@@ -410,8 +410,11 @@ fit_parse_data(fit_message_def* def, int time_offset)
   uint16_t power = 0xffff;
   int8_t temperature = 0x7f;
   Waypoint* waypt;
+  int32_t startlat = 0x7fffffff;
+  int32_t startlon = 0x7fffffff;
   int32_t endlat = 0x7fffffff;
   int32_t endlon = 0x7fffffff;
+  uint32_t starttime = 0; // ??? default ?
   char cbuf[10];
   Waypoint* lappt;  // WptPt in gpx
 
@@ -536,19 +539,19 @@ fit_parse_data(fit_message_def* def, int time_offset)
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: starttime=%d\n", MYNAME, val);
           }
-          //starttime = val;
+          starttime = val;
           break;
         case kFieldStartLatitude:
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: startlat=%d\n", MYNAME, val);
           }
-          //startlat = val;
+          startlat = val;
           break;
         case kFieldStartLongitude:
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: startlon=%d\n", MYNAME, val);
           }
-          //startlon = val;
+          startlon = val;
           break;
         case kFieldEndLatitude:
           if (global_opts.debug_level >= 7) {
