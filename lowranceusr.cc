@@ -48,6 +48,7 @@
     Hook2 Series Operator Manual (English) - //software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf
     Lowrance Endura FAQs II - http://support.lowrance.com/system/selfservice.controller?CONFIGURATION=1001&PARTITION_ID=1&secureFlag=false&TIMEZONE_OFFSET=&CMD=VIEW_ARTICLE&ARTICLE_ID=2028
     BBCBoards.Net : Lowrance Sonar/GPS Topic : Waypoints; USR Versions Thread : http://www.bbcboards.net/showthread.php?t=855028
+    Python USR4 (Version 4) to GPX Converter - http://lowranceusrv4togpxconverter.blogspot.com/2011/12/about-this-blog.html
 
     USRv3 supported trails with a maximum of 10,000 trail-points.
     USRv4 and above support a maximum of 20,000 trail-points(actually 24K and change).
@@ -1942,7 +1943,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
 
 
 static void
-lowranceusr4_route_trl(const route_head* rte)
+lowranceusr4_route_trl(const route_head*)
 {
   /* Mystery byte */
   gbfputc(0x01, file_out);	// end of Route info ??
