@@ -274,6 +274,7 @@ struct tm *tm;
 enum locale_status *decided;
 int era_cnt;
 {
+  const char *rp_backup;
   int cnt;
   size_t val;
   int have_I, is_pm;
@@ -283,17 +284,15 @@ int era_cnt;
   int have_yday;
   int have_mon, have_mday;
 #ifdef _NL_CURRENT
-  const char *rp_backup;
   size_t num_eras;
-  struct era_entry *era;
-
-  era = NULL;
 #endif
+  struct era_entry *era;
 
   have_I = is_pm = 0;
   century = -1;
   want_century = 0;
   want_era = 0;
+  era = NULL;
 
   have_wday = want_xday = have_yday = have_mon = have_mday = 0;
 
@@ -319,10 +318,10 @@ int era_cnt;
 #ifndef _NL_CURRENT
     /* We need this for handling the `E' modifier.  */
 start_over:
-#else
+#endif
+
     /* Make back up of current processing pointer.  */
     rp_backup = rp;
-#endif
 
     switch (*fmt++) {
     case '%':
