@@ -45,39 +45,43 @@
 
   Collected from various WEB sources and Lowrance HOOK2 User Manual.
 
+    Hook2 Series Operator Manual (English) - //software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf
+    Lowrance Endura FAQs II - http://support.lowrance.com/system/selfservice.controller?CONFIGURATION=1001&PARTITION_ID=1&secureFlag=false&TIMEZONE_OFFSET=&CMD=VIEW_ARTICLE&ARTICLE_ID=2028
+    BBCBoards.Net : Lowrance Sonar/GPS Topic : Waypoints; USR Versions Thread : http://www.bbcboards.net/showthread.php?t=855028
+
     USRv3 supported trails with a maximum of 10,000 trail-points.
     USRv4 and above support a maximum of 20,000 trail-points(actually 24K and change).
     USRv4 and above & GPX support trails with trail-segments.
     USRv6 supports trail characteristics speed & temperature.
 
-    USR Data File Description from Lowrance Manual
-    ----------------------------------------------
+    USR Data File Description (quoted text) from Lowrance Manual
+    ------------------------------------------------------------
       User Data File version 6 - USRv6
-        This is used to import and export waypoints, routes and colored Trails.
+        "This is used to import and export waypoints, routes and colored Trails."
 
       User Data File version 5 - USRv5
-        This is used to import and export waypoints and routes with a
+        "This is used to import and export waypoints and routes with a
         standardized universally unique identifier (UUID), which is very
         reliable and easy to use. The data includes such information as
-        the time and date when a route was created, and so on.
+        the time and date when a route was created, and so on."
 
       User Data File version 4 - USRv4
-        This is best used when transferring data from one system to
+        "This is best used when transferring data from one system to
         another, since it contains all the extra bits of information these
-        systems store about items.
+        systems store about items."
 
       User Data File version 3 - USRv3 (w/depth)
-        Should be used when transferring user data from one system to
-        a legacy product (Lowrance LMS, LCX, and so on.)
+        "Should be used when transferring user data from one system to
+        a legacy product (Lowrance LMS, LCX, and so on.)"
 
       User Data File version 2 - USRv2 (no depth)
-        Can be used when transferring user data from one system to a
-        legacy product (Lowrance LMS, LCX, and so on.)
+        "Can be used when transferring user data from one system to a
+        legacy product (Lowrance LMS, LCX, and so on.)"
 
       GPX (GPS Exchange, no depth)
-        This is the format most used on the web that shares among
+        "This is the format most used on the web that shares among
         most GPS systems in the world. Use this format if you are taking
-        data to a competitors unit.
+        data to a competitors unit."
 
 */
 
@@ -1668,7 +1672,7 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (wpt->fs != (format_specific_data*)nullptr) {
+  } else if (wpt->fs != nullptr) {
     gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
@@ -1898,7 +1902,7 @@ lowranceusr4_route_hdr(const route_head* rte)
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (rte->fs != (format_specific_data*)nullptr) {
+  } else if (rte->fs != nullptr) {
     gbfputint32(((lowranceusr4_fsdata*)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
