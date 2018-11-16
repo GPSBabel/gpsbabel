@@ -37,8 +37,8 @@
       format data.
     - Combined processing of USR 2/3/4/5/6 formats into a single
       file. The previous implementation did not support conversion
-      between USR 2/3 and 4/5/6 or between 4/5/6 and 2/3 beause of 
-      the seperation in processing between lowranceusr.cc and 
+      between USR 2/3 and 4/5/6 or between 4/5/6 and 2/3 beause of
+      the seperation in processing between lowranceusr.cc and
       lowranceusr4.cc.
 
   USR Background Information
@@ -294,7 +294,6 @@ static int            writing_version;
 #define SEMIMINOR               6356752.3142
 //#define DEGREESTORADIANS        0.017453292
 #define DEGREESTORADIANS        0.01745329252   // increased accuracy in calculations
-#define SECSTO2000              946713600
 #define MAX_TRAIL_POINTS        9999
 #define UNKNOWN_USR_ALTITUDE    METERS_TO_FEET(-10000) /* -10000ft is how the unit stores unknown */
 
@@ -406,10 +405,10 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 
 #if NEWQ
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
 #endif
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
@@ -437,10 +436,10 @@ lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 
 #if NEWQ
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
 #endif
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
@@ -699,8 +698,8 @@ wr_init(const QString& fname)
   waypt_out_count = 0;
   writing_version = atoi(opt_wversion);
   if ((writing_version < 2) || (writing_version > 4)) {
-      fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
-      exit(-1);
+    fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
+    exit(-1);
   }
 }
 
@@ -769,14 +768,14 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
     buff[text_len] = '\0';
     wpt_tmp->shortname = buff;
   }
-  
+
   if (global_opts.debug_level > 1) {
     if (global_opts.debug_level == 99) {
       printf(" %16.16s %+15.10f %+15.10f %+10.4f",
-        qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->altitude);
+             qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->altitude);
     } else {
       printf(MYNAME " parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = %+f\n",
-           qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->altitude);
+             qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->altitude);
     }
   }
 
@@ -796,9 +795,9 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
       printf(" %08x", (int)waypt_time);
     } else {
       printf(MYNAME " parse_waypt: creation time %d, base_time %d waypt_time %d\n",
-        (int)wpt_tmp->creation_time.toTime_t(),
-        (int)base_time_secs,
-        (int)waypt_time);
+             (int)wpt_tmp->creation_time.toTime_t(),
+             (int)base_time_secs,
+             (int)waypt_time);
     }
   }
 
@@ -951,8 +950,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
       }
       printf(" %10u %8d %8d %8d %6d %16s",
-               fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
-               waypoint_version, name_len, name_buff);
+             fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
+             waypoint_version, name_len, name_buff);
       if (reading_version > 4) {
         printf("  %10u ", fsdata->uid_unit2);
       }
@@ -960,13 +959,13 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
       printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
       printf(" %6d %16s", desc_len, desc_buff);
       printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
-          create_date, create_time, unused_byte, waypt_depth, loran_GRI, loran_Tda, loran_Tdb);
+             create_date, create_time, unused_byte, waypt_depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
       printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
-           "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
-           waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
-           fsdata->uid_seq_low, fsdata->uid_seq_high,
-           wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->depth);
+             "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
+             waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
+             fsdata->uid_seq_low, fsdata->uid_seq_high,
+             wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->depth);
     }
   }
 }
@@ -1007,7 +1006,7 @@ lowranceusr_parse_waypts()
       }
       printf(" Latitude       Longitude      Flags    ICON   Color  Length Description     ");
       printf(" Time     Date     Unused   Depth    LoranGRI LoranTda LoranTdb\n");
-  
+
       printf(MYNAME " parse_waypoints: ");
       if (reading_version > 4) {
         printf("-------- -------- -------- -------- ");
@@ -1019,16 +1018,16 @@ lowranceusr_parse_waypts()
       printf(" -------------- -------------- -------- ------ ------ ------ ----------------");
       printf(" -------- -------- -------- -------- -------- -------- --------\n");
     } else {
-      printf (MYNAME " parse_waypts: Number Name            Longitude       Latitude       Altitude    Time     ICON ID (dec)    Flag (dec)");
+      printf(MYNAME " parse_waypts: Number Name            Longitude       Latitude       Altitude    Time     ICON ID (dec)    Flag (dec)");
       if (reading_version == 3) {
-        printf (" Depth");
+        printf(" Depth");
       }
-      printf ("\n");
-      printf (MYNAME " parse_waypts: ------ --------------- --------------- -------------- ----------- -------- ---------------- ----------");
+      printf("\n");
+      printf(MYNAME " parse_waypts: ------ --------------- --------------- -------------- ----------- -------- ---------------- ----------");
       if (reading_version == 3) {
-        printf (" ----------------");
+        printf(" ----------------");
       }
-      printf ("\n");
+      printf("\n");
     }
   }
 
@@ -1036,15 +1035,15 @@ lowranceusr_parse_waypts()
     Waypoint* wpt_tmp = new Waypoint;
 
     switch (reading_version) {
-      case 2:
-      case 3:
-        lowranceusr_parse_waypt(wpt_tmp, 1);  /* Indicate object number present */
-        break;
-      case 4:
-      case 5:
-      case 6:
-        lowranceusr4_parse_waypt(wpt_tmp);
-        break;
+    case 2:
+    case 3:
+      lowranceusr_parse_waypt(wpt_tmp, 1);  /* Indicate object number present */
+      break;
+    case 4:
+    case 5:
+    case 6:
+      lowranceusr4_parse_waypt(wpt_tmp);
+      break;
     }
     waypt_add(wpt_tmp);
   }
@@ -1093,10 +1092,10 @@ lowranceusr4_parse_route()
 
   if (reading_version >= 5) {
     /* Routes have Universal IDs */
-      UUID1 = gbfgetint32(file_in);
-      UUID2 = gbfgetint32(file_in);
-      UUID3 = gbfgetint32(file_in);
-      UUID4 = gbfgetint32(file_in);
+    UUID1 = gbfgetint32(file_in);
+    UUID2 = gbfgetint32(file_in);
+    UUID3 = gbfgetint32(file_in);
+    UUID4 = gbfgetint32(file_in);
   }
 
   /* UID unit number */
@@ -1132,10 +1131,10 @@ lowranceusr4_parse_route()
   if (global_opts.debug_level > 1) {
     if (reading_version >= 5) {
       printf(MYNAME " parse_route: route '%s'' (UUID %08x %08x %8x %08x) has %d legs\n",
-           qPrintable(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
+             qPrintable(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
     } else {
       printf(MYNAME " parse_route: route '%s' has %d legs\n",
-           qPrintable(rte_head->rte_name), num_legs);
+             qPrintable(rte_head->rte_name), num_legs);
     }
   }
 
@@ -1250,8 +1249,8 @@ lowranceusr_parse_icons()
       /* symbol */
       wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_number);
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " parse_icons: '%s' %16.16s %+15.10f %+15.10f\n", 
-          qPrintable(wpt_tmp->shortname), qPrintable(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
+        printf(MYNAME " parse_icons: '%s' %16.16s %+15.10f %+15.10f\n",
+               qPrintable(wpt_tmp->shortname), qPrintable(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
       }
       waypt_add(wpt_tmp);
     }
@@ -1260,7 +1259,7 @@ lowranceusr_parse_icons()
 }
 
 static void
-lowranceusr_parse_trail(int *trail_num)
+lowranceusr_parse_trail(int* trail_num)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
 
@@ -1330,7 +1329,7 @@ lowranceusr_parse_trail(int *trail_num)
 }
 
 static void
-lowranceusr4_parse_trail(int *trail_num)
+lowranceusr4_parse_trail(int* trail_num)
 {
   int trail_version;
   char name_buff[MAXUSRSTRINGSIZE + 1];
@@ -1350,8 +1349,7 @@ lowranceusr4_parse_trail(int *trail_num)
 
   /* Trail stream version number */
   trail_version = gbfgetint16(file_in);
-  if (global_opts.debug_level == 99)
-  {
+  if (global_opts.debug_level == 99) {
     printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
   }
 
@@ -1397,9 +1395,9 @@ lowranceusr4_parse_trail(int *trail_num)
   }
 
   if (global_opts.debug_level == 99) {
-        printf(MYNAME " parse_trails: Trail %s\n", qPrintable(trk_head->rte_name));
-        printf(MYNAME " parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
-        printf(MYNAME " parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
+    printf(MYNAME " parse_trails: Trail %s\n", qPrintable(trk_head->rte_name));
+    printf(MYNAME " parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
+    printf(MYNAME " parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
   }
   for (int j = 0; j < num_trail_pts; ++j) {
     Waypoint* wpt_tmp = new Waypoint;
@@ -1485,8 +1483,8 @@ data_read()
   }
 
   if ((reading_version < 2) || (reading_version > 6)) {
-      fatal(MYNAME " input file is a USR format that is not supported\n");
-      exit(-1);
+    fatal(MYNAME " input file is a USR format that is not supported\n");
+    exit(-1);
   }
 
   if (reading_version >= 4) {
@@ -1539,7 +1537,7 @@ data_read()
   lowranceusr_parse_routes();
 
   if ((reading_version == 2) || (reading_version == 3)) {
-      lowranceusr_parse_icons();      // Event Marker ICONS exists only in USR 2 & 3 format
+    lowranceusr_parse_icons();      // Event Marker ICONS exists only in USR 2 & 3 format
   }
 
   lowranceusr_parse_trails();
@@ -1592,7 +1590,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   if (global_opts.debug_level > 2) {
     /* print lat/lon/alt on one easily greppable line */
     printf(MYNAME " waypt_disp: '%s' Lat = %d   Lon = %d   Alt = %d\n",
-          qPrintable(wpt->shortname), Lat, Lon, alt);
+           qPrintable(wpt->shortname), Lat, Lon, alt);
   }
 
   int text_len = name.length();
@@ -1632,7 +1630,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
     time_t wpt_time = Time;
     // NOTE: Newline added by ctime() to string
     printf("base_time %d, creation_time %d, waypt_time %d (local) %s",
-      (int)base_time_secs, (int)wpt->creation_time.toTime_t(), (int)wpt_time, ctime(&wpt_time));
+           (int)base_time_secs, (int)wpt->creation_time.toTime_t(), (int)wpt_time, ctime(&wpt_time));
   }
 
   gbfputint32(Time, file_out);
@@ -1659,20 +1657,22 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
     gbfputint32(depth, file_out);
   }
 
-  if (global_opts.debug_level > 1)
+  if (global_opts.debug_level > 1) {
     printf("\n");
+  }
 }
 
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
   /* UID unit number */
-  if (opt_serialnum_i > 0)
-    gbfputint32(opt_serialnum_i, file_out);   // use option serial number if specified
-  else if (wpt->fs != (format_specific_data *)NULL)
-    gbfputint32(((lowranceusr4_fsdata *)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
-  else
-    gbfputint32(0, file_out);                 // else Write Serial Number = 0
+  if (opt_serialnum_i > 0) {
+    gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
+  } else if (wpt->fs != (format_specific_data*)NULL) {
+    gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else {
+    gbfputint32(0, file_out);  // else Write Serial Number = 0
+  }
 
   /* 64-bit UID sequence number */
   gbfputint32(waypt_uid++, file_out);
@@ -1838,10 +1838,11 @@ lowranceusr_trail_hdr(const route_head* trk)
 
   if (global_opts.debug_level) {
     printf("num_trail_points = %d ", num_trail_points);
-    if (global_opts.debug_level > 1)
+    if (global_opts.debug_level > 1) {
       printf("max_trail_size = %d num_section_points = %d\n", max_trail_size, num_section_points);
-    else
+    } else {
       printf("\n");
+    }
   }
 
   gbfwrite(&visible, 1, 1, file_out);
@@ -1895,12 +1896,13 @@ lowranceusr4_route_hdr(const route_head* rte)
   }
 
   /* UID unit number */
-  if (opt_serialnum_i > 0)
-    gbfputint32(opt_serialnum_i, file_out);   // use option serial number if specified
-  else if (rte->fs != (format_specific_data *)NULL)
-    gbfputint32(((lowranceusr4_fsdata *)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
-  else
-    gbfputint32(0, file_out);                 // else Write Serial Number = 0
+  if (opt_serialnum_i > 0) {
+    gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
+  } else if (rte->fs != (format_specific_data*)NULL) {
+    gbfputint32(((lowranceusr4_fsdata*)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else {
+    gbfputint32(0, file_out);  // else Write Serial Number = 0
+  }
 
   /* 64-bit UID sequence number */
   gbfputint32(route_uid++, file_out);
@@ -1922,7 +1924,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
     if (cmp->shortname == wpt->shortname) {
-      lowranceusr4_fsdata *fsdata = (lowranceusr4_fsdata *)cmp->fs;
+      lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*)cmp->fs;
       gbfputint32(fsdata->uid_unit, file_out);  // serial number from input if valid
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
@@ -2110,7 +2112,7 @@ data_write()
     printf(MYNAME " data_write: Num Waypoints = %d\n", NumWaypoints);
   }
 
-  // If writeasicons option specified then all Waypoints processed are written as  
+  // If writeasicons option specified then all Waypoints processed are written as
   // Event Marker ICONs so write the number of Waypoints as ZERO but only if
   // USR format 2 or 3
   if ((writing_version == 2) || (writing_version == 3)) {
@@ -2164,7 +2166,7 @@ data_write()
 
   /* Original Route support added 6/21/05 */
   int NumRoutes = route_count();
-      lowrance_route_count=0;
+  lowrance_route_count=0;
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " data_write: Num routes = %d\n", NumRoutes);
@@ -2184,7 +2186,7 @@ data_write()
     }
   }
 
-  
+
   /*
    * End ROUTE Element
    */
@@ -2195,8 +2197,7 @@ data_write()
    * Start EVENT MARKER ICON Element
    */
 
-  if ((writing_version == 2) || (writing_version == 3))
-  {
+  if ((writing_version == 2) || (writing_version == 3)) {
     // Only USR versions 2 and 3 supprt Event Marker ICONs
     // Ignore for all other USR versions
     if (NumWaypoints && opt_writeasicons) {
@@ -2225,7 +2226,7 @@ data_write()
       // All other USR formats use 32-bit count
       gbfputint32(NumTrails, file_out);
     }
-  
+
     if ((writing_version == 2) || (writing_version == 3)) {
       trail_point_count = 0;
       trail_count = 0;
