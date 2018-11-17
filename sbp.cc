@@ -62,7 +62,7 @@ read_sbp_header(route_head*)
 
 #define HEADER_SKIP 7
 
-  int success;
+  bool success;
   char header[64];
 
   if (gbfread(header, sizeof(header), 1, file_handle) == 1) {
@@ -73,7 +73,7 @@ read_sbp_header(route_head*)
 
     success = locosys_decode_file_id(header + HEADER_SKIP, len);
   } else {
-    success = FALSE;
+    success = false;
   }
 
   if (!success) {

@@ -282,15 +282,15 @@ read_word()
  *
  * handle_nak determines behaviour when a PID_NAK packet is read from
  * the device:
- *  - if handle_nak is FALSE, a fatal error will be raised.
- *  - if handle_nak is TRUE, read_packet will simply return FALSE.
+ *  - if handle_nak is false, a fatal error will be raised.
+ *  - if handle_nak is true, read_packet will simply return false.
  *
- * Returns TRUE if the packet was successfully read into payload.
+ * Returns true if the packet was successfully read into payload.
  */
-static int
+static bool
 read_packet(unsigned type, void* payload,
             unsigned minlength, unsigned maxlength,
-            int handle_nak)
+            bool handle_nak)
 {
   unsigned      size;
   unsigned      checksum;
@@ -316,7 +316,7 @@ read_packet(unsigned type, void* payload,
 
   if (data[0] != type) {
     if (handle_nak && data[0] == PID_NAK) {
-      return FALSE;
+      return false;
     }
 
     fatal(MYNAME ": Protocol error: Bad packet type (expected 0x%02x but got 0x%02x)\n", type, data[0]);
@@ -339,7 +339,7 @@ read_packet(unsigned type, void* payload,
 
   xfree(data);
 
-  return TRUE;
+  return true;
 }
 
 static QDateTime
@@ -475,7 +475,7 @@ serial_read_waypoints()
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
-              FALSE);
+              false);
 
   unsigned short total = le_read16(information + 0);
 
@@ -495,7 +495,7 @@ serial_read_waypoints()
 
     unsigned char*  waypoints = (unsigned char*) xmalloc(count * 32);
 
-    read_packet(PID_DATA, waypoints, count * 32, count * 32, FALSE);
+    read_packet(PID_DATA, waypoints, count * 32, count * 32, false);
 
     for (unsigned char*  w = waypoints; w < waypoints + count * 32; w = w + 32) {
       if (global_opts.masked_objective & WPTDATAMASK) {
@@ -524,7 +524,7 @@ serial_write_waypoint_packet(const Waypoint* waypt)
 
   encode_waypoint(waypt, data);
   write_packet(PID_ADD_A_WAYPOINT, data, sizeof(data));
-  if (!read_packet(PID_DATA, id, sizeof(id), sizeof(id), TRUE)) {
+  if (!read_packet(PID_DATA, id, sizeof(id), sizeof(id), true)) {
     fatal(MYNAME ": Could not write waypoint.\n");
   }
 
@@ -545,7 +545,7 @@ serial_read_track()
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
-              FALSE);
+              false);
 
   unsigned int address = le_read32(information + 4);
   unsigned short total = le_read16(information + 12);
@@ -565,7 +565,7 @@ serial_read_track()
 
     unsigned char*  trackpoints = (unsigned char*) xmalloc(count * 32);
 
-    read_packet(PID_DATA, trackpoints, count * 32, count * 32, FALSE);
+    read_packet(PID_DATA, trackpoints, count * 32, count * 32, false);
     write_packet(PID_ACK, nullptr, 0);
 
     for (unsigned char*  t = trackpoints; t < trackpoints + count * 32; t = t + 32) {
@@ -588,7 +588,7 @@ serial_write_track()
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
-              FALSE);
+              false);
 
   unsigned int address = le_read32(information + 4);
   unsigned short total = le_read16(information + 12);
@@ -600,7 +600,7 @@ serial_write_track()
   write_packet(PID_WRITE_TRACKPOINTS, data, sizeof(data));
   gb_sleep(10000);
   write_packet(PID_DATA, track_data, track_data_ptr - track_data);
-  read_packet(PID_CMD_OK, nullptr, 0, 0, FALSE);
+  read_packet(PID_CMD_OK, nullptr, 0, 0, false);
 
   track_data_ptr = track_data;
 }
@@ -643,7 +643,7 @@ serial_read_routes(Waypoint** waypts)
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
-              FALSE);
+              false);
 
   unsigned char routec = information[2];
 
@@ -656,7 +656,7 @@ serial_read_routes(Waypoint** waypts)
     payload[6] = 0x01;
 
     write_packet(PID_QRY_ROUTE, payload, sizeof(payload));
-    read_packet(PID_DATA, routedata, 64, sizeof(routedata), FALSE);
+    read_packet(PID_DATA, routedata, 64, sizeof(routedata), false);
 
     route_head*    route = route_head_alloc();
     route->rte_num = routedata[2];
@@ -756,7 +756,7 @@ serial_write_route_end(const route_head* route)
   }
 
   write_packet(PID_ADD_A_ROUTE, data, 32 + src * 32);
-  if (!read_packet(PID_DATA, id, sizeof(id), sizeof(id), TRUE)) {
+  if (!read_packet(PID_DATA, id, sizeof(id), sizeof(id), true)) {
     fatal(MYNAME ": Could not add route.\n");
   }
 
@@ -841,7 +841,7 @@ read_datalog_info(unsigned int* seg1_addr, unsigned int* seg1_len,
   unsigned char  info[16];
 
   write_packet(PID_INFO_DATALOG, nullptr, 0);
-  read_packet(PID_DATA, info, sizeof(info), sizeof(info), FALSE);
+  read_packet(PID_DATA, info, sizeof(info), sizeof(info), false);
 
   unsigned int flash_start_addr = le_read32(info);
   unsigned int flash_length = le_read32(info + 4);
@@ -885,7 +885,7 @@ read_datalog_records(route_head* track,
     payload[6] = 0x01;
 
     write_packet(PID_READ_DATALOG, payload, sizeof(payload));
-    read_packet(PID_DATA, logpoints, logpoints_len, logpoints_len, FALSE);
+    read_packet(PID_DATA, logpoints, logpoints_len, logpoints_len, false);
     write_packet(PID_ACK, nullptr, 0);
 
     for (unsigned char* p = logpoints; p < logpoints + logpoints_len; p += 32) {
@@ -1007,14 +1007,14 @@ nuke()
     write_packet(PID_QRY_INFORMATION, nullptr, 0);
     read_packet(PID_DATA, information,
                 sizeof(information), sizeof(information),
-                FALSE);
+                false);
 
     le_write32(data + 0, le_read32(information + 4));
     le_write16(data + 4, 0);
     data[6] = 0;
 
     write_packet(PID_ERASE_TRACK, data, sizeof(data));
-    read_packet(PID_CMD_OK, nullptr, 0, 0, FALSE);
+    read_packet(PID_CMD_OK, nullptr, 0, 0, false);
   }
 
   if (nukerte) {
@@ -1022,7 +1022,7 @@ nuke()
 
     le_write32(data, 0x00f00000);
     write_packet(PID_DEL_ALL_ROUTE, data, sizeof(data));
-    if (!read_packet(PID_ACK, nullptr, 0, 0, TRUE)) {
+    if (!read_packet(PID_ACK, nullptr, 0, 0, true)) {
       fatal(MYNAME ": Could not nuke all routes.\n");
     }
   }
@@ -1032,7 +1032,7 @@ nuke()
 
     le_write32(data, 0x00f00000);
     write_packet(PID_DEL_ALL_WAYPOINT, data, sizeof(data));
-    if (!read_packet(PID_ACK, nullptr, 0, 0, TRUE)) {
+    if (!read_packet(PID_ACK, nullptr, 0, 0, true)) {
       fatal(MYNAME ": You must nuke all routes before nuking waypoints.\n");
       /* perhaps a better action would be to nuke routes for user.
        * i.e. set nukerte when nukewpt is set */
@@ -1046,7 +1046,7 @@ nuke()
      * So give the device some time to clear its datalog, in addition
      * to SERIAL_TIMEOUT, which applies to read_packet() */
     gb_sleep(CLEAR_DATALOG_TIME * 1000);
-    read_packet(PID_ACK, nullptr, 0, 0, FALSE);
+    read_packet(PID_ACK, nullptr, 0, 0, false);
   }
 }
 
@@ -1063,7 +1063,7 @@ navilink_common_init(const QString& name)
     }
 
     write_packet(PID_SYNC, nullptr, 0);
-    read_packet(PID_ACK, nullptr, 0, 0, FALSE);
+    read_packet(PID_ACK, nullptr, 0, 0, false);
 
     /* nuke data before writing */
     if (operation == WRITING) {

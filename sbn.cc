@@ -131,7 +131,7 @@ hdrcpy(char* dest, const char* src, size_t max_len)
 }
 #endif /* LOCOSYS_PARSE_FILE_ID */
 
-int
+bool
 locosys_decode_file_id(char* header, size_t len)
 {
   Q_UNUSED(header);
@@ -164,7 +164,7 @@ locosys_decode_file_id(char* header, size_t len)
   printf(MYNAME ": Firmware version: %s\n", version);
 #endif /* LOCOSYS_PARSE_FILE_ID */
 
-  return TRUE;
+  return true;
 }
 
 static void
