@@ -45,7 +45,7 @@
 #define MYNAME "GlobalsatSport"
 
 static void* serial_handle;
-static int isSizeSwaped;
+static bool isSizeSwapped;
 
 static char* showlist = nullptr;               // if true show a list instead of download tracks
 static char* track = nullptr;                     // if not 0 only download this track, if 0 download all
@@ -286,13 +286,13 @@ globalsat_write_package(uint8_t* payload, uint32_t size)
 {
   //All globalsat devices but gh561
   //2 <len_h> <len_l> <payload...> <crc>
-  // gh561 (isSizeSwaped)
+  // gh561 (isSizeSwapped)
   //2 <len_l> <len_h> <payload...> <crc>
 
   uint8_t crc = 0;
   write_byte(2);
 
-  if (!isSizeSwaped) {
+  if (!isSizeSwapped) {
     write_byte((0xff00 & size) >> 8);
     crc ^= (0xff00 & size) >> 8;
     write_byte(0xff & size);
@@ -377,7 +377,7 @@ static void
 globalsat_probe_device()
 {
   //TODO try this first if fails try with false, to support 561
-  isSizeSwaped = FALSE;		//all devices but gh561 since gh561 has swaped size.
+  isSizeSwapped = false;		//all devices but gh561 since gh561 has swaped size.
 
   globalsat_send_simple(CommandWhoAmI);
 

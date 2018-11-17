@@ -261,7 +261,7 @@ format_garmin_xt_proc_strk()
     track_add_head(tmp_track);
 
     // This is the 1st coordinate of the track
-    int FirstCoo = TRUE;
+    bool FirstCoo = true;
     while (trackbytes>0) {
       if (trackbytes>=STRK_BLOCK_SIZE) {
         Count = gbfread(&TrackBlock, DATABLOCKSIZE, STRK_BLOCK_SIZE, fin);
@@ -293,7 +293,7 @@ format_garmin_xt_proc_strk()
           // add way point to the track
           track_add_wpt(tmp_track, wpt);
         } else {
-          FirstCoo = FALSE;
+          FirstCoo = false;
         }
         PrevLat = Lat;
         PrevLon = Lon;
