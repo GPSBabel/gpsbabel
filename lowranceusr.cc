@@ -285,7 +285,7 @@ extern queue          waypt_head;
 #endif
 
 static unsigned short waypt_out_count;
-static unsigned int   trail_count, lowrance_route_count;
+static int            trail_count, lowrance_route_count;
 static int            trail_point_count;
 static char           continuous = 1;
 static short          num_section_points;
@@ -307,8 +307,8 @@ const time_t base_time_secs = 946706400;
 
 typedef struct {
   format_specific_data fs;
-  int uid_unit;
-  int uid_unit2;
+  uint uid_unit;
+  uint uid_unit2;
   int uid_seq_low;
   int uid_seq_high;
   uint UUID1;
@@ -401,7 +401,7 @@ register_waypt(const Waypoint* ref)
 /* end borrowed from raymarine.c */
 
 static Waypoint*
-lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
+lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
 #if !NEWQ
   queue* elem, *tmp;
@@ -533,14 +533,14 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
 
 //  Starting with USR 4, adopted a UTF-16 character string format
 static void
-lowranceusr4_writestr(const QString& buf, gbfile* file, unsigned int bytes_per_char)
+lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
 {
-  unsigned int len = buf.length();
+  int len = buf.length();
 
-  if (0xffffffff / bytes_per_char < len) {
+  if ((int)(0xffffffff / bytes_per_char) < len) {
     /* be pedantic and check for the unlikely event that we are asked
        to write more than 2^32 bytes */
-    len = 0xffffffff / bytes_per_char;
+    len = (int)(0xffffffff / bytes_per_char);
   }
 
   gbfputint32(len*bytes_per_char, file_out);
@@ -548,9 +548,9 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, unsigned int bytes_per_c
   if (bytes_per_char == 1) {
     (void) gbfwrite(CSTR(buf), 1, len, file);
   } else {
-    for (unsigned int i = 0; i < len; ++i) {
+    for (int i = 0; i < len; ++i) {
       gbfputc(buf[i].cell(), file_out);
-      for (unsigned int j = 1; j < bytes_per_char; ++j) {
+      for (int j = 1; j < bytes_per_char; ++j) {
         gbfputc('\0', file_out);
       }
     }
@@ -704,7 +704,6 @@ wr_init(const QString& fname)
   writing_version = atoi(opt_wversion);
   if ((writing_version < 2) || (writing_version > 4)) {
     fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
-    exit(-1);
   }
 }
 
@@ -857,7 +856,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 {
   char name_buff[MAXUSRSTRINGSIZE + 1];
   char desc_buff[MAXUSRSTRINGSIZE + 1];
-  unsigned int waypoint_version;
+  int waypoint_version;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
   fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
@@ -924,8 +923,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 
   /* Creation date/time; the date is a Julian day number, and the
      time is a unix timestamp. */
-  unsigned int create_date = gbfgetint32(file_in);
-  unsigned int create_time = gbfgetint32(file_in);
+  uint create_date = gbfgetint32(file_in);
+  uint create_time = gbfgetint32(file_in);
 
   // Julian date 2440487 is 1/1/1970.  If that's the date we're working
   // with, as a practical matter, we have no date, so don't even compute
@@ -1120,7 +1119,7 @@ lowranceusr4_parse_route()
   }
 
   /* Route name; input is 2 bytes per char, we convert to 1 */
-  unsigned int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+  int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
   if (text_len) {
     buff[text_len] = '\0';
     rte_head->rte_name = buff;
@@ -1131,7 +1130,7 @@ lowranceusr4_parse_route()
     gbfgetint32(file_in);
   }
 
-  unsigned int num_legs = gbfgetint32(file_in);
+  int num_legs = gbfgetint32(file_in);
 
   if (global_opts.debug_level > 1) {
     if (reading_version >= 5) {
@@ -1145,10 +1144,10 @@ lowranceusr4_parse_route()
 
   if (reading_version <= 4) {
     /* Use UID based sequence numbers for route */
-    for (unsigned int j = 0; j < num_legs; ++j) {
-      unsigned int uid_unit = gbfgetint32(file_in);
-      unsigned int uid_seq_low = gbfgetint32(file_in);
-      unsigned int uid_seq_high = gbfgetint32(file_in);
+    for (int j = 0; j < num_legs; ++j) {
+      uint uid_unit = gbfgetint32(file_in);
+      uint uid_seq_low = gbfgetint32(file_in);
+      uint uid_seq_high = gbfgetint32(file_in);
       Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
@@ -1160,7 +1159,7 @@ lowranceusr4_parse_route()
     }
   } else {
     /* Use global sequence number for route */
-    for (unsigned int j = 0; j < num_legs; ++j) {
+    for (int j = 0; j < num_legs; ++j) {
       UUID1 = gbfgetint32(file_in);
       UUID2 = gbfgetint32(file_in);
       UUID3 = gbfgetint32(file_in);
@@ -1516,15 +1515,15 @@ data_read()
 
     /* AND date and time created values */
     /* for now we won't use these for anything */
-    unsigned int create_date = gbfgetint32(file_in);
+    uint create_date = gbfgetint32(file_in);
     (void) create_date;
-    unsigned int create_time = gbfgetint32(file_in);
+    uint create_time = gbfgetint32(file_in);
     (void) create_time;
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
     (void) byte;
 
     /* AND the serial number of the unit that created the file */
-    unsigned int serial_num = gbfgetint32(file_in);
+    uint serial_num = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " device serial number: %u\n", serial_num);
     }
@@ -2006,7 +2005,7 @@ lowranceusr_merge_trail_hdr(const route_head* trk)
 static void
 lowranceusr_merge_trail_tlr(const route_head*)
 {
-  if (trail_count == track_count()) {  /* last trail */
+  if (trail_count == (int)track_count()) {  /* last trail */
     short num_trail_points = trail_point_count;
     short max_trail_size = MAX_TRAIL_POINTS;
     if (num_trail_points > max_trail_size) {
