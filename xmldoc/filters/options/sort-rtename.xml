@@ -1,0 +1,7 @@
+<para>
+This option causes the routes to be sorted in alphabetical order by
+name.
+</para>
+<para>
+This option is not valid in combination with rtedesc and rtenum.
+</para>

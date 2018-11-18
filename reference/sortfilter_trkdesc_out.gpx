@@ -59,22 +59,6 @@
     </rtept>
   </rte>
   <trk>
-    <name>d</name>
-    <desc>b</desc>
-    <number>31163</number>
-    <trkseg>
-      <trkpt lat="25.600000000" lon="-112.900000000"/>
-    </trkseg>
-  </trk>
-  <trk>
-    <name>b</name>
-    <desc>d</desc>
-    <number>15939</number>
-    <trkseg>
-      <trkpt lat="25.700000000" lon="-112.800000000"/>
-    </trkseg>
-  </trk>
-  <trk>
     <name>a</name>
     <desc>a</desc>
     <number>607</number>
@@ -83,11 +67,27 @@
     </trkseg>
   </trk>
   <trk>
+    <name>d</name>
+    <desc>b</desc>
+    <number>31163</number>
+    <trkseg>
+      <trkpt lat="25.600000000" lon="-112.900000000"/>
+    </trkseg>
+  </trk>
+  <trk>
     <name>c</name>
     <desc>c</desc>
     <number>24282</number>
     <trkseg>
       <trkpt lat="25.900000000" lon="-112.600000000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>b</name>
+    <desc>d</desc>
+    <number>15939</number>
+    <trkseg>
+      <trkpt lat="25.700000000" lon="-112.800000000"/>
     </trkseg>
   </trk>
 </gpx>

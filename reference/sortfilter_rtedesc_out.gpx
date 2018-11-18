@@ -27,11 +27,11 @@
     <desc>d</desc>
   </wpt>
   <rte>
-    <name>b</name>
-    <desc>c</desc>
-    <number>11163</number>
-    <rtept lat="47.600000000" lon="-89.900000000">
-      <name>RPT001</name>
+    <name>c</name>
+    <desc>a</desc>
+    <number>10607</number>
+    <rtept lat="47.800000000" lon="-89.700000000">
+      <name>RPT003</name>
     </rtept>
   </rte>
   <rte>
@@ -43,11 +43,11 @@
     </rtept>
   </rte>
   <rte>
-    <name>c</name>
-    <desc>a</desc>
-    <number>10607</number>
-    <rtept lat="47.800000000" lon="-89.700000000">
-      <name>RPT003</name>
+    <name>b</name>
+    <desc>c</desc>
+    <number>11163</number>
+    <rtept lat="47.600000000" lon="-89.900000000">
+      <name>RPT001</name>
     </rtept>
   </rte>
   <rte>

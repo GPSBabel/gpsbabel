@@ -4,6 +4,29 @@
 
 rm -f ${TMPDIR}/sortfilter*
 
-gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,time -o gpx -F ${TMPDIR}/sortfilter_out.gpx
-compare ${REFERENCE}/sortfilter_out.gpx ${TMPDIR}/sortfilter_out.gpx
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,time -o gpx -F ${TMPDIR}/sortfilter_time_out.gpx
+compare ${REFERENCE}/sortfilter_time_out.gpx ${TMPDIR}/sortfilter_time_out.gpx
 
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,shortname -o gpx -F ${TMPDIR}/sortfilter_shortname_out.gpx
+compare ${REFERENCE}/sortfilter_shortname_out.gpx ${TMPDIR}/sortfilter_shortname_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,description -o gpx -F ${TMPDIR}/sortfilter_description_out.gpx
+compare ${REFERENCE}/sortfilter_description_out.gpx ${TMPDIR}/sortfilter_description_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,rtenum -o gpx -F ${TMPDIR}/sortfilter_rtenum_out.gpx
+compare ${REFERENCE}/sortfilter_rtenum_out.gpx ${TMPDIR}/sortfilter_rtenum_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,rtename -o gpx -F ${TMPDIR}/sortfilter_rtename_out.gpx
+compare ${REFERENCE}/sortfilter_rtename_out.gpx ${TMPDIR}/sortfilter_rtename_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,rtedesc -o gpx -F ${TMPDIR}/sortfilter_rtedesc_out.gpx
+compare ${REFERENCE}/sortfilter_rtedesc_out.gpx ${TMPDIR}/sortfilter_rtedesc_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,trknum -o gpx -F ${TMPDIR}/sortfilter_trknum_out.gpx
+compare ${REFERENCE}/sortfilter_trknum_out.gpx ${TMPDIR}/sortfilter_trknum_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,trkname -o gpx -F ${TMPDIR}/sortfilter_trkname_out.gpx
+compare ${REFERENCE}/sortfilter_trkname_out.gpx ${TMPDIR}/sortfilter_trkname_out.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,trkdesc -o gpx -F ${TMPDIR}/sortfilter_trkdesc_out.gpx
+compare ${REFERENCE}/sortfilter_trkdesc_out.gpx ${TMPDIR}/sortfilter_trkdesc_out.gpx

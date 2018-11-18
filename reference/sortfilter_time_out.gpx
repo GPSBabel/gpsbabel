@@ -3,10 +3,10 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="25.600000000" minlon="-112.900000000" maxlat="48.858370100" maxlon="2.292292600"/>
   <wpt lat="48.858370100" lon="2.292292600">
-    <time>2018-07-06T05:04:03.750Z</time>
-    <name>a</name>
-    <cmt>b</cmt>
-    <desc>b</desc>
+    <time>2018-07-05T05:04:03.750Z</time>
+    <name>c</name>
+    <cmt>d</cmt>
+    <desc>d</desc>
   </wpt>
   <wpt lat="48.858370100" lon="2.292292600">
     <time>2018-07-06T05:04:03.250Z</time>
@@ -15,16 +15,16 @@
     <desc>a</desc>
   </wpt>
   <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-06T05:04:03.750Z</time>
+    <name>a</name>
+    <cmt>b</cmt>
+    <desc>b</desc>
+  </wpt>
+  <wpt lat="48.858370100" lon="2.292292600">
     <time>2018-07-07T05:04:03.750Z</time>
     <name>d</name>
     <cmt>c</cmt>
     <desc>c</desc>
-  </wpt>
-  <wpt lat="48.858370100" lon="2.292292600">
-    <time>2018-07-05T05:04:03.750Z</time>
-    <name>c</name>
-    <cmt>d</cmt>
-    <desc>d</desc>
   </wpt>
   <rte>
     <name>b</name>

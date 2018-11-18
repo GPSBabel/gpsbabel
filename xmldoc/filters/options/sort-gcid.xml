@@ -1,8 +1,7 @@
 <para>
-If the data contains Groundspeak geocache IDs, this option causes the 
-waypoints to be sorted in alphabetical order by geocache ID.
+If the data contains Groundspeak geocache IDs, this option causes the
+waypoints to be sorted in numerical order by geocache ID.
 </para>
 <para>
-This option is not valid in combination with any other option.
+This option is not valid in combination with description, shortname, and time.
 </para>
-
