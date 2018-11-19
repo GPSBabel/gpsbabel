@@ -298,7 +298,8 @@ static int            writing_version;
 #define MAXUSRSTRINGSIZE        256
 #define SEMIMINOR               6356752.3142
 //#define DEGREESTORADIANS        0.017453292
-#define DEGREESTORADIANS        0.01745329252   // increased accuracy in calculations
+//#define DEGREESTORADIANS        0.01745329252   // increased accuracy in calculations
+#define DEGREESTORADIANS        (M_PI/180.0)
 #define MAX_TRAIL_POINTS        9999
 #define UNKNOWN_USR_ALTITUDE    METERS_TO_FEET(-10000) /* -10000ft is how the unit stores unknown */
 
