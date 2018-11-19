@@ -15,16 +15,16 @@
     <desc>a</desc>
   </wpt>
   <wpt lat="48.858370100" lon="2.292292600">
-    <time>2018-07-07T05:04:03.750Z</time>
-    <name>d</name>
-    <cmt>c</cmt>
-    <desc>c</desc>
-  </wpt>
-  <wpt lat="48.858370100" lon="2.292292600">
     <time>2018-07-05T05:04:03.750Z</time>
     <name>c</name>
     <cmt>d</cmt>
     <desc>d</desc>
+  </wpt>
+  <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-07T05:04:03.750Z</time>
+    <name>d</name>
+    <cmt>c</cmt>
+    <desc>c</desc>
   </wpt>
   <rte>
     <name>b</name>

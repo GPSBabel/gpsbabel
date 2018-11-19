@@ -129,7 +129,7 @@ fl_vecs_t filter_vec_list[] = {
     {
       &sort,
       "sort",
-      "Rearrange waypoints by resorting",
+      "Rearrange waypoints, routes and/or tracks by resorting",
     },
     {
       &stackfilt,

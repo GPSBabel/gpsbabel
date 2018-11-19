@@ -39,44 +39,92 @@ public:
   void process() override;
 
 private:
-  typedef enum {
-    sm_unknown = 0,
-    sm_gcid,
-    sm_shortname,
-    sm_description,
-    sm_time
-  } sort_mode_;
+  enum class SortModeWpt {
+    none,
+    description,
+    gcid,
+    shortname,
+    time
+  };
 
-  sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
+  SortModeWpt wpt_sort_mode = SortModeWpt::none;	/* How are we sorting these? */
+
+  enum class SortModeRteHd {
+    none,
+    description,
+    name,
+    number
+  };
+
+  SortModeRteHd rte_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
+  SortModeRteHd trk_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
+  SortModeRteHd rh_sort_mode = SortModeRteHd::none;
 
   char* opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
+  char* opt_sm_rtenum, *opt_sm_rtename, *opt_sm_rtedesc;
+  char* opt_sm_trknum, *opt_sm_trkname, *opt_sm_trkdesc;
 
-  arglist_t args[5] = {
+  arglist_t args[11] = {
     {
-      "gcid", &opt_sm_gcid, "Sort by numeric geocache ID",
+      "description", &opt_sm_description, "Sort waypoints by description",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "shortname", &opt_sm_shortname, "Sort by waypoint short name",
+      "gcid", &opt_sm_gcid, "Sort waypoints by numeric geocache ID",
+      nullptr, ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "shortname", &opt_sm_shortname, "Sort waypoints by short name",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "description", &opt_sm_description, "Sort by waypoint description",
+      "time", &opt_sm_time, "Sort waypoints by time",
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "rtedesc", &opt_sm_rtedesc, "Sort routes by description",
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "rtename", &opt_sm_rtename, "Sort routes by name",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "time", &opt_sm_time, "Sort by time",
+      "rtenum", &opt_sm_rtenum, "Sort routes by number",
+      nullptr, ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "trkdesc", &opt_sm_trkdesc, "Sort tracks by description",
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "trkname", &opt_sm_trkname, "Sort tracks by name",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "trknum", &opt_sm_trknum, "Sort tracks by number",
+      nullptr, ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     ARG_TERMINATOR
   };
 
-  int sort_comp(const queue* a, const queue* b);
+  int sort_comp_wpt(const queue* a, const queue* b);
+  int sort_comp_rh(const queue* a, const queue* b);
 
-  class SortCompFunctor
+  class SortCompWptFunctor
   {
   public:
-    SortCompFunctor(SortFilter& obj) : that(&obj) {}
+    SortCompWptFunctor(SortFilter& obj) : that(&obj) {}
+    int operator()(const queue* a, const queue* b);
+
+  private:
+    SortFilter* that;
+  };
+
+  class SortCompRteHdFunctor
+  {
+  public:
+    SortCompRteHdFunctor(SortFilter& obj) : that(&obj) {}
     int operator()(const queue* a, const queue* b);
 
   private:

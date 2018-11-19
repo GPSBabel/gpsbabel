@@ -1,5 +1,4 @@
 <para>
-This filter sorts waypoints into alphabetical order by the selected field.
-You must specify exactly one of the options.
+This filter sorts waypoints, routes and/or tracks by the selected field(s).
 </para>
       

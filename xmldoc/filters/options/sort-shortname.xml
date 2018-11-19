@@ -1,8 +1,7 @@
 <para>
-This option causes the waypoints to be sorted in alphabetical order by 
+This option causes the waypoints to be sorted in alphabetical order by
 short name.
 </para>
 <para>
-This option is not valid in combination with any other option.
+This option is not valid in combination with description, gcid, and time.
 </para>
-
