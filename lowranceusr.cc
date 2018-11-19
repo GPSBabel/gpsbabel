@@ -1488,7 +1488,6 @@ data_read()
 
   if ((reading_version < 2) || (reading_version > 6)) {
     fatal(MYNAME " input file is a USR format that is not supported\n");
-    exit(-1);
   }
 
   if (reading_version >= 4) {
@@ -1870,7 +1869,7 @@ lowranceusr_route_hdr(const route_head* rte)
     name = xstrdup(rte->rte_desc);
   } else {
     tmp_name[0]='\0';
-    snprintf(tmp_name, sizeof(tmp_name), "Babel R%u", ++lowrance_route_count);
+    snprintf(tmp_name, sizeof(tmp_name), "Babel R%d", ++lowrance_route_count);
     name = xstrdup(tmp_name);
   }
   int text_len = strlen(name);
@@ -1983,7 +1982,7 @@ lowranceusr_merge_trail_hdr(const route_head* trk)
       name = xstrdup(trk->rte_desc);
     } else {
       tmp_name[0]='\0';
-      snprintf(tmp_name, sizeof(tmp_name), "Babel %u", trail_count);
+      snprintf(tmp_name, sizeof(tmp_name), "Babel %d", trail_count);
       name = xstrdup(tmp_name);
     }
     int text_len = strlen(name);
@@ -2242,7 +2241,6 @@ data_write()
     } else {
       /* MERGE NEEDS SOME MORE WORK */
       fatal(MYNAME " output file USR %d format is not supported with merge option\n", writing_version);
-      exit(-1);
     }
 
   } else {
