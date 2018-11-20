@@ -22,36 +22,38 @@ five USR formats or even the GPX format.
 
 <para>
 The following provides a high-level description of the multiple USR formats that are supported by the Lowrance product set
-(this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>).
+(this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>) and other sources.
 </para>
 <para>
-          <emphasis>User Data File version 2 (no depth) </emphasis>- 
-            Typically used when transferring user data from one system to a
-            legacy product (Lowrance LMS, LCX, and so on.)  This is the default
-            output USR version used by GPSBabel. It contains only basic information
-            on waypoints, routes, and trails.
+          <emphasis>User Data File version 2 </emphasis>- 
+            Legacy file format.
+            This is the default output USR version used by GPSBabel.
+            It contains only basic information on waypoints, routes, and trails.
 </para>
 <para>
-          <emphasis>User Data File version 3 (w/depth)</emphasis> - 
-            Also used when transferring user data from one system to
-            a legacy product (Lowrance LMS, LCX, and so on.)
+          <emphasis>User Data File version 3 </emphasis> - 
+            Legacy file format.
+            Added depth information to Route waypoints.
+            Supports trails with a maximum of 10,000 trail-points.
+            Last version that supports Event Marker ICONs.
 </para>
 <para>
           <emphasis>User Data File version 4</emphasis> - 
-            This is best used when transferring data from one system to
-            another since it contains all the extra bits of information these
-            systems store about items.
+            Seems to be the best option for transferring data from older Lowrance units.
+            Many of the counts (Number of Waypoints, Number of Routes, etc) were exanded from
+            16-bit integer values (maximum value of 65,535) to 32-bit (maxumum value 2,147,483,647)
+            USRv4 and above support a maximum of 20,000 trail-points (actually 24K and change).
+            USRv4 and above and GPX support trails with trail-segments.
+
 </para>
 <para>
           <emphasis>User Data File version 5</emphasis> - 
-            This is used to import and export waypoints and routes with a
-            standardized universally unique identifier (UUID), which is very
-            reliable and easy to use. The data includes such information as
-            the time and date when a route was created, and so on.
+            Lowrance introduced universally unique identifiers (UUIDs) in this version.
 </para>
 <para>
           <emphasis>User Data File version 6</emphasis> - 
-            This is used to import and export waypoints, routes and colored Trails.
+            Latest format.  
+            Supports trail characteristics speed and temperature.
 </para>
 
 <para>
@@ -1195,3 +1197,41 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
     
+<para>
+Some Lowrance units have the ability to export
+<ulink url="https://www.topografix.com/gpx.asp">GPX</ulink> (GPS Exchange Format) formatted data.
+Lowrance only provides minimal
+support for GPX export data on their HOOK2 series (only data available to the author).  Refer to 
+the official <ulink url="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</ulink> for the complete schema.
+</para>
+<example>
+  <title>Lowrance GPX Export Data</title>
+  <programlisting>
+    &lt;metadata>
+      &lt;time>xsd:dateTime&lt;/time>
+      &lt;depthunits>meters&lt;/depthunits>
+      &lt;tempunits>C&lt;/tempunits>
+      &lt;sogunits>m/s&lt;/sogunits>
+    &lt;/metadata>
+    &lt;wpt lon="longitudeType" lat="latitudeType">
+      &lt;time>xsd:dateTime&lt;/time>
+      &lt;name>xsd:string&lt;/name>
+      &lt;sym>xsd:string&lt;/sym>
+    &lt;/rte>
+      &lt;name>xsd:string&lt;/name>
+      &lt;rtept lon="longitudeType" lat="latitudeType">
+        &lt;time>xsd:dateTime&lt;/time>
+        &lt;name>xsd:string&lt;/name>
+        &lt;sym>xsd:string&lt;/sym>
+      &lt;/rtept>
+    &lt;/rte>
+    &lt;trk>
+      &lt;name>xsd:string&lt;/name>
+      &lt;trkseg>
+        &lt;trkpt lon="longitudeType" lat="latitudeType">
+          &lt;time>xsd:dateTime&lt;/time>
+        &lt;/trkpt>
+      &lt;/trkseg>
+    &lt;/trk>
+  </programlisting>
+</example>

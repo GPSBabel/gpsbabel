@@ -50,39 +50,37 @@
     BBCBoards.Net : Lowrance Sonar/GPS Topic : Waypoints; USR Versions Thread : http://www.bbcboards.net/showthread.php?t=855028
     Python USR4 (Version 4) to GPX Converter - http://lowranceusrv4togpxconverter.blogspot.com/2011/12/about-this-blog.html
 
-    USRv3 supported trails with a maximum of 10,000 trail-points.
-    USRv4 and above support a maximum of 20,000 trail-points(actually 24K and change).
-    USRv4 and above & GPX support trails with trail-segments.
-    USRv6 supports trail characteristics speed & temperature.
-
-    USR Data File Description (quoted text) from Lowrance Manual
-    ------------------------------------------------------------
       User Data File version 6 - USRv6
-        "This is used to import and export waypoints, routes and colored Trails."
+       Latest format.
+       Supports trail characteristics speed and temperature.
 
       User Data File version 5 - USRv5
-        "This is used to import and export waypoints and routes with a
-        standardized universally unique identifier (UUID), which is very
-        reliable and easy to use. The data includes such information as
-        the time and date when a route was created, and so on."
+        Lowrance introduced universally unique identifiers (UUIDs) in this version.
 
       User Data File version 4 - USRv4
-        "This is best used when transferring data from one system to
-        another, since it contains all the extra bits of information these
-        systems store about items."
+        Seems to be the best option for transferring data from older Lowrance units.
+        Many of the counts (Number of Waypoints, Number of Routes, etc) were exanded from
+        16-bit integer values (maximum value of 65,535) to 32-bit (maxumum value 2,147,483,647)
+        USRv4 and above support a maximum of 20,000 trail-points (actually 24K and change).
+        USRv4 and above and GPX support trails with trail-segments.
 
-      User Data File version 3 - USRv3 (w/depth)
-        "Should be used when transferring user data from one system to
-        a legacy product (Lowrance LMS, LCX, and so on.)"
+      User Data File version 3 - USRv3
+        Legacy file format.
+        Added depth information to Route waypoints.
+        Supports trails with a maximum of 10,000 trail-points.
+        Last version that supports Event Marker ICONs.
 
-      User Data File version 2 - USRv2 (no depth)
-        "Can be used when transferring user data from one system to a
-        legacy product (Lowrance LMS, LCX, and so on.)"
+      User Data File version 2 - USRv2
+        Legacy file format.
+        This is the default output USR version used by GPSBabel.
+        This format contains ony basic information on waypoints, routes, and trails.
 
-      GPX (GPS Exchange, no depth)
-        "This is the format most used on the web that shares among
-        most GPS systems in the world. Use this format if you are taking
-        data to a competitors unit."
+      GPX (GPS Exchange)
+        Common format supported by many vendors and programs.  Lowrance only provides
+        minimal support for GPX export with their HOOK2 series.  Waypoints include 
+        longitude, latitude, timestamp, name and symbol information.  Routes include
+        name and for route points longitude, latitude, timestamp, name, and symbol.
+        Tracks include name and for track points longitude, latitude, and timestamp.
 
 */
 
