@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="76.000003614" maxlon="158.537464649"/>
+  <bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="82.999996519" maxlon="158.537464649"/>
   <wpt lat="25.400181298" lon="80.144525617">
     <time>2008-08-23T18:14:04Z</time>
     <name>Wpt_12E7vrv</name>
@@ -290,6 +290,22 @@
     <name>Wpt_37X_2</name>
     <cmt>Wpt_37X_2</cmt>
     <desc>Wpt_37X_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="79.000001449" lon="1.000006060">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31X_1</name>
+    <cmt>Wpt_31X_1</cmt>
+    <desc>Wpt_31X_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="82.999996519" lon="0.999966472">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31X_2</name>
+    <cmt>Wpt_31X_2</cmt>
+    <desc>Wpt_31X_2</desc>
     <sym>Waypoint</sym>
   </wpt>
 </gpx>

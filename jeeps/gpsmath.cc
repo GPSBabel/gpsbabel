@@ -2004,19 +2004,19 @@ static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,
 {
   int32 ilon;
   int32 ilat;
-  int32 psign;
-  int32 lsign;
+  bool psign;
+  bool lsign;
 
   if (lat >= 84.0 || lat < -80.0) {
     return 0;
   }
 
-  psign = lsign = 0;
+  psign = lsign = false;
   if (lon < 0.0) {
-    lsign=1;
+    lsign=true;
   }
   if (lat < 0.0) {
-    psign=1;
+    psign=true;
   }
 
   ilon = abs((int32)lon);
@@ -2024,10 +2024,10 @@ static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,
 
   if (!lsign) {
     *zone = 31 + (ilon / 6);
-    *Mc   = (double)((ilon / 6) * 6 + 3);
+    *Mc   = static_cast<double>((ilon / 6) * 6 + 3);
   } else {
     *zone = 30 - (ilon / 6);
-    *Mc   = -(double)((ilon / 6) * 6 + 3);
+    *Mc   = -static_cast<double>((ilon / 6) * 6 + 3);
   }
 
   if (!psign) {
@@ -2042,14 +2042,19 @@ static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,
     }
   }
 
+  // The northernmost latitude band, X, is 12 degrees tall
+  // instead of the usual 8 degrees, i.e. [72.0,84.0).
+  if (*zc=='Y') {
+    *zc = 'X';
+  }
 
-  if (lat>=56.0 && lat<64.0 && lon>=3.0 &&
-      lon<12.0) {
+  // Norway exception
+  if (*zc=='V' && lon>=3.0 && lon<12.0) {
     *zone = 32;
-    *zc   = 'V';
     *Mc   = 9.0;
   }
 
+  // Svalbard exception
   if (*zc=='X' && lon>=0.0 && lon<42.0) {
     if (lon<9.0) {
       *zone = 31;
