@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="65.469335178" maxlon="158.537464649"/>
+  <bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="76.000003614" maxlon="158.537464649"/>
   <wpt lat="25.400181298" lon="80.144525617">
     <time>2008-08-23T18:14:04Z</time>
     <name>Wpt_12E7vrv</name>
@@ -194,6 +194,102 @@
     <name>Wpt_ZHNuvzhQ</name>
     <cmt>Wpt_ZHNuvzhQ</cmt>
     <desc>Wpt_ZHNuvzhQ</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.999996103" lon="1.000000988">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31V_1</name>
+    <cmt>Wpt_31V_1</cmt>
+    <desc>Wpt_31V_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.000002409" lon="2.000004710">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31V_2</name>
+    <cmt>Wpt_31V_2</cmt>
+    <desc>Wpt_31V_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.999999787" lon="4.000003927">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_32V_1</name>
+    <cmt>Wpt_32V_1</cmt>
+    <desc>Wpt_32V_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.999996103" lon="10.999999012">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_32V_2</name>
+    <cmt>Wpt_32V_2</cmt>
+    <desc>Wpt_32V_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000000478" lon="1.000017959">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31X_1</name>
+    <cmt>Wpt_31X_1</cmt>
+    <desc>Wpt_31X_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="7.999997628">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_31X_2</name>
+    <cmt>Wpt_31X_2</cmt>
+    <desc>Wpt_31X_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="10.000002372">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_33X_1</name>
+    <cmt>Wpt_33X_1</cmt>
+    <desc>Wpt_33X_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="19.999997628">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_33X_2</name>
+    <cmt>Wpt_33X_2</cmt>
+    <desc>Wpt_33X_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="22.000002372">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_35X_1</name>
+    <cmt>Wpt_35X_1</cmt>
+    <desc>Wpt_35X_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="31.999997628">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_35X_2</name>
+    <cmt>Wpt_35X_2</cmt>
+    <desc>Wpt_35X_2</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000003614" lon="34.000002372">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_37X_1</name>
+    <cmt>Wpt_37X_1</cmt>
+    <desc>Wpt_37X_1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="76.000000478" lon="40.999982041">
+    <ele>0.000</ele>
+    <time>2018-11-24T00:00:00Z</time>
+    <name>Wpt_37X_2</name>
+    <cmt>Wpt_37X_2</cmt>
+    <desc>Wpt_37X_2</desc>
     <sym>Waypoint</sym>
   </wpt>
 </gpx>

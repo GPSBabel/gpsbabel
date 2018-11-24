@@ -2169,32 +2169,14 @@ static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double* Mc,
                                       double* E0, double* N0, double* F0)
 {
 
-  if (zone>60 || zone<0 || zc<'C' || zc>'X') {
+  if (zone>60 || zone<0 || zc<'C' || zc>'X' || zc=='I' || zc=='O') {
     return 0;
   }
 
-  if (zone > 30) {
-    *Mc = (double)((zone-31)*6) + 3.0;
-  } else {
-    *Mc = (double) -(((30-zone)*6)+3);
-  }
+  *Mc = static_cast<double>(((zone-31)*6) + 3);
 
-  if (zone==32 && zc=='V') {
-    *Mc = 9.0;
-  }
-
-  if (zone==31 && zc=='X') {
-    *Mc = 3.0;
-  }
-  if (zone==33 && zc=='X') {
-    *Mc = 15.0;
-  }
-  if (zone==35 && zc=='X') {
-    *Mc = 27.0;
-  }
-  if (zone==37 && zc=='X') {
-    *Mc = 39.0;
-  }
+  // The Norway and Svalbard exceptions do NOT change the central meridian of
+  // the impacted zones (31V, 32V, 31X, 33X, 35X, 37X).
 
   if (zc>'M') {
     *N0 = 0.0;
