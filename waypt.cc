@@ -381,13 +381,13 @@ waypt_restore(signed int count, queue* head_bak)
 void
 waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text)
 {
-  wpt->url_link_list_.push_back(UrlLink(link, url_link_text));
+  wpt->AddUrlLink(UrlLink(link, url_link_text));
 }
 
 void
 waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text, const QString& url_link_type)
 {
-  wpt->url_link_list_.push_back(UrlLink(link, url_link_text, url_link_type));
+  wpt->AddUrlLink(UrlLink(link, url_link_text, url_link_type));
 }
 
 double
@@ -606,7 +606,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   shortname(other.shortname),
   description(other.description),
   notes(other.notes),
-  url_link_list_(other.url_link_list_),
+  urls(other.urls),
   wpt_flags(other.wpt_flags),
   icon_descr(other.icon_descr),
   creation_time(other.creation_time),
@@ -649,25 +649,25 @@ Waypoint::Waypoint(const Waypoint& other) :
 bool
 Waypoint::HasUrlLink() const
 {
-  return !url_link_list_.isEmpty();
+  return urls.HasUrlLink();
 }
 
 const UrlLink&
 Waypoint::GetUrlLink() const
 {
-  return url_link_list_[0];
+  return urls.GetUrlLink();
 }
 
-const QList<UrlLink>
+[[deprecated]] const QList<UrlLink>
 Waypoint::GetUrlLinks() const
 {
-  return url_link_list_;
+  return urls;
 }
 
 void
 Waypoint::AddUrlLink(const UrlLink& l)
 {
-  url_link_list_.push_back(l);
+  urls.AddUrlLink(l);
 }
 
 QString

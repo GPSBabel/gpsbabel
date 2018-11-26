@@ -131,7 +131,7 @@ random_read()
     }
     head->rte_desc = rand_qstr(16, nullptr);
 	if RND(3) {
-      head->rte_url = rand_qstr(8, "http://rteurl.example.com/%s");
+      head->rte_urls.AddUrlLink(UrlLink(rand_qstr(8, "http://rteurl.example.com/%s")));
     }
   } else {
     head = nullptr;

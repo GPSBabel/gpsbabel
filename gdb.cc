@@ -901,9 +901,9 @@ read_route()
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    rte->rte_url = fread_cstr();
+    rte->rte_urls.AddUrlLink(UrlLink(fread_cstr()));
   } else {
-    rte->rte_url = gdb_fread_strlist();
+    rte->rte_urls.AddUrlLink(UrlLink(gdb_fread_strlist()));
 
     int color_idx = FREAD_i32;
     rte->line_color.bbggrr = gt_color_value(color_idx);
@@ -971,9 +971,9 @@ read_track()
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_3) {
-    res->rte_url = gdb_fread_strlist();
+    res->rte_urls.AddUrlLink(UrlLink(gdb_fread_strlist()));
   } else { /* if (gdb_ver <= GDB_VER_2) */
-    res->rte_url = FREAD_CSTR_AS_QSTR;
+    res->rte_urls.AddUrlLink(UrlLink(FREAD_CSTR_AS_QSTR));
   }
 #if GDB_DEBUG
   DBG(GDB_DBG_TRK, !res->rte_url.isNull())
@@ -1327,7 +1327,6 @@ write_waypoint(
     }
     FWRITE_CSTR(descr);
   } else { /* if (gdb_ver > GDB_VER_3) */
-    int cnt;
 //    url_link* url_next;
 //    const char* str;
     QString str;
@@ -1362,10 +1361,8 @@ write_waypoint(
     FWRITE_CSTR(str);				/* instruction */
 #endif
 
-    cnt = 0;
-    cnt += wpt->url_link_list_.size();
-    FWRITE_i32(cnt);
-    foreach(UrlLink l, wpt->GetUrlLinks()) {
+    FWRITE_i32(wpt->urls.size());
+    foreach(UrlLink l, wpt->urls) {
       FWRITE_CSTR(l.url_);
     }
   }
@@ -1518,9 +1515,17 @@ write_route(const route_head* rte, const QString& rte_name)
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    FWRITE_CSTR(rte->rte_url);
+    if (rte->rte_urls.HasUrlLink()) {
+      FWRITE_CSTR(rte->rte_urls.GetUrlLink().url_);
+    } else {
+      FWRITE_CSTR("");
+    }
   } else { /* if (gdb_ver >= GDB_VER_3) */
-    FWRITE_CSTR_LIST(rte->rte_url);
+    if (rte->rte_urls.HasUrlLink()) {
+      FWRITE_CSTR_LIST(rte->rte_urls.GetUrlLink().url_);
+    } else {
+      FWRITE_CSTR_LIST("");
+    }
     /* "Magenta" (14) is MapSource default */
     FWRITE_i32((rte->line_color.bbggrr < 0) ? 14 : gt_color_index_by_rgb(rte->line_color.bbggrr));
     FWRITE_C(0);
@@ -1560,9 +1565,17 @@ write_track(const route_head* trk, const QString& trk_name)
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    FWRITE_CSTR(trk->rte_url);
+    if (trk->rte_urls.HasUrlLink()) {
+      FWRITE_CSTR(trk->rte_urls.GetUrlLink().url_);
+    } else {
+      FWRITE_CSTR("");
+    }
   } else { /* if (gdb_ver >= GDB_VER_3 */
-    FWRITE_CSTR_LIST(trk->rte_url);
+    if (trk->rte_urls.HasUrlLink()) {
+      FWRITE_CSTR_LIST(trk->rte_urls.GetUrlLink().url_);
+    } else {
+      FWRITE_CSTR_LIST("");
+    }
   }
 }
 

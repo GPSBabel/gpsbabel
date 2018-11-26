@@ -61,7 +61,7 @@ cst_add_wpt(route_head* track, Waypoint* wpt)
     // Rather than creating a new waypt on each read, tis format bizarrely
     // recycles the same one, relying on new waypoint(*) above and then manually
     // resetting fields.  Weird.
-    wpt->url_link_list_.clear();
+    wpt->urls.clear();
 
     if (temp_route == nullptr) {
       temp_route = route_head_alloc();

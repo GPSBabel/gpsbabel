@@ -361,6 +361,24 @@ public:
   QString url_link_type_;
 };
 
+class UrlList : public QList<UrlLink>
+{
+public:
+  void AddUrlLink(const UrlLink& l)
+  {
+    push_back(l);
+  }
+
+  bool HasUrlLink() const
+  {
+    return !isEmpty();
+  }
+
+  const UrlLink& GetUrlLink() const
+  {
+    return first();
+  }
+};
 
 /*
  * Misc bitfields inside struct waypoint;
@@ -493,9 +511,7 @@ public:
    */
   QString notes;
 
-  /* TODO: UrlLink should probably move to a "real" class of its own.
-   */
-  QList<UrlLink> url_link_list_;
+  UrlList urls;
 
   wp_flags wpt_flags;
   QString icon_descr;
@@ -546,7 +562,7 @@ public:
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
-  const QList<UrlLink> GetUrlLinks() const;
+  [[deprecated]] const QList<UrlLink> GetUrlLinks() const;
   void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
   gpsbabel::DateTime GetCreationTime() const;
@@ -653,7 +669,7 @@ public:
   queue waypoint_list;	/* List of child waypoints */
   QString rte_name;
   QString rte_desc;
-  QString rte_url;
+  UrlList rte_urls;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
   format_specific_data* fs;
