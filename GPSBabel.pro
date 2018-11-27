@@ -266,3 +266,6 @@ linux{
   coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
   QMAKE_EXTRA_TARGETS += coverage
 }
+
+cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
+QMAKE_EXTRA_TARGETS += cppcheck

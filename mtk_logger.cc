@@ -303,7 +303,8 @@ static void dbg(int l, const char* msg, ...)
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static const QString GetTempName(bool backup) {
+static const QString GetTempName(bool backup)
+{
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";
   return QDir::tempPath() + QDir::separator() + (backup ? kDataBackup : kData);
@@ -817,11 +818,11 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
       sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
     }
     trk_head->rte_desc = QString().sprintf("Log every %.0f sec, %.0f m%s"
-              , mtk_info.period/10., mtk_info.distance/10., spds);
+                                           , mtk_info.period/10., mtk_info.distance/10., spds);
     track_add_head(trk_head);
   }
 
-  if (bmask & (1<<LATITUDE) && bmask & (1<<LONGITUDE)) {
+  if (bmask & (1U<<LATITUDE) && bmask & (1U<<LONGITUDE)) {
     trk->latitude       = itm->lat;
     trk->longitude      = itm->lon;
   } else {
@@ -829,31 +830,31 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     return -1; // GPX requires lat/lon...
   }
 
-  if (bmask & (1<<HEIGHT)) {
+  if (bmask & (1U<<HEIGHT)) {
     trk->altitude       = itm->height;
   }
   trk->SetCreationTime(itm->timestamp); // in UTC..
-  if (bmask & (1<<MILLISECOND)) {
+  if (bmask & (1U<<MILLISECOND)) {
     trk->creation_time = trk->creation_time.addMSecs(itm->timestamp_ms);
   }
 
-  if (bmask & (1<<PDOP)) {
+  if (bmask & (1U<<PDOP)) {
     trk->pdop = itm->pdop;
   }
-  if (bmask & (1<<HDOP)) {
+  if (bmask & (1U<<HDOP)) {
     trk->hdop = itm->hdop;
   }
-  if (bmask & (1<<VDOP)) {
+  if (bmask & (1U<<VDOP)) {
     trk->vdop = itm->vdop;
   }
 
-  if (bmask & (1<<HEADING)) {
+  if (bmask & (1U<<HEADING)) {
     WAYPT_SET(trk, course, itm->heading);
   }
-  if (bmask & (1<<SPEED)) {
+  if (bmask & (1U<<SPEED)) {
     WAYPT_SET(trk, speed, KPH_TO_MPS(itm->speed));
   }
-  if (bmask & (1<<VALID)) {
+  if (bmask & (1U<<VALID)) {
     switch (itm->valid) {
     case 0x0040:
       trk->fix = fix_unknown;
@@ -889,14 +890,14 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
       return -1;
     }
   }
-  if (bmask & (1<<NSAT)) {
+  if (bmask & (1U<<NSAT)) {
     trk->sat = itm->sat_used;
   }
 
   // RCR is a bitmask of possibly several log reasons..
   // Holux devics use a Event prefix for each waypt.
   if (global_opts.masked_objective & WPTDATAMASK
-      && ((bmask & (1<<RCR) && itm->rcr & 0x0008)
+      && ((bmask & (1U<<RCR) && itm->rcr & 0x0008)
           || (mtk_info.track_event & MTK_EVT_WAYPT)
          )
      ) {
@@ -942,10 +943,10 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   }
 
   /* Add the header line */
-  gbfprintf(cd, "INDEX,%s%s", ((1<<RCR) & bitmask)?"RCR,":"",
-            ((1<<UTC) & bitmask)?"DATE,TIME,":"");
+  gbfprintf(cd, "INDEX,%s%s", ((1U<<RCR) & bitmask)?"RCR,":"",
+            ((1U<<UTC) & bitmask)?"DATE,TIME,":"");
   for (int i = 0; i<32; i++) {
-    if ((1<<i) & bitmask) {
+    if ((1U<<i) & bitmask) {
       switch (i) {
       case RCR:
       case UTC:
@@ -968,7 +969,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
         break;
       }
     }
-    if (i == SNR && (1<<SID) & bitmask) {
+    if (i == SNR && (1U<<SID) & bitmask) {
       gbfprintf(cd, "),");
     }
   }
@@ -992,7 +993,7 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   struct tm* ts_tm = gmtime(&(itm->timestamp));
   strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);
 
-  if (bmask & (1<<VALID)) {
+  if (bmask & (1U<<VALID)) {
     switch (itm->valid) {
     case 0x0001:
       fix_str = "No fix";
@@ -1029,56 +1030,56 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   gbfprintf(csvFile, "%d,", idx);
 
   // RCR is a bitmask of possibly several log reasons..
-  if (bmask & (1<<RCR))
+  if (bmask & (1U<<RCR))
     gbfprintf(csvFile, "%s%s%s%s,"
               , itm->rcr&0x0001?"T":"",itm->rcr&0x0002?"S":""
               , itm->rcr&0x0004?"D":"",itm->rcr&0x0008?"B":"");
 
-  if (bmask & (1<<UTC)) {
-    gbfprintf(csvFile, "%s.%.3d,", ts_str, (bmask & (1<<MILLISECOND))?itm->timestamp_ms:0);
+  if (bmask & (1U<<UTC)) {
+    gbfprintf(csvFile, "%s.%.3d,", ts_str, (bmask & (1U<<MILLISECOND))?itm->timestamp_ms:0);
   }
 
-  if (bmask & (1<<VALID)) {
+  if (bmask & (1U<<VALID)) {
     gbfprintf(csvFile, "%s,", fix_str);
   }
 
-  if (bmask & (1<<LATITUDE | 1<<LONGITUDE))
+  if (bmask & (1U<<LATITUDE | 1U<<LONGITUDE))
     gbfprintf(csvFile, "%.6f,%c,%.6f,%c,", fabs(itm->lat), itm->lat>0?'N':'S',
               fabs(itm->lon), itm->lon>0?'E':'W');
 
-  if (bmask & (1<<HEIGHT)) {
+  if (bmask & (1U<<HEIGHT)) {
     gbfprintf(csvFile, "%.3f m,",  itm->height);
   }
 
-  if (bmask & (1<<SPEED)) {
+  if (bmask & (1U<<SPEED)) {
     gbfprintf(csvFile, "%.3f km/h,", itm->speed);
   }
 
-  if (bmask & (1<<HEADING)) {
+  if (bmask & (1U<<HEADING)) {
     gbfprintf(csvFile, "%.6f,", itm->heading);
   }
 
-  if (bmask & (1<<DSTA)) {
+  if (bmask & (1U<<DSTA)) {
     gbfprintf(csvFile, "%d,", itm->dsta);
   }
-  if (bmask & (1<<DAGE)) {
+  if (bmask & (1U<<DAGE)) {
     gbfprintf(csvFile, "%.6f,", itm->dage);
   }
 
-  if (bmask & (1<<PDOP)) {
+  if (bmask & (1U<<PDOP)) {
     gbfprintf(csvFile, "%.2f,", itm->pdop);
   }
-  if (bmask & (1<<HDOP)) {
+  if (bmask & (1U<<HDOP)) {
     gbfprintf(csvFile, "%.2f,", itm->hdop);  // note bug in MTK appl. 1.02 is output as 1.2 !
   }
-  if (bmask & (1<<VDOP)) {
+  if (bmask & (1U<<VDOP)) {
     gbfprintf(csvFile, "%.2f,", itm->vdop);
   }
-  if (bmask & (1<<NSAT)) {
+  if (bmask & (1U<<NSAT)) {
     gbfprintf(csvFile, "%d(%d),", itm->sat_used, itm->sat_view);
   }
 
-  if (bmask & (1<<SID)) {
+  if (bmask & (1U<<SID)) {
     int do_sc = 0;
     char sstr[40];
     for (int l=0; l<itm->sat_count; l++) {
@@ -1086,23 +1087,23 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
       slen += sprintf(&sstr[slen], "%s%.2d"
                       , itm->sat_data[l].used?"#":""
                       , itm->sat_data[l].id);
-      if (bmask & (1<<ELEVATION)) {
+      if (bmask & (1U<<ELEVATION)) {
         slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].elevation);
       }
-      if (bmask & (1<<AZIMUTH)) {
+      if (bmask & (1U<<AZIMUTH)) {
         slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].azimut);
       }
-      if (bmask & (1<<SNR)) {
+      if (bmask & (1U<<SNR)) {
         slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].snr);
       }
 
-      gbfprintf(csvFile, "%s%s" , do_sc?";":"", sstr);
+      gbfprintf(csvFile, "%s%s", do_sc?";":"", sstr);
       do_sc = 1;
     }
     gbfprintf(csvFile, ",");
   }
 
-  if (bmask & (1<<DISTANCE)) {
+  if (bmask & (1U<<DISTANCE)) {
     gbfprintf(csvFile, "%10.2f m,", itm->distance);
   }
 
@@ -1134,28 +1135,28 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   int i = 0;
   unsigned char crc = 0;
   for (int k = 0; k<32; k++) {
-    switch (((1<<k) & bmask)) {
-    case 1<<UTC:
+    switch (((1U<<k) & bmask)) {
+    case 1U<<UTC:
       itm.timestamp = le_read32(data + i);
       break;
-    case 1<<VALID:
+    case 1U<<VALID:
       itm.valid = le_read16(data + i);
       break;
-    case 1<<LATITUDE:
+    case 1U<<LATITUDE:
       if (log_type[LATITUDE].size == 4) {
         itm.lat = endian_read_float(data + i, 1 /* le */); // M-241
       } else {
         itm.lat = endian_read_double(data + i, 1 /* le */);
       }
       break;
-    case 1<<LONGITUDE:
+    case 1U<<LONGITUDE:
       if (log_type[LONGITUDE].size == 4) {
         itm.lon = endian_read_float(data + i, 1 /* le */); // M-241
       } else {
         itm.lon = endian_read_double(data + i, 1 /* le */);
       }
       break;
-    case 1<<HEIGHT:
+    case 1U<<HEIGHT:
       switch (mtk_device) {
       case HOLUX_GR245: // Stupid Holux GPsport 245 - log speed as centimeters/sec. (in height position !)
         hspd = data[i] + data[i+1]*0x100 + data[i+2]*0x10000 + data[i+3]*0x1000000;
@@ -1174,7 +1175,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
         break;
       }
       break;
-    case 1<<SPEED:
+    case 1U<<SPEED:
       if (mtk_device == HOLUX_GR245) {  // Stupid Holux GPsport 245 - log height in speed position...
         hbuf[0] = 0x0;
         hbuf[1] = *(data + i);
@@ -1185,29 +1186,29 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
         itm.speed = endian_read_float(data + i, 1 /* le */);
       }
       break;
-    case 1<<HEADING:
+    case 1U<<HEADING:
       itm.heading = endian_read_float(data + i, 1 /* le */);
       break;
-    case 1<<DSTA:
+    case 1U<<DSTA:
       itm.dsta = le_read16(data + i);
       break;
-    case 1<<DAGE:  // ?? fixme - is this a float ?
+    case 1U<<DAGE:  // ?? fixme - is this a float ?
       itm.dage = endian_read_float(data + i, 1 /* le */);
       break;
-    case 1<<PDOP:
+    case 1U<<PDOP:
       itm.pdop = le_read16(data + i) / 100.;
       break;
-    case 1<<HDOP:
+    case 1U<<HDOP:
       itm.hdop = le_read16(data + i) / 100.;
       break;
-    case 1<<VDOP:
+    case 1U<<VDOP:
       itm.vdop = le_read16(data + i) / 100.;
       break;
-    case 1<<NSAT:
+    case 1U<<NSAT:
       itm.sat_view = data[i];
       itm.sat_used = data[i+1];
       break;
-    case 1<<SID: {
+    case 1U<<SID: {
       int sat_count;
       int sat_idx;
       int sid_size;
@@ -1225,16 +1226,16 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
       azoffset = 0;
       snroffset = 0;
       if (sat_count > 0) {  // handle 'Zero satellites in view issue'
-        if (bmask & (1<<ELEVATION)) {
+        if (bmask & (1U<<ELEVATION)) {
           sid_size += log_type[ELEVATION].size;
           azoffset += log_type[ELEVATION].size;
           snroffset += log_type[ELEVATION].size;
         }
-        if (bmask & (1<<AZIMUTH)) {
+        if (bmask & (1U<<AZIMUTH)) {
           sid_size += log_type[AZIMUTH].size;
           snroffset += log_type[AZIMUTH].size;
         }
-        if (bmask & (1<<SNR)) {
+        if (bmask & (1U<<SNR)) {
           sid_size += log_type[SNR].size;
         }
       }
@@ -1247,13 +1248,13 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
         // get_word(&data[i+2], &smask); // assume - nr of satellites...
 
         if (sat_count > 0) {
-          if (bmask & (1<<ELEVATION)) {
+          if (bmask & (1U<<ELEVATION)) {
             itm.sat_data[sat_idx].elevation = le_read16(data + i + 4);
           }
-          if (bmask & (1<<AZIMUTH)) {
+          if (bmask & (1U<<AZIMUTH)) {
             itm.sat_data[sat_idx].azimut = le_read16(data + i + 4 + azoffset);
           }
-          if (bmask & (1<<SNR)) {
+          if (bmask & (1U<<SNR)) {
             itm.sat_data[sat_idx].snr    = le_read16(data + i + 4 + snroffset);
           }
         }
@@ -1268,29 +1269,29 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
     }
     continue; // dont do any more checksum calc..
     break;
-    case 1<<ELEVATION:
-    case 1<<AZIMUTH:
-    case 1<<SNR:
+    case 1U<<ELEVATION:
+    case 1U<<AZIMUTH:
+    case 1U<<SNR:
       // handled in SID
       continue; // avoid checksum calc
       break;
-    case 1<<RCR:
+    case 1U<<RCR:
       itm.rcr = le_read16(data + i);
       break;
-    case 1<<MILLISECOND:
+    case 1U<<MILLISECOND:
       itm.timestamp_ms = le_read16(data + i);
       break;
-    case 1<<DISTANCE:
+    case 1U<<DISTANCE:
       itm.distance = endian_read_double(data + i, 1 /* le */);
       break;
     default:
-      // if ( ((1<<k) & bmask) )
+      // if ( ((1U<<k) & bmask) )
       //   printf("Unknown ID %d: %.2x %.2x %.2x %.2x\n", k, data[i], data[i+1], data[i+2], data[i+3]);
       break;
     } /* End: switch (bmap) */
 
     /* update item checksum and length */
-    if (((1<<k) & bmask)) {
+    if (((1U<<k) & bmask)) {
       for (int j = 0; j<log_type[k].size; j++) {
         crc ^= data[i+j];
       }
@@ -1365,8 +1366,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
     case 0x03:
       dbg(1, "# Log period change %.0f sec\n", cmd/10.);
       mtk_info.track_event |= MTK_EVT_PERIOD;
-      if (mtk_device != MTK_LOGGER)
-      {
+      if (mtk_device != MTK_LOGGER) {
         mtk_info.track_event |= MTK_EVT_START;
       }
       mtk_info.period = cmd;
@@ -1374,8 +1374,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
     case 0x04:
       dbg(1, "# Log distance change %.1f m\n", cmd/10.);
       mtk_info.track_event |= MTK_EVT_DISTANCE;
-      if (mtk_device != MTK_LOGGER)
-      {
+      if (mtk_device != MTK_LOGGER) {
         mtk_info.track_event |= MTK_EVT_START;
       }
       mtk_info.distance = cmd;
@@ -1397,8 +1396,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
     case 0x07:
       if (cmd == 0x0106) {
         dbg(5, "# GPS Logger# Turned On\n");
-        if (mtk_device == MTK_LOGGER)
-        {
+        if (mtk_device == MTK_LOGGER) {
           mtk_info.track_event |= MTK_EVT_START;
         }
       }
@@ -1439,11 +1437,11 @@ static int mtk_log_len(unsigned int bitmask)
     break;
   }
   for (int i = 0; i<32; i++) {
-    if ((1<<i) & bitmask) {
+    if ((1U<<i) & bitmask) {
       if (i > DISTANCE && global_opts.debug_level > 0) {
         warning(MYNAME ": Unknown size/meaning of bit %d\n", i);
       }
-      if ((i == SID || i == ELEVATION || i == AZIMUTH || i == SNR) && (1<<SID) & bitmask) {
+      if ((i == SID || i == ELEVATION || i == AZIMUTH || i == SNR) && (1U<<SID) & bitmask) {
         len += log_type[i].size*32;  // worst case, max sat. count..
       } else {
         len += log_type[i].size;
