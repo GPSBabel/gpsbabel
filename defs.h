@@ -815,13 +815,7 @@ typedef void (*ff_exit)(void);
 typedef void (*ff_writeposn)(Waypoint*);
 typedef Waypoint* (*ff_readposn)(posn_status*);
 
-#ifndef DEBUG_MEM
 char* get_option(const char* iarglist, const char* argname);
-#else
-#define DEBUG_PARAMS const char *file, const int line
-char* GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS);
-#define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
-#endif
 
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
@@ -851,16 +845,9 @@ typedef struct {
 } mkshort_handle_imp;
 typedef mkshort_handle_imp* short_handle;
 
-#ifndef DEBUG_MEM
 char* mkshort(short_handle,  const char*);
 QString mkshort(short_handle,  const QString&);
 short_handle mkshort_new_handle(void);
-#else
-char* MKSHORT(short_handle,  const char*, DEBUG_PARAMS);
-short_handle MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
-#define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
-#define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
-#endif
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
@@ -1002,7 +989,6 @@ void disp_formats(int version);
 const char* name_option(long type);
 void printposn(const double c, int is_lat);
 
-#ifndef DEBUG_MEM
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
@@ -1010,38 +996,7 @@ void xfree(const void* mem);
 char* xstrdup(const QString& s);
 char* xstrndup(const char* str, size_t sz);
 char* xstrappend(char* src, const char* newd);
-#define xxcalloc(nmemb, size, file, line) xcalloc(nmemb, size)
-#define xxmalloc(size, file, line) xmalloc(size)
-#define xxrealloc(p, s, file, line) xrealloc(p,s)
-#define xxfree(mem, file, line) xfree(mem)
-#define xxstrdup(s, file, line) xstrdup(s)
 char* xstrdup(const char* s);
-#define xxstrappend(src, addon, file, line) xstrappend(src, addon)
-#else /* DEBUG_MEM */
-void* XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS);
-void* XMALLOC(size_t size, DEBUG_PARAMS);
-void* XREALLOC(void* p, size_t s, DEBUG_PARAMS);
-void XFREE(void* mem, DEBUG_PARAMS);
-char* XSTRDUP(const char* s, DEBUG_PARAMS);
-char* XSTRNDUP(const char* src, size_t size, DEBUG_PARAMS);
-char* XSTRAPPEND(char* src, const char* addon, DEBUG_PARAMS);
-void debug_mem_open();
-void debug_mem_output(char* format, ...);
-void debug_mem_close();
-#define xcalloc(nmemb, size) XCALLOC(nmemb, size, __FILE__, __LINE__)
-#define xmalloc(size) XMALLOC(size, __FILE__, __LINE__)
-#define xrealloc(p, s) XREALLOC(p,s,__FILE__,__LINE__)
-#define xfree(mem) XFREE(mem, __FILE__, __LINE__)
-#define xstrdup(s) XSTRDUP(s, __FILE__, __LINE__)
-#define xstrndup(s, z) XSTRNDUP(s, z, __FILE__, __LINE__)
-#define xstrappend(src,addon) XSTRAPPEND(src, addon, __FILE__, __LINE__)
-#define xxcalloc XCALLOC
-#define xxmalloc XMALLOC
-#define xxrealloc XREALLOC
-#define xxfree XFREE
-#define xxstrdup XSTRDUP
-#define xxstrappend XSTRAPPEND
-#endif /* DEBUG_MEM */
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 

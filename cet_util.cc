@@ -94,9 +94,6 @@ cet_register_cs(cet_cs_vec_t* vec)
     vec->next = cet_cs_vec_root;
     cet_cs_vec_root = vec;
     cet_cs_vec_ct++;
-#ifdef DEBUG_MEM
-    cet_check_cs(vec);
-#endif
   }
 }
 

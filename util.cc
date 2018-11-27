@@ -45,51 +45,11 @@
 #endif
 #endif
 
-#ifdef DEBUG_MEM
-#define DEBUG_FILENAME "/tmp/gpsbabel.debug"
-
-static FILE* debug_mem_file = NULL;
-void
-debug_mem_open()
-{
-  debug_mem_file = xfopen(DEBUG_FILENAME, "a", "debug");
-}
-
-void
-debug_mem_output(char* format, ...)
-{
-  va_list args;
-  va_start(args, format);
-  if (debug_mem_file) {
-    vfprintf(debug_mem_file, format, args);
-    fflush(debug_mem_file);
-  }
-  va_end(args);
-}
-
-void
-debug_mem_close()
-{
-  if (debug_mem_file) {
-    fclose(debug_mem_file);
-  }
-  debug_mem_file = NULL;
-}
-#endif
-
 void*
-#ifdef DEBUG_MEM
-XMALLOC(size_t size, DEBUG_PARAMS)
-#else
 xmalloc(size_t size)
-#endif
 {
   void* obj = malloc(size);
 
-#ifdef DEBUG_MEM
-  debug_mem_output("malloc, %x, %d, %s, %d\n",
-                   obj, size, file, line);
-#endif
   if (!obj) {
     fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) size);
   }
@@ -98,17 +58,9 @@ xmalloc(size_t size)
 }
 
 void*
-#ifdef DEBUG_MEM
-XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS)
-#else
 xcalloc(size_t nmemb, size_t size)
-#endif
 {
   void* obj = calloc(nmemb, size);
-#ifdef DEBUG_MEM
-  debug_mem_output("calloc, %x, %d, %d, %s, %d\n",
-                   obj, nmemb, size, file, line);
-#endif
 
   if (!obj) {
     fatal("gpsbabel: Unable to allocate %ld units of %ld bytes of memory.\n", (unsigned long) nmemb, (unsigned long) size);
@@ -118,31 +70,15 @@ xcalloc(size_t nmemb, size_t size)
 }
 
 void
-#ifdef DEBUG_MEM
-XFREE(const void* mem, DEBUG_PARAMS)
-#else
 xfree(const void* mem)
-#endif
 {
   free(const_cast<void*>(mem));
-#ifdef DEBUG_MEM
-  debug_mem_output("free, %x, %s, %d\n",
-                   mem, file, line);
-#endif
 }
 
 char*
-#ifdef DEBUG_MEM
-XSTRDUP(const char* s, DEBUG_PARAMS)
-#else
 xstrdup(const char* s)
-#endif
 {
   char* o = s ? strdup(s) : strdup("");
-#ifdef DEBUG_MEM
-  debug_mem_output("strdup, %x, %x, %s, %d\n",
-                   o, s, file, line);
-#endif
 
   if (!o) {
     fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) strlen(s));
@@ -160,11 +96,7 @@ char* xstrdup(const QString& s)
  * Duplicate at most sz bytes in str.
  */
 char*
-#ifdef DEBUG_MEM
-XSTRNDUP(const char* str, size_t sz, DEBUG_PARAMS)
-#else
 xstrndup(const char* str, size_t sz)
-#endif
 {
   size_t newlen = 0;
   const char* cin = str;
@@ -182,20 +114,9 @@ xstrndup(const char* str, size_t sz)
 }
 
 void*
-#ifdef DEBUG_MEM
-XREALLOC(void* p, size_t s, DEBUG_PARAMS)
-#else
 xrealloc(void* p, size_t s)
-#endif
 {
   char* o = (char*) realloc(p, s);
-#ifdef DEBUG_MEM
-  if (p != NULL) {
-    debug_mem_output("realloc, %x, %x, %x, %s, %d\n", o, p, s, file, line);
-  } else {
-    debug_mem_output("malloc, %x, %d, %s, %d\n", o, s, file, line);
-  }
-#endif
 
   if (!o) {
     fatal("gpsbabel: Unable to realloc %ld bytes of memory.\n", (unsigned long) s);
@@ -208,21 +129,17 @@ xrealloc(void* p, size_t s)
 * For an allocated string, realloc it and append 's'
 */
 char*
-#ifdef DEBUG_MEM
-XSTRAPPEND(char* src, const char* newd, DEBUG_PARAMS)
-#else
 xstrappend(char* src, const char* newd)
-#endif
 {
   if (!src) {
-    return xxstrdup(newd, file, line);
+    return xstrdup(newd);
   }
   if (!newd) {
-    return xxstrdup(src, file, line);
+    return xstrdup(src);
   }
 
   size_t newsz = strlen(src) + strlen(newd) + 1;
-  src = (char*) xxrealloc(src, newsz, file, line);
+  src = (char*) xrealloc(src, newsz);
   strcat(src, newd);
 
   return src;
@@ -325,11 +242,7 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
 {
   /* From http://perfec.to/vsnprintf/pasprintf.c */
   /* size of first buffer malloc; start small to exercise grow routines */
-#ifdef DEBUG_MEM
-# define	FIRSTSIZE	64
-#else
 # define	FIRSTSIZE	1
-#endif
   char* buf = nullptr;
   char* newbuf;
   size_t nextsize = 0;

@@ -46,9 +46,6 @@ typedef gbsize_t (*gbfwrite_cb)(const void* buf, const gbsize_t size, const gbsi
 typedef int (*gbfungetc_cb)(const int c, gbfile* self);
 
 typedef struct gbfile_s {
-#ifdef DEBUG_MEM
-  void*   dummy;	/* ZERO pointer for stdio oop's */
-#endif
   union {
     FILE* std;
     unsigned char* mem;

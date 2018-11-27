@@ -56,7 +56,6 @@ LRELEASE=@LRELEASE@
 #
 #OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
-# add -DDEBUG_MEM to turn on memory allocation logging
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) $(BUILD_CPP) @ZLIB_CPP@ @QT_INC_OPT@$(QT_INC) \
 	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
@@ -143,7 +142,7 @@ WEB=@DOCDIR@
 # Declaring a target PHONY whose names matches a subdirectory can be
 # particularly important, e.g. gui.
 .PHONY: all clean tag more-clean check torture \
-install install-debug leaktest \
+install install-debug \
 dep doc \
 release-sourcecheck release-tarball release-rpm \
 cross-configure \
@@ -223,12 +222,6 @@ install-debug:
 	install gpsbabel-debug  $(INSTALL_DIR)/bin/
 
 # Nerdy release stuff that needs to work only on Linux.
-
-leaktest:
-	make EXTRA_CFLAGS=-DDEBUG_MEM
-	tools/cleardebug
-	./testo
-	tools/memdebug | grep -v '^command line:'
 
 dep:
 	make clean && make -j8 EXTRA_CFLAGS="-isystem /sw/include @QT_SYSINC_OPT@ $(QT_INC) -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
