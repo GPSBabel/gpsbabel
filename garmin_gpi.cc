@@ -50,6 +50,7 @@
 #include "garmin_gpi.h"
 #include "jeeps/gpsmath.h"
 #include <QtCore/QTextCodec>
+#include <QtCore/QThread>
 #include <cstdlib>
 
 #define MYNAME "garmin_gpi"
@@ -1573,7 +1574,7 @@ garmin_gpi_wr_deinit()
     }
     gpi_timestamp += sleep;
     while (gpi_timestamp > time(nullptr)) {
-      gb_sleep(100);
+      QThread::usleep(100);
     }
   }
 }

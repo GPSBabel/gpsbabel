@@ -59,6 +59,7 @@
 #include "gbser.h"
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtCore/QThread>
 #include <cerrno>
 #include <cmath>
 #include <cstdlib>
@@ -517,11 +518,11 @@ static int mtk_erase()
 
   dbg(1, "Start flash erase..\n");
   do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", nullptr, 1);
-  gb_sleep(10*1000);
+  QThread::usleep(10 * 1000);
 
   // Erase log....
   do_cmd(CMD_LOG_ERASE, "PMTK001,182,6", nullptr, 30);
-  gb_sleep(100*1000);
+  QThread::usleep(100 * 1000);
 
   if ((log_status & 2)) {  // auto-log were enabled before..re-enable log.
     int err = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
@@ -576,12 +577,12 @@ static void mtk_read()
     fusage = nullptr;
   }
 
-  gb_sleep(10*1000);
+  QThread::usleep(10 * 1000);
   if (true || log_enabled) {
     i = do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", nullptr, 2);
     dbg(3, " ---- LOG DISABLE ---- %s\n", i==0?"Success":"Fail");
   }
-  gb_sleep(100*1000);
+  QThread::usleep(100 * 1000);
 
   unsigned int addr_max = 0;
   // get flash usage, current log address..cmd only works if log disabled.
@@ -716,7 +717,7 @@ mtk_retry:
           if (line[15] != '3') {
             // fixme - we should timeout here when no log data has been received...
             dbg(2, "\nLog req. failed (%c)\n", line[15]);
-            gb_sleep(10*1000);
+            QThread::usleep(10 * 1000);
             retry_cnt++;
             goto mtk_retry;
           }

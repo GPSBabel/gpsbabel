@@ -1232,11 +1232,6 @@ double fmt_altitude(const double, const char** tag);
 double fmt_speed(const double, const char** tag);
 
 /*
- * From gbsleep.c
- */
-void gb_sleep(unsigned long microseconds);
-
-/*
  * From nmea.c
  */
 int nmea_cksum(const char* const buf);

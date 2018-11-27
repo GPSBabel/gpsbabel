@@ -94,7 +94,7 @@ set(SUPPORT
   queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc
   csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc
   formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc
-  inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc
+  inifile.cc garmin_fs.cc units.cc gbser.cc
   gbfile.cc parse.cc session.cc main.cc globals.cc
   src/core/usasciicodec.cc
   src/core/xmlstreamwriter.cc 
@@ -186,7 +186,7 @@ if(UNIX)
   if(${HAVE_STDARG_H})
     add_definitions(-DHAVE_STDARG_H)
   endif()
-  add_definitions(-DHAVE_NANOSLEEP -DHAVE_LIBUSB -DHAVE_GLOB)
+  add_definitions(-DHAVE_LIBUSB -DHAVE_GLOB)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)

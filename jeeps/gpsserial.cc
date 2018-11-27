@@ -26,6 +26,7 @@
 #include "gps.h"
 #include "../gbser.h"
 #include "gpsserial.h"
+#include <QtCore/QThread>
 #include <cerrno>
 #include <cstdio>
 #include <ctime>
@@ -235,7 +236,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   GPS_PPacket tra;
   GPS_PPacket rec;
   win_serial_data* wsd = (win_serial_data*)fd;
-  
+
   DWORD speed = mkspeed(br);
 
   // Turn off all requests by transmitting packet
@@ -247,7 +248,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-  
+
   GPS_Util_Put_Int(data, br);
   GPS_Make_Packet(&tra, 0x30, data, 4);
   if (!GPS_Write_Packet(fd,tra)) {
@@ -268,11 +269,11 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   }
   GPS_Device_Flush(fd);
   GPS_Device_Wait(fd);
-  
+
   // Sleep for a small amount of time, about 100 milliseconds,
   // to make sure the packet was successfully transmitted to the GPS unit.
-  gb_sleep(100000); 
-  
+  QThread::usleep(100000);
+
   // Change port speed
   DCB tio;
   tio.DCBlength = sizeof(DCB);
@@ -302,10 +303,10 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-  
+
   if (global_opts.debug_level >= 1) fprintf(stderr, "Serial port speed set to %d\n", br);
   return 0;
-  
+
 }
 #else
 
@@ -623,7 +624,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   static UC data[4];
   GPS_PPacket tra;
   GPS_PPacket rec;
-  
+
   speed_t speed = mkspeed(br);
 
   // Turn off all requests by transmitting packet
@@ -635,7 +636,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-  
+
   GPS_Util_Put_Int(data, br);
   GPS_Make_Packet(&tra, 0x30, data, 4);
   if (!GPS_Write_Packet(fd,tra)) {
@@ -656,23 +657,23 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   }
   GPS_Device_Flush(fd);
   GPS_Device_Wait(fd);
-  
+
   // Sleep for a small amount of time, about 100 milliseconds,
   // to make sure the packet was successfully transmitted to the GPS unit.
-  gb_sleep(100000); 
-  
+    QThread::usleep(100000);
+
   // Change port speed
   posix_serial_data* psd = (posix_serial_data*)fd;
   tty = psd->gps_ttysave;
-  
+
   cfsetospeed(&tty,speed);
   cfsetispeed(&tty,speed);
-  
+
   if (tcsetattr(psd->fd,TCSANOW|TCSAFLUSH,&tty)==-1) {
     GPS_Serial_Error("SERIAL: tcsetattr error");
     return 0;
   }
-  
+
   GPS_Util_Put_Short(data, 0x3a);
   GPS_Make_Packet(&tra, 0x0a, data, 2);
   if (!GPS_Write_Packet(fd,tra)) {
@@ -690,10 +691,10 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-  
+
   if (global_opts.debug_level >= 1) fprintf(stderr, "Serial port speed set to %d\n", br);
   return 0;
-  
+
 }
 
 #endif /* __WIN32__ */
