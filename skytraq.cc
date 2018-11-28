@@ -25,6 +25,7 @@
 
 #include "defs.h"
 #include "gbser.h"
+#include <QtCore/QThread>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -469,7 +470,7 @@ skytraq_set_baud(int baud)
     return res_ERROR;
   }
 
-  gb_sleep(50);		/* allow UART to settle. */
+  QThread::usleep(50);		/* allow UART to settle. */
 
   return res_OK;
 }
@@ -1206,7 +1207,7 @@ skytraq_probe()
       }
     }
 
-    gb_sleep(50);		/* allow UART to settle. */
+    QThread::usleep(50);		/* allow UART to settle. */
 
     skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                    sizeof(MSG_QUERY_SOFTWARE_VERSION));

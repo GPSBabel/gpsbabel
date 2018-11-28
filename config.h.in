@@ -9,8 +9,8 @@
 /* 1 to enable all the filters. */
 #undef FILTERS_ENABLED
 
-/* define if the compiler supports basic C++11 syntax */
-#undef HAVE_CXX11
+/* define if the compiler supports basic C++14 syntax */
+#undef HAVE_CXX14
 
 /* Define to 1 if you have the `glob' function. */
 #undef HAVE_GLOB
@@ -35,12 +35,6 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
-
-/* Define to 1 if you have the `nanosleep' function. */
-#undef HAVE_NANOSLEEP
-
-/* Define to 1 if you have the `sleep' function. */
-#undef HAVE_SLEEP
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H

@@ -35,6 +35,7 @@
 #include <ctime>
 
 #include <QtCore/QStringList>
+#include <QtCore/QThread>
 
 /**********************************************************
 
@@ -1229,7 +1230,7 @@ nmea_wayptpr(const Waypoint* wpt)
   gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   if (sleepus >= 0) {
     gbfflush(file_out);
-    gb_sleep(sleepus);
+    QThread::usleep(sleepus);
   }
 }
 static void
@@ -1251,11 +1252,11 @@ nmea_trackpt_pr(const Waypoint* wpt)
     gbfflush(file_out);
     if (last_time > 0) {
       if (sleepus >= 0) {
-        gb_sleep(sleepus);
+        QThread::usleep(sleepus);
       } else {
         long wait_time = wpt->GetCreationTime().toTime_t() - last_time;
         if (wait_time > 0) {
-          gb_sleep(wait_time * 1000000);
+          QThread::usleep(wait_time * 1000000);
         }
       }
     }
@@ -1454,6 +1455,6 @@ void reset_sirf_to_nmea(int br)
   pkt[27] = br & 0xff;
 
   sirf_write(pkt);
-  gb_sleep(250 * 1000);
+  QThread::usleep(250 * 1000);
   gbser_flush(gbser_handle);
 }

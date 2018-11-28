@@ -26,6 +26,7 @@
 #include "gbser.h"
 #include "jeeps/gpsmath.h"
 #include "navilink.h"
+#include <QtCore/QThread>
 
 #define MYNAME "NAVILINK"
 
@@ -598,7 +599,7 @@ serial_write_track()
   data[6] = 0x00;
 
   write_packet(PID_WRITE_TRACKPOINTS, data, sizeof(data));
-  gb_sleep(10000);
+  QThread::usleep(10000);
   write_packet(PID_DATA, track_data, track_data_ptr - track_data);
   read_packet(PID_CMD_OK, nullptr, 0, 0, false);
 
@@ -1045,7 +1046,7 @@ nuke()
      * takes around 1 second.  The total sectors for SBP is 10.
      * So give the device some time to clear its datalog, in addition
      * to SERIAL_TIMEOUT, which applies to read_packet() */
-    gb_sleep(CLEAR_DATALOG_TIME * 1000);
+    QThread::usleep(CLEAR_DATALOG_TIME * 1000);
     read_packet(PID_ACK, nullptr, 0, 0, false);
   }
 }

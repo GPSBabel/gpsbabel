@@ -79,7 +79,7 @@ JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
 SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
           formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
-          inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc \
+          inifile.cc garmin_fs.cc units.cc gbser.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc \
           src/core/usasciicodec.cc \
           src/core/xmlstreamwriter.cc 
@@ -169,7 +169,7 @@ macx|linux {
     # this is used by zlib
     DEFINES += HAVE_STDARG_H
   }
-  DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB
+  DEFINES += HAVE_LIBUSB HAVE_GLOB
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
   JEEPS += jeeps/gpslibusb.cc
