@@ -278,15 +278,6 @@ main(int argc, char* argv[])
   gpsbabel_now = time(nullptr);			/* gpsbabel startup-time */
   gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but freezed to zero during testo */
 
-#ifdef DEBUG_MEM
-  debug_mem_open();
-  debug_mem_output("command line: ");
-  for (int i = 1; i < qargs.size(); i++) {
-    debug_mem_output("%s ", qPrintable(qargs.at(i)));
-  }
-  debug_mem_output("\n");
-#endif
-
   if (gpsbabel_time != 0) {	/* within testo ? */
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
@@ -735,9 +726,6 @@ main(int argc, char* argv[])
   exit_filter_vecs();
   inifile_done(global_opts.inifile);
 
-#ifdef DEBUG_MEM
-  debug_mem_close();
-#endif
   exit(0);
 }
 

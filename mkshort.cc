@@ -81,13 +81,9 @@ unsigned int hash_string(const char* key)
 }
 
 short_handle
-#ifdef DEBUG_MEM
-MKSHORT_NEW_HANDLE(DEBUG_PARAMS)
-#else
 mkshort_new_handle()
-#endif
 {
-  mkshort_handle_imp* h = (mkshort_handle_imp*) xxcalloc(sizeof *h, 1, file, line);
+  mkshort_handle_imp* h = (mkshort_handle_imp*) xcalloc(sizeof *h, 1);
 
   for (int i = 0; i < PRIME; i++) {
     QUEUE_INIT(&h->namelist[i]);
@@ -370,11 +366,7 @@ setshort_is_utf8(short_handle h, const int is_utf8)
 }
 
 char*
-#ifdef DEBUG_MEM
-MKSHORT(short_handle h, const char* istring, DEBUG_PARAMS)
-#else
 mkshort(short_handle h, const char* istring)
-#endif
 {
   char* ostring;
   char* tstring;
@@ -385,7 +377,7 @@ mkshort(short_handle h, const char* istring)
   if (hdl->is_utf8) {
     ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */
   } else {
-    ostring = xxstrdup(istring, file, line);
+    ostring = xstrdup(istring);
   }
 
   /*
@@ -406,7 +398,7 @@ mkshort(short_handle h, const char* istring)
   if ((strlen(ostring) > hdl->target_len + 4) &&
       (strncmp(ostring, "The ", 4) == 0 ||
        strncmp(ostring, "the ", 4) == 0)) {
-    char* nstring = xxstrdup(ostring + 4, file, line);
+    char* nstring = xstrdup(ostring + 4);
     xfree(ostring);
     ostring = nstring;
   }
@@ -424,7 +416,7 @@ mkshort(short_handle h, const char* istring)
     /*
      * Eliminate Whitespace
      */
-    tstring = xxstrdup(ostring, file, line);
+    tstring = xstrdup(ostring);
     l = strlen(tstring);
     cp = ostring;
     for (i=0; i<l; i++) {
@@ -451,7 +443,7 @@ mkshort(short_handle h, const char* istring)
   /*
    * Eliminate chars on the blacklist.
    */
-  tstring = xxstrdup(ostring, file, line);
+  tstring = xstrdup(ostring);
   l = strlen(tstring);
   cp = ostring;
   for (i=0; i<l; i++) {

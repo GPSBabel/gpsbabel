@@ -581,11 +581,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
 
   file->fileopen(file, mode);
 
-#ifdef DEBUG_MEM
-  file->buffsz = 1;
-#else
   file->buffsz = 256;
-#endif
   file->buff = (char*) xmalloc(file->buffsz);
 
   return file;

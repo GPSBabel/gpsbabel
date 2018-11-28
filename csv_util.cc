@@ -194,7 +194,7 @@ char*
 csv_stringtrim(const char* string, const char* enclosure, int strip_max)
 {
   static const char* p1 = nullptr;
-  char* tmp = xxstrdup(string,file,line);
+  char* tmp = xstrdup(string);
   size_t elen;
   int stripped = 0;
 

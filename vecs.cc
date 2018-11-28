@@ -1387,11 +1387,7 @@ find_vec(const char* vecname, const char** opts)
  * Modelled approximately after getenv.
  */
 char*
-#ifdef DEBUG_MEM
-GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS)
-#else
 get_option(const char* iarglist, const char* argname)
-#endif
 {
   const size_t arglen = strlen(argname);
   char* rval = nullptr;
@@ -1425,7 +1421,7 @@ get_option(const char* iarglist, const char* argname)
    * this data.
    */
   if (rval) {
-    rval = xxstrdup(rval,file, line);
+    rval = xstrdup(rval);
   }
   xfree(arglist);
   return rval;
