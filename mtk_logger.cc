@@ -555,7 +555,6 @@ static void mtk_read()
     if (dout == nullptr) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
-      return;
     }
   }
   fseek(dout, 0L,SEEK_END);
@@ -611,7 +610,6 @@ static void mtk_read()
     if (dout == nullptr) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
-      return;
     }
   }
 
@@ -1032,8 +1030,8 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   // RCR is a bitmask of possibly several log reasons..
   if (bmask & (1U<<RCR))
     gbfprintf(csvFile, "%s%s%s%s,"
-              , itm->rcr&0x0001?"T":"",itm->rcr&0x0002?"S":""
-              , itm->rcr&0x0004?"D":"",itm->rcr&0x0008?"B":"");
+              , (itm->rcr&0x0001)?"T":"", (itm->rcr&0x0002)?"S":""
+              , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
     gbfprintf(csvFile, "%s.%.3d,", ts_str, (bmask & (1U<<MILLISECOND))?itm->timestamp_ms:0);
