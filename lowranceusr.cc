@@ -209,6 +209,13 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   { 10081,    "Golf Course" },
   { 10082,    "Money/Atm" },
 
+  /* This list comes from HOOK2 */
+
+  { 10083,    "longgrass" },
+  { 10084,    "rocks" },
+  { 10086,    "hump" },
+  { 10087,    "hole" },
+
   /* This list comes from Alan Porter <alan@kr4jb.net>, using an iFinder Expedition C */
 
   { 10042,    "icon42" },               // black box with red X
@@ -245,6 +252,31 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   { 10019,    "Event Cache" },          // person
   { 10070,    "Webcam Cache" },         // webcam
   { 10042,    "Disabled Cache" },       // black box with red X
+
+  // END OF ICON MAPPING
+  {    -1,    nullptr }
+};
+
+const lowranceusr_icon_mapping_t lowranceusr4_icon_value_table[] = {
+
+  /*  USR     GPX Symbol                HOOK2 Displays */
+
+  {     1,    "diamond 1" },            // diamond
+  {     2,    "x 1" },                  // X
+  {     4,    "fish" },                 // single fish
+  {     5,    "two fish" },             // schoolfish
+  {     8,    "hole" },                 // dip sign
+  {     9,    "hump" },                 // bump sign
+  {    10,    "longgrass" },            // long grass
+  {    12,    "rocks" },                // rocks
+  {    17,    "gas station" },          // gas pump
+  {    28,    "tree" },                 // tree
+  {    30,    "campsite" },             // tent
+  {    37,    "skull and crossbones" }, // skull and crossbones
+  {    40,    "dive flag" },            // diveflag
+  {    42,    "anchor" },               // anchor
+  {    44,    "boat ramp" },            // boatramp
+  {    48,    "pier" },                 // pier
 
   // END OF ICON MAPPING
   {    -1,    nullptr }
@@ -630,6 +662,18 @@ lowranceusr_find_icon_number_from_desc(const QString& desc)
   return DEF_ICON;
 }
 
+const QString
+lowranceusr4_find_desc_from_icon_number(const int icon)
+{
+  for (const lowranceusr_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+    if (icon == i->value) {
+      return i->icon;
+    }
+  }
+
+  return "";
+}
+
 // Combined arguments from previous lowranceusr and lowranceusr4 into single set.
 // Use output format specified to determine if args are ignored.
 static
@@ -904,7 +948,12 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
      used in usr4 match those from usr{2,3} so we need a new
      mapping. */
   fsdata->icon_num = gbfgetint16(file_in);
-  /* wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_num); */
+  wpt_tmp->icon_descr = lowranceusr4_find_desc_from_icon_number(fsdata->icon_num);
+  if (wpt_tmp->icon_descr.isNull()) {
+    char nbuf[10];
+    snprintf(nbuf, sizeof(nbuf), "%d", le_read32(name_buff));
+    wpt_tmp->icon_descr = nbuf;
+  }
 
   /* Color ID, discard for now */
   fsdata->color = gbfgetint16(file_in);
