@@ -936,9 +936,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
   /* Unused byte */
   char unused_byte = gbfgetc(file_in);
 
-  /* Depth in feet */
-  float waypt_depth = FEET_TO_METERS(gbfgetflt(file_in));
-  WAYPT_SET(wpt_tmp, depth, waypt_depth);
+  /* Altitude/Depth in feet */
+  wpt_tmp->altitude = FEET_TO_METERS(gbfgetflt(file_in));
 
   /* Loran data, discard for now */
   int loran_GRI = gbfgetint32(file_in);
@@ -962,13 +961,13 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
       printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
       printf(" %6d %16s", desc_len, desc_buff);
       printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
-             create_date, create_time, unused_byte, waypt_depth, loran_GRI, loran_Tda, loran_Tdb);
+             create_date, create_time, unused_byte, wpt_tmp->altitude, loran_GRI, loran_Tda, loran_Tdb);
     } else {
       printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
              waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
-             wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->depth);
+             wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->altitude);
     }
   }
 }
