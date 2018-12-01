@@ -112,15 +112,6 @@
 #  define strdup _strdup
 #endif
 
-/* Workaround for lack of va_copy in Visual Studio 2012 and earlier */
-#if __WIN32__
-#  if _MSC_VER
-#    if _MSC_VER < 1700
-#      define va_copy(dest, src) ((dest) = (src))
-#    endif
-#  endif
-#endif
-
 /* Turn off numeric conversion warning */
 #if __WIN32__
 #  if _MSC_VER
@@ -1080,14 +1071,6 @@ QString rot13(const QString& s);
  */
 
 signed int si_round(double d);
-
-#if _MSC_VER
-//These functions are not included in the MS pre C99 implementation, use internal implementation
-//This asssumes that non-_MSC_VER includes math.h (all should include defs.h)
-#define round si_round
-#define lround si_round
-#endif
-
 
 /*
  * Protypes for Endianness helpers.
