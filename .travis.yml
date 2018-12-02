@@ -55,6 +55,7 @@ matrix:
           packages:
             - libusb-dev
             - gcovr
+            - lcov
       cache:
         directories:
           - $HOME/Qt

@@ -263,6 +263,9 @@ linux{
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
   coverage.commands += gcov -r -o . $(SOURCES) &&
-  coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
+  coverage.commands += gcovr -k -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
+  coverage.commands += lcov --capture --directory . --no-external --output-file coverage.info;
+  coverage.commands += genhtml coverage.info --output-directory coverage_report;
+
   QMAKE_EXTRA_TARGETS += coverage
 }
