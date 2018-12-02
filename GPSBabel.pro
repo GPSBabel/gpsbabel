@@ -255,7 +255,7 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 # generate coverage report for codacy
 # must use gcc, g++
 # dependencies:
-# extra ubuntu bionic packages: gcovr
+# extra ubuntu bionic packages: gcovr lcov
 linux{
   coverage.commands = make clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
@@ -266,6 +266,5 @@ linux{
   coverage.commands += gcovr -k -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
   coverage.commands += lcov --capture --directory . --no-external --output-file coverage.info;
   coverage.commands += genhtml coverage.info --output-directory coverage_report;
-
   QMAKE_EXTRA_TARGETS += coverage
 }
