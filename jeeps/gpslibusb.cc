@@ -167,7 +167,7 @@ gusb_teardown(gpsdevh* dh)
 }
 
 static void
-gusb_atexit_teardown(void)
+gusb_atexit_teardown()
 {
   gusb_teardown(nullptr);
 }
@@ -208,7 +208,7 @@ gusb_atexit_teardown(void)
  * Grrrr!
  */
 unsigned
-gusb_reset_toggles(void)
+gusb_reset_toggles()
 {
   static const unsigned char  oinit[12] =
   {0, 0, 0, 0, GUSB_SESSION_START, 0, 0, 0, 0, 0, 0, 0};

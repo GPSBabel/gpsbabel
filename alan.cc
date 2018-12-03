@@ -938,7 +938,6 @@ static void alan_wr_deinit()
 
 static void alan_exit()
 {
-  return;
 }
 
 /**************************************************************************/

@@ -174,7 +174,7 @@ track_qsort_cb(const void* a, const void* b)
 }
 
 static void
-finalize_tracks(void)
+finalize_tracks()
 {
   queue* elem, *tmp;
   route_head* track = nullptr;
@@ -370,7 +370,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(fin);
   rte_name = QString();
@@ -378,7 +378,7 @@ rd_deinit(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* buf;
   sdf_section_e section = sdf_unknown;
@@ -672,14 +672,14 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   mkshort_del_handle(&short_h);
   gbfclose(fout);
 }
 
 static void
-data_write(void)
+data_write()
 {
   gbfprintf(fout, "[HEADER]\n");
   gbfprintf(fout, "FILEVERSION=1\n");

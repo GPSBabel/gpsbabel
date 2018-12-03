@@ -280,7 +280,6 @@ read_line()
 
   packetnum++;
   dbg(1, "Line %i: %s\n", packetnum, line);
-  return;
 }
 
 void

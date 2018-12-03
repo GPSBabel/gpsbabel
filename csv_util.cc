@@ -708,7 +708,7 @@ dec_to_human(const char* format, const char* dirs, double val)
 /*****************************************************************************/
 /* xcsv_file_init() - prepare xcsv_file for first use.                       */
 /*****************************************************************************/
-void xcsv_file_init(void)
+void xcsv_file_init()
 {
   xcsv_file.is_internal = false;
   xcsv_file.field_delimiter = QString();
@@ -1380,7 +1380,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
 /*                   any data conversion (the input meat)                    */
 /*****************************************************************************/
 void
-xcsv_data_read(void)
+xcsv_data_read()
 {
   int linecount = 0;
   route_head* rte = nullptr;
@@ -2176,7 +2176,7 @@ xcsv_replace_tokens(const QString& original) {
 /*                         epilogues.                                        */
 /*****************************************************************************/
 void
-xcsv_data_write(void)
+xcsv_data_write()
 {
   /* reset the index counter */
   waypt_out_count = 0;

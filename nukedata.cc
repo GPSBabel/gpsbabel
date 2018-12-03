@@ -27,7 +27,7 @@
 #if FILTERS_ENABLED
 #define MYNAME "nukedata"
 
-void NukeDataFilter::process(void)
+void NukeDataFilter::process()
 {
   if (*nukewpts != '0') {
     waypt_flush_all();

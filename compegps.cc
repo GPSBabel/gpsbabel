@@ -379,13 +379,13 @@ compegps_rd_init(const QString& fname)
 }
 
 static void
-compegps_rd_deinit(void)
+compegps_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-compegps_data_read(void)
+compegps_data_read()
 {
   char* buff;
   int line = 0;
@@ -520,7 +520,7 @@ write_route_hdr_cb(const route_head* rte)
 }
 
 static void
-write_route(void)
+write_route()
 {
   curr_index = 0;
   route_disp_all(write_route_hdr_cb, nullptr, write_waypt_cb);
@@ -589,7 +589,7 @@ write_trkpt_cb(const Waypoint* wpt)
 }
 
 static void
-write_track(void)
+write_track()
 {
   curr_index = 0;
 
@@ -599,7 +599,7 @@ write_track(void)
 }
 
 static void
-write_waypoints(void)
+write_waypoints()
 {
   waypt_disp_all(write_waypt_cb);
 }
@@ -614,14 +614,14 @@ compegps_wr_init(const QString& fname)
 }
 
 static void
-compegps_wr_deinit(void)
+compegps_wr_deinit()
 {
   mkshort_del_handle(&sh);
   gbfclose(fout);
 }
 
 static void
-compegps_data_write(void)
+compegps_data_write()
 {
   /* because of different file extensions we can only write one GPS data type at time */
 

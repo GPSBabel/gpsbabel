@@ -324,8 +324,7 @@ fit_parse_definition_message(uint8_t header)
 
     }
     def->num_fields = numOfFields;
-  } 
-  return;
+  }
 }
 
 static uint32_t

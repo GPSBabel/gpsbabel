@@ -818,7 +818,6 @@ mag_rd_init_common(const QString& portname)
     }
   }
 
-  return;
 }
 
 static void
@@ -1400,7 +1399,6 @@ mag_waypt_pr(const Waypoint* waypointp)
 static
 void mag_track_nop(const route_head*)
 {
-  return;
 }
 
 static

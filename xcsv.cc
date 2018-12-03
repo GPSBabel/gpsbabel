@@ -112,7 +112,7 @@ char_map_t xcsv_char_table[] = {
 };
 
 void
-xcsv_destroy_style(void)
+xcsv_destroy_style()
 {
 
   /*
@@ -450,7 +450,7 @@ xcsv_rd_init(const QString& fname)
 }
 
 static void
-xcsv_rd_deinit(void)
+xcsv_rd_deinit()
 {
   xcsv_file.file->close();
   delete xcsv_file.file;
@@ -529,7 +529,7 @@ xcsv_wr_position_init(const QString& fname)
 }
 
 static void
-xcsv_wr_deinit(void)
+xcsv_wr_deinit()
 {
   xcsv_file.stream->flush();
   xcsv_file.file->close();
@@ -543,7 +543,7 @@ xcsv_wr_deinit(void)
 }
 
 static void
-xcsv_wr_position_deinit(void)
+xcsv_wr_position_deinit()
 {
   xcsv_wr_deinit();
 }

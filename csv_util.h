@@ -44,13 +44,13 @@ csv_stringclean(const char* string, const char* chararray);
 QString csv_stringclean(const QString& string, const QString& chararray);
 
 void
-xcsv_data_read(void);
+xcsv_data_read();
 
 void
-xcsv_data_write(void);
+xcsv_data_write();
 
 void
-xcsv_file_init(void);
+xcsv_file_init();
 
 void
 xcsv_prologue_add(const QString&);
@@ -65,7 +65,7 @@ void
 xcsv_ofield_add(const QString&, const QString&, const QString&, unsigned options);
 
 void
-xcsv_destroy_style(void);
+xcsv_destroy_style();
 
 QString
 xcsv_get_char_from_constant_table(const QString& key);

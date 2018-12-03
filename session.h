@@ -33,10 +33,10 @@ public:
   session_t(const QString& name_p, const QString& filename_p) : name{name_p},filename{filename_p} {}
 };
 
-void session_init(void);
-void session_exit(void);
+void session_init();
+void session_exit();
 
 void start_session(const QString& name, const QString& filename);
-const session_t* curr_session(void);
+const session_t* curr_session();
 
 #endif  // SESSION_H_INCLUDED_

@@ -131,7 +131,7 @@ int DuplicateFilter::compare(const void* a, const void* b)
 
 }
 
-void DuplicateFilter::process(void)
+void DuplicateFilter::process()
 {
   Waypoint* waypointp;
   btree_node* newnode, * btmp, * sup_tree = nullptr;

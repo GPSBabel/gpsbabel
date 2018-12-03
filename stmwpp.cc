@@ -69,13 +69,13 @@ stmwpp_rd_init(const QString& fname)
 }
 
 static void
-stmwpp_rd_deinit(void)
+stmwpp_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-stmwpp_data_read(void)
+stmwpp_data_read()
 {
   int line = 0;
 
@@ -200,7 +200,7 @@ stmwpp_rw_init(const QString& fname)
 }
 
 static void
-stmwpp_rw_deinit(void)
+stmwpp_rw_deinit()
 {
   mkshort_del_handle(&short_h);
   gbfclose(fout);
@@ -277,7 +277,7 @@ stmwpp_waypt_cb(const Waypoint* wpt)
 }
 
 static void
-stmwpp_data_write(void)
+stmwpp_data_write()
 {
   setshort_length(short_h, 100);
   setshort_badchars(short_h, ",\r\n");

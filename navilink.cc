@@ -1091,7 +1091,6 @@ navilink_common_init(const QString& name)
     write_route_end = file_write_route_end;
   }
 
-  return;
 }
 
 static void
@@ -1128,7 +1127,6 @@ navilink_deinit()
     gbfclose(file_handle);
   }
 
-  return;
 }
 
 static void

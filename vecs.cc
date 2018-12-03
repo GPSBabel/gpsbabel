@@ -1546,7 +1546,6 @@ disp_vecs()
     }
   }
   xfree(svp);
-  return;
 }
 
 void
@@ -1572,7 +1571,6 @@ disp_vec(const char* vecname)
     }
   }
   xfree(svp);
-  return;
 }
 
 /*

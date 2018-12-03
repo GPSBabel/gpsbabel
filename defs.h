@@ -551,11 +551,11 @@ public:
 typedef void (*waypt_cb)(const Waypoint*);
 
 const global_trait* get_traits();
-void waypt_init(void);
+void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
-unsigned int waypt_count(void);
+unsigned int waypt_count();
 void set_waypt_count(unsigned int nc);
 void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
@@ -567,7 +567,7 @@ void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
 void waypt_flush(queue* head);
-void waypt_flush_all(void);
+void waypt_flush_all();
 void waypt_backup(signed int* count, queue** head_bak);
 void waypt_restore(signed int count, queue* head_bak);
 void waypt_add_url(Waypoint* wpt, const QString& link,
@@ -661,12 +661,12 @@ public:
 typedef void (*route_hdr)(const route_head*);
 typedef void (*route_trl)(const route_head*);
 
-void route_init(void);
-unsigned int route_waypt_count(void);
-unsigned int route_count(void);
-unsigned int track_waypt_count(void);
-unsigned int track_count(void);
-route_head* route_head_alloc(void);
+void route_init();
+unsigned int route_waypt_count();
+unsigned int route_count();
+unsigned int track_waypt_count();
+unsigned int track_count();
+route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
 void track_add_head(route_head* rte);
@@ -688,9 +688,9 @@ void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* overri
 void route_reverse(const route_head* rte_hd);
 void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
-void route_flush_all_routes(void);
-void route_flush_all_tracks(void);
-void route_flush_all(void);
+void route_flush_all_routes();
+void route_flush_all_tracks();
+void route_flush_all();
 void route_flush(queue* head);
 void route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src);
 void route_append(queue* src);
@@ -799,10 +799,10 @@ typedef struct {
 extern posn_status tracking_status;
 
 typedef void (*ff_init)(const QString&);
-typedef void (*ff_deinit)(void);
-typedef void (*ff_read)(void);
-typedef void (*ff_write)(void);
-typedef void (*ff_exit)(void);
+typedef void (*ff_deinit)();
+typedef void (*ff_read)();
+typedef void (*ff_write)();
+typedef void (*ff_exit)();
 typedef void (*ff_writeposn)(Waypoint*);
 typedef Waypoint* (*ff_readposn)(posn_status*);
 
@@ -838,7 +838,7 @@ typedef mkshort_handle_imp* short_handle;
 
 char* mkshort(short_handle,  const char*);
 QString mkshort(short_handle,  const QString&);
-short_handle mkshort_new_handle(void);
+short_handle mkshort_new_handle();
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
@@ -972,10 +972,10 @@ void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 ff_vecs_t* find_vec(const char*, const char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
-void disp_vecs(void);
+void disp_vecs();
 void disp_vec(const char* vecname);
-void init_vecs(void);
-void exit_vecs(void);
+void init_vecs();
+void exit_vecs();
 void disp_formats(int version);
 const char* name_option(long type);
 void printposn(const double c, int is_lat);
@@ -1024,10 +1024,10 @@ int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-signed int get_tz_offset(void);
+signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
-gpsbabel::DateTime current_time(void);
+gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);
 const char* get_cache_icon(const Waypoint* waypointp);

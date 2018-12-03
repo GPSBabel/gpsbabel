@@ -410,7 +410,6 @@ write_route_wpt_cb(const Waypoint* wpt)
   }
 
   rte_wpt_index++;
-  return;
 }
 
 static void

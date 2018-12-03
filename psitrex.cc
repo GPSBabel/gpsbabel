@@ -718,8 +718,6 @@ psit_read()
     }
   } while (!gbfeof(psit_file_in));
 
-  return;
-
 #ifdef DUMP_ICON_TABLE
   printf("\t{ -1, NULL },\n");
   printf("};\n");

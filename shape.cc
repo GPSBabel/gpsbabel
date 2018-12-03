@@ -163,7 +163,7 @@ DBFCreateGpsbabel(const QString& pszFilename)
 #endif
 
 static
-void dump_fields(void)
+void dump_fields()
 {
   char name[12];
   warning(MYNAME ": Database fields:\n");
@@ -223,7 +223,7 @@ my_rd_init(const QString& fname)
 }
 
 static void
-my_read(void)
+my_read()
 {
   // option processing here instead of in my_rd_init
   // lets the results of option processing be automatic.
@@ -398,7 +398,7 @@ err:
 }
 
 static void
-my_rd_deinit(void)
+my_rd_deinit()
 {
   SHPClose(ihandle);
   DBFClose(ihandledb);
@@ -412,7 +412,7 @@ my_wr_init(const QString& fname)
 }
 
 static void
-my_wr_deinit(void)
+my_wr_deinit()
 {
   SHPClose(ohandle);
   DBFClose(ohandledb);
@@ -477,7 +477,7 @@ poly_deinit(const route_head* rte)
 
 
 static void
-my_write(void)
+my_write()
 {
   // shape files can only contain one shape type in addition
   // to the null shape type.

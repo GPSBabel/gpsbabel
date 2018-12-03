@@ -43,7 +43,7 @@ typedef struct {
 } gdx_info;
 
 const gdx_info* gdx_read(const char* fname);
-const gdx_info* gdx_get_info(void);
+const gdx_info* gdx_get_info();
 const gdx_info* gdx_find_file(char** dirlist);
 
 // This is so gross.   By the time we know it's not a USB device

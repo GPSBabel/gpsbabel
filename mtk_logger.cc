@@ -799,7 +799,6 @@ mtk_retry:
     mtk_erase();
   }
 
-  return;
 }
 
 

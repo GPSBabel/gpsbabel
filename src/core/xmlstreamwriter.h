@@ -53,7 +53,7 @@ public:
 
     explicit XmlStreamWriter(QFile* f);
 
-  void writeStartDocument(void);
+  void writeStartDocument();
   void writeOptionalAttribute(const QString& qualifiedName, const QString& value);
   void writeOptionalTextElement(const QString& qualifiedName, const QString& text);
 };
