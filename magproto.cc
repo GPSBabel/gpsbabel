@@ -1362,7 +1362,8 @@ mag_waypt_pr(const Waypoint* waypointp)
 
   if (global_opts.smart_icons &&
       waypointp->gc_data->diff && waypointp->gc_data->terr) {
-    sprintf(ofmtdesc, "%d/%d %s", waypointp->gc_data->diff,
+    // It's a string and compactness counts, so "1.0" is OK to be "10".
+    sprintf(ofmtdesc, "%ud/%ud %s", waypointp->gc_data->diff,
             waypointp->gc_data->terr, CSTRc(odesc));
     odesc = mag_cleanse(ofmtdesc);
   } else {
