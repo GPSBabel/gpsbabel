@@ -54,22 +54,22 @@ int cet_ucs4_to_utf8(char* dest, size_t dest_size, int value);
 
 /* single char/value transmission - vec based */
 
-int cet_char_to_ucs4(const char src, const cet_cs_vec_t* vec, int* value);
+int cet_char_to_ucs4(char src, const cet_cs_vec_t* vec, int* value);
 short cet_utf8_to_char(const char* str, const cet_cs_vec_t* vecint, int* bytes, int* value);
-short cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec);
+short cet_ucs4_to_char(int value, const cet_cs_vec_t* vec);
 
 /* string to string - vector based */
 
 char* cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec);
 char* cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec);
 
-char* cet_str_uni_to_utf8(const short* src, const int length);
+char* cet_str_uni_to_utf8(const short* src, int length);
 
 /* UTF-8 string manipulation functions */
 
 unsigned int cet_utf8_strlen(const char* str);
 char* cet_utf8_strdup(const char* str);
-char* cet_utf8_strndup(const char* str, const int maxlen);
+char* cet_utf8_strndup(const char* str, int maxlen);
 
 /* unicode functions */
 

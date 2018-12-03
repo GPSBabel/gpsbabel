@@ -116,14 +116,14 @@ typedef struct garmin_fs_s {
 #endif
 } garmin_fs_t, *garmin_fs_p;
 
-garmin_fs_t* garmin_fs_alloc(const int protocol);
+garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src);
 void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
-void garmin_fs_xml_convert(const int base_tag, int tag, const QString& cdatastr, Waypoint* waypt);
+void garmin_fs_xml_convert(int base_tag, int tag, const QString& cdatastr, Waypoint* waypt);
 class QXmlStreamWriter;
 void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
 
@@ -137,7 +137,7 @@ unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* wayp
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
 
-void garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid);
-void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid);
+void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
+void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
 #endif

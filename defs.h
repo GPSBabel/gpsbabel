@@ -575,8 +575,7 @@ void waypt_add_url(Waypoint* wpt, const QString& link,
 void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text,
                    const QString& url_link_type);
-double gcgeodist(const double lat1, const double lon1,
-                 const double lat2, const double lon2);
+double gcgeodist(double lat1, double lon1, double lat2, double lon2);
 double waypt_time(const Waypoint* wpt);
 double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
 double waypt_distance(const Waypoint* A, const Waypoint* B);
@@ -849,7 +848,7 @@ void setshort_mustuniq(short_handle,  int n);
 void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
-void setshort_is_utf8(short_handle h, const int is_utf8);
+void setshort_is_utf8(short_handle h, int is_utf8);
 
 #define ARGTYPE_UNKNOWN    0x00000000
 #define ARGTYPE_INT        0x00000001
@@ -965,7 +964,7 @@ typedef struct style_vecs {
 extern style_vecs_t style_list[];
 
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
+void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
@@ -978,7 +977,7 @@ void init_vecs();
 void exit_vecs();
 void disp_formats(int version);
 const char* name_option(long type);
-void printposn(const double c, int is_lat);
+void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
@@ -1012,7 +1011,7 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 }
 
 int str_match(const char* str, const char* match);
-QString strenquote(const QString& str, const QChar quot_char);
+QString strenquote(const QString& str, QChar quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);
@@ -1084,10 +1083,10 @@ unsigned int le_readu16(const void* ptr);
 signed int le_read32(const void* ptr);
 unsigned int le_readu32(const void* ptr);
 void le_read64(void* dest, const void* src);
-void be_write16(void* ptr, const unsigned value);
-void be_write32(void* ptr, const unsigned value);
-void le_write16(void* ptr, const unsigned value);
-void le_write32(void* ptr, const unsigned value);
+void be_write16(void* ptr, unsigned value);
+void be_write32(void* ptr, unsigned value);
+void le_write16(void* ptr, unsigned value);
+void le_write32(void* ptr, unsigned value);
 
 double endian_read_double(const void* ptr, int read_le);
 float  endian_read_float(const void* ptr, int read_le);
@@ -1129,23 +1128,23 @@ typedef enum {
 
 /* bit manipulation functions (util.c) */
 
-char gb_getbit(const void* buf, const uint32_t nr);
-void gb_setbit(void* buf, const uint32_t nr);
+char gb_getbit(const void* buf, uint32_t nr);
+void gb_setbit(void* buf, uint32_t nr);
 
-void* gb_int2ptr(const int i);
+void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
 /*
  *  From parse.c
  */
-int parse_coordinates(const char* str, int datum, const grid_type grid,
+int parse_coordinates(const char* str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
-int parse_coordinates(const QString& str, int datum, const grid_type grid,
+int parse_coordinates(const QString& str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
 int parse_distance(const char* str, double* val, double scale, const char* module);
 int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, const double scale, const char* module);
-int parse_speed(const QString& str, double* val, const double scale, const char* module);
+int parse_speed(const char* str, double* val, double scale, const char* module);
+int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*
  *  From util_crc.c
@@ -1165,14 +1164,14 @@ typedef enum {
 } fmt_units;
 
 int    fmt_setunits(fmt_units);
-double fmt_distance(const double, const char** tag);
-double fmt_altitude(const double, const char** tag);
-double fmt_speed(const double, const char** tag);
+double fmt_distance(double, const char** tag);
+double fmt_altitude(double, const char** tag);
+double fmt_speed(double, const char** tag);
 
 /*
  * From nmea.c
  */
-int nmea_cksum(const char* const buf);
+int nmea_cksum(const char*buf);
 
 /*
  * Color helpers.

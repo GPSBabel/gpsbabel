@@ -53,7 +53,7 @@ typedef struct icon_mapping {
 QString mag_find_descr_from_token(const char* token);
 QString mag_find_token_from_descr(const QString& icon);
 
-unsigned int mag_checksum(const char* const buf);
+unsigned int mag_checksum(const char*buf);
 QString m330_cleanse(const char* istring);
 
 Waypoint* mag_trkparse(char* trkmsg);

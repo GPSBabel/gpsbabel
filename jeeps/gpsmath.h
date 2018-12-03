@@ -111,9 +111,9 @@
                                  double N, int32 zone, char zc);
 
   int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
-                                       double* N, int32* zone, char* zc, const int n);
+                                       double* N, int32* zone, char* zc, int n);
   int32 GPS_Math_UTM_EN_To_Known_Datum(double* lat, double* lon, double E,
-                                       double N, int32 zone, char zc, const int n);
+                                       double N, int32 zone, char zc, int n);
 
   void GPS_Math_Swiss_LatLon_To_EN(double phi, double lambda, double* E,
                                    double* N,double phi0,double lambda0,
@@ -137,11 +137,11 @@
   void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon);
 
   void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
-                                 const double UTMNorthing, const double UTMEasting,
+                                 double UTMNorthing, double UTMEasting,
                                  double* Lat, double* Lon,
-                                 const double lambda0, const double E0, const double N0);
+                                 double lambda0, double E0, double N0);
 
   int32 GPS_Lookup_Datum_Index(const char* n);
-  const char* GPS_Math_Get_Datum_Name(const int datum_index);
+  const char* GPS_Math_Get_Datum_Name(int datum_index);
 
 #endif

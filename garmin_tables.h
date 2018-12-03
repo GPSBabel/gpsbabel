@@ -36,7 +36,7 @@ typedef const struct icon_mapping {
 
 typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL, GDB} garmin_formats_e;
 
-const QString gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format);
+const QString gt_find_desc_from_icon_number(int icon, garmin_formats_e garmin_format);
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format);
 
 extern icon_mapping_t garmin_icon_table[];
@@ -89,16 +89,16 @@ typedef enum {
 
 unsigned char gt_convert_category(const char* name, int* category);
 
-unsigned char gt_switch_display_mode_value(const unsigned char display_mode, const int protoid, const char device);
+unsigned char gt_switch_display_mode_value(unsigned char display_mode, int protoid, char device);
 
 grid_type gt_lookup_grid_type(const char* grid_name, const QString& module);
-const char* gt_get_mps_grid_longname(const grid_type grid, const char* module);
+const char* gt_get_mps_grid_longname(grid_type grid, const char* module);
 int gt_lookup_datum_index(const char* datum_str, const QString& module);
-const char* gt_get_mps_datum_name(const int datum_index);
-uint32_t gt_color_value(const unsigned int garmin_index);
+const char* gt_get_mps_datum_name(int datum_index);
+uint32_t gt_color_value(unsigned int garmin_index);
 uint32_t gt_color_value_by_name(const QString& name);
 int gt_color_index_by_name(const QString& name);
-int gt_color_index_by_rgb(const int rgb);
-const char* gt_color_name(const unsigned int garmin_index);
+int gt_color_index_by_rgb(int rgb);
+const char* gt_color_name(unsigned int garmin_index);
 
 #endif
