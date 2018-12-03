@@ -115,7 +115,7 @@ static void process_pmtklox();
 static void process_pmtklog();
 static void process_pmtk001();
 static void process_pmtk705();
-static void send_command(const char* s, const char* waitfor);
+static void send_command(const char* s, const char*wait_for);
 static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
 

@@ -63,7 +63,7 @@ static void   GPS_D105_Get(GPS_PWay* way, UC* s);
 static void   GPS_D106_Get(GPS_PWay* way, UC* s);
 static void   GPS_D107_Get(GPS_PWay* way, UC* s);
 static void   GPS_D108_Get(GPS_PWay* way, UC* s);
-static void   GPS_D109_Get(GPS_PWay* way, UC* s, int proto);
+static void   GPS_D109_Get(GPS_PWay* way, UC* s, int protoid);
 static void   GPS_D150_Get(GPS_PWay* way, UC* s);
 static void   GPS_D151_Get(GPS_PWay* way, UC* s);
 static void   GPS_D152_Get(GPS_PWay* way, UC* s);
@@ -79,14 +79,14 @@ static void   GPS_D105_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D106_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D107_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D108_Send(UC* data, GPS_PWay way, int32* len);
-static void   GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int proto);
+static void   GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid);
 static void   GPS_D150_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D151_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D152_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D154_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D155_Send(UC* data, GPS_PWay way, int32* len);
 
-static void   GPS_D120_Get(int n, char* data);
+static void   GPS_D120_Get(int cat_num, char*s);
 
 static void   GPS_D200_Get(GPS_PWay* way, UC* s);
 static void   GPS_D201_Get(GPS_PWay* way, UC* s);
