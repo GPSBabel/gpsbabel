@@ -1859,7 +1859,11 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
     ColorId = 0; // default
   } else {
     SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
-    ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, ((lowranceusr4_fsdata*)(wpt->fs))->color_desc);
+    if (wpt->fs != nullptr) {
+      ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, ((lowranceusr4_fsdata*)(wpt->fs))->color_desc);
+    } else {
+      ColorId = 0; // default
+    }
   }
   /* If the waypoint is archived or disabled, use a "disabled" icon instead. */
   if ((wpt->gc_data->is_archived==status_true) || (wpt->gc_data->is_available==status_false)) {
