@@ -116,7 +116,7 @@ gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
   r = usb_bulk_write(udev, gusb_bulk_out_ep, (char*)(void*)opkt->dbuf, sz, TMOUT_B);
 
   if (r != (int) sz) {
-    fprintf(stderr, "Bad cmdsend r %d sz %ld\n", r, (unsigned long) sz);
+    fprintf(stderr, "Bad cmdsend r %d sz %lud\n", r, (unsigned long) sz);
     if (r < 0) {
       fatal("usb_bulk_write failed. '%s'\n",
             usb_strerror());
