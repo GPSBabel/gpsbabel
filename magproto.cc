@@ -1569,7 +1569,7 @@ const char** os_get_magellan_mountpoints()
 #if __APPLE__
   const char** dlist = (const char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/Magellan");
-  dlist[1] = NULL;
+  dlist[1] = nullptr;
   return dlist;
 #else
   fatal("Not implemented");

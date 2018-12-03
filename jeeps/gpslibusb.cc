@@ -98,7 +98,7 @@ char** os_get_garmin_mountpoints()
 {
   char** dlist = (char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/GARMIN");
-  dlist[1] = NULL;
+  dlist[1] = nullptr;
   return dlist;
 }
 #else
