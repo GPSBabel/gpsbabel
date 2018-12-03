@@ -233,7 +233,7 @@ raymarine_read()
     char sect[10];
     QString name;
 
-    snprintf(sect, sizeof(sect), "Rt%d", rx);
+    snprintf(sect, sizeof(sect), "Rt%u", rx);
     name = inifile_readstr(fin, sect, "Name");
     if (name.isNull()) {
       break;
