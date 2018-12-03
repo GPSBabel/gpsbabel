@@ -28,7 +28,7 @@
 
 class Warning {
  public:
-  Warning(bool fatal = false) :
+    explicit Warning(bool fatal = false) :
    fatal_(fatal) {
     file_.open(stderr, QIODevice::WriteOnly);
     fileStream_.setDevice(&file_);

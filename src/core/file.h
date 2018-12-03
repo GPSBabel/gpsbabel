@@ -30,7 +30,7 @@ namespace gpsbabel
 class File : public QFile
 {
 public:
-  File(const QString& s) : QFile(s) {}
+    explicit File(const QString& s) : QFile(s) {}
 
   /* in the tradition of gbfile we assume WriteOnly or ReadOnly, not ReadWrite */
   bool open(OpenMode mode) override {
