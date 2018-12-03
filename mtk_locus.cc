@@ -325,7 +325,6 @@ process_packet()
 void
 process_pmtklox()
 {
-  int hexval;
   uint8_t fixbytes[16];
   static Waypoint* trkpt;
   static Waypoint* waypt;
@@ -384,6 +383,7 @@ process_pmtklox()
         return;
       }
       for (int i = 0; i<4; i++) {
+        unsigned int hexval;
         sscanf(&token[i * 2], "%2x", &hexval);
         fixbytes[bytenum++] = hexval;
         calculated_checksum ^= hexval;
