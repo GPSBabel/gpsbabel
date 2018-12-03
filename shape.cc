@@ -300,10 +300,10 @@ my_read()
 //  } else if (nameidx == -1) {
 //      leave name as a null QString.
     } else if (nameidx == -2) {
-      for (int oidx=0; oidx<nameindices.size(); oidx++) {
+      for (int nameindice : nameindices) {
         // form a compound name from one or more dbf fields.
         QString namecomponent = DBFReadStringAttribute(
-                                  ihandledb, iShape, nameindices.at(oidx));
+                                  ihandledb, iShape, nameindice);
         if (!name.isEmpty() && !namecomponent.isEmpty()) {
           name.append(QLatin1String(" / "));
         }

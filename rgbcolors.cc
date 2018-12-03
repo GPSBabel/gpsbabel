@@ -236,11 +236,11 @@ color_to_bbggrr(const char* opt_color)
     return color_num;
   }
 
-  for (unsigned int i = 0; i < sizeof(color_table) / sizeof(color_table[0]); i++) {
-    if (0 == case_ignore_strcmp(opt_color, color_table[i].cn)) {
-      return (color_table[i].b << 16) +
-             (color_table[i].g << 8) +
-             color_table[i].r;
+  for (auto i : color_table) {
+    if (0 == case_ignore_strcmp(opt_color, i.cn)) {
+      return (i.b << 16) +
+             (i.g << 8) +
+              i.r;
     }
   }
 
