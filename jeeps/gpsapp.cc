@@ -88,7 +88,7 @@ static void   GPS_D155_Send(UC* data, GPS_PWay way, int32* len);
 
 static void   GPS_D120_Get(int cat_num, char*s);
 
-static void   GPS_D200_Get(GPS_PWay* way, UC* s);
+static void   GPS_D200_Get(GPS_PWay* way, const UC* s);
 static void   GPS_D201_Get(GPS_PWay* way, UC* s);
 static void   GPS_D202_Get(GPS_PWay* way, UC* s);
 static void   GPS_D210_Get(GPS_PWay* way, UC* s);
@@ -3444,7 +3444,7 @@ int32 GPS_A201_Send(const char* port, GPS_PWay* way, int32 n)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D200_Get(GPS_PWay* way, UC* s)
+static void GPS_D200_Get(GPS_PWay* way, const UC* s)
 {
   (*way)->rte_prot = 200;
   (*way)->rte_num  = *s;
