@@ -23,6 +23,7 @@
 #define SESSION_H_INCLUDED_
 
 #include <QtCore/QString>  // for QString
+#include <utility>
 
 struct session_t {
 public:
@@ -30,7 +31,7 @@ public:
   QString filename;			/* used file within format */
 
 public:
-  session_t(const QString& name_p, const QString& filename_p) : name{name_p},filename{filename_p} {}
+  session_t(QString name_p, QString filename_p) : name{std::move(name_p)},filename{std::move(filename_p)} {}
 };
 
 void session_init();

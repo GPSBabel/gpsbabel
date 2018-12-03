@@ -35,7 +35,7 @@
 #include "session.h"
 
 #include <QtCore/QString>
-
+#include <utility>
 #include "src/core/datetime.h"
 #include "src/core/optional.h"
 
@@ -246,9 +246,9 @@ class utf_string
 {
 public:
   utf_string() = default;
-  utf_string(bool html, const QString& str) :
+  utf_string(bool html, QString str) :
     is_html{html},
-    utfstring{str}
+    utfstring{std::move(str)}
   {}
   bool is_html{false};
   QString utfstring;
@@ -332,20 +332,20 @@ class UrlLink
 {
 public:
   UrlLink() = default;
-  UrlLink(const QString& url) :
-    url_(url)
+  UrlLink(QString url) :
+    url_(std::move(url))
   { }
   UrlLink(const char* url) :
     url_(url)
   { }
-  UrlLink(const QString& url, const QString& url_link_text) :
-    url_(url),
-    url_link_text_(url_link_text)
+  UrlLink(QString url, QString url_link_text) :
+    url_(std::move(url)),
+    url_link_text_(std::move(url_link_text))
   { }
-  UrlLink(const QString& url, const QString& url_link_text, const QString& url_link_type) :
-    url_(url),
-    url_link_text_(url_link_text),
-    url_link_type_(url_link_type)
+  UrlLink(QString url, QString url_link_text, QString url_link_type) :
+    url_(std::move(url)),
+    url_link_text_(std::move(url_link_text)),
+    url_link_type_(std::move(url_link_type))
   { }
   QString url_;
   QString url_link_text_;

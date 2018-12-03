@@ -22,6 +22,7 @@
 #include "defs.h"
 #include <QtCore/QStringList>
 class QTextStream;
+#include <utility> 
 
 /* function prototypes */
 
@@ -91,8 +92,9 @@ public:
   unsigned options{0};
 
   field_map() = default;
-  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk) : key{k},val{v},printfc{p},hashed_key{hk} {}
-  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk, unsigned o) : key{k},val{v},printfc{p},hashed_key{hk},options{o} {}
+  field_map(QByteArray k, QByteArray v, QByteArray p, int hk) : key{std::move(k)},val{std::move(v)},printfc{std::move(p)},hashed_key{hk} {}
+  field_map(QByteArray k, QByteArray v, QByteArray p, int hk, unsigned o) : key{std::move(k)},val{std::move(v)},printfc{
+          std::move(p)},hashed_key{hk},options{o} {}
 };
 
 /* something to map config file constants to chars */
