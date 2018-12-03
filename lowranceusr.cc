@@ -305,7 +305,11 @@ const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
   /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
 
   {     1,    "diamond 1"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
+  {     1,    "diamond 2"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
+  {     1,    "diamond 3"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
   {     2,    "x 1"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
+  {     2,    "x 2"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
+  {     2,    "x 3"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
   {     4,    "fish"                , { "green",  "aqua",    "blue",   "magenta", "red",     "yellow",  "white" }},   // single fish
   {     5,    "two fish"            , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // schoolfish
   {     8,    "hole"                , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // dip sign
@@ -1855,7 +1859,11 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
 
   int SymbolId, ColorId;
   if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
-    SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
+    if(writing_version == 4) {
+      SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
+    } else {
+      SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
+    }
     ColorId = 0; // default
   } else {
     SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
