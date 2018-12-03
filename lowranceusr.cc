@@ -45,6 +45,7 @@
 
   Collected from various WEB sources and Lowrance HOOK2 User Manual.
 
+    Lowrance Support Site - https://www.lowrance.com/help-and-support/
     Hook2 Series Operator Manual (English) - //software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf
     Lowrance Endura FAQs II - http://support.lowrance.com/system/selfservice.controller?CONFIGURATION=1001&PARTITION_ID=1&secureFlag=false&TIMEZONE_OFFSET=&CMD=VIEW_ARTICLE&ARTICLE_ID=2028
     BBCBoards.Net : Lowrance Sonar/GPS Topic : Waypoints; USR Versions Thread : http://www.bbcboards.net/showthread.php?t=855028
@@ -96,7 +97,8 @@ typedef struct lowranceusr_icon_mapping {
   const char*  icon;
 } lowranceusr_icon_mapping_t;
 
-#define DEF_ICON 10001
+#define DEF_ICON  10001
+#define DEF_COLOR 0
 
 const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 
@@ -257,30 +259,73 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   {    -1,    nullptr }
 };
 
-const lowranceusr_icon_mapping_t lowranceusr4_icon_value_table[] = {
+#define	NEW_USR4_COLOR
+#ifndef	NEW_USR4_COLOR
 
-  /*  USR     GPX Symbol                HOOK2 Displays */
+typedef struct lowranceusr4_icon_mapping {
+  const int      value;
+  const char*    icon;
+} lowranceusr4_icon_mapping_t;
 
-  {     1,    "diamond 1" },            // diamond
-  {     2,    "x 1" },                  // X
-  {     4,    "fish" },                 // single fish
-  {     5,    "two fish" },             // schoolfish
-  {     8,    "hole" },                 // dip sign
-  {     9,    "hump" },                 // bump sign
-  {    10,    "longgrass" },            // long grass
-  {    12,    "rocks" },                // rocks
-  {    17,    "gas station" },          // gas pump
-  {    28,    "tree" },                 // tree
-  {    30,    "campsite" },             // tent
-  {    37,    "skull and crossbones" }, // skull and crossbones
-  {    40,    "dive flag" },            // diveflag
-  {    42,    "anchor" },               // anchor
-  {    44,    "boat ramp" },            // boatramp
-  {    48,    "pier" },                 // pier
+const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
+
+  /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
+
+  {     1,    "diamond 1"           },
+  {     2,    "x 1"                 },
+  {     4,    "fish"                },
+  {     5,    "two fish"            },
+  {     8,    "hole"                },
+  {     9,    "hump"                },
+  {    10,    "longgrass"           },
+  {    12,    "rocks"               },
+  {    17,    "gas station"         },
+  {    28,    "tree"                },
+  {    30,    "campsite"            },
+  {    37,    "skull and crossbones"},
+  {    40,    "dive flag"           },
+  {    42,    "anchor"              },
+  {    44,    "boat ramp"           },
+  {    48,    "pier"                },
 
   // END OF ICON MAPPING
-  {    -1,    nullptr }
+  {    -1,    nullptr               }
 };
+
+#else
+
+typedef struct lowranceusr4_icon_mapping {
+  const int      value;
+  const char*    icon;
+  const char*    color[7];
+} lowranceusr4_icon_mapping_t;
+
+const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
+
+  /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
+
+  {     1,    "diamond 1"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
+  {     2,    "x 1"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
+  {     4,    "fish"                , { "green",  "aqua",    "blue",   "magenta", "red",     "yellow",  "white" }},   // single fish
+  {     5,    "two fish"            , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // schoolfish
+  {     8,    "hole"                , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // dip sign
+  {     9,    "hump"                , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // bump sign
+  {    10,    "longgrass"           , { "green",  "aqua",    "blue",   "red",     "orange",  "yellow",  "white" }},   // long grass
+  {    12,    "rocks"               , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // rocks
+  {    17,    "gas station"         , { "red",   "yellow",   "green",  "aqua",    "blue",    "magenta", "white" }},   // gas pump
+  {    28,    "tree"                , { "green",  "aqua",    "blue",   "magenta", "red",     "yellow",  "white" }},   // tree
+  {    30,    "campsite"            , { "yellow", "green",   "aqua",   "blue",    "magenta", "red",     "white" }},   // tent
+  {    37,    "skull and crossbones", { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // skull and crossbones
+  {    40,    "dive flag"           , { "red",    "yellow",  "green",  "aqua",    "blue",    "magenta", "white" }},   // diveflag
+  {    42,    "anchor"              , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // anchor
+  {    44,    "boat ramp"           , { "red",    "yellow",  "green",  "aqua",    "blue",    "magenta", "white" }},   // boatramp
+  {    48,    "pier"                , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // pier
+
+  // END OF ICON MAPPING
+  {    -1,    nullptr               , { nullptr,  nullptr,   nullptr,  nullptr,   nullptr,   nullptr,  nullptr  }}
+};
+
+#endif
 
 static gbfile*        file_in;
 static gbfile*        file_out;
@@ -348,6 +393,7 @@ typedef struct {
   uint UUID4;
   int  flags;
   int  color;
+  const char *color_desc;
   int  icon_num;
 } lowranceusr4_fsdata;
 
@@ -568,10 +614,10 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
 {
   int len = buf.length();
 
-  if ((int)(0xffffffff / bytes_per_char) < len) {
+  if ((int)(0x7fffffff / bytes_per_char) < len) {
     /* be pedantic and check for the unlikely event that we are asked
        to write more than 2^32 bytes */
-    len = (int)(0xffffffff / bytes_per_char);
+    len = (int)(0x7fffffff / bytes_per_char);
   }
 
   gbfputint32(len*bytes_per_char, file_out);
@@ -652,7 +698,6 @@ lowranceusr_find_icon_number_from_desc(const QString& desc)
     return n;
   }
 
-
   for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
     if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
       return i->value;
@@ -665,7 +710,7 @@ lowranceusr_find_icon_number_from_desc(const QString& desc)
 const QString
 lowranceusr4_find_desc_from_icon_number(const int icon)
 {
-  for (const lowranceusr_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -673,6 +718,74 @@ lowranceusr4_find_desc_from_icon_number(const int icon)
 
   return "";
 }
+
+static int
+lowranceusr4_find_icon_number_from_desc(const QString& desc)
+{
+  if (desc.isNull()) {
+    return DEF_ICON;
+  }
+
+  /*
+   * If we were given a numeric icon number as a description
+   * (i.e. 8255), just return that.
+   */
+  int n = desc.toInt();
+  if (n)  {
+    return n;
+  }
+
+  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
+      return i->value;
+    }
+  }
+
+  return DEF_ICON;
+}
+
+#ifdef	NEW_USR4_COLOR
+const char *
+lowranceusr4_find_color_from_icon_number_plus_color_index(const int icon, const int index)
+{
+  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+    if (icon == i->value) {
+      return i->color[index];
+    }
+  }
+
+  return nullptr;
+}
+
+static int
+lowranceusr4_find_index_from_icon_desc_and_color_desc(const QString& icon, const QString& color)
+{
+  if (icon.isNull()) {
+    return DEF_COLOR;
+  }
+
+  /*
+   * If we were given a numeric icon number as a description
+   * (i.e. 8255), just return DEF_COLOR.
+   */
+  int n = icon.toInt();
+  if (n)  {
+    return DEF_COLOR;
+  }
+
+  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+    if (icon.compare(i->icon,Qt::CaseInsensitive) == 0) {
+      // Found ICON, now look for color
+      for (int index=0; index<7; index++) {
+        if (color.compare(i->color[index],Qt::CaseInsensitive) == 0) 
+          return index;
+      }
+    }
+  }
+
+  return DEF_COLOR;
+}
+#endif
 
 // Combined arguments from previous lowranceusr and lowranceusr4 into single set.
 // Use output format specified to determine if args are ignored.
@@ -942,11 +1055,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
   /* Flags, discard for now */
   fsdata->flags = gbfgetint32(file_in);
 
-  /* Icon ID; TODO: need to run this through something like
-     lowranceusr_find_desc_from_icon_number to convert to a gpsbabel
-     icon description; however it doesn't seem that the icon ids
-     used in usr4 match those from usr{2,3} so we need a new
-     mapping. */
+  /* Icon ID */
   fsdata->icon_num = gbfgetint16(file_in);
   wpt_tmp->icon_descr = lowranceusr4_find_desc_from_icon_number(fsdata->icon_num);
   if (wpt_tmp->icon_descr.isNull()) {
@@ -955,8 +1064,9 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
     wpt_tmp->icon_descr = nbuf;
   }
 
-  /* Color ID, discard for now */
+  /* Color ID */
   fsdata->color = gbfgetint16(file_in);
+  fsdata->color_desc = lowranceusr4_find_color_from_icon_number_plus_color_index(fsdata->icon_num, fsdata->color);
 
   /* Waypoint descr; input is 2 bytes per char, we convert to 1 */
   int desc_len = lowranceusr4_readstr(&desc_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
@@ -1007,7 +1117,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
         printf("  %10u ", fsdata->uid_unit2);
       }
       printf(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
-      printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
+      printf(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color, qPrintable(fsdata->color_desc));
       printf(" %6d %16s", desc_len, desc_buff);
       printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
              create_date, create_time, unused_byte, wpt_tmp->altitude, loran_GRI, loran_Tda, loran_Tdb);
@@ -1055,7 +1165,7 @@ lowranceusr_parse_waypts()
       if (reading_version > 4) {
         printf(" Unit Number2");
       }
-      printf(" Latitude       Longitude      Flags    ICON   Color  Length Description     ");
+      printf(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
       printf(" Time     Date     Unused   Depth    LoranGRI LoranTda LoranTdb\n");
 
       printf(MYNAME " parse_waypoints: ");
@@ -1066,7 +1176,7 @@ lowranceusr_parse_waypts()
       if (reading_version > 4) {
         printf(" ------------");
       }
-      printf(" -------------- -------------- -------- ------ ------ ------ ----------------");
+      printf(" --------------- --------------- -------- ---- ------------ ------ ----------------");
       printf(" -------- -------- -------- -------- -------- -------- --------\n");
     } else {
       printf(MYNAME " parse_waypts: Number Name            Longitude       Latitude       Altitude    Time     ICON ID (dec)    Flag (dec)");
@@ -1743,12 +1853,21 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
      it means */
   gbfputint32(2, file_out);
 
-  /* Icon ID; TODO: need to invert icon description to an icon number,
-     see parse_waypoints above */
-  gbfputint16(0, file_out);
-
-  /* Color ID */
-  gbfputint16(0, file_out);
+  int SymbolId, ColorId;
+  if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
+    SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
+    ColorId = 0; // default
+  } else {
+    SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
+    ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, ((lowranceusr4_fsdata*)(wpt->fs))->color_desc);
+  }
+  /* If the waypoint is archived or disabled, use a "disabled" icon instead. */
+  if ((wpt->gc_data->is_archived==status_true) || (wpt->gc_data->is_available==status_false)) {
+    SymbolId = lowranceusr_find_icon_number_from_desc("Disabled Cache");
+    ColorId = 0; // default
+  }
+  gbfputint16(SymbolId, file_out);
+  gbfputint16(ColorId, file_out);
 
   /* Waypt description */
   lowranceusr4_writestr(wpt->description, file_out, 2);
@@ -1767,7 +1886,7 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   gbfputflt(METERS_TO_FEET(WAYPT_GET(wpt, depth, 0.0)), file_out);
 
   /* Loran data */
-  gbfputint32(0, file_out);
+  gbfputint32(0xffffffff, file_out);  // indicate Loran not used
   gbfputint32(0, file_out);
   gbfputint32(0, file_out);
 }
@@ -2153,6 +2272,10 @@ lowranceusr4_trail_disp(const Waypoint* wpt)
 static void
 data_write()
 {
+  QString buf;
+  char tbuf[64];
+  int len;
+
   setshort_length(mkshort_handle, 15);
 
   gbfputint32(writing_version, file_out);
@@ -2183,18 +2306,32 @@ data_write()
     gbfputint32(DataStreamVersion, file_out);
 
     /* file title */
-    lowranceusr4_writestr(opt_title, file_out, 1);
+    if ((len = strlen(opt_title)) == 0) {
+      buf = QString("GPSBabel generated USR data file");
+    } else {
+      if (len > MAXUSRSTRINGSIZE) {
+        opt_title[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
+      }
+      buf = opt_title;
+    }
+    if (global_opts.debug_level >= 1) {
+      printf(MYNAME " data_write: Title = '%s'\n", qPrintable(buf));
+    }
+    lowranceusr4_writestr(buf, file_out, 1);
 
     /* date string */
-    char buf[256];
     time_t now = time(nullptr);
     struct tm* now_tm = gmtime(&now);
-    sprintf(buf, "%d/%d/%d", now_tm->tm_mon+1, now_tm->tm_mday, now_tm->tm_year+1900);
+    sprintf(tbuf, "%d/%d/%d", now_tm->tm_mon+1, now_tm->tm_mday, now_tm->tm_year+1900);
+    buf = tbuf;
+    if (global_opts.debug_level >= 1) {
+      printf(MYNAME " data_write: Date = '%s'\n", qPrintable(buf));
+    }
     lowranceusr4_writestr(buf, file_out, 1);
 
     /* creation date/time */
-    gbfputint32(lowranceusr4_jd_from_timestamp(now), file_out);
-    gbfputint32(now, file_out);
+    gbfputint32(lowranceusr4_jd_from_timestamp(now), file_out);  // creation date
+    gbfputint32(now, file_out);                                  // creation time
 
     /* unused byte */
     gbfputc(0, file_out);
@@ -2204,7 +2341,18 @@ data_write()
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
-    lowranceusr4_writestr(opt_content_descr, file_out, 1);
+    if ((len = strlen(opt_content_descr)) == 0) {
+      buf = QString("Waypoints, routes, and trails");
+    } else {
+      if(len > MAXUSRSTRINGSIZE) {
+        opt_content_descr[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
+      }
+      buf = opt_content_descr;
+    }
+    if (global_opts.debug_level >= 1) {
+      printf(MYNAME " data_write: Description = '%s'\n", qPrintable(buf));
+    }
+    lowranceusr4_writestr(buf, file_out, 1);
 
     lowranceusr4_write_waypoints();
   }
