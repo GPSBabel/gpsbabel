@@ -97,8 +97,7 @@ typedef struct lowranceusr_icon_mapping {
   const char*  icon;
 } lowranceusr_icon_mapping_t;
 
-#define DEF_ICON  10001
-#define DEF_COLOR 0
+#define DEF_ICON      10001
 
 const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 
@@ -259,40 +258,8 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   {    -1,    nullptr }
 };
 
-#define	NEW_USR4_COLOR
-#ifndef	NEW_USR4_COLOR
-
-typedef struct lowranceusr4_icon_mapping {
-  const int      value;
-  const char*    icon;
-} lowranceusr4_icon_mapping_t;
-
-const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
-
-  /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
-
-  {     1,    "diamond 1"           },
-  {     2,    "x 1"                 },
-  {     4,    "fish"                },
-  {     5,    "two fish"            },
-  {     8,    "hole"                },
-  {     9,    "hump"                },
-  {    10,    "longgrass"           },
-  {    12,    "rocks"               },
-  {    17,    "gas station"         },
-  {    28,    "tree"                },
-  {    30,    "campsite"            },
-  {    37,    "skull and crossbones"},
-  {    40,    "dive flag"           },
-  {    42,    "anchor"              },
-  {    44,    "boat ramp"           },
-  {    48,    "pier"                },
-
-  // END OF ICON MAPPING
-  {    -1,    nullptr               }
-};
-
-#else
+#define DEF_USR4_ICON  2
+#define DEF_USR4_COLOR 0
 
 typedef struct lowranceusr4_icon_mapping {
   const int      value;
@@ -328,8 +295,6 @@ const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
   // END OF ICON MAPPING
   {    -1,    nullptr               , { nullptr,  nullptr,   nullptr,  nullptr,   nullptr,   nullptr,  nullptr  }}
 };
-
-#endif
 
 static gbfile*        file_in;
 static gbfile*        file_out;
@@ -727,7 +692,7 @@ static int
 lowranceusr4_find_icon_number_from_desc(const QString& desc)
 {
   if (desc.isNull()) {
-    return DEF_ICON;
+    return DEF_USR4_ICON;
   }
 
   /*
@@ -745,10 +710,9 @@ lowranceusr4_find_icon_number_from_desc(const QString& desc)
     }
   }
 
-  return DEF_ICON;
+  return DEF_USR4_ICON;
 }
 
-#ifdef	NEW_USR4_COLOR
 const char *
 lowranceusr4_find_color_from_icon_number_plus_color_index(const int icon, const int index)
 {
@@ -765,16 +729,16 @@ static int
 lowranceusr4_find_index_from_icon_desc_and_color_desc(const QString& icon, const QString& color)
 {
   if (icon.isNull()) {
-    return DEF_COLOR;
+    return DEF_USR4_COLOR;
   }
 
   /*
    * If we were given a numeric icon number as a description
-   * (i.e. 8255), just return DEF_COLOR.
+   * (i.e. 8255), just return DEF_USR4_COLOR.
    */
   int n = icon.toInt();
   if (n)  {
-    return DEF_COLOR;
+    return DEF_USR4_COLOR;
   }
 
   for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
@@ -787,9 +751,8 @@ lowranceusr4_find_index_from_icon_desc_and_color_desc(const QString& icon, const
     }
   }
 
-  return DEF_COLOR;
+  return DEF_USR4_COLOR;
 }
-#endif
 
 // Combined arguments from previous lowranceusr and lowranceusr4 into single set.
 // Use output format specified to determine if args are ignored.
