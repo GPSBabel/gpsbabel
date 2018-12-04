@@ -39,8 +39,8 @@
 #include "src/core/datetime.h"
 #include "src/core/optional.h"
 
-#define CSTR(qstr) (qstr.toUtf8().constData())
-#define CSTRc(qstr) (qstr.toLatin1().constData())
+#define CSTR(qstr) ((qstr).toUtf8().constData())
+#define CSTRc(qstr) ((qstr).toLatin1().constData())
 #define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
 #define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
@@ -93,10 +93,10 @@
 /* knots to meters/second */
 #define KNOTS_TO_MPS(a) (KPH_TO_MPS((a)*1.852))
 
-#define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
+#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
+#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
+#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
+#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in
@@ -424,7 +424,7 @@ typedef struct {
   double min_alt;	/* -unknown_alt => invalid */
 } bounds;
 
-#define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
+#define WAYPT_SET(wpt,member,val) { (wpt)->member = (val); wpt->wpt_flags.member = 1; }
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
