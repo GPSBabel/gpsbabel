@@ -87,6 +87,10 @@
 
 
 #include "defs.h"
+#include "src/core/datetime.h"
+#include <QtCore/QDate>
+#include <QtCore/QDateTime>
+#include <QtCore/QTime>
 #include <QtCore/QDebug>
 #include <cmath>          // for lat/lon conversion 
 #include <cstdio>         // for gmtime
@@ -366,6 +370,14 @@ typedef struct {
   int  icon_num;
 } lowranceusr4_fsdata;
 
+class Lowranceusr4Timestamp {
+  public:
+  unsigned int julian_day_number;
+  unsigned int milliseconds;
+
+  Lowranceusr4Timestamp(unsigned int jd, unsigned int ms) : julian_day_number{jd}, milliseconds{ms} {}
+};
+
 
 /* fsdata manipulation functions */
 static void
@@ -603,39 +615,23 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   }
 }
 
-static time_t
-lowranceusr4_get_timestamp(int jd_number, time_t t)
+static gpsbabel::DateTime
+lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 {
-  struct tm ntm;
-
-  /* get UTC time from time_t */
-  struct tm* ptm = gmtime(&t);
-  memset(&ntm, 0, sizeof(ntm));
-  ntm.tm_hour = ptm->tm_hour;
-  ntm.tm_min = ptm->tm_min;
-  ntm.tm_sec = ptm->tm_sec;
-
-  /* convert the JD number to get day/month/year */
-  int a = jd_number + 32044;
-  int b = (4*a + 3) / 146097;
-  int c = a - (146097*b) / 4;
-  int d = (4*c + 3) / 1461;
-  int e = c - (1461*d) / 4;
-  int m = (5*e + 2) / 153;
-  ntm.tm_mday = e + 1 - (153*m + 2) / 5;
-  ntm.tm_mon = m + 3 - 12 * (m / 10) - 1;
-  ntm.tm_year = 100 * b + d - 4800 + m / 10 - 1900;
-
-  /* put it all back together into a unix timestamp in UTC */
-  time_t out = mkgmtime(&ntm);
-
-  return out;
+  QDateTime qdt = QDateTime(QDate::fromJulianDay(jd_number), QTime(0, 0, 0), Qt::UTC).addMSecs(msecs);
+  qDebug() << fixed << qSetRealNumberPrecision(9) << "getts" << jd_number << msecs << jd_number + msecs/86400000.0 << qdt;
+  return qdt;
 }
 
-static int
-lowranceusr4_jd_from_timestamp(time_t t)
+static Lowranceusr4Timestamp
+lowranceusr4_jd_from_timestamp(gpsbabel::DateTime qdt)
 {
-  return (int)round((float)t / 86400.0 + 2440587.0);
+  QDateTime jdt = qdt.toUTC().addSecs(-60 * 60 * 12);
+  unsigned int jd_number = jdt.date().toJulianDay();
+  QTime jd_time = jdt.time();
+  unsigned int msecs = (((((jd_time.hour() * 60) + jd_time.minute()) * 60) + jd_time.second()) * 1000) + jd_time.msec();
+  qDebug() << fixed << qSetRealNumberPrecision(9) << "frmts" << jd_number << msecs << jd_number + msecs/86400000.0 << qdt;
+  return Lowranceusr4Timestamp(jd_number, msecs);
 }
 
 
@@ -934,8 +930,6 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
       dt = wpt_tmp->GetCreationTime();
       t  = wpt_tmp->GetCreationTime().time();
       printf(" %s %s", qPrintable(dt.toString("yyyy/MM/dd")), qPrintable(t.toString("hh:mm")));
-      
-      /* printf(" %08x", (int)waypt_time); */
     } else {
       printf(MYNAME " parse_waypt: creation time %d, base_time %d waypt_time %d\n",
              (int)wpt_tmp->creation_time.toTime_t(),
@@ -1104,8 +1098,13 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
       printf(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
       printf(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color, qPrintable(fsdata->color_desc));
       printf(" %6d %16s", desc_len, desc_buff);
-      printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
-             create_date, create_time, unused_byte, wpt_tmp->altitude, loran_GRI, loran_Tda, loran_Tdb);
+      QDateTime dt;
+      QTime t;
+      dt = wpt_tmp->GetCreationTime();
+      t  = wpt_tmp->GetCreationTime().time();
+      printf(" %s %s", qPrintable(dt.toString("yyyy/MM/dd")), qPrintable(t.toString("hh:mm")));
+      printf(" %08x %f %08x %08x %08x\n",
+             unused_byte, wpt_tmp->altitude, loran_GRI, loran_Tda, loran_Tdb);
     } else {
       printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
@@ -1151,7 +1150,7 @@ lowranceusr_parse_waypts()
         printf(" Unit Number2");
       }
       printf(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
-      printf(" Time     Date     Unused   Depth    LoranGRI LoranTda LoranTdb\n");
+      printf(" Date       Time  Unused   Depth    LoranGRI LoranTda LoranTdb\n");
 
       printf(MYNAME " parse_waypoints: ");
       if (reading_version > 4) {
@@ -1162,7 +1161,7 @@ lowranceusr_parse_waypts()
         printf(" ------------");
       }
       printf(" --------------- --------------- -------- ---- ------------ ------ ----------------");
-      printf(" -------- -------- -------- -------- -------- -------- --------\n");
+      printf(" ---------- ----- -------- -------- -------- -------- --------\n");
     } else {
       printf(MYNAME " parse_waypts: Number Name            Longitude       Latitude       Altitude    Time            ");
       if (strcmp(opt_rversion, "+") == 0) {
@@ -1877,8 +1876,9 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   gbfputflt(WAYPT_GET(wpt, proximity, 0.0), file_out);
 
   /* Creation date/time */
-  gbfputint32(lowranceusr4_jd_from_timestamp(wpt->GetCreationTime().toTime_t()), file_out);
-  gbfputint32(wpt->GetCreationTime().toTime_t(), file_out);
+  auto ts = lowranceusr4_jd_from_timestamp(wpt->GetCreationTime());
+  gbfputint32(ts.julian_day_number, file_out);
+  gbfputint32(ts.milliseconds, file_out);
 
   /* Unused byte */
   gbfputc(0, file_out);
@@ -2274,7 +2274,6 @@ static void
 data_write()
 {
   QString buf;
-  char tbuf[64];
   int len;
 
   setshort_length(mkshort_handle, 15);
@@ -2321,18 +2320,13 @@ data_write()
     lowranceusr4_writestr(buf, file_out, 1);
 
     /* date string */
-    time_t now = time(nullptr);
-    struct tm* now_tm = gmtime(&now);
-    sprintf(tbuf, "%d/%d/%d", now_tm->tm_mon+1, now_tm->tm_mday, now_tm->tm_year+1900);
-    buf = tbuf;
-    if (global_opts.debug_level >= 1) {
-      printf(MYNAME " data_write: Date = '%s'\n", qPrintable(buf));
-    }
-    lowranceusr4_writestr(buf, file_out, 1);
+    gpsbabel::DateTime now = current_time().toUTC();
+    lowranceusr4_writestr(now.toString("MM/dd/yyyy"), file_out, 1);
 
     /* creation date/time */
-    gbfputint32(lowranceusr4_jd_from_timestamp(now), file_out);  // creation date
-    gbfputint32(now, file_out);                                  // creation time
+    auto ts = lowranceusr4_jd_from_timestamp(now);
+    gbfputint32(ts.julian_day_number, file_out);
+    gbfputint32(ts.milliseconds, file_out);
 
     /* unused byte */
     gbfputc(0, file_out);
