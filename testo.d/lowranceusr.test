@@ -96,8 +96,8 @@ compare ${REFERENCE}/lowrance-v2-unicsv.txt ${TMPDIR}/lowrance-v2-unicsv.txt
 # Compare generated to reference
 compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
 # cut the depth column from V3 and then compare the resultant v3 with v2
-tail --lines=+2 ${REFERENCE}/lowrance-v2-unicsv.txt | sed "s/[0-9]*,//" | sort --field-separator=, --key=3 > ${TMPDIR}/lowrance-v2-unicsv-sorted.txt
-tail --lines=+2 ${REFERENCE}/lowrance-v3-unicsv.txt | sed "s/[0-9]*,//" | sort --field-separator=, --key=3 | cut --delimiter=, --complement -f 6 > ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
+tail -n +2 ${REFERENCE}/lowrance-v2-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v2-unicsv-sorted.txt
+tail -n +2 ${REFERENCE}/lowrance-v3-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 | cut -d , --complement -f 6 > ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
 compare ${TMPDIR}/lowrance-v2-unicsv-sorted.txt ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
 
 # Ideally, there'd be a test for v2 vs. v3 writes, but their numeric
@@ -128,9 +128,9 @@ compare ${REFERENCE}/lowrance-v5.gpx ${TMPDIR}/lowrance-v5.gpx
 # so use another way to compare to ensure have EXACTLY the same data
 #
 gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v4.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v4-unicsv.txt
-tail --lines=+2 ${TMPDIR}/lowrance-v4-unicsv.txt | sed "s/[0-9]*,//" | sort --field-separator=, --key=3 > ${TMPDIR}/lowrance-v4-unicsv-sorted.txt
+tail -n +2 ${TMPDIR}/lowrance-v4-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v4-unicsv-sorted.txt
 gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v5.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v5-unicsv.txt
-tail --lines=+2 ${TMPDIR}/lowrance-v5-unicsv.txt | sed "s/[0-9]*,//" | sort --field-separator=, --key=3 > ${TMPDIR}/lowrance-v5-unicsv-sorted.txt
+tail -n +2 ${TMPDIR}/lowrance-v5-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v5-unicsv-sorted.txt
 compare ${TMPDIR}/lowrance-v4-unicsv-sorted.txt ${TMPDIR}/lowrance-v5-unicsv-sorted.txt
 
 #
@@ -145,6 +145,6 @@ compare ${REFERENCE}/lowrance-v5.gpx ${TMPDIR}/lowrance-v6.gpx
 # so use another way to compare to ensure have EXACTLY the same data
 #
 gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v6.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v6-unicsv.txt
-tail --lines=+2 ${TMPDIR}/lowrance-v6-unicsv.txt | sed "s/[0-9]*,//" | sort --field-separator=, --key=3 > ${TMPDIR}/lowrance-v6-unicsv-sorted.txt
+tail -n +2 ${TMPDIR}/lowrance-v6-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v6-unicsv-sorted.txt
 compare ${TMPDIR}/lowrance-v4-unicsv-sorted.txt ${TMPDIR}/lowrance-v6-unicsv-sorted.txt
 
