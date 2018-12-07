@@ -275,26 +275,26 @@ const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
 
   /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
 
-  {     1,    "diamond 1"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
-  {     1,    "diamond 2"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
-  {     1,    "diamond 3"           , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // diamond
-  {     2,    "x 1"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
-  {     2,    "x 2"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
-  {     2,    "x 3"                 , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // X
+  {     1,    "diamond 1"           , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // diamond
+  {     1,    "diamond 2"           , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // diamond
+  {     1,    "diamond 3"           , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // diamond
+  {     2,    "x 1"                 , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // X
+  {     2,    "x 2"                 , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // X
+  {     2,    "x 3"                 , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // X
   {     4,    "fish"                , { "green",  "aqua",    "blue",   "magenta", "red",     "yellow",  "white" }},   // single fish
   {     5,    "two fish"            , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // schoolfish
   {     8,    "hole"                , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // dip sign
   {     9,    "hump"                , { "aqua",   "blue",    "red",    "orange",  "yellow",  "green",   "white" }},   // bump sign
   {    10,    "longgrass"           , { "green",  "aqua",    "blue",   "red",     "orange",  "yellow",  "white" }},   // long grass
-  {    12,    "rocks"               , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // rocks
-  {    17,    "gas station"         , { "red",   "yellow",   "green",  "aqua",    "blue",    "magenta", "white" }},   // gas pump
+  {    12,    "rocks"               , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // rocks
+  {    17,    "gas station"         , { "red",    "yellow",  "green",  "aqua",    "blue",    "magenta", "white" }},   // gas pump
   {    28,    "tree"                , { "green",  "aqua",    "blue",   "magenta", "red",     "yellow",  "white" }},   // tree
   {    30,    "campsite"            , { "yellow", "green",   "aqua",   "blue",    "magenta", "red",     "white" }},   // tent
-  {    37,    "skull and crossbones", { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // skull and crossbones
+  {    37,    "skull and crossbones", { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // skull and crossbones
   {    40,    "dive flag"           , { "red",    "yellow",  "green",  "aqua",    "blue",    "magenta", "white" }},   // diveflag
-  {    42,    "anchor"              , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // anchor
+  {    42,    "anchor"              , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // anchor
   {    44,    "boat ramp"           , { "red",    "yellow",  "green",  "aqua",    "blue",    "magenta", "white" }},   // boatramp
-  {    48,    "pier"                , { "blue",   "magenta", "orange", "yellow",  "greem",   "aqua",    "white" }},   // pier
+  {    48,    "pier"                , { "blue",   "magenta", "orange", "yellow",  "green",   "aqua",    "white" }},   // pier
 
   // END OF ICON MAPPING
   {    -1,    nullptr               , { nullptr,  nullptr,   nullptr,  nullptr,   nullptr,   nullptr,  nullptr  }}
@@ -1414,7 +1414,7 @@ lowranceusr_parse_icons()
       /* position coord lat & long */
       wpt_tmp->latitude = latitude;
       wpt_tmp->longitude = longitude;
-      wpt_tmp->altitude = 0;
+      wpt_tmp->altitude = unknown_alt;
       snprintf(buff, sizeof(buff), "Event Marker %d", i+1);
       wpt_tmp->shortname = buff;
       /* symbol */
