@@ -339,6 +339,7 @@ static char           continuous = 1;
 static short          num_section_points;
 static char*          merge;
 static int            reading_version;
+static int            rstream_version;
 static int            writing_version;
 
 #define MYNAME "Lowrance USR"
@@ -879,9 +880,25 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
 
   wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
   wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
-  wpt_tmp->altitude = FEET_TO_METERS(gbfgetint32(file_in));
-  if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
-    wpt_tmp->altitude = unknown_alt;
+  /* 
+   * From available data, looks like stream version = 0 used float to store for altitude in feet
+   * and version 1 used int32.  If that is found to not be the case may need to add flag for input.
+   * Only have a small sample size.
+   */
+  if (rstream_version == 0) {
+    float read_alt = gbfgetflt(file_in);
+    char buf[16];
+    sprintf(buf, "%f", read_alt);
+    if (strcmp(buf, "-nan") == 0) {
+      wpt_tmp->altitude = unknown_alt;
+    } else {
+      wpt_tmp->altitude = FEET_TO_METERS(read_alt);
+    }
+  } else {
+    wpt_tmp->altitude = FEET_TO_METERS(gbfgetint32(file_in));
+    if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
+      wpt_tmp->altitude = unknown_alt;
+    }
   }
 
   int text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
@@ -897,7 +914,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
       if (wpt_tmp->altitude == unknown_alt) {
           printf(" %11s", "UNKNOWN ALT");
       } else {
-          printf(" %+11.4f", wpt_tmp->altitude);
+          printf(" %5d %5.1f", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
       }
     } else {
       printf(MYNAME " parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
@@ -905,7 +922,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
       if (wpt_tmp->altitude == unknown_alt) {
         printf("UNKNOWN ALT\n");
       } else {
-        printf("%+f\n", wpt_tmp->altitude);
+        printf("%d (%f)\n", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
       }
     }
   }
@@ -975,7 +992,9 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
         printf("   %10.1f", depth_feet);
       }
     } else {
-      printf("      UNKNOWN");
+      if (global_opts.debug_level == 99) {
+        printf("      UNKNOWN");
+      }
     }
   }
 
@@ -1628,9 +1647,10 @@ data_read()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
 
-  reading_version = gbfgetint32(file_in);
+  reading_version = gbfgetint16(file_in);
+  rstream_version = gbfgetint16(file_in);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " input_file: USR Version %d\n", reading_version);
+    printf(MYNAME " input_file: USR File Format %d (Version = %d)\n", reading_version, rstream_version);
   }
 
   if ((reading_version < 2) || (reading_version > 6)) {
@@ -1639,10 +1659,10 @@ data_read()
 
   if (reading_version >= 4) {
 
-    /* Starting with USR version 4 now have a Data Stream version */
-    int stream_version = gbfgetint32(file_in);
+    /* Starting with USR version 4 have an unknown here */
+    int unknown = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " input_file: Stream Version %d\n", stream_version);
+      printf(MYNAME " input_file: Unknown %d (%x)\n", unknown, unknown);
     }
 
     /* USR files also now contain a file title */
@@ -1697,15 +1717,16 @@ data_read()
 static void
 lowranceusr_waypt_disp(const Waypoint* wpt)
 {
-  int Time, SymbolId;
-  int alt = METERS_TO_FEET(wpt->altitude);
-
-  if (wpt->altitude == unknown_alt) {
-    alt = UNKNOWN_USR_ALTITUDE;
-  }
+  int Time, SymbolId, alt;
 
   int Lat = lat_deg_to_mm(wpt->latitude);
   int Lon = lon_deg_to_mm(wpt->longitude);
+
+  if (wpt->altitude == unknown_alt) {
+    alt = UNKNOWN_USR_ALTITUDE;
+  } else {
+    alt = METERS_TO_FEET(wpt->altitude);
+  }
 
   gbfputint32(Lat, file_out);
   gbfputint32(Lon, file_out);
