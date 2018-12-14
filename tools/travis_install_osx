@@ -1,35 +1,32 @@
 #!/bin/bash -ex
 #
 # This script is run on travis for the install stage of mac builds.
-# Note the script must be sourced if you want the modified PATH to
-# be used outside this script.
 #
 
 QT_VERSION=${1:-5.12.0}
 QT_VERSION_SHORT=$(echo ${QT_VERSION} | sed 's/\.//g')
 
 # our expectation is that install-qt-osx creates $QTDIR, $QTDIR/bin.
-QTDIR=${HOME}/Qt/${QT_VERSION}/clang_64
+CACHEDIR=${HOME}/Cache
+QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
 
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
   echo "If you need to clear the cache see"
   echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
 else
-  pushd ${HOME};
-  rm -fr Qt
+  rm -fr ${CACHEDIR}
+  mkdir -p ${CACHEDIR}
+  pushd ${CACHEDIR}
   # install-qt-osx creates the install at $PWD/Qt.
   QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt-osx ${QT_VERSION}
   popd;
   if [ ! -e ${QTDIR}/bin/qmake ]; then
     echo "ERROR: qmake not found on the installation path." >&2
     echo "Are the package names in QT_CI_PACKAGES correct?" >&2
-    find ${HOME}/Qt -maxdepth 3
-    cat ${HOME}/Qt/InstallationLog.txt
-    cat ${HOME}/Qt/components.xml
+    find ${CACHEDIR}/Qt -maxdepth 3
+    cat ${CACHEDIR}/Qt/InstallationLog.txt
+    cat ${CACHEDIR}/Qt/components.xml
     exit 1
   fi
 fi
-# note that qt-x.y.z.env created by install-qt-osx is not cached!
-export PATH=${QTDIR}/bin:${PATH}
-unset -v QT_VERSION QT_VERSION_SHORT QTDIR
