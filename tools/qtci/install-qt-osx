@@ -25,11 +25,11 @@ extract-qt-installer $APPFILE ${QT_TARGET_CATALOG}/Qt
 # and the install resources not being available.
 #hdiutil detach /Volumes/${INSTALLER_NAME}
 count=0
-until hdiutil detach /Volumes/${INSTALLER_NAME} || [ $count -ge 5 ]
+until hdiutil detach /Volumes/${INSTALLER_NAME} || [ $count -ge 12 ]
 do
   echo "Wait and attempt to detach again"
   count=`expr $count + 1`
-  sleep 5
+  sleep 10
 done
 
 echo Create $ENVFILE
