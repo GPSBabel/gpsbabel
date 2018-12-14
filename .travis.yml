@@ -37,21 +37,21 @@ matrix:
             - libgl1-mesa-dev
       cache:
         directories:
-          - $HOME/Qt
+          - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
       env: QT_VERSION="5.9.7"
       cache:
         directories:
-          - $HOME/Qt
+          - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
       env: QT_VERSION="5.12.0"
       cache:
         directories:
-          - $HOME/Qt
+          - $HOME/Cache
         timeout: 600
     - os: linux
       dist: xenial
