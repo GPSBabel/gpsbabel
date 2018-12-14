@@ -22,6 +22,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
+        - QT_VERSION="5.9.7"
       addons:
         apt:
           packages:
@@ -40,6 +41,14 @@ matrix:
         timeout: 600
     - os: osx
       compiler: clang
+      env: QT_VERSION="5.9.7"
+      cache:
+        directories:
+          - $HOME/Qt
+        timeout: 600
+    - os: osx
+      compiler: clang
+      env: QT_VERSION="5.12.0"
       cache:
         directories:
           - $HOME/Qt
@@ -62,8 +71,8 @@ matrix:
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_install_linux_coverage; fi
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then source ./tools/travis_install_linux_local; fi
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then source ./tools/travis_install_linux_local ${QT_VERSION}; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx ${QT_VERSION}; fi
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_script_linux_coverage; fi
@@ -74,7 +83,7 @@ script:
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/objects/GPSBabel-*.dmg; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.9.7" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/objects/GPSBabel-*.dmg; fi
 
 branches:
   except:
