@@ -1476,7 +1476,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
     return;
   }
 #ifdef	MPS_DEBUG
-  fprintf(stderr, "mps_track_r: there are %d track waypoints %d\n", trk_count);
+  fprintf(stderr, "mps_track_r: there are %d track waypoints\n", trk_count);
 #endif
 
   track_head = route_head_alloc();

@@ -49,7 +49,7 @@ public:
     if (!status) {
       fatal("Cannot open '%s' for %s.  Error was '%s'.\n",
             qPrintable(QFile::fileName()),
-            mode & QIODevice::WriteOnly? "write" : "read",
+            (mode & QIODevice::WriteOnly)? "write" : "read",
             qPrintable(QFile::errorString()));
     }
     return status;

@@ -276,7 +276,7 @@ int era_cnt;
 {
   const char *rp_backup;
   int cnt;
-  size_t val;
+  int val;
   int have_I, is_pm;
   int century, want_century;
   int want_era;
@@ -475,7 +475,7 @@ match_century:
         *decided = raw;
       }
 #endif
-      /* Fall through.  */
+    /* Fall through.  */
     case 'D':
       /* Match standard day format.  */
       if (!recursive(HERE_D_FMT)) {
@@ -624,7 +624,7 @@ match_century:
         *decided = raw;
       }
 #endif
-      /* Fall through.  */
+    /* Fall through.  */
     case 'T':
       if (!recursive(HERE_T_FMT)) {
         return NULL;
@@ -1005,4 +1005,3 @@ struct tm *tm;
 #endif
   return strptime_internal(buf, format, tm, &decided, -1);
 }
-
