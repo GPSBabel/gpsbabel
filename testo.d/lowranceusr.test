@@ -97,7 +97,7 @@ compare ${REFERENCE}/lowrance-v2-unicsv.txt ${TMPDIR}/lowrance-v2-unicsv.txt
 compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
 # cut the depth column from V3 and then compare the resultant v3 with v2
 tail -n +2 ${TMPDIR}/lowrance-v2-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v2-unicsv-sorted.txt
-tail -n +2 ${TMPDIR}/lowrance-v3-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 | cut -d , -f 1,2,3,4,5,7,8 > ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
+tail -n +2 ${TMPDIR}/lowrance-v3-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 | cut -d , -f 1,2,3,4,6,7 > ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
 compare ${TMPDIR}/lowrance-v2-unicsv-sorted.txt ${TMPDIR}/lowrance-v3-unicsv-nodepth.txt
 
 # Ideally, there'd be a test for v2 vs. v3 writes, but their numeric
