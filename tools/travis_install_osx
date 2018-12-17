@@ -3,10 +3,34 @@
 # This script is run on travis for the install stage of mac builds.
 #
 
-QT_VERSION=${1:-5.12.0}
-QT_VERSION_SHORT=$(echo ${QT_VERSION} | sed 's/\.//g')
+#debug failed install
+function debug() {
+  cat ${CACHEDIR}/qt-${QT_VERSION}.env
+  find ${CACHEDIR}/Qt -maxdepth 3 -ls
+  cat ${CACHEDIR}/Qt/InstallationLog.txt
+  cat ${CACHEDIR}/Qt/components.xml
+  echo "$1" >&2
+  exit 1
+}
 
-# our expectation is that install-qt-osx creates $QTDIR, $QTDIR/bin.
+# validate install
+function validate() {
+  (
+    set +e
+    source ${CACHEDIR}/qt-${QT_VERSION}.env
+    if [ "$(qmake -query QT_INSTALL_BINS)" != "${QTDIR}/bin" ]; then
+      debug "ERROR: unexpected Qt location."
+    fi
+    if [ "$(qmake -query QT_VERSION)" != "${QT_VERSION}" ]; then
+      debug "ERROR: wrong Qt version."
+    fi
+  )
+}
+
+QT_VERSION=${1:-5.12.0}
+QT_VERSION_SHORT=${QT_VERSION//./}
+
+# our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
 QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
 
@@ -18,15 +42,9 @@ else
   rm -fr ${CACHEDIR}
   mkdir -p ${CACHEDIR}
   pushd ${CACHEDIR}
-  # install-qt-osx creates the install at $PWD/Qt.
-  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt-osx ${QT_VERSION}
-  popd;
-  if [ ! -e ${QTDIR}/bin/qmake ]; then
-    echo "ERROR: qmake not found on the installation path." >&2
-    echo "Are the package names in QT_CI_PACKAGES correct?" >&2
-    find ${CACHEDIR}/Qt -maxdepth 3
-    cat ${CACHEDIR}/Qt/InstallationLog.txt
-    cat ${CACHEDIR}/Qt/components.xml
-    exit 1
-  fi
+  # install-qt creates the install at $PWD/Qt.
+  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
+  popd
+  validate
+  rm ${CACHEDIR}/qt-opensource*.dmg
 fi

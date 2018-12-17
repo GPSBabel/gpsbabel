@@ -181,20 +181,23 @@ Controller.prototype.CredentialsPageCallback = function() {
 }
 
 Controller.prototype.ComponentSelectionPageCallback = function() {
-	log("ComponentSelectionPageCallback");
+    log("ComponentSelectionPageCallback");
 
-    if ($LIST_PACKAGES) {
+    function list_packages() {
       var components = installer.components();
       log("Available components: " + components.length);
       var packages = ["Packages: "];
 
       for (var i = 0 ; i < components.length ;i++) {
-		  packages.push(components[i].name);
+          packages.push(components[i].name);
       }
-	  log(packages.join(" "));
+      log(packages.join(" "));
+    }
       
-      gui.clickButton(buttons.CancelButton);
-      return;
+    if ($LIST_PACKAGES) {
+        list_packages();
+        gui.clickButton(buttons.CancelButton);
+        return;
     }
 
     log("Select components");
@@ -208,10 +211,30 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     var packages = trim("$PACKAGES").split(",");
     if (packages.length > 0 && packages[0] !== "") {
         widget.deselectAll();
+        var components = installer.components();
+        var allfound = true;
         for (var i in packages) {
             var pkg = trim(packages[i]);
-	        log("Select " + pkg);
-	        widget.selectComponent(pkg);
+            var found = false;
+            for (var j in components) {
+                if (components[j].name === pkg) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                allfound = false;
+                log("ERROR: Package " + pkg + " not found.");
+            } else {
+                log("Select " + pkg);
+                widget.selectComponent(pkg);
+            }
+        }
+        if (!allfound) {
+            list_packages();
+            // TODO: figure out how to set non-zero exit status.
+            gui.clickButton(buttons.CancelButton);
+            return;
         }
     } else {
        log("Use default component list");

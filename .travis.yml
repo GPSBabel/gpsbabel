@@ -59,6 +59,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
+        - QT_VERSION="5.7.1"
       addons:
         apt:
           packages:
@@ -67,10 +68,10 @@ matrix:
             - lcov
       cache:
         directories:
-          - $HOME/Qt
+          - $HOME/Cache
 
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_install_linux_coverage; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_install_linux_coverage ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then ./tools/travis_install_linux_local ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
 
