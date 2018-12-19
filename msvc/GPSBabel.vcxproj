@@ -330,7 +330,6 @@
     <ClCompile Include="wfff_xml.cc" />
     <ClCompile Include="wintec_tes.cc" />
     <ClCompile Include="xcsv.cc" />
-    <ClCompile Include="xhtmlent.cc" />
     <ClCompile Include="xmlgeneric.cc" />
     <ClCompile Include="src\core\xmlstreamwriter.cc" />
     <ClCompile Include="xmltag.cc" />

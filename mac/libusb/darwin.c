@@ -672,6 +672,7 @@ int usb_claim_interface(usb_dev_handle *dev, int interface)
 int usb_release_interface(usb_dev_handle *dev, int interface)
 {
   struct darwin_dev_handle *device;
+  (void) interface;
   io_return_t result;
 
   if (!dev)
@@ -1160,6 +1161,7 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
 
 int usb_os_determine_children(struct usb_bus *bus)
 {
+  (void) bus;
   /* Nothing yet */
   return 0;
 }
