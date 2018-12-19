@@ -217,7 +217,7 @@ if (UNIX AND NOT APPLE)
 endif()
 
 if (APPLE)
-  set(LIBS ${LIBS} -framework IOKit -framework CoreFoundation)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework IOKit -framework CoreFoundation")
   include_directories(AFTER mac/libusb)
   set(SOURCES ${SOURCES}
     mac/libusb/darwin.c
