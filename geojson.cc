@@ -164,7 +164,7 @@ geojson_read() {
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
 	QString file_content = file.readAll();
 	file.close();
-	QJsonParseError error;
+	QJsonParseError error{};
 	QJsonDocument document = QJsonDocument::fromJson(file_content.toUtf8(), &error);
 	QJsonObject rootObject = document.object();
 
