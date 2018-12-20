@@ -35,10 +35,13 @@
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
+#include "src/core/logging.h"
 
 #include <ctime>
 #include <cstdio>
 #include <cstdlib>
+#include <QtCore/qDebug>
+#include <QtCore/QRegularExpression>
 
 #define MYNAME "stmsdf"
 
@@ -107,32 +110,37 @@ static void
 parse_header(char* line)
 {
   char* str;
-  char* key = nullptr;
+  QString key;
   const char* prod = nullptr;
   int column = -1;
 
   while ((str = csv_lineparse(line, "=", "", lineno))) {
     line = nullptr;
     column++;
+    QString qstr(str);
+    bool ok;
 
     switch (column) {
     case 0:
-      key = xstrdup(str);
+      key = qstr.toUpper();
       break;
     case 1:
-      if (case_ignore_strcmp(key, "DATUM") == 0) {
+      if (key == "DATUM") {
         datum = GPS_Lookup_Datum_Index(str);
-      } else if (case_ignore_strcmp(key, "FILEVERSION") == 0) {
-        int ver = atoi(str);
-        is_fatal((ver != 1),
+      } else if (key == "FILEVERSION") {
+        int ver = qstr.toInt(&ok);
+        is_fatal(!ok || (ver != 1),
                  MYNAME ": This version '%d' is not yet supported. Please report!", ver);
-      } else if (case_ignore_strcmp(key, "NAME") == 0) {
+      } else if (key == "NAME") {
         rte_name = str;
-      } else if (case_ignore_strcmp(key, "NOTES") == 0) /* ToDo */;
-      else if (case_ignore_strcmp(key, "SOURCE") == 0) {
+      } else if (key == "NOTES") /* ToDo */;
+      else if (key == "SOURCE") {
         rte_desc = str;
-      } else if (case_ignore_strcmp(key, "TYPE") == 0) {
-        filetype = atoi(str);
+      } else if (key == "TYPE") {
+        filetype = qstr.toInt(&ok);
+        if (!ok) {
+          Fatal() << MYNAME << "Unknown file type " << key;
+        }
         switch (filetype) {
         case 4:	/* M9 TrackLog (Suunto Sail Manager) */
         case 5: /* route */
@@ -154,14 +162,12 @@ parse_header(char* line)
           }
           fatal(MYNAME ": Unsupported file type (%s, type %d)!\n", prod, filetype);
         }
+        break;
+      default:
+        break;
       }
-      break;
     }
   }
-  if (key) {
-    xfree(key);
-  }
-
 }
 
 static int
@@ -230,105 +236,127 @@ finalize_tracks(void)
 }
 
 static void
-parse_point(char* line)
-{
-  char* str;
+parse_point(char *line) {
+  char *str;
   int column = -1;
-  int what = -1;		/* -1 = unknown, 0 = tp, 1 = mp, 2 = wp, 3 = ap  */
-  Waypoint* wpt = nullptr;
-  char* cx;
-  int hour, min, sec, day, month, year;
-
-  year = hour = -1;
+  int what = -1;        /* -1 = unknown, 0 = tp, 1 = mp, 2 = wp, 3 = ap  */
+  Waypoint *wpt = nullptr;
+  QDate dt;
+  QTime tm;
 
   while ((str = csv_lineparse(line, ",", "", lineno))) {
 
     line = nullptr;
     column++;
+    QString qstr(str);
+    bool ok(true);
+    // TODO: Several entries use a QString variant. This whole function should just parse it like that.
 
     switch (column) {
-
-    case 0:
-      if (strcmp(str, "\"TP\"") == 0) {
-        what = 0;
-        column++;	/* skip name */
-      } else if (strcmp(str, "\"MP\"") == 0) {
-        what = 1;
-      } else if (strcmp(str, "\"WP\"") == 0) {
-        what = 2;
-      } else if (strcmp(str, "\"AP\"") == 0) {
-        what = 3;
-      } else {
-        warning(MYNAME ": Unknown point type %s at line %d!\n", str, lineno);
-        return;
-      }
-      wpt = new Waypoint;
-      break;
-
-    case 1:
-      wpt->shortname = csv_stringclean(str, QString("\""));
-      if ((what == 2) || (what == 3)) {
-        column += 2;  /* doesn't have date and time */
-      }
-      break;
-    case 2:
-      sscanf(str, "%d.%d.%d", &day, &month, &year);
-      break;
-    case 3:
-      while ((cx = strchr(str, '.'))) {
-        *cx = ':';
-      }
-      sscanf(str, "%d:%d:%d", &hour, &min, &sec);
-      break;
-    case 4:
-      wpt->latitude = atof(str);
-      break;
-    case 5:
-      wpt->longitude = atof(str);
-      break;
-    case 6:
-      wpt->altitude = atof(str);
-      break;
-    case 7:
-      switch (what) {
       case 0:
-        WAYPT_SET(wpt, speed, atof(str) * 3.6);
+        if (qstr == "\"TP\"") {
+          what = 0;
+          column++;    /* skip name */
+        } else if (qstr == "\"MP\"") {
+          what = 1;
+        } else if (qstr == "\"WP\"") {
+          what = 2;
+        } else if (qstr == "\"AP\"") {
+          what = 3;
+        } else {
+          warning(MYNAME ": Unknown point type %s at line %d!\n", str, lineno);
+          return;
+        }
+        wpt = new Waypoint;
         break;
-      case 3:
-        WAYPT_SET(wpt, proximity, atof(str));
-        wpt->notes = QString().sprintf("Alarm point: radius=%s", str);
+
+      case 1:
+        wpt->shortname = qstr.remove('\"');
+        if ((what == 2) || (what == 3)) {
+          column += 2;  /* doesn't have date and time */
+        }
+        break;
+      case 2: {
+        // Date is in format dd.mm.yyyy
+        auto v = qstr.split('.', QString::KeepEmptyParts);
+
+        if (v.size() == 3) {
+          auto day = v[0].toInt();
+          auto month = v[1].toInt();
+          auto year = v[2].toInt();
+          dt = QDate(year, month, day);
+        } else {
+          Fatal() << MYNAME << "Invalid date" << qstr;
+        }
         break;
       }
-      break;
-    case 8:
-      if (what == 0) {
-        WAYPT_SET(wpt, course, atof(str));
+      case 3: {
+        // Time is hh:mm.ss - yes, colon and period.
+        auto v = qstr.split(QRegularExpression("[.:]"), QString::KeepEmptyParts);
+        if (v.size() == 3) {
+          auto hour = v[0].toInt();
+          auto min = v[1].toInt();
+          auto sec = v[2].toInt();
+          tm = QTime(hour, min, sec);
+        } else {
+          Fatal() << MYNAME << "Invalid Time" << qstr;
+        }
+        break;
       }
-      break;
-    case 9:
-    case 10:
-      break;
-    case 11:
-      if (what == 1) {
-        wpt->wpt_flags.fmt_use = atoi(str);  /* memory point type */
+      case 4:
+        wpt->latitude = qstr.toDouble(&ok);
+        if (!ok) {
+          Fatal() << MYNAME << "Invalid latitude" << qstr;
+        }
+        break;
+      case 5:
+        wpt->longitude = qstr.toDouble(&ok);
+        if (!ok) {
+          Fatal() << MYNAME << "Invalid longitude" << qstr;
+        }
+        break;
+      case 6: {
+        // Not entirely sure if this is optional.
+        double alt = qstr.toDouble(&ok);
+        if (ok) {
+          wpt->altitude = alt;
+        }
       }
-      break;
+        break;
+      case 7: {
+        auto v = qstr.toFloat(&ok);
+        if (ok) {
+          if (what == 0) {
+            WAYPT_SET(wpt, speed, v * 3.6);
+          } else if (what == 3) {
+            WAYPT_SET(wpt, proximity, v);
+            wpt->notes = QString("Alarm point: radius=" + qstr);
+          }
+        }
+        break;
+      }
+      case 8:
+        if (what == 0) {
+          auto scourse = qstr.toFloat(&ok);
+          if (ok) {
+            WAYPT_SET(wpt, course, scourse);
+          }
+        }
+        break;
+      case 9:
+      case 10:
+      default:
+        break;
+      case 11:
+        if (wpt && what == 1) {
+          wpt->wpt_flags.fmt_use = qstr.toUInt(&ok);  /* memory point type */
+        }
+        break;
     }
   }
 
-  if ((year > -1) && (hour > -1)) {
-    struct tm tm;
-
-    memset(&tm, 0, sizeof(tm));
-
-    tm.tm_year = year - 1900;
-    tm.tm_mon = month - 1;
-    tm.tm_mday = day;
-    tm.tm_hour = hour;
-    tm.tm_min = min;
-    tm.tm_sec = sec;
-
-    wpt->SetCreationTime(mklocaltime(&tm));
+  if (dt.isValid() && tm.isValid()) {
+    wpt->SetCreationTime(QDateTime(dt, tm));
   }
 
   if (datum != DATUM_WGS84) {
@@ -338,18 +366,20 @@ parse_point(char* line)
   }
 
   switch (what) {
-  case 0:
-  case 1:
-    ENQUEUE_TAIL(&trackpts, &wpt->Q);
-    break;
-  case 2:
-  case 3:
-    if (route == nullptr) {
-      route = route_head_alloc();
-      route_add_head(route);
-    }
-    route_add_wpt(route, wpt);
-    break;
+    case 0:
+    case 1:
+      ENQUEUE_TAIL(&trackpts, &wpt->Q);
+      break;
+    case 2:
+    case 3:
+      if (route == nullptr) {
+        route = route_head_alloc();
+        route_add_head(route);
+      }
+      route_add_wpt(route, wpt);
+      break;
+    default:
+      Warning() << MYNAME << "Invalid internal field type" << what;
   }
 }
 
