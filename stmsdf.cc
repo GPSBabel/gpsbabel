@@ -40,7 +40,6 @@
 #include <ctime>
 #include <cstdio>
 #include <cstdlib>
-#include <QtCore/qDebug>
 #include <QtCore/QRegularExpression>
 
 #define MYNAME "stmsdf"
