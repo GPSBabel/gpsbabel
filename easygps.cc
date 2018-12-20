@@ -76,13 +76,13 @@ wr_deinit()
 static void
 data_read()
 {
-  char p;
+  int p;
   char ibuf[10];
   do {
     Waypoint* wpt_tmp = new Waypoint;
     UrlLink link;
 
-    for (unsigned char tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
+    for (int tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
       switch (tag) {
       case 1:
         wpt_tmp->shortname = gbfgetpstr(file_in);
