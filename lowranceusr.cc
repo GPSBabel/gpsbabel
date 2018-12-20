@@ -530,35 +530,6 @@ lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
   return nullptr;
 }
 
-
-
-static int
-lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
-{
-  int len;
-
-  int org = len = gbfgetint32(file);
-  if (len < 0) {
-    fatal(MYNAME " readstr: Invalid item length (%d)!\n", len);
-  } else if (len) {
-    if (len > maxlen) {
-      len = maxlen;
-    }
-    (void) gbfread(buf, 1, len, file);
-    if (org > maxlen) {
-      (void) gbfseek(file, org - maxlen, SEEK_CUR);
-    }
-    // IWay 350C puts 0x01 for the accented o in the street name
-    // of the Montreal Holiday Inn.
-    for (int i = 0; i < len; i++) {
-      if (buf[i] == 0x01) {
-        buf[i] = '*';
-      }
-    }
-  }
-  return len;
-}
-
 //  Starting with USR 4, adopted a UTF-16 character string format
 static QString
 lowranceusr4_readstr(gbfile* file, int bytes_per_char)
@@ -570,12 +541,14 @@ lowranceusr4_readstr(gbfile* file, int bytes_per_char)
     /* seems len=-1 means no string */
     retval = QString();
   } else if (len == 0) {
+    /* len == 0 means an empty string */
     retval = QString("");
   } else {
     QByteArray buf;
     buf.resize(len);
     int bytesread = gbfread(buf.data(), 1, len, file);
     buf.truncate(bytesread);
+    buf.replace((char)0x01, '*');  // IWay 350C puts 0x01 for the accented o in the street name of the Montreal Holiday Inn.
     if (bytes_per_char == 1) {
       retval = QString(buf);
     } else {
@@ -858,8 +831,6 @@ lat_deg_to_mm(double x)
 static void
 lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
 {
-  char buff[MAXUSRSTRINGSIZE + 1];
-
   /* Object num */
   if (object_num_present) {
     short object_num = gbfgetint16(file_in);
@@ -898,10 +869,10 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
     }
   }
 
-  int text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
-  if (text_len) {
-    buff[text_len] = '\0';
-    wpt_tmp->shortname = buff;
+  /* Waypoint name; input is 1 byte per char */
+  QString name = lowranceusr4_readstr(file_in, 1);
+  if (!name.isEmpty()) {
+    wpt_tmp->shortname = name;
   }
 
   if (global_opts.debug_level > 1) {
@@ -928,11 +899,12 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
     }
   }
 
-  text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
-  if (text_len) {
-    buff[text_len] = '\0';
-    wpt_tmp->description = buff;
+  /* Description; input is 1 byte per char */
+  QString description = lowranceusr4_readstr(file_in, 1);
+  if (!description.isEmpty()) {
+    wpt_tmp->description = description;
   }
+
   /* Time is number of seconds since Jan. 1, 2000 */
   time_t waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
@@ -1164,7 +1136,7 @@ lowranceusr_parse_waypts()
         printf(" Unit Number2");
       }
       printf(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
-      printf(" Date       Time  Unused   Depth    LoranGRI LoranTda LoranTdb\n");
+      printf(" Date       Time  Unknown  Depth    LoranGRI LoranTda LoranTdb\n");
 
       printf(MYNAME " parse_waypoints: ");
       if (reading_version > 4) {
@@ -1219,31 +1191,36 @@ lowranceusr_parse_waypts()
 static void
 lowranceusr_parse_route()
 {
-  char buff[MAXUSRSTRINGSIZE + 1];
-
   /* route name */
-  int text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
-  if (text_len) {
-    buff[text_len] = '\0';
-    rte_head->rte_name = buff;
+  QString name = lowranceusr4_readstr(file_in, 1);
+  if (!name.isEmpty()) {
+    rte_head->rte_name = name;
   }
 
   /* num Legs */
   short num_legs = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_route: Route '%s' Num Legs = %d\n", buff, num_legs);
+    printf(MYNAME " parse_route: Route '%s', Num Legs = %d", qPrintable(name), num_legs);
   }
 
   /* route reversed */
   char reversed = gbfgetc(file_in);
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_route: Reversed '%x' - %s\n", reversed, (reversed ? "Yes" : "No"));
+    printf(", reversed '%x' - %s\n", reversed, (reversed ? "Yes" : "No"));
+  }
+
+  if (global_opts.debug_level == 99) {
+    printf(MYNAME " parse_route:  Name            Longitude        Latitude       Altitude      Time             Unknown  ICON ID (dec)    Flag (dec) Depth (ft)\n");
+    printf(MYNAME " parse_route:  --------------- ---------------  -------------- ------------- ---------------- -------- ---------------- ---------- ----------\n");
   }
 
   /* waypoints */
   for (int j = 0; j < num_legs; j++) {
     Waypoint* wpt_tmp = new Waypoint;
+    if (global_opts.debug_level == 99) {
+      printf(MYNAME " parse_route:");
+    }
     lowranceusr_parse_waypt(wpt_tmp, 0); /* Indicate object number missing */
     route_add_wpt(rte_head, wpt_tmp);
   }
@@ -1391,8 +1368,6 @@ lowranceusr_parse_routes()
 static void
 lowranceusr_parse_icons()
 {
-  char buff[MAXUSRSTRINGSIZE + 1];
-
   short int num_icons = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
@@ -1411,8 +1386,11 @@ lowranceusr_parse_icons()
       wpt_tmp->latitude = latitude;
       wpt_tmp->longitude = longitude;
       wpt_tmp->altitude = unknown_alt;
-      snprintf(buff, sizeof(buff), "Event Marker %d", i+1);
-      wpt_tmp->shortname = buff;
+
+      /* shortname */
+      QString name = "Event Marker " + QString::number(i+1);
+      wpt_tmp->shortname = name;
+
       /* symbol */
       wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_number);
 
@@ -1423,20 +1401,15 @@ lowranceusr_parse_icons()
       waypt_add(wpt_tmp);
     }
   }
-
 }
 
 static void
 lowranceusr_parse_trail(int* trail_num)
 {
-  char buff[MAXUSRSTRINGSIZE + 1];
-
-  /* trail name */
-  int text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
-
-  if (text_len) {
-    buff[text_len] = '\0';
-    trk_head->rte_name = buff;
+  /* Trail name; input is 1 byte per char */
+  QString name = lowranceusr4_readstr(file_in, 1);
+  if (!name.isEmpty()) {
+    trk_head->rte_name = name;
   }
 
   if (global_opts.debug_level > 1) {
@@ -1526,7 +1499,7 @@ lowranceusr4_parse_trail(int* trail_num)
   if (global_opts.debug_level == 99) {
     printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
   }
-  if ((trail_version < 3) || (trail_version > 4)) {
+  if ((trail_version < 3) || (trail_version > 5)) {
     fatal(MYNAME " trail version %d not supported!!", trail_version);
   }
 
@@ -1545,7 +1518,7 @@ lowranceusr4_parse_trail(int* trail_num)
   /* Color ID, discard for now */
   trail_color = gbfgetint32(file_in);
 
-  /* Comment/description */
+  /* Comment/description; input is 2 bytes per char, we convert to 1 */
   QString desc = lowranceusr4_readstr(file_in, 2);
   if (!desc.isEmpty()) {
     trk_head->rte_desc = desc;
@@ -1585,8 +1558,7 @@ lowranceusr4_parse_trail(int* trail_num)
     gbfgetc(file_in);
   }
 
-#if 0
-  if ((trail_version == 3) || (trail_version == 4)) {
+  if ((trail_version == 4) || (trail_version == 5)) {
     /* Some flag bytes */
     if (global_opts.debug_level == 99) {
       printf (MYNAME " unknown flag bytes %02x %02x %02x\n",
@@ -1598,7 +1570,6 @@ lowranceusr4_parse_trail(int* trail_num)
       gbfgetc(file_in);
     }
   }
-#endif
 
   int num_trail_pts = gbfgetint32(file_in);
 
@@ -1687,8 +1658,6 @@ lowranceusr_parse_trails()
 static void
 data_read()
 {
-  QString buff;
-
   reading_version = gbfgetint16(file_in);
   rstream_version = gbfgetint16(file_in);
   if (global_opts.debug_level >= 1) {
@@ -1708,15 +1677,15 @@ data_read()
     }
 
     /* USR files also now contain a file title */
-    buff = lowranceusr4_readstr(file_in, 1);
-    if (!buff.isEmpty() && global_opts.debug_level >= 1) {
-      printf(MYNAME " file title: '%s'\n", qPrintable(buff));
+    QString title = lowranceusr4_readstr(file_in, 1);
+    if (!title.isEmpty() && global_opts.debug_level >= 1) {
+      printf(MYNAME " file title: '%s'\n", qPrintable(title));
     }
 
     /* AND a date created string */
-    buff = lowranceusr4_readstr(file_in, 1);
-    if (!buff.isEmpty()  && global_opts.debug_level >= 1) {
-      printf(MYNAME " date string: '%s'\n", qPrintable(buff));
+    QString creation_date = lowranceusr4_readstr(file_in, 1);
+    if (!creation_date.isEmpty()  && global_opts.debug_level >= 1) {
+      printf(MYNAME " date string: '%s'\n", qPrintable(creation_date));
     }
 
     /* AND date and time created values */
@@ -1735,9 +1704,9 @@ data_read()
     }
 
     /* AND a comment on the file contents */
-    buff = lowranceusr4_readstr(file_in, 1);
-    if (!buff.isEmpty() && global_opts.debug_level >= 1) {
-      printf(MYNAME " content description: '%s'\n", qPrintable(buff));
+    QString comment = lowranceusr4_readstr(file_in, 1);
+    if (!comment.isEmpty() && global_opts.debug_level >= 1) {
+      printf(MYNAME " content description: '%s'\n", qPrintable(comment));
     }
 
   }
