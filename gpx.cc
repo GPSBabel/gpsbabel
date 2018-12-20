@@ -219,7 +219,7 @@ struct GpxGlobal {
   QStringList url;
   QStringList urlname;
   QStringList keywords;
-  QList<UrlLink> link;
+  UrlList link;
   /* time and bounds aren't here; they're recomputed. */
 };
 static GpxGlobal* gpx_global = nullptr;
@@ -680,11 +680,6 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     rh_link_ = new UrlLink;
     fs_ptr = &rte_head->fs;
     break;
-  case tt_rte_link:
-    if (attr.hasAttribute("href")) {
-      link_url = attr.value("href").toString();
-    }
-    break;
   case tt_rte_rtept:
     tag_wpt(attr);
     break;
@@ -694,16 +689,17 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     rh_link_ = new UrlLink;
     fs_ptr = &trk_head->fs;
     break;
-  case tt_trk_link:
-    if (attr.hasAttribute("href")) {
-      link_url = attr.value("href").toString();
-    }
-    break;
   case tt_trk_trkseg_trkpt:
     tag_wpt(attr);
     if (next_trkpt_is_new_seg) {
       wpt_tmp->wpt_flags.new_trkseg = 1;
       next_trkpt_is_new_seg = 0;
+    }
+    break;
+  case tt_rte_link:
+  case tt_trk_link:
+    if (attr.hasAttribute("href")) {
+      link_url = attr.value("href").toString();
     }
     break;
   case tt_unknown:
@@ -933,7 +929,7 @@ gpx_end(const QString&)
     gpx_add_to_global(gpx_global->keywords, cdatastr);
     break;
   case tt_link:
-    (gpx_global->link).push_back(UrlLink(link_url, link_text, link_type));
+    (gpx_global->link).AddUrlLink(UrlLink(link_url, link_text, link_type));
     link_type.clear();
     link_text.clear();
     link_url.clear();
@@ -1074,23 +1070,11 @@ gpx_end(const QString&)
   case tt_garmin_rte_display_color:
     rte_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
-  case tt_rte_url:
-    rh_link_->url_ = cdatastr;
-    break;
-  case tt_rte_urlname:
-    rh_link_->url_link_text_ = cdatastr;
-    break;
   case tt_rte_link:
     rte_head->rte_urls.AddUrlLink(UrlLink(link_url, link_text, link_type));
     link_type.clear();
     link_text.clear();
     link_url.clear();
-    break;
-  case tt_rte_link_text:
-    link_text = cdatastr;
-    break;
-  case tt_rte_link_type:
-    link_type = cdatastr;
     break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
@@ -1130,23 +1114,11 @@ gpx_end(const QString&)
   case tt_garmin_trk_display_color:
     trk_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
-  case tt_trk_url:
-    rh_link_->url_ = cdatastr;
-    break;
-  case tt_trk_urlname:
-    rh_link_->url_link_text_ = cdatastr;
-    break;
   case tt_trk_link:
     trk_head->rte_urls.AddUrlLink(UrlLink(link_url, link_text, link_type));
     link_type.clear();
     link_text.clear();
     link_url.clear();
-    break;
-  case tt_trk_link_text:
-    link_text = cdatastr;
-    break;
-  case tt_trk_link_type:
-    link_type = cdatastr;
     break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
@@ -1167,6 +1139,22 @@ gpx_end(const QString&)
   /*
    * Items that are actually in multiple categories.
    */
+  case tt_rte_url:
+  case tt_trk_url:
+    rh_link_->url_ = cdatastr;
+    break;
+  case tt_rte_urlname:
+  case tt_trk_urlname:
+    rh_link_->url_link_text_ = cdatastr;
+    break;
+  case tt_rte_link_text:
+  case tt_trk_link_text:
+    link_text = cdatastr;
+    break;
+  case tt_rte_link_type:
+  case tt_trk_link_type:
+    link_type = cdatastr;
+    break;
   case tt_wpttype_ele:
     wpt_tmp->altitude = cdatastr.toDouble();
     break;
