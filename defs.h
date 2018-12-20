@@ -145,9 +145,6 @@
  */
 
 
-#define BASE_STRUCT(memberp, struct_type, member_name) \
-   ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
-
 /*
  * Define globally on which kind of data gpsbabel is working.
  * Important for "file types" that are essentially a communication
@@ -1016,7 +1013,7 @@ QString strenquote(const QString& str, const QChar quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);
-const char* xstrrstr(const char* s1, const char* s2);
+
 void rtrim(char* s);
 char* lrtrim(char* buff);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
