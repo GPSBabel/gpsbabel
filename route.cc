@@ -366,7 +366,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
-    rte_new->rte_url = rte_old->rte_url;
+    rte_new->rte_urls = rte_old->rte_urls;
     rte_new->fs = fs_chain_copy(rte_old->fs);
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
