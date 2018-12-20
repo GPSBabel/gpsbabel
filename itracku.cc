@@ -503,7 +503,7 @@ itracku_is_valid_data_record(itracku_data_record* d)
 }
 
 static void
-itracku_device_dump_waypts(void* fd, void (*waypt_add)(Waypoint* wpt))
+itracku_device_dump_waypts(void* fd, void (*waypt_add)(Waypoint*))
 {
   itracku_data_record d;
 
@@ -542,7 +542,7 @@ itracku_file_read_last_time(gbfile* fin)
 }
 
 static void
-itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(Waypoint* wpt))
+itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(Waypoint*))
 {
   itracku_data_record d;
 
@@ -565,7 +565,7 @@ itracku_file_write_waypt(gbfile* fout, const Waypoint* wpt)
 }
 
 static void
-itracku_waypt_input(void (*waypt_add)(Waypoint* wpt))
+itracku_waypt_input(void (*waypt_add)(Waypoint*))
 {
   if (fd) {
     itracku_device_dump_waypts(fd, waypt_add);
