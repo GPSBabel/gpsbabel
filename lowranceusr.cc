@@ -1551,13 +1551,21 @@ lowranceusr4_parse_trail(int* trail_num)
   if (global_opts.debug_level == 99) {
     printf (MYNAME " parse_trails: attribute count %4d : (", attr_count);
     for (int i=0; i<attr_count; i++) {
-      printf("%02x ", gbfgetc(file_in));
+      if (trail_version == 5) {
+        printf("%08x ", gbfgetint32(file_in));
+      } else {
+        printf("%02x ", gbfgetc(file_in));
+      }
     }
     printf(")\n");
   } else {
     /* just discard */
     for (int i=0; i<attr_count; i++) {
-      gbfgetc(file_in);
+      if (trail_version == 5) {
+        gbfgetint32(file_in);
+      } else {
+        gbfgetc(file_in);
+      }
     }
   }
 
