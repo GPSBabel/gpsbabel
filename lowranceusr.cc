@@ -1537,7 +1537,7 @@ lowranceusr4_parse_trail(int* trail_num)
 
   /* Some flag bytes */
   if (global_opts.debug_level == 99) {
-    printf (MYNAME " unknown flag bytes %02x %02x %02x\n",
+    printf (MYNAME " parse_trails: unknown flag bytes %02x %02x %02x\n",
       gbfgetc(file_in), gbfgetc(file_in), gbfgetc(file_in));
   } else {
     /* just discard */
@@ -1546,27 +1546,17 @@ lowranceusr4_parse_trail(int* trail_num)
     gbfgetc(file_in);
   }
 
-  /* Some mysterious "data count" */
+  /* Mysterious attribute "data count" */
+  int attr_count = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
-    printf (MYNAME " unknown counts %08x %02x %02x %02x\n",
-      gbfgetint32(file_in), gbfgetc(file_in), gbfgetc(file_in), gbfgetc(file_in));
+    printf (MYNAME " parse_trails: attribute count %4d : (", attr_count);
+    for (int i=0; i<attr_count; i++) {
+      printf("%02x ", gbfgetc(file_in));
+    }
+    printf(")\n");
   } else {
     /* just discard */
-    gbfgetint32(file_in);
-    gbfgetc(file_in);
-    gbfgetc(file_in);
-    gbfgetc(file_in);
-  }
-
-  if ((trail_version == 4) || (trail_version == 5)) {
-    /* Some flag bytes */
-    if (global_opts.debug_level == 99) {
-      printf (MYNAME " unknown flag bytes %02x %02x %02x\n",
-        gbfgetc(file_in), gbfgetc(file_in), gbfgetc(file_in));
-    } else {
-      /* just discard */
-      gbfgetc(file_in);
-      gbfgetc(file_in);
+    for (int i=0; i<attr_count; i++) {
       gbfgetc(file_in);
     }
   }
