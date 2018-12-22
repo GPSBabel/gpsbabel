@@ -451,7 +451,6 @@ mps_mapsegment_r(gbfile* mps_file, int mps_ver)
   if (reclen >= 0) {
     gbfseek(mps_file, reclen+1, SEEK_CUR);
   }
-  return;
 }
 
 
@@ -476,7 +475,6 @@ mps_mapsetname_r(gbfile* mps_file, int mps_ver)
   gbfseek(mps_file, -5, SEEK_CUR);
   int reclen = gbfgetint32(mps_file);
   gbfseek(mps_file, reclen+1, SEEK_CUR);
-  return;
 }
 
 
@@ -585,12 +583,6 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
 
   /* might need to change this to handle version dependent icon handling */
   thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE);
-
-  /* The following Now done elsewhere since it can be useful to read in and
-    perhaps not add to the list */
-  /* waypt_add(thisWaypoint); */
-
-  return;
 }
 
 /*
@@ -1082,8 +1074,6 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   }
 
   route_add_wpt(rte_head, thisWaypoint);
-
-  return;
 }
 
 /*
@@ -1521,7 +1511,6 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
 
   }		/* while (trk_count--) */
 
-  return;
 
 }
 
@@ -1769,7 +1758,6 @@ mps_read()
   printf("};\n");
 #endif
 
-  return ;
 
 }
 

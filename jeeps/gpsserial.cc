@@ -610,8 +610,6 @@ int32 GPS_Serial_Off(gpsdevh* dh)
     gps_errno = HARDWARE_ERROR;
     return 0;
   }
-  dh = nullptr;
-
   return 1;
 }
 

@@ -27,7 +27,7 @@
 
 garmin_unit_info_t garmin_unit_info[GUSB_MAX_UNITS];
 
-static int32 success_stub(void)
+static int32 success_stub()
 {
   return 1;
 }

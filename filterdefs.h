@@ -38,10 +38,10 @@ extern queue waypt_head;
 #endif
 #include "filter.h"
 
-typedef void (*filter_init)(void);
-typedef void (*filter_process)(void);
-typedef void (*filter_deinit)(void);
-typedef void (*filter_exit)(void);
+typedef void (*filter_init)();
+typedef void (*filter_process)();
+typedef void (*filter_deinit)();
+typedef void (*filter_exit)();
 
 typedef struct filter_vecs {
   filter_init f_init;
@@ -56,8 +56,8 @@ void free_filter_vec(Filter*);
 void disp_filters(int version);
 void disp_filter(const char* vecname);
 void disp_filter_vec(const char* vecname);
-void disp_filter_vecs(void);
-void init_filter_vecs(void);
-void exit_filter_vecs(void);
+void disp_filter_vecs();
+void init_filter_vecs();
+void exit_filter_vecs();
 
 #endif // FILTERDEFS_H_INCLUDED_

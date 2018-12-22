@@ -50,10 +50,10 @@ extern const char* xhtml_entities;
 void xml_ignore_tags(const char** taglist);
 
 void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding);
-void xml_read(void);
+void xml_read();
 void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
 void xml_readunicode(const QString& str);
-void xml_deinit(void);
+void xml_deinit();
 
 #endif  // XMLGENERIC_H_INCLUDED_

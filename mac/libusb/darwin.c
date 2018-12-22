@@ -283,9 +283,6 @@ int usb_os_open(usb_dev_handle *dev)
 
   usb_device_t **darwin_device;
 
-  UInt32 location = *((UInt32 *)dev->device->dev);
-  UInt32 dlocation;
-
   if (!dev)
     USB_ERROR(-ENXIO);
 
@@ -303,6 +300,10 @@ int usb_os_open(usb_dev_handle *dev)
 
   if ((result = usb_setup_iterator (&deviceIterator)) < 0)
     return result;
+
+  UInt32 location = *((UInt32 *)dev->device->dev);
+  UInt32 dlocation;
+
 
   /* This port of libusb uses locations to keep track of devices. */
   while ((darwin_device = usb_get_next_device (deviceIterator, &dlocation)) != NULL) {
@@ -671,6 +672,7 @@ int usb_claim_interface(usb_dev_handle *dev, int interface)
 int usb_release_interface(usb_dev_handle *dev, int interface)
 {
   struct darwin_dev_handle *device;
+  (void) interface;
   io_return_t result;
 
   if (!dev)
@@ -1159,6 +1161,7 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
 
 int usb_os_determine_children(struct usb_bus *bus)
 {
+  (void) bus;
   /* Nothing yet */
   return 0;
 }

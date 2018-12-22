@@ -98,7 +98,7 @@ char** os_get_garmin_mountpoints()
 {
   char** dlist = (char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/GARMIN");
-  dlist[1] = NULL;
+  dlist[1] = nullptr;
   return dlist;
 }
 #else
@@ -116,7 +116,7 @@ gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
   r = usb_bulk_write(udev, gusb_bulk_out_ep, (char*)(void*)opkt->dbuf, sz, TMOUT_B);
 
   if (r != (int) sz) {
-    fprintf(stderr, "Bad cmdsend r %d sz %ld\n", r, (unsigned long) sz);
+    fprintf(stderr, "Bad cmdsend r %d sz %lud\n", r, (unsigned long) sz);
     if (r < 0) {
       fatal("usb_bulk_write failed. '%s'\n",
             usb_strerror());
@@ -167,7 +167,7 @@ gusb_teardown(gpsdevh* dh)
 }
 
 static void
-gusb_atexit_teardown(void)
+gusb_atexit_teardown()
 {
   gusb_teardown(nullptr);
 }
@@ -208,7 +208,7 @@ gusb_atexit_teardown(void)
  * Grrrr!
  */
 unsigned
-gusb_reset_toggles(void)
+gusb_reset_toggles()
 {
   static const unsigned char  oinit[12] =
   {0, 0, 0, 0, GUSB_SESSION_START, 0, 0, 0, 0, 0, 0, 0};

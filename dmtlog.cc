@@ -638,8 +638,6 @@ read_XML()
   xml_init(fin->name, tlog3b_xgcb_map, nullptr);
   xml_read();
   xml_deinit();
-
-  return;
 }
 
 /*******************************************************************************

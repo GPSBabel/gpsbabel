@@ -35,15 +35,13 @@ void SwapDataFilter::swapdata_cb(const Waypoint* ref)
   double x = wpt->latitude;
   wpt->latitude = wpt->longitude;
   wpt->longitude = x;
-
-  return;
 }
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-void SwapDataFilter::process(void)	/* this procedure must be present in vecs */
+void SwapDataFilter::process()	/* this procedure must be present in vecs */
 {
   WayptFunctor<SwapDataFilter> swapdata_cb_f(this, &SwapDataFilter::swapdata_cb);
 

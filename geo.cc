@@ -74,9 +74,9 @@ static void GeoReadLoc()
         waypt_add_url(wpt,
                       reader.readElementText(), a.value("text").toString());
       } else if (current_tag == "/loc/waypoint/difficulty") {
-        wpt->gc_data->diff = reader.readElementText().toDouble() * 10;
+        wpt->gc_data->diff = reader.readElementText().toUInt() * 10;
       } else if (current_tag == "/loc/waypoint/terrain") {
-        wpt->gc_data->terr = reader.readElementText().toDouble() * 10;
+        wpt->gc_data->terr = reader.readElementText().toUInt() * 10;
       } else if (current_tag == "/loc/waypoint/container") {
         wpt->gc_data->container = wpt_container(reader.readElementText());
       }

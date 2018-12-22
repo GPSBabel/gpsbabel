@@ -110,8 +110,8 @@ fit_rd_init(const QString& fname)
 static void
 fit_rd_deinit()
 {
-  for (int local_id = 0; local_id<16; local_id++) {
-    fit_message_def* def = &fit_data.message_def[local_id];
+  for (auto &local_id : fit_data.message_def) {
+    fit_message_def* def = &local_id;
     if (def->fields) {
       xfree(def->fields);
       def->fields = nullptr;
@@ -324,8 +324,7 @@ fit_parse_definition_message(uint8_t header)
 
     }
     def->num_fields = numOfFields;
-  } 
-  return;
+  }
 }
 
 static uint32_t

@@ -31,6 +31,7 @@
 #include <QtCore/QTextStream>  // for QTextStream
 #include <QtCore/Qt>           // for CaseInsensitive
 #include <QtCore/QtGlobal>     // for qPrintable
+#include <utility>
 
 #define MYNAME "inifile"
 
@@ -41,7 +42,7 @@ public:
   QHash<QString, QString> entries;
 
   InifileSection() = default;
-  explicit InifileSection(QString nm) : name{nm} {}
+  explicit InifileSection(QString nm) : name{std::move(nm)} {}
 };
 
 /* internal procedures */

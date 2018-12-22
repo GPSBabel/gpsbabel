@@ -1546,7 +1546,6 @@ disp_vecs()
     }
   }
   xfree(svp);
-  return;
 }
 
 void
@@ -1572,7 +1571,6 @@ disp_vec(const char* vecname)
     }
   }
   xfree(svp);
-  return;
 }
 
 /*
@@ -1604,9 +1602,9 @@ disp_v1(ff_type t)
 static void
 disp_v2(ff_vecs_t* v)
 {
-  for (int i = 0; i < 3; i++) {
-    putchar((v->cap[i] & ff_cap_read) ? 'r' : '-');
-    putchar((v->cap[i] & ff_cap_write) ? 'w' : '-');
+  for (auto &i : v->cap) {
+    putchar((i & ff_cap_read) ? 'r' : '-');
+    putchar((i & ff_cap_write) ? 'w' : '-');
   }
   putchar('\t');
 }

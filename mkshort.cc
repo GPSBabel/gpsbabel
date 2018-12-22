@@ -85,8 +85,8 @@ mkshort_new_handle()
 {
   mkshort_handle_imp* h = (mkshort_handle_imp*) xcalloc(sizeof *h, 1);
 
-  for (int i = 0; i < PRIME; i++) {
-    QUEUE_INIT(&h->namelist[i]);
+  for (auto &i : h->namelist) {
+    QUEUE_INIT(&i);
   }
 
   h->whitespaceok = 1;
@@ -160,9 +160,9 @@ mkshort_del_handle(short_handle* h)
     return;
   }
 
-  for (int i = 0; i < PRIME; i++) {
+  for (auto &i : hdr->namelist) {
     queue* e, *t;
-    QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
+    QUEUE_FOR_EACH(&i, e, t) {
       uniq_shortname* s = reinterpret_cast<uniq_shortname *>(e);
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {

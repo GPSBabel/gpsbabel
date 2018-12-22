@@ -115,7 +115,7 @@ static void process_pmtklox();
 static void process_pmtklog();
 static void process_pmtk001();
 static void process_pmtk705();
-static void send_command(const char* s, const char* waitfor);
+static void send_command(const char* s, const char*wait_for);
 static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
 
@@ -280,7 +280,6 @@ read_line()
 
   packetnum++;
   dbg(1, "Line %i: %s\n", packetnum, line);
-  return;
 }
 
 void
@@ -326,7 +325,6 @@ process_packet()
 void
 process_pmtklox()
 {
-  int hexval;
   uint8_t fixbytes[16];
   static Waypoint* trkpt;
   static Waypoint* waypt;
@@ -385,6 +383,7 @@ process_pmtklox()
         return;
       }
       for (int i = 0; i<4; i++) {
+        unsigned int hexval;
         sscanf(&token[i * 2], "%2x", &hexval);
         fixbytes[bytenum++] = hexval;
         calculated_checksum ^= hexval;

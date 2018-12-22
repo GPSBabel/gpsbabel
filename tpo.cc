@@ -522,12 +522,12 @@ static void tpo_process_tracks()
 
     // next three bytes are RGB color, fourth is unknown
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
-    for (unsigned xx = 0; xx < 3; xx++) {
+    for (unsigned char &xx : styles[ii].color) {
       int col = gbfgetc(tpo_file_in);
       if ((col < 0) || (col >255)) {
         col = 0; // assign black if out of range 0x00 to 0xff
       }
-      styles[ii].color[xx] = (uint8_t)col;
+        xx = (uint8_t)col;
     }
 
     unsigned char tmp = gbfgetc(tpo_file_in);

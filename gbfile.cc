@@ -474,7 +474,6 @@ static void
 memapi_clearerr(gbfile* self)
 {
   (void)self;
-  return;
 }
 
 static int

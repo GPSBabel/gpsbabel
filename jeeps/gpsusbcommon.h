@@ -36,9 +36,9 @@ typedef struct gusb_llops {
 } gusb_llops_t;
 
 /* Provided by the common code. */
-void gusb_syncup(void);
+void gusb_syncup();
 void gusb_register_ll(struct gusb_llops*);
-void gusb_list_units(void);
+void gusb_list_units();
 
 /* Provided by the OS layers */
 // int gusb_init(const char *portname, gpsdev **dh);
