@@ -396,13 +396,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* buff;
   int line = 0;

@@ -818,7 +818,6 @@ mag_rd_init_common(const QString& portname)
     }
   }
 
-  return;
 }
 
 static void
@@ -1363,7 +1362,8 @@ mag_waypt_pr(const Waypoint* waypointp)
 
   if (global_opts.smart_icons &&
       waypointp->gc_data->diff && waypointp->gc_data->terr) {
-    sprintf(ofmtdesc, "%d/%d %s", waypointp->gc_data->diff,
+    // It's a string and compactness counts, so "1.0" is OK to be "10".
+    sprintf(ofmtdesc, "%ud/%ud %s", waypointp->gc_data->diff,
             waypointp->gc_data->terr, CSTRc(odesc));
     odesc = mag_cleanse(ofmtdesc);
   } else {
@@ -1400,7 +1400,6 @@ mag_waypt_pr(const Waypoint* waypointp)
 static
 void mag_track_nop(const route_head*)
 {
-  return;
 }
 
 static
@@ -1569,7 +1568,7 @@ const char** os_get_magellan_mountpoints()
 #if __APPLE__
   const char** dlist = (const char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/Magellan");
-  dlist[1] = NULL;
+  dlist[1] = nullptr;
   return dlist;
 #else
   fatal("Not implemented");

@@ -404,7 +404,7 @@ read_header()
 }
 
 /* gpi tag handler */
-static int read_tag(const char* caller, const int tag, Waypoint* wpt);
+static int read_tag(const char* caller, int tag, Waypoint* wpt);
 
 
 /* read a single poi with all options */

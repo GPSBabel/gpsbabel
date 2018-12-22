@@ -1272,8 +1272,8 @@ skytraq_set_location()
   sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
   le_write_double(&MSG_SET_LOCATION[9], lng);
-  for (unsigned int i = 0; i<sizeof MSG_SET_LOCATION; i++) {
-    db(3, "%02x ", MSG_SET_LOCATION[i]);
+  for (unsigned char i : MSG_SET_LOCATION) {
+    db(3, "%02x ", i);
   }
   db(3, "\n");
   if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {

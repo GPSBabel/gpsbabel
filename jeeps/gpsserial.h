@@ -20,9 +20,8 @@
 // int32  GPS_Serial_On_NMEA(const char *port, gpsdevh **fd);
   int32  GPS_Serial_Read(gpsdevh* fd, void* ibuf, int size);
   int32  GPS_Serial_Write(gpsdevh* fd, const void* obuf, int size);
-  int32  GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet);
-  int32  GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec);
-  void   GPS_Serial_Error(const char* hdr, ...);
-  int32  GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br);
+
+
+int32  GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br);
 
 #endif

@@ -73,7 +73,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	saroute.o navicache.o psitrex.o delgpl.o \
 	text.o html.o netstumbler.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o  \
-	vcf.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
+	vcf.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o vitosmt.o bcr.o \
 	ignrando.o stmwpp.o cst.o nmn4.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o gpssim.o \

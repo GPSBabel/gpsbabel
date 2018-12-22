@@ -37,7 +37,7 @@ static QString read_fname;
  ***************************************************************************/
 
 static void
-ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, qint64 len, const char* descr = nullptr)
+ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr = nullptr)
 {
   buf.resize(len);
   if (stream.readRawData(buf.data(), len) != len || stream.status() != QDataStream::Ok)
@@ -133,7 +133,7 @@ ggv_bin_read_v2(QDataStream& stream)
     if (global_opts.debug_level > 1)
       qDebug("------------------------------------ 0x%llx", stream.device()->pos());
 
-    quint64 entry_pos = stream.device()->pos();
+    auto entry_pos = stream.device()->pos();
     quint16 entry_type = ggv_bin_read16(stream, "entry type");
     ggv_bin_read16(stream, "entry group");
     ggv_bin_read16(stream, "entry zoom");

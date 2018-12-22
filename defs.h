@@ -35,12 +35,12 @@
 #include "session.h"
 
 #include <QtCore/QString>
-
+#include <utility>
 #include "src/core/datetime.h"
 #include "src/core/optional.h"
 
-#define CSTR(qstr) (qstr.toUtf8().constData())
-#define CSTRc(qstr) (qstr.toLatin1().constData())
+#define CSTR(qstr) ((qstr).toUtf8().constData())
+#define CSTRc(qstr) ((qstr).toLatin1().constData())
 #define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
 #define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
@@ -93,10 +93,10 @@
 /* knots to meters/second */
 #define KNOTS_TO_MPS(a) (KPH_TO_MPS((a)*1.852))
 
-#define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
+#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
+#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
+#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
+#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in
@@ -243,9 +243,9 @@ class utf_string
 {
 public:
   utf_string() = default;
-  utf_string(bool html, const QString& str) :
+  utf_string(bool html, QString str) :
     is_html{html},
-    utfstring{str}
+    utfstring{std::move(str)}
   {}
   bool is_html{false};
   QString utfstring;
@@ -329,26 +329,44 @@ class UrlLink
 {
 public:
   UrlLink() = default;
-  UrlLink(const QString& url) :
-    url_(url)
+  UrlLink(QString url) :
+    url_(std::move(url))
   { }
   UrlLink(const char* url) :
     url_(url)
   { }
-  UrlLink(const QString& url, const QString& url_link_text) :
-    url_(url),
-    url_link_text_(url_link_text)
+  UrlLink(QString url, QString url_link_text) :
+    url_(std::move(url)),
+    url_link_text_(std::move(url_link_text))
   { }
-  UrlLink(const QString& url, const QString& url_link_text, const QString& url_link_type) :
-    url_(url),
-    url_link_text_(url_link_text),
-    url_link_type_(url_link_type)
+  UrlLink(QString url, QString url_link_text, QString url_link_type) :
+    url_(std::move(url)),
+    url_link_text_(std::move(url_link_text)),
+    url_link_type_(std::move(url_link_type))
   { }
   QString url_;
   QString url_link_text_;
   QString url_link_type_;
 };
 
+class UrlList : public QList<UrlLink>
+{
+public:
+  void AddUrlLink(const UrlLink& l)
+  {
+    push_back(l);
+  }
+
+  bool HasUrlLink() const
+  {
+    return !isEmpty();
+  }
+
+  const UrlLink& GetUrlLink() const
+  {
+    return first();
+  }
+};
 
 /*
  * Misc bitfields inside struct waypoint;
@@ -421,7 +439,7 @@ typedef struct {
   double min_alt;	/* -unknown_alt => invalid */
 } bounds;
 
-#define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
+#define WAYPT_SET(wpt,member,val) { (wpt)->member = (val); wpt->wpt_flags.member = 1; }
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
@@ -481,9 +499,7 @@ public:
    */
   QString notes;
 
-  /* TODO: UrlLink should probably move to a "real" class of its own.
-   */
-  QList<UrlLink> url_link_list_;
+  UrlList urls;
 
   wp_flags wpt_flags;
   QString icon_descr;
@@ -534,7 +550,7 @@ public:
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
-  const QList<UrlLink> GetUrlLinks() const;
+  [[deprecated]] const QList<UrlLink> GetUrlLinks() const;
   void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
   gpsbabel::DateTime GetCreationTime() const;
@@ -548,11 +564,11 @@ public:
 typedef void (*waypt_cb)(const Waypoint*);
 
 const global_trait* get_traits();
-void waypt_init(void);
+void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
-unsigned int waypt_count(void);
+unsigned int waypt_count();
 void set_waypt_count(unsigned int nc);
 void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
@@ -564,7 +580,7 @@ void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
 void waypt_flush(queue* head);
-void waypt_flush_all(void);
+void waypt_flush_all();
 void waypt_backup(signed int* count, queue** head_bak);
 void waypt_restore(signed int count, queue* head_bak);
 void waypt_add_url(Waypoint* wpt, const QString& link,
@@ -572,8 +588,7 @@ void waypt_add_url(Waypoint* wpt, const QString& link,
 void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text,
                    const QString& url_link_type);
-double gcgeodist(const double lat1, const double lon1,
-                 const double lat2, const double lon2);
+double gcgeodist(double lat1, double lon1, double lat2, double lon2);
 double waypt_time(const Waypoint* wpt);
 double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
 double waypt_distance(const Waypoint* A, const Waypoint* B);
@@ -641,7 +656,7 @@ public:
   queue waypoint_list;	/* List of child waypoints */
   QString rte_name;
   QString rte_desc;
-  QString rte_url;
+  UrlList rte_urls;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
   format_specific_data* fs;
@@ -658,12 +673,12 @@ public:
 typedef void (*route_hdr)(const route_head*);
 typedef void (*route_trl)(const route_head*);
 
-void route_init(void);
-unsigned int route_waypt_count(void);
-unsigned int route_count(void);
-unsigned int track_waypt_count(void);
-unsigned int track_count(void);
-route_head* route_head_alloc(void);
+void route_init();
+unsigned int route_waypt_count();
+unsigned int route_count();
+unsigned int track_waypt_count();
+unsigned int track_count();
+route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
 void track_add_head(route_head* rte);
@@ -685,9 +700,9 @@ void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* overri
 void route_reverse(const route_head* rte_hd);
 void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
-void route_flush_all_routes(void);
-void route_flush_all_tracks(void);
-void route_flush_all(void);
+void route_flush_all_routes();
+void route_flush_all_tracks();
+void route_flush_all();
 void route_flush(queue* head);
 void route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src);
 void route_append(queue* src);
@@ -796,10 +811,10 @@ typedef struct {
 extern posn_status tracking_status;
 
 typedef void (*ff_init)(const QString&);
-typedef void (*ff_deinit)(void);
-typedef void (*ff_read)(void);
-typedef void (*ff_write)(void);
-typedef void (*ff_exit)(void);
+typedef void (*ff_deinit)();
+typedef void (*ff_read)();
+typedef void (*ff_write)();
+typedef void (*ff_exit)();
 typedef void (*ff_writeposn)(Waypoint*);
 typedef Waypoint* (*ff_readposn)(posn_status*);
 
@@ -835,7 +850,7 @@ typedef mkshort_handle_imp* short_handle;
 
 char* mkshort(short_handle,  const char*);
 QString mkshort(short_handle,  const QString&);
-short_handle mkshort_new_handle(void);
+short_handle mkshort_new_handle();
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
@@ -846,7 +861,7 @@ void setshort_mustuniq(short_handle,  int n);
 void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
-void setshort_is_utf8(short_handle h, const int is_utf8);
+void setshort_is_utf8(short_handle h, int is_utf8);
 
 #define ARGTYPE_UNKNOWN    0x00000000
 #define ARGTYPE_INT        0x00000001
@@ -962,20 +977,20 @@ typedef struct style_vecs {
 extern style_vecs_t style_list[];
 
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
+void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
 ff_vecs_t* find_vec(const char*, const char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
-void disp_vecs(void);
+void disp_vecs();
 void disp_vec(const char* vecname);
-void init_vecs(void);
-void exit_vecs(void);
+void init_vecs();
+void exit_vecs();
 void disp_formats(int version);
 const char* name_option(long type);
-void printposn(const double c, int is_lat);
+void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
@@ -1009,7 +1024,7 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 }
 
 int str_match(const char* str, const char* match);
-QString strenquote(const QString& str, const QChar quot_char);
+QString strenquote(const QString& str, QChar quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);
@@ -1021,10 +1036,10 @@ int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-signed int get_tz_offset(void);
+signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
-gpsbabel::DateTime current_time(void);
+gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);
 const char* get_cache_icon(const Waypoint* waypointp);
@@ -1081,10 +1096,10 @@ unsigned int le_readu16(const void* ptr);
 signed int le_read32(const void* ptr);
 unsigned int le_readu32(const void* ptr);
 void le_read64(void* dest, const void* src);
-void be_write16(void* ptr, const unsigned value);
-void be_write32(void* ptr, const unsigned value);
-void le_write16(void* ptr, const unsigned value);
-void le_write32(void* ptr, const unsigned value);
+void be_write16(void* ptr, unsigned value);
+void be_write32(void* ptr, unsigned value);
+void le_write16(void* ptr, unsigned value);
+void le_write32(void* ptr, unsigned value);
 
 double endian_read_double(const void* ptr, int read_le);
 float  endian_read_float(const void* ptr, int read_le);
@@ -1126,23 +1141,23 @@ typedef enum {
 
 /* bit manipulation functions (util.c) */
 
-char gb_getbit(const void* buf, const uint32_t nr);
-void gb_setbit(void* buf, const uint32_t nr);
+char gb_getbit(const void* buf, uint32_t nr);
+void gb_setbit(void* buf, uint32_t nr);
 
-void* gb_int2ptr(const int i);
+void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
 /*
  *  From parse.c
  */
-int parse_coordinates(const char* str, int datum, const grid_type grid,
+int parse_coordinates(const char* str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
-int parse_coordinates(const QString& str, int datum, const grid_type grid,
+int parse_coordinates(const QString& str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
 int parse_distance(const char* str, double* val, double scale, const char* module);
 int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, const double scale, const char* module);
-int parse_speed(const QString& str, double* val, const double scale, const char* module);
+int parse_speed(const char* str, double* val, double scale, const char* module);
+int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*
  *  From util_crc.c
@@ -1162,14 +1177,14 @@ typedef enum {
 } fmt_units;
 
 int    fmt_setunits(fmt_units);
-double fmt_distance(const double, const char** tag);
-double fmt_altitude(const double, const char** tag);
-double fmt_speed(const double, const char** tag);
+double fmt_distance(double, const char** tag);
+double fmt_altitude(double, const char** tag);
+double fmt_speed(double, const char** tag);
 
 /*
  * From nmea.c
  */
-int nmea_cksum(const char* const buf);
+int nmea_cksum(const char*buf);
 
 /*
  * Color helpers.

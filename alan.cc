@@ -236,8 +236,8 @@ static void swap_wpthdr(struct wpthdr* wpthdr,
   if (swap16_func != nullptr) {
     swap16_func(&wpthdr->num);
     swap16_func(&wpthdr->next);
-    for (int i=0; i<MAXWPT; i++) {
-      swap16_func(&wpthdr->idx[i]);
+    for (short &i : wpthdr->idx) {
+      swap16_func(&i);
     }
   }
 }
@@ -262,8 +262,8 @@ static void swap_rtehdr(struct rtehdr* rtehdr,
   if (swap16_func != nullptr) {
     swap16_func(&rtehdr->num);
     swap16_func(&rtehdr->next);
-    for (int i=0; i<MAXRTE; i++) {
-      swap16_func(&rtehdr->idx[i]);
+    for (short &i : rtehdr->idx) {
+      swap16_func(&i);
     }
     swap16_func(&rtehdr->rteno);
   }
@@ -277,8 +277,8 @@ static void swap_rte(struct rte* rte,
 {
   if (swap16_func != nullptr) {
     swap16_func(&rte->wptnum);
-    for (int i=0; i<MAXWPTINRTE; i++) {
-      swap16_func(&rte->wptidx[i]);
+    for (short &i : rte->wptidx) {
+      swap16_func(&i);
     }
     swap16_func(&rte->reserved);
   }
@@ -350,8 +350,8 @@ static void swap_loghdr(struct loghdr* loghdr,
     swap32_func(&(loghdr->date));
     swap32_func(&(loghdr->time));
   }
-  for (int i = 0; i<MAXTRK; i++) {
-    swap_trkhdr(&(loghdr->trkhdr[i]), swap16_func, swap32_func);
+  for (auto &i : loghdr->trkhdr) {
+    swap_trkhdr(&i, swap16_func, swap32_func);
   }
 }
 
@@ -400,8 +400,8 @@ static void trl_swap(struct trldata* trldata)
   }
 
   swap_loghdr(&(trldata->loghdr), swap16_func, swap32_func);
-  for (int i = 0; i<MAXTRK; i++) {
-    swap_trklog(&(trldata->trklog[i]), swap16_func, swap32_func);
+  for (auto &i : trldata->trklog) {
+    swap_trklog(&i, swap16_func, swap32_func);
   }
 }
 
@@ -938,7 +938,6 @@ static void alan_wr_deinit()
 
 static void alan_exit()
 {
-  return;
 }
 
 /**************************************************************************/

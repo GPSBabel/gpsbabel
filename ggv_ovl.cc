@@ -203,7 +203,7 @@ static void waypt_disp_cb(const Waypoint* wpt);
 static void track_disp_cb(const route_head* trk);
 static void route_disp_cb(const route_head* rte);
 static void write_bounds();
-static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const Waypoint* wpt);
+static void draw_symbol_basics(OVL_SYMBOL_TYP typ, int art, OVL_COLOR_TYP color, const Waypoint* wpt);
 static int get_direction(const Waypoint* A, const Waypoint* B);
 // static void draw_symbol_text(const char *text, const waypoint *reference);
 

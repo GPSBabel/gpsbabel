@@ -629,7 +629,11 @@ route_disp_hdr_cb(const route_head* rte)
   print_distance(cur_info->length, 0, 1, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   gbfprintf(fout, "\t%d waypoints\t", cur_info->count);
-  print_string("%s\r\n", rte->rte_url);
+  if (rte->rte_urls.HasUrlLink()) {
+    print_string("%s\r\n", rte->rte_urls.GetUrlLink().url_);
+  } else {
+    print_string("%s\r\n", "");
+  }
   gbfprintf(fout, "\r\nHeader\t%s\r\n\r\n", headers[rtept_header]);
 }
 
@@ -681,7 +685,11 @@ track_disp_hdr_cb(const route_head* track)
   print_date_and_time(cur_info->time, 1);
   print_distance(cur_info->length, 0, 1, 0);
   print_speed(&cur_info->length, &cur_info->time);
-  print_string("%s", track->rte_url);
+  if (track->rte_urls.HasUrlLink()) {
+    print_string("%s", track->rte_urls.GetUrlLink().url_);
+  } else {
+    print_string("%s", "");
+  }
   gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
 }
 
@@ -1189,7 +1197,7 @@ parse_route_header()
       rte->rte_name = DUPSTR(str);
       break;
     case 5:
-      rte->rte_url = str;
+      rte->rte_urls.AddUrlLink(UrlLink(str));
       break;
     }
   }
@@ -1212,7 +1220,7 @@ parse_track_header()
       trk->rte_name = DUPSTR(str);
       break;
     case 6:
-      trk->rte_url = str;
+      trk->rte_urls.AddUrlLink(UrlLink(str));
       break;
     }
   }

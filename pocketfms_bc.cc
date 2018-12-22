@@ -85,7 +85,7 @@ read_tracks()
   trk_head->rte_num = 1;
   trk_head->rte_name = "PocketFMS";
   trk_head->rte_desc = "Breadcrumb";
-  trk_head->rte_url = "www.pocketfms.com";
+  trk_head->rte_urls.AddUrlLink(UrlLink("www.pocketfms.com"));
   track_add_head(trk_head);
 
   while (1 == gbfread(&bc, sizeof(bc), 1, file_in)) {

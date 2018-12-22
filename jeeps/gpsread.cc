@@ -39,7 +39,7 @@
 ** @return [time_t] number of bytes read
 **********************************************************************/
 
-time_t GPS_Time_Now(void)
+time_t GPS_Time_Now()
 {
   time_t secs;
 

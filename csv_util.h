@@ -22,6 +22,7 @@
 #include "defs.h"
 #include <QtCore/QStringList>
 class QTextStream;
+#include <utility> 
 
 /* function prototypes */
 
@@ -30,7 +31,7 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max);
 QString csv_stringtrim(const QString& source, const QString& enclosure);
 
 char*
-csv_lineparse(const char* stringstart, const char* delimited_by, const char* enclosed_in, const int line_no);
+csv_lineparse(const char* stringstart, const char* delimited_by, const char* enclosed_in, int line_no);
 
 void
 human_to_dec(const char* instr, double* outlat, double* outlon, int which);
@@ -44,13 +45,13 @@ csv_stringclean(const char* string, const char* chararray);
 QString csv_stringclean(const QString& string, const QString& chararray);
 
 void
-xcsv_data_read(void);
+xcsv_data_read();
 
 void
-xcsv_data_write(void);
+xcsv_data_write();
 
 void
-xcsv_file_init(void);
+xcsv_file_init();
 
 void
 xcsv_prologue_add(const QString&);
@@ -65,7 +66,7 @@ void
 xcsv_ofield_add(const QString&, const QString&, const QString&, unsigned options);
 
 void
-xcsv_destroy_style(void);
+xcsv_destroy_style();
 
 QString
 xcsv_get_char_from_constant_table(const QString& key);
@@ -91,8 +92,9 @@ public:
   unsigned options{0};
 
   field_map() = default;
-  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk) : key{k},val{v},printfc{p},hashed_key{hk} {}
-  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk, unsigned o) : key{k},val{v},printfc{p},hashed_key{hk},options{o} {}
+  field_map(QByteArray k, QByteArray v, QByteArray p, int hk) : key{std::move(k)},val{std::move(v)},printfc{std::move(p)},hashed_key{hk} {}
+  field_map(QByteArray k, QByteArray v, QByteArray p, int hk, unsigned o) : key{std::move(k)},val{std::move(v)},printfc{
+          std::move(p)},hashed_key{hk},options{o} {}
 };
 
 /* something to map config file constants to chars */

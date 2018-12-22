@@ -558,7 +558,7 @@ main(int argc, char* argv[])
       optarg = FETCH_OPTARG;
       qargs_stack.push(QargStackElement(argn, qargs));
       qargs = load_args(optarg, qargs.at(0));
-      if (qargs.size() == 0) {
+      if (qargs.empty()) {
         QargStackElement ele = qargs_stack.pop();
         argn = ele.argn;
         qargs = ele.qargs;

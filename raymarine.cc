@@ -233,7 +233,7 @@ raymarine_read()
     char sect[10];
     QString name;
 
-    snprintf(sect, sizeof(sect), "Rt%d", rx);
+    snprintf(sect, sizeof(sect), "Rt%u", rx);
     name = inifile_readstr(fin, sect, "Name");
     if (name.isNull()) {
       break;
@@ -410,7 +410,6 @@ write_route_wpt_cb(const Waypoint* wpt)
   }
 
   rte_wpt_index++;
-  return;
 }
 
 static void

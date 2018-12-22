@@ -114,7 +114,7 @@ private:
   class SortCompWptFunctor
   {
   public:
-    SortCompWptFunctor(SortFilter& obj) : that(&obj) {}
+      explicit SortCompWptFunctor(SortFilter& obj) : that(&obj) {}
     int operator()(const queue* a, const queue* b);
 
   private:
@@ -124,7 +124,7 @@ private:
   class SortCompRteHdFunctor
   {
   public:
-    SortCompRteHdFunctor(SortFilter& obj) : that(&obj) {}
+      explicit SortCompRteHdFunctor(SortFilter& obj) : that(&obj) {}
     int operator()(const queue* a, const queue* b);
 
   private:

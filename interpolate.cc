@@ -63,11 +63,11 @@ void InterpolateFilter::process()
     } else {
       track_add_head(rte_new);
     }
-    bool first = 1;
+    bool first = true;
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
       Waypoint* wpt = reinterpret_cast<Waypoint *>(elem2);
       if (first) {
-        first = 0;
+        first = false;
       } else {
         if (opt_interval &&
             wpt->creation_time.toTime_t() - time1 > interval) {

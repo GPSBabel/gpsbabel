@@ -63,7 +63,7 @@ static void   GPS_D105_Get(GPS_PWay* way, UC* s);
 static void   GPS_D106_Get(GPS_PWay* way, UC* s);
 static void   GPS_D107_Get(GPS_PWay* way, UC* s);
 static void   GPS_D108_Get(GPS_PWay* way, UC* s);
-static void   GPS_D109_Get(GPS_PWay* way, UC* s, int proto);
+static void   GPS_D109_Get(GPS_PWay* way, UC* s, int protoid);
 static void   GPS_D150_Get(GPS_PWay* way, UC* s);
 static void   GPS_D151_Get(GPS_PWay* way, UC* s);
 static void   GPS_D152_Get(GPS_PWay* way, UC* s);
@@ -79,16 +79,16 @@ static void   GPS_D105_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D106_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D107_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D108_Send(UC* data, GPS_PWay way, int32* len);
-static void   GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int proto);
+static void   GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid);
 static void   GPS_D150_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D151_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D152_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D154_Send(UC* data, GPS_PWay way, int32* len);
 static void   GPS_D155_Send(UC* data, GPS_PWay way, int32* len);
 
-static void   GPS_D120_Get(int n, char* data);
+static void   GPS_D120_Get(int cat_num, char*s);
 
-static void   GPS_D200_Get(GPS_PWay* way, UC* s);
+static void   GPS_D200_Get(GPS_PWay* way, const UC* s);
 static void   GPS_D201_Get(GPS_PWay* way, UC* s);
 static void   GPS_D202_Get(GPS_PWay* way, UC* s);
 static void   GPS_D210_Get(GPS_PWay* way, UC* s);
@@ -3444,7 +3444,7 @@ int32 GPS_A201_Send(const char* port, GPS_PWay* way, int32 n)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D200_Get(GPS_PWay* way, UC* s)
+static void GPS_D200_Get(GPS_PWay* way, const UC* s)
 {
   (*way)->rte_prot = 200;
   (*way)->rte_num  = *s;
@@ -4596,8 +4596,6 @@ void GPS_D303_Send(UC* data, GPS_PTrack trk, int32* len, int protoid)
   }
 
   *len = p-data;
-
-  return;
 }
 
 /* @func GPS_D311_Send **************************************************
@@ -4618,8 +4616,6 @@ void GPS_D311_Send(UC* data, GPS_PTrack trk, int32* len)
   GPS_Util_Put_Short(p,strtoul(trk->trk_ident, nullptr, 0));
   p += 2;
   *len = p-data;
-
-  return;
 }
 
 /* @func GPS_D310_Send **************************************************
@@ -4646,8 +4642,6 @@ void GPS_D310_Send(UC* data, GPS_PTrack trk, int32* len)
   while ((*p++ = *q++));
 
   *len = p-data;
-
-  return;
 }
 
 
@@ -4682,8 +4676,6 @@ static void GPS_A300_Translate(UC* s, GPS_PTrack* trk)
   p+=sizeof(uint32);
 
   (*trk)->tnew = *p;
-
-  return;
 }
 
 
@@ -4716,8 +4708,6 @@ static void GPS_A300_Encode(UC* s, GPS_PTrack trk)
   p+=sizeof(uint32);
 
   *p = (UC) trk->tnew;
-
-  return;
 }
 
 
@@ -5038,9 +5028,6 @@ static void GPS_D400_Get(GPS_PWay* way, UC* s)
   }
 
   (*way)->dst=GPS_Util_Get_Float(p);
-
-
-  return;
 }
 
 
@@ -5081,8 +5068,6 @@ static void GPS_D403_Get(GPS_PWay* way, UC* s)
   (*way)->dspl = *p++;
 
   (*way)->dst=GPS_Util_Get_Float(p);
-
-  return;
 }
 
 
@@ -5138,8 +5123,6 @@ static void GPS_D450_Get(GPS_PWay* way, UC* s)
   }
 
   (*way)->dst=GPS_Util_Get_Float(p);
-
-  return;
 }
 
 
@@ -5176,8 +5159,6 @@ static void GPS_D400_Send(UC* data, GPS_PWay way, int32* len)
   GPS_Util_Put_Float(p,way->dst);
 
   *len = 62;
-
-  return;
 }
 
 
@@ -5217,8 +5198,6 @@ static void GPS_D403_Send(UC* data, GPS_PWay way, int32* len)
   GPS_Util_Put_Float(p,way->dst);
 
   *len = 64;
-
-  return;
 }
 
 
@@ -5275,8 +5254,6 @@ static void GPS_D450_Send(UC* data, GPS_PWay way, int32* len)
 
 
   *len = 121;
-
-  return;
 }
 
 
@@ -5612,8 +5589,6 @@ static void GPS_A500_Translate(UC* s, GPS_PAlmanac* alm)
 
   (*alm)->i = GPS_Util_Get_Float(p);
   p+=sizeof(float);
-
-  return;
 }
 
 
@@ -5632,8 +5607,6 @@ static void GPS_D500_Send(UC* data, GPS_PAlmanac alm)
 
   p = data;
   GPS_A500_Encode(p,alm);
-
-  return;
 }
 
 
@@ -5654,8 +5627,6 @@ static void GPS_D501_Send(UC* data, GPS_PAlmanac alm)
   p=data;
   p[42] = alm->hlth;
   GPS_A500_Encode(p,alm);
-
-  return;
 }
 
 
@@ -5676,8 +5647,6 @@ static void GPS_D550_Send(UC* data, GPS_PAlmanac alm)
   p = data;
   *p = alm->svid;
   GPS_A500_Encode(p+1,alm);
-
-  return;
 }
 
 
@@ -5699,8 +5668,6 @@ static void GPS_D551_Send(UC* data, GPS_PAlmanac alm)
   *p = alm->svid;
   GPS_A500_Encode(p+1,alm);
   p[43] = alm->hlth;
-
-  return;
 }
 
 
@@ -5751,8 +5718,6 @@ static void GPS_A500_Encode(UC* s, GPS_PAlmanac alm)
   p+=sizeof(float);
 
   GPS_Util_Put_Float(p,alm->i);
-
-  return;
 }
 
 
@@ -5957,8 +5922,6 @@ void GPS_D600_Send(GPS_PPacket& packet, time_t Time)
 
   GPS_Make_Packet(&packet, LINK_ID[gps_link_type].Pid_Date_Time_Data,
                   data,8);
-
-  return;
 }
 
 
@@ -6093,9 +6056,6 @@ void GPS_D700_Get(GPS_PPacket& packet, double* lat, double* lon)
 
   t    = GPS_Util_Get_Double(p);
   *lon = GPS_Math_Rad_To_Deg(t);
-
-
-  return;
 }
 
 
@@ -6125,8 +6085,6 @@ void GPS_D700_Send(GPS_PPacket& packet, double lat, double lon)
 
   GPS_Make_Packet(&packet, LINK_ID[gps_link_type].Pid_Position_Data,
                   data,16);
-
-  return;
 }
 
 
@@ -6300,8 +6258,6 @@ void GPS_D800_Get(GPS_PPacket& packet, GPS_PPvt_Data* pvt)
   p+=sizeof(int16);
 
   (*pvt)->wn_days = GPS_Util_Get_Int(p);
-
-  return;
 }
 
 /* @func GPS_A906_Get ******************************************************
@@ -6505,7 +6461,6 @@ void GPS_D1011b_Get(GPS_PLap* Lap, UC* p)
     */
   }
 
-  return;
 }
 
 
@@ -6753,8 +6708,6 @@ void GPS_D1006_Send(UC* data, GPS_PCourse crs, int32* len)
   p += 2;
 
   *len = p-data;
-
-  return;
 }
 
 
@@ -6976,8 +6929,6 @@ void GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p)
     (*clp)->avg_cadence = *p;
   }
   p++;
-
-  return;
 }
 
 
@@ -7027,8 +6978,6 @@ void GPS_D1007_Send(UC* data, GPS_PCourse_Lap clp, int32* len)
   *p++ = clp->avg_cadence > 0 ? clp->avg_cadence : 0xff;
 
   *len = p-data;
-
-  return;
 }
 
 
@@ -7278,8 +7227,6 @@ void GPS_D1012_Send(UC* data, GPS_PCourse_Point cpt, int32* len)
   *p++ = cpt->point_type;
 
   *len = p-data;
-
-  return;
 }
 
 

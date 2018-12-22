@@ -130,11 +130,11 @@ static void
 ReadGuid(gbfile* f, GUID* guid)
 {
   guid->l = ReadLong(f);
-  for (int i = 0; i < 3; i++) {
-    guid->s[i] = ReadShort(f);
+  for (unsigned short &i : guid->s) {
+    i = ReadShort(f);
   }
-  for (int i = 0; i < 6; i++) {
-    guid->c[i] = ReadChar(f);
+  for (unsigned char &i : guid->c) {
+    i = ReadChar(f);
   }
 }
 

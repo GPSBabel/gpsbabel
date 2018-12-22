@@ -61,8 +61,8 @@ f90g_track_rd_init(const QString& fname)
     fatal(MYNAME ": read error");
   } else {
     // flip bits and check for valid header
-    for (int i = 0; i<HEADERRECORDSIZE; i++) {
-      header[i] ^= FLIPEDBITS;
+    for (char &i : header) {
+        i ^= FLIPEDBITS;
     }
     if (memcmp(header, VALIDHEADER, sizeof(VALIDHEADER)-1)) {
       fatal(MYNAME ": bad header");
@@ -100,8 +100,8 @@ f90g_track_read()
     if (gbfread((void*)ttRec, 1, TTRECORDSIZE, fin) != TTRECORDSIZE) {
       break;
     }
-    for (int i = 0; i<TTRECORDSIZE; i++) {
-      ttRec[i] ^= FLIPEDBITS;
+    for (char &i : ttRec) {
+        i ^= FLIPEDBITS;
     }
 
     // Pick the TT record apart and if it is good, fill in a new Waypoint

@@ -225,8 +225,6 @@ ozi_openfile(const QString& fname)
   }
 
   file_out = gbfopen(tmpname, "wb", MYNAME);
-
-  return;
 }
 
 static void

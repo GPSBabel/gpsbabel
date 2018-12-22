@@ -59,6 +59,6 @@ int inifile_readint(const inifile_t* inifile, const char* section, const char* k
      inifile_readint_def:
        if found inifile_readint_def returns value of key, otherwise a default value "def"
  */
-int inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, const int def);
+int inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, int def);
 
 #endif

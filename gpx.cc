@@ -64,6 +64,7 @@ static QString current_tag;
 
 static Waypoint* wpt_tmp;
 static UrlLink* link_;
+static UrlLink* rh_link_;
 static bool cache_descr_is_html;
 static gpsbabel::File* iqfile;
 static gpsbabel::File* oqfile;
@@ -169,6 +170,11 @@ typedef enum  {
   tt_rte_name,
   tt_rte_desc,
   tt_rte_cmt,
+  tt_rte_url,		/* Not in GPX 1.1 */
+  tt_rte_urlname,	/* Not in GPX 1.1 */
+  tt_rte_link,		/* New in GPX 1.1 */
+  tt_rte_link_text,	/* New in GPX 1.1 */
+  tt_rte_link_type,	/* New in GPX 1.1 */
   tt_rte_number,
   tt_garmin_rte_display_color,
   tt_rte_rtept,
@@ -176,6 +182,11 @@ typedef enum  {
   tt_trk_desc,
   tt_trk_name,
   tt_trk_trkseg,
+  tt_trk_url,		/* Not in GPX 1.1 */
+  tt_trk_urlname,	/* Not in GPX 1.1 */
+  tt_trk_link,		/* New in GPX 1.1 */
+  tt_trk_link_text,	/* New in GPX 1.1 */
+  tt_trk_link_type,	/* New in GPX 1.1 */
   tt_trk_number,
   tt_garmin_trk_display_color,
   tt_trk_trkseg_trkpt,
@@ -208,7 +219,7 @@ struct GpxGlobal {
   QStringList url;
   QStringList urlname;
   QStringList keywords;
-  QList<UrlLink> link;
+  UrlList link;
   /* time and bounds aren't here; they're recomputed. */
 };
 static GpxGlobal* gpx_global = nullptr;
@@ -371,6 +382,11 @@ static tag_mapping tag_path_map[] = {
   { tt_rte, 0, "/gpx/rte" },
   { tt_rte_name, 0, "/gpx/rte/name" },
   { tt_rte_desc, 0, "/gpx/rte/desc" },
+  { tt_rte_url, 0, "/gpx/rte/url"},				/* GPX 1.0 */
+  { tt_rte_urlname, 0, "/gpx/rte/urlname"},		/* GPX 1.0 */
+  { tt_rte_link, 0, "/gpx/rte/link"},			/* GPX 1.1 */
+  { tt_rte_link_text, 0, "/gpx/rte/link/text"},	/* GPX 1.1 */
+  { tt_rte_link_type, 0, "/gpx/rte/link/type"},	/* GPX 1.1 */
   { tt_rte_number, 0, "/gpx/rte/number" },
   { tt_garmin_rte_display_color, 1, GARMIN_RTE_EXT "/gpxx:DisplayColor"},
 
@@ -380,6 +396,11 @@ static tag_mapping tag_path_map[] = {
   { tt_trk_name, 0, "/gpx/trk/name" },
   { tt_trk_desc, 0, "/gpx/trk/desc" },
   { tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
+  { tt_trk_url, 0, "/gpx/trk/url"},				/* GPX 1.0 */
+  { tt_trk_urlname, 0, "/gpx/trk/urlname"},		/* GPX 1.0 */
+  { tt_trk_link, 0, "/gpx/trk/link"},			/* GPX 1.1 */
+  { tt_trk_link_text, 0, "/gpx/trk/link/text"},	/* GPX 1.1 */
+  { tt_trk_link_type, 0, "/gpx/trk/link/type"},	/* GPX 1.1 */
   { tt_trk_number, 0, "/gpx/trk/number" },
   { tt_garmin_trk_display_color, 1, GARMIN_TRK_EXT "/gpxx:DisplayColor"},
 
@@ -656,6 +677,7 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
   case tt_rte:
     rte_head = route_head_alloc();
     route_add_head(rte_head);
+    rh_link_ = new UrlLink;
     fs_ptr = &rte_head->fs;
     break;
   case tt_rte_rtept:
@@ -664,6 +686,7 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
   case tt_trk:
     trk_head = route_head_alloc();
     track_add_head(trk_head);
+    rh_link_ = new UrlLink;
     fs_ptr = &trk_head->fs;
     break;
   case tt_trk_trkseg_trkpt:
@@ -671,6 +694,12 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     if (next_trkpt_is_new_seg) {
       wpt_tmp->wpt_flags.new_trkseg = 1;
       next_trkpt_is_new_seg = 0;
+    }
+    break;
+  case tt_rte_link:
+  case tt_trk_link:
+    if (attr.hasAttribute("href")) {
+      link_url = attr.value("href").toString();
     }
     break;
   case tt_unknown:
@@ -900,10 +929,16 @@ gpx_end(const QString&)
     gpx_add_to_global(gpx_global->keywords, cdatastr);
     break;
   case tt_link:
-    (gpx_global->link).push_back(UrlLink(link_url, link_text, link_type));
+    (gpx_global->link).AddUrlLink(UrlLink(link_url, link_text, link_type));
     link_type.clear();
     link_text.clear();
     link_url.clear();
+    break;
+  case tt_link_text:
+    link_text = cdatastr;
+    break;
+  case tt_link_type:
+    link_type = cdatastr;
     break;
 
   /*
@@ -1010,6 +1045,13 @@ gpx_end(const QString&)
     rte_head->rte_name = cdatastr;
     break;
   case tt_rte:
+    if (rh_link_) {
+      if (!rh_link_->url_.isEmpty()) {
+        rte_head->rte_urls.AddUrlLink(*rh_link_);
+      }
+      delete rh_link_;
+      rh_link_ = nullptr;
+    }
     break;
   case tt_rte_rtept:
     if (link_) {
@@ -1028,6 +1070,12 @@ gpx_end(const QString&)
   case tt_garmin_rte_display_color:
     rte_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
+  case tt_rte_link:
+    rte_head->rte_urls.AddUrlLink(UrlLink(link_url, link_text, link_type));
+    link_type.clear();
+    link_text.clear();
+    link_url.clear();
+    break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
     break;
@@ -1038,6 +1086,13 @@ gpx_end(const QString&)
     trk_head->rte_name = cdatastr;
     break;
   case tt_trk:
+    if (rh_link_) {
+      if (!rh_link_->url_.isEmpty()) {
+        trk_head->rte_urls.AddUrlLink(*rh_link_);
+      }
+      delete rh_link_;
+      rh_link_ = nullptr;
+    }
     break;
   case tt_trk_trkseg:
     next_trkpt_is_new_seg = 1;
@@ -1059,6 +1114,12 @@ gpx_end(const QString&)
   case tt_garmin_trk_display_color:
     trk_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
+  case tt_trk_link:
+    trk_head->rte_urls.AddUrlLink(UrlLink(link_url, link_text, link_type));
+    link_type.clear();
+    link_text.clear();
+    link_url.clear();
+    break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
     break;
@@ -1078,6 +1139,22 @@ gpx_end(const QString&)
   /*
    * Items that are actually in multiple categories.
    */
+  case tt_rte_url:
+  case tt_trk_url:
+    rh_link_->url_ = cdatastr;
+    break;
+  case tt_rte_urlname:
+  case tt_trk_urlname:
+    rh_link_->url_link_text_ = cdatastr;
+    break;
+  case tt_rte_link_text:
+  case tt_trk_link_text:
+    link_text = cdatastr;
+    break;
+  case tt_rte_link_type:
+  case tt_trk_link_type:
+    link_type = cdatastr;
+    break;
   case tt_wpttype_ele:
     wpt_tmp->altitude = cdatastr.toDouble();
     break;
@@ -1142,12 +1219,6 @@ gpx_end(const QString&)
     link_text = cdatastr;
     break;
   case tt_wpttype_link_type:
-    link_type = cdatastr;
-    break;
-  case tt_link_text:
-    link_text = cdatastr;
-    break;
-  case tt_link_type:
     link_type = cdatastr;
     break;
   case tt_unknown:
@@ -1488,25 +1559,41 @@ void free_gpx_extras(xml_tag* tag)
  * Handle the grossness of GPX 1.0 vs. 1.1 handling of linky links.
  */
 static void
+write_gpx_url(const UrlList& urls)
+{
+  if (gpx_wversion_num > 10) {
+    for (const auto& l : urls) {
+      if (!l.url_.isEmpty()) {
+        writer->writeStartElement(QStringLiteral("link"));
+        writer->writeAttribute(QStringLiteral("href"), l.url_);
+        writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);
+        writer->writeOptionalTextElement(QStringLiteral("type"), l.url_link_type_);
+        writer->writeEndElement();
+      }
+    }
+  } else {
+    UrlLink l = urls.GetUrlLink();
+    if (!l.url_.isEmpty()) {
+      writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
+      writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);
+    }
+  }
+}
+
+static void
 write_gpx_url(const Waypoint* waypointp)
 {
-  if (!waypointp->HasUrlLink()) {
-    return;
+  if (waypointp->HasUrlLink()) {
+    write_gpx_url(waypointp->urls);
   }
+}
 
-  if (gpx_wversion_num > 10) {
-    for (const auto& l : waypointp->GetUrlLinks()) {
-      writer->writeStartElement(QStringLiteral("link"));
-      writer->writeAttribute(QStringLiteral("href"), l.url_);
-      writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);
-      writer->writeOptionalTextElement(QStringLiteral("type"), l.url_link_type_);
-      writer->writeEndElement();
-    }
-    return;
+static void
+write_gpx_url(const route_head* rh)
+{
+  if (rh->rte_urls.HasUrlLink()) {
+    write_gpx_url(rh->rte_urls);
   }
-  UrlLink l = waypointp->GetUrlLink();
-  writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
-  writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);
 }
 
 /*
@@ -1709,6 +1796,7 @@ gpx_track_hdr(const route_head* rte)
   writer->writeStartElement(QStringLiteral("trk"));
   writer->writeOptionalTextElement(QStringLiteral("name"), rte->rte_name);
   writer->writeOptionalTextElement(QStringLiteral("desc"), rte->rte_desc);
+  write_gpx_url(rte);
 
   if (rte->rte_num) {
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));
@@ -1797,6 +1885,7 @@ gpx_route_hdr(const route_head* rte)
   writer->writeStartElement(QStringLiteral("rte"));
   writer->writeOptionalTextElement(QStringLiteral("name"), rte->rte_name);
   writer->writeOptionalTextElement(QStringLiteral("desc"), rte->rte_desc);
+  write_gpx_url(rte);
 
   if (rte->rte_num) {
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));

@@ -1112,7 +1112,7 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
 
   if (BYTE_TYPE(type)) {
     assert(item_size == 1);
-    if (tag->data.size() == 0) {
+    if (tag->data.empty()) {
       tag->data.append(QByteArray());
     }
     QByteArray qba = tag->data.at(0).toByteArray();

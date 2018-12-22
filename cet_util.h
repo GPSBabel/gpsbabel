@@ -31,8 +31,8 @@
 #include "defs.h"
 
 cet_cs_vec_t* cet_find_cs_by_name(const QString& name);
-void cet_register(void);
-void cet_deregister(void);
+void cet_register();
+void cet_deregister();
 
 /* short hand transmissions */
 
@@ -61,8 +61,8 @@ const char* cet_convert_string(const QString& str);
 
 /* gpsbabel extensions */
 
-void cet_convert_init(const QString& cs_name, const int force);
+void cet_convert_init(const QString& cs_name, int force);
 void cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format);
-void cet_convert_deinit(void);
+void cet_convert_deinit();
 
 #endif  // CET_UTIL_H_INCLUDED_
