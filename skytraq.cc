@@ -273,7 +273,7 @@ skytraq_rd_msg(const void* payload, unsigned int len)
 {
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, state;
-  signed int rcv_len;
+  unsigned int rcv_len;
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);

@@ -632,7 +632,7 @@ dg100_getfiles()
 
   dg100_getfileheaders(&headers);
 
-  for (int i = 0; i < headers.count; i++) {
+  for (unsigned int i = 0; i < headers.count; i++) {
     int filenum = headers.data[i];
     dg100_getfile(filenum, &track);
   }

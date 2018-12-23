@@ -27,9 +27,9 @@
 
 garmin_unit_info_t garmin_unit_info[GUSB_MAX_UNITS];
 
-static int32 success_stub()
+static bool success_stub()
 {
-  return 1;
+  return true;
 }
 
 static int32 gdu_on(const char* port, gpsdevh** fd)

@@ -70,12 +70,12 @@ int32 GPS_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
   return (ops->Read_Packet)(fd, packet);
 }
 
-int32 GPS_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   return (ops->Send_Ack)(fd, tra, rec);
 }
 
-int32 GPS_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   return (ops->Get_Ack)(fd, tra, rec);
 }

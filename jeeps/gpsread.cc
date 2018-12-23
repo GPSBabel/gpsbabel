@@ -43,10 +43,10 @@ time_t GPS_Time_Now()
 {
   time_t secs;
 
-  if (time(&secs)==-1) {
+  if (time(&secs) < 0) {
     perror("time");
-    GPS_Error("GPS_Time_Now: Error reading time");
     gps_errno = HARDWARE_ERROR;
+    GPS_Error("GPS_Time_Now: Error reading time");
     return 0;
   }
 
@@ -72,24 +72,20 @@ time_t GPS_Time_Now()
 int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 {
   time_t start;
-  int32  len;
-  UC     u;
-  int32  isDLE;
-  UC*     p;
-  int32  i;
-  UC     chk=0, chk_read;
+  int32 len = 0;
+  UC u;
+  UC* p;
+  UC chk = 0, chk_read;
   const char* m1;
   const char* m2;
-
-  len = 0;
-  isDLE = gpsFalse;
+  bool isDLE = false;
   p = (*packet).data;
 
   start = GPS_Time_Now();
   GPS_Diag("Rx Data:");
-  while (GPS_Time_Now() < start+GPS_TIME_OUT) {
+  while (GPS_Time_Now() < start + GPS_TIME_OUT) {
     if (int32 n = GPS_Serial_Chars_Ready(fd)) {
-      if (GPS_Serial_Read(fd,&u,1)==-1) {
+      if (GPS_Serial_Read(fd, &u, 1) < 0) {
         perror("read");
         GPS_Error("GPS_Packet_Read: Read error");
         gps_errno = FRAMING_ERROR;
@@ -100,7 +96,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 
       if (!len) {
         if (u != DLE) {
-          (void) fprintf(stderr,"GPS_Packet_Read: No DLE.  Data received, but probably not a garmin packet.\n");
+          (void) fprintf(stderr, "GPS_Packet_Read: No DLE.  Data received, but probably not a garmin packet.\n");
           (void) fflush(stderr);
           return 0;
         }
@@ -108,7 +104,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
         continue;
       }
 
-      if (len==1) {
+      if (len == 1) {
         (*packet).type = u;
         ++len;
         continue;
@@ -116,10 +112,10 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 
       if (u == DLE) {
         if (isDLE) {
-          isDLE = gpsFalse;
+          isDLE = false;
           continue;
         }
-        isDLE = gpsTrue;
+        isDLE = true;
       }
 
       if (len == 2) {
@@ -130,14 +126,15 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 
       if (u == ETX)
         if (isDLE) {
-          if (p-(*packet).data-2 != (*packet).n) {
+          if (p - (*packet).data - 2 != (*packet).n) {
             GPS_Error("GPS_Packet_Read: Bad count");
             gps_errno = FRAMING_ERROR;
             return 0;
           }
-          chk_read = *(p-2);
+          chk_read = *(p - 2);
 
-          for (i=0,p=(*packet).data; i<(*packet).n; ++i) {
+          unsigned int i;
+          for (i = 0, p = (*packet).data; i < (*packet).n; ++i) {
             chk -= *p++;
           }
           chk -= packet->type;
@@ -151,9 +148,9 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
           m1 = Get_Pkt_Type((*packet).type, (*packet).data[0], &m2);
           if (gps_show_bytes) {
             GPS_Diag(" ");
-            for (i = 0; i < packet->n; i++) {
+            for (unsigned i = 0; i < packet->n; i++) {
               char c = (*packet).data[i];
-              GPS_Diag("%c", isalnum(c) ? c  : '.');
+              GPS_Diag("%c", isalnum(c) ? c : '.');
             }
             GPS_Diag(" ");
           }
@@ -187,13 +184,13 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 ** @param [r] tra [GPS_PPacket *] packet just transmitted
 ** @param [r] rec [GPS_PPacket *] packet to receive
 **
-** @return [int32] true if ACK
+** @return [bool] true if ACK
 **********************************************************************/
 
-int32 GPS_Serial_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Serial_Get_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec)
 {
   if (!GPS_Serial_Packet_Read(fd, rec)) {
-    return 0;
+    return false;
   }
 
   if (LINK_ID[0].Pid_Ack_Byte != (*rec).type) {
@@ -203,8 +200,8 @@ int32 GPS_Serial_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 
   if (*(*rec).data != (*tra).type) {
     gps_error = FRAMING_ERROR;
-    return 0;
+    return false;
   }
 
-  return 1;
+  return true;
 }
