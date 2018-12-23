@@ -834,12 +834,8 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
   /* Object num */
   if (object_num_present) {
     short object_num = gbfgetint16(file_in);
-    if (global_opts.debug_level > 2) {
-      if (global_opts.debug_level == 99) {
-        printf(MYNAME " parse_waypt: %5d", object_num);
-      } else {
-        printf(MYNAME " parse_waypt: object_num = %d\n", object_num);
-      }
+    if (global_opts.debug_level == 99) {
+      printf(MYNAME " parse_waypt: %5d", object_num);
     }
   }
 
@@ -905,24 +901,19 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
     wpt_tmp->description = description;
   }
 
-  /* Time is number of seconds since Jan. 1, 2000 */
+  /* Input is the number of seconds since Jan. 1, 2000 */
   time_t waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
-    wpt_tmp->SetCreationTime(base_time_secs + waypt_time);
+    /* Waypoint needs the number of seconds since UNIX Epoch (Jan 1, 1970) */
+    wpt_tmp->SetCreationTime(waypt_time += base_time_secs);
   }
 
   if (global_opts.debug_level > 2) {
     if (global_opts.debug_level == 99) {
-      QDateTime dt;
-      QTime t;
-      dt = wpt_tmp->GetCreationTime();
-      t  = wpt_tmp->GetCreationTime().time();
-      printf(" %s %s", qPrintable(dt.toString("yyyy/MM/dd")), qPrintable(t.toString("hh:mm")));
+      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
     } else {
-      printf(MYNAME " parse_waypt: creation time %d, base_time %d waypt_time %d\n",
-             (int)wpt_tmp->creation_time.toTime_t(),
-             (int)base_time_secs,
-             (int)waypt_time);
+      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %ld\n",
+        qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
 
@@ -1030,8 +1021,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
      assuming meters but may be feet? */
   WAYPT_SET(wpt_tmp, proximity, gbfgetflt(file_in));
 
-  /* Creation date/time; the date is a Julian day number, and the
-     time is a unix timestamp. */
+  /* Creation date/time */
+  /* The date is a Julian day number, and the time is a unix timestamp. */
   uint create_date = gbfgetint32(file_in);
   uint create_time = gbfgetint32(file_in);
 
@@ -1039,8 +1030,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
   // with, as a practical matter, we have no date, so don't even compute
   // or set it.
   if (create_date > 2440587) {
-    wpt_tmp->SetCreationTime(lowranceusr4_get_timestamp(create_date,
-                             create_time));
+    wpt_tmp->SetCreationTime(lowranceusr4_get_timestamp(create_date, create_time));
   }
 
   /* Unused byte */
@@ -1080,11 +1070,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
       } else {
         printf(" %6d %16s", desc.length(), qPrintable(desc));
       }
-      QDateTime dt;
-      QTime t;
-      dt = wpt_tmp->GetCreationTime();
-      t  = wpt_tmp->GetCreationTime().time();
-      printf(" %s %s", qPrintable(dt.toString("yyyy/MM/dd")), qPrintable(t.toString("hh:mm")));
+      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
       printf(" %08x %8.3f %08x %08x %08x\n",
              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
@@ -1518,6 +1504,7 @@ lowranceusr4_parse_trail(int* trail_num)
   }
 
   /* Creation date/time, discard for now */
+  /* The date is a Julian day number, and the time is a unix timestamp. */
   int create_date = gbfgetint32(file_in);
   int create_time = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
@@ -1577,12 +1564,8 @@ lowranceusr4_parse_trail(int* trail_num)
     gbfgetint16(file_in);
     gbfgetc(file_in);
 
-    /* POSIX timestamp */
+    /* POSIX timestamp (a.k.a. UNIX Epoch) - seconds since Jan 1, 1970 */
     wpt_tmp->SetCreationTime(QDateTime::fromTime_t(gbfgetint32(file_in)));
-      QDateTime dt;
-      QTime t;
-      dt = wpt_tmp->GetCreationTime();
-      t  = wpt_tmp->GetCreationTime().time();
 
     /* Long/Lat */
     wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */
@@ -1591,7 +1574,7 @@ lowranceusr4_parse_trail(int* trail_num)
     if (global_opts.debug_level >= 2) {
       if (global_opts.debug_level == 99) {
         printf(MYNAME " parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
-      printf(" '%s %s'", qPrintable(dt.toString("yyyy/MM/dd")), qPrintable(t.toString("hh:mm")));
+        printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
       } else {
         printf(MYNAME " parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
                wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
@@ -1681,12 +1664,15 @@ data_read()
       printf(MYNAME " date string: '%s'\n", qPrintable(creation_date));
     }
 
-    /* AND date and time created values */
-    /* for now we won't use these for anything */
-    uint create_date = gbfgetint32(file_in);
-    (void) create_date;
-    uint create_time = gbfgetint32(file_in);
-    (void) create_time;
+    /* Creation date/time, discard for now */
+    /* The date is a Julian day number, and the time is a unix timestamp. */
+    int create_date = gbfgetint32(file_in);
+    int create_time = gbfgetint32(file_in);
+    if (global_opts.debug_level >= 1) {
+      QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
+      printf(MYNAME " creation date/time : '%s'\n", qPrintable(qdt.toString("yyyy-MM-dd hh:mm:ss AP")));
+    }
+
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
     (void) byte;
 
@@ -1701,7 +1687,6 @@ data_read()
     if (!comment.isEmpty() && global_opts.debug_level >= 1) {
       printf(MYNAME " content description: '%s'\n", qPrintable(comment));
     }
-
   }
 
   lowranceusr_parse_waypts();
@@ -1733,11 +1718,6 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   gbfputint32(Lon, file_out);
   gbfputint32(alt, file_out);
 
-  if (global_opts.debug_level > 2) {
-    /* print lat/lon/alt on one easily greppable line */
-    printf(MYNAME " waypt_disp: Lat = %d   Lon = %d   Alt = %d\n",Lat, Lon, alt);
-  }
-
   /* Try and make sure we have a name */
 // this kind of thing would probably be more readable like
 // name = blah.
@@ -1761,8 +1741,8 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 
   if (global_opts.debug_level > 2) {
     /* print lat/lon/alt on one easily greppable line */
-    printf(MYNAME " waypt_disp: '%s' Lat = %d   Lon = %d   Alt = %d\n",
-           qPrintable(wpt->shortname), Lat, Lon, alt);
+    printf(MYNAME " waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
+           qPrintable(wpt->shortname), wpt->latitude, wpt->longitude, wpt->altitude);
   }
 
   QByteArray name_qba = name.toLatin1();
@@ -1793,17 +1773,20 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
     gbfputint32(text_len, file_out);
   }
 
-  if (wpt->creation_time.toTime_t() > base_time_secs) {
-    Time = wpt->creation_time.toTime_t() - base_time_secs;
+  /* Waypoint creation time stored as seconds since UNIX Epoch (Jan 1, 1970) */
+  if ((Time = wpt->creation_time.toTime_t()) > base_time_secs) {
+    /* This should always be true */
+    /* Lowrance needs it as seconds since Jan 1, 2000 */
+    Time -= base_time_secs;
+    if (global_opts.debug_level >= 2) {
+      printf("creation_time %d, '%s'", (int)Time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
+    }
   } else {
+    /* If false, make sure it is an unknown time value */
     Time = 0;
-  }
-
-  if (global_opts.debug_level >= 2) {
-    time_t wpt_time = Time;
-    // NOTE: Newline added by ctime() to string
-    printf("base_time %d, creation_time %d, waypt_time %d (local) %s",
-           (int)base_time_secs, (int)wpt->creation_time.toTime_t(), (int)wpt_time, ctime(&wpt_time));
+    if (global_opts.debug_level >= 2) {
+      printf("creation_time UNKNOWN");
+    }
   }
 
   gbfputint32(Time, file_out);
