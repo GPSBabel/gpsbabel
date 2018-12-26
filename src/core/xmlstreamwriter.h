@@ -49,12 +49,10 @@ protected:
 class XmlStreamWriter : public QXmlStreamWriter
 {
 public:
-    explicit XmlStreamWriter(QString* string);
-
-    explicit XmlStreamWriter(QFile* f);
+  explicit XmlStreamWriter(QString* string);
+  explicit XmlStreamWriter(QFile* f);
 
   void writeStartDocument();
-  void writeOptionalAttribute(const QString& qualifiedName, const QString& value);
   void writeOptionalTextElement(const QString& qualifiedName, const QString& text);
 };
 

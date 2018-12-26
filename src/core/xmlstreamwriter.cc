@@ -88,14 +88,6 @@ void XmlStreamWriter::writeStartDocument()
   writeProcessingInstruction(QStringLiteral("xml version=\"1.0\" encoding=\"UTF-8\""));
 }
 
-// Dont emit the attribute if there's nothing interesting in it.
-void XmlStreamWriter::writeOptionalAttribute(const QString& qualifiedName, const QString& value)
-{
-  if (!value.isEmpty()) {
-    QXmlStreamWriter::writeAttribute(qualifiedName, value);
-  }
-}
-
 // Dont emit the element if there's nothing interesting in it.
 void XmlStreamWriter::writeOptionalTextElement(const QString& qualifiedName, const QString& text)
 {
