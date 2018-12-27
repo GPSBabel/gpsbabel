@@ -333,8 +333,10 @@ xcsv_parse_style_line(QString line)
 
     // This is pretty lazy way to parse write options.
     // They've very rarely used, so we'll go for simple.
-    if (tokens.size() > 4) {
-      QString options_string = tokens[3].simplified();
+    // We may have split the optional fourth and final field which can contain
+    // option[s], so look at all the remaining tokens.
+    for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
+      QString options_string = tokens[token_idx].simplified();
       if (options_string.contains("no_delim_before")) {
         options |= OPTIONS_NODELIM;
       }
