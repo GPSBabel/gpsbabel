@@ -169,6 +169,8 @@ static route_head* csv_track, *csv_route;
 static double utm_northing, utm_easting, utm_zone = 0;
 static char utm_zonec;
 static UrlLink* link_;
+static gpsbabel_optional::optional<bool> lat_dir_positive;
+static gpsbabel_optional::optional<bool> lon_dir_positive;
 #endif // CSVFMTS_ENABLED
 
 
@@ -956,7 +958,7 @@ gmsd_init(Waypoint* wpt)
 /*****************************************************************************/
 static void
 xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
-               route_head** trk)
+               route_head** trk, const int line_no)
 {
   const char* enclosure = "";
   geocache_data* gc_data = nullptr;
@@ -1060,10 +1062,24 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     break;
     /* DIRECTIONS **********************************************************/
   case XT_LAT_DIR:
-    /* latitude N/S.  Ignore on input for now */
+    /* latitude N/S. */
+    if (*s == 'n' || *s == 'N') {
+      lat_dir_positive = true;
+    } else if (*s == 's' || *s == 'S') {
+      lat_dir_positive = false;
+    } else {
+      warning("parse of string '%s' on line number %d as LAT_DIR failed.  Expected 'n', 'N', 's' or 'S'.\n", s, line_no);
+    }
     break;
   case XT_LON_DIR:
-    /* longitude E/W. Ingore on input for now */
+    /* longitude E/W. */
+    if (*s == 'e' || *s == 'E') {
+      lon_dir_positive = true; 
+    } else if (*s == 'w' || *s == 'W') {
+      lon_dir_positive = false;
+    } else {
+      warning("parse of string '%s' on line number %d as LON_DIR failed.  Expected 'e', 'E', 'w' or 'W'.\n", s, line_no);
+    }
     break;
     /* SPECIAL COORDINATES/GRID */
   case XT_MAP_EN_BNG:
@@ -1438,6 +1454,8 @@ xcsv_data_read()
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", CSTR(xcsv_file.description)? CSTR(xcsv_file.description) : "unknown");
       }
 
+      lat_dir_positive.reset();
+      lon_dir_positive.reset();
       int ifield_idx = 0;
 
       /* now rip the line apart, advancing the queue for each tear
@@ -1445,7 +1463,7 @@ xcsv_data_read()
        */
       while (s) {
         const field_map& fmp = xcsv_file.ifields.at(ifield_idx++);
-        xcsv_parse_val(s, wpt_tmp, fmp, &trk);
+        xcsv_parse_val(s, wpt_tmp, fmp, &trk, linecount);
 
         if (ifield_idx >= xcsv_file.ifields.size()) {
           /* we've wrapped the queue. so stop parsing! */
@@ -1457,6 +1475,15 @@ xcsv_data_read()
 
         s = csv_lineparse(nullptr, CSTR(xcsv_file.field_delimiter),
                           CSTR(xcsv_file.field_encloser), linecount);
+      }
+
+      // If XT_LAT_DIR(XT_LON_DIR) was an input field, and the latitude(longitude) is positive,
+      // assume the latitude(longitude) was the absolute value and take the sign from XT_LAT_DIR(XT_LON_DIR).
+      if (lat_dir_positive.has_value() && !lat_dir_positive.value() && (wpt_tmp->latitude > 0.0)) {
+        wpt_tmp->latitude = -wpt_tmp->latitude;
+      }
+      if (lon_dir_positive.has_value() && !lon_dir_positive.value() && (wpt_tmp->longitude > 0.0)) {
+        wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
       if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
