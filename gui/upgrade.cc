@@ -271,8 +271,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
       response = tr("A new version of GPSBabel is available.<br />"
         "Your version is %1 <br />"
         "The latest version is %2")
-          .arg(currentVersion_)
-          .arg(updateVersion);
+          .arg(currentVersion_, updateVersion);
       break;
     }
   }

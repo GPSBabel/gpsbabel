@@ -298,7 +298,6 @@ void MainWindow::loadLanguage(const QString& rLanguage)
     currLang_ = rLanguage;
     QLocale locale = QLocale(currLang_);
     QLocale::setDefault(locale);
-    QString languageName = QLocale::languageToString(locale.language());
 
     switchTranslator(translator_, QString("gpsbabelfe_%1.qm").arg(rLanguage));
     switchTranslator(translatorCore_, QString("gpsbabel__%1.qm").arg(rLanguage));
@@ -648,10 +647,10 @@ void MainWindow::setIndicatorLights(QLabel *label, const QString &type, int code
       s = tr("Input and output formats do not support %1").arg(type);
       break;
     case 1:
-      s = tr("Input does not support %1; output format supports %2").arg(type).arg(type);
+      s = tr("Input does not support %1; output format supports %1").arg(type);
       break;
     case 2:
-      s = tr("Input format supports %1; output format does not support %2").arg(type).arg(type);
+      s = tr("Input format supports %1; output format does not support %1").arg(type);
       break;
     case 3:
       s = tr("Both input and output formats support %1").arg(type);
