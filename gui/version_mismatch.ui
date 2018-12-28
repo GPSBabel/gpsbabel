@@ -51,7 +51,7 @@
      <item>
       <widget class="QLabel" name="ClVersion">
        <property name="toolTip">
-        <string notr="true" extracomment="Will be replaced by a versio nnumber at runtime.  Do not translate."/>
+        <string notr="true" extracomment="Will be replaced by a version number at runtime.  Do not translate."/>
        </property>
        <property name="text">
         <string/>
