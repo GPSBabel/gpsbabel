@@ -32,6 +32,7 @@
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
+#include "src/core/optional.h"
 #include "strptime.h"
 
 #include <cmath>

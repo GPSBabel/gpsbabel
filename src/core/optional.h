@@ -23,6 +23,9 @@
 // 1. 'gpsbabel_optional::optional' to 'std::optional',
 // 2. 'include "optional.h"' becomes 'include <optional>'.
 
+#ifndef GPSBABEL_OPTIONAL_H_INCLUDED_
+#define GPSBABEL_OPTIONAL_H_INCLUDED_
+
 #if __cplusplus >= 201703L
 #warning "using std::optional"
 #include <optional>
@@ -250,3 +253,4 @@ constexpr bool operator>=(const T& value, const optional<U>& opt)
 } // namespace
 #endif
 
+#endif // GPSBABEL_OPTIONAL_H_INCLUDED_
