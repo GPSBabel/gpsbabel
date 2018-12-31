@@ -473,7 +473,9 @@ fit_parse_data(fit_message_def* def, int time_offset)
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
           }
-          alt = val;
+          if (val != 0xffff) {
+              alt = val;
+          }
           break;
         case kFieldHeartRate:
           if (global_opts.debug_level >= 7) {
@@ -497,7 +499,9 @@ fit_parse_data(fit_message_def* def, int time_offset)
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: speed=%d\n", MYNAME, val);
           }
-          speed = val;
+          if (val != 0xffff) {
+              speed = val;
+          }
           break;
         case kFieldPower:
           if (global_opts.debug_level >= 7) {
@@ -515,13 +519,17 @@ fit_parse_data(fit_message_def* def, int time_offset)
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: enhanced_speed=%d\n", MYNAME, val);
           }
-          speed = val;
+          if (val != 0xffff) {
+              speed = val;
+          }
           break;
         case kFieldEnhancedAltitude:
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: enhanced_altitude=%d\n", MYNAME, val);
           }
-          alt = val;
+          if (val != 0xffff) {
+              alt = val;
+          }
           break;
         default:
           if (global_opts.debug_level >= 1) {
