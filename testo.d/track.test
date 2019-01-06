@@ -39,5 +39,18 @@ compare ${REFERENCE}/track/seg2trk_test-seg.gpx ${TMPDIR}/seg2trk_test-seg.gpx
 gpsbabel -i gpx -f ${REFERENCE}/track/split-raw.gpx -x track,merge,split=1m -o gpx -F ${TMPDIR}/split-raw-split.gpx
 compare ${REFERENCE}/track/split-split.gpx ${TMPDIR}/split-raw-split.gpx
 
-gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=+5h,name=LOG-20020527,start=20020528000242,stop=20020528000450,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move.gpx
-compare ${REFERENCE}/track/trackfilter-move.gpx ${TMPDIR}/trackfilter-move.gpx
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=+5h,name=LOG-20020527,start=20020528000242,stop=20020528000450,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-h.gpx
+compare ${REFERENCE}/track/trackfilter-move-h.gpx ${TMPDIR}/trackfilter-move-h.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=5s,name=LOG-20020527,start=20020527190247,stop=20020527190455,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-s.gpx
+compare ${REFERENCE}/track/trackfilter-move-s.gpx ${TMPDIR}/trackfilter-move-s.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=5d,name=LOG-20020527,start=20020601190242,stop=20020601190450,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-d.gpx
+compare ${REFERENCE}/track/trackfilter-move-d.gpx ${TMPDIR}/trackfilter-move-d.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=-5m,name=LOG-20020527,start=20020527185742,stop=20020527185950,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-m.gpx
+compare ${REFERENCE}/track/trackfilter-move-m.gpx ${TMPDIR}/trackfilter-move-m.gpx
+
+# speed with msec
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/utm_subsecond_track.csv -x track,speed -o unicsv,utc -F ${TMPDIR}/utm_subsecond_track~csv.csv
+compare ${REFERENCE}/track/utm_subsecond_track~csv.csv ${TMPDIR}/utm_subsecond_track~csv.csv

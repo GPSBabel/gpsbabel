@@ -15,8 +15,7 @@ splitting them back apart per day thusly: </para>
          between two points is greater than this parameter. The
          interval must be numeric and can be int days, hours, minutes
          or seconds, expressed as one of the character "d", "h", "m",
-         or "s".  If no trailing character is present, the units are
-         assumed to be in seconds.
+         or "s".
 </para>
          <para> For example, to split a track based on an four hour
          interval, use this:</para>
