@@ -181,7 +181,7 @@ private:
   int timeless_pts = 0;
   int opt_interval = 0;
   int opt_distance = 0;
-  char need_time;		/* initialized within trackfilter_init */
+  bool need_time;		/* initialized within trackfilter_init */
 
   int trackfilter_opt_count();
   qint64 trackfilter_parse_time_opt(const char* arg);
@@ -221,7 +221,7 @@ private:
 
   faketime_t trackfilter_faketime_check(const char* timestr);
   void trackfilter_faketime();             /* returns number of track points left after filtering */
-  int trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
+  bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
 
   void trackfilter_segment_head(const route_head* rte);
 

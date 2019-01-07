@@ -75,7 +75,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   qint64 result;
 
-  QRegularExpression re("^([+-]?\\d+)([dhms])$");
+  QRegularExpression re("^([+-]?\\d+)([dhms])$", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
@@ -213,7 +213,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
     if (!wpt->creation_time.isValid()) {
       timeless_pts++;
     }
-    if (!(opt_merge && opt_discard) && (need_time != 0) && (!wpt->creation_time.isValid())) {
+    if (!(opt_merge && opt_discard) && need_time && (!wpt->creation_time.isValid())) {
       fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
     }
@@ -225,7 +225,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
       track_list[track_ct].last_time = wpt->GetCreationTime();
     }
 
-    if ((need_time != 0) && (prev != nullptr) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
+    if (need_time && (prev != nullptr) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
       if (opt_merge == nullptr) {
         QString t1 = prev->CreationTimeXML();
         QString t2 = wpt->CreationTimeXML();
@@ -446,7 +446,7 @@ void TrackFilter::trackfilter_split()
 
   opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
   if (opt_interval != 0) {
-    QRegularExpression re("^([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+))([dhms])$");
+    QRegularExpression re("^([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+))([dhms])$", QRegularExpression::CaseInsensitiveOption);
     assert(re.isValid());
     QRegularExpressionMatch match = re.match(opt_split);
     if (match.hasMatch()) {
@@ -482,7 +482,7 @@ void TrackFilter::trackfilter_split()
 
   opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
   if (opt_distance != 0) {
-    QRegularExpression re("^([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+))([km])$");
+    QRegularExpression re("^([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+))([km])$", QRegularExpression::CaseInsensitiveOption);
     assert(re.isValid());
     QRegularExpressionMatch match = re.match(opt_sdistance);
     if (match.hasMatch()) {
@@ -918,7 +918,7 @@ void TrackFilter::trackfilter_faketime()
   }
 }
 
-int TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
+bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
 {
   // We use a simpler (non great circle) test for lat/lon here as this
   // is used for keeping the 'bookends' of non-moving points.
@@ -1010,7 +1010,7 @@ void TrackFilter::init()
               );
   /* in case of a formated title we also need valid timestamps */
   if ((opt_title != nullptr) && (strchr(opt_title, '%') != nullptr)) {
-    need_time = 1;
+    need_time = true;
   }
 
   track_ct = 0;
@@ -1153,17 +1153,17 @@ void TrackFilter::process()
     }
   }
 
-  int something_done = 0;
+  bool something_done = false;
 
   if ((opt_pack != nullptr) || (opts == -1)) {	/* call our default option */
     trackfilter_pack();
-    something_done = 1;
+    something_done = true;
   } else if (opt_merge != nullptr) {
     trackfilter_merge();
-    something_done = 1;
+    something_done = true;
   }
 
-  if ((something_done == 1) && (--opts <= 0)) {
+  if (something_done && (--opts <= 0)) {
     if (opt_title != nullptr) {
       trackfilter_title();
     }
