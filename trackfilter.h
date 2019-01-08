@@ -78,6 +78,7 @@ private:
   char* opt_faketime = nullptr;
   char* opt_discard = nullptr;
   char* opt_minpoints = nullptr;
+  int minimum_points{0};
 
   arglist_t args[19] = {
     {
@@ -169,25 +170,18 @@ private:
     ARG_TERMINATOR
   };
 
-  struct trkflt_t {
-    route_head* track{nullptr};
-    QDateTime first_time;
-    QDateTime last_time;
-  };
-
-  trkflt_t* track_list = nullptr;
-  int track_ct = 0;
-  int track_pts = 0;
-  int timeless_pts = 0;
+  QList<route_head*> track_list;
   int opt_interval = 0;
   int opt_distance = 0;
   bool need_time;		/* initialized within trackfilter_init */
 
   int trackfilter_opt_count();
   qint64 trackfilter_parse_time_opt(const char* arg);
-  static int trackfilter_init_qsort_cb(const void* a, const void* b);
-  static int trackfilter_merge_qsort_cb(const void* a, const void* b);
+  static bool trackfilter_init_sort_cb(const route_head* ha, const route_head* hb);
+  static bool trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb);
   fix_type trackfilter_parse_fix(int* nsats);
+  static QDateTime trackfilter_get_first_time(const route_head* track);
+  static QDateTime trackfilter_get_last_time(const route_head* track);
   void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
   void trackfilter_minpoint_list_cb(const route_head* track);
 
@@ -207,7 +201,7 @@ private:
   void trackfilter_synth();
 
   QDateTime trackfilter_range_check(const char* timestr);
-  int trackfilter_range();		/* returns number of track points left after filtering */
+  void trackfilter_range();
 
   void trackfilter_seg2trk();
 
