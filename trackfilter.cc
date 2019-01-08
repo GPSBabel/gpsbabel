@@ -191,8 +191,8 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
 
   if (opt_name != nullptr) {
     if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
-      QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-        Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+      QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
         track_del_wpt(const_cast<route_head*>(track), wpt);
         delete wpt;
       }
@@ -206,10 +206,10 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
   int i = 0;
   Waypoint* prev = nullptr;
 
-  QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
     track_pts++;
 
-    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    auto wpt = reinterpret_cast<Waypoint*>(elem);
     if (!wpt->creation_time.isValid()) {
       timeless_pts++;
     }
@@ -288,7 +288,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const QDateT
     if (track->rte_waypt_ct == 0) {
       dt = default_time;
     } else {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>QUEUE_FIRST((queue*)&track->waypoint_list);
+      auto wpt = reinterpret_cast<Waypoint*>QUEUE_FIRST(&track->waypoint_list);
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
@@ -345,8 +345,8 @@ void TrackFilter::trackfilter_pack()
     queue* elem, *tmp;
     route_head* curr = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&curr->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       track_del_wpt(curr, wpt);
       track_add_wpt(master, wpt);
     }
@@ -377,7 +377,7 @@ void TrackFilter::trackfilter_merge()
   int j = 0;
   for (i = 0; i < track_ct; i++) {	/* put all points into temp buffer */
     route_head* track = track_list[i].track;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
       wpt = reinterpret_cast<Waypoint*>(elem);
       if (wpt->creation_time.isValid()) {
         buff[j] = new Waypoint(*wpt);
@@ -516,7 +516,7 @@ void TrackFilter::trackfilter_split()
   Waypoint** buff = (Waypoint**) xcalloc(count, sizeof(*buff));
 
   i = 0;
-  QUEUE_FOR_EACH((queue*)&master->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH(&master->waypoint_list, elem, tmp) {
     wpt = reinterpret_cast<Waypoint*>(elem);
     buff[i++] = wpt;
   }
@@ -601,8 +601,8 @@ void TrackFilter::trackfilter_move()
 
   for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       wpt->creation_time = wpt->creation_time.addSecs(delta);
     }
 
@@ -631,8 +631,8 @@ void TrackFilter::trackfilter_synth()
   for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
     bool first = true;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       if (opt_fix) {
         wpt->fix = fix;
         if (wpt->sat == 0) {
@@ -740,8 +740,8 @@ int TrackFilter::trackfilter_range()		/* returns number of track points left aft
   for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       bool inside;
       if (wpt->creation_time.isValid()) {
         bool after_start = !start.isValid() || (wpt->GetCreationTime() >= start);
@@ -787,8 +787,8 @@ void TrackFilter::trackfilter_seg2trk()
     int trk_seg_num = 1;
     bool first = true;
 
-    QUEUE_FOR_EACH((queue*)&src->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&src->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       if (wpt->wpt_flags.new_trkseg && !first) {
 
         dest = route_head_alloc();
@@ -810,7 +810,7 @@ void TrackFilter::trackfilter_seg2trk()
        * point.
        */
       if (dest) {
-        int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+        unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
         wpt->wpt_flags.new_trkseg = 0;
         track_del_wpt(src, wpt);
         wpt->wpt_flags.new_trkseg = orig_new_trkseg;
@@ -834,11 +834,10 @@ void TrackFilter::trackfilter_trk2seg()
     route_head* curr = track_list[i].track;
 
     bool first = true;
-    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&curr->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
 
-
-      int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+      unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
       wpt->wpt_flags.new_trkseg = 0;
       track_del_wpt(curr, wpt);
       wpt->wpt_flags.new_trkseg = orig_new_trkseg;
@@ -907,8 +906,8 @@ void TrackFilter::trackfilter_faketime()
   for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
 
       if (!wpt->creation_time.isValid() || faketime.force) {
         wpt->creation_time = faketime.start;
@@ -952,7 +951,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   const double ktoo_close = 0.000005;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+    auto wpt = reinterpret_cast<Waypoint*>(elem);
     if (index > 0) {
       double cur_dist = gcdist(RAD(prev_wpt->latitude),
                                RAD(prev_wpt->longitude),
@@ -965,7 +964,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
       if (cur_dist < ktoo_close) {
         if (wpt != reinterpret_cast<Waypoint*>QUEUE_LAST(&rte->waypoint_list)) {
-          Waypoint* next_wpt = reinterpret_cast<Waypoint*>QUEUE_NEXT(&wpt->Q);
+          auto next_wpt = reinterpret_cast<Waypoint*>QUEUE_NEXT(&wpt->Q);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
             track_del_wpt(const_cast<route_head*>(rte), wpt);
