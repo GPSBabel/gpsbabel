@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="0.000000000" minlon="2.999550663" maxlat="0.000000000" maxlon="3.000943608"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="0.000000000" lon="2.999550663">
+        <time>2010-01-01T00:00:00Z</time>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="2.999649517">
+        <time>2010-01-01T00:00:00.200Z</time>
+        <speed>55.021885</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="2.999757358">
+        <time>2010-01-01T00:00:00.400Z</time>
+        <speed>60.024025</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="2.999874186">
+        <time>2010-01-01T00:00:00.600Z</time>
+        <speed>65.026169</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000000000">
+        <time>2010-01-01T00:00:00.800Z</time>
+        <speed>70.027756</speed>
+      </trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="0.000000000" lon="3.000134801">
+        <time>2010-01-01T00:00:01Z</time>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000278589">
+        <time>2010-01-01T00:00:01.200Z</time>
+        <speed>80.032036</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000431364">
+        <time>2010-01-01T00:00:01.400Z</time>
+        <speed>85.034180</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000593125">
+        <time>2010-01-01T00:00:01.600Z</time>
+        <speed>90.035759</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000763874">
+        <time>2010-01-01T00:00:01.800Z</time>
+        <speed>95.038460</speed>
+      </trkpt>
+      <trkpt lat="0.000000000" lon="3.000943608">
+        <time>2010-01-01T00:00:02Z</time>
+        <speed>100.039490</speed>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

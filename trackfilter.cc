@@ -350,17 +350,18 @@ void TrackFilter::trackfilter_merge()
       queue* elem, *tmp;
       QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
         auto wpt = reinterpret_cast<Waypoint*>(elem);
+        track_del_wpt(track, wpt); /* copies any new_trkseg flag forward, and clears new_trkseg flag. */
         if (wpt->creation_time.isValid()) {
-          buff.append(new Waypoint(*wpt));
           // we will put the merged points in one track segment,
           // as it isn't clear how track segments in the original tracks
           // should relate to the merged track.
+          // track_del_wpt cleared new_trkseg flag for wpt.
           // track_add_wpt will set new_trkseg for the first point
-          // after the sort.
-          wpt->wpt_flags.new_trkseg = 0;
+          // added to a track.
+          buff.append(wpt);
+        } else {
+          delete wpt;
         }
-        track_del_wpt(track, wpt); // copies any new_trkseg flag forward.
-        delete wpt;
       }
       if (it != track_list.begin()) {
         track_del_head(track);

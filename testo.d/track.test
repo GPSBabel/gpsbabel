@@ -16,6 +16,9 @@ compare ${REFERENCE}/track/trackfilter-sdistance.gpx ${TMPDIR}/trackfilter2.gpx
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
 compare ${REFERENCE}/track/trackfilter-sdistance2.gpx ${TMPDIR}/trackfilter-sdistance2.gpx
 
+gpsbabel -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,title=LOG-%FT%TZ -o gpx -F ${TMPDIR}/trackfilter3.gpx
+compare ${REFERENCE}/track/trackfilter3.gpx ${TMPDIR}/trackfilter3.gpx
+
 # Exercise the 'faketime' filter.  The middle of the three points has
 # time so we can exercise the 'forced' option, too.
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=20100506060000+5 -o gpx -F ${TMPDIR}/ft.gpx 
@@ -50,6 +53,14 @@ compare ${REFERENCE}/track/trackfilter-move-d.gpx ${TMPDIR}/trackfilter-move-d.g
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=-5m,name=LOG-20020527,start=20020527185742,stop=20020527185950,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-m.gpx
 compare ${REFERENCE}/track/trackfilter-move-m.gpx ${TMPDIR}/trackfilter-move-m.gpx
+
+# actually test a merge
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_merge.gpx -x track,merge -x track,speed -o gpx -F ${TMPDIR}/trackfilter_merge~gpx.gpx
+compare ${REFERENCE}/track/trackfilter_merge~gpx.gpx ${TMPDIR}/trackfilter_merge~gpx.gpx
+
+# test trk2seg
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_trk2seg.gpx -x track,speed,trk2seg -o gpx -F ${TMPDIR}/trackfilter_trk2seg~gpx.gpx
+compare ${REFERENCE}/track/trackfilter_trk2seg~gpx.gpx ${TMPDIR}/trackfilter_trk2seg~gpx.gpx
 
 # speed with msec
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/utm_subsecond_track.csv -x track,speed -o unicsv,utc -F ${TMPDIR}/utm_subsecond_track~csv.csv
