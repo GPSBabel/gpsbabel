@@ -1012,6 +1012,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
             track_del_wpt(const_cast<route_head*>(rte), wpt);
+            delete wpt;
             continue;
           }
         }

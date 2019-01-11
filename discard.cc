@@ -91,17 +91,19 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
     switch (what) {
     case wptdata:
       waypt_del(waypointp);
+      delete waypointp;
       break;
     case trkdata:
       track_del_wpt(head, waypointp);
+      delete waypointp;
       break;
     case rtedata:
       route_del_wpt(head, waypointp);
+      delete waypointp;
       break;
     default:
       return;
     }
-    delete waypointp;
   }
 }
 

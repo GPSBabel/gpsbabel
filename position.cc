@@ -87,9 +87,11 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
               break;
             case trkdata:
               track_del_wpt(cur_rte, comp[j]);
+              delete comp[j];
               break;
             case rtedata:
               route_del_wpt(cur_rte, comp[j]);
+              delete comp[j];
               break;
             default:
               break;
@@ -103,17 +105,19 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
         switch (qtype) {
         case wptdata:
           waypt_del(comp[i]);
+          delete comp[i];
           break;
         case trkdata:
           track_del_wpt(cur_rte, comp[i]);
+          delete comp[i];
           break;
         case rtedata:
           route_del_wpt(cur_rte, comp[i]);
+          delete comp[i];
           break;
         default:
           break;
         }
-        delete comp[i];
       }
     }
   }
