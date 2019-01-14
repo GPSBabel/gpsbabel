@@ -245,5 +245,4 @@ color_to_bbggrr(const char* opt_color)
   }
 
   fatal("unrecognized color name %s\n", opt_color);
-  return -1;
 }

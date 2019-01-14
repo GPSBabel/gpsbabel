@@ -606,9 +606,6 @@
     <ClCompile Include="xcsv.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xhtmlent.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xmlgeneric.cc">
       <Filter>Source Files</Filter>
     </ClCompile>

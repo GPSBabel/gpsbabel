@@ -252,10 +252,10 @@ serial_write_byte(uint8_t byte)
 static int
 recv_byte()
 {
-  int result=0;
+  int result = 0;
   // Read from serial or dumpfile
   if (!opt_input_dump_file) {
-    result=serial_recv_byte();
+    result = serial_recv_byte();
   } else {
     int bytes = gbfread(&result, 1, 1, in_file);
     is_fatal((bytes != 1), MYNAME ": read error");
@@ -536,14 +536,14 @@ track_read()
       if (showlist || global_opts.debug_level > 1) {
         printf("Track[%02i]: %02d-%02d-%02d ", i,header.dateStart.Year,header.dateStart.Month, header.dateStart.Day);
         printf("%02d:%02d:%02d ", header.timeStart.Hour,header.timeStart.Minute, header.timeStart.Second);
-        int time_s=header.TotalTime / 10;
-        int time_h=time_s/(60*60);
-        time_s-=time_h*(60*60);
-        int time_m=time_s/60;
-        time_s-=time_m*60;
-        printf("Points:%6d Time:%02d:%02d:%02d Dist:%9dm LapCnts:%5d ",	header.TotalPoint, time_h,time_m,time_s, header.TotalDistance, header.LapCnts);
-        printf("Index/StartPt:%d ", header.gh_ptrec.Index);
-        printf("LapIndex/EndPt:%d ", header.gh_laprec.LapIndex);
+        int time_s = header.TotalTime / 10;
+        int time_h = time_s / (60 * 60);
+        time_s -= time_h * (60 * 60);
+        int time_m = time_s / 60;
+        time_s -= time_m * 60;
+        printf("Points:%6u Time:%02d:%02d:%02d Dist:%9um LapCnts:%5u ",	header.TotalPoint, time_h,time_m,time_s, header.TotalDistance, header.LapCnts);
+        printf("Index/StartPt:%u ", header.gh_ptrec.Index);
+        printf("LapIndex/EndPt:%u ", header.gh_laprec.LapIndex);
         printf("DataType:0x%x\n", header.DataType);
       }
 
@@ -607,9 +607,9 @@ track_read()
         if (global_opts.debug_level > 1) {
           printf("\nTrainData:%02d-%02d-%02d ", db_train.dateStart.Year,db_train.dateStart.Month, db_train.dateStart.Day);
           printf("%02d:%02d:%02d ", db_train.timeStart.Hour, db_train.timeStart.Minute, db_train.timeStart.Second);
-          printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", db_train.TotalPoint,db_train.TotalTime / 10,db_train.TotalDistance, db_train.LapCnts);
-          printf("Index/StartPt:%d ", db_train.gh_ptrec.Index);
-          printf("LapIndex/EndPt:%d ", db_train.gh_laprec.LapIndex);
+          printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5u ", db_train.TotalPoint,db_train.TotalTime / 10,db_train.TotalDistance, db_train.LapCnts);
+          printf("Index/StartPt:%u ", db_train.gh_ptrec.Index);
+          printf("LapIndex/EndPt:%u ", db_train.gh_laprec.LapIndex);
           printf("MultiSport:0x%x ", db_train.MultiSport);
         }
         int total_laps = db_train.LapCnts;
@@ -646,7 +646,7 @@ track_read()
           if (global_opts.debug_level > 1) {
             printf("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
             printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-            printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", header.TotalPoint,header.TotalTime / 10, header.TotalDistance, header.LapCnts);
+            printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5u ", header.TotalPoint,header.TotalTime / 10, header.TotalDistance, header.LapCnts);
             printf("Index/StartPt:%d ", header.gh_ptrec.Index);
             printf("LapIndex/EndPt:%d ", header.gh_laprec.LapIndex);
             printf("DataType:0x%x\n", header.DataType);
@@ -693,7 +693,7 @@ track_read()
               printf(" Cadns avg:%d best:%d", db_lap.AvgCadns, db_lap.BestCadns);
               printf(" Power avg:%d Max:%d", db_lap.AvgPower, db_lap.MaxPower);
               printf(" MultisportIndex:%d", db_lap.MultiSportIndex);
-              printf(" StartPt:%d EndPt:%d\n", db_lap.StartPt, db_lap.EndPt);
+              printf(" StartPt:%u EndPt:%u\n", db_lap.StartPt, db_lap.EndPt);
             }
           }
           free(track_payload);
@@ -734,8 +734,8 @@ track_read()
               printf("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
               printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
               printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
-              printf("StartPt:%d ", header.gh_ptrec.StartPt);
-              printf("EndPt:%d ", header.gh_laprec.EndPt);
+              printf("StartPt:%u ", header.gh_ptrec.StartPt);
+              printf("EndPt:%u ", header.gh_laprec.EndPt);
               printf("DataType:0x%x\n", header.DataType);
             }
 
@@ -768,12 +768,11 @@ track_read()
               if (global_opts.debug_level > 1) {
                 printf("     recpoint[%2d] Lat:%f Long:%f Alt:%dm", recpoint,(double)((int32_t) point.Latitude) / 1000000.0,(double)((int32_t) point.Longitude) / 1000000.0, point.Altitude);
                 printf(" Speed:%f HR:%d",(double) point.Speed / 100, point.HeartRate);
-                printf(" Time:%d Cadence:%d", point.IntervalTime, point.Cadence);
+                printf(" Time:%u Cadence:%d", point.IntervalTime, point.Cadence);
                 printf(" PwrCadense:%d Power:%d\n", point.PwrCadence,point.Power);
               }
 
               Waypoint* wpt = new Waypoint(); // waypt_new();
-              //wpt->creation_time = mkgmtime(&gpstime);
               wpt->SetCreationTime(gpsbabeltime);
               wpt->longitude = ((int32_t) point.Longitude) / 1000000.0;
               wpt->latitude = ((int32_t) point.Latitude) / 1000000.0;
@@ -847,7 +846,7 @@ ff_vecs_t globalsat_sport_vecs = {
 };
 
 // This reads from a RAW dump bile from a watch
-// Usefull for testing generata a dumpfile with
+// Useful for testing generata a dumpfile with
 // gpsbabel -i globalsat,dump-file=<dumpfilename> -f /dev/ttyUSB0 -o gpx,garminextensions -F <1:st gpx file name>
 // gpsbabel -i globalsat-bin -f <dumpfilename> -o gpx,garminextensions -F <2:nd gpx file name>
 ff_vecs_t globalsat_sport_fvecs = {
