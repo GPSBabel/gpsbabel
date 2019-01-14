@@ -290,17 +290,15 @@ read_word()
  */
 static bool
 read_packet(unsigned type, void* payload,
-            unsigned minlength, unsigned maxlength,
+            int minlength, int maxlength,
             bool handle_nak)
 {
-  unsigned      size;
-  unsigned      checksum;
-
   if (read_word() != 0xa2a0) {
     fatal(MYNAME ": Protocol error: Bad packet header."
           " Is your NaviGPS in NAVILINK mode?\n");
   }
 
+  int size;
   if ((size = read_word()) <= minlength) {
     fatal(MYNAME ": Protocol error: Packet too short\n");
   }
@@ -323,6 +321,7 @@ read_packet(unsigned type, void* payload,
     fatal(MYNAME ": Protocol error: Bad packet type (expected 0x%02x but got 0x%02x)\n", type, data[0]);
   }
 
+  unsigned checksum;
   if ((checksum = read_word()) != navilink_checksum_packet(data, size)) {
     fatal(MYNAME ": Checksum error - expected %x got %x\n",
           navilink_checksum_packet(data, size), checksum);

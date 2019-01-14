@@ -1247,7 +1247,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
   cpt = (struct GPS_SCourse_Point**) xrealloc(cpt, (n_cpt+n_wpt) * sizeof(GPS_PCourse_Point));
   for (i=0; i<n_wpt; i++) {
     double dist, min_dist = DBL_MAX;
-    int min_dist_idx = 0, trk_idx = 0, min_dist_trk_idx = 0;
+    uint32 min_dist_idx = 0, trk_idx = 0, min_dist_trk_idx = 0;
 
     /* Find closest track point */
     for (j=first_new_ctk; j<n_ctk; j++) {

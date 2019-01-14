@@ -40,7 +40,7 @@ set(ALL_FMTS
   saroute.cc navicache.cc psitrex.cc delgpl.cc
   ozi.cc text.cc html.cc netstumbler.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc xhtmlent.cc lowranceusr.cc an1.cc tomtom.cc
+  vcf.cc lowranceusr.cc an1.cc tomtom.cc
   tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
   ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
   yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
@@ -230,6 +230,7 @@ if (APPLE)
     mac/libusb/usb.h
     mac/libusb/usbi.h
   )
+  add_compile_options(-Wall -Wsign-compare)
 endif()
 
 set(SOURCES

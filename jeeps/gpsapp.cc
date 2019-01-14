@@ -1666,7 +1666,6 @@ static void GPS_D109_Get(GPS_PWay* way, UC* s, int protoid)
   p += 4; /* Skip over "outbound link ete in seconds */
   if (protoid == 110) {
     float gps_temp;
-    int gps_time;
     gps_temp = GPS_Util_Get_Float(p);
     p+=4;
     if (gps_temp <= 1.0e24) {
@@ -1674,7 +1673,7 @@ static void GPS_D109_Get(GPS_PWay* way, UC* s, int protoid)
       (*way)->temperature = gps_temp;
     }
 
-    gps_time = GPS_Util_Get_Uint(p);
+    uint32 gps_time = GPS_Util_Get_Uint(p);
     p+=4;
     /* The spec says that 0xffffffff is unknown, but the 60CSX with
      * firmware 2.5.0 writes zero.

@@ -16,9 +16,6 @@
 #define MAX_GPS_PACKET_SIZE	1024
 #define GPS_TIME_OUT		5
 
-#define gpsTrue  1
-#define gpsFalse 0
-
 #define DLE 0x10
 #define ETX 0x03
 
@@ -243,10 +240,10 @@ typedef struct GPS_SCourse_Point {
 } GPS_OCourse_Point, *GPS_PCourse_Point;
 
 typedef struct GPS_SCourse_Limits {
-  uint32 max_courses;
-  uint32 max_course_laps;
-  uint32 max_course_pnt;
-  uint32 max_course_trk_pnt;
+  int32 max_courses;
+  int32 max_course_laps;
+  int32 max_course_pnt;
+  int32 max_course_trk_pnt;
 } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
 
