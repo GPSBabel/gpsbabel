@@ -11,7 +11,6 @@
 #define SERIAL_ERROR   -4
 #define MEMORY_ERROR   -5
 #define GPS_UNSUPPORTED -6
-#define INPUT_ERROR -7
 
 #define MAX_GPS_PACKET_SIZE	1024
 #define GPS_TIME_OUT		5
