@@ -216,14 +216,25 @@ rd_buf(const uint8_t* buf, int len)
   return res_OK;
 }
 
-static unsigned int
+static int
 rd_word()
 {
   int errors = 5;		/* allow this many errors */
+  int c;
   uint8_t buffer[2];
 
-  buffer[0] = rd_char(&errors);
-  buffer[1] = rd_char(&errors);
+  c = rd_char(&errors);
+  if (c < 0) {
+    db(1, MYNAME ": rd_word(): Got error: %d\n", c);
+    return -1;
+  }
+  buffer[0] = c;
+  c = rd_char(&errors);
+  if (c < 0) {
+    db(1, MYNAME ": rd_word(): Got error: %d\n", c);
+    return -1;
+  }
+  buffer[1] = c;
   /*	if (rd_buf(buffer, 2) != res_OK) {
   		db(1, MYNAME ": rd_word(): Read error\n");
   		return res_ERROR;
@@ -273,7 +284,7 @@ skytraq_rd_msg(const void* payload, unsigned int len)
 {
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, state;
-  unsigned int rcv_len;
+  int rcv_len;
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);
@@ -290,19 +301,20 @@ skytraq_rd_msg(const void* payload, unsigned int len)
     return res_ERROR;
   }
 
-  if ((rcv_len = rd_word()) < len) {
+  if ((rcv_len = rd_word()) < (signed int)len) {
     if (rcv_len >= 0) {	/* negative values indicate receive errors */
-      db(1, MYNAME ": Received message too short (got %i bytes, expected %i)\n",
+      db(1, MYNAME ": Received message too short (got %i bytes, expected %u)\n",
          rcv_len, len);
       return res_PROTOCOL_ERR;
     }
     return res_ERROR;
   }
+  /* at this point, we have rcv_len >= len >= 0 */
 
-  db(2, "Receiving message with %i bytes of payload (expected >=%i)\n", rcv_len, len);
-  rd_buf((const unsigned char*) payload, MIN(rcv_len, len));
+  db(2, "Receiving message with %i bytes of payload (expected >=%u)\n", rcv_len, len);
+  rd_buf((const unsigned char*) payload, MIN((unsigned int)rcv_len, len));
 
-  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN(rcv_len, len));
+  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN((unsigned int)rcv_len, len));
   for (i = 0; i < rcv_len-len; i++) {
     c = rd_char(&errors);
     calc_cs ^= c;
