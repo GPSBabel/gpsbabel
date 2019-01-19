@@ -2,7 +2,7 @@
 
     Serial download of track data from GPS loggers with Skytraq chipset.
 
-    Copyright (C) 2008-2012  Mathias Adam, m.adam (at) adamis.de
+    Copyright (C) 2008-2019  Mathias Adam, m.adam (at) adamis.de
 
     2008         J.C Haessig, jean-christophe.haessig (at) dianosis.org
     2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
@@ -70,6 +70,7 @@ static char* opt_no_output = nullptr;		/* disable output? (0/1) */
 static char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
 static char* opt_configure_logging = nullptr;
 static char* opt_gps_utc_offset = nullptr;
+static char* opt_gps_week_rollover = nullptr;
 
 static
 arglist_t skytraq_args[] = {
@@ -117,6 +118,10 @@ arglist_t skytraq_args[] = {
     "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
+  {
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (<0: best guess)",
+    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
   ARG_TERMINATOR,
 };
 
@@ -133,6 +138,10 @@ arglist_t skytraq_fargs[] = {
   {
     "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
+  {
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (<0: best guess)",
+    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -580,12 +589,12 @@ static time_t
 gpstime_to_timet(int week, int sec)
 {
   /* Notes:
-   *   * assumes we're between the 1st and 2nd week rollover
-   *     (i.e. between 22 Aug 1999 and 7 April 2019), so this
-   *     should be taken care of before the next rollover...
+   *   * week rollover period can be specified using option
+   *     gps-week-rollover, otherwise input timestamps are
+   *     assumed to be within previous 1024 weeks from today
    *   * list of leap seconds taken from
    *     <http://maia.usno.navy.mil/ser7/tai-utc.dat>
-   *     as of 2012-10-12. Please update when necessary.
+   *     as of 2019-01-19. Please update when necessary.
    *     Announcement of leap seconds:
    *     <http://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat>
    *   * leap seconds of 1999 JAN  1 and before are not reflected
@@ -594,7 +603,13 @@ gpstime_to_timet(int week, int sec)
    *     (i.e. sec >= 7*24*3600 = 604800 is allowed)
    */
   time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
-  gps_timet += (week+1024)*7*SECONDS_PER_DAY + sec;
+
+  int week_rollover = atoi(opt_gps_week_rollover);
+  if (week_rollover < 0) {
+    int current_week = (time(NULL)-gps_timet)/(7*SECONDS_PER_DAY);
+    week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
+  }
+  gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
 
   int override = atoi(opt_gps_utc_offset);
   if (override) {
