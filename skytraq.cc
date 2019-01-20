@@ -183,7 +183,7 @@ rd_char(int* errors)
 }
 
 static int
-rd_buf(const uint8_t* buf, int len)
+rd_buf(uint8_t* buf, int len)
 {
   char dump[16*3+16+2];
 
@@ -289,7 +289,7 @@ skytraq_calc_checksum(const unsigned char* buf, int len)
 }
 
 static int
-skytraq_rd_msg(const void* payload, unsigned int len)
+skytraq_rd_msg(void* payload, unsigned int len)
 {
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, state;
@@ -321,9 +321,9 @@ skytraq_rd_msg(const void* payload, unsigned int len)
   /* at this point, we have rcv_len >= len >= 0 */
 
   db(2, "Receiving message with %i bytes of payload (expected >=%u)\n", rcv_len, len);
-  rd_buf((const unsigned char*) payload, MIN((unsigned int)rcv_len, len));
+  rd_buf((uint8_t*) payload, len);
 
-  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN((unsigned int)rcv_len, len));
+  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, len);
   for (i = 0; i < rcv_len-len; i++) {
     c = rd_char(&errors);
     calc_cs ^= c;
@@ -338,7 +338,6 @@ skytraq_rd_msg(const void* payload, unsigned int len)
     fatal(MYNAME ": Didn't get message end tag (CR/LF)\n");
   }
 
-//	return MIN(rcv_len, len);
   return res_OK;
 }
 
@@ -397,7 +396,7 @@ skytraq_expect_ack(uint8_t id)
 }
 
 static int
-skytraq_expect_msg(uint8_t id, const uint8_t* payload, int len)
+skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     int rc = skytraq_rd_msg(payload, len);
@@ -620,19 +619,19 @@ gpstime_to_timet(int week, int sec)
   /* leap second compensation: */
   gps_timet -= 13;  /* diff GPS-UTC=13s (valid from Jan 01 1999 on) */
   if (gps_timet >= 1136073600) {    /* Jan 01 2006 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 14s      */
+    gps_timet--;                    /*   GPS-UTC = 14s      */
   }
   if (gps_timet >= 1230768000) {    /* Jan 01 2009 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 15s      */
+    gps_timet--;                    /*   GPS-UTC = 15s      */
   }
   if (gps_timet >= 1341100800) {    /* Jul 01 2012 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 16s      */
+    gps_timet--;                    /*   GPS-UTC = 16s      */
   }
   if (gps_timet >= 1435708800) {    /* Jul 01 2015 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 17s      */
+    gps_timet--;                    /*   GPS-UTC = 17s      */
   }
   if (gps_timet >= 1483228800) {    /* Jan 01 2017 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 18s      */
+    gps_timet--;                    /*   GPS-UTC = 18s      */
   }
   // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
   // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec
