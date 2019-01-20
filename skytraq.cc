@@ -119,7 +119,7 @@ arglist_t skytraq_args[] = {
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
-    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (<0: best guess)",
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
     "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR,
@@ -140,7 +140,7 @@ arglist_t skytraq_fargs[] = {
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
-    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (<0: best guess)",
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
     "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
@@ -606,7 +606,7 @@ gpstime_to_timet(int week, int sec)
 
   int week_rollover = atoi(opt_gps_week_rollover);
   if (week_rollover < 0) {
-    int current_week = (time(NULL)-gps_timet)/(7*SECONDS_PER_DAY);
+    int current_week = (time(nullptr)-gps_timet)/(7*SECONDS_PER_DAY);
     week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;

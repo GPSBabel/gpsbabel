@@ -1,0 +1,46 @@
+<para>
+gps-week-rollover is used to override the best-guessing of GPS week rollover period
+we're currently in: skytraq log data contains dates in the form of GPS weeks,
+which roll over to 0 every 1024 weeks (close to 20 years).
+</para>
+
+<table id="gps_week_rollovers">
+<title>GPS week rollover dates</title>
+<tgroup cols="2">
+<thead>
+<row>
+ <entry>Starting from:</entry>
+ <entry>gps-week-rollover value:</entry> 
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>1980-01-06 00:00:00 UTC</entry>
+  <entry>0</entry>
+</row>
+<row>
+  <entry>1999-08-21 23:59:47 UTC</entry>
+  <entry>1</entry>
+</row>
+<row>
+  <entry>2019-04-06 23:59:42 UTC</entry>
+  <entry>2</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+The default behaviour when gps-week-rollover isn't given (or is a negative number)
+is to assume the input data has been logged within the preceding 1024 weeks from the
+time gpsbabel is run, which should be perfectly fine in almost all cases.
+</para>
+
+<para>
+The following example:
+<screen>
+<command>gpsbabel</command> -i skytraq.bin,gps-week-rollover=1 -f <replaceable>filename.bin</replaceable>
+</screen>
+
+indicates that logged data is assumed to be from the period between 21/22 Aug 1999 and 6/7 April 2019.
+</para>
