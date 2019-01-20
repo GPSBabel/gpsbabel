@@ -115,7 +115,7 @@ arglist_t skytraq_args[] = {
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
@@ -136,7 +136,7 @@ arglist_t skytraq_fargs[] = {
     "-1", ARGTYPE_INT, "-1", "65535", nullptr
   },
   {
-    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
