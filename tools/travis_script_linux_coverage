@@ -5,10 +5,6 @@
 # extra ubuntu bionic packages: gcovr, openjdk-8-jre-headless, /usr/lib/jvm/java-8-openjdk-amd64/bin/java
 # as of 6/18/2018 you must use java 8, see issue #76, #83 at https://github.com/codacy/codacy-coverage-reporter/issues
 
-which qmake
-export PATH=${HOME}/Qt/5.7/gcc_64/bin:$PATH
-which qmake
-
 qmake
 make coverage
 
