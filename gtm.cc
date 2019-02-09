@@ -19,11 +19,14 @@
 */
 
 /*
- * Documentation can be found at http://www.trackmaker.com/download/ref_guide_eng.pdf
+ * Documentation can be found at
+ * https://www.trackmaker.com/download/ref_guide_eng.pdf
+ * https://www.trackmaker.com/download/GTM211_format.pdf
  */
 
 #include "defs.h"
 #include "jeeps/gpsmath.h"
+#include <QtCore/QList>
 
 static gbfile* file_in, *file_out;
 static int indatum;
@@ -507,11 +510,10 @@ gtm_wr_deinit()
 static void
 gtm_read()
 {
-  route_head* first_trk_head = nullptr;
   route_head* trk_head = nullptr;
   route_head* rte_head = nullptr;
   Waypoint* wpt;
-  int real_tr_count = 0;
+  QList<route_head*> real_track_list;
   unsigned int icon;
   int i;
 
@@ -575,20 +577,28 @@ gtm_read()
     if (start_new || !trk_head) {
       trk_head = route_head_alloc();
       track_add_head(trk_head);
-      real_tr_count++;
-      if (!first_trk_head) {
-        first_trk_head = trk_head;
-      }
+      real_track_list.append(trk_head);
     }
     track_add_wpt(trk_head, wpt);
   }
 
   /* Tracklog styles */
-  trk_head = first_trk_head;
-  for (i = 0; i != ts_count && i != real_tr_count; i++) {
-    trk_head->rte_name = fread_string(file_in);
+  // TODO: The format document states there are ts_count tracklog style entries,
+  //       and tr_count tracklog entries.
+  //       Some tracklog entries may be contiuation entries, so we turn these into
+  //       real_track_list.size() <= tr_count tracks.
+  //       If ts_count != real_track_list.size() we don't know how to line up the tracklogs,
+  //       and the real tracks, with the tracklog styles.
+  if (ts_count != real_track_list.size()) {
+    warning(MYNAME ": The number of tracklog entries with the new flag set doesn't match the number of tracklog style entries.");
+  }
+  for (i = 0; i != ts_count; i++) {
+    QString tname = fread_string(file_in);
     fread_discard(file_in, 12);
-    trk_head = reinterpret_cast<route_head *>QUEUE_NEXT(&trk_head->Q);
+    if (i < real_track_list.size()) {
+      trk_head = real_track_list.at(i);
+      trk_head->rte_name = tname;
+    }
   }
 
   /* Routes */

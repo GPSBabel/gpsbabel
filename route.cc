@@ -19,12 +19,15 @@
 
 #include "defs.h"
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
-#include "queue.h"              // for queue, dequeue, QUEUE_FOR_EACH, QUEUE_MOVE, QUEUE_INIT, sortqueue, ENQUEUE_TAIL, QUEUE_EMPTY, ENQUEUE_AFTER, ENQUEUE_HEAD, QUEUE_LAST, QUEUE_NEXT, QueueList
+#include "queue.h"              // for dequeue, queue, QUEUE_FOR_EACH, QUEUE_EMPTY, ENQUEUE_HEAD, ENQUEUE_TAIL, QUEUE_INIT, QUEUE_LAST, QUEUE_NEXT
 #include "session.h"            // for curr_session, session_t (ptr only)
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/optional.h"  // for optional, operator>, operator<
 #include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QList>         // for QList<>::iterator
 #include <QtCore/QString>       // for QString
+#include <QtCore/QtGlobal>      // for foreach
+#include <algorithm>            // for sort
 #include <cstddef>              // for nullptr_t
 
 RouteList* global_route_list;
@@ -103,37 +106,6 @@ track_insert_head(route_head* rte, route_head* predecessor)
   global_track_list->insert_head(rte, predecessor);
 }
 
-// FIXME: can we delete this unused and untested code?
-#ifdef DEAD_CODE_IS_REBORN
-static
-route_head*
-common_route_by_name(queue* routes, const char* name)
-{
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(routes, elem, tmp) {
-    route_head* rte = reinterpret_cast<route_head*>(elem);
-    if (rte->rte_name == name) {
-      return rte;
-    }
-  }
-
-  return nullptr;
-}
-
-route_head*
-route_find_route_by_name(const char* name)
-{
-  return common_route_by_name(&my_route_head, name);
-}
-
-route_head*
-route_find_track_by_name(const char* name)
-{
-  return common_route_by_name(&my_track_head, name);
-}
-#endif
-
 void
 route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
 {
@@ -161,23 +133,6 @@ track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int numbe
   // are ignored because synth is set to false.
   global_track_list->add_wpt(rte, wpt, false, namepart, number_digits);
 }
-
-// FIXME: can we delete this unused and untested code?
-#ifdef DEAD_CODE_IS_REBORN
-Waypoint*
-route_find_waypt_by_name(route_head* rh, const char* name)
-{
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
-    if (waypointp->shortname == name) {
-      return waypointp;
-    }
-  }
-  return nullptr;
-}
-#endif
 
 void
 route_del_wpt(route_head* rte, Waypoint* wpt)
@@ -300,44 +255,6 @@ track_sort(RouteList::Compare cmp)
 {
   global_track_list->sort(cmp);
 }
-
-// FIXME: can we delete this unused and untested code?
-#ifdef DEAD_CODE_IS_REBORN
-/*
- * Move the entire track queue onto the route queue making no attempt
- * at all to "fix" anything in the process.
- */
-void
-routes_to_tracks()
-{
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
-    route_head* trk = (route_head*) elem;
-    dequeue(&trk->Q);
-    ENQUEUE_TAIL(&my_track_head, &trk->Q);
-  }
-}
-#endif
-
-// FIXME: can we delete this unused and untested code?
-#ifdef DEAD_CODE_IS_REBORN
-/*
- * Same, but in opposite direction.
- */
-void
-tracks_to_routes()
-{
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&my_track_head, elem, tmp) {
-    route_head* trk = (route_head*) elem;
-    dequeue(&trk->Q);
-    ENQUEUE_TAIL(&my_route_head, &trk->Q);
-  }
-}
-#endif
-
 
 /*
  * This really makes more sense for tracks than routes.
@@ -477,7 +394,6 @@ route_head::route_head() :
   line_width(-1),
   session(curr_session())
 {
-  QUEUE_INIT(&Q);
   QUEUE_INIT(&waypoint_list);
 };
 
@@ -487,16 +403,6 @@ route_head::~route_head()
   if (fs) {
     fs_chain_destroy(fs);
   }
-}
-
-RouteList::RouteList() : QueueList<queue>(&head, &head_ct)
-{
-  QUEUE_INIT(&head);
-}
-
-int RouteList::count() const
-{
-  return head_ct;
 }
 
 int RouteList::waypt_count() const
@@ -511,24 +417,23 @@ int RouteList::waypt_count() const
 void
 RouteList::add_head(route_head* rte)
 {
-  ENQUEUE_TAIL(&head, &rte->Q);
-  ++head_ct;
+  this->append(rte);
 }
 
 void
 RouteList::del_head(route_head* rte)
 {
   waypt_ct -= rte->rte_waypt_ct;
-  dequeue(&rte->Q);
+  const int idx = this->indexOf(rte);
+  removeAt(idx);
   delete rte;
-  --head_ct;
 }
 
 void
 RouteList::insert_head(route_head* rte, route_head* predecessor)
 {
-  ENQUEUE_AFTER(&predecessor->Q, &rte->Q);
-  ++head_ct;
+  const int idx = this->indexOf(predecessor);
+  this->insert(idx + 1, rte);
 }
 
 // Synthesizing names based on the total number of waypoints in the RouteList makes
@@ -564,9 +469,7 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 void
 RouteList::common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    const route_head* rhp = reinterpret_cast<route_head*>(elem);
+  foreach (const route_head* rhp, *this) {
     if (rhp->session == se) {
       if (rh) {
         (*rh)(rhp);
@@ -582,29 +485,24 @@ RouteList::common_disp_session(const session_t* se, route_hdr rh, route_trl rt, 
 void
 RouteList::flush()
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    queue* q = dequeue(elem);
-    delete reinterpret_cast<route_head*>(q);
+  foreach (route_head* rte, *this) {
+    delete rte;
   }
-  head_ct = 0;
+  clear();
   waypt_ct = 0;
 }
 
 void
 RouteList::copy(RouteList** dst) const
 {
-  queue* elem, *tmp, *elem2, *tmp2;
+  queue* elem2, *tmp2;
 
   if (*dst == nullptr) {
     *dst = new RouteList;
   }
 
   const char RPT[] = "RPT";
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    auto rte_old = reinterpret_cast<route_head*>(elem);
-
+  foreach (const route_head* rte_old, *this) {
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
@@ -624,34 +522,22 @@ RouteList::restore(RouteList* src)
   if (src == nullptr) {
     return;
   }
-
   flush();
-  QUEUE_MOVE(&head, &src->head);
 
-  head_ct = src->head_ct;
-  src->head_ct = 0;
-  waypt_ct = src->waypt_ct;
+  *this = *src;
+  src->clear();
   src->waypt_ct = 0;
 }
 
 void RouteList::swap(RouteList& other)
 {
-  queue tmp_head;
-  QUEUE_MOVE(&tmp_head, &(other.head));
-  QUEUE_MOVE(&(other.head), &(this->head));
-  QUEUE_MOVE(&(this->head), &tmp_head);
-
-  const auto tmp_head_ct = other.head_ct;
-  other.head_ct = this->head_ct;
-  this->head_ct = tmp_head_ct;
-
-  const auto tmp_waypt_ct = other.waypt_ct;
-  other.waypt_ct = this->waypt_ct;
-  this->waypt_ct = tmp_waypt_ct;
+  const RouteList tmp_list = *this;
+  other = *this;
+  *this = tmp_list;
 }
 
 void RouteList::sort(Compare cmp)
 {
-  sortqueue(&head, cmp);
+  std::sort(begin(), end(), cmp);
 }
 

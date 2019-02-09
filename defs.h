@@ -652,7 +652,6 @@ struct computed_trkdata {
 class route_head
 {
 public:
-  queue Q;		/* Link onto parent list. */
   queue waypoint_list;	/* List of child waypoints */
   QString rte_name;
   QString rte_desc;
@@ -679,17 +678,11 @@ typedef void (*route_hdr)(const route_head*);
 typedef void (*route_trl)(const route_head*);
 
 // TODO: Consider using composition instead of private inheritance.
-class RouteList : private QueueList<queue>
+class RouteList : private QList<route_head*>
 {
 public:
-// FIXME: The interface should NOT depend on the implementation of the list.
-//        Migrate to std::sort using a compare function
-//        typedef bool (*Compare)(const route_head* a, const route_head* b);
-  typedef int (*Compare)(const queue* a, const queue* b);
+  typedef bool (*Compare)(const route_head* a, const route_head* b);
 
-  RouteList();
-
-  int count() const; // a.k.a. size()
   int waypt_count() const;
   void add_head(route_head* rte); // a.k.a. append(), push_back()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
@@ -719,19 +712,20 @@ public:
   // Our contained element (route_head) also contains a container (waypoint_list), 
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
-  using QueueList<queue>::begin;
-  using QueueList<queue>::end;
-  using QueueList<queue>::cbegin;
-  using QueueList<queue>::cend;
-  using QueueList<queue>::empty; // a.k.a. isEmpty()
-  using QueueList<queue>::front; // a.k.a. first()
-  using QueueList<queue>::back;  // a.k.a. last()
-  using QueueList<queue>::Iterator;
-  using QueueList<queue>::ConstIterator;
+  using QList<route_head*>::begin;
+  using QList<route_head*>::end;
+  using QList<route_head*>::cbegin;
+  using QList<route_head*>::cend;
+  using QList<route_head*>::empty; // a.k.a. isEmpty()
+  using QList<route_head*>::front; // a.k.a. first()
+  using QList<route_head*>::back;  // a.k.a. last()
+  using QList<route_head*>::count;  // a.k.a. size()
+  using QList<route_head*>::iterator;
+  using QList<route_head*>::const_iterator;
+  typedef iterator Iterator;
+  typedef const_iterator ConstIterator;
 
 private:
-  queue head;
-  int head_ct{0};
   int waypt_ct{0};
 };
 
@@ -789,10 +783,7 @@ template <typename T1, typename T2, typename T3>
 void
 RouteList::disp_all(T1 rh, T2 rt, T3 wc)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    const route_head* rhp;
-    rhp = reinterpret_cast<route_head*>(elem);
+  foreach (const route_head* rhp, *this) {
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -805,10 +796,7 @@ template <typename T2, typename T3>
 void
 RouteList::disp_all(std::nullptr_t /* rh */, T2 rt, T3 wc)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    const route_head* rhp;
-    rhp = reinterpret_cast<route_head*>(elem);
+  foreach (const route_head* rhp, *this) {
 // rh == nullptr
     route_disp(rhp, wc);
 // rt != nullptr, caught with an overload of common_disp_all
@@ -820,10 +808,7 @@ template <typename T1, typename T3>
 void
 RouteList::disp_all(T1 rh, std::nullptr_t /* rt */, T3 wc)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    const route_head* rhp;
-    rhp = reinterpret_cast<route_head*>(elem);
+  foreach (const route_head* rhp, *this) {
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -835,10 +820,7 @@ template <typename T3>
 void
 RouteList::disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&head, elem, tmp) {
-    const route_head* rhp;
-    rhp = reinterpret_cast<route_head*>(elem);
+  foreach (const route_head* rhp, *this) {
 // rh == nullptr
     route_disp(rhp, wc);
 // rt == nullptr

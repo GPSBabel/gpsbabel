@@ -62,28 +62,19 @@ int SortFilter::sort_comp_wpt(const queue* a, const queue* b)
   }
 }
 
-int SortFilter::sort_comp_rh_by_description(const queue* a, const queue* b)
+bool SortFilter::sort_comp_rh_by_description(const route_head* a, const route_head* b)
 {
-  const route_head* x1 = reinterpret_cast<const route_head*>(a);
-  const route_head* x2 = reinterpret_cast<const route_head*>(b);
-
-  return x1->rte_desc.compare(x2->rte_desc);
+  return a->rte_desc < b->rte_desc;
 }
 
-int SortFilter::sort_comp_rh_by_name(const queue* a, const queue* b)
+bool SortFilter::sort_comp_rh_by_name(const route_head* a, const route_head* b)
 {
-  const route_head* x1 = reinterpret_cast<const route_head*>(a);
-  const route_head* x2 = reinterpret_cast<const route_head*>(b);
-
-  return x1->rte_name.compare(x2->rte_name);
+  return a->rte_name < b->rte_name;
 }
 
-int SortFilter::sort_comp_rh_by_number(const queue* a, const queue* b)
+bool SortFilter::sort_comp_rh_by_number(const route_head* a, const route_head* b)
 {
-  const route_head* x1 = reinterpret_cast<const route_head*>(a);
-  const route_head* x2 = reinterpret_cast<const route_head*>(b);
-
-  return cmp(x1->rte_num, x2->rte_num);
+  return a->rte_num <  b->rte_num;
 }
 
 int SortFilter::SortCompWptFunctor::operator()(const queue* a, const queue* b)

@@ -108,9 +108,9 @@ private:
   };
 
   int sort_comp_wpt(const queue* a, const queue* b);
-  static int sort_comp_rh_by_description(const queue* a, const queue* b);
-  static int sort_comp_rh_by_name(const queue* a, const queue* b);
-  static int sort_comp_rh_by_number(const queue* a, const queue* b);
+  static bool sort_comp_rh_by_description(const route_head* a, const route_head* b);
+  static bool sort_comp_rh_by_name(const route_head* a, const route_head* b);
+  static bool sort_comp_rh_by_number(const route_head* a, const route_head* b);
 
   class SortCompWptFunctor
   {
