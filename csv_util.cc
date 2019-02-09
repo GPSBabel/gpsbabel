@@ -167,11 +167,19 @@ static double oldlat = 999;
 
 static int waypt_out_count;
 static route_head* csv_track, *csv_route;
-static double utm_northing, utm_easting, utm_zone = 0;
-static char utm_zonec;
-static UrlLink* link_;
-static gpsbabel_optional::optional<bool> lat_dir_positive;
-static gpsbabel_optional::optional<bool> lon_dir_positive;
+
+struct xcsv_parse_data {
+  QString rte_name;
+  QString trk_name;
+  bool new_track{false};
+  double utm_northing{0};
+  double utm_easting{0};
+  double utm_zone{0};
+  char utm_zonec{'N'};
+  UrlLink* link_{nullptr};
+  gpsbabel_optional::optional<bool> lat_dir_positive;
+  gpsbabel_optional::optional<bool> lon_dir_positive;
+};
 #endif // CSVFMTS_ENABLED
 
 
@@ -957,9 +965,9 @@ gmsd_init(Waypoint* wpt)
 /* xcsv_parse_val() - parse incoming data into the waypt structure.          */
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
-static void
+static void 
 xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
-               route_head** trk, const int line_no)
+               xcsv_parse_data* parse_data, const int line_no)
 {
   const char* enclosure = "";
   geocache_data* gc_data = nullptr;
@@ -994,16 +1002,16 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     wpt->notes = csv_stringtrim(s, "");
     break;
   case XT_URL:
-    if (!link_) {
-      link_ = new UrlLink;
+    if (!parse_data->link_) {
+      parse_data->link_ = new UrlLink;
     }
-    link_->url_ = QString(s).trimmed();
+    parse_data->link_->url_ = QString(s).trimmed();
     break;
   case XT_URL_LINK_TEXT:
-    if (!link_) {
-      link_ = new UrlLink;
+    if (!parse_data->link_) {
+      parse_data->link_ = new UrlLink;
     }
-    link_->url_link_text_ = QString(s).trimmed();
+    parse_data->link_->url_link_text_ = QString(s).trimmed();
     break;
   case XT_ICON_DESCR:
     wpt->icon_descr = QString(s).trimmed();
@@ -1065,9 +1073,9 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
   case XT_LAT_DIR:
     /* latitude N/S. */
     if (*s == 'n' || *s == 'N') {
-      lat_dir_positive = true;
+      parse_data->lat_dir_positive = true;
     } else if (*s == 's' || *s == 'S') {
-      lat_dir_positive = false;
+      parse_data->lat_dir_positive = false;
     } else {
       warning("parse of string '%s' on line number %d as LAT_DIR failed.  Expected 'n', 'N', 's' or 'S'.\n", s, line_no);
     }
@@ -1075,9 +1083,9 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
   case XT_LON_DIR:
     /* longitude E/W. */
     if (*s == 'e' || *s == 'E') {
-      lon_dir_positive = true; 
+      parse_data->lon_dir_positive = true; 
     } else if (*s == 'w' || *s == 'W') {
-      lon_dir_positive = false;
+      parse_data->lon_dir_positive = false;
     } else {
       warning("parse of string '%s' on line number %d as LON_DIR failed.  Expected 'e', 'E', 'w' or 'W'.\n", s, line_no);
     }
@@ -1088,33 +1096,33 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
                       &wpt->latitude, &wpt->longitude, MYNAME);
     break;
   case XT_UTM_ZONE:
-    utm_zone = atoi(s);
+    parse_data->utm_zone = atoi(s);
     break;
   case XT_UTM_ZONEC:
-    utm_zonec = s[0];
+    parse_data->utm_zonec = s[0];
     break;
   case XT_UTM_ZONEF:
-    utm_zone = atoi(s);
-    utm_zonec = s[strlen(s) - 1];
+    parse_data->utm_zone = atoi(s);
+    parse_data->utm_zonec = s[strlen(s) - 1];
     break;
   case XT_UTM_EASTING:
-    utm_easting = atof(s);
+    parse_data->utm_easting = atof(s);
     break;
   case XT_UTM_NORTHING:
-    utm_northing = atof(s);
+    parse_data->utm_northing = atof(s);
     break;
   case XT_UTM: {
     char* ss;
     int i = 0;
 
-    utm_zone = strtod(s, &ss);
-    utm_zonec = ss[i];
+    parse_data->utm_zone = strtod(s, &ss);
+    parse_data->utm_zonec = ss[i];
     ss++;
-    utm_easting = strtod(ss, &ss);
+    parse_data->utm_easting = strtod(ss, &ss);
     while (*ss && !isdigit(*ss)) {
       ss++;
     }
-    utm_northing = strtod(ss, nullptr);
+    parse_data->utm_northing = strtod(ss, nullptr);
   }
   break;
   /* ALTITUDE CONVERSIONS ************************************************/
@@ -1296,23 +1304,13 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     break;
     /* Tracks and routes *********************************************/
   case XT_ROUTE_NAME:
-    if (csv_route) {
-      csv_route->rte_name = csv_stringtrim(s, enclosure);
-    }
+    parse_data->rte_name = csv_stringtrim(s, enclosure);
     break;
   case XT_TRACK_NEW:
-    if (atoi(s) && csv_track && !QUEUE_EMPTY(&csv_track->Q)) {
-      *trk = route_head_alloc();
-      csv_track = *trk;
-
-      track_add_head(*trk);
-    }
+    parse_data->new_track = atoi(s);
     break;
   case XT_TRACK_NAME:
-    if (!csv_track) {
-      csv_track = route_head_alloc();
-    }
-    csv_track->rte_name = csv_stringtrim(s, enclosure);
+    parse_data->trk_name = csv_stringtrim(s, enclosure);
     break;
 
     /* OTHER STUFF ***************************************************/
@@ -1402,17 +1400,6 @@ xcsv_data_read()
   int linecount = 0;
   route_head* rte = nullptr;
   route_head* trk = nullptr;
-  utm_northing = 0;
-  utm_easting = 0;
-  utm_zone = 0;
-  utm_zonec = 'N';
-
-  csv_route = csv_track = nullptr;
-  if (xcsv_file.datatype == trkdata) {
-    csv_track = trk;
-  } else if (xcsv_file.datatype == rtedata) {
-    csv_route = rte;
-  }
 
   while (true) {
     QString buff = xcsv_file.stream->readLine();
@@ -1445,6 +1432,8 @@ xcsv_data_read()
     }
     if (!buff.isEmpty()) {
       Waypoint* wpt_tmp = new Waypoint;
+      // initialize parse data for accumulation of line results from all fields in this line.
+      xcsv_parse_data parse_data;
       // tbuf is a temporary copy of buff since we modify it. :-(
       char *tbuf = xstrdup(buff);
       const char* s = tbuf;
@@ -1455,8 +1444,6 @@ xcsv_data_read()
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", CSTR(xcsv_file.description)? CSTR(xcsv_file.description) : "unknown");
       }
 
-      lat_dir_positive.reset();
-      lon_dir_positive.reset();
       int ifield_idx = 0;
 
       /* now rip the line apart, advancing the queue for each tear
@@ -1464,7 +1451,7 @@ xcsv_data_read()
        */
       while (s) {
         const field_map& fmp = xcsv_file.ifields.at(ifield_idx++);
-        xcsv_parse_val(s, wpt_tmp, fmp, &trk, linecount);
+        xcsv_parse_val(s, wpt_tmp, fmp, &parse_data, linecount);
 
         if (ifield_idx >= xcsv_file.ifields.size()) {
           /* we've wrapped the queue. so stop parsing! */
@@ -1480,10 +1467,10 @@ xcsv_data_read()
 
       // If XT_LAT_DIR(XT_LON_DIR) was an input field, and the latitude(longitude) is positive,
       // assume the latitude(longitude) was the absolute value and take the sign from XT_LAT_DIR(XT_LON_DIR).
-      if (lat_dir_positive.has_value() && !lat_dir_positive.value() && (wpt_tmp->latitude > 0.0)) {
+      if (parse_data.lat_dir_positive.has_value() && !parse_data.lat_dir_positive.value() && (wpt_tmp->latitude > 0.0)) {
         wpt_tmp->latitude = -wpt_tmp->latitude;
       }
-      if (lon_dir_positive.has_value() && !lon_dir_positive.value() && (wpt_tmp->longitude > 0.0)) {
+      if (parse_data.lon_dir_positive.has_value() && !parse_data.lon_dir_positive.value() && (wpt_tmp->longitude > 0.0)) {
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
@@ -1493,18 +1480,18 @@ xcsv_data_read()
                                         &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file.gps_datum);
       }
 
-      if (utm_easting || utm_northing) {
+      if (parse_data.utm_easting || parse_data.utm_northing) {
         GPS_Math_UTM_EN_To_Known_Datum(&wpt_tmp->latitude,
                                        &wpt_tmp->longitude,
-                                       utm_easting, utm_northing,
-                                       utm_zone, utm_zonec,
+                                       parse_data.utm_easting, parse_data.utm_northing,
+                                       parse_data.utm_zone, parse_data.utm_zonec,
                                        DATUM_WGS84);
       }
 
-      if (link_) {
-        wpt_tmp->AddUrlLink(*link_);
-        delete link_;
-        link_ = nullptr;
+      if (parse_data.link_) {
+        wpt_tmp->AddUrlLink(*parse_data.link_);
+        delete parse_data.link_;
+        parse_data.link_ = nullptr;
       }
 
       switch (xcsv_file.datatype) {
@@ -1513,18 +1500,22 @@ xcsv_data_read()
         waypt_add(wpt_tmp);
         break;
       case trkdata:
-        if (trk == nullptr) {
+        if ((trk == nullptr) || parse_data.new_track) {
           trk = route_head_alloc();
-          csv_track = trk;
           track_add_head(trk);
+        }
+        if (!parse_data.trk_name.isEmpty()) {
+          trk->rte_name = parse_data.trk_name;
         }
         track_add_wpt(trk, wpt_tmp);
         break;
       case rtedata:
         if (rte == nullptr) {
           rte = route_head_alloc();
-          csv_route = rte;
           route_add_head(rte);
+        }
+        if (!parse_data.rte_name.isEmpty()) {
+          rte->rte_name = parse_data.rte_name;
         }
         route_add_wpt(rte, wpt_tmp);
         break;
