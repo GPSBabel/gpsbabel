@@ -609,7 +609,7 @@ waypt_disp_session(const session_t* se, T cb)
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
 #endif
     if ((se == nullptr) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
@@ -667,11 +667,73 @@ public:
 
 public:
   route_head();
+  // the default copy constructor and assignment operator are not appropriate as we do deep copy of some members,
+  // and we haven't bothered to write an appropriate one.
+  // Catch attempts to use the default copy constructor and assignment operator.
+  route_head(const route_head& other) = delete;
+  route_head& operator=(const route_head& rhs) = delete;
   ~route_head();
 };
 
 typedef void (*route_hdr)(const route_head*);
 typedef void (*route_trl)(const route_head*);
+
+// TODO: Consider using composition instead of private inheritance.
+class RouteList : private QueueList<queue>
+{
+public:
+// FIXME: The interface should NOT depend on the implementation of the list.
+//        Migrate to std::sort using a compare function
+//        typedef bool (*Compare)(const route_head* a, const route_head* b);
+  typedef int (*Compare)(const queue* a, const queue* b);
+
+  RouteList();
+
+  int count() const; // a.k.a. size()
+  int waypt_count() const;
+  void add_head(route_head* rte); // a.k.a. append(), push_back()
+  // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
+  //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
+  void del_head(route_head* rte); // a.k.a. erase()
+  // FIXME: Generally it is inefficent to use an element pointer or reference to define the insertion point, use iterator instead.
+  void insert_head(route_head* rte, route_head* predecessor); // a.k.a. insert
+  void add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  // FIXME: Generally it is inefficent to use an element pointer or reference to define the insertion point, use iterator instead.
+  void del_wpt(route_head* rte, Waypoint* wpt);
+  void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
+  void flush(); // a.k.a. clear()
+  void copy(RouteList** dst) const;
+  void restore(RouteList* src);
+  void swap(RouteList& other);
+  void sort(Compare cmp);
+  template <typename T1, typename T2, typename T3>
+  void disp_all(T1 rh, T2 rt, T3 wc);
+  template <typename T2, typename T3>
+  void disp_all(std::nullptr_t /* rh */, T2 rt, T3 wc);
+  template <typename T1, typename T3>
+  void disp_all(T1 rh, std::nullptr_t /* rt */, T3 wc);
+  template <typename T3>
+  void disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc);
+
+  // Only expose methods from our underlying container that won't corrupt our private data.
+  // Our contained element (route_head) also contains a container (waypoint_list), 
+  // and we maintain a total count the elements in these contained containers, i.e.
+  // the total number of waypoints in all the routes in the RouteList.
+  using QueueList<queue>::begin;
+  using QueueList<queue>::end;
+  using QueueList<queue>::cbegin;
+  using QueueList<queue>::cend;
+  using QueueList<queue>::empty; // a.k.a. isEmpty()
+  using QueueList<queue>::front; // a.k.a. first()
+  using QueueList<queue>::back;  // a.k.a. last()
+  using QueueList<queue>::Iterator;
+  using QueueList<queue>::ConstIterator;
+
+private:
+  queue head;
+  int head_ct{0};
+  int waypt_ct{0};
+};
 
 void route_init();
 unsigned int route_waypt_count();
@@ -684,13 +746,8 @@ void route_del_head(route_head* rte);
 void track_add_head(route_head* rte);
 void track_del_head(route_head* rte);
 void track_insert_head(route_head* rte, route_head* predecessor);
-route_head* route_find_route_by_name(const char* name);
-route_head* route_find_track_by_name(const char* name);
-void route_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
-void route_add_wpt(route_head* rte, Waypoint* wpt);
-void track_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
-void track_add_wpt(route_head* rte, Waypoint* wpt);
-Waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
+void route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
+void track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
@@ -702,15 +759,17 @@ void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_c
 void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void route_flush_all_routes();
 void route_flush_all_tracks();
-void route_flush_all();
-void route_flush(queue* head);
-void route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src);
-void route_append(queue* src);
-void track_append(queue* src);
-void route_backup(signed int* count, queue** head_bak);
-void route_restore(queue* head_bak);
-void track_backup(signed int* count, queue** head_bak);
-void track_restore(queue* head_bak);
+void route_deinit();
+void route_append(RouteList* src);
+void track_append(RouteList* src);
+void route_backup(RouteList** head_bak);
+void route_restore(RouteList* head_bak);
+void route_swap(RouteList& other);
+void route_sort(RouteList::Compare cmp);
+void track_backup(RouteList** head_bak);
+void track_restore(RouteList* head_bak);
+void track_swap(RouteList& other);
+void track_sort(RouteList::Compare cmp);
 computed_trkdata track_recompute(const route_head* trk);
 
 template <typename T>
@@ -721,19 +780,19 @@ route_disp(const route_head* rh, T cb)
 // cb != nullptr, caught with an overload of route_disp
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     Waypoint* waypointp;
-    waypointp = reinterpret_cast<Waypoint *>(elem);
+    waypointp = reinterpret_cast<Waypoint*>(elem);
     cb(waypointp);
   }
 }
 
 template <typename T1, typename T2, typename T3>
 void
-common_disp_all(queue* qh, T1 rh, T2 rt, T3 wc)
+RouteList::disp_all(T1 rh, T2 rt, T3 wc)
 {
   queue* elem, *tmp;
-  QUEUE_FOR_EACH(qh, elem, tmp) {
+  QUEUE_FOR_EACH(&head, elem, tmp) {
     const route_head* rhp;
-    rhp = reinterpret_cast<route_head *>(elem);
+    rhp = reinterpret_cast<route_head*>(elem);
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -744,12 +803,12 @@ common_disp_all(queue* qh, T1 rh, T2 rt, T3 wc)
 
 template <typename T2, typename T3>
 void
-common_disp_all(queue* qh, std::nullptr_t /* rh */, T2 rt, T3 wc)
+RouteList::disp_all(std::nullptr_t /* rh */, T2 rt, T3 wc)
 {
   queue* elem, *tmp;
-  QUEUE_FOR_EACH(qh, elem, tmp) {
+  QUEUE_FOR_EACH(&head, elem, tmp) {
     const route_head* rhp;
-    rhp = reinterpret_cast<route_head *>(elem);
+    rhp = reinterpret_cast<route_head*>(elem);
 // rh == nullptr
     route_disp(rhp, wc);
 // rt != nullptr, caught with an overload of common_disp_all
@@ -759,12 +818,12 @@ common_disp_all(queue* qh, std::nullptr_t /* rh */, T2 rt, T3 wc)
 
 template <typename T1, typename T3>
 void
-common_disp_all(queue* qh, T1 rh, std::nullptr_t /* rt */, T3 wc)
+RouteList::disp_all(T1 rh, std::nullptr_t /* rt */, T3 wc)
 {
   queue* elem, *tmp;
-  QUEUE_FOR_EACH(qh, elem, tmp) {
+  QUEUE_FOR_EACH(&head, elem, tmp) {
     const route_head* rhp;
-    rhp = reinterpret_cast<route_head *>(elem);
+    rhp = reinterpret_cast<route_head*>(elem);
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -774,12 +833,12 @@ common_disp_all(queue* qh, T1 rh, std::nullptr_t /* rt */, T3 wc)
 
 template <typename T3>
 void
-common_disp_all(queue* qh, std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc)
+RouteList::disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc)
 {
   queue* elem, *tmp;
-  QUEUE_FOR_EACH(qh, elem, tmp) {
+  QUEUE_FOR_EACH(&head, elem, tmp) {
     const route_head* rhp;
-    rhp = reinterpret_cast<route_head *>(elem);
+    rhp = reinterpret_cast<route_head*>(elem);
 // rh == nullptr
     route_disp(rhp, wc);
 // rt == nullptr
@@ -790,18 +849,18 @@ template <typename T1, typename T2, typename T3>
 void
 route_disp_all(T1 rh, T2 rt, T3 wc)
 {
-  extern queue my_route_head;
+  extern RouteList* global_route_list;
 
-  common_disp_all(&my_route_head, rh, rt, wc);
+  global_route_list->disp_all(rh, rt, wc);
 }
 
 template <typename T1, typename T2, typename T3>
 void
 track_disp_all(T1 rh, T2 rt, T3 wc)
 {
-  extern queue my_track_head;
+  extern RouteList* global_track_list;
 
-  common_disp_all(&my_track_head, rh, rt, wc);
+  global_track_list->disp_all(rh, rt, wc);
 }
 
 typedef struct {
@@ -1184,7 +1243,7 @@ double fmt_speed(double, const char** tag);
 /*
  * From nmea.c
  */
-int nmea_cksum(const char*buf);
+int nmea_cksum(const char* buf);
 
 /*
  * Color helpers.

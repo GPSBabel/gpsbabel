@@ -58,7 +58,6 @@ private:
 
   SortModeRteHd rte_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
   SortModeRteHd trk_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
-  SortModeRteHd rh_sort_mode = SortModeRteHd::none;
 
   char* opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
   char* opt_sm_rtenum, *opt_sm_rtename, *opt_sm_rtedesc;
@@ -109,22 +108,14 @@ private:
   };
 
   int sort_comp_wpt(const queue* a, const queue* b);
-  int sort_comp_rh(const queue* a, const queue* b);
+  static int sort_comp_rh_by_description(const queue* a, const queue* b);
+  static int sort_comp_rh_by_name(const queue* a, const queue* b);
+  static int sort_comp_rh_by_number(const queue* a, const queue* b);
 
   class SortCompWptFunctor
   {
   public:
       explicit SortCompWptFunctor(SortFilter& obj) : that(&obj) {}
-    int operator()(const queue* a, const queue* b);
-
-  private:
-    SortFilter* that;
-  };
-
-  class SortCompRteHdFunctor
-  {
-  public:
-      explicit SortCompRteHdFunctor(SortFilter& obj) : that(&obj) {}
     int operator()(const queue* a, const queue* b);
 
   private:

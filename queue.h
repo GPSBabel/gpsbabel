@@ -21,6 +21,8 @@
 #ifndef QUEUE_H_INCLUDED_
 #define QUEUE_H_INCLUDED_
 
+#include <iterator>
+
 typedef struct queue {
   struct queue* next;
   struct queue* prev;
@@ -60,6 +62,197 @@ queue* dequeue(queue* element);
 		(tmp) = QUEUE_NEXT(element), \
 		(element) != (listhead); \
 		(element) = (tmp))
+
+// FIXME: g++ 7.3.0, -O2, with T=route_head yields warnings.
+//        implementing QueueList as a template was meant to 
+//        i) avoid reinterpret_casts all over the code as with QUEUE_FOR_EACH
+//        ii) allow use of range based for loops.
+//        If this isn't fixed then QueueList doesn't need to be a template, T == queue.
+// In file included from defs.h:27:0,
+//                  from bend.cc:23:
+// queue.h: In instantiation of ‘const T*& QueueList<T>::ConstIterator::operator*() [with T = route_head; QueueList<T>::ConstIterator::reference = const route_head*&]’:
+// bend.cc:162:24:   required from here
+// queue.h:143:14: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+//        return reinterpret_cast<reference>(ptr_);
+//               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+template <typename T>
+class QueueList
+{
+public:
+
+  QueueList(queue* head, int* ct) : head_{head}, ct_{ct} {}
+
+  class Iterator
+  {
+  public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using value_type = T*;
+    using difference_type = std::ptrdiff_t;
+    using pointer = T** ;
+    using reference = T* &;
+
+    Iterator() = default;
+    explicit Iterator(queue* p) : ptr_{p} {}
+
+    reference operator*()
+    {
+      return reinterpret_cast<reference>(ptr_);
+    }
+    pointer operator->()
+    {
+      return reinterpret_cast<pointer>(&ptr_);
+    }
+    Iterator& operator++()   // pre-increment
+    {
+      ptr_ = ptr_->next;
+      return *this;
+    }
+    Iterator operator++(int)   // post-increment
+    {
+      Iterator tmp = *this;
+      ++*this;
+      return tmp;
+    }
+    Iterator& operator--()   // pre-decrement
+    {
+      ptr_ = ptr_->prev;
+      return *this;
+    }
+    Iterator operator--(int)   // post-decrement
+    {
+      Iterator tmp = *this;
+      --*this;
+      return tmp;
+    }
+    bool operator==(const Iterator& other) const
+    {
+      return ptr_ == other.ptr_;
+    }
+    bool operator!=(const Iterator& other) const
+    {
+      return ptr_ != other.ptr_;
+    }
+
+  private:
+    queue* ptr_{nullptr};
+  };
+  //friend class Iterator;
+
+  class ConstIterator
+  {
+  public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using value_type = T*;
+    using difference_type = std::ptrdiff_t;
+    using pointer = const T** ;
+    using reference = const T* &;
+
+    ConstIterator() = default;
+    explicit ConstIterator(const queue* p) : ptr_{p} {}
+
+    reference operator*()
+    {
+      return reinterpret_cast<reference>(ptr_);
+    }
+    pointer operator->()
+    {
+      return reinterpret_cast<pointer>(&ptr_);
+    }
+    ConstIterator& operator++()   // pre-increment
+    {
+      ptr_ = ptr_->next;
+      return *this;
+    }
+    ConstIterator operator++(int)   // post-increment
+    {
+      ConstIterator tmp = *this;
+      ++*this;
+      return tmp;
+    }
+    ConstIterator& operator--()   // pre-decrement
+    {
+      ptr_ = ptr_->prev;
+      return *this;
+    }
+    ConstIterator operator--(int)   // post-decrement
+    {
+      ConstIterator tmp = *this;
+      --*this;
+      return tmp;
+    }
+    bool operator==(const ConstIterator& other) const
+    {
+      return ptr_ == other.ptr_;
+    }
+    bool operator!=(const ConstIterator& other) const
+    {
+      return ptr_ != other.ptr_;
+    }
+
+  private:
+    const queue* ptr_{nullptr};
+  };
+  //friend class ConstIterator;
+
+  Iterator begin()
+  {
+    return Iterator(head_->next);
+  }
+  ConstIterator begin() const
+  {
+    return ConstIterator(head_->next);
+  }
+  Iterator end()
+  {
+    return Iterator(head_);
+  }
+  ConstIterator end() const
+  {
+    return ConstIterator(head_);
+  }
+  ConstIterator cbegin()
+  {
+    return ConstIterator(head_->next);
+  }
+  ConstIterator cend()
+  {
+    return ConstIterator(head_);
+  }
+
+  bool empty() const
+  {
+    return begin() == end();
+  }
+
+  T& front()
+  {
+    return reinterpret_cast<T&>(**begin());
+  }
+
+  const T& front() const
+  {
+    return reinterpret_cast<const T&>(**begin());
+  }
+
+  T& back()
+  {
+    auto tmp = end();
+    --tmp;
+    return reinterpret_cast<T&>(**tmp);
+  }
+
+  const T& back() const
+  {
+    auto tmp = end();
+    --tmp;
+    return reinterpret_cast<const T&>(**tmp);
+  }
+
+private:
+  queue* head_;
+  int* ct_;
+};
+
 
 /*
  * The following sorting code was derived from linked-list mergesort

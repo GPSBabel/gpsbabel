@@ -44,7 +44,7 @@ void BendFilter::init()
     minAngle = strtod(minangleopt, nullptr);
   }
 
-  route_backup(&routes_orig_num, &routes_orig);
+  route_backup(&routes_orig);
   route_flush_all_routes();
 }
 
@@ -158,17 +158,17 @@ void BendFilter::process_route_orig(const route_head* route_orig)
 
 void BendFilter::process()
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(routes_orig, elem, tmp) {
-    route_head* route_orig = reinterpret_cast<route_head *>(elem);
+  for (auto it = routes_orig->cbegin(); it != routes_orig->cend(); ++it) {
+    auto route_orig = reinterpret_cast<const route_head*>(*it);
     process_route_orig(route_orig);
   }
 }
 
 void BendFilter::deinit()
 {
-  route_flush(routes_orig);
-  xfree(routes_orig);
+  routes_orig->flush();
+  delete routes_orig;
+  routes_orig = nullptr;
 }
 
 #endif // FILTERS_ENABLED

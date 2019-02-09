@@ -213,8 +213,10 @@ main(int argc, char* argv[])
   int opt_version = 0;
   int did_something = 0;
   const char* prog_name = argv[0]; /* argv is modified during processing */
-  queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
-  signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
+  queue* wpt_head_bak;	/* #ifdef UTF8_SUPPORT */
+  RouteList* rte_head_bak, *trk_head_bak; /* #ifdef UTF8_SUPPORT */
+  signed int wpt_ct_bak;  /* #ifdef UTF8_SUPPORT */
+  bool lists_backedup;  /* #ifdef UTF8_SUPPORT */
   QStack<QargStackElement> qargs_stack = QStack<QargStackElement>();
 
   // Create a QCoreApplication object to handle application initialization.
@@ -401,9 +403,7 @@ main(int argc, char* argv[])
 
         cet_convert_init(ovecs->encode, ovecs->fixed_encode);
 
-        wpt_ct_bak = -1;
-        rte_ct_bak = -1;
-        trk_ct_bak = -1;
+        lists_backedup = false;
         rte_head_bak = trk_head_bak = nullptr;
 
         ovecs->wr_init(ofname);
@@ -417,9 +417,10 @@ main(int argc, char* argv[])
            */
           int saved_status = global_opts.verbose_status;
           global_opts.verbose_status = 0;
+          lists_backedup = true;
           waypt_backup(&wpt_ct_bak, &wpt_head_bak);
-          route_backup(&rte_ct_bak, &rte_head_bak);
-          track_backup(&trk_ct_bak, &trk_head_bak);
+          route_backup(&rte_head_bak);
+          track_backup(&trk_head_bak);
 
           cet_convert_strings(nullptr, global_opts.charset, nullptr);
           global_opts.verbose_status = saved_status;
@@ -430,16 +431,12 @@ main(int argc, char* argv[])
 
         cet_convert_deinit();
 
-        if (wpt_ct_bak != -1) {
+        if (lists_backedup) {
           waypt_restore(wpt_ct_bak, wpt_head_bak);
-        }
-        if (rte_ct_bak != -1) {
           route_restore(rte_head_bak);
-          xfree(rte_head_bak);
-        }
-        if (trk_ct_bak != -1) {
+          delete rte_head_bak;
           track_restore(trk_head_bak);
-          xfree(trk_head_bak);
+          delete trk_head_bak;
         }
       }
       break;
@@ -720,7 +717,7 @@ main(int argc, char* argv[])
 
   cet_deregister();
   waypt_flush_all();
-  route_flush_all();
+  route_deinit();
   session_exit();
   exit_vecs();
   exit_filter_vecs();

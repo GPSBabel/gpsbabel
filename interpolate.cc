@@ -30,28 +30,27 @@
 
 void InterpolateFilter::process()
 {
-  queue* backuproute = nullptr;
-  queue* elem, *tmp, *elem2, *tmp2;
-  int count = 0;
+  RouteList* backuproute = nullptr;
+  queue* elem2, *tmp2;
   double lat1 = 0, lon1 = 0;
   double altitude1 = unknown_alt;
   unsigned int time1 = 0;
   double frac;
 
   if (opt_route) {
-    route_backup(&count, &backuproute);
+    route_backup(&backuproute);
     route_flush_all_routes();
   } else {
-    track_backup(&count, &backuproute);
+    track_backup(&backuproute);
     route_flush_all_tracks();
   }
 
-  if (count == 0) {
+  if (backuproute->empty()) {
     fatal(MYNAME ": Found no routes or tracks to operate on.\n");
   }
 
-  QUEUE_FOR_EACH(backuproute, elem, tmp) {
-    route_head* rte_old = reinterpret_cast<route_head *>(elem);
+  for (auto it = backuproute->cbegin(); it != backuproute->cend(); ++it) {
+    auto rte_old = reinterpret_cast<const route_head*>(*it);
 
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
@@ -139,8 +138,8 @@ void InterpolateFilter::process()
       time1 = wpt->creation_time.toTime_t();
     }
   }
-  route_flush(backuproute);
-  xfree(backuproute);
+  backuproute->flush();
+  delete backuproute;
 }
 
 void InterpolateFilter::init()

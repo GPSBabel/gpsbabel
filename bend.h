@@ -47,8 +47,7 @@ private:
   double maxDist;
   double minAngle;
 
-  queue* routes_orig = nullptr;
-  int routes_orig_num = 0;
+  RouteList* routes_orig = nullptr;
 
   arglist_t args[3] = {
     {

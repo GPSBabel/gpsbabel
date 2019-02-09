@@ -30,13 +30,14 @@
 
 void StackFilter::process()
 {
-  struct stack_elt* tmp_elt = nullptr;
+  stack_elt* tmp_elt = nullptr;
   queue* elem = nullptr;
   queue* tmp = nullptr;
   queue tmp_queue;
+  RouteList* route_list_ptr;
 
   if (opt_push) {
-    tmp_elt = (struct stack_elt*)xmalloc(sizeof(struct stack_elt));
+    tmp_elt = new stack_elt;
 
     QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
     tmp_elt->waypt_ct = waypt_count();
@@ -49,18 +50,14 @@ void StackFilter::process()
       }
     }
 
-    tmp = nullptr;
-    route_backup(&(tmp_elt->route_count), &tmp);
-    QUEUE_MOVE(&(tmp_elt->routes), tmp);
-    xfree(tmp);
+    route_list_ptr = &(tmp_elt->routes);
+    route_backup(&route_list_ptr);
     if (!opt_copy) {
       route_flush_all_routes();
     }
 
-    tmp = nullptr;
-    track_backup(&(tmp_elt->track_count), &tmp);
-    QUEUE_MOVE(&(tmp_elt->tracks), tmp);
-    xfree(tmp);
+    route_list_ptr = &(tmp_elt->tracks);
+    track_backup(&route_list_ptr);
     if (!opt_copy) {
       route_flush_all_tracks();
     }
@@ -75,13 +72,13 @@ void StackFilter::process()
         waypt_add(reinterpret_cast<Waypoint *>(elem));
       }
       route_append(&(stack->routes));
-      route_flush(&(stack->routes));
+      stack->routes.flush();
       track_append(&(stack->tracks));
-      route_flush(&(stack->tracks));
+      stack->tracks.flush();
     } else if (opt_discard) {
       waypt_flush(&(stack->waypts));
-      route_flush(&(stack->routes));
-      route_flush(&(stack->tracks));
+      stack->routes.flush();
+      stack->tracks.flush();
     } else {
       waypt_flush(&waypt_head);
       QUEUE_MOVE(&(waypt_head), &(stack->waypts));
@@ -92,7 +89,7 @@ void StackFilter::process()
     }
 
     stack = tmp_elt->next;
-    xfree(tmp_elt);
+    delete tmp_elt;
   } else if (opt_swap) {
     tmp_elt = stack;
     while (swapdepth > 1) {
@@ -105,24 +102,13 @@ void StackFilter::process()
     QUEUE_MOVE(&tmp_queue, &(tmp_elt->waypts));
     QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
     QUEUE_MOVE(&waypt_head, &tmp_queue);
-
-    QUEUE_MOVE(&tmp_queue, &(tmp_elt->routes));
-    tmp = nullptr;
-    route_backup(&(tmp_elt->route_count), &tmp);
-    QUEUE_MOVE(&(tmp_elt->routes), tmp);
-    xfree(tmp);
-    route_restore(&tmp_queue);
-
-    QUEUE_MOVE(&tmp_queue, &(tmp_elt->tracks));
-    tmp = nullptr;
-    track_backup(&(tmp_elt->track_count), &tmp);
-    QUEUE_MOVE(&(tmp_elt->tracks), tmp);
-    xfree(tmp);
-    track_restore(&tmp_queue);
-
     unsigned int tmp_count = waypt_count();
     set_waypt_count(tmp_elt->waypt_ct);
     tmp_elt->waypt_ct = tmp_count;
+
+    route_swap(tmp_elt->routes);
+
+    track_swap(tmp_elt->tracks);
   }
 }
 
@@ -172,7 +158,7 @@ void StackFilter::deinit()
 
 void StackFilter::exit()
 {
-  struct stack_elt* tmp_elt = nullptr;
+  stack_elt* tmp_elt = nullptr;
 
   if (warnings_enabled && stack) {
     warning(MYNAME " Warning: leftover stack entries; "
@@ -182,7 +168,7 @@ void StackFilter::exit()
     waypt_flush(&(stack->waypts));
     tmp_elt = stack;
     stack = stack->next;
-    xfree(tmp_elt);
+    delete tmp_elt;
   }
 }
 
