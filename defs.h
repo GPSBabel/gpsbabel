@@ -820,9 +820,6 @@ typedef Waypoint* (*ff_readposn)(posn_status*);
 
 char* get_option(const char* iarglist, const char* argname);
 
-void xcsv_setup_internal_style(const char* style_buf);
-void xcsv_read_internal_style(const char* style_buf);
-
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
 

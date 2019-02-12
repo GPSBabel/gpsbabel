@@ -133,6 +133,7 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
+  xcsv.h \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
