@@ -43,7 +43,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
-        subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
+        subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 
