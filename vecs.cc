@@ -23,6 +23,7 @@
 #include "csv_util.h"
 #include "gbversion.h"
 #include "inifile.h"
+#include "xcsv.h"
 #include <QtCore/QString>
 #include <cstdio>
 #include <cstdlib> // qsort

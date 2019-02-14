@@ -17,6 +17,9 @@
 
  */
 
+#ifndef SRC_CORE_FILE_INCLUDED_H_
+#define SRC_CORE_FILE_INCLUDED_H_
+
 #include <QtCore/QFile>
 #include <QtCore/QIODevice>
 #include <cstdio>
@@ -58,3 +61,5 @@ public:
 };
 
 }; // namespace gpsbabel
+
+#endif // SRC_CORE_FILE_INCLUDED_H_
