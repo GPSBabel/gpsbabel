@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="30.046233000" minlon="-91.599283000" maxlat="30.046783000" maxlon="-91.598467000"/>
+  <trk>
+    <name>LOG-20020527</name>
+    <trkseg>
+      <trkpt lat="30.046233000" lon="-91.598467000">
+        <ele>0.000</ele>
+        <time>2002-06-01T19:02:48Z</time>
+      </trkpt>
+      <trkpt lat="30.046317000" lon="-91.598967000">
+        <ele>0.000</ele>
+        <time>2002-06-01T19:03:43Z</time>
+      </trkpt>
+      <trkpt lat="30.046783000" lon="-91.599283000">
+        <ele>0.000</ele>
+        <time>2002-06-01T19:04:49Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
