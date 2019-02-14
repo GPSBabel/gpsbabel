@@ -438,5 +438,9 @@ internal_styles.cc: mkstyle.sh $(srcdir)/style/*.style
 	$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)
 
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),more-clean)
+ifneq ($(MAKECMDGOALS),toolinfo)
 -include $(DEPFILES)
+endif
+endif
 endif
