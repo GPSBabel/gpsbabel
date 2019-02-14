@@ -271,9 +271,9 @@ skytraq_calc_checksum(const unsigned char* buf, int len)
 static int
 skytraq_rd_msg(const void* payload, unsigned int len)
 {
-  int errors = 5;		/* allow this many errors */
+  int errors = 5;		// Allow this many receiver errors silently.
   unsigned int c, i, state;
-  signed int rcv_len;
+  signed int rcv_len;		// Negative length is read error.
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);
