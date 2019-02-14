@@ -40,7 +40,7 @@ set(ALL_FMTS
   saroute.cc navicache.cc psitrex.cc delgpl.cc
   ozi.cc text.cc html.cc netstumbler.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc xhtmlent.cc lowranceusr.cc an1.cc tomtom.cc
+  vcf.cc lowranceusr.cc an1.cc tomtom.cc
   tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
   ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
   yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
@@ -51,7 +51,7 @@ set(ALL_FMTS
   jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
   pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
   vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
-  subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc
+  subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 )
@@ -149,6 +149,7 @@ set(HEADERS
   session.h
   shapelib/shapefil.h
   strptime.h
+  xcsv.h
   xmlgeneric.h
   zlib/crc32.h
   zlib/deflate.h
@@ -230,6 +231,7 @@ if (APPLE)
     mac/libusb/usb.h
     mac/libusb/usbi.h
   )
+  add_compile_options(-Wall -Wsign-compare)
 endif()
 
 set(SOURCES

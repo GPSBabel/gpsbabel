@@ -20,24 +20,39 @@
 
  */
 
+#undef TRACKF_DBG
 
 #include "defs.h"
 #include "filterdefs.h"
-#include "grtcirc.h"
+#include "queue.h"                         // for queue, QUEUE_FOR_EACH, QUEUE_FIRST, QUEUE_LAST, QUEUE_NEXT
+#include "grtcirc.h"                       // for RAD, gcdist, heading_true_degrees, radtometers, radtomiles
 #include "strptime.h"
 #include "trackfilter.h"
-#include "xmlgeneric.h"
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamAttributes>
-#include <cassert>
-#include <cmath>
-#include <cstdio> /* for snprintf */
-#include <cstdlib> /* for qsort */
+#include "src/core/datetime.h"             // for DateTime
+#include <QtCore/QByteArray>               // for QByteArray
+#include <QtCore/QChar>                    // for QChar
+#include <QtCore/QDate>                    // for QDate
+#include <QtCore/QDateTime>                // for QDateTime
+#ifdef TRACKF_DBG
+#include <QtCore/QDebug>
+#endif
+#include <QtCore/QList>                    // for QList<>::iterator, QList
+#include <QtCore/QtGlobal>                 // for qint64, qPrintable
+#include <QtCore/QRegExp>                  // for QRegExp, QRegExp::WildcardUnix
+#include <QtCore/QRegularExpression>       // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
+#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
+#include <QtCore/QString>                  // for QString
+#include <QtCore/Qt>                       // for UTC, CaseInsensitive
+#include <algorithm>                       // for sort, stable_sort
+#include <cassert>                         // for assert
+#include <cmath>                           // for nan
+#include <cstdio>                          // for printf
+#include <cstdlib>                         // for abs
+#include <cstring>                         // for strlen, strchr, strcmp
+#include <ctime>                           // for gmtime, strftime
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
 #define MYNAME "trackfilter"
-
-#undef TRACKF_DBG
 
 /*******************************************************************************
 * helpers
@@ -57,90 +72,54 @@ int TrackFilter::trackfilter_opt_count()
   return res;
 }
 
-int TrackFilter::trackfilter_parse_time_opt(const char* arg)
+qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
-  int sign = 1;
-  const char* cin = arg;
-  char c;
+  qint64 result;
 
-  time_t t0 = 0;
-  time_t t1 = 0;
-
-  while ((c = *cin++)) {
-    time_t seconds;
-
-    if (c >= '0' && c <= '9') {
-      t1 = (t1 * 10) + (c - '0');
-      continue;
+  QRegularExpression re("^([+-]?\\d+)([dhms])$", QRegularExpression::CaseInsensitiveOption);
+  assert(re.isValid());
+  QRegularExpressionMatch match = re.match(arg);
+  if (match.hasMatch()) {
+    bool ok;
+    result = match.captured(1).toLong(&ok);
+    if (!ok) {
+      fatal(MYNAME "-time: invalid quantity in move option \"%s\"!\n", qPrintable(match.captured(1)));
     }
-    switch (tolower(c)) {
+
+    switch (match.captured(2).at(0).toLower().toLatin1()) {
     case 'd':
-      seconds = SECONDS_PER_DAY;
+      result *= SECONDS_PER_DAY;
       break;
     case 'h':
-      seconds = SECONDS_PER_HOUR;
+      result *= SECONDS_PER_HOUR;
       break;
     case 'm':
-      seconds = 60;
+      result *= 60;
       break;
     case 's':
-      seconds = 1;
       break;
-    case '+':
-      sign = +1;
-      continue;
-    case '-':
-      sign = -1;
-      continue;
     default:
-      fatal(MYNAME "-time: invalid character in time option!\n");
+      fatal(MYNAME "-time: invalid unit in move option \"%s\"!\n", qPrintable(match.captured(2)));
     }
-    t0 += (t1 * seconds * sign);
-    sign = +1;
-    t1 = 0;
+
+#ifdef TRACKF_DBG
+    qDebug() << MYNAME "-time option: shift =" << result << "seconds";
+#endif
+  } else {
+    fatal(MYNAME "-time: invalid value in move option \"%s\"!\n", arg);
   }
-  t0 += t1;
-  return t0;
+
+  return result;
 }
 
-int TrackFilter::trackfilter_init_qsort_cb(const void* a, const void* b)
+bool TrackFilter::trackfilter_init_sort_cb(const route_head* ha, const route_head* hb)
 {
-  const trkflt_t* ra = (const trkflt_t*) a;
-  const trkflt_t* rb = (const trkflt_t*) b;
-  const QDateTime dta = ra->first_time;
-  const QDateTime dtb = rb->first_time;
-
-  if (dta > dtb) {
-    return 1;
-  }
-  if (dta == dtb) {
-    return 0;
-  }
-  return -1;
+  return trackfilter_get_first_time(ha) < trackfilter_get_first_time(hb);
 }
 
-int TrackFilter::trackfilter_merge_qsort_cb(const void* a, const void* b)
+bool TrackFilter::trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb)
 {
-  const Waypoint* wa = *(Waypoint**)a;
-  const Waypoint* wb = *(Waypoint**)b;
-  const QDateTime dta = wa->GetCreationTime();
-  const QDateTime dtb = wb->GetCreationTime();
-
-  if (dta > dtb) {
-    return 1;
-  }
-  if (dta == dtb) {
-    int seqno_a = gb_ptr2int(wa->extra_data);
-    int seqno_b = gb_ptr2int(wb->extra_data);
-    if (seqno_a > seqno_b) {
-      return 1;
-    } else if (seqno_a == seqno_b) {
-      return 0;
-    } else {
-      return -1;
-    }
-  }
-  return -1;
+  return wa->GetCreationTime() < wb->GetCreationTime();
 }
 
 fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
@@ -172,6 +151,25 @@ fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
   return fix_unknown;
 }
 
+QDateTime TrackFilter::trackfilter_get_first_time(const route_head* track)
+{
+  if (QUEUE_EMPTY(&track->waypoint_list)) {
+    return QDateTime();
+  } else {
+    return reinterpret_cast<Waypoint*>(QUEUE_FIRST(&track->waypoint_list))->GetCreationTime();
+  }
+}
+
+QDateTime TrackFilter::trackfilter_get_last_time(const route_head* track)
+{
+  if (QUEUE_EMPTY(&track->waypoint_list)) {
+    return QDateTime();
+  } else {
+    return reinterpret_cast<Waypoint*>(QUEUE_LAST(&track->waypoint_list))->GetCreationTime();
+  }
+}
+
+
 void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_disp_all */
 {
   queue* elem, *tmp;
@@ -183,8 +181,8 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
 
   if (opt_name != nullptr) {
     if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
-      QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-        Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+      QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
         track_del_wpt(const_cast<route_head*>(track), wpt);
         delete wpt;
       }
@@ -193,31 +191,16 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
     }
   }
 
-  track_list[track_ct].track = const_cast<route_head*>(track);
-
-  int i = 0;
   Waypoint* prev = nullptr;
 
-  QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-    track_pts++;
-
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-    if (!wpt->creation_time.isValid()) {
-      timeless_pts++;
-    }
-    if (!(opt_merge && opt_discard) && (need_time != 0) && (!wpt->creation_time.isValid())) {
+  QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+    auto wpt = reinterpret_cast<Waypoint*>(elem);
+    if (!(opt_merge && opt_discard) && need_time && (!wpt->creation_time.isValid())) {
       fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
     }
 
-    i++;
-    if (i == 1) {
-      track_list[track_ct].first_time = wpt->GetCreationTime();
-    } else if (i == track->rte_waypt_ct) {
-      track_list[track_ct].last_time = wpt->GetCreationTime();
-    }
-
-    if ((need_time != 0) && (prev != nullptr) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
+    if (need_time && (prev != nullptr) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
       if (opt_merge == nullptr) {
         QString t1 = prev->CreationTimeXML();
         QString t2 = wpt->CreationTimeXML();
@@ -226,12 +209,12 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
     }
     prev = wpt;
   }
-  track_ct++;
+
+  track_list.append(const_cast<route_head*>(track));
 }
 
 void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 {
-  int minimum_points = atoi(opt_minpoints);
   if (track->rte_waypt_ct < minimum_points) {
     track_del_head(const_cast<route_head*>(track));
     return;
@@ -255,11 +238,10 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDate
   if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {
     if (strchr(opt_title, '%') != nullptr) {
       // Uggh.  strftime format exposed to user.
-      char buff[128];
 
-      time_t time = dt.toUTC().toTime_t();
+      time_t time = dt.toTime_t();
       struct tm tm = *gmtime(&time);
-
+      char buff[128];
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
     } else {
@@ -272,18 +254,20 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDate
   }
 }
 
-void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
+void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const QDateTime& default_time)
 {
   if (strchr(opt_title, '%') != nullptr) {
-    struct tm tm;
+    // Uggh.  strftime format exposed to user.
 
+    QDateTime dt;
     if (track->rte_waypt_ct == 0) {
-      tm = *localtime(&default_time);
+      dt = default_time;
     } else {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>QUEUE_FIRST((queue*)&track->waypoint_list);
-      time_t t = wpt->GetCreationTime().toTime_t();
-      tm = *localtime(&t);
+      auto wpt = reinterpret_cast<Waypoint*>QUEUE_FIRST(&track->waypoint_list);
+      dt = wpt->GetCreationTime();
     }
+    time_t t = dt.toTime_t();
+    struct tm tm = *gmtime(&t);
     char buff[128];
     strftime(buff, sizeof(buff), opt_title, &tm);
     track->rte_name = buff;
@@ -305,9 +289,8 @@ void TrackFilter::trackfilter_title()
   if (strlen(opt_title) == 0) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
-  for (int i = 0; i < track_ct; i++) {
-    route_head* track = track_list[i].track;
-    trackfilter_pack_init_rte_name(track, 0);
+  for (auto track : qAsConst(track_list)) {
+    trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, Qt::UTC));
   }
 }
 
@@ -317,34 +300,35 @@ void TrackFilter::trackfilter_title()
 
 void TrackFilter::trackfilter_pack()
 {
-  int i, j;
+  if (!track_list.isEmpty()) {
+    int i, j;
 
-  for (i = 1, j = 0; i < track_ct; i++, j++) {
-    trkflt_t prev = track_list[j];
-    if (prev.last_time >= track_list[i].first_time) {
-      fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
-            qPrintable(prev.last_time.toString()),
-            qPrintable(track_list[i].first_time.toString()), i);
+    for (i = 1, j = 0; i < track_list.size(); i++, j++) {
+      auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
+      auto curr_first_time = trackfilter_get_first_time(track_list.at(i));
+      if (prev_last_time >= curr_first_time) {
+        fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
+              qPrintable(prev_last_time.toString()),
+              qPrintable(curr_first_time.toString()), i);
+      }
+    }
+
+    /* we fill up the first track by all other track points */
+
+    route_head* master = track_list.first();
+
+    while (track_list.size() > 1) {
+      route_head* curr = track_list.takeAt(1);
+
+      queue* elem, *tmp;
+      QUEUE_FOR_EACH(&curr->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
+        track_del_wpt(curr, wpt);
+        track_add_wpt(master, wpt);
+      }
+      track_del_head(curr);
     }
   }
-
-  /* we fill up the first track by all other track points */
-
-  route_head* master = track_list[0].track;
-
-  for (i = 1; i < track_ct; i++) {
-    queue* elem, *tmp;
-    route_head* curr = track_list[i].track;
-
-    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-      track_del_wpt(curr, wpt);
-      track_add_wpt(master, wpt);
-    }
-    track_del_head(curr);
-    track_list[i].track = nullptr;
-  }
-  track_ct = 1;
 }
 
 /*******************************************************************************
@@ -353,64 +337,64 @@ void TrackFilter::trackfilter_pack()
 
 void TrackFilter::trackfilter_merge()
 {
-  int i;
+  if (!track_list.isEmpty()) {
+    route_head* master = track_list.first();
 
-  queue* elem, *tmp;
-  Waypoint* wpt;
-  route_head* master = track_list[0].track;
+    int original_waypt_count = track_waypt_count();
 
-  if (track_pts-timeless_pts < 1) {
-    return;
-  }
+    QList<Waypoint*> buff;
 
-  Waypoint** buff = (Waypoint**)xcalloc(track_pts-timeless_pts, sizeof(*buff));
-
-  int j = 0;
-  for (i = 0; i < track_ct; i++) {	/* put all points into temp buffer */
-    route_head* track = track_list[i].track;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      wpt = reinterpret_cast<Waypoint *>(elem);
-      if (wpt->creation_time.isValid()) {
-        buff[j] = new Waypoint(*wpt);
-        // augment sort key so a stable sort is possible.
-        buff[j]->extra_data = gb_int2ptr(j);
-        j++;
-        // we will put the merged points in one track segment,
-        // as it isn't clear how track segments in the original tracks
-        // should relate to the merged track.
-        // track_add_wpt will set new_trkseg for the first point
-        // after the sort.
-        wpt->wpt_flags.new_trkseg = 0;
+    auto it = track_list.begin();
+    while (it != track_list.end()) { /* put all points into temp buffer */
+      route_head* track = *it;
+      queue* elem, *tmp;
+      QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
+        track_del_wpt(track, wpt); /* copies any new_trkseg flag forward, and clears new_trkseg flag. */
+        if (wpt->creation_time.isValid()) {
+          // we will put the merged points in one track segment,
+          // as it isn't clear how track segments in the original tracks
+          // should relate to the merged track.
+          // track_del_wpt cleared new_trkseg flag for wpt.
+          // track_add_wpt will set new_trkseg for the first point
+          // added to a track.
+          buff.append(wpt);
+        } else {
+          delete wpt;
+        }
       }
-      track_del_wpt(track, wpt); // copies any new_trkseg flag forward.
-      delete wpt;
+      if (it != track_list.begin()) {
+        track_del_head(track);
+        it = track_list.erase(it);
+      } else {
+        ++it;
+      }
     }
-    if (track != master) {	/* i > 0 */
-      track_del_head(track);
+
+    std::stable_sort(buff.begin(), buff.end(), trackfilter_merge_sort_cb);
+
+    Waypoint* prev = nullptr;
+
+    for (auto wpt : buff) {
+      if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
+        track_add_wpt(master, wpt);
+        prev = wpt;
+      } else {
+        delete wpt;
+      }
     }
-  }
-  track_ct = 1;
 
-  qsort(buff, track_pts-timeless_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
-
-  int dropped = timeless_pts;
-  Waypoint* prev = nullptr;
-
-  for (i = 0; i < track_pts-timeless_pts; i++) {
-    buff[i]->extra_data = nullptr;
-    wpt = buff[i];
-    if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
-      track_add_wpt(master, wpt);
-      prev = wpt;
-    } else {
-      delete wpt;
-      dropped++;
+    if (master->rte_waypt_ct == 0) {
+      track_del_head(master);
+      track_list.clear();
     }
-  }
-  xfree(buff);
 
-  if (global_opts.verbose_status > 0) {
-    printf(MYNAME "-merge: %d track point(s) merged, %d dropped.\n", track_pts - dropped, dropped);
+    if (global_opts.verbose_status > 0) {
+      printf(MYNAME "-merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
+    }
+    if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
+      warning(MYNAME "-merge: All %d track points have been dropped!\n", original_waypt_count);
+    }
   }
 }
 
@@ -420,195 +404,160 @@ void TrackFilter::trackfilter_merge()
 
 void TrackFilter::trackfilter_split()
 {
-  route_head* master = track_list[0].track;
-  int count = master->rte_waypt_ct;
+  if (track_list.size() > 1) {
+    fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
+  } else if (!track_list.isEmpty()) {
+    route_head* master = track_list.first();
+    int count = master->rte_waypt_ct;
 
-  Waypoint* wpt;
-  queue* elem, *tmp;
-  int i, j;
-  double interval = -1;
-  double distance = -1;
+    queue* elem, *tmp;
+    int i, j;
+    double interval = -1; /* seconds */
+    double distance = -1; /* meters */
 
-  if (count <= 1) {
-    return;
-  }
-
-  /* check additional options */
-
-  opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
-  opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
-
-  if (opt_interval != 0) {
-    double base;
-    char   unit;
-
-    switch (strlen(opt_split)) {
-    case 0:
-      fatal(MYNAME ": No time interval specified.\n");
-      break; /* ? */
-
-    case 1:
-      unit = *opt_split;
-      interval = 1;
-      break;
-
-    default:
-      i = sscanf(opt_split,"%lf%c", &interval, &unit);
-      if (i == 0) {
-        /* test reverse order */
-        i = sscanf(opt_split,"%c%lf", &unit, &interval);
-      }
-      if ((i != 2) || (interval <= 0)) {
-        fatal(MYNAME ": invalid time interval specified, must be one a positive number.\n");
-      }
-      break;
+    if (count <= 1) {
+      return;
     }
 
-    switch (tolower(unit)) {
-    case 's':
-      base = 1;
-      break;
-    case 'm':
-      base = 60;
-      break;
-    case 'h':
-      base = 60 * 60;
-      break;
-    case 'd':
-      base = 24 * 60 * 60;
-      break;
-    default:
-      fatal(MYNAME ": invalid time interval specified, must be one of [dhms].\n");
-      break;
-    }
+    /* check additional options */
+
+    opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
+    if (opt_interval != 0) {
+      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
+      assert(re.isValid());
+      QRegularExpressionMatch match = re.match(opt_split);
+      if (match.hasMatch()) {
+        bool ok;
+        interval = match.captured(1).toDouble(&ok);
+        if (!ok || interval <= 0.0) {
+          fatal(MYNAME ": invalid time interval specified \"%s\", must be a positive number.\n", qPrintable(match.captured(1)));
+        }
+
+        switch (match.captured(2).at(0).toLower().toLatin1()) {
+        case 'd':
+          interval *= SECONDS_PER_DAY;
+          break;
+        case 'h':
+          interval *= SECONDS_PER_HOUR;
+          break;
+        case 'm':
+          interval *= 60;
+          break;
+        case 's':
+          break;
+        default:
+          fatal(MYNAME ": invalid time interval unit specified.\n");
+        }
+
 #ifdef TRACKF_DBG
-    printf(MYNAME ": unit \"%c\", interval %g -> %g\n", unit, interval, base * interval);
+        printf(MYNAME ": interval %f seconds\n", interval);
 #endif
-    interval *= base;
-  }
-
-  if (opt_distance != 0) {
-    double base;
-    char   unit;
-
-    switch (strlen(opt_sdistance)) {
-    case 0:
-      fatal(MYNAME ": No distance specified.\n");
-      break; /* ? */
-
-    case 1:
-      unit = *opt_sdistance;
-      distance = 1;
-      break;
-
-    default:
-      i = sscanf(opt_sdistance,"%lf%c", &distance, &unit);
-      if (i == 0) {
-        /* test reverse order */
-        i = sscanf(opt_sdistance,"%c%lf", &unit, &distance);
+      } else {
+        fatal(MYNAME ": invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", opt_split);
       }
-      if ((i != 2) || (distance <= 0)) {
-        fatal(MYNAME ": invalid distance specified, must be one a positive number.\n");
-      }
-      break;
     }
 
-    switch (tolower(unit)) {
-    case 'k': /* kilometers */
-      base = 0.6214;
-      break;
-    case 'm': /* miles */
-      base = 1;
-      break;
-    default:
-      fatal(MYNAME ": invalid distance specified, must be one of [km].\n");
-      break;
-    }
+    opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
+    if (opt_distance != 0) {
+      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
+      assert(re.isValid());
+      QRegularExpressionMatch match = re.match(opt_sdistance);
+      if (match.hasMatch()) {
+        bool ok;
+        distance = match.captured(1).toDouble(&ok);
+        if (!ok || distance <= 0.0) {
+          fatal(MYNAME ": invalid time distance specified \"%s\", must be a positive number.\n", qPrintable(match.captured(1)));
+        }
+
+        switch (match.captured(2).at(0).toLower().toLatin1()) {
+        case 'k': /* kilometers */
+          distance *= 1000.0;
+          break;
+        case 'm': /* miles */
+          distance *= 1609.344;
+          break;
+        default:
+          fatal(MYNAME ": invalid distance unit specified.\n");
+        }
+
 #ifdef TRACKF_DBG
-    printf(MYNAME ": unit \"%c\", distance %g -> %g\n", unit, distance, base * distance);
+        printf(MYNAME ": distance %f meters\n", distance);
 #endif
-    distance *= base;
-  }
+      } else {
+        fatal(MYNAME ": invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", opt_sdistance);
+      }
+    }
 
-  trackfilter_split_init_rte_name(master, track_list[0].first_time);
+    QList<Waypoint*> buff;
 
-  Waypoint** buff = (Waypoint**) xcalloc(count, sizeof(*buff));
+    QUEUE_FOR_EACH(&master->waypoint_list, elem, tmp) {
+      buff.append(reinterpret_cast<Waypoint*>(elem));
+    }
 
-  i = 0;
-  QUEUE_FOR_EACH((queue*)&master->waypoint_list, elem, tmp) {
-    wpt = reinterpret_cast<Waypoint *>(elem);
-    buff[i++] = wpt;
-  }
+    trackfilter_split_init_rte_name(master, buff.at(0)->GetCreationTime());
 
-  route_head* curr = nullptr;	/* will be set by first new track */
+    route_head* curr = nullptr;	/* will be set by first new track */
 
-  for (i=0, j=1; j<count; i++, j++) {
-    int new_track_flag;
+    for (i=0, j=1; j<count; i++, j++) {
+      bool new_track_flag;
 
-    if ((opt_interval == 0) && (opt_distance == 0)) {
+      if ((opt_interval == 0) && (opt_distance == 0)) {
 // FIXME: This whole function needs to be reconsidered for arbitrary time.
-      time_t tt1 = buff[i]->GetCreationTime().toTime_t();
-      time_t tt2 = buff[j]->GetCreationTime().toTime_t();
-
-      const struct tm t1 = *localtime(&tt1);
-      const struct tm t2 = *localtime(&tt2);
-
-      new_track_flag = ((t1.tm_year != t2.tm_year) || (t1.tm_mon != t2.tm_mon) ||
-                        (t1.tm_mday != t2.tm_mday));
+        new_track_flag = buff.at(i)->GetCreationTime().toLocalTime().date() !=
+                         buff.at(j)->GetCreationTime().toLocalTime().date();
 #ifdef TRACKF_DBG
-      if (new_track_flag != 0) {
-        printf(MYNAME ": new day %02d.%02d.%04d\n", t2.tm_mday, t2.tm_mon+1, t2.tm_year+1900);
+        if (new_track_flag) {
+          printf(MYNAME ": new day %s\n", qPrintable(buff.at(j)->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+        }
+#endif
+      } else {
+        new_track_flag = true;
+
+        if (distance > 0) {
+          double rt1 = RAD(buff.at(i)->latitude);
+          double rn1 = RAD(buff.at(i)->longitude);
+          double rt2 = RAD(buff.at(j)->latitude);
+          double rn2 = RAD(buff.at(j)->longitude);
+          double curdist = gcdist(rt1, rn1, rt2, rn2);
+          curdist = radtometers(curdist);
+          if (curdist <= distance) {
+            new_track_flag = false;
+          }
+#ifdef TRACKF_DBG
+          else {
+            printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
+          }
+#endif
+        }
+
+        if (interval > 0) {
+          double tr_interval = 0.001 * buff.at(i)->GetCreationTime().msecsTo(buff.at(j)->GetCreationTime());
+          if (tr_interval <= interval) {
+            new_track_flag = false;
+          }
+#ifdef TRACKF_DBG
+          else {
+            printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
+          }
+#endif
+        }
+
       }
-#endif
-    } else {
-      new_track_flag = 1;
-
-      if (distance > 0) {
-        double rt1 = RAD(buff[i]->latitude);
-        double rn1 = RAD(buff[i]->longitude);
-        double rt2 = RAD(buff[j]->latitude);
-        double rn2 = RAD(buff[j]->longitude);
-        double curdist = gcdist(rt1, rn1, rt2, rn2);
-        curdist = radtomiles(curdist);
-        if (curdist <= distance) {
-          new_track_flag = 0;
-        }
+      if (new_track_flag) {
 #ifdef TRACKF_DBG
-        else {
-          printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
-        }
+        printf(MYNAME ": splitting new track\n");
 #endif
+        curr = route_head_alloc();
+        trackfilter_split_init_rte_name(curr, buff.at(j)->GetCreationTime());
+        track_add_head(curr);
+        track_list.append(curr);
       }
-
-      if (interval > 0) {
-        double tr_interval = difftime(buff[j]->GetCreationTime().toTime_t(), buff[i]->GetCreationTime().toTime_t());
-        if (tr_interval <= interval) {
-          new_track_flag = 0;
-        }
-#ifdef TRACKF_DBG
-        else {
-          printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
-        }
-#endif
+      if (curr != nullptr) {
+        track_del_wpt(master, buff.at(j));
+        track_add_wpt(curr, buff.at(j));
       }
-
-    }
-    if (new_track_flag != 0) {
-#ifdef TRACKF_DBG
-      printf(MYNAME ": splitting new track\n");
-#endif
-      curr = route_head_alloc();
-      trackfilter_split_init_rte_name(curr, buff[j]->GetCreationTime());
-      track_add_head(curr);
-    }
-    if (curr != nullptr) {
-      wpt = buff[j];
-      track_del_wpt(master, wpt);
-      track_add_wpt(curr, wpt);
-      buff[j] = wpt;
     }
   }
-  xfree(buff);
 }
 
 /*******************************************************************************
@@ -619,20 +568,16 @@ void TrackFilter::trackfilter_move()
 {
   queue* elem, *tmp;
 
-  time_t delta = trackfilter_parse_time_opt(opt_move);
+  qint64 delta = trackfilter_parse_time_opt(opt_move);
   if (delta == 0) {
     return;
   }
 
-  for (int i = 0; i < track_ct; i++) {
-    route_head* track = track_list[i].track;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-      wpt->creation_time += delta;
+  for (auto track : qAsConst(track_list)) {
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
+      wpt->creation_time = wpt->creation_time.addSecs(delta);
     }
-
-    track_list[i].first_time = track_list[i].first_time.addSecs(delta);
-    track_list[i].last_time = track_list[i].last_time.addSecs(delta);
   }
 }
 
@@ -646,18 +591,17 @@ void TrackFilter::trackfilter_synth()
 
   double last_course_lat;
   double last_course_lon;
-  double last_speed_lat;
-  double last_speed_lon;
-  time_t last_speed_time;
+  double last_speed_lat = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
+  double last_speed_lon = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
+  gpsbabel::DateTime last_speed_time;
   int nsats = 0;
 
   fix_type fix = trackfilter_parse_fix(&nsats);
 
-  for (int i = 0; i < track_ct; i++) {
-    route_head* track = track_list[i].track;
-    int first = 1;
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  for (auto track : qAsConst(track_list)) {
+    bool first = true;
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
       if (opt_fix) {
         wpt->fix = fix;
         if (wpt->sat == 0) {
@@ -673,12 +617,12 @@ void TrackFilter::trackfilter_synth()
           // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
           WAYPT_SET(wpt, speed, 0);
         }
-        first = 0;
+        first = false;
         last_course_lat = wpt->latitude;
         last_course_lon = wpt->longitude;
         last_speed_lat = wpt->latitude;
         last_speed_lon = wpt->longitude;
-        last_speed_time = wpt->GetCreationTime().toTime_t();
+        last_speed_time = wpt->GetCreationTime();
       } else {
         if (opt_course) {
           WAYPT_SET(wpt, course, heading_true_degrees(RAD(last_course_lat),
@@ -688,7 +632,7 @@ void TrackFilter::trackfilter_synth()
           last_course_lon = wpt->longitude;
         }
         if (opt_speed) {
-          if (last_speed_time != wpt->GetCreationTime().toTime_t()) {
+          if (last_speed_time.msecsTo(wpt->GetCreationTime()) != 0) {
             // If we have mutliple points with the same time and
             // we use the pair of points about which the time ticks then we will
             // underestimate the distance and compute low speeds on average.
@@ -701,10 +645,11 @@ void TrackFilter::trackfilter_synth()
                                                 RAD(last_speed_lat), RAD(last_speed_lon),
                                                 RAD(wpt->latitude),
                                                 RAD(wpt->longitude))) /
-                      labs(wpt->GetCreationTime().toTime_t()-last_speed_time));
+                      (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
+                     );
             last_speed_lat = wpt->latitude;
             last_speed_lon = wpt->longitude;
-            last_speed_time = wpt->GetCreationTime().toTime_t();
+            last_speed_time = wpt->GetCreationTime();
           } else {
             WAYPT_UNSET(wpt, speed);
           }
@@ -719,86 +664,82 @@ void TrackFilter::trackfilter_synth()
 * option: "start" / "stop"
 *******************************************************************************/
 
-time_t TrackFilter::trackfilter_range_check(const char* timestr)
+QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
-  char fmt[20];
-  char c;
-  struct tm time;
+  QDateTime result;
 
-
-  int i = 0;
-  strncpy(fmt, "00000101000000", sizeof(fmt));
-  const char* cin = timestr;
-
-  while ((c = *cin++)) {
-    if (fmt[i] == '\0') {
-      fatal(MYNAME "-range: parameter too long \"%s\"!\n", timestr);
+  QRegularExpression re("^(\\d{0,14})$");
+  assert(re.isValid());
+  QRegularExpressionMatch match = re.match(timestr);
+  if (match.hasMatch()) {
+    QString start = match.captured(1);
+    QString fmtstart("00000101000000");
+    fmtstart.replace(0, start.size(), start);
+    result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    result.setTimeSpec(Qt::UTC);
+    if (!result.isValid()) {
+      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
     }
-    if (isdigit(c) == 0) {
-      fatal(MYNAME "-range: invalid character \"%c\"!\n", c);
-    }
-    fmt[i++] = c;
-  }
-  cin = strptime(fmt, "%Y%m%d%H%M%S", &time);
-  if ((cin != nullptr) && (*cin != '\0')) {
-    fatal(MYNAME "-range-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmt);
+
+#ifdef TRACKF_DBG
+    qDebug() << MYNAME "-range-check: " << result;
+#endif
+  } else {
+    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n", timestr);
   }
 
-  return mkgmtime(&time);
+  return result;
 }
 
-int TrackFilter::trackfilter_range()		/* returns number of track points left after filtering */
+void TrackFilter::trackfilter_range()
 {
-  time_t start, stop;
+  QDateTime start, stop; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
   queue* elem, *tmp;
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
-  } else {
-    start = 0;
   }
 
   if (opt_stop != nullptr) {
     stop = trackfilter_range_check(opt_stop);
-  } else {
-    stop = 0x7FFFFFFF;
   }
 
-  int dropped = 0;
-  int inside = 0;
+  int original_waypt_count = track_waypt_count();
 
-  for (int i = 0; i < track_ct; i++) {
-    route_head* track = track_list[i].track;
+  auto it = track_list.begin();
+  while (it != track_list.end()) {
+    route_head* track = *it;
 
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
+      bool inside;
       if (wpt->creation_time.isValid()) {
-        inside = ((wpt->GetCreationTime().toTime_t() >= start) && (wpt->GetCreationTime().toTime_t() <= stop));
-      }
-      // If the time is mangled so horribly that it's
-      // negative, toss it.
-      if (!wpt->creation_time.isValid()) {
-        inside = 0;
+        bool after_start = !start.isValid() || (wpt->GetCreationTime() >= start);
+        bool before_stop = !stop.isValid() || (wpt->GetCreationTime() <= stop);
+        inside = after_start && before_stop;
+      } else {
+        // If the time is mangled so horribly that it's
+        // negative, toss it.
+        inside = false;
       }
 
-      if (! inside) {
+      if (!inside) {
         track_del_wpt(track, wpt);
         delete wpt;
-        dropped++;
       }
     }
 
     if (track->rte_waypt_ct == 0) {
       track_del_head(track);
-      track_list[i].track = nullptr;
+      it = track_list.erase(it);
+    } else {
+      ++it;
     }
   }
 
-  if ((track_pts > 0) && (dropped == track_pts)) {
-    warning(MYNAME "-range: All %d track points have been dropped!\n", track_pts);
+  if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
+    warning(MYNAME "-range: All %d track points have been dropped!\n", original_waypt_count);
   }
-
-  return track_pts - dropped;
 }
 
 /*******************************************************************************
@@ -807,44 +748,50 @@ int TrackFilter::trackfilter_range()		/* returns number of track points left aft
 
 void TrackFilter::trackfilter_seg2trk()
 {
-  for (int i = 0; i < track_ct; i++) {
-    queue* elem, *tmp;
-    route_head* src = track_list[i].track;
-    route_head* dest = nullptr;
-    route_head* insert_point = src;
-    int trk_seg_num = 1, first = 1;
+  if (!track_list.isEmpty()) {
+    QList<route_head*> new_track_list;
+    for (auto src : qAsConst(track_list)) {
+      queue* elem, *tmp;
+      new_track_list.append(src);
+      route_head* dest = nullptr;
+      route_head* insert_point = src;
+      int trk_seg_num = 1;
+      bool first = true;
 
-    QUEUE_FOR_EACH((queue*)&src->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-      if (wpt->wpt_flags.new_trkseg && !first) {
+      QUEUE_FOR_EACH(&src->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
+        if (wpt->wpt_flags.new_trkseg && !first) {
 
-        dest = route_head_alloc();
-        dest->rte_num = src->rte_num;
-        /* name in the form TRACKNAME #n */
-        if (!src->rte_name.isEmpty()) {
-          dest->rte_name = QString("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
+          dest = route_head_alloc();
+          dest->rte_num = src->rte_num;
+          /* name in the form TRACKNAME #n */
+          if (!src->rte_name.isEmpty()) {
+            dest->rte_name = QString("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
+          }
+
+          /* Insert after original track or after last newly
+           * created track */
+          track_insert_head(dest, insert_point);
+          insert_point = dest;
+          new_track_list.append(dest);
         }
 
-        /* Insert after original track or after last newly
-         * created track */
-        track_insert_head(dest, insert_point);
-        insert_point = dest;
+        /* If we found a track separator, transfer from original to
+         * new track. We have to reset new_trkseg temporarily to
+         * prevent track_del_wpt() from copying it to the next track
+         * point.
+         */
+        if (dest) {
+          unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+          wpt->wpt_flags.new_trkseg = 0;
+          track_del_wpt(src, wpt);
+          wpt->wpt_flags.new_trkseg = orig_new_trkseg;
+          track_add_wpt(dest, wpt);
+        }
+        first = false;
       }
-
-      /* If we found a track separator, transfer from original to
-       * new track. We have to reset new_trkseg temporarily to
-       * prevent track_del_wpt() from copying it to the next track
-       * point.
-       */
-      if (dest) {
-        int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
-        wpt->wpt_flags.new_trkseg = 0;
-        track_del_wpt(src, wpt);
-        wpt->wpt_flags.new_trkseg = orig_new_trkseg;
-        track_add_wpt(dest, wpt);
-      }
-      first = 0;
     }
+    track_list = new_track_list;
   }
 }
 
@@ -854,31 +801,30 @@ void TrackFilter::trackfilter_seg2trk()
 
 void TrackFilter::trackfilter_trk2seg()
 {
-  route_head* master = track_list[0].track;
+  if (!track_list.isEmpty()) {
+    route_head* master = track_list.first();
 
-  for (int i = 1; i < track_ct; i++) {
-    queue* elem, *tmp;
-    route_head* curr = track_list[i].track;
+    while (track_list.size() > 1) {
+      route_head* curr = track_list.takeAt(1);
 
-    int first = 1;
-    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+      queue* elem, *tmp;
+      bool first = true;
+      QUEUE_FOR_EACH(&curr->waypoint_list, elem, tmp) {
+        auto wpt = reinterpret_cast<Waypoint*>(elem);
 
-
-      int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
-      wpt->wpt_flags.new_trkseg = 0;
-      track_del_wpt(curr, wpt);
-      wpt->wpt_flags.new_trkseg = orig_new_trkseg;
-      track_add_wpt(master, wpt);
-      if (first) {
-        wpt->wpt_flags.new_trkseg = 1;
-        first = 0;
+        unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+        wpt->wpt_flags.new_trkseg = 0;
+        track_del_wpt(curr, wpt);
+        wpt->wpt_flags.new_trkseg = orig_new_trkseg;
+        track_add_wpt(master, wpt);
+        if (first) {
+          wpt->wpt_flags.new_trkseg = 1;
+          first = false;
+        }
       }
+      track_del_head(curr);
     }
-    track_del_head(curr);
-    track_list[i].track = nullptr;
   }
-  track_ct = 1;
 }
 
 /*******************************************************************************
@@ -887,56 +833,40 @@ void TrackFilter::trackfilter_trk2seg()
 
 TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* timestr)
 {
-  char fmtstart[20];
-  char fmtstep[20];
-  char c;
-  struct tm time;
-  bool timeparse = true;
   faketime_t result;
-  result.force = false;
 
-  int i = 0;
-  int j = 0;
-  strncpy(fmtstart, "00000101000000", sizeof(fmtstart));
-  strncpy(fmtstep,  "00000000000000", sizeof(fmtstep));
-  const char* cin = timestr;
+  QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
+  assert(re.isValid());
+  QRegularExpressionMatch match = re.match(timestr);
+  if (match.hasMatch()) {
+    result.force = match.capturedLength(1) > 0;
 
-  while ((c = *cin++)) {
-    if (c=='f') {
-      result.force = true;
-      continue;
+    QString start = match.captured(2);
+    QString fmtstart("00000101000000");
+    fmtstart.replace(0, start.size(), start);
+    result.start = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    result.start.setTimeSpec(Qt::UTC);
+    if (!result.start.isValid()) {
+      fatal(MYNAME "-faketime-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
     }
 
-    if (c!='+' && isdigit(c) == 0) {
-      fatal(MYNAME "-faketime: invalid character \"%c\"!\n", c);
-    }
-
-    if (timeparse) {
-      if (c == '+') {
-        fmtstart[i++] = '\0';
-        timeparse = false;
-      } else {
-        if (fmtstart[i] == '\0') {
-          fatal(MYNAME "-faketime: parameter too long \"%s\"!\n", timestr);
-        }
-        fmtstart[i++] = c;
+    if (match.capturedLength(3) > 0) {
+      bool ok;
+      result.step = match.captured(3).toInt(&ok);
+      if (!ok) {
+        fatal(MYNAME "-faketime-check: Invalid step \"%s\"!\n", qPrintable(match.captured(3)));
       }
     } else {
-      if (fmtstep[j] == '\0') {
-        fatal(MYNAME "-faketime: parameter too long \"%s\"!\n", timestr);
-      }
-      fmtstep[j++] = c;
+      result.step = 0;
     }
-  }
-  fmtstep[j++] = '\0';
 
-  cin = strptime(fmtstart, "%Y%m%d%H%M%S", &time);
-  result.step = atoi(fmtstep);
-  if ((cin != nullptr) && (*cin != '\0')) {
-    fatal(MYNAME "-faketime-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmtstart);
+#ifdef TRACKF_DBG
+    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step;
+#endif
+  } else {
+    fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", timestr);
   }
 
-  result.start = mkgmtime(&time);
   return result;
 }
 
@@ -947,21 +877,19 @@ void TrackFilter::trackfilter_faketime()
   assert(opt_faketime != nullptr);
   faketime_t faketime = trackfilter_faketime_check(opt_faketime);
 
-  for (int i = 0; i < track_ct; i++) {
-    route_head* track = track_list[i].track;
-
-    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  for (auto track : qAsConst(track_list)) {
+    QUEUE_FOR_EACH(&track->waypoint_list, elem, tmp) {
+      auto wpt = reinterpret_cast<Waypoint*>(elem);
 
       if (!wpt->creation_time.isValid() || faketime.force) {
-        wpt->creation_time = QDateTime::fromTime_t(faketime.start);
-        faketime.start += faketime.step;
+        wpt->creation_time = faketime.start;
+        faketime.start = faketime.start.addSecs(faketime.step);
       }
     }
   }
 }
 
-int TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
+bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
 {
   // We use a simpler (non great circle) test for lat/lon here as this
   // is used for keeping the 'bookends' of non-moving points.
@@ -995,7 +923,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   const double ktoo_close = 0.000005;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    auto wpt = reinterpret_cast<Waypoint*>(elem);
     if (index > 0) {
       double cur_dist = gcdist(RAD(prev_wpt->latitude),
                                RAD(prev_wpt->longitude),
@@ -1007,11 +935,12 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
       }
 
       if (cur_dist < ktoo_close) {
-        if (wpt != reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list)) {
-          Waypoint* next_wpt = reinterpret_cast<Waypoint *>QUEUE_NEXT(&wpt->Q);
+        if (wpt != reinterpret_cast<Waypoint*>QUEUE_LAST(&rte->waypoint_list)) {
+          auto next_wpt = reinterpret_cast<Waypoint*>QUEUE_NEXT(&wpt->Q);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
             track_del_wpt(const_cast<route_head*>(rte), wpt);
+            delete wpt;
             continue;
           }
         }
@@ -1037,8 +966,6 @@ void TrackFilter::init()
   RteHdFunctor<TrackFilter> trackfilter_segment_head_f(this, &TrackFilter::trackfilter_segment_head);
   RteHdFunctor<TrackFilter> trackfilter_fill_track_list_cb_f(this, &TrackFilter::trackfilter_fill_track_list_cb);
 
-  int count = track_count();
-
   /*
    * check time presence only if required. Options that NOT require time:
    *
@@ -1053,34 +980,28 @@ void TrackFilter::init()
               );
   /* in case of a formated title we also need valid timestamps */
   if ((opt_title != nullptr) && (strchr(opt_title, '%') != nullptr)) {
-    need_time = 1;
+    need_time = true;
   }
-
-  track_ct = 0;
-  track_pts = 0;
 
   // Perform segmenting first.
   if (opt_segment) {
     track_disp_all(trackfilter_segment_head_f, nullptr, nullptr);
   }
 
-  if (count > 0) {
-    track_list = new trkflt_t[count];
-
+  track_list.clear();
+  if (track_count() > 0) {
     /* check all tracks for time and order (except merging) */
 
     track_disp_all(trackfilter_fill_track_list_cb_f, nullptr, nullptr);
     if (need_time) {
-      qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
+      std::sort(track_list.begin(), track_list.end(), trackfilter_init_sort_cb);
     }
   }
 }
 
 void TrackFilter::deinit()
 {
-  delete[] track_list;
-  track_ct = 0;
-  track_pts = 0;
+  track_list.clear();
 }
 
 /*******************************************************************************
@@ -1091,7 +1012,7 @@ void TrackFilter::process()
 {
   RteHdFunctor<TrackFilter> trackfilter_minpoint_list_cb_f(this, &TrackFilter::trackfilter_minpoint_list_cb);
 
-  if (track_ct == 0) {
+  if (track_list.isEmpty()) {
     return;  /* no track(s), no fun */
   }
 
@@ -1133,6 +1054,7 @@ void TrackFilter::process()
     opts--;
 
     trackfilter_faketime();
+    // tracks and points within tracks may now be out of order.
 
     if (opts == 0) {
       return;
@@ -1141,7 +1063,7 @@ void TrackFilter::process()
     deinit();       /* reinitialize */
     init();
 
-    if (track_ct == 0) {
+    if (track_list.isEmpty()) {
       return;  /* no more track(s), no more fun */
     }
   }
@@ -1155,26 +1077,29 @@ void TrackFilter::process()
     }
 
     trackfilter_range();
+    // track_list may? now be invalid!
 
     if (opts == 0) {
       return;
     }
 
+    // TODO: Is this needed if range maintains the track_list?
     deinit();	/* reinitialize */
     init();
 
-    if (track_ct == 0) {
+    if (track_list.isEmpty()) {
       return;  /* no more track(s), no more fun */
     }
-
   }
 
   if (opt_seg2trk != nullptr) {
     trackfilter_seg2trk();
+    // track_list may? now be invalid!
     if (--opts == 0) {
       return;
     }
 
+    // TODO: Is this needed if seg2trk maintains the track_list?
     deinit();	/* reinitialize */
     init();
   }
@@ -1193,17 +1118,17 @@ void TrackFilter::process()
     }
   }
 
-  int something_done = 0;
+  bool something_done = false;
 
   if ((opt_pack != nullptr) || (opts == -1)) {	/* call our default option */
     trackfilter_pack();
-    something_done = 1;
+    something_done = true;
   } else if (opt_merge != nullptr) {
     trackfilter_merge();
-    something_done = 1;
+    something_done = true;
   }
 
-  if ((something_done == 1) && (--opts <= 0)) {
+  if (something_done && (--opts <= 0)) {
     if (opt_title != nullptr) {
       trackfilter_title();
     }
@@ -1211,15 +1136,17 @@ void TrackFilter::process()
   }
 
   if ((opt_split != nullptr) || (opt_sdistance != nullptr)) {
-    if (track_ct > 1) {
-      fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
-    }
-
     trackfilter_split();
+    // track_list may? now be invalid!
   }
 
   // Performed last as previous options may have created "small" tracks.
-  if ((opt_minpoints != nullptr) && atoi(opt_minpoints) > 0) {
+  if (opt_minpoints != nullptr) {
+    bool ok;
+    minimum_points = QString(opt_minpoints).toInt(&ok);
+    if (!ok || minimum_points <= 0) {
+      fatal(MYNAME "-minimum_points: option value must be a positive integer!\n");
+    }
     track_disp_all(trackfilter_minpoint_list_cb_f, nullptr, nullptr);
   }
 }

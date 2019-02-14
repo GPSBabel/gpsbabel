@@ -32,3 +32,41 @@ echo "IFIELD HMSG_TIME,  , %d:%d:%d" >> ${TMPDIR}/testo2.style
 rm -f ${TMPDIR}/grid-utm~xscv.gpx
 gpsbabel -i xcsv,style=${TMPDIR}/testo2.style -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~xscv.gpx
 compare ${REFERENCE}/grid-utm~xscv.gpx ${TMPDIR}/grid-utm~xscv.gpx
+
+# test TRACK_NAME, TRACK_NEW
+echo 'DESCRIPTION track style test 1' >>${TMPDIR}/track1.style
+echo 'EXTENSION csv' >>${TMPDIR}/track1.style
+echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track1.style
+echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track1.style
+echo 'DATATYPE TRACK' >>${TMPDIR}/track1.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track1.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/track1.style
+echo 'IFIELD TRACK_NAME,"","%s"' >>${TMPDIR}/track1.style
+echo 'IFIELD TRACK_NEW,"","%d"' >>${TMPDIR}/track1.style
+gpsbabel -i xcsv,style=${TMPDIR}/track1.style -f ${REFERENCE}/track/track1.csv -o gpx -F ${TMPDIR}/track1~csv.gpx
+compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track1~csv.gpx
+
+# flip TRACK_NAME, TRACK_NEW order
+echo 'DESCRIPTION track style test 2' >>${TMPDIR}/track2.style
+echo 'EXTENSION csv' >>${TMPDIR}/track2.style
+echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track2.style
+echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track2.style
+echo 'DATATYPE TRACK' >>${TMPDIR}/track2.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track2.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/track2.style
+echo 'IFIELD TRACK_NEW,"","%d"' >>${TMPDIR}/track2.style
+echo 'IFIELD TRACK_NAME,"","%s"' >>${TMPDIR}/track2.style
+gpsbabel -i xcsv,style=${TMPDIR}/track2.style -f ${REFERENCE}/track/track2.csv -o gpx -F ${TMPDIR}/track2~csv.gpx
+compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track2~csv.gpx
+
+# ROUTE_NAME
+echo 'DESCRIPTION route style test 1' >>${TMPDIR}/route1.style
+echo 'EXTENSION csv' >>${TMPDIR}/route1.style
+echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/route1.style
+echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/route1.style
+echo 'DATATYPE ROUTE' >>${TMPDIR}/route1.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/route1.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/route1.style
+echo 'IFIELD ROUTE_NAME,"","%s"' >>${TMPDIR}/route1.style
+gpsbabel -i xcsv,style=${TMPDIR}/route1.style -f ${REFERENCE}/route/route1.csv -o gpx -F ${TMPDIR}/route1~csv.gpx
+compare ${REFERENCE}/route/route1~csv.gpx ${TMPDIR}/route1~csv.gpx

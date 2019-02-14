@@ -44,10 +44,8 @@ Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
 {
   UC* p;
   UC* q;
-
-  int32 i;
-  UC  chk=0;
-  US  bytes=0;
+  UC  chk = 0;
+  US  bytes = 0;
 
   p = in.data;
   q = out->data;
@@ -67,7 +65,7 @@ Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
 
   chk -= in.n;
 
-  for (i = 0; i < in.n; ++i) {
+  for (uint32 i = 0; i < in.n; ++i) {
     if (*p == DLE) {
       ++bytes;
       *q++ = DLE;
@@ -188,10 +186,10 @@ int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
 ** @param [r] tra [GPS_PPacket *] packet to transmit
 ** @param [r] rec [GPS_PPacket *] last packet received
 **
-** @return [int32] success
+** @return [bool] success
 ************************************************************************/
 
-int32 GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   UC data[2];
 
@@ -200,8 +198,8 @@ int32 GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
   if (!GPS_Write_Packet(fd,*tra)) {
     GPS_Error("Error acknowledging packet");
     gps_errno = SERIAL_ERROR;
-    return 0;
+    return false;
   }
 
-  return 1;
+  return true;
 }

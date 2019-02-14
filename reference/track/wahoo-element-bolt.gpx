@@ -1578,6 +1578,8 @@
         <time>2018-03-20T07:13:58Z</time>
         <speed>1.151000</speed>
       </trkpt>
+    </trkseg>
+    <trkseg>
       <trkpt lat="51.705748370" lon="8.721013353">
         <ele>116.400</ele>
         <time>2018-03-20T07:14:11Z</time>
@@ -1608,6 +1610,8 @@
         <time>2018-03-20T07:14:16Z</time>
         <speed>0.000000</speed>
       </trkpt>
+    </trkseg>
+    <trkseg>
       <trkpt lat="51.705778126" lon="8.721019555">
         <ele>117.000</ele>
         <time>2018-03-20T07:14:19Z</time>
@@ -5483,6 +5487,8 @@
         <time>2018-03-20T07:27:13Z</time>
         <speed>0.000000</speed>
       </trkpt>
+    </trkseg>
+    <trkseg>
       <trkpt lat="51.704860056" lon="8.755921632">
         <ele>168.200</ele>
         <time>2018-03-20T07:27:26Z</time>

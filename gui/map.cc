@@ -199,8 +199,7 @@ void Map::showGpxData()
       << QString("waypts[%1] = new google.maps.Marker({map: map, position: %2, "
 		 "title: \"%3\", icon: blueIcon});")
       .arg(num)
-      .arg(fmtLatLng(pt.getLocation()))
-      .arg(stripDoubleQuotes(pt.getName()));
+      .arg(fmtLatLng(pt.getLocation()), stripDoubleQuotes(pt.getName()));
     num++;
   }
 
@@ -232,7 +231,7 @@ void Map::showGpxData()
                  "    new google.maps.LatLng(%4),\n"
                  "    \"%5\",\n"
                  "    new MarkerHandler(1, %1)\n);"
-                ).arg(num).arg(path).arg(fmtLatLng(pts.front())).arg(fmtLatLng(pts.back())).arg(stripDoubleQuotes(trk.getName()))
+                ).arg(num).arg(path, fmtLatLng(pts.front()), fmtLatLng(pts.back()), stripDoubleQuotes(trk.getName()))
       << QString("bounds.union(trks[%1].getBounds());").arg(num)
       ;
     num++;
@@ -260,7 +259,7 @@ void Map::showGpxData()
                  "    new google.maps.LatLng(%4),\n"
                  "    \"%5\",\n"
                  "    new MarkerHandler(2, %1)\n);"
-                ).arg(num).arg(path).arg(fmtLatLng(pts.front())).arg(fmtLatLng(pts.back())).arg(stripDoubleQuotes(rte.getName()))
+                ).arg(num).arg(path, fmtLatLng(pts.front()), fmtLatLng(pts.back()), stripDoubleQuotes(rte.getName()))
       << QString("bounds.union(rtes[%1].getBounds());").arg(num)
       ;
     num++;
