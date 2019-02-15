@@ -22,7 +22,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.7"
+        - QT_VERSION="5.12.1"
       addons:
         apt:
           packages:
@@ -59,7 +59,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.7.1"
+        - QT_VERSION="5.9.7"
       addons:
         apt:
           packages:
