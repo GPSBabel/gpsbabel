@@ -3,14 +3,14 @@ language: cpp
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: required
       services: docker
       compiler: gcc
       env:
         - BUILD_TYPE="docker"
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: required
       services: docker
       compiler: clang
