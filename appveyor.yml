@@ -37,7 +37,7 @@ build_script:
       echo "qt: $env:qt"
       qmake -query
       Get-Location
-      if ($env:flow -eq "nmake") -and ($env:arch -eq "x86") -and ($env:qt -eq "5.12\msvc2017"))
+      if (($env:flow -eq "nmake") -and ($env:arch -eq "x86") -and ($env:qt -eq "5.12\msvc2017"))
       {
         # full build and deploy of our release configuration
         & ".\tools\make_windows_release.ps1" -flow $env:flow -buildinstaller "true"
