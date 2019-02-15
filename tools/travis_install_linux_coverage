@@ -29,13 +29,10 @@ function validate() {
 
 QT_VERSION=${1:-5.12.1}
 QT_VERSION_SHORT=${QT_VERSION//./}
-# older Qt releases use different package names and install locations.
-QT_VERSION_XY=$(echo ${QT_VERSION} | cut -d "." -f -2)
-QT_VERSION_XY_SHORT=${QT_VERSION_XY//./}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
-QTDIR=${CACHEDIR}/Qt/${QT_VERSION_XY}/gcc_64
+QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/gcc_64
 
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
@@ -46,7 +43,7 @@ else
   mkdir -p ${CACHEDIR}
   pushd ${CACHEDIR}
   # install-qt creates the install at $PWD/Qt.
-  QT_CI_PACKAGES=qt.${QT_VERSION_XY_SHORT}.gcc_64 QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
+  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.gcc_64 QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
   popd
   validate
   rm ${CACHEDIR}/qt-opensource*.run
