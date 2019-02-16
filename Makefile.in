@@ -129,19 +129,23 @@ OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 DEPFILES = $(OBJS:.o=.d)
 
+TESTCASES := $(sort $(wildcard $(srcdir)/testo.d/*.test))
+VGLOGS := $(addprefix $(builddir)/testo.d/, $(addsuffix .vglog, $(basename $(notdir $(TESTCASES)))))
+
 .cc.o:
 	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 .c.o:
 	$(CC) @CPPFLAGS@ @CFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 
-
+%.vglog: FORCE
+	@$(srcdir)/vtesto -l -j $@ $(basename $(notdir $@))
 
 # Directory of local web doc.  Traditionally a sibling to the GPSBabel tree.
 WEB=@DOCDIR@
 
 # Declaring a target PHONY whose names matches a subdirectory can be
 # particularly important, e.g. gui.
-.PHONY: all clean tag more-clean check torture \
+.PHONY: all clean tag more-clean check check-vtesto torture \
 install install-debug \
 dep doc \
 release-sourcecheck release-tarball release-rpm \
@@ -175,7 +179,7 @@ fileinfo.o: win32/gpsbabel.rc
 	$(RC) -o fileinfo.o win32/gpsbabel.rc
 
 clean:
-	rm -f $(OBJS) gpsbabel gpsbabel.exe
+	rm -f $(OBJS) gpsbabel gpsbabel.exe $(VGLOGS)
 	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
 	$(srcdir)/test-all -W
 
@@ -193,6 +197,9 @@ more-clean: clean
 
 check: gpsbabel$(EXEEXT)
 	$(srcdir)/testo
+
+check-vtesto: gpsbabel$(EXEEXT)
+	$(MAKE) $(VGLOGS)
 
 torture: gpsbabel$(EXEEXT)
 	@echo "testo in progress... (basic data integrity test)"
