@@ -6778,6 +6778,7 @@ as_dir=jeeps; as_fn_mkdir_p
 as_dir=shapelib; as_fn_mkdir_p
 as_dir=src/core; as_fn_mkdir_p
 as_dir=zlib/contrib/minizip; as_fn_mkdir_p
+as_dir=testo.d; as_fn_mkdir_p
 
 ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc"
 
