@@ -9,6 +9,9 @@
 QUIET="-q"
 BASEPATH=`dirname $0`
 
+# https://doc.qt.io/qt-5/qregularexpression.html#debugging-code-that-uses-qregularexpression
+export QT_ENABLE_REGEXP_JIT=0
+
 while getopts "lj:" opt; do
   case $opt in
     l) OPTS="--leak-check=full --show-reachable=yes --num-callers=24 --suppressions=${BASEPATH}/gpsbabel.supp" ; QUIET="";;

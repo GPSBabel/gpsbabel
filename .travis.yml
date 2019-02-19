@@ -22,7 +22,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.7" # 5.12.1 vtesto stmsdf fails differently on xenial & bionic
+        - QT_VERSION="5.12.1"
       addons:
         apt:
           packages:
