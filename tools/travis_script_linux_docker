@@ -17,4 +17,4 @@ docker run \
 --mount type=bind,source=/etc/group,target=/etc/group,readonly \
 --user "$(id -u):$(id -g)" \
 tsteven4/gpsbabel_build_environment_test \
-bash -c "./build_and_test"
+bash -c ". /opt/qt-5.12.1.env; ./build_and_test"
