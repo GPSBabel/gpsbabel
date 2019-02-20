@@ -22,7 +22,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.12.1"
+        - QT_VERSION="5.9.7" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
