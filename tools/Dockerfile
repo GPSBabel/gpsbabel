@@ -1,9 +1,32 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
+FROM ubuntu:bionic as qt_install
+WORKDIR /app
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# install packages needed to install Qt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libdbus-1-3 \
+  libfreetype6 \
+  libfontconfig1 \
+  libx11-6 \
+  libx11-xcb1 \
+  ca-cacert \
+  wget \
+ && rm -rf /var/lib/apt/lists/*
+
+# basic build and test tools
+COPY ./qtci/install-qt ./qtci/extract-qt-installer /app/
+RUN QT_CI_PACKAGES=qt.qt5.5121.gcc_64,qt.qt5.5121.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=/app:${PATH} ./install-qt 5.12.1 /opt
+
 FROM ubuntu:bionic
-
 LABEL maintainer="https://github.com/tsteven4"
-
 WORKDIR /app
 
 # update environment.
@@ -27,10 +50,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     expat \
     libxml2-utils \
  && rm -rf /var/lib/apt/lists/*
+
 # alternative compiler
 RUN apt-get update && apt-get install -y --no-install-recommends \
     clang \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs needed to build document
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fop \
@@ -38,17 +63,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     docbook-xml \
     docbook-xsl \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs with libraries needed by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-dev \
  && rm -rf /var/lib/apt/lists/*
-# pkgs with qt used by gpsbabel
+
+# dependencies of Qt
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qt5-default \
-    libqt5webkit5-dev \
-    qttools5-dev-tools \
-    qttranslations5-l10n \
+    libglib2.0-0 \
+    libx11-xcb-dev \
+    libglu1-mesa-dev \
+    libasound2 \
+    libxcomposite1 \
+    libxcursor1 \
  && rm -rf /var/lib/apt/lists/*
+
+# Qt
+COPY --from=qt_install /opt/qt-5.12.1.env /opt/qt-5.12.1.env
+COPY --from=qt_install /opt/Qt/5.12.1 /opt/Qt/5.12.1
+COPY --from=qt_install /opt/Qt/Licenses /opt/Qt/Licenses
+
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcovr \

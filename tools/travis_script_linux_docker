@@ -16,5 +16,5 @@ docker run \
 --mount type=bind,source=/etc/passwd,target=/etc/passwd,readonly \
 --mount type=bind,source=/etc/group,target=/etc/group,readonly \
 --user "$(id -u):$(id -g)" \
-tsteven4/gpsbabel_build_environment_test \
+tsteven4/gpsbabel_build_environment_bionic_qt_5_12_1 \
 bash -c ". /opt/qt-5.12.1.env; ./build_and_test"
