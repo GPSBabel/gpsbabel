@@ -18,7 +18,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-#include <cstdlib>           // for atoi, srand, rand, RAND_MAX
+#include <cstdlib>           // for atoi
+#include <random>            // for mt19937
 
 #include <QtCore/QDateTime>  // for QDateTime
 #include <QtCore/QString>    // for QString
@@ -47,11 +48,21 @@ static arglist_t random_args[] = {
   ARG_TERMINATOR
 };
 
+//  this generator is invariant across platforms.
+static std::mt19937* generator;
+
+// we do this cheesy distribution function because we need it to be invariant across platforms.
+// note uniform_int_distribution is not invariant.
 template <typename T>
 static T
 rand_num(const T max)
 {
-  return static_cast<T>((double)max * rand() / (((double)RAND_MAX) + 1));
+  T retval;
+  constexpr double scalefactor = 1.0 / (*generator).max();
+  do {
+    retval = static_cast<T>(static_cast<double>(max) * scalefactor * (*generator)());
+  } while (retval >= max);
+  return retval;
 }
 
 static double
@@ -115,11 +126,18 @@ rand_qstr(const int maxlen, const char* fmt)
 static void
 random_rd_init(const QString&)
 {
+  generator = new std::mt19937;
+  if (opt_seed) {
+    generator->seed(atoi(opt_seed));
+  } else {
+    generator->seed(gpsbabel_now);
+  }
 }
 
 static void
 random_rd_deinit()
 {
+  delete generator;
 }
 
 #define RND(a) (rand_int(a) > 0)
@@ -227,13 +245,6 @@ random_read()
   Waypoint* prev = nullptr;
   QDateTime time = QDateTime::fromTime_t(gpsbabel_time);
 
-  if (opt_seed) {
-    srand(atoi(opt_seed));
-  } else {
-    srand(gpsbabel_now);
-  }
-
-
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
     head = route_head_alloc();
@@ -278,10 +289,11 @@ static realtime_data* realtime;
 void
 random_rd_posn_init(const QString& fname)
 {
+  generator = new std::mt19937;
   if (opt_seed) {
-    srand(atoi(opt_seed));
+    generator->seed(atoi(opt_seed));
   } else {
-    srand(gpsbabel_now);
+    generator->seed(gpsbabel_now);
   }
   realtime = new realtime_data;
   if (opt_points) {
@@ -293,6 +305,7 @@ random_rd_posn_init(const QString& fname)
 void
 random_rd_posn_deinit()
 {
+  delete generator;
   delete realtime;
 }
 
