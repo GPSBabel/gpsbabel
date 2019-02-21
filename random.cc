@@ -58,7 +58,8 @@ static T
 rand_num(const T max)
 {
   T retval;
-  constexpr double scalefactor = 1.0 / (*generator).max();
+  // scalefactor expression assumes generator is mt19937.
+  constexpr double scalefactor = 1.0 / std::mt19937::max();
   do {
     retval = static_cast<T>(static_cast<double>(max) * scalefactor * (*generator)());
   } while (retval >= max);
@@ -287,7 +288,7 @@ struct realtime_data {
 static realtime_data* realtime;
 
 void
-random_rd_posn_init(const QString& fname)
+random_rd_posn_init(const QString&)
 {
   generator = new std::mt19937;
   if (opt_seed) {
