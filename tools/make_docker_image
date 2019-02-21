@@ -1,11 +1,11 @@
 #!/bin/bash -ex
 # you must be logged into docker for the push to succeed.
-ver=bionic_qt_5_12_1 # tag name must be lower case
+ver=_qtio # tag name must be lower case
 tag=$(date -u +%Y%m%dT%H%M%SZ)
-docker build --pull --tag gpsbabel_build_environment_${ver}:latest .
-docker tag gpsbabel_build_environment_${ver}:latest gpsbabel_build_environment_${ver}:$tag
-docker tag gpsbabel_build_environment_${ver}:latest tsteven4/gpsbabel_build_environment_${ver}:latest 
-docker tag gpsbabel_build_environment_${ver}:latest tsteven4/gpsbabel_build_environment_${ver}:$tag
-docker push tsteven4/gpsbabel_build_environment_${ver}:$tag
-docker push tsteven4/gpsbabel_build_environment_${ver}:latest
+docker build --pull --tag gpsbabel_build_environment${ver}:latest .
+docker tag gpsbabel_build_environment${ver}:latest gpsbabel_build_environment${ver}:$tag
+docker tag gpsbabel_build_environment${ver}:latest tsteven4/gpsbabel_build_environment${ver}:latest 
+docker tag gpsbabel_build_environment${ver}:latest tsteven4/gpsbabel_build_environment${ver}:$tag
+docker push tsteven4/gpsbabel_build_environment${ver}:$tag
+docker push tsteven4/gpsbabel_build_environment${ver}:latest
 docker image ls

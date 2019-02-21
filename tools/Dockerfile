@@ -80,7 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Qt
-COPY --from=qt_install /opt/qt-5.12.1.env /opt/qt-5.12.1.env
+COPY --from=qt_install /opt/qt-5.12.1.env /opt/qtio.env
 COPY --from=qt_install /opt/Qt/5.12.1 /opt/Qt/5.12.1
 COPY --from=qt_install /opt/Qt/Licenses /opt/Qt/Licenses
 
