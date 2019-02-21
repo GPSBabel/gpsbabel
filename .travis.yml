@@ -9,6 +9,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="docker"
+        - DOCKER_IMG="qtio"
     - os: linux
       dist: xenial
       sudo: required
@@ -16,13 +17,22 @@ matrix:
       compiler: clang
       env:
         - BUILD_TYPE="docker"
+        - DOCKER_IMG="qtio"
+    - os: linux
+      dist: xenial
+      sudo: required
+      services: docker
+      compiler: gcc
+      env:
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG=""
     - os: linux
       dist: xenial
       sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.7" # 5.12.1 vtesto stmsdf fails differently on xenial & bionic
+        - QT_VERSION="5.9.7" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
@@ -77,7 +87,7 @@ install:
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_script_linux_coverage; fi
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker ${DOCKER_IMG}; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then echo $PATH; ./build_and_test; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
 

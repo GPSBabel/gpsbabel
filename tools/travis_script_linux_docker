@@ -7,6 +7,9 @@
 # pass the compiler from the travis matrix through CC, CXX.
 # we need the default charmap to be UTF-8 for test_encoding_utf8, explicit set it here through LC_ALL.
 # travis has got the code to test in the pwd.
+
+ver=${1}
+versuffix=${ver:+_$1}
 docker run \
 --rm \
 --mount type=bind,source="$(pwd)",target=/app \
@@ -16,5 +19,5 @@ docker run \
 --mount type=bind,source=/etc/passwd,target=/etc/passwd,readonly \
 --mount type=bind,source=/etc/group,target=/etc/group,readonly \
 --user "$(id -u):$(id -g)" \
-tsteven4/gpsbabel_build_environment \
-bash -c "./build_and_test"
+tsteven4/gpsbabel_build_environment${versuffix} \
+bash -c "if [ -n ${ver} ]; then if [ -e /opt/${ver}.env ]; then . /opt/${ver}.env; fi; fi; ./build_and_test"
