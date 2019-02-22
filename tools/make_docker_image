@@ -1,10 +1,12 @@
 #!/bin/bash -ex
 # you must be logged into docker for the push to succeed.
+
+versuffix=${1:+_$1} # tag name must be lower case
 tag=$(date -u +%Y%m%dT%H%M%SZ)
-docker build --pull --tag gpsbabel_build_environment:latest .
-docker tag gpsbabel_build_environment:latest gpsbabel_build_environment:$tag
-docker tag gpsbabel_build_environment:latest tsteven4/gpsbabel_build_environment:latest 
-docker tag gpsbabel_build_environment:latest tsteven4/gpsbabel_build_environment:$tag
-docker push tsteven4/gpsbabel_build_environment:$tag
-docker push tsteven4/gpsbabel_build_environment:latest
+docker build --pull --file Dockerfile${versuffix} --tag gpsbabel_build_environment${versuffix}:latest .
+docker tag gpsbabel_build_environment${versuffix}:latest gpsbabel_build_environment${versuffix}:$tag
+docker tag gpsbabel_build_environment${versuffix}:latest tsteven4/gpsbabel_build_environment${versuffix}:latest 
+docker tag gpsbabel_build_environment${versuffix}:latest tsteven4/gpsbabel_build_environment${versuffix}:$tag
+docker push tsteven4/gpsbabel_build_environment${versuffix}:$tag
+docker push tsteven4/gpsbabel_build_environment${versuffix}:latest
 docker image ls

@@ -167,7 +167,7 @@ AC_CHECK_TOOLS(LUPDATE, [lupdate-qt5 lupdate])
 AC_CHECK_TOOLS(LRELEASE, [lrelease-qt5 lrelease])
 
 # MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-MIN_QT_VERSION=5.7
+MIN_QT_VERSION=5.9
 AS_IF([test "$QMAKE" = "no"], [
 	AC_MSG_ERROR([Qt qmake (with QT_VERSION >= $MIN_QT_VERSION) is required but was not found.])
 ])
@@ -442,6 +442,7 @@ AS_MKDIR_P([jeeps])
 AS_MKDIR_P([shapelib])
 AS_MKDIR_P([src/core])
 AS_MKDIR_P([zlib/contrib/minizip])
+AS_MKDIR_P([testo.d])
 
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
 AC_CONFIG_FILES([gui/makelinuxdist.sh], [chmod +x gui/makelinuxdist.sh])

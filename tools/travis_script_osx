@@ -14,11 +14,11 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z $(git show -s --format=
 "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
 
 # build and test the CLI
-$QMAKE GPSBabel.pro && make && make check
+$QMAKE GPSBabel.pro && make -j 2 && make check
 
 # build the GUI
 pushd gui
-$QMAKE app.pro && make
+$QMAKE app.pro && make -j 2
 $LUPDATE app.pro
 $LRELEASE app.pro
 popd

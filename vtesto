@@ -6,12 +6,44 @@
 # from time to time.
 #
 
+vg_version_warning() {
+  echo "This version of valgrind may not be compatible with later versions of Qt." 1>&2
+  echo "If you get \"unhandled instruction bytes: 0xF 0xC7\" warnings from" 1>&2
+  echo "valgrind your valgrind is too old." 1>&2
+  echo "valgrind 3.13.0 and later should not have this problem." 1>&2
+  echo "$(which valgrind) is $(valgrind --version)" 1>&2
+  echo "" 1>&2
+}
+
 QUIET="-q"
 BASEPATH=`dirname $0`
 
+# Older valgrind can choke with newer version of Qt.
+# valgrind 3.11.0 has this problem with Qt 5.12.1.
+# It is unknown if 3.12.0 has this problem with Qt 5.12.1.
+# valgrind 3.13.0 does not have this problem with Qt 5.12.1.
+# valgrind 3.11.0 is find with Qt 5.9.7.
+# vex amd64->IR: unhandled instruction bytes: 0xF 0xC7 0xF2 0xB9 0x1 0x0 0x0 0x0
+vgmajor=$(valgrind --version| cut -d- -f 2 | cut -d. -f 1)
+vgminor=$(valgrind --version| cut -d- -f 2 | cut -d. -f 2)
+if [ ${vgmajor} -lt 3 ]; then
+  vg_vesion_warning
+fi
+if [ ${vgmajor} -eq 3 ] ; then
+  if [ ${vgminor} -le 12 ]; then
+    vg_version_warning
+  fi
+fi
+
+# newer versons of Qt, e.g. 5.12.x, use a JIT compiler for QRegularExpression.
+# JITs use of self-modifying code can confuse valgrind.
+# We disable JIT with this environmental variable to keep valgrind happy.
+# https://doc.qt.io/qt-5/qregularexpression.html#debugging-code-that-uses-qregularexpression
+export QT_ENABLE_REGEXP_JIT=0
+
 while getopts "lj:" opt; do
   case $opt in
-    l) OPTS="--leak-check=full --show-reachable=yes --num-callers=24 --suppressions=gpsbabel.supp" ; QUIET="";;
+    l) OPTS="--leak-check=full --show-reachable=yes --num-callers=24 --suppressions=${BASEPATH}/gpsbabel.supp" ; QUIET="";;
     j) LOG=$OPTARG;;
   esac
 done
