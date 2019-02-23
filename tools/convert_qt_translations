@@ -1,0 +1,28 @@
+#!/bin/bash -e
+# It is recommended to combine Qts .qm files, this script does that for
+# linux and macos, windeployqt does this for windows.
+# https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
+#
+# This script is created from the log of the windows build from windeployqt
+# with Qt 5.12.1.
+# From the log you can see which translation files are used which depends on
+# which Qt modules we use.
+# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm.
+#
+# Note with Qt5 the Qt distributed qt_xx.qm files are metacatalogs, and just
+# copying or converting them won't copy the dependencies.
+
+QT_INSTALL_TRANSLATIONS="$(qmake -query QT_INSTALL_TRANSLATIONS)"
+LCONVERT="$(qmake -query QT_INSTALL_BINS)/lconvert"
+OUTDIR="$(pwd)"
+
+cd "${QT_INSTALL_TRANSLATIONS}"
+languages=($(echo qtbase_??.qm | sed 's/qtbase_\(..\).qm/\1/g'))
+for language in "${languages[@]}"
+do
+  inputs=()
+  inputs+=("qtbase_${language}.qm")
+  if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi
+  if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
+  "${LCONVERT}" -o "${OUTDIR}/qt_${language}.qm" "${inputs[@]}"
+done

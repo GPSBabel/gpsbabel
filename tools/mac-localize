@@ -1,29 +1,35 @@
-# Create locversion.plist in the bundle to trigger translations for 
+#!/bin/bash -e
+# Create locversion.plist in the bundle to trigger translations for
 # the application menu and system buttons.  See description at
-# http://doc.qt.nokia.com/4.6/mac-differences.html#translating-the-application-menu-and-native-dialogs
+# https://doc.qt.io/qt-5/macos-issues.html#translating-the-application-menu-and-native-dialogs
 
-QTDIR=`qmake -query QT_INSTALL_TRANSLATIONS`
-
-LANGDIR=objects/GPSBabelFE.app/Contents/MacOS/translations
+LANGDIR="objects/GPSBabelFE.app/Contents/MacOS/translations"
 
 
 mkplist() {
-  D=objects/GPSBabelFE.app/Contents/Resources/$1.lproj 
-  [ ! -d $D ] && mkdir $D
-  sed "s/LANGUAGE/$1/" ../tools/skeleton-locversion-plist > $D/locversion.plist
-  # optional as en, it, and hu aren't translated in Qt yet.
-  [ ! -f "$QTDIR/qt_$1.qm" ]  && echo "Bad QTDIR for $1"
-  [  -f "$QTDIR/qt_$1.qm" ] && cp "$QTDIR/qt_$1.qm" $LANGDIR
-  [ -f gpsbabelfe_${1}.qm ] && cp gpsbabelfe_${1}.qm  $LANGDIR
+  D="objects/GPSBabelFE.app/Contents/Resources/$1.lproj"
+  if [ ! -d "$D" ]; then mkdir -p "$D"; fi
+  sed "s/LANGUAGE/$1/" ../tools/skeleton-locversion-plist > "$D/locversion.plist"
+  if [ -f "objects/qt_${1}.qm" ]; then cp "objects/qt_${1}.qm" "$LANGDIR"; fi
+  if [ -f "gpsbabelfe_${1}.qm" ]; then cp "gpsbabelfe_${1}.qm" "$LANGDIR"; fi
 }
 
-cd gui 
-[ ! -d $LANGDIR ] && mkdir $LANGDIR
-for i in $(echo  gpsbabelfe_??.ts | sed 's/gpsbabelfe_\(..\).ts/\1/g')
-do
-	mkplist $i
-done
+cd gui
+if [ ! -d "$LANGDIR" ]; then mkdir -p "$LANGDIR"; fi
 
-mkplist en
+# combine the Qt translation files we use into local qt_??.qm files.
+cd objects
+../../tools/convert_qt_translations
+languages=($(echo qt_??.qm | sed 's/qt_\(..\).qm/\1/g'))
+cd ..
+
+# We assume all the languages corresponding to gpsbabelfe_??.qm
+# are also translated by Qt, so they are in $languages.
+# Note there are langauages Qt has translations for that we don't.
+# Note Qt has *_en.qm files, so en is in $languages.
+for language in "${languages[@]}"
+do
+	mkplist "$language"
+done
 
 exit 0
