@@ -24,6 +24,7 @@ unix:DESTDIR = objects
 unix:MOC_DIR = objects
 unix:OBJECTS_DIR = objects
 unix:RCC_DIR = objects
+mac:DESTDIR = .
 
 mac:LIBS += -framework IOKit -framework CoreFoundation
 unix {
@@ -45,7 +46,7 @@ win32 {
 win32-g++ {
   QMAKE_LFLAGS_RELEASE += -static-libgcc
 }
-unix:TARGET=gpsbabelfe-bin
+unix:TARGET=gpsbabelfe
 mac:TARGET=GPSBabelFE
 
 FORMS += aboutui.ui
@@ -117,6 +118,9 @@ TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
 TRANSLATIONS += gpsbabelfe.ts
 
-
-
-
+macx|linux{
+  package.commands = QMAKE=$(QMAKE) ./package_app
+  package.depends = $(TARGET)
+  QMAKE_EXTRA_TARGETS += package
+}
+linux: QMAKE_DISTCLEAN += -r GPSBabelFE

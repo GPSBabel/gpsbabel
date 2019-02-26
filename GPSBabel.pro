@@ -15,7 +15,11 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 
 QT -= gui
 
-TARGET = GPSBabel
+linux: {
+  TARGET = gpsbabel
+} else {
+  TARGET = GPSBabel
+}
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14
