@@ -1,6 +1,6 @@
 # Enforce minimum Qt version.
 # versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
-MIN_QT_VERSION = 5.7 # major[.minor[.patch]]
+MIN_QT_VERSION = 5.9 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
 MIN_QT_VERSION_MINOR = $$member(MIN_QT_VERSION_COMPONENTS, 1)
@@ -43,7 +43,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
-        subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
+        subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 
@@ -133,6 +133,7 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
+  xcsv.h \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \

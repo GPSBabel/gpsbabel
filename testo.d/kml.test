@@ -65,23 +65,25 @@ compare ${REFERENCE}/track/tracks~gpx.kml ${TMPDIR}/tracks~gpx.kml
 gpsbabel -i kml -f ${REFERENCE}/track/Placemark-Track-1.kml -o gpx -F ${TMPDIR}/Placemark-Track-1~kml.gpx
 compare ${REFERENCE}/track/Placemark-Track-1~kml.gpx ${TMPDIR}/Placemark-Track-1~kml.gpx
 
-set -e
-if which xmllint > /dev/null;
-then
-  KMLS=$(find ${REFERENCE} -name \*.kml)
-  for f in $KMLS
-  do
-    case $f in 
-      # Argue with the KML wizards about this.  It was the intent for that
-      # to be legal in Earth GX 2.2.
-      ${REFERENCE}/track/segmented_tracks-track.kml) continue;;
-    *)
-      tmpf=${TMPDIR}/$(basename $f)
-      gpsbabel -i kml -f $f -o kml -F $tmpf
-      xmllint --schema ${BASEPATH}/tools/kml22-schema/kml22gx.xsd --noout $tmpf
-    esac;
-  done
-else
-  echo "Skipping KML validation phase."
+if [ "${RUNNINGVALGRIND}" != "0" ]; then
+  set -e
+  if which xmllint > /dev/null;
+  then
+    KMLS=$(find ${REFERENCE} -name \*.kml)
+    for f in $KMLS
+    do
+      case $f in 
+        # Argue with the KML wizards about this.  It was the intent for that
+        # to be legal in Earth GX 2.2.
+        ${REFERENCE}/track/segmented_tracks-track.kml) continue;;
+      *)
+        tmpf=${TMPDIR}/$(basename $f)
+        gpsbabel -i kml -f $f -o kml -F $tmpf
+        xmllint --schema ${BASEPATH}/tools/kml22-schema/kml22gx.xsd --noout $tmpf
+      esac;
+    done
+  else
+    echo "Skipping KML validation phase."
+  fi
+  set +e
 fi
-set +e

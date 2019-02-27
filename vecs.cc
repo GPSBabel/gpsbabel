@@ -23,6 +23,7 @@
 #include "csv_util.h"
 #include "gbversion.h"
 #include "inifile.h"
+#include "xcsv.h"
 #include <QtCore/QString>
 #include <cstdio>
 #include <cstdlib> // qsort
@@ -75,7 +76,6 @@ extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t kml_vecs;
 extern ff_vecs_t lowranceusr_vecs;
-extern ff_vecs_t lowranceusr4_vecs;
 extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t magnav_vec;
@@ -296,13 +296,6 @@ vecs_t vec_list[] = {
     &lowranceusr_vecs,
     "lowranceusr",
     "Lowrance USR",
-    "usr",
-    nullptr,
-  },
-  {
-    &lowranceusr4_vecs,
-    "lowranceusr4",
-    "Lowrance USR version 4",
     "usr",
     nullptr,
   },
@@ -1449,7 +1442,7 @@ alpha(const void* a, const void* b)
 vecs_t**
 sort_and_unify_vecs(int* ctp)
 {
-  int vc;
+  size_t vc;
   vecs_t** svp;
 #if CSVFMTS_ENABLED
 #endif
@@ -1497,7 +1490,7 @@ sort_and_unify_vecs(int* ctp)
     }
     memset(&svp[i]->vec->cap, 0, sizeof(svp[i]->vec->cap));
     switch (xcsv_file.datatype) {
-    case 0:
+    case unknown_gpsdata:
     case wptdata:
       svp[i]->vec->cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
@@ -1610,7 +1603,7 @@ disp_v2(ff_vecs_t* v)
 }
 
 const char*
-name_option(long type)
+name_option(uint32_t type)
 {
   const char* at[] = {
     "unknown",

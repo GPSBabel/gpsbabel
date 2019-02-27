@@ -21,8 +21,8 @@ message("Qt5Core_DEFINITIONS List of definitions for use with add_definitions: \
 message("Qt5Core_COMPILE_DEFINITIONS List of definitions for use with the COMPILE_DEFINITIONS target property: \"${Qt5Core_COMPILE_DEFINITIONS}\"")
 message("Qt5Core_FOUND Boolean describing whether the module was found successfully: \"${Qt5Core_FOUND}\"")
 message("Qt5Core_EXECUTABLE_COMPILE_FLAGS String of flags to be used when building executables: \"${Qt5Core_EXECUTABLE_COMPILE_FLAGS}\"")
-if (${Qt5Core_VERSION} VERSION_LESS 5.7)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.7 or newer is required.")
+if (${Qt5Core_VERSION} VERSION_LESS 5.9)
+  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
 endif()
 include_directories(AFTER SYSTEM ${Qt5Core_INCLUDE_DIRS})
 add_definitions(${Qt5Core_DEFINITIONS})
@@ -51,7 +51,7 @@ set(ALL_FMTS
   jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
   pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
   vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
-  subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc
+  subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 )
@@ -149,6 +149,7 @@ set(HEADERS
   session.h
   shapelib/shapefil.h
   strptime.h
+  xcsv.h
   xmlgeneric.h
   zlib/crc32.h
   zlib/deflate.h

@@ -31,7 +31,12 @@ New-Item "$($gpsbabel_build_dir)" -type directory -force | Out-Null
 Set-Location "$($gpsbabel_build_dir)"
 switch ($flow) {
   "mingw"   { qmake "$($gpsbabel_src_dir)\GPSBabel.pro" -spec "win32-g++" }
-  "msbuild" { qmake -tp vc "$($gpsbabel_src_dir)\GPSBabel.pro"}
+  # work around Qt 5.12.1 qmake bug.
+  #C:\Qt\5.12.1\msvc2017\bin\qmake.exe -tp vc GPSBabel.pro
+  #WARNING: Could not parse Compiler option '-std:c++14'; added to AdditionalOptions.
+  #WARNING: You can suppress these warnings with CONFIG+=suppress_vcproj_warnings.
+  #WARNING: Could not parse Compiler option '-std:c++14'; added to AdditionalOptions.
+  "msbuild" { $ErrorActionPreference = "Continue"; qmake -tp vc "$($gpsbabel_src_dir)\GPSBabel.pro"; $ErrorActionPreference = "Stop" }
   "nmake"   { qmake "$($gpsbabel_src_dir)\GPSBabel.pro" -spec "win32-msvc" }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }

@@ -30,6 +30,7 @@
 const int kIdDeviceSettings = 0;
 const int kIdLap = 19;
 const int kIdRecord = 20;
+const int kIdEvent = 21;
 
 // constants for message fields
 // for all global IDs
@@ -56,12 +57,18 @@ const int kFieldPower = 7;
 const int kFieldTemperature = 13;
 const int kFieldEnhancedSpeed = 73;
 const int kFieldEnhancedAltitude = 78;
+// for global ID: event
+const int kFieldEvent = 0;
+const int kEnumEventTimer = 0;
+const int kFieldEventType = 1;
+const int kEnumEventTypeStart = 0;
 
 // For developer fields as a non conflicting id
 const int kFieldInvalid = 255;
 
 static char* opt_allpoints = nullptr;
 static int lap_ct = 0;
+static bool new_trkseg = false;
 
 static
 arglist_t fit_args[] = {
@@ -346,6 +353,7 @@ fit_read_field(fit_field_t* f)
                 MYNAME, f->type, f->size, fit_data.len);
   }
   switch (f->type) {
+  case 0: // enum
   case 1: // sint8
   case 2: // uint8
     if (f->size == 1) {
@@ -414,6 +422,8 @@ fit_parse_data(fit_message_def* def, int time_offset)
   int32_t endlat = 0x7fffffff;
   int32_t endlon = 0x7fffffff;
   uint32_t starttime = 0; // ??? default ?
+  uint8_t event = 0xff;
+  uint8_t eventtype = 0xff;
   char cbuf[10];
   Waypoint* lappt;  // WptPt in gpx
 
@@ -593,6 +603,23 @@ fit_parse_data(fit_message_def* def, int time_offset)
         // end of case def->global_id = kIdLap
         break;
 
+      case kIdEvent:
+        switch (f->id) {
+        case kFieldEvent:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: event=%d\n", MYNAME, val);
+          }
+          event = val;
+          break;
+        case kFieldEventType:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: eventtype=%d\n", MYNAME, val);
+          }
+          eventtype = val;
+          break;
+        } // switch (f->id)
+        // end of case def->global_id = kIdEvent
+        break;
       default:
         if (global_opts.debug_level >= 1) {
           debug_print(1, "%s: unrecognized/unhandled global ID for GARMIN FIT: %d\n", MYNAME, def->global_id);
@@ -652,7 +679,20 @@ fit_parse_data(fit_message_def* def, int time_offset)
     if (temperature != 0x7f) {
       WAYPT_SET(waypt, temperature, temperature);
     }
+    if (new_trkseg) {
+      waypt->wpt_flags.new_trkseg = 1;
+      new_trkseg = false;
+    }
     track_add_wpt(fit_data.track, waypt);
+    break;
+  case kIdEvent: // event message
+    if (event == kEnumEventTimer && eventtype == kEnumEventTypeStart) {
+      // Start event, start new track segment. Note: We don't do this
+      // on stop events because some GPS devices seem to generate a last
+      // trackpoint after the stop event and that would erroneously get
+      // assigned to the next segment.
+      new_trkseg = true;
+    }
     break;
   }
 }

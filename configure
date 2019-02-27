@@ -6144,7 +6144,7 @@ fi
 
 
 # MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-MIN_QT_VERSION=5.7
+MIN_QT_VERSION=5.9
 if test "$QMAKE" = "no"; then :
 
 	as_fn_error $? "Qt qmake (with QT_VERSION >= $MIN_QT_VERSION) is required but was not found." "$LINENO" 5
@@ -6778,6 +6778,7 @@ as_dir=jeeps; as_fn_mkdir_p
 as_dir=shapelib; as_fn_mkdir_p
 as_dir=src/core; as_fn_mkdir_p
 as_dir=zlib/contrib/minizip; as_fn_mkdir_p
+as_dir=testo.d; as_fn_mkdir_p
 
 ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc"
 

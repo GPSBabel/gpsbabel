@@ -90,7 +90,7 @@ nmn4_read_data()
 
     int column = -1;
     QString c = csv_lineparse(str, "|", "", column++);
-    while (c != nullptr) {
+    while (!c.isNull()) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
       case  1: /* "-" */

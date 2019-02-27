@@ -27,10 +27,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     expat \
     libxml2-utils \
  && rm -rf /var/lib/apt/lists/*
+
 # alternative compiler
 RUN apt-get update && apt-get install -y --no-install-recommends \
     clang \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs needed to build document
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fop \
@@ -38,10 +40,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     docbook-xml \
     docbook-xsl \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs with libraries needed by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-dev \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qt5-default \
@@ -49,6 +53,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qttools5-dev-tools \
     qttranslations5-l10n \
  && rm -rf /var/lib/apt/lists/*
+
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcovr \
