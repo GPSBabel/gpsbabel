@@ -1465,13 +1465,17 @@ xcsv_waypt_pr(const Waypoint* wpt)
       /* ALTITUDE CONVERSIONS**********************************************/
     case XT_ALT_FEET:
       /* altitude in feet as a decimal value */
-      buff = QString().sprintf(fmp.printfc.constData(),
-                METERS_TO_FEET(wpt->altitude));
+      if (wpt->altitude != unknown_alt) {
+        buff = QString().sprintf(fmp.printfc.constData(),
+                  METERS_TO_FEET(wpt->altitude));
+      }
       break;
     case XT_ALT_METERS:
       /* altitude in meters as a decimal value */
-      buff = QString().sprintf(fmp.printfc.constData(),
-                wpt->altitude);
+      if (wpt->altitude != unknown_alt) {
+        buff = QString().sprintf(fmp.printfc.constData(),
+                  wpt->altitude);
+      }
       break;
 
       /* DISTANCE CONVERSIONS**********************************************/

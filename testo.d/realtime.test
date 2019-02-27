@@ -1,0 +1,15 @@
+
+echo 'DESCRIPTION realtime tracking 1' >>${TMPDIR}/realtime1.style
+echo 'EXTENSION csv' >>${TMPDIR}/realtime1.style
+echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/realtime1.style
+echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/realtime1.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/realtime1.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/realtime1.style
+echo 'IFIELD ALT_METERS,"","%.3f"' >>${TMPDIR}/realtime1.style
+echo 'IFIELD SHORTNAME,"","%s"' >>${TMPDIR}/realtime1.style
+echo 'IFIELD ISO_TIME_MS,"","%s"' >>${TMPDIR}/realtime1.style
+# test real time tracking
+gpsbabel -T -i random,points=10,seed=22,nodelay -f dummy -o xcsv,style=${TMPDIR}/realtime1.style -F ${TMPDIR}/realtime.csv
+compare ${REFERENCE}/realtime.csv ${TMPDIR}/realtime.csv
+
+

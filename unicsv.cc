@@ -537,7 +537,7 @@ unicsv_fondle_header(QString s)
     cbuf = buf;
   }
 
-  while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)), !s.isEmpty()) {
+  while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)), !s.isNull()) {
     s = s.trimmed();
 
     field_t* f = &fields_def[0];

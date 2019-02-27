@@ -1442,7 +1442,7 @@ alpha(const void* a, const void* b)
 vecs_t**
 sort_and_unify_vecs(int* ctp)
 {
-  int vc;
+  size_t vc;
   vecs_t** svp;
 #if CSVFMTS_ENABLED
 #endif
@@ -1490,7 +1490,7 @@ sort_and_unify_vecs(int* ctp)
     }
     memset(&svp[i]->vec->cap, 0, sizeof(svp[i]->vec->cap));
     switch (xcsv_file.datatype) {
-    case 0:
+    case unknown_gpsdata:
     case wptdata:
       svp[i]->vec->cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
@@ -1603,7 +1603,7 @@ disp_v2(ff_vecs_t* v)
 }
 
 const char*
-name_option(long type)
+name_option(uint32_t type)
 {
   const char* at[] = {
     "unknown",

@@ -19,16 +19,25 @@
 
  */
 
-#include "defs.h"
-#include "cet_util.h"
-#include "garmin_fs.h"
-#include "grtcirc.h"
-#include "session.h"
-#include "src/core/logging.h"
+#include <cmath>                // for fabs
+#include <cstdio>               // for printf, fflush, fprintf, stdout
+#include <ctime>                // for time_t
+
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QDateTime>     // for QDateTime
 #include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <cmath>
-#include <cstdio>
+#include <QtCore/QList>         // for QList
+#include <QtCore/QString>       // for QString, operator==
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/QtGlobal>      // for qPrintable
+
+#include "defs.h"
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_s, GMSD_FIND, garmin_fs_p
+#include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
+#include "queue.h"              // for queue, QUEUE_INIT, dequeue, QUEUE_FOR_EACH, QUEUE_MOVE, ENQUEUE_TAIL
+#include "session.h"            // for curr_session, session_t
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"   // for Warning, Fatal
 
 #if NEWQ
 QList<Waypoint*> waypt_list;
@@ -256,11 +265,11 @@ waypt_compute_bounds(bounds* bounds)
 {
   waypt_init_bounds(bounds);
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
 #endif
     waypt_add_to_bounds(bounds, waypointp);
   }
@@ -270,12 +279,12 @@ Waypoint*
 find_waypt_by_name(const QString& name)
 {
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
 #endif
     if (waypointp->shortname == name) {
       return waypointp;
@@ -308,7 +317,7 @@ waypt_flush(queue* head)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
-    Waypoint* q = reinterpret_cast<Waypoint *>(dequeue(elem));
+    Waypoint* q = reinterpret_cast<Waypoint*>(dequeue(elem));
     delete q;
     if (head == &waypt_head) {
       waypt_ct--;
@@ -351,7 +360,7 @@ waypt_backup(signed int* count, queue** head_bak)
   waypt_ct = 0;
 
   QUEUE_FOR_EACH(qbackup, elem, tmp) {
-    wpt = reinterpret_cast<Waypoint *>(elem);
+    wpt = reinterpret_cast<Waypoint*>(elem);
     waypt_add(new Waypoint(*wpt));
     no++;
   }
@@ -536,7 +545,7 @@ waypt_gradient(const Waypoint* A, const Waypoint* B)
   }
 
   double altitude = A->altitude - B->altitude;
-  if (altitude == 0 || 
+  if (altitude == 0 ||
       A->altitude == unknown_alt || B->altitude == unknown_alt) {
     return 0;
   }
@@ -644,6 +653,69 @@ Waypoint::Waypoint(const Waypoint& other) :
 
   // note: session is not deep copied.
   // note: extra_data is not deep copied.
+}
+
+Waypoint& Waypoint::operator=(const Waypoint& rhs)
+{
+  if (this != &rhs) {
+
+    // deallocate
+    if (gc_data != &Waypoint::empty_gc_data) {
+      delete gc_data;
+    }
+    fs_chain_destroy(fs);
+
+    // allocate and copy
+    // Q(rhs.Q),
+    latitude = rhs.latitude;
+    longitude = rhs.longitude;
+    altitude = rhs.altitude;
+    geoidheight = rhs.geoidheight;
+    depth = rhs.depth;
+    proximity = rhs.proximity;
+    shortname = rhs.shortname;
+    description = rhs.description;
+    notes = rhs.notes;
+    urls = rhs.urls;
+    wpt_flags = rhs.wpt_flags;
+    icon_descr = rhs.icon_descr;
+    creation_time = rhs.creation_time;
+    route_priority = rhs.route_priority;
+    hdop = rhs.hdop;
+    vdop = rhs.vdop;
+    pdop = rhs.pdop;
+    course = rhs.course;
+    speed = rhs.speed;
+    fix = rhs.fix;
+    sat = rhs.sat;
+    heartrate = rhs.heartrate;
+    cadence = rhs.cadence;
+    power = rhs.power;
+    temperature = rhs.temperature;
+    odometer_distance = rhs.odometer_distance;
+    gc_data = rhs.gc_data;
+    fs = rhs.fs;
+    session = rhs.session;
+    extra_data = rhs.extra_data;
+    // deep copy geocache data unless it is the specail static empty_gc_data.
+    if (rhs.gc_data != &Waypoint::empty_gc_data) {
+      gc_data = new geocache_data(*rhs.gc_data);
+    }
+
+    /*
+     * It's important that this duplicated waypoint not appear
+     * on the master Q.
+     */
+    QUEUE_INIT(&Q);
+
+    // deep copy fs chain data.
+    fs = fs_chain_copy(rhs.fs);
+
+    // note: session is not deep copied.
+    // note: extra_data is not deep copied.
+  }
+
+  return *this;
 }
 
 bool

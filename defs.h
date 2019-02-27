@@ -158,11 +158,11 @@ typedef enum {
   posndata
 } gpsdata_type;
 
-#define NOTHINGMASK		0
-#define WPTDATAMASK		1
-#define TRKDATAMASK		2
-#define	RTEDATAMASK		4
-#define	POSNDATAMASK		8
+#define NOTHINGMASK		0U
+#define WPTDATAMASK		1U
+#define TRKDATAMASK		2U
+#define	RTEDATAMASK		4U
+#define	POSNDATAMASK		8U
 
 /* mask objective testing */
 #define	doing_nothing (global_opts.masked_objective == NOTHINGMASK)
@@ -543,10 +543,7 @@ public:
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
-  // the default assignment operator is not appropriate as we do deep copy of some members,
-  // and we haven't bothered to write an appropriate one.
-  // Catch attempts to use the default assignment operator.
-  Waypoint& operator=(const Waypoint& other) = delete;
+  Waypoint& operator=(const Waypoint& other);
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
@@ -870,29 +867,29 @@ void setshort_is_utf8(short_handle h, int is_utf8);
 
 /* REQUIRED means that the option is required to be set.
  * See also BEGIN/END_REQ */
-#define ARGTYPE_REQUIRED   0x40000000
+#define ARGTYPE_REQUIRED   0x40000000U
 
 /* HIDDEN means that the option does not appear in help texts.  Useful
  * for debugging or testing options */
-#define ARGTYPE_HIDDEN     0x20000000
+#define ARGTYPE_HIDDEN     0x20000000U
 
 /* BEGIN/END_EXCL mark the beginning and end of an exclusive range of
  * options. No more than one of the options in the range may be selected
  * or set. If exactly one must be set, use with BEGIN/END_REQ
  * Both of these flags set is just like neither set, so avoid doing that. */
-#define ARGTYPE_BEGIN_EXCL 0x10000000
-#define ARGTYPE_END_EXCL   0x08000000
+#define ARGTYPE_BEGIN_EXCL 0x10000000U
+#define ARGTYPE_END_EXCL   0x08000000U
 
 /* BEGIN/END_REQ mark the beginning and end of a required range of
  * options.  One or more of the options in the range MUST be selected or set.
  * If exactly one must be set, use with BEGIN/END_EXCL
  * Both of these flags set is synonymous with REQUIRED, so use that instead
  * for "groups" of exactly one option. */
-#define ARGTYPE_BEGIN_REQ  0x04000000
-#define ARGTYPE_END_REQ    0x02000000
+#define ARGTYPE_BEGIN_REQ  0x04000000U
+#define ARGTYPE_END_REQ    0x02000000U
 
-#define ARGTYPE_TYPEMASK 0x00000fff
-#define ARGTYPE_FLAGMASK 0xfffff000
+#define ARGTYPE_TYPEMASK 0x00000fffU
+#define ARGTYPE_FLAGMASK 0xfffff000U
 
 #define ARG_NOMINMAX NULL, NULL
 #define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX, NULL}
@@ -986,7 +983,7 @@ void disp_vec(const char* vecname);
 void init_vecs();
 void exit_vecs();
 void disp_formats(int version);
-const char* name_option(long type);
+const char* name_option(uint32_t type);
 void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);

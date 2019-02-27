@@ -84,6 +84,9 @@ data_read()
     }
     wpt->longitude = wppos_to_dec(s);
     waypt_add(wpt);
+
+    // continue reading until csv_lineparse returns null indicating all dynamic memory has been deallocated.
+    while (csv_lineparse(nullptr, "\\w", "", linecount));
   }
 }
 
