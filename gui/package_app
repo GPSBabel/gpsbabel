@@ -1,0 +1,120 @@
+#!/bin/bash -e
+#
+# package GUI application
+#
+
+function convert_qt_translations()
+{
+# Combine the Qt translation files we use into local qt_??.qm files.
+#
+# It is recommended to combine Qts .qm files, this script does that for
+# linux and macos, windeployqt does this for windows.
+# https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
+#
+# This script is created from the log of the windows build from windeployqt
+# with Qt 5.12.1.
+# From the log you can see which translation files are used which depends on
+# which Qt modules we use.
+# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm.
+#
+# Note with Qt5 the Qt distributed qt_xx.qm files are metacatalogs, and just
+# copying or converting them won't copy the dependencies.
+
+  if [ "${machine}" = "Mac" ]; then
+    resourcedir="${APPDIR}/Contents/Resources"
+
+    # caution, mktemp here is macos specific version
+    resourceskel="$(mktemp -t gpsbabel_package_app)"
+    echo '<?xml version="1.0" encoding="UTF-8"?>' > "$resourceskel"
+    echo '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"' >> "$resourceskel"
+    echo '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> "$resourceskel"
+    echo '<plist version="1.0">' >> "$resourceskel"
+    echo '<dict>' >> "$resourceskel"
+    echo '    <key>LprojCompatibleVersion</key>' >> "$resourceskel"
+    echo '    <string>123</string>' >> "$resourceskel"
+    echo '    <key>LprojLocale</key>' >> "$resourceskel"
+    echo '    <string>LANGUAGE</string>' >> "$resourceskel"
+    echo '    <key>LprojRevisionLevel</key>' >> "$resourceskel"
+    echo '    <string>1</string>' >> "$resourceskel"
+    echo '    <key>LprojVersion</key>' >> "$resourceskel"
+    echo '    <string>123</string>' >> "$resourceskel"
+    echo '</dict>' >> "$resourceskel"
+    echo '</plist>' >> "$resourceskel"
+  fi
+
+  pushd "$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)" > /dev/null
+  languages=($(echo qtbase_??.qm | sed 's/qtbase_\(..\).qm/\1/g'))
+  for language in "${languages[@]}"
+  do
+    inputs=()
+    inputs+=("qtbase_${language}.qm")
+    if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi
+    if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
+    "${LCONVERT}" -o "${LANGDIR}/qt_${language}.qm" "${inputs[@]}"
+
+    if [ "${machine}" = "Mac" ]; then
+      # Create locversion.plist in the bundle to trigger translations for
+      # the application menu and system buttons.  See description at
+      # https://doc.qt.io/qt-5/macos-issues.html#translating-the-application-menu-and-native-dialogs
+      mkdir -p "${resourcedir}/${language}.lproj"
+      sed "s/LANGUAGE/${language}/" "${resourceskel}" > "${resourcedir}/${language}.lproj/locversion.plist"
+    fi
+  done
+  popd > /dev/null
+
+  if [ "${machine}" = "Mac" ]; then
+    rm "${resourceskel}"
+  fi
+}
+
+QMAKE="${QMAKE:-qmake}"
+
+LUPDATE="$(${QMAKE} -query QT_INSTALL_BINS)/lupdate"
+LRELEASE="$(${QMAKE} -query QT_INSTALL_BINS)/lrelease"
+LCONVERT="$(${QMAKE} -query QT_INSTALL_BINS)/lconvert"
+MACDEPLOYQT="$(${QMAKE} -query QT_INSTALL_BINS)/macdeployqt"
+
+case "$(uname -s)" in
+  Linux*)     machine=Linux;;
+  Darwin*)    machine=Mac;;
+  *)          echo "Unknown kernel name $(uname -s)." 1>&2; exit 1;;
+esac
+
+# update our translations and compile them.
+"${LUPDATE}" app.pro
+"${LRELEASE}" app.pro
+
+if [ "${machine}" = "Linux" ]; then
+  # need absolute paths for convert_qt_translations()
+  APPDIR="$(pwd)/GPSBabelFE"
+  LANGDIR="${APPDIR}/translations"
+else
+  APPBUNDLE=GPSBabelFE.app
+  # need absolute paths for convert_qt_translations()
+  APPDIR="$(pwd)/${APPBUNDLE}"
+  LANGDIR="${APPDIR}/Contents/MacOS/translations"
+fi
+
+rm -fr "${LANGDIR}"
+mkdir -p "${LANGDIR}"
+
+# copy our compiled translations.
+cp gpsbabelfe_??.qm "${LANGDIR}"
+
+# bundle Qt .qm files, deploy them with our .qm files,
+# and, for macos, make & deploy locversion.plist files.
+(convert_qt_translations)
+
+if [ "${machine}" = "Linux" ]; then
+  cp objects/gpsbabelfe "${APPDIR}"
+  cp ../gpsbabel "${APPDIR}"
+  cp gmapbase.html "${APPDIR}"
+  cp COPYING.txt "${APPDIR}"
+else # Mac
+  cp ../GPSBabel "${APPDIR}/Contents/MacOS/gpsbabel"
+  cp gmapbase.html "${APPDIR}/Contents/MacOS"
+  cp COPYING.txt "${APPDIR}/Contents/MacOS"
+  rm -f objects/GPSBabelFE.dmg
+  # macdeploytqt likes relative paths or else the dmg mount points get funky.
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
+fi

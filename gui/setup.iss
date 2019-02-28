@@ -1,5 +1,5 @@
 ;
-; NOTE: setup.iss is generated from setup.iss.in via autoconf.
+; NOTE: setup.iss is generated from setup.iss.in via configure.
 ; The generated setup.iss is checked in to help keep the version numbers
 ; synchronized.
 ;
@@ -58,7 +58,7 @@ Source: "..\..\{#gpsbabel_build_dir_name}\release\gpsbabel.exe";   	DestDir: "{a
 
 ; Compiled translation strings that are used at runtime.
 ; Source: gpsbabel_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
-Source: gpsbabelfe*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
+Source: gpsbabelfe_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
 
 ; Miscellaneous
 Source: COPYING.txt;			DestDir: {app}; Flags: ignoreversion

@@ -151,7 +151,7 @@ dep doc \
 release-sourcecheck release-tarball release-rpm \
 cross-configure \
 release-winbuild release-upload mac-upload release rpm mac-release \
-gui linux-gui mac-gui mac-gui-dmg msvc-build test-release \
+gui linux-gui mac-gui test-release \
 toolinfo
 
 all: gpsbabel$(EXEEXT)
@@ -384,7 +384,7 @@ release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip
 
 mac-upload:
 	# gb_upload GPSBabel+-$(VERSIOND).dmg
-	gb_upload gui/objects/GPSBabel-$(VERSIOND).dmg
+	gb_upload gui/GPSBabel-$(VERSIOND).dmg
 
 
 release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
@@ -394,33 +394,17 @@ rpm: changes.html
 
 gui: gpsbabel$(EXEEXT)
 	cd gui ; $(QMAKE) app.pro && $(MAKE) $(MAKEFLAGS)
-	cd gui ; $(LUPDATE) app.pro
-	cd gui ; $(LRELEASE) app.pro
 
 linux-gui: gui
-	cd gui; ./makelinuxdist.sh
-
-mac-gui: gui
-	# file gpsbabel | grep '2 architectures' || exit 1
-	# file gui/objects/GPSBabelFE.app/Contents/MacOS/GPSBabelFE | grep '2 architectures' || exit 1
-	mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
-	cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
-	cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
-	cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
-	cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
-	tools/mac-localize
+	cd gui; $(MAKE) $(MAKEFLAGS) package
 
 # Build the Qt front end, place GPSBabel in the right place, deploy all
 # the libs.
 
-mac-gui-dmg: mac-gui
-	rm -f gui/objects/GPSBabelFE.dmg
-	cd gui/objects ; macdeployqt GPSBabelFE.app  -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg
-	mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
-
-msvc-build:
-	@#Intended for development. Assume .NET 4 is used - may require tweaks
-	"$(word 1, $(wildcard $(SYSTEMROOT)/Microsoft.NET/Framework/v4*/msbuild.exe))" msvc/GPSBabel.vcxproj /nologo /maxcpucount
+mac-gui: gui
+	rm -f gui/GPSBabelFE.dmg
+	cd gui; $(MAKE) $(MAKEFLAGS) package
+	mv gui/GPSBabelFE.dmg  gui/GPSBabel-$(VERSIOND).dmg
 
 # release check using CVS tree
 test-release: doc gpsbabel.html changes.html
