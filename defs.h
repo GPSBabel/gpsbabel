@@ -745,7 +745,6 @@ void track_del_wpt(route_head* rte, Waypoint* wpt);
 void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
 //void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
 //void track_disp_all(route_hdr, route_trl, waypt_cb); /* template */
-void route_reverse(const route_head* rte_hd);
 void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void route_flush_all_routes();

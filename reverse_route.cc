@@ -40,9 +40,14 @@ void ReverseRouteFilter::reverse_route_wpt(const Waypoint* waypointp)
   prev_new_trkseg = curr_new_trkseg;
 }
 
-void ReverseRouteFilter::reverse_route_head(const route_head* rte)
+void ReverseRouteFilter::reverse_route_head(const route_head* rte_hd)
 {
-  route_reverse(rte);
+  /* Cast away const-ness */
+  auto rh = const_cast<route_head*>(rte_hd);
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
+    ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
+  }
   prev_new_trkseg = 1;
 }
 

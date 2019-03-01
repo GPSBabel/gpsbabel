@@ -228,10 +228,10 @@ run(const char* prog_name)
   const char* fvec_opts = nullptr;
   int opt_version = 0;
   bool did_something = false;
-  queue* wpt_head_bak;	/* #ifdef UTF8_SUPPORT */
-  RouteList* rte_head_bak, *trk_head_bak; /* #ifdef UTF8_SUPPORT */
-  signed int wpt_ct_bak;  /* #ifdef UTF8_SUPPORT */
-  bool lists_backedup;  /* #ifdef UTF8_SUPPORT */
+  queue* wpt_head_bak;
+  RouteList* rte_head_bak, *trk_head_bak;
+  signed int wpt_ct_bak;
+  bool lists_backedup;
   QStack<QargStackElement> qargs_stack;
 
   // Use QCoreApplication::arguments() to process the command line.

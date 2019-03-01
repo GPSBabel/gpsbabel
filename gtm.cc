@@ -585,13 +585,17 @@ gtm_read()
   /* Tracklog styles */
   // TODO: The format document states there are ts_count tracklog style entries,
   //       and tr_count tracklog entries.
-  //       Some tracklog entries may be contiuation entries, so we turn these into
-  //       real_track_list.size() <= tr_count tracks.
-  //       If ts_count != real_track_list.size() we don't know how to line up the tracklogs,
-  //       and the real tracks, with the tracklog styles.
+  //       Some tracklog entries may be continuation entries, so we turn these
+  //       into real_track_list.size() <= tr_count tracks.
+  //       If ts_count != real_track_list.size() we don't know how to line up
+  //       the tracklogs, and the real tracks, with the tracklog styles.
   if (ts_count != real_track_list.size()) {
-    warning(MYNAME ": The number of tracklog entries with the new flag set doesn't match the number of tracklog style entries.");
+    warning(MYNAME ": The number of tracklog entries with the new flag "
+           "set doesn't match the number of tracklog style entries.\n"
+           "  This is unexpected and may indicate a malformed input file.\n"
+           "  As a result the track names may be incorrect.\n");
   }
+  // Read the entire tracklog styles section whether we use it or not.
   for (i = 0; i != ts_count; i++) {
     QString tname = fread_string(file_in);
     fread_discard(file_in, 12);

@@ -153,17 +153,6 @@ route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 }
 
 void
-route_reverse(const route_head* rte_hd)
-{
-  /* Cast away const-ness */
-  auto rh = const_cast<route_head*>(rte_hd);
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
-  }
-}
-
-void
 route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
   global_route_list->common_disp_session(se, rh, rt, wc);
@@ -447,7 +436,7 @@ RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& na
   rte->rte_waypt_ct++;	/* waypoints in this route */
   ++waypt_ct;
   if (synth && wpt->shortname.isEmpty()) {
-    wpt->shortname = QString().sprintf("%s%0*d", CSTRc(namepart), number_digits, waypt_ct);
+    wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
   update_common_traits(wpt);
