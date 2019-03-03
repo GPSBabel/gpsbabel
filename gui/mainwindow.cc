@@ -1316,7 +1316,7 @@ void MainWindow::getWidgetValues()
 // It's also kind of dumb to return the name which SetCombo then looks up,
 // but there's not a 1:1 correlation between offsets in the combo box and
 // in the list of formats.
-QString MainWindow::getFormatNameForExtension(QString ext)
+QString MainWindow::getFormatNameForExtension(const QString& ext)
 {
   for (int i = 0; i < formatList_.size(); i++) {
     QStringList extensions = formatList_[i].getExtensions();

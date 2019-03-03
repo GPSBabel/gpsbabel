@@ -29,7 +29,7 @@
 #include "gpx.h"
 
 
-static QDateTime decodeDateTime(const QString s)
+static QDateTime decodeDateTime(const QString& s)
 {
   QDateTime utc = QDateTime::fromString(s, "yyyy-MM-dd'T'HH:mm:ss'Z'");
   return utc;

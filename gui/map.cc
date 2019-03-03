@@ -48,7 +48,7 @@ using std::string;
 using std::vector;
 
 //------------------------------------------------------------------------
-static QString stripDoubleQuotes(const QString s)
+static QString stripDoubleQuotes(const QString& s)
 {
   QString out;
   foreach (QChar c, s) {
