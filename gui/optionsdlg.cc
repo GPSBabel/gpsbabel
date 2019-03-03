@@ -55,26 +55,25 @@ QVariant getOptionValue(QList<FormatOption> opts, int k)
 {
   if (opts[k].getValue().toString() != "") {
     return opts[k].getValue();
-  } else {
-    return opts[k].getDefaultValue();
   }
+  return opts[k].getDefaultValue();
+
 }
 
 //------------------------------------------------------------------------
 FileDlgManager::~FileDlgManager()
-{
-}
+  = default;
 
 //------------------------------------------------------------------------
 void FileDlgManager::buttonClicked()
 {
   QString str;
   if (isInFile) {
-    str = QFileDialog::getOpenFileName(0, tr("Select input file"),
+    str = QFileDialog::getOpenFileName(nullptr, tr("Select input file"),
                                        le->text(),
                                        "All Files (*.*)");
   } else {
-    str = QFileDialog::getSaveFileName(0, tr("Select output file"),
+    str = QFileDialog::getSaveFileName(nullptr, tr("Select output file"),
                                        le->text(),
                                        "All Files (*.*)");
   }
@@ -107,7 +106,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     QSpacerItem* horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
 
-    QWidget* w = 0;
+    QWidget* w = nullptr;
     switch (options_[k].getType()) {
     case FormatOption::OPTstring: {
       QLineEdit* lineEdit = new QLineEdit(this);
@@ -136,7 +135,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     case FormatOption::OPTbool:
       // If it was selected before, select it again.
       checkBox->setChecked(options_[k].getSelected());
-      w = 0;
+      w = nullptr;
       break;
 
     case FormatOption::OPTfloat: {
@@ -223,7 +222,7 @@ void OptionsDlg::acceptClicked()
 {
   for (int k=0; k<options_.size(); k++) {
     options_[k].setSelected(checkBoxes_[k]->isChecked());
-    if (fields_[k]) {
+    if (fields_[k] != nullptr) {
       if (options_[k].getType() == FormatOption::OPTboundedInt) {
         int value = static_cast<QSpinBox*>(fields_[k])->value();
         value = qMax(qMin(value, options_[k].getMaxValue().toInt()),options_[k].getMinValue().toInt());

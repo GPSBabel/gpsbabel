@@ -97,7 +97,7 @@ private:
   UpgradeCheck* upgrade;
   bool allowBetaUpgrades();
   void osLoadDeviceNameCombos(QComboBox*);
-  QString getFormatNameForExtension(QString ext);
+  QString getFormatNameForExtension(const QString& ext);
 
 protected:
   void closeEvent(QCloseEvent*);

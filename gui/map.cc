@@ -48,7 +48,7 @@ using std::string;
 using std::vector;
 
 //------------------------------------------------------------------------
-static QString stripDoubleQuotes(const QString s)
+static QString stripDoubleQuotes(const QString& s)
 {
   QString out;
   foreach (QChar c, s) {
@@ -92,7 +92,7 @@ Map::Map(QWidget* parent,
 
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
   if (!QFile(baseFile).exists()) {
-    QMessageBox::critical(0, appName,
+    QMessageBox::critical(nullptr, appName,
                           tr("Missing \"gmapbase.html\" file.  Check installation"));
   } else {
     QString urlStr = "file:///" + baseFile;
@@ -129,10 +129,10 @@ Map::~Map()
 void Map::loadFinishedX(bool f)
 {
   this->logTime("Done initial page load");
-  if (!f)
-    QMessageBox::critical(0, appName,
+  if (!f) {
+    QMessageBox::critical(nullptr, appName,
                           tr("Failed to load Google maps base page"));
-  else {
+  } else {
     QApplication::processEvents();
     showGpxData();
   }
@@ -301,7 +301,7 @@ void Map::markerClicked(int t, int i)
 void Map::logTime(const QString& s)
 {
   //  fprintf(stderr, "Log: %s:  %d ms\n", s.toStdString().c_str(), stopWatch.elapsed());
-  if (textEdit_) {
+  if (textEdit_ != nullptr) {
     textEdit_->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch_.elapsed()));
   }
   stopWatch_.start();

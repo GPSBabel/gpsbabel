@@ -29,7 +29,7 @@
 #include "gpx.h"
 
 
-static QDateTime decodeDateTime(const QString s)
+static QDateTime decodeDateTime(const QString& s)
 {
   QDateTime utc = QDateTime::fromString(s, "yyyy-MM-dd'T'HH:mm:ss'Z'");
   return utc;
@@ -49,15 +49,15 @@ static bool trackIsEmpty(const GpxTrack& trk)
 class GpxHandler: public QXmlDefaultHandler
 {
 public:
-  GpxHandler(): QXmlDefaultHandler()
+  GpxHandler()
 
   {
     state = e_noop;
   }
 
-  typedef enum {e_noop, e_wpt, e_trk,
-                e_trkpt, e_trkseg, e_rte, e_rtept
-               } elementState;
+  enum elementState {e_noop, e_wpt, e_trk,
+                     e_trkpt, e_trkseg, e_rte, e_rtept
+                    };
   QString textChars;
   GpxWaypoint currentWpt;
   QList <GpxWaypoint> wptList;
@@ -74,9 +74,9 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  virtual bool startElement(const QString&,
-                            const QString& localName, const QString&,
-                            const QXmlAttributes& atts)
+  bool startElement(const QString& /*namespaceURI*/,
+                    const QString& localName, const QString& /*qName*/,
+                    const QXmlAttributes& atts) override
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
@@ -134,9 +134,9 @@ public:
     return true;
   };
 
-  virtual bool endElement(const QString&,
-                          const QString& localName,
-                          const QString&)
+  bool endElement(const QString& /*namespaceURI*/,
+                  const QString& localName,
+                  const QString& /*qName*/) override
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
@@ -207,7 +207,7 @@ public:
     return true;
   };
 
-  virtual bool characters(const QString& x)
+  bool characters(const QString& x) override
   {
     textChars = x;
     return true;
@@ -235,7 +235,7 @@ bool Gpx::read(const QString& fileName)
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
     return true;
-  } else {
-    return false;
   }
+  return false;
+
 }

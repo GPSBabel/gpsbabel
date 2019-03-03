@@ -250,7 +250,7 @@ void GMapDialog::itemChangedX(QStandardItem* it)
   else {
     // Individual items, find the right one.
     GpxItem* git = static_cast<GpxItem*>(it->data().value<void*>());
-    if (git != 0) {
+    if (git != nullptr) {
       git->setVisible(show);
       for (int i=0; i<gpx_.getWaypoints().size(); i++) {
         if (&gpx_.getWaypoints()[i] == git) {
@@ -498,7 +498,7 @@ void GMapDialog::showOnlyThisWaypoint()
 {
   QList <GpxWaypoint>& tlist = gpx_.getWaypoints();
   for (int i=0; i<tlist.size(); i++) {
-    tlist[i].setVisible(i == menuIndex_? true: false);
+    tlist[i].setVisible(i == menuIndex_);
     trkList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   wptItem_->setCheckState(Qt::Checked);
@@ -509,7 +509,7 @@ void GMapDialog::showOnlyThisTrack()
 {
   QList <GpxTrack>& tlist = gpx_.getTracks();
   for (int i=0; i<tlist.size(); i++) {
-    tlist[i].setVisible(i == menuIndex_? true: false);
+    tlist[i].setVisible(i == menuIndex_);
     trkList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   trkItem_->setCheckState(Qt::Checked);
@@ -521,7 +521,7 @@ void GMapDialog::showOnlyThisRoute()
 {
   QList <GpxRoute>& rlist = gpx_.getRoutes();
   for (int i=0; i<rlist.size(); i++) {
-    rlist[i].setVisible(i == menuIndex_? true: false);
+    rlist[i].setVisible(i == menuIndex_);
     rteList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   rteItem_->setCheckState(Qt::Checked);

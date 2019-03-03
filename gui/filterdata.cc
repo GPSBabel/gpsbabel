@@ -35,7 +35,7 @@ QStringList WayPtsFilterData::makeOptionString()
     args << QString("radius,distance=%1%2,lat=%3,lon=%4")
          .arg(radiusVal).arg("MK"[radiusUnit]).arg(latVal, 0, 'f', 8).arg(longVal, 0, 'f', 8);
   }
-  if (duplicates && (shortNames ^ locations)) {
+  if (duplicates && ((shortNames ^ locations) != 0)) {
     args << QString("-x");
     QString s = "duplicate";
     if (shortNames) {
@@ -142,7 +142,7 @@ QStringList TrackFilterData::makeOptionString()
     s += QString(",title=%1").arg(titleString);
   }
 
-  if (s.length()) {
+  if (s.length() != 0) {
     args << "-x" << "track" + s;
   }
 

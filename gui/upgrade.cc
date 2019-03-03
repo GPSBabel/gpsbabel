@@ -49,8 +49,8 @@ static const bool testing = false;
 UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
                            BabelData& bd) :
   QObject(parent),
-  manager_(0),
-  replyId_(0),
+  manager_(nullptr),
+  replyId_(nullptr),
   upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList),
   updateStatus_(updateUnknown),
@@ -60,13 +60,13 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
 
 UpgradeCheck::~UpgradeCheck()
 {
-  if (replyId_) {
+  if (replyId_ != nullptr) {
     replyId_->abort();
-    replyId_ = 0;
+    replyId_ = nullptr;
   }
-  if (manager_) {
+  if (manager_ != nullptr) {
     delete manager_;
-    manager_ = 0;
+    manager_ = nullptr;
   }
 }
 
@@ -123,7 +123,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += "&os=" + getOsName();
   args += "&cpu=" + getCpuArchitecture();
   args += "&os_ver=" + getOsVersion();
-  args += QString("&beta_ok=%1").arg(allowBeta);
+  args += QString("&beta_ok=%1").arg(static_cast<int>(allowBeta));
   args += "&lang=" + QLocale::languageToString(locale.language());
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
   args += QString("&ugcb=%1").arg(babelData_.upgradeCallbacks_);
@@ -139,14 +139,14 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     int rc = formatList_[i].getReadUseCount();
     int wc = formatList_[i].getWriteUseCount();
     QString formatName = formatList_[i].getName();
-    if (rc) {
+    if (rc != 0) {
       args += QString("&uc%1=rd/%2/%3").arg(j++).arg(formatName).arg(rc);
     }
-    if (wc) {
+    if (wc != 0) {
       args += QString("&uc%1=wr/%2/%3").arg(j++).arg(formatName).arg(wc);
     }
   }
-  if (j && babelData_.reportStatistics_) {
+  if ((j != 0) && babelData_.reportStatistics_) {
     args += QString("&uc=%1").arg(j);
   }
 
@@ -172,18 +172,19 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
 void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 {
 
-  if (reply == 0) {
+  if (reply == nullptr) {
     babelData_.upgradeErrors_++;
     return;
-  } else if (reply != replyId_) {
-    QMessageBox::information(0, tr("HTTP"),
+  }
+  if (reply != replyId_) {
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Unexpected reply."));
   } else if (reply->error() != QNetworkReply::NoError) {
     babelData_.upgradeErrors_++;
-    QMessageBox::information(0, tr("HTTP"),
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Download failed: %1.")
                              .arg(reply->errorString()));
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -202,7 +203,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
       // Change the url for the next update check.
       // TOODO: kick off another update check.
       upgradeUrl_ = redirectUrl;
-      replyId_ = 0;
+      replyId_ = nullptr;
       reply->deleteLater();
       return;
     }
@@ -214,11 +215,11 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   }
   if (statusCode != 200) {
     QVariant reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute);
-    QMessageBox::information(0, tr("HTTP"),
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Download failed: %1: %2.")
                              .arg(statusCode.toInt())
                              .arg(reason.toString()));
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -231,12 +232,12 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QString error_text;
   // This shouldn't ever be seen by a user.
   if (!document.setContent(oresponse, &error_text, &line)) {
-    QMessageBox::critical(0, tr("Error"),
+    QMessageBox::critical(nullptr, tr("Error"),
                           tr("Invalid return data at line %1: %2.")
                           .arg(line)
                           .arg(error_text));
     babelData_.upgradeErrors_++;
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -282,7 +283,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     }
   }
 
-  if (response.length()) {
+  if (response.length() != 0) {
     QMessageBox information;
     information.setWindowTitle(tr("Upgrade"));
 
@@ -312,6 +313,6 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   for (int i = 0; i < formatList_.size(); i++) {
     formatList_[i].zeroUseCounts();
   }
-  replyId_ = 0;
+  replyId_ = nullptr;
   reply->deleteLater();
 }

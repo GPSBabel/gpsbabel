@@ -120,7 +120,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) ? str.mid(1) : str;
+  return (str.length()) != 0 ? str.mid(1) : str;
 
 }
 
@@ -216,7 +216,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 
   if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
-    VersionMismatch vm(0, babelVersion_, QString(VERSION));
+    VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
 
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
@@ -226,9 +226,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 //------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
-  if (upgrade) {
-    delete upgrade;
-  }
+
+  delete upgrade;
+
 }
 //------------------------------------------------------------------------
 // Dynamic language switching courtesy of
@@ -277,7 +277,7 @@ void MainWindow::createLanguageMenu(void)
 // Called every time, when a menu entry of the language menu is called
 void MainWindow::slotLanguageChanged(QAction* action)
 {
-  if (0 != action) {
+  if (nullptr != action) {
     // load the language dependant on the action content.
     loadLanguage(action->data().toString());
   }
@@ -311,7 +311,7 @@ void MainWindow::loadLanguage(const QString& rLanguage)
 
 void MainWindow::changeEvent(QEvent* event)
 {
-  if (0 != event) {
+  if (nullptr != event) {
     switch (event->type()) {
     // This event is sent if a translator is loaded.
     case QEvent::LanguageChange:
@@ -477,7 +477,7 @@ QString MainWindow::filterForFormat(int idx)
 
   // If we don't have any meaningful extensions available for this format,
   // don't be clever here; just fall through to "All files" case.
-  if (extensions.size() > 0 && !extensions[0].isEmpty()) {
+  if (!extensions.empty() && !extensions[0].isEmpty()) {
     str += " (";
     for (int i=0; i<extensions.size(); i++) {
       if (i!= 0) {
@@ -496,7 +496,7 @@ QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
   QString outname = name;
   if (QFileInfo(name).suffix().length() == 0) {
     QStringList extensions = formatList_[idx].getExtensions();
-    if (extensions.size() > 0 && !extensions[0].isEmpty()) {
+    if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
     }
   }
@@ -528,7 +528,7 @@ int MainWindow::currentComboFormatIndex(QComboBox* comboBox)
 //------------------------------------------------------------------------
 void MainWindow::browseInputFile()
 {
-  QString startFile = babelData_.inputFileNames_.size() ? babelData_.inputFileNames_[0] : babelData_.inputBrowse_;
+  QString startFile = !babelData_.inputFileNames_.empty() ? babelData_.inputFileNames_[0] : babelData_.inputBrowse_;
   int idx = currentComboFormatIndex(ui_.inputFormatCombo);
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
@@ -536,10 +536,10 @@ void MainWindow::browseInputFile()
   }
 
   QStringList userList =
-    QFileDialog::getOpenFileNames(0, tr("Select one or more input files"),
+    QFileDialog::getOpenFileNames(nullptr, tr("Select one or more input files"),
                                   startFile,
                                   filterForFormat(idx));
-  if (userList.size()) {
+  if (!userList.empty()) {
     babelData_.inputBrowse_ = userList[0];
     babelData_.inputFileNames_ = userList;
     QString str;
@@ -564,7 +564,7 @@ void MainWindow::browseOutputFile()
   }
 
   QString str =
-    QFileDialog::getSaveFileName(0, tr("Output File Name"),
+    QFileDialog::getSaveFileName(nullptr, tr("Output File Name"),
                                  startFile,
                                  filterForFormat(idx));
   if (str.length() != 0) {
@@ -627,18 +627,18 @@ QList<int> MainWindow::outputDeviceFormatIndices()
 void MainWindow::loadFormats()
 {
   if (!FormatLoad().getFormats(formatList_)) {
-    QMessageBox::information(0, QString(appName),
+    QMessageBox::information(nullptr, QString(appName),
                              tr("Error reading format configuration.  "
                                 "Check that the backend program \"gpsbabel\" is properly installed "
                                 "and is in the current PATH\n\n"
                                 "This program cannot continue."));
     exit(1);
   }
-  if (inputFileFormatIndices().size() == 0 ||
-      inputDeviceFormatIndices().size() == 0 ||
-      outputFileFormatIndices().size() == 0 ||
-      outputDeviceFormatIndices().size() == 0) {
-    QMessageBox::information(0, QString(appName),
+  if (inputFileFormatIndices().empty() ||
+      inputDeviceFormatIndices().empty() ||
+      outputFileFormatIndices().empty() ||
+      outputDeviceFormatIndices().empty()) {
+    QMessageBox::information(nullptr, QString(appName),
                              tr("Some file/device formats were not found during initialization.  "
                                 "Check that the backend program \"gpsbabel\" is properly installed "
                                 "and is in the current PATH\n\n"
@@ -747,7 +747,7 @@ void MainWindow::inputFormatChanged(int comboIdx)
     return;
   }
   int fidx = ui_.inputFormatCombo->itemData(comboIdx).toInt();
-  ui_.inputOptionsBtn->setEnabled(formatList_[fidx].getInputOptions().size()>0);
+  ui_.inputOptionsBtn->setEnabled(!formatList_[fidx].getInputOptions().empty());
   displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   crossCheckInOutFormats();
 
@@ -767,7 +767,7 @@ void MainWindow::outputFormatChanged(int comboIdx)
     return;
   }
   int fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
-  ui_.outputOptionsBtn->setEnabled(formatList_[fidx].getOutputOptions().size()>0);
+  ui_.outputOptionsBtn->setEnabled(!formatList_[fidx].getOutputOptions().empty());
   displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   crossCheckInOutFormats();
 
@@ -784,12 +784,12 @@ void MainWindow::outputFormatChanged(int comboIdx)
 void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.inputFormatCombo);
-  if (formatList_[fidx].getInputOptionsRef()->size() == 0) {
+  if (formatList_[fidx].getInputOptionsRef()->empty()) {
     QMessageBox::information
-    (0, appName,
+    (nullptr, appName,
      tr("There are no input options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   } else {
-    OptionsDlg optionDlg(0,
+    OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
                          formatList_[fidx].getInputOptionsRef(),
                          formatList_[fidx].getHtml());
@@ -803,12 +803,12 @@ void MainWindow::inputOptionButtonClicked()
 void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.outputFormatCombo);
-  if (formatList_[fidx].getOutputOptionsRef()->size() == 0) {
+  if (formatList_[fidx].getOutputOptionsRef()->empty()) {
     QMessageBox::information
-    (0, appName,
+    (nullptr, appName,
      tr("There are no output options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   } else {
-    OptionsDlg optionDlg(0,
+    OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
                          formatList_[fidx].getOutputOptionsRef(),
                          formatList_[fidx].getHtml());
@@ -826,14 +826,14 @@ bool MainWindow::isOkToGo()
   if (!((ui_.xlateWayPtsCk->isChecked() && ui_.xlateWayPtsCk->isEnabled()) ||
         (ui_.xlateRoutesCk->isChecked() && ui_.xlateRoutesCk->isEnabled()) ||
         (ui_.xlateTracksCk->isChecked() && ui_.xlateTracksCk->isEnabled()))) {
-    QMessageBox::information(0, QString(appName), tr("No valid waypoints/routes/tracks translation specified"));
+    QMessageBox::information(nullptr, QString(appName), tr("No valid waypoints/routes/tracks translation specified"));
     return false;
   }
 
   // Paper over what didn't happen in inputBrowse() if the user edited
   // the filename fields directly.
   if ((babelData_.inputType_ == BabelData::fileType_) &&
-      (babelData_.inputFileNames_.size() == 0) &&
+      (babelData_.inputFileNames_.empty()) &&
       (!ui_.inputFileNameText->text().isEmpty())) {
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
@@ -844,19 +844,20 @@ bool MainWindow::isOkToGo()
   }
 
   if ((babelData_.inputType_ == BabelData::fileType_) &&
-      (babelData_.inputFileNames_.size() == 0)) {
-    QMessageBox::information(0, QString(appName), tr("No input file specified"));
+      (babelData_.inputFileNames_.empty())) {
+    QMessageBox::information(nullptr, QString(appName), tr("No input file specified"));
     return false;
   }
 
-  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_ == true) {
+  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_) {
   }
-  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_ == false) {
-    QMessageBox::information(0, QString(appName), tr("No valid output specified"));
+  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
+    QMessageBox::information(nullptr, QString(appName), tr("No valid output specified"));
     return false;
-  } else if (babelData_.outputType_ == BabelData::fileType_ &&
-             babelData_.outputFileName_.length() == 0) {
-    QMessageBox::information(0, QString(appName), tr("No output file specified"));
+  }
+  if (babelData_.outputType_ == BabelData::fileType_ &&
+      babelData_.outputFileName_.length() == 0) {
+    QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }
   return true;
@@ -866,10 +867,10 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  QProcess* proc = new QProcess(0);
+  QProcess* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
   proc->start(name, args);
-  ProcessWaitDialog* waitDlg = new ProcessWaitDialog(0, proc);
+  ProcessWaitDialog* waitDlg = new ProcessWaitDialog(nullptr, proc);
 
   if (proc->state() == QProcess::NotRunning) {
     errorString = QString(tr("Process \"%1\" did not start")).arg(name);
@@ -1031,7 +1032,7 @@ void MainWindow::applyActionX()
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
     if (babelData_.previewGmap_) {
       this->hide();
-      GMapDialog dlg(0, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : 0);
+      GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
       dlg.show();
       dlg.exec();
       QFile(tempName).remove();
@@ -1054,7 +1055,7 @@ void MainWindow::closeActionX()
   QDateTime now = QDateTime::currentDateTime();
   if ((babelData_.runCount_ == 1) ||
       ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30))) {
-    Donate donate(0);
+    Donate donate(nullptr);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1)) {
       donate.showNever(false);
     }
@@ -1063,12 +1064,12 @@ void MainWindow::closeActionX()
   }
   saveSettings();
   delete upgrade;
-  upgrade = 0;
+  upgrade = nullptr;
   qApp->exit(0);
 }
 
 //------------------------------------------------------------------------
-void MainWindow::closeEvent(QCloseEvent*)
+void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
   closeActionX();
 }
@@ -1172,7 +1173,7 @@ void MainWindow::resetFormatDefaults()
 //------------------------------------------------------------------------
 void MainWindow::moreOptionButtonClicked()
 {
-  AdvDlg advDlg(0, babelData_.synthShortNames_,
+  AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
                 babelData_.previewGmap_, babelData_.debugLevel_);
   connect(advDlg.formatButton(), SIGNAL(clicked()),
           this, SLOT(resetFormatDefaults()));
@@ -1181,7 +1182,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(0, babelVersion_, QString(appName) + QString(" " VERSION), babelData_.installationUuid_);
+  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
@@ -1197,7 +1198,7 @@ void MainWindow::upgradeCheckActionX()
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
 {
-  Preferences preferences(0, formatList_, babelData_);
+  Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
   // We may have changed the list of displayed formats.  Resynchronize.
@@ -1213,7 +1214,7 @@ void MainWindow::helpActionX()
 //------------------------------------------------------------------------
 void MainWindow::filtersClicked()
 {
-  FilterDialog dlg(0, filterData_);
+  FilterDialog dlg(nullptr, filterData_);
   dlg.runDialog();
   updateFilterStatus();
 }
@@ -1222,7 +1223,7 @@ void MainWindow::filtersClicked()
 //------------------------------------------------------------------------
 void MainWindow::updateFilterStatus()
 {
-  bool filterActive = filterData_.getAllFilterStrings().size();
+  bool filterActive = !filterData_.getAllFilterStrings().empty();
   ui_.filterStatus->setEnabled(filterActive);
   if (filterActive) {
     ui_.filterStatus->setToolTip(tr("One or more data filters are active"));
@@ -1316,7 +1317,7 @@ void MainWindow::getWidgetValues()
 // It's also kind of dumb to return the name which SetCombo then looks up,
 // but there's not a 1:1 correlation between offsets in the combo box and
 // in the list of formats.
-QString MainWindow::getFormatNameForExtension(QString ext)
+QString MainWindow::getFormatNameForExtension(const QString& ext)
 {
   for (int i = 0; i < formatList_.size(); i++) {
     QStringList extensions = formatList_[i].getExtensions();
@@ -1326,5 +1327,5 @@ QString MainWindow::getFormatNameForExtension(QString ext)
       }
     }
   }
-  return 0;
+  return nullptr;
 }

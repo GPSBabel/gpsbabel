@@ -125,7 +125,7 @@ void FilterDialog::helpX()
 //------------------------------------------------------------------------
 void FilterDialog::runDialog()
 {
-  if (exec()) {
+  if (exec() != 0) {
     for (int i=0; i<pages_.size(); i++) {
       pages_[i]->getWidgetValues();
       *(usePages_[i]) = ui_.filterList->item(i)->checkState() == Qt::Checked;
