@@ -74,9 +74,9 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  virtual bool startElement(const QString&,
+  bool startElement(const QString&,
                             const QString& localName, const QString&,
-                            const QXmlAttributes& atts)
+                            const QXmlAttributes& atts) override
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
@@ -134,9 +134,9 @@ public:
     return true;
   };
 
-  virtual bool endElement(const QString&,
+  bool endElement(const QString&,
                           const QString& localName,
-                          const QString&)
+                          const QString&) override
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
@@ -207,7 +207,7 @@ public:
     return true;
   };
 
-  virtual bool characters(const QString& x)
+  bool characters(const QString& x) override
   {
     textChars = x;
     return true;
