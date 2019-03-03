@@ -74,8 +74,8 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  bool startElement(const QString&,
-                            const QString& localName, const QString&,
+  bool startElement(const QString& /*namespaceURI*/,
+                            const QString& localName, const QString& /*qName*/,
                             const QXmlAttributes& atts) override
   {
     if (localName == "wpt") {
@@ -134,9 +134,9 @@ public:
     return true;
   };
 
-  bool endElement(const QString&,
+  bool endElement(const QString& /*namespaceURI*/,
                           const QString& localName,
-                          const QString&) override
+                          const QString& /*qName*/) override
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();

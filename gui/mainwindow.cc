@@ -1068,7 +1068,7 @@ void MainWindow::closeActionX()
 }
 
 //------------------------------------------------------------------------
-void MainWindow::closeEvent(QCloseEvent*)
+void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
   closeActionX();
 }
