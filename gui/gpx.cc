@@ -35,7 +35,8 @@ static QDateTime decodeDateTime(const QString s)
   return utc;
 }
 
-static bool trackIsEmpty(const GpxTrack &trk){
+static bool trackIsEmpty(const GpxTrack& trk)
+{
   int count = 0;
   for (int i=0; i< trk.getTrackSegments().size(); i++) {
     for (int j=0; j<trk.getTrackSegments()[i].getTrackPoints().size(); j++) {
@@ -55,7 +56,8 @@ public:
   }
 
   typedef enum {e_noop, e_wpt, e_trk,
-		e_trkpt, e_trkseg, e_rte, e_rtept} elementState;
+                e_trkpt, e_trkseg, e_rte, e_rtept
+               } elementState;
   QString textChars;
   GpxWaypoint currentWpt;
   QList <GpxWaypoint> wptList;
@@ -72,9 +74,9 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  virtual bool startElement (const QString & ,
-                 const QString & localName, const QString &,
-			     const QXmlAttributes & atts )
+  virtual bool startElement(const QString&,
+                            const QString& localName, const QString&,
+                            const QXmlAttributes& atts)
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
@@ -123,48 +125,40 @@ public:
 
 
     else if (state == e_wpt ||
-	     state == e_trkpt || state == e_trkseg || state == e_trk ||
-	     state == e_rte || state == e_rtept) {
-    }
-    else {
+             state == e_trkpt || state == e_trkseg || state == e_trk ||
+             state == e_rte || state == e_rtept) {
+    } else {
       //fprintf(stderr, "localName:  %s     name:  %s\n",
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
     return true;
   };
 
-  virtual bool endElement (const QString & ,
-			   const QString & localName,
-               const QString &)
+  virtual bool endElement(const QString&,
+                          const QString& localName,
+                          const QString&)
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
       wptList << currentWpt;
-    }
-    else if (localName == "ele" && state == e_wpt) {
+    } else if (localName == "ele" && state == e_wpt) {
       currentWpt.setElevation(textChars.toDouble());
-    }
-    else if (localName == "name" && state == e_wpt) {
+    } else if (localName == "name" && state == e_wpt) {
       currentWpt.setName(textChars);
-    }
-    else if (localName == "cmt" && state == e_wpt) {
+    } else if (localName == "cmt" && state == e_wpt) {
       currentWpt.setComment(textChars);
-    }
-    else if (localName == "desc" && state == e_wpt) {
+    } else if (localName == "desc" && state == e_wpt) {
       currentWpt.setDescription(textChars);
-    }
-    else if (localName == "sym" && state == e_wpt) {
+    } else if (localName == "sym" && state == e_wpt) {
       currentWpt.setSymbol(textChars);
     }
 
     else if (localName == "trkpt") {
       state = stateStack.takeLast();
       currentTrkSeg.addPoint(currentTrkPt);
-    }
-    else if (localName == "ele" && state == e_trkpt) {
+    } else if (localName == "ele" && state == e_trkpt) {
       currentTrkPt.setElevation(textChars.toDouble());
-    }
-    else if (localName == "time" && state == e_trkpt) {
+    } else if (localName == "time" && state == e_trkpt) {
       currentTrkPt.setDateTime(decodeDateTime(textChars));
     }
 
@@ -175,21 +169,22 @@ public:
 
     else if (localName == "trk") {
       state = stateStack.takeLast();
-      if (!trackIsEmpty(currentTrk))
-	trkList << currentTrk;
+      if (!trackIsEmpty(currentTrk)) {
+        trkList << currentTrk;
+      }
     }
 
     else if (localName == "name" && state == e_trk) {
       currentTrk.setName(textChars);
-    }
-    else if (localName == "number" && state == e_trk) {
+    } else if (localName == "number" && state == e_trk) {
       currentTrk.setNumber(textChars.toInt());
     }
 
     else if (localName == "rte") {
       state = stateStack.takeLast();
-      if (currentRte.getRoutePoints().size()>=2)
-	rteList << currentRte;
+      if (currentRte.getRoutePoints().size()>=2) {
+        rteList << currentRte;
+      }
     }
 
     else if (localName == "rtept") {
@@ -212,7 +207,7 @@ public:
     return true;
   };
 
-  virtual bool characters(const QString &x)
+  virtual bool characters(const QString& x)
   {
     textChars = x;
     return true;
@@ -222,11 +217,12 @@ public:
 
 //------------------------------------------------------------------------
 
-bool Gpx::read(const QString & fileName)
+bool Gpx::read(const QString& fileName)
 {
   QFile file(fileName);
-  if (!file.open(QIODevice::ReadOnly))
+  if (!file.open(QIODevice::ReadOnly)) {
     return false;
+  }
 
   QXmlInputSource xmlIn(&file);
 
@@ -239,7 +235,7 @@ bool Gpx::read(const QString & fileName)
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
     return true;
-  }
-  else
+  } else {
     return false;
+  }
 }

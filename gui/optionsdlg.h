@@ -32,45 +32,46 @@
 
 #include "format.h"
 
-class FileDlgManager: public QObject 
+class FileDlgManager: public QObject
 {
-Q_OBJECT
+  Q_OBJECT
 public:
-  FileDlgManager(QObject*parent, 
-		 QLineEdit *le,
-		 QToolButton *tb, bool isInFile);
-  
+  FileDlgManager(QObject* parent,
+                 QLineEdit* le,
+                 QToolButton* tb, bool isInFile);
+
   ~FileDlgManager();
 
 private:
-  QLineEdit *le;
-  QToolButton *tb;
+  QLineEdit* le;
+  QToolButton* tb;
   bool isInFile;
-		   
+
 private slots:
   void buttonClicked();
 
 };
 
-class OptionsDlg: public QDialog {
-Q_OBJECT
- public:
-  OptionsDlg(QWidget *parent, const QString &fmtName_, QList<FormatOption> *options_,
-       const QString &html_);
-  
- private:
+class OptionsDlg: public QDialog
+{
+  Q_OBJECT
+public:
+  OptionsDlg(QWidget* parent, const QString& fmtName_, QList<FormatOption>* options_,
+             const QString& html_);
+
+private:
   QString fmtName_;
-  QList<FormatOption> &options_;
-  QDialogButtonBox *buttonBox_;
+  QList<FormatOption>& options_;
+  QDialogButtonBox* buttonBox_;
   QList<QCheckBox*> checkBoxes_;
   QList<QWidget*> fields_;
   QString html_;
 
- private slots:
+private slots:
   void acceptClicked();
   void rejectClicked();
   void helpClicked();
-  
+
 };
 
 

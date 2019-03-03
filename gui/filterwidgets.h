@@ -36,15 +36,15 @@ class FilterOption;
 class CheckEnabler: public QObject
 {
   Q_OBJECT
-    public:
-  CheckEnabler(QObject *parent, QAbstractButton *ck, QWidget *w): QObject(parent), checkBox(ck)
+public:
+  CheckEnabler(QObject* parent, QAbstractButton* ck, QWidget* w): QObject(parent), checkBox(ck)
   {
     widgetList << w;
     connect(ck, SIGNAL(clicked()), this, SLOT(checkStatusChanged()));
     checkStatusChanged();
     fixWhatsThis();
   }
-  CheckEnabler(QObject *parent, QAbstractButton *ck, QList<QWidget *> &wl): 
+  CheckEnabler(QObject* parent, QAbstractButton* ck, QList<QWidget*>& wl):
     QObject(parent), checkBox(ck)
   {
     widgetList = wl;
@@ -61,26 +61,28 @@ public slots:
       widgetList[i]->setEnabled(b);
     }
   }
-  
+
 private:
-  QAbstractButton *checkBox;
+  QAbstractButton* checkBox;
   QList<QWidget*> widgetList;
   void fixWhatsThis()
   {
     QString wts = checkBox->whatsThis();
     if (wts.length() != 0) {
       for (int i=0; i<widgetList.size(); i++) {
-	QString s = widgetList[i]->whatsThis();
-	if (s.length() == 0)
-	  widgetList[i]->setWhatsThis(wts);
+        QString s = widgetList[i]->whatsThis();
+        if (s.length() == 0) {
+          widgetList[i]->setWhatsThis(wts);
+        }
       }
     }
     QString wtf = checkBox->toolTip();
     if (wtf.length() != 0) {
       for (int i=0; i<widgetList.size(); i++) {
-	QString s = widgetList[i]->toolTip();
-	if (s.length() == 0)
-	  widgetList[i]->setToolTip(wtf);
+        QString s = widgetList[i]->toolTip();
+        if (s.length() == 0) {
+          widgetList[i]->setToolTip(wtf);
+        }
       }
     }
   }
@@ -90,7 +92,7 @@ private:
 //------------------------------------------------------------------------
 class FilterOption
 {
- public:
+public:
   FilterOption() {};
   virtual ~FilterOption() {};
   virtual void setWidgetValue() = 0;
@@ -100,75 +102,95 @@ class FilterOption
 //------------------------------------------------------------------------
 class BoolFilterOption: public FilterOption
 {
- public:
- BoolFilterOption(bool &b, QAbstractButton *ck): FilterOption(), b(b), checkBox(ck)
+public:
+  BoolFilterOption(bool& b, QAbstractButton* ck): FilterOption(), b(b), checkBox(ck)
   {
   }
-  void setWidgetValue() {checkBox->setChecked(b); }
-  void getWidgetValue() {b = checkBox->isChecked();  }
-    
- private:
-  bool &b;
-  QAbstractButton *checkBox;
+  void setWidgetValue()
+  {
+    checkBox->setChecked(b);
+  }
+  void getWidgetValue()
+  {
+    b = checkBox->isChecked();
+  }
+
+private:
+  bool& b;
+  QAbstractButton* checkBox;
 };
 
 //------------------------------------------------------------------------
 class IntSpinFilterOption: public FilterOption
 {
- public:
-  IntSpinFilterOption(int &val, QSpinBox *sb, int bottom = -100, int top = 100): FilterOption(), val(val), spinBox(sb)
+public:
+  IntSpinFilterOption(int& val, QSpinBox* sb, int bottom = -100, int top = 100): FilterOption(), val(val), spinBox(sb)
   {
     sb->setRange(bottom, top);
   }
-  void setWidgetValue() {spinBox->setValue(val); }
-  void getWidgetValue() {val = spinBox->value();  }
-    
- private:
-  int &val;
-  QSpinBox *spinBox;
+  void setWidgetValue()
+  {
+    spinBox->setValue(val);
+  }
+  void getWidgetValue()
+  {
+    val = spinBox->value();
+  }
+
+private:
+  int& val;
+  QSpinBox* spinBox;
 };
 
 //------------------------------------------------------------------------
 class StringFilterOption: public FilterOption
 {
- public:
- StringFilterOption(QString &val, QLineEdit *le): FilterOption(), val(val), lineEdit(le)
+public:
+  StringFilterOption(QString& val, QLineEdit* le): FilterOption(), val(val), lineEdit(le)
   {
   }
-  void setWidgetValue() {lineEdit->setText(val); }
-  void getWidgetValue() {val = lineEdit->text();  }
-    
- private:
-  QString &val;
-  QLineEdit *lineEdit;
+  void setWidgetValue()
+  {
+    lineEdit->setText(val);
+  }
+  void getWidgetValue()
+  {
+    val = lineEdit->text();
+  }
+
+private:
+  QString& val;
+  QLineEdit* lineEdit;
 };
 
 //------------------------------------------------------------------------
 class DoubleFilterOption: public FilterOption
 {
- public:
-  DoubleFilterOption(double &val, QLineEdit *le,
-		     double minVal = -1.E308, 
-		     double maxVal = 1.0E308,
-		     int decimals = -1, 
-		     char format = 'g'
-		     ): FilterOption(), val(val), lineEdit(le), minVal(minVal),
-			maxVal(maxVal), decimals(decimals), format(format)
+public:
+  DoubleFilterOption(double& val, QLineEdit* le,
+                     double minVal = -1.E308,
+                     double maxVal = 1.0E308,
+                     int decimals = -1,
+                     char format = 'g'
+                    ): FilterOption(), val(val), lineEdit(le), minVal(minVal),
+    maxVal(maxVal), decimals(decimals), format(format)
   {
     le->setValidator(new QDoubleValidator(minVal, maxVal, decimals, le));
   }
-  void setWidgetValue() {
+  void setWidgetValue()
+  {
     lineEdit->setText(QString("%1").arg(val, 0, format, decimals));
   }
-  void getWidgetValue() {
-    val = lineEdit->text().toDouble(); 
+  void getWidgetValue()
+  {
+    val = lineEdit->text().toDouble();
     val = qMin(val, maxVal);
     val = qMax(val, minVal);
   }
-    
- private:
-  double &val;
-  QLineEdit *lineEdit;
+
+private:
+  double& val;
+  QLineEdit* lineEdit;
   double minVal, maxVal;
   int decimals;
   char format;
@@ -177,31 +199,43 @@ class DoubleFilterOption: public FilterOption
 //------------------------------------------------------------------------
 class DateTimeFilterOption: public FilterOption
 {
- public:
- DateTimeFilterOption(QDateTime &val, QDateTimeEdit *w): FilterOption(), val(val), w(w)
+public:
+  DateTimeFilterOption(QDateTime& val, QDateTimeEdit* w): FilterOption(), val(val), w(w)
   {
   }
-  void setWidgetValue() {w->setDateTime(val); }
-  void getWidgetValue() {val = w->dateTime();  }
-    
- private:
-  QDateTime &val;
-  QDateTimeEdit *w;
+  void setWidgetValue()
+  {
+    w->setDateTime(val);
+  }
+  void getWidgetValue()
+  {
+    val = w->dateTime();
+  }
+
+private:
+  QDateTime& val;
+  QDateTimeEdit* w;
 };
 
 //------------------------------------------------------------------------
 class ComboFilterOption: public FilterOption
 {
- public:
- ComboFilterOption(int &val, QComboBox *w): FilterOption(), val(val), w(w)
+public:
+  ComboFilterOption(int& val, QComboBox* w): FilterOption(), val(val), w(w)
   {
   }
-  void setWidgetValue() {w->setCurrentIndex(val); }
-  void getWidgetValue() {val = w->currentIndex();  }
-    
- private:
-  int &val;
-  QComboBox *w;
+  void setWidgetValue()
+  {
+    w->setCurrentIndex(val);
+  }
+  void getWidgetValue()
+  {
+    val = w->currentIndex();
+  }
+
+private:
+  int& val;
+  QComboBox* w;
 };
 
 
@@ -209,56 +243,65 @@ class ComboFilterOption: public FilterOption
 class FilterWidget: public QWidget
 {
 public:
-  FilterWidget(QWidget *parent) : QWidget(parent) {}
-  ~FilterWidget() {
-    for (int i=0; i<fopts.size(); i++)
+  FilterWidget(QWidget* parent) : QWidget(parent) {}
+  ~FilterWidget()
+  {
+    for (int i=0; i<fopts.size(); i++) {
       delete fopts[i];
+    }
   }
 
-  void getWidgetValues() {
+  void getWidgetValues()
+  {
     for (int i=0; i<fopts.size(); i++) {
       fopts[i]->getWidgetValue();
     }
   }
-  void setWidgetValues() {
-    for (int i=0; i<fopts.size(); i++)
+  void setWidgetValues()
+  {
+    for (int i=0; i<fopts.size(); i++) {
       fopts[i]->setWidgetValue();
+    }
   }
-  void addCheckEnabler(QAbstractButton *ck, QWidget *w) {
+  void addCheckEnabler(QAbstractButton* ck, QWidget* w)
+  {
     enbls << new CheckEnabler(this, ck, w);
   }
-  void addCheckEnabler(QAbstractButton *ck, QList<QWidget *> &wl)
+  void addCheckEnabler(QAbstractButton* ck, QList<QWidget*>& wl)
   {
     enbls << new CheckEnabler(this, ck, wl);
   }
-  virtual void checkChecks(){
-    for (int i=0; i<enbls.size(); i++)
+  virtual void checkChecks()
+  {
+    for (int i=0; i<enbls.size(); i++) {
       enbls[i]->checkStatusChanged();
+    }
   }
 
 protected:
   QList <FilterOption*> fopts;
-  QList <CheckEnabler *> enbls;
+  QList <CheckEnabler*> enbls;
 };
 
 //------------------------------------------------------------------------
 
 class TrackWidget: public FilterWidget
 {
-Q_OBJECT
- public:
-  TrackWidget(QWidget *parent, TrackFilterData &tf);
+  Q_OBJECT
+public:
+  TrackWidget(QWidget* parent, TrackFilterData& tf);
 
-  virtual void checkChecks(){
+  virtual void checkChecks()
+  {
     otherCheckX();
     FilterWidget::checkChecks();
   }
 
- private:
+private:
   Ui_TrackWidget ui;
-  TrackFilterData &tfd;
+  TrackFilterData& tfd;
 
-  private slots:
+private slots:
   void mergeCheckX();
   void otherCheckX();
   void splitDateX();
@@ -270,14 +313,14 @@ Q_OBJECT
 //------------------------------------------------------------------------
 class WayPtsWidget: public FilterWidget
 {
-Q_OBJECT
- public:
-  WayPtsWidget(QWidget *parent, WayPtsFilterData &wf);
+  Q_OBJECT
+public:
+  WayPtsWidget(QWidget* parent, WayPtsFilterData& wf);
 
- private:
+private:
   Ui_WayPtsWidget ui;
-  WayPtsFilterData &wfd;
-  
+  WayPtsFilterData& wfd;
+
 private slots:
   void locationsCkX();
   void shortNamesCkX();
@@ -286,24 +329,24 @@ private slots:
 //------------------------------------------------------------------------
 class RtTrkWidget: public FilterWidget
 {
-Q_OBJECT
- public:
-  RtTrkWidget(QWidget *parent, RtTrkFilterData &wf);
+  Q_OBJECT
+public:
+  RtTrkWidget(QWidget* parent, RtTrkFilterData& wf);
 
- private:
+private:
   Ui_RtTrkWidget ui;
-  RtTrkFilterData &rfd;
+  RtTrkFilterData& rfd;
 };
 //------------------------------------------------------------------------
 class MiscFltWidget: public FilterWidget
 {
-Q_OBJECT
- public:
-  MiscFltWidget(QWidget *, MiscFltFilterData &);
+  Q_OBJECT
+public:
+  MiscFltWidget(QWidget*, MiscFltFilterData&);
 
- private:
+private:
   Ui_MiscFltWidget ui;
-  MiscFltFilterData &mfd;
+  MiscFltFilterData& mfd;
 };
 
 #endif

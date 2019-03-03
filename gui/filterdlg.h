@@ -30,27 +30,27 @@
 
 class FilterDialog: public QDialog
 {
-Q_OBJECT
- public:
- FilterDialog(QWidget *parent, AllFiltersData &fd_);
+  Q_OBJECT
+public:
+  FilterDialog(QWidget* parent, AllFiltersData& fd_);
   ~FilterDialog() {}
 
   void runDialog();
-  
 
- private:
+
+private:
   static int lastPage_;
-  QList <FilterWidget *>pages_;
-  QList <bool *>usePages_;
-  QStackedWidget *widgetStack_;
+  QList <FilterWidget*>pages_;
+  QList <bool*>usePages_;
+  QStackedWidget* widgetStack_;
   Ui_FilterDlg ui_;
-  AllFiltersData &fd_;
+  AllFiltersData& fd_;
 
-  void addFilterPage(const QString & name, FilterWidget *w, bool *);
+  void addFilterPage(const QString& name, FilterWidget* w, bool*);
 
 private slots:
   void pageSelectionChanged(int);
-  void itemClickedX(QListWidgetItem *);
+  void itemClickedX(QListWidgetItem*);
   void resetX();
   void helpX();
 };

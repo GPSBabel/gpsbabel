@@ -27,10 +27,11 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class UpgradeCheck : public QObject {
+class UpgradeCheck : public QObject
+{
   Q_OBJECT
 public:
-  UpgradeCheck(QWidget *parent, QList<Format> &formatList, BabelData& bd);
+  UpgradeCheck(QWidget* parent, QList<Format>& formatList, BabelData& bd);
   ~UpgradeCheck();
 
   typedef enum {
@@ -39,8 +40,8 @@ public:
     updateNeeded,
   } updateStatus;
 
-  UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion,
-      const QDateTime &lastCheckTime,
+  UpgradeCheck::updateStatus checkForUpgrade(const QString& babelVersion,
+      const QDateTime& lastCheckTime,
       bool allowBeta);
   QDateTime getUpgradeWarningTime(void);
   UpgradeCheck::updateStatus getStatus(void);
@@ -55,7 +56,7 @@ private:
   QUrl upgradeUrl_;
   QString latestVersion_;
   QDateTime upgradeWarningTime_;  // invalid time if this object never issued.
-  QList<Format> &formatList_;
+  QList<Format>& formatList_;
   updateStatus updateStatus_;
   BabelData& babelData_;
 

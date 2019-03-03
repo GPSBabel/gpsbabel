@@ -40,25 +40,25 @@ public:
     OPTinFile,
     OPToutFile,
   } optionType;
-  
+
   FormatOption(): name_(QString()), description_(QString()), type_(OPTbool),
-      defaultValue_(QVariant()),
-      minValue_(QVariant()), maxValue_(QVariant()),
-      html_(QString()), value_(QVariant()), isSelected_(false)
+    defaultValue_(QVariant()),
+    minValue_(QVariant()), maxValue_(QVariant()),
+    html_(QString()), value_(QVariant()), isSelected_(false)
   {
   }
-  FormatOption(const QString &name, 
-	       const QString &description,
-	       optionType type,
-	       QVariant defaultValue = QVariant(),
-	       QVariant minValue = QVariant(),
-	       QVariant maxValue = QVariant(),
-	       QString html = QString()
-         ): name_(name), description_(description), type_(type),
-      defaultValue_(defaultValue), minValue_(minValue), maxValue_(maxValue), html_(html)
+  FormatOption(const QString& name,
+               const QString& description,
+               optionType type,
+               QVariant defaultValue = QVariant(),
+               QVariant minValue = QVariant(),
+               QVariant maxValue = QVariant(),
+               QString html = QString()
+              ): name_(name), description_(description), type_(type),
+    defaultValue_(defaultValue), minValue_(minValue), maxValue_(maxValue), html_(html)
   {
     value_ = QVariant();
-    // Boolean values pay more atention to 'selected' than value.  Make 
+    // Boolean values pay more atention to 'selected' than value.  Make
     // them match here. For non-bools, just make them unchecked.
     if (type_ == OPTbool && defaultValue.toBool() == true) {
       isSelected_ = true;
@@ -67,25 +67,58 @@ public:
     }
   }
 
-  FormatOption(const FormatOption & c)
+  FormatOption(const FormatOption& c)
     : name_(c.name_), description_(c.description_), type_(c.type_),
       defaultValue_(c.defaultValue_), minValue_(c.minValue_), maxValue_(c.maxValue_), html_(c.html_),
       value_(c.value_), isSelected_(c.isSelected_)
   {
   }
-  
-  QString  getName() const {return name_; }
-  QString  getDescription() const {return description_; }
-  optionType getType() const {return type_; }
-  QVariant getValue() const    { return value_; }
-  bool     getSelected() const {return isSelected_; }
-  QVariant getMinValue() const {return minValue_; }
-  QVariant getMaxValue() const {return maxValue_; }
-  QVariant getDefaultValue() const {return defaultValue_; }
 
-  void setValue(QVariant v) { value_ = v; };
-  void setSelected(bool v)  { isSelected_ = v; };
-  QString getHtml() const { return html_; };
+  QString  getName() const
+  {
+    return name_;
+  }
+  QString  getDescription() const
+  {
+    return description_;
+  }
+  optionType getType() const
+  {
+    return type_;
+  }
+  QVariant getValue() const
+  {
+    return value_;
+  }
+  bool     getSelected() const
+  {
+    return isSelected_;
+  }
+  QVariant getMinValue() const
+  {
+    return minValue_;
+  }
+  QVariant getMaxValue() const
+  {
+    return maxValue_;
+  }
+  QVariant getDefaultValue() const
+  {
+    return defaultValue_;
+  }
+
+  void setValue(QVariant v)
+  {
+    value_ = v;
+  };
+  void setSelected(bool v)
+  {
+    isSelected_ = v;
+  };
+  QString getHtml() const
+  {
+    return html_;
+  };
 
 private:
   QString name_;
@@ -101,38 +134,38 @@ private:
 
 
 //------------------------------------------------------------------------
-class Format 
+class Format
 {
- public:
+public:
   Format():name_(QString()),
-     description_(QString()),
-     readWaypoints_(false),
-     readTracks_(false),
-     readRoutes_(false),
-     writeWaypoints_(false),
-     writeTracks_(false),
-     writeRoutes_(false),
-     fileFormat_(false),
-     deviceFormat_(false),
-           hidden_(false),
-     extensions_(QStringList()),
-           html_(QString()),
-           readUseCount_(0),
-           writeUseCount_(0)
+    description_(QString()),
+    readWaypoints_(false),
+    readTracks_(false),
+    readRoutes_(false),
+    writeWaypoints_(false),
+    writeTracks_(false),
+    writeRoutes_(false),
+    fileFormat_(false),
+    deviceFormat_(false),
+    hidden_(false),
+    extensions_(QStringList()),
+    html_(QString()),
+    readUseCount_(0),
+    writeUseCount_(0)
   {
     inputOptions_.clear();
     outputOptions_.clear();
   };
 
-  Format(const QString &name,
-	 const QString &description,
-	 bool readWaypoints, bool readTracks, bool readRoutes,
-	 bool writeWaypoints, bool writeTracks, bool writeRoutes,
-	 bool fileFormat, bool deviceFormat,
-	 const QStringList &extensions,
-	 QList<FormatOption> &inputOptions, 
-	 QList<FormatOption> &outputptions,
-         const QString &html):
+  Format(const QString& name,
+         const QString& description,
+         bool readWaypoints, bool readTracks, bool readRoutes,
+         bool writeWaypoints, bool writeTracks, bool writeRoutes,
+         bool fileFormat, bool deviceFormat,
+         const QStringList& extensions,
+         QList<FormatOption>& inputOptions,
+         QList<FormatOption>& outputptions,
+         const QString& html):
     name_(name), description_(description),
     readWaypoints_(readWaypoints), readTracks_(readTracks), readRoutes_(readRoutes),
     writeWaypoints_(writeWaypoints), writeTracks_(writeTracks), writeRoutes_(writeRoutes),
@@ -148,7 +181,7 @@ class Format
     (void)html; // suppress 'unused' warning.
   }
 
-  Format(const Format &c):
+  Format(const Format& c):
     name_(c.name_), description_(c.description_),
     readWaypoints_(c.readWaypoints_), readTracks_(c.readTracks_), readRoutes_(c.readRoutes_),
     writeWaypoints_(c.writeWaypoints_), writeTracks_(c.writeTracks_), writeRoutes_(c.writeRoutes_),
@@ -165,52 +198,127 @@ class Format
 
   ~Format() {};
 
-  bool isReadWaypoints() const { return readWaypoints_; };
-  bool isReadTracks() const    { return readTracks_; };
-  bool isReadRoutes() const    { return readRoutes_; };
-  bool isReadSomething() const { 
-    return isReadWaypoints() || isReadTracks () || isReadRoutes(); 
+  bool isReadWaypoints() const
+  {
+    return readWaypoints_;
+  };
+  bool isReadTracks() const
+  {
+    return readTracks_;
+  };
+  bool isReadRoutes() const
+  {
+    return readRoutes_;
+  };
+  bool isReadSomething() const
+  {
+    return isReadWaypoints() || isReadTracks() || isReadRoutes();
   };
 
-  bool isWriteWaypoints() const { return writeWaypoints_; };
-  bool isWriteTracks() const    { return writeTracks_; };
-  bool isWriteRoutes() const    { return writeRoutes_; };
-  bool isWriteSomething() const { 
-    return isWriteWaypoints() || isWriteTracks () || isWriteRoutes(); 
+  bool isWriteWaypoints() const
+  {
+    return writeWaypoints_;
+  };
+  bool isWriteTracks() const
+  {
+    return writeTracks_;
+  };
+  bool isWriteRoutes() const
+  {
+    return writeRoutes_;
+  };
+  bool isWriteSomething() const
+  {
+    return isWriteWaypoints() || isWriteTracks() || isWriteRoutes();
   };
 
-  QString getName() const           { return name_; };
-  QString getDescription() const    { return description_; };
-  QString getHtml() const           { return html_; };
-  QStringList getExtensions() const { return extensions_; };
-  const QList<FormatOption> &getInputOptions()  const { return inputOptions_; };
-  const QList<FormatOption> &getOutputOptions() const { return outputOptions_; };
+  QString getName() const
+  {
+    return name_;
+  };
+  QString getDescription() const
+  {
+    return description_;
+  };
+  QString getHtml() const
+  {
+    return html_;
+  };
+  QStringList getExtensions() const
+  {
+    return extensions_;
+  };
+  const QList<FormatOption>& getInputOptions()  const
+  {
+    return inputOptions_;
+  };
+  const QList<FormatOption>& getOutputOptions() const
+  {
+    return outputOptions_;
+  };
 
-  QList<FormatOption> *getInputOptionsRef()  { return &inputOptions_; };
-  QList<FormatOption> *getOutputOptionsRef() { return &outputOptions_; };
+  QList<FormatOption>* getInputOptionsRef()
+  {
+    return &inputOptions_;
+  };
+  QList<FormatOption>* getOutputOptionsRef()
+  {
+    return &outputOptions_;
+  };
 
-  bool isDeviceFormat() const { return deviceFormat_; };
-  bool isFileFormat() const { return   fileFormat_; };
+  bool isDeviceFormat() const
+  {
+    return deviceFormat_;
+  };
+  bool isFileFormat() const
+  {
+    return   fileFormat_;
+  };
 
-  bool isHidden() const { return hidden_; };
-  void setHidden(bool state) { hidden_ = state; };
-  
-  void saveSettings(QSettings &settings);
-  void restoreSettings(QSettings &settings);
+  bool isHidden() const
+  {
+    return hidden_;
+  };
+  void setHidden(bool state)
+  {
+    hidden_ = state;
+  };
+
+  void saveSettings(QSettings& settings);
+  void restoreSettings(QSettings& settings);
   void setToDefault();
-  static QString getHtmlBase() { return htmlBase_; }
-  static void setHtmlBase(const QString &s) { htmlBase_ = s; }
-  
-  void bumpReadUseCount(int v)  { readUseCount_ += v; }
-  void bumpWriteUseCount(int v) { writeUseCount_ += v; }
-  int getReadUseCount()  const { return readUseCount_; }
-  int getWriteUseCount() const { return writeUseCount_; }
-  void zeroUseCounts() {
+  static QString getHtmlBase()
+  {
+    return htmlBase_;
+  }
+  static void setHtmlBase(const QString& s)
+  {
+    htmlBase_ = s;
+  }
+
+  void bumpReadUseCount(int v)
+  {
+    readUseCount_ += v;
+  }
+  void bumpWriteUseCount(int v)
+  {
+    writeUseCount_ += v;
+  }
+  int getReadUseCount()  const
+  {
+    return readUseCount_;
+  }
+  int getWriteUseCount() const
+  {
+    return writeUseCount_;
+  }
+  void zeroUseCounts()
+  {
     readUseCount_  = 0;
     writeUseCount_ = 0;
   }
-  
- private:
+
+private:
   QString name_, description_;
   bool readWaypoints_, readTracks_, readRoutes_;
   bool writeWaypoints_, writeTracks_, writeRoutes_;
@@ -222,7 +330,7 @@ class Format
   static QString htmlBase_;
   int      readUseCount_;
   int      writeUseCount_;
-  
+
 };
 
 #endif

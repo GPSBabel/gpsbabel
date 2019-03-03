@@ -27,14 +27,20 @@
 //------------------------------------------------------------------------
 class LatLng
 {
- public:
- LatLng(): _lat(0), _lng(0) {};
- LatLng(double lat, double lng): _lat(lat), _lng(lng) {};
-  double lat() const { return _lat; }
-  double lng() const { return _lng; }
-  double haversineDistance(const LatLng &other) const;
-  
- private:
+public:
+  LatLng(): _lat(0), _lng(0) {};
+  LatLng(double lat, double lng): _lat(lat), _lng(lng) {};
+  double lat() const
+  {
+    return _lat;
+  }
+  double lng() const
+  {
+    return _lng;
+  }
+  double haversineDistance(const LatLng& other) const;
+
+private:
   double _lat;
   double _lng;
 };

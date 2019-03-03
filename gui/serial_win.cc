@@ -23,7 +23,7 @@
 
 #if 0  // Does not require Windows 2000
 
-static const char *deviceNames[] = {
+static const char* deviceNames[] = {
   "com1:",
   "com2:",
   "com3:",
@@ -31,7 +31,7 @@ static const char *deviceNames[] = {
   0
 };
 
-void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
+void MainWindow::osLoadDeviceNameCombos(QComboBox* box)
 {
   for (int i=0; deviceNames[i]; i++) {
     box->addItem(deviceNames[i]);
@@ -41,30 +41,30 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
 #else // This code assumes Windows 2000 or later
 
 // Uses QueryDosDevice(), Minimum supported: Windows 2000 Professional/Server
-#include <windows.h> 
+#include <windows.h>
 #include <stdio.h>
 
-void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
+void MainWindow::osLoadDeviceNameCombos(QComboBox* box)
 {
   char DevList[64*1024-1];  // a single byte more, and certain versions of windows
-                            // always return QueryDosDevice()==0 && GetLastError()==ERROR_MORE_DATA.
-                            // see http://support.microsoft.com/kb/931305
+  // always return QueryDosDevice()==0 && GetLastError()==ERROR_MORE_DATA.
+  // see http://support.microsoft.com/kb/931305
   // Get a list of all existing MS-DOS device names. Stores one or more asciiz strings followed by an extra null.
   DWORD res = QueryDosDeviceA(NULL, DevList, sizeof(DevList));
-  if (res == 0)
-  {
+  if (res == 0) {
     DWORD err = GetLastError(); // could check for ERROR_INSUFFICIENT_BUFFER, and retry with a larger buffer.
-                                // but DevList is already at the maximum size it can be without running into kb 931305.
+    // but DevList is already at the maximum size it can be without running into kb 931305.
     // FIXME: This shold be a QMessageBox::warning() - RJL
     // fprintf(stderr,"QueryDosDevice() failed with %d.  GetLastError()==%d.\n", res, err);
     (void) err;
     return;
   }
 
-  for (char *p=DevList; *p;) {
+  for (char* p=DevList; *p;) {
     int len = strlen(p);
-    if (strncmp(p,"COM",3)==0)
+    if (strncmp(p,"COM",3)==0) {
       box->addItem((PCHAR)p);
+    }
     p += len+1; // +1 to also skip the null character of each string
   }
 }

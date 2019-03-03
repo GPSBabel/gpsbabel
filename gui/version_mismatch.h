@@ -26,13 +26,17 @@
 
 #include "ui_version_mismatch.h"
 
-class VersionMismatch: public QDialog {
- public:
-  VersionMismatch(QWidget *parent,  const QString &ver1,
-    	          const QString &ver2);
-  bool neverAgain() { return ui_.neverAgain->isChecked(); }
+class VersionMismatch: public QDialog
+{
+public:
+  VersionMismatch(QWidget* parent,  const QString& ver1,
+                  const QString& ver2);
+  bool neverAgain()
+  {
+    return ui_.neverAgain->isChecked();
+  }
 
- private:
+private:
   Ui_VersionMismatch  ui_;
 };
 

@@ -27,9 +27,9 @@
 
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
-	       bool &synthShortNames,
-	       bool &previewGmap,
-	       int  &debugLevel):
+               bool& synthShortNames,
+               bool& previewGmap,
+               int&  debugLevel):
   QDialog(parent),
   synthShortNames_(synthShortNames),
   previewGmap_(previewGmap),

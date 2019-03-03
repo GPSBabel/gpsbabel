@@ -36,28 +36,31 @@ class QPlainTextEdit;
 class QDialogButtonBox;
 class QTimer;
 //------------------------------------------------------------------------
-class ProcessWaitDialog: public QDialog 
+class ProcessWaitDialog: public QDialog
 {
-  
+
   Q_OBJECT
-  
- public:
+
+public:
   //
-  ProcessWaitDialog(QWidget *parent, QProcess *process_);
+  ProcessWaitDialog(QWidget* parent, QProcess* process_);
   ~ProcessWaitDialog();
-  
+
   bool getExitedNormally();
   int getExitCode();
   QString getErrorString();
-  QString getOutputString() const {return outputString_;};
+  QString getOutputString() const
+  {
+    return outputString_;
+  };
 
- protected:
-  void closeEvent (QCloseEvent*event);
-  void appendToText(const char *);
+protected:
+  void closeEvent(QCloseEvent* event);
+  void appendToText(const char*);
   QString processErrorString(QProcess::ProcessError err);
-				 
 
- private slots:
+
+private slots:
   void errorX(QProcess::ProcessError);
   void finishedX(int exitCode, QProcess::ExitStatus);
   void readyReadStandardErrorX();
@@ -65,18 +68,18 @@ class ProcessWaitDialog: public QDialog
   void timeoutX();
   void stopClickedX();
 
- private:
+private:
   vector <int> progressVals_;
   int          progressIndex_;
   int          stopCount_;
   string       bufferedOut_;
   QProcess::ExitStatus exitStatus_;
   int                  ecode_;
-  QProcess     *process_;
-  QProgressBar *progressBar_;
-  QPlainTextEdit *textEdit_;
-  QDialogButtonBox *buttonBox_;
-  QTimer           *timer_;
+  QProcess*     process_;
+  QProgressBar* progressBar_;
+  QPlainTextEdit* textEdit_;
+  QDialogButtonBox* buttonBox_;
+  QTimer*           timer_;
   QString          errorString_;
   QString          outputString_;
 };
