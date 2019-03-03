@@ -30,19 +30,20 @@ using std::vector;
 using std::string;
 
 
-class PolylineEncoder {
+class PolylineEncoder
+{
 public:
   PolylineEncoder(int numLevels=19, double zoomFactor=2.0, double verySmall = 0.00001);
-  void dpEncode(string &encPts, string &encLevels, const vector<LatLng> &points);
-  
+  void dpEncode(string& encPts, string& encLevels, const vector<LatLng>& points);
+
 private:
 
   int computeLevel(double dd);
-  double distance(const LatLng &, const LatLng &, const LatLng &);
-  void encodeLevels(string &, const vector<LatLng> &points, const vector<double>&dists);
-  void createEncodings(string &encoded_points, 
-		       const vector <LatLng> &points, 
-		       const vector <double> &dists);
+  double distance(const LatLng&, const LatLng&, const LatLng&);
+  void encodeLevels(string&, const vector<LatLng>& points, const vector<double>& dists);
+  void createEncodings(string& encoded_points,
+                       const vector <LatLng>& points,
+                       const vector <double>& dists);
 
   int numLevels;
   double verySmall;

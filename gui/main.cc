@@ -32,9 +32,9 @@
 #include "gmapdlg.h"
 
 #ifdef _WIN32
-const char *pathSeparator = ";";
+const char* pathSeparator = ";";
 #else
-const char *pathSeparator = ":";
+const char* pathSeparator = ":";
 #endif
 
 #if defined (Q_OS_MAC)
@@ -42,20 +42,20 @@ const char *pathSeparator = ":";
 #endif
 
 //------------------------------------------------------------------------
-int main(int argc, char**argv)
+int main(int argc, char** argv)
 {
 // MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
 #if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
-  #error this version of Qt is not supported.
+#error this version of Qt is not supported.
 #endif
 
-  QApplication *app;
+  QApplication* app;
   app = new QApplication(argc, argv);
   app->setWindowIcon(QIcon(":/images/appicon.png"));
 
   QString newPath = "PATH=" + QApplication::applicationDirPath() +
-    QString(pathSeparator) + getenv("PATH");
-  char *newPathEnv = new char[newPath.length() + 1];
+                    QString(pathSeparator) + getenv("PATH");
+  char* newPathEnv = new char[newPath.length() + 1];
   strcpy(newPathEnv, newPath.toStdString().c_str());
   putenv(newPathEnv);
 

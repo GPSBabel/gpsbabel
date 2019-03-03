@@ -24,32 +24,32 @@
 
 
 //------------------------------------------------------------------------
-TrackWidget::TrackWidget(QWidget *parent, TrackFilterData &tfd): FilterWidget(parent) , tfd(tfd)
+TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(parent), tfd(tfd)
 {
   ui.setupUi(this);
 
   // Checkbox interlocks
   addCheckEnabler(ui.titleCheck, ui.titleText);
   addCheckEnabler(ui.moveCheck,
-		  (QList<QWidget *> ()
-		   << ui.daysLabel << ui.daysSpin
-		   << ui.hoursLabel<< ui.hoursSpin
-		   << ui.minsLabel << ui.minsSpin
-		   << ui.secsLabel << ui.secsSpin));
+                  (QList<QWidget*> ()
+                   << ui.daysLabel << ui.daysSpin
+                   << ui.hoursLabel<< ui.hoursSpin
+                   << ui.minsLabel << ui.minsSpin
+                   << ui.secsLabel << ui.secsSpin));
   addCheckEnabler(ui.startCheck,    ui.startEdit);
   addCheckEnabler(ui.stopCheck,     ui.stopEdit);
   addCheckEnabler(ui.GPSFixesCheck, ui.GPSFixesCombo);
 
-  addCheckEnabler(ui.splitTimeCheck, 
-		  (QList<QWidget *> ()
-		   <<ui.splitTimeSpin
-		   <<ui.splitTimeCombo));
-  addCheckEnabler(ui.splitDistanceCheck, 
-		  (QList<QWidget *> ()
-		   <<ui.splitDistSpin
-		   <<ui.splitDistCombo));
+  addCheckEnabler(ui.splitTimeCheck,
+                  (QList<QWidget*> ()
+                   <<ui.splitTimeSpin
+                   <<ui.splitTimeCombo));
+  addCheckEnabler(ui.splitDistanceCheck,
+                  (QList<QWidget*> ()
+                   <<ui.splitDistSpin
+                   <<ui.splitDistCombo));
 
-  connect(ui.mergeCheck, SIGNAL(clicked()) , this, SLOT(mergeCheckX()));
+  connect(ui.mergeCheck, SIGNAL(clicked()), this, SLOT(mergeCheckX()));
   connect(ui.packCheck,  SIGNAL(clicked()),  this, SLOT(packCheckX()));
   connect(ui.startCheck, SIGNAL(clicked()),  this, SLOT(otherCheckX()));
   connect(ui.stopCheck,   SIGNAL(clicked()), this, SLOT(otherCheckX()));
@@ -103,7 +103,7 @@ void TrackWidget::otherCheckX()
   ui.splitTimeCombo->setEnabled(ui.splitTimeCheck->isChecked());
   ui.splitDistSpin->setEnabled(ui.splitDistanceCheck->isChecked());
   ui.splitDistCombo->setEnabled(ui.splitDistanceCheck->isChecked());
-  
+
   bool bb = (ui.mergeCheck->isChecked() || ui.packCheck->isChecked());
   ui.splitDateCheck->setEnabled(bb);
   ui.splitTimeCheck->setEnabled(bb);
@@ -113,15 +113,17 @@ void TrackWidget::otherCheckX()
 //------------------------------------------------------------------------
 void TrackWidget::mergeCheckX()
 {
-  if (ui.mergeCheck->isChecked())
+  if (ui.mergeCheck->isChecked()) {
     ui.packCheck->setChecked(false);
+  }
   otherCheckX();
 }
 //------------------------------------------------------------------------
 void TrackWidget::packCheckX()
 {
-  if (ui.packCheck->isChecked())
+  if (ui.packCheck->isChecked()) {
     ui.mergeCheck->setChecked(false);
+  }
   otherCheckX();
 }
 
@@ -156,16 +158,16 @@ void TrackWidget::splitDistanceX()
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-WayPtsWidget::WayPtsWidget(QWidget *parent, WayPtsFilterData &wfd): FilterWidget(parent) , wfd(wfd)
+WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget(parent), wfd(wfd)
 {
   ui.setupUi(this);
   addCheckEnabler(ui.duplicatesCheck,
-		  QList<QWidget*>() << ui.shortNamesCheck << ui.locationsCheck);
-  addCheckEnabler(ui.positionCheck, 
-		  QList<QWidget*>() << ui.positionText << ui.positionUnitCombo);
+                  QList<QWidget*>() << ui.shortNamesCheck << ui.locationsCheck);
+  addCheckEnabler(ui.positionCheck,
+                  QList<QWidget*>() << ui.positionText << ui.positionUnitCombo);
   addCheckEnabler(ui.radiusCheck,
-		  QList<QWidget*>() << ui.latLabel << ui.latText << ui.longLabel <<
-		  ui.longText << ui.radiusUnitCombo << ui.radiusText);
+                  QList<QWidget*>() << ui.latLabel << ui.latText << ui.longLabel <<
+                  ui.longText << ui.radiusUnitCombo << ui.radiusText);
 
   fopts << new BoolFilterOption(wfd.duplicates, ui.duplicatesCheck);
   fopts << new BoolFilterOption(wfd.shortNames, ui.shortNamesCheck);
@@ -188,23 +190,25 @@ WayPtsWidget::WayPtsWidget(QWidget *parent, WayPtsFilterData &wfd): FilterWidget
 //------------------------------------------------------------------------
 void WayPtsWidget::shortNamesCkX()
 {
-  if (!ui.shortNamesCheck->isChecked())
+  if (!ui.shortNamesCheck->isChecked()) {
     ui.locationsCheck->setChecked(true);
+  }
 }
 //------------------------------------------------------------------------
 void WayPtsWidget::locationsCkX()
 {
-  if (!ui.locationsCheck->isChecked())
+  if (!ui.locationsCheck->isChecked()) {
     ui.shortNamesCheck->setChecked(true);
+  }
 }
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-RtTrkWidget::RtTrkWidget(QWidget *parent, RtTrkFilterData &rfd): FilterWidget(parent) , rfd(rfd)
+RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(parent), rfd(rfd)
 {
   ui.setupUi(this);
   addCheckEnabler(ui.simplifyCheck,
-		  QList<QWidget*>() << ui.limitToLabel << ui.limitToSpin << ui.pointLabel);
+                  QList<QWidget*>() << ui.limitToLabel << ui.limitToSpin << ui.pointLabel);
 
   fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
   fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
@@ -215,7 +219,7 @@ RtTrkWidget::RtTrkWidget(QWidget *parent, RtTrkFilterData &rfd): FilterWidget(pa
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-MiscFltWidget::MiscFltWidget(QWidget *parent, MiscFltFilterData &mfd): FilterWidget(parent) , mfd(mfd)
+MiscFltWidget::MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd): FilterWidget(parent), mfd(mfd)
 {
   ui.setupUi(this);
   ui.transformCombo->addItem(QString("%1 %2 %3").arg(tr("Tracks")).arg(QChar(8594)).arg(tr("Waypoints")));
@@ -225,7 +229,7 @@ MiscFltWidget::MiscFltWidget(QWidget *parent, MiscFltFilterData &mfd): FilterWid
   ui.transformCombo->addItem(QString("%1 %2 %3").arg(tr("Tracks")).arg(QChar(8594)).arg(tr("Routes")));
   ui.transformCombo->addItem(QString("%1 %2 %3").arg(tr("Waypoints")).arg(QChar(8594)).arg(tr("Tracks")));
   addCheckEnabler(ui.transformCheck,
-		  QList<QWidget*>() << ui.transformCombo << ui.deleteCheck);
+                  QList<QWidget*>() << ui.transformCombo << ui.deleteCheck);
 
   fopts << new BoolFilterOption(mfd.transform_, ui.transformCheck);
   fopts << new BoolFilterOption(mfd.swap_, ui.swapCheck);

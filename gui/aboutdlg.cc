@@ -24,11 +24,11 @@
 #include "appname.h"
 #include "upgrade.h"
 
-AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
-       const QString &ver2, const QString& installationId): QDialog(parent)
+AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
+                   const QString& ver2, const QString& installationId): QDialog(parent)
 {
   ui_.setupUi(this);
-  QTextDocument *doc = ui_.textEdit->document();
+  QTextDocument* doc = ui_.textEdit->document();
   ui_.textEdit->setReadOnly(true);
   QString tt = doc->toHtml();
   tt.replace(QRegExp("\\$appname\\$"),  QString(appName));
@@ -37,9 +37,9 @@ AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
   tt.replace(QRegExp("\\$installationId\\$"),  installationId);
 
   // Not localized as it should never be seen.
-  tt.replace(QRegExp("\\$upgradetestmode\\$"),  
-    UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
-      
+  tt.replace(QRegExp("\\$upgradetestmode\\$"),
+             UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
+
   doc->setHtml(tt);
   QTextCursor cur(doc);
   cur.setPosition(0);

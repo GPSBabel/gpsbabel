@@ -28,106 +28,155 @@
 
 
 //------------------------------------------------------------------------
-class VarSetting {
- public:
+class VarSetting
+{
+public:
   VarSetting() {};
   virtual ~VarSetting() {};
 
-  virtual void saveSetting(QSettings &) = 0;
-  virtual void restoreSetting(QSettings &) = 0;
+  virtual void saveSetting(QSettings&) = 0;
+  virtual void restoreSetting(QSettings&) = 0;
 };
 
 
 //------------------------------------------------------------------------
 class IntSetting: public VarSetting
 {
- public:
-  IntSetting(const QString &name, int &var): VarSetting(), name_(name), var_(var) { }
-  void saveSetting(QSettings &st) {st.setValue(name_, var_); }
-  void restoreSetting(QSettings &st) {if (st.contains(name_)) var_ = st.value(name_).toInt(); }
+public:
+  IntSetting(const QString& name, int& var): VarSetting(), name_(name), var_(var) { }
+  void saveSetting(QSettings& st)
+  {
+    st.setValue(name_, var_);
+  }
+  void restoreSetting(QSettings& st)
+  {
+    if (st.contains(name_)) {
+      var_ = st.value(name_).toInt();
+    }
+  }
 
- private:
+private:
   QString name_;
-  int &var_;
+  int& var_;
 };
 
 //------------------------------------------------------------------------
 class DoubleSetting: public VarSetting
 {
- public:
-  DoubleSetting(const QString &name, double &var): VarSetting(), name_(name), var_(var) { }
-  void saveSetting(QSettings &st) {st.setValue(name_, var_); }
-  void restoreSetting(QSettings &st) {if (st.contains(name_)) var_ = st.value(name_).toDouble(); }
+public:
+  DoubleSetting(const QString& name, double& var): VarSetting(), name_(name), var_(var) { }
+  void saveSetting(QSettings& st)
+  {
+    st.setValue(name_, var_);
+  }
+  void restoreSetting(QSettings& st)
+  {
+    if (st.contains(name_)) {
+      var_ = st.value(name_).toDouble();
+    }
+  }
 
- private:
+private:
   QString name_;
-  double &var_;
+  double& var_;
 };
 
 //------------------------------------------------------------------------
 class StringSetting: public VarSetting
 {
- public:
-  StringSetting(const QString &name, QString &var): VarSetting(), name_(name), var_(var) { }
-  void saveSetting(QSettings &st) {st.setValue(name_, var_); }
-  void restoreSetting(QSettings &st) {if (st.contains(name_)) var_ = st.value(name_).toString(); }
+public:
+  StringSetting(const QString& name, QString& var): VarSetting(), name_(name), var_(var) { }
+  void saveSetting(QSettings& st)
+  {
+    st.setValue(name_, var_);
+  }
+  void restoreSetting(QSettings& st)
+  {
+    if (st.contains(name_)) {
+      var_ = st.value(name_).toString();
+    }
+  }
 
- private:
+private:
   QString name_;
-  QString &var_;
+  QString& var_;
 };
 
 //------------------------------------------------------------------------
 class BoolSetting: public VarSetting
 {
- public:
-  BoolSetting(const QString &name, bool &var): VarSetting(), name_(name), var_(var) { }
-  void saveSetting(QSettings &st) {st.setValue(name_, var_); }
-  void restoreSetting(QSettings &st) {if (st.contains(name_)) var_ = st.value(name_).toBool(); }
+public:
+  BoolSetting(const QString& name, bool& var): VarSetting(), name_(name), var_(var) { }
+  void saveSetting(QSettings& st)
+  {
+    st.setValue(name_, var_);
+  }
+  void restoreSetting(QSettings& st)
+  {
+    if (st.contains(name_)) {
+      var_ = st.value(name_).toBool();
+    }
+  }
 
- private:
+private:
   QString name_;
-  bool &var_;
+  bool& var_;
 };
 
 //------------------------------------------------------------------------
 class DateTimeSetting: public VarSetting
 {
- public:
-  DateTimeSetting(const QString &name, QDateTime &var):VarSetting(), name_(name), var_(var) { }
-  void saveSetting(QSettings &st) {st.setValue(name_, var_); }
-  void restoreSetting(QSettings &st) {if (st.contains(name_)) var_ = st.value(name_).toDateTime(); }
+public:
+  DateTimeSetting(const QString& name, QDateTime& var):VarSetting(), name_(name), var_(var) { }
+  void saveSetting(QSettings& st)
+  {
+    st.setValue(name_, var_);
+  }
+  void restoreSetting(QSettings& st)
+  {
+    if (st.contains(name_)) {
+      var_ = st.value(name_).toDateTime();
+    }
+  }
 
- private:
+private:
   QString name_;
-  QDateTime &var_;
+  QDateTime& var_;
 };
 
 
 //------------------------------------------------------------------------
-class SettingGroup {
- public:
+class SettingGroup
+{
+public:
   SettingGroup() {}
-  ~SettingGroup() {
-    for (int i=0; i< settingGroup_.size(); i++)
+  ~SettingGroup()
+  {
+    for (int i=0; i< settingGroup_.size(); i++) {
       delete settingGroup_[i];
+    }
   }
 
-  void saveSettings(QSettings &st) {
-    for (int i=0; i< settingGroup_.size(); i++)
+  void saveSettings(QSettings& st)
+  {
+    for (int i=0; i< settingGroup_.size(); i++) {
       settingGroup_[i]->saveSetting(st);
+    }
   }
-  void restoreSettings(QSettings &st) {
-    for (int i=0; i< settingGroup_.size(); i++)
+  void restoreSettings(QSettings& st)
+  {
+    for (int i=0; i< settingGroup_.size(); i++) {
       settingGroup_[i]->restoreSetting(st);
+    }
   }
 
-  void addVarSetting(VarSetting *vs) {
+  void addVarSetting(VarSetting* vs)
+  {
     settingGroup_ << vs;
   }
 
- private:
-  QList <VarSetting *> settingGroup_;
+private:
+  QList <VarSetting*> settingGroup_;
 };
 
 #endif

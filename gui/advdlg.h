@@ -24,25 +24,29 @@
 
 #include "ui_advui.h"
 
-class AdvDlg: public QDialog {
+class AdvDlg: public QDialog
+{
   Q_OBJECT
-  
+
 public:
-  AdvDlg(QWidget* parent, 
-   bool &synthShortNames_,
-   bool &previewGmap_,
-   int   &debugLevel_);
-  QPushButton* formatButton() { return ui_.formatButton; };
+  AdvDlg(QWidget* parent,
+         bool& synthShortNames_,
+         bool& previewGmap_,
+         int&   debugLevel_);
+  QPushButton* formatButton()
+  {
+    return ui_.formatButton;
+  };
 
 private:
   Ui_AdvUi ui_;
-  bool &synthShortNames_;
-  bool &previewGmap_;
-  int  &debugLevel_;
+  bool& synthShortNames_;
+  bool& previewGmap_;
+  int&  debugLevel_;
 
- protected:
+protected:
 
- private slots:
+private slots:
   void acceptClicked();
   void rejectClicked();
 };

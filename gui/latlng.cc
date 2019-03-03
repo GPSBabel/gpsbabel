@@ -61,12 +61,13 @@ static double ArcInRadians(const LatLng& from, const LatLng& to)
  *
  * @sa ArcInRadians
  */
-static double DistanceInMeters(const LatLng& from, const LatLng& to) {
+static double DistanceInMeters(const LatLng& from, const LatLng& to)
+{
   return EARTH_RADIUS_IN_METERS*ArcInRadians(from, to);
 }
 //------------------------------------------------------------------------
 
-double LatLng::haversineDistance(const LatLng &other) const
+double LatLng::haversineDistance(const LatLng& other) const
 {
   return DistanceInMeters(*this, other);
 }

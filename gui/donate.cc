@@ -24,7 +24,7 @@
 #include <QDesktopServices>
 
 // A completely simple QDialog, in a class of its own for layout.
-Donate::Donate(QWidget *parent) : QDialog(parent)
+Donate::Donate(QWidget* parent) : QDialog(parent)
 {
   ui_.setupUi(this);
   connect(ui_.contributeButton, SIGNAL(clicked()), this, SLOT(contributeClicked()));

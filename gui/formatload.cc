@@ -30,7 +30,8 @@
 #include "appname.h"
 
 //------------------------------------------------------------------------
-static QString xlt(const QString &f) {
+static QString xlt(const QString& f)
+{
   return QCoreApplication::translate("", f.toStdString().c_str());
 }
 
@@ -38,13 +39,14 @@ static QString xlt(const QString &f) {
 bool FormatLoad::skipToValidLine()
 {
   QRegExp regex("^(file|serial)");
-  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) != 0)
+  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) != 0) {
     currentLine_++;
+  }
   return (currentLine_<lines_.size());
 }
 
 //------------------------------------------------------------------------
-bool FormatLoad::processFormat(Format &format)
+bool FormatLoad::processFormat(Format& format)
 {
   QStringList hfields = lines_[currentLine_++].split("\t");
   if (hfields.size() < 5) {
@@ -69,48 +71,48 @@ bool FormatLoad::processFormat(Format &format)
     QString optionMax   = ofields[7];
     QString optionHtml  = ofields[8];
     FormatOption::optionType type = FormatOption::OPTbool;
-    if (optionType == "boolean")
+    if (optionType == "boolean") {
       type = FormatOption::OPTbool;
-    else if (optionType == "string")
+    } else if (optionType == "string") {
       type = FormatOption::OPTstring;
-    else if (optionType == "integer") {
+    } else if (optionType == "integer") {
       type = (optionMax != "" && optionMin != "") ? FormatOption::OPTboundedInt : FormatOption::OPTint;
-      if (optionMax == "")
-	optionMax = "2147483647";
-      if (optionMin == "")
-	optionMin = "-2147483647";
-    }
-    else if (optionType == "float") {
+      if (optionMax == "") {
+        optionMax = "2147483647";
+      }
+      if (optionMin == "") {
+        optionMin = "-2147483647";
+      }
+    } else if (optionType == "float") {
       type = FormatOption::OPTfloat;
-      if (optionMax == "")
-	optionMax = "1.0E308";
-      if (optionMin == "")
-	optionMin = "-1.0E308";
-    }
-    else if (optionType == "file") {
+      if (optionMax == "") {
+        optionMax = "1.0E308";
+      }
+      if (optionMin == "") {
+        optionMin = "-1.0E308";
+      }
+    } else if (optionType == "file") {
       type = FormatOption::OPTinFile;
-    }
-    else if (optionType == "outfile") {
+    } else if (optionType == "outfile") {
       type = FormatOption::OPToutFile;
-    }
-    else {
+    } else {
       type = FormatOption::OPTstring;
     }
     optionList << FormatOption(name, xlt(description),
-			       type, QVariant(optionDef), QVariant(optionMin),
-			       QVariant(optionMax), optionHtml);
+                               type, QVariant(optionDef), QVariant(optionMin),
+                               QVariant(optionMax), optionHtml);
     currentLine_++;
   }
   QList <FormatOption> optionList2 = optionList;
 
   format = Format(hfields[2], xlt(hfields[4]),
-		  hfields[1][0] == QChar('r'),  hfields[1][2] == QChar('r'),  hfields[1][4] == QChar('r'),
-		  hfields[1][1] == QChar('w'),  hfields[1][3] == QChar('w'),  hfields[1][5] == QChar('w'),
-		  hfields[0] == "file",
-		  hfields[0] == "serial",
-		  hfields[3].split('/'),
-		  optionList,
-		  optionList2, htmlPage);
+                  hfields[1][0] == QChar('r'),  hfields[1][2] == QChar('r'),  hfields[1][4] == QChar('r'),
+                  hfields[1][1] == QChar('w'),  hfields[1][3] == QChar('w'),  hfields[1][5] == QChar('w'),
+                  hfields[0] == "file",
+                  hfields[0] == "serial",
+                  hfields[3].split('/'),
+                  optionList,
+                  optionList2, htmlPage);
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
     QString base = htmlPage;
     base.replace(QRegExp("/[^/]+$"), "/");
@@ -120,24 +122,27 @@ bool FormatLoad::processFormat(Format &format)
 }
 
 //------------------------------------------------------------------------
-bool FormatLoad::getFormats(QList<Format> &formatList)
+bool FormatLoad::getFormats(QList<Format>& formatList)
 {
   formatList.clear();
 
   QProcess babel;
   babel.start("gpsbabel", QStringList() << "-^3");
-  if (!babel.waitForStarted())
+  if (!babel.waitForStarted()) {
     return false;
+  }
   babel.closeWriteChannel();
-  if (!babel.waitForFinished())
+  if (!babel.waitForFinished()) {
     return false;
-  if (babel.exitCode() != 0)
+  }
+  if (babel.exitCode() != 0) {
     return false;
+  }
 
   QTextStream tstream(babel.readAll());
   QList<int>lineList;
   int k=0;
-  while(!tstream.atEnd()) {
+  while (!tstream.atEnd()) {
     QString l = tstream.readLine();
     k++;
     if (!QRegExp("^[\\s]*$").exactMatch(l)) {
@@ -147,14 +152,13 @@ bool FormatLoad::getFormats(QList<Format> &formatList)
   }
   currentLine_ = 0;
 
-  for  (bool dataPresent = skipToValidLine(); dataPresent; dataPresent=skipToValidLine()) {
+  for (bool dataPresent = skipToValidLine(); dataPresent; dataPresent=skipToValidLine()) {
     Format format;
     if (!processFormat(format)) {
       QMessageBox::information
-	(0, appName,
-   QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine_]));
-    }
-    else {
+      (0, appName,
+       QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine_]));
+    } else {
       formatList << format;
     }
   }

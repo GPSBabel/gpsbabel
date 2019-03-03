@@ -27,17 +27,18 @@
 
 #include "format.h"
 
-class FormatLoad {
- public:
+class FormatLoad
+{
+public:
   FormatLoad() : currentLine_(0) {};
   ~FormatLoad() {};
-  
-  bool getFormats(QList<Format> &formatList);
- private:
+
+  bool getFormats(QList<Format>& formatList);
+private:
   QStringList lines_;
   int currentLine_;
   bool skipToValidLine();
-  bool processFormat(Format &format);
+  bool processFormat(Format& format);
 };
 
 #endif

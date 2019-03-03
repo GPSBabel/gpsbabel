@@ -24,7 +24,7 @@
 #define HELP_H
 #include <QString>
 
-extern void ShowHelp(const QString & name);
+extern void ShowHelp(const QString& name);
 
 
 #endif
