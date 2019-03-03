@@ -49,9 +49,8 @@ int main(int argc, char** argv)
 #error this version of Qt is not supported.
 #endif
 
-  QApplication* app;
-  app = new QApplication(argc, argv);
-  app->setWindowIcon(QIcon(":/images/appicon.png"));
+  QApplication app(argc, argv);
+  QApplication::setWindowIcon(QIcon(":/images/appicon.png"));
 
   QString newPath = "PATH=" + QApplication::applicationDirPath() +
                     QString(pathSeparator) + getenv("PATH");
@@ -65,7 +64,7 @@ int main(int argc, char** argv)
 
   MainWindow mainWindow(nullptr);
   mainWindow.show();
-  app->exec();
+  QApplication::exec();
 
   return 0;
 }
