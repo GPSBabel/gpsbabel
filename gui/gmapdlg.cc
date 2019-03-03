@@ -250,7 +250,7 @@ void GMapDialog::itemChangedX(QStandardItem* it)
   else {
     // Individual items, find the right one.
     GpxItem* git = static_cast<GpxItem*>(it->data().value<void*>());
-    if (git != 0) {
+    if (git != nullptr) {
       git->setVisible(show);
       for (int i=0; i<gpx_.getWaypoints().size(); i++) {
         if (&gpx_.getWaypoints()[i] == git) {

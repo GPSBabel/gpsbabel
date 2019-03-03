@@ -49,8 +49,8 @@ static const bool testing = false;
 UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
                            BabelData& bd) :
   QObject(parent),
-  manager_(0),
-  replyId_(0),
+  manager_(nullptr),
+  replyId_(nullptr),
   upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList),
   updateStatus_(updateUnknown),
@@ -62,11 +62,11 @@ UpgradeCheck::~UpgradeCheck()
 {
   if (replyId_) {
     replyId_->abort();
-    replyId_ = 0;
+    replyId_ = nullptr;
   }
   if (manager_) {
     delete manager_;
-    manager_ = 0;
+    manager_ = nullptr;
   }
 }
 
@@ -172,18 +172,18 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
 void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 {
 
-  if (reply == 0) {
+  if (reply == nullptr) {
     babelData_.upgradeErrors_++;
     return;
   } else if (reply != replyId_) {
-    QMessageBox::information(0, tr("HTTP"),
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Unexpected reply."));
   } else if (reply->error() != QNetworkReply::NoError) {
     babelData_.upgradeErrors_++;
-    QMessageBox::information(0, tr("HTTP"),
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Download failed: %1.")
                              .arg(reply->errorString()));
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -202,7 +202,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
       // Change the url for the next update check.
       // TOODO: kick off another update check.
       upgradeUrl_ = redirectUrl;
-      replyId_ = 0;
+      replyId_ = nullptr;
       reply->deleteLater();
       return;
     }
@@ -214,11 +214,11 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   }
   if (statusCode != 200) {
     QVariant reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute);
-    QMessageBox::information(0, tr("HTTP"),
+    QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Download failed: %1: %2.")
                              .arg(statusCode.toInt())
                              .arg(reason.toString()));
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -231,12 +231,12 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QString error_text;
   // This shouldn't ever be seen by a user.
   if (!document.setContent(oresponse, &error_text, &line)) {
-    QMessageBox::critical(0, tr("Error"),
+    QMessageBox::critical(nullptr, tr("Error"),
                           tr("Invalid return data at line %1: %2.")
                           .arg(line)
                           .arg(error_text));
     babelData_.upgradeErrors_++;
-    replyId_ = 0;
+    replyId_ = nullptr;
     reply->deleteLater();
     return;
   }
@@ -312,6 +312,6 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   for (int i = 0; i < formatList_.size(); i++) {
     formatList_[i].zeroUseCounts();
   }
-  replyId_ = 0;
+  replyId_ = nullptr;
   reply->deleteLater();
 }

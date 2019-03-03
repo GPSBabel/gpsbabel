@@ -69,11 +69,11 @@ void FileDlgManager::buttonClicked()
 {
   QString str;
   if (isInFile) {
-    str = QFileDialog::getOpenFileName(0, tr("Select input file"),
+    str = QFileDialog::getOpenFileName(nullptr, tr("Select input file"),
                                        le->text(),
                                        "All Files (*.*)");
   } else {
-    str = QFileDialog::getSaveFileName(0, tr("Select output file"),
+    str = QFileDialog::getSaveFileName(nullptr, tr("Select output file"),
                                        le->text(),
                                        "All Files (*.*)");
   }
@@ -106,7 +106,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     QSpacerItem* horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
 
-    QWidget* w = 0;
+    QWidget* w = nullptr;
     switch (options_[k].getType()) {
     case FormatOption::OPTstring: {
       QLineEdit* lineEdit = new QLineEdit(this);
@@ -135,7 +135,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     case FormatOption::OPTbool:
       // If it was selected before, select it again.
       checkBox->setChecked(options_[k].getSelected());
-      w = 0;
+      w = nullptr;
       break;
 
     case FormatOption::OPTfloat: {

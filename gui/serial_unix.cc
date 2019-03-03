@@ -90,7 +90,7 @@ static const char* deviceNames[] = {
   "/dev/ttyS3",
   "/dev/ttyUSB0",
   "/dev/rfcomm0",
-  0
+  nullptr
 };
 
 void MainWindow::osLoadDeviceNameCombos(QComboBox* box)

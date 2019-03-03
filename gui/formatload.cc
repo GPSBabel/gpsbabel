@@ -156,7 +156,7 @@ bool FormatLoad::getFormats(QList<Format>& formatList)
     Format format;
     if (!processFormat(format)) {
       QMessageBox::information
-      (0, appName,
+      (nullptr, appName,
        QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine_]));
     } else {
       formatList << format;

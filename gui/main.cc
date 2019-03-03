@@ -63,7 +63,7 @@ int main(int argc, char** argv)
   QCoreApplication::setOrganizationDomain("gpsbabel.org");
   QCoreApplication::setApplicationName("GPSBabel");
 
-  MainWindow mainWindow(0);
+  MainWindow mainWindow(nullptr);
   mainWindow.show();
   app->exec();
 
