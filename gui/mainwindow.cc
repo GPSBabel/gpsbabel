@@ -226,9 +226,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 //------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
-  if (upgrade) {
+  
     delete upgrade;
-  }
+  
 }
 //------------------------------------------------------------------------
 // Dynamic language switching courtesy of
