@@ -49,7 +49,7 @@ static bool trackIsEmpty(const GpxTrack& trk)
 class GpxHandler: public QXmlDefaultHandler
 {
 public:
-  GpxHandler(): QXmlDefaultHandler()
+  GpxHandler()
 
   {
     state = e_noop;
