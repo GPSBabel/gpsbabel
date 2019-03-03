@@ -129,10 +129,10 @@ Map::~Map()
 void Map::loadFinishedX(bool f)
 {
   this->logTime("Done initial page load");
-  if (!f)
+  if (!f) {
     QMessageBox::critical(nullptr, appName,
                           tr("Failed to load Google maps base page"));
-  else {
+  } else {
     QApplication::processEvents();
     showGpxData();
   }
