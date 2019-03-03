@@ -849,9 +849,9 @@ bool MainWindow::isOkToGo()
     return false;
   }
 
-  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_ == true) {
+  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_) {
   }
-  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_ == false) {
+  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
     QMessageBox::information(nullptr, QString(appName), tr("No valid output specified"));
     return false;
   } else if (babelData_.outputType_ == BabelData::fileType_ &&

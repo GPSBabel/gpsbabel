@@ -70,7 +70,7 @@ void Format::restoreSettings(QSettings& settings)
 void Format::setToDefault()
 {
   for (int i=0; i<inputOptions_.size(); i++) {
-    if (inputOptions_[i].getType() == FormatOption::OPTbool && inputOptions_[i].getDefaultValue().toBool() == true) {
+    if (inputOptions_[i].getType() == FormatOption::OPTbool && inputOptions_[i].getDefaultValue().toBool()) {
       inputOptions_[i].setSelected(true);
     } else {
       inputOptions_[i].setSelected(false);
@@ -78,7 +78,7 @@ void Format::setToDefault()
     inputOptions_[i].setValue(QVariant());
   }
   for (int i=0; i<outputOptions_.size(); i++) {
-    if (outputOptions_[i].getType() == FormatOption::OPTbool && outputOptions_[i].getDefaultValue().toBool() == true) {
+    if (outputOptions_[i].getType() == FormatOption::OPTbool && outputOptions_[i].getDefaultValue().toBool()) {
       outputOptions_[i].setSelected(true);
     } else {
       outputOptions_[i].setSelected(false);
