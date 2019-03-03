@@ -477,7 +477,7 @@ QString MainWindow::filterForFormat(int idx)
 
   // If we don't have any meaningful extensions available for this format,
   // don't be clever here; just fall through to "All files" case.
-  if (extensions.size() > 0 && !extensions[0].isEmpty()) {
+  if (!extensions.empty() && !extensions[0].isEmpty()) {
     str += " (";
     for (int i=0; i<extensions.size(); i++) {
       if (i!= 0) {
@@ -496,7 +496,7 @@ QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
   QString outname = name;
   if (QFileInfo(name).suffix().length() == 0) {
     QStringList extensions = formatList_[idx].getExtensions();
-    if (extensions.size() > 0 && !extensions[0].isEmpty()) {
+    if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
     }
   }
@@ -528,7 +528,7 @@ int MainWindow::currentComboFormatIndex(QComboBox* comboBox)
 //------------------------------------------------------------------------
 void MainWindow::browseInputFile()
 {
-  QString startFile = babelData_.inputFileNames_.size() ? babelData_.inputFileNames_[0] : babelData_.inputBrowse_;
+  QString startFile = !babelData_.inputFileNames_.empty() ? babelData_.inputFileNames_[0] : babelData_.inputBrowse_;
   int idx = currentComboFormatIndex(ui_.inputFormatCombo);
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
@@ -539,7 +539,7 @@ void MainWindow::browseInputFile()
     QFileDialog::getOpenFileNames(0, tr("Select one or more input files"),
                                   startFile,
                                   filterForFormat(idx));
-  if (userList.size()) {
+  if (!userList.empty()) {
     babelData_.inputBrowse_ = userList[0];
     babelData_.inputFileNames_ = userList;
     QString str;
@@ -634,10 +634,10 @@ void MainWindow::loadFormats()
                                 "This program cannot continue."));
     exit(1);
   }
-  if (inputFileFormatIndices().size() == 0 ||
-      inputDeviceFormatIndices().size() == 0 ||
-      outputFileFormatIndices().size() == 0 ||
-      outputDeviceFormatIndices().size() == 0) {
+  if (inputFileFormatIndices().empty() ||
+      inputDeviceFormatIndices().empty() ||
+      outputFileFormatIndices().empty() ||
+      outputDeviceFormatIndices().empty()) {
     QMessageBox::information(0, QString(appName),
                              tr("Some file/device formats were not found during initialization.  "
                                 "Check that the backend program \"gpsbabel\" is properly installed "
@@ -747,7 +747,7 @@ void MainWindow::inputFormatChanged(int comboIdx)
     return;
   }
   int fidx = ui_.inputFormatCombo->itemData(comboIdx).toInt();
-  ui_.inputOptionsBtn->setEnabled(formatList_[fidx].getInputOptions().size()>0);
+  ui_.inputOptionsBtn->setEnabled(!formatList_[fidx].getInputOptions().empty());
   displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   crossCheckInOutFormats();
 
@@ -767,7 +767,7 @@ void MainWindow::outputFormatChanged(int comboIdx)
     return;
   }
   int fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
-  ui_.outputOptionsBtn->setEnabled(formatList_[fidx].getOutputOptions().size()>0);
+  ui_.outputOptionsBtn->setEnabled(!formatList_[fidx].getOutputOptions().empty());
   displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   crossCheckInOutFormats();
 
@@ -784,7 +784,7 @@ void MainWindow::outputFormatChanged(int comboIdx)
 void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.inputFormatCombo);
-  if (formatList_[fidx].getInputOptionsRef()->size() == 0) {
+  if (formatList_[fidx].getInputOptionsRef()->empty()) {
     QMessageBox::information
     (0, appName,
      tr("There are no input options for format \"%1\"").arg(formatList_[fidx].getDescription()));
@@ -803,7 +803,7 @@ void MainWindow::inputOptionButtonClicked()
 void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.outputFormatCombo);
-  if (formatList_[fidx].getOutputOptionsRef()->size() == 0) {
+  if (formatList_[fidx].getOutputOptionsRef()->empty()) {
     QMessageBox::information
     (0, appName,
      tr("There are no output options for format \"%1\"").arg(formatList_[fidx].getDescription()));
@@ -833,7 +833,7 @@ bool MainWindow::isOkToGo()
   // Paper over what didn't happen in inputBrowse() if the user edited
   // the filename fields directly.
   if ((babelData_.inputType_ == BabelData::fileType_) &&
-      (babelData_.inputFileNames_.size() == 0) &&
+      (babelData_.inputFileNames_.empty()) &&
       (!ui_.inputFileNameText->text().isEmpty())) {
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
@@ -844,7 +844,7 @@ bool MainWindow::isOkToGo()
   }
 
   if ((babelData_.inputType_ == BabelData::fileType_) &&
-      (babelData_.inputFileNames_.size() == 0)) {
+      (babelData_.inputFileNames_.empty())) {
     QMessageBox::information(0, QString(appName), tr("No input file specified"));
     return false;
   }
@@ -1222,7 +1222,7 @@ void MainWindow::filtersClicked()
 //------------------------------------------------------------------------
 void MainWindow::updateFilterStatus()
 {
-  bool filterActive = filterData_.getAllFilterStrings().size();
+  bool filterActive = !filterData_.getAllFilterStrings().empty();
   ui_.filterStatus->setEnabled(filterActive);
   if (filterActive) {
     ui_.filterStatus->setToolTip(tr("One or more data filters are active"));
