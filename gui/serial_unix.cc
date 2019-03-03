@@ -98,7 +98,7 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox* box)
   const QStringList devices = dynamicDevices();
   box->addItems(devices);
 
-  for (int i=0; deviceNames[i]; i++) {
+  for (int i=0; deviceNames[i] != nullptr; i++) {
     if (!devices.contains(deviceNames[i])) {
       box->addItem(deviceNames[i]);
     }

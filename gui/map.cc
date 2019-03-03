@@ -301,7 +301,7 @@ void Map::markerClicked(int t, int i)
 void Map::logTime(const QString& s)
 {
   //  fprintf(stderr, "Log: %s:  %d ms\n", s.toStdString().c_str(), stopWatch.elapsed());
-  if (textEdit_) {
+  if (textEdit_ != nullptr) {
     textEdit_->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch_.elapsed()));
   }
   stopWatch_.start();

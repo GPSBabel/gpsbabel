@@ -222,7 +222,7 @@ void OptionsDlg::acceptClicked()
 {
   for (int k=0; k<options_.size(); k++) {
     options_[k].setSelected(checkBoxes_[k]->isChecked());
-    if (fields_[k]) {
+    if (fields_[k] != nullptr) {
       if (options_[k].getType() == FormatOption::OPTboundedInt) {
         int value = static_cast<QSpinBox*>(fields_[k])->value();
         value = qMax(qMin(value, options_[k].getMaxValue().toInt()),options_[k].getMinValue().toInt());

@@ -186,7 +186,7 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 void ProcessWaitDialog::appendToText(const char* ptr)
 {
   outputString_ += QString(ptr);
-  for (const char* cptr = ptr; *cptr; cptr++) {
+  for (const char* cptr = ptr; *cptr != 0; cptr++) {
     if (*cptr == '\r') {
       continue;
     }

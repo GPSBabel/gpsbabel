@@ -60,11 +60,11 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
 
 UpgradeCheck::~UpgradeCheck()
 {
-  if (replyId_) {
+  if (replyId_ != nullptr) {
     replyId_->abort();
     replyId_ = nullptr;
   }
-  if (manager_) {
+  if (manager_ != nullptr) {
     delete manager_;
     manager_ = nullptr;
   }
@@ -123,7 +123,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += "&os=" + getOsName();
   args += "&cpu=" + getCpuArchitecture();
   args += "&os_ver=" + getOsVersion();
-  args += QString("&beta_ok=%1").arg(allowBeta);
+  args += QString("&beta_ok=%1").arg(static_cast<int>(allowBeta));
   args += "&lang=" + QLocale::languageToString(locale.language());
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
   args += QString("&ugcb=%1").arg(babelData_.upgradeCallbacks_);
@@ -139,14 +139,14 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     int rc = formatList_[i].getReadUseCount();
     int wc = formatList_[i].getWriteUseCount();
     QString formatName = formatList_[i].getName();
-    if (rc) {
+    if (rc != 0) {
       args += QString("&uc%1=rd/%2/%3").arg(j++).arg(formatName).arg(rc);
     }
-    if (wc) {
+    if (wc != 0) {
       args += QString("&uc%1=wr/%2/%3").arg(j++).arg(formatName).arg(wc);
     }
   }
-  if (j && babelData_.reportStatistics_) {
+  if ((j != 0) && babelData_.reportStatistics_) {
     args += QString("&uc=%1").arg(j);
   }
 
@@ -282,7 +282,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     }
   }
 
-  if (response.length()) {
+  if (response.length() != 0) {
     QMessageBox information;
     information.setWindowTitle(tr("Upgrade"));
 

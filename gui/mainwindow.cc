@@ -120,7 +120,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) ? str.mid(1) : str;
+  return (str.length()) != 0 ? str.mid(1) : str;
 
 }
 
