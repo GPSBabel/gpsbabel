@@ -55,9 +55,9 @@ public:
     state = e_noop;
   }
 
-  typedef enum {e_noop, e_wpt, e_trk,
-                e_trkpt, e_trkseg, e_rte, e_rtept
-               } elementState;
+  enum elementState {e_noop, e_wpt, e_trk,
+                     e_trkpt, e_trkseg, e_rte, e_rtept
+                    };
   QString textChars;
   GpxWaypoint currentWpt;
   QList <GpxWaypoint> wptList;
@@ -75,8 +75,8 @@ public:
   QList <elementState> stateStack;
 
   bool startElement(const QString& /*namespaceURI*/,
-                            const QString& localName, const QString& /*qName*/,
-                            const QXmlAttributes& atts) override
+                    const QString& localName, const QString& /*qName*/,
+                    const QXmlAttributes& atts) override
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
@@ -135,8 +135,8 @@ public:
   };
 
   bool endElement(const QString& /*namespaceURI*/,
-                          const QString& localName,
-                          const QString& /*qName*/) override
+                  const QString& localName,
+                  const QString& /*qName*/) override
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
