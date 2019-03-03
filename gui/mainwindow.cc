@@ -226,9 +226,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 //------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
-  
-    delete upgrade;
-  
+
+  delete upgrade;
+
 }
 //------------------------------------------------------------------------
 // Dynamic language switching courtesy of
@@ -854,8 +854,9 @@ bool MainWindow::isOkToGo()
   if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
     QMessageBox::information(nullptr, QString(appName), tr("No valid output specified"));
     return false;
-  } else if (babelData_.outputType_ == BabelData::fileType_ &&
-             babelData_.outputFileName_.length() == 0) {
+  }
+  if (babelData_.outputType_ == BabelData::fileType_ &&
+      babelData_.outputFileName_.length() == 0) {
     QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }

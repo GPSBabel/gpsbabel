@@ -55,14 +55,14 @@ QVariant getOptionValue(QList<FormatOption> opts, int k)
 {
   if (opts[k].getValue().toString() != "") {
     return opts[k].getValue();
-  } else {
-    return opts[k].getDefaultValue();
   }
+  return opts[k].getDefaultValue();
+
 }
 
 //------------------------------------------------------------------------
 FileDlgManager::~FileDlgManager()
-= default;
+  = default;
 
 //------------------------------------------------------------------------
 void FileDlgManager::buttonClicked()

@@ -175,7 +175,8 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   if (reply == nullptr) {
     babelData_.upgradeErrors_++;
     return;
-  } else if (reply != replyId_) {
+  }
+  if (reply != replyId_) {
     QMessageBox::information(nullptr, tr("HTTP"),
                              tr("Unexpected reply."));
   } else if (reply->error() != QNetworkReply::NoError) {

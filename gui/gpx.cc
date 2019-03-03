@@ -235,7 +235,7 @@ bool Gpx::read(const QString& fileName)
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
     return true;
-  } else {
-    return false;
   }
+  return false;
+
 }
