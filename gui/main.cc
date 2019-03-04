@@ -20,18 +20,61 @@
 //  USA
 //
 //------------------------------------------------------------------------
-#define _CRT_SECURE_NO_DEPRECATE 1
 
-#include <cstdlib>                  // for getenv, putenv
+#ifdef _WIN32
+#include <cstddef>                 // for size_t
+#include <string>                  // for c_str
+#include <stdlib.h>                // for _wgetenv_s, _wputenv_s
+#endif
 
-#include <QtCore/QByteArray>        // for QByteArray
-#include <QtCore/QDir>              // for QDir
-#include <QtCore/QString>           // for operator+, QString
-#include <QtCore/QtGlobal>          // for QT_VERSION, QT_VERSION_CHECK
-#include <QtGui/QIcon>              // for QIcon
-#include <QtWidgets/QApplication>   // for QApplication
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QDir>             // for QDir
+#include <QtCore/QFile>            // for QFile
+#include <QtCore/QString>          // for QString
+#include <QtCore/QtGlobal>         // for qgetenv, qputenv, QT_VERSION, QT_VERSION_CHECK
+#include <QtGui/QIcon>             // for QIcon
+#include <QtWidgets/QApplication>  // for QApplication
 
 #include "mainwindow.h"             // for MainWindow
+
+//------------------------------------------------------------------------
+
+// Put the directory where this executable is on the front of the path.
+// Who could imagine that this is so tricky!
+#ifdef _WIN32
+static void set_path()
+{
+  QString newPath = QDir::toNativeSeparators(QApplication::applicationDirPath());
+  newPath += ';';
+
+  // On windows qgetenv may produce data loss.
+#if 0 // TODO: Qt >= 5.10
+  newPath += qEnvironmentVariable("PATH");
+#else
+  size_t pathSize;
+  _wgetenv_s(&pathSize, nullptr, 0, L"PATH");
+  auto oldPath = new wchar_t[pathSize];
+  _wgetenv_s(&pathSize, oldPath, pathSize, L"PATH");
+  newPath += QString::fromStdWString(oldPath).chopped(1);
+  delete[] oldPath;
+#endif
+
+  // On windows qputenv has similar, but undocumented, data loss issues.
+  _wputenv_s(L"PATH", newPath.toStdWString().c_str());
+}
+#else // macos, linux
+static void set_path()
+{
+  // QFile::encodeName handles encoding weirdness,
+  // normalized utf8 for macos vs. local8bit for linux.
+  QByteArray newPath = QFile::encodeName(QDir::toNativeSeparators(QApplication::applicationDirPath()));
+  // we assume we don't have to normalize around the separator.
+  newPath += ':';
+  newPath += qgetenv("PATH");
+  qputenv("PATH", newPath);
+}
+#endif // _WIN32
+
 
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
@@ -44,17 +87,7 @@ int main(int argc, char** argv)
   QApplication app(argc, argv);
   QApplication::setWindowIcon(QIcon(":/images/appicon.png"));
 
-#ifdef _WIN32
-  const char pathSeparator = ';';
-#else
-  const char pathSeparator = ':';
-#endif
-  const QString newPath = "PATH=" +
-                          QDir::toNativeSeparators(QApplication::applicationDirPath()) +
-                          pathSeparator +
-                          QString::fromLocal8Bit(getenv("PATH"));
-  QByteArray newPathEnv = newPath.toLocal8Bit();
-  putenv(newPathEnv.data());
+  set_path();
 
   QApplication::setOrganizationName("GPSBabel");
   QApplication::setOrganizationDomain("gpsbabel.org");
