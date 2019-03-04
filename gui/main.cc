@@ -55,8 +55,10 @@ static void set_path()
   _wgetenv_s(&pathSize, nullptr, 0, L"PATH");
   auto oldPath = new wchar_t[pathSize];
   _wgetenv_s(&pathSize, oldPath, pathSize, L"PATH");
-  newPath += QString::fromStdWString(oldPath).chopped(1);
+  QString qoldPath = QString::fromStdWString(oldPath);
   delete[] oldPath;
+  qoldPath.chop(1);
+  newPath += qoldPath;
 #endif
 
   // On windows qputenv has similar, but undocumented, data loss issues.
