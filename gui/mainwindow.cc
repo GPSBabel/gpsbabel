@@ -19,32 +19,58 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111
 //  USA
 //
-#include <QDesktopServices>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QMimeData>
-#include <QProcess>
-#include <QSettings>
-#include <QTemporaryFile>
-#include <QTextStream>
-// #include <QDebug>
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QDate>                // for QDate
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QDir>                 // for QDir
+#include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
+#include <QtCore/QFile>                // for QFile
+#include <QtCore/QFileInfo>            // for QFileInfo
+#include <QtCore/QLocale>              // for QLocale
+#include <QtCore/QMimeData>            // for QMimeData
+#include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
+#include <QtCore/QRegExp>              // for QRegExp
+#include <QtCore/QSettings>            // for QSettings
+#include <QtCore/QTemporaryFile>       // for QTemporaryFile
+#include <QtCore/QTime>                // for QTime
+#include <QtCore/QUrl>                 // for QUrl
+#include <QtCore/QVariant>             // for QVariant
+#include <QtCore/Qt>                   // for SmoothTransformation, WaitCursor
+#include <QtCore/QtGlobal>             // for foreach
+#include <QtGui/QCursor>               // for QCursor
+#include <QtGui/QDesktopServices>      // for QDesktopServices
+#include <QtGui/QIcon>                 // for QIcon
+#include <QtGui/QImage>                // for QImage
+#include <QtWidgets/QApplication>      // for QApplication, qApp
+#include <QtWidgets/QCheckBox>         // for QCheckBox
+#include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
+#include <QtWidgets/QFileDialog>       // for QFileDialog
+#include <QtWidgets/QMessageBox>       // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
+#include <QtWidgets/QPlainTextEdit>    // for QPlainTextEdit
+#include <QtWidgets/QPushButton>       // for QPushButton
+#include <QtWidgets/QRadioButton>      // for QRadioButton
+#include <QtWidgets/QStackedWidget>    // for QStackedWidget
+
+#include <cstdlib>                     // for exit
 
 #include "mainwindow.h"
-#include "../gbversion.h"
-#include "aboutdlg.h"
-#include "advdlg.h"
-#include "appname.h"
-#include "babeldata.h"
-#include "donate.h"
-#include "filterdlg.h"
-#include "formatload.h"
-#include "gmapdlg.h"
-#include "help.h"
-#include "optionsdlg.h"
-#include "preferences.h"
-#include "processwait.h"
-#include "version_mismatch.h"
-#include "upgrade.h"
+#include "../gbversion.h"              // for VERSION
+#include "aboutdlg.h"                  // for AboutDlg
+#include "advdlg.h"                    // for AdvDlg
+#include "appname.h"                   // for appName
+#include "babeldata.h"                 // for BabelData
+#include "donate.h"                    // for Donate
+#include "filterdlg.h"                 // for FilterDialog
+#include "formatload.h"                // for FormatLoad
+#include "gmapdlg.h"                   // for GMapDialog
+#include "help.h"                      // for ShowHelp
+#include "optionsdlg.h"                // for OptionsDlg
+#include "preferences.h"               // for Preferences
+#include "processwait.h"               // for ProcessWaitDialog
+#include "upgrade.h"                   // for UpgradeCheck
+#include "version_mismatch.h"          // for VersionMismatch
+
+
 
 const int BabelData::noType_ = -1;
 const int BabelData::fileType_ = 0;
@@ -56,7 +82,7 @@ const int BabelData::deviceType_ = 1;
 QString MainWindow::findBabelVersion()
 {
   QProcess babel;
-  babel.start("gpsbabel", QStringList() << "-V");
+  babel.start(QApplication::applicationDirPath() + "/gpsbabel", QStringList() << "-V");
   if (!babel.waitForStarted()) {
     return QString();
   }
@@ -869,7 +895,7 @@ bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
 {
   QProcess* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
-  proc->start(name, args);
+  proc->start(QApplication::applicationDirPath() + '/' + name, args);
   ProcessWaitDialog* waitDlg = new ProcessWaitDialog(nullptr, proc);
 
   if (proc->state() == QProcess::NotRunning) {

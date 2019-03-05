@@ -20,16 +20,9 @@
 //  USA
 //
 //------------------------------------------------------------------------
-#define _CRT_SECURE_NO_DEPRECATE 1
-
-#include <cstdlib>                  // for getenv, putenv
-
-#include <QtCore/QByteArray>        // for QByteArray
-#include <QtCore/QDir>              // for QDir
-#include <QtCore/QString>           // for operator+, QString
-#include <QtCore/QtGlobal>          // for QT_VERSION, QT_VERSION_CHECK
-#include <QtGui/QIcon>              // for QIcon
-#include <QtWidgets/QApplication>   // for QApplication
+#include <QtCore/QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
+#include <QtGui/QIcon>             // for QIcon
+#include <QtWidgets/QApplication>  // for QApplication
 
 #include "mainwindow.h"             // for MainWindow
 
@@ -43,19 +36,6 @@ int main(int argc, char** argv)
 
   QApplication app(argc, argv);
   QApplication::setWindowIcon(QIcon(":/images/appicon.png"));
-
-#ifdef _WIN32
-  const char pathSeparator = ';';
-#else
-  const char pathSeparator = ':';
-#endif
-  const QString newPath = "PATH=" +
-                          QDir::toNativeSeparators(QApplication::applicationDirPath()) +
-                          pathSeparator +
-                          QString::fromLocal8Bit(getenv("PATH"));
-  QByteArray newPathEnv = newPath.toLocal8Bit();
-  putenv(newPathEnv.data());
-
   QApplication::setOrganizationName("GPSBabel");
   QApplication::setOrganizationDomain("gpsbabel.org");
   QApplication::setApplicationName("GPSBabel");
