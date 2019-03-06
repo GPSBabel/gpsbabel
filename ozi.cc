@@ -294,32 +294,16 @@ ozi_openfile(const QString& fname)
 static void
 ozi_track_hdr(const route_head* rte)
 {
-#if 0
-  static const char* ozi_trk_header =
-    "OziExplorer Track Point File Version 2.1\r\n"
-    "WGS 84\r\n"
-    "Altitude is in %s\r\n"
-    "Reserved 3\r\n"
-    "0,2,255,%s,0,0,2,8421376\r\n"
-    "0\r\n";
-#endif
-
   if ((! pack_opt) || (track_out_count == 0)) {
     ozi_openfile(ozi_ofname);
-#if 0
-    gbfprintf(file_out, ozi_trk_header,
-              altunit == 'f' ? "Feet" : "Meters",
-              rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : CSTRc(rte->rte_name));
-#else
-  *ozi_file.stream << "OziExplorer Track Point File Version 2.1\r\n"
-                   << "WGS 84\r\n"
-                   << "Altitude is in " << (altunit == 'f' ? "Feet" : "Meters") << "\r\n"
-                   << "Reserved 3\r\n"
-                   << "0,2,255,"
-                   << (rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : rte->rte_name)
-                   << ",0,0,2,8421376\r\n"
-                   << "0\r\n";
-#endif
+    *ozi_file.stream << "OziExplorer Track Point File Version 2.1\r\n"
+                     << "WGS 84\r\n"
+                     << "Altitude is in " << (altunit == 'f' ? "Feet" : "Meters") << "\r\n"
+                     << "Reserved 3\r\n"
+                     << "0,2,255,"
+                     << (rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : rte->rte_name)
+                     << ",0,0,2,8421376\r\n"
+                     << "0\r\n";
   }
 
   track_out_count++;
@@ -339,17 +323,11 @@ ozi_track_disp(const Waypoint* waypointp)
     alt = waypointp->altitude * alt_scale;
   }
 
-#if 0
-  gbfprintf(file_out, "%.6f,%.6f,%d,%.0f,%s,,\r\n",
-            waypointp->latitude, waypointp->longitude, new_track,
-            alt, ozi_time);
-#else
   *ozi_file.stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
                    << waypointp->longitude << ','
                    << new_track << ','
                    << qSetRealNumberPrecision(0) << alt << ','
                    << ozi_time << ",,\r\n";
-#endif
 
   new_track = 0;
 }
@@ -365,19 +343,10 @@ ozi_route_hdr(const route_head* rte)
 {
   /* prologue on 1st pass only */
   if (route_out_count == 0) {
-#if 0
-		static const char* ozi_route_header =
-			"OziExplorer Route File Version 1.0\r\n"
-			"WGS 84\r\n"
-			"Reserved 1\r\n"
-			"Reserved 2\r\n";
-    gbfprintf(file_out, ozi_route_header);
-#else
     *ozi_file.stream << "OziExplorer Route File Version 1.0\r\n"
                      << "WGS 84\r\n"
                      << "Reserved 1\r\n"
                      << "Reserved 2\r\n";
-#endif
   }
 
   route_out_count++;
@@ -395,16 +364,9 @@ ozi_route_hdr(const route_head* rte)
    * R, 1, ICP GALHETA,, 16711680
    */
 
-#if 0
-  gbfprintf(file_out, "R,%d,%s,%s,\r\n",
-            route_out_count,
-            CSTRc(rte->rte_name),
-            CSTRc(rte->rte_desc));
-#else
   *ozi_file.stream << "R," << route_out_count << ','
                    << rte->rte_name << ','
                    << rte->rte_desc << ",\r\n";
-#endif
 }
 
 static void
@@ -443,16 +405,6 @@ ozi_route_disp(const Waypoint* waypointp)
    * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0
    */
 
-#if 0
-  gbfprintf(file_out, "W,%d,,%d,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
-            route_out_count,
-            route_wpt_count,
-            CSTR(waypointp->shortname),
-            waypointp->latitude,
-            waypointp->longitude,
-            ozi_time,
-            CSTR(waypointp->description));
-#else
   *ozi_file.stream << "W," << route_out_count << ",,"
                    << route_wpt_count << ','
                    << waypointp->shortname << ','
@@ -460,7 +412,6 @@ ozi_route_disp(const Waypoint* waypointp)
                    << waypointp->longitude << ','
                    << ozi_time << ",0,1,3,0,65535,"
                    << waypointp->description << ",0,0\r\n";
-#endif
 
 }
 
@@ -992,12 +943,6 @@ ozi_waypt_pr(const Waypoint* wpt)
     icon = wpt->icon_descr.toInt();
   }
 
-#if 0
-  gbfprintf(file_out,
-            "%d,%s,%.6f,%.6f,%s,%d,%d,%d,%d,%d,%s,%d,%d,",
-            index, CSTRc(shortname), wpt->latitude, wpt->longitude, ozi_time, icon,
-            1, 3, fs->fgcolor, fs->bgcolor, CSTRc(description), 0, 0);
-#else
   *ozi_file.stream << index << ','
                    << shortname << ','
                    << qSetRealNumberPrecision(6) << wpt->latitude << ','
@@ -1008,18 +953,13 @@ ozi_waypt_pr(const Waypoint* wpt)
                    << fs->fgcolor << ','
                    << fs->bgcolor << ','
                    << description << ",0,0,";
-#endif
   if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-    //gbfprintf(file_out, "%.1f,", wpt->proximity * prox_scale);
     *ozi_file.stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
   } else if (proximity > 0) {
-    //gbfprintf(file_out,"%.1f,", proximity * prox_scale);
     *ozi_file.stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
   } else {
-    //gbfprintf(file_out,"%d,", 0);
     *ozi_file.stream << "0,";
   }
-  //gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt, 6, 0, 17);
   *ozi_file.stream << qSetRealNumberPrecision(0) << alt << ",6,0,17\r\n";
 
   if (faked_fsdata) {
@@ -1030,27 +970,14 @@ ozi_waypt_pr(const Waypoint* wpt)
 static void
 data_write()
 {
-
   if (waypt_count()) {
-#if 0
-  static const char* ozi_wpt_header =
-    "OziExplorer Waypoint File Version 1.1\r\n"
-    "WGS 84\r\n"
-    "Reserved 2\r\n"
-    "Reserved 3\r\n";
-#endif
-
-  track_out_count = route_out_count = 0;
+    track_out_count = route_out_count = 0;
     ozi_objective = wptdata;
     ozi_openfile(ozi_ofname);
-#if 0
-    gbfprintf(file_out, ozi_wpt_header);
-#else
     *ozi_file.stream << "OziExplorer Waypoint File Version 1.1\r\n"
                      << "WGS 84\r\n"
                      << "Reserved 2\r\n"
                      << "Reserved 3\r\n";
-#endif
     waypt_disp_all(ozi_waypt_pr);
   }
 
