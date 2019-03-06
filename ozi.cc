@@ -27,8 +27,7 @@
 
 #include <cctype>               // for tolower
 #include <cmath>                // for lround
-#include <cstdio>               // for snprintf, size_t
-#include <cstdlib>              // for atof, atoi
+#include <cstdlib>              // for atoi
 
 #include <QtCore/QByteArray>    // for QByteArray
 #include <QtCore/QChar>         // for operator==, QChar
@@ -36,15 +35,16 @@
 #include <QtCore/QFile>         // for QFile
 #include <QtCore/QFileInfo>     // for QFileInfo
 #include <QtCore/QFlags>        // for QFlags
-#include <QtCore/QIODevice>     // for QIODevice::WriteOnly, operator|, QIODevice, QIODevice::OpenModeFlag, QIODevice::ReadOnly
+#include <QtCore/QIODevice>     // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
 #include <QtCore/QString>       // for QString
+#include <QtCore/QStringList>   // for QStringList
 #include <QtCore/QTextCodec>    // for QTextCodec
 #include <QtCore/QTextStream>   // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
 #include <QtCore/Qt>            // for CaseInsensitive
 #include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "csv_util.h"           // for csv_stringclean, csv_lineparse
+#include "csv_util.h"           // for csv_stringclean
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/file.h"      // for File
@@ -217,15 +217,14 @@ ozi_alloc_fsdata()
   return fsdata;
 }
 
-static void
-ozi_get_time_str(const Waypoint* waypointp, char* buff, size_t buffsz)
+static QString
+ozi_get_time_str(const Waypoint* waypointp)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
-    snprintf(buff, buffsz, "%.7f", time);
-  } else {
-    *buff = '\0';
+    return QString("%1").arg(time, 0, 'f', 7);
   }
+  return QString("");
 }
 
 static void
@@ -331,9 +330,8 @@ static void
 ozi_track_disp(const Waypoint* waypointp)
 {
   double alt;
-  char ozi_time[16];
 
-  ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(waypointp);
 
   if (waypointp->altitude == unknown_alt) {
     alt = -777;
@@ -412,11 +410,9 @@ ozi_route_hdr(const route_head* rte)
 static void
 ozi_route_disp(const Waypoint* waypointp)
 {
-  char ozi_time[16];
-
   route_wpt_count++;
 
-  ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(waypointp);
 
 /*
   double alt;
@@ -670,26 +666,24 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
 }
 
 static void
-ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
+ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name)
 {
-  double alt;
-
-  if (*str == '\0') {
+  if (str.isEmpty()) {
     return;
   }
 
   switch (field) {
   case 0:
     /* latitude */
-    wpt_tmp->latitude = atof(str);
+    wpt_tmp->latitude = str.toDouble();
     break;
   case 1:
     /* longitude */
-    wpt_tmp->longitude = atof(str);
+    wpt_tmp->longitude = str.toDouble();
     break;
   case 2:
     /* new track flag */
-    if ((atoi(str) == 1) && (trk_head->rte_waypt_ct > 0)) {
+    if ((str.toInt() == 1) && (trk_head->rte_waypt_ct > 0)) {
       trk_head = route_head_alloc();
       track_add_head(trk_head);
       if (trk_name) {
@@ -697,15 +691,16 @@ ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
       }
     }
     break;
-  case 3:
+  case 3: {
     /* altitude */
-    alt = atof(str);
+    double alt = str.toDouble();
     if (alt == -777) {
       wpt_tmp->altitude = unknown_alt;
     } else {
       wpt_tmp->altitude = alt * alt_scale;
     }
     break;
+  }
   case 4:
     /* DAYS since 1900 00:00:00 in days.days (5.5) */
     ozi_set_time_str(str, wpt_tmp);
@@ -716,9 +711,9 @@ ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
 }
 
 static void
-ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
+ozi_parse_routepoint(int field, const QString& str, Waypoint* wpt_tmp)
 {
-  if (*str == '\0') {
+  if (str.isEmpty()) {
     return;
   }
 
@@ -741,11 +736,11 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
     break;
   case 5:
     /* latitude */
-    wpt_tmp->latitude = atof(str);
+    wpt_tmp->latitude = str.toDouble();
     break;
   case 6:
     /* longitude */
-    wpt_tmp->longitude = atof(str);
+    wpt_tmp->longitude = str.toDouble();
     break;
   case 7:
     /* DAYS since 1900 00:00:00 in days.days (5.5) */
@@ -853,17 +848,10 @@ data_read()
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
-      int field = 0;
-      char* orig_s = xstrdup(CSTR(buff));
-      char* s = csv_lineparse(orig_s, ",", "", linecount);
-      while (s) {
-        field ++;
-        if (field == 4) {
-          trk_head->rte_name = QString(s).trimmed();
-        }
-        s = csv_lineparse(nullptr, ",", "", linecount);
+      const QStringList parts = buff.split(',');
+      if (parts.size() >= 4) {
+          trk_head->rte_name = parts.at(3).trimmed();
       }
-      xfree(orig_s);
     }
 
     if (buff.contains(',')) {
@@ -871,13 +859,12 @@ data_read()
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
       Waypoint* wpt_tmp = new Waypoint;
 
-      /* data delimited by commas, possibly enclosed in quotes.  */
-      char* orig_s = xstrdup(CSTR(buff));
-      char* s = csv_lineparse(orig_s, ",", "", linecount);
+      /* data delimited by commas. */
+      const QStringList parts = buff.split(',');
 
       int i = 0;
       bool header = false;
-      while (s) {
+      for (const auto& s : parts) {
         switch (ozi_objective) {
         case trkdata:
           ozi_parse_track(i, s, wpt_tmp, trk_name);
@@ -900,9 +887,7 @@ data_read()
           break;
         }
         i++;
-        s = csv_lineparse(nullptr, ",", "", linecount);
       }
-      xfree(orig_s);
 
       switch (ozi_objective) {
       case trkdata:
@@ -958,7 +943,6 @@ ozi_waypt_pr(const Waypoint* wpt)
 {
   static int index = 0;
   double alt;
-  char ozi_time[16];
   QString description;
   QString shortname;
   int faked_fsdata = 0;
@@ -971,7 +955,7 @@ ozi_waypt_pr(const Waypoint* wpt)
     faked_fsdata = 1;
   }
 
-  ozi_get_time_str(wpt, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(wpt);
 
   if (wpt->altitude == unknown_alt) {
     alt = -777;
