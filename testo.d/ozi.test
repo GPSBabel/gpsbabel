@@ -8,3 +8,12 @@ compare ${TMPDIR}/ozi.wpt ${REFERENCE}
 # Test Ozi routes.
 gpsbabel -i ozi -f ${REFERENCE}/route/ozi.rte -o gpx -F ${TMPDIR}/ozi~gpx.gpx
 compare ${TMPDIR}/ozi~gpx.gpx ${REFERENCE}/route/
+gpsbabel -i ozi -f ${REFERENCE}/route/ozi.rte -o ozi -F ${TMPDIR}/ozi~rte.rte
+compare ${REFERENCE}/route/ozi~rte.rte ${TMPDIR}/ozi~rte.rte
+
+# Test Ozi tracks.
+gpsbabel -i ozi -f ${REFERENCE}/track/20070813_short.plt -o gpx -F ${TMPDIR}/20070813_short~plt.gpx
+compare ${REFERENCE}/track/20070813_short~plt.gpx ${TMPDIR}/20070813_short~plt.gpx
+gpsbabel -i ozi -f ${REFERENCE}/track/20070813_short.plt -o ozi -F ${TMPDIR}/20070813_short~plt.plt
+compare ${REFERENCE}/track/20070813_short~plt.plt ${TMPDIR}/20070813_short~plt.plt
+
