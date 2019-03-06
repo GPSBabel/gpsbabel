@@ -23,6 +23,17 @@
     Reference:
     https://www.oziexplorer4.com/eng/help/fileformats.html
 
+    According to the OZI Explorer developer:
+    "There is no specified character set, it defaults to whatever 8 bit
+     character set "Windows" defaults to - normally CP-1252 but can vary
+     depending on Windows regional settings."
+
+    According to the reference, for some text fields:
+    "comma's not allowed in text fields, character 209 can be used instead
+     and a comma will be substituted."
+    This could work for windows-1252, but not for utf-8.
+    We don't support any special handling for character 209.
+
  */
 
 #include <cctype>               // for tolower
@@ -53,10 +64,6 @@
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
-
-// TODO: From the reference:
-//       "comma's not allowed in text fields, character 209 can be used instead and a comma will be substituted."
-// This could work for windows-1252, but not for utf-8.
 
 struct ozi_fsdata {
   format_specific_data fs;
