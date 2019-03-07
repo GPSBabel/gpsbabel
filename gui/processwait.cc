@@ -84,8 +84,8 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
 
   connect(process, SIGNAL(error(QProcess::ProcessError)),
           this,    SLOT(errorX(QProcess::ProcessError)));
-  connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
-          this,    SLOT(finishedX(int, QProcess::ExitStatus)));
+  connect(process, SIGNAL(finished(int,QProcess::ExitStatus)),
+          this,    SLOT(finishedX(int,QProcess::ExitStatus)));
   connect(process, SIGNAL(readyReadStandardError()),
           this,    SLOT(readyReadStandardErrorX()));
   connect(process, SIGNAL(readyReadStandardOutput()),
