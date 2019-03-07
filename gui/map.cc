@@ -86,8 +86,8 @@ Map::Map(QWidget* parent,
   this->page()->setWebChannel(channel);
   // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
-  connect(mclicker, SIGNAL(markerClicked(int, int)), this, SLOT(markerClicked(int, int)));
-  connect(mclicker, SIGNAL(logTime(const QString&)), this, SLOT(logTime(const QString&)));
+  connect(mclicker, SIGNAL(markerClicked(int,int)), this, SLOT(markerClicked(int,int)));
+  connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
 #endif
 
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
@@ -177,8 +177,8 @@ void Map::showGpxData()
   // Historically this was done here in showGpxData.
   MarkerClicker* mclicker = new MarkerClicker(this);
   this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
-  connect(mclicker, SIGNAL(markerClicked(int, int)), this, SLOT(markerClicked(int, int)));
-  connect(mclicker, SIGNAL(logTime(const QString&)), this, SLOT(logTime(const QString&)));
+  connect(mclicker, SIGNAL(markerClicked(int,int)), this, SLOT(markerClicked(int,int)));
+  connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
 #endif
 
   this->logTime("Start defining JS string");

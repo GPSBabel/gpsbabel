@@ -205,14 +205,14 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   connect(mapWidget_, SIGNAL(waypointClicked(int)), this, SLOT(waypointClickedX(int)));
   connect(mapWidget_, SIGNAL(routeClicked(int)), this, SLOT(routeClickedX(int)));
   connect(mapWidget_, SIGNAL(trackClicked(int)), this, SLOT(trackClickedX(int)));
-  connect(ui_.treeView, SIGNAL(doubleClicked(const QModelIndex&)),
-          this, SLOT(treeDoubleClicked(const QModelIndex&)));
-  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,  const QItemSelection&)),
-          this, SLOT(selectionChangedX(const QItemSelection&,  const QItemSelection&)));
+  connect(ui_.treeView, SIGNAL(doubleClicked(QModelIndex)),
+          this, SLOT(treeDoubleClicked(QModelIndex)));
+  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+          this, SLOT(selectionChangedX(QItemSelection,QItemSelection)));
 
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(ui_.treeView, SIGNAL(customContextMenuRequested(const QPoint&)),
-          this, SLOT(showContextMenu(const QPoint&)));
+  connect(ui_.treeView, SIGNAL(customContextMenuRequested(QPoint)),
+          this, SLOT(showContextMenu(QPoint)));
 
   connect(ui_.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
 
