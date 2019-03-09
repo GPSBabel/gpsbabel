@@ -747,13 +747,11 @@ static void tpo_process_tracks()
 
 
         if (buf[jj] == 0) {
-          printf("Found unexpected ZERO\n");
-          exit(1);
+          fatal(MYNAME ": Found unexpected ZERO\n");
         }
 
         if (latscale == 0 || lonscale == 0) {
-          printf("Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
-          exit(1);
+          fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
         }
 
         lon+=lonscale*scarray[buf[jj]>>4];

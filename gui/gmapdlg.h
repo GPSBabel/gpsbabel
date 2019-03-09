@@ -32,44 +32,44 @@
 
 class GMapDialog: public QDialog
 {
-Q_OBJECT
- public:
-  GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEdit *te);
+  Q_OBJECT
+public:
+  GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEdit* te);
 
- private:
+private:
   Ui_GMapDlg ui_;
-  Map *mapWidget_;
-  QStandardItemModel *model_;
-  QStandardItem *wptItem_, *trkItem_, *rteItem_;
-  QList<QStandardItem *> wptList_, trkList_, rteList_;
+  Map* mapWidget_;
+  QStandardItemModel* model_;
+  QStandardItem* wptItem_, *trkItem_, *rteItem_;
+  QList<QStandardItem*> wptList_, trkList_, rteList_;
   Gpx gpx_;
   int menuIndex_;
 
-  void appendWaypointInfo(QStandardItem *it, const GpxWaypoint &wpt);
-  void appendTrackInfo(QStandardItem *it, const GpxTrack &trk);
-  void appendRouteInfo(QStandardItem *it, const GpxRoute &rte);
+  void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
+  void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
+  void appendRouteInfo(QStandardItem* it, const GpxRoute& rte);
 
-  int waypointIndex(QStandardItem *it);
-  int trackIndex(QStandardItem *it);
-  int routeIndex(QStandardItem *it);
+  int waypointIndex(QStandardItem* it);
+  int trackIndex(QStandardItem* it);
+  int routeIndex(QStandardItem* it);
   QString formatLength(double l);
 
   //
 private slots:
-  void itemChangedX(QStandardItem *);
+  void itemChangedX(QStandardItem*);
   void waypointClickedX(int i);
   void trackClickedX(int i);
   void routeClickedX(int i);
-  void treeDoubleClicked(const QModelIndex &idx);
-  void selectionChangedX (const QItemSelection &,  const QItemSelection &);
+  void treeDoubleClicked(const QModelIndex& idx);
+  void selectionChangedX(const QItemSelection&,  const QItemSelection&);
   void copyButtonClickedX();
-  void showContextMenu(const QPoint &);
+  void showContextMenu(const QPoint&);
 
 
-  void expandCollapseAll(const QList<QStandardItem *> &li, 
-			 QStandardItem *it, bool exp);
-  void checkUncheckAll(const QList<QStandardItem *> &li, 
-		       QStandardItem *it, bool exp);
+  void expandCollapseAll(const QList<QStandardItem*>& li,
+                         QStandardItem* it, bool exp);
+  void checkUncheckAll(const QList<QStandardItem*>& li,
+                       QStandardItem* it, bool exp);
   void expandAllWaypoints();
   void expandAllTracks();
   void expandAllRoutes();

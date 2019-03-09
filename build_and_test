@@ -39,8 +39,7 @@ make check
 ./test_encoding_latin1
 ./test_encoding_utf8
 #make torture
-rm -f vg.log
-./vtesto -l -j vg.log
+make -k -j2 check-vtesto
 # eat the verbose output from test-all, including crash.output
 # this is a bit risky, if test-all generates an error we won't see what happened.
 echo "test-all in progress... (read/write test between all possible formats)"

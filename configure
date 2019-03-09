@@ -6144,7 +6144,7 @@ fi
 
 
 # MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-MIN_QT_VERSION=5.7
+MIN_QT_VERSION=5.9
 if test "$QMAKE" = "no"; then :
 
 	as_fn_error $? "Qt qmake (with QT_VERSION >= $MIN_QT_VERSION) is required but was not found." "$LINENO" 5
@@ -6778,10 +6778,9 @@ as_dir=jeeps; as_fn_mkdir_p
 as_dir=shapelib; as_fn_mkdir_p
 as_dir=src/core; as_fn_mkdir_p
 as_dir=zlib/contrib/minizip; as_fn_mkdir_p
+as_dir=testo.d; as_fn_mkdir_p
 
 ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc"
-
-ac_config_files="$ac_config_files gui/makelinuxdist.sh"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7482,7 +7481,6 @@ do
     "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
     "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
     "win32/gpsbabel.rc") CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;
-    "gui/makelinuxdist.sh") CONFIG_FILES="$CONFIG_FILES gui/makelinuxdist.sh" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -8033,11 +8031,6 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
-
-  case $ac_file$ac_mode in
-    "gui/makelinuxdist.sh":F) chmod +x gui/makelinuxdist.sh ;;
-
-  esac
 done # for ac_tag
 
 

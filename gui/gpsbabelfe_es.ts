@@ -636,7 +636,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwindow.cc" line="872"/>
-        <source>Process exited unsucessfully with code %1</source>
+        <source>Process exited unsuccessfully with code %1</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>

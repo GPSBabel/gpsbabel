@@ -593,7 +593,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="872"/>
-        <source>Process exited unsucessfully with code %1</source>
+        <source>Process exited unsuccessfully with code %1</source>
         <translation>Prozess endete mit code %1</translation>
     </message>
     <message>

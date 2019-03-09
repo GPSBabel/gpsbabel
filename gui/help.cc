@@ -27,7 +27,7 @@
 #include "format.h"
 
 //------------------------------------------------------------------------
-void ShowHelp(const QString &urlIn)
+void ShowHelp(const QString& urlIn)
 
 {
   QString url = urlIn;

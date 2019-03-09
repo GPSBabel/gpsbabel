@@ -25,7 +25,8 @@
 
 QString Format::htmlBase_ = QString();
 
-static void saveOptions(QSettings &settings, const QString &prefix, const QList<FormatOption> &options) {
+static void saveOptions(QSettings& settings, const QString& prefix, const QList<FormatOption>& options)
+{
   for (int i=0; i<options.size(); i++) {
     QString kp = prefix + "." + options[i].getName();
     QString k1 = kp + ".selected";
@@ -35,7 +36,8 @@ static void saveOptions(QSettings &settings, const QString &prefix, const QList<
   }
 }
 
-static void restoreOptions(QSettings &settings, const QString&prefix, QList<FormatOption> &options) {
+static void restoreOptions(QSettings& settings, const QString& prefix, QList<FormatOption>& options)
+{
   for (int i=0; i<options.size(); i++) {
     QString kp = prefix + "." + options[i].getName();
     QString k1 = kp + ".selected";
@@ -47,7 +49,7 @@ static void restoreOptions(QSettings &settings, const QString&prefix, QList<Form
   }
 }
 
-void Format::saveSettings(QSettings &settings)
+void Format::saveSettings(QSettings& settings)
 {
   saveOptions(settings, name_+".input", inputOptions_);
   saveOptions(settings, name_+".output", outputOptions_);
@@ -56,7 +58,7 @@ void Format::saveSettings(QSettings &settings)
   settings.setValue(name_+".hidden", isHidden());
 }
 
-void Format::restoreSettings(QSettings &settings)
+void Format::restoreSettings(QSettings& settings)
 {
   restoreOptions(settings, name_ + ".input", inputOptions_);
   restoreOptions(settings, name_ + ".output", outputOptions_);
@@ -68,7 +70,7 @@ void Format::restoreSettings(QSettings &settings)
 void Format::setToDefault()
 {
   for (int i=0; i<inputOptions_.size(); i++) {
-    if (inputOptions_[i].getType() == FormatOption::OPTbool && inputOptions_[i].getDefaultValue().toBool() == true) {
+    if (inputOptions_[i].getType() == FormatOption::OPTbool && inputOptions_[i].getDefaultValue().toBool()) {
       inputOptions_[i].setSelected(true);
     } else {
       inputOptions_[i].setSelected(false);
@@ -76,7 +78,7 @@ void Format::setToDefault()
     inputOptions_[i].setValue(QVariant());
   }
   for (int i=0; i<outputOptions_.size(); i++) {
-    if (outputOptions_[i].getType() == FormatOption::OPTbool && outputOptions_[i].getDefaultValue().toBool() == true) {
+    if (outputOptions_[i].getType() == FormatOption::OPTbool && outputOptions_[i].getDefaultValue().toBool()) {
       outputOptions_[i].setSelected(true);
     } else {
       outputOptions_[i].setSelected(false);

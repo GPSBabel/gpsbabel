@@ -17,35 +17,47 @@
 
  */
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QStack>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <clocale>                  // for setlocale, LC_NUMERIC, LC_TIME
+#include <csignal>                  // for signal, SIGINT, SIG_ERR
+#include <cstdio>                   // for printf, fgetc, stdin
+#include <cstdlib>                  // for exit
+#include <cstring>                  // for strcmp
+#include <ctime>                    // for time
 
-#include "cet.h"
-#include "cet_util.h"
-#include "csv_util.h"
-#include "defs.h"
-#include "filterdefs.h"
-#include "inifile.h"
-#include "session.h"
-#include "src/core/file.h"
-#include "src/core/usasciicodec.h"
-#include <cctype>
-#include <clocale>
-#include <cstdio>
-#include <cstdlib>
-#include <csignal>
+#include <QtCore/QByteArray>        // for QByteArray
+#include <QtCore/QChar>             // for QChar
+#include <QtCore/QCoreApplication>  // for QCoreApplication
+#include <QtCore/QFile>             // for QFile
+#include <QtCore/QIODevice>         // for QIODevice::ReadOnly
+#include <QtCore/QLocale>           // for QLocale
+#include <QtCore/QStack>            // for QStack
+#include <QtCore/QString>           // for QString
+#include <QtCore/QStringList>       // for QStringList
+#include <QtCore/QSysInfo>          // for QSysInfo
+#include <QtCore/QTextCodec>        // for QTextCodec
+#include <QtCore/QTextStream>       // for QTextStream
+#include <QtCore/QtConfig>          // for QT_VERSION_STR
+#include <QtCore/QtGlobal>          // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
+
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
 #endif
 
+#include "defs.h"
+#include "cet_util.h"               // for cet_convert_init, cet_convert_strings, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
+#include "csv_util.h"               // for csv_lineparse
+#include "filter.h"                 // for Filter
+#include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
+#include "inifile.h"                // for inifile_done, inifile_init
+#include "queue.h"                  // for queue
+#include "session.h"                // for start_session, session_exit, session_init
+#include "src/core/datetime.h"      // for DateTime
+#include "src/core/file.h"          // for File
+#include "src/core/usasciicodec.h"  // for UsAsciiCodec
+
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
-
-void signal_handler(int sig);
 
 class QargStackElement
 {
@@ -194,12 +206,16 @@ print_extended_info()
     "\n");
 }
 
-int
-main(int argc, char* argv[])
+static void
+signal_handler(int sig)
 {
-#ifdef AFL_INPUT_FUZZING
-  AFL_INIT_ARGV();
-#endif
+  (void)sig;
+  tracking_status.request_terminate = 1;
+}
+
+static int
+run(const char* prog_name)
+{
   int c;
   int argn;
   ff_vecs_t* ivecs = nullptr;
@@ -211,87 +227,17 @@ main(int argc, char* argv[])
   const char* ovec_opts = nullptr;
   const char* fvec_opts = nullptr;
   int opt_version = 0;
-  int did_something = 0;
-  const char* prog_name = argv[0]; /* argv is modified during processing */
+  bool did_something = false;
   queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
-  QStack<QargStackElement> qargs_stack = QStack<QargStackElement>();
+  QStack<QargStackElement> qargs_stack;
 
-  // Create a QCoreApplication object to handle application initialization.
-  // In addition to being useful for argument decoding, the creation of a
-  // QCoreApplication object gets Qt initialized, especially locale related
-  // QTextCodec stuff.
-  // For example, this will get the QTextCodec::codecForLocale set
-  // correctly.
-  QCoreApplication app(argc, argv);
   // Use QCoreApplication::arguments() to process the command line.
   QStringList qargs = QCoreApplication::arguments();
 
-  (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
-
-// MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-#if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
-#error This version of Qt is not supported.
-#endif
-
-  // The first invocation of QTextCodec::codecForLocale() may result in LC_ALL being set to the native environment
-  // as opposed to the initial default "C" locale.
-  // This was demonstrated with Qt5 on Mac OS X.
-  // TODO: This need to invoke QTextCodec::codecForLocale() may be taken care of
-  // by creating a QCoreApplication.
-#ifdef DEBUG_LOCALE
-  printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
-#endif
-  (void) QTextCodec::codecForLocale();
-#ifdef DEBUG_LOCALE
-  printf("Locale after codedForLocale: %s\n",setlocale(LC_ALL, NULL));
-#endif
-  // As recommended in QCoreApplication reset the locale to the default.
-  // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
-  // actually sets LC_ALL.
-  // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
-  if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_NUMERIC\n");
-#endif
-    setlocale(LC_NUMERIC,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
-  }
-  /* reset LC_TIME for strftime */
-  if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_TIME\n");
-#endif
-    setlocale(LC_TIME,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
-  }
-
-  global_opts.objective = wptdata;
-  global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
-  global_opts.charset_name.clear();
-  global_opts.inifile = nullptr;
-
-  gpsbabel_now = time(nullptr);			/* gpsbabel startup-time */
-  gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but freezed to zero during testo */
-
-  if (gpsbabel_time != 0) {	/* within testo ? */
-    global_opts.inifile = inifile_init(QString(), MYNAME);
-  }
-
-  init_vecs();
-  init_filter_vecs();
-  cet_register();
-  session_init();
-  waypt_init();
-  route_init();
-
   if (qargs.size() < 2) {
     usage(prog_name,1);
-    exit(0);
+    return 0;
   }
 
   /*
@@ -315,7 +261,7 @@ main(int argc, char* argv[])
       if (qargs.at(argn).size() > 2 && qargs.at(argn).at(2).toLatin1() == 'V') {
         print_extended_info();
       }
-      exit(0);
+      return 0;
     }
 
     if (qargs.at(argn).size() > 1 && (qargs.at(argn).at(1).toLatin1() == '?' || qargs.at(argn).at(1).toLatin1() == 'h')) {
@@ -324,7 +270,7 @@ main(int argc, char* argv[])
       } else {
         usage(prog_name,0);
       }
-      exit(0);
+      return 0;
     }
 
     c = qargs.at(argn).size() > 1 ? qargs.at(argn).at(1).toLatin1() : '\0';
@@ -364,7 +310,7 @@ main(int argc, char* argv[])
         fatal("Format does not support reading.\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
-        did_something = 1;
+        did_something = true;
         break;
       }
       /* simulates the default behaviour of waypoints */
@@ -382,7 +328,7 @@ main(int argc, char* argv[])
       cet_convert_strings(global_opts.charset, nullptr, nullptr);
       cet_convert_deinit();
 
-      did_something = 1;
+      did_something = true;
       break;
     case 'F':
       optarg = FETCH_OPTARG;
@@ -537,14 +483,14 @@ main(int argc, char* argv[])
      */
     case '^':
       disp_formats(opt_version);
-      exit(0);
+      return 0;
     case '%':
       disp_filters(opt_version);
-      exit(0);
+      return 0;
     case 'h':
     case '?':
       usage(prog_name,0);
-      exit(0);
+      return 0;
     case 'p':
       optarg = FETCH_OPTARG;
       inifile_done(global_opts.inifile);
@@ -590,7 +536,7 @@ main(int argc, char* argv[])
   if (qargs.size() > 2) {
     fatal("Extra arguments on command line\n");
   } else if ((!qargs.isEmpty()) && ivecs) {
-    did_something = 1;
+    did_something = true;
     /* simulates the default behaviour of waypoints */
     if (doing_nothing) {
       global_opts.masked_objective |= WPTDATAMASK;
@@ -625,7 +571,7 @@ main(int argc, char* argv[])
     }
   } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
-    exit(0);
+    return 0;
   }
   if (ovecs == nullptr) {
     /*
@@ -710,13 +656,97 @@ main(int argc, char* argv[])
     if (ovecs && ovecs->position_ops.wr_deinit) {
       ovecs->position_ops.wr_deinit();
     }
-    exit(0);
+    return 0;
   }
 
 
   if (!did_something) {
     fatal("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
   }
+
+  return 0;
+}
+
+int
+main(int argc, char* argv[])
+{
+#ifdef AFL_INPUT_FUZZING
+  AFL_INIT_ARGV();
+#endif
+  int rc = 0;
+  const char* prog_name = argv[0]; /* may not match QCoreApplication::arguments().at(0)! */
+
+// MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
+#if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
+#error This version of Qt is not supported.
+#endif
+
+#ifdef DEBUG_LOCALE
+  printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+#endif
+
+  // Create a QCoreApplication object to handle application initialization.
+  // In addition to being useful for argument decoding, the creation of a
+  // QCoreApplication object gets Qt initialized, especially locale related
+  // QTextCodec stuff.
+  // For example, this will get the QTextCodec::codecForLocale set
+  // correctly.
+  QCoreApplication app(argc, argv);
+
+  // The first invocation of QTextCodec::codecForLocale() or
+  // construction of QCoreApplication object
+  // may result in LC_ALL being set to the native environment
+  // as opposed to the initial default "C" locale.
+  // This was demonstrated with Qt5 on Mac OS X.
+#ifdef DEBUG_LOCALE
+  printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+#endif
+  // As recommended in QCoreApplication reset the locale to the default.
+  // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
+  // actually sets LC_ALL.
+  // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
+  if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
+#ifdef DEBUG_LOCALE
+    printf("Resetting LC_NUMERIC\n");
+#endif
+    setlocale(LC_NUMERIC,"C");
+#ifdef DEBUG_LOCALE
+    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+#endif
+  }
+  /* reset LC_TIME for strftime */
+  if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
+#ifdef DEBUG_LOCALE
+    printf("Resetting LC_TIME\n");
+#endif
+    setlocale(LC_TIME,"C");
+#ifdef DEBUG_LOCALE
+    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+#endif
+  }
+
+  (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
+
+  global_opts.objective = wptdata;
+  global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
+  global_opts.charset_name.clear();
+  global_opts.inifile = nullptr;
+
+  gpsbabel_now = time(nullptr);			/* gpsbabel startup-time */
+  gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but freezed to zero during testo */
+
+  if (gpsbabel_time != 0) {	/* within testo ? */
+    global_opts.inifile = inifile_init(QString(), MYNAME);
+  }
+
+  init_vecs();
+  init_filter_vecs();
+  cet_register();
+  session_init();
+  waypt_init();
+  route_init();
+
+  rc = run(prog_name);
 
   cet_deregister();
   waypt_flush_all();
@@ -726,11 +756,5 @@ main(int argc, char* argv[])
   exit_filter_vecs();
   inifile_done(global_opts.inifile);
 
-  exit(0);
-}
-
-void signal_handler(int sig)
-{
-  (void)sig;
-  tracking_status.request_terminate = 1;
+  exit(rc);
 }

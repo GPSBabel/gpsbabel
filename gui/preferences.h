@@ -24,18 +24,19 @@
 #include "babeldata.h"
 #include "format.h"
 
-class Preferences : public QDialog {
+class Preferences : public QDialog
+{
   Q_OBJECT
 
- public:
+public:
   Preferences(QWidget* parent, QList<Format>& formatList, BabelData& bd);
 
- private:
+private:
   QList<Format>& formatList_;
   Ui_Preferences ui_;
   BabelData& babelData_;
 
- private slots:
+private slots:
   void enableAllClicked();
   void disableAllClicked();
   void acceptClicked();

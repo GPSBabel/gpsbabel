@@ -22,19 +22,36 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_mainwinui.h"
-#include "format.h"
-#include "filterdata.h"
-#include "babeldata.h"
-#include "upgrade.h"
+#include <QtCore/QEvent>          // for QEvent
+#include <QtCore/QList>           // for QList
+#include <QtCore/QObject>         // for QObject (& Q_OBJECT, slots)
+#include <QtCore/QString>         // for QString
+#include <QtCore/QStringList>     // for QStringList
+#include <QtCore/QTranslator>     // for QTranslator
+#include <QtGui/QCloseEvent>      // for QCloseEvent
+#include <QtGui/QDragEnterEvent>  // for QDragEnterEvent
+#include <QtGui/QDropEvent>       // for QDropEvent
+#include <QtGui/QPixmap>          // for QPixmap
+#include <QtWidgets/QAction>      // for QAction
+#include <QtWidgets/QComboBox>    // for QComboBox
+#include <QtWidgets/QLabel>       // for QLabel
+#include <QtWidgets/QLineEdit>    // for QLineEdit
+#include <QtWidgets/QMainWindow>  // for QMainWindow
+#include <QtWidgets/QWidget>      // for QWidget
 
-#include <QTranslator>
+#include "babeldata.h"            // for BabelData
+#include "filterdata.h"           // for AllFiltersData
+#include "format.h"               // for Format
+#include "ui_mainwinui.h"         // for Ui_MainWindow
+#include "upgrade.h"              // for UpgradeCheck
 
-class MainWindow: public QMainWindow {
+
+class MainWindow: public QMainWindow
+{
   Q_OBJECT
 
 
-  public:
+public:
   MainWindow(QWidget* parent);
   ~MainWindow();
 
@@ -61,56 +78,56 @@ private:
   void switchTranslator(QTranslator&, const QString&);
   void createLanguageMenu();
   QString filterForFormat(int idx);
-  QString ensureExtensionPresent(const QString &nanme, int idx);
+  QString ensureExtensionPresent(const QString& nanme, int idx);
   QString findBabelVersion();
-  bool    filterForFormatIncludes(int idx, const QString &s);
-  int  formatIndexFromName(bool isFile, const QString &);
+  bool    filterForFormatIncludes(int idx, const QString& s);
+  int  formatIndexFromName(bool isFile, const QString&);
   QList<int>inputFileFormatIndices();
   QList<int>inputDeviceFormatIndices();
   QList<int>outputFileFormatIndices();
   QList<int>outputDeviceFormatIndices();
-  int  currentComboFormatIndex(QComboBox *comboBox);
+  int  currentComboFormatIndex(QComboBox* comboBox);
   bool isOkToGo();
-  bool runGpsbabel(const QStringList &args, QString &errorString, QString &outputString);
+  bool runGpsbabel(const QStringList& args, QString& errorString, QString& outputString);
   void crossCheckInOutFormats();
-  void setIndicatorLights(QLabel *label, const QString &type, int code) ;
-  void displayOptionsText(QLineEdit *, QComboBox *, bool);
+  void setIndicatorLights(QLabel* label, const QString& type, int code) ;
+  void displayOptionsText(QLineEdit*, QComboBox*, bool);
 
   void saveSettings();
   void restoreSettings();
-  void setComboToFormat(QComboBox *comboBox, const QString &, bool isFile);
-  void setComboToDevice(QComboBox *comboBox, const QString &);
+  void setComboToFormat(QComboBox* comboBox, const QString&, bool isFile);
+  void setComboToDevice(QComboBox* comboBox, const QString&);
 
   void loadDeviceNameCombos();
-  void loadInputDeviceNameCombo(const QString &format);
-  void loadOutputDeviceNameCombo(const QString &format);
-  bool formatSupportsUSB(const QString &format);
-  bool formatSupportsSerial(const QString &format);
+  void loadInputDeviceNameCombo(const QString& format);
+  void loadOutputDeviceNameCombo(const QString& format);
+  bool formatSupportsUSB(const QString& format);
+  bool formatSupportsSerial(const QString& format);
   void loadCharSetCombos();
   void checkCharSetCombos();
-  QString charSetFromCombo(QComboBox *);
-  void setComboToCharSet(QComboBox *, const QString &);
+  QString charSetFromCombo(QComboBox*);
+  void setComboToCharSet(QComboBox*, const QString&);
   void updateFilterStatus();
   void setWidgetValues();
   void getWidgetValues();
-  UpgradeCheck *upgrade;
+  UpgradeCheck* upgrade;
   bool allowBetaUpgrades();
   void osLoadDeviceNameCombos(QComboBox*);
-  QString getFormatNameForExtension(QString ext);
+  QString getFormatNameForExtension(const QString& ext);
 
 protected:
   void closeEvent(QCloseEvent*);
   void changeEvent(QEvent*);
 
- private slots:
+private slots:
   void aboutActionX();
   void applyActionX();
   void browseInputFile();
   void browseOutputFile();
   void closeActionX();
   void donateActionX();
-  void dragEnterEvent(QDragEnterEvent *);
-  void dropEvent(QDropEvent *event);
+  void dragEnterEvent(QDragEnterEvent*);
+  void dropEvent(QDropEvent* event);
   void filtersClicked();
   void helpActionX();
   void inputDeviceOptBtnClicked();

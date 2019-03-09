@@ -2,7 +2,7 @@
 rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
 gpsbabel -i gpx -f ${REFERENCE}/geocaching.gpx -o pcx -F ${TMPDIR}/mm.pcx
 gpsbabel -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
-compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+compare ${REFERENCE}/gu.wpt ${TMPDIR}/pcx.gps
 gpsbabel -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
 gpsbabel -t -i pcx -f ${REFERENCE}/track/pcx.trk -o pcx -F ${TMPDIR}/pcx2.trk
 compare ${TMPDIR}/pcx.trk ${TMPDIR}/pcx2.trk 

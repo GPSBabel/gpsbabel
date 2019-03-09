@@ -24,21 +24,26 @@
 
 #include "ui_donate.h"
 
-class Donate: public QDialog {
- Q_OBJECT
+class Donate: public QDialog
+{
+  Q_OBJECT
 
- public:
-  Donate(QWidget *parent);
-  void showNever(bool f)  { 
+public:
+  Donate(QWidget* parent);
+  void showNever(bool f)
+  {
     ui_.neverAgain->setVisible(f);
     ui_.textLine2->setVisible(f);
   }
-  bool neverAgain() { return ui_.neverAgain->isChecked(); }
+  bool neverAgain()
+  {
+    return ui_.neverAgain->isChecked();
+  }
 
- private:
+private:
   Ui_Donate  ui_;
 
- private slots:
+private slots:
   void contributeClicked();
 
 };

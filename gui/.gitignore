@@ -1,7 +1,8 @@
 /GPSBabel[0-9]*.[0-9]*.[0-9]*/
 /GPSBabel[0-9]*.[0-9]*.[0-9]*.tar.bz2
+/GPSBabelFE/
+/GPSBabelFE.app/
 /Makefile
-/makelinuxdist.sh
 /objects/
 /tmp/
 /release/

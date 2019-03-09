@@ -2,21 +2,21 @@
 # Skytraq logger tests
 #
 rm -f ${TMPDIR}/skytraq.*
-gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
+gpsbabel -t -w -i skytraq-bin,gps-week-rollover=1 -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
 compare ${REFERENCE}/skytraq.gpx ${TMPDIR}/skytraq.gpx
 
 #
 # The original was recorded in Germany, thus all coordinates are positive.
 # This one is in North America and triggered a sign extension bug on 64-bit
 # systems prior to revision 4176.
-gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-2.bin -o gpx -F ${TMPDIR}/skytraq-2.gpx
+gpsbabel -t -w -i skytraq-bin,gps-week-rollover=1 -f ${REFERENCE}/skytraq-2.bin -o gpx -F ${TMPDIR}/skytraq-2.gpx
 compare ${REFERENCE}/skytraq-2.gpx ${TMPDIR}/skytraq-2.gpx
 
-gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-realdata.bin -o gpx -F ${TMPDIR}/skytraq-realdata.gpx
+gpsbabel -t -w -i skytraq-bin,gps-week-rollover=1 -f ${REFERENCE}/skytraq-realdata.bin -o gpx -F ${TMPDIR}/skytraq-realdata.gpx
 compare ${REFERENCE}/skytraq-realdata.gpx ${TMPDIR}/skytraq-realdata.gpx
 
-gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-artificial.bin -o gpx -F ${TMPDIR}/skytraq-artificial.gpx
+gpsbabel -t -w -i skytraq-bin,gps-week-rollover=1 -f ${REFERENCE}/skytraq-artificial.bin -o gpx -F ${TMPDIR}/skytraq-artificial.gpx
 compare ${REFERENCE}/skytraq-artificial.gpx ${TMPDIR}/skytraq-artificial.gpx
 
-gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-miniHomer2_8.bin -o gpx -F ${TMPDIR}/skytraq-miniHomer2_8.gpx
+gpsbabel -t -w -i skytraq-bin,gps-week-rollover=1 -f ${REFERENCE}/skytraq-miniHomer2_8.bin -o gpx -F ${TMPDIR}/skytraq-miniHomer2_8.gpx
 compare ${REFERENCE}/skytraq-miniHomer2_8.gpx ${TMPDIR}/skytraq-miniHomer2_8.gpx

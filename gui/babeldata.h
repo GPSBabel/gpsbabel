@@ -29,9 +29,10 @@
 #include "setting.h"
 
 
-class BabelData {
+class BabelData
+{
 public:
-  BabelData(): 
+  BabelData():
     inputType_(fileType_),
     inputFileFormat_(QString()),
     inputDeviceFormat_(QString()),
@@ -71,19 +72,22 @@ public:
     donateSplashed_(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
   {
   };
-  
-  void saveSettings(QSettings &st) {
+
+  void saveSettings(QSettings& st)
+  {
     SettingGroup sg;
     makeSettingGroup(sg);
     sg.saveSettings(st);
   }
-  void restoreSettings(QSettings &st) {
+  void restoreSettings(QSettings& st)
+  {
     SettingGroup sg;
     makeSettingGroup(sg);
     sg.restoreSettings(st);
   }
 
-  void makeSettingGroup(SettingGroup &sg) {
+  void makeSettingGroup(SettingGroup& sg)
+  {
     sg.addVarSetting(new IntSetting("app.inputType", inputType_));
     sg.addVarSetting(new StringSetting("app.inputFileFormat", inputFileFormat_));
     sg.addVarSetting(new StringSetting("app.inputDeviceFormat", inputDeviceFormat_));
@@ -142,7 +146,7 @@ public:
   bool xlateWayPts_;
   bool xlateRoutes_;
   bool xlateTracks_;
-  
+
   int outputType_;
   QString outputFileFormat_;
   QString outputDeviceFormat_;

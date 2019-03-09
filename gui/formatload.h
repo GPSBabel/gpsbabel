@@ -25,19 +25,23 @@
 #ifndef FORMATLOAD_H
 #define FORMATLOAD_H
 
-#include "format.h"
+#include <QtCore/QList>        // for QList
+#include <QtCore/QStringList>  // for QStringList
 
-class FormatLoad {
- public:
+#include "format.h"            // for Format
+
+class FormatLoad
+{
+public:
   FormatLoad() : currentLine_(0) {};
   ~FormatLoad() {};
-  
-  bool getFormats(QList<Format> &formatList);
- private:
+
+  bool getFormats(QList<Format>& formatList);
+private:
   QStringList lines_;
   int currentLine_;
   bool skipToValidLine();
-  bool processFormat(Format &format);
+  bool processFormat(Format& format);
 };
 
 #endif

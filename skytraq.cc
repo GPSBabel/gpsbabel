@@ -2,7 +2,7 @@
 
     Serial download of track data from GPS loggers with Skytraq chipset.
 
-    Copyright (C) 2008-2012  Mathias Adam, m.adam (at) adamis.de
+    Copyright (C) 2008-2019  Mathias Adam, m.adam (at) adamis.de
 
     2008         J.C Haessig, jean-christophe.haessig (at) dianosis.org
     2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
@@ -70,6 +70,7 @@ static char* opt_no_output = nullptr;		/* disable output? (0/1) */
 static char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
 static char* opt_configure_logging = nullptr;
 static char* opt_gps_utc_offset = nullptr;
+static char* opt_gps_week_rollover = nullptr;
 
 static
 arglist_t skytraq_args[] = {
@@ -114,8 +115,12 @@ arglist_t skytraq_args[] = {
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
+  {
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
+    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR,
 };
@@ -131,8 +136,12 @@ arglist_t skytraq_fargs[] = {
     "-1", ARGTYPE_INT, "-1", "65535", nullptr
   },
   {
-    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
     "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
+  {
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
+    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -174,7 +183,7 @@ rd_char(int* errors)
 }
 
 static int
-rd_buf(const uint8_t* buf, int len)
+rd_buf(uint8_t* buf, int len)
 {
   char dump[16*3+16+2];
 
@@ -216,14 +225,25 @@ rd_buf(const uint8_t* buf, int len)
   return res_OK;
 }
 
-static unsigned int
+static int
 rd_word()
 {
   int errors = 5;		/* allow this many errors */
+  int c;
   uint8_t buffer[2];
 
-  buffer[0] = rd_char(&errors);
-  buffer[1] = rd_char(&errors);
+  c = rd_char(&errors);
+  if (c < 0) {
+    db(1, MYNAME ": rd_word(): Got error: %d\n", c);
+    return -1;
+  }
+  buffer[0] = c;
+  c = rd_char(&errors);
+  if (c < 0) {
+    db(1, MYNAME ": rd_word(): Got error: %d\n", c);
+    return -1;
+  }
+  buffer[1] = c;
   /*	if (rd_buf(buffer, 2) != res_OK) {
   		db(1, MYNAME ": rd_word(): Read error\n");
   		return res_ERROR;
@@ -269,7 +289,7 @@ skytraq_calc_checksum(const unsigned char* buf, int len)
 }
 
 static int
-skytraq_rd_msg(const void* payload, unsigned int len)
+skytraq_rd_msg(void* payload, unsigned int len)
 {
   int errors = 5;		// Allow this many receiver errors silently.
   unsigned int c, i, state;
@@ -290,19 +310,20 @@ skytraq_rd_msg(const void* payload, unsigned int len)
     return res_ERROR;
   }
 
-  if ((rcv_len = rd_word()) < len) {
+  if ((rcv_len = rd_word()) < (signed int)len) {
     if (rcv_len >= 0) {	/* negative values indicate receive errors */
-      db(1, MYNAME ": Received message too short (got %i bytes, expected %i)\n",
+      db(1, MYNAME ": Received message too short (got %i bytes, expected %u)\n",
          rcv_len, len);
       return res_PROTOCOL_ERR;
     }
     return res_ERROR;
   }
+  /* at this point, we have rcv_len >= len >= 0 */
 
-  db(2, "Receiving message with %i bytes of payload (expected >=%i)\n", rcv_len, len);
-  rd_buf((const unsigned char*) payload, MIN(rcv_len, len));
+  db(2, "Receiving message with %i bytes of payload (expected >=%u)\n", rcv_len, len);
+  rd_buf((uint8_t*) payload, len);
 
-  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN(rcv_len, len));
+  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, len);
   for (i = 0; i < rcv_len-len; i++) {
     c = rd_char(&errors);
     calc_cs ^= c;
@@ -317,7 +338,6 @@ skytraq_rd_msg(const void* payload, unsigned int len)
     fatal(MYNAME ": Didn't get message end tag (CR/LF)\n");
   }
 
-//	return MIN(rcv_len, len);
   return res_OK;
 }
 
@@ -376,7 +396,7 @@ skytraq_expect_ack(uint8_t id)
 }
 
 static int
-skytraq_expect_msg(uint8_t id, const uint8_t* payload, int len)
+skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     int rc = skytraq_rd_msg(payload, len);
@@ -568,12 +588,12 @@ static time_t
 gpstime_to_timet(int week, int sec)
 {
   /* Notes:
-   *   * assumes we're between the 1st and 2nd week rollover
-   *     (i.e. between 22 Aug 1999 and 7 April 2019), so this
-   *     should be taken care of before the next rollover...
+   *   * week rollover period can be specified using option
+   *     gps-week-rollover, otherwise input timestamps are
+   *     assumed to be within previous 1024 weeks from today
    *   * list of leap seconds taken from
    *     <http://maia.usno.navy.mil/ser7/tai-utc.dat>
-   *     as of 2012-10-12. Please update when necessary.
+   *     as of 2019-01-19. Please update when necessary.
    *     Announcement of leap seconds:
    *     <http://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat>
    *   * leap seconds of 1999 JAN  1 and before are not reflected
@@ -582,7 +602,13 @@ gpstime_to_timet(int week, int sec)
    *     (i.e. sec >= 7*24*3600 = 604800 is allowed)
    */
   time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
-  gps_timet += (week+1024)*7*SECONDS_PER_DAY + sec;
+
+  int week_rollover = atoi(opt_gps_week_rollover);
+  if (week_rollover < 0) {
+    int current_week = (time(nullptr)-gps_timet)/(7*SECONDS_PER_DAY);
+    week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
+  }
+  gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
 
   int override = atoi(opt_gps_utc_offset);
   if (override) {
@@ -593,19 +619,19 @@ gpstime_to_timet(int week, int sec)
   /* leap second compensation: */
   gps_timet -= 13;  /* diff GPS-UTC=13s (valid from Jan 01 1999 on) */
   if (gps_timet >= 1136073600) {    /* Jan 01 2006 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 14s      */
+    gps_timet--;                    /*   GPS-UTC = 14s      */
   }
   if (gps_timet >= 1230768000) {    /* Jan 01 2009 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 15s      */
+    gps_timet--;                    /*   GPS-UTC = 15s      */
   }
   if (gps_timet >= 1341100800) {    /* Jul 01 2012 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 16s      */
+    gps_timet--;                    /*   GPS-UTC = 16s      */
   }
   if (gps_timet >= 1435708800) {    /* Jul 01 2015 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 17s      */
+    gps_timet--;                    /*   GPS-UTC = 17s      */
   }
   if (gps_timet >= 1483228800) {    /* Jan 01 2017 0:00 UTC */
-    gps_timet--;  /*   GPS-UTC = 18s      */
+    gps_timet--;                    /*   GPS-UTC = 18s      */
   }
   // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
   // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec

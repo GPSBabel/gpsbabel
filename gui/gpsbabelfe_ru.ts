@@ -791,7 +791,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwindow.cc" line="872"/>
-        <source>Process exited unsucessfully with code %1</source>
+        <source>Process exited unsuccessfully with code %1</source>
         <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>

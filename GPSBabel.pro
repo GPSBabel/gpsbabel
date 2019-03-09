@@ -1,6 +1,6 @@
 # Enforce minimum Qt version.
 # versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
-MIN_QT_VERSION = 5.7 # major[.minor[.patch]]
+MIN_QT_VERSION = 5.9 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
 MIN_QT_VERSION_MINOR = $$member(MIN_QT_VERSION_COMPONENTS, 1)
@@ -15,7 +15,11 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 
 QT -= gui
 
-TARGET = GPSBabel
+linux: {
+  TARGET = gpsbabel
+} else {
+  TARGET = GPSBabel
+}
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14

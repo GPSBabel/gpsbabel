@@ -31,19 +31,19 @@
 //------------------------------------------------------------------------
 class StandardItem: public QStandardItem
 {
- public:
-  StandardItem(const QString &text): QStandardItem(text)
-    {
-      this->setEditable(false);
-    }
+public:
+  StandardItem(const QString& text): QStandardItem(text)
+  {
+    this->setEditable(false);
+  }
 };
 
 //------------------------------------------------------------------------
 class TreeAction: public QAction
 {
 public:
-  TreeAction(const QString &text,
-	     QObject *obj, const char *member,  QObject *parent): QAction(text, parent)
+  TreeAction(const QString& text,
+             QObject* obj, const char* member,  QObject* parent): QAction(text, parent)
   {
     connect(this, SIGNAL(triggered()), obj, member);
   }
@@ -69,56 +69,61 @@ QString GMapDialog::formatLength(double l)
     fpsPrecision = 3;
   }
   return QString(tr("Length: %1 %2\n  %3 %4")
-		 .arg(metricLength, 0, 'f', metricPrecision)
-		 .arg(metricUnit)
-		 .arg(fpsLength, 0, 'f', fpsPrecision)
-		 .arg(fpsUnit));
+                 .arg(metricLength, 0, 'f', metricPrecision)
+                 .arg(metricUnit)
+                 .arg(fpsLength, 0, 'f', fpsPrecision)
+                 .arg(fpsUnit));
 
 }
 //------------------------------------------------------------------------
-void GMapDialog::appendWaypointInfo(QStandardItem *it, const GpxWaypoint &wpt)
+void GMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
 {
   it->appendRow(new StandardItem(tr("Lat: %1").arg(wpt.getLocation().lat(), 0, 'f', 7)));
   it->appendRow(new StandardItem(tr("Lng: %1").arg(wpt.getLocation().lng(), 0, 'f', 7)));
-  if (wpt.getDescription() != QString())
+  if (wpt.getDescription() != QString()) {
     it->appendRow(new StandardItem(tr("Desc: %1").arg(wpt.getDescription())));
-  if (wpt.getComment() != QString() && wpt.getComment() != wpt.getDescription())
+  }
+  if (wpt.getComment() != QString() && wpt.getComment() != wpt.getDescription()) {
     it->appendRow(new StandardItem(tr("Cmt: %1").arg(wpt.getComment())));
-  if (wpt.getElevation() > -50000)
+  }
+  if (wpt.getElevation() > -50000) {
     it->appendRow(new StandardItem(tr("Ele: %1").arg(wpt.getElevation())));
+  }
 
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::appendTrackInfo(QStandardItem *it, const GpxTrack &trk)
+void GMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
 {
   QDateTime startTime, stopTime;
   bool first = true;
   int count = 0;
-  foreach (const GpxTrackSegment &seg, trk.getTrackSegments()) {
-    foreach (const GpxTrackPoint &pt, seg.getTrackPoints()) {
+  foreach (const GpxTrackSegment& seg, trk.getTrackSegments()) {
+    foreach (const GpxTrackPoint& pt, seg.getTrackPoints()) {
       count++;
       QDateTime t = pt.getDateTime();
-      if (!t.isValid())
-	continue;
-      if (first) {
-	startTime = t;
-	stopTime = t;
-	first = false;
+      if (!t.isValid()) {
+        continue;
       }
-      else {
-	if (t < startTime)
-	  startTime = t;
-	if (t > stopTime)
-	  stopTime = t;
+      if (first) {
+        startTime = t;
+        stopTime = t;
+        first = false;
+      } else {
+        if (t < startTime) {
+          startTime = t;
+        }
+        if (t > stopTime) {
+          stopTime = t;
+        }
       }
     }
   }
   if (startTime.isValid()) {
     it->appendRow(new StandardItem(tr("Start: %1")
-				    .arg(startTime.toString("yyyy-MMM-dd HH:mm:ss"))));
+                                   .arg(startTime.toString("yyyy-MMM-dd HH:mm:ss"))));
     it->appendRow(new StandardItem(tr("Stop: %1")
-				    .arg(stopTime.toString("yyyy-MMM-dd HH:mm:ss"))));
+                                   .arg(stopTime.toString("yyyy-MMM-dd HH:mm:ss"))));
   }
   it->appendRow(new StandardItem(tr("Points: %1").arg(count)));
 
@@ -127,20 +132,20 @@ void GMapDialog::appendTrackInfo(QStandardItem *it, const GpxTrack &trk)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::appendRouteInfo(QStandardItem *it, const GpxRoute &rte)
+void GMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
 {
   it->appendRow(new StandardItem(formatLength(rte.length())));
 }
 
 //------------------------------------------------------------------------
-GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEdit *te): QDialog(parent)
+GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEdit* te): QDialog(parent)
 {
   ui_.setupUi(this);
   this->setWindowTitle(QString(appName) + " " + QString("Google Maps"));
   gpx_.read(gpxFileName);
 
   mapWidget_ = new Map(this, gpx_, te);
-  QHBoxLayout *lay = new QHBoxLayout(ui_.frame);
+  QHBoxLayout* lay = new QHBoxLayout(ui_.frame);
   lay->setContentsMargins(0, 0, 0, 0);
   lay->addWidget(mapWidget_);
 
@@ -152,12 +157,12 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   wptItem_->setCheckState(Qt::Checked);
   model_->appendRow(wptItem_);
   for (int i=0; i<gpx_.getWaypoints().size(); i++) {
-    GpxWaypoint &wpt = gpx_.getWaypoints()[i];
-    QStandardItem *it = new StandardItem(wpt.getName());
+    GpxWaypoint& wpt = gpx_.getWaypoints()[i];
+    QStandardItem* it = new StandardItem(wpt.getName());
     wptItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void *)&wpt));
+    it->setData(qVariantFromValue((void*)&wpt));
     appendWaypointInfo(it, wpt);
     wptList_ << it;
   }
@@ -167,12 +172,12 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   trkItem_->setCheckState(Qt::Checked);
   model_->appendRow(trkItem_);
   for (int i=0; i<gpx_.getTracks().size(); i++) {
-    GpxTrack &trk = gpx_.getTracks()[i];
-    QStandardItem *it = new StandardItem(trk.getName());
+    GpxTrack& trk = gpx_.getTracks()[i];
+    QStandardItem* it = new StandardItem(trk.getName());
     trkItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void *)&trk));
+    it->setData(qVariantFromValue((void*)&trk));
     appendTrackInfo(it, trk);
     trkList_ << it;
   }
@@ -182,12 +187,12 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   rteItem_->setCheckState(Qt::Checked);
   model_->appendRow(rteItem_);
   for (int i=0; i<gpx_.getRoutes().size(); i++) {
-    GpxRoute &rte = gpx_.getRoutes()[i];
-    QStandardItem *it = new StandardItem(rte.getName());
+    GpxRoute& rte = gpx_.getRoutes()[i];
+    QStandardItem* it = new StandardItem(rte.getName());
     rteItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void *)&rte));
+    it->setData(qVariantFromValue((void*)&rte));
     appendRouteInfo(it, rte);
     rteList_ << it;
   }
@@ -195,19 +200,19 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   ui_.treeView->header()->hide();
   ui_.treeView->setModel(model_);
   ui_.treeView->setExpandsOnDoubleClick(false);
-  connect(model_, SIGNAL(itemChanged(QStandardItem *)),
-	  this,  SLOT(itemChangedX(QStandardItem *)));
+  connect(model_, SIGNAL(itemChanged(QStandardItem*)),
+          this,  SLOT(itemChangedX(QStandardItem*)));
   connect(mapWidget_, SIGNAL(waypointClicked(int)), this, SLOT(waypointClickedX(int)));
   connect(mapWidget_, SIGNAL(routeClicked(int)), this, SLOT(routeClickedX(int)));
   connect(mapWidget_, SIGNAL(trackClicked(int)), this, SLOT(trackClickedX(int)));
-  connect(ui_.treeView, SIGNAL(doubleClicked(const QModelIndex &)),
-	  this, SLOT(treeDoubleClicked(const QModelIndex&)));
-  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged (const QItemSelection &,  const QItemSelection &)),
-	  this, SLOT(selectionChangedX(const QItemSelection &,  const QItemSelection &)));
-						
+  connect(ui_.treeView, SIGNAL(doubleClicked(QModelIndex)),
+          this, SLOT(treeDoubleClicked(QModelIndex)));
+  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+          this, SLOT(selectionChangedX(QItemSelection,QItemSelection)));
+
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(ui_.treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
-	  this, SLOT(showContextMenu(const QPoint &)));
+  connect(ui_.treeView, SIGNAL(customContextMenuRequested(QPoint)),
+          this, SLOT(showContextMenu(QPoint)));
 
   connect(ui_.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
 
@@ -215,88 +220,94 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
 }
 
 //-------------------------------------------------------------------------
-void GMapDialog::itemChangedX(QStandardItem *it)
+void GMapDialog::itemChangedX(QStandardItem* it)
 {
   bool show = (it->checkState() == Qt::Checked);
   if (it == trkItem_) {
-    if (show)
+    if (show) {
       mapWidget_->showTracks(gpx_.getTracks());
-    else
+    } else {
       mapWidget_->hideAllTracks();
+    }
   }
 
   else if (it == wptItem_) {
-    if (show)
+    if (show) {
       mapWidget_->showWaypoints(gpx_.getWaypoints());
-    else
+    } else {
       mapWidget_->hideAllWaypoints();
+    }
   }
 
   else if (it == rteItem_) {
-    if (show)
+    if (show) {
       mapWidget_->showRoutes(gpx_.getRoutes());
-    else
+    } else {
       mapWidget_->hideAllRoutes();
+    }
   }
 
   else {
     // Individual items, find the right one.
-    GpxItem *git = static_cast<GpxItem *>(it->data().value<void *>());
-    if (git != 0) {
+    GpxItem* git = static_cast<GpxItem*>(it->data().value<void*>());
+    if (git != nullptr) {
       git->setVisible(show);
       for (int i=0; i<gpx_.getWaypoints().size(); i++) {
-	if (&gpx_.getWaypoints()[i] == git) {
-	  mapWidget_->setWaypointVisibility(i, show);
-	}
+        if (&gpx_.getWaypoints()[i] == git) {
+          mapWidget_->setWaypointVisibility(i, show);
+        }
       }
       for (int i=0; i<gpx_.getTracks().size(); i++) {
-	if (&gpx_.getTracks()[i] == git) {
-	  mapWidget_->setTrackVisibility(i, show);
-	}
+        if (&gpx_.getTracks()[i] == git) {
+          mapWidget_->setTrackVisibility(i, show);
+        }
       }
       for (int i=0; i<gpx_.getRoutes().size(); i++) {
-	if (&gpx_.getRoutes()[i] == git) {
-	  mapWidget_->setRouteVisibility(i, show);
-	}
+        if (&gpx_.getRoutes()[i] == git) {
+          mapWidget_->setRouteVisibility(i, show);
+        }
       }
     }
   }
 }
 
 //-------------------------------------------------------------------------
-int GMapDialog::waypointIndex(QStandardItem *it)
+int GMapDialog::waypointIndex(QStandardItem* it)
 {
-  for (int j=0; j<wptList_.size(); j++){
-    if (it == wptList_[j])
+  for (int j=0; j<wptList_.size(); j++) {
+    if (it == wptList_[j]) {
       return j;
+    }
   }
   return -1;
 }
 
 //-------------------------------------------------------------------------
-int GMapDialog::trackIndex(QStandardItem *it)
+int GMapDialog::trackIndex(QStandardItem* it)
 {
-  for (int j=0; j<trkList_.size(); j++){
-    if (it == trkList_[j])
+  for (int j=0; j<trkList_.size(); j++) {
+    if (it == trkList_[j]) {
       return j;
+    }
   }
   return -1;
 }
 
 //-------------------------------------------------------------------------
-int GMapDialog::routeIndex(QStandardItem *it)
+int GMapDialog::routeIndex(QStandardItem* it)
 {
-  for (int j=0; j<rteList_.size(); j++){
-    if (it == rteList_[j])
+  for (int j=0; j<rteList_.size(); j++) {
+    if (it == rteList_[j]) {
       return j;
+    }
   }
   return -1;
 }
 
 //-------------------------------------------------------------------------
-void GMapDialog::treeDoubleClicked(const QModelIndex &idx)
+void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
 {
-  QStandardItem *it = model_->itemFromIndex(idx);
+  QStandardItem* it = model_->itemFromIndex(idx);
   int i = waypointIndex(it);
   if (i >= 0) {
     it->setCheckState(Qt::Checked);
@@ -327,7 +338,7 @@ void GMapDialog::treeDoubleClicked(const QModelIndex &idx)
 void GMapDialog::waypointClickedX(int i)
 {
   if (i>=0 && i < wptList_.size()) {
-    QStandardItem *it = wptList_[i];
+    QStandardItem* it = wptList_[i];
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
     ui_.treeView->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
@@ -337,7 +348,7 @@ void GMapDialog::waypointClickedX(int i)
 void GMapDialog::trackClickedX(int i)
 {
   if (i>=0 && i <trkList_.size()) {
-    QStandardItem *it = trkList_[i];
+    QStandardItem* it = trkList_[i];
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
     ui_.treeView->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
@@ -348,7 +359,7 @@ void GMapDialog::trackClickedX(int i)
 void GMapDialog::routeClickedX(int i)
 {
   if (i>=0 && i <rteList_.size()) {
-    QStandardItem *it = rteList_[i];
+    QStandardItem* it = rteList_[i];
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
     ui_.treeView->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
@@ -356,25 +367,27 @@ void GMapDialog::routeClickedX(int i)
 }
 
 //-------------------------------------------------------------------------
-void GMapDialog::selectionChangedX (const QItemSelection &sel,  const QItemSelection &desel)
+void GMapDialog::selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel)
 {
   int k=0;
-  foreach (QStandardItem*w, wptList_) {
+  foreach (QStandardItem* w, wptList_) {
     QModelIndex idx = model_->indexFromItem(w);
-    if (desel.contains(idx))
+    if (desel.contains(idx)) {
       mapWidget_->setWaypointColorBlue(k);
-    if (sel.contains(idx))
+    }
+    if (sel.contains(idx)) {
       mapWidget_->setWaypointColorRed(k);
+    }
     k++;
   }
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::expandCollapseAll(const QList<QStandardItem *> &li,
-				   QStandardItem *top, bool exp)
+void GMapDialog::expandCollapseAll(const QList<QStandardItem*>& li,
+                                   QStandardItem* top, bool exp)
 {
   ui_.treeView->setExpanded(model_->indexFromItem(top), exp);
-  foreach (QStandardItem*it, li) {
+  foreach (QStandardItem* it, li) {
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->setExpanded(idx, exp);
   }
@@ -413,27 +426,29 @@ void GMapDialog::collapseAllRoutes()
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::checkUncheckAll(const QList<QStandardItem *> &li,
-				   QStandardItem *top, bool ck)
+void GMapDialog::checkUncheckAll(const QList<QStandardItem*>& li,
+                                 QStandardItem* top, bool ck)
 {
   top->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
-  foreach (QStandardItem*it, li) {
+  foreach (QStandardItem* it, li) {
     it->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
   }
 }
 //------------------------------------------------------------------------
 void GMapDialog::showAllWaypoints()
 {
-  foreach (GpxWaypoint wpt, gpx_.getWaypoints())
+  foreach (GpxWaypoint wpt, gpx_.getWaypoints()) {
     wpt.setVisible(true);
+  }
   checkUncheckAll(wptList_, wptItem_, true);
   mapWidget_->showWaypoints(gpx_.getWaypoints());
 }
 //------------------------------------------------------------------------
 void GMapDialog::showAllTracks()
 {
-  foreach (GpxTrack trk, gpx_.getTracks())
+  foreach (GpxTrack trk, gpx_.getTracks()) {
     trk.setVisible(true);
+  }
   checkUncheckAll(trkList_, trkItem_, true);
   mapWidget_->showTracks(gpx_.getTracks());
 }
@@ -441,8 +456,9 @@ void GMapDialog::showAllTracks()
 //------------------------------------------------------------------------
 void GMapDialog::showAllRoutes()
 {
-  foreach (GpxRoute rte, gpx_.getRoutes())
+  foreach (GpxRoute rte, gpx_.getRoutes()) {
     rte.setVisible(true);
+  }
   checkUncheckAll(rteList_, rteItem_, true);
   mapWidget_->showRoutes(gpx_.getRoutes());
 }
@@ -450,16 +466,18 @@ void GMapDialog::showAllRoutes()
 //------------------------------------------------------------------------
 void GMapDialog::hideAllWaypoints()
 {
-  foreach (GpxWaypoint wpt, gpx_.getWaypoints())
+  foreach (GpxWaypoint wpt, gpx_.getWaypoints()) {
     wpt.setVisible(false);
+  }
   checkUncheckAll(wptList_, wptItem_, false);
   mapWidget_->showWaypoints(gpx_.getWaypoints());
 }
 //------------------------------------------------------------------------
 void GMapDialog::hideAllTracks()
 {
-  foreach (GpxTrack trk, gpx_.getTracks())
+  foreach (GpxTrack trk, gpx_.getTracks()) {
     trk.setVisible(false);
+  }
   checkUncheckAll(trkList_, trkItem_, false);
   mapWidget_->showTracks(gpx_.getTracks());
 
@@ -467,8 +485,9 @@ void GMapDialog::hideAllTracks()
 //------------------------------------------------------------------------
 void GMapDialog::hideAllRoutes()
 {
-  foreach (GpxRoute rte, gpx_.getRoutes())
+  foreach (GpxRoute rte, gpx_.getRoutes()) {
     rte.setVisible(false);
+  }
   checkUncheckAll(rteList_, rteItem_, false);
   mapWidget_->showRoutes(gpx_.getRoutes());
 
@@ -477,9 +496,9 @@ void GMapDialog::hideAllRoutes()
 //------------------------------------------------------------------------
 void GMapDialog::showOnlyThisWaypoint()
 {
-  QList <GpxWaypoint> &tlist = gpx_.getWaypoints();
+  QList <GpxWaypoint>& tlist = gpx_.getWaypoints();
   for (int i=0; i<tlist.size(); i++) {
-    tlist[i].setVisible(i == menuIndex_? true: false);
+    tlist[i].setVisible(i == menuIndex_);
     trkList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   wptItem_->setCheckState(Qt::Checked);
@@ -488,9 +507,9 @@ void GMapDialog::showOnlyThisWaypoint()
 //------------------------------------------------------------------------
 void GMapDialog::showOnlyThisTrack()
 {
-  QList <GpxTrack> &tlist = gpx_.getTracks();
+  QList <GpxTrack>& tlist = gpx_.getTracks();
   for (int i=0; i<tlist.size(); i++) {
-    tlist[i].setVisible(i == menuIndex_? true: false);
+    tlist[i].setVisible(i == menuIndex_);
     trkList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   trkItem_->setCheckState(Qt::Checked);
@@ -500,9 +519,9 @@ void GMapDialog::showOnlyThisTrack()
 //------------------------------------------------------------------------
 void GMapDialog::showOnlyThisRoute()
 {
-  QList <GpxRoute> &rlist = gpx_.getRoutes();
+  QList <GpxRoute>& rlist = gpx_.getRoutes();
   for (int i=0; i<rlist.size(); i++) {
-    rlist[i].setVisible(i == menuIndex_? true: false);
+    rlist[i].setVisible(i == menuIndex_);
     rteList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   rteItem_->setCheckState(Qt::Checked);
@@ -511,10 +530,10 @@ void GMapDialog::showOnlyThisRoute()
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::showContextMenu(const QPoint &pt)
+void GMapDialog::showContextMenu(const QPoint& pt)
 {
   QModelIndex idx = ui_.treeView->indexAt(pt);
-  QStandardItem *it = model_->itemFromIndex(idx);
+  QStandardItem* it = model_->itemFromIndex(idx);
   int j;
   if (model_->indexFromItem(wptItem_) == idx) {
     QMenu menu(this);
@@ -523,45 +542,40 @@ void GMapDialog::showContextMenu(const QPoint &pt)
     menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllWaypoints()),&menu));
     menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllWaypoints()),&menu));
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else if (model_->indexFromItem(rteItem_) == idx) {
+  } else if (model_->indexFromItem(rteItem_) == idx) {
     QMenu menu(this);
     menu.addAction(new TreeAction(tr("Show All Routes"), this, SLOT(showAllRoutes()), &menu));
     menu.addAction(new TreeAction(tr("Hide All Routes"), this, SLOT(hideAllRoutes()),&menu));
     menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllRoutes()),&menu));
     menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllRoutes()),&menu));
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else if (model_->indexFromItem(trkItem_) == idx) {
+  } else if (model_->indexFromItem(trkItem_) == idx) {
     QMenu menu(this);
     menu.addAction(new TreeAction(tr("Show All Tracks"), this, SLOT(showAllTracks()), &menu));
     menu.addAction(new TreeAction(tr("Hide All Tracks"), this, SLOT(hideAllTracks()),&menu));
     menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllTracks()),&menu));
     menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllTracks()),&menu));
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else if ((j = waypointIndex(it)) >=0) {
+  } else if ((j = waypointIndex(it)) >=0) {
     QMenu menu(this);
     menu.addAction(new TreeAction(tr("Show Only This Waypoint"), this, SLOT(showOnlyThisWaypoint()), &menu));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else if ((j = trackIndex(it)) >=0) {
+  } else if ((j = trackIndex(it)) >=0) {
     QMenu menu(this);
     menu.addAction(new TreeAction(tr("Show Only This Track"), this, SLOT(showOnlyThisTrack()), &menu));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else if ((j = routeIndex(it)) >=0) {
+  } else if ((j = routeIndex(it)) >=0) {
     QMenu menu(this);
     menu.addAction(new TreeAction(tr("Show Only This Route"), this, SLOT(showOnlyThisRoute()), &menu));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
-  }
-  else {
+  } else {
   }
 }
 //------------------------------------------------------------------------
-void GMapDialog::copyButtonClickedX() {
-  
+void GMapDialog::copyButtonClickedX()
+{
+
 }

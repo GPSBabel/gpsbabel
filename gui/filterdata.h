@@ -30,22 +30,25 @@
 
 //------------------------------------------------------------------------
 
-class FilterData {
+class FilterData
+{
 public:
   FilterData(): inUse_(true) {};
   virtual ~FilterData() {};
 
-  void saveSettings(QSettings &st) {
+  void saveSettings(QSettings& st)
+  {
     SettingGroup sg;
     makeSettingGroup(sg);
     sg.saveSettings(st);
   }
-  void restoreSettings(QSettings &st) {
+  void restoreSettings(QSettings& st)
+  {
     SettingGroup sg;
     makeSettingGroup(sg);
     sg.restoreSettings(st);
   }
-  virtual void makeSettingGroup(SettingGroup &sg) = 0;
+  virtual void makeSettingGroup(SettingGroup& sg) = 0;
   virtual QStringList makeOptionString() = 0;
 
 public:
@@ -53,21 +56,22 @@ public:
 };
 //------------------------------------------------------------------------
 
-class TrackFilterData: public FilterData  {
- public:
+class TrackFilterData: public FilterData
+{
+public:
   TrackFilterData(): FilterData(), title(false), titleString(QString()),
-		     move(false),  days(0), hours(0), mins(0), secs(0),
-		     TZ(false),
-		     start(false),
-		     stop(false),
-		     pack(false), merge(false), split(false), 
-		     GPSFixes(false), GPSFixesVal(0),
-		     splitByDate(false),
-		     splitByTime(false),
-		     splitByDistance(false),
-		     course(false), speed(false),
-		     splitTime(0), splitTimeUnit(0),
-		     splitDist(0), splitDistUnit(0)
+    move(false),  days(0), hours(0), mins(0), secs(0),
+    TZ(false),
+    start(false),
+    stop(false),
+    pack(false), merge(false), split(false),
+    GPSFixes(false), GPSFixesVal(0),
+    splitByDate(false),
+    splitByTime(false),
+    splitByDistance(false),
+    course(false), speed(false),
+    splitTime(0), splitTimeUnit(0),
+    splitDist(0), splitDistUnit(0)
   {
     titleString = "ACTIVE LOG #%Y%m%d";
     stopTime = QDateTime::currentDateTime();
@@ -75,7 +79,7 @@ class TrackFilterData: public FilterData  {
     startTime = stopTime.addMonths(-6);
     startTime.setTime(QTime(0, 0, 1));
   }
-  virtual void makeSettingGroup(SettingGroup &sg)
+  virtual void makeSettingGroup(SettingGroup& sg)
   {
     sg.addVarSetting(new BoolSetting("trks.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("trks.GPSFixes", GPSFixes));
@@ -106,8 +110,8 @@ class TrackFilterData: public FilterData  {
     sg.addVarSetting(new IntSetting("trks.splitDistUnit", splitDistUnit));
   }
   virtual QStringList makeOptionString();
-  
- public:
+
+public:
   bool title;
   QString titleString;
   bool move;
@@ -128,19 +132,20 @@ class TrackFilterData: public FilterData  {
 
 //------------------------------------------------------------------------
 
-class WayPtsFilterData: public FilterData  {
- public:
-  WayPtsFilterData(): FilterData(), 
-		      duplicates(false), shortNames(true), locations(false), 
-		      position(false), radius(false), sort(false),
-		      positionVal(0.0), radiusVal(0.0),
-		      longVal(0.0), latVal(0.0),
-		      positionUnit(0), radiusUnit(0)
-    {
-    }
-  
+class WayPtsFilterData: public FilterData
+{
+public:
+  WayPtsFilterData(): FilterData(),
+    duplicates(false), shortNames(true), locations(false),
+    position(false), radius(false), sort(false),
+    positionVal(0.0), radiusVal(0.0),
+    longVal(0.0), latVal(0.0),
+    positionUnit(0), radiusUnit(0)
+  {
+  }
+
   virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup &sg)
+  virtual void makeSettingGroup(SettingGroup& sg)
   {
     sg.addVarSetting(new BoolSetting("wpts.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("wpts.radius", radius));
@@ -158,7 +163,7 @@ class WayPtsFilterData: public FilterData  {
   }
 
 
- public:
+public:
   bool duplicates, shortNames, locations, position, radius, sort;
   double positionVal;
   double radiusVal;
@@ -167,44 +172,47 @@ class WayPtsFilterData: public FilterData  {
 };
 
 //------------------------------------------------------------------------
-class RtTrkFilterData: public FilterData  {
- public:
-  RtTrkFilterData(): FilterData(), 
-         simplify_(false),
-         reverse_(false),
-         limitTo_(100)
-    {
-    }
-  
+class RtTrkFilterData: public FilterData
+{
+public:
+  RtTrkFilterData(): FilterData(),
+    simplify_(false),
+    reverse_(false),
+    limitTo_(100)
+  {
+  }
+
   virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup &sg) {
+  virtual void makeSettingGroup(SettingGroup& sg)
+  {
     sg.addVarSetting(new BoolSetting("rttrk.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("rttrk.reverse", reverse_));
     sg.addVarSetting(new BoolSetting("rttrk.simplify", simplify_));
     sg.addVarSetting(new IntSetting("rttrk.limitTo", limitTo_));
   }
 
- public:
+public:
   bool simplify_, reverse_;
   int limitTo_;
 };
 
 //------------------------------------------------------------------------
-class MiscFltFilterData: public FilterData  {
- public:
-  MiscFltFilterData(): FilterData(), 
-           nukeRoutes_(false),
-           nukeTracks_(false),
-           nukeWaypoints_(false),
-           transform_(false),
-           del_(false),
-           swap_(false),
-           transformVal_(0)
-    {
-    }
-  
+class MiscFltFilterData: public FilterData
+{
+public:
+  MiscFltFilterData(): FilterData(),
+    nukeRoutes_(false),
+    nukeTracks_(false),
+    nukeWaypoints_(false),
+    transform_(false),
+    del_(false),
+    swap_(false),
+    transformVal_(0)
+  {
+  }
+
   virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup &sg)
+  virtual void makeSettingGroup(SettingGroup& sg)
   {
     sg.addVarSetting(new BoolSetting("mscflt.nukeRoutes", nukeRoutes_));
     sg.addVarSetting(new BoolSetting("mscflt.nukeTracks", nukeTracks_));
@@ -216,7 +224,7 @@ class MiscFltFilterData: public FilterData  {
     sg.addVarSetting(new BoolSetting("mscflt.swap", swap_));
   }
 
- public:
+public:
   bool nukeRoutes_, nukeTracks_, nukeWaypoints_;
   bool transform_, del_, swap_;
   int transformVal_;
@@ -227,7 +235,7 @@ class MiscFltFilterData: public FilterData  {
 //
 class AllFiltersData
 {
- public:
+public:
   AllFiltersData()
   {
     defaultAll();
@@ -236,18 +244,21 @@ class AllFiltersData
     filters << &wayPtsFilterData;
     filters << &rtTrkFilterData;
   }
-  
-  void defaultAll() {
+
+  void defaultAll()
+  {
     miscFltFilterData = MiscFltFilterData();
     trackFilterData = TrackFilterData();
     wayPtsFilterData = WayPtsFilterData();
     rtTrkFilterData = RtTrkFilterData();
   }
 
-  QStringList getAllFilterStrings() {
+  QStringList getAllFilterStrings()
+  {
     QStringList args;
-    for (int i=0; i<filters.size(); i++) 
+    for (int i=0; i<filters.size(); i++) {
       args << filters[i]->makeOptionString();
+    }
     return args;
   }
 
@@ -255,7 +266,7 @@ class AllFiltersData
   WayPtsFilterData wayPtsFilterData;
   RtTrkFilterData rtTrkFilterData;
   MiscFltFilterData miscFltFilterData;
-  QList<FilterData *>filters;
+  QList<FilterData*>filters;
 };
 
 

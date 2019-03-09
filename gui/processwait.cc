@@ -35,38 +35,37 @@
 
 //------------------------------------------------------------------------
 
-QString ProcessWaitDialog::processErrorString( QProcess::ProcessError err)
+QString ProcessWaitDialog::processErrorString(QProcess::ProcessError err)
 {
-  switch (err)
-    {
-    case QProcess::FailedToStart:
-      return QString(tr("Process failed to start"));
-      break;
-    case QProcess::Crashed:
-      return QString(tr("Process crashed"));
-      break;
-    case QProcess::Timedout:
-      return QString(tr("Process timedout"));
-      break;
-    case QProcess::WriteError:
-      return QString(tr("Error while trying to write to process"));
-      break;
-    case QProcess::ReadError:
-      return QString(tr("Error while trying to read from process"));
-      break;
-    case QProcess::UnknownError:
-    default:
-      return QString(tr("Unknown process error"));
-    }
+  switch (err) {
+  case QProcess::FailedToStart:
+    return QString(tr("Process failed to start"));
+    break;
+  case QProcess::Crashed:
+    return QString(tr("Process crashed"));
+    break;
+  case QProcess::Timedout:
+    return QString(tr("Process timedout"));
+    break;
+  case QProcess::WriteError:
+    return QString(tr("Error while trying to write to process"));
+    break;
+  case QProcess::ReadError:
+    return QString(tr("Error while trying to read from process"));
+    break;
+  case QProcess::UnknownError:
+  default:
+    return QString(tr("Unknown process error"));
+  }
   return QString("");
 }
 //------------------------------------------------------------------------
-ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
+ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   QDialog(parent), process_(process)
 {
   this->resize(400, 220);
   this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
-  QVBoxLayout *layout = new QVBoxLayout(this);
+  QVBoxLayout* layout = new QVBoxLayout(this);
 
   textEdit_ = new QPlainTextEdit(this);
   textEdit_->setReadOnly(true);
@@ -84,24 +83,26 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
   layout->addWidget(buttonBox_);
 
   connect(process, SIGNAL(error(QProcess::ProcessError)),
-	  this,    SLOT  (errorX(QProcess::ProcessError)));
-  connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
-	  this,    SLOT  (finishedX(int, QProcess::ExitStatus)));
+          this,    SLOT(errorX(QProcess::ProcessError)));
+  connect(process, SIGNAL(finished(int,QProcess::ExitStatus)),
+          this,    SLOT(finishedX(int,QProcess::ExitStatus)));
   connect(process, SIGNAL(readyReadStandardError()),
-          this,    SLOT  (readyReadStandardErrorX()));
+          this,    SLOT(readyReadStandardErrorX()));
   connect(process, SIGNAL(readyReadStandardOutput()),
-	  this,    SLOT  (readyReadStandardOutputX()));
+          this,    SLOT(readyReadStandardOutputX()));
   connect(btn,     SIGNAL(clicked()),
-	  this,    SLOT  (stopClickedX()));
+          this,    SLOT(stopClickedX()));
   exitStatus_ = QProcess::CrashExit;  // Assume all errors are crashes for now.
 
   bufferedOut_ = "";
 
   //
-  for (int i=0; i<=100; i+=2)
+  for (int i=0; i<=100; i+=2) {
     progressVals_.push_back(i);
-  for (int i=98; i>0; i-=2)
+  }
+  for (int i=98; i>0; i-=2) {
     progressVals_.push_back(i);
+  }
   progressIndex_ = progressVals_.size()/2;
 
   timer_ = new QTimer(this);
@@ -117,8 +118,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
 
 //------------------------------------------------------------------------
 ProcessWaitDialog::~ProcessWaitDialog()
-{
-};
+= default;
 //------------------------------------------------------------------------
 bool ProcessWaitDialog::getExitedNormally()
 {
@@ -148,8 +148,9 @@ void ProcessWaitDialog::timeoutX()
   progressIndex_++;
   int idx = progressIndex_ % progressVals_.size();
   progressBar_->setValue(progressVals_[idx]);
-  if (stopCount_ >=0)
+  if (stopCount_ >=0) {
     stopCount_++;
+  }
   if (stopCount_ > 150) {
     process_->kill();
     errorString_ = QString(tr("Process did not terminate successfully"));
@@ -170,8 +171,9 @@ void ProcessWaitDialog::errorX(QProcess::ProcessError err)
 void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 {
   ecode_ = exitCode;
-  if (es == QProcess::CrashExit)
+  if (es == QProcess::CrashExit) {
     errorString_ = QString(tr("Process crashed whle running"));
+  }
   timer_->stop();
   accept();
 };
@@ -181,12 +183,13 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 // appendPlainText automatically puts in a new line with every call.  That's
 // why you have to buffer it, and only append when we get a real newline.
 //
-void ProcessWaitDialog::appendToText(const char *ptr)
+void ProcessWaitDialog::appendToText(const char* ptr)
 {
   outputString_ += QString(ptr);
-  for (const char *cptr = ptr; *cptr; cptr++) {
-    if (*cptr == '\r')
+  for (const char* cptr = ptr; *cptr != 0; cptr++) {
+    if (*cptr == '\r') {
       continue;
+    }
     if (*cptr == '\n') {
       textEdit_->appendPlainText(QString::fromStdString(bufferedOut_));
       bufferedOut_ = "";
@@ -206,12 +209,12 @@ void ProcessWaitDialog::readyReadStandardErrorX()
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::readyReadStandardOutputX()
- {
+{
   QByteArray d = process_->readAllStandardOutput();
   appendToText(d.data());
 };
 
-void ProcessWaitDialog::closeEvent(QCloseEvent *event)
+void ProcessWaitDialog::closeEvent(QCloseEvent* event)
 {
-   event->ignore();
+  event->ignore();
 };
