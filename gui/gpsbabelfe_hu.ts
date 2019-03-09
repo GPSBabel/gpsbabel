@@ -207,12 +207,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cc" line="73"/>
+        <location filename="optionsdlg.cc" line="72"/>
         <source>Select input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optionsdlg.cc" line="77"/>
+        <location filename="optionsdlg.cc" line="76"/>
         <source>Select output file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -240,7 +240,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="104"/>
+        <location filename="filterdlg.cc" line="105"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -307,101 +307,101 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="86"/>
+        <location filename="gmapdlg.cc" line="87"/>
         <source>Cmt: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="88"/>
+        <location filename="gmapdlg.cc" line="90"/>
         <source>Ele: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="118"/>
+        <location filename="gmapdlg.cc" line="123"/>
         <source>Start: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="120"/>
+        <location filename="gmapdlg.cc" line="125"/>
         <source>Stop: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="123"/>
+        <location filename="gmapdlg.cc" line="128"/>
         <source>Points: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="150"/>
+        <location filename="gmapdlg.cc" line="155"/>
         <source>Waypoints</source>
         <translation type="unfinished">Útpontok</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="165"/>
+        <location filename="gmapdlg.cc" line="170"/>
         <source>Tracks</source>
         <translation type="unfinished">Nyomvonalak</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="180"/>
+        <location filename="gmapdlg.cc" line="185"/>
         <source>Routes</source>
         <translation type="unfinished">Útvonalak</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="521"/>
+        <location filename="gmapdlg.cc" line="540"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="522"/>
+        <location filename="gmapdlg.cc" line="541"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="523"/>
-        <location filename="gmapdlg.cc" line="531"/>
-        <location filename="gmapdlg.cc" line="539"/>
+        <location filename="gmapdlg.cc" line="542"/>
+        <location filename="gmapdlg.cc" line="549"/>
+        <location filename="gmapdlg.cc" line="556"/>
         <source>Expand All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="524"/>
-        <location filename="gmapdlg.cc" line="532"/>
-        <location filename="gmapdlg.cc" line="540"/>
+        <location filename="gmapdlg.cc" line="543"/>
+        <location filename="gmapdlg.cc" line="550"/>
+        <location filename="gmapdlg.cc" line="557"/>
         <source>Collapse All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="529"/>
+        <location filename="gmapdlg.cc" line="547"/>
         <source>Show All Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="530"/>
+        <location filename="gmapdlg.cc" line="548"/>
         <source>Hide All Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="537"/>
+        <location filename="gmapdlg.cc" line="554"/>
         <source>Show All Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="538"/>
+        <location filename="gmapdlg.cc" line="555"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="545"/>
+        <location filename="gmapdlg.cc" line="561"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="551"/>
+        <location filename="gmapdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="557"/>
+        <location filename="gmapdlg.cc" line="571"/>
         <source>Show Only This Route</source>
         <translation type="unfinished"></translation>
     </message>
@@ -470,138 +470,138 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cc" line="528"/>
+        <location filename="mainwindow.cc" line="565"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="555"/>
+        <location filename="mainwindow.cc" line="593"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="615"/>
+        <location filename="mainwindow.cc" line="657"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="626"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="648"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="651"/>
-        <source>Input does not support %1; output format supports %2</source>
+        <location filename="mainwindow.cc" line="692"/>
+        <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="654"/>
-        <source>Input format supports %1; output format does not support %2</source>
+        <location filename="mainwindow.cc" line="695"/>
+        <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="657"/>
+        <location filename="mainwindow.cc" line="698"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="678"/>
+        <location filename="mainwindow.cc" line="719"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="679"/>
+        <location filename="mainwindow.cc" line="720"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="680"/>
+        <location filename="mainwindow.cc" line="721"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="770"/>
+        <location filename="mainwindow.cc" line="816"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="777"/>
-        <location filename="mainwindow.cc" line="797"/>
+        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="841"/>
         <source>Options for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="790"/>
+        <location filename="mainwindow.cc" line="835"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="811"/>
+        <location filename="mainwindow.cc" line="855"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="830"/>
+        <location filename="mainwindow.cc" line="874"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="837"/>
+        <location filename="mainwindow.cc" line="881"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="842"/>
+        <location filename="mainwindow.cc" line="886"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="858"/>
+        <location filename="mainwindow.cc" line="902"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="872"/>
+        <location filename="mainwindow.cc" line="916"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1007"/>
+        <location filename="mainwindow.cc" line="1058"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1018"/>
+        <location filename="mainwindow.cc" line="1068"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1132"/>
+        <location filename="mainwindow.cc" line="1188"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1155"/>
+        <location filename="mainwindow.cc" line="1212"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1198"/>
+        <location filename="mainwindow.cc" line="1255"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1200"/>
+        <location filename="mainwindow.cc" line="1257"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -832,12 +832,12 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="76"/>
+        <location filename="map.cc" line="96"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map.cc" line="96"/>
+        <location filename="map.cc" line="134"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished"></translation>
     </message>
@@ -846,28 +846,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <location filename="filterwidgets.cc" line="221"/>
-        <location filename="filterwidgets.cc" line="222"/>
         <location filename="filterwidgets.cc" line="225"/>
         <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="230"/>
         <source>Tracks</source>
         <translation type="unfinished">Nyomvonalak</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="60"/>
-        <location filename="filterwidgets.cc" line="221"/>
-        <location filename="filterwidgets.cc" line="223"/>
-        <location filename="filterwidgets.cc" line="224"/>
-        <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="225"/>
+        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="230"/>
         <source>Waypoints</source>
         <translation type="unfinished">Útpontok</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <location filename="filterwidgets.cc" line="222"/>
-        <location filename="filterwidgets.cc" line="223"/>
-        <location filename="filterwidgets.cc" line="224"/>
-        <location filename="filterwidgets.cc" line="225"/>
+        <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="229"/>
         <source>Routes</source>
         <translation type="unfinished">Útvonalak</translation>
     </message>
@@ -937,8 +937,8 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cc" line="192"/>
-        <location filename="optionsdlg.cc" line="203"/>
+        <location filename="optionsdlg.cc" line="191"/>
+        <location filename="optionsdlg.cc" line="202"/>
         <source>Help</source>
         <translation type="unfinished">Segítség</translation>
     </message>
@@ -994,52 +994,52 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>ProcessWaitDialog</name>
     <message>
-        <location filename="processwait.cc" line="43"/>
+        <location filename="processwait.cc" line="42"/>
         <source>Process failed to start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="46"/>
+        <location filename="processwait.cc" line="45"/>
         <source>Process crashed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="49"/>
+        <location filename="processwait.cc" line="48"/>
         <source>Process timedout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="52"/>
+        <location filename="processwait.cc" line="51"/>
         <source>Error while trying to write to process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="55"/>
+        <location filename="processwait.cc" line="54"/>
         <source>Error while trying to read from process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="59"/>
+        <location filename="processwait.cc" line="58"/>
         <source>Unknown process error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="68"/>
+        <location filename="processwait.cc" line="67"/>
         <source> ... Process GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="83"/>
+        <location filename="processwait.cc" line="82"/>
         <source>Stop Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="155"/>
+        <location filename="processwait.cc" line="156"/>
         <source>Process did not terminate successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="174"/>
+        <location filename="processwait.cc" line="175"/>
         <source>Process crashed whle running</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1047,7 +1047,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="155"/>
+        <location filename="formatload.cc" line="177"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1423,49 +1423,49 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="234"/>
-        <location filename="upgrade.cc" line="238"/>
-        <location filename="upgrade.cc" line="272"/>
+        <location filename="upgrade.cc" line="180"/>
+        <location filename="upgrade.cc" line="184"/>
+        <location filename="upgrade.cc" line="218"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="235"/>
+        <location filename="upgrade.cc" line="181"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="239"/>
+        <location filename="upgrade.cc" line="185"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="273"/>
+        <location filename="upgrade.cc" line="219"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="289"/>
+        <location filename="upgrade.cc" line="235"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="290"/>
+        <location filename="upgrade.cc" line="236"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="331"/>
+        <location filename="upgrade.cc" line="278"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="349"/>
+        <location filename="upgrade.cc" line="295"/>
         <source>Do you wish to download an upgrade?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="342"/>
+        <location filename="upgrade.cc" line="288"/>
         <source>Upgrade</source>
         <translation type="unfinished"></translation>
     </message>

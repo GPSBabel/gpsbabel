@@ -25,6 +25,9 @@
 #include <QtCore/QChar>             // for operator==, QChar
 #include <QtCore/QCharRef>          // for QCharRef
 #include <QtCore/QCoreApplication>  // for QCoreApplication
+#ifdef GENERATE_CORE_STRINGS
+#include <QtCore/QDebug>
+#endif
 #include <QtCore/QObject>           // for QObject
 #include <QtCore/QProcess>          // for QProcess
 #include <QtCore/QRegExp>           // for QRegExp
@@ -41,7 +44,10 @@
 //------------------------------------------------------------------------
 static QString xlt(const QString& f)
 {
-  return QCoreApplication::translate("", f.toUtf8().constData());
+#ifdef GENERATE_CORE_STRINGS
+  qInfo().nospace() << "QT_TRANSLATE_NOOP(\"core\"," << f << ")";
+#endif
+  return QCoreApplication::translate("core", f.toUtf8().constData());
 }
 
 //------------------------------------------------------------------------
@@ -122,11 +128,13 @@ bool FormatLoad::processFormat(Format& format)
                   hfields[3].split('/'),
                   optionList,
                   optionList2, htmlPage);
+#ifndef GENERATE_CORE_STRINGS
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
     QString base = htmlPage;
     base.replace(QRegExp("/[^/]+$"), "/");
     Format::setHtmlBase(base);
   }
+#endif
   return true;
 }
 

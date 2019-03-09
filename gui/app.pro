@@ -116,7 +116,6 @@ TRANSLATIONS += gpsbabelfe_es.ts
 TRANSLATIONS += gpsbabelfe_fr.ts
 TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
-TRANSLATIONS += gpsbabelfe.ts
 
 macx|linux{
   package.commands = QMAKE=$(QMAKE) ./package_app
@@ -124,3 +123,13 @@ macx|linux{
   QMAKE_EXTRA_TARGETS += package
 }
 linux: QMAKE_DISTCLEAN += -r GPSBabelFE
+
+# build the compilation data base used by clang tools including clang-tidy,
+# as well as CLion.
+macx|linux{
+  compile_command_database.target = compile_commands.json
+  compile_command_database.commands = make clean; bear make
+  QMAKE_EXTRA_TARGETS += compile_command_database
+  QMAKE_DISTCLEAN += compile_commands.json
+}
+
