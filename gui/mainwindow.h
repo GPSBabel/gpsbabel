@@ -22,13 +22,29 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_mainwinui.h"
-#include "format.h"
-#include "filterdata.h"
-#include "babeldata.h"
-#include "upgrade.h"
+#include <QtCore/QEvent>          // for QEvent
+#include <QtCore/QList>           // for QList
+#include <QtCore/QObject>         // for QObject (& Q_OBJECT, slots)
+#include <QtCore/QString>         // for QString
+#include <QtCore/QStringList>     // for QStringList
+#include <QtCore/QTranslator>     // for QTranslator
+#include <QtGui/QCloseEvent>      // for QCloseEvent
+#include <QtGui/QDragEnterEvent>  // for QDragEnterEvent
+#include <QtGui/QDropEvent>       // for QDropEvent
+#include <QtGui/QPixmap>          // for QPixmap
+#include <QtWidgets/QAction>      // for QAction
+#include <QtWidgets/QComboBox>    // for QComboBox
+#include <QtWidgets/QLabel>       // for QLabel
+#include <QtWidgets/QLineEdit>    // for QLineEdit
+#include <QtWidgets/QMainWindow>  // for QMainWindow
+#include <QtWidgets/QWidget>      // for QWidget
 
-#include <QTranslator>
+#include "babeldata.h"            // for BabelData
+#include "filterdata.h"           // for AllFiltersData
+#include "format.h"               // for Format
+#include "ui_mainwinui.h"         // for Ui_MainWindow
+#include "upgrade.h"              // for UpgradeCheck
+
 
 class MainWindow: public QMainWindow
 {

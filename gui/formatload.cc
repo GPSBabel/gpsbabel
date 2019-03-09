@@ -21,18 +21,27 @@
 //
 //------------------------------------------------------------------------
 
-#include <QProcess>
-#include <QMessageBox>
-#include <QTextStream>
-#include <QCoreApplication>
-#include <QApplication>
+#include <QtCore/QByteArray>        // for QByteArray
+#include <QtCore/QChar>             // for operator==, QChar
+#include <QtCore/QCharRef>          // for QCharRef
+#include <QtCore/QCoreApplication>  // for QCoreApplication
+#include <QtCore/QObject>           // for QObject
+#include <QtCore/QProcess>          // for QProcess
+#include <QtCore/QRegExp>           // for QRegExp
+#include <QtCore/QString>           // for QString, operator+
+#include <QtCore/QTextStream>       // for QTextStream
+#include <QtCore/QVariant>          // for QVariant
+#include <QtWidgets/QApplication>   // for QApplication
+#include <QtWidgets/QMessageBox>    // for QMessageBox
+
 #include "formatload.h"
-#include "appname.h"
+#include "appname.h"                // for appName
+
 
 //------------------------------------------------------------------------
 static QString xlt(const QString& f)
 {
-  return QCoreApplication::translate("", f.toStdString().c_str());
+  return QCoreApplication::translate("", f.toUtf8().constData());
 }
 
 //------------------------------------------------------------------------
@@ -127,7 +136,7 @@ bool FormatLoad::getFormats(QList<Format>& formatList)
   formatList.clear();
 
   QProcess babel;
-  babel.start("gpsbabel", QStringList() << "-^3");
+  babel.start(QApplication::applicationDirPath() + "/gpsbabel", QStringList() << "-^3");
   if (!babel.waitForStarted()) {
     return false;
   }
