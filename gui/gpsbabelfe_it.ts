@@ -793,7 +793,7 @@ Questo programma non può proseguire.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="872"/>
-        <source>Process exited unsucessfully with code %1</source>
+        <source>Process exited unsuccessfully with code %1</source>
         <translation>Il processo è terminato con il codice di errorre %1</translation>
     </message>
     <message>

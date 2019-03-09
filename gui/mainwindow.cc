@@ -103,7 +103,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
         str += "," + option.getName() + "=" + option.getValue().toString();
       }
     } else {
-      // For every boolean option not selected, explictly
+      // For every boolean option not selected, explicitly
       // turn it off here, but only if the default isn't zero
       // or given.
       if (option.getType() == FormatOption::OPTbool &&
@@ -887,7 +887,7 @@ bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
       retStatus = true;
     } else  {
       errorString =
-        QString(tr("Process exited unsucessfully with code %1"))
+        QString(tr("Process exited unsuccessfully with code %1"))
         .arg(exitCode);
       retStatus = false;
     }
