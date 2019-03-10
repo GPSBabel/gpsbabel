@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="47.463833000" minlon="3.743018000" maxlat="47.466222000" maxlon="3.747318000"/>
+  <trk>
+    <name>Vézelay / Cuncy-lès-Varzy</name>
+    <trkseg>
+      <trkpt lat="47.466222000" lon="3.747318000">
+        <ele>383.682</ele>
+        <time>2007-08-13T07:52:19.328Z</time>
+      </trkpt>
+      <trkpt lat="47.466150000" lon="3.747233000">
+        <ele>376.885</ele>
+        <time>2007-08-13T07:52:28.328Z</time>
+      </trkpt>
+      <trkpt lat="47.466130000" lon="3.747113000">
+        <ele>378.988</ele>
+        <time>2007-08-13T07:52:39.328Z</time>
+      </trkpt>
+      <trkpt lat="47.466078000" lon="3.747023000">
+        <ele>377.190</ele>
+        <time>2007-08-13T07:52:44.328Z</time>
+      </trkpt>
+      <trkpt lat="47.466020000" lon="3.746888000">
+        <ele>372.283</ele>
+        <time>2007-08-13T07:52:51.328Z</time>
+      </trkpt>
+      <trkpt lat="47.465943000" lon="3.746815000">
+        <ele>366.888</ele>
+        <time>2007-08-13T07:52:55.328Z</time>
+      </trkpt>
+      <trkpt lat="47.465872000" lon="3.746727000">
+        <ele>358.811</ele>
+        <time>2007-08-13T07:53:02.328Z</time>
+      </trkpt>
+      <trkpt lat="47.465902000" lon="3.746598000">
+        <ele>356.098</ele>
+        <time>2007-08-13T07:53:06.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465900000" lon="3.746465000">
+        <ele>353.294</ele>
+        <time>2007-08-13T07:53:14.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465792000" lon="3.746433000">
+        <ele>352.897</ele>
+        <time>2007-08-13T07:53:19.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465713000" lon="3.746388000">
+        <ele>351.892</ele>
+        <time>2007-08-13T07:53:25.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465695000" lon="3.746242000">
+        <ele>353.690</ele>
+        <time>2007-08-13T07:53:32.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465697000" lon="3.746097000">
+        <ele>353.598</ele>
+        <time>2007-08-13T07:53:38.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465717000" lon="3.745948000">
+        <ele>356.403</ele>
+        <time>2007-08-13T07:53:44.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465715000" lon="3.745807000">
+        <ele>362.407</ele>
+        <time>2007-08-13T07:53:51.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465640000" lon="3.745703000">
+        <ele>367.284</ele>
+        <time>2007-08-13T07:53:59.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465575000" lon="3.745608000">
+        <ele>366.705</ele>
+        <time>2007-08-13T07:54:04.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465488000" lon="3.745547000">
+        <ele>364.907</ele>
+        <time>2007-08-13T07:54:08.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465447000" lon="3.745437000">
+        <ele>359.908</ele>
+        <time>2007-08-13T07:54:16.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465353000" lon="3.745390000">
+        <ele>352.806</ele>
+        <time>2007-08-13T07:54:22.329Z</time>
+      </trkpt>
+      <trkpt lat="47.465298000" lon="3.745282000">
+        <ele>347.899</ele>
+        <time>2007-08-13T07:54:30.330Z</time>
+      </trkpt>
+      <trkpt lat="47.465250000" lon="3.745155000">
+        <ele>335.310</ele>
+        <time>2007-08-13T07:54:39.330Z</time>
+      </trkpt>
+      <trkpt lat="47.465157000" lon="3.745133000">
+        <ele>335.707</ele>
+        <time>2007-08-13T07:54:43.330Z</time>
+      </trkpt>
+      <trkpt lat="47.465018000" lon="3.745113000">
+        <ele>333.604</ele>
+        <time>2007-08-13T07:54:50.330Z</time>
+      </trkpt>
+      <trkpt lat="47.465010000" lon="3.744965000">
+        <ele>335.798</ele>
+        <time>2007-08-13T07:54:55.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464992000" lon="3.744823000">
+        <ele>339.608</ele>
+        <time>2007-08-13T07:55:03.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464955000" lon="3.744658000">
+        <ele>342.687</ele>
+        <time>2007-08-13T07:55:12.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464885000" lon="3.744563000">
+        <ele>344.607</ele>
+        <time>2007-08-13T07:55:18.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464778000" lon="3.744497000">
+        <ele>340.492</ele>
+        <time>2007-08-13T07:55:25.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464710000" lon="3.744412000">
+        <ele>338.084</ele>
+        <time>2007-08-13T07:55:29.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464635000" lon="3.744317000">
+        <ele>338.602</ele>
+        <time>2007-08-13T07:55:36.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464547000" lon="3.744233000">
+        <ele>338.206</ele>
+        <time>2007-08-13T07:55:41.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464475000" lon="3.744142000">
+        <ele>339.181</ele>
+        <time>2007-08-13T07:55:48.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464405000" lon="3.744057000">
+        <ele>335.798</ele>
+        <time>2007-08-13T07:55:53.330Z</time>
+      </trkpt>
+      <trkpt lat="47.464342000" lon="3.743965000">
+        <ele>334.701</ele>
+        <time>2007-08-13T07:55:59.331Z</time>
+      </trkpt>
+      <trkpt lat="47.464313000" lon="3.743808000">
+        <ele>333.695</ele>
+        <time>2007-08-13T07:56:07.331Z</time>
+      </trkpt>
+      <trkpt lat="47.464233000" lon="3.743725000">
+        <ele>328.483</ele>
+        <time>2007-08-13T07:56:15.331Z</time>
+      </trkpt>
+      <trkpt lat="47.464173000" lon="3.743628000">
+        <ele>325.100</ele>
+        <time>2007-08-13T07:56:22.331Z</time>
+      </trkpt>
+      <trkpt lat="47.464102000" lon="3.743548000">
+        <ele>324.582</ele>
+        <time>2007-08-13T07:56:28.331Z</time>
+      </trkpt>
+      <trkpt lat="47.464015000" lon="3.743477000">
+        <ele>320.010</ele>
+        <time>2007-08-13T07:56:34.331Z</time>
+      </trkpt>
+      <trkpt lat="47.463935000" lon="3.743393000">
+        <ele>318.607</ele>
+        <time>2007-08-13T07:56:41.331Z</time>
+      </trkpt>
+      <trkpt lat="47.463860000" lon="3.743303000">
+        <ele>324.094</ele>
+        <time>2007-08-13T07:56:50.331Z</time>
+      </trkpt>
+      <trkpt lat="47.463847000" lon="3.743163000">
+        <ele>323.911</ele>
+        <time>2007-08-13T07:56:55.331Z</time>
+      </trkpt>
+      <trkpt lat="47.463833000" lon="3.743018000">
+        <ele>326.898</ele>
+        <time>2007-08-13T07:57:01.331Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

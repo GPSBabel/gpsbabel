@@ -20,30 +20,63 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
+    Reference:
+    https://www.oziexplorer4.com/eng/help/fileformats.html
+
+    According to the OZI Explorer developer:
+    "There is no specified character set, it defaults to whatever 8 bit
+     character set "Windows" defaults to - normally CP-1252 but can vary
+     depending on Windows regional settings."
+
+    According to the reference, for some text fields:
+    "comma's not allowed in text fields, character 209 can be used instead
+     and a comma will be substituted."
+    This could work for windows-1252, but not for utf-8.
+    We don't support any special handling for character 209.
+
  */
 
+#include <cctype>               // for tolower
+#include <cmath>                // for lround
+#include <cstdlib>              // for atoi
+
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QChar>         // for operator==, QChar
+#include <QtCore/QCharRef>      // for QCharRef
+#include <QtCore/QFile>         // for QFile
+#include <QtCore/QFileInfo>     // for QFileInfo
+#include <QtCore/QFlags>        // for QFlags
+#include <QtCore/QIODevice>     // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
+#include <QtCore/QString>       // for QString
+#include <QtCore/QStringList>   // for QStringList
+#include <QtCore/QTextCodec>    // for QTextCodec
+#include <QtCore/QTextStream>   // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
+#include <QtCore/Qt>            // for CaseInsensitive
+#include <QtCore/QtGlobal>      // for qPrintable
+
 #include "defs.h"
-#include "cet_util.h"
-#include "csv_util.h"
-#include "jeeps/gpsmath.h"
-#include <QtCore/QFileInfo>
-#include <cctype>
-#include <cmath>                /* for floor */
-#include <cstdio>
-#include <cstdlib>
+#include "csv_util.h"           // for csv_stringclean
+#include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/file.h"      // for File
+
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
-typedef struct {
+struct ozi_fsdata {
   format_specific_data fs;
   int fgcolor;
   int bgcolor;
-} ozi_fsdata;
+};
 
+static struct {
+  gpsbabel::File* file{nullptr};
+  QTextStream* stream{nullptr};
+  QTextCodec* codec{nullptr};
+} ozi_file;
 
-static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 static route_head* trk_head;
 static route_head* rte_head;
@@ -69,6 +102,7 @@ static char altunit;
 static char proxunit;
 static double alt_scale;
 static double prox_scale;
+static char* opt_codec;
 
 static
 arglist_t ozi_args[] = {
@@ -112,12 +146,51 @@ arglist_t ozi_args[] = {
     "proxunit", &proxunit_opt, "Unit used in proximity values",
     "miles", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
+  {
+    "codec", &opt_codec, "codec to use for reading and writing strings (default windows-1252)",
+    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
   ARG_TERMINATOR
 };
 
 static gpsdata_type ozi_objective;
 
 static QString ozi_ofname;
+
+static void
+ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
+{
+  ozi_file.codec = QTextCodec::codecForName(opt_codec);
+  if (ozi_file.codec == nullptr) {
+    fatal(MYNAME ": Unsupported character set '%s'.\n", opt_codec);
+  }
+
+  ozi_file.file = new gpsbabel::File(fname);
+  ozi_file.file->open(mode);
+  ozi_file.stream = new QTextStream(ozi_file.file);
+  ozi_file.stream->setCodec(ozi_file.codec);
+
+  if (mode | QFile::WriteOnly) {
+    ozi_file.stream->setRealNumberNotation(QTextStream::FixedNotation);
+  }
+
+  if (mode | QFile::ReadOnly) {
+    if (ozi_file.codec->mibEnum() == 106) { // UTF-8
+      ozi_file.stream->setAutoDetectUnicode(true);
+    }
+  }
+}
+
+static void
+ozi_close_io()
+{
+  ozi_file.file->close();
+  delete ozi_file.file;
+  ozi_file.file = nullptr;
+  delete ozi_file.stream;
+  ozi_file.stream = nullptr;
+  ozi_file.codec = nullptr;
+}
 
 static void
 ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
@@ -151,15 +224,14 @@ ozi_alloc_fsdata()
   return fsdata;
 }
 
-static void
-ozi_get_time_str(const Waypoint* waypointp, char* buff, gbsize_t buffsz)
+static QString
+ozi_get_time_str(const Waypoint* waypointp)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
-    snprintf(buff, buffsz, "%.7f", time);
-  } else {
-    *buff = '\0';
+    return QString("%1").arg(time, 0, 'f', 7);
   }
+  return QString("");
 }
 
 static void
@@ -195,15 +267,15 @@ ozi_openfile(const QString& fname)
    */
 
   if (fname == "-") {
-    if (! file_out) {
-      file_out = gbfopen(fname, "wb", MYNAME);
+    if (ozi_file.file == nullptr) {
+      ozi_open_io(fname, QFile::WriteOnly);
     }
     return;
   }
 
   QString buff;
   if ((track_out_count) && (ozi_objective == trkdata)) {
-    buff = QString("-%d").arg(track_out_count);
+    buff = QString("-%1").arg(track_out_count);
   } else {
     buff = QString("");
   }
@@ -219,30 +291,26 @@ ozi_openfile(const QString& fname)
   QString tmpname = QString("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
-  if (file_out) {
-    gbfclose(file_out);
-    file_out = nullptr;
+  if (ozi_file.file != nullptr) {
+    ozi_close_io();
   }
-
-  file_out = gbfopen(tmpname, "wb", MYNAME);
+ 
+  ozi_open_io(tmpname, QFile::WriteOnly);
 }
 
 static void
 ozi_track_hdr(const route_head* rte)
 {
-  static const char* ozi_trk_header =
-    "OziExplorer Track Point File Version 2.1\r\n"
-    "WGS 84\r\n"
-    "Altitude is in %s\r\n"
-    "Reserved 3\r\n"
-    "0,2,255,%s,0,0,2,8421376\r\n"
-    "0\r\n";
-
   if ((! pack_opt) || (track_out_count == 0)) {
     ozi_openfile(ozi_ofname);
-    gbfprintf(file_out, ozi_trk_header,
-              altunit == 'f' ? "Feet" : "Meters",
-              rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : CSTRc(rte->rte_name));
+    *ozi_file.stream << "OziExplorer Track Point File Version 2.1\r\n"
+                     << "WGS 84\r\n"
+                     << "Altitude is in " << (altunit == 'f' ? "Feet" : "Meters") << "\r\n"
+                     << "Reserved 3\r\n"
+                     << "0,2,255,"
+                     << (rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : rte->rte_name)
+                     << ",0,0,2,8421376\r\n"
+                     << "0\r\n";
   }
 
   track_out_count++;
@@ -253,9 +321,8 @@ static void
 ozi_track_disp(const Waypoint* waypointp)
 {
   double alt;
-  char ozi_time[16];
 
-  ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(waypointp);
 
   if (waypointp->altitude == unknown_alt) {
     alt = -777;
@@ -263,22 +330,19 @@ ozi_track_disp(const Waypoint* waypointp)
     alt = waypointp->altitude * alt_scale;
   }
 
-  gbfprintf(file_out, "%.6f,%.6f,%d,%.0f,%s,,\r\n",
-            waypointp->latitude, waypointp->longitude, new_track,
-            alt, ozi_time);
+  *ozi_file.stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
+                   << waypointp->longitude << ','
+                   << new_track << ','
+                   << qSetRealNumberPrecision(0) << alt << ','
+                   << ozi_time << ",,\r\n";
 
   new_track = 0;
 }
 
 static void
-ozi_track_tlr(const route_head*)
-{
-}
-
-static void
 ozi_track_pr()
 {
-  track_disp_all(ozi_track_hdr, ozi_track_tlr, ozi_track_disp);
+  track_disp_all(ozi_track_hdr, nullptr, ozi_track_disp);
 }
 
 static void
@@ -286,12 +350,10 @@ ozi_route_hdr(const route_head* rte)
 {
   /* prologue on 1st pass only */
   if (route_out_count == 0) {
-		static const char* ozi_route_header =
-			"OziExplorer Route File Version 1.0\r\n"
-			"WGS 84\r\n"
-			"Reserved 1\r\n"
-			"Reserved 2\r\n";
-    gbfprintf(file_out, ozi_route_header);
+    *ozi_file.stream << "OziExplorer Route File Version 1.0\r\n"
+                     << "WGS 84\r\n"
+                     << "Reserved 1\r\n"
+                     << "Reserved 2\r\n";
   }
 
   route_out_count++;
@@ -309,20 +371,17 @@ ozi_route_hdr(const route_head* rte)
    * R, 1, ICP GALHETA,, 16711680
    */
 
-  gbfprintf(file_out, "R,%d,%s,%s,\r\n",
-            route_out_count,
-            CSTRc(rte->rte_name),
-            CSTRc(rte->rte_desc));
+  *ozi_file.stream << "R," << route_out_count << ','
+                   << rte->rte_name << ','
+                   << rte->rte_desc << ",\r\n";
 }
 
 static void
 ozi_route_disp(const Waypoint* waypointp)
 {
-  char ozi_time[16];
-
   route_wpt_count++;
 
-  ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(waypointp);
 
 /*
   double alt;
@@ -353,26 +412,20 @@ ozi_route_disp(const Waypoint* waypointp)
    * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0
    */
 
-  gbfprintf(file_out, "W,%d,,%d,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
-            route_out_count,
-            route_wpt_count,
-            CSTR(waypointp->shortname),
-            waypointp->latitude,
-            waypointp->longitude,
-            ozi_time,
-            CSTR(waypointp->description));
+  *ozi_file.stream << "W," << route_out_count << ",,"
+                   << route_wpt_count << ','
+                   << waypointp->shortname << ','
+                   << qSetRealNumberPrecision(6) << waypointp->latitude << ','
+                   << waypointp->longitude << ','
+                   << ozi_time << ",0,1,3,0,65535,"
+                   << waypointp->description << ",0,0\r\n";
 
-}
-
-static void
-ozi_route_tlr(const route_head*)
-{
 }
 
 static void
 ozi_route_pr()
 {
-  route_disp_all(ozi_route_hdr, ozi_route_tlr, ozi_route_disp);
+  route_disp_all(ozi_route_hdr, nullptr, ozi_route_disp);
 }
 
 static void
@@ -415,7 +468,7 @@ ozi_init_units(const int direction)	/* 0 = in; 1 = out */
 static void
 rd_init(const QString& fname)
 {
-  file_in = gbfopen(fname, "rb", MYNAME);
+  ozi_open_io(fname, QFile::ReadOnly);
 
   mkshort_handle = mkshort_new_handle();
   ozi_init_units(0);
@@ -424,8 +477,8 @@ rd_init(const QString& fname)
 static void
 rd_deinit()
 {
-  gbfclose(file_in);
-  file_in = nullptr;
+  ozi_close_io();
+
   mkshort_del_handle(&mkshort_handle);
 }
 
@@ -464,18 +517,12 @@ wr_init(const QString& fname)
 
   ozi_init_units(1);
   parse_distance(proximityarg, &proximity, 1 / prox_scale, MYNAME);
-
-  file_out = nullptr;
 }
 
 static void
 wr_deinit()
 {
-  if (file_out != nullptr) {
-
-    gbfclose(file_out);
-    file_out = nullptr;
-  }
+  ozi_close_io();
   ozi_ofname.clear();
 
   mkshort_del_handle(&mkshort_handle);
@@ -577,26 +624,24 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
 }
 
 static void
-ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
+ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name)
 {
-  double alt;
-
-  if (*str == '\0') {
+  if (str.isEmpty()) {
     return;
   }
 
   switch (field) {
   case 0:
     /* latitude */
-    wpt_tmp->latitude = atof(str);
+    wpt_tmp->latitude = str.toDouble();
     break;
   case 1:
     /* longitude */
-    wpt_tmp->longitude = atof(str);
+    wpt_tmp->longitude = str.toDouble();
     break;
   case 2:
     /* new track flag */
-    if ((atoi(str) == 1) && (trk_head->rte_waypt_ct > 0)) {
+    if ((str.toInt() == 1) && (trk_head->rte_waypt_ct > 0)) {
       trk_head = route_head_alloc();
       track_add_head(trk_head);
       if (trk_name) {
@@ -604,15 +649,16 @@ ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
       }
     }
     break;
-  case 3:
+  case 3: {
     /* altitude */
-    alt = atof(str);
+    double alt = str.toDouble();
     if (alt == -777) {
       wpt_tmp->altitude = unknown_alt;
     } else {
       wpt_tmp->altitude = alt * alt_scale;
     }
     break;
+  }
   case 4:
     /* DAYS since 1900 00:00:00 in days.days (5.5) */
     ozi_set_time_str(str, wpt_tmp);
@@ -623,9 +669,9 @@ ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
 }
 
 static void
-ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
+ozi_parse_routepoint(int field, const QString& str, Waypoint* wpt_tmp)
 {
-  if (*str == '\0') {
+  if (str.isEmpty()) {
     return;
   }
 
@@ -648,11 +694,11 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
     break;
   case 5:
     /* latitude */
-    wpt_tmp->latitude = atof(str);
+    wpt_tmp->latitude = str.toDouble();
     break;
   case 6:
     /* longitude */
-    wpt_tmp->longitude = atof(str);
+    wpt_tmp->longitude = str.toDouble();
     break;
   case 7:
     /* DAYS since 1900 00:00:00 in days.days (5.5) */
@@ -683,7 +729,7 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
 }
 
 static void
-ozi_parse_routeheader(int field, const QString& str, Waypoint*)
+ozi_parse_routeheader(int field, const QString& str)
 {
 
   switch (field) {
@@ -719,10 +765,12 @@ data_read()
   char* trk_name = nullptr;
   int linecount = 0;
 
-  while ((buff = gbfgetstr(file_in)), !buff.isNull()) {
-    if ((linecount++ == 0) && file_in->unicode) {
-      cet_convert_init(CET_CHARSET_UTF8, 1);
+  while (true) {
+    buff = ozi_file.stream->readLine();
+    if (buff.isNull()) {
+      break;
     }
+    linecount++;
 
     /*
      * this is particularly nasty.  use the first line of the file
@@ -758,14 +806,9 @@ data_read()
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
-      int field = 0;
-      char* s = csv_lineparse(CSTR(buff), ",", "", linecount);
-      while (s) {
-        field ++;
-        if (field == 4) {
-          trk_head->rte_name = QString(s).trimmed();
-        }
-        s = csv_lineparse(nullptr, ",", "", linecount);
+      const QStringList parts = buff.split(',');
+      if (parts.size() >= 4) {
+          trk_head->rte_name = parts.at(3).trimmed();
       }
     }
 
@@ -774,20 +817,19 @@ data_read()
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
       Waypoint* wpt_tmp = new Waypoint;
 
-      /* data delimited by commas, possibly enclosed in quotes.  */
-      char* orig_s = xstrdup(CSTR(buff));
-      char* s = csv_lineparse(orig_s, ",", "", linecount);
+      /* data delimited by commas. */
+      const QStringList parts = buff.split(',');
 
       int i = 0;
       bool header = false;
-      while (s) {
+      for (const auto& s : parts) {
         switch (ozi_objective) {
         case trkdata:
           ozi_parse_track(i, s, wpt_tmp, trk_name);
           break;
         case rtedata:
           if (buff[0] == 'R') {
-            ozi_parse_routeheader(i, QString(s), wpt_tmp);
+            ozi_parse_routeheader(i, QString(s));
             header = true;
           } else {
             ozi_parse_routepoint(i, s, wpt_tmp);
@@ -803,9 +845,7 @@ data_read()
           break;
         }
         i++;
-        s = csv_lineparse(nullptr, ",", "", linecount);
       }
-      xfree(orig_s);
 
       switch (ozi_objective) {
       case trkdata:
@@ -861,7 +901,6 @@ ozi_waypt_pr(const Waypoint* wpt)
 {
   static int index = 0;
   double alt;
-  char ozi_time[16];
   QString description;
   QString shortname;
   int faked_fsdata = 0;
@@ -874,7 +913,7 @@ ozi_waypt_pr(const Waypoint* wpt)
     faked_fsdata = 1;
   }
 
-  ozi_get_time_str(wpt, ozi_time, sizeof(ozi_time));
+  QString ozi_time = ozi_get_time_str(wpt);
 
   if (wpt->altitude == unknown_alt) {
     alt = -777;
@@ -911,18 +950,24 @@ ozi_waypt_pr(const Waypoint* wpt)
     icon = wpt->icon_descr.toInt();
   }
 
-  gbfprintf(file_out,
-            "%d,%s,%.6f,%.6f,%s,%d,%d,%d,%d,%d,%s,%d,%d,",
-            index, CSTRc(shortname), wpt->latitude, wpt->longitude, ozi_time, icon,
-            1, 3, fs->fgcolor, fs->bgcolor, CSTRc(description), 0, 0);
+  *ozi_file.stream << index << ','
+                   << shortname << ','
+                   << qSetRealNumberPrecision(6) << wpt->latitude << ','
+                   << wpt->longitude << ','
+                   << ozi_time << ','
+                   << icon << ','
+                   << "1,3,"
+                   << fs->fgcolor << ','
+                   << fs->bgcolor << ','
+                   << description << ",0,0,";
   if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-    gbfprintf(file_out, "%.1f,", wpt->proximity * prox_scale);
+    *ozi_file.stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
   } else if (proximity > 0) {
-    gbfprintf(file_out,"%.1f,", proximity * prox_scale);
+    *ozi_file.stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
   } else {
-    gbfprintf(file_out,"%d,", 0);
+    *ozi_file.stream << "0,";
   }
-  gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt, 6, 0, 17);
+  *ozi_file.stream << qSetRealNumberPrecision(0) << alt << ",6,0,17\r\n";
 
   if (faked_fsdata) {
     xfree(fs);
@@ -932,18 +977,14 @@ ozi_waypt_pr(const Waypoint* wpt)
 static void
 data_write()
 {
-
   if (waypt_count()) {
-  static const char* ozi_wpt_header =
-    "OziExplorer Waypoint File Version 1.1\r\n"
-    "WGS 84\r\n"
-    "Reserved 2\r\n"
-    "Reserved 3\r\n";
-
-  track_out_count = route_out_count = 0;
+    track_out_count = route_out_count = 0;
     ozi_objective = wptdata;
     ozi_openfile(ozi_ofname);
-    gbfprintf(file_out, ozi_wpt_header);
+    *ozi_file.stream << "OziExplorer Waypoint File Version 1.1\r\n"
+                     << "WGS 84\r\n"
+                     << "Reserved 2\r\n"
+                     << "Reserved 3\r\n";
     waypt_disp_all(ozi_waypt_pr);
   }
 
