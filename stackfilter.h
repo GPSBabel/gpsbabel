@@ -93,15 +93,21 @@ private:
     ARG_TERMINATOR
   };
 
-  struct stack_elt {
+  class stack_elt
+  {
+  public:
+    stack_elt()
+    {
+      QUEUE_INIT(&waypts);
+    }
+
     queue waypts;
-    queue routes;
-    queue tracks;
-    unsigned int waypt_ct;
-    int route_count;
-    int track_count;
-    struct stack_elt* next;
-  }* stack = nullptr;
+    RouteList routes;
+    RouteList tracks;
+    unsigned int waypt_ct{0};
+    stack_elt* next{nullptr};
+  };
+  stack_elt* stack = nullptr;
 
 };
 #endif // FILTERS_ENABLED

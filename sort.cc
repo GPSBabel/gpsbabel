@@ -24,10 +24,8 @@
 #include <QtCore/QString>    // for QString
 #include <cstdlib>           // for abort
 
-extern queue my_route_head;
-extern queue my_track_head;
-
 #if FILTERS_ENABLED
+#define MYNAME "sort"
 
 template <class T>
 inline int sgn(T v)
@@ -64,22 +62,19 @@ int SortFilter::sort_comp_wpt(const queue* a, const queue* b)
   }
 }
 
-int SortFilter::sort_comp_rh(const queue* a, const queue* b)
+bool SortFilter::sort_comp_rh_by_description(const route_head* a, const route_head* b)
 {
-  const route_head* x1 = reinterpret_cast<const route_head*>(a);
-  const route_head* x2 = reinterpret_cast<const route_head*>(b);
+  return a->rte_desc < b->rte_desc;
+}
 
-  switch (rh_sort_mode)  {
-  case SortModeRteHd::description:
-    return x1->rte_desc.compare(x2->rte_desc);
-  case SortModeRteHd::name:
-    return x1->rte_name.compare(x2->rte_name);
-  case SortModeRteHd::number:
-    return cmp(x1->rte_num, x2->rte_num);
-  default:
-    abort();
-    return 0; /* Internal caller error. */
-  }
+bool SortFilter::sort_comp_rh_by_name(const route_head* a, const route_head* b)
+{
+  return a->rte_name < b->rte_name;
+}
+
+bool SortFilter::sort_comp_rh_by_number(const route_head* a, const route_head* b)
+{
+  return a->rte_num <  b->rte_num;
 }
 
 int SortFilter::SortCompWptFunctor::operator()(const queue* a, const queue* b)
@@ -87,26 +82,42 @@ int SortFilter::SortCompWptFunctor::operator()(const queue* a, const queue* b)
   return that->sort_comp_wpt(a, b);
 }
 
-int SortFilter::SortCompRteHdFunctor::operator()(const queue* a, const queue* b)
-{
-  return that->sort_comp_rh(a, b);
-}
-
 void SortFilter::process()
 {
   SortCompWptFunctor sort_comp_wpt_f(*this);
-  SortCompRteHdFunctor sort_comp_rh_f(*this);
 
   if (wpt_sort_mode != SortModeWpt::none) {
     sortqueue(&waypt_head, sort_comp_wpt_f);
   }
   if (rte_sort_mode != SortModeRteHd::none) {
-    rh_sort_mode = rte_sort_mode;
-    sortqueue(&my_route_head, sort_comp_rh_f);
+    switch (rte_sort_mode)  {
+    case SortModeRteHd::description:
+      route_sort(SortFilter::sort_comp_rh_by_description);
+      break;
+    case SortModeRteHd::name:
+      route_sort(sort_comp_rh_by_name);
+      break;
+    case SortModeRteHd::number:
+      route_sort(sort_comp_rh_by_number);
+      break;
+    default:
+      fatal(MYNAME ": unknown route sort mode.");
+    }
   }
   if (trk_sort_mode != SortModeRteHd::none) {
-    rh_sort_mode = trk_sort_mode;
-    sortqueue(&my_track_head, sort_comp_rh_f);
+    switch (trk_sort_mode)  {
+    case SortModeRteHd::description:
+      track_sort(sort_comp_rh_by_description);
+      break;
+    case SortModeRteHd::name:
+      track_sort(sort_comp_rh_by_name);
+      break;
+    case SortModeRteHd::number:
+      track_sort(sort_comp_rh_by_number);
+      break;
+    default:
+      fatal(MYNAME ": unknown track sort mode.");
+    }
   }
 }
 
