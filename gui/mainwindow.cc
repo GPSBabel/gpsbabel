@@ -153,7 +153,6 @@ static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 //------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 {
-  loadFormats();
   ui_.setupUi(this);
   setWindowTitle(appName);
   babelVersion_ = findBabelVersion();
@@ -228,6 +227,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
+  loadFormats();
 #if FAKE_LANGUAGE_MENU
   createLanguageMenu();
 #endif
@@ -330,7 +330,7 @@ void MainWindow::loadLanguage(const QString& rLanguage)
     QLocale::setDefault(locale);
 
     switchTranslator(translator_, QString("gpsbabelfe_%1.qm").arg(rLanguage));
-    switchTranslator(translatorCore_, QString("gpsbabel__%1.qm").arg(rLanguage));
+    switchTranslator(translatorCore_, QString("gpsbabel_%1.qm").arg(rLanguage));
     switchTranslator(translatorQt_, QString("qt_%1.qm").arg(rLanguage));
   }
 }

@@ -57,7 +57,7 @@ Source: "..\..\{#gpsbabel_build_dir_name}\release\gpsbabel.exe";   	DestDir: "{a
 ; Source: gpsbabelfe_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion
 
 ; Compiled translation strings that are used at runtime.
-; Source: gpsbabel_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
+Source: coretool\gpsbabel_*.qm;    	DestDir: "{app}\translations"; Flags: ignoreversion
 Source: gpsbabelfe_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
 
 ; Miscellaneous

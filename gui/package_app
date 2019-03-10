@@ -100,6 +100,7 @@ mkdir -p "${LANGDIR}"
 
 # copy our compiled translations.
 cp gpsbabelfe_??.qm "${LANGDIR}"
+cp coretool/gpsbabel_??.qm "${LANGDIR}"
 
 # bundle Qt .qm files, deploy them with our .qm files,
 # and, for macos, make & deploy locversion.plist files.
