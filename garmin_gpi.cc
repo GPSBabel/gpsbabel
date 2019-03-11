@@ -44,14 +44,27 @@
 	* support category from GMSD "Garmin Special Data"
 */
 
+#include <algorithm>               // for stable_sort
+#include <cctype>                  // for tolower
+#include <cstdio>                  // for NULL, SEEK_CUR, SEEK_SET
+#include <cstdlib>                 // for atoi
+#include <cstdint>
+#include <cstring>                 // for strcmp, strlen, strncmp, strncpy
+#include <ctime>                   // for time, gmtime
+
+#include <QtCore/QList>            // for QList<>::iterator, QList
+#include <QtCore/QString>          // for QString, operator+, operator<
+#include <QtCore/QThread>          // for QThread
+#include <QtCore/Qt>               // for CaseInsensitive
+#include <QtCore/QtGlobal>         // for foreach, Q_UNUSED
+
 #include "defs.h"
-#include "cet_util.h"
-#include "garmin_fs.h"
 #include "garmin_gpi.h"
-#include "jeeps/gpsmath.h"
-#include <QtCore/QTextCodec>
-#include <QtCore/QThread>
-#include <cstdlib>
+#include "cet_util.h"              // for cet_convert_init
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_SET, GMSD_GET, garmin_fs_alloc, GMSD_FIND
+#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfile, gbfopen_le, gbsize_t, gbfgetuint16
+#include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+
 
 #define MYNAME "garmin_gpi"
 
@@ -146,17 +159,16 @@ public:
   QString category;
 } reader_data_t;
 
-typedef struct writer_data_s {
-  queue Q;
-  int ct;
-  int sz;
-  int alert;
+struct writer_data_t {
+  QList<Waypoint*> waypt_list;
+  int sz{0};
+  int alert{0};
   bounds bds;
-  struct writer_data_s* top_left;
-  struct writer_data_s* top_right;
-  struct writer_data_s* buttom_left;
-  struct writer_data_s* buttom_right;
-} writer_data_t;
+  writer_data_t* top_left{nullptr};
+  writer_data_t* top_right{nullptr};
+  writer_data_t* buttom_left{nullptr};
+  writer_data_t* buttom_right{nullptr};
+};
 
 typedef struct gpi_waypt_data_s {
   int sz;
@@ -764,12 +776,10 @@ write_string(const char* str, const char long_format)
   gbfwrite(str, 1, len, fout);
 }
 
-static int
-compare_wpt_cb(const queue* a, const queue* b)
+static bool
+compare_wpt_cb(const Waypoint* a, const Waypoint* b)
 {
-  const Waypoint* wa = reinterpret_cast<const Waypoint *>(a);
-  const Waypoint* wb = reinterpret_cast<const Waypoint *>(b);
-  return wa->shortname.compare(wb->shortname);
+  return a->shortname < b->shortname;
 }
 
 static char
@@ -781,8 +791,7 @@ compare_strings(const QString& s1, const QString& s2)
 static writer_data_t*
 wdata_alloc()
 {
-  writer_data_t* res = (writer_data_t*) xcalloc(1, sizeof(*res));
-  QUEUE_INIT(&res->Q);
+  auto res = new writer_data_t;
   waypt_init_bounds(&res->bds);
 
   return res;
@@ -792,10 +801,7 @@ wdata_alloc()
 static void
 wdata_free(writer_data_t* data)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (Waypoint* wpt, data->waypt_list) {
 
     if (wpt->extra_data) {
       gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
@@ -820,15 +826,14 @@ wdata_free(writer_data_t* data)
     wdata_free(data->buttom_right);
   }
 
-  xfree(data);
+  delete data;
 }
 
 
 static void
 wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
 {
-  data->ct++;
-  ENQUEUE_TAIL(&data->Q, &wpt->Q);
+  data->waypt_list.append(wpt);
   waypt_add_to_bounds(&data->bds, wpt);
 }
 
@@ -836,15 +841,14 @@ wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
 static void
 wdata_check(writer_data_t* data)
 {
-  queue* elem, *tmp;
   double center_lon;
 
-  if ((data->ct <= WAYPOINTS_PER_BLOCK) ||
+  if ((data->waypt_list.size() <= WAYPOINTS_PER_BLOCK) ||
       /* avoid endless loop for points (more than WAYPOINTS_PER_BLOCK)
          at same coordinates */
       ((data->bds.min_lat >= data->bds.max_lat) && (data->bds.min_lon >= data->bds.max_lon))) {
-    if (data->ct > 1) {
-      sortqueue(&data->Q, compare_wpt_cb);
+    if (data->waypt_list.size() > 1) {
+      std::stable_sort(data->waypt_list.begin(), data->waypt_list.end(), compare_wpt_cb);
     }
     return;
   }
@@ -852,16 +856,15 @@ wdata_check(writer_data_t* data)
   /* compute the (mean) center of current bounds */
 
   double center_lat = center_lon = 0;
-  QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt, data->waypt_list) {
     center_lat += wpt->latitude;
     center_lon += wpt->longitude;
   }
-  center_lat /= data->ct;
-  center_lon /= data->ct;
+  center_lat /= data->waypt_list.size();
+  center_lon /= data->waypt_list.size();
 
-  QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  while (!data->waypt_list.isEmpty()) {
+    Waypoint* wpt = data->waypt_list.takeFirst();
     writer_data_t** ref;
 
     if (wpt->latitude < center_lat) {
@@ -881,9 +884,6 @@ wdata_check(writer_data_t* data)
     if (*ref == nullptr) {
       *ref = wdata_alloc();
     }
-
-    data->ct--;
-    dequeue(&wpt->Q);
 
     wdata_add_wpt(*ref, wpt);
   }
@@ -906,17 +906,15 @@ wdata_check(writer_data_t* data)
 static int
 wdata_compute_size(writer_data_t* data)
 {
-  queue* elem, *tmp;
   int res = 0;
 
-  if (QUEUE_EMPTY(&data->Q)) {
+  if (data->waypt_list.isEmpty()) {
     goto skip_empty_block;  /* do not issue an empty block */
   }
 
   res = 23;	/* bounds, ... of tag 0x80008 */
 
-  QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (Waypoint* wpt, data->waypt_list) {
     garmin_fs_t* gmsd;
 
     res += 12;		/* tag/sz/sub-sz */
@@ -1050,7 +1048,7 @@ skip_empty_block:
 
   data->sz = res;
 
-  if (QUEUE_EMPTY(&data->Q)) {
+  if (data->waypt_list.isEmpty()) {
     return res;
   }
 
@@ -1061,9 +1059,7 @@ skip_empty_block:
 static void
 wdata_write(const writer_data_t* data)
 {
-  queue* elem, *tmp;
-
-  if (QUEUE_EMPTY(&data->Q)) {
+  if (data->waypt_list.isEmpty()) {
     goto skip_empty_block;  /* do not issue an empty block */
   }
 
@@ -1080,9 +1076,8 @@ wdata_write(const writer_data_t* data)
   gbfputint16(1, fout);
   gbfputc(data->alert, fout);
 
-  QUEUE_FOR_EACH(&data->Q, elem, tmp) {
+  foreach (const Waypoint* wpt, data->waypt_list) {
     int s1;
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
     QString str = wpt->description;
@@ -1266,10 +1261,7 @@ write_header()
 static void
 enum_waypt_cb(const Waypoint* ref)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
-    Waypoint* cmp = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* cmp, wdata->waypt_list) {
 
     /* sort out nearly equal waypoints */
     if ((compare_strings(cmp->shortname, ref->shortname) == 0) &&

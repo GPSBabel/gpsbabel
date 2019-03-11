@@ -20,19 +20,36 @@
 
  */
 
-#include "defs.h"
-#include "explorist_ini.h"
-#include "gbser.h"
-#include "magellan.h"
+#include "defs.h"                  // might include config.h, which might define HAVE_GLOB.
+
+#include <cctype>                  // for isprint, toupper
+#include <cmath>                   // for fabs, lround
+#include <cstdio>                  // for sprintf, sscanf, snprintf, size_t
+#include <cstdlib>                 // for atoi, atof, strtoul
+#include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
+#include <ctime>                   // for gmtime
 
 #if HAVE_GLOB
 #include <glob.h>
 #endif
-#include <QtCore/QFileInfo>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QFileInfo>        // for QFileInfo
+#include <QtCore/QLatin1String>    // for QLatin1String
+#include <QtCore/QList>            // for QList
+#include <QtCore/QString>          // for QString, operator==
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/Qt>               // for CaseInsensitive
+#include <QtCore/QtGlobal>         // for qPrintable, foreach
+
+#include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
+#include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
+#include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
+#include "magellan.h"              // for mm_meridian, mm_sportrak, icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
+#include "queue.h"                 // for queue, QUEUE_FOR_EACH
+#include "src/core/datetime.h"     // for DateTime
+
 
 static int bitrate = 4800;
 static int wptcmtcnt;
@@ -85,12 +102,7 @@ typedef enum {
 /*
  *   An individual element of a route.
  */
-class mag_rte_elem {
- public:
-  mag_rte_elem() {
-    QUEUE_INIT(&Q);
-  }
-  queue Q;	 		/* My link pointers */
+struct mag_rte_elem {
   QString wpt_name;
   QString wpt_icon;
 };
@@ -98,13 +110,13 @@ class mag_rte_elem {
 /*
  *  A header of a route.  Related elements of a route belong to this.
  */
-typedef struct mag_rte_head_ {
-  queue Q;			/* Queue head for child rte_elems */
-  char* rte_name;
-  int nelems;
-} mag_rte_head;
+struct mag_rte_head_t {
+  QList<mag_rte_elem*> elem_list; /* list of child rte_elems */
+  char* rte_name{nullptr};
+  int nelems{0};
+};
 
-static queue rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
+static QList<Waypoint*> rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
 
 static gbfile* magfile_h;
 static mag_rxstate magrxstate;
@@ -496,7 +508,7 @@ retry:
       if (extension_hint == WPTDATAMASK) {
         waypt_add(wpt);
       } else if (extension_hint == RTEDATAMASK) {
-        ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
+        rte_wpt_tmp.append(wpt);
       }
     } else {
       switch (objective) {
@@ -504,7 +516,7 @@ retry:
         waypt_add(wpt);
         break;
       case rtedata:
-        ENQUEUE_TAIL(&rte_wpt_tmp, &wpt->Q);
+        rte_wpt_tmp.append(wpt);
         break;
       default:
         break;
@@ -793,7 +805,7 @@ mag_rd_init_common(const QString& portname)
   terminit(portname, 0);
   mag_serial_init_common(portname);
 
-  QUEUE_INIT(&rte_wpt_tmp);
+  rte_wpt_tmp.clear();
 
   /* find the location of the tail of the path name,
    * make a copy of it, then lop off the file extension
@@ -860,7 +872,7 @@ mag_wr_init_common(const QString& portname)
   terminit(portname, 1);
   mag_serial_init_common(portname);
 
-  QUEUE_INIT(&rte_wpt_tmp);
+  rte_wpt_tmp.clear();
 }
 
 /*
@@ -903,7 +915,9 @@ mag_deinit()
     mkshort_del_handle(&mkshort_handle);
   }
 
-  waypt_flush(&rte_wpt_tmp);
+  while (!rte_wpt_tmp.isEmpty()) {
+    delete rte_wpt_tmp.takeFirst();
+  }
 
   trk_head = nullptr;
 
@@ -1025,7 +1039,7 @@ mag_rteparse(char* rtemsg)
   int frags,frag,rtenum;
   char xbuf[100],next_stop[100],abuf[100];
   char* currtemsg;
-  static mag_rte_head* mag_rte_head;
+  static mag_rte_head_t* mag_rte_head;
   char* p;
 
 #if 0
@@ -1062,8 +1076,7 @@ mag_rteparse(char* rtemsg)
    * queue head.
    */
   if (frag == 1) {
-    mag_rte_head = (struct mag_rte_head_*) xcalloc(sizeof(*mag_rte_head),1);
-    QUEUE_INIT(&mag_rte_head->Q);
+    mag_rte_head = new mag_rte_head_t;
     mag_rte_head->nelems = frags;
   }
 
@@ -1088,7 +1101,7 @@ mag_rteparse(char* rtemsg)
     rte_elem->wpt_name = next_stop;
     rte_elem->wpt_icon = abuf;
 
-    ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
+    mag_rte_head->elem_list.append(rte_elem);
 
     /* Sportrak (the non-mapping unit) creates malformed
      * RTE sentence with no icon info after the routepoint
@@ -1099,7 +1112,7 @@ mag_rteparse(char* rtemsg)
       rte_elem = new mag_rte_elem;
       rte_elem->wpt_name = abuf;
 
-      ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
+      mag_rte_head->elem_list.append(rte_elem);
     }
 
     next_stop[0] = 0;
@@ -1111,7 +1124,6 @@ mag_rteparse(char* rtemsg)
    * gpsbabel internal structs now.
    */
   if (frag == mag_rte_head->nelems) {
-    queue* elem, *tmp;
 
     route_head* rte_head = route_head_alloc();
     route_add_head(rte_head);
@@ -1124,15 +1136,13 @@ mag_rteparse(char* rtemsg)
      * those in the queue for SD routes...
      */
 
-    QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
-      mag_rte_elem* re = reinterpret_cast<mag_rte_elem *>(elem);
-      queue* welem, *wtmp;
+    while (!mag_rte_head->elem_list.isEmpty()) {
+      mag_rte_elem* re = mag_rte_head->elem_list.takeFirst();
 
       /*
        * Copy route points from temp wpt queue.
        */
-      QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
-        Waypoint* waypt = reinterpret_cast<Waypoint *>(welem);
+      foreach (const Waypoint* waypt, rte_wpt_tmp) {
         if (waypt->shortname == re->wpt_name) {
           Waypoint* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
@@ -1140,10 +1150,9 @@ mag_rteparse(char* rtemsg)
         }
       }
 
-      dequeue(&re->Q);
       delete re;
     }
-    xfree(mag_rte_head);
+    delete mag_rte_head;
   }
 }
 

@@ -61,7 +61,6 @@ void RadiusFilter::process()
 #endif
   Waypoint** comp;
   int i, wc;
-  queue temp_head;
   route_head* rte_head = nullptr;
 #if NEWQ
   foreach (Waypoint* waypointp, waypt_list) {
@@ -89,7 +88,6 @@ void RadiusFilter::process()
   }
 
   wc = waypt_count();
-  QUEUE_INIT(&temp_head);
 
   comp = (Waypoint**) xcalloc(wc, sizeof(*comp));
 

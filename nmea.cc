@@ -20,22 +20,34 @@
 
  */
 
+#include <cctype>                  // for isprint
+#include <cmath>                   // for fabs, lround
+#include <cstdio>                  // for snprintf, sscanf, NULL, fprintf, fputc, stderr
+#include <cstdlib>                 // for atoi, atof
+#include <cstring>                 // for strncmp, memset, strlen, strchr, strstr, strrchr
+#include <ctime>                   // for gmtime
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QChar>            // for QChar, operator==, operator!=
+#include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QList>            // for QList
+#include <QtCore/QString>          // for QString, QString::KeepEmptyParts
+#include <QtCore/QStringList>      // for QStringList
+#include <QtCore/QThread>          // for QThread
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/QtGlobal>         // for qPrintable
 
 #include "defs.h"
-#include "cet_util.h"
-#include "gbser.h"
-#include "jeeps/gpsmath.h"
-#include "src/core/logging.h"
-#include "strptime.h"
+#include "cet_util.h"              // for cet_convert_init
+#include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
+#include "gbser.h"                 // for gbser_set_speed, gbser_flush, gbser_read_line, gbser_deinit, gbser_init, gbser_write
+#include "jeeps/gpsmath.h"         // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M
+#include "queue.h"                 // for queue, QUEUE_FOR_EACH, QUEUE_LAST
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/logging.h"      // for Warning
+#include "strptime.h"              // for strptime
 
-#include <cctype>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
-
-#include <QtCore/QStringList>
-#include <QtCore/QThread>
 
 /**********************************************************
 
@@ -165,7 +177,7 @@ static Waypoint* curr_waypt;
 static Waypoint* last_waypt;
 static void* gbser_handle;
 static QString posn_fname;
-static queue pcmpt_head;
+static QList<Waypoint*> pcmpt_head;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -277,7 +289,7 @@ nmea_rd_init(const QString& fname)
   CHECK_BOOL(opt_gpgsa);
   CHECK_BOOL(opt_gisteq);
 
-  QUEUE_INIT(&pcmpt_head);
+  pcmpt_head.clear();
 
   if (getposnarg) {
     getposn = 1;
@@ -826,11 +838,10 @@ pcmpt_parse(char* ibuf)
     dmy = dmy / 100;
     tm.tm_mday = dmy;
     nmea_set_waypoint_time(curr_waypt, &tm, 0);
-    ENQUEUE_HEAD(&pcmpt_head, &curr_waypt->Q);
+    pcmpt_head.prepend(curr_waypt);
   } else {
-    queue* elem, *tmp;
 
-    if (QUEUE_EMPTY(&pcmpt_head)) {
+    if (pcmpt_head.isEmpty()) {
       return;
     }
 
@@ -841,8 +852,8 @@ pcmpt_parse(char* ibuf)
      */
     route_head* trk_head = route_head_alloc();
     track_add_head(trk_head);
-    QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(dequeue(elem));
+    while (!pcmpt_head.isEmpty()) {
+      Waypoint* wpt = pcmpt_head.takeFirst();
       nmea_add_wpt(wpt, trk_head);
     }
   }

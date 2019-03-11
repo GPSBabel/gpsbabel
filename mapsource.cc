@@ -21,12 +21,23 @@
 
 /* #define	MPS_DEBUG	0 */
 
+#include <cstdio>               // for SEEK_CUR, sprintf, SEEK_SET, EOF, size_t
+#include <cstdlib>              // for atoi, rand, srand
+#include <cstring>              // for strcpy, memset, strlen, strcmp
+#include <ctime>                // for time_t
+
+#include <QtCore/QChar>         // for QChar
+#include <QtCore/QFile>         // for QFile
+#include <QtCore/QList>         // for QList
+#include <QtCore/QString>       // for QString, operator==
+
 #include "defs.h"
-#include "garmin_tables.h"
-#include "jeeps/gpsmath.h"
-#include <QtCore/QFile>
-#include <cstdio>
-#include <cstdlib>
+#include "garmin_tables.h"      // for gt_find_icon_number_from_desc, MAPSOURCE, gt_find_desc_from_icon_number, GARMIN_SERIAL, PCX, garmin_formats_e
+#include "gbfile.h"             // for gbfwrite, gbfread, gbfgetint32, gbfputint32, gbfseek, gbfputc, gbfgetc, gbfputdbl, gbfgetdbl, gbfclose, gbfeof, gbfile, gbftell, gbfgetcstr, gbfputs, gbfopen_le
+#include "jeeps/gpsmath.h"      // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "queue.h"              // for queue, QUEUE_FOR_EACH
+#include "src/core/datetime.h"  // for DateTime
+
 
 static	gbfile*	mps_file_in;
 static	gbfile*	mps_file_out;
@@ -43,12 +54,12 @@ static QString fin_name;
 
 static	const Waypoint*	prevRouteWpt;
 /* Private queues of written out waypoints */
-static queue written_wpt_head;
-static queue written_route_wpt_head;
+static QList<Waypoint *> written_wpt_head;
+static QList<Waypoint *> written_route_wpt_head;
 static short_handle written_wpt_mkshort_handle;
 
 /* Private queue of read in waypoints assumed to be used only for routes */
-static queue read_route_wpt_head;
+static QList<Waypoint *> read_route_wpt_head;
 static short_handle read_route_wpt_mkshort_handle;
 
 #define MPSDEFAULTWPTCLASS		0
@@ -113,19 +124,16 @@ mps_noop(const route_head*)
 }
 
 static void
-mps_wpt_q_init(queue* whichQueue)
+mps_wpt_q_init(QList<Waypoint *>* whichQueue)
 {
-  QUEUE_INIT(whichQueue);
+  whichQueue->clear();
 }
 
 static void
-mps_wpt_q_deinit(queue* whichQueue)
+mps_wpt_q_deinit(QList<Waypoint *>* whichQueue)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    Waypoint* q = reinterpret_cast<Waypoint *>(dequeue(elem));
-    delete q;
+  while (!whichQueue->isEmpty()) {
+    delete whichQueue->takeFirst();
   }
 }
 
@@ -134,12 +142,9 @@ mps_wpt_q_deinit(queue* whichQueue)
  *
  */
 static Waypoint*
-mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
+mps_find_wpt_q_by_name(const QList<Waypoint *>* whichQueue, const QString& name)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
+  foreach (Waypoint* waypointp, *whichQueue) {
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -152,10 +157,10 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
  *
  */
 static void
-mps_wpt_q_add(const queue* whichQueue, const Waypoint* wpt)
+mps_wpt_q_add(QList<Waypoint *>* whichQueue, const Waypoint* wpt)
 {
   Waypoint* written_wpt = new Waypoint(*wpt);
-  ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
+  whichQueue->append(written_wpt);
 }
 
 static int
