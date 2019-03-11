@@ -20,7 +20,7 @@
 */
 
 /*
-    2006/04/05: initial release (not published in GPSBbabel)
+    2006/04/05: initial release (not published in GPSBabel)
     2006/07/19: finished reader and writer for type 4,5,28 of ver. 1
     2006/10/31: remove wptdata from case statement (data_write)
 
@@ -31,16 +31,28 @@
 
 #if CSVFMTS_ENABLED
 
-#include "cet_util.h"
-#include "csv_util.h"
-#include "jeeps/gpsmath.h"
-#include "grtcirc.h"
-#include "src/core/logging.h"
+#include <algorithm>                  // for sort
+#include <cstdlib>                    // for atoi
+#include <cstring>                    // for strchr
+#include <ctime>                      // for localtime, strftime
 
-#include <ctime>
-#include <cstdio>
-#include <cstdlib>
-#include <QtCore/QRegularExpression>
+#include <QtCore/QDate>               // for QDate
+#include <QtCore/QDateTime>           // for QDateTime
+#include <QtCore/QList>               // for QList<>::iterator, QList
+#include <QtCore/QRegularExpression>  // for QRegularExpression
+#include <QtCore/QString>             // for QString, operator+, QString::KeepEmptyParts
+#include <QtCore/QStringList>         // for QStringList
+#include <QtCore/QTime>               // for QTime
+#include <QtCore/QtGlobal>            // for qAsConst, QAddConst<>::Type
+
+#include "cet_util.h"                 // for cet_convert_init
+#include "csv_util.h"                 // for csv_lineparse
+#include "gbfile.h"                   // for gbfprintf, gbfclose, gbfopen, gbfgetstr, gbfile
+#include "grtcirc.h"                  // for RAD, gcdist, heading_true_degrees, radtometers
+#include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index, GPS_Math_WGS84_To_Known_Datum_M
+#include "src/core/datetime.h"        // for DateTime
+#include "src/core/logging.h"         // for Warning, Fatal
+
 
 #define MYNAME "stmsdf"
 
@@ -59,7 +71,7 @@ static int lineno;
 static int datum;
 static int filetype;
 static route_head* route;
-static queue trackpts;
+static QList<Waypoint*> trackpts;
 static QString rte_name;
 static QString rte_desc;
 
@@ -76,7 +88,7 @@ static int all_points;
 static int this_points;
 static int saved_points;
 static time_t start_time;
-static unsigned char this_valid;
+static bool this_valid;
 static short_handle short_h;
 
 #define route_index this_index
@@ -169,43 +181,25 @@ parse_header(char* line)
   }
 }
 
-static int
-track_qsort_cb(const void* a, const void* b)
+static bool
+track_sort_cb(const Waypoint* a, const Waypoint* b)
 {
-  const Waypoint* wa = *(Waypoint**)a;
-  const Waypoint* wb = *(Waypoint**)b;
-
-  return wa->GetCreationTime().toTime_t() - wb->GetCreationTime().toTime_t();
+  return a->GetCreationTime() < b->GetCreationTime();
 }
 
 static void
 finalize_tracks()
 {
-  queue* elem, *tmp;
   route_head* track = nullptr;
   int trackno = 0;
 
-  int count = 0;
-  QUEUE_FOR_EACH(&trackpts, elem, tmp) {
-    count++;
-  };
-  if (count == 0) {
+  if (trackpts.isEmpty()) {
     return;
   }
 
-  Waypoint** list = (Waypoint**)xmalloc(count * sizeof(*list));
+  std::sort(trackpts.begin(), trackpts.end(), track_sort_cb);
 
-  int index = 0;
-  QUEUE_FOR_EACH(&trackpts, elem, tmp) {
-    list[index] = reinterpret_cast<Waypoint *>(elem);
-    dequeue(elem);
-    index++;
-  }
-
-  qsort(list, count, sizeof(*list), track_qsort_cb);
-
-  for (index = 0; index < count; index++) {
-    Waypoint* wpt = list[index];
+  foreach (Waypoint* wpt, trackpts) {
     if (wpt->wpt_flags.fmt_use == 2) {	/* log continued */
       track = nullptr;
     }
@@ -231,7 +225,7 @@ finalize_tracks()
     wpt->wpt_flags.fmt_use = 0;
   }
 
-  xfree(list);
+  trackpts.clear();
 }
 
 static void
@@ -367,7 +361,7 @@ parse_point(char *line) {
   switch (what) {
     case 0:
     case 1:
-      ENQUEUE_TAIL(&trackpts, &wpt->Q);
+    trackpts.append(wpt);
       break;
     case 2:
     case 3:
@@ -395,7 +389,7 @@ rd_init(const QString& fname)
   filetype = 28;
   rte_name = rte_desc = QString();
 
-  QUEUE_INIT(&trackpts);
+  trackpts.clear();
 }
 
 static void

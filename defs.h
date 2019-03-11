@@ -35,6 +35,7 @@
 #include "session.h"
 
 #include <QtCore/QString>
+#include <QtCore/QTextCodec>
 #include <utility>
 #include "src/core/datetime.h"
 #include "src/core/optional.h"

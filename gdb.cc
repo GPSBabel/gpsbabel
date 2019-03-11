@@ -21,16 +21,29 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
+#include <cmath>                   // for fabs
+#include <cstdio>                  // for printf, snprintf, sscanf, SEEK_SET, NULL
+#include <cstdlib>                 // for atoi, strtol, NULL
+#include <cstring>                 // for memset, strcmp, strstr, strchr, strlen, strncpy
+#include <ctime>                   // for strftime
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QList>            // for QList
+#include <QtCore/QString>          // for QString, operator!=, operator==
+#include <QtCore/Qt>               // for CaseInsensitive
+#include <QtCore/QtGlobal>         // for qPrintable, Q_UNUSED, foreach
+
 #include "defs.h"
 
-#include "cet_util.h"
-#include "csv_util.h"
-#include "garmin_fs.h"
-#include "garmin_tables.h"
-#include "grtcirc.h"
-#include "jeeps/gpsmath.h"
-#include <cmath>
-#include <cstdlib>
+#include "cet_util.h"              // for cet_convert_init
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, garmin_ilink_t, GMSD_GET, GMSD_SETSTR, GMSD_SET, garmin_fs_alloc, GMSD_FIND, GMSD_HAS
+#include "garmin_tables.h"         // for gt_get_icao_country, gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
+#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfread, gbfwrite, gbfgetc, gbfputc, gbfgetdbl, gbfgetcstr, gbfile, gbfclose, gbfputcstr, gbfcopyfrom, gbfrewind, gbfseek, gbftell, gbfopen_le, gbfgetcstr_old, gbfgetint16, gbfputdbl, gbfputint16
+#include "grtcirc.h"               // for RAD, gcdist, radtometers
+#include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "queue.h"                 // for queue, QUEUE_FOR_EACH
+#include "src/core/datetime.h"     // for DateTime
+
 
 #define MYNAME "gdb"
 
@@ -70,7 +83,7 @@ static char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
 static gbfile* fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
 
-static queue wayptq_in, wayptq_out, wayptq_in_hidden;
+static QList<Waypoint *> wayptq_in, wayptq_out, wayptq_in_hidden;
 static short_handle short_h;
 
 static char* gdb_opt_category;
@@ -95,13 +108,11 @@ static int trk_ct;	/* informational: total number of tracks in/out */
 #define NOT_EMPTY(a) (a && *a)
 
 static void
-gdb_flush_waypt_queue(queue* Q)
+gdb_flush_waypt_queue(QList<Waypoint *>* Q)
 {
-  queue* elem, *tmp;
 
-  QUEUE_FOR_EACH(Q, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-    dequeue(elem);
+  while(!Q->isEmpty()) {
+    const Waypoint* wpt = Q->takeFirst();
     if (wpt->extra_data) {
 #if NEW_STRINGS
       // FIXME
@@ -117,7 +128,6 @@ gdb_flush_waypt_queue(queue* Q)
     delete wpt;
   }
 }
-
 
 #if GDB_DEBUG
 static void
@@ -283,13 +293,10 @@ gdb_fread_strlist()
 }
 
 static Waypoint*
-gdb_find_wayptq(const queue* Q, const Waypoint* wpt, const char exact)
+gdb_find_wayptq(const QList<Waypoint *>* Q, const Waypoint* wpt, const char exact)
 {
-  queue* elem, *tmp;
   QString name = wpt->shortname;
-
-  QUEUE_FOR_EACH(Q, elem, tmp) {
-    Waypoint* tmp = reinterpret_cast<Waypoint *>(elem);
+  foreach (Waypoint* tmp, *Q) {
     if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
       if (! exact) {
         return tmp;
@@ -996,8 +1003,8 @@ gdb_rd_init(const QString& fname)
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
 
-  QUEUE_INIT(&wayptq_in);
-  QUEUE_INIT(&wayptq_in_hidden);
+  wayptq_in.clear();
+  wayptq_in_hidden.clear();
 
   gdb_via = (gdb_opt_via && *gdb_opt_via) ? atoi(gdb_opt_via) : 0;
   gdb_roadbook = (gdb_opt_roadbook && *gdb_opt_roadbook) ? atoi(gdb_opt_roadbook) : 0;
@@ -1059,9 +1066,9 @@ read_data()
       if ((gdb_via == 0) || (wpt_class == 0)) {
         waypt_add(wpt);
         Waypoint* dupe = new Waypoint(*wpt);
-        ENQUEUE_TAIL(&wayptq_in, &dupe->Q);
+        wayptq_in.append(dupe);
       } else {
-        ENQUEUE_TAIL(&wayptq_in_hidden, &wpt->Q);
+        wayptq_in_hidden.append(wpt);
       }
       break;
     case 'R':
@@ -1630,7 +1637,7 @@ write_waypoint_cb(const Waypoint* refpt)
     Waypoint* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
-    ENQUEUE_TAIL(&wayptq_out, &wpt->Q);
+    wayptq_out.append(wpt);
 
     gbfile* fsave = fout;
     fout = ftmp;
@@ -1770,7 +1777,7 @@ gdb_wr_init(const QString& fname)
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
 
-  QUEUE_INIT(&wayptq_out);
+  wayptq_out.clear();
   short_h = nullptr;
 
   waypt_ct = 0;
