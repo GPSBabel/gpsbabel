@@ -155,6 +155,11 @@ time I have seen this is when the recording stops suddenly, where the last
 sentence is truncated - and missing part of the line, including the checksum.
 */
 
+struct NmeaWaypoint : Waypoint
+{
+  bool added{false};
+};
+
 typedef enum {
   gp_unknown = 0,
   gpgga,
@@ -173,11 +178,11 @@ static route_head* trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static struct tm tm;
-static Waypoint* curr_waypt;
-static Waypoint* last_waypt;
+static NmeaWaypoint* curr_waypt;
+static NmeaWaypoint* last_waypt;
 static void* gbser_handle;
 static QString posn_fname;
-static QList<Waypoint*> pcmpt_head;
+static QList<NmeaWaypoint*> pcmpt_head;
 
 static int without_date;	/* number of created trackpoints without a valid date */
 static struct tm opt_tm;	/* converted "date" parameter */
@@ -246,7 +251,7 @@ nmea_cksum(const char* const buf)
 }
 
 static void
-nmea_add_wpt(Waypoint* wpt, route_head* trk)
+nmea_add_base_wpt(Waypoint* wpt, route_head* trk)
 {
   if (datum != DATUM_WGS84) {
     double lat, lon, alt;
@@ -264,9 +269,16 @@ nmea_add_wpt(Waypoint* wpt, route_head* trk)
 }
 
 static void
-nmea_release_wpt(Waypoint* wpt)
+nmea_add_wpt(NmeaWaypoint* wpt, route_head* trk)
 {
-  if (wpt && ((wpt->Q.next == nullptr) || (wpt->Q.next == &wpt->Q))) {
+  wpt->added = true;
+  nmea_add_base_wpt(wpt, trk);
+}
+
+static void
+nmea_release_wpt(NmeaWaypoint* wpt)
+{
+  if (wpt && !wpt->added) {
     /* This waypoint isn't queued.
        Release it, because we don't have any reference to this
        waypoint (! memory leak !) */
@@ -301,12 +313,12 @@ nmea_rd_init(const QString& fname)
   if (getposn) {
     posn_status st;
     nmea_rd_posn_init(fname);
-    Waypoint* wpt = nmea_rd_posn(&st);
+    auto wpt = nmea_rd_posn(&st);
     if (!wpt) {
       return;
     }
     wpt->shortname = "Position";
-    nmea_add_wpt(wpt, nullptr);
+    nmea_add_base_wpt(wpt, nullptr);
     return;
   }
 
@@ -428,7 +440,7 @@ gpgll_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = hms % 100;
 
-  Waypoint* waypt = new Waypoint;
+  auto waypt = new NmeaWaypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -499,7 +511,7 @@ gpgga_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = (long) hms % 100;
 
-  Waypoint* waypt = new Waypoint;
+  auto waypt = new NmeaWaypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -609,7 +621,7 @@ gprmc_parse(char* ibuf)
     return;
   }
 
-  Waypoint* waypt = new Waypoint;
+  auto waypt = new NmeaWaypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
   WAYPT_SET(waypt, course, course);
@@ -663,7 +675,7 @@ gpwpl_parse(char* ibuf)
     lngdeg = -lngdeg;
   }
 
-  Waypoint* waypt = new Waypoint;
+  auto waypt = new NmeaWaypoint;
   waypt->latitude = ddmm2degrees(latdeg);
   waypt->longitude = ddmm2degrees(lngdeg);
   waypt->shortname = sname;
@@ -822,7 +834,7 @@ pcmpt_parse(char* ibuf)
   }
 
   if (lat || lon) {
-    curr_waypt = new Waypoint;
+    curr_waypt = new NmeaWaypoint;
     curr_waypt->longitude = pcmpt_deg(lon);
     curr_waypt->latitude = pcmpt_deg(lat);
 
@@ -853,7 +865,7 @@ pcmpt_parse(char* ibuf)
     route_head* trk_head = route_head_alloc();
     track_add_head(trk_head);
     while (!pcmpt_head.isEmpty()) {
-      Waypoint* wpt = pcmpt_head.takeFirst();
+      auto wpt = pcmpt_head.takeFirst();
       nmea_add_wpt(wpt, trk_head);
     }
   }
@@ -1207,7 +1219,7 @@ nmea_rd_posn(posn_status*)
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {
       if (last_read_time) {
-        Waypoint* w = curr_waypt;
+        auto w = curr_waypt;
 
         lt = last_read_time;
         curr_waypt = nullptr;
