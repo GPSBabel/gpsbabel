@@ -166,6 +166,8 @@ void StackFilter::exit()
   }
   while (stack) {
     waypt_flush(&(stack->waypts));
+    stack->routes.flush();
+    stack->tracks.flush();
     tmp_elt = stack;
     stack = stack->next;
     delete tmp_elt;

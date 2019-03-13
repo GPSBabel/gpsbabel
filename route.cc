@@ -521,8 +521,8 @@ RouteList::restore(RouteList* src)
 void RouteList::swap(RouteList& other)
 {
   const RouteList tmp_list = *this;
-  other = *this;
-  *this = tmp_list;
+  *this = other;
+  other = tmp_list;
 }
 
 void RouteList::sort(Compare cmp)

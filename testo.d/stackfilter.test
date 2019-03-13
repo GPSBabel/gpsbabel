@@ -7,3 +7,7 @@
 
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
 
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x transform,rte=wpt,del -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
+
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x transform,trk=wpt,del -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
+
