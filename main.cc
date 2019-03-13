@@ -49,7 +49,6 @@
 #include "filter.h"                 // for Filter
 #include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
 #include "inifile.h"                // for inifile_done, inifile_init
-#include "queue.h"                  // for queue
 #include "session.h"                // for start_session, session_exit, session_init
 #include "src/core/datetime.h"      // for DateTime
 #include "src/core/file.h"          // for File
@@ -228,9 +227,9 @@ run(const char* prog_name)
   const char* fvec_opts = nullptr;
   int opt_version = 0;
   bool did_something = false;
-  queue* wpt_head_bak;
-  RouteList* rte_head_bak, *trk_head_bak;
-  signed int wpt_ct_bak;
+  WaypointList* wpt_head_bak;
+  RouteList* rte_head_bak;
+  RouteList* trk_head_bak;
   bool lists_backedup;
   QStack<QargStackElement> qargs_stack;
 
@@ -350,7 +349,9 @@ run(const char* prog_name)
         cet_convert_init(ovecs->encode, ovecs->fixed_encode);
 
         lists_backedup = false;
-        rte_head_bak = trk_head_bak = nullptr;
+        wpt_head_bak = nullptr;
+        rte_head_bak = nullptr;
+        trk_head_bak = nullptr;
 
         ovecs->wr_init(ofname);
 
@@ -364,7 +365,7 @@ run(const char* prog_name)
           int saved_status = global_opts.verbose_status;
           global_opts.verbose_status = 0;
           lists_backedup = true;
-          waypt_backup(&wpt_ct_bak, &wpt_head_bak);
+          waypt_backup(&wpt_head_bak);
           route_backup(&rte_head_bak);
           track_backup(&trk_head_bak);
 
@@ -378,7 +379,8 @@ run(const char* prog_name)
         cet_convert_deinit();
 
         if (lists_backedup) {
-          waypt_restore(wpt_ct_bak, wpt_head_bak);
+          waypt_restore(wpt_head_bak);
+          delete wpt_head_bak;
           route_restore(rte_head_bak);
           delete rte_head_bak;
           track_restore(trk_head_bak);

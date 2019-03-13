@@ -23,12 +23,25 @@
  * 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+#include <cmath>                     // for fabs, lround
+#include <cstdio>                    // for sscanf, snprintf, fputs, printf, stdout, putchar, size_t
+#include <cstdlib>                   // for labs, ldiv, ldiv_t, abs
+#include <cstring>                   // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
+#include <ctime>                     // for gmtime, ctime
+#include <iterator>                  // for reverse_iterator, operator==, prev, next
+
+#include <QtCore/QByteArray>         // for QByteArray
+#include <QtCore/QList>              // for QList<>::const_iterator
+#include <QtCore/QStaticStringData>  // for QStaticStringData
+#include <QtCore/QString>            // for QString, operator+, QStringLiteral
+#include <QtCore/QtGlobal>           // for foreach, qPrintable
+
 #include "defs.h"
-#include "cet_util.h"
-#include <cerrno>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include "cet_util.h"                // for cet_convert_init
+#include "gbfile.h"                  // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include "src/core/datetime.h"       // for DateTime
+#include "src/core/optional.h"       // for optional
+
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];
@@ -590,7 +603,7 @@ static void wr_header()
   }
   // Date in header record is that of the first fix record
   date = !track ? current_time().toTime_t() :
-         (reinterpret_cast<Waypoint *>QUEUE_FIRST(&track->waypoint_list))->GetCreationTime().toTime_t();
+         track->waypoint_list.front()->GetCreationTime().toTime_t();
 
   if (nullptr == (tm = gmtime(&date))) {
     fatal(MYNAME ": Bad track timestamp\n");
@@ -662,11 +675,11 @@ static void wr_task_hdr(const route_head* rte)
   }
   // See if the takeoff and landing waypoints are there or if we need to
   // generate them.
-  const Waypoint* wpt = reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list);
+  const Waypoint* wpt = rte->waypoint_list.back();
   if (wpt->shortname.startsWith("LANDING")) {
     num_tps--;
   }
-  wpt = reinterpret_cast<Waypoint *>QUEUE_FIRST(&rte->waypoint_list);
+  wpt = rte->waypoint_list.front();
   if (wpt->shortname.startsWith("TAKEOFF")) {
     have_takeoff = 1;
     num_tps--;
@@ -704,7 +717,7 @@ static void wr_task_wpt(const Waypoint* wpt)
 static void wr_task_tlr(const route_head* rte)
 {
   // If the landing waypoint is not supplied we need to generate it.
-  const Waypoint* wpt = reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list);
+  const Waypoint* wpt = rte->waypoint_list.back();
   QString sn = wpt->shortname;
 //  if (!wpt->shortname || strncmp(wpt->shortname, "LANDIN", 6) != 0) {
   if (sn.isEmpty() || !sn.startsWith("LANDIN")) {
@@ -757,45 +770,45 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
 
   // Deduce the landing time from the pressure altitude track based on
   // when we last descended to within 10m of the final track altitude.
-  const queue* elem = QUEUE_LAST(&pres_track->waypoint_list);
-  double last_alt = (reinterpret_cast<const Waypoint *>(elem))->altitude;
+  WaypointList::const_reverse_iterator wpt_rit = pres_track->waypoint_list.crbegin();
+  double last_alt = (*wpt_rit)->altitude;
   do {
-    elem = elem->prev;
-    if (&pres_track->waypoint_list == elem) {
+    ++wpt_rit;
+    if (pres_track->waypoint_list.crend() == wpt_rit) {
       // No track left
       return 0;
     }
-    alt_diff = last_alt - (reinterpret_cast<const Waypoint *>(elem))->altitude;
+    alt_diff = last_alt - (*wpt_rit)->altitude;
     if (alt_diff > 10.0) {
       // Last part of track was ascending
       return 0;
     }
   } while (alt_diff > -10.0);
-  pres_time = (reinterpret_cast<Waypoint *>(elem->next))->GetCreationTime().toTime_t();
+  pres_time = (*std::prev(wpt_rit))->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": pressure landing time %s", ctime(&pres_time));
   }
+
   // Deduce the landing time from the GNSS altitude track based on
   // when the groundspeed last dropped below a certain level.
-  elem = QUEUE_LAST(&gnss_track->waypoint_list);
-  last_alt = (reinterpret_cast<const Waypoint *>(elem))->altitude;
+  wpt_rit = gnss_track->waypoint_list.crbegin();
   do {
-    const Waypoint* wpt = reinterpret_cast<const Waypoint *>(elem);
-    elem = elem->prev;
-    if (&gnss_track->waypoint_list == elem) {
+    const Waypoint* wpt = *wpt_rit;
+    ++wpt_rit;
+    if (gnss_track->waypoint_list.crend() == wpt_rit) {
       // No track left
       return 0;
     }
     // Get a crude indication of groundspeed from the change in lat/lon
-    time_diff = wpt->GetCreationTime().toTime_t() - (reinterpret_cast<const Waypoint *>(elem))->GetCreationTime().toTime_t();
+    time_diff = wpt->GetCreationTime().toTime_t() - (*wpt_rit)->GetCreationTime().toTime_t();
     speed = !time_diff ? 0 :
-            (fabs(wpt->latitude - (reinterpret_cast<const Waypoint *>(elem))->latitude) +
-             fabs(wpt->longitude - (reinterpret_cast<const Waypoint *>(elem))->longitude)) / time_diff;
+            (fabs(wpt->latitude - (*wpt_rit)->latitude) +
+             fabs(wpt->longitude - (*wpt_rit)->longitude)) / time_diff;
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%f\n", speed);
     }
   } while (speed < 0.00003);
-  gnss_time = (reinterpret_cast<Waypoint *>(elem->next))->GetCreationTime().toTime_t();
+  gnss_time = (*std::prev(wpt_rit))->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": gnss landing time %s", ctime(&gnss_time));
   }
@@ -814,43 +827,42 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
  */
 static double interpolate_alt(const route_head* track, time_t time)
 {
-  static const queue* prev_elem = nullptr;
-  static const queue* curr_elem = nullptr;
+  static gpsbabel_optional::optional<WaypointList::const_iterator> prev_wpt;
+  static gpsbabel_optional::optional<WaypointList::const_iterator> curr_wpt;
   int time_diff;
 
   // Start search at the beginning of the track
-  if (!prev_elem) {
-    curr_elem = prev_elem = QUEUE_FIRST(&track->waypoint_list);
+  if (!prev_wpt.has_value()) {
+    prev_wpt = track->waypoint_list.cbegin();
+    curr_wpt = track->waypoint_list.cbegin();
   }
   // Find the track points either side of the requested time
-  while ((reinterpret_cast<const Waypoint *>(curr_elem))->GetCreationTime().toTime_t() < time) {
-    if (QUEUE_LAST(&track->waypoint_list) == curr_elem) {
-      // Requested time later than all track points, we can't interpolate
-      return unknown_alt;
-    }
-    prev_elem = curr_elem;
-    curr_elem = QUEUE_NEXT(prev_elem);
+  while ((track->waypoint_list.cend() != curr_wpt.value()) &&
+         ((*curr_wpt.value())->GetCreationTime().toTime_t() < time)) {
+    prev_wpt = curr_wpt;
+    curr_wpt = std::next(prev_wpt.value());
+  }
+  if (track->waypoint_list.cend() == curr_wpt.value()) {
+    // Requested time later than all track points, we can't interpolate
+    return unknown_alt;
   }
 
-  const Waypoint* prev_wpt = reinterpret_cast<const Waypoint *>(prev_elem);
-  const Waypoint* curr_wpt = reinterpret_cast<const Waypoint *>(curr_elem);
-
-  if (QUEUE_FIRST(&track->waypoint_list) == curr_elem) {
-    if (curr_wpt->GetCreationTime().toTime_t() == time) {
+  if (track->waypoint_list.cbegin() == curr_wpt.value()) {
+    if ((*curr_wpt.value())->GetCreationTime().toTime_t() == time) {
       // First point's creation time is an exact match so use it's altitude
-      return curr_wpt->altitude;
+      return (*curr_wpt.value())->altitude;
     } else {
       // Requested time is prior to any track points, we can't interpolate
       return unknown_alt;
     }
   }
   // Interpolate
-  if (0 == (time_diff = curr_wpt->GetCreationTime().toTime_t() - prev_wpt->GetCreationTime().toTime_t())) {
+  if (0 == (time_diff = (*curr_wpt.value())->GetCreationTime().toTime_t() - (*prev_wpt.value())->GetCreationTime().toTime_t())) {
     // Avoid divide by zero
-    return curr_wpt->altitude;
+    return (*curr_wpt.value())->altitude;
   }
-  double alt_diff = curr_wpt->altitude - prev_wpt->altitude;
-  return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->GetCreationTime().toTime_t());
+  double alt_diff = (*curr_wpt.value())->altitude - (*prev_wpt.value())->altitude;
+  return (*prev_wpt.value())->altitude + (alt_diff / time_diff) * (time - (*prev_wpt.value())->GetCreationTime().toTime_t());
 }
 
 /*
@@ -881,11 +893,7 @@ static void wr_track()
       printf(MYNAME ": adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
-    const queue* elem;
-    const queue* tmp;
-    QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-      // FIXME(NEW_Q): the excessive casting of the iterators is gross. Rethink.
-      const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
+    foreach (const Waypoint* wpt, gnss_track->waypoint_list) {
       double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
       wr_fix_record(wpt, pres_alt, wpt->altitude);
     }
@@ -893,19 +901,13 @@ static void wr_track()
     if (pres_track) {
       // Only the pressure altitude track was found so generate fix
       // records from it alone.
-      const queue* elem;
-      const queue* tmp;
-      QUEUE_FOR_EACH(&pres_track->waypoint_list, elem, tmp) {
-        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
+      foreach (const Waypoint* wpt, pres_track->waypoint_list) {
         wr_fix_record(wpt, wpt->altitude, unknown_alt);
       }
     } else if (gnss_track) {
       // Only the GNSS altitude track was found so generate fix
       // records from it alone.
-      const queue* elem;
-      const queue* tmp;
-      QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
+      foreach (const Waypoint* wpt, gnss_track->waypoint_list) {
         wr_fix_record(wpt, unknown_alt, wpt->altitude);
       }
     } else {

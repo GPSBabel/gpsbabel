@@ -19,19 +19,30 @@
 
  */
 
-#include <cctype>
-#include <climits>
-#include <cmath>
-#include <cstdlib>
+#include <cctype>               // for isalpha, toupper
+#include <climits>              // for INT_MAX
+#include <cmath>                // for atan2, floor, sqrt
+#include <csetjmp>              // for setjmp
+#include <cstdio>               // for fprintf, fflush, snprintf, sprintf
+#include <cstdlib>              // for atoi, strtol
+#include <cstring>              // for memcpy, strlen, strncpy, strchr
+#include <ctime>                // for time_t
 
-#include "cet_util.h"
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QChar>         // for QChar
+#include <QtCore/QString>       // for QString
+#include <QtCore/Qt>            // for CaseInsensitive
+#include <QtCore/QtGlobal>      // for qPrintable, foreach
+
 #include "defs.h"
-#include "garmin_device_xml.h"
-#include "garmin_fs.h"
-#include "garmin_tables.h"
-#include "grtcirc.h"
+#include "cet_util.h"           // for cet_convert_init, cet_cs_vec_utf8
+#include "garmin_device_xml.h"  // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
+#include "garmin_fs.h"          // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
+#include "garmin_tables.h"      // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
+#include "grtcirc.h"            // for DEG
 #include "jeeps/gps.h"
 #include "jeeps/gpsserial.h"
+#include "src/core/datetime.h"  // for DateTime
 
 #define MYNAME "GARMIN"
 static const char* portname;
@@ -910,12 +921,7 @@ waypoint_prepare()
 {
   int i;
   int n = waypt_count();
-#if NEWQ
-  extern QList<Waypoint*> waypt_list;
-#else
-  queue* elem, *tmp;
-  extern queue waypt_head;
-#endif
+  extern WaypointList* global_waypoint_list;
   int icon;
 
   tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
@@ -926,13 +932,8 @@ waypoint_prepare()
 
   i = 0;
 
-#if NEWQ
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* wpt, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach(Waypoint* wpt, *global_waypoint_list) {
     char obuf[256];
 
     QString src;

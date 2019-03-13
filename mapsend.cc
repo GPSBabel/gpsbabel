@@ -18,12 +18,23 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+#include <cmath>                // for lround
+#include <cstdio>               // for sprintf
+#include <cstdlib>              // for atoi
+#include <cstring>              // for strncpy
+#include <ctime>
+
+#include <QtCore/QCharRef>      // for QCharRef
+#include <QtCore/QString>       // for QString
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/QtGlobal>      // for Q_UNUSED
+
 #include "defs.h"
-#include "magellan.h"
 #include "mapsend.h"
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include "gbfile.h"             // for gbfputint32, gbfgetint32, gbfgetdbl, gbfputdbl, gbfgetpstr, gbfwrite, gbfputpstr, gbfputc, gbfread, gbfclose, gbfgetc, gbfgetflt, gbfopen, gbfputflt, gbfile, gbfgetuint32, gbfopen_le, gbsize_t
+#include "magellan.h"           // for mag_find_token_from_descr, mag_find_descr_from_token
+#include "src/core/datetime.h"  // for DateTime
+
 
 static gbfile* mapsend_file_in;
 static gbfile* mapsend_file_out;
@@ -395,7 +406,6 @@ static void mapsend_track_hdr(const route_head* trk)
    * tremendously out of whack time/date wise.
    */
   const char* verstring = "30";
-  queue* elem, *tmp;
   mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','4',' ','M','S'},
     {'3','0'}, ms_type_track, {0, 0, 0}
   };
@@ -428,10 +438,7 @@ static void mapsend_track_hdr(const route_head* trk)
   gbfputpstr(tname, mapsend_file_out);
 
   /* total nodes (waypoints) this track */
-  int i = 0;
-  QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
-    i++;
-  }
+  int i = trk->waypoint_list.count();
 
   gbfputint32(i, mapsend_file_out);
 

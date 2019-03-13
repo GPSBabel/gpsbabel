@@ -20,12 +20,30 @@
 
  */
 
+#include <cctype>                // for isspace
+#include <cerrno>                // for errno
+#include <cstdio>                // for SEEK_CUR, fprintf, size_t, stdout
+#include <cstdlib>               // for abort, strtol
+#include <cstdint>
+#include <cstring>               // for strcmp, strlen, memset, strchr, strncmp
+#include <ctime>
+
+#include <QtCore/QByteArray>     // for QByteArray
+#include <QtCore/QChar>          // for operator==, QChar
+#include <QtCore/QCharRef>       // for QCharRef
+#include <QtCore/QDateTime>      // for QDateTime
+#include <QtCore/QHash>          // for QHash, QHash<>::const_iterator
+#include <QtCore/QLatin1String>  // for QLatin1String
+#include <QtCore/QString>        // for QString, operator==
+#include <QtCore/Qt>             // for CaseInsensitive
+#include <QtCore/QtGlobal>       // for qAsConst, QAddConst<>::Type, foreach, Q_UNUSED
+
 #include "defs.h"
-#include <QtCore/QHash>
-#include <QtCore/QtGlobal>
-#include <cerrno>
-#include <cstdio>
-#include <cstdlib>
+#include "cet.h"                 // for cet_ucs4_to_utf8, cet_utf8_to_ucs4
+#include "gbfile.h"              // for gbfputc, gbfgetuint16, gbfgetc, gbfgetdbl, gbfgetuint32, gbfputflt, gbfputuint32, gbfgetint16, gbfputdbl, gbfputuint16, gbfclose, gbfread, gbfseek, gbfputint16, gbfwrite, gbfcopyfrom, gbfeof, gbfgetflt, gbfgetint32, gbfile, gbfopen, gbfrewind, gbsize_t
+#include "session.h"             // for curr_session, session_t
+#include "src/core/datetime.h"   // for DateTime
+
 
 #define MYNAME "mmo"
 
@@ -1270,7 +1288,6 @@ mmo_write_wpt_cb(const Waypoint* wpt)
 static void
 mmo_write_rte_head_cb(const route_head* rte)
 {
-  queue* elem, *tmp;
   time_t time = 0x7FFFFFFF;
 
   if (rte->rte_waypt_ct <= 0) {
@@ -1279,8 +1296,7 @@ mmo_write_rte_head_cb(const route_head* rte)
 
   mmo_rte = rte;
 
-  QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+  foreach (const Waypoint* wpt, rte->waypoint_list) {
     QDateTime t = wpt->GetCreationTime();
     if ((t.isValid()) && (t.toTime_t() < time)) {
       time = t.toTime_t();
@@ -1301,8 +1317,6 @@ mmo_write_rte_head_cb(const route_head* rte)
 static void
 mmo_write_rte_tail_cb(const route_head* rte)
 {
-  queue* elem, *tmp;
-
   if (rte->rte_waypt_ct <= 0) {
     return;
   }
@@ -1323,8 +1337,7 @@ mmo_write_rte_tail_cb(const route_head* rte)
     }
   }
 
-  QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+  foreach (const Waypoint* wpt, rte->waypoint_list) {
     int objid = mmo_get_objid(wpt);
     gbfputuint16(objid & 0x7FFF, fout);
   }

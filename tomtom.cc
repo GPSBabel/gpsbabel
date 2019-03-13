@@ -37,11 +37,16 @@
     description string beyond the NUL terminator.  -- Ron Parker, 17 July 2006
 */
 
+#include <cstdio>           // for printf, snprintf, SEEK_CUR, EOF
+#include <cstdlib>          // for qsort
+#include <cstring>          // for strlen
+
+#include <QtCore/QString>   // for QString
+#include <QtCore/QtGlobal>  // for foreach
 
 #include "defs.h"
-#include <QtCore/QTextCodec>
-#include <cstdio> // sprintf
-#include <cstdlib> // qsort
+#include "gbfile.h"         // for gbfgetint32, gbfputint32, gbfclose, gbfgetc, gbfputc, gbfseek, gbfile, gbfeof, gbfread, gbftell, gbfwrite, gbfopen_le
+
 
 #define MYNAME "TomTom"
 
@@ -423,12 +428,7 @@ data_write()
 {
   int ct = waypt_count();
   struct hdr* htable, *bh;
-#if NEWQ
-  extern QList<Waypoint*> waypt_list;
-#else
-  queue* elem, *tmp;
-  extern queue waypt_head;
-#endif
+  extern WaypointList* global_waypoint_list;
   double minlon = 200;
   double maxlon = -200;
   double minlat = 200;
@@ -438,13 +438,8 @@ data_write()
   htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
-#if NEWQ
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* waypointp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach(Waypoint* waypointp, *global_waypoint_list) {
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {
       maxlon = waypointp->longitude;

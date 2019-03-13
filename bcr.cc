@@ -26,14 +26,20 @@
     2007/04&14: new handling of DESCRIPTION lines
 */
 
+#include <cmath>            // for M_PI, atan, exp, log, tan
+#include <cstdio>           // for printf, snprintf, sscanf
+#include <cstdlib>          // for atof, atoi
+
+#include <QtCore/QString>   // for QString, operator+
+#include <QtCore/Qt>        // for CaseInsensitive
+#include <QtCore/QtGlobal>  // for foreach
+
 #include "defs.h"
-#include "csv_util.h"
-#include "garmin_tables.h"
-#include "inifile.h"
-#include <QtCore/QString>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include "csv_util.h"       // for csv_stringclean
+#include "garmin_tables.h"  // for gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, MAPSOURCE
+#include "gbfile.h"         // for gbfprintf, gbfclose, gbfopen, gbfile
+#include "inifile.h"        // for inifile_readstr, inifile_done, inifile_init, inifile_t
+
 
 #define MYNAME "bcr"
 
@@ -201,11 +207,8 @@ bcr_rd_deinit()
 static void
 bcr_create_waypts_from_route(route_head* route)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    Waypoint* wpt = new Waypoint(*reinterpret_cast<Waypoint *>(elem));
-    waypt_add(wpt);
+  foreach (const Waypoint* wpt, route->waypoint_list) {
+    waypt_add(new Waypoint(*wpt));
   }
 }
 
@@ -350,8 +353,6 @@ static void bcr_write_line(gbfile* fout, const QString& key, const int* index, c
 static void
 bcr_route_header(const route_head* route)
 {
-  queue* elem, *tmp;
-  Waypoint* wpt;
   int north, east, nmax, emin;
 
   curr_rte_num++;
@@ -375,8 +376,7 @@ bcr_route_header(const route_head* route)
   bcr_write_line(fout, "DESCRIPTIONLINES", nullptr, "0");
 
   int i = 0;
-  QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt, route->waypoint_list) {
 
     i++;
 
@@ -392,9 +392,8 @@ bcr_route_header(const route_head* route)
   int emax = nmax = -nmin;
 
   i = 0;
-  QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
+  foreach (const Waypoint* wpt, route->waypoint_list) {
     i++;
-    wpt = reinterpret_cast<Waypoint *>(elem);
 
     bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
 
@@ -418,11 +417,10 @@ bcr_route_header(const route_head* route)
   bcr_write_line(fout, "[DESCRIPTION]", nullptr, nullptr);		/* descr. section */
 
   i = 0;
-  QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
+  foreach (const Waypoint* wpt, route->waypoint_list) {
     QString s2;
 
     i++;
-    wpt = reinterpret_cast<Waypoint *>(elem);
     QString s1 = wpt->notes;
     if (s1.isEmpty()) {
       s1 = wpt->description;

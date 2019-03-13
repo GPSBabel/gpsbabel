@@ -25,17 +25,18 @@
 #include <cstdlib>              // for atoi, rand, srand
 #include <cstring>              // for strcpy, memset, strlen, strcmp
 #include <ctime>                // for time_t
+#include <cstdio>               // for SEEK_CUR
 
 #include <QtCore/QChar>         // for QChar
 #include <QtCore/QFile>         // for QFile
 #include <QtCore/QList>         // for QList
 #include <QtCore/QString>       // for QString, operator==
+#include <QtCore/QtGlobal>      // for foreach
 
 #include "defs.h"
 #include "garmin_tables.h"      // for gt_find_icon_number_from_desc, MAPSOURCE, gt_find_desc_from_icon_number, GARMIN_SERIAL, PCX, garmin_formats_e
 #include "gbfile.h"             // for gbfwrite, gbfread, gbfgetint32, gbfputint32, gbfseek, gbfputc, gbfgetc, gbfputdbl, gbfgetdbl, gbfclose, gbfeof, gbfile, gbftell, gbfgetcstr, gbfputs, gbfopen_le
 #include "jeeps/gpsmath.h"      // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
-#include "queue.h"              // for queue, QUEUE_FOR_EACH
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -1101,8 +1102,6 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   double		maxalt=unknown_alt;
   double		minalt=-unknown_alt;
 
-  queue* elem, *tmp;
-
   prevRouteWpt = nullptr;		/* clear the stateful flag used to know when the start of route wpts happens */
 
   memset(zbuf, 0, sizeof(zbuf));
@@ -1111,9 +1110,9 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   unsigned int rte_datapoints = 0;
   int allWptNameLengths = 0;
 
-  if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-    QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      Waypoint* testwpt = reinterpret_cast<Waypoint *>(elem);
+  //if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
+  if (true) {
+    foreach (const Waypoint* testwpt, rte->waypoint_list) {
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -1420,7 +1419,8 @@ mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   (void)mps_ver;
   hdr[0] = 1;
 
-  if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
+  //if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
+  if (true) {
     gbfwrite(&value, 4, 1, mps_file);
     gbfwrite(hdr, 1, 1, mps_file);
   }
@@ -1531,16 +1531,14 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
   char		hdr[20];
   time_t		uniqueValue = 0;
 
-  queue* elem, *tmp;
-
   (void)mps_ver;
 
   /* total nodes (waypoints) this track */
   unsigned int trk_datapoints = 0;
-  if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
-    QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
+  //if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
+  if (true) {
+    foreach (const Waypoint* testwpt, trk->waypoint_list) {
       if (trk_datapoints == 0) {
-        Waypoint* testwpt = reinterpret_cast<Waypoint *>(elem);
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       trk_datapoints++;

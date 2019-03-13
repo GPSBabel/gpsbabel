@@ -29,14 +29,10 @@
 #ifndef FILTERDEFS_H_INCLUDED_
 #define FILTERDEFS_H_INCLUDED_
 
-#if NEWQ
-#include <QtCore/QList>
-extern QList<Waypoint*> waypt_list;
-#else
-#include "queue.h"
-extern queue waypt_head;
-#endif
+#include "defs.h"
 #include "filter.h"
+
+extern WaypointList* global_waypoint_list;
 
 typedef void (*filter_init)();
 typedef void (*filter_process)();

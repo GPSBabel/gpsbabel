@@ -85,18 +85,26 @@
 
 */
 
+#include <cmath>                 // for M_PI, atan, exp, log, tan
+#include <cstdio>                // for printf, snprintf, sprintf, SEEK_CUR
+#include <cstdlib>               // for atoi, abs
+#include <cstring>               // for strlen, strcmp
+#include <ctime>
+
+#include <QtCore/QByteArray>     // for QByteArray
+#include <QtCore/QDate>          // for QDate
+#include <QtCore/QDateTime>      // for QDateTime
+#include <QtCore/QLatin1String>  // for QLatin1String
+#include <QtCore/QString>        // for QString, operator+, operator==, operator!=
+#include <QtCore/QTextCodec>     // for QTextCodec
+#include <QtCore/QTime>          // for QTime
+#include <QtCore/Qt>             // for CaseInsensitive, UTC
+#include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
 
 #include "defs.h"
-#include "src/core/datetime.h"
-#include <QtCore/QByteArray>
-#include <QtCore/QDate>
-#include <QtCore/QDateTime>
-#include <QtCore/QTime>
-#include <QtCore/QTextCodec>
-#include <QtCore/QDebug>
-#include <cmath>          // for lat/lon conversion 
-#include <cstdio>         // for gmtime
-#include <cstdlib>        // atoi
+#include "gbfile.h"              // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfputc, gbfwrite, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfputdbl, gbfile, gbfputflt, gbfread, gbfseek, gbfopen_le
+#include "src/core/datetime.h"   // for DateTime
+
 
 typedef struct lowranceusr_icon_mapping {
   const int    value;
@@ -332,11 +340,7 @@ static int            waypt_table_sz;
 static int            waypt_table_ct;
 
 /* from waypt.c, we need to iterate over waypoints when extracting routes */
-#if NEWQ
-extern QList<Waypoint*> waypt_list;
-#else
-extern queue          waypt_head;
-#endif
+extern WaypointList* global_waypoint_list;
 
 static unsigned short waypt_out_count;
 static int            trail_count, lowrance_route_count;
@@ -470,18 +474,10 @@ register_waypt(const Waypoint* ref)
 static Waypoint*
 lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
-#if !NEWQ
-  queue* elem, *tmp;
-#endif
   lowranceusr4_fsdata* fs = nullptr;
 
-#if NEWQ
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
-#endif
+  foreach (Waypoint* waypointp, *global_waypoint_list) {
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&
@@ -501,18 +497,10 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 static Waypoint*
 lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
-#if !NEWQ
-  queue* elem, *tmp;
-#endif
   lowranceusr4_fsdata* fs = nullptr;
 
-#if NEWQ
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
-#endif
+  foreach (Waypoint* waypointp, *global_waypoint_list) {
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->UUID1 == id1 &&

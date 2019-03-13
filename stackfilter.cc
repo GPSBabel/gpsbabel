@@ -19,10 +19,11 @@
 
  */
 
+#include <cstdlib>  // for atoi
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "stackfilter.h"
-#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -31,23 +32,18 @@
 void StackFilter::process()
 {
   stack_elt* tmp_elt = nullptr;
-  queue* elem = nullptr;
-  queue* tmp = nullptr;
-  queue tmp_queue;
+  WaypointList* waypt_list_ptr;
   RouteList* route_list_ptr;
 
   if (opt_push) {
     tmp_elt = new stack_elt;
-
-    QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
-    tmp_elt->waypt_ct = waypt_count();
-    set_waypt_count(0);
     tmp_elt->next = stack;
     stack = tmp_elt;
-    if (opt_copy) {
-      QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(new Waypoint(*reinterpret_cast<Waypoint *>(elem)));
-      }
+
+    waypt_list_ptr = &(tmp_elt->waypts);
+    waypt_backup(&waypt_list_ptr);
+    if (!opt_copy) {
+      waypt_flush_all();
     }
 
     route_list_ptr = &(tmp_elt->routes);
@@ -68,22 +64,18 @@ void StackFilter::process()
       fatal(MYNAME ": stack empty\n");
     }
     if (opt_append) {
-      QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(reinterpret_cast<Waypoint *>(elem));
-      }
+      waypt_append(&(stack->waypts));
+      stack->waypts.flush();
       route_append(&(stack->routes));
       stack->routes.flush();
       track_append(&(stack->tracks));
       stack->tracks.flush();
     } else if (opt_discard) {
-      waypt_flush(&(stack->waypts));
+      stack->waypts.flush();
       stack->routes.flush();
       stack->tracks.flush();
     } else {
-      waypt_flush(&waypt_head);
-      QUEUE_MOVE(&(waypt_head), &(stack->waypts));
-      set_waypt_count(stack->waypt_ct);
-
+      waypt_restore(&(stack->waypts));
       route_restore(&(stack->routes));
       track_restore(&(stack->tracks));
     }
@@ -99,12 +91,8 @@ void StackFilter::process()
       tmp_elt = tmp_elt->next;
       swapdepth--;
     }
-    QUEUE_MOVE(&tmp_queue, &(tmp_elt->waypts));
-    QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
-    QUEUE_MOVE(&waypt_head, &tmp_queue);
-    unsigned int tmp_count = waypt_count();
-    set_waypt_count(tmp_elt->waypt_ct);
-    tmp_elt->waypt_ct = tmp_count;
+
+    waypt_swap(tmp_elt->waypts);
 
     route_swap(tmp_elt->routes);
 
@@ -165,7 +153,7 @@ void StackFilter::exit()
             "check command line for mistakes\n");
   }
   while (stack) {
-    waypt_flush(&(stack->waypts));
+    stack->waypts.flush();
     stack->routes.flush();
     stack->tracks.flush();
     tmp_elt = stack;

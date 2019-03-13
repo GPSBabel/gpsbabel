@@ -24,26 +24,35 @@
 # include <windows.h>
 #endif
 
-#include "defs.h"
-#include "grtcirc.h"
-#include "queue.h"
-#include "src/core/datetime.h"
-#include "src/core/file.h"
-#include "src/core/xmlstreamwriter.h"
-#include "src/core/xmltag.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
+#include <cctype>                      // for tolower, toupper
+#include <cmath>                       // for fabs
+#include <cstdio>                      // for sscanf, printf
+#include <cstdlib>                     // for atoi, atol, atof
+#include <cstring>                     // for strcmp
+#include <tuple>                       // for tuple, make_tuple, tie
+
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QChar>                // for QChar
+#include <QtCore/QDate>                // for QDate
 #include <QtCore/QDateTime>            // for QDateTime
 #include <QtCore/QFile>                // for QFile
+#include <QtCore/QIODevice>            // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
 #include <QtCore/QList>                // for QList
-#include <QtCore/QString>              // for QString, QStringLiteral, QStat...
-#include <QtCore/QtGlobal>             // for qint64, qPrintable
-#include <cctype>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <tuple>
+#include <QtCore/QStaticStringData>    // for QStaticStringData
+#include <QtCore/QString>              // for QString, QStringLiteral, operator+, operator!=
+#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
+#include <QtCore/Qt>                   // for ISODate
+#include <QtCore/QtGlobal>             // for foreach, qint64, qPrintable
+
+#include "defs.h"
+#include "grtcirc.h"                    // for RAD, gcdist, radtometers
+#include "src/core/datetime.h"          // for DateTime
+#include "src/core/file.h"              // for File
+#include "src/core/optional.h"          // for optional
+#include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
+#include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
+#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+
 
 // options
 static char* opt_deficon = nullptr;
@@ -443,10 +452,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
     if (trk_head->rte_waypt_ct > 0) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
-      queue* curr_elem;
-      queue* tmp_elem;
-      QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
-        trkpt = reinterpret_cast<Waypoint*>(curr_elem);
+      foreach (Waypoint* trkpt, trk_head->waypoint_list) {
         trkpt->SetCreationTime(wpt_timespan_begin);
         wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
       }
@@ -1095,11 +1101,9 @@ static void kml_output_tailer(const route_head* header)
   // Add a linestring for this track?
   if (export_lines && header->rte_waypt_ct > 0) {
     int needs_multigeometry = 0;
-    queue* elem, *tmp;
 
-    QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
-      int first_in_trk = tpt->Q.prev == &header->waypoint_list;
+    foreach (const Waypoint* tpt, header->waypoint_list) {
+      int first_in_trk = tpt == header->waypoint_list.front();
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
         break;
@@ -1134,9 +1138,8 @@ static void kml_output_tailer(const route_head* header)
       writer->writeStartElement(QStringLiteral("MultiGeometry"));
     }
 
-    QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
-      int first_in_trk = tpt->Q.prev == &header->waypoint_list;
+    foreach (const Waypoint* tpt, header->waypoint_list) {
+      int first_in_trk = tpt == header->waypoint_list.front();
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
           writer->writeEndElement(); // Close coordinates tag
@@ -1717,13 +1720,10 @@ static void kml_mt_simple_array(const route_head* header,
                                 const char* name,
                                 wp_field member)
 {
-  queue* elem, *tmp;
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
 
-  QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-
-    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
+  foreach (const Waypoint* wpt, header->waypoint_list) {
 
     switch (member) {
     case fld_power:
@@ -1751,11 +1751,8 @@ static void kml_mt_simple_array(const route_head* header,
 // True if at least two points in the track have timestamps.
 static int track_has_time(const route_head* header)
 {
-  queue* elem, *tmp;
   int points_with_time = 0;
-  QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
-
+  foreach (const Waypoint* tpt, header->waypoint_list) {
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
       if (points_with_time >= 2) {
@@ -1769,10 +1766,8 @@ static int track_has_time(const route_head* header)
 // Simulate a track_disp_all callback sequence for a single track.
 static void write_as_linestring(const route_head* header)
 {
-  queue* elem, *tmp;
   kml_track_hdr(header);
-  QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
+  foreach (const Waypoint* tpt, header->waypoint_list) {
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
@@ -1781,7 +1776,6 @@ static void write_as_linestring(const route_head* header)
 
 static void kml_mt_hdr(const route_head* header)
 {
-  queue* elem, *tmp;
   int has_cadence = 0;
   int has_depth = 0;
   int has_heartrate = 0;
@@ -1801,9 +1795,7 @@ static void kml_mt_hdr(const route_head* header)
   writer->writeStartElement(QStringLiteral("gx:Track"));
   kml_output_positioning(false);
 
-  QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
-
+  foreach (const Waypoint* tpt, header->waypoint_list) {
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement(QStringLiteral("when"), time_string);
@@ -1814,9 +1806,7 @@ static void kml_mt_hdr(const route_head* header)
   }
 
   // TODO: How to handle clamped, floating, extruded, etc.?
-  QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
-
+  foreach (const Waypoint* tpt, header->waypoint_list) {
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
                                QString::number(tpt->longitude, 'f', precision) + QString(" ") +
@@ -2192,7 +2182,7 @@ kml_wr_position(Waypoint* wpt)
      track points if we've not moved a minimum distance from the
      beginning of our accumulated track. */
   {
-    Waypoint* newest_posn= reinterpret_cast<Waypoint*>QUEUE_LAST(&posn_trk_head->waypoint_list);
+    Waypoint* newest_posn= posn_trk_head->waypoint_list.back();
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
@@ -2217,7 +2207,7 @@ kml_wr_position(Waypoint* wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    Waypoint* tonuke = reinterpret_cast<Waypoint*>QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    Waypoint* tonuke = posn_trk_head->waypoint_list.front();
     track_del_wpt(posn_trk_head, tonuke);
   }
 

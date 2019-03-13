@@ -20,12 +20,20 @@
 
  */
 
+#include <cctype>                  // for isspace
+#include <cstdio>                  // for snprintf
+#include <cstdlib>                 // for atoi, atof, qsort, strtol
+#include <cstring>                 // for strcpy, strlen, memset, strncmp, strstr
+#include <ctime>                   // for mktime
+
+#include <QtCore/QString>          // for QString
+#include <QtCore/QtGlobal>         // for foreach
+
 #include "defs.h"
-#include "cet_util.h"
-#include "csv_util.h"
-#include <cctype>
-#include <cstdio>
-#include <cstdlib>
+#include "cet_util.h"              // for cet_convert_init
+#include "csv_util.h"              // for csv_lineparse
+#include "gbfile.h"                // for gbfclose, gbfgetstr, gbfopen, gbfile
+
 
 static gbfile* file_in;
 static char* nseicon = nullptr;
@@ -298,18 +306,11 @@ fix_netstumbler_dupes()
   htable_t* bh = htable;
 
   int i = 0;
-#if NEWQ
   // Why, oh, why is this format running over the entire waypoint list and
   // modifying it?  This seems wrong.
-  extern QList<Waypoint*> waypt_list;
-  foreach(Waypoint* waypointp, waypt_list) {
+  extern WaypointList* global_waypoint_list;
+  foreach(Waypoint* waypointp, *global_waypoint_list) {
     bh->wpt = waypointp;
-#else
-  queue* elem, *tmp;
-  extern queue waypt_head;
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = reinterpret_cast<Waypoint *>(elem);
-#endif
     QString snptr = bh->wpt->shortname;
     QString tmp_sn = snptr.toLower();
     bh->crc = get_crc32(CSTR(tmp_sn), tmp_sn.length());

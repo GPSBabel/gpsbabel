@@ -18,48 +18,37 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QString>       // for operator<, QString
+
 #include "defs.h"
+#include "src/core/datetime.h"  // for DateTime
 #include "filterdefs.h"
 #include "sort.h"
-#include <QtCore/QString>    // for QString
-#include <cstdlib>           // for abort
 
 #if FILTERS_ENABLED
 #define MYNAME "sort"
 
-template <class T>
-inline int sgn(T v)
+
+bool SortFilter::sort_comp_wpt_by_description(const Waypoint* a, const Waypoint* b)
 {
-// Returns 1 if v > 0, -1 if v < 0, and 0 if v is zero
-  return (v > T(0)) - (v < T(0));
+  return a->description < b->description;
 }
 
-template <class T>
-inline int cmp(T a, T b)
+bool SortFilter::sort_comp_wpt_by_gcid(const Waypoint* a, const Waypoint* b)
 {
-// Returns 1 if a > b, -1 if a < b, and 0 if a = b
-// note possible overflow in computing sgn(a-b) is avoided.
-  return (a > b) - (a < b);
+  return a->gc_data->id < b->gc_data->id;
 }
 
-int SortFilter::sort_comp_wpt(const queue* a, const queue* b)
+bool SortFilter::sort_comp_wpt_by_shortname(const Waypoint* a, const Waypoint* b)
 {
-  const Waypoint* x1 = reinterpret_cast<const Waypoint*>(a);
-  const Waypoint* x2 = reinterpret_cast<const Waypoint*>(b);
+  return a->shortname < b->shortname;
+}
 
-  switch (wpt_sort_mode)  {
-  case SortModeWpt::description:
-    return x1->description.compare(x2->description);
-  case SortModeWpt::gcid:
-    return cmp(x1->gc_data->id, x2->gc_data->id);
-  case SortModeWpt::shortname:
-    return x1->shortname.compare(x2->shortname);
-  case SortModeWpt::time:
-    return sgn(x2->GetCreationTime().msecsTo(x1->GetCreationTime()));
-  default:
-    abort();
-    return 0; /* Internal caller error. */
-  }
+bool SortFilter::sort_comp_wpt_by_time(const Waypoint* a, const Waypoint* b)
+{
+  return a->GetCreationTime() < b->GetCreationTime();
 }
 
 bool SortFilter::sort_comp_rh_by_description(const route_head* a, const route_head* b)
@@ -74,21 +63,30 @@ bool SortFilter::sort_comp_rh_by_name(const route_head* a, const route_head* b)
 
 bool SortFilter::sort_comp_rh_by_number(const route_head* a, const route_head* b)
 {
-  return a->rte_num <  b->rte_num;
-}
-
-int SortFilter::SortCompWptFunctor::operator()(const queue* a, const queue* b)
-{
-  return that->sort_comp_wpt(a, b);
+  return a->rte_num < b->rte_num;
 }
 
 void SortFilter::process()
 {
-  SortCompWptFunctor sort_comp_wpt_f(*this);
-
   if (wpt_sort_mode != SortModeWpt::none) {
-    sortqueue(&waypt_head, sort_comp_wpt_f);
+    switch (wpt_sort_mode) {
+    case SortModeWpt::description:
+      waypt_sort(sort_comp_wpt_by_description);
+      break;
+    case SortModeWpt::gcid:
+      waypt_sort(sort_comp_wpt_by_gcid);
+      break;
+    case SortModeWpt::shortname:
+      waypt_sort(sort_comp_wpt_by_shortname);
+      break;
+    case SortModeWpt::time:
+      waypt_sort(sort_comp_wpt_by_time);
+      break;
+    default:
+      fatal(MYNAME ": unknown waypoint sort mode.");
+    }
   }
+  
   if (rte_sort_mode != SortModeRteHd::none) {
     switch (rte_sort_mode)  {
     case SortModeRteHd::description:

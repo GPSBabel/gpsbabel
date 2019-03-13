@@ -26,6 +26,7 @@
 #include <cstdlib>                 // for atoi, strtol, NULL
 #include <cstring>                 // for memset, strcmp, strstr, strchr, strlen, strncpy
 #include <ctime>                   // for strftime
+#include <iterator>                // for next
 
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QList>            // for QList
@@ -41,7 +42,6 @@
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfread, gbfwrite, gbfgetc, gbfputc, gbfgetdbl, gbfgetcstr, gbfile, gbfclose, gbfputcstr, gbfcopyfrom, gbfrewind, gbfseek, gbftell, gbfopen_le, gbfgetcstr_old, gbfgetint16, gbfputdbl, gbfputint16
 #include "grtcirc.h"               // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
-#include "queue.h"                 // for queue, QUEUE_FOR_EACH
 #include "src/core/datetime.h"     // for DateTime
 
 
@@ -1396,10 +1396,8 @@ write_waypoint(
 static void
 route_compute_bounds(const route_head* rte, bounds* bounds)
 {
-  queue* elem, *tmp;
   waypt_init_bounds(bounds);
-  QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (Waypoint* wpt, rte->waypoint_list) {
     gdb_check_waypt(wpt);
     waypt_add_to_bounds(bounds, wpt);
   }
@@ -1425,7 +1423,6 @@ static void
 write_route(const route_head* rte, const QString& rte_name)
 {
   bounds bounds;
-  queue* elem, *tmp;
   char zbuf[32], ffbuf[32];
 
   memset(zbuf, 0, sizeof(zbuf));
@@ -1442,10 +1439,13 @@ write_route(const route_head* rte, const QString& rte_name)
 
   int index = 0;
 
-  QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
+  for (auto it =rte->waypoint_list.cbegin(); it != rte->waypoint_list.cend(); ++it) {
 
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-    Waypoint* next = reinterpret_cast<Waypoint *>(tmp);
+    Waypoint* wpt = *it;
+    Waypoint* next = nullptr;
+    if (index < points) {
+      next = *std::next(it);
+    }
 
     index++;
     rtept_ct++;	/* increase informational number of written route points */
@@ -1543,7 +1543,6 @@ write_route(const route_head* rte, const QString& rte_name)
 static void
 write_track(const route_head* trk, const QString& trk_name)
 {
-  queue* elem, *tmp;
   int points = ELEMENTS(trk);
 
   FWRITE_CSTR(trk_name);
@@ -1553,8 +1552,7 @@ write_track(const route_head* trk, const QString& trk_name)
 
   FWRITE_i32(points);	/* total number of waypoints in waypoint list */
 
-  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt, trk->waypoint_list) {
 
     trkpt_ct++;	/* increase informational number of written route points */
 
