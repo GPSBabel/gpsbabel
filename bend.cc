@@ -20,6 +20,7 @@
 
  */
 
+#include <cmath>            // macos wants abs from here!
 #include <cstdlib>          // for strtod, abs
 
 #include <QtCore/QList>     // for QList<>::const_iterator
