@@ -19,26 +19,40 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cstdint>
+#include <cmath>                // for M_PI
+#include <cstdarg>              // for va_list
+#include <cstddef>              // for NULL, nullptr_t, size_t
+#include <cstdint>              // for int32_t, uint32_t
+#include <cstdio>               // for NULL, fprintf, FILE, stdout
+#include <ctime>                // for time_t
+#include <utility>              // for move
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "queue.h"
 #if HAVE_LIBZ
-#include <zlib.h>
+#include <zlib.h>               // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
-#include "zlib.h"
+#include "zlib.h"               // doesn't really belong here, but is missing elsewhere.
 #endif
-#include "gbfile.h"
-#include "inifile.h"
-#include "session.h"
 
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <utility>
-#include "src/core/datetime.h"
-#include "src/core/optional.h"
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QChar>         // for QChar
+#include <QtCore/QList>         // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QtCore/QString>       // for QString
+#include <QtCore/QStringRef>    // for QStringRef
+#include <QtCore/QTextCodec>    // for QTextCodec
+#include <QtCore/Qt>            // for CaseInsensitive
+#include <QtCore/QtGlobal>      // for foreach
+
+#include "cet.h"                // for cet_cs_vec_t
+#include "inifile.h"            // for inifile_t
+#include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
+#include "queue.h"              // for queue
+#include "session.h"            // for session_t
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/optional.h"  // for optional
+
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
@@ -584,26 +598,24 @@ public:
   void waypt_disp_session(const session_t* se, T cb);
 
   // Expose limited methods for portability.
+  // public types
+  using QList<Waypoint*>::const_iterator;
+  using QList<Waypoint*>::const_reverse_iterator;
+  using QList<Waypoint*>::iterator;
+  using QList<Waypoint*>::reverse_iterator;
+  // public functions
+  using QList<Waypoint*>::back; // a.k.a. last()
   using QList<Waypoint*>::begin;
-  using QList<Waypoint*>::end;
   using QList<Waypoint*>::cbegin;
   using QList<Waypoint*>::cend;
+  using QList<Waypoint*>::count; // a.k.a. size()
+  using QList<Waypoint*>::crbegin;
+  using QList<Waypoint*>::crend;
   using QList<Waypoint*>::empty; // a.k.a. isEmpty()
+  using QList<Waypoint*>::end;
   using QList<Waypoint*>::front; // a.k.a. first()
-  using QList<Waypoint*>::back;  // a.k.a. last()
-  using QList<Waypoint*>::count;  // a.k.a. size()
-  using QList<Waypoint*>::iterator;
-  using QList<Waypoint*>::const_iterator;
-  typedef iterator Iterator;
-  typedef const_iterator ConstIterator;
-  typedef std::reverse_iterator<iterator> reverse_iterator;
-  typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-  reverse_iterator rbegin() {return reverse_iterator(end());}
-  reverse_iterator rend() {return reverse_iterator(begin());}
-  const_reverse_iterator rbegin() const {return const_reverse_iterator(end());}
-  const_reverse_iterator rend() const {return const_reverse_iterator(begin());}
-  const_reverse_iterator crbegin() const {return const_reverse_iterator(end());}
-  const_reverse_iterator crend() const {return const_reverse_iterator(begin());}
+  using QList<Waypoint*>::rbegin;
+  using QList<Waypoint*>::rend;
 };
 
 const global_trait* get_traits();
@@ -760,26 +772,24 @@ public:
   // Our contained element (route_head) also contains a container (waypoint_list), 
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
+  // public types
+  using QList<route_head*>::const_iterator;
+  using QList<route_head*>::const_reverse_iterator;
+  using QList<route_head*>::iterator;
+  using QList<route_head*>::reverse_iterator;
+  // public functions
+  using QList<route_head*>::back; // a.k.a. last()
   using QList<route_head*>::begin;
-  using QList<route_head*>::end;
   using QList<route_head*>::cbegin;
   using QList<route_head*>::cend;
+  using QList<route_head*>::count; // a.k.a. size()
+  using QList<route_head*>::crbegin;
+  using QList<route_head*>::crend;
   using QList<route_head*>::empty; // a.k.a. isEmpty()
+  using QList<route_head*>::end;
   using QList<route_head*>::front; // a.k.a. first()
-  using QList<route_head*>::back;  // a.k.a. last()
-  using QList<route_head*>::count;  // a.k.a. size()
-  using QList<route_head*>::iterator;
-  using QList<route_head*>::const_iterator;
-  typedef iterator Iterator;
-  typedef const_iterator ConstIterator;
-  typedef std::reverse_iterator<iterator> reverse_iterator;
-  typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-  reverse_iterator rbegin() {return reverse_iterator(end());}
-  reverse_iterator rend() {return reverse_iterator(begin());}
-  const_reverse_iterator rbegin() const {return const_reverse_iterator(end());}
-  const_reverse_iterator rend() const {return const_reverse_iterator(begin());}
-  const_reverse_iterator crbegin() const {return const_reverse_iterator(end());}
-  const_reverse_iterator crend() const {return const_reverse_iterator(begin());}
+  using QList<route_head*>::rbegin;
+  using QList<route_head*>::rend;
 
 private:
   int waypt_ct{0};

@@ -839,7 +839,7 @@ static double interpolate_alt(const route_head* track, time_t time)
   // Find the track points either side of the requested time
   while ((track->waypoint_list.cend() != curr_wpt.value()) &&
          ((*curr_wpt.value())->GetCreationTime().toTime_t() < time)) {
-    prev_wpt = curr_wpt;
+    prev_wpt = curr_wpt.value();
     curr_wpt = std::next(prev_wpt.value());
   }
   if (track->waypoint_list.cend() == curr_wpt.value()) {
