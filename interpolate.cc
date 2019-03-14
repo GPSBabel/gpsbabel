@@ -21,16 +21,14 @@
 
 #include <cstdlib>              // for atoi, strtod
 
-#include <QtCore/QList>         // for QList<>::const_iterator
 #include <QtCore/QString>       // for QString
-#include <QtCore/QtGlobal>      // for foreach
+#include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"
 #include "filterdefs.h"
 #include "interpolate.h"
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
 #include "src/core/datetime.h"  // for DateTime
-
 
 
 #if FILTERS_ENABLED
@@ -56,8 +54,7 @@ void InterpolateFilter::process()
     fatal(MYNAME ": Found no routes or tracks to operate on.\n");
   }
 
-  for (auto it = backuproute->cbegin(); it != backuproute->cend(); ++it) {
-    auto rte_old = reinterpret_cast<const route_head*>(*it);
+  for (const auto* rte_old : qAsConst(*backuproute)) {
 
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;

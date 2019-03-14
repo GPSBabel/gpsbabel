@@ -23,9 +23,8 @@
 #include <cmath>            // macos wants abs from here!
 #include <cstdlib>          // for strtod, abs
 
-#include <QtCore/QList>     // for QList<>::const_iterator
 #include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for foreach
+#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"
 #include "filterdefs.h"
@@ -161,8 +160,7 @@ void BendFilter::process_route_orig(const route_head* route_orig)
 
 void BendFilter::process()
 {
-  for (auto it = routes_orig->cbegin(); it != routes_orig->cend(); ++it) {
-    auto route_orig = reinterpret_cast<const route_head*>(*it);
+  for (const auto* route_orig : qAsConst(*routes_orig)) {
     process_route_orig(route_orig);
   }
 }
