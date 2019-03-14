@@ -866,21 +866,8 @@ geocache_container gs_mkcont(const QString& t);
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
 // This is a crutch until the new C++ shorthandle goes in.
-#define PRIME 37
-typedef struct {
-  unsigned int target_len;
-  char* badchars;
-  char* goodchars;
-  char* defname;
-  queue namelist[PRIME];
 
-  /* Various internal flags at end to allow alignment flexibility. */
-  unsigned int mustupper:1;
-  unsigned int whitespaceok:1;
-  unsigned int repeating_whitespaceok:1;
-  unsigned int must_uniq:1;
-  unsigned int is_utf8:1;
-} mkshort_handle_imp;
+struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
 typedef mkshort_handle_imp* short_handle;
 
 char* mkshort(short_handle,  const char*);
