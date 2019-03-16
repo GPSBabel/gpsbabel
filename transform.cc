@@ -20,10 +20,15 @@
 
  */
 
+#include <cctype>           // for toupper
+#include <cstdlib>          // for atoi
+
+#include <QtCore/QtGlobal>  // for foreach
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "transform.h"
-#include <cstdlib>
+
 
 #if FILTERS_ENABLED
 
@@ -42,13 +47,7 @@ void TransformFilter::transform_waypoints()
     track_add_head(rte);
     break;
   }
-#if NEWQ
-  foreach (Waypoint* wpt, waypt_list) {
-#else
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach (Waypoint* wpt, *global_waypoint_list) {
 
     wpt = new Waypoint(*wpt);
     switch (current_target) {

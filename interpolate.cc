@@ -19,11 +19,17 @@
 
  */
 
+#include <cstdlib>              // for atoi, strtod
+
+#include <QtCore/QString>       // for QString
+#include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type, foreach
+
 #include "defs.h"
 #include "filterdefs.h"
-#include "grtcirc.h"
 #include "interpolate.h"
-#include <cstdlib>
+#include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
+#include "src/core/datetime.h"  // for DateTime
+
 
 #if FILTERS_ENABLED
 #define MYNAME "Interpolate filter"
@@ -31,7 +37,6 @@
 void InterpolateFilter::process()
 {
   RouteList* backuproute = nullptr;
-  queue* elem2, *tmp2;
   double lat1 = 0, lon1 = 0;
   double altitude1 = unknown_alt;
   unsigned int time1 = 0;
@@ -49,8 +54,7 @@ void InterpolateFilter::process()
     fatal(MYNAME ": Found no routes or tracks to operate on.\n");
   }
 
-  for (auto it = backuproute->cbegin(); it != backuproute->cend(); ++it) {
-    auto rte_old = reinterpret_cast<const route_head*>(*it);
+  for (const auto* rte_old : qAsConst(*backuproute)) {
 
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
@@ -63,8 +67,7 @@ void InterpolateFilter::process()
       track_add_head(rte_new);
     }
     bool first = true;
-    QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem2);
+    foreach (const Waypoint* wpt, rte_old->waypoint_list) {
       if (first) {
         first = false;
       } else {

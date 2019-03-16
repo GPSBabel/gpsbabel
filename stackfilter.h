@@ -24,7 +24,6 @@
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, ARGTYPE_BEGIN_EXCL
 #include "filter.h"  // for Filter
-#include "queue.h"   // for queue
 
 #if FILTERS_ENABLED
 
@@ -93,18 +92,11 @@ private:
     ARG_TERMINATOR
   };
 
-  class stack_elt
+  struct stack_elt
   {
-  public:
-    stack_elt()
-    {
-      QUEUE_INIT(&waypts);
-    }
-
-    queue waypts;
+    WaypointList waypts;
     RouteList routes;
     RouteList tracks;
-    unsigned int waypt_ct{0};
     stack_elt* next{nullptr};
   };
   stack_elt* stack = nullptr;

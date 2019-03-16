@@ -20,14 +20,22 @@
 
  */
 
-#include <cctype>
-#include <cmath>
-#include <cstdio>
-#include <ctime>
+#include <cmath>                   // for fabs, floor, lround
+#include <cstdio>                  // for sscanf
+#include <cstring>                 // for memset, strncmp
+#include <cstdint>                 // for int16_t
+#include <ctime>                   // for gmtime
+
+#include <QtCore/QString>          // for QString
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/QtGlobal>         // for foreach
 
 #include "defs.h"
-#include "grtcirc.h"
-#include "jeeps/gpsmath.h"
+#include "gbfile.h"                // for gbfputint16, gbfclose, gbfopen, gbfputflt, gbfgetc, gbfputcstr, gbfputdbl, gbfread, gbfile
+#include "grtcirc.h"               // for heading_true_degrees
+#include "src/core/datetime.h"     // for DateTime
+
+
 
 #define MYNAME "ggv_log"
 
@@ -196,13 +204,11 @@ ggv_log_wr_deinit()
 static void
 ggv_log_track_head_cb(const route_head* trk)
 {
-  queue* elem, *tmp;
-  Waypoint* prev = nullptr;
+  const Waypoint* prev = nullptr;
 
-  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
+  foreach (const Waypoint* wpt, trk->waypoint_list) {
     double  course = 0, speed = 0;
     struct tm tm;
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     double secs = 0;
 
     int latint = wpt->latitude;

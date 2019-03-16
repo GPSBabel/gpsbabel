@@ -26,6 +26,7 @@
 #include <cstdlib>                 // for atoi, atof
 #include <cstring>                 // for strncmp, memset, strlen, strchr, strstr, strrchr
 #include <ctime>                   // for gmtime
+#include <iterator>                // for operator!=, reverse_iterator
 
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QChar>            // for QChar, operator==, operator!=
@@ -43,7 +44,6 @@
 #include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
 #include "gbser.h"                 // for gbser_set_speed, gbser_flush, gbser_read_line, gbser_deinit, gbser_init, gbser_write
 #include "jeeps/gpsmath.h"         // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M
-#include "queue.h"                 // for queue, QUEUE_FOR_EACH, QUEUE_LAST
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning
 #include "strptime.h"              // for strptime
@@ -879,7 +879,6 @@ nmea_fix_timestamps(route_head* track)
   }
 
   if (tm.tm_year == 0) {
-    queue* elem, *temp;
     Waypoint* prev = nullptr;
 
     if (optdate == nullptr) {
@@ -890,8 +889,7 @@ nmea_fix_timestamps(route_head* track)
     }
     time_t delta_tm = mkgmtime(&opt_tm);
 
-    QUEUE_FOR_EACH(&track->waypoint_list, elem, temp) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    foreach (Waypoint* wpt, track->waypoint_list) {
 
       wpt->creation_time += delta_tm;
       if ((prev != nullptr) && (prev->creation_time > wpt->creation_time)) {
@@ -910,8 +908,8 @@ nmea_fix_timestamps(route_head* track)
 
     /* go backward through the track and complete timestamps */
 
-    for (queue* elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
-      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    for (auto it = track->waypoint_list.crbegin(); it != track->waypoint_list.crend(); ++it) {
+      Waypoint* wpt = *it;
 
       if (wpt->wpt_flags.fmt_use != 0) {
         wpt->wpt_flags.fmt_use = 0; /* reset flag */

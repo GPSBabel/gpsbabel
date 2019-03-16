@@ -70,15 +70,24 @@
     3.x     "recreation"
 */
 
+#include <cassert>                     // for assert
+#include <cmath>                       // for cos, sqrt
+#include <cstdio>                      // for printf, sprintf, SEEK_CUR, SEEK_SET
+#include <cstdint>
+#include <cstring>                     // for strncmp, strlen, memset
+#include <vector>                      // for vector
+
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QChar>                // for operator==, QChar
+#include <QtCore/QCharRef>             // for QCharRef
+#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
+#include <QtCore/QString>              // for QString
+#include <QtCore/QtGlobal>             // for qPrintable, Q_UNUSED
 
 #include "defs.h"
-#include "jeeps/gpsmath.h" /* for datum conversions */
-#include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
-#include <cassert>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
+#include "gbfile.h"                    // for gbfread, gbfgetc, gbfgetint32, gbfwrite, gbfputint16, gbfseek, gbfgetdbl, gbfgetint16, gbfputdbl, gbfclose, gbfputint32, gbfile, gbfopen_le, gbfgetuint16
+#include "jeeps/gpsmath.h"             // for GPS_Math_WGS84LatLonH_To_XYZ, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_Deg_To_Rad, GPS_Math_Known_Datum_To_WGS84_M
+
 
 #define MYNAME	"TPO"
 
@@ -1614,7 +1623,7 @@ tpo_track_hdr(const route_head* rte)
   unsigned char unknown1[] = { 0xFF, 0x00, 0x00, 0x00 };
   unsigned char bounding_box[8] = { 0x00, 0x80, 0x00, 0x80, 0xFF, 0x7F, 0xFF, 0x7F };
 
-  Waypoint* first_track_waypoint = reinterpret_cast<Waypoint *>QUEUE_FIRST(&rte->waypoint_list);
+  Waypoint* first_track_waypoint = rte->waypoint_list.front();
 
   /* zoom level 1-5 visibility flags */
   gbfwrite(visibility_flags, 1, sizeof(visibility_flags), tpo_file_out);

@@ -19,26 +19,40 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cstdint>
+#include <cmath>                // for M_PI
+#include <cstdarg>              // for va_list
+#include <cstddef>              // for NULL, nullptr_t, size_t
+#include <cstdint>              // for int32_t, uint32_t
+#include <cstdio>               // for NULL, fprintf, FILE, stdout
+#include <ctime>                // for time_t
+#include <utility>              // for move
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "queue.h"
 #if HAVE_LIBZ
-#include <zlib.h>
+#include <zlib.h>               // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
-#include "zlib.h"
+#include "zlib.h"               // doesn't really belong here, but is missing elsewhere.
 #endif
-#include "gbfile.h"
-#include "inifile.h"
-#include "session.h"
 
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <utility>
-#include "src/core/datetime.h"
-#include "src/core/optional.h"
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QChar>         // for QChar
+#include <QtCore/QList>         // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QtCore/QString>       // for QString
+#include <QtCore/QStringRef>    // for QStringRef
+#include <QtCore/QTextCodec>    // for QTextCodec
+#include <QtCore/Qt>            // for CaseInsensitive
+#include <QtCore/QtGlobal>      // for foreach
+
+#include "cet.h"                // for cet_cs_vec_t
+#include "inifile.h"            // for inifile_t
+#include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
+#include "queue.h"              // for queue
+#include "session.h"            // for session_t
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/optional.h"  // for optional
+
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
@@ -457,8 +471,6 @@ private:
   static geocache_data empty_gc_data;
 
 public:
-  queue Q;			/* Master waypoint q.  Not for use
-					   by modules. */
 
   double latitude;		/* Degrees */
   double longitude; 		/* Degrees */
@@ -561,13 +573,57 @@ public:
 
 typedef void (*waypt_cb)(const Waypoint*);
 
+// TODO: Consider using composition instead of private inheritance.
+class WaypointList : private QList<Waypoint*>
+{
+public:
+  typedef bool (*Compare)(const Waypoint* a, const Waypoint* b);
+
+  void waypt_add(Waypoint* wpt); // a.k.a. append(), push_back()
+  void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
+  //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
+  void waypt_del(Waypoint* wpt); // a.k.a. erase()
+  // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
+  //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
+  void del_rte_waypt(Waypoint* wpt);
+  void waypt_compute_bounds(bounds* bounds) const;
+  Waypoint* find_waypt_by_name(const QString& name) const;
+  void flush(); // a.k.a. clear()
+  void copy(WaypointList** dst) const;
+  void restore(WaypointList* src);
+  void swap(WaypointList& other);
+  void sort(Compare cmp);
+  template <typename T>
+  void waypt_disp_session(const session_t* se, T cb);
+
+  // Expose limited methods for portability.
+  // public types
+  using QList<Waypoint*>::const_iterator;
+  using QList<Waypoint*>::const_reverse_iterator;
+  using QList<Waypoint*>::iterator;
+  using QList<Waypoint*>::reverse_iterator;
+  // public functions
+  using QList<Waypoint*>::back; // a.k.a. last()
+  using QList<Waypoint*>::begin;
+  using QList<Waypoint*>::cbegin;
+  using QList<Waypoint*>::cend;
+  using QList<Waypoint*>::count; // a.k.a. size()
+  using QList<Waypoint*>::crbegin;
+  using QList<Waypoint*>::crend;
+  using QList<Waypoint*>::empty; // a.k.a. isEmpty()
+  using QList<Waypoint*>::end;
+  using QList<Waypoint*>::front; // a.k.a. first()
+  using QList<Waypoint*>::rbegin;
+  using QList<Waypoint*>::rend;
+};
+
 const global_trait* get_traits();
 void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 unsigned int waypt_count();
-void set_waypt_count(unsigned int nc);
 void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
@@ -577,10 +633,12 @@ int waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
-void waypt_flush(queue* head);
 void waypt_flush_all();
-void waypt_backup(signed int* count, queue** head_bak);
-void waypt_restore(signed int count, queue* head_bak);
+void waypt_append(WaypointList* src);
+void waypt_backup(WaypointList** head_bak);
+void waypt_restore(WaypointList* head_bak);
+void waypt_swap(WaypointList& other);
+void waypt_sort(WaypointList::Compare cmp);
 void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text);
 void waypt_add_url(Waypoint* wpt, const QString& link,
@@ -598,17 +656,10 @@ double waypt_course(const Waypoint* A, const Waypoint* B);
 
 template <typename T>
 void
-waypt_disp_session(const session_t* se, T cb)
+WaypointList::waypt_disp_session(const session_t* se, T cb)
 {
-  extern queue waypt_head;
   int i = 0;
-#if NEWQ
-  foreach (Waypoint* waypointp, waypt_list) {
-#else
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
-#endif
+  foreach (Waypoint* waypointp, *this) {
     if ((se == nullptr) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
         i++;
@@ -624,9 +675,20 @@ waypt_disp_session(const session_t* se, T cb)
 
 template <typename T>
 void
+waypt_disp_session(const session_t* se, T cb)
+{
+  extern WaypointList* global_waypoint_list;
+
+  global_waypoint_list->waypt_disp_session(se, cb);
+}
+
+template <typename T>
+void
 waypt_disp_all(T cb)
 {
-  waypt_disp_session(nullptr, cb);
+  extern WaypointList* global_waypoint_list;
+
+  global_waypoint_list->waypt_disp_session(nullptr, cb);
 }
 
 /*
@@ -650,7 +712,7 @@ struct computed_trkdata {
 class route_head
 {
 public:
-  queue waypoint_list;	/* List of child waypoints */
+  WaypointList waypoint_list;	/* List of child waypoints */
   QString rte_name;
   QString rte_desc;
   UrlList rte_urls;
@@ -710,18 +772,24 @@ public:
   // Our contained element (route_head) also contains a container (waypoint_list), 
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
+  // public types
+  using QList<route_head*>::const_iterator;
+  using QList<route_head*>::const_reverse_iterator;
+  using QList<route_head*>::iterator;
+  using QList<route_head*>::reverse_iterator;
+  // public functions
+  using QList<route_head*>::back; // a.k.a. last()
   using QList<route_head*>::begin;
-  using QList<route_head*>::end;
   using QList<route_head*>::cbegin;
   using QList<route_head*>::cend;
+  using QList<route_head*>::count; // a.k.a. size()
+  using QList<route_head*>::crbegin;
+  using QList<route_head*>::crend;
   using QList<route_head*>::empty; // a.k.a. isEmpty()
+  using QList<route_head*>::end;
   using QList<route_head*>::front; // a.k.a. first()
-  using QList<route_head*>::back;  // a.k.a. last()
-  using QList<route_head*>::count;  // a.k.a. size()
-  using QList<route_head*>::iterator;
-  using QList<route_head*>::const_iterator;
-  typedef iterator Iterator;
-  typedef const_iterator ConstIterator;
+  using QList<route_head*>::rbegin;
+  using QList<route_head*>::rend;
 
 private:
   int waypt_ct{0};
@@ -767,11 +835,8 @@ template <typename T>
 void
 route_disp(const route_head* rh, T cb)
 {
-  queue* elem, *tmp;
 // cb != nullptr, caught with an overload of route_disp
-  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    Waypoint* waypointp;
-    waypointp = reinterpret_cast<Waypoint*>(elem);
+  foreach (const Waypoint* waypointp, rh->waypoint_list) {
     cb(waypointp);
   }
 }

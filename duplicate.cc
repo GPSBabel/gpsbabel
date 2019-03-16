@@ -18,11 +18,19 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <cstdio>               // for sprintf
+#include <cstdlib>              // for qsort
+#include <cstring>              // for memset, strncpy
+
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QtGlobal>      // for foreach
+
 #include "defs.h"
-#include "duplicate.h"
 #include "filterdefs.h"
-#include <cstdio>
-#include <cstdlib> // qsort
+#include "duplicate.h"
+#include "src/core/datetime.h"  // for DateTime
+
 
 #if FILTERS_ENABLED
 
@@ -145,19 +153,13 @@ void DuplicateFilter::process()
   Waypoint* delwpt = nullptr;
 
   int ct = waypt_count();
-  queue* elem, *tmp;
 
   wpt_ptr* htable = (wpt_ptr*) xmalloc(ct * sizeof(*htable));
   wpt_ptr* bh = htable;
 
   int i = 0;
-#if NEWQ
-  foreach (Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, *global_waypoint_list) {
     bh->wpt = waypointp;
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = reinterpret_cast<Waypoint *>(elem);
-#endif
     bh->index = i;
     i ++;
     bh ++;

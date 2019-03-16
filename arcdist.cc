@@ -42,13 +42,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
                   (arcpt1->latitude != BADVAL && arcpt1->longitude != BADVAL)))) {
-#if NEWQ
-    foreach (Waypoint* waypointp, waypt_list) {
-#else
-    queue* elem, *tmp;
-    QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-      Waypoint* waypointp = reinterpret_cast<Waypoint*>(elem);
-#endif
+    foreach (Waypoint* waypointp, *global_waypoint_list) {
       double dist;
       extra_data* ed;
       if (waypointp->extra_data) {
@@ -107,8 +101,6 @@ void ArcDistanceFilter::process()
   WayptFunctor<ArcDistanceFilter> arcdist_arc_disp_wpt_cb_f(this, &ArcDistanceFilter::arcdist_arc_disp_wpt_cb);
   RteHdFunctor<ArcDistanceFilter> arcdist_arc_disp_hdr_cb_f(this, &ArcDistanceFilter::arcdist_arc_disp_hdr_cb);
 
-  queue* elem, * tmp;
-
   if (arcfileopt) {
     int fileline = 0;
     char* line;
@@ -154,12 +146,7 @@ void ArcDistanceFilter::process()
   }
 
   unsigned removed = 0;
-#if NEWQ
-  foreach (Waypoint* wp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach (Waypoint* wp, *global_waypoint_list) {
     extra_data* ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
     if (ed) {

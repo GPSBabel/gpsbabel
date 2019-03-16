@@ -23,7 +23,9 @@
 #define TRACKFILTER_H_INCLUDED_
 
 #include <QtCore/QDateTime>  // for QDateTime
+#include <QtCore/QList>      // for QList
 #include <QtCore/QtGlobal>   // for qint64
+
 #include "defs.h"            // for ARG_NOMINMAX, route_head (ptr only), ARG...
 #include "filter.h"          // for Filter
 

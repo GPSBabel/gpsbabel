@@ -18,12 +18,16 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <cstdlib>          // for atof, atoi, qsort, strtod
+
+#include <QtCore/QString>   // for QString
+#include <QtCore/QtGlobal>  // for foreach
+
 #include "defs.h"
 #include "filterdefs.h"
-#include "grtcirc.h"
 #include "radius.h"
-#include <cstdio>
-#include <cstdlib>
+#include "grtcirc.h"        // for RAD, gcdist, radtomiles
 
 #if FILTERS_ENABLED
 
@@ -56,18 +60,10 @@ int RadiusFilter::dist_comp(const void* a, const void* b)
 
 void RadiusFilter::process()
 {
-#if !NEWQ
-  queue* elem, * tmp;
-#endif
   Waypoint** comp;
   int i, wc;
   route_head* rte_head = nullptr;
-#if NEWQ
-  foreach (Waypoint* waypointp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach (Waypoint* waypointp, *global_waypoint_list) {
     double dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
                        home_pos->latitude,
@@ -99,12 +95,7 @@ void RadiusFilter::process()
    * for qsort.
    */
 
-#if NEWQ
-  foreach (Waypoint* wp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach (Waypoint* wp, *global_waypoint_list) {
     comp[i] = wp;
     waypt_del(wp);
     i++;

@@ -24,7 +24,6 @@
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, arglist_t, ARG_TERMI...
 #include "filter.h"  // for Filter
-#include "queue.h"   // for queue
 
 #if FILTERS_ENABLED
 
@@ -107,20 +106,13 @@ private:
     ARG_TERMINATOR
   };
 
-  int sort_comp_wpt(const queue* a, const queue* b);
+  static bool sort_comp_wpt_by_description(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_gcid(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_shortname(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_time(const Waypoint* a, const Waypoint* b);
   static bool sort_comp_rh_by_description(const route_head* a, const route_head* b);
   static bool sort_comp_rh_by_name(const route_head* a, const route_head* b);
   static bool sort_comp_rh_by_number(const route_head* a, const route_head* b);
-
-  class SortCompWptFunctor
-  {
-  public:
-      explicit SortCompWptFunctor(SortFilter& obj) : that(&obj) {}
-    int operator()(const queue* a, const queue* b);
-
-  private:
-    SortFilter* that;
-  };
 
 };
 #endif // FILTERS_ENABLED

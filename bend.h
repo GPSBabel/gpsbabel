@@ -25,7 +25,6 @@
 
 #include "defs.h"    // for route_head (ptr only), ARGTYPE_FLOAT, ARG_NOMINMAX
 #include "filter.h"  // for Filter
-#include "queue.h"   // for queue
 
 #if FILTERS_ENABLED
 

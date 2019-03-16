@@ -19,6 +19,30 @@
 
  */
 
+#include <cmath>                                   // for lround
+#include <cstdio>                                  // for sscanf
+#include <cstdlib>                                 // for atoi, strtod
+#include <cstring>                                 // for strchr, strncpy
+
+#include <QtCore/QDate>                            // for QDate
+#include <QtCore/QDateTime>                        // for QDateTime
+#include <QtCore/QHash>                            // for QHash
+#include <QtCore/QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QtCore/QLatin1String>                    // for QLatin1String
+#include <QtCore/QStaticStringData>                // for QStaticStringData
+#include <QtCore/QString>                          // for QString, QStringLiteral, operator+, operator==
+#include <QtCore/QStringList>                      // for QStringList
+#include <QtCore/QStringRef>                       // for QStringRef
+#include <QtCore/QTime>                            // for QTime
+#include <QtCore/QVector>                          // for QVector
+#include <QtCore/QXmlStreamAttribute>              // for QXmlStreamAttribute
+#include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
+#include <QtCore/QXmlStreamNamespaceDeclaration>   // for QXmlStreamNamespaceDeclaration
+#include <QtCore/QXmlStreamNamespaceDeclarations>  // for QXmlStreamNamespaceDeclarations
+#include <QtCore/QXmlStreamReader>                 // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
+#include <QtCore/Qt>                               // for CaseInsensitive, UTC
+#include <QtCore/QtGlobal>                         // for qAsConst, QAddConst<>::Type
+
 #include "defs.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
@@ -27,21 +51,6 @@
 #include "src/core/logging.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
-
-#include <QtCore/QDateTime>            // for QDateTime, QDate, QTime
-#include <QtCore/QHash>                // for QHash
-#include <QtCore/QList>                // for QList
-#include <QtCore/QString>              // for QString, QStringLiteral, QStringRef, QStaticStringData, QLatin1String, operator+
-#include <QtCore/QStringList>          // for QStringList
-#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamNamespaceDeclarations> // for QXmlStreamNamespaceDeclarations
-#include <QtCore/QXmlStreamReader>     // for QXmlStreamReader, QXmlStreamReader::TokenType::Characters, QXmlStreamReader::TokenType::EndDocument, QXmlStreamReader::TokenType::EndElement, QXmlStreamReader::TokenType::Invalid, QXmlStreamReader::TokenType::StartElement
-#include <QtCore/QtGlobal>             // for qAsConst
-
-#include <cmath>                       // for lround
-#include <cstdio>                      // for sscanf
-#include <cstdlib>                     // for atoi, strtod
-#include <cstring>                     // for strchr
 
 
 static QXmlStreamReader* reader;
@@ -1827,7 +1836,7 @@ gpx_track_hdr(const route_head* rte)
 static void
 gpx_track_disp(const Waypoint* waypointp)
 {
-  bool first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
+  bool first_in_trk = waypointp == current_trk_head->waypoint_list.front();
 
   if (waypointp->wpt_flags.new_trkseg) {
     if (!first_in_trk) {
@@ -1864,7 +1873,7 @@ gpx_track_disp(const Waypoint* waypointp)
 static void
 gpx_track_tlr(const route_head*)
 {
-  if (!QUEUE_EMPTY(&current_trk_head->waypoint_list)) {
+  if (!current_trk_head->waypoint_list.empty()) {
     writer->writeEndElement();
   }
 

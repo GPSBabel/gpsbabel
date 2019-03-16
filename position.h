@@ -24,7 +24,6 @@
 
 #include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT
 #include "filter.h"  // for Filter
-#include "queue.h"   // for queue
 
 #if FILTERS_ENABLED
 
@@ -70,7 +69,7 @@ private:
   };
 
   double gc_distance(double lat1, double lon1, double lat2, double lon2);
-  void position_runqueue(queue* q, int nelems, int qtype);
+  void position_runqueue(WaypointList* waypt_list, int nelems, int qtype);
   void position_process_any_route(const route_head* rh, int type);
   void position_process_rte(const route_head* rh);
   void position_process_trk(const route_head* rh);

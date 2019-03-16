@@ -18,6 +18,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+#include <algorithm>     // for reverse
+
+#include <QtCore/QList>  // for QList<>::iterator
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "reverse_route.h"
@@ -44,10 +48,7 @@ void ReverseRouteFilter::reverse_route_head(const route_head* rte_hd)
 {
   /* Cast away const-ness */
   auto rh = const_cast<route_head*>(rte_hd);
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
-  }
+  std::reverse(rh->waypoint_list.begin(), rh->waypoint_list.end());
   prev_new_trkseg = 1;
 }
 

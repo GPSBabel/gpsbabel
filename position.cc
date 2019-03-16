@@ -19,12 +19,15 @@
 
  */
 
+#include <cmath>            // for fabs
+#include <cstdlib>          // for strtod
+
+#include <QtCore/QtGlobal>  // for foreach
+
 #include "defs.h"
 #include "filterdefs.h"
-#include "grtcirc.h"
+#include "grtcirc.h"        // for RAD, gcdist, radtomiles
 #include "position.h"
-#include <cmath>
-#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -39,22 +42,16 @@ double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double
 }
 
 /* tear through a waypoint queue, processing points by distance */
-void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
+void PositionFilter::position_runqueue(WaypointList* waypt_list, int nelems, int qtype)
 {
-  queue* elem, * tmp;
   double dist, diff_time;
   int i = 0, anyitem;
 
   Waypoint** comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
   int* qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
-#if NEWQ
-  foreach (Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, *waypt_list) {
     comp[i] = waypointp;
-#else
-  QUEUE_FOR_EACH(q, elem, tmp) {
-    comp[i] = reinterpret_cast<Waypoint *>(elem);
-#endif
     qlist[i] = 0;
     i++;
   }
@@ -137,7 +134,7 @@ void PositionFilter::position_process_any_route(const route_head* rh, int type)
 
   if (i) {
     cur_rte = const_cast<route_head*>(rh);
-    position_runqueue(const_cast<queue*>(&rh->waypoint_list), i, type);
+    position_runqueue(&cur_rte->waypoint_list, i, type);
     cur_rte = nullptr;
   }
 
@@ -161,7 +158,7 @@ void PositionFilter::process()
   int i = waypt_count();
 
   if (i) {
-    position_runqueue(&waypt_head, i, wptdata);
+    position_runqueue(global_waypoint_list, i, wptdata);
   }
 
   route_disp_all(position_process_rte_f, nullptr, nullptr);

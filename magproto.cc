@@ -47,7 +47,6 @@
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
 #include "magellan.h"              // for mm_meridian, mm_sportrak, icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
-#include "queue.h"                 // for queue, QUEUE_FOR_EACH
 #include "src/core/datetime.h"     // for DateTime
 
 
@@ -1073,7 +1072,7 @@ mag_rteparse(char* rtemsg)
 
   /*
    * This is the first component of a route.  Allocate a new
-   * queue head.
+   * head.
    */
   if (frag == 1) {
     mag_rte_head = new mag_rte_head_t;
@@ -1481,7 +1480,6 @@ and to replace the 2nd name with "<<>>", but I haven't seen one of those.
 static void
 mag_route_trl(const route_head* rte)
 {
-  queue* elem, *tmp;
   char obuff[256];
   char buff1[64], buff2[64];
   char* pbuff;
@@ -1497,8 +1495,7 @@ mag_route_trl(const route_head* rte)
   route_out_count++;
 
   int thisline = i = 0;
-  QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* waypointp, rte->waypoint_list) {
     i++;
 
     if (deficon) {
@@ -1515,7 +1512,7 @@ mag_route_trl(const route_head* rte)
     // Write name, icon tuple into alternating buff1/buff2 buffer.
     sprintf(pbuff, "%s,%s", CSTR(waypointp->shortname), CSTR(icon_token));
 
-    if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
+    if ((waypointp == rte->waypoint_list.back()) || ((i % 2) == 0)) {
       char expbuf[1024];
       thisline++;
       expbuf[0] = 0;

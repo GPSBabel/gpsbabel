@@ -20,14 +20,17 @@
 
  */
 
-#include "defs.h"
-#include "grtcirc.h"
-#include "inifile.h"
+#include <cmath>            // for sin, cos, acos
+#include <cstdio>           // for snprintf
 
-#include <QtCore/QString>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include <QtCore/QString>   // for QString
+#include <QtCore/QtGlobal>  // for foreach
+
+#include "defs.h"
+#include "gbfile.h"         // for gbfprintf, gbfclose, gbfopen, gbfile
+#include "grtcirc.h"        // for RAD, gcdist, DEG
+#include "inifile.h"        // for inifile_readstr, inifile_readint_def, inifile_done, inifile_init, inifile_readint, inifile_t
+
 
 #define MYNAME "ggv_ovl"
 
@@ -268,7 +271,6 @@ waypt_disp_cb(const Waypoint* wpt)
 static void
 track_disp_cb(const route_head* trk)
 {
-  queue* elem, *tmp;
   int waypt_ct = trk->rte_waypt_ct;
 
   if (waypt_ct <= 0) {
@@ -283,9 +285,7 @@ track_disp_cb(const route_head* trk)
 
   int i = 0;
 
-  QUEUE_FOR_EACH(&(trk->waypoint_list), elem, tmp) {
-
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt, trk->waypoint_list) {
 
     gbfprintf(fout, "XKoord%d=%0.8f\n", i, wpt->longitude);
     gbfprintf(fout, "YKoord%d=%0.8f\n", i, wpt->latitude);
@@ -299,7 +299,6 @@ track_disp_cb(const route_head* trk)
 static void
 route_disp_cb(const route_head* rte)
 {
-  queue* elem, *tmp;
   int waypt_ct = rte->rte_waypt_ct;
 
   if (waypt_ct <= 0) {
@@ -311,11 +310,9 @@ route_disp_cb(const route_head* rte)
   color = OVL_COLOR_RED;
 
   int i = 0;
-  Waypoint* prev = nullptr;
+  const Waypoint* prev = nullptr;
 
-  QUEUE_FOR_EACH(&(rte->waypoint_list), elem, tmp) {
-
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt, rte->waypoint_list) {
 
     if (prev != nullptr) {
       draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, (OVL_COLOR_TYP)9 /* color */, prev);

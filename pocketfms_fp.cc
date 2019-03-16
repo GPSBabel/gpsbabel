@@ -19,10 +19,13 @@
 
  */
 
+#include <QtCore/QString>               // for QString
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 #include "defs.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, cb_start, cb_end, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
+
 
 static int isFirst = 1;
 static route_head* route = nullptr;
@@ -65,8 +68,8 @@ static void
 rd_deinit()
 {
   if (route != nullptr) {
-    Waypoint* head = reinterpret_cast<Waypoint *>QUEUE_FIRST(&route->waypoint_list);
-    Waypoint* tail = reinterpret_cast<Waypoint *>QUEUE_LAST(&route->waypoint_list);
+    Waypoint* head = route->waypoint_list.front();
+    Waypoint* tail = route->waypoint_list.back();
     if (head != nullptr) {
       route->rte_name = head->shortname;
     }

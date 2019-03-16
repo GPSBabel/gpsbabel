@@ -20,11 +20,21 @@
 
  */
 
-#include <QtCore/QXmlStreamAttributes>
+#include <cstdio>                       // for SEEK_CUR, size_t
+#include <cstdint>                      // int32_t, int16_t, uint32_t
+#include <cstdlib>                      // for atoi
+#include <cstring>                      // for strncmp, memcpy, strcmp, strlen
+
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QString>               // for QString, operator+
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/QtGlobal>              // for qPrintable
 
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include "xmlgeneric.h"
+#include "gbfile.h"                     // for gbfgetdbl, gbfgetint32, gbfputint32, gbfgetint16, gbfputdbl, gbfputc, gbfread, gbfseek, gbfgetc, gbfile, gbfclose, gbfungetc, gbfeof, gbfputs, gbfwrite, gbfopen_le, gbfgetuint32, gbfputuint16, gbfputuint32
+#include "jeeps/gpsmath.h"              // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_C, GPS_Math_NGENToAiry1830LatLon
+#include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, xml_deinit, xml_init, cb_end, cb_start, xg_cb_type, xml_read, xml_readstring, xg_tag_mapping
+
 
 #define MYNAME "dmtlog"
 
@@ -711,8 +721,7 @@ write_header(const route_head* trk)
 
   int count = 0;
   if (trk != nullptr) {
-    queue* curr, *prev;
-    QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
+    count = trk->waypoint_list.count();
   }
   if (!trk || trk->rte_name.isEmpty()) {
     write_str("Name", fout);

@@ -20,13 +20,17 @@
 
  */
 
-#include "defs.h"
-#include "bend.h"
-#include "filterdefs.h"
-#include "grtcirc.h"
+#include <cmath>            // macos wants abs from here!
+#include <cstdlib>          // for strtod, abs
 
-#include <cmath>
-#include <cstdlib>
+#include <QtCore/QString>   // for QString
+#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
+
+#include "defs.h"
+#include "filterdefs.h"
+#include "bend.h"
+#include "grtcirc.h"        // for RAD, heading_true_degrees, gcdist, linepart, radtometers, DEG
+
 
 #define MYNAME "bend"
 
@@ -90,12 +94,10 @@ int BendFilter::is_small_angle(double lat_orig, double long_orig, double lat_ori
 
 void BendFilter::process_route(const route_head* route_orig, route_head* route_dest)
 {
-  Waypoint* wpt_orig_prev = nullptr;
-  Waypoint* wpt_orig = nullptr;
+  const Waypoint* wpt_orig_prev = nullptr;
+  const Waypoint* wpt_orig = nullptr;
 
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&route_orig->waypoint_list, elem, tmp) {
-    Waypoint* wpt_orig_next = reinterpret_cast<Waypoint *>(elem);
+  foreach (const Waypoint* wpt_orig_next, route_orig->waypoint_list) {
 
     if (wpt_orig_prev == nullptr) {
       if (wpt_orig != nullptr) {
@@ -158,8 +160,7 @@ void BendFilter::process_route_orig(const route_head* route_orig)
 
 void BendFilter::process()
 {
-  for (auto it = routes_orig->cbegin(); it != routes_orig->cend(); ++it) {
-    auto route_orig = reinterpret_cast<const route_head*>(*it);
+  for (const auto* route_orig : qAsConst(*routes_orig)) {
     process_route_orig(route_orig);
   }
 }

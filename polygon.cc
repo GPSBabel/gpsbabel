@@ -18,10 +18,17 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <cstdio>           // for sscanf
+#include <cstring>          // for strchr, strlen, strspn
+
+#include <QtCore/QtGlobal>  // for foreach
+
 #include "defs.h"
-#include "filterdefs.h"
+#include "filterdefs.h"     // for global_waypoint_list
 #include "polygon.h"
-#include <cstdio>
+#include "gbfile.h"         // for gbfclose, gbfgetstr, gbfopen, gbfile
+
 
 #if FILTERS_ENABLED
 #define MYNAME "Polygon filter"
@@ -215,8 +222,6 @@ void PolygonFilter::polytest(double lat1, double lon1,
 
 void PolygonFilter::process()
 {
-  queue* elem, * tmp;
-  Waypoint* waypointp;
   extra_data* ed;
   int fileline = 0;
   int first = 1;
@@ -248,12 +253,7 @@ void PolygonFilter::process()
               fileline);
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
-#if NEWQ
-      foreach (Waypoint* waypointp, waypt_list) {
-#else
-      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-        waypointp = reinterpret_cast<Waypoint *>(elem);
-#endif
+      foreach (Waypoint* waypointp, *global_waypoint_list) {
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
         } else {
@@ -297,12 +297,7 @@ void PolygonFilter::process()
   }
   gbfclose(file_in);
 
-#if NEWQ
-  foreach (Waypoint* wp, waypt_list) {
-#else
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
-#endif
+  foreach (Waypoint* wp, *global_waypoint_list) {
     ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
     if (ed) {

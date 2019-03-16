@@ -20,12 +20,21 @@
 
  */
 
+#include <cmath>                // for fabs
+#include <cstring>              // for memset
+
+#include <QtCore/QDate>         // for QDate
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QString>       // for QString
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/Qt>            // for UTC
+#include <QtCore/QtGlobal>      // for foreach
+
 #include "defs.h"
-#include <cctype>
-#include <cmath>
-#include <cstring>
-#include <ctime>
-//#include "session.h"
+#include "gbfile.h"             // for gbfclose, gbfeof, gbfgetint32, gbfputint32, gbfread, gbfwrite, gbfile, gbfopen_le
+#include "session.h"            // for curr_session
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define MYNAME "mapasia"
 
@@ -167,9 +176,7 @@ tr7_check_after_read_wpt_cb(const Waypoint* wpt)
 static void
 tr7_check_after_read_trailer_cb(const route_head* trk)
 {
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+  foreach (Waypoint* wpt, trk->waypoint_list) {
     if (speed_tmp == 0) {
       WAYPT_UNSET(wpt, speed);
     }

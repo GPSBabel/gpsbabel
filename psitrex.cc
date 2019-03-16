@@ -19,11 +19,22 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+#include <cctype>                  // for isspace
+#include <cstdio>                  // for sscanf, EOF, size_t
+#include <cstdlib>                 // for atof, atoi
+#include <cstring>                 // for strcmp, strlen, strcpy
+#include <ctime>                   // for gmtime
+
+#include <QtCore/QChar>            // for QChar
+#include <QtCore/QLatin1String>    // for QLatin1String
+#include <QtCore/QString>          // for QString
+#include <QtCore/QtGlobal>         // for foreach, uint
+
 #include "defs.h"
-#include "garmin_tables.h"
-#include <cctype>
-#include <cstdio>
-#include <cstdlib>
+#include "garmin_tables.h"         // for gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, PCX
+#include "gbfile.h"                // for gbfprintf, gbfeof, gbfile, gbfgetc, gbfclose, gbfgets, gbfopen, gbfputs
+#include "src/core/datetime.h"     // for DateTime
+
 
 #define MYNAME "PSITREX"
 
@@ -451,14 +462,13 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
   QString rname;
 
   /* total nodes (waypoints) this route */
-  if (rte->waypoint_list.next) { 
+  //if (rte->waypoint_list.next) { 
+  if (true) {
     // this test doesn't do what I w ant i.e test if this is a valid 
     // route - treat as a placeholder for now .
     time_t uniqueValue = 0;
     unsigned int rte_datapoints = 0;
-    queue *elem, *tmp;
-    QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      Waypoint* testwpt = reinterpret_cast<Waypoint*>(elem);
+    foreach (const Waypoint* testwpt, rte->waypoint_list) {
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -591,16 +601,14 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
   QString tname;
   time_t uniqueValue = 0;
 
-  queue* elem, *tmp;
-
   if (psit_track_state == 2) {
     /* total nodes (waypoints) this track */
-    if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
+    //if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
+    if (true) {
 
       unsigned int trk_datapoints = 0;
-      QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
+      foreach (const Waypoint* testwpt, trk->waypoint_list) {
         if (trk_datapoints == 0) {
-          Waypoint* testwpt = reinterpret_cast<Waypoint*>(elem);
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;
