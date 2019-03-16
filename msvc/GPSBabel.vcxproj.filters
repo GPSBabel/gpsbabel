@@ -162,9 +162,6 @@
     <ClCompile Include="gbser_win.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gbsleep.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gdb.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -348,9 +345,6 @@
     <ClCompile Include="lowranceusr.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lowranceusr4.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="maggeo.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -442,9 +436,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="psitrex.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="queue.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="radius.cc">
@@ -604,9 +595,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xcsv.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xhtmlent.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xmlgeneric.cc">
@@ -821,9 +809,6 @@
     <ClInclude Include="position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="radius.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -864,6 +849,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="validate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xcsv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xmlgeneric.h">

@@ -80,7 +80,7 @@ JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsusbcommon.cc
 
 
-SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
+SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
           formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc units.cc gbser.cc \
@@ -133,7 +133,6 @@ HEADERS =  \
 	magellan.h \
 	mapsend.h \
 	navilink.h \
-	queue.h \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \

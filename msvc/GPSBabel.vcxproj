@@ -11,13 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CFC0F0AD-9E1E-38C1-852A-BDF085ED75EA}</ProjectGuid>
+    <ProjectGuid>{3E927E7F-E970-3403-8520-5CA7309B5F7D}</ProjectGuid>
     <RootNamespace>GPSBabel</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="Configuration">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
@@ -26,7 +28,7 @@
     <PrimaryOutput>GPSBabel</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="Configuration">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
@@ -56,8 +58,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;zlib;C:\Qt\5.9.6\msvc2015\include;C:\Qt\5.9.6\msvc2015\include\QtCore;release;C:\Qt\5.9.6\msvc2015\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;zlib;C:\Qt\5.12.2\msvc2017\include;C:\Qt\5.12.2\msvc2017\include\QtCore;release;C:\Qt\5.12.2\msvc2017\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -std:c++14 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -66,7 +68,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -75,8 +77,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>setupapi.lib;C:\Qt\5.9.6\msvc2015\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Qt\5.9.6\msvc2015\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>&quot;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x86\setupapi.lib&quot;;C:\Qt\5.12.2\msvc2017\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.12.2\msvc2017\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -93,13 +95,13 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;zlib;C:\Qt\5.9.6\msvc2015\include;C:\Qt\5.9.6\msvc2015\include\QtCore;debug;C:\Qt\5.9.6\msvc2015\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;zlib;C:\Qt\5.12.2\msvc2017\include;C:\Qt\5.12.2\msvc2017\include\QtCore;debug;C:\Qt\5.12.2\msvc2017\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -std:c++14 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -108,7 +110,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -116,8 +118,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>setupapi.lib;C:\Qt\5.9.6\msvc2015\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Qt\5.9.6\msvc2015\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>&quot;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x86\setupapi.lib&quot;;C:\Qt\5.12.2\msvc2017\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.12.2\msvc2017\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,7 +135,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -182,7 +184,6 @@
     <ClCompile Include="gbfile.cc" />
     <ClCompile Include="gbser.cc" />
     <ClCompile Include="gbser_win.cc" />
-    <ClCompile Include="gbsleep.cc" />
     <ClCompile Include="gdb.cc" />
     <ClCompile Include="geo.cc" />
     <ClCompile Include="geojson.cc" />
@@ -244,7 +245,6 @@
     <ClCompile Include="kml.cc" />
     <ClCompile Include="lmx.cc" />
     <ClCompile Include="lowranceusr.cc" />
-    <ClCompile Include="lowranceusr4.cc" />
     <ClCompile Include="maggeo.cc" />
     <ClCompile Include="magproto.cc" />
     <ClCompile Include="main.cc" />
@@ -276,7 +276,6 @@
     <ClCompile Include="polygon.cc" />
     <ClCompile Include="position.cc" />
     <ClCompile Include="psitrex.cc" />
-    <ClCompile Include="queue.cc" />
     <ClCompile Include="radius.cc" />
     <ClCompile Include="random.cc" />
     <ClCompile Include="raymarine.cc" />
@@ -402,7 +401,6 @@
     <ClInclude Include="nukedata.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="position.h" />
-    <ClInclude Include="queue.h" />
     <ClInclude Include="radius.h" />
     <ClInclude Include="reverse_route.h" />
     <ClInclude Include="session.h" />
@@ -417,6 +415,7 @@
     <ClInclude Include="zlib\trees.h" />
     <ClInclude Include="src\core\usasciicodec.h" />
     <ClInclude Include="validate.h" />
+    <ClInclude Include="xcsv.h" />
     <ClInclude Include="xmlgeneric.h" />
     <ClInclude Include="src\core\xmlstreamwriter.h" />
     <ClInclude Include="src\core\xmltag.h" />
@@ -428,15 +427,15 @@
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\Qt\5.9.6\msvc2015\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">cl -BxC:\Qt\5.9.6\msvc2015\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew /MP -wd4100 -Zi -MDd -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.9.6\msvc2015\mkspecs\features\data\dummy.cpp 2>NUL >debug\moc_predefs.h</Command>
+      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">cl -BxC:\Qt\5.12.2\msvc2017\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus /MP -wd4100 -Zi -MDd -std:c++14 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp 2>NUL >debug\moc_predefs.h</Command>
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">Generate moc_predefs.h</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\Qt\5.9.6\msvc2015\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">cl -BxC:\Qt\5.9.6\msvc2015\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew /MP -wd4100 -O2 -MD -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.9.6\msvc2015\mkspecs\features\data\dummy.cpp 2>NUL >release\moc_predefs.h</Command>
+      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">cl -BxC:\Qt\5.12.2\msvc2017\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus /MP -wd4100 -O2 -MD -std:c++14 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp 2>NUL >release\moc_predefs.h</Command>
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Generate moc_predefs.h</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\moc_predefs.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
