@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     valgrind \
     expat \
     libxml2-utils \
+    bear \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
@@ -59,7 +60,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcovr \
-    openjdk-8-jre-headless \
  && rm -rf /var/lib/apt/lists/*
 
 # install environment for locale test

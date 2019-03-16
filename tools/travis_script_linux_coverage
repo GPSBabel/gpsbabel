@@ -4,6 +4,7 @@
 
 # extra ubuntu bionic packages: gcovr, openjdk-8-jre-headless, /usr/lib/jvm/java-8-openjdk-amd64/bin/java
 # as of 6/18/2018 you must use java 8, see issue #76, #83 at https://github.com/codacy/codacy-coverage-reporter/issues
+# as of 3/16/2019 with coverage reporter 4.0.3 java 8 is not required.
 
 qmake
 make coverage
@@ -16,8 +17,8 @@ make coverage
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if [ -v CODACY_PROJECT_TOKEN ] ; then
   # upload coverate report to codacy.
-  wget -nv -c https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.3/codacy-coverage-reporter-4.0.3-assembly.jar
-  java -jar codacy-coverage-reporter-4.0.3-assembly.jar report -l cpp -f -r gpsbabel_coverage.xml
+  wget -nv -c https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar
+  java -jar codacy-coverage-reporter-4.0.5-assembly.jar report -l cpp -f -r gpsbabel_coverage.xml
 else
   echo "Skipping codacy coverage upload as CODACY_PROJECT_TOKEN is not set."
 fi
