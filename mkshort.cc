@@ -19,21 +19,24 @@
 
  */
 
-#include "defs.h"
-#include "cet.h"
-#include "cet_util.h"
+#include <cctype>           // for isspace, toupper, isdigit
+#include <cstdio>           // for sprintf, size_t
+#include <cstring>          // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
-#include <cctype>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
+#include <QtCore/QList>     // for QList
+#include <QtCore/QString>   // for QString
+#include <QtCore/QtGlobal>  // for foreach
+
+#include "defs.h"
+#include "cet.h"            // for cet_utf8_strdup, cet_utf8_strlen, cet_utf8_strndup
+#include "cet_util.h"       // for cet_cs_vec_utf8
 
 
 #define MYNAME	"mkshort"
 
 static const char vowels[] = "aeiouAEIOU";
 
-#define DEFAULT_TARGET_LEN 8
+static constexpr unsigned int default_target_len = 8U;
 static const char* DEFAULT_BADCHARS = "\"$.,'!-";
 
 /*
@@ -42,13 +45,27 @@ static const char* DEFAULT_BADCHARS = "\"$.,'!-";
  * string hash mixes things up enough that strcmp can generally bail on the
  * first byte or two for a mismatch.
  */
-#define PRIME 37
+static constexpr unsigned int prime = 37U;
 
-typedef struct {
-  queue list;
-  char* orig_shortname;
-  int conflictctr;
-} uniq_shortname;
+struct uniq_shortname {
+  char* orig_shortname{nullptr};
+  int conflictctr{0};
+};
+
+struct  mkshort_handle_imp {
+  unsigned int target_len{default_target_len};
+  char* badchars{nullptr};
+  char* goodchars{nullptr};
+  char* defname{nullptr};
+  QList<uniq_shortname*> namelist[prime];
+
+  /* Various internal flags */
+  bool mustupper{false};
+  bool whitespaceok{true};
+  bool repeating_whitespaceok{false};
+  bool must_uniq{true};
+  bool is_utf8{false};
+};
 
 static struct replacements {
   const char* orig;
@@ -76,23 +93,16 @@ unsigned int hash_string(const char* key)
   while (*key) {
     hash = ((hash<<5) ^ (hash>>27)) ^ toupper(*key++);
   }
-  hash = hash % PRIME;
+  hash = hash % prime;
   return hash;
 }
 
 short_handle
 mkshort_new_handle()
 {
-  mkshort_handle_imp* h = (mkshort_handle_imp*) xcalloc(sizeof *h, 1);
+  auto h = new mkshort_handle_imp;
 
-  for (auto &i : h->namelist) {
-    QUEUE_INIT(&i);
-  }
-
-  h->whitespaceok = 1;
   h->badchars = xstrdup(DEFAULT_BADCHARS);
-  h->target_len = DEFAULT_TARGET_LEN;
-  h->must_uniq = 1;
   h->defname = xstrdup("WPT");
   h->is_utf8 = (global_opts.charset == &cet_cs_vec_utf8);
 
@@ -103,11 +113,9 @@ static
 uniq_shortname*
 is_unique(mkshort_handle_imp* h, char* name)
 {
-  queue* e, *t;
 
   int hash = hash_string(name);
-  QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
-    uniq_shortname* z = reinterpret_cast<uniq_shortname *>(e);
+  foreach (uniq_shortname* z, h->namelist[hash]) {
     if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
       return z;
     }
@@ -123,7 +131,7 @@ add_to_hashlist(mkshort_handle_imp* h, char* name)
   uniq_shortname* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
 
   s->orig_shortname = xstrdup(name);
-  ENQUEUE_TAIL(&h->namelist[hash], &s->list);
+  h->namelist[hash].append(s);
 }
 
 char*
@@ -161,16 +169,14 @@ mkshort_del_handle(short_handle* h)
   }
 
   for (auto &i : hdr->namelist) {
-    queue* e, *t;
-    QUEUE_FOR_EACH(&i, e, t) {
-      uniq_shortname* s = reinterpret_cast<uniq_shortname *>(e);
+    while (!i.isEmpty()) {
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {
         fprintf(stderr, "%d Output name conflicts: '%s'\n",
                 s->conflictctr, s->orig_shortname);
       }
 #endif
-      dequeue(e);
+      auto s = i.takeFirst();
       xfree(s->orig_shortname);
       xfree(s);
     }
@@ -184,7 +190,7 @@ mkshort_del_handle(short_handle* h)
     xfree(hdr->defname);
   }
 
-  xfree(hdr);
+  delete hdr;
   *h = nullptr;
 }
 
@@ -252,7 +258,7 @@ setshort_length(short_handle h, int l)
 {
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   if (l == 0) {
-    hdl->target_len = DEFAULT_TARGET_LEN;
+    hdl->target_len = default_target_len;
   } else {
     hdl->target_len = l;
   }
