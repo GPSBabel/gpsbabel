@@ -44,6 +44,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs with libraries needed by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-dev \
+    pkg-config \
+    libudev-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with qt used by gpsbabel
