@@ -49,7 +49,7 @@
 #include <QtCore/QtGlobal>         // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
-#include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, csv_lineparse, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec
+#include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_FIND, GMSD_GET, GMSD_SET, garmin_fs_alloc
 #include "gbfile.h"                // for gbfgetstr, gbfclose, gbfopen, gbfile
 #include "grtcirc.h"               // for RAD, gcdist, radtomiles
@@ -1056,11 +1056,8 @@ xcsv_data_read()
       Waypoint* wpt_tmp = new Waypoint;
       // initialize parse data for accumulation of line results from all fields in this line.
       xcsv_parse_data parse_data;
-      // tbuf is a temporary copy of buff since we modify it. :-(
-      char *tbuf = xstrdup(buff);
-      const char* s = tbuf;
-      s = csv_lineparse(s, CSTR(xcsv_file.field_delimiter),
-                        CSTR(xcsv_file.field_encloser), linecount);
+      const QStringList values = csv_linesplit(buff, xcsv_file.field_delimiter,
+                        xcsv_file.field_encloser, linecount);
 
       if (xcsv_file.ifields.isEmpty()) {
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", CSTR(xcsv_file.description)? CSTR(xcsv_file.description) : "unknown");
@@ -1068,23 +1065,15 @@ xcsv_data_read()
 
       int ifield_idx = 0;
 
-      /* now rip the line apart, advancing the queue for each tear
-       * off the beginning of buff since there's no index into queue.
-       */
-      while (s) {
+      /* now rip the line apart */
+      for (const auto& value : values) {
         const field_map& fmp = xcsv_file.ifields.at(ifield_idx++);
-        xcsv_parse_val(s, wpt_tmp, fmp, &parse_data, linecount);
+        xcsv_parse_val(CSTR(value), wpt_tmp, fmp, &parse_data, linecount);
 
         if (ifield_idx >= xcsv_file.ifields.size()) {
-          /* we've wrapped the queue. so stop parsing! */
-          while (s) {
-            s = csv_lineparse(nullptr, "\xff","",linecount);
-          }
+          /* no more fields, stop parsing! */
           break;
         }
-
-        s = csv_lineparse(nullptr, CSTR(xcsv_file.field_delimiter),
-                          CSTR(xcsv_file.field_encloser), linecount);
       }
 
       // If XT_LAT_DIR(XT_LON_DIR) was an input field, and the latitude(longitude) is positive,
@@ -1144,7 +1133,6 @@ xcsv_data_read()
       default:
         ;
       }
-      xfree(tbuf);
     }
   }
 }
