@@ -48,7 +48,6 @@
 #include "cet.h"                // for cet_cs_vec_t
 #include "inifile.h"            // for inifile_t
 #include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
-#include "queue.h"              // for queue
 #include "session.h"            // for session_t
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/optional.h"  // for optional

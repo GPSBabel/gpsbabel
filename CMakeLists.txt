@@ -91,7 +91,7 @@ set(JEEPS
 )
 
 set(SUPPORT
-  queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc
+  route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc
   csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc
   formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc
   inifile.cc garmin_fs.cc units.cc gbser.cc
@@ -145,7 +145,6 @@ set(HEADERS
   magellan.h
   mapsend.h
   navilink.h
-  queue.h
   session.h
   shapelib/shapefil.h
   strptime.h
