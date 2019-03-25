@@ -121,9 +121,9 @@ LIBOBJS = route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o units.o @GBSER@ gbser.o \
 	  gbfile.o parse.o session.o \
+    src/core/textstream.o \
+	  src/core/usasciicodec.o \
 	  src/core/xmlstreamwriter.o \
-	  src/core/usasciicodec.o\
-	  src/core/ziparchive.o \
 	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ @MINIZIP@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -459,7 +459,7 @@ cst.o: cst.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h cet_util.h
 csv_util.o: csv_util.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  csv_util.h
+  csv_util.h src/core/logging.h
 delgpl.o: delgpl.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 destinator.o: destinator.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
@@ -846,7 +846,7 @@ osm.o: osm.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   xmlgeneric.h
 ozi.o: ozi.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h csv_util.h \
-  jeeps/gpsmath.h jeeps/gpsport.h src/core/file.h
+  jeeps/gpsmath.h jeeps/gpsport.h src/core/textstream.h src/core/file.h
 parse.o: parse.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   jeeps/gpsmath.h jeeps/gpsport.h
@@ -917,14 +917,12 @@ smplrout.o: smplrout.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
 sort.o: sort.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h \
   filterdefs.h filter.h sort.h
+src/core/textstream.o: src/core/textstream.cc src/core/textstream.h \
+  src/core/file.h defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 src/core/usasciicodec.o: src/core/usasciicodec.cc src/core/usasciicodec.h
 src/core/xmlstreamwriter.o: src/core/xmlstreamwriter.cc \
   src/core/xmlstreamwriter.h
-src/core/ziparchive.o: src/core/ziparchive.cc src/core/ziparchive.h \
-  defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h gbfile.h \
-  session.h src/core/datetime.h src/core/optional.h \
-  zlib/contrib/minizip/zip.h zlib/contrib/minizip/ioapi.h \
-  src/core/logging.h
 stackfilter.o: stackfilter.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h filterdefs.h filter.h stackfilter.h
@@ -971,11 +969,11 @@ transform.o: transform.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   filterdefs.h filter.h transform.h
 unicsv.o: unicsv.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  cet_util.h csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h \
-  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h garmin_tables.h \
-  src/core/logging.h
+  csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h garmin_tables.h src/core/logging.h \
+  src/core/textstream.h src/core/file.h
 units.o: units.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 util.o: util.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \

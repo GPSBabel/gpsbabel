@@ -30,6 +30,7 @@
 #include <QtCore/QChar>            // for QChar
 #include <QtCore/QCharRef>         // for QCharRef
 #include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QIODevice>        // for QIODevice, QIODevice::ReadOnly
 #include <QtCore/QLatin1String>    // for QLatin1String
 #include <QtCore/QString>          // for QString, operator!=, operator==
 #include <QtCore/QStringList>      // for QStringList
@@ -39,7 +40,6 @@
 #include <QtCore/QtGlobal>         // for qPrintable
 
 #include "defs.h"
-#include "cet_util.h"              // for cet_convert_init
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
@@ -48,6 +48,7 @@
 #include "session.h"               // for session_t
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning, Fatal
+#include "src/core/textstream.h"   // for TextStream
 
 
 #define MYNAME "unicsv"
@@ -264,7 +265,8 @@ static QVector<field_e> unicsv_fields_tab;
 static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
 ;
 static const char* unicsv_fieldsep;
-static gbfile* fin, *fout;
+static gpsbabel::TextStream* fin = nullptr;
+static gbfile* fout;
 static gpsdata_type unicsv_data_type;
 static route_head* unicsv_track, *unicsv_route;
 static char unicsv_outp_flags[(fld_terminator + 8) / 8];
@@ -559,7 +561,7 @@ unicsv_fondle_header(QString header)
 static void
 unicsv_rd_init(const QString& fname)
 {
-  char* c;
+  QString buff;
   unicsv_altscale = 1.0;
   unicsv_depthscale = 1.0;
   unicsv_proximityscale = 1.0;
@@ -571,29 +573,29 @@ unicsv_rd_init(const QString& fname)
   unicsv_track = unicsv_route = nullptr;
   unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 
-  fin = gbfopen(fname, "rb", MYNAME);
+  fin = new gpsbabel::TextStream;
+  fin->open(fname, QIODevice::ReadOnly, MYNAME);
   if (opt_fields) {
     QString fields = QString(opt_fields).replace("+", ",");
     unicsv_fondle_header(fields);
-  } else if ((c = gbfgetstr(fin))) {
-    unicsv_fondle_header(c);
+  } else if (buff = fin->readLine(), !buff.isNull()) {
+    unicsv_fondle_header(buff);
   } else {
     unicsv_fieldsep = nullptr;
-  }
-  if (fin->unicode) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
   }
 }
 
 static void
 unicsv_rd_deinit()
 {
-  gbfclose(fin);
+  fin->close();
+  delete fin;
+  fin = nullptr;
   unicsv_fields_tab.clear();
 }
 
 static void
-unicsv_parse_one_line(char* ibuf)
+unicsv_parse_one_line(const QString& ibuf)
 {
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -628,8 +630,6 @@ unicsv_parse_one_line(char* ibuf)
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
     }
-
-    ibuf = nullptr;
 
     checked++;
     value = value.trimmed();
@@ -1198,15 +1198,15 @@ unicsv_parse_one_line(char* ibuf)
 static void
 unicsv_rd()
 {
-  char* buff;
+  QString buff;
 
   if (unicsv_fieldsep == nullptr) {
     return;
   }
 
-  while ((buff = gbfgetstr(fin))) {
-    buff = lrtrim(buff);
-    if ((*buff == '\0') || (*buff == '#')) {
+  while ((buff = fin->readLine(), !buff.isNull())) {
+    buff = buff.trimmed();
+    if (buff.isEmpty() || buff.startsWith('#')) {
       continue;
     }
     unicsv_parse_one_line(buff);

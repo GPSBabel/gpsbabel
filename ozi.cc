@@ -36,29 +36,28 @@
 
  */
 
-#include <cctype>               // for tolower
-#include <cmath>                // for lround
-#include <cstdlib>              // for atoi
+#include <cctype>                 // for tolower
+#include <cmath>                  // for lround
+#include <cstdlib>                // for atoi
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QChar>         // for operator==, QChar
-#include <QtCore/QCharRef>      // for QCharRef
-#include <QtCore/QFile>         // for QFile
-#include <QtCore/QFileInfo>     // for QFileInfo
-#include <QtCore/QFlags>        // for QFlags
-#include <QtCore/QIODevice>     // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
-#include <QtCore/QString>       // for QString
-#include <QtCore/QStringList>   // for QStringList
-#include <QtCore/QTextCodec>    // for QTextCodec
-#include <QtCore/QTextStream>   // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QtCore/QByteArray>      // for QByteArray
+#include <QtCore/QChar>           // for operator==, QChar
+#include <QtCore/QCharRef>        // for QCharRef
+#include <QtCore/QFile>           // for QFile
+#include <QtCore/QFileInfo>       // for QFileInfo
+#include <QtCore/QFlags>          // for QFlags
+#include <QtCore/QIODevice>       // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
+#include <QtCore/QString>         // for QString
+#include <QtCore/QStringList>     // for QStringList
+#include <QtCore/QTextStream>     // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
+#include <QtCore/Qt>              // for CaseInsensitive
+#include <QtCore/QtGlobal>        // for qPrintable
 
 #include "defs.h"
-#include "csv_util.h"           // for csv_stringclean
-#include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
-#include "src/core/datetime.h"  // for DateTime
-#include "src/core/file.h"      // for File
+#include "csv_util.h"             // for csv_stringclean
+#include "jeeps/gpsmath.h"        // for GPS_Math_Known_Datum_To_WGS84_M
+#include "src/core/datetime.h"    // for DateTime
+#include "src/core/textstream.h"  // for TextStream
 
 
 #define MYNAME        "OZI"
@@ -71,11 +70,7 @@ struct ozi_fsdata {
   int bgcolor;
 };
 
-static struct {
-  gpsbabel::File* file{nullptr};
-  QTextStream* stream{nullptr};
-  QTextCodec* codec{nullptr};
-} ozi_file;
+static gpsbabel::TextStream* stream = nullptr;
 
 static short_handle mkshort_handle;
 static route_head* trk_head;
@@ -160,36 +155,20 @@ static QString ozi_ofname;
 static void
 ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
 {
-  ozi_file.codec = QTextCodec::codecForName(opt_codec);
-  if (ozi_file.codec == nullptr) {
-    fatal(MYNAME ": Unsupported character set '%s'.\n", opt_codec);
-  }
+  stream = new gpsbabel::TextStream;
+  stream->open(fname, mode, MYNAME, opt_codec);
 
-  ozi_file.file = new gpsbabel::File(fname);
-  ozi_file.file->open(mode);
-  ozi_file.stream = new QTextStream(ozi_file.file);
-  ozi_file.stream->setCodec(ozi_file.codec);
-
-  if (mode | QFile::WriteOnly) {
-    ozi_file.stream->setRealNumberNotation(QTextStream::FixedNotation);
-  }
-
-  if (mode | QFile::ReadOnly) {
-    if (ozi_file.codec->mibEnum() == 106) { // UTF-8
-      ozi_file.stream->setAutoDetectUnicode(true);
-    }
+  if (mode & QFile::WriteOnly) {
+    stream->setRealNumberNotation(QTextStream::FixedNotation);
   }
 }
 
 static void
 ozi_close_io()
 {
-  ozi_file.file->close();
-  delete ozi_file.file;
-  ozi_file.file = nullptr;
-  delete ozi_file.stream;
-  ozi_file.stream = nullptr;
-  ozi_file.codec = nullptr;
+  stream->close();
+  delete stream;
+  stream = nullptr;
 }
 
 static void
@@ -267,7 +246,7 @@ ozi_openfile(const QString& fname)
    */
 
   if (fname == "-") {
-    if (ozi_file.file == nullptr) {
+    if (stream == nullptr) {
       ozi_open_io(fname, QFile::WriteOnly);
     }
     return;
@@ -291,7 +270,7 @@ ozi_openfile(const QString& fname)
   QString tmpname = QString("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
-  if (ozi_file.file != nullptr) {
+  if (stream != nullptr) {
     ozi_close_io();
   }
  
@@ -303,7 +282,7 @@ ozi_track_hdr(const route_head* rte)
 {
   if ((! pack_opt) || (track_out_count == 0)) {
     ozi_openfile(ozi_ofname);
-    *ozi_file.stream << "OziExplorer Track Point File Version 2.1\r\n"
+    *stream << "OziExplorer Track Point File Version 2.1\r\n"
                      << "WGS 84\r\n"
                      << "Altitude is in " << (altunit == 'f' ? "Feet" : "Meters") << "\r\n"
                      << "Reserved 3\r\n"
@@ -330,7 +309,7 @@ ozi_track_disp(const Waypoint* waypointp)
     alt = waypointp->altitude * alt_scale;
   }
 
-  *ozi_file.stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
+  *stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
                    << waypointp->longitude << ','
                    << new_track << ','
                    << qSetRealNumberPrecision(0) << alt << ','
@@ -350,7 +329,7 @@ ozi_route_hdr(const route_head* rte)
 {
   /* prologue on 1st pass only */
   if (route_out_count == 0) {
-    *ozi_file.stream << "OziExplorer Route File Version 1.0\r\n"
+    *stream << "OziExplorer Route File Version 1.0\r\n"
                      << "WGS 84\r\n"
                      << "Reserved 1\r\n"
                      << "Reserved 2\r\n";
@@ -371,7 +350,7 @@ ozi_route_hdr(const route_head* rte)
    * R, 1, ICP GALHETA,, 16711680
    */
 
-  *ozi_file.stream << "R," << route_out_count << ','
+  *stream << "R," << route_out_count << ','
                    << rte->rte_name << ','
                    << rte->rte_desc << ",\r\n";
 }
@@ -412,7 +391,7 @@ ozi_route_disp(const Waypoint* waypointp)
    * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0
    */
 
-  *ozi_file.stream << "W," << route_out_count << ",,"
+  *stream << "W," << route_out_count << ",,"
                    << route_wpt_count << ','
                    << waypointp->shortname << ','
                    << qSetRealNumberPrecision(6) << waypointp->latitude << ','
@@ -765,11 +744,7 @@ data_read()
   char* trk_name = nullptr;
   int linecount = 0;
 
-  while (true) {
-    buff = ozi_file.stream->readLine();
-    if (buff.isNull()) {
-      break;
-    }
+  while (buff = stream->readLine(), !buff.isNull()) {
     linecount++;
 
     /*
@@ -950,7 +925,7 @@ ozi_waypt_pr(const Waypoint* wpt)
     icon = wpt->icon_descr.toInt();
   }
 
-  *ozi_file.stream << index << ','
+  *stream << index << ','
                    << shortname << ','
                    << qSetRealNumberPrecision(6) << wpt->latitude << ','
                    << wpt->longitude << ','
@@ -961,13 +936,13 @@ ozi_waypt_pr(const Waypoint* wpt)
                    << fs->bgcolor << ','
                    << description << ",0,0,";
   if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-    *ozi_file.stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
+    *stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
   } else if (proximity > 0) {
-    *ozi_file.stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
+    *stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
   } else {
-    *ozi_file.stream << "0,";
+    *stream << "0,";
   }
-  *ozi_file.stream << qSetRealNumberPrecision(0) << alt << ",6,0,17\r\n";
+  *stream << qSetRealNumberPrecision(0) << alt << ",6,0,17\r\n";
 
   if (faked_fsdata) {
     xfree(fs);
@@ -981,7 +956,7 @@ data_write()
     track_out_count = route_out_count = 0;
     ozi_objective = wptdata;
     ozi_openfile(ozi_ofname);
-    *ozi_file.stream << "OziExplorer Waypoint File Version 1.1\r\n"
+    *stream << "OziExplorer Waypoint File Version 1.1\r\n"
                      << "WGS 84\r\n"
                      << "Reserved 2\r\n"
                      << "Reserved 3\r\n";
