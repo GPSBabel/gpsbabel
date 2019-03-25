@@ -1233,6 +1233,8 @@ void gb_setbit(void* buf, uint32_t nr);
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
+void list_codecs();
+
 /*
  *  From parse.c
  */

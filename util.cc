@@ -19,19 +19,33 @@
 
  */
 
+#include <cctype>                  // for isspace, isalpha, ispunct, tolower, toupper
+#include <cerrno>                  // for errno
+#include <cmath>                   // for fabs, floor
+#include <cstdarg>                 // for va_list, va_end, va_start, va_copy
+#include <cstdint>                 // for uint32_t
+#include <cstdio>                  // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
+#include <cstdlib>                 // for abs, getenv, calloc, free, malloc, realloc
+#include <cstring>                 // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <ctime>                   // for mktime, localtime
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QChar>            // for QChar, operator<=, operator>=
+#include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QFileInfo>        // for QFileInfo
+#include <QtCore/QList>            // for QList
+#include <QtCore/QString>          // for QString, operator+
+#include <QtCore/QTextCodec>       // for QTextCodec
+#include <QtCore/QTextStream>      // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QtCore/Qt>               // for CaseInsensitive
+#include <QtCore/QtGlobal>         // for qPrintable
+
 #include "defs.h"
-#include "jeeps/gpsmath.h"
+#include "cet.h"                   // for cet_utf8_to_ucs4
+#include "src/core/datetime.h"     // for DateTime
 #include "src/core/xmltag.h"
 
-#include <QtCore/QFileInfo>
-#include <cctype>
-#include <cerrno>
-#include <cmath>
-#include <cstdarg>
-#include <cstdarg> // for va_copy
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -1730,3 +1744,35 @@ int gb_ptr2int(const void* p)
 
   return x.i;
 }
+
+void
+list_codecs()
+{
+  QTextStream info(stderr);
+  info.setFieldAlignment(QTextStream::AlignLeft);
+  auto mibs = QTextCodec::availableMibs();
+  int maxlen = 0;
+  for (auto mib : mibs) {
+    auto codec = QTextCodec::codecForMib(mib);
+    if (codec->name().size() > maxlen) {
+      maxlen = codec->name().size();
+    }
+  }
+  info << "Avaialble Codecs:" << endl;
+  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
+  for (auto mib : mibs) {
+    auto codec = QTextCodec::codecForMib(mib);
+    info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
+    bool first = true;
+    for (const auto& alias : codec->aliases()) {
+      if (first) {
+        first = false;
+      } else {
+        info << ", ";
+      }
+      info << alias;
+    }
+    info << endl;
+  }
+}
+

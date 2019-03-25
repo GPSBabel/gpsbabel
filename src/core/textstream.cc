@@ -31,7 +31,8 @@ void TextStream::open(const QString& fname, QIODevice::OpenModeFlag mode, const 
 {
   codec_ = QTextCodec::codecForName(codec_name);
   if (codec_ == nullptr) {
-    fatal("%s: Unsupported character set '%s'.\n", module, codec_name);
+    list_codecs();
+    fatal("%s: Unsupported codec '%s'.\n", module, codec_name);
   }
 
   file_ = new gpsbabel::File(fname);
