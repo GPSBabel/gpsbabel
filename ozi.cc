@@ -45,7 +45,6 @@
 #include <QtCore/QCharRef>        // for QCharRef
 #include <QtCore/QFile>           // for QFile
 #include <QtCore/QFileInfo>       // for QFileInfo
-#include <QtCore/QFlags>          // for QFlags
 #include <QtCore/QIODevice>       // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
 #include <QtCore/QString>         // for QString
 #include <QtCore/QStringList>     // for QStringList

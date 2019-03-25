@@ -1,0 +1,5 @@
+<para>
+This lets you override the default codec of 'UTF-8'.  As an
+input option the codec should correspond to the encoding of the input file.
+As an output option it sets the encoding of the output file.
+</para>
