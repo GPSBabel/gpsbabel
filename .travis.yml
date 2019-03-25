@@ -94,7 +94,7 @@ script:
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.1" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.2" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
 
 branches:
   except:
