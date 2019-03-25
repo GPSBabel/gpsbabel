@@ -2103,7 +2103,7 @@ ff_vecs_t unicsv_vecs = {
   unicsv_wr,
   nullptr,
   unicsv_args,
-  CET_CHARSET_ASCII, 0	/* can be changed with -c ... */
+  CET_CHARSET_UTF8, 0
   , NULL_POS_OPS,
   nullptr
 };
