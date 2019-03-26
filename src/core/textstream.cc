@@ -45,6 +45,13 @@ void TextStream::open(const QString& fname, QIODevice::OpenModeFlag mode, const 
       setAutoDetectUnicode(true);
     }
   }
+
+  if (mode & QFile::WriteOnly) {
+    // enable bom for all UTF codecs except UTF-8
+    if (codec_->mibEnum() != 106) {
+      setGenerateByteOrderMark(true);
+    }
+  }
 }
 
 void TextStream::close()
