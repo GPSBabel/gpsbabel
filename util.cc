@@ -493,22 +493,6 @@ str_match(const char* str, const char* match)
   return ((*s == '\0') && (*m == '\0'));
 }
 
-// for ruote_char = "
-// make str = blank into nothing
-// make str = foo into "foo"
-// make str = foo"bar into "foo""bar"
-// No, that doesn't seem obvious to me, either...
-
-QString
-strenquote(const QString& str, const QChar quot_char)
-{
-  QString replacement = QString("%1%1").arg(quot_char);
-  QString t = str;
-  t.replace(quot_char, replacement);
-  QString r = quot_char + t + quot_char;
-  return r;
-}
-
 void
 printposn(const double c, int is_lat)
 {

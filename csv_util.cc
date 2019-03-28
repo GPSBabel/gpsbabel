@@ -157,6 +157,50 @@ csv_stringtrim(const QString& string, const QString& enclosure, int strip_max)
   return retval;
 }
 
+// for enclosure = "
+// make str = blank into nothing
+// make str = foo into "foo"
+// make str = foo"bar into "foo""bar"
+// No, that doesn't seem obvious to me, either...
+
+QString
+csv_enquote(const QString& str, const QString& enclosure)
+{
+  QString retval = str;
+  if (enclosure.size() > 0) {
+    retval = enclosure + retval.replace(enclosure, enclosure + enclosure) + enclosure;
+  }
+  return retval;
+}
+
+// csv_dequote() - trim whitespace, leading and trailing
+//                 enclosures (quotes), and de-escape
+//                 internal enclosures.
+//    usage: p = csv_dequote(string, "\"")
+QString
+csv_dequote(const QString& string, const QString& enclosure)
+{
+  if (string.isEmpty()) {
+    return string;
+  }
+
+  int elen = enclosure.size();
+
+  /* trim off leading and trailing whitespace */
+  QString retval = string.trimmed();
+
+  if (elen > 0) {
+    /* If the string is enclosed in enclosures */
+    if (retval.startsWith(enclosure) && retval.endsWith(enclosure)) {
+      /* strip the enclosures */
+      retval = retval.mid(elen, retval.size() - (elen * 2));
+      /* replace any contained escaped enclosures */
+      retval = retval.replace(enclosure + enclosure, enclosure);
+    }
+  }
+
+  return retval;
+}
 /*****************************************************************************/
 /* csv_lineparse() - extract data fields from a delimited string. designed   */
 /*                   to handle quoted and delimited data within quotes.      */
@@ -280,7 +324,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no)
+              const QString& enclosed_in, const int line_no, Csv_dequote method)
 {
   QStringList retval;
 
@@ -342,7 +386,11 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     QString value = string.mid(sp, p - sp);
 
     if (efound) {
-      value = csv_stringtrim(value, enclosed_in, 0);
+      if (method == Csv_dequote::rfc4180) {
+        value = csv_dequote(value, enclosed_in);
+      } else {
+        value = csv_stringtrim(value, enclosed_in, 0);
+      }
     }
 
     if (dfound) {

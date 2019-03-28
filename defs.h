@@ -1110,7 +1110,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 }
 
 int str_match(const char* str, const char* match);
-QString strenquote(const QString& str, QChar quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);

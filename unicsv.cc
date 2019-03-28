@@ -58,7 +58,7 @@
 
 #define UNICSV_FIELD_SEP	","
 #define UNICSV_LINE_SEP		"\r\n"
-#define UNICSV_QUOT_CHAR	'"'
+#define UNICSV_QUOT_CHAR	"\""
 
 /* GPSBabel internal and calculated fields */
 
@@ -522,7 +522,7 @@ unicsv_fondle_header(QString header)
   }
   header = header.toLower();
 
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0);
+  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, Csv_dequote::rfc4180);
   for (auto value : values) {
     value = value.trimmed();
 
@@ -631,7 +631,7 @@ unicsv_parse_one_line(const QString& ibuf)
   memset(&ymd, 0, sizeof(ymd));
 
   int column = -1;
-  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0);
+  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, Csv_dequote::rfc4180);
   for (auto value : values) {
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
@@ -1237,7 +1237,7 @@ unicsv_print_str(const QString& s)
   *fout << unicsv_fieldsep;
   QString t;
   if (!s.isEmpty()) {
-    t = strenquote(s, UNICSV_QUOT_CHAR);
+    t = csv_enquote(s, UNICSV_QUOT_CHAR);
     // I'm not sure these three replacements are necessary; they're just a
     // slavish re-implementation of (what I think) the original C code
     // was doing.
@@ -1454,9 +1454,9 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
     cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
     char* sep = strchr(cout, ',');
     *sep = '\0';
-    QString tmp = strenquote(cout, UNICSV_QUOT_CHAR);
+    QString tmp = csv_enquote(cout, UNICSV_QUOT_CHAR);
     *fout << tmp << unicsv_fieldsep;
-    tmp = strenquote(sep+1, UNICSV_QUOT_CHAR);
+    tmp = csv_enquote(sep+1, UNICSV_QUOT_CHAR);
     *fout << tmp;
   }
   break;
