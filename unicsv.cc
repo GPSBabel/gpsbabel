@@ -522,7 +522,7 @@ unicsv_fondle_header(QString header)
   }
   header = header.toLower();
 
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, Csv_dequote::rfc4180);
+  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     value = value.trimmed();
 
@@ -631,7 +631,7 @@ unicsv_parse_one_line(const QString& ibuf)
   memset(&ymd, 0, sizeof(ymd));
 
   int column = -1;
-  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, Csv_dequote::rfc4180);
+  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */

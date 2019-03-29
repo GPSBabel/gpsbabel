@@ -30,3 +30,11 @@ compare ${REFERENCE}/unicsv_subsec.csv ${TMPDIR}/unicsv_subsec.csv
 # Verify 'fields' option
 gpsbabel -i unicsv,fields=lat+lon+description -f ${REFERENCE}/radius.csv -o csv -F ${TMPDIR}/unicsv_fields.out
 compare ${REFERENCE}/radius.csv ${TMPDIR}/unicsv_fields.out
+
+# stress quoting - internal separators and internal quotes
+gpsbabel -i unicsv -f ${REFERENCE}/libreoffice.csv -o text,degformat=ddd -F ${TMPDIR}/libreoffice.text
+compare ${REFERENCE}/libreoffice.text ${TMPDIR}/libreoffice.text
+
+gpsbabel -i unicsv -f ${REFERENCE}/libreoffice.csv -o unicsv -F ${TMPDIR}/libreoffice2.csv
+gpsbabel -i unicsv -f ${TMPDIR}/libreoffice2.csv -o text,degformat=ddd -F ${TMPDIR}/libreoffice2.text
+compare ${REFERENCE}/libreoffice.text ${TMPDIR}/libreoffice2.text

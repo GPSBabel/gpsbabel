@@ -157,6 +157,7 @@ csv_stringtrim(const QString& string, const QString& enclosure, int strip_max)
   return retval;
 }
 
+// RFC4180 method, but we don't handle line breaks within a field.
 // for enclosure = "
 // make str = blank into nothing
 // make str = foo into "foo"
@@ -173,6 +174,8 @@ csv_enquote(const QString& str, const QString& enclosure)
   return retval;
 }
 
+// RFC4180 method, but we don't handle line breaks within a field,
+// and we strip spaces from the ends.
 // csv_dequote() - trim whitespace, leading and trailing
 //                 enclosures (quotes), and de-escape
 //                 internal enclosures.
@@ -324,7 +327,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, Csv_dequote method)
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
 {
   QStringList retval;
 
@@ -386,7 +389,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     QString value = string.mid(sp, p - sp);
 
     if (efound) {
-      if (method == Csv_dequote::rfc4180) {
+      if (method == CsvQuoteMethod::rfc4180) {
         value = csv_dequote(value, enclosed_in);
       } else {
         value = csv_stringtrim(value, enclosed_in, 0);

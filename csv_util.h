@@ -41,13 +41,13 @@ csv_enquote(const QString& str, const QString& enclosure);
 QString
 csv_dequote(const QString& string, const QString& enclosure);
 
-enum class Csv_dequote {historic, rfc4180};
+enum class CsvQuoteMethod {historic, rfc4180};
 
 char*
 csv_lineparse(const char* stringstart, const char* delimited_by, const char* enclosed_in, int line_no);
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, Csv_dequote method = Csv_dequote::historic);
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic);
 
 int
 dec_to_intdeg(const double d);
