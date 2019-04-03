@@ -1748,7 +1748,8 @@ list_codecs()
     auto codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
     bool first = true;
-    for (const auto& alias : codec->aliases()) {
+    const auto aliases = codec->aliases();
+    for (const auto& alias : aliases) {
       if (first) {
         first = false;
       } else {
