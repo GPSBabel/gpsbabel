@@ -137,7 +137,7 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
-  xcsv.h \
+	xcsv.h \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
@@ -153,7 +153,7 @@ HEADERS =  \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
-  src/core/textstream.h \
+	src/core/textstream.h \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
