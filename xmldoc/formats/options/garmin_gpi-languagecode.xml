@@ -6,7 +6,7 @@ Subsequently you may use one of these codes with the languagecode
 option to specify which language to use.
 </para>
 <example id="gpi_languagecode_notspecified">
-  <title>Example with unspecified language and a garmin points of interest format dual language file.</title>
+  <title>Example with unspecified language and a garmin points of interest dual language file.</title>
   <para>
     <userinput>
       gpsbabel -i garmin_gpi -f reference/spb_metro_norm.gpi
@@ -18,7 +18,7 @@ option to specify which language to use.
   </para>
 </example>
 <example id="gpi_languagecode_specified">
-  <title>Example for specifying language with a garmin points of interest format dual language file.</title>
+  <title>Example for specifying language with a garmin points of interest dual language file.</title>
   <para>
     <userinput>
       gpsbabel -i garmin_gpi,languagecode=EN -f reference/spb_metro_norm.gpi 
