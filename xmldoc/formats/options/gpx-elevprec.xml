@@ -8,8 +8,9 @@ silliness in files caused by repeating decimals in insignificant
 digits.
 </para>
 <para>
-As a guideline, three decimal places is 1 millimeter.  To achieve precisions approaching this
-levelling techiniques are required.  Precisions beyond this are not currently realizable.
+As a guideline, three decimal places is 1 millimeter.
+To achieve precision approaching this limit leveling techniques are required.
+Precisions beyond this are not currently obtainable.
 </para>
 <para>
 This value is ignored on read and has no impact on the internal 
