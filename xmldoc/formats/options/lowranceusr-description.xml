@@ -1,0 +1,3 @@
+<para>
+This option can be used when writing a version 4 or higher Lowrance USR file to set the description text.  If the option is not used the description text will be "Waypoints, routes, and trails".
+</para>

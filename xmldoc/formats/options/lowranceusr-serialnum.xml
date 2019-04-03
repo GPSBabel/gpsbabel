@@ -1,0 +1,7 @@
+<para>
+This option can be used when writing a version 4 or higher Lowrance
+USR file to set the device serial number.
+If the option is not used and the source of the data is a Lowrance USR
+file with a valid serial number then that serial number will be used,
+otherwise a value of 0 will be used.
+</para>

@@ -329,7 +329,6 @@ static char*          opt_ignoreicons;
 static char*          opt_writeasicons;
 static char*          opt_seg_break;
 static char*          opt_wversion;
-static char*          opt_rversion;
 static char*          opt_title;
 static char*          opt_content_descr;
 static char*          opt_serialnum;
@@ -721,12 +720,6 @@ arglist_t lowranceusr_args[] = {
   {
     "break", &opt_seg_break, "(USR input) Break segments into separate trails",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    // Specify the Input USR Version to be interpreted
-    // Obsolete option that is ignored
-    "rversion", &opt_rversion, "(USR input) Read version",
-    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     // Specify the Output USR Version to be generated
