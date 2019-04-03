@@ -1,0 +1,34 @@
+<para>
+Garmin points of interest files may contain data in two languages.
+If you attempt to read a dual language Garmin points of interest file without specifiying which language
+to use GPSBabel will print an error message containing the language codes used in the file.
+Subsequently you may use one of these codes with the languagecode
+option to specify which language to use.
+</para>
+<example id="gpi_languagecode_notspecified">
+  <title>Example with unspecified language and a garmin points of interest dual language file.</title>
+  <para>
+    <userinput>
+      gpsbabel -i garmin_gpi -f reference/spb_metro_norm.gpi
+    </userinput>
+    could produce the following output:
+    <simplelist type="vert">
+      <member>garmin_gpi: Must select language code, RU and EN found.</member>
+    </simplelist>
+  </para>
+</example>
+<example id="gpi_languagecode_specified">
+  <title>Example for specifying language with a garmin points of interest dual language file.</title>
+  <para>
+    <userinput>
+      gpsbabel -i garmin_gpi,languagecode=EN -f reference/spb_metro_norm.gpi 
+    </userinput>
+    could produce the following output:
+    <simplelist type="vert">
+      <member>59.944070N 30.306680E About Saint-Petersburg Metro - 2016.05/This file represents information about metro stations in aint-Petersburg. Published by NAVICOM, 2016. http://navicom.ru</member>
+      <member>59.830660N 30.500100E RYBACKOE/Subway</member>
+      <member>59.934430N 30.329950E NEVSKII PROSPEKT/Subway</member>
+      <member>...</member>
+    </simplelist>
+  </para>
+</example>

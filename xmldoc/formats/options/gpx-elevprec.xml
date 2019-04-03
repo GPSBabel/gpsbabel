@@ -1,0 +1,18 @@
+<para>
+This option specifies the number of digits to be used when
+writing elevation values.
+Precision is the number of digits after the decimal point.  The default
+precision is 3.  We limit the number of places we write to improve the
+fidelity when round-tripping elevation, reduce file size, and reduce 
+silliness in files caused by repeating decimals in insignificant 
+digits.
+</para>
+<para>
+As a guideline, three decimal places is 1 millimeter.
+To achieve precision approaching this limit leveling techniques are required.
+Precisions beyond this are not currently obtainable.
+</para>
+<para>
+This value is ignored on read and has no impact on the internal 
+representation of data.
+</para>
