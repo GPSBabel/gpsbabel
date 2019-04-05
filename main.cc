@@ -45,7 +45,7 @@
 
 #include "defs.h"
 #include "cet_util.h"               // for cet_convert_init, cet_convert_strings, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
-#include "csv_util.h"               // for csv_lineparse
+#include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
 #include "inifile.h"                // for inifile_done, inifile_init
@@ -102,21 +102,9 @@ load_args(const QString& filename, const QString& arg0)
   }
   file.close();
 
-  // We use csv_lineparse to protect quoted strings, otherwise
-  // we could just split on blank and eliminate the round trip
-  // to 8 bit characters and back.
-  // TODO: move csv processing to Qt, eliminating the need to go
-  // back to 8 bit encoding, which is shaky for encoding like utf8
-  // that have multibyte characters.
-  char* cbuff = xstrdup(CSTR(line));
+  const QStringList values = csv_linesplit(line, " ", "\"", 0);
+  qargs.append(values);
 
-  char* cstr = csv_lineparse(cbuff, " ", "\"", 0);
-  while (cstr != nullptr) {
-    qargs.append(QString::fromUtf8(cstr));
-    cstr = csv_lineparse(nullptr, " ", "\"", 0);
-  }
-
-  xfree(cbuff);
   return (qargs);
 }
 

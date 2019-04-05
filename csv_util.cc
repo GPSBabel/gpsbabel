@@ -31,6 +31,7 @@
 
 #include "defs.h"
 #include "csv_util.h"
+#include "src/core/logging.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -110,7 +111,7 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max)
   return (tmp);
 }
 
-// Is this really the replacement for the above?
+// Is this really the replacement for the above? No.
 QString
 csv_stringtrim(const QString& source, const QString& enclosure)
 {
@@ -119,6 +120,90 @@ csv_stringtrim(const QString& source, const QString& enclosure)
   return r.trimmed();
 }
 
+// csv_stringtrim() - trim whitespace and leading and trailing
+//                    enclosures (quotes)
+//                    returns a copy of the modified string
+//    usage: p = csv_stringtrim(string, "\"", 0)
+QString
+csv_stringtrim(const QString& string, const QString& enclosure, int strip_max)
+{
+  if (string.isEmpty()) {
+    return string;
+  }
+
+  int elen = enclosure.size();
+
+  /* trim off leading and trailing whitespace */
+  QString retval = string.trimmed();
+
+  /* if no maximum strippage, assign a reasonable value to max */
+  if (strip_max == 0) {
+    strip_max = 9999;
+  }
+
+  /* if we have enclosures, skip past them in pairs */
+  if (elen > 0) {
+    int stripped = 0;
+    while (
+      (stripped < strip_max) &&
+      (retval.size() >= (elen * 2)) &&
+      (retval.startsWith(enclosure)) &&
+      (retval.endsWith(enclosure))) {
+      retval = retval.mid(elen, retval.size() - (elen * 2));
+      stripped++;
+    }
+  }
+
+  return retval;
+}
+
+// RFC4180 method, but we don't handle line breaks within a field.
+// for enclosure = "
+// make str = blank into nothing
+// make str = foo into "foo"
+// make str = foo"bar into "foo""bar"
+// No, that doesn't seem obvious to me, either...
+
+QString
+csv_enquote(const QString& str, const QString& enclosure)
+{
+  QString retval = str;
+  if (enclosure.size() > 0) {
+    retval = enclosure + retval.replace(enclosure, enclosure + enclosure) + enclosure;
+  }
+  return retval;
+}
+
+// RFC4180 method, but we don't handle line breaks within a field,
+// and we strip spaces from the ends.
+// csv_dequote() - trim whitespace, leading and trailing
+//                 enclosures (quotes), and de-escape
+//                 internal enclosures.
+//    usage: p = csv_dequote(string, "\"")
+QString
+csv_dequote(const QString& string, const QString& enclosure)
+{
+  if (string.isEmpty()) {
+    return string;
+  }
+
+  int elen = enclosure.size();
+
+  /* trim off leading and trailing whitespace */
+  QString retval = string.trimmed();
+
+  if (elen > 0) {
+    /* If the string is enclosed in enclosures */
+    if (retval.startsWith(enclosure) && retval.endsWith(enclosure)) {
+      /* strip the enclosures */
+      retval = retval.mid(elen, retval.size() - (elen * 2));
+      /* replace any contained escaped enclosures */
+      retval = retval.replace(enclosure + enclosure, enclosure);
+    }
+  }
+
+  return retval;
+}
 /*****************************************************************************/
 /* csv_lineparse() - extract data fields from a delimited string. designed   */
 /*                   to handle quoted and delimited data within quotes.      */
@@ -235,6 +320,102 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
   return (tmp);
 }
 
+/*****************************************************************************/
+/* csv_linesplit() - extract data fields from a delimited string. designed   */
+/*                   to handle quoted and delimited data within quotes.      */
+/*    usage: p = csv_lineparse(string, ",", "\"", line)                      */
+/*****************************************************************************/
+QStringList
+csv_linesplit(const QString& string, const QString& delimited_by,
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
+{
+  QStringList retval;
+
+  const bool hyper_whitespace_delimiter = delimited_by == "\\w";
+
+  /*
+   * This is tacky.  Our "csv" format is actually "commaspace" format.
+   * Changing that causes unwanted churn, but it also makes "real"
+   * comma separated data (such as likely to be produced by Excel, etc.)
+   * unreadable.   So we silently change it here on a read and let the
+   * whitespace eater consume the space.
+   */
+  QString delimiter = delimited_by;
+  if (delimited_by == ", ") {
+    delimiter = ",";
+  }
+
+  /* length of delimiters and enclosures */
+  int dlen = 0;
+  if ((!delimiter.isEmpty()) && (!hyper_whitespace_delimiter)) {
+    dlen = delimiter.size();
+  }
+  int elen = enclosed_in.size();
+
+  int p = 0;
+  bool endofline = false;
+  while (!endofline) {
+    bool efound = false;
+    bool dfound = false;
+    bool enclosed = false;
+
+    /* the beginning of the string we start with (this pass) */
+    const int sp = p;
+
+    while (p < string.size() && !dfound) {
+      if ((elen > 0) && string.midRef(p).startsWith(enclosed_in)) {
+        efound = true;
+        p += elen;
+        enclosed = !enclosed;
+        continue;
+      }
+
+      if (!enclosed) {
+        if ((dlen > 0) && string.midRef(p).startsWith(delimiter)) {
+          dfound = true;
+        } else if (hyper_whitespace_delimiter && string.at(p).isSpace()) {
+          dfound = true;
+          while ((p < string.size()) && string.at(p).isSpace()) {
+            p++;
+          }
+        } else {
+          p++;
+        }
+      } else {
+        p++;
+      }
+    }
+
+    QString value = string.mid(sp, p - sp);
+
+    if (efound) {
+      if (method == CsvQuoteMethod::rfc4180) {
+        value = csv_dequote(value, enclosed_in);
+      } else {
+        value = csv_stringtrim(value, enclosed_in, 0);
+      }
+    }
+
+    if (dfound) {
+      /* skip over the delimiter */
+      p += dlen;
+    } else {
+      endofline = true;
+    }
+
+    if (enclosed) {
+      Warning() << MYNAME":" <<
+              "Warning- Unbalanced Field Enclosures" <<
+              enclosed_in <<
+              "on line" <<
+              line_no;
+    }
+
+    retval.append(value);
+
+  }
+  return retval;
+}
 /*****************************************************************************/
 /* dec_to_intdeg() - convert decimal degrees to integer degreees             */
 /*    usage: i = dec_to_intdeg(31.1234);                                     */
