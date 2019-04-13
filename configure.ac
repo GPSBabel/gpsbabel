@@ -4,8 +4,8 @@
 AC_PREREQ([2.59])
 
 #PACKAGE_RELEASE=
-AC_INIT([GPSBabel], [1.5.4])
-DOCVERSION=1.5.4
+AC_INIT([GPSBabel], [1.6.0])
+DOCVERSION=1.6.0
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
 #DOCVERSION=development
@@ -13,8 +13,8 @@ DOCVERSION=1.5.4
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc.in which is used by the setup program,
-GBBUILD=28
-# PACKAGE_RELEASE="-beta20140216"
+GBBUILD=29
+PACKAGE_RELEASE="-beta20190413"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)
 
