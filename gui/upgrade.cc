@@ -27,20 +27,21 @@
 
 #include <cstdio>
 
-#include <QDebug>
-#include <QDesktopServices>
-#include <QDomDocument>
-#include <QLocale>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QSysInfo>
-#include <QUrl>
-#include <QVariant>
+#include <QtCore/QDebug>
+#include <QtCore/QLocale>
+#include <QtCore/QSysInfo>
+#include <QtCore/QUrl>
+#include <QtCore/QVariant>
+#include <QtCore/QVersionNumber>
+#include <QtGui/QDesktopServices>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtWidgets/QMessageBox>
+#include <QtXml/QDomDocument>
 
 
-#if 0
+#if 1
 static const bool testing = true;
 #else
 static const bool testing = false;
@@ -169,6 +170,38 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
   return updateStatus_;
 }
 
+// GPSBabel version numbers throughout the code mostly predate QVersionNumber
+// and are stored as strings. They may be of the form "1.6.0-beta20200413" 
+// which, if sorted as a string, will be after "1.6.0" which is bad. Use
+// this function to sort that out. (See what I did there? Bwaaaahah!) 
+bool UpgradeCheck::suggestUpgrade(QString from, QString to) 
+{
+  int fromIndex = 0;
+  int toIndex = 0;
+  QVersionNumber fromVersion  = QVersionNumber::fromString(from, &fromIndex);
+  QVersionNumber toVersion  = QVersionNumber::fromString(to, &toIndex);
+
+  // We don't have to handle every possible range because the server won't
+  // have more than a version or two live at any time.
+  if (fromVersion < toVersion) {
+    return true;
+  }
+  // Just look for the presence of stuff (not even the contents) of the 
+  // string. Shorter string (no "-betaXXX" wins)
+  if (fromVersion == toVersion) {
+    if (from.length() - fromIndex > to.length() - toIndex) {
+      return true;
+    }
+  }
+  return false;
+}
+// Some day when we have Gunit or equiv, add unit tests for: 
+//suggestUpgrade(updateVersion, currentVersion_);
+//suggestUpgrade("1.6.0-beta20190413", "1.6.0");
+//suggestUpgrade("1.6.0", "1.6.0-beta20190413");
+//suggestUpgrade("1.6.0-beta20190413", "1.7.0");
+//suggestUpgrade("1.7.0", "1.6.0-beta20190413");
+
 void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 {
 
@@ -272,7 +305,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     upgradeText = upgrade.firstChildElement("overview").text();
 
     // String compare, not a numeric one.  Server will return "best first".
-    if ((updateVersion > currentVersion_) && updateCandidate) {
+    if (suggestUpgrade(updateVersion, currentVersion_) && updateCandidate) {
       babelData_.upgradeOffers_++;
       updateStatus_ = updateNeeded;
       response = tr("A new version of GPSBabel is available.<br />"
