@@ -41,7 +41,7 @@
 #include <QtXml/QDomDocument>
 
 
-#if 1
+#if 0
 static const bool testing = true;
 #else
 static const bool testing = false;
