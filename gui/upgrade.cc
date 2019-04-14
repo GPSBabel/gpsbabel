@@ -305,7 +305,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     upgradeText = upgrade.firstChildElement("overview").text();
 
     // String compare, not a numeric one.  Server will return "best first".
-    if (suggestUpgrade(updateVersion, currentVersion_) && updateCandidate) {
+    if (suggestUpgrade(currentVersion_, updateVersion) && updateCandidate) {
       babelData_.upgradeOffers_++;
       updateStatus_ = updateNeeded;
       response = tr("A new version of GPSBabel is available.<br />"
