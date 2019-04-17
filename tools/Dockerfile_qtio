@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # basic build and test tools
 COPY ./qtci/install-qt ./qtci/extract-qt-installer /app/
-RUN QT_CI_PACKAGES=qt.qt5.5122.gcc_64,qt.qt5.5122.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=/app:${PATH} ./install-qt 5.12.2 /opt
+RUN QT_CI_PACKAGES=qt.qt5.5123.gcc_64,qt.qt5.5123.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=/app:${PATH} ./install-qt 5.12.3 /opt
 
 FROM ubuntu:bionic
 LABEL maintainer="https://github.com/tsteven4"
@@ -83,8 +83,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Qt
-COPY --from=qt_install /opt/qt-5.12.2.env /opt/qtio.env
-COPY --from=qt_install /opt/Qt/5.12.2 /opt/Qt/5.12.2
+COPY --from=qt_install /opt/qt-5.12.3.env /opt/qtio.env
+COPY --from=qt_install /opt/Qt/5.12.3 /opt/Qt/5.12.3
 COPY --from=qt_install /opt/Qt/Licenses /opt/Qt/Licenses
 
 # pkgs needed to generate coverage report:

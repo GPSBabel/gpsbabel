@@ -32,7 +32,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.7" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+        - QT_VERSION="5.9.8" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
@@ -51,14 +51,14 @@ matrix:
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.9.7"
+      env: QT_VERSION="5.9.8"
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.12.2"
+      env: QT_VERSION="5.12.3"
       cache:
         directories:
           - $HOME/Cache
@@ -69,7 +69,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.9.7"
+        - QT_VERSION="5.9.8"
       addons:
         apt:
           packages:
@@ -94,7 +94,7 @@ script:
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.2" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.3" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
 
 branches:
   except:
