@@ -128,22 +128,6 @@ AS_CASE([$with_zlib], ["system"], [
 AC_SUBST(ZLIB_CPP)
 AC_SUBST(ZLIB)
 
-AC_MSG_CHECKING([whether to support zlib's minizip])
-AC_ARG_WITH([libminizip],
-	[AS_HELP_STRING(
-		[--with-libminizip=(included)|system|no],
-		[])])
-AS_CASE([$with_libminizip], ["system"], [
-	AC_CHECK_LIB([minizip], [zipOpen64])
-], ["no"], [
-	AC_DEFINE(MINIZIP_INHIBITED, 1, [1 to inhibit our use of libminizip.])
-	AC_MSG_RESULT([no])
-], [
-	MINIZIP="\$(MINIZIP)"
-	AC_MSG_RESULT([using included version])
-])
-AC_SUBST(MINIZIP)
-
 AS_CASE(["$target"], [*-*-mingw32*], [
 	FILEINFO=fileinfo.o
 	AS_IF([test "$CC" = "gcc"], [

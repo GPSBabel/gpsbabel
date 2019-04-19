@@ -21,9 +21,6 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
-/* Define to 1 if you have the `minizip' library (-lminizip). */
-#undef HAVE_LIBMINIZIP
-
 /* Defined if you have libusb */
 #undef HAVE_LIBUSB
 
@@ -68,9 +65,6 @@
 
 /* 1 to enable as many formats as possible */
 #undef MAXIMAL_ENABLED
-
-/* 1 to inhibit our use of libminizip. */
-#undef MINIZIP_INHIBITED
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
