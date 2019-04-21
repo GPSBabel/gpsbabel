@@ -210,5 +210,24 @@ QStringList MiscFltFilterData::makeOptionString()
     }
     args << s;
   }
+
+  if (sortWpt_ || sortRte_ || sortTrk_) {
+    args << "-x";
+    QString s = "sort";
+    if (sortWpt_) {
+      const QStringList wptopts= {"description", "gcid", "shortname", "time"};
+      s += QString(",%1").arg(wptopts.at(sortWptBy_));
+    }
+    if (sortRte_) {
+      const QStringList rteopts= {"rtedesc", "rtename", "rtenum"};
+      s += QString(",%1").arg(rteopts.at(sortRteBy_));
+    }
+    if (sortTrk_) {
+      const QStringList trkopts= {"trkdesc", "trkname", "trknum"};
+      s += QString(",%1").arg(trkopts.at(sortTrkBy_));
+    }
+    args << s;
+    
+  }
   return args;
 }

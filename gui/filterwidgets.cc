@@ -174,7 +174,6 @@ WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget
   fopts << new BoolFilterOption(wfd.locations, ui.locationsCheck);
   fopts << new BoolFilterOption(wfd.position, ui.positionCheck);
   fopts << new BoolFilterOption(wfd.radius, ui.radiusCheck);
-  fopts << new BoolFilterOption(wfd.sort, ui.sortCheck);
   fopts << new DoubleFilterOption(wfd.positionVal, ui.positionText, 0.0, 1.0E308);
   fopts << new DoubleFilterOption(wfd.radiusVal, ui.radiusText, 0.0, 1.0E308);
   fopts << new DoubleFilterOption(wfd.longVal, ui.longText, -180, 180, 7, 'f');
@@ -230,6 +229,9 @@ MiscFltWidget::MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd): FilterWid
   ui.transformCombo->addItem(QString("%1 %2 %3").arg(tr("Waypoints")).arg(QChar(8594)).arg(tr("Tracks")));
   addCheckEnabler(ui.transformCheck,
                   QList<QWidget*>() << ui.transformCombo << ui.deleteCheck);
+  addCheckEnabler(ui.sortWptCheck, ui.sortWptBy);
+  addCheckEnabler(ui.sortRteCheck, ui.sortRteBy);
+  addCheckEnabler(ui.sortTrkCheck, ui.sortTrkBy);
 
   fopts << new BoolFilterOption(mfd.transform_, ui.transformCheck);
   fopts << new BoolFilterOption(mfd.swap_, ui.swapCheck);
@@ -237,7 +239,13 @@ MiscFltWidget::MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd): FilterWid
   fopts << new BoolFilterOption(mfd.nukeTracks_, ui.nukeTracks);
   fopts << new BoolFilterOption(mfd.nukeRoutes_, ui.nukeRoutes);
   fopts << new BoolFilterOption(mfd.nukeWaypoints_, ui.nukeWaypoints);
+  fopts << new BoolFilterOption(mfd.sortWpt_, ui.sortWptCheck);
+  fopts << new BoolFilterOption(mfd.sortRte_, ui.sortRteCheck);
+  fopts << new BoolFilterOption(mfd.sortTrk_, ui.sortTrkCheck);
   fopts << new ComboFilterOption(mfd.transformVal_,  ui.transformCombo);
+  fopts << new ComboFilterOption(mfd.sortWptBy_, ui.sortWptBy);
+  fopts << new ComboFilterOption(mfd.sortRteBy_, ui.sortRteBy);
+  fopts << new ComboFilterOption(mfd.sortTrkBy_, ui.sortTrkBy);
 
   setWidgetValues();
   checkChecks();
