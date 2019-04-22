@@ -137,7 +137,7 @@ class WayPtsFilterData: public FilterData
 public:
   WayPtsFilterData(): FilterData(),
     duplicates(false), shortNames(true), locations(false),
-    position(false), radius(false), sort(false),
+    position(false), radius(false),
     positionVal(0.0), radiusVal(0.0),
     longVal(0.0), latVal(0.0),
     positionUnit(0), radiusUnit(0)
@@ -159,12 +159,11 @@ public:
     sg.addVarSetting(new BoolSetting("wpts.position", position));
     sg.addVarSetting(new DoubleSetting("wpts.positionVal", positionVal));
     sg.addVarSetting(new IntSetting("wpts.positionUnit", positionUnit));
-    sg.addVarSetting(new BoolSetting("wpts.sort", sort));
   }
 
 
 public:
-  bool duplicates, shortNames, locations, position, radius, sort;
+  bool duplicates, shortNames, locations, position, radius;
   double positionVal;
   double radiusVal;
   double longVal, latVal;
@@ -207,7 +206,13 @@ public:
     transform_(false),
     del_(false),
     swap_(false),
-    transformVal_(0)
+    sortWpt_(false),
+    sortRte_(false),
+    sortTrk_(false),
+    transformVal_(0),
+    sortWptBy_(0),
+    sortRteBy_(0),
+    sortTrkBy_(0)
   {
   }
 
@@ -222,12 +227,20 @@ public:
     sg.addVarSetting(new IntSetting("mscflt.transformVal", transformVal_));
     sg.addVarSetting(new BoolSetting("mscflt.delete", del_));
     sg.addVarSetting(new BoolSetting("mscflt.swap", swap_));
+    sg.addVarSetting(new BoolSetting("mscflt.sortWpt", sortWpt_));
+    sg.addVarSetting(new IntSetting("mscflt.sortWptBy", sortWptBy_));
+    sg.addVarSetting(new BoolSetting("mscflt.sortRte", sortRte_));
+    sg.addVarSetting(new IntSetting("mscflt.sortRteBy", sortRteBy_));
+    sg.addVarSetting(new BoolSetting("mscflt.sortTrk", sortTrk_));
+    sg.addVarSetting(new IntSetting("mscflt.sortTrkBy", sortTrkBy_));
   }
 
 public:
   bool nukeRoutes_, nukeTracks_, nukeWaypoints_;
   bool transform_, del_, swap_;
+  bool sortWpt_, sortRte_, sortTrk_;
   int transformVal_;
+  int sortWptBy_, sortRteBy_, sortTrkBy_;
 };
 
 
