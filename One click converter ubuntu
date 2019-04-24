@@ -1,0 +1,9 @@
+#!/bin/bash
+# This script convert FIT files generated with Garmin or Bryton devices in GPX files and rename it using last modification time
+# please put this script in ~/.local/share/nautilus/scripts/ folder and ensure that have execution access to file
+# with command chmod a+x ~/.local/share/nautilus/scripts/*
+#
+# SiRiusCb ™
+
+FILE_PATH=($NAUTILUS_SCRIPT_SELECTED_FILE_PATHS)
+gpsbabel -i garmin_fit -f $FILE_PATH -o gpx -F "/media/$USER/BRYTON/`date -r $FILE_PATH +%d-%m-%Y.gpx`"
