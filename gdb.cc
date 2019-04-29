@@ -185,9 +185,7 @@ disp_summary(const gbfile* f)
 // which ways in which versions are not at all clear, leaing to 
 // encoding issues on read and leaks because of teh differences 
 // in calling conventions on who owns/destroys the result.
-//#define FREAD_CSTR \
-//  (gdb_ver >= GDB_VER_UTF8) ? QString::fromUtf8(gdb_fread_cstr(fin)) : \
-//  QString::fromLatin1(gdb_fread_cstr(fin))
+
 #define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
 
 static char* gdb_fread_cstr(gbfile* fin);
