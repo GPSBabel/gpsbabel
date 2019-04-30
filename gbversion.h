@@ -4,5 +4,5 @@
  *
  * Isn't simplification via automation grand?
  */
-#define VERSION "1.6.0-beta20190413"
+#define VERSION "1.6.0"
 #define WEB_DOC_DIR "http://www.gpsbabel.org/htmldoc-1.6.0"

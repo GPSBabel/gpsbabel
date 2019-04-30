@@ -927,29 +927,29 @@ This program cannot continue.</source>
 <context>
     <name>MiscFltWidget</name>
     <message>
-        <location filename="miscfltui.ui" line="53"/>
+        <location filename="miscfltui.ui" line="97"/>
+        <location filename="filterwidgets.cc" line="224"/>
         <location filename="filterwidgets.cc" line="225"/>
-        <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="229"/>
-        <location filename="filterwidgets.cc" line="230"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="60"/>
-        <location filename="filterwidgets.cc" line="225"/>
+        <location filename="miscfltui.ui" line="104"/>
+        <location filename="filterwidgets.cc" line="224"/>
+        <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
-        <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="229"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="46"/>
+        <location filename="miscfltui.ui" line="90"/>
+        <location filename="filterwidgets.cc" line="225"/>
         <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="229"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
@@ -959,23 +959,28 @@ This program cannot continue.</source>
         <translation>Formulario</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="27"/>
+        <location filename="miscfltui.ui" line="232"/>
         <source>Misc. Filters</source>
         <translation>Otros filtros</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="34"/>
+        <location filename="miscfltui.ui" line="78"/>
         <source>Nuke (Remove) Data Types</source>
         <translatorcomment>Espero que sea la traducción correcta (ADC)</translatorcomment>
         <translation>Borrar todo tipo de datos</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="72"/>
+        <location filename="miscfltui.ui" line="22"/>
+        <source>Sort Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="31"/>
         <source>Convert routes, waypoints and tracks to different types.</source>
         <translation>Convertir rutas, puntos de interés y trazados a diferentes tipos.</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="75"/>
+        <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
 Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
@@ -984,39 +989,86 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 Algunos formatos de datos de los GPS solo permiten utilizar una parte de los puntos de interés, trazados o rutas. El filtro de transformación habilita la conversión entres esos tipos. Por ejemplo, se puede usar para convertir un conjunto de puntos de interés (como los contenidos en un fichero CSV) a un trazado o viceversa.</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="80"/>
+        <location filename="miscfltui.ui" line="39"/>
         <source>Transform</source>
         <translation>Transformar</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="87"/>
+        <location filename="miscfltui.ui" line="46"/>
         <source>Type of transformation. </source>
         <translation>Tipos de transformación. </translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="94"/>
+        <location filename="miscfltui.ui" line="53"/>
         <source>Delete original data after transform to prevent duplicated data. </source>
         <translation>Borrar los datos originales después de la transaformación para evitar la duplicación de los mismos.</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="97"/>
+        <location filename="miscfltui.ui" line="56"/>
         <source>Delete</source>
         <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="119"/>
+        <location filename="miscfltui.ui" line="116"/>
+        <location filename="miscfltui.ui" line="171"/>
+        <location filename="miscfltui.ui" line="248"/>
+        <source>By</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="124"/>
+        <location filename="miscfltui.ui" line="179"/>
+        <location filename="miscfltui.ui" line="256"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="129"/>
+        <source>GCID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="134"/>
+        <location filename="miscfltui.ui" line="184"/>
+        <location filename="miscfltui.ui" line="261"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="139"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="162"/>
+        <source>Sort Waypoints</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="189"/>
+        <location filename="miscfltui.ui" line="266"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="212"/>
         <source>Swap Longitude and Latitudes for badly formatted data formats.</source>
         <translation>Cambiar longitud y latitud en los formatos erróneos.</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="122"/>
+        <location filename="miscfltui.ui" line="215"/>
         <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
         <translation>Filtro simple para cambiar entre los valores de las coordenadas (latitud y longitud) de todos los puntos. Esto puede ser útil si los datos están mal definidos o si piensas que algún formato xcsv te puede ser útil pero la longitud y la latitud están en un orden incorrecto.</translation>
     </message>
     <message>
-        <location filename="miscfltui.ui" line="125"/>
+        <location filename="miscfltui.ui" line="218"/>
         <source>Swap Coordinates</source>
         <translation>Cambia longitud a latitud (y al revés)</translation>
+    </message>
+    <message>
+        <location filename="miscfltui.ui" line="239"/>
+        <source>Sort Tracks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1567,44 +1619,44 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="180"/>
-        <location filename="upgrade.cc" line="184"/>
-        <location filename="upgrade.cc" line="218"/>
+        <location filename="upgrade.cc" line="213"/>
+        <location filename="upgrade.cc" line="217"/>
+        <location filename="upgrade.cc" line="251"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="181"/>
+        <location filename="upgrade.cc" line="214"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="185"/>
+        <location filename="upgrade.cc" line="218"/>
         <source>Download failed: %1.</source>
         <translation>La descarga falló: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="219"/>
+        <location filename="upgrade.cc" line="252"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="235"/>
+        <location filename="upgrade.cc" line="268"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="236"/>
+        <location filename="upgrade.cc" line="269"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Ha devuelto datos no válidos en la línea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="278"/>
+        <location filename="upgrade.cc" line="311"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Una nueva versióon de GPSBabel ha salido ya. &lt;br /&gt;Tu versión es la %1 &lt;br /&gt;La última versióon sería %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="295"/>
+        <location filename="upgrade.cc" line="328"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>¿Quieres bajarte una actualización?</translation>
     </message>
@@ -1613,7 +1665,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
         <translation type="obsolete">&lt;center&gt;&lt;b&gt;Una nueva versión de GPSBabel está disponible &lt;/b&gt;&lt;br&gt;La versión actual es %1 &lt;br&gt; La versión más reciente es %2&lt;/center&gt;</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="288"/>
+        <location filename="upgrade.cc" line="321"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>
@@ -1654,32 +1706,32 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
         <translation>Formulario</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="29"/>
+        <location filename="wayptsui.ui" line="93"/>
         <source>Waypoints Filters</source>
         <translation>Filtros para puntos de interés</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="36"/>
+        <location filename="wayptsui.ui" line="165"/>
         <source>Remove duplicates</source>
         <translation>Borrar duplicados</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="39"/>
+        <location filename="wayptsui.ui" line="168"/>
         <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
         <translation>El filtro duplicados está designado para borrar los puntos duplicados basándose en el nombre corto (normalmente el nombre del punto de interés en el receptor GPS), y su localización (hasta una precisión de seis decimales). El filtro permite dos opciones para designar como serán tratados los duplicados, por nombre corto y localización. Normalmente, al menos una de esas opciones es requerida.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="42"/>
+        <location filename="wayptsui.ui" line="171"/>
         <source>Duplicates</source>
         <translation>Duplicados</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="55"/>
+        <location filename="wayptsui.ui" line="184"/>
         <source>Suppress duplicate waypoints based on name.</source>
         <translation>Suprimir duplicados con nombres idénticos.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="58"/>
+        <location filename="wayptsui.ui" line="187"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1694,17 +1746,17 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Esta opción es una de la más usadas con el filtro de duplicados. La opción instruye al filtro para que borre los puntos que tienen el mismo nombre que uno ya procesado. La opcion puede usarse para borrar puntos cuando se unen dos conjuntos de datos que vienen de una fuente parcialmente común. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="66"/>
+        <location filename="wayptsui.ui" line="195"/>
         <source>Short Names</source>
         <translation>Nombres cortos</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="73"/>
+        <location filename="wayptsui.ui" line="133"/>
         <source>Suppress duplicate waypoint based on coords. </source>
         <translation>Suprimir los puntos de interés que comparten coordenadas. </translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="76"/>
+        <location filename="wayptsui.ui" line="136"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1719,17 +1771,17 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Esta opción es una de la más usadas con el filtro de duplicados. La opción instruye al filtro para que borre los puntos que tienen coordenadas idénticas a uno ya procesado. La opcion puede usarse para borrar puntos que se sabe no tienen el mismo nombre pero si la misma localización. &lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;nombre corto&lt;/span&gt;. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="84"/>
+        <location filename="wayptsui.ui" line="144"/>
         <source>Locations</source>
         <translation>Lugares</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="91"/>
+        <location filename="wayptsui.ui" line="37"/>
         <source>Remove points based on proximity</source>
         <translation>Borrar puntos próximos</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="94"/>
+        <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
 This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
@@ -1739,32 +1791,32 @@ This option specifies the minimum allowable distance between two points. If two 
 Esta opción especifica la distancia máxima permitidad entre dos puntos. Si dos puntos están más alejados que la distancia dada un nuevo punto es creado.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="99"/>
+        <location filename="wayptsui.ui" line="45"/>
         <source>Position</source>
         <translation>Posición</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="112"/>
+        <location filename="wayptsui.ui" line="119"/>
         <source>Maximum positional distance.</source>
         <translation>Distancia máxima permitida.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="120"/>
+        <location filename="wayptsui.ui" line="152"/>
         <source>Feet</source>
         <translation>Pies</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="125"/>
+        <location filename="wayptsui.ui" line="157"/>
         <source>Meters</source>
         <translation>Metros</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="133"/>
+        <location filename="wayptsui.ui" line="22"/>
         <source>Include points only within radius</source>
         <translation>Incluir sólo puntos dentro de un radio determinado</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="136"/>
+        <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
 By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
@@ -1773,55 +1825,52 @@ By default, all remaining points are sorted so that points closer to the center 
 Por defecto, los puntos restantes se ordenan de acuerdo con su distancia al centro, el más cercano será el primero. </translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="141"/>
+        <location filename="wayptsui.ui" line="30"/>
         <source>Radius</source>
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="154"/>
+        <location filename="wayptsui.ui" line="208"/>
         <source>Maximum distance from center. </source>
         <translation>Máxima distancia desde el centro.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="162"/>
+        <location filename="wayptsui.ui" line="73"/>
         <source>Miles</source>
         <translation>Millas</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="167"/>
+        <location filename="wayptsui.ui" line="78"/>
         <source>km</source>
         <translation>Km</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="175"/>
+        <location filename="wayptsui.ui" line="52"/>
         <source>Lat.</source>
         <translation>Lat.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="188"/>
+        <location filename="wayptsui.ui" line="65"/>
         <source>Latitude of the central point in decimal degrees.  South latitudes should be expressed as a negative number.</source>
         <translation>Latitud del punto central en grados decimales. Las latitudes Sur deben ser número negativos.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="195"/>
+        <location filename="wayptsui.ui" line="126"/>
         <source>Long.</source>
         <translation>Long.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="208"/>
+        <location filename="wayptsui.ui" line="106"/>
         <source>Longitude of the central point in decimal degrees. West longitudes should be expressed as a negative number.</source>
         <translation>Longitud del punto central en grados decimales. Las longitudes Oeste deben ser número negativos.</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="215"/>
-        <location filename="wayptsui.ui" line="218"/>
         <source>This filter sorts waypoints into alphabetical order</source>
-        <translation>Este filtro ordena los puntos de interés en orden alfabético</translation>
+        <translation type="vanished">Este filtro ordena los puntos de interés en orden alfabético</translation>
     </message>
     <message>
-        <location filename="wayptsui.ui" line="221"/>
         <source>Sort</source>
-        <translation>Ordenar</translation>
+        <translation type="vanished">Ordenar</translation>
     </message>
 </context>
 </TS>
