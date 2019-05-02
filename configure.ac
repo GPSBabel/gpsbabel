@@ -13,8 +13,8 @@ DOCVERSION=1.6.0
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc.in which is used by the setup program,
-GBBUILD=29
-PACKAGE_RELEASE="-beta20190413"
+GBBUILD=30
+# PACKAGE_RELEASE="-beta20190413"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)
 
