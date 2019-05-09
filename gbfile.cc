@@ -1211,16 +1211,19 @@ gbfputflt(const float f, gbfile* file)
  *             return the number of written characters
  */
 int
-gbfputcstr(const QString& s, gbfile* file) 
+gbfputcstr(const char* s, gbfile* file)
 {
-  QByteArray qs = s.toUtf8();
-  int rv =  gbfwrite(qs.constData(), 1, qs.size(), file);
-  gbfputc(0, file);
-  return rv;
+  int len = (s == nullptr) ? 0 : strlen(s);
+  if (len > 0) {
+    return gbfwrite(s, 1, len + 1, file);
+  } else {
+    gbfputc(0, file);
+    return 1;
+  }
 }
 
 /*
- * gbfputcstr: write a pascal string into a stream
+ * gbfputpstr: write a pascal string into a stream
  *             return the number of written characters
  */
 

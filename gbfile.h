@@ -127,7 +127,7 @@ int gbfputint32(int32_t i, gbfile* file);
 int gbfputdbl(double d, gbfile* file);	// write a double value
 int gbfputflt(float f, gbfile* file);	// write a float value
 
-int gbfputcstr(const QString& s, gbfile* file);	// write string including '\0'
+int gbfputcstr(const char* s, gbfile* file);	// write string including '\0'
 
 int gbfputpstr(const QString& s, gbfile* file);	// write as pascal string
 
