@@ -16,8 +16,7 @@ compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample~gdb.gpx
 
 gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
 gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample_v2.gpx
-# FP jitter...
-# compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v2.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v2.gpx
 
 gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample-v3.gdb -o gpx -F ${TMPDIR}/gdb-sample_v3.gpx
 compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx

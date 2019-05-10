@@ -249,7 +249,7 @@ double GPS_Math_Feet_To_Metres(double v)
 
 int32 GPS_Math_Deg_To_Semi(double v)
 {
-  return ((double)(1U<<31) / 180.0) * v;
+  return round(((double)(1U<<31) / 180.0) * v);
 }
 
 

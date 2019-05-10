@@ -6,7 +6,7 @@ compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi.gpx
 
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi -F ${TMPDIR}/garmin_gpi.gpi
 gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi.gpi -o gpx -F ${TMPDIR}/garmin_gpi2.gpx
-compare ${REFERENCE}/garmin_gpi2.gpx ${TMPDIR}/garmin_gpi2.gpx
+compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi2.gpx
 
 gpsbabel -i gpx -f ${REFERENCE}/track/vitovtt-sample.gpx -x transform,wpt=trk -o garmin_gpi -F ${TMPDIR}/garmin_gpi3a.gpi
 gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi3a.gpi -o garmin_gpi -F ${TMPDIR}/garmin_gpi3b.gpi
@@ -25,7 +25,7 @@ gpsbabel -i garmin_gpi -f ${REFERENCE}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1
 compare ${REFERENCE}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding.gpx
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi_encoding.gpx  -o garmin_gpi -F ${TMPDIR}/garmin_gpi_encoding.gpi
 gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
-compare ${REFERENCE}/garmin_gpi_encoding2.gpi.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
+compare ${TMPDIR}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
 
 # check category encoding
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,category="Vinícolas",hide -F ${TMPDIR}/garmin_gpi_category~gpx.gpi
