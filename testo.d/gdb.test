@@ -10,9 +10,14 @@ compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 # The Latin1 encoded character string "Völkerschlachtdenkmal" in the version 2 file
 # gdb-sample.gdb can't be converted to a Qstring using the implicit fromUtf8()
 # without corruption as 'ö' is '\xf6' in Latin1 which is illegal in UTF-8.
-gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gdb,ver=2 -F ${TMPDIR}/gdb-sample.gdb
-gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample~gdb.gpx
-compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample~gdb.gpx
+gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gdb,ver=2 -F ${TMPDIR}/gdb-sample2.gdb
+gpsbabel -i gdb -f ${TMPDIR}/gdb-sample2.gdb -o gpx -F ${TMPDIR}/gdb-sample2.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample2.gpx
+
+# again with gdb version 3.
+gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gdb,ver=3 -F ${TMPDIR}/gdb-sample3.gdb
+gpsbabel -i gdb -f ${TMPDIR}/gdb-sample3.gdb -o gpx -F ${TMPDIR}/gdb-sample3.gpx
+compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample3.gpx
 
 gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
 gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample_v2.gpx
