@@ -26,10 +26,13 @@
  * we don't implement that at this time in GPSBabel.
  */
 
+#include <QtCore/QString>               // for QString
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+
 #include "defs.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
-#include <cstdio>
+#include "gbfile.h"                     // for gbfputc, gbfprintf, gbfclose, gbfopen, gbfputcstr, gbfputs, gbfile, gbfputuint16
+#include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, cb_end, cb_start, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
+
 
 static gbfile* ofd;
 static Waypoint* wpt_tmp;
@@ -182,7 +185,7 @@ lmx_write_xml(int tag, const QString& data, int indent)
 
   if (binary) {
     gbfputc(0x03, ofd); // inline string follows
-    gbfputcstr(data, ofd);
+    gbfputcstr(CSTR(data), ofd);
   } else {
     char* tmp_ent = xml_entitize(CSTR(data));
     gbfputs(tmp_ent, ofd);
@@ -223,16 +226,12 @@ lmx_print(const Waypoint* wpt)
     gbfputc('\n', ofd);
   }
 
-  char tbuf[100];
-  sprintf(tbuf, "%f", wpt->latitude);
-  lmx_write_xml(0x4B, tbuf, 4); // latitude
+  lmx_write_xml(0x4B, QString::number(wpt->latitude, 'f'), 4); // latitude
 
-  sprintf(tbuf, "%f", wpt->longitude);
-  lmx_write_xml(0x4C, tbuf, 4); // longitude
+  lmx_write_xml(0x4C, QString::number(wpt->longitude, 'f'), 4); // longitude
 
   if (wpt->altitude && (wpt->altitude != unknown_alt)) {
-    sprintf(tbuf, "%f", wpt->altitude);
-    lmx_write_xml(0x4D, tbuf, 4); // altitude
+    lmx_write_xml(0x4D, QString::number(wpt->altitude, 'f'), 4); // altitude
   }
   lmx_end_tag(0x4A, 3); // coordinates
 

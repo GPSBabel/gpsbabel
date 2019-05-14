@@ -181,7 +181,7 @@ ez_disp(const Waypoint* wpt)
     }
     if (!link.url_.isEmpty()) {
       gbfputc(9, file_out);
-      gbfputcstr(link.url_, file_out);
+      gbfputcstr(CSTRc(link.url_), file_out);
     }
   }
   gbfputc(0xff, file_out);
