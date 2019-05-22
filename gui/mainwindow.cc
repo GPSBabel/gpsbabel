@@ -314,10 +314,8 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   // remove the old translator
   qApp->removeTranslator(&translator);
 
-  QString full_filename(langPath_ + "/" + filename);
-
   // load the new translator
-  if (translator.load(full_filename)) {
+  if (translator.load(filename, langPath_)) {
     qApp->installTranslator(&translator);
   }
 }
