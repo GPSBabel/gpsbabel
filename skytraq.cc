@@ -1491,6 +1491,14 @@ static arglist_t miniHomer_args[] = {
   { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
   { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
   { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
+  {
+    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
+  {
+    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
+    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
   ARG_TERMINATOR
 };
 /*
