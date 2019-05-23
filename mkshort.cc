@@ -140,7 +140,7 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
   uniq_shortname* s;
 
   while ((s = is_unique(h, name))) {
-    char tbuf[10];
+    char tbuf[13];
     size_t l = strlen(name);
 
     s->conflictctr++;
