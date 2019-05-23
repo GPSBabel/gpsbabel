@@ -449,7 +449,7 @@ read_file_header()
   }
 
   QByteArray applicationField = FREAD_STR();
-  is_fatal(!((applicationField == "MapSource") || (applicationField ==  "BaseCamp")), MYNAME ": Not a recognized signature in header");
+  is_fatal(!((applicationField == "MapSource") || (applicationField == "BaseCamp")), MYNAME ": Not a recognized signature in header");
 }
 
 /*-----------------------------------------------------------------------------*/
