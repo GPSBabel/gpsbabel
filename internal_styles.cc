@@ -865,7 +865,7 @@ static char mainnav[] =
   "#\n"
   "#   You should have received a copy of the GNU General Public License\n"
   "#   along with this program; if not, write to the Free Software\n"
-  "#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA\n"
+  "#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n"
   "#\n"
   "# gpsbabel XCSV style file\n"
   "# Format: Mainnav MG-950d data logger and possibly others\n"
