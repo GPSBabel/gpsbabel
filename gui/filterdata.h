@@ -60,7 +60,7 @@ class TrackFilterData: public FilterData
 {
 public:
   TrackFilterData(): FilterData(), title(false), titleString(QString()),
-    move(false),  days(0), hours(0), mins(0), secs(0),
+    move(false),  weeks(0), days(0), hours(0), mins(0), secs(0),
     TZ(false),
     start(false),
     stop(false),
@@ -98,6 +98,7 @@ public:
     sg.addVarSetting(new DateTimeSetting("trks.stopTime", stopTime));
     sg.addVarSetting(new BoolSetting("trks.TZ", TZ));
     sg.addVarSetting(new BoolSetting("trks.move", move));
+    sg.addVarSetting(new IntSetting("trks.weeks", weeks));
     sg.addVarSetting(new IntSetting("trks.days", days));
     sg.addVarSetting(new IntSetting("trks.mins", mins));
     sg.addVarSetting(new IntSetting("trks.hours", hours));
@@ -115,7 +116,7 @@ public:
   bool title;
   QString titleString;
   bool move;
-  int  days, hours, mins, secs;
+  int  weeks, days, hours, mins, secs;
   bool TZ;
 
   bool start;
