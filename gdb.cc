@@ -175,7 +175,7 @@ disp_summary(const gbfile* f)
 #define FREAD_DBL gbfgetdbl(fin)
 #define FREAD_LATLON GPS_Math_Semi_To_Deg(gbfgetint32(fin))
 
-#define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
+#define FREAD_STR() gbfgetnativecstr(fin)
 
 // This is all very messy.  Some versions of GDB store strings as 
 // 8859-1 strings and others as UTF8.  This wrapper tries to hide 
@@ -249,24 +249,6 @@ gdb_fread_cstr(gbfile* fin)
   }
 
   return result;
-}
-
-static int
-gdb_fread_str(char* buf, int size, gbfile* fin)
-{
-  char c;
-  int res = 0;
-
-  while (size--) {
-    gbfread(&c, 1, 1, fin);
-    buf[res] = c;
-    if (c == '\0') {
-      return res;
-    }
-    res++;
-  }
-  buf[res] = '\0';
-  return res;
 }
 
 static QString
@@ -443,11 +425,10 @@ read_file_header()
 
   int reclen = FREAD_i32;
   Q_UNUSED(reclen);
-  int i = FREAD_STR(buf);
-  Q_UNUSED(i);
-  is_fatal(buf[0] != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
+  QByteArray drec = FREAD_STR();
+  is_fatal(drec.at(0) != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
 
-  gdb_ver = buf[1] - 'k' + 1;
+  gdb_ver = drec.at(1) - 'k' + 1;
   is_fatal((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX),
            MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
 
@@ -456,8 +437,7 @@ read_file_header()
   }
 
   reclen = FREAD_i32;
-  i = FREAD(buf, reclen + 1);
-  Q_UNUSED(i);
+  (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
     if (strstr(name, "SQA") == nullptr) {
@@ -468,8 +448,8 @@ read_file_header()
     warning(MYNAME ": File created with \"%s\"\n", name);
   }
 
-  i = FREAD_STR(buf);
-  is_fatal(!(((i == 9) && (strcmp(buf, "MapSource") == 0)) || ((i == 8) && (strcmp(buf, "BaseCamp") == 0))), MYNAME ": Not a recognized signature in header");
+  QByteArray applicationField = FREAD_STR();
+  is_fatal(!((applicationField == "MapSource") || (applicationField ==  "BaseCamp")), MYNAME ": Not a recognized signature in header");
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -478,13 +458,13 @@ static Waypoint*
 read_waypoint(gt_waypt_classes_e* waypt_class_out)
 {
   char buf[128];		/* used for temporary stuff */
+  QByteArray ba;
   int display, icon;
   gt_waypt_classes_e wpt_class;
   int i;
   Waypoint* res;
   garmin_fs_t* gmsd;
   char* str;
-  char* bufp = buf;
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22];
 #endif
@@ -506,8 +486,8 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     waypth_ct++;
   }
 
-  FREAD_STR(buf);					/* Country code */
-  GMSD_SETSTR(cc, bufp);
+  ba = FREAD_STR();					/* Country code */
+  GMSD_SETSTR(cc, ba.constData());
 
 #ifdef GMSD_EXPERIMENTAL
   FREAD(subclass, sizeof(subclass));
@@ -578,12 +558,12 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   FREAD_i32;				/* color !not implemented! */
   icon = FREAD_i32;
   GMSD_SET(icon, icon);			/* icon */
-  FREAD_STR(buf);				/* city */
-  GMSD_SETSTR(city, bufp);
-  FREAD_STR(buf);				/* state */
-  GMSD_SETSTR(state, bufp);
-  FREAD_STR(buf);				/* facility */
-  GMSD_SETSTR(facility, bufp);
+  ba = FREAD_STR();				/* city */
+  GMSD_SETSTR(city, ba.constData());
+  ba = FREAD_STR();				/* state */
+  GMSD_SETSTR(state, ba.constData());
+  ba = FREAD_STR();				/* facility */
+  GMSD_SETSTR(facility, ba.constData());
 
   FREAD(buf, 1);
 
@@ -627,8 +607,8 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
     waypt_flag = 0;
 
-    FREAD_STR(buf);				/* street address */
-    GMSD_SETSTR(addr, bufp);
+    ba = FREAD_STR();				/* street address */
+    GMSD_SETSTR(addr, ba.constData());
 
     FREAD(buf, 5);				/* instruction depended */
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
@@ -686,14 +666,14 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_3) {
     if (FREAD_i32 == 1) {
-      FREAD_STR(buf);		/* phone number */
-      GMSD_SETSTR(phone_nr, bufp);
-      FREAD_STR(buf);		/* ?? fax / mobile ?? */
+      ba = FREAD_STR();		/* phone number */
+      GMSD_SETSTR(phone_nr, ba.constData());
+      (void) FREAD_STR();		/* ?? fax / mobile ?? */
     }
-    FREAD_STR(buf);			/* country */
-    GMSD_SETSTR(country, bufp);
-    FREAD_STR(buf);			/* postal code */
-    GMSD_SETSTR(postal_code, bufp);
+    ba = FREAD_STR();			/* country */
+    GMSD_SETSTR(country, ba.constData());
+    ba = FREAD_STR();			/* postal code */
+    GMSD_SETSTR(postal_code, ba.constData());
   }
 
   res->icon_descr = gt_find_desc_from_icon_number(icon, GDB);
@@ -769,7 +749,7 @@ read_route()
 
     wpt->shortname = fread_cstr();	/* shortname */
     int wpt_class = FREAD_i32;		/* waypoint class */
-    FREAD_STR(buf);			/* country code */
+    (void) FREAD_STR();			/* country code */
     FREAD(buf, 18 + 4);		/* subclass part 1-3 / unknown */
 
     if (FREAD_C != 0) {
@@ -1086,7 +1066,6 @@ read_data()
       break;
     }
 
-    fin = fsave;
     int delta = len - gbftell(ftmp);
     is_fatal(delta > 1000000, "Internal consistency error.  Delta too big");
 
@@ -1117,6 +1096,8 @@ read_data()
       }
       warning("\n");
     }
+
+    fin = fsave;
   }
 
 

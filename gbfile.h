@@ -23,11 +23,15 @@
 #ifndef GBFILE_H
 #define GBFILE_H
 
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QString>       // for QString
+
+#include <cstdarg>             // for va_list
+#include <cstdio>              // for FILE
+#include <cstdint>             // for int32_t, int16_t, uint32_t
 
 #include "defs.h"
-#include "cet.h"
 
-#include <QtCore/QString>
 
 struct gbfile_s;
 typedef struct gbfile_s gbfile;
@@ -117,6 +121,7 @@ float gbfgetflt(gbfile* file);			// read a float value
 char* gbfgetstr(gbfile* file);			// read until any type of line-breaks or EOF
 QString gbfgetpstr(gbfile* file);		// read a pascal string
 QString gbfgetcstr(gbfile* file);		// read a null terminated string
+QByteArray gbfgetnativecstr(gbfile* file);  // read a null terminated string
 char* gbfgetcstr_old(gbfile* file);		// read a null terminated string
 
 int gbfputint16(int16_t i, gbfile* file);

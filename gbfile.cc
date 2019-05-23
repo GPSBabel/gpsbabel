@@ -20,13 +20,22 @@
 
  */
 
+#include <QtCore/QByteArray>   // for QByteArray
+#include <QtCore/QString>      // for QString
+#include <QtCore/QtGlobal>     // for qPrintable
+
+#include <cassert>             // for assert
+#include <cstdarg>             // for va_list, va_end, va_copy, va_start
+#include <cstdio>              // for EOF, ferror, ftell, SEEK_SET, SEEK_CUR, SEEK_END, clearerr, fclose, feof, fflush, fileno, fread, fseek, fwrite, ungetc, vsnprintf, FILE, stdin, stdout
+#include <cstring>             // for memcpy, strlen, strchr, strcpy, strncat
+#include <ctype.h>             // for tolower
+#include <errno.h>             // for errno
+
 #include "defs.h"
 #include "gbfile.h"
 #include "src/core/logging.h"
 
-#include <cassert>
-#include <cstdarg> // for va_copy
-#include <cstdio>
+#include "cet.h"               // for cet_ucs4_to_utf8
 
 #if __WIN32__
 /* taken from minigzip.c (part of the zlib project) */
@@ -997,6 +1006,15 @@ gbfgetcstr(gbfile* file)
 {
   char* result = gbfgetcstr_old(file);
   QString rv(result);
+  xfree(result);
+  return rv; 
+}
+
+QByteArray
+gbfgetnativecstr(gbfile* file)
+{
+  char* result = gbfgetcstr_old(file);
+  QByteArray rv(result);
   xfree(result);
   return rv; 
 }
