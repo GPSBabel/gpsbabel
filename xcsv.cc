@@ -803,20 +803,10 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     break;
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
-    int s_len = strlen(s);
-    if (s_len < 4) {
-      /* less than 1 epochsecond, an unusual case */
-      wpt->SetCreationTime(0, atoi(s));
-    } else {
-      char buff[32];
-      int off = s_len - 3;
-      strncpy(buff, s, off);
-      buff[off] = '\0';
-      time_t t = (time_t) atol(buff);
-      s += off;
-      strncpy(buff, s, 3);
-      buff[3] = '\0';
-      wpt->SetCreationTime(t, atoi(buff));
+    bool ok;
+    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(QString(s).toLongLong(&ok)));
+    if (!ok) {
+      warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
   }
   break;
