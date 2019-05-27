@@ -903,7 +903,7 @@ ozi_waypt_pr(const Waypoint* wpt)
       }
     } else {
       /* no description available */
-      shortname = xstrdup("");
+      shortname = "";
     }
   } else {
     shortname = csv_stringclean(wpt->shortname, BADCHARS);
@@ -912,7 +912,7 @@ ozi_waypt_pr(const Waypoint* wpt)
     if (!shortname.isEmpty()) {
       description = csv_stringclean(shortname, BADCHARS);
     } else {
-      description = xstrdup("");
+      description = "";
     }
   } else {
     description = csv_stringclean(wpt->description, BADCHARS);
