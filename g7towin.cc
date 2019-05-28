@@ -510,7 +510,7 @@ data_read()
         break;
 
       case 'L':
-        waypt_add_url(wpt, xstrdup(cdata), nullptr);
+        waypt_add_url(wpt, cdata, nullptr);
         break;
 
       default:
