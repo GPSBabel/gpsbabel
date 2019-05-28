@@ -180,9 +180,6 @@ typedef enum {
 /* obligatory global struct                                                 */
 /****************************************************************************/
 
-extern char* xcsv_urlbase;
-extern char* prefer_shortnames;
-
 XcsvFile xcsv_file;
 static double pathdist = 0;
 static double oldlon = 999;
@@ -209,8 +206,8 @@ static char* snlenopt = nullptr;
 static char* snwhiteopt = nullptr;
 static char* snupperopt = nullptr;
 static char* snuniqueopt = nullptr;
-char* prefer_shortnames = nullptr;
-char* xcsv_urlbase = nullptr;
+static char* prefer_shortnames = nullptr;
+static char* xcsv_urlbase = nullptr;
 static char* opt_datum;
 
 static const char* intstylebuf = nullptr;
