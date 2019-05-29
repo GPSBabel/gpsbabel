@@ -2,6 +2,13 @@
 This option changes the time of all trackpoints. This might be useful if
 your track must be moved by one or more hours because of an incorrect
 time zone.
+It can also be useful to correct tracks for week number roll over problems.
+</para>
+<para>
+The value of this option is a series of integer and unit pairs.  Each integer may include a
+leading '+' or '-' sign.  Positive integers shift the tracks later, while negative integers shift
+the tracks earlier.  If no sign is provided the integer is assumed to be nonnegative.
+Possible units are w for weeks, d for days, h for hours, m for minutes and s for seconds.
 </para>
 <example id="ex_track_move">
 <title>Time-shifting a track with the track filter</title>
@@ -9,5 +16,22 @@ time zone.
 The following command line will shift all tracks to be one hour later.
 </para>
 <para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1h -o gpx -F out.gpx</userinput></para>
+</example>
+<example id="ex_track_move_wnro">
+<title>Time-shifting a track with the track filter to correct WNRO</title>
+<para>
+The following command line will shift all tracks to be 1024 weeks later.  Because the GPS Week Number
+is transmitted modulo 1024 there is the possibility that the recovered timestamp will be off by
+a multiple of 1024 weeks.
+</para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1024w -o gpx -F out.gpx</userinput></para>
+</example>
+<example id="ex_track_move_combo">
+<title>Time-shifting a track with the track filter with combined units</title>
+<para>
+The following command lines will each shift all tracks to be 1 hour and 1 minute earlier, i.e. 61 minutes earlier.
+</para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=-1h-1m -o gpx -F out.gpx</userinput></para>
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=-61m -o gpx -F out.gpx</userinput></para>
 </example>
 

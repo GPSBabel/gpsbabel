@@ -136,7 +136,7 @@ QStringList TrackFilterData::makeOptionString()
     s += QString(",stop=%1").arg(optionDate(stopTime, TZ));
   }
   if (move) {
-    s += QString(",move=%1d%2h%3m%4s").arg(days).arg(hours).arg(mins).arg(secs);
+    s += QString(",move=%1w%2d%3h%4m%5s").arg(weeks).arg(days).arg(hours).arg(mins).arg(secs);
   }
   if (title) {
     s += QString(",title=%1").arg(titleString);

@@ -32,6 +32,7 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   addCheckEnabler(ui.titleCheck, ui.titleText);
   addCheckEnabler(ui.moveCheck,
                   (QList<QWidget*> ()
+                   << ui.weeksLabel << ui.weeksSpin
                    << ui.daysLabel << ui.daysSpin
                    << ui.hoursLabel<< ui.hoursSpin
                    << ui.minsLabel << ui.minsSpin
@@ -76,10 +77,11 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   fopts << new BoolFilterOption(tfd.course, ui.courseCheck);
   fopts << new BoolFilterOption(tfd.speed,  ui.speedCheck);
 
-  fopts << new IntSpinFilterOption(tfd.days,  ui.daysSpin, -2000, 2000);
-  fopts << new IntSpinFilterOption(tfd.hours, ui.hoursSpin);
-  fopts << new IntSpinFilterOption(tfd.mins,  ui.minsSpin);
-  fopts << new IntSpinFilterOption(tfd.secs,  ui.secsSpin);
+  fopts << new IntSpinFilterOption(tfd.weeks,  ui.weeksSpin, ui.weeksSpin->minimum(), ui.weeksSpin->maximum());
+  fopts << new IntSpinFilterOption(tfd.days,  ui.daysSpin, ui.daysSpin->minimum(), ui.daysSpin->maximum());
+  fopts << new IntSpinFilterOption(tfd.hours, ui.hoursSpin, ui.hoursSpin->minimum(), ui.hoursSpin->maximum());
+  fopts << new IntSpinFilterOption(tfd.mins,  ui.minsSpin, ui.minsSpin->minimum(), ui.minsSpin->maximum());
+  fopts << new IntSpinFilterOption(tfd.secs,  ui.secsSpin, ui.secsSpin->minimum(), ui.secsSpin->maximum());
   fopts << new IntSpinFilterOption(tfd.splitTime,  ui.splitTimeSpin, 0, 1000);
   fopts << new IntSpinFilterOption(tfd.splitDist,  ui.splitDistSpin, 0, 5280);
 

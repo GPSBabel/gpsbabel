@@ -78,34 +78,42 @@ int TrackFilter::trackfilter_opt_count()
 
 qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
-  qint64 result;
+  qint64 result = 0;
 
-  QRegularExpression re("^([+-]?\\d+)([dhms])$", QRegularExpression::CaseInsensitiveOption);
+  QRegularExpression re("^([+-]?\\d+)([wdhms])(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?$", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
-    bool ok;
-    result = match.captured(1).toLong(&ok);
-    if (!ok) {
-      fatal(MYNAME "-time: invalid quantity in move option \"%s\"!\n", qPrintable(match.captured(1)));
-    }
+    int lastindex = match.lastCapturedIndex();
+    for (int idx = 1; idx < lastindex; idx += 2) {
+      bool ok;
+      qint64 partial = match.captured(idx).toLong(&ok);
+      if (!ok) {
+        fatal(MYNAME "-time: invalid quantity in move option \"%s\"!\n", qPrintable(match.captured(idx)));
+      }
 
-    switch (match.captured(2).at(0).toLower().toLatin1()) {
-    case 'd':
-      result *= SECONDS_PER_DAY;
-      break;
-    case 'h':
-      result *= SECONDS_PER_HOUR;
-      break;
-    case 'm':
-      result *= 60;
-      break;
-    case 's':
-      break;
-    default:
-      fatal(MYNAME "-time: invalid unit in move option \"%s\"!\n", qPrintable(match.captured(2)));
-    }
+      switch (match.captured(idx+1).at(0).toLower().toLatin1()) {
+      case 'w':
+        partial *= SECONDS_PER_DAY * 7;
+        break;
+      case 'd':
+        partial *= SECONDS_PER_DAY;
+        break;
+      case 'h':
+        partial *= SECONDS_PER_HOUR;
+        break;
+      case 'm':
+        partial *= 60;
+        break;
+      case 's':
+        break;
+      default:
+        fatal(MYNAME "-time: invalid unit in move option \"%s\"!\n", qPrintable(match.captured(idx+1)));
+      }
 
+      result += partial;
+
+    }
 #ifdef TRACKF_DBG
     qDebug() << MYNAME "-time option: shift =" << result << "seconds";
 #endif

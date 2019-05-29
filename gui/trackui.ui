@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>248</height>
+    <height>270</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,9 +73,43 @@ This option changes the time of all trackpoints. This might be useful if your tr
       </widget>
      </item>
      <item row="2" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QSpinBox" name="weeksSpin">
+         <property name="accelerated">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>-10000</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="weeksLabel">
+         <property name="text">
+          <string>weeks</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="2">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QSpinBox" name="daysSpin"/>
+        <widget class="QSpinBox" name="daysSpin">
+         <property name="accelerated">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>-100000</number>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="daysLabel">
@@ -89,7 +123,17 @@ This option changes the time of all trackpoints. This might be useful if your tr
      <item row="2" column="3">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QSpinBox" name="hoursSpin"/>
+        <widget class="QSpinBox" name="hoursSpin">
+         <property name="accelerated">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>-100000</number>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="hoursLabel">
@@ -103,7 +147,17 @@ This option changes the time of all trackpoints. This might be useful if your tr
      <item row="2" column="4">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QSpinBox" name="minsSpin"/>
+        <widget class="QSpinBox" name="minsSpin">
+         <property name="accelerated">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>-100000</number>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="minsLabel">
@@ -117,7 +171,17 @@ This option changes the time of all trackpoints. This might be useful if your tr
      <item row="2" column="5">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QSpinBox" name="secsSpin"/>
+        <widget class="QSpinBox" name="secsSpin">
+         <property name="accelerated">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>-100000</number>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="secsLabel">
