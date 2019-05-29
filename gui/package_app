@@ -115,7 +115,7 @@ else # Mac
   cp ../GPSBabel "${APPDIR}/Contents/MacOS/gpsbabel"
   cp gmapbase.html "${APPDIR}/Contents/MacOS"
   cp COPYING.txt "${APPDIR}/Contents/MacOS"
-  rm -f objects/GPSBabelFE.dmg
+  rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
 fi
