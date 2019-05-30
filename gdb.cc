@@ -394,7 +394,7 @@ gdb_write_cstr_list(const char* str)
 static void
 gdb_write_cstr_list(const QString& str)
 {
-  return gdb_write_cstr_list(CSTRc(str));
+  gdb_write_cstr_list(CSTRc(str));
 }
 
 static void

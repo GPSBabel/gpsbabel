@@ -660,7 +660,7 @@ serial_read_routes(Waypoint** waypts)
 
     route_head*    route = route_head_alloc();
     route->rte_num = routedata[2];
-    route->rte_name = xstrdup((char*)routedata + 4);
+    route->rte_name = (char*)routedata + 4;
     route_add_head(route);
 
     for (int sr = 0; sr < MAX_SUBROUTES; sr++) {

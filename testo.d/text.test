@@ -7,3 +7,6 @@ gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8.gpx \
 compare ${REFERENCE}/gc/GCGCA8~text.txt ${TMPDIR}/gc.txt
 compare ${REFERENCE}/gc/GCGCA8~text-encoded.txt ${TMPDIR}/gc-encoded.txt
 compare ${REFERENCE}/gc/GCGCA8~html.txt ${TMPDIR}/gc.html
+
+gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o html,logs -F ${TMPDIR}/gc_logs.html
+compare ${REFERENCE}/gc/GCGCA8_logs~html.txt ${TMPDIR}/gc_logs.html

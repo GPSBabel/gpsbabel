@@ -215,11 +215,12 @@ html_disp(const Waypoint* wpt)
         if (html_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
-          s = xstrdup(logpart->cdata);
+          s = logpart->cdata;
         }
 
-        QString t = html_entitize(s);
+        char* t = html_entitize(s);
         gbfputs(t, file_out);
+        xfree(t);
       }
 
       gbfprintf(file_out, "</p>\n");

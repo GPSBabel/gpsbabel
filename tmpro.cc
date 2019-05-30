@@ -182,7 +182,7 @@ tmpro_waypt_pr(const Waypoint* wpt)
       }
     } else {
       /* no description available */
-      shortname = xstrdup("");
+      shortname = "";
     }
   } else {
     shortname = csv_stringclean(wpt->shortname, ",\"");
@@ -192,7 +192,7 @@ tmpro_waypt_pr(const Waypoint* wpt)
     if (!shortname.isEmpty()) {
       description = csv_stringclean(shortname, ",\"");
     } else {
-      description = xstrdup("");
+      description = "";
     }
   } else {
     description = csv_stringclean(wpt->description, ",\"");
