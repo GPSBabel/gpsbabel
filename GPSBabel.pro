@@ -175,7 +175,7 @@ macx|linux {
     # this is used by zlib
     DEFINES += HAVE_STDARG_H
   }
-  DEFINES += HAVE_LIBUSB HAVE_GLOB
+  DEFINES += HAVE_LIBUSB
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
   JEEPS += jeeps/gpslibusb.cc
