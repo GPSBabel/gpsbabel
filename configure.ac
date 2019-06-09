@@ -410,7 +410,7 @@ AC_CHECK_HEADERS([unistd.h stdarg.h])
 # AC_FUNC_STRTOD
 # AC_FUNC_VPRINTF
 # AC_CHECK_FUNCS([atexit floor localtime_r memmove memset pow select sqrt strchr strcspn strdup strerror strncasecmp strrchr strspn strstr strtol strtoul])
-AC_CHECK_FUNCS([uname glob])
+AC_CHECK_FUNCS([uname])
 
 #
 # There's probably some more "autoconfish" way to do this.

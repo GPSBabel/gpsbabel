@@ -12,9 +12,6 @@
 /* define if the compiler supports basic C++14 syntax */
 #undef HAVE_CXX14
 
-/* Define to 1 if you have the `glob' function. */
-#undef HAVE_GLOB
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 

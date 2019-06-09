@@ -20,8 +20,6 @@
 
  */
 
-#include "defs.h"                  // might include config.h, which might define HAVE_GLOB.
-
 #include <cctype>                  // for isprint, toupper
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for sprintf, sscanf, snprintf, size_t
@@ -29,20 +27,20 @@
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 #include <ctime>                   // for gmtime
 
-#if HAVE_GLOB
-#include <glob.h>
-#endif
-
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QDir>             // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
 #include <QtCore/QFileInfo>        // for QFileInfo
+#include <QtCore/QFileInfoList>    // for QFileInfoList
 #include <QtCore/QLatin1String>    // for QLatin1String
 #include <QtCore/QList>            // for QList
 #include <QtCore/QString>          // for QString, operator==
+#include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QTime>            // for QTime
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for qPrintable, foreach
 
+#include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
@@ -80,7 +78,7 @@ static int extension_hint;
 // (This has nothing to do with the Explorist 100...600 products.)
 static ff_vecs_t* gpx_vec;
 static mag_info* explorist_info;
-static char** os_gpx_files(const char* dirname);
+static QStringList os_gpx_files(const char* dirname);
 
 /*
  * Magellan's firmware is *horribly* slow to send the next packet after
@@ -268,7 +266,7 @@ m330_cleanse(const char* istring)
                                    "abcdefghijklmnopqrstuvwxyz"
                                    "0123456789+-.'/!@#<%^&>()=:\\";
   char* rstring = (char*) xmalloc(strlen(istring)+1);
-  char* o; 
+  char* o;
   const char* i;
 
   for (o=rstring,i=istring; *i; i++) {
@@ -540,7 +538,7 @@ retry:
       if (idx > 0) {
         s.truncate(idx);
       }
-        
+
       trk_head->rte_name = s;
       track_add_head(trk_head);
     }
@@ -1249,25 +1247,25 @@ static void
 mag_read()
 {
   if (gpx_vec) {
-    char** f = os_gpx_files(explorist_info->track_path);
-    while (f && *f) {
-      gpx_vec->rd_init(*f);
+    QStringList f = os_gpx_files(explorist_info->track_path);
+    for (const auto& file : qAsConst(f)) {
+      gpx_vec->rd_init(file);
       gpx_vec->read();
-      f++;
+      gpx_vec->rd_deinit();
     }
 
     f = os_gpx_files(explorist_info->waypoint_path);
-    while (f && *f) {
-      gpx_vec->rd_init(*f);
+    for (const auto& file : qAsConst(f)) {
+      gpx_vec->rd_init(file);
       gpx_vec->read();
-      f++;
+      gpx_vec->rd_deinit();
     }
 #if 0
     f = os_gpx_files(explorist_info->geo_path);
-    while (f && *f) {
-      gpx_vec->rd_init(*f);
+    for (const auto& file : qAsConst(f)) {
+      gpx_vec->rd_init(file);
       gpx_vec->read();
-      f++;
+      gpx_vec->rd_deinit();
     }
 #endif
     return;
@@ -1582,27 +1580,18 @@ const char** os_get_magellan_mountpoints()
 #endif
 }
 
-// My kingdom for container classes and portable tree-walking...
-// Returns a pointer to a static vector that's valid until the next call.
-#if HAVE_GLOB
-static char**
+static QStringList
 os_gpx_files(const char* dirname)
 {
-  static glob_t g;
-  char* path;
-  xasprintf(&path, "%s/*.gpx", dirname);
-  glob(path, 0, nullptr, &g);
-  xfree(path);
-  return g.gl_pathv;
+  QDir dir(dirname);
+
+  const QFileInfoList filist = dir.entryInfoList(QStringList("*.gpx"), QDir::Files | QDir::Readable, QDir::Name);
+  QStringList rv;
+  for (const auto& fi : filist) {
+    rv.append(fi.absoluteFilePath());
+  }
+  return rv;
 }
-#else
-static char**
-os_gpx_files(const char* /* dirname */)
-{
-  fatal("Not implemented");
-  return NULL;
-}
-#endif
 
 /*
  *  This is repeated just so it shows up as separate menu options
