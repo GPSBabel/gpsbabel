@@ -286,7 +286,6 @@ static void data_read() {
       } break;
       default:
         break;
-        ;
     }
   }
 }

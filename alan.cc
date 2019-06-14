@@ -490,11 +490,11 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
-  for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {};
+  for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {}
   char *s = xstrndup(wpt->name,j+1);
   WP->shortname = s;
   xfree(s);
-  for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
+  for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {}
   if (j >= 0) {
     char *s = xstrndup(wpt->comment, j+1);
     WP->description = s;
@@ -541,11 +541,11 @@ static void wpr_read()
 
     route_head* RT = route_head_alloc();
     RT->rte_num = i;
-    for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {};
+    for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {}
     char *s = xstrndup(rte->name,j+1);
     RT->rte_name = s;
     xfree(s);
-    for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {};
+    for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {}
     if (j >= 0) {
       char *s = xstrndup(rte->comment,j+1);
       RT->rte_desc = s;
@@ -595,14 +595,14 @@ static void trl_read()
     route_head* TL = route_head_alloc();
     for (j=TRK_NAME_LEN-1;
          j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
-         j--) {};
+         j--) {}
     char *s1 = xstrndup(trkhdr->name,j+1);
     TL->rte_name = s1;
     xfree(s1);
     /*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     for (j=TRK_COMMENT_LEN-1;
          j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
-         j--) {};
+         j--) {}
     s1 = xstrndup(trkhdr->comment,j+1);
     TL->rte_desc = s1;
     xfree(s1);
@@ -791,7 +791,7 @@ static void trl_track_hdr(const route_head* TL)
 
   struct trkhdr* trkhdr = TRL.loghdr.trkhdr;
 
-  for (idx=0; idx< MAXTRK && trkhdr[idx].occupied != TRK_UNUSED; idx++) {};
+  for (idx=0; idx< MAXTRK && trkhdr[idx].occupied != TRK_UNUSED; idx++) {}
   if (idx >= MAXTRK) {
     fatal(MYNAME ": Can't store more than %u tracklogs", MAXTRK);
   }

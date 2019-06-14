@@ -125,7 +125,7 @@ top:
     if ((rv == 0)  && (receive_state == rs_frombulk)) {
       m1= "RET2INTR";
       m2=nullptr;
-    };
+    }
     GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
   }
 

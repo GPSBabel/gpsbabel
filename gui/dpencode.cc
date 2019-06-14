@@ -100,7 +100,7 @@ void PolylineEncoder::createEncodings(string& encoded_points,
                                       const vector <LatLng>& points,
                                       const vector <double>& dists)
 {
-  encoded_points = "";;
+  encoded_points = "";
   int plat = 0;
   int plng = 0;
   for (unsigned int i = 0; i < points.size(); i++) {

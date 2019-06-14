@@ -31,8 +31,8 @@
 class VarSetting
 {
 public:
-  VarSetting() {};
-  virtual ~VarSetting() {};
+  VarSetting() {}
+  virtual ~VarSetting() {}
 
   virtual void saveSetting(QSettings&) = 0;
   virtual void restoreSetting(QSettings&) = 0;

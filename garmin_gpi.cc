@@ -1583,7 +1583,7 @@ garmin_gpi_read()
     if (! read_tag("garmin_gpi_read", tag, nullptr)) {
       return;
     }
-  };
+  }
 }
 
 

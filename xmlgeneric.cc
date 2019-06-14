@@ -160,7 +160,7 @@ xml_run_parser(QXmlStreamReader& reader)
 
     default:
       break;
-    };
+    }
 
 readnext:
     // readNextStartElement will cause a "Premature end of document." error

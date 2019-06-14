@@ -385,7 +385,7 @@ route_head::route_head() :
   line_width(-1),
   session(curr_session())
 {
-};
+}
 
 route_head::~route_head()
 {

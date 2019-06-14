@@ -65,4 +65,4 @@ void TextStream::close()
   codec_ = nullptr;
 }
 
-}; // namespace
+} // namespace

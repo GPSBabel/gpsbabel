@@ -36,7 +36,7 @@ public:
   QPushButton* formatButton()
   {
     return ui_.formatButton;
-  };
+  }
 
 private:
   Ui_AdvUi ui_;

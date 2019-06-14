@@ -43,7 +43,7 @@ class MarkerClicker: public QObject
   Q_OBJECT
 
 public:
-  MarkerClicker(QObject* parent): QObject(parent) {};
+  MarkerClicker(QObject* parent): QObject(parent) {}
 
 public slots:
   void clickedX(int t, int i)

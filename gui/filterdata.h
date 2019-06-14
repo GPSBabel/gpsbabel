@@ -33,8 +33,8 @@
 class FilterData
 {
 public:
-  FilterData(): inUse_(true) {};
-  virtual ~FilterData() {};
+  FilterData(): inUse_(true) {}
+  virtual ~FilterData() {}
 
   void saveSettings(QSettings& st)
   {

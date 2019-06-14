@@ -31,17 +31,18 @@
 class GpxItem
 {
 public:
-  GpxItem(): visible(true) {};
-  GpxItem(bool visible): visible(visible) {};
+  GpxItem(): visible(true) {}
+  GpxItem(bool visible): visible(visible) {}
 
   void setVisible(bool b)
   {
     visible = b;
-  };
+  }
+
   bool getVisible() const
   {
     return visible;
-  };
+  }
 
 protected:
   bool visible;
@@ -53,24 +54,27 @@ class GpxRoutePoint: public GpxItem
 public:
   GpxRoutePoint(): GpxItem(), location(LatLng()), name(QString())
   {
-  };
+  }
+
   void setLocation(const LatLng& pt)
   {
     location = pt;
-  };
+  }
+
   LatLng getLocation() const
   {
     return location;
-  };
+  }
 
   void setName(const QString& s)
   {
     name = s;
-  };
+  }
+
   QString getName() const
   {
     return name;
-  };
+  }
 
 private:
   LatLng location;
@@ -81,7 +85,7 @@ private:
 class GpxRoute: public GpxItem
 {
 public:
-  GpxRoute(): GpxItem(),name(QString()), cachedLength(-1) {};
+  GpxRoute(): GpxItem(),name(QString()), cachedLength(-1) {}
 
   GpxRoute(const GpxRoute& c)
     :GpxItem(c.visible),
@@ -130,16 +134,18 @@ public:
   void setName(const QString& s)
   {
     name = s;
-  };
+  }
+
   QString getName() const
   {
     return name;
-  };
+  }
 
   void clear()
   {
     routePoints.clear();
-  };
+  }
+
   void addPoint(const GpxRoutePoint& pt)
   {
     routePoints << pt;
@@ -147,7 +153,7 @@ public:
   const QList<GpxRoutePoint>& getRoutePoints() const
   {
     return routePoints;
-  };
+  }
 
 private:
   QString name;
@@ -161,33 +167,37 @@ class GpxTrackPoint: public GpxItem
 public:
   GpxTrackPoint(): GpxItem(), location(LatLng()), elevation(0), dateTime(QDateTime())
   {
-  };
+  }
+
   void setLocation(const LatLng& pt)
   {
     location = pt;
-  };
+  }
+
   LatLng getLocation() const
   {
     return location;
-  };
+  }
 
   void setElevation(double e)
   {
     elevation = e;
-  };
+  }
+
   double getElevation() const
   {
     return elevation;
-  };
+  }
 
   void setDateTime(const QDateTime& dt)
   {
     dateTime = dt;
-  };
+  }
+
   QDateTime getDateTime() const
   {
     return dateTime;
-  };
+  }
 
 private:
   LatLng location;
@@ -199,7 +209,8 @@ private:
 class GpxTrackSegment: public GpxItem
 {
 public:
-  GpxTrackSegment() {};
+  GpxTrackSegment() {}
+
   GpxTrackSegment(const GpxTrackSegment& c): GpxItem(c.visible)
   {
     trackPoints.clear();
@@ -223,11 +234,12 @@ public:
   void clear()
   {
     trackPoints.clear();
-  };
+  }
+
   const QList<GpxTrackPoint>& getTrackPoints() const
   {
     return trackPoints;
-  };
+  }
 
 private:
   QList <GpxTrackPoint> trackPoints;
@@ -236,7 +248,7 @@ private:
 class GpxTrack: public GpxItem
 {
 public:
-  GpxTrack(): GpxItem(), number(1), name(QString()), comment(QString()), description(QString()), cachedLength(-1.0) {};
+  GpxTrack(): GpxItem(), number(1), name(QString()), comment(QString()), description(QString()), cachedLength(-1.0) {}
 
   GpxTrack(const GpxTrack& c)
     :GpxItem(c.visible),
@@ -269,43 +281,48 @@ public:
   void setNumber(int n)
   {
     number = n;
-  };
+  }
+
   int getNumber() const
   {
     return number;
-  };
+  }
 
   void setName(const QString& s)
   {
     name = s;
-  };
+  }
+
   QString getName() const
   {
     return name;
-  };
+  }
 
   void setComment(const QString& s)
   {
     comment = s;
-  };
+  }
+
   QString getComment() const
   {
     return comment;
-  };
+  }
 
   void setDescription(const QString& s)
   {
     description = s;
-  };
+  }
+
   QString getDescription() const
   {
     return description;
-  };
+  }
 
   void clear()
   {
     trackSegments.clear();
-  };
+  }
+
   void addSegment(const GpxTrackSegment& seg)
   {
     trackSegments << seg;
@@ -313,7 +330,7 @@ public:
   const QList<GpxTrackSegment>& getTrackSegments() const
   {
     return trackSegments;
-  };
+  }
 
   double length() const
   {
@@ -360,61 +377,67 @@ public:
     comment_(QString()),
     description_(QString()),
     symbol_(QString())
-  {};
+  {}
 
   void setLocation(const LatLng& pt)
   {
     location_ = pt;
-  };
+  }
+
   LatLng getLocation() const
   {
     return location_;
-  };
+  }
 
   void setElevation(double e)
   {
     elevation_ = e;
-  };
+  }
+
   double getElevation() const
   {
     return elevation_;
-  };
+  }
 
   void setName(const QString& s)
   {
     name_ = s;
-  };
+  }
+
   QString getName() const
   {
     return name_;
-  };
+  }
 
   void setComment(const QString& s)
   {
     comment_ = s;
-  };
+  }
+
   QString getComment() const
   {
     return comment_;
-  };
+  }
 
   void setDescription(const QString& s)
   {
     description_ = s;
-  };
+  }
+
   QString getDescription() const
   {
     return description_;
-  };
+  }
 
   void setSymbol(const QString& s)
   {
     symbol_ = s;
-  };
+  }
+
   QString getSymbol() const
   {
     return symbol_;
-  };
+  }
 
 private:
   LatLng location_;
@@ -429,34 +452,38 @@ private:
 class Gpx
 {
 public:
-  Gpx() {};
+  Gpx() {}
   bool read(const QString& fileName);
 
   QList <GpxWaypoint>& getWaypoints()
   {
     return wayPoints;
-  }; // nonconst
+  } // nonconst
+
   QList <GpxTrack>&    getTracks()
   {
     return tracks;
-  };
+  }
+
   QList <GpxRoute>&    getRoutes()
   {
     return routes;
-  };
+  }
 
   const QList <GpxWaypoint>& getWaypoints() const
   {
     return wayPoints;
-  };
+  }
+
   const QList <GpxTrack>& getTracks()       const
   {
     return tracks;
-  };
+  }
+
   const QList <GpxRoute>& getRoutes()       const
   {
     return routes;
-  };
+  }
 
 private:
   QList <GpxWaypoint> wayPoints;

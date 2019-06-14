@@ -52,7 +52,7 @@ public:
   QString getOutputString() const
   {
     return outputString_;
-  };
+  }
 
 protected:
   void closeEvent(QCloseEvent* event);

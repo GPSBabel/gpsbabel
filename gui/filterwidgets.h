@@ -93,8 +93,8 @@ private:
 class FilterOption
 {
 public:
-  FilterOption() {};
-  virtual ~FilterOption() {};
+  FilterOption() {}
+  virtual ~FilterOption() {}
   virtual void setWidgetValue() = 0;
   virtual void getWidgetValue() = 0;
 };

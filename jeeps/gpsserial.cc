@@ -279,7 +279,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   tio.DCBlength = sizeof(DCB);
 
   GetCommState(wsd->comport, &tio);
-  tio.BaudRate = speed;;
+  tio.BaudRate = speed;
   if (!SetCommState(wsd->comport, &tio)) {
     GPS_Serial_Error("SetCommState on port for alternate bit rate failed");
     CloseHandle(wsd->comport);

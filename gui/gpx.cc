@@ -80,8 +80,8 @@ public:
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
-      double lat = atts.value("lat").toDouble();;
-      double lon = atts.value("lon").toDouble();;
+      double lat = atts.value("lat").toDouble();
+      double lon = atts.value("lon").toDouble();
       currentWpt.setLocation(LatLng(lat, lon));
       stateStack << state;
       state = e_wpt;
@@ -101,8 +101,8 @@ public:
 
     else if (localName == "trkpt") {
       currentTrkPt = GpxTrackPoint();
-      double lat = atts.value("lat").toDouble();;
-      double lon = atts.value("lon").toDouble();;
+      double lat = atts.value("lat").toDouble();
+      double lon = atts.value("lon").toDouble();
       currentTrkPt.setLocation(LatLng(lat, lon));
       stateStack << state;
       state = e_trkpt;
@@ -116,8 +116,8 @@ public:
 
     else if (localName == "rtept") {
       currentRtePt = GpxRoutePoint();
-      double lat = atts.value("lat").toDouble();;
-      double lon = atts.value("lon").toDouble();;
+      double lat = atts.value("lat").toDouble();
+      double lon = atts.value("lon").toDouble();
       currentRtePt.setLocation(LatLng(lat, lon));
       stateStack << state;
       state = e_rtept;
@@ -132,7 +132,7 @@ public:
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
     return true;
-  };
+  }
 
   bool endElement(const QString& /*namespaceURI*/,
                   const QString& localName,
@@ -205,13 +205,13 @@ public:
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
     return true;
-  };
+  }
 
   bool characters(const QString& x) override
   {
     textChars = x;
     return true;
-  };
+  }
 };
 
 

@@ -1347,7 +1347,7 @@ QString MainWindow::getFormatNameForExtension(const QString& ext)
     QStringList extensions = formatList_[i].getExtensions();
     for (int j = 0; j < extensions.size(); ++j) {
       if (extensions[j] == ext) {
-        return formatList_[i].getName();;
+        return formatList_[i].getName();
       }
     }
   }

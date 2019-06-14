@@ -247,12 +247,12 @@ gpx_add_to_global(QStringList& ge, const QString& s)
 static inline QString toString(double d)
 {
   return QString::number(d, 'f', 9);
-};
+}
 
 static inline QString toString(float f)
 {
   return QString::number(f, 'f', 6);
-};
+}
 
 
 /*

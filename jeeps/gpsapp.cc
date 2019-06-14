@@ -2490,7 +2490,7 @@ static void GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid)
       }
     }
 
-    GPS_Util_Put_Short(p, (US) way->category);; /* D110 category */
+    GPS_Util_Put_Short(p, (US) way->category); /* D110 category */
     p += 2;
   }
 
