@@ -893,7 +893,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   }
 
   // RCR is a bitmask of possibly several log reasons..
-  // Holux devics use a Event prefix for each waypt.
+  // Holux devices use a Event prefix for each waypt.
   if (global_opts.masked_objective & WPTDATAMASK
       && ((bmask & (1U<<RCR) && itm->rcr & 0x0008)
           || (mtk_info.track_event & MTK_EVT_WAYPT)

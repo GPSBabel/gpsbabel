@@ -273,7 +273,7 @@ static unsigned int print_unicode(char* dst, const unsigned int dst_max_length, 
 /* 2008/06/24, O.K.: Use CET library for ascii-> unicode 2 converter */
 // 2008/07/25, Dustin: Slight fix to make sure that we always null terminate the
 //                     string, validate that the use of the CET library provides
-//                     conmforming output, remove my old junk converter code.
+//                     conforming output, remove my old junk converter code.
 
 static unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
 {

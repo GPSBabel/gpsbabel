@@ -935,7 +935,7 @@ static uint32 Unique_Track_Index(GPS_PCourse* crs, int n_crs)
 ** Calculate lap data totals from individual track points. Also
 ** generates time stamps for track points if they don't have
 ** time stamps yet (using an arbitrary speed of 10 km/h which is
-** currently hardcoded. This is required so that couse points can
+** currently hardcoded. This is required so that course points can
 ** refer to track points and identify them uniquely.
 **
 ** @param [w] clp [GPS_PCourse_Lap] course lap to be calculated

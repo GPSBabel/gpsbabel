@@ -887,7 +887,7 @@ int kml_altitude_known(const Waypoint* waypoint)
   if (waypoint->altitude == unknown_alt) {
     return 0;
   }
-  // We see way more data that's sourceed at 'zero' than is actually
+  // We see way more data that's sourced at 'zero' than is actually
   // precisely at 0 MSL.
   if (fabs(waypoint->altitude) < 0.01) {
     return 0;
@@ -941,7 +941,7 @@ static void kml_output_positioning(bool tessellate)
 
 }
 
-/* Output something interesing when we can for route and trackpoints */
+/* Output something interesting when we can for route and trackpoints */
 static void kml_output_description(const Waypoint* pt)
 {
   const char* alt_units;
@@ -1257,7 +1257,7 @@ void kml_gc_make_balloonstyletext()
 
   cdataStr.append("  <ul>\n");
   // Fortunately, all the mappy map URLs take lat/longs in the URLs, so
-  // the substition is easy.
+  // the substitution is easy.
   for (int tp = 0; !map_templates[tp].isEmpty(); tp++) {
     cdataStr.append("    <li>\n");
     cdataStr.append("    ");
@@ -1355,7 +1355,7 @@ kml_lookup_gc_icon(const Waypoint* waypointp)
   case gt_locationless:
     icon = "8.png";
     break; // No unique icon.
-  case gt_suprise:
+  case gt_surprise:
     icon = "8.png";
     break;
   case gt_webcam:

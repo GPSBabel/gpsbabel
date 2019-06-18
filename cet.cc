@@ -31,7 +31,7 @@
 /* %%% cet_char_to_ucs4 %%%
  *
  * single character to UCS-4 code %%%
- * return values: 0 if convertable character, otherwise 1
+ * return values: 0 if convertible character, otherwise 1
  */
 
 int
@@ -194,7 +194,7 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
  *
  * convert single UCS-4 value to original character from CS
  *
- * return values: coverted character or "CET_NOT_CONVERTABLE_DEFAULT"
+ * return values: converted character or "CET_NOT_CONVERTABLE_DEFAULT"
  *                if not possible
  */
 short
@@ -249,7 +249,7 @@ cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec)
 
 /* %%% cet_utf8_to_char %%%
  *
- * Convert single UTF-8 sequence directly into associated characted
+ * Convert single UTF-8 sequence directly into associated characters
  * by given character set.
  */
 

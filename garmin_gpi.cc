@@ -166,8 +166,8 @@ struct writer_data_t {
   bounds bds;
   writer_data_t* top_left{nullptr};
   writer_data_t* top_right{nullptr};
-  writer_data_t* buttom_left{nullptr};
-  writer_data_t* buttom_right{nullptr};
+  writer_data_t* bottom_left{nullptr};
+  writer_data_t* bottom_right{nullptr};
 };
 
 typedef struct gpi_waypt_data_s {
@@ -819,11 +819,11 @@ wdata_free(writer_data_t* data)
   if (data->top_right) {
     wdata_free(data->top_right);
   }
-  if (data->buttom_left) {
-    wdata_free(data->buttom_left);
+  if (data->bottom_left) {
+    wdata_free(data->bottom_left);
   }
-  if (data->buttom_right) {
-    wdata_free(data->buttom_right);
+  if (data->bottom_right) {
+    wdata_free(data->bottom_right);
   }
 
   delete data;
@@ -869,9 +869,9 @@ wdata_check(writer_data_t* data)
 
     if (wpt->latitude < center_lat) {
       if (wpt->longitude < center_lon) {
-        ref = &data->buttom_left;
+        ref = &data->bottom_left;
       } else {
-        ref = &data->buttom_right;
+        ref = &data->bottom_right;
       }
     } else {
       if (wpt->longitude < center_lon) {
@@ -894,11 +894,11 @@ wdata_check(writer_data_t* data)
   if (data->top_right) {
     wdata_check(data->top_right);
   }
-  if (data->buttom_left) {
-    wdata_check(data->buttom_left);
+  if (data->bottom_left) {
+    wdata_check(data->bottom_left);
   }
-  if (data->buttom_right) {
-    wdata_check(data->buttom_right);
+  if (data->bottom_right) {
+    wdata_check(data->bottom_right);
   }
 }
 
@@ -1039,11 +1039,11 @@ skip_empty_block:
   if (data->top_right) {
     res += wdata_compute_size(data->top_right);
   }
-  if (data->buttom_left) {
-    res += wdata_compute_size(data->buttom_left);
+  if (data->bottom_left) {
+    res += wdata_compute_size(data->bottom_left);
   }
-  if (data->buttom_right) {
-    res += wdata_compute_size(data->buttom_right);
+  if (data->bottom_right) {
+    res += wdata_compute_size(data->bottom_right);
   }
 
   data->sz = res;
@@ -1191,11 +1191,11 @@ skip_empty_block:
   if (data->top_right) {
     wdata_write(data->top_right);
   }
-  if (data->buttom_left) {
-    wdata_write(data->buttom_left);
+  if (data->bottom_left) {
+    wdata_write(data->bottom_left);
   }
-  if (data->buttom_right) {
-    wdata_write(data->buttom_right);
+  if (data->bottom_right) {
+    wdata_write(data->bottom_right);
   }
 }
 

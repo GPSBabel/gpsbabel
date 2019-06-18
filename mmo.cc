@@ -75,7 +75,7 @@ typedef struct mmo_data_s {
   gpsdata_type type;	/* type of "data" */
   time_t ctime;
   time_t mtime;
-  int left;		/* number of un-readed route points */
+  int left;		/* number of unread route points */
   void* data;		/* can be a waypoint, a route or a track */
   int refct;
   struct mmo_data_s** members;
@@ -132,9 +132,9 @@ static const mmo_icon_mapping_t mmo_icon_value_table[] = {
   { 0x11, "Triangle" },
   { 0x12, "Square" },
   { 0x13, "Circle" },
-  { 0x14, "Green bouy" },
-  { 0x15, "Red bouy" },
-  { 0x16, "Yellow bouy" },
+  { 0x14, "Green buoy" },
+  { 0x15, "Red buoy" },
+  { 0x16, "Yellow buoy" },
   { 0x17, "Geocache" },
 
   { -1, nullptr }
@@ -1109,7 +1109,7 @@ mmo_writestr(const char* str)
 static void
 mmo_writestr(const QString& str)
 {
-  // If UTF-8 is used instgead of Latin1, we fail in weird ways.
+  // If UTF-8 is used instead of Latin1, we fail in weird ways.
   mmo_writestr(str.toLatin1().constData());
 }
 

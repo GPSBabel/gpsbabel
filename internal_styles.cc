@@ -1,5 +1,5 @@
 /* This file is machine-generated from the contents of style/ */
-/* by mkstyle.sh.   Editing it by hand is an exeedingly bad idea. */
+/* by mkstyle.sh.   Editing it by hand is an exceedingly bad idea. */
 
 #include "defs.h"
 #if CSVFMTS_ENABLED
@@ -267,7 +267,7 @@ static char fugawi[] =
   "PROLOGUE \\# Waypoint name\n"
   "PROLOGUE \\# Waypoint comment\n"
   "PROLOGUE \\# Waypoint description\n"
-  "PROLOGUE \\# Latitude in Degree and decimals (soutern hemisphere has neg. degrees)\n"
+  "PROLOGUE \\# Latitude in Degree and decimals (southern hemisphere has neg. degrees)\n"
   "PROLOGUE \\# Longitude in degree and decimals (neg. numbers: west of Greenwich)\n"
   "PROLOGUE \\# Height in meters [optional when importing, always present when exporting: Date (GMT) as ISO YYYYMMDD, Time of the day relative to the date as HHMMSS\n"
 
@@ -1471,7 +1471,7 @@ static char xmapwpt[] =
 
   "#\n"
   "#\n"
-  "# FILE LAYOUT DEFINITIIONS:\n"
+  "# FILE LAYOUT DEFINITIONS:\n"
   "#\n"
   "FIELD_DELIMITER		COLON\n"
   "RECORD_DELIMITER	NEWLINE\n"

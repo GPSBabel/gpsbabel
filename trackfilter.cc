@@ -630,7 +630,7 @@ void TrackFilter::trackfilter_synth()
         }
         if (opt_speed) {
           if (last_speed_time.msecsTo(wpt->GetCreationTime()) != 0) {
-            // If we have mutliple points with the same time and
+            // If we have multiple points with the same time and
             // we use the pair of points about which the time ticks then we will
             // underestimate the distance and compute low speeds on average.
             // Therefore, if we have multiple points with the same time use the
@@ -965,7 +965,7 @@ void TrackFilter::init()
                 opt_move || opt_fix || opt_speed ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
-  /* in case of a formated title we also need valid timestamps */
+  /* in case of a formatted title we also need valid timestamps */
   if ((opt_title != nullptr) && (strchr(opt_title, '%') != nullptr)) {
     need_time = true;
   }

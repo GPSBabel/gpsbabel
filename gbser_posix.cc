@@ -340,7 +340,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
         // is incoming data.   This has been shown to trigger driver
         // bugs in the Prolific drivers for Mac and in certain Linux
         // kernels, thought the latter has since been fixed.
-        // So althogh removing this means that the timeout behaviour
+        // So although removing this means that the timeout behaviour
         // is actually different on POSIX and WIN32, it triggers
         // fewer buts this way.  2/12/2008 RJL
         if (/* (rc = set_rx_timeout(h, vmin, vtime), rc < 0) || */
@@ -420,7 +420,7 @@ int gbser_is_serial(const char* port_name)
  * COM ports 1 - 9 are "COM1:" through "COM9:"
  * The one after that is \\.\\com10 - this function tries to plaster over
  * that.
- * It returns a pointer to a staticly allocated buffer and is therefore not
+ * It returns a pointer to a statically allocated buffer and is therefore not
  * thread safe.   The buffer pointed to remains valid only until the next
  * call to this function.
  */

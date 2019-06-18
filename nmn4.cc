@@ -153,7 +153,7 @@ nmn4_read_data()
           }
         }
 
-        /* concats all fields to one string and release */
+        /* concatenates all fields to one string and release */
         wpt->description = zip1.trimmed() + " " +
           city.trimmed() + " " +
           street.trimmed() + " " +

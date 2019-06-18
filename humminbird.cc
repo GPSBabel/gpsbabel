@@ -820,7 +820,7 @@ humminbird_track_cb(const Waypoint* wpt)
     be_write16(&trk_points[j].deltanorth, trk_points[j].deltanorth);
     be_write16(&trk_points[j].depth, trk_points[j].depth);
 
-    /* Update bounding box in header if neccessary */
+    /* Update bounding box in header if necessary */
     if (east > trk_head->ne_east) {
       trk_head->ne_east = east;
     }

@@ -41,8 +41,8 @@
 #define GARMIN_VID 0x91e
 
 /* This is very sensitive to timing; libusb and/or the unit is kind of
- * sloppy about not obeying packet boundries.  If this is too high, the
- * multiple packets responding to the device inquriy will be glommed into
+ * sloppy about not obeying packet boundaries.  If this is too high, the
+ * multiple packets responding to the device inquiry will be glommed into
  * one packet and we'll misparse them.  If it's too low, we'll get partially
  * satisfied reads.  It turns out this isn't terrible because we still end
  * up with DLE boundings and the upper layers (which are used to doing frame
@@ -194,14 +194,14 @@ gusb_atexit_teardown()
  * remove this.
  *
  * 9/2008 But wait, there's more.   The very toggle reset that we *had* to
- * implement in 2006 to make non-Windows OSes work actually locks up verion
+ * implement in 2006 to make non-Windows OSes work actually locks up version
  * 2.70 of the Venture HC.   On that model, the second product request
  * (you know, the one that we *use*, locks that device's protocol stack
  * after the RET2INTR that immediately follows the REQBLK (and why is it
- * telling us to go into bulk mode followed by an immeidate EOF, anyway?)
+ * telling us to go into bulk mode followed by an immediate EOF, anyway?)
  * that follows the request for product ID.   100% reproducible on Mac and
  * Linux.    Of course, we don't see this on the Windows system because
- * we don't have to jump through hooops to clear the spec-violating out
+ * we don't have to jump through hoops to clear the spec-violating out
  * of state toggles there because those systems see only one configuration
  * set ever.
  *
@@ -250,7 +250,7 @@ gusb_reset_toggles()
   /*
    * Now that the bulk out and intr in packets are good, we send
    * a product ID.    On devices that respond totally on the intr
-   * pipe, this does nothing interesting, but on devices that respon
+   * pipe, this does nothing interesting, but on devices that respond
    * on the bulk pipe this will reset the toggles on the bulk in.
    */
 
@@ -371,7 +371,7 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
   if (gusb_intr_in_ep && gusb_bulk_in_ep && gusb_bulk_out_ep) {
     lud->product_id = gusb_reset_toggles();
     switch (lud->product_id) {
-      // Search for "Venture HC" for more on this siliness..
+      // Search for "Venture HC" for more on this silliness..
       // It's a case instead of an 'if' because I have a
       // feeling there are more affected models either
       // on the market or on the way.

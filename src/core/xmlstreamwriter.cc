@@ -82,7 +82,7 @@ XmlStreamWriter::XmlStreamWriter(QFile* f) : QXmlStreamWriter(f)
   setCodec(XmlTextCodec::instance);
 }
 
-// We must overide the encoding, we don't want to use XmlTextCode::name().
+// We must override the encoding, we don't want to use XmlTextCode::name().
 void XmlStreamWriter::writeStartDocument()
 {
   writeProcessingInstruction(QStringLiteral("xml version=\"1.0\" encoding=\"UTF-8\""));

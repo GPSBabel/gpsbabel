@@ -34,15 +34,7 @@ cet_cs_vec_t* cet_find_cs_by_name(const QString& name);
 void cet_register();
 void cet_deregister();
 
-/* short hand transmissions */
-
-char* cet_str_utf8_to_cp1252(const char* src);
-char* cet_str_cp1252_to_utf8(const char* src);
 extern cet_cs_vec_t cet_cs_vec_cp1252;
-
-char* cet_str_iso8859_1_to_utf8(const char* src);
-char* cet_str_utf8_to_iso8859_1(const char* src);
-extern cet_cs_vec_t cet_cs_vec_iso8859_1;
 
 extern cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968;
 

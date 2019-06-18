@@ -31,7 +31,7 @@ public:
   // its base class type.
   // https://wiki.sei.cmu.edu/confluence/display/cplusplus/OOP52-CPP.+Do+not+delete+a+polymorphic+object+without+a+virtual+destructor
   virtual ~Filter() = default;
-  // And that requires us to explictly default the move and copy operations.
+  // And that requires us to explicitly default the move and copy operations.
   // https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c21-if-you-define-or-delete-any-default-operation-define-or-delete-them-all.
   Filter(const Filter&) = default;
   Filter& operator=(const Filter&) = default;

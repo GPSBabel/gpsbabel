@@ -128,7 +128,7 @@ int gbser_is_serial(const char* port_name);
  * COM ports 1 - 9 are "COM1:" through "COM9:"
  * The one after that is \\.\\com10 - this function tries to plaster over
  * that.
- * It returns a pointer to a staticly allocated buffer and is therefore not
+ * It returns a pointer to a statically allocated buffer and is therefore not
  * thread safe.   The buffer pointed to remains valid only until the next
  * call to this function.
  */

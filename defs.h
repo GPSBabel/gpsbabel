@@ -203,7 +203,6 @@ extern global_options global_opts;
 extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
-extern int geocaches_present;
 
 typedef enum {
   fix_unknown=-1,
@@ -232,7 +231,7 @@ typedef enum {
   gt_virtual,
   gt_letterbox,
   gt_event,
-  gt_suprise,
+  gt_surprise,
   gt_webcam,
   gt_earth,
   gt_locationless,
@@ -420,7 +419,7 @@ public:
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
-// things, though it's u nlikely to matter in practical terms.  Don't use these
+// things, though it's unlikely to matter in practical terms.  Don't use these
 // if a false positive would be deleterious.
 #
 class global_trait
@@ -530,7 +529,7 @@ public:
    */
   int route_priority;
 
-  /* Optional dilution of precision:  positional, horizontal, veritcal.
+  /* Optional dilution of precision:  positional, horizontal, vertical.
    * 1 <= dop <= 50
    */
   float hdop;
@@ -747,10 +746,10 @@ public:
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_head(route_head* rte); // a.k.a. erase()
-  // FIXME: Generally it is inefficent to use an element pointer or reference to define the insertion point, use iterator instead.
+  // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void insert_head(route_head* rte, route_head* predecessor); // a.k.a. insert
   void add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
-  // FIXME: Generally it is inefficent to use an element pointer or reference to define the insertion point, use iterator instead.
+  // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
@@ -1097,7 +1096,7 @@ QString ugetenv(const char* env_var);
 
 // FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
 // just be replaced at the call sites.  These shims are just here to make
-// them more accomidating of QString input.
+// them more accommodating of QString input.
 inline int
 case_ignore_strcmp(const QString& s1, const QString& s2)
 {
@@ -1151,12 +1150,6 @@ const QString get_filename(const QString& fname);			/* extract the filename port
 #define CET_CHARSET_MS_ANSI	"windows-1252"
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 
-#define str_utf8_to_cp1252(str) cet_str_utf8_to_cp1252((str))
-#define str_cp1252_to_utf8(str) cet_str_cp1252_to_utf8((str))
-
-#define str_utf8_to_iso8859_1(str) cet_str_utf8_to_iso8859_1((str))
-#define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
-
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
 
@@ -1170,7 +1163,7 @@ QString rot13(const QString& s);
 signed int si_round(double d);
 
 /*
- * Protypes for Endianness helpers.
+ * Prototypes for Endianness helpers.
  */
 
 signed int be_read16(const void* ptr);

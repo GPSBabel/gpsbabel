@@ -22,7 +22,7 @@
 
     The map file contains a constant 30 byte header record followed by a variable number of
     TT records.  The TT records start with the two characters "TT" and are 251 bytes long.
-    The TT records conatain values for time, position and velocity.
+    The TT records contain values for time, position and velocity.
 
  */
 

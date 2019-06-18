@@ -94,7 +94,7 @@
   A1005  Workout Limits Transfer Protocol
   	Capability A1005: D1005
   */
-  /* Unimplemted and Undocumented, as listed from the following device/sw:
+  /* Unimplemented and Undocumented, as listed from the following device/sw:
   	GF305 3.70
 
   Capability A601: D601

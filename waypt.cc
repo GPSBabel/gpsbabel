@@ -62,7 +62,7 @@ void update_common_traits(const Waypoint* wpt)
 {
   /* This is a bit tacky, but it allows a hint whether we've seen
    * this data or not in the life cycle of this run.   Of course,
-   * the caches could have been filtered out of existance and not
+   * the caches could have been filtered out of existence and not
    * all waypoints may have this and a few other pitfalls, but it's
    * an easy and fast test here.
    */
@@ -142,7 +142,7 @@ waypt_bounds_valid(bounds* bounds)
 }
 
 /*
- * Recompund bounding box based on new position point.
+ * Recompute bounding box based on new position point.
  */
 void
 waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp)
@@ -473,7 +473,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   session(other.session),
   extra_data(other.extra_data)
 {
-  // deep copy geocache data unless it is the specail static empty_gc_data.
+  // deep copy geocache data unless it is the special static empty_gc_data.
   if (other.gc_data != &Waypoint::empty_gc_data) {
     gc_data = new geocache_data(*other.gc_data);
   }
@@ -526,7 +526,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     fs = rhs.fs;
     session = rhs.session;
     extra_data = rhs.extra_data;
-    // deep copy geocache data unless it is the specail static empty_gc_data.
+    // deep copy geocache data unless it is the special static empty_gc_data.
     if (rhs.gc_data != &Waypoint::empty_gc_data) {
       gc_data = new geocache_data(*rhs.gc_data);
     }

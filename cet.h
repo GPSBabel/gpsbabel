@@ -29,7 +29,7 @@
 
 typedef struct cet_ucs4_link_s {
   int value;			/* UCS-4 value 			*/
-  short origin;			/* associeted character 	*/
+  short origin;			/* associated character 	*/
 } cet_ucs4_link_t;
 
 typedef struct cet_cs_vec_s {

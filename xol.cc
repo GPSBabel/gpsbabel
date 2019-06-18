@@ -145,7 +145,7 @@ static void xol_rd_deinit() { xml_deinit(); }
 /* writer */
 
 static void xol_fatal_outside(const Waypoint* wpt) {
-  fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+  fatal(MYNAME ": %s (%s) is outside of convertible area \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
@@ -273,7 +273,7 @@ static void xol_write() {
                                   (all_bounds.min_lon + all_bounds.max_lon) / 2,
                                   &x, &y)) {
     fatal(MYNAME
-          ": At least one point is outside of convertable area \"%s\"!\n",
+          ": At least one point is outside of convertible area \"%s\"!\n",
           gt_get_mps_grid_longname(grid_swiss, MYNAME));
   }
 

@@ -276,7 +276,7 @@ uint32 GPS_Util_Get_Uint(const UC* s)
 
 /* @func GPS_Util_Put_Uint ********************************************
 **
-** Put an unisgned int to a string
+** Put an unsigned int to a string
 **
 ** @param [w] s [UC *] string to write to
 ** @param [r] v [const uint32] unsigned int to write
@@ -685,7 +685,7 @@ void GPS_Enable_Diagnose()
 
 
 
-/* @func GPS_Disble_Diagnose ***********************************************
+/* @func GPS_Disable_Diagnose ***********************************************
 **
 ** Disable diagnosis mode
 **

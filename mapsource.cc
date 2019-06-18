@@ -328,7 +328,7 @@ mps_readstr(gbfile* mps_file, char* buf, size_t sz)
 }
 
 /*
- * read in from file to check a) valid format b) version of data formating
+ * read in from file to check a) valid format b) version of data formatting
  * MRCB
  */
 static void
@@ -355,7 +355,7 @@ mps_fileHeader_r(gbfile* mps_file, int* mps_ver)
   } else if ((hdr[1] > 'h') && (hdr[1] <= 'i')) {
     *mps_ver = 5;
   } else {
-    fatal(MYNAME ": Unsuppported version of mapsource file.\n");
+    fatal(MYNAME ": Unsupported version of mapsource file.\n");
   }
   /* Skip reliably over the "format details" section */
   gbfseek(mps_file, reclen+1-3, SEEK_CUR);

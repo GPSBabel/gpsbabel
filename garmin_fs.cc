@@ -115,7 +115,7 @@ void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
   }
   *dest = (garmin_fs_t*) xmalloc(sizeof(*src));
 
-  /* do not copy interlinks, only increment the refrence counter */
+  /* do not copy interlinks, only increment the reference counter */
   if (src->ilinks != nullptr) {
     src->ilinks->ref_count++;
   }

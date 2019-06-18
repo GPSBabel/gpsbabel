@@ -37,8 +37,8 @@
       format data.
     - Combined processing of USR 2/3/4/5/6 formats into a single
       file. The previous implementation did not support conversion
-      between USR 2/3 and 4/5/6 or between 4/5/6 and 2/3 beause of
-      the seperation in processing between lowranceusr.cc and
+      between USR 2/3 and 4/5/6 or between 4/5/6 and 2/3 because of
+      the separation in processing between lowranceusr.cc and
       lowranceusr4.cc.
 
   USR Background Information
@@ -60,7 +60,7 @@
 
       User Data File version 4 - USRv4
         Seems to be the best option for transferring data from older Lowrance units.
-        Many of the counts (Number of Waypoints, Number of Routes, etc) were exanded from
+        Many of the counts (Number of Waypoints, Number of Routes, etc) were expanded from
         16-bit integer values (maximum value of 65,535) to 32-bit (maxumum value 2,147,483,647)
         USRv4 and above support a maximum of 20,000 trail-points (actually 24K and change).
         USRv4 and above and GPX support trails with trail-segments.

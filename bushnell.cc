@@ -35,7 +35,7 @@ arglist_t bushnell_args[] = {
 };
 
 // Apparently, the icons are undocumented, so we made up names,
-// preferring them to be consistent with other brands where possiblde.
+// preferring them to be consistent with other brands where possible.
 
 typedef struct  {
   const signed int symbol;
@@ -75,7 +75,7 @@ static icon_mapping_t bushnell_icons[] = {
   { 0x19, "Blue Diamond Checkmark" }, //  undocumented.
 
   { 0x1a, "Camera" },
-  { 0x1b, "Restaraunt" }, // "Fork/Knife (meal place?)"
+  { 0x1b, "Restaurant" }, // "Fork/Knife (meal place?)"
   { 0x1c, "Restroom" }, // (man & Woman icon)"
   { 0x1d, "RV Park" }, // "Bus or RV (RV campground?)"
   { 0x1e, "Potable Water" }, // (faucet/glass or bucket)"
@@ -83,19 +83,19 @@ static icon_mapping_t bushnell_icons[] = {
   { 0x20, "Anchor in square" },
   { 0x21, "Boat ramp/launch" },
   { 0x22, "Anchor" },
-  { 0x23, "Bouy" },
+  { 0x23, "Buoy" },
   { 0x24, "Man Overboard?" },
   { 0x25, "Snow Skiing" },
-  { 0x26, "Mouantin/Mountain Peak" },
+  { 0x26, "Mountain/Mountain Peak" },
   { 0x27, "Turkey Tracks/animal tracks" },
 
-  { 0x28, "Bank" }, // "Cash (ATM MAybe)"
+  { 0x28, "Bank" }, // "Cash (ATM Maybe)"
   { 0x29, "Bar" }, // "Martini undocumented"
   { 0x2a, "Lighthouse" },
 
   { 0x2b, "Tent" },
 
-  { 0x2c, "Cresent Wrench or can opener" },
+  { 0x2c, "Crescent Wrench or can opener" },
 
   { 0x2d, "School" }, //? White Building with tunnel looking door and flag on top."
   { 0x2f, "Information" }, // "i  (info/internet maybe?)"
@@ -117,9 +117,9 @@ static icon_mapping_t bushnell_icons[] = {
   { 0x3b, "Officer? Looks like man leaned over holding blue cube..." },
   { 0x3c, "Parking" }, //"Car Parked"
   { 0x3d, "Airport" },
-  { 0x3e, "Bus Terminal" }, // (guess) Loks like Bus under canopy."
+  { 0x3e, "Bus Terminal" }, // (guess) Looks like Bus under canopy."
   { 0x3f, "Red Cross" },
-  { 0x40, "Red Buidling with flag, Fire Station maybe." },
+  { 0x40, "Red Building with flag, Fire Station maybe." },
   { 0x41, "Bus" },
   { 0x42, "Officer" }, // "see 3b: duplicate"
   { 0x43, "Railroad" },

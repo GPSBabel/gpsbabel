@@ -245,7 +245,7 @@ my_read()
         bool ok;
         int fieldIdx = opt_name_fields.at(oidx).toInt(&ok);
         if (ok) {
-          // retrieve name commponent from given field number
+          // retrieve name component from given field number
           check_field_index(fieldIdx);
         } else {
           // retrieve name component from given field name.

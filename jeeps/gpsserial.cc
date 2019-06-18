@@ -649,7 +649,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
     return gps_errno;
   }
 
-  // Acnowledge new speed
+  // Acknowledge new speed
   if (!GPS_Send_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }

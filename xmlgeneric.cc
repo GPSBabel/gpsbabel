@@ -111,7 +111,7 @@ xml_run_parser(QXmlStreamReader& reader)
       }
       if (codec == nullptr) {
         // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we
-        // should assume UTF-8 in absense of other informations. Users can
+        // should assume UTF-8 in absence of other information. Users can
         // EASILY override this with xml_init().
         codec = QTextCodec::codecForName("UTF-8");
       }

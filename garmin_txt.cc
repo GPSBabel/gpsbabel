@@ -352,7 +352,7 @@ print_position(const Waypoint* wpt)
 
   if (! valid) {
     gbfprintf(fout, "#####\n");
-    fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+    fatal(MYNAME ": %s (%s) is outside of convertible area \"%s\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
           pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
           gt_get_mps_grid_longname(grid_index, MYNAME));
@@ -1377,7 +1377,7 @@ garmin_txt_read()
       parse_track_header();
     } else if (case_ignore_strcmp(cin, "Map") == 0) /* do nothing */ ;
     else {
-      fatal(MYNAME ": Unknwon identifier (%s) at line %d!\n", cin, current_line);
+      fatal(MYNAME ": Unknown identifier (%s) at line %d!\n", cin, current_line);
     }
 
     /* flush pending data */

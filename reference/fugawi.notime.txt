@@ -5,7 +5,7 @@
 # Waypoint name
 # Waypoint comment
 # Waypoint description
-# Latitude in Degree and decimals (soutern hemisphere has neg. degrees)
+# Latitude in Degree and decimals (southern hemisphere has neg. degrees)
 # Longitude in degree and decimals (neg. numbers: west of Greenwich)
 # Height in meters
 GCEBB,Mountain Bike Heaven by susy1313,,35.9720333,-87.1347000,0.0

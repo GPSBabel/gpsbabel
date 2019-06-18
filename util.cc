@@ -220,9 +220,9 @@ QString ugetenv(const char* env_var) {
  * Allocate a string using a format list with optional arguments
  * Returns -1 on error.
  * If return value is anything else, *strp will be populated with an
- * allocated string containging the formatted buffer.
+ * allocated string containing the formatted buffer.
  *
- * Freeing that is the responsbility of the caller.
+ * Freeing that is the responsibility the caller.
  */
 
 int
@@ -310,7 +310,7 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
     } else if (outsize == bufsize - 1) {
       /* This is ambiguous. May mean that the output string
        * exactly fits, but on some systems the output string
-       * may have been trucated. We can't tell.
+       * may have been truncated. We can't tell.
        * Just double the buffer size for next time.
        */
       nextsize = bufsize * 2;
@@ -798,7 +798,7 @@ get_cache_icon(const Waypoint* waypointp)
     return "Multi-Cache";
   case gt_event:
     return "Event Cache";
-  case gt_suprise:
+  case gt_surprise:
     return "Unknown Cache";
   case gt_webcam:
     return "Webcam Cache";
@@ -1742,7 +1742,7 @@ list_codecs()
       maxlen = codec->name().size();
     }
   }
-  info << "Avaialble Codecs:" << endl;
+  info << "Available Codecs:" << endl;
   info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
   for (auto mib : mibs) {
     auto codec = QTextCodec::codecForMib(mib);

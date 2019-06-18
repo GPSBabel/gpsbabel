@@ -74,11 +74,11 @@ private:
       "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
     },
     {
-      "hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
+      "hdopandvdop", &andopt, "Link hdop and vdop suppression with AND",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "sat", &satopt, "Minimium sats to keep points",
+      "sat", &satopt, "Minimum sats to keep points",
       "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
     },
     {

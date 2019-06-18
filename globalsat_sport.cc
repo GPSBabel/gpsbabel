@@ -22,7 +22,7 @@
 /*
  * This is the bridge between the GPSBabel and globalsat sport devices
  * gh625XT. Globalsat has a few devices under the sport brand and they
- * are using a similar USB serial protocal.
+ * are using a similar USB serial protocol.
  * Currently only gh625XT is supported by this driver but the code could
  * extended (maybe autodetect) support more devices in the future.
  *
@@ -52,8 +52,8 @@ static char* track = nullptr;                     // if not 0 only download this
 
 static char* opt_dump_file = nullptr;	            // dump raw data to this file (optional)
 static char* opt_input_dump_file = nullptr;    // if true input is from a dump-file instead of serial console
-static gbfile* dumpfile = nullptr;             // used for creating bin/RAW datadump files, usefull for testing
-static gbfile* in_file = nullptr;              // used for reading from bin/RAW datadump files, usefull for testing
+static gbfile* dumpfile = nullptr;             // used for creating bin/RAW datadump files, useful for testing
+static gbfile* in_file = nullptr;              // used for reading from bin/RAW datadump files, useful for testing
 
 static
 arglist_t globalsat_args[] = {
@@ -91,7 +91,7 @@ typedef enum {
   HeaderTypeLaps = 0xAA,
   HeaderTypeTrackPoints = 0x55,
 
-  ResponseInsuficientMemory = 0x95,
+  ResponseInsufficientMemory = 0x95,
   ResponseResendTrackSection = 0x92,
   ResponseSendTrackFinish = 0x9A
 } globalsat_commands_e;
@@ -260,7 +260,7 @@ recv_byte()
     int bytes = gbfread(&result, 1, 1, in_file);
     is_fatal((bytes != 1), MYNAME ": read error");
   }
-  // Check if byte sould be dumped also into a file
+  // Check if byte should be dumped also into a file
   if (dumpfile) {
     gbfwrite(&result, 1, 1, dumpfile);
   }
@@ -377,7 +377,7 @@ static void
 globalsat_probe_device()
 {
   //TODO try this first if fails try with false, to support 561
-  isSizeSwapped = false;		//all devices but gh561 since gh561 has swaped size.
+  isSizeSwapped = false;		//all devices but gh561 since gh561 has swapped size.
 
   globalsat_send_simple(CommandWhoAmI);
 
@@ -408,7 +408,7 @@ rd_init(const QString& fname)
       printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n",opt_dump_file);
     } else {
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " rd_init() creating dumpfile %s for writing binnary copy of serial stream\n",opt_dump_file);
+        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n",opt_dump_file);
       }
     }
   }
@@ -568,7 +568,7 @@ track_read()
         uint8_t trackDeviceCommand;
         int track_length;
         uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
-        is_fatal(((track_length == 0) || (track_payload == nullptr)) , "tracklength in 0 bytes or payload nonexistant");
+        is_fatal(((track_length == 0) || (track_payload == nullptr)) , "track length is 0 bytes or payload nonexistent");
         //      printf("Got track package!!! Train data\n");
 
         uint8_t* dbtrain = track_payload;
@@ -623,7 +623,7 @@ track_read()
         while (total_laps_left > 0) {
           globalsat_send_simple(CommandGetNextTrackSection);
           track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
-          is_fatal(((track_length == 0) || (track_payload == nullptr)), "tracklength in 0 bytes or payload nonexistant");
+          is_fatal(((track_length == 0) || (track_payload == nullptr)), "track length is 0 bytes or payload nonexistent");
           //	printf("Got track package!!! Laps data\n");
 
           uint8_t* hdr = track_payload;
@@ -755,8 +755,8 @@ track_read()
               point.PwrCadence = be_readu16(ghpoint+21);
               point.Power = be_readu16(ghpoint+23);
 
-              //Time from last point in sec's * 10 (e.g. point.lntervalTime is sec multiplied witn 10)
-              // convert to milisecs
+              //Time from last point in sec's * 10 (e.g. point.IntervalTime is sec multiplied with 10)
+              // convert to millisecs
               gpsbabel::DateTime gpsbabeltime = gpsDateTime.addMSecs(point.IntervalTime*100);
               gpsbabeltime.setTimeSpec(Qt::UTC);
               gpsDateTime.setDate(gpsbabeltime.date());
@@ -828,7 +828,7 @@ data_read()
   }
 }
 
-// This used the serial comunication to the watch
+// This used the serial communication to the watch
 ff_vecs_t globalsat_sport_vecs = {
   ff_type_serial,		//type
   FF_CAP_RW_ALL,		//cap[3]
@@ -847,7 +847,7 @@ ff_vecs_t globalsat_sport_vecs = {
 };
 
 // This reads from a RAW dump bile from a watch
-// Usefull for testing generata a dumpfile with
+// Useful for testing generated dumpfile with
 // gpsbabel -i globalsat,dump-file=<dumpfilename> -f /dev/ttyUSB0 -o gpx,garminextensions -F <1:st gpx file name>
 // gpsbabel -i globalsat-bin -f <dumpfilename> -o gpx,garminextensions -F <2:nd gpx file name>
 ff_vecs_t globalsat_sport_fvecs = {

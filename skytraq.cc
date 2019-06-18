@@ -1521,7 +1521,7 @@ static int getPoiByName(char* name)
 }
 #endif
 // Convert lla (lat, lng, alt) to ECEF
-// Algorith taken from these sources:
+// Algorithm taken from these sources:
 // http://www.mathworks.com/matlabcentral/fileexchange/7942-covert-lat-lon-alt-to-ecef-cartesian
 // http://en.wikipedia.org/wiki/Geodetic_system#From_ECEF_to_geodetic
 // http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
@@ -1667,7 +1667,7 @@ miniHomer_read()
     npoi++;
   }
   if (npoi == 0) {				// do not read if POIs are set (consider set & read distinct operations)
-    skytraq_read();				// first read tracks (if not supressed by cmd line params)
+    skytraq_read();				// first read tracks (if not suppressed by cmd line params)
     // we need this call it initialized waypoint list etc...
     skytraq_rd_deinit(); 		// skytraq_read called system_reset, which changes the baud rate.
 

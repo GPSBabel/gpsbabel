@@ -123,7 +123,7 @@
 #define GPS_IFD_TAG_DATESTAMP 0x001D
 
 struct ExifTag {
-  uint16_t id{0};           // tag that identifieds the field.
+  uint16_t id{0};           // tag that identifies the field.
   uint16_t type{0};         // field type.
   uint32_t count{0};        // number of values. Note that Count is not the total number of bytes.
   uint32_t offset{0};       // byte offset relative to beginning of TIFF file to value (only for values longer than 4 bytes).
