@@ -365,11 +365,11 @@ format_garmin_xt_proc_atrk()
     double LatF = Lat;
     if (LatF>8388608) {
       LatF -= 16777216;
-    };
+    }
     double LonF = Lon;
     if (LonF>8388608) {
       LonF -= 16777216;
-    };
+    }
     double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint

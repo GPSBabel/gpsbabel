@@ -40,4 +40,4 @@ private:
   QTextCodec* codec_{nullptr};
 };
 
-}; // namespace
+} // namespace

@@ -71,7 +71,7 @@ public:
     disableDonateDialog_(false),
     donateSplashed_(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
   {
-  };
+  }
 
   void saveSettings(QSettings& st)
   {

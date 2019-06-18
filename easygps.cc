@@ -136,7 +136,6 @@ data_read()
         break;
       default:
         printf("Unknown tag %x\n", tag);
-        ;
       }
     }
     if (!link.url_.isEmpty() || !link.url_link_text_.isEmpty()) {

@@ -110,15 +110,17 @@ public:
   void setValue(QVariant v)
   {
     value_ = v;
-  };
+  }
+
   void setSelected(bool v)
   {
     isSelected_ = v;
-  };
+  }
+
   QString getHtml() const
   {
     return html_;
-  };
+  }
 
 private:
   QString name_;
@@ -155,7 +157,7 @@ public:
   {
     inputOptions_.clear();
     outputOptions_.clear();
-  };
+  }
 
   Format(const QString& name,
          const QString& description,
@@ -196,93 +198,107 @@ public:
   {
   }
 
-  ~Format() {};
+  ~Format() {}
 
   bool isReadWaypoints() const
   {
     return readWaypoints_;
-  };
+  }
+
   bool isReadTracks() const
   {
     return readTracks_;
-  };
+  }
+
   bool isReadRoutes() const
   {
     return readRoutes_;
-  };
+  }
+
   bool isReadSomething() const
   {
     return isReadWaypoints() || isReadTracks() || isReadRoutes();
-  };
+  }
 
   bool isWriteWaypoints() const
   {
     return writeWaypoints_;
-  };
+  }
+
   bool isWriteTracks() const
   {
     return writeTracks_;
-  };
+  }
+
   bool isWriteRoutes() const
   {
     return writeRoutes_;
-  };
+  }
+
   bool isWriteSomething() const
   {
     return isWriteWaypoints() || isWriteTracks() || isWriteRoutes();
-  };
+  }
 
   QString getName() const
   {
     return name_;
-  };
+  }
+
   QString getDescription() const
   {
     return description_;
-  };
+  }
+
   QString getHtml() const
   {
     return html_;
-  };
+  }
+
   QStringList getExtensions() const
   {
     return extensions_;
-  };
+  }
+
   const QList<FormatOption>& getInputOptions()  const
   {
     return inputOptions_;
-  };
+  }
+
   const QList<FormatOption>& getOutputOptions() const
   {
     return outputOptions_;
-  };
+  }
 
   QList<FormatOption>* getInputOptionsRef()
   {
     return &inputOptions_;
-  };
+  }
+
   QList<FormatOption>* getOutputOptionsRef()
   {
     return &outputOptions_;
-  };
+  }
 
   bool isDeviceFormat() const
   {
     return deviceFormat_;
-  };
+  }
+
   bool isFileFormat() const
   {
     return   fileFormat_;
-  };
+  }
 
   bool isHidden() const
   {
     return hidden_;
-  };
+  }
+
   void setHidden(bool state)
   {
     hidden_ = state;
-  };
+  }
 
   void saveSettings(QSettings& settings);
   void restoreSettings(QSettings& settings);

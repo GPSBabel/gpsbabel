@@ -60,6 +60,6 @@ public:
 
 };
 
-}; // namespace gpsbabel
+} // namespace gpsbabel
 
 #endif // SRC_CORE_FILE_INCLUDED_H_

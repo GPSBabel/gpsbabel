@@ -123,25 +123,26 @@ ProcessWaitDialog::~ProcessWaitDialog()
 bool ProcessWaitDialog::getExitedNormally()
 {
   return (errorString_.length() == 0);
-};
+}
 
 //------------------------------------------------------------------------
 QString ProcessWaitDialog::getErrorString()
 {
   return errorString_;
-};
+}
 
 //------------------------------------------------------------------------
 int ProcessWaitDialog::getExitCode()
 {
   return ecode_;
-};
+}
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::stopClickedX()
 {
   process_->terminate();
-};
+}
+
 //------------------------------------------------------------------------
 void ProcessWaitDialog::timeoutX()
 {
@@ -157,7 +158,7 @@ void ProcessWaitDialog::timeoutX()
     timer_->stop();
     accept();
   }
-};
+}
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::errorX(QProcess::ProcessError err)
@@ -165,7 +166,7 @@ void ProcessWaitDialog::errorX(QProcess::ProcessError err)
   errorString_ = processErrorString(err);
   timer_->stop();
   accept();
-};
+}
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
@@ -176,7 +177,7 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
   }
   timer_->stop();
   accept();
-};
+}
 
 
 //------------------------------------------------------------------------
@@ -205,16 +206,16 @@ void ProcessWaitDialog::readyReadStandardErrorX()
 {
   QByteArray d = process_->readAllStandardError();
   appendToText(d.data());
-};
+}
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::readyReadStandardOutputX()
 {
   QByteArray d = process_->readAllStandardOutput();
   appendToText(d.data());
-};
+}
 
 void ProcessWaitDialog::closeEvent(QCloseEvent* event)
 {
   event->ignore();
-};
+}
