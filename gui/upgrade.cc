@@ -234,7 +234,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
         qDebug() << "redirect to " << redirectUrl.toString();
       }
       // Change the url for the next update check.
-      // TOODO: kick off another update check.
+      // TODO: kick off another update check.
       upgradeUrl_ = redirectUrl;
       replyId_ = nullptr;
       reply->deleteLater();

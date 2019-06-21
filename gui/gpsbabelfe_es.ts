@@ -212,7 +212,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="advui.ui" line="52"/>
         <source>Debugging diagnostics.  
-Higher number provides more deitaled diagnostics.</source>
+Higher number provides more detailed diagnostics.</source>
         <translation>Depurar errores. Cuanto mayor es el número, el diagnóstico es más detallado.</translation>
     </message>
     <message>
@@ -535,31 +535,31 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="565"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="593"/>
+        <location filename="mainwindow.cc" line="591"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="657"/>
+        <location filename="mainwindow.cc" line="655"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="668"/>
+        <location filename="mainwindow.cc" line="666"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="689"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
@@ -568,109 +568,109 @@ This program cannot continue.</source>
         <translation type="vanished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="692"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="695"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="698"/>
+        <location filename="mainwindow.cc" line="696"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="719"/>
+        <location filename="mainwindow.cc" line="717"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="720"/>
+        <location filename="mainwindow.cc" line="718"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="721"/>
+        <location filename="mainwindow.cc" line="719"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="816"/>
+        <location filename="mainwindow.cc" line="814"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="820"/>
+        <location filename="mainwindow.cc" line="839"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="835"/>
+        <location filename="mainwindow.cc" line="833"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="874"/>
+        <location filename="mainwindow.cc" line="872"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="881"/>
+        <location filename="mainwindow.cc" line="879"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="886"/>
+        <location filename="mainwindow.cc" line="884"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="902"/>
+        <location filename="mainwindow.cc" line="900"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>El proceso &quot;%1&quot; no comenzó</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="916"/>
+        <location filename="mainwindow.cc" line="914"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1058"/>
+        <location filename="mainwindow.cc" line="1056"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1068"/>
+        <location filename="mainwindow.cc" line="1066"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1188"/>
+        <location filename="mainwindow.cc" line="1186"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1212"/>
+        <location filename="mainwindow.cc" line="1210"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1255"/>
+        <location filename="mainwindow.cc" line="1253"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1257"/>
+        <location filename="mainwindow.cc" line="1255"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -928,28 +928,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="224"/>
-        <location filename="filterwidgets.cc" line="225"/>
-        <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="224"/>
         <location filename="filterwidgets.cc" line="226"/>
-        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="225"/>
-        <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="230"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
@@ -1171,13 +1171,13 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
         <translation>Parar el proceso</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="156"/>
+        <location filename="processwait.cc" line="157"/>
         <source>Process did not terminate successfully</source>
         <translation>El proceso no terminó como se esperaba</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="175"/>
-        <source>Process crashed whle running</source>
+        <location filename="processwait.cc" line="176"/>
+        <source>Process crashed while running</source>
         <translation>El proceso falló cuando estaba ejecutándose</translation>
     </message>
 </context>
@@ -1275,7 +1275,7 @@ La calidad de los resultados variará dependiendo del número de puntos que cont
     </message>
     <message>
         <location filename="rttrkui.ui" line="121"/>
-        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a wierd thing and place each waypoint on a separate day. 
+        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
         <translation>La inversión es realizada de la manera más simple posible. Los tiempos de marca de los puntos originales se guardan tal cual de tal forma que el trazado o la ruta resultantes tendrá características curiosas cuando el tiempo va para atrás. Esto hace que, sobre todo, Magellan Mapasend haga cosas raras como poner cada punto de interés en un día diferente. 
 Además, si se utiliza este filtro para navegar por una ruta invertida que se mueve, por ejemplo una rampa de salida o una calle de sentido único, puedes encontrarte con un viaje poco apacible. Al programa le importan los tiempos de marca </translation>
@@ -1338,35 +1338,40 @@ This option changes the time of all trackpoints. This might be useful if your tr
         <translation>Mover</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="83"/>
-        <location filename="trackui.ui" line="275"/>
+        <location filename="trackui.ui" line="93"/>
+        <source>weeks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="117"/>
+        <location filename="trackui.ui" line="339"/>
         <source>days</source>
         <translation>días</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="97"/>
+        <location filename="trackui.ui" line="141"/>
         <source>hours</source>
         <translation>horas</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="111"/>
-        <location filename="trackui.ui" line="265"/>
+        <location filename="trackui.ui" line="165"/>
+        <location filename="trackui.ui" line="329"/>
         <source>mins</source>
         <translation>minutos</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="125"/>
+        <location filename="trackui.ui" line="189"/>
         <source>secs</source>
         <translation>segundos</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="140"/>
-        <location filename="trackui.ui" line="155"/>
+        <location filename="trackui.ui" line="204"/>
+        <location filename="trackui.ui" line="219"/>
         <source>Use track pts. after this time. </source>
         <translation>Usar sólo los puntos del trazado grabados después de esta hora.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="143"/>
+        <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
 This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
@@ -1375,50 +1380,50 @@ This option is used along with the stop to discard trackpoints that were recorde
 Esta opción se utiliza junto con la de parar (stop) para descartar puntos que fueron grabados fuera del período de tiempo deseado. La opción especifica el inicio del período. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="148"/>
+        <location filename="trackui.ui" line="212"/>
         <source>Start</source>
         <translation>Comenzar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="162"/>
+        <location filename="trackui.ui" line="226"/>
         <source>If checked, time specified here is based on this computer&apos;s current time zone. </source>
         <translation>Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="165"/>
+        <location filename="trackui.ui" line="229"/>
         <source>If checked, the times specified here are based on the local computer&apos;s time zone.  Otherwise it is UTC.</source>
         <translation>Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. En caso contrario, es UTC.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="168"/>
+        <location filename="trackui.ui" line="232"/>
         <source>Local Time</source>
         <translation>Hora local</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="181"/>
-        <location filename="trackui.ui" line="196"/>
+        <location filename="trackui.ui" line="245"/>
+        <location filename="trackui.ui" line="260"/>
         <source>Use track pts before this time. </source>
         <translation>Usa los puntos del trazado tomados antes de esta hora. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="184"/>
+        <location filename="trackui.ui" line="248"/>
         <source> Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
         <translation>Usa los puntos del trazado tomados antes de esta marca de tiempo. Esta opción se usa junto con la opción comenzar para descartar todos los puntos no tomados en determinado período temporal. Esta opción define el final del período. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="189"/>
+        <location filename="trackui.ui" line="253"/>
         <source>Stop</source>
         <translation>Parar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="203"/>
+        <location filename="trackui.ui" line="267"/>
         <source>Pack all tracks into one. </source>
         <translation>Junta todos los trazados en uno. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="206"/>
+        <location filename="trackui.ui" line="270"/>
         <source>Pack all tracks into one.
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
@@ -1431,17 +1436,17 @@ Esta opción hace que todos los trazados se añadan uno tras otros hasta formar 
 Esta opción es muy útil para juntar trazados que se interrumpieron por un error en el equipo o por una parada para descansar. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="213"/>
+        <location filename="trackui.ui" line="277"/>
         <source>Pack</source>
         <translation>Juntar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="220"/>
+        <location filename="trackui.ui" line="284"/>
         <source>Merge multiple tracks for the same way.</source>
         <translation>Unir diversos trazados repetitivos.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="223"/>
+        <location filename="trackui.ui" line="287"/>
         <source> Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
@@ -1450,12 +1455,12 @@ This option puts all track points from all tracks into a single track and sorts 
 Esta opción pone todos los puntos de todos los trazados en un único trazado y los ordena por la marca de tiempo. Los puntos con idénticas marcas de tiempo son borrados.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="228"/>
+        <location filename="trackui.ui" line="292"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="235"/>
+        <location filename="trackui.ui" line="299"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
         <translation>Dividir trazados por fecha</translation>
@@ -1478,42 +1483,42 @@ Si la entrada tiene múltiples trazados, júntalos antes de dividirlos por día.
         <translation type="obsolete">Dividir</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="254"/>
+        <location filename="trackui.ui" line="318"/>
         <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido si el tiempo entre dos puntos es mayor que el parámetro.   Si &quot;zero&quot;, el trazado será dividido por día.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="270"/>
+        <location filename="trackui.ui" line="334"/>
         <source>hrs</source>
         <translation>hrs</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="285"/>
+        <location filename="trackui.ui" line="349"/>
         <source>Split by Dist.</source>
         <translation>Dividir trazados por distancia.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="297"/>
+        <location filename="trackui.ui" line="361"/>
         <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido en varios trazados si la distancia entre dos puntos es mayor que el parámetro dado.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="308"/>
+        <location filename="trackui.ui" line="372"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="313"/>
+        <location filename="trackui.ui" line="377"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="318"/>
+        <location filename="trackui.ui" line="382"/>
         <source>km</source>
         <translation>Km</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="323"/>
+        <location filename="trackui.ui" line="387"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
@@ -1535,42 +1540,42 @@ Esta opción fija el estatus de las correcciones GPS de todos los puntos del tra
 Esta opción es muy útil cuando se trata de convertir de un formato que no contiene ninguna corrección GPS a uno que la requiere.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="341"/>
+        <location filename="trackui.ui" line="405"/>
         <source>GPS Fixes</source>
         <translation>Correcciones GPS</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="349"/>
+        <location filename="trackui.ui" line="413"/>
         <source>none</source>
         <translation>ninguno</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="354"/>
+        <location filename="trackui.ui" line="418"/>
         <source>pps</source>
         <translation>pps</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="359"/>
+        <location filename="trackui.ui" line="423"/>
         <source>dgps</source>
         <translation>dgps</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="364"/>
+        <location filename="trackui.ui" line="428"/>
         <source>3d</source>
         <translation>3d</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="369"/>
+        <location filename="trackui.ui" line="433"/>
         <source>2d</source>
         <translation>2d</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="407"/>
+        <location filename="trackui.ui" line="471"/>
         <source>Synthesize course.</source>
         <translation>Sintetizar el rumbo.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="410"/>
+        <location filename="trackui.ui" line="474"/>
         <source>Synthesize course.
 
 This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
@@ -1579,31 +1584,31 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
 Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre el rumbo o para puntos de trazado calculados con el filtro interpolar. El rumbo de cada punto es simplemente la dirección desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de 0 grados.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="415"/>
+        <location filename="trackui.ui" line="479"/>
         <source>Course</source>
         <translation>Dirección</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="392"/>
+        <location filename="trackui.ui" line="456"/>
         <source>Synthesize speed. </source>
         <translation>Calcular velocidad. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="242"/>
+        <location filename="trackui.ui" line="306"/>
         <source>Split by Time</source>
         <translation>Dividir trazados en función del tiempo</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="395"/>
+        <location filename="trackui.ui" line="459"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
         <translation>Sintetizar la veloclidad.
 
 Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre la velocidad o para puntos de trazado calculados con el filtro interpolar. La velocidad de cada punto es simplemente la media (distancia partido por tiempo) desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de &quot;desconocido&quot;.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="400"/>
+        <location filename="trackui.ui" line="464"/>
         <source>Speed</source>
         <translation>Velocidad</translation>
     </message>

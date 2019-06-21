@@ -173,7 +173,7 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 {
   ecode_ = exitCode;
   if (es == QProcess::CrashExit) {
-    errorString_ = QString(tr("Process crashed whle running"));
+    errorString_ = QString(tr("Process crashed while running"));
   }
   timer_->stop();
   accept();

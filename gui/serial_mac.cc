@@ -1,6 +1,6 @@
 // Borrowed liberally (as allowed by license) from
 // http://developer.apple.com/samplecode/SerialPortSample/index.html
-// This really is a slash-and-burn; no attempt was to make it very "C++-iike"
+// This really is a slash-and-burn; no attempt was to make it very "C++-like"
 
 // Apple's copyright blob:
 /*

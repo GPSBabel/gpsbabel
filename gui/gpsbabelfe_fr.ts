@@ -153,7 +153,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="advui.ui" line="52"/>
         <source>Debugging diagnostics.  
-Higher number provides more deitaled diagnostics.</source>
+Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -470,138 +470,138 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cc" line="565"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="593"/>
+        <location filename="mainwindow.cc" line="591"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="657"/>
+        <location filename="mainwindow.cc" line="655"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="668"/>
+        <location filename="mainwindow.cc" line="666"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="689"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="692"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="695"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="698"/>
+        <location filename="mainwindow.cc" line="696"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="719"/>
+        <location filename="mainwindow.cc" line="717"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="720"/>
+        <location filename="mainwindow.cc" line="718"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="721"/>
+        <location filename="mainwindow.cc" line="719"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="816"/>
+        <location filename="mainwindow.cc" line="814"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="820"/>
+        <location filename="mainwindow.cc" line="839"/>
         <source>Options for %1</source>
         <translation>Options pour %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="835"/>
+        <location filename="mainwindow.cc" line="833"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="874"/>
+        <location filename="mainwindow.cc" line="872"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="881"/>
+        <location filename="mainwindow.cc" line="879"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="886"/>
+        <location filename="mainwindow.cc" line="884"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="902"/>
+        <location filename="mainwindow.cc" line="900"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="916"/>
+        <location filename="mainwindow.cc" line="914"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1058"/>
+        <location filename="mainwindow.cc" line="1056"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1068"/>
+        <location filename="mainwindow.cc" line="1066"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1188"/>
+        <location filename="mainwindow.cc" line="1186"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1212"/>
+        <location filename="mainwindow.cc" line="1210"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1255"/>
+        <location filename="mainwindow.cc" line="1253"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1257"/>
+        <location filename="mainwindow.cc" line="1255"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -851,28 +851,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="224"/>
-        <location filename="filterwidgets.cc" line="225"/>
-        <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="226"/>
+        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Tracks</source>
         <translation type="unfinished">Traces</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="224"/>
         <location filename="filterwidgets.cc" line="226"/>
-        <location filename="filterwidgets.cc" line="227"/>
+        <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Waypoints</source>
         <translation type="unfinished">Waypoints</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="225"/>
-        <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="229"/>
+        <location filename="filterwidgets.cc" line="230"/>
         <source>Routes</source>
         <translation type="unfinished">Routes</translation>
     </message>
@@ -1091,13 +1091,13 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="156"/>
+        <location filename="processwait.cc" line="157"/>
         <source>Process did not terminate successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="175"/>
-        <source>Process crashed whle running</source>
+        <location filename="processwait.cc" line="176"/>
+        <source>Process crashed while running</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1184,7 +1184,7 @@ The quality of the results will vary depending on the density of points in the o
     </message>
     <message>
         <location filename="rttrkui.ui" line="121"/>
-        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a wierd thing and place each waypoint on a separate day. 
+        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1245,85 +1245,90 @@ This option changes the time of all trackpoints. This might be useful if your tr
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="83"/>
-        <location filename="trackui.ui" line="275"/>
+        <location filename="trackui.ui" line="93"/>
+        <source>weeks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="117"/>
+        <location filename="trackui.ui" line="339"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="97"/>
+        <location filename="trackui.ui" line="141"/>
         <source>hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="111"/>
-        <location filename="trackui.ui" line="265"/>
+        <location filename="trackui.ui" line="165"/>
+        <location filename="trackui.ui" line="329"/>
         <source>mins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="125"/>
+        <location filename="trackui.ui" line="189"/>
         <source>secs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="140"/>
-        <location filename="trackui.ui" line="155"/>
+        <location filename="trackui.ui" line="204"/>
+        <location filename="trackui.ui" line="219"/>
         <source>Use track pts. after this time. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="143"/>
+        <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
 This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="148"/>
+        <location filename="trackui.ui" line="212"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="162"/>
+        <location filename="trackui.ui" line="226"/>
         <source>If checked, time specified here is based on this computer&apos;s current time zone. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="165"/>
+        <location filename="trackui.ui" line="229"/>
         <source>If checked, the times specified here are based on the local computer&apos;s time zone.  Otherwise it is UTC.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="168"/>
+        <location filename="trackui.ui" line="232"/>
         <source>Local Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="181"/>
-        <location filename="trackui.ui" line="196"/>
+        <location filename="trackui.ui" line="245"/>
+        <location filename="trackui.ui" line="260"/>
         <source>Use track pts before this time. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="184"/>
+        <location filename="trackui.ui" line="248"/>
         <source> Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="189"/>
+        <location filename="trackui.ui" line="253"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="203"/>
+        <location filename="trackui.ui" line="267"/>
         <source>Pack all tracks into one. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="206"/>
+        <location filename="trackui.ui" line="270"/>
         <source>Pack all tracks into one.
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
@@ -1332,139 +1337,139 @@ This option is most useful for rejoining tracks that might have been interrupted
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="213"/>
+        <location filename="trackui.ui" line="277"/>
         <source>Pack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="220"/>
+        <location filename="trackui.ui" line="284"/>
         <source>Merge multiple tracks for the same way.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="223"/>
+        <location filename="trackui.ui" line="287"/>
         <source> Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="228"/>
+        <location filename="trackui.ui" line="292"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="235"/>
+        <location filename="trackui.ui" line="299"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="254"/>
+        <location filename="trackui.ui" line="318"/>
         <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="270"/>
+        <location filename="trackui.ui" line="334"/>
         <source>hrs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="285"/>
+        <location filename="trackui.ui" line="349"/>
         <source>Split by Dist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="297"/>
+        <location filename="trackui.ui" line="361"/>
         <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="308"/>
+        <location filename="trackui.ui" line="372"/>
         <source>ft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="313"/>
+        <location filename="trackui.ui" line="377"/>
         <source>m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="318"/>
+        <location filename="trackui.ui" line="382"/>
         <source>km</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="323"/>
+        <location filename="trackui.ui" line="387"/>
         <source>mi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="341"/>
+        <location filename="trackui.ui" line="405"/>
         <source>GPS Fixes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="349"/>
+        <location filename="trackui.ui" line="413"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="354"/>
+        <location filename="trackui.ui" line="418"/>
         <source>pps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="359"/>
+        <location filename="trackui.ui" line="423"/>
         <source>dgps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="364"/>
+        <location filename="trackui.ui" line="428"/>
         <source>3d</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="369"/>
+        <location filename="trackui.ui" line="433"/>
         <source>2d</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="407"/>
+        <location filename="trackui.ui" line="471"/>
         <source>Synthesize course.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="410"/>
+        <location filename="trackui.ui" line="474"/>
         <source>Synthesize course.
 
 This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="415"/>
+        <location filename="trackui.ui" line="479"/>
         <source>Course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="392"/>
+        <location filename="trackui.ui" line="456"/>
         <source>Synthesize speed. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="242"/>
+        <location filename="trackui.ui" line="306"/>
         <source>Split by Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="395"/>
+        <location filename="trackui.ui" line="459"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="400"/>
+        <location filename="trackui.ui" line="464"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
