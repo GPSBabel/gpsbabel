@@ -222,7 +222,7 @@ QString ugetenv(const char* env_var) {
  * If return value is anything else, *strp will be populated with an
  * allocated string containing the formatted buffer.
  *
- * Freeing that is the responsibility the caller.
+ * Freeing that is the responsibility of the caller.
  */
 
 int

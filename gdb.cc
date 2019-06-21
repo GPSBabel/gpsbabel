@@ -183,7 +183,7 @@ disp_summary(const gbfile* f)
 // not pushing that decision  down into gbfread.  This module is
 // still pretty messy and the points as to which fields are encode
 // which ways in which versions are not at all clear, leading to
-// encoding issues on read and leaks because of teh differences 
+// encoding issues on read and leaks because of the differences 
 // in calling conventions on who owns/destroys the result.
 
 #define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
