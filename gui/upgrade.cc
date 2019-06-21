@@ -174,7 +174,7 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
 // and are stored as strings. They may be of the form "1.6.0-beta20200413" 
 // which, if sorted as a string, will be after "1.6.0" which is bad. Use
 // this function to sort that out. (See what I did there? Bwaaaahah!) 
-bool UpgradeCheck::suggestUpgrade(QString from, QString to) 
+bool UpgradeCheck::suggestUpgrade(const QString& from, const QString& to) 
 {
   int fromIndex = 0;
   int toIndex = 0;
