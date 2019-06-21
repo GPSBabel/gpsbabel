@@ -29,11 +29,11 @@
  FILE FORMAT INFO
 =================
 
-File has csv extention, and is somewhat csv like creature...
+File has csv extension, and is somewhat csv like creature...
 All lines end with \r\n
 First line is a header line. It contains no nulls.
 Following lines are record lines. They are comma separated, but fields always
-have the exact same length (per field), and therfore, the commas are always
+have the exact same length (per field), and therefore, the commas are always
 at the exact same position on the line. Fields are padded with nulls, in case
 they have shorter value then the fixed field length.
 Two modes are available: basic and advanced.

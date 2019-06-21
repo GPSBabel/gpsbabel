@@ -228,7 +228,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
       gu->unit_version = le_read16(iresp.gusb_pkt.databuf+2);
     }
     /*
-     * My goodnesss, this is fragile.  During command syncup,
+     * My goodness, this is fragile.  During command syncup,
      * we need to know if we're at the end.  The 0xfd packet
      * is promised by Garmin engineering to be the last.
      */

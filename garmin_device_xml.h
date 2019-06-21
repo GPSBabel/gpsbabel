@@ -48,7 +48,7 @@ const gdx_info* gdx_find_file(char** dirlist);
 
 // This is so gross.   By the time we know it's not a USB device
 // and could be one of our devices, we're so deep into the callstack
-// that can't back out tracefully without bludgeoning most of the
+// that can't back out gracefully without bludgeoning most of the
 // (Mac|Lin|Win) x (USB|Serial) matrix.   Since we don't *really* want
 // to progress any further, we just longjump back to the caller...
 #include <csetjmp>

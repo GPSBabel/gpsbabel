@@ -29,7 +29,7 @@
 	in the data, i.e. only one data point shows a totally wrong longitude or latitude. Everything else in
 	the dataset seems ok, so I needed a way to sort out these errors. My solution is to calculate the speed
 	between successive points and drop points not between minspeed and maxspeed. This way I can sort out most
-	of this annoying bugs, a side effect is that if a minimum speed > 0 is set points with the same coodinates are also
+	of this annoying bugs, a side effect is that if a minimum speed > 0 is set points with the same coordinates are also
 	dropped.
 
 	Fileformat GoPal
@@ -147,7 +147,7 @@ gopal_rd_init(const QString& fname)
     } else if (filename.startsWith("A_")&&(filename.length()>10)) { // here we expect at least 10 letters: A_YYYYMMDD...
       datestr = filename.mid(2,8);
     }
-    // in buff we should now have something wich looks like a valid date starting with YYYYMMDD
+    // in buff we should now have something which looks like a valid date starting with YYYYMMDD
     /*ck = (char*)*/strptime(qPrintable(datestr), "%Y%m%d", &filenamedate);
     // if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
     // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);

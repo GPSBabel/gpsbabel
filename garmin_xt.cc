@@ -209,7 +209,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
 }
 
 /*
- * Decompose Last Waypoint Eleveation
+ * Decompose Last Waypoint Elevation
  */
 static void
 format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t TrackBlock[])

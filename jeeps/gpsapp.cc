@@ -523,7 +523,7 @@ static void GPS_A001(GPS_PPacket& packet)
           break;
 
           /*
-           * Observered on Quest 3.0, 27xx, 27x, 29x.
+           * Observed on Quest 3.0, 27xx, 27x, 29x.
            */
         case 120:
           gps_category_type = data;
@@ -2423,7 +2423,7 @@ static void GPS_D108_Send(UC* data, GPS_PWay way, int32* len)
 ** @param [w] len [int32 *] packet length
 **
 ** @return [void]
-** D109's and D110's are so simlar, we handle themw with the same code.
+** D109's and D110's are so similar, we handle them with the same code.
 ************************************************************************/
 static void GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid)
 {
@@ -4024,7 +4024,7 @@ int32 GPS_A300_Send(const char* port, GPS_PTrack* trk, int32 n)
     }
 
     if (!GPS_Get_Ack(fd, &tra, &rec)) {
-      GPS_Error("A300_Send: Pid_Trk_Data not acknowledgedn");
+      GPS_Error("A300_Send: Pid_Trk_Data not acknowledged");
       return FRAMING_ERROR;
     }
   }
@@ -4906,7 +4906,7 @@ int32 GPS_A400_Send(const char* port, GPS_PWay* way, int32 n)
     return gps_errno;
   }
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
-    GPS_Error("A400_Send: Prx start data not acknowledgedn");
+    GPS_Error("A400_Send: Prx start data not acknowledged");
     return FRAMING_ERROR;
   }
 
@@ -5990,7 +5990,7 @@ int32 GPS_A700_Get(const char* port, double* lat, double* lon)
 **
 ** @param [r] port [const char *] serial port
 ** @param [r] lat [double] latitude  (deg)
-** @param [r] lon [double] longitute (deg)
+** @param [r] lon [double] longitude (deg)
 **
 ** @return [int32] success
 ************************************************************************/
@@ -6856,7 +6856,7 @@ int32 GPS_A1007_Send(const char*,
       GPS_D1007_Send(data,clp[i],&len);
       break;
     default:
-      GPS_Error("A1007_Send: Unknown couse_lap type %d\n",
+      GPS_Error("A1007_Send: Unknown course_lap type %d\n",
                 gps_course_lap_type);
       return PROTOCOL_ERROR;
     }
@@ -7127,7 +7127,7 @@ int32 GPS_A1008_Send(const char*,
       GPS_D1012_Send(data,cpt[i],&len);
       break;
     default:
-      GPS_Error("GPS_A1008_Send: Unknown couse_point type %d\n",
+      GPS_Error("GPS_A1008_Send: Unknown course_point type %d\n",
                 gps_course_point_type);
       return PROTOCOL_ERROR;
     }

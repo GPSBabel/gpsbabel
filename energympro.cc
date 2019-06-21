@@ -145,8 +145,8 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
     qDebug() << "point.lntervalTime:" << point.lntervalTime;
   }
 
-  //Time from last point in sec's * 10 (e.g. point.lntervalTime is sec multiplied witn 10)
-  // convert to milisecs
+  //Time from last point in sec's * 10 (e.g. point.lntervalTime is sec multiplied with 10)
+  // convert to millisecs
   gpsbabel::DateTime gpsbabeltime = gpsDateTime.addMSecs(point.lntervalTime*100);
   gpsDateTime.setDate(gpsbabeltime.date());
   gpsDateTime.setTime(gpsbabeltime.time());

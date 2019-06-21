@@ -105,7 +105,7 @@ arglist_t tpo2_args[] = {
 };
 */
 //
-// Note that we've disabled the write capabilites for the tpo2
+// Note that we've disabled the write capabilities for the tpo2
 // format at present.  The "testo" tests were failing on some
 // platforms and there wasn't anyone willing to work on the problem.
 // If this is fixed in the future we can go back to the tpo2_args[]
@@ -359,7 +359,7 @@ static void tpo_read_2_x()
         78);
 
       /* there is no elevation data for the waypoints */
-      /* this is unecessary, the constructor will do this anyway. */
+      /* this is unnecessary, the constructor will do this anyway. */
       waypoint_temp->altitude = unknown_alt;
 
       track_add_wpt(track_temp, waypoint_temp);
@@ -850,7 +850,7 @@ static void tpo_process_waypoints()
     // The original untested check for unknown altitude was for 0xfffd000c (-196596 cm),
     // but a test case submitted later used 0xffce0000 (-3276800 cm).
     if (altitude == -3276800) { // Unknown altitude
-      /* this is unecessary, the constructor will do this anyway. */
+      /* this is unnecessary, the constructor will do this anyway. */
       waypoint_temp->altitude = unknown_alt;
     } else {
       waypoint_temp->altitude = (double) altitude / 100.0;   // Meters
@@ -1275,7 +1275,7 @@ static void
 tpo_rd_init(const QString& fname)
 {
 
-  // preprare for an attempt to deallocate memory that may or may not get allocated
+  // prepare for an attempt to deallocate memory that may or may not get allocated
   // depending on the options used.
   tpo_index_ptr = 0;
   tpo_wp_index = nullptr;
@@ -1368,7 +1368,7 @@ tpo_read()
    3. Add a new if() clause to tpo_write_file_header(). Copy the header bytes definition
    from the previous step.
    4. Recompile gpsbabel.
-   5. You should now be able write TPO ouput in the new state's format. For example, if
+   5. You should now be able write TPO output in the new state's format. For example, if
       you added support for Texas:
      gpsbabel -t -i gpx -f input.gpx -o tpo,state="TX" -F output.tpo */
 static void
@@ -1610,7 +1610,7 @@ tpo_write_file_header()
   }
 
   else {
-    fatal(MYNAME ": writing ouput for state \"%s\" is not currently supported.\n", output_state);
+    fatal(MYNAME ": writing output for state \"%s\" is not currently supported.\n", output_state);
   }
 }
 

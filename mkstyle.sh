@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "/* This file is machine-generated from the contents of style/ */"
-echo "/* by mkstyle.sh.   Editing it by hand is an exeedingly bad idea. */"
+echo "/* by mkstyle.sh.   Editing it by hand is an exceedingly bad idea. */"
 echo 
 
 # set the locale for sorting so that the collate order doesn't depend

@@ -313,7 +313,7 @@ to_itracku_data_record(const Waypoint* wp, itracku_data_record* d)
 	Tries to initialize an itracku device attached to
 	serial port fd. fd must already be opened.
 
-	Returns gbser_OK if the initialization is sucessful, a
+	Returns gbser_OK if the initialization is successful, a
 	non-zero integer otherwise.
 */
 static int

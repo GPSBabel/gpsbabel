@@ -102,7 +102,7 @@ data_read()
     int n = sscanf(ibuf, "%lf%c %lf%c %ld%c %30[^,] %2s",
                    &lat, &latdir, &lon, &londir,
                    &alt, &alttype, desc, icon);
-    /* Require at least first threee fields, otherwise ignore */
+    /* Require at least first three fields, otherwise ignore */
     if (n < 2) {
       xfree(sn);
       continue;

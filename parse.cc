@@ -45,7 +45,7 @@ parse_distance(const char* str, double* val, double scale, const char* module)
   }
   *val = strtod(str, &unit);
   if (unit == nullptr) {
-    fatal("%s: Unconvertable numeric value (%s)!\n", module, str);
+    fatal("%s: Unconvertible numeric value (%s)!\n", module, str);
   }
 
   if (fabs(*val) + 1 >= 1.0e25) {
@@ -106,7 +106,7 @@ parse_speed(const char* str, double* val, const double scale, const char* module
 
   *val = strtod(str, &unit);
   if (unit == nullptr) {
-    fatal("%s: Unconvertable numeric value (%s)!\n", module, str);
+    fatal("%s: Unconvertible numeric value (%s)!\n", module, str);
   }
 
   while (isspace(*unit)) {
@@ -150,10 +150,10 @@ parse_speed(const QString& str, double* val, const double scale, const char* mod
 }
 
 /*
- * Convert string 'str' into geodetic latitide & longitude values. The format
+ * Convert string 'str' into geodetic latitude & longitude values. The format
  * will be interpreted depending on 'grid' parameter.
  *
- * return value: number of characters efective parsed
+ * return value: number of characters parsed
  */
 
 int

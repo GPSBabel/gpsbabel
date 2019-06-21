@@ -161,7 +161,7 @@ void ArcDistanceFilter::process()
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
-          /* Interpolate alititude */
+          /* Interpolate altitude */
           if (ptsopt) {
             wp->altitude = ed->arcpt2->altitude;
           } else {

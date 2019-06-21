@@ -282,7 +282,7 @@ gpx_write_gdata(const QStringList& ge, const QString& tag)
     writer->writeStartElement(tag);
     // TODO: This seems questionable.
     // We concatenate element content from multiple elements,
-    // possibly from muliple input files, into one element.
+    // possibly from multiple input files, into one element.
     // This is necessary to comply with the schema as
     // these elements have maxOccurs limits of 1.
     for (const auto& str : ge) {
@@ -305,9 +305,9 @@ typedef struct tag_mapping {
 } tag_mapping;
 
 /*
- * xpath(ish) mappings between full tag paths and internal identifers.
+ * xpath(ish) mappings between full tag paths and internal identifiers.
  * These appear in the order they appear in the GPX specification.
- * If it's not a tag we explictly handle, it doesn't go here.
+ * If it's not a tag we explicitly handle, it doesn't go here.
  */
 
 /* /gpx/<name> for GPX 1.0, /gpx/metadata/<name> for GPX 1.1 */
@@ -635,7 +635,7 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
   }
   /* Make a new shortname.  Since this is a groundspeak extension,
     we assume that GCBLAH is the current shortname format and that
-    wpt_tmp refers to the currently parsed waypoint. Unfortunatley,
+    wpt_tmp refers to the currently parsed waypoint. Unfortunately,
     we need to keep track of log_wpt counts so we don't collide with
     dupe shortnames.
   */
@@ -753,7 +753,7 @@ struct
   { gt_event, "Event" }, /* opencaching.de */
   { gt_webcam, "Webcam Cache" },
   { gt_webcam, "Webcam" }, /* opencaching.de */
-  { gt_suprise, "Unknown Cache" },
+  { gt_surprise, "Unknown Cache" },
   { gt_earth, "Earthcache" },
   { gt_earth, "Earth" }, /* opencaching.de */
   { gt_cito, "Cache In Trash Out Event" },

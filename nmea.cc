@@ -706,7 +706,7 @@ gpzda_parse(char* ibuf)
 // bunch of nested sscanfs. In 2017, robertl replaced the scanf stuff with
 // a QString::split() to make it more tolerant of really empty fields from
 // certain GPS implementations, but didn't replace the (somewhat funky) back
-// half to match the parse. There are definitely some readibility issues
+// half to match the parse. There are definitely some readability issues
 // here.
 // The numbering as per http://aprs.gids.nl/nmea/#gsa was the reference as
 // the field numbers conveniently match our index.
@@ -883,7 +883,7 @@ nmea_fix_timestamps(route_head* track)
 
     if (optdate == nullptr) {
       warning(MYNAME ": No date found within track (all points dropped)!\n");
-      warning(MYNAME ": Please use option \"date\" to preset a valid date for thoose tracks.\n");
+      warning(MYNAME ": Please use option \"date\" to preset a valid date for those tracks.\n");
       track_del_head(track);
       return;
     }
@@ -930,11 +930,11 @@ notalkerid_strmatch(const char * s1, const char *sentenceFormatterMnemonicCode)
 {
 /*
  * compare leading start of parametric sentence character ('$'), sentence address field, and trailing comma
- * to the desired sentence formatter mneumonic code (the 3rd-5th characters of the sentence address field).
- * The talker identifier mneumonic (the 1st-2nd characters of the sentence address field)
- * is likely "GP" for Global Posilioning System (GPS)
+ * to the desired sentence formatter mnemonic code (the 3rd-5th characters of the sentence address field).
+ * The talker identifier mnemonic(the 1st-2nd characters of the sentence address field)
+ * is likely "GP" for Global Positioning System (GPS)
  * but other talkers like "IN" for Integrated Navigation can emit relevant sentences,
- * so we ignore the talker identifier mneumonic.
+ * so we ignore the talker identifier mnemonic.
  */
 return strncmp(s1,"$",1) || strncmp(s1+3,sentenceFormatterMnemonicCode,3) || strncmp(s1+6,",",1);
 }
@@ -1022,7 +1022,7 @@ nmea_parse_one_line(char* ibuf)
   }
 
   if (tbuf != ibuf) {
-    /* clear up the dynamic buffer we used because substition was required */
+    /* clear up the dynamic buffer we used because substitution was required */
     xfree(tbuf);
   }
 }

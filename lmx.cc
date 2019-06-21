@@ -199,7 +199,7 @@ static void
 lmx_print(const Waypoint* wpt)
 {
   /*
-   * Desparation time, try very hard to get a good shortname
+   * Desperation time, try very hard to get a good shortname
    */
   QString odesc = wpt->notes;
   if (odesc.isEmpty()) {

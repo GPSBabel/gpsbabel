@@ -203,7 +203,7 @@ char*
 delete_last_vowel(int start, char* istring, int* replaced)
 {
   /*
-   * Basically impelement strrchr.
+   * Basically implement strrchr.
    */
   *replaced = 0;
   for (int l = strlen(istring); l > start; l--) {
@@ -236,7 +236,7 @@ replace_constants(char* s)
   for (struct replacements* r = replacements; r->orig; r++) {
     int rl = strlen(r->orig);
     /*
-     * If word is in replacement list and preceeded by a
+     * If word is in replacement list and preceded by a
      * space, replace it.
      */
     if ((origslen - rl > 1) &&

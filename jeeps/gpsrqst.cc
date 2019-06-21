@@ -128,7 +128,7 @@ int32 GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon)
 **
 ** @param [r] fd [int32] file descriptor
 ** @param [r] lat [double] latitude  (deg)
-** @param [r] lon [double] longitute (deg)
+** @param [r] lon [double] longitude (deg)
 **
 ** @return [int32] success
 ************************************************************************/

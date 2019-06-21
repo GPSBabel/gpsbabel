@@ -301,7 +301,7 @@ stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self
   gbsize_t result = fread(buf, size, members, self->handle.std);
 
   if ((result < members) && (errno = ferror(self->handle.std))) {
-    fatal("%s: Error %d occured during read of file '%s'!\n",
+    fatal("%s: Error %d occurred during read of file '%s'!\n",
           self->module, errno, self->name);
   }
   return result;
@@ -774,7 +774,7 @@ gbfputc(int c, gbfile* file)
  */
 
 // This is a depressing hack, meant to ease the pain from C strings
-// to QStrings, which are consitently encoded.
+// to QStrings, which are consistently encoded.
 int
 gbfputs(const QString& s, gbfile* file)
 {
@@ -1262,4 +1262,4 @@ gbfcopyfrom(gbfile* file, gbfile* src, gbsize_t count)
 }
 
 
-/* Thats all, sorry. */
+/* That's all, sorry. */

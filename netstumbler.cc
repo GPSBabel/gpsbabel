@@ -123,7 +123,7 @@ data_read()
 
       /*
        * Mac stumbler files are the same, except
-       * use DDMM.mmm instad of DD.DDDD.
+       * use DDMM.mmm instead of DD.DDDD.
        */
       if (strstr(ibuf, "Creator: MacStumbler")) {
         macstumbler = 1;

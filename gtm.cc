@@ -179,7 +179,7 @@ fwrite_fixedstring(gbfile* fd, const QString& str, int fieldlen)
   fwrite_fixedstring(fd, CSTR(str), fieldlen);
 }
 
-/* Auxiliar functions */
+/* Auxiliary functions */
 
 #define MAX_INDATUM_INDEX 263
 

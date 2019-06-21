@@ -262,7 +262,7 @@ cst_data_read()
                         &wpt->latitude,
                         &wpt->altitude,
                         &interp, name)) {
-          fatal(MYNAME ": Could not interprete line %d!\n", line);
+          fatal(MYNAME ": Could not interpret line %d!\n", line);
         }
 
         data_lines++;

@@ -62,7 +62,7 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "time", &timeopt, "Maximum time in seconds beetween two points",
+      "time", &timeopt, "Maximum time in seconds between two points",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     ARG_TERMINATOR

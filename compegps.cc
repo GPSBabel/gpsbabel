@@ -23,7 +23,7 @@
     History:
     		10/23/2005: First release; only a reader
     		10/25/2005: becomes a writer too
-		10/26/2005: received documention from CompeGPS team
+		10/26/2005: received documentation from CompeGPS team
 		            added fatals for "G" and "U" if not WGS84 and lat/lon
 		08/13/2006: switch to gbfile api
 */

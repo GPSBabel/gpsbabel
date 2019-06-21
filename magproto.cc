@@ -74,7 +74,7 @@ static int waypoint_read_count;
 static int wpt_len = 8;
 static QString curfname;
 static int extension_hint;
-// For Explorist GC/510/610/710 familes, bludgeon in GPX support.
+// For Explorist GC/510/610/710 families, bludgeon in GPX support.
 // (This has nothing to do with the Explorist 100...600 products.)
 static ff_vecs_t* gpx_vec;
 static mag_info* explorist_info;
@@ -85,8 +85,8 @@ static QStringList os_gpx_files(const char* dirname);
  * we turn around an ack while we are reading from the device.  It's
  * quite spiffy when we're writing to the device.   Since we're *way*
  * less likely to lose data while reading from it than it is to lose data
- * when we write to it, we turn off the acks when we are predominatly
- *  reading.
+ * when we write to it, we turn off the acks when we are predominantly
+ * reading.
  */
 static int suppress_ack;
 
@@ -201,7 +201,7 @@ static icon_mapping_t map330_icon_table[] = {
   { "ah", "Virtual cache"}, 	/* Binos: because you "see" them. */
   { "ak", "Micro-Cache" },	/* Looks like a film canister. */
   { "an", "Multi-Cache"}, 	/* Winery: grapes 'coz they "bunch" */
-  { "s",  "Unknown Cache"}, 	/* 'Suprise' cache: use a target. */
+  { "s",  "Unknown Cache"}, 	/* 'Surprise' cache: use a target. */
   { "ac",  "Event Cache"}, 	/* Event caches.  May be food. */
   { nullptr, nullptr }
 };

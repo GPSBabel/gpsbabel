@@ -298,7 +298,7 @@ icon_mapping_t garmin_icon_table[] = {
   { -1,  8363, "Steak" },
   { -1,  8223, "Street Intersection" },
   { -1, 16401, "TACAN" },
-  { -1,   183, "Tide/Current PRediction Station" },
+  { -1,   183, "Tide/Current Prediction Station" },
   { -1,   191, "U Marina" },
   { -1,  8193, "US hwy" },
   { -1,   193, "U stump" },

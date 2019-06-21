@@ -1115,7 +1115,7 @@ int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
 /* @GPS_Math_ICS_EN_To_WGS84 *****************************************
 **
 ** Convert WGS84 latitude and longitude to
-** Israeli Oldl Grid Eastings and Northings
+** Israeli Old Grid Eastings and Northings
 **
 ** @param [r] E [double] ICS easting (metres)
 ** @param [r] N [double] ICS northing (metres)
@@ -2502,7 +2502,7 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
 //East Longitudes are positive, West longitudes are negative.
 //North latitudes are positive, South latitudes are negative
 //Lat and Long are in decimal degrees.
-//based on code witten by Chuck Gantz- chuck.gantz@globalstar.com
+//based on code written by Chuck Gantz- chuck.gantz@globalstar.com
 //found at http://www.gpsy.com/gpsinfo/geotoutm/index.html
 
   double k0 = 0.9996;

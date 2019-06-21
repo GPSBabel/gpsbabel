@@ -147,7 +147,7 @@ maggeo_read()
         break;
       case 12: // cache type
         if (strcmp(s, "Mystery Cache") == 0) {
-          gcdata->type = gt_suprise;
+          gcdata->type = gt_surprise;
         } else {
           gcdata->type = gs_mktype(s);
         }
@@ -256,7 +256,7 @@ maggeo_waypt_pr(const Waypoint* waypointp)
    * For some reason, Magellan used exactly the GPX spellings of
    * everything except this one...
    */
-  if (waypointp->gc_data->type == gt_suprise) {
+  if (waypointp->gc_data->type == gt_surprise) {
     ctype = "Mystery Cache";
   } else {
     ctype = gs_get_cachetype(waypointp->gc_data->type);

@@ -709,7 +709,7 @@ lap_read_as_track(void)
 #endif
 
 /*
- * Rather than propogate Garmin-specific data types outside of the Garmin
+ * Rather than propagate Garmin-specific data types outside of the Garmin
  * code, we convert the PVT (position/velocity/time) data from the receiver
  * to the data type we use throughout.   Yes, we do lose some data that way.
  */
@@ -962,7 +962,7 @@ waypoint_prepare()
     }
     tx_waylist[i]->ident[sizeof(tx_waylist[i]->ident)-1] = 0;
 
-    // If we were explictly given a comment from GPX, use that.
+    // If we were explicitly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
     if (!wpt->description.isEmpty() &&
         global_opts.smart_names && !wpt->gc_data->diff) {
@@ -1034,7 +1034,7 @@ waypoint_write()
   int n = waypoint_prepare();
 
   if ((ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb)) < 0) {
-    fatal(MYNAME ":communication error sending wayoints..\n");
+    fatal(MYNAME ":communication error sending waypoints..\n");
   }
 
   for (int i = 0; i < n; ++i) {

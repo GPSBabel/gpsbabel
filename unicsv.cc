@@ -409,7 +409,7 @@ unicsv_parse_time(const char* str, int* usec, time_t* date)
   double us;
   char sep[2];
 
-  /* If we have somethine we're pretty sure is a date, parse that
+  /* If we have something we're pretty sure is a date, parse that
    * first, skip over it, and pass that back to the caller)
    */
   time_t ldate = unicsv_parse_date(str, &consumed);
@@ -1225,7 +1225,7 @@ static void
 unicsv_fatal_outside(const Waypoint* wpt)
 {
   *fout << "#####\n";
-  fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
+  fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));

@@ -182,8 +182,8 @@ disp_summary(const gbfile* f)
 // all that while (while keeping the character sets correct) and
 // not pushing that decision  down into gbfread.  This module is
 // still pretty messy and the points as to which fields are encode
-// which ways in which versions are not at all clear, leaing to 
-// encoding issues on read and leaks because of teh differences 
+// which ways in which versions are not at all clear, leading to
+// encoding issues on read and leaks because of the differences 
 // in calling conventions on who owns/destroys the result.
 
 #define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
@@ -435,7 +435,7 @@ read_file_header()
   /*
   	A "gbfgetcstr" (FREAD_CSTR) works too, but if we get a wrong file as input,
   	the file validation my be comes too late. For example a XML base file normally
-  	has no binary zeros inside and produce, if big enought, a buffer overflow.
+  	has no binary zeros inside and produce, if big enough, a buffer overflow.
   	The following message "local buffer overflow detected..." could be
   	misinterpreted.
   */
@@ -856,7 +856,7 @@ read_route()
     }
 
     if (links == 0) {
-      /* Without links we need all informations from wpt */
+      /* Without links we need all information from wpt */
       Waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
       if (tmp != nullptr) {
         delete wpt;
@@ -1277,7 +1277,7 @@ write_waypoint(
 
   int wpt_class = wpt->wpt_flags.fmt_use;		/* trick */
 
-  FWRITE_CSTR(shortname);			/* uniqe (!!!) shortname */
+  FWRITE_CSTR(shortname);			/* unique (!!!) shortname */
   FWRITE_i32(wpt_class);			/* waypoint class */
   FWRITE_CSTR(GMSD_GET(cc, ""));		/* country code */
 
@@ -1342,7 +1342,7 @@ write_waypoint(
       str = "";
     }
     FWRITE_CSTR(str);
-    FWRITE(zbuf, 5);				/* instruction dependend */
+    FWRITE(zbuf, 5);				/* instruction dependent */
 
     /* GBD doesn't have a native description field */
     /* here we misuse the instruction field */

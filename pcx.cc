@@ -189,9 +189,9 @@ static void data_read() {
       }
       case 'H':
         /* Garmap2 has headers
-        "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
+        "H(2 spaces)LATITUDE(some spaces)LONGITUDE(etc... followed by);track
           everything else is
-          H(2 chars)TN(tracknane\0)
+          H(2 chars)TN(trackname\0)
           */
         if (points > 0) {
           track = nullptr;
@@ -326,7 +326,7 @@ static void pcx_track_hdr(const route_head* trk) {
       mkshort(mkshort_handle2,
               trk->rte_name.isEmpty() ? CSTR(default_name) : trk->rte_name);
   /* Carto Exploreur (popular in France) chokes on trackname headers,
-   * so provide option to supppress these.
+   * so provide option to suppress these.
    */
   if (!cartoexploreur) {
     gbfprintf(file_out, "\n\nH  TN %s\n", CSTR(name));

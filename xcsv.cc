@@ -322,7 +322,7 @@ xcsv_get_char_from_constant_table(const QString& key)
   if (substitutions.contains(key)) {
     return substitutions[key];
   }
-  // No substition found? Just return original.
+  // No substitution found? Just return original.
   return key;
 }
 
@@ -609,7 +609,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     /* ANYNAME -- Ignore -- this is output magic. */
     break;
   case XT_INDEX:
-    /* IGNORE -- Calculated Sequence # For Ouput*/
+    /* IGNORE -- Calculated Sequence # For Output*/
     break;
   case XT_SHORTNAME:
     wpt->shortname = csv_stringtrim(s, enclosure);
@@ -1354,12 +1354,12 @@ xcsv_waypt_pr(const Waypoint* wpt)
                fabs(lon));
       break;
     case XT_LON_INT32DEG:
-      /* longitudee as an integer offset from 0 degrees */
+      /* longitude as an integer offset from 0 degrees */
       buff = QString().sprintf(fmp.printfc.constData(),
                 dec_to_intdeg(lon));
       break;
     case XT_LON_DDMMDIR:
-      /* longidute as (degrees * 100) + decimal minutes, with W/E after it*/
+      /* longitude as (degrees * 100) + decimal minutes, with W/E after it*/
       buff = dec_to_human(fmp.printfc.constData(), "WE", degrees2ddmm(lon));
       break;
     case XT_LON_HUMAN_READABLE:
@@ -1887,7 +1887,7 @@ xcsv_parse_style_line(QString line)
     if (tokens[0] == "INTERNAL") {
       xcsv_file.type = ff_type_internal;
     }
-      // this is almost inconcievable...
+      // this is almost inconceivable...
     if (tokens[0] == "SERIAL") {
       xcsv_file.type = ff_type_serial;
     }
@@ -1975,7 +1975,7 @@ xcsv_parse_style_line(QString line)
       //
   if (op == "OFIELD") {
     unsigned options = 0;
-      // Note: simplifieid() has to run after split().
+      // Note: simplified() has to run after split().
     if (tokens.size() < 3) {
       Fatal() << "Invalid OFIELD line: " << tokenstr;
     }
