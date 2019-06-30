@@ -63,7 +63,7 @@ private:
   QString getOsName();
   QString getOsVersion();
   QString getCpuArchitecture();
-  bool suggestUpgrade(QString from, QString to);
+  bool suggestUpgrade(const QString& from, const QString& to);
 
 private slots:
   void httpRequestFinished(QNetworkReply* reply);

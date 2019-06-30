@@ -78,7 +78,7 @@ Map::Map(QWidget* parent,
   manager_ = new QNetworkAccessManager(this);
   connect(this,SIGNAL(loadFinished(bool)),
           this,SLOT(loadFinishedX(bool)));
-  this->logTime("Start map constuctor");
+  this->logTime("Start map constructor");
 
 #if HAVE_WEBENGINE
   MarkerClicker* mclicker = new MarkerClicker(this);

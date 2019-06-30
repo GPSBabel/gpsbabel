@@ -58,7 +58,7 @@ public:
     defaultValue_(defaultValue), minValue_(minValue), maxValue_(maxValue), html_(html)
   {
     value_ = QVariant();
-    // Boolean values pay more atention to 'selected' than value.  Make
+    // Boolean values pay more attention to 'selected' than value.  Make
     // them match here. For non-bools, just make them unchecked.
     if (type_ == OPTbool && defaultValue.toBool() == true) {
       isSelected_ = true;
@@ -166,7 +166,7 @@ public:
          bool fileFormat, bool deviceFormat,
          const QStringList& extensions,
          QList<FormatOption>& inputOptions,
-         QList<FormatOption>& outputptions,
+         QList<FormatOption>& outputOptions,
          const QString& html):
     name_(name), description_(description),
     readWaypoints_(readWaypoints), readTracks_(readTracks), readRoutes_(readRoutes),
@@ -175,7 +175,7 @@ public:
     hidden_(false),
     extensions_(extensions),
     inputOptions_(inputOptions),
-    outputOptions_(outputptions),
+    outputOptions_(outputOptions),
     html_(QString()),
     readUseCount_(0),
     writeUseCount_(0)

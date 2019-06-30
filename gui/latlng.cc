@@ -49,10 +49,10 @@ static double ArcInRadians(const LatLng& from, const LatLng& to)
   double longitudeArc = (from.lng() - to.lng()) * DEG_TO_RAD;
   double latitudeH = sin(latitudeArc * 0.5);
   latitudeH *= latitudeH;
-  double lontitudeH = sin(longitudeArc * 0.5);
-  lontitudeH *= lontitudeH;
+  double longitudeH = sin(longitudeArc * 0.5);
+  longitudeH *= longitudeH;
   double tmp = cos(from.lat()*DEG_TO_RAD) * cos(to.lat()*DEG_TO_RAD);
-  return 2.0 * asin(sqrt(latitudeH + tmp*lontitudeH));
+  return 2.0 * asin(sqrt(latitudeH + tmp*longitudeH));
 }
 
 /** @brief Computes the distance, in meters, between two WGS-84 positions.
