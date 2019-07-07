@@ -22,95 +22,97 @@
 #include <cmath>            // for fabs
 #include <cstdlib>          // for strtod
 
-#include <QtCore/QtGlobal>  // for foreach
+#include <QtCore/QList>     // for QList
+#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "filterdefs.h"
-#include "grtcirc.h"        // for RAD, gcdist, radtomiles
+#include "grtcirc.h"        // for RAD, gcdist, radtometers
 #include "position.h"
 
 #if FILTERS_ENABLED
 
 double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
-  return gcdist(
-           RAD(lat1),
-           RAD(lon1),
-           RAD(lat2),
-           RAD(lon2)
-         );
+  return radtometers(gcdist(
+                       RAD(lat1),
+                       RAD(lon1),
+                       RAD(lat2),
+                       RAD(lon2)
+                     ));
 }
 
 /* tear through a waypoint queue, processing points by distance */
-void PositionFilter::position_runqueue(WaypointList* waypt_list, int nelems, int qtype)
+void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
 {
-  double dist, diff_time;
-  int i = 0, anyitem;
+  QList<WptRecord> qlist;
 
-  Waypoint** comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
-  int* qlist = (int*) xcalloc(nelems, sizeof(*qlist));
-
-  foreach (Waypoint* waypointp, *waypt_list) {
-    comp[i] = waypointp;
-    qlist[i] = 0;
-    i++;
+  for (const auto waypointp : qAsConst(*waypt_list)) {
+    qlist.append(WptRecord(waypointp));
   }
+  int nelems = qlist.size();
 
-  for (i = 0 ; i < nelems ; i++) {
-    anyitem = 0;
+  for (int i = 0 ; i < nelems ; ++i) {
+    bool something_deleted = false;
 
-    if (!qlist[i]) {
-      for (int j = i + 1 ; j < nelems ; j++) {
-        if (!qlist[j]) {
-          dist = gc_distance(comp[j]->latitude,
-                             comp[j]->longitude,
-                             comp[i]->latitude,
-                             comp[i]->longitude);
-
-          /* convert radians to integer feet */
-          dist = (int)(5280*radtomiles(dist));
-          diff_time = fabs(waypt_time(comp[i]) - waypt_time(comp[j]));
+    if (!qlist.at(i).deleted) {
+      for (int j = i + 1 ; j < nelems ; ++j) {
+        if (!qlist.at(j).deleted) {
+          double dist = gc_distance(qlist.at(j).wpt->latitude,
+                                    qlist.at(j).wpt->longitude,
+                                    qlist.at(i).wpt->latitude,
+                                    qlist.at(i).wpt->longitude);
 
           if (dist <= pos_dist) {
-            if (check_time && diff_time >= max_diff_time) {
-              continue;
+            if (check_time) {
+              double diff_time = fabs(waypt_time(qlist.at(i).wpt) - waypt_time(qlist.at(j).wpt));
+              if (diff_time >= max_diff_time) {
+                continue;
+              }
             }
 
-            qlist[j] = 1;
+            qlist[j].deleted = true;
             switch (qtype) {
             case wptdata:
-              waypt_del(comp[j]);
-              delete comp[j];
+              waypt_del(qlist.at(j).wpt);
+              delete qlist.at(j).wpt;
               break;
             case trkdata:
-              track_del_wpt(cur_rte, comp[j]);
-              delete comp[j];
+              track_del_wpt(cur_rte, qlist.at(j).wpt);
+              delete qlist.at(j).wpt;
               break;
             case rtedata:
-              route_del_wpt(cur_rte, comp[j]);
-              delete comp[j];
+              route_del_wpt(cur_rte, qlist.at(j).wpt);
+              delete qlist.at(j).wpt;
               break;
             default:
               break;
             }
-            anyitem = 1;
+            something_deleted = true;
+          } else {
+            // Unlike waypoints, routes and tracks are ordered paths.
+            // Don't eliminate points from the return path when the
+            // route or track loops back on itself.
+            if ((qtype == trkdata) || (qtype == rtedata)) {
+              break;
+            }
           }
         }
       }
 
-      if (anyitem && !!purge_duplicates) {
+      if (something_deleted && (purge_duplicates != nullptr)) {
         switch (qtype) {
         case wptdata:
-          waypt_del(comp[i]);
-          delete comp[i];
+          waypt_del(qlist.at(i).wpt);
+          delete qlist.at(i).wpt;
           break;
         case trkdata:
-          track_del_wpt(cur_rte, comp[i]);
-          delete comp[i];
+          track_del_wpt(cur_rte, qlist.at(i).wpt);
+          delete qlist.at(i).wpt;
           break;
         case rtedata:
-          route_del_wpt(cur_rte, comp[i]);
-          delete comp[i];
+          route_del_wpt(cur_rte, qlist.at(i).wpt);
+          delete qlist.at(i).wpt;
           break;
         default:
           break;
@@ -119,25 +121,15 @@ void PositionFilter::position_runqueue(WaypointList* waypt_list, int nelems, int
     }
   }
 
-  if (comp) {
-    xfree(comp);
-  }
-
-  if (qlist) {
-    xfree(qlist);
-  }
 }
 
 void PositionFilter::position_process_any_route(const route_head* rh, int type)
 {
-  int i = rh->rte_waypt_ct;
-
-  if (i) {
+  if (rh->rte_waypt_ct != 0) {
     cur_rte = const_cast<route_head*>(rh);
-    position_runqueue(&cur_rte->waypoint_list, i, type);
+    position_runqueue(&cur_rte->waypoint_list, type);
     cur_rte = nullptr;
   }
-
 }
 
 void PositionFilter::position_process_rte(const route_head* rh)
@@ -155,10 +147,8 @@ void PositionFilter::process()
   RteHdFunctor<PositionFilter> position_process_rte_f(this, &PositionFilter::position_process_rte);
   RteHdFunctor<PositionFilter> position_process_trk_f(this, &PositionFilter::position_process_trk);
 
-  int i = waypt_count();
-
-  if (i) {
-    position_runqueue(global_waypoint_list, i, wptdata);
+  if (waypt_count() != 0) {
+    position_runqueue(global_waypoint_list, wptdata);
   }
 
   route_disp_all(position_process_rte_f, nullptr, nullptr);
@@ -169,21 +159,21 @@ void PositionFilter::init()
 {
   char* fm;
 
-  pos_dist = 0;
-  max_diff_time = 0;
-  check_time = 0;
+  pos_dist = 0.0;
+  max_diff_time = 0.0;
+  check_time = false;
 
-  if (distopt) {
+  if (distopt != nullptr) {
     pos_dist = strtod(distopt, &fm);
 
-    if ((*fm == 'm') || (*fm == 'M')) {
-      /* distance is meters */
-      pos_dist *= 3.2802;
+    if (!((*fm == 'm') || (*fm == 'M'))) {
+      /* distance is feet */
+      pos_dist = FEET_TO_METERS(pos_dist);
     }
   }
 
-  if (timeopt) {
-    check_time = 1;
+  if (timeopt != nullptr) {
+    check_time = true;
     max_diff_time = strtod(timeopt, &fm);
   }
 }

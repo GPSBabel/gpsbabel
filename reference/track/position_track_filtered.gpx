@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="40.008761985" minlon="-105.207110341" maxlat="40.009181255" maxlon="-105.205863237"/>
+  <trk>
+    <name>Untitled Path</name>
+    <trkseg>
+      <trkpt lat="40.009054849" lon="-105.206004844"/>
+      <trkpt lat="40.009003650" lon="-105.206144881"/>
+      <trkpt lat="40.008941848" lon="-105.206316939"/>
+      <trkpt lat="40.008883566" lon="-105.206475630"/>
+      <trkpt lat="40.008820497" lon="-105.206640987"/>
+      <trkpt lat="40.008761985" lon="-105.206788064"/>
+      <trkpt lat="40.008905939" lon="-105.206879224"/>
+      <trkpt lat="40.009030426" lon="-105.207004804"/>
+      <trkpt lat="40.009121469" lon="-105.207110341"/>
+      <trkpt lat="40.009072029" lon="-105.206928441"/>
+      <trkpt lat="40.008921748" lon="-105.206773246"/>
+      <trkpt lat="40.008905642" lon="-105.206619702"/>
+      <trkpt lat="40.008974216" lon="-105.206446800"/>
+      <trkpt lat="40.009020531" lon="-105.206315106"/>
+      <trkpt lat="40.009085925" lon="-105.206134925"/>
+      <trkpt lat="40.009137114" lon="-105.205995744"/>
+      <trkpt lat="40.009181255" lon="-105.205863237"/>
+    </trkseg>
+  </trk>
+</gpx>
