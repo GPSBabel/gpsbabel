@@ -45,11 +45,7 @@ private:
   char* distopt = nullptr;
   char* timeopt = nullptr;
   char* purge_duplicates = nullptr;
-  int check_time;
-
-  typedef struct {
-    double distance;
-  } extra_data;
+  bool check_time;
 
   arglist_t args[4] = {
     {
@@ -68,8 +64,17 @@ private:
     ARG_TERMINATOR
   };
 
+  class WptRecord
+  {
+  public:
+    Waypoint* wpt{nullptr};
+    bool deleted{false};
+
+    explicit WptRecord(Waypoint* w) : wpt(w) {}
+  };
+
   double gc_distance(double lat1, double lon1, double lat2, double lon2);
-  void position_runqueue(WaypointList* waypt_list, int nelems, int qtype);
+  void position_runqueue(WaypointList* waypt_list, int qtype);
   void position_process_any_route(const route_head* rh, int type);
   void position_process_rte(const route_head* rh);
   void position_process_trk(const route_head* rh);

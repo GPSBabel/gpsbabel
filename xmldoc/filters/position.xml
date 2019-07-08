@@ -1,7 +1,7 @@
 <para> 
-This filter removes points based on their proximity to each other.  A 
-point is removed if it is within the specified distance of a point that 
-has come before.
+This filter removes points based on their proximity to each other.
+For waypoints a point is removed if it is within the specified distance of a preceeding point.
+For routes and tracks consecutive points are removed until the distance between the bracketing points is greater than the specified distance.
 </para>
 
 <example id="posn_to_suppress_close_points">
