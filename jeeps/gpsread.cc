@@ -84,7 +84,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
   start = GPS_Time_Now();
   GPS_Diag("Rx Data:");
   while (GPS_Time_Now() < start + GPS_TIME_OUT) {
-    if (int32 n = GPS_Serial_Chars_Ready(fd)) {
+    if (GPS_Serial_Chars_Ready(fd)) {
       if (GPS_Serial_Read(fd, &u, 1) < 0) {
         perror("read");
         GPS_Error("GPS_Packet_Read: Read error");
