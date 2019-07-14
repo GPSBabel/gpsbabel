@@ -1802,11 +1802,13 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
+  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (wpt->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else if (fs != nullptr) {
+    gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
   }
@@ -1840,8 +1842,8 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
     ColorId = 0; // default
   } else {
     SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
-    if (wpt->fs != nullptr) {
-      ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, ((lowranceusr4_fsdata*)(wpt->fs))->color_desc);
+    if (fs != nullptr) {
+      ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, fs->color_desc);
     } else {
       ColorId = DEF_USR4_COLOR; // default
     }
@@ -1869,8 +1871,8 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   gbfputc(0, file_out);
 
   /* Depth in feet */
-  if (wpt->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->depth, file_out);
+  if (fs != nullptr) {
+    gbfputint32(fs->depth, file_out);
   } else {
     gbfputint32(0, file_out); // zero seems to indicate no depth
   }
@@ -2054,11 +2056,13 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
+  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (rte->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else if (fs != nullptr) {
+    gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
   }
@@ -2083,8 +2087,15 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
     if (cmp->shortname == wpt->shortname) {
-      lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*)cmp->fs;
-      gbfputint32(fsdata->uid_unit, file_out);  // serial number from input if valid
+      lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+
+      if (opt_serialnum_i > 0) {
+        gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
+      } else if (fs != nullptr) {
+        gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
+      } else {
+        gbfputint32(0, file_out);  // else Write Serial Number = 0
+      }
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
       if (global_opts.debug_level > 1) {
