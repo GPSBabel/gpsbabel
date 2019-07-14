@@ -97,6 +97,7 @@
 #include <QtCore/QLatin1String>  // for QLatin1String
 #include <QtCore/QString>        // for QString, operator+, operator==, operator!=
 #include <QtCore/QTextCodec>     // for QTextCodec
+#include <QtCore/QTextEncoder>   // for QTextEncoder
 #include <QtCore/QTime>          // for QTime
 #include <QtCore/Qt>             // for CaseInsensitive, UTC
 #include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
@@ -557,7 +558,8 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   if (bytes_per_char == 1) {
     qba = buf.toUtf8();
   } else {
-    qba = utf16le_codec->fromUnicode(buf);
+    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    qba = encoder->fromUnicode(buf);
   }
   int len = qba.size();
   gbfputint32(len, file_out);
@@ -574,7 +576,7 @@ lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 static Lowranceusr4Timestamp
 lowranceusr4_jd_from_timestamp(gpsbabel::DateTime qdt)
 {
-  QDateTime jdt = qdt.toUTC().addSecs(-60 * 60 * 12);
+  QDateTime jdt = qdt.toUTC();
   unsigned int jd_number = jdt.date().toJulianDay();
   QTime jd_time = jdt.time();
   unsigned int msecs = (((((jd_time.hour() * 60) + jd_time.minute()) * 60) + jd_time.second()) * 1000) + jd_time.msec();
@@ -2243,9 +2245,10 @@ lowranceusr4_trail_hdr(const route_head* trail)
 
   /* Mysterious "data count" and "data type" stuff */
   gbfputint32(0, file_out);
-  gbfputc(0, file_out);
-  gbfputc(0, file_out);
-  gbfputc(0, file_out);
+//  /* If we hadn't forced the count to zero we would need something like: */
+//  for (int i=0; i< attr_count; ++i) {
+//    gbfputc(0, file_out);
+//  }
 
   /* Trackpoint count */
   gbfputint32(trail->rte_waypt_ct, file_out);

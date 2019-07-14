@@ -72,7 +72,7 @@ bincompare ${REFERENCE}/lowrance.usr ${TMPDIR}/lowrance1.usr
 
 # Use the file just created to see if can write back the same data
 gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance2.usr
-# Unfortunately precision issues cause mismatch on Lat/Long conversion, actual test validation commented out
+# At a minimum unkown altitude not making the round trip, actual test validation commented out
 # bincompare ${REFERENCE}/lowrance.usr ${TMPDIR}/lowrance2.usr
 
 # Test ability to generate GPX from USR v2 and then generate USR v2 using that newly created GPX file
@@ -116,6 +116,11 @@ compare ${TMPDIR}/lowrance-v2-unicsv-sorted.txt ${TMPDIR}/lowrance-v3-unicsv-nod
 #
 gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v4.usr -o gpx -F ${TMPDIR}/lowrance-v4.gpx
 compare ${REFERENCE}/lowrance-v4.gpx ${TMPDIR}/lowrance-v4.gpx
+
+# This almost works, except we lose some symbols on the round trip.
+#gpsbabel -i gpx -f ${TMPDIR}/lowrance-v4.gpx -o lowranceusr,wversion=4 -F ${TMPDIR}/lowrance-v4.usr
+#gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-v4.usr -o gpx -F ${TMPDIR}/lowrance-v4~usr.gpx
+#compare ${TMPDIR}/lowrance-v4.gpx ${TMPDIR}/lowrance-v4~usr.gpx
 
 #
 # Perform USR version 5 test
