@@ -1,7 +1,7 @@
 #
 # Lowrance USR
 # ============
-# 
+#
 # Binary data format, and slightly lossy because of the math to
 # convert lat/long.
 #
@@ -18,11 +18,11 @@
 #				Trail 'Trail 1' conains 0 points, Trail 'Bull Run' contains 97 points in a
 #				single section, Trail 'Hike' contains 198 points in a single section.
 #
-# lowrance-enchilada.usr	USR version 2 format file. 
+# lowrance-enchilada.usr	USR version 2 format file.
 #				Used to validate that GPX file generated from lowrance-all.usr
 #				when converted back to USR v2 matches previous executions of GPSBabel.
 #
-# lowrance-ignoreicons.usr	USR version 2 format file. 
+# lowrance-ignoreicons.usr	USR version 2 format file.
 #				Used to validate use of ignoreicons option to strip out Event Marker Icons.
 #
 # lowrance-v2.usr		USR version 2 format file.  Generated on an unknown Lowrance unit.
@@ -30,7 +30,7 @@
 #				Each trail is named 'Trail 1'.
 #				The first 'Trail 1' has 2000 points boken into 10 sections with 200 points
 #				in each section.  The second 'Trail 1' has 1258 points broken into 7 sections,
-#				with 200 points in 6 and 58 in the last. 
+#				with 200 points in 6 and 58 in the last.
 #
 # lowrance-v2-unicsv.txt	Comma seperated file generated from lowrance-v2.usr by GPSBabel.
 #				Used to validate that the parsing of the USR version 2 file yields the same
@@ -68,22 +68,22 @@ rm -f ${TMPDIR}/lowrance*
 
 # Test ability to read non-Lowrance format and generate USR v2 file
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance1.usr
-bincompare ${TMPDIR}/lowrance1.usr ${REFERENCE}/lowrance.usr
+bincompare ${REFERENCE}/lowrance.usr ${TMPDIR}/lowrance1.usr
 
 # Use the file just created to see if can write back the same data
-gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance1.usr
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance2.usr
 # Unfortunately precision issues cause mismatch on Lat/Long conversion, actual test validation commented out
-# bincompare ${REFERENCE}/lowrance.usr  ${TMPDIR}/lowrance1.usr
+# bincompare ${REFERENCE}/lowrance.usr ${TMPDIR}/lowrance2.usr
 
 # Test ability to generate GPX from USR v2 and then generate USR v2 using that newly created GPX file
 gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-all.usr -o gpx,elevprec=6 -F ${TMPDIR}/lowrance-enchilada.gpx
-gpsbabel -i gpx -f ${TMPDIR}/lowrance-enchilada.gpx -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance-enchilada1.usr
-bincompare ${TMPDIR}/lowrance-enchilada1.usr ${REFERENCE}/lowrance-enchilada.usr
+gpsbabel -i gpx -f ${TMPDIR}/lowrance-enchilada.gpx -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance-enchilada.usr
+bincompare ${REFERENCE}/lowrance-enchilada.usr ${TMPDIR}/lowrance-enchilada.usr
 
 # Don't convert icons as waypts
 gpsbabel -i lowranceusr,ignoreicons -f ${REFERENCE}/lowrance-all.usr -o gpx,elevprec=6 -F ${TMPDIR}/lowrance-enchilada.gpx
-gpsbabel -i gpx -f ${TMPDIR}/lowrance-enchilada.gpx -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance-enchilada1.usr
-bincompare ${TMPDIR}/lowrance-enchilada1.usr ${REFERENCE}/lowrance-ignoreicons.usr
+gpsbabel -i gpx -f ${TMPDIR}/lowrance-enchilada.gpx -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance-ignoreicons.usr
+bincompare ${REFERENCE}/lowrance-ignoreicons.usr ${TMPDIR}/lowrance-ignoreicons.usr
 
 #
 # Another variation of Lowrance.  Compare v2 and v3.  These reference
@@ -105,7 +105,7 @@ compare ${TMPDIR}/lowrance-v2-unicsv-sorted.txt ${TMPDIR}/lowrance-v3-unicsv-nod
 
 #
 # ${REFERENCE}/lowrance-hook2-v2.usr, ${REFERENCE}/lowrance-hook2-v3.usr,
-# ${REFERENCE}/lowrance-hook2-v4.usr, ${REFERENCE}/lowrance-hook2-v5.usr, ${REFERENCE}/lowrance-hook2-v6.usr 
+# ${REFERENCE}/lowrance-hook2-v4.usr, ${REFERENCE}/lowrance-hook2-v5.usr, ${REFERENCE}/lowrance-hook2-v6.usr
 # AND ${REFERENCE}/lowrance-hook2.gpx were generated on a single Lowrance Hook2 System.
 # This system has the ability to select any one of those formats for database export.
 # All files should contain the same basic data with increasing amounts of detail as you

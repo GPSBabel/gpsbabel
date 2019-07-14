@@ -799,13 +799,13 @@ lat_mm_to_deg(double x)
 static long
 lon_deg_to_mm(double x)
 {
-  return (long)(x * SEMIMINOR * DEGREESTORADIANS);
+  return round(x * SEMIMINOR * DEGREESTORADIANS);
 }
 
 static long
 lat_deg_to_mm(double x)
 {
-  return (long)(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
+  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
 }
 
 
