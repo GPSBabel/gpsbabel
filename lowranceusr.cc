@@ -583,11 +583,10 @@ lowranceusr4_jd_from_timestamp(gpsbabel::DateTime qdt)
   return Lowranceusr4Timestamp(jd_number, msecs);
 }
 
-
-const QString
-lowranceusr_find_desc_from_icon_number(const int icon)
+template <typename T>
+static QString lowranceusr_common_find_desc_from_icon_number(const int icon, const T icon_value_table[])
 {
-  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
+  for (const T* i = icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -595,72 +594,60 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 
   // Didn't find it in table, default to leave it as the number found
   return QString("icon-%1").arg(icon);
+}
+
+template <typename T>
+static int lowranceusr_common_find_icon_number_from_desc(const QString& desc, const T icon_value_table[], const int def_icon)
+{
+  if (desc.isNull()) {
+    return def_icon;
+  }
+
+  /*
+   * If we were given a numeric icon number as a description
+   * (i.e. 8255), just return that.
+   * Also return the icon number for descriptions of "icon-"
+   * followed by a numeric icon number.
+   */
+  int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
+  if (n)  {
+    return n;
+  }
+
+  for (const T* i = icon_value_table; i->icon; i++) {
+    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
+      return i->value;
+    }
+  }
+
+  return def_icon;
+}
+
+static QString
+lowranceusr_find_desc_from_icon_number(const int icon)
+{
+  return lowranceusr_common_find_desc_from_icon_number(icon, lowranceusr_icon_value_table);
 }
 
 static int
 lowranceusr_find_icon_number_from_desc(const QString& desc)
 {
-  if (desc.isNull()) {
-    return DEF_ICON;
-  }
-
-  /*
-   * If we were given a numeric icon number as a description
-   * (i.e. 8255), just return that.
-   */
-  int n = desc.toInt();
-  if (n)  {
-    return n;
-  }
-
-  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
-    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
-      return i->value;
-    }
-  }
-
-  return DEF_ICON;
+  return lowranceusr_common_find_icon_number_from_desc(desc, lowranceusr_icon_value_table, DEF_ICON);
 }
 
-const QString
+static QString
 lowranceusr4_find_desc_from_icon_number(const int icon)
 {
-  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
-    if (icon == i->value) {
-      return i->icon;
-    }
-  }
-
-  // Didn't find it in table, default to leave it as the number found
-  return QString("icon-%1").arg(icon);
+  return lowranceusr_common_find_desc_from_icon_number(icon, lowranceusr4_icon_value_table);
 }
 
 static int
 lowranceusr4_find_icon_number_from_desc(const QString& desc)
 {
-  if (desc.isNull()) {
-    return DEF_USR4_ICON;
-  }
-
-  /*
-   * If we were given a numeric icon number as a description
-   * (i.e. 8255), just return that.
-   */
-  int n = desc.toInt();
-  if (n)  {
-    return n;
-  }
-
-  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
-    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
-      return i->value;
-    }
-  }
-
-  return DEF_USR4_ICON;
+  return lowranceusr_common_find_icon_number_from_desc(desc, lowranceusr4_icon_value_table, DEF_USR4_ICON);
 }
 
-const char *
+static const char *
 lowranceusr4_find_color_from_icon_number_plus_color_index(const int icon, const int index)
 {
   for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
