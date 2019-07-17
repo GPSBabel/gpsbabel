@@ -560,6 +560,7 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   } else {
     QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
     qba = encoder->fromUnicode(buf);
+    delete encoder;
   }
   int len = qba.size();
   gbfputint32(len, file_out);
