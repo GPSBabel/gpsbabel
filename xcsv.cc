@@ -1849,7 +1849,8 @@ xcsv_parse_style_line(QString line)
   QStringList tokens = tokenstr.split(",");
 
   if (op == "FIELD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto cp = dequote(tokens[0]);
+    cp = xcsv_get_char_from_constant_table(cp);
     xcsv_file.field_delimiter = cp;
 
     char* p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
