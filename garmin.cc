@@ -144,16 +144,6 @@ rw_init(const QString& fname)
     return;
   }
 
-  /*
-   * THis is Gross. The B&W Vista sometimes sets its time decades into
-   * the future with no way to reset it.  This apparently can "cure"
-   * an affected unit.
-   */
-  if (resettime) {
-    GPS_Command_Send_Time(qPrintable(fname), current_time().toTime_t());
-    return;
-  }
-
   if (categorybitsopt) {
     categorybits = strtol(categorybitsopt, nullptr, 0);
   }
@@ -175,6 +165,18 @@ rw_init(const QString& fname)
   if (GPS_Init(qPrintable(fname)) < 0) {
     fatal(MYNAME ":Can't init %s\n", qPrintable(fname));
   }
+
+  /*
+   * THis is Gross. The B&W Vista sometimes sets its time decades into
+   * the future with no way to reset it.  This apparently can "cure"
+   * an affected unit.
+   */
+  if (resettime) {
+    GPS_User("Issuing Time Reset...\n");
+    GPS_Command_Send_Time(qPrintable(fname), current_time().toTime_t());
+    GPS_User("done.\n");
+  }
+
   portname = xstrdup(qPrintable(fname));
 
   if (baud && baud != DEFAULT_BAUD) {
