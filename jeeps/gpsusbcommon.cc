@@ -118,7 +118,8 @@ top:
         GPS_Diag("[...]");
         break;
       }
-      GPS_Diag("%c", isalnum(buf[i])? buf[i] : '.');
+      int c = buf[i];
+      GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
     }
 
     m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
@@ -169,7 +170,8 @@ gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
     }
 
     for (i=0; i<sz; i++) {
-      GPS_Diag("%c", isalnum(obuf[i])? obuf[i] : '.');
+      int c = obuf[i];
+      GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
     }
 
     m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);

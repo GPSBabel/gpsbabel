@@ -30,6 +30,8 @@
 #include <cstring>
 #include <ctime>
 
+#include <QtCore/QDateTime>
+
 /*
  * This violates the layering design, but is needed for device discovery.
  * See the use of gps_is_usb and GPS_Packet_Read_usb below.
@@ -842,6 +844,8 @@ static void GPS_A001(GPS_PPacket& packet)
            gps_route_transfer, gps_rte_hdr_type, gps_rte_type);
   GPS_User("Track:    Transfer %d Type %d\n",
            gps_trk_transfer, gps_trk_type);
+  QDateTime dt = QDateTime::fromMSecsSinceEpoch(gps_save_time * 1000);
+  GPS_User("GPS Time: %s\n", CSTR(dt.toString()));
 
   return;
 }

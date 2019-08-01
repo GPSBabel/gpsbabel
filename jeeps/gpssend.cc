@@ -102,7 +102,7 @@ DiagS(void* buf, size_t sz)
 
   while (sz--) {
     unsigned char c = *cbuf++;
-    GPS_Diag("%c", isalnum(c) ? c : '.');
+    GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
   }
 }
 

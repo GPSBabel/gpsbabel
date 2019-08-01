@@ -150,7 +150,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
             GPS_Diag(" ");
             for (unsigned i = 0; i < packet->n; i++) {
               char c = (*packet).data[i];
-              GPS_Diag("%c", isalnum(c) ? c : '.');
+              GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
             }
             GPS_Diag(" ");
           }
