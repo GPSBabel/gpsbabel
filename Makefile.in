@@ -390,17 +390,17 @@ rpm: changes.html
 	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
 
 gui: gpsbabel$(EXEEXT)
-	cd gui ; $(QMAKE) app.pro && $(MAKE) $(MAKEFLAGS)
+	cd gui ; $(QMAKE) app.pro && $(MAKE)
 
 linux-gui: gui
-	cd gui; $(MAKE) $(MAKEFLAGS) package
+	cd gui; $(MAKE) package
 
 # Build the Qt front end, place GPSBabel in the right place, deploy all
 # the libs.
 
 mac-gui: gui
 	rm -f gui/GPSBabelFE.dmg
-	cd gui; $(MAKE) $(MAKEFLAGS) package
+	cd gui; $(MAKE) package
 	mv gui/GPSBabelFE.dmg  gui/GPSBabel-$(VERSIOND).dmg
 
 # release check using CVS tree
