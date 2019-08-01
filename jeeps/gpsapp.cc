@@ -235,7 +235,7 @@ static int32 GPS_A000(const char* port)
   gps_save_id = id;
   gps_save_version = ((double)version/100.);
 
-  GPS_User("Unit:\t%s\nID:\t%d\nVersion:\t%.2f",
+  GPS_User("Unit:\t%s\nID:\t%d\nVersion:\t%.2f\n",
            gps_save_string, gps_save_id, gps_save_version);
 
 #if 0
