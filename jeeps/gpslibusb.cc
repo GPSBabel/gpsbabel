@@ -29,7 +29,7 @@
 #if HAVE_LIBUSB
 #  if __APPLE__
      // We use our own (slightly modified) libusb.
-#    include "mac/libusb/usb.h"
+#    include "mac/libusb/libusb.h"
 #  else
 #    include "usb.h"
 #  endif
@@ -351,14 +351,14 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
 #define EA(x) x & USB_ENDPOINT_ADDRESS_MASK
     case USB_ENDPOINT_TYPE_BULK:
       if (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) {
-        gusb_bulk_in_ep = (EA(ep->bEndpointAddress)) | USB_ENDPOINT_IN;
+        gusb_bulk_in_ep = (EA(ep->bEndpointAddress)) | LIBUSB_ENDPOINT_IN;
       } else {
         gusb_bulk_out_ep = EA(ep->bEndpointAddress);
       }
       break;
     case USB_ENDPOINT_TYPE_INTERRUPT:
       if (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) {
-        gusb_intr_in_ep = (EA(ep->bEndpointAddress)) | USB_ENDPOINT_IN;
+        gusb_intr_in_ep = (EA(ep->bEndpointAddress)) | LIBUSB_ENDPOINT_IN;
       }
       break;
     }

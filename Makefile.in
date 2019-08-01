@@ -688,7 +688,7 @@ jeeps/gpsdevice_usb.o: jeeps/gpsdevice_usb.cc jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/garminusb.h \
   jeeps/gpsusbcommon.h jeeps/gpsusbint.h
-jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/usb.h \
+jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/libusb.h \
   jeeps/gps.h jeeps/../defs.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h defs.h session.h src/core/datetime.h src/core/optional.h \
   jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
@@ -775,19 +775,16 @@ kml.o: kml.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   src/core/file.h src/core/xmlstreamwriter.h src/core/xmltag.h \
   xmlgeneric.h
 lmx.o: lmx.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
-  gbfile.h session.h src/core/datetime.h src/core/optional.h \
+  ebfile.h session.h src/core/datetime.h src/core/optional.h \
   xmlgeneric.h
 lowranceusr.o: lowranceusr.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h
-mac/libusb/darwin.o: mac/libusb/darwin.c config.h mac/libusb/usbi.h \
-  mac/libusb/usb.h mac/libusb/error.h
-mac/libusb/descriptors.o: mac/libusb/descriptors.c mac/libusb/usbi.h \
-  mac/libusb/usb.h mac/libusb/error.h
-mac/libusb/error.o: mac/libusb/error.c mac/libusb/usb.h \
-  mac/libusb/error.h
-mac/libusb/usb.o: mac/libusb/usb.c mac/libusb/usbi.h mac/libusb/usb.h \
-  mac/libusb/error.h
+mac/libusb/os/darwin_usb.o: mac/libusb/os/darwin_usb.c config.h mac/libusb/libusbi.h \
+  mac/libusb/libusb.h mac/libusb/error.h
+mac/libusb/descriptors.o: mac/libusb/descriptors.c mac/libusb/libusbi.h \
+  mac/libusb/libusb.h 
+mac/libusb/usb.o: mac/libusb/usb.c mac/libusb/usbi.h mac/libusb/libusb.h 
 maggeo.o: maggeo.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   csv_util.h magellan.h xmlgeneric.h
