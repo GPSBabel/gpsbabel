@@ -100,8 +100,7 @@ Map::Map(QWidget* parent,
     QMessageBox::critical(nullptr, appName,
                           tr("Missing \"gmapbase.html\" file.  Check installation"));
   } else {
-    QString urlStr = "file:///" + baseFile;
-    this->load(QUrl(urlStr));
+    this->load(QUrl::fromLocalFile(baseFile));
   }
 
 #ifdef DEBUG_JS_GENERATION
