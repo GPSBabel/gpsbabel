@@ -222,7 +222,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui_.outputWindow->setReadOnly(true);
 
+#ifdef PKGDATADIR
+  langPath_ = QLatin1String(PKGDATADIR);
+#else
   langPath_ = QApplication::applicationDirPath();
+#endif
   langPath_.append("/translations/");
 
   // Start up in the current system language.

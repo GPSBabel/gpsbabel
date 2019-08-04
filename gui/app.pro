@@ -33,6 +33,10 @@ unix {
         DEFINES += HAVE_UDEV
         PKGCONFIG += libudev
     }
+    !isEmpty(PREFIX) {
+        PKGDATADIR = $$PREFIX/share/gpsbabel
+        DEFINES += PKGDATADIR=\\\"$$PKGDATADIR\\\"
+    }
 }
 
 UI_DIR = tmp
