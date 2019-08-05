@@ -106,15 +106,22 @@ cp coretool/gpsbabel_??.qm "${LANGDIR}"
 # and, for macos, make & deploy locversion.plist files.
 (convert_qt_translations)
 
+cat > qt.conf <<-EOT
+[PATH]
+Translations=${LANGDIR}
+EOT
+
 if [ "${machine}" = "Linux" ]; then
   cp objects/gpsbabelfe "${APPDIR}"
   cp ../gpsbabel "${APPDIR}"
   cp gmapbase.html "${APPDIR}"
   cp COPYING.txt "${APPDIR}"
+  cp qt.conf "${APPDIR}"
 else # Mac
   cp ../GPSBabel "${APPDIR}/Contents/MacOS/gpsbabel"
   cp gmapbase.html "${APPDIR}/Contents/MacOS"
   cp COPYING.txt "${APPDIR}/Contents/MacOS"
+  cp qt.conf "${APPDIR}/Contents/Resources"
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2

@@ -26,6 +26,7 @@
 #include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
 #include <QtCore/QFile>                // for QFile
 #include <QtCore/QFileInfo>            // for QFileInfo
+#include <QtCore/QLibraryInfo>         // for QLibraryInfo
 #include <QtCore/QLocale>              // for QLocale
 #include <QtCore/QMimeData>            // for QMimeData
 #include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
@@ -222,9 +223,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui_.outputWindow->setReadOnly(true);
 
-  langPath_ = QApplication::applicationDirPath();
-  langPath_.append("/translations/");
-
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   loadFormats();
@@ -315,7 +313,8 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   qApp->removeTranslator(&translator);
 
   // load the new translator
-  if (translator.load(filename, langPath_)) {
+  if (translator.load(filename,
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
     qApp->installTranslator(&translator);
   }
 }
