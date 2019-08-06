@@ -1,5 +1,5 @@
 If you're interested in contributing to this program, here are some
-guidelines.  Mail patches to gpsbabel-code@lists.sourceforge.net for
+guidelines.  Submit pull requests to https://github.com/gpsbabel/gpsbabel for
 consideration and integration.
 
 Rules to Live By
@@ -54,11 +54,10 @@ The corresponding astyle settings for this are provided in our source
 tree in the file named 'astylerc'
 
 
-Submitting Patches
-------------------
+Submitting Code
+---------------
 
-If you are creating a new target you should submit patches (use 
-"svn diff" to create patches) to the following files:
+If you are creating a new target your work should include the following files:
 * Yourcode.c and/or Yourcode.h - this is the code required to do your
   conversions and any support files that your code requires.
 * vecs.c - an updated vecs.c file implementing your conversion code into
@@ -72,8 +71,8 @@ If you are creating a new target you should submit patches (use
 * Documentation - see below.
 
 Please ensure that you are building and testing against the latest code
-from the top of the SVN tree and that any code you modify is the latest
-version from the SVN - Note: code changes sometimes occur frequently!
+from the master branch of the Git repository - Note: code changes sometimes
+occur frequently!
 
 Documentation
 -------------
