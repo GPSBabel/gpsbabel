@@ -90,13 +90,16 @@ Map::Map(QWidget* parent,
   connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
 #endif
 
+#ifdef PKGDATADIR
+  QString baseFile =  PKGDATADIR + "/gmapbase.html";
+#else
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+#endif
   if (!QFile(baseFile).exists()) {
     QMessageBox::critical(nullptr, appName,
                           tr("Missing \"gmapbase.html\" file.  Check installation"));
   } else {
-    QString urlStr = "file:///" + baseFile;
-    this->load(QUrl(urlStr));
+    this->load(QUrl::fromLocalFile(baseFile));
   }
 
 #ifdef DEBUG_JS_GENERATION
