@@ -33,6 +33,30 @@ unix {
         DEFINES += HAVE_UDEV
         PKGCONFIG += libudev
     }
+
+    # To override the installed location of gmapbase.html set PKGDATADIR.
+    # e.g. qmake PKGDATADIR=/usr/share/gpsbabel
+    !isEmpty(PKGDATADIR):DEFINES += PKGDATADIR=\\\"$$PKGDATADIR\\\"
+
+    # To override the installed location of the translation files (*.qm)
+    # set QTTRANSLATIONDIR.
+    # Common use case 1:
+    # If the translations are installed local to the package then 
+    # gpsbabel_*.qm, gpsbabelfe_*.qm and the concatenated qt_*.qm must all
+    # be in QTTRANSLATIONDIR.
+    # .e.g. qmake QTTRANSLATIONDIR=/usr/share/gpsbabel/translations
+    # Note that the package_app target will create the concatenated qt_*.qm files.
+    # The concatenated qt_*.qm files are DIFFERENT from the
+    # the Qt provided meta catalog file of the same name, the concatenated
+    # qt_*.qm files include all the necessary Qt provided module qm files.
+    # Common use case 2:
+    # If the translations are installed in the directory that contains all the
+    # original Qt provided translations, then only gpsbabel_*.qm and
+    # gpsbabelfe_*.qm need be installed alongside the original Qt provided
+    # translations (which include the meta catalogs as well as the module
+    # qm files.)
+    # .e.g. qmake QTTRANSLATIONDIR=/usr/share/qt5/translations
+    !isEmpty(QTTRANSLATIONDIR):DEFINES += QTTRANSLATIONDIR=\\\"$$QTTRANSLATIONDIR\\\"
 }
 
 UI_DIR = tmp
