@@ -18,6 +18,9 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
+/* Define to 1 if you have the `shp' library (-lshp). */
+#undef HAVE_LIBSHP
+
 /* Defined if you have libusb */
 #undef HAVE_LIBUSB
 
@@ -84,8 +87,8 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* 1 to enable shapefile support */
-#undef SHAPELIB_ENABLED
+/* 1 to inhibit our use of libshp. */
+#undef SHAPELIB_INHIBITED
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

@@ -369,7 +369,7 @@ vecs_t vec_list[] = {
     nullptr,
     nullptr,
   },
-#if SHAPELIB_ENABLED
+#if !SHAPELIB_INHIBITED
   {
     &shape_vecs,
     "shape",

@@ -222,7 +222,6 @@ DEFINES += NEW_STRINGS
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
-DEFINES += SHAPELIB_ENABLED
 DEFINES += CSVFMTS_ENABLED
 
 # Creator insists on adding -W to -Wall which results in a completely

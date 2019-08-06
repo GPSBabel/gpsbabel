@@ -58,18 +58,6 @@ AS_IF([test "$GCC" = "yes"], [
 	CXXFLAGS="$CXXFLAGS -Wall"
 ])
 
-AC_MSG_CHECKING([whether to support shapefiles])
-AC_ARG_ENABLE([shapefile],
-	[AS_HELP_STRING(
-		[--disable-shapefile],
-		[])],
-	[],
-	[AS_VAR_SET([enable_shapefile], [yes])])
-AS_IF([test "$enable_shapefile" = "yes"], [
-	AC_DEFINE(SHAPELIB_ENABLED, 1, [1 to enable shapefile support])
-])
-AC_MSG_RESULT([$enable_shapefile])
-
 AC_MSG_CHECKING([whether to support csv formats])
 AC_ARG_ENABLE([csv],
 	[AS_HELP_STRING(
@@ -109,6 +97,24 @@ AS_IF([test "$enable_filters" = "yes"], [
 	AC_DEFINE(FILTERS_ENABLED, 1, [1 to enable all the filters.])
 ])
 AC_MSG_RESULT([$enable_filters])
+
+AC_MSG_CHECKING([whether to support shapefiles])
+AC_ARG_WITH([shapelib],
+	[AS_HELP_STRING(
+		[--with-shapelib=(included)|system|no],
+		[])])
+AS_CASE([$with_shapelib], ["system"], [
+	AC_CHECK_LIB([shp], [SHPOpenLL])
+], ["no"], [
+	AC_DEFINE(SHAPELIB_INHIBITED, 1, [1 to inhibit our use of libshp.])
+	AC_MSG_RESULT([no])
+], [
+	SHAPELIB_CPP="-I\$(srcdir)/shapelib"
+	SHAPELIB="\$(SHAPELIB)"
+	AC_MSG_RESULT([using included version])
+])
+AC_SUBST(SHAPELIB_CPP)
+AC_SUBST(SHAPELIB)
 
 AC_MSG_CHECKING([whether to support zlib])
 AC_ARG_WITH([zlib],

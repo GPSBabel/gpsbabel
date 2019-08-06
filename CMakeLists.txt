@@ -243,7 +243,6 @@ add_definitions(-DNEW_STRINGS)
 # We don't care about stripping things out of the build.  Full monty, baby.
 add_definitions(-DMAXIMAL_ENABLED)
 add_definitions(-DFILTERS_ENABLED)
-add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
 add_executable(GPSBabel ${SOURCES} ${HEADERS})

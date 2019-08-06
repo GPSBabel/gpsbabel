@@ -28,7 +28,7 @@
 #include "shapelib/shapefil.h"
 #include <cstdlib>
 
-#if SHAPELIB_ENABLED
+#if !SHAPELIB_INHIBITED
 static SHPHandle ihandle;
 static DBFHandle ihandledb;
 static SHPHandle ohandle;
@@ -541,4 +541,4 @@ ff_vecs_t shape_vecs = {
   , NULL_POS_OPS,
   nullptr
 };
-#endif /* SHAPELIB_ENABLED */
+#endif /* !SHAPELIB_INHIBITED */

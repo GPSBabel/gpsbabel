@@ -644,6 +644,8 @@ RC
 FILEINFO
 ZLIB
 ZLIB_CPP
+SHAPELIB
+SHAPELIB_CPP
 FMTS
 EGREP
 GREP
@@ -723,10 +725,10 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_shapefile
 enable_csv
 enable_most
 enable_filters
+with_shapelib
 with_zlib
 with_doc
 '
@@ -1367,7 +1369,6 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --disable-shapefile
   --disable-csv
   --disable-most
   --disable-filters
@@ -1375,6 +1376,8 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-shapelib=(included)|system|no
+
   --with-zlib=(included)|system|no
 
   --with-doc=DIR          Path where the documentation will be stored.
@@ -5579,25 +5582,6 @@ if test "$GCC" = "yes"; then :
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support shapefiles" >&5
-$as_echo_n "checking whether to support shapefiles... " >&6; }
-# Check whether --enable-shapefile was given.
-if test "${enable_shapefile+set}" = set; then :
-  enableval=$enable_shapefile;
-else
-  enable_shapefile=yes
-fi
-
-if test "$enable_shapefile" = "yes"; then :
-
-
-$as_echo "#define SHAPELIB_ENABLED 1" >>confdefs.h
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_shapefile" >&5
-$as_echo "$enable_shapefile" >&6; }
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support csv formats" >&5
 $as_echo_n "checking whether to support csv formats... " >&6; }
 # Check whether --enable-csv was given.
@@ -5660,6 +5644,82 @@ $as_echo "#define FILTERS_ENABLED 1" >>confdefs.h
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_filters" >&5
 $as_echo "$enable_filters" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support shapefiles" >&5
+$as_echo_n "checking whether to support shapefiles... " >&6; }
+
+# Check whether --with-shapelib was given.
+if test "${with_shapelib+set}" = set; then :
+  withval=$with_shapelib;
+fi
+
+case $with_shapelib in #(
+  "system") :
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SHPOpenLL in -lshp" >&5
+$as_echo_n "checking for SHPOpenLL in -lshp... " >&6; }
+if ${ac_cv_lib_shp_SHPOpenLL+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lshp  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char SHPOpenLL ();
+int
+main ()
+{
+return SHPOpenLL ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_shp_SHPOpenLL=yes
+else
+  ac_cv_lib_shp_SHPOpenLL=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_shp_SHPOpenLL" >&5
+$as_echo "$ac_cv_lib_shp_SHPOpenLL" >&6; }
+if test "x$ac_cv_lib_shp_SHPOpenLL" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSHP 1
+_ACEOF
+
+  LIBS="-lshp $LIBS"
+
+fi
+
+ ;; #(
+  "no") :
+
+
+$as_echo "#define SHAPELIB_INHIBITED 1" >>confdefs.h
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+ ;; #(
+  *) :
+
+	SHAPELIB_CPP="-I\$(srcdir)/shapelib"
+	SHAPELIB="\$(SHAPELIB)"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using included version" >&5
+$as_echo "using included version" >&6; }
+ ;;
+esac
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support zlib" >&5
 $as_echo_n "checking whether to support zlib... " >&6; }

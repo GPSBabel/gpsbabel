@@ -56,7 +56,7 @@ LRELEASE=@LRELEASE@
 #
 #OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
-GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) $(BUILD_CPP) @ZLIB_CPP@ @QT_INC_OPT@$(QT_INC) \
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) $(BUILD_CPP) @SHAPELIB_CPP@ @ZLIB_CPP@ @QT_INC_OPT@$(QT_INC) \
 	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
@@ -105,7 +105,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 # Extra modules in Jeeps that we don't use
 # 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
 
-SHAPE=shapelib/shpopen.o shapelib/dbfopen.o shapelib/safileio.o
+SHAPELIB=shapelib/shpopen.o shapelib/dbfopen.o shapelib/safileio.o
 
 ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
 	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
@@ -121,7 +121,7 @@ LIBOBJS = route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
     src/core/textstream.o \
 	  src/core/usasciicodec.o \
 	  src/core/xmlstreamwriter.o \
-	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+	  $(GARMIN) $(JEEPS) @SHAPELIB@ @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 DEPFILES = $(OBJS:.o=.d)

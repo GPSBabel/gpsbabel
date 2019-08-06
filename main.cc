@@ -186,7 +186,7 @@ print_extended_info()
     "CSVFMTS_ENABLED "
 #endif
 
-#if SHAPELIB_ENABLED
+#if !SHAPELIB_INHIBITED
     "SHAPELIB_ENABLED "
 #endif
 
