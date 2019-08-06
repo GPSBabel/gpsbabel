@@ -91,7 +91,7 @@ Map::Map(QWidget* parent,
 #endif
 
 #ifdef PKGDATADIR
-  QString baseFile =  PKGDATADIR + "/gmapbase.html";
+  QString baseFile =  PKGDATADIR  "/gmapbase.html";
 #else
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
 #endif
