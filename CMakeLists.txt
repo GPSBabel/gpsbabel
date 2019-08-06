@@ -56,11 +56,6 @@ set(ALL_FMTS
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 )
 
-#DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
-
-#DEPRECATED_HEADERS=geo.h quovadis.h
-#DEPRECATED_SHAPE=pdbfile.cc
-
 # ALL_FMTS=$$MINIMAL_FMTS
 set(FILTERS
   position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc
@@ -69,7 +64,7 @@ set(FILTERS
   validate.cc
 )
 
-set(SHAPE
+set(SHAPELIB
   shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
 )
 
@@ -236,7 +231,7 @@ if (APPLE)
 endif()
 
 set(SOURCES
-  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS}
+  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPELIB} ${ZLIB} ${JEEPS}
 )
 add_definitions(-DNEW_STRINGS)
 

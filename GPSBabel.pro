@@ -51,11 +51,6 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 
-DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
-
-DEPRECATED_HEADERS=geo.h quovadis.h
-DEPRECATED_SHAPE=pdbfile.cc
-
 # ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
@@ -64,7 +59,7 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
 FILTER_HEADERS = $$FILTERS
 FILTER_HEADERS ~= s/\.cc/.h/g
 
-SHAPE=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
+SHAPELIB=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
 
 ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
         zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
@@ -216,7 +211,7 @@ macx {
              mac/libusb/usbi.h
 }
 
-SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
+SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPELIB $$ZLIB $$JEEPS
 DEFINES += NEW_STRINGS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
