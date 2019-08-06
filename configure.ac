@@ -425,7 +425,6 @@ AC_SUBST(QT_LIBS)
 AS_MKDIR_P([jeeps])
 AS_MKDIR_P([shapelib])
 AS_MKDIR_P([src/core])
-AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
 
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
