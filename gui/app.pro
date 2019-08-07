@@ -84,9 +84,13 @@ SOURCES += preferences.cc
 SOURCES += processwait.cc
 SOURCES += upgrade.cc
 SOURCES += version_mismatch.cc
-macx:SOURCES += serial_mac.cc
-unix:SOURCES += serial_unix.cc
-windows:SOURCES += serial_win.cc
+unix:!mac {
+  SOURCES += serial_unix.cc
+} else:mac {
+  SOURCES += serial_mac.cc
+} else:windows {
+  SOURCES += serial_win.cc
+}
 
 HEADERS += aboutdlg.h
 HEADERS += advdlg.h
