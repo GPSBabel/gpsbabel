@@ -109,7 +109,16 @@
          </property>
          <widget class="QWidget" name="inputFilePage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -144,7 +153,16 @@
          </widget>
          <widget class="QWidget" name="inputDevicePage">
           <layout class="QVBoxLayout" name="verticalLayout_2">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -221,13 +239,25 @@
        <string>Translation Options</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
         <number>4</number>
        </property>
        <item>
         <widget class="QLabel" name="wayPtLabel">
          <property name="text">
-          <string>-</string>
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="app.qrc">:/images/lights.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -270,7 +300,10 @@
        <item>
         <widget class="QLabel" name="routeLabel">
          <property name="text">
-          <string>-</string>
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="app.qrc">:/images/lights.png</pixmap>
          </property>
         </widget>
        </item>
@@ -310,7 +343,10 @@
        <item>
         <widget class="QLabel" name="trackLabel">
          <property name="text">
-          <string>-</string>
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="app.qrc">:/images/lights.png</pixmap>
          </property>
         </widget>
        </item>
@@ -493,7 +529,16 @@
          </property>
          <widget class="QWidget" name="outputFilePage">
           <layout class="QHBoxLayout" name="horizontalLayout_9">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -528,7 +573,16 @@
          </widget>
          <widget class="QWidget" name="outputDevicePage">
           <layout class="QVBoxLayout" name="verticalLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -620,7 +674,7 @@
      <x>0</x>
      <y>0</y>
      <width>675</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
