@@ -123,7 +123,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
       QLineEdit* lineEdit = new QLineEdit(this);
       QToolButton* button = new QToolButton(this);
       lineEdit->setText(getOptionValue(options_, k).toString());
-      button->setIcon(QIcon(inFile ? ":images/file.png" : ":images/save.png"));
+      button->setIcon(QIcon(inFile ? ":/images/file.png" : ":/images/save.png"));
       w = lineEdit;
       horizontalSpacer->changeSize(5, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
       horizontalLayout->addWidget(lineEdit);
@@ -209,8 +209,10 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   buttonBox_->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
   lay->addWidget(buttonBox_);
   verticalLayout->addLayout(lay);
-  buttonBox_->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
-  buttonBox_->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
+#if defined (Q_OS_WIN)
+  buttonBox_->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/ok.png"));
+  buttonBox_->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":/images/cancel.png"));
+#endif // Q_OS_WIN
 
   connect(buttonBox_, SIGNAL(accepted()), this, SLOT(acceptClicked()));
   connect(buttonBox_, SIGNAL(rejected()), this, SLOT(rejectClicked()));
