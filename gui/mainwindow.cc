@@ -199,8 +199,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
 #if defined (Q_OS_WIN)
   // Windows users like the colored buttons.  They look out of place elsewhere.
-  ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/runit.png"));
-  ui_.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":images/exit.png"));
+  ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/runit.png"));
+  ui_.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":/images/exit.png"));
 #endif
 
   ui_.inputOptionsText->setReadOnly(true);
@@ -212,10 +212,10 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 #else
   setAcceptDrops(true);
 #endif
-  lights_[0] = QPixmap::fromImage(QImage(":images/00.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights_[1] = QPixmap::fromImage(QImage(":images/01.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights_[2] = QPixmap::fromImage(QImage(":images/10.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights_[3] = QPixmap::fromImage(QImage(":images/11.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[0] = QPixmap::fromImage(QImage(":/images/00.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[1] = QPixmap::fromImage(QImage(":/images/01.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[2] = QPixmap::fromImage(QImage(":/images/10.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[3] = QPixmap::fromImage(QImage(":/images/11.png").scaledToHeight(20, Qt::SmoothTransformation));
 
   ui_.outputWindow->setReadOnly(true);
 
