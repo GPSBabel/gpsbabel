@@ -15,6 +15,7 @@
      <file>images/cancel.png</file>
      <file>images/reload.png</file>
      <file>images/appicon.png</file>
+     <file>gmapbase.html</file>
  </qresource>
  </RCC>
 

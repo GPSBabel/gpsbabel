@@ -90,14 +90,9 @@ Map::Map(QWidget* parent,
   connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
 #endif
 
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
-  if (!QFile(baseFile).exists()) {
-    QMessageBox::critical(nullptr, appName,
-                          tr("Missing \"gmapbase.html\" file.  Check installation"));
-  } else {
-    QString urlStr = "file:///" + baseFile;
-    this->load(QUrl(urlStr));
-  }
+  // gmapbase.html is stored as an internal resource.
+  // gmapbase.html does NOT need to be distributed with gpsbabel.
+  this->load(QUrl("qrc:///gmapbase.html"));
 
 #ifdef DEBUG_JS_GENERATION
   dbgdata_ = new QFile("mapdebug.js");

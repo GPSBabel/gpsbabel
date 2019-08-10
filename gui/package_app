@@ -109,11 +109,9 @@ cp coretool/gpsbabel_??.qm "${LANGDIR}"
 if [ "${machine}" = "Linux" ]; then
   cp objects/gpsbabelfe "${APPDIR}"
   cp ../gpsbabel "${APPDIR}"
-  cp gmapbase.html "${APPDIR}"
   cp COPYING.txt "${APPDIR}"
 else # Mac
   cp ../GPSBabel "${APPDIR}/Contents/MacOS/gpsbabel"
-  cp gmapbase.html "${APPDIR}/Contents/MacOS"
   cp COPYING.txt "${APPDIR}/Contents/MacOS"
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
