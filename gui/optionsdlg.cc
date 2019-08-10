@@ -123,7 +123,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
       QLineEdit* lineEdit = new QLineEdit(this);
       QToolButton* button = new QToolButton(this);
       lineEdit->setText(getOptionValue(options_, k).toString());
-      button->setIcon(QIcon(inFile ? ":/images/file.png" : ":/images/save.png"));
+      button->setIcon(QIcon(inFile ? ":/images/open.png" : ":/images/save.png"));
       w = lineEdit;
       horizontalSpacer->changeSize(5, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
       horizontalLayout->addWidget(lineEdit);
