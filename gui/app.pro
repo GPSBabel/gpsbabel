@@ -33,58 +33,6 @@ unix {
         DEFINES += HAVE_UDEV
         PKGCONFIG += libudev
     }
-
-    # Setting PKGDATADIR will:
-    # 1. Look for gmapbase.html in PKGDATADIR instead
-    # of in QApplication::applicationDirPath().
-    # E.g. qmake PKGDATADIR=/usr/share/gpsbabel
-    # will use /usr/share/gpsbabel/gmapbase.html instead of
-    # QApplication::applicationDirPath() + "/gmapbase.html".
-    # 2. Substitude PKGDATADIR/translations in the search path for
-    # translation files instead of
-    # QApplication::applicationDirPath() + "/translations".
-    # E.g. qmake PKGDATADIR=/usr/share/gpsbabel
-    # will look in /usr/share/gpsbabel/translations instead of
-    # QApplication::applicationDirPath() + "/translations".
-
-    # We search for translation files (*.qm) in this order:
-    # 1a. Relative to the executable, specifically at
-    # QApplication::applicationDirPath() + "/translations".
-    # This works when we package the app on windows and macos.
-    # It also works we create a bundled app on linux,
-    # for example with the package target.  However, linux packagers typically
-    # install the translation files in another location.
-    #  OR
-    # 1b. In PKGDATADIR/translations.  This works for linux packages that
-    # place the translations in PKGDATADIR/translations, e.g.
-    # qmake PKGDATADIR=/usr/share/gpsbabel with the translations in
-    # /usr/share/gpsbabel/translations.
-    # 2. In the Qt TranslationsPath.  If this is not overridden in qt.conf it
-    # will point to the hard-coded paths that are compiled into the Qt library.
-    # This hard-coded path can be found with "qmake -query QT_INSTALL_TRANSLATIONS".
-    # This works for linux packages that have some or all translation files
-    # installed in the original location they used when compiling Qt.
-
-    # There are three sets of translation files that should be available
-    # when running gpsbabelfe:
-    # 1. gpsbabelfe_*.qm
-    # 2. gpsbabel_*.qm
-    # 3a. The Qt supplied meta catalogs (qt_*.qm) and the module files they
-    #     refer to (qt*_*.qm).
-    #     Note if you are counting on finding the Qt supplied translations,
-    #     then the package that provides the Qt translations
-    #     needs to be a prerequisite to the gpsbabel gui package.
-    #  OR
-    # 3b. The concatentated translation files for the modules that gpsbabelfe
-    #     uses.  These files are created by building the package target.
-    #     These are named identically to the Qt translation meta catalogs, i.e.
-    #     qt_*.qm, but contain the necessary translation data for the modules
-    #     gpsbabelfe uses.
-    # A description of the meta catalogs and concatentation process is
-    # available at
-    # https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
-
-    !isEmpty(PKGDATADIR):DEFINES += PKGDATADIR=\\\"$$PKGDATADIR\\\"
 }
 
 UI_DIR = tmp
@@ -189,3 +137,79 @@ macx|linux{
   QMAKE_DISTCLEAN += compile_commands.json
 }
 
+linux:!isEmpty(PREFIX) {
+  DATADIR = $$PREFIX/share
+  ICONSDIR = $$DATADIR/pixmaps
+  PKGDATADIR = $$DATADIR/gpsbabel
+
+  target.path = $$PREFIX/bin
+
+  desktop.path = $$DATADIR/applications
+  desktop.files = gpsbabel.desktop
+
+  icon.path = $$ICONSDIR
+  icon.extra = $(INSTALL_FILE) images/appicon.png $(INSTALL_ROOT)$$ICONSDIR/gpsbabel.png
+
+  gmapbase.files = gmapbase.html
+  gmapbase.path = $$PKGDATADIR
+
+  translations.files = gpsbabelfe_*.qm
+  translations.files += coretool/gpsbabel_*.qm
+  translations.path = $$PKGDATADIR/translations
+
+  INSTALLS += target desktop icon gmapbase translations
+}
+
+unix {
+    # Setting PKGDATADIR will:
+    # 1. Look for gmapbase.html in PKGDATADIR instead
+    # of in QApplication::applicationDirPath().
+    # E.g. qmake PKGDATADIR=/usr/share/gpsbabel
+    # will use /usr/share/gpsbabel/gmapbase.html instead of
+    # QApplication::applicationDirPath() + "/gmapbase.html".
+    # 2. Substitude PKGDATADIR/translations in the search path for
+    # translation files instead of
+    # QApplication::applicationDirPath() + "/translations".
+    # E.g. qmake PKGDATADIR=/usr/share/gpsbabel
+    # will look in /usr/share/gpsbabel/translations instead of
+    # QApplication::applicationDirPath() + "/translations".
+
+    # We search for translation files (*.qm) in this order:
+    # 1a. Relative to the executable, specifically at
+    # QApplication::applicationDirPath() + "/translations".
+    # This works when we package the app on windows and macos.
+    # It also works we create a bundled app on linux,
+    # for example with the package target.  However, linux packagers typically
+    # install the translation files in another location.
+    #  OR
+    # 1b. In PKGDATADIR/translations.  This works for linux packages that
+    # place the translations in PKGDATADIR/translations, e.g.
+    # qmake PKGDATADIR=/usr/share/gpsbabel with the translations in
+    # /usr/share/gpsbabel/translations.
+    # 2. In the Qt TranslationsPath.  If this is not overridden in qt.conf it
+    # will point to the hard-coded paths that are compiled into the Qt library.
+    # This hard-coded path can be found with "qmake -query QT_INSTALL_TRANSLATIONS".
+    # This works for linux packages that have some or all translation files
+    # installed in the original location they used when compiling Qt.
+
+    # There are three sets of translation files that should be available
+    # when running gpsbabelfe:
+    # 1. gpsbabelfe_*.qm
+    # 2. gpsbabel_*.qm
+    # 3a. The Qt supplied meta catalogs (qt_*.qm) and the module files they
+    #     refer to (qt*_*.qm).
+    #     Note if you are counting on finding the Qt supplied translations,
+    #     then the package that provides the Qt translations
+    #     needs to be a prerequisite to the gpsbabel gui package.
+    #  OR
+    # 3b. The concatentated translation files for the modules that gpsbabelfe
+    #     uses.  These files are created by building the package target.
+    #     These are named identically to the Qt translation meta catalogs, i.e.
+    #     qt_*.qm, but contain the necessary translation data for the modules
+    #     gpsbabelfe uses.
+    # A description of the meta catalogs and concatentation process is
+    # available at
+    # https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
+
+    !isEmpty(PKGDATADIR):DEFINES += PKGDATADIR=\\\"$$PKGDATADIR\\\"
+}
