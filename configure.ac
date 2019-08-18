@@ -209,15 +209,15 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 ], [*-*-darwin*], [
 	GBSER=gbser_posix.o
 	OSJEEPS="jeeps/gpslibusb.o \
-  mac/libusb/core.h \
-  mac/libusb/descriptor.h \
-  mac/libusb/hotplug.h \
-  mac/libusb/io.h \
-  mac/libusb/strerror.h \
-  mac/libusb/sync.h \
-  mac/libusb/os/darwin_usb.h \
-  mac/libusb/os/poll_posix.h \
-  mac/libusb/os/threads_posix.h "
+  mac/libusb/core.o \
+  mac/libusb/descriptor.o \
+  mac/libusb/hotplug.o \
+  mac/libusb/io.o \
+  mac/libusb/strerror.o \
+  mac/libusb/sync.o \
+  mac/libusb/os/darwin_usb.o \
+  mac/libusb/os/poll_posix.o \
+  mac/libusb/os/threads_posix.o "
 	USB_LIBS="-framework  IOKit -framework CoreFoundation"
 	AC_DEFINE(HAVE_LIBUSB_1_0, 1)
 
