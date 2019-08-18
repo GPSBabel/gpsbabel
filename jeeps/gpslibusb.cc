@@ -27,7 +27,7 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-#if HAVE_LIBUSB
+#if HAVE_LIBUSB_1_0
 #  if __APPLE__
 // We use our own (slightly modified) libusb.
 #    include "mac/libusb/libusb.h"
@@ -539,4 +539,4 @@ gusb_init(const char* portname, gpsdevh** dh)
   return garmin_usb_scan(lud, req_unit_number);
 }
 
-#endif /* HAVE_LIBUSB */
+#endif /* HAVE_LIBUSB_1_0 */

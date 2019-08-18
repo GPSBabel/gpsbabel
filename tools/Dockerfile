@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs with libraries needed by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-dev \
+    libusb-1.0-0-dev \
     pkg-config \
     libudev-dev \
  && rm -rf /var/lib/apt/lists/*
