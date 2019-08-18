@@ -30,7 +30,7 @@
 #if HAVE_LIBUSB
 #  if __APPLE__
 // We use our own (slightly modified) libusb.
-#    include "mac/libusb/usb.h"
+#    include "mac/libusb/libusb.h"
 #  else
 #    include <libusb-1.0/libusb.h>
 #  endif

@@ -207,13 +207,23 @@ linux {
 macx {
   LIBS += -framework IOKit -framework CoreFoundation
   INCLUDEPATH += mac/libusb
-  SOURCES += mac/libusb/darwin.c \
-             mac/libusb/descriptors.c \
-             mac/libusb/error.c \
-             mac/libusb/usb.c
-  HEADERS += mac/libusb/error.h \
-             mac/libusb/usb.h \
-             mac/libusb/usbi.h
+  SOURCES += mac/libusb/core.c
+  SOURCES += mac/libusb/descriptor.c
+  SOURCES += mac/libusb/hotplug.c
+  SOURCES += mac/libusb/io.c
+  SOURCES += mac/libusb/strerror.c
+  SOURCES += mac/libusb/sync.c
+  SOURCES += mac/libusb/os/darwin_usb.c
+  SOURCES += mac/libusb/os/poll_posix.c
+  SOURCES += mac/libusb/os/threads_posix.c
+  HEADERS += mac/libusb/hotplug.h
+  HEADERS += mac/libusb/libusb.h
+  HEADERS += mac/libusb/libusbi.h
+  HEADERS += mac/libusb/version.h
+  HEADERS += mac/libusb/version_nano.h
+  HEADERS += mac/libusb/os/darwin_usb.h
+  HEADERS += mac/libusb/os/poll_posix.h
+  HEADERS += mac/libusb/os/threads_posix.h
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
