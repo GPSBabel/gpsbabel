@@ -206,7 +206,8 @@ linux {
 
 macx {
   LIBS += -framework IOKit -framework CoreFoundation
-  INCLUDEPATH += mac/libusb
+  INCLUDEPATH += mac/libusb \
+                 mac/libusb/Xcode
   SOURCES += mac/libusb/core.c \
              mac/libusb/descriptor.c \
              mac/libusb/hotplug.c \

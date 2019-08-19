@@ -208,17 +208,10 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	])
 ], [*-*-darwin*], [
 	GBSER=gbser_posix.o
-	OSJEEPS="jeeps/gpslibusb.o \
-  mac/libusb/core.o \
-  mac/libusb/descriptor.o \
-  mac/libusb/hotplug.o \
-  mac/libusb/io.o \
-  mac/libusb/strerror.o \
-  mac/libusb/sync.o \
-  mac/libusb/os/darwin_usb.o \
-  mac/libusb/os/poll_posix.o \
-  mac/libusb/os/threads_posix.o "
-	USB_LIBS="-framework  IOKit -framework CoreFoundation"
+	OSJEEPS="jeeps/gpslibusb.o"
+        USB_INC="-I\$(srcdir)/mac/libusb"
+	USB_LIBS="-t -Lmac/libusb -llibusb-1.0.o -framework  IOKit -framework CoreFoundation"
+        USB_DEPS="mac/libusb/libusb-1.0.o"
 	AC_DEFINE(HAVE_LIBUSB_1_0, 1)
 
 	# On Mac, use frameworks for includes and library files.
@@ -247,7 +240,9 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	])
 ])
 
+AC_SUBST(USB_INC)
 AC_SUBST(USB_LIBS)
+AC_SUBST(USB_DEPS)
 AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
 AC_SUBST(GBSER)
@@ -393,6 +388,7 @@ AS_MKDIR_P([shapelib])
 AS_MKDIR_P([src/core])
 AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
+AS_MKDIR_P([mac/libusb])
 
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
 AC_OUTPUT
