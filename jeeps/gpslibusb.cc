@@ -183,8 +183,8 @@ gusb_teardown(gpsdevh* dh)
       xfree(dh);
     }
     udev = nullptr;
+    libusb_exit(nullptr);
   }
-  libusb_exit(nullptr);
   return 0;
 }
 
