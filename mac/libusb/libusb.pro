@@ -8,12 +8,6 @@ TEMPLATE = lib
 
 TARGET = usb-1.0
 
-# Set static library extension to o instead of the default a.
-# This makes it more likely ld will find our library instead of
-# another, e.g. one in /usr/local/lib from Homebrew.
-QMAKE_EXTENSION_STATICLIB = o
-QMAKE_CLEAN += libusb-1.0.o
-
 SOURCES = core.c \
   descriptor.c \
   hotplug.c \

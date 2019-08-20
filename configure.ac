@@ -210,8 +210,8 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	GBSER=gbser_posix.o
 	OSJEEPS="jeeps/gpslibusb.o"
 	USB_CFLAGS="-I\$(srcdir)/mac/libusb"
-	USB_LIBS="-t -Lmac/libusb -llibusb-1.0.o -lobjc -framework IOKit -framework CoreFoundation"
-	USB_DEPS="mac/libusb/libusb-1.0.o"
+	USB_LIBS="-t -Lmac/libusb -lusb-1.0 -lobjc -framework IOKit -framework CoreFoundation"
+	USB_DEPS="mac/libusb/libusb-1.0.a"
 	AC_DEFINE(HAVE_LIBUSB_1_0, 1)
 
 	# On Mac, use frameworks for includes and library files.

@@ -422,7 +422,7 @@ toolinfo:
 	-$(CC) --version
 	-$(QMAKE) -v
 
-mac/libusb/libusb-1.0.o:
+mac/libusb/libusb-1.0.a:
 	cd mac/libusb; $(QMAKE) @abs_srcdir@/mac/libusb/libusb.pro && $(MAKE)
 
 # Machine generated from here down.

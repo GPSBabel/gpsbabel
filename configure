@@ -6225,8 +6225,8 @@ fi
 	GBSER=gbser_posix.o
 	OSJEEPS="jeeps/gpslibusb.o"
 	USB_CFLAGS="-I\$(srcdir)/mac/libusb"
-	USB_LIBS="-t -Lmac/libusb -llibusb-1.0.o -lobjc -framework IOKit -framework CoreFoundation"
-	USB_DEPS="mac/libusb/libusb-1.0.o"
+	USB_LIBS="-t -Lmac/libusb -lusb-1.0 -lobjc -framework IOKit -framework CoreFoundation"
+	USB_DEPS="mac/libusb/libusb-1.0.a"
 	$as_echo "#define HAVE_LIBUSB_1_0 1" >>confdefs.h
 
 
