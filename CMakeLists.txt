@@ -219,7 +219,7 @@ if (UNIX AND NOT APPLE)
 endif()
 
 if (APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework IOKit -framework CoreFoundation")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
   include_directories(AFTER mac/libusb mac/libusb/Xcode)
   set(SOURCES ${SOURCES}
     mac/libusb/core.c

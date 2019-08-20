@@ -205,7 +205,7 @@ linux {
 }
 
 macx {
-  LIBS += -framework IOKit -framework CoreFoundation
+  LIBS += -lobjc -framework IOKit -framework CoreFoundation
   INCLUDEPATH += mac/libusb \
                  mac/libusb/Xcode
   SOURCES += mac/libusb/core.c \
