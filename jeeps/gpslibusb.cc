@@ -66,7 +66,8 @@ static unsigned char gusb_intr_in_ep;
 static unsigned char gusb_bulk_out_ep;
 static unsigned char gusb_bulk_in_ep;
 
-static libusb_device_handle* udev;
+static bool libusb_successfully_initialized{false};
+static libusb_device_handle* udev{nullptr};
 static int garmin_usb_scan(libusb_unit_data*, int);
 static const gdx_info* gdx;
 
@@ -183,7 +184,10 @@ gusb_teardown(gpsdevh* dh)
       xfree(dh);
     }
     udev = nullptr;
+  }
+  if (libusb_successfully_initialized) {
     libusb_exit(nullptr);
+    libusb_successfully_initialized = false;
   }
   return 0;
 }
@@ -309,8 +313,6 @@ garmin_usb_start(struct libusb_device* dev,
     return;
   }
   ret  = libusb_open(dev, &udev);
-  atexit(gusb_atexit_teardown);
-
   if (ret != LIBUSB_SUCCESS) {
     fatal("libusb_open failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
@@ -525,6 +527,14 @@ gusb_init(const char* portname, gpsdevh** dh)
   if (ret != LIBUSB_SUCCESS) {
     fatal("libusb_init failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
+  }
+  libusb_successfully_initialized = true;
+  /* you can't unregister an exit handler, and */
+  /* they are called once for ever time they are registered. */
+  static bool exit_handler_registered{false};
+  if (!exit_handler_registered) {
+    atexit(gusb_atexit_teardown);
+    exit_handler_registered = true;
   }
   gusb_register_ll(&libusb_llops);
 
