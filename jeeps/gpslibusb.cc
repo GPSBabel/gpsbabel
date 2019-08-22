@@ -29,7 +29,7 @@
 #endif
 #if HAVE_LIBUSB_1_0
 #  if __APPLE__
-// We use our own (slightly modified) libusb.
+// We use our own libusb.
 #    include "mac/libusb/libusb.h"
 #  else
 #    include <libusb-1.0/libusb.h>
