@@ -21,8 +21,16 @@
 
  */
 
+#include <cstdint>
+#include <cstdio>               // for EOF, snprintf
+
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QString>       // for QString
+
 #include "defs.h"
-#include <cstdio>
+#include "gbfile.h"             // for gbfgetc, gbfread, gbfclose, gbfgetuint16, gbfgetuint32, gbfile, gbfopen_le
+#include "jeeps/gpsmath.h"      // for GPS_Math_Semi_To_Deg
+
 
 #define MYNAME "fit"
 
@@ -641,8 +649,8 @@ fit_parse_data(fit_message_def* def, int time_offset)
       debug_print(7,"%s: storing fit data LAP %d\n", MYNAME, def->global_id);
     }
     lappt = new Waypoint;
-    lappt->latitude = (endlat / (double)0x7fffffff) * 180;
-    lappt->longitude = (endlon / (double)0x7fffffff) * 180;
+    lappt->latitude = GPS_Math_Semi_To_Deg(endlat);
+    lappt->longitude = GPS_Math_Semi_To_Deg(endlon);
     lap_ct++;
     snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
     lappt->shortname = cbuf;
@@ -655,10 +663,10 @@ fit_parse_data(fit_message_def* def, int time_offset)
 
     waypt = new Waypoint;
     if (lat != 0x7fffffff) {
-      waypt->latitude = (lat / (double)0x7fffffff) * 180;
+      waypt->latitude = GPS_Math_Semi_To_Deg(lat);
     }
     if (lon != 0x7fffffff) {
-      waypt->longitude = (lon / (double)0x7fffffff) * 180;
+      waypt->longitude = GPS_Math_Semi_To_Deg(lon);
     }
     if (alt != 0xffff) {
       waypt->altitude = (alt / 5.0) - 500;
