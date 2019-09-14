@@ -261,7 +261,7 @@ fit_parse_definition_message(uint8_t header)
   // second byte is endianness
   def->endian = fit_getuint8();
   if (def->endian > 1) {
-    fatal(MYNAME ": Bad endian field\n");
+    warning(MYNAME ": Unusual endian field (interpreting as big endian): %d\n",def->endian);
   }
   fit_data.endian = def->endian;
 
