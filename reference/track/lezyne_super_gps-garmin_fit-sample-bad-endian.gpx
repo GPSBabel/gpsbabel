@@ -2,6 +2,11 @@
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="-37.736125868" minlon="144.949568426" maxlat="-37.720219195" maxlon="144.965343503"/>
+  <wpt lat="-37.720647510" lon="144.964655098">
+    <name>LAP001</name>
+    <cmt>LAP001</cmt>
+    <desc>LAP001</desc>
+  </wpt>
   <trk>
     <trkseg>
       <trkpt lat="-37.720464198" lon="144.964863472">
