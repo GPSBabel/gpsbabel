@@ -25,3 +25,6 @@ compare ${REFERENCE}/track/wahoo-element-bolt.gpx ${TMPDIR}/fit-sample-wahoo-ele
 
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-oregon-700.fit -o gpx -F ${TMPDIR}/fit-sample-garmin-oregon-700.gpx
 compare ${REFERENCE}/track/garmin-oregon-700-output.gpx ${TMPDIR}/fit-sample-garmin-oregon-700.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.fit -o gpx -F ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx
+compare ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx
