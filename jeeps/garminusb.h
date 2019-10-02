@@ -60,7 +60,7 @@ extern garmin_unit_info_t garmin_unit_info[GUSB_MAX_UNITS];
 int gusb_cmd_send(const garmin_usb_packet* obuf, size_t sz);
 int gusb_cmd_get(garmin_usb_packet* ibuf, size_t sz);
 int gusb_init(const char* portname, gpsdevh** dh);
-int gusb_close(gpsdevh*);
+int gusb_close(gpsdevh*, bool exit_lib = true);
 
 /*
  * New packet types in USB.

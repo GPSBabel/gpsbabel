@@ -58,7 +58,7 @@ static int usb_tx_packet_size ;
 static const gdx_info* gdx;
 
 static int
-gusb_win_close(gpsdevh* /* handle */)
+gusb_win_close(gpsdevh* /* handle */, bool /* exit_lib */)
 {
   if (usb_handle != INVALID_HANDLE_VALUE) {
     CloseHandle(usb_handle);
@@ -290,7 +290,7 @@ gusb_init(const char* pname, gpsdevh** dh)
     }
     /* We've matched.  Now start the specific unit. */
     garmin_usb_start(hdevinfo, &devinterface);
-    gusb_close(NULL);
+    gusb_close(nullptr);
   }
   gusb_list_units();
   exit(0);

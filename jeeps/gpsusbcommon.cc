@@ -47,7 +47,7 @@ gusb_register_ll(gusb_llops_t* p)
 }
 
 int
-gusb_close(gpsdevh* dh)
+gusb_close(gpsdevh* dh, bool exit_lib)
 {
   garmin_usb_packet scratch;
 
@@ -61,7 +61,7 @@ gusb_close(gpsdevh* dh)
     break;
   }
 
-  gusb_llops->llop_close(dh);
+  gusb_llops->llop_close(dh, exit_lib);
   return 1;
 
 #if BOOGER

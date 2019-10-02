@@ -73,7 +73,7 @@ static const gdx_info* gdx;
 
 static int gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz);
 static int gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz);
-static int gusb_teardown(gpsdevh* dh);
+static int gusb_teardown(gpsdevh* dh, bool exit_lib);
 static int gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz);
 
 static gusb_llops_t libusb_llops = {
@@ -167,7 +167,7 @@ gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz)
 
 
 static int
-gusb_teardown(gpsdevh* dh)
+gusb_teardown(gpsdevh* dh, bool exit_lib)
 {
   if (udev != nullptr) {
     int ret = libusb_release_interface(udev, 0);
@@ -185,7 +185,7 @@ gusb_teardown(gpsdevh* dh)
     }
     udev = nullptr;
   }
-  if (libusb_successfully_initialized) {
+  if (exit_lib && libusb_successfully_initialized) {
     libusb_exit(nullptr);
     libusb_successfully_initialized = false;
   }
@@ -195,7 +195,7 @@ gusb_teardown(gpsdevh* dh)
 static void
 gusb_atexit_teardown()
 {
-  gusb_teardown(nullptr);
+  gusb_teardown(nullptr, true);
 }
 
 
@@ -478,7 +478,7 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
          * may have a "dangling" packet that
          * needs to be drained.
          */
-        gusb_close(nullptr);
+        gusb_close(nullptr, false);
       } else if (req_unit_number == found_devices) {
         garmin_usb_start(devs[i], &desc, lud);
       }

@@ -25,7 +25,7 @@
  */
 typedef int (*gusb_llop_get)(garmin_usb_packet* ibuf, size_t sz);
 typedef int (*gusb_llop_send)(const garmin_usb_packet* opkt, size_t sz);
-typedef int (*gusb_llop_close)(gpsdevh* dh);
+typedef int (*gusb_llop_close)(gpsdevh* dh, bool exit_lib);
 
 typedef struct gusb_llops {
   gusb_llop_get  llop_get_intr;
