@@ -506,6 +506,12 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
     }
     /* Plan C. */
     fatal("Found no Garmin USB devices.\n");
+  } else if (req_unit_number >= found_devices) {
+    fatal("usb unit number(%d) too high.\n"
+          "The unit number must be either\n"
+          "1) nonnegative and less than the number of garmin devices found(%d), or\n"
+          "2) negative to list the garmin devices found.\n",
+          req_unit_number, found_devices);
   } else {
     return 1;
   }
