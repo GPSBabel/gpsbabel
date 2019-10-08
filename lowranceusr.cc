@@ -97,6 +97,7 @@
 #include <QtCore/QLatin1String>  // for QLatin1String
 #include <QtCore/QString>        // for QString, operator+, operator==, operator!=
 #include <QtCore/QTextCodec>     // for QTextCodec
+#include <QtCore/QTextEncoder>   // for QTextEncoder
 #include <QtCore/QTime>          // for QTime
 #include <QtCore/Qt>             // for CaseInsensitive, UTC
 #include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
@@ -557,7 +558,9 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   if (bytes_per_char == 1) {
     qba = buf.toUtf8();
   } else {
-    qba = utf16le_codec->fromUnicode(buf);
+    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    qba = encoder->fromUnicode(buf);
+    delete encoder;
   }
   int len = qba.size();
   gbfputint32(len, file_out);
@@ -574,18 +577,17 @@ lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 static Lowranceusr4Timestamp
 lowranceusr4_jd_from_timestamp(gpsbabel::DateTime qdt)
 {
-  QDateTime jdt = qdt.toUTC().addSecs(-60 * 60 * 12);
+  QDateTime jdt = qdt.toUTC();
   unsigned int jd_number = jdt.date().toJulianDay();
   QTime jd_time = jdt.time();
   unsigned int msecs = (((((jd_time.hour() * 60) + jd_time.minute()) * 60) + jd_time.second()) * 1000) + jd_time.msec();
   return Lowranceusr4Timestamp(jd_number, msecs);
 }
 
-
-const QString
-lowranceusr_find_desc_from_icon_number(const int icon)
+template <typename T>
+static QString lowranceusr_common_find_desc_from_icon_number(const int icon, const T icon_value_table[])
 {
-  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
+  for (const T* i = icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -593,72 +595,60 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 
   // Didn't find it in table, default to leave it as the number found
   return QString("icon-%1").arg(icon);
+}
+
+template <typename T>
+static int lowranceusr_common_find_icon_number_from_desc(const QString& desc, const T icon_value_table[], const int def_icon)
+{
+  if (desc.isNull()) {
+    return def_icon;
+  }
+
+  /*
+   * If we were given a numeric icon number as a description
+   * (i.e. 8255), just return that.
+   * Also return the icon number for descriptions of "icon-"
+   * followed by a numeric icon number.
+   */
+  int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
+  if (n)  {
+    return n;
+  }
+
+  for (const T* i = icon_value_table; i->icon; i++) {
+    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
+      return i->value;
+    }
+  }
+
+  return def_icon;
+}
+
+static QString
+lowranceusr_find_desc_from_icon_number(const int icon)
+{
+  return lowranceusr_common_find_desc_from_icon_number(icon, lowranceusr_icon_value_table);
 }
 
 static int
 lowranceusr_find_icon_number_from_desc(const QString& desc)
 {
-  if (desc.isNull()) {
-    return DEF_ICON;
-  }
-
-  /*
-   * If we were given a numeric icon number as a description
-   * (i.e. 8255), just return that.
-   */
-  int n = desc.toInt();
-  if (n)  {
-    return n;
-  }
-
-  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
-    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
-      return i->value;
-    }
-  }
-
-  return DEF_ICON;
+  return lowranceusr_common_find_icon_number_from_desc(desc, lowranceusr_icon_value_table, DEF_ICON);
 }
 
-const QString
+static QString
 lowranceusr4_find_desc_from_icon_number(const int icon)
 {
-  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
-    if (icon == i->value) {
-      return i->icon;
-    }
-  }
-
-  // Didn't find it in table, default to leave it as the number found
-  return QString("icon-%1").arg(icon);
+  return lowranceusr_common_find_desc_from_icon_number(icon, lowranceusr4_icon_value_table);
 }
 
 static int
 lowranceusr4_find_icon_number_from_desc(const QString& desc)
 {
-  if (desc.isNull()) {
-    return DEF_USR4_ICON;
-  }
-
-  /*
-   * If we were given a numeric icon number as a description
-   * (i.e. 8255), just return that.
-   */
-  int n = desc.toInt();
-  if (n)  {
-    return n;
-  }
-
-  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
-    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
-      return i->value;
-    }
-  }
-
-  return DEF_USR4_ICON;
+  return lowranceusr_common_find_icon_number_from_desc(desc, lowranceusr4_icon_value_table, DEF_USR4_ICON);
 }
 
-const char *
+static const char *
 lowranceusr4_find_color_from_icon_number_plus_color_index(const int icon, const int index)
 {
   for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
@@ -799,13 +789,13 @@ lat_mm_to_deg(double x)
 static long
 lon_deg_to_mm(double x)
 {
-  return (long)(x * SEMIMINOR * DEGREESTORADIANS);
+  return round(x * SEMIMINOR * DEGREESTORADIANS);
 }
 
 static long
 lat_deg_to_mm(double x)
 {
-  return (long)(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
+  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
 }
 
 
@@ -1802,11 +1792,13 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
+  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (wpt->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else if (fs != nullptr) {
+    gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
   }
@@ -1840,8 +1832,8 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
     ColorId = 0; // default
   } else {
     SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
-    if (wpt->fs != nullptr) {
-      ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, ((lowranceusr4_fsdata*)(wpt->fs))->color_desc);
+    if (fs != nullptr) {
+      ColorId = lowranceusr4_find_index_from_icon_desc_and_color_desc(wpt->icon_descr, fs->color_desc);
     } else {
       ColorId = DEF_USR4_COLOR; // default
     }
@@ -1869,8 +1861,8 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   gbfputc(0, file_out);
 
   /* Depth in feet */
-  if (wpt->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->depth, file_out);
+  if (fs != nullptr) {
+    gbfputint32(fs->depth, file_out);
   } else {
     gbfputint32(0, file_out); // zero seems to indicate no depth
   }
@@ -2054,11 +2046,13 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
+  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (rte->fs != nullptr) {
-    gbfputint32(((lowranceusr4_fsdata*)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
+  } else if (fs != nullptr) {
+    gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
   }
@@ -2083,8 +2077,15 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
     if (cmp->shortname == wpt->shortname) {
-      lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*)cmp->fs;
-      gbfputint32(fsdata->uid_unit, file_out);  // serial number from input if valid
+      lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+
+      if (opt_serialnum_i > 0) {
+        gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
+      } else if (fs != nullptr) {
+        gbfputint32(fs->uid_unit, file_out);  // else use serial number from input if valid
+      } else {
+        gbfputint32(0, file_out);  // else Write Serial Number = 0
+      }
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
       if (global_opts.debug_level > 1) {
@@ -2232,9 +2233,10 @@ lowranceusr4_trail_hdr(const route_head* trail)
 
   /* Mysterious "data count" and "data type" stuff */
   gbfputint32(0, file_out);
-  gbfputc(0, file_out);
-  gbfputc(0, file_out);
-  gbfputc(0, file_out);
+//  /* If we hadn't forced the count to zero we would need something like: */
+//  for (int i=0; i< attr_count; ++i) {
+//    gbfputc(0, file_out);
+//  }
 
   /* Trackpoint count */
   gbfputint32(trail->rte_waypt_ct, file_out);
