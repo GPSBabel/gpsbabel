@@ -238,7 +238,6 @@ endif()
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS}
 )
-add_definitions(-DNEW_STRINGS)
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 add_definitions(-DMAXIMAL_ENABLED)

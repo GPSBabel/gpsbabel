@@ -928,14 +928,9 @@ wdata_compute_size(writer_data_t* data)
     wpt->extra_data = dt;
 
     if (alerts) {
-#if NEW_STRINGS
       int pidx;
       if ((pidx = wpt->shortname.indexOf('@')) != -1) {
         const char* pos = CSTR(wpt->shortname.mid(pidx));
-#else
-      char* pos;
-      if ((pos = strchr(wpt->shortname, '@'))) {
-#endif
         double speed, scale;
         if (units == 's') {
           scale = MPH_TO_MPS(1);

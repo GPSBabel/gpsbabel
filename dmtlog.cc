@@ -173,20 +173,12 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes*)
   char* bin;
   char* cin, *cout;
   char cl, ch;
-#if NEW_STRINGS
-// This function needs rethinking.
+  //TODO This function needs rethinking.
   len = args.length();
-#else
-  len = strlen(args);
-#endif
   bin = (char*) xmalloc((len >> 1) + 1);
 
-#if NEW_STRINGS
   char* cincopy  = xstrdup(args);
   cin = cincopy;
-#else
-  cin = (char*)args;
-#endif
   cout = bin;
 
   cl = 0x10;
@@ -215,9 +207,7 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes*)
   }
   xmlbin = bin;
   xmlbinsize = (cout - bin);
-#if NEW_STRINGS
   xfree(cincopy);
-#endif
 }
 #endif
 

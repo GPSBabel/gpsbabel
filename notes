@@ -1,0 +1,13 @@
+Original:
+./gpsbabel -i garmin -f usb:
+libusb_bulk_transfer failed. 'Input/Output Error'
+
+git pull & rebuild 
+
+
+main: Compiled with Qt 5.12.0 for architecture x86_64-little_endian-lp64
+main: Running with Qt 5.12.0 on macOS 10.14, x86_64
+main: QLocale::system() is en_US
+main: QLocale() is en_US
+main: QTextCodec::codecForLocale() is UTF-8, mib 106
+libusb_bulk_transfer failed. 'Input/Output Error'

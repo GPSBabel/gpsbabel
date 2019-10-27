@@ -114,16 +114,12 @@ gdb_flush_waypt_queue(QList<Waypoint *>* Q)
   while(!Q->isEmpty()) {
     const Waypoint* wpt = Q->takeFirst();
     if (wpt->extra_data) {
-#if NEW_STRINGS
       // FIXME
       // wpt->extra_data may be holding a pointer to a QString, courtesy
       // the grossness at the end of write_waypt_cb().  If that leaks,
       // (and I think it will) find some way to do the approximate equivalent
       // of:
       // delete static_cast<QString*>(wpt->extra_data);
-#else
-      xfree(wpt->extra_data);
-#endif
     }
     delete wpt;
   }
@@ -1587,12 +1583,8 @@ static void
 write_waypoint_cb(const Waypoint* refpt)
 {
   /* do this when backup always happens in main */
-#if NEW_STRINGS
 // but, but, casting away the const here is wrong...
   (const_cast<Waypoint*>(refpt))->shortname = refpt->shortname.trimmed();
-#else
-  rtrim((const_cast<Waypoint*>(refpt))->shortname);
-#endif
   Waypoint* test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
@@ -1669,15 +1661,6 @@ write_waypoint_cb(const Waypoint* refpt)
     }
 
     name = mkshort(short_h, name);
-#if NEW_STRINGS
-    // This is sooooo tacky.
-    // Actually, it's not just tacky.  I can't figure out what this code
-    // was trying to do, but it's wrong and it breaks things.  
-    //   robertl 2013-12-30.
-    // wpt->extra_data = static_cast<void*>(&name);
-#else
-    wpt->extra_data = (void*)name;
-#endif
     write_waypoint(wpt, name, gmsd, icon, display);
 
     finalize_item(fsave, 'W');
