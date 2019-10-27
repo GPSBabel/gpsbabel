@@ -2,52 +2,110 @@
   <title>Getting or Building GPSBabel</title>
 <sect1 id="Download">
 <title>Downloading - the easy way.</title>
-  <para> 
-GPSBabel is distributed "ready to run" on most common 
-operating systems via the 
+  <para>
+GPSBabel is distributed "ready to run" on most common
+operating systems via the
 <ulink url="http://www.gpsbabel.org/download.html">download page</ulink>.
 </para>
   <para> As GPSBabel runs on a wide variety of operating systems,
-be sure to visit the 
+be sure to visit the
 <ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
 additional information.
 </para>
 </sect1>
 <sect1 id="Source">
 <title>Building from source.</title>
-  <para> 
- For operating systems where no binary is provided or if 
+  <para>
+ For operating systems where no binary is provided or if
 you want the latest development version, you will have to build it from
 source.  The code should be compilable on any system with
-ISO C++. It's tested on Linux, Mac OS/X, and Windows cross compilers.
-Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris, 
-etc.   Both Clang/LLVM and GNU C++ are regularly exercised.
+ISO C++14. It's tested on Linux, Mac OS/X, and Windows cross compilers.
+Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris,
+etc.   Both Clang/LLVM and GNU C++ are regularly exercised via automation.
 </para>
 <para>
-You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts vis Git, HTTPS, SSH, and Subversion are supported.
+You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
 </para>
+<para>There are external requirements for bulding.</para>
+<variablelist>
+<varlistentry>
+<term>
+<ulink url="http://qt-project.org">Qt</ulink></term>
+<listitem>
+<para>
+Qt version 5.9 or newer is required for all builds.  MacOS and Windows users can download
+binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
+Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qtbase5-dev'. Package names
+and versions in Linux frequently change, so you may need to ask your Linux vendor
+for help or look in tools/Docker* for inspiration for our automated builds that
+use Docker.
+  </para>
+</listitem>
+</varlistentry>
 
+<varlistentry>
+  <term>
+   <ulink url="http://libusb.sourceforge.net">libusb</ulink>
+  </term>
+<listitem>
+  <para>
+is needed to communicate with use with older USB Garmins.
+For MacOS, we use an included copy.
+Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
+need to 'yum install libusb-dev' or look in tools/Docker* for inspiration
+from our automated Docker builds.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<sect2 id="Internal_History">
+<title>Brief history of internals</title>
+  <para>
+    Parts of GPSBabel have been public since 2002, with some of the original
+    design and original code came from 2001. It was originally in C89, not C++
+    and while we strongly encourage modern C++ code where we can use it, we've
+    not gone back to those older formats - some of which we don't have
+    the hardware to test and have fallen out of touch with original authors - and
+    rewritten them in Modern C++ style. There are this void*'s everywhere, C String
+    use, gross buffer abuse, and other things that look more like a C program from the 80's than a C++ program of modern date.  Code that's earned it's own wings can
+    continue to fly with us as long as it passes the tests we have. We've additionally
+    not enforced style rules as strongly across modules as we could have. Fixing
+    both of these is a goal for us in 2020.
+  </para>
+</sect2>
+
+<sect2 id="Qt">
+  <title>Building with Qt Creator</title>
+  <para>
+    Qt provides a lovely IDE (Integrated Development Evironment) with an
+    editor and debugger. Its use is strongly encouraged for those new to C++.
+    Once you have Qt correctly installed, just opening either the <filename>
+    GPSBabel.pro</filename> or <filename>gui/app.pro</filename> files from
+    the OS file launcher (e.g. a double click in MacOS while seeing it in Finder)
+    or from a File->Open in an already-running instance of <ulink url="https://www.qt.io/development-tools">Qt Creator</ulink> is the fastest and easiest way for most
+    people to get to development because it handles things like build dependencies
+    changing and class and method compilation.
+  </para>
+  <para>A path of low resistance for some users is to use the Qt build files (*.pro)
+    and compiler chain, but use the command line.  If you type <ulink url="https://doc.qt.io/qt-5/qmake-manual.html"> qmake</ulink> in our working
+    directory, it will build a "native" Build file (Makefile, XCode, Visual Studio)
+    which you can use for development.
+  </para>
+  </sect2>
+<sect2 id="Configure">
+  <title>Building with configure</title>
 <para>
-  In most cases, the code is as simple to build as running:
+  Those familiar with UNIX-y open source packages may be more comfortable
+  with configure. In most cases, the code is as simple to build as running:
 </para>
 <para><userinput> ./configure &amp;&amp; make</userinput></para>
-  <para><ulink url="http://qt-project.org">Qt</ulink> 
-is required for all builds.  Mac and Windows users can download
-binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
-Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' can help you find the correct package name
-Ubuntu users may need to 'apt-get install qtbase5-dev'.
-Qt versions 5.2 and newer are supported.
+  <para>
 </para>
-  <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
-is recommended for OS/X and Linux if you want to use a USB Garmin or 
-DeLorme device.
-Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
-need to 'yum install libusb-dev'.
-</para>
+
 <para>There are additional flags that can be passed to configure to
- customize your build of GPSBabel.   
+ customize your build of GPSBabel.
 </para>
-<para><userinput>./configure --help</userinput></para> 
+<para><userinput>./configure --help</userinput></para>
 <para>
 lists all the supported options, but of interest we have:</para><para>
  <option>--disable-shapefile</option> Excludes the shapefile support.
@@ -59,9 +117,6 @@ lists all the supported options, but of interest we have:</para><para>
   <option>--disable-filters</option> Excludes all filter support.
 </para>
 <para>
-  <option>--enable-efence</option> Activate debugging mode for gpsbabel-debug.
-</para>
-<para>
   <option>--with-doc=</option><filename class="directory">dir</filename> Specifies that the doc should be created and installed in <filename class="directory">dir</filename>.
 </para>
 <para>
@@ -70,5 +125,11 @@ lists all the supported options, but of interest we have:</para><para>
 <para>
  <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
 </para>
+<para>
+  There are some makefile targets that are useful mostly to the GPSBabel maintainers
+  that appear only in the configure-generated Makefiles. Their presence is considered
+  mostly a TODO bug and those items should be migrated to stand-alone tools.
+  </para>
+</sect2>
 </sect1>
 </chapter>
