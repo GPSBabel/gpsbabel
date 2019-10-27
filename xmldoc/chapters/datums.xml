@@ -1,10 +1,10 @@
 <appendix id="Datums">
 <title>Supported Datums</title>
 <para>
-Some formats in GPSBabel support multiple datums.  For example, the 
-<option>datum</option> option to the 
+Some formats in GPSBabel support multiple datums.  For example, the
+<option>datum</option> option to the
 <link linkend="fmt_garmin_txt">garmin_txt</link> format allows you to specify
-a datum for the output file.  
+a datum for the output file.
 </para>
 <para>
 The following is a list of the datums supported by GPSBabel.
