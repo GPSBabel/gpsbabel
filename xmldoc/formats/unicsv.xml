@@ -1,6 +1,6 @@
 <para>
    Unicsv examines the first line of a file to determine the field
-   order and field separator in that file.   On write, it tries to 
+   order and field separator in that file.   On write, it tries to
    figure out what data it has and writes headers and all the data it can.
 </para>
 <para>
@@ -29,7 +29,7 @@
       diff =     <link linkend="style_def_geodiff">Geocache difficulty</link>
       ele =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
       e/w =      'e' for eastern hemisphere, 'w' for western
-      exported = Geocache export date 
+      exported = Geocache export date
       found =    <link linkend="style_def_geofound">Geocache last found date</link>
       fix =      3d, 2d, etc.
       gcid =     Geocache cache id
@@ -74,11 +74,11 @@
       y_pos =    Latitude
       z =        Altitude (elevation).  See "elevation".
    </screen>
-   We support some enhanced Garmin attributes. They are also available in 
-   <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>, 
-   <link linkend="fmt_garmin_gpi">garmin_gpi</link> and partly 
-   <link linkend="fmt_garmin_txt">garmin_txt</link>. These entities are currently 
-   not visible in <productname>MapSource</productname> (6.12.4), but are NOT dropped  
+   We support some enhanced Garmin attributes. They are also available in
+   <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>,
+   <link linkend="fmt_garmin_gpi">garmin_gpi</link> and partly
+   <link linkend="fmt_garmin_txt">garmin_txt</link>. These entities are currently
+   not visible in <productname>MapSource</productname> (6.12.4), but are NOT dropped
    when working with GDB (version 3) or GPX files.
    <screen></screen>
    Please note, that these do NOT provide a geocoding service; don't expect
@@ -98,7 +98,7 @@
 <para>
    A typical file may be:
    <screen format="linespecific">
-     Name, Latitude, Longitude, Description 
+     Name, Latitude, Longitude, Description
      GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
      GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
    </screen>

@@ -8,13 +8,13 @@ task declarations in other formats.
 <section id="fmt_igc_notes">
 <title>IGC Data Format Notes</title>
 <para>
-Refer to Appendix 1 of 
+Refer to Appendix 1 of
 <ulink url="http://www.fai.org:81/gliding/gnss/tech_spec_gnss.asp">http://www.fai.org:81/gliding/gnss/tech_spec_gnss.asp</ulink>
 for the specification of the IGC data format.
 </para>
 <para>
 A sample list of software applications that use data in IGC format can be
-found at 
+found at
 <ulink url="http://www.fai.org:81/gliding/gnss/gnss_analysis_software.pdf">http://www.fai.org:81/gliding/gnss/gnss_analysis_software.pdf</ulink>
 </para>
 <para>

@@ -12,7 +12,7 @@
    but it's mangled beyond what we're likely to successfully read.
 </para>
 <para>
-  If a waypoint name is annotated with a trailing '@'NNN where NNN is 
+  If a waypoint name is annotated with a trailing '@'NNN where NNN is
   a number, that number will be used as the speed for POI alerts, just
   as with Garmin's POI Loader program. The units default to metric kilometers
   per hour, but this can be changed to statute via the units argument.
@@ -23,7 +23,7 @@
 </para>
 <para>
    The layout of GPI files isn't documented and our module was created
-   via reverse engineering. If you get a problem on reading or writing 
+   via reverse engineering. If you get a problem on reading or writing
    a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
 </para>
 <para>
@@ -36,11 +36,11 @@
 </para>
 <para>
 	This module does not support direct transfer of .GPI files to
-	receivers in Garmin protocol mode.  For units like Nuvi, Zumo, or 
+	receivers in Garmin protocol mode.  For units like Nuvi, Zumo, or
 	Streetpilot, just choose a file that's on the drive where your
-	GPS is mounted.   For units like the X series (GPSMap 60CSx, GPSMap 60Cx, Legend Hcx, etc.) 
+	GPS is mounted.   For units like the X series (GPSMap 60CSx, GPSMap 60Cx, Legend Hcx, etc.)
 	you must explicitly put the unit in mass storage mode or mount
-	the memory chip in an external reader and transfer the file 
+	the memory chip in an external reader and transfer the file
 	directly.
 </para>
 </important>

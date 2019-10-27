@@ -1,5 +1,5 @@
 <para>
-  This format is used to exchange data with the <ulink url="http://www.openstreetmap.org">OpenStreetMap</ulink> project. 
+  This format is used to exchange data with the <ulink url="http://www.openstreetmap.org">OpenStreetMap</ulink> project.
   The main goal of this collaborative project is to create free editable maps.
 </para>
 <para>
@@ -8,6 +8,6 @@
   negative numbers will be used as identifier. This has been tested with <ulink url="http://wiki.openstreetmap.org/index.php/JOSM">JOSM</ulink>.
 </para>
 <para>
-  Because the resulting timestamps of OSM ways differ from real GPS tracks, 
+  Because the resulting timestamps of OSM ways differ from real GPS tracks,
   we read OSM ways into routes. On the output side we write all available routes and tracks into the osm target file.
 </para>
