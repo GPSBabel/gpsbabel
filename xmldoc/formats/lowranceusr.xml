@@ -1,4 +1,4 @@
-<para> 
+<para>
 Many <ulink url="http://www.lowrance.com">Lowrance</ulink> systems have the ability
 to output their data to an external storage device.
 Early models (such as iFinder Hunt) supported an MMC card.
@@ -6,7 +6,7 @@ Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card
 When exported the data is saved to the card as a
 file.  Some models have the ability to export data in GPX format but the
 format native to <ulink url="http://www.lowrance.com">Lowrance</ulink> units is called USR.
-Typically the file created by the export operation will have a ".usr" suffix if is a 
+Typically the file created by the export operation will have a ".usr" suffix if is a
 native format or a ".gpx" suffix if is is a GPX format file.
 </para>
 
@@ -17,7 +17,7 @@ using different formats.  Some units do not support all four elements (typically
 Some USR formats also have multiple element versions (i.e. USR version 4 has two different formats for storing
 route data).
 Depending on the model of device you have you may be able to select the format for export data from any of the
-five USR formats or even the GPX format. 
+five USR formats or even the GPX format.
 </para>
 
 <para>
@@ -25,20 +25,20 @@ The following provides a high-level description of the multiple USR formats that
 (this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>) and other sources.
 </para>
 <para>
-          <emphasis>User Data File version 2 </emphasis>- 
+          <emphasis>User Data File version 2 </emphasis>-
             Legacy file format.
             This is the default output USR version used by GPSBabel.
             It contains only basic information on waypoints, routes, and trails.
 </para>
 <para>
-          <emphasis>User Data File version 3 </emphasis> - 
+          <emphasis>User Data File version 3 </emphasis> -
             Legacy file format.
             Added depth information to Route waypoints.
             Supports trails with a maximum of 10,000 trail-points.
             Last version that supports Event Marker ICONs.
 </para>
 <para>
-          <emphasis>User Data File version 4</emphasis> - 
+          <emphasis>User Data File version 4</emphasis> -
             Seems to be the best option for transferring data from older Lowrance units.
             Many of the counts (Number of Waypoints, Number of Routes, etc) were exanded from
             16-bit integer values (maximum value of 65,535) to 32-bit (maxumum value 2,147,483,647)
@@ -47,12 +47,12 @@ The following provides a high-level description of the multiple USR formats that
 
 </para>
 <para>
-          <emphasis>User Data File version 5</emphasis> - 
+          <emphasis>User Data File version 5</emphasis> -
             Lowrance introduced universally unique identifiers (UUIDs) in this version.
 </para>
 <para>
-          <emphasis>User Data File version 6</emphasis> - 
-            Latest format.  
+          <emphasis>User Data File version 6</emphasis> -
+            Latest format.
             Supports trail characteristics speed and temperature.
 </para>
 
@@ -681,7 +681,7 @@ The following tables detail the content format of USR data files.</para>
         <entry>-</entry> <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry>
         <entry>  Route Universally Unique ID Number </entry>
         <entry>  16 </entry>
-        <entry>  Appears only in USR 5 and 6 format.  Universally Unique Route ID captured 
+        <entry>  Appears only in USR 5 and 6 format.  Universally Unique Route ID captured
                  as four integers</entry>
       </row>
       <row valign="middle">
@@ -1196,12 +1196,12 @@ The following tables detail the content format of USR data files.</para>
     </tbody>
   </tgroup>
 </table>
-    
+
 <para>
 Some Lowrance units have the ability to export
 <ulink url="https://www.topografix.com/gpx.asp">GPX</ulink> (GPS Exchange Format) formatted data.
 Lowrance only provides minimal
-support for GPX export data on their HOOK2 series (only data available to the author).  Refer to 
+support for GPX export data on their HOOK2 series (only data available to the author).  Refer to
 the official <ulink url="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</ulink> for the complete schema.
 </para>
 <example>

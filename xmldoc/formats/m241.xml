@@ -1,15 +1,25 @@
 <para>
-	The Holux m241 is a small datalogger using the MTK chipset, with 
-	a couple small differences in the binary format. In its default 
+	The Holux m241 is a small datalogger using the MTK chipset, with
+	a couple small differences in the binary format. In its default
 	configuration, it can store ~100000 trackpoints with very limited
-	 data; to configure extended logging you can use the BT747 open 
-	source software 
+	 data; to configure extended logging you can use the BT747 open
+	source software
          <ulink url="http://bt747.wiki.sourceforge.net">bt747</ulink>
 	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
 </para>
 <para>
-	Holux GPSport 245 is a datalogger with display suitable for cycling, walking and running. 
-        It can store ~200k trackpoints with limited data. The m241 and m241-bin format is 
+  The m-241 came in two models. The yellow one, popular with photographers,
+  internally used the Silicon Labs CP210X chipset to transform the internal and
+  inaccessible serial port to the USB port that was familiar on the side. The
+  drivers for that port can be found with
+  <ulink url="https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx">SiLabs CP210x serial port drivers</ulink>. The red and white one existed
+  very briefly before Holux went out of business. GPSBabel does not work with
+  the red and white one.
+
+  </para>
+<para>
+	Holux GPSport 245 is a datalogger with display suitable for cycling, walking and running.
+        It can store ~200k trackpoints with limited data. The m241 and m241-bin format is
         able to automatically detect GPSport 245 data and handle the differences from Holux 241 devices.
         Note: GP245 does not log any quality of the position.
 </para>

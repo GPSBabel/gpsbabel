@@ -1,71 +1,71 @@
-<para> 
+<para>
 	GPSBabel supports a wide variety of Garmin hardware via serial
 	on most operating systems and USB on Windows, Linux, and OS X.
 </para>
 
-<para> 
+<para>
 	For serial models, be sure the GPS is set for "Garmin
 	mode" in setup and that nothing else (PDA hotsync programs, gpsd,
 	getty, pppd, etc.) is using the serial port.
 </para>
 
-<para> 
-	Supported Garmin GPS receivers with USB include 
+<para>
+	Supported Garmin GPS receivers with USB include
 	<simplelist columns="4">
-<member>Astro</member> 
-<member>Edge 205</member> 
-<member>Edge 305</member> 
-<member>eTrex Legend C</member> 
-<member>eTrex Legend Cx</member>  
-<member>eTrex Legend H</member>  
-<member>eTrex Legend HCx</member>  
-<member>eTrex Summit Cx</member> 
-<member>eTrex Summit HC</member>  
-<member>eTrex Venture C</member> 
-<member>eTrex Venture Cx</member> 
-<member>eTrex Venture HC</member> 
-<member>eTrex Vista C</member> 
-<member>eTrex Vista Cx</member> 
-<member>eTrex Vista H</member> 
-<member>eTrex Vista HCx</member> 
-<member>Forerunner 205</member> 
-<member>Forerunner 301</member> 
-<member>Forerunner 305</member>  
+<member>Astro</member>
+<member>Edge 205</member>
+<member>Edge 305</member>
+<member>eTrex Legend C</member>
+<member>eTrex Legend Cx</member>
+<member>eTrex Legend H</member>
+<member>eTrex Legend HCx</member>
+<member>eTrex Summit Cx</member>
+<member>eTrex Summit HC</member>
+<member>eTrex Venture C</member>
+<member>eTrex Venture Cx</member>
+<member>eTrex Venture HC</member>
+<member>eTrex Vista C</member>
+<member>eTrex Vista Cx</member>
+<member>eTrex Vista H</member>
+<member>eTrex Vista HCx</member>
+<member>Forerunner 205</member>
+<member>Forerunner 301</member>
+<member>Forerunner 305</member>
 <member>Foretrex 201</member>
-<member>Foretrex 301</member> 
+<member>Foretrex 301</member>
 <member>GPS 18<footnote id="posnonly"><para>This model does not support transfer of waypoints, tracks, or routes, but may be used with the <link linkend="tracking">realtime tracking</link> feature.</para></footnote></member>
-<member>GPSMAP 195</member> 
-<member>GPSMAP 276C</member> 
-<member>GPSMAP 295</member> 
-<member>GPSMAP 296C</member> 
-<member>GPSMAP 378</member> 
-<member>GPSMAP 396</member> 
-<member>GPSMAP 478</member> 
+<member>GPSMAP 195</member>
+<member>GPSMAP 276C</member>
+<member>GPSMAP 295</member>
+<member>GPSMAP 296C</member>
+<member>GPSMAP 378</member>
+<member>GPSMAP 396</member>
+<member>GPSMAP 478</member>
 <member>GPSMAP 496</member>
-<member>GPSMAP 60C</member> 
-<member>GPSMAP 60CS</member> 
-<member>GPSMAP 60CSx</member> 
-<member>GPSMAP 60Cx</member> 
-<member>GPSMAP 76C</member> 
-<member>GPSMAP 76CS</member> 
-<member>GPSMAP 76CSX</member> 
-<member>GPSMAP 76Cx</member> 
-<member>GPSMAP 96</member> 
-<member>GPSMAP 96C</member> 
+<member>GPSMAP 60C</member>
+<member>GPSMAP 60CS</member>
+<member>GPSMAP 60CSx</member>
+<member>GPSMAP 60Cx</member>
+<member>GPSMAP 76C</member>
+<member>GPSMAP 76CS</member>
+<member>GPSMAP 76CSX</member>
+<member>GPSMAP 76Cx</member>
+<member>GPSMAP 96</member>
+<member>GPSMAP 96C</member>
 <member>Quest</member>
 <member>Quest II</member>
 <member>Rhino 520</member>
 <member>Rhino 530</member>
 <member>Rhino 520 HCx</member>
 <member>Rhino 530 HCx</member>
-<member>StreetPilot 2610</member> 
-<member>StreetPilot 2620</member> 
-<member>StreetPilot 2650</member> 
-<member>StreetPilot 2720</member> 
-<member>StreetPilot 2730</member> 
-<member>StreetPilot 2820</member> 
-<member>StreetPilot 7200</member> 
-<member>StreetPilot 7500</member> 
+<member>StreetPilot 2610</member>
+<member>StreetPilot 2620</member>
+<member>StreetPilot 2650</member>
+<member>StreetPilot 2720</member>
+<member>StreetPilot 2730</member>
+<member>StreetPilot 2820</member>
+<member>StreetPilot 7200</member>
+<member>StreetPilot 7500</member>
 <member>StreetPilot c310</member>
 <member>StreetPilot c320</member>
 <member>StreetPilot c330</member>
@@ -92,30 +92,30 @@
 <member>eTrex Vista</member>
 <member>eTrex (Basic Yellow)</member>
 <member>eTrex H</member>
-<member>Forerunner 201</member> 
-<member>Foretrex 201</member> 
-<member>Geko 201</member> 
-<member>Geko 301</member> 
-<member>GPS 12CX </member> 
-<member>GPS 12Map </member> 
-<member>GPS 12 </member> 
-<member>GPS 12XL </member> 
-<member>GPS III </member> 
-<member>GPS III+ </member> 
-<member>GPS II </member> 
-<member>GPS II+ </member> 
-<member>GPS V</member> 
-<member>Rhino 110</member> 
-<member>Rhino 120</member> 
-<member>Rhino 130</member> 
-<member>StreetPilot III</member> 
-<member>StreetPilot III+</member> 
+<member>Forerunner 201</member>
+<member>Foretrex 201</member>
+<member>Geko 201</member>
+<member>Geko 301</member>
+<member>GPS 12CX </member>
+<member>GPS 12Map </member>
+<member>GPS 12 </member>
+<member>GPS 12XL </member>
+<member>GPS III </member>
+<member>GPS III+ </member>
+<member>GPS II </member>
+<member>GPS II+ </member>
+<member>GPS V</member>
+<member>Rhino 110</member>
+<member>Rhino 120</member>
+<member>Rhino 130</member>
+<member>StreetPilot III</member>
+<member>StreetPilot III+</member>
 </simplelist>
 </para>
 
 <para>
 The following Garmin GPS receivers are supported, but they do not
-support Garmin communication protocol and don't work with the 
+support Garmin communication protocol and don't work with the
 <option>garmin</option> option.  To use these receivers, read or write
 GPX files from the mass storage device as mounted on your computer.
 <simplelist columns="4">
@@ -234,10 +234,10 @@ GPX files from the mass storage device as mounted on your computer.
 </para>
 
 <para>
-	Not every feature on every model is supported.  For example, 
+	Not every feature on every model is supported.  For example,
 	while we do extract data such as heart rate and temperature from
 	tracks on the sporting models like Edge and Forerunner, GPSBabel
-	is not a fitness program at its core and does not support features 
+	is not a fitness program at its core and does not support features
 	like workouts or calorie/fitness zone data. Furthermore, sporting
 	models don't support track upload. When trying to upload tracks to
 	these devices, GPSBabel converts them to courses on the fly and
@@ -249,28 +249,28 @@ GPX files from the mass storage device as mounted on your computer.
 	a speed of 10 km/h for tracks that lack them.
 </para>
 
-<para> 
+<para>
 	To communicate with a Garmin GPS serially, use the name of that
-	serial port such as <filename>COM1</filename> or  <filename>/dev/cu.serial</filename>.  
+	serial port such as <filename>COM1</filename> or  <filename>/dev/cu.serial</filename>.
 </para>
 <para>
-	To communicate via USB use <filename>usb:</filename> as the filename on all OSes.   
-	Thus, to read the waypoints from a Garmin USB receiver and write 
+	To communicate via USB use <filename>usb:</filename> as the filename on all OSes.
+	Thus, to read the waypoints from a Garmin USB receiver and write
 	them to a GPX file:
 </para>
 
       <para><userinput>gpsbabel -i garmin -f usb: -o gpx -F blah.gpx</userinput></para>
 
 <para>
-	If you have multiple units attached via USB, you may provide 
-	a unit number, with zero being the implied default.  So if you 
-	have three USB models on your system, they can be addressed as 
+	If you have multiple units attached via USB, you may provide
+	a unit number, with zero being the implied default.  So if you
+	have three USB models on your system, they can be addressed as
 	<filename>usb:0</filename>, <filename>usb:1</filename>, and <filename>usb:2</filename>.  To get a list of recognized devices,
 	specify a negative number such as:
 </para>
 	<para><userinput>gpsbabel -i garmin -f usb:-1</userinput></para>
- 
-<para> 
+
+<para>
 When reporting problems with the Garmin format, be sure to include
 the full unit model, firmware version, and be prepared to offer
 debugging dumps by adding <option>-D9</option> to the command line, like:
@@ -278,7 +278,7 @@ debugging dumps by adding <option>-D9</option> to the command line, like:
 
       <para><userinput> gpsbabel -D9 -i garmin -f usb: -o gpx -F blah.gpx</userinput></para>
 
-<para> 
+<para>
 Custom icons are supported on units that support that.
 Neither GPSBabel nor your firmware know what is associated with any
 given slot number.  They don't know that the picture you placed in the
@@ -287,28 +287,28 @@ numbered slot.  GPSBabel names the them consistently with Mapsource,
 so they are named 'Custom 0' through 'Custom 511'.
 </para>
 <para>
-	For models where the connection on the GPS is a serial interface, 
+	For models where the connection on the GPS is a serial interface,
 	be sure the GPS is set for "Garmin
 	mode" in setup and that nothing else (PDA hotsync programs, gpsd,
-	getty, pppd, etc.) is using the serial port.  
+	getty, pppd, etc.) is using the serial port.
 </para>
 <para>
 	For models connected via USB, we recommend use of the <filename>usb:</filename>
 	filename.   For this to work on Windows, you must install
 	the Garmin driver.  For Linux, this will fail if you have the garmin_gps
-	kernel module loaded.  
+	kernel module loaded.
 	See the <ulink url="/osnotes.html">Operating System Notes</ulink> for details.
 </para>
 
 <para>
-This module also supports <link linkend="tracking">realtime tracking</link> 
+This module also supports <link linkend="tracking">realtime tracking</link>
 which allows realtime position reports from a Garmin GPS receiver over USB
-or serial.  
+or serial.
 </para>
 
 <important>
-<para>The following Garmin units do not follow the standard Garmin 
-communications protocol and are <emphasis>not supported</emphasis> 
+<para>The following Garmin units do not follow the standard Garmin
+communications protocol and are <emphasis>not supported</emphasis>
 by GPSBabel.</para>
 <para>
 Marine plotters:
