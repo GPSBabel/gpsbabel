@@ -1,5 +1,5 @@
 #
-# Basic FIT tests (readonly)
+# Basic FIT tests (read)
 #
 rm -f ${TMPDIR}/fit-*
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/fit-sample.fit -o gpx -F ${TMPDIR}/fit-sameple.gpx
@@ -28,3 +28,9 @@ compare ${REFERENCE}/track/garmin-oregon-700-output.gpx ${TMPDIR}/fit-sample-gar
 
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.fit -o gpx -F ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx
 compare ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx
+
+#
+# Basic FIT tests (write)
+#
+gpsbabel -i gpx -f ${REFERENCE}/track/fitwrite-track.gpx -o garmin_fit -F ${TMPDIR}/fitwrite-track.fit
+bincompare ${REFERENCE}/track/fitwrite-track.fit ${TMPDIR}/fitwrite-track.fit

@@ -4,6 +4,7 @@
 
     Copyright (C) 2011 Paul Brook, paul@nowt.org
     Copyright (C) 2003-2011  Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2019 Martin Buck, mb-tmp-tvguho.pbz@gromit.dyndns.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +24,9 @@
 
 #include <cstdint>
 #include <cstdio>               // for EOF, snprintf
+#include <vector>
+#include <deque>
+#include <utility>
 
 #include <QtCore/QDateTime>     // for QDateTime
 #include <QtCore/QString>       // for QString
@@ -35,14 +39,31 @@
 #define MYNAME "fit"
 
 // constants for global IDs
+const int kIdFileId = 0;
 const int kIdDeviceSettings = 0;
 const int kIdLap = 19;
 const int kIdRecord = 20;
 const int kIdEvent = 21;
+const int kIdCourse = 31;
+const int kIdCoursePoint = 32;
+
+// constants for local IDs (for writing)
+const int kWriteLocalIdFileId = 0;
+const int kWriteLocalIdCourse = 1;
+const int kWriteLocalIdLap = 2;
+const int kWriteLocalIdEvent = 3;
+const int kWriteLocalIdCoursePoint = 4;
+const int kWriteLocalIdRecord = 5;
 
 // constants for message fields
 // for all global IDs
 const int kFieldTimestamp = 253;
+const int kFieldMessageIndex = 254;
+// for global ID: file id
+const int kFieldType = 0;
+const int kFieldManufacturer = 1;
+const int kFieldProduct = 2;
+const int kFieldTimeCreated = 4;
 // for global ID: device settings
 const int kFieldGlobalUtcOffset = 4;
 // for global ID: lap
@@ -52,7 +73,10 @@ const int kFieldStartLongitude = 4;
 const int kFieldEndLatitude = 5;
 const int kFieldEndLongitude = 6;
 const int kFieldElapsedTime = 7;
+const int kFieldTotalTimerTime = 8;
 const int kFieldTotalDistance = 9;
+const int kFieldAvgSpeed = 13;
+const int kFieldMaxSpeed = 14;
 // for global ID: record
 const int kFieldLatitude = 0;
 const int kFieldLongitude = 1;
@@ -70,13 +94,48 @@ const int kFieldEvent = 0;
 const int kEnumEventTimer = 0;
 const int kFieldEventType = 1;
 const int kEnumEventTypeStart = 0;
+const int kFieldEventGroup = 4;
+// for global ID: course
+const int kFieldSport = 4;
+const int kFieldName = 5;
+// for global ID: course point
+const int kFieldCPTimeStamp = 1;
+const int kFieldCPPositionLat = 2;
+const int kFieldCPPositionLong = 3;
+const int kFieldCPDistance = 4;
+const int kFieldCPName = 6;
+const int kFieldCPType = 5;
 
 // For developer fields as a non conflicting id
 const int kFieldInvalid = 255;
 
+// types for message definitions
+const int kTypeEnum = 0x00;
+const int kTypeUint8 = 0x02;
+const int kTypeString = 0x07;
+const int kTypeUint16 = 0x84;
+const int kTypeSint32 = 0x85;
+const int kTypeUint32 = 0x86;
+
+// misc. constants for message fields
+const int kFileCourse = 0x06;
+const int kEventTimer = 0x00;
+const int kEventTypeStart = 0x00;
+const int kEventTypeStopDisableAll = 0x09;
+const int kCoursePointTypeGeneric = 0x00;
+const int kCoursePointTypeLeft = 0x06;
+const int kCoursePointTypeRight = 0x07;
+
+const int kWriteHeaderLen = 12;
+const int kWriteHeaderCrcLen = 14;
+
+const double kSynthSpeed = 10.0 * 1000 / 3600; /* speed in m/s */
+
 static char* opt_allpoints = nullptr;
 static int lap_ct = 0;
 static bool new_trkseg = false;
+static bool write_header_msgs = false;
+
 
 static
 arglist_t fit_args[] = {
@@ -87,6 +146,21 @@ arglist_t fit_args[] = {
   },
   ARG_TERMINATOR
 };
+
+const std::vector<std::pair<QString, int> > kCoursePointTypeMapping = {
+  {"left", kCoursePointTypeLeft},
+  {"links", kCoursePointTypeLeft},
+  {"gauche", kCoursePointTypeLeft},
+  {"izquierda", kCoursePointTypeLeft},
+  {"sinistra", kCoursePointTypeLeft},
+
+  {"right", kCoursePointTypeRight},
+  {"rechts", kCoursePointTypeRight},
+  {"droit", kCoursePointTypeRight},
+  {"derecha", kCoursePointTypeRight},
+  {"destro", kCoursePointTypeRight},
+};
+
 
 typedef struct {
   int id;
@@ -110,7 +184,30 @@ static struct {
   fit_message_def message_def[16];
 } fit_data;
 
+struct FitCourseRecordPoint {
+  FitCourseRecordPoint(const Waypoint &wpt, bool is_course_point, unsigned int course_point_type = kCoursePointTypeGeneric)
+      : lat(wpt.latitude),
+        lon(wpt.longitude),
+        altitude(wpt.altitude),
+        speed(WAYPT_HAS((&wpt), speed) ? wpt.speed : -1),
+        odometer_distance(wpt.odometer_distance),
+        creation_time(wpt.creation_time),
+        shortname(wpt.shortname),
+        is_course_point(is_course_point),
+        course_point_type(course_point_type) { }
+  double lat, lon, altitude;
+  double speed, odometer_distance;
+  gpsbabel::DateTime creation_time;
+  QString shortname;
+  bool is_course_point;
+  unsigned int course_point_type;
+};
+
+std::deque<FitCourseRecordPoint> course, waypoints;
+
+
 static	gbfile* fin;
+static	gbfile* fout;
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
@@ -134,6 +231,18 @@ fit_rd_deinit()
   }
 
   gbfclose(fin);
+}
+
+static void
+fit_wr_init(const QString& fname)
+{
+  fout = gbfopen_le(fname, "w+b", MYNAME);
+}
+
+static void
+fit_wr_deinit()
+{
+  gbfclose(fout);
 }
 
 
@@ -671,7 +780,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
     if (alt != 0xffff) {
       waypt->altitude = (alt / 5.0) - 500;
     }
-    waypt->SetCreationTime(QDateTime::fromTime_t(timestamp + 631065600));
+    waypt->SetCreationTime(QDateTime::fromTime_t(GPS_Math_Gtime_To_Utime(timestamp)));
     if (speed != 0xffff) {
       WAYPT_SET(waypt, speed, speed / 1000.0f);
     }
@@ -777,6 +886,483 @@ fit_read()
   }
 }
 
+/*******************************************************************************
+* FIT writing
+*******************************************************************************/
+
+const static std::vector<fit_field_t> fit_msg_fields_file_id = {
+  // field id,            size, type
+  { kFieldType,           0x01, kTypeEnum   },
+  { kFieldManufacturer,   0x02, kTypeUint16 },
+  { kFieldProduct,        0x02, kTypeUint16 },
+  { kFieldTimeCreated,    0x04, kTypeUint32 },
+};
+const static std::vector<fit_field_t> fit_msg_fields_course = {
+  { kFieldName,           0x10, kTypeString },
+  { kFieldSport,          0x01, kTypeEnum   },
+};
+const static std::vector<fit_field_t> fit_msg_fields_lap = {
+  { kFieldTimestamp,      0x04, kTypeUint32 },
+  { kFieldStartTime,      0x04, kTypeUint32 },
+  { kFieldStartLatitude,  0x04, kTypeSint32 },
+  { kFieldStartLongitude, 0x04, kTypeSint32 },
+  { kFieldEndLatitude,    0x04, kTypeSint32 },
+  { kFieldEndLongitude,   0x04, kTypeSint32 },
+  { kFieldElapsedTime,    0x04, kTypeUint32 },
+  { kFieldTotalTimerTime, 0x04, kTypeUint32 },
+  { kFieldTotalDistance,  0x04, kTypeUint32 },
+  { kFieldAvgSpeed,       0x02, kTypeUint16 },
+  { kFieldMaxSpeed,       0x02, kTypeUint16 },
+};
+const static std::vector<fit_field_t> fit_msg_fields_event = {
+  { kFieldTimestamp,      0x04, kTypeUint32 },
+  { kFieldEvent,          0x01, kTypeEnum   },
+  { kFieldEventType,      0x01, kTypeEnum   },
+  { kFieldEventGroup,     0x01, kTypeUint8  },
+};
+const static std::vector<fit_field_t> fit_msg_fields_course_point = {
+  { kFieldCPTimeStamp,    0x04, kTypeUint32 },
+  { kFieldCPPositionLat,  0x04, kTypeSint32 },
+  { kFieldCPPositionLong, 0x04, kTypeSint32 },
+  { kFieldCPDistance,     0x04, kTypeUint32 },
+  { kFieldCPName,         0x10, kTypeString },
+  { kFieldCPType,         0x01, kTypeEnum   },
+};
+const static std::vector<fit_field_t> fit_msg_fields_record = {
+  { kFieldTimestamp,      0x04, kTypeUint32 },
+  { kFieldLatitude,       0x04, kTypeSint32 },
+  { kFieldLongitude,      0x04, kTypeSint32 },
+  { kFieldDistance,       0x04, kTypeUint32 },
+  { kFieldAltitude,       0x02, kTypeUint16 },
+  { kFieldSpeed,          0x02, kTypeUint16 },
+};
+
+
+static void
+fit_write_message_def(uint8_t local_id, uint16_t global_id, const std::vector<fit_field_t> &fields) {
+  gbfputc(0x40 | local_id, fout); // Local ID
+  gbfputc(0, fout); // Reserved
+  gbfputc(0, fout); // Little endian
+  gbfputuint16(global_id, fout); // Global ID
+  gbfputc(fields.size(), fout); // Number of fields
+  for (auto &&field : fields) {
+    gbfputc(field.id, fout); // Field definition number
+    gbfputc(field.size, fout); // Field size in bytes
+    gbfputc(field.type, fout); // Field type
+  }
+}
+
+
+static uint16_t
+fit_crc16(uint8_t data, uint16_t crc) {
+  static const uint16_t crc_table[] = {
+    0x0000, 0xcc01, 0xd801, 0x1400, 0xf001, 0x3c00, 0x2800, 0xe401,
+    0xa001, 0x6c00, 0x7800, 0xb401, 0x5000, 0x9c01, 0x8801, 0x4400
+  };
+
+  crc = (crc >> 4) ^ crc_table[crc & 0xf] ^ crc_table[data & 0xf];
+  crc = (crc >> 4) ^ crc_table[crc & 0xf] ^ crc_table[(data >> 4) & 0xf];
+  return crc;
+}
+
+
+static void
+fit_write_timestamp(const gpsbabel::DateTime &t) {
+  uint32_t t_fit;
+  if (t.isValid() && t.toTime_t() >= (unsigned int)GPS_Math_Gtime_To_Utime(0)) {
+    t_fit = GPS_Math_Utime_To_Gtime(t.toTime_t());
+  } else {
+    t_fit = 0xffffffff;
+  }
+  gbfputuint32(t_fit, fout);
+}
+
+
+static void
+fit_write_fixed_string(const QString &s, unsigned int len) {
+  QString trimmed(s);
+  QByteArray u8buf;
+
+  // Truncate if too long, making sure not to chop in the middle of a UTF-8
+  // character (i.e. we chop the unicode string and then check whether its
+  // UTF-8 representation fits)
+  while (true) {
+    u8buf = trimmed.toUtf8();
+    if (static_cast<unsigned int>(u8buf.size()) < len) {
+      break;
+    }
+    trimmed.chop(1);
+  }
+  // If the string was too short initially or we had to chop multibyte
+  // characters, the UTF-8 representation might be too short now, so pad
+  // it.
+  u8buf.append(len - u8buf.size(), '\0');
+  gbfwrite(u8buf.data(), len, 1, fout);
+}
+
+
+static void
+fit_write_position(double pos) {
+  if (pos >= -180 && pos < 180) {
+    gbfputint32(GPS_Math_Deg_To_Semi(pos), fout);
+  } else {
+    gbfputint32(0xffffffff, fout);
+  }
+}
+
+
+// Note: The data fields written using fit_write_msg_*() below need to match
+// the message field definitions in fit_msg_fields_* above!
+static void
+fit_write_msg_file_id(uint8_t type, uint16_t manufacturer, uint16_t product,
+                      const gpsbabel::DateTime &time_created) {
+  gbfputc(kWriteLocalIdFileId, fout);
+  gbfputc(type, fout);
+  gbfputuint16(manufacturer, fout);
+  gbfputuint16(product, fout);
+  fit_write_timestamp(time_created);
+}
+
+static void
+fit_write_msg_course(const QString &name, uint8_t sport) {
+  gbfputc(kWriteLocalIdCourse, fout);
+  fit_write_fixed_string(name, 0x10);
+  gbfputc(sport, fout);
+}
+
+static void
+fit_write_msg_lap(const gpsbabel::DateTime &timestamp, const gpsbabel::DateTime &start_time,
+                  double start_position_lat, double start_position_long,
+                  double end_position_lat, double end_position_long,
+                  uint32_t total_elapsed_time_s, double total_distance_m,
+                  double avg_speed_ms, double max_speed_ms) {
+  gbfputc(kWriteLocalIdLap, fout);
+  fit_write_timestamp(timestamp);
+  fit_write_timestamp(start_time);
+  fit_write_position(start_position_lat);
+  fit_write_position(start_position_long);
+  fit_write_position(end_position_lat);
+  fit_write_position(end_position_long);
+  if (total_elapsed_time_s < 4294967) {
+    gbfputuint32(total_elapsed_time_s * 1000, fout);
+    gbfputuint32(total_elapsed_time_s * 1000, fout);
+  } else {
+    gbfputuint32(0xffffffff, fout);
+    gbfputuint32(0xffffffff, fout);
+  }
+  if (total_distance_m >= 0 && total_distance_m < 42949672.94) {
+    gbfputuint32(total_distance_m * 100, fout);
+  } else {
+    gbfputuint32(0xffffffff, fout);
+  }
+  if (avg_speed_ms >= 0 && avg_speed_ms < 65.534) {
+    gbfputuint16(avg_speed_ms * 1000, fout);
+  } else {
+    gbfputuint16(0xffff, fout);
+  }
+  if (max_speed_ms >= 0 && max_speed_ms < 65.534) {
+    gbfputuint16(max_speed_ms * 1000, fout);
+  } else {
+    gbfputuint16(0xffff, fout);
+  }
+}
+
+
+static void
+fit_write_msg_event(const gpsbabel::DateTime &timestamp,
+                    uint8_t event, uint8_t event_type, uint8_t event_group) {
+  gbfputc(kWriteLocalIdEvent, fout);
+  fit_write_timestamp(timestamp);
+  gbfputc(event, fout);
+  gbfputc(event_type, fout);
+  gbfputc(event_group, fout);
+}
+
+
+static void
+fit_write_msg_course_point(const gpsbabel::DateTime &timestamp,
+                           double position_lat, double position_long,
+                           double distance_m, const QString &name,
+                           uint8_t type) {
+  gbfputc(kWriteLocalIdCoursePoint, fout);
+  fit_write_timestamp(timestamp);
+  fit_write_position(position_lat);
+  fit_write_position(position_long);
+  if (distance_m >= 0 && distance_m < 42949672.94) {
+    gbfputuint32(distance_m * 100, fout);
+  } else {
+    gbfputuint32(0xffffffff, fout);
+  }
+  fit_write_fixed_string(name, 0x10);
+  gbfputc(type, fout);
+}
+
+
+static void
+fit_write_msg_record(const gpsbabel::DateTime &timestamp,
+                     double position_lat, double position_long,
+                     double distance_m, double altitude,
+                     double speed_ms) {
+  gbfputc(kWriteLocalIdRecord, fout);
+  fit_write_timestamp(timestamp);
+  fit_write_position(position_lat);
+  fit_write_position(position_long);
+  if (distance_m >= 0 && distance_m < 42949672.94) {
+    gbfputuint32(distance_m * 100, fout);
+  } else {
+    gbfputuint32(0xffffffff, fout);
+  }
+  if (altitude != unknown_alt && altitude >= -500 && altitude < 12606.8) {
+    gbfputuint16((altitude + 500) * 5, fout);
+  } else {
+    gbfputuint16(0xffff, fout);
+  }
+  if (speed_ms >= 0 && speed_ms < 65.534) {
+    gbfputuint16(speed_ms * 1000, fout);
+  } else {
+    gbfputuint16(0xffff, fout);
+  }
+}
+
+
+static void
+fit_write_file_header(uint32_t file_size, uint16_t crc)
+{
+  gbfputc(kWriteHeaderCrcLen, fout); // Header+CRC length
+  gbfputc(0x10, fout);               // Protocol version
+  gbfputuint16(0x811, fout);         // Profile version
+  gbfputuint32(file_size, fout);     // Length of data records (little endian)
+  gbfputs(".FIT", fout);             // Signature
+  gbfputuint16(crc, fout);           // CRC
+}
+
+
+static void
+fit_write_header_msgs(gpsbabel::DateTime ctime, QString name)
+{
+  fit_write_message_def(kWriteLocalIdFileId, kIdFileId, fit_msg_fields_file_id);
+  fit_write_message_def(kWriteLocalIdCourse, kIdCourse, fit_msg_fields_course);
+  fit_write_message_def(kWriteLocalIdLap, kIdLap, fit_msg_fields_lap);
+  fit_write_message_def(kWriteLocalIdEvent, kIdEvent, fit_msg_fields_event);
+  fit_write_message_def(kWriteLocalIdCoursePoint, kIdCoursePoint, fit_msg_fields_course_point);
+  fit_write_message_def(kWriteLocalIdRecord, kIdRecord, fit_msg_fields_record);
+
+  fit_write_msg_file_id(kFileCourse, 1, 0x3e9, ctime);
+  fit_write_msg_course(name, 0);
+}
+
+
+static void
+fit_write_file_finish()
+{
+  // Update data records size in file header
+  gbsize_t file_size = gbftell(fout);
+  if (file_size < kWriteHeaderCrcLen) {
+    fatal(MYNAME ": File %s truncated\n", fout->name);
+  }
+  gbfseek(fout, 0, SEEK_SET);
+  fit_write_file_header(file_size - kWriteHeaderCrcLen, 0);
+
+  // Update file header CRC
+  uint16_t crc = 0;
+  gbfseek(fout, 0, SEEK_SET);
+  for (unsigned int i = 0; i < kWriteHeaderLen; i++) {
+    int data = gbfgetc(fout);
+    if (data == EOF) {
+      fatal(MYNAME ": File %s truncated\n", fout->name);
+    }
+    crc = fit_crc16(data, crc);
+  }
+  gbfseek(fout, 0, SEEK_SET);
+  fit_write_file_header(file_size - kWriteHeaderCrcLen, crc);
+
+  // Write file CRC
+  gbfflush(fout);
+  crc = 0;
+  while (true) {
+    int data = gbfgetc(fout);
+    if (data == EOF) {
+      break;
+    }
+    crc = fit_crc16(data, crc);
+  }
+  gbfputuint16(crc, fout);
+}
+
+static void
+fit_collect_track_hdr(const route_head *rte)
+{
+  (void)rte;
+  course.clear();
+}
+
+static void
+fit_collect_trackpt(const Waypoint* waypointp)
+{
+  course.push_back(FitCourseRecordPoint(*waypointp, false));
+}
+
+static void
+fit_collect_track_tlr(const route_head *rte)
+{
+  // Prepare for writing a course corresponding to a track.
+  // For this, we need to check for/synthesize missing information
+  // and convert waypoints to coursepoints (i.e. insert them at the right
+  // place between course records).
+
+  // Recalculate odometer_distance for the whole track unless already
+  // (properly, i.e. monotonically increasing) set
+  double dist_sum = 0;
+  double prev_lat = 999, prev_lon = 999;
+  double max_speed = 0;
+  gpsbabel::DateTime prev_time;
+  for (auto &crpt: course) {
+    // Distance to prev. point
+    double dist;
+    if (crpt.odometer_distance && crpt.odometer_distance >= dist_sum) {
+      dist = crpt.odometer_distance - dist_sum;
+      dist_sum = crpt.odometer_distance;
+    } else {
+      if (prev_lat >= -90 && prev_lat <= 90 && prev_lon >= -180 && prev_lon <= 180) {
+        dist = gcgeodist(prev_lat, prev_lon, crpt.lat, crpt.lon);
+      } else {
+        dist = 0;
+      }
+      dist_sum += dist;
+      crpt.odometer_distance = dist_sum;
+    }
+    prev_lat = crpt.lat;
+    prev_lon = crpt.lon;
+
+    // Check/set timestamp/speed
+    if (!crpt.creation_time.isValid() ||
+        (prev_time.isValid() && prev_time >= crpt.creation_time)) {
+      if (crpt.speed < 1e-3) {
+        crpt.speed = kSynthSpeed;
+      }
+      crpt.creation_time = prev_time.addSecs(dist / crpt.speed);
+    } else if (crpt.speed < 1e-3) {
+      uint64_t duration = prev_time.secsTo(crpt.creation_time);
+      if (!duration) {
+        duration = 1;
+      }
+      crpt.speed = dist / duration;
+    }
+    prev_time = crpt.creation_time;
+
+    if (crpt.speed > max_speed) {
+      max_speed = crpt.speed;
+    }
+  }
+
+  // Insert course points at the right place between track points (with
+  // minimum distance to next track point)
+  while (!waypoints.empty()) {
+    auto &wpt = waypoints.front();
+    double best_distance = -1;
+    auto best_distance_it = course.begin();
+    double best_odometer_distance = 0;
+    for (auto cit = course.begin(); cit != course.end(); cit++) {
+      if (!cit->is_course_point) {
+        double distance = gcgeodist(cit->lat, cit->lon, wpt.lat, wpt.lon);;
+        if (best_distance < 0 || distance < best_distance) {
+          best_distance = distance;
+          best_distance_it = cit;
+          best_odometer_distance = cit->odometer_distance;
+        }
+      }
+    }
+    wpt.odometer_distance = best_odometer_distance;
+    course.insert(best_distance_it, wpt);
+    waypoints.pop_front();
+  }
+
+  // Use current time as creation time if we have nothing better
+  gpsbabel::DateTime track_date_time, track_end_date_time, creation_time;
+  double first_lat = 999, first_lon = 999, last_lat = 999, last_lon = 999;
+  if (!course.empty()) {
+    track_date_time = creation_time = course.front().creation_time;
+    track_end_date_time = course.back().creation_time;
+    first_lat = course.front().lat;
+    first_lon = course.front().lon;
+    last_lat = course.back().lat;
+    last_lon = course.back().lon;
+  } else {
+    creation_time = gpsbabel::DateTime::currentDateTimeUtc();
+  }
+  uint32_t total_time = track_date_time.secsTo(track_end_date_time);
+
+  // Write file-level header messages here because we need a name and date
+  // and take these from the first track
+  if (write_header_msgs) {
+    fit_write_header_msgs(creation_time, rte->rte_name);
+    write_header_msgs = false;
+  }
+
+  // Write track header messages (lap+start event)
+  double avg_speed = 0;
+  if (total_time) {
+    avg_speed = dist_sum / total_time;
+  }
+  fit_write_msg_lap(track_date_time, track_date_time,
+                    first_lat, first_lon, last_lat, last_lon, total_time, dist_sum,
+                    avg_speed, max_speed);
+  fit_write_msg_event(track_date_time, kEventTimer, kEventTypeStart, 0);
+
+  // Write track/course points for the whole track
+  for (auto &crpt: course) {
+    if (crpt.is_course_point) {
+      fit_write_msg_course_point(crpt.creation_time,
+                                 crpt.lat,
+                                 crpt.lon,
+                                 crpt.odometer_distance,
+                                 crpt.shortname,
+                                 crpt.course_point_type);
+    } else {
+      fit_write_msg_record(crpt.creation_time,
+                           crpt.lat,
+                           crpt.lon,
+                           crpt.odometer_distance,
+                           crpt.altitude,
+                           crpt.speed);
+    }
+  }
+
+  fit_write_msg_event(track_end_date_time, kEventTimer, kEventTypeStopDisableAll, 0);
+}
+
+static void
+fit_collect_waypt(const Waypoint* waypointp)
+{
+  FitCourseRecordPoint crpt(*waypointp, true);
+
+  // Try to find a better course point type than "generic", based on the
+  // course point name
+  for (auto &cptm: kCoursePointTypeMapping) {
+    if (crpt.shortname.contains(cptm.first, Qt::CaseInsensitive)) {
+      crpt.course_point_type = cptm.second;
+      break;
+    }
+  }
+
+  waypoints.push_back(crpt);
+}
+
+
+
+/*******************************************************************************
+* fit_write- global entry point
+*******************************************************************************/
+static void
+fit_write()
+{
+  fit_write_file_header(0, 0);
+  write_header_msgs = true;
+  waypt_disp_all(fit_collect_waypt);
+  track_disp_all(fit_collect_track_hdr, fit_collect_track_tlr, fit_collect_trackpt);
+  fit_write_file_finish();
+}
+
 /**************************************************************************/
 
 // capabilities below means: we can only read and write waypoints
@@ -785,16 +1371,16 @@ fit_read()
 ff_vecs_t format_fit_vecs = {
   ff_type_file,
   {
-    ff_cap_none			/* waypoints */,
-    ff_cap_read 		/* tracks */,
-    ff_cap_none 		/* routes */
+    ff_cap_write				/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
+    ff_cap_none 				/* routes */
   },
   fit_rd_init,
-  nullptr,
+  fit_wr_init,
   fit_rd_deinit,
-  nullptr,
+  fit_wr_deinit,
   fit_read,
-  nullptr,
+  fit_write,
   nullptr,
   fit_args,
   CET_CHARSET_ASCII, 0		/* ascii is the expected character set */

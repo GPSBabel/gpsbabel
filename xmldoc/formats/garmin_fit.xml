@@ -1,1 +1,32 @@
-
+<para>
+GPSBabel supports reading and writing of tracks in the .fit
+format used by products based on the Garmin
+<ulink url="https://www.thisisant.com/">ANT+ protocol</ulink>.
+</para>
+<para>
+As in case of <link  linkend="fmt_gtrnctr">Garmin Training Center</link>,
+FIT files contain courses with laps etc. which don't exactly match
+GPSBabel's waypoints, tracks, and routes. An attempt is made to extract and
+transform data than can be handled by GPSBabel like heart rate etc. and
+conversion from waypoints to course points and vice versa. Note that routes
+are not handled, so they should be transformed to tracks first before
+converting to FIT. Also, track segments are not supported, so all segments
+in a track get concatenated and written as a single continuous track without
+gaps.
+</para>
+<para>
+When writing a FIT file, waypoints are converted to course points by
+inserting them at the nearest location in the track/course. By default,
+generic course points are written unless the waypoint name contains one of
+the following words in which case course points of type left/right are
+emitted:
+<simplelist>
+<member>left, links, gauche, izquierda, sinistra</member>
+<member>right, rechts, droit, derecha, destro</member>
+</simplelist>
+</para>
+<para>
+FIT courses typically contain speed information. If the original track
+contains neither speed information nor timestamps which may be used to
+derive the speed, a speed of 10 km/h is assumed and assigned to the course.
+</para>
