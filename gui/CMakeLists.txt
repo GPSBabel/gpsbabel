@@ -42,14 +42,17 @@ set(QT_DEFINITIONS ${Qt5Core_DEFINITIONS} ${QT5Gui_DEFINITIONS} ${Qt5Network_DEF
 list(REMOVE_DUPLICATES QT_DEFINITIONS)
 message("QT DEFS: \"${QT_DEFINITIONS}\"\n")
 
-set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5Xml_LIBRARIES} ${Qt5WebEngineWidgets_LIBRARIES} ${Qt5WebChannel_LIBRARIES} ${LIBUDEV_LIBRARIES} ${LIBS})
+set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5Xml_LIBRARIES} ${Qt5WebEngineWidgets_LIBRARIES} ${Qt5WebChannel_LIBRARIES})
 #list(REMOVE_DUPLICATES QT_LIBRARIES)
 message("QT LIBS: \"${QT_LIBRARIES}\"\n")
 
 include_directories(AFTER SYSTEM ${QT_INCLUDE_DIRS})
 add_definitions(${QT_DEFINITIONS} -DHAVE_WEBENGINE)
 
-# mac:LIBS += -framework IOKit -framework CoreFoundation
+if (APPLE)
+  find_library(IOKIT_LIBRARIES IOKit)
+  find_library(COREFOUNDATION_LIBRARIES CoreFoundation)
+endif()
 
 if (UNIX AND NOT APPLE)
   find_package(PkgConfig REQUIRED)
@@ -144,8 +147,23 @@ set(HEADERS
   version_mismatch.h
 )
 
-add_executable(${TARGET} ${SOURCES} ${HEADERS} ${RESOURCES})
-set(LIBS ${QT_LIBRARIES} ${LIBUDEV_LIBRARIES})
+if (APPLE)
+  set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
+  set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
+  set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+  add_executable(${TARGET} MACOSX_BUNDLE ${SOURCES} ${HEADERS} ${ICON_FILE} ${RESOURCES})
+
+  # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
+  set_target_properties(${TARGET} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.${TARGET}
+    MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
+  )
+else()
+  add_executable(${TARGET} ${SOURCES} ${HEADERS} ${RESOURCES})
+endif()
+
+set(LIBS ${QT_LIBRARIES} ${LIBUDEV_LIBRARIES} ${IOKIT_LIBRARIES} ${COREFOUNDATION_LIBRARIES})
 list(REMOVE_DUPLICATES LIBS)
 target_link_libraries(${TARGET} ${LIBS})
 
@@ -158,3 +176,4 @@ message("Libs are: \"${LnkLibs}\"\n")
 get_directory_property(IncDirs INCLUDE_DIRECTORIES)
 message("Include Directores are: \"${IncDirs}\"\n")
 
+add_custom_target(package COMMAND ./package_app DEPENDS ${TARGET})
