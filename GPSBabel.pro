@@ -175,7 +175,7 @@ macx|linux {
     # this is used by zlib
     DEFINES += HAVE_STDARG_H
   }
-  DEFINES += HAVE_LIBUSB
+  DEFINES += HAVE_LIBUSB_1_0
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
   JEEPS += jeeps/gpslibusb.cc
@@ -201,19 +201,30 @@ win32-msvc* {
 
 linux {
   DEFINES += HAVE_LINUX_HID
-  LIBS += "-lusb"
+  LIBS += "-lusb-1.0"
 }
 
 macx {
-  LIBS += -framework IOKit -framework CoreFoundation
-  INCLUDEPATH += mac/libusb
-  SOURCES += mac/libusb/darwin.c \
-             mac/libusb/descriptors.c \
-             mac/libusb/error.c \
-             mac/libusb/usb.c
-  HEADERS += mac/libusb/error.h \
-             mac/libusb/usb.h \
-             mac/libusb/usbi.h
+  LIBS += -lobjc -framework IOKit -framework CoreFoundation
+  INCLUDEPATH += mac/libusb \
+                 mac/libusb/Xcode
+  SOURCES += mac/libusb/core.c \
+             mac/libusb/descriptor.c \
+             mac/libusb/hotplug.c \
+             mac/libusb/io.c \
+             mac/libusb/strerror.c \
+             mac/libusb/sync.c \
+             mac/libusb/os/darwin_usb.c \
+             mac/libusb/os/poll_posix.c \
+             mac/libusb/os/threads_posix.c
+  HEADERS += mac/libusb/hotplug.h \
+             mac/libusb/libusb.h \
+             mac/libusb/libusbi.h \
+             mac/libusb/version.h \
+             mac/libusb/version_nano.h \
+             mac/libusb/os/darwin_usb.h \
+             mac/libusb/os/poll_posix.h \
+             mac/libusb/os/threads_posix.h
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS

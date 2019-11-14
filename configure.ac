@@ -208,13 +208,11 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	])
 ], [*-*-darwin*], [
 	GBSER=gbser_posix.o
-	OSJEEPS="jeeps/gpslibusb.o \
-	mac/libusb/darwin.o \
-	mac/libusb/descriptors.o \
-	mac/libusb/error.o \
-	mac/libusb/usb.o "
-	USB_LIBS="-framework  IOKit -framework CoreFoundation"
-	AC_DEFINE(HAVE_LIBUSB, 1)
+	OSJEEPS="jeeps/gpslibusb.o"
+	USB_CFLAGS="-I\$(srcdir)/mac/libusb"
+	USB_LIBS="-Lmac/libusb -lusb-1.0 -lobjc -framework IOKit -framework CoreFoundation"
+	USB_DEPS="mac/libusb/libusb-1.0.a"
+	AC_DEFINE(HAVE_LIBUSB_1_0, 1)
 
 	# On Mac, use frameworks for includes and library files.
 	# Macports uses a non-standard build of Qt with an added
@@ -229,59 +227,21 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	QT_INC="$QT_FW_OR_LIBS"
 	QT_INC_OPT="-F"
 	QT_SYSINC_OPT="-iframework"
-], [*-*-freebsd*], [
-	GBSER=gbser_posix.o
-	AC_MSG_CHECKING(for libusb)
-	AS_IF([test "$with_libusb" = "no"], [
-		AC_MSG_RESULT(check not done)
-		OSJEEPS=jeeps/gpsusbstub.o
-	], [
-		OLDFLAGS=$LDFLAGS
-		OCFLAGS=$CFLAGS
-		LDFLAGS="$LDFLAGS -lusb"
-		CFLAGS="$OCFLAGS"
-
-		AC_CHECK_LIB([usb], [usb_interrupt_read],
-			AC_DEFINE(HAVE_LIBUSB, 1, [Defined if you have libusb])
-			[USB_CFLAGS=""]
-			[USB_LIBS="-lusb"]
-			#,[AC_MSG_ERROR([libusb is needed])]
-		)
-		OSJEEPS=jeeps/gpslibusb.o
-		CFLAGS="$OCFLAGS"
-		LDFLAGS="$OLDFLAGS"
-	])
 ], [
 	GBSER=gbser_posix.o
-	AC_MSG_CHECKING(for libusb)
+	AC_MSG_CHECKING(for libusb-1.0)
 	AS_IF([test "$with_libusb" = "no"], [
 		AC_MSG_RESULT(check not done)
 		OSJEEPS=jeeps/gpsusbstub.o
 	], [
-		AC_CHECK_PROG(LIBUSBCONFIG, libusb-config, true, false)
-		AS_IF([test "$LIBUSBCONFIG" = "true"], [
-			OLDFLAGS=$LDFLAGS
-			OCFLAGS=$CFLAGS
-			LDFLAGS="$LDFLAGS `libusb-config --libs`"
-			CFLAGS="$OCFLAGS `libusb-config --cflags`"
 
-			AC_CHECK_LIB([usb], [usb_interrupt_read],
-				AC_DEFINE(HAVE_LIBUSB, 1, [Defined if you have libusb])
-				[USB_CFLAGS="`libusb-config --cflags`"]
-				[USB_LIBS="`libusb-config --libs`"]
-				#,[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
-			)
-			OSJEEPS=jeeps/gpslibusb.o
-			CFLAGS="$OCFLAGS"
-			LDFLAGS="$OLDFLAGS"
-			#LIBS="$LIBS `libusb-config --libs`"
-		], [
-			OSJEEPS=jeeps/gpsusbstub.o
-		])
+		AC_CHECK_LIB([usb-1.0], [libusb_init])
+		OSJEEPS=jeeps/gpslibusb.o
 	])
 ])
 
 AC_SUBST(USB_LIBS)
+AC_SUBST(USB_DEPS)
 AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
 AC_SUBST(GBSER)
@@ -427,6 +387,7 @@ AS_MKDIR_P([shapelib])
 AS_MKDIR_P([src/core])
 AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
+AS_MKDIR_P([mac/libusb])
 
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
 AC_OUTPUT

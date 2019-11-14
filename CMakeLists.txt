@@ -188,7 +188,7 @@ if(UNIX)
   if(${HAVE_STDARG_H})
     add_definitions(-DHAVE_STDARG_H)
   endif()
-  add_definitions(-DHAVE_LIBUSB)
+  add_definitions(-DHAVE_LIBUSB_1_0)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
@@ -215,22 +215,32 @@ endif()
 
 if (UNIX AND NOT APPLE)
   add_definitions(-DHAVE_LINUX_HID)
-  set(LIBS ${LIBS} usb)
+  set(LIBS ${LIBS} usb-1.0)
 endif()
 
 if (APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework IOKit -framework CoreFoundation")
-  include_directories(AFTER mac/libusb)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
+  include_directories(AFTER mac/libusb mac/libusb/Xcode)
   set(SOURCES ${SOURCES}
-    mac/libusb/darwin.c
-    mac/libusb/descriptors.c
-    mac/libusb/error.c
-    mac/libusb/usb.c
+    mac/libusb/core.c
+    mac/libusb/descriptor.c
+    mac/libusb/hotplug.c
+    mac/libusb/io.c
+    mac/libusb/strerror.c
+    mac/libusb/sync.c
+    mac/libusb/os/darwin_usb.c
+    mac/libusb/os/poll_posix.c
+    mac/libusb/os/threads_posix.c
   )
   set(HEADERS ${HEADERS}
-    mac/libusb/error.h
-    mac/libusb/usb.h
-    mac/libusb/usbi.h
+    mac/libusb/hotplug.h
+    mac/libusb/libusb.h
+    mac/libusb/libusbi.h
+    mac/libusb/version.h
+    mac/libusb/version_nano.h
+    mac/libusb/os/darwin_usb.h
+    mac/libusb/os/poll_posix.h
+    mac/libusb/os/threads_posix.h
   )
   add_compile_options(-Wall -Wsign-compare)
 endif()

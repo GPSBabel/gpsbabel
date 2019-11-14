@@ -153,10 +153,10 @@ toolinfo
 
 all: gpsbabel$(EXEEXT)
 
-gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@
+gpsbabel$(EXEEXT): configure Makefile $(OBJS) @USB_DEPS@ @GPSBABEL_DEBUG@
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
-gpsbabel-debug: $(OBJS)
+gpsbabel-debug: $(OBJS) @USB_DEPS@
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
@@ -178,6 +178,7 @@ fileinfo.o: win32/gpsbabel.rc
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe $(VGLOGS)
 	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
+	if [ -f mac/libusb/Makefile ]; then $(MAKE) -C mac/libusb clean; fi
 	$(srcdir)/test-all -W
 
 configure: configure.ac
@@ -420,6 +421,9 @@ cov-upload: FORCE
 toolinfo:
 	-$(CC) --version
 	-$(QMAKE) -v
+
+mac/libusb/libusb-1.0.a:
+	cd mac/libusb; $(QMAKE) @abs_srcdir@/mac/libusb/libusb.pro && $(MAKE)
 
 # Machine generated from here down.
 alan.o: alan.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
@@ -688,13 +692,14 @@ jeeps/gpsdevice_usb.o: jeeps/gpsdevice_usb.cc jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/garminusb.h \
   jeeps/gpsusbcommon.h jeeps/gpsusbint.h
-jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/usb.h \
-  jeeps/gps.h jeeps/../defs.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
-  gbfile.h defs.h session.h src/core/datetime.h src/core/optional.h \
-  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
-  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
-  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/garminusb.h jeeps/gpsusbcommon.h jeeps/../garmin_device_xml.h
+jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/libusb.h \
+  jeeps/../defs.h zlib/zlib.h zlib/zconf.h cet.h inifile.h gbfile.h \
+  defs.h session.h src/core/datetime.h src/core/optional.h \
+  jeeps/garminusb.h jeeps/gpsdevice.h jeeps/gps.h jeeps/gpsport.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsusbcommon.h \
+  jeeps/../garmin_device_xml.h
 jeeps/gpsmath.o: jeeps/gpsmath.cc jeeps/gps.h jeeps/../defs.h config.h \
   zlib/zlib.h zlib/zconf.h cet.h inifile.h gbfile.h defs.h session.h \
   src/core/datetime.h src/core/optional.h jeeps/gpsport.h \
@@ -780,14 +785,6 @@ lmx.o: lmx.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
 lowranceusr.o: lowranceusr.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h
-mac/libusb/darwin.o: mac/libusb/darwin.c config.h mac/libusb/usbi.h \
-  mac/libusb/usb.h mac/libusb/error.h
-mac/libusb/descriptors.o: mac/libusb/descriptors.c mac/libusb/usbi.h \
-  mac/libusb/usb.h mac/libusb/error.h
-mac/libusb/error.o: mac/libusb/error.c mac/libusb/usb.h \
-  mac/libusb/error.h
-mac/libusb/usb.o: mac/libusb/usb.c mac/libusb/usbi.h mac/libusb/usb.h \
-  mac/libusb/error.h
 maggeo.o: maggeo.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   csv_util.h magellan.h xmlgeneric.h
@@ -1047,11 +1044,6 @@ yahoo.o: yahoo.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
 zlib/adler32.o: zlib/adler32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
   config.h
 zlib/compress.o: zlib/compress.c zlib/zlib.h zlib/zconf.h config.h
-zlib/contrib/minizip/ioapi.o: zlib/contrib/minizip/ioapi.c \
-  zlib/contrib/minizip/ioapi.h zlib/zlib.h zlib/zconf.h config.h
-zlib/contrib/minizip/zip.o: zlib/contrib/minizip/zip.c zlib/zlib.h \
-  zlib/zconf.h config.h zlib/contrib/minizip/zip.h \
-  zlib/contrib/minizip/ioapi.h zlib/contrib/minizip/crypt.h
 zlib/crc32.o: zlib/crc32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h config.h \
   zlib/crc32.h
 zlib/deflate.o: zlib/deflate.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \

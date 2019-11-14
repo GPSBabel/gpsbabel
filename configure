@@ -631,8 +631,8 @@ GPSBABEL_DEBUG
 GBSER
 OSJEEPS
 USB_CFLAGS
+USB_DEPS
 USB_LIBS
-LIBUSBCONFIG
 AWK
 ac_ct_LRELEASE
 LRELEASE
@@ -700,7 +700,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -780,7 +779,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1033,15 +1031,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1179,7 +1168,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1332,7 +1321,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -6235,13 +6223,11 @@ fi
   *-*-darwin*) :
 
 	GBSER=gbser_posix.o
-	OSJEEPS="jeeps/gpslibusb.o \
-	mac/libusb/darwin.o \
-	mac/libusb/descriptors.o \
-	mac/libusb/error.o \
-	mac/libusb/usb.o "
-	USB_LIBS="-framework  IOKit -framework CoreFoundation"
-	$as_echo "#define HAVE_LIBUSB 1" >>confdefs.h
+	OSJEEPS="jeeps/gpslibusb.o"
+	USB_CFLAGS="-I\$(srcdir)/mac/libusb"
+	USB_LIBS="-Lmac/libusb -lusb-1.0 -lobjc -framework IOKit -framework CoreFoundation"
+	USB_DEPS="mac/libusb/libusb-1.0.a"
+	$as_echo "#define HAVE_LIBUSB_1_0 1" >>confdefs.h
 
 
 	# On Mac, use frameworks for includes and library files.
@@ -6260,11 +6246,11 @@ fi
 	QT_INC_OPT="-F"
 	QT_SYSINC_OPT="-iframework"
  ;; #(
-  *-*-freebsd*) :
+  *) :
 
 	GBSER=gbser_posix.o
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb" >&5
-$as_echo_n "checking for libusb... " >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb-1.0" >&5
+$as_echo_n "checking for libusb-1.0... " >&6; }
 	if test "$with_libusb" = "no"; then :
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: check not done" >&5
@@ -6273,18 +6259,14 @@ $as_echo "check not done" >&6; }
 
 else
 
-		OLDFLAGS=$LDFLAGS
-		OCFLAGS=$CFLAGS
-		LDFLAGS="$LDFLAGS -lusb"
-		CFLAGS="$OCFLAGS"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for usb_interrupt_read in -lusb" >&5
-$as_echo_n "checking for usb_interrupt_read in -lusb... " >&6; }
-if ${ac_cv_lib_usb_usb_interrupt_read+:} false; then :
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb_init in -lusb-1.0" >&5
+$as_echo_n "checking for libusb_init in -lusb-1.0... " >&6; }
+if ${ac_cv_lib_usb_1_0_libusb_init+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lusb  $LIBS"
+LIBS="-lusb-1.0  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -6294,160 +6276,41 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char usb_interrupt_read ();
+char libusb_init ();
 int
 main ()
 {
-return usb_interrupt_read ();
+return libusb_init ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_usb_usb_interrupt_read=yes
+  ac_cv_lib_usb_1_0_libusb_init=yes
 else
-  ac_cv_lib_usb_usb_interrupt_read=no
+  ac_cv_lib_usb_1_0_libusb_init=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_usb_usb_interrupt_read" >&5
-$as_echo "$ac_cv_lib_usb_usb_interrupt_read" >&6; }
-if test "x$ac_cv_lib_usb_usb_interrupt_read" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_usb_1_0_libusb_init" >&5
+$as_echo "$ac_cv_lib_usb_1_0_libusb_init" >&6; }
+if test "x$ac_cv_lib_usb_1_0_libusb_init" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBUSB_1_0 1
+_ACEOF
 
-$as_echo "#define HAVE_LIBUSB 1" >>confdefs.h
-
-			USB_CFLAGS=""
-			USB_LIBS="-lusb"
-			#,[AC_MSG_ERROR([libusb is needed])]
+  LIBS="-lusb-1.0 $LIBS"
 
 fi
 
 		OSJEEPS=jeeps/gpslibusb.o
-		CFLAGS="$OCFLAGS"
-		LDFLAGS="$OLDFLAGS"
-
-fi
- ;; #(
-  *) :
-
-	GBSER=gbser_posix.o
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb" >&5
-$as_echo_n "checking for libusb... " >&6; }
-	if test "$with_libusb" = "no"; then :
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: check not done" >&5
-$as_echo "check not done" >&6; }
-		OSJEEPS=jeeps/gpsusbstub.o
-
-else
-
-		# Extract the first word of "libusb-config", so it can be a program name with args.
-set dummy libusb-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_LIBUSBCONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$LIBUSBCONFIG"; then
-  ac_cv_prog_LIBUSBCONFIG="$LIBUSBCONFIG" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_LIBUSBCONFIG="true"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_prog_LIBUSBCONFIG" && ac_cv_prog_LIBUSBCONFIG="false"
-fi
-fi
-LIBUSBCONFIG=$ac_cv_prog_LIBUSBCONFIG
-if test -n "$LIBUSBCONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBUSBCONFIG" >&5
-$as_echo "$LIBUSBCONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-		if test "$LIBUSBCONFIG" = "true"; then :
-
-			OLDFLAGS=$LDFLAGS
-			OCFLAGS=$CFLAGS
-			LDFLAGS="$LDFLAGS `libusb-config --libs`"
-			CFLAGS="$OCFLAGS `libusb-config --cflags`"
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for usb_interrupt_read in -lusb" >&5
-$as_echo_n "checking for usb_interrupt_read in -lusb... " >&6; }
-if ${ac_cv_lib_usb_usb_interrupt_read+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lusb  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char usb_interrupt_read ();
-int
-main ()
-{
-return usb_interrupt_read ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_usb_usb_interrupt_read=yes
-else
-  ac_cv_lib_usb_usb_interrupt_read=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_usb_usb_interrupt_read" >&5
-$as_echo "$ac_cv_lib_usb_usb_interrupt_read" >&6; }
-if test "x$ac_cv_lib_usb_usb_interrupt_read" = xyes; then :
-
-$as_echo "#define HAVE_LIBUSB 1" >>confdefs.h
-
-				USB_CFLAGS="`libusb-config --cflags`"
-				USB_LIBS="`libusb-config --libs`"
-				#,[AC_MSG_ERROR([libusb >= 0.1.8 is needed])]
-
-fi
-
-			OSJEEPS=jeeps/gpslibusb.o
-			CFLAGS="$OCFLAGS"
-			LDFLAGS="$OLDFLAGS"
-			#LIBS="$LIBS `libusb-config --libs`"
-
-else
-
-			OSJEEPS=jeeps/gpsusbstub.o
-
-fi
 
 fi
  ;;
 esac
+
 
 
 
@@ -6700,6 +6563,7 @@ as_dir=shapelib; as_fn_mkdir_p
 as_dir=src/core; as_fn_mkdir_p
 as_dir=zlib/contrib/minizip; as_fn_mkdir_p
 as_dir=testo.d; as_fn_mkdir_p
+as_dir=mac/libusb; as_fn_mkdir_p
 
 ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc"
 

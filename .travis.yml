@@ -41,7 +41,7 @@ matrix:
             - valgrind
             - xsltproc
             - libxml2-utils
-            - libusb-dev
+            - libusb-1.0-0-dev
             - docbook-xml
             - docbook-xsl
             - libgl1-mesa-dev
@@ -73,7 +73,7 @@ matrix:
       addons:
         apt:
           packages:
-            - libusb-dev
+            - libusb-1.0-0-dev
             - gcovr
             - lcov
       cache:

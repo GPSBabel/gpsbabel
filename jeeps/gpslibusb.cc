@@ -20,21 +20,23 @@
  */
 
 
-#include <cctype>
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-#if HAVE_LIBUSB
+#if HAVE_LIBUSB_1_0
 #  if __APPLE__
-     // We use our own (slightly modified) libusb.
-#    include "mac/libusb/usb.h"
+// We use our own libusb.
+#    include "mac/libusb/libusb.h"
 #  else
-#    include "usb.h"
+#    include <libusb-1.0/libusb.h>
 #  endif
-#include "gps.h"
+#include "../defs.h"
 #include "garminusb.h"
+#include "gpsdevice.h"
 #include "gpsusbcommon.h"
 #include "../garmin_device_xml.h"
 
@@ -53,7 +55,6 @@
 #define TMOUT_B 5000 /*  Milliseconds to timeout bulk pipe access. */
 
 typedef struct {
-  struct usb_bus* busses;
   unsigned product_id;
 } libusb_unit_data;
 
@@ -61,17 +62,18 @@ typedef struct {
  * TODO: this should all be moved into libusbdata in gpslibusb.h,
  * allocated once here in gusb_start, and deallocated at the end.
  */
-static int gusb_intr_in_ep;
-static int gusb_bulk_out_ep;
-static int gusb_bulk_in_ep;
+static unsigned char gusb_intr_in_ep;
+static unsigned char gusb_bulk_out_ep;
+static unsigned char gusb_bulk_in_ep;
 
-static usb_dev_handle* udev;
+static bool libusb_successfully_initialized{false};
+static libusb_device_handle* udev{nullptr};
 static int garmin_usb_scan(libusb_unit_data*, int);
 static const gdx_info* gdx;
 
 static int gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz);
 static int gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz);
-static int gusb_teardown(gpsdevh* dh);
+static int gusb_teardown(gpsdevh* dh, bool exit_lib);
 static int gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz);
 
 static gusb_llops_t libusb_llops = {
@@ -104,7 +106,7 @@ char** os_get_garmin_mountpoints()
 #else
 char** os_get_garmin_mountpoints()
 {
-  return NULL;
+  return nullptr;
 }
 #endif
 
@@ -112,48 +114,68 @@ char** os_get_garmin_mountpoints()
 static int
 gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  int r;
-  r = usb_bulk_write(udev, gusb_bulk_out_ep, (char*)(void*)opkt->dbuf, sz, TMOUT_B);
+  auto buf = const_cast<unsigned char*>(&opkt->dbuf[0]);
+  int transferred;
 
-  if (r != (int) sz) {
-    fprintf(stderr, "Bad cmdsend r %d sz %lud\n", r, (unsigned long) sz);
-    if (r < 0) {
-      fatal("usb_bulk_write failed. '%s'\n",
-            usb_strerror());
-    }
+  int ret = libusb_bulk_transfer(udev, gusb_bulk_out_ep, buf, sz,
+                                 &transferred, TMOUT_B);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_bulk_transfer failed. '%s'\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
+  }
+  if (transferred != (int) sz) {
+    warning("Bad cmdsend transferred %d sz %lud\n", transferred,
+            (unsigned long) sz);
   }
 
-  return r;
+  return transferred;
 }
 
 static int
 gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz)
 {
   unsigned char* buf = &ibuf->dbuf[0];
-  int r = -1;
+  int transferred;
 
-  r = usb_interrupt_read(udev, gusb_intr_in_ep, (char*) buf, sz, TMOUT_I);
-  return r;
+  int ret = libusb_interrupt_transfer(udev, gusb_intr_in_ep, buf, sz,
+                                      &transferred, TMOUT_I);
+// UGGH: expected return is error code < 0 or # of bytes transferred.
+// assume libusb return values are all <= 0, transferred >= 0.
+  if (ret != LIBUSB_SUCCESS) {
+    assert(ret < 0);
+    return ret;
+  }
+  return transferred;
 }
 
 static int
 gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz)
 {
-  int r;
   unsigned char* buf = &ibuf->dbuf[0];
+  int transferred;
 
-  r = usb_bulk_read(udev, gusb_bulk_in_ep, (char*) buf, sz, TMOUT_B);
-
-  return r;
+  int ret = libusb_bulk_transfer(udev, gusb_bulk_in_ep, buf, sz,
+                                 &transferred, TMOUT_B);
+// UGGH: expected return is error code < 0 or # of bytes transferred.
+// assume libusb return values are all <= 0, transferred >= 0.
+  if (ret != LIBUSB_SUCCESS) {
+    assert(ret < 0);
+    return ret;
+  }
+  return transferred;
 }
 
 
 static int
-gusb_teardown(gpsdevh* dh)
+gusb_teardown(gpsdevh* dh, bool exit_lib)
 {
-  if (udev) {
-    usb_release_interface(udev, 0);
-    usb_close(udev);
+  if (udev != nullptr) {
+    int ret = libusb_release_interface(udev, 0);
+    if (ret != LIBUSB_SUCCESS) {
+      warning("libusb_release_interface failed: %s\n",
+              libusb_strerror(static_cast<enum libusb_error>(ret)));
+    }
+    libusb_close(udev);
     /* In the worst case, we leak a little bit of memory
      * when called via the atexit handler.  That's not too
      * terrible.
@@ -163,13 +185,17 @@ gusb_teardown(gpsdevh* dh)
     }
     udev = nullptr;
   }
+  if (exit_lib && libusb_successfully_initialized) {
+    libusb_exit(nullptr);
+    libusb_successfully_initialized = false;
+  }
   return 0;
 }
 
 static void
 gusb_atexit_teardown()
 {
-  gusb_teardown(nullptr);
+  gusb_teardown(nullptr, true);
 }
 
 
@@ -278,19 +304,20 @@ gusb_reset_toggles()
 }
 
 void
-garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
+garmin_usb_start(struct libusb_device* dev,
+                 struct libusb_device_descriptor* desc, libusb_unit_data* lud)
 {
-  int i;
+  int ret;
 
-  if (udev) {
+  if (udev != nullptr) {
     return;
   }
-  udev = usb_open(dev);
-  atexit(gusb_atexit_teardown);
-
-  if (!udev) {
-    fatal("usb_open failed: %s\n", usb_strerror());
+  ret  = libusb_open(dev, &udev);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_open failed: %s\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
+  assert(udev != nullptr);
   /*
    * Hrmph.  No iManufacturer or iProduct headers....
    */
@@ -299,8 +326,10 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
 #if __APPLE__
   // On Leopard, if we don't do an explicit set_configuration, some
   // devices will work only the first time after a reset.
-  if (usb_set_configuration(udev, 1) < 0) {
-    fatal("usb_set_configuration failed: %s\n", usb_strerror());
+  ret = libusb_set_configuration(udev, 1);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_set_configuration failed: %s\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
   };
 #endif
 
@@ -322,11 +351,18 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
 #endif
   }
 #endif
-  if (usb_claim_interface(udev, 0) < 0) {
-    fatal("Claim interfaced failed: %s\n", usb_strerror());
+  ret = libusb_claim_interface(udev, 0);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_claim_interface failed: %s\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
 
-  libusb_llops.max_tx_size = dev->descriptor.bMaxPacketSize0;
+  /*
+   * FIXME: Shouldn't this be wMaxPacketSize from the
+   * endpoint descriptor for the bulk out endpoint?
+   *
+   */
+  libusb_llops.max_tx_size = desc->bMaxPacketSize0;
 
   /*
    * About 5% of the time on OS/X (Observed on 10.5.4 on Intel Imac
@@ -339,30 +375,53 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
    * a nastygram.  Experiments with retrying various USB ops brought
    * no joy, so just call fatal and move on.
    */
-  if (!dev->config) {
+  struct libusb_config_descriptor* config;
+  ret = libusb_get_active_config_descriptor(dev, &config);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_get_active_config_descriptor failed: %s\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
+  }
+
+  if (config == nullptr) {
     fatal("Found USB device with no configuration.\n");
   }
 
-  for (i = 0; i < dev->config->interface->altsetting->bNumEndpoints; i++) {
-    struct usb_endpoint_descriptor* ep;
-    ep = &dev->config->interface->altsetting->endpoint[i];
+  for (int i = 0; i < config->bNumInterfaces; ++i) {
+    const struct libusb_interface* interface = &config->interface[i];
+    for (int j = 0; j < interface->num_altsetting; ++j) {
+      const struct libusb_interface_descriptor* altsetting = &interface->altsetting[j];
+      /*
+       * FIXME: Since we never use libusb_set_interface_alt_setting()
+       * shouldn't we only look at the default interface descriptor, i.e. 
+       * the one that has a bAlternateSetting of 0 and/or the one
+       * that has index 0?
+       * From the USB spec:
+       * "The default setting for an interface is always alternate setting zero."
+       */
+      for (int k = 0; k < altsetting->bNumEndpoints; ++k) {
+        const struct libusb_endpoint_descriptor* ep = &altsetting->endpoint[k];
 
-    switch (ep->bmAttributes & USB_ENDPOINT_TYPE_MASK) {
-#define EA(x) x & USB_ENDPOINT_ADDRESS_MASK
-    case USB_ENDPOINT_TYPE_BULK:
-      if (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) {
-        gusb_bulk_in_ep = (EA(ep->bEndpointAddress)) | USB_ENDPOINT_IN;
-      } else {
-        gusb_bulk_out_ep = EA(ep->bEndpointAddress);
+        switch (ep->bmAttributes & LIBUSB_TRANSFER_TYPE_MASK) {
+#define EA(x) x & LIBUSB_ENDPOINT_ADDRESS_MASK
+        case LIBUSB_TRANSFER_TYPE_BULK:
+          if (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK) {
+            gusb_bulk_in_ep = (EA(ep->bEndpointAddress)) | LIBUSB_ENDPOINT_IN;
+          } else {
+            gusb_bulk_out_ep = EA(ep->bEndpointAddress);
+          }
+          break;
+        case LIBUSB_TRANSFER_TYPE_INTERRUPT:
+          if (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK) {
+            gusb_intr_in_ep = (EA(ep->bEndpointAddress)) | LIBUSB_ENDPOINT_IN;
+          }
+          break;
+        }
+
       }
-      break;
-    case USB_ENDPOINT_TYPE_INTERRUPT:
-      if (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) {
-        gusb_intr_in_ep = (EA(ep->bEndpointAddress)) | USB_ENDPOINT_IN;
-      }
-      break;
     }
   }
+
+  libusb_free_config_descriptor(config);
 
   /*
    *  Zero is the configuration endpoint, so if we made it through
@@ -371,10 +430,10 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
   if (gusb_intr_in_ep && gusb_bulk_in_ep && gusb_bulk_out_ep) {
     lud->product_id = gusb_reset_toggles();
     switch (lud->product_id) {
-      // Search for "Venture HC" for more on this silliness..
-      // It's a case instead of an 'if' because I have a
-      // feeling there are more affected models either
-      // on the market or on the way.
+    // Search for "Venture HC" for more on this silliness..
+    // It's a case instead of an 'if' because I have a
+    // feeling there are more affected models either
+    // on the market or on the way.
     case 695:
       break;   // Venture HC
     case 941:
@@ -402,39 +461,44 @@ static
 int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
 {
   int found_devices = 0;
-  struct usb_bus* bus;
 
-  for (bus = lud->busses; bus; bus = bus->next) {
-    struct usb_device* dev;
+  libusb_device** devs;
+  ssize_t cnt = libusb_get_device_list(nullptr, &devs);
 
-    for (dev = bus->devices; dev; dev = dev->next) {
-      /*
-       * Exclude Mass Storage devices (CO, OR, Nuvi, etc.)
-       * from this scan.
-       * At least on Mac, bDeviceClass isn't
-       * USB_MASS_STORAGE as it should be (perhaps because
-       * the storage driver has already bound to it?) so
-       * we fondle only the proprietary class devices.
-       */
-      if (dev->descriptor.idVendor == GARMIN_VID &&
-          dev->config &&
-          dev->descriptor.bDeviceClass == USB_CLASS_VENDOR_SPEC) {
-        if (req_unit_number < 0) {
-          garmin_usb_start(dev, lud);
-          /*
-           * It's important to call _close
-           * here since the bulk/intr models
-          	 * may have a "dangling" packet that
-           * needs to be drained.
-           */
-          gusb_close(nullptr);
-        } else if (req_unit_number == found_devices) {
-          garmin_usb_start(dev, lud);
-        }
-        found_devices++;
+  for (int i = 0; i < cnt; ++i) {
+    /*
+     * Exclude Mass Storage devices (CO, OR, Nuvi, etc.)
+     * from this scan.
+     * At least on Mac, bDeviceClass isn't
+     * USB_MASS_STORAGE as it should be (perhaps because
+     * the storage driver has already bound to it?) so
+     * we fondle only the proprietary class devices.
+     */
+    struct libusb_device_descriptor desc;
+    int ret = libusb_get_device_descriptor(devs[i], &desc);
+    if (ret != LIBUSB_SUCCESS) {
+      fatal("libusb_get_device_descriptor failed: %s\n",
+            libusb_strerror(static_cast<enum libusb_error>(ret)));
+    }
+    if ((desc.idVendor == GARMIN_VID) &&
+        (desc.bNumConfigurations > 0) &&
+        (desc.bDeviceClass == LIBUSB_CLASS_VENDOR_SPEC)) {
+      if (req_unit_number < 0) {
+        garmin_usb_start(devs[i], &desc, lud);
+        /*
+         * It's important to call _close
+         * here since the bulk/intr models
+         * may have a "dangling" packet that
+         * needs to be drained.
+         */
+        gusb_close(nullptr, false);
+      } else if (req_unit_number == found_devices) {
+        garmin_usb_start(devs[i], &desc, lud);
       }
+      found_devices++;
     }
   }
+  libusb_free_device_list(devs, 1);
 
   if (req_unit_number < 0) {
     gusb_list_units();
@@ -450,11 +514,17 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
      */
     char** dlist = os_get_garmin_mountpoints();
     gdx = gdx_find_file(dlist);
-    if (gdx) {
+    if (gdx != nullptr) {
       return 1;
     }
     /* Plan C. */
     fatal("Found no Garmin USB devices.\n");
+  } else if (req_unit_number >= found_devices) {
+    fatal("usb unit number(%d) too high.\n"
+          "The unit number must be either\n"
+          "1) nonnegative and less than the number of garmin devices found(%d), or\n"
+          "2) negative to list the garmin devices found.\n",
+          req_unit_number, found_devices);
   } else {
     return 1;
   }
@@ -465,12 +535,26 @@ int
 gusb_init(const char* portname, gpsdevh** dh)
 {
   int req_unit_number = 0;
-  libusb_unit_data* lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
+  auto lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
 
   *dh = (gpsdevh*) lud;
 
-// usb_set_debug(99);
-  usb_init();
+//  To enable debug logging
+//  set the LIBUSB_DEBUG environment variable to the log level, or
+//  libusb_set_option(nullptr, LIBUSB_OPTION_LOG_LEVEL, 99);
+  int ret = libusb_init(nullptr);
+  if (ret != LIBUSB_SUCCESS) {
+    fatal("libusb_init failed: %s\n",
+          libusb_strerror(static_cast<enum libusb_error>(ret)));
+  }
+  libusb_successfully_initialized = true;
+  /* you can't unregister an exit handler, and */
+  /* they are called once for ever time they are registered. */
+  static bool exit_handler_registered{false};
+  if (!exit_handler_registered) {
+    atexit(gusb_atexit_teardown);
+    exit_handler_registered = true;
+  }
   gusb_register_ll(&libusb_llops);
 
   /* if "usb:N", read "N" to be the unit number. */
@@ -481,10 +565,7 @@ gusb_init(const char* portname, gpsdevh** dh)
       req_unit_number = atoi(portname + 4);
     }
   }
-  usb_find_busses();
-  usb_find_devices();
-  lud->busses = usb_get_busses();
   return garmin_usb_scan(lud, req_unit_number);
 }
 
-#endif /* HAVE_LIBUSB */
+#endif /* HAVE_LIBUSB_1_0 */

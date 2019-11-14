@@ -27,7 +27,7 @@
 #include "../defs.h"
 #include "src/core/logging.h"
 
-#if !HAVE_LIBUSB
+#if !HAVE_LIBUSB_1_0
 
 const char no_usb[] = "USB support is not available in this build.\n";
 typedef struct gpsdevh gpsdevh;
@@ -38,4 +38,4 @@ gusb_init(const char* portname, gpsdevh** dh)
   return 0;
 }
 
-#endif /* defined(HAVE_LIBUSB) */
+#endif /* defined(HAVE_LIBUSB_1_0) */
