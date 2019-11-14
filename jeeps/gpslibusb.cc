@@ -357,6 +357,11 @@ garmin_usb_start(struct libusb_device* dev,
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
 
+  /*
+   * FIXME: Shouldn't this be wMaxPacketSize from the
+   * endpoint descriptor for the bulk out endpoint?
+   *
+   */
   libusb_llops.max_tx_size = desc->bMaxPacketSize0;
 
   /*
@@ -385,6 +390,14 @@ garmin_usb_start(struct libusb_device* dev,
     const struct libusb_interface* interface = &config->interface[i];
     for (int j = 0; j < interface->num_altsetting; ++j) {
       const struct libusb_interface_descriptor* altsetting = &interface->altsetting[j];
+      /*
+       * FIXME: Since we never use libusb_set_interface_alt_setting()
+       * shouldn't we only look at the default interface descriptor, i.e. 
+       * the one that has a bAlternateSetting of 0 and/or the one
+       * that has index 0?
+       * From the USB spec:
+       * "The default setting for an interface is always alternate setting zero."
+       */
       for (int k = 0; k < altsetting->bNumEndpoints; ++k) {
         const struct libusb_endpoint_descriptor* ep = &altsetting->endpoint[k];
 
