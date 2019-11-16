@@ -48,9 +48,9 @@ static void* serial_handle;
 static bool isSizeSwapped;
 
 static char* showlist = nullptr;               // if true show a list instead of download tracks
-static char* track = nullptr;                     // if not 0 only download this track, if 0 download all
+static char* track = nullptr;                  // if not 0 only download this track, if 0 download all
 
-static char* opt_dump_file = nullptr;	            // dump raw data to this file (optional)
+static char* opt_dump_file = nullptr;          // dump raw data to this file (optional)
 static char* opt_input_dump_file = nullptr;    // if true input is from a dump-file instead of serial console
 static gbfile* dumpfile = nullptr;             // used for creating bin/RAW datadump files, useful for testing
 static gbfile* in_file = nullptr;              // used for reading from bin/RAW datadump files, useful for testing
@@ -424,16 +424,6 @@ rd_init(const QString& fname)
 }
 
 static void
-wr_init(const QString& fname)
-{
-  if (global_opts.debug_level > 1) {
-    printf(MYNAME " wr_init()\n");
-  }
-  serial_init(qPrintable(fname));
-}
-
-
-static void
 rd_deinit()
 {
   if (global_opts.debug_level > 1) {
@@ -455,17 +445,7 @@ rd_deinit()
   }
 }
 
-static void
-wr_deinit()
-{
-  if (global_opts.debug_level > 1) {
-    printf(MYNAME " wr_deinit()\n");
-  }
-  serial_deinit();
-}
-
 static void track_read();
-
 
 static void
 waypoint_read()
@@ -830,39 +810,22 @@ data_read()
 
 // This used the serial communication to the watch
 ff_vecs_t globalsat_sport_vecs = {
-  ff_type_serial,		//type
-  FF_CAP_RW_ALL,		//cap[3]
-  rd_init,			//rd_init
-  wr_init,			//wr_init
-  rd_deinit,			//rd_deinit
-  wr_deinit,			//wr_deinit
-  data_read,			//read
-  nullptr,			//write
-  nullptr,				//exit
-  globalsat_args,		//args
-  CET_CHARSET_ASCII, 0		//encode,fixed_encode
-  //NULL                   //name dynamic/internal?
-  , NULL_POS_OPS,
-  nullptr
-};
-
-// This reads from a RAW dump bile from a watch
-// Useful for testing generated dumpfile with
-// gpsbabel -i globalsat,dump-file=<dumpfilename> -f /dev/ttyUSB0 -o gpx,garminextensions -F <1:st gpx file name>
-// gpsbabel -i globalsat-bin -f <dumpfilename> -o gpx,garminextensions -F <2:nd gpx file name>
-ff_vecs_t globalsat_sport_fvecs = {
-  ff_type_serial,		//type
-  FF_CAP_RW_ALL,		//cap[3]
-  rd_init,			//rd_init
-  wr_init,			//wr_init
-  rd_deinit,			//rd_deinit
-  wr_deinit,			//wr_deinit
-  data_read,			//read
-  nullptr,			//write
-  nullptr,				//exit
-  globalsat_args,		//args
-  CET_CHARSET_ASCII, 0		//encode,fixed_encode
-  //NULL                   //name dynamic/internal?
-  , NULL_POS_OPS,
+  ff_type_serial,			// type
+  {										// cap
+    ff_cap_none,			// waypoints
+    ff_cap_read,			// tracks
+    ff_cap_none,			// routes
+  },
+  rd_init,						// rd_init
+  nullptr,						// wr_init
+  rd_deinit,					// rd_deinit
+  nullptr,						// wr_deinit
+  data_read,					// read
+  nullptr,						// write
+  nullptr,						// exit
+  globalsat_args,			// args
+  CET_CHARSET_ASCII,	// encode
+  0,									// fixed_encode
+  NULL_POS_OPS,				// position_ops
   nullptr
 };

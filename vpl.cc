@@ -155,12 +155,6 @@ vpl_read()
   }
 }
 
-static void
-vpl_wr_init(const QString&)
-{
-  fatal("Writing file of type %s is not support\n", MYNAME);
-}
-
 /*******************************************************************************
 * Local Functions
 *******************************************************************************/
@@ -222,7 +216,7 @@ ff_vecs_t vpl_vecs = {
     ff_cap_none		/* routes */
   },
   vpl_rd_init,
-  vpl_wr_init,
+  nullptr,
   vpl_rd_deinit,
   nullptr,
   vpl_read,

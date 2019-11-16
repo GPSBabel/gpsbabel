@@ -82,12 +82,6 @@ rd_deinit()
   xml_deinit();
 }
 
-static void
-wr_init(const QString&)
-{
-  fatal("Writing file of type %s is not supported\n", MYNAME);
-}
-
 void	wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
@@ -187,7 +181,7 @@ ff_vecs_t pocketfms_fp_vecs = {
     ff_cap_read  	/* routes */
   },
   rd_init,
-  wr_init,
+  nullptr,
   rd_deinit,
   nullptr,
   data_read,

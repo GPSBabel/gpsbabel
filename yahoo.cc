@@ -72,12 +72,6 @@ yahoo_rd_deinit()
   xml_deinit();
 }
 
-static void
-yahoo_wr_init(const QString&)
-{
-  fatal("Writing file of type %s is not supported\n", MYNAME);
-}
-
 void	wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
@@ -109,9 +103,9 @@ void	wpt_addr(xg_string args, const QXmlStreamAttributes*)
 
 ff_vecs_t yahoo_vecs = {
   ff_type_file,
-  { ff_cap_read },
+  { ff_cap_read, ff_cap_none, ff_cap_none },
   yahoo_rd_init,
-  yahoo_wr_init,
+  nullptr,
   yahoo_rd_deinit,
   nullptr,
   yahoo_read,
