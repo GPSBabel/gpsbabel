@@ -276,7 +276,7 @@ char_map_t xcsv_char_table[] = {
   { nullptr, 		nullptr	}
 };
 
-static void
+void
 xcsv_destroy_style()
 {
 
