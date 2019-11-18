@@ -1778,15 +1778,13 @@ validate_vec(const vecs_t* vec)
 
 int validate_formats()
 {
-  int vc = 0;
   bool ok = true;
 
-  vecs_t** svp = sort_and_unify_vecs(&vc);
-  for (int i = 0; i < vc; i++) {
-    vecs_t* vec = svp[i];
+  const vecs_t* vec = vec_list;
+  while (vec->vec) {
     ok = validate_vec(vec) && ok;
+    vec++;
   }
-  xfree(svp);
 
   return ok? 0 : 1;
 }
