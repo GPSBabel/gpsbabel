@@ -35,7 +35,6 @@
 
 /* function prototypes */
 
-void xcsv_destroy_style();
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
 
