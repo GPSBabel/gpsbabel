@@ -575,7 +575,7 @@ lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 }
 
 static Lowranceusr4Timestamp
-lowranceusr4_jd_from_timestamp(gpsbabel::DateTime qdt)
+lowranceusr4_jd_from_timestamp(const gpsbabel::DateTime& qdt)
 {
   QDateTime jdt = qdt.toUTC();
   unsigned int jd_number = jdt.date().toJulianDay();
