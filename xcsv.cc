@@ -2014,7 +2014,7 @@ xcsv_parse_style_line(QString line)
 static void
 xcsv_parse_style_buff(const char* sbuff)
 {
-  QStringList lines = QString(sbuff).split('\n');
+  const QStringList lines = QString(sbuff).split('\n');
   for (const auto& line : lines) {
     xcsv_parse_style_line(line);
   }
