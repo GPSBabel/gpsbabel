@@ -1700,3 +1700,91 @@ disp_formats(int version)
     ;
   }
 }
+
+static bool
+validate_vec(const vecs_t* vec)
+{
+  bool ok = true;
+
+  if (!((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_write)) {
+    if (vec->vec->wr_init != nullptr) {
+      printf("ERROR no write capability but non-null wr_init %s\n", vec->name);
+      ok = false;
+    }
+  }
+  if (!((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_read)) {
+    if (vec->vec->rd_init != nullptr) {
+      printf("ERROR no read capbility but non-null rd_init %s\n", vec->name);
+      ok = false;
+    }
+  }
+  if ((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_write) {
+    if (vec->vec->wr_init == nullptr) {
+      printf("ERROR write capability but null wr_init %s\n", vec->name);
+      ok = false;
+    }
+  }
+  if ((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_read) {
+    if (vec->vec->rd_init == nullptr) {
+      printf("ERROR read capability but null rd_init %s\n", vec->name);
+      ok = false;
+    }
+  }
+
+  if (vec->vec->wr_init != nullptr) {
+    if (vec->vec->write == nullptr) {
+      printf("ERROR nonnull wr_init but null write %s\n", vec->name);
+      ok = false;
+    }
+    if (vec->vec->wr_deinit == nullptr) {
+      printf("ERROR nonnull wr_init but null wr_deinit %s\n", vec->name);
+      ok = false;
+    }
+  }
+  if (vec->vec->wr_init == nullptr) {
+    if (vec->vec->write != nullptr) {
+      printf("ERROR null wr_init with non-null write %s\n", vec->name);
+      ok = false;
+    }
+    if (vec->vec->wr_deinit != nullptr) {
+      printf("ERROR null wr_init with non-null wr_deinit %s\n", vec->name);
+      ok = false;
+    }
+  }
+
+  if (vec->vec->rd_init != nullptr) {
+    if (vec->vec->read == nullptr) {
+      printf("ERROR nonnull rd_init but null read %s\n", vec->name);
+      ok = false;
+    }
+    if (vec->vec->rd_deinit == nullptr) {
+      printf("ERROR nonnull rd_init but null rd_deinit %s\n", vec->name);
+      ok = false;
+    }
+  }
+  if (vec->vec->rd_init == nullptr) {
+    if (vec->vec->read != nullptr) {
+      printf("ERROR null rd_init with non-null read %s\n", vec->name);
+      ok = false;
+    }
+    if (vec->vec->rd_deinit != nullptr) {
+      printf("ERROR null rd_init with non-null rd_deinit %s\n", vec->name);
+      ok = false;
+    }
+  }
+
+  return ok;
+}
+
+int validate_formats()
+{
+  bool ok = true;
+
+  const vecs_t* vec = vec_list;
+  while (vec->vec) {
+    ok = validate_vec(vec) && ok;
+    vec++;
+  }
+
+  return ok? 0 : 1;
+}

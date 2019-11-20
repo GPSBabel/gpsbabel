@@ -204,31 +204,15 @@ nav_rd_deinit()
 {
 }
 
-static void
-nav_wr_init(const QString&)
-{
-  fatal(MYNAME ": Does not support writing Navicache files.\n");
-}
-
-static void
-nav_wr_deinit()
-{
-}
-
-static void
-nav_write()
-{
-}
-
 ff_vecs_t navicache_vecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_none, ff_cap_none },
   nav_rd_init,
-  nav_wr_init,
+  nullptr,
   nav_rd_deinit,
-  nav_wr_deinit,
+  nullptr,
   nav_read,
-  nav_write,
+  nullptr,
   nullptr,
   nav_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */

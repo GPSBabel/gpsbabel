@@ -448,8 +448,14 @@ run(const char* prog_name)
         warning(MYNAME ": QTextCodec::codecForLocale() is %s, mib %d\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
-
       break;
+
+    /*
+     * Undocumented '-@' option for test.
+     */
+    case '@':
+      return validate_formats();
+
     /*
      * Undocumented '-vs' option for GUI wrappers.
      */

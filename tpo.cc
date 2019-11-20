@@ -92,9 +92,11 @@
 #define MYNAME	"TPO"
 
 static char* dumpheader = nullptr;
+#ifdef ENABLE_TPO_WRITE
 static char* output_state = nullptr;
+#endif
 
-/*
+#ifdef ENABLE_TPO_WRITE
 static
 arglist_t tpo2_args[] = {
 	{ "dumpheader", &dumpheader, "Display the file header bytes",
@@ -103,7 +105,7 @@ arglist_t tpo2_args[] = {
 	  "CA", ARGTYPE_STRING, ARG_NOMINMAX} ,
 	ARG_TERMINATOR
 };
-*/
+#else
 //
 // Note that we've disabled the write capabilities for the tpo2
 // format at present.  The "testo" tests were failing on some
@@ -115,6 +117,7 @@ static
 arglist_t tpo2_args[] = {
   ARG_TERMINATOR
 };
+#endif
 
 static
 arglist_t tpo3_args[] = {
@@ -123,8 +126,10 @@ arglist_t tpo3_args[] = {
 
 
 static gbfile* tpo_file_in;
+static double track_length;
+
+#ifdef ENABLE_TPO_WRITE
 static gbfile* tpo_file_out;
-//static short_handle mkshort_handle;
 
 static double output_track_lon_scale;
 static double output_track_lat_scale;
@@ -132,10 +137,10 @@ static double output_track_lat_scale;
 static unsigned int track_out_count;
 static double first_track_waypoint_lat;
 static double first_track_waypoint_lon;
-static double track_length;
 static double last_waypoint_x;
 static double last_waypoint_y;
 static double last_waypoint_z;
+#endif
 
 /*******************************************************************************/
 /*                                      READ                                   */
@@ -1337,7 +1342,7 @@ tpo_read()
 
 
 
-
+#ifdef ENABLE_TPO_WRITE
 /*******************************************************************************/
 /*                                     WRITE                                   */
 /*******************************************************************************/
@@ -1374,8 +1379,6 @@ tpo_read()
 static void
 tpo_write_file_header()
 {
-  // this assertion will quiet gcc 7.3 warnings about output_state in the strncmp calls
-  // warning: argument 2 null where non-null expected [-Wnonnull]
   assert(output_state != nullptr);
 
   /* force upper-case state name */
@@ -1802,18 +1805,34 @@ tpo_write()
   track_out_count = 0;
   track_disp_all(tpo_track_hdr, tpo_track_tlr, tpo_track_disp);
 }
+#endif // ENABLE_TPO_WRITE
 
 /* TPO 2.x format can read tracks only */
 ff_vecs_t tpo2_vecs = {
   ff_type_file,   /* ff_type_internal */
-  /*    { ff_cap_none | ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none | ff_cap_none }, */
+#ifdef ENABLE_TPO_WRITE
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none },
+#else
   { ff_cap_none, ff_cap_read,  ff_cap_none },
+#endif
   tpo_rd_init,
+#ifdef ENABLE_TPO_WRITE
   tpo_wr_init,
+#else
+  nullptr,
+#endif
   tpo_rd_deinit,
+#ifdef ENABLE_TPO_WRITE
   tpo_wr_deinit,
+#else
+  nullptr,
+#endif
   tpo_read,
+#ifdef ENABLE_TPO_WRITE
   tpo_write,
+#else
+  nullptr,
+#endif
   nullptr,
   tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
@@ -1826,11 +1845,11 @@ ff_vecs_t tpo3_vecs = {
   ff_type_file,   /* ff_type_internal */
   { ff_cap_read, ff_cap_read, ff_cap_read },
   tpo_rd_init,
-  tpo_wr_init,
+  nullptr,
   tpo_rd_deinit,
-  tpo_wr_deinit,
+  nullptr,
   tpo_read,
-  tpo_write,
+  nullptr,
   nullptr,
   tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */

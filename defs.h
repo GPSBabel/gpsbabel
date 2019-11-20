@@ -1071,6 +1071,7 @@ void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs();
 void disp_vec(const char* vecname);
+int validate_formats();
 void init_vecs();
 void exit_vecs();
 void disp_formats(int version);

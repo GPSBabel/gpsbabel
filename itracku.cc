@@ -29,11 +29,26 @@
   ./gpsbabel -i itracku -f com14 -o gpx -F out.gpx
 
  */
+#include <cmath>                   // for lround, round, floor
+#include <cstdarg>                 // for va_end, va_list, va_start
+#include <cstdio>                  // for fprintf, stderr, SEEK_END, fflush, sscanf, vfprintf
+#include <cstdint>
+#include <cstring>                 // for memcpy, strcmp, strlen, strncmp
+#include <ctime>                   // for gmtime
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QDate>            // for QDate
+#include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QString>          // for QString
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/Qt>               // for UTC
+#include <QtCore/QtGlobal>         // for qPrintable
+
 #include "defs.h"
-#include "gbser.h"
-#include <cctype>
-#include <cmath>
-#include <cstdio>
+#include "gbser.h"                 // for gbser_read_line, gbser_write, gbser_deinit, gbser_flush, gbser_init, gbser_is_serial, gbser_read_wait, gbser_ERROR, gbser_OK
+#include "gbfile.h"                // for gbfile, gbfclose, gbfopen, gbfseek, gbfread, gbfwrite, gbftell, gbsize_t
+#include "src/core/datetime.h"     // for DateTime
+
 
 #define MYNAME "itracku"
 
@@ -243,7 +258,7 @@ deg_to_deg_min(double x)
 
   return
     (uint32_t)d * 1000000 + // multiply integer degrees to shift it to the right digits.
-    (uint32_t)(f * 600000.0) + // multiply fractional part to convert to minutes and to to shift it to the right digits.
+    (uint32_t)round((f * 600000.0)) + // multiply fractional part to convert to minutes and to to shift it to the right digits.
     ((sign > 0) ? 0 : 0x80000000); // add 0x80000000 for negative degrees
 }
 
@@ -304,7 +319,7 @@ to_itracku_data_record(const Waypoint* wp, itracku_data_record* d)
   le_write32(d->longitude, deg_to_deg_min(wp->longitude));
   le_write32(d->latitude, deg_to_deg_min(wp->latitude));
   le_write32(d->creation_time, encode_itracku_time(wp->creation_time.toTime_t()));
-  d->speed = MPS_TO_KNOTS(wp->speed);
+  d->speed = round(MPS_TO_KNOTS(wp->speed));
   le_write16(d->altitude, wp->altitude);
   d->flag = 0xff;
 }
@@ -751,11 +766,9 @@ itracku_rt_deinit()
 
 /**************************************************************************/
 
-// capabilities below means: we can only read and write waypoints
-// please change this depending on your new module
 
 ff_vecs_t itracku_vecs = {
-  ff_type_file,
+  ff_type_serial,
   {
     ff_cap_read /* waypoints */,
     ff_cap_read /* tracks */,
@@ -766,7 +779,7 @@ ff_vecs_t itracku_vecs = {
   itracku_rd_deinit,
   nullptr,
   itracku_read,
-  itracku_write,
+  nullptr,
   itracku_exit,
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */

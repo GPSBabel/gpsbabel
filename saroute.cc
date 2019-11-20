@@ -447,17 +447,11 @@ my_read()
 
 }
 
-static void
-wr_init(const QString&)
-{
-  fatal(MYNAME ":Not enough information is known about this format to write it.\n");
-}
-
 ff_vecs_t saroute_vecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_read, ff_cap_none},
   rd_init,
-  wr_init,
+  nullptr,
   rd_deinit,
   nullptr,
   my_read,
