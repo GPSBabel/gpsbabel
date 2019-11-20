@@ -1734,7 +1734,7 @@ list_codecs()
 {
   QTextStream info(stderr);
   info.setFieldAlignment(QTextStream::AlignLeft);
-  auto mibs = QTextCodec::availableMibs();
+  const auto mibs = QTextCodec::availableMibs();
   int maxlen = 0;
   for (auto mib : mibs) {
     auto codec = QTextCodec::codecForMib(mib);

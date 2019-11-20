@@ -1138,7 +1138,7 @@ fit_write_file_header(uint32_t file_size, uint16_t crc)
 
 
 static void
-fit_write_header_msgs(gpsbabel::DateTime ctime, QString name)
+fit_write_header_msgs(const gpsbabel::DateTime& ctime, const QString& name)
 {
   fit_write_message_def(kWriteLocalIdFileId, kIdFileId, fit_msg_fields_file_id);
   fit_write_message_def(kWriteLocalIdCourse, kIdCourse, fit_msg_fields_course);
