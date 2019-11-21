@@ -44,7 +44,7 @@ typedef struct filter_vecs {
   filter_process f_process;
   filter_deinit f_deinit;
   filter_exit f_exit;
-  struct arglist* args;
+  arglist_t* args;
 } filter_vecs_t;
 
 Filter* find_filter_vec(const char* const, const char**);

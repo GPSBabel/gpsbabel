@@ -42,6 +42,7 @@
 #include <QtCore/QString>       // for QString
 #include <QtCore/QStringRef>    // for QStringRef
 #include <QtCore/QTextCodec>    // for QTextCodec
+#include <QtCore/QVector>       // for QVector
 #include <QtCore/Qt>            // for CaseInsensitive
 #include <QtCore/QtGlobal>      // for foreach
 
@@ -985,7 +986,7 @@ void setshort_is_utf8(short_handle h, int is_utf8);
 #define ARG_NOMINMAX NULL, NULL
 #define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX, NULL}
 
-typedef struct arglist {
+struct arglist_t {
   const char* argstring;
   char** argval;
   const char* helpstring;
@@ -994,7 +995,7 @@ typedef struct arglist {
   const char* minvalue;		/* minimum value for numeric options */
   const char* maxvalue;		/* maximum value for numeric options */
   char* argvalptr;	/* !!! internal helper. Not used in definitions !!! */
-} arglist_t;
+};
 
 typedef enum {
   ff_type_file = 1,	/* normal format: useful to a GUI. */
@@ -1055,11 +1056,11 @@ typedef struct ff_vecs {
   const char* name;		/* dyn. initialized by find_vec */
 } ff_vecs_t;
 
-typedef struct style_vecs {
+struct style_vecs_t {
   const char* name;
   const char* style_buf;
-} style_vecs_t;
-extern style_vecs_t style_list[];
+};
+extern const QVector<style_vecs_t> style_list;
 
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
