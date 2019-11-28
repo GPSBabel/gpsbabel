@@ -307,7 +307,7 @@ using fs_convert = void (*)(void*);
 
 struct format_specific_data {
   long type;
-  struct format_specific_data* next;
+  format_specific_data* next;
 
   fs_destroy destroy;
   fs_copy copy;
