@@ -19,24 +19,30 @@
 
  */
 
-#include "defs.h"
-#include "csv_util.h"
-#include "gbversion.h"
-#include "inifile.h"
-#include "xcsv.h"
 #include <QtCore/QString>
-#include <cstdio>
-#include <cstdlib> // qsort
+#include <QtCore/QVector>
+
+#include <algorithm>            // for sort
+#include <cstdio>               // for printf, putchar, sscanf, size_t
+#include <cstdint>
+#include <cstring>              // for strchr, strtok, memset, strlen
+#include <ctype.h>              // for isdigit
+
+#include "defs.h"
+#include "gbversion.h"          // for WEB_DOC_DIR
+#include "inifile.h"            // for inifile_readstr
+#include "xcsv.h"               // for XcsvFile, xcsv_file, xcsv_read_internal_style, xcsv_setup_internal_style
+
 
 #define MYNAME "vecs.c"
 
-typedef struct {
+struct vecs_t {
   ff_vecs_t* vec;
   const char* name;
   QString desc;
   QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
   const char* parent;
-} vecs_t;
+};
 
 extern ff_vecs_t an1_vecs;
 extern ff_vecs_t bcr_vecs;
@@ -182,7 +188,7 @@ extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
 
 static
-vecs_t vec_list[] = {
+const QVector<vecs_t> vec_list = {
 #if CSVFMTS_ENABLED
   /* XCSV must be the first entry in this table. */
   {
@@ -1085,31 +1091,22 @@ vecs_t vec_list[] = {
     "GlobalSat GH625XT GPS training watch",
     nullptr,
     nullptr,
-  },
-#endif // MAXIMAL_ENABLED
-  {
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
   }
+#endif // MAXIMAL_ENABLED
 };
 
 void
 init_vecs()
 {
-  vecs_t* vec = vec_list;
-  while (vec->vec) {
-    if (vec->vec->args) {
-      for (auto ap = vec->vec->args; ap->argstring; ap++) {
+  for (const auto& vec : vec_list) {
+    if (vec.vec->args) {
+      for (auto ap = vec.vec->args; ap->argstring; ap++) {
         ap->argvalptr = nullptr;
         if (ap->argval) {
           *ap->argval = nullptr;
         }
       }
     }
-    vec++;
   }
 }
 
@@ -1122,13 +1119,12 @@ is_integer(const char* c)
 void
 exit_vecs()
 {
-  vecs_t* vec = vec_list;
-  while (vec->vec) {
-    if (vec->vec->exit) {
-      (*vec->vec->exit)();
+  for (const auto& vec : vec_list) {
+    if (vec.vec->exit) {
+      (*vec.vec->exit)();
     }
-    if (vec->vec->args) {
-      for (auto ap = vec->vec->args; ap->argstring; ap++) {
+    if (vec.vec->args) {
+      for (auto ap = vec.vec->args; ap->argstring; ap++) {
         if (ap->defaultvalue &&
             (ap->argtype == ARGTYPE_INT) &&
             ! is_integer(ap->defaultvalue)) {
@@ -1140,7 +1136,6 @@ exit_vecs()
         }
       }
     }
-    vec++;
   }
 }
 
@@ -1250,8 +1245,6 @@ disp_vec_options(const char* vecname, arglist_t* ap)
 ff_vecs_t*
 find_vec(const char* vecname, const char** opts)
 {
-  vecs_t* vec = vec_list;
-  style_vecs_t* svec = style_list;
   char* v = xstrdup(vecname);
   char* svecname = strtok(v, ",");
   int found = 0;
@@ -1260,9 +1253,8 @@ find_vec(const char* vecname, const char** opts)
     fatal("A format name is required.\n");
   }
 
-  while (vec->vec) {
-    if (case_ignore_strcmp(svecname, vec->name)) {
-      vec++;
+  for (const auto& vec : vec_list) {
+    if (case_ignore_strcmp(svecname, vec.name)) {
       continue;
     }
 
@@ -1273,8 +1265,8 @@ find_vec(const char* vecname, const char** opts)
       *opts = nullptr;
     }
 
-    if (vec->vec->args) {
-      for (auto ap = vec->vec->args; ap->argstring; ap++) {
+    if (vec.vec->args) {
+      for (auto ap = vec.vec->args; ap->argstring; ap++) {
         if (res) {
           const char* opt = get_option(*opts, ap->argstring);
           if (opt) {
@@ -1284,31 +1276,31 @@ find_vec(const char* vecname, const char** opts)
             continue;
           }
         }
-        QString qopt = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, vec.name, ap->argstring);
         if (qopt.isNull()) {
           qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
         if (qopt.isNull()) {
-          assign_option(vec->name, ap, ap->defaultvalue);
+          assign_option(vec.name, ap, ap->defaultvalue);
         } else {
-          assign_option(vec->name, ap, CSTR(qopt));
+          assign_option(vec.name, ap, CSTR(qopt));
         }
       }
     }
     if (opts && opts[0] && !found) {
-      warning("'%s' is an unknown option to %s.\n", *opts, vec->name);
+      warning("'%s' is an unknown option to %s.\n", *opts, vec.name);
     }
 
     if (global_opts.debug_level >= 1) {
-      disp_vec_options(vec->name, vec->vec->args);
+      disp_vec_options(vec.name, vec.vec->args);
     }
 
 #if CSVFMTS_ENABLED
     // xcsv_setup_internal_style( NULL );
 #endif // CSVFMTS_ENABLED
     xfree(v);
-    vec->vec->name = vec->name;	/* needed for session information */
-    return vec->vec;
+    vec.vec->name = vec.name;	/* needed for session information */
+    return vec.vec;
 
   }
 
@@ -1316,9 +1308,8 @@ find_vec(const char* vecname, const char** opts)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  while (svec->name) {
-    if (case_ignore_strcmp(svecname, svec->name)) {
-      svec++;
+  for (const auto& svec : style_list) {
+    if (case_ignore_strcmp(svecname, svec.name)) {
       continue;
     }
 
@@ -1340,31 +1331,31 @@ find_vec(const char* vecname, const char** opts)
             continue;
           }
         }
-        QString qopt = inifile_readstr(global_opts.inifile, svec->name, ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, svec.name, ap->argstring);
         if (qopt.isNull()) {
           qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
         if (qopt.isNull()) {
-          assign_option(svec->name, ap, ap->defaultvalue);
+          assign_option(svec.name, ap, ap->defaultvalue);
         } else {
-          assign_option(svec->name, ap, CSTR(qopt));
+          assign_option(svec.name, ap, CSTR(qopt));
         }
       }
     }
 
     if (opts && opts[0] && !found) {
-      warning("'%s' is an unknown option to %s.\n", *opts, svec->name);
+      warning("'%s' is an unknown option to %s.\n", *opts, svec.name);
     }
 
     if (global_opts.debug_level >= 1) {
-      disp_vec_options(svec->name, vec_list[0].vec->args);
+      disp_vec_options(svec.name, vec_list[0].vec->args);
     }
 #if CSVFMTS_ENABLED
-    xcsv_setup_internal_style(svec->style_buf);
+    xcsv_setup_internal_style(svec.style_buf);
 #endif // CSVFMTS_ENABLED
 
     xfree(v);
-    vec_list[0].vec->name = svec->name;	/* needed for session information */
+    vec_list[0].vec->name = svec.name;	/* needed for session information */
     return vec_list[0].vec;
   }
 
@@ -1424,14 +1415,10 @@ get_option(const char* iarglist, const char* argname)
  *  Display the available formats in a format that's easy for humans to
  *  parse for help on available command line options.
  */
-static signed int
-alpha(const void* a, const void* b)
+static bool
+alpha(const vecs_t& a, const vecs_t& b)
 {
-
-  const vecs_t* const* ap = (const vecs_t *const*) a;
-  const vecs_t* const* bp = (const vecs_t *const*) b;
-
-  return case_ignore_strcmp((*ap)->desc , (*bp)->desc);
+  return case_ignore_strcmp(a.desc, b.desc) < 0;
 }
 
 /*
@@ -1439,79 +1426,63 @@ alpha(const void* a, const void* b)
  * alphabetically.  Returns an allocated copy of a style_vecs_array
  * that's populated and sorted.
  */
-vecs_t**
-sort_and_unify_vecs(int* ctp)
+QVector<vecs_t>
+sort_and_unify_vecs()
 {
-  size_t vc;
-  vecs_t** svp;
-#if CSVFMTS_ENABLED
-#endif
-  int i = 0;
-
-  /* Get a count from both the vec (normal) and the svec (csv) lists */
-
-#if CSVFMTS_ENABLED
-  extern size_t nstyles;
-  vc = sizeof vec_list / sizeof vec_list[0] - 1 + nstyles;
-#else
-  vc = sizeof vec_list / sizeof vec_list[0] - 1;
-#endif // CSVFMTS_ENABLED
-
-
-  svp = (vecs_t**)xcalloc(vc, sizeof(style_vecs_t*));
+  QVector<vecs_t> svp;
+  svp.reserve(vec_list.size() + style_list.size());
   /* Normal vecs are easy; populate the first part of the array. */
-  for (vecs_t* vec = vec_list; vec->vec; vec++, i++) {
-    svp[i] = vec;
-    if (svp[i]->parent == nullptr) {
-      svp[i]->parent = svp[i]->name;
+  for (const auto& vec : vec_list) {
+    vecs_t uvec = vec;
+    if (uvec.parent == nullptr) {
+      uvec.parent = uvec.name;
     }
+    svp.append(uvec);
   }
 
-#if CSVFMTS_ENABLED
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
-  for (style_vecs_t* svec = style_list; svec->name; svec++, i++)  {
-    xcsv_read_internal_style(svec->style_buf);
-    svp[i] = new vecs_t;
-    svp[i]->name = svec->name;
-    svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
-    svp[i]->extensions = xcsv_file.extension;
-    *svp[i]->vec = *vec_list[0].vec; /* Inherits xcsv opts */
+  for (const auto& svec : style_list) {
+    xcsv_read_internal_style(svec.style_buf);
+    vecs_t uvec;
+    uvec.name = svec.name;
+    uvec.vec = new ff_vecs_t; /* LEAK */
+    uvec.extensions = xcsv_file.extension;
+    *uvec.vec = *vec_list[0].vec; /* Inherits xcsv opts */
     /* Reset file type to inherit ff_type from xcsv for everything
      * except the xcsv format itself, which we leave as "internal"
      */
-    if (case_ignore_strcmp(svec->name, "xcsv")) {
-      svp[i]->vec->type = xcsv_file.type;
+    if (case_ignore_strcmp(svec.name, "xcsv")) {
+      uvec.vec->type = xcsv_file.type;
       /* Skip over the first help entry for all but the
        * actual 'xcsv' format - so we don't expose the
        * 'full path to xcsv style file' argument to any
        * GUIs for an internal format.
        */
-      svp[i]->vec->args++;
+      uvec.vec->args++;
     }
-    memset(&svp[i]->vec->cap, 0, sizeof(svp[i]->vec->cap));
+    memset(&uvec.vec->cap, 0, sizeof(uvec.vec->cap));
     switch (xcsv_file.datatype) {
     case unknown_gpsdata:
     case wptdata:
-      svp[i]->vec->cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
+      uvec.vec->cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     case trkdata:
-      svp[i]->vec->cap[ff_cap_rw_trk] = (ff_cap)(ff_cap_read | ff_cap_write);
+      uvec.vec->cap[ff_cap_rw_trk] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     case rtedata:
-      svp[i]->vec->cap[ff_cap_rw_rte] = (ff_cap)(ff_cap_read | ff_cap_write);
+      uvec.vec->cap[ff_cap_rw_rte] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     default:
       ;
     }
-    svp[i]->desc = xcsv_file.description;
-    svp[i]->parent = "xcsv";
+    uvec.desc = xcsv_file.description;
+    uvec.parent = "xcsv";
+    svp.append(uvec);
   }
-#endif // CSVFMTS_ENABLED
 
   /* Now that we have everything in an array, alphabetize them */
-  qsort(svp, vc, sizeof(*svp), alpha);
+  std::sort(svp.begin(), svp.end(), alpha);
 
-  *ctp = i;
   return svp;
 }
 
@@ -1520,15 +1491,13 @@ sort_and_unify_vecs(int* ctp)
 void
 disp_vecs()
 {
-  int vc;
-
-  vecs_t** svp = sort_and_unify_vecs(&vc);
-  for (int i = 0; i<vc; i++) {
-    if (svp[i]->vec->type == ff_type_internal)  {
+  const auto svp = sort_and_unify_vecs();
+  for (const auto& vec : svp) {
+    if (vec.vec->type == ff_type_internal)  {
       continue;
     }
-    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
-    for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
+    printf(VEC_FMT, vec.name, CSTR(vec.desc));
+    for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
                ap->argstring,
@@ -1538,22 +1507,19 @@ disp_vecs()
                (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
     }
   }
-  xfree(svp);
 }
 
 void
 disp_vec(const char* vecname)
 {
-  int vc;
-
-  vecs_t** svp = sort_and_unify_vecs(&vc);
-  for (int i = 0; i<vc; i++) {
-    if (case_ignore_strcmp(svp[i]->name, vecname))  {
+  const auto svp = sort_and_unify_vecs();
+  for (const auto& vec : svp) {
+    if (case_ignore_strcmp(vec.name, vecname))  {
       continue;
     }
 
-    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
-    for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
+    printf(VEC_FMT, vec.name, CSTR(vec.desc));
+    for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
                ap->argstring,
@@ -1563,7 +1529,6 @@ disp_vec(const char* vecname)
                (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
     }
   }
-  xfree(svp);
 }
 
 /*
@@ -1595,7 +1560,7 @@ disp_v1(ff_type t)
 static void
 disp_v2(ff_vecs_t* v)
 {
-  for (auto &i : v->cap) {
+  for (auto& i : v->cap) {
     putchar((i & ff_cap_read) ? 'r' : '-');
     putchar((i & ff_cap_write) ? 'w' : '-');
   }
@@ -1622,24 +1587,24 @@ name_option(uint32_t type)
 }
 
 static
-void disp_help_url(const vecs_t* vec, arglist_t* arg)
+void disp_help_url(const vecs_t& vec, arglist_t* arg)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec->name);
+  printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec.name);
   if (arg) {
-    printf("#fmt_%s_o_%s",vec->name, arg->argstring);
+    printf("#fmt_%s_o_%s",vec.name, arg->argstring);
   }
   printf("\n");
 }
 
 
 static void
-disp_v3(const vecs_t* vec)
+disp_v3(const vecs_t& vec)
 {
   disp_help_url(vec, nullptr);
-  for (auto ap = vec->vec->args; ap && ap->argstring; ap++) {
+  for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-             vec->name,
+             vec.name,
              ap->argstring,
              ap->helpstring,
              name_option(ap->argtype),
@@ -1660,115 +1625,109 @@ disp_v3(const vecs_t* vec)
 void
 disp_formats(int version)
 {
-  vecs_t** svp;
-  vecs_t* vec;
-  int vc = 0;
+  const auto svp = sort_and_unify_vecs();
   switch (version) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    svp = sort_and_unify_vecs(&vc);
-    for (int i = 0; i<vc; i++,vec++) {
-      vec = svp[i];
-
+  case 0:
+  case 1:
+  case 2:
+  case 3:
+    for (const auto& vec : svp) {
       /* Version 1 displays type at front of all types.
        * Version 0 skips internal types.
        */
       if (version > 0) {
-        disp_v1(vec->vec->type);
+        disp_v1(vec.vec->type);
       } else {
-        if (vec->vec->type == ff_type_internal) {
+        if (vec.vec->type == ff_type_internal) {
           continue;
         }
       }
       if (version >= 2) {
-        disp_v2(vec->vec);
+        disp_v2(vec.vec);
       }
-      printf("%s\t%s\t%s%s%s\n", vec->name,
-        !vec->extensions.isEmpty() ? CSTR(vec->extensions) : "",
-        CSTR(vec->desc),
-        version >= 3 ? "\t" : "",
-        version >= 3 ? vec->parent : "");
+      printf("%s\t%s\t%s%s%s\n", vec.name,
+             !vec.extensions.isEmpty() ? CSTR(vec.extensions) : "",
+             CSTR(vec.desc),
+             version >= 3 ? "\t" : "",
+             version >= 3 ? vec.parent : "");
       if (version >= 3) {
         disp_v3(vec);
       }
     }
-    xfree(svp);
     break;
-    default:
+  default:
     ;
   }
 }
 
 static bool
-validate_vec(const vecs_t* vec)
+validate_vec(const vecs_t& vec)
 {
   bool ok = true;
 
-  if (!((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_write)) {
-    if (vec->vec->wr_init != nullptr) {
-      printf("ERROR no write capability but non-null wr_init %s\n", vec->name);
+  if (!((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_write)) {
+    if (vec.vec->wr_init != nullptr) {
+      printf("ERROR no write capability but non-null wr_init %s\n", vec.name);
       ok = false;
     }
   }
-  if (!((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_read)) {
-    if (vec->vec->rd_init != nullptr) {
-      printf("ERROR no read capbility but non-null rd_init %s\n", vec->name);
+  if (!((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_read)) {
+    if (vec.vec->rd_init != nullptr) {
+      printf("ERROR no read capbility but non-null rd_init %s\n", vec.name);
       ok = false;
     }
   }
-  if ((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_write) {
-    if (vec->vec->wr_init == nullptr) {
-      printf("ERROR write capability but null wr_init %s\n", vec->name);
+  if ((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_write) {
+    if (vec.vec->wr_init == nullptr) {
+      printf("ERROR write capability but null wr_init %s\n", vec.name);
       ok = false;
     }
   }
-  if ((vec->vec->cap[0]|vec->vec->cap[1]|vec->vec->cap[2]) & ff_cap_read) {
-    if (vec->vec->rd_init == nullptr) {
-      printf("ERROR read capability but null rd_init %s\n", vec->name);
-      ok = false;
-    }
-  }
-
-  if (vec->vec->wr_init != nullptr) {
-    if (vec->vec->write == nullptr) {
-      printf("ERROR nonnull wr_init but null write %s\n", vec->name);
-      ok = false;
-    }
-    if (vec->vec->wr_deinit == nullptr) {
-      printf("ERROR nonnull wr_init but null wr_deinit %s\n", vec->name);
-      ok = false;
-    }
-  }
-  if (vec->vec->wr_init == nullptr) {
-    if (vec->vec->write != nullptr) {
-      printf("ERROR null wr_init with non-null write %s\n", vec->name);
-      ok = false;
-    }
-    if (vec->vec->wr_deinit != nullptr) {
-      printf("ERROR null wr_init with non-null wr_deinit %s\n", vec->name);
+  if ((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_read) {
+    if (vec.vec->rd_init == nullptr) {
+      printf("ERROR read capability but null rd_init %s\n", vec.name);
       ok = false;
     }
   }
 
-  if (vec->vec->rd_init != nullptr) {
-    if (vec->vec->read == nullptr) {
-      printf("ERROR nonnull rd_init but null read %s\n", vec->name);
+  if (vec.vec->wr_init != nullptr) {
+    if (vec.vec->write == nullptr) {
+      printf("ERROR nonnull wr_init but null write %s\n", vec.name);
       ok = false;
     }
-    if (vec->vec->rd_deinit == nullptr) {
-      printf("ERROR nonnull rd_init but null rd_deinit %s\n", vec->name);
+    if (vec.vec->wr_deinit == nullptr) {
+      printf("ERROR nonnull wr_init but null wr_deinit %s\n", vec.name);
       ok = false;
     }
   }
-  if (vec->vec->rd_init == nullptr) {
-    if (vec->vec->read != nullptr) {
-      printf("ERROR null rd_init with non-null read %s\n", vec->name);
+  if (vec.vec->wr_init == nullptr) {
+    if (vec.vec->write != nullptr) {
+      printf("ERROR null wr_init with non-null write %s\n", vec.name);
       ok = false;
     }
-    if (vec->vec->rd_deinit != nullptr) {
-      printf("ERROR null rd_init with non-null rd_deinit %s\n", vec->name);
+    if (vec.vec->wr_deinit != nullptr) {
+      printf("ERROR null wr_init with non-null wr_deinit %s\n", vec.name);
+      ok = false;
+    }
+  }
+
+  if (vec.vec->rd_init != nullptr) {
+    if (vec.vec->read == nullptr) {
+      printf("ERROR nonnull rd_init but null read %s\n", vec.name);
+      ok = false;
+    }
+    if (vec.vec->rd_deinit == nullptr) {
+      printf("ERROR nonnull rd_init but null rd_deinit %s\n", vec.name);
+      ok = false;
+    }
+  }
+  if (vec.vec->rd_init == nullptr) {
+    if (vec.vec->read != nullptr) {
+      printf("ERROR null rd_init with non-null read %s\n", vec.name);
+      ok = false;
+    }
+    if (vec.vec->rd_deinit != nullptr) {
+      printf("ERROR null rd_init with non-null rd_deinit %s\n", vec.name);
       ok = false;
     }
   }
@@ -1780,10 +1739,8 @@ int validate_formats()
 {
   bool ok = true;
 
-  const vecs_t* vec = vec_list;
-  while (vec->vec) {
+  for (const auto& vec : vec_list) {
     ok = validate_vec(vec) && ok;
-    vec++;
   }
 
   return ok? 0 : 1;
