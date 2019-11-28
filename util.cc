@@ -1465,11 +1465,11 @@ strip_html(const utf_string* in)
 #endif
 }
 
-typedef struct {
+struct entity_types {
   const char* text;
   const char* entity;
   int  not_html;
-} entity_types;
+};
 
 static
 entity_types stdentities[] =  {

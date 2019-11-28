@@ -162,18 +162,18 @@ const std::vector<std::pair<QString, int> > kCoursePointTypeMapping = {
 };
 
 
-typedef struct {
+struct fit_field_t {
   int id;
   int size;
   int type;
-} fit_field_t;
+};
 
-typedef struct {
+struct fit_message_def {
   int endian;
   int global_id;
   int num_fields;
   fit_field_t* fields;
-} fit_message_def;
+};
 
 static struct {
   int len;

@@ -37,12 +37,12 @@ arglist_t bushnell_args[] = {
 // Apparently, the icons are undocumented, so we made up names,
 // preferring them to be consistent with other brands where possible.
 
-typedef struct  {
-  const signed int symbol;
+struct bushnell_icon_mapping_t {
+  signed int symbol;
   const char* icon;
-} icon_mapping_t;
+};
 
-static icon_mapping_t bushnell_icons[] = {
+static const bushnell_icon_mapping_t bushnell_icons[] = {
   { 0x00, "Yellow Square"},
   { 0x01, "Blue Grey Circle" },
   { 0x02, "Yellow Diamond" },
@@ -134,7 +134,7 @@ bushnell_get_icon_from_name(QString name)
     name = "Waypoint";
   }
 
-  for (icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
+  for (const bushnell_icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
     if (0 == name.compare(t->icon, Qt::CaseInsensitive)) {
       return t->symbol;
     }
@@ -145,7 +145,7 @@ bushnell_get_icon_from_name(QString name)
 static const char*
 bushnell_get_name_from_symbol(signed int s)
 {
-  for (icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
+  for (const bushnell_icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
     if (s == t->symbol) {
       return t->icon;
     }

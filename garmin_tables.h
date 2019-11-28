@@ -28,20 +28,20 @@
 #define DEFAULT_ICON_DESCR "Waypoint"
 #define DEFAULT_ICON_VALUE 18
 
-typedef const struct icon_mapping {
-  const int mpssymnum;
-  const int pcxsymnum;
+struct icon_mapping_t {
+  int mpssymnum;
+  int pcxsymnum;
   const char* icon;
-} icon_mapping_t;
+};
 
-typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL, GDB} garmin_formats_e;
+enum garmin_formats_e {MAPSOURCE, PCX, GARMIN_SERIAL, GDB};
 
 const QString gt_find_desc_from_icon_number(int icon, garmin_formats_e garmin_format);
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format);
 
-extern icon_mapping_t garmin_icon_table[];
+extern const icon_mapping_t garmin_icon_table[];
 
-typedef enum {
+enum gt_waypt_classes_e {
   gt_waypt_class_user_waypoint = 0,
   gt_waypt_class_airport,
   gt_waypt_class_intersection,
@@ -55,14 +55,14 @@ typedef enum {
   gt_waypt_class_map_intersection,
   gt_waypt_class_map_address,
   gt_waypt_class_map_line
-} gt_waypt_classes_e;
+};
 
 extern const char* gt_waypt_class_names[];
 
-typedef struct gt_country_code_s {
+struct gt_country_code_t {
   const char* cc;
   const char* country;
-} gt_country_code_t;
+};
 
 extern gt_country_code_t gt_country_codes[];
 
@@ -70,22 +70,22 @@ const char* gt_get_icao_country(const QString& cc);
 const char* gt_get_icao_cc(const QString& country, const QString& shortname);
 
 /* this order is used by most devices */
-typedef enum {
+enum gt_display_modes_e {
   gt_display_mode_symbol_and_name = 0,
   gt_display_mode_symbol,
   gt_display_mode_symbol_and_comment
-} gt_display_modes_e;
+};
 
 extern const char* gt_display_mode_names[];
 
 #define GT_DISPLAY_MODE_MIN gt_display_mode_symbol_and_name
 #define GT_DISPLAY_MODE_MAX gt_display_mode_symbol_and_comment
 
-typedef enum {
+enum gt_gdb_display_modes_e {
   gt_gdb_display_mode_symbol = 0,
   gt_gdb_display_mode_symbol_and_name,
   gt_gdb_display_mode_symbol_and_comment
-} gt_gdb_display_modes_e;
+};
 
 unsigned char gt_convert_category(const char* name, int* category);
 

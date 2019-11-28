@@ -64,7 +64,7 @@ arglist_t globalsat_args[] = {
   ARG_TERMINATOR
 };
 
-typedef enum {
+enum globalsat_commands_e {
   CommandWhoAmI = 0xBF,
   CommandGetSystemInformation = 0x85,
   CommandGetSystemConfiguration = 0x86,
@@ -94,21 +94,21 @@ typedef enum {
   ResponseInsufficientMemory = 0x95,
   ResponseResendTrackSection = 0x92,
   ResponseSendTrackFinish = 0x9A
-} globalsat_commands_e;
+};
 
-typedef struct tagDATE {
+struct gh_date {
   uint8_t Year;
   uint8_t Month;
   uint8_t Day;
-} gh_date;
+};
 
-typedef struct tagTIME {
+struct gh_time {
   uint8_t Hour;
   uint8_t Minute;
   uint8_t Second;
-} gh_time;
+};
 
-typedef struct tagTRAINHEADER {
+struct gh_trainheader {
   gh_date dateStart;
   gh_time timeStart;
   uint32_t TotalPoint;		//6-9
@@ -124,9 +124,9 @@ typedef struct tagTRAINHEADER {
     uint32_t EndPt;
   } gh_laprec;			//24-27
   uint8_t DataType;		//28
-} gh_trainheader;
+};
 
-typedef struct tagDB_TRAIN {
+struct gh_db_train {
   gh_date dateStart;
   gh_time timeStart;
   uint32_t TotalPoint;		//6-9
@@ -161,9 +161,9 @@ typedef struct tagDB_TRAIN {
   uint8_t Sport3;
   uint8_t Sport4;
   uint8_t Sport5;
-} gh_db_train;
+};
 
-typedef struct tagDB_LAP {
+struct gh_db_lap {
   uint32_t AccruedTime;
   uint32_t TotalTime;
   uint32_t TotalDistance;
@@ -180,9 +180,9 @@ typedef struct tagDB_LAP {
   uint8_t MultiSportIndex;
   uint32_t StartPt;
   uint32_t EndPt;
-} gh_db_lap;
+};
 
-typedef struct tagRECPOINT {
+struct gh_recpoint {
   uint32_t Latitude;
   uint32_t Longitude;
   int16_t Altitude;
@@ -192,7 +192,7 @@ typedef struct tagRECPOINT {
   uint16_t Cadence;
   uint16_t PwrCadence;
   uint16_t Power;
-} gh_recpoint;
+};
 
 static void
 serial_init(const char* fname)

@@ -49,33 +49,33 @@
 #define OFFS_WPT        0x05E4          /* offet for waypoint table */
 
 
-typedef  struct tagWPTHDR {
+struct WPTHDR {
   DWORD	    id;			            /* WPT_HDR_ID */
   short		num;			        /* Current wpt number */
   short		next;			        /* next wpt number */
   short		idx[MAXWPT];	        /* saving wpt index here for each wpt, default was -1*/
   BYTE		used[MAXWPT];	        /* Have the match wpt been used (0xFF), Default was 0 */
-} WPTHDR;
+};
 
 
 
 
-typedef  struct tagPOINT {
+struct POINT {
   signed int  iLongitude;
   signed int  iLatitude;
-} POINT;
+};
 
 
 
 
-typedef  struct tagDATE {
+struct HX_DATE {
   BYTE    day;
   BYTE    month;
   short   year;
-} HX_DATE;
+};
 
 
-typedef struct tagWPT {
+struct WPT {
   char name[8];				        /* wpt name  */
   char comment[12];			        /* comment string */
   POINT	 pt;				        /* waypoint location  */
@@ -85,21 +85,21 @@ typedef struct tagWPT {
   unsigned time;			            /* time	 */
   char     checked;				    /* Active or not */
   BYTE     dummy[3];                  /* fill bytes */
-} WPT;
+};
 
 
 
-typedef  struct tagRTEHDR {
+struct RTEHDR {
   DWORD	        id;			             /* RTE_HDR_ID */
   short		    num;			         /* Current route number */
   short		    next;			         /* next route number */
   signed short	idx[MAXRTE];	         /* saving route index here for each route, default was -1  */
   BYTE		    used[MAXRTE];	         /* Have the wpt been used (0xFF), Default was 0 */
   signed short    rteno;			         /* Saving navigationroute number here */
-} RTEHDR;
+};
 
 
-typedef  struct tagRTE {
+struct RTE {
   char name[8];				         /* route name */
   char comment[12];			         /* comment string */
   short wptnum;				         /* the total waypoint number */
@@ -107,5 +107,5 @@ typedef  struct tagRTE {
   short reserved;
   int date;				             /* date */
   int time;				             /* time	 */
-} RTE;
+};
 

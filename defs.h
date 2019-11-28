@@ -165,13 +165,13 @@
  * Important for "file types" that are essentially a communication
  * protocol for a receiver, like the Magellan serial data.
  */
-typedef enum {
+enum gpsdata_type {
   unknown_gpsdata = 0,
   trkdata = 1,
   wptdata,
   rtedata,
   posndata
-} gpsdata_type;
+};
 
 #define NOTHINGMASK		0U
 #define WPTDATAMASK		1U
@@ -186,7 +186,7 @@ typedef enum {
 #define	doing_rtes ((global_opts.masked_objective & RTEDATAMASK) == RTEDATAMASK)
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
-typedef struct {
+struct global_options {
   int synthesize_shortnames;
   int debug_level;
   gpsdata_type objective;
@@ -198,34 +198,34 @@ typedef struct {
   QString charset_name;
   inifile_t* inifile;
   QTextCodec* codec;
-} global_options;
+};
 
 extern global_options global_opts;
 extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
-typedef enum {
+enum fix_type {
   fix_unknown=-1,
   fix_none=0,
   fix_2d=1,
   fix_3d,
   fix_dgps,
   fix_pps
-} fix_type;
+};
 
-typedef enum {
+enum status_type {
   status_unknown=0,
   status_true,
   status_false
-} status_type;
+};
 
 /*
  * Extended data if waypoint happens to represent a geocache.  This is
  * totally voluntary data...
  */
 
-typedef enum {
+enum geocache_type {
   gt_unknown = 0,
   gt_traditional,
   gt_multi,
@@ -241,9 +241,9 @@ typedef enum {
   gt_ape,
   gt_mega,
   gt_wherigo
-} geocache_type;
+};
 
-typedef enum {
+enum geocache_container {
   gc_unknown = 0,
   gc_micro,
   gc_other,
@@ -251,7 +251,7 @@ typedef enum {
   gc_large,
   gc_virtual,
   gc_small
-} geocache_container;
+};
 
 class utf_string
 {
@@ -301,18 +301,18 @@ public:
   QString personal_note;
 };
 
-typedef void (*fs_destroy)(void*);
-typedef void (*fs_copy)(void**, void*);
-typedef void (*fs_convert)(void*);
+using fs_destroy = void (*)(void*);
+using fs_copy = void (*)(void**, void*);
+using fs_convert = void (*)(void*);
 
-typedef struct format_specific_data {
+struct format_specific_data {
   long type;
   struct format_specific_data* next;
 
   fs_destroy destroy;
   fs_copy copy;
   fs_convert convert;
-} format_specific_data;
+};
 
 class gb_color
 {
@@ -444,14 +444,14 @@ public:
 /*
  *  Bounding box information.
  */
-typedef struct {
+struct bounds {
   double max_lat;
   double max_lon;
   double max_alt;	/*  unknown_alt => invalid */
   double min_lat;
   double min_lon;
   double min_alt;	/* -unknown_alt => invalid */
-} bounds;
+};
 
 #define WAYPT_SET(wpt,member,val) { (wpt)->member = (val); wpt->wpt_flags.member = 1; }
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
@@ -570,13 +570,13 @@ public:
   int EmptyGCData() const;
 };
 
-typedef void (*waypt_cb)(const Waypoint*);
+using waypt_cb = void (*)(const Waypoint*);
 
 // TODO: Consider using composition instead of private inheritance.
 class WaypointList : private QList<Waypoint*>
 {
 public:
-  typedef bool (*Compare)(const Waypoint* a, const Waypoint* b);
+  using Compare = bool (*)(const Waypoint*, const Waypoint*);
 
   void waypt_add(Waypoint* wpt); // a.k.a. append(), push_back()
   void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
@@ -733,14 +733,14 @@ public:
   ~route_head();
 };
 
-typedef void (*route_hdr)(const route_head*);
-typedef void (*route_trl)(const route_head*);
+using route_hdr = void (*)(const route_head*);
+using route_trl = void (*)(const route_head*);
 
 // TODO: Consider using composition instead of private inheritance.
 class RouteList : private QList<route_head*>
 {
 public:
-  typedef bool (*Compare)(const route_head* a, const route_head* b);
+  using Compare = bool (*)(const route_head*, const route_head*);
 
   int waypt_count() const;
   void add_head(route_head* rte); // a.k.a. append(), push_back()
@@ -906,19 +906,19 @@ track_disp_all(T1 rh, T2 rt, T3 wc)
   global_track_list->disp_all(rh, rt, wc);
 }
 
-typedef struct {
+struct posn_status {
   volatile int request_terminate;
-} posn_status;
+};
 
 extern posn_status tracking_status;
 
-typedef void (*ff_init)(const QString&);
-typedef void (*ff_deinit)();
-typedef void (*ff_read)();
-typedef void (*ff_write)();
-typedef void (*ff_exit)();
-typedef void (*ff_writeposn)(Waypoint*);
-typedef Waypoint* (*ff_readposn)(posn_status*);
+using ff_init = void (*)(const QString&);
+using ff_deinit = void (*)();
+using ff_read = void (*)();
+using ff_write = void (*)();
+using ff_exit = void (*)();
+using ff_writeposn = void (*)(Waypoint*);
+using ff_readposn = Waypoint* (*)(posn_status*);
 
 char* get_option(const char* iarglist, const char* argname);
 
@@ -932,7 +932,7 @@ geocache_container gs_mkcont(const QString& t);
 // This is a crutch until the new C++ shorthandle goes in.
 
 struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
-typedef mkshort_handle_imp* short_handle;
+using short_handle = mkshort_handle_imp*;
 
 char* mkshort(short_handle,  const char*);
 QString mkshort(short_handle,  const QString&);
@@ -997,23 +997,23 @@ struct arglist_t {
   char* argvalptr;	/* !!! internal helper. Not used in definitions !!! */
 };
 
-typedef enum {
+enum ff_type {
   ff_type_file = 1,	/* normal format: useful to a GUI. */
   ff_type_internal,	/* fmt not useful with default options */
   ff_type_serial		/* format describes a serial protocol (GUI can display port names) */
-} ff_type;
+};
 
-typedef enum {
+enum ff_cap_array {
   ff_cap_rw_wpt,
   ff_cap_rw_trk,
   ff_cap_rw_rte
-} ff_cap_array;
+};
 
-typedef enum {
+enum ff_cap {
   ff_cap_none,
   ff_cap_read = 1,
   ff_cap_write = 2
-} ff_cap;
+};
 
 #define FF_CAP_RW_ALL \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write) }
@@ -1024,7 +1024,7 @@ typedef enum {
 /*
  * Format capabilities for realtime positioning.
  */
-typedef struct position_ops {
+struct position_ops_t {
   ff_init rd_init;
   ff_readposn rd_position;
   ff_deinit rd_deinit;
@@ -1032,14 +1032,14 @@ typedef struct position_ops {
   ff_init wr_init;
   ff_writeposn wr_position;
   ff_deinit wr_deinit;
-} position_ops_t;
+};
 
-#define NULL_POS_OPS { 0, 0, 0, 0, 0, 0, }
+#define NULL_POS_OPS { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, }
 
 /*
  *  Describe the file format to the caller.
  */
-typedef struct ff_vecs {
+struct ff_vecs_t {
   ff_type type;
   ff_cap cap[3];
   ff_init rd_init;
@@ -1054,7 +1054,7 @@ typedef struct ff_vecs {
   int fixed_encode;
   position_ops_t position_ops;
   const char* name;		/* dyn. initialized by find_vec */
-} ff_vecs_t;
+};
 
 struct style_vecs_t {
   const char* name;
@@ -1203,7 +1203,7 @@ void   le_write_double(void* ptr, double value);
 double ddmm2degrees(double pcx_val);
 double degrees2ddmm(double deg_val);
 
-typedef enum {
+enum grid_type {
   grid_unknown = -1,
   grid_lat_lon_ddd = 0,
   grid_lat_lon_dmm = 1,
@@ -1211,7 +1211,7 @@ typedef enum {
   grid_bng = 3,
   grid_utm = 4,
   grid_swiss = 5
-} grid_type;
+};
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
@@ -1249,13 +1249,13 @@ unsigned long get_crc32(const void* data, int datalen);
 /*
  *  From units.c
  */
-typedef enum {
+enum fmt_units {
   units_unknown = 0,
   units_statute = 1,
   units_metric = 2,
   units_nautical =3,
   units_aviation =4
-} fmt_units;
+};
 
 int    fmt_setunits(fmt_units);
 double fmt_distance(double, const char** tag);

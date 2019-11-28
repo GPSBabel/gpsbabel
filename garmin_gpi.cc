@@ -148,7 +148,7 @@ static arglist_t garmin_gpi_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct {
+struct reader_data_t {
 public:
   int D2;
   char S3[9];		/* "GRMRECnn" */
@@ -157,7 +157,7 @@ public:
   char S8[3];
   QString group;
   QString category;
-} reader_data_t;
+};
 
 struct writer_data_t {
   QList<Waypoint*> waypt_list;
@@ -170,13 +170,13 @@ struct writer_data_t {
   writer_data_t* bottom_right{nullptr};
 };
 
-typedef struct gpi_waypt_data_s {
+struct gpi_waypt_data_t {
   int sz;
   char* addr;
   char* postal_code;
-} gpi_waypt_data_t;
+};
 
-typedef struct {
+struct bmp_header_t {
   int32_t size;
   int16_t res1;
   int16_t res2;
@@ -192,9 +192,9 @@ typedef struct {
   int32_t resolution_v;
   int32_t used_colors;
   int32_t important_colors;
-} bmp_header_t;
+};
 
-typedef struct {
+struct gpi_bitmap_header_t {
   int16_t index;
   int16_t height;
   int16_t width;
@@ -207,9 +207,9 @@ typedef struct {
   int32_t tr_color;
   int32_t flag2;
   int32_t size_2c;
-} gpi_bitmap_header_t;
+};
 
-typedef struct {
+struct gpi_waypt_t {
   int sz;
   int alerts;
   short mask;
@@ -220,7 +220,7 @@ typedef struct {
   char* phone_nr;
   char* postal_code;
   char* state;
-} gpi_waypt_t;
+};
 
 static gbfile* fin, *fout;
 static uint16_t codepage;	/* code-page, e.g. 1252, 65001 */

@@ -257,10 +257,10 @@ data_read()
   fix_netstumbler_dupes();
 }
 
-typedef struct {
+struct htable_t {
   unsigned long crc;
   Waypoint* wpt;
-} htable_t;
+};
 
 static
 int

@@ -38,14 +38,14 @@
 
 #define MYNAME "garmin_txt"
 
-typedef struct gtxt_flags_s {
+struct gtxt_flags_t {
   unsigned int metric:1;
   unsigned int celsius:1;
   unsigned int utc:1;
   unsigned int enum_waypoints:1;
   unsigned int route_header_written:1;
   unsigned int track_header_written:1;
-} gtxt_flags_t;
+};
 
 static gbfile* fin, *fout;
 static route_head* current_trk, *current_rte;
@@ -67,14 +67,14 @@ static const unsigned char kDegreeSymbol = 0xB0;
 
 static gtxt_flags_t gtxt_flags;
 
-typedef enum {
+enum header_type {
   waypt_header = 0,
   rtept_header,
   trkpt_header,
   route_header,
   track_header,
   unknown_header
-} header_type;
+};
 
 inline header_type& operator++(header_type& s) // prefix
 {
@@ -136,7 +136,7 @@ arglist_t garmin_txt_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct info_s {
+struct info_t {
   double length;
   time_t start;
   time_t time;
@@ -146,7 +146,7 @@ typedef struct info_s {
   const Waypoint* prev_wpt;
   const Waypoint* first_wpt;
   const Waypoint* last_wpt;
-} info_t;
+};
 
 static info_t* route_info;
 static int route_idx;
@@ -840,7 +840,7 @@ garmin_txt_write()
     xfree(wpt_a);
 
     route_idx = 0;
-    route_info = (info_t*) xcalloc(route_count(), sizeof(struct info_s));
+    route_info = (info_t*) xcalloc(route_count(), sizeof(info_t));
     routepoints = 0;
     route_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
     if (routepoints > 0) {
@@ -851,7 +851,7 @@ garmin_txt_write()
   }
 
   route_idx = 0;
-  route_info = (info_t*) xcalloc(track_count(), sizeof(struct info_s));
+  route_info = (info_t*) xcalloc(track_count(), sizeof(info_t));
   routepoints = 0;
   track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
 

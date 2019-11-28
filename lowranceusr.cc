@@ -107,10 +107,10 @@
 #include "src/core/datetime.h"   // for DateTime
 
 
-typedef struct lowranceusr_icon_mapping {
-  const int    value;
+struct lowranceusr_icon_mapping_t {
+  int    value;
   const char*  icon;
-} lowranceusr_icon_mapping_t;
+};
 
 #define DEF_ICON            10001
 #define X_1_ICON            10003
@@ -279,11 +279,11 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 #define DEF_USR4_ICON  2
 #define DEF_USR4_COLOR 0
 
-typedef struct lowranceusr4_icon_mapping {
-  const int      value;
+struct lowranceusr4_icon_mapping_t {
+  int      value;
   const char*    icon;
   const char*    color[7];
-} lowranceusr4_icon_mapping_t;
+};
 
 const lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
 
@@ -366,7 +366,7 @@ static QTextCodec*    utf16le_codec{nullptr};
 /* Jan 1, 2000 00:00:00 */
 const time_t base_time_secs = 946706400;
 
-typedef struct {
+struct lowranceusr4_fsdata {
   format_specific_data fs;
   uint uid_unit;
   uint uid_unit2;
@@ -381,7 +381,7 @@ typedef struct {
   const char *color_desc;
   int  icon_num;
   float depth;
-} lowranceusr4_fsdata;
+};
 
 class Lowranceusr4Timestamp {
   public:

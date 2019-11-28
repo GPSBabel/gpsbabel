@@ -708,28 +708,28 @@ make_trackpoint(struct read_state* st, double lat, double lon, double alt)
   return wpt;
 }
 
-typedef struct {
+struct full_item {
   uint32_t gps_week;
   uint32_t gps_sec;
   int32_t  x;
   int32_t  y;
   int32_t  z;
-} full_item;
+};
 
-typedef struct {
+struct compact_item {
   uint16_t dt;
   int16_t dx;
   int16_t dy;
   int16_t dz;
-} compact_item;
+};
 
-typedef struct {
+struct multi_hz_item {
   uint32_t gps_week;
   uint32_t gps_sec;
   int32_t  lat;
   int32_t  lon;
   int32_t  alt;
-} multi_hz_item;
+};
 
 
 struct full_item_frame {
@@ -752,14 +752,14 @@ struct multi_hz_item_frame {
   unsigned char alt[4];
 };
 
-typedef struct {
+struct item_frame {
   unsigned char type_and_speed[2];
   union {
-    struct multi_hz_item_frame multi_hz;
-    struct full_item_frame full;
-    struct compact_item_frame comp;
+    multi_hz_item_frame multi_hz;
+    full_item_frame full;
+    compact_item_frame comp;
   };
-} item_frame;
+};
 #define ITEM_WEEK_NUMBER(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x03) << 8))
 
 #define POW_2_M20 0.000000953674316

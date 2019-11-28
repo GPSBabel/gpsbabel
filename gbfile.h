@@ -27,29 +27,28 @@
 #include <QtCore/QString>       // for QString
 
 #include <cstdarg>             // for va_list
-#include <cstdio>              // for FILE
 #include <cstdint>             // for int32_t, int16_t, uint32_t
+#include <cstdio>              // for FILE
 
 #include "defs.h"
 
 
-struct gbfile_s;
-typedef struct gbfile_s gbfile;
-typedef uint32_t gbsize_t;
+struct gbfile;
+using gbsize_t = uint32_t;
 
-typedef void (*gbfclearerr_cb)(gbfile* self);
-typedef int (*gbfclose_cb)(gbfile* self);
-typedef int (*gbfeof_cb)(gbfile* self);
-typedef int (*gbferror_cb)(gbfile* self);
-typedef int (*gbfflush_cb)(gbfile* self);
-typedef gbfile* (*gbfopen_cb)(gbfile* self, const char* mode);
-typedef gbsize_t (*gbfread_cb)(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self);
-typedef int (*gbfseek_cb)(gbfile* self, int32_t offset, int whence);
-typedef gbsize_t (*gbftell_cb)(gbfile* self);
-typedef gbsize_t (*gbfwrite_cb)(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self);
-typedef int (*gbfungetc_cb)(const int c, gbfile* self);
+using gbfclearerr_cb = void (*)(gbfile* self);
+using gbfclose_cb = int (*)(gbfile* self);
+using gbfeof_cb = int (*)(gbfile* self);
+using gbferror_cb = int (*)(gbfile* self);
+using gbfflush_cb = int (*)(gbfile* self);
+using gbfopen_cb = gbfile* (*)(gbfile* self, const char* mode);
+using gbfread_cb = gbsize_t (*)(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self);
+using gbfseek_cb = int (*)(gbfile* self, int32_t offset, int whence);
+using gbftell_cb = gbsize_t (*)(gbfile* self);
+using gbfwrite_cb = gbsize_t (*)(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self);
+using gbfungetc_cb = int (*)(const int c, gbfile* self);
 
-typedef struct gbfile_s {
+struct gbfile {
   union {
     FILE* std;
     unsigned char* mem;
@@ -84,7 +83,7 @@ typedef struct gbfile_s {
   gbftell_cb filetell;
   gbfungetc_cb fileungetc;
   gbfwrite_cb filewrite;
-} gbfile_t;
+};
 
 
 gbfile* gbfopen(const QString& filename, const char* mode, const char* module);

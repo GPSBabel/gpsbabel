@@ -40,10 +40,10 @@ private:
   char* polyfileopt = nullptr;
   char* exclopt = nullptr;
 
-  typedef struct {
+  struct extra_data {
     unsigned short state;
     unsigned short override;
-  } extra_data;
+  };
 
   arglist_t args[3] = {
     {

@@ -103,13 +103,13 @@ static void gpx_write_bounds();
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif
 
-typedef enum  {
+enum gpx_point_type {
   gpxpt_waypoint,
   gpxpt_track,
   gpxpt_route
-} gpx_point_type;
+};
 
-typedef enum  {
+enum tag_type {
   tt_unknown = 0,
   tt_gpx,
 
@@ -207,7 +207,7 @@ typedef enum  {
   tt_humminbird_wpt_depth,
   tt_humminbird_wpt_status,
   tt_humminbird_trk_trkseg_trkpt_depth,
-} tag_type;
+};
 
 /*
  * The file-level information.
@@ -298,11 +298,11 @@ gpx_write_gdata(const QStringList& ge, const QString& tag)
 }
 
 
-typedef struct tag_mapping {
+struct tag_mapping {
   tag_type tag_type_;		/* enum from above for this tag */
   int tag_passthrough;		/* true if we don't generate this */
   const char* tag_name;		/* xpath-ish tag name */
-} tag_mapping;
+};
 
 /*
  * xpath(ish) mappings between full tag paths and internal identifiers.

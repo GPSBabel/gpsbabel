@@ -52,7 +52,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-typedef unsigned long long guid_t;
+using guid_t = unsigned long long;
 
 static inifile_t* fin;
 static gbfile* fout;
@@ -79,12 +79,12 @@ arglist_t raymarine_args[] = {
 
 /* Bitmaps */
 
-typedef struct {
+struct raymarine_symbol_mapping_t {
   const char* name;
   const char* mps_name;
-} raymarine_symbol_mapping_t;
+};
 
-static raymarine_symbol_mapping_t raymarine_symbols[] = {
+static const raymarine_symbol_mapping_t raymarine_symbols[] = {
   { /* 0 */  "Unknown Symbol 0", nullptr },
   { /* 1 */  "Unknown Symbol 1", nullptr },
   { /* 2 */  "Unknown Symbol 2", nullptr },
@@ -144,7 +144,7 @@ static int
 find_symbol_num(const QString& descr)
 {
   if (!descr.isNull()) {
-    raymarine_symbol_mapping_t* a = &raymarine_symbols[0];
+    const raymarine_symbol_mapping_t* a = &raymarine_symbols[0];
 
     for (unsigned int i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
       if (descr.compare(a->name, Qt::CaseInsensitive) == 0) {

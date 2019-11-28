@@ -93,9 +93,9 @@ static FILE* fl;
 static char* port;
 static char* erase;
 
-typedef enum {
+enum wintec_gps_types {
   UNKNOWN, WBT200, WBT201, WSG1000
-} wintec_gps_types;
+};
 
 static wintec_gps_types dev_type = UNKNOWN;
 

@@ -29,7 +29,7 @@
  * This doesn't mean I actually have TRIED all models listed below.
  * (Donations welcome. :-)
  */
-typedef enum {
+enum meridian_model {
   mm_unknown = 0 ,
   mm_gps315320,
   mm_map410,
@@ -37,18 +37,18 @@ typedef enum {
   mm_gps310,
   mm_meridian,
   mm_sportrak
-} meridian_model;
+};
 
-typedef struct pid_to_model {
+struct pid_to_model_t {
   meridian_model model;
   int pid;
   const char* model_n;
-} pid_to_model_t;
+};
 
-typedef struct icon_mapping {
+struct magellan_icon_mapping_t {
   const char* token;
   const char* icon;
-} icon_mapping_t;
+};
 
 QString mag_find_descr_from_token(const char* token);
 QString mag_find_token_from_descr(const QString& icon);

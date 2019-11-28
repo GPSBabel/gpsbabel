@@ -28,17 +28,17 @@
  *
  */
 
-typedef struct {
+struct mapsend_hdr {
   char ms_length;
   char ms_signature[11];
   char ms_version[2];
   char ms_type;
   char _ms_type[3];
-} mapsend_hdr;
+};
 
-typedef enum {
+enum ms_type {
   ms_type_rgn = 0,
   ms_type_wpt = 1,
   ms_type_track = 2,
   ms_type_log = 3
-} ms_type;
+};

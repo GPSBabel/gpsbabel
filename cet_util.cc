@@ -31,10 +31,10 @@
 
 static cet_cs_vec_t* cet_cs_vec_root = nullptr;
 
-typedef struct cet_cs_alias_s {
+struct cet_cs_alias_t {
   char* name;
   cet_cs_vec_t* vec;
-} cet_cs_alias_t;
+};
 
 static cet_cs_alias_t* cet_cs_alias;
 static int cet_cs_alias_ct = 0;

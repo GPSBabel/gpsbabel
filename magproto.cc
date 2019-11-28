@@ -44,7 +44,7 @@
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
-#include "magellan.h"              // for mm_meridian, mm_sportrak, icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
+#include "magellan.h"              // for mm_meridian, mm_sportrak, magellan_icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
 #include "src/core/datetime.h"     // for DateTime
 
 
@@ -90,11 +90,11 @@ static QStringList os_gpx_files(const char* dirname);
  */
 static int suppress_ack;
 
-typedef enum {
+enum mag_rxstate {
   mrs_handoff = 0,
   mrs_handon,
   mrs_awaiting_ack
-} mag_rxstate;
+};
 
 /*
  *   An individual element of a route.
@@ -126,11 +126,11 @@ static route_head* trk_head;
 static int ignore_unable;
 
 static Waypoint* mag_wptparse(char*);
-typedef QString (cleanse_fn)(const char*);
+using cleanse_fn = QString (const char*);
 static cleanse_fn* mag_cleanse;
 static const char** os_get_magellan_mountpoints();
 
-static icon_mapping_t gps315_icon_table[] = {
+static const magellan_icon_mapping_t gps315_icon_table[] = {
   { "a", "filled circle" },
   { "b", "box" },
   { "c", "red buoy" },
@@ -154,7 +154,7 @@ static icon_mapping_t gps315_icon_table[] = {
   { nullptr, nullptr }
 };
 
-static icon_mapping_t map330_icon_table[] = {
+static const magellan_icon_mapping_t map330_icon_table[] = {
   { "a", "crossed square" },
   { "b", "box" },
   { "c", "house" },
@@ -230,7 +230,7 @@ pid_to_model_t pid_to_model[] = {
   { mm_unknown, 0, nullptr }
 };
 
-static icon_mapping_t* icon_mapping = map330_icon_table;
+static const magellan_icon_mapping_t* icon_mapping = map330_icon_table;
 
 /*
  *   For each receiver type, return a "cleansed" version of the string
@@ -1160,7 +1160,7 @@ mag_find_descr_from_token(const char* token)
     return "unknown";
   }
 
-  for (icon_mapping_t* i = icon_mapping; i->token; i++) {
+  for (const magellan_icon_mapping_t* i = icon_mapping; i->token; i++) {
     if (token[0] == 0) {
       break;
     }
@@ -1174,7 +1174,7 @@ mag_find_descr_from_token(const char* token)
 QString
 mag_find_token_from_descr(const QString& icon)
 {
-  icon_mapping_t* i = icon_mapping;
+  const magellan_icon_mapping_t* i = icon_mapping;
 
   if (i == nullptr || icon == nullptr) {
     return "a";

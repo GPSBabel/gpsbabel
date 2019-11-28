@@ -25,7 +25,7 @@
 
 static char header_id[] = "BRC";
 
-typedef struct breadcrumb {
+struct breadcrumb {
   // header
   char		id[4];		  // 0x42 0x52 0x43 0x00 <=> "BRC"
   uint16_t	version;	// 0x0100
@@ -49,7 +49,7 @@ typedef struct breadcrumb {
   uint16_t	minute;		// 0..59
   uint16_t	second;		// 0..59
   uint16_t	reserve2;	// 0x0000
-} BREADCRUMB;
+};
 
 static gbfile* file_in, *file_out;
 
@@ -80,7 +80,7 @@ wr_deinit()
 static void
 read_tracks()
 {
-  struct breadcrumb bc;
+  breadcrumb bc;
   route_head* trk_head = route_head_alloc();
   trk_head->rte_num = 1;
   trk_head->rte_name = "PocketFMS";
@@ -127,7 +127,7 @@ route_head_noop(const route_head*)
 static void
 pocketfms_waypt_disp(const Waypoint* wpt)
 {
-  struct breadcrumb bc;
+  breadcrumb bc;
 
   memset(&bc, 0, sizeof(bc));
   const time_t tt = wpt->GetCreationTime().toTime_t();

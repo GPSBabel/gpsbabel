@@ -59,7 +59,7 @@ Still, they're useful in the code as a plain signature.
 
 /* The hwr data format is records-based, and the records are 36 bytes long. */
 
-typedef struct humminbird_waypt_s {
+struct humminbird_waypt_t {
   /* O.K.: the file can also contain routes with a different magic. */
   /* uint32_t signature; */   /* Just for error checking(?) */
   uint16_t num;          /* Always ascending in the file. */
@@ -72,9 +72,9 @@ typedef struct humminbird_waypt_s {
   int32_t  east;
   int32_t  north;
   char     name[WPT_NAME_LEN];
-} humminbird_waypt_t;
+};
 
-typedef struct humminbird_rte_s {
+struct humminbird_rte_t {
   /* O.K.: the file can contain also routes with a different magic. */
   /* uint32_t signature; */   /* Just for error checking(?) */
   uint16_t num;
@@ -86,9 +86,9 @@ typedef struct humminbird_rte_s {
   uint32_t time;
   char     name[RTE_NAME_LEN];
   uint16_t points[MAX_RTE_POINTS];
-} humminbird_rte_t;
+};
 
-typedef struct humminbird_trk_header_s {      /* 68 bytes, incl signature */
+struct humminbird_trk_header_t {      /* 68 bytes, incl signature */
   /* uint32_t signature; */
   uint16_t trk_num;
   uint16_t zero;
@@ -107,16 +107,16 @@ typedef struct humminbird_trk_header_s {      /* 68 bytes, incl signature */
   int32_t ne_north;
 
   char     name[20];
-} humminbird_trk_header_t;
+};
 
 
-typedef struct humminbird_trk_point_s {
+struct humminbird_trk_point_t {
   int16_t  deltaeast;
   int16_t  deltanorth;
   uint16_t depth;		/* in centimeters */
-} humminbird_trk_point_t;
+};
 
-typedef struct humminbird_trk_header_old_s {      /* 16 bytes, incl signature */
+struct humminbird_trk_header_old_t {      /* 16 bytes, incl signature */
   /* uint32_t signature; */
   uint16_t trk_num;
   uint16_t zero;
@@ -129,14 +129,14 @@ typedef struct humminbird_trk_header_old_s {      /* 16 bytes, incl signature */
   int32_t end_east;	/* end of track */
   int32_t end_north;
 
-} humminbird_trk_header_old_t;
+};
 
-typedef struct humminbird_trk_point_old_s {
+struct humminbird_trk_point_old_t {
   int16_t  deltaeast;
   int16_t  deltanorth;
-} humminbird_trk_point_old_t;
+};
 
-typedef struct group_header {
+struct group_header_t {
   uint8_t status;
   uint8_t icon;
   uint16_t depth;
@@ -146,14 +146,14 @@ typedef struct group_header {
   uint16_t first_body_index;
   uint16_t reserved2;
   char name[WPT_NAME_LEN];
-} group_header_t;
+};
 
-typedef struct group_body {
+struct group_body_t {
   uint8_t status;
   uint8_t icon;
   uint16_t next_idx;
   uint16_t item[MAX_ITEMS_PER_GROUP];
-} group_body_t;
+};
 
 
 static const char* humminbird_icons[] = {

@@ -23,24 +23,24 @@
 /*
  * Describes a file on the unit.
  */
-typedef struct {
+struct gdx_file {
   char* path;
   char* basename;
   char* extension;
   char* canon;	// full name, when applicable.
-} gdx_file;
+};
 
 /*
  * The interesting traits of this device.
  */
-typedef struct {
+struct gdx_info {
   const char* device_desc;
   const char* device_id;
   const char* device_mounted_path; // Not from the file; about the file.
   gdx_file from_device;
   gdx_file to_device;
 //	gdx_file geocache_logs;
-} gdx_info;
+};
 
 const gdx_info* gdx_read(const char* fname);
 const gdx_info* gdx_get_info();

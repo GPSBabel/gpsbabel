@@ -28,7 +28,7 @@
 #define MYNAME "garmin_tables"
 
 /* MapSource 4.13 */
-icon_mapping_t garmin_icon_table[] = {
+const icon_mapping_t garmin_icon_table[] = {
   /*	  mps    pcx    desc */
   {   107, 16384, "Airport" },
   {    73,  8204, "Amusement Park" },
@@ -340,7 +340,7 @@ icon_mapping_t garmin_icon_table[] = {
   {    -1,    -1, nullptr },
 };
 
-icon_mapping_t garmin_smart_icon_table[] = {
+const icon_mapping_t garmin_smart_icon_table[] = {
   /* Additional (optional, activated with -Si) icons */
   {    92,  8227, "Micro-Cache" },   	/* icon for "Toll Booth" */
   {    48,   161, "Virtual cache" }, 	/* icon for "Scenic Area" */
@@ -609,11 +609,11 @@ const char* gt_display_mode_names[] = {
   "Symbol & Description"
 };
 
-typedef struct {
+struct grid_mapping_t {
   const char* shortname;
   const char* longname;
   grid_type grid;
-} grid_mapping_t;
+};
 
 /* gt_mps_grid_names: !!! degree sign substituted with '*' !!! */
 
@@ -629,10 +629,10 @@ grid_mapping_t gt_mps_grid_names[] = {
 
 /* gt_mps_datum_names: */
 
-typedef struct {
+struct datum_mapping_t {
   const char* jeeps_name;
   const char* mps_name;
-} datum_mapping_t;
+};
 
 /* will be continued (when requested) */
 static datum_mapping_t gt_mps_datum_names[] = {
@@ -651,10 +651,10 @@ static datum_mapping_t gt_mps_datum_names[] = {
   { nullptr,	nullptr }
 };
 
-typedef struct garmin_color_s {
+struct garmin_color_t {
   const char* name;
   int32_t rgb;
-} garmin_color_t;
+};
 
 static garmin_color_t gt_colors[] = {
   { "Unknown",		unknown_color },
@@ -749,7 +749,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
     return QString("Custom %1").arg(icon - 7680);
   }
 
-  for (icon_mapping_t* i = garmin_icon_table; i->icon; i++) {
+  for (const icon_mapping_t* i = garmin_icon_table; i->icon; i++) {
     switch (garmin_format) {
     case MAPSOURCE:
     case GDB:
@@ -773,7 +773,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format)
 {
   static int find_flag = 0;
-  icon_mapping_t* i;
+  const icon_mapping_t* i;
   int def_icon = DEFAULT_ICON_VALUE;
 
   if (desc.isNull()) {

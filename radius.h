@@ -51,9 +51,9 @@ private:
 
   Waypoint* home_pos;
 
-  typedef struct {
+  struct extra_data {
     double distance;
-  } extra_data;
+  };
 
   arglist_t args[8] = {
     {

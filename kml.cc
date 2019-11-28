@@ -96,14 +96,14 @@ static QList<std::tuple<int, double, double, double>>* gx_trk_coords;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 
-typedef enum  {
+enum kml_point_type {
   kmlpt_unknown,
   kmlpt_waypoint,
   kmlpt_track,
   kmlpt_route,
   kmlpt_multitrack,
   kmlpt_other
-} kml_point_type;
+};
 
 static int realtime_positioning;
 static bounds kml_bounds;
@@ -1708,13 +1708,13 @@ static void kml_track_tlr(const route_head* header)
 
 // Helper to write gx:SimpleList, iterating over a route queue and writing out.
 
-typedef enum {
+enum wp_field {
   fld_cadence,
   fld_depth,
   fld_heartrate,
   fld_temperature,
   fld_power
-} wp_field;
+};
 
 static void kml_mt_simple_array(const route_head* header,
                                 const char* name,

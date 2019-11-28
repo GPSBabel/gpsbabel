@@ -58,12 +58,12 @@
 
 #define ALT(a) (a->altitude != unknown_alt) ? a->altitude : 0
 
-typedef enum {
+enum sdf_section_e {
   sdf_unknown,
   sdf_header,
   sdf_points,
   sdf_custom
-} sdf_section_e;
+};
 
 static gbfile* fin, *fout;
 
