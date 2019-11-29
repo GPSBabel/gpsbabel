@@ -61,7 +61,7 @@
  */
 
 static struct defguid {
-  GUID guid;
+  guid_t guid;
   const char* name;
 } default_guids[] = {
   { {0xb610bc70,{0x377e, 0x11d6, 0xaeb3}, {0x00, 0x01, 0x02, 0x31, 0x5f, 0xfd}},
@@ -708,21 +708,21 @@ static struct defguid {
   },
 };
 
-static int FindIconByName(const char* name, GUID* guid)
+static int FindIconByName(const char* name, guid_t* guid)
 {
   for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
     if (!case_ignore_strcmp(name, default_guids[i].name)) {
-      memcpy(guid, &(default_guids[i].guid), sizeof(GUID));
+      memcpy(guid, &(default_guids[i].guid), sizeof(guid_t));
       return 1;
     }
   }
   return 0;
 }
 
-static int FindIconByGuid(GUID* guid, char** name)
+static int FindIconByGuid(guid_t* guid, char** name)
 {
   for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
-    if (!memcmp(guid, &default_guids[i].guid, sizeof(GUID))) {
+    if (!memcmp(guid, &default_guids[i].guid, sizeof(guid_t))) {
       *name = const_cast<char*>(default_guids[i].name);
       return 1;
     }

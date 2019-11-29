@@ -62,7 +62,7 @@ union wpt_data {
   int32_t     dummy;        // waypoint type 7, unused
 };
 
-typedef struct enigma_wpt {
+struct enigma_wpt {
   int32_t			latitude;
   int32_t			longitude;
   union wpt_data  data;
@@ -71,7 +71,7 @@ typedef struct enigma_wpt {
   char            shortname[6];
   uint8_t         longname_len;
   char            longname[27];
-} ENIGMA_WPT;
+};
 
 static gbfile* file_in, *file_out;
 
@@ -103,7 +103,7 @@ static float enigmaPositionToDec(int32_t val)
 static void
 data_read()
 {
-  struct enigma_wpt ewpt;
+  enigma_wpt ewpt;
   route_head* route = route_head_alloc();
   route_add_head(route);
 
@@ -169,7 +169,7 @@ wr_init(const QString& fname)
 static void
 enigma_waypt_disp(const Waypoint* wpt)
 {
-  struct enigma_wpt ewpt;
+  enigma_wpt ewpt;
 
   memset(&ewpt, 0, sizeof(ewpt));
 

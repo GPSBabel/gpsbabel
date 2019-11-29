@@ -70,25 +70,28 @@
 #define IGO8_HEADER_SIZE (sizeof(igo8_id_block) + 256)
 #define MYNAME "IGO8"
 
-typedef struct _igo8_id_block {
+struct igo8_id_block {
   uint32_t unknown_1;
   uint32_t unknown_2;
   uint32_t unknown_3;
   uint32_t track_number;
   uint32_t unknown_4;
-} igo8_id_block, *p_igo8_id_block;
+};
+using p_igo8_id_block = igo8_id_block*;
 
-typedef struct _igo8_information_block {
+struct igo8_information_block {
   uint32_t start_time;       // In Unix time
   uint32_t zero;             // Doesn't appear to serve a purpose
   uint32_t total_file_size;  // In bytes
-} igo8_information_block, *p_igo8_information_block;
+};
+using p_igo8_information_block = igo8_information_block*;
 
-typedef struct _igo8_point {
+struct igo8_point {
   uint32_t unix_time;
   uint32_t lon;
   uint32_t lat;
-} igo8_point, *p_igo8_point;
+};
+using p_igo8_point = igo8_point*;
 
 // Files
 static gbfile* igo8_file_in;

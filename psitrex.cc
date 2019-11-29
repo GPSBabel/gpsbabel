@@ -38,18 +38,18 @@
 
 #define MYNAME "PSITREX"
 
-typedef enum {
+enum psit_tokenSep_type {
   ltrimEOL = 1 ,		/* skip spaces & tabs to start; ends on EOL */
   EOL,				/* don't skip spaces and tabs to start; end on EOL */
   comma,				/* skip spaces & tabs to start; ends on comma or EOL */
   whitespace,			/* skip spaces & tabs to start; ends on white space or EOL */
   wscomma				/* skip spaces & tabs to start; ends on white space, comma or EOL */
-} psit_tokenSep_type;
+};
 
-typedef struct psit_icon_mapping {
-  const int	value;
+struct psit_icon_mapping_t {
+  int	value;
   const char*	icon;
-} psit_icon_mapping_t;
+};
 
 static gbfile* psit_file_in;
 static gbfile* psit_file_out;

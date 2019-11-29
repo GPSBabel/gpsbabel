@@ -39,7 +39,7 @@ arglist_t ggv_ovl_args[] = {
   ARG_TERMINATOR
 };
 
-typedef enum {
+enum OVL_SYMBOL_TYP {
   OVL_SYMBOL_BITMAP = 1,
   OVL_SYMBOL_TEXT,
   OVL_SYMBOL_LINE,
@@ -47,9 +47,9 @@ typedef enum {
   OVL_SYMBOL_RECTANGLE,
   OVL_SYMBOL_CIRCLE,
   OVL_SYMBOL_TRIANGLE
-} OVL_SYMBOL_TYP;
+};
 
-typedef enum {
+enum OVL_COLOR_TYP {
   OVL_COLOR_RED = 1,	/* = 1 */
   OVL_COLOR_LIME,		/* = 2 */
   OVL_COLOR_BLUE,		/* = 3 */
@@ -59,7 +59,7 @@ typedef enum {
   OVL_COLOR_7,		/* = 7 (draws only a simple line) */
   OVL_COLOR_FUCHSIA,	/* = 8 */
   OVL_COLOR_AQUA,		/* = 9 */
-} OVL_COLOR_TYP;
+};
 
 /* some hints:
 		# "col":   color

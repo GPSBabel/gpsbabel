@@ -38,9 +38,9 @@ xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);
 char* xml_attribute(xml_tag* tag, const char* attrname);
 void free_gpx_extras(xml_tag* tag);
 
-typedef struct fs_xml {
+struct fs_xml {
   format_specific_data fs;
   xml_tag* tag;
-} fs_xml;
+};
 
 fs_xml* fs_xml_alloc(long type);

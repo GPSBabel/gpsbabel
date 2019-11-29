@@ -48,10 +48,10 @@ static double radius = 0.0;
 static long serial=10000;
 static long rtserial=1;
 
-typedef struct roadchange {
+struct roadchange {
   long type;
   char* name;
-} roadchange;
+};
 
 static roadchange* roadchanges = nullptr;
 
@@ -97,11 +97,11 @@ arglist_t an1_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct guid {
+struct guid_t {
   unsigned long l;
   unsigned short s[3];
   unsigned char c[6];
-} GUID;
+};
 
 #include "an1sym.h"
 
@@ -127,7 +127,7 @@ ReadString(gbfile* f, short len)
 #define WriteString(f,s) gbfputs((s),f)
 
 static void
-ReadGuid(gbfile* f, GUID* guid)
+ReadGuid(gbfile* f, guid_t* guid)
 {
   guid->l = ReadLong(f);
   for (unsigned short &i : guid->s) {
@@ -139,7 +139,7 @@ ReadGuid(gbfile* f, GUID* guid)
 }
 
 static void
-WriteGuid(gbfile* f, GUID* guid)
+WriteGuid(gbfile* f, guid_t* guid)
 {
   WriteLong(f, guid->l);
   for (int i = 0; i < 3; i++) {
@@ -169,15 +169,15 @@ EncodeOrd(double ord)
   return (int32_t)(0x80000000 - (int32_t)(ord * 0x800000));
 }
 
-typedef struct {
+struct an1_symbol_record {
   short hotspotxhi;
   long hotspoty;
   long unk1;
-  GUID guid;
+  guid_t guid;
   char* name;
-} an1_symbol_record;
+};
 
-typedef struct {
+struct an1_waypoint_record {
   format_specific_data fs;
   short magic;
   long unk1;
@@ -196,7 +196,7 @@ typedef struct {
   double radius; /* in km */
   char* name;
   char* fontname;
-  GUID guid;
+  guid_t guid;
   long fontcolor;
   long fontstyle;
   long fontsize;
@@ -214,18 +214,18 @@ typedef struct {
   long creation_time;
   long modification_time;
   char* image_name;
-} an1_waypoint_record;
+};
 
-typedef struct {
+struct an1_vertex_record {
   format_specific_data fs;
   short magic;
   long unk0;
   long lon;
   long lat;
   short unk1;
-} an1_vertex_record;
+};
 
-typedef struct {
+struct an1_line_record {
   format_specific_data fs;
   long roadtype;
   short serial;
@@ -243,7 +243,7 @@ typedef struct {
   long unk7;
   short unk8;
   long pointcount;
-} an1_line_record;
+};
 
 static an1_waypoint_record* Alloc_AN1_Waypoint();
 

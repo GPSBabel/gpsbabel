@@ -32,7 +32,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-typedef struct {
+struct gbser_handle {
   struct termios  old_tio;
   struct termios  new_tio;
   int             fd;
@@ -41,7 +41,7 @@ typedef struct {
 
   unsigned char   inbuf[BUFSIZE];
   unsigned        inbuf_used;
-} gbser_handle;
+};
 
 /* Wrapper to safely cast a void * into a gbser_handle */
 static gbser_handle* gbser__get_handle(void* p)
@@ -84,7 +84,7 @@ speed_t mkspeed(unsigned br)
   }
 }
 
-typedef struct timeval hp_time;
+using hp_time = struct timeval;
 
 static void get_time(hp_time* tv)
 {

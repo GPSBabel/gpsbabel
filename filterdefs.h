@@ -34,18 +34,18 @@
 
 extern WaypointList* global_waypoint_list;
 
-typedef void (*filter_init)();
-typedef void (*filter_process)();
-typedef void (*filter_deinit)();
-typedef void (*filter_exit)();
+using filter_init = void (*)();
+using filter_process = void (*)();
+using filter_deinit = void (*)();
+using filter_exit = void (*)();
 
-typedef struct filter_vecs {
+struct filter_vecs_t {
   filter_init f_init;
   filter_process f_process;
   filter_deinit f_deinit;
   filter_exit f_exit;
   arglist_t* args;
-} filter_vecs_t;
+};
 
 Filter* find_filter_vec(const char* const, const char**);
 void free_filter_vec(Filter*);

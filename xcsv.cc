@@ -83,7 +83,7 @@
  * statements below, add it to xcsv_tokens.in, and rebuild on a system
  * that has GNU gperf on it.
  */
-typedef enum {
+enum xcsv_token {
   XT_unused = 0,
   XT_ALT_FEET,
   XT_ALT_METERS,
@@ -171,7 +171,7 @@ typedef enum {
   XT_UTM_NORTHING,
   XT_URL_LINK_TEXT,
   XT_YYYYMMDD_TIME
-} xcsv_token;
+};
 
 #include "xcsv_tokens.gperf"       // for Perfect_Hash, xt_mapping
 
@@ -251,10 +251,10 @@ arglist_t xcsv_args[] = {
 };
 
 /* something to map config file constants to chars */
-typedef struct char_map {
+struct char_map_t {
   const QString key;
   const QString chars;
-} char_map_t;
+};
 
 /* a table of config file constants mapped to chars */
 static

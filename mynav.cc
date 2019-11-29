@@ -26,7 +26,7 @@
 
 #define MYNAME "mynav"
 
-typedef enum {
+enum field_e {
   fld_type = 0,
   fld_lon,
   fld_lat,
@@ -43,7 +43,7 @@ typedef enum {
   fld_id,
   fld_total_duration,
   fld_terminator
-} field_e;
+};
 
 static route_head* mynav_track;
 static gbfile* fin;

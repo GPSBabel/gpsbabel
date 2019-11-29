@@ -40,8 +40,9 @@ static arglist_t osm_args[] = {
 static QHash<QString, const Waypoint*> waypoints;
 
 static QHash<QString, int> keys;
-static QHash<QString, const struct osm_icon_mapping_s*> values;
-static QHash<QString, const struct osm_icon_mapping_s*> icons;
+struct osm_icon_mapping_t;
+static QHash<QString, const osm_icon_mapping_t*> values;
+static QHash<QString, const osm_icon_mapping_t*> icons;
 
 static gbfile* fout;
 static int node_id;
@@ -90,16 +91,16 @@ static const char* osm_features[] = {
   nullptr
 };
 
-typedef struct osm_icon_mapping_s {
-  const int key;
+struct osm_icon_mapping_t {
+  int key;
   const char* value;
   const char* icon;
-} osm_icon_mapping_t;
+};
 
 
 /* based on <http://wiki.openstreetmap.org/index.php/Map_Features> */
 
-static osm_icon_mapping_t osm_icon_mappings[] = {
+static const osm_icon_mapping_t osm_icon_mappings[] = {
 
   /* cycleway ...*/
 

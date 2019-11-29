@@ -277,7 +277,7 @@ print <<'END';
  */
 
 static struct defguid {
-	GUID guid;
+	guid_t guid;
 	const char *name;
 } default_guids[] = {
 END
@@ -287,23 +287,23 @@ sub print_footer {
 print <<'END';
 };
 
-static int FindIconByName( const char *name, GUID *guid ) {
+static int FindIconByName( const char *name, guid_t *guid ) {
 	unsigned int i = 0; 
 	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
 	{
 		if ( !case_ignore_strcmp(name, default_guids[i].name)) {
-			memcpy( guid, &(default_guids[i].guid), sizeof(GUID));
+			memcpy( guid, &(default_guids[i].guid), sizeof(guid_t));
 			return 1;
 		}
 	}
 	return 0;
 }
 
-static int FindIconByGuid( GUID *guid, char **name ) {
+static int FindIconByGuid( guid_t *guid, char **name ) {
 	unsigned int i = 0; 
 	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
 	{
-		if ( !memcmp(guid, &default_guids[i].guid, sizeof(GUID))) {
+		if ( !memcmp(guid, &default_guids[i].guid, sizeof(guid_t))) {
 			*name = default_guids[i].name;
 			return 1;
 		}

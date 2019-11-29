@@ -33,15 +33,15 @@
 /************* Specific Naviguide data formats ****************/
 
 /* Naviguide file header */
-typedef struct {
+struct ng_file_header_t {
   uint16_t nof_wp;    /* Little endean format */
   unsigned char pad1[6];      /* 0xff, 0xff, 0x01, 0x00, 0x06, 0x00 */
   char signature[9]; /* cWaypoint */
   unsigned char pad2[4];      /* 0x01, 0x00, 0x00, 0x00 */
-} ng_file_header_t;
+};
 
 /* Naviguide waypoint/rout data  */
-typedef struct {
+struct ng_wp_data_t {
   unsigned char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
   /* coordination are in old israeli grid */
   int32_t East;
@@ -49,19 +49,19 @@ typedef struct {
   unsigned char pad2[2];  /* 0x01, 0x01 */
   uint32_t Alt;
   char CommentLength;
-} ng_wp_data_t;
+};
 
-typedef struct {
+struct ng_next_wp_t {
   unsigned char pad1[2]; /* 0x01, 0x80 */
   uint16_t next_wp;
   unsigned char pad2[2]; /* 0x00, 0x00 */
-} ng_next_wp_t;
+};
 
-typedef struct {
+struct ng_wp_no_comment_t {
   unsigned char chHeaderLen;
   char strName[255];
   ng_wp_data_t wp_data;
-} ng_wp_no_comment_t;
+};
 
 
 /* Global variables */

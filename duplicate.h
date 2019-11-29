@@ -62,19 +62,20 @@ private:
     ARG_TERMINATOR
   };
 
-  typedef struct btree_node {
-    struct btree_node* left, *right;
+  struct btree_node {
+    btree_node* left;
+    btree_node* right;
     unsigned long data;
     Waypoint* wpt;
-  } btree_node;
+  };
 
   btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
   void free_tree(btree_node* tree);
 
-  typedef struct {
+  struct wpt_ptr {
     Waypoint* wpt;
     int index;
-  } wpt_ptr;
+  };
 
   static int compare(const void* a, const void* b);
 

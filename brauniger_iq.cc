@@ -27,7 +27,7 @@ static void* serial_handle;
 #define MYNAME "BRAUNIGER-IQ"
 #define PRESTRKNAME "PRESALTTRK"
 
-typedef enum {
+enum state_t {
   st_sync,
   st_fl_num,
   st_data_len,
@@ -45,7 +45,7 @@ typedef enum {
   st_sample_alt,
   st_sample_spd,
   num_states
-} state_t;
+};
 static state_t state;
 inline state_t& operator++(state_t& s) // prefix
 {

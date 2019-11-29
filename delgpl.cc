@@ -23,7 +23,7 @@
 
 #define MYNAME "GPL"
 
-typedef struct gpl_point {
+struct gpl_point_t {
   unsigned int status;
   unsigned int dummy1;
   double lat;
@@ -33,7 +33,7 @@ typedef struct gpl_point {
   double speed; /* mph */
   unsigned int tm;
   unsigned int dummy3;
-} gpl_point_t;
+};
 
 static gbfile* gplfile_in;
 static gbfile* gplfile_out;
@@ -42,9 +42,9 @@ static void
 gpl_rd_init(const QString& fname)
 {
   gplfile_in = gbfopen_le(fname, "rb", MYNAME);
-  if (sizeof(struct gpl_point) != 56) {
+  if (sizeof(gpl_point_t) != 56) {
     fatal(MYNAME ": gpl_point is %lu instead of 56.\n",
-          (unsigned long) sizeof(struct gpl_point));
+          (unsigned long) sizeof(gpl_point_t));
   }
 }
 

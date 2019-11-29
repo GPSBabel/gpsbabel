@@ -25,11 +25,11 @@
 #include <QtCore/QtGlobal>     // for qPrintable
 
 #include <cassert>             // for assert
+#include <cctype>              // for tolower
+#include <cerrno>              // for errno
 #include <cstdarg>             // for va_list, va_end, va_copy, va_start
 #include <cstdio>              // for EOF, ferror, ftell, SEEK_SET, SEEK_CUR, SEEK_END, clearerr, fclose, feof, fflush, fileno, fread, fseek, fwrite, ungetc, vsnprintf, FILE, stdin, stdout
 #include <cstring>             // for memcpy, strlen, strchr, strcpy, strncat
-#include <ctype.h>             // for tolower
-#include <errno.h>             // for errno
 
 #include "defs.h"
 #include "gbfile.h"

@@ -30,14 +30,14 @@
 #include <cstdarg>
 #include <cstdio>
 
-typedef struct {
+struct gbser_handle {
   HANDLE          comport;
   DWORD           timeout;
   unsigned long   magic;
 
   unsigned char   inbuf[BUFSIZE];
   unsigned        inbuf_used;
-} gbser_handle;
+};
 
 #define DEV_PREFIX "\\\\.\\\\"
 
@@ -86,7 +86,7 @@ DWORD mkspeed(unsigned br)
   }
 }
 
-typedef LARGE_INTEGER hp_time;
+using hp_time = LARGE_INTEGER;
 
 static void get_time(hp_time* tv)
 {

@@ -53,14 +53,14 @@
 #define MYNAME "itracku"
 
 /* memory layout of the iTrackU data record */
-typedef struct {
+struct itracku_data_record {
   uint8_t longitude[4];
   uint8_t latitude[4];
   uint8_t creation_time[4];
   uint8_t altitude[2];
   uint8_t speed;
   uint8_t flag;
-} itracku_data_record;
+};
 
 static int itracku_is_valid_data_record(itracku_data_record* d);
 static void to_itracku_data_record(const Waypoint* wp, itracku_data_record* d);

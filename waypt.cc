@@ -34,7 +34,7 @@
 #include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_s, GMSD_FIND, garmin_fs_p
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND, garmin_fs_p
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime

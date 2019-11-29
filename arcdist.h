@@ -47,12 +47,12 @@ private:
   char* ptsopt = nullptr;
   char* projectopt = nullptr;
 
-  typedef struct {
+  struct extra_data {
     double distance;
     double prjlatitude, prjlongitude;
     double frac;
     Waypoint* arcpt1, * arcpt2;
-  } extra_data;
+  };
 
   arglist_t args[8] = {
     {

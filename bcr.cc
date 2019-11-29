@@ -88,12 +88,12 @@ arglist_t bcr_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct {
+struct bcr_icon_mapping_t {
   const char* bcr_name;
   const char* mps_name;
   const char* symbol_DE;
   bool  warned;
-} bcr_icon_mapping_t;
+};
 
 static
 bcr_icon_mapping_t bcr_icon_mapping[] = {

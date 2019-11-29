@@ -62,7 +62,7 @@
 
 /* GPSBabel internal and calculated fields */
 
-typedef enum {
+enum field_e {
   fld_shortname = 0,
   fld_latitude,
   fld_longitude,
@@ -135,7 +135,7 @@ typedef enum {
   fld_gc_placer_id,
   fld_gc_hint,
   fld_terminator
-} field_e;
+};
 
 #define STR_LEFT	1
 #define STR_RIGHT	2
@@ -145,11 +145,11 @@ typedef enum {
 
 #define unicsv_unknown	1e25
 
-typedef struct {
+struct field_t {
   const char* name;
   field_e type;
   uint32_t options;
-} field_t;
+};
 
 /*
  * ! Please use always underscores in field names !

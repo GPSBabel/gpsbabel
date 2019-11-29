@@ -68,7 +68,7 @@ arglist_t mmo_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct mmo_data_s {
+struct mmo_data_t {
   int objid;		/* internal object id */
   char* name;
   const char* category;	/* currently not handled */
@@ -78,11 +78,11 @@ typedef struct mmo_data_s {
   int left;		/* number of unread route points */
   void* data;		/* can be a waypoint, a route or a track */
   int refct;
-  struct mmo_data_s** members;
+  mmo_data_t** members;
   unsigned char visible:1;
   unsigned char locked:1;
   unsigned char loaded:1;
-} mmo_data_t;
+};
 
 static gbfile* fin, *fout;
 static int mmo_version;
@@ -104,10 +104,10 @@ static QHash<int, QString> icons;
 static QHash<int, mmo_data_t*> objects;
 static QHash<QString, unsigned> mmobjects;
 
-typedef struct mmo_icon_mapping_s {
-  const int	value;
+struct mmo_icon_mapping_t {
+  int	value;
   const char*	icon;
-} mmo_icon_mapping_t;
+};
 
 /* standard icons; no bitmaps in file */
 

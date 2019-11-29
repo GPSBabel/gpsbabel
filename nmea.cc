@@ -160,12 +160,12 @@ struct NmeaWaypoint : Waypoint
   bool added{false};
 };
 
-typedef enum {
+enum preferred_posn_type {
   gp_unknown = 0,
   gpgga,
   gplgll,
   gprmc
-} preferred_posn_type;
+};
 
 static enum {
   rm_unknown = 0,

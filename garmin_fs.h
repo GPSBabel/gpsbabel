@@ -28,11 +28,11 @@
 #include "jeeps/gps.h"
 
 /* this order is used by most devices */
-/* typedef enum {
+/* enum garmin_display_t {
 	garmin_display_symbol_and_name = 0,
 	garmin_display_symbol_only = 1,
 	garmin_display_symbol_and_description = 2
-} garmin_display_t;
+};
 */
 
 /* macros */
@@ -60,13 +60,13 @@
 /* GMSD_GETNSTR(a,b,c): a = gmsd field, b = target, c = sizeof(target) */
 #define GMSD_GETNSTR(a,b,c) if (gmsd && gmsd->flags.a) strncpy((b),gmsd->a,(c))
 
-typedef struct garmin_ilink_s {
+struct garmin_ilink_t {
   int ref_count;
   double lat, lon, alt;
-  struct garmin_ilink_s* next;
-} garmin_ilink_t;
+  garmin_ilink_t* next;
+};
 
-typedef struct {
+struct garmin_fs_flags_t {
   unsigned int icon:1;
   unsigned int wpt_class:1;
   unsigned int display:1;
@@ -86,9 +86,9 @@ typedef struct {
 #ifdef GMSD_EXPERIMENTAL
   unsigned int subclass:1;
 #endif
-} garmin_fs_flags_t;
+};
 
-typedef struct garmin_fs_s {
+struct garmin_fs_t {
   format_specific_data fs;
   garmin_fs_flags_t flags;
 
@@ -114,7 +114,8 @@ typedef struct garmin_fs_s {
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22];
 #endif
-} garmin_fs_t, *garmin_fs_p;
+};
+using garmin_fs_p = garmin_fs_t*;
 
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);

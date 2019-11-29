@@ -87,7 +87,7 @@ protected:
   class RteHdFunctor
   {
   public:
-    typedef void (MyFilter::*RteHdCb)(const route_head*);
+    using RteHdCb = void (MyFilter::*)(const route_head*);
     RteHdFunctor(MyFilter* obj, RteHdCb cb) : that(obj), _cb(cb) {}
     void operator()(const route_head* rh)
     {
@@ -103,7 +103,7 @@ protected:
   class WayptFunctor
   {
   public:
-    typedef void (MyFilter::*WayptCb)(const Waypoint*);
+    using WayptCb = void (MyFilter::*)(const Waypoint*);
     WayptFunctor(MyFilter* obj, WayptCb cb) : that(obj), _cb(cb) {}
     void operator()(const Waypoint* wpt)
     {

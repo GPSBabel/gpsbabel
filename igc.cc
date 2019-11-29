@@ -62,7 +62,7 @@ static int lineno;
  * IGC record types.
  * These appear as the first char in each record.
  */
-typedef enum {
+enum igc_rec_type_t {
   rec_manuf_id = 'A',		// FR manufacturer and identification
   rec_fix = 'B',		// Fix
   rec_task = 'C',		// Task/declaration
@@ -80,7 +80,7 @@ typedef enum {
 
   rec_none = 0,		// No record
   rec_bad = 1,		// Bad record
-} igc_rec_type_t;
+};
 
 /*
  * See if two lat/lon pairs are approximately equal.
@@ -148,7 +148,7 @@ static void rd_deinit()
   gbfclose(file_in);
 }
 
-typedef enum { id, takeoff, start, turnpoint, finish, landing } state_t;
+enum state_t { id, takeoff, start, turnpoint, finish, landing };
 inline state_t& operator++(state_t& s) // prefix
 {
   return s = static_cast<state_t>(s + 1);

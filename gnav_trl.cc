@@ -29,12 +29,12 @@ arglist_t gnav_trl_args[] = {
   ARG_TERMINATOR
 };
 
-typedef struct gnav_trl_s {
+struct gnav_trl_t {
   uint32_t time;
   float lat;
   float lon;
   uint32_t alt;
-} gnav_trl_t;
+};
 
 static gbfile* fin, *fout;
 

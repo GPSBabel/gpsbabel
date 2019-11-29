@@ -38,14 +38,14 @@
 
 #define MYNAME "DG-100"
 
-typedef struct {
+struct model_t {
   const char *name;
   unsigned speed;
   int has_trailing_bytes;
   int has_payload_end_seq;
   struct dg100_command *commands;
   unsigned int numcommands;
-} model_t;
+};
 
 static const model_t* model;
 

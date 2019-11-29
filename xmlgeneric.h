@@ -28,23 +28,23 @@
 // of its own; this was a crutch during the move from char* to QString.
 // It's "just" a search and replace to make it go away, but it might
 // be convenient to overload some day.
-typedef const QString& xg_string;
+using xg_string = const QString&;
 
 
-typedef enum {
+enum xg_cb_type {
   cb_start = 1,
   cb_cdata,
   cb_end,
-} xg_cb_type;
+};
 
 class QXmlStreamAttributes;
-typedef void (xg_callback)(xg_string, const QXmlStreamAttributes*);
+using xg_callback = void (xg_string, const QXmlStreamAttributes*);
 
-typedef struct xg_tag_mapping {
+struct xg_tag_mapping {
   xg_callback* tag_cb;
   xg_cb_type cb_type;
   const char* tag_name;
-} xg_tag_mapping;
+};
 
 extern const char* xhtml_entities;
 void xml_ignore_tags(const char** taglist);
