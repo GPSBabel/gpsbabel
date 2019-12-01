@@ -983,8 +983,8 @@ void setshort_is_utf8(short_handle h, int is_utf8);
 #define ARGTYPE_TYPEMASK 0x00000fffU
 #define ARGTYPE_FLAGMASK 0xfffff000U
 
-#define ARG_NOMINMAX NULL, NULL
-#define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX, NULL}
+#define ARG_NOMINMAX nullptr, nullptr
+#define ARG_TERMINATOR {nullptr, nullptr, nullptr, nullptr, 0, ARG_NOMINMAX, nullptr}
 
 struct arglist_t {
   const char* argstring;
@@ -1072,7 +1072,8 @@ void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs();
 void disp_vec(const char* vecname);
-int validate_formats();
+bool validate_args(const char* vecname, arglist_t* ap);
+bool validate_formats();
 void init_vecs();
 void exit_vecs();
 void disp_formats(int version);

@@ -31,10 +31,11 @@
 #include "defs.h"
 #include "gbversion.h"          // for WEB_DOC_DIR
 #include "inifile.h"            // for inifile_readstr
+#include "src/core/logging.h"   // for Warning
 #include "xcsv.h"               // for XcsvFile, xcsv_file, xcsv_read_internal_style, xcsv_setup_internal_style
 
 
-#define MYNAME "vecs.c"
+#define MYNAME "vecs"
 
 struct vecs_t {
   ff_vecs_t* vec;
@@ -1110,7 +1111,7 @@ init_vecs()
   }
 }
 
-int
+static int
 is_integer(const char* c)
 {
   return isdigit(c[0]) || ((c[0] == '+' || c[0] == '-') && isdigit(c[1]));
@@ -1125,11 +1126,6 @@ exit_vecs()
     }
     if (vec.vec->args) {
       for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        if (ap->defaultvalue &&
-            (ap->argtype == ARGTYPE_INT) &&
-            ! is_integer(ap->defaultvalue)) {
-          warning("%s: not an integer\n", ap->argstring);
-        }
         if (ap->argvalptr) {
           xfree(ap->argvalptr);
           *ap->argval = ap->argvalptr = nullptr;
@@ -1296,7 +1292,7 @@ find_vec(const char* vecname, const char** opts)
     }
 
 #if CSVFMTS_ENABLED
-    // xcsv_setup_internal_style( NULL );
+    // xcsv_setup_internal_style( nullptr );
 #endif // CSVFMTS_ENABLED
     xfree(v);
     vec.vec->name = vec.name;	/* needed for session information */
@@ -1412,21 +1408,11 @@ get_option(const char* iarglist, const char* argname)
 }
 
 /*
- *  Display the available formats in a format that's easy for humans to
- *  parse for help on available command line options.
- */
-static bool
-alpha(const vecs_t& a, const vecs_t& b)
-{
-  return case_ignore_strcmp(a.desc, b.desc) < 0;
-}
-
-/*
  * Smoosh the vecs list and style lists together and sort them
  * alphabetically.  Returns an allocated copy of a style_vecs_array
  * that's populated and sorted.
  */
-QVector<vecs_t>
+static QVector<vecs_t>
 sort_and_unify_vecs()
 {
   QVector<vecs_t> svp;
@@ -1479,6 +1465,14 @@ sort_and_unify_vecs()
     uvec.parent = "xcsv";
     svp.append(uvec);
   }
+
+  /*
+   *  Display the available formats in a format that's easy for humans to
+   *  parse for help on available command line options.
+   */
+  auto alpha = [](const vecs_t& a, const vecs_t& b)->bool {
+    return case_ignore_strcmp(a.desc, b.desc) < 0;
+  };
 
   /* Now that we have everything in an array, alphabetize them */
   std::sort(svp.begin(), svp.end(), alpha);
@@ -1660,74 +1654,101 @@ disp_formats(int version)
   }
 }
 
-static bool
-validate_vec(const vecs_t& vec)
+bool validate_args(const char* vecname, arglist_t* ap)
 {
   bool ok = true;
 
+  for (; ap && ap->argstring; ap++) {
+    if (ap->argtype == ARGTYPE_INT) {
+      if (ap->defaultvalue &&
+          ! is_integer(ap->defaultvalue)) {
+        Warning() << vecname << "Int option" << ap->argstring << "default value" << ap->defaultvalue << "is not an integer.";
+        ok = false;
+      }
+      if (ap->minvalue &&
+          ! is_integer(ap->minvalue)) {
+        Warning() << vecname << "Int option" << ap->argstring << "minimum value" << ap->minvalue << "is not an integer.";
+        ok = false;
+      }
+      if (ap->maxvalue &&
+          ! is_integer(ap->maxvalue)) {
+        Warning() << vecname << "Int option" << ap->argstring << "maximum value" << ap->maxvalue << "is not an integer.";
+        ok = false;
+      }
+    }
+  }
+
+  return ok;
+}
+
+static bool
+validate_vec(const vecs_t& vec)
+{
+  bool ok = validate_args(vec.name, vec.vec->args);
+
   if (!((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_write)) {
     if (vec.vec->wr_init != nullptr) {
-      printf("ERROR no write capability but non-null wr_init %s\n", vec.name);
+      Warning() << "ERROR no write capability but non-null wr_init %s\n" << vec.name;
       ok = false;
     }
   }
   if (!((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_read)) {
     if (vec.vec->rd_init != nullptr) {
-      printf("ERROR no read capbility but non-null rd_init %s\n", vec.name);
+      Warning() << "ERROR no read capability but non-null rd_init %s\n" << vec.name;
       ok = false;
     }
   }
   if ((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_write) {
     if (vec.vec->wr_init == nullptr) {
-      printf("ERROR write capability but null wr_init %s\n", vec.name);
+      Warning() << "ERROR write capability but null wr_init %s\n" << vec.name;
       ok = false;
     }
   }
   if ((vec.vec->cap[0]|vec.vec->cap[1]|vec.vec->cap[2]) & ff_cap_read) {
     if (vec.vec->rd_init == nullptr) {
-      printf("ERROR read capability but null rd_init %s\n", vec.name);
+      Warning() << "ERROR read capability but null rd_init %s\n" << vec.name;
       ok = false;
     }
   }
 
   if (vec.vec->wr_init != nullptr) {
     if (vec.vec->write == nullptr) {
-      printf("ERROR nonnull wr_init but null write %s\n", vec.name);
+      Warning() << "ERROR nonnull wr_init but null write %s\n" << vec.name;
       ok = false;
     }
     if (vec.vec->wr_deinit == nullptr) {
-      printf("ERROR nonnull wr_init but null wr_deinit %s\n", vec.name);
+      Warning() << "ERROR nonnull wr_init but null wr_deinit %s\n" << vec.name;
       ok = false;
     }
   }
   if (vec.vec->wr_init == nullptr) {
     if (vec.vec->write != nullptr) {
-      printf("ERROR null wr_init with non-null write %s\n", vec.name);
+      Warning() << "ERROR null wr_init with non-null write %s\n" << vec.name;
       ok = false;
     }
     if (vec.vec->wr_deinit != nullptr) {
-      printf("ERROR null wr_init with non-null wr_deinit %s\n", vec.name);
+      Warning() << "ERROR null wr_init with non-null wr_deinit %s\n" << vec.name;
       ok = false;
     }
   }
 
   if (vec.vec->rd_init != nullptr) {
     if (vec.vec->read == nullptr) {
-      printf("ERROR nonnull rd_init but null read %s\n", vec.name);
+      Warning() << "ERROR nonnull rd_init but null read %s\n" << vec.name;
       ok = false;
     }
     if (vec.vec->rd_deinit == nullptr) {
-      printf("ERROR nonnull rd_init but null rd_deinit %s\n", vec.name);
+      Warning() << "ERROR nonnull rd_init but null rd_deinit %s\n" << vec.name;
       ok = false;
     }
   }
   if (vec.vec->rd_init == nullptr) {
     if (vec.vec->read != nullptr) {
-      printf("ERROR null rd_init with non-null read %s\n", vec.name);
+      Warning() << "ERROR null rd_init with non-null read %s\n" << vec.name;
       ok = false;
     }
     if (vec.vec->rd_deinit != nullptr) {
-      printf("ERROR null rd_init with non-null rd_deinit %s\n", vec.name);
+      Warning() << "ERROR null rd_init with non-null rd_deinit %s\n" << vec.name;
       ok = false;
     }
   }
@@ -1735,7 +1756,7 @@ validate_vec(const vecs_t& vec)
   return ok;
 }
 
-int validate_formats()
+bool validate_formats()
 {
   bool ok = true;
 
@@ -1743,5 +1764,5 @@ int validate_formats()
     ok = validate_vec(vec) && ok;
   }
 
-  return ok? 0 : 1;
+  return ok;
 }
