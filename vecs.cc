@@ -1106,10 +1106,10 @@ init_vecs()
 {
   for (const auto& vec : vec_list) {
     if (vec.vec->args) {
-      for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        ap->argvalptr = nullptr;
-        if (ap->argval) {
-          *ap->argval = nullptr;
+      for (auto arg = vec.vec->args; arg->argstring; arg++) {
+        arg->argvalptr = nullptr;
+        if (arg->argval) {
+          *arg->argval = nullptr;
         }
       }
     }
@@ -1130,10 +1130,10 @@ exit_vecs()
       (*vec.vec->exit)();
     }
     if (vec.vec->args) {
-      for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        if (ap->argvalptr) {
-          xfree(ap->argvalptr);
-          *ap->argval = ap->argvalptr = nullptr;
+      for (auto arg = vec.vec->args; arg->argstring; arg++) {
+        if (arg->argvalptr) {
+          xfree(arg->argvalptr);
+          *arg->argval = arg->argvalptr = nullptr;
         }
       }
     }
@@ -1141,20 +1141,20 @@ exit_vecs()
 }
 
 void
-assign_option(const QString& module, arglist_t* ap, const char* val)
+assign_option(const QString& module, arglist_t* arg, const char* val)
 {
   const char* c;
 
-  if (ap->argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!", qPrintable(module), ap->argstring);
+  if (arg->argval == nullptr) {
+    fatal("%s: No local variable defined for option \"%s\"!", qPrintable(module), arg->argstring);
   }
 
-  if (ap->argvalptr != nullptr) {
-    xfree(ap->argvalptr);
-    ap->argvalptr = nullptr;
+  if (arg->argvalptr != nullptr) {
+    xfree(arg->argvalptr);
+    arg->argvalptr = nullptr;
   }
-  if (ap->argval) {
-    *ap->argval = nullptr;
+  if (arg->argval) {
+    *arg->argval = nullptr;
   }
 
   if (val == nullptr) {
@@ -1164,20 +1164,20 @@ assign_option(const QString& module, arglist_t* ap, const char* val)
   // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo"
   // and want to set it to the value "foo", this code will prevent that from happening, but we seem to have
   // code all over the place that relies on this. :-/
-  if (case_ignore_strcmp(val, ap->argstring) == 0) {
+  if (case_ignore_strcmp(val, arg->argstring) == 0) {
     c = "";
   } else {
     c = val;
   }
 
-  switch (ap->argtype & ARGTYPE_TYPEMASK) {
+  switch (arg->argtype & ARGTYPE_TYPEMASK) {
   case ARGTYPE_INT:
     if (*c == '\0') {
       c = "0";
     } else {
       int test;
       is_fatal(1 != sscanf(c, "%d", &test),
-               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, ap->argstring);
+               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
     }
     break;
   case ARGTYPE_FLOAT:
@@ -1186,7 +1186,7 @@ assign_option(const QString& module, arglist_t* ap, const char* val)
     } else {
       double test;
       is_fatal(1 != sscanf(c, "%lf", &test),
-               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, ap->argstring);
+               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
     }
     break;
   case ARGTYPE_BOOL:
@@ -1221,22 +1221,22 @@ assign_option(const QString& module, arglist_t* ap, const char* val)
 
   /* for bool options without default: don't set argval if "FALSE" */
 
-  if (((ap->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      (*c == '0') && (ap->defaultvalue == nullptr)) {
+  if (((arg->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
+      (*c == '0') && (arg->defaultvalue == nullptr)) {
     return;
   }
-  *ap->argval = ap->argvalptr = xstrdup(c);
+  *arg->argval = arg->argvalptr = xstrdup(c);
 }
 
 void
 disp_vec_options(const QString& vecname, const arglist_t* args)
 {
   if (args) {
-    for (auto ap = args; ap->argstring; ap++) {
-      if (*ap->argval && ap->argval) {
+    for (auto arg = args; arg->argstring; arg++) {
+      if (*arg->argval && arg->argval) {
         printf("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), ap->argstring, *ap->argval);
-        if (ap->defaultvalue && (case_ignore_strcmp(ap->defaultvalue, *ap->argval) == 0)) {
+               qPrintable(vecname), arg->argstring, *arg->argval);
+        if (arg->defaultvalue && (case_ignore_strcmp(arg->defaultvalue, *arg->argval) == 0)) {
           printf(" (=default)");
         }
         printf("\n");
@@ -1251,8 +1251,8 @@ void validate_options(const QStringList& options, const arglist_t* args, const Q
     const QString option_name = option.left(option.indexOf('='));
     bool valid = false;
     if (args) {
-      for (auto ap = args; ap->argstring; ap++) {
-        if (option_name.compare(ap->argstring, Qt::CaseInsensitive) == 0) {
+      for (auto arg = args; arg->argstring; arg++) {
+        if (option_name.compare(arg->argstring, Qt::CaseInsensitive) == 0) {
           valid = true;
           break;
         }
@@ -1281,22 +1281,22 @@ find_vec(const QString& vecname)
     validate_options(options, vec.vec->args, vec.name);
 
     if (vec.vec->args) {
-      for (auto ap = vec.vec->args; ap->argstring; ap++) {
+      for (auto arg = vec.vec->args; arg->argstring; arg++) {
         if (!options.isEmpty()) {
-          const QString opt = get_option(options, ap->argstring);
+          const QString opt = get_option(options, arg->argstring);
           if (!opt.isNull()) {
-            assign_option(vec.name, ap, CSTR(opt));
+            assign_option(vec.name, arg, CSTR(opt));
             continue;
           }
         }
-        QString qopt = inifile_readstr(global_opts.inifile, vec.name, ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, vec.name, arg->argstring);
         if (qopt.isNull()) {
-          qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+          qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg->argstring);
         }
         if (qopt.isNull()) {
-          assign_option(vec.name, ap, ap->defaultvalue);
+          assign_option(vec.name, arg, arg->defaultvalue);
         } else {
-          assign_option(vec.name, ap, CSTR(qopt));
+          assign_option(vec.name, arg, CSTR(qopt));
         }
       }
     }
@@ -1325,22 +1325,22 @@ find_vec(const QString& vecname)
     validate_options(options, vec_list[0].vec->args, svec.name);
 
     if (vec_list[0].vec->args) {
-      for (auto ap = vec_list[0].vec->args; ap->argstring; ap++) {
+      for (auto arg = vec_list[0].vec->args; arg->argstring; arg++) {
         if (!options.isEmpty()) {
-          const QString opt = get_option(options, ap->argstring);
+          const QString opt = get_option(options, arg->argstring);
           if (!opt.isNull()) {
-            assign_option(svec.name, ap, CSTR(opt));
+            assign_option(svec.name, arg, CSTR(opt));
             continue;
           }
         }
-        QString qopt = inifile_readstr(global_opts.inifile, svec.name, ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, svec.name, arg->argstring);
         if (qopt.isNull()) {
-          qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+          qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg->argstring);
         }
         if (qopt.isNull()) {
-          assign_option(svec.name, ap, ap->defaultvalue);
+          assign_option(svec.name, arg, arg->defaultvalue);
         } else {
-          assign_option(svec.name, ap, CSTR(qopt));
+          assign_option(svec.name, arg, CSTR(qopt));
         }
       }
     }
@@ -1476,14 +1476,14 @@ disp_vecs()
     }
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
     if (vec.vec->args) {
-      for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        if (!(ap->argtype & ARGTYPE_HIDDEN))
+      for (auto arg = vec.vec->args; arg->argstring; arg++) {
+        if (!(arg->argtype & ARGTYPE_HIDDEN))
           printf("	  %-18.18s    %s%-.50s %s\n",
-                 ap->argstring,
-                 (ap->argtype & ARGTYPE_TYPEMASK) ==
+                 arg->argstring,
+                 (arg->argtype & ARGTYPE_TYPEMASK) ==
                  ARGTYPE_BOOL ? "(0/1) " : "",
-                 ap->helpstring,
-                 (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+                 arg->helpstring,
+                 (arg->argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -1500,14 +1500,14 @@ disp_vec(const QString& vecname)
 
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
     if (vec.vec->args) {
-      for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        if (!(ap->argtype & ARGTYPE_HIDDEN))
+      for (auto arg = vec.vec->args; arg->argstring; arg++) {
+        if (!(arg->argtype & ARGTYPE_HIDDEN))
           printf("	  %-18.18s    %s%-.50s %s\n",
-                 ap->argstring,
-                 (ap->argtype & ARGTYPE_TYPEMASK) ==
+                 arg->argstring,
+                 (arg->argtype & ARGTYPE_TYPEMASK) ==
                  ARGTYPE_BOOL ? "(0/1) " : "",
-                 ap->helpstring,
-                 (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+                 arg->helpstring,
+                 (arg->argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -1584,18 +1584,18 @@ disp_v3(const vecs_t& vec)
 {
   disp_help_url(vec, nullptr);
   if (vec.vec->args) {
-    for (auto ap = vec.vec->args; ap->argstring; ap++) {
-      if (!(ap->argtype & ARGTYPE_HIDDEN)) {
+    for (auto arg = vec.vec->args; arg->argstring; arg++) {
+      if (!(arg->argtype & ARGTYPE_HIDDEN)) {
         printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
                CSTR(vec.name),
-               ap->argstring,
-               ap->helpstring,
-               name_option(ap->argtype),
-               ap->defaultvalue? ap->defaultvalue : "",
-               ap->minvalue? ap->minvalue : "",
-               ap->maxvalue? ap->maxvalue : "");
+               arg->argstring,
+               arg->helpstring,
+               name_option(arg->argtype),
+               arg->defaultvalue ? arg->defaultvalue : "",
+               arg->minvalue ? arg->minvalue : "",
+               arg->maxvalue ? arg->maxvalue : "");
       }
-      disp_help_url(vec, ap);
+      disp_help_url(vec, arg);
       printf("\n");
     }
   }
@@ -1649,21 +1649,21 @@ bool validate_args(const QString& name, const arglist_t* args)
   bool ok = true;
 
   if (args != nullptr) {
-    for (auto ap = args; ap->argstring; ap++) {
-      if (ap->argtype == ARGTYPE_INT) {
-        if (ap->defaultvalue &&
-            ! is_integer(ap->defaultvalue)) {
-          Warning() << name << "Int option" << ap->argstring << "default value" << ap->defaultvalue << "is not an integer.";
+    for (auto arg = args; arg->argstring; arg++) {
+      if (arg->argtype == ARGTYPE_INT) {
+        if (arg->defaultvalue &&
+            ! is_integer(arg->defaultvalue)) {
+          Warning() << name << "Int option" << arg->argstring << "default value" << arg->defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (ap->minvalue &&
-            ! is_integer(ap->minvalue)) {
-          Warning() << name << "Int option" << ap->argstring << "minimum value" << ap->minvalue << "is not an integer.";
+        if (arg->minvalue &&
+            ! is_integer(arg->minvalue)) {
+          Warning() << name << "Int option" << arg->argstring << "minimum value" << arg->minvalue << "is not an integer.";
           ok = false;
         }
-        if (ap->maxvalue &&
-            ! is_integer(ap->maxvalue)) {
-          Warning() << name << "Int option" << ap->argstring << "maximum value" << ap->maxvalue << "is not an integer.";
+        if (arg->maxvalue &&
+            ! is_integer(arg->maxvalue)) {
+          Warning() << name << "Int option" << arg->argstring << "maximum value" << arg->maxvalue << "is not an integer.";
           ok = false;
         }
       }

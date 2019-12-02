@@ -1068,7 +1068,7 @@ void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
 ff_vecs_t* find_vec(const QString&);
-void assign_option(const QString& vecname, arglist_t* ap, const char* val);
+void assign_option(const QString& vecname, arglist_t* arg, const char* val);
 void disp_vec_options(const QString& vecname, const arglist_t* args);
 void disp_vecs();
 void disp_vec(const QString& vecname);
