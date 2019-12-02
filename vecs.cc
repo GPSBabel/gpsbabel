@@ -19,14 +19,19 @@
 
  */
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QString>       // for QString
+#include <QtCore/QStringList>   // for QStringList
+#include <QtCore/QVector>       // for QVector<>::iterator, QVector
+#include <QtCore/Qt>            // for CaseInsensitive
+#include <QtCore/QtGlobal>      // for qPrintable
 
 #include <algorithm>            // for sort
+#include <cassert>              // for assert
+#include <cctype>               // for isdigit
 #include <cstdio>               // for printf, putchar, sscanf, size_t
 #include <cstdint>
 #include <cstring>              // for strchr, strtok, memset, strlen
-#include <ctype.h>              // for isdigit
 
 #include "defs.h"
 #include "gbversion.h"          // for WEB_DOC_DIR
@@ -39,10 +44,10 @@
 
 struct vecs_t {
   ff_vecs_t* vec;
-  const char* name;
+  QString name;
   QString desc;
   QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
-  const char* parent;
+  QString parent;
 };
 
 extern ff_vecs_t an1_vecs;
@@ -1136,12 +1141,12 @@ exit_vecs()
 }
 
 void
-assign_option(const char* module, arglist_t* ap, const char* val)
+assign_option(const QString& module, arglist_t* ap, const char* val)
 {
   const char* c;
 
   if (ap->argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
+    fatal("%s: No local variable defined for option \"%s\"!", qPrintable(module), ap->argstring);
   }
 
   if (ap->argvalptr != nullptr) {
@@ -1172,7 +1177,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
     } else {
       int test;
       is_fatal(1 != sscanf(c, "%d", &test),
-               "%s: Invalid parameter value %s for option %s", module, val, ap->argstring);
+               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, ap->argstring);
     }
     break;
   case ARGTYPE_FLOAT:
@@ -1181,7 +1186,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
     } else {
       double test;
       is_fatal(1 != sscanf(c, "%lf", &test),
-               "%s: Invalid parameter value %s for option %s", module, val, ap->argstring);
+               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, ap->argstring);
     }
     break;
   case ARGTYPE_BOOL:
@@ -1205,7 +1210,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
             c = "1";
           }
         } else {
-          warning(MYNAME ": Invalid logical value '%s' (%s)!\n", c, module);
+          warning(MYNAME ": Invalid logical value '%s' (%s)!\n", c, qPrintable(module));
           c = "0";
         }
         break;
@@ -1224,12 +1229,12 @@ assign_option(const char* module, arglist_t* ap, const char* val)
 }
 
 void
-disp_vec_options(const char* vecname, arglist_t* ap)
+disp_vec_options(const QString& vecname, const arglist_t* ap)
 {
   for (; ap && ap->argstring; ap++) {
     if (*ap->argval && ap->argval) {
       printf("options: module/option=value: %s/%s=\"%s\"",
-             vecname, ap->argstring, *ap->argval);
+             qPrintable(vecname), ap->argstring, *ap->argval);
       if (ap->defaultvalue && (case_ignore_strcmp(ap->defaultvalue, *ap->argval) == 0)) {
         printf(" (=default)");
       }
@@ -1238,37 +1243,45 @@ disp_vec_options(const char* vecname, arglist_t* ap)
   }
 }
 
-ff_vecs_t*
-find_vec(const char* vecname, const char** opts)
+void validate_options(const QStringList& options, const arglist_t* args, const QString& name)
 {
-  char* v = xstrdup(vecname);
-  char* svecname = strtok(v, ",");
-  int found = 0;
+  for (const auto& option : options) {
+    const QString option_name = option.left(option.indexOf('='));
+    bool valid = false;
+    for (auto ap = args; ap && ap->argstring; ap++) {
+      if (option_name.compare(ap->argstring, Qt::CaseInsensitive) == 0) {
+        valid = true;
+        break;
+      }
+    }
+    if (!valid) {
+      warning("'%s' is an unknown option to %s.\n", qPrintable(option_name), qPrintable(name));
+    }
+  }
+}
 
-  if (vecname == nullptr) {
+ff_vecs_t*
+find_vec(const QString& vecname)
+{
+  QStringList options = vecname.split(',');
+  if (options.isEmpty()) {
     fatal("A format name is required.\n");
   }
+  const QString svecname = options.takeFirst();
 
   for (const auto& vec : vec_list) {
-    if (case_ignore_strcmp(svecname, vec.name)) {
+    if (svecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
 
-    const char* res = strchr(vecname, ',');
-    if (res) {
-      *opts = strchr(vecname, ',')+1;
-    } else {
-      *opts = nullptr;
-    }
+    validate_options(options, vec.vec->args, vec.name);
 
     if (vec.vec->args) {
       for (auto ap = vec.vec->args; ap->argstring; ap++) {
-        if (res) {
-          const char* opt = get_option(*opts, ap->argstring);
-          if (opt) {
-            found = 1;
-            assign_option(svecname, ap, opt);
-            xfree(opt);
+        if (!options.isEmpty()) {
+          const QString opt = get_option(options, ap->argstring);
+          if (!opt.isNull()) {
+            assign_option(vec.name, ap, CSTR(opt));
             continue;
           }
         }
@@ -1283,9 +1296,6 @@ find_vec(const char* vecname, const char** opts)
         }
       }
     }
-    if (opts && opts[0] && !found) {
-      warning("'%s' is an unknown option to %s.\n", *opts, vec.name);
-    }
 
     if (global_opts.debug_level >= 1) {
       disp_vec_options(vec.name, vec.vec->args);
@@ -1294,7 +1304,6 @@ find_vec(const char* vecname, const char** opts)
 #if CSVFMTS_ENABLED
     // xcsv_setup_internal_style( nullptr );
 #endif // CSVFMTS_ENABLED
-    xfree(v);
     vec.vec->name = vec.name;	/* needed for session information */
     return vec.vec;
 
@@ -1305,25 +1314,18 @@ find_vec(const char* vecname, const char** opts)
    * is to search the list of xcsv styles.
    */
   for (const auto& svec : style_list) {
-    if (case_ignore_strcmp(svecname, svec.name)) {
+    if (svecname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
 
-    const char* res = strchr(vecname, ',');
-    if (res) {
-      *opts = strchr(vecname, ',') + 1;
-    } else {
-      *opts = nullptr;
-    }
+    validate_options(options, vec_list[0].vec->args, svec.name);
 
     if (vec_list[0].vec->args) {
       for (auto ap = vec_list[0].vec->args; ap->argstring; ap++) {
-        if (res) {
-          const char* opt = get_option(*opts, ap->argstring);
-          if (opt) {
-            found = 1;
-            assign_option(svecname, ap, opt);
-            xfree(opt);
+        if (!options.isEmpty()) {
+          const QString opt = get_option(options, ap->argstring);
+          if (!opt.isNull()) {
+            assign_option(svec.name, ap, CSTR(opt));
             continue;
           }
         }
@@ -1339,10 +1341,6 @@ find_vec(const char* vecname, const char** opts)
       }
     }
 
-    if (opts && opts[0] && !found) {
-      warning("'%s' is an unknown option to %s.\n", *opts, svec.name);
-    }
-
     if (global_opts.debug_level >= 1) {
       disp_vec_options(svec.name, vec_list[0].vec->args);
     }
@@ -1350,7 +1348,6 @@ find_vec(const char* vecname, const char** opts)
     xcsv_setup_internal_style(svec.style_buf);
 #endif // CSVFMTS_ENABLED
 
-    xfree(v);
     vec_list[0].vec->name = svec.name;	/* needed for session information */
     return vec_list[0].vec;
   }
@@ -1358,7 +1355,6 @@ find_vec(const char* vecname, const char** opts)
   /*
    * Not found.
    */
-  xfree(v);
   return nullptr;
 }
 
@@ -1366,44 +1362,31 @@ find_vec(const char* vecname, const char** opts)
  * Find and return a specific argument in an arg list.
  * Modelled approximately after getenv.
  */
-char*
-get_option(const char* iarglist, const char* argname)
+QString
+get_option(const QStringList& options, const char* argname)
 {
-  const size_t arglen = strlen(argname);
-  char* rval = nullptr;
-  char* argp;
+  QString rval;
 
-  if (!iarglist) {
-    return nullptr;
-  }
-
-  char* arglist = xstrdup(iarglist);
-
-  for (char* arg = arglist; argp = strtok(arg, ","), nullptr != argp; arg = nullptr) {
-    if (0 == case_ignore_strncmp(argp, argname, arglen)) {
+  for (const auto& option : options) {
+    int split = option.indexOf('=');
+    const QString option_name = option.left(split);
+    if (option_name.compare(argname, Qt::CaseInsensitive) == 0) {
       /*
        * If we have something of the form "foo=bar"
        * return "bar".   Otherwise, we assume we have
        * simply "foo" so we return that.
        */
-      if (argp[arglen] == '=') {
-        rval = argp + arglen + 1;
+      if (split >= 0) { // we found an '='s.
+        rval = option.mid(split + 1); // not null, possibly empty
+        assert(!rval.isNull());
         break;
-      } else if (argp[arglen] == '\0') {
-        rval = argp;
+      } else {
+        rval = option_name; // not null, possibly empty.
+        assert(!rval.isNull());
         break;
       }
     }
   }
-  /*
-   * Return an offset into the allocated copy.
-   * The caller mustn't free or otherwise get froggy with
-   * this data.
-   */
-  if (rval) {
-    rval = xstrdup(rval);
-  }
-  xfree(arglist);
   return rval;
 }
 
@@ -1417,6 +1400,7 @@ sort_and_unify_vecs()
 {
   QVector<vecs_t> svp;
   svp.reserve(vec_list.size() + style_list.size());
+
   /* Normal vecs are easy; populate the first part of the array. */
   for (const auto& vec : vec_list) {
     vecs_t uvec = vec;
@@ -1434,18 +1418,14 @@ sort_and_unify_vecs()
     uvec.vec = new ff_vecs_t; /* LEAK */
     uvec.extensions = xcsv_file.extension;
     *uvec.vec = *vec_list[0].vec; /* Inherits xcsv opts */
-    /* Reset file type to inherit ff_type from xcsv for everything
-     * except the xcsv format itself, which we leave as "internal"
+    /* Reset file type to inherit ff_type from xcsv. */
+    uvec.vec->type = xcsv_file.type;
+    /* Skip over the first help entry for all but the
+     * actual 'xcsv' format - so we don't expose the
+     * 'full path to xcsv style file' argument to any
+     * GUIs for an internal format.
      */
-    if (case_ignore_strcmp(svec.name, "xcsv")) {
-      uvec.vec->type = xcsv_file.type;
-      /* Skip over the first help entry for all but the
-       * actual 'xcsv' format - so we don't expose the
-       * 'full path to xcsv style file' argument to any
-       * GUIs for an internal format.
-       */
-      uvec.vec->args++;
-    }
+    uvec.vec->args++;
     memset(&uvec.vec->cap, 0, sizeof(uvec.vec->cap));
     switch (xcsv_file.datatype) {
     case unknown_gpsdata:
@@ -1471,7 +1451,7 @@ sort_and_unify_vecs()
    *  parse for help on available command line options.
    */
   auto alpha = [](const vecs_t& a, const vecs_t& b)->bool {
-    return case_ignore_strcmp(a.desc, b.desc) < 0;
+    return QString::compare(a.desc, b.desc, Qt::CaseInsensitive) < 0;
   };
 
   /* Now that we have everything in an array, alphabetize them */
@@ -1490,7 +1470,7 @@ disp_vecs()
     if (vec.vec->type == ff_type_internal)  {
       continue;
     }
-    printf(VEC_FMT, vec.name, CSTR(vec.desc));
+    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
     for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1504,15 +1484,15 @@ disp_vecs()
 }
 
 void
-disp_vec(const char* vecname)
+disp_vec(const QString& vecname)
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (case_ignore_strcmp(vec.name, vecname))  {
+    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)  {
       continue;
     }
 
-    printf(VEC_FMT, vec.name, CSTR(vec.desc));
+    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
     for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1552,7 +1532,7 @@ disp_v1(ff_type t)
 }
 
 static void
-disp_v2(ff_vecs_t* v)
+disp_v2(const ff_vecs_t* v)
 {
   for (auto& i : v->cap) {
     putchar((i & ff_cap_read) ? 'r' : '-');
@@ -1581,11 +1561,11 @@ name_option(uint32_t type)
 }
 
 static
-void disp_help_url(const vecs_t& vec, arglist_t* arg)
+void disp_help_url(const vecs_t& vec, const arglist_t* arg)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec.name);
+  printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
   if (arg) {
-    printf("#fmt_%s_o_%s",vec.name, arg->argstring);
+    printf("#fmt_%s_o_%s", CSTR(vec.name), arg->argstring);
   }
   printf("\n");
 }
@@ -1598,7 +1578,7 @@ disp_v3(const vecs_t& vec)
   for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-             vec.name,
+             CSTR(vec.name),
              ap->argstring,
              ap->helpstring,
              name_option(ap->argtype),
@@ -1639,11 +1619,11 @@ disp_formats(int version)
       if (version >= 2) {
         disp_v2(vec.vec);
       }
-      printf("%s\t%s\t%s%s%s\n", vec.name,
+      printf("%s\t%s\t%s%s%s\n", CSTR(vec.name),
              !vec.extensions.isEmpty() ? CSTR(vec.extensions) : "",
              CSTR(vec.desc),
              version >= 3 ? "\t" : "",
-             version >= 3 ? vec.parent : "");
+             version >= 3 ? CSTR(vec.parent) : "");
       if (version >= 3) {
         disp_v3(vec);
       }
@@ -1654,26 +1634,28 @@ disp_formats(int version)
   }
 }
 
-bool validate_args(const char* vecname, arglist_t* ap)
+bool validate_args(const QString& name, const arglist_t* args)
 {
   bool ok = true;
 
-  for (; ap && ap->argstring; ap++) {
-    if (ap->argtype == ARGTYPE_INT) {
-      if (ap->defaultvalue &&
-          ! is_integer(ap->defaultvalue)) {
-        Warning() << vecname << "Int option" << ap->argstring << "default value" << ap->defaultvalue << "is not an integer.";
-        ok = false;
-      }
-      if (ap->minvalue &&
-          ! is_integer(ap->minvalue)) {
-        Warning() << vecname << "Int option" << ap->argstring << "minimum value" << ap->minvalue << "is not an integer.";
-        ok = false;
-      }
-      if (ap->maxvalue &&
-          ! is_integer(ap->maxvalue)) {
-        Warning() << vecname << "Int option" << ap->argstring << "maximum value" << ap->maxvalue << "is not an integer.";
-        ok = false;
+  if (args != nullptr) {
+    for (auto ap = args; ap->argstring; ap++) {
+      if (ap->argtype == ARGTYPE_INT) {
+        if (ap->defaultvalue &&
+            ! is_integer(ap->defaultvalue)) {
+          Warning() << name << "Int option" << ap->argstring << "default value" << ap->defaultvalue << "is not an integer.";
+          ok = false;
+        }
+        if (ap->minvalue &&
+            ! is_integer(ap->minvalue)) {
+          Warning() << name << "Int option" << ap->argstring << "minimum value" << ap->minvalue << "is not an integer.";
+          ok = false;
+        }
+        if (ap->maxvalue &&
+            ! is_integer(ap->maxvalue)) {
+          Warning() << name << "Int option" << ap->argstring << "maximum value" << ap->maxvalue << "is not an integer.";
+          ok = false;
+        }
       }
     }
   }

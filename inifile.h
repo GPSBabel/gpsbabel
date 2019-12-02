@@ -46,14 +46,14 @@ bool inifile_has_section(const inifile_t* inifile, const char* section);
        returns a null QString if not found, otherwise a non-null but possibly
        empty Qstring with the value of key ...
  */
-QString inifile_readstr(const inifile_t* inifile, const char* section, const char* key);
+QString inifile_readstr(const inifile_t* inifile, const QString& section, const QString& key);
 
 /*
      inifile_readint:
        on success the value is stored into "*value" and "inifile_readint" returns 1,
        otherwise inifile_readint returns 0
  */
-int inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value);
+int inifile_readint(const inifile_t* inifile, const QString& section, const QString& key, int* value);
 
 /*
      inifile_readint_def:

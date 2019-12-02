@@ -43,19 +43,21 @@
 #include "gbversion.h"
 #include "inifile.h"
 
+#include <QtCore/QByteArray>   // for QByteArray
 #include <QtCore/QString>      // for QString
 #include <QtCore/QStringList>  // for QStringList
 #include <QtCore/QVector>      // for QVector<>::iterator, QVector
 #include <QtCore/Qt>           // for CaseInsensitive
+#include <QtCore/QtGlobal>     // for qPrintable
 
 #include <algorithm>           // for sort
 #include <cstdio>              // for printf
-#include <cstring>             // for strchr
+
 
 struct fl_vecs_t {
   Filter* vec;
-  const char* name;
-  const char* desc;
+  QString name;
+  QString desc;
 };
 
 ArcDistanceFilter arcdist;
@@ -170,8 +172,7 @@ const QVector<fl_vecs_t> filter_vec_list = {
     &validate,
     "validate",
     "Validate internal data structures"
-  },
-
+  }
 #elif defined (MINIMAL_FILTERS)
   {
     &trackfilter,
@@ -182,18 +183,24 @@ const QVector<fl_vecs_t> filter_vec_list = {
 };
 
 Filter*
-find_filter_vec(const char* const vecname, const char** opts)
+find_filter_vec(const QString& vecname)
 {
-  const QString svecname = QString(vecname).split(',').at(0);
-  int found = 0;
+  QStringList options = vecname.split(',');
+  if (options.isEmpty()) {
+    fatal("A filter name is required.\n");
+  }
+  const QString svecname = options.takeFirst();
 
   for (const auto& vec : filter_vec_list) {
-    if (svecname.compare(vec.name, Qt::CaseInsensitive)) {
+    if (svecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
 
-    /* step 1: initialize by inifile or default values */
     arglist_t* args = vec.vec->get_args();
+
+    validate_options(options, args, vec.name);
+
+    /* step 1: initialize by inifile or default values */
     if (args) {
       for (auto ap = args; ap->argstring; ap++) {
         QString qtemp = inifile_readstr(global_opts.inifile, vec.name, ap->argstring);
@@ -209,25 +216,15 @@ find_filter_vec(const char* const vecname, const char** opts)
     }
 
     /* step 2: override settings with command-line values */
-    const char* res = strchr(vecname, ',');
-    if (res) {
-      *opts = res+1;
-
+    if (!options.isEmpty()) {
       if (args) {
         for (auto ap = args; ap->argstring; ap++) {
-          char* opt = get_option(*opts, ap->argstring);
-          if (opt) {
-            found = 1;
-            assign_option(vec.name, ap, opt);
-            xfree(opt);
+          const QString opt = get_option(options, ap->argstring);
+          if (!opt.isNull()) {
+            assign_option(vec.name, ap, CSTR(opt));
           }
         }
       }
-    } else {
-      *opts = nullptr;
-    }
-    if (opts && opts[0] && !found) {
-      warning("'%s' is an unknown option to %s.\n", *opts, vec.name);
     }
 
     if (global_opts.debug_level >= 1) {
@@ -246,7 +243,7 @@ free_filter_vec(Filter* filter)
   arglist_t* args = filter->get_args();
 
   if (args) {
-    for (arglist_t* ap = args; ap->argstring; ap++) {
+    for (auto ap = args; ap->argstring; ap++) {
       if (ap->argvalptr) {
         xfree(ap->argvalptr);
         ap->argvalptr = *ap->argval = nullptr;
@@ -261,7 +258,7 @@ init_filter_vecs()
   for (const auto& vec : filter_vec_list) {
     arglist_t* args = vec.vec->get_args();
     if (args) {
-      for (arglist_t* ap = args; ap->argstring; ap++) {
+      for (auto ap = args; ap->argstring; ap++) {
         ap->argvalptr = nullptr;
       }
     }
@@ -285,9 +282,9 @@ disp_filter_vecs()
 {
   for (const auto& vec : filter_vec_list) {
     printf("	%-20.20s  %-50.50s\n",
-           vec.name, vec.desc);
+           qPrintable(vec.name), qPrintable(vec.desc));
     arglist_t* args = vec.vec->get_args();
-    for (arglist_t* ap = args; ap && ap->argstring; ap++) {
+    for (auto ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -297,16 +294,16 @@ disp_filter_vecs()
 }
 
 void
-disp_filter_vec(const char* vecname)
+disp_filter_vec(const QString& vecname)
 {
   for (const auto& vec : filter_vec_list) {
-    if (case_ignore_strcmp(vec.name, vecname)) {
+    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
     printf("	%-20.20s  %-50.50s\n",
-           vec.name, vec.desc);
+           qPrintable(vec.name), qPrintable(vec.desc));
     arglist_t* args = vec.vec->get_args();
-    for (arglist_t* ap = args; ap && ap->argstring; ap++) {
+    for (auto ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -316,11 +313,11 @@ disp_filter_vec(const char* vecname)
 }
 
 static
-void disp_help_url(const fl_vecs_t& vec, arglist_t* arg)
+void disp_help_url(const fl_vecs_t& vec, const arglist_t* arg)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec.name);
+  printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
   if (arg) {
-    printf("#fmt_%s_o_%s",vec.name, arg->argstring);
+    printf("#fmt_%s_o_%s", CSTR(vec.name), arg->argstring);
   }
 }
 
@@ -330,10 +327,10 @@ disp_v1(const fl_vecs_t& vec)
   disp_help_url(vec, nullptr);
   printf("\n");
   arglist_t* args = vec.vec->get_args();
-  for (arglist_t* ap = args; ap && ap->argstring; ap++) {
+  for (auto ap = args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-             vec.name,
+             CSTR(vec.name),
              ap->argstring,
              ap->helpstring,
              name_option(ap->argtype),
@@ -357,7 +354,7 @@ disp_filters(int version)
   auto sorted_filter_vec_list = filter_vec_list;
 
   auto alpha = [](const fl_vecs_t& a, const fl_vecs_t& b)->bool {
-    return case_ignore_strcmp(a.desc, b.desc) < 0;
+    return QString::compare(a.desc, b.desc, Qt::CaseInsensitive) < 0;
   };
 
   std::sort(sorted_filter_vec_list.begin(), sorted_filter_vec_list.end(), alpha);
@@ -367,9 +364,9 @@ disp_filters(int version)
   case 1:
     for (const auto& vec : sorted_filter_vec_list) {
       if (version == 0) {
-        printf("%s\t%s\n", vec.name, vec.desc);
+        printf("%s\t%s\n", CSTR(vec.name), CSTR(vec.desc));
       } else {
-        printf("%s\t%s", vec.name, vec.desc);
+        printf("%s\t%s", CSTR(vec.name), CSTR(vec.desc));
         disp_v1(vec);
       }
     }

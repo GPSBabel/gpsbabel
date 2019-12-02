@@ -158,7 +158,7 @@ usage(const char* pname, int shorter)
 }
 
 static void
-spec_usage(const char* vec)
+spec_usage(const QString& vec)
 {
   printf("\n");
   disp_vec(vec);
@@ -206,9 +206,6 @@ run(const char* prog_name)
   Filter* filter = nullptr;
   QString fname;
   QString ofname;
-  const char* ivec_opts = nullptr;
-  const char* ovec_opts = nullptr;
-  const char* fvec_opts = nullptr;
   int opt_version = 0;
   bool did_something = false;
   WaypointList* wpt_head_bak;
@@ -251,7 +248,7 @@ run(const char* prog_name)
 
     if (qargs.at(argn).size() > 1 && (qargs.at(argn).at(1).toLatin1() == '?' || qargs.at(argn).at(1).toLatin1() == 'h')) {
       if (argn < qargs.size()-1) {
-        spec_usage(qPrintable(qargs.at(argn+1)));
+        spec_usage(qargs.at(argn+1));
       } else {
         usage(prog_name,0);
       }
@@ -267,7 +264,7 @@ run(const char* prog_name)
     switch (c) {
     case 'i':
       optarg = FETCH_OPTARG;
-      ivecs = find_vec(CSTR(optarg), &ivec_opts);
+      ivecs = find_vec(optarg);
       if (ivecs == nullptr) {
         fatal("Input type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -277,7 +274,7 @@ run(const char* prog_name)
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       optarg = FETCH_OPTARG;
-      ovecs = find_vec(CSTR(optarg), &ovec_opts);
+      ovecs = find_vec(optarg);
       if (ovecs == nullptr) {
         fatal("Output type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -407,7 +404,7 @@ run(const char* prog_name)
       break;
     case 'x':
       optarg = FETCH_OPTARG;
-      filter = find_filter_vec(CSTR(optarg), &fvec_opts);
+      filter = find_filter_vec(optarg);
 
       if (filter) {
         filter->init();

@@ -216,7 +216,7 @@ inifile_has_section(const inifile_t* inifile, const char* section)
  */
 
 QString
-inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
+inifile_readstr(const inifile_t* inifile, const QString& section, const QString& key)
 {
   return inifile_find_value(inifile, section, key);
 }
@@ -228,7 +228,7 @@ inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
  */
 
 int
-inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value)
+inifile_readint(const inifile_t* inifile, const QString& section, const QString& key, int* value)
 {
   const QString str = inifile_find_value(inifile, section, key);
 

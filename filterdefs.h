@@ -47,10 +47,10 @@ struct filter_vecs_t {
   arglist_t* args;
 };
 
-Filter* find_filter_vec(const char* const, const char**);
+Filter* find_filter_vec(const QString&);
 void free_filter_vec(Filter*);
 void disp_filters(int version);
-void disp_filter_vec(const char* vecname);
+void disp_filter_vec(const QString& vecname);
 void disp_filter_vecs();
 void init_filter_vecs();
 void exit_filter_vecs();
