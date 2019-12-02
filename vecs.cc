@@ -1229,16 +1229,18 @@ assign_option(const QString& module, arglist_t* ap, const char* val)
 }
 
 void
-disp_vec_options(const QString& vecname, const arglist_t* ap)
+disp_vec_options(const QString& vecname, const arglist_t* args)
 {
-  for (; ap && ap->argstring; ap++) {
-    if (*ap->argval && ap->argval) {
-      printf("options: module/option=value: %s/%s=\"%s\"",
-             qPrintable(vecname), ap->argstring, *ap->argval);
-      if (ap->defaultvalue && (case_ignore_strcmp(ap->defaultvalue, *ap->argval) == 0)) {
-        printf(" (=default)");
+  if (args) {
+    for (auto ap = args; ap->argstring; ap++) {
+      if (*ap->argval && ap->argval) {
+        printf("options: module/option=value: %s/%s=\"%s\"",
+               qPrintable(vecname), ap->argstring, *ap->argval);
+        if (ap->defaultvalue && (case_ignore_strcmp(ap->defaultvalue, *ap->argval) == 0)) {
+          printf(" (=default)");
+        }
+        printf("\n");
       }
-      printf("\n");
     }
   }
 }
@@ -1248,10 +1250,12 @@ void validate_options(const QStringList& options, const arglist_t* args, const Q
   for (const auto& option : options) {
     const QString option_name = option.left(option.indexOf('='));
     bool valid = false;
-    for (auto ap = args; ap && ap->argstring; ap++) {
-      if (option_name.compare(ap->argstring, Qt::CaseInsensitive) == 0) {
-        valid = true;
-        break;
+    if (args) {
+      for (auto ap = args; ap->argstring; ap++) {
+        if (option_name.compare(ap->argstring, Qt::CaseInsensitive) == 0) {
+          valid = true;
+          break;
+        }
       }
     }
     if (!valid) {
@@ -1471,14 +1475,16 @@ disp_vecs()
       continue;
     }
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
-      if (!(ap->argtype & ARGTYPE_HIDDEN))
-        printf("	  %-18.18s    %s%-.50s %s\n",
-               ap->argstring,
-               (ap->argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               ap->helpstring,
-               (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+    if (vec.vec->args) {
+      for (auto ap = vec.vec->args; ap->argstring; ap++) {
+        if (!(ap->argtype & ARGTYPE_HIDDEN))
+          printf("	  %-18.18s    %s%-.50s %s\n",
+                 ap->argstring,
+                 (ap->argtype & ARGTYPE_TYPEMASK) ==
+                 ARGTYPE_BOOL ? "(0/1) " : "",
+                 ap->helpstring,
+                 (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+      }
     }
   }
 }
@@ -1493,14 +1499,16 @@ disp_vec(const QString& vecname)
     }
 
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
-      if (!(ap->argtype & ARGTYPE_HIDDEN))
-        printf("	  %-18.18s    %s%-.50s %s\n",
-               ap->argstring,
-               (ap->argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               ap->helpstring,
-               (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+    if (vec.vec->args) {
+      for (auto ap = vec.vec->args; ap->argstring; ap++) {
+        if (!(ap->argtype & ARGTYPE_HIDDEN))
+          printf("	  %-18.18s    %s%-.50s %s\n",
+                 ap->argstring,
+                 (ap->argtype & ARGTYPE_TYPEMASK) ==
+                 ARGTYPE_BOOL ? "(0/1) " : "",
+                 ap->helpstring,
+                 (ap->argtype & ARGTYPE_REQUIRED)?"(required)":"");
+      }
     }
   }
 }
@@ -1575,19 +1583,21 @@ static void
 disp_v3(const vecs_t& vec)
 {
   disp_help_url(vec, nullptr);
-  for (auto ap = vec.vec->args; ap && ap->argstring; ap++) {
-    if (!(ap->argtype & ARGTYPE_HIDDEN)) {
-      printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-             CSTR(vec.name),
-             ap->argstring,
-             ap->helpstring,
-             name_option(ap->argtype),
-             ap->defaultvalue? ap->defaultvalue : "",
-             ap->minvalue? ap->minvalue : "",
-             ap->maxvalue? ap->maxvalue : "");
+  if (vec.vec->args) {
+    for (auto ap = vec.vec->args; ap->argstring; ap++) {
+      if (!(ap->argtype & ARGTYPE_HIDDEN)) {
+        printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+               CSTR(vec.name),
+               ap->argstring,
+               ap->helpstring,
+               name_option(ap->argtype),
+               ap->defaultvalue? ap->defaultvalue : "",
+               ap->minvalue? ap->minvalue : "",
+               ap->maxvalue? ap->maxvalue : "");
+      }
+      disp_help_url(vec, ap);
+      printf("\n");
     }
-    disp_help_url(vec, ap);
-    printf("\n");
   }
 }
 
