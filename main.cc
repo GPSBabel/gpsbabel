@@ -65,14 +65,11 @@ public:
   QStringList qargs;
 
 public:
-  QargStackElement()
-    = default;
+  QargStackElement() = default;
 
-  QargStackElement(int p_argn, const QStringList& p_qargs)
-  {
-    argn = p_argn;
-    qargs = p_qargs;
-  }
+  QargStackElement(int p_argn, const QStringList& p_qargs) :
+    argn{p_argn}, qargs{p_qargs}
+  {}
 };
 
 static QStringList
@@ -203,7 +200,6 @@ signal_handler(int sig)
 static int
 run(const char* prog_name)
 {
-  int c;
   int argn;
   ff_vecs_t* ivecs = nullptr;
   ff_vecs_t* ovecs = nullptr;
@@ -262,7 +258,7 @@ run(const char* prog_name)
       return 0;
     }
 
-    c = qargs.at(argn).size() > 1 ? qargs.at(argn).at(1).toLatin1() : '\0';
+    int c = qargs.at(argn).size() > 1 ? qargs.at(argn).at(1).toLatin1() : '\0';
 
     if (qargs.at(argn).size() > 2) {
       opt_version = qargs.at(argn).at(2).digitValue();
@@ -453,8 +449,11 @@ run(const char* prog_name)
     /*
      * Undocumented '-@' option for test.
      */
-    case '@':
-      return validate_formats();
+    case '@': {
+      bool format_ok = validate_formats();
+      bool filter_ok = validate_filters();
+      return (format_ok && filter_ok)? 0 : 1;
+    }
 
     /*
      * Undocumented '-vs' option for GUI wrappers.

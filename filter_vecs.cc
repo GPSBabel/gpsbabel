@@ -43,7 +43,6 @@
 #include "gbversion.h"
 #include "inifile.h"
 
-#include <QtCore/QList>        // for QList
 #include <QtCore/QString>      // for QString
 #include <QtCore/QStringList>  // for QStringList
 #include <QtCore/QVector>      // for QVector<>::iterator, QVector
@@ -316,12 +315,6 @@ disp_filter_vec(const char* vecname)
   }
 }
 
-static bool
-alpha(const fl_vecs_t& a, const fl_vecs_t& b)
-{
-  return case_ignore_strcmp(a.desc, b.desc) < 0;
-}
-
 static
 void disp_help_url(const fl_vecs_t& vec, arglist_t* arg)
 {
@@ -362,6 +355,11 @@ void
 disp_filters(int version)
 {
   auto sorted_filter_vec_list = filter_vec_list;
+
+  auto alpha = [](const fl_vecs_t& a, const fl_vecs_t& b)->bool {
+    return case_ignore_strcmp(a.desc, b.desc) < 0;
+  };
+
   std::sort(sorted_filter_vec_list.begin(), sorted_filter_vec_list.end(), alpha);
 
   switch (version) {
@@ -379,4 +377,23 @@ disp_filters(int version)
   default:
     ;
   }
+}
+
+static bool
+validate_filter_vec(const fl_vecs_t& vec)
+{
+  bool ok = validate_args(vec.name, vec.vec->get_args());
+
+  return ok;
+}
+
+bool validate_filters()
+{
+  bool ok = true;
+
+  for (const auto& vec : filter_vec_list) {
+    ok = validate_filter_vec(vec) && ok;
+  }
+
+  return ok;
 }
