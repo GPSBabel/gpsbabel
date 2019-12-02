@@ -785,8 +785,7 @@ mag_rd_init_common(const QString& portname)
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      const char* vec_opts = nullptr;
-      gpx_vec = find_vec("gpx", &vec_opts);
+      gpx_vec = find_vec("gpx");
     }
     return;
   }

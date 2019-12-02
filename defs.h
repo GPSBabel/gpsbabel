@@ -920,7 +920,7 @@ using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
 
-char* get_option(const char* iarglist, const char* argname);
+QString get_option(const QStringList& options, const char* argname);
 
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
@@ -983,8 +983,8 @@ void setshort_is_utf8(short_handle h, int is_utf8);
 #define ARGTYPE_TYPEMASK 0x00000fffU
 #define ARGTYPE_FLAGMASK 0xfffff000U
 
-#define ARG_NOMINMAX NULL, NULL
-#define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX, NULL}
+#define ARG_NOMINMAX nullptr, nullptr
+#define ARG_TERMINATOR {nullptr, nullptr, nullptr, nullptr, 0, ARG_NOMINMAX, nullptr}
 
 struct arglist_t {
   const char* argstring;
@@ -1050,10 +1050,10 @@ struct ff_vecs_t {
   ff_write write;
   ff_exit exit;
   arglist_t* args;
-  const char* encode;
+  QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  const char* name;		/* dyn. initialized by find_vec */
+  QString name;		/* dyn. initialized by find_vec */
 };
 
 struct style_vecs_t {
@@ -1067,12 +1067,14 @@ void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const char*, const char**);
-void assign_option(const char* vecname, arglist_t* ap, const char* val);
-void disp_vec_options(const char* vecname, arglist_t* ap);
+ff_vecs_t* find_vec(const QString&);
+void assign_option(const QString& vecname, arglist_t* ap, const char* val);
+void disp_vec_options(const QString& vecname, const arglist_t* ap);
 void disp_vecs();
-void disp_vec(const char* vecname);
-int validate_formats();
+void disp_vec(const QString& vecname);
+void validate_options(const QStringList& options, const arglist_t* args, const QString& name);
+bool validate_args(const QString& name, const arglist_t* args);
+bool validate_formats();
 void init_vecs();
 void exit_vecs();
 void disp_formats(int version);
