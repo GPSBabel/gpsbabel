@@ -692,7 +692,7 @@ lowranceusr4_find_index_from_icon_desc_and_color_desc(const QString& icon, const
 // Combined arguments from previous lowranceusr and lowranceusr4 into single set.
 // Use output format specified to determine if args are ignored.
 static
-arglist_t lowranceusr_args[] = {
+QVector<arglist_t> lowranceusr_args = {
   {
     // Ignore Event Marker ICONs in input data
     "ignoreicons", &opt_ignoreicons, "(USR input) Ignore event marker icons on read",
@@ -732,7 +732,6 @@ arglist_t lowranceusr_args[] = {
     "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
 
-  ARG_TERMINATOR
 };
 
 static void
@@ -2457,7 +2456,7 @@ ff_vecs_t lowranceusr_vecs = {
   data_read,
   data_write,
   nullptr,
-  lowranceusr_args,
+  &lowranceusr_args,
   CET_CHARSET_ASCII, 0   /* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

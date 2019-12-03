@@ -65,9 +65,8 @@ static char* opt_location;
 #define MYNAME "raymarine"
 
 static
-arglist_t raymarine_args[] = {
+QVector<arglist_t> raymarine_args = {
   { "location", &opt_location, "Default location", "My Waypoints", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
-  ARG_TERMINATOR
 };
 
 /* from csv_util.c: convert excel time (days since 1900) to time_t and back again */
@@ -508,7 +507,7 @@ ff_vecs_t raymarine_vecs = {
   raymarine_read,
   raymarine_write,
   nullptr,
-  raymarine_args,
+  &raymarine_args,
   CET_CHARSET_ASCII, 0	/* should we force this to 1 ? */
   , NULL_POS_OPS,
   nullptr

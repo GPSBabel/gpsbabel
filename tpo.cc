@@ -98,12 +98,11 @@ static char* output_state = nullptr;
 
 #ifdef ENABLE_TPO_WRITE
 static
-arglist_t tpo2_args[] = {
+QVector<arglist_t> tpo2_args = {
 	{ "dumpheader", &dumpheader, "Display the file header bytes",
 		"0", ARGTYPE_BOOL, ARG_NOMINMAX} ,
 	{ "state", &output_state, "State map format to write, default=CA",
 	  "CA", ARGTYPE_STRING, ARG_NOMINMAX} ,
-	ARG_TERMINATOR
 };
 #else
 //
@@ -114,14 +113,12 @@ arglist_t tpo2_args[] = {
 // above.
 //
 static
-arglist_t tpo2_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> tpo2_args = {
 };
 #endif
 
 static
-arglist_t tpo3_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> tpo3_args = {
 };
 
 
@@ -1834,7 +1831,7 @@ ff_vecs_t tpo2_vecs = {
   nullptr,
 #endif
   nullptr,
-  tpo2_args,
+  &tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr
@@ -1851,7 +1848,7 @@ ff_vecs_t tpo3_vecs = {
   tpo_read,
   nullptr,
   nullptr,
-  tpo3_args,
+  &tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

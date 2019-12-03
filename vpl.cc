@@ -114,8 +114,7 @@ C - Checksum
 static void vpl_parse_75_sentence(const char*);
 
 static
-arglist_t vpl_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> vpl_args = {
 };
 
 static gbfile* vpl_file_in;
@@ -222,7 +221,7 @@ ff_vecs_t vpl_vecs = {
   vpl_read,
   nullptr,
   nullptr,
-  vpl_args,
+  &vpl_args,
   CET_CHARSET_ASCII, /* ascii is the expected character set */
   1	               /* fixed, can't be changed through command line parameter */
   , NULL_POS_OPS,

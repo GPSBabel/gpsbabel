@@ -32,7 +32,7 @@
 
 static char* opt_points, *opt_seed, *opt_nodelay;
 
-static arglist_t random_args[] = {
+static QVector<arglist_t> random_args = {
   {
     "points", &opt_points, "Generate # points", nullptr,
     ARGTYPE_INT, "1", nullptr, nullptr
@@ -45,7 +45,6 @@ static arglist_t random_args[] = {
     "nodelay", &opt_nodelay, "Output realtime points without delay", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 //  this generator is invariant across platforms.
@@ -348,7 +347,7 @@ ff_vecs_t random_vecs = {
   random_read,
   nullptr,	/* write */
   nullptr,	/* exit */
-  random_args,
+  &random_args,
   CET_CHARSET_ASCII, 1,			/* fixed */
   {
   random_rd_posn_init, random_rd_posn, random_rd_posn_deinit,

@@ -35,8 +35,7 @@ static route_head* trk_head;
 #define MYNAME "hiketech"
 
 static
-arglist_t hiketech_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> hiketech_args = {
 };
 
 /* Waypoints */
@@ -312,7 +311,7 @@ ff_vecs_t hiketech_vecs = {
   hiketech_read,
   hiketech_write,
   nullptr,
-  hiketech_args,
+  &hiketech_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

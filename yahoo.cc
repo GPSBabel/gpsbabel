@@ -29,13 +29,12 @@ static char* as;
 #define MYNAME "yahoo"
 
 static
-arglist_t yahoo_args[] = {
+QVector<arglist_t> yahoo_args = {
   {
     "addrsep", &as,
     "String to separate concatenated address fields (default=\", \")",
     ", ", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
@@ -111,7 +110,7 @@ ff_vecs_t yahoo_vecs = {
   yahoo_read,
   nullptr,
   nullptr,
-  yahoo_args,
+  &yahoo_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -61,8 +61,7 @@ static const route_head* trk_tmp;
 static int course_tmp, speed_tmp;
 
 static
-arglist_t tr7_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> tr7_args = {
 };
 
 /*******************************************************************************
@@ -300,7 +299,7 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   tr7_read,
   tr7_write,
   nullptr,
-  tr7_args,
+  &tr7_args,
   CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
   , NULL_POS_OPS,
   nullptr

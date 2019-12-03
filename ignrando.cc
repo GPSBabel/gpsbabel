@@ -38,9 +38,8 @@ static int xmlpoints;
 /* options */
 static char* index_opt = nullptr;
 
-static arglist_t ignr_args[] = {
+static QVector<arglist_t> ignr_args = {
   {"index", &index_opt, "Index of track to write (if more than one in source)", nullptr, ARGTYPE_INT, "1", nullptr , nullptr},
-  ARG_TERMINATOR
 };
 
 
@@ -254,7 +253,7 @@ ff_vecs_t ignr_vecs = {
   ignr_read,
   ignr_write,
   nullptr,
-  ignr_args,
+  &ignr_args,
   CET_CHARSET_MS_ANSI, 1
   , NULL_POS_OPS,
   nullptr

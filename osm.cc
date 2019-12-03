@@ -28,11 +28,10 @@
 
 static char* opt_tag, *opt_tagnd, *created_by;
 
-static arglist_t osm_args[] = {
+static QVector<arglist_t> osm_args = {
   { "tag", &opt_tag, 	"Write additional way tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  ARG_TERMINATOR
 };
 
 #define MYNAME "osm"
@@ -978,7 +977,7 @@ ff_vecs_t osm_vecs = {
   osm_read,
   osm_write,
   osm_exit,
-  osm_args,
+  &osm_args,
   CET_CHARSET_UTF8, 0
   , NULL_POS_OPS,
   nullptr};

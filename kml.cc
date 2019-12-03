@@ -124,7 +124,7 @@ static const char kmt_power[] = "power";
 
 
 static
-arglist_t kml_args[] = {
+QVector<arglist_t> kml_args = {
   {"deficon", &opt_deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "lines", &opt_export_lines,
@@ -196,7 +196,6 @@ arglist_t kml_args[] = {
     "Precision of coordinates, number of decimals",
     DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static
@@ -2224,7 +2223,7 @@ ff_vecs_t kml_vecs = {
   kml_read,
   kml_write,
   nullptr,
-  kml_args,
+  &kml_args,
   CET_CHARSET_UTF8, 1,	/* CET-REVIEW */
   { nullptr, nullptr, nullptr, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit },
   nullptr

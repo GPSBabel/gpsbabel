@@ -73,12 +73,11 @@ static char* optclean= nullptr;
 static double minspeed,maxspeed;
 static struct tm opt_tm;	/* converted "date" parameter */
 static
-arglist_t gopal_args[] = {
+QVector<arglist_t> gopal_args = {
   {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
   {"maxspeed", &optmaxspeed, "The maximum speed (km/h) traveling from waypoint to waypoint.", "200", ARGTYPE_INT, "1", "1000", nullptr },
   {"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999", nullptr },
   {"clean", &optclean, "Cleanup common errors in trackdata", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  ARG_TERMINATOR
 };
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
@@ -414,7 +413,7 @@ ff_vecs_t gopal_vecs = {
   gopal_read,
   gopal_write,
   gopal_exit,
-  gopal_args,
+  &gopal_args,
   CET_CHARSET_ASCII, 0	/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

@@ -27,8 +27,7 @@ static gpsbabel::File* oqfile;
 static QXmlStreamWriter* writer;
 
 static
-arglist_t mapfactor_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> mapfactor_args = {
 };
 
 #define MYNAME "mapfactor"
@@ -156,7 +155,7 @@ ff_vecs_t mapfactor_vecs = {
   mapfactor_read,
   mapfactor_write,
   nullptr,
-  mapfactor_args,
+  &mapfactor_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

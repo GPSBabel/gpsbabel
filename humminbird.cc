@@ -198,8 +198,7 @@ static int rte_num;
 static QMap<QString, Waypoint*> map;
 
 static
-arglist_t humminbird_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> humminbird_args = {
 };
 
 /* Takes a latitude in degrees,
@@ -951,7 +950,7 @@ ff_vecs_t humminbird_vecs = {
   humminbird_read,
   humminbird_write,
   nullptr, // humminbird_exit,
-  humminbird_args,
+  &humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */
   , NULL_POS_OPS,
@@ -976,7 +975,7 @@ ff_vecs_t humminbird_ht_vecs = {
   humminbird_read,
   humminbird_track_write,
   nullptr, // humminbird_exit,
-  humminbird_args,
+  &humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */
   , NULL_POS_OPS,

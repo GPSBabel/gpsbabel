@@ -56,7 +56,7 @@ struct roadchange {
 static roadchange* roadchanges = nullptr;
 
 static
-arglist_t an1_args[] = {
+QVector<arglist_t> an1_args = {
   {
     "type", &output_type, "Type of .an1 file",
     "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -94,7 +94,6 @@ arglist_t an1_args[] = {
     "radius", &opt_radius, "Radius for circles",
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 struct guid_t {
@@ -1213,7 +1212,7 @@ ff_vecs_t an1_vecs = {
   my_read,
   my_write,
   nullptr,
-  an1_args,
+  &an1_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

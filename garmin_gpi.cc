@@ -88,7 +88,7 @@ static char* opt_writecodec;
 static double defspeed, defproximity;
 static int alerts;
 
-static arglist_t garmin_gpi_args[] = {
+static QVector<arglist_t> garmin_gpi_args = {
   {
     "alerts", &opt_alerts, "Enable alerts on speed or proximity distance",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -145,7 +145,6 @@ static arglist_t garmin_gpi_args[] = {
     "languagecode", &opt_lang, "language code to use for reading dual language files",
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 struct reader_data_t {
@@ -1636,7 +1635,7 @@ ff_vecs_t garmin_gpi_vecs = {
   garmin_gpi_read,
   garmin_gpi_write,
   nullptr,
-  garmin_gpi_args,
+  &garmin_gpi_args,
   CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
   , NULL_POS_OPS,
   nullptr

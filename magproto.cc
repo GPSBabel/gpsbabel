@@ -684,7 +684,7 @@ static void termdeinit()
  *  Arg tables are doubled up so that -? can output appropriate help
  */
 static
-arglist_t mag_sargs[] = {
+QVector<arglist_t> mag_sargs = {
   {
     "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
@@ -705,11 +705,10 @@ arglist_t mag_sargs[] = {
     "nukewpt", &nukewpt, "Delete all waypoints", nullptr, ARGTYPE_BOOL,
     ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static
-arglist_t mag_fargs[] = {
+QVector<arglist_t> mag_fargs = {
   {
     "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
@@ -718,7 +717,6 @@ arglist_t mag_fargs[] = {
     "maxcmts", &cmts, "Max number of comments to write (maxcmts=200)",
     nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /*
@@ -1606,7 +1604,7 @@ ff_vecs_t mag_svecs = {
   mag_read,
   mag_write,
   nullptr,
-  mag_sargs,
+  &mag_sargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr,
@@ -1622,7 +1620,7 @@ ff_vecs_t mag_fvecs = {
   mag_read,
   mag_write,
   nullptr,
-  mag_fargs,
+  &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr,
@@ -1641,7 +1639,7 @@ ff_vecs_t magX_fvecs = {
   mag_read,
   mag_write,
   nullptr,
-  mag_fargs,
+  &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr,

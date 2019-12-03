@@ -73,7 +73,7 @@ static char* opt_gps_utc_offset = nullptr;
 static char* opt_gps_week_rollover = nullptr;
 
 static
-arglist_t skytraq_args[] = {
+QVector<arglist_t> skytraq_args = {
   {
     "erase", &opt_erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -122,11 +122,10 @@ arglist_t skytraq_args[] = {
     "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
     "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR,
 };
 
 static
-arglist_t skytraq_fargs[] = {
+QVector<arglist_t> skytraq_fargs = {
   {
     "first-sector", &opt_first_sector, "First sector to be read from the file",
     "0", ARGTYPE_INT, "0", "65535", nullptr
@@ -143,7 +142,6 @@ arglist_t skytraq_fargs[] = {
     "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
     "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void
@@ -1437,7 +1435,7 @@ ff_vecs_t skytraq_vecs = {
   skytraq_read,
   nullptr,
   nullptr,
-  skytraq_args,
+  &skytraq_args,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
  , NULL_POS_OPS,
  nullptr
@@ -1457,7 +1455,7 @@ ff_vecs_t skytraq_fvecs = {
   file_read,
   nullptr,
   nullptr,
-  skytraq_fargs,
+  &skytraq_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
  , NULL_POS_OPS,
  nullptr
@@ -1477,7 +1475,7 @@ static char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
-static arglist_t miniHomer_args[] = {
+static QVector<arglist_t> miniHomer_args = {
   { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
   { "dump-file",    &opt_dump_file,     "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
   { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
@@ -1499,7 +1497,6 @@ static arglist_t miniHomer_args[] = {
     "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
     "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 /*
  * Names of the POIs on miniHomer
@@ -1690,7 +1687,7 @@ ff_vecs_t miniHomer_vecs = {
   miniHomer_read,
   nullptr,
   nullptr,
-  miniHomer_args,
+  &miniHomer_args,
   CET_CHARSET_UTF8, 1,         /* master process: don't convert anything */
   NULL_POS_OPS,
   nullptr

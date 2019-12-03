@@ -38,7 +38,7 @@ static char* altunits = nullptr;
 #define MYNAME "HTML"
 
 static
-arglist_t html_args[] = {
+QVector<arglist_t> html_args = {
   {
     "stylesheet", &stylesheet,
     "Path to HTML style sheet", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -59,7 +59,6 @@ arglist_t html_args[] = {
     "altunits", &altunits,
     "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -290,7 +289,7 @@ ff_vecs_t html_vecs = {
   nullptr,
   data_write,
   nullptr,
-  html_args,
+  &html_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

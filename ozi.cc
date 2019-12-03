@@ -99,7 +99,7 @@ static double prox_scale;
 static char* opt_codec;
 
 static
-arglist_t ozi_args[] = {
+QVector<arglist_t> ozi_args = {
   {
     "pack", &pack_opt, "Write all tracks into one file",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -144,7 +144,6 @@ arglist_t ozi_args[] = {
     "codec", &opt_codec, "codec to use for reading and writing strings (default windows-1252)",
     "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static gpsdata_type ozi_objective;
@@ -985,7 +984,7 @@ ff_vecs_t ozi_vecs = {
   data_read,
   data_write,
   nullptr,
-  ozi_args,
+  &ozi_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

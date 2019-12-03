@@ -30,8 +30,7 @@ static QString ofname;
 static short_handle mkshort_handle = nullptr;
 
 static
-arglist_t bushnell_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> bushnell_args = {
 };
 
 // Apparently, the icons are undocumented, so we made up names,
@@ -260,7 +259,7 @@ ff_vecs_t bushnell_vecs = {
   bushnell_read,
   bushnell_write,
   nullptr,
-  bushnell_args,
+  &bushnell_args,
   CET_CHARSET_MS_ANSI, 0,  /* Not really sure... */
   NULL_POS_OPS,
   nullptr

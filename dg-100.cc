@@ -659,7 +659,7 @@ static char* erase;
 static char* erase_only;
 
 static
-arglist_t dg100_args[] = {
+QVector<arglist_t> dg100_args = {
   {
     "erase", &erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -668,7 +668,6 @@ arglist_t dg100_args[] = {
     "erase_only", &erase_only, "Only erase device data, do not download anything",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /*******************************************************************************
@@ -743,7 +742,7 @@ ff_vecs_t dg100_vecs = {
   dg100_read,
   nullptr,
   nullptr,
-  dg100_args,
+  &dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,
@@ -764,7 +763,7 @@ ff_vecs_t dg200_vecs = {
   dg100_read,
   nullptr,
   nullptr,
-  dg100_args,
+  &dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

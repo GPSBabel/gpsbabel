@@ -56,12 +56,11 @@ static gbfile* dumpfile = nullptr;             // used for creating bin/RAW data
 static gbfile* in_file = nullptr;              // used for reading from bin/RAW datadump files, useful for testing
 
 static
-arglist_t globalsat_args[] = {
+QVector<arglist_t> globalsat_args = {
   {"showlist", &showlist, "list tracks", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
   {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   {"dump-file", &opt_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
   {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
-  ARG_TERMINATOR
 };
 
 enum globalsat_commands_e {
@@ -823,7 +822,7 @@ ff_vecs_t globalsat_sport_vecs = {
   data_read,					// read
   nullptr,						// write
   nullptr,						// exit
-  globalsat_args,			// args
+  &globalsat_args,			// args
   CET_CHARSET_ASCII,	// encode
   0,									// fixed_encode
   NULL_POS_OPS,				// position_ops

@@ -36,12 +36,11 @@ static route_head* route = nullptr;
 
 static char* routevia = nullptr;
 
-static arglist_t tef_xml_args[] = {
+static QVector<arglist_t> tef_xml_args = {
   {
     "routevia", &routevia, "Include only via stations in route",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 #define MYNAME "TourExchangeFormat"
@@ -328,7 +327,7 @@ ff_vecs_t tef_xml_vecs = {
   tef_xml_read,
   nullptr,
   nullptr,
-  tef_xml_args,
+  &tef_xml_args,
   CET_CHARSET_UTF8, 1
   , NULL_POS_OPS,
   nullptr

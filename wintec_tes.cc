@@ -93,8 +93,7 @@ wintec_tes_read()
 }
 
 static
-arglist_t wintec_tes_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> wintec_tes_args = {
 };
 
 ff_vecs_t wintec_tes_vecs = {
@@ -111,7 +110,7 @@ ff_vecs_t wintec_tes_vecs = {
   wintec_tes_read,
   nullptr,
   nullptr,
-  wintec_tes_args,
+  &wintec_tes_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

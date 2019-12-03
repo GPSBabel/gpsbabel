@@ -65,10 +65,9 @@ static char psit_current_token[256];
 static char* snlen;
 
 static
-arglist_t psit_args[] = {
+QVector<arglist_t> psit_args = {
   /*	{"snlen", &snlen, "Length of generated shortnames",
    	NULL, ARGTYPE_INT, "1", NULL }, */
-  ARG_TERMINATOR
 };
 
 /* Taken from PsiTrex 1.13 */
@@ -781,7 +780,7 @@ ff_vecs_t psit_vecs = {
   psit_read,
   psit_write,
   nullptr,
-  psit_args,
+  &psit_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

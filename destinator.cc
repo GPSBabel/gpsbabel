@@ -34,8 +34,7 @@
 #define DST_ITINERARY 	"City->Street"
 
 static
-arglist_t destinator_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> destinator_args = {
 };
 
 static gbfile* fin, *fout;
@@ -545,7 +544,7 @@ ff_vecs_t destinator_poi_vecs = {
   destinator_read_poi_wrapper,
   destinator_write_poi,
   nullptr,
-  destinator_args,
+  &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,
   nullptr};
@@ -564,7 +563,7 @@ ff_vecs_t destinator_itn_vecs = {
   destinator_read_rte_wrapper,
   destinator_write_rte,
   nullptr,
-  destinator_args,
+  &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,
   nullptr};
@@ -583,7 +582,7 @@ ff_vecs_t destinator_trl_vecs = {
   destinator_read_trk_wrapper,
   destinator_write_trk,
   nullptr,
-  destinator_args,
+  &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,
   nullptr };

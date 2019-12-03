@@ -25,8 +25,7 @@
 #define MYNAME "gnav_trl"
 
 static
-arglist_t gnav_trl_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> gnav_trl_args = {
 };
 
 struct gnav_trl_t {
@@ -151,7 +150,7 @@ ff_vecs_t gnav_trl_vecs = {
   gnav_trl_read,
   gnav_trl_write,
   nullptr,
-  gnav_trl_args,
+  &gnav_trl_args,
   CET_CHARSET_UTF8, 1	/* CET - do nothing ! */
   , NULL_POS_OPS,
   nullptr

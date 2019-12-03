@@ -28,8 +28,7 @@
 static gbfile* file_handle = nullptr;
 
 static
-arglist_t sbp_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> sbp_args = {
 };
 
 /*******************************************************************************
@@ -130,7 +129,7 @@ ff_vecs_t sbp_vecs = {
   sbp_read,
   nullptr,
   sbp_exit,
-  sbp_args,
+  &sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

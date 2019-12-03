@@ -215,7 +215,7 @@ static int had_checksum;
 static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const QString& fname);
 
-static arglist_t nmea_args[] = {
+static QVector<arglist_t> nmea_args = {
   {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
   {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
@@ -231,7 +231,6 @@ static arglist_t nmea_args[] = {
   {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
   {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
   {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
-  ARG_TERMINATOR
 };
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
@@ -1419,7 +1418,7 @@ ff_vecs_t nmea_vecs = {
   nmea_read,
   nmea_write,
   nullptr,
-  nmea_args,
+  &nmea_args,
   CET_CHARSET_ASCII, 0, /* CET-REVIEW */
   {
     nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit,

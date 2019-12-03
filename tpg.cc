@@ -39,9 +39,8 @@ static int tpg_datum_idx;
 static unsigned int waypt_out_count;
 
 static
-arglist_t tpg_args[] = {
+QVector<arglist_t> tpg_args = {
   {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
-  ARG_TERMINATOR
 };
 
 static int
@@ -315,7 +314,7 @@ ff_vecs_t tpg_vecs = {
   tpg_read,
   tpg_write,
   nullptr,
-  tpg_args,
+  &tpg_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr};

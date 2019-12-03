@@ -43,8 +43,7 @@ static route_head* temp_route;
 /* placeholders for options */
 
 static
-arglist_t cst_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> cst_args = {
 };
 
 /* helpers */
@@ -324,7 +323,7 @@ ff_vecs_t cst_vecs = {
   cst_data_read,
   nullptr,		/* cst_data_write, */
   nullptr,
-  cst_args,
+  &cst_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

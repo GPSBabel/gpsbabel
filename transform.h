@@ -32,9 +32,9 @@
 class TransformFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void process() override;
 
@@ -50,7 +50,7 @@ private:
 
   const QString RPT = "RPT";
 
-  arglist_t args[7] = {
+  QVector<arglist_t> args = {
     {
       "wpt", &opt_waypts, "Transform track(s) or route(s) into waypoint(s) [R/T]", nullptr,
       ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -75,7 +75,6 @@ private:
       "del", &opt_delete, "Delete source data after transformation", "N",
       ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   void transform_waypoints();

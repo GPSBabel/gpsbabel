@@ -30,10 +30,9 @@ static short_handle mkshort_handle;
 #define MYNAME "EasyGPS"
 
 static
-arglist_t easygps_args[] = {
+QVector<arglist_t> easygps_args = {
   /*	{"deficon", &deficon, "Default icon name", "Waypoint",
     	ARGTYPE_STRING}, */
-  ARG_TERMINATOR
 };
 
 static void
@@ -217,7 +216,7 @@ ff_vecs_t easygps_vecs = {
   data_read,
   data_write,
   nullptr,
-  easygps_args,
+  &easygps_args,
   CET_CHARSET_ASCII, 0	/* CET REVIEW */
   , NULL_POS_OPS,
   nullptr

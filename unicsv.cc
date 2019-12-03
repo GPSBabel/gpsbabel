@@ -285,7 +285,7 @@ static int unicsv_waypt_ct;
 static char unicsv_detect;
 static int llprec;
 
-static arglist_t unicsv_args[] = {
+static QVector<arglist_t> unicsv_args = {
   {
     "datum", &opt_datum, "GPS datum (def. WGS 84)",
     "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -318,7 +318,6 @@ static arglist_t unicsv_args[] = {
     "codec", &opt_codec, "codec to use for reading and writing strings (default UTF-8)",
     "UTF-8", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -2102,7 +2101,7 @@ ff_vecs_t unicsv_vecs = {
   unicsv_rd,
   unicsv_wr,
   nullptr,
-  unicsv_args,
+  &unicsv_args,
   CET_CHARSET_UTF8, 0
   , NULL_POS_OPS,
   nullptr

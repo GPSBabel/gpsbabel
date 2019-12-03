@@ -51,8 +51,7 @@ static int gardown;
 static int event_ct;
 
 static
-arglist_t g7towin_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> g7towin_args = {
 };
 
 #define WAYPT__OFS	0x00000
@@ -583,7 +582,7 @@ ff_vecs_t g7towin_vecs = {
   data_read,
   nullptr,
   nullptr,
-  g7towin_args,
+  &g7towin_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,
   nullptr

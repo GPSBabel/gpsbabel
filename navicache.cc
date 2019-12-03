@@ -25,12 +25,11 @@ static char* noretired = nullptr;
 static QString read_fname;
 
 static
-arglist_t nav_args[] = {
+QVector<arglist_t> nav_args = {
   {
     "noretired", &noretired, "Suppress retired geocaches",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 #define MYNAME "navicache"
@@ -214,7 +213,7 @@ ff_vecs_t navicache_vecs = {
   nav_read,
   nullptr,
   nullptr,
-  nav_args,
+  &nav_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

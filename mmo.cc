@@ -52,7 +52,7 @@
 static char* opt_locked, *opt_visible, *opt_version;
 
 static
-arglist_t mmo_args[] = {
+QVector<arglist_t> mmo_args = {
   {
     "locked", &opt_locked, "Write items 'locked' [default no]", "0",
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -65,7 +65,6 @@ arglist_t mmo_args[] = {
     "ver", &opt_version, "Write files with internal version [n]", nullptr,
     ARGTYPE_INT, "17", "18", nullptr
   },
-  ARG_TERMINATOR
 };
 
 struct mmo_data_t {
@@ -1467,7 +1466,7 @@ ff_vecs_t mmo_vecs = {
   mmo_read,
   mmo_write,
   nullptr,
-  mmo_args,
+  &mmo_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,
   nullptr

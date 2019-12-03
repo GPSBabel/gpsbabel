@@ -36,7 +36,7 @@ static int trk_count;
 static int doing_tracks;
 
 static
-arglist_t gpssim_args[] = {
+QVector<arglist_t> gpssim_args = {
   {
     "wayptspd", &wayptspd, "Default speed for waypoints (knots/hr)",
     nullptr, ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
@@ -45,7 +45,6 @@ arglist_t gpssim_args[] = {
     "split", &splitfiles_opt, "Split input into separate files",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /*
@@ -198,7 +197,7 @@ ff_vecs_t gpssim_vecs = {
   nullptr,
   gpssim_write,
   nullptr,
-  gpssim_args,
+  &gpssim_args,
   CET_CHARSET_ASCII, 0
   , NULL_POS_OPS,
   nullptr

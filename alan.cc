@@ -178,19 +178,17 @@ static gbfile* fin = nullptr, *fout = nullptr;
 static struct wprdata WPR;
 static struct trldata TRL;
 
-static arglist_t wpr_args[] = {
+static QVector<arglist_t> wpr_args = {
   /*
   {"os3", &osversion, "Operating system version 3",
           NULL, ARGTYPE_BOOL, ARGNOMINMAX },
   */
-  ARG_TERMINATOR
 };
-static arglist_t trl_args[] = {
+static QVector<arglist_t> trl_args = {
   /*
   {"os3", &osversion, "Operating system version 3",
           NULL, ARGTYPE_BOOL, ARGNOMINMAX },
   */
-  ARG_TERMINATOR
 };
 
 /**************************************************************************/
@@ -956,7 +954,7 @@ ff_vecs_t alanwpr_vecs = {
   wpr_read,
   wpr_write,
   alan_exit,
-  wpr_args,
+  &wpr_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   NULL_POS_OPS,
@@ -977,7 +975,7 @@ ff_vecs_t alantrl_vecs = {
   trl_read,
   trl_write,
   alan_exit,
-  trl_args,
+  &trl_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   NULL_POS_OPS,

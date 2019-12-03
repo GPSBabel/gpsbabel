@@ -124,7 +124,7 @@ static char* opt_utc = nullptr;
 static char* opt_grid = nullptr;
 
 static
-arglist_t garmin_txt_args[] = {
+QVector<arglist_t> garmin_txt_args = {
   {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
@@ -133,7 +133,6 @@ arglist_t garmin_txt_args[] = {
   {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
-  ARG_TERMINATOR
 };
 
 struct info_t {
@@ -1395,7 +1394,7 @@ ff_vecs_t garmin_txt_vecs = {
   garmin_txt_read,
   garmin_txt_write,
   nullptr,
-  garmin_txt_args,
+  &garmin_txt_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,
   nullptr

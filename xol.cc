@@ -38,7 +38,7 @@ static short_handle short_h;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 
-static arglist_t xol_args[] = {ARG_TERMINATOR};
+static QVector<arglist_t> xol_args = {};
 
 #define MYNAME "xol"
 
@@ -306,7 +306,7 @@ ff_vecs_t xol_vecs = {ff_type_file,
                       xol_read,
                       xol_write,
                       nullptr,
-                      xol_args,
+                      &xol_args,
                       CET_CHARSET_UTF8,
                       0  , NULL_POS_OPS,
   nullptr

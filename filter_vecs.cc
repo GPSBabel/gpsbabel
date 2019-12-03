@@ -51,6 +51,7 @@
 #include <QtCore/QtGlobal>     // for qPrintable
 
 #include <algorithm>           // for sort
+#include <cassert>             // for assert
 #include <cstdio>              // for printf
 
 
@@ -196,32 +197,34 @@ find_filter_vec(const QString& vecname)
       continue;
     }
 
-    arglist_t* args = vec.vec->get_args();
+    QVector<arglist_t>* args = vec.vec->get_args();
 
     validate_options(options, args, vec.name);
 
     /* step 1: initialize by inifile or default values */
-    if (args) {
-      for (auto arg = args; arg->argstring; arg++) {
-        QString qtemp = inifile_readstr(global_opts.inifile, vec.name, arg->argstring);
+    if (args && !args->isEmpty()) {
+      assert(args->isDetached());
+      for (auto& arg : *args) {
+        QString qtemp = inifile_readstr(global_opts.inifile, vec.name, arg.argstring);
         if (qtemp.isNull()) {
-          qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg->argstring);
+          qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
         }
         if (qtemp.isNull()) {
-          assign_option(vec.name, arg, arg->defaultvalue);
+          assign_option(vec.name, &arg, arg.defaultvalue);
         } else {
-          assign_option(vec.name, arg, CSTR(qtemp));
+          assign_option(vec.name, &arg, CSTR(qtemp));
         }
       }
     }
 
     /* step 2: override settings with command-line values */
     if (!options.isEmpty()) {
-      if (args) {
-        for (auto arg = args; arg->argstring; arg++) {
-          const QString opt = get_option(options, arg->argstring);
+      if (args && !args->isEmpty()) {
+        assert(args->isDetached());
+        for (auto& arg : *args) {
+          const QString opt = get_option(options, arg.argstring);
           if (!opt.isNull()) {
-            assign_option(vec.name, arg, CSTR(opt));
+            assign_option(vec.name, &arg, CSTR(opt));
           }
         }
       }
@@ -240,13 +243,14 @@ find_filter_vec(const QString& vecname)
 void
 free_filter_vec(Filter* filter)
 {
-  arglist_t* args = filter->get_args();
+  QVector<arglist_t>* args = filter->get_args();
 
-  if (args) {
-    for (auto arg = args; arg->argstring; arg++) {
-      if (arg->argvalptr) {
-        xfree(arg->argvalptr);
-        arg->argvalptr = *arg->argval = nullptr;
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      if (arg.argvalptr) {
+        xfree(arg.argvalptr);
+        arg.argvalptr = *arg.argval = nullptr;
       }
     }
   }
@@ -256,10 +260,11 @@ void
 init_filter_vecs()
 {
   for (const auto& vec : filter_vec_list) {
-    arglist_t* args = vec.vec->get_args();
-    if (args) {
-      for (auto arg = args; arg->argstring; arg++) {
-        arg->argvalptr = nullptr;
+    QVector<arglist_t>* args = vec.vec->get_args();
+    if (args && !args->isEmpty()) {
+      assert(args->isDetached());
+      for (auto& arg : *args) {
+        arg.argvalptr = nullptr;
       }
     }
   }
@@ -283,13 +288,13 @@ disp_filter_vecs()
   for (const auto& vec : filter_vec_list) {
     printf("	%-20.20s  %-50.50s\n",
            qPrintable(vec.name), qPrintable(vec.desc));
-    arglist_t* args = vec.vec->get_args();
+    const QVector<arglist_t>* args = vec.vec->get_args();
     if (args) {
-      for (auto arg = args; arg->argstring; arg++) {
-        if (!(arg->argtype & ARGTYPE_HIDDEN))
+      for (const auto& arg : *args) {
+        if (!(arg.argtype & ARGTYPE_HIDDEN))
           printf("	  %-18.18s    %-.50s %s\n",
-                 arg->argstring, arg->helpstring,
-                 (arg->argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+                 arg.argstring, arg.helpstring,
+                 (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -304,13 +309,13 @@ disp_filter_vec(const QString& vecname)
     }
     printf("	%-20.20s  %-50.50s\n",
            qPrintable(vec.name), qPrintable(vec.desc));
-    arglist_t* args = vec.vec->get_args();
+    const QVector<arglist_t>* args = vec.vec->get_args();
     if (args) {
-      for (auto arg = args; arg->argstring; arg++) {
-        if (!(arg->argtype & ARGTYPE_HIDDEN))
+      for (const auto& arg : *args) {
+        if (!(arg.argtype & ARGTYPE_HIDDEN))
           printf("	  %-18.18s    %-.50s %s\n",
-                 arg->argstring, arg->helpstring,
-                 (arg->argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+                 arg.argstring, arg.helpstring,
+                 (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -330,19 +335,19 @@ disp_v1(const fl_vecs_t& vec)
 {
   disp_help_url(vec, nullptr);
   printf("\n");
-  arglist_t* args = vec.vec->get_args();
+  const QVector<arglist_t>* args = vec.vec->get_args();
   if (args) {
-    for (auto arg = args; arg->argstring; arg++) {
-      if (!(arg->argtype & ARGTYPE_HIDDEN)) {
+    for (const auto& arg : *args) {
+      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
         printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
                CSTR(vec.name),
-               arg->argstring,
-               arg->helpstring,
-               name_option(arg->argtype),
-               arg->defaultvalue ? arg->defaultvalue : "",
-               arg->minvalue ? arg->minvalue : "",
-               arg->maxvalue ? arg->maxvalue : "");
-        disp_help_url(vec, arg);
+               arg.argstring,
+               arg.helpstring,
+               name_option(arg.argtype),
+               arg.defaultvalue ? arg.defaultvalue : "",
+               arg.minvalue ? arg.minvalue : "",
+               arg.maxvalue ? arg.maxvalue : "");
+        disp_help_url(vec, &arg);
         printf("\n");
       }
     }

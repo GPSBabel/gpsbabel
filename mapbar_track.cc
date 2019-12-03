@@ -29,8 +29,7 @@
 static gbfile* fin;
 
 static
-arglist_t mapbar_track_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> mapbar_track_args = {
 };
 
 /*******************************************************************************
@@ -140,7 +139,7 @@ ff_vecs_t mapbar_track_vecs = {
   mapbar_track_read,
   nullptr,
   nullptr,
-  mapbar_track_args,
+  &mapbar_track_args,
   CET_CHARSET_UTF8, 0
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

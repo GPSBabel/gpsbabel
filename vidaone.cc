@@ -43,13 +43,12 @@ static char* vidaone_opt_ver;
 static int vidaone_ver;
 
 static
-arglist_t vidaone_args[] = {
+QVector<arglist_t> vidaone_args = {
   {
     VIDAONE_VER, &vidaone_opt_ver,
     "Version of VidaOne file to read or write (1 or 2)",
     "1", ARGTYPE_INT, "1", "2", nullptr
   },
-  ARG_TERMINATOR
 };
 
 static gbfile* fin, *fout;
@@ -146,7 +145,7 @@ ff_vecs_t vidaone_vecs = {
   vidaone_read,
   vidaone_write,
   nullptr,
-  vidaone_args,
+  &vidaone_args,
   CET_CHARSET_UTF8, 1
   , NULL_POS_OPS,
   nullptr

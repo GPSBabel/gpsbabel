@@ -138,13 +138,12 @@ static bool write_header_msgs = false;
 
 
 static
-arglist_t fit_args[] = {
+QVector<arglist_t> fit_args = {
   {
     "allpoints", &opt_allpoints,
     "Read all points even if latitude or longitude is missing",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 const std::vector<std::pair<QString, int> > kCoursePointTypeMapping = {
@@ -1382,7 +1381,7 @@ ff_vecs_t format_fit_vecs = {
   fit_read,
   fit_write,
   nullptr,
-  fit_args,
+  &fit_args,
   CET_CHARSET_ASCII, 0		/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

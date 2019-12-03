@@ -26,17 +26,16 @@
 class ReverseRouteFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
 
 private:
   int prev_new_trkseg;
-  arglist_t args[1] = {
-    ARG_TERMINATOR
+  QVector<arglist_t> args = {
   };
 
   void reverse_route_wpt(const Waypoint* waypointp);

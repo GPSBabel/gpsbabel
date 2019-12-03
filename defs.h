@@ -984,14 +984,18 @@ void setshort_is_utf8(short_handle h, int is_utf8);
 #define ARGTYPE_FLAGMASK 0xfffff000U
 
 #define ARG_NOMINMAX nullptr, nullptr
-#define ARG_TERMINATOR {nullptr, nullptr, nullptr, nullptr, 0, ARG_NOMINMAX, nullptr}
 
 struct arglist_t {
   const char* argstring;
   char** argval;
   const char* helpstring;
   const char* defaultvalue;
-  const uint32_t argtype;
+#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
+  const uint32_t argtype{ARGTYPE_UNKNOWN};
+#else
+  /* MSVC 2015 generates C2440, C2664 errors with the above. */
+  uint32_t argtype;
+#endif
   const char* minvalue;		/* minimum value for numeric options */
   const char* maxvalue;		/* maximum value for numeric options */
   char* argvalptr;	/* !!! internal helper. Not used in definitions !!! */
@@ -1049,7 +1053,7 @@ struct ff_vecs_t {
   ff_read read;
   ff_write write;
   ff_exit exit;
-  arglist_t* args;
+  QVector<arglist_t>* args;
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
@@ -1069,11 +1073,11 @@ void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
 ff_vecs_t* find_vec(const QString&);
 void assign_option(const QString& vecname, arglist_t* arg, const char* val);
-void disp_vec_options(const QString& vecname, const arglist_t* args);
+void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
 void disp_vecs();
 void disp_vec(const QString& vecname);
-void validate_options(const QStringList& options, const arglist_t* args, const QString& name);
-bool validate_args(const QString& name, const arglist_t* args);
+void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
+bool validate_args(const QString& name, const QVector<arglist_t>* args);
 bool validate_formats();
 void init_vecs();
 void exit_vecs();

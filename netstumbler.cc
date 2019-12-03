@@ -48,7 +48,7 @@ static void	fix_netstumbler_dupes();
 #define MYNAME "NETSTUMBLER"
 
 static
-arglist_t netstumbler_args[] = {
+QVector<arglist_t> netstumbler_args = {
   {
     "nseicon", &nseicon, "Non-stealth encrypted icon name",
     "Red Square", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -69,7 +69,6 @@ arglist_t netstumbler_args[] = {
     "snmac", &snmac, "Shortname is MAC address", nullptr, ARGTYPE_BOOL,
     ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void
@@ -343,7 +342,7 @@ ff_vecs_t netstumbler_vecs = {
   data_read,
   nullptr,
   nullptr,
-  netstumbler_args,
+  &netstumbler_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

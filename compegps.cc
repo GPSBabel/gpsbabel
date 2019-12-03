@@ -88,7 +88,7 @@ static char* option_radius;
 static char* option_snlen;
 
 static
-arglist_t compegps_args[] = {
+QVector<arglist_t> compegps_args = {
   {
     "deficon", &option_icon, "Default icon name",
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -105,7 +105,6 @@ arglist_t compegps_args[] = {
     "snlen", &option_snlen, "Length of generated shortnames (default 16)",
     "16", ARGTYPE_INT, "1", nullptr, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static
@@ -691,7 +690,7 @@ ff_vecs_t compegps_vecs = {
   compegps_data_read,
   compegps_data_write,
   nullptr,
-  compegps_args,
+  &compegps_args,
   CET_CHARSET_MS_ANSI, 1
   , NULL_POS_OPS,
   nullptr

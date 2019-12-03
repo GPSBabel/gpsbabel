@@ -60,12 +60,11 @@ static char* opt_index;
 static int track_index, this_index;
 
 static
-arglist_t dmtlog_args[] = {
+QVector<arglist_t> dmtlog_args = {
   {
     "index", &opt_index,
     "Index of track (if more than one in source)", "1", ARGTYPE_INT, "1", nullptr, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -836,7 +835,7 @@ ff_vecs_t dmtlog_vecs = {
   dmtlog_read,
   dmtlog_write,
   nullptr,
-  dmtlog_args,
+  &dmtlog_args,
   CET_CHARSET_ASCII, 0
   , NULL_POS_OPS,
   nullptr
