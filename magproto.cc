@@ -1401,11 +1401,6 @@ mag_waypt_pr(const Waypoint* waypointp)
 }
 
 static
-void mag_track_nop(const route_head*)
-{
-}
-
-static
 void mag_track_disp(const Waypoint* waypointp)
 {
   char obuf[200];
@@ -1456,7 +1451,7 @@ void mag_track_disp(const Waypoint* waypointp)
 static
 void mag_track_pr()
 {
-  track_disp_all(mag_track_nop, mag_track_nop, mag_track_disp);
+  track_disp_all(nullptr, nullptr, mag_track_disp);
 }
 
 /*
@@ -1531,15 +1526,10 @@ mag_route_trl(const route_head* rte)
 }
 
 static void
-mag_route_hdr(const route_head*)
-{
-}
-
-static void
 mag_route_pr()
 {
   route_out_count = 0;
-  route_disp_all(mag_route_hdr, mag_route_trl, mag_waypt_pr);
+  route_disp_all(nullptr, mag_route_trl, mag_waypt_pr);
 
 }
 

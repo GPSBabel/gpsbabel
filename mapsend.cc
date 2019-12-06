@@ -364,12 +364,6 @@ mapsend_route_hdr(const route_head* rte)
 }
 
 static void
-mapsend_noop(const route_head*)
-{
-  /* no-op */
-}
-
-static void
 mapsend_route_disp(const Waypoint* waypointp)
 {
   unsigned char c;
@@ -495,7 +489,7 @@ static void mapsend_track_disp(const Waypoint* wpt)
 static void
 mapsend_track_write()
 {
-  track_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);
+  track_disp_all(mapsend_track_hdr, nullptr, mapsend_track_disp);
 }
 
 static void
@@ -520,7 +514,7 @@ mapsend_wpt_write()
       gbfputint32(route_waypt_count(), mapsend_file_out);
 
       /* write points - all routes */
-      route_disp_all(mapsend_noop, mapsend_noop, mapsend_waypt_pr);
+      route_disp_all(nullptr, nullptr, mapsend_waypt_pr);
     }
 
     int n = route_count();
@@ -528,7 +522,7 @@ mapsend_wpt_write()
     gbfputint32(n, mapsend_file_out);
 
     if (n) {
-      route_disp_all(mapsend_route_hdr, mapsend_noop, mapsend_route_disp);
+      route_disp_all(mapsend_route_hdr, nullptr, mapsend_route_disp);
     }
   }
 }

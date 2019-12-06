@@ -933,11 +933,6 @@ static void alan_wr_deinit()
   fout = nullptr;
 }
 
-
-static void alan_exit()
-{
-}
-
 /**************************************************************************/
 
 ff_vecs_t alanwpr_vecs = {
@@ -953,7 +948,7 @@ ff_vecs_t alanwpr_vecs = {
   alan_wr_deinit,
   wpr_read,
   wpr_write,
-  alan_exit,
+  nullptr,
   &wpr_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
@@ -974,7 +969,7 @@ ff_vecs_t alantrl_vecs = {
   alan_wr_deinit,
   trl_read,
   trl_write,
-  alan_exit,
+  nullptr,
   &trl_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

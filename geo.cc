@@ -152,7 +152,6 @@ geocache_container wpt_container(const QString& args)
 static void
 geo_rd_deinit()
 {
-
 }
 
 static void

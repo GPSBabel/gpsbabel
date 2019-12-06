@@ -118,12 +118,6 @@ QVector<arglist_t> mps_args = {
 };
 
 static void
-mps_noop(const route_head*)
-{
-  /* no-op */
-}
-
-static void
 mps_wpt_q_init(QList<Waypoint *>* whichQueue)
 {
   whichQueue->clear();
@@ -1949,7 +1943,7 @@ mps_write()
        waypoints without consideration for uniqueness for "real" waypoints that haven't
        been output (phew!)
     */
-    route_disp_all(mps_noop, mps_noop, mps_route_wpt_w_unique_wrapper);
+    route_disp_all(nullptr, nullptr, mps_route_wpt_w_unique_wrapper);
 
     route_disp_all(mps_routehdr_w_wrapper, mps_routetrlr_w_wrapper, mps_routedatapoint_w_wrapper);
   }
@@ -2002,7 +1996,7 @@ mps_write()
         gbfread(&recType, 1, 1, mps_file_temp);
       }
     }
-    track_disp_all(mps_trackhdr_w_wrapper, mps_noop, mps_trackdatapoint_w_wrapper);
+    track_disp_all(mps_trackhdr_w_wrapper, nullptr, mps_trackdatapoint_w_wrapper);
   }
 
   if (mpsmergeout) {

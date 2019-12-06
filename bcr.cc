@@ -323,16 +323,6 @@ bcr_wr_deinit()
   gbfclose(fout);
 }
 
-static void
-bcr_route_trailer(const route_head*)
-{
-}
-
-static void
-bcr_write_wpt(const Waypoint*)
-{
-}
-
 static void bcr_write_line(gbfile* fout, const QString& key, const int* index, const QString& value)
 {
   if (value.isEmpty()) {			/* this is mostly used in the world of windows */
@@ -473,7 +463,7 @@ bcr_data_write()
             target_rte_num, route_count());
   }
   curr_rte_num = 0;
-  route_disp_all(bcr_route_header, bcr_route_trailer, bcr_write_wpt);
+  route_disp_all(bcr_route_header, nullptr, nullptr);
 }
 
 ff_vecs_t bcr_vecs = {

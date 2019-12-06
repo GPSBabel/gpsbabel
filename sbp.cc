@@ -108,11 +108,6 @@ sbp_read()
   }
 }
 
-static void
-sbp_exit()
-{
-}
-
 /**************************************************************************/
 
 ff_vecs_t sbp_vecs = {
@@ -128,7 +123,7 @@ ff_vecs_t sbp_vecs = {
   nullptr,
   sbp_read,
   nullptr,
-  sbp_exit,
+  nullptr,
   &sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

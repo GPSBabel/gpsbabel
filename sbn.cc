@@ -298,11 +298,6 @@ sbn_read()
   }
 }
 
-static void
-sbn_exit()
-{
-}
-
 /**********************************************************************/
 
 ff_vecs_t sbn_vecs = {
@@ -318,7 +313,7 @@ ff_vecs_t sbn_vecs = {
   nullptr,
   sbn_read,
   nullptr,
-  sbn_exit,
+  nullptr,
   &sbn_args,
   /* Characters are always encoded in ASCII. Even if the unit is set
    * to Chinese language, only ASCII characters can be entered. */

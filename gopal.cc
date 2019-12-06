@@ -333,17 +333,6 @@ gopal_read()
 }
 
 static void
-gopal_route_hdr(const route_head*)
-{
-
-}
-
-static void
-gopal_route_tlr(const route_head*)
-{
-}
-
-static void
 gopal_write_waypt(const Waypoint* wpt)
 {
   char tbuffer[64];
@@ -386,12 +375,7 @@ gopal_wr_deinit()
 static void
 gopal_write()
 {
-  route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);
-}
-
-static void
-gopal_exit()		/* optional */
-{
+  route_disp_all(nullptr, nullptr, gopal_write_waypt);
 }
 
 /**************************************************************************/
@@ -412,7 +396,7 @@ ff_vecs_t gopal_vecs = {
   gopal_wr_deinit,
   gopal_read,
   gopal_write,
-  gopal_exit,
+  nullptr,
   &gopal_args,
   CET_CHARSET_ASCII, 0	/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

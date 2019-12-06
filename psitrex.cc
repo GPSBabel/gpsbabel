@@ -732,12 +732,6 @@ psit_read()
 }
 
 static void
-psit_noop(const route_head*)
-{
-  /* no-op */
-}
-
-static void
 psit_write()
 {
   int short_length;
@@ -759,11 +753,11 @@ psit_write()
     waypt_disp_all(psit_waypoint_w_wrapper);
   }
   if (global_opts.objective == rtedata) {
-    route_disp_all(psit_routehdr_w_wrapper, psit_noop, psit_waypoint_w_wrapper);
+    route_disp_all(psit_routehdr_w_wrapper, nullptr, psit_waypoint_w_wrapper);
   }
   if (global_opts.objective == trkdata) {
     track_disp_all(psit_trackhdr_w_wrapper,
-                   psit_noop, psit_trackdatapoint_w_wrapper);
+                   nullptr, psit_trackdatapoint_w_wrapper);
   }
 
   mkshort_del_handle(&mkshort_handle);

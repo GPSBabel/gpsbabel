@@ -188,11 +188,6 @@ ignr_write_track_hdr(const route_head* track)
 }
 
 static void
-ignr_write_track_trl(const route_head*)
-{
-}
-
-static void
 ignr_write_waypt(const Waypoint* wpt)
 {
   if (track_num != track_index) {
@@ -239,7 +234,7 @@ ignr_write()
   gbfprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
 
   gbfprintf(fout, "\t</ENTETE>\n");
-  track_disp_all(ignr_write_track_hdr, ignr_write_track_trl, ignr_write_waypt);
+  track_disp_all(ignr_write_track_hdr, nullptr, ignr_write_waypt);
   gbfprintf(fout, "</RANDONNEE>\n");
 }
 
