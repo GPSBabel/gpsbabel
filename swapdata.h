@@ -23,6 +23,7 @@
 #ifndef SWAPDATA_H_INCLUDED_
 #define SWAPDATA_H_INCLUDED_
 
+#include "defs.h"    // for arglist_t, Waypoint
 #include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
