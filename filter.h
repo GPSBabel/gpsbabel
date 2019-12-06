@@ -22,6 +22,10 @@
 
 #include "defs.h"
 
+// Filter have access to the global_waypoint_list, which formats really
+// shouldn't have.
+extern WaypointList* global_waypoint_list;
+
 class Filter
 {
 public:

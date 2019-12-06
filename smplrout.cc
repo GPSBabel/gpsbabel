@@ -57,7 +57,6 @@
 */
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "grtcirc.h"
 #include "smplrout.h"
 #include <cstdlib>

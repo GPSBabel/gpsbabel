@@ -25,7 +25,6 @@
 #include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "interpolate.h"
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
 #include "src/core/datetime.h"  // for DateTime

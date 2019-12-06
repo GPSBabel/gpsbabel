@@ -23,7 +23,6 @@
 #include <QtCore/QList>  // for QList<>::iterator
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "reverse_route.h"
 
 #if FILTERS_ENABLED

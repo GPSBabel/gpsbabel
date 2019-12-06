@@ -21,7 +21,6 @@
  */
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "nukedata.h"
 
 #if FILTERS_ENABLED

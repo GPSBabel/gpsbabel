@@ -27,7 +27,6 @@
 #include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "bend.h"
 #include "grtcirc.h"        // for RAD, heading_true_degrees, gcdist, linepart, radtometers, DEG
 

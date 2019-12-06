@@ -19,33 +19,14 @@
 
  */
 
-
-
-/*
- * Filters can do some things that modules really shouldn't do.
- * This is our (weak) attempt to make that distinction.
- */
-
 #ifndef FILTERDEFS_H_INCLUDED_
 #define FILTERDEFS_H_INCLUDED_
 
 #include "defs.h"
-#include "filter.h"
 
-extern WaypointList* global_waypoint_list;
 
-using filter_init = void (*)();
-using filter_process = void (*)();
-using filter_deinit = void (*)();
-using filter_exit = void (*)();
-
-struct filter_vecs_t {
-  filter_init f_init;
-  filter_process f_process;
-  filter_deinit f_deinit;
-  filter_exit f_exit;
-  QVector<arglist_t>* args;
-};
+// forward declare filter to avoid exposing global_waypoint_list by filter.h
+class Filter;
 
 Filter* find_filter_vec(const QString&);
 void free_filter_vec(Filter*);

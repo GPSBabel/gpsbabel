@@ -27,7 +27,6 @@
 #include <QtCore/QtGlobal>      // for foreach
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "duplicate.h"
 #include "src/core/datetime.h"  // for DateTime
 

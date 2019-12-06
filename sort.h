@@ -22,6 +22,8 @@
 #ifndef SORT_H_INCLUDED_
 #define SORT_H_INCLUDED_
 
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, arglist_t, ARG_TERMI...
 #include "filter.h"  // for Filter
 
