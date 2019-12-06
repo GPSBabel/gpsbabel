@@ -30,9 +30,9 @@
 class InterpolateFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -44,7 +44,7 @@ private:
   double dist = 0;
   char* opt_route = nullptr;
 
-  arglist_t args[4] = {
+  QVector<arglist_t> args = {
     {
       "time", &opt_interval, "Time interval in seconds", nullptr,
       ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
@@ -59,7 +59,6 @@ private:
       "route", &opt_route, "Interpolate routes instead", nullptr,
       ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
 };

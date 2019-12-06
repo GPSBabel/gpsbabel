@@ -43,8 +43,7 @@ static gbfile* fin, *fout;
 static int ggv_log_ver;
 
 static
-arglist_t ggv_log_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> ggv_log_args = {
 };
 
 /*******************************************************************************
@@ -280,7 +279,7 @@ ff_vecs_t ggv_log_vecs = {
   ggv_log_read,
   ggv_log_write,
   nullptr,
-  ggv_log_args,
+  &ggv_log_args,
   CET_CHARSET_ASCII, 1
   , NULL_POS_OPS,
   nullptr

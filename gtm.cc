@@ -732,8 +732,7 @@ gtm_write()
 }
 
 static
-arglist_t gtm_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> gtm_args = {
 };
 
 ff_vecs_t gtm_vecs = {
@@ -746,7 +745,7 @@ ff_vecs_t gtm_vecs = {
   gtm_read,
   gtm_write,
   nullptr,
-  gtm_args,
+  &gtm_args,
   CET_CHARSET_ASCII, 0, /* CET-REVIEW */
   NULL_POS_OPS,
   nullptr

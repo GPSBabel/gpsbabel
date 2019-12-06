@@ -52,13 +52,12 @@ static char* mapsend_opt_trkver = nullptr;
 #define MAPSEND_TRKVER_MAX 4
 
 static
-arglist_t mapsend_args[] = {
+QVector<arglist_t> mapsend_args = {
   {
     "trkver", &mapsend_opt_trkver,
     "MapSend version TRK file to generate (3,4)",
     "4", ARGTYPE_INT, "3", "4", nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void
@@ -546,7 +545,7 @@ ff_vecs_t mapsend_vecs = {
   mapsend_read,
   mapsend_wpt_write,
   nullptr,
-  mapsend_args,
+  &mapsend_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

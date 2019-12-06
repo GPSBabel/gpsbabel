@@ -31,8 +31,7 @@
 
 
 static
-arglist_t skyforce_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> skyforce_args = {
 };
 
 static gbfile* fin, *fout;
@@ -378,7 +377,7 @@ ff_vecs_t skyforce_vecs = {
   skyforce_read,
   skyforce_write,
   nullptr,
-  skyforce_args,
+  &skyforce_args,
   CET_CHARSET_ASCII, 1
   , NULL_POS_OPS,
   nullptr

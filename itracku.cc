@@ -359,11 +359,10 @@ init_device()
 // Values for ARGTYPE_xxx can be found in defs.h and are used to
 // select the type of option.
 static
-arglist_t itracku_args[] = {
+QVector<arglist_t> itracku_args = {
   { "backup", &backup_file_name, "Appends the input to a backup file", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   { "new", &only_new, "Only waypoints that are not the backup file", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
 //   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
-  ARG_TERMINATOR
 };
 
 /*******************************************************************************
@@ -781,7 +780,7 @@ ff_vecs_t itracku_vecs = {
   itracku_read,
   nullptr,
   itracku_exit,
-  itracku_args,
+  &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, nullptr, nullptr, nullptr },
@@ -802,7 +801,7 @@ ff_vecs_t itracku_fvecs = {
   itracku_read,
   itracku_write,
   itracku_exit,
-  itracku_args,
+  &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },

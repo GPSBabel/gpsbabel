@@ -92,7 +92,7 @@ static char temp_short_name[5];
 static void ng_read_file_header();
 
 static
-arglist_t ng_args[] = {
+QVector<arglist_t> ng_args = {
   {
     "output", &process, "'wp' - Create waypoint file , 'rte' - Create route file",
     "rte", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
@@ -102,7 +102,6 @@ arglist_t ng_args[] = {
     "n", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
 
-  ARG_TERMINATOR
 };
 
 /*===================Utilities ==========================================*/
@@ -417,7 +416,7 @@ ff_vecs_t ng_vecs = {
   data_read,
   data_write,
   nullptr,
-  ng_args,
+  &ng_args,
   CET_CHARSET_HEBREW, 0
   , NULL_POS_OPS,
   nullptr

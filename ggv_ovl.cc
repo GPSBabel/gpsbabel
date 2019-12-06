@@ -35,8 +35,7 @@
 #define MYNAME "ggv_ovl"
 
 static
-arglist_t ggv_ovl_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> ggv_ovl_args = {
 };
 
 enum OVL_SYMBOL_TYP {
@@ -445,7 +444,7 @@ ff_vecs_t ggv_ovl_vecs = {
   ggv_ovl_read,
   ggv_ovl_write,
   nullptr,
-  ggv_ovl_args,
+  &ggv_ovl_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,
   nullptr

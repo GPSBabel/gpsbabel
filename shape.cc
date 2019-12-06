@@ -47,7 +47,7 @@ static char* opt_name = nullptr;
 static char* opt_url = nullptr;
 
 static
-arglist_t shp_args[] = {
+QVector<arglist_t> shp_args = {
   {
     "name", &opt_name, "Source for name field in .dbf",
     nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
@@ -56,7 +56,6 @@ arglist_t shp_args[] = {
     "url", &opt_url, "Source for URL field in .dbf",
     nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -536,7 +535,7 @@ ff_vecs_t shape_vecs = {
   my_read,
   my_write,
   nullptr,
-  shp_args,
+  &shp_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

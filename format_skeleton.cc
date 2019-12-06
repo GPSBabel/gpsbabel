@@ -46,10 +46,9 @@
 // Values for ARGTYPE_xxx can be found in defs.h and are used to
 // select the type of option.
 static
-arglist_t format_skeleton_args[] = {
+QVector<arglist_t> format_skeleton_args = {
 // {"foo", &fooopt, "The text of the foo option in help",
 //   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
-  ARG_TERMINATOR
 };
 
 /*******************************************************************************
@@ -148,7 +147,7 @@ ff_vecs_t format_skeleton_vecs = {
   format_skeleton_read,
   format_skeleton_write,
   format_skeleton_exit,
-  format_skeleton_args,
+  &format_skeleton_args,
   CET_CHARSET_ASCII, 0,			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   NULL_POS_OPS, // Unless you do realtime positioning

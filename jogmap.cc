@@ -29,8 +29,7 @@
 
 static route_head* trk;
 
-static arglist_t jogmap_args[] = {
-  ARG_TERMINATOR
+static QVector<arglist_t> jogmap_args = {
 };
 
 #define MYNAME "xol"
@@ -107,7 +106,7 @@ ff_vecs_t jogmap_vecs = {
   jogmap_read,
   nullptr,
   nullptr,
-  jogmap_args,
+  &jogmap_args,
   CET_CHARSET_UTF8, 0
   , NULL_POS_OPS,
   nullptr

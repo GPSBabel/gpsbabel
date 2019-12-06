@@ -27,8 +27,7 @@
 static gbfile* file_handle = nullptr;
 
 static
-arglist_t sbn_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> sbn_args = {
 };
 
 
@@ -320,7 +319,7 @@ ff_vecs_t sbn_vecs = {
   sbn_read,
   nullptr,
   sbn_exit,
-  sbn_args,
+  &sbn_args,
   /* Characters are always encoded in ASCII. Even if the unit is set
    * to Chinese language, only ASCII characters can be entered. */
   CET_CHARSET_ASCII, 0

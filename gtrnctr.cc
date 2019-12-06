@@ -55,7 +55,7 @@ static double gtc_end_long;
 static char* opt_sport, *opt_course;
 
 static
-arglist_t gtc_args[] = {
+QVector<arglist_t> gtc_args = {
   {
     "course", &opt_course, "Write course rather than history, default yes",
     "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -64,7 +64,6 @@ arglist_t gtc_args[] = {
     "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other",
     "Biking", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /* Tracks */
@@ -646,7 +645,7 @@ ff_vecs_t gtc_vecs = {
   gtc_read,
   gtc_write,
   nullptr,
-  gtc_args,
+  &gtc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

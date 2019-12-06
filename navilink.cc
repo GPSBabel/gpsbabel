@@ -138,7 +138,7 @@ const char* const icon_table[] = {
 };
 
 static
-arglist_t navilink_args[] = {
+QVector<arglist_t> navilink_args = {
   {
     "nuketrk", &nuketrk, "Delete all track points", nullptr, ARGTYPE_BOOL,
     ARG_NOMINMAX, nullptr
@@ -163,7 +163,6 @@ arglist_t navilink_args[] = {
     "power_off", &poweroff, "Command unit to power itself down",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void (*write_waypoint)(const Waypoint*) = nullptr;
@@ -1207,7 +1206,7 @@ ff_vecs_t navilink_vecs = {
   navilink_read,
   navilink_write,
   nullptr,
-  navilink_args,
+  &navilink_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

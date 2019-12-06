@@ -42,9 +42,8 @@ static int curr_rte_num, target_rte_num;
 static char* index_opt;
 
 static
-arglist_t nmn4_args[] = {
+QVector<arglist_t> nmn4_args = {
   {"index", &index_opt, "Index of route to write (if more than one in source)", nullptr, ARGTYPE_INT, "1", nullptr , nullptr},
-  ARG_TERMINATOR
 };
 
 
@@ -285,7 +284,7 @@ ff_vecs_t nmn4_vecs = {
   nmn4_read,
   nmn4_write,
   nullptr,
-  nmn4_args,
+  &nmn4_args,
   CET_CHARSET_MS_ANSI, 1	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -29,10 +29,9 @@ static QString ostring;
 static QXmlStreamWriter writer(&ostring);
 
 static
-arglist_t geo_args[] = {
+QVector<arglist_t> geo_args = {
   {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {"nuke_placer", &nuke_placer, "Omit Placer name", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  ARG_TERMINATOR
 };
 
 #define MYNAME "geo"
@@ -266,7 +265,7 @@ ff_vecs_t geo_vecs = {
   geo_read,
   geo_write,
   nullptr,
-  geo_args,
+  &geo_args,
   CET_CHARSET_UTF8, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr

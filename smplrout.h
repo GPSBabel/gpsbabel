@@ -67,9 +67,9 @@
 class SimplifyRouteFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -87,7 +87,7 @@ private:
   char* relopt;
   void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
 
-  arglist_t args[6] = {
+  QVector<arglist_t> args = {
     {
       "count", &countopt,  "Maximum number of points in route",
       nullptr, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", nullptr, nullptr
@@ -108,7 +108,6 @@ private:
       "relative", &relopt, "Use relative error", nullptr,
       ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   struct xte_intermed;

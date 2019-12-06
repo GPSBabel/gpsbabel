@@ -263,7 +263,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen);
 
 // Arguments for log fetch 'mtk' command..
 
-static arglist_t mtk_sargs[] = {
+static QVector<arglist_t> mtk_sargs = {
   {
     "erase", &OPT_erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -284,7 +284,6 @@ static arglist_t mtk_sargs[] = {
     "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
     "1", ARGTYPE_INT, "1", "64", nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void dbg(int l, const char* msg, ...)
@@ -1675,7 +1674,7 @@ ff_vecs_t mtk_vecs = {
   mtk_read,
   nullptr,
   nullptr,
-  mtk_sargs,
+  &mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,
@@ -1696,7 +1695,7 @@ ff_vecs_t mtk_m241_vecs = {
   mtk_read,
   nullptr,
   nullptr,
-  mtk_sargs,
+  &mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,
@@ -1705,12 +1704,11 @@ ff_vecs_t mtk_m241_vecs = {
 
 /* used for mtk-bin */
 
-static arglist_t mtk_fargs[] = {
+static QVector<arglist_t> mtk_fargs = {
   {
     "csv",   &csv_file, "MTK compatible CSV output file",
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 ff_vecs_t mtk_fvecs = {
@@ -1723,7 +1721,7 @@ ff_vecs_t mtk_fvecs = {
   file_read,
   nullptr,
   nullptr,
-  mtk_fargs,
+  &mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr
@@ -1739,7 +1737,7 @@ ff_vecs_t mtk_m241_fvecs = {
   file_read,
   nullptr,
   nullptr,
-  mtk_fargs,
+  &mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

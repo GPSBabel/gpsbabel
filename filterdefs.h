@@ -44,7 +44,7 @@ struct filter_vecs_t {
   filter_process f_process;
   filter_deinit f_deinit;
   filter_exit f_exit;
-  arglist_t* args;
+  QVector<arglist_t>* args;
 };
 
 Filter* find_filter_vec(const QString&);

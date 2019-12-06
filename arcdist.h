@@ -30,9 +30,9 @@
 class ArcDistanceFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -54,7 +54,7 @@ private:
     Waypoint* arcpt1, * arcpt2;
   };
 
-  arglist_t args[8] = {
+  QVector<arglist_t> args = {
     {
       "file", &arcfileopt,  "File containing vertices of arc",
       nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
@@ -83,7 +83,6 @@ private:
       "project", &projectopt, "Move waypoints to its projection on lines or vertices",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);

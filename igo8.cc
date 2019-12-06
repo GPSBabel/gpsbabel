@@ -108,11 +108,10 @@ static uint32_t point_count;
 static int in_point_count;
 
 // Exported options list
-static arglist_t igo8_options[] = {
+static QVector<arglist_t> igo8_options = {
   { "tracknum", &igo8_option_tracknum, "Track identification number", nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
   { "title", &igo8_option_title, "Track title", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   { "description", &igo8_option_description, "Track description", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  ARG_TERMINATOR
 };
 
 // Sanity check
@@ -364,7 +363,7 @@ ff_vecs_t igo8_vecs = {
   igo8_read,
   igo8_write,
   nullptr,
-  igo8_options,
+  &igo8_options,
   CET_CHARSET_UTF8,
   1
   , NULL_POS_OPS,

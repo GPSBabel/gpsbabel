@@ -41,7 +41,7 @@ static QString output_name;
 #define MYNAME "TEXT"
 
 static
-arglist_t text_args[] = {
+QVector<arglist_t> text_args = {
   {
     "nosep", &suppresssep,
     "Suppress separator lines between waypoints",
@@ -68,7 +68,6 @@ arglist_t text_args[] = {
     "Write each waypoint in a separate file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 
-  ARG_TERMINATOR
 };
 
 
@@ -272,7 +271,7 @@ ff_vecs_t text_vecs = {
   nullptr,
   data_write,
   nullptr,
-  text_args,
+  &text_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -53,9 +53,9 @@
 class TrackFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -82,7 +82,7 @@ private:
   char* opt_minpoints = nullptr;
   int minimum_points{0};
 
-  arglist_t args[19] = {
+  QVector<arglist_t> args = {
     {
       TRACKFILTER_MOVE_OPTION, &opt_move,
       "Correct trackpoint timestamps by a delta", nullptr, ARGTYPE_STRING,
@@ -169,7 +169,6 @@ private:
       "Discard tracks with fewer than these points",
       nullptr, ARGTYPE_INT, "0", "50", nullptr
     },
-    ARG_TERMINATOR
   };
 
   QList<route_head*> track_list;

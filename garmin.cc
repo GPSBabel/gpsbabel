@@ -75,7 +75,7 @@ static ff_vecs_t* gpx_vec;
 static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
 static
-arglist_t garmin_args[] = {
+QVector<arglist_t> garmin_args = {
   {
     "snlen", &snlen, "Length of generated shortnames", nullptr,
     ARGTYPE_INT, "1", nullptr, nullptr
@@ -113,7 +113,6 @@ arglist_t garmin_args[] = {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
     nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
 
-  ARG_TERMINATOR
 };
 
 static const char* d103_symbol_from_icon_number(unsigned int n);
@@ -1252,7 +1251,7 @@ ff_vecs_t garmin_vecs = {
   data_read,
   data_write,
   nullptr,
-  garmin_args,
+  &garmin_args,
   CET_CHARSET_ASCII, 0,
   { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr },
   nullptr

@@ -263,8 +263,7 @@ static void data_read()
   }
 }
 
-static arglist_t brauniger_iq_args[] = {
-  ARG_TERMINATOR
+static QVector<arglist_t> brauniger_iq_args = {
 };
 
 ff_vecs_t brauniger_iq_vecs = {
@@ -277,7 +276,7 @@ ff_vecs_t brauniger_iq_vecs = {
   data_read,
   nullptr,
   nullptr,
-  brauniger_iq_args,
+  &brauniger_iq_args,
   CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

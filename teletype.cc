@@ -26,8 +26,7 @@
 
 
 static
-arglist_t teletype_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> teletype_args = {
 };
 
 /*******************************************************************************
@@ -113,7 +112,7 @@ ff_vecs_t teletype_vecs = {
   teletype_read,
   nullptr,
   teletype_exit,
-  teletype_args,
+  &teletype_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
   , NULL_POS_OPS,

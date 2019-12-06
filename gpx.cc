@@ -2014,7 +2014,7 @@ gpx_exit()
 }
 
 static
-arglist_t gpx_args[] = {
+QVector<arglist_t> gpx_args = {
   {
     "snlen", &snlen, "Length of generated shortnames",
     "32", ARGTYPE_INT, "1", nullptr, nullptr
@@ -2052,7 +2052,6 @@ arglist_t gpx_args[] = {
     "Precision of elevations, number of decimals",
     "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 ff_vecs_t gpx_vecs = {
@@ -2065,7 +2064,7 @@ ff_vecs_t gpx_vecs = {
   gpx_read,
   gpx_write,
   gpx_exit,
-  gpx_args,
+  &gpx_args,
   CET_CHARSET_UTF8, 0,	/* non-fixed to create non UTF-8 XML's for testing | CET-REVIEW */
   NULL_POS_OPS,
   nullptr,

@@ -38,7 +38,7 @@ public:
   Filter(Filter&&) = default;
   Filter& operator=(Filter&&) = default;
 
-  virtual arglist_t* get_args() = 0;
+  virtual QVector<arglist_t>* get_args() = 0;
 
   virtual void init()
   {

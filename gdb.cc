@@ -1808,7 +1808,7 @@ write_data()
 #define GDB_OPT_BITCATEGORY	"bitscategory"
 #define GDB_OPT_ROADBOOK	"roadbook"
 
-static arglist_t gdb_args[] = {
+static QVector<arglist_t> gdb_args = {
   {
     GDB_OPT_CATEGORY, &gdb_opt_category,
     "Default category on output (1..16)",
@@ -1834,7 +1834,6 @@ static arglist_t gdb_args[] = {
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 
-  ARG_TERMINATOR
 };
 
 ff_vecs_t gdb_vecs = {
@@ -1847,7 +1846,7 @@ ff_vecs_t gdb_vecs = {
   read_data,
   write_data,
   nullptr,
-  gdb_args,
+  &gdb_args,
   CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
   /* because of utf8 strings since GDB V3 */
   , NULL_POS_OPS,

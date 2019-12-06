@@ -106,12 +106,11 @@ static char* opt_route_index;
 static int opt_route_index_value;
 
 static
-arglist_t stmsdf_args[] = {
+QVector<arglist_t> stmsdf_args = {
   {
     "index", &opt_route_index,
     "Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", nullptr, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -820,7 +819,7 @@ ff_vecs_t stmsdf_vecs = {
   data_read,
   data_write,
   nullptr,
-  stmsdf_args,
+  &stmsdf_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

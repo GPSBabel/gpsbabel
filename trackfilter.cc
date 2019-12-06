@@ -65,13 +65,11 @@
 int TrackFilter::trackfilter_opt_count()
 {
   int res = 0;
-  arglist_t* a = args;
 
-  while (a->argstring) {
-    if (*a->argval != nullptr) {
+  for (const auto& arg : qAsConst(args)) {
+    if (*arg.argval != nullptr) {
       res++;
     }
-    a++;
   }
   return res;
 }

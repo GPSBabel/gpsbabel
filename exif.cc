@@ -197,12 +197,11 @@ static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 
 static uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
-static arglist_t exif_args[] = {
+static QVector<arglist_t> exif_args = {
   { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", nullptr, nullptr },
   { "name", &opt_name, "Locate waypoint for tagging by this name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   { "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  ARG_TERMINATOR
 };
 
 // for debug only
@@ -1685,7 +1684,7 @@ ff_vecs_t exif_vecs = {
   exif_read,
   exif_write,
   nullptr,
-  exif_args,
+  &exif_args,
   CET_CHARSET_UTF8, 0,
   NULL_POS_OPS,
   nullptr

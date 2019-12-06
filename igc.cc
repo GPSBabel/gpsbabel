@@ -938,13 +938,12 @@ static void data_write()
 }
 
 
-static arglist_t igc_args[] = {
+static QVector<arglist_t> igc_args = {
   {
     "timeadj", &timeadj,
     "(integer sec or 'auto') Barograph to GPS time diff",
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 ff_vecs_t igc_vecs = {
@@ -957,7 +956,7 @@ ff_vecs_t igc_vecs = {
   data_read,
   data_write,
   nullptr,
-  igc_args,
+  &igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

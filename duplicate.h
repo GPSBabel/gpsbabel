@@ -30,9 +30,9 @@
 class DuplicateFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void process() override;
 
@@ -42,7 +42,7 @@ private:
   char* purge_duplicates = nullptr;
   char* correct_coords = nullptr;
 
-  arglist_t args[5] = {
+  QVector<arglist_t> args = {
     {
       "shortname", &snopt, "Suppress duplicate waypoints based on name",
       nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -59,7 +59,6 @@ private:
       "correct", &correct_coords, "Use coords from duplicate points",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   struct btree_node {

@@ -54,8 +54,7 @@ static gbfile* file_in;
 static gbfile* file_out;
 
 static
-arglist_t tomtom_args[] = {
-  ARG_TERMINATOR
+QVector<arglist_t> tomtom_args = {
 };
 
 static void
@@ -473,7 +472,7 @@ ff_vecs_t tomtom_vecs = {
   data_read,
   data_write,
   nullptr,
-  tomtom_args,
+  &tomtom_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -32,12 +32,11 @@ static char* vcf_encrypt = nullptr;
 #define MYNAME "VCF"
 
 static
-arglist_t vcf_args[] = {
+QVector<arglist_t> vcf_args = {
   {
     "encrypt", &vcf_encrypt,
     "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void
@@ -142,7 +141,7 @@ ff_vecs_t vcf_vecs = {
   nullptr,
   data_write,
   nullptr,
-  vcf_args,
+  &vcf_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

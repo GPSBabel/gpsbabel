@@ -43,13 +43,12 @@ static char* binary = nullptr;
 #define MYNAME "lmx"
 
 static
-arglist_t lmx_args[] = {
+QVector<arglist_t> lmx_args = {
   {
     "binary", &binary,
     "Compact binary representation",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /*
@@ -411,7 +410,7 @@ ff_vecs_t lmx_vecs = {
   lmx_read,
   lmx_write,
   nullptr,
-  lmx_args,
+  &lmx_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

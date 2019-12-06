@@ -31,9 +31,9 @@
 class BendFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -48,7 +48,7 @@ private:
 
   RouteList* routes_orig = nullptr;
 
-  arglist_t args[3] = {
+  QVector<arglist_t> args = {
     {
       "distance", &distopt, "Distance to the bend in meters where the new points will be added",
       "25", ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
@@ -57,7 +57,6 @@ private:
       "minangle", &minangleopt, "Minimum bend angle in degrees", "5",
       ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   Waypoint* create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,

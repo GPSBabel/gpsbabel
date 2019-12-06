@@ -47,10 +47,9 @@ static const QString DESCRIPTION = QStringLiteral("description");
 static const QString URL = QStringLiteral("url");
 static const QString URLNAME = QStringLiteral("urlname");
 
-static arglist_t geojson_args[] = {
+static QVector<arglist_t> geojson_args = {
   {"compact", &compact_opt, "Compact Output. Default is off.", 
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
-  ARG_TERMINATOR
 };
 
 static void
@@ -324,7 +323,7 @@ ff_vecs_t geojson_vecs = {
   geojson_read,
   geojson_write,
   nullptr,
-  geojson_args,
+  &geojson_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr  

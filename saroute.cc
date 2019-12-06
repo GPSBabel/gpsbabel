@@ -36,7 +36,7 @@ static char* timesynth = nullptr;
 static int control = 0;
 
 static
-arglist_t saroute_args[] = {
+QVector<arglist_t> saroute_args = {
   {
     "turns_important", &turns_important,
     "Keep turns if simplify filter is used",
@@ -58,7 +58,6 @@ arglist_t saroute_args[] = {
     "times", &timesynth, "Synthesize track times",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 #define ReadShort(f) gbfgetint16(f)
@@ -457,7 +456,7 @@ ff_vecs_t saroute_vecs = {
   my_read,
   nullptr,
   nullptr,
-  saroute_args,
+  &saroute_args,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

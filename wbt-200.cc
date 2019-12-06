@@ -1054,12 +1054,11 @@ static void data_read()
 
 /* wbt */
 
-static arglist_t wbt_sargs[] = {
+static QVector<arglist_t> wbt_sargs = {
   {
     "erase", &erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 ff_vecs_t wbt_svecs = {
@@ -1072,7 +1071,7 @@ ff_vecs_t wbt_svecs = {
   data_read,
   nullptr,
   nullptr,
-  wbt_sargs,
+  &wbt_sargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr
@@ -1080,8 +1079,7 @@ ff_vecs_t wbt_svecs = {
 
 /* used for wbt-bin /and/ wbt-tk1 */
 
-static arglist_t wbt_fargs[] = {
-  ARG_TERMINATOR
+static QVector<arglist_t> wbt_fargs = {
 };
 
 ff_vecs_t wbt_fvecs = {
@@ -1094,7 +1092,7 @@ ff_vecs_t wbt_fvecs = {
   file_read,
   nullptr,
   nullptr,
-  wbt_fargs,
+  &wbt_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

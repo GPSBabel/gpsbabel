@@ -32,9 +32,9 @@
 class HeightFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -44,7 +44,7 @@ private:
   char* wgs84tomslopt = nullptr;
   double addf;
 
-  arglist_t args[3] = {
+  QVector<arglist_t> args = {
     {
       "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
       nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
@@ -53,7 +53,6 @@ private:
       "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",
       nullptr, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   double bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22);

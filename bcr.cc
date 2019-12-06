@@ -68,7 +68,7 @@ static char* radius_opt;
 static char* prefer_shortnames_opt;
 
 static
-arglist_t bcr_args[] = {
+QVector<arglist_t> bcr_args = {
   {
     "index", &rtenum_opt, "Index of route to write (if more than one in source)",
     nullptr, ARGTYPE_INT, "1", nullptr, nullptr
@@ -85,7 +85,6 @@ arglist_t bcr_args[] = {
     "prefer_shortnames", &prefer_shortnames_opt, "Use shortname instead of description",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 struct bcr_icon_mapping_t {
@@ -487,7 +486,7 @@ ff_vecs_t bcr_vecs = {
   bcr_data_read,
   bcr_data_write,
   nullptr,
-  bcr_args,
+  &bcr_args,
   CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr

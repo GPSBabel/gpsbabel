@@ -50,12 +50,11 @@ static int what;
 static char* index_opt = nullptr;
 
 static
-arglist_t stmwpp_args[] = {
+QVector<arglist_t> stmwpp_args = {
   {
     "index", &index_opt, "Index of route/track to write (if more than one in source)",
     nullptr, ARGTYPE_INT, "1", nullptr, nullptr
   },
-  ARG_TERMINATOR
 };
 
 
@@ -328,7 +327,7 @@ ff_vecs_t stmwpp_vecs = {
   stmwpp_data_read,
   stmwpp_data_write,
   nullptr,
-  stmwpp_args,
+  &stmwpp_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,
   nullptr

@@ -30,9 +30,9 @@
 class RadiusFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -55,7 +55,7 @@ private:
     double distance;
   };
 
-  arglist_t args[8] = {
+  QVector<arglist_t> args = {
     {
       "lat", &latopt,       "Latitude for center point (D.DDDDD)",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
@@ -84,7 +84,6 @@ private:
       "asroute", &routename,"Put resulting waypoints in route of this name",
       nullptr, ARGTYPE_STRING, nullptr, nullptr, nullptr
     },
-    ARG_TERMINATOR
   };
 
   double gc_distance(double lat1, double lon1, double lat2, double lon2);

@@ -30,9 +30,9 @@
 class StackFilter:public Filter
 {
 public:
-  arglist_t* get_args() override
+  QVector<arglist_t>* get_args() override
   {
-    return args;
+    return &args;
   }
   void init() override;
   void process() override;
@@ -52,7 +52,7 @@ private:
   int  warnings_enabled = 1;
   int  swapdepth = 0;
 
-  arglist_t args[10] = {
+  QVector<arglist_t> args = {
     {
       "push", &opt_push, "Push waypoint list onto stack", nullptr,
       ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -89,7 +89,6 @@ private:
       "nowarn", &nowarn, "Suppress cleanup warning", nullptr,
       ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX, nullptr
     },
-    ARG_TERMINATOR
   };
 
   struct stack_elt

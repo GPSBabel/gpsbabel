@@ -213,7 +213,7 @@ static char* opt_datum;
 static const char* intstylebuf = nullptr;
 
 static
-arglist_t xcsv_args[] = {
+QVector<arglist_t> xcsv_args = {
   {
     "style", &styleopt, "Full path to XCSV style file", nullptr,
     ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
@@ -247,7 +247,6 @@ arglist_t xcsv_args[] = {
     "datum", &opt_datum, "GPS datum (def. WGS 84)",
     "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 /* something to map config file constants to chars */
@@ -2234,7 +2233,7 @@ ff_vecs_t xcsv_vecs = {
   xcsv_data_read,
   xcsv_data_write,
   nullptr,
-  xcsv_args,
+  &xcsv_args,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
   nullptr

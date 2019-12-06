@@ -87,7 +87,7 @@ static char* mpsusedepth = nullptr;
 static char* mpsuseprox = nullptr;
 
 static
-arglist_t mps_args[] = {
+QVector<arglist_t> mps_args = {
   {
     "snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1",
     nullptr, nullptr
@@ -115,7 +115,6 @@ arglist_t mps_args[] = {
     "Use proximity values on output (default is ignore)",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
 };
 
 static void
@@ -2048,7 +2047,7 @@ ff_vecs_t mps_vecs = {
   mps_read,
   mps_write,
   nullptr,
-  mps_args,
+  &mps_args,
   CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
   nullptr,
