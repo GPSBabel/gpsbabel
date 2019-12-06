@@ -242,7 +242,6 @@ void	ht_trk_s(xg_string, const QXmlStreamAttributes*)
 static
 void	ht_trk_e(xg_string, const QXmlStreamAttributes*)
 {
-
 }
 
 static

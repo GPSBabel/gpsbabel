@@ -120,11 +120,6 @@ read_tracks()
 }
 
 static void
-route_head_noop(const route_head*)
-{
-}
-
-static void
 pocketfms_waypt_disp(const Waypoint* wpt)
 {
   breadcrumb bc;
@@ -169,7 +164,7 @@ data_read()
 static void
 data_write()
 {
-  track_disp_all(route_head_noop, route_head_noop, pocketfms_waypt_disp);
+  track_disp_all(nullptr, nullptr, pocketfms_waypt_disp);
 }
 
 ff_vecs_t pocketfms_bc_vecs = {

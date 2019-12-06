@@ -1756,13 +1756,6 @@ xcsv_waypt_pr(const Waypoint* wpt)
   waypt_out_count++;
 }
 
-static void
-xcsv_noop(const route_head* wp)
-{
-  (void)wp;
-  /* no-op */
-}
-
 // return |original| after performing token replacement.
 static QString
 xcsv_replace_tokens(const QString& original) {
@@ -1810,10 +1803,10 @@ xcsv_data_write()
     waypt_disp_all(xcsv_waypt_pr);
   }
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == rtedata)) {
-    route_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
+    route_disp_all(xcsv_resetpathlen, nullptr, xcsv_waypt_pr);
   }
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == trkdata)) {
-    track_disp_all(xcsv_resetpathlen,xcsv_noop,xcsv_waypt_pr);
+    track_disp_all(xcsv_resetpathlen, nullptr, xcsv_waypt_pr);
   }
 
   /* output epilogue lines, if any. */

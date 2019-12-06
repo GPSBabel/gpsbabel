@@ -1111,11 +1111,6 @@ route_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-route_noop(const route_head* )
-{
-}
-
-static void
 route_write()
 {
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
@@ -1127,7 +1122,7 @@ route_write()
     tx_routelist[i] = sane_GPS_Way_New();
   }
 
-  route_disp_all(route_hdr_pr, route_noop, route_waypt_pr);
+  route_disp_all(route_hdr_pr, nullptr, route_waypt_pr);
   GPS_Command_Send_Route(portname, tx_routelist, n);
 }
 
@@ -1171,7 +1166,7 @@ track_prepare()
     tx_tracklist[i] = GPS_Track_New();
   }
   my_track_count = 0;
-  track_disp_all(track_hdr_pr, route_noop, track_waypt_pr);
+  track_disp_all(track_hdr_pr, nullptr, track_waypt_pr);
 
   GPS_Prepare_Track_For_Device(&tx_tracklist, &n);
 

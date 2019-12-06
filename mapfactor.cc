@@ -93,7 +93,6 @@ mapfactor_read()
 static void
 mapfactor_rd_deinit()
 {
-
 }
 
 static void

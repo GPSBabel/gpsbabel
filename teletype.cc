@@ -88,11 +88,6 @@ teletype_read()
   }
 }
 
-static void
-teletype_exit()		/* optional */
-{
-}
-
 /**************************************************************************/
 
 // capabilities below means: we can only read and write waypoints
@@ -111,7 +106,7 @@ ff_vecs_t teletype_vecs = {
   nullptr,
   teletype_read,
   nullptr,
-  teletype_exit,
+  nullptr,
   &teletype_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

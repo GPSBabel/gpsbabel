@@ -183,11 +183,6 @@ nmn4_route_hdr(const route_head*)
 }
 
 static void
-nmn4_route_tlr(const route_head*)
-{
-}
-
-static void
 nmn4_write_waypt(const Waypoint* wpt)
 {
   char city[128], street[128], zipc[32], number[32];
@@ -230,7 +225,7 @@ nmn4_write_data()
   }
 
   curr_rte_num = 0;
-  route_disp_all(nmn4_route_hdr, nmn4_route_tlr, nmn4_write_waypt);
+  route_disp_all(nmn4_route_hdr, nullptr, nmn4_write_waypt);
 }
 
 

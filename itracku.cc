@@ -654,11 +654,6 @@ itracku_write()
 }
 
 static void
-itracku_exit()		/* optional */
-{
-}
-
-static void
 itracku_rt_init(const QString& fname)
 {
   itracku_rd_ser_init(fname);
@@ -779,7 +774,7 @@ ff_vecs_t itracku_vecs = {
   nullptr,
   itracku_read,
   nullptr,
-  itracku_exit,
+  nullptr,
   &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
@@ -800,7 +795,7 @@ ff_vecs_t itracku_fvecs = {
   itracku_wr_deinit,
   itracku_read,
   itracku_write,
-  itracku_exit,
+  nullptr,
   &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

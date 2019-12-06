@@ -757,11 +757,6 @@ track_hdr_cb(const route_head* trk)
 }
 
 static void
-track_tlr_cb(const route_head*)
-{
-}
-
-static void
 track_wpt_cb(const Waypoint* wpt)
 {
   if (this_index != track_index) {
@@ -807,7 +802,7 @@ dmtlog_write()
 
   header_written = 0;
   this_index = 0;
-  track_disp_all(track_hdr_cb, track_tlr_cb, track_wpt_cb);
+  track_disp_all(track_hdr_cb, nullptr, track_wpt_cb);
   if (!header_written) {
     write_header(nullptr);
   }
