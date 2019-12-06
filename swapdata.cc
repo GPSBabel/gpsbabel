@@ -21,7 +21,6 @@
  */
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "swapdata.h"
 
 #define MYNAME "swapdata"

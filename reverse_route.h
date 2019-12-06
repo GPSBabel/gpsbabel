@@ -18,6 +18,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"    // for Waypoint (ptr only), arglist_t, route_head (ptr ...
 #include "filter.h"  // for Filter
 

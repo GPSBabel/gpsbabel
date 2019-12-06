@@ -26,7 +26,6 @@
 #include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "grtcirc.h"        // for RAD, gcdist, radtometers
 #include "position.h"
 

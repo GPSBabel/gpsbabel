@@ -24,6 +24,7 @@
 
 #include <QtCore/QDateTime>  // for QDateTime
 #include <QtCore/QList>      // for QList
+#include <QtCore/QVector>    // for QVector
 #include <QtCore/QtGlobal>   // for qint64
 
 #include "defs.h"            // for ARG_NOMINMAX, route_head (ptr only), ARG...

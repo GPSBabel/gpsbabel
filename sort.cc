@@ -24,7 +24,6 @@
 
 #include "defs.h"
 #include "src/core/datetime.h"  // for DateTime
-#include "filterdefs.h"
 #include "sort.h"
 
 #if FILTERS_ENABLED

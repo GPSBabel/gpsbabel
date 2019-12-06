@@ -24,6 +24,8 @@
 #define TRANSFORM_H_INCLUDED_
 
 #include <QtCore/QString>  // for QString
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"          // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
 #include "filter.h"        // for Filter
 

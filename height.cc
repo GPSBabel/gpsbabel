@@ -23,7 +23,6 @@
 
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "height.h"
 #include <cmath>
 #include <cstdlib>

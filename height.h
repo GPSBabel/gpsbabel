@@ -24,6 +24,8 @@
 #ifndef HEIGHT_H_INCLUDED_
 #define HEIGHT_H_INCLUDED_
 
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"    // for ARG_NOMINMAX, Waypoint (ptr only), arglist_t
 #include "filter.h"  // for Filter
 

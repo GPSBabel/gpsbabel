@@ -22,6 +22,8 @@
 #ifndef POSITION_H_INCLUDED_
 #define POSITION_H_INCLUDED_
 
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT
 #include "filter.h"  // for Filter
 

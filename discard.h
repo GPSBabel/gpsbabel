@@ -24,6 +24,8 @@
 
 // Can't use QRegularExpression because Linux won't get Qt 5 for years.
 #include <QtCore/QRegExp>  // for QRegExp
+#include <QtCore/QVector>  // for QVector
+
 #include "defs.h"          // for ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_S...
 #include "filter.h"        // for Filter
 

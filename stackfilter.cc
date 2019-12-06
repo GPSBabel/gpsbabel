@@ -22,7 +22,6 @@
 #include <cstdlib>  // for atoi
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "stackfilter.h"
 
 #if FILTERS_ENABLED

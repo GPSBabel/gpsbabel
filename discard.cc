@@ -21,7 +21,6 @@
 
 #include "defs.h"
 #include "discard.h"
-#include "filterdefs.h"
 #include <cstdlib>
 // Can't use QRegularExpression because Linux won't get Qt 5 for years.
 #include <QtCore/QRegExp>

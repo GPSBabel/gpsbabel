@@ -48,7 +48,6 @@
 #include <QtCore/QtGlobal>                 // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "trackfilter.h"
 
 #include "grtcirc.h"                       // for RAD, gcdist, radtometers, heading_true_degrees

@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "arcdist.h"
-#include "filterdefs.h"
 #include "grtcirc.h"
 
 #include <cmath>

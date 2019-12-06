@@ -25,7 +25,6 @@
 #include <QtCore/QtGlobal>  // for foreach
 
 #include "defs.h"
-#include "filterdefs.h"
 #include "radius.h"
 #include "grtcirc.h"        // for RAD, gcdist, radtomiles
 
