@@ -413,9 +413,9 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
   }
   track_add_head(trk_head);
 
-  auto vecs = args.simplified().split(' ');
+  const auto vecs = args.simplified().split(' ');
   for(const auto& vec : vecs) {
-    QStringList coords = vec.split(',');
+    const QStringList coords = vec.split(',');
     auto csize = coords.size();
     auto trkpt = new Waypoint;
 

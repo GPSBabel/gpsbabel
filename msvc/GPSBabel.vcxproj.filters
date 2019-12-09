@@ -848,6 +848,9 @@
     <ClInclude Include="src\core\usasciicodec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="units.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="validate.h">
       <Filter>Header Files</Filter>
     </ClInclude>

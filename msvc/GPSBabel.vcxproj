@@ -412,6 +412,7 @@
     <ClInclude Include="swapdata.h" />
     <ClInclude Include="trackfilter.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="units.h" />
     <ClInclude Include="zlib\trees.h" />
     <ClInclude Include="src\core\usasciicodec.h" />
     <ClInclude Include="validate.h" />
