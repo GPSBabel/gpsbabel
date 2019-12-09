@@ -83,7 +83,7 @@ static signed int
 cet_cs_alias_qsort_cb(const void* a, const void* b)
 {
   const auto* va = (const cet_cs_alias_t*) a;
-  const cet_cs_alias_t* vb = (const cet_cs_alias_t*) b;
+  const auto* vb = (const cet_cs_alias_t*) b;
   return case_ignore_strcmp(va->name, vb->name);
 }
 
