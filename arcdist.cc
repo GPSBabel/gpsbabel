@@ -27,6 +27,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib> // strtod
+#include <src/core/logging.h>
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"
@@ -60,6 +61,13 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
           prjlon = arcpt2->longitude;
           frac = 1.0;
         } else {
+          if (waypointp == nullptr) {
+            Fatal() << "Internal error. Attempt to project through a waypoint that doesn't exist";
+          }
+          if (arcpt1 == nullptr) {
+            Fatal() << "Internal error: Attempt to project waypoint without predecessor";
+          }
+
           dist = linedistprj(arcpt1->latitude,
                              arcpt1->longitude,
                              arcpt2->latitude,

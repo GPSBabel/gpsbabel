@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include <QtCore/QDebug>
-#include <climits>
 
 #define MYNAME "energympro"
 
@@ -126,11 +125,11 @@ struct tw_lap {
 static void
 read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
 {
-  tw_point point;
+  tw_point point{};
   gbfread(&point,sizeof(tw_point),1,file_in);
   if (global_opts.debug_level > 1) {
-    printf("Point: lat:%8d long:%8d alt:%8d ",point.Latitude,point.Longitude,point.Altitude);
-    printf("speed:%6d dist:%5d time:%5d Status:%1d", point.Speed,point.IntervalDist,point.lntervalTime,point.Status);
+    printf("Point: lat:%8u long:%8u alt:%8d ",point.Latitude,point.Longitude,point.Altitude);
+    printf("speed:%6u dist:%5u time:%5d Status:%1u", point.Speed,point.IntervalDist,point.lntervalTime,point.Status);
     printf("HR:(%3d,%1d)", point.HR_Heartrate,point.HR_Status);
     printf("Speed:(%8d,%1d)", point.Speed_Speed,point.Speed_Status);
     printf("Cad:(%3d,%1d)", point.Cadence_Cadence, point.Cadence_Status);
@@ -151,7 +150,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
   qint64 mSecsSinceEpoc = gpsbabeltime.toMSecsSinceEpoch();
   gpsbabeltime.setMSecsSinceEpoch(mSecsSinceEpoc-mSecsSinceEpoc%1000);
 
-  Waypoint* waypt = new Waypoint;
+  auto waypt = new Waypoint;
   waypt->latitude = (point.Latitude / 1000000.0);
   waypt->longitude = (point.Longitude / 1000000.0);
   waypt->altitude = point.Altitude;
@@ -182,7 +181,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
 static void
 read_lap()
 {
-  tw_lap lap;
+  tw_lap lap{};
   gbfread(&lap,sizeof(tw_lap),1,file_in);
   if (global_opts.debug_level > 1) {
     printf("LAP: splitTime:%6ds TotalTime:%6ds LapNumber:%5d ",lap.splitTime/10,lap.TotalTime/10,lap.Number);
@@ -234,20 +233,20 @@ track_read()
 
   gbfseek(file_in, 0L, SEEK_END);
   gbfseek(file_in, -(int32_t)(sizeof(tw_workout)), SEEK_CUR);
-  tw_workout workout;
+  tw_workout workout{};
   workout.dateStart.Year = gbfgetc(file_in);
   workout.dateStart.Month = gbfgetc(file_in);
   workout.dateStart.Day = gbfgetc(file_in);
   workout.timeStart.Hour = gbfgetc(file_in);
   workout.timeStart.Minute = gbfgetc(file_in);
   workout.timeStart.Second = gbfgetc(file_in);
-  workout.TotalRecPt = gbfgetint16(file_in);
-  workout.TotalTime = gbfgetint32(file_in);
-  workout.TotalDist = gbfgetint32(file_in);
-  workout.LapNumber = gbfgetint16(file_in);
-  workout.Calory = gbfgetint16(file_in);
-  workout.MaxSpeed = gbfgetint32(file_in);
-  workout.AvgSpeed = gbfgetint32(file_in);
+  workout.TotalRecPt = gbfgetuint16(file_in);
+  workout.TotalTime = gbfgetuint32(file_in);
+  workout.TotalDist = gbfgetuint32(file_in);
+  workout.LapNumber = gbfgetuint16(file_in);
+  workout.Calory = gbfgetuint16(file_in);
+  workout.MaxSpeed = gbfgetuint32(file_in);
+  workout.AvgSpeed = gbfgetuint32(file_in);
   workout.MaxHeart = gbfgetc(file_in);
   workout.AvgHeart = gbfgetc(file_in);
 
