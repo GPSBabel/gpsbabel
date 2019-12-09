@@ -417,11 +417,13 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
     QStringList coords = vec.split(',');
     auto csize = coords.size();
     auto trkpt = new Waypoint;
-    if (csize >= 2) {
+
+    if (csize == 3) {
+      trkpt->altitude = coords[2].toDouble();
+    }
+    if (csize == 2 || csize == 3) {
       trkpt->latitude = coords[1].toDouble();
       trkpt->longitude = coords[0].toDouble();
-    } else if (csize >= 3) {
-      trkpt->altitude = coords[2].toDouble();
     } else {
       Warning() << MYNAME << ": malformed coordinates " << vec;
     }
