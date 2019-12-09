@@ -774,7 +774,7 @@ gpvtg_parse(char* ibuf)
   if (curr_waypt) {
     WAYPT_SET(curr_waypt, course, course);
     if (speed_k > 0) {
-      WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k))
+      WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k));
     } else {
       WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
     }

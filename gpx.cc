@@ -1042,7 +1042,7 @@ gpx_end(const QString&)
    */
   case tt_humminbird_wpt_depth:
   case tt_humminbird_trk_trkseg_trkpt_depth:
-    WAYPT_SET(wpt_tmp, depth, cdatastr.toDouble() / 100.0)
+    WAYPT_SET(wpt_tmp, depth, cdatastr.toDouble() / 100.0);
     break;
   /*
    * Route-specific tags.
@@ -1174,7 +1174,7 @@ gpx_end(const QString&)
     wpt_tmp->SetCreationTime(xml_parse_time(cdatastr));
     break;
   case tt_wpttype_geoidheight:
-    WAYPT_SET(wpt_tmp, geoidheight, cdatastr.toDouble())
+    WAYPT_SET(wpt_tmp, geoidheight, cdatastr.toDouble());
     break;
   case tt_wpttype_cmt:
     wpt_tmp->description = cdatastr;

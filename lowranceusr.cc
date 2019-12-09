@@ -101,6 +101,7 @@
 #include <QtCore/QTime>          // for QTime
 #include <QtCore/Qt>             // for CaseInsensitive, UTC
 #include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
+#include <src/core/logging.h>
 
 #include "defs.h"
 #include "gbfile.h"              // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfputc, gbfwrite, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfputdbl, gbfile, gbfputflt, gbfread, gbfseek, gbfopen_le
@@ -1129,6 +1130,8 @@ lowranceusr_parse_waypts()
     case 6:
       lowranceusr4_parse_waypt(wpt_tmp);
       break;
+      default:
+        Warning() << MYNAME << ": Unknown internal version " << reading_version;
     }
     waypt_add(wpt_tmp);
   }

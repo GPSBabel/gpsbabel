@@ -453,7 +453,7 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
-#define WAYPT_SET(wpt,member,val) { (wpt)->member = (val); wpt->wpt_flags.member = 1; }
+#define WAYPT_SET(wpt,member,val) do { (wpt)->member = (val); wpt->wpt_flags.member = 1; } while (0)
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)

@@ -617,7 +617,7 @@ static void trl_read()
       WP->longitude =  pt2deg(trklog->pt[j].x);
       WP->altitude  =  hgt2m(trklog->sh[j].height);
       if (trklog->sh[j].speed >= 0)
-        WAYPT_SET(WP, speed, sp2mps(trklog->sh[j].speed))
+        WAYPT_SET(WP, speed, sp2mps(trklog->sh[j].speed));
         else {			/* bad speed < 0 - set to 0.0 */
           WAYPT_UNSET(WP, speed);
         }
