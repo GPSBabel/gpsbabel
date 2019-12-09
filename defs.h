@@ -91,7 +91,7 @@
 #define SECONDS_PER_DAY (24L*60*60)
 
 /* meters/second to kilometers/hour */
-#define MPS_TO_KPH(a) ((double)(a)*SECONDS_PER_HOUR/1000)
+#define MPS_TO_KPH(a) ((a)*SECONDS_PER_HOUR/1000.0)
 
 /* meters/second to miles/hour */
 #define MPS_TO_MPH(a) (METERS_TO_MILES(a) * SECONDS_PER_HOUR)
@@ -100,7 +100,7 @@
 #define MPS_TO_KNOTS(a) (MPS_TO_KPH((a)/1.852))
 
 /* kilometers/hour to meters/second */
-#define KPH_TO_MPS(a) ((double)(a)*1000/SECONDS_PER_HOUR)
+#define KPH_TO_MPS(a) ((a)*1000.0/SECONDS_PER_HOUR)
 
 /* miles/hour to meters/second */
 #define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
