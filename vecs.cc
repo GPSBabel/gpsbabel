@@ -1454,9 +1454,8 @@ sort_and_unify_vecs()
     xcsv_read_internal_style(svec.style_buf);
     vecs_t uvec;
     uvec.name = svec.name;
-    uvec.vec = new ff_vecs_t; /* LEAK */
     uvec.extensions = xcsv_file.extension;
-    *uvec.vec = *vec_list.at(0).vec; /* Inherits xcsv opts */
+    uvec.vec = new ff_vecs_t(*vec_list.at(0).vec); /* Inherits xcsv opts */ /* LEAK */
     /* Reset file type to inherit ff_type from xcsv. */
     uvec.vec->type = xcsv_file.type;
     /* Skip over the first help entry for all but the
