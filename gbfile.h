@@ -93,6 +93,8 @@ void gbfclose(gbfile* file);
 
 gbsize_t gbfread(void* buf, gbsize_t size, gbsize_t members, gbfile* file);
 gbsize_t gbfread(QString& buf, gbsize_t size, gbsize_t members, gbfile* file);
+// Convenience wrapper for above, but ignoring the possibility of endian swapping.
+QByteArray gbfreadbuf(gbsize_t size, gbfile* file);
 int gbfgetc(gbfile* file);
 QString gbfgets(char* buf, int len, gbfile* file);
 
