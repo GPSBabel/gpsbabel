@@ -1253,22 +1253,6 @@ int parse_speed(const QString& str, double* val, double scale, const char* modul
 unsigned long get_crc32(const void* data, int datalen);
 
 /*
- *  From units.c
- */
-enum fmt_units {
-  units_unknown = 0,
-  units_statute = 1,
-  units_metric = 2,
-  units_nautical =3,
-  units_aviation =4
-};
-
-int    fmt_setunits(fmt_units);
-double fmt_distance(double, const char** tag);
-double fmt_altitude(double, const char** tag);
-double fmt_speed(double, const char** tag);
-
-/*
  * From nmea.c
  */
 int nmea_cksum(const char* buf);

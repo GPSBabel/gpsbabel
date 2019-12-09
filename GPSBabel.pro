@@ -137,6 +137,7 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
+	units.h \
 	xcsv.h \
 	xmlgeneric.h \
 	zlib/crc32.h \

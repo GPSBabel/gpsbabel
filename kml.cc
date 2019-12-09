@@ -53,6 +53,7 @@
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+#include "units.h"
 
 // options
 static char* opt_deficon = nullptr;
