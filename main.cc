@@ -48,15 +48,19 @@
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
+#include "format.h"
 #include "inifile.h"                // for inifile_done, inifile_init
 #include "session.h"                // for start_session, session_exit, session_init
 #include "src/core/datetime.h"      // for DateTime
 #include "src/core/file.h"          // for File
 #include "src/core/usasciicodec.h"  // for UsAsciiCodec
+#include "vecs.h"
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
+
+Vecs* format_vecs;
 
 class QargStackElement
 {
@@ -151,7 +155,7 @@ usage(const char* pname, int shorter)
     fgetc(stdin);
   } else {
     printf("File Types (-i and -o options):\n");
-    disp_vecs();
+    format_vecs->disp_vecs();
     printf("\nSupported data filters:\n");
     disp_filter_vecs();
   }
@@ -161,7 +165,7 @@ static void
 spec_usage(const QString& vec)
 {
   printf("\n");
-  disp_vec(vec);
+  format_vecs->disp_vec(vec);
   disp_filter_vec(vec);
   printf("\n");
 }
@@ -201,8 +205,8 @@ static int
 run(const char* prog_name)
 {
   int argn;
-  ff_vecs_t* ivecs = nullptr;
-  ff_vecs_t* ovecs = nullptr;
+  Format* ivecs = nullptr;
+  Format* ovecs = nullptr;
   Filter* filter = nullptr;
   QString fname;
   QString ofname;
@@ -264,7 +268,7 @@ run(const char* prog_name)
     switch (c) {
     case 'i':
       optarg = FETCH_OPTARG;
-      ivecs = find_vec(optarg);
+      ivecs = format_vecs->find_vec(optarg);
       if (ivecs == nullptr) {
         fatal("Input type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -274,7 +278,7 @@ run(const char* prog_name)
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       optarg = FETCH_OPTARG;
-      ovecs = find_vec(optarg);
+      ovecs = format_vecs->find_vec(optarg);
       if (ovecs == nullptr) {
         fatal("Output type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -288,9 +292,6 @@ run(const char* prog_name)
       if (ivecs == nullptr) {
         fatal("No valid input type specified\n");
       }
-      if (ivecs->rd_init == nullptr) {
-        fatal("Format does not support reading.\n");
-      }
       if (global_opts.masked_objective & POSNDATAMASK) {
         did_something = true;
         break;
@@ -300,9 +301,9 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
+      cet_convert_init(ivecs->get_encode(), ivecs->get_fixed_encode());	/* init by module vec */
 
-      start_session(ivecs->name, fname);
+      start_session(ivecs->get_name(), fname);
       ivecs->rd_init(fname);
       ivecs->read();
       ivecs->rd_deinit();
@@ -323,11 +324,8 @@ run(const char* prog_name)
         if (doing_nothing) {
           global_opts.masked_objective |= WPTDATAMASK;
         }
-        if (ovecs->wr_init == nullptr) {
-          fatal("Format does not support writing.\n");
-        }
 
-        cet_convert_init(ovecs->encode, ovecs->fixed_encode);
+        cet_convert_init(ovecs->get_encode(), ovecs->get_fixed_encode());
 
         lists_backedup = false;
         wpt_head_bak = nullptr;
@@ -447,7 +445,7 @@ run(const char* prog_name)
      * Undocumented '-@' option for test.
      */
     case '@': {
-      bool format_ok = validate_formats();
+      bool format_ok = format_vecs->validate_formats();
       bool filter_ok = validate_filters();
       return (format_ok && filter_ok)? 0 : 1;
     }
@@ -471,7 +469,7 @@ run(const char* prog_name)
      * this as -^^.
      */
     case '^':
-      disp_formats(opt_version);
+      format_vecs->disp_formats(opt_version);
       return 0;
     case '%':
       disp_filters(opt_version);
@@ -531,12 +529,9 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
-    cet_convert_init(ivecs->encode, 1);
+    cet_convert_init(ivecs->get_encode(), 1);
 
-    start_session(ivecs->name, qargs.at(0));
-    if (ivecs->rd_init == nullptr) {
-      fatal("Format does not support reading.\n");
-    }
+    start_session(ivecs->get_name(), qargs.at(0));
     ivecs->rd_init(qargs.at(0));
     ivecs->read();
     ivecs->rd_deinit();
@@ -545,12 +540,8 @@ run(const char* prog_name)
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
-      cet_convert_init(ovecs->encode, 1);
+      cet_convert_init(ovecs->get_encode(), 1);
       cet_convert_strings(nullptr, global_opts.charset, nullptr);
-
-      if (ovecs->wr_init == nullptr) {
-        fatal("Format does not support writing.\n");
-      }
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
@@ -588,40 +579,27 @@ run(const char* prog_name)
       fatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
     }
 
-    if (!ivecs->position_ops.rd_position) {
-      fatal("Realtime tracking (-T) is not suppored by this input type.\n");
+    if (fname.isEmpty()) {
+      fatal("An input file (-f) must be specified.\n");
     }
-
-
-    if (ivecs->position_ops.rd_init) {
-      if (fname.isEmpty()) {
-        fatal("An input file (-f) must be specified.\n");
-      }
-      start_session(ivecs->name, fname);
-      ivecs->position_ops.rd_init(fname);
-    }
+    start_session(ivecs->get_name(), fname);
+    ivecs->rd_position_init(fname);
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
       fatal("Realtime tracking (-T) is exclusive of other modes.\n");
-    }
-
-    if (ovecs) {
-      if (!ovecs->position_ops.wr_position) {
-        fatal("This output format does not support output of realtime positioning.\n");
-      }
     }
 
     if (signal(SIGINT, signal_handler) == SIG_ERR) {
       fatal("Couldn't install the exit signal handler.\n");
     }
 
-    if (ovecs && ovecs->position_ops.wr_init) {
-      ovecs->position_ops.wr_init(ofname);
+    if (ovecs) {
+      ovecs->wr_position_init(ofname);
     }
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
-      Waypoint* wpt = ivecs->position_ops.rd_position(&tracking_status);
+      Waypoint* wpt = ivecs->rd_position(&tracking_status);
 
       if (tracking_status.request_terminate) {
         delete wpt;
@@ -629,9 +607,9 @@ run(const char* prog_name)
       }
       if (wpt) {
         if (ovecs) {
-//					ovecs->position_ops.wr_init(ofname);
-          ovecs->position_ops.wr_position(wpt);
-//					ovecs->position_ops.wr_deinit();
+//					ovecs->wr_position_init(ofname);
+          ovecs->wr_position(wpt);
+//					ovecs->wr_position_deinit();
         } else {
           /* Just print to screen */
           waypt_disp(wpt);
@@ -639,11 +617,9 @@ run(const char* prog_name)
         delete wpt;
       }
     }
-    if (ivecs->position_ops.rd_deinit) {
-      ivecs->position_ops.rd_deinit();
-    }
-    if (ovecs && ovecs->position_ops.wr_deinit) {
-      ovecs->position_ops.wr_deinit();
+    ivecs->rd_position_deinit();
+    if (ovecs) {
+      ovecs->wr_position_deinit();
     }
     return 0;
   }
@@ -728,7 +704,8 @@ main(int argc, char* argv[])
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
-  init_vecs();
+  format_vecs = new Vecs;
+  format_vecs->init_vecs();
   init_filter_vecs();
   cet_register();
   session_init();
@@ -741,7 +718,7 @@ main(int argc, char* argv[])
   waypt_flush_all();
   route_deinit();
   session_exit();
-  exit_vecs();
+  format_vecs->exit_vecs();
   exit_filter_vecs();
   inifile_done(global_opts.inifile);
 

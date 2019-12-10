@@ -113,6 +113,7 @@ set(HEADERS
   explorist_ini.h
   filter.h
   filterdefs.h
+  format.h
   garmin_device_xml.h
   garmin_fs.h
   garmin_gpi.h
@@ -143,12 +144,14 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
+  legacyformat.h
   magellan.h
   mapsend.h
   navilink.h
   session.h
   shapelib/shapefil.h
   strptime.h
+  vecs.h
   xcsv.h
   xmlgeneric.h
   zlib/crc32.h

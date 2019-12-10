@@ -16,6 +16,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef SRC_CORE_XMLTAG_INCLUDED_H_
+#define SRC_CORE_XMLTAG_INCLUDED_H_
+
 class xml_tag {
  public:
   xml_tag() :
@@ -44,3 +47,5 @@ struct fs_xml {
 };
 
 fs_xml* fs_xml_alloc(long type);
+
+#endif // SRC_CORE_XMLTAG_INCLUDED_H_

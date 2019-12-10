@@ -1045,7 +1045,7 @@ struct position_ops_t {
  */
 struct ff_vecs_t {
   ff_type type;
-  ff_cap cap[3];
+  QVector<ff_cap> cap;
   ff_init rd_init;
   ff_init wr_init;
   ff_deinit rd_deinit;
@@ -1057,7 +1057,7 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  QString name;		/* dyn. initialized by find_vec */
+  void* unused; /* TODO: delete this field */
 };
 
 struct style_vecs_t {
@@ -1071,17 +1071,10 @@ void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const QString&);
 void assign_option(const QString& vecname, arglist_t* arg, const char* val);
 void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
-void disp_vecs();
-void disp_vec(const QString& vecname);
 void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
 bool validate_args(const QString& name, const QVector<arglist_t>* args);
-bool validate_formats();
-void init_vecs();
-void exit_vecs();
-void disp_formats(int version);
 const char* name_option(uint32_t type);
 void printposn(double c, int is_lat);
 

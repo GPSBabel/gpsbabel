@@ -36,6 +36,7 @@
 
 #include "defs.h"
 #include "cet_util.h"           // for cet_convert_init, cet_cs_vec_utf8
+#include "format.h"
 #include "garmin_device_xml.h"  // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
 #include "garmin_fs.h"          // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"      // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
@@ -43,8 +44,13 @@
 #include "jeeps/gps.h"
 #include "jeeps/gpsserial.h"
 #include "src/core/datetime.h"  // for DateTime
+#include "vecs.h"
+
 
 #define MYNAME "GARMIN"
+
+extern Vecs* format_vecs;
+
 static const char* portname;
 static short_handle mkshort_handle;
 static GPS_PWay* tx_waylist;
@@ -67,7 +73,7 @@ static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
 
-static ff_vecs_t* gpx_vec;
+static Format* gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -342,7 +348,7 @@ rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
     const gdx_info* gi = gdx_get_info();
-    gpx_vec = find_vec("gpx");
+    gpx_vec = format_vecs->find_vec("gpx");
     gpx_vec->rd_init(gi->from_device.canon);
   } else {
     gpx_vec = nullptr;
