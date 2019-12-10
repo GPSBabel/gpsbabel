@@ -180,6 +180,20 @@ extern ff_vecs_t globalsat_sport_vecs;
 
 class Vecs
 {
+// Meyers Singleton
+public:
+  static Vecs& Instance()
+  {
+    static Vecs instance;
+    return instance;
+  }
+
+private:
+  Vecs() = default;
+  ~Vecs() = default;
+  Vecs(const Vecs&) = delete;
+  Vecs& operator= (const Vecs&) = delete;
+
 private:
   struct vecs_t {
     Format* vec;
@@ -207,13 +221,13 @@ private:
   static bool validate_vec(const vecs_t& vec);
 
 private:
-/*
- * Having these LegacyFormat instances be non-static data members
- * prevents the static initialization order fiasco because
- * the static vec that is used to construct a legacy format
- * instance is guaranteed to have already constructed an instance
- * of this class is constructed.
- */
+  /*
+   * Having these LegacyFormat instances be non-static data members
+   * prevents the static initialization order fiasco because
+   * the static vec that is used to construct a legacy format
+   * instance is guaranteed to have already constructed when an instance
+   * of this class is constructed.
+   */
 #if CSVFMTS_ENABLED
   LegacyFormat xcsv_fmt {xcsv_vecs};
 #endif // CSVFMTS_ENABLED

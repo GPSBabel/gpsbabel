@@ -48,19 +48,17 @@
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
-#include "format.h"
+#include "format.h"                 // for Format
 #include "inifile.h"                // for inifile_done, inifile_init
 #include "session.h"                // for start_session, session_exit, session_init
 #include "src/core/datetime.h"      // for DateTime
 #include "src/core/file.h"          // for File
 #include "src/core/usasciicodec.h"  // for UsAsciiCodec
-#include "vecs.h"
+#include "vecs.h"                   // for Vecs
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
-
-Vecs* format_vecs;
 
 class QargStackElement
 {
@@ -155,7 +153,7 @@ usage(const char* pname, int shorter)
     fgetc(stdin);
   } else {
     printf("File Types (-i and -o options):\n");
-    format_vecs->disp_vecs();
+    Vecs::Instance().disp_vecs();
     printf("\nSupported data filters:\n");
     disp_filter_vecs();
   }
@@ -165,7 +163,7 @@ static void
 spec_usage(const QString& vec)
 {
   printf("\n");
-  format_vecs->disp_vec(vec);
+  Vecs::Instance().disp_vec(vec);
   disp_filter_vec(vec);
   printf("\n");
 }
@@ -268,7 +266,7 @@ run(const char* prog_name)
     switch (c) {
     case 'i':
       optarg = FETCH_OPTARG;
-      ivecs = format_vecs->find_vec(optarg);
+      ivecs = Vecs::Instance().find_vec(optarg);
       if (ivecs == nullptr) {
         fatal("Input type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -278,7 +276,7 @@ run(const char* prog_name)
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       optarg = FETCH_OPTARG;
-      ovecs = format_vecs->find_vec(optarg);
+      ovecs = Vecs::Instance().find_vec(optarg);
       if (ovecs == nullptr) {
         fatal("Output type '%s' not recognized\n", qPrintable(optarg));
       }
@@ -445,7 +443,7 @@ run(const char* prog_name)
      * Undocumented '-@' option for test.
      */
     case '@': {
-      bool format_ok = format_vecs->validate_formats();
+      bool format_ok = Vecs::Instance().validate_formats();
       bool filter_ok = validate_filters();
       return (format_ok && filter_ok)? 0 : 1;
     }
@@ -469,7 +467,7 @@ run(const char* prog_name)
      * this as -^^.
      */
     case '^':
-      format_vecs->disp_formats(opt_version);
+      Vecs::Instance().disp_formats(opt_version);
       return 0;
     case '%':
       disp_filters(opt_version);
@@ -704,8 +702,7 @@ main(int argc, char* argv[])
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
-  format_vecs = new Vecs;
-  format_vecs->init_vecs();
+  Vecs::Instance().init_vecs();
   init_filter_vecs();
   cet_register();
   session_init();
@@ -718,7 +715,7 @@ main(int argc, char* argv[])
   waypt_flush_all();
   route_deinit();
   session_exit();
-  format_vecs->exit_vecs();
+  Vecs::Instance().exit_vecs();
   exit_filter_vecs();
   inifile_done(global_opts.inifile);
 

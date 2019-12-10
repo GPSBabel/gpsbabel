@@ -42,14 +42,13 @@
 
 #include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
-#include "format.h"
+#include "format.h"                // for Format
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
 #include "magellan.h"              // for mm_meridian, mm_sportrak, magellan_icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
 #include "src/core/datetime.h"     // for DateTime
-#include "vecs.h"
+#include "vecs.h"                  // for Vecs
 
-extern Vecs* format_vecs;
 
 static int bitrate = 4800;
 static int wptcmtcnt;
@@ -786,7 +785,7 @@ mag_rd_init_common(const QString& portname)
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      gpx_vec = format_vecs->find_vec("gpx");
+      gpx_vec = Vecs::Instance().find_vec("gpx");
     }
     return;
   }
