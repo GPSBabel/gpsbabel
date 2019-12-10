@@ -61,7 +61,7 @@ public:
   * %%%        global callbacks called by gpsbabel main process              %%% *
   *******************************************************************************/
 
-  virtual void rd_init(const QString& fname)
+  virtual void rd_init(const QString& /* fname */)
   {
     fatal("Format does not support reading.\n");
 //	fin = gbfopen(fname, "r", MYNAME);
@@ -106,7 +106,7 @@ public:
 //
   }
 
-  virtual void wr_init(const QString& fname)
+  virtual void wr_init(const QString& /* fname */)
   {
     fatal("Format does not support writing.\n");
 //	fout = gbfopen(fname, "w", MYNAME);
@@ -129,12 +129,12 @@ public:
   {
   }
 
-  virtual void rd_position_init(const QString& fname)
+  virtual void rd_position_init(const QString& /* fname */)
   {
     fatal("Realtime tracking (-T) is not suppored by this input type.\n");
   }
 
-  virtual Waypoint* rd_position(posn_status* status)
+  virtual Waypoint* rd_position(posn_status* /* status */)
   {
     return nullptr;
   }
@@ -143,11 +143,11 @@ public:
   {
   }
 
-  virtual void wr_position_init(const QString& fname)
+  virtual void wr_position_init(const QString& /* fname */)
   {
   }
 
-  virtual void wr_position(Waypoint* wpt)
+  virtual void wr_position(Waypoint* /* wpt */)
   {
     fatal("This output format does not support output of realtime positioning.\n");
   }

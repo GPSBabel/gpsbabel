@@ -30,7 +30,7 @@ class LegacyFormat : public Format
 {
 public:
   LegacyFormat() = default;
-  LegacyFormat(const ff_vecs_t& v) : vec(v) {}
+  explicit LegacyFormat(const ff_vecs_t& v) : vec(v) {}
 
   /*******************************************************************************
   * %%%        global callbacks called by gpsbabel main process              %%% *
