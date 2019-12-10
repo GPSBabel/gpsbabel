@@ -920,8 +920,6 @@ using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
 
-QString get_option(const QStringList& options, const char* argname);
-
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
 
@@ -1071,11 +1069,6 @@ void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-void assign_option(const QString& vecname, arglist_t* arg, const char* val);
-void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
-void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
-bool validate_args(const QString& name, const QVector<arglist_t>* args);
-const char* name_option(uint32_t type);
 void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);

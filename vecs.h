@@ -206,13 +206,20 @@ private:
 public:
   void init_vecs();
   void exit_vecs();
+  static void assign_option(const QString& module, arglist_t* arg, const char* val);
+  static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
+  static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
+  static QString get_option(const QStringList& options, const char* argname);
   Format* find_vec(const QString& vecname);
   void disp_vecs() const;
   void disp_vec(const QString& vecname) const;
+  static const char* name_option(uint32_t type);
   void disp_formats(int version) const;
+  static bool validate_args(const QString& name, const QVector<arglist_t>* args);
   bool validate_formats() const;
 
 private:
+  static int is_integer(const char* c);
   QVector<vecs_t> sort_and_unify_vecs() const;
   static void disp_v1(ff_type t);
   static void disp_v2(const Format* v);

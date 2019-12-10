@@ -76,8 +76,7 @@ void Vecs::init_vecs()
   }
 }
 
-static int
-is_integer(const char* c)
+int Vecs::is_integer(const char* c)
 {
   return isdigit(c[0]) || ((c[0] == '+' || c[0] == '-') && isdigit(c[1]));
 }
@@ -99,8 +98,7 @@ void Vecs::exit_vecs()
   }
 }
 
-void
-assign_option(const QString& module, arglist_t* arg, const char* val)
+void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
 {
   const char* c;
 
@@ -187,8 +185,7 @@ assign_option(const QString& module, arglist_t* arg, const char* val)
   *arg->argval = arg->argvalptr = xstrdup(c);
 }
 
-void
-disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
+void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
 {
   if (args) {
     for (const auto& arg : *args) {
@@ -204,7 +201,7 @@ disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
   }
 }
 
-void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name)
+void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name)
 {
   for (const auto& option : options) {
     const QString option_name = option.left(option.indexOf('='));
@@ -330,8 +327,7 @@ Format* Vecs::find_vec(const QString& vecname)
  * Find and return a specific argument in an arg list.
  * Modelled approximately after getenv.
  */
-QString
-get_option(const QStringList& options, const char* argname)
+QString Vecs::get_option(const QStringList& options, const char* argname)
 {
   QString rval;
 
@@ -529,8 +525,7 @@ void Vecs::disp_v2(const Format* v)
   putchar('\t');
 }
 
-const char*
-name_option(uint32_t type)
+const char* Vecs::name_option(uint32_t type)
 {
   const char* at[] = {
     "unknown",
@@ -625,7 +620,7 @@ void Vecs::disp_formats(int version) const
 //#define FIND_ALL_NULLPTR_ARGUMENTS
 //#define FIND_ALL_EMPTY_ARGUMENT_LISTS
 
-bool validate_args(const QString& name, const QVector<arglist_t>* args)
+bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
 {
   bool ok = true;
 

@@ -42,6 +42,7 @@
 #include "validate.h"
 #include "gbversion.h"
 #include "inifile.h"
+#include "vecs.h"
 
 #include <QtCore/QByteArray>   // for QByteArray
 #include <QtCore/QString>      // for QString
@@ -199,7 +200,7 @@ find_filter_vec(const QString& vecname)
 
     QVector<arglist_t>* args = vec.vec->get_args();
 
-    validate_options(options, args, vec.name);
+    Vecs::validate_options(options, args, vec.name);
 
     /* step 1: initialize by inifile or default values */
     if (args && !args->isEmpty()) {
@@ -210,9 +211,9 @@ find_filter_vec(const QString& vecname)
           qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
         }
         if (qtemp.isNull()) {
-          assign_option(vec.name, &arg, arg.defaultvalue);
+          Vecs::assign_option(vec.name, &arg, arg.defaultvalue);
         } else {
-          assign_option(vec.name, &arg, CSTR(qtemp));
+          Vecs::assign_option(vec.name, &arg, CSTR(qtemp));
         }
       }
     }
@@ -222,16 +223,16 @@ find_filter_vec(const QString& vecname)
       if (args && !args->isEmpty()) {
         assert(args->isDetached());
         for (auto& arg : *args) {
-          const QString opt = get_option(options, arg.argstring);
+          const QString opt = Vecs::get_option(options, arg.argstring);
           if (!opt.isNull()) {
-            assign_option(vec.name, &arg, CSTR(opt));
+            Vecs::assign_option(vec.name, &arg, CSTR(opt));
           }
         }
       }
     }
 
     if (global_opts.debug_level >= 1) {
-      disp_vec_options(vec.name, args);
+      Vecs::disp_vec_options(vec.name, args);
     }
 
     return vec.vec;
@@ -343,7 +344,7 @@ disp_v1(const fl_vecs_t& vec)
                CSTR(vec.name),
                arg.argstring,
                arg.helpstring,
-               name_option(arg.argtype),
+               Vecs::name_option(arg.argtype),
                arg.defaultvalue ? arg.defaultvalue : "",
                arg.minvalue ? arg.minvalue : "",
                arg.maxvalue ? arg.maxvalue : "");
@@ -390,7 +391,7 @@ disp_filters(int version)
 static bool
 validate_filter_vec(const fl_vecs_t& vec)
 {
-  bool ok = validate_args(vec.name, vec.vec->get_args());
+  bool ok = Vecs::validate_args(vec.name, vec.vec->get_args());
 
   return ok;
 }
