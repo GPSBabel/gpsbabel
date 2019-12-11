@@ -139,6 +139,7 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
+	units.h \
 	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
@@ -231,7 +232,6 @@ macx {
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
-DEFINES += NEW_STRINGS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED

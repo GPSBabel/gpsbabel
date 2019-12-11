@@ -557,7 +557,7 @@ start_something_else(const QString& el, const QXmlStreamAttributes& attr)
     return;
   }
 
-  xml_tag* new_tag = new xml_tag;
+  auto* new_tag = new xml_tag;
   new_tag->tagname = el;
 
   int attr_count = attr.size();
@@ -593,7 +593,7 @@ start_something_else(const QString& el, const QXmlStreamAttributes& attr)
       new_tag->parent = cur_tag;
     }
   } else {
-    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(*fs_ptr, FS_GPX);
+    auto* fs_gpx = (fs_xml*)fs_chain_find(*fs_ptr, FS_GPX);
 
     if (fs_gpx && fs_gpx->tag) {
       cur_tag = fs_gpx->tag;
@@ -624,7 +624,7 @@ static void
 tag_log_wpt(const QXmlStreamAttributes& attr)
 {
   /* create a new waypoint */
-  Waypoint* lwp_tmp = new Waypoint;
+  auto* lwp_tmp = new Waypoint;
 
   /* extract the lat/lon attributes */
   if (attr.hasAttribute("lat")) {
@@ -639,18 +639,10 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
     we need to keep track of log_wpt counts so we don't collide with
     dupe shortnames.
   */
-#if NEW_STRINGS
   if (wpt_tmp->shortname.size() > 2) {
 // FIXME: think harder about this later.
     lwp_tmp->shortname = wpt_tmp->shortname.mid(2, 4) + "-FIXME";
 
-#else
-  if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
-    /* copy of the shortname */
-    lwp_tmp->shortname = (char*) xcalloc(7, 1);
-    sprintf(lwp_tmp->shortname, "%-4.4s%02d",
-            &wpt_tmp->shortname[2], logpoint_ct++);
-#endif
     waypt_add(lwp_tmp);
   }
 }
@@ -903,7 +895,6 @@ xml_parse_time(const QString& dateTimeString)
 static void
 gpx_end(const QString&)
 {
-  float x;
   int passthrough;
   static QDateTime gc_log_date;
 
@@ -976,8 +967,7 @@ gpx_end(const QString&)
     wpt_tmp->AllocGCData()->type = gs_mktype(cdatastr);
     break;
   case tt_cache_difficulty:
-    x = cdatastr.toDouble();
-    wpt_tmp->AllocGCData()->diff = x * 10;
+    wpt_tmp->AllocGCData()->diff = cdatastr.toFloat() * 10;
     break;
   case tt_cache_hint:
     wpt_tmp->AllocGCData()->hint = cdatastr;
@@ -995,8 +985,7 @@ gpx_end(const QString&)
   }
   break;
   case tt_cache_terrain:
-    x = cdatastr.toDouble();
-    wpt_tmp->AllocGCData()->terr = x * 10;
+    wpt_tmp->AllocGCData()->terr = cdatastr.toFloat() * 10;
     break;
   case tt_cache_placer:
     wpt_tmp->AllocGCData()->placer = cdatastr;
@@ -1045,7 +1034,7 @@ gpx_end(const QString&)
    */
   case tt_humminbird_wpt_depth:
   case tt_humminbird_trk_trkseg_trkpt_depth:
-    WAYPT_SET(wpt_tmp, depth, cdatastr.toDouble() / 100.0)
+    WAYPT_SET(wpt_tmp, depth, cdatastr.toDouble() / 100.0);
     break;
   /*
    * Route-specific tags.
@@ -1186,16 +1175,16 @@ gpx_end(const QString&)
     wpt_tmp->notes = cdatastr;
     break;
   case tt_wpttype_pdop:
-    wpt_tmp->pdop = cdatastr.toDouble();
+    wpt_tmp->pdop = cdatastr.toFloat();
     break;
   case tt_wpttype_hdop:
-    wpt_tmp->hdop = cdatastr.toDouble();
+    wpt_tmp->hdop = cdatastr.toFloat();
     break;
   case tt_wpttype_vdop:
-    wpt_tmp->vdop = cdatastr.toDouble();
+    wpt_tmp->vdop = cdatastr.toFloat();
     break;
   case tt_wpttype_sat:
-    wpt_tmp->sat = cdatastr.toDouble();
+    wpt_tmp->sat = cdatastr.toInt();
     break;
   case tt_wpttype_fix:
     if (cdatastr == QLatin1String("none")) {
@@ -1780,8 +1769,8 @@ gpx_waypt_pr(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-    garmin_fs_t* gmsd = GMSD_FIND(waypointp); /* gARmIN sPECIAL dATA */
+    auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    auto* gmsd = GMSD_FIND(waypointp); /* gARmIN sPECIAL dATA */
     if (fs_gpx) {
       if (! gmsd) {
         fprint_xml_chain(fs_gpx->tag, waypointp);
@@ -1813,7 +1802,7 @@ gpx_track_hdr(const route_head* rte)
 
   if (gpx_wversion_num > 10) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      fs_xml* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1860,7 +1849,7 @@ gpx_track_disp(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
@@ -1902,7 +1891,7 @@ gpx_route_hdr(const route_head* rte)
 
   if (gpx_wversion_num > 10) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      fs_xml* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1939,7 +1928,7 @@ gpx_route_disp(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }

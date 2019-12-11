@@ -82,8 +82,8 @@ cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_ve
 static signed int
 cet_cs_alias_qsort_cb(const void* a, const void* b)
 {
-  const cet_cs_alias_t* va = (const cet_cs_alias_t*) a;
-  const cet_cs_alias_t* vb = (const cet_cs_alias_t*) b;
+  const auto* va = (const cet_cs_alias_t*) a;
+  const auto* vb = (const cet_cs_alias_t*) b;
   return case_ignore_strcmp(va->name, vb->name);
 }
 
@@ -219,7 +219,7 @@ cet_find_cs_by_name(const QString& name)
 
   while (i <= j) {
     int a = (i + j) >> 1;
-    cet_cs_alias_t* n = &cet_cs_alias[a];
+    auto n = &cet_cs_alias[a];
     int x = case_ignore_strcmp(name, n->name);
     if (x == 0) {
       return n->vec;
@@ -376,7 +376,7 @@ cet_convert_string(const QString& str)
 static void
 cet_convert_waypt(const Waypoint* wpt)
 {
-  Waypoint* w = const_cast<Waypoint*>(wpt);
+  auto* w = const_cast<Waypoint*>(wpt);
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
     return;
@@ -398,7 +398,7 @@ cet_convert_waypt(const Waypoint* wpt)
 static void
 cet_convert_route_hdr(const route_head* route)
 {
-  route_head* rte = const_cast<route_head*>(route);
+  auto* rte = const_cast<route_head*>(route);
 
   if ((cet_output == 0) && (rte->cet_converted != 0)) {
     return;

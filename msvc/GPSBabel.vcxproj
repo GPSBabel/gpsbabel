@@ -68,7 +68,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;__WIN32__;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
@@ -110,7 +110,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -135,7 +135,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;NEW_STRINGS;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;__WIN32__;_CONSOLE;_DEBUG;_CRT_SECURE_NO_DEPRECATE;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -412,6 +412,7 @@
     <ClInclude Include="swapdata.h" />
     <ClInclude Include="trackfilter.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="units.h" />
     <ClInclude Include="zlib\trees.h" />
     <ClInclude Include="src\core\usasciicodec.h" />
     <ClInclude Include="validate.h" />

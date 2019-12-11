@@ -49,10 +49,11 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/optional.h"          // for optional
+#include <src/core/logging.h>           // for Warning
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
-
+#include "units.h"
 
 // options
 static char* opt_deficon = nullptr;
@@ -107,8 +108,8 @@ enum kml_point_type {
 
 static int realtime_positioning;
 static bounds kml_bounds;
-static gpsbabel::DateTime kml_time_min;
 static gpsbabel::DateTime kml_time_max;
+static gpsbabel::DateTime kml_time_min;
 
 #define DEFAULT_PRECISION "6"
 
@@ -208,7 +209,7 @@ struct {
   { 0,  ICON_BASE "youarehere-0.png" }, // Green
 };
 
-#define ICON_NOSAT ICON_BASE "youarehere-warning.png";
+#define ICON_NOSAT ICON_BASE "youarehere-warning.png"
 #define ICON_WPT "https://maps.google.com/mapfiles/kml/pal4/icon61.png"
 #define ICON_TRK ICON_BASE "track-directional/track-none.png"
 #define ICON_RTE ICON_BASE "track-directional/track-none.png"
@@ -406,34 +407,28 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 
 void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  int consumed = 0;
-  double lat, lon, alt;
-  Waypoint* trkpt;
-  int n = 0;
-
   route_head* trk_head = route_head_alloc();
-
-  QString iargs = args;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
   track_add_head(trk_head);
-  while ((n = sscanf(CSTRc(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
-    trkpt = new Waypoint;
-    trkpt->latitude = lat;
-    trkpt->longitude = lon;
 
-    // Line malformed or two-arg format without alt .  Rescan.
-    if (2 == n) {
-      sscanf(CSTRc(iargs), "%lf,%lf%n", &lon, &lat, &consumed);
+  const auto vecs = args.simplified().split(' ');
+  for(const auto& vec : vecs) {
+    const QStringList coords = vec.split(',');
+    auto csize = coords.size();
+    auto trkpt = new Waypoint;
+
+    if (csize == 3) {
+      trkpt->altitude = coords[2].toDouble();
     }
-
-    if (3 == n) {
-      trkpt->altitude = alt;
+    if (csize == 2 || csize == 3) {
+      trkpt->latitude = coords[1].toDouble();
+      trkpt->longitude = coords[0].toDouble();
+    } else {
+      Warning() << MYNAME << ": malformed coordinates " << vec;
     }
-
     track_add_wpt(trk_head, trkpt);
-    iargs = iargs.mid(consumed);
   }
 
   /* The track coordinates do not have a time associated with them. This is specified by using:
@@ -451,8 +446,8 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
     if (trk_head->rte_waypt_ct > 0) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
-      foreach (Waypoint* trkpt, trk_head->waypoint_list) {
-        trkpt->SetCreationTime(wpt_timespan_begin);
+      foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
+        trackpoint->SetCreationTime(wpt_timespan_begin);
         wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
       }
     }
@@ -1927,7 +1922,9 @@ static void kml_write_AbstractView()
       // the network position.  So we shove the end of the timespan out to
       // ensure the right edge of that time slider includes us.
       //
-      gpsbabel::DateTime time_max = realtime_positioning ? kml_time_max.addSecs(600) : kml_time_max;
+      gpsbabel::DateTime time_max;
+      time_max = realtime_positioning ? kml_time_max.addSecs(600)
+                                      : kml_time_max;
       writer->writeTextElement(QStringLiteral("end"), time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag

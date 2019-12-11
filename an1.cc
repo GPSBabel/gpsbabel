@@ -739,11 +739,8 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
   rec->name = xstrdup(wpt->description);
 
   if (!nogc && wpt->gc_data->id) {
-#if NEW_STRINGS
+    // FIXME: this whole mess should be qstring concatenation
     char* extra = (char*) xmalloc(25 + wpt->gc_data->placer.length() + wpt->shortname.length());
-#else
-    char* extra = (char*) xmalloc(25 + strlen(CSTR(wpt->gc_data->placer)) + strlen(wpt->shortname));
-#endif
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
             CSTR(wpt->gc_data->placer),
             CSTRc(wpt->shortname), wpt->gc_data->diff/10.0,
