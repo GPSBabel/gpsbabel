@@ -28,6 +28,7 @@
 
 #include "defs.h"
 #include "format.h"
+#include "gpx.h"
 #include "legacyformat.h"
 
 
@@ -35,7 +36,6 @@
 extern ff_vecs_t xcsv_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t geo_vecs;
-extern ff_vecs_t gpx_vecs;
 extern ff_vecs_t mag_svecs;
 extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t magX_fvecs;
@@ -239,7 +239,7 @@ private:
   LegacyFormat xcsv_fmt {xcsv_vecs};
 #endif // CSVFMTS_ENABLED
   LegacyFormat geo_fmt {geo_vecs};
-  LegacyFormat gpx_fmt {gpx_vecs};
+  GpxFormat gpx_fmt;
   LegacyFormat mag_sfmt {mag_svecs};
   LegacyFormat mag_ffmt {mag_fvecs};
   LegacyFormat magX_ffmt {magX_fvecs};

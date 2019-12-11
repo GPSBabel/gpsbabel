@@ -122,6 +122,7 @@ set(HEADERS
   gbser.h
   gbser_private.h
   gbversion.h
+  gpx.h
   grtcirc.h
   heightgrid.h
   holux.h

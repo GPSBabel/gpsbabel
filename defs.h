@@ -1137,7 +1137,7 @@ const QString get_filename(const QString& fname);			/* extract the filename port
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 /* this lives in gpx.c */
-gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
+gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 
 QString rot13(const QString& s);
 
