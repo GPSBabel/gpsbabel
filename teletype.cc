@@ -70,19 +70,11 @@ teletype_read()
 
     if (true) {  // need bit value of NEWFORMAT
       int len = gbfgetuint16(fin);
-      // probably could treat as a pascal string
-      char* junk = (char*) xmalloc(len);
-      gbfread(junk, len, 1, fin);
-      xfree(junk);
+      gbfseek(fin, len, SEEK_CUR);
     }
     wpt->latitude = gbfgetint32(fin) / 1000000.0 ;
     wpt->longitude = gbfgetint32(fin) / 1000000.0 ;
-
-    {
-      char jibberish[21];
-      gbfread(jibberish, sizeof(jibberish), 1, fin);
-    }
-
+    gbfseek(fin, 21, SEEK_CUR);
 
     waypt_add(wpt);
   }

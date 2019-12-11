@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#include "units.h"
 
 static int units = units_statute;
 

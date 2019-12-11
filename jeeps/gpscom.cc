@@ -1255,7 +1255,9 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
         trk_idx = strtoul(ctk[j]->trk_ident, nullptr, 0);
         continue;
       }
-
+      if (wpt[i] == nullptr || ctk[j] == nullptr) {
+        fatal("Internal error in GPS_Command_Send_Track_As_Course");
+      }
       dist = gcgeodist(wpt[i]->lat, wpt[i]->lon, ctk[j]->lat, ctk[j]->lon);
       if (dist < min_dist) {
         min_dist = dist;
@@ -1264,6 +1266,9 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
       }
     }
 
+    if (wpt[i] == nullptr) {
+      fatal("Internal error in GPS_Command_Send_Track_As_Course: no wpt");
+    }
     cpt[i+n_cpt] = GPS_Course_Point_New();
     strncpy(cpt[i+n_cpt]->name, wpt[i]->cmnt,
             sizeof(cpt[i+n_cpt]->name) - 1);

@@ -778,7 +778,7 @@ jtr.o: jtr.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
 kml.o: kml.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h grtcirc.h \
   src/core/file.h src/core/xmlstreamwriter.h src/core/xmltag.h \
-  xmlgeneric.h
+  units.h xmlgeneric.h
 lmx.o: lmx.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h \
   xmlgeneric.h
@@ -980,7 +980,7 @@ unicsv.o: unicsv.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h garmin_tables.h \
   src/core/logging.h src/core/textstream.h src/core/file.h
 units.o: units.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h units.h
 util.o: util.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h \
   src/core/xmltag.h

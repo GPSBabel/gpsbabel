@@ -157,11 +157,7 @@ tpo_check_version_string()
 
   /* read the id string */
   gbfread(&string_size, 1, 1, tpo_file_in);
-  char* string_buffer = (char*) xmalloc(string_size+1);
-  gbfread(string_buffer, 1, string_size, tpo_file_in);
-
-  /* terminate the string */
-  string_buffer[string_size] = 0;
+  QByteArray string_buffer = gbfgetnativecstr(tpo_file_in);
 
   /* check for the presence of a 3.0-style id string */
   /* Note this check also finds version 4 id strings, e.g. "TOPO! Ver. 4.5.0" */
@@ -170,7 +166,6 @@ tpo_check_version_string()
 //fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
 
     gbfseek(tpo_file_in, -(string_size+1), SEEK_CUR);
-    xfree(string_buffer);
     tpo_version = 3.0;  /* Really any 3.x version */
     return;
 
@@ -178,7 +173,6 @@ tpo_check_version_string()
     /* We found a version 1.x or 2.x file */
     /* seek back to the beginning of the file */
     gbfseek(tpo_file_in, -(string_size+1), SEEK_CUR);
-    xfree(string_buffer);
     tpo_version = 2.0;  /* Really any 1.x or 2.x version */
     return;
   }
@@ -190,9 +184,7 @@ static void
    as a C array definition. */
 tpo_dump_header_bytes(int header_size)
 {
-  unsigned char* buffer = (unsigned char*) xmalloc(header_size);
-
-  gbfread(buffer, 1, header_size, tpo_file_in);
+  QByteArray buffer = gbfreadbuf(header_size, tpo_file_in);
 
   printf("unsigned char header_bytes[] = {\n");
 
@@ -200,7 +192,7 @@ tpo_dump_header_bytes(int header_size)
     if (i%8 == 0) {
       printf("    ");
     }
-    printf("0x%02X", buffer[i]);
+    printf("0x%02X", buffer.at(i));
     if (i != header_size-1) {
       printf(", ");
     }
@@ -210,8 +202,6 @@ tpo_dump_header_bytes(int header_size)
   }
 
   printf("};\n");
-
-  xfree(buffer);
 }
 
 /* tpo_read_until_section()
@@ -527,7 +517,7 @@ static void tpo_process_tracks()
     // clumsy way to skip two undefined bytes (compiler should unwind this)
     for (unsigned xx = 0; xx < 2; xx++) {
       unsigned int skipped = (unsigned char) gbfgetc(tpo_file_in);
-      Q_UNUSED(skipped);
+      Q_UNUSED(skipped)
       // printf("Skipping unknown (visibility?) byte 0x%x\n", skipped);
     }
 
@@ -542,7 +532,7 @@ static void tpo_process_tracks()
     }
 
     unsigned char tmp = gbfgetc(tpo_file_in);
-    Q_UNUSED(tmp);
+    Q_UNUSED(tmp)
     // printf("Skipping unknown byte 0x%x after color\n",tmp);
 
     // byte for name length, then name
@@ -554,9 +544,7 @@ static void tpo_process_tracks()
       return;
     }
     if (tmp) {
-      styles[ii].name[0] = '\0';
-      gbfread(styles[ii].name, 1, tmp, tpo_file_in);
-      styles[ii].name[tmp] = '\0';  // Terminator
+      styles[ii].name = gbfreadbuf(tmp, tpo_file_in);
     } else { // Assign a generic style name
       styles[ii].name = QString("STYLE %1").arg(ii);
     }
@@ -754,7 +742,7 @@ static void tpo_process_tracks()
 
       // Process the delta
       else {
-        int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1};
+        static const int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1};
 
 
         if (buf[jj] == 0) {
@@ -765,8 +753,8 @@ static void tpo_process_tracks()
           fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
         }
 
-        lon+=lonscale*scarray[buf[jj]>>4];
-        lat+=latscale*scarray[(buf[jj]&0xf)];
+        lon += lonscale * scarray[buf[jj] >> 4];
+        lat += latscale * scarray[(buf[jj] & 0xf)];
 //printf(".");
         jj++;
 
@@ -864,9 +852,7 @@ static void tpo_process_waypoints()
     name_length = tpo_read_int();
 //printf("\tComment length: %d\n", name_length);
     if (name_length) {
-      QString comment;
-      gbfread(comment, 1, name_length, tpo_file_in);
-      waypoint_temp->description = comment;
+      waypoint_temp->description = gbfreadbuf(name_length, tpo_file_in);
     }
 
     // For routes (later), we need a duplicate of each waypoint
@@ -948,10 +934,7 @@ static void tpo_process_map_notes()
     // Fetch comment length
     unsigned int name_length = tpo_read_int();
     if (name_length) {
-      QString comment;
-
-      gbfread(comment, 1, name_length, tpo_file_in);
-      waypoint_temp->description = comment;
+      waypoint_temp->description = gbfreadbuf(name_length, tpo_file_in);
     }
 
     // Length of text for external path.  If non-zero, skip past
@@ -960,9 +943,7 @@ static void tpo_process_map_notes()
     name_length = tpo_read_int();
 //printf("name_length: %x\n", name_length);
     if (name_length) {
-      QString notes;
-
-      gbfread(notes, 1, name_length, tpo_file_in);
+      QString notes = gbfreadbuf(name_length, tpo_file_in);
       waypoint_temp->AddUrlLink(notes);
     }
 
@@ -971,9 +952,7 @@ static void tpo_process_map_notes()
 //UNKNOWN DATA LENGTH
     name_length = tpo_read_int();
     if (name_length) {
-      QString notes;
-
-      gbfread(notes, 1, name_length, tpo_file_in);
+      QString notes = gbfreadbuf(name_length, tpo_file_in);
       waypoint_temp->AddUrlLink(notes);
     }
 
@@ -1047,9 +1026,6 @@ static void tpo_process_symbols()
     waypt_add(waypoint_temp);
   }
 }
-
-
-
 
 
 // Text Labels decoder for version 3.x files.

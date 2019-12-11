@@ -242,19 +242,19 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   GetCommState(h->comport, &tio);
 
   tio.BaudRate            = mkspeed(speed);
-  tio.fBinary             = TRUE;
-  tio.fParity             = TRUE;
-  tio.fOutxCtsFlow        = FALSE;
-  tio.fOutxDsrFlow        = FALSE;
+  tio.fBinary             = true;
+  tio.fParity             = true;
+  tio.fOutxCtsFlow        = false;
+  tio.fOutxDsrFlow        = false;
   tio.fDtrControl         = DTR_CONTROL_ENABLE;
-  tio.fDsrSensitivity     = FALSE;
-  tio.fTXContinueOnXoff   = TRUE;
-  tio.fOutX               = FALSE;
-  tio.fInX                = FALSE;
-  tio.fErrorChar          = FALSE;
-  tio.fNull               = FALSE;
+  tio.fDsrSensitivity     = false;
+  tio.fTXContinueOnXoff   = true;
+  tio.fOutX               = false;
+  tio.fInX                = false;
+  tio.fErrorChar          = false;
+  tio.fNull               = false;
   tio.fRtsControl         = RTS_CONTROL_ENABLE;
-  tio.fAbortOnError       = FALSE;
+  tio.fAbortOnError       = false;
   tio.ByteSize            = bits;
   tio.Parity              = parity == 0 ? NOPARITY :
                             (parity == 1 ? ODDPARITY : EVENPARITY);

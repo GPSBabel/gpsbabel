@@ -101,6 +101,7 @@
 #include <QtCore/QTime>          // for QTime
 #include <QtCore/Qt>             // for CaseInsensitive, UTC
 #include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
+#include <src/core/logging.h>
 
 #include "defs.h"
 #include "gbfile.h"              // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfputc, gbfwrite, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfputdbl, gbfile, gbfputflt, gbfread, gbfseek, gbfopen_le
@@ -1129,6 +1130,8 @@ lowranceusr_parse_waypts()
     case 6:
       lowranceusr4_parse_waypt(wpt_tmp);
       break;
+      default:
+        Warning() << MYNAME << ": Unknown internal version " << reading_version;
     }
     waypt_add(wpt_tmp);
   }
@@ -1749,7 +1752,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
     /* Lowrance needs it as seconds since Jan 1, 2000 */
     Time -= base_time_secs;
     if (global_opts.debug_level >= 2) {
-      printf("creation_time %d, '%s'", (int)Time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
+      printf("creation_time %d, '%s'", Time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
     }
   } else {
     /* If false, make sure it is an unknown time value */
@@ -2005,31 +2008,26 @@ lowranceusr_trail_hdr(const route_head* trk)
 static void
 lowranceusr_route_hdr(const route_head* rte)
 {
-  char* name, tmp_name[20];
-  char route_reversed=0;
+  QString name;
 
   /* route name */
   //TODO: This whole function needs to be replaced...
   if (!rte->rte_name.isEmpty()) {
-    name = xstrdup(rte->rte_name);
+    name = rte->rte_name;
   } else if (!rte->rte_desc.isEmpty()) {
-    name = xstrdup(rte->rte_desc);
+    name = rte->rte_desc;
   } else {
-    tmp_name[0]='\0';
-    snprintf(tmp_name, sizeof(tmp_name), "Babel R%d", ++lowrance_route_count);
-    name = xstrdup(tmp_name);
+    name = QString().sprintf("Babel R%d", ++lowrance_route_count);
   }
-  int text_len = strlen(name);
-  if (text_len > MAXUSRSTRINGSIZE) {
-    text_len = MAXUSRSTRINGSIZE;
-  }
+  int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
+  name.truncate(text_len);
   gbfputint32(text_len, file_out);
-  gbfwrite(name, 1, text_len, file_out);
-  xfree(name);
+  gbfputs(name, file_out);
 
   /* num legs */
   short num_legs = (short) rte->rte_waypt_ct;
   gbfputint16(num_legs, file_out);
+  char route_reversed=0;
   gbfwrite(&route_reversed, 1, 1, file_out);
 
   if (global_opts.debug_level >= 1)
@@ -2129,29 +2127,24 @@ lowranceusr_trail_disp(const Waypoint* wpt)
 static void
 lowranceusr_merge_trail_hdr(const route_head* trk)
 {
-  char* name, tmp_name[20];
-
+  QString name;
   if (++trail_count == 1) {
     if (!trk->rte_name.isEmpty()) {
-      name = xstrdup(trk->rte_name);
+      name = trk->rte_name;
     } else if (!trk->rte_desc.isEmpty()) {
-      name = xstrdup(trk->rte_desc);
+      name = trk->rte_desc;
     } else {
-      tmp_name[0]='\0';
-      snprintf(tmp_name, sizeof(tmp_name), "Babel %d", trail_count);
-      name = xstrdup(tmp_name);
+      name = QString().sprintf("Babel %d", trail_count);
     }
-    int text_len = strlen(name);
-    if (text_len > MAXUSRSTRINGSIZE) {
-      text_len = MAXUSRSTRINGSIZE;
-    }
+
+    int text_len = std::min(MAXUSRSTRINGSIZE, name.size());
+    name.truncate(text_len);
     gbfputint32(text_len, file_out);
+    gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " trail_hdr: trail name = %s\n", name);
+      printf(MYNAME " trail_hdr: trail name = %s\n", CSTR(name));
     }
-
-    gbfwrite(name, 1, text_len, file_out);
   }
 
   trail_point_count += (short) trk->rte_waypt_ct;

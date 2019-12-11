@@ -233,7 +233,7 @@ static QVector<arglist_t> nmea_args = {
   {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
 };
 
-#define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
+#define CHECK_BOOL(a) if ((a) && (*(a) == '0')) (a) = NULL
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -354,7 +354,7 @@ nmea_wr_init(const QString& portname)
   CHECK_BOOL(opt_gpgsa);
   CHECK_BOOL(opt_gisteq);
 
-  append_output = atoi(opt_append);
+  append_output = strtod(opt_append, nullptr);
 
   file_out = gbfopen(portname, append_output ? "a+" : "w+", MYNAME);
 
@@ -533,18 +533,20 @@ gpgga_parse(char* ibuf)
   waypt->hdop = hdop;
 
   switch (fix) {
-  case 0:
-    waypt->fix = fix_none;
-    break;
-  case 1:
-    waypt->fix  = (nsats>3)?(fix_3d):(fix_2d);
-    break;
-  case 2:
-    waypt->fix = fix_dgps;
-    break;
-  case 3:
-    waypt->fix = fix_pps;
-    break;
+    case 0:
+      waypt->fix = fix_none;
+      break;
+    case 1:
+      waypt->fix = (nsats > 3) ? (fix_3d) : (fix_2d);
+      break;
+    case 2:
+      waypt->fix = fix_dgps;
+      break;
+    case 3:
+      waypt->fix = fix_pps;
+      break;
+    default:
+      Warning() << MYNAME << ": unknown vix value" << fix;
   }
 
   nmea_release_wpt(curr_waypt);
@@ -730,12 +732,12 @@ gpgsa_parse(char* ibuf)
   }
 
   float pdop = 0, hdop = 0, vdop = 0;
-  if (nfields > 14) pdop = fields[15].toDouble();
-  if (nfields > 15) hdop = fields[16].toDouble();
+  if (nfields > 14) pdop = fields[15].toFloat();
+  if (nfields > 15) hdop = fields[16].toFloat();
   if (nfields > 16) {
      // Last one is special. The checksum isn't split out above.
     fields[17].chop(3);
-    vdop = fields[17].toDouble();
+    vdop = fields[17].toFloat();
   }
 
   if (curr_waypt) {
@@ -774,7 +776,7 @@ gpvtg_parse(char* ibuf)
   if (curr_waypt) {
     WAYPT_SET(curr_waypt, course, course);
     if (speed_k > 0) {
-      WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k))
+      WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k));
     } else {
       WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
     }
@@ -1369,9 +1371,9 @@ nmea_trackpt_pr(const Waypoint* wpt)
     }
     snprintf(obuf,sizeof(obuf),"GPGSA,A,%c,,,,,,,,,,,,,%.1f,%.1f,%.1f",
              fix,
-             (wpt->pdop>0)?(wpt->pdop):(0),
-             (wpt->hdop>0)?(wpt->hdop):(0),
-             (wpt->vdop>0)?(wpt->vdop):(0));
+             (wpt->pdop > 0) ? (wpt->pdop) : (0),
+             (wpt->hdop > 0) ? (wpt->hdop) : (0),
+             (wpt->vdop > 0) ? (wpt->vdop) : (0));
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
