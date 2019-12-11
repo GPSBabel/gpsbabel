@@ -476,7 +476,7 @@ void Vecs::disp_vec(const QString& vecname) const
     }
 
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    QVector<arglist_t>* args = vec.vec->get_args();
+    const QVector<arglist_t>* args = vec.vec->get_args();
     if (args) {
       for (const auto& arg : *args) {
         if (!(arg.argtype & ARGTYPE_HIDDEN))
