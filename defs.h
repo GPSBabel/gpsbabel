@@ -79,8 +79,8 @@ constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;};
 constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);};
 constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);};
 
-constexpr double SECONDS_PER_HOUR = 60L * 60;
-constexpr double SECONDS_PER_DAY = 24L * 60 * 60;
+constexpr long SECONDS_PER_HOUR = 60L * 60;
+constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
 
 /* meters/second to kilometers/hour */
 constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;};
