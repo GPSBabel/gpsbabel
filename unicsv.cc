@@ -1131,7 +1131,7 @@ unicsv_parse_one_line(const QString& ibuf)
     }
 
     if (opt_utc) {
-      wpt->creation_time += atoi(opt_utc) * SECONDS_PER_HOUR;
+      wpt->creation_time = wpt->creation_time.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
     }
   }
 

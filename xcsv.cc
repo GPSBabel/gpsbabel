@@ -814,17 +814,17 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     break;
   case XT_LOCAL_TIME:
     if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
-      wpt->creation_time += sscanftime(s, fmp.printfc.constData(), 0);
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 0));
     } else {
       /* Force constant time zone for test */
-      wpt->creation_time += sscanftime(s, fmp.printfc.constData(), 1);
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 1));
     }
     break;
     /* Useful when time and date are in separate fields
     	GMT / Local offset is handled by the two cases above */
   case XT_HMSG_TIME:
   case XT_HMSL_TIME:
-    wpt->creation_time += addhms(s, fmp.printfc.constData());
+    wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
     break;
   case XT_ISO_TIME:
   case XT_ISO_TIME_MS:
