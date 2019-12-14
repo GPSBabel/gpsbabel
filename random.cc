@@ -243,7 +243,7 @@ random_read()
 
   route_head* head;
   Waypoint* prev = nullptr;
-  QDateTime time = QDateTime::fromTime_t(gpsbabel_time);
+  QDateTime time = QDateTime::fromSecsSinceEpoch(gpsbabel_time, Qt::UTC);
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
@@ -299,7 +299,7 @@ random_rd_posn_init(const QString&)
   if (opt_points) {
     realtime->points = atoi(opt_points);
   }
-  realtime->time = QDateTime::fromTime_t(gpsbabel_time);
+  realtime->time = QDateTime::fromTime_t(gpsbabel_time, Qt::UTC);
 }
 
 void

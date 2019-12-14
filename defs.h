@@ -556,8 +556,7 @@ public:
   QString CreationTimeXML() const;
   gpsbabel::DateTime GetCreationTime() const;
   void SetCreationTime(const gpsbabel::DateTime& t);
-  void SetCreationTime(time_t t);
-  void SetCreationTime(time_t t, int ms);
+  void SetCreationTime(time_t t, int ms = 0);
   geocache_data* AllocGCData();
   int EmptyGCData() const;
 };

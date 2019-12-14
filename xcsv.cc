@@ -800,7 +800,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
-    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(QString(s).toLongLong(&ok)));
+    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(QString(s).toLongLong(&ok), Qt::UTC));
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
@@ -1768,8 +1768,7 @@ xcsv_replace_tokens(const QString& original) {
       replacement.replace("__FILE__", xcsv_file.fname);
       replacement.replace("__VERSION__", my_time == 0 ? "" : gpsbabel_version);
 
-      QDateTime dt = QDateTime::fromTime_t(my_time);
-      dt = dt.toTimeSpec(Qt::UTC);
+      QDateTime dt = QDateTime::fromSecsSinceEpoch(my_time, Qt::UTC);
 
       QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
       replacement.replace("__DATE_AND_TIME__", dts);

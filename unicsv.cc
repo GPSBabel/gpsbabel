@@ -1658,7 +1658,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
         // We might wrap to a different day by overriding the TZ offset.
         dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        dt = wpt->GetCreationTime();
+        dt = wpt->GetCreationTime().toLocalTime();
       }
       QString date = dt.toString("yyyy/MM/dd");
       *fout << unicsv_fieldsep << date;
@@ -1673,7 +1673,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
         t = wpt->GetCreationTime().toUTC().time();
         t = t.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        t = wpt->GetCreationTime().time();
+        t = wpt->GetCreationTime().toLocalTime().time();
       }
       QString out;
       if (t.msec() > 0) {
