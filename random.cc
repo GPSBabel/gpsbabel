@@ -299,7 +299,7 @@ random_rd_posn_init(const QString&)
   if (opt_points) {
     realtime->points = atoi(opt_points);
   }
-  realtime->time = QDateTime::fromTime_t(gpsbabel_time, Qt::UTC);
+  realtime->time = QDateTime::fromSecsSinceEpoch(gpsbabel_time, Qt::UTC);
 }
 
 void

@@ -468,7 +468,7 @@ unicsv_adjust_time(const time_t time, const time_t* date)
     struct tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
   }
-  return QDateTime::fromTime_t(res);
+  return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
 }
 
 static bool
