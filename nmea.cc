@@ -547,7 +547,7 @@ gpgga_parse(char* ibuf)
       waypt->fix = fix_pps;
       break;
     default:
-      Warning() << MYNAME << ": unknown vix value" << fix;
+      break;
   }
 
   nmea_release_wpt(curr_waypt);
@@ -963,7 +963,7 @@ nmea_parse_one_line(char* ibuf)
     int ckcmp;
     sscanf(ck, "%2X", &ckcmp);
     if (ckval != ckcmp) {
-      Warning() << "Invalid NMEA checksum. Computed " << ckval << " but found " << ckcmp << ". Ignoring sentence";
+      Warning().nospace() <<  hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
       return;
     }
 
