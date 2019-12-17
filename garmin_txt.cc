@@ -1,3 +1,4 @@
+#include <QtCore/QDebug>
 /*
 
     Support for MapSource Text Export (Tab delimited) files.
@@ -30,6 +31,7 @@
 #include "grtcirc.h"
 #include "inifile.h"
 #include "jeeps/gpsmath.h"
+#include "src/core/logging.h"
 #include "strptime.h"
 
 #include <QtCore/QString>
@@ -60,6 +62,7 @@ static int current_line;
 static char* date_time_format = nullptr;
 static int precision = 3;
 static time_t utc_offs = 0;
+static QString current_line_text;
 // Having a Windows background, this software encodes degree marks in
 // Windows CP-1252.  We don't attempt to handle all the subtleties of that,
 // but since we write degree marks and we know how they're encoded, use this.
@@ -112,7 +115,6 @@ static int header_ct[unknown_header + 1];
 /* macros */
 
 #define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
-#define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? ((a)) : NULL
 
 static char* opt_datum = nullptr;
 static char* opt_dist = nullptr;
@@ -135,21 +137,22 @@ QVector<arglist_t> garmin_txt_args = {
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
 };
 
-struct info_t {
-  double length;
-  time_t start;
-  time_t time;
-  double speed;
-  double total;
-  int count;
-  const Waypoint* prev_wpt;
-  const Waypoint* first_wpt;
-  const Waypoint* last_wpt;
+class PathInfo {
+ public:
+  double length {0};
+  time_t start {0};
+  time_t time {0};
+  double speed {0};
+  double total {0};
+  int count {0};
+  const Waypoint* prev_wpt {nullptr};
+  const Waypoint* first_wpt {nullptr};
+  const Waypoint* last_wpt {nullptr};
 };
 
-static info_t* route_info;
+static PathInfo* route_info;
 static int route_idx;
-static info_t* cur_info;
+static PathInfo* cur_info;
 
 static const char* headers[] = {
   "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
@@ -235,14 +238,10 @@ sort_waypt_cb(const void* a, const void* b)
 
 
 /* common route and track pre-work */
-
 static void
 prework_hdr_cb(const route_head*)
 {
   cur_info = &route_info[route_idx];
-  cur_info->prev_wpt = nullptr;
-  cur_info->length = 0;
-  cur_info->time = 0;
 }
 
 static void
@@ -826,31 +825,30 @@ garmin_txt_write()
 
   if (waypoints > 0) {
     wpt_a_ct = 0;
-    wpt_a = (const Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
+    wpt_a = new const Waypoint*[waypoints];
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(nullptr, nullptr, enum_waypt_cb);
     qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
 
     gbfprintf(fout, "Header\t%s\r\n\r\n", headers[waypt_header]);
     for (int i = 0; i < waypoints; i++) {
-      const Waypoint* wpt = wpt_a[i];
-      write_waypt(wpt);
+      write_waypt(wpt_a[i]);
     }
-    xfree(wpt_a);
 
     route_idx = 0;
-    route_info = (info_t*) xcalloc(route_count(), sizeof(info_t));
+    route_info = new PathInfo[route_count()];
     routepoints = 0;
     route_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
     if (routepoints > 0) {
       route_idx = 0;
       route_disp_all(route_disp_hdr_cb, route_disp_tlr_cb, route_disp_wpt_cb);
     }
-    xfree(route_info);
+    delete route_info;
+    route_info = nullptr;
   }
 
   route_idx = 0;
-  route_info = (info_t*) xcalloc(track_count(), sizeof(info_t));
+  route_info = new PathInfo[route_count()];
   routepoints = 0;
   track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
 
@@ -858,7 +856,8 @@ garmin_txt_write()
     route_idx = 0;
     track_disp_all(track_disp_hdr_cb, track_disp_tlr_cb, track_disp_wpt_cb);
   }
-  xfree(route_info);
+  delete route_info;
+  route_info = nullptr;
 }
 
 /* READER *****************************************************************/
@@ -881,28 +880,16 @@ free_header(const header_type ht)
 
 /* data parsers */
 
-static int
-parse_date_and_time(char* str, time_t* value)
+static bool
+parse_date_and_time(char* str, QDateTime* value)
 {
-  struct tm tm;
-
-  memset(&tm, 0, sizeof(tm));
-  char* cin = lrtrim(str);
-  if (*cin == '\0') {
-    return 0;
+  QDateTime dt;
+  dt = QDateTime::fromString(QString(str).trimmed(), "dd/MM/yyyy hh:mm:ss");
+  if (dt.isValid()) {
+    *value = dt;
+    return true;
   }
-
-  char* cerr = strptime(cin, date_time_format, &tm);
-  if (cerr == nullptr) {
-    cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", cin, current_line);
-  }
-
-//	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
-//		tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
-
-  *value = mklocaltime(&tm);
-  return 1;
+  return false;
 }
 
 static uint16_t
@@ -1089,7 +1076,6 @@ parse_waypoint()
   Waypoint* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
-
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int i;
     double d;
@@ -1097,10 +1083,10 @@ parse_waypoint()
 
     switch (field_no) {
     case  1:
-      wpt->shortname = DUPSTR(str);
+      wpt->shortname = str;
       break;
     case  2:
-      wpt->notes = DUPSTR(str);
+      wpt->notes = str;
       break;
     case  3:
       for (i = 0; i <= gt_waypt_class_map_line; i++) {
@@ -1160,7 +1146,7 @@ parse_waypoint()
       GMSD_SETSTR(cc, gt_get_icao_cc(str, wpt->shortname));
       break;
     case 16: {
-      time_t ct;
+      QDateTime ct;
       if (parse_date_and_time(str, &ct)) {
         wpt->SetCreationTime(ct);
       }
@@ -1193,7 +1179,7 @@ parse_route_header()
     int field_no = header_fields[route_header][column];
     switch (field_no) {
     case 1:
-      rte->rte_name = DUPSTR(str);
+      rte->rte_name = str;
       break;
     case 5:
       rte->rte_urls.AddUrlLink(UrlLink(str));
@@ -1216,7 +1202,7 @@ parse_track_header()
     int field_no = header_fields[track_header][column];
     switch (field_no) {
     case 1:
-      trk->rte_name = DUPSTR(str);
+      trk->rte_name = str;
       break;
     case 6:
       trk->rte_urls.AddUrlLink(UrlLink(str));
@@ -1230,23 +1216,19 @@ parse_track_header()
 static void
 parse_route_waypoint()
 {
-  char* str;
-  int column = -1;
-  Waypoint* wpt = nullptr;
-
-  bind_fields(rtept_header);
-
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
-    int field_no = header_fields[rtept_header][column];
-    switch (field_no) {
-    case 1:
-      is_fatal((*str == '\0'), MYNAME ": Route waypoint without name at line %d!\n", current_line);
-      wpt = find_waypt_by_name(str);
-      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
-      wpt = new Waypoint(*wpt);
-      break;
-    }
+  // An example of how most of these parse_foo()'s could look if brought to c++.
+  auto tokens = current_line_text.split("\t");
+  if (tokens.size() < 1) {
+    Fatal() << MYNAME ": Route waypoint at " << current_line;
   }
+
+  auto wpt = find_waypt_by_name(tokens.at(1));
+  if (wpt == nullptr) {
+    Fatal() << MYNAME ": Route waypoint " << tokens.at(1) << 
+      " not in waypoint list (line " << current_line << ")!\n";
+  }
+
+  wpt = new Waypoint(*wpt);
   if (wpt != nullptr) {
     route_add_wpt(current_rte, wpt);
   }
@@ -1275,7 +1257,7 @@ parse_track_waypoint()
                         &wpt->latitude, &wpt->longitude, MYNAME);
       break;
     case 2: {
-      time_t ct;
+      QDateTime ct;
       if (parse_date_and_time(str, &ct)) {
         wpt->SetCreationTime(ct);
       }
@@ -1346,13 +1328,13 @@ garmin_txt_read()
     if ((current_line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
-
     char* cin = lrtrim(buff);
     if (*cin == '\0') {
       continue;
     }
 
     cin = csv_lineparse(cin, "\t", "", 0);
+    current_line_text = QString(buff).trimmed();
 
     if (cin == nullptr) {
       continue;
