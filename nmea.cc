@@ -547,7 +547,7 @@ gpgga_parse(char* ibuf)
       waypt->fix = fix_pps;
       break;
     default:
-      Warning() << MYNAME ": unknown fix value" << fix;
+      break;
   }
 
   nmea_release_wpt(curr_waypt);
