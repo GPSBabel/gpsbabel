@@ -1123,6 +1123,7 @@ char* strlower(char* src);
 signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
+bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);

@@ -253,7 +253,7 @@ data_write()
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
-  if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
+  if (!gpsbabel_testmode()) {
     gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
   }
   gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");

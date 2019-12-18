@@ -1462,7 +1462,7 @@ garmin_gpi_rd_init(const QString& fname)
 static void
 garmin_gpi_wr_init(const QString& fname)
 {
-  if (gpi_timestamp != 0) {			/* not the first gpi output session */
+  if ((gpi_timestamp != 0) && !gpsbabel_testmode()) {			/* not the first gpi output session */
     time_t t = time(nullptr);
     if (t <= gpi_timestamp) {
       gpi_timestamp++;  /* don't create files with same timestamp */
@@ -1470,7 +1470,7 @@ garmin_gpi_wr_init(const QString& fname)
       gpi_timestamp = t;
     }
   } else {
-    gpi_timestamp = gpsbabel_time;  /* always ZERO during 'testo' */
+    gpi_timestamp = gpsbabel_time;
   }
 
   fout = gbfopen_le(fname, "wb", MYNAME);
@@ -1553,7 +1553,7 @@ garmin_gpi_wr_deinit()
   mkshort_del_handle(&short_h);
   gbfclose(fout);
 
-  if ((opt_sleep) && (gpi_timestamp != 0)) {	/* don't sleep during 'testo' */
+  if ((opt_sleep) && !gpsbabel_testmode()) {	/* don't sleep during 'testo' */
     int sleep = atoi(opt_sleep);
     if (sleep < 1) {
       sleep = 1;

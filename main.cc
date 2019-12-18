@@ -721,10 +721,9 @@ main(int argc, char* argv[])
   global_opts.charset_name.clear();
   global_opts.inifile = nullptr;
 
-  gpsbabel_now = time(nullptr);			/* gpsbabel startup-time */
-  gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but frozen at zero during testo */
+  gpsbabel_time = current_time().toTime_t();			/* frozen in testmode */
 
-  if (gpsbabel_time != 0) {	/* within testo ? */
+  if (!gpsbabel_testmode()) {	/* within testo ? */
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 

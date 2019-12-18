@@ -2001,7 +2001,7 @@ static void kml_write()
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("GPS device"));
   }
 
-  if (current_time().isValid()) {
+  if (!gpsbabel_testmode()) {
     writer->writeTextElement(QStringLiteral("snippet"), QStringLiteral("Created ") +
                              current_time().toString());
   }
