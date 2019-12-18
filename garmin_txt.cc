@@ -1080,13 +1080,13 @@ parse_waypoint()
     int i;
     double d;
     int field_no = header_fields[waypt_header][column];
-
     switch (field_no) {
     case  1:
-      wpt->shortname = str;
+      wpt->shortname = (str);
       break;
     case  2:
-      wpt->notes = str;
+      // Force a truncated string to prevent doubling elsewhere.
+      wpt->notes = str && str[0] == 0 ? 0 : str ;
       break;
     case  3:
       for (i = 0; i <= gt_waypt_class_map_line; i++) {
