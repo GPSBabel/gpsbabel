@@ -837,7 +837,7 @@ osm_waypt_disp(const Waypoint* wpt)
 
   if (strlen(created_by) !=0) {
     gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (gpsbabel_time != 0)
+    if (!gpsbabel_testmode())
       if (strcmp("GPSBabel",created_by)==0) {
         gbfprintf(fout, "-%s", gpsbabel_version);
       }
@@ -892,7 +892,7 @@ osm_rte_disp_trail(const route_head* rte)
 
   if (strlen(created_by) !=0) {
     gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (gpsbabel_time != 0)
+    if (!gpsbabel_testmode())
       if (strcmp("GPSBabel",created_by)==0) {
         gbfprintf(fout, "-%s", gpsbabel_version);
       }
@@ -926,7 +926,7 @@ osm_write()
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
   gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
-  if (gpsbabel_time != 0) {
+  if (!gpsbabel_testmode()) {
     gbfprintf(fout, "-%s", gpsbabel_version);
   }
   gbfprintf(fout, "'>\n");

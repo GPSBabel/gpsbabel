@@ -715,6 +715,13 @@ mklocaltime(struct tm* t)
   return result;
 }
 
+bool
+gpsbabel_testmode()
+{
+  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  return testmode;
+}
+
 /*
  * Historically, when we were C, this was A wrapper for time(2) that
  * allowed us to "freeze" time for testing. The UNIX epoch
@@ -725,7 +732,7 @@ mklocaltime(struct tm* t)
 gpsbabel::DateTime
 current_time()
 {
-  if (getenv("GPSBABEL_FREEZE_TIME")) {
+  if (gpsbabel_testmode()) {
     return QDateTime::fromTime_t(0);
   }
 

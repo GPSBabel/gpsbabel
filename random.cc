@@ -24,6 +24,7 @@
 #include <QtCore/QDateTime>  // for QDateTime
 #include <QtCore/QString>    // for QString
 #include <QtCore/QThread>    // for QThread
+#include <QtCore/QVector>    // for QVector
 
 #include "defs.h"
 #include "garmin_fs.h"       // for garmin_fs_t, GMSD_SET, garmin_fs_flags_t, garmin_fs_alloc
@@ -124,14 +125,20 @@ rand_qstr(const int maxlen, const char* fmt)
 }
 
 static void
-random_rd_init(const QString&)
+random_set_generator()
 {
   generator = new std::mt19937;
   if (opt_seed) {
     generator->seed(atoi(opt_seed));
   } else {
-    generator->seed(gpsbabel_now);
+    generator->seed(gpsbabel_time);
   }
+}
+
+static void
+random_rd_init(const QString&)
+{
+  random_set_generator();
 }
 
 static void
@@ -243,7 +250,7 @@ random_read()
 
   route_head* head;
   Waypoint* prev = nullptr;
-  QDateTime time = QDateTime::fromTime_t(gpsbabel_time);
+  QDateTime time = current_time();
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
@@ -289,17 +296,12 @@ static realtime_data* realtime;
 void
 random_rd_posn_init(const QString&)
 {
-  generator = new std::mt19937;
-  if (opt_seed) {
-    generator->seed(atoi(opt_seed));
-  } else {
-    generator->seed(gpsbabel_now);
-  }
+  random_set_generator();
   realtime = new realtime_data;
   if (opt_points) {
     realtime->points = atoi(opt_points);
   }
-  realtime->time = QDateTime::fromTime_t(gpsbabel_time);
+  realtime->time = current_time();
 }
 
 void
