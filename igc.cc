@@ -305,7 +305,7 @@ static void data_read()
 
     case rec_header:
       // Get the header sub type
-      if (sscanf(ibuf, "H%*1[FOP]%3s", tmp_str) != 1) {
+      if (sscanf(ibuf, "H%*1[FOPS]%3s", tmp_str) != 1) {
         fatal(MYNAME ": header (H) record parse error\n%s\n%s\n", ibuf, tmp_str);
       }
       // Optional long name of record sub type is followed by a
