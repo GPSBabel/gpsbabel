@@ -28,23 +28,27 @@
 #include <cstdlib>                 // for abs, getenv, calloc, free, malloc, realloc
 #include <cstring>                 // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                   // for mktime, localtime
+#include <algorithm>               // for sort
 
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QChar>            // for QChar, operator<=, operator>=
 #include <QtCore/QCharRef>         // for QCharRef
 #include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QDebug>           // for QDebug
 #include <QtCore/QFileInfo>        // for QFileInfo
 #include <QtCore/QList>            // for QList
 #include <QtCore/QString>          // for QString, operator+
 #include <QtCore/QTextCodec>       // for QTextCodec
 #include <QtCore/QTextStream>      // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QtCore/QTimeZone>        // for QTimeZone
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for qPrintable
 
 #include "defs.h"
 #include "cet.h"                   // for cet_utf8_to_ucs4
 #include "src/core/datetime.h"     // for DateTime
-#include "src/core/xmltag.h"
+#include "src/core/logging.h"      // for Warning
+#include "src/core/xmltag.h"       // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
 
 // First test Apple's clever macro that's really a runtime test so
@@ -1765,6 +1769,19 @@ list_codecs()
       info << alias;
     }
     info << endl;
+  }
+}
+
+void list_timezones()
+{
+  QList<QByteArray> zoneids = QTimeZone::availableTimeZoneIds();
+  auto alpha = [](const QByteArray& a, const QByteArray& b)->bool {
+    return QString::compare(a, b, Qt::CaseInsensitive) < 0;
+  };
+  std::sort(zoneids.begin(), zoneids.end(), alpha);
+  Warning() << "Available timezones are:";
+  for (const auto& id : zoneids) {
+    Warning() << id;
   }
 }
 

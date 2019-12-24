@@ -20,8 +20,21 @@
 
  */
 
+#include <cstdint>
+#include <cstdio>               // for printf, SEEK_SET, SEEK_CUR, SEEK_END
+
+#include <QtCore/QDate>         // for QDate
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QDebug>        // for QDebug
+#include <QtCore/QString>       // for QString
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/QTimeZone>     // for QTimeZone
+#include <QtCore/Qt>            // for UTC
+
 #include "defs.h"
-#include <QtCore/QDebug>
+#include "gbfile.h"             // for gbfgetc, gbfseek, gbfclose, gbfopen, gbfread, gbfgetuint32, gbfcopyfrom, gbfgetuint16, gbfile, gbsize_t
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define MYNAME "energympro"
 
@@ -118,6 +131,13 @@ struct tw_lap {
   uint16_t       FinishRecPt;      // Finish record point
 };
 
+char* opt_timezone = nullptr;
+static QTimeZone* timezn = nullptr;
+
+static
+QVector<arglist_t> energympro_args = {
+  {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+};
 
 //*******************************************************************************
 //           local helper functions
@@ -141,14 +161,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
 
   //Time from last point in sec's * 10 (e.g. point.lntervalTime is sec multiplied with 10)
   // convert to millisecs
-  gpsbabel::DateTime gpsbabeltime = gpsDateTime.addMSecs(point.lntervalTime*100);
-  gpsDateTime.setDate(gpsbabeltime.date());
-  gpsDateTime.setTime(gpsbabeltime.time());
-
-  //remove parts of sec (on purpose) on reported time, we keep track of parts of sec in
-  // global structure so we don't drift
-  qint64 mSecsSinceEpoc = gpsbabeltime.toMSecsSinceEpoch();
-  gpsbabeltime.setMSecsSinceEpoch(mSecsSinceEpoc-mSecsSinceEpoc%1000);
+  gpsDateTime = gpsDateTime.addMSecs(point.lntervalTime*100);
 
   auto waypt = new Waypoint;
   waypt->latitude = (point.Latitude / 1000000.0);
@@ -159,7 +172,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
     qDebug() << "DateTime2:" << gpsDateTime.toString();
   }
 
-  waypt->SetCreationTime(gpsbabeltime);
+  waypt->SetCreationTime(gpsDateTime);
 
   if (point.Speed_Status == 0) {
     WAYPT_SET(waypt, speed, point.Speed_Speed / 100.0f);
@@ -213,11 +226,25 @@ rd_init(const QString& fname)
     printf(MYNAME "  filesize=%d\n",size);
   }
   gbfclose(fileorg_in);
+  if (opt_timezone) {
+    if (QTimeZone::isTimeZoneIdAvailable(opt_timezone)) {
+      timezn = new QTimeZone(opt_timezone);
+    } else {
+      list_timezones();
+      fatal(MYNAME ": Requested time zone \"%s\" is not available.\n", opt_timezone);
+    }
+  } else {
+    timezn = nullptr;
+  }
 }
 
 static void
 rd_deinit()
 {
+  if (timezn != nullptr) {
+    delete timezn;
+    timezn = nullptr;
+  }
   if (global_opts.debug_level > 1) {
     printf(MYNAME " rd_deinit()\n");
   }
@@ -261,8 +288,12 @@ track_read()
    */
   QDate gpsDate = QDate(workout.dateStart.Year+2000,workout.dateStart.Month,workout.dateStart.Day);
   QTime gpsTime = QTime(workout.timeStart.Hour,workout.timeStart.Minute,workout.timeStart.Second);
-  gpsbabel::DateTime gpsDateTime = gpsbabel::DateTime(gpsDate,gpsTime);
-  gpsDateTime.setTimeSpec(Qt::UTC);
+  gpsbabel::DateTime gpsDateTime;
+  if (timezn != nullptr) {
+    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,*timezn).toUTC());
+  } else {
+    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,Qt::LocalTime).toUTC());
+  }
   route_head* gpsbabel_route = route_head_alloc();
 
   track_add_head(gpsbabel_route);
@@ -303,7 +334,7 @@ ff_vecs_t energympro_vecs = {
   data_read,    // read
   nullptr,      // write
   nullptr,      // exit
-  nullptr,      // args
+  &energympro_args,      // args
   CET_CHARSET_ASCII, 0,  // encode, fixed_encode
   NULL_POS_OPS,
   nullptr
