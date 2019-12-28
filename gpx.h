@@ -196,7 +196,7 @@ private:
   void gpx_start(const QString& el, const QXmlStreamAttributes& attr);
   void gpx_end(const QString& unused);
   void gpx_cdata(const QString& s);
-  void write_tag_attributes(xml_tag* tag);
+  void write_attributes(const QXmlStreamAttributes& attributes);
   void fprint_xml_chain(xml_tag* tag, const Waypoint* wpt);
   void write_gpx_url(const UrlList& urls);
   void write_gpx_url(const Waypoint* waypointp);

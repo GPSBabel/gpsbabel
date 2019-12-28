@@ -79,8 +79,8 @@ constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;};
 constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);};
 constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);};
 
-constexpr double SECONDS_PER_HOUR = 60L * 60;
-constexpr double SECONDS_PER_DAY = 24L * 60 * 60;
+constexpr long SECONDS_PER_HOUR = 60L * 60;
+constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
 
 /* meters/second to kilometers/hour */
 constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;};
@@ -298,12 +298,12 @@ using fs_copy = void (*)(void**, void*);
 using fs_convert = void (*)(void*);
 
 struct format_specific_data {
-  long type;
-  format_specific_data* next;
+  long type{0};
+  format_specific_data* next{nullptr};
 
-  fs_destroy destroy;
-  fs_copy copy;
-  fs_convert convert;
+  fs_destroy destroy{nullptr};
+  fs_copy copy{nullptr};
+  fs_convert convert{nullptr};
 };
 
 class gb_color
@@ -1109,6 +1109,7 @@ char* strlower(char* src);
 signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
+bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);

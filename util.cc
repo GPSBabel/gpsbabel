@@ -19,32 +19,34 @@
 
  */
 
-#include <cctype>                  // for isspace, isalpha, ispunct, tolower, toupper
-#include <cerrno>                  // for errno
-#include <cmath>                   // for fabs, floor
-#include <cstdarg>                 // for va_list, va_end, va_start, va_copy
-#include <cstdint>                 // for uint32_t
-#include <cstdio>                  // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
-#include <cstdlib>                 // for abs, getenv, calloc, free, malloc, realloc
-#include <cstring>                 // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <ctime>                   // for mktime, localtime
+#include <cctype>                      // for isspace, isalpha, ispunct, tolower, toupper
+#include <cerrno>                      // for errno
+#include <cmath>                       // for fabs, floor
+#include <cstdarg>                     // for va_list, va_end, va_start, va_copy
+#include <cstdio>                      // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
+#include <cstdint>                     // for uint32_t
+#include <cstdlib>                     // for abs, getenv, calloc, free, malloc, realloc
+#include <cstring>                     // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <ctime>                       // for mktime, localtime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar, operator<=, operator>=
-#include <QtCore/QCharRef>         // for QCharRef
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QFileInfo>        // for QFileInfo
-#include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString, operator+
-#include <QtCore/QTextCodec>       // for QTextCodec
-#include <QtCore/QTextStream>      // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QChar>                // for QChar, operator<=, operator>=
+#include <QtCore/QCharRef>             // for QCharRef
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QFileInfo>            // for QFileInfo
+#include <QtCore/QList>                // for QList
+#include <QtCore/QString>              // for QString
+#include <QtCore/QStringRef>           // for QStringRef
+#include <QtCore/QTextCodec>           // for QTextCodec
+#include <QtCore/QTextStream>          // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QtCore/QXmlStreamAttribute>  // for QXmlStreamAttribute
+#include <QtCore/Qt>                   // for CaseInsensitive
+#include <QtCore/QtGlobal>             // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
-#include "cet.h"                   // for cet_utf8_to_ucs4
-#include "src/core/datetime.h"     // for DateTime
-#include "src/core/xmltag.h"
+#include "cet.h"                       // for cet_utf8_to_ucs4
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/xmltag.h"           // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
 
 // First test Apple's clever macro that's really a runtime test so
@@ -715,6 +717,13 @@ mklocaltime(struct tm* t)
   return result;
 }
 
+bool
+gpsbabel_testmode()
+{
+  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  return testmode;
+}
+
 /*
  * Historically, when we were C, this was A wrapper for time(2) that
  * allowed us to "freeze" time for testing. The UNIX epoch
@@ -725,7 +734,7 @@ mklocaltime(struct tm* t)
 gpsbabel::DateTime
 current_time()
 {
-  if (getenv("GPSBABEL_FREEZE_TIME")) {
+  if (gpsbabel_testmode()) {
     return QDateTime::fromTime_t(0);
   }
 
@@ -1646,7 +1655,7 @@ xml_tag* xml_next(xml_tag* root, xml_tag* cur)
   return cur;
 }
 
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
+xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
 {
   xml_tag* result = cur;
   do {
@@ -1655,25 +1664,19 @@ xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
   return result;
 }
 
-xml_tag* xml_findfirst(xml_tag* root, const char* tagname)
+xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
 {
   return xml_findnext(root, root, tagname);
 }
 
-char* xml_attribute(xml_tag* tag, const char* attrname)
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
 {
-  char* result = nullptr;
-  if (tag->attributes) {
-    char** attr = tag->attributes;
-    while (attr && *attr) {
-      if (0 == case_ignore_strcmp(*attr, attrname)) {
-        result = attr[1];
-        break;
-      }
-      attr+=2;
+  for (const auto& attribute : attributes) {
+    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
+      return attribute.value().toString();
     }
   }
-  return result;
+  return QString();
 }
 
 const QString get_filename(const QString& fname)

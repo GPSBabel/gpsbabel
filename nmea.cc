@@ -37,6 +37,7 @@
 #include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QThread>          // for QThread
 #include <QtCore/QTime>            // for QTime
+#include <QtCore/QVector>          // for QVector
 #include <QtCore/QtGlobal>         // for qPrintable
 
 #include "defs.h"
@@ -546,7 +547,7 @@ gpgga_parse(char* ibuf)
       waypt->fix = fix_pps;
       break;
     default:
-      Warning() << MYNAME << ": unknown vix value" << fix;
+      break;
   }
 
   nmea_release_wpt(curr_waypt);
@@ -892,19 +893,15 @@ nmea_fix_timestamps(route_head* track)
 
     foreach (Waypoint* wpt, track->waypoint_list) {
 
-      wpt->creation_time += delta_tm;
+      wpt->creation_time = wpt->creation_time.addSecs(delta_tm);
       if ((prev != nullptr) && (prev->creation_time > wpt->creation_time)) {
         /* go over midnight ? */
         delta_tm += SECONDS_PER_DAY;
-        wpt->creation_time += SECONDS_PER_DAY;
+        wpt->creation_time = wpt->creation_time.addSecs(SECONDS_PER_DAY);
       }
       prev = wpt;
     }
   } else {
-    tm.tm_hour = 23; /* last date found */
-    tm.tm_min = 59;
-    tm.tm_sec = 59;
-
     time_t prev = mkgmtime(&tm);
 
     /* go backward through the track and complete timestamps */
@@ -916,9 +913,9 @@ nmea_fix_timestamps(route_head* track)
         wpt->wpt_flags.fmt_use = 0; /* reset flag */
 
         time_t dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
-        wpt->creation_time += dt;
+        wpt->creation_time = wpt->creation_time.addSecs(dt);
         if (wpt->creation_time.toTime_t() > prev) {
-          wpt->creation_time+=SECONDS_PER_DAY;
+          wpt->creation_time = wpt->creation_time.addSecs(-SECONDS_PER_DAY);
         }
       }
       prev = wpt->GetCreationTime().toTime_t();
@@ -966,7 +963,7 @@ nmea_parse_one_line(char* ibuf)
     int ckcmp;
     sscanf(ck, "%2X", &ckcmp);
     if (ckval != ckcmp) {
-      Warning() << "Invalid NMEA checksum. Computed " << ckval << " but found " << ckcmp << ". Ignoring sentence";
+      Warning().nospace() <<  hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
       return;
     }
 
