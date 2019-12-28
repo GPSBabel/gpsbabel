@@ -1464,7 +1464,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      QString encstr = xml_attribute(logpart, "encoded");
+      QString encstr = xml_attribute(logpart->attributes, "encoded");
       bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
       QString s;

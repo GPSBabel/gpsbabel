@@ -195,8 +195,8 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        double lat = xml_attribute(logpart, "lat").toDouble();
-        double lon = xml_attribute(logpart, "lon").toDouble();
+        double lat = xml_attribute(logpart->attributes, "lat").toDouble();
+        double lon = xml_attribute(logpart->attributes, "lon").toDouble();
         char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
         gbfprintf(file_out,
                   "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
@@ -206,7 +206,7 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        QString encstr = xml_attribute(logpart, "encoded");
+        QString encstr = xml_attribute(logpart->attributes, "encoded");
         bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
         QString s;

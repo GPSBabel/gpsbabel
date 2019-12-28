@@ -38,11 +38,11 @@ public:
 
 xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
 xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
-QString xml_attribute(xml_tag* tag, const QString& attrname);
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
 
 struct fs_xml {
   format_specific_data fs;
-  xml_tag* tag;
+  xml_tag* tag{nullptr};
 };
 
 fs_xml* fs_xml_alloc(long type);

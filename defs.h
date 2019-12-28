@@ -298,12 +298,12 @@ using fs_copy = void (*)(void**, void*);
 using fs_convert = void (*)(void*);
 
 struct format_specific_data {
-  long type;
-  format_specific_data* next;
+  long type{0};
+  format_specific_data* next{nullptr};
 
-  fs_destroy destroy;
-  fs_copy copy;
-  fs_convert convert;
+  fs_destroy destroy{nullptr};
+  fs_copy copy{nullptr};
+  fs_convert convert{nullptr};
 };
 
 class gb_color

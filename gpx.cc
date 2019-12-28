@@ -1483,9 +1483,9 @@ gpx_read()
 }
 
 static void
-write_tag_attributes(xml_tag* tag)
+write_attributes(const QXmlStreamAttributes& attributes)
 {
-  for (const auto& attribute : qAsConst(tag->attributes)) {
+  for (const auto& attribute : attributes) {
     writer->writeAttribute(attribute.qualifiedName().toString(), attribute.value().toString());
   }
 }
@@ -1495,14 +1495,11 @@ fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);
-
+    write_attributes(tag->attributes);
     if (tag->cdata.isEmpty() && !tag->child) {
-      write_tag_attributes(tag);
       // No children?  Self-closing tag.
       writer->writeEndElement();
     } else {
-      write_tag_attributes(tag);
-
       if (!tag->cdata.isEmpty()) {
         writer->writeCharacters(tag->cdata);
       }

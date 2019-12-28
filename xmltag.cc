@@ -19,8 +19,6 @@
 
  */
 
-#include <cstring>                      // for memcpy
-
 #include <QtCore/QString>               // for QString
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 
@@ -53,7 +51,6 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
   xml_tag* res = new xml_tag;
   *copy = res;
 
-//  memcpy(res, src, sizeof(xml_tag));
   res->tagname = (src->tagname);
   res->cdata = (src->cdata);
   res->parentcdata = (src->parentcdata);
@@ -81,9 +78,11 @@ fs_xml_copy(void** copy, void* source)
     *copy = nullptr;
     return;
   }
-  *copy = (void*)fs_xml_alloc(src->fs.type);
-  memcpy(*copy, source, sizeof(fs_xml));
-  copy_xml_tag(&(((fs_xml*)(*copy))->tag), src->tag, nullptr);
+  fs_xml* res = new fs_xml;
+  *copy = res;
+
+  res->fs = src->fs;
+  copy_xml_tag(&(res->tag), src->tag, nullptr);
 }
 
 fs_xml* fs_xml_alloc(long type)

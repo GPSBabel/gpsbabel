@@ -19,7 +19,6 @@
 
  */
 
-
 #include <cctype>                      // for isspace, isalpha, ispunct, tolower, toupper
 #include <cerrno>                      // for errno
 #include <cmath>                       // for fabs, floor
@@ -1663,10 +1662,9 @@ xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
   return xml_findnext(root, root, tagname);
 }
 
-QString xml_attribute(xml_tag* tag, const QString& attrname)
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
 {
-  // Search ourselves to implement a CaseInsensitive match.
-  for (const auto& attribute : qAsConst(tag->attributes)) {
+  for (const auto& attribute : attributes) {
     if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
       return attribute.value().toString();
     }
