@@ -19,12 +19,19 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cstdint>
+#include <ctime>                   // for localtime
+
+#include <QtCore/QString>          // for QString, operator!=
+#include <QtCore/QVector>          // for QVector
+#include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include "src/core/xmltag.h"
-#include <cctype>
-#include <cstdlib>
+#include "gbfile.h"                // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/xmltag.h"       // for xml_findfirst, xml_attribute, xml_tag, fs_xml, xml_findnext
+
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -120,7 +127,7 @@ text_disp(const Waypoint* wpt)
   }
   xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout);
   gbfprintf(file_out, "%-16s  %59s\n",
-            (global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname),
+            (global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname),
             tmpout2);
   xfree(tmpout2);
   xfree(tmpout1);
@@ -204,25 +211,17 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        double lat = 0;
-        double lon = 0;
-        char* coordstr = xml_attribute(logpart, "lat");
-        if (coordstr) {
-          lat = atof(coordstr);
-        }
-        coordstr = xml_attribute(logpart, "lon");
-        if (coordstr) {
-          lon = atof(coordstr);
-        }
-        coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 0);
+        double lat = xml_attribute(logpart->attributes, "lat").toDouble();
+        double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+        char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 0);
         gbfprintf(file_out, "%s\n", coordstr);
         xfree(coordstr);
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = xml_attribute(logpart, "encoded");
-        int encoded = (toupper(encstr[0]) != 'F');
+        QString encstr = xml_attribute(logpart->attributes, "encoded");
+        bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
         QString s;
         if (txt_encrypt && encoded) {

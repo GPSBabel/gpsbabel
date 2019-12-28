@@ -16,31 +16,35 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-class xml_tag {
- public:
-  xml_tag() :
-    attributes(nullptr),
-    parent(nullptr),
-    sibling(nullptr),
-    child(nullptr) {}
+#ifndef SRC_CORE_XMLTAG_H
+#define SRC_CORE_XMLTAG_H
 
+#include <QtCore/QString>                          // for QString
+#include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
+
+#include "defs.h"
+
+class xml_tag
+{
+public:
   QString tagname;
   QString cdata;
   QString parentcdata;
-  char** attributes;
-  xml_tag* parent;
-  xml_tag* sibling;
-  xml_tag* child;
+  QXmlStreamAttributes attributes;
+  xml_tag* parent{nullptr};
+  xml_tag* sibling{nullptr};
+  xml_tag* child{nullptr};
 };
 
-xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);
-char* xml_attribute(xml_tag* tag, const char* attrname);
-void free_gpx_extras(xml_tag* tag);
+xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
+xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
 
 struct fs_xml {
   format_specific_data fs;
-  xml_tag* tag;
+  xml_tag* tag{nullptr};
 };
 
 fs_xml* fs_xml_alloc(long type);
+
+#endif // SRC_CORE_XMLTAG_H

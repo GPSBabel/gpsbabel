@@ -24,36 +24,39 @@
 # include <windows.h>
 #endif
 
-#include <cctype>                      // for tolower, toupper
-#include <cmath>                       // for fabs
-#include <cstdio>                      // for sscanf, printf
-#include <cstdlib>                     // for atoi, atol, atof
-#include <cstring>                     // for strcmp
-#include <tuple>                       // for tuple, make_tuple, tie
+#include <cctype>                       // for tolower, toupper
+#include <cmath>                        // for fabs
+#include <cstdio>                       // for sscanf, printf
+#include <cstdlib>                      // for atoi, atol, atof
+#include <cstring>                      // for strcmp
+#include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for QChar
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QFile>                // for QFile
-#include <QtCore/QIODevice>            // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>                // for QList
-#include <QtCore/QStaticStringData>    // for QStaticStringData
-#include <QtCore/QString>              // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
-#include <QtCore/Qt>                   // for ISODate
-#include <QtCore/QtGlobal>             // for foreach, qint64, qPrintable
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QChar>                 // for QChar
+#include <QtCore/QDate>                 // for QDate
+#include <QtCore/QDateTime>             // for QDateTime
+#include <QtCore/QFile>                 // for QFile
+#include <QtCore/QIODevice>             // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QtCore/QList>                 // for QList
+#include <QtCore/QStaticStringData>     // for QStaticStringData
+#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
+#include <QtCore/QStringList>           // for QStringList
+#include <QtCore/QVector>               // for QVector
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/Qt>                    // for ISODate
+#include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
 
 #include "defs.h"
 #include "grtcirc.h"                    // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
+#include "src/core/logging.h"           // for Warning, Fatal
 #include "src/core/optional.h"          // for optional
-#include <src/core/logging.h>           // for Warning
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
+#include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
-#include "units.h"
+
 
 // options
 static char* opt_deficon = nullptr;
@@ -1461,8 +1464,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      char* encstr = xml_attribute(logpart, "encoded");
-      int encoded = (toupper(encstr[0]) != 'F');
+      QString encstr = xml_attribute(logpart->attributes, "encoded");
+      bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
       QString s;
       if (html_encrypt && encoded) {
