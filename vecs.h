@@ -198,7 +198,7 @@ private:
 
 private:
   struct vecs_t {
-    Format* vec{nullptr};
+    Format* vec;
     QString name;
     QString desc;
     QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
