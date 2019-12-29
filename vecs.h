@@ -187,16 +187,18 @@ public:
     static Vecs instance;
     return instance;
   }
+  Vecs(const Vecs&) = delete;
+  Vecs& operator= (const Vecs&) = delete;
+  Vecs(Vecs&&) = delete;
+  Vecs& operator=(Vecs&&) = delete;
 
 private:
   Vecs() = default;
   ~Vecs() = default;
-  Vecs(const Vecs&) = delete;
-  Vecs& operator= (const Vecs&) = delete;
 
 private:
   struct vecs_t {
-    Format* vec;
+    Format* vec{nullptr};
     QString name;
     QString desc;
     QString extensions; // list of possible extensions separated by '/', first is output default for GUI.

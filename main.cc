@@ -22,7 +22,6 @@
 #include <cstdio>                   // for printf, fgetc, stdin
 #include <cstdlib>                  // for exit
 #include <cstring>                  // for strcmp
-#include <ctime>                    // for time
 
 #include <QtCore/QByteArray>        // for QByteArray
 #include <QtCore/QChar>             // for QChar
@@ -47,7 +46,7 @@
 #include "cet_util.h"               // for cet_convert_init, cet_convert_strings, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
-#include "filterdefs.h"             // for disp_filter_vec, disp_filter_vecs, disp_filters, exit_filter_vecs, find_filter_vec, free_filter_vec, init_filter_vecs
+#include "filter_vecs.h"            // for FilterVecs
 #include "format.h"                 // for Format
 #include "inifile.h"                // for inifile_done, inifile_init
 #include "session.h"                // for start_session, session_exit, session_init
@@ -155,7 +154,7 @@ usage(const char* pname, int shorter)
     printf("File Types (-i and -o options):\n");
     Vecs::Instance().disp_vecs();
     printf("\nSupported data filters:\n");
-    disp_filter_vecs();
+    FilterVecs::Instance().disp_filter_vecs();
   }
 }
 
@@ -164,7 +163,7 @@ spec_usage(const QString& vec)
 {
   printf("\n");
   Vecs::Instance().disp_vec(vec);
-  disp_filter_vec(vec);
+  FilterVecs::Instance().disp_filter_vec(vec);
   printf("\n");
 }
 
@@ -335,7 +334,7 @@ run(const char* prog_name)
         if (global_opts.charset != &cet_cs_vec_utf8) {
           /*
            * Push and pop verbose_status so
-                          		 * we don't get dual progress bars
+           * we don't get dual progress bars
            * when doing characterset
            * transformation.
            */
@@ -400,13 +399,13 @@ run(const char* prog_name)
       break;
     case 'x':
       optarg = FETCH_OPTARG;
-      filter = find_filter_vec(optarg);
+      filter = FilterVecs::Instance().find_filter_vec(optarg);
 
       if (filter) {
         filter->init();
         filter->process();
         filter->deinit();
-        free_filter_vec(filter);
+        FilterVecs::free_filter_vec(filter);
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(optarg));
       }
@@ -444,7 +443,7 @@ run(const char* prog_name)
      */
     case '@': {
       bool format_ok = Vecs::Instance().validate_formats();
-      bool filter_ok = validate_filters();
+      bool filter_ok = FilterVecs::Instance().validate_filters();
       return (format_ok && filter_ok)? 0 : 1;
     }
 
@@ -470,7 +469,7 @@ run(const char* prog_name)
       Vecs::Instance().disp_formats(opt_version);
       return 0;
     case '%':
-      disp_filters(opt_version);
+      FilterVecs::Instance().disp_filters(opt_version);
       return 0;
     case 'h':
     case '?':
@@ -605,9 +604,9 @@ run(const char* prog_name)
       }
       if (wpt) {
         if (ovecs) {
-//					ovecs->wr_position_init(ofname);
+//          ovecs->wr_position_init(ofname);
           ovecs->wr_position(wpt);
-//					ovecs->wr_position_deinit();
+//          ovecs->wr_position_deinit();
         } else {
           /* Just print to screen */
           waypt_disp(wpt);
@@ -702,7 +701,7 @@ main(int argc, char* argv[])
   }
 
   Vecs::Instance().init_vecs();
-  init_filter_vecs();
+  FilterVecs::Instance().init_filter_vecs();
   cet_register();
   session_init();
   waypt_init();
@@ -715,7 +714,7 @@ main(int argc, char* argv[])
   route_deinit();
   session_exit();
   Vecs::Instance().exit_vecs();
-  exit_filter_vecs();
+  FilterVecs::Instance().exit_filter_vecs();
   inifile_done(global_opts.inifile);
 
   exit(rc);

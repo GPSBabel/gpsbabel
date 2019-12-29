@@ -100,7 +100,7 @@ HEADERS =  \
 	defs.h \
 	explorist_ini.h \
 	filter.h \
-	filterdefs.h \
+	filter_vecs.h \
 	format.h \
 	garmin_device_xml.h \
 	garmin_fs.h \

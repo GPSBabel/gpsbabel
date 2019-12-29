@@ -48,13 +48,13 @@
  * that we are not modifying a Qt COW copy.
  * Qt has an undocumented but public member function isDetached().
  * If the list is detached it implies it is not shared, then functions
- * then might detach, like the iterator begin which is implcitly used
+ * then might detach, like the iterator begin which is implicitly used
  * in the range based for loop, won't cause a copy to be created.
  * We can make sure this is true for at least our regression cases
  * with assertions.
  * There is an odd situation that an empty QVector is not detached,
  * so we have to exclude this from the check.
- * The possibility of detachement is also why the type of element
+ * The possibility of detachment is also why the type of element
  * on the list must be default constructable. This is why we have
  * to supply a default for any const members of arglist_t.  Without
  * the default the default constructor would be implicitly deleted.
