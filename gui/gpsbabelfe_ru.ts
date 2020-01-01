@@ -467,8 +467,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="mainwinui.ui" line="44"/>
-        <location filename="mainwinui.ui" line="431"/>
-        <location filename="mainwinui.ui" line="628"/>
+        <location filename="mainwinui.ui" line="467"/>
+        <location filename="mainwinui.ui" line="682"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
@@ -479,13 +479,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="mainwinui.ui" line="60"/>
-        <location filename="mainwinui.ui" line="447"/>
+        <location filename="mainwinui.ui" line="483"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="89"/>
-        <location filename="mainwinui.ui" line="476"/>
+        <location filename="mainwinui.ui" line="512"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
@@ -499,116 +499,109 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Кодировка входных данных</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="120"/>
+        <location filename="mainwinui.ui" line="129"/>
         <source>Browse for one or more input files. </source>
         <translation>Выберите один или более входных файлов.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="123"/>
+        <location filename="mainwinui.ui" line="132"/>
         <source>File Name(s)</source>
         <translation>Входные файлы</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="155"/>
-        <location filename="mainwinui.ui" line="539"/>
+        <location filename="mainwinui.ui" line="173"/>
+        <location filename="mainwinui.ui" line="593"/>
         <source>Device Name:</source>
         <translation>Имя устройства:</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="162"/>
+        <location filename="mainwinui.ui" line="180"/>
         <source>Name of port to which input device is connected</source>
         <translation>Порт к которому подключено входное устройство</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="193"/>
+        <location filename="mainwinui.ui" line="211"/>
         <source>Options for the selected input format. </source>
         <translation>Параметры выбранного входного формата.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="196"/>
-        <location filename="mainwinui.ui" line="580"/>
+        <location filename="mainwinui.ui" line="214"/>
+        <location filename="mainwinui.ui" line="634"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="221"/>
+        <location filename="mainwinui.ui" line="239"/>
         <source>Translation Options</source>
         <translation>Параметры конвертации</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="230"/>
-        <location filename="mainwinui.ui" line="273"/>
-        <location filename="mainwinui.ui" line="313"/>
-        <source>-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwinui.ui" line="240"/>
+        <location filename="mainwinui.ui" line="270"/>
         <source>If selected, translate waypoints.</source>
         <translation>Если выбрано, конвертируются маршрутные точки.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="243"/>
+        <location filename="mainwinui.ui" line="273"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="280"/>
+        <location filename="mainwinui.ui" line="313"/>
         <source>If selected, translate routes.</source>
         <translation>Если выбрано, конвертируются маршруты.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="283"/>
+        <location filename="mainwinui.ui" line="316"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="320"/>
+        <location filename="mainwinui.ui" line="356"/>
         <source>If selected, translate tracks.</source>
         <translation>Если выбрано, конвертируются треки.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="323"/>
+        <location filename="mainwinui.ui" line="359"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="359"/>
+        <location filename="mainwinui.ui" line="395"/>
         <source>Data Filters between input and output</source>
         <translation>Фильтр данных между входом и выходом</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="362"/>
+        <location filename="mainwinui.ui" line="398"/>
         <source>Filters</source>
         <translation>Фильтры</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="395"/>
+        <location filename="mainwinui.ui" line="431"/>
         <source>More translation options. </source>
         <translation>Дополнительные параметры конвертации.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="398"/>
+        <location filename="mainwinui.ui" line="434"/>
         <source>More Options</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="408"/>
+        <location filename="mainwinui.ui" line="444"/>
         <source>Output</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="428"/>
+        <location filename="mainwinui.ui" line="464"/>
         <source>If selected, output is to a file. </source>
         <translation>Если выбрано, результат будет направлен в файл. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="444"/>
+        <location filename="mainwinui.ui" line="480"/>
         <source>If selected, output is to a device or GPS unit</source>
         <translation>Если выбрано, результат будет направлен на устройство или GPS приемник</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="483"/>
+        <location filename="mainwinui.ui" line="519"/>
         <source>Output data format.</source>
         <translation>Формат выходных данных.</translation>
     </message>
@@ -617,67 +610,67 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Кодировка выходных данных</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="504"/>
+        <location filename="mainwinui.ui" line="549"/>
         <source>Browse for an output file name. </source>
         <translation>Выберите имя выходного файла.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="507"/>
+        <location filename="mainwinui.ui" line="552"/>
         <source>File Name</source>
         <translation>Имя файла</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="546"/>
+        <location filename="mainwinui.ui" line="600"/>
         <source>Name of port to which output device is connected</source>
         <translation>Порт к которому подключено выходное устройство</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="577"/>
+        <location filename="mainwinui.ui" line="631"/>
         <source>Options for the selected output format. </source>
         <translation>Параметры выбранного выходного формата.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="601"/>
+        <location filename="mainwinui.ui" line="655"/>
         <source>Output of GPSBabel translation process. </source>
         <translation>Выполняется конвертация GPSBabel.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="635"/>
+        <location filename="mainwinui.ui" line="689"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="651"/>
+        <location filename="mainwinui.ui" line="705"/>
         <source>GPSBabel Help</source>
         <translation>Справка GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="656"/>
+        <location filename="mainwinui.ui" line="710"/>
         <source>About GPSBabel</source>
         <translation>О GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="661"/>
+        <location filename="mainwinui.ui" line="715"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="666"/>
+        <location filename="mainwinui.ui" line="720"/>
         <source>Preferences...</source>
         <translation>Настройки...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="671"/>
+        <location filename="mainwinui.ui" line="725"/>
         <source>Check for Upgrade</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="676"/>
+        <location filename="mainwinui.ui" line="730"/>
         <source>Visit Website...</source>
         <translation>Посетите веб-сайт ...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="681"/>
+        <location filename="mainwinui.ui" line="735"/>
         <source>Make a Donation...</source>
         <translation>Сделать пожертвование...</translation>
     </message>
@@ -686,17 +679,17 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">по умолчанию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="563"/>
+        <location filename="mainwindow.cc" line="560"/>
         <source>Select one or more input files</source>
         <translation>Выберите один или несколько файлов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="591"/>
+        <location filename="mainwindow.cc" line="588"/>
         <source>Output File Name</source>
         <translation>Имя выходного файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="655"/>
+        <location filename="mainwindow.cc" line="652"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -705,7 +698,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="666"/>
+        <location filename="mainwindow.cc" line="663"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -714,7 +707,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="684"/>
         <source>Input and output formats do not support %1</source>
         <translation>Входной и выходной форматы не поддерживают %1</translation>
     </message>
@@ -727,109 +720,109 @@ This program cannot continue.</source>
         <translation type="vanished">Входной формат поддерживает %1; выходной формат не поддерживаетt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Входной формат не поддерживает %1; выходной формат поддерживает %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">Входной формат поддерживает %1; выходной формат не поддерживаетt %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="696"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>Both input and output formats support %1</source>
         <translation>Входной и выходной формат поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="717"/>
+        <location filename="mainwindow.cc" line="714"/>
         <source>waypoints</source>
         <translation>маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="718"/>
+        <location filename="mainwindow.cc" line="715"/>
         <source>tracks</source>
         <translation>треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="719"/>
+        <location filename="mainwindow.cc" line="716"/>
         <source>routes</source>
         <translation>маршруты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="814"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Нет входных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="820"/>
-        <location filename="mainwindow.cc" line="839"/>
+        <location filename="mainwindow.cc" line="817"/>
+        <location filename="mainwindow.cc" line="836"/>
         <source>Options for %1</source>
         <translation>Параметры %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="833"/>
+        <location filename="mainwindow.cc" line="830"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Нет выходных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="853"/>
+        <location filename="mainwindow.cc" line="850"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Не выбрано преобразование маршрутных точек/маршрутов/треков</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="872"/>
+        <location filename="mainwindow.cc" line="869"/>
         <source>No input file specified</source>
         <translation>Не выбран входной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="879"/>
+        <location filename="mainwindow.cc" line="876"/>
         <source>No valid output specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="884"/>
+        <location filename="mainwindow.cc" line="881"/>
         <source>No output file specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="900"/>
+        <location filename="mainwindow.cc" line="897"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>Процесс &quot;%1&quot; не запустился</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="914"/>
+        <location filename="mainwindow.cc" line="911"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1056"/>
+        <location filename="mainwindow.cc" line="1053"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1066"/>
+        <location filename="mainwindow.cc" line="1063"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1186"/>
+        <location filename="mainwindow.cc" line="1183"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1210"/>
+        <location filename="mainwindow.cc" line="1207"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1253"/>
+        <location filename="mainwindow.cc" line="1250"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1255"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
