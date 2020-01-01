@@ -535,31 +535,31 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="563"/>
+        <location filename="mainwindow.cc" line="560"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="591"/>
+        <location filename="mainwindow.cc" line="588"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="655"/>
+        <location filename="mainwindow.cc" line="652"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="666"/>
+        <location filename="mainwindow.cc" line="663"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="684"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
@@ -568,109 +568,109 @@ This program cannot continue.</source>
         <translation type="vanished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="696"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="717"/>
+        <location filename="mainwindow.cc" line="714"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="718"/>
+        <location filename="mainwindow.cc" line="715"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="719"/>
+        <location filename="mainwindow.cc" line="716"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="814"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="820"/>
-        <location filename="mainwindow.cc" line="839"/>
+        <location filename="mainwindow.cc" line="817"/>
+        <location filename="mainwindow.cc" line="836"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="833"/>
+        <location filename="mainwindow.cc" line="830"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="853"/>
+        <location filename="mainwindow.cc" line="850"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="872"/>
+        <location filename="mainwindow.cc" line="869"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="879"/>
+        <location filename="mainwindow.cc" line="876"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="884"/>
+        <location filename="mainwindow.cc" line="881"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="900"/>
+        <location filename="mainwindow.cc" line="897"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>El proceso &quot;%1&quot; no comenzó</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="914"/>
+        <location filename="mainwindow.cc" line="911"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1056"/>
+        <location filename="mainwindow.cc" line="1053"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1066"/>
+        <location filename="mainwindow.cc" line="1063"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1186"/>
+        <location filename="mainwindow.cc" line="1183"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1210"/>
+        <location filename="mainwindow.cc" line="1207"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1253"/>
+        <location filename="mainwindow.cc" line="1250"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1255"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -695,8 +695,8 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="44"/>
-        <location filename="mainwinui.ui" line="431"/>
-        <location filename="mainwinui.ui" line="628"/>
+        <location filename="mainwinui.ui" line="467"/>
+        <location filename="mainwinui.ui" line="682"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
@@ -707,13 +707,13 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="60"/>
-        <location filename="mainwinui.ui" line="447"/>
+        <location filename="mainwinui.ui" line="483"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="89"/>
-        <location filename="mainwinui.ui" line="476"/>
+        <location filename="mainwinui.ui" line="512"/>
         <source>Format</source>
         <translation>Formato</translation>
     </message>
@@ -727,117 +727,114 @@ This program cannot continue.</source>
         <translation type="obsolete">Codificación de los caracteres de entrada</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="120"/>
+        <location filename="mainwinui.ui" line="129"/>
         <source>Browse for one or more input files. </source>
         <translatorcomment>Podría ser más literal navega, pero buscar creo que se entiende mejor</translatorcomment>
         <translation>Busca uno o más ficheros de entrada. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="123"/>
+        <location filename="mainwinui.ui" line="132"/>
         <source>File Name(s)</source>
         <translation>Nombre del o los ficheros</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="155"/>
-        <location filename="mainwinui.ui" line="539"/>
+        <location filename="mainwinui.ui" line="173"/>
+        <location filename="mainwinui.ui" line="593"/>
         <source>Device Name:</source>
         <translation>Nombre del dispositivo:</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="162"/>
+        <location filename="mainwinui.ui" line="180"/>
         <source>Name of port to which input device is connected</source>
         <translation>Nombre del puerto al que está conectado el dispositivo</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="193"/>
+        <location filename="mainwinui.ui" line="211"/>
         <source>Options for the selected input format. </source>
         <translation>Opciones aplicables al formato de entrada seleccionado.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="196"/>
-        <location filename="mainwinui.ui" line="580"/>
+        <location filename="mainwinui.ui" line="214"/>
+        <location filename="mainwinui.ui" line="634"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="221"/>
+        <location filename="mainwinui.ui" line="239"/>
         <source>Translation Options</source>
         <translation>Opciones de conversión</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="230"/>
-        <location filename="mainwinui.ui" line="273"/>
-        <location filename="mainwinui.ui" line="313"/>
         <source>-</source>
-        <translation>-</translation>
+        <translation type="vanished">-</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="240"/>
+        <location filename="mainwinui.ui" line="270"/>
         <source>If selected, translate waypoints.</source>
         <translation>Si se selecciona, convertir puntos de interés.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="243"/>
+        <location filename="mainwinui.ui" line="273"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="280"/>
+        <location filename="mainwinui.ui" line="313"/>
         <source>If selected, translate routes.</source>
         <translation>Si se selecciona, convertir las rutas.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="283"/>
+        <location filename="mainwinui.ui" line="316"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="320"/>
+        <location filename="mainwinui.ui" line="356"/>
         <source>If selected, translate tracks.</source>
         <translation>Si se selecciona, convertir los trazados.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="323"/>
+        <location filename="mainwinui.ui" line="359"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="359"/>
+        <location filename="mainwinui.ui" line="395"/>
         <source>Data Filters between input and output</source>
         <translation>Filtros de datos entre la entrada y la salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="362"/>
+        <location filename="mainwinui.ui" line="398"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="395"/>
+        <location filename="mainwinui.ui" line="431"/>
         <source>More translation options. </source>
         <translation>Más opciones de conversión.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="398"/>
+        <location filename="mainwinui.ui" line="434"/>
         <source>More Options</source>
         <translation>Más opciones</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="408"/>
+        <location filename="mainwinui.ui" line="444"/>
         <source>Output</source>
         <translation>Salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="428"/>
+        <location filename="mainwinui.ui" line="464"/>
         <source>If selected, output is to a file. </source>
         <translation>Si se selecciona, la salida es a un fichero. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="444"/>
+        <location filename="mainwinui.ui" line="480"/>
         <source>If selected, output is to a device or GPS unit</source>
         <translation>Si se selecciona, la salida esperada es un dispositivo o un GPS</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="483"/>
+        <location filename="mainwinui.ui" line="519"/>
         <source>Output data format.</source>
         <translation>Formato de salida de los datos.</translation>
     </message>
@@ -846,67 +843,67 @@ This program cannot continue.</source>
         <translation type="obsolete">Codificación de los caracteres de salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="504"/>
+        <location filename="mainwinui.ui" line="549"/>
         <source>Browse for an output file name. </source>
         <translation>Selecciona el nombre del fichero de salida. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="507"/>
+        <location filename="mainwinui.ui" line="552"/>
         <source>File Name</source>
         <translation>Nombre del fichero</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="546"/>
+        <location filename="mainwinui.ui" line="600"/>
         <source>Name of port to which output device is connected</source>
         <translation>Nombre del puerto al que está conectado el dispositivo de salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="577"/>
+        <location filename="mainwinui.ui" line="631"/>
         <source>Options for the selected output format. </source>
         <translation>Opciones aplicables al formato de salida seleccionado.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="601"/>
+        <location filename="mainwinui.ui" line="655"/>
         <source>Output of GPSBabel translation process. </source>
         <translation>Salida del proceso de conversión de GPSBabel.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="635"/>
+        <location filename="mainwinui.ui" line="689"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="651"/>
+        <location filename="mainwinui.ui" line="705"/>
         <source>GPSBabel Help</source>
         <translation>Ayuda de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="656"/>
+        <location filename="mainwinui.ui" line="710"/>
         <source>About GPSBabel</source>
         <translation>Acerca de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="661"/>
+        <location filename="mainwinui.ui" line="715"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="666"/>
+        <location filename="mainwinui.ui" line="720"/>
         <source>Preferences...</source>
         <translation>Preferencias ...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="671"/>
+        <location filename="mainwinui.ui" line="725"/>
         <source>Check for Upgrade</source>
         <translation>Comprueba si hay una actualización</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="676"/>
+        <location filename="mainwinui.ui" line="730"/>
         <source>Visit Website...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="681"/>
+        <location filename="mainwinui.ui" line="735"/>
         <source>Make a Donation...</source>
         <translation>Haga una donación...</translation>
     </message>
