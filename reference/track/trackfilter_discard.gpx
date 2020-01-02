@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx
   version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
+  creator="GPSBabel - https://www.gpsbabel.org"
   xmlns="http://www.topografix.com/GPX/1/0">
 <time>2012-04-17T08:26:58Z</time>
 <bounds minlat="-36.722941300" minlon="142.175800700" maxlat="-36.716685300" maxlon="142.198467900"/>
