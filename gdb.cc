@@ -31,6 +31,7 @@
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QList>            // for QList
 #include <QtCore/QString>          // for QString, operator!=, operator==
+#include <QtCore/QVector>          // for QVector
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for qPrintable, Q_UNUSED, foreach
 
@@ -200,39 +201,6 @@ static QString fread_cstr()
 
   return rv;
 }
-
-#if GDB_DEBUG
-static char*
-nice(const char* str)
-{
-  char* res, *env;
-  cet_cs_vec_t* vec;
-
-  if (!(str && *str)) {
-    return "";
-  }
-
-  env = getenv("LANG");
-  if (env == NULL) {
-    return (char*)str;
-  }
-
-  if ((res = strchr(env, '.'))) {
-    env = ++res;
-  }
-  vec = cet_find_cs_by_name(env);
-
-  if ((vec != NULL) && (vec != global_opts.charset)) {
-    static char buf[128];
-    res = cet_str_any_to_any(str, global_opts.charset, vec);
-    strncpy(buf, res, sizeof(buf));
-    xfree(res);
-    return buf;
-  } else {
-    return (char*)str;
-  }
-}
-#endif
 
 static char*
 gdb_fread_cstr(gbfile* fin)
@@ -464,18 +432,12 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22];
 #endif
-#if GDB_DEBUG
-  char* sn;
-#endif
   waypt_ct++;
   res = new Waypoint;
 
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&res->fs, (format_specific_data*) gmsd);
   res->shortname = fread_cstr();
-#if GDB_DEBUG
-  sn = xstrdup(nice(res->shortname));
-#endif
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
   GMSD_SET(wpt_class, wpt_class);
   if (wpt_class != 0) {
@@ -504,39 +466,37 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
       DBG(GDB_DBG_WPTe, 1)
       printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
-             sn, wpt_class, alt);
+             qPrintable(res->shortname), wpt_class, alt);
 #endif
     }
   }
 #if GDB_DEBUG
   DBG(GDB_DBG_WPT, 1)
   printf(MYNAME "-wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
-         sn,
+         qPrintable(res->shortname),
          res->latitude < 0 ? 'S' : 'N', res->latitude,
          res->longitude < 0 ? 'W' : 'E', res->longitude);
 #endif
   res->notes = fread_cstr();
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, res->notes) {
-    char* str = gstrsub(res->notes, "\r\n", ", ");
+  DBG(GDB_DBG_WPTe, !res->notes.isNull())
     printf(MYNAME "-wpt \"%s\" (%d): notes = %s\n",
-           sn, wpt_class, nice(str));
-    xfree(str);
-  }
+           qPrintable(res->shortname), wpt_class,
+           qPrintable(QString(res->notes).replace("\r\n", ", ")));
 #endif
   if (FREAD_C == 1) {
     WAYPT_SET(res, proximity, FREAD_DBL);
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
-           sn, wpt_class, res->proximity / 1000);
+           qPrintable(res->shortname), wpt_class, res->proximity / 1000);
 #endif
   }
   i = FREAD_i32;
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, i)
   printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
-         sn, wpt_class, i);
+         qPrintable(res->shortname), wpt_class, i);
 #endif
   switch (i) {			/* display value */
   case gt_gdb_display_mode_symbol:
@@ -568,7 +528,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
-           sn, wpt_class, res->depth);
+           qPrintable(res->shortname), wpt_class, res->depth);
 #endif
   }
 
@@ -584,11 +544,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       FREAD(buf, 2);
     }
 
-    (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, temp)
+    QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+    DBG(GDB_DBG_WPTe, !temp.isEmpty())
     printf(MYNAME "-wpt \"%s\" (%d): Unknown string = %s\n",
-           sn, wpt_class, nice(temp));
+           qPrintable(res->shortname), wpt_class, qPrintable(temp));
+#else
+    (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
 #endif
 
     QString linky = FREAD_CSTR_AS_QSTR;
@@ -616,19 +578,19 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
         DBG(GDB_DBG_WPTe, 1)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
-               sn, wpt_class, url_ct - i, qPrintable(str));
+               qPrintable(res->shortname), wpt_class, url_ct - i, qPrintable(str));
 #endif
       }
     }
   }
 
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, res->description)
+  DBG(GDB_DBG_WPTe, !res->description.isNull())
   printf(MYNAME "-wpt \"%s\" (%d): description = %s\n",
-         sn, wpt_class, nice(res->description));
-  DBG(GDB_DBG_WPTe, !res->url.isNull())
+         qPrintable(res->shortname), wpt_class, qPrintable(res->description));
+  DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
   printf(MYNAME "-wpt \"%s\" (%d): url = %s\n",
-         sn, wpt_class, nice(qPrintable(res->url))); // FIXME: qPrintable and nice probably are fighting.
+         qPrintable(res->shortname), wpt_class, qPrintable(res->urls.GetUrlLink().url_));
 #endif
   i = FREAD_i16;
   if (i != 0) {
@@ -637,7 +599,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, i)
   printf(MYNAME "-wpt \"%s\" (%d): category = %d\n",
-         sn, wpt_class, i);
+         qPrintable(res->shortname), wpt_class, i);
 #endif
 
   if (FREAD_C == 1) {
@@ -645,7 +607,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
-           sn, wpt_class, res->temperature);
+           qPrintable(res->shortname), wpt_class, res->temperature);
 #endif
   }
 
@@ -677,7 +639,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)
   printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
-         sn, wpt_class, nice(qPrintable(res->icon_descr)), icon); // FIXME: qPrintable and nice probably are fighting.
+         qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
 #endif
   if ((str = GMSD_GET(cc, NULL))) {
     if (! GMSD_HAS(country)) {
@@ -691,9 +653,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     GMSD_UNSET(subclass);
 #endif
   }
-#if GDB_DEBUG
-  xfree(sn);
-#endif
   *waypt_class_out = wpt_class;
   return res;
 }
@@ -734,7 +693,7 @@ read_route()
 #if GDB_DEBUG
   DBG(GDB_DBG_RTE, 1)
   printf(MYNAME "-rte \"%s\": loading route with %d point(s)...\n",
-         nice(rte->rte_name), points);
+         qPrintable(rte->rte_name), points);
 #endif
 
   for (int i = 0; i < points; i++) {
@@ -777,7 +736,7 @@ read_route()
 #if GDB_DEBUG
     DBG(GDB_DBG_RTE, links)
     printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
-           nice(wpt->shortname), wpt_class, links);
+           qPrintable(wpt->shortname), wpt_class, links);
 #endif
     for (int j = 0; j < links; j++) {
       garmin_ilink_t* il_step = (garmin_ilink_t*) xmalloc(sizeof(*il_step));
@@ -809,7 +768,7 @@ read_route()
 #if GDB_DEBUG
       DBG(GDB_DBG_RTEe, 1) {
         printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
-               nice(wpt->shortname), j + 1, links,
+               qPrintable(wpt->shortname), j + 1, links,
                il_step->lat < 0 ? 'S' : 'N', il_step->lat,
                il_step->lon < 0 ? 'W' : 'E', il_step->lon);
       }
@@ -857,7 +816,7 @@ read_route()
 #if GDB_DEBUG
     DBG(GDB_DBG_RTE, 1)
     printf(MYNAME "-rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
-           nice(wpt->shortname),
+           qPrintable(wpt->shortname),
            wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
            wpt->longitude < 0 ? 'W' : 'E', wpt->longitude);
 #endif
@@ -957,9 +916,9 @@ read_track()
     res->rte_urls.AddUrlLink(UrlLink(FREAD_CSTR_AS_QSTR));
   }
 #if GDB_DEBUG
-  DBG(GDB_DBG_TRK, !res->rte_url.isNull())
+  DBG(GDB_DBG_TRK, res->rte_urls.HasUrlLink())
   printf(MYNAME "-trk \"%s\": url = %s\n",
-         res->rte_name, qPrintable(res->rte_url));
+         qPrintable(res->rte_name), qPrintable(res->rte_urls.GetUrlLink().url_));
 #endif
   return res;
 }

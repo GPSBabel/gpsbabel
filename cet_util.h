@@ -45,7 +45,7 @@ extern cet_cs_vec_t cet_cs_vec_utf8;
 
 /* helpers */
 
-char* cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec);
+[[deprecated]] char* cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec);
 
 /* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
 char* cet_convert_string(char* str);
