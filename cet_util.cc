@@ -399,10 +399,9 @@ cet_convert_waypt(const Waypoint* wpt)
  * !!! One of "source" or "target" must be internal cet_cs_vec_utf8 or NULL !!! */
 
 void
-cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
+cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target)
 {
   const char* cs_name_from, *cs_name_to;
-  (void)format;
 
   converter = nullptr;
 
