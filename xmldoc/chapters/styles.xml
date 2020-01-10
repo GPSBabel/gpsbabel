@@ -1208,6 +1208,18 @@ longitude)
 
             <screen format="linespecific">COUNTRY, &quot;&quot;, &quot;%s&quot;</screen></para>
       </section>
+      <section id="style_email">
+         <title>EMAIL</title>
+         <para>An email address associated with a position.</para>
+         <para>example:
+
+
+
+
+
+
+            <screen format="linespecific">EMAIL, &quot;&quot;, &quot;%s&quot;</screen></para>
+      </section>
       <section id="style_facility">
          <title>FACILITY</title>
          <para>The name of a facility to associate with a position.</para>
