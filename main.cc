@@ -307,7 +307,7 @@ run(const char* prog_name)
       ivecs->read();
       ivecs->rd_deinit();
 
-      cet_convert_strings(global_opts.charset, nullptr, nullptr);
+      cet_convert_strings(global_opts.charset, nullptr);
       cet_convert_deinit();
 
       did_something = true;
@@ -350,7 +350,7 @@ run(const char* prog_name)
           route_backup(&rte_head_bak);
           track_backup(&trk_head_bak);
 
-          cet_convert_strings(nullptr, global_opts.charset, nullptr);
+          cet_convert_strings(nullptr, global_opts.charset);
           global_opts.verbose_status = saved_status;
         }
 
@@ -541,12 +541,12 @@ run(const char* prog_name)
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_strings(global_opts.charset, nullptr, nullptr);
+    cet_convert_strings(global_opts.charset, nullptr);
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
       cet_convert_init(ovecs->encode, 1);
-      cet_convert_strings(nullptr, global_opts.charset, nullptr);
+      cet_convert_strings(nullptr, global_opts.charset);
 
       if (ovecs->wr_init == nullptr) {
         fatal("Format does not support writing.\n");
@@ -570,7 +570,7 @@ run(const char* prog_name)
     int saved_status = global_opts.verbose_status;
     global_opts.verbose_status = 0;
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    cet_convert_strings(nullptr, global_opts.charset, nullptr);
+    cet_convert_strings(nullptr, global_opts.charset);
     waypt_disp_all(waypt_disp);
     global_opts.verbose_status = saved_status;
   }
