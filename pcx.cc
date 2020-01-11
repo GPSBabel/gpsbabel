@@ -321,7 +321,7 @@ static void gpsutil_disp(const Waypoint* wpt) {
 static void pcx_track_hdr(const route_head* trk) {
   route_ctr++;
 
-  QString default_name = QString().sprintf("Trk%03d", route_ctr);
+  QString default_name = QString::asprintf("Trk%03d", route_ctr);
   QString name =
       mkshort(mkshort_handle2,
               trk->rte_name.isEmpty() ? CSTR(default_name) : trk->rte_name);
@@ -337,7 +337,7 @@ static void pcx_track_hdr(const route_head* trk) {
 
 static void pcx_route_hdr(const route_head* rte) {
   route_ctr++;
-  QString default_name = QString().sprintf("Rte%03d", route_ctr);
+  QString default_name = QString::asprintf("Rte%03d", route_ctr);
 
   QString name = mkshort(
       mkshort_handle2, rte->rte_name.isEmpty() ? default_name : rte->rte_name);

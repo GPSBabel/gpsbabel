@@ -705,7 +705,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       *(type+1) = '\0';
       switch (*type) {
       case 'c':
-        buff += QString().sprintf(subformat, dirs[sign]);
+        buff += QString::asprintf(subformat, dirs[sign]);
         break;
       case 'd':
       case 'i':
@@ -716,7 +716,7 @@ dec_to_human(const char* format, const char* dirs, double val)
         if (index>2) {
           fatal(MYNAME ": too many format specifiers\n");
         }
-        buff += QString().sprintf(subformat, intvals[index]);
+        buff += QString::asprintf(subformat, intvals[index]);
         index++;
         break;
       case 'e':
@@ -727,7 +727,7 @@ dec_to_human(const char* format, const char* dirs, double val)
         if (index>2) {
           fatal(MYNAME ": too many format specifiers\n");
         }
-        buff += QString().sprintf(subformat, dblvals[index]);
+        buff += QString::asprintf(subformat, dblvals[index]);
         index++;
         break;
       case '%':

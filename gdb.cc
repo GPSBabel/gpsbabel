@@ -1635,7 +1635,7 @@ write_route_cb(const route_head* rte)
 
   QString name;
   if (rte->rte_name.isNull()) {
-    name = mkshort(short_h, QString().sprintf("Route%04d", rte->rte_num));
+    name = mkshort(short_h, QString::asprintf("Route%04d", rte->rte_num));
   } else {
     name = mkshort(short_h, rte->rte_name);
   }
@@ -1657,7 +1657,7 @@ write_track_cb(const route_head* trk)
 
   QString name; 
   if (trk->rte_name.isNull()) {
-    name = mkshort(short_h, QString().sprintf("Track%04d", trk->rte_num));
+    name = mkshort(short_h, QString::asprintf("Track%04d", trk->rte_num));
   } else {
     name = mkshort(short_h, trk->rte_name);
   }

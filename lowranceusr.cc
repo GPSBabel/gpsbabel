@@ -2017,7 +2017,7 @@ lowranceusr_route_hdr(const route_head* rte)
   } else if (!rte->rte_desc.isEmpty()) {
     name = rte->rte_desc;
   } else {
-    name = QString().sprintf("Babel R%d", ++lowrance_route_count);
+    name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
   int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
   name.truncate(text_len);
@@ -2134,7 +2134,7 @@ lowranceusr_merge_trail_hdr(const route_head* trk)
     } else if (!trk->rte_desc.isEmpty()) {
       name = trk->rte_desc;
     } else {
-      name = QString().sprintf("Babel %d", trail_count);
+      name = QString::asprintf("Babel %d", trail_count);
     }
 
     int text_len = std::min(MAXUSRSTRINGSIZE, name.size());

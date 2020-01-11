@@ -216,7 +216,7 @@ my_read()
         wpt_tmp->shortname = "booger";
         wpt_tmp->notes = "goober";
       } else {
-        wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+        wpt_tmp->shortname = QString::asprintf("\\%5.5x", serial++);
       }
       if (control == 2) {
         waypt_add(wpt_tmp);
@@ -336,7 +336,7 @@ my_read()
         if (stringlen && ((coordcount>1) || count)) {
           wpt_tmp->shortname = QString(((char*)record)+2);
         } else {
-          wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+          wpt_tmp->shortname = QString::asprintf("\\%5.5x", serial++);
         }
         if (timesynth) {
           if (!first) {

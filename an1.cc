@@ -828,7 +828,7 @@ static void Read_AN1_Lines(gbfile* f)
       Waypoint* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
-      wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
+      wpt_tmp->shortname = QString::asprintf("\\%5.5lx", rtserial++);
       fs_chain_add(&wpt_tmp->fs,
                    (format_specific_data*)vert);
       route_add_wpt(rte_head, wpt_tmp);
