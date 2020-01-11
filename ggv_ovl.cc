@@ -147,6 +147,7 @@ ggv_ovl_read()
           if (!lat.isNull()) {
             wpt->latitude = lat.toDouble();
           } else {
+            delete wpt;
             continue;
           }
 
@@ -155,6 +156,7 @@ ggv_ovl_read()
           if (!lon.isNull()) {
             wpt->longitude = lon.toDouble();
           } else {
+            delete wpt;
             continue;
           }
 
@@ -177,12 +179,14 @@ ggv_ovl_read()
       if (!lat.isNull()) {
         wpt->latitude = lat.toDouble();
       } else {
+        delete wpt;
         continue;
       }
       lon = inifile_readstr(inifile, symbol, "XKoord");
       if (!lon.isNull()) {
         wpt->longitude = lon.toDouble();
       } else {
+        delete wpt;
         continue;
       }
 
