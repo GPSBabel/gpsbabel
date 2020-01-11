@@ -185,35 +185,35 @@ private:
   QString name;
 
 protected:
-  template <class MyForamt>
+  template <class MyFormat>
   class RteHdFunctor
   {
   public:
-    using RteHdCb = void (MyForamt::*)(const route_head*);
-    RteHdFunctor(MyForamt* obj, RteHdCb cb) : that(obj), _cb(cb) {}
+    using RteHdCb = void (MyFormat::*)(const route_head*);
+    RteHdFunctor(MyFormat* obj, RteHdCb cb) : that(obj), _cb(cb) {}
     void operator()(const route_head* rh)
     {
       ((that)->*(_cb))(rh);
     }
 
   private:
-    MyForamt* that;
+    MyFormat* that;
     RteHdCb _cb;
   };
 
-  template <class MyForamt>
+  template <class MyFormat>
   class WayptFunctor
   {
   public:
-    using WayptCb = void (MyForamt::*)(const Waypoint*);
-    WayptFunctor(MyForamt* obj, WayptCb cb) : that(obj), _cb(cb) {}
+    using WayptCb = void (MyFormat::*)(const Waypoint*);
+    WayptFunctor(MyFormat* obj, WayptCb cb) : that(obj), _cb(cb) {}
     void operator()(const Waypoint* wpt)
     {
       ((that)->*(_cb))(wpt);
     }
 
   private:
-    MyForamt* that;
+    MyFormat* that;
     WayptCb _cb;
   };
 
