@@ -174,7 +174,7 @@ void FilterVecs::disp_filter_vec(const QString& vecname) const
 
 void FilterVecs::disp_help_url(const fl_vecs_t& vec, const arglist_t* arg)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
+  printf("\t" WEB_DOC_DIR "/filter_%s.html", CSTR(vec.name));
   if (arg) {
     printf("#fmt_%s_o_%s", CSTR(vec.name), arg->argstring);
   }

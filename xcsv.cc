@@ -93,6 +93,7 @@ enum xcsv_token {
   XT_CONSTANT,
   XT_COUNTRY,
   XT_DESCRIPTION,
+  XT_EMAIL,
   XT_EXCEL_TIME,
   XT_FACILITY,
   XT_FILENAME,
@@ -982,6 +983,11 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     GMSD_SET(facility, csv_stringtrim(s, enclosure, 0));
   }
   break;
+  case XT_EMAIL: {
+    garmin_fs_t* gmsd = gmsd_init(wpt);
+    GMSD_SET(email, csv_stringtrim(s, enclosure, 0));
+  }
+  break;
   case -1:
     if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
       wpt->longitude = atof(s) / pow(10.0, atof(fmp.key.constData()+7));
@@ -1705,6 +1711,10 @@ xcsv_waypt_pr(const Waypoint* wpt)
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
       buff = QString().sprintf(fmp.printfc.constData(), GMSD_GET(facility, ""));
     }
+    case XT_EMAIL: {
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
+      buff = QString().sprintf(fmp.printfc.constData(), GMSD_GET(email, ""));
+    }
     break;
     /* specials */
     case XT_FILENAME:
@@ -2224,7 +2234,7 @@ ff_vecs_t xcsv_vecs = {
   xcsv_data_write,
   nullptr,
   &xcsv_args,
-  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  CET_CHARSET_UTF8, 0,	/* conversion to utf8 for gmsd is handled by the stream, don't let csv_convert_strings convert gmsd data */
   { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
   nullptr
 

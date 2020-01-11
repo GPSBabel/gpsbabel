@@ -17,7 +17,7 @@ License:   GPL
 Group:     File tools
 Source:    %{name}-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-%{version}-build
-URL:       http://www.gpsbabel.org
+URL:       https://www.gpsbabel.org
 
 %description
 Converts GPS waypoint, route and track data from one format type to another.

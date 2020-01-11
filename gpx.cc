@@ -56,7 +56,7 @@
 
 #define MYNAME "GPX"
 #ifndef CREATOR_NAME_URL
-#  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
+#  define CREATOR_NAME_URL "GPSBabel - https://www.gpsbabel.org"
 #endif
 
 void

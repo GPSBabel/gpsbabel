@@ -710,7 +710,6 @@ public:
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
   format_specific_data* fs;
-  unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   const session_t* session;	/* pointer to a session struct */

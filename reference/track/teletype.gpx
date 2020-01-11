@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="-84.592135000" minlon="40.492200000" maxlat="-73.845933000" maxlon="42.374635000"/>
   <wpt lat="-73.993588000" lon="40.702659000">

@@ -109,7 +109,7 @@ load_args(const QString& filename, const QString& arg0)
 static void
 usage(const char* pname, int shorter)
 {
-  printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
+  printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
          gpsbabel_version);
   printf(
     "Usage:\n"
@@ -305,7 +305,7 @@ run(const char* prog_name)
       ivecs->read();
       ivecs->rd_deinit();
 
-      cet_convert_strings(global_opts.charset, nullptr, nullptr);
+      cet_convert_strings(global_opts.charset, nullptr);
       cet_convert_deinit();
 
       did_something = true;
@@ -345,7 +345,7 @@ run(const char* prog_name)
           route_backup(&rte_head_bak);
           track_backup(&trk_head_bak);
 
-          cet_convert_strings(nullptr, global_opts.charset, nullptr);
+          cet_convert_strings(nullptr, global_opts.charset);
           global_opts.verbose_status = saved_status;
         }
 
@@ -533,12 +533,12 @@ run(const char* prog_name)
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_strings(global_opts.charset, nullptr, nullptr);
+    cet_convert_strings(global_opts.charset, nullptr);
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
       cet_convert_init(ovecs->get_encode(), 1);
-      cet_convert_strings(nullptr, global_opts.charset, nullptr);
+      cet_convert_strings(nullptr, global_opts.charset);
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
@@ -558,7 +558,7 @@ run(const char* prog_name)
     int saved_status = global_opts.verbose_status;
     global_opts.verbose_status = 0;
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    cet_convert_strings(nullptr, global_opts.charset, nullptr);
+    cet_convert_strings(nullptr, global_opts.charset);
     waypt_disp_all(waypt_disp);
     global_opts.verbose_status = saved_status;
   }
