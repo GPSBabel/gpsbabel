@@ -100,7 +100,7 @@ static void gpx_write_bounds();
 
 #define MYNAME "GPX"
 #ifndef CREATOR_NAME_URL
-#  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
+#  define CREATOR_NAME_URL "GPSBabel - https://www.gpsbabel.org"
 #endif
 
 enum gpx_point_type {

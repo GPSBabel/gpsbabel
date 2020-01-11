@@ -108,7 +108,7 @@ load_args(const QString& filename, const QString& arg0)
 static void
 usage(const char* pname, int shorter)
 {
-  printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
+  printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
          gpsbabel_version);
   printf(
     "Usage:\n"

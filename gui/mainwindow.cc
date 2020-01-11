@@ -1104,7 +1104,7 @@ void MainWindow::donateActionX()
 //------------------------------------------------------------------------
 void MainWindow::visitWebsiteActionX()
 {
-  QDesktopServices::openUrl(QString("http://www.gpsbabel.org"));
+  QDesktopServices::openUrl(QString("https://www.gpsbabel.org"));
 }
 
 //------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 // Display all the Garmin icons that we know about so we can copy/paste
-// into our doc, http://www.gpsbabel.org/htmldoc-development/GarminIcons.html
+// into our doc, https://www.gpsbabel.org/htmldoc-development/GarminIcons.html
 
 
 #include "fatal.cc"

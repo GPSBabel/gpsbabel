@@ -612,7 +612,7 @@ static char gpsman[] =
   "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
   ;
 static char iblue747[] =
-  "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
+  "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
   "# Author: Christian Barmala http://www.barmala.de/\n"
   "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
 
@@ -656,7 +656,7 @@ static char iblue747[] =
   "IFIELD PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
   ;
 static char iblue757[] =
-  "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
+  "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
   "# Author: iBlue747csv by Christian Barmala http://www.barmala.de/\n"
   "#		  edited by Anthony Vella to suit the iBlue757 csv format (date format changed)\n"
   "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
