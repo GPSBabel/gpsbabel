@@ -100,7 +100,8 @@ HEADERS =  \
 	defs.h \
 	explorist_ini.h \
 	filter.h \
-	filterdefs.h \
+	filter_vecs.h \
+	format.h \
 	garmin_device_xml.h \
 	garmin_fs.h \
 	garmin_gpi.h \
@@ -109,6 +110,7 @@ HEADERS =  \
 	gbser.h \
 	gbser_private.h \
 	gbversion.h \
+	gpx.h \
 	grtcirc.h \
 	heightgrid.h \
 	holux.h \
@@ -131,6 +133,7 @@ HEADERS =  \
 	jeeps/gpsusbcommon.h \
 	jeeps/gpsusbint.h \
 	jeeps/gpsutil.h \
+	legacyformat.h \
 	magellan.h \
 	mapsend.h \
 	navilink.h \
@@ -138,6 +141,7 @@ HEADERS =  \
 	shapelib/shapefil.h \
 	strptime.h \
 	units.h \
+	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
 	zlib/crc32.h \
