@@ -599,7 +599,7 @@ gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
     a waypoint. */
-    wpt_tmp->shortname = QString().sprintf("LAP%03d", lap_ct);
+    wpt_tmp->shortname = QString::asprintf("LAP%03d", lap_ct);
     waypt_add(wpt_tmp);
   } else {
     delete wpt_tmp;
