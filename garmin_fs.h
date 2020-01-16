@@ -37,6 +37,7 @@
 
 /* macros */
 
+#if 0
 #define GMSD_FIND(a) (garmin_fs_t *) fs_chain_find((a)->fs, FS_GMSD)
 #define GMSD_HAS(a) (gmsd && gmsd->flags.a)
 
@@ -59,6 +60,7 @@
 
 /* GMSD_GETNSTR(a,b,c): a = gmsd field, b = target, c = sizeof(target) */
 #define GMSD_GETNSTR(a,b,c) if (gmsd && gmsd->flags.a) strncpy((b),gmsd->a,(c))
+#endif
 
 struct garmin_ilink_t {
   int ref_count;
@@ -67,6 +69,29 @@ struct garmin_ilink_t {
 };
 
 struct garmin_fs_flags_t {
+public:
+  garmin_fs_flags_t() :
+  icon(0),
+  wpt_class(0),
+  display(0),
+  category(0),
+  city(0),
+  state(0),
+  facility(0),
+  cc(0),
+  cross_road(0),
+  addr(0),
+  country(0),
+  phone_nr(0),
+  phone_nr2(0),
+  fax_nr(0),
+  postal_code(0),
+  email(0)
+#ifdef GMSD_EXPERIMENTAL
+  , subclass(0)
+#endif
+  {}
+
   unsigned int icon:1;
   unsigned int wpt_class:1;
   unsigned int display:1;
@@ -88,32 +113,135 @@ struct garmin_fs_flags_t {
 #endif
 };
 
-struct garmin_fs_t {
+class garmin_fs_t {
+public:
   format_specific_data fs;
   garmin_fs_flags_t flags;
 
-  int protocol;		/* ... used by device (-1 is MapSource) */
+  int protocol{0};		/* ... used by device (-1 is MapSource) */
 
-  int32_t icon;
-  int wpt_class;
-  int32_t display;
-  int16_t category;
-  char* city;			/* city name */
-  char* facility;			/* facility name */
-  char* state;			/* state */
-  char* cc;			/* country code */
-  char* cross_road;		/* Intersection road label */
-  char* addr;			/* address + number */
-  char* country;			/* country */
-  char* phone_nr;			/* phone number */
-  char* phone_nr2;		/* phone number (2) */
-  char* fax_nr;			/* fax number */
-  char* postal_code;		/* postal code */
-  char* email;			/* email address */
-  garmin_ilink_t* ilinks;
+  int32_t icon{0};
+  int wpt_class{0};
+  int32_t display{0};
+  int16_t category{0};
+  char* city{nullptr};					/* city name */
+  char* facility{nullptr};			/* facility name */
+  char* state{nullptr};					/* state */
+  char* cc{nullptr};						/* country code */
+  char* cross_road{nullptr};		/* Intersection road label */
+  char* addr{nullptr};					/* address + number */
+  char* country{nullptr};				/* country */
+  char* phone_nr{nullptr};			/* phone number */
+  char* phone_nr2{nullptr};			/* phone number (2) */
+  char* fax_nr{nullptr};				/* fax number */
+  char* postal_code{nullptr};		/* postal code */
+  char* email{nullptr};					/* email address */
+  garmin_ilink_t* ilinks{nullptr};
 #ifdef GMSD_EXPERIMENTAL
-  char subclass[22];
+  char subclass[22]{};
 #endif
+
+public:
+  garmin_fs_t() = default;
+  ~garmin_fs_t();
+  garmin_fs_t(const garmin_fs_t& other);
+  garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
+  garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
+  garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
+
+  static garmin_fs_t* find(const Waypoint* wpt) {
+    return (garmin_fs_t*) fs_chain_find(wpt->fs, FS_GMSD);
+  }
+
+#define GEN_GMSD_METHODS(field) \
+  static auto get_##field(garmin_fs_t* gmsd, decltype(field) p) \
+  { \
+    return (gmsd && gmsd->flags.field)? gmsd->field : p; \
+  } \
+  static void set_##field(garmin_fs_t* gmsd, decltype(field) p) \
+  { \
+    if (gmsd) { \
+      gmsd->field = p; \
+      gmsd->flags.field = 1; \
+    } \
+  }
+
+  GEN_GMSD_METHODS(icon)
+  GEN_GMSD_METHODS(wpt_class)
+  GEN_GMSD_METHODS(display)
+  GEN_GMSD_METHODS(category)
+
+#undef GEN_GMSD_METHODS
+
+#define GEN_GMSD_STR_METHODS(field) \
+  static bool has_##field(garmin_fs_t* gmsd) \
+  { \
+    return gmsd && gmsd->flags.field; \
+  } \
+  static const char* get_##field(garmin_fs_t* gmsd, const char* p) \
+  { \
+    return (gmsd && gmsd->flags.field)? gmsd->field : p; \
+  } \
+  static char* get_##field(garmin_fs_t* gmsd, std::nullptr_t p) \
+  { \
+    return (gmsd && gmsd->flags.field)? gmsd->field : p; \
+  } \
+  static void set_##field(garmin_fs_t* gmsd, char* p) \
+  { \
+    if (gmsd) { \
+      gmsd->field = p; \
+      gmsd->flags.field = 1; \
+    } \
+  } \
+  static void setstr_##field(garmin_fs_t* gmsd, const char* p) \
+  { \
+    if (gmsd && p && *p) { \
+      gmsd->field = xstrdup(p); \
+      gmsd->flags.field = 1; \
+    } \
+  } \
+  static void setqstr_##field(garmin_fs_t* gmsd, const QString& p) \
+  { \
+    if (gmsd) { \
+      gmsd->field = xstrdup(p); \
+      gmsd->flags.field = 1; \
+    } \
+  } \
+  static void setstrq_##field(garmin_fs_t* gmsd, const QString& p) \
+  { \
+    if (gmsd && !p.isEmpty()) { \
+      gmsd->field = xstrdup(p); \
+      gmsd->flags.field = 1; \
+    } \
+  } \
+  static void setnstr_##field(garmin_fs_t* gmsd, const char* source, size_t len) \
+  { \
+    if (gmsd && source && *source) { \
+      gmsd->field = xstrndup(source, len); \
+      gmsd->flags.field = 1; \
+    } \
+  } \
+  static void getnstr_##field(garmin_fs_t* gmsd, char* target, size_t len) \
+  { \
+    if (gmsd && gmsd->flags.field) { \
+      strncpy(target, gmsd->field, len); \
+    } \
+  }
+
+  GEN_GMSD_STR_METHODS(city)
+  GEN_GMSD_STR_METHODS(facility)
+  GEN_GMSD_STR_METHODS(state)
+  GEN_GMSD_STR_METHODS(cc)
+  GEN_GMSD_STR_METHODS(cross_road)
+  GEN_GMSD_STR_METHODS(addr)
+  GEN_GMSD_STR_METHODS(country)
+  GEN_GMSD_STR_METHODS(phone_nr)
+  GEN_GMSD_STR_METHODS(phone_nr2)
+  GEN_GMSD_STR_METHODS(fax_nr)
+  GEN_GMSD_STR_METHODS(postal_code)
+  GEN_GMSD_STR_METHODS(email)
+
+#undef GEN_GMSD_STR_METHODS
 };
 using garmin_fs_p = garmin_fs_t*;
 

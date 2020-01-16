@@ -244,7 +244,7 @@ static time_t gpi_timestamp = 0;
 static garmin_fs_t*
 gpi_gmsd_init(Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (wpt == nullptr) {
     fatal(MYNAME ": Error in file structure.\n");
   }
@@ -666,23 +666,23 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 #endif
     if ((mask & GPI_ADDR_CITY) && (cstr = gpi_read_string_old("City"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(city, cstr);
+      garmin_fs_t::set_city(gmsd, cstr);
     }
     if ((mask & GPI_ADDR_COUNTRY) && (cstr = gpi_read_string_old("Country"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(country, cstr);
+      garmin_fs_t::set_country(gmsd, cstr);
     }
     if ((mask & GPI_ADDR_STATE) && (cstr = gpi_read_string_old("State"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(state, cstr);
+      garmin_fs_t::set_state(gmsd, cstr);
     }
     if ((mask & GPI_ADDR_POSTAL_CODE) && (cstr = gpi_read_string_old("Postal code"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(postal_code, cstr);
+      garmin_fs_t::set_postal_code(gmsd, cstr);
     }
     if ((mask & GPI_ADDR_ADDR) && (cstr = gpi_read_string_old("Street address"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(addr, cstr);
+      garmin_fs_t::set_addr(gmsd, cstr);
     }
     break;
 
@@ -690,19 +690,19 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
     mask = gbfgetint16(fin);
     if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, cstr);
+      garmin_fs_t::set_phone_nr(gmsd, cstr);
     }
     if ((mask & 2) && (cstr = gpi_read_string_old("Phone2"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr2, cstr);
+      garmin_fs_t::set_phone_nr2(gmsd, cstr);
     }
     if ((mask & 4) && (cstr = gpi_read_string_old("Fax"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(fax_nr, cstr);
+      garmin_fs_t::set_fax_nr(gmsd, cstr);
     }
     if ((mask & 8) && (cstr = gpi_read_string_old("Email"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(email, cstr);
+      garmin_fs_t::set_email(gmsd, cstr);
     }
     if ((mask & 0x10) && (str = gpi_read_string("Link"), !str.isEmpty())) {
       waypt_add_url(wpt, str, str);
@@ -719,7 +719,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 #endif
     if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, cstr);
+      garmin_fs_t::set_phone_nr(gmsd, cstr);
     }
     break;
 
@@ -982,29 +982,29 @@ wdata_compute_size(writer_data_t* data)
       dt->sz += (8 + strlen(dt->addr));
     }
 
-    if ((gmsd = GMSD_FIND(wpt))) {
-      if ((dt->mask == 0) && ((dt->addr = GMSD_GET(addr, NULL)))) {
+    if ((gmsd = garmin_fs_t::find(wpt))) {
+      if ((dt->mask == 0) && ((dt->addr = garmin_fs_t::get_addr(gmsd, nullptr)))) {
         dt->mask |= GPI_ADDR_ADDR;
         dt->sz += (8 + strlen(dt->addr));
       }
-      if ((dt->city = GMSD_GET(city, NULL))) {
+      if ((dt->city = garmin_fs_t::get_city(gmsd, nullptr))) {
         dt->mask |= GPI_ADDR_CITY;
         dt->sz += (8 + strlen(dt->city));
       }
-      if ((dt->country = GMSD_GET(country, NULL))) {
+      if ((dt->country = garmin_fs_t::get_country(gmsd, nullptr))) {
         dt->mask |= GPI_ADDR_COUNTRY;
         dt->sz += (8 + strlen(dt->country));
       }
-      if ((dt->state = GMSD_GET(state, NULL))) {
+      if ((dt->state = garmin_fs_t::get_state(gmsd, nullptr))) {
         dt->mask |= GPI_ADDR_STATE;
         dt->sz += (8 + strlen(dt->state));
       }
-      if ((dt->postal_code = GMSD_GET(postal_code, NULL))) {
+      if ((dt->postal_code = garmin_fs_t::get_postal_code(gmsd, nullptr))) {
         dt->mask |= GPI_ADDR_POSTAL_CODE;
         dt->sz += (2 + strlen(dt->postal_code));	/* short form */
       }
 
-      if ((dt->phone_nr = GMSD_GET(phone_nr, NULL))) {
+      if ((dt->phone_nr = garmin_fs_t::get_phone_nr(gmsd, nullptr))) {
         res += (12 + 4 +  strlen(dt->phone_nr));
       }
     }

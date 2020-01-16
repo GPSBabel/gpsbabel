@@ -75,7 +75,7 @@ static void
 parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 {
   char* cin;
-  garmin_fs_p gmsd = GMSD_FIND(wpt);
+  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
 
   while ((cin = csv_lineparse(buff, delimiter, "", index++))) {
 
@@ -121,11 +121,11 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
     case WAYPT__OFS + 4:
       if (strcmp(cin, "S+C") == 0) {
-        GMSD_SET(display, gt_display_mode_symbol_and_comment);
+        garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_comment);
       } else if (strcmp(cin, "S") == 0) {
-        GMSD_SET(display, gt_display_mode_symbol);
+        garmin_fs_t::set_display(gmsd, gt_display_mode_symbol);
       } else if (strcmp(cin, "S+N") == 0) {
-        GMSD_SET(display, gt_display_mode_symbol_and_name);
+        garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_name);
       }
       break;
 
@@ -136,32 +136,32 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
     case WPT_cA_OFS + 4:
     case WPT_c4_OFS + 2:
-      GMSD_SETSTR(city, cin);
+      garmin_fs_t::setstr_city(gmsd, cin);
       break;
 
     case WPT_cA_OFS + 5:
     case WPT_c4_OFS + 3:
-      GMSD_SETSTR(state, cin);
+      garmin_fs_t::setstr_state(gmsd, cin);
       break;
 
     case WPT_cA_OFS + 6:
     case WPT_c4_OFS + 4:
-      GMSD_SETSTR(cc, cin);
+      garmin_fs_t::setstr_cc(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 1:
     case WPT_c6_OFS + 2:
-      GMSD_SETSTR(facility, cin);
+      garmin_fs_t::setstr_facility(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 2:
     case WPT_c6_OFS + 3:
-      GMSD_SETSTR(addr, cin);
+      garmin_fs_t::setstr_addr(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 3: /*cross road */
     case WPT_c6_OFS + 4:
-      GMSD_SETSTR(cross_road, cin);
+      garmin_fs_t::setstr_cross_road(gmsd, cin);
       break;
 
     case TRKPT__OFS + 2: /* altitude */
@@ -203,7 +203,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
     case WPT_cD_OFS + 3:
       categories = atoi(cin);
       if (categories != 0) {
-        GMSD_SET(category, atoi(cin));
+        garmin_fs_t::set_category(gmsd, atoi(cin));
       }
       break;
 

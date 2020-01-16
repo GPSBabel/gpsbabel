@@ -219,25 +219,25 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
         wpt->notes = rand_qstr(16, "Nts_%s");
       }
       if RND(3) {
-        GMSD_SET(addr, rand_str(8, "Adr_%s"));
+        garmin_fs_t::set_addr(gmsd, rand_str(8, "Adr_%s"));
       }
       if RND(3) {
-        GMSD_SET(city, rand_str(8, "Cty_%s"));
+        garmin_fs_t::set_city(gmsd, rand_str(8, "Cty_%s"));
       }
       if RND(3) {
-        GMSD_SET(facility, rand_str(8, "Fac_%s"));
+        garmin_fs_t::set_facility(gmsd, rand_str(8, "Fac_%s"));
       }
       if RND(3) {
-        GMSD_SET(country, rand_str(8, "Ctr_%s"));
+        garmin_fs_t::set_country(gmsd, rand_str(8, "Ctr_%s"));
       }
       if RND(3) {
-        GMSD_SET(state, rand_str(8, "Sta_%s"));
+        garmin_fs_t::set_state(gmsd, rand_str(8, "Sta_%s"));
       }
       if RND(3) {
-        GMSD_SET(phone_nr, rand_str(8, "Pnr_%s"));
+        garmin_fs_t::set_phone_nr(gmsd, rand_str(8, "Pnr_%s"));
       }
       if RND(3) {
-        GMSD_SET(postal_code, rand_str(8, "Pcd_%s"));
+        garmin_fs_t::set_postal_code(gmsd, rand_str(8, "Pcd_%s"));
       }
     }
 

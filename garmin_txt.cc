@@ -215,8 +215,8 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  garmin_fs_p gmsd = GMSD_FIND(wpt);
-  int wpt_class = GMSD_GET(wpt_class, 0);
+  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
+  int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class < 0x80) {
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
       waypoints++;
@@ -535,15 +535,15 @@ write_waypt(const Waypoint* wpt)
 {
   const char* wpt_type;
 
-  garmin_fs_p gmsd = GMSD_FIND(wpt);
+  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
 
-  int i = GMSD_GET(display, 0);
+  int i = garmin_fs_t::get_display(gmsd, 0);
   if (i > GT_DISPLAY_MODE_MAX) {
     i = 0;
   }
   const char* dspl_mode = gt_display_mode_names[i];
 
-  unsigned char wpt_class = GMSD_GET(wpt_class, 0);
+  unsigned char wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class <= gt_waypt_class_map_line) {
     wpt_type = gt_waypt_class_names[wpt_class];
   } else {
@@ -593,16 +593,16 @@ write_waypt(const Waypoint* wpt)
 
   *fout << "Unknown\t"; 				/* Color is fixed: Unknown */
 
-  int icon = GMSD_GET(icon, -1);
+  int icon = garmin_fs_t::get_icon(gmsd, -1);
   if (icon == -1) {
     icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
   }
   print_string("%s\t", gt_find_desc_from_icon_number(icon, GDB));
 
-  print_string("%s\t", GMSD_GET(facility, ""));
-  print_string("%s\t", GMSD_GET(city, ""));
-  print_string("%s\t", GMSD_GET(state, ""));
-  const char* country = gt_get_icao_country(GMSD_GET(cc, ""));
+  print_string("%s\t", garmin_fs_t::get_facility(gmsd, ""));
+  print_string("%s\t", garmin_fs_t::get_city(gmsd, ""));
+  print_string("%s\t", garmin_fs_t::get_state(gmsd, ""));
+  const char* country = gt_get_icao_country(garmin_fs_t::get_cc(gmsd, ""));
   print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
   if (wpt->HasUrlLink()) {
@@ -611,7 +611,7 @@ write_waypt(const Waypoint* wpt)
   } else {
     print_string("%s\t", "");
   }
-  print_categories(GMSD_GET(category, 0));
+  print_categories(garmin_fs_t::get_category(gmsd, 0));
 
   *fout << "\r\n";
 }
@@ -1108,7 +1108,7 @@ parse_waypoint()
     case  3:
       for (i = 0; i <= gt_waypt_class_map_line; i++) {
         if (case_ignore_strcmp(str, gt_waypt_class_names[i]) == 0) {
-          GMSD_SET(wpt_class, i);
+          garmin_fs_t::set_wpt_class(gmsd, i);
           break;
         }
       }
@@ -1139,28 +1139,28 @@ parse_waypoint()
       break;
     case  9:
       if (parse_display(str, &i)) {
-        GMSD_SET(display, i);
+        garmin_fs_t::set_display(gmsd, i);
       }
       break;
     case 10:
       break;	/* skip color */
     case 11:
       i = gt_find_icon_number_from_desc(str, GDB);
-      GMSD_SET(icon, i);
+      garmin_fs_t::set_icon(gmsd, i);
       wpt->icon_descr = gt_find_desc_from_icon_number(i, GDB);
       break;
     case 12:
-      GMSD_SETSTR(facility, str);
+      garmin_fs_t::setstr_facility(gmsd, str);
       break;
     case 13:
-      GMSD_SETSTR(city, str);
+      garmin_fs_t::setstr_city(gmsd, str);
       break;
     case 14:
-      GMSD_SETSTR(state, str);
+      garmin_fs_t::setstr_state(gmsd, str);
       break;
     case 15:
-      GMSD_SETSTR(country, str);
-      GMSD_SETSTR(cc, gt_get_icao_cc(str, wpt->shortname));
+      garmin_fs_t::setstr_country(gmsd, str);
+      garmin_fs_t::setstr_cc(gmsd, gt_get_icao_cc(str, wpt->shortname));
       break;
     case 16: {
       time_t ct;
@@ -1174,7 +1174,7 @@ parse_waypoint()
     }
     break;
     case 18:
-      GMSD_SET(category, parse_categories(str));
+      garmin_fs_t::set_category(gmsd, parse_categories(str));
       break;
     default:
       break;

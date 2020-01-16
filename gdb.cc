@@ -439,13 +439,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   fs_chain_add(&res->fs, (format_specific_data*) gmsd);
   res->shortname = fread_cstr();
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
-  GMSD_SET(wpt_class, wpt_class);
+  garmin_fs_t::set_wpt_class(gmsd, wpt_class);
   if (wpt_class != 0) {
     waypth_ct++;
   }
 
   ba = FREAD_STR();					/* Country code */
-  GMSD_SETSTR(cc, ba.constData());
+  garmin_fs_t::setstr_cc(gmsd, ba.constData());
 
 #ifdef GMSD_EXPERIMENTAL
   FREAD(subclass, sizeof(subclass));
@@ -509,17 +509,17 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     display = gt_display_mode_symbol_and_name;
     break;
   }
-  GMSD_SET(display, display);
+  garmin_fs_t::set_display(gmsd, display);
 
   FREAD_i32;				/* color !not implemented! */
   icon = FREAD_i32;
-  GMSD_SET(icon, icon);			/* icon */
+  garmin_fs_t::set_icon(gmsd, icon);			/* icon */
   ba = FREAD_STR();				/* city */
-  GMSD_SETSTR(city, ba.constData());
+  garmin_fs_t::setstr_city(gmsd, ba.constData());
   ba = FREAD_STR();				/* state */
-  GMSD_SETSTR(state, ba.constData());
+  garmin_fs_t::setstr_state(gmsd, ba.constData());
   ba = FREAD_STR();				/* facility */
-  GMSD_SETSTR(facility, ba.constData());
+  garmin_fs_t::setstr_facility(gmsd, ba.constData());
 
   FREAD(buf, 1);
 
@@ -566,7 +566,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     waypt_flag = 0;
 
     ba = FREAD_STR();				/* street address */
-    GMSD_SETSTR(addr, ba.constData());
+    garmin_fs_t::setstr_addr(gmsd, ba.constData());
 
     FREAD(buf, 5);				/* instruction depended */
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
@@ -594,7 +594,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #endif
   i = FREAD_i16;
   if (i != 0) {
-    GMSD_SET(category, i);
+    garmin_fs_t::set_category(gmsd, i);
   }
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, i)
@@ -625,13 +625,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (gdb_ver >= GDB_VER_3) {
     if (FREAD_i32 == 1) {
       ba = FREAD_STR();		/* phone number */
-      GMSD_SETSTR(phone_nr, ba.constData());
+      garmin_fs_t::setstr_phone_nr(gmsd, ba.constData());
       (void) FREAD_STR();		/* ?? fax / mobile ?? */
     }
     ba = FREAD_STR();			/* country */
-    GMSD_SETSTR(country, ba.constData());
+    garmin_fs_t::setstr_country(gmsd, ba.constData());
     ba = FREAD_STR();			/* postal code */
-    GMSD_SETSTR(postal_code, ba.constData());
+    garmin_fs_t::setstr_postal_code(gmsd, ba.constData());
   }
 
   res->icon_descr = gt_find_desc_from_icon_number(icon, GDB);
@@ -641,16 +641,16 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
          qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
 #endif
-  if ((str = GMSD_GET(cc, NULL))) {
-    if (! GMSD_HAS(country)) {
-      GMSD_SETSTR(country, gt_get_icao_country(str));
+  if ((str = garmin_fs_t::get_cc(gmsd, nullptr))) {
+    if (! (garmin_fs_t::has_country(gmsd))) {
+      garmin_fs_t::setstr_country(gmsd, gt_get_icao_country(str));
     }
   }
   if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !res->description.isEmpty()) {
     wpt_class = gt_waypt_class_user_waypoint;
-    GMSD_SET(wpt_class, wpt_class);
+    garmin_fs_t::set_wpt_class(gmsd, wpt_class);
 #ifdef GMSD_EXPERIMENTAL
-    GMSD_UNSET(subclass);
+    garmin_fs_t::unset_subclass(gmsd);
 #endif
   }
   *waypt_class_out = wpt_class;
@@ -822,12 +822,12 @@ read_route()
 #endif
     wpt = gdb_add_route_waypt(rte, wpt, wpt_class);
     if (wpt != nullptr) {
-      garmin_fs_t* gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       if (gmsd == nullptr) {
         gmsd = garmin_fs_alloc(-1);
         fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
       }
-      GMSD_SET(wpt_class, wpt_class);
+      garmin_fs_t::set_wpt_class(gmsd, wpt_class);
       gmsd->ilinks = il_root;
       il_root = nullptr;
     }
@@ -1215,7 +1215,7 @@ write_waypoint(
 
   FWRITE_CSTR(shortname);			/* unique (!!!) shortname */
   FWRITE_i32(wpt_class);			/* waypoint class */
-  FWRITE_CSTR(GMSD_GET(cc, ""));		/* country code */
+  FWRITE_CSTR(garmin_fs_t::get_cc(gmsd, ""));		/* country code */
 
   if (wpt_class != 0) {
     waypth_ct++;
@@ -1245,9 +1245,9 @@ write_waypoint(
   FWRITE_i32(display);			/* display */
   FWRITE_i32(0);				/* color */
   FWRITE_i32(icon);			/* icon */
-  FWRITE_CSTR(GMSD_GET(city, ""));	/* city */
-  FWRITE_CSTR(GMSD_GET(state, ""));	/* state */
-  FWRITE_CSTR(GMSD_GET(facility, ""));	/* facility */
+  FWRITE_CSTR(garmin_fs_t::get_city(gmsd, ""));	/* city */
+  FWRITE_CSTR(garmin_fs_t::get_state(gmsd, ""));	/* state */
+  FWRITE_CSTR(garmin_fs_t::get_facility(gmsd, ""));	/* facility */
   FWRITE_C(0);				/* unknown */
   FWRITE_DBL(WAYPT_GET(wpt, depth, unknown_alt), unknown_alt);	/* depth */
 
@@ -1273,7 +1273,7 @@ write_waypoint(
     QString str;
 
     if (wpt_class < gt_waypt_class_map_point) {	/* street address */
-      str  = GMSD_GET(addr, "");
+      str  = garmin_fs_t::get_addr(gmsd, "");
     } else {
       str = "";
     }
@@ -1308,13 +1308,13 @@ write_waypoint(
     }
   }
 
-  FWRITE_i16(GMSD_GET(category, gdb_category));
+  FWRITE_i16(garmin_fs_t::get_category(gmsd, gdb_category));
   FWRITE_DBL(WAYPT_GET(wpt, temperature, 0), 0);
   FWRITE_TIME(wpt->GetCreationTime().toTime_t());
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_3) {
-    const char* str = GMSD_GET(phone_nr, "");
+    const char* str = garmin_fs_t::get_phone_nr(gmsd, "");
     if (*str) {
       FWRITE_i32(1);
       FWRITE_CSTR(str);
@@ -1322,8 +1322,8 @@ write_waypoint(
     } else {
       FWRITE_i32(0);
     }
-    FWRITE_CSTR(GMSD_GET(country, ""));
-    FWRITE_CSTR(GMSD_GET(postal_code, ""));
+    FWRITE_CSTR(garmin_fs_t::get_country(gmsd, ""));
+    FWRITE_CSTR(garmin_fs_t::get_postal_code(gmsd, ""));
   }
 }
 
@@ -1398,7 +1398,7 @@ write_route(const route_head* rte, const QString& rte_name)
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
     }
 
-    garmin_fs_t* gmsd = GMSD_FIND(wpt);
+    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
     FWRITE_CSTR((wpt->extra_data) ? (char*)wpt->extra_data : wpt->shortname);
@@ -1406,7 +1406,7 @@ write_route(const route_head* rte, const QString& rte_name)
     int wpt_class = wpt->wpt_flags.fmt_use;			/* trick */
 
     FWRITE_i32(wpt_class);				/* waypoint class */
-    FWRITE_CSTR(GMSD_GET(cc, ""));			/* country */
+    FWRITE_CSTR(garmin_fs_t::get_cc(gmsd, ""));			/* country */
 #ifdef GMSD_EXPERIMENTAL
     if (gmsd && gmsd->flags.subclass && (wpt_class >= gt_waypt_class_map_point)) {
       FWRITE(gmsd->subclass, sizeof(gmsd->subclass));
@@ -1571,15 +1571,15 @@ write_waypoint_cb(const Waypoint* refpt)
     fout = ftmp;
 
     /* prepare the waypoint */
-    garmin_fs_t* gmsd = GMSD_FIND(wpt);
+    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
-    int wpt_class = GMSD_GET(wpt_class, -1);
+    int wpt_class = garmin_fs_t::get_wpt_class(gmsd, -1);
     if (wpt_class == -1) {
       wpt_class = (route_flag) ? GDB_DEF_HIDDEN_CLASS : GDB_DEF_CLASS;
     }
     wpt->wpt_flags.fmt_use = wpt_class; 	/* trick, we need this for the route(s) */
 
-    int icon = GMSD_GET(icon, -1);
+    int icon = garmin_fs_t::get_icon(gmsd, -1);
     if (icon < 0) {
       if (wpt->icon_descr.isNull()) {
         icon = GDB_DEF_ICON;
@@ -1588,7 +1588,7 @@ write_waypoint_cb(const Waypoint* refpt)
       }
     }
 
-    switch (GMSD_GET(display, -1)) {		/* display */
+    switch (garmin_fs_t::get_display(gmsd, -1)) {		/* display */
     case -1:
       if (wpt_class < 8) {
         display = gt_gdb_display_mode_symbol_and_name;

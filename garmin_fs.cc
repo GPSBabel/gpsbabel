@@ -37,7 +37,7 @@
 garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
-  garmin_fs_t* result = (garmin_fs_t*)xcalloc(1, sizeof(*result));
+  garmin_fs_t* result = new garmin_fs_t;
   result->fs.type = FS_GMSD;
   result->fs.copy = (fs_copy) garmin_fs_copy;
   result->fs.destroy = garmin_fs_destroy;
@@ -52,58 +52,34 @@ garmin_fs_alloc(const int protocol)
 void
 garmin_fs_destroy(void* fs)
 {
-  garmin_fs_t* data = (garmin_fs_t*) fs;
-  if (data != nullptr) {
-    garmin_ilink_t* ilinks;
+  delete (garmin_fs_t*) fs;
+}
 
-    if (data->addr != nullptr) {
-      xfree(data->addr);
-    }
-    if (data->cc != nullptr) {
-      xfree(data->cc);
-    }
-    if (data->city != nullptr) {
-      xfree(data->city);
-    }
-    if (data->country != nullptr) {
-      xfree(data->country);
-    }
-    if (data->cross_road != nullptr) {
-      xfree(data->cross_road);
-    }
-    if (data->facility != nullptr) {
-      xfree(data->facility);
-    }
-    if (data->phone_nr != nullptr) {
-      xfree(data->phone_nr);
-    }
-    if (data->phone_nr2 != nullptr) {
-      xfree(data->phone_nr2);
-    }
-    if (data->fax_nr != nullptr) {
-      xfree(data->fax_nr);
-    }
-    if (data->email != nullptr) {
-      xfree(data->email);
-    }
-    if (data->postal_code != nullptr) {
-      xfree(data->postal_code);
-    }
-    if (data->state != nullptr) {
-      xfree(data->state);
-    }
+garmin_fs_t::~garmin_fs_t()
+{
+  free(addr);
+  free(cc);
+  free(city);
+  free(country);
+  free(cross_road);
+  free(facility);
+  free(phone_nr);
+  free(phone_nr2);
+  free(fax_nr);
+  free(email);
+  free(postal_code);
+  free(state);
 
-    if ((ilinks = data->ilinks) != nullptr) {
-      ilinks->ref_count--;
-      if (ilinks->ref_count <= 0) {
-        while (ilinks != nullptr) {
-          garmin_ilink_t* tmp = ilinks;
-          ilinks = ilinks->next;
-          xfree(tmp);
-        }
+  garmin_ilink_t* links;
+  if ((links = ilinks) != nullptr) {
+    links->ref_count--;
+    if (links->ref_count <= 0) {
+      while (links != nullptr) {
+        garmin_ilink_t* tmp = links;
+        links = links->next;
+        xfree(tmp);
       }
     }
-    xfree(data);
   }
 }
 
@@ -113,27 +89,40 @@ void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
     *dest = nullptr;
     return;
   }
-  *dest = (garmin_fs_t*) xmalloc(sizeof(*src));
+  *dest = new garmin_fs_t(*src);
+}
 
-  /* do not copy interlinks, only increment the reference counter */
-  if (src->ilinks != nullptr) {
-    src->ilinks->ref_count++;
+garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) :
+  fs(other.fs),
+  flags(other.flags),
+  protocol(other.protocol),
+  icon(other.icon),
+  wpt_class(other.wpt_class),
+  display(other.display),
+  category(other.category),
+  ilinks(other.ilinks)
+{
+  addr = (other.addr != nullptr) ? xstrdup(other.addr) : nullptr;
+  cc = (other.cc != nullptr) ? xstrdup(other.cc) : nullptr;
+  city = (other.city != nullptr) ? xstrdup(other.city) : nullptr;
+  country = (other.country != nullptr) ? xstrdup(other.country) : nullptr;
+  cross_road = (other.cross_road != nullptr) ? xstrdup(other.cross_road) : nullptr;
+  facility = (other.facility != nullptr) ? xstrdup(other.facility) : nullptr;
+  phone_nr = (other.phone_nr != nullptr) ? xstrdup(other.phone_nr) : nullptr;
+  phone_nr2 = (other.phone_nr2 != nullptr) ? xstrdup(other.phone_nr2) : nullptr;
+  fax_nr = (other.fax_nr != nullptr) ? xstrdup(other.fax_nr) : nullptr;
+  email = (other.email != nullptr) ? xstrdup(other.email) : nullptr;
+  postal_code = (other.postal_code != nullptr) ? xstrdup(other.postal_code) : nullptr;
+  state = (other.state != nullptr) ? xstrdup(other.state) : nullptr;
+
+  /* do not deep copy interlinks, only increment the reference counter */
+  if (ilinks != nullptr) {
+    ilinks->ref_count++;
   }
 
-  memcpy(*dest, src, sizeof(*src));
-
-  (*dest)->addr = (src->addr != nullptr) ? xstrdup(src->addr) : nullptr;
-  (*dest)->cc = (src->cc != nullptr) ? xstrdup(src->cc) : nullptr;
-  (*dest)->city = (src->city != nullptr) ? xstrdup(src->city) : nullptr;
-  (*dest)->country = (src->country != nullptr) ? xstrdup(src->country) : nullptr;
-  (*dest)->cross_road = (src->cross_road != nullptr) ? xstrdup(src->cross_road) : nullptr;
-  (*dest)->facility = (src->facility != nullptr) ? xstrdup(src->facility) : nullptr;
-  (*dest)->phone_nr = (src->phone_nr != nullptr) ? xstrdup(src->phone_nr) : nullptr;
-  (*dest)->phone_nr2 = (src->phone_nr2 != nullptr) ? xstrdup(src->phone_nr2) : nullptr;
-  (*dest)->fax_nr = (src->fax_nr != nullptr) ? xstrdup(src->fax_nr) : nullptr;
-  (*dest)->email = (src->email != nullptr) ? xstrdup(src->email) : nullptr;
-  (*dest)->postal_code = (src->postal_code != nullptr) ? xstrdup(src->postal_code) : nullptr;
-  (*dest)->state = (src->state != nullptr) ? xstrdup(src->state) : nullptr;
+#ifdef GMSD_EXPERIMENTAL
+  memcopy(subclass, other.subclass, sizeof(subclass));
+#endif
 }
 
 void garmin_fs_convert(void* fs)
@@ -184,28 +173,28 @@ void
 garmin_fs_xml_fprint(const Waypoint* waypt,
                      QXmlStreamWriter* writer)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(waypt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
 
   if (gmsd == nullptr) {
     return;
   }
 
   /* Find out if there is at least one field set */
-  const char* addr = GMSD_GET(addr, "");
+  const char* addr = garmin_fs_t::get_addr(gmsd, "");
   if (! *addr) {
-    addr = GMSD_GET(city, "");
+    addr = garmin_fs_t::get_city(gmsd, "");
   }
   if (! *addr) {
-    addr = GMSD_GET(country, "");
+    addr = garmin_fs_t::get_country(gmsd, "");
   }
   if (! *addr) {
-    addr = GMSD_GET(postal_code, "");
+    addr = garmin_fs_t::get_postal_code(gmsd, "");
   }
   if (! *addr) {
-    addr = GMSD_GET(state, "");
+    addr = garmin_fs_t::get_state(gmsd, "");
   }
 
-  const char* phone = GMSD_GET(phone_nr, "");
+  const char* phone = garmin_fs_t::get_phone_nr(gmsd, "");
 
   if (*addr || *phone ||
       (gmsd->flags.category && gmsd->category) ||
@@ -256,19 +245,19 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
       char* str;
       writer->writeStartElement(QStringLiteral("gpxx:Address"));
 
-      if ((str = GMSD_GET(addr, NULL))) {
+      if ((str = garmin_fs_t::get_addr(gmsd, nullptr))) {
         writer->writeTextElement(QStringLiteral("gpxx:StreetAddress"), str);
       }
-      if ((str = GMSD_GET(city, NULL))) {
+      if ((str = garmin_fs_t::get_city(gmsd, nullptr))) {
         writer->writeTextElement(QStringLiteral("gpxx:City"), str);
       }
-      if ((str = GMSD_GET(state, NULL))) {
+      if ((str = garmin_fs_t::get_state(gmsd, nullptr))) {
         writer->writeTextElement(QStringLiteral("gpxx:State"), str);
       }
-      if ((str = GMSD_GET(country, NULL))) {
+      if ((str = garmin_fs_t::get_country(gmsd, nullptr))) {
         writer->writeTextElement(QStringLiteral("gpxx:Country"), str);
       }
-      if ((str = GMSD_GET(postal_code, NULL))) {
+      if ((str = garmin_fs_t::get_postal_code(gmsd, nullptr))) {
         writer->writeTextElement(QStringLiteral("gpxx:PostalCode"), str);
       }
       writer->writeEndElement(); // /gpxx::Address
@@ -289,7 +278,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Way
 {
   // FIXME: eliminate C string copy/use here:
   const char *cdatastr = xstrdup(Qcdatastr);
-  garmin_fs_t* gmsd = GMSD_FIND(waypt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
@@ -329,11 +318,11 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Way
     break;
   case 4:
     if (case_ignore_strcmp(cdatastr, "SymbolOnly") == 0) {
-      GMSD_SET(display, gt_display_mode_symbol);
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol);
     } else if (case_ignore_strcmp(cdatastr, "SymbolAndDescription") == 0) {
-      GMSD_SET(display, gt_display_mode_symbol_and_comment);
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_comment);
     } else {
-      GMSD_SET(display, gt_display_mode_symbol_and_name);
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_name);
     }
     break;
   case 6:
@@ -347,22 +336,22 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Way
     }
     break;
   case 7:
-    GMSD_SETSTR(addr, cdatastr);
+    garmin_fs_t::setstr_addr(gmsd, cdatastr);
     break;
   case 8:
-    GMSD_SETSTR(city, cdatastr);
+    garmin_fs_t::setstr_city(gmsd, cdatastr);
     break;
   case 9:
-    GMSD_SETSTR(state, cdatastr);
+    garmin_fs_t::setstr_state(gmsd, cdatastr);
     break;
   case 10:
-    GMSD_SETSTR(country, cdatastr);
+    garmin_fs_t::setstr_country(gmsd, cdatastr);
     break;
   case 11:
-    GMSD_SETSTR(postal_code, cdatastr);
+    garmin_fs_t::setstr_postal_code(gmsd, cdatastr);
     break;
   case 12:
-    GMSD_SETSTR(phone_nr, cdatastr);
+    garmin_fs_t::setstr_phone_nr(gmsd, cdatastr);
     break;
   }
   xfree(cdatastr);
@@ -413,14 +402,14 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
     return 0;
   }
 
-  garmin_fs_t* gmsd = GMSD_FIND(waypt);
-  cat = cat | (GMSD_GET(category, 0));
+  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
+  cat = cat | (garmin_fs_t::get_category(gmsd, 0));
 
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
   }
-  GMSD_SET(category, cat);
+  garmin_fs_t::set_category(gmsd, cat);
   return 1;
 }
 
@@ -433,12 +422,12 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
   /* nothing happens until gmsd is allocated some lines above */
 
   /* !!! class needs protocol specific conversion !!! (ToDo)
-  GMSD_SET(wpt_class, way[i]->wpt_class);
+  garmin_fs_t::set_wpt_class(gmsd, way[i]->wpt_class);
   */
   /* flagged data fields */
-  GMSD_SET(display, gt_switch_display_mode_value(way->dspl, gps_waypt_type, 1));
+  garmin_fs_t::set_display(gmsd, gt_switch_display_mode_value(way->dspl, gps_waypt_type, 1));
   if (way->category != 0) {
-    GMSD_SET(category, way->category);
+    garmin_fs_t::set_category(gmsd, way->category);
   }
   if (way->dst < 1.0e25f) {
     WAYPT_SET(wpt, proximity, way->dst);
@@ -449,18 +438,18 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
   if (way->dpth < 1.0e25f) {
     WAYPT_SET(wpt, depth, way->dpth);
   }
-  GMSD_SETNSTR(cc, way->cc, sizeof(way->cc));
-  GMSD_SETNSTR(state, way->state, sizeof(way->state));
-  GMSD_SETSTR(city, way->city);
-  GMSD_SETSTR(facility, way->facility);
-  GMSD_SETSTR(cross_road, way->cross_road);
-  GMSD_SETSTR(addr, way->addr);
+  garmin_fs_t::setnstr_cc(gmsd, way->cc, sizeof(way->cc));
+  garmin_fs_t::setnstr_state(gmsd, way->state, sizeof(way->state));
+  garmin_fs_t::setstr_city(gmsd, way->city);
+  garmin_fs_t::setstr_facility(gmsd, way->facility);
+  garmin_fs_t::setstr_cross_road(gmsd, way->cross_road);
+  garmin_fs_t::setstr_addr(gmsd, way->addr);
 }
 
 void
 garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   (void)protoid; // unused for now.
 
@@ -469,19 +458,19 @@ garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int proto
   }
 
   /* ToDo: protocol specific conversion of class
-  way[i]->wpt_class = GMSD_GET(wpt_class, way[i]->wpt_class);
+  way[i]->wpt_class = garmin_fs_t::get_wpt_class(gmsd, way[i]->wpt_class);
   	*/
   way->dspl = gt_switch_display_mode_value(
-                GMSD_GET(display, way->dspl), gps_waypt_type, 0);
-  way->category = GMSD_GET(category, way->category);
+                garmin_fs_t::get_display(gmsd, way->dspl), gps_waypt_type, 0);
+  way->category = garmin_fs_t::get_category(gmsd, way->category);
   way->dpth = WAYPT_GET(wpt, depth, way->dpth);
   way->dst = WAYPT_GET(wpt, proximity, way->dpth);
   way->temperature = WAYPT_GET(wpt, temperature, way->temperature);
 
-  GMSD_GETNSTR(cc, way->cc, sizeof(way->cc));
-  GMSD_GETNSTR(city, way->city, sizeof(way->city));
-  GMSD_GETNSTR(state, way->state, sizeof(way->state));
-  GMSD_GETNSTR(facility, way->facility, sizeof(way->facility));
-  GMSD_GETNSTR(cross_road, way->cross_road, sizeof(way->cross_road));
-  GMSD_GETNSTR(addr, way->addr, sizeof(way->addr));
+  garmin_fs_t::getnstr_cc(gmsd, way->cc, sizeof(way->cc));
+  garmin_fs_t::getnstr_city(gmsd, way->city, sizeof(way->city));
+  garmin_fs_t::getnstr_state(gmsd, way->state, sizeof(way->state));
+  garmin_fs_t::getnstr_facility(gmsd, way->facility, sizeof(way->facility));
+  garmin_fs_t::getnstr_cross_road(gmsd, way->cross_road, sizeof(way->cross_road));
+  garmin_fs_t::getnstr_addr(gmsd, way->addr, sizeof(way->addr));
 }
