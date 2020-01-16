@@ -585,7 +585,7 @@ gmsd_init(Waypoint* wpt)
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
 static void 
-xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
+xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
                xcsv_parse_data* parse_data, const int line_no)
 {
   const char* enclosure = "";
@@ -598,6 +598,11 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
   if (0 == strcmp(fmp.printfc.constData(), "\"%s\"")) {
     enclosure = "\"";
   }
+
+  // TODO: eliminate this char string usage.
+  QByteArray value_utf8 = value.toUtf8();
+  const char* s = value_utf8.constData();
+
   switch (fmp.hashed_key) {
   case XT_IGNORE:
     /* IGNORE -- Categorically ignore this... */
@@ -624,16 +629,16 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     if (!parse_data->link_) {
       parse_data->link_ = new UrlLink;
     }
-    parse_data->link_->url_ = QString(s).trimmed();
+    parse_data->link_->url_ = value.trimmed();
     break;
   case XT_URL_LINK_TEXT:
     if (!parse_data->link_) {
       parse_data->link_ = new UrlLink;
     }
-    parse_data->link_->url_link_text_ = QString(s).trimmed();
+    parse_data->link_->url_link_text_ = value.trimmed();
     break;
   case XT_ICON_DESCR:
-    wpt->icon_descr = QString(s).trimmed();
+    wpt->icon_descr = value.trimmed();
     break;
 
     /* LATITUDE CONVERSIONS**************************************************/
@@ -801,7 +806,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
-    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(QString(s).toLongLong(&ok)));
+    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(value.toLongLong(&ok)));
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
@@ -858,10 +863,10 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     wpt->AllocGCData()->container = gs_mkcont(s);
     break;
   case XT_GEOCACHE_HINT:
-    wpt->AllocGCData()->hint = QString(s).trimmed();
+    wpt->AllocGCData()->hint = value.trimmed();
     break;
   case XT_GEOCACHE_PLACER:
-    wpt->AllocGCData()->placer = QString(s).trimmed();
+    wpt->AllocGCData()->placer = value.trimmed();
     break;
   case XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
@@ -950,42 +955,42 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map& fmp,
     /* GMSD ****************************************************************/
   case XT_COUNTRY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_country(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_country(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_STATE: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_state(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_state(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_CITY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_city(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_city(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_STREET_ADDR: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_addr(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_addr(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_POSTAL_CODE: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_postal_code(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_postal_code(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_PHONE_NR: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_phone_nr(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_phone_nr(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_FACILITY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_facility(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_facility(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case XT_EMAIL: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
-    garmin_fs_t::set_email(gmsd, csv_stringtrim(s, enclosure, 0));
+    garmin_fs_t::set_email(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
   case -1:
@@ -1060,7 +1065,7 @@ xcsv_data_read()
       /* now rip the line apart */
       for (const auto& value : values) {
         const field_map& fmp = xcsv_file.ifields.at(ifield_idx++);
-        xcsv_parse_val(CSTR(value), wpt_tmp, fmp, &parse_data, linecount);
+        xcsv_parse_val(value, wpt_tmp, fmp, &parse_data, linecount);
 
         if (ifield_idx >= xcsv_file.ifields.size()) {
           /* no more fields, stop parsing! */
