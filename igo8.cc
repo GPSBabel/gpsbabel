@@ -61,10 +61,21 @@
 
 */
 
+#include <algorithm>
+#include <cstdio>               // for SEEK_SET
+#include <cstdint>
+#include <cstdlib>              // for atoi
+#include <cstring>              // for memset
+
+#include <QtCore/QChar>         // for QChar
+#include <QtCore/QString>       // for QString
+#include <QtCore/QVector>       // for QVector
+#include <QtCore/QtGlobal>      // for ushort
+
 #include "defs.h"
-#include "cet.h"
-#include "cet_util.h"
-#include <cstdlib>
+#include "gbfile.h"             // for gbfwrite, gbfclose, gbfseek, gbfgetint32, gbfread, gbfile, gbfopen_le
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define FLOAT_TO_INT(x) ((int)((x) + ((x)<0?-0.5:0.5)))
 #define IGO8_HEADER_SIZE (sizeof(igo8_id_block) + 256)
@@ -236,64 +247,33 @@ static void write_igo8_track_point(const Waypoint* wpt)
   point_count++;
 }
 
-// Write src unicode str to the dst cstring using unicode characters
-// All lengths are in bytes
-static unsigned int print_unicode(char* dst, const unsigned int dst_max_length, short* src, unsigned int src_len)
+// Write src unicode str to the dst cstring using unicode characters.
+// dst_max_length is in bytes.
+// I have no idea if iGo8 even supports real unicode 2, but is does look like
+// it as every ascii character is a short with the ascii character as the
+// least significant 7 bits.
+static unsigned int print_unicode(char* dst, int dst_max_length, const QString& src)
 {
-  // Check to see what length we were passed, if the length doesn't include the null
-  // then we make it include the null
-  if (src[(src_len/2) - 1] != 0) {
-    // If the last character isn't null check the next one
-    if (src[(src_len/2)] != 0) {
-      // If the next character also inst' null, make it null
-      src[(src_len/2)] = 0;
-    } else {
-      // The next character is null, adjust the total length of the str to account for this
-      src_len += 2;
-    }
+  int max_qchars = dst_max_length / 2;
+  if (max_qchars < 1) {
+    // We must have room for the terminator.
+    fatal(MYNAME ": igo8 header overflow.\n");
+  };
+  // Write as many characters from the source as possible
+  // while leaving space for a terminator.
+  int n_src_qchars = std::min(max_qchars - 1, src.size());
+  for (int i = 0; i < n_src_qchars; ++i) {
+    le_write16(dst, src.at(i).unicode());
+    dst += 2;
   }
+  le_write16(dst, 0); // NULL (U+0000) terminator
 
-  // Make sure we fit in our dst size
-  if (src_len > dst_max_length) {
-    src_len = dst_max_length;
-    src[(src_len/2) - 1] = 0; // Make sure we keep that terminating null around
-  }
-
-  // Copy the str
-  memcpy(dst, src, src_len);
-
-  return src_len;
-}
-
-// This is a sort of hacked together ascii-> unicode 2 converter.  I have no idea
-// if iGo8 even supports real unicode 2, but is does look like it as every ascii
-// character is a short with the ascii character as the least significant 7 bits
-//
-// Please replace this with a much more filled out and correct version if you see
-// fit.
-
-/* 2008/06/24, O.K.: Use CET library for ascii-> unicode 2 converter */
-// 2008/07/25, Dustin: Slight fix to make sure that we always null terminate the
-//                     string, validate that the use of the CET library provides
-//                     conforming output, remove my old junk converter code.
-
-static unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
-{
-  int len;
-
-  short* unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
-
-  len *= 2;	/* real size in bytes */
-  len = print_unicode(dst, dst_max_length, unicode, len);
-
-  xfree(unicode);
-
-  return len;
+  return (n_src_qchars + 1) * 2;
 }
 
 static void write_header()
 {
-  char header[IGO8_HEADER_SIZE] = {'\0'};
+  char header[IGO8_HEADER_SIZE] = {};
   igo8_id_block tmp_id_block;
   p_igo8_id_block id_block = (p_igo8_id_block)header;
   uint32_t current_position = 0;
@@ -334,13 +314,13 @@ static void write_header()
   if (igo8_option_title) {
     title = igo8_option_title;
   }
-  current_position += ascii_to_unicode_2((header+current_position), IGO8_HEADER_SIZE - current_position - 2, title);
+  current_position += print_unicode((header+current_position), IGO8_HEADER_SIZE - current_position - 2, title);
 
   // Set the description of the track
   if (igo8_option_description) {
     description = igo8_option_description;
   }
-  current_position += ascii_to_unicode_2((header+current_position), IGO8_HEADER_SIZE - current_position, description);
+  current_position += print_unicode((header+current_position), IGO8_HEADER_SIZE - current_position, description);
 
   gbfwrite(&header, IGO8_HEADER_SIZE, 1, igo8_file_out);
 }
