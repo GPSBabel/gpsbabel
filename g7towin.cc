@@ -136,32 +136,32 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
     case WPT_cA_OFS + 4:
     case WPT_c4_OFS + 2:
-      garmin_fs_t::setstr_city(gmsd, cin);
+      garmin_fs_t::set_city(gmsd, cin);
       break;
 
     case WPT_cA_OFS + 5:
     case WPT_c4_OFS + 3:
-      garmin_fs_t::setstr_state(gmsd, cin);
+      garmin_fs_t::set_state(gmsd, cin);
       break;
 
     case WPT_cA_OFS + 6:
     case WPT_c4_OFS + 4:
-      garmin_fs_t::setstr_cc(gmsd, cin);
+      garmin_fs_t::set_cc(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 1:
     case WPT_c6_OFS + 2:
-      garmin_fs_t::setstr_facility(gmsd, cin);
+      garmin_fs_t::set_facility(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 2:
     case WPT_c6_OFS + 3:
-      garmin_fs_t::setstr_addr(gmsd, cin);
+      garmin_fs_t::set_addr(gmsd, cin);
       break;
 
     case WPT_cB_OFS + 3: /*cross road */
     case WPT_c6_OFS + 4:
-      garmin_fs_t::setstr_cross_road(gmsd, cin);
+      garmin_fs_t::set_cross_road(gmsd, cin);
       break;
 
     case TRKPT__OFS + 2: /* altitude */

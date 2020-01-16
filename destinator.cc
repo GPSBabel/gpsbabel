@@ -181,19 +181,19 @@ destinator_read_poi()
         str += " ";
         str += hnum;
       }
-      garmin_fs_t::setstrq_addr(gmsd, str);
+      garmin_fs_t::set_addr(gmsd, str);
     }
 
-    if ((str = read_wcstr(0), !str.isEmpty())) {		/* city */
+    if (!(str = read_wcstr(0)).isEmpty()) {		/* city */
       gmsd = gmsd_init(wpt);
-      garmin_fs_t::setstrq_city(gmsd, str);
+      garmin_fs_t::set_city(gmsd, str);
     }
 
     (void) read_wcstr(1);			/* unknown */
 
-    if ((str = read_wcstr(0), !str.isEmpty())) {		/* postcode */
+    if (!(str = read_wcstr(0)).isEmpty()) {		/* postcode */
       gmsd = gmsd_init(wpt);
-      garmin_fs_t::setstrq_postal_code(gmsd, str);
+      garmin_fs_t::set_postal_code(gmsd, str);
     }
 
     (void) read_wcstr(1);			/* unknown */

@@ -959,34 +959,34 @@ unicsv_parse_one_line(const QString& ibuf)
       }
       switch (unicsv_fields_tab[column]) {
       case fld_garmin_city:
-        garmin_fs_t::setqstr_city(gmsd, value);
+        garmin_fs_t::set_city(gmsd, value);
         break;
       case fld_garmin_postal_code:
-        garmin_fs_t::setqstr_postal_code(gmsd, value);
+        garmin_fs_t::set_postal_code(gmsd, value);
         break;
       case fld_garmin_state:
-        garmin_fs_t::setqstr_state(gmsd, value);
+        garmin_fs_t::set_state(gmsd, value);
         break;
       case fld_garmin_country:
-        garmin_fs_t::setqstr_country(gmsd, value);
+        garmin_fs_t::set_country(gmsd, value);
         break;
       case fld_garmin_addr:
-        garmin_fs_t::setqstr_addr(gmsd, value);
+        garmin_fs_t::set_addr(gmsd, value);
         break;
       case fld_garmin_phone_nr:
-        garmin_fs_t::setqstr_phone_nr(gmsd, value);
+        garmin_fs_t::set_phone_nr(gmsd, value);
         break;
       case fld_garmin_phone_nr2:
-        garmin_fs_t::setqstr_phone_nr2(gmsd, value);
+        garmin_fs_t::set_phone_nr2(gmsd, value);
         break;
       case fld_garmin_fax_nr:
-        garmin_fs_t::setqstr_fax_nr(gmsd, value);
+        garmin_fs_t::set_fax_nr(gmsd, value);
         break;
       case fld_garmin_email:
-        garmin_fs_t::setqstr_email(gmsd, value);
+        garmin_fs_t::set_email(gmsd, value);
         break;
       case fld_garmin_facility:
-        garmin_fs_t::setqstr_facility(gmsd, value);
+        garmin_fs_t::set_facility(gmsd, value);
         break;
       default:
         break;

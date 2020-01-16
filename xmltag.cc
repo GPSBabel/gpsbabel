@@ -91,6 +91,5 @@ fs_xml* fs_xml_alloc(long type)
   result->fs.type = type;
   result->fs.copy = fs_xml_copy;
   result->fs.destroy = fs_xml_destroy;
-  result->fs.convert = nullptr;
   return result;
 }

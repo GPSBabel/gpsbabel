@@ -1679,41 +1679,41 @@ xcsv_waypt_pr(const Waypoint* wpt)
     /* GMSD ************************************************************/
     case XT_COUNTRY: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_country(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_country(gmsd, "")));
     }
     break;
     case XT_STATE: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_state(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_state(gmsd, "")));
     }
     break;
     case XT_CITY: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_city(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_city(gmsd, "")));
     }
     break;
     case XT_POSTAL_CODE: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_postal_code(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_postal_code(gmsd, "")));
     }
     break;
     case XT_STREET_ADDR: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_addr(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_addr(gmsd, "")));
     }
     break;
     case XT_PHONE_NR: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_phone_nr(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_phone_nr(gmsd, "")));
     }
     break;
     case XT_FACILITY: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_facility(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_facility(gmsd, "")));
     }
     case XT_EMAIL: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), garmin_fs_t::get_email(gmsd, ""));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_email(gmsd, "")));
     }
     break;
     /* specials */

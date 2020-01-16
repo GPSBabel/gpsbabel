@@ -43,7 +43,7 @@
 #endif
 
 #include "defs.h"
-#include "cet_util.h"               // for cet_convert_init, cet_convert_strings, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
+#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filter_vecs.h"            // for FilterVecs
@@ -305,7 +305,6 @@ run(const char* prog_name)
       ivecs->read();
       ivecs->rd_deinit();
 
-      cet_convert_strings(global_opts.charset, nullptr);
       cet_convert_deinit();
 
       did_something = true;
@@ -345,7 +344,6 @@ run(const char* prog_name)
           route_backup(&rte_head_bak);
           track_backup(&trk_head_bak);
 
-          cet_convert_strings(nullptr, global_opts.charset);
           global_opts.verbose_status = saved_status;
         }
 
@@ -533,12 +531,10 @@ run(const char* prog_name)
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_strings(global_opts.charset, nullptr);
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
       cet_convert_init(ovecs->get_encode(), 1);
-      cet_convert_strings(nullptr, global_opts.charset);
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
@@ -558,7 +554,6 @@ run(const char* prog_name)
     int saved_status = global_opts.verbose_status;
     global_opts.verbose_status = 0;
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    cet_convert_strings(nullptr, global_opts.charset);
     waypt_disp_all(waypt_disp);
     global_opts.verbose_status = saved_status;
   }

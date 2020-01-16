@@ -35,33 +35,6 @@
 };
 */
 
-/* macros */
-
-#if 0
-#define GMSD_FIND(a) (garmin_fs_t *) fs_chain_find((a)->fs, FS_GMSD)
-#define GMSD_HAS(a) (gmsd && gmsd->flags.a)
-
-/* GMSD_GET(a,b): a = any gmsd field, b = default value */
-#define GMSD_GET(a,b) ((gmsd) && (gmsd->flags.a)) ? (gmsd->a) : (b)
-
-/* GMSD_SET(a,b): a = numeric gmsd field, b = numeric source */
-#define GMSD_SET(a,b) if (gmsd) {gmsd->a = (b); gmsd->flags.a = 1; }
-
-/* GMSD_UNSET(a): a = gmsd field */
-#define GMSD_UNSET(a) if (gmsd) { gmsd->flags.a = 0; }
-
-/* GMSD_SETSTR(a,b): a = gmsd field, b = null terminated source */
-#define GMSD_SETSTR(a,b) if (gmsd && (b) && (b)[0]) { gmsd->a = xstrdup((b)); gmsd->flags.a = 1; }
-#define GMSD_SETQSTR(a,b) if (gmsd) { gmsd->a = xstrdup((b)); gmsd->flags.a = 1; }
-#define GMSD_SETSTRQ(a,b) if (gmsd && !b.isEmpty())  { gmsd->a = xstrdup((b)); gmsd->flags.a = 1; }
-
-/* GMSD_SETNSTR(a,b,c): a = gmsd field, b = source, c = sizeof(source) */
-#define GMSD_SETNSTR(a,b,c) if (gmsd && (b) && (b)[0]) { gmsd->a = xstrndup((b),(c)); gmsd->flags.a = 1; }
-
-/* GMSD_GETNSTR(a,b,c): a = gmsd field, b = target, c = sizeof(target) */
-#define GMSD_GETNSTR(a,b,c) if (gmsd && gmsd->flags.a) strncpy((b),gmsd->a,(c))
-#endif
-
 struct garmin_ilink_t {
   int ref_count;
   double lat, lon, alt;
@@ -124,18 +97,18 @@ public:
   int wpt_class{0};
   int32_t display{0};
   int16_t category{0};
-  char* city{nullptr};					/* city name */
-  char* facility{nullptr};			/* facility name */
-  char* state{nullptr};					/* state */
-  char* cc{nullptr};						/* country code */
-  char* cross_road{nullptr};		/* Intersection road label */
-  char* addr{nullptr};					/* address + number */
-  char* country{nullptr};				/* country */
-  char* phone_nr{nullptr};			/* phone number */
-  char* phone_nr2{nullptr};			/* phone number (2) */
-  char* fax_nr{nullptr};				/* fax number */
-  char* postal_code{nullptr};		/* postal code */
-  char* email{nullptr};					/* email address */
+  QString city;					/* city name */
+  QString facility;			/* facility name */
+  QString state;				/* state */
+  QString cc;						/* country code */
+  QString cross_road;		/* Intersection road label */
+  QString addr;					/* address + number */
+  QString country;			/* country */
+  QString phone_nr;			/* phone number */
+  QString phone_nr2;		/* phone number (2) */
+  QString fax_nr;				/* fax number */
+  QString postal_code;	/* postal code */
+  QString email;				/* email address */
   garmin_ilink_t* ilinks{nullptr};
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22]{};
@@ -154,7 +127,11 @@ public:
   }
 
 #define GEN_GMSD_METHODS(field) \
-  static auto get_##field(garmin_fs_t* gmsd, decltype(field) p) \
+  static bool has_##field(const garmin_fs_t* gmsd) \
+  { \
+    return gmsd && gmsd->flags.field; \
+  } \
+  static decltype(field) get_##field(const garmin_fs_t* gmsd, decltype(field) p) \
   { \
     return (gmsd && gmsd->flags.field)? gmsd->field : p; \
   } \
@@ -163,6 +140,12 @@ public:
     if (gmsd) { \
       gmsd->field = p; \
       gmsd->flags.field = 1; \
+    } \
+  } \
+  static void unset_##field(garmin_fs_t* gmsd) \
+  { \
+    if (gmsd) { \
+      gmsd->flags.field = 0; \
     } \
   }
 
@@ -174,57 +157,32 @@ public:
 #undef GEN_GMSD_METHODS
 
 #define GEN_GMSD_STR_METHODS(field) \
-  static bool has_##field(garmin_fs_t* gmsd) \
+  static bool has_##field(const garmin_fs_t* gmsd) \
   { \
     return gmsd && gmsd->flags.field; \
   } \
-  static const char* get_##field(garmin_fs_t* gmsd, const char* p) \
+  static QString get_##field(const garmin_fs_t* gmsd, const QString& p) \
   { \
     return (gmsd && gmsd->flags.field)? gmsd->field : p; \
   } \
-  static char* get_##field(garmin_fs_t* gmsd, std::nullptr_t p) \
+  static void set_##field(garmin_fs_t* gmsd, const char* p) \
   { \
-    return (gmsd && gmsd->flags.field)? gmsd->field : p; \
-  } \
-  static void set_##field(garmin_fs_t* gmsd, char* p) \
-  { \
-    if (gmsd) { \
+    if (gmsd && p && *p) { \
       gmsd->field = p; \
       gmsd->flags.field = 1; \
     } \
   } \
-  static void setstr_##field(garmin_fs_t* gmsd, const char* p) \
-  { \
-    if (gmsd && p && *p) { \
-      gmsd->field = xstrdup(p); \
-      gmsd->flags.field = 1; \
-    } \
-  } \
-  static void setqstr_##field(garmin_fs_t* gmsd, const QString& p) \
-  { \
-    if (gmsd) { \
-      gmsd->field = xstrdup(p); \
-      gmsd->flags.field = 1; \
-    } \
-  } \
-  static void setstrq_##field(garmin_fs_t* gmsd, const QString& p) \
+  static void set_##field(garmin_fs_t* gmsd, const QString& p) \
   { \
     if (gmsd && !p.isEmpty()) { \
-      gmsd->field = xstrdup(p); \
+      gmsd->field = p; \
       gmsd->flags.field = 1; \
     } \
   } \
-  static void setnstr_##field(garmin_fs_t* gmsd, const char* source, size_t len) \
+  static void unset_##field(garmin_fs_t* gmsd) \
   { \
-    if (gmsd && source && *source) { \
-      gmsd->field = xstrndup(source, len); \
-      gmsd->flags.field = 1; \
-    } \
-  } \
-  static void getnstr_##field(garmin_fs_t* gmsd, char* target, size_t len) \
-  { \
-    if (gmsd && gmsd->flags.field) { \
-      strncpy(target, gmsd->field, len); \
+    if (gmsd) { \
+      gmsd->flags.field = 0; \
     } \
   }
 
@@ -252,7 +210,7 @@ void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
-void garmin_fs_xml_convert(int base_tag, int tag, const QString& cdatastr, Waypoint* waypt);
+void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
 class QXmlStreamWriter;
 void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
 

@@ -1150,17 +1150,17 @@ parse_waypoint()
       wpt->icon_descr = gt_find_desc_from_icon_number(i, GDB);
       break;
     case 12:
-      garmin_fs_t::setstr_facility(gmsd, str);
+      garmin_fs_t::set_facility(gmsd, str);
       break;
     case 13:
-      garmin_fs_t::setstr_city(gmsd, str);
+      garmin_fs_t::set_city(gmsd, str);
       break;
     case 14:
-      garmin_fs_t::setstr_state(gmsd, str);
+      garmin_fs_t::set_state(gmsd, str);
       break;
     case 15:
-      garmin_fs_t::setstr_country(gmsd, str);
-      garmin_fs_t::setstr_cc(gmsd, gt_get_icao_cc(str, wpt->shortname));
+      garmin_fs_t::set_country(gmsd, str);
+      garmin_fs_t::set_cc(gmsd, gt_get_icao_cc(str, wpt->shortname));
       break;
     case 16: {
       time_t ct;
