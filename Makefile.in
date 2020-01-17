@@ -581,7 +581,8 @@ geojson.o: geojson.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   src/core/file.h
 ggv_bin.o: ggv_bin.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
+  ggv_bin.h format.h
 ggv_log.o: ggv_log.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   grtcirc.h
@@ -1008,7 +1009,8 @@ vcf.o: vcf.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
 vecs.o: vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h vecs.h \
   format.h gpx.h src/core/file.h src/core/xmlstreamwriter.h \
-  src/core/xmltag.h legacyformat.h gbversion.h src/core/logging.h xcsv.h
+  src/core/xmltag.h legacyformat.h gbversion.h src/core/logging.h xcsv.h \
+  ggv_bin.h
 vidaone.o: vidaone.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 vitosmt.o: vitosmt.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \

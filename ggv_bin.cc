@@ -2,8 +2,8 @@
 
     Handle Geogrid-Viewer binary overlay file format (.ovl)
 
-    Copyright (C) 2016 Ralf Horstmann <ralf@ackstorm.de>
-    Copyright (C) 2016 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2016-2020 Ralf Horstmann <ralf@ackstorm.de>
+    Copyright (C) 2016-2020 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,16 +21,15 @@
 
 */
 
-#include "defs.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QtEndian>
 
-#define MYNAME "ggv_bin"
+#include "ggv_bin.h"
 
-static QString read_fname;
+#define MYNAME "ggv_bin"
 
 /***************************************************************************
  *           local helper functions                                        *
@@ -450,14 +449,21 @@ ggv_bin_read_v34(QDataStream& stream)
 }
 
 /***************************************************************************
- *           global callbacks called by gpsbabel main process              *
+ *              entry points called by gpsbabel main process               *
  ***************************************************************************/
 
-static void
-ggv_bin_read_file(QDataStream& stream)
-{
-  QByteArray buf;
+void
+GgvBinFormat::read() {
+  QFile file(read_fname);
+  if (!file.open(QIODevice::ReadOnly)) {
+    fatal(MYNAME ": Error opening file %s\n", qPrintable(read_fname));
+  }
 
+  QDataStream stream(&file);
+  stream.setFloatingPointPrecision(QDataStream::DoublePrecision);
+  stream.setByteOrder(QDataStream::LittleEndian);
+
+  QByteArray buf;
   ggv_bin_read_bytes(stream, buf, 0x17, "magic");
   buf[23] = 0;
   if (global_opts.debug_level > 1) {
@@ -473,54 +479,19 @@ ggv_bin_read_file(QDataStream& stream)
   } else {
     fatal(MYNAME ": Unsupported file format\n");
   }
+
+  file.close();
 }
 
-static void
-ggv_bin_read_init(const QString& fname)
+void
+GgvBinFormat::rd_init(const QString& fname)
 {
   read_fname = fname;
 }
 
-static void
-ggv_bin_read_deinit()
+void
+GgvBinFormat::rd_deinit()
 {
   read_fname.clear();
 }
 
-static void
-ggv_bin_read()
-{
-  QFile file(read_fname);
-
-  if (!file.open(QIODevice::ReadOnly)) {
-    fatal(MYNAME ": Error opening file %s\n", qPrintable(read_fname));
-  }
-
-  QDataStream stream(&file);
-  stream.setFloatingPointPrecision(QDataStream::DoublePrecision);
-  stream.setByteOrder(QDataStream::LittleEndian);
-  
-  ggv_bin_read_file(stream);
-  file.close();
-}
-
-ff_vecs_t ggv_bin_vecs = {
-  ff_type_file,
-  {
-    ff_cap_none,  // waypoints
-    ff_cap_read,  // tracks
-    ff_cap_none   // routes
-  },
-  ggv_bin_read_init,    // rd_init
-  nullptr,                 // wr_init
-  ggv_bin_read_deinit,  // rd_deinit
-  nullptr,                 // wr_deinit
-  ggv_bin_read,         // read
-  nullptr,                 // write
-  nullptr,                 // exit
-  nullptr,                 //args
-  CET_CHARSET_ASCII, 0  //encode,fixed_encode
-  //NULL                //name dynamic/internal?
-  , NULL_POS_OPS,
-  nullptr
-};
