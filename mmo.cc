@@ -35,6 +35,7 @@
 #include <QtCore/QDateTime>      // for QDateTime
 #include <QtCore/QHash>          // for QHash, QHash<>::const_iterator
 #include <QtCore/QLatin1String>  // for QLatin1String
+#include <QtCore/QScopedPointer> // for QScopedPointer
 #include <QtCore/QString>        // for QString, operator==
 #include <QtCore/QTextCodec>     // for QTextCodec, QTextCodec::IgnoreHeader
 #include <QtCore/QTextEncoder>   // for QTextEncoder
@@ -1063,9 +1064,8 @@ mmo_writestr(const QString& str)
   QByteArray outbytes;
   if (topbitset) {
     // Use an encoder to avoid generating a BOM.
-    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
     outbytes = encoder->fromUnicode(str);
-    delete encoder;
     assert(outbytes.size() % 2 == 0);
     len = outbytes.size() / 2;
     len = len & 0xff;
