@@ -1411,7 +1411,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp)
 
   if (!(opt_humminbirdext || opt_garminext)) {
     auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-    auto* gmsd = GMSD_FIND(waypointp); /* gARmIN sPECIAL dATA */
+    auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
     if (fs_gpx) {
       if (! gmsd) {
         fprint_xml_chain(fs_gpx->tag, waypointp);

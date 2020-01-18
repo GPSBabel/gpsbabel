@@ -295,7 +295,6 @@ public:
 
 using fs_destroy = void (*)(void*);
 using fs_copy = void (*)(void**, void*);
-using fs_convert = void (*)(void*);
 
 struct format_specific_data {
   long type{0};
@@ -303,7 +302,6 @@ struct format_specific_data {
 
   fs_destroy destroy{nullptr};
   fs_copy copy{nullptr};
-  fs_convert convert{nullptr};
 };
 
 class gb_color
@@ -382,7 +380,6 @@ class wp_flags
 public:
   wp_flags() :
     shortname_is_synthetic(0),
-    cet_converted(0),
     fmt_use(0),
     temperature(0),
     proximity(0),
@@ -393,7 +390,6 @@ public:
     is_split(0),
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
-  unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   /* "flagged fields" */
   unsigned int temperature:1;		/* temperature field is set */

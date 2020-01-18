@@ -117,6 +117,7 @@ set(HEADERS
   garmin_device_xml.h
   garmin_fs.h
   garmin_gpi.h
+  garmin_icon_tables.h
   garmin_tables.h
   gbfile.h
   gbser.h
