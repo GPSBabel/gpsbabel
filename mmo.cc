@@ -20,6 +20,7 @@
 
  */
 
+#include <cassert>               // for assert
 #include <cctype>                // for isspace
 #include <cerrno>                // for errno
 #include <cstdio>                // for SEEK_CUR, fprintf, size_t, stdout
@@ -35,11 +36,13 @@
 #include <QtCore/QHash>          // for QHash, QHash<>::const_iterator
 #include <QtCore/QLatin1String>  // for QLatin1String
 #include <QtCore/QString>        // for QString, operator==
+#include <QtCore/QTextCodec>     // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QtCore/QTextEncoder>   // for QTextEncoder
+#include <QtCore/QVector>        // for QVector
 #include <QtCore/Qt>             // for CaseInsensitive
 #include <QtCore/QtGlobal>       // for qAsConst, QAddConst<>::Type, foreach, Q_UNUSED
 
 #include "defs.h"
-#include "cet.h"                 // for cet_ucs4_to_utf8, cet_utf8_to_ucs4
 #include "gbfile.h"              // for gbfputc, gbfgetuint16, gbfgetc, gbfgetdbl, gbfgetuint32, gbfputflt, gbfputuint32, gbfgetint16, gbfputdbl, gbfputuint16, gbfclose, gbfread, gbfseek, gbfputint16, gbfwrite, gbfcopyfrom, gbfeof, gbfgetflt, gbfgetint32, gbfile, gbfopen, gbfrewind, gbsize_t
 #include "session.h"             // for curr_session, session_t
 #include "src/core/datetime.h"   // for DateTime
@@ -69,7 +72,7 @@ QVector<arglist_t> mmo_args = {
 
 struct mmo_data_t {
   int objid;		/* internal object id */
-  char* name;
+  const char* name;
   const char* category;	/* currently not handled */
   gpsdata_type type;	/* type of "data" */
   time_t ctime;
@@ -84,6 +87,8 @@ struct mmo_data_t {
 };
 
 static gbfile* fin, *fout;
+static QTextCodec* utf16le_codec{nullptr};
+static QTextCodec* legacy_codec{nullptr};
 static int mmo_version;
 static int mmo_obj_ct;
 static int mmo_object_id;
@@ -166,10 +171,10 @@ dbgprintf(const char* sobj, const char* fmt, ...)
 # define DBG(args) do {} while (0) ;
 #endif
 
-static char*
+static QString
 mmo_readstr()
 {
-  char* res;
+  QString res;
 
   signed int len = (unsigned)gbfgetc(fin);
   if (len == 0xFF) {
@@ -181,18 +186,8 @@ mmo_readstr()
       // length is number of "characters" not number of bytes
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
-        unsigned int resbytes=0;
-        res = (char*) xmalloc(len*2 + 1);  // bigger to allow for utf-8 expansion
-        for (signed int ii = 0; ii<len; ii++) {
-          char utf8buf[8];
-          unsigned int ch = gbfgetint16(fin);
-          // convert to utf-8, possibly multiple bytes
-          int utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
-          for (signed int jj = 0; jj < utf8len; jj++) {
-            res[resbytes++] = utf8buf[jj];
-          }
-        }
-        res[resbytes] = '\0';
+        QByteArray bytesin = gbfreadbuf(len*2, fin);
+        res = utf16le_codec->toUnicode(bytesin);
         return res;
       }
       // length zero is handled below: returns an empty string
@@ -202,16 +197,9 @@ mmo_readstr()
     // positive values of len are for strings longer than 254, handled below:
   }
   // length zero returns an empty string
-  res = (char*) xmalloc(len + 1);
-  res[len] = '\0';
   if (len) {
-    gbfread(res, len, 1, fin);
-    if (static_cast<size_t>(len) != strlen(res)) {
-      // strlen requires a size_t, but Microsoft's stupid compiler doesn't
-      // do C99 %zd.  Thanx, Microsoft.
-      fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, (int) strlen(res));
-      fatal(MYNAME ": Error in file structure!\n");
-    }
+    QByteArray bytesin = gbfreadbuf(len, fin);
+    res = legacy_codec->toUnicode(bytesin);
   }
 
   return res;
@@ -419,10 +407,9 @@ mmo_read_CObjIcons(mmo_data_t* data)
   while ((icon_id = gbfgetuint32(fin))) {
     (void) gbfgetuint32(fin);
     (void) gbfgetuint32(fin);
-    char* name = mmo_readstr();
-    DBG((sobj, "bitmap(0x%08X) = \"%s\"\n", icon_id, name));
-    mmo_register_icon(icon_id, name);
-    xfree(name);
+    QString name = mmo_readstr();
+    DBG((sobj, "bitmap(0x%08X) = \"%s\"\n", icon_id, qPrintable(name)));
+    mmo_register_icon(icon_id, CSTR(name));
     // The next four bytes hold the length of the image,
     // read them and then skip the image data.
     gbfseek(fin, gbfgetuint32(fin), SEEK_CUR);
@@ -446,7 +433,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
        data->name, data->visible ? "yes" : "NO", data->objid));
 
   data->data = wpt = new Waypoint;
-  wpt->shortname = QString::fromLatin1(data->name);
+  wpt->shortname = data->name;
 
   time_t time = data->mtime;
   if (! time) {
@@ -486,34 +473,32 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 
   }
 
-  char* str = mmo_readstr();	/* descr + url */
-  if (strncmp(str, "_FILE_ ", 7) == 0) {
-    char* cx = lrtrim(str + 7);
-    char* cend = strchr(cx, '\n');
-    if (cend == nullptr) {
-      cend = cx + strlen(cx);
+  QString str = mmo_readstr();	/* descr + url */
+  if (str.startsWith("_FILE_ ")) {
+    str.remove(0,7);
+    str = str.trimmed();
+    int index = str.indexOf('\n');
+
+    QString url = str.mid(0, index).trimmed();
+    if (!url.isEmpty()) {
+      wpt->AddUrlLink(url);
     }
 
-    {
-      QString url = QString::fromUtf8(cx, cend-cx).trimmed();
-      if (!url.isEmpty()) {
-        wpt->AddUrlLink(url);
+    if (index > 0) {
+      str.remove(0,index + 1);
+      if (!str.isEmpty()) {
+        wpt->notes = str;
       }
-    }
-
-    if (*cend++) {
-      wpt->notes = QString::fromLatin1(cend);
     }
 
     if (wpt->HasUrlLink()) {
       DBG((sobj, "url = \"%s\"\n", wpt->url));
     }
-  } else if (*str) {
-    wpt->notes = QString::fromLatin1(str);
+  } else if (!str.isEmpty()) {
+    wpt->notes = str;
   }
-  xfree(str);
   if (!wpt->notes.isEmpty()) {
-    DBG((sobj, "notes = \"%s\"\n", wpt->notes));
+    DBG((sobj, "notes = \"%s\"\n", qPrintable(wpt->notes)));
   }
 
   mmo_fillbuf(buf, 12, 1);
@@ -537,12 +522,10 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   }
 
   str = mmo_readstr();	/* name on gps ??? option ??? */
-  if (*str) {
+  if (!str.isEmpty()) {
     wpt->description = wpt->shortname;
     wpt->shortname = str;
-    DBG((sobj, "name on gps = %s\n", str));
-  } else {
-    xfree(str);
+    DBG((sobj, "name on gps = %s\n", qPrintable(str)));
   }
 
   int ux = gbfgetuint32(fin);
@@ -720,9 +703,8 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
     if (mmo_version >= 0x16) {
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
-      char* text = mmo_readstr();
-      DBG((sobj, "text = \"%s\"\n", text));
-      xfree(text);
+      QString text = mmo_readstr();
+      DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
       uint16_t u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
       u16 = gbfgetuint16(fin);
@@ -756,15 +738,13 @@ mmo_read_CObjText(mmo_data_t*)
   (void) lat;
   (void) lon;
 
-  char* text = mmo_readstr();
-  DBG((sobj, "text = \"%s\"\n", text));
-  xfree(text);
+  QString text = mmo_readstr();
+  DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
 
   mmo_fillbuf(buf, 28, 1);
 
-  char* font = mmo_readstr();
-  DBG((sobj, "font = \"%s\"\n", font));
-  xfree(font);
+  QString font = mmo_readstr();
+  DBG((sobj, "font = \"%s\"\n", qPrintable(font)));
 
   mmo_fillbuf(buf, 25, 1);
 }
@@ -794,15 +774,13 @@ mmo_read_CObjCurrentPosition(mmo_data_t*)
   }
 
   if (mmo_version >= 0x14) {
-    char* name = mmo_readstr();
-    DBG((sobj, "name = \"%s\"\n", name));
-    xfree(name);
+    QString name = mmo_readstr();
+    DBG((sobj, "name = \"%s\"\n", qPrintable(name)));
     // XXX ARB was just: mmo_fillbuf(buf, 13, 1);
     // but actually it's string/long/string/long/long
     (void) gbfgetuint32(fin);
     name = mmo_readstr();
-    DBG((sobj, "name = \"%s\"\n", name));
-    xfree(name);
+    DBG((sobj, "name = \"%s\"\n", qPrintable(name)));
     (void) gbfgetuint32(fin);
     (void) gbfgetuint32(fin);
   }
@@ -859,7 +837,7 @@ mmo_read_object()
 
   if (objid & 0x8000) {
     data = mmo_register_object(mmo_object_id++, nullptr, (gpsdata_type)0);
-    data->name = mmo_readstr();
+    data->name = xstrdup(mmo_readstr());
 
     if (objid != cat_object_id) {
       data->ctime = gbfgetuint32(fin);
@@ -971,6 +949,9 @@ mmo_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 
+  utf16le_codec = QTextCodec::codecForName("UTF-16LE");
+  legacy_codec = QTextCodec::codecForName("Windows-1252");
+
   ico_object_id = pos_object_id = txt_object_id = cat_object_id = 0;
   wpt_object_id = rte_object_id = trk_object_id = 0;
 
@@ -996,6 +977,9 @@ mmo_rd_deinit()
   }
   objects.clear();
 
+  legacy_codec = nullptr;
+  utf16le_codec = nullptr;
+  
   gbfclose(fin);
 }
 
@@ -1056,22 +1040,38 @@ mmo_register_category_names(const QString& name)
 
 
 static void
-mmo_writestr(const char* str)
+mmo_writestr(const QString& str)
 {
-  int ii, topbitset = 0;
-  int len = strlen(str);
+
+  bool topbitset = false;
 
   // see if there's any utf-8 multi-byte chars
-  for (ii = 0; ii < len; ii++) {
-    if (str[ii] & 0x80) {
-      topbitset = 1;
+  QByteArray utf8 = str.toUtf8();
+  int len = utf8.size();
+  for (unsigned char byte : utf8) {
+    if (byte & 0x80) {
+      topbitset = true;
       break;
     }
   }
   // Old version can't handle utf-16
   // XXX ARB check which version number can, just guessed at 0x12
   if (mmo_version < 0x12) {
-    topbitset = 0;
+    topbitset = false;
+  }
+
+  QByteArray outbytes;
+  if (topbitset) {
+    // Use an encoder to avoid generating a BOM.
+    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    outbytes = encoder->fromUnicode(str);
+    delete encoder;
+    assert(outbytes.size() % 2 == 0);
+    len = outbytes.size() / 2;
+    len = len & 0xff;
+  } else {
+    outbytes = legacy_codec->fromUnicode(str);
+    len = outbytes.size();
   }
 
   // XXX ARB need to convert UTF-8 into UTF-16
@@ -1089,29 +1089,12 @@ mmo_writestr(const char* str)
   }
   if (len) {
     if (topbitset) {
-      int utf16val;
-      int utf16len;
-      for (ii=0; ii<len; ii++) {
-        cet_utf8_to_ucs4(str+ii, &utf16len, &utf16val);
-        // this format only handles two-byte encoding
-        // so only write the lower two bytes
-        gbfputint16(utf16val & 0xffff, fout);
-        // if utf8 char was multi-byte then skip them
-        ii += (utf16len - 1);
-      }
+      gbfwrite(outbytes, 1, len*2, fout);
     } else {
-      gbfwrite(str, len, 1, fout);
+      gbfwrite(outbytes, 1, len, fout);
     }
   }
 }
-
-static void
-mmo_writestr(const QString& str)
-{
-  // If UTF-8 is used instead of Latin1, we fail in weird ways.
-  mmo_writestr(str.toLatin1().constData());
-}
-
 
 static void
 mmo_enum_waypt_cb(const Waypoint*)
@@ -1218,7 +1201,7 @@ mmo_write_wpt_cb(const Waypoint* wpt)
 
   DBG(("write", "waypoint \"%s\"\n", wpt->shortname ? wpt->shortname : "Mark"));
   int objid = mmo_write_obj_head("CObjWaypoint",
-                                 wpt->shortname.isEmpty() ? "Mark" : CSTRc(wpt->shortname), time, obj_type_wpt);
+                                 wpt->shortname.isEmpty() ? "Mark" : CSTR(wpt->shortname), time, obj_type_wpt);
   mmo_data_t* data = mmo_register_object(objid, wpt, wptdata);
   data->refct = 1;
   mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
@@ -1305,7 +1288,7 @@ mmo_write_rte_head_cb(const route_head* rte)
     time = gpsbabel_time;
   }
   int objid = mmo_write_obj_head("CObjRoute",
-                                 rte->rte_name.isEmpty() ? "Route" : CSTRc(rte->rte_name), time, obj_type_rte);
+                                 rte->rte_name.isEmpty() ? "Route" : CSTR(rte->rte_name), time, obj_type_rte);
   mmo_register_object(objid, rte, rtedata);
   mmo_write_category("CCategory", "Route");
   gbfputc(0, fout); /* unknown */
@@ -1350,7 +1333,7 @@ mmo_write_trk_head_cb(const route_head* trk)
     return;
   }
   int objid = mmo_write_obj_head("CObjTrack",
-                                 trk->rte_name.isEmpty() ? "Track" : CSTRc(trk->rte_name), gpsbabel_time, obj_type_trk);
+                                 trk->rte_name.isEmpty() ? "Track" : CSTR(trk->rte_name), gpsbabel_time, obj_type_trk);
 
   mmo_write_category("CCategory", "Track");
   gbfputuint16(trk->rte_waypt_ct, fout);
@@ -1398,6 +1381,9 @@ mmo_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 
+  utf16le_codec = QTextCodec::codecForName("UTF-16LE");
+  legacy_codec = QTextCodec::codecForName("Windows-1252");
+
   mmo_object_id = 0x8000;
   mmo_obj_ct = 1;			/* ObjIcons always present */
   mmo_version = 0x12;		/* by default we write as version 0x12 */
@@ -1427,6 +1413,9 @@ mmo_wr_deinit()
   }
   objects.clear();
 
+  legacy_codec = nullptr;
+  utf16le_codec = nullptr;
+  
   gbfclose(fout);
 }
 
