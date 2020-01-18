@@ -417,7 +417,6 @@ lowranceusr4_alloc_fsdata()
   fsdata->fs.type = FS_LOWRANCEUSR4;
   fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;
-  fsdata->fs.convert = nullptr;
 
   fsdata->uid_unit = 0;
   fsdata->uid_seq_low = 0;
