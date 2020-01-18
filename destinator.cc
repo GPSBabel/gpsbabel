@@ -180,14 +180,14 @@ destinator_read_poi()
       garmin_fs_t::set_addr(gmsd, str);
     }
 
-    if (!(str = read_wcstr(0)).isEmpty()) {		/* city */
+    if (!(str = read_wcstr()).isEmpty()) {		/* city */
       gmsd = gmsd_init(wpt);
       garmin_fs_t::set_city(gmsd, str);
     }
 
     (void) read_wcstr();			/* unknown */
 
-    if (!(str = read_wcstr(0)).isEmpty()) {		/* postcode */
+    if (!(str = read_wcstr()).isEmpty()) {		/* postcode */
       gmsd = gmsd_init(wpt);
       garmin_fs_t::set_postal_code(gmsd, str);
     }
