@@ -31,6 +31,7 @@
 #include <ctime>                   // for gmtime
 
 #include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QScopedPointer>   // for QScopedPointer
 #include <QtCore/QString>          // for QString
 #include <QtCore/QTextCodec>       // for QTextCodec, QTextCodec::IgnoreHeader
 #include <QtCore/QTextDecoder>     // for QTextDecoder
@@ -76,7 +77,7 @@ gmsd_init(Waypoint* wpt)
 static QString
 read_wcstr()
 {
-  QTextDecoder* decoder = utf16le_codec->makeDecoder(QTextCodec::IgnoreHeader);
+  QScopedPointer<QTextDecoder> decoder(utf16le_codec->makeDecoder(QTextCodec::IgnoreHeader));
   QString result;
   bool done;
   do {
@@ -89,7 +90,6 @@ read_wcstr()
       done = true;
     }
   } while (!done);
-  delete decoder;
   return result.trimmed();
 }
 
@@ -97,20 +97,18 @@ static void
 write_wcstr(const QString& str)
 {
   /* use an encoder to avoid generating a BOM. */
-  QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+  QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
   QByteArray qba = encoder->fromUnicode(str).append(2, 0);
   assert((qba.size() % 2) == 0);
-  delete encoder;
   gbfwrite(qba.constData(), 1, qba.size(), fout);
 }
 
 static int
 read_until_wcstr(const QString& str)
 {
-  QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+  QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
   QByteArray target = encoder->fromUnicode(str).append(2, 0);
   assert((target.size() % 2) == 0);
-  delete encoder;
   
   int eos = 0;
 
