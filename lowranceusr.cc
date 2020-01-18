@@ -95,6 +95,7 @@
 #include <QtCore/QDate>          // for QDate
 #include <QtCore/QDateTime>      // for QDateTime
 #include <QtCore/QLatin1String>  // for QLatin1String
+#include <QtCore/QScopedPointer> // for QScopedPointer
 #include <QtCore/QString>        // for QString, operator+, operator==, operator!=
 #include <QtCore/QTextCodec>     // for QTextCodec
 #include <QtCore/QTextEncoder>   // for QTextEncoder
@@ -558,9 +559,8 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   if (bytes_per_char == 1) {
     qba = buf.toUtf8();
   } else {
-    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
     qba = encoder->fromUnicode(buf);
-    delete encoder;
   }
   int len = qba.size();
   gbfputint32(len, file_out);

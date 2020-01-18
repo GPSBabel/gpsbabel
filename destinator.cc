@@ -21,13 +21,30 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#include <QtCore/QDebug>
+
+#include <cassert>                 // for assert
+#include <cmath>                   // for fabs, lround
+#include <cstdio>                  // for NULL, SEEK_CUR, snprintf
+#include <cstdint>
+#include <cstring>                 // for strcmp, memmove, memset, strlen
+#include <ctime>                   // for gmtime
+
+#include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QScopedPointer>   // for QScopedPointer
+#include <QtCore/QString>          // for QString
+#include <QtCore/QTextCodec>       // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QtCore/QTextDecoder>     // for QTextDecoder
+#include <QtCore/QTextEncoder>     // for QTextEncoder
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/QVector>          // for QVector
 
 #include "defs.h"
-#include "cet.h"
-#include "cet_util.h"
-#include "garmin_fs.h"
-#include "strptime.h"
-#include <cmath>
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_GET, GMSD_SETSTRQ, garmin_fs_alloc, GMSD_FIND
+#include "gbfile.h"                // for gbfputdbl, gbfgetdbl, gbfputint32, gbfeof, gbfgetint32, gbfread, gbfrewind, gbfseek, gbfclose, gbfputflt, gbfgetc, gbfgetflt, gbfputc, gbfputcstr, gbfputint16, gbfwrite, gbfile, gbfopen_le
+#include "src/core/datetime.h"     // for DateTime
+#include "strptime.h"              // for strptime
+
 
 #define MYNAME 		"destinator"
 #define DST_DYN_POI 	"Dynamic POI"
@@ -39,6 +56,7 @@ QVector<arglist_t> destinator_args = {
 
 static gbfile* fin, *fout;
 static gpsdata_type data_type;
+static QTextCodec* utf16le_codec{nullptr};
 
 
 /*******************************************************************************/
@@ -57,88 +75,66 @@ gmsd_init(Waypoint* wpt)
 }
 
 static QString
-read_wcstr(const int discard)
+read_wcstr()
 {
-  int16_t* buff = nullptr, c;
-  int size = 0, pos = 0;
-
-  while (gbfread(&c, sizeof(c), 1, fin) && (c != 0)) {
-    if (size == 0) {
-      size = 16;
-      buff = (int16_t*) xmalloc(size * sizeof(*buff));
-    } else if (pos == size) {
-      size += 16;
-      buff = (int16_t*) xrealloc(buff, size * sizeof(*buff));
-    }
-    buff[pos] = c;
-    pos += 1;
-  }
-
-  if (pos != 0) {
-    char* res;
-    if (discard) {
-      res = nullptr;
+  QScopedPointer<QTextDecoder> decoder(utf16le_codec->makeDecoder(QTextCodec::IgnoreHeader));
+  QString result;
+  bool done;
+  do {
+    QByteArray chunk = gbfreadbuf(2, fin);
+    assert(chunk.size() == 2);
+    if ((chunk.at(0) != 0) || (chunk.at(1) != 0)) {
+      result += decoder->toUnicode(chunk);
+      done = false;
     } else {
-      res = cet_str_uni_to_utf8(buff, pos);
-      res = lrtrim(res);
-      if (*res == '\0') {
-        xfree(res);
-        res = nullptr;
-      }
+      done = true;
     }
-    xfree(buff);
-    QString rv = QString::fromUtf8(res);
-    xfree(res);
-    return rv;
-    //return res;
-  } else {
-    return nullptr;
-  }
+  } while (!done);
+  return result.trimmed();
 }
 
 static void
 write_wcstr(const QString& str)
 {
-  int len;
-
-  short* unicode = cet_str_utf8_to_uni(CSTR(str), &len);
-  gbfwrite((void*)unicode, 2, len + 1, fout);
-  xfree(unicode);
+  /* use an encoder to avoid generating a BOM. */
+  QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
+  QByteArray qba = encoder->fromUnicode(str).append(2, 0);
+  assert((qba.size() % 2) == 0);
+  gbfwrite(qba.constData(), 1, qba.size(), fout);
 }
 
 static int
-read_until_wcstr(const char* str)
+read_until_wcstr(const QString& str)
 {
-  int eos = 0, res = 0;
+  QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
+  QByteArray target = encoder->fromUnicode(str).append(2, 0);
+  assert((target.size() % 2) == 0);
+  
+  int eos = 0;
 
-  int len = strlen(str);
-  int sz = (len + 1) * 2;
-  char* buff = (char*) xcalloc(sz, 1);
+  int sz = target.size();
+  QByteArray buff(sz, 0);
 
   while (! gbfeof(fin)) {
 
     char c = gbfgetc(fin);
-    memmove(buff, buff + 1, sz - 1);
-    buff[sz - 1] = c;
+    buff = buff.right(sz-1);
+    buff.append(c);
 
     if (c == 0) {
       eos++;
       if (eos >= 2) {	/* two or more zero bytes => end of string */
-        char* test = cet_str_uni_to_utf8((short*)buff, len);
-        if (test) {
-          res = (strcmp(str, test) == 0);
-          xfree(test);
-          if (res) {
-            break;
-          }
+        // QByteArray::compare introduced in Qt 5.12, but we can use
+        // QByteArray::startsWith as buff.size() == target.size().
+        if (buff.startsWith(target)) {
+          return 1;
         }
       }
     } else {
       eos = 0;
     }
   }
-  xfree(buff);
-  return res;
+  return 0;
 }
 
 static void
@@ -153,7 +149,7 @@ destinator_read_poi()
     garmin_fs_t* gmsd;
 
     if (count == 0) {
-      str = read_wcstr(0);
+      str = read_wcstr();
       if ((str != DST_DYN_POI)) {
         fatal(MYNAME "_poi: Invalid record header!\n");
       }
@@ -165,12 +161,12 @@ destinator_read_poi()
 
     Waypoint* wpt = new Waypoint;
 
-    wpt->shortname = read_wcstr(0);
-    wpt->notes = read_wcstr(0);		/* comment */
+    wpt->shortname = read_wcstr();
+    wpt->notes = read_wcstr();		/* comment */
 
-    QString hnum = read_wcstr(0);			/* house number */
+    QString hnum = read_wcstr();			/* house number */
 
-    str = read_wcstr(0); 			/* street */
+    str = read_wcstr(); 			/* street */
     if (str.isEmpty()) {
       str = hnum;
       hnum = QString();
@@ -184,19 +180,19 @@ destinator_read_poi()
       garmin_fs_t::set_addr(gmsd, str);
     }
 
-    if (!(str = read_wcstr(0)).isEmpty()) {		/* city */
+    if (!(str = read_wcstr()).isEmpty()) {		/* city */
       gmsd = gmsd_init(wpt);
       garmin_fs_t::set_city(gmsd, str);
     }
 
-    (void) read_wcstr(1);			/* unknown */
+    (void) read_wcstr();			/* unknown */
 
-    if (!(str = read_wcstr(0)).isEmpty()) {		/* postcode */
+    if (!(str = read_wcstr()).isEmpty()) {		/* postcode */
       gmsd = gmsd_init(wpt);
       garmin_fs_t::set_postal_code(gmsd, str);
     }
 
-    (void) read_wcstr(1);			/* unknown */
+    (void) read_wcstr();			/* unknown */
 
     (void) gbfgetdbl(fin);
 
@@ -225,7 +221,7 @@ destinator_read_rte()
 
   while (!(gbfeof(fin))) {
     if (count == 0) {
-      QString str = read_wcstr(0);
+      QString str = read_wcstr();
       if ((str != DST_ITINERARY)) {
         fatal(MYNAME "_itn: Invalid record header!\n");
       }
@@ -237,8 +233,8 @@ destinator_read_rte()
 
     Waypoint* wpt = new Waypoint;
 
-    wpt->shortname = read_wcstr(0);
-    wpt->notes = read_wcstr(0);
+    wpt->shortname = read_wcstr();
+    wpt->notes = read_wcstr();
 
     (void) gbfgetint32(fin);
     (void) gbfgetdbl(fin);
@@ -469,12 +465,14 @@ static void
 destinator_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
+  utf16le_codec = QTextCodec::codecForName("UTF-16LE");
 }
 
 static void
 destinator_rd_deinit()
 {
   gbfclose(fin);
+  utf16le_codec = nullptr;
 }
 
 static void
@@ -502,12 +500,14 @@ static void
 destinator_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
+  utf16le_codec = QTextCodec::codecForName("UTF-16LE");
 }
 
 static void
 destinator_wr_deinit()
 {
   gbfclose(fout);
+  utf16le_codec = nullptr;
 }
 
 static void
