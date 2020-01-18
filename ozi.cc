@@ -192,7 +192,6 @@ ozi_alloc_fsdata()
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
-  fsdata->fs.convert = nullptr;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);

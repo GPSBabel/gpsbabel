@@ -39,6 +39,8 @@ static QString read_fname;
 static void
 ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr = nullptr)
 {
+  if (len < 0)
+    fatal(MYNAME ": Read error, negative len (%s)\n", descr ? descr : "");
   buf.resize(len);
   if (stream.readRawData(buf.data(), len) != len || stream.status() != QDataStream::Ok)
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
@@ -86,6 +88,12 @@ static void
 ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = nullptr)
 {
   quint32 len = ggv_bin_read32(stream, descr);
+  // The following check prevents passing an unsigned int with a
+  // value greater than INT32_MAX to a signed int parameter in
+  // ggv_bin_read_bytes later on. If this happens, the file is
+  // almost certainly corrupted.
+  if (len > INT32_MAX)
+    fatal(MYNAME ": Read error, max len exceeded (%s)\n", descr ? descr : "");
   ggv_bin_read_bytes(stream, buf, len, descr);
   buf[len] = 0;
   if (global_opts.debug_level > 1)
@@ -385,6 +393,12 @@ ggv_bin_read_v34_record(QDataStream& stream)
     ggv_bin_read_double(stream, "bmp lat");
     ggv_bin_read_double(stream, "bmp unk");
     bmp_len = ggv_bin_read32(stream, "bmp len");
+    // The following check prevents passing an unsigned int with a
+    // value greater than INT32_MAX to a signed int parameter in
+    // ggv_bin_read_bytes later on. If this happens, the file is
+    // almost certainly corrupted.
+    if (bmp_len > INT32_MAX)
+      fatal(MYNAME ": Read error, max bmp_len exceeded\n");
     ggv_bin_read16(stream, "bmp prop");
     ggv_bin_read_bytes(stream, buf, bmp_len, "bmp data");
     break;
