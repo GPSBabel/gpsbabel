@@ -48,7 +48,7 @@ static gpsdata_type data_type;
 static garmin_fs_t*
 gmsd_init(Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
@@ -181,19 +181,19 @@ destinator_read_poi()
         str += " ";
         str += hnum;
       }
-      GMSD_SETSTRQ(addr, str);
+      garmin_fs_t::set_addr(gmsd, str);
     }
 
-    if ((str = read_wcstr(0), !str.isEmpty())) {		/* city */
+    if (!(str = read_wcstr(0)).isEmpty()) {		/* city */
       gmsd = gmsd_init(wpt);
-      GMSD_SETSTRQ(city, str);
+      garmin_fs_t::set_city(gmsd, str);
     }
 
     (void) read_wcstr(1);			/* unknown */
 
-    if ((str = read_wcstr(0), !str.isEmpty())) {		/* postcode */
+    if (!(str = read_wcstr(0)).isEmpty()) {		/* postcode */
       gmsd = gmsd_init(wpt);
-      GMSD_SETSTRQ(postal_code, str);
+      garmin_fs_t::set_postal_code(gmsd, str);
     }
 
     (void) read_wcstr(1);			/* unknown */
@@ -373,17 +373,17 @@ destinator_read()
 static void
 destinator_wpt_disp(const Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   write_wcstr(DST_DYN_POI);
   write_wcstr((!wpt->shortname.isEmpty()) ? wpt->shortname : "WPT");
   write_wcstr((!wpt->notes.isEmpty()) ? wpt->notes : wpt->description);
 
   write_wcstr(nullptr);				/* house number */
-  write_wcstr(GMSD_GET(addr, NULL));		/* street */
-  write_wcstr(GMSD_GET(city, NULL));		/* city */
+  write_wcstr(garmin_fs_t::get_addr(gmsd, nullptr));		/* street */
+  write_wcstr(garmin_fs_t::get_city(gmsd, nullptr));		/* city */
   write_wcstr(nullptr);				/* unknown */
-  write_wcstr(GMSD_GET(postal_code, NULL));	/* postcode */
+  write_wcstr(garmin_fs_t::get_postal_code(gmsd, nullptr));	/* postcode */
   write_wcstr(nullptr);				/* unknown */
 
   gbfputint32(0, fout);
