@@ -380,7 +380,6 @@ route_head::route_head() :
   rte_num(0),
   rte_waypt_ct(0),
   fs(nullptr),
-  cet_converted(0),
   // line_color(),
   line_width(-1),
   session(curr_session())

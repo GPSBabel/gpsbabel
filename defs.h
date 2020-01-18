@@ -295,15 +295,13 @@ public:
 
 using fs_destroy = void (*)(void*);
 using fs_copy = void (*)(void**, void*);
-using fs_convert = void (*)(void*);
 
 struct format_specific_data {
-  long type;
-  format_specific_data* next;
+  long type{0};
+  format_specific_data* next{nullptr};
 
-  fs_destroy destroy;
-  fs_copy copy;
-  fs_convert convert;
+  fs_destroy destroy{nullptr};
+  fs_copy copy{nullptr};
 };
 
 class gb_color
@@ -382,7 +380,6 @@ class wp_flags
 public:
   wp_flags() :
     shortname_is_synthetic(0),
-    cet_converted(0),
     fmt_use(0),
     temperature(0),
     proximity(0),
@@ -393,7 +390,6 @@ public:
     is_split(0),
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
-  unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   /* "flagged fields" */
   unsigned int temperature:1;		/* temperature field is set */
@@ -709,7 +705,6 @@ public:
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
   format_specific_data* fs;
-  unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   const session_t* session;	/* pointer to a session struct */
@@ -911,8 +906,6 @@ using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
 
-QString get_option(const QStringList& options, const char* argname);
-
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
 
@@ -1036,7 +1029,7 @@ struct position_ops_t {
  */
 struct ff_vecs_t {
   ff_type type;
-  ff_cap cap[3];
+  QVector<ff_cap> cap;
   ff_init rd_init;
   ff_init wr_init;
   ff_deinit rd_deinit;
@@ -1048,7 +1041,7 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  QString name;		/* dyn. initialized by find_vec */
+  void* unused; /* TODO: delete this field */
 };
 
 struct style_vecs_t {
@@ -1062,18 +1055,6 @@ void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const QString&);
-void assign_option(const QString& vecname, arglist_t* arg, const char* val);
-void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
-void disp_vecs();
-void disp_vec(const QString& vecname);
-void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
-bool validate_args(const QString& name, const QVector<arglist_t>* args);
-bool validate_formats();
-void init_vecs();
-void exit_vecs();
-void disp_formats(int version);
-const char* name_option(uint32_t type);
 void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
@@ -1122,6 +1103,7 @@ char* strlower(char* src);
 signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
+bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);
@@ -1150,7 +1132,7 @@ const QString get_filename(const QString& fname);			/* extract the filename port
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 /* this lives in gpx.c */
-gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
+gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 
 QString rot13(const QString& s);
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # creates a RPM compatible ChangeLog file from babelweb/changes.html 
-# (published at http://www.gpsbabel.org)
+# (published at https://www.gpsbabel.org)
 #
 # !!! input from stdin and output to stdout !!!
 #
@@ -55,7 +55,7 @@ BEGIN { TMx=0 }
   if (TM != TMx) 
   {
     TX=strftime("%a %b %d %Y", TM)
-    printf("* %s http://www.gpsbabel.org\n", TX)
+    printf("* %s https://www.gpsbabel.org\n", TX)
     TMx = TM
   }
   OUTP=substr($0, 11)

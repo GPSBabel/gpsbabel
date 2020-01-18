@@ -280,7 +280,7 @@ waypt_distance_ex(const Waypoint* A, const Waypoint* B)
     return 0;
   }
 
-  if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != nullptr)) {
+  if ((gmsd = garmin_fs_t::find(A)) && (gmsd->ilinks != nullptr)) {
     garmin_ilink_t* link = gmsd->ilinks;
 
     res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);

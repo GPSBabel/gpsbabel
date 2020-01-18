@@ -814,7 +814,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     if (mtk_info.speed > 0) {
       sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
     }
-    trk_head->rte_desc = QString().sprintf("Log every %.0f sec, %.0f m%s"
+    trk_head->rte_desc = QString::asprintf("Log every %.0f sec, %.0f m%s"
                                            , mtk_info.period/10., mtk_info.distance/10., spds);
     track_add_head(trk_head);
   }
@@ -901,7 +901,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     Waypoint* w = new Waypoint(*trk);
 
-    w->shortname = QString().sprintf("WP%06d", waypt_count()+1);
+    w->shortname = QString::asprintf("WP%06d", waypt_count()+1);
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of
@@ -910,7 +910,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   // trackpoint unless we include/duplicate it.
 
   if (global_opts.masked_objective & TRKDATAMASK) {
-    trk->shortname = QString().sprintf("TP%06d", idx);
+    trk->shortname = QString::asprintf("TP%06d", idx);
 
     track_add_wpt(trk_head, trk);
   } else {

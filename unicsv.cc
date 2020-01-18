@@ -952,41 +952,41 @@ unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_fax_nr:
     case fld_garmin_email:
     case fld_garmin_facility:
-      gmsd = GMSD_FIND(wpt);
+      gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
         gmsd = garmin_fs_alloc(-1);
         fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
       }
       switch (unicsv_fields_tab[column]) {
       case fld_garmin_city:
-        GMSD_SETQSTR(city, value);
+        garmin_fs_t::set_city(gmsd, value);
         break;
       case fld_garmin_postal_code:
-        GMSD_SETQSTR(postal_code, value);
+        garmin_fs_t::set_postal_code(gmsd, value);
         break;
       case fld_garmin_state:
-        GMSD_SETQSTR(state, value);
+        garmin_fs_t::set_state(gmsd, value);
         break;
       case fld_garmin_country:
-        GMSD_SETQSTR(country, value);
+        garmin_fs_t::set_country(gmsd, value);
         break;
       case fld_garmin_addr:
-        GMSD_SETQSTR(addr, value);
+        garmin_fs_t::set_addr(gmsd, value);
         break;
       case fld_garmin_phone_nr:
-        GMSD_SETQSTR(phone_nr, value);
+        garmin_fs_t::set_phone_nr(gmsd, value);
         break;
       case fld_garmin_phone_nr2:
-        GMSD_SETQSTR(phone_nr2, value);
+        garmin_fs_t::set_phone_nr2(gmsd, value);
         break;
       case fld_garmin_fax_nr:
-        GMSD_SETQSTR(fax_nr, value);
+        garmin_fs_t::set_fax_nr(gmsd, value);
         break;
       case fld_garmin_email:
-        GMSD_SETQSTR(email, value);
+        garmin_fs_t::set_email(gmsd, value);
         break;
       case fld_garmin_facility:
-        GMSD_SETQSTR(facility, value);
+        garmin_fs_t::set_facility(gmsd, value);
         break;
       default:
         break;
@@ -1269,7 +1269,7 @@ static void
 unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     gb_setbit(&unicsv_outp_flags, fld_shortname);
@@ -1341,34 +1341,34 @@ unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 
   if (gmsd) {
-    if GMSD_HAS(addr) {
+    if (garmin_fs_t::has_addr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_addr);
     }
-    if GMSD_HAS(city) {
+    if (garmin_fs_t::has_city(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_city);
     }
-    if GMSD_HAS(country) {
+    if (garmin_fs_t::has_country(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_country);
     }
-    if GMSD_HAS(phone_nr) {
+    if (garmin_fs_t::has_phone_nr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr);
     }
-    if GMSD_HAS(phone_nr2) {
+    if (garmin_fs_t::has_phone_nr2(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr2);
     }
-    if GMSD_HAS(fax_nr) {
+    if (garmin_fs_t::has_fax_nr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_fax_nr);
     }
-    if GMSD_HAS(email) {
+    if (garmin_fs_t::has_email(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_email);
     }
-    if GMSD_HAS(postal_code) {
+    if (garmin_fs_t::has_postal_code(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_postal_code);
     }
-    if GMSD_HAS(state) {
+    if (garmin_fs_t::has_state(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_state);
     }
-    if GMSD_HAS(facility) {
+    if (garmin_fs_t::has_facility(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_facility);
     }
   }
@@ -1424,7 +1424,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (unicsv_datum_idx == DATUM_WGS84) {
     lat = wpt->latitude;
@@ -1696,34 +1696,34 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
 
   if FIELD_USED(fld_garmin_facility) {
-    unicsv_print_str(GMSD_GET(facility, NULL));
+    unicsv_print_str(garmin_fs_t::get_facility(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_addr) {
-    unicsv_print_str(GMSD_GET(addr, NULL));
+    unicsv_print_str(garmin_fs_t::get_addr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_city) {
-    unicsv_print_str(GMSD_GET(city, NULL));
+    unicsv_print_str(garmin_fs_t::get_city(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_postal_code) {
-    unicsv_print_str(GMSD_GET(postal_code, NULL));
+    unicsv_print_str(garmin_fs_t::get_postal_code(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_state) {
-    unicsv_print_str(GMSD_GET(state, NULL));
+    unicsv_print_str(garmin_fs_t::get_state(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_country) {
-    unicsv_print_str(GMSD_GET(country, NULL));
+    unicsv_print_str(garmin_fs_t::get_country(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_phone_nr) {
-    unicsv_print_str(GMSD_GET(phone_nr, NULL));
+    unicsv_print_str(garmin_fs_t::get_phone_nr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_phone_nr2) {
-    unicsv_print_str(GMSD_GET(phone_nr2, NULL));
+    unicsv_print_str(garmin_fs_t::get_phone_nr2(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_fax_nr) {
-    unicsv_print_str(GMSD_GET(fax_nr, NULL));
+    unicsv_print_str(garmin_fs_t::get_fax_nr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_email) {
-    unicsv_print_str(GMSD_GET(email, NULL));
+    unicsv_print_str(garmin_fs_t::get_email(gmsd, nullptr));
   }
 
   if (wpt->EmptyGCData()) {

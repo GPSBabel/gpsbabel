@@ -19,13 +19,18 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cstdio>                // for printf, snprintf
+#include <cstdlib>               // for qsort
+
+#include <QtCore/QByteArray>     // for QByteArray
+#include <QtCore/QDebug>         // for QDebug
+#include <QtCore/QTextCodec>     // for QTextCodec
+
 #include "defs.h"
-#include "cet.h"
+#include "cet.h"                 // for cet_cs_vec_t, cet_str_any_to_utf8, cet_str_utf8_to_any, cet_str_any_to_uni
 #include "cet_util.h"
-#include "src/core/logging.h"
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <cstdlib> // qsort
+#include "src/core/logging.h"    // for Fatal
+
 
 #define MYNAME "cet_util"
 
@@ -39,13 +44,12 @@ struct cet_cs_alias_t {
 static cet_cs_alias_t* cet_cs_alias;
 static int cet_cs_alias_ct = 0;
 static int cet_cs_vec_ct = 0;
-static int cet_output = 0;
 
 /* %%% fixed inbuild character sets %%% */
 
-#include "cet/ansi_x3_4_1968.h"
-#include "cet/cp1252.h"
-#include "cet/iso_8859_8.h"
+#include "cet/ansi_x3_4_1968.h"  // for cet_cs_vec_ansi_x3_4_1968, cet_cs_name_ansi_x3_4_1968
+#include "cet/cp1252.h"          // for cet_cs_name_cp1252, cet_cs_vec_cp1252
+#include "cet/iso_8859_8.h"      // for cet_cs_name_iso_8859_8, cet_cs_vec_iso_8859_8
 
 
 /* %%% short hand strings transmission for main character sets %%% */
@@ -301,168 +305,5 @@ cet_convert_init(const QString& cs_name, const int force)
     if (!global_opts.codec) {
       Fatal() << "Unsupported character set \"" << cs_name << ".";
     }
-  }
-}
-
-/* -------------------------------------------------------------------- */
-
-static void
-cet_flag_waypt(const Waypoint* wpt)
-{
-  (const_cast<Waypoint*>(wpt))->wpt_flags.cet_converted = 1;
-}
-
-static void
-cet_flag_route(const route_head* rte)
-{
-  (const_cast<route_head*>(rte))->cet_converted = 1;
-}
-
-static void
-cet_flag_all()
-{
-  waypt_disp_all(cet_flag_waypt);
-  route_disp_all(cet_flag_route, nullptr, cet_flag_waypt);
-  track_disp_all(cet_flag_route, nullptr, cet_flag_waypt);
-}
-
-/* -------------------------------------------------------------------- */
-/* %%%         complete data strings transformation                 %%% */
-/* -------------------------------------------------------------------- */
-
-static char* (*converter)(const char*) = nullptr;
-
-/* two converters */
-
-static char*
-cet_convert_to_utf8(const char* str)
-{
-  return cet_str_any_to_utf8(str, global_opts.charset);
-}
-
-static char*
-cet_convert_from_utf8(const char* str)
-{
-  return cet_str_utf8_to_any(str, global_opts.charset);
-}
-
-/* cet_convert_string: internal used within cet_convert_strings process */
-
-char*
-cet_convert_string(char* str)
-{
-  if (str == nullptr) {
-    return nullptr;  /* return origin if empty or NULL */
-  } else if (*str == '\0') {
-    return str;
-  }
-
-  char* res = converter(str);
-  xfree(str);
-  return res;
-}
-
-const char*
-cet_convert_string(const QString& str)
-{
-  // FIXME: this is really weird.  Since cet_convert_string wants to free
-  // its argument (!) we make a duplicate just to satisfy that kind of goofy
-  // requirement.
-  return cet_convert_string(xstrdup(str));
-}
-
-/* cet_convert_waypt: internal used within cet_convert_strings process */
-
-static void
-cet_convert_waypt(const Waypoint* wpt)
-{
-  auto* w = const_cast<Waypoint*>(wpt);
-
-  if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
-    return;
-  }
-
-  w->wpt_flags.cet_converted = 1;
-
-  format_specific_data* fs = wpt->fs;
-  while (fs != nullptr) {
-    if (fs->convert != nullptr) {
-      fs->convert(fs);
-    }
-    fs = fs->next;
-  }
-}
-
-/* cet_convert_route_hdr: internal used within cet_convert_strings process */
-
-static void
-cet_convert_route_hdr(const route_head* route)
-{
-  auto* rte = const_cast<route_head*>(route);
-
-  if ((cet_output == 0) && (rte->cet_converted != 0)) {
-    return;
-  }
-
-  rte->cet_converted = 1;
-}
-
-/* cet_convert_route_tlr: internal used within cet_convert_strings process */
-
-static void
-cet_convert_route_tlr(const route_head* route)
-{
-  (void)route;
-}
-
-/* %%% cet_convert_strings (public) %%%
- *
- * - Convert all well known strings of GPS data from or to UTF-8 -
- *
- * !!! One of "source" or "target" must be internal cet_cs_vec_utf8 or NULL !!! */
-
-void
-cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
-{
-  const char* cs_name_from, *cs_name_to;
-  (void)format;
-
-  converter = nullptr;
-
-  if ((source == nullptr) || (source == &cet_cs_vec_utf8)) {
-    if ((target == nullptr) || (target == &cet_cs_vec_utf8)) {
-      cet_flag_all();
-      return;
-    }
-
-    cet_output = 1;
-
-    converter = cet_convert_from_utf8;
-    cs_name_from = cet_cs_vec_utf8.name;
-    cs_name_to = target->name;
-  } else {
-    if ((target != nullptr) && (target != &cet_cs_vec_utf8)) {
-      fatal(MYNAME ": Internal error!\n");
-    }
-
-    cet_output = 0;
-
-    converter = cet_convert_to_utf8;
-    cs_name_to = cet_cs_vec_utf8.name;
-    cs_name_from = source->name;
-  }
-
-  if (global_opts.debug_level > 0) {
-    printf(MYNAME ": Converting from \"%s\" to \"%s\"", cs_name_from, cs_name_to);
-  }
-
-  waypt_disp_all(cet_convert_waypt);
-  route_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
-  track_disp_all(cet_convert_route_hdr, cet_convert_route_tlr, cet_convert_waypt);
-
-  cet_output = 0;
-
-  if (global_opts.debug_level > 0) {
-    printf(", done.\n");
   }
 }

@@ -52,7 +52,7 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
   QObject(parent),
   manager_(nullptr),
   replyId_(nullptr),
-  upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
+  upgradeUrl_(QUrl("https://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList),
   updateStatus_(updateUnknown),
   babelData_(bd)
@@ -293,7 +293,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     QDomElement upgrade = upgradeNode.toElement();
     QString updateVersion = upgrade.attribute("version");
     if (upgrade.attribute("downloadURL").isEmpty()) {
-      downloadUrl = "http://www.gpsbabel.org/download.html";
+      downloadUrl = "https://www.gpsbabel.org/download.html";
     } else {
       downloadUrl = upgrade.attribute("downloadURL");
     }

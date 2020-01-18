@@ -568,7 +568,7 @@ psit_track_r(gbfile* psit_file, route_head**)
          tracklog is usually ACTIVE LOG
          the second is ACTIVE LOG001 and so on */
         if (trk_num > 0) {
-          track_head->rte_name = QString().sprintf("%s%03d", trkname, trk_num);
+          track_head->rte_name = QString::asprintf("%s%03d", trkname, trk_num);
         } else {
           track_head->rte_name = trkname;
         }

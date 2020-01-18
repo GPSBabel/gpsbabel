@@ -19,12 +19,19 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cstdint>
+#include <ctime>                   // for localtime
+
+#include <QtCore/QString>          // for QString, operator!=
+#include <QtCore/QVector>          // for QVector
+#include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include "src/core/xmltag.h"
-#include <cstdio>
-#include <cstdlib>
+#include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfile
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/xmltag.h"       // for xml_findfirst, xml_attribute, xml_tag, fs_xml, xml_findnext
+
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -89,9 +96,9 @@ html_disp(const Waypoint* wpt)
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
 
-  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTRc(wpt->shortname));
+  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTR(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
-  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname));
+  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname));
   char* cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
   gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
   xfree(cout);
@@ -101,12 +108,12 @@ html_disp(const Waypoint* wpt)
   gbfprintf(file_out, "<br>\n");
   if (wpt->description != wpt->shortname) {
     if (wpt->HasUrlLink()) {
-      char* d = html_entitize(CSTRc(wpt->description));
+      char* d = html_entitize(CSTR(wpt->description));
       UrlLink link = wpt->GetUrlLink();
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", CSTR(link.url_), d);
       xfree(d);
     } else {
-      gbfprintf(file_out, "%s", CSTRc(wpt->description));
+      gbfprintf(file_out, "%s", CSTR(wpt->description));
     }
     if (!wpt->gc_data->placer.isEmpty()) {
       gbfprintf(file_out, " by %s", CSTR(wpt->gc_data->placer));
@@ -146,7 +153,7 @@ html_disp(const Waypoint* wpt)
     }
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", CSTR(hint));
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
+    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTR(wpt->notes));
   }
 
   fs_xml* fs_gpx = nullptr;
@@ -188,17 +195,9 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        double lat = 0;
-        double lon = 0;
-        char* coordstr = xml_attribute(logpart, "lat");
-        if (coordstr) {
-          lat = atof(coordstr);
-        }
-        coordstr = xml_attribute(logpart, "lon");
-        if (coordstr) {
-          lon = atof(coordstr);
-        }
-        coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
+        double lat = xml_attribute(logpart->attributes, "lat").toDouble();
+        double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+        char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
         gbfprintf(file_out,
                   "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
                   coordstr);
@@ -207,8 +206,8 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = xml_attribute(logpart, "encoded");
-        int encoded = (toupper(encstr[0]) != 'F');
+        QString encstr = xml_attribute(logpart->attributes, "encoded");
+        bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
         QString s;
         if (html_encrypt && encoded) {
@@ -253,7 +252,7 @@ data_write()
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
-  if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
+  if (!gpsbabel_testmode()) {
     gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
   }
   gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");

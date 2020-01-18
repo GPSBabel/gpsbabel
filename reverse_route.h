@@ -18,6 +18,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef REVERSE_ROUTE_H_INCLUDED_
+#define REVERSE_ROUTE_H_INCLUDED_
 
 #include <QtCore/QVector>  // for QVector
 
@@ -46,3 +48,4 @@ private:
 
 };
 #endif
+#endif // REVERSE_ROUTE_H_INCLUDED_

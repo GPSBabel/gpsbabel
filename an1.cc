@@ -284,7 +284,6 @@ static an1_waypoint_record* Alloc_AN1_Waypoint()
   result->fs.type = FS_AN1W;
   result->fs.copy = Copy_AN1_Waypoint;
   result->fs.destroy = Destroy_AN1_Waypoint;
-  result->fs.convert = nullptr;
   return result;
 }
 
@@ -309,7 +308,6 @@ static an1_vertex_record* Alloc_AN1_Vertex()
   result->fs.type = FS_AN1V;
   result->fs.copy = Copy_AN1_Vertex;
   result->fs.destroy = Destroy_AN1_Vertex;
-  result->fs.convert = nullptr;
   return result;
 }
 
@@ -338,7 +336,6 @@ static an1_line_record* Alloc_AN1_Line()
   result->fs.type = FS_AN1L;
   result->fs.copy = Copy_AN1_Line;
   result->fs.destroy = Destroy_AN1_Line;
-  result->fs.convert = nullptr;
   return result;
 }
 
@@ -828,7 +825,7 @@ static void Read_AN1_Lines(gbfile* f)
       Waypoint* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
-      wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
+      wpt_tmp->shortname = QString::asprintf("\\%5.5lx", rtserial++);
       fs_chain_add(&wpt_tmp->fs,
                    (format_specific_data*)vert);
       route_add_wpt(rte_head, wpt_tmp);
