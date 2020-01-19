@@ -205,10 +205,6 @@ win32-msvc* {
   QMAKE_CXXFLAGS += /MP -wd4100
 }
 
-linux {
-  DEFINES += HAVE_LINUX_HID
-}
-
 linux|openbsd {
   LIBS += "-lusb-1.0"
 }
