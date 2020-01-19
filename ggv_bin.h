@@ -59,6 +59,19 @@ public:
   void rd_deinit() override;
 
 private:
+  static void ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr = nullptr);
+  static quint16 ggv_bin_read16(QDataStream& stream, const char* descr = nullptr);
+  static quint32 ggv_bin_read32(QDataStream& stream, const char* descr = nullptr);
+  static void ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = nullptr);
+  static void ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = nullptr);
+  static double ggv_bin_read_double(QDataStream& stream, const char* descr = nullptr);
+  static void ggv_bin_read_v2(QDataStream& stream);
+  static void ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &number_records);
+  static void ggv_bin_read_v34_label(QDataStream& stream);
+  static QString ggv_bin_read_v34_common(QDataStream& stream);
+  static void ggv_bin_read_v34_record(QDataStream& stream);
+  static void ggv_bin_read_v34(QDataStream& stream);
+
   QString read_fname;
 
 };

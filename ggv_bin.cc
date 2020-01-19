@@ -35,8 +35,8 @@
  *           local helper functions                                        *
  ***************************************************************************/
 
-static void
-ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr = nullptr)
+void
+GgvBinFormat::ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr)
 {
   if (len < 0)
     fatal(MYNAME ": Read error, negative len (%s)\n", descr ? descr : "");
@@ -45,8 +45,8 @@ ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* de
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
 }
 
-static quint16
-ggv_bin_read16(QDataStream& stream, const char* descr = nullptr)
+quint16
+GgvBinFormat::ggv_bin_read16(QDataStream& stream, const char* descr)
 {
   quint16 res;
   stream >> res;
@@ -57,8 +57,8 @@ ggv_bin_read16(QDataStream& stream, const char* descr = nullptr)
   return res;
 }
 
-static quint32
-ggv_bin_read32(QDataStream& stream, const char* descr = nullptr)
+quint32
+GgvBinFormat::ggv_bin_read32(QDataStream& stream, const char* descr)
 {
   quint32 res;
   stream >> res;
@@ -73,8 +73,8 @@ ggv_bin_read32(QDataStream& stream, const char* descr = nullptr)
   return res;
 }
 
-static void
-ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = nullptr)
+void
+GgvBinFormat::ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr)
 {
   quint16 len = ggv_bin_read16(stream, descr);
   ggv_bin_read_bytes(stream, buf, len, descr);
@@ -83,8 +83,8 @@ ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = nu
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
 }
 
-static void
-ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = nullptr)
+void
+GgvBinFormat::ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr)
 {
   quint32 len = ggv_bin_read32(stream, descr);
   // The following check prevents passing an unsigned int with a
@@ -99,8 +99,8 @@ ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = nu
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
 }
 
-static double
-ggv_bin_read_double(QDataStream& stream, const char* descr = nullptr)
+double
+GgvBinFormat::ggv_bin_read_double(QDataStream& stream, const char* descr)
 {
   double res;
   stream >> res;
@@ -113,8 +113,8 @@ ggv_bin_read_double(QDataStream& stream, const char* descr = nullptr)
  *            OVL Version 2.0                                              *
  ***************************************************************************/
 
-static void
-ggv_bin_read_v2(QDataStream& stream)
+void
+GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
 {
   QByteArray buf;
   QString track_name;
@@ -225,8 +225,8 @@ ggv_bin_read_v2(QDataStream& stream)
  *           OVL Version 3.0 and 4.0                                       *
  ***************************************************************************/
 
-static void
-ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &number_records)
+void
+GgvBinFormat::ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &number_records)
 {
   QByteArray buf;
 
@@ -250,8 +250,8 @@ ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &nu
   }
 }
 
-static void
-ggv_bin_read_v34_label(QDataStream& stream)
+void
+GgvBinFormat::ggv_bin_read_v34_label(QDataStream& stream)
 {
   QByteArray buf;
 
@@ -264,8 +264,8 @@ ggv_bin_read_v34_label(QDataStream& stream)
   ggv_bin_read16(stream, "label flag2");
 }
 
-static QString
-ggv_bin_read_v34_common(QDataStream& stream)
+QString
+GgvBinFormat::ggv_bin_read_v34_common(QDataStream& stream)
 {
   QByteArray buf;
 
@@ -292,8 +292,8 @@ ggv_bin_read_v34_common(QDataStream& stream)
   return res;
 }
 
-static void
-ggv_bin_read_v34_record(QDataStream& stream)
+void
+GgvBinFormat::ggv_bin_read_v34_record(QDataStream& stream)
 {
   QByteArray buf;
   Waypoint *wpt;
@@ -406,8 +406,8 @@ ggv_bin_read_v34_record(QDataStream& stream)
   }
 }
 
-static void
-ggv_bin_read_v34(QDataStream& stream)
+void
+GgvBinFormat::ggv_bin_read_v34(QDataStream& stream)
 {
   QByteArray buf;
   quint32 label_count;
