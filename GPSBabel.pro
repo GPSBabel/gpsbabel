@@ -172,7 +172,7 @@ load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
-macx|linux {
+macx|linux|openbsd {
   qtCompileTest(unistd) {
     # this is used by zlib
     DEFINES += HAVE_UNISTD_H
@@ -207,6 +207,9 @@ win32-msvc* {
 
 linux {
   DEFINES += HAVE_LINUX_HID
+}
+
+linux|openbsd {
   LIBS += "-lusb-1.0"
 }
 
@@ -249,14 +252,14 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-macx|linux{
+macx|linux|openbsd{
   check.commands = PNAME=./$(TARGET) ./testo
   check.depends = $(TARGET)
   QMAKE_EXTRA_TARGETS += check
 }
 
 # build the compilation data base used by clang tools including clang-tidy.
-macx|linux{
+macx|linux|openbsd{
   compile_command_database.target = compile_commands.json
   compile_command_database.commands = make clean; bear make
   QMAKE_EXTRA_TARGETS += compile_command_database

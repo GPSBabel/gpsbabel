@@ -219,8 +219,11 @@ if(MSVC)
   add_compile_options(/MP -wd4100)
 endif()
 
-if (UNIX AND NOT APPLE)
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   add_definitions(-DHAVE_LINUX_HID)
+endif()
+
+if (UNIX AND NOT APPLE)
   set(LIBS ${LIBS} usb-1.0)
 endif()
 
