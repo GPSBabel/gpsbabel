@@ -246,29 +246,6 @@ AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
 AC_SUBST(GBSER)
 
-dnl Linux HID support
-AS_CASE(["$target"], [*-linux-*], [
-	AC_MSG_CHECKING(for Linux HID interface)
-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-		#include <sys/ioctl.h>
-		#include <linux/types.h>
-		#include <linux/hiddev.h>
-		#include <linux/hidraw.h>
-		void f(void) {
-			struct hidraw_devinfo info;
-			struct hiddev_field_info finfo;
-			struct hiddev_usage_ref_multi urefm;
-			struct hiddev_report_info rinfo;
-			ioctl(0, HIDIOCGRAWINFO, &info);
-			ioctl(0, HIDIOCGFIELDINFO, &finfo);
-			ioctl(0, HIDIOCSUSAGES, &urefm);
-			ioctl(0, HIDIOCSREPORT, &rinfo);
-		}])],
-		AC_MSG_RESULT(yes)
-		AC_DEFINE(HAVE_LINUX_HID, 1, [Defined if you have Linux HID]),
-		AC_MSG_RESULT(no))
-])
-
 AS_CASE(["$target"], [*-*-darwin*], [
 ], [
 	AC_MSG_CHECKING(for reduce relocations)
