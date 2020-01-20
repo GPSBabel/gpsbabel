@@ -595,9 +595,9 @@ Waypoint::SetCreationTime(const gpsbabel::DateTime& t)
 }
 
 void
-Waypoint::SetCreationTime(time_t t, int ms)
+Waypoint::SetCreationTime(qint64 t, qint64 ms)
 {
-  creation_time.setMSecsSinceEpoch(((qint64)t * 1000) + ms);
+  creation_time.setMSecsSinceEpoch((t * 1000) + ms);
 }
 
 geocache_data*

@@ -806,7 +806,7 @@ xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
-    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(value.toLongLong(&ok), Qt::UTC));
+    wpt->SetCreationTime(0, value.toLongLong(&ok));
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }

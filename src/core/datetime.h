@@ -42,6 +42,15 @@ class DateTime : public QDateTime {
 public:
   // As a crutch, mimic the old behaviour of an uninitialized creation time
   // being 1/1/1970.
+  // The choice of Qt::TimeSpec here can be critical to performance.
+  // With a Qt::LocalTime conversions between Qt::UTC and Qt::LocalTime
+  // can be required when using a method such as *Epoch, add*.
+  // Using Qt::Utc avoids these conversions.
+  // The lowranceusr regression test was measured taking 2.7x longer,
+  // and the entire regression suite took 1.7x longer, with
+  // Qt::LocalTime compared to Qt::UTC on ubuntu bionic.
+  // Note that these conversions can be required if the Qt::TimeSpec is
+  // set to Qt:LocalTime after construction.
   DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC)) {
   }
 
