@@ -1537,7 +1537,7 @@ lowranceusr4_parse_trail(int* trail_num)
     gbfgetc(file_in);
 
     /* POSIX timestamp (a.k.a. UNIX Epoch) - seconds since Jan 1, 1970 */
-    wpt_tmp->SetCreationTime(QDateTime::fromTime_t(gbfgetint32(file_in)));
+    wpt_tmp->SetCreationTime(gbfgetint32(file_in));
 
     /* Long/Lat */
     wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */

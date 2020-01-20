@@ -735,10 +735,10 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
-    return QDateTime::fromTime_t(0);
+    return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
   }
 
-  return QDateTime::currentDateTime();
+  return QDateTime::currentDateTimeUtc();
 }
 
 /*

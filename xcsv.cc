@@ -806,7 +806,7 @@ xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
-    wpt->SetCreationTime(QDateTime::fromMSecsSinceEpoch(value.toLongLong(&ok)));
+    wpt->SetCreationTime(0, value.toLongLong(&ok));
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
@@ -820,17 +820,17 @@ xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
     break;
   case XT_LOCAL_TIME:
     if (!gpsbabel_testmode()) {
-      wpt->creation_time += sscanftime(s, fmp.printfc.constData(), 0);
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 0));
     } else {
       /* Force constant time zone for test */
-      wpt->creation_time += sscanftime(s, fmp.printfc.constData(), 1);
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 1));
     }
     break;
     /* Useful when time and date are in separate fields
     	GMT / Local offset is handled by the two cases above */
   case XT_HMSG_TIME:
   case XT_HMSL_TIME:
-    wpt->creation_time += addhms(s, fmp.printfc.constData());
+    wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
     break;
   case XT_ISO_TIME:
   case XT_ISO_TIME_MS:

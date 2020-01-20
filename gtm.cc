@@ -539,7 +539,7 @@ gtm_read()
     fread_discard(file_in, 1);
     wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time.isValid()) {
-      wpt->creation_time += EPOCH89DIFF;
+      wpt->creation_time = wpt->creation_time.addSecs(EPOCH89DIFF);
     }
     fread_discard(file_in, 2);
     wpt->altitude = fread_single(file_in);
@@ -567,7 +567,7 @@ gtm_read()
     convert_datum(&wpt->latitude, &wpt->longitude);
     wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time.isValid()) {
-      wpt->creation_time += EPOCH89DIFF;
+      wpt->creation_time = wpt->creation_time.addSecs(EPOCH89DIFF);
     }
     start_new = fread_byte(file_in);
     wpt->altitude = fread_single(file_in);

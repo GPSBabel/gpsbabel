@@ -235,7 +235,7 @@ random_read()
 
   route_head* head;
   Waypoint* prev = nullptr;
-  QDateTime time = current_time();
+  QDateTime time = current_time().toUTC();
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
@@ -286,7 +286,7 @@ random_rd_posn_init(const QString&)
   if (opt_points) {
     realtime->points = atoi(opt_points);
   }
-  realtime->time = current_time();
+  realtime->time = current_time().toUTC();
 }
 
 void
