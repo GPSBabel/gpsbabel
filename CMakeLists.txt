@@ -123,6 +123,7 @@ set(HEADERS
   gbser.h
   gbser_private.h
   gbversion.h
+  ggv_bin.h
   gpx.h
   grtcirc.h
   heightgrid.h
