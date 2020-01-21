@@ -209,10 +209,6 @@ run(const char* prog_name)
   QString ofname;
   int opt_version = 0;
   bool did_something = false;
-  WaypointList* wpt_head_bak;
-  RouteList* rte_head_bak;
-  RouteList* trk_head_bak;
-  bool lists_backedup;
   QStack<QargStackElement> qargs_stack;
 
   // Use QCoreApplication::arguments() to process the command line.
@@ -323,43 +319,11 @@ run(const char* prog_name)
 
         cet_convert_init(ovecs->get_encode(), ovecs->get_fixed_encode());
 
-        lists_backedup = false;
-        wpt_head_bak = nullptr;
-        rte_head_bak = nullptr;
-        trk_head_bak = nullptr;
-
         ovecs->wr_init(ofname);
-
-        if (global_opts.charset != &cet_cs_vec_utf8) {
-          /*
-           * Push and pop verbose_status so
-           * we don't get dual progress bars
-           * when doing characterset
-           * transformation.
-           */
-          int saved_status = global_opts.verbose_status;
-          global_opts.verbose_status = 0;
-          lists_backedup = true;
-          waypt_backup(&wpt_head_bak);
-          route_backup(&rte_head_bak);
-          track_backup(&trk_head_bak);
-
-          global_opts.verbose_status = saved_status;
-        }
-
         ovecs->write();
         ovecs->wr_deinit();
 
         cet_convert_deinit();
-
-        if (lists_backedup) {
-          waypt_restore(wpt_head_bak);
-          delete wpt_head_bak;
-          route_restore(rte_head_bak);
-          delete rte_head_bak;
-          track_restore(trk_head_bak);
-          delete trk_head_bak;
-        }
       }
       break;
     case 's':
@@ -547,15 +511,8 @@ run(const char* prog_name)
     return 0;
   }
   if (ovecs == nullptr) {
-    /*
-     * Push and pop verbose_status so we don't get dual
-     * progress bars when doing characterset transformation.
-     */
-    int saved_status = global_opts.verbose_status;
-    global_opts.verbose_status = 0;
     cet_convert_init(CET_CHARSET_ASCII, 1);
     waypt_disp_all(waypt_disp);
-    global_opts.verbose_status = saved_status;
   }
 
   /*
