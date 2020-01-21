@@ -485,11 +485,16 @@ RouteList::copy(RouteList** dst) const
   const char RPT[] = "RPT";
   foreach (const route_head* rte_old, *this) {
     route_head* rte_new = route_head_alloc();
+    // waypoint_list created below with add_wpt.
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->rte_urls = rte_old->rte_urls;
-    rte_new->fs = fs_chain_copy(rte_old->fs);
     rte_new->rte_num = rte_old->rte_num;
+    // rte_waypt_ct created below with add_wpt.
+    rte_new->fs = fs_chain_copy(rte_old->fs);
+    rte_new->line_color = rte_old->line_color;
+    rte_new->line_width = rte_old->line_width;
+    rte_new->session = rte_old->session;
     (*dst)->add_head(rte_new);
     foreach (const Waypoint* old_wpt, rte_old->waypoint_list) {
       (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
