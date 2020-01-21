@@ -104,9 +104,6 @@ set(SUPPORT
 set(HEADERS
   an1sym.h
   cet.h
-  cet/ansi_x3_4_1968.h
-  cet/cp1252.h
-  cet/iso_8859_8.h
   cet_util.h
   csv_util.h
   defs.h

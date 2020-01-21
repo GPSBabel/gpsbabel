@@ -186,8 +186,6 @@ struct global_options {
   int verbose_status;	/* set by GUI wrappers for status */
   int smart_icons;
   int smart_names;
-  cet_cs_vec_t* charset;
-  QString charset_name;
   inifile_t* inifile;
   QTextCodec* codec;
 };
