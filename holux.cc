@@ -164,7 +164,7 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
   setshort_length(mkshort_handle, sLen);
   setshort_mustuniq(mkshort_handle, 0);
 
-  char* shortstr = mkshort(mkshort_handle, stIn);
+  char* shortstr = mkshort(mkshort_handle, stIn, false);
   strcpy(strTmp,shortstr);
   xfree(shortstr);
 

@@ -343,8 +343,6 @@ psit_waypoint_r(gbfile* psit_file, Waypoint**)
 static void
 psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
-  char* src = nullptr;  /* BUGBUG Passed to mkshort */
-
   gbfprintf(psit_file, "%11.6f,%11.6f,",
             wpt->latitude,
             wpt->longitude);
@@ -356,7 +354,7 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
               wpt->altitude);
 
   const char* ident = global_opts.synthesize_shortnames ?
-                         mkshort(mkshort_handle, src) :
+                         mkshort(mkshort_handle, "WPT", false) :
                          xstrdup(wpt->shortname);
 
   gbfprintf(psit_file, " %-6s, ", ident);
