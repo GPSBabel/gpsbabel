@@ -918,7 +918,7 @@ geocache_container gs_mkcont(const QString& t);
 struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
 using short_handle = mkshort_handle_imp*;
 
-char* mkshort(short_handle,  const char*);
+char* mkshort(short_handle,  const char*, bool);
 QString mkshort(short_handle,  const QString&);
 short_handle mkshort_new_handle();
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
@@ -931,7 +931,6 @@ void setshort_mustuniq(short_handle,  int n);
 void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
-void setshort_is_utf8(short_handle h, int is_utf8);
 
 #define ARGTYPE_UNKNOWN    0x00000000
 #define ARGTYPE_INT        0x00000001
