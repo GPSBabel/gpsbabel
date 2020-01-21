@@ -38,11 +38,13 @@
 void
 GgvBinFormat::ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, int len, const char* descr)
 {
-  if (len < 0)
+  if (len < 0) {
     fatal(MYNAME ": Read error, negative len (%s)\n", descr ? descr : "");
+  }
   buf.resize(len);
-  if (stream.readRawData(buf.data(), len) != len || stream.status() != QDataStream::Ok)
+  if (stream.readRawData(buf.data(), len) != len || stream.status() != QDataStream::Ok) {
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
+  }
 }
 
 quint16
@@ -50,10 +52,12 @@ GgvBinFormat::ggv_bin_read16(QDataStream& stream, const char* descr)
 {
   quint16 res;
   stream >> res;
-  if (stream.status() != QDataStream::Ok)
+  if (stream.status() != QDataStream::Ok) {
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
-  if (global_opts.debug_level > 1)
+  }
+  if (global_opts.debug_level > 1) {
     qDebug("ovl: %-15s %5u (0x%04x)", descr, res, res);
+  }
   return res;
 }
 
@@ -62,13 +66,15 @@ GgvBinFormat::ggv_bin_read32(QDataStream& stream, const char* descr)
 {
   quint32 res;
   stream >> res;
-  if (stream.status() != QDataStream::Ok)
+  if (stream.status() != QDataStream::Ok) {
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
+  }
   if (global_opts.debug_level > 1) {
-    if ((res & 0xFFFF0000) == 0) 
+    if ((res & 0xFFFF0000) == 0) {
       qDebug("ovl: %-15s %5u (0x%08x)", descr, res, res);
-    else
+    } else {
       qDebug("ovl: %-15s       (0x%08x)", descr, res);
+    }
   }
   return res;
 }
@@ -79,8 +85,9 @@ GgvBinFormat::ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const ch
   quint16 len = ggv_bin_read16(stream, descr);
   ggv_bin_read_bytes(stream, buf, len, descr);
   buf[len] = 0;
-  if (global_opts.debug_level > 1)
+  if (global_opts.debug_level > 1) {
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
+  }
 }
 
 void
@@ -91,12 +98,14 @@ GgvBinFormat::ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const ch
   // value greater than INT32_MAX to a signed int parameter in
   // ggv_bin_read_bytes later on. If this happens, the file is
   // almost certainly corrupted.
-  if (len > INT32_MAX)
+  if (len > INT32_MAX) {
     fatal(MYNAME ": Read error, max len exceeded (%s)\n", descr ? descr : "");
+  }
   ggv_bin_read_bytes(stream, buf, len, descr);
   buf[len] = 0;
-  if (global_opts.debug_level > 1)
+  if (global_opts.debug_level > 1) {
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
+  }
 }
 
 double
@@ -104,8 +113,9 @@ GgvBinFormat::ggv_bin_read_double(QDataStream& stream, const char* descr)
 {
   double res;
   stream >> res;
-  if (stream.status() != QDataStream::Ok)
+  if (stream.status() != QDataStream::Ok) {
     fatal(MYNAME ": Read error (%s)\n", descr ? descr : "");
+  }
   return res;
 }
 
@@ -130,15 +140,17 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
     ggv_bin_read_bytes(stream, buf, header_len, "map name");
     buf.remove(0,4);
     buf.append('\0');
-    if (global_opts.debug_level > 1)
+    if (global_opts.debug_level > 1) {
       qDebug() << "ovl: name =" << buf.constData();
+    }
   }
 
   while (!stream.atEnd()) {
     track_name.clear();
 
-    if (global_opts.debug_level > 1)
+    if (global_opts.debug_level > 1) {
       qDebug("------------------------------------ 0x%llx", stream.device()->pos());
+    }
 
     auto entry_pos = stream.device()->pos();
     quint16 entry_type = ggv_bin_read16(stream, "entry type");
@@ -170,7 +182,7 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
       waypt_add(wpt);
       break;
     case 0x03:
-      // line
+    // line
     case 0x04:
       // area
       ggv_bin_read16(stream, "line color");
@@ -179,8 +191,9 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
       line_points = ggv_bin_read16(stream, "line points");
       ggv_bin_track = route_head_alloc();
       track_add_head(ggv_bin_track);
-      if (! track_name.isEmpty())
+      if (! track_name.isEmpty()) {
         ggv_bin_track->rte_name = track_name;
+      }
 
       for (int i = 1; i <= line_points; i++) {
         lon = ggv_bin_read_double(stream, "line lon");
@@ -192,9 +205,9 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
       }
       break;
     case 0x05:
-      // rectangle
+    // rectangle
     case 0x06:
-      // circle
+    // circle
     case 0x07:
       // triangle
       ggv_bin_read16(stream, "geom color");
@@ -226,7 +239,7 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
  ***************************************************************************/
 
 void
-GgvBinFormat::ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &number_records)
+GgvBinFormat::ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32& number_records)
 {
   QByteArray buf;
 
@@ -245,8 +258,9 @@ GgvBinFormat::ggv_bin_read_v34_header(QDataStream& stream, quint32& number_label
     ggv_bin_read_bytes(stream, buf, header_len, "map name");
     buf.remove(0,4);
     buf.append('\0');
-    if (global_opts.debug_level > 1)
+    if (global_opts.debug_level > 1) {
       qDebug() << "ovl: name =" << buf.constData();
+    }
   }
 }
 
@@ -255,8 +269,9 @@ GgvBinFormat::ggv_bin_read_v34_label(QDataStream& stream)
 {
   QByteArray buf;
 
-  if (global_opts.debug_level > 1)
+  if (global_opts.debug_level > 1) {
     qDebug("------------------------------------ 0x%llx", stream.device()->pos());
+  }
   ggv_bin_read_bytes(stream, buf, 0x08, "label header");
   ggv_bin_read_bytes(stream, buf, 0x14, "label number");
   ggv_bin_read_text16(stream, buf, "label text");
@@ -296,14 +311,15 @@ void
 GgvBinFormat::ggv_bin_read_v34_record(QDataStream& stream)
 {
   QByteArray buf;
-  Waypoint *wpt;
+  Waypoint* wpt;
   route_head* ggv_bin_track;
   quint32 bmp_len;
   quint16 line_points;
   double lon, lat;
 
-  if (global_opts.debug_level > 1)
+  if (global_opts.debug_level > 1) {
     qDebug("------------------------------------ 0x%llx", stream.device()->pos());
+  }
 
   quint16 entry_type = ggv_bin_read16(stream, "entry type");
   QString label = ggv_bin_read_v34_common(stream);
@@ -331,14 +347,15 @@ GgvBinFormat::ggv_bin_read_v34_record(QDataStream& stream)
     break;
   case 0x03:
   case 0x04:
-    // area
+  // area
   case 0x17:
     // line
     ggv_bin_track = route_head_alloc();
     track_add_head(ggv_bin_track);
-      
-    if (! label.isEmpty()) 
+
+    if (! label.isEmpty()) {
       ggv_bin_track->rte_name = label;
+    }
 
     ggv_bin_read16(stream, "line prop1");
     ggv_bin_read32(stream, "line prop2");
@@ -396,8 +413,9 @@ GgvBinFormat::ggv_bin_read_v34_record(QDataStream& stream)
     // value greater than INT32_MAX to a signed int parameter in
     // ggv_bin_read_bytes later on. If this happens, the file is
     // almost certainly corrupted.
-    if (bmp_len > INT32_MAX)
+    if (bmp_len > INT32_MAX) {
       fatal(MYNAME ": Read error, max bmp_len exceeded\n");
+    }
     ggv_bin_read16(stream, "bmp prop");
     ggv_bin_read_bytes(stream, buf, bmp_len, "bmp data");
     break;
@@ -417,31 +435,37 @@ GgvBinFormat::ggv_bin_read_v34(QDataStream& stream)
     ggv_bin_read_v34_header(stream, label_count, record_count);
 
     if (label_count && !stream.atEnd()) {
-      if (global_opts.debug_level > 1)
+      if (global_opts.debug_level > 1) {
         qDebug("-----labels------------------------- 0x%llx", stream.device()->pos());
-      for (unsigned int i = 0; i < label_count; i++)
+      }
+      for (unsigned int i = 0; i < label_count; i++) {
         ggv_bin_read_v34_label(stream);
+      }
     }
 
     if (record_count && !stream.atEnd()) {
-      if (global_opts.debug_level > 1)
+      if (global_opts.debug_level > 1) {
         qDebug("-----records------------------------ 0x%llx", stream.device()->pos());
-      for (unsigned int i = 0; i < record_count; i++)
+      }
+      for (unsigned int i = 0; i < record_count; i++) {
         ggv_bin_read_v34_record(stream);
+      }
     }
 
     if (!stream.atEnd()) {
-      if (global_opts.debug_level > 1)
+      if (global_opts.debug_level > 1) {
         qDebug("------------------------------------ 0x%llx", stream.device()->pos());
+      }
       // we just skip over the next magic bytes without checking they
       // contain the correct string. This is consistent with what I
       // believe GGV does
       ggv_bin_read_bytes(stream, buf, 23, "magicbytes");
-      if (global_opts.debug_level > 1)
+      if (global_opts.debug_level > 1) {
         qDebug() << "ovl: header = " << buf.constData();
+      }
     }
   }
-    
+
   if (global_opts.debug_level > 1) {
     qDebug("fpos: 0x%llx", stream.device()->pos());
     qDebug("size: 0x%llx", stream.device()->size());
@@ -453,7 +477,8 @@ GgvBinFormat::ggv_bin_read_v34(QDataStream& stream)
  ***************************************************************************/
 
 void
-GgvBinFormat::read() {
+GgvBinFormat::read()
+{
   QFile file(read_fname);
   if (!file.open(QIODevice::ReadOnly)) {
     fatal(MYNAME ": Error opening file %s\n", qPrintable(read_fname));
