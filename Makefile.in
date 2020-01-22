@@ -833,7 +833,8 @@ mtk_logger.o: mtk_logger.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h gbser.h
 mynav.o: mynav.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
+  mynav.h format.h
 navicache.o: navicache.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   cet_util.h src/core/file.h
@@ -1010,7 +1011,7 @@ vecs.o: vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h vecs.h \
   format.h gpx.h src/core/file.h src/core/xmlstreamwriter.h \
   src/core/xmltag.h legacyformat.h gbversion.h src/core/logging.h xcsv.h \
-  ggv_bin.h
+  ggv_bin.h mynav.h
 vidaone.o: vidaone.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 vitosmt.o: vitosmt.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \

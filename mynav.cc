@@ -1,8 +1,8 @@
 /*
     Handle MyNav TRC format .trc and .ftn files
 
-    Copyright (c) 2014 Ralf Horstmann <ralf@ackstorm.de>
-    Copyright (C) 2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (c) 2014-2020 Ralf Horstmann <ralf@ackstorm.de>
+    Copyright (C) 2014-2020 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,39 +20,20 @@
 
  */
 
-#include "defs.h"
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
+#include <QtCore/QTextStream>
 
-#define MYNAME "mynav"
+#include <src/core/file.h>
 
-enum field_e {
-  fld_type = 0,
-  fld_lon,
-  fld_lat,
-  fld_direction,
-  fld_speed,
-  fld_altitude,
-  fld_timestamp,
-  fld_duration,
-  fld_gps_valid,
-  fld_distance,
-  fld_ascent,
-  fld_cadence,
-  fld_heart_rate,
-  fld_id,
-  fld_total_duration,
-  fld_terminator
-};
+#include "mynav.h"
 
-static route_head* mynav_track;
-static gbfile* fin;
+/***************************************************************************
+ *              local helper functions                                     *
+ ***************************************************************************/
 
-//***************************************************************************
-//           local helper functions
-//***************************************************************************
-static void
-mynav_rd_line(const QString& line)
+void
+MyNavFormat::read_line(const QString& line, route_head* track)
 {
   QStringList fields = line.split("|");
 
@@ -70,11 +51,11 @@ mynav_rd_line(const QString& line)
 
   // only type 1 and type 5 lines contain coordinates
   bool ok = false;
-  int val_type = fields.at(fld_type).trimmed().toInt(&ok);
+  int line_type = fields.at(fld_type).trimmed().toInt(&ok);
   if (!ok) {
     return;
   }
-  if (val_type != 1 && val_type != 5) {
+  if (line_type != line_sensors && line_type != line_gps) {
     return;
   }
 
@@ -114,59 +95,45 @@ mynav_rd_line(const QString& line)
     }
   }
 
-  track_add_wpt(mynav_track, wpt);
+  track_add_wpt(track, wpt);
 }
 
+/***************************************************************************
+ *              entry points called by gpsbabel main process               *
+ ***************************************************************************/
 
-//***************************************************************************
-//           global callbacks called by gpsbabel main process
-//***************************************************************************
-
-static void
-mynav_rd_init(const QString& fname)
+void
+MyNavFormat::rd_init(const QString& fname)
 {
-  fin = gbfopen(fname, "rb", MYNAME);
-  mynav_track = route_head_alloc();
-  track_add_head(mynav_track);
+  read_fname = fname;
 }
 
-static void
-mynav_rd_deinit()
+void
+MyNavFormat::rd_deinit()
 {
-  gbfclose(fin);
+  read_fname.clear();
 }
 
-static void
-mynav_rd()
+void
+MyNavFormat::read()
 {
-  QString buff;
+  gpsbabel::File file(read_fname);
+  file.open(QIODevice::ReadOnly);
 
-  while ((buff = gbfgetstr(fin)), !buff.isNull()) {
-    buff = buff.trimmed();
-    if ((buff.isEmpty()) || (buff[0] == '#')) {
+  route_head* track = route_head_alloc();
+  track_add_head(track);
+
+  QTextStream stream(&file);
+  stream.setCodec("ASCII");
+
+  QString buf;
+  while (stream.readLineInto(&buf)) {
+    buf = buf.trimmed();
+    if ((buf.isEmpty()) || (buf[0] == '#')) {
       continue;
     }
-    mynav_rd_line(buff);
+    read_line(buf, track);
   }
-}
 
-ff_vecs_t mynav_vecs = {
-  ff_type_file,
-  {
-    ff_cap_none,  // waypoints
-    ff_cap_read,  // tracks
-    ff_cap_none   // routes
-  },
-  mynav_rd_init,    // rd_init
-  nullptr,           // wr_init
-  mynav_rd_deinit,  // rd_deinit
-  nullptr,           // wr_deinit
-  mynav_rd,         // read
-  nullptr,           // write
-  nullptr,           // exit
-  nullptr,           //args
-  CET_CHARSET_ASCII, 0  //encode,fixed_encode
-  //NULL                //name dynamic/internal?
-  , NULL_POS_OPS,
-  nullptr
-};
+  file.close();
+}
