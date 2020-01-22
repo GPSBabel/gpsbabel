@@ -38,7 +38,7 @@ constexpr double HeightFilter::geoid_grid_deg;
 constexpr double HeightFilter::geoid_scale;
 constexpr int HeightFilter::geoid_row;
 constexpr int HeightFilter::geoid_col;
-constexpr int8_t HeightFilter::geoid_delta[];
+constexpr int8_t HeightFilter::geoid_delta[geoid_row][geoid_col];
 #endif
 
 double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
@@ -81,10 +81,10 @@ double HeightFilter::wgs84_separation(double lat, double lon)
            ilon1*geoid_grid_deg-180.0, ilat1*geoid_grid_deg-90.0,
            ilon2*geoid_grid_deg-180.0, ilat2*geoid_grid_deg-90.0,
            lon, lat,
-           (double)geoid_delta[ilon1+ilat1*geoid_col]/geoid_scale,
-           (double)geoid_delta[ilon2+ilat1*geoid_col]/geoid_scale,
-           (double)geoid_delta[ilon1+ilat2*geoid_col]/geoid_scale,
-           (double)geoid_delta[ilon2+ilat2*geoid_col]/geoid_scale
+           (double)geoid_delta[ilat1][ilon1]/geoid_scale,
+           (double)geoid_delta[ilat1][ilon2]/geoid_scale,
+           (double)geoid_delta[ilat2][ilon1]/geoid_scale,
+           (double)geoid_delta[ilat2][ilon2]/geoid_scale
          );
 }
 

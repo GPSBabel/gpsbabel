@@ -63,9 +63,9 @@ echo "static constexpr double geoid_grid_deg = $geoidgrid;"
 echo "static constexpr double geoid_scale = $geoidscale;"
 echo "static constexpr int geoid_row = ${#latarray[@]};"
 echo "static constexpr int geoid_col = ${#lonarray[@]};"
-echo "static constexpr $geoidtype geoid_delta[] = {"
+echo "static constexpr $geoidtype geoid_delta[geoid_row][geoid_col] = {"
 idx=1
-echo -n "  /*         "
+echo -n "  /*           "
 for lon in $lons
 do
 	echo -n $geoidformat1 $lon | awk '{printf $1,$2}'
@@ -81,18 +81,23 @@ for lat in $lats
 do
 	echo -n "  /* "
 	echo -n $lat | awk '{printf "%5.1f",$1}'
-	echo -n " */"
+	echo -n " */ {"
 	lonidx=1
 	for lon in $lons
 	do
 		fullheight=$(echo "$lat $lon" | GeoidEval -n $geoidmodel -l)
 		echo -n $geoidformat2 $fullheight $geoidscale | awk '{printf $1,$2*$3}'
-		if [ $lonidx -lt ${#lonarray[@]} -o $latidx -lt ${#latarray[@]} ]; then
+		if [ $lonidx -lt ${#lonarray[@]} ]; then
 			echo -n ","
+    else
+		  if [ $latidx -lt ${#latarray[@]} ]; then
+        echo "},"
+      else
+        echo "}"
+      fi
 		fi
 		let lonidx++
 	done
-	echo ""
 	let latidx++
 done
 echo "};"
