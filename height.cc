@@ -24,12 +24,22 @@
 
 #include "defs.h"
 #include "height.h"
-#include <cmath>
-#include <cstdlib>
+#include <cmath>    // for floor
+#include <cstdint>  // for int8_t
+#include <cstdlib>  // for strtod
 
 #define MYNAME "height"
 
 #if FILTERS_ENABLED
+
+// Until c++17 we have to define odr-used constexpr static data members at namespace scope.
+#if __cplusplus < 201703L
+constexpr double HeightFilter::geoid_grid_deg;
+constexpr double HeightFilter::geoid_scale;
+constexpr int HeightFilter::geoid_row;
+constexpr int HeightFilter::geoid_col;
+constexpr int8_t HeightFilter::geoid_delta[];
+#endif
 
 double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
 {
@@ -51,9 +61,6 @@ double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double
 /* return geoid separation (MSL - WGS84) in meters, given a lat/lot in degrees */
 double HeightFilter::wgs84_separation(double lat, double lon)
 {
-#include "heightgrid.h"
-
-
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
     fatal(MYNAME ": Invalid latitude value (%f)\n", lat);
@@ -62,22 +69,22 @@ double HeightFilter::wgs84_separation(double lat, double lon)
     fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
   }
 
-  int ilat = (int)floor((90.0+lat)/GEOID_GRID_DEG);
-  int ilon = (int)floor((180.0+lon)/GEOID_GRID_DEG);
+  int ilat = (int)floor((90.0+lat)/geoid_grid_deg);
+  int ilon = (int)floor((180.0+lon)/geoid_grid_deg);
 
   int ilat1 = ilat;
   int ilon1 = ilon;
-  int ilat2 = (ilat < GEOID_ROW-1)? ilat+1:ilat;
-  int ilon2 = (ilon < GEOID_COL-1)? ilon+1:ilon;
+  int ilat2 = (ilat < geoid_row-1)? ilat+1:ilat;
+  int ilon2 = (ilon < geoid_col-1)? ilon+1:ilon;
 
   return bilinear(
-           ilon1*GEOID_GRID_DEG-180.0,ilat1*GEOID_GRID_DEG-90.0,
-           ilon2*GEOID_GRID_DEG-180.0,ilat2*GEOID_GRID_DEG-90.0,
+           ilon1*geoid_grid_deg-180.0, ilat1*geoid_grid_deg-90.0,
+           ilon2*geoid_grid_deg-180.0, ilat2*geoid_grid_deg-90.0,
            lon, lat,
-           (double)geoid_delta[ilon1+ilat1*GEOID_COL]/GEOID_SCALE,
-           (double)geoid_delta[ilon2+ilat1*GEOID_COL]/GEOID_SCALE,
-           (double)geoid_delta[ilon1+ilat2*GEOID_COL]/GEOID_SCALE,
-           (double)geoid_delta[ilon2+ilat2*GEOID_COL]/GEOID_SCALE
+           (double)geoid_delta[ilon1+ilat1*geoid_col]/geoid_scale,
+           (double)geoid_delta[ilon2+ilat1*geoid_col]/geoid_scale,
+           (double)geoid_delta[ilon1+ilat2*geoid_col]/geoid_scale,
+           (double)geoid_delta[ilon2+ilat2*geoid_col]/geoid_scale
          );
 }
 

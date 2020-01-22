@@ -12,7 +12,7 @@ fi
 geoidgrid=$1 # grid spacing in degrees
 geoidtype=$2
 case $geoidtype in
-gbint8)
+gbint8 | int8_t)
 	geoidscale=1.0
 	geoidformat1="%4.0f"
 	geoidformat2="%4.0f"
@@ -33,7 +33,7 @@ lons=$(seq -s' ' -180 $geoidgrid 180)
 latarray=($lats)
 lonarray=($lons)
 echo "/*"
-echo "    Copyright (C) 2013  Robert Lipe, robertlipe@usa.net"
+echo "    Copyright (C) 2013  Robert Lipe, robertlipe+source@gpsbabel.org"
 echo ""
 echo "    This program is free software; you can redistribute it and/or modify"
 echo "    it under the terms of the GNU General Public License as published by"
@@ -50,12 +50,20 @@ echo "    along with this program; if not, write to the Free Software"
 echo "    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
 echo ""
 echo " */"
+echo "#ifndef HEIGHTGRID_H_INCLUDED_"
+echo "#define HEIGHTGRID_H_INCLUDED_"
+echo ""
 echo "/* Created by \"$0 $1 $2\" using GeographicLib utility GeoidEval with $geoidmodel. */"
-echo "#define GEOID_GRID_DEG $geoidgrid"
-echo "#define GEOID_SCALE $geoidscale"
-echo "#define GEOID_ROW ${#latarray[@]}"
-echo "#define GEOID_COL ${#lonarray[@]}"
-echo "static const $geoidtype geoid_delta[GEOID_COL*GEOID_ROW]= {"
+echo ""
+if [ "$geoidtype" = "int8_t" ]; then
+  echo "#include <cstdint>"
+  echo ""
+fi
+echo "static constexpr double geoid_grid_deg = $geoidgrid;"
+echo "static constexpr double geoid_scale = $geoidscale;"
+echo "static constexpr int geoid_row = ${#latarray[@]};"
+echo "static constexpr int geoid_col = ${#lonarray[@]};"
+echo "static constexpr $geoidtype geoid_delta[] = {"
 idx=1
 echo -n "  /*         "
 for lon in $lons
@@ -88,4 +96,5 @@ do
 	let latidx++
 done
 echo "};"
+echo "#endif  // HEIGHTGRID_H_INCLUDED_"
 

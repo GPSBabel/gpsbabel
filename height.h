@@ -26,8 +26,8 @@
 
 #include <QtCore/QVector>  // for QVector
 
-#include "defs.h"    // for ARG_NOMINMAX, Waypoint (ptr only), arglist_t
-#include "filter.h"  // for Filter
+#include "defs.h"          // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_BOOL, ARGTYPE_END_REQ, ARGTYPE_FLOAT, Waypoint
+#include "filter.h"        // for Filter
 
 #if FILTERS_ENABLED
 
@@ -45,6 +45,8 @@ private:
   char* addopt        = nullptr;
   char* wgs84tomslopt = nullptr;
   double addf;
+  // include static constexpr data member definitions with intializers for grid as private members.
+  #include "heightgrid.h"
 
   QVector<arglist_t> args = {
     {
