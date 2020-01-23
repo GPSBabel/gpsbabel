@@ -55,10 +55,6 @@ echo "#define HEIGHTGRID_H_INCLUDED_"
 echo ""
 echo "/* Created by \"$0 $1 $2\" using GeographicLib utility GeoidEval with $geoidmodel. */"
 echo ""
-if [ "$geoidtype" = "int8_t" ]; then
-  echo "#include <cstdint>"
-  echo ""
-fi
 echo "static constexpr double geoid_grid_deg = $geoidgrid;"
 echo "static constexpr double geoid_scale = $geoidscale;"
 echo "static constexpr int geoid_row = ${#latarray[@]};"

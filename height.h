@@ -24,6 +24,8 @@
 #ifndef HEIGHT_H_INCLUDED_
 #define HEIGHT_H_INCLUDED_
 
+#include <cstdint>         // for int8_t in heightgrid.h
+
 #include <QtCore/QVector>  // for QVector
 
 #include "defs.h"          // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_BOOL, ARGTYPE_END_REQ, ARGTYPE_FLOAT, Waypoint

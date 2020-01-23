@@ -69,8 +69,8 @@ double HeightFilter::wgs84_separation(double lat, double lon)
     fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
   }
 
-  int ilat = (int)floor((90.0+lat)/geoid_grid_deg);
-  int ilon = (int)floor((180.0+lon)/geoid_grid_deg);
+  auto ilat = static_cast<int>(floor((90.0+lat)/geoid_grid_deg));
+  auto ilon = static_cast<int>(floor((180.0+lon)/geoid_grid_deg));
 
   int ilat1 = ilat;
   int ilon1 = ilon;
@@ -81,23 +81,23 @@ double HeightFilter::wgs84_separation(double lat, double lon)
            ilon1*geoid_grid_deg-180.0, ilat1*geoid_grid_deg-90.0,
            ilon2*geoid_grid_deg-180.0, ilat2*geoid_grid_deg-90.0,
            lon, lat,
-           (double)geoid_delta[ilat1][ilon1]/geoid_scale,
-           (double)geoid_delta[ilat1][ilon2]/geoid_scale,
-           (double)geoid_delta[ilat2][ilon1]/geoid_scale,
-           (double)geoid_delta[ilat2][ilon2]/geoid_scale
+           static_cast<double>(geoid_delta[ilat1][ilon1])/geoid_scale,
+           static_cast<double>(geoid_delta[ilat1][ilon2])/geoid_scale,
+           static_cast<double>(geoid_delta[ilat2][ilon1])/geoid_scale,
+           static_cast<double>(geoid_delta[ilat2][ilon2])/geoid_scale
          );
 }
 
 void HeightFilter::correct_height(const Waypoint* wpt)
 {
-  Waypoint* waypointp = const_cast<Waypoint*>(wpt);
+  auto* waypointp = const_cast<Waypoint*>(wpt);
 
   if (waypointp->altitude != unknown_alt) {
-    if (addopt) {
+    if (addopt != nullptr) {
       waypointp->altitude += addf;
     }
 
-    if (wgs84tomslopt) {
+    if (wgs84tomslopt != nullptr) {
       waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
     }
   }
@@ -107,7 +107,7 @@ void HeightFilter::init()
 {
   char* unit;
 
-  if (addopt) {
+  if (addopt != nullptr) {
     addf = strtod(addopt, &unit);
 
     if (*unit == 'f' || *unit== 'F') {

@@ -21,8 +21,6 @@
 
 /* Created by "./tools/createGeoidGrid 1.0 int8_t" using GeographicLib utility GeoidEval with egm96-5. */
 
-#include <cstdint>
-
 static constexpr double geoid_grid_deg = 1.0;
 static constexpr double geoid_scale = 1.0;
 static constexpr int geoid_row = 181;
