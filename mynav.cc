@@ -20,7 +20,11 @@
 
  */
 
+#include <QtCore/qglobal.h>
+#include <QtCore/QChar>
 #include <QtCore/QDebug>
+#include <QtCore/QIODevice>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 
 #include <src/core/textstream.h>
