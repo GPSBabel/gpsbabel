@@ -22,9 +22,8 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
-#include <QtCore/QTextStream>
 
-#include <src/core/file.h>
+#include <src/core/textstream.h>
 
 #include "mynav.h"
 
@@ -117,23 +116,20 @@ MyNavFormat::rd_deinit()
 void
 MyNavFormat::read()
 {
-  gpsbabel::File file(read_fname);
-  file.open(QIODevice::ReadOnly);
+  gpsbabel::TextStream stream;
+  stream.open(read_fname, QIODevice::ReadOnly, "mynav");
 
   route_head* track = route_head_alloc();
   track_add_head(track);
 
-  QTextStream stream(&file);
-  stream.setCodec("ASCII");
-
   QString buf;
   while (stream.readLineInto(&buf)) {
     buf = buf.trimmed();
-    if ((buf.isEmpty()) || (buf[0] == '#')) {
+    if ((buf.isEmpty()) || buf.startsWith('#')) {
       continue;
     }
     read_line(buf, track);
   }
 
-  file.close();
+  stream.close();
 }
