@@ -18,16 +18,18 @@
  */
 
 #include <QtCore/QFile>        // for QFile
+#include <QtCore/QFlags>     // for QFlags
+#include <QtCore/QIODevice>  // for QIODevice, QIODevice::OpenMode, QIODevice::ReadOnly, QIODevice::WriteOnly
 
+#include "defs.h"              // for fatal, list_codecs
 #include "src/core/textstream.h"
-#include "defs.h"              // for fatal
 #include "src/core/file.h"     // for File
 
 
 namespace gpsbabel
 {
 
-void TextStream::open(const QString& fname, QIODevice::OpenModeFlag mode, const char* module, const char* codec_name)
+void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char* module, const char* codec_name)
 {
   codec_ = QTextCodec::codecForName(codec_name);
   if (codec_ == nullptr) {
