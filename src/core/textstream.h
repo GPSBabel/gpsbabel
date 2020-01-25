@@ -16,9 +16,10 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef SRC_CORE_TEXTSTREAM_INCLUDED_H_
+#define SRC_CORE_TEXTSTREAM_INCLUDED_H_
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QIODevice>    // for QIODevice, QIODevice::OpenModeFlag
+#include <QtCore/QIODevice>    // for QIODevice, QIODevice::OpenMode
 #include <QtCore/QString>      // for QString
 #include <QtCore/QTextCodec>   // for QTextCodec
 #include <QtCore/QTextStream>  // for QTextStream
@@ -32,7 +33,7 @@ namespace gpsbabel
 class TextStream : public QTextStream
 {
 public:
-  void open(const QString& fname, QIODevice::OpenModeFlag mode, const char* module, const char* codec = "UTF-8");
+  void open(const QString& fname, QIODevice::OpenMode mode, const char* module, const char* codec = "UTF-8");
   void close();
 
 private:
@@ -41,3 +42,4 @@ private:
 };
 
 } // namespace
+#endif // SRC_CORE_TEXTSTREAM_INCLUDED_H_
