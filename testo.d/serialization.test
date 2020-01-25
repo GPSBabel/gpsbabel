@@ -5,19 +5,19 @@
 #
 # These are primarily meant to serialize the interface specification to
 # the GUI and the document.
-# We do a bincompare as specific whitespace is part of deserialization.
+# We do a compare_nole as specific whitespace is part of deserialization.
 gpsbabel -^3 > ${TMPDIR}/format3.txt
-bincompare ${REFERENCE}/format3.txt ${TMPDIR}/format3.txt
+compare_nole ${REFERENCE}/format3.txt ${TMPDIR}/format3.txt
 gpsbabel -^2 > ${TMPDIR}/format2.txt
-bincompare ${REFERENCE}/format2.txt ${TMPDIR}/format2.txt
+compare_nole ${REFERENCE}/format2.txt ${TMPDIR}/format2.txt
 gpsbabel -^1 > ${TMPDIR}/format1.txt
-bincompare ${REFERENCE}/format1.txt ${TMPDIR}/format1.txt
+compare_nole ${REFERENCE}/format1.txt ${TMPDIR}/format1.txt
 gpsbabel -^0 > ${TMPDIR}/format0.txt
-bincompare ${REFERENCE}/format0.txt ${TMPDIR}/format0.txt
+compare_nole ${REFERENCE}/format0.txt ${TMPDIR}/format0.txt
 gpsbabel -%1 > ${TMPDIR}/filter1.txt
-bincompare ${REFERENCE}/filter1.txt ${TMPDIR}/filter1.txt
+compare_nole ${REFERENCE}/filter1.txt ${TMPDIR}/filter1.txt
 gpsbabel -%0 > ${TMPDIR}/filter0.txt
-bincompare ${REFERENCE}/filter0.txt ${TMPDIR}/filter0.txt
+compare_nole ${REFERENCE}/filter0.txt ${TMPDIR}/filter0.txt
 
 # These are primarily meant for a user
 gpsbabel -h > ${TMPDIR}/help.txt
@@ -29,5 +29,7 @@ compare ${REFERENCE}/filterusage.txt ${TMPDIR}/filterusage.txt
 gpsbabel > ${TMPDIR}/usage.txt << EOJ
 
 EOJ
-compare ${REFERENCE}/usage.txt ${TMPDIR}/usage.txt
+# ahh shucks, the executable changes based on OS, and the path can change as well.
+sed 's/.*\[options\]/    .\/gpsbabel [options]/' ${TMPDIR}/usage.txt > ${TMPDIR}/usage.stripped.txt
+compare ${REFERENCE}/usage.txt ${TMPDIR}/usage.stripped.txt
 
