@@ -1,0 +1,33 @@
+# These outputs will change with any new format or changed format option.
+# Format options should be automatically handled by the GUI.
+# These outputs will change with any new filter or changed filter option.
+# Filter options must be hand coded in the GUI.
+#
+# These are primarily meant to serialize the interface specification to
+# the GUI and the document.
+# We do a bincompare as specific whitespace is part of deserialization.
+gpsbabel -^3 > ${TMPDIR}/format3.txt
+bincompare ${REFERENCE}/format3.txt ${TMPDIR}/format3.txt
+gpsbabel -^2 > ${TMPDIR}/format2.txt
+bincompare ${REFERENCE}/format2.txt ${TMPDIR}/format2.txt
+gpsbabel -^1 > ${TMPDIR}/format1.txt
+bincompare ${REFERENCE}/format1.txt ${TMPDIR}/format1.txt
+gpsbabel -^0 > ${TMPDIR}/format0.txt
+bincompare ${REFERENCE}/format0.txt ${TMPDIR}/format0.txt
+gpsbabel -%1 > ${TMPDIR}/filter1.txt
+bincompare ${REFERENCE}/filter1.txt ${TMPDIR}/filter1.txt
+gpsbabel -%0 > ${TMPDIR}/filter0.txt
+bincompare ${REFERENCE}/filter0.txt ${TMPDIR}/filter0.txt
+
+# These are primarily meant for a user
+gpsbabel -h > ${TMPDIR}/help.txt
+compare ${REFERENCE}/help.txt ${TMPDIR}/help.txt
+gpsbabel -h gpx > ${TMPDIR}/formatusage.txt
+compare ${REFERENCE}/formatusage.txt ${TMPDIR}/formatusage.txt
+gpsbabel -h radius > ${TMPDIR}/filterusage.txt
+compare ${REFERENCE}/filterusage.txt ${TMPDIR}/filterusage.txt
+gpsbabel > ${TMPDIR}/usage.txt << EOJ
+
+EOJ
+compare ${REFERENCE}/usage.txt ${TMPDIR}/usage.txt
+

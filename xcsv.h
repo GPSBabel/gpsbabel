@@ -21,31 +21,49 @@
 #ifndef XCSV_H_INCLUDED_
 #define XCSV_H_INCLUDED_
 
-#include <utility>             // for move
+#include <utility>                // for move
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QList>        // for QList
-#include <QtCore/QString>      // for QString
-#include <QtCore/QStringList>  // for QStringList
-#include <QtCore/QTextCodec>   // for QTextCodec
-#include <QtCore/QTextStream>  // for QTextStream
+#include <QtCore/QByteArray>      // for QByteArray
+#include <QtCore/QList>           // for QList
+#include <QtCore/QString>         // for QString
+#include <QtCore/QStringList>     // for QStringList
 
 #include "defs.h"
-#include "src/core/file.h"     // for File
+#include "src/core/optional.h"    // for optional
+#include "src/core/textstream.h"  // for TextStream
 
-/* function prototypes */
-
-void xcsv_setup_internal_style(const char* style_buf);
-void xcsv_read_internal_style(const char* style_buf);
+#if CSVFMTS_ENABLED
 
 /****************************************************************************/
 /* types required for various xcsv functions                                */
 /****************************************************************************/
 
+class XcsvFile {
+public:
+  XcsvFile() : mkshort_handle(mkshort_new_handle()) {}
+  // delete copy and move constructors and assignment operators.
+  // The defaults are not appropriate, and we haven't implemented proper ones.
+  XcsvFile(const XcsvFile&) = delete;
+  XcsvFile& operator=(const XcsvFile&) = delete;
+  XcsvFile(XcsvFile&&) = delete;
+  XcsvFile& operator=(XcsvFile&&) = delete;
+  ~XcsvFile() {
+    if (mkshort_handle != nullptr) {
+      mkshort_del_handle(&mkshort_handle);
+    }
+  }
+
+  gpsbabel::TextStream stream;
+  QString fname;
+  int gps_datum_idx{-1};		/* result of GPS_Lookup_Datum_Index */
+  short_handle mkshort_handle{nullptr};
+};
+
 /* something to map fields to waypts */
-#define OPTIONS_NODELIM 1U
-#define OPTIONS_ABSOLUTE 2U
-#define OPTIONS_OPTIONAL 4U
+constexpr unsigned options_nodelim = 1;
+constexpr unsigned options_absolute = 2;
+constexpr unsigned options_optional = 4;
+
 struct field_map {
 public:
   // We use QByteArrays because consumers want char* data and QByteArrays supply this through constData().
@@ -65,52 +83,75 @@ public:
 };
 
 /*
- * a Class describing all the wonderful elements of xcsv files, in a
- * nutshell.
- * It completely shows that this began life as a C struct...baby steps.
+ * Class describing an xcsv format.
  */
-class XcsvFile {
- public:
-  XcsvFile();
-
-  bool is_internal;		/* bool - is internal (1) or parsed (0) */
-
+struct XcsvStyle {
+  /* PROLOGUE from style file */
   /* header lines for writing at the top of the file. */
   QStringList prologue;
 
+  /* EPILOGUE from style file */
   /* footer lines for writing at the bottom of the file. */
   QStringList epilogue;
 
-  QString field_delimiter; 	/* comma, quote, etc... */
-  QString field_encloser;		/* doublequote, etc... */
-  QString record_delimiter;	/* newline, c/r, etc... */
+  /* FIELD_DELIMITER from style file */
+  /* comma, quote, etc... */
+  QString field_delimiter;
 
-  QString badchars;		/* characters we never write to output */
+  /* FIELD_ENCLOSER from style file */
+  /* doublequote, etc... */
+  QString field_encloser;
 
-  QList<field_map> ifields;	/* input field mapping */
-  QList<field_map> ofields;	/* output field mapping */
+  /* RECORD_DELIMITER from style file */
+  /* newline, c/r, etc... */
+  QString record_delimiter;
 
-  gpsbabel::File* file;
-  QTextStream* stream;
-  QTextCodec* codec;
-  QString fname;                 /* ptr to filename of above. */
+  /* BADCHARS from style file */
+  /* characters we never write to output */
+  QString badchars;
 
-  QString description;		/* Description for help text */
-  QString extension;		/* preferred filename extension (for wrappers)*/
+  /* IFIELDS from style file */
+  /* input field mapping */
+  QList<field_map> ifields;
 
-  short_handle mkshort_handle;/* handle for mkshort() */
-  ff_type type;		/* format type for GUI wrappers. */
+  /* OFIELDS from style file */
+  /* output field mapping */
+  QList<field_map> ofields;
 
-  int gps_datum;		/* result of GPS_Lookup_Datum_Index */
-  gpsdata_type datatype;	/* can be wptdata, rtedata or trkdata */
+  /* ENCODING from style file */
+  QString codecname;
+
+  /* DESCRIPTION from style file */
+  /* for help text */
+  QString description;
+
+  /* EXTENSION from style file */
+  /* preferred filename extension (for wrappers)*/
+  QString extension;
+
+  /* FORMAT_TYPE from style file */
+  /* format type for GUI wrappers. */
+  ff_type type{ff_type_file};
+
+  /* DATUM from style file */
+  QString gps_datum_name;
+
+  /* DATATYPE from style file */
+  /* can be wptdata, rtedata or trkdata */
   /* ... or ZERO to keep the old behaviour */
+  gpsdata_type datatype{unknown_gpsdata};
 
+  /* SHORTLEN from style file */
+  gpsbabel_optional::optional<int> shortlen;
+
+  /* SHORTWHITE from style file */
+  gpsbabel_optional::optional<int> whitespace_ok;
 };
 
+/* public function prototypes */
 
-/****************************************************************************/
-/* obligatory global struct                                                 */
-/****************************************************************************/
-extern XcsvFile xcsv_file;
+void xcsv_setup_internal_style(const char* style_buf);
+XcsvStyle xcsv_read_internal_style(const char* style_buf);
 
-#endif  // XCSV_H_INCLUDED_
+#endif // CSVFMTS_ENABLED
+#endif // XCSV_H_INCLUDED_

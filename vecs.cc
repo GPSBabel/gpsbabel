@@ -38,7 +38,7 @@
 #include "inifile.h"            // for inifile_readstr
 #include "legacyformat.h"
 #include "src/core/logging.h"   // for Warning
-#include "xcsv.h"               // for XcsvFile, xcsv_file, xcsv_read_internal_style, xcsv_setup_internal_style
+#include "xcsv.h"               // for xcsv_setup_internal_style, XcsvStyle, xcsv_read_internal_style
 
 
 #define MYNAME "vecs"
@@ -264,7 +264,12 @@ Format* Vecs::find_vec(const QString& vecname)
     }
 
 #if CSVFMTS_ENABLED
-    // xcsv_setup_internal_style( nullptr );
+    /*
+     * If this happens to be xcsv,style= and it was preceeded by an xcsv
+     * format that utilized an internal style file, then we need to let
+     * xcsv know the internal style file is no longer in play.
+     */
+     xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
     return vec.vec;
@@ -390,16 +395,16 @@ QVector<Vecs::vecs_t> Vecs::sort_and_unify_vecs() const
 
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
   for (const auto& svec : style_list) {
-    xcsv_read_internal_style(svec.style_buf);
+    XcsvStyle style = xcsv_read_internal_style(svec.style_buf);
     vecs_t uvec;
     uvec.name = svec.name;
-    uvec.extensions = xcsv_file.extension;
+    uvec.extensions = style.extension;
     /* TODO: This needs to be reworked when xcsv isn't a LegacyFormat and
      * xcsv_vecs disappear.
      */
     auto ffvec = ff_vecs_t(xcsv_vecs); /* Inherits xcsv opts */
     /* Reset file type to inherit ff_type from xcsv. */
-    ffvec.type = xcsv_file.type;
+    ffvec.type = style.type;
     /* Skip over the first help entry for all but the
      * actual 'xcsv' format - so we don't expose the
      * 'Full path to XCSV style file' argument to any
@@ -407,7 +412,7 @@ QVector<Vecs::vecs_t> Vecs::sort_and_unify_vecs() const
      */
     ffvec.args = xcsv_args;
     ffvec.cap.fill(ff_cap_none);
-    switch (xcsv_file.datatype) {
+    switch (style.datatype) {
     case unknown_gpsdata:
     case wptdata:
       ffvec.cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
@@ -422,7 +427,7 @@ QVector<Vecs::vecs_t> Vecs::sort_and_unify_vecs() const
       ;
     }
     uvec.vec = new LegacyFormat(ffvec); /* LEAK */
-    uvec.desc = xcsv_file.description;
+    uvec.desc = style.description;
     uvec.parent = "xcsv";
     svp.append(uvec);
   }

@@ -488,6 +488,9 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    (void) Vecs::Instance().find_vec(ivecs->get_name());
+
     cet_convert_init(ivecs->get_encode(), 1);
 
     start_session(ivecs->get_name(), qargs.at(0));
@@ -498,6 +501,9 @@ run(const char* prog_name)
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
+      /* reinitialize xcsv in case two formats that use xcsv were given */
+      (void) Vecs::Instance().find_vec(ovecs->get_name());
+
       cet_convert_init(ovecs->get_encode(), 1);
 
       ovecs->wr_init(qargs.at(1));
