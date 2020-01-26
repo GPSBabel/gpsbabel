@@ -185,8 +185,8 @@ static double oldlon = 999;
 static double oldlat = 999;
 
 static int waypt_out_count = 0;
-static route_head* csv_track = nullptr;
-static route_head* csv_route = nullptr;
+static const route_head* csv_track = nullptr;
+static const route_head* csv_route = nullptr;
 
 struct xcsv_parse_data {
   QString rte_name;
@@ -1046,10 +1046,10 @@ xcsv_resetpathlen(const route_head* head)
   csv_route = csv_track = nullptr;
   switch (xcsv_style->datatype) {
   case trkdata:
-    csv_track = const_cast<route_head*>(head);
+    csv_track = head;
     break;
   case rtedata:
-    csv_route = const_cast<route_head*>(head);
+    csv_route = head;
     break;
   default:
     break;
