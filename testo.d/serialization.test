@@ -23,7 +23,9 @@ if [ ${RUNNINGVALGRIND} -ne  0 ]; then
   
   # These are primarily meant for a user
   gpsbabel -h > ${TMPDIR}/help.txt
-  compare ${REFERENCE}/help.txt ${TMPDIR}/help.txt
+  # ahh shucks, the executable changes based on OS, and the path can change as well.
+  sed 's/.*\[options\]/    .\/gpsbabel [options]/' ${TMPDIR}/help.txt > ${TMPDIR}/help.stripped.txt
+  compare ${REFERENCE}/help.txt ${TMPDIR}/help.stripped.txt
   gpsbabel -h gpx > ${TMPDIR}/formatusage.txt
   compare ${REFERENCE}/formatusage.txt ${TMPDIR}/formatusage.txt
   gpsbabel -h radius > ${TMPDIR}/filterusage.txt
@@ -32,9 +34,7 @@ if [ ${RUNNINGVALGRIND} -ne  0 ]; then
   
 EOJ
   # ahh shucks, the executable changes based on OS, and the path can change as well.
-  # sed command fails to change anything on appveyor???
-  # works ok on macos.
   sed 's/.*\[options\]/    .\/gpsbabel [options]/' ${TMPDIR}/usage.txt > ${TMPDIR}/usage.stripped.txt
-  #compare ${REFERENCE}/usage.txt ${TMPDIR}/usage.stripped.txt
+  compare ${REFERENCE}/usage.txt ${TMPDIR}/usage.stripped.txt
 fi
 
