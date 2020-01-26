@@ -191,6 +191,11 @@ static void holux_disp(const Waypoint* wpt)
   }
 
   short sIndex = le_read16(&((WPTHDR*)HxWFile)->num);
+
+  if (sIndex >= MAXWPT) {
+    fatal(MYNAME ": too many waypoints.  Max is %d.\n", MAXWPT);
+  }
+
   ((WPTHDR*)HxWFile)->idx[sIndex] = sIndex;          /* set the waypoint index  */
   le_write16(&((WPTHDR*)HxWFile)->idx[sIndex], sIndex);          /* set the waypoint index  */
   ((WPTHDR*)HxWFile)->used[sIndex] = 0xff;            /* Waypoint used */
