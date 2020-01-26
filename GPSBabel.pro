@@ -146,6 +146,7 @@ HEADERS =  \
 	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
+	yahoo.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
 	zlib/gzguts.h \
