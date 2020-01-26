@@ -12,7 +12,7 @@ fi
 geoidgrid=$1 # grid spacing in degrees
 geoidtype=$2
 case $geoidtype in
-gbint8)
+gbint8 | int8_t)
 	geoidscale=1.0
 	geoidformat1="%4.0f"
 	geoidformat2="%4.0f"
@@ -33,7 +33,7 @@ lons=$(seq -s' ' -180 $geoidgrid 180)
 latarray=($lats)
 lonarray=($lons)
 echo "/*"
-echo "    Copyright (C) 2013  Robert Lipe, robertlipe@usa.net"
+echo "    Copyright (C) 2013  Robert Lipe, robertlipe+source@gpsbabel.org"
 echo ""
 echo "    This program is free software; you can redistribute it and/or modify"
 echo "    it under the terms of the GNU General Public License as published by"
@@ -50,14 +50,18 @@ echo "    along with this program; if not, write to the Free Software"
 echo "    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
 echo ""
 echo " */"
+echo "#ifndef HEIGHTGRID_H_INCLUDED_"
+echo "#define HEIGHTGRID_H_INCLUDED_"
+echo ""
 echo "/* Created by \"$0 $1 $2\" using GeographicLib utility GeoidEval with $geoidmodel. */"
-echo "#define GEOID_GRID_DEG $geoidgrid"
-echo "#define GEOID_SCALE $geoidscale"
-echo "#define GEOID_ROW ${#latarray[@]}"
-echo "#define GEOID_COL ${#lonarray[@]}"
-echo "static const $geoidtype geoid_delta[GEOID_COL*GEOID_ROW]= {"
+echo ""
+echo "static constexpr double geoid_grid_deg = $geoidgrid;"
+echo "static constexpr double geoid_scale = $geoidscale;"
+echo "static constexpr int geoid_row = ${#latarray[@]};"
+echo "static constexpr int geoid_col = ${#lonarray[@]};"
+echo "static constexpr $geoidtype geoid_delta[geoid_row][geoid_col] = {"
 idx=1
-echo -n "  /*         "
+echo -n "  /*           "
 for lon in $lons
 do
 	echo -n $geoidformat1 $lon | awk '{printf $1,$2}'
@@ -73,19 +77,25 @@ for lat in $lats
 do
 	echo -n "  /* "
 	echo -n $lat | awk '{printf "%5.1f",$1}'
-	echo -n " */"
+	echo -n " */ {"
 	lonidx=1
 	for lon in $lons
 	do
 		fullheight=$(echo "$lat $lon" | GeoidEval -n $geoidmodel -l)
 		echo -n $geoidformat2 $fullheight $geoidscale | awk '{printf $1,$2*$3}'
-		if [ $lonidx -lt ${#lonarray[@]} -o $latidx -lt ${#latarray[@]} ]; then
+		if [ $lonidx -lt ${#lonarray[@]} ]; then
 			echo -n ","
+    else
+		  if [ $latidx -lt ${#latarray[@]} ]; then
+        echo "},"
+      else
+        echo "}"
+      fi
 		fi
 		let lonidx++
 	done
-	echo ""
 	let latidx++
 done
 echo "};"
+echo "#endif  // HEIGHTGRID_H_INCLUDED_"
 
