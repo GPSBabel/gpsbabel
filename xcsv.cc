@@ -1539,7 +1539,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
 
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
-      buff = writetime("%ld", wpt->GetCreationTime().toTime_t(), false);
+      buff = writetime("%s", wpt->GetCreationTime().toTime_t(), false);
       buff += QString::asprintf("%03d", wpt->GetCreationTime().time().msec());
 
     }
@@ -1747,7 +1747,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
 
     if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      *xcsv_file.stream << xcsv_file.record_delimiter;
+      *xcsv_file.stream << xcsv_file.field_encloser;
     }
 
     /* As a special case (pronounced "horrible hack") we allow
@@ -1760,7 +1760,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
 
     if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      *xcsv_file.stream << xcsv_file.record_delimiter;
+      *xcsv_file.stream << xcsv_file.field_encloser;
     }
     buff.clear();
   }
