@@ -472,13 +472,13 @@ register_waypt(const Waypoint* ref)
 
 /* end borrowed from raymarine.c */
 
-static Waypoint*
+static const Waypoint*
 lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   lowranceusr4_fsdata* fs = nullptr;
 
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, *global_waypoint_list) {
+  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&
@@ -495,13 +495,13 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
   return nullptr;
 }
 
-static Waypoint*
+static const Waypoint*
 lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   lowranceusr4_fsdata* fs = nullptr;
 
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, *global_waypoint_list) {
+  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->UUID1 == id1 &&
@@ -610,7 +610,7 @@ static int lowranceusr_common_find_icon_number_from_desc(const QString& desc, co
    * Also return the icon number for descriptions of "icon-"
    * followed by a numeric icon number.
    */
-  int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
+  int n = desc.midRef(desc.startsWith("icon-") ? 5 : 0).toInt();
   if (n)  {
     return n;
   }
@@ -1236,7 +1236,7 @@ lowranceusr4_parse_route()
       uint uid_unit = gbfgetint32(file_in);
       uint uid_seq_low = gbfgetint32(file_in);
       uint uid_seq_high = gbfgetint32(file_in);
-      Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
+      const Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
@@ -1252,7 +1252,7 @@ lowranceusr4_parse_route()
       UUID2 = gbfgetint32(file_in);
       UUID3 = gbfgetint32(file_in);
       UUID4 = gbfgetint32(file_in);
-      Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
+      const Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",

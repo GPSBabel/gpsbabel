@@ -251,7 +251,7 @@ data_read()
 
 
 struct hdr {
-  Waypoint* wpt;
+  const Waypoint* wpt;
 };
 
 static int compare_lon(const void* a, const void* b);
@@ -377,7 +377,7 @@ compute_blocks(struct hdr* start, int count,
     for (int i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
       /* wpt const part 3 longs, 1 char */
-      Waypoint* wpt = start[i].wpt;
+      const Waypoint* wpt = start[i].wpt;
       newblock->size += wpt->description.length() + 1;
     }
   } else {
@@ -438,7 +438,7 @@ data_write()
   bh = htable;
 
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* waypointp, *global_waypoint_list) {
+  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {
       maxlon = waypointp->longitude;
