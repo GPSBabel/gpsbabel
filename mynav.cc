@@ -1,6 +1,9 @@
 /*
     Handle MyNav TRC format .trc and .ftn files
 
+    For information on the data format see
+    http://www.mynav.it/hwdoc/dev/TRC_Format_Spec.pdf
+
     Copyright (c) 2014-2020 Ralf Horstmann <ralf@ackstorm.de>
     Copyright (C) 2014-2020 Robert Lipe, robertlipe+source@gpsbabel.org
 
@@ -20,12 +23,12 @@
 
  */
 
-#include <QtCore/qglobal.h>
 #include <QtCore/QChar>
 #include <QtCore/QDebug>
 #include <QtCore/QIODevice>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QtGlobal>
 
 #include <src/core/textstream.h>
 
