@@ -43,7 +43,7 @@
 #endif
 
 #include "defs.h"
-#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
+#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filter_vecs.h"            // for FilterVecs
@@ -643,7 +643,6 @@ main(int argc, char* argv[])
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
-  global_opts.charset_name.clear();
   global_opts.inifile = nullptr;
 
   gpsbabel_time = current_time().toTime_t();			/* frozen in testmode */
@@ -654,14 +653,12 @@ main(int argc, char* argv[])
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();
-  cet_register();
   session_init();
   waypt_init();
   route_init();
 
   rc = run(prog_name);
 
-  cet_deregister();
   waypt_flush_all();
   route_deinit();
   session_exit();

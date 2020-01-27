@@ -288,12 +288,6 @@ rw_init(const QString& fname)
 
   }
 
-  // If a user has specified a non-default character set, we'll trust
-  // them to sort our the wreckage of violating the Garmin protocol and
-  // ship characters to the device in that character set.
-  if (global_opts.charset != &cet_cs_vec_utf8) {
-    receiver_charset = xstrdup(global_opts.charset_name);
-  }
   if (global_opts.debug_level > 0)  {
     fprintf(stderr, "Waypoint type: %d\n"
             "Chosen waypoint length %d\n",
@@ -302,11 +296,6 @@ rw_init(const QString& fname)
       fprintf(stderr, "Waypoint category type: %d\n",
               gps_category_type);
     }
-  }
-
-  // Allow override of sent character set for internationalized GPSes.
-  if (global_opts.charset != &cet_cs_vec_utf8) {
-    receiver_charset = xstrdup(global_opts.charset_name);
   }
 
   /*
@@ -334,6 +323,14 @@ rw_init(const QString& fname)
 
   setshort_mustupper(mkshort_handle, receiver_must_upper);
 
+  /*
+   * This used to mean something when we used cet, but these days this
+   * format either use implicit QString conversions (utf8) which is
+   * likely a bug, or we have hard coded QString::fromLatin1 or CSTRc.
+   * So all the above detection of receiver_charset is for naught.
+   * But perhaps we will use an appropriate codec based on receiver_charset
+   * someday.
+   */
   if (receiver_charset) {
     cet_convert_init(receiver_charset, 1);
   }
@@ -520,7 +517,7 @@ track_read()
     if (trk_head == nullptr || array[i]->ishdr) {
       trk_head = route_head_alloc();
       trk_head->rte_num = trk_num;
-      trk_head->rte_name = trk_name;
+      trk_head->rte_name = QString::fromLatin1(trk_name);
       trk_num++;
       track_add_head(trk_head);
     }
@@ -599,7 +596,7 @@ route_read()
       rte_head = route_head_alloc();
       route_add_head(rte_head);
       if (csrc) {
-        rte_head->rte_name = csrc;
+        rte_head->rte_name = QString::fromLatin1(csrc);
       }
     } else {
       if (array[i]->islink)  {

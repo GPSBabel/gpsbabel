@@ -451,8 +451,7 @@ cet.o: cet.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h
 cet_util.o: cet_util.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  cet_util.h src/core/logging.h cet/ansi_x3_4_1968.h cet/cp1252.h \
-  cet/iso_8859_8.h
+  cet_util.h src/core/logging.h
 compegps.o: compegps.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   cet_util.h csv_util.h jeeps/gpsmath.h jeeps/gpsport.h
@@ -465,7 +464,7 @@ delgpl.o: delgpl.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 destinator.o: destinator.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
-  src/core/optional.h cet_util.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
+  src/core/optional.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
   jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
   jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
@@ -547,8 +546,8 @@ garmin_gpi.o: garmin_gpi.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsrqst.h
 garmin_tables.o: garmin_tables.cc defs.h config.h zlib/zlib.h \
   zlib/zconf.h cet.h inifile.h gbfile.h session.h src/core/datetime.h \
-  src/core/optional.h garmin_tables.h garmin_icon_tables.h \
-  jeeps/gpsmath.h jeeps/gpsport.h src/core/logging.h
+  src/core/optional.h garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h \
+  src/core/logging.h garmin_icon_tables.h
 garmin_txt.o: garmin_txt.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   cet.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h csv_util.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
@@ -650,7 +649,7 @@ ignrando.o: ignrando.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   xmlgeneric.h
 igo8.o: igo8.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
-  gbfile.h session.h src/core/datetime.h src/core/optional.h cet_util.h
+  gbfile.h session.h src/core/datetime.h src/core/optional.h
 ik3d.o: ik3d.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h \
   xmlgeneric.h
@@ -822,8 +821,7 @@ mapsource.o: mapsource.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h
 mkshort.o: mkshort.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  cet_util.h
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 mmo.o: mmo.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h inifile.h \
   gbfile.h session.h src/core/datetime.h src/core/optional.h
 mtk_locus.o: mtk_locus.cc defs.h config.h zlib/zlib.h zlib/zconf.h cet.h \
