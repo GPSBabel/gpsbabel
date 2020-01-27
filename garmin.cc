@@ -890,7 +890,7 @@ waypt_write_cb(GPS_PWay*)
  * description.
  */
 static const char*
-get_gc_info(Waypoint* wpt)
+get_gc_info(const Waypoint* wpt)
 {
   if (global_opts.smart_names) {
     if (wpt->gc_data->type == gt_virtual) {
@@ -935,7 +935,7 @@ waypoint_prepare()
   i = 0;
 
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* wpt, *global_waypoint_list) {
+  for (const Waypoint* wpt : qAsConst(*global_waypoint_list)) {
     char obuf[256];
 
     QString src;
