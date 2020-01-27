@@ -337,7 +337,7 @@ static char*          opt_content_descr;
 static char*          opt_serialnum;
 static int            opt_serialnum_i;
 
-static Waypoint**     waypt_table;
+static const Waypoint**     waypt_table;
 static int            waypt_table_sz;
 static int            waypt_table_ct;
 
@@ -440,12 +440,10 @@ same_points(const Waypoint* A, const Waypoint* B)
 }
 
 static void
-register_waypt(const Waypoint* ref)
+register_waypt(const Waypoint* wpt)
 {
-  Waypoint* wpt = const_cast<Waypoint*>(ref);
-
   for (int i = 0; i < waypt_table_ct; i++) {
-    Waypoint* cmp = waypt_table[i];
+    const Waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
       return;
@@ -455,9 +453,9 @@ register_waypt(const Waypoint* ref)
   if (waypt_table_ct >= waypt_table_sz) {
     waypt_table_sz += 32;
     if (waypt_table) {
-      waypt_table = (Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
+      waypt_table = (const Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
     } else {
-      waypt_table = (Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
+      waypt_table = (const Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
     }
   }
 
@@ -2071,7 +2069,7 @@ static void
 lowranceusr4_route_leg_disp(const Waypoint* wpt)
 {
   for (int i = 0; i < waypt_table_ct; i++) {
-    Waypoint* cmp = waypt_table[i];
+    const Waypoint* cmp = waypt_table[i];
     if (cmp->shortname == wpt->shortname) {
       lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
 
