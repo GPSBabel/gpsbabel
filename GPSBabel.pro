@@ -135,6 +135,7 @@ HEADERS =  \
 	legacyformat.h \
 	magellan.h \
 	mapsend.h \
+	mynav.h \
 	navilink.h \
 	session.h \
 	shapelib/shapefil.h \
