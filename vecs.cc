@@ -673,7 +673,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
   return ok;
 }
 
-bool Vecs::validate_vec(const Vecs::vecs_t& vec)
+bool Vecs::validate_vec(const vecs_t& vec)
 {
   bool ok = validate_args(vec.name, vec.vec->get_args());
 
