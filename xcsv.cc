@@ -166,7 +166,7 @@ enum xcsv_token {
 #include "xcsv_tokens.gperf"       // for Perfect_Hash, xt_mapping
 
 /* a table of config file constants mapped to chars */
-const XcsvFormat::char_map_t XcsvFormat::xcsv_char_table[] = {
+const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
   { "COMMA",		"," 	},
   { "COMMASPACE",		", " 	},
   { "SINGLEQUOTE",	"'"	},
@@ -186,7 +186,7 @@ const XcsvFormat::char_map_t XcsvFormat::xcsv_char_table[] = {
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
-XcsvFormat::xcsv_get_char_from_constant_table(const QString& key)
+XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 {
   static QHash<QString, QString> substitutions;
   if (substitutions.empty()) {
@@ -203,14 +203,14 @@ XcsvFormat::xcsv_get_char_from_constant_table(const QString& key)
 
 // Remove outer quotes.
 // Should probably be in csv_util.
-QString XcsvFormat::XcsvStyle::dequote(const QString& in) {
+QString XcsvStyle::dequote(const QString& in) {
   QString r = in.simplified();
   if (r.startsWith("\"")) r = r.mid(1);
   if (r.endsWith("\"")) r.chop(1);
   return r;
 }
 
-void XcsvFormat::XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output) {
+void XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output) {
   if (fmp.key.isEmpty()) {
     Fatal() << MYNAME << ": xcsv style is missing" <<
             (is_output ? "output" : "input") << "field type.";
@@ -228,7 +228,7 @@ void XcsvFormat::XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_outp
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
 /*****************************************************************************/
 void
-XcsvFormat::XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
+XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -247,7 +247,7 @@ XcsvFormat::XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, co
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
 void
-XcsvFormat::XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
+XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -397,7 +397,7 @@ XcsvFormat::gmsd_init(Waypoint* wpt)
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
 void 
-XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
+XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp,
                xcsv_parse_data* parse_data, const int line_no)
 {
   const char* enclosure = "";
@@ -876,7 +876,7 @@ XcsvFormat::read()
 
       /* now rip the line apart */
       for (const auto& value : values) {
-        const field_map& fmp = xcsv_style->ifields.at(ifield_idx++);
+        const XcsvStyle::field_map& fmp = xcsv_style->ifields.at(ifield_idx++);
         xcsv_parse_val(value, wpt_tmp, fmp, &parse_data, linecount);
 
         if (ifield_idx >= xcsv_style->ifields.size()) {
@@ -1041,11 +1041,11 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
      */
     int field_is_unknown = 0;
 
-    if ((i != 0) && !(fmp.options & options_nodelim)) {
+    if ((i != 0) && !(fmp.options & XcsvStyle::options_nodelim)) {
       xcsv_file->stream << write_delimiter;
     }
 
-    if (fmp.options & options_absolute) {
+    if (fmp.options & XcsvStyle::options_absolute) {
       lat = fabs(lat);
       lon = fabs(lon);
     }
@@ -1061,7 +1061,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), waypt_out_count + atoi(fmp.val.constData()));
       break;
     case XT_CONSTANT: {
-      auto cp = xcsv_get_char_from_constant_table(fmp.val.constData());
+      auto cp = XcsvStyle::xcsv_get_char_from_constant_table(fmp.val.constData());
       if (!cp.isEmpty()) {
         buff = QString::asprintf(fmp.printfc.constData(), CSTR(cp));
       } else {
@@ -1551,7 +1551,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     }
     QString obuff = csv_stringclean(buff, xcsv_style->badchars);
 
-    if (field_is_unknown && fmp.options & options_optional) {
+    if (field_is_unknown && fmp.options & XcsvStyle::options_optional) {
       continue;
     }
 
@@ -1646,7 +1646,7 @@ XcsvFormat::write()
 }
 
 void
-XcsvFormat::XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
+XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 {
   // The lines to be parsed have a leading operation |op| that is
   // separated by whitespace from the rest. Each op may have zero or
@@ -1670,7 +1670,7 @@ XcsvFormat::XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   QStringList tokens = tokenstr.split(",");
 
   if (op == "FIELD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto cp = XcsvStyle::xcsv_get_char_from_constant_table(tokens[0]);
     style->field_delimiter = cp;
 
     char* p = csv_stringtrim(CSTR(style->field_delimiter), " ", 0);
@@ -1822,8 +1822,8 @@ XcsvFormat::XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
  * a terminating null.   Makes multiple calls to that function so
  * that "ignore to end of line" comments work right.
  */
-XcsvFormat::XcsvStyle
-XcsvFormat::XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
+XcsvStyle
+XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
 {
   XcsvStyle style;
   const QStringList lines = QString(sbuff).split('\n');
@@ -1833,8 +1833,8 @@ XcsvFormat::XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
   return style;
 }
 
-XcsvFormat::XcsvStyle
-XcsvFormat::XcsvStyle::xcsv_read_style(const char* fname)
+XcsvStyle
+XcsvStyle::xcsv_read_style(const char* fname)
 {
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
   XcsvStyle style;
@@ -1857,8 +1857,8 @@ XcsvFormat::XcsvStyle::xcsv_read_style(const char* fname)
  * to the series of bytes that would be in a style file, we set up
  * the xcsv parser and make it ready for general use.
  */
-XcsvFormat::XcsvStyle
-XcsvFormat::XcsvStyle::xcsv_read_internal_style(const char* style_buf)
+XcsvStyle
+XcsvStyle::xcsv_read_internal_style(const char* style_buf)
 {
   XcsvStyle style = xcsv_parse_style_buff(style_buf);
 
