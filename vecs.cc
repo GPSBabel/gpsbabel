@@ -404,7 +404,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
-    XcsvFormat::XcsvStyle style = XcsvFormat::xcsv_read_internal_style(svec.style_buf);
+    XcsvFormat::XcsvStyle style = XcsvFormat::XcsvStyle::xcsv_read_internal_style(svec.style_buf);
     vecinfo_t info;
     info.name = svec.name;
     info.desc = style.description;

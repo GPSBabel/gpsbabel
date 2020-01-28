@@ -66,16 +66,6 @@
 
 #define MYNAME	"XCSV"
 
-/* macros */
-constexpr char lat_dir(double a) {return a < 0.0 ? 'S' : 'N';}
-constexpr char lon_dir(double a) {return a < 0.0 ? 'W' : 'E';}
-
-/* convert excel time (days since 1900) to time_t and back again */
-constexpr double excel_to_timet(double a) {return (a - 25569.0) * 86400.0;}
-constexpr double timet_to_excel(double a) {return (a / 86400.0) + 25569.0;}
-
-constexpr int gps_datum_wgs84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
-
 /*
  * Internal numeric value to associate with each keyword in a style file.
  * To add new keywords, just add an entry here, handle it in the switch
@@ -213,14 +203,14 @@ XcsvFormat::xcsv_get_char_from_constant_table(const QString& key)
 
 // Remove outer quotes.
 // Should probably be in csv_util.
-QString XcsvFormat::dequote(const QString& in) {
+QString XcsvFormat::XcsvStyle::dequote(const QString& in) {
   QString r = in.simplified();
   if (r.startsWith("\"")) r = r.mid(1);
   if (r.endsWith("\"")) r.chop(1);
   return r;
 }
 
-void XcsvFormat::validate_fieldmap(const field_map& fmp, bool is_output) {
+void XcsvFormat::XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output) {
   if (fmp.key.isEmpty()) {
     Fatal() << MYNAME << ": xcsv style is missing" <<
             (is_output ? "output" : "input") << "field type.";
@@ -238,7 +228,7 @@ void XcsvFormat::validate_fieldmap(const field_map& fmp, bool is_output) {
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
 /*****************************************************************************/
 void
-XcsvFormat::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
+XcsvFormat::XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -257,7 +247,7 @@ XcsvFormat::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
 void
-XcsvFormat::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
+XcsvFormat::XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -1656,7 +1646,7 @@ XcsvFormat::write()
 }
 
 void
-XcsvFormat::xcsv_parse_style_line(XcsvStyle* style, QString line)
+XcsvFormat::XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 {
   // The lines to be parsed have a leading operation |op| that is
   // separated by whitespace from the rest. Each op may have zero or
@@ -1833,7 +1823,7 @@ XcsvFormat::xcsv_parse_style_line(XcsvStyle* style, QString line)
  * that "ignore to end of line" comments work right.
  */
 XcsvFormat::XcsvStyle
-XcsvFormat::xcsv_parse_style_buff(const char* sbuff)
+XcsvFormat::XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
 {
   XcsvStyle style;
   const QStringList lines = QString(sbuff).split('\n');
@@ -1844,7 +1834,7 @@ XcsvFormat::xcsv_parse_style_buff(const char* sbuff)
 }
 
 XcsvFormat::XcsvStyle
-XcsvFormat::xcsv_read_style(const char* fname)
+XcsvFormat::XcsvStyle::xcsv_read_style(const char* fname)
 {
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
   XcsvStyle style;
@@ -1868,7 +1858,7 @@ XcsvFormat::xcsv_read_style(const char* fname)
  * the xcsv parser and make it ready for general use.
  */
 XcsvFormat::XcsvStyle
-XcsvFormat::xcsv_read_internal_style(const char* style_buf)
+XcsvFormat::XcsvStyle::xcsv_read_internal_style(const char* style_buf)
 {
   XcsvStyle style = xcsv_parse_style_buff(style_buf);
 
@@ -1894,13 +1884,13 @@ XcsvFormat::rd_init(const QString& fname)
    * read it from a user-supplied style file, or die trying.
    */
   if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(xcsv_read_internal_style(intstylebuf));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(xcsv_read_style(styleopt));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
   }
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
@@ -1949,13 +1939,13 @@ XcsvFormat::wr_init(const QString& fname)
    * read it from a user-supplied style file, or die trying.
    */
   if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(xcsv_read_internal_style(intstylebuf));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(xcsv_read_style(styleopt));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
   }
 
   xcsv_file = new XcsvFile;

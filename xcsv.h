@@ -40,7 +40,6 @@
 
 #if CSVFMTS_ENABLED
 
-
 class XcsvFormat : public Format
 {
 public:
@@ -104,7 +103,20 @@ public:
   /*
    * Class describing an xcsv format.
    */
-  struct XcsvStyle {
+  class XcsvStyle
+  {
+  public:
+    static XcsvStyle xcsv_read_internal_style(const char* style_buf);
+    static XcsvStyle xcsv_read_style(const char* fname);
+  private:
+    static QString dequote(const QString& in);
+    static void validate_fieldmap(const field_map& fmp, bool is_output);
+    static void xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc);
+    static void xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned int options);
+    static void xcsv_parse_style_line(XcsvStyle* style, QString line);
+    static XcsvStyle xcsv_parse_style_buff(const char* sbuff);
+
+  public:
     /* PROLOGUE from style file */
     /* header lines for writing at the top of the file. */
     QStringList prologue;
@@ -167,10 +179,31 @@ public:
     gpsbabel_optional::optional<int> whitespace_ok;
   };
 
-  static XcsvStyle xcsv_read_internal_style(const char* style_buf);
   void xcsv_setup_internal_style(const char* style_buf);
 
 private:
+  /* macros */
+  static constexpr char lat_dir(double a)
+  {
+    return a < 0.0 ? 'S' : 'N';
+  }
+  static constexpr char lon_dir(double a)
+  {
+    return a < 0.0 ? 'W' : 'E';
+  }
+
+  /* convert excel time (days since 1900) to time_t and back again */
+  static constexpr double excel_to_timet(double a)
+  {
+    return (a - 25569.0) * 86400.0;
+  }
+  static constexpr double timet_to_excel(double a)
+  {
+    return (a / 86400.0) + 25569.0;
+  }
+
+  static constexpr int gps_datum_wgs84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+
   class XcsvFile
   {
   public:
@@ -208,10 +241,6 @@ private:
   };
 
   static QString xcsv_get_char_from_constant_table(const QString& key);
-  static QString dequote(const QString& in);
-  static void validate_fieldmap(const field_map& fmp, bool is_output);
-  static void xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc);
-  static void xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned int options);
   static QDateTime yyyymmdd_to_time(const char* s);
   static time_t sscanftime(const char* s, const char* format, int gmt);
   static time_t addhms(const char* s, const char* format);
@@ -225,9 +254,6 @@ private:
   void xcsv_resetpathlen(const route_head* head);
   void xcsv_waypt_pr(const Waypoint* wpt);
   QString xcsv_replace_tokens(const QString& original) const;
-  static void xcsv_parse_style_line(XcsvStyle* style, QString line);
-  static XcsvStyle xcsv_parse_style_buff(const char* sbuff);
-  static XcsvStyle xcsv_read_style(const char* fname);
 
   XcsvFile* xcsv_file{nullptr};
   const XcsvStyle* xcsv_style{nullptr};
