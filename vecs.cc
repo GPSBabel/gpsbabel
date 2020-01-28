@@ -269,7 +269,7 @@ Format* Vecs::find_vec(const QString& vecname)
      * format that utilized an internal style file, then we need to let
      * xcsv know the internal style file is no longer in play.
      */
-     xcsv_setup_internal_style(nullptr);
+     xcsv_fmt.xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
     return vec.vec;
@@ -315,7 +315,7 @@ Format* Vecs::find_vec(const QString& vecname)
       disp_vec_options(svec.name, xcsv_args);
     }
 #if CSVFMTS_ENABLED
-    xcsv_setup_internal_style(svec.style_buf);
+    xcsv_fmt.xcsv_setup_internal_style(svec.style_buf);
 #endif // CSVFMTS_ENABLED
 
     vec_list[0].vec->set_name(svec.name);	/* needed for session information */
@@ -404,7 +404,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
-    XcsvStyle style = xcsv_read_internal_style(svec.style_buf);
+    XcsvFormat::XcsvStyle style = XcsvFormat::xcsv_read_internal_style(svec.style_buf);
     vecinfo_t info;
     info.name = svec.name;
     info.desc = style.description;
@@ -431,9 +431,9 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
      * 'Full path to XCSV style file' argument to any
      * GUIs for an internal format.
      */
-    bool first = true;
     const QVector<arglist_t>* args = vec_list.at(0).vec->get_args();
     if (args != nullptr) {
+      bool first = true;
       for (const auto& arg : *args) {
         if (!first) {
           info.arginfo.append(arginfo_t(arg));

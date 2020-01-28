@@ -44,7 +44,6 @@
 #include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QTextStream>      // for QTextStream
 #include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
 #include <QtCore/QtGlobal>         // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
@@ -61,6 +60,9 @@
 #include "src/core/textstream.h"
 #include "strptime.h"              // for strptime
 #include "xcsv.h"
+
+
+#if CSVFMTS_ENABLED
 
 #define MYNAME	"XCSV"
 
@@ -173,91 +175,8 @@ enum xcsv_token {
 
 #include "xcsv_tokens.gperf"       // for Perfect_Hash, xt_mapping
 
-#if CSVFMTS_ENABLED
-/****************************************************************************/
-/* obligatory global struct                                                 */
-/****************************************************************************/
-
-static XcsvFile* xcsv_file;
-static const XcsvStyle* xcsv_style;
-static double pathdist = 0;
-static double oldlon = 999;
-static double oldlat = 999;
-
-static int waypt_out_count = 0;
-static const route_head* csv_track = nullptr;
-static const route_head* csv_route = nullptr;
-
-struct xcsv_parse_data {
-  QString rte_name;
-  QString trk_name;
-  bool new_track{false};
-  double utm_northing{0};
-  double utm_easting{0};
-  double utm_zone{0};
-  char utm_zonec{'N'};
-  UrlLink* link_{nullptr};
-  gpsbabel_optional::optional<bool> lat_dir_positive;
-  gpsbabel_optional::optional<bool> lon_dir_positive;
-};
-
-static char* styleopt = nullptr;
-static char* snlenopt = nullptr;
-static char* snwhiteopt = nullptr;
-static char* snupperopt = nullptr;
-static char* snuniqueopt = nullptr;
-static char* prefer_shortnames = nullptr;
-static char* xcsv_urlbase = nullptr;
-static char* opt_datum = nullptr;;
-
-static const char* intstylebuf = nullptr;
-
-static
-QVector<arglist_t> xcsv_args = {
-  {
-    "style", &styleopt, "Full path to XCSV style file", nullptr,
-    ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "snlen", &snlenopt, "Max synthesized shortname length", nullptr,
-    ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "prefer_shortnames", &prefer_shortnames,
-    "Use shortname instead of description",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "datum", &opt_datum, "GPS datum (def. WGS 84)",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-/* something to map config file constants to chars */
-struct char_map_t {
-  const QString key;
-  const QString chars;
-};
-
 /* a table of config file constants mapped to chars */
-static
-char_map_t xcsv_char_table[] = {
+const XcsvFormat::char_map_t XcsvFormat::xcsv_char_table[] = {
   { "COMMA",		"," 	},
   { "COMMASPACE",		", " 	},
   { "SINGLEQUOTE",	"'"	},
@@ -276,12 +195,12 @@ char_map_t xcsv_char_table[] = {
 };
 
 // Given a keyword of "COMMASPACE", return ", ".
-static QString
-xcsv_get_char_from_constant_table(const QString& key)
+QString
+XcsvFormat::xcsv_get_char_from_constant_table(const QString& key)
 {
   static QHash<QString, QString> substitutions;
   if (substitutions.empty()) {
-    for (char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
+    for (const char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
       substitutions.insert(cm->key, cm->chars);
     }
   }
@@ -294,14 +213,14 @@ xcsv_get_char_from_constant_table(const QString& key)
 
 // Remove outer quotes.
 // Should probably be in csv_util.
-static QString dequote(const QString& in) {
+QString XcsvFormat::dequote(const QString& in) {
   QString r = in.simplified();
   if (r.startsWith("\"")) r = r.mid(1);
   if (r.endsWith("\"")) r.chop(1);
   return r;
 }
 
-static void validate_fieldmap(const field_map& fmp, bool is_output) {
+void XcsvFormat::validate_fieldmap(const field_map& fmp, bool is_output) {
   if (fmp.key.isEmpty()) {
     Fatal() << MYNAME << ": xcsv style is missing" <<
             (is_output ? "output" : "input") << "field type.";
@@ -318,8 +237,8 @@ static void validate_fieldmap(const field_map& fmp, bool is_output) {
 /* xcsv_ifield_add() - add input field to ifield queue.                      */
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
 /*****************************************************************************/
-static void
-xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
+void
+XcsvFormat::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -337,8 +256,8 @@ xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, cons
 /* xcsv_ofield_add() - add output field to ofield queue.                     */
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
-static void
-xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
+void
+XcsvFormat::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned options)
 {
   QByteArray key = qkey.toUtf8();
   QByteArray val = qval.toUtf8();
@@ -352,8 +271,8 @@ xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, cons
   style->ofields.append(fmp);
 }
 
-static QDateTime
-yyyymmdd_to_time(const char* s)
+QDateTime
+XcsvFormat::yyyymmdd_to_time(const char* s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
   return QDateTime(d);
@@ -363,8 +282,8 @@ yyyymmdd_to_time(const char* s)
 /*
  * sscanftime - Parse a date buffer using strftime format
  */
-static time_t
-sscanftime(const char* s, const char* format, const int gmt)
+time_t
+XcsvFormat::sscanftime(const char* s, const char* format, const int gmt)
 {
   struct tm stm;
   memset(&stm, 0, sizeof(stm));
@@ -390,8 +309,8 @@ sscanftime(const char* s, const char* format, const int gmt)
   return 0;
 }
 
-static time_t
-addhms(const char* s, const char* format)
+time_t
+XcsvFormat::addhms(const char* s, const char* format)
 {
   time_t tt = 0;
   int hour = 0;
@@ -412,8 +331,8 @@ addhms(const char* s, const char* format)
   return tt;
 }
 
-static QString
-writetime(const char* format, time_t t, bool gmt)
+QString
+XcsvFormat::writetime(const char* format, time_t t, bool gmt)
 {
   static struct tm* stmp;
 
@@ -432,14 +351,14 @@ writetime(const char* format, time_t t, bool gmt)
   return QString(tbuff);
 }
 
-static QString
-writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
+QString
+XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
 {
   return writetime(format, t.toTime_t(), gmt);
 }
 
-static QString
-writehms(const char* format, time_t t, int gmt)
+QString
+XcsvFormat::writehms(const char* format, time_t t, int gmt)
 {
   static struct tm no_time = tm();
   static struct tm* stmp = &no_time;
@@ -459,21 +378,21 @@ writehms(const char* format, time_t t, int gmt)
                             (stmp->tm_hour >= 12 ? "PM" : "AM"));
 }
 
-static QString
-writehms(const char* format, const gpsbabel::DateTime& t, int gmt)
+QString
+XcsvFormat::writehms(const char* format, const gpsbabel::DateTime& t, int gmt)
 {
   return writehms(format, t.toTime_t(), gmt);
 }
 
-static long
-time_to_yyyymmdd(const QDateTime& t)
+long
+XcsvFormat::time_to_yyyymmdd(const QDateTime& t)
 {
   QDate d = t.date();
   return d.year() * 10000 + d.month() * 100 + d.day();
 }
 
-static garmin_fs_t*
-gmsd_init(Waypoint* wpt)
+garmin_fs_t*
+XcsvFormat::gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
@@ -487,8 +406,8 @@ gmsd_init(Waypoint* wpt)
 /* xcsv_parse_val() - parse incoming data into the waypt structure.          */
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
-static void 
-xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
+void 
+XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
                xcsv_parse_data* parse_data, const int line_no)
 {
   const char* enclosure = "";
@@ -913,11 +832,11 @@ xcsv_parse_val(const QString& value, Waypoint* wpt, const field_map& fmp,
 }
 
 /*****************************************************************************/
-/* xcsv_data_read() - read input file, parsing lines, fields and handling    */
+/* read() - read input file, parsing lines, fields and handling              */
 /*                   any data conversion (the input meat)                    */
 /*****************************************************************************/
-static void
-xcsv_data_read()
+void
+XcsvFormat::read()
 {
   int linecount = 0;
   route_head* rte = nullptr;
@@ -953,7 +872,7 @@ xcsv_data_read()
        }
     }
     if (!buff.isEmpty()) {
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
       // initialize parse data for accumulation of line results from all fields in this line.
       xcsv_parse_data parse_data;
       const QStringList values = csv_linesplit(buff, xcsv_style->field_delimiter,
@@ -1037,8 +956,8 @@ xcsv_data_read()
   }
 }
 
-static void
-xcsv_resetpathlen(const route_head* head)
+void
+XcsvFormat::xcsv_resetpathlen(const route_head* head)
 {
   pathdist = 0;
   oldlat = 999;
@@ -1060,8 +979,8 @@ xcsv_resetpathlen(const route_head* head)
 /* xcsv_waypt_pr() - write output file, handling output conversions          */
 /*                  (the output meat)                                        */
 /*****************************************************************************/
-static void
-xcsv_waypt_pr(const Waypoint* wpt)
+void
+XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
   double latitude, longitude;
@@ -1673,8 +1592,8 @@ xcsv_waypt_pr(const Waypoint* wpt)
 }
 
 // return |original| after performing token replacement.
-static QString
-xcsv_replace_tokens(const QString& original) {
+QString
+XcsvFormat::xcsv_replace_tokens(const QString& original) const {
   QString replacement = original;
     // Don't do potentially expensive replacements if token prefix
     // isn't present;
@@ -1697,11 +1616,11 @@ xcsv_replace_tokens(const QString& original) {
 }
 
 /*****************************************************************************/
-/* xcsv_data_write(void) - write prologues, spawn the output loop, and write */
+/* write(void) - write prologues, spawn the output loop, and write           */
 /*                         epilogues.                                        */
 /*****************************************************************************/
-static void
-xcsv_data_write()
+void
+XcsvFormat::write()
 {
   /* reset the index counter */
   waypt_out_count = 0;
@@ -1712,14 +1631,21 @@ xcsv_data_write()
     xcsv_file->stream << line_to_write <<  xcsv_style->record_delimiter;
   }
 
+  auto xcsv_waypt_pr_lambda = [this](const Waypoint* wpt)->void {
+    xcsv_waypt_pr(wpt);
+  };
+  auto xcsv_resetpathlen_lambda = [this](const route_head* rte)->void {
+    xcsv_resetpathlen(rte);
+  };
+
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
-    waypt_disp_all(xcsv_waypt_pr);
+    waypt_disp_all(xcsv_waypt_pr_lambda);
   }
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == rtedata)) {
-    route_disp_all(xcsv_resetpathlen, nullptr, xcsv_waypt_pr);
+    route_disp_all(xcsv_resetpathlen_lambda, nullptr, xcsv_waypt_pr_lambda);
   }
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == trkdata)) {
-    track_disp_all(xcsv_resetpathlen, nullptr, xcsv_waypt_pr);
+    track_disp_all(xcsv_resetpathlen_lambda, nullptr, xcsv_waypt_pr_lambda);
   }
 
   /* output epilogue lines, if any. */
@@ -1729,8 +1655,8 @@ xcsv_data_write()
   }
 }
 
-static void
-xcsv_parse_style_line(XcsvStyle* style, QString line)
+void
+XcsvFormat::xcsv_parse_style_line(XcsvStyle* style, QString line)
 {
   // The lines to be parsed have a leading operation |op| that is
   // separated by whitespace from the rest. Each op may have zero or
@@ -1906,8 +1832,8 @@ xcsv_parse_style_line(XcsvStyle* style, QString line)
  * a terminating null.   Makes multiple calls to that function so
  * that "ignore to end of line" comments work right.
  */
-static XcsvStyle
-xcsv_parse_style_buff(const char* sbuff)
+XcsvFormat::XcsvStyle
+XcsvFormat::xcsv_parse_style_buff(const char* sbuff)
 {
   XcsvStyle style;
   const QStringList lines = QString(sbuff).split('\n');
@@ -1917,8 +1843,8 @@ xcsv_parse_style_buff(const char* sbuff)
   return style;
 }
 
-static XcsvStyle
-xcsv_read_style(const char* fname)
+XcsvFormat::XcsvStyle
+XcsvFormat::xcsv_read_style(const char* fname)
 {
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
   XcsvStyle style;
@@ -1941,8 +1867,8 @@ xcsv_read_style(const char* fname)
  * to the series of bytes that would be in a style file, we set up
  * the xcsv parser and make it ready for general use.
  */
-XcsvStyle
-xcsv_read_internal_style(const char* style_buf)
+XcsvFormat::XcsvStyle
+XcsvFormat::xcsv_read_internal_style(const char* style_buf)
 {
   XcsvStyle style = xcsv_parse_style_buff(style_buf);
 
@@ -1955,13 +1881,13 @@ xcsv_read_internal_style(const char* style_buf)
 }
 
 void
-xcsv_setup_internal_style(const char* style_buf)
+XcsvFormat::xcsv_setup_internal_style(const char* style_buf)
 {
   intstylebuf = style_buf;
 }
 
-static void
-xcsv_rd_init(const QString& fname)
+void
+XcsvFormat::rd_init(const QString& fname)
 {
   /*
    * if we don't have an internal style defined, we need to
@@ -2004,8 +1930,8 @@ xcsv_rd_init(const QString& fname)
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
-static void
-xcsv_rd_deinit()
+void
+XcsvFormat::rd_deinit()
 {
   xcsv_file->stream.close();
   delete xcsv_file;
@@ -2015,8 +1941,8 @@ xcsv_rd_deinit()
   xcsv_style = nullptr;
 }
 
-static void
-xcsv_wr_init(const QString& fname)
+void
+XcsvFormat::wr_init(const QString& fname)
 {
   /*
    * if we don't have an internal style defined, we need to
@@ -2083,14 +2009,14 @@ xcsv_wr_init(const QString& fname)
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
-static void
-xcsv_wr_position_init(const QString& fname)
+void
+XcsvFormat::wr_position_init(const QString& fname)
 {
-  xcsv_wr_init(fname);
+  wr_init(fname);
 }
 
-static void
-xcsv_wr_deinit()
+void
+XcsvFormat::wr_deinit()
 {
   xcsv_file->stream.close();
   delete xcsv_file;
@@ -2100,14 +2026,14 @@ xcsv_wr_deinit()
   xcsv_style = nullptr;
 }
 
-static void
-xcsv_wr_position_deinit()
+void
+XcsvFormat::wr_position_deinit()
 {
-  xcsv_wr_deinit();
+  wr_deinit();
 }
 
-static void
-xcsv_wr_position(Waypoint* wpt)
+void
+XcsvFormat::wr_position(Waypoint* wpt)
 {
   /* Tweak incoming name if we don't have a fix */
   switch (wpt->fix) {
@@ -2119,26 +2045,9 @@ xcsv_wr_position(Waypoint* wpt)
   }
 
   waypt_add(wpt);
-  xcsv_data_write();
+  write();
   waypt_del(wpt);
 
   xcsv_file->stream.flush();
 }
-
-ff_vecs_t xcsv_vecs = {
-  ff_type_internal,
-  FF_CAP_RW_WPT, /* This is a bit of a lie for now... */
-  xcsv_rd_init,
-  xcsv_wr_init,
-  xcsv_rd_deinit,
-  xcsv_wr_deinit,
-  xcsv_data_read,
-  xcsv_data_write,
-  nullptr,
-  &xcsv_args,
-  CET_CHARSET_UTF8, 0,	/* conversion to utf8 for gmsd is handled by the stream, don't let csv_convert_strings convert gmsd data */
-  { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
-  nullptr
-
-};
 #endif //CSVFMTS_ENABLED
