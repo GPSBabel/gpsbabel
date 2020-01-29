@@ -397,7 +397,7 @@ decode_waypoint_id(const unsigned char* buffer)
 static Waypoint*
 decode_waypoint(const unsigned char* buffer)
 {
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   decode_position(buffer + 12, waypt);
   char* s = xstrdup((char*)buffer + 4);
@@ -429,7 +429,7 @@ encode_waypoint(const Waypoint* waypt, unsigned char* buffer)
 static Waypoint*
 decode_trackpoint(const unsigned char* buffer)
 {
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   decode_position(buffer + 12, waypt);
   waypt->SetCreationTime(decode_datetime(buffer + 22));
@@ -813,7 +813,7 @@ decode_sbp_position(const unsigned char* buffer, Waypoint* waypt)
 Waypoint*
 navilink_decode_logpoint(const unsigned char* buffer)
 {
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   waypt->hdop = (buffer[0]) * 0.2f;
   waypt->sat = buffer[1];

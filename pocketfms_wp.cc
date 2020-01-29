@@ -65,7 +65,7 @@ data_read()
       break;
     }
     linecount++;
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     char* s = buff;
     s = csv_lineparse(s, "\\w", "", linecount);
     if (!s) {

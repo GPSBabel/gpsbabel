@@ -270,7 +270,7 @@ process_gpsfile(uint8_t data[], route_head** track)
       track_add_head(*track);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     float latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;

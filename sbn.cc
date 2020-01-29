@@ -235,7 +235,7 @@ decode_sbn_position(const unsigned char* buffer, Waypoint* waypt)
 static Waypoint*
 decode_sbn_record(unsigned char* buffer)
 {
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   if (is_sbn_valid(buffer)) {
     waypt->fix = decode_sbn_mode(buffer + 3);

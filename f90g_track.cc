@@ -118,7 +118,7 @@ f90g_track_read()
         && velocityMark == 'M') {
 
       // create the Waypoint and fill it in
-      Waypoint* readWaypoint = new Waypoint;
+      auto* readWaypoint = new Waypoint;
       QDateTime dt = QDateTime(QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC);
 
       readWaypoint->SetCreationTime(dt);

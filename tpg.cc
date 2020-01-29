@@ -113,7 +113,7 @@ tpg_read()
 
 
   while (pointcount--) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     /* pascal-like shortname */
     wpt_tmp->shortname = gbfgetpstr(tpg_file_in);

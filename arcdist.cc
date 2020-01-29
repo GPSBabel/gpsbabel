@@ -114,8 +114,8 @@ void ArcDistanceFilter::process()
 
     gbfile* file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-    Waypoint* arcpt1 = new Waypoint;
-    Waypoint* arcpt2 = new Waypoint;
+    auto* arcpt1 = new Waypoint;
+    auto* arcpt2 = new Waypoint;
     arcdist_arc_disp_hdr_cb(nullptr);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;

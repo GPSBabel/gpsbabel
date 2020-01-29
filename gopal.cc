@@ -200,7 +200,7 @@ gopal_read()
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...

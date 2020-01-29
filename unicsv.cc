@@ -624,7 +624,7 @@ unicsv_parse_one_line(const QString& ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = nullptr;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));

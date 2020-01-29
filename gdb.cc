@@ -690,7 +690,7 @@ read_route()
   for (int i = 0; i < points; i++) {
     char buf[128];
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     rtept_ct++;
 
     wpt->shortname = fread_cstr();	/* shortname */
@@ -875,7 +875,7 @@ read_track()
   int points = FREAD_i32;
 
   for (int index = 0; index < points; index++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     trkpt_ct++;
 
@@ -989,7 +989,7 @@ read_data()
       wpt = read_waypoint(&wpt_class);
       if ((gdb_via == 0) || (wpt_class == 0)) {
         waypt_add(wpt);
-        Waypoint* dupe = new Waypoint(*wpt);
+        auto* dupe = new Waypoint(*wpt);
         wayptq_in.append(dupe);
       } else {
         wayptq_in_hidden.append(wpt);
@@ -1553,7 +1553,7 @@ write_waypoint_cb(const Waypoint* refpt)
 
   if (test == nullptr) {
     int display;
-    Waypoint* wpt = new Waypoint(*refpt);
+    auto* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
     wayptq_out.append(wpt);

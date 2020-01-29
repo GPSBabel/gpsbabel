@@ -303,7 +303,7 @@ encode_itracku_time(time_t time)
 static Waypoint*
 to_waypoint(itracku_data_record* d)
 {
-  Waypoint* wp = new Waypoint;
+  auto* wp = new Waypoint;
   wp->longitude = deg_min_to_deg(le_read32(d->longitude));
   wp->latitude = deg_min_to_deg(le_read32(d->latitude));
   wp->SetCreationTime(decode_itracku_time(le_read32(d->creation_time)));
@@ -710,7 +710,7 @@ gprmc_parse(char* ibuf)
   dmy = dmy / 100;
   tm.tm_mday = dmy;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 

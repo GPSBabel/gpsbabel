@@ -953,7 +953,7 @@ xcsv_data_read()
        }
     }
     if (!buff.isEmpty()) {
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
       // initialize parse data for accumulation of line results from all fields in this line.
       xcsv_parse_data parse_data;
       const QStringList values = csv_linesplit(buff, xcsv_style->field_delimiter,

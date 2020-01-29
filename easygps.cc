@@ -78,7 +78,7 @@ data_read()
   int p;
   char ibuf[10];
   do {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
     UrlLink link;
 
     for (int tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {

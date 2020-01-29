@@ -368,7 +368,7 @@ data_read()
 
   for (int n = 0; n < nof_wp; ++n) {
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     /* Read waypoint data */
 

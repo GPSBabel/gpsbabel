@@ -171,7 +171,7 @@ static void igo8_read()
   while (in_point_count &&
          gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
     in_point_count--;
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
     wpt_tmp->longitude = le_read32(&point.lon) / (double)0x800000;

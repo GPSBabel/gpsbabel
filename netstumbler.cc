@@ -219,7 +219,7 @@ data_read()
       continue;
     }
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     if (stealth) {
       if (!snmac) {

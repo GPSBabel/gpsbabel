@@ -647,7 +647,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   DBG((sobj, "track has %d point(s)\n", tp));
 
   for (int ctp = 0; ctp < tp; ctp++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);

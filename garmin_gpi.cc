@@ -918,7 +918,7 @@ wdata_compute_size(writer_data_t* data)
       res += 10;  /* tag(4) */
     }
 
-    gpi_waypt_t* dt = new gpi_waypt_t;
+    auto* dt = new gpi_waypt_t;
     wpt->extra_data = dt;
 
     if (alerts) {
@@ -1261,7 +1261,7 @@ enum_waypt_cb(const Waypoint* ref)
     }
   }
 
-  Waypoint* wpt = new Waypoint(*ref);
+  auto* wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
     wpt->shortname = mkshort(short_h, wpt->shortname);

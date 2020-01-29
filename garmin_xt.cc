@@ -372,7 +372,7 @@ format_garmin_xt_proc_atrk()
     double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

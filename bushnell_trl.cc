@@ -102,7 +102,7 @@ bushnell_read()
       break;
     }
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
     wpt_tmp->latitude  = lat_tmp / 10000000.0;
     wpt_tmp->longitude = lon_tmp / 10000000.0;
 

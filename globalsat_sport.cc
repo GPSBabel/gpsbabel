@@ -751,7 +751,7 @@ track_read()
                 printf(" PwrCadense:%d Power:%d\n", point.PwrCadence,point.Power);
               }
 
-              Waypoint* wpt = new Waypoint(); // waypt_new();
+              auto* wpt = new Waypoint(); // waypt_new();
               //wpt->creation_time = mkgmtime(&gpstime);
               wpt->SetCreationTime(gpsbabeltime);
               wpt->longitude = ((int32_t) point.Longitude) / 1000000.0;

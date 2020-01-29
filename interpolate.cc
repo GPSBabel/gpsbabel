@@ -75,7 +75,7 @@ void InterpolateFilter::process()
           for (unsigned int timen = time1+interval;
                timen < wpt->creation_time.toTime_t();
                timen += interval) {
-            Waypoint* wpt_new = new Waypoint(*wpt);
+            auto* wpt_new = new Waypoint(*wpt);
             wpt_new->SetCreationTime(timen);
             wpt_new->shortname = QString();
             wpt_new->description = QString();
@@ -106,7 +106,7 @@ void InterpolateFilter::process()
             for (double distn = dist;
                  distn < curdist;
                  distn += dist) {
-              Waypoint* wpt_new = new Waypoint(*wpt);
+              auto* wpt_new = new Waypoint(*wpt);
               frac = distn / curdist;
               wpt_new->SetCreationTime(frac * (wpt->creation_time.toTime_t() - time1) + time1);
               wpt_new->shortname = QString();

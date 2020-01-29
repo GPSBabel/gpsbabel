@@ -88,7 +88,7 @@ vitovtt_read()
     int course = gbfgetint16(infile);
     int status = gbfgetint32(infile);
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude= scaled_lat / vitovtt_latitudescale;
     wpt_tmp->longitude= scaled_lon / vitovtt_longitudescale;

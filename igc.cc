@@ -215,7 +215,7 @@ static void igc_task_rec(const char* rec)
     fatal(MYNAME ": task waypoint (C) record parse error\n%s", rec);
   }
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = ('N' == lat_hemi[0] ? 1 : -1) *
                   (lat_deg + (lat_min * 1000 + lat_frac) / 1000.0 / 60);
 

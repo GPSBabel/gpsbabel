@@ -48,7 +48,7 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
     return;
   }
 
-  xml_tag* res = new xml_tag;
+  auto* res = new xml_tag;
   *copy = res;
 
   res->tagname = (src->tagname);
@@ -78,7 +78,7 @@ fs_xml_copy(void** copy, void* source)
     *copy = nullptr;
     return;
   }
-  fs_xml* res = new fs_xml;
+  auto* res = new fs_xml;
   *copy = res;
 
   res->fs = src->fs;
@@ -87,7 +87,7 @@ fs_xml_copy(void** copy, void* source)
 
 fs_xml* fs_xml_alloc(long type)
 {
-  fs_xml* result = new fs_xml;
+  auto* result = new fs_xml;
   result->fs.type = type;
   result->fs.copy = fs_xml_copy;
   result->fs.destroy = fs_xml_destroy;

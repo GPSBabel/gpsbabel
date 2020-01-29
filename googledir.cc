@@ -117,7 +117,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
     lon += decode_goog64(qbstr, qbpos);
 
     {
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
       route_add_wpt(routehead, wpt_tmp);

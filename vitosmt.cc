@@ -126,7 +126,7 @@ vitosmt_read()
     unsigned char gpsvalid = gbfgetc(infile); /* fix is valid */
     unsigned char gpssats = gbfgetc(infile); /* number of sats */
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude =DEG(latrad);
     wpt_tmp->longitude =DEG(lonrad);

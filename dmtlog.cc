@@ -449,7 +449,7 @@ read_CTrackFile(const int version)
       datum = read_datum(fin);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -496,7 +496,7 @@ read_CTrackFile(const int version)
       gbfungetc(i, fin);
       datum = read_datum(fin);
 
-      Waypoint* wpt = new Waypoint;
+      auto* wpt = new Waypoint;
 
       wpt->latitude = gbfgetdbl(fin);
       wpt->longitude = gbfgetdbl(fin);
@@ -523,7 +523,7 @@ read_CTrackFile(const int version)
   while (wcount > 0) {
     wcount--;
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);

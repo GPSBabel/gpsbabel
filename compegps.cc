@@ -155,7 +155,7 @@ parse_wpt(char* buff)
 {
   int col = -1;
   char* cx;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   struct tm tm;
   int has_time = 0;
   memset(&tm, 0, sizeof(tm));
@@ -272,7 +272,7 @@ parse_trkpt(char* buff)
 {
   int col = -1;
   struct tm tm;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   char* c = strstr(buff, "A ");
   if (c == buff) {

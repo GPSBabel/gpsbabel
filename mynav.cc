@@ -83,7 +83,7 @@ MyNavFormat::read_line(const QString& line, route_head* track)
     return;
   }
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = val_lat;
   wpt->longitude = val_lon;
 
