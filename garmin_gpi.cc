@@ -801,7 +801,7 @@ wdata_free(writer_data_t* data)
   foreach (Waypoint* wpt, data->waypt_list) {
 
     if (wpt->extra_data) {
-      gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
+      auto* dt = (gpi_waypt_t*) wpt->extra_data;
       delete dt;
     }
     delete wpt;
@@ -1066,7 +1066,7 @@ wdata_write(const writer_data_t* data)
 
   foreach (const Waypoint* wpt, data->waypt_list) {
     int s1;
-    gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
+    auto* dt = (gpi_waypt_t*) wpt->extra_data;
 
     QString str = wpt->description;
     if (str.isEmpty()) {

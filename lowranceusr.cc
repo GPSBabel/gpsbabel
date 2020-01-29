@@ -413,7 +413,7 @@ static
 lowranceusr4_fsdata*
 lowranceusr4_alloc_fsdata()
 {
-  lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  auto* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_LOWRANCEUSR4;
   fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;
@@ -1791,7 +1791,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
-  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -1979,7 +1979,7 @@ lowranceusr_trail_hdr(const route_head* trk)
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
 
-  short num_trail_points = (short) trk->rte_waypt_ct;
+  auto num_trail_points = (short) trk->rte_waypt_ct;
   short max_trail_size = MAX_TRAIL_POINTS;
   if (num_trail_points > max_trail_size) {
     num_trail_points = max_trail_size;
@@ -2022,7 +2022,7 @@ lowranceusr_route_hdr(const route_head* rte)
   gbfputs(name, file_out);
 
   /* num legs */
-  short num_legs = (short) rte->rte_waypt_ct;
+  auto num_legs = (short) rte->rte_waypt_ct;
   gbfputint16(num_legs, file_out);
   char route_reversed=0;
   gbfwrite(&route_reversed, 1, 1, file_out);
@@ -2040,7 +2040,7 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
-  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2071,7 +2071,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table_ct; i++) {
     const Waypoint* cmp = waypt_table[i];
     if (cmp->shortname == wpt->shortname) {
-      lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+      auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
 
       if (opt_serialnum_i > 0) {
         gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified

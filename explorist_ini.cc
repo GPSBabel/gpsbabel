@@ -25,7 +25,7 @@ explorist_ini_try(const char* path)
     return nullptr;
   }
 
-  mag_info* info = (mag_info*) xmalloc(sizeof(mag_info));
+  auto* info = (mag_info*) xmalloc(sizeof(mag_info));
   info->geo_path = nullptr;
   info->track_path = nullptr;
   info->waypoint_path = nullptr;

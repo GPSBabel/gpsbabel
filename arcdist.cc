@@ -154,7 +154,7 @@ void ArcDistanceFilter::process()
 
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
-    extra_data* ed = (extra_data*) wp->extra_data;
+    auto* ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
     if (ed) {
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {

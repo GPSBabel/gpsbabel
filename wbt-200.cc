@@ -208,7 +208,7 @@ static void buf_extend(struct buf_head* h, size_t amt)
 {
   size_t sz = amt + sizeof(struct buf_chunk);
 
-  struct buf_chunk* c = (struct buf_chunk*) xmalloc(sz);
+  auto* c = (struct buf_chunk*) xmalloc(sz);
   c->next = nullptr;
   c->size = amt;
   c->used = 0;
@@ -224,7 +224,7 @@ static void buf_extend(struct buf_head* h, size_t amt)
 
 static void buf_update_checksum(struct buf_head* h, const void* data, size_t len)
 {
-  unsigned char* cp = (unsigned char*) data;
+  auto* cp = (unsigned char*) data;
 
   db(4, "Updating checksum with %p, %lu, before: %02x ",
      data, (unsigned long) len, h->checksum);
@@ -809,7 +809,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
 
   double lat = (double)((int32_t) le_read32(bp +  6)) / 10000000;
   double lon = (double)((int32_t) le_read32(bp + 10)) / 10000000;
-  double alt = (double)((int16_t) le_read16(bp + 14));
+  auto alt = (double)((int16_t) le_read16(bp + 14));
 
   time_t rtim = decode_date(tim);
 

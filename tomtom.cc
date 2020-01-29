@@ -260,8 +260,8 @@ static
 int
 compare_lat(const void* a, const void* b)
 {
-  const struct hdr* wa = (const struct hdr*) a;
-  const struct hdr* wb = (const struct hdr*) b;
+  const auto* wa = (const struct hdr*) a;
+  const auto* wb = (const struct hdr*) b;
 
   double difference = wa->wpt->latitude - wb->wpt->latitude;
   if (difference < 0) {
@@ -280,8 +280,8 @@ static
 int
 compare_lon(const void* a, const void* b)
 {
-  const struct hdr* wa = (const struct hdr*)a;
-  const struct hdr* wb = (const struct hdr*)b;
+  const auto* wa = (const struct hdr*)a;
+  const auto* wb = (const struct hdr*)b;
 
   double difference = wa->wpt->longitude - wb->wpt->longitude;
   if (difference < 0) {
@@ -365,7 +365,7 @@ static struct blockheader*
 compute_blocks(struct hdr* start, int count,
                double minlon, double maxlon, double minlat, double maxlat)
 {
-  struct blockheader* newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
+  auto* newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
   newblock->start = start;
   newblock->count = count;
   newblock->minlon = minlon;

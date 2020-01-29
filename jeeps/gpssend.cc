@@ -89,7 +89,7 @@ Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
 void
 Diag(void* buf, size_t sz)
 {
-  unsigned char* cbuf = (unsigned char*) buf;
+  auto* cbuf = (unsigned char*) buf;
   while (sz--) {
     GPS_Diag("%02x ", *cbuf++);
   }
@@ -98,7 +98,7 @@ Diag(void* buf, size_t sz)
 void
 DiagS(void* buf, size_t sz)
 {
-  unsigned char* cbuf = (unsigned char*) buf;
+  auto* cbuf = (unsigned char*) buf;
 
   while (sz--) {
     unsigned char c = *cbuf++;

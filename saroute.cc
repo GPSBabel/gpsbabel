@@ -66,7 +66,7 @@ QVector<arglist_t> saroute_args = {
 static unsigned char*
 ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char* result = (unsigned char*) xmalloc(size);
+  auto* result = (unsigned char*) xmalloc(size);
 
   (void)gbfread(result, size, 1, f);
   return result;

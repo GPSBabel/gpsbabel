@@ -222,7 +222,7 @@ tpg_waypt_pr(const Waypoint* wpt)
   lon *= -1.0;
 
   /* convert meters back to feets */
-  short int elev = (short int) METERS_TO_FEET(wpt->altitude);
+  auto elev = (short int) METERS_TO_FEET(wpt->altitude);
 
   /* 1 bytes stringsize for shortname */
   char c = shortname.length();

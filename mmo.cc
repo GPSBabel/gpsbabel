@@ -250,7 +250,7 @@ mmo_printbuf(const char* buf, int count, const char* comment)
 static mmo_data_t*
 mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 {
-  mmo_data_t* data = (mmo_data_t*) xcalloc(1, sizeof(*data));
+  auto* data = (mmo_data_t*) xcalloc(1, sizeof(*data));
   data->data = const_cast<void*>(ptr);
   data->visible = 1;
   data->locked = 0;
@@ -334,7 +334,7 @@ mmo_end_of_route(mmo_data_t* data)
 #ifdef MMO_DBG
   const char* sobj = "CObjRoute";
 #endif
-  route_head* rte = (route_head*) data->data;
+  auto* rte = (route_head*) data->data;
   char buf[7];
 
   if (mmo_version >= 0x12) {
@@ -906,7 +906,7 @@ mmo_read_object()
 static void
 mmo_finalize_rtept_cb(const Waypoint* wptref)
 {
-  Waypoint* wpt = const_cast<Waypoint*>(wptref);
+  auto* wpt = const_cast<Waypoint*>(wptref);
 
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;

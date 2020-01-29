@@ -243,7 +243,7 @@ dump_packet(char* prefix, unsigned char* packet, unsigned length)
 static void
 write_packet(unsigned type, const void* payload, unsigned length)
 {
-  unsigned char* packet = (unsigned char*) xmalloc(length + 9);
+  auto* packet = (unsigned char*) xmalloc(length + 9);
 
   packet[0] = 0xa0;
   packet[1] = 0xa2;
@@ -302,7 +302,7 @@ read_packet(unsigned type, void* payload,
     fatal(MYNAME ": Protocol error: Packet too short\n");
   }
 
-  unsigned char* data = (unsigned char*) xmalloc(size);
+  auto* data = (unsigned char*) xmalloc(size);
 
   if (gbser_read_wait(serial_handle, data, size, SERIAL_TIMEOUT) != size) {
     fatal(MYNAME ": Read error reading %d byte payload\n", size);
@@ -492,7 +492,7 @@ serial_read_waypoints()
 
     write_packet(PID_QRY_WAYPOINTS, payload, sizeof(payload));
 
-    unsigned char*  waypoints = (unsigned char*) xmalloc(count * 32);
+    auto*  waypoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, waypoints, count * 32, count * 32, false);
 
@@ -562,7 +562,7 @@ serial_read_track()
 
     write_packet(PID_READ_TRACKPOINTS, payload, sizeof(payload));
 
-    unsigned char*  trackpoints = (unsigned char*) xmalloc(count * 32);
+    auto*  trackpoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, trackpoints, count * 32, count * 32, false);
     write_packet(PID_ACK, nullptr, 0);
@@ -721,7 +721,7 @@ serial_write_route_end(const route_head* route)
   }
 
   unsigned src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;
-  unsigned char* data = (unsigned char*) xmalloc(32 + src * 32);
+  auto* data = (unsigned char*) xmalloc(32 + src * 32);
 
   le_write16(data + 0, 0x2000);
   data[2] = 0;

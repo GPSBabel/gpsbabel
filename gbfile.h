@@ -88,7 +88,10 @@ struct gbfile {
 
 gbfile* gbfopen(const QString& filename, const char* mode, const char* module);
 gbfile* gbfopen_be(const QString& filename, const char* mode, const char* module);
-#define gbfopen_le gbfopen
+inline gbfile* gbfopen_le(const QString& filename, const char* mode, const char* module)
+{
+  return gbfopen(filename, mode, module);
+}
 void gbfclose(gbfile* file);
 
 gbsize_t gbfread(void* buf, gbsize_t size, gbsize_t members, gbfile* file);
@@ -114,9 +117,15 @@ int gbfeof(gbfile* file);
 int gbfungetc(int c, gbfile* file);
 
 int32_t gbfgetint32(gbfile* file);
-#define gbfgetuint32 (uint32_t)gbfgetint32
+inline uint32_t gbfgetuint32(gbfile* file)
+{
+  return gbfgetint32(file);
+}
 int16_t gbfgetint16(gbfile* file);
-#define gbfgetuint16 (uint16_t)gbfgetint16
+inline uint16_t gbfgetuint16(gbfile* file)
+{
+  return gbfgetint16(file);
+}
 double gbfgetdbl(gbfile* file);			// read a double value
 float gbfgetflt(gbfile* file);			// read a float value
 char* gbfgetstr(gbfile* file);			// read until any type of line-breaks or EOF
@@ -126,9 +135,15 @@ QByteArray gbfgetnativecstr(gbfile* file);  // read a null terminated string
 char* gbfgetcstr_old(gbfile* file);		// read a null terminated string
 
 int gbfputint16(int16_t i, gbfile* file);
-#define gbfputuint16(a,b) gbfputint16((uint16_t)(a),(b))
+inline int gbfputuint16(uint16_t i, gbfile* file)
+{
+  return gbfputint16(i, file);
+}
 int gbfputint32(int32_t i, gbfile* file);
-#define gbfputuint32(a,b) gbfputint32((uint32_t)(a),(b))
+inline int gbfputuint32(uint32_t i, gbfile* file)
+{
+  return gbfputint32(i, file);
+}
 
 int gbfputdbl(double d, gbfile* file);	// write a double value
 int gbfputflt(float f, gbfile* file);	// write a float value

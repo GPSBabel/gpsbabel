@@ -335,7 +335,7 @@ globalsat_read_package(int* out_length, uint8_t* out_DeviceCommand)
     printf("len=%d Payload:", length);
   }
 
-  uint8_t* payload = (uint8_t*) malloc(length);
+  auto* payload = (uint8_t*) malloc(length);
   if (payload == nullptr) {
     goto error_out;
   }

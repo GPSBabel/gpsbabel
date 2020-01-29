@@ -44,8 +44,8 @@ int RadiusFilter::dist_comp(const void* a, const void* b)
 {
   const Waypoint* x1 = *(Waypoint**)a;
   const Waypoint* x2 = *(Waypoint**)b;
-  extra_data* x1e = (extra_data*) x1->extra_data;
-  extra_data* x2e = (extra_data*) x2->extra_data;
+  auto* x1e = (extra_data*) x1->extra_data;
+  auto* x2e = (extra_data*) x2->extra_data;
 
   if (x1e->distance > x2e->distance) {
     return 1;
@@ -77,7 +77,7 @@ void RadiusFilter::process()
       continue;
     }
 
-    extra_data* ed = (extra_data*) xcalloc(1, sizeof(*ed));
+    auto* ed = (extra_data*) xcalloc(1, sizeof(*ed));
     ed->distance = dist;
     waypointp->extra_data = ed;
   }
