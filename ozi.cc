@@ -787,7 +787,7 @@ data_read()
     if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       /* data delimited by commas. */
       const QStringList parts = buff.split(',');

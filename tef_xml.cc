@@ -205,7 +205,7 @@ waypoint_final()
 
   if (route != nullptr) {
     if ((via != 0) || (routevia == nullptr)) {
-      Waypoint* wpt = new Waypoint(*wpt_tmp);
+      auto* wpt = new Waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }

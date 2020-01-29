@@ -108,7 +108,7 @@ data_read()
   route_add_head(route);
 
   while (1 == gbfread(&ewpt, sizeof(ewpt), 1, file_in)) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
     wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
     char*sn = xstrndup(ewpt.shortname, ewpt.shortname_len);

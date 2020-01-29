@@ -85,7 +85,7 @@ nmn4_read_data()
     /* for a quiet compiler */
     QString zip1 = zip2 = city = street = number = QString();
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int column = -1;
     QString c = csv_lineparse(str, "|", "", column++);

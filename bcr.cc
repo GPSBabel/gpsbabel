@@ -271,7 +271,7 @@ bcr_data_read()
       fatal(MYNAME ": structure error at %s (Coordinates)!\n", station);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);

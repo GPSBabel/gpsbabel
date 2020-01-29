@@ -279,7 +279,7 @@ humminbird_read_wpt(gbfile* fin)
 
   /* All right! Copy the data to the gpsbabel struct... */
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   // Could probably find a way to eliminate the alloc/copy.
   char* s = xstrndup(w.name, sizeof(w.name));
@@ -422,7 +422,7 @@ humminbird_read_track(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  Waypoint* first_wpt = new Waypoint;
+  auto* first_wpt = new Waypoint;
   double g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -431,7 +431,7 @@ humminbird_read_track(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (int i = 0 ; i<th.num_points-1 ; i++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     points[i].depth      = be_read16(&points[i].depth);
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
@@ -532,7 +532,7 @@ humminbird_read_track_old(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  Waypoint* first_wpt = new Waypoint;
+  auto* first_wpt = new Waypoint;
   double g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -540,7 +540,7 @@ humminbird_read_track_old(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (int i = 0 ; i<th.num_points-1 ; i++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
     points[i].deltanorth = be_read16(&points[i].deltanorth);

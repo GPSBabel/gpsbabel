@@ -1089,7 +1089,7 @@ parse_waypoint()
 
   bind_fields(waypt_header);
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -1262,7 +1262,7 @@ parse_track_waypoint()
   int column = -1;
 
   bind_fields(trkpt_header);
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     double x;

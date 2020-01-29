@@ -206,7 +206,7 @@ jtr_read()
       continue;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;

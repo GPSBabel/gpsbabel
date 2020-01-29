@@ -1115,7 +1115,7 @@ lowranceusr_parse_waypts()
   }
 
   for (int i = 0; i < NumWaypoints && !gbfeof(file_in); i++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     switch (reading_version) {
     case 2:
@@ -1163,7 +1163,7 @@ lowranceusr_parse_route()
 
   /* waypoints */
   for (int j = 0; j < num_legs; j++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
     if (global_opts.debug_level == 99) {
       printf(MYNAME " parse_route:");
     }
@@ -1326,7 +1326,7 @@ lowranceusr_parse_icons()
     int    icon_number = gbfgetint32(file_in);
 
     if (opt_ignoreicons == nullptr) {          /* Option not specified if NULL */
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       /* position coord lat & long */
       wpt_tmp->latitude = latitude;
@@ -1394,7 +1394,7 @@ lowranceusr_parse_trail(int* trail_num)
       }
 
       for (int j = 0; j < num_section_points && !gbfeof(file_in); j++, num_trail_points--) {
-        Waypoint* wpt_tmp = new Waypoint;
+        auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
         wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
 
@@ -1528,7 +1528,7 @@ lowranceusr4_parse_trail(int* trail_num)
     }
   }
   for (int j = 0; j < num_trail_pts; ++j) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     /* Some unknown bytes */
     gbfgetint16(file_in);

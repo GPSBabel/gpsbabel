@@ -95,7 +95,7 @@ void TransformFilter::transform_trk_disp_hdr_cb(const route_head* trk)
 
 void TransformFilter::transform_any_disp_wpt_cb(const Waypoint* wpt)
 {
-  Waypoint* temp = new Waypoint(*wpt);
+  auto* temp = new Waypoint(*wpt);
   if (current_target == 'R') {
     route_add_wpt(current_rte, temp, current_namepart, name_digits);
   } else if (current_target == 'T') {

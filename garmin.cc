@@ -385,7 +385,7 @@ waypt_read()
   GPS_PWay* way = nullptr;
 
   if (getposn) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
     wpt->shortname = "Position";
@@ -401,7 +401,7 @@ waypt_read()
   }
 
   for (int i = 0; i < n; i++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
     wpt_tmp->description = QString::fromLatin1(way[i]->cmnt);
@@ -532,7 +532,7 @@ track_read()
     if (array[i]->no_latlon || array[i]->ishdr) {
       continue;
     }
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->longitude = array[i]->lon;
     wpt->latitude = array[i]->lat;
@@ -602,7 +602,7 @@ route_read()
       if (array[i]->islink)  {
         continue;
       } else {
-        Waypoint* wpt_tmp = new Waypoint;
+        auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
         wpt_tmp->shortname = array[i]->ident;
@@ -786,7 +786,7 @@ pvt_init(const QString& fname)
 static Waypoint*
 pvt_read(posn_status* posn_status)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
   if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {

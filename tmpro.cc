@@ -80,7 +80,7 @@ data_read()
     /* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
     if ((strlen(buff)) && (strstr(buff, "sHyperLink") == nullptr)) {
 
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       /* data delimited by tabs, not enclosed in quotes.  */
       char* s = buff;

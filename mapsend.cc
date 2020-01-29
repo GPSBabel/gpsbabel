@@ -202,7 +202,7 @@ mapsend_track_read()
   unsigned int trk_count = gbfgetuint32(mapsend_file_in);
 
   while (trk_count--) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->longitude = gbfgetdbl(mapsend_file_in);
     wpt_tmp->latitude = -gbfgetdbl(mapsend_file_in);

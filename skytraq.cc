@@ -694,7 +694,7 @@ state_init(struct read_state* pst)
 static Waypoint*
 make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   wpt->shortname = QString::asprintf("TP%04d", ++st->tpn);
 
@@ -1561,7 +1561,7 @@ static void miniHomer_get_poi()
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
-      Waypoint* wpt = new Waypoint;
+      auto* wpt = new Waypoint;
       wpt->shortname      = QString::asprintf("POI_%s", poinames[poi]);
       wpt->description    = QString::asprintf("miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;

@@ -153,7 +153,7 @@ mps_find_wpt_q_by_name(const QList<Waypoint *>* whichQueue, const QString& name)
 static void
 mps_wpt_q_add(QList<Waypoint *>* whichQueue, const Waypoint* wpt)
 {
-  Waypoint* written_wpt = new Waypoint(*wpt);
+  auto* written_wpt = new Waypoint(*wpt);
   whichQueue->append(written_wpt);
 }
 
@@ -511,7 +511,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
   double mps_proximity = unknown_alt;
   double mps_depth = unknown_alt;
 
-  Waypoint* thisWaypoint = new Waypoint;
+  auto* thisWaypoint = new Waypoint;
   *wpt = thisWaypoint;
 
   mps_readstr(mps_file, wptname, sizeof(wptname));

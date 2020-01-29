@@ -591,7 +591,7 @@ osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 
     if (waypoints.contains(atstr)) {
       const Waypoint* ctmp = waypoints.value(atstr);
-      Waypoint* tmp = new Waypoint(*ctmp);
+      auto* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));

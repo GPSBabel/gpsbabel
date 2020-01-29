@@ -485,7 +485,7 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
   // In gx:Track elements all kml:when elements are required to precede all gx:coord elements.
   // For both we allow any order.  Many writers using gx:Track elements don't adhere to the schema.
   while (!gx_trk_times->isEmpty()) {
-    Waypoint* trkpt = new Waypoint;
+    auto* trkpt = new Waypoint;
     trkpt->SetCreationTime(gx_trk_times->takeFirst());
     double lat, lon, alt;
     int n;

@@ -69,7 +69,7 @@ read_waypoint()
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
 
-  Waypoint* ret = new Waypoint;
+  auto* ret = new Waypoint;
 
   ret->latitude = double(latitude)/DIV_RATE;
   ret->longitude = double(longitude)/DIV_RATE;

@@ -200,7 +200,7 @@ raymarine_read()
       break;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->shortname = name;
     wpt->latitude = lat.toDouble();
     wpt->longitude = lon.toDouble();

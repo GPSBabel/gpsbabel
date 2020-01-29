@@ -124,7 +124,7 @@ ggv_log_read()
 
     memset(&tm, 0, sizeof(tm));
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int deg = (int16_t) le_read16(&buf[0]);
     int min = le_read16(&buf[2]);

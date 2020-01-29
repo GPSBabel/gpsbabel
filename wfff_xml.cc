@@ -152,7 +152,7 @@ void wfff_e(xg_string, const QXmlStreamAttributes*)
   char		desc[255]	="\0";
 
   if ((ap_hdop>=1)&&(ap_hdop<50)) { // Discard invalid GPS fix
-    Waypoint*	wpt_tmp = new Waypoint;
+    auto*	wpt_tmp = new Waypoint;
 
     if (snmac) {
       wpt_tmp->shortname = ap_mac;
