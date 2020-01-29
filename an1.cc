@@ -280,7 +280,7 @@ static void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 
 static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
-  auto* result = (an1_waypoint_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_waypoint_record*)xcalloc(1, sizeof(an1_waypoint_record));
   result->fs.type = FS_AN1W;
   result->fs.copy = Copy_AN1_Waypoint;
   result->fs.destroy = Destroy_AN1_Waypoint;
@@ -304,7 +304,7 @@ static void Copy_AN1_Vertex(void** vdvert, void* vvert)
 
 static an1_vertex_record* Alloc_AN1_Vertex()
 {
-  auto* result = (an1_vertex_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_vertex_record*)xcalloc(1, sizeof(an1_vertex_record));
   result->fs.type = FS_AN1V;
   result->fs.copy = Copy_AN1_Vertex;
   result->fs.destroy = Destroy_AN1_Vertex;
@@ -332,7 +332,7 @@ static void Copy_AN1_Line(void** vdline, void* vline)
 
 static an1_line_record* Alloc_AN1_Line()
 {
-  auto* result = (an1_line_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_line_record*)xcalloc(1, sizeof(an1_line_record));
   result->fs.type = FS_AN1L;
   result->fs.copy = Copy_AN1_Line;
   result->fs.destroy = Destroy_AN1_Line;

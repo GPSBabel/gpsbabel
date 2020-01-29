@@ -413,7 +413,7 @@ static
 lowranceusr4_fsdata*
 lowranceusr4_alloc_fsdata()
 {
-  auto* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  auto* fsdata = (lowranceusr4_fsdata*) xcalloc(1, sizeof(lowranceusr4_fsdata));
   fsdata->fs.type = FS_LOWRANCEUSR4;
   fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;

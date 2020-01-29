@@ -188,7 +188,7 @@ static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
-  auto* fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  auto* fsdata = (ozi_fsdata*) xcalloc(1, sizeof(ozi_fsdata));
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;

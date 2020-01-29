@@ -250,7 +250,7 @@ mmo_printbuf(const char* buf, int count, const char* comment)
 static mmo_data_t*
 mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 {
-  auto* data = (mmo_data_t*) xcalloc(1, sizeof(*data));
+  auto* data = (mmo_data_t*) xcalloc(1, sizeof(mmo_data_t));
   data->data = const_cast<void*>(ptr);
   data->visible = 1;
   data->locked = 0;

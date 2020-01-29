@@ -307,7 +307,7 @@ fix_netstumbler_dupes(const WaypointList* waypt_list)
   int ct = waypt_list->count(), serial = 0;
   unsigned long last_crc;
 
-  auto* htable = (htable_t*) xmalloc(ct * sizeof *htable);
+  auto* htable = (htable_t*) xmalloc(ct * sizeof(htable_t));
   htable_t* bh = htable;
 
   int i = 0;

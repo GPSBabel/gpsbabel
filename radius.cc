@@ -77,7 +77,7 @@ void RadiusFilter::process()
       continue;
     }
 
-    auto* ed = (extra_data*) xcalloc(1, sizeof(*ed));
+    auto* ed = (extra_data*) xcalloc(1, sizeof(extra_data));
     ed->distance = dist;
     waypointp->extra_data = ed;
   }

@@ -730,7 +730,7 @@ read_route()
            qPrintable(wpt->shortname), wpt_class, links);
 #endif
     for (int j = 0; j < links; j++) {
-      auto* il_step = (garmin_ilink_t*) xmalloc(sizeof(*il_step));
+      auto* il_step = (garmin_ilink_t*) xmalloc(sizeof(garmin_ilink_t));
 
       il_step->ref_count = 1;
 

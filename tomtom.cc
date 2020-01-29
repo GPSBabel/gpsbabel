@@ -365,7 +365,7 @@ static struct blockheader*
 compute_blocks(struct hdr* start, int count,
                double minlon, double maxlon, double minlat, double maxlat)
 {
-  auto* newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
+  auto* newblock = (struct blockheader*)xcalloc(1, sizeof(struct blockheader));
   newblock->start = start;
   newblock->count = count;
   newblock->minlon = minlon;

@@ -153,7 +153,7 @@ void DuplicateFilter::process()
 
   int ct = waypt_count();
 
-  auto* htable = (wpt_ptr*) xmalloc(ct * sizeof(*htable));
+  auto* htable = (wpt_ptr*) xmalloc(ct * sizeof(wpt_ptr));
   wpt_ptr* bh = htable;
 
   int i = 0;
