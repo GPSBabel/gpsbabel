@@ -33,11 +33,9 @@
 #include "gpx.h"
 #include "legacyformat.h"
 #include "mynav.h"
+#include "xcsv.h"
 
 
-#if CSVFMTS_ENABLED
-extern ff_vecs_t xcsv_vecs;
-#endif // CSVFMTS_ENABLED
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t mag_svecs;
 extern ff_vecs_t mag_fvecs;
@@ -268,7 +266,7 @@ private:
    * of this class is constructed.
    */
 #if CSVFMTS_ENABLED
-  LegacyFormat xcsv_fmt {xcsv_vecs};
+  XcsvFormat xcsv_fmt;
 #endif // CSVFMTS_ENABLED
   LegacyFormat geo_fmt {geo_vecs};
   GpxFormat gpx_fmt;
