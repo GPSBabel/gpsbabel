@@ -84,7 +84,7 @@ static void data_read()
 
   memset(&tm, 0, sizeof(tm));
 
-  unsigned char* HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
+  auto* HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
 
   /* read the wpo file to the data-array */
   int iDataRead = gbfread(HxWpt, 1, GM100_WPO_FILE_SIZE, file_in);

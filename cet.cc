@@ -113,7 +113,7 @@ cet_ucs4_to_utf8(char* dest, size_t dest_size, int value)
 int
 cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
 {
-  unsigned char* cp = (unsigned char*)str;
+  auto* cp = (unsigned char*)str;
 
   if (*cp < 0x80) {
     if (bytes != nullptr) {

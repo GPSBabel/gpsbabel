@@ -108,7 +108,7 @@ ggv_log_read()
     break;
   }
 
-  signed char* buf = (signed char*) xmalloc(bufsz);
+  auto* buf = (signed char*) xmalloc(bufsz);
 
   while ((len = gbfread(buf, 1, bufsz, fin))) {
     struct tm tm;

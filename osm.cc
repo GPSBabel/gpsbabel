@@ -763,7 +763,7 @@ static void
 osm_release_ids(const Waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    Waypoint* tmp = const_cast<Waypoint*>(wpt);
+    auto* tmp = const_cast<Waypoint*>(wpt);
     xfree(tmp->extra_data);
     tmp->extra_data = nullptr;
   }

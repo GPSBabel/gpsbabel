@@ -38,7 +38,7 @@ const size_t vitosmt_datasize = 64;
 static unsigned char*
 ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char* result = (unsigned char*) xmalloc(size);
+  auto* result = (unsigned char*) xmalloc(size);
 
   gbfread(result, size, 1, f);
   return result;
@@ -214,7 +214,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
   double  seconds  =0;
 
   ++count;
-  unsigned char*  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
+  auto*  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
 
   WriteDouble(&workbuffer[position], RAD(waypointp->latitude));
   position += sizeof(double);
@@ -288,7 +288,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 static void
 vitosmt_write()
 {
-  unsigned char* workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
+  auto* workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
   count = 0;
 

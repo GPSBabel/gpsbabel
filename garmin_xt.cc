@@ -180,7 +180,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 3];
   LatLW = LatLW << 8;
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 2];
-  double LatF = (double)LatLW;
+  auto LatF = (double)LatLW;
   if (LatF > 8388608) {
     LatF = LatF - 16777216;
   }
@@ -191,7 +191,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
   LonLW = LonLW+TrackBlock[(ii-1)*12+6];
   LonLW = LonLW << 8;
   LonLW = LonLW+TrackBlock[(ii-1)*12+5];
-  double LonF = (double)LonLW;
+  auto LonF = (double)LonLW;
   if (LonF>8388608) {
     LonF = LonF - 16777216;
   }

@@ -373,7 +373,7 @@ static void tpo_read_2_x()
 //
 static int tpo_read_int()
 {
-  unsigned char val = (unsigned char) gbfgetc(tpo_file_in);
+  auto val = (unsigned char) gbfgetc(tpo_file_in);
 
   switch (val) {
 
@@ -671,7 +671,7 @@ static void tpo_process_tracks()
     // proper place for the next track.
 
     // Read the track bytes into a buffer
-    unsigned char* buf = (unsigned char*) xmalloc(track_byte_count);
+    auto* buf = (unsigned char*) xmalloc(track_byte_count);
     gbfread(buf, 1, track_byte_count, tpo_file_in);
 
     int latscale = 0;

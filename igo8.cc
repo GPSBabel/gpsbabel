@@ -275,7 +275,7 @@ static void write_header()
 {
   char header[IGO8_HEADER_SIZE] = {};
   igo8_id_block tmp_id_block;
-  p_igo8_id_block id_block = (p_igo8_id_block)header;
+  auto id_block = (p_igo8_id_block)header;
   uint32_t current_position = 0;
   const char* title = "Title";
   const char* description = "Description";

@@ -188,7 +188,7 @@ static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
-  ozi_fsdata* fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  auto* fsdata = (ozi_fsdata*) xcalloc(1, sizeof(ozi_fsdata));
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
@@ -878,7 +878,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  ozi_fsdata* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
 
   if (!fs) {
     fs = ozi_alloc_fsdata();
