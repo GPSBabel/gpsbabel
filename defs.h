@@ -608,7 +608,6 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 unsigned int waypt_count();
-void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
