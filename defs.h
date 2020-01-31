@@ -617,6 +617,7 @@ void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
 void waypt_flush_all();
+void waypt_deinit();
 void waypt_append(WaypointList* src);
 void waypt_backup(WaypointList** head_bak);
 void waypt_restore(WaypointList* head_bak);

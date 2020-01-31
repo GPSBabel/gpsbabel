@@ -20,7 +20,6 @@
 #include <clocale>                  // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                  // for signal, SIGINT, SIG_ERR
 #include <cstdio>                   // for printf, fgetc, stdin
-#include <cstdlib>                  // for exit
 #include <cstring>                  // for strcmp
 
 #include <QtCore/QByteArray>        // for QByteArray
@@ -707,12 +706,12 @@ main(int argc, char* argv[])
 
   rc = run(prog_name);
 
-  waypt_flush_all();
   route_deinit();
+  waypt_deinit();
   session_exit();
-  Vecs::Instance().exit_vecs();
   FilterVecs::Instance().exit_filter_vecs();
+  Vecs::Instance().exit_vecs();
   inifile_done(global_opts.inifile);
 
-  exit(rc);
+  return rc;
 }

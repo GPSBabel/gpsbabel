@@ -22,10 +22,8 @@
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
 #include <cstdio>               // for printf, fflush, fprintf, stdout
-#include <ctime>                // for time_t
 #include <algorithm>            // for stable_sort
 
-#include <QtCore/QByteArray>    // for QByteArray
 #include <QtCore/QChar>         // for QChar
 #include <QtCore/QDateTime>     // for QDateTime
 #include <QtCore/QList>         // for QList
@@ -166,6 +164,13 @@ void
 waypt_flush_all()
 {
   global_waypoint_list->flush();
+}
+
+void
+waypt_deinit()
+{
+  waypt_flush_all();
+  delete global_waypoint_list;
 }
 
 void
