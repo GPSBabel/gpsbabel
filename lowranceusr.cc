@@ -110,7 +110,7 @@
 #include "defs.h"
 #include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
 #include "src/core/datetime.h"    // for DateTime
-#include <src/core/logging.h>     // for Warning
+#include "src/core/logging.h"     // for Warning
 
 
 struct lowranceusr_icon_mapping_t {
