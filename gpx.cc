@@ -35,6 +35,7 @@
 #include <QtCore/QStringRef>                       // for QStringRef
 #include <QtCore/QTime>                            // for QTime
 #include <QtCore/QVector>                          // for QVector
+#include <QtCore/QVersionNumber>                   // for QVersionNumber
 #include <QtCore/QXmlStreamAttribute>              // for QXmlStreamAttribute
 #include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
 #include <QtCore/QXmlStreamNamespaceDeclaration>   // for QXmlStreamNamespaceDeclaration
@@ -150,10 +151,11 @@ GpxFormat::tag_gpx(const QXmlStreamAttributes& attr)
     /* Set the default output version to the highest input
      * version.
      */
-    if (gpx_version.isEmpty()) {
-      gpx_version = attr.value("version").toString();
-    } else if ((gpx_version.toInt() * 10) < (attr.value("version").toString().toDouble() * 10)) {
-      gpx_version = attr.value("version").toString();
+    QVersionNumber thisVersion = QVersionNumber::fromString(attr.value("version").toString()).normalized();
+    if (gpx_highest_version_read.isNull()) {
+      gpx_highest_version_read = thisVersion;
+    } else if (!thisVersion.isNull() && (gpx_highest_version_read < thisVersion)) {
+      gpx_highest_version_read = thisVersion;
     }
   }
   /* save namespace declarations in case we pass through elements
@@ -973,56 +975,51 @@ GpxFormat::wr_init(const QString& fname)
   * available use it, otherwise use the default.
   */
 
-  if (!gpx_wversion) {
-    if (gpx_version.isEmpty()) {
-      gpx_wversion = (char*)"1.0";
-    } else {
-      // FIXME: this is gross.  The surrounding code is badly tortured by
-      // there being three concepts of "output version", each with a different
-      // data type (QString, int, char*).  This section needs a rethink. For
-      // now, we stuff over the QString gpx_version into the global char *
-      // gpx_wversion without making a malloc'ed copy.
-      static char tmp[16];
-      strncpy(tmp, CSTR(gpx_version), sizeof(tmp));
-      gpx_wversion = tmp;
-    }
+  if (opt_gpxver != nullptr) {
+    gpx_write_version = QVersionNumber::fromString(opt_gpxver).normalized();
+  } else if (!gpx_highest_version_read.isNull()) {
+    gpx_write_version = gpx_highest_version_read;
+  } else {
+    gpx_write_version = gpx_1_0;
   }
 
   if (opt_humminbirdext || opt_garminext) {
-    gpx_wversion = (char*)"1.1";
+    gpx_write_version = gpx_1_1;
   }
 
-  gpx_wversion_num = strtod(gpx_wversion, nullptr) * 10;
-
-  if (gpx_wversion_num <= 0) {
-    Fatal() << MYNAME << ": gpx version number of "
-            << gpx_wversion << "not valid.";
+  // It's a good thing 0, 0.0, 0.0.0 aren't valid gpx versions,
+  // normalization makes them null.
+  if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
+    Fatal() << MYNAME ": gpx version number"
+            << gpx_write_version << "not valid.";
   }
-
-  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
-  // to include just enough whitespace between <xml/> and <gpx...> to pass
-  // diff -w.  It's here for now to shim compatibility with our zillion
-  // reference files, but this blank link can go away some day.
-  writer->writeCharacters(QStringLiteral("\n"));
 
   writer->setAutoFormatting(true);
   writer->writeStartElement(QStringLiteral("gpx"));
-  writer->writeAttribute(QStringLiteral("version"), gpx_wversion);
+  writer->writeAttribute(QStringLiteral("version"),
+                         QStringLiteral("%1.%2")
+                         .arg(gpx_write_version.majorVersion())
+                         .arg(gpx_write_version.minorVersion()));
   writer->writeAttribute(QStringLiteral("creator"), CREATOR_NAME_URL);
-  writer->writeAttribute(QStringLiteral("xmlns"), QStringLiteral("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+  writer->writeAttribute(QStringLiteral("xmlns"),
+                         QStringLiteral("http://www.topografix.com/GPX/%1/%2")
+                         .arg(gpx_write_version.majorVersion())
+                         .arg(gpx_write_version.minorVersion()));
   if (opt_humminbirdext || opt_garminext) {
     if (opt_humminbirdext) {
       writer->writeAttribute(QStringLiteral("xmlns:h"), QStringLiteral("http://humminbird.com"));
     }
     if (opt_garminext) {
-      writer->writeAttribute(QStringLiteral("xmlns:gpxx"), QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"));
-      writer->writeAttribute(QStringLiteral("xmlns:gpxtpx"), QStringLiteral("http://www.garmin.com/xmlschemas/TrackPointExtension/v1"));
+      writer->writeAttribute(QStringLiteral("xmlns:gpxx"),
+                             QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"));
+      writer->writeAttribute(QStringLiteral("xmlns:gpxtpx"),
+                             QStringLiteral("http://www.garmin.com/xmlschemas/TrackPointExtension/v1"));
     }
   } else {
     writer->writeAttributes(gpx_namespace_attribute);
   }
 
-  if (gpx_wversion_num > 10) {
+  if (gpx_write_version > gpx_1_0) {
     writer->writeStartElement(QStringLiteral("metadata"));
   }
   if (gpx_global) {
@@ -1032,7 +1029,7 @@ GpxFormat::wr_init(const QString& fname)
   /* In GPX 1.1, author changed from a string to a PersonType.
    * since it's optional, we just drop it instead of rewriting it.
    */
-  if (gpx_wversion_num < 11) {
+  if (gpx_write_version < gpx_1_1) {
     if (gpx_global) {
       gpx_write_gdata(gpx_global->author, "author");
     }
@@ -1040,7 +1037,7 @@ GpxFormat::wr_init(const QString& fname)
   // TODO: gpx 1.1 author goes here.
   //}
   /* In GPX 1.1 email, url, urlname aren't allowed. */
-  if (gpx_wversion_num < 11) {
+  if (gpx_write_version < gpx_1_1) {
     if (gpx_global) {
       gpx_write_gdata(gpx_global->email, "email");
       gpx_write_gdata(gpx_global->url, "url");
@@ -1070,7 +1067,7 @@ GpxFormat::wr_init(const QString& fname)
 
   // TODO: gpx 1.1 extensions go here.
 
-  if (gpx_wversion_num > 10) {
+  if (gpx_write_version > gpx_1_0) {
     writer->writeEndElement();
   }
 
@@ -1200,7 +1197,7 @@ GpxFormat::fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
 void
 GpxFormat::write_gpx_url(const UrlList& urls)
 {
-  if (gpx_wversion_num > 10) {
+  if (gpx_write_version > gpx_1_0) {
     for (const auto& l : urls) {
       if (!l.url_.isEmpty()) {
         writer->writeStartElement(QStringLiteral("link"));
@@ -1295,7 +1292,7 @@ GpxFormat::gpx_write_common_position(const Waypoint* waypointp, const gpx_point_
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement(QStringLiteral("time"), t);
-  if (gpxpt_track==point_type && 10 == gpx_wversion_num) {
+  if (gpxpt_track==point_type && gpx_1_0 == gpx_write_version) {
     /* These were accidentally removed from 1.1, and were only a part of trkpts in 1.0 */
     if WAYPT_HAS(waypointp, course) {
       writer->writeTextElement(QStringLiteral("course"), toString(waypointp->course));
@@ -1417,7 +1414,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp)
         fprint_xml_chain(fs_gpx->tag, waypointp);
       }
     }
-    if (gmsd && (gpx_wversion_num > 10)) {
+    if (gmsd && (gpx_write_version > gpx_1_0)) {
       /* MapSource doesn't accepts extensions from 1.0 */
       garmin_fs_xml_fprint(waypointp, writer);
     }
@@ -1441,7 +1438,7 @@ GpxFormat::gpx_track_hdr(const route_head* rte)
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));
   }
 
-  if (gpx_wversion_num > 10) {
+  if (gpx_write_version > gpx_1_0) {
     if (!(opt_humminbirdext || opt_garminext)) {
       auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
@@ -1539,7 +1536,7 @@ GpxFormat::gpx_route_hdr(const route_head* rte)
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));
   }
 
-  if (gpx_wversion_num > 10) {
+  if (gpx_write_version > gpx_1_0) {
     if (!(opt_humminbirdext || opt_garminext)) {
       auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
@@ -1659,7 +1656,7 @@ GpxFormat::write()
 void
 GpxFormat::exit()
 {
-  gpx_version.clear();
+  gpx_highest_version_read = QVersionNumber();
 
   gpx_namespace_attribute.clear();
 
