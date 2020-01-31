@@ -85,28 +85,32 @@
 
 */
 
-#include <cmath>                 // for M_PI, atan, exp, log, tan
-#include <cstdio>                // for printf, snprintf, sprintf, SEEK_CUR
-#include <cstdlib>               // for atoi, abs
-#include <cstring>               // for strlen, strcmp
-#include <ctime>
+#include <algorithm>              // for min
+#include <cmath>                  // for M_PI, round, atan, exp, log, tan
+#include <cstdio>                 // for printf, sprintf, SEEK_CUR
+#include <cstdlib>                // for atoi, abs
+#include <cstring>                // for strcmp, strlen
+#include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QDate>          // for QDate
-#include <QtCore/QDateTime>      // for QDateTime
-#include <QtCore/QLatin1String>  // for QLatin1String
-#include <QtCore/QScopedPointer> // for QScopedPointer
-#include <QtCore/QString>        // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>     // for QTextCodec
-#include <QtCore/QTextEncoder>   // for QTextEncoder
-#include <QtCore/QTime>          // for QTime
-#include <QtCore/Qt>             // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
-#include <src/core/logging.h>
+#include <QtCore/QByteArray>      // for QByteArray
+#include <QtCore/QDate>           // for QDate
+#include <QtCore/QDateTime>       // for QDateTime
+#include <QtCore/QLatin1String>   // for QLatin1String
+#include <QtCore/QList>           // for QList
+#include <QtCore/QScopedPointer>  // for QScopedPointer
+#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
+#include <QtCore/QStringRef>      // for QStringRef
+#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QtCore/QTextEncoder>    // for QTextEncoder
+#include <QtCore/QTime>           // for QTime
+#include <QtCore/QVector>         // for QVector
+#include <QtCore/Qt>              // for CaseInsensitive, UTC
+#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "gbfile.h"              // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfputc, gbfwrite, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfputdbl, gbfile, gbfputflt, gbfread, gbfseek, gbfopen_le
-#include "src/core/datetime.h"   // for DateTime
+#include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "src/core/datetime.h"    // for DateTime
+#include <src/core/logging.h>     // for Warning
 
 
 struct lowranceusr_icon_mapping_t {
@@ -337,9 +341,7 @@ static char*          opt_content_descr;
 static char*          opt_serialnum;
 static int            opt_serialnum_i;
 
-static const Waypoint**     waypt_table;
-static int            waypt_table_sz;
-static int            waypt_table_ct;
+static QList<const Waypoint*>* waypt_table{nullptr};
 
 /* from waypt.c, we need to iterate over waypoints when extracting routes */
 extern WaypointList* global_waypoint_list;
@@ -442,30 +444,18 @@ same_points(const Waypoint* A, const Waypoint* B)
 static void
 register_waypt(const Waypoint* wpt)
 {
-  for (int i = 0; i < waypt_table_ct; i++) {
-    const Waypoint* cmp = waypt_table[i];
-
+  for (const Waypoint* cmp : qAsConst(*waypt_table)) {
     if (same_points(wpt, cmp)) {
       return;
     }
   }
 
-  if (waypt_table_ct >= waypt_table_sz) {
-    waypt_table_sz += 32;
-    if (waypt_table) {
-      waypt_table = (const Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
-    } else {
-      waypt_table = (const Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
-    }
-  }
-
   if (global_opts.debug_level >= 2) {
     printf(MYNAME " adding waypt %s (%s) to table at index %d\n",
-           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table_ct);
+           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table->size());
   }
 
-  waypt_table[waypt_table_ct] = wpt;
-  waypt_table_ct++;
+  waypt_table->append(wpt);
 }
 
 /* end borrowed from raymarine.c */
@@ -757,6 +747,7 @@ wr_init(const QString& fname)
     fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
+  waypt_table = new QList<const Waypoint*>;
 }
 
 static void
@@ -765,6 +756,8 @@ wr_deinit()
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
   utf16le_codec = nullptr;
+  delete waypt_table;
+  waypt_table = nullptr;
 }
 
 /**
@@ -1894,24 +1887,21 @@ lowranceusr4_write_waypoints()
 {
   /* enumerate all waypoints from both the plain old waypoint list and
      also all routes */
-  waypt_table_sz = 0;
-  waypt_table_ct = 0;
-  waypt_table = nullptr;
   waypt_disp_all(register_waypt);
   route_disp_all(nullptr, nullptr, register_waypt);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %d waypoints\n", waypt_table_ct);
+    printf(MYNAME " writing %d waypoints\n", waypt_table->size());
   }
 
-  gbfputint32(waypt_table_ct, file_out);
+  gbfputint32(waypt_table->size(), file_out);
   waypt_uid = 0;
-  for (int i = 0; i < waypt_table_ct; ++i) {
+  for (int i = 0; i < waypt_table->size(); ++i) {
     if (global_opts.debug_level >= 2) {
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
-             i, qPrintable(waypt_table[i]->shortname), qPrintable(waypt_table[i]->description));
+             i, qPrintable(waypt_table->at(i)->shortname), qPrintable(waypt_table->at(i)->description));
     }
-    lowranceusr4_waypt_disp((static_cast<const Waypoint*>(waypt_table[i])));
+    lowranceusr4_waypt_disp((waypt_table->at(i)));
   }
 }
 
@@ -2068,8 +2058,8 @@ lowranceusr4_route_hdr(const route_head* rte)
 static void
 lowranceusr4_route_leg_disp(const Waypoint* wpt)
 {
-  for (int i = 0; i < waypt_table_ct; i++) {
-    const Waypoint* cmp = waypt_table[i];
+  for (int i = 0; i < waypt_table->size(); i++) {
+    const Waypoint* cmp = waypt_table->at(i);
     if (cmp->shortname == wpt->shortname) {
       auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
 
