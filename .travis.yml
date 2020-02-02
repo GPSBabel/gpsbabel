@@ -45,6 +45,7 @@ matrix:
             - docbook-xml
             - docbook-xsl
             - libgl1-mesa-dev
+            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
       cache:
         directories:
           - $HOME/Cache
@@ -76,6 +77,7 @@ matrix:
             - libusb-1.0-0-dev
             - gcovr
             - lcov
+            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
       cache:
         directories:
           - $HOME/Cache
