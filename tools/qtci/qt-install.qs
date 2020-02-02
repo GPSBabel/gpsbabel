@@ -101,6 +101,24 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
         log(packages.join(" "));
     }
 
+    var widget = gui.currentPageWidget();
+
+    var archiveCheckBox = gui.findChild(widget, "Archive");
+    var latestCheckBox = gui.findChild(widget, "Latest releases");
+    var fetchButton = gui.findChild(widget, "FetchCategoryButton");
+
+    if (archiveCheckBox != null) {
+      // check archive
+      archiveCheckBox.click();
+    }
+    if (latestCheckBox != null) {
+      // uncheck latest
+      latestCheckBox.click();
+    }
+    if (fetchButton != null) {
+      fetchButton.click()
+    }
+
     if (installer.value("QTCI_LIST_PACKAGES", "0") != "0") {
         list_packages();
         gui.clickButton(buttons.CancelButton);
@@ -112,8 +130,6 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     function trim(str) {
         return str.replace(/^ +/, "").replace(/ *$/, "");
     }
-
-    var widget = gui.currentPageWidget();
 
     var packages = trim(installer.value("QTCI_PACKAGES")).split(",");
     if (packages.length > 0 && packages[0] !== "") {
