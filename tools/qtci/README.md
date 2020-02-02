@@ -4,35 +4,36 @@ This project collects a set of script for building Qt application for Android/iO
 [![Build Status](https://travis-ci.org/benlau/qtci.svg?branch=master)](https://travis-ci.org/benlau/qtci)
 
 Check [.travis.yml](https://github.com/benlau/qtci/blob/master/.travis.yml) to see how it works.
-It will demonstrate how to build a apk file using QT-CI scripts.
+It will demonstrate how to build an apk file using QT-CI scripts.
 
 Installation
 ============
 
-Since this project is a collection of script, and the script in bin folder do not have any dependence to each othter.
-It is not necessary to clone / download the whole repository into your build environmnet.
-You may just copy the script you need from this repository.
+Since this project is a collection of scripts, and the script in the bin folder does not have any dependence on each other.
+It is not necessary to clone/download the whole repository into your build environment.
+You may simply copy the script you need from this repository.
 
 **recipes/install-qt**
 
-To automaticly install Qt, you can just donwload 2 scripts and give them permition to be executed.
+To automatically install Qt, you can just download 2 scripts and grant them permission for execution.
 
 "recipes/install-qt"
 "bin/extract-qt-installer"
 
-Then just run scritp "recipes/install-qt" with desiered verion of Qt
+Then just run script "recipes/install-qt" with the desired version of Qt
 Example:
 
-	bash install-qt 5.9.4
+    bash install-qt 5.9.4
+
 Enviroument variables
 =====================
 
-QT_CI_PACKAGES - packages to install. You can check availble packages if set VERBOSE to 1.
+QT_CI_PACKAGES - packages to install. You can check available packages if set VERBOSE to 1.
 
 Example:
 
-	export VERBOSE=1
-	export QT_CI_PACKAGES=qt,qt.594,qt.594.gcc_64,qt.594.doc.qtvirtualkeyboard
+    export VERBOSE=1
+    export QT_CI_PACKAGES=qt,qt.594,qt.594.gcc_64,qt.594.doc.qtvirtualkeyboard
 
 Setup
 =====
@@ -48,29 +49,38 @@ Script
 **(1) bin/extract-qt-installer**
 --------------------------------
 
-Extract installer of Qt to target path (for Qt 5.5 or above)
+Usage
+
+```
+    extract-qt-installer [--disable-progress-report] qt-installer output_path
+    extract-qt-installer --list-packages qt-installer
+```
+
+Extract Qt from the installer to the target path (for Qt 5.5 or above). If --list-packages is given, it will show the available packages from the installer and terminate immediately. 
 
 Example:
 
-	extract-qt-installer qt-opensource-linux-x64-android-5.5.1.run ~/Qt
+    extract-qt-installer qt-opensource-linux-x64-android-5.5.1.run ~/Qt
 
 **Remarks: The installation path must be absolute path**
 
 Environment Variables
 
-	VERBOSE [Optional] Set to "true" will enable VERBOSE output
-	QT_CI_PACKAGES [Optional] Select the components to be installed instead of using default (eg. QT_CI_PACKAGES="qt.59.gcc_64")
+    VERBOSE [Optional] Set to "true" will enable VERBOSE output
+    QT_CI_PACKAGES [Optional] Select the components to be installed instead of using default (eg. QT_CI_PACKAGES="qt.59.gcc_64")
+    QT_CI_LOGIN [Optional] The login name 
+    QT_CI_PASSWORD [Optional] The password of login
 
-
+The arguments and environment required could be different due to the installer changes. Check the recipes folder or the wiki of known issues to find out the correct setting.
 
 **(2) bin/extract-ifw**
 --------------------------------
 
-Extract installer of "Qt installer framework" to target path
+Extract installer of "Qt installer framework" to the target path
 
 Example:
 
-	extract-ifw qt-installer-framework-opensource-1.5.0-x64.run ~/QtIfw
+    extract-ifw qt-installer-framework-opensource-1.5.0-x64.run ~/QtIfw
 
 **(3) bin/install-android-sdk**
 --------------------------------
@@ -79,7 +89,7 @@ Download and install Android SDK
 
 Example:
 
-	install-android-sdk platform-tool,build-tools-20.0.0,android-19
+    install-android-sdk platform-tool,build-tools-20.0.0,android-19
 
 **(4) bin/build-android-gradle-project**
 --------------------------------
@@ -88,14 +98,14 @@ Build a Qt Android project and sign the APK
 
 Usage:
 
-	build-android-gradle-project project.pro
+    build-android-gradle-project project.pro
 
 Required Environment Variables
 
-	QT_HOME [Required] The home directory of installed Qt. (e.g ~/Qt/5.7)
-	KEYSTORE [Optional] The location of keystore. If it is set, it will be used to sign the created apk
-	KEYALIAS [Optional] The alias of the keystore
-	KEYPASS  [Optional] The password of keystore.
+    QT_HOME [Required] The home directory of installed Qt. (e.g., ~/Qt/5.7)
+    KEYSTORE [Optional] The location of keystore. If it is set, it will be used to sign the created apk
+    KEYALIAS [Optional] The alias of the keystore
+    KEYPASS  [Optional] The password of keystore.
         ANDROID_TARGET_SDK_VERSION [Optional] Target Android SDK version. The default value is "19"
 
 (5) bin/increase-android-version-code
@@ -105,7 +115,7 @@ Usage
 
     increase-android-version-code AndroidManifest.xml
 
-Given a AndroidManifest.xml file, it will increase the value of versionCode field by one.
+Given an AndroidManifest.xml file, it will increase the value of the versionCode field by one.
 
 (6) bin/run-unittests
 ----------------------
@@ -114,27 +124,27 @@ Usage
 
     run-unittests project.pro
 
-Build and run an unit test project in current folder. If qpm.json was found, it will call `qpm install` first.
+Build and run a unit test project in the current folder. If qpm.json were found, it would call `qpm install` first.
 
 Recipes
 =======
 
 
-In the folder "recipes", it contains a set of script that could download and install specific Qt toolchains for different environment. (Include Android)
+In the folder "recipes", it contains a set of script that could download and install specific Qt toolchains for a different environment. (Include Android)
 
-Please feel free to modify and submit new recipe.
+Please feel free to modify and submit a new recipe.
 
 Example
 
-	apt-get install openjdk-8-jdk p7zip
+    apt-get install openjdk-8-jdk p7zip
 
-	source path.env #Add $PWD/bin and $PWD/recipes to $PATH
+    source path.env #Add $PWD/bin and $PWD/recipes to $PATH
 
-	#Change to installation path
+    #Change to the installation path
 
-	qt-5.5.1-android-19 # Install Qt 5.5.1 and Android SDK
-	
-	source qt-5.5.1-android-19.env # Add installed Qt path to $PATH
+    qt-5.5.1-android-19 # Install Qt 5.5.1 and Android SDK
+    
+    source qt-5.5.1-android-19.env # Add installed Qt path to $PATH
 
 
 Reference
