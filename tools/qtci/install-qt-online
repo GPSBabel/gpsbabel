@@ -1,0 +1,59 @@
+#!/bin/bash -e
+# Install Qt by online installer
+
+function usage() {
+    echo "Usage:"
+    echo "install-qt-online \"packages\" output_path"
+    echo "Example"
+    echo "install-qt-online 'qt.qt5.5121.gcc_64' /opt/Qt"
+    exit -1
+}
+
+if [ $# -lt 2 ]
+then
+	usage
+fi
+
+export QT_CI_PACKAGES=${1}
+QT_TARGET_CATALOG=${2:-$PWD}
+INSTALLER_VERSION=${3:-latest} # lastest or a version triplet, e.g. 3.1.1
+QT_CI_DOWNLOADER=${QT_CI_DOWNLOADER:-"wget -c -N"}
+
+if [ "$(uname)" = "Darwin" ]; then
+  if [ "${INSTALLER_VERSION}" = "latest" ]; then
+    DOWNLOAD_URL=https://download.qt.io/official_releases/online_installers/qt-unified-mac-x64-online.dmg
+  else
+    DOWNLOAD_URL=https://download.qt.io/archive/online_installers/$(echo ${INSTALLER_VERSION} | cut -d . -f1-2)/qt-unified-mac-x64-${INSTALLER_VERSION}-online.dmg
+  fi
+  COMPILER=clang_64
+elif [ "$(uname)" = "Linux" ]; then
+  if [ "${INSTALLER_VERSION}" = "latest" ]; then
+    DOWNLOAD_URL=https://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
+  else
+    DOWNLOAD_URL=https://download.qt.io/archive/online_installers/$(echo ${INSTALLER_VERSION} | cut -d . -f1-2)/qt-unified-linux-x64-${INSTALLER_VERSION}-online.run
+  fi
+  COMPILER=gcc_64
+else
+  echo "Unsupported system." >&2
+  exit 1
+fi
+
+INSTALLER=$(basename $DOWNLOAD_URL)
+
+echo Downloading Qt
+${QT_CI_DOWNLOADER} ${DOWNLOAD_URL} || exit 1
+
+echo Installing Qt
+
+if [ "$(uname)" = "Darwin" ]; then
+  hdiutil attach ${PWD}/${INSTALLER} -plist > minfo.plist
+  MOUNTPOINT=$(/usr/libexec/PlistBuddy -c "Print :system-entities:0:mount-point" minfo.plist || \
+               /usr/libexec/PlistBuddy -c "Print :system-entities:1:mount-point" minfo.plist || \
+               /usr/libexec/PlistBuddy -c "Print :system-entities:2:mount-point" minfo.plist)
+  INSTALLER_NAME=$(basename "${MOUNTPOINT}")
+  APPFILE="${MOUNTPOINT}"/${INSTALLER_NAME}.app/Contents/MacOS/${INSTALLER_NAME}
+  extract-qt-installer "$APPFILE" "${QT_TARGET_CATALOG}/Qt"
+  hdiutil detach "${MOUNTPOINT}"
+elif [ "$(uname)" = "Linux" ]; then
+  extract-qt-installer ${PWD}/${INSTALLER} "${QT_TARGET_CATALOG}/Qt"
+fi
