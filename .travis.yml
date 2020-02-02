@@ -32,7 +32,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.8" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+        - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
@@ -51,7 +51,7 @@ matrix:
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.9.8"
+      env: QT_VERSION="5.9.9"
       cache:
         directories:
           - $HOME/Cache
@@ -69,7 +69,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.9.8"
+        - QT_VERSION="5.9.9"
       addons:
         apt:
           packages:

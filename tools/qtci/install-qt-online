@@ -3,13 +3,16 @@
 
 function usage() {
     echo "Usage:"
-    echo "install-qt-online \"packages\" output_path"
-    echo "Example"
-    echo "install-qt-online 'qt.qt5.5121.gcc_64' /opt/Qt"
+    echo "install-qt-online \"packages\" [output_path [qt_installer_version]]"
+    echo "Examples:"
+    echo "install-qt-online \"qt.qt5.5121.gcc_64\""
+    echo "install-qt-online \"qt.qt5.5121.gcc_64\" /opt/Qt"
+    echo "install-qt-online \"qt.qt5.5121.gcc_64\" /opt/Qt latest"
+    echo "install-qt-online \"qt.qt5.5121.gcc_64\" /opt/Qt 3.1.1"
     exit -1
 }
 
-if [ $# -lt 2 ]
+if [ $# -lt 1 ]
 then
 	usage
 fi

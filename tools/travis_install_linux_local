@@ -41,7 +41,7 @@ if [ -d "${QTDIR}/bin" ]; then
 else
   rm -fr ${CACHEDIR}
   mkdir -p ${CACHEDIR}
-  QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt-online "qt.qt5.${QT_VERSION_SHORT}.gcc_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine" ${QT_VERSION}
+  QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt-online "qt.qt5.${QT_VERSION_SHORT}.gcc_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine" ${QT_VERSION} ${CACHEDIR}
   echo "export PATH=${QTDIR}/bin:$PATH" > ${CACHEDIR}/qt-${QT_VERSION}.env
   validate
   rm ${CACHEDIR}/qt-opensource*.run
