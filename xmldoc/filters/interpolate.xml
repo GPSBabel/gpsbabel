@@ -1,6 +1,6 @@
 <para>
 This filter modifies any tracks so that either the distance or the time
-between consecutive points is no less than the specified interval. Where
+between consecutive points is no more than the specified interval. Where
 points are missing, the filter fills them in by following a straight 
 line (actually a great circle) between the adjacent points.  You
 must specify either the 

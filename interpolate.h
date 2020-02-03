@@ -22,10 +22,12 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QtCore/QVector>       // for QVector
+#include <QtCore/QtGlobal>      // for qint64
 
-#include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
-#include "filter.h"  // for Filter
+#include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
+#include "filter.h"             // for Filter
+#include "src/core/optional.h"  // for optional
 
 #if FILTERS_ENABLED
 
@@ -40,15 +42,15 @@ public:
   void process() override;
 
 private:
-  char* opt_interval = nullptr;
-  unsigned int interval = 0;
-  char* opt_dist = nullptr;
-  double dist = 0;
-  char* opt_route = nullptr;
+  char* opt_time{nullptr};
+  double max_time_step{0};
+  char* opt_dist{nullptr};
+  double max_dist_step{0};
+  char* opt_route{nullptr};
 
   QVector<arglist_t> args = {
     {
-      "time", &opt_interval, "Time interval in seconds", nullptr,
+      "time", &opt_time, "Time interval in seconds", nullptr,
       ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
       "0", nullptr, nullptr
     },

@@ -930,13 +930,13 @@ void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
 
-#define ARGTYPE_UNKNOWN    0x00000000
-#define ARGTYPE_INT        0x00000001
-#define ARGTYPE_FLOAT      0x00000002
-#define ARGTYPE_STRING     0x00000003
-#define ARGTYPE_BOOL       0x00000004
-#define ARGTYPE_FILE       0x00000005
-#define ARGTYPE_OUTFILE    0x00000006
+#define ARGTYPE_UNKNOWN    0x00000000U
+#define ARGTYPE_INT        0x00000001U
+#define ARGTYPE_FLOAT      0x00000002U
+#define ARGTYPE_STRING     0x00000003U
+#define ARGTYPE_BOOL       0x00000004U
+#define ARGTYPE_FILE       0x00000005U
+#define ARGTYPE_OUTFILE    0x00000006U
 
 /* REQUIRED means that the option is required to be set.
  * See also BEGIN/END_REQ */
