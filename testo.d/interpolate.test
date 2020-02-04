@@ -4,15 +4,15 @@
 # 
 
 
-echo "FIELD_DELIMITER COMMA" > ${TMPDIR}/interp.style
-echo "RECORD_DELIMITER NEWLINE" >> ${TMPDIR}/interp.style
-echo "BADCHARS COMMA" >> ${TMPDIR}/interp.style
-echo "PROLOGUE Lat,Long,Distance,Altitude,Time" >> ${TMPDIR}/interp.style
-echo "IFIELD LAT_DECIMAL, , %.6f" >> ${TMPDIR}/interp.style
-echo "IFIELD LON_DECIMAL, , %.6f" >> ${TMPDIR}/interp.style
-echo "IFIELD PATH_DISTANCE_METERS, , %.0f" >> ${TMPDIR}/interp.style
-echo "IFIELD ALT_METERS, , %.3f" >> ${TMPDIR}/interp.style
-echo "IFIELD TIMET_TIME_MS, , %ld" >> ${TMPDIR}/interp.style
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/interp.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/interp.style
+echo 'BADCHARS COMMA' >> ${TMPDIR}/interp.style
+echo 'PROLOGUE Lat,Long,Distance,Altitude,Time' >> ${TMPDIR}/interp.style
+echo 'IFIELD LAT_DECIMAL, "", "%.6f"' >> ${TMPDIR}/interp.style
+echo 'IFIELD LON_DECIMAL, "", "%.6f"' >> ${TMPDIR}/interp.style
+echo 'IFIELD PATH_DISTANCE_METERS, "", "%.0f"' >> ${TMPDIR}/interp.style
+echo 'IFIELD ALT_METERS, "", "%.3f"' >> ${TMPDIR}/interp.style
+echo 'IFIELD TIMET_TIME_MS, "", "%lld"' >> ${TMPDIR}/interp.style
 gpsbabel -t -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,distance=50m -o gpx -F ${TMPDIR}/interp.gpx -o xcsv,style=${TMPDIR}/interp.style -F ${TMPDIR}/interp.csv
 compare ${REFERENCE}/track/interptrack.gpx ${TMPDIR}/interp.gpx 
 compare ${REFERENCE}/track/interptrack.csv ${TMPDIR}/interp.csv
