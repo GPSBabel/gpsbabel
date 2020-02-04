@@ -69,7 +69,7 @@
 constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * 0.3048; }
 constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * 3.2808399; }
 
-constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}
+constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}		/* nautical miles */
 constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;}
 
 constexpr double MILES_TO_METERS(double a) { return (a) * 1609.344;}
