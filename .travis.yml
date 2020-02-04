@@ -32,7 +32,7 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.8" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+        - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
@@ -45,20 +45,21 @@ matrix:
             - docbook-xml
             - docbook-xsl
             - libgl1-mesa-dev
+            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.9.8"
+      env: QT_VERSION="5.9.9"
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.12.6"
+      env: QT_VERSION="5.12.7"
       cache:
         directories:
           - $HOME/Cache
@@ -69,13 +70,14 @@ matrix:
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.9.8"
+        - QT_VERSION="5.9.9"
       addons:
         apt:
           packages:
             - libusb-1.0-0-dev
             - gcovr
             - lcov
+            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
       cache:
         directories:
           - $HOME/Cache
@@ -94,7 +96,7 @@ script:
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.6" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.7" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
 
 branches:
   except:
