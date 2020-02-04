@@ -258,7 +258,7 @@ static unsigned int print_unicode(char* dst, int dst_max_length, const QString& 
   if (max_qchars < 1) {
     // We must have room for the terminator.
     fatal(MYNAME ": igo8 header overflow.\n");
-  };
+  }
   // Write as many characters from the source as possible
   // while leaving space for a terminator.
   int n_src_qchars = std::min(max_qchars - 1, src.size());
