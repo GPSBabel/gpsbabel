@@ -810,7 +810,7 @@ pcmpt_parse(char* ibuf)
   dmy = hms = 0;
 
   sscanf(ibuf,"$PCMPT,%d,%d,%d,%c,%f,%d,%19[^,],%d,%f,%d,%f,%c,%d,%c,%d",
-         &j1, &j2, &j3, &altflag, &alt, &j4, (char*) &coords,
+         &j1, &j2, &j3, &altflag, &alt, &j4, coords,
          &j5, &f1, &j6, &f2, &u1, &dmy, &u2, &hms);
 
   if (altflag == 'D' && curr_waypt && alt > 0) {

@@ -270,7 +270,7 @@ cst_data_read()
           track = route_head_alloc();
           track_add_head(track);
         } else if (strncmp(name, "NAME:", 5) == 0) {
-          wpt->shortname = QString::fromLatin1(((char*)&name) + 5);
+          wpt->shortname = QString::fromLatin1(name + 5);
         }
 
         QString time_string(cin);
