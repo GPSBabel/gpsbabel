@@ -20,7 +20,6 @@
 #include <clocale>                  // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                  // for signal, SIGINT, SIG_ERR
 #include <cstdio>                   // for printf, fgetc, stdin
-#include <cstdlib>                  // for exit
 #include <cstring>                  // for strcmp
 
 #include <QtCore/QByteArray>        // for QByteArray
@@ -198,6 +197,43 @@ signal_handler(int sig)
   tracking_status.request_terminate = 1;
 }
 
+class FallbackOutput
+{
+public:
+  FallbackOutput() : mkshort_handle(mkshort_new_handle()) {}
+  // delete copy and move constructors and assignment operators.
+  // The defaults are not appropriate, and we haven't implemented proper ones.
+  FallbackOutput(const FallbackOutput&) = delete;
+  FallbackOutput& operator=(const FallbackOutput&) = delete;
+  FallbackOutput(FallbackOutput&&) = delete;
+  FallbackOutput& operator=(FallbackOutput&&) = delete;
+  ~FallbackOutput() {mkshort_del_handle(&mkshort_handle);}
+
+  void waypt_disp(const Waypoint* wpt)
+  {
+    if (wpt->GetCreationTime().isValid()) {
+      printf("%s ", qPrintable(wpt->creation_time.toString()));
+    }
+    printposn(wpt->latitude,1);
+    printposn(wpt->longitude,0);
+    if (!wpt->description.isEmpty()) {
+      printf("%s/%s",
+             global_opts.synthesize_shortnames ?
+             qPrintable(mkshort(mkshort_handle, wpt->description)) :
+             qPrintable(wpt->shortname),
+             qPrintable(wpt->description));
+    }
+  
+    if (wpt->altitude != unknown_alt) {
+      printf(" %f", wpt->altitude);
+    }
+    printf("\n");
+  }
+
+private:
+  short_handle mkshort_handle;
+};
+
 static int
 run(const char* prog_name)
 {
@@ -210,6 +246,8 @@ run(const char* prog_name)
   int opt_version = 0;
   bool did_something = false;
   QStack<QargStackElement> qargs_stack;
+  FallbackOutput fbOutput;
+
 
   // Use QCoreApplication::arguments() to process the command line.
   QStringList qargs = QCoreApplication::arguments();
@@ -518,7 +556,10 @@ run(const char* prog_name)
   }
   if (ovecs == nullptr) {
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    waypt_disp_all(waypt_disp);
+    auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
+      fbOutput.waypt_disp(wpt);
+    };
+    waypt_disp_all(waypt_disp_lambda);
   }
 
   /*
@@ -567,7 +608,7 @@ run(const char* prog_name)
 //          ovecs->wr_position_deinit();
         } else {
           /* Just print to screen */
-          waypt_disp(wpt);
+          fbOutput.waypt_disp(wpt);
         }
         delete wpt;
       }
@@ -665,12 +706,12 @@ main(int argc, char* argv[])
 
   rc = run(prog_name);
 
-  waypt_flush_all();
   route_deinit();
+  waypt_deinit();
   session_exit();
-  Vecs::Instance().exit_vecs();
   FilterVecs::Instance().exit_filter_vecs();
+  Vecs::Instance().exit_vecs();
   inifile_done(global_opts.inifile);
 
-  exit(rc);
+  return rc;
 }
