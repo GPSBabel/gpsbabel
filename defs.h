@@ -539,7 +539,7 @@ public:
 
 public:
   Waypoint();
-  ~Waypoint();
+  virtual ~Waypoint();
   Waypoint(const Waypoint& other);
   Waypoint& operator=(const Waypoint& other);
 
