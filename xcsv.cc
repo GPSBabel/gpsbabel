@@ -611,10 +611,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* Time as Excel Time  */
     wpt->SetCreationTime(excel_to_timet(atof(s)));
     break;
-  case XT_TIMET_TIME:
+  case XT_TIMET_TIME: {
     /* Time as time_t */
-    wpt->SetCreationTime((time_t) atol(s));
-    break;
+    bool ok;
+    wpt->SetCreationTime(value.toLongLong(&ok));
+    if (!ok) {
+      warning("parse of string '%s' on line number %d as TIMET_TIME failed.\n", s, line_no);
+    }
+  }
+  break;
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
@@ -1342,20 +1347,13 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), timet_to_excel(wpt->GetCreationTime().toTime_t()));
       break;
     case XT_TIMET_TIME:
-      /* time as a time_t variable */
-    {
-      time_t tt = wpt->GetCreationTime().toTime_t();
-      buff = QString::asprintf(fmp.printfc.constData(), tt);
-    }
-    break;
-
-    case XT_TIMET_TIME_MS: {
+      /* time as a time_t variable in seconds */
+      buff = QString::asprintf(fmp.printfc.constData(), wpt->GetCreationTime().toSecsSinceEpoch());
+      break;
+    case XT_TIMET_TIME_MS:
       /* time as a time_t variable in milliseconds */
-      buff = writetime("%s", wpt->GetCreationTime().toTime_t(), false);
-      buff += QString::asprintf("%03d", wpt->GetCreationTime().time().msec());
-
-    }
-    break;
+      buff = QString::asprintf(fmp.printfc.constData(), wpt->GetCreationTime().toMSecsSinceEpoch());
+      break;
     case XT_YYYYMMDD_TIME:
       buff = QString::asprintf(fmp.printfc.constData(), time_to_yyyymmdd(wpt->GetCreationTime()));
       break;

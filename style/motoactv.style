@@ -28,7 +28,7 @@ IFIELD LAT_DECIMAL,"","%.6f"
 IFIELD IGNORE,"","%s" # repetitions
 IFIELD TEMPERATURE,"","%.1f"
 IFIELD IGNORE,"","%s" # instant torque crank
-IFIELD TIMET_TIME_MS,"","%ld"
+IFIELD TIMET_TIME_MS,"","%lld"
 IFIELD ALT_METERS,"","%.1f"
 IFIELD POWER,"","%.0f"
 IFIELD IGNORE,"","%s" # strides

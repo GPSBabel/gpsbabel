@@ -22,7 +22,7 @@ PROLOGUE	Timestamp,Latitude, Longitude, Altitude(ft), heart rate
 #
 # INDIVIDUAL DATA FIELDS:
 #
-IFIELD	TIMET_TIME,"","%ld"
+IFIELD	TIMET_TIME,"","%lld"
 IFIELD	LAT_DECIMAL, "", "%f"
 IFIELD	LON_DECIMAL, "", "%f"
 IFIELD	ALT_FEET, "", "%fF"
