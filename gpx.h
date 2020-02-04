@@ -25,6 +25,7 @@
 #include <QtCore/QString>               // for QString
 #include <QtCore/QStringList>           // for QStringList
 #include <QtCore/QVector>               // for QVector
+#include <QtCore/QVersionNumber>        // for QVersionNumber
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 #include <QtCore/QXmlStreamReader>      // for QXmlStreamReader
 
@@ -227,10 +228,12 @@ private:
   int logpoint_ct = 0;
   int elevation_precision;
 
-// static char* gpx_version = NULL;
-  QString gpx_version;
-  char* gpx_wversion;
-  int gpx_wversion_num;
+  // to check if two numbers are equivalent use normalized values.
+  const QVersionNumber gpx_1_0 = QVersionNumber(1,0).normalized();
+  const QVersionNumber gpx_1_1 = QVersionNumber(1,1).normalized();
+  QVersionNumber gpx_highest_version_read;
+  char* opt_gpxver = nullptr;
+  QVersionNumber gpx_write_version;
   QXmlStreamAttributes gpx_namespace_attribute;
 
   QString current_tag;
@@ -456,7 +459,7 @@ private:
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      "gpxver", &gpx_wversion, "Target GPX version for output",
+      "gpxver", &opt_gpxver, "Target GPX version for output",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
