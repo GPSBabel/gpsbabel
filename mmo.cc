@@ -704,7 +704,14 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
     if (mmo_version >= 0x16) {
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
-      QString text = mmo_readstr();
+      // Don't construct a QString we aren't going to use.
+      // avoid clazy-unused-non-trivial-variable
+#if 1
+      QString text =
+#else
+      (void)
+#endif
+        mmo_readstr();
       DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
       uint16_t u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
@@ -739,12 +746,26 @@ mmo_read_CObjText(mmo_data_t*)
   (void) lat;
   (void) lon;
 
-  QString text = mmo_readstr();
+  // Don't construct a QString we aren't going to use.
+  // avoid clazy-unused-non-trivial-variable
+#ifdef MMO_DBG
+  QString text =
+#else
+  (void)
+#endif
+    mmo_readstr();
   DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
 
   mmo_fillbuf(buf, 28, 1);
 
-  QString font = mmo_readstr();
+  // Don't construct a QString we aren't going to use.
+  // avoid clazy-unused-non-trivial-variable
+#ifdef MMO_DBG
+  QString font =
+#else
+  (void)
+#endif
+    mmo_readstr();
   DBG((sobj, "font = \"%s\"\n", qPrintable(font)));
 
   mmo_fillbuf(buf, 25, 1);
@@ -980,7 +1001,7 @@ mmo_rd_deinit()
 
   legacy_codec = nullptr;
   utf16le_codec = nullptr;
-  
+
   gbfclose(fin);
 }
 
@@ -1415,7 +1436,7 @@ mmo_wr_deinit()
 
   legacy_codec = nullptr;
   utf16le_codec = nullptr;
-  
+
   gbfclose(fout);
 }
 

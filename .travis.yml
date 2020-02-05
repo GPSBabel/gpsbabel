@@ -27,6 +27,15 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG=""
     - os: linux
+      dist: bionic
+      sudo: required
+      services: docker
+      compiler: gcc
+      env:
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG="eoan"
+        - DOCKER_SCRIPT="./tools/build_extra_tests"
+    - os: linux
       dist: xenial
       sudo: required
       compiler: gcc
@@ -89,7 +98,7 @@ install:
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_script_linux_coverage; fi
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker ${DOCKER_IMG}; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker ${DOCKER_IMG} ${DOCKER_SCRIPT}; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then echo $PATH; ./build_and_test; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
 
