@@ -706,7 +706,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
       // Don't construct a QString we aren't going to use.
       // avoid clazy-unused-non-trivial-variable
-#if 1
+#ifdef MMO_DBG
       QString text =
 #else
       (void)
