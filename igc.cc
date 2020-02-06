@@ -185,7 +185,7 @@ static void igc_task_rec(const char* rec)
   // First task record identifies the task to follow
   if (id == state) {
     task_desc[0] = '\0';
-    if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%79[^\r]\r\n",
+    if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%78[^\r]\r\n",
                &tm.tm_mday, &tm.tm_mon, &tm.tm_year,
                &tm.tm_hour, &tm.tm_min, &tm.tm_sec,
                flight_date, task_num, &num_tp, task_desc) < 9) {
@@ -209,7 +209,7 @@ static void igc_task_rec(const char* rec)
   }
   // Get the waypoint
   tmp_str[0] = '\0';
-  if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%79[^\r]\r\n",
+  if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%78[^\r]\r\n",
              &lat_deg, &lat_min, &lat_frac, lat_hemi,
              &lon_deg, &lon_min, &lon_frac, lon_hemi, tmp_str) < 8) {
     fatal(MYNAME ": task waypoint (C) record parse error\n%s", rec);

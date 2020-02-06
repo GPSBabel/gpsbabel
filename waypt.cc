@@ -22,10 +22,8 @@
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
 #include <cstdio>               // for printf, fflush, fprintf, stdout
-#include <ctime>                // for time_t
 #include <algorithm>            // for stable_sort
 
-#include <QtCore/QByteArray>    // for QByteArray
 #include <QtCore/QChar>         // for QChar
 #include <QtCore/QDateTime>     // for QDateTime
 #include <QtCore/QList>         // for QList
@@ -42,7 +40,6 @@
 
 WaypointList* global_waypoint_list;
 
-static short_handle mkshort_handle;
 geocache_data Waypoint::empty_gc_data;
 static global_trait traits;
 
@@ -54,7 +51,6 @@ const global_trait* get_traits()
 void
 waypt_init()
 {
-  mkshort_handle = mkshort_new_handle();
   global_waypoint_list = new WaypointList;
 }
 
@@ -90,29 +86,6 @@ unsigned int
 waypt_count()
 {
   return global_waypoint_list->count();
-}
-
-// TODO: should this, and mkshort_handle, be part of main, which is the only user?
-void
-waypt_disp(const Waypoint* wpt)
-{
-  if (wpt->GetCreationTime().isValid()) {
-    printf("%s ", qPrintable(wpt->creation_time.toString()));
-  }
-  printposn(wpt->latitude,1);
-  printposn(wpt->longitude,0);
-  if (!wpt->description.isEmpty()) {
-    printf("%s/%s",
-           global_opts.synthesize_shortnames ?
-           qPrintable(mkshort(mkshort_handle, wpt->description)) :
-           qPrintable(wpt->shortname),
-           qPrintable(wpt->description));
-  }
-
-  if (wpt->altitude != unknown_alt) {
-    printf(" %f", wpt->altitude);
-  }
-  printf("\n");
 }
 
 void
@@ -190,10 +163,14 @@ find_waypt_by_name(const QString& name)
 void
 waypt_flush_all()
 {
-  if (mkshort_handle) {
-    mkshort_del_handle(&mkshort_handle);
-  }
   global_waypoint_list->flush();
+}
+
+void
+waypt_deinit()
+{
+  waypt_flush_all();
+  delete global_waypoint_list;
 }
 
 void

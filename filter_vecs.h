@@ -82,9 +82,9 @@ void disp_filters(int version) const;
 bool validate_filters() const;
 
 private:
-static void disp_help_url(const FilterVecs::fl_vecs_t& vec, const arglist_t* arg);
-static void disp_v1(const FilterVecs::fl_vecs_t& vec);
-static bool validate_filter_vec(const FilterVecs::fl_vecs_t& vec);
+static void disp_help_url(const fl_vecs_t& vec, const arglist_t* arg);
+static void disp_v1(const fl_vecs_t& vec);
+static bool validate_filter_vec(const fl_vecs_t& vec);
 
 private:
   ArcDistanceFilter arcdist;

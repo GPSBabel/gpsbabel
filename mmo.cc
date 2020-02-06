@@ -1047,7 +1047,7 @@ mmo_writestr(const QString& str)
   bool topbitset = false;
 
   // see if there's any utf-8 multi-byte chars
-  QByteArray utf8 = str.toUtf8();
+  const QByteArray utf8 = str.toUtf8();
   int len = utf8.size();
   for (unsigned char byte : utf8) {
     if (byte & 0x80) {
