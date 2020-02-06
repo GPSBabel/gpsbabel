@@ -1263,7 +1263,7 @@ fit_collect_track_tlr(const route_head *rte)
     double best_odometer_distance = 0;
     for (auto cit = course.begin(); cit != course.end(); cit++) {
       if (!cit->is_course_point) {
-        double distance = gcgeodist(cit->lat, cit->lon, wpt.lat, wpt.lon);;
+        double distance = gcgeodist(cit->lat, cit->lon, wpt.lat, wpt.lon);
         if (best_distance < 0 || distance < best_distance) {
           best_distance = distance;
           best_distance_it = cit;

@@ -66,39 +66,39 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
-constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * 0.3048; };
-constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * 3.2808399; };
+constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * 0.3048; }
+constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * 3.2808399; }
 
-constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;};	/* nautical miles */
-constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;};
+constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}	/* nautical miles */
+constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;}
 
-constexpr double MILES_TO_METERS(double a) { return (a) * 1609.344;};
-constexpr double METERS_TO_MILES(double a) { return (a) / 1609.344;};
-constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;};
+constexpr double MILES_TO_METERS(double a) { return (a) * 1609.344;}
+constexpr double METERS_TO_MILES(double a) { return (a) / 1609.344;}
+constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;}
 
-constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);};
-constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);};
+constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);}
+constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
 
 /* meters/second to kilometers/hour */
-constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;};
+constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;}
 
 /* meters/second to miles/hour */
-constexpr double MPS_TO_MPH(double a) { return METERS_TO_MILES(a) * SECONDS_PER_HOUR;};
+constexpr double MPS_TO_MPH(double a) { return METERS_TO_MILES(a) * SECONDS_PER_HOUR;}
 
 /* meters/second to knots */
-constexpr double MPS_TO_KNOTS(double a) { return MPS_TO_KPH((a)/1.852);};
+constexpr double MPS_TO_KNOTS(double a) { return MPS_TO_KPH((a)/1.852);}
 
 /* kilometers/hour to meters/second */
-constexpr double KPH_TO_MPS(double a) { return a * 1000.0/SECONDS_PER_HOUR;};
+constexpr double KPH_TO_MPS(double a) { return a * 1000.0/SECONDS_PER_HOUR;}
 
 /* miles/hour to meters/second */
 #define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
 
 /* knots to meters/second */
-constexpr double KNOTS_TO_MPS(double a)  {return KPH_TO_MPS(a) * 1.852; };
+constexpr double KNOTS_TO_MPS(double a)  {return KPH_TO_MPS(a) * 1.852; }
 
 #define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
