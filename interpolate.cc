@@ -174,7 +174,7 @@ void InterpolateFilter::init()
     max_dist_step = strtod(opt_dist, &fm);
     if ((*fm == 'k') || (*fm == 'K')) {
       /* distance is kilometers, convert to miles */
-      max_dist_step /= 1.609344;
+      max_dist_step *= kMilesPerKilometer;
     }
     if (max_dist_step <= 0) {
       Fatal() << MYNAME ": interpolation distance should be positve!";
