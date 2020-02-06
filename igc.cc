@@ -331,9 +331,10 @@ static void data_read()
       } else {
         // Store other header data in the track descriptions
         if (strlen(trk_desc) < MAXDESCLEN) {
-          strcat(ibuf, HDRDELIM);
           remain = MAXDESCLEN - strlen(trk_desc);
           strncat(trk_desc, ibuf, remain);
+          remain = MAXDESCLEN - strlen(trk_desc);
+          strncat(trk_desc, HDRDELIM, remain);
         }
       }
       break;
