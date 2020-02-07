@@ -312,7 +312,8 @@ static void
 mps_readstr(gbfile* mps_file, char* buf, size_t sz)
 {
   int c;
-  while (sz-- && (c = gbfgetc(mps_file)) != EOF) {
+  buf[sz-1] = 0;
+  while (--sz && (c = gbfgetc(mps_file)) != EOF) {
     *buf++ = c;
     if (c == 0)  {
       return;
