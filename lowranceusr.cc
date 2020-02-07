@@ -1169,7 +1169,10 @@ static void
 lowranceusr4_parse_route()
 {
   int route_version;
-  int UUID1, UUID2, UUID3, UUID4;
+  int UUID1 = 0;
+  int UUID2 = 0;
+  int UUID3 = 0;
+  int UUID4 = 0;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
   fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
