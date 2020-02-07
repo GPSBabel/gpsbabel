@@ -809,10 +809,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
    */
   if (rstream_version == 0) {
     float read_alt = gbfgetflt(file_in);
-    char buf[32];
-    sprintf(buf, "%15.10f", read_alt);
-    // test for both cases to avoid compiler differences
-    if ((strcmp(buf, "-nan") == 0) || (strcmp(buf, "nan") == 0)) {
+    if (std::isnan(read_alt)) {
       wpt_tmp->altitude = unknown_alt;
     } else if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
       wpt_tmp->altitude = unknown_alt;
