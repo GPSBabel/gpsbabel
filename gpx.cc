@@ -207,7 +207,7 @@ GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr)
   geocache_data* gc_data = wpt_tmp->AllocGCData();
 
   if (attr.hasAttribute("id")) {
-    gc_data->id = attr.value("id").toString().toInt();
+    gc_data->id = attr.value("id").toString().toLongLong();
   }
   if (attr.hasAttribute("available")) {
     if (attr.value("available").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
