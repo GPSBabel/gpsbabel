@@ -323,10 +323,10 @@ static QVector<arglist_t> unicsv_args = {
 
 /* helpers */
 
-// Convert GCID / geo cache reference code into int64
+// Parse GC-Code / geo cache reference code into int64 (GC-ID)
 // (see also https://api.groundspeak.com/documentation#referencecodes)
 static long long
-unicsv_parse_gc_id(const QString& str)
+unicsv_parse_gc_code(const QString& str)
 {
   if (! str.startsWith("GC")) {
     return 0;
@@ -1048,9 +1048,13 @@ unicsv_parse_one_line(const QString& ibuf)
       switch (unicsv_fields_tab[column]) {
 
       case fld_gc_id:
-        gc_data->id = value.toLongLong();
-        if (gc_data->id == 0) {
-          gc_data->id = unicsv_parse_gc_id(value);
+        // First try to decode as numeric GC-ID (e.g. "575006").
+        // If that doesn't succedd, try to decode as GC-Code
+        // (e.g. "GC1234G").
+        bool ok;
+        gc_data->id = value.toLongLong(&ok, 10);
+        if (!ok) {
+          gc_data->id = unicsv_parse_gc_code(value);
         }
         break;
       case fld_gc_type:
