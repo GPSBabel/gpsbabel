@@ -727,7 +727,7 @@ gpgsa_parse(char* ibuf)
   // 0 = "GPGSA"
   // 1 = Mode. Ignored
   QChar fix;
-  if (nfields > 1) {
+  if (nfields > 2) {
     fix = fields[2][0];
   }
 
@@ -737,9 +737,9 @@ gpgsa_parse(char* ibuf)
   }
 
   float pdop = 0, hdop = 0, vdop = 0;
-  if (nfields > 14) pdop = fields[15].toFloat();
-  if (nfields > 15) hdop = fields[16].toFloat();
-  if (nfields > 16) {
+  if (nfields > 15) pdop = fields[15].toFloat();
+  if (nfields > 16) hdop = fields[16].toFloat();
+  if (nfields > 17) {
      // Last one is special. The checksum isn't split out above.
     fields[17].chop(3);
     vdop = fields[17].toFloat();
