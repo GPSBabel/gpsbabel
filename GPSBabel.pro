@@ -247,8 +247,12 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
+openbsd {
+  check.commands = DIFF=gdiff
+}
+
 macx|linux|openbsd{
-  check.commands = PNAME=./$(TARGET) ./testo
+  check.commands += PNAME=./$(TARGET) ./testo
   check.depends = $(TARGET)
   QMAKE_EXTRA_TARGETS += check
 }
