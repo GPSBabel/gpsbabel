@@ -693,7 +693,7 @@ static void Read_AN1_Waypoints(gbfile* f)
       wpt_tmp->icon_descr = icon;
     }
 
-    fs_chain_add(&(wpt_tmp->fs), (format_specific_data*)rec);
+    fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(rec));
     rec = nullptr;
     waypt_add(wpt_tmp);
   }
@@ -704,7 +704,7 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
 {
   an1_waypoint_record* rec;
 
-  const auto* source_rec = (an1_waypoint_record*) fs_chain_find(wpt->fs, FS_AN1W);
+  const auto* source_rec = reinterpret_cast<an1_waypoint_record*>(fs_chain_find(wpt->fs, FS_AN1W));
 
   if (source_rec != nullptr) {
     Copy_AN1_Waypoint((void**) &rec, (const void*) source_rec);
@@ -812,7 +812,7 @@ static void Read_AN1_Lines(gbfile* f)
       rte_head->line_width = rec->lineweight;
     }
     rte_head->rte_name = rec->name;
-    fs_chain_add(&rte_head->fs, (format_specific_data*)rec);
+    fs_chain_add(&rte_head->fs, reinterpret_cast<format_specific_data*>(rec));
     route_add_head(rte_head);
     for (unsigned long j = 0; j < (unsigned) rec->pointcount; j++) {
       an1_vertex_record* vert = Alloc_AN1_Vertex();
@@ -857,7 +857,7 @@ Write_One_AN1_Line(const route_head* rte)
 {
   an1_line_record* rec;
 
-  const auto* source_rec = (an1_line_record*) fs_chain_find(rte->fs, FS_AN1L);
+  const auto* source_rec = reinterpret_cast<an1_line_record*>(fs_chain_find(rte->fs, FS_AN1L));
 
   if (source_rec != nullptr) {
     Copy_AN1_Line((void**) &rec, (const void*) source_rec);
@@ -939,7 +939,7 @@ Write_One_AN1_Vertex(const Waypoint* wpt)
 {
   an1_vertex_record* rec;
 
-  const auto* source_rec = (an1_vertex_record*) fs_chain_find(wpt->fs, FS_AN1V);
+  const auto* source_rec = reinterpret_cast<an1_vertex_record*>(fs_chain_find(wpt->fs, FS_AN1V));
 
   if (source_rec != nullptr) {
     Copy_AN1_Vertex((void**) &rec, (const void*) source_rec);

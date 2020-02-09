@@ -435,7 +435,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   res = new Waypoint;
 
   gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&res->fs, (format_specific_data*) gmsd);
+  fs_chain_add(&res->fs, reinterpret_cast<format_specific_data*>(gmsd));
   res->shortname = fread_cstr();
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
   garmin_fs_t::set_wpt_class(gmsd, wpt_class);
@@ -816,7 +816,7 @@ read_route()
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       if (gmsd == nullptr) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+        fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
       }
       garmin_fs_t::set_wpt_class(gmsd, wpt_class);
       gmsd->ilinks = il_root;

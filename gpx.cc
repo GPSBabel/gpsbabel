@@ -265,7 +265,7 @@ GpxFormat::start_something_else(const QString& el, const QXmlStreamAttributes& a
       new_tag->parent = cur_tag;
     }
   } else {
-    auto* fs_gpx = (fs_xml*)fs_chain_find(*fs_ptr, FS_GPX);
+    auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(*fs_ptr, FS_GPX));
 
     if (fs_gpx && fs_gpx->tag) {
       cur_tag = fs_gpx->tag;
@@ -277,7 +277,7 @@ GpxFormat::start_something_else(const QString& el, const QXmlStreamAttributes& a
     } else {
       fs_gpx = fs_xml_alloc(FS_GPX);
       fs_gpx->tag = new_tag;
-      fs_chain_add(fs_ptr, (format_specific_data*)fs_gpx);
+      fs_chain_add(fs_ptr, reinterpret_cast<format_specific_data*>(fs_gpx));
       new_tag->parent = nullptr;
     }
   }
@@ -1406,7 +1406,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    const auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(waypointp->fs, FS_GPX));
     auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
     if (fs_gpx) {
       if (! gmsd) {
@@ -1439,7 +1439,7 @@ GpxFormat::gpx_track_hdr(const route_head* rte)
 
   if (gpx_write_version > gpx_1_0) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      const auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(rte->fs, FS_GPX));
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1486,7 +1486,7 @@ GpxFormat::gpx_track_disp(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    const auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(waypointp->fs, FS_GPX));
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
@@ -1537,7 +1537,7 @@ GpxFormat::gpx_route_hdr(const route_head* rte)
 
   if (gpx_write_version > gpx_1_0) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      const auto* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(rte->fs, FS_GPX));
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1574,7 +1574,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp)
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    const auto* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(waypointp->fs, FS_GPX));
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }

@@ -461,7 +461,7 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4));
 
     if (fs && fs->uid_unit == uid_unit &&
         fs->uid_seq_low == uid_seq_low &&
@@ -482,7 +482,7 @@ lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4));
 
     if (fs && fs->UUID1 == id1 &&
         fs->UUID2 == id2 &&
@@ -917,7 +917,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
   int waypoint_version;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
+  fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(fsdata));
 
   if (reading_version > 4) {
     /* USR 5 and 6 have four additional data values at the start of each Waypoint */
@@ -1164,7 +1164,7 @@ lowranceusr4_parse_route()
   int UUID1, UUID2, UUID3, UUID4;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
+  fs_chain_add(&(rte_head->fs), reinterpret_cast<format_specific_data*>(fsdata));
 
   if (reading_version >= 5) {
     /* Routes have Universal IDs */
@@ -1416,7 +1416,7 @@ lowranceusr4_parse_trail(int* trail_num)
   int trail_flags;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
+  fs_chain_add(&(trk_head->fs), reinterpret_cast<format_specific_data*>(fsdata));
 
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);
@@ -1776,7 +1776,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
-  const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(fs_chain_find(wpt->fs, FS_LOWRANCEUSR4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2022,7 +2022,7 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
-  const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(fs_chain_find(rte->fs, FS_LOWRANCEUSR4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2053,7 +2053,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table->size(); i++) {
     const Waypoint* cmp = waypt_table->at(i);
     if (cmp->shortname == wpt->shortname) {
-      const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+      const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(fs_chain_find(cmp->fs, FS_LOWRANCEUSR4));
 
       if (opt_serialnum_i > 0) {
         gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified

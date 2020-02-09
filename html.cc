@@ -157,7 +157,7 @@ html_disp(const Waypoint* wpt)
   }
 
   if (includelogs) {
-    const auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(wpt->fs, FS_GPX));
     if (fs_gpx && fs_gpx->tag) {
       xml_tag* root = fs_gpx->tag;
       xml_tag* curlog = xml_findfirst(root, "groundspeak:log");

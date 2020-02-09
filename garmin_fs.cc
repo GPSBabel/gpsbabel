@@ -232,7 +232,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
+    fs_chain_add(&waypt->fs, reinterpret_cast<format_specific_data*>(gmsd));
   }
 
   tag -= base_tag;
@@ -358,7 +358,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
+    fs_chain_add(&waypt->fs, reinterpret_cast<format_specific_data*>(gmsd));
   }
   garmin_fs_t::set_category(gmsd, cat);
   return 1;
@@ -368,7 +368,7 @@ void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
   garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
-  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
 
   /* nothing happens until gmsd is allocated some lines above */
 

@@ -845,8 +845,7 @@ data_read()
       case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
           ozi_fsdata_used = true;
-          fs_chain_add(&(wpt_tmp->fs),
-                       (format_specific_data*) fsdata);
+          fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(fsdata));
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {
@@ -879,7 +878,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  const auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  const auto* fs = reinterpret_cast<ozi_fsdata*>(fs_chain_find(wpt->fs, FS_OZI));
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

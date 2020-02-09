@@ -130,7 +130,7 @@ public:
   garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
 
   static garmin_fs_t* find(const Waypoint* wpt) {
-    return (garmin_fs_t*) fs_chain_find(wpt->fs, FS_GMSD);
+    return reinterpret_cast<garmin_fs_t*>(fs_chain_find(wpt->fs, FS_GMSD));
   }
 
 #define GEN_GMSD_METHODS(field) \

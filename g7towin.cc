@@ -274,7 +274,7 @@ parse_waypt(char* buff)
 
   auto* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
 
   if (gardown) {
     cin = buff + 6;
@@ -345,7 +345,7 @@ parse_trkpt(char* buff)
 {
   auto* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
 
   parse_line(buff, TRKPT__OFS, ";", wpt);
 
