@@ -372,19 +372,19 @@ const time_t base_time_secs = 946706400;
 
 struct lowranceusr4_fsdata {
   format_specific_data fs;
-  uint uid_unit;
-  uint uid_unit2;
-  int uid_seq_low;
-  int uid_seq_high;
-  uint UUID1;
-  uint UUID2;
-  uint UUID3;
-  uint UUID4;
-  int  flags;
-  int  color;
-  const char *color_desc;
-  int  icon_num;
-  float depth;
+  uint uid_unit{0};
+  uint uid_unit2{0};
+  int uid_seq_low{0};
+  int uid_seq_high{0};
+  uint UUID1{0};
+  uint UUID2{0};
+  uint UUID3{0};
+  uint UUID4{0};
+  int  flags{0};
+  int  color{0};
+  const char *color_desc{nullptr};
+  int  icon_num{0};
+  float depth{0.0};
 };
 
 class Lowranceusr4Timestamp {
@@ -400,29 +400,25 @@ class Lowranceusr4Timestamp {
 static void
 lowranceusr4_free_fsdata(void* fsdata)
 {
-  xfree(fsdata);
+  delete static_cast<lowranceusr4_fsdata*>(fsdata);
 }
 
 static void
-lowranceusr4_copy_fsdata(lowranceusr4_fsdata** dest, lowranceusr4_fsdata* src)
+lowranceusr4_copy_fsdata(void** dest, const void* src)
 {
-  *dest = (lowranceusr4_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
+  auto* copy = new lowranceusr4_fsdata(*static_cast<const lowranceusr4_fsdata*>(src));
+  copy->fs.next = nullptr;
+  *dest = copy;
 }
 
 static
 lowranceusr4_fsdata*
 lowranceusr4_alloc_fsdata()
 {
-  auto* fsdata = (lowranceusr4_fsdata*) xcalloc(1, sizeof(lowranceusr4_fsdata));
+  auto* fsdata = new lowranceusr4_fsdata;
   fsdata->fs.type = FS_LOWRANCEUSR4;
-  fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
+  fsdata->fs.copy = lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;
-
-  fsdata->uid_unit = 0;
-  fsdata->uid_seq_low = 0;
-  fsdata->uid_seq_high = 0;
 
   return fsdata;
 }
@@ -463,11 +459,9 @@ register_waypt(const Waypoint* wpt)
 static const Waypoint*
 lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&
         fs->uid_seq_low == uid_seq_low &&
@@ -486,11 +480,9 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 static const Waypoint*
 lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->UUID1 == id1 &&
         fs->UUID2 == id2 &&
@@ -1784,7 +1776,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
-  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+  const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2030,7 +2022,7 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
-  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+  const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2061,7 +2053,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table->size(); i++) {
     const Waypoint* cmp = waypt_table->at(i);
     if (cmp->shortname == wpt->shortname) {
-      auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+      const auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
 
       if (opt_serialnum_i > 0) {
         gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified

@@ -24,8 +24,15 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
+#include <cstddef>                  // for size_t
+#include <cstdint>                  // for int32_t, int16_t, uint16_t
+
+#include <QtCore/QString>           // for QString
+#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
+
 #include "defs.h"
 #include "jeeps/gps.h"
+
 
 /* this order is used by most devices */
 /* enum garmin_display_t {
@@ -205,13 +212,12 @@ using garmin_fs_p = garmin_fs_t*;
 
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
-void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src);
+void garmin_fs_copy(void** dest, const void* src);
 void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
 void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
-class QXmlStreamWriter;
 void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
 
 /* common garmin_fs utilities */

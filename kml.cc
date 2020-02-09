@@ -1433,7 +1433,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
-  auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  const auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
 
   if (!fs_gpx) {
     return r;

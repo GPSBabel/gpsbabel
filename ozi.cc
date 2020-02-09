@@ -49,6 +49,7 @@
 #include <QtCore/QString>         // for QString
 #include <QtCore/QStringList>     // for QStringList
 #include <QtCore/QTextStream>     // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
+#include <QtCore/QVector>         // for QVector
 #include <QtCore/Qt>              // for CaseInsensitive
 #include <QtCore/QtGlobal>        // for qPrintable
 
@@ -65,8 +66,8 @@
 
 struct ozi_fsdata {
   format_specific_data fs;
-  int fgcolor;
-  int bgcolor;
+  int fgcolor{0};
+  int bgcolor{65535};
 };
 
 static gpsbabel::TextStream* stream = nullptr;
@@ -170,27 +171,27 @@ ozi_close_io()
 }
 
 static void
-ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
+ozi_copy_fsdata(void** dest, const void* src)
 {
   /* No strings to mess with.  Straight forward copy. */
-  *dest = (ozi_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
+  auto* copy = new ozi_fsdata(*static_cast<const ozi_fsdata*>(src));
+  copy->fs.next = nullptr;
+  *dest = copy;
 }
 
 static void
 ozi_free_fsdata(void* fsdata)
 {
-  xfree(fsdata);
+  delete static_cast<ozi_fsdata*>(fsdata);
 }
 
 static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
-  auto* fsdata = (ozi_fsdata*) xcalloc(1, sizeof(ozi_fsdata));
+  auto* fsdata = new ozi_fsdata;
   fsdata->fs.type = FS_OZI;
-  fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
+  fsdata->fs.copy = ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
 
   /* Provide defaults via command line defaults */
@@ -878,7 +879,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  const auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

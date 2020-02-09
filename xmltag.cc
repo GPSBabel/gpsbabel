@@ -63,7 +63,7 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 static void
 fs_xml_destroy(void* fs)
 {
-  auto* xml = (fs_xml*)fs;
+  auto* xml = static_cast<fs_xml*>(fs);
   if (xml) {
     free_xml_tag(xml->tag);
   }
@@ -71,18 +71,19 @@ fs_xml_destroy(void* fs)
 }
 
 static void
-fs_xml_copy(void** copy, void* source)
+fs_xml_copy(void** dest, const void* src)
 {
-  auto* src = (fs_xml*)source;
-  if (!source) {
-    *copy = nullptr;
+  if (!src) {
+    *dest = nullptr;
     return;
   }
-  auto* res = new fs_xml;
-  *copy = res;
 
-  res->fs = src->fs;
-  copy_xml_tag(&(res->tag), src->tag, nullptr);
+  const auto* source = static_cast<const fs_xml*>(src);
+  auto* copy = new fs_xml(*source);
+  copy->fs.next = nullptr;
+  copy_xml_tag(&(copy->tag), source->tag, nullptr);
+
+  *dest = copy;
 }
 
 fs_xml* fs_xml_alloc(long type)

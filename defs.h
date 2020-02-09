@@ -292,7 +292,7 @@ public:
 };
 
 using fs_destroy = void (*)(void*);
-using fs_copy = void (*)(void**, void*);
+using fs_copy = void (*)(void**, const void*);
 
 struct format_specific_data {
   long type{0};

@@ -20,17 +20,23 @@
 
  */
 
-#include "defs.h"
-#include "cet_util.h"
-#include "garmin_fs.h"
-#include "garmin_tables.h"
-#include "inifile.h"
+#include <cassert>                   // for assert
+#include <cstdio>                    // for snprintf, sscanf
+#include <cstdlib>                   // for atof
+#include <cstring>                   // for strncpy
 
-#include <QtCore/QString>
-#include <QtCore/QXmlStreamWriter>
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
+#include <QtCore/QByteArray>         // for QByteArray
+#include <QtCore/QStaticStringData>  // for QStaticStringData
+#include <QtCore/QString>            // for QString, QStringLiteral
+#include <QtCore/QXmlStreamWriter>   // for QXmlStreamWriter
+#include <QtCore/Qt>                 // for CaseInsensitive
+
+#include "defs.h"
+#include "garmin_fs.h"
+#include "garmin_tables.h"           // for gt_switch_display_mode_value, gt_display_mode_symbol, gt_display_mode_symbol_and_comment, gt_display_mode_symbol_and_name
+#include "inifile.h"                 // for inifile_readstr
+#include "jeeps/gps.h"               // for gps_waypt_type
+
 
 #define MYNAME "garmin_fs"
 
@@ -39,7 +45,7 @@ garmin_fs_alloc(const int protocol)
 {
   auto* result = new garmin_fs_t;
   result->fs.type = FS_GMSD;
-  result->fs.copy = (fs_copy) garmin_fs_copy;
+  result->fs.copy = garmin_fs_copy;
   result->fs.destroy = garmin_fs_destroy;
   result->fs.next = nullptr;
 
@@ -51,7 +57,7 @@ garmin_fs_alloc(const int protocol)
 void
 garmin_fs_destroy(void* fs)
 {
-  delete (garmin_fs_t*) fs;
+  delete static_cast<garmin_fs_t*>(fs);
 }
 
 garmin_fs_t::~garmin_fs_t()
@@ -69,13 +75,15 @@ garmin_fs_t::~garmin_fs_t()
   }
 }
 
-void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
+void garmin_fs_copy(void** dest, const void* src)
 {
   if (src == nullptr) {
     *dest = nullptr;
     return;
   }
-  *dest = new garmin_fs_t(*src);
+  auto* copy = new garmin_fs_t(*static_cast<const garmin_fs_t*>(src));
+  copy->fs.next = nullptr;
+  *dest = copy;
 }
 
 garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) :
