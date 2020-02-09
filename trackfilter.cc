@@ -474,7 +474,7 @@ void TrackFilter::trackfilter_split()
           distance *= 1000.0;
           break;
         case 'm': /* miles */
-          distance *= 1609.344;
+          distance *= kMetersPerMile;
           break;
         default:
           fatal(MYNAME ": invalid distance unit specified.\n");

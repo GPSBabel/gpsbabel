@@ -231,7 +231,7 @@ void ArcDistanceFilter::init()
 
     if ((*fm == 'k') || (*fm == 'K')) {
       /* distance is kilometers, convert to mile */
-      pos_dist *= .6214;
+      pos_dist *= kMilesPerKilometer;
     }
   }
 }

@@ -1167,11 +1167,11 @@ wr_init(const QString& fname)
   if (opt_zoom) {
     opt_zoom_num = atoi(opt_zoom);
   }
-  radius = .1609344; /* 1/10 mi */
+  radius = .1609344; /* 1/10 mi in kilometers */
   if (opt_radius) {
     radius = atof(opt_radius);
     if (!strchr(opt_radius,'k') && !strchr(opt_radius,'K')) {
-      radius *= 5280*12*2.54/100000;
+      radius *= kKilometersPerMile;
     }
   }
 }

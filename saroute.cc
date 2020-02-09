@@ -306,7 +306,7 @@ my_read()
                               (record + 2 + stringlen + 0x30));
         transittime = le_read32((uint32_t*)
                                 (record + 2 + stringlen + 0x10));
-        seglen /= 5280*12*2.54/100000; /* to miles */
+        seglen *= kMilesPerKilometer; /* to miles */
       }
 
       uint16_t coordcount = le_read16((uint16_t*)
