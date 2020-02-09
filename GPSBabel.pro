@@ -15,7 +15,7 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 
 QT -= gui
 
-linux: {
+linux|bsd: {
   TARGET = gpsbabel
 } else {
   TARGET = GPSBabel
