@@ -171,7 +171,7 @@ load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
-macx|linux|openbsd {
+macx|linux|openbsd|freebsd {
   qtCompileTest(unistd) {
     # this is used by zlib
     DEFINES += HAVE_UNISTD_H
@@ -206,6 +206,10 @@ win32-msvc* {
 
 linux|openbsd {
   LIBS += "-lusb-1.0"
+}
+
+freebsd {
+  LIBS += "-lusb"
 }
 
 macx {
@@ -251,7 +255,7 @@ openbsd {
   check.commands = DIFF=gdiff
 }
 
-macx|linux|openbsd{
+macx|linux|openbsd|freebsd {
   check.commands += PNAME=./$(TARGET) ./testo
   check.depends = $(TARGET)
   QMAKE_EXTRA_TARGETS += check

@@ -31,6 +31,8 @@
 #  if __APPLE__
 // We use our own libusb.
 #    include "mac/libusb/libusb.h"
+#  elif defined(__FreeBSD__)
+#    include <libusb.h>
 #  else
 #    include <libusb-1.0/libusb.h>
 #  endif
