@@ -366,7 +366,7 @@ unicsv_parse_gc_id(const QString& str)
   }
 
   long long res = 0;
-  for (auto c : s) {
+  for (auto c : qAsConst(s)) {
     int val = kBase31.indexOf(c);
     if (val < 0 || (base == 16 && val > 15)) {
       return 0;
