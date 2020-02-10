@@ -93,9 +93,8 @@ public:
 #endif
 };
 
-class garmin_fs_t {
+class garmin_fs_t : public format_specific_data {
 public:
-  format_specific_data fs;
   garmin_fs_flags_t flags;
 
   int protocol{0};		/* ... used by device (-1 is MapSource) */
@@ -123,7 +122,7 @@ public:
 
 public:
   garmin_fs_t() = default;
-  ~garmin_fs_t();
+  ~garmin_fs_t() override;
   garmin_fs_t(const garmin_fs_t& other);
   garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
   garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
@@ -208,7 +207,6 @@ public:
 
 #undef GEN_GMSD_STR_METHODS
 };
-using garmin_fs_p = garmin_fs_t*;
 
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);

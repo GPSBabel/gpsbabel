@@ -370,8 +370,7 @@ static QTextCodec*    utf16le_codec{nullptr};
 /* Jan 1, 2000 00:00:00 */
 const time_t base_time_secs = 946706400;
 
-struct lowranceusr4_fsdata {
-  format_specific_data fs;
+struct lowranceusr4_fsdata : format_specific_data {
   uint uid_unit{0};
   uint uid_unit2{0};
   int uid_seq_low{0};
@@ -407,7 +406,7 @@ static void
 lowranceusr4_copy_fsdata(void** dest, const void* src)
 {
   auto* copy = new lowranceusr4_fsdata(*static_cast<const lowranceusr4_fsdata*>(src));
-  copy->fs.next = nullptr;
+  copy->fsnext = nullptr;
   *dest = copy;
 }
 
@@ -416,9 +415,9 @@ lowranceusr4_fsdata*
 lowranceusr4_alloc_fsdata()
 {
   auto* fsdata = new lowranceusr4_fsdata;
-  fsdata->fs.type = FS_LOWRANCEUSR4;
-  fsdata->fs.copy = lowranceusr4_copy_fsdata;
-  fsdata->fs.destroy = lowranceusr4_free_fsdata;
+  fsdata->fstype = FS_LOWRANCEUSR4;
+  fsdata->fscopy = lowranceusr4_copy_fsdata;
+  fsdata->fsdestroy = lowranceusr4_free_fsdata;
 
   return fsdata;
 }
@@ -917,7 +916,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
   int waypoint_version;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(fsdata));
+  fs_chain_add(&(wpt_tmp->fs), fsdata);
 
   if (reading_version > 4) {
     /* USR 5 and 6 have four additional data values at the start of each Waypoint */
@@ -1164,7 +1163,7 @@ lowranceusr4_parse_route()
   int UUID1, UUID2, UUID3, UUID4;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(rte_head->fs), reinterpret_cast<format_specific_data*>(fsdata));
+  fs_chain_add(&(rte_head->fs), fsdata);
 
   if (reading_version >= 5) {
     /* Routes have Universal IDs */
@@ -1416,7 +1415,7 @@ lowranceusr4_parse_trail(int* trail_num)
   int trail_flags;
 
   lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(trk_head->fs), reinterpret_cast<format_specific_data*>(fsdata));
+  fs_chain_add(&(trk_head->fs), fsdata);
 
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);

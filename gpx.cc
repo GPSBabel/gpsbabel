@@ -277,7 +277,7 @@ GpxFormat::start_something_else(const QString& el, const QXmlStreamAttributes& a
     } else {
       fs_gpx = fs_xml_alloc(FS_GPX);
       fs_gpx->tag = new_tag;
-      fs_chain_add(fs_ptr, reinterpret_cast<format_specific_data*>(fs_gpx));
+      fs_chain_add(fs_ptr, fs_gpx);
       new_tag->parent = nullptr;
     }
   }

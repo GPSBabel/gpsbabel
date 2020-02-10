@@ -41,7 +41,7 @@
 #include <QtCore/QtGlobal>         // for qPrintable
 
 #include "csv_util.h"              // for csv_lineparse
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, garmin_fs_p, GMSD_SECTION_CATEGORIES
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, GMSD_SECTION_CATEGORIES
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
 #include "inifile.h"               // for inifile_readstr
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
@@ -215,7 +215,7 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class < 0x80) {
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
@@ -535,7 +535,7 @@ write_waypt(const Waypoint* wpt)
 {
   const char* wpt_type;
 
-  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   int i = garmin_fs_t::get_display(gmsd, 0);
   if (i > GT_DISPLAY_MODE_MAX) {
@@ -1090,8 +1090,8 @@ parse_waypoint()
   bind_fields(waypt_header);
 
   auto* wpt = new Waypoint;
-  garmin_fs_p gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
+  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  fs_chain_add(&wpt->fs, gmsd);
 
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int i;

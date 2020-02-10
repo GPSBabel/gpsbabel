@@ -64,8 +64,7 @@
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
-struct ozi_fsdata {
-  format_specific_data fs;
+struct ozi_fsdata : format_specific_data {
   int fgcolor{0};
   int bgcolor{65535};
 };
@@ -175,7 +174,7 @@ ozi_copy_fsdata(void** dest, const void* src)
 {
   /* No strings to mess with.  Straight forward copy. */
   auto* copy = new ozi_fsdata(*static_cast<const ozi_fsdata*>(src));
-  copy->fs.next = nullptr;
+  copy->fsnext = nullptr;
   *dest = copy;
 }
 
@@ -190,9 +189,9 @@ ozi_fsdata*
 ozi_alloc_fsdata()
 {
   auto* fsdata = new ozi_fsdata;
-  fsdata->fs.type = FS_OZI;
-  fsdata->fs.copy = ozi_copy_fsdata;
-  fsdata->fs.destroy = ozi_free_fsdata;
+  fsdata->fstype = FS_OZI;
+  fsdata->fscopy = ozi_copy_fsdata;
+  fsdata->fsdestroy = ozi_free_fsdata;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
@@ -845,7 +844,7 @@ data_read()
       case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
           ozi_fsdata_used = true;
-          fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(fsdata));
+          fs_chain_add(&(wpt_tmp->fs), fsdata);
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {

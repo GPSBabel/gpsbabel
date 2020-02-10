@@ -80,7 +80,7 @@ fs_xml_copy(void** dest, const void* src)
 
   const auto* source = static_cast<const fs_xml*>(src);
   auto* copy = new fs_xml(*source);
-  copy->fs.next = nullptr;
+  copy->fsnext = nullptr;
   copy_xml_tag(&(copy->tag), source->tag, nullptr);
 
   *dest = copy;
@@ -89,8 +89,8 @@ fs_xml_copy(void** dest, const void* src)
 fs_xml* fs_xml_alloc(long type)
 {
   auto* result = new fs_xml;
-  result->fs.type = type;
-  result->fs.copy = fs_xml_copy;
-  result->fs.destroy = fs_xml_destroy;
+  result->fstype = type;
+  result->fscopy = fs_xml_copy;
+  result->fsdestroy = fs_xml_destroy;
   return result;
 }

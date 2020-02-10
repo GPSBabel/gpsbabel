@@ -185,8 +185,7 @@ struct an1_symbol_record {
   char* name{nullptr};
 };
 
-struct an1_waypoint_record  {
-  format_specific_data fs;
+struct an1_waypoint_record : format_specific_data {
   short magic{0};
   long unk1{0};
   long lon{0};
@@ -224,8 +223,7 @@ struct an1_waypoint_record  {
   char* image_name{nullptr};
 };
 
-struct an1_vertex_record  {
-  format_specific_data fs;
+struct an1_vertex_record : format_specific_data {
   short magic{0};
   long unk0{0};
   long lon{0};
@@ -233,8 +231,7 @@ struct an1_vertex_record  {
   short unk1{0};
 };
 
-struct an1_line_record  {
-  format_specific_data fs;
+struct an1_line_record : format_specific_data {
   long roadtype{0};
   short serial{0};
   long unk2{0};
@@ -270,7 +267,7 @@ static void Copy_AN1_Waypoint(void** vdwpt, const void* vwpt)
 {
   const auto* wpt = static_cast<const an1_waypoint_record*>(vwpt);
   auto* dwpt = new an1_waypoint_record(*wpt);
-  dwpt->fs.next = nullptr;
+  dwpt->fsnext = nullptr;
   dwpt->name = xstrdup(wpt->name);
   dwpt->fontname = xstrdup(wpt->fontname);
   dwpt->url = xstrdup(wpt->url);
@@ -282,9 +279,9 @@ static void Copy_AN1_Waypoint(void** vdwpt, const void* vwpt)
 static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
   auto* result = new an1_waypoint_record;
-  result->fs.type = FS_AN1W;
-  result->fs.copy = Copy_AN1_Waypoint;
-  result->fs.destroy = Destroy_AN1_Waypoint;
+  result->fstype = FS_AN1W;
+  result->fscopy = Copy_AN1_Waypoint;
+  result->fsdestroy = Destroy_AN1_Waypoint;
   return result;
 }
 
@@ -300,16 +297,16 @@ static void Copy_AN1_Vertex(void** vdvert, const void* vvert)
 {
   const auto* vert = static_cast<const an1_vertex_record*>(vvert);
   auto* dvert = new an1_vertex_record(*vert);
-  dvert->fs.next = nullptr;
+  dvert->fsnext = nullptr;
   *vdvert = dvert;
 }
 
 static an1_vertex_record* Alloc_AN1_Vertex()
 {
   auto* result = new an1_vertex_record;
-  result->fs.type = FS_AN1V;
-  result->fs.copy = Copy_AN1_Vertex;
-  result->fs.destroy = Destroy_AN1_Vertex;
+  result->fstype = FS_AN1V;
+  result->fscopy = Copy_AN1_Vertex;
+  result->fsdestroy = Destroy_AN1_Vertex;
   return result;
 }
 
@@ -326,7 +323,7 @@ static void Copy_AN1_Line(void** vdline, const void* vline)
 {
   const auto* line = static_cast<const an1_line_record*>(vline);
   auto* dline = new an1_line_record(*line);
-  dline->fs.next = nullptr;
+  dline->fsnext = nullptr;
   dline->name = xstrdup(line->name);
   *vdline = dline;
 }
@@ -334,9 +331,9 @@ static void Copy_AN1_Line(void** vdline, const void* vline)
 static an1_line_record* Alloc_AN1_Line()
 {
   auto* result = new an1_line_record;
-  result->fs.type = FS_AN1L;
-  result->fs.copy = Copy_AN1_Line;
-  result->fs.destroy = Destroy_AN1_Line;
+  result->fstype = FS_AN1L;
+  result->fscopy = Copy_AN1_Line;
+  result->fsdestroy = Destroy_AN1_Line;
   return result;
 }
 
@@ -693,7 +690,7 @@ static void Read_AN1_Waypoints(gbfile* f)
       wpt_tmp->icon_descr = icon;
     }
 
-    fs_chain_add(&(wpt_tmp->fs), reinterpret_cast<format_specific_data*>(rec));
+    fs_chain_add(&(wpt_tmp->fs), rec);
     rec = nullptr;
     waypt_add(wpt_tmp);
   }
@@ -812,7 +809,7 @@ static void Read_AN1_Lines(gbfile* f)
       rte_head->line_width = rec->lineweight;
     }
     rte_head->rte_name = rec->name;
-    fs_chain_add(&rte_head->fs, reinterpret_cast<format_specific_data*>(rec));
+    fs_chain_add(&rte_head->fs, rec);
     route_add_head(rte_head);
     for (unsigned long j = 0; j < (unsigned) rec->pointcount; j++) {
       an1_vertex_record* vert = Alloc_AN1_Vertex();
@@ -823,8 +820,7 @@ static void Read_AN1_Lines(gbfile* f)
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString::asprintf("\\%5.5lx", rtserial++);
-      fs_chain_add(&wpt_tmp->fs,
-                   (format_specific_data*)vert);
+      fs_chain_add(&wpt_tmp->fs, vert);
       route_add_wpt(rte_head, wpt_tmp);
     }
   }

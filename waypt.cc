@@ -32,7 +32,7 @@
 #include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND, garmin_fs_p
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
@@ -251,7 +251,7 @@ double
 waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 {
   double res = 0;
-  garmin_fs_p gmsd;
+  garmin_fs_t* gmsd;
 
   if ((A == nullptr) || (B == nullptr)) {
     return 0;

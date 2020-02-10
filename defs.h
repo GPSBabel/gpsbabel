@@ -295,11 +295,18 @@ using fs_destroy = void (*)(void*);
 using fs_copy = void (*)(void**, const void*);
 
 struct format_specific_data {
-  long type{0};
-  format_specific_data* next{nullptr};
+  format_specific_data() = default;
+  virtual ~format_specific_data() = default;
+  format_specific_data(const format_specific_data& other) = default;
+  format_specific_data& operator=(const format_specific_data&) = default;
+  format_specific_data(format_specific_data&&) = delete;
+  format_specific_data& operator=(format_specific_data&&) = delete;
 
-  fs_destroy destroy{nullptr};
-  fs_copy copy{nullptr};
+  long fstype{0};
+  format_specific_data* fsnext{nullptr};
+
+  fs_destroy fsdestroy{nullptr};
+  fs_copy fscopy{nullptr};
 };
 
 class gb_color

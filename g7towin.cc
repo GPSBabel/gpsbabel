@@ -75,7 +75,7 @@ static void
 parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 {
   char* cin;
-  garmin_fs_p gmsd = garmin_fs_t::find(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   while ((cin = csv_lineparse(buff, delimiter, "", index++))) {
 
@@ -273,8 +273,8 @@ parse_waypt(char* buff)
   struct tm tm;
 
   auto* wpt = new Waypoint;
-  garmin_fs_p gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
+  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  fs_chain_add(&wpt->fs, gmsd);
 
   if (gardown) {
     cin = buff + 6;
@@ -344,8 +344,8 @@ static Waypoint*
 parse_trkpt(char* buff)
 {
   auto* wpt = new Waypoint;
-  garmin_fs_p gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
+  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  fs_chain_add(&wpt->fs, gmsd);
 
   parse_line(buff, TRKPT__OFS, ";", wpt);
 

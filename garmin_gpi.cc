@@ -249,7 +249,7 @@ gpi_gmsd_init(Waypoint* wpt)
   }
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, reinterpret_cast<format_specific_data*>(gmsd));
+    fs_chain_add(&wpt->fs, gmsd);
   }
   return gmsd;
 }
