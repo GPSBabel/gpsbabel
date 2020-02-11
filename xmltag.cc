@@ -80,7 +80,6 @@ fs_xml_copy(void** dest, const void* src)
 
   const auto* source = static_cast<const fs_xml*>(src);
   auto* copy = new fs_xml(*source);
-  copy->fsnext = nullptr;
   copy_xml_tag(&(copy->tag), source->tag, nullptr);
 
   *dest = copy;

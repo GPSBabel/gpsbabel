@@ -261,7 +261,7 @@ private:
   bounds all_bounds;
   int next_trkpt_is_new_seg;
 
-  format_specific_data** fs_ptr;
+  QList<format_specific_data*>* fs_ptr;
 
   /*
    * The file-level information.

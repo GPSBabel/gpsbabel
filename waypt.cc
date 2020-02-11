@@ -404,7 +404,6 @@ Waypoint::Waypoint() :
   temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
-  fs(nullptr),
   session(curr_session()),
   extra_data(nullptr)
 {
@@ -415,7 +414,7 @@ Waypoint::~Waypoint()
   if (gc_data != &Waypoint::empty_gc_data) {
     delete gc_data;
   }
-  fs_chain_destroy(fs);
+  fs_chain_destroy(&fs);
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
@@ -446,7 +445,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   temperature(other.temperature),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
-  fs(other.fs),
   session(other.session),
   extra_data(other.extra_data)
 {
@@ -470,7 +468,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     if (gc_data != &Waypoint::empty_gc_data) {
       delete gc_data;
     }
-    fs_chain_destroy(fs);
+    fs_chain_destroy(&fs);
 
     // allocate and copy
     latitude = rhs.latitude;
@@ -500,7 +498,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     temperature = rhs.temperature;
     odometer_distance = rhs.odometer_distance;
     gc_data = rhs.gc_data;
-    fs = rhs.fs;
     session = rhs.session;
     extra_data = rhs.extra_data;
     // deep copy geocache data unless it is the special static empty_gc_data.

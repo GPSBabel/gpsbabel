@@ -406,7 +406,6 @@ static void
 lowranceusr4_copy_fsdata(void** dest, const void* src)
 {
   auto* copy = new lowranceusr4_fsdata(*static_cast<const lowranceusr4_fsdata*>(src));
-  copy->fsnext = nullptr;
   *dest = copy;
 }
 

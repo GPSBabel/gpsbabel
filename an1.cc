@@ -267,7 +267,6 @@ static void Copy_AN1_Waypoint(void** vdwpt, const void* vwpt)
 {
   const auto* wpt = static_cast<const an1_waypoint_record*>(vwpt);
   auto* dwpt = new an1_waypoint_record(*wpt);
-  dwpt->fsnext = nullptr;
   dwpt->name = xstrdup(wpt->name);
   dwpt->fontname = xstrdup(wpt->fontname);
   dwpt->url = xstrdup(wpt->url);
@@ -297,7 +296,6 @@ static void Copy_AN1_Vertex(void** vdvert, const void* vvert)
 {
   const auto* vert = static_cast<const an1_vertex_record*>(vvert);
   auto* dvert = new an1_vertex_record(*vert);
-  dvert->fsnext = nullptr;
   *vdvert = dvert;
 }
 
@@ -323,7 +321,6 @@ static void Copy_AN1_Line(void** vdline, const void* vline)
 {
   const auto* line = static_cast<const an1_line_record*>(vline);
   auto* dline = new an1_line_record(*line);
-  dline->fsnext = nullptr;
   dline->name = xstrdup(line->name);
   *vdline = dline;
 }

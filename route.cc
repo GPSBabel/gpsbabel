@@ -379,7 +379,6 @@ computed_trkdata track_recompute(const route_head* trk)
 route_head::route_head() :
   rte_num(0),
   rte_waypt_ct(0),
-  fs(nullptr),
   // line_color(),
   line_width(-1),
   session(curr_session())
@@ -389,9 +388,7 @@ route_head::route_head() :
 route_head::~route_head()
 {
   waypoint_list.flush();
-  if (fs) {
-    fs_chain_destroy(fs);
-  }
+  fs_chain_destroy(&fs);
 }
 
 int RouteList::waypt_count() const

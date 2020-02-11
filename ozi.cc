@@ -174,7 +174,6 @@ ozi_copy_fsdata(void** dest, const void* src)
 {
   /* No strings to mess with.  Straight forward copy. */
   auto* copy = new ozi_fsdata(*static_cast<const ozi_fsdata*>(src));
-  copy->fsnext = nullptr;
   *dest = copy;
 }
 
@@ -857,7 +856,7 @@ data_read()
       }
 
       if (!ozi_fsdata_used) {
-        fs_chain_destroy((format_specific_data*) fsdata);
+        ozi_free_fsdata(fsdata);
       }
 
     } else {

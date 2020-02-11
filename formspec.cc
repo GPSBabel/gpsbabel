@@ -19,48 +19,44 @@
 
  */
 
+#include <QtCore/QList>
+
 #include "defs.h"
 
-format_specific_data* fs_chain_copy(format_specific_data* source)
+QList<format_specific_data*> fs_chain_copy(const QList<format_specific_data*>& source)
 {
-  format_specific_data* result = nullptr;
-
-  format_specific_data** copy = &result;
-  while (source) {
-    source->fscopy((void**)copy, (void*)source);
-    /* prevent segfaults from badly-behaved copy functions */
-    (*copy)->fsnext = nullptr;
-    copy = &((*copy)->fsnext);
-    source = source->fsnext;
+  QList<format_specific_data*> dest;
+  for (const auto* item : source) {
+    format_specific_data* copy;
+    item->fscopy((void**)&copy, (void*)item);
+    dest.append(copy);
   }
-  return result;
+  return dest;
 }
 
-void fs_chain_destroy(format_specific_data* chain)
+void fs_chain_destroy(QList<format_specific_data*>* chain)
 {
-  format_specific_data* cur = chain;
-  while (cur) {
-    format_specific_data* next = cur->fsnext;
-    cur->fsdestroy(cur);
-    cur = next;
-  }
-}
-
-format_specific_data* fs_chain_find(format_specific_data* chain, long type)
-{
-  format_specific_data* cur = chain;
-  while (cur) {
-    if (cur->fstype == type) {
-      return cur;
+  if (chain != nullptr) {
+    while (!chain->isEmpty()) {
+      format_specific_data* item = chain->takeFirst();
+      item->fsdestroy(item);
     }
-    cur = cur->fsnext;
+  }
+}
+
+format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, long type)
+{
+  for (auto* item : chain) {
+    if (item->fstype == type) {
+      return item;
+    }
   }
   return nullptr;
 }
 
-void fs_chain_add(format_specific_data** chain, format_specific_data* data)
+void fs_chain_add(QList<format_specific_data*>* chain, format_specific_data* data)
 {
-  data->fsnext = *chain;
-  *chain = data;
+  if (chain != nullptr) {
+    chain->append(data);
+  }
 }
-

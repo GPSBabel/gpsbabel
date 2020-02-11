@@ -81,7 +81,6 @@ void garmin_fs_copy(void** dest, const void* src)
     return;
   }
   auto* copy = new garmin_fs_t(*static_cast<const garmin_fs_t*>(src));
-  copy->fsnext = nullptr;
   *dest = copy;
 }
 

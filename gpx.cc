@@ -265,7 +265,7 @@ GpxFormat::start_something_else(const QString& el, const QXmlStreamAttributes& a
       new_tag->parent = cur_tag;
     }
   } else {
-    auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(*fs_ptr, FS_GPX));
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(fs_chain_find(*fs_ptr, FS_GPX));
 
     if (fs_gpx && fs_gpx->tag) {
       cur_tag = fs_gpx->tag;
@@ -275,9 +275,9 @@ GpxFormat::start_something_else(const QString& el, const QXmlStreamAttributes& a
       cur_tag->sibling = new_tag;
       new_tag->parent = nullptr;
     } else {
-      fs_gpx = fs_xml_alloc(FS_GPX);
-      fs_gpx->tag = new_tag;
-      fs_chain_add(fs_ptr, fs_gpx);
+      fs_xml* new_fs_gpx = fs_xml_alloc(FS_GPX);
+      new_fs_gpx->tag = new_tag;
+      fs_chain_add(fs_ptr, new_fs_gpx);
       new_tag->parent = nullptr;
     }
   }
