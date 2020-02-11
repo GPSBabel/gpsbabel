@@ -145,7 +145,7 @@ void RadiusFilter::init()
 
     if ((*fm == 'k') || (*fm == 'K')) {
       /* distance is kilometers, convert to miles */
-      pos_dist *= .6214;
+      pos_dist *= kMilesPerKilometer;
     }
   }
 

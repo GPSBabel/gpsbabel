@@ -57,7 +57,7 @@ static double dotproduct(double x1, double y1, double z1,
 
 double radtomiles(double rads)
 {
-  const double radmiles = EARTH_RAD * 100.0 / 2.54 / 12.0 / 5280.0;
+  const double radmiles = METERS_TO_MILES(EARTH_RAD);
   return (rads * radmiles);
 }
 

@@ -309,7 +309,7 @@ ozi_track_disp(const Waypoint* waypointp)
   *stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
                    << waypointp->longitude << ','
                    << new_track << ','
-                   << qSetRealNumberPrecision(0) << alt << ','
+                   << qSetRealNumberPrecision(1) << alt << ','
                    << ozi_time << ",,\r\n";
 
   new_track = 0;

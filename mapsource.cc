@@ -926,7 +926,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
          data (min 22 bytes) terminated by a zero */
       do {
         gbfread(tbuf, 1, 1, mps_file);
-      } while (tbuf[0]);
+      } while (tbuf[0] && !gbfeof(mps_file));
 
       /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
       gbfread(tbuf, 18, 1, mps_file);
@@ -1039,7 +1039,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
     	data (min 22 bytes) terminated by a zero */
     do {
       gbfread(tbuf, 1, 1, mps_file);
-    } while (tbuf[0]);
+    } while (tbuf[0] && !gbfeof(mps_file));
 
     /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
     gbfread(tbuf, 18, 1, mps_file);

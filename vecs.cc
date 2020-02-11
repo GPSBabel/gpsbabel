@@ -650,7 +650,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
-      if (arg.argtype == ARGTYPE_INT) {
+      if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
         if (arg.defaultvalue &&
             ! is_integer(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";

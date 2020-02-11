@@ -64,18 +64,33 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
-constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * 0.3048; }
-constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * 3.2808399; }
+/*
+ * The constants marked "exact in decimal notation" may be more accurately
+ * converted to doubles when we don't ask the compiler to do any multiplication.
+ * e.g. kMetersPerMile = 0.0254 * 12.0 * 5280.0; might have a larger error than
+ *      kMetersPerMile = 1609.344;
+ * Historically we have had some problematic test cases where this mattered.
+ * It is a better idea to use test cases that aren't so demanding.
+ */
+constexpr double kMetersPerFoot = 0.3048; /* exact in decimal notation */
+constexpr double kFeetPerMeter = 1.0 / kMetersPerFoot;
+constexpr double kMetersPerMile = 1609.344; /* exact in decimal notation */
+constexpr double kMilesPerMeter = 1.0 / kMetersPerMile;
+constexpr double kKilometersPerMile = 1.609344; /* exact in decimal notation */
+constexpr double kMilesPerKilometer = 1.0 / kKilometersPerMile;
+
+constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * kMetersPerFoot; }
+constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * kFeetPerMeter; }
 
 constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}	/* nautical miles */
 constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;}
 
-constexpr double MILES_TO_METERS(double a) { return (a) * 1609.344;}
-constexpr double METERS_TO_MILES(double a) { return (a) / 1609.344;}
+constexpr double MILES_TO_METERS(double a) { return (a) * kMetersPerMile;}
+constexpr double METERS_TO_MILES(double a) { return (a) * kMilesPerMeter;}
 constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;}
 
-constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);}
-constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);}
+constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32.0);}
+constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32.0) / 1.8);}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
@@ -903,13 +918,13 @@ void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
 
-#define ARGTYPE_UNKNOWN    0x00000000
-#define ARGTYPE_INT        0x00000001
-#define ARGTYPE_FLOAT      0x00000002
-#define ARGTYPE_STRING     0x00000003
-#define ARGTYPE_BOOL       0x00000004
-#define ARGTYPE_FILE       0x00000005
-#define ARGTYPE_OUTFILE    0x00000006
+#define ARGTYPE_UNKNOWN    0x00000000U
+#define ARGTYPE_INT        0x00000001U
+#define ARGTYPE_FLOAT      0x00000002U
+#define ARGTYPE_STRING     0x00000003U
+#define ARGTYPE_BOOL       0x00000004U
+#define ARGTYPE_FILE       0x00000005U
+#define ARGTYPE_OUTFILE    0x00000006U
 
 /* REQUIRED means that the option is required to be set.
  * See also BEGIN/END_REQ */
