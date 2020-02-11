@@ -44,9 +44,9 @@ garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
   auto* result = new garmin_fs_t;
-  result->fstype = FS_GMSD;
-  result->fscopy = garmin_fs_copy;
-  result->fsdestroy = garmin_fs_destroy;
+  result->fs_type = kFsGmsd;
+  result->fs_copy = garmin_fs_copy;
+  result->fs_destroy = garmin_fs_destroy;
 
   result->protocol = protocol;
 
@@ -84,7 +84,7 @@ void garmin_fs_copy(void** dest, const void* src)
   *dest = copy;
 }
 
-garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) : format_specific_data(other),
+garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) : FormatSpecificData(other),
   flags(other.flags),
   protocol(other.protocol),
   icon(other.icon),
@@ -229,7 +229,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, gmsd);
+    waypt->fs.FsChainAdd(gmsd);
   }
 
   tag -= base_tag;
@@ -355,7 +355,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, gmsd);
+    waypt->fs.FsChainAdd(gmsd);
   }
   garmin_fs_t::set_category(gmsd, cat);
   return 1;
@@ -365,7 +365,7 @@ void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
   garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
-  fs_chain_add(&wpt->fs, gmsd);
+  wpt->fs.FsChainAdd(gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */
 

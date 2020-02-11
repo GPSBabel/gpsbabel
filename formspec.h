@@ -1,5 +1,5 @@
 /*
-    Functions to manage the format_specific_data chain
+    Functions to manage the FormatSpecificData chain
 
     Copyright (C) 2005 Ron Parker and Robert Lipe.
 
@@ -24,36 +24,39 @@
 #include <QtCore/QList>  // for QList
 
 enum FsType {
-  FS_UNKNOWN = 0L,
-  FS_GPX = 0x67707800L,
-  FS_AN1W = 0x616e3177L,
-  FS_AN1L = 0x616e316cL,
-  FS_AN1V = 0x616e3176L,
-  FS_OZI = 0x6f7a6900L,
-  FS_GMSD = 0x474d5344L,	/* GMSD = Garmin specific data */
-  FS_LOWRANCEUSR4 = 0x615f234cL
+  kFsUnknown = 0L,
+  KFsGpx = 0x67707800L,
+  KFsAn1W = 0x616e3177L,
+  kFsAn1L = 0x616e316cL,
+  KFsAn1V = 0x616e3176L,
+  kFsOzi = 0x6f7a6900L,
+  kFsGmsd = 0x474d5344L,	/* GMSD = Garmin specific data */
+  kFsLowranceusr4 = 0x615f234cL
 };
 
-using fs_destroy = void (*)(void*);
-using fs_copy = void (*)(void**, const void*);
+using FsDestroy = void (*)(void*);
+using FsCopy = void (*)(void**, const void*);
 
-struct format_specific_data {
-  format_specific_data() = default;
-  virtual ~format_specific_data() = default;
-  format_specific_data(const format_specific_data& other) = default;
-  format_specific_data& operator=(const format_specific_data&) = default;
-  format_specific_data(format_specific_data&&) = delete;
-  format_specific_data& operator=(format_specific_data&&) = delete;
+struct FormatSpecificData {
+  FormatSpecificData() = default;
+  virtual ~FormatSpecificData() = default;
+  FormatSpecificData(const FormatSpecificData&) = default;
+  FormatSpecificData& operator=(const FormatSpecificData&) = default;
+  FormatSpecificData(FormatSpecificData&&) = delete;
+  FormatSpecificData& operator=(FormatSpecificData&&) = delete;
 
-  FsType fstype{FS_UNKNOWN};
-
-  fs_destroy fsdestroy{nullptr};
-  fs_copy fscopy{nullptr};
+  FsType fs_type{kFsUnknown};
+  FsDestroy fs_destroy{nullptr};
+  FsCopy fs_copy{nullptr};
 };
 
-QList<format_specific_data*> fs_chain_copy(const QList<format_specific_data*>& source);
-void fs_chain_destroy(QList<format_specific_data*>* chain);
-format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, FsType type);
-void fs_chain_add(QList<format_specific_data*>* chain, format_specific_data* data);
+class FormatSpecificDataList : private QList<FormatSpecificData*>
+{
+public:
+  FormatSpecificDataList FsChainCopy() const;
+  void FsChainDestroy();
+  FormatSpecificData* FsChainFind(FsType type) const;
+  void FsChainAdd(FormatSpecificData* data);
+};
 
 #endif // FORMSPEC_H_INCLUDED_

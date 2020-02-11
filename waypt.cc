@@ -414,7 +414,7 @@ Waypoint::~Waypoint()
   if (gc_data != &Waypoint::empty_gc_data) {
     delete gc_data;
   }
-  fs_chain_destroy(&fs);
+  fs.FsChainDestroy();
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
@@ -454,7 +454,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   }
 
   // deep copy fs chain data.
-  fs = fs_chain_copy(other.fs);
+  fs = other.fs.FsChainCopy();
 
   // note: session is not deep copied.
   // note: extra_data is not deep copied.
@@ -468,7 +468,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     if (gc_data != &Waypoint::empty_gc_data) {
       delete gc_data;
     }
-    fs_chain_destroy(&fs);
+    fs.FsChainDestroy();
 
     // allocate and copy
     latitude = rhs.latitude;
@@ -506,7 +506,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     }
 
     // deep copy fs chain data.
-    fs = fs_chain_copy(rhs.fs);
+    fs = rhs.fs.FsChainCopy();
 
     // note: session is not deep copied.
     // note: extra_data is not deep copied.

@@ -55,7 +55,7 @@
 
 #include "defs.h"
 #include "csv_util.h"             // for csv_stringclean
-#include "formspec.h"             // for fs_chain_add, fs_chain_find, FS_OZI, format_specific_data
+#include "formspec.h"             // for FsChainAdd, FsChainFind, kFsOzi, FormatSpecificData
 #include "jeeps/gpsmath.h"        // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
@@ -65,7 +65,7 @@
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
-struct ozi_fsdata : format_specific_data {
+struct ozi_fsdata : FormatSpecificData {
   int fgcolor{0};
   int bgcolor{65535};
 };
@@ -189,9 +189,9 @@ ozi_fsdata*
 ozi_alloc_fsdata()
 {
   auto* fsdata = new ozi_fsdata;
-  fsdata->fstype = FS_OZI;
-  fsdata->fscopy = ozi_copy_fsdata;
-  fsdata->fsdestroy = ozi_free_fsdata;
+  fsdata->fs_type = kFsOzi;
+  fsdata->fs_copy = ozi_copy_fsdata;
+  fsdata->fs_destroy = ozi_free_fsdata;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
@@ -844,7 +844,7 @@ data_read()
       case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
           ozi_fsdata_used = true;
-          fs_chain_add(&(wpt_tmp->fs), fsdata);
+          wpt_tmp->fs.FsChainAdd(fsdata);
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {
@@ -877,7 +877,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  const auto* fs = reinterpret_cast<ozi_fsdata*>(fs_chain_find(wpt->fs, FS_OZI));
+  const auto* fs = reinterpret_cast<ozi_fsdata*>(wpt->fs.FsChainFind(kFsOzi));
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

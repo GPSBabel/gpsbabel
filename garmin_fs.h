@@ -31,7 +31,7 @@
 #include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
 
 #include "defs.h"
-#include "formspec.h"               // for fs_chain_find, FS_GMSD, format_specific_data
+#include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
 #include "jeeps/gps.h"
 
 
@@ -94,7 +94,7 @@ public:
 #endif
 };
 
-class garmin_fs_t : public format_specific_data {
+class garmin_fs_t : public FormatSpecificData {
 public:
   garmin_fs_flags_t flags;
 
@@ -130,7 +130,7 @@ public:
   garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
 
   static garmin_fs_t* find(const Waypoint* wpt) {
-    return reinterpret_cast<garmin_fs_t*>(fs_chain_find(wpt->fs, FS_GMSD));
+    return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }
 
 #define GEN_GMSD_METHODS(field) \

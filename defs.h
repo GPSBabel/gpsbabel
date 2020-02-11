@@ -44,7 +44,7 @@
 #include <QtCore/Qt>            // for CaseInsensitive
 #include <QtCore/QtGlobal>      // for foreach
 
-#include "formspec.h"           // for format_specific_data
+#include "formspec.h"           // for FormatSpecificData
 #include "inifile.h"            // for inifile_t
 #include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
 #include "session.h"            // for session_t
@@ -506,7 +506,7 @@ public:
   float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters? */
   geocache_data* gc_data;
-  QList<format_specific_data*> fs;
+  FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
@@ -675,7 +675,7 @@ public:
   UrlList rte_urls;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
-  QList<format_specific_data*> fs;
+  FormatSpecificDataList fs;
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   const session_t* session;	/* pointer to a session struct */

@@ -28,7 +28,7 @@
 #include <QtCore/QVector>       // for QVector
 
 #include "defs.h"
-#include "formspec.h"           // for fs_chain_add, fs_chain_find, format_specific_data, FS_AN1L, FS_AN1V, FS_AN1W
+#include "formspec.h"           // for FsChainAdd, FsChainFind, FormatSpecificData, kFsAn1L, KFsAn1V, KFsAn1W
 #include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetint16, gbfile, gbfputs, gbfgetc, gbfputc, gbfclose, gbfopen_le, gbfgetdbl, gbfputdbl, gbfread, gbfseek
 #include "src/core/datetime.h"  // for DateTime
 
@@ -186,7 +186,7 @@ struct an1_symbol_record {
   char* name{nullptr};
 };
 
-struct an1_waypoint_record : format_specific_data {
+struct an1_waypoint_record : FormatSpecificData {
   short magic{0};
   long unk1{0};
   long lon{0};
@@ -224,7 +224,7 @@ struct an1_waypoint_record : format_specific_data {
   char* image_name{nullptr};
 };
 
-struct an1_vertex_record : format_specific_data {
+struct an1_vertex_record : FormatSpecificData {
   short magic{0};
   long unk0{0};
   long lon{0};
@@ -232,7 +232,7 @@ struct an1_vertex_record : format_specific_data {
   short unk1{0};
 };
 
-struct an1_line_record : format_specific_data {
+struct an1_line_record : FormatSpecificData {
   long roadtype{0};
   short serial{0};
   long unk2{0};
@@ -279,9 +279,9 @@ static void Copy_AN1_Waypoint(void** vdwpt, const void* vwpt)
 static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
   auto* result = new an1_waypoint_record;
-  result->fstype = FS_AN1W;
-  result->fscopy = Copy_AN1_Waypoint;
-  result->fsdestroy = Destroy_AN1_Waypoint;
+  result->fs_type = KFsAn1W;
+  result->fs_copy = Copy_AN1_Waypoint;
+  result->fs_destroy = Destroy_AN1_Waypoint;
   return result;
 }
 
@@ -303,9 +303,9 @@ static void Copy_AN1_Vertex(void** vdvert, const void* vvert)
 static an1_vertex_record* Alloc_AN1_Vertex()
 {
   auto* result = new an1_vertex_record;
-  result->fstype = FS_AN1V;
-  result->fscopy = Copy_AN1_Vertex;
-  result->fsdestroy = Destroy_AN1_Vertex;
+  result->fs_type = KFsAn1V;
+  result->fs_copy = Copy_AN1_Vertex;
+  result->fs_destroy = Destroy_AN1_Vertex;
   return result;
 }
 
@@ -329,9 +329,9 @@ static void Copy_AN1_Line(void** vdline, const void* vline)
 static an1_line_record* Alloc_AN1_Line()
 {
   auto* result = new an1_line_record;
-  result->fstype = FS_AN1L;
-  result->fscopy = Copy_AN1_Line;
-  result->fsdestroy = Destroy_AN1_Line;
+  result->fs_type = kFsAn1L;
+  result->fs_copy = Copy_AN1_Line;
+  result->fs_destroy = Destroy_AN1_Line;
   return result;
 }
 
@@ -688,7 +688,7 @@ static void Read_AN1_Waypoints(gbfile* f)
       wpt_tmp->icon_descr = icon;
     }
 
-    fs_chain_add(&(wpt_tmp->fs), rec);
+    wpt_tmp->fs.FsChainAdd(rec);
     rec = nullptr;
     waypt_add(wpt_tmp);
   }
@@ -699,7 +699,7 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
 {
   an1_waypoint_record* rec;
 
-  const auto* source_rec = reinterpret_cast<an1_waypoint_record*>(fs_chain_find(wpt->fs, FS_AN1W));
+  const auto* source_rec = reinterpret_cast<an1_waypoint_record*>(wpt->fs.FsChainFind(KFsAn1W));
 
   if (source_rec != nullptr) {
     Copy_AN1_Waypoint((void**) &rec, (const void*) source_rec);
@@ -807,7 +807,7 @@ static void Read_AN1_Lines(gbfile* f)
       rte_head->line_width = rec->lineweight;
     }
     rte_head->rte_name = rec->name;
-    fs_chain_add(&rte_head->fs, rec);
+    rte_head->fs.FsChainAdd(rec);
     route_add_head(rte_head);
     for (unsigned long j = 0; j < (unsigned) rec->pointcount; j++) {
       an1_vertex_record* vert = Alloc_AN1_Vertex();
@@ -818,7 +818,7 @@ static void Read_AN1_Lines(gbfile* f)
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString::asprintf("\\%5.5lx", rtserial++);
-      fs_chain_add(&wpt_tmp->fs, vert);
+      wpt_tmp->fs.FsChainAdd(vert);
       route_add_wpt(rte_head, wpt_tmp);
     }
   }
@@ -851,7 +851,7 @@ Write_One_AN1_Line(const route_head* rte)
 {
   an1_line_record* rec;
 
-  const auto* source_rec = reinterpret_cast<an1_line_record*>(fs_chain_find(rte->fs, FS_AN1L));
+  const auto* source_rec = reinterpret_cast<an1_line_record*>(rte->fs.FsChainFind(kFsAn1L));
 
   if (source_rec != nullptr) {
     Copy_AN1_Line((void**) &rec, (const void*) source_rec);
@@ -933,7 +933,7 @@ Write_One_AN1_Vertex(const Waypoint* wpt)
 {
   an1_vertex_record* rec;
 
-  const auto* source_rec = reinterpret_cast<an1_vertex_record*>(fs_chain_find(wpt->fs, FS_AN1V));
+  const auto* source_rec = reinterpret_cast<an1_vertex_record*>(wpt->fs.FsChainFind(KFsAn1V));
 
   if (source_rec != nullptr) {
     Copy_AN1_Vertex((void**) &rec, (const void*) source_rec);

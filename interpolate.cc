@@ -58,7 +58,7 @@ void InterpolateFilter::process()
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
-    rte_new->fs = fs_chain_copy(rte_old->fs);
+    rte_new->fs = rte_old->fs.FsChainCopy();
     rte_new->rte_num = rte_old->rte_num;
     if (opt_route) {
       route_add_head(rte_new);

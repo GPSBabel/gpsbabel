@@ -139,7 +139,7 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
     auto wpt = new Waypoint;
     garmin_fs_t* gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, gmsd);
+    wpt->fs.FsChainAdd(gmsd);
 
     do {
       wpt->shortname = rand_str(8, "Wpt_%s");

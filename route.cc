@@ -388,7 +388,7 @@ route_head::route_head() :
 route_head::~route_head()
 {
   waypoint_list.flush();
-  fs_chain_destroy(&fs);
+  fs.FsChainDestroy();
 }
 
 int RouteList::waypt_count() const
@@ -488,7 +488,7 @@ RouteList::copy(RouteList** dst) const
     rte_new->rte_urls = rte_old->rte_urls;
     rte_new->rte_num = rte_old->rte_num;
     // rte_waypt_ct created below with add_wpt.
-    rte_new->fs = fs_chain_copy(rte_old->fs);
+    rte_new->fs = rte_old->fs.FsChainCopy();
     rte_new->line_color = rte_old->line_color;
     rte_new->line_width = rte_old->line_width;
     rte_new->session = rte_old->session;

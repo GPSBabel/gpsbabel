@@ -32,7 +32,7 @@
 
 #include "defs.h"
 #include "format.h"                     // for Format
-#include "formspec.h"                   // for format_specific_data
+#include "formspec.h"                   // for FormatSpecificData
 #include "src/core/file.h"              // for File
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_tag
@@ -263,7 +263,7 @@ private:
   bounds all_bounds;
   int next_trkpt_is_new_seg;
 
-  QList<format_specific_data*>* fs_ptr;
+  FormatSpecificDataList* fs_ptr;
 
   /*
    * The file-level information.

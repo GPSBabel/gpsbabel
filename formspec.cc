@@ -1,5 +1,5 @@
 /*
-    Functions to manage the format_specific_data chain
+    Functions to manage the FormatSpecificData chain
 
     Copyright (C) 2005 Ron Parker and Robert Lipe.
 
@@ -22,42 +22,38 @@
 #include <QtCore/QList>  // for QList
 
 #include "defs.h"
-#include "formspec.h"    // for format_specific_data, fs_chain_add, fs_chain_copy, fs_chain_destroy, fs_chain_find
+#include "formspec.h"    // for FormatSpecificData, FsChainAdd, FsChainCopy, FsChainDestroy, FsChainFind
 
-QList<format_specific_data*> fs_chain_copy(const QList<format_specific_data*>& source)
+FormatSpecificDataList FormatSpecificDataList::FsChainCopy() const
 {
-  QList<format_specific_data*> dest;
-  for (const auto* item : source) {
-    format_specific_data* copy;
-    item->fscopy((void**)&copy, (void*)item);
+  FormatSpecificDataList dest;
+  for (const auto* item : *this) {
+    FormatSpecificData* copy;
+    item->fs_copy((void**)&copy, (void*)item);
     dest.append(copy);
   }
   return dest;
 }
 
-void fs_chain_destroy(QList<format_specific_data*>* chain)
+void FormatSpecificDataList::FsChainDestroy()
 {
-  if (chain != nullptr) {
-    while (!chain->isEmpty()) {
-      format_specific_data* item = chain->takeFirst();
-      item->fsdestroy(item);
-    }
+  while (!isEmpty()) {
+    FormatSpecificData* item = takeFirst();
+    item->fs_destroy(item);
   }
 }
 
-format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, FsType type)
+FormatSpecificData* FormatSpecificDataList::FsChainFind(FsType type) const
 {
-  for (auto* item : chain) {
-    if (item->fstype == type) {
+  for (auto* item : *this) {
+    if (item->fs_type == type) {
       return item;
     }
   }
   return nullptr;
 }
 
-void fs_chain_add(QList<format_specific_data*>* chain, format_specific_data* data)
+void FormatSpecificDataList::FsChainAdd(FormatSpecificData* data)
 {
-  if (chain != nullptr) {
-    chain->append(data);
-  }
+  append(data);
 }

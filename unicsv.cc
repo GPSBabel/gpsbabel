@@ -955,7 +955,7 @@ unicsv_parse_one_line(const QString& ibuf)
       gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, gmsd);
+        wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
       case fld_garmin_city:

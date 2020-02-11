@@ -88,8 +88,8 @@ fs_xml_copy(void** dest, const void* src)
 fs_xml* fs_xml_alloc(FsType type)
 {
   auto* result = new fs_xml;
-  result->fstype = type;
-  result->fscopy = fs_xml_copy;
-  result->fsdestroy = fs_xml_destroy;
+  result->fs_type = type;
+  result->fs_copy = fs_xml_copy;
+  result->fs_destroy = fs_xml_destroy;
   return result;
 }
