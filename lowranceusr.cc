@@ -108,6 +108,7 @@
 #include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
+#include "formspec.h"             // for fs_chain_find, fs_chain_add, FS_LOWRANCEUSR4, format_specific_data
 #include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/logging.h"     // for Warning
@@ -399,7 +400,7 @@ class Lowranceusr4Timestamp {
 static void
 lowranceusr4_free_fsdata(void* fsdata)
 {
-  delete static_cast<lowranceusr4_fsdata*>(fsdata);
+  delete reinterpret_cast<lowranceusr4_fsdata*>(fsdata);
 }
 
 static void

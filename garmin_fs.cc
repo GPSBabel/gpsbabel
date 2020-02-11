@@ -56,7 +56,7 @@ garmin_fs_alloc(const int protocol)
 void
 garmin_fs_destroy(void* fs)
 {
-  delete static_cast<garmin_fs_t*>(fs);
+  delete reinterpret_cast<garmin_fs_t*>(fs);
 }
 
 garmin_fs_t::~garmin_fs_t()

@@ -63,7 +63,7 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 static void
 fs_xml_destroy(void* fs)
 {
-  auto* xml = static_cast<fs_xml*>(fs);
+  auto* xml = reinterpret_cast<fs_xml*>(fs);
   if (xml) {
     free_xml_tag(xml->tag);
   }
@@ -85,7 +85,7 @@ fs_xml_copy(void** dest, const void* src)
   *dest = copy;
 }
 
-fs_xml* fs_xml_alloc(long type)
+fs_xml* fs_xml_alloc(FsType type)
 {
   auto* result = new fs_xml;
   result->fstype = type;

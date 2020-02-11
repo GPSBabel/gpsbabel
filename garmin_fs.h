@@ -31,6 +31,7 @@
 #include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
 
 #include "defs.h"
+#include "formspec.h"               // for fs_chain_find, FS_GMSD, format_specific_data
 #include "jeeps/gps.h"
 
 
@@ -211,7 +212,6 @@ public:
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(void** dest, const void* src);
-void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */

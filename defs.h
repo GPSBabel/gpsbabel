@@ -36,8 +36,6 @@
 #include "zlib.h"               // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QChar>         // for QChar
 #include <QtCore/QList>         // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
 #include <QtCore/QString>       // for QString
 #include <QtCore/QStringRef>    // for QStringRef
@@ -46,7 +44,7 @@
 #include <QtCore/Qt>            // for CaseInsensitive
 #include <QtCore/QtGlobal>      // for foreach
 
-#include "cet.h"                // for cet_cs_vec_t
+#include "formspec.h"           // for format_specific_data
 #include "inifile.h"            // for inifile_t
 #include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
 #include "session.h"            // for session_t
@@ -291,43 +289,12 @@ public:
   QString personal_note;
 };
 
-using fs_destroy = void (*)(void*);
-using fs_copy = void (*)(void**, const void*);
-
-struct format_specific_data {
-  format_specific_data() = default;
-  virtual ~format_specific_data() = default;
-  format_specific_data(const format_specific_data& other) = default;
-  format_specific_data& operator=(const format_specific_data&) = default;
-  format_specific_data(format_specific_data&&) = delete;
-  format_specific_data& operator=(format_specific_data&&) = delete;
-
-  long fstype{0};
-
-  fs_destroy fsdestroy{nullptr};
-  fs_copy fscopy{nullptr};
-};
-
 class gb_color
 {
 public:
   int bbggrr{-1};   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
   unsigned char opacity{255};  // 0 == transparent.  255 == opaque.
 };
-
-
-QList<format_specific_data*> fs_chain_copy(const QList<format_specific_data*>& source);
-void fs_chain_destroy(QList<format_specific_data*>* chain);
-format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, long type);
-void fs_chain_add(QList<format_specific_data*>* chain, format_specific_data* data);
-
-#define FS_GPX 0x67707800L
-#define FS_AN1W 0x616e3177L
-#define FS_AN1L 0x616e316cL
-#define FS_AN1V 0x616e3176L
-#define FS_OZI 0x6f7a6900L
-#define FS_GMSD 0x474d5344L	/* GMSD = Garmin specific data */
-#define FS_LOWRANCEUSR4 0x615f234cL
 
 /*
  * Structures and functions for multiple URLs per waypoint.

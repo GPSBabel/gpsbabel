@@ -27,6 +27,7 @@
 #include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
+#include "formspec.h"              // for fs_chain_find, FS_GPX
 #include "gbfile.h"                // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime

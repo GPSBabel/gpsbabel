@@ -19,9 +19,10 @@
 
  */
 
-#include <QtCore/QList>
+#include <QtCore/QList>  // for QList
 
 #include "defs.h"
+#include "formspec.h"    // for format_specific_data, fs_chain_add, fs_chain_copy, fs_chain_destroy, fs_chain_find
 
 QList<format_specific_data*> fs_chain_copy(const QList<format_specific_data*>& source)
 {
@@ -44,7 +45,7 @@ void fs_chain_destroy(QList<format_specific_data*>* chain)
   }
 }
 
-format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, long type)
+format_specific_data* fs_chain_find(const QList<format_specific_data*>& chain, FsType type)
 {
   for (auto* item : chain) {
     if (item->fstype == type) {

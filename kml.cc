@@ -47,6 +47,7 @@
 #include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
 
 #include "defs.h"
+#include "formspec.h"                   // for fs_chain_find, FS_GPX
 #include "grtcirc.h"                    // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File

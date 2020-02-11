@@ -55,6 +55,7 @@
 
 #include "defs.h"
 #include "csv_util.h"             // for csv_stringclean
+#include "formspec.h"             // for fs_chain_add, fs_chain_find, FS_OZI, format_specific_data
 #include "jeeps/gpsmath.h"        // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
@@ -180,7 +181,7 @@ ozi_copy_fsdata(void** dest, const void* src)
 static void
 ozi_free_fsdata(void* fsdata)
 {
-  delete static_cast<ozi_fsdata*>(fsdata);
+  delete reinterpret_cast<ozi_fsdata*>(fsdata);
 }
 
 static

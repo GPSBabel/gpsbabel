@@ -28,6 +28,7 @@
 #include <QtCore/QVector>       // for QVector
 
 #include "defs.h"
+#include "formspec.h"           // for fs_chain_add, fs_chain_find, format_specific_data, FS_AN1L, FS_AN1V, FS_AN1W
 #include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetint16, gbfile, gbfputs, gbfgetc, gbfputc, gbfclose, gbfopen_le, gbfgetdbl, gbfputdbl, gbfread, gbfseek
 #include "src/core/datetime.h"  // for DateTime
 
@@ -254,7 +255,7 @@ static an1_waypoint_record* Alloc_AN1_Waypoint();
 
 static void Destroy_AN1_Waypoint(void* vwpt)
 {
-  auto* wpt = static_cast<an1_waypoint_record*>(vwpt);
+  auto* wpt = reinterpret_cast<an1_waypoint_record*>(vwpt);
   xfree(wpt->name);
   xfree(wpt->fontname);
   xfree(wpt->url);
@@ -288,7 +289,7 @@ static an1_vertex_record* Alloc_AN1_Vertex();
 
 static void Destroy_AN1_Vertex(void* vvert)
 {
-  auto* vert = static_cast<an1_vertex_record*>(vvert);
+  auto* vert = reinterpret_cast<an1_vertex_record*>(vvert);
   delete vert;
 }
 
@@ -312,7 +313,7 @@ static an1_line_record* Alloc_AN1_Line();
 
 static void Destroy_AN1_Line(void* vline)
 {
-  auto* line = static_cast<an1_line_record*>(vline);
+  auto* line = reinterpret_cast<an1_line_record*>(vline);
   xfree(line->name);
   delete line;
 }

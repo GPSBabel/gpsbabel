@@ -44,6 +44,6 @@ struct fs_xml : format_specific_data {
   xml_tag* tag{nullptr};
 };
 
-fs_xml* fs_xml_alloc(long type);
+fs_xml* fs_xml_alloc(FsType type);
 
 #endif // SRC_CORE_XMLTAG_H

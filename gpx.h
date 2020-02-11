@@ -22,6 +22,7 @@
 #define GPX_H_INCLUDED_
 
 #include <QtCore/QHash>                 // for QHash
+#include <QtCore/QList>                 // for QList
 #include <QtCore/QString>               // for QString
 #include <QtCore/QStringList>           // for QStringList
 #include <QtCore/QVector>               // for QVector
@@ -31,6 +32,7 @@
 
 #include "defs.h"
 #include "format.h"                     // for Format
+#include "formspec.h"                   // for format_specific_data
 #include "src/core/file.h"              // for File
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_tag
