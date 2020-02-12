@@ -401,6 +401,8 @@ read_file_header()
   }
 
   reclen = FREAD_i32;
+  is_fatal((reclen + 1 > int(sizeof(buf))),
+           MYNAME ": Invalid record length\n");
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;

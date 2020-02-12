@@ -117,7 +117,7 @@ static void data_read() {
       case 'W': {
         QStringList tokens =
             line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
-        if (tokens.size() < 5) {
+        if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse waypoint, not all required columns "
                 "contained\n");
@@ -217,7 +217,7 @@ static void data_read() {
       case 'T': {
         QStringList tokens =
             line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
-        if (tokens.size() < 5) {
+        if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse trackpoint, not all required columns "
                 "contained\n");

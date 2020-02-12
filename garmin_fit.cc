@@ -816,7 +816,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
 static void
 fit_parse_data_message(uint8_t header)
 {
-  int local_id = header & 0x1f;
+  int local_id = header & 0x0f;
   fit_message_def* def = &fit_data.message_def[local_id];
   fit_parse_data(def, 0);
 }
