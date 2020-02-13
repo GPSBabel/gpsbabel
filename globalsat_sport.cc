@@ -815,7 +815,6 @@ data_read()
 ff_vecs_t globalsat_sport_vecs = {
   ff_type_serial,			// type
   {
-    // cap
     ff_cap_none,			// waypoints
     ff_cap_read,			// tracks
     ff_cap_none,			// routes
@@ -827,7 +826,7 @@ ff_vecs_t globalsat_sport_vecs = {
   data_read,					// read
   nullptr,						// write
   nullptr,						// exit
-  &globalsat_args,			// args
+  &globalsat_args,		// args
   CET_CHARSET_ASCII,	// encode
   0,									// fixed_encode
   NULL_POS_OPS,				// position_ops
