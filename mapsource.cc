@@ -1405,7 +1405,7 @@ mps_routedatapoint_w_wrapper(const Waypoint* rte)
  * MRCB
  */
 static void
-mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
+mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* /* rte */)
 {
   char		hdr[2];
   int			value = 0;
