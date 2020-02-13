@@ -529,9 +529,13 @@ track_read()
       if (!showlist) {
         route_head* trk = route_head_alloc();
 
-        QString str;
-        str.asprintf("%02d-%02d-%02d_%02d:%02d:%02d", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day, header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-        trk->rte_name = str;
+        trk->rte_name = QString::asprintf("%02d-%02d-%02d_%02d:%02d:%02d",
+                                          header.dateStart.Year,
+                                          header.dateStart.Month,
+                                          header.dateStart.Day,
+                                          header.timeStart.Hour,
+                                          header.timeStart.Minute,
+                                          header.timeStart.Second);
         trk->rte_desc = QString("GH625XT GPS tracklog data");
 
         track_add_head(trk);
@@ -547,7 +551,7 @@ track_read()
         uint8_t trackDeviceCommand;
         int track_length;
         uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
-        is_fatal(((track_length == 0) || (track_payload == nullptr)) , "track length is 0 bytes or payload nonexistent");
+        is_fatal(((track_length == 0) || (track_payload == nullptr)), "track length is 0 bytes or payload nonexistent");
         //      printf("Got track package!!! Train data\n");
 
         uint8_t* dbtrain = track_payload;
@@ -810,7 +814,8 @@ data_read()
 // This used the serial communication to the watch
 ff_vecs_t globalsat_sport_vecs = {
   ff_type_serial,			// type
-  {										// cap
+  {
+    // cap
     ff_cap_none,			// waypoints
     ff_cap_read,			// tracks
     ff_cap_none,			// routes
