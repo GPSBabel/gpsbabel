@@ -530,7 +530,7 @@ track_read()
         route_head* trk = route_head_alloc();
 
         QString str;
-        str.sprintf("%02d-%02d-%02d_%02d:%02d:%02d", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day, header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
+        str.asprintf("%02d-%02d-%02d_%02d:%02d:%02d", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day, header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
         trk->rte_name = str;
         trk->rte_desc = QString("GH625XT GPS tracklog data");
 
