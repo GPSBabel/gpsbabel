@@ -3,7 +3,7 @@
 # Radius filter
 #
 rm -f ${TMPDIR}/radius.csv
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc \
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc \
 		-x radius,lat=35.9720,lon=-87.1347,distance=14.7 \
 		-o csv -F ${TMPDIR}/radius.csv
 compare ${TMPDIR}/radius.csv ${REFERENCE}
