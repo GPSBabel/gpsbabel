@@ -41,6 +41,17 @@ xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
 QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
 
 struct fs_xml : FormatSpecificData {
+  explicit fs_xml(FsType type) : FormatSpecificData(type) {}
+private:
+  fs_xml(const fs_xml&) = default;
+public:
+  fs_xml& operator=(const fs_xml&) = delete;
+  fs_xml(fs_xml&&) = delete;
+  fs_xml& operator=(fs_xml&&) = delete;
+  ~fs_xml() override;
+
+  fs_xml* clone() const override;
+
   xml_tag* tag{nullptr};
 };
 

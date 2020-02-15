@@ -27,7 +27,7 @@
 #include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
-#include "formspec.h"              // for FsChainFind, KFsGpx
+#include "formspec.h"              // for FsChainFind, kFsGpx
 #include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
@@ -158,7 +158,7 @@ html_disp(const Waypoint* wpt)
   }
 
   if (includelogs) {
-    const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(KFsGpx));
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
     if (fs_gpx && fs_gpx->tag) {
       xml_tag* root = fs_gpx->tag;
       xml_tag* curlog = xml_findfirst(root, "groundspeak:log");

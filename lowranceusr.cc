@@ -372,6 +372,13 @@ static QTextCodec*    utf16le_codec{nullptr};
 const time_t base_time_secs = 946706400;
 
 struct lowranceusr4_fsdata : FormatSpecificData {
+  lowranceusr4_fsdata() : FormatSpecificData(kFsLowranceusr4) {}
+
+  lowranceusr4_fsdata* clone() const override
+  {
+    return new lowranceusr4_fsdata(*this);
+  }
+
   uint uid_unit{0};
   uint uid_unit2{0};
   int uid_seq_low{0};
@@ -394,33 +401,6 @@ class Lowranceusr4Timestamp {
 
   Lowranceusr4Timestamp(unsigned int jd, unsigned int ms) : julian_day_number{jd}, milliseconds{ms} {}
 };
-
-
-/* fsdata manipulation functions */
-static void
-lowranceusr4_free_fsdata(void* fsdata)
-{
-  delete reinterpret_cast<lowranceusr4_fsdata*>(fsdata);
-}
-
-static void
-lowranceusr4_copy_fsdata(void** dest, const void* src)
-{
-  auto* copy = new lowranceusr4_fsdata(*static_cast<const lowranceusr4_fsdata*>(src));
-  *dest = copy;
-}
-
-static
-lowranceusr4_fsdata*
-lowranceusr4_alloc_fsdata()
-{
-  auto* fsdata = new lowranceusr4_fsdata;
-  fsdata->fs_type = kFsLowranceusr4;
-  fsdata->fs_copy = lowranceusr4_copy_fsdata;
-  fsdata->fs_destroy = lowranceusr4_free_fsdata;
-
-  return fsdata;
-}
 
 
 
@@ -915,7 +895,7 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 {
   int waypoint_version;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+  auto* fsdata = new lowranceusr4_fsdata;
   wpt_tmp->fs.FsChainAdd(fsdata);
 
   if (reading_version > 4) {
@@ -1162,7 +1142,7 @@ lowranceusr4_parse_route()
   int route_version;
   int UUID1, UUID2, UUID3, UUID4;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+  auto* fsdata = new lowranceusr4_fsdata;
   rte_head->fs.FsChainAdd(fsdata);
 
   if (reading_version >= 5) {
@@ -1414,7 +1394,7 @@ lowranceusr4_parse_trail(int* trail_num)
   int trail_color;
   int trail_flags;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+  auto* fsdata = new lowranceusr4_fsdata;
   trk_head->fs.FsChainAdd(fsdata);
 
   /* UID unit number */

@@ -66,6 +66,13 @@
 #define DAYS_SINCE_1990	25569
 
 struct ozi_fsdata : FormatSpecificData {
+  ozi_fsdata() : FormatSpecificData(kFsOzi) {}
+
+  ozi_fsdata* clone() const override
+  {
+    return new ozi_fsdata(*this);
+  }
+
   int fgcolor{0};
   int bgcolor{65535};
 };
@@ -170,28 +177,11 @@ ozi_close_io()
   stream = nullptr;
 }
 
-static void
-ozi_copy_fsdata(void** dest, const void* src)
-{
-  /* No strings to mess with.  Straight forward copy. */
-  auto* copy = new ozi_fsdata(*static_cast<const ozi_fsdata*>(src));
-  *dest = copy;
-}
-
-static void
-ozi_free_fsdata(void* fsdata)
-{
-  delete reinterpret_cast<ozi_fsdata*>(fsdata);
-}
-
 static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
   auto* fsdata = new ozi_fsdata;
-  fsdata->fs_type = kFsOzi;
-  fsdata->fs_copy = ozi_copy_fsdata;
-  fsdata->fs_destroy = ozi_free_fsdata;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
@@ -857,7 +847,7 @@ data_read()
       }
 
       if (!ozi_fsdata_used) {
-        ozi_free_fsdata(fsdata);
+        delete fsdata;
       }
 
     } else {

@@ -28,11 +28,7 @@ FormatSpecificDataList FormatSpecificDataList::FsChainCopy() const
 {
   FormatSpecificDataList dest;
   for (const auto* item : *this) {
-    FormatSpecificData* copy;
-    if (item->fs_copy != nullptr) {
-      item->fs_copy((void**)&copy, (void*)item);
-    }
-    dest.append(copy);
+    dest.append(item->clone());
   }
   return dest;
 }
@@ -40,10 +36,7 @@ FormatSpecificDataList FormatSpecificDataList::FsChainCopy() const
 void FormatSpecificDataList::FsChainDestroy()
 {
   while (!isEmpty()) {
-    FormatSpecificData* item = takeFirst();
-    if (item->fs_destroy != nullptr) {
-      item->fs_destroy(item);
-    }
+    delete takeFirst();
   }
 }
 
@@ -59,5 +52,7 @@ FormatSpecificData* FormatSpecificDataList::FsChainFind(FsType type) const
 
 void FormatSpecificDataList::FsChainAdd(FormatSpecificData* data)
 {
-  append(data);
+  if (data != nullptr) {
+    append(data);
+  }
 }

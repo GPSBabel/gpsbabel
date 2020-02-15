@@ -122,13 +122,16 @@ public:
 #endif
 
 public:
-  garmin_fs_t() = default;
-  ~garmin_fs_t() override;
-  garmin_fs_t(const garmin_fs_t& other);
+  garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
+private:
+  garmin_fs_t(const garmin_fs_t& other) = default;
+public:
   garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
   garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
   garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
+  ~garmin_fs_t() override;
 
+  garmin_fs_t* clone() const override;
   static garmin_fs_t* find(const Waypoint* wpt) {
     return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }

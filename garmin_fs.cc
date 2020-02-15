@@ -44,19 +44,26 @@ garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
   auto* result = new garmin_fs_t;
-  result->fs_type = kFsGmsd;
-  result->fs_copy = garmin_fs_copy;
-  result->fs_destroy = garmin_fs_destroy;
 
   result->protocol = protocol;
 
   return result;
 }
 
-void
-garmin_fs_destroy(void* fs)
+garmin_fs_t* garmin_fs_t::clone() const
 {
-  delete reinterpret_cast<garmin_fs_t*>(fs);
+  auto* copy = new garmin_fs_t(*this);
+
+  /* do not deep copy interlinks, only increment the reference counter */
+  if (ilinks != nullptr) {
+    ilinks->ref_count++;
+  }
+
+#ifdef GMSD_EXPERIMENTAL
+  memcopy(subclass, other.subclass, sizeof(subclass));
+#endif
+
+  return copy;
 }
 
 garmin_fs_t::~garmin_fs_t()
@@ -72,47 +79,6 @@ garmin_fs_t::~garmin_fs_t()
       }
     }
   }
-}
-
-void garmin_fs_copy(void** dest, const void* src)
-{
-  if (src == nullptr) {
-    *dest = nullptr;
-    return;
-  }
-  auto* copy = new garmin_fs_t(*static_cast<const garmin_fs_t*>(src));
-  *dest = copy;
-}
-
-garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) : FormatSpecificData(other),
-  flags(other.flags),
-  protocol(other.protocol),
-  icon(other.icon),
-  wpt_class(other.wpt_class),
-  display(other.display),
-  category(other.category),
-  city(other.city),
-  facility(other.facility),
-  state(other.state),
-  cc(other.cc),
-  cross_road(other.cross_road),
-  addr(other.addr),
-  country(other.country),
-  phone_nr(other.phone_nr),
-  phone_nr2(other.phone_nr2),
-  fax_nr(other.fax_nr),
-  postal_code(other.postal_code),
-  email(other.email),
-  ilinks(other.ilinks)
-{
-  /* do not deep copy interlinks, only increment the reference counter */
-  if (ilinks != nullptr) {
-    ilinks->ref_count++;
-  }
-
-#ifdef GMSD_EXPERIMENTAL
-  memcopy(subclass, other.subclass, sizeof(subclass));
-#endif
 }
 
 /* GPX - out */

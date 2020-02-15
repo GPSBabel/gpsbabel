@@ -25,29 +25,27 @@
 
 enum FsType {
   kFsUnknown = 0L,
-  KFsGpx = 0x67707800L,
-  KFsAn1W = 0x616e3177L,
+  kFsGpx = 0x67707800L,
+  kFsAn1W = 0x616e3177L,
   kFsAn1L = 0x616e316cL,
-  KFsAn1V = 0x616e3176L,
+  kFsAn1V = 0x616e3176L,
   kFsOzi = 0x6f7a6900L,
   kFsGmsd = 0x474d5344L,	/* GMSD = Garmin specific data */
   kFsLowranceusr4 = 0x615f234cL
 };
 
-using FsDestroy = void (*)(void*);
-using FsCopy = void (*)(void**, const void*);
-
 struct FormatSpecificData {
   FormatSpecificData() = default;
-  virtual ~FormatSpecificData() = default;
+  explicit FormatSpecificData(FsType type) : fs_type(type) {}
   FormatSpecificData(const FormatSpecificData&) = default;
   FormatSpecificData& operator=(const FormatSpecificData&) = default;
   FormatSpecificData(FormatSpecificData&&) = delete;
   FormatSpecificData& operator=(FormatSpecificData&&) = delete;
+  virtual ~FormatSpecificData() = default;
+
+  virtual FormatSpecificData* clone() const = 0;
 
   FsType fs_type{kFsUnknown};
-  FsDestroy fs_destroy{nullptr};
-  FsCopy fs_copy{nullptr};
 };
 
 class FormatSpecificDataList : private QList<FormatSpecificData*>
