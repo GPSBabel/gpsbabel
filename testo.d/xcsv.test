@@ -11,7 +11,7 @@ echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
 echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
 echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
 rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
 gpsbabel -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
 compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 

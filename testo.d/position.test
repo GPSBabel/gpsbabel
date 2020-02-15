@@ -4,11 +4,11 @@
 # position filter, we can test very similarly to the duplicate filter.
 #
 rm -f ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -f ${REFERENCE}/../geocaching.loc -x position,distance=5f \
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -f ${REFERENCE}/geocaching.loc -x position,distance=5f \
 		-o csv -F ${TMPDIR}/filterpos.csv2
 sort_and_compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
 
 # check a track that loops back with a return leg adjacent to an outgoing leg.
-gpsbabel -i gpx -f reference/track/position_track.gpx -x position,distance=12m -o gpx -F ${TMPDIR}/position_track_filtered.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/position_track.gpx -x position,distance=12m -o gpx -F ${TMPDIR}/position_track_filtered.gpx
 compare ${REFERENCE}/track/position_track_filtered.gpx ${TMPDIR}/position_track_filtered.gpx
