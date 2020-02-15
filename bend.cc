@@ -146,7 +146,7 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
 
 void BendFilter::process_route_orig(const route_head* route_orig)
 {
-  route_head* route_dest = route_head_alloc();
+  auto* route_dest = new route_head;
   route_dest->rte_name = route_orig->rte_name;
   route_dest->rte_desc = route_orig->rte_desc;
   route_dest->fs = fs_chain_copy(route_orig->fs);

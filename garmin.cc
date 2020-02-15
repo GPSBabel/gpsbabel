@@ -515,7 +515,7 @@ track_read()
     }
 
     if (trk_head == nullptr || array[i]->ishdr) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       trk_head->rte_num = trk_num;
       trk_head->rte_name = QString::fromLatin1(trk_name);
       trk_num++;
@@ -593,7 +593,7 @@ route_read()
       default:
         break;
       }
-      rte_head = route_head_alloc();
+      rte_head = new route_head;
       route_add_head(rte_head);
       if (csrc) {
         rte_head->rte_name = QString::fromLatin1(csrc);
@@ -650,7 +650,7 @@ lap_read_as_track(void)
        ) {
       static struct tm* stmp;
       stmp = gmtime(&array[i]->start_time);
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       /*For D906, we would like to use the track_index in the last packet instead...*/
       trk_head->rte_num = ++trk_num;
       strftime(tbuf, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);

@@ -282,7 +282,7 @@ skyforce_read()
       }
 
       if (rte == nullptr) {
-        rte = route_head_alloc();
+        rte = new route_head;
         route_add_head(rte);
         rte->rte_num = rte_num;
       }
@@ -295,7 +295,7 @@ skyforce_read()
         continue;
       }
       if (trk == nullptr) {
-        trk = route_head_alloc();
+        trk = new route_head;
         track_add_head(trk);
       }
       track_add_wpt(trk, wpt);

@@ -349,7 +349,7 @@ GpxFormat::gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     }
     break;
   case tt_rte:
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     rh_link_ = new UrlLink;
     fs_ptr = &rte_head->fs;
@@ -358,7 +358,7 @@ GpxFormat::gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     tag_wpt(attr);
     break;
   case tt_trk:
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     track_add_head(trk_head);
     rh_link_ = new UrlLink;
     fs_ptr = &trk_head->fs;

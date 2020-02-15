@@ -125,7 +125,7 @@ ggv_ovl_read()
       if (points > 0) {
         route_head* trk;
 
-        route_head* rte = trk = route_head_alloc();
+        auto* rte = trk = new route_head;
         if (group > 1) {
           route_add_head(rte);
           route_ct++;

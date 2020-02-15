@@ -189,7 +189,7 @@ GgvBinFormat::ggv_bin_read_v2(QDataStream& stream)
       ggv_bin_read16(stream, "line width");
       ggv_bin_read16(stream, "line type");
       line_points = ggv_bin_read16(stream, "line points");
-      ggv_bin_track = route_head_alloc();
+      ggv_bin_track = new route_head;
       track_add_head(ggv_bin_track);
       if (! track_name.isEmpty()) {
         ggv_bin_track->rte_name = track_name;
@@ -350,7 +350,7 @@ GgvBinFormat::ggv_bin_read_v34_record(QDataStream& stream)
   // area
   case 0x17:
     // line
-    ggv_bin_track = route_head_alloc();
+    ggv_bin_track = new route_head;
     track_add_head(ggv_bin_track);
 
     if (! label.isEmpty()) {

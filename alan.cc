@@ -537,7 +537,7 @@ static void wpr_read()
     }
     struct rte* rte = &(wprdata.rte[idx]);
 
-    route_head* RT = route_head_alloc();
+    auto* RT = new route_head;
     RT->rte_num = i;
     for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {}
     char *s = xstrndup(rte->name,j+1);
@@ -590,7 +590,7 @@ static void trl_read()
     if (trkhdr->occupied == TRK_UNUSED) {
       continue;
     }
-    route_head* TL = route_head_alloc();
+    auto* TL = new route_head;
     for (j=TRK_NAME_LEN-1;
          j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
          j--) {}

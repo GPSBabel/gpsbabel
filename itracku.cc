@@ -605,7 +605,7 @@ itracku_read_trk_waypt_add(Waypoint* wpt)
 static void
 itracku_read_trk()
 {
-  itracku_read_trk_track = route_head_alloc();
+  itracku_read_trk_track = new route_head;
   track_add_head(itracku_read_trk_track);
   itracku_waypt_input(&itracku_read_trk_waypt_add);
 }

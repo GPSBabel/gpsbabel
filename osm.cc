@@ -575,7 +575,7 @@ osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 static void
 osm_way(xg_string, const QXmlStreamAttributes* attrv)
 {
-  rte = route_head_alloc();
+  rte = new route_head;
   // create a wpt to represent the route center if it has a center tag
   wpt = new Waypoint;
   if (attrv->hasAttribute("id")) {

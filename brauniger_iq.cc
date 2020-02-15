@@ -194,7 +194,7 @@ static int process_data(const unsigned char* data)
       printf(MYNAME ": End Time: %s", ctime(&finish));
     }
     if (remaining) {
-      track = route_head_alloc();
+      track = new route_head;
       track->rte_name = PRESTRKNAME;
       track->rte_desc = "Brauniger-IQ Barograph";
       track_add_head(track);

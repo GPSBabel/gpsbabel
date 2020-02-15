@@ -273,7 +273,7 @@ static void tpo_read_2_x()
 
   for (int i = 0; i < track_count; i++) {
 
-    route_head* track_temp = route_head_alloc();
+    auto* track_temp = new route_head;
     track_add_head(track_temp);
 
     /* generate a generic track name */
@@ -603,7 +603,7 @@ static void tpo_process_tracks()
     char rgb[7],bgr[7];
 
     // Allocate the track struct
-    route_head* track_temp = route_head_alloc();
+    auto* track_temp = new route_head;
     track_add_head(track_temp);
 
 //UNKNOWN DATA LENGTH
@@ -1116,7 +1116,7 @@ static void tpo_process_routes()
   //
   for (unsigned int ii = 0; ii < route_count; ii++) {
     // Allocate the route struct
-    route_head* route_temp = route_head_alloc();
+    auto* route_temp = new route_head;
     route_add_head(route_temp);
 
 //UNKNOWN DATA LENGTH

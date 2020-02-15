@@ -199,18 +199,18 @@ static void data_read() {
         }
         if (track == nullptr) {
           if (ibuf[3] == 'L' && ibuf[4] == 'A') {
-            track = route_head_alloc();
+            track = new route_head;
             track->rte_name = "track";
             track_add_head(track);
           } else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
-            track = route_head_alloc();
+            track = new route_head;
             track->rte_name = &ibuf[6];
             track_add_head(track);
           }
         }
         break;
       case 'R':
-        route = route_head_alloc();
+        route = new route_head;
         route->rte_name = QString(&ibuf[1]).trimmed();
         route_add_head(route);
         break;
@@ -256,7 +256,7 @@ static void data_read() {
 
         /* Did we get a track point before a track header? */
         if (track == nullptr) {
-          track = route_head_alloc();
+          track = new route_head;
           track->rte_name = "Default";
           track_add_head(track);
         }

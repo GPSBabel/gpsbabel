@@ -158,7 +158,7 @@ mtk_locus_rd_deinit()
 static void
 mtk_locus_read()
 {
-  track = route_head_alloc();
+  track = new route_head;
   track_add_head(track);
   dbg(1, "Track initialized\n");
 

@@ -37,7 +37,7 @@
 
 void TransformFilter::transform_waypoints()
 {
-  route_head* rte = route_head_alloc();
+  auto* rte = new route_head;
   switch (current_target) {
   case 'R':
     route_add_head(rte);
@@ -67,7 +67,7 @@ void TransformFilter::transform_rte_disp_hdr_cb(const route_head* rte)
     current_namepart = rte->rte_name;
   }
   if (current_target == 'T') {
-    current_trk = route_head_alloc();
+    current_trk = new route_head;
     track_add_head(current_trk);
     if (!rte->rte_name.isEmpty()) {
       current_trk->rte_desc = QString("Generated from route %1").arg(rte->rte_name);
@@ -83,7 +83,7 @@ void TransformFilter::transform_trk_disp_hdr_cb(const route_head* trk)
     current_namepart = trk->rte_name;
   }
   if (current_target == 'R') {
-    current_rte = route_head_alloc();
+    current_rte = new route_head;
     route_add_head(current_rte);
     if (!trk->rte_name.isEmpty()) {
       current_rte->rte_desc = "Generated from track ";

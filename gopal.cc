@@ -176,7 +176,7 @@ gopal_read()
   double lat_old = 0;
   
 
-  route_head* route = route_head_alloc();
+  auto* route = new route_head;
   QDateTime qtx = QDateTime::fromSecsSinceEpoch(tx, Qt::UTC);
   route->rte_name = "Tracklog ";
   route->rte_name += qtx.toString(Qt::ISODate);

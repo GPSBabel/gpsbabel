@@ -1287,7 +1287,7 @@ lowranceusr_parse_routes()
   }
 
   for (int i = 0; i < num_routes; i++) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = i+1;
 
@@ -1395,7 +1395,7 @@ lowranceusr_parse_trail(int* trail_num)
         char continuous = gbfgetc(file_in);
         if (!continuous && opt_seg_break && j) {
           /* option to break trails into segments was specified */
-          auto trk_tmp = route_head_alloc();
+          auto* trk_tmp = new route_head;
           trk_tmp->rte_num = ++(*trail_num);
           trk_tmp->rte_name = trk_head->rte_name;
           track_add_head(trk_tmp);
@@ -1582,7 +1582,7 @@ lowranceusr_parse_trails()
   }
 
   for (int i = trail_num = 0; i < num_trails && !gbfeof(file_in); i++) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     trk_head->rte_num = ++trail_num;
     track_add_head(trk_head);
 

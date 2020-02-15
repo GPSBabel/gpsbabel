@@ -250,7 +250,7 @@ format_garmin_xt_proc_strk()
     // Generate Track Header
     uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
-    route_head* tmp_track = route_head_alloc();
+    auto* tmp_track = new route_head;
     // update track color
     tmp_track->line_color.bbggrr = colors[trk_color];
     tmp_track->line_color.opacity = 255;
@@ -334,7 +334,7 @@ format_garmin_xt_proc_atrk()
   }
 
   if (! track) {
-    track = route_head_alloc();
+    track = new route_head;
     // header option was not set to ignore
     if (method !=1) {
       track->rte_name = "ATRK XT";

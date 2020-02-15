@@ -246,7 +246,7 @@ bcr_data_read()
 {
   QString str;
 
-  route_head* route = route_head_alloc();
+  auto* route = new route_head;
 
   str = inifile_readstr(ini, "client", "routename");
   if (!str.isNull()) {
