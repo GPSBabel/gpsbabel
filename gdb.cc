@@ -661,7 +661,7 @@ read_route()
   rte_ct++;
   int warnings = 0;
 
-  route_head* rte = route_head_alloc();
+  auto* rte = new route_head;
   rte->rte_name = fread_cstr();
   FREAD(buf, 1);			/* display/autoname - 1 byte */
 
@@ -866,7 +866,7 @@ read_track()
 
   trk_ct++;
 
-  route_head* res = route_head_alloc();
+  auto* res = new route_head;
   res->rte_name = fread_cstr();
 //	res->rte_num = trk_ct;
 

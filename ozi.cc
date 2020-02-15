@@ -618,7 +618,7 @@ ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name
   case 2:
     /* new track flag */
     if ((str.toInt() == 1) && (trk_head->rte_waypt_ct > 0)) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       track_add_head(trk_head);
       if (trk_name) {
         trk_head->rte_name = trk_name;
@@ -711,7 +711,7 @@ ozi_parse_routeheader(int field, const QString& str)
   switch (field) {
   case 0:
     /* R */
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     break;
   case 1:
@@ -750,7 +750,7 @@ data_read()
      */
     if (linecount == 1) {
       if (buff.contains("Track Point")) {
-        trk_head = route_head_alloc();
+        trk_head = new route_head;
         track_add_head(trk_head);
         ozi_objective = trkdata;
       } else if (buff.contains("Route File")) {

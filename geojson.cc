@@ -146,7 +146,7 @@ routes_from_polygon_coordinates(const QJsonArray& polygon)
 	for (auto && lineStringIterator : polygon)
 	{
 		QJsonArray coordinates = (lineStringIterator).toArray();
-		auto route = route_head_alloc();
+		auto* route = new route_head;
 		route_add_head(route);
 		for (auto && coordinate : coordinates)
 		{
@@ -225,7 +225,7 @@ geojson_read() {
 		else if (geometry_type == LINESTRING)
 		{
 			QJsonArray coordinates = geometry.value(COORDINATES).toArray();
-			auto route = route_head_alloc();
+			auto* route = new route_head;
 			route->rte_name = name;
 			route_add_head(route);
 			for (auto && coordinate : coordinates)
@@ -254,7 +254,7 @@ geojson_read() {
 			for (auto && line_string : line_strings)
 			{
 				QJsonArray coordinates = line_string.toArray();
-				auto route = route_head_alloc();
+				auto* route = new route_head;
 				track_add_head(route);
 				for (auto && coordinate : coordinates)
 				{

@@ -675,7 +675,7 @@ struct read_state {
 static void
 state_init(struct read_state* pst)
 {
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
   track->rte_desc = "SkyTraq GPS tracklog data";
   track_add_head(track);
@@ -899,7 +899,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
     if (nullptr == pst->route_head_) {
       db(1, MYNAME ": New Track\n");
-      pst->route_head_ = route_head_alloc();
+      pst->route_head_ = new route_head;
       track_add_head(pst->route_head_);
     }
 

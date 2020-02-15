@@ -289,7 +289,7 @@ static void
 sbn_read()
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
-    route_head*     track = route_head_alloc();
+    auto* track = new route_head;
     track_add_head(track);
 
     read_sbn_header(track);

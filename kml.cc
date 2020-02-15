@@ -410,7 +410,7 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 
 void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  route_head* trk_head = route_head_alloc();
+  auto* trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -459,7 +459,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  gx_trk_head = route_head_alloc();
+  gx_trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     gx_trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -2147,7 +2147,7 @@ kml_wr_position(Waypoint* wpt)
   kml_wr_init(posnfilenametmp);
 
   if (!posn_trk_head) {
-    posn_trk_head = route_head_alloc();
+    posn_trk_head = new route_head;
     track_add_head(posn_trk_head);
   }
 

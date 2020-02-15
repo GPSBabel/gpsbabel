@@ -68,7 +68,7 @@ nmn4_read_data()
 
   QString zip2, city, street, number;
 
-  route_head* route = route_head_alloc();
+  auto* route = new route_head;
   route_add_head(route);
 
   while ((buff = gbfgetstr(fin))) {

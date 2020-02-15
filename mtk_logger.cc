@@ -807,7 +807,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == nullptr || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     trk_head->rte_name = QString("track-%1").arg(1 + track_count());
 
     spds[0] = '\0';

@@ -362,7 +362,7 @@ static void
 data_read()
 {
   if (process_rte) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
   }
 

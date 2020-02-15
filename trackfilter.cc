@@ -547,7 +547,7 @@ void TrackFilter::trackfilter_split()
 #ifdef TRACKF_DBG
         printf(MYNAME ": splitting new track\n");
 #endif
-        curr = route_head_alloc();
+        curr = new route_head;
         trackfilter_split_init_rte_name(curr, buff.at(j)->GetCreationTime());
         track_add_head(curr);
         track_list.append(curr);
@@ -752,7 +752,7 @@ void TrackFilter::trackfilter_seg2trk()
       foreach (Waypoint* wpt, src->waypoint_list) {
         if (wpt->wpt_flags.new_trkseg && !first) {
 
-          dest = route_head_alloc();
+          dest = new route_head;
           dest->rte_num = src->rte_num;
           /* name in the form TRACKNAME #n */
           if (!src->rte_name.isEmpty()) {

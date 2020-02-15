@@ -803,7 +803,7 @@ static void Read_AN1_Lines(gbfile* f)
     an1_line_record* rec = Alloc_AN1_Line();
     Read_AN1_Line(f, rec);
     /* create route rec */
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     rte_head->line_color.bbggrr = rec->linecolor;
     if (rec->opacity == 0x8200) {
       rte_head->line_color.opacity = 128;

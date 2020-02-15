@@ -63,7 +63,7 @@ cst_add_wpt(route_head* track, Waypoint* wpt)
     wpt->urls.clear();
 
     if (temp_route == nullptr) {
-      temp_route = route_head_alloc();
+      temp_route = new route_head;
       route_add_head(temp_route);
     }
     route_add_wpt(temp_route, new Waypoint(*wpt));
@@ -267,7 +267,7 @@ cst_data_read()
         data_lines++;
 
         if (strcmp(name, "1") == 0) {
-          track = route_head_alloc();
+          track = new route_head;
           track_add_head(track);
         } else if (strncmp(name, "NAME:", 5) == 0) {
           wpt->shortname = QString::fromLatin1(name + 5);

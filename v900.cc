@@ -225,7 +225,7 @@ v900_read()
   v900_log("header line: %s",line.text);
   v900_log("is_advance_mode=%d\n",is_advanced_mode);
 
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track->rte_name = "V900 tracklog";
   track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);

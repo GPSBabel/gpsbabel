@@ -875,7 +875,7 @@ fit_read()
 {
   fit_parse_header();
 
-  fit_data.track = route_head_alloc();
+  fit_data.track = new route_head;
   track_add_head(fit_data.track);
   if (global_opts.debug_level >= 1) {
     debug_print(1,"%s: starting to read data with fit_data.len=%d\n", MYNAME, fit_data.len);

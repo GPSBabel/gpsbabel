@@ -153,7 +153,7 @@ mapsend_wpt_read()
   int rte_count = gbfgetint32(mapsend_file_in);
 
   while (rte_count--) {
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     route_add_head(rte_head);
 
     /* route name */
@@ -195,7 +195,7 @@ mapsend_wpt_read()
 static void
 mapsend_track_read()
 {
-  route_head* track_head = route_head_alloc();
+  auto* track_head = new route_head;
   track_head->rte_name = gbfgetpstr(mapsend_file_in);
   track_add_head(track_head);
 

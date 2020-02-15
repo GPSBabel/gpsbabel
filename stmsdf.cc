@@ -203,7 +203,7 @@ finalize_tracks()
       track = nullptr;
     }
     if (track == nullptr) {
-      track = route_head_alloc();
+      track = new route_head;
       track_add_head(track);
       trackno++;
       if (rte_name != nullptr) {
@@ -365,7 +365,7 @@ parse_point(char *line) {
     case 2:
     case 3:
       if (route == nullptr) {
-        route = route_head_alloc();
+        route = new route_head;
         route_add_head(route);
       }
       route_add_wpt(route, wpt);

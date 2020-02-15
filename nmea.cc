@@ -411,7 +411,7 @@ static void
 gpgll_parse(char* ibuf)
 {
   if (trk_head == nullptr) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     track_add_head(trk_head);
   }
 
@@ -466,7 +466,7 @@ static void
 gpgga_parse(char* ibuf)
 {
   if (trk_head == nullptr) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     track_add_head(trk_head);
   }
 
@@ -562,7 +562,7 @@ static void
 gprmc_parse(char* ibuf)
 {
   if (trk_head == nullptr) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     track_add_head(trk_head);
   }
 
@@ -868,7 +868,7 @@ pcmpt_parse(char* ibuf)
      * we can rip through the queue forward now to get our
      * handy-dandy reversing effect.
      */
-    route_head* trk_head = route_head_alloc();
+    auto* trk_head = new route_head;
     track_add_head(trk_head);
     while (!pcmpt_head.isEmpty()) {
       Waypoint* wpt = pcmpt_head.takeFirst();

@@ -143,7 +143,7 @@ vpl_read()
 
   // Set up a track
   if (track_head == nullptr) {
-    track_head = route_head_alloc();
+    track_head = new route_head;
     track_add_head(track_head);
   }
 

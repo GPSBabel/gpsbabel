@@ -238,7 +238,7 @@ raymarine_read()
       break;
     }
 
-    route_head* rte = route_head_alloc();
+    auto* rte = new route_head;
     rte->rte_name = name;
     route_add_head(rte);
 

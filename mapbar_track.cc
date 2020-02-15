@@ -80,7 +80,7 @@ read_waypoint()
 static void
 mapbar_track_read()
 {
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   is_fatal((track == nullptr), MYNAME ": memory non-enough");
   track_add_head(track);
 

@@ -53,7 +53,7 @@ gpl_read()
 {
   gpl_point_t gp;
 
-  route_head* track_head = route_head_alloc();
+  auto* track_head = new route_head;
   track_add_head(track_head);
 
   while (gbfread(&gp, sizeof(gp), 1, gplfile_in) > 0) {

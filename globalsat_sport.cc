@@ -527,7 +527,7 @@ track_read()
       }
 
       if (!showlist) {
-        route_head* trk = route_head_alloc();
+        auto* trk = new route_head;
 
         trk->rte_name = QString::asprintf("%02d-%02d-%02d_%02d:%02d:%02d",
                                           header.dateStart.Year,

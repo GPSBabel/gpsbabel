@@ -1225,14 +1225,14 @@ unicsv_parse_one_line(const QString& ibuf)
   switch (unicsv_data_type) {
   case rtedata:
     if (! unicsv_route) {
-      unicsv_route = route_head_alloc();
+      unicsv_route = new route_head;
       route_add_head(unicsv_route);
     }
     route_add_wpt(unicsv_route, wpt);
     break;
   case trkdata:
     if (! unicsv_track) {
-      unicsv_track = route_head_alloc();
+      unicsv_track = new route_head;
       track_add_head(unicsv_track);
     }
     track_add_wpt(unicsv_track, wpt);

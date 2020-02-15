@@ -104,7 +104,7 @@ static void
 data_read()
 {
   enigma_wpt ewpt;
-  route_head* route = route_head_alloc();
+  auto* route = new route_head;
   route_add_head(route);
 
   while (1 == gbfread(&ewpt, sizeof(ewpt), 1, file_in)) {
