@@ -32,11 +32,8 @@
 class YahooFormat : public Format
 {
 public:
-    YahooFormat() {printf("Ctor\n");}
   QVector<arglist_t>* get_args() override
   {
-    printf("Getting args\n");
-
     return &yahoo_args;
   }
 
@@ -46,7 +43,6 @@ public:
   }
 
   QVector<ff_cap> get_cap() const override {
-    printf("Getting Cap\n");
     return FF_CAP_RW_ALL;
     //return { (ff_cap) ff_cap_read };
   }
