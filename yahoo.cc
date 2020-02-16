@@ -45,7 +45,6 @@ static xg_tag_mapping gl_map[] = {
 };
 #endif
 
-void YahooFormat() {printf("Ctor2\n");}
 void
 YahooFormat::rd_init(const QString& fname)
 {
