@@ -27,12 +27,21 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG=""
     - os: linux
+      dist: bionic
+      sudo: required
+      services: docker
+      compiler: gcc
+      env:
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG="eoan"
+        - DOCKER_SCRIPT="./tools/build_extra_tests"
+    - os: linux
       dist: xenial
       sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="local"
-        - QT_VERSION="5.9.8" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+        - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
       addons:
         apt:
           packages:
@@ -45,56 +54,53 @@ matrix:
             - docbook-xml
             - docbook-xsl
             - libgl1-mesa-dev
+            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.9.8"
+      env: QT_VERSION="5.9.9"
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.12.6"
+      env: QT_VERSION="5.12.7"
       cache:
         directories:
           - $HOME/Cache
         timeout: 600
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.9.8"
       addons:
         apt:
           packages:
-            - libusb-1.0-0-dev
             - gcovr
             - lcov
-      cache:
-        directories:
-          - $HOME/Cache
+            - libusb-1.0-0-dev
+            - qt5-default
 
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_install_linux_coverage ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then ./tools/travis_install_linux_local ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_script_linux_coverage; fi
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker ${DOCKER_IMG}; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "docker" ]; then ./tools/travis_script_linux_docker ${DOCKER_IMG} ${DOCKER_SCRIPT}; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then echo $PATH; ./build_and_test; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.6" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] &&  [ "${QT_VERSION}" = "5.12.7" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/GPSBabel-*.dmg; fi
 
 branches:
   except:

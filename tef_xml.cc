@@ -92,7 +92,7 @@ tef_start(xg_string, const QXmlStreamAttributes* attrv)
 static void
 tef_header(xg_string, const QXmlStreamAttributes* attrv)
 {
-  route = route_head_alloc();
+  route = new route_head;
   foreach(QXmlStreamAttribute attr, *attrv) {
     if (attr.name().compare(QLatin1String("Name"), Qt::CaseInsensitive) == 0) {
       route->rte_name = attr.value().toString().trimmed();
@@ -205,7 +205,7 @@ waypoint_final()
 
   if (route != nullptr) {
     if ((via != 0) || (routevia == nullptr)) {
-      Waypoint* wpt = new Waypoint(*wpt_tmp);
+      auto* wpt = new Waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }

@@ -200,7 +200,7 @@ raymarine_read()
       break;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->shortname = name;
     wpt->latitude = lat.toDouble();
     wpt->longitude = lon.toDouble();
@@ -238,7 +238,7 @@ raymarine_read()
       break;
     }
 
-    route_head* rte = route_head_alloc();
+    auto* rte = new route_head;
     rte->rte_name = name;
     route_add_head(rte);
 
@@ -279,7 +279,7 @@ same_points(const Waypoint* A, const Waypoint* B)
 static void
 register_waypt(const Waypoint* ref, const char)
 {
-  Waypoint* wpt = const_cast<Waypoint*>(ref);
+  auto* wpt = const_cast<Waypoint*>(ref);
 
   for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];

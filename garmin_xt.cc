@@ -180,7 +180,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 3];
   LatLW = LatLW << 8;
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 2];
-  double LatF = (double)LatLW;
+  auto LatF = (double)LatLW;
   if (LatF > 8388608) {
     LatF = LatF - 16777216;
   }
@@ -191,7 +191,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
   LonLW = LonLW+TrackBlock[(ii-1)*12+6];
   LonLW = LonLW << 8;
   LonLW = LonLW+TrackBlock[(ii-1)*12+5];
-  double LonF = (double)LonLW;
+  auto LonF = (double)LonLW;
   if (LonF>8388608) {
     LonF = LonF - 16777216;
   }
@@ -250,7 +250,7 @@ format_garmin_xt_proc_strk()
     // Generate Track Header
     uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
-    route_head* tmp_track = route_head_alloc();
+    auto* tmp_track = new route_head;
     // update track color
     tmp_track->line_color.bbggrr = colors[trk_color];
     tmp_track->line_color.opacity = 255;
@@ -334,7 +334,7 @@ format_garmin_xt_proc_atrk()
   }
 
   if (! track) {
-    track = route_head_alloc();
+    track = new route_head;
     // header option was not set to ignore
     if (method !=1) {
       track->rte_name = "ATRK XT";
@@ -372,7 +372,7 @@ format_garmin_xt_proc_atrk()
     double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

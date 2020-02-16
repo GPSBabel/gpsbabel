@@ -86,7 +86,7 @@ read_packet(int* type, void* payload, size_t max_len)
   size_t data_size = size + 4;
 
   /* data_size can be up to about 64k */
-  unsigned char* data = (unsigned char*) xmalloc(data_size);
+  auto* data = (unsigned char*) xmalloc(data_size);
 
   if (gbfread(data, data_size, 1, file_handle) != 1) {
     fatal(MYNAME ": Format error: could not read %d bytes.\n",
@@ -235,7 +235,7 @@ decode_sbn_position(const unsigned char* buffer, Waypoint* waypt)
 static Waypoint*
 decode_sbn_record(unsigned char* buffer)
 {
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   if (is_sbn_valid(buffer)) {
     waypt->fix = decode_sbn_mode(buffer + 3);
@@ -289,7 +289,7 @@ static void
 sbn_read()
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
-    route_head*     track = route_head_alloc();
+    auto* track = new route_head;
     track_add_head(track);
 
     read_sbn_header(track);

@@ -17,13 +17,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libfontconfig1 \
   libx11-6 \
   libx11-xcb1 \
+  libxext6 \
+  libxkbcommon0 \
+  libxkbcommon-x11-0 \
+  libxrender1 \
   ca-cacert \
   wget \
  && rm -rf /var/lib/apt/lists/*
 
 # basic build and test tools
-COPY ./qtci/install-qt ./qtci/extract-qt-installer /app/
-RUN QT_CI_PACKAGES=qt.qt5.5126.gcc_64,qt.qt5.5126.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=/app:${PATH} ./install-qt 5.12.6 /opt
+COPY ./qtci/install-qt-online ./qtci/extract-qt-installer ./qtci/qt-install.qs /app/
+RUN QT_CI_DOWNLOADER="wget -nv -c" PATH=/app:${PATH} ./install-qt-online "qt.qt5.5127.gcc_64,qt.qt5.5127.qtwebengine" /opt
+RUN echo "export PATH=/opt/Qt/5.12.7/gcc_64/bin:$PATH" > /opt/qt-5.12.7.env
 
 FROM ubuntu:bionic
 LABEL maintainer="https://github.com/tsteven4"
@@ -84,8 +89,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Qt
-COPY --from=qt_install /opt/qt-5.12.6.env /opt/qtio.env
-COPY --from=qt_install /opt/Qt/5.12.6 /opt/Qt/5.12.6
+COPY --from=qt_install /opt/qt-5.12.7.env /opt/qtio.env
+COPY --from=qt_install /opt/Qt/5.12.7 /opt/Qt/5.12.7
 COPY --from=qt_install /opt/Qt/Licenses /opt/Qt/Licenses
 
 # pkgs needed to generate coverage report:

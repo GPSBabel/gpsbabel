@@ -1,10 +1,51 @@
 
 # CSV (Comma separated value) data.
 
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/csv.csv
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o csv -F ${TMPDIR}/csv.csv
 gpsbabel -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
 compare ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
 # And the alternate command line version.
 gpsbabel -i csv -o gpx ${TMPDIR}/csv.csv ${TMPDIR}/csv3.gpx
 gpsbabel -i gpx -o csv ${TMPDIR}/csv3.gpx ${TMPDIR}/csv4.csv
 compare ${TMPDIR}/csv.csv ${TMPDIR}/csv4.csv 
+
+# flip lat and lon so we can distiguish which style file got used.
+echo '# and an internal xcsv and external xcsv.' >> ${TMPDIR}/csvb.style
+echo '# gpsbabel XCSV style file' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo '# Format: DeLorme SA 9.0 CSV' >> ${TMPDIR}/csvb.style
+echo '# Author: Alex Mottram' >> ${TMPDIR}/csvb.style
+echo '#   Date: 12/09/2002' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo 'DESCRIPTION	Comma separated values' >> ${TMPDIR}/csvb.style
+echo 'SHORTLEN	8' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo '# FILE LAYOUT DEFINITIIONS:' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo 'FIELD_DELIMITER		COMMASPACE' >> ${TMPDIR}/csvb.style
+echo 'RECORD_DELIMITER	NEWLINE' >> ${TMPDIR}/csvb.style
+echo 'BADCHARS		COMMA' >> ${TMPDIR}/csvb.style
+echo '' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo '# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:' >> ${TMPDIR}/csvb.style
+echo '#' >> ${TMPDIR}/csvb.style
+echo 'IFIELD	LON_HUMAN_READABLE, "", "%08.5f"' >> ${TMPDIR}/csvb.style
+echo 'IFIELD	LAT_HUMAN_READABLE, "", "%08.5f"' >> ${TMPDIR}/csvb.style
+echo 'IFIELD	DESCRIPTION, "", "%s"' >> ${TMPDIR}/csvb.style
+echo '' >> ${TMPDIR}/csvb.style
+echo 'OFIELD	LON_DECIMAL, "", "%08.5f"' >> ${TMPDIR}/csvb.style
+echo 'OFIELD	LAT_DECIMAL, "", "%08.5f"' >> ${TMPDIR}/csvb.style
+echo 'OFIELD	DESCRIPTION, "", "%s"' >> ${TMPDIR}/csvb.style
+
+# make sure we can follow an internal format with an explict style on read.
+gpsbabel -i csv -f ${TMPDIR}/csv.csv -i xcsv,style=${TMPDIR}/csvb.style  -f ${TMPDIR}/csv.csv -o gpx -F ${TMPDIR}/csv_csvb.gpx
+compare ${REFERENCE}/csv_csvb.gpx ${TMPDIR}/csv_csvb.gpx
+# make sure we remember the style file if we don't give a second -i.
+gpsbabel -i csv -f ${TMPDIR}/csv.csv -f ${TMPDIR}/csv.csv -o gpx -F ${TMPDIR}/csv_csv.gpx
+compare ${REFERENCE}/csv_csv.gpx ${TMPDIR}/csv_csv.gpx
+# make sure we can follow a internal format with an explict style on write.
+gpsbabel -i csv -f ${TMPDIR}/csv.csv -o xcsv,style=${TMPDIR}/csvb.style -F ${TMPDIR}/csvb.csv
+compare ${REFERENCE}/csvb.csv ${TMPDIR}/csvb.csv
+

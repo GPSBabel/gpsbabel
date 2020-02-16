@@ -250,7 +250,7 @@ mmo_printbuf(const char* buf, int count, const char* comment)
 static mmo_data_t*
 mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 {
-  mmo_data_t* data = (mmo_data_t*) xcalloc(1, sizeof(*data));
+  auto* data = (mmo_data_t*) xcalloc(1, sizeof(mmo_data_t));
   data->data = const_cast<void*>(ptr);
   data->visible = 1;
   data->locked = 0;
@@ -334,7 +334,7 @@ mmo_end_of_route(mmo_data_t* data)
 #ifdef MMO_DBG
   const char* sobj = "CObjRoute";
 #endif
-  route_head* rte = (route_head*) data->data;
+  auto* rte = (route_head*) data->data;
   char buf[7];
 
   if (mmo_version >= 0x12) {
@@ -555,7 +555,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  data->data = rte = route_head_alloc();
+  data->data = rte = new route_head;
   rte->rte_name = data->name;
   route_add_head(rte);
 
@@ -627,7 +627,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   trk->rte_name = data->name;
   track_add_head(trk);
 
@@ -647,7 +647,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   DBG((sobj, "track has %d point(s)\n", tp));
 
   for (int ctp = 0; ctp < tp; ctp++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -704,7 +704,14 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
     if (mmo_version >= 0x16) {
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
-      QString text = mmo_readstr();
+      // Don't construct a QString we aren't going to use.
+      // avoid clazy-unused-non-trivial-variable
+#ifdef MMO_DBG
+      QString text =
+#else
+      (void)
+#endif
+        mmo_readstr();
       DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
       uint16_t u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
@@ -739,12 +746,26 @@ mmo_read_CObjText(mmo_data_t*)
   (void) lat;
   (void) lon;
 
-  QString text = mmo_readstr();
+  // Don't construct a QString we aren't going to use.
+  // avoid clazy-unused-non-trivial-variable
+#ifdef MMO_DBG
+  QString text =
+#else
+  (void)
+#endif
+    mmo_readstr();
   DBG((sobj, "text = \"%s\"\n", qPrintable(text)));
 
   mmo_fillbuf(buf, 28, 1);
 
-  QString font = mmo_readstr();
+  // Don't construct a QString we aren't going to use.
+  // avoid clazy-unused-non-trivial-variable
+#ifdef MMO_DBG
+  QString font =
+#else
+  (void)
+#endif
+    mmo_readstr();
   DBG((sobj, "font = \"%s\"\n", qPrintable(font)));
 
   mmo_fillbuf(buf, 25, 1);
@@ -906,7 +927,7 @@ mmo_read_object()
 static void
 mmo_finalize_rtept_cb(const Waypoint* wptref)
 {
-  Waypoint* wpt = const_cast<Waypoint*>(wptref);
+  auto* wpt = const_cast<Waypoint*>(wptref);
 
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;
@@ -980,7 +1001,7 @@ mmo_rd_deinit()
 
   legacy_codec = nullptr;
   utf16le_codec = nullptr;
-  
+
   gbfclose(fin);
 }
 
@@ -1047,7 +1068,7 @@ mmo_writestr(const QString& str)
   bool topbitset = false;
 
   // see if there's any utf-8 multi-byte chars
-  QByteArray utf8 = str.toUtf8();
+  const QByteArray utf8 = str.toUtf8();
   int len = utf8.size();
   for (unsigned char byte : utf8) {
     if (byte & 0x80) {
@@ -1415,7 +1436,7 @@ mmo_wr_deinit()
 
   legacy_codec = nullptr;
   utf16le_codec = nullptr;
-  
+
   gbfclose(fout);
 }
 

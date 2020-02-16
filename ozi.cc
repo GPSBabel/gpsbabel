@@ -188,7 +188,7 @@ static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
-  ozi_fsdata* fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  auto* fsdata = (ozi_fsdata*) xcalloc(1, sizeof(ozi_fsdata));
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
@@ -309,7 +309,7 @@ ozi_track_disp(const Waypoint* waypointp)
   *stream << qSetRealNumberPrecision(6) << waypointp->latitude << ','
                    << waypointp->longitude << ','
                    << new_track << ','
-                   << qSetRealNumberPrecision(0) << alt << ','
+                   << qSetRealNumberPrecision(1) << alt << ','
                    << ozi_time << ",,\r\n";
 
   new_track = 0;
@@ -618,7 +618,7 @@ ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name
   case 2:
     /* new track flag */
     if ((str.toInt() == 1) && (trk_head->rte_waypt_ct > 0)) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       track_add_head(trk_head);
       if (trk_name) {
         trk_head->rte_name = trk_name;
@@ -711,7 +711,7 @@ ozi_parse_routeheader(int field, const QString& str)
   switch (field) {
   case 0:
     /* R */
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     break;
   case 1:
@@ -750,7 +750,7 @@ data_read()
      */
     if (linecount == 1) {
       if (buff.contains("Track Point")) {
-        trk_head = route_head_alloc();
+        trk_head = new route_head;
         track_add_head(trk_head);
         ozi_objective = trkdata;
       } else if (buff.contains("Route File")) {
@@ -787,7 +787,7 @@ data_read()
     if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       /* data delimited by commas. */
       const QStringList parts = buff.split(',');
@@ -878,7 +878,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  ozi_fsdata* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

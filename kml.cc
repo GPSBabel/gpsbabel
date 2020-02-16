@@ -410,7 +410,7 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 
 void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  route_head* trk_head = route_head_alloc();
+  auto* trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -459,7 +459,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  gx_trk_head = route_head_alloc();
+  gx_trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     gx_trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -485,7 +485,7 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
   // In gx:Track elements all kml:when elements are required to precede all gx:coord elements.
   // For both we allow any order.  Many writers using gx:Track elements don't adhere to the schema.
   while (!gx_trk_times->isEmpty()) {
-    Waypoint* trkpt = new Waypoint;
+    auto* trkpt = new Waypoint;
     trkpt->SetCreationTime(gx_trk_times->takeFirst());
     double lat, lon, alt;
     int n;
@@ -1433,7 +1433,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
-  fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
 
   if (!fs_gpx) {
     return r;
@@ -2147,7 +2147,7 @@ kml_wr_position(Waypoint* wpt)
   kml_wr_init(posnfilenametmp);
 
   if (!posn_trk_head) {
-    posn_trk_head = route_head_alloc();
+    posn_trk_head = new route_head;
     track_add_head(posn_trk_head);
   }
 

@@ -264,13 +264,13 @@ process_gpsfile(uint8_t data[], route_head** track)
       strncpy(buf, model->name, sizeof(buf));
       strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
                gmtime(&creation_time));
-      *track = route_head_alloc();
+      *track = new route_head;
       (*track)->rte_name = buf;
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     float latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;
@@ -550,7 +550,7 @@ dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
   /* the number of frames the answer will comprise */
   int frames = (cmd == dg100cmd_getfile) ? 2 : 1;
   /* alias pointer for easy typecasting */
-  uint8_t* buf = (uint8_t*) recvbuf;
+  auto* buf = (uint8_t*) recvbuf;
   int fill = 0;
   for (int i = 0; i < frames; i++) {
     int n = dg100_recv(cmd, buf + fill, count - fill);

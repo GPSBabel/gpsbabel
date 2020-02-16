@@ -75,7 +75,7 @@ ignr_start(xg_string, const QXmlStreamAttributes*)
 {
   ignr_xml_error((track != nullptr));
 
-  track = route_head_alloc();
+  track = new route_head;
   track_add_head(track);
 }
 

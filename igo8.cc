@@ -165,13 +165,13 @@ static void igo8_read()
 {
   igo8_point point;
 
-  route_head* track_head = route_head_alloc();
+  auto* track_head = new route_head;
   track_add_head(track_head);
 
   while (in_point_count &&
          gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
     in_point_count--;
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
     wpt_tmp->longitude = le_read32(&point.lon) / (double)0x800000;
@@ -258,7 +258,7 @@ static unsigned int print_unicode(char* dst, int dst_max_length, const QString& 
   if (max_qchars < 1) {
     // We must have room for the terminator.
     fatal(MYNAME ": igo8 header overflow.\n");
-  };
+  }
   // Write as many characters from the source as possible
   // while leaving space for a terminator.
   int n_src_qchars = std::min(max_qchars - 1, src.size());
@@ -275,7 +275,7 @@ static void write_header()
 {
   char header[IGO8_HEADER_SIZE] = {};
   igo8_id_block tmp_id_block;
-  p_igo8_id_block id_block = (p_igo8_id_block)header;
+  auto id_block = (p_igo8_id_block)header;
   uint32_t current_position = 0;
   const char* title = "Title";
   const char* description = "Description";

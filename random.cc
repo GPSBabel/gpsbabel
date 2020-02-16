@@ -239,7 +239,7 @@ random_read()
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
-    head = route_head_alloc();
+    head = new route_head;
     if (doing_trks) {
       head->rte_name = rand_str(8, "Trk_%s");
       track_add_head(head);

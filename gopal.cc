@@ -176,7 +176,7 @@ gopal_read()
   double lat_old = 0;
   
 
-  route_head* route = route_head_alloc();
+  auto* route = new route_head;
   QDateTime qtx = QDateTime::fromSecsSinceEpoch(tx, Qt::UTC);
   route->rte_name = "Tracklog ";
   route->rte_name += qtx.toString(Qt::ISODate);
@@ -200,7 +200,7 @@ gopal_read()
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...

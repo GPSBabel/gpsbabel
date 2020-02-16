@@ -20,7 +20,6 @@
 #include <clocale>                  // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                  // for signal, SIGINT, SIG_ERR
 #include <cstdio>                   // for printf, fgetc, stdin
-#include <cstdlib>                  // for exit
 #include <cstring>                  // for strcmp
 
 #include <QtCore/QByteArray>        // for QByteArray
@@ -43,7 +42,7 @@
 #endif
 
 #include "defs.h"
-#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit, cet_deregister, cet_register, cet_cs_vec_utf8
+#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit
 #include "csv_util.h"               // for csv_linesplit
 #include "filter.h"                 // for Filter
 #include "filter_vecs.h"            // for FilterVecs
@@ -198,6 +197,43 @@ signal_handler(int sig)
   tracking_status.request_terminate = 1;
 }
 
+class FallbackOutput
+{
+public:
+  FallbackOutput() : mkshort_handle(mkshort_new_handle()) {}
+  // delete copy and move constructors and assignment operators.
+  // The defaults are not appropriate, and we haven't implemented proper ones.
+  FallbackOutput(const FallbackOutput&) = delete;
+  FallbackOutput& operator=(const FallbackOutput&) = delete;
+  FallbackOutput(FallbackOutput&&) = delete;
+  FallbackOutput& operator=(FallbackOutput&&) = delete;
+  ~FallbackOutput() {mkshort_del_handle(&mkshort_handle);}
+
+  void waypt_disp(const Waypoint* wpt)
+  {
+    if (wpt->GetCreationTime().isValid()) {
+      printf("%s ", qPrintable(wpt->creation_time.toString()));
+    }
+    printposn(wpt->latitude,1);
+    printposn(wpt->longitude,0);
+    if (!wpt->description.isEmpty()) {
+      printf("%s/%s",
+             global_opts.synthesize_shortnames ?
+             qPrintable(mkshort(mkshort_handle, wpt->description)) :
+             qPrintable(wpt->shortname),
+             qPrintable(wpt->description));
+    }
+  
+    if (wpt->altitude != unknown_alt) {
+      printf(" %f", wpt->altitude);
+    }
+    printf("\n");
+  }
+
+private:
+  short_handle mkshort_handle;
+};
+
 static int
 run(const char* prog_name)
 {
@@ -210,6 +246,8 @@ run(const char* prog_name)
   int opt_version = 0;
   bool did_something = false;
   QStack<QargStackElement> qargs_stack;
+  FallbackOutput fbOutput;
+
 
   // Use QCoreApplication::arguments() to process the command line.
   QStringList qargs = QCoreApplication::arguments();
@@ -488,6 +526,9 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    (void) Vecs::Instance().find_vec(ivecs->get_name());
+
     cet_convert_init(ivecs->get_encode(), 1);
 
     start_session(ivecs->get_name(), qargs.at(0));
@@ -498,6 +539,9 @@ run(const char* prog_name)
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
+      /* reinitialize xcsv in case two formats that use xcsv were given */
+      (void) Vecs::Instance().find_vec(ovecs->get_name());
+
       cet_convert_init(ovecs->get_encode(), 1);
 
       ovecs->wr_init(qargs.at(1));
@@ -512,7 +556,10 @@ run(const char* prog_name)
   }
   if (ovecs == nullptr) {
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    waypt_disp_all(waypt_disp);
+    auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
+      fbOutput.waypt_disp(wpt);
+    };
+    waypt_disp_all(waypt_disp_lambda);
   }
 
   /*
@@ -561,7 +608,7 @@ run(const char* prog_name)
 //          ovecs->wr_position_deinit();
         } else {
           /* Just print to screen */
-          waypt_disp(wpt);
+          fbOutput.waypt_disp(wpt);
         }
         delete wpt;
       }
@@ -643,7 +690,6 @@ main(int argc, char* argv[])
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
-  global_opts.charset_name.clear();
   global_opts.inifile = nullptr;
 
   gpsbabel_time = current_time().toTime_t();			/* frozen in testmode */
@@ -654,20 +700,18 @@ main(int argc, char* argv[])
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();
-  cet_register();
   session_init();
   waypt_init();
   route_init();
 
   rc = run(prog_name);
 
-  cet_deregister();
-  waypt_flush_all();
   route_deinit();
+  waypt_deinit();
   session_exit();
-  Vecs::Instance().exit_vecs();
   FilterVecs::Instance().exit_filter_vecs();
+  Vecs::Instance().exit_vecs();
   inifile_done(global_opts.inifile);
 
-  exit(rc);
+  return rc;
 }

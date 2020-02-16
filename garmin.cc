@@ -288,12 +288,6 @@ rw_init(const QString& fname)
 
   }
 
-  // If a user has specified a non-default character set, we'll trust
-  // them to sort our the wreckage of violating the Garmin protocol and
-  // ship characters to the device in that character set.
-  if (global_opts.charset != &cet_cs_vec_utf8) {
-    receiver_charset = xstrdup(global_opts.charset_name);
-  }
   if (global_opts.debug_level > 0)  {
     fprintf(stderr, "Waypoint type: %d\n"
             "Chosen waypoint length %d\n",
@@ -302,11 +296,6 @@ rw_init(const QString& fname)
       fprintf(stderr, "Waypoint category type: %d\n",
               gps_category_type);
     }
-  }
-
-  // Allow override of sent character set for internationalized GPSes.
-  if (global_opts.charset != &cet_cs_vec_utf8) {
-    receiver_charset = xstrdup(global_opts.charset_name);
   }
 
   /*
@@ -334,6 +323,14 @@ rw_init(const QString& fname)
 
   setshort_mustupper(mkshort_handle, receiver_must_upper);
 
+  /*
+   * This used to mean something when we used cet, but these days this
+   * format either use implicit QString conversions (utf8) which is
+   * likely a bug, or we have hard coded QString::fromLatin1 or CSTRc.
+   * So all the above detection of receiver_charset is for naught.
+   * But perhaps we will use an appropriate codec based on receiver_charset
+   * someday.
+   */
   if (receiver_charset) {
     cet_convert_init(receiver_charset, 1);
   }
@@ -388,7 +385,7 @@ waypt_read()
   GPS_PWay* way = nullptr;
 
   if (getposn) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
     wpt->shortname = "Position";
@@ -404,7 +401,7 @@ waypt_read()
   }
 
   for (int i = 0; i < n; i++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
     wpt_tmp->description = QString::fromLatin1(way[i]->cmnt);
@@ -518,9 +515,9 @@ track_read()
     }
 
     if (trk_head == nullptr || array[i]->ishdr) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       trk_head->rte_num = trk_num;
-      trk_head->rte_name = trk_name;
+      trk_head->rte_name = QString::fromLatin1(trk_name);
       trk_num++;
       track_add_head(trk_head);
     }
@@ -535,7 +532,7 @@ track_read()
     if (array[i]->no_latlon || array[i]->ishdr) {
       continue;
     }
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->longitude = array[i]->lon;
     wpt->latitude = array[i]->lat;
@@ -596,16 +593,16 @@ route_read()
       default:
         break;
       }
-      rte_head = route_head_alloc();
+      rte_head = new route_head;
       route_add_head(rte_head);
       if (csrc) {
-        rte_head->rte_name = csrc;
+        rte_head->rte_name = QString::fromLatin1(csrc);
       }
     } else {
       if (array[i]->islink)  {
         continue;
       } else {
-        Waypoint* wpt_tmp = new Waypoint;
+        auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
         wpt_tmp->shortname = array[i]->ident;
@@ -653,7 +650,7 @@ lap_read_as_track(void)
        ) {
       static struct tm* stmp;
       stmp = gmtime(&array[i]->start_time);
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       /*For D906, we would like to use the track_index in the last packet instead...*/
       trk_head->rte_num = ++trk_num;
       strftime(tbuf, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
@@ -789,7 +786,7 @@ pvt_init(const QString& fname)
 static Waypoint*
 pvt_read(posn_status* posn_status)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
   if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
@@ -890,7 +887,7 @@ waypt_write_cb(GPS_PWay*)
  * description.
  */
 static const char*
-get_gc_info(Waypoint* wpt)
+get_gc_info(const Waypoint* wpt)
 {
   if (global_opts.smart_names) {
     if (wpt->gc_data->type == gt_virtual) {
@@ -935,7 +932,7 @@ waypoint_prepare()
   i = 0;
 
   // Iterate with waypt_disp_all?
-  foreach(Waypoint* wpt, *global_waypoint_list) {
+  for (const Waypoint* wpt : qAsConst(*global_waypoint_list)) {
     char obuf[256];
 
     QString src;

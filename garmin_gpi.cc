@@ -801,7 +801,7 @@ wdata_free(writer_data_t* data)
   foreach (Waypoint* wpt, data->waypt_list) {
 
     if (wpt->extra_data) {
-      gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
+      auto* dt = (gpi_waypt_t*) wpt->extra_data;
       delete dt;
     }
     delete wpt;
@@ -918,7 +918,7 @@ wdata_compute_size(writer_data_t* data)
       res += 10;  /* tag(4) */
     }
 
-    gpi_waypt_t* dt = new gpi_waypt_t;
+    auto* dt = new gpi_waypt_t;
     wpt->extra_data = dt;
 
     if (alerts) {
@@ -1066,7 +1066,7 @@ wdata_write(const writer_data_t* data)
 
   foreach (const Waypoint* wpt, data->waypt_list) {
     int s1;
-    gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
+    auto* dt = (gpi_waypt_t*) wpt->extra_data;
 
     QString str = wpt->description;
     if (str.isEmpty()) {
@@ -1261,7 +1261,7 @@ enum_waypt_cb(const Waypoint* ref)
     }
   }
 
-  Waypoint* wpt = new Waypoint(*ref);
+  auto* wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
     wpt->shortname = mkshort(short_h, wpt->shortname);

@@ -51,9 +51,11 @@ private:
 
   struct extra_data {
     double distance;
-    double prjlatitude, prjlongitude;
+    double prjlatitude;
+    double prjlongitude;
     double frac;
-    Waypoint* arcpt1, * arcpt2;
+    const Waypoint* arcpt1;
+    const Waypoint* arcpt2;
   };
 
   QVector<arglist_t> args = {

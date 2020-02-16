@@ -206,7 +206,7 @@ jtr_read()
       continue;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -236,7 +236,7 @@ jtr_read()
     }
 
     if (trk == nullptr) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
 

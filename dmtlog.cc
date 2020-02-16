@@ -215,7 +215,7 @@ static void
 tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes*)
 {
   if (xmltrk == nullptr) {
-    xmltrk = route_head_alloc();
+    xmltrk = new route_head;
     track_add_head(xmltrk);
   }
   xmltrk->rte_name = args;
@@ -226,7 +226,7 @@ static void
 tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
 {
   if (xmltrk == nullptr) {
-    xmltrk = route_head_alloc();
+    xmltrk = new route_head;
     track_add_head(xmltrk);
   }
   xmltrk->rte_desc = args;
@@ -255,7 +255,7 @@ tlog3b_xgcb_tpten(xg_string, const QXmlStreamAttributes*)
   finalize_pt(xmlwpt);
 
   if (xmltrk == nullptr) {
-    xmltrk = route_head_alloc();
+    xmltrk = new route_head;
     track_add_head(xmltrk);
   }
   track_add_wpt(xmltrk, xmlwpt);
@@ -422,7 +422,7 @@ read_CTrackFile(const int version)
   (void) gbfgetint32(fin); // Unknown 3
   (void) gbfgetint32(fin); // Unknown 4
 
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track_add_head(track);
 
   /* S1 .. S9: comments, hints, jokes, aso */
@@ -449,7 +449,7 @@ read_CTrackFile(const int version)
       datum = read_datum(fin);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -496,7 +496,7 @@ read_CTrackFile(const int version)
       gbfungetc(i, fin);
       datum = read_datum(fin);
 
-      Waypoint* wpt = new Waypoint;
+      auto* wpt = new Waypoint;
 
       wpt->latitude = gbfgetdbl(fin);
       wpt->longitude = gbfgetdbl(fin);
@@ -523,7 +523,7 @@ read_CTrackFile(const int version)
   while (wcount > 0) {
     wcount--;
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);

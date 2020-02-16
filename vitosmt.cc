@@ -38,7 +38,7 @@ const size_t vitosmt_datasize = 64;
 static unsigned char*
 ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char* result = (unsigned char*) xmalloc(size);
+  auto* result = (unsigned char*) xmalloc(size);
 
   gbfread(result, size, 1, f);
   return result;
@@ -68,7 +68,7 @@ rd_deinit()
 static void
 vitosmt_read()
 {
-  route_head* route_head =nullptr;
+  route_head* rte = nullptr;
   struct tm tmStruct;
   int  serial  =0;
 
@@ -126,7 +126,7 @@ vitosmt_read()
     unsigned char gpsvalid = gbfgetc(infile); /* fix is valid */
     unsigned char gpssats = gbfgetc(infile); /* number of sats */
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude =DEG(latrad);
     wpt_tmp->longitude =DEG(lonrad);
@@ -174,17 +174,17 @@ vitosmt_read()
     if (doing_wpts) { /* process as waypoints */
       waypt_add(wpt_tmp);
     } else if (doing_rtes) { /* process as route */
-      if (route_head == nullptr) {
-        route_head = route_head_alloc();
-        route_add_head(route_head);
+      if (rte == nullptr) {
+          rte = new route_head;
+        route_add_head(rte);
       }
-      route_add_wpt(route_head, wpt_tmp);
+      route_add_wpt(rte, wpt_tmp);
     } else {  /* default track mode */
-      if (route_head == nullptr) {
-        route_head = route_head_alloc();
-        track_add_head(route_head);
+      if (rte == nullptr) {
+          rte = new route_head;
+        track_add_head(rte);
       }
-      track_add_wpt(route_head, wpt_tmp);
+      track_add_wpt(rte, wpt_tmp);
     }
 
     xfree(timestamp);
@@ -214,7 +214,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
   double  seconds  =0;
 
   ++count;
-  unsigned char*  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
+  auto*  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
 
   WriteDouble(&workbuffer[position], RAD(waypointp->latitude));
   position += sizeof(double);
@@ -288,7 +288,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 static void
 vitosmt_write()
 {
-  unsigned char* workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
+  auto* workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
   count = 0;
 

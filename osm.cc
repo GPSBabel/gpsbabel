@@ -575,7 +575,7 @@ osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 static void
 osm_way(xg_string, const QXmlStreamAttributes* attrv)
 {
-  rte = route_head_alloc();
+  rte = new route_head;
   // create a wpt to represent the route center if it has a center tag
   wpt = new Waypoint;
   if (attrv->hasAttribute("id")) {
@@ -591,7 +591,7 @@ osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 
     if (waypoints.contains(atstr)) {
       const Waypoint* ctmp = waypoints.value(atstr);
-      Waypoint* tmp = new Waypoint(*ctmp);
+      auto* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));
@@ -763,7 +763,7 @@ static void
 osm_release_ids(const Waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    Waypoint* tmp = const_cast<Waypoint*>(wpt);
+    auto* tmp = const_cast<Waypoint*>(wpt);
     xfree(tmp->extra_data);
     tmp->extra_data = nullptr;
   }

@@ -325,7 +325,7 @@ my_read()
 // Parts may or may not be connected to one another.
 // Parts may or may not intersect one another.
       for (int part=0; part < shp->nParts; part++) {
-        route_head* routehead = route_head_alloc();
+        auto* routehead = new route_head;
         routehead->rte_name = name;
         route_add_head(routehead);
         int endVertex;

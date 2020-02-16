@@ -68,7 +68,7 @@ static void xol_shape(xg_string, const QXmlStreamAttributes* attrv) {
     if (attrv->value("type") == "waypoint") {
       wpt = new Waypoint;
     } else if (attrv->value("type") == "polyline") {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
   }

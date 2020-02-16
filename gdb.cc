@@ -401,6 +401,8 @@ read_file_header()
   }
 
   reclen = FREAD_i32;
+  is_fatal((reclen + 1 > int(sizeof(buf))),
+           MYNAME ": Invalid record length\n");
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
@@ -659,7 +661,7 @@ read_route()
   rte_ct++;
   int warnings = 0;
 
-  route_head* rte = route_head_alloc();
+  auto* rte = new route_head;
   rte->rte_name = fread_cstr();
   FREAD(buf, 1);			/* display/autoname - 1 byte */
 
@@ -690,7 +692,7 @@ read_route()
   for (int i = 0; i < points; i++) {
     char buf[128];
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     rtept_ct++;
 
     wpt->shortname = fread_cstr();	/* shortname */
@@ -730,7 +732,7 @@ read_route()
            qPrintable(wpt->shortname), wpt_class, links);
 #endif
     for (int j = 0; j < links; j++) {
-      garmin_ilink_t* il_step = (garmin_ilink_t*) xmalloc(sizeof(*il_step));
+      auto* il_step = (garmin_ilink_t*) xmalloc(sizeof(garmin_ilink_t));
 
       il_step->ref_count = 1;
 
@@ -864,7 +866,7 @@ read_track()
 
   trk_ct++;
 
-  route_head* res = route_head_alloc();
+  auto* res = new route_head;
   res->rte_name = fread_cstr();
 //	res->rte_num = trk_ct;
 
@@ -875,7 +877,7 @@ read_track()
   int points = FREAD_i32;
 
   for (int index = 0; index < points; index++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     trkpt_ct++;
 
@@ -989,7 +991,7 @@ read_data()
       wpt = read_waypoint(&wpt_class);
       if ((gdb_via == 0) || (wpt_class == 0)) {
         waypt_add(wpt);
-        Waypoint* dupe = new Waypoint(*wpt);
+        auto* dupe = new Waypoint(*wpt);
         wayptq_in.append(dupe);
       } else {
         wayptq_in_hidden.append(wpt);
@@ -1553,7 +1555,7 @@ write_waypoint_cb(const Waypoint* refpt)
 
   if (test == nullptr) {
     int display;
-    Waypoint* wpt = new Waypoint(*refpt);
+    auto* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
     wayptq_out.append(wpt);

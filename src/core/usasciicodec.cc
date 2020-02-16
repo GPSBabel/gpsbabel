@@ -60,7 +60,7 @@ QString UsAsciiCodec::convertToUnicode(const char* chars, int len, ConverterStat
 {
   QString result(len, Qt::Uninitialized);
   QChar* uc = result.data();
-  const unsigned char* c = (const unsigned char*)chars;
+  const auto* c = (const unsigned char*)chars;
   int invalid = 0;
 
   for (int i = 0; i < len; i++) {
@@ -82,7 +82,7 @@ QString UsAsciiCodec::convertToUnicode(const char* chars, int len, ConverterStat
 QByteArray UsAsciiCodec::convertFromUnicode(const QChar* uc, int len, ConverterState* state) const
 {
   QByteArray result(len, Qt::Uninitialized);
-  unsigned char* c = (unsigned char*)result.data();
+  auto* c = (unsigned char*)result.data();
   const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
   int invalid = 0;
 

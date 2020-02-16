@@ -249,7 +249,7 @@ static an1_waypoint_record* Alloc_AN1_Waypoint();
 static void Destroy_AN1_Waypoint(void* vwpt)
 {
 
-  an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
+  auto* wpt = (an1_waypoint_record*)vwpt;
   xfree(wpt->name);
   xfree(wpt->fontname);
 
@@ -267,7 +267,7 @@ static void Destroy_AN1_Waypoint(void* vwpt)
 
 static void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 {
-  an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
+  auto* wpt = (an1_waypoint_record*)vwpt;
   an1_waypoint_record* dwpt = Alloc_AN1_Waypoint();
   memcpy(dwpt, wpt, sizeof(an1_waypoint_record));
   dwpt->name = xstrdup(wpt->name);
@@ -280,7 +280,7 @@ static void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 
 static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
-  an1_waypoint_record* result = (an1_waypoint_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_waypoint_record*)xcalloc(1, sizeof(an1_waypoint_record));
   result->fs.type = FS_AN1W;
   result->fs.copy = Copy_AN1_Waypoint;
   result->fs.destroy = Destroy_AN1_Waypoint;
@@ -296,7 +296,7 @@ static void Destroy_AN1_Vertex(void* vvertex)
 
 static void Copy_AN1_Vertex(void** vdvert, void* vvert)
 {
-  an1_vertex_record* vert = (an1_vertex_record*)vvert;
+  auto* vert = (an1_vertex_record*)vvert;
   an1_vertex_record* dvert = Alloc_AN1_Vertex();
   memcpy(dvert, vert, sizeof(an1_vertex_record));
   *vdvert = (void*)dvert;
@@ -304,7 +304,7 @@ static void Copy_AN1_Vertex(void** vdvert, void* vvert)
 
 static an1_vertex_record* Alloc_AN1_Vertex()
 {
-  an1_vertex_record* result = (an1_vertex_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_vertex_record*)xcalloc(1, sizeof(an1_vertex_record));
   result->fs.type = FS_AN1V;
   result->fs.copy = Copy_AN1_Vertex;
   result->fs.destroy = Destroy_AN1_Vertex;
@@ -316,14 +316,14 @@ static an1_line_record* Alloc_AN1_Line();
 
 static void Destroy_AN1_Line(void* vline)
 {
-  an1_line_record* line = (an1_line_record*)vline;
+  auto* line = (an1_line_record*)vline;
   xfree(line->name);
   xfree(vline);
 }
 
 static void Copy_AN1_Line(void** vdline, void* vline)
 {
-  an1_line_record* line = (an1_line_record*)vline;
+  auto* line = (an1_line_record*)vline;
   an1_line_record* dline = Alloc_AN1_Line();
   memcpy(dline, line, sizeof(an1_line_record));
   dline->name = xstrdup(line->name);
@@ -332,7 +332,7 @@ static void Copy_AN1_Line(void** vdline, void* vline)
 
 static an1_line_record* Alloc_AN1_Line()
 {
-  an1_line_record* result = (an1_line_record*)xcalloc(sizeof(*result), 1);
+  auto* result = (an1_line_record*)xcalloc(1, sizeof(an1_line_record));
   result->fs.type = FS_AN1L;
   result->fs.copy = Copy_AN1_Line;
   result->fs.destroy = Destroy_AN1_Line;
@@ -662,7 +662,7 @@ static void Read_AN1_Waypoints(gbfile* f)
   for (unsigned long i = 0; i < count; i++) {
     an1_waypoint_record* rec = Alloc_AN1_Waypoint();
     Read_AN1_Waypoint(f, rec);
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     if (rec->creation_time) {
       wpt_tmp->SetCreationTime(rec->creation_time);
@@ -803,7 +803,7 @@ static void Read_AN1_Lines(gbfile* f)
     an1_line_record* rec = Alloc_AN1_Line();
     Read_AN1_Line(f, rec);
     /* create route rec */
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     rte_head->line_color.bbggrr = rec->linecolor;
     if (rec->opacity == 0x8200) {
       rte_head->line_color.opacity = 128;
@@ -822,7 +822,7 @@ static void Read_AN1_Lines(gbfile* f)
       Read_AN1_Vertex(f, vert);
 
       /* create route point */
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString::asprintf("\\%5.5lx", rtserial++);
@@ -1167,11 +1167,11 @@ wr_init(const QString& fname)
   if (opt_zoom) {
     opt_zoom_num = atoi(opt_zoom);
   }
-  radius = .1609344; /* 1/10 mi */
+  radius = .1609344; /* 1/10 mi in kilometers */
   if (opt_radius) {
     radius = atof(opt_radius);
     if (!strchr(opt_radius,'k') && !strchr(opt_radius,'K')) {
-      radius *= 5280*12*2.54/100000;
+      radius *= kKilometersPerMile;
     }
   }
 }

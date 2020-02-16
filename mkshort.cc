@@ -125,7 +125,7 @@ void
 add_to_hashlist(mkshort_handle_imp* h, char* name)
 {
   int hash = hash_string(name);
-  uniq_shortname* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
+  auto* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
 
   s->orig_shortname = xstrdup(name);
   h->namelist[hash].append(s);
@@ -159,7 +159,7 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
 void
 mkshort_del_handle(short_handle* h)
 {
-  mkshort_handle_imp* hdr = (mkshort_handle_imp*) *h;
+  auto* hdr = (mkshort_handle_imp*) *h;
 
   if (!h || !hdr) {
     return;
@@ -253,7 +253,7 @@ replace_constants(char* s)
 void
 setshort_length(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   if (l == 0) {
     hdl->target_len = default_target_len;
   } else {
@@ -268,7 +268,7 @@ setshort_length(short_handle h, int l)
 void
 setshort_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->whitespaceok = l;
 }
 
@@ -280,7 +280,7 @@ setshort_whitespace_ok(short_handle h, int l)
 void
 setshort_repeating_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->repeating_whitespaceok = l;
 }
 
@@ -291,7 +291,7 @@ setshort_repeating_whitespace_ok(short_handle h, int l)
 void
 setshort_defname(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   if (s == nullptr) {
     fatal("setshort_defname called without a valid name.");
   }
@@ -309,7 +309,7 @@ setshort_defname(short_handle h, const char* s)
 void
 setshort_badchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
   if ((hdl->badchars != nullptr)) {
     xfree(hdl->badchars);
@@ -324,7 +324,7 @@ setshort_badchars(short_handle h, const char* s)
 void
 setshort_goodchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->goodchars != nullptr) {
     xfree(hdl->goodchars);
@@ -342,7 +342,7 @@ setshort_goodchars(short_handle h, const char* s)
 void
 setshort_mustupper(short_handle h, int i)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->mustupper = i;
 }
 
@@ -354,7 +354,7 @@ setshort_mustupper(short_handle h, int i)
 void
 setshort_mustuniq(short_handle h, int i)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->must_uniq = i;
 }
 
@@ -365,7 +365,7 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
   char* tstring;
   char* cp;
   int i, l, replaced;
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
   if (is_utf8) {
     ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */

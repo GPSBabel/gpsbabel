@@ -323,23 +323,61 @@ static QVector<arglist_t> unicsv_args = {
 
 /* helpers */
 
-// There is no test coverage of this and it's been wrong for years and
-// nobody has noticed...
-static int
-unicsv_parse_gc_id(const QString& str)
+// Parse GC-Code / geo cache reference code into int64 (GC-ID)
+// (see also https://api.groundspeak.com/documentation#referencecodes)
+static long long
+unicsv_parse_gc_code(const QString& str)
 {
-  int res = 0;
-  const QString kBase35 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
-  if (str.startsWith("GC")) {
-    int base35 = str.size() > 6; // above GCFFFF?
-    QString s = str.mid(2);
-    while (!s.isEmpty()) {
-      res = res * 16 + kBase35.indexOf(s[0]);
-      s = str.mid(1);
+  if (! str.startsWith("GC")) {
+    return 0;
+  }
+
+  // Remove "GC" prefix
+  QString s = str.mid(2);
+  // Replacements according to groundspeak api documentation
+  s.replace('S', '5');
+  s.replace('O', '0');
+  // Remove leading zeros. some online converters do that as well.
+  while (s.startsWith('0')) {
+    s.remove(0, 1);
+  }
+
+  // We have these cases:
+  // *  1-3 digits                   => base 16
+  // *    4 digits, first one is 0-F => base 16
+  // *    4 digits, first one G-Z    => base 31
+  // * 5-12 digits                   => base 31
+  // *  13- digits                   => exceeds int64_t
+  //
+  int base;
+  const QString kBase31 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
+  if (s.size() >= 1 && s.size() <= 3) {
+    base = 16;
+  } else if (s.size() == 4) {
+    if (kBase31.indexOf(s[0]) < 16) {
+      base = 16;
+    } else {
+      base = 31;
     }
-    if (base35) {
-      res -= 411120;
+  } else if (s.size() >= 5 && s.size() <= 12) {
+    base = 31;
+  } else {
+    return 0;
+  }
+
+  long long res = 0;
+  for (auto c : qAsConst(s)) {
+    int val = kBase31.indexOf(c);
+    if (val < 0 || (base == 16 && val > 15)) {
+      return 0;
     }
+    res = res * base + val;
+  }
+  if (base == 31) {
+    res -= 411120;
+  }
+  if (res < 0) {
+    res = 0;
   }
   return res;
 }
@@ -624,7 +662,7 @@ unicsv_parse_one_line(const QString& ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = nullptr;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));
@@ -1010,9 +1048,13 @@ unicsv_parse_one_line(const QString& ibuf)
       switch (unicsv_fields_tab[column]) {
 
       case fld_gc_id:
-        gc_data->id = value.toInt();
-        if (gc_data->id == 0) {
-          gc_data->id = unicsv_parse_gc_id(value);
+        // First try to decode as numeric GC-ID (e.g. "575006").
+        // If that doesn't succedd, try to decode as GC-Code
+        // (e.g. "GC1234G").
+        bool ok;
+        gc_data->id = value.toLongLong(&ok, 10);
+        if (!ok) {
+          gc_data->id = unicsv_parse_gc_code(value);
         }
         break;
       case fld_gc_type:
@@ -1183,14 +1225,14 @@ unicsv_parse_one_line(const QString& ibuf)
   switch (unicsv_data_type) {
   case rtedata:
     if (! unicsv_route) {
-      unicsv_route = route_head_alloc();
+      unicsv_route = new route_head;
       route_add_head(unicsv_route);
     }
     route_add_wpt(unicsv_route, wpt);
     break;
   case trkdata:
     if (! unicsv_track) {
-      unicsv_track = route_head_alloc();
+      unicsv_track = new route_head;
       track_add_head(unicsv_track);
     }
     track_add_wpt(unicsv_track, wpt);

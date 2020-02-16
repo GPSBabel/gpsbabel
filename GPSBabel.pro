@@ -92,9 +92,6 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
 HEADERS =  \
 	an1sym.h \
 	cet.h \
-	cet/ansi_x3_4_1968.h \
-	cet/cp1252.h \
-	cet/iso_8859_8.h \
 	cet_util.h \
 	csv_util.h \
 	defs.h \
@@ -138,6 +135,7 @@ HEADERS =  \
 	legacyformat.h \
 	magellan.h \
 	mapsend.h \
+	mynav.h \
 	navilink.h \
 	session.h \
 	shapelib/shapefil.h \

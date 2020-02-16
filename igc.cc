@@ -185,7 +185,7 @@ static void igc_task_rec(const char* rec)
   // First task record identifies the task to follow
   if (id == state) {
     task_desc[0] = '\0';
-    if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%79[^\r]\r\n",
+    if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%78[^\r]\r\n",
                &tm.tm_mday, &tm.tm_mon, &tm.tm_year,
                &tm.tm_hour, &tm.tm_min, &tm.tm_sec,
                flight_date, task_num, &num_tp, task_desc) < 9) {
@@ -200,7 +200,7 @@ static void igc_task_rec(const char* rec)
     creation = mkgmtime(&tm);
 
     // Create a route to store the task data in.
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     rte_head->rte_name = task_num;
     rte_head->rte_desc = QStringLiteral(DATEMAGIC) + flight_date + QStringLiteral(": ") + task_desc;
     route_add_head(rte_head);
@@ -209,13 +209,13 @@ static void igc_task_rec(const char* rec)
   }
   // Get the waypoint
   tmp_str[0] = '\0';
-  if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%79[^\r]\r\n",
+  if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%78[^\r]\r\n",
              &lat_deg, &lat_min, &lat_frac, lat_hemi,
              &lon_deg, &lon_min, &lon_frac, lon_hemi, tmp_str) < 8) {
     fatal(MYNAME ": task waypoint (C) record parse error\n%s", rec);
   }
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = ('N' == lat_hemi[0] ? 1 : -1) *
                   (lat_deg + (lat_min * 1000 + lat_frac) / 1000.0 / 60);
 
@@ -331,9 +331,10 @@ static void data_read()
       } else {
         // Store other header data in the track descriptions
         if (strlen(trk_desc) < MAXDESCLEN) {
-          strcat(ibuf, HDRDELIM);
           remain = MAXDESCLEN - strlen(trk_desc);
           strncat(trk_desc, ibuf, remain);
+          remain = MAXDESCLEN - strlen(trk_desc);
+          strncat(trk_desc, HDRDELIM, remain);
         }
       }
       break;
@@ -345,14 +346,14 @@ static void data_read()
       }
       // Create a track for pressure altitude waypoints
       if (!pres_head) {
-        pres_head = route_head_alloc();
+        pres_head = new route_head;
         pres_head->rte_name = PRESTRKNAME;
         pres_head->rte_desc = trk_desc;
         track_add_head(pres_head);
       }
       // Create a second track for GNSS altitude waypoints
       if (!gnss_head) {
-        gnss_head = route_head_alloc();
+        gnss_head = new route_head;
         gnss_head->rte_name = GNSSTRKNAME;
         gnss_head->rte_desc = trk_desc;
         track_add_head(gnss_head);

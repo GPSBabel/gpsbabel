@@ -5,7 +5,6 @@ exclude_paths:
   - 'shapelib/**'
   - 'zlib/**'
   - coverity_model.cc
-  - height.cc # It takes newer cppcheck versions, somewhere > 1.82, an excessive amount of time to analyze heightgrid.h
   - strptime.[ch]
   - jeeps/gpsproj.cc
   - jeeps/gpsproj.h

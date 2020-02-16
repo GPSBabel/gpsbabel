@@ -272,7 +272,7 @@ parse_waypt(char* buff)
   char* cin;
   struct tm tm;
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -343,7 +343,7 @@ parse_waypt(char* buff)
 static Waypoint*
 parse_trkpt(char* buff)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -519,7 +519,7 @@ data_read()
 
     case 'N':	/* track log header */
       mode = trkdata;
-      head = route_head_alloc();
+      head = new route_head;
       cdata = strchr(cdata, '-');
       if (cdata) {
         while (isspace(*cdata)) {
@@ -542,7 +542,7 @@ data_read()
 
     case 'R':	/* route header */
       mode = rtedata;
-      head = route_head_alloc();
+      head = new route_head;
       cdata += 3; /*skip route number */
       if (*cdata) {
         head->rte_name = cdata;

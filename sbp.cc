@@ -98,7 +98,7 @@ sbp_read()
 {
   Waypoint* logpoint;
 
-  route_head*     track = route_head_alloc();
+  auto* track = new route_head;
   track_add_head(track);
 
   read_sbp_header(track);

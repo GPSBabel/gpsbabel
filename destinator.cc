@@ -159,7 +159,7 @@ destinator_read_poi()
 
     count++;
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->shortname = read_wcstr();
     wpt->notes = read_wcstr();		/* comment */
@@ -231,7 +231,7 @@ destinator_read_rte()
 
     count++;
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->shortname = read_wcstr();
     wpt->notes = read_wcstr();
@@ -250,7 +250,7 @@ destinator_read_rte()
     }
 
     if (! rte) {
-      rte = route_head_alloc();
+      rte = new route_head;
       route_add_head(rte);
     }
     route_add_wpt(rte, wpt);
@@ -279,7 +279,7 @@ destinator_read_trk()
       break;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->longitude = gbfgetdbl(fin);
     wpt->latitude = gbfgetdbl(fin);
@@ -318,7 +318,7 @@ destinator_read_trk()
     }
 
     if (! trk) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
     track_add_wpt(trk, wpt);

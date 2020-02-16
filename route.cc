@@ -72,14 +72,6 @@ track_count()
   return global_track_list->count();	/* total # of tracks */
 }
 
-// FIXME: provide a method to deallocate a head that isn't added onto a route list,
-// or just let the users allocate with new and deallocate with delete.
-route_head*
-route_head_alloc()
-{
-  return new route_head;
-}
-
 void
 route_add_head(route_head* rte)
 {
@@ -484,7 +476,7 @@ RouteList::copy(RouteList** dst) const
 
   const char RPT[] = "RPT";
   foreach (const route_head* rte_old, *this) {
-    route_head* rte_new = route_head_alloc();
+    auto* rte_new = new route_head;
     // waypoint_list created below with add_wpt.
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;

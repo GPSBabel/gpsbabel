@@ -46,7 +46,7 @@ struct gbser_handle {
 /* Wrapper to safely cast a void * into a gbser_handle */
 static gbser_handle* gbser__get_handle(void* p)
 {
-  gbser_handle* h = (gbser_handle*) p;
+  auto* h = (gbser_handle*) p;
   assert(h->magic == MYMAGIC);
   return h;
 }
@@ -255,7 +255,7 @@ unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
 {
   gbser_handle* h = gbser__get_handle(handle);
   unsigned count = *len;
-  unsigned char* cp = (unsigned char*) *buf;
+  auto* cp = (unsigned char*) *buf;
   if (count > h->inbuf_used) {
     count = h->inbuf_used;
   }

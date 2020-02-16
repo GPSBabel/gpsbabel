@@ -24,6 +24,7 @@
 #include <cstdint>
 
 #include <QtCore/QString>       // for QString
+#include <QtCore/QStringList>   // for QStringList
 #include <QtCore/QVector>       // for QVector<>::iterator, QVector
 
 #include "defs.h"
@@ -32,11 +33,10 @@
 #include "gpx.h"
 #include "yahoo.h"
 #include "legacyformat.h"
+#include "mynav.h"
+#include "xcsv.h"
 
 
-#if CSVFMTS_ENABLED
-extern ff_vecs_t xcsv_vecs;
-#endif // CSVFMTS_ENABLED
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t mag_svecs;
 extern ff_vecs_t mag_fvecs;
@@ -174,7 +174,6 @@ extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
 extern ff_vecs_t energympro_vecs;
-extern ff_vecs_t mynav_vecs;
 extern ff_vecs_t geojson_vecs;
 extern ff_vecs_t globalsat_sport_vecs;
 #endif // MAXIMAL_ENABLED
@@ -206,6 +205,35 @@ private:
     QString parent;
   };
 
+  struct arginfo_t {
+    arginfo_t() = default;
+    explicit arginfo_t(const arglist_t& arg) :
+      argstring(arg.argstring),
+      helpstring(arg.helpstring),
+      defaultvalue(arg.defaultvalue),
+      argtype(arg.argtype),
+      minvalue(arg.minvalue),
+      maxvalue(arg.maxvalue)
+    {}
+
+    QString argstring;
+    QString helpstring;
+    QString defaultvalue;
+    uint32_t argtype{ARGTYPE_UNKNOWN};
+    QString minvalue;
+    QString maxvalue;
+  };
+
+  struct vecinfo_t {
+    QString name;
+    QString desc;
+    QString extensions;
+    QString parent;
+    ff_type type{ff_type_file};
+    QVector<ff_cap> cap;
+    QVector<arginfo_t> arginfo;
+  };
+
 public:
   void init_vecs();
   void exit_vecs();
@@ -223,11 +251,11 @@ public:
 
 private:
   static int is_integer(const char* c);
-  QVector<vecs_t> sort_and_unify_vecs() const;
+  QVector<vecinfo_t> sort_and_unify_vecs() const;
   static void disp_v1(ff_type t);
-  static void disp_v2(const Format* v);
-  static void disp_help_url(const vecs_t& vec, const arglist_t* arg);
-  static void disp_v3(const vecs_t& vec);
+  static void disp_v2(const vecinfo_t& v);
+  static void disp_help_url(const vecinfo_t& vec, const QString& argstring);
+  static void disp_v3(const vecinfo_t& vec);
   static bool validate_vec(const vecs_t& vec);
 
 private:
@@ -239,7 +267,7 @@ private:
    * of this class is constructed.
    */
 #if CSVFMTS_ENABLED
-  LegacyFormat xcsv_fmt {xcsv_vecs};
+  XcsvFormat xcsv_fmt;
 #endif // CSVFMTS_ENABLED
   LegacyFormat geo_fmt {geo_vecs};
   GpxFormat gpx_fmt;
@@ -379,7 +407,7 @@ private:
   LegacyFormat f90g_track_fmt {f90g_track_vecs};
   LegacyFormat mapfactor_fmt {mapfactor_vecs};
   LegacyFormat energympro_fmt {energympro_vecs};
-  LegacyFormat mynav_fmt {mynav_vecs};
+  MyNavFormat mynav_fmt;
   LegacyFormat geojson_fmt {geojson_vecs};
   GgvBinFormat ggv_bin_fmt;
   LegacyFormat globalsat_sport_fmt {globalsat_sport_vecs};

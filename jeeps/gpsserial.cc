@@ -336,7 +336,7 @@ int32 GPS_Serial_Open(gpsdevh* dh, const char* port)
   struct termios tty;
   if (global_opts.debug_level >= 2) fprintf(stderr, "GPS Serial Open at %d\n", gps_baud_rate);
   speed_t baud = mkspeed(gps_baud_rate);
-  posix_serial_data* psd = (posix_serial_data*)dh;
+  auto* psd = (posix_serial_data*)dh;
 
   /*
    * This originally had O_NDELAY | O_NOCTTY in here, but this
@@ -402,7 +402,7 @@ void GPS_Serial_Error(const char* mb, ...)
 
 int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 {
-  posix_serial_data* psd = (posix_serial_data*)dh;
+  auto* psd = (posix_serial_data*)dh;
 #if GARMULATOR
   static int l;
   static char* rp;
@@ -434,7 +434,7 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 
 int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 {
-  posix_serial_data* psd = (posix_serial_data*)dh;
+  auto* psd = (posix_serial_data*)dh;
   return write(psd->fd, obuf, size);
 }
 
@@ -449,7 +449,7 @@ int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 ************************************************************************/
 int32 GPS_Serial_Flush(gpsdevh* fd)
 {
-  posix_serial_data* psd = (posix_serial_data*)fd;
+  auto* psd = (posix_serial_data*)fd;
 
   if (tcflush(psd->fd,TCIOFLUSH)) {
     GPS_Serial_Error("SERIAL: tcflush error");
@@ -474,7 +474,7 @@ int32 GPS_Serial_Flush(gpsdevh* fd)
 
 int32 GPS_Serial_Close(gpsdevh* fd)
 {
-  posix_serial_data* psd = (posix_serial_data*)fd;
+  auto* psd = (posix_serial_data*)fd;
 
   if (tcsetattr(psd->fd, TCSAFLUSH, &psd->gps_ttysave)==-1) {
     gps_errno = HARDWARE_ERROR;
@@ -505,7 +505,7 @@ int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
 {
   fd_set rec;
   struct timeval t;
-  posix_serial_data* psd = (posix_serial_data*)dh;
+  auto* psd = (posix_serial_data*)dh;
   int32 fd = psd->fd;
 
 #if GARMULATOR
@@ -548,7 +548,7 @@ int32 GPS_Serial_Wait(gpsdevh* dh)
 {
   fd_set rec;
   struct timeval t;
-  posix_serial_data* psd = (posix_serial_data*)dh;
+  auto* psd = (posix_serial_data*)dh;
 
   FD_ZERO(&rec);
   FD_SET(psd->fd,&rec);
@@ -578,7 +578,7 @@ int32 GPS_Serial_Wait(gpsdevh* dh)
 
 int32 GPS_Serial_On(const char* port, gpsdevh** dh)
 {
-  posix_serial_data* psd = (posix_serial_data*) xcalloc(sizeof(posix_serial_data), 1);
+  auto* psd = (posix_serial_data*) xcalloc(sizeof(posix_serial_data), 1);
   *dh = (gpsdevh*) psd;
 
   if (!GPS_Serial_Open((gpsdevh*) psd,port)) {
@@ -661,7 +661,7 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
     QThread::usleep(100000);
 
   // Change port speed
-  posix_serial_data* psd = (posix_serial_data*)fd;
+  auto* psd = (posix_serial_data*)fd;
   tty = psd->gps_ttysave;
 
   cfsetospeed(&tty,speed);

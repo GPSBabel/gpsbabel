@@ -38,7 +38,7 @@
 #include "inifile.h"            // for inifile_readstr
 #include "legacyformat.h"
 #include "src/core/logging.h"   // for Warning
-#include "xcsv.h"               // for XcsvFile, xcsv_file, xcsv_read_internal_style, xcsv_setup_internal_style
+#include "xcsv.h"               // for xcsv_setup_internal_style, XcsvStyle, xcsv_read_internal_style
 
 
 #define MYNAME "vecs"
@@ -264,7 +264,12 @@ Format* Vecs::find_vec(const QString& vecname)
     }
 
 #if CSVFMTS_ENABLED
-    // xcsv_setup_internal_style( nullptr );
+    /*
+     * If this happens to be xcsv,style= and it was preceeded by an xcsv
+     * format that utilized an internal style file, then we need to let
+     * xcsv know the internal style file is no longer in play.
+     */
+     xcsv_fmt.xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
     return vec.vec;
@@ -310,7 +315,7 @@ Format* Vecs::find_vec(const QString& vecname)
       disp_vec_options(svec.name, xcsv_args);
     }
 #if CSVFMTS_ENABLED
-    xcsv_setup_internal_style(svec.style_buf);
+    xcsv_fmt.xcsv_setup_internal_style(svec.style_buf);
 #endif // CSVFMTS_ENABLED
 
     vec_list[0].vec->set_name(svec.name);	/* needed for session information */
@@ -355,76 +360,88 @@ QString Vecs::get_option(const QStringList& options, const char* argname)
 }
 
 /*
- * Smoosh the vecs list and style lists together and sort them
- * alphabetically.  Returns an allocated copy of a style_vecs_array
- * that's populated and sorted.
+ * Gather information relevant to serialization from the
+ * vecs and style lists.  Sort and return the information.
  */
-QVector<Vecs::vecs_t> Vecs::sort_and_unify_vecs() const
+QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
 {
-  QVector<vecs_t> svp;
+  QVector<vecinfo_t> svp;
   svp.reserve(vec_list.size() + style_list.size());
 
-  /* Normal vecs are easy; populate the first part of the array. */
+  /* Gather relevant information for normal formats. */
   for (const auto& vec : vec_list) {
-    vecs_t uvec = vec;
-    if (uvec.parent == nullptr) {
-      uvec.parent = uvec.name;
+    vecinfo_t info;
+    info.name = vec.name;
+    info.desc = vec.desc;
+    info.extensions = vec.extensions;
+    if (vec.parent.isEmpty()) {
+      info.parent = vec.name;
+    } else {
+      info.parent = vec.parent;
     }
-    svp.append(uvec);
+    info.type = vec.vec->get_type();
+    info.cap = vec.vec->get_cap();
+    const QVector<arglist_t>* args = vec.vec->get_args();
+    if (args != nullptr) {
+      for (const auto& arg : *args) {
+        info.arginfo.append(arginfo_t(arg));
+      }
+    }
+    svp.append(info);
   }
 
 #if CSVFMTS_ENABLED
   /* The style formats are based on the xcsv format,
    * Make sure we know which entry in the vector list that is.
    */
-  assert(vec_list.at(0).name == "xcsv");
+  assert(vec_list.at(0).name.compare("xcsv", Qt::CaseInsensitive) == 0);
   /* The style formats use a modified xcsv argument list that doesn't include
    * the option to set the style file.  Make sure we know which entry in
    * the argument list that is.
    */
   assert(case_ignore_strcmp(vec_list.at(0).vec->get_args()->at(0).helpstring,
                             "Full path to XCSV style file") == 0);
-  /* Prepare a modified argument list for the style formats. */
-  auto xcsv_args = new QVector<arglist_t>(*vec_list.at(0).vec->get_args()); /* LEAK */
-  xcsv_args->removeFirst();
 
-  /* Walk the style list, parse the entries, dummy up a "normal" vec */
+  /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
-    xcsv_read_internal_style(svec.style_buf);
-    vecs_t uvec;
-    uvec.name = svec.name;
-    uvec.extensions = xcsv_file.extension;
-    /* TODO: This needs to be reworked when xcsv isn't a LegacyFormat and
-     * xcsv_vecs disappear.
-     */
-    auto ffvec = ff_vecs_t(xcsv_vecs); /* Inherits xcsv opts */
-    /* Reset file type to inherit ff_type from xcsv. */
-    ffvec.type = xcsv_file.type;
-    /* Skip over the first help entry for all but the
-     * actual 'xcsv' format - so we don't expose the
-     * 'Full path to XCSV style file' argument to any
-     * GUIs for an internal format.
-     */
-    ffvec.args = xcsv_args;
-    ffvec.cap.fill(ff_cap_none);
-    switch (xcsv_file.datatype) {
+    XcsvStyle style = XcsvStyle::xcsv_read_internal_style(svec.style_buf);
+    vecinfo_t info;
+    info.name = svec.name;
+    info.desc = style.description;
+    info.extensions = style.extension;
+    info.parent = "xcsv";
+    info.type = style.type;
+    info.cap.fill(ff_cap_none, 3);
+    switch (style.datatype) {
     case unknown_gpsdata:
     case wptdata:
-      ffvec.cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
+      info.cap[ff_cap_rw_wpt] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     case trkdata:
-      ffvec.cap[ff_cap_rw_trk] = (ff_cap)(ff_cap_read | ff_cap_write);
+      info.cap[ff_cap_rw_trk] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     case rtedata:
-      ffvec.cap[ff_cap_rw_rte] = (ff_cap)(ff_cap_read | ff_cap_write);
+      info.cap[ff_cap_rw_rte] = (ff_cap)(ff_cap_read | ff_cap_write);
       break;
     default:
       ;
     }
-    uvec.vec = new LegacyFormat(ffvec); /* LEAK */
-    uvec.desc = xcsv_file.description;
-    uvec.parent = "xcsv";
-    svp.append(uvec);
+    /* Skip over the first help entry of the xcsv args.
+     * We don't want to expose the
+     * 'Full path to XCSV style file' argument to any
+     * GUIs for an internal format.
+     */
+    const QVector<arglist_t>* args = vec_list.at(0).vec->get_args();
+    if (args != nullptr) {
+      bool first = true;
+      for (const auto& arg : *args) {
+        if (!first) {
+          info.arginfo.append(arginfo_t(arg));
+        }
+        first = false;
+      }
+    }
+    svp.append(info);
   }
 #endif // CSVFMTS_ENABLED
 
@@ -432,7 +449,7 @@ QVector<Vecs::vecs_t> Vecs::sort_and_unify_vecs() const
    *  Display the available formats in a format that's easy for humans to
    *  parse for help on available command line options.
    */
-  auto alpha = [](const vecs_t& a, const vecs_t& b)->bool {
+  auto alpha = [](const vecinfo_t& a, const vecinfo_t& b)->bool {
     return QString::compare(a.desc, b.desc, Qt::CaseInsensitive) < 0;
   };
 
@@ -448,20 +465,19 @@ void Vecs::disp_vecs() const
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (vec.vec->get_type() == ff_type_internal)  {
+    if (vec.type == ff_type_internal)  {
       continue;
     }
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arglist_t>* args = vec.vec->get_args();
-    if (args) {
-      for (const auto& arg : *args) {
-        if (!(arg.argtype & ARGTYPE_HIDDEN))
-          printf("	  %-18.18s    %s%-.50s %s\n",
-                 arg.argstring,
-                 (arg.argtype & ARGTYPE_TYPEMASK) ==
-                 ARGTYPE_BOOL ? "(0/1) " : "",
-                 arg.helpstring,
-                 (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+    const QVector<arginfo_t> args = vec.arginfo;
+    for (const auto& arg : args) {
+      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
+        printf("	  %-18.18s    %s%-.50s %s\n",
+               qPrintable(arg.argstring),
+               (arg.argtype & ARGTYPE_TYPEMASK) ==
+               ARGTYPE_BOOL ? "(0/1) " : "",
+               qPrintable(arg.helpstring),
+               (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -476,16 +492,15 @@ void Vecs::disp_vec(const QString& vecname) const
     }
 
     printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arglist_t>* args = vec.vec->get_args();
-    if (args) {
-      for (const auto& arg : *args) {
-        if (!(arg.argtype & ARGTYPE_HIDDEN))
-          printf("	  %-18.18s    %s%-.50s %s\n",
-                 arg.argstring,
-                 (arg.argtype & ARGTYPE_TYPEMASK) ==
-                 ARGTYPE_BOOL ? "(0/1) " : "",
-                 arg.helpstring,
-                 (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+    const QVector<arginfo_t> args = vec.arginfo;
+    for (const auto& arg : args) {
+      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
+        printf("	  %-18.18s    %s%-.50s %s\n",
+               qPrintable(arg.argstring),
+               (arg.argtype & ARGTYPE_TYPEMASK) ==
+               ARGTYPE_BOOL ? "(0/1) " : "",
+               qPrintable(arg.helpstring),
+               (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
       }
     }
   }
@@ -516,9 +531,9 @@ void Vecs::disp_v1(ff_type t)
   printf("%s\t", tstring);
 }
 
-void Vecs::disp_v2(const Format* v)
+void Vecs::disp_v2(const vecinfo_t& v)
 {
-  for (auto& i : v->get_cap()) {
+  for (auto& i : v.cap) {
     putchar((i & ff_cap_read) ? 'r' : '-');
     putchar((i & ff_cap_write) ? 'w' : '-');
   }
@@ -543,35 +558,33 @@ const char* Vecs::name_option(uint32_t type)
   return at[0];
 }
 
-void Vecs::disp_help_url(const vecs_t& vec, const arglist_t* arg)
+void Vecs::disp_help_url(const vecinfo_t& vec, const QString& argstring)
 {
   printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
-  if (arg) {
-    printf("#fmt_%s_o_%s", CSTR(vec.name), arg->argstring);
+  if (!argstring.isEmpty()) {
+    printf("#fmt_%s_o_%s", CSTR(vec.name), CSTR(argstring));
   }
   printf("\n");
 }
 
 
-void Vecs::disp_v3(const Vecs::vecs_t& vec)
+void Vecs::disp_v3(const vecinfo_t& vec)
 {
   disp_help_url(vec, nullptr);
-  const QVector<arglist_t>* args = vec.vec->get_args();
-  if (args) {
-    for (const auto& arg : *args) {
-      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-               CSTR(vec.name),
-               arg.argstring,
-               arg.helpstring,
-               name_option(arg.argtype),
-               arg.defaultvalue ? arg.defaultvalue : "",
-               arg.minvalue ? arg.minvalue : "",
-               arg.maxvalue ? arg.maxvalue : "");
-      }
-      disp_help_url(vec, &arg);
-      printf("\n");
+  const QVector<arginfo_t> args = vec.arginfo;
+  for (const auto& arg : args) {
+    if (!(arg.argtype & ARGTYPE_HIDDEN)) {
+      printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+             CSTR(vec.name),
+             CSTR(arg.argstring),
+             CSTR(arg.helpstring),
+             name_option(arg.argtype),
+             arg.defaultvalue.isEmpty() ? "" : CSTR(arg.defaultvalue),
+             arg.minvalue.isEmpty() ? "" : CSTR(arg.minvalue),
+             arg.maxvalue.isEmpty() ? "" : CSTR(arg.maxvalue));
     }
+    disp_help_url(vec, arg.argstring);
+    printf("\n");
   }
 }
 
@@ -593,14 +606,14 @@ void Vecs::disp_formats(int version) const
        * Version 0 skips internal types.
        */
       if (version > 0) {
-        disp_v1(vec.vec->get_type());
+        disp_v1(vec.type);
       } else {
-        if (vec.vec->get_type() == ff_type_internal) {
+        if (vec.type == ff_type_internal) {
           continue;
         }
       }
       if (version >= 2) {
-        disp_v2(vec.vec);
+        disp_v2(vec);
       }
       printf("%s\t%s\t%s%s%s\n", CSTR(vec.name),
              !vec.extensions.isEmpty() ? CSTR(vec.extensions) : "",
@@ -637,7 +650,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
-      if (arg.argtype == ARGTYPE_INT) {
+      if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
         if (arg.defaultvalue &&
             ! is_integer(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
@@ -660,7 +673,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
   return ok;
 }
 
-bool Vecs::validate_vec(const Vecs::vecs_t& vec)
+bool Vecs::validate_vec(const vecs_t& vec)
 {
   bool ok = validate_args(vec.name, vec.vec->get_args());
 
