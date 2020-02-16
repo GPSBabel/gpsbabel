@@ -43,8 +43,11 @@ public:
   }
 
   QVector<ff_cap> get_cap() const override {
-    return FF_CAP_RW_ALL;
-    //return { (ff_cap) ff_cap_read };
+    return {
+      ff_cap_read,  // waypoints
+      ff_cap_none,  // tracks
+      ff_cap_none   // routes
+    };
   }
 
   QString get_encode() const override {
@@ -76,23 +79,7 @@ private:
  void wpt_lat(const QString &, const QXmlStreamAttributes *);
  void wpt_lon(const QString &, const QXmlStreamAttributes *);
  void wpt_addr(const QString &, const QXmlStreamAttributes *);
- xg_tag_mapping gl_map[];
-
-#if 0
-      static xg_tag_mapping gl_map[] = {
-      { wpt_s,	cb_start, "/ResultSet/Result" },
-      { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
-      { wpt_lon,	cb_cdata, "/ResultSet/Result/Longitude" },
-      { wpt_addr,	cb_cdata, "/ResultSet/Result/Address" },
-      { wpt_addr,	cb_cdata, "/ResultSet/Result/City" },
-      { wpt_addr,	cb_cdata, "/ResultSet/Result/State" },
-      { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
-      { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
-      { wpt_e,	cb_end,   "/ResultSet/Result" },
-      { nullptr,	(xg_cb_type)0,         nullptr}
-      };
-#endif
-
+// xg_tag_mapping gl_map[];
 
 };
 

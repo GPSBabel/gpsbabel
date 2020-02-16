@@ -48,7 +48,8 @@ static xg_tag_mapping gl_map[] = {
 void
 YahooFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, nullptr);
+abort();
+//  xml_init(fname, gl_map, nullptr);
 }
 
 void
