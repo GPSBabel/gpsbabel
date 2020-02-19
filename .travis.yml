@@ -3,7 +3,7 @@ language: cpp
 matrix:
   include:
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: gcc
@@ -11,7 +11,7 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG="qtio"
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: clang
@@ -19,7 +19,7 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG="qtio"
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: gcc
