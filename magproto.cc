@@ -532,7 +532,7 @@ retry:
        * from input filename.
        */
 
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
 
       /* Whack trailing extension if present. */
       QString s = get_filename(curfname);
@@ -1121,7 +1121,7 @@ mag_rteparse(char* rtemsg)
    */
   if (frag == mag_rte_head->nelems) {
 
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = rtenum;
     rte_head->rte_name = rte_name;

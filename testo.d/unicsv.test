@@ -15,6 +15,9 @@ gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -o unicsv,utc=0 -F ${TMPDIR}/gcuni
 gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/gc/GC7FA4~unicsv.csv -o unicsv,utc=0 -F  ${TMPDIR}/gcunicsv-2.csv
 compare ${TMPDIR}/gcunicsv-1.csv ${TMPDIR}/gcunicsv-2.csv
 
+gpsbabel -i unicsv -f ${REFERENCE}/gc/gcid-input.csv -o unicsv -F ${TMPDIR}/gcid-output.csv
+compare ${REFERENCE}/gc/gcid-output.csv ${TMPDIR}/gcid-output.csv
+
 # check header detection features
 gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/headerdetection.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/headerdetection~unicsv.gpx
 compare ${REFERENCE}/extensiondata~unicsv.gpx ${TMPDIR}/headerdetection~unicsv.gpx

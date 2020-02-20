@@ -595,7 +595,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
 
   if (nullptr == st->route_head_) {
     db(1, "New Track\n");
-    st->route_head_ = route_head_alloc();
+    st->route_head_ = new route_head;
     track_add_head(st->route_head_);
   }
 
@@ -827,7 +827,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
 
     if (nullptr == st->route_head_) {
       db(1, "New Track\n");
-      st->route_head_ = route_head_alloc();
+      st->route_head_ = new route_head;
       track_add_head(st->route_head_);
     }
 

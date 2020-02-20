@@ -68,7 +68,7 @@ rd_deinit()
 static void
 vitosmt_read()
 {
-  route_head* route_head =nullptr;
+  route_head* rte = nullptr;
   struct tm tmStruct;
   int  serial  =0;
 
@@ -174,17 +174,17 @@ vitosmt_read()
     if (doing_wpts) { /* process as waypoints */
       waypt_add(wpt_tmp);
     } else if (doing_rtes) { /* process as route */
-      if (route_head == nullptr) {
-        route_head = route_head_alloc();
-        route_add_head(route_head);
+      if (rte == nullptr) {
+          rte = new route_head;
+        route_add_head(rte);
       }
-      route_add_wpt(route_head, wpt_tmp);
+      route_add_wpt(rte, wpt_tmp);
     } else {  /* default track mode */
-      if (route_head == nullptr) {
-        route_head = route_head_alloc();
-        track_add_head(route_head);
+      if (rte == nullptr) {
+          rte = new route_head;
+        track_add_head(rte);
       }
-      track_add_wpt(route_head, wpt_tmp);
+      track_add_wpt(rte, wpt_tmp);
     }
 
     xfree(timestamp);

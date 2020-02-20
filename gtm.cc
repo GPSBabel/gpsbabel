@@ -575,7 +575,7 @@ gtm_read()
       wpt->altitude = unknown_alt;
     }
     if (start_new || !trk_head) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       track_add_head(trk_head);
       real_track_list.append(trk_head);
     }
@@ -628,7 +628,7 @@ gtm_read()
     fread_discard(file_in, 2);
 
     if (start_new || !rte_head) {
-      rte_head = route_head_alloc();
+      rte_head = new route_head;
       rte_head->rte_name = route_name;
       route_add_head(rte_head);
     }

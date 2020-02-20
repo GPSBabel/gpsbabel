@@ -67,7 +67,7 @@
 rm -f ${TMPDIR}/lowrance*
 
 # Test ability to read non-Lowrance format and generate USR v2 file
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance1.usr
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o lowranceusr,wversion=2 -F ${TMPDIR}/lowrance1.usr
 bincompare ${REFERENCE}/lowrance.usr ${TMPDIR}/lowrance1.usr
 
 # Use the file just created to see if can write back the same data

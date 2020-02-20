@@ -1189,7 +1189,7 @@ parse_route_header()
   char* str;
   int column = -1;
 
-  route_head* rte = route_head_alloc();
+  auto* rte = new route_head;
 
   bind_fields(route_header);
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
@@ -1214,7 +1214,7 @@ parse_track_header()
   int column = -1;
 
   bind_fields(track_header);
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int field_no = header_fields[track_header][column];
     switch (field_no) {

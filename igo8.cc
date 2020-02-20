@@ -165,7 +165,7 @@ static void igo8_read()
 {
   igo8_point point;
 
-  route_head* track_head = route_head_alloc();
+  auto* track_head = new route_head;
   track_add_head(track_head);
 
   while (in_point_count &&

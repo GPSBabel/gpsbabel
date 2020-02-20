@@ -67,7 +67,7 @@ f90g_track_rd_init(const QString& fname)
       fatal(MYNAME ": bad header");
     }
     // start the track list
-    track = route_head_alloc();
+    track = new route_head;
     is_fatal((track == nullptr), MYNAME ": memory non-enough");
     track->rte_name = fname;
     track_add_head(track);

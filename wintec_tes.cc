@@ -56,7 +56,7 @@ wintec_date_to_time(uint32_t w)
 static void
 wintec_tes_read()
 {
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   track_add_head(trk);
 
   while (!gbfeof(fin)) {

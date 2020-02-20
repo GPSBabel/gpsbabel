@@ -284,7 +284,7 @@ public:
     placer_id(0),
     favorite_points(0)
   {}
-  int id; /* The decimal cache number */
+  long long id; /* The decimal cache number */
   geocache_type type:5;
   geocache_container container:4;
   unsigned int diff:6; /* (multiplied by ten internally) */

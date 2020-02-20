@@ -145,7 +145,7 @@ tr7_read()
     }
 
     if (! trk) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
     track_add_wpt(trk, wpt);

@@ -263,7 +263,7 @@ track_read()
   QTime gpsTime = QTime(workout.timeStart.Hour,workout.timeStart.Minute,workout.timeStart.Second);
   gpsbabel::DateTime gpsDateTime = gpsbabel::DateTime(gpsDate,gpsTime);
   gpsDateTime.setTimeSpec(Qt::UTC);
-  route_head* gpsbabel_route = route_head_alloc();
+  auto* gpsbabel_route = new route_head;
 
   track_add_head(gpsbabel_route);
   gbfseek(file_in, 0L, SEEK_SET);

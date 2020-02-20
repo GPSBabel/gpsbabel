@@ -549,7 +549,7 @@ serial_read_track()
   unsigned int address = le_read32(information + 4);
   unsigned short total = le_read16(information + 12);
 
-  route_head*     track = route_head_alloc();
+  auto* track = new route_head;
   track_add_head(track);
 
   while (total > 0) {
@@ -657,7 +657,7 @@ serial_read_routes(Waypoint** waypts)
     write_packet(PID_QRY_ROUTE, payload, sizeof(payload));
     read_packet(PID_DATA, routedata, 64, sizeof(routedata), false);
 
-    route_head*    route = route_head_alloc();
+    auto* route = new route_head;
     route->rte_num = routedata[2];
     route->rte_name = (char*)routedata + 4;
     route_add_head(route);
@@ -906,7 +906,7 @@ serial_read_datalog()
 
   read_datalog_info(&seg1_addr, &seg1_len, &seg2_addr, &seg2_len);
 
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track_add_head(track);
 
   if (seg1_len) {
@@ -940,7 +940,7 @@ file_read()
     default:
       if (global_opts.masked_objective & TRKDATAMASK) {
         if (track == nullptr) {
-          track = route_head_alloc();
+          track = new route_head;
           track_add_head(track);
         }
 

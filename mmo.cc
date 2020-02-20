@@ -555,7 +555,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  data->data = rte = route_head_alloc();
+  data->data = rte = new route_head;
   rte->rte_name = data->name;
   route_add_head(rte);
 
@@ -627,7 +627,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   trk->rte_name = data->name;
   track_add_head(trk);
 

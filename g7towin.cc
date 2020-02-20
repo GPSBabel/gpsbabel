@@ -519,7 +519,7 @@ data_read()
 
     case 'N':	/* track log header */
       mode = trkdata;
-      head = route_head_alloc();
+      head = new route_head;
       cdata = strchr(cdata, '-');
       if (cdata) {
         while (isspace(*cdata)) {
@@ -542,7 +542,7 @@ data_read()
 
     case 'R':	/* route header */
       mode = rtedata;
-      head = route_head_alloc();
+      head = new route_head;
       cdata += 3; /*skip route number */
       if (*cdata) {
         head->rte_name = cdata;

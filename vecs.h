@@ -31,6 +31,7 @@
 #include "format.h"
 #include "ggv_bin.h"
 #include "gpx.h"
+#include "yahoo.h"
 #include "legacyformat.h"
 #include "mynav.h"
 #include "xcsv.h"
@@ -104,7 +105,7 @@ extern ff_vecs_t nmn4_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t compegps_vecs;
 #endif // CSVFMTS_ENABLED
-extern ff_vecs_t yahoo_vecs;
+// extern ff_vecs_t yahoo_vecs;
 extern ff_vecs_t unicsv_vecs;
 extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t gpssim_vecs;
@@ -337,7 +338,7 @@ private:
 #if CSVFMTS_ENABLED
   LegacyFormat compegps_fmt {compegps_vecs};
 #endif // CSVFMTS_ENABLED
-  LegacyFormat yahoo_fmt {yahoo_vecs};
+  YahooFormat yahoo_fmt;
   LegacyFormat unicsv_fmt {unicsv_vecs};
   LegacyFormat gtm_fmt {gtm_vecs};
   LegacyFormat gpssim_fmt {gpssim_vecs};

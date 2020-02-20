@@ -780,10 +780,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
    */
   if (rstream_version == 0) {
     float read_alt = gbfgetflt(file_in);
-    char buf[32];
-    sprintf(buf, "%15.10f", read_alt);
-    // test for both cases to avoid compiler differences
-    if ((strcmp(buf, "-nan") == 0) || (strcmp(buf, "nan") == 0)) {
+    if (std::isnan(read_alt)) {
       wpt_tmp->altitude = unknown_alt;
     } else if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
       wpt_tmp->altitude = unknown_alt;
@@ -1140,7 +1137,10 @@ static void
 lowranceusr4_parse_route()
 {
   int route_version;
-  int UUID1, UUID2, UUID3, UUID4;
+  int UUID1 = 0;
+  int UUID2 = 0;
+  int UUID3 = 0;
+  int UUID4 = 0;
 
   auto* fsdata = new lowranceusr4_fsdata;
   rte_head->fs.FsChainAdd(fsdata);
@@ -1258,7 +1258,7 @@ lowranceusr_parse_routes()
   }
 
   for (int i = 0; i < num_routes; i++) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = i+1;
 
@@ -1366,7 +1366,7 @@ lowranceusr_parse_trail(int* trail_num)
         char continuous = gbfgetc(file_in);
         if (!continuous && opt_seg_break && j) {
           /* option to break trails into segments was specified */
-          auto trk_tmp = route_head_alloc();
+          auto* trk_tmp = new route_head;
           trk_tmp->rte_num = ++(*trail_num);
           trk_tmp->rte_name = trk_head->rte_name;
           track_add_head(trk_tmp);
@@ -1553,7 +1553,7 @@ lowranceusr_parse_trails()
   }
 
   for (int i = trail_num = 0; i < num_trails && !gbfeof(file_in); i++) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     trk_head->rte_num = ++trail_num;
     track_add_head(trk_head);
 

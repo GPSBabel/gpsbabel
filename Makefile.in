@@ -1091,9 +1091,9 @@ xol.o: xol.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h src/core/file.h \
   src/core/xmlstreamwriter.h xmlgeneric.h
-yahoo.o: yahoo.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  xmlgeneric.h
+yahoo.o: yahoo.cc defs.h config.h zlib/zlib.h zlib/zconf.h config.h \
+ formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
+ src/core/optional.h yahoo.h format.h xmlgeneric.h
 zlib/adler32.o: zlib/adler32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
   config.h
 zlib/compress.o: zlib/compress.c zlib/zlib.h zlib/zconf.h config.h

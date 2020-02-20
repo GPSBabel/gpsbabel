@@ -400,7 +400,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   rtrim(rtename);
 
-  route_head* rte_head = route_head_alloc();
+  auto* rte_head = new route_head;
   rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
@@ -561,7 +561,7 @@ psit_track_r(gbfile* psit_file, route_head**)
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 
       if ((strcmp(psit_current_token, "1") == 0) || (track_head == nullptr)) {
-        track_head = route_head_alloc();
+        track_head = new route_head;
         /* Add a number to the track name.  With Garmins, the "first"
          tracklog is usually ACTIVE LOG
          the second is ACTIVE LOG001 and so on */

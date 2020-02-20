@@ -206,7 +206,7 @@ GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr)
   geocache_data* gc_data = wpt_tmp->AllocGCData();
 
   if (attr.hasAttribute("id")) {
-    gc_data->id = attr.value("id").toString().toInt();
+    gc_data->id = attr.value("id").toString().toLongLong();
   }
   if (attr.hasAttribute("available")) {
     if (attr.value("available").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
@@ -348,7 +348,7 @@ GpxFormat::gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     }
     break;
   case tt_rte:
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     rh_link_ = new UrlLink;
     fs_ptr = &rte_head->fs;
@@ -357,7 +357,7 @@ GpxFormat::gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     tag_wpt(attr);
     break;
   case tt_trk:
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     track_add_head(trk_head);
     rh_link_ = new UrlLink;
     fs_ptr = &trk_head->fs;

@@ -105,7 +105,7 @@ void RadiusFilter::process()
   }
 
   if (routename) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     rte_head->rte_name = routename;
     route_add_head(rte_head);
   }

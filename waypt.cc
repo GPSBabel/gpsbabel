@@ -629,9 +629,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      QString n;
-      n.sprintf("%03d", waypt_count());
-      wpt->shortname = QString("WPT%1").arg(n);
+      wpt->shortname = QString::asprintf("WPT%03d", waypt_count());
     }
   }
 
