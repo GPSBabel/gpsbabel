@@ -24,8 +24,16 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
+#include <cstddef>                  // for size_t
+#include <cstdint>                  // for int32_t, int16_t, uint16_t
+
+#include <QtCore/QString>           // for QString
+#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
+
 #include "defs.h"
+#include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
 #include "jeeps/gps.h"
+
 
 /* this order is used by most devices */
 /* enum garmin_display_t {
@@ -86,9 +94,8 @@ public:
 #endif
 };
 
-class garmin_fs_t {
+class garmin_fs_t : public FormatSpecificData {
 public:
-  format_specific_data fs;
   garmin_fs_flags_t flags;
 
   int protocol{0};		/* ... used by device (-1 is MapSource) */
@@ -115,15 +122,18 @@ public:
 #endif
 
 public:
-  garmin_fs_t() = default;
-  ~garmin_fs_t();
-  garmin_fs_t(const garmin_fs_t& other);
+  garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
+private:
+  garmin_fs_t(const garmin_fs_t& other) = default;
+public:
   garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
   garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
   garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
+  ~garmin_fs_t() override;
 
+  garmin_fs_t* clone() const override;
   static garmin_fs_t* find(const Waypoint* wpt) {
-    return (garmin_fs_t*) fs_chain_find(wpt->fs, FS_GMSD);
+    return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }
 
 #define GEN_GMSD_METHODS(field) \
@@ -201,17 +211,14 @@ public:
 
 #undef GEN_GMSD_STR_METHODS
 };
-using garmin_fs_p = garmin_fs_t*;
 
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
-void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src);
-void garmin_fs_convert(void* fs);
+void garmin_fs_copy(void** dest, const void* src);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
 void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
-class QXmlStreamWriter;
 void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
 
 /* common garmin_fs utilities */

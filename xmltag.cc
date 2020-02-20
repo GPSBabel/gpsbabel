@@ -60,36 +60,20 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
   copy_xml_tag(&(res->child), src->child, res);
 }
 
-static void
-fs_xml_destroy(void* fs)
+fs_xml::~fs_xml()
 {
-  auto* xml = (fs_xml*)fs;
-  if (xml) {
-    free_xml_tag(xml->tag);
-  }
-  delete xml;
+  free_xml_tag(tag);
 }
 
-static void
-fs_xml_copy(void** copy, void* source)
+fs_xml* fs_xml::clone() const
 {
-  auto* src = (fs_xml*)source;
-  if (!source) {
-    *copy = nullptr;
-    return;
-  }
-  auto* res = new fs_xml;
-  *copy = res;
-
-  res->fs = src->fs;
-  copy_xml_tag(&(res->tag), src->tag, nullptr);
+  auto* copy = new fs_xml(*this);
+  copy_xml_tag(&(copy->tag), tag, nullptr);
+  return copy;
 }
 
-fs_xml* fs_xml_alloc(long type)
+fs_xml* fs_xml_alloc(FsType type)
 {
-  auto* result = new fs_xml;
-  result->fs.type = type;
-  result->fs.copy = fs_xml_copy;
-  result->fs.destroy = fs_xml_destroy;
+  auto* result = new fs_xml(type);
   return result;
 }

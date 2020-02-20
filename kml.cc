@@ -47,6 +47,7 @@
 #include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
 
 #include "defs.h"
+#include "formspec.h"                   // for FsChainFind, kFsGpx
 #include "grtcirc.h"                    // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
@@ -1433,7 +1434,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
-  auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
 
   if (!fs_gpx) {
     return r;

@@ -149,7 +149,7 @@ void BendFilter::process_route_orig(const route_head* route_orig)
   auto* route_dest = new route_head;
   route_dest->rte_name = route_orig->rte_name;
   route_dest->rte_desc = route_orig->rte_desc;
-  route_dest->fs = fs_chain_copy(route_orig->fs);
+  route_dest->fs = route_orig->fs.FsChainCopy();
   route_dest->rte_num = route_orig->rte_num;
 
   route_add_head(route_dest);

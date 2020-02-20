@@ -108,6 +108,7 @@
 #include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
+#include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
 #include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/logging.h"     // for Warning
@@ -370,21 +371,27 @@ static QTextCodec*    utf16le_codec{nullptr};
 /* Jan 1, 2000 00:00:00 */
 const time_t base_time_secs = 946706400;
 
-struct lowranceusr4_fsdata {
-  format_specific_data fs;
-  uint uid_unit;
-  uint uid_unit2;
-  int uid_seq_low;
-  int uid_seq_high;
-  uint UUID1;
-  uint UUID2;
-  uint UUID3;
-  uint UUID4;
-  int  flags;
-  int  color;
-  const char *color_desc;
-  int  icon_num;
-  float depth;
+struct lowranceusr4_fsdata : FormatSpecificData {
+  lowranceusr4_fsdata() : FormatSpecificData(kFsLowranceusr4) {}
+
+  lowranceusr4_fsdata* clone() const override
+  {
+    return new lowranceusr4_fsdata(*this);
+  }
+
+  uint uid_unit{0};
+  uint uid_unit2{0};
+  int uid_seq_low{0};
+  int uid_seq_high{0};
+  uint UUID1{0};
+  uint UUID2{0};
+  uint UUID3{0};
+  uint UUID4{0};
+  int  flags{0};
+  int  color{0};
+  const char *color_desc{nullptr};
+  int  icon_num{0};
+  float depth{0.0};
 };
 
 class Lowranceusr4Timestamp {
@@ -394,38 +401,6 @@ class Lowranceusr4Timestamp {
 
   Lowranceusr4Timestamp(unsigned int jd, unsigned int ms) : julian_day_number{jd}, milliseconds{ms} {}
 };
-
-
-/* fsdata manipulation functions */
-static void
-lowranceusr4_free_fsdata(void* fsdata)
-{
-  xfree(fsdata);
-}
-
-static void
-lowranceusr4_copy_fsdata(lowranceusr4_fsdata** dest, lowranceusr4_fsdata* src)
-{
-  *dest = (lowranceusr4_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
-}
-
-static
-lowranceusr4_fsdata*
-lowranceusr4_alloc_fsdata()
-{
-  auto* fsdata = (lowranceusr4_fsdata*) xcalloc(1, sizeof(lowranceusr4_fsdata));
-  fsdata->fs.type = FS_LOWRANCEUSR4;
-  fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
-  fsdata->fs.destroy = lowranceusr4_free_fsdata;
-
-  fsdata->uid_unit = 0;
-  fsdata->uid_seq_low = 0;
-  fsdata->uid_seq_high = 0;
-
-  return fsdata;
-}
 
 
 
@@ -463,11 +438,9 @@ register_waypt(const Waypoint* wpt)
 static const Waypoint*
 lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->uid_unit == uid_unit &&
         fs->uid_seq_low == uid_seq_low &&
@@ -486,11 +459,9 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 static const Waypoint*
 lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->UUID1 == id1 &&
         fs->UUID2 == id2 &&
@@ -921,8 +892,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 {
   int waypoint_version;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  wpt_tmp->fs.FsChainAdd(fsdata);
 
   if (reading_version > 4) {
     /* USR 5 and 6 have four additional data values at the start of each Waypoint */
@@ -1171,8 +1142,8 @@ lowranceusr4_parse_route()
   int UUID3 = 0;
   int UUID4 = 0;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  rte_head->fs.FsChainAdd(fsdata);
 
   if (reading_version >= 5) {
     /* Routes have Universal IDs */
@@ -1423,8 +1394,8 @@ lowranceusr4_parse_trail(int* trail_num)
   int trail_color;
   int trail_flags;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  trk_head->fs.FsChainAdd(fsdata);
 
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);
@@ -1784,7 +1755,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
-  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(wpt->fs.FsChainFind(kFsLowranceusr4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2030,7 +2001,7 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
-  auto* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(rte->fs.FsChainFind(kFsLowranceusr4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2061,7 +2032,7 @@ lowranceusr4_route_leg_disp(const Waypoint* wpt)
   for (int i = 0; i < waypt_table->size(); i++) {
     const Waypoint* cmp = waypt_table->at(i);
     if (cmp->shortname == wpt->shortname) {
-      auto* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+      const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(cmp->fs.FsChainFind(kFsLowranceusr4));
 
       if (opt_serialnum_i > 0) {
         gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
