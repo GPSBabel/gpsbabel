@@ -40,7 +40,8 @@ double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double l
 
 void RadiusFilter::process()
 {
-  for (Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  const auto wptlist = *global_waypoint_list; // waypt_del may modify container.
+  for (Waypoint* waypointp : wptlist) {
     double dist = gc_distance(waypointp->latitude, waypointp->longitude,
                               home_pos->latitude, home_pos->longitude);
 
