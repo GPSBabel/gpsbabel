@@ -19,11 +19,9 @@
 
  */
 
-#include <algorithm>        // for sort
 #include <cstdlib>          // for atoi, strtod
 
 #include <QtCore/QString>   // for QString
-#include <QtCore/QVector>   // for QVector<>::iterator, QVector
 #include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"           // for Waypoint, waypt_del, route_add_head, route_add_wpt, route_head, waypt_add, waypt_count, xcalloc, xfree, kMilesPerKilometer
@@ -40,8 +38,8 @@ double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double l
 
 void RadiusFilter::process()
 {
-  const auto wptlist = *global_waypoint_list; // waypt_del may modify container.
-  for (Waypoint* waypointp : wptlist) {
+  // waypt_del may modify container.
+  foreach (Waypoint* waypointp, *global_waypoint_list) {
     double dist = gc_distance(waypointp->latitude, waypointp->longitude,
                               home_pos->latitude, home_pos->longitude);
 
@@ -56,22 +54,13 @@ void RadiusFilter::process()
     waypointp->extra_data = ed;
   }
 
-  /*
-   * Create an list of remaining waypoints, popping them off the
-   * master queue as we go.  This gives us something reasonable
-   * for sort.
-   */
-
-  WaypointList comp;
-  waypt_swap(comp);
-
   if (nosort == nullptr) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
       auto* aed = reinterpret_cast<const extra_data*>(a->extra_data);
       auto* bed = reinterpret_cast<const extra_data*>(b->extra_data);
       return aed->distance < bed->distance;
     };
-    std::sort(comp.begin(), comp.end(), dist_comp_lambda);
+    waypt_sort(dist_comp_lambda);
   }
 
   route_head* rte_head = nullptr;
@@ -82,13 +71,16 @@ void RadiusFilter::process()
   }
 
   /*
-   * The comp list is now sorted by distance.   As we run through it,
-   * we push them back onto the master wp list, letting us pass them
-   * on through in the modified order.
+   * Create an list of remaining waypoints.
+   * Delete them, add them to the global waypoint list, or add them
+   * to a new route.
    */
+
+  WaypointList comp;
+  waypt_swap(comp);
+
   int i = 0;
   for (Waypoint* wp : qAsConst(comp)) {
-
     delete reinterpret_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 
