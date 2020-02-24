@@ -19,52 +19,29 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include <QtCore/QLatin1String>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QVector>
+
+#include <QtCore/QByteArray>     // for QByteArray
+#include <QtCore/QLatin1String>  // for QLatin1String
+#include <QtCore/QString>        // for QString, QString::SkipEmptyParts
+#include <QtCore/QStringList>    // for QStringList
+#include <QtCore/QVector>        // for QVector
+#include <QtCore/Qt>             // for CaseInsensitive
+#include <QtCore/QtGlobal>       // for qPrintable
 
 #include "defs.h"
+#include "shape.h"
 #include "shapelib/shapefil.h"
-#include <cstdlib>
+
 
 #if SHAPELIB_ENABLED
-static SHPHandle ihandle;
-static DBFHandle ihandledb;
-static SHPHandle ohandle;
-static DBFHandle ohandledb;
 #define MYNAME "shape"
-
-static unsigned poly_count;
-static double* polybufx;
-static double* polybufy;
-static double* polybufz;
-static QString ifname;
-static QString ofname;
-static int nameFieldIdx;	// the field index of the field with fieldName "name" in the output DBF.
-
-static char* opt_name = nullptr;
-static char* opt_url = nullptr;
-
-static
-QVector<arglist_t> shp_args = {
-  {
-    "name", &opt_name, "Source for name field in .dbf",
-    nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
-  },
-  {
-    "url", &opt_url, "Source for URL field in .dbf",
-    nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
-  },
-};
-
 
 /************************************************************************/
 /*                              SHPOpenGpsbabel()                       */
 /************************************************************************/
 
-static SHPHandle SHPAPI_CALL
-SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
+SHPHandle SHPAPI_CALL
+ShapeFormat::SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
 
 {
   SAHooks sHooks;
@@ -86,8 +63,8 @@ SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
 /*      shape file with read/write access.                              */
 /************************************************************************/
 
-static SHPHandle SHPAPI_CALL
-SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
+SHPHandle SHPAPI_CALL
+ShapeFormat::SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
 
 {
   SAHooks sHooks;
@@ -108,8 +85,8 @@ SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
 /*      Open a .dbf file.                                               */
 /************************************************************************/
 
-static DBFHandle SHPAPI_CALL
-DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
+DBFHandle SHPAPI_CALL
+ShapeFormat::DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
 
 {
   SAHooks sHooks;
@@ -130,18 +107,18 @@ DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
 /*      Create a new .dbf file.                                         */
 /************************************************************************/
 
-static DBFHandle SHPAPI_CALL
-DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
+DBFHandle SHPAPI_CALL
+ShapeFormat::DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
 
 {
   SAHooks sHooks;
 
 #ifdef SHPAPI_UTF8_HOOKS
   SASetupUtf8Hooks(&sHooks);
-  return DBFCreateLL(pszFilename.toUtf8().constData(), pszCodePage , &sHooks);
+  return DBFCreateLL(pszFilename.toUtf8().constData(), pszCodePage, &sHooks);
 #else
   SASetupDefaultHooks(&sHooks);
-  return DBFCreateLL(qPrintable(pszFilename), pszCodePage , &sHooks);
+  return DBFCreateLL(qPrintable(pszFilename), pszCodePage, &sHooks);
 #endif
 
 }
@@ -153,16 +130,15 @@ DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
 /* Create a new .dbf file with default code page LDID/87 (0x57)         */
 /************************************************************************/
 
-static DBFHandle SHPAPI_CALL
-DBFCreateGpsbabel(const QString& pszFilename)
+DBFHandle SHPAPI_CALL
+ShapeFormat::DBFCreateGpsbabel(const QString& pszFilename)
 
 {
   return DBFCreateExGpsbabel(pszFilename, "LDID/87");   // 0x57
 }
 #endif
 
-static
-void dump_fields()
+void ShapeFormat::dump_fields() const
 {
   char name[12];
   warning(MYNAME ": Database fields:\n");
@@ -174,8 +150,7 @@ void dump_fields()
   fatal("\n");
 }
 
-static
-void check_field_index(const int fieldIdx)
+void ShapeFormat::check_field_index(const int fieldIdx) const
 {
   const int maxFields = DBFGetFieldCount(ihandledb);
   if (fieldIdx < 0 || fieldIdx >= maxFields) {
@@ -185,8 +160,7 @@ void check_field_index(const int fieldIdx)
   }
 }
 
-static
-int get_field_index(const QString& fieldName)
+int ShapeFormat::get_field_index(const QString& fieldName) const
 {
   const int fieldIdx = DBFGetFieldIndex(ihandledb, CSTR(fieldName));
   if (fieldIdx < 0) {
@@ -196,8 +170,8 @@ int get_field_index(const QString& fieldName)
   return fieldIdx;
 }
 
-static void
-my_rd_init(const QString& fname)
+void
+ShapeFormat::rd_init(const QString& fname)
 {
   ifname = fname;
   // TODO: The .prj file can define the the coordinate system and projection information.
@@ -221,10 +195,10 @@ my_rd_init(const QString& fname)
   }
 }
 
-static void
-my_read()
+void
+ShapeFormat::read()
 {
-  // option processing here instead of in my_rd_init
+  // option processing here instead of in rd_init
   // lets the results of option processing be automatic.
   int nameidx;
   int urlidx;
@@ -396,58 +370,58 @@ err:
 
 }
 
-static void
-my_rd_deinit()
+void
+ShapeFormat::rd_deinit()
 {
   SHPClose(ihandle);
   DBFClose(ihandledb);
   ifname.clear();
 }
 
-static void
-my_wr_init(const QString& fname)
+void
+ShapeFormat::wr_init(const QString& fname)
 {
   ofname = fname;
 }
 
-static void
-my_wr_deinit()
+void
+ShapeFormat::wr_deinit()
 {
   SHPClose(ohandle);
   DBFClose(ohandledb);
   ofname.clear();
 }
 
-static void
-my_write_wpt(const Waypoint* wpt)
+void
+ShapeFormat::write_wpt(const Waypoint* wpt) const
 {
   // note that the z coordinate (&wpt->altitude) does not apply
   // to SHPT_POINT.
   // We could potentially write SHPT_POINTZ, but we would have
   // to address what to do when we don't have altitude data.
   SHPObject* shpobject = SHPCreateSimpleObject(SHPT_POINT, 1,
-                                                &wpt->longitude,
-                                                &wpt->latitude,
-                                                &wpt->altitude);
+                         &wpt->longitude,
+                         &wpt->latitude,
+                         &wpt->altitude);
   int iShape = SHPWriteObject(ohandle, -1, shpobject);
   SHPDestroyObject(shpobject);
   DBFWriteStringAttribute(ohandledb, iShape, nameFieldIdx,
                           CSTR(wpt->shortname));
 }
 
-static void
-poly_init(const route_head* rte)
+void
+ShapeFormat::poly_init(const route_head* rte)
 {
   const int ct = rte->rte_waypt_ct;
   poly_count = 0;
-  polybufx = (double*) xcalloc(ct, sizeof(double));
-  polybufy = (double*) xcalloc(ct, sizeof(double));
-  polybufz = (double*) xcalloc(ct, sizeof(double));
+  polybufx = new double[ct];
+  polybufy = new double[ct];
+  polybufz = new double[ct];
 }
 
 
-static void
-poly_point(const Waypoint* wpt)
+void
+ShapeFormat::poly_point(const Waypoint* wpt)
 {
   polybufx[poly_count] = wpt->longitude;
   polybufy[poly_count] = wpt->latitude;
@@ -455,28 +429,28 @@ poly_point(const Waypoint* wpt)
   poly_count++;
 }
 
-static void
-poly_deinit(const route_head* rte)
+void
+ShapeFormat::poly_deinit(const route_head* rte)
 {
   // note that the z coordinate (polybufz) does not apply
   // to SHPT_ARC.
   // We could potentially write SHPT_ARCZ, but we would have
   // to address what to do when we don't have altitude data.
   SHPObject* shpobject = SHPCreateSimpleObject(SHPT_ARC, poly_count,
-                                                polybufx, polybufy, polybufz);
+                         polybufx, polybufy, polybufz);
   int iShape = SHPWriteObject(ohandle, -1,  shpobject);
   SHPDestroyObject(shpobject);
   DBFWriteStringAttribute(ohandledb, iShape, nameFieldIdx,
                           CSTR(rte->rte_name));
-  xfree(polybufx);
-  xfree(polybufy);
-  xfree(polybufz);
+  delete[] polybufx;
+  delete[] polybufy;
+  delete[] polybufz;
   poly_count = 0;
 }
 
 
-static void
-my_write()
+void
+ShapeFormat::write()
 {
   // shape files can only contain one shape type in addition
   // to the null shape type.
@@ -484,7 +458,7 @@ my_write()
   // route/track data.
   switch (global_opts.objective) {
   case wptdata:
-  case unknown_gpsdata:
+  case unknown_gpsdata: {
     ohandle = SHPCreateGpsbabel(ofname, SHPT_POINT);
 
     if (ohandle == nullptr) {
@@ -497,10 +471,14 @@ my_write()
             qPrintable(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
-    waypt_disp_all(my_write_wpt);
+    auto write_wpt_lambda = [this](const Waypoint* wpt)->void {
+      write_wpt(wpt);
+    };
+    waypt_disp_all(write_wpt_lambda);
     break;
+  }
   case rtedata:
-  case trkdata:
+  case trkdata: {
     ohandle = SHPCreateGpsbabel(ofname, SHPT_ARC);
 
     if (ohandle == nullptr) {
@@ -513,31 +491,25 @@ my_write()
             qPrintable(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
+    auto poly_init_lambda = [this](const route_head* rte)->void {
+      poly_init(rte);
+    };
+    auto poly_deinit_lambda = [this](const route_head* rte)->void {
+      poly_deinit(rte);
+    };
+    auto poly_point_lambda = [this](const Waypoint* wpt)->void {
+      poly_point(wpt);
+    };
     if (global_opts.objective == trkdata) {
-      track_disp_all(poly_init, poly_deinit, poly_point);
+      track_disp_all(poly_init_lambda, poly_deinit_lambda, poly_point_lambda);
     } else { // rtedata
-      route_disp_all(poly_init, poly_deinit, poly_point);
+      route_disp_all(poly_init_lambda, poly_deinit_lambda, poly_point_lambda);
     }
     break;
+  }
   case posndata:
     fatal(MYNAME ": Realtime positioning not supported\n");
     break;
   }
 }
-
-ff_vecs_t shape_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  my_rd_init,
-  my_wr_init,
-  my_rd_deinit,
-  my_wr_deinit,
-  my_read,
-  my_write,
-  nullptr,
-  &shp_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-};
 #endif /* SHAPELIB_ENABLED */

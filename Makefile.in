@@ -511,11 +511,12 @@ filter_vecs.o: filter_vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   position.h radius.h reverse_route.h smplrout.h sort.h stackfilter.h \
   swapdata.h trackfilter.h transform.h validate.h gbversion.h vecs.h \
   format.h ggv_bin.h gpx.h src/core/file.h src/core/xmlstreamwriter.h \
-  src/core/xmltag.h legacyformat.h mynav.h xcsv.h garmin_fs.h \
-  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
-  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
-  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
-  jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h
+  src/core/xmltag.h shape.h shapelib/shapefil.h yahoo.h xmlgeneric.h \
+  legacyformat.h mynav.h xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  src/core/textstream.h
 formspec.o: formspec.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h
@@ -534,7 +535,8 @@ garmin.o: garmin.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h garmin_tables.h grtcirc.h jeeps/gpsserial.h vecs.h \
   ggv_bin.h gpx.h src/core/file.h src/core/xmlstreamwriter.h \
-  src/core/xmltag.h legacyformat.h mynav.h xcsv.h src/core/textstream.h
+  src/core/xmltag.h shape.h shapelib/shapefil.h yahoo.h xmlgeneric.h \
+  legacyformat.h mynav.h xcsv.h src/core/textstream.h
 garmin_device_xml.o: garmin_device_xml.cc defs.h config.h zlib/zlib.h \
   zlib/zconf.h formspec.h inifile.h gbfile.h session.h \
   src/core/datetime.h src/core/optional.h garmin_device_xml.h \
@@ -677,7 +679,8 @@ internal_styles.o: internal_styles.cc defs.h config.h zlib/zlib.h \
   src/core/datetime.h src/core/optional.h
 interpolate.o: interpolate.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
-  src/core/optional.h interpolate.h filter.h grtcirc.h
+  src/core/optional.h interpolate.h filter.h grtcirc.h \
+  src/core/logging.h
 itracku.o: itracku.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   gbser.h
@@ -814,11 +817,12 @@ magproto.o: magproto.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h explorist_ini.h format.h gbser.h magellan.h vecs.h \
   ggv_bin.h gpx.h src/core/file.h src/core/xmlstreamwriter.h \
-  src/core/xmltag.h legacyformat.h mynav.h xcsv.h garmin_fs.h \
-  jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h \
-  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
-  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
-  jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h
+  src/core/xmltag.h shape.h shapelib/shapefil.h yahoo.h xmlgeneric.h \
+  legacyformat.h mynav.h xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  src/core/textstream.h
 main.o: main.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   cet_util.h csv_util.h filter.h filter_vecs.h arcdist.h bend.h \
@@ -826,8 +830,9 @@ main.o: main.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   polygon.h position.h radius.h reverse_route.h smplrout.h sort.h \
   stackfilter.h swapdata.h trackfilter.h transform.h validate.h format.h \
   src/core/file.h src/core/usasciicodec.h vecs.h ggv_bin.h gpx.h \
-  src/core/xmlstreamwriter.h src/core/xmltag.h legacyformat.h mynav.h \
-  xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  src/core/xmlstreamwriter.h src/core/xmltag.h shape.h \
+  shapelib/shapefil.h yahoo.h xmlgeneric.h legacyformat.h mynav.h xcsv.h \
+  garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h
@@ -949,7 +954,7 @@ session.o: session.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 shape.o: shape.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  shapelib/shapefil.h
+  shape.h format.h shapelib/shapefil.h
 shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
 shapelib/safileio.o: shapelib/safileio.c shapelib/shapefil.h
 shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
@@ -1042,8 +1047,9 @@ vcf.o: vcf.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
 vecs.o: vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   vecs.h format.h ggv_bin.h gpx.h src/core/file.h \
-  src/core/xmlstreamwriter.h src/core/xmltag.h legacyformat.h mynav.h \
-  xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  src/core/xmlstreamwriter.h src/core/xmltag.h shape.h \
+  shapelib/shapefil.h yahoo.h xmlgeneric.h legacyformat.h mynav.h xcsv.h \
+  garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h \
@@ -1091,9 +1097,9 @@ xol.o: xol.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h src/core/file.h \
   src/core/xmlstreamwriter.h xmlgeneric.h
-yahoo.o: yahoo.cc defs.h config.h zlib/zlib.h zlib/zconf.h config.h \
- formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
- src/core/optional.h yahoo.h format.h xmlgeneric.h
+yahoo.o: yahoo.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
+  yahoo.h format.h xmlgeneric.h
 zlib/adler32.o: zlib/adler32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
   config.h
 zlib/compress.o: zlib/compress.c zlib/zlib.h zlib/zconf.h config.h
