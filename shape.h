@@ -84,7 +84,7 @@ private:
   SHPHandle ohandle;
   DBFHandle ohandledb;
 
-  unsigned poly_count;
+  int poly_count;
   double* polybufx;
   double* polybufy;
   double* polybufz;

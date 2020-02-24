@@ -20,6 +20,8 @@
 
  */
 
+#include <assert.h>              // for assert
+
 #include <QtCore/QByteArray>     // for QByteArray
 #include <QtCore/QLatin1String>  // for QLatin1String
 #include <QtCore/QString>        // for QString, QString::SkipEmptyParts
@@ -436,6 +438,7 @@ ShapeFormat::poly_deinit(const route_head* rte)
   // to SHPT_ARC.
   // We could potentially write SHPT_ARCZ, but we would have
   // to address what to do when we don't have altitude data.
+  assert(rte->rte_waypt_ct == poly_count);
   SHPObject* shpobject = SHPCreateSimpleObject(SHPT_ARC, poly_count,
                          polybufx, polybufy, polybufz);
   int iShape = SHPWriteObject(ohandle, -1,  shpobject);
