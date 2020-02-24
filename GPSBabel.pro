@@ -139,6 +139,7 @@ HEADERS =  \
 	mynav.h \
 	navilink.h \
 	session.h \
+	shape.h \
 	shapelib/shapefil.h \
 	strptime.h \
 	units.h \

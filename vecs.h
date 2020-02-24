@@ -31,10 +31,11 @@
 #include "format.h"
 #include "ggv_bin.h"
 #include "gpx.h"
-#include "yahoo.h"
 #include "legacyformat.h"
 #include "mynav.h"
+#include "shape.h"
 #include "xcsv.h"
+#include "yahoo.h"
 
 
 extern ff_vecs_t geo_vecs;
@@ -62,9 +63,6 @@ extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t psit_vecs;
-#if SHAPELIB_ENABLED
-extern ff_vecs_t shape_vecs;
-#endif
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
 extern ff_vecs_t html_vecs;
@@ -296,7 +294,7 @@ private:
   LegacyFormat navicache_fmt {navicache_vecs};
   LegacyFormat psit_fmt {psit_vecs};
 #if SHAPELIB_ENABLED
-  LegacyFormat shape_fmt {shape_vecs};
+  ShapeFormat shape_fmt;
 #endif
   LegacyFormat gpl_fmt {gpl_vecs};
   LegacyFormat text_fmt {text_vecs};
