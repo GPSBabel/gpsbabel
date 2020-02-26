@@ -1,0 +1,9 @@
+#
+# qstarz_bl-1000 logger tests
+#
+FORMAT=qstarz_bl-1000
+
+rm -f ${TMPDIR}/$FORMAT.*
+
+gpsbabel -i $FORMAT -f ${REFERENCE}/$FORMAT.BIN -o gpx -F ${TMPDIR}/$FORMAT.gpx >/dev/null
+compare ${REFERENCE}/$FORMAT.gpx ${TMPDIR}/$FORMAT.gpx 
