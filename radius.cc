@@ -56,8 +56,8 @@ void RadiusFilter::process()
 
   if (nosort == nullptr) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
-      auto* aed = reinterpret_cast<const extra_data*>(a->extra_data);
-      auto* bed = reinterpret_cast<const extra_data*>(b->extra_data);
+      const auto* aed = static_cast<const extra_data*>(a->extra_data);
+      const auto* bed = static_cast<const extra_data*>(b->extra_data);
       return aed->distance < bed->distance;
     };
     waypt_sort(dist_comp_lambda);
@@ -81,7 +81,7 @@ void RadiusFilter::process()
 
   int i = 0;
   for (Waypoint* wp : qAsConst(comp)) {
-    delete reinterpret_cast<extra_data*>(wp->extra_data);
+    delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 
     if ((maxctarg != nullptr) && (i >= maxct)) {
