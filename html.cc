@@ -27,6 +27,7 @@
 #include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
+#include "formspec.h"              // for FsChainFind, kFsGpx
 #include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
@@ -156,73 +157,71 @@ html_disp(const Waypoint* wpt)
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTR(wpt->notes));
   }
 
-  fs_xml* fs_gpx = nullptr;
   if (includelogs) {
-    fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
-  }
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
+    if (fs_gpx && fs_gpx->tag) {
+      xml_tag* root = fs_gpx->tag;
+      xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+      while (curlog) {
+        time_t logtime = 0;
+        gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
 
-  if (fs_gpx && fs_gpx->tag) {
-    xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
-    while (curlog) {
-      time_t logtime = 0;
-      gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
+        xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+        if (logpart) {
+          gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
+        }
 
-      xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
-      if (logpart) {
-        gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
-      }
+        logpart = xml_findfirst(curlog, "groundspeak:finder");
+        if (logpart) {
+          char* f = html_entitize(CSTR(logpart->cdata));
+          gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
+          xfree(f);
+        }
 
-      logpart = xml_findfirst(curlog, "groundspeak:finder");
-      if (logpart) {
-        char* f = html_entitize(CSTR(logpart->cdata));
-        gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
-        xfree(f);
-      }
+        logpart = xml_findfirst(curlog, "groundspeak:date");
+        if (logpart) {
+          logtime = xml_parse_time(logpart->cdata).toTime_t();
+          struct tm* logtm = localtime(&logtime);
+          if (logtm) {
+            gbfprintf(file_out,
+                      "<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
+                      logtm->tm_year+1900,
+                      logtm->tm_mon+1,
+                      logtm->tm_mday);
+          }
+        }
 
-      logpart = xml_findfirst(curlog, "groundspeak:date");
-      if (logpart) {
-        logtime = xml_parse_time(logpart->cdata).toTime_t();
-        struct tm* logtm = localtime(&logtime);
-        if (logtm) {
+        logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
+        if (logpart) {
+          double lat = xml_attribute(logpart->attributes, "lat").toDouble();
+          double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+          char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
           gbfprintf(file_out,
-                    "<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
-                    logtm->tm_year+1900,
-                    logtm->tm_mon+1,
-                    logtm->tm_mday);
-        }
-      }
-
-      logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
-      if (logpart) {
-        double lat = xml_attribute(logpart->attributes, "lat").toDouble();
-        double lon = xml_attribute(logpart->attributes, "lon").toDouble();
-        char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
-        gbfprintf(file_out,
-                  "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
-                  coordstr);
-        xfree(coordstr);
-      }
-
-      logpart = xml_findfirst(curlog, "groundspeak:text");
-      if (logpart) {
-        QString encstr = xml_attribute(logpart->attributes, "encoded");
-        bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
-
-        QString s;
-        if (html_encrypt && encoded) {
-          s = rot13(logpart->cdata);
-        } else {
-          s = logpart->cdata;
+                    "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
+                    coordstr);
+          xfree(coordstr);
         }
 
-        char* t = html_entitize(s);
-        gbfputs(t, file_out);
-        xfree(t);
-      }
+        logpart = xml_findfirst(curlog, "groundspeak:text");
+        if (logpart) {
+          QString encstr = xml_attribute(logpart->attributes, "encoded");
+          bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
-      gbfprintf(file_out, "</p>\n");
-      curlog = xml_findnext(root, curlog, "groundspeak:log");
+          QString s;
+          if (html_encrypt && encoded) {
+            s = rot13(logpart->cdata);
+          } else {
+            s = logpart->cdata;
+          }
+
+          char* t = html_entitize(s);
+          gbfputs(t, file_out);
+          xfree(t);
+        }
+
+        gbfprintf(file_out, "</p>\n");
+        curlog = xml_findnext(root, curlog, "groundspeak:log");
+      }
     }
   }
   gbfprintf(file_out, "</td></tr></table>\n");

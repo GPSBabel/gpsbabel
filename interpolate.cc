@@ -55,12 +55,12 @@ void InterpolateFilter::process()
     // time is not maintainable.  When new members are added it is likely
     // they will not be copied here!
     // We want a deep copy of everything but with an empty WaypointList.
-    route_head* rte_new = route_head_alloc();
+    auto* rte_new = new route_head;
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->rte_urls = rte_old->rte_urls;
     rte_new->rte_num = rte_old->rte_num;
-    rte_new->fs = fs_chain_copy(rte_old->fs);
+    rte_new->fs = rte_old->fs.FsChainCopy();
     rte_new->line_color = rte_old->line_color;
     rte_new->line_width = rte_old->line_width;
     rte_new->session = rte_old->session;

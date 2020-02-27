@@ -61,8 +61,8 @@ vitovtt_read()
 
   memset(&tmStruct, 0, sizeof(tmStruct));
 
-  route_head* route_head = route_head_alloc();
-  track_add_head(route_head);
+  auto* rte = new route_head;
+  track_add_head(rte);
 
   /* Read the header. */
   int version = gbfgetint32(infile);
@@ -104,7 +104,7 @@ vitovtt_read()
     (void) course;
     (void) status;
 
-    track_add_wpt(route_head, wpt_tmp);
+    track_add_wpt(rte, wpt_tmp);
 
     count--;
   }

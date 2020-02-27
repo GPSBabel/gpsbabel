@@ -38,6 +38,14 @@ if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
   echo "If you need to clear the cache see"
   echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+  if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
+    # the cache is being used.  modify it to reset expiration date.
+    date > ${CACHEDIR}/timestamp
+  fi
+  if [ -f "${CACHEDIR}/timestamp" ]; then
+    echo -n "Cache timestamp: "
+    cat "${CACHEDIR}/timestamp"
+  fi
 else
   rm -fr ${CACHEDIR}
   mkdir -p ${CACHEDIR}

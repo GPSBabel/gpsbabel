@@ -710,20 +710,23 @@ static struct defguid {
 
 static int FindIconByName(const char* name, guid_t* guid)
 {
-  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
+  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); ++i) {
     if (!case_ignore_strcmp(name, default_guids[i].name)) {
-      memcpy(guid, &(default_guids[i].guid), sizeof(guid_t));
+      *guid = default_guids[i].guid;
       return 1;
     }
   }
   return 0;
 }
 
-static int FindIconByGuid(guid_t* guid, char** name)
+static int FindIconByGuid(const guid_t* guid, const char** name)
 {
-  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
-    if (!memcmp(guid, &default_guids[i].guid, sizeof(guid_t))) {
-      *name = const_cast<char*>(default_guids[i].name);
+  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); ++i) {
+    /* don't compare any structure padding */
+    if ((guid->l == default_guids[i].guid.l) &&
+        memcmp(guid->s, default_guids[i].guid.s, sizeof(guid->s)) &&
+        memcmp(guid->c, default_guids[i].guid.c, sizeof(guid->c))) {
+      *name = default_guids[i].name;
       return 1;
     }
   }

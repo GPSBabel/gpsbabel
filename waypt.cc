@@ -32,7 +32,7 @@
 #include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND, garmin_fs_p
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
@@ -251,7 +251,7 @@ double
 waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 {
   double res = 0;
-  garmin_fs_p gmsd;
+  garmin_fs_t* gmsd;
 
   if ((A == nullptr) || (B == nullptr)) {
     return 0;
@@ -404,7 +404,6 @@ Waypoint::Waypoint() :
   temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
-  fs(nullptr),
   session(curr_session()),
   extra_data(nullptr)
 {
@@ -415,7 +414,7 @@ Waypoint::~Waypoint()
   if (gc_data != &Waypoint::empty_gc_data) {
     delete gc_data;
   }
-  fs_chain_destroy(fs);
+  fs.FsChainDestroy();
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
@@ -446,7 +445,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   temperature(other.temperature),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
-  fs(other.fs),
   session(other.session),
   extra_data(other.extra_data)
 {
@@ -456,7 +454,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   }
 
   // deep copy fs chain data.
-  fs = fs_chain_copy(other.fs);
+  fs = other.fs.FsChainCopy();
 
   // note: session is not deep copied.
   // note: extra_data is not deep copied.
@@ -470,7 +468,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     if (gc_data != &Waypoint::empty_gc_data) {
       delete gc_data;
     }
-    fs_chain_destroy(fs);
+    fs.FsChainDestroy();
 
     // allocate and copy
     latitude = rhs.latitude;
@@ -500,7 +498,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     temperature = rhs.temperature;
     odometer_distance = rhs.odometer_distance;
     gc_data = rhs.gc_data;
-    fs = rhs.fs;
     session = rhs.session;
     extra_data = rhs.extra_data;
     // deep copy geocache data unless it is the special static empty_gc_data.
@@ -509,7 +506,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     }
 
     // deep copy fs chain data.
-    fs = fs_chain_copy(rhs.fs);
+    fs = rhs.fs.FsChainCopy();
 
     // note: session is not deep copied.
     // note: extra_data is not deep copied.
@@ -632,9 +629,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      QString n;
-      n.sprintf("%03d", waypt_count());
-      wpt->shortname = QString("WPT%1").arg(n);
+      wpt->shortname = QString::asprintf("WPT%03d", waypt_count());
     }
   }
 

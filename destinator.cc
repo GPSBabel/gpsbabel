@@ -69,7 +69,7 @@ gmsd_init(Waypoint* wpt)
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+    wpt->fs.FsChainAdd(gmsd);
   }
   return gmsd;
 }
@@ -250,7 +250,7 @@ destinator_read_rte()
     }
 
     if (! rte) {
-      rte = route_head_alloc();
+      rte = new route_head;
       route_add_head(rte);
     }
     route_add_wpt(rte, wpt);
@@ -318,7 +318,7 @@ destinator_read_trk()
     }
 
     if (! trk) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
     track_add_wpt(trk, wpt);

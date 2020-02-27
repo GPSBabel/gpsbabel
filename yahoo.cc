@@ -19,27 +19,18 @@
 
  */
 
+
 #include "defs.h"
+#include "yahoo.h"
 #include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
 
-static Waypoint* wpt_tmp;
-static char* as;
 
 #define MYNAME "yahoo"
 
-static
-QVector<arglist_t> yahoo_args = {
-  {
-    "addrsep", &as,
-    "String to separate concatenated address fields (default=\", \")",
-    ", ", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
-static xg_callback 	wpt_addr /*, wpt_city, wpt_state, wpt_zip, wpt_country*/;
-
+// static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
+// static xg_callback 	wpt_addr /*, wpt_city, wpt_state, wpt_zip, wpt_country*/;
+#if 0
 static xg_tag_mapping gl_map[] = {
   { wpt_s,	cb_start, "/ResultSet/Result" },
   { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
@@ -52,54 +43,61 @@ static xg_tag_mapping gl_map[] = {
   { wpt_e,	cb_end,   "/ResultSet/Result" },
   { nullptr,	(xg_cb_type)0,         nullptr}
 };
+#endif
 
-static void
-yahoo_rd_init(const QString& fname)
+void
+YahooFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, nullptr);
+abort();
+//  xml_init(fname, gl_map, nullptr);
 }
 
-static void
-yahoo_read()
+void
+YahooFormat::read()
 {
   xml_read();
 }
 
-static void
-yahoo_rd_deinit()
+void
+YahooFormat::rd_deinit()
 {
   xml_deinit();
 }
 
-void	wpt_s(xg_string, const QXmlStreamAttributes*)
+void
+YahooFormat::wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
-void	wpt_e(xg_string, const QXmlStreamAttributes*)
+void
+YahooFormat::wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = nullptr;
 }
 
-void	wpt_lat(xg_string args, const QXmlStreamAttributes*)
+void
+YahooFormat::wpt_lat(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->latitude = args.toDouble();
 }
 
-void	wpt_lon(xg_string args, const QXmlStreamAttributes*)
+void
+YahooFormat::wpt_lon(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->longitude = args.toDouble();
 }
 
-void	wpt_addr(xg_string args, const QXmlStreamAttributes*)
+void
+YahooFormat::wpt_addr(xg_string args, const QXmlStreamAttributes*)
 {
   if (!wpt_tmp->notes.isEmpty()) {
     wpt_tmp->notes += as;
   }
   wpt_tmp->notes += args;
 }
-
+#if 0
 ff_vecs_t yahoo_vecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_none, ff_cap_none },
@@ -115,3 +113,4 @@ ff_vecs_t yahoo_vecs = {
   , NULL_POS_OPS,
   nullptr
 };
+#endif

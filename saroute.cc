@@ -168,7 +168,7 @@ my_read()
    * here lie the route description records
    */
   if (version < 6 || (control == 1)) {
-    track_head = route_head_alloc();
+    track_head = new route_head;
     route_add_head(track_head);
     if (control) {
       track_head->rte_name = "control points";
@@ -268,7 +268,7 @@ my_read()
      */
     count = ReadLong(infile);
     if (count) {
-      track_head = route_head_alloc();
+      track_head = new route_head;
       if (timesynth) {
         track_add_head(track_head);
       } else {
@@ -287,7 +287,7 @@ my_read()
       if (split && stringlen) {
         if (track_head->rte_waypt_ct) {
           old_track_head = track_head;
-          track_head = route_head_alloc();
+          track_head = new route_head;
           if (timesynth) {
             track_add_head(track_head);
           } else {

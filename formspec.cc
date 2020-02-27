@@ -1,5 +1,5 @@
 /*
-    Functions to manage the format_specific_data chain
+    Functions to manage the FormatSpecificData chain
 
     Copyright (C) 2005 Ron Parker and Robert Lipe.
 
@@ -19,48 +19,40 @@
 
  */
 
+#include <QtCore/QList>  // for QList
+
 #include "defs.h"
+#include "formspec.h"    // for FormatSpecificData, FsChainAdd, FsChainCopy, FsChainDestroy, FsChainFind
 
-format_specific_data* fs_chain_copy(format_specific_data* source)
+FormatSpecificDataList FormatSpecificDataList::FsChainCopy() const
 {
-  format_specific_data* result = nullptr;
-
-  format_specific_data** copy = &result;
-  while (source) {
-    source->copy((void**)copy, (void*)source);
-    /* prevent segfaults from badly-behaved copy functions */
-    (*copy)->next = nullptr;
-    copy = &((*copy)->next);
-    source = source->next;
+  FormatSpecificDataList dest;
+  for (const auto* item : *this) {
+    dest.append(item->clone());
   }
-  return result;
+  return dest;
 }
 
-void fs_chain_destroy(format_specific_data* chain)
+void FormatSpecificDataList::FsChainDestroy()
 {
-  format_specific_data* cur = chain;
-  while (cur) {
-    format_specific_data* next = cur->next;
-    cur->destroy(cur);
-    cur = next;
+  while (!isEmpty()) {
+    delete takeFirst();
   }
 }
 
-format_specific_data* fs_chain_find(format_specific_data* chain, long type)
+FormatSpecificData* FormatSpecificDataList::FsChainFind(FsType type) const
 {
-  format_specific_data* cur = chain;
-  while (cur) {
-    if (cur->type == type) {
-      return cur;
+  for (auto* item : *this) {
+    if (item->fs_type == type) {
+      return item;
     }
-    cur = cur->next;
   }
   return nullptr;
 }
 
-void fs_chain_add(format_specific_data** chain, format_specific_data* data)
+void FormatSpecificDataList::FsChainAdd(FormatSpecificData* data)
 {
-  data->next = *chain;
-  *chain = data;
+  if (data != nullptr) {
+    append(data);
+  }
 }
-

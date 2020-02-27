@@ -47,6 +47,7 @@
 #include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
 
 #include "defs.h"
+#include "formspec.h"                   // for FsChainFind, kFsGpx
 #include "grtcirc.h"                    // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
@@ -410,7 +411,7 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 
 void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  route_head* trk_head = route_head_alloc();
+  auto* trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -459,7 +460,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  gx_trk_head = route_head_alloc();
+  gx_trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     gx_trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -1433,7 +1434,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
-  auto* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
 
   if (!fs_gpx) {
     return r;
@@ -2147,7 +2148,7 @@ kml_wr_position(Waypoint* wpt)
   kml_wr_init(posnfilenametmp);
 
   if (!posn_trk_head) {
-    posn_trk_head = route_head_alloc();
+    posn_trk_head = new route_head;
     track_add_head(posn_trk_head);
   }
 

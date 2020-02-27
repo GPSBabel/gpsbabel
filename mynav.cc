@@ -126,7 +126,7 @@ MyNavFormat::read()
   gpsbabel::TextStream stream;
   stream.open(read_fname, QIODevice::ReadOnly, "mynav");
 
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track_add_head(track);
 
   QString buf;

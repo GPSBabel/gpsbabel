@@ -816,7 +816,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
 static void
 fit_parse_data_message(uint8_t header)
 {
-  int local_id = header & 0x1f;
+  int local_id = header & 0x0f;
   fit_message_def* def = &fit_data.message_def[local_id];
   fit_parse_data(def, 0);
 }
@@ -875,7 +875,7 @@ fit_read()
 {
   fit_parse_header();
 
-  fit_data.track = route_head_alloc();
+  fit_data.track = new route_head;
   track_add_head(fit_data.track);
   if (global_opts.debug_level >= 1) {
     debug_print(1,"%s: starting to read data with fit_data.len=%d\n", MYNAME, fit_data.len);

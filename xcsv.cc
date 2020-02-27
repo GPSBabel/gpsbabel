@@ -387,7 +387,7 @@ XcsvFormat::gmsd_init(Waypoint* wpt)
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+    wpt->fs.FsChainAdd(gmsd);
   }
   return gmsd;
 }
@@ -926,7 +926,7 @@ XcsvFormat::read()
         break;
       case trkdata:
         if ((trk == nullptr) || parse_data.new_track) {
-          trk = route_head_alloc();
+          trk = new route_head;
           track_add_head(trk);
         }
         if (!parse_data.trk_name.isEmpty()) {
@@ -936,7 +936,7 @@ XcsvFormat::read()
         break;
       case rtedata:
         if (rte == nullptr) {
-          rte = route_head_alloc();
+          rte = new route_head;
           route_add_head(rte);
         }
         if (!parse_data.rte_name.isEmpty()) {

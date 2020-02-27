@@ -171,7 +171,7 @@ stmwpp_data_read()
         waypt_add(wpt);
         if (global_opts.objective == rtedata) {
           if (route == nullptr) {
-            route = route_head_alloc();
+            route = new route_head;
             route_add_head(route);
           }
           route_add_wpt(route, new Waypoint(*wpt));
@@ -180,7 +180,7 @@ stmwpp_data_read()
 
       case STM_TRKPT:
         if (track == nullptr) {
-          track = route_head_alloc();
+          track = new route_head;
           track_add_head(track);
         }
         track_add_wpt(track, wpt);

@@ -139,7 +139,7 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
     auto wpt = new Waypoint;
     garmin_fs_t* gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+    wpt->fs.FsChainAdd(gmsd);
 
     do {
       wpt->shortname = rand_str(8, "Wpt_%s");
@@ -239,7 +239,7 @@ random_read()
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
-    head = route_head_alloc();
+    head = new route_head;
     if (doing_trks) {
       head->rte_name = rand_str(8, "Trk_%s");
       track_add_head(head);

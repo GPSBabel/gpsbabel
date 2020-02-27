@@ -352,7 +352,7 @@ humminbird_read_route(gbfile* fin)
       if ((map.value(buff))) {
         const Waypoint* wpt = map.value(buff);
         if (rte == nullptr) {
-          rte = route_head_alloc();
+          rte = new route_head;
           route_add_head(rte);
           // TODO: find a way to eliminate the copy.
           char* s = xstrndup(hrte.name, sizeof(hrte.name));
@@ -411,7 +411,7 @@ humminbird_read_track(gbfile* fin)
   int32_t accum_east = th.start_east;
   int32_t accum_north = th.start_north;
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   track_add_head(trk);
 
   // TODO: find a way to eliminate the copy.
@@ -518,7 +518,7 @@ humminbird_read_track_old(gbfile* fin)
   int32_t accum_east = th.start_east;
   int32_t accum_north = th.start_north;
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   track_add_head(trk);
 
   /* The name is not in the header, but at the end of the file.

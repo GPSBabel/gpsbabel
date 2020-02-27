@@ -425,7 +425,7 @@ compegps_data_read()
       }
       break;
     case 'R':
-      route = route_head_alloc();
+      route = new route_head;
       route_add_head(route);
       parse_rte_info(ctail, route);
       break;
@@ -449,7 +449,7 @@ compegps_data_read()
       wpt = parse_trkpt(ctail);
       if (wpt != nullptr) {
         if (track == nullptr) {
-          track = route_head_alloc();
+          track = new route_head;
           track_add_head(track);
         }
         track_add_wpt(track, wpt);

@@ -20,17 +20,23 @@
 
  */
 
-#include "defs.h"
-#include "cet_util.h"
-#include "garmin_fs.h"
-#include "garmin_tables.h"
-#include "inifile.h"
+#include <cassert>                   // for assert
+#include <cstdio>                    // for snprintf, sscanf
+#include <cstdlib>                   // for atof
+#include <cstring>                   // for strncpy
 
-#include <QtCore/QString>
-#include <QtCore/QXmlStreamWriter>
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
+#include <QtCore/QByteArray>         // for QByteArray
+#include <QtCore/QStaticStringData>  // for QStaticStringData
+#include <QtCore/QString>            // for QString, QStringLiteral
+#include <QtCore/QXmlStreamWriter>   // for QXmlStreamWriter
+#include <QtCore/Qt>                 // for CaseInsensitive
+
+#include "defs.h"
+#include "garmin_fs.h"
+#include "garmin_tables.h"           // for gt_switch_display_mode_value, gt_display_mode_symbol, gt_display_mode_symbol_and_comment, gt_display_mode_symbol_and_name
+#include "inifile.h"                 // for inifile_readstr
+#include "jeeps/gps.h"               // for gps_waypt_type
+
 
 #define MYNAME "garmin_fs"
 
@@ -38,20 +44,26 @@ garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
   auto* result = new garmin_fs_t;
-  result->fs.type = FS_GMSD;
-  result->fs.copy = (fs_copy) garmin_fs_copy;
-  result->fs.destroy = garmin_fs_destroy;
-  result->fs.next = nullptr;
 
   result->protocol = protocol;
 
   return result;
 }
 
-void
-garmin_fs_destroy(void* fs)
+garmin_fs_t* garmin_fs_t::clone() const
 {
-  delete (garmin_fs_t*) fs;
+  auto* copy = new garmin_fs_t(*this);
+
+  /* do not deep copy interlinks, only increment the reference counter */
+  if (ilinks != nullptr) {
+    ilinks->ref_count++;
+  }
+
+#ifdef GMSD_EXPERIMENTAL
+  memcopy(subclass, other.subclass, sizeof(subclass));
+#endif
+
+  return copy;
 }
 
 garmin_fs_t::~garmin_fs_t()
@@ -67,47 +79,6 @@ garmin_fs_t::~garmin_fs_t()
       }
     }
   }
-}
-
-void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
-{
-  if (src == nullptr) {
-    *dest = nullptr;
-    return;
-  }
-  *dest = new garmin_fs_t(*src);
-}
-
-garmin_fs_t::garmin_fs_t(const garmin_fs_t& other) :
-  fs(other.fs),
-  flags(other.flags),
-  protocol(other.protocol),
-  icon(other.icon),
-  wpt_class(other.wpt_class),
-  display(other.display),
-  category(other.category),
-  city(other.city),
-  facility(other.facility),
-  state(other.state),
-  cc(other.cc),
-  cross_road(other.cross_road),
-  addr(other.addr),
-  country(other.country),
-  phone_nr(other.phone_nr),
-  phone_nr2(other.phone_nr2),
-  fax_nr(other.fax_nr),
-  postal_code(other.postal_code),
-  email(other.email),
-  ilinks(other.ilinks)
-{
-  /* do not deep copy interlinks, only increment the reference counter */
-  if (ilinks != nullptr) {
-    ilinks->ref_count++;
-  }
-
-#ifdef GMSD_EXPERIMENTAL
-  memcopy(subclass, other.subclass, sizeof(subclass));
-#endif
 }
 
 /* GPX - out */
@@ -224,7 +195,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
+    waypt->fs.FsChainAdd(gmsd);
   }
 
   tag -= base_tag;
@@ -350,7 +321,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
+    waypt->fs.FsChainAdd(gmsd);
   }
   garmin_fs_t::set_category(gmsd, cat);
   return 1;
@@ -360,7 +331,7 @@ void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
   garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
-  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+  wpt->fs.FsChainAdd(gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */
 

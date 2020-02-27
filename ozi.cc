@@ -49,11 +49,13 @@
 #include <QtCore/QString>         // for QString
 #include <QtCore/QStringList>     // for QStringList
 #include <QtCore/QTextStream>     // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
+#include <QtCore/QVector>         // for QVector
 #include <QtCore/Qt>              // for CaseInsensitive
 #include <QtCore/QtGlobal>        // for qPrintable
 
 #include "defs.h"
 #include "csv_util.h"             // for csv_stringclean
+#include "formspec.h"             // for FsChainAdd, FsChainFind, kFsOzi, FormatSpecificData
 #include "jeeps/gpsmath.h"        // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
@@ -63,10 +65,16 @@
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
-struct ozi_fsdata {
-  format_specific_data fs;
-  int fgcolor;
-  int bgcolor;
+struct ozi_fsdata : FormatSpecificData {
+  ozi_fsdata() : FormatSpecificData(kFsOzi) {}
+
+  ozi_fsdata* clone() const override
+  {
+    return new ozi_fsdata(*this);
+  }
+
+  int fgcolor{0};
+  int bgcolor{65535};
 };
 
 static gpsbabel::TextStream* stream = nullptr;
@@ -169,29 +177,11 @@ ozi_close_io()
   stream = nullptr;
 }
 
-static void
-ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
-{
-  /* No strings to mess with.  Straight forward copy. */
-  *dest = (ozi_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
-}
-
-static void
-ozi_free_fsdata(void* fsdata)
-{
-  xfree(fsdata);
-}
-
 static
 ozi_fsdata*
 ozi_alloc_fsdata()
 {
-  auto* fsdata = (ozi_fsdata*) xcalloc(1, sizeof(ozi_fsdata));
-  fsdata->fs.type = FS_OZI;
-  fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
-  fsdata->fs.destroy = ozi_free_fsdata;
+  auto* fsdata = new ozi_fsdata;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
@@ -618,7 +608,7 @@ ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name
   case 2:
     /* new track flag */
     if ((str.toInt() == 1) && (trk_head->rte_waypt_ct > 0)) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       track_add_head(trk_head);
       if (trk_name) {
         trk_head->rte_name = trk_name;
@@ -711,7 +701,7 @@ ozi_parse_routeheader(int field, const QString& str)
   switch (field) {
   case 0:
     /* R */
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     break;
   case 1:
@@ -750,7 +740,7 @@ data_read()
      */
     if (linecount == 1) {
       if (buff.contains("Track Point")) {
-        trk_head = route_head_alloc();
+        trk_head = new route_head;
         track_add_head(trk_head);
         ozi_objective = trkdata;
       } else if (buff.contains("Route File")) {
@@ -844,8 +834,7 @@ data_read()
       case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
           ozi_fsdata_used = true;
-          fs_chain_add(&(wpt_tmp->fs),
-                       (format_specific_data*) fsdata);
+          wpt_tmp->fs.FsChainAdd(fsdata);
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {
@@ -858,7 +847,7 @@ data_read()
       }
 
       if (!ozi_fsdata_used) {
-        fs_chain_destroy((format_specific_data*) fsdata);
+        delete fsdata;
       }
 
     } else {
@@ -878,7 +867,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   int faked_fsdata = 0;
   int icon = 0;
 
-  auto* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  const auto* fs = reinterpret_cast<ozi_fsdata*>(wpt->fs.FsChainFind(kFsOzi));
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

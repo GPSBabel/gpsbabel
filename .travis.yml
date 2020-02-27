@@ -3,7 +3,7 @@ language: cpp
 matrix:
   include:
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: gcc
@@ -11,7 +11,7 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG="qtio"
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: clang
@@ -19,7 +19,7 @@ matrix:
         - BUILD_TYPE="docker"
         - DOCKER_IMG="qtio"
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       services: docker
       compiler: gcc
@@ -74,25 +74,20 @@ matrix:
           - $HOME/Cache
         timeout: 600
     - os: linux
-      dist: xenial
+      dist: bionic
       sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
-        - QT_VERSION="5.9.9"
       addons:
         apt:
           packages:
-            - libusb-1.0-0-dev
             - gcovr
             - lcov
-            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
-      cache:
-        directories:
-          - $HOME/Cache
+            - libusb-1.0-0-dev
+            - qt5-default
 
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_install_linux_coverage ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then ./tools/travis_install_linux_local ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
 

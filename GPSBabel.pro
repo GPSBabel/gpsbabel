@@ -99,6 +99,7 @@ HEADERS =  \
 	filter.h \
 	filter_vecs.h \
 	format.h \
+	formspec.h \
 	garmin_device_xml.h \
 	garmin_fs.h \
 	garmin_gpi.h \
@@ -138,12 +139,14 @@ HEADERS =  \
 	mynav.h \
 	navilink.h \
 	session.h \
+	shape.h \
 	shapelib/shapefil.h \
 	strptime.h \
 	units.h \
 	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
+	yahoo.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
 	zlib/gzguts.h \

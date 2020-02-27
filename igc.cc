@@ -200,7 +200,7 @@ static void igc_task_rec(const char* rec)
     creation = mkgmtime(&tm);
 
     // Create a route to store the task data in.
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     rte_head->rte_name = task_num;
     rte_head->rte_desc = QStringLiteral(DATEMAGIC) + flight_date + QStringLiteral(": ") + task_desc;
     route_add_head(rte_head);
@@ -346,14 +346,14 @@ static void data_read()
       }
       // Create a track for pressure altitude waypoints
       if (!pres_head) {
-        pres_head = route_head_alloc();
+        pres_head = new route_head;
         pres_head->rte_name = PRESTRKNAME;
         pres_head->rte_desc = trk_desc;
         track_add_head(pres_head);
       }
       // Create a second track for GNSS altitude waypoints
       if (!gnss_head) {
-        gnss_head = route_head_alloc();
+        gnss_head = new route_head;
         gnss_head->rte_name = GNSSTRKNAME;
         gnss_head->rte_desc = trk_desc;
         track_add_head(gnss_head);

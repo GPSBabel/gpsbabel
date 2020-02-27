@@ -401,6 +401,8 @@ read_file_header()
   }
 
   reclen = FREAD_i32;
+  is_fatal((reclen + 1 > int(sizeof(buf))),
+           MYNAME ": Invalid record length\n");
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
@@ -435,7 +437,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   res = new Waypoint;
 
   gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&res->fs, (format_specific_data*) gmsd);
+  res->fs.FsChainAdd(gmsd);
   res->shortname = fread_cstr();
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
   garmin_fs_t::set_wpt_class(gmsd, wpt_class);
@@ -659,7 +661,7 @@ read_route()
   rte_ct++;
   int warnings = 0;
 
-  route_head* rte = route_head_alloc();
+  auto* rte = new route_head;
   rte->rte_name = fread_cstr();
   FREAD(buf, 1);			/* display/autoname - 1 byte */
 
@@ -816,7 +818,7 @@ read_route()
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       if (gmsd == nullptr) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+        wpt->fs.FsChainAdd(gmsd);
       }
       garmin_fs_t::set_wpt_class(gmsd, wpt_class);
       gmsd->ilinks = il_root;
@@ -864,7 +866,7 @@ read_track()
 
   trk_ct++;
 
-  route_head* res = route_head_alloc();
+  auto* res = new route_head;
   res->rte_name = fread_cstr();
 //	res->rte_num = trk_ct;
 

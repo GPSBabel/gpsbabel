@@ -264,7 +264,7 @@ process_gpsfile(uint8_t data[], route_head** track)
       strncpy(buf, model->name, sizeof(buf));
       strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
                gmtime(&creation_time));
-      *track = route_head_alloc();
+      *track = new route_head;
       (*track)->rte_name = buf;
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);

@@ -20,21 +20,21 @@ compare ${REFERENCE}/dusky.gnuplot ${TMPDIR}/pathdist.out
 # it.
 #
 
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o tabsep -F ${TMPDIR}/tabsep.in
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o tabsep -F ${TMPDIR}/tabsep.in
 gpsbabel -i tabsep -f ${TMPDIR}/tabsep.in -o geo -F ${TMPDIR}/tabsep.out
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geotabsep.out
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o geo -F ${TMPDIR}/geotabsep.out
 compare ${TMPDIR}/tabsep.out ${TMPDIR}/geotabsep.out
 
 #
 # Now do the same for custom - it has the same issues.
 #
 
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o custom -F ${TMPDIR}/custom.in
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o custom -F ${TMPDIR}/custom.in
 gpsbabel -i custom -f ${TMPDIR}/custom.in -o geo -F ${TMPDIR}/custom.out
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geocustom.out
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o geo -F ${TMPDIR}/geocustom.out
 
 #
 # Write something to the various output-only formats
 #
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
 

@@ -93,7 +93,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
   long lon = 0;
   const QByteArray qbstr = encoded_points.toUtf8();
 
-  route_head* routehead = route_head_alloc();
+  auto* routehead = new route_head;
   if (args == "overview_polyline") {
     routehead->rte_name = "overview";
     routehead->rte_desc = "Overview";

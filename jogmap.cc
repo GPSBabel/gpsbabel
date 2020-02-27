@@ -44,7 +44,7 @@ static QVector<arglist_t> jogmap_args = {
 static void
 jogmap_markers(xg_string, const QXmlStreamAttributes*)
 {
-  trk = route_head_alloc();
+  trk = new route_head;
   track_add_head(trk);
 }
 
