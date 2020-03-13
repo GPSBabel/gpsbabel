@@ -131,7 +131,7 @@ struct tw_lap {
   uint16_t       FinishRecPt;      // Finish record point
 };
 
-char* opt_timezone = nullptr;
+static char* opt_timezone = nullptr;
 static QTimeZone* timezn = nullptr;
 
 static
