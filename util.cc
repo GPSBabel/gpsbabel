@@ -41,6 +41,7 @@
 #include <QtCore/QTextStream>          // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <QtCore/QXmlStreamAttribute>  // for QXmlStreamAttribute
 #include <QtCore/Qt>                   // for CaseInsensitive
+#include <QtCore/QTimeZone>            // for QTimeZone
 #include <QtCore/QtGlobal>             // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
