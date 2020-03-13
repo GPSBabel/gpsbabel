@@ -1,71 +1,43 @@
 // Display all the Garmin icons that we know about so we can copy/paste
-// into our doc, http://www.gpsbabel.org/htmldoc-development/GarminIcons.html
+// into our doc, xmldoc/chapters/garmin_icons.xml.
+// cd mkicondoc && qmake && make
 
+#include <algorithm>             // for sort
+#include <cstdio>                // for printf
+#include <cstring>               // for strcmp
 
-#include "fatal.cc"
-#include "cet.cc"
-#include "globals.cc"
-#include "jeeps/gpsmath.cc"
-#include "util.cc"
-#include <cstdlib> // qsort
+#include <QtCore/QVector>        // for QVector<>::iterator, QVector
 
+#include "garmin_icon_tables.h"  // for garmin_icon_table, garmin_smart_icon_table
+#include "garmin_tables.h"       // for icon_mapping_t
 
-
-void tbl_ent(int n, ...)
-{
-  int i;
-  char* t;
-  va_list args;
-  va_start(args, n);
-#if 0
-  for (i = 0; i < n; i++) {
-    t = va_arg(args, char*);
-    printf("%s%s", i > 0 ? "," : "", t);
-
-  }
-#else
-  t = va_arg(args, char*);
-  printf("<member>%s</member>", t);
-#endif
-  printf("\n");
-  va_end(args);
-
-
-}
-
-#include "garmin_tables.cc"
-int sort_garmin(const void* a, const void* b)
-{
-  const icon_mapping_t* ap = (const icon_mapping_t*) a;
-  const icon_mapping_t* bp = (const icon_mapping_t*) b;
-  return (case_ignore_strcmp((ap)->icon, (bp)->icon));
-}
-
-void garmin()
-{
-  icon_mapping_t* i;
-  int n = 0;
-  char pbuf[100];
-  char mbuf[100];
-
-  for (i = garmin_icon_table; i->icon; i++) {
-    n++;
-  }
-
-  qsort(garmin_icon_table,
-        n,
-        sizeof(garmin_icon_table[0]),
-        sort_garmin);
-
-  for (i = garmin_icon_table; i->icon; i++) {
-    snprintf(pbuf, sizeof(pbuf), "%d", i->pcxsymnum);
-    snprintf(mbuf, sizeof(mbuf), "%d", i->mpssymnum);
-    tbl_ent(3, i->icon, pbuf, mbuf);
-  }
-}
 
 int main()
 {
-  garmin();
+  QVector<icon_mapping_t> table;
+  for (int index = 0; true ; ++index) {
+    icon_mapping_t entry = garmin_icon_table[index];
+    if (entry.icon == nullptr) {
+      break;
+    }
+    table.append(entry);
+  }
+  for (int index = 0; true ; ++index) {
+    icon_mapping_t entry = garmin_smart_icon_table[index];
+    if (entry.icon == nullptr) {
+      break;
+    }
+    table.append(entry);
+  }
+  
+  auto sort_lambda = [](const icon_mapping_t& a, const icon_mapping_t& b)->bool {
+    return strcmp(a.icon, b.icon) < 0;
+  };
+  std::sort(table.begin(), table.end(), sort_lambda);
+
+  for (const auto& entry : table) {
+    printf("    <member>%s</member>\n",entry.icon);
+  }
+
   return 0;
 }

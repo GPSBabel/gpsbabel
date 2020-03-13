@@ -39,7 +39,7 @@ rd_init(const QString& fname)
   file_in = gbfopen_le(fname, "rb", MYNAME);
   gbfread(h, 1, sizeof(h), file_in);
 
-  trk_head = route_head_alloc();
+  trk_head = new route_head;
   track_add_head(trk_head);
 
   trk_head->rte_name = lrtrim(h);
@@ -102,7 +102,7 @@ bushnell_read()
       break;
     }
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
     wpt_tmp->latitude  = lat_tmp / 10000000.0;
     wpt_tmp->longitude = lon_tmp / 10000000.0;
 

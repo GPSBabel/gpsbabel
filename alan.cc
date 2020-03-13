@@ -197,7 +197,7 @@ static unsigned int byte_order()
 {
   unsigned long test = BYTEORDER_TEST;
 
-  unsigned char* ptr = (unsigned char*)(&test);
+  auto* ptr = (unsigned char*)(&test);
   unsigned int order = (ptr[0] << 12) | (ptr[1] << 8) | (ptr[2] << 4) | ptr[3];
 
   return order;
@@ -205,22 +205,22 @@ static unsigned int byte_order()
 
 static void sw_bytes(void* word)
 {
-  uint8_t* p = (uint8_t*) word;
-  uint16_t* r = (uint16_t*) word;
+  auto* p = (uint8_t*) word;
+  auto* r = (uint16_t*) word;
 
   *r = (uint16_t)(p[1] << 8 | p[0]);
 }
 static void sw_words(void* dword)
 {
-  uint16_t* p = (uint16_t*) dword;
-  uint32_t* r = (uint32_t*) dword;
+  auto* p = (uint16_t*) dword;
+  auto* r = (uint32_t*) dword;
 
   *r = (uint32_t)(p[0] << 16 | p[1]);
 }
 static void rev_bytes(void* dword)
 {
-  uint8_t* p = (uint8_t*) dword;
-  uint32_t* r = (uint32_t*) dword;
+  auto* p = (uint8_t*) dword;
+  auto* r = (uint32_t*) dword;
 
   *r = (uint32_t)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
@@ -484,7 +484,7 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   }
   struct wpt* wpt = &(wprdata->wpt[idx]);
 
-  Waypoint* WP = new Waypoint;
+  auto* WP = new Waypoint;
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
@@ -537,7 +537,7 @@ static void wpr_read()
     }
     struct rte* rte = &(wprdata.rte[idx]);
 
-    route_head* RT = route_head_alloc();
+    auto* RT = new route_head;
     RT->rte_num = i;
     for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {}
     char *s = xstrndup(rte->name,j+1);
@@ -590,7 +590,7 @@ static void trl_read()
     if (trkhdr->occupied == TRK_UNUSED) {
       continue;
     }
-    route_head* TL = route_head_alloc();
+    auto* TL = new route_head;
     for (j=TRK_NAME_LEN-1;
          j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
          j--) {}
@@ -612,7 +612,7 @@ static void trl_read()
     /* track points */
     struct trklog* trklog = &(trldata.trklog[i]);
     for (j=0; j<trkhdr->totalpt; j++) {
-      Waypoint* WP = new Waypoint;
+      auto* WP = new Waypoint;
       WP->latitude  = -pt2deg(trklog->pt[j].y);
       WP->longitude =  pt2deg(trklog->pt[j].x);
       WP->altitude  =  hgt2m(trklog->sh[j].height);

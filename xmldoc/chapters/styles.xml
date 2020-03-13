@@ -807,24 +807,24 @@ longitude)
       <section id="style_def_timettime">
          <title>TIMET_TIME</title>
          <para>TIMET_TIME is the waypoint's creation time, if any.  This is actually
-   the integer seconds since 1/1/1970 (let's not start the holy war) and
-   is handled internally as a LONG INTEGER and requires a LONG INTEGER
+   the integer seconds since 1970-01-01T00:00:00 UTC. It
+   is handled internally as a 64 bit integer and requires a LONG LONG INTEGER
    printf conversion.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TIMET_TIME,&quot;&quot;,&quot;%ld&quot;
+         <screen format="linespecific">IFIELD TIMET_TIME,&quot;&quot;,&quot;%lld&quot;
 </screen>
       </section>
       <section id="style_def_timettimems">
          <title>TIMET_TIME_MS</title>
          <para>TIMET_TIME_MS is the same as TIMET_TIME, but expressed in milliseconds.
-   It too is handled internally as a LONG INTEGER and requires a LONG INTEGER
+   It too is handled internally as a 64 bit integer and requires a LONG LONG INTEGER
    printf conversion.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TIMET_TIME_MS,&quot;&quot;,&quot;%ld&quot;
+         <screen format="linespecific">IFIELD TIMET_TIME_MS,&quot;&quot;,&quot;%lld&quot;
 </screen>
       </section>
       <section id="style_def_yyyymmdd">
@@ -1207,6 +1207,18 @@ longitude)
 
 
             <screen format="linespecific">COUNTRY, &quot;&quot;, &quot;%s&quot;</screen></para>
+      </section>
+      <section id="style_email">
+         <title>EMAIL</title>
+         <para>An email address associated with a position.</para>
+         <para>example:
+
+
+
+
+
+
+            <screen format="linespecific">EMAIL, &quot;&quot;, &quot;%s&quot;</screen></para>
       </section>
       <section id="style_facility">
          <title>FACILITY</title>

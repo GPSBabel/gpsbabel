@@ -36,8 +36,6 @@
 #include "zlib.h"               // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QChar>         // for QChar
 #include <QtCore/QList>         // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
 #include <QtCore/QString>       // for QString
 #include <QtCore/QStringRef>    // for QStringRef
@@ -46,7 +44,7 @@
 #include <QtCore/Qt>            // for CaseInsensitive
 #include <QtCore/QtGlobal>      // for foreach
 
-#include "cet.h"                // for cet_cs_vec_t
+#include "formspec.h"           // for FormatSpecificData
 #include "inifile.h"            // for inifile_t
 #include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
 #include "session.h"            // for session_t
@@ -66,39 +64,54 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
-constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * 0.3048; };
-constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * 3.2808399; };
+/*
+ * The constants marked "exact in decimal notation" may be more accurately
+ * converted to doubles when we don't ask the compiler to do any multiplication.
+ * e.g. kMetersPerMile = 0.0254 * 12.0 * 5280.0; might have a larger error than
+ *      kMetersPerMile = 1609.344;
+ * Historically we have had some problematic test cases where this mattered.
+ * It is a better idea to use test cases that aren't so demanding.
+ */
+constexpr double kMetersPerFoot = 0.3048; /* exact in decimal notation */
+constexpr double kFeetPerMeter = 1.0 / kMetersPerFoot;
+constexpr double kMetersPerMile = 1609.344; /* exact in decimal notation */
+constexpr double kMilesPerMeter = 1.0 / kMetersPerMile;
+constexpr double kKilometersPerMile = 1.609344; /* exact in decimal notation */
+constexpr double kMilesPerKilometer = 1.0 / kKilometersPerMile;
 
-constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;};	/* nautical miles */
-constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;};
+constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * kMetersPerFoot; }
+constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * kFeetPerMeter; }
 
-constexpr double MILES_TO_METERS(double a) { return (a) * 1609.344;};
-constexpr double METERS_TO_MILES(double a) { return (a) / 1609.344;};
-constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;};
+constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}	/* nautical miles */
+constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;}
 
-constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32);};
-constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32) / 1.8);};
+constexpr double MILES_TO_METERS(double a) { return (a) * kMetersPerMile;}
+constexpr double METERS_TO_MILES(double a) { return (a) * kMilesPerMeter;}
+constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;}
+
+constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32.0);}
+constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32.0) / 1.8);}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
 
 /* meters/second to kilometers/hour */
-constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;};
+constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;}
 
 /* meters/second to miles/hour */
-constexpr double MPS_TO_MPH(double a) { return METERS_TO_MILES(a) * SECONDS_PER_HOUR;};
+constexpr double MPS_TO_MPH(double a) { return METERS_TO_MILES(a) * SECONDS_PER_HOUR;}
 
 /* meters/second to knots */
-constexpr double MPS_TO_KNOTS(double a) { return MPS_TO_KPH((a)/1.852);};
+constexpr double MPS_TO_KNOTS(double a) { return MPS_TO_KPH((a)/1.852);}
 
 /* kilometers/hour to meters/second */
-constexpr double KPH_TO_MPS(double a) { return a * 1000.0/SECONDS_PER_HOUR;};
+constexpr double KPH_TO_MPS(double a) { return a * 1000.0/SECONDS_PER_HOUR;}
 
 /* miles/hour to meters/second */
 #define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
 
 /* knots to meters/second */
-constexpr double KNOTS_TO_MPS(double a)  {return KPH_TO_MPS(a) * 1.852; };
+constexpr double KNOTS_TO_MPS(double a)  {return KPH_TO_MPS(a) * 1.852; }
 
 #define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
@@ -186,8 +199,6 @@ struct global_options {
   int verbose_status;	/* set by GUI wrappers for status */
   int smart_icons;
   int smart_names;
-  cet_cs_vec_t* charset;
-  QString charset_name;
   inifile_t* inifile;
   QTextCodec* codec;
 };
@@ -273,7 +284,7 @@ public:
     placer_id(0),
     favorite_points(0)
   {}
-  int id; /* The decimal cache number */
+  long long id; /* The decimal cache number */
   geocache_type type:5;
   geocache_container container:4;
   unsigned int diff:6; /* (multiplied by ten internally) */
@@ -293,39 +304,12 @@ public:
   QString personal_note;
 };
 
-using fs_destroy = void (*)(void*);
-using fs_copy = void (*)(void**, void*);
-using fs_convert = void (*)(void*);
-
-struct format_specific_data {
-  long type;
-  format_specific_data* next;
-
-  fs_destroy destroy;
-  fs_copy copy;
-  fs_convert convert;
-};
-
 class gb_color
 {
 public:
   int bbggrr{-1};   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
   unsigned char opacity{255};  // 0 == transparent.  255 == opaque.
 };
-
-
-format_specific_data* fs_chain_copy(format_specific_data* source);
-void fs_chain_destroy(format_specific_data* chain);
-format_specific_data* fs_chain_find(format_specific_data* chain, long type);
-void fs_chain_add(format_specific_data** chain, format_specific_data* data);
-
-#define FS_GPX 0x67707800L
-#define FS_AN1W 0x616e3177L
-#define FS_AN1L 0x616e316cL
-#define FS_AN1V 0x616e3176L
-#define FS_OZI 0x6f7a6900L
-#define FS_GMSD 0x474d5344L	/* GMSD = Garmin specific data */
-#define FS_LOWRANCEUSR4 0x615f234cL
 
 /*
  * Structures and functions for multiple URLs per waypoint.
@@ -382,7 +366,6 @@ class wp_flags
 public:
   wp_flags() :
     shortname_is_synthetic(0),
-    cet_converted(0),
     fmt_use(0),
     temperature(0),
     proximity(0),
@@ -393,7 +376,6 @@ public:
     is_split(0),
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
-  unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   /* "flagged fields" */
   unsigned int temperature:1;		/* temperature field is set */
@@ -539,7 +521,7 @@ public:
   float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters? */
   geocache_data* gc_data;
-  format_specific_data* fs;
+  FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
@@ -556,8 +538,7 @@ public:
   QString CreationTimeXML() const;
   gpsbabel::DateTime GetCreationTime() const;
   void SetCreationTime(const gpsbabel::DateTime& t);
-  void SetCreationTime(time_t t);
-  void SetCreationTime(time_t t, int ms);
+  void SetCreationTime(qint64 t, qint64 ms = 0);
   geocache_data* AllocGCData();
   int EmptyGCData() const;
 };
@@ -615,7 +596,6 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 unsigned int waypt_count();
-void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
@@ -625,6 +605,7 @@ void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
 void waypt_flush_all();
+void waypt_deinit();
 void waypt_append(WaypointList* src);
 void waypt_backup(WaypointList** head_bak);
 void waypt_restore(WaypointList* head_bak);
@@ -709,8 +690,7 @@ public:
   UrlList rte_urls;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
-  format_specific_data* fs;
-  unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
+  FormatSpecificDataList fs;
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   const session_t* session;	/* pointer to a session struct */
@@ -912,8 +892,6 @@ using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
 
-QString get_option(const QStringList& options, const char* argname);
-
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
 
@@ -926,7 +904,7 @@ geocache_container gs_mkcont(const QString& t);
 struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
 using short_handle = mkshort_handle_imp*;
 
-char* mkshort(short_handle,  const char*);
+char* mkshort(short_handle,  const char*, bool);
 QString mkshort(short_handle,  const QString&);
 short_handle mkshort_new_handle();
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
@@ -939,15 +917,14 @@ void setshort_mustuniq(short_handle,  int n);
 void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
-void setshort_is_utf8(short_handle h, int is_utf8);
 
-#define ARGTYPE_UNKNOWN    0x00000000
-#define ARGTYPE_INT        0x00000001
-#define ARGTYPE_FLOAT      0x00000002
-#define ARGTYPE_STRING     0x00000003
-#define ARGTYPE_BOOL       0x00000004
-#define ARGTYPE_FILE       0x00000005
-#define ARGTYPE_OUTFILE    0x00000006
+#define ARGTYPE_UNKNOWN    0x00000000U
+#define ARGTYPE_INT        0x00000001U
+#define ARGTYPE_FLOAT      0x00000002U
+#define ARGTYPE_STRING     0x00000003U
+#define ARGTYPE_BOOL       0x00000004U
+#define ARGTYPE_FILE       0x00000005U
+#define ARGTYPE_OUTFILE    0x00000006U
 
 /* REQUIRED means that the option is required to be set.
  * See also BEGIN/END_REQ */
@@ -1037,7 +1014,7 @@ struct position_ops_t {
  */
 struct ff_vecs_t {
   ff_type type;
-  ff_cap cap[3];
+  QVector<ff_cap> cap;
   ff_init rd_init;
   ff_init wr_init;
   ff_deinit rd_deinit;
@@ -1049,7 +1026,7 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  QString name;		/* dyn. initialized by find_vec */
+  void* unused; /* TODO: delete this field */
 };
 
 struct style_vecs_t {
@@ -1063,18 +1040,6 @@ void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const QString&);
-void assign_option(const QString& vecname, arglist_t* arg, const char* val);
-void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
-void disp_vecs();
-void disp_vec(const QString& vecname);
-void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
-bool validate_args(const QString& name, const QVector<arglist_t>* args);
-bool validate_formats();
-void init_vecs();
-void exit_vecs();
-void disp_formats(int version);
-const char* name_option(uint32_t type);
 void printposn(double c, int is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
@@ -1152,7 +1117,7 @@ const QString get_filename(const QString& fname);			/* extract the filename port
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 /* this lives in gpx.c */
-gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
+gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 
 QString rot13(const QString& s);
 

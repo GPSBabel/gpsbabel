@@ -111,7 +111,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes*)
     waypt = new Waypoint;
     break;
   case 1:
-    track = route_head_alloc();
+    track = new route_head;
     break;
   default:
     fatal(MYNAME ": Unknown object type %s!\n", qPrintable(args));

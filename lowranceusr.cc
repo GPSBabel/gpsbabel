@@ -85,27 +85,33 @@
 
 */
 
-#include <cmath>                 // for M_PI, atan, exp, log, tan
-#include <cstdio>                // for printf, snprintf, sprintf, SEEK_CUR
-#include <cstdlib>               // for atoi, abs
-#include <cstring>               // for strlen, strcmp
-#include <ctime>
+#include <algorithm>              // for min
+#include <cmath>                  // for M_PI, round, atan, exp, log, tan
+#include <cstdio>                 // for printf, sprintf, SEEK_CUR
+#include <cstdlib>                // for atoi, abs
+#include <cstring>                // for strcmp, strlen
+#include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QDate>          // for QDate
-#include <QtCore/QDateTime>      // for QDateTime
-#include <QtCore/QLatin1String>  // for QLatin1String
-#include <QtCore/QString>        // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>     // for QTextCodec
-#include <QtCore/QTextEncoder>   // for QTextEncoder
-#include <QtCore/QTime>          // for QTime
-#include <QtCore/Qt>             // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>       // for qPrintable, uint, foreach
-#include <src/core/logging.h>
+#include <QtCore/QByteArray>      // for QByteArray
+#include <QtCore/QDate>           // for QDate
+#include <QtCore/QDateTime>       // for QDateTime
+#include <QtCore/QLatin1String>   // for QLatin1String
+#include <QtCore/QList>           // for QList
+#include <QtCore/QScopedPointer>  // for QScopedPointer
+#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
+#include <QtCore/QStringRef>      // for QStringRef
+#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QtCore/QTextEncoder>    // for QTextEncoder
+#include <QtCore/QTime>           // for QTime
+#include <QtCore/QVector>         // for QVector
+#include <QtCore/Qt>              // for CaseInsensitive, UTC
+#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "gbfile.h"              // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfputc, gbfwrite, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfputdbl, gbfile, gbfputflt, gbfread, gbfseek, gbfopen_le
-#include "src/core/datetime.h"   // for DateTime
+#include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
+#include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "src/core/datetime.h"    // for DateTime
+#include "src/core/logging.h"     // for Warning
 
 
 struct lowranceusr_icon_mapping_t {
@@ -336,9 +342,7 @@ static char*          opt_content_descr;
 static char*          opt_serialnum;
 static int            opt_serialnum_i;
 
-static Waypoint**     waypt_table;
-static int            waypt_table_sz;
-static int            waypt_table_ct;
+static QList<const Waypoint*>* waypt_table{nullptr};
 
 /* from waypt.c, we need to iterate over waypoints when extracting routes */
 extern WaypointList* global_waypoint_list;
@@ -367,21 +371,27 @@ static QTextCodec*    utf16le_codec{nullptr};
 /* Jan 1, 2000 00:00:00 */
 const time_t base_time_secs = 946706400;
 
-struct lowranceusr4_fsdata {
-  format_specific_data fs;
-  uint uid_unit;
-  uint uid_unit2;
-  int uid_seq_low;
-  int uid_seq_high;
-  uint UUID1;
-  uint UUID2;
-  uint UUID3;
-  uint UUID4;
-  int  flags;
-  int  color;
-  const char *color_desc;
-  int  icon_num;
-  float depth;
+struct lowranceusr4_fsdata : FormatSpecificData {
+  lowranceusr4_fsdata() : FormatSpecificData(kFsLowranceusr4) {}
+
+  lowranceusr4_fsdata* clone() const override
+  {
+    return new lowranceusr4_fsdata(*this);
+  }
+
+  uint uid_unit{0};
+  uint uid_unit2{0};
+  int uid_seq_low{0};
+  int uid_seq_high{0};
+  uint UUID1{0};
+  uint UUID2{0};
+  uint UUID3{0};
+  uint UUID4{0};
+  int  flags{0};
+  int  color{0};
+  const char *color_desc{nullptr};
+  int  icon_num{0};
+  float depth{0.0};
 };
 
 class Lowranceusr4Timestamp {
@@ -391,39 +401,6 @@ class Lowranceusr4Timestamp {
 
   Lowranceusr4Timestamp(unsigned int jd, unsigned int ms) : julian_day_number{jd}, milliseconds{ms} {}
 };
-
-
-/* fsdata manipulation functions */
-static void
-lowranceusr4_free_fsdata(void* fsdata)
-{
-  xfree(fsdata);
-}
-
-static void
-lowranceusr4_copy_fsdata(lowranceusr4_fsdata** dest, lowranceusr4_fsdata* src)
-{
-  *dest = (lowranceusr4_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
-}
-
-static
-lowranceusr4_fsdata*
-lowranceusr4_alloc_fsdata()
-{
-  lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
-  fsdata->fs.type = FS_LOWRANCEUSR4;
-  fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
-  fsdata->fs.destroy = lowranceusr4_free_fsdata;
-  fsdata->fs.convert = nullptr;
-
-  fsdata->uid_unit = 0;
-  fsdata->uid_seq_low = 0;
-  fsdata->uid_seq_high = 0;
-
-  return fsdata;
-}
 
 
 
@@ -440,46 +417,30 @@ same_points(const Waypoint* A, const Waypoint* B)
 }
 
 static void
-register_waypt(const Waypoint* ref)
+register_waypt(const Waypoint* wpt)
 {
-  Waypoint* wpt = const_cast<Waypoint*>(ref);
-
-  for (int i = 0; i < waypt_table_ct; i++) {
-    Waypoint* cmp = waypt_table[i];
-
+  for (const Waypoint* cmp : qAsConst(*waypt_table)) {
     if (same_points(wpt, cmp)) {
       return;
     }
   }
 
-  if (waypt_table_ct >= waypt_table_sz) {
-    waypt_table_sz += 32;
-    if (waypt_table) {
-      waypt_table = (Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
-    } else {
-      waypt_table = (Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
-    }
-  }
-
   if (global_opts.debug_level >= 2) {
     printf(MYNAME " adding waypt %s (%s) to table at index %d\n",
-           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table_ct);
+           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table->size());
   }
 
-  waypt_table[waypt_table_ct] = wpt;
-  waypt_table_ct++;
+  waypt_table->append(wpt);
 }
 
 /* end borrowed from raymarine.c */
 
-static Waypoint*
+static const Waypoint*
 lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, *global_waypoint_list) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->uid_unit == uid_unit &&
         fs->uid_seq_low == uid_seq_low &&
@@ -495,14 +456,12 @@ lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
   return nullptr;
 }
 
-static Waypoint*
+static const Waypoint*
 lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
-  lowranceusr4_fsdata* fs = nullptr;
-
   // Iterate with waypt_disp_all?
-  foreach (Waypoint* waypointp, *global_waypoint_list) {
-    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+    const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->UUID1 == id1 &&
         fs->UUID2 == id2 &&
@@ -559,9 +518,8 @@ lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char)
   if (bytes_per_char == 1) {
     qba = buf.toUtf8();
   } else {
-    QTextEncoder* encoder = utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader);
+    QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
     qba = encoder->fromUnicode(buf);
-    delete encoder;
   }
   int len = qba.size();
   gbfputint32(len, file_out);
@@ -611,7 +569,7 @@ static int lowranceusr_common_find_icon_number_from_desc(const QString& desc, co
    * Also return the icon number for descriptions of "icon-"
    * followed by a numeric icon number.
    */
-  int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
+  int n = desc.midRef(desc.startsWith("icon-") ? 5 : 0).toInt();
   if (n)  {
     return n;
   }
@@ -760,6 +718,7 @@ wr_init(const QString& fname)
     fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
+  waypt_table = new QList<const Waypoint*>;
 }
 
 static void
@@ -768,6 +727,8 @@ wr_deinit()
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
   utf16le_codec = nullptr;
+  delete waypt_table;
+  waypt_table = nullptr;
 }
 
 /**
@@ -819,10 +780,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present)
    */
   if (rstream_version == 0) {
     float read_alt = gbfgetflt(file_in);
-    char buf[32];
-    sprintf(buf, "%15.10f", read_alt);
-    // test for both cases to avoid compiler differences
-    if ((strcmp(buf, "-nan") == 0) || (strcmp(buf, "nan") == 0)) {
+    if (std::isnan(read_alt)) {
       wpt_tmp->altitude = unknown_alt;
     } else if (METERS_TO_FEET(wpt_tmp->altitude) <= -10000) {
       wpt_tmp->altitude = unknown_alt;
@@ -934,8 +892,8 @@ lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 {
   int waypoint_version;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  wpt_tmp->fs.FsChainAdd(fsdata);
 
   if (reading_version > 4) {
     /* USR 5 and 6 have four additional data values at the start of each Waypoint */
@@ -1118,7 +1076,7 @@ lowranceusr_parse_waypts()
   }
 
   for (int i = 0; i < NumWaypoints && !gbfeof(file_in); i++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     switch (reading_version) {
     case 2:
@@ -1166,7 +1124,7 @@ lowranceusr_parse_route()
 
   /* waypoints */
   for (int j = 0; j < num_legs; j++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
     if (global_opts.debug_level == 99) {
       printf(MYNAME " parse_route:");
     }
@@ -1179,10 +1137,13 @@ static void
 lowranceusr4_parse_route()
 {
   int route_version;
-  int UUID1, UUID2, UUID3, UUID4;
+  int UUID1 = 0;
+  int UUID2 = 0;
+  int UUID3 = 0;
+  int UUID4 = 0;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  rte_head->fs.FsChainAdd(fsdata);
 
   if (reading_version >= 5) {
     /* Routes have Universal IDs */
@@ -1237,7 +1198,7 @@ lowranceusr4_parse_route()
       uint uid_unit = gbfgetint32(file_in);
       uint uid_seq_low = gbfgetint32(file_in);
       uint uid_seq_high = gbfgetint32(file_in);
-      Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
+      const Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
@@ -1253,7 +1214,7 @@ lowranceusr4_parse_route()
       UUID2 = gbfgetint32(file_in);
       UUID3 = gbfgetint32(file_in);
       UUID4 = gbfgetint32(file_in);
-      Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
+      const Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
@@ -1297,7 +1258,7 @@ lowranceusr_parse_routes()
   }
 
   for (int i = 0; i < num_routes; i++) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = i+1;
 
@@ -1329,7 +1290,7 @@ lowranceusr_parse_icons()
     int    icon_number = gbfgetint32(file_in);
 
     if (opt_ignoreicons == nullptr) {          /* Option not specified if NULL */
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       /* position coord lat & long */
       wpt_tmp->latitude = latitude;
@@ -1397,7 +1358,7 @@ lowranceusr_parse_trail(int* trail_num)
       }
 
       for (int j = 0; j < num_section_points && !gbfeof(file_in); j++, num_trail_points--) {
-        Waypoint* wpt_tmp = new Waypoint;
+        auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
         wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
 
@@ -1405,7 +1366,7 @@ lowranceusr_parse_trail(int* trail_num)
         char continuous = gbfgetc(file_in);
         if (!continuous && opt_seg_break && j) {
           /* option to break trails into segments was specified */
-          auto trk_tmp = route_head_alloc();
+          auto* trk_tmp = new route_head;
           trk_tmp->rte_num = ++(*trail_num);
           trk_tmp->rte_name = trk_head->rte_name;
           track_add_head(trk_tmp);
@@ -1433,8 +1394,8 @@ lowranceusr4_parse_trail(int* trail_num)
   int trail_color;
   int trail_flags;
 
-  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
-  fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
+  auto* fsdata = new lowranceusr4_fsdata;
+  trk_head->fs.FsChainAdd(fsdata);
 
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);
@@ -1531,14 +1492,14 @@ lowranceusr4_parse_trail(int* trail_num)
     }
   }
   for (int j = 0; j < num_trail_pts; ++j) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     /* Some unknown bytes */
     gbfgetint16(file_in);
     gbfgetc(file_in);
 
     /* POSIX timestamp (a.k.a. UNIX Epoch) - seconds since Jan 1, 1970 */
-    wpt_tmp->SetCreationTime(QDateTime::fromTime_t(gbfgetint32(file_in)));
+    wpt_tmp->SetCreationTime(gbfgetint32(file_in));
 
     /* Long/Lat */
     wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */
@@ -1592,7 +1553,7 @@ lowranceusr_parse_trails()
   }
 
   for (int i = trail_num = 0; i < num_trails && !gbfeof(file_in); i++) {
-    trk_head = route_head_alloc();
+    trk_head = new route_head;
     trk_head->rte_num = ++trail_num;
     track_add_head(trk_head);
 
@@ -1794,7 +1755,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
-  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(wpt->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(wpt->fs.FsChainFind(kFsLowranceusr4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -1897,24 +1858,21 @@ lowranceusr4_write_waypoints()
 {
   /* enumerate all waypoints from both the plain old waypoint list and
      also all routes */
-  waypt_table_sz = 0;
-  waypt_table_ct = 0;
-  waypt_table = nullptr;
   waypt_disp_all(register_waypt);
   route_disp_all(nullptr, nullptr, register_waypt);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %d waypoints\n", waypt_table_ct);
+    printf(MYNAME " writing %d waypoints\n", waypt_table->size());
   }
 
-  gbfputint32(waypt_table_ct, file_out);
+  gbfputint32(waypt_table->size(), file_out);
   waypt_uid = 0;
-  for (int i = 0; i < waypt_table_ct; ++i) {
+  for (int i = 0; i < waypt_table->size(); ++i) {
     if (global_opts.debug_level >= 2) {
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
-             i, qPrintable(waypt_table[i]->shortname), qPrintable(waypt_table[i]->description));
+             i, qPrintable(waypt_table->at(i)->shortname), qPrintable(waypt_table->at(i)->description));
     }
-    lowranceusr4_waypt_disp((static_cast<const Waypoint*>(waypt_table[i])));
+    lowranceusr4_waypt_disp((waypt_table->at(i)));
   }
 }
 
@@ -1982,7 +1940,7 @@ lowranceusr_trail_hdr(const route_head* trk)
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
 
-  short num_trail_points = (short) trk->rte_waypt_ct;
+  auto num_trail_points = (short) trk->rte_waypt_ct;
   short max_trail_size = MAX_TRAIL_POINTS;
   if (num_trail_points > max_trail_size) {
     num_trail_points = max_trail_size;
@@ -2017,7 +1975,7 @@ lowranceusr_route_hdr(const route_head* rte)
   } else if (!rte->rte_desc.isEmpty()) {
     name = rte->rte_desc;
   } else {
-    name = QString().sprintf("Babel R%d", ++lowrance_route_count);
+    name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
   int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
   name.truncate(text_len);
@@ -2025,7 +1983,7 @@ lowranceusr_route_hdr(const route_head* rte)
   gbfputs(name, file_out);
 
   /* num legs */
-  short num_legs = (short) rte->rte_waypt_ct;
+  auto num_legs = (short) rte->rte_waypt_ct;
   gbfputint16(num_legs, file_out);
   char route_reversed=0;
   gbfwrite(&route_reversed, 1, 1, file_out);
@@ -2043,7 +2001,7 @@ lowranceusr4_route_hdr(const route_head* rte)
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
-  lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(rte->fs, FS_LOWRANCEUSR4);
+  const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(rte->fs.FsChainFind(kFsLowranceusr4));
 
   /* UID unit number */
   if (opt_serialnum_i > 0) {
@@ -2071,10 +2029,10 @@ lowranceusr4_route_hdr(const route_head* rte)
 static void
 lowranceusr4_route_leg_disp(const Waypoint* wpt)
 {
-  for (int i = 0; i < waypt_table_ct; i++) {
-    Waypoint* cmp = waypt_table[i];
+  for (int i = 0; i < waypt_table->size(); i++) {
+    const Waypoint* cmp = waypt_table->at(i);
     if (cmp->shortname == wpt->shortname) {
-      lowranceusr4_fsdata* fs = (lowranceusr4_fsdata*) fs_chain_find(cmp->fs, FS_LOWRANCEUSR4);
+      const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(cmp->fs.FsChainFind(kFsLowranceusr4));
 
       if (opt_serialnum_i > 0) {
         gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
@@ -2134,7 +2092,7 @@ lowranceusr_merge_trail_hdr(const route_head* trk)
     } else if (!trk->rte_desc.isEmpty()) {
       name = trk->rte_desc;
     } else {
-      name = QString().sprintf("Babel %d", trail_count);
+      name = QString::asprintf("Babel %d", trail_count);
     }
 
     int text_len = std::min(MAXUSRSTRINGSIZE, name.size());

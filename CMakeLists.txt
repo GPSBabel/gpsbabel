@@ -104,23 +104,25 @@ set(SUPPORT
 set(HEADERS
   an1sym.h
   cet.h
-  cet/ansi_x3_4_1968.h
-  cet/cp1252.h
-  cet/iso_8859_8.h
   cet_util.h
   csv_util.h
   defs.h
   explorist_ini.h
   filter.h
-  filterdefs.h
+  filter_vecs.h
+  format.h
+  formspec.h
   garmin_device_xml.h
   garmin_fs.h
   garmin_gpi.h
+  garmin_icon_tables.h
   garmin_tables.h
   gbfile.h
   gbser.h
   gbser_private.h
   gbversion.h
+  ggv_bin.h
+  gpx.h
   grtcirc.h
   heightgrid.h
   holux.h
@@ -143,15 +145,20 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
+  legacyformat.h
   magellan.h
   mapsend.h
+  mynav.h
   navilink.h
   session.h
+  shape.h
   shapelib/shapefil.h
   strptime.h
   units.h
+  vecs.h
   xcsv.h
   xmlgeneric.h
+  yahoo.h
   zlib/crc32.h
   zlib/deflate.h
   zlib/gzguts.h
@@ -215,7 +222,6 @@ if(MSVC)
 endif()
 
 if (UNIX AND NOT APPLE)
-  add_definitions(-DHAVE_LINUX_HID)
   set(LIBS ${LIBS} usb-1.0)
 endif()
 

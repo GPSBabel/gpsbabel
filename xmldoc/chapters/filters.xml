@@ -16,7 +16,7 @@
       <para> Beware that most filters only apply to a certain kind of
       data. This is usually indicated below by referring to points,
       tracks or routes in the first sentence which describes each
-      filter or in the table at <ulink url="http://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
+      filter or in the table at <ulink url="https://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
       .
 </para>
      &filters;

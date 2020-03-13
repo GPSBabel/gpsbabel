@@ -279,7 +279,7 @@ humminbird_read_wpt(gbfile* fin)
 
   /* All right! Copy the data to the gpsbabel struct... */
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   // Could probably find a way to eliminate the alloc/copy.
   char* s = xstrndup(w.name, sizeof(w.name));
@@ -352,7 +352,7 @@ humminbird_read_route(gbfile* fin)
       if ((map.value(buff))) {
         const Waypoint* wpt = map.value(buff);
         if (rte == nullptr) {
-          rte = route_head_alloc();
+          rte = new route_head;
           route_add_head(rte);
           // TODO: find a way to eliminate the copy.
           char* s = xstrndup(hrte.name, sizeof(hrte.name));
@@ -403,7 +403,7 @@ humminbird_read_track(gbfile* fin)
   /* num_points is actually one too big, because it includes the value in
      the header. But we want the extra point at the end because the
      freak-value filter below looks at points[i+1] */
-  humminbird_trk_point_t* points = (humminbird_trk_point_t*) xcalloc(th.num_points, sizeof(humminbird_trk_point_t));
+  auto* points = (humminbird_trk_point_t*) xcalloc(th.num_points, sizeof(humminbird_trk_point_t));
   if (! gbfread(points, sizeof(humminbird_trk_point_t), th.num_points-1, fin)) {
     fatal(MYNAME ": Unexpected end of file reading points!\n");
   }
@@ -411,7 +411,7 @@ humminbird_read_track(gbfile* fin)
   int32_t accum_east = th.start_east;
   int32_t accum_north = th.start_north;
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   track_add_head(trk);
 
   // TODO: find a way to eliminate the copy.
@@ -422,7 +422,7 @@ humminbird_read_track(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  Waypoint* first_wpt = new Waypoint;
+  auto* first_wpt = new Waypoint;
   double g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -431,7 +431,7 @@ humminbird_read_track(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (int i = 0 ; i<th.num_points-1 ; i++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     points[i].depth      = be_read16(&points[i].depth);
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
@@ -510,7 +510,7 @@ humminbird_read_track_old(gbfile* fin)
   /* num_points is actually one too big, because it includes the value in
      the header. But we want the extra point at the end because the
      freak-value filter below looks at points[i+1] */
-  humminbird_trk_point_old_t* points = (humminbird_trk_point_old_t*)xcalloc(th.num_points, sizeof(humminbird_trk_point_old_t));
+  auto* points = (humminbird_trk_point_old_t*)xcalloc(th.num_points, sizeof(humminbird_trk_point_old_t));
   if (! gbfread(points, sizeof(humminbird_trk_point_old_t), th.num_points-1, fin)) {
     fatal(MYNAME ": Unexpected end of file reading points!\n");
   }
@@ -518,7 +518,7 @@ humminbird_read_track_old(gbfile* fin)
   int32_t accum_east = th.start_east;
   int32_t accum_north = th.start_north;
 
-  route_head* trk = route_head_alloc();
+  auto* trk = new route_head;
   track_add_head(trk);
 
   /* The name is not in the header, but at the end of the file.
@@ -532,7 +532,7 @@ humminbird_read_track_old(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  Waypoint* first_wpt = new Waypoint;
+  auto* first_wpt = new Waypoint;
   double g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -540,7 +540,7 @@ humminbird_read_track_old(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (int i = 0 ; i<th.num_points-1 ; i++) {
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
     points[i].deltanorth = be_read16(&points[i].deltanorth);

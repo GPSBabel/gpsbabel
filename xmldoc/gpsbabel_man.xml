@@ -118,11 +118,11 @@ or as the backend for other tools. </para>
         </listitem>
       </varlistentry>
     </variablelist>
-    <para>Lists of filters and formats are given in the doc at http://www.gpsbabel.org. </para>
+    <para>Lists of filters and formats are given in the doc at https://www.gpsbabel.org. </para>
   </refsect1>
   <refsect1>
     <title>See Also</title>
-    <para>http://www.gpsbabel.org
+    <para>https://www.gpsbabel.org
 </para>
   </refsect1>
 </refentry>

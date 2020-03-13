@@ -38,15 +38,20 @@ if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
   echo "If you need to clear the cache see"
   echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+  if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
+    # the cache is being used.  modify it to reset expiration date.
+    date > ${CACHEDIR}/timestamp
+  fi
+  if [ -f "${CACHEDIR}/timestamp" ]; then
+    echo -n "Cache timestamp: "
+    cat "${CACHEDIR}/timestamp"
+  fi
 else
   rm -fr ${CACHEDIR}
   mkdir -p ${CACHEDIR}
-  pushd ${CACHEDIR}
-  # install-qt creates the install at $PWD/Qt.
-  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.gcc_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
-  popd
+  QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt-online "qt.qt5.${QT_VERSION_SHORT}.gcc_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine" ${CACHEDIR}
+  echo "export PATH=${QTDIR}/bin:$PATH" > ${CACHEDIR}/qt-${QT_VERSION}.env
   validate
-  rm ${CACHEDIR}/qt-opensource*.run
 fi
 
 # prepare locale for test_encoding_latin1, requires locales package.

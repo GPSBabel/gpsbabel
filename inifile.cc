@@ -204,9 +204,9 @@ inifile_done(inifile_t* inifile)
 }
 
 bool
-inifile_has_section(const inifile_t* inifile, const char* section)
+inifile_has_section(const inifile_t* inifile, const QString& section)
 {
-  return inifile->sections.contains(QString(section).toLower());
+  return inifile->sections.contains(section.toLower());
 }
 
 /*
@@ -248,7 +248,7 @@ inifile_readint(const inifile_t* inifile, const QString& section, const QString&
  */
 
 int
-inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, const int def)
+inifile_readint_def(const inifile_t* inifile, const QString& section, const QString& key, const int def)
 {
   int result;
 

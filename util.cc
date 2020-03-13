@@ -19,37 +19,34 @@
 
  */
 
-#include <cctype>                  // for isspace, isalpha, ispunct, tolower, toupper
-#include <cerrno>                  // for errno
-#include <cmath>                   // for fabs, floor
-#include <cstdarg>                 // for va_list, va_end, va_start, va_copy
-#include <cstdint>                 // for uint32_t
-#include <cstdio>                  // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
-#include <cstdlib>                 // for abs, getenv, calloc, free, malloc, realloc
-#include <cstring>                 // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <ctime>                   // for mktime, localtime
-#include <algorithm>               // for sort
+#include <cctype>                      // for isspace, isalpha, ispunct, tolower, toupper
+#include <cerrno>                      // for errno
+#include <cmath>                       // for fabs, floor
+#include <cstdarg>                     // for va_list, va_end, va_start, va_copy
+#include <cstdio>                      // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
+#include <cstdint>                     // for uint32_t
+#include <cstdlib>                     // for abs, getenv, calloc, free, malloc, realloc
+#include <cstring>                     // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <ctime>                       // for mktime, localtime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar, operator<=, operator>=
-#include <QtCore/QCharRef>         // for QCharRef
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QDebug>           // for QDebug
-#include <QtCore/QFileInfo>        // for QFileInfo
-#include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString, operator+
-#include <QtCore/QTextCodec>       // for QTextCodec
-#include <QtCore/QTextStream>      // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QtCore/QTimeZone>        // for QTimeZone
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QChar>                // for QChar, operator<=, operator>=
+#include <QtCore/QCharRef>             // for QCharRef
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QFileInfo>            // for QFileInfo
+#include <QtCore/QList>                // for QList
+#include <QtCore/QString>              // for QString
+#include <QtCore/QStringRef>           // for QStringRef
+#include <QtCore/QTextCodec>           // for QTextCodec
+#include <QtCore/QTextStream>          // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QtCore/QXmlStreamAttribute>  // for QXmlStreamAttribute
+#include <QtCore/Qt>                   // for CaseInsensitive
+#include <QtCore/QtGlobal>             // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
-#include "cet.h"                   // for cet_utf8_to_ucs4
-#include "src/core/datetime.h"     // for DateTime
-#include "src/core/logging.h"      // for Warning
-#include "src/core/xmltag.h"       // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
-
+#include "cet.h"                       // for cet_utf8_to_ucs4
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/xmltag.h"           // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -540,28 +537,28 @@ is_fatal(const int condition, const char* fmt, ...)
 signed int
 be_read32(const void* ptr)
 {
-  const unsigned char* i = (const unsigned char*) ptr;
+  const auto* i = (const unsigned char*) ptr;
   return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
 }
 
 signed int
 be_read16(const void* ptr)
 {
-  const unsigned char* i = (const unsigned char*) ptr;
+  const auto* i = (const unsigned char*) ptr;
   return i[0] << 8 | i[1];
 }
 
 unsigned int
 be_readu16(const void* ptr)
 {
-  const unsigned char* i = (const unsigned char*) ptr;
+  const auto* i = (const unsigned char*) ptr;
   return i[0] << 8 | i[1];
 }
 
 void
 be_write16(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) ptr;
+  auto* p = (unsigned char*) ptr;
   p[0] = value >> 8;
   p[1] = value;
 }
@@ -569,7 +566,7 @@ be_write16(void* ptr, const unsigned value)
 void
 be_write32(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) ptr;
+  auto* p = (unsigned char*) ptr;
 
   p[0] = value >> 24;
   p[1] = value >> 16;
@@ -580,28 +577,28 @@ be_write32(void* ptr, const unsigned value)
 signed int
 le_read16(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) ptr;
+  const auto* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8);
 }
 
 unsigned int
 le_readu16(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) ptr;
+  const auto* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8);
 }
 
 signed int
 le_read32(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) ptr;
+  const auto* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
 unsigned int
 le_readu32(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) ptr;
+  const auto* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
@@ -628,7 +625,7 @@ le_read64(void* dest, const void* src)
 void
 le_write16(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) ptr;
+  auto* p = (unsigned char*) ptr;
   p[0] = value;
   p[1] = value >> 8;
 }
@@ -636,7 +633,7 @@ le_write16(void* ptr, const unsigned value)
 void
 le_write32(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) ptr;
+  auto* p = (unsigned char*) ptr;
   p[0] = value;
   p[1] = value >> 8;
   p[2] = value >> 16;
@@ -737,10 +734,10 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
-    return QDateTime::fromTime_t(0);
+    return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
   }
 
-  return QDateTime::currentDateTime();
+  return QDateTime::currentDateTimeUtc();
 }
 
 /*
@@ -969,14 +966,14 @@ be_write_double(void* ptr, double value)
 /* Magellan and PCX formats use this DDMM.mm format */
 double ddmm2degrees(double pcx_val)
 {
-  signed int deg = (signed int)(pcx_val / 100.0);
+  auto deg = (signed int)(pcx_val / 100.0);
   double minutes = (((pcx_val / 100.0) - deg) * 100.0) / 60.0;
   return (double) deg + minutes;
 }
 
 double degrees2ddmm(double deg_val)
 {
-  signed int deg = (signed int) deg_val;
+  auto deg = (signed int) deg_val;
   return (deg * 100.0) + ((deg_val - deg) * 60.0);
 }
 
@@ -1657,7 +1654,7 @@ xml_tag* xml_next(xml_tag* root, xml_tag* cur)
   return cur;
 }
 
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
+xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
 {
   xml_tag* result = cur;
   do {
@@ -1666,25 +1663,19 @@ xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
   return result;
 }
 
-xml_tag* xml_findfirst(xml_tag* root, const char* tagname)
+xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
 {
   return xml_findnext(root, root, tagname);
 }
 
-char* xml_attribute(xml_tag* tag, const char* attrname)
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
 {
-  char* result = nullptr;
-  if (tag->attributes) {
-    char** attr = tag->attributes;
-    while (attr && *attr) {
-      if (0 == case_ignore_strcmp(*attr, attrname)) {
-        result = attr[1];
-        break;
-      }
-      attr+=2;
+  for (const auto& attribute : attributes) {
+    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
+      return attribute.value().toString();
     }
   }
-  return result;
+  return QString();
 }
 
 const QString get_filename(const QString& fname)
@@ -1699,7 +1690,7 @@ const QString get_filename(const QString& fname)
  */
 void gb_setbit(void* buf, const uint32_t nr)
 {
-  unsigned char* bytes = (unsigned char*) buf;
+  auto* bytes = (unsigned char*) buf;
   bytes[nr / 8] |= (1 << (nr % 8));
 }
 
@@ -1708,7 +1699,7 @@ void gb_setbit(void* buf, const uint32_t nr)
  */
 char gb_getbit(const void* buf, const uint32_t nr)
 {
-  const unsigned char* bytes = (const unsigned char*) buf;
+  const auto* bytes = (const unsigned char*) buf;
   return (bytes[nr / 8] & (1 << (nr % 8)));
 
 }

@@ -15,7 +15,7 @@ compare ${REFERENCE}/track/amod.gpx ${TMPDIR}/amod-out.gpx
 compare ${REFERENCE}/track/amod-cleansed ${TMPDIR}/amod-pure
 
 # Test GPWPL waypoints.  Verify we can write first.
-gpsbabel -i geo -f geocaching.loc -o nmea -F ${TMPDIR}/waypoints.nmea
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o nmea -F ${TMPDIR}/waypoints.nmea
 compare ${REFERENCE}/waypoints.nmea ${TMPDIR}/waypoints.nmea 
 # Now read our reference file and prove that our writer will make one to match.
 gpsbabel -i nmea -f ${REFERENCE}/waypoints.nmea -o nmea -F ${TMPDIR}/wayout.nmea

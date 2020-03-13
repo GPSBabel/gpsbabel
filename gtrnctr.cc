@@ -467,7 +467,7 @@ gtc_write()
 void
 gtc_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  trk_head = route_head_alloc();
+  trk_head = new route_head;
   track_add_head(trk_head);
 }
 
@@ -504,7 +504,7 @@ gtc_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
       /* Add the first point of an ActivityLap as
       a waypoint as well as a trackpoint. */
       char cbuf[10];
-      Waypoint* wpt_lap_s = new Waypoint(*wpt_tmp);
+      auto* wpt_lap_s = new Waypoint(*wpt_tmp);
       snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
       wpt_lap_s->shortname = cbuf;
       waypt_add(wpt_lap_s);
@@ -599,7 +599,7 @@ gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
     a waypoint. */
-    wpt_tmp->shortname = QString().sprintf("LAP%03d", lap_ct);
+    wpt_tmp->shortname = QString::asprintf("LAP%03d", lap_ct);
     waypt_add(wpt_tmp);
   } else {
     delete wpt_tmp;

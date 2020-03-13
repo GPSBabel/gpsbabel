@@ -675,7 +675,7 @@ struct read_state {
 static void
 state_init(struct read_state* pst)
 {
-  route_head* track = route_head_alloc();
+  auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
   track->rte_desc = "SkyTraq GPS tracklog data";
   track_add_head(track);
@@ -694,9 +694,9 @@ state_init(struct read_state* pst)
 static Waypoint*
 make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
-  wpt->shortname = QString().sprintf("TP%04d", ++st->tpn);
+  wpt->shortname = QString::asprintf("TP%04d", ++st->tpn);
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
@@ -899,7 +899,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
     if (nullptr == pst->route_head_) {
       db(1, MYNAME ": New Track\n");
-      pst->route_head_ = route_head_alloc();
+      pst->route_head_ = new route_head;
       track_add_head(pst->route_head_);
     }
 
@@ -1115,7 +1115,7 @@ skytraq_read_tracks()
     }
   }
 
-  uint8_t* buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+  auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
@@ -1391,7 +1391,7 @@ file_read()
   int opt_last_sector_val = atoi(opt_last_sector);
 
   state_init(&st);
-  uint8_t* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
+  auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
 
   if (opt_first_sector_val > 0) {
     db(4, MYNAME ": Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);
@@ -1561,9 +1561,9 @@ static void miniHomer_get_poi()
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
-      Waypoint* wpt = new Waypoint;
-      wpt->shortname      = QString().sprintf("POI_%s", poinames[poi]);
-      wpt->description    = QString().sprintf("miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
+      auto* wpt = new Waypoint;
+      wpt->shortname      = QString::asprintf("POI_%s", poinames[poi]);
+      wpt->description    = QString::asprintf("miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;
       wpt->longitude      = lng;
       wpt->altitude       = alt;

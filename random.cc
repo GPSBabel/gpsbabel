@@ -86,15 +86,15 @@ rand_int(const int max)
 
 /* rand_str always returns a valid string with len >= 0 */
 
-static char*
+static QString
 rand_str(const int maxlen, const char* fmt)
 {
   int len = rand_int(maxlen) + 1;
 
-  auto res = (char*) xmalloc(len + 1);
-  res[len] = '\0';
+  QByteArray res;
+  res.resize(len);
 
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < len; ++i) {
     int c = rand_int(26 + 26 + 10);
     if (c < 26) {
       c += 'a';
@@ -105,23 +105,8 @@ rand_str(const int maxlen, const char* fmt)
     }
     res[i] = c;
   }
-  if (fmt) {
-    char* tmp;
-    xasprintf(&tmp, fmt, res);
-    xfree(res);
-    return tmp;
-  } else {
-    return res;
-  }
-}
-
-static QString 
-rand_qstr(const int maxlen, const char* fmt)
-{
-  char * str = rand_str(maxlen, fmt);
-  QString qstr = QString(str);
-  xfree(str);
-  return qstr;
+  return (fmt != nullptr)?
+         QString::asprintf(fmt, res.constData()) : QString(res);
 }
 
 static void
@@ -154,10 +139,10 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
     auto wpt = new Waypoint;
     garmin_fs_t* gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+    wpt->fs.FsChainAdd(gmsd);
 
     do {
-      wpt->shortname = rand_qstr(8, "Wpt_%s");
+      wpt->shortname = rand_str(8, "Wpt_%s");
     } while (wpt->shortname == nullptr);
 
     wpt->latitude = rand_dbl(180.0) - 90.0;
@@ -178,13 +163,13 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
       WAYPT_SET(wpt, depth, rand_dbl(1000.0));
     }
     if RND(3) {
-      wpt->AddUrlLink(rand_qstr(8, "http://link1.example.com/%s"));
+      wpt->AddUrlLink(rand_str(8, "http://link1.example.com/%s"));
       if RND(3) {
-        wpt->AddUrlLink(rand_qstr(8, "http://link2.example.com/%s"));
+        wpt->AddUrlLink(rand_str(8, "http://link2.example.com/%s"));
       }
     }
     if RND(3) {
-      wpt->icon_descr = rand_qstr(3, "Icon_%s");
+      wpt->icon_descr = rand_str(3, "Icon_%s");
     }
 
     wpt->SetCreationTime(time);
@@ -213,31 +198,31 @@ random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
         wpt->longitude = prev->longitude + rand_dbl(0.01);
       }
       if RND(3) {
-        wpt->description = rand_qstr(16, "Des_%s");
+        wpt->description = rand_str(16, "Des_%s");
       }
       if RND(3) {
-        wpt->notes = rand_qstr(16, "Nts_%s");
+        wpt->notes = rand_str(16, "Nts_%s");
       }
       if RND(3) {
-        GMSD_SET(addr, rand_str(8, "Adr_%s"));
+        garmin_fs_t::set_addr(gmsd, rand_str(8, "Adr_%s"));
       }
       if RND(3) {
-        GMSD_SET(city, rand_str(8, "Cty_%s"));
+        garmin_fs_t::set_city(gmsd, rand_str(8, "Cty_%s"));
       }
       if RND(3) {
-        GMSD_SET(facility, rand_str(8, "Fac_%s"));
+        garmin_fs_t::set_facility(gmsd, rand_str(8, "Fac_%s"));
       }
       if RND(3) {
-        GMSD_SET(country, rand_str(8, "Ctr_%s"));
+        garmin_fs_t::set_country(gmsd, rand_str(8, "Ctr_%s"));
       }
       if RND(3) {
-        GMSD_SET(state, rand_str(8, "Sta_%s"));
+        garmin_fs_t::set_state(gmsd, rand_str(8, "Sta_%s"));
       }
       if RND(3) {
-        GMSD_SET(phone_nr, rand_str(8, "Pnr_%s"));
+        garmin_fs_t::set_phone_nr(gmsd, rand_str(8, "Pnr_%s"));
       }
       if RND(3) {
-        GMSD_SET(postal_code, rand_str(8, "Pcd_%s"));
+        garmin_fs_t::set_postal_code(gmsd, rand_str(8, "Pcd_%s"));
       }
     }
 
@@ -250,21 +235,21 @@ random_read()
 
   route_head* head;
   Waypoint* prev = nullptr;
-  QDateTime time = current_time();
+  QDateTime time = current_time().toUTC();
 
   int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
-    head = route_head_alloc();
+    head = new route_head;
     if (doing_trks) {
-      head->rte_name = rand_qstr(8, "Trk_%s");
+      head->rte_name = rand_str(8, "Trk_%s");
       track_add_head(head);
     } else {
-      head->rte_name = rand_qstr(8, "Rte_%s");
+      head->rte_name = rand_str(8, "Rte_%s");
       route_add_head(head);
     }
-    head->rte_desc = rand_qstr(16, nullptr);
+    head->rte_desc = rand_str(16, nullptr);
 	if RND(3) {
-      head->rte_urls.AddUrlLink(UrlLink(rand_qstr(8, "http://rteurl.example.com/%s")));
+      head->rte_urls.AddUrlLink(UrlLink(rand_str(8, "http://rteurl.example.com/%s")));
     }
   } else {
     head = nullptr;
@@ -301,7 +286,7 @@ random_rd_posn_init(const QString&)
   if (opt_points) {
     realtime->points = atoi(opt_points);
   }
-  realtime->time = current_time();
+  realtime->time = current_time().toUTC();
 }
 
 void

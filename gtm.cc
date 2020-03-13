@@ -539,7 +539,7 @@ gtm_read()
     fread_discard(file_in, 1);
     wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time.isValid()) {
-      wpt->creation_time += EPOCH89DIFF;
+      wpt->creation_time = wpt->creation_time.addSecs(EPOCH89DIFF);
     }
     fread_discard(file_in, 2);
     wpt->altitude = fread_single(file_in);
@@ -567,7 +567,7 @@ gtm_read()
     convert_datum(&wpt->latitude, &wpt->longitude);
     wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time.isValid()) {
-      wpt->creation_time += EPOCH89DIFF;
+      wpt->creation_time = wpt->creation_time.addSecs(EPOCH89DIFF);
     }
     start_new = fread_byte(file_in);
     wpt->altitude = fread_single(file_in);
@@ -575,7 +575,7 @@ gtm_read()
       wpt->altitude = unknown_alt;
     }
     if (start_new || !trk_head) {
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
       track_add_head(trk_head);
       real_track_list.append(trk_head);
     }
@@ -628,7 +628,7 @@ gtm_read()
     fread_discard(file_in, 2);
 
     if (start_new || !rte_head) {
-      rte_head = route_head_alloc();
+      rte_head = new route_head;
       rte_head->rte_name = route_name;
       route_add_head(rte_head);
     }

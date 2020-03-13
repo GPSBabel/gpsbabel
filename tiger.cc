@@ -166,7 +166,7 @@ data_read()
     }
     if (sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]",
                &lon, &lat, icon, desc)) {
-      Waypoint* wpt_tmp = new Waypoint;
+      auto* wpt_tmp = new Waypoint;
 
       wpt_tmp->longitude = lon;
       wpt_tmp->latitude = lat;

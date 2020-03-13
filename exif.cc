@@ -805,7 +805,7 @@ exif_waypt_from_exif_app(ExifApp* app)
     return nullptr;
   }
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   wpt->latitude = unknown_alt;
   wpt->longitude = unknown_alt;

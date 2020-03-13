@@ -22,10 +22,8 @@
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
 #include <cstdio>               // for printf, fflush, fprintf, stdout
-#include <ctime>                // for time_t
 #include <algorithm>            // for stable_sort
 
-#include <QtCore/QByteArray>    // for QByteArray
 #include <QtCore/QChar>         // for QChar
 #include <QtCore/QDateTime>     // for QDateTime
 #include <QtCore/QList>         // for QList
@@ -34,7 +32,7 @@
 #include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND, garmin_fs_p
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
@@ -42,7 +40,6 @@
 
 WaypointList* global_waypoint_list;
 
-static short_handle mkshort_handle;
 geocache_data Waypoint::empty_gc_data;
 static global_trait traits;
 
@@ -54,7 +51,6 @@ const global_trait* get_traits()
 void
 waypt_init()
 {
-  mkshort_handle = mkshort_new_handle();
   global_waypoint_list = new WaypointList;
 }
 
@@ -90,29 +86,6 @@ unsigned int
 waypt_count()
 {
   return global_waypoint_list->count();
-}
-
-// TODO: should this, and mkshort_handle, be part of main, which is the only user?
-void
-waypt_disp(const Waypoint* wpt)
-{
-  if (wpt->GetCreationTime().isValid()) {
-    printf("%s ", qPrintable(wpt->creation_time.toString()));
-  }
-  printposn(wpt->latitude,1);
-  printposn(wpt->longitude,0);
-  if (!wpt->description.isEmpty()) {
-    printf("%s/%s",
-           global_opts.synthesize_shortnames ?
-           qPrintable(mkshort(mkshort_handle, wpt->description)) :
-           qPrintable(wpt->shortname),
-           qPrintable(wpt->description));
-  }
-
-  if (wpt->altitude != unknown_alt) {
-    printf(" %f", wpt->altitude);
-  }
-  printf("\n");
 }
 
 void
@@ -190,10 +163,14 @@ find_waypt_by_name(const QString& name)
 void
 waypt_flush_all()
 {
-  if (mkshort_handle) {
-    mkshort_del_handle(&mkshort_handle);
-  }
   global_waypoint_list->flush();
+}
+
+void
+waypt_deinit()
+{
+  waypt_flush_all();
+  delete global_waypoint_list;
 }
 
 void
@@ -274,13 +251,13 @@ double
 waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 {
   double res = 0;
-  garmin_fs_p gmsd;
+  garmin_fs_t* gmsd;
 
   if ((A == nullptr) || (B == nullptr)) {
     return 0;
   }
 
-  if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != nullptr)) {
+  if ((gmsd = garmin_fs_t::find(A)) && (gmsd->ilinks != nullptr)) {
     garmin_ilink_t* link = gmsd->ilinks;
 
     res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
@@ -427,7 +404,6 @@ Waypoint::Waypoint() :
   temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
-  fs(nullptr),
   session(curr_session()),
   extra_data(nullptr)
 {
@@ -438,7 +414,7 @@ Waypoint::~Waypoint()
   if (gc_data != &Waypoint::empty_gc_data) {
     delete gc_data;
   }
-  fs_chain_destroy(fs);
+  fs.FsChainDestroy();
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
@@ -469,7 +445,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   temperature(other.temperature),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
-  fs(other.fs),
   session(other.session),
   extra_data(other.extra_data)
 {
@@ -479,7 +454,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   }
 
   // deep copy fs chain data.
-  fs = fs_chain_copy(other.fs);
+  fs = other.fs.FsChainCopy();
 
   // note: session is not deep copied.
   // note: extra_data is not deep copied.
@@ -493,7 +468,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     if (gc_data != &Waypoint::empty_gc_data) {
       delete gc_data;
     }
-    fs_chain_destroy(fs);
+    fs.FsChainDestroy();
 
     // allocate and copy
     latitude = rhs.latitude;
@@ -523,7 +498,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     temperature = rhs.temperature;
     odometer_distance = rhs.odometer_distance;
     gc_data = rhs.gc_data;
-    fs = rhs.fs;
     session = rhs.session;
     extra_data = rhs.extra_data;
     // deep copy geocache data unless it is the special static empty_gc_data.
@@ -532,7 +506,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     }
 
     // deep copy fs chain data.
-    fs = fs_chain_copy(rhs.fs);
+    fs = rhs.fs.FsChainCopy();
 
     // note: session is not deep copied.
     // note: extra_data is not deep copied.
@@ -595,16 +569,9 @@ Waypoint::SetCreationTime(const gpsbabel::DateTime& t)
 }
 
 void
-Waypoint::SetCreationTime(time_t t)
+Waypoint::SetCreationTime(qint64 t, qint64 ms)
 {
-  creation_time = QDateTime::fromTime_t(t);
-}
-
-void
-Waypoint::SetCreationTime(time_t t, int ms)
-{
-  creation_time.setTime_t(t);
-  creation_time = creation_time.addMSecs(ms);
+  creation_time.setMSecsSinceEpoch((t * 1000) + ms);
 }
 
 geocache_data*
@@ -662,9 +629,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      QString n;
-      n.sprintf("%03d", waypt_count());
-      wpt->shortname = QString("WPT%1").arg(n);
+      wpt->shortname = QString::asprintf("WPT%03d", waypt_count());
     }
   }
 

@@ -24,36 +24,40 @@
 # include <windows.h>
 #endif
 
-#include <cctype>                      // for tolower, toupper
-#include <cmath>                       // for fabs
-#include <cstdio>                      // for sscanf, printf
-#include <cstdlib>                     // for atoi, atol, atof
-#include <cstring>                     // for strcmp
-#include <tuple>                       // for tuple, make_tuple, tie
+#include <cctype>                       // for tolower, toupper
+#include <cmath>                        // for fabs
+#include <cstdio>                       // for sscanf, printf
+#include <cstdlib>                      // for atoi, atol, atof
+#include <cstring>                      // for strcmp
+#include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for QChar
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QFile>                // for QFile
-#include <QtCore/QIODevice>            // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>                // for QList
-#include <QtCore/QStaticStringData>    // for QStaticStringData
-#include <QtCore/QString>              // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
-#include <QtCore/Qt>                   // for ISODate
-#include <QtCore/QtGlobal>             // for foreach, qint64, qPrintable
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QChar>                 // for QChar
+#include <QtCore/QDate>                 // for QDate
+#include <QtCore/QDateTime>             // for QDateTime
+#include <QtCore/QFile>                 // for QFile
+#include <QtCore/QIODevice>             // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QtCore/QList>                 // for QList
+#include <QtCore/QStaticStringData>     // for QStaticStringData
+#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
+#include <QtCore/QStringList>           // for QStringList
+#include <QtCore/QVector>               // for QVector
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/Qt>                    // for ISODate
+#include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
 
 #include "defs.h"
+#include "formspec.h"                   // for FsChainFind, kFsGpx
 #include "grtcirc.h"                    // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
+#include "src/core/logging.h"           // for Warning, Fatal
 #include "src/core/optional.h"          // for optional
-#include <src/core/logging.h>           // for Warning
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
+#include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
-#include "units.h"
+
 
 // options
 static char* opt_deficon = nullptr;
@@ -407,7 +411,7 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 
 void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  route_head* trk_head = route_head_alloc();
+  auto* trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -456,7 +460,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  gx_trk_head = route_head_alloc();
+  gx_trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     gx_trk_head->rte_name  = wpt_tmp->shortname;
   }
@@ -482,7 +486,7 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
   // In gx:Track elements all kml:when elements are required to precede all gx:coord elements.
   // For both we allow any order.  Many writers using gx:Track elements don't adhere to the schema.
   while (!gx_trk_times->isEmpty()) {
-    Waypoint* trkpt = new Waypoint;
+    auto* trkpt = new Waypoint;
     trkpt->SetCreationTime(gx_trk_times->takeFirst());
     double lat, lon, alt;
     int n;
@@ -1430,7 +1434,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
-  fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
 
   if (!fs_gpx) {
     return r;
@@ -1461,8 +1465,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      char* encstr = xml_attribute(logpart, "encoded");
-      int encoded = (toupper(encstr[0]) != 'F');
+      QString encstr = xml_attribute(logpart->attributes, "encoded");
+      bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
       QString s;
       if (html_encrypt && encoded) {
@@ -2144,7 +2148,7 @@ kml_wr_position(Waypoint* wpt)
   kml_wr_init(posnfilenametmp);
 
   if (!posn_trk_head) {
-    posn_trk_head = route_head_alloc();
+    posn_trk_head = new route_head;
     track_add_head(posn_trk_head);
   }
 

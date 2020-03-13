@@ -153,7 +153,7 @@ mps_find_wpt_q_by_name(const QList<Waypoint *>* whichQueue, const QString& name)
 static void
 mps_wpt_q_add(QList<Waypoint *>* whichQueue, const Waypoint* wpt)
 {
-  Waypoint* written_wpt = new Waypoint(*wpt);
+  auto* written_wpt = new Waypoint(*wpt);
   whichQueue->append(written_wpt);
 }
 
@@ -312,7 +312,8 @@ static void
 mps_readstr(gbfile* mps_file, char* buf, size_t sz)
 {
   int c;
-  while (sz-- && (c = gbfgetc(mps_file)) != EOF) {
+  buf[sz-1] = 0;
+  while (--sz && (c = gbfgetc(mps_file)) != EOF) {
     *buf++ = c;
     if (c == 0)  {
       return;
@@ -511,7 +512,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
   double mps_proximity = unknown_alt;
   double mps_depth = unknown_alt;
 
-  Waypoint* thisWaypoint = new Waypoint;
+  auto* thisWaypoint = new Waypoint;
   *wpt = thisWaypoint;
 
   mps_readstr(mps_file, wptname, sizeof(wptname));
@@ -901,7 +902,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   fprintf(stderr, "mps_route_r: route contains %d waypoints\n", rte_count);
 #endif
 
-  rte_head = route_head_alloc();
+  rte_head = new route_head;
   rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
@@ -926,7 +927,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
          data (min 22 bytes) terminated by a zero */
       do {
         gbfread(tbuf, 1, 1, mps_file);
-      } while (tbuf[0]);
+      } while (tbuf[0] && !gbfeof(mps_file));
 
       /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
       gbfread(tbuf, 18, 1, mps_file);
@@ -1039,7 +1040,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
     	data (min 22 bytes) terminated by a zero */
     do {
       gbfread(tbuf, 1, 1, mps_file);
-    } while (tbuf[0]);
+    } while (tbuf[0] && !gbfeof(mps_file));
 
     /* The next thing is the unknown 0x03 0x00 .. 0x00 (18 bytes) */
     gbfread(tbuf, 18, 1, mps_file);
@@ -1404,7 +1405,7 @@ mps_routedatapoint_w_wrapper(const Waypoint* rte)
  * MRCB
  */
 static void
-mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
+mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* /* rte */)
 {
   char		hdr[2];
   int			value = 0;
@@ -1467,7 +1468,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
   fprintf(stderr, "mps_track_r: there are %d track waypoints\n", trk_count);
 #endif
 
-  track_head = route_head_alloc();
+  track_head = new route_head;
   track_head->rte_name = trkname;
   track_add_head(track_head);
   *trk = track_head;

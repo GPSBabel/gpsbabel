@@ -68,7 +68,7 @@ gnav_trl_rw_deinit()
 static double
 read_altitude(void* ptr)
 {
-  unsigned char* i = (unsigned char*) ptr;
+  auto* i = (unsigned char*) ptr;
   char buf[sizeof(float)];
   le_write32(&buf, i[2] << 24 | i[1] << 16 | i[0] <<8 | i[3]);
   return le_read_float(&buf);
@@ -78,7 +78,7 @@ static void
 write_altitude(void* ptr, const float alt)
 {
   char buf[sizeof(float)];
-  unsigned char* i = (unsigned char*) &buf;
+  auto* i = (unsigned char*) &buf;
   le_write_float(&buf, alt);
   le_write32(ptr, i[0] << 24 | i[3] << 16 | i[2] << 8 | i[1]);
 }
@@ -95,7 +95,7 @@ gnav_trl_read()
       fatal(MYNAME ": Unexpected EOF (end of file)!\n");
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->SetCreationTime(le_read32(&rec.time));
     wpt->latitude = le_read_float(&rec.lat);
@@ -103,7 +103,7 @@ gnav_trl_read()
     wpt->altitude = read_altitude(&rec.alt);
 
     if (trk == nullptr) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
     track_add_wpt(trk, wpt);

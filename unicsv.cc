@@ -323,23 +323,61 @@ static QVector<arglist_t> unicsv_args = {
 
 /* helpers */
 
-// There is no test coverage of this and it's been wrong for years and
-// nobody has noticed...
-static int
-unicsv_parse_gc_id(const QString& str)
+// Parse GC-Code / geo cache reference code into int64 (GC-ID)
+// (see also https://api.groundspeak.com/documentation#referencecodes)
+static long long
+unicsv_parse_gc_code(const QString& str)
 {
-  int res = 0;
-  const QString kBase35 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
-  if (str.startsWith("GC")) {
-    int base35 = str.size() > 6; // above GCFFFF?
-    QString s = str.mid(2);
-    while (!s.isEmpty()) {
-      res = res * 16 + kBase35.indexOf(s[0]);
-      s = str.mid(1);
+  if (! str.startsWith("GC")) {
+    return 0;
+  }
+
+  // Remove "GC" prefix
+  QString s = str.mid(2);
+  // Replacements according to groundspeak api documentation
+  s.replace('S', '5');
+  s.replace('O', '0');
+  // Remove leading zeros. some online converters do that as well.
+  while (s.startsWith('0')) {
+    s.remove(0, 1);
+  }
+
+  // We have these cases:
+  // *  1-3 digits                   => base 16
+  // *    4 digits, first one is 0-F => base 16
+  // *    4 digits, first one G-Z    => base 31
+  // * 5-12 digits                   => base 31
+  // *  13- digits                   => exceeds int64_t
+  //
+  int base;
+  const QString kBase31 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
+  if (s.size() >= 1 && s.size() <= 3) {
+    base = 16;
+  } else if (s.size() == 4) {
+    if (kBase31.indexOf(s[0]) < 16) {
+      base = 16;
+    } else {
+      base = 31;
     }
-    if (base35) {
-      res -= 411120;
+  } else if (s.size() >= 5 && s.size() <= 12) {
+    base = 31;
+  } else {
+    return 0;
+  }
+
+  long long res = 0;
+  for (auto c : qAsConst(s)) {
+    int val = kBase31.indexOf(c);
+    if (val < 0 || (base == 16 && val > 15)) {
+      return 0;
     }
+    res = res * base + val;
+  }
+  if (base == 31) {
+    res -= 411120;
+  }
+  if (res < 0) {
+    res = 0;
   }
   return res;
 }
@@ -468,7 +506,7 @@ unicsv_adjust_time(const time_t time, const time_t* date)
     struct tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
   }
-  return QDateTime::fromTime_t(res);
+  return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
 }
 
 static bool
@@ -624,7 +662,7 @@ unicsv_parse_one_line(const QString& ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = nullptr;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));
@@ -952,41 +990,41 @@ unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_fax_nr:
     case fld_garmin_email:
     case fld_garmin_facility:
-      gmsd = GMSD_FIND(wpt);
+      gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+        wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
       case fld_garmin_city:
-        GMSD_SETQSTR(city, value);
+        garmin_fs_t::set_city(gmsd, value);
         break;
       case fld_garmin_postal_code:
-        GMSD_SETQSTR(postal_code, value);
+        garmin_fs_t::set_postal_code(gmsd, value);
         break;
       case fld_garmin_state:
-        GMSD_SETQSTR(state, value);
+        garmin_fs_t::set_state(gmsd, value);
         break;
       case fld_garmin_country:
-        GMSD_SETQSTR(country, value);
+        garmin_fs_t::set_country(gmsd, value);
         break;
       case fld_garmin_addr:
-        GMSD_SETQSTR(addr, value);
+        garmin_fs_t::set_addr(gmsd, value);
         break;
       case fld_garmin_phone_nr:
-        GMSD_SETQSTR(phone_nr, value);
+        garmin_fs_t::set_phone_nr(gmsd, value);
         break;
       case fld_garmin_phone_nr2:
-        GMSD_SETQSTR(phone_nr2, value);
+        garmin_fs_t::set_phone_nr2(gmsd, value);
         break;
       case fld_garmin_fax_nr:
-        GMSD_SETQSTR(fax_nr, value);
+        garmin_fs_t::set_fax_nr(gmsd, value);
         break;
       case fld_garmin_email:
-        GMSD_SETQSTR(email, value);
+        garmin_fs_t::set_email(gmsd, value);
         break;
       case fld_garmin_facility:
-        GMSD_SETQSTR(facility, value);
+        garmin_fs_t::set_facility(gmsd, value);
         break;
       default:
         break;
@@ -1010,9 +1048,13 @@ unicsv_parse_one_line(const QString& ibuf)
       switch (unicsv_fields_tab[column]) {
 
       case fld_gc_id:
-        gc_data->id = value.toInt();
-        if (gc_data->id == 0) {
-          gc_data->id = unicsv_parse_gc_id(value);
+        // First try to decode as numeric GC-ID (e.g. "575006").
+        // If that doesn't succedd, try to decode as GC-Code
+        // (e.g. "GC1234G").
+        bool ok;
+        gc_data->id = value.toLongLong(&ok, 10);
+        if (!ok) {
+          gc_data->id = unicsv_parse_gc_code(value);
         }
         break;
       case fld_gc_type:
@@ -1131,7 +1173,7 @@ unicsv_parse_one_line(const QString& ibuf)
     }
 
     if (opt_utc) {
-      wpt->creation_time += atoi(opt_utc) * SECONDS_PER_HOUR;
+      wpt->creation_time = wpt->creation_time.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
     }
   }
 
@@ -1183,14 +1225,14 @@ unicsv_parse_one_line(const QString& ibuf)
   switch (unicsv_data_type) {
   case rtedata:
     if (! unicsv_route) {
-      unicsv_route = route_head_alloc();
+      unicsv_route = new route_head;
       route_add_head(unicsv_route);
     }
     route_add_wpt(unicsv_route, wpt);
     break;
   case trkdata:
     if (! unicsv_track) {
-      unicsv_track = route_head_alloc();
+      unicsv_track = new route_head;
       track_add_head(unicsv_track);
     }
     track_add_wpt(unicsv_track, wpt);
@@ -1269,7 +1311,7 @@ static void
 unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     gb_setbit(&unicsv_outp_flags, fld_shortname);
@@ -1341,34 +1383,34 @@ unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 
   if (gmsd) {
-    if GMSD_HAS(addr) {
+    if (garmin_fs_t::has_addr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_addr);
     }
-    if GMSD_HAS(city) {
+    if (garmin_fs_t::has_city(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_city);
     }
-    if GMSD_HAS(country) {
+    if (garmin_fs_t::has_country(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_country);
     }
-    if GMSD_HAS(phone_nr) {
+    if (garmin_fs_t::has_phone_nr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr);
     }
-    if GMSD_HAS(phone_nr2) {
+    if (garmin_fs_t::has_phone_nr2(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr2);
     }
-    if GMSD_HAS(fax_nr) {
+    if (garmin_fs_t::has_fax_nr(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_fax_nr);
     }
-    if GMSD_HAS(email) {
+    if (garmin_fs_t::has_email(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_email);
     }
-    if GMSD_HAS(postal_code) {
+    if (garmin_fs_t::has_postal_code(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_postal_code);
     }
-    if GMSD_HAS(state) {
+    if (garmin_fs_t::has_state(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_state);
     }
-    if GMSD_HAS(facility) {
+    if (garmin_fs_t::has_facility(gmsd)) {
       gb_setbit(&unicsv_outp_flags, fld_garmin_facility);
     }
   }
@@ -1424,7 +1466,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (unicsv_datum_idx == DATUM_WGS84) {
     lat = wpt->latitude;
@@ -1658,7 +1700,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
         // We might wrap to a different day by overriding the TZ offset.
         dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        dt = wpt->GetCreationTime();
+        dt = wpt->GetCreationTime().toLocalTime();
       }
       QString date = dt.toString("yyyy/MM/dd");
       *fout << unicsv_fieldsep << date;
@@ -1673,7 +1715,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
         t = wpt->GetCreationTime().toUTC().time();
         t = t.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        t = wpt->GetCreationTime().time();
+        t = wpt->GetCreationTime().toLocalTime().time();
       }
       QString out;
       if (t.msec() > 0) {
@@ -1696,34 +1738,34 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
 
   if FIELD_USED(fld_garmin_facility) {
-    unicsv_print_str(GMSD_GET(facility, NULL));
+    unicsv_print_str(garmin_fs_t::get_facility(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_addr) {
-    unicsv_print_str(GMSD_GET(addr, NULL));
+    unicsv_print_str(garmin_fs_t::get_addr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_city) {
-    unicsv_print_str(GMSD_GET(city, NULL));
+    unicsv_print_str(garmin_fs_t::get_city(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_postal_code) {
-    unicsv_print_str(GMSD_GET(postal_code, NULL));
+    unicsv_print_str(garmin_fs_t::get_postal_code(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_state) {
-    unicsv_print_str(GMSD_GET(state, NULL));
+    unicsv_print_str(garmin_fs_t::get_state(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_country) {
-    unicsv_print_str(GMSD_GET(country, NULL));
+    unicsv_print_str(garmin_fs_t::get_country(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_phone_nr) {
-    unicsv_print_str(GMSD_GET(phone_nr, NULL));
+    unicsv_print_str(garmin_fs_t::get_phone_nr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_phone_nr2) {
-    unicsv_print_str(GMSD_GET(phone_nr2, NULL));
+    unicsv_print_str(garmin_fs_t::get_phone_nr2(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_fax_nr) {
-    unicsv_print_str(GMSD_GET(fax_nr, NULL));
+    unicsv_print_str(garmin_fs_t::get_fax_nr(gmsd, nullptr));
   }
   if FIELD_USED(fld_garmin_email) {
-    unicsv_print_str(GMSD_GET(email, NULL));
+    unicsv_print_str(garmin_fs_t::get_email(gmsd, nullptr));
   }
 
   if (wpt->EmptyGCData()) {

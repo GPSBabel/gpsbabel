@@ -32,7 +32,7 @@
       exported = Geocache export date
       found =    <link linkend="style_def_geofound">Geocache last found date</link>
       fix =      3d, 2d, etc.
-      gcid =     Geocache cache id
+      gcid =     Geocache cache id. This accepts GC-ID ("575006") and GC-Code ("GC1234G").
       geschw =   Geschwindigkeit (speed)
       hdop =     Horizontal dilution of precision
       head =     Heading / Course true

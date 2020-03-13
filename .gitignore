@@ -5,6 +5,7 @@
 /config.log
 /config.status
 /cscope.out
+/debug/
 /gpsbabel
 /gpsbabel-debug
 /gpsbabel_coverage.xml
@@ -25,6 +26,7 @@
 /Makefile
 /makelinuxdist.sh
 /objects/
+/release/
 *.swp
 /tmp/
 /Makefile

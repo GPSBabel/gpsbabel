@@ -82,7 +82,7 @@ int
 gusb_cmd_get(garmin_usb_packet* ibuf, size_t sz)
 {
   int rv;
-  unsigned char* buf = (unsigned char*) &ibuf->dbuf;
+  auto* buf = (unsigned char*) &ibuf->dbuf;
   unsigned short pkt_id;
 top:
   switch (receive_state) {
@@ -155,7 +155,7 @@ gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
 {
   unsigned int rv, i;
 
-  unsigned char* obuf = (unsigned char*) &opkt->dbuf;
+  auto* obuf = (unsigned char*) &opkt->dbuf;
   const char* m1, *m2;
 
   rv = gusb_llops->llop_send(opkt, sz);

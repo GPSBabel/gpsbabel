@@ -42,10 +42,12 @@
 
 #include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
+#include "format.h"                // for Format
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
 #include "magellan.h"              // for mm_meridian, mm_sportrak, magellan_icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
 #include "src/core/datetime.h"     // for DateTime
+#include "vecs.h"                  // for Vecs
 
 
 static int bitrate = 4800;
@@ -76,7 +78,7 @@ static QString curfname;
 static int extension_hint;
 // For Explorist GC/510/610/710 families, bludgeon in GPX support.
 // (This has nothing to do with the Explorist 100...600 products.)
-static ff_vecs_t* gpx_vec;
+static Format* gpx_vec;
 static mag_info* explorist_info;
 static QStringList os_gpx_files(const char* dirname);
 
@@ -530,7 +532,7 @@ retry:
        * from input filename.
        */
 
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
 
       /* Whack trailing extension if present. */
       QString s = get_filename(curfname);
@@ -783,7 +785,7 @@ mag_rd_init_common(const QString& portname)
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      gpx_vec = find_vec("gpx");
+      gpx_vec = Vecs::Instance().find_vec("gpx");
     }
     return;
   }
@@ -970,7 +972,7 @@ mag_trkparse(char* trkmsg)
   int fracsecs;
   struct tm tm;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -1090,7 +1092,7 @@ mag_rteparse(char* rtemsg)
       *p = '\0';
     }
 
-    mag_rte_elem* rte_elem = new mag_rte_elem;
+    auto* rte_elem = new mag_rte_elem;
 
     rte_elem->wpt_name = next_stop;
     rte_elem->wpt_icon = abuf;
@@ -1119,7 +1121,7 @@ mag_rteparse(char* rtemsg)
    */
   if (frag == mag_rte_head->nelems) {
 
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = rtenum;
     rte_head->rte_name = rte_name;
@@ -1138,7 +1140,7 @@ mag_rteparse(char* rtemsg)
        */
       foreach (const Waypoint* waypt, rte_wpt_tmp) {
         if (waypt->shortname == re->wpt_name) {
-          Waypoint* wpt = new Waypoint(*waypt);
+          auto* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
           break;
         }
@@ -1206,7 +1208,7 @@ mag_wptparse(char* trkmsg)
   descr[0] = 0;
   icon_token[0] = 0;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]",
          &latdeg,&latdir,

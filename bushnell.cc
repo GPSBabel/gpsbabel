@@ -197,7 +197,7 @@ wr_deinit()
 static void
 bushnell_read()
 {
-  Waypoint* wpt_tmp = new Waypoint;
+  auto* wpt_tmp = new Waypoint;
 
   int32_t lat_tmp = gbfgetint32(file_in);
   int32_t lon_tmp = gbfgetint32(file_in);

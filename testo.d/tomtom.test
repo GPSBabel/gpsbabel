@@ -19,6 +19,6 @@ rm -f ${TMPDIR}/tomtom.gpx
 gpsbabel -i tomtom -f ${REFERENCE}/tomtom.ov2 -o gpx -F ${TMPDIR}/tomtom.gpx
 compare ${REFERENCE}/tomtom.gpx ${TMPDIR}/tomtom.gpx
 
-rm -f ${TMDIR}/tomtom.ov2
+rm -f ${TMPDIR}/tomtom.ov2
 gpsbabel -i gpx -f ${REFERENCE}/tomtom.gpx -o tomtom -F ${TMPDIR}/tomtom.ov2
 bincompare ${REFERENCE}/tomtom.ov2 ${TMPDIR}/tomtom.ov2

@@ -214,7 +214,7 @@ sub DoImage {
 
 sub print_header {
 print <<'END';
-/* 
+/*
 
 
 
@@ -257,7 +257,7 @@ print <<'END';
 
 /*
     Read DeLorme drawing files (.an1) - supplemental (included by an1.c)
- 
+
     Copyright (C) 2005 Ron Parker and Robert Lipe.
 
     This program is free software; you can redistribute it and/or modify
@@ -277,8 +277,8 @@ print <<'END';
  */
 
 static struct defguid {
-	guid_t guid;
-	const char *name;
+  guid_t guid;
+  const char* name;
 } default_guids[] = {
 END
 }
@@ -287,28 +287,29 @@ sub print_footer {
 print <<'END';
 };
 
-static int FindIconByName( const char *name, guid_t *guid ) {
-	unsigned int i = 0; 
-	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
-	{
-		if ( !case_ignore_strcmp(name, default_guids[i].name)) {
-			memcpy( guid, &(default_guids[i].guid), sizeof(guid_t));
-			return 1;
-		}
-	}
-	return 0;
+static int FindIconByName(const char* name, guid_t* guid)
+{
+  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); ++i) {
+    if (!case_ignore_strcmp(name, default_guids[i].name)) {
+      *guid = default_guids[i].guid;
+      return 1;
+    }
+  }
+  return 0;
 }
 
-static int FindIconByGuid( guid_t *guid, char **name ) {
-	unsigned int i = 0; 
-	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
-	{
-		if ( !memcmp(guid, &default_guids[i].guid, sizeof(guid_t))) {
-			*name = default_guids[i].name;
-			return 1;
-		}
-	}
-	return 0;
+static int FindIconByGuid(const guid_t* guid, const char** name)
+{
+  for (unsigned int i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); ++i) {
+    /* don't compare any structure padding */
+    if ((guid->l == default_guids[i].guid.l) &&
+        memcmp(guid->s, default_guids[i].guid.s, sizeof(guid->s)) &&
+        memcmp(guid->c, default_guids[i].guid.c, sizeof(guid->c))) {
+      *name = default_guids[i].name;
+      return 1;
+    }
+  }
+  return 0;
 }
 END
 }

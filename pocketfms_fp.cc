@@ -86,7 +86,7 @@ void	wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
     wpt_from = new Waypoint;
-    route = route_head_alloc();
+    route = new route_head;
     route->rte_desc="PocketFMS flightplan";
     route_add_head(route);
   }

@@ -13,3 +13,7 @@ compare ${TMPDIR}/igo.gpx ${TMPDIR}/new-igo2.gpx
 
 gpsbabel -i igo8 -f ${REFERENCE}/track/igo8_padded.trk -o gpx -F ${TMPDIR}/igo8_padded.gpx
 compare ${REFERENCE}/track/igo8_padded~gpx.gpx ${TMPDIR}/igo8_padded.gpx
+
+# test header.
+gpsbabel -i igo8 -f ${REFERENCE}/track/igo8.trk -o igo8,title="Track 001",description="recorded track log",tracknum=3 -F ${TMPDIR}/igo8.trk
+bincompare ${REFERENCE}/track/igo8.trk ${TMPDIR}/igo8.trk

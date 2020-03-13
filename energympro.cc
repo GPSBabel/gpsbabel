@@ -294,7 +294,8 @@ track_read()
   } else {
     gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,Qt::LocalTime).toUTC());
   }
-  route_head* gpsbabel_route = route_head_alloc();
+
+  auto* gpsbabel_route = new route_head;
 
   track_add_head(gpsbabel_route);
   gbfseek(file_in, 0L, SEEK_SET);

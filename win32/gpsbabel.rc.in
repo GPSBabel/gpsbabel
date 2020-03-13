@@ -21,7 +21,7 @@ FILEFLAGSMASK 0x3fL
 		VALUE "OriginalFilename", "gpsbabel.exe\0"
 		VALUE "ProductName", "GPSBabel\0"
 		VALUE "ProductVersion", "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@\0"
-		VALUE "Comments", "http://www.gpsbabel.org\0"
+		VALUE "Comments", "https://www.gpsbabel.org\0"
 	}
  }
 }

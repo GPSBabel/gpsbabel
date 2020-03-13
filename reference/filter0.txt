@@ -1,0 +1,18 @@
+bend	Add points before and after bends in routes
+polygon	Include Only Points Inside Polygon
+arc	Include Only Points Within Distance of Arc
+radius	Include Only Points Within Radius
+interpolate	Interpolate between trackpoints
+height	Manipulate altitudes
+track	Manipulate track lists
+sort	Rearrange waypoints, routes and/or tracks by resorting
+nuketypes	Remove all waypoints, tracks, or routes
+duplicate	Remove Duplicates
+position	Remove Points Within Distance
+discard	Remove unreliable points with high hdop or vdop
+reverse	Reverse stops within routes
+stack	Save and restore waypoint lists
+simplify	Simplify routes
+swap	Swap latitude and longitude of all loaded points
+transform	Transform waypoints into a route, tracks into routes, ...
+validate	Validate internal data structures
