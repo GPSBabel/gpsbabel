@@ -449,7 +449,10 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
     // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
     if (trk_head->rte_waypt_ct > 0) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
-      qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
+      if (trk_head->rte_waypt_ct < 2) {
+        fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
+      }
+      qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct - 1);
       foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
         trackpoint->SetCreationTime(wpt_timespan_begin);
         wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
