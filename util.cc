@@ -47,6 +47,7 @@
 #include "defs.h"
 #include "cet.h"                       // for cet_utf8_to_ucs4
 #include "src/core/datetime.h"         // for DateTime
+#include "src/core/logging.h"          // for Warning
 #include "src/core/xmltag.h"           // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
 // First test Apple's clever macro that's really a runtime test so
