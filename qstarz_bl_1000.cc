@@ -50,7 +50,7 @@ enum BL1000_POINT_TYPE {
 void
 QstarzBL1000Format::qstarz_bl_1000_read(QDataStream& stream)
 {
-  route_head* track_route = route_head_alloc();
+  route_head* track_route = new route_head;
 
   track_add_head(track_route);
 
@@ -81,7 +81,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   qint8                 satelliteCountView;       // 52
   qint8                 satelliteCountUsed;       // 53
   quint8                fixQuality;               // 54
-  qint8              	  batteryPercent;           // 55
+  quint8              	batteryPercent;           // 55
   quint32               unused1;                  // 56-59
   quint32               unused2;                  // 60-64
 
@@ -224,17 +224,12 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   waypoint->course = heading;
   waypoint->wpt_flags.course = 1;
+  waypoint->SetCreationTime(time, milliseconds);
 
-  double timeIntervalSince1970 = time + milliseconds / 1000.0;
-  QDateTime dateTime = QDateTime::fromSecsSinceEpoch(timeIntervalSince1970);
+  auto* fsdata = new qstarz_bl_1000_fsdata;
 
-  waypoint->SetCreationTime(gpsbabel::DateTime(dateTime));
+  waypoint->fs.FsChainAdd(fsdata);
 
-  qstarz_bl_1000_fsdata* fsdata = qstarz_bl_1000_alloc_fsdata();
-
-  fs_chain_add(&(waypoint->fs), (format_specific_data*) fsdata);
-
-  fsdata->accelerationOffset = 0;
   fsdata->accelerationX = gx / 256.0;
   fsdata->accelerationY = gy / 256.0;
   fsdata->accelerationZ = gz / 256.0;
@@ -256,30 +251,6 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   }
 }
 
-/* fsdata manipulation functions */
-void
-qstarz_bl_1000_free_fsdata(void* fsdata)
-{
-  xfree(fsdata);
-}
-
-void
-qstarz_bl_1000_copy_fsdata(qstarz_bl_1000_fsdata** dest, qstarz_bl_1000_fsdata* src)
-{
-  *dest = (qstarz_bl_1000_fsdata*)xmalloc(sizeof(*src));
-  ** dest = *src;
-  (*dest)->fs.next = nullptr;
-}
-
-qstarz_bl_1000_fsdata*
-qstarz_bl_1000_alloc_fsdata()
-{
-  auto* fsdata = (qstarz_bl_1000_fsdata*) xcalloc(1, sizeof(qstarz_bl_1000_fsdata));
-  fsdata->fs.copy = (fs_copy) qstarz_bl_1000_copy_fsdata;
-  fsdata->fs.destroy = qstarz_bl_1000_free_fsdata;
-
-  return fsdata;
-}
 
 /***************************************************************************
  *              entry points called by gpsbabel main process               *

@@ -32,19 +32,22 @@
 #include "defs.h"
 #include "format.h"
 
+struct qstarz_bl_1000_fsdata : FormatSpecificData {
+  qstarz_bl_1000_fsdata() : FormatSpecificData(kFsQstarzBl1000) {}
 
-struct qstarz_bl_1000_fsdata {
-  format_specific_data fs;
-  char rcr;
-  int accelerationOffset;
-  float accelerationX;
-  float accelerationY;
-  float accelerationZ;
-  unsigned short maxSNR;
-  int satTotal;
-  uint8_t batteryPercent;
+  qstarz_bl_1000_fsdata* clone() const override
+  {
+    return new qstarz_bl_1000_fsdata(*this);
+  }
+
+  char rcr; // record reason. possible values are listed in switch-case in .cc file
+  float accelerationX; // horizonal acceleration value measured in acceleration due to gravity or g
+  float accelerationY; // vertical acceleration value measured in acceleration due to gravity or g
+  float accelerationZ; // depth acceleration value measured in acceleration due to gravity or g
+  quint16 maxSNR;
+  qint8 satTotal; // satellite count (view)
+  quint8 batteryPercent;
 };
-
 
 class QstarzBL1000Format : public Format
 {
@@ -83,8 +86,5 @@ private:
   QString read_fname;
 };
 
-void qstarz_bl_1000_free_fsdata(void* fsdata);
-void qstarz_bl_1000_copy_fsdata(qstarz_bl_1000_fsdata** dest, qstarz_bl_1000_fsdata* src);
-qstarz_bl_1000_fsdata* qstarz_bl_1000_alloc_fsdata();
 
 #endif
