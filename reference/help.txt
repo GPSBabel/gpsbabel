@@ -135,6 +135,7 @@ File Types (-i and -o options):
 	  name                  Locate waypoint for tagging by this name 
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N 
 	energympro            Energympro GPS training watch
+	  timezone              Time zone ID 
 	enigma                Enigma binary waypoint file (.ert)
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf 
@@ -270,6 +271,7 @@ File Types (-i and -o options):
 	  track                 get track 
 	  dump-file             Dump raw data to this file 
 	  input-is-dump-file    (0/1) Dump raw data to this file 
+	  timezone              Time zone ID 
 	googledir             Google Directions XML
 	kml                   Google Earth (Keyhole) Markup Language
 	  deficon               Default icon name 
