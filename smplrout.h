@@ -82,11 +82,11 @@ private:
   double totalerror = 0;
   double error = 0;
 
-  char* countopt;
-  char* erroropt;
-  char* xteopt;
-  char* lenopt;
-  char* relopt;
+  char* countopt = nullptr;
+  char* erroropt = nullptr;
+  char* xteopt = nullptr;
+  char* lenopt = nullptr;
+  char* relopt = nullptr;
   void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
 
   QVector<arglist_t> args = {
@@ -115,16 +115,15 @@ private:
   struct xte_intermed;
 
   struct xte {
-    double distance;
-    int ordinal;
-    struct xte_intermed* intermed;
+    double distance{0.0};
+    struct xte_intermed* intermed{nullptr};
   };
 
   struct xte_intermed {
-    struct xte* xte_rec;
-    struct xte_intermed* next;
-    struct xte_intermed* prev;
-    const Waypoint* wpt;
+    struct xte* xte_rec{nullptr};
+    struct xte_intermed* next{nullptr};
+    struct xte_intermed* prev{nullptr};
+    const Waypoint* wpt{nullptr};
   };
 
   void free_xte(struct xte* xte_rec);
