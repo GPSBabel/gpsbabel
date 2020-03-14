@@ -1,4 +1,4 @@
-/*
+  /*
 
     GlobalSat DG-100/DG-200 GPS data logger download.
 
@@ -636,7 +636,14 @@ dg100_getfiles()
     int filenum = headers.data[i];
     dg100_getfile(filenum, &track);
   }
-  dg100_getconfig();       // To light on the green LED on the DG-200
+  /* Different DG-100 devices seem to return different numbers of bytes
+   * from the getconfig command.  This can result in a mismatched checksum,
+   * which we treat as a fatal error.  Avoid this mess by not issuing the
+   * getconfig command on DG-100 devices.
+   */
+  if (strcmp(model->name, "DG-100") != 0) {
+    dg100_getconfig();       // To light on the green LED on the DG-200
+  }
 }
 
 static int
