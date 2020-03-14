@@ -1,4 +1,4 @@
-  /*
+/*
 
     GlobalSat DG-100/DG-200 GPS data logger download.
 
