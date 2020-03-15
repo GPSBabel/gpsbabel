@@ -1196,6 +1196,8 @@ file	r---r-	pocketfms_fp	xml	PocketFMS flightplan (.xml)	pocketfms_fp
 	https://www.gpsbabel.org/htmldoc-1.6.0/fmt_pocketfms_fp.html
 file	rw----	pocketfms_wp	txt	PocketFMS waypoints (.txt)	pocketfms_wp
 	https://www.gpsbabel.org/htmldoc-1.6.0/fmt_pocketfms_wp.html
+file	r-r---	qstarz_bl-1000		Qstarz BL-1000	qstarz_bl-1000
+	https://www.gpsbabel.org/htmldoc-1.6.0/fmt_qstarz_bl-1000.html
 file	rw--rw	raymarine	rwf	Raymarine Waypoint File (.rwf)	raymarine
 	https://www.gpsbabel.org/htmldoc-1.6.0/fmt_raymarine.html
 option	raymarine	location	Default location	string	My Waypoints			https://www.gpsbabel.org/htmldoc-1.6.0/fmt_raymarine.html#fmt_raymarine_o_location

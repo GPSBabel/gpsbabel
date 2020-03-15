@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
-  <time>2020-02-20T13:40:32.579Z</time>
+  <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="25.067766267" minlon="121.591293783" maxlat="25.068748717" maxlon="121.592796933"/>
   <wpt lat="25.068690117" lon="121.592073833">
     <ele>8.092</ele>
@@ -151,7 +151,7 @@
         <ele>16.226</ele>
         <time>2020-02-19T01:25:10Z</time>
         <course>85.070000</course>
-        <speed>5.518960</speed>
+        <speed>1.533044</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.660000</hdop>
@@ -161,7 +161,7 @@
         <ele>18.556</ele>
         <time>2020-02-19T01:25:19Z</time>
         <course>94.059998</course>
-        <speed>3.944760</speed>
+        <speed>1.095767</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.240000</hdop>
@@ -171,7 +171,7 @@
         <ele>21.337</ele>
         <time>2020-02-19T01:25:26Z</time>
         <course>93.800003</course>
-        <speed>5.315240</speed>
+        <speed>1.476456</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -181,7 +181,7 @@
         <ele>32.409</ele>
         <time>2020-02-19T01:25:37Z</time>
         <course>95.839996</course>
-        <speed>5.018920</speed>
+        <speed>1.394144</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -191,7 +191,7 @@
         <ele>34.995</ele>
         <time>2020-02-19T01:25:43Z</time>
         <course>88.519997</course>
-        <speed>5.000400</speed>
+        <speed>1.389000</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -201,7 +201,7 @@
         <ele>36.327</ele>
         <time>2020-02-19T01:25:50Z</time>
         <course>156.889999</course>
-        <speed>4.870760</speed>
+        <speed>1.352989</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -211,7 +211,7 @@
         <ele>38.900</ele>
         <time>2020-02-19T01:25:56Z</time>
         <course>177.429993</course>
-        <speed>5.426360</speed>
+        <speed>1.507322</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -221,7 +221,7 @@
         <ele>38.710</ele>
         <time>2020-02-19T01:26:03Z</time>
         <course>267.480011</course>
-        <speed>4.592960</speed>
+        <speed>1.275822</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -231,7 +231,7 @@
         <ele>38.318</ele>
         <time>2020-02-19T01:26:09Z</time>
         <course>273.649994</course>
-        <speed>4.981880</speed>
+        <speed>1.383856</speed>
         <fix>3d</fix>
         <sat>9</sat>
         <hdop>1.110000</hdop>
@@ -241,7 +241,7 @@
         <ele>40.410</ele>
         <time>2020-02-19T01:26:21Z</time>
         <course>273.959991</course>
-        <speed>5.093000</speed>
+        <speed>1.414722</speed>
         <fix>3d</fix>
         <sat>11</sat>
         <hdop>0.910000</hdop>
@@ -251,7 +251,7 @@
         <ele>38.466</ele>
         <time>2020-02-19T01:26:27Z</time>
         <course>267.760010</course>
-        <speed>5.074480</speed>
+        <speed>1.409578</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -261,7 +261,7 @@
         <ele>35.997</ele>
         <time>2020-02-19T01:26:42Z</time>
         <course>270.010010</course>
-        <speed>4.833720</speed>
+        <speed>1.342700</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -271,7 +271,7 @@
         <ele>37.212</ele>
         <time>2020-02-19T01:26:49Z</time>
         <course>281.559998</course>
-        <speed>3.481760</speed>
+        <speed>0.967156</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -281,7 +281,7 @@
         <ele>34.867</ele>
         <time>2020-02-19T01:26:58Z</time>
         <course>214.130005</course>
-        <speed>4.592960</speed>
+        <speed>1.275822</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -291,7 +291,7 @@
         <ele>34.900</ele>
         <time>2020-02-19T01:27:06Z</time>
         <course>202.059998</course>
-        <speed>4.611480</speed>
+        <speed>1.280967</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -301,7 +301,7 @@
         <ele>34.622</ele>
         <time>2020-02-19T01:27:12Z</time>
         <course>188.479996</course>
-        <speed>4.167000</speed>
+        <speed>1.157500</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -311,7 +311,7 @@
         <ele>32.953</ele>
         <time>2020-02-19T01:27:20Z</time>
         <course>181.250000</course>
-        <speed>3.574360</speed>
+        <speed>0.992878</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -321,7 +321,7 @@
         <ele>31.464</ele>
         <time>2020-02-19T01:27:29Z</time>
         <course>176.839996</course>
-        <speed>4.296640</speed>
+        <speed>1.193511</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -331,7 +331,7 @@
         <ele>32.151</ele>
         <time>2020-02-19T01:27:35Z</time>
         <course>181.100006</course>
-        <speed>4.592960</speed>
+        <speed>1.275822</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -341,7 +341,7 @@
         <ele>30.846</ele>
         <time>2020-02-19T01:27:43Z</time>
         <course>179.210007</course>
-        <speed>5.037440</speed>
+        <speed>1.399289</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -351,7 +351,7 @@
         <ele>30.044</ele>
         <time>2020-02-19T01:27:51Z</time>
         <course>180.139999</course>
-        <speed>4.222560</speed>
+        <speed>1.172933</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -361,7 +361,7 @@
         <ele>27.201</ele>
         <time>2020-02-19T01:28:00Z</time>
         <course>185.139999</course>
-        <speed>5.185600</speed>
+        <speed>1.440444</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -371,7 +371,7 @@
         <ele>26.132</ele>
         <time>2020-02-19T01:28:08Z</time>
         <course>217.850006</course>
-        <speed>3.500280</speed>
+        <speed>0.972300</speed>
         <fix>3d</fix>
         <sat>11</sat>
         <hdop>0.940000</hdop>
@@ -381,7 +381,7 @@
         <ele>25.763</ele>
         <time>2020-02-19T01:28:16Z</time>
         <course>283.320007</course>
-        <speed>4.685560</speed>
+        <speed>1.301545</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -391,7 +391,7 @@
         <ele>25.861</ele>
         <time>2020-02-19T01:28:23Z</time>
         <course>285.540009</course>
-        <speed>4.685560</speed>
+        <speed>1.301545</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -401,7 +401,7 @@
         <ele>27.001</ele>
         <time>2020-02-19T01:28:30Z</time>
         <course>289.260010</course>
-        <speed>4.870760</speed>
+        <speed>1.352989</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -411,7 +411,7 @@
         <ele>26.668</ele>
         <time>2020-02-19T01:28:40Z</time>
         <course>291.989990</course>
-        <speed>4.778160</speed>
+        <speed>1.327267</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -421,7 +421,7 @@
         <ele>23.075</ele>
         <time>2020-02-19T01:28:47Z</time>
         <course>22.600000</course>
-        <speed>4.685560</speed>
+        <speed>1.301545</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -431,7 +431,7 @@
         <ele>21.345</ele>
         <time>2020-02-19T01:28:53Z</time>
         <course>32.419998</course>
-        <speed>5.296720</speed>
+        <speed>1.471311</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -441,7 +441,7 @@
         <ele>18.598</ele>
         <time>2020-02-19T01:29:00Z</time>
         <course>44.570000</course>
-        <speed>4.222560</speed>
+        <speed>1.172933</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -451,7 +451,7 @@
         <ele>21.046</ele>
         <time>2020-02-19T01:29:05Z</time>
         <course>63.330002</course>
-        <speed>5.018920</speed>
+        <speed>1.394144</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>
@@ -461,7 +461,7 @@
         <ele>21.881</ele>
         <time>2020-02-19T01:29:13Z</time>
         <course>35.980000</course>
-        <speed>4.185520</speed>
+        <speed>1.162645</speed>
         <fix>3d</fix>
         <sat>12</sat>
         <hdop>0.860000</hdop>

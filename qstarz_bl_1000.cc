@@ -28,6 +28,7 @@
 
 #include "defs.h"
 #include "gbfile.h"
+#include "src/core/logging.h"   // for Warning, Fatal
 
 #include "qstarz_bl_1000.h"
 
@@ -46,6 +47,20 @@ enum BL1000_POINT_TYPE {
 /***************************************************************************
  *           local helper functions                                        *
  ***************************************************************************/
+
+inline bool qstarz_bl_1000_is_waypoint_type(BL1000_POINT_TYPE type)
+{
+  return (type == BL1000_POINT_TYPE_WAY_POINT);
+}
+
+inline bool qstarz_bl_1000_is_trackpoint_type(BL1000_POINT_TYPE type)
+{
+  return (
+           (type == BL1000_POINT_TYPE_TRACK_POINT_BY_TIME) ||
+           (type == BL1000_POINT_TYPE_TRACK_POINT_BY_DISTANCE) ||
+           (type == BL1000_POINT_TYPE_TRACK_POINT_BY_SPEED)
+         );
+}
 
 void
 QstarzBL1000Format::qstarz_bl_1000_read(QDataStream& stream)
@@ -117,7 +132,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   stream >> unused2;
 
   if (stream.status() != QDataStream::Ok) {
-    fatal(MYNAME ":  error on '%s'. Perhaps this isn't a Qstarz BL-1000 file\n", qPrintable(read_fname));
+    Fatal() << MYNAME << ": File format error on " << read_fname << ". Perhaps this isn't a Qstarz BL-1000 file";
   }
 
   BL1000_POINT_TYPE type;
@@ -153,7 +168,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   default:
     type = BL1000_POINT_TYPE_UNKNOWN;
 
-    fatal(MYNAME ": File format error on '%s'. Unexpected value for RCR (record reason): %c\n", qPrintable(read_fname), (char)rcr);
+    Fatal() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for RCR (record reason): " << rcr;
 
     break;
   }
@@ -187,7 +202,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
     fix = fix_unknown;
 
     if (type != BL1000_POINT_TYPE_UNKNOWN) {
-      fatal(MYNAME ": File format error on '%s'. Unexpected value for fix quality: %d\n", qPrintable(read_fname), fixQuality);
+      Fatal() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for fix quality: " << fixQuality;
     }
 
     break;
@@ -195,21 +210,17 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   auto* waypoint = new Waypoint();
 
-  int tmp_lat = dLatitude / 100;
-  int tmp_lon = dLongitude / 100;
+  waypoint->latitude = ddmm2degrees(dLatitude);
+  waypoint->longitude = ddmm2degrees(dLongitude);
 
-  waypoint->latitude = tmp_lat + (dLatitude - tmp_lat * 100) / 60.0;
-  waypoint->longitude = tmp_lon + (dLongitude - tmp_lon * 100) / 60.0;
-
-  // printf(MYNAME ": waypoint->latitude: %f\n", waypoint->latitude);
-  // printf(MYNAME ": waypoint->longitude: %f\n", waypoint->longitude);
+  // qDebug(waypoint)
 
   if ((waypoint->latitude < -90) || (waypoint->latitude > 90)) {
-    fatal(MYNAME ": File format error on '%s'. Unexpected value for latitude: %f\n", qPrintable(read_fname), waypoint->latitude);
+    Fatal() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for latitude: " << waypoint->latitude;
   }
 
   if ((waypoint->longitude < -180) || (waypoint->longitude > 180)) {
-    fatal(MYNAME ": File format error on '%s'. Unexpected value for longitude: %f\n", qPrintable(read_fname), waypoint->longitude);
+    Fatal() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for longitude: " << waypoint->longitude;
   }
 
   waypoint->altitude = altitude;
@@ -219,7 +230,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  waypoint->speed = speed;
+  waypoint->speed = speed * (1000.0 / (60 * 60)); // km/h to m/s
   waypoint->wpt_flags.speed = 1;
 
   waypoint->course = heading;
@@ -238,13 +249,13 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   fsdata->maxSNR = maxSNR;
   fsdata->batteryPercent = batteryPercent;
 
-  if (type == BL1000_POINT_TYPE_WAY_POINT) {
+  if (qstarz_bl_1000_is_waypoint_type(type)) {
     if (global_opts.synthesize_shortnames) {
       waypoint->shortname = QString("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
       waypoint->wpt_flags.shortname_is_synthetic = 1;
     }
     waypt_add(waypoint);
-  } else if ((type == BL1000_POINT_TYPE_TRACK_POINT_BY_TIME) || (type == BL1000_POINT_TYPE_TRACK_POINT_BY_DISTANCE) || (type == BL1000_POINT_TYPE_TRACK_POINT_BY_SPEED)) {
+  } else if (qstarz_bl_1000_is_trackpoint_type(type)) {
     track_add_wpt(track_route, waypoint, "TP", 3);
   } else {
     delete waypoint;
@@ -273,7 +284,7 @@ QstarzBL1000Format::read()
 {
   QFile file(read_fname);
   if (!file.open(QIODevice::ReadOnly)) {
-    fatal(MYNAME ": Error opening file %s\n", qPrintable(read_fname));
+    Fatal() << MYNAME << ": Error opening file " << read_fname;
   }
 
   QDataStream stream(&file);

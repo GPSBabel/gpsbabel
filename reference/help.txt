@@ -602,6 +602,7 @@ File Types (-i and -o options):
 	pocketfms_bc          PocketFMS breadcrumbs
 	pocketfms_fp          PocketFMS flightplan (.xml)
 	pocketfms_wp          PocketFMS waypoints (.txt)
+	qstarz_bl-1000        Qstarz BL-1000
 	raymarine             Raymarine Waypoint File (.rwf)
 	  location              Default location 
 	ricoh                 Ricoh GPS Log File
