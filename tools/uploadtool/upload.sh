@@ -51,6 +51,10 @@ if [ "$TRAVIS_EVENT_TYPE" == "pull_request" ] ; then
   rm -f ./uploaded-to
   for FILE in "$@" ; do
     BASENAME="$(basename "${FILE}")"
+
+    echo "Uploading $BASENAME to upload.sh has been suspended as o 03/16 -- rjl"
+    break
+
     curl --upload-file $FILE "https://transfer.sh/$BASENAME" > ./one-upload
     echo "$(cat ./one-upload)" # this way we get a newline
     echo -n "$(cat ./one-upload)\\n" >> ./uploaded-to # this way we get a \n but no newline
