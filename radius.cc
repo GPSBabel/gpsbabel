@@ -19,57 +19,29 @@
 
  */
 
-#include <cstdlib>          // for atof, atoi, qsort, strtod
+#include <cstdlib>          // for atoi, strtod
 
 #include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for foreach
+#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
 
-#include "defs.h"
+#include "defs.h"           // for Waypoint, waypt_del, route_add_head, route_add_wpt, route_head, waypt_add, waypt_count, xcalloc, xfree, kMilesPerKilometer
 #include "radius.h"
 #include "grtcirc.h"        // for RAD, gcdist, radtomiles
+
 
 #if FILTERS_ENABLED
 
 double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
-  return gcdist(
-           RAD(lat1),
-           RAD(lon1),
-           RAD(lat2),
-           RAD(lon2)
-         );
-}
-
-int RadiusFilter::dist_comp(const void* a, const void* b)
-{
-  const Waypoint* x1 = *(Waypoint**)a;
-  const Waypoint* x2 = *(Waypoint**)b;
-  auto* x1e = (extra_data*) x1->extra_data;
-  auto* x2e = (extra_data*) x2->extra_data;
-
-  if (x1e->distance > x2e->distance) {
-    return 1;
-  }
-  if (x1e->distance < x2e->distance) {
-    return -1;
-  }
-  return 0;
-
+  return radtomiles(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
 }
 
 void RadiusFilter::process()
 {
-  Waypoint** comp;
-  int i, wc;
-  route_head* rte_head = nullptr;
+  // waypt_del may modify container.
   foreach (Waypoint* waypointp, *global_waypoint_list) {
-    double dist = gc_distance(waypointp->latitude,
-                       waypointp->longitude,
-                       home_pos->latitude,
-                       home_pos->longitude);
-
-    /* convert radians to float point statute miles */
-    dist = radtomiles(dist);
+    double dist = gc_distance(waypointp->latitude, waypointp->longitude,
+                              home_pos->latitude, home_pos->longitude);
 
     if ((dist >= pos_dist) == (exclopt == nullptr)) {
       waypt_del(waypointp);
@@ -77,70 +49,60 @@ void RadiusFilter::process()
       continue;
     }
 
-    auto* ed = (extra_data*) xcalloc(1, sizeof(extra_data));
+    auto* ed = new extra_data;
     ed->distance = dist;
     waypointp->extra_data = ed;
   }
 
-  wc = waypt_count();
-
-  comp = (Waypoint**) xcalloc(wc, sizeof(*comp));
-
-  i = 0;
-
-  /*
-   * Create an array of remaining waypoints, popping them off the
-   * master queue as we go.   This gives us something reasonable
-   * for qsort.
-   */
-
-  foreach (Waypoint* wp, *global_waypoint_list) {
-    comp[i] = wp;
-    waypt_del(wp);
-    i++;
+  if (nosort == nullptr) {
+    auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
+      const auto* aed = static_cast<const extra_data*>(a->extra_data);
+      const auto* bed = static_cast<const extra_data*>(b->extra_data);
+      return aed->distance < bed->distance;
+    };
+    waypt_sort(dist_comp_lambda);
   }
 
-  if (!nosort) {
-    qsort(comp, wc, sizeof(Waypoint*), dist_comp);
-  }
-
-  if (routename) {
+  route_head* rte_head = nullptr;
+  if (routename != nullptr) {
     rte_head = new route_head;
     rte_head->rte_name = routename;
     route_add_head(rte_head);
   }
 
   /*
-   * The comp array is now sorted by distance.   As we run through it,
-   * we push them back onto the master wp list, letting us pass them
-   * on through in the modified order.
+   * Create an list of remaining waypoints.
+   * Delete them, add them to the global waypoint list, or add them
+   * to a new route.
    */
-  for (i = 0; i < wc; i++) {
-    Waypoint* wp = comp[i];
 
-    xfree(wp->extra_data);
+  WaypointList comp;
+  waypt_swap(comp);
+
+  int i = 0;
+  for (Waypoint* wp : qAsConst(comp)) {
+    delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 
-    if (maxctarg && i >= maxct) {
-      continue;
-    }
-    if (routename) {
-      route_add_wpt(rte_head, wp);
+    if ((maxctarg != nullptr) && (i >= maxct)) {
+      delete wp;
     } else {
-      waypt_add(wp);
+      if (routename != nullptr) {
+        route_add_wpt(rte_head, wp);
+      } else {
+        waypt_add(wp);
+      }
     }
+    ++i;
   }
-
-  xfree(comp);
 }
 
 void RadiusFilter::init()
 {
-  char* fm;
-
   pos_dist = 0;
 
-  if (distopt) {
+  if (distopt != nullptr) {
+    char* fm;
     pos_dist = strtod(distopt, &fm);
 
     if ((*fm == 'k') || (*fm == 'K')) {
@@ -149,7 +111,7 @@ void RadiusFilter::init()
     }
   }
 
-  if (maxctarg) {
+  if (maxctarg != nullptr) {
     maxct = atoi(maxctarg);
   } else {
     maxct = 0;
@@ -157,11 +119,11 @@ void RadiusFilter::init()
 
   home_pos = new Waypoint;
 
-  if (latopt) {
-    home_pos->latitude = atof(latopt);
+  if (latopt != nullptr) {
+    home_pos->latitude = strtod(latopt, nullptr);
   }
-  if (lonopt) {
-    home_pos->longitude = atof(lonopt);
+  if (lonopt != nullptr) {
+    home_pos->longitude = strtod(lonopt, nullptr);
   }
 }
 

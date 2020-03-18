@@ -19,6 +19,7 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
+#include <algorithm>            // for sort, stable_sort
 #include <cmath>                // for M_PI
 #include <cstdarg>              // for va_list
 #include <cstddef>              // for NULL, nullptr_t, size_t
@@ -549,8 +550,6 @@ using waypt_cb = void (*)(const Waypoint*);
 class WaypointList : private QList<Waypoint*>
 {
 public:
-  using Compare = bool (*)(const Waypoint*, const Waypoint*);
-
   void waypt_add(Waypoint* wpt); // a.k.a. append(), push_back()
   void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
@@ -565,7 +564,8 @@ public:
   void copy(WaypointList** dst) const;
   void restore(WaypointList* src);
   void swap(WaypointList& other);
-  void sort(Compare cmp);
+  template <typename Compare>
+  void sort(Compare cmp) {std::stable_sort(begin(), end(), cmp);}
   template <typename T>
   void waypt_disp_session(const session_t* se, T cb);
 
@@ -610,7 +610,13 @@ void waypt_append(WaypointList* src);
 void waypt_backup(WaypointList** head_bak);
 void waypt_restore(WaypointList* head_bak);
 void waypt_swap(WaypointList& other);
-void waypt_sort(WaypointList::Compare cmp);
+template <typename Compare>
+void waypt_sort(Compare cmp)
+{
+  extern WaypointList* global_waypoint_list;
+
+  global_waypoint_list->sort(cmp);
+}
 void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text);
 void waypt_add_url(Waypoint* wpt, const QString& link,
@@ -712,8 +718,6 @@ using route_trl = void (*)(const route_head*);
 class RouteList : private QList<route_head*>
 {
 public:
-  using Compare = bool (*)(const route_head*, const route_head*);
-
   int waypt_count() const;
   void add_head(route_head* rte); // a.k.a. append(), push_back()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
@@ -729,7 +733,8 @@ public:
   void copy(RouteList** dst) const;
   void restore(RouteList* src);
   void swap(RouteList& other);
-  void sort(Compare cmp);
+  template <typename Compare>
+  void sort(Compare cmp) {std::sort(begin(), end(), cmp);}
   template <typename T1, typename T2, typename T3>
   void disp_all(T1 rh, T2 rt, T3 wc);
   template <typename T2, typename T3>
@@ -795,11 +800,23 @@ void track_append(RouteList* src);
 void route_backup(RouteList** head_bak);
 void route_restore(RouteList* head_bak);
 void route_swap(RouteList& other);
-void route_sort(RouteList::Compare cmp);
+template <typename Compare>
+void route_sort(Compare cmp)
+{
+  extern RouteList* global_route_list;
+
+  global_route_list->sort(cmp);
+}
 void track_backup(RouteList** head_bak);
 void track_restore(RouteList* head_bak);
 void track_swap(RouteList& other);
-void track_sort(RouteList::Compare cmp);
+template <typename Compare>
+void track_sort(Compare cmp)
+{
+  extern RouteList* global_track_list;
+
+  global_track_list->sort(cmp);
+}
 computed_trkdata track_recompute(const route_head* trk);
 
 template <typename T>
