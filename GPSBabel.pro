@@ -279,7 +279,6 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 linux{
   coverage.commands = make clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
-  coverage.commands += ln -sf GPSBabel gpsbabel;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
   coverage.commands += gcov -r -o . $(SOURCES) &&
