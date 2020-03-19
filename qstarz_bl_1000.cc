@@ -23,14 +23,17 @@
 
  */
 
-#include <QtCore/QDataStream>
-#include <QtCore/QFile>
-
-#include "defs.h"
-#include "gbfile.h"
-#include "src/core/logging.h"   // for Warning, Fatal
-
 #include "qstarz_bl_1000.h"
+
+#include <cmath>               // for round
+#include <QtCore/QChar>        // for QChar
+#include <QtCore/QDataStream>  // for QDataStream, QDataStream::SinglePrecision, QDataStream::DoublePrecision, QDataStream::LittleEndian, QDataStream::Ok
+#include <QtCore/QDebug>       // for QDebug
+#include <QtCore/QFile>        // for QFile
+#include <QtCore/QIODevice>    // for QIODevice, QIODevice::ReadOnly
+#include "defs.h"              // for Waypoint, ddmm2degrees, route_head, track_add_head, track_add_wpt, waypt_add, waypt_count, wp_flags, fix_unknown, fix_2d, fix_3d, fix_dgps, fix_none, fix_pps, fix_type, global_options, global_opts
+#include "src/core/logging.h"  // for Fatal
+
 
 #define MYNAME "Qstarz BL-1000"
 
@@ -65,7 +68,7 @@ inline bool qstarz_bl_1000_is_trackpoint_type(BL1000_POINT_TYPE type)
 void
 QstarzBL1000Format::qstarz_bl_1000_read(QDataStream& stream)
 {
-  route_head* track_route = new route_head;
+  auto* track_route = new route_head;
 
   track_add_head(track_route);
 
@@ -230,7 +233,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  waypoint->speed = speed * (1000.0 / (60 * 60)); // km/h to m/s
+  waypoint->speed = KPH_TO_MPS(speed);
   waypoint->wpt_flags.speed = 1;
 
   waypoint->course = heading;

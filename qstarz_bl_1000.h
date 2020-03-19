@@ -26,11 +26,14 @@
 #ifndef QSTARZ_BL1000_H_INCLUDED_
 #define QSTARZ_BL1000_H_INCLUDED_
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
+#include <QtCore/QDataStream>  // for QDataStream
+#include <QtCore/QString>      // for QString
+#include <QtCore/QVector>      // for QVector
+#include <QtCore/QtGlobal>     // for qint8, quint16, quint8
 
-#include "defs.h"
-#include "format.h"
+#include "defs.h"              // for ff_cap, ff_cap_read, ff_cap_none, CET_CHARSET_ASCII, ff_type, ff_type_file, route_head
+#include "format.h"            // for Format
+#include "formspec.h"          // for FormatSpecificData, kFsQstarzBl1000
 
 struct qstarz_bl_1000_fsdata : FormatSpecificData {
   qstarz_bl_1000_fsdata() : FormatSpecificData(kFsQstarzBl1000) {}
