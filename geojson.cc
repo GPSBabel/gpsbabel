@@ -28,7 +28,8 @@
 
 #include "defs.h"
 #include "geojson.h"
-#include "src/core/file.h"
+#include "src/core/file.h"         // for File
+#include "src/core/logging.h"      // for Fatal
 
 
 void
@@ -143,6 +144,9 @@ GeoJsonFormat::read() {
 	QString file_content = ifd->readAll();
 	QJsonParseError error{};
 	QJsonDocument document = QJsonDocument::fromJson(file_content.toUtf8(), &error);
+  if (error.error != QJsonParseError::NoError) {
+    Fatal().nospace() << MYNAME << ": GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString();
+  }
 	QJsonObject rootObject = document.object();
 
 	if (rootObject[TYPE] != FEATURE_COLLECTION)

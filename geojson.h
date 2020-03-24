@@ -74,6 +74,7 @@ public:
 private:
 gpsbabel::File* ifd{nullptr};
 gpsbabel::File* ofd{nullptr};
+const char* MYNAME = "geojson";
 char* compact_opt = nullptr;
 QJsonObject* track_object = nullptr;
 QJsonArray* track_coords = nullptr;
