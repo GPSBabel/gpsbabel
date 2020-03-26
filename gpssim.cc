@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include "nmea.h"
 
 #define MYNAME "gpssim"
 
@@ -91,7 +92,7 @@ gpssim_wr_deinit()
 static void
 gpssim_write_sentence(const char* const s)
 {
-  gbfprintf(fout, "$%s*%02X\r\n", s, nmea_cksum(s));
+  gbfprintf(fout, "$%s*%02X\r\n", s, NmeaFormat::nmea_cksum(s));
 }
 
 static void
