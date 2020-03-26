@@ -32,6 +32,8 @@
 class GeoJsonFormat : public Format
 {
 public:
+  /* Member Functions */
+
   QVector<arglist_t>* get_args() override
   {
     return &geojson_args;
@@ -64,6 +66,9 @@ public:
   void write() override;
   void wr_deinit() override;
 
+private:
+  /* Member Functions */
+
   void geojson_waypt_pr(const Waypoint* waypoint) const;
   static Waypoint* waypoint_from_coordinates(const QJsonArray& coordinates);
   void routes_from_polygon_coordinates(const QJsonArray& polygon);
@@ -71,38 +76,41 @@ public:
   void geojson_track_disp(const Waypoint* trackpoint) const;
   void geojson_track_tlr(const route_head* unused);
 
-private:
-gpsbabel::File* ifd{nullptr};
-gpsbabel::File* ofd{nullptr};
-const char* MYNAME = "geojson";
-char* compact_opt = nullptr;
-QJsonObject* track_object = nullptr;
-QJsonArray* track_coords = nullptr;
+  /* Data Members */
 
-const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
-const QString FEATURE = QStringLiteral("Feature");
-const QString POINT = QStringLiteral("Point");
-const QString MULTIPOINT = QStringLiteral("MultiPoint");
-const QString LINESTRING = QStringLiteral("LineString");
-const QString MULTILINESTRING = QStringLiteral("MultiLineString");
-const QString POLYGON = QStringLiteral("Polygon");
-const QString MULTIPOLYGON = QStringLiteral("MultiPolygon");
-const QString TYPE = QStringLiteral("type");
-const QString FEATURES = QStringLiteral("features");
-const QString COORDINATES = QStringLiteral("coordinates");
-const QString GEOMETRY = QStringLiteral("geometry");
-const QString PROPERTIES = QStringLiteral("properties");
-const QString NAME = QStringLiteral("name");
-const QString DESCRIPTION = QStringLiteral("description");
-const QString URL = QStringLiteral("url");
-const QString URLNAME = QStringLiteral("urlname");
+  gpsbabel::File* ifd{nullptr};
+  gpsbabel::File* ofd{nullptr};
+  const char* MYNAME = "geojson";
+  char* compact_opt = nullptr;
+  QJsonObject* track_object = nullptr;
+  QJsonArray* track_coords = nullptr;
 
-QVector<arglist_t> geojson_args = {
-  {"compact", &compact_opt, "Compact Output. Default is off.", 
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
-};
+  const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
+  const QString FEATURE = QStringLiteral("Feature");
+  const QString POINT = QStringLiteral("Point");
+  const QString MULTIPOINT = QStringLiteral("MultiPoint");
+  const QString LINESTRING = QStringLiteral("LineString");
+  const QString MULTILINESTRING = QStringLiteral("MultiLineString");
+  const QString POLYGON = QStringLiteral("Polygon");
+  const QString MULTIPOLYGON = QStringLiteral("MultiPolygon");
+  const QString TYPE = QStringLiteral("type");
+  const QString FEATURES = QStringLiteral("features");
+  const QString COORDINATES = QStringLiteral("coordinates");
+  const QString GEOMETRY = QStringLiteral("geometry");
+  const QString PROPERTIES = QStringLiteral("properties");
+  const QString NAME = QStringLiteral("name");
+  const QString DESCRIPTION = QStringLiteral("description");
+  const QString URL = QStringLiteral("url");
+  const QString URLNAME = QStringLiteral("urlname");
 
-QJsonArray* feature_collection = nullptr;
+  QVector<arglist_t> geojson_args = {
+    {
+      "compact", &compact_opt, "Compact Output. Default is off.",
+      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+  };
+
+  QJsonArray* feature_collection = nullptr;
 
 };
 #endif // GEOJSON_H_INCLUDED_
