@@ -29,6 +29,7 @@
 
 #include "defs.h"
 #include "format.h"
+#include "geojson.h"
 #include "ggv_bin.h"
 #include "gpx.h"
 #include "legacyformat.h"
@@ -172,7 +173,6 @@ extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
 extern ff_vecs_t energympro_vecs;
-extern ff_vecs_t geojson_vecs;
 extern ff_vecs_t globalsat_sport_vecs;
 #endif // MAXIMAL_ENABLED
 
@@ -406,7 +406,7 @@ private:
   LegacyFormat mapfactor_fmt {mapfactor_vecs};
   LegacyFormat energympro_fmt {energympro_vecs};
   MyNavFormat mynav_fmt;
-  LegacyFormat geojson_fmt {geojson_vecs};
+  GeoJsonFormat geojson_fmt;
   GgvBinFormat ggv_bin_fmt;
   LegacyFormat globalsat_sport_fmt {globalsat_sport_vecs};
 #endif // MAXIMAL_ENABLED
