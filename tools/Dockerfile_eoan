@@ -54,9 +54,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qt5-default \
-    libqt5webkit5-dev \
     qttools5-dev-tools \
     qttranslations5-l10n \
+    qtwebengine5-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs needed to generate coverage report:
