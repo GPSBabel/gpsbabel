@@ -136,6 +136,7 @@ HEADERS =  \
 	mapsend.h \
 	mynav.h \
 	navilink.h \
+	nmea.h \
 	session.h \
 	shape.h \
 	shapelib/shapefil.h \

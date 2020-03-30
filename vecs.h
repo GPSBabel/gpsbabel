@@ -34,6 +34,7 @@
 #include "gpx.h"
 #include "legacyformat.h"
 #include "mynav.h"
+#include "nmea.h"
 #include "shape.h"
 #include "xcsv.h"
 #include "yahoo.h"
@@ -47,7 +48,6 @@ extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
-extern ff_vecs_t nmea_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t kml_vecs;
@@ -276,7 +276,7 @@ private:
   LegacyFormat gdb_fmt {gdb_vecs};
   LegacyFormat mapsend_fmt {mapsend_vecs};
   LegacyFormat mps_fmt {mps_vecs};
-  LegacyFormat nmea_fmt {nmea_vecs};
+  NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   LegacyFormat pcx_fmt {pcx_vecs};
   LegacyFormat kml_fmt {kml_vecs};
