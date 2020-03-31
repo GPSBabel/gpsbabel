@@ -152,6 +152,7 @@ set(HEADERS
   mynav.h
   navilink.h
   nmea.h
+  random.h
   session.h
   shape.h
   shapelib/shapefil.h
