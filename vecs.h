@@ -35,6 +35,7 @@
 #include "legacyformat.h"
 #include "mynav.h"
 #include "nmea.h"
+#include "random.h"
 #include "shape.h"
 #include "xcsv.h"
 #include "yahoo.h"
@@ -123,7 +124,6 @@ extern ff_vecs_t g7towin_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
-extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t dg100_vecs;
 extern ff_vecs_t dg200_vecs;
@@ -355,7 +355,7 @@ private:
 #endif // CSVFMTS_ENABLED
   LegacyFormat garmin_gpi_fmt {garmin_gpi_vecs};
   LegacyFormat lmx_fmt {lmx_vecs};
-  LegacyFormat random_fmt {random_vecs};
+  RandomFormat random_fmt;
   LegacyFormat xol_fmt {xol_vecs};
   LegacyFormat dg100_fmt {dg100_vecs};
   LegacyFormat dg200_fmt {dg200_vecs};
