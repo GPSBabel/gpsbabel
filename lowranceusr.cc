@@ -123,10 +123,20 @@ extern WaypointList* global_waypoint_list;
 constexpr int LowranceusrFormat::DEF_ICON;
 constexpr int LowranceusrFormat::X_1_ICON;
 constexpr const char* LowranceusrFormat::DISABLED_CACHE_TXT;
+// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
+#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
 constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[];
+#else
+constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[134];
+#endif
 constexpr int LowranceusrFormat::DEF_USR4_ICON;
 constexpr int LowranceusrFormat::DEF_USR4_COLOR;
+// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
+#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
 constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[];
+#else
+constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[22];
+#endif
 constexpr int LowranceusrFormat::MAXUSRSTRINGSIZE;
 constexpr double LowranceusrFormat::SEMIMINOR;
 constexpr double LowranceusrFormat::DEGREESTORADIANS;
