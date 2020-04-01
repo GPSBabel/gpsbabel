@@ -546,8 +546,6 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
 void
 LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
 {
-  int waypoint_version;
-
   auto* fsdata = new lowranceusr4_fsdata;
   wpt_tmp->fs.FsChainAdd(fsdata);
 
@@ -568,7 +566,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
   fsdata->uid_seq_high = gbfgetint32(file_in);
 
   /* Waypt stream version number */
-  waypoint_version = gbfgetint16(file_in);
+  int waypoint_version = gbfgetint16(file_in);
 
   /* Waypoint name; input is 2 bytes per char, we convert to 1 */
   QString name = lowranceusr4_readstr(file_in, 2);
@@ -791,7 +789,6 @@ LowranceusrFormat::lowranceusr_parse_route() const
 void
 LowranceusrFormat::lowranceusr4_parse_route() const
 {
-  int route_version;
   int UUID1 = 0;
   int UUID2 = 0;
   int UUID3 = 0;
@@ -819,7 +816,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
   fsdata->uid_seq_high = gbfgetint32(file_in);
 
   /* Route stream version number */
-  route_version = gbfgetint16(file_in);
+  int route_version = gbfgetint16(file_in);
   if (global_opts.debug_level > 1) {
     printf(MYNAME " parse_route: Version = %d\n", route_version);
   }
@@ -1044,10 +1041,6 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
 void
 LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
 {
-  int trail_version;
-  int trail_color;
-  int trail_flags;
-
   auto* fsdata = new lowranceusr4_fsdata;
   trk_head->fs.FsChainAdd(fsdata);
 
@@ -1059,7 +1052,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   fsdata->uid_seq_high = gbfgetint32(file_in);
 
   /* Trail stream version number */
-  trail_version = gbfgetint16(file_in);
+  int trail_version = gbfgetint16(file_in);
   if (global_opts.debug_level == 99) {
     printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
   }
@@ -1077,10 +1070,10 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   }
 
   /* Flags, discard for now */
-  trail_flags = gbfgetint32(file_in);
+  int trail_flags = gbfgetint32(file_in);
 
   /* Color ID, discard for now */
-  trail_color = gbfgetint32(file_in);
+  int trail_color = gbfgetint32(file_in);
 
   /* Comment/description; input is 2 bytes per char, we convert to 1 */
   QString desc = lowranceusr4_readstr(file_in, 2);

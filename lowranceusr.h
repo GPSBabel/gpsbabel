@@ -189,15 +189,15 @@ private:
 
   /* Constants */
 
-  constexpr static int DEF_ICON = 10001;
-  constexpr static int X_1_ICON = 10003;
-  constexpr static const char* DISABLED_CACHE_TXT = "Disabled Cache";
+  static constexpr int DEF_ICON = 10001;
+  static constexpr int X_1_ICON = 10003;
+  static constexpr const char* DISABLED_CACHE_TXT = "Disabled Cache";
 
 // MSVC 2015 will error with C2373 if the array length isn't explicitly included.
 #if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-  constexpr static lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
+  static constexpr lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
 #else
-  constexpr static lowranceusr_icon_mapping_t lowranceusr_icon_value_table[134] = {
+  static constexpr lowranceusr_icon_mapping_t lowranceusr_icon_value_table[134] = {
 #endif
 
     /* Taken from iFinder 1.8 */
@@ -358,14 +358,14 @@ private:
     {    -1,    nullptr }
   };
 
-  constexpr static int DEF_USR4_ICON = 2;
-  constexpr static int DEF_USR4_COLOR = 0;
+  static constexpr int DEF_USR4_ICON = 2;
+  static constexpr int DEF_USR4_COLOR = 0;
 
 // MSVC 2015 will error with C2373 if the array length isn't explicitly included.
 #if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-  constexpr static lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
+  static constexpr lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
 #else
-  constexpr static lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[22] = {
+  static constexpr lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[22] = {
 #endif
 
     /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
@@ -396,12 +396,12 @@ private:
     {    -1,    nullptr,                { nullptr,  nullptr,   nullptr,  nullptr,   nullptr,   nullptr,  nullptr  }}
   };
 
-  constexpr static int MAXUSRSTRINGSIZE = 256;
-  constexpr static double SEMIMINOR = 6356752.3142;
-  constexpr static double DEGREESTORADIANS = M_PI/180.0;
-  constexpr static int MAX_TRAIL_POINTS = 9999;
-  constexpr static double UNKNOWN_USR_ALTITUDE = METERS_TO_FEET(-10000); /* -10000ft is how the unit stores unknown */
-  constexpr static time_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
+  static constexpr int MAXUSRSTRINGSIZE = 256;
+  static constexpr double SEMIMINOR = 6356752.3142;
+  static constexpr double DEGREESTORADIANS = M_PI/180.0;
+  static constexpr int MAX_TRAIL_POINTS = 9999;
+  static constexpr double UNKNOWN_USR_ALTITUDE = METERS_TO_FEET(-10000); /* -10000ft is how the unit stores unknown */
+  static constexpr time_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
 
   /* Member Functions */
 
