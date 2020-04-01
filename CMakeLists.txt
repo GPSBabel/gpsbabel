@@ -147,6 +147,7 @@ set(HEADERS
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
   legacyformat.h
+  lowranceusr.h
   magellan.h
   mapsend.h
   mynav.h
