@@ -120,8 +120,19 @@ extern WaypointList* global_waypoint_list;
 
 // Until c++17 we have to define odr-used constexpr static data members at namespace scope.
 #if __cplusplus < 201703L
+constexpr int LowranceusrFormat::DEF_ICON;
+constexpr int LowranceusrFormat::X_1_ICON;
+constexpr const char* LowranceusrFormat::DISABLED_CACHE_TXT;
 constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[];
+constexpr int LowranceusrFormat::DEF_USR4_ICON;
+constexpr int LowranceusrFormat::DEF_USR4_COLOR;
 constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[];
+constexpr int LowranceusrFormat::MAXUSRSTRINGSIZE;
+constexpr double LowranceusrFormat::SEMIMINOR;
+constexpr double LowranceusrFormat::DEGREESTORADIANS;
+constexpr int LowranceusrFormat::MAX_TRAIL_POINTS;
+constexpr double LowranceusrFormat::UNKNOWN_USR_ALTITUDE;
+constexpr time_t LowranceusrFormat::base_time_secs;
 #endif
 
 /* below couple of functions mostly borrowed from raymarine.c */
