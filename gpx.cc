@@ -28,6 +28,7 @@
 #include <QtCore/QDateTime>                        // for QDateTime
 #include <QtCore/QHash>                            // for QHash
 #include <QtCore/QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QtCore/QLatin1Char>                      // for QLatin1Char
 #include <QtCore/QLatin1String>                    // for QLatin1String
 #include <QtCore/QStaticStringData>                // for QStaticStringData
 #include <QtCore/QString>                          // for QString, QStringLiteral, operator+, operator==
@@ -1075,7 +1076,7 @@ GpxFormat::read()
     // do processing
     switch (reader->tokenType()) {
     case QXmlStreamReader::StartElement:
-      current_tag.append(QLatin1String("/"));
+      current_tag.append(QLatin1Char('/'));
       current_tag.append(reader->qualifiedName());
       gpx_start(reader->qualifiedName(), reader->attributes());
       break;
