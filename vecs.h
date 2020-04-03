@@ -33,6 +33,7 @@
 #include "ggv_bin.h"
 #include "gpx.h"
 #include "legacyformat.h"
+#include "lowranceusr.h"
 #include "mynav.h"
 #include "nmea.h"
 #include "random.h"
@@ -54,7 +55,6 @@ extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t kml_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t gpsutil_vecs;
-extern ff_vecs_t lowranceusr_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
@@ -282,7 +282,7 @@ private:
   LegacyFormat kml_fmt {kml_vecs};
 #if MAXIMAL_ENABLED
   LegacyFormat gpsutil_fmt {gpsutil_vecs};
-  LegacyFormat lowranceusr_fmt {lowranceusr_vecs};
+  LowranceusrFormat lowranceusr_fmt;
   LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
