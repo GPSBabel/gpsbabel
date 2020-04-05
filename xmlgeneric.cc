@@ -59,8 +59,10 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
 xg_callback*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
-  for (xg_tag_mapping* tm = xg_tag_tbl; tm->tag_cb != nullptr; tm++) {
-    if (str_match(CSTR(tag), tm->tag_name) && (cb_type == tm->cb_type)) {
+  const QByteArray key = tag.toUtf8();
+  const char* keyptr = key.constData();
+  for (xg_tag_mapping* tm = xg_tag_tbl; tm->tag_cb != nullptr; ++tm) {
+    if ((cb_type == tm->cb_type) && str_match(keyptr, tm->tag_name)) {
       return tm->tag_cb;
     }
   }
@@ -122,7 +124,7 @@ xml_run_parser(QXmlStreamReader& reader)
         goto readnext;
       }
 
-      current_tag.append("/");
+      current_tag.append(QLatin1Char('/'));
       current_tag.append(reader.qualifiedName());
 
       cb = xml_tbl_lookup(current_tag, cb_start);
@@ -191,7 +193,7 @@ void xml_read()
 
 void xml_ignore_tags(const char** taglist)
 {
-  for (; taglist && *taglist; taglist++) {
+  for (; taglist && *taglist; ++taglist) {
     xg_ignore_taglist.insert(QString::fromUtf8(*taglist));
   }
 }

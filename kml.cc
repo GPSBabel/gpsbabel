@@ -312,6 +312,10 @@ xg_tag_mapping kml_map[] = {
 
 static
 const char* kml_tags_to_ignore[] = {
+  "styleUrl",
+  "snippet",
+  "LookAt",
+  "tilt",
   "kml",
   "Document",
   "Folder",
