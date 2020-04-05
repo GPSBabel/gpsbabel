@@ -22,9 +22,9 @@
 #define GPX_H_INCLUDED_
 
 #include <QtCore/QHash>                 // for QHash
-#include <QtCore/QList>                 // for QList
 #include <QtCore/QString>               // for QString
 #include <QtCore/QStringList>           // for QStringList
+#include <QtCore/QStringRef>            // for QStringRef
 #include <QtCore/QVector>               // for QVector
 #include <QtCore/QVersionNumber>        // for QVersionNumber
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
