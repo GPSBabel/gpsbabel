@@ -312,14 +312,19 @@ xg_tag_mapping kml_map[] = {
 
 static
 const char* kml_tags_to_ignore[] = {
-  "styleUrl",
-  "snippet",
-  "LookAt",
-  "tilt",
   "kml",
   "Document",
   "Folder",
-  nullptr,
+  nullptr
+};
+
+static
+const char* kml_tags_to_skip[] = {
+  "Camera",
+  "LookAt",
+  "styleUrl",
+  "snippet",
+  nullptr
 };
 
 // The TimeSpan/begin and TimeSpan/end DateTimes:
@@ -552,6 +557,7 @@ kml_rd_init(const QString& fname)
 {
   xml_init(fname, kml_map, nullptr);
   xml_ignore_tags(kml_tags_to_ignore);
+  xml_skip_tags(kml_tags_to_skip);
 }
 
 static

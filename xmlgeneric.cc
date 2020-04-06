@@ -19,24 +19,33 @@
 
  */
 
-#include "defs.h"
-#include "cet_util.h"
-#include "src/core/file.h"
-#include "xmlgeneric.h"
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QHash>                 // for QHash
+#include <QtCore/QIODevice>             // for QIODevice, QIODevice::ReadOnly
+#include <QtCore/QLatin1Char>           // for QLatin1Char
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QTextCodec>            // for QTextCodec
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
+#include <QtCore/QtGlobal>              // for qPrintable
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QXmlStreamReader>
+#include "defs.h"
+#include "xmlgeneric.h"
+#include "src/core/file.h"              // for File
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
 #include <QtCore/QDebug>
 #endif
 
+enum xg_shortcut {
+  xg_shortcut_none = 0,
+  xg_shortcut_skip,
+  xg_shortcut_ignore
+};
+
 static xg_tag_mapping* xg_tag_tbl;
-static QSet<QString> xg_ignore_taglist;
+static QHash<QString, xg_shortcut> xg_shortcut_taglist;
 
 static QString rd_fname;
 static QByteArray reader_data;
@@ -93,10 +102,14 @@ xml_deinit()
   codec = utf8_codec;
 }
 
-static bool
-xml_consider_ignoring(const QStringRef& name)
+static xg_shortcut
+xml_shortcut(const QStringRef& name)
 {
-  return xg_ignore_taglist.contains(name.toString());
+   QString key = name.toString();
+   if (xg_shortcut_taglist.contains(key)) {
+     return xg_shortcut_taglist.value(key);
+   }
+  return xg_shortcut_none;
 }
 
 static void
@@ -120,9 +133,15 @@ xml_run_parser(QXmlStreamReader& reader)
       break;
 
     case QXmlStreamReader::StartElement:
-      if (xml_consider_ignoring(reader.name())) {
+      switch (xml_shortcut(reader.name())) {
+      case xg_shortcut_skip:
+        reader.skipCurrentElement();
         goto readnext;
-      }
+      case xg_shortcut_ignore:
+        goto readnext;
+      default:
+        break;
+     }
 
       current_tag.append(QLatin1Char('/'));
       current_tag.append(reader.qualifiedName());
@@ -146,7 +165,7 @@ xml_run_parser(QXmlStreamReader& reader)
       break;
 
     case QXmlStreamReader::EndElement:
-      if (xml_consider_ignoring(reader.name())) {
+      if (xml_shortcut(reader.name()) == xg_shortcut_skip) {
         goto readnext;
       }
 
@@ -194,7 +213,14 @@ void xml_read()
 void xml_ignore_tags(const char** taglist)
 {
   for (; taglist && *taglist; ++taglist) {
-    xg_ignore_taglist.insert(QString::fromUtf8(*taglist));
+    xg_shortcut_taglist.insert(QString::fromUtf8(*taglist), xg_shortcut_ignore);
+  }
+}
+
+void xml_skip_tags(const char** taglist)
+{
+  for (; taglist && *taglist; ++taglist) {
+    xg_shortcut_taglist.insert(QString::fromUtf8(*taglist), xg_shortcut_skip);
   }
 }
 
