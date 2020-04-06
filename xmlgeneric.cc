@@ -122,7 +122,7 @@ xml_run_parser(QXmlStreamReader& reader)
     switch (reader.tokenType()) {
     case QXmlStreamReader::StartDocument:
       if (!reader.documentEncoding().isEmpty()) {
-        codec = QTextCodec::codecForName(CSTR(reader.documentEncoding().toString()));
+        codec = QTextCodec::codecForName(reader.documentEncoding().toUtf8());
       }
       if (codec == nullptr) {
         // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we
@@ -202,11 +202,11 @@ void xml_read()
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           qPrintable(file.fileName()),
-          (long) reader.lineNumber(),
-          (long) reader.columnNumber());
+          reader.lineNumber(),
+          reader.columnNumber());
   }
 }
 
@@ -241,11 +241,11 @@ void xml_readstring(const char* str)
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           "unknown",
-          (long) reader.lineNumber(),
-          (long) reader.columnNumber());
+          reader.lineNumber(),
+          reader.columnNumber());
   }
 }
 
