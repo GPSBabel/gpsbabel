@@ -555,9 +555,7 @@ static
 void
 kml_rd_init(const QString& fname)
 {
-  xml_init(fname, kml_map, nullptr);
-  xml_ignore_tags(kml_tags_to_ignore);
-  xml_skip_tags(kml_tags_to_skip);
+  xml_init(fname, kml_map, nullptr, kml_tags_to_ignore, kml_tags_to_skip);
 }
 
 static

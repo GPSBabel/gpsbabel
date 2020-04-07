@@ -45,7 +45,7 @@ enum xg_shortcut {
 };
 
 static xg_tag_mapping* xg_tag_tbl;
-static QHash<QString, xg_shortcut> xg_shortcut_taglist;
+static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
 
 static QString rd_fname;
 static QByteArray reader_data;
@@ -79,7 +79,8 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 }
 
 void
-xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
+xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
+         const char** ignorelist, const char** skiplist)
 {
   rd_fname = fname;
   xg_tag_tbl = tbl;
@@ -88,6 +89,17 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
     QTextCodec* tcodec = QTextCodec::codecForName(encoding);
     if (tcodec) {
       codec = tcodec;
+    }
+  }
+  xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
+  if (ignorelist != nullptr) {
+    for (; ignorelist && *ignorelist; ++ignorelist) {
+      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut_ignore);
+    }
+  }
+  if (skiplist != nullptr) {
+    for (; skiplist && *skiplist; ++skiplist) {
+      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut_skip);
     }
   }
 }
@@ -100,14 +112,16 @@ xml_deinit()
   xg_tag_tbl = nullptr;
   xg_encoding = nullptr;
   codec = utf8_codec;
+  delete xg_shortcut_taglist;
+  xg_shortcut_taglist = nullptr;
 }
 
 static xg_shortcut
 xml_shortcut(const QStringRef& name)
 {
    QString key = name.toString();
-   if (xg_shortcut_taglist.contains(key)) {
-     return xg_shortcut_taglist.value(key);
+   if (xg_shortcut_taglist->contains(key)) {
+     return xg_shortcut_taglist->value(key);
    }
   return xg_shortcut_none;
 }
@@ -207,20 +221,6 @@ void xml_read()
           qPrintable(file.fileName()),
           reader.lineNumber(),
           reader.columnNumber());
-  }
-}
-
-void xml_ignore_tags(const char** taglist)
-{
-  for (; taglist && *taglist; ++taglist) {
-    xg_shortcut_taglist.insert(QString::fromUtf8(*taglist), xg_shortcut_ignore);
-  }
-}
-
-void xml_skip_tags(const char** taglist)
-{
-  for (; taglist && *taglist; ++taglist) {
-    xg_shortcut_taglist.insert(QString::fromUtf8(*taglist), xg_shortcut_skip);
   }
 }
 

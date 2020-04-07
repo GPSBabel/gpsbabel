@@ -170,8 +170,7 @@ gtc_tags_to_ignore[] = {
 static void
 gtc_rd_init(const QString& fname)
 {
-  xml_init(fname, gtc_map, nullptr);
-  xml_ignore_tags(gtc_tags_to_ignore);
+  xml_init(fname, gtc_map, nullptr, gtc_tags_to_ignore);
 }
 
 static void
