@@ -1,0 +1,4 @@
+
+gpsbabel -i yahoo -f ${REFERENCE}/yahoo.xml -o unicsv -F ${TMPDIR}/yahoo.csv
+compare ${REFERENCE}/yahoo.csv ${TMPDIR}/yahoo.csv
+

@@ -31,23 +31,72 @@
 // be convenient to overload some day.
 using xg_string = const QString&;
 
-
 enum xg_cb_type {
   cb_start = 1,
   cb_cdata,
   cb_end,
 };
 
-using xg_callback = void (xg_string, const QXmlStreamAttributes*);
+class XgCallbackBase
+{
+public:
+  XgCallbackBase() = default;
+  virtual ~XgCallbackBase() = default;
+  XgCallbackBase(const XgCallbackBase&) = delete;
+  XgCallbackBase& operator=(const XgCallbackBase&) = delete;
+  XgCallbackBase(XgCallbackBase&&) = delete;
+  XgCallbackBase& operator=(XgCallbackBase&&) = delete;
 
+  virtual void operator()(xg_string string, const QXmlStreamAttributes* attrs) const = 0;
+};
+
+template<class XgFormat>
+class XgFunctor : public XgCallbackBase
+{
+public:
+  using XgCb = void (XgFormat::*)(xg_string, const QXmlStreamAttributes*);
+  XgFunctor(XgFormat* obj, XgCb cb) : that_(obj), cb_(cb) {}
+  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const
+  {
+    (that_->*cb_)(string, attrs);
+  }
+
+private:
+  XgFormat* that_;
+  XgCb cb_;
+};
+
+class XgFunctionPtrCallback : public XgCallbackBase
+{
+public:
+  using XgCb = void (xg_string, const QXmlStreamAttributes*);
+  explicit XgFunctionPtrCallback(XgCb cb) : cb_(cb) {}
+  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const
+  {
+    (*cb_)(string, attrs);
+  }
+
+private:
+  XgCb* cb_;
+};
+
+struct xg_tag_map_entry {
+  XgCallbackBase* tag_cb;
+  xg_cb_type cb_type;
+  const char* tag_name;
+};
+
+// Legacy tag mapping table using function pointers.
+using xg_callback = void (xg_string, const QXmlStreamAttributes*);
 struct xg_tag_mapping {
   xg_callback* tag_cb;
   xg_cb_type cb_type;
   const char* tag_name;
 };
 
-extern const char* xhtml_entities;
-
+void xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
+              const char** ignorelist = nullptr,
+              const char** skiplist = nullptr);
 void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding,
               const char** ignorelist = nullptr,
               const char** skiplist = nullptr);
