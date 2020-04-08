@@ -46,6 +46,7 @@ enum xg_shortcut {
 };
 
 static QList<xg_tag_map_entry>* xg_tag_tbl;
+static bool dynamic_tag_tbl;
 static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
 
 static QString rd_fname;
@@ -111,7 +112,8 @@ void
 xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
          const char** ignorelist, const char** skiplist)
 {
-  xg_tag_tbl = new QList<xg_tag_map_entry>(*tbl);
+  xg_tag_tbl = tbl;
+  dynamic_tag_tbl = false;
 
   xml_common_init(fname, encoding, ignorelist, skiplist);
 }
@@ -121,6 +123,7 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
          const char** ignorelist, const char** skiplist)
 {
   xg_tag_tbl = new QList<xg_tag_map_entry>;
+  dynamic_tag_tbl = true;
   for (xg_tag_mapping* tm = tbl; tm->tag_cb != nullptr; ++tm) {
   auto* cb = new XgFunctionPtrCallback(tm->tag_cb);
     xg_tag_tbl->append({cb, tm->cb_type, tm->tag_name});
@@ -132,7 +135,12 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
 void
 xml_deinit()
 {
-  delete xg_tag_tbl;
+  if (dynamic_tag_tbl) {
+    for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+      delete tm.tag_cb;
+    }
+    delete xg_tag_tbl;
+  }
   xg_tag_tbl = nullptr;
 
   reader_data.clear();
