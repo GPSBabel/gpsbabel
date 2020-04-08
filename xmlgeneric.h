@@ -56,7 +56,7 @@ class XgFunctor : public XgCallbackBase
 public:
   using XgCb = void (XgFormat::*)(xg_string, const QXmlStreamAttributes*);
   XgFunctor(XgFormat* obj, XgCb cb) : that_(obj), cb_(cb) {}
-  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const
+  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
   {
     (that_->*cb_)(string, attrs);
   }
@@ -71,7 +71,7 @@ class XgFunctionPtrCallback : public XgCallbackBase
 public:
   using XgCb = void (xg_string, const QXmlStreamAttributes*);
   explicit XgFunctionPtrCallback(XgCb cb) : cb_(cb) {}
-  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const
+  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
   {
     (*cb_)(string, attrs);
   }
