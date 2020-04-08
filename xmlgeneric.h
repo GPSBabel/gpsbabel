@@ -22,7 +22,8 @@
 #ifndef XMLGENERIC_H_INCLUDED_
 #define XMLGENERIC_H_INCLUDED_
 
-#include <QtCore/QString>
+#include <QtCore/QString>               // for QString
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 // Maybe the XmlGeneric string callback really shouldn't have a type
 // of its own; this was a crutch during the move from char* to QString.
@@ -37,7 +38,6 @@ enum xg_cb_type {
   cb_end,
 };
 
-class QXmlStreamAttributes;
 using xg_callback = void (xg_string, const QXmlStreamAttributes*);
 
 struct xg_tag_mapping {
@@ -47,9 +47,10 @@ struct xg_tag_mapping {
 };
 
 extern const char* xhtml_entities;
-void xml_ignore_tags(const char** taglist);
 
-void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding);
+void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding,
+              const char** ignorelist = nullptr,
+              const char** skiplist = nullptr);
 void xml_read();
 void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
