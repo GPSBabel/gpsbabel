@@ -107,13 +107,12 @@ xml_common_init(const QString& fname, const char* encoding,
   }
 }
 
-
 void
 xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
-         const char** ignorelist, const char** skiplist)
+         const char** ignorelist, const char** skiplist, bool dynamic_tbl)
 {
   xg_tag_tbl = tbl;
-  dynamic_tag_tbl = false;
+  dynamic_tag_tbl = dynamic_tbl;
 
   xml_common_init(fname, encoding, ignorelist, skiplist);
 }

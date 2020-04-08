@@ -20,10 +20,11 @@
  */
 
 
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+
 #include "defs.h"
 #include "yahoo.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include "xmlgeneric.h"                 // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
 
 
 #define MYNAME "yahoo"
@@ -31,7 +32,7 @@
 void
 YahooFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, &gl_map, nullptr);
+  xml_init(fname, build_xg_tag_map(this, gl_map), nullptr, nullptr, nullptr, true);
 }
 
 void

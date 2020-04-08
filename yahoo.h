@@ -84,22 +84,16 @@ private:
   void wpt_lon(const QString&, const QXmlStreamAttributes*);
   void wpt_addr(const QString&, const QXmlStreamAttributes*);
 
-  XgFunctor<YahooFormat> wpt_s_f{this, &YahooFormat::wpt_s};
-  XgFunctor<YahooFormat> wpt_lat_f{this, &YahooFormat::wpt_lat};
-  XgFunctor<YahooFormat> wpt_lon_f{this, &YahooFormat::wpt_lon};
-  XgFunctor<YahooFormat> wpt_addr_f{this, &YahooFormat::wpt_addr};
-  XgFunctor<YahooFormat> wpt_e_f{this, &YahooFormat::wpt_e};
-
-  QList<xg_tag_map_entry> gl_map = {
-    {&wpt_s_f, cb_start, "/ResultSet/Result"},
-    {&wpt_lat_f, cb_cdata, "/ResultSet/Result/Latitude"},
-    {&wpt_lon_f, cb_cdata, "/ResultSet/Result/Longitude"},
-    {&wpt_addr_f, cb_cdata, "/ResultSet/Result/Address"},
-    {&wpt_addr_f, cb_cdata, "/ResultSet/Result/City"},
-    {&wpt_addr_f, cb_cdata, "/ResultSet/Result/State"},
-    {&wpt_addr_f, cb_cdata, "/ResultSet/Result/Zip"},
-    {&wpt_addr_f, cb_cdata, "/ResultSet/Result/Country"},
-    {&wpt_e_f, cb_end, "/ResultSet/Result"}
+  QList<xg_functor_map_entry<YahooFormat>> gl_map = {
+    {&YahooFormat::wpt_s, cb_start, "/ResultSet/Result"},
+    {&YahooFormat::wpt_lat, cb_cdata, "/ResultSet/Result/Latitude"},
+    {&YahooFormat::wpt_lon, cb_cdata, "/ResultSet/Result/Longitude"},
+    {&YahooFormat::wpt_addr, cb_cdata, "/ResultSet/Result/Address"},
+    {&YahooFormat::wpt_addr, cb_cdata, "/ResultSet/Result/City"},
+    {&YahooFormat::wpt_addr, cb_cdata, "/ResultSet/Result/State"},
+    {&YahooFormat::wpt_addr, cb_cdata, "/ResultSet/Result/Zip"},
+    {&YahooFormat::wpt_addr, cb_cdata, "/ResultSet/Result/Country"},
+    {&YahooFormat::wpt_e, cb_end, "/ResultSet/Result"}
   };
 };
 
