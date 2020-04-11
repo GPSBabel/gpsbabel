@@ -1,4 +1,11 @@
 rm -f ${TMPDIR}/subrip.srt
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip -F ${TMPDIR}/subrip.srt
-# FIXME: This can't work right until we move to "real" subsecond support.
 compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000.200,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip-shifted.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample-shifted~subrip.srt ${TMPDIR}/subrip-shifted.srt
