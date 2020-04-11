@@ -1272,11 +1272,11 @@ option	skytraq-bin	gps-week-rollover	GPS week rollover period we're in (-1: best
 
 file	---w--	subrip	srt	SubRip subtitles for video mapping (.srt)	subrip
 	https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html
-option	subrip	video_time	Video position for which exact GPS time is known (hhmmss, default is 0:00:00)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_video_time
+option	subrip	video_time	Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_video_time
 
-option	subrip	gps_time	GPS time at position video_time (hhmmss, default is first timestamp of track)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_gps_time
+option	subrip	gps_time	GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_gps_time
 
-option	subrip	gps_date	GPS date at position video_time (hhmmss, default is first timestamp of track)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_gps_date
+option	subrip	gps_date	GPS date at position video_time (yyyymmdd, default is first timestamp of track)	string				https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_gps_date
 
 option	subrip	format	Format for subtitles	string	%s km/h %e m\n%t %l			https://www.gpsbabel.org/htmldoc-1.6.0/fmt_subrip.html#fmt_subrip_o_format
 
