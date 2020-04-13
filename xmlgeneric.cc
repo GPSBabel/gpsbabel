@@ -23,6 +23,7 @@
 #include <QtCore/QHash>                 // for QHash
 #include <QtCore/QIODevice>             // for QIODevice, QIODevice::ReadOnly
 #include <QtCore/QLatin1Char>           // for QLatin1Char
+#include <QtCore/QList>
 #include <QtCore/QStringRef>            // for QStringRef
 #include <QtCore/QTextCodec>            // for QTextCodec
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
@@ -44,7 +45,8 @@ enum xg_shortcut {
   xg_shortcut_ignore
 };
 
-static xg_tag_mapping* xg_tag_tbl;
+static QList<xg_tag_map_entry>* xg_tag_tbl;
+static bool dynamic_tag_tbl;
 static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
 
 static QString rd_fname;
@@ -65,25 +67,25 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
  * xml strains and insulates us from a lot of the grubbiness of expat.
  */
 
-xg_callback*
+XgCallbackBase*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   const QByteArray key = tag.toUtf8();
   const char* keyptr = key.constData();
-  for (xg_tag_mapping* tm = xg_tag_tbl; tm->tag_cb != nullptr; ++tm) {
-    if ((cb_type == tm->cb_type) && str_match(keyptr, tm->tag_name)) {
-      return tm->tag_cb;
+  for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+    if ((cb_type == tm.cb_type) && str_match(keyptr, tm.tag_name)) {
+      return tm.tag_cb;
     }
   }
   return nullptr;
 }
 
 void
-xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
+xml_common_init(const QString& fname, const char* encoding,
          const char** ignorelist, const char** skiplist)
 {
   rd_fname = fname;
-  xg_tag_tbl = tbl;
+
   xg_encoding = encoding;
   if (encoding) {
     QTextCodec* tcodec = QTextCodec::codecForName(encoding);
@@ -91,6 +93,7 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
       codec = tcodec;
     }
   }
+
   xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
   if (ignorelist != nullptr) {
     for (; ignorelist && *ignorelist; ++ignorelist) {
@@ -105,13 +108,46 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
 }
 
 void
+xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
+         const char** ignorelist, const char** skiplist, bool dynamic_tbl)
+{
+  xg_tag_tbl = tbl;
+  dynamic_tag_tbl = dynamic_tbl;
+
+  xml_common_init(fname, encoding, ignorelist, skiplist);
+}
+
+void
+xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
+         const char** ignorelist, const char** skiplist)
+{
+  xg_tag_tbl = new QList<xg_tag_map_entry>;
+  dynamic_tag_tbl = true;
+  for (xg_tag_mapping* tm = tbl; tm->tag_cb != nullptr; ++tm) {
+  auto* cb = new XgFunctionPtrCallback(tm->tag_cb);
+    xg_tag_tbl->append({cb, tm->cb_type, tm->tag_name});
+  }
+
+  xml_common_init(fname, encoding, ignorelist, skiplist);
+}
+
+void
 xml_deinit()
 {
+  if (dynamic_tag_tbl) {
+    for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+      delete tm.tag_cb;
+    }
+    delete xg_tag_tbl;
+  }
+  xg_tag_tbl = nullptr;
+
   reader_data.clear();
   rd_fname.clear();
-  xg_tag_tbl = nullptr;
+
   xg_encoding = nullptr;
   codec = utf8_codec;
+
   delete xg_shortcut_taglist;
   xg_shortcut_taglist = nullptr;
 }
@@ -129,7 +165,7 @@ xml_shortcut(const QStringRef& name)
 static void
 xml_run_parser(QXmlStreamReader& reader)
 {
-  xg_callback* cb;
+  XgCallbackBase* cb;
   QString current_tag;
 
   while (!reader.atEnd()) {
@@ -163,7 +199,7 @@ xml_run_parser(QXmlStreamReader& reader)
       cb = xml_tbl_lookup(current_tag, cb_start);
       if (cb) {
         const QXmlStreamAttributes attrs = reader.attributes();
-        cb(nullptr, &attrs);
+        (*cb)(nullptr, &attrs);
       }
 
       cb = xml_tbl_lookup(current_tag, cb_cdata);
@@ -173,7 +209,7 @@ xml_run_parser(QXmlStreamReader& reader)
         // thus we will not process the EndElement case as we will issue a readNext first.
         // does a caller ever expect to be able to use both a cb_cdata and a
         // cb_end callback?
-        cb(c, nullptr);
+        (*cb)(c, nullptr);
         current_tag.chop(reader.qualifiedName().length() + 1);
       }
       break;
@@ -185,7 +221,7 @@ xml_run_parser(QXmlStreamReader& reader)
 
       cb = xml_tbl_lookup(current_tag, cb_end);
       if (cb) {
-        cb(reader.name().toString(), nullptr);
+        (*cb)(reader.name().toString(), nullptr);
       }
       current_tag.chop(reader.qualifiedName().length() + 1);
       break;
