@@ -84,7 +84,7 @@ GgvBinFormat::ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const ch
 {
   quint16 len = ggv_bin_read16(stream, descr);
   ggv_bin_read_bytes(stream, buf, len, descr);
-  buf[len] = 0;
+  buf.append('\0');
   if (global_opts.debug_level > 1) {
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
   }
@@ -102,7 +102,7 @@ GgvBinFormat::ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const ch
     fatal(MYNAME ": Read error, max len exceeded (%s)\n", descr ? descr : "");
   }
   ggv_bin_read_bytes(stream, buf, len, descr);
-  buf[len] = 0;
+  buf.append('\0');
   if (global_opts.debug_level > 1) {
     qDebug() << "ovl: text =" << QString::fromLatin1(buf.constData()).simplified();
   }
@@ -490,7 +490,7 @@ GgvBinFormat::read()
 
   QByteArray buf;
   ggv_bin_read_bytes(stream, buf, 0x17, "magic");
-  buf[23] = 0;
+  buf.append('\0');
   if (global_opts.debug_level > 1) {
     qDebug() << "ovl: header =" << buf.constData();
   }
