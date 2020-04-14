@@ -983,8 +983,6 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   double utme, utmn;
   char utmzc;
 
-  buff[0] = '\0';
-
   if (oldlon < 900) {
     pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
                                   RAD(wpt->latitude),RAD(wpt->longitude)));
