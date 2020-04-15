@@ -268,9 +268,7 @@ gpsbabel.fo:  FORCE
 	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
 
 gpsbabel.pdf: gpsbabel.fo
-	# override fop defaults IN USER HOME DIRECTORY to turn off INFO.
-	if [ ! -e $(HOME)/.foprc ]; then echo "LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN" > $(HOME)/.foprc; fi;
-	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+	HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
 	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 

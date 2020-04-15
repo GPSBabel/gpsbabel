@@ -300,9 +300,7 @@ gpsbabel.pdf.commands += perl xmldoc/makedoc &&
 gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
 gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
 gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-# override fop defaults IN USER HOME DIRECTORY to turn off INFO.
-gpsbabel.pdf.commands += if [ ! -e $(HOME)/.foprc ]; then echo "LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN" > $(HOME)/.foprc; fi;
-gpsbabel.pdf.commands += fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
 #gpsbabel.pdf.commands += cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 

@@ -1,0 +1,1 @@
+LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN
