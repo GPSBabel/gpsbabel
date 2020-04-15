@@ -366,5 +366,6 @@ AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
 AS_MKDIR_P([mac/libusb])
 
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc], [chmod +x tools/mkcapabilities])
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc win32/gpsbabel.rc])
+AC_CONFIG_FILES([tools/mkcapabilities], [chmod +x tools/mkcapabilities])
 AC_OUTPUT
