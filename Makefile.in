@@ -29,7 +29,6 @@ VERSIOND=$(VERSD)$(RELEASE)
 VERSIONU=$(VERSU)$(RELEASE)
 
 DOCVERSION=@DOCVERSION@
-DOCVERSION=development
 
 CC=@CC@
 CXX=@CXX@
@@ -239,13 +238,12 @@ $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
-	xsltproc --load-trace \
+	xsltproc \
 	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
 	 --stringparam root.filename "index" \
 	 xmldoc/babelmain.xsl \
 	 xmldoc/readme.xml
 	tools/fixdoc $(WEB)/htmldoc-$(DOCVERSION) "GPSBabel $(DOCVERSION):"
-	chmod 755 tools/mkcapabilities
 	tools/mkcapabilities
 
 #
@@ -267,16 +265,18 @@ gpsbabel.fo:  FORCE
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
-	xsltproc --load-trace -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
+	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
 
 gpsbabel.pdf: gpsbabel.fo
+	# override fop defaults IN USER HOME DIRECTORY to turn off INFO.
+	if [ ! -e $(HOME)/.foprc ]; then echo "LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN" > $(HOME)/.foprc; fi;
 	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
 	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 
 gpsbabel.html: FORCE # gpsbabel
 	# perl xmldoc/makedoc
-	xsltproc --load-trace \
+	xsltproc \
 	  --output $@ \
 	  --stringparam toc.section.depth "1" \
 	  --stringparam html.cleanup "1" \

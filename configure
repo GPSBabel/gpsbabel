@@ -6464,7 +6464,7 @@ $as_echo_n "checking for docdir... " >&6; }
 if test "${with_doc+set}" = set; then :
   withval=$with_doc; DOCDIR="$withval"
 else
-  DOCDIR="../babelweb/"
+  DOCDIR="../babelweb"
 fi
 
 
@@ -7789,6 +7789,16 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "Makefile":F) chmod +x tools/mkcapabilities ;;
+    "gbversion.h":F) chmod +x tools/mkcapabilities ;;
+    "gui/setup.iss":F) chmod +x tools/mkcapabilities ;;
+    "xmldoc/makedoc":F) chmod +x tools/mkcapabilities ;;
+    "tools/mkcapabilities":F) chmod +x tools/mkcapabilities ;;
+    "win32/gpsbabel.rc":F) chmod +x tools/mkcapabilities ;;
+
+  esac
 done # for ac_tag
 
 
