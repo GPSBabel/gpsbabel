@@ -1,10 +1,9 @@
 language: cpp
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: bionic
-      sudo: required
       services: docker
       compiler: gcc
       env:
@@ -12,7 +11,6 @@ matrix:
         - DOCKER_IMG="qtio"
     - os: linux
       dist: bionic
-      sudo: required
       services: docker
       compiler: clang
       env:
@@ -20,7 +18,6 @@ matrix:
         - DOCKER_IMG="qtio"
     - os: linux
       dist: bionic
-      sudo: required
       services: docker
       compiler: gcc
       env:
@@ -28,7 +25,6 @@ matrix:
         - DOCKER_IMG=""
     - os: linux
       dist: bionic
-      sudo: required
       services: docker
       compiler: gcc
       env:
@@ -37,7 +33,6 @@ matrix:
         - DOCKER_SCRIPT="./tools/build_extra_tests"
     - os: linux
       dist: xenial
-      sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="local"
@@ -75,7 +70,6 @@ matrix:
         timeout: 600
     - os: linux
       dist: bionic
-      sudo: required
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
