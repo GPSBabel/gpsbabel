@@ -51,7 +51,7 @@ else
   mkdir -p ${CACHEDIR}
   pushd ${CACHEDIR}
   # install-qt creates the install at $PWD/Qt.
-  VERBOSE=1 QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
+  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
   popd
   validate
   rm ${CACHEDIR}/qt-opensource*.dmg
