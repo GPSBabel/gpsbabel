@@ -7,7 +7,8 @@
 # the GUI and the document.
 # We do a compare_nole as specific whitespace is part of deserialization.
 gpsbabel -^3 > ${TMPDIR}/format3.txt
-compare_nole ${REFERENCE}/format3.txt ${TMPDIR}/format3.txt
+sed 's,https://www.gpsbabel.org/htmldoc-.[^/]*/,https://www.gpsbabel.org/WEB_DOC_DIR/,' ${TMPDIR}/format3.txt >${TMPDIR}/format3.fiddled.txt
+compare_nole ${REFERENCE}/format3.txt ${TMPDIR}/format3.fiddled.txt
 gpsbabel -^2 > ${TMPDIR}/format2.txt
 compare_nole ${REFERENCE}/format2.txt ${TMPDIR}/format2.txt
 gpsbabel -^1 > ${TMPDIR}/format1.txt
@@ -15,7 +16,8 @@ compare_nole ${REFERENCE}/format1.txt ${TMPDIR}/format1.txt
 gpsbabel -^0 > ${TMPDIR}/format0.txt
 compare_nole ${REFERENCE}/format0.txt ${TMPDIR}/format0.txt
 gpsbabel -%1 > ${TMPDIR}/filter1.txt
-compare_nole ${REFERENCE}/filter1.txt ${TMPDIR}/filter1.txt
+sed 's,https://www.gpsbabel.org/htmldoc-.[^/]*/,https://www.gpsbabel.org/WEB_DOC_DIR/,' ${TMPDIR}/filter1.txt >${TMPDIR}/filter1.fiddled.txt
+compare_nole ${REFERENCE}/filter1.txt ${TMPDIR}/filter1.fiddled.txt
 gpsbabel -%0 > ${TMPDIR}/filter0.txt
 compare_nole ${REFERENCE}/filter0.txt ${TMPDIR}/filter0.txt
 

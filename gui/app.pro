@@ -11,6 +11,7 @@ ICON = images/appicon.icns
 QT += core \
       gui \
       network \
+      widgets \
       xml
 
 qtHaveModule(webenginewidgets) {
