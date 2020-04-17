@@ -29,8 +29,10 @@
 
 #include "defs.h"
 #include "format.h"
+#include "energympro.h"
 #include "geojson.h"
 #include "ggv_bin.h"
+#include "globalsat_sport.h"
 #include "gpx.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
@@ -40,6 +42,7 @@
 #include "qstarz_bl_1000.h"
 #include "random.h"
 #include "shape.h"
+#include "subrip.h"
 #include "xcsv.h"
 #include "yahoo.h"
 
@@ -168,14 +171,11 @@ extern ff_vecs_t skytraq_fvecs;
 extern ff_vecs_t miniHomer_vecs;
 extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
-extern ff_vecs_t subrip_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t format_fit_vecs;
 extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
-extern ff_vecs_t energympro_vecs;
-extern ff_vecs_t globalsat_sport_vecs;
 #endif // MAXIMAL_ENABLED
 
 class Vecs
@@ -400,17 +400,17 @@ private:
   LegacyFormat miniHomer_fmt {miniHomer_vecs};
   LegacyFormat jogmap_fmt {jogmap_vecs};
   LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
-  LegacyFormat subrip_fmt {subrip_vecs};
+  SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   LegacyFormat format_fit_fmt {format_fit_vecs};
   LegacyFormat mapbar_track_fmt {mapbar_track_vecs};
   LegacyFormat f90g_track_fmt {f90g_track_vecs};
   LegacyFormat mapfactor_fmt {mapfactor_vecs};
-  LegacyFormat energympro_fmt {energympro_vecs};
+  EnergymproFormat energympro_fmt;
   MyNavFormat mynav_fmt;
   GeoJsonFormat geojson_fmt;
   GgvBinFormat ggv_bin_fmt;
-  LegacyFormat globalsat_sport_fmt {globalsat_sport_vecs};
+  GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
 

@@ -107,6 +107,7 @@ set(HEADERS
   cet_util.h
   csv_util.h
   defs.h
+  energympro.h
   explorist_ini.h
   filter.h
   filter_vecs.h
@@ -123,6 +124,7 @@ set(HEADERS
   gbversion.h
   geojson.h
   ggv_bin.h
+  globalsat_sport.h
   gpx.h
   grtcirc.h
   heightgrid.h
@@ -158,6 +160,7 @@ set(HEADERS
   shape.h
   shapelib/shapefil.h
   strptime.h
+  subrip.h
   units.h
   vecs.h
   xcsv.h

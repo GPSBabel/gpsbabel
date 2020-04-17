@@ -24,10 +24,10 @@
 #include <QtCore/QDebug>        // for QDebug
 #include <QtCore/QString>       // for QString
 #include <QtCore/QTime>         // for QTime
-#include <QtCore/QVector>       // for QVector
 #include <QtCore/Qt>            // for UTC
 
 #include "defs.h"
+#include "subrip.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
@@ -35,29 +35,16 @@
 
 #define MYNAME "subrip"
 
-static char* opt_videotime;
-static char* opt_gpstime;
-static char* opt_gpsdate;
-static char* opt_format;
-static QDateTime gps_datetime;    // Date time corresponding to video video_offset_ms
-static QDateTime video_datetime;  // Date time corresponding to video time 00:00:00,000.
-static int video_offset_ms;
-static int stnum;
-static gbfile* fout;
-static const Waypoint* prevwpp;
-static double vspeed;
-static double gradient;
-
 /* internal helper functions */
 
-static QTime
-video_time(const QDateTime& dt)
+QTime
+SubripFormat::video_time(const QDateTime& dt) const
 {
   return QTime::fromMSecsSinceStartOfDay(video_datetime.msecsTo(dt));
 }
 
-static void
-subrip_prevwp_pr(const Waypoint* waypointp)
+void
+SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 {
   static long long deltaoffset;
 
@@ -165,8 +152,8 @@ subrip_prevwp_pr(const Waypoint* waypointp)
 
 /* callback functions */
 
-static void
-subrip_trkpt_pr(const Waypoint* waypointp)
+void
+SubripFormat::subrip_trkpt_pr(const Waypoint* waypointp)
 {
   /*
    * To determine the duration of the subtitle, we need the timestamp of the
@@ -206,8 +193,8 @@ subrip_trkpt_pr(const Waypoint* waypointp)
 
 /* global callback (exported) functions */
 
-static void
-subrip_wr_init(const QString& fname)
+void
+SubripFormat::wr_init(const QString& fname)
 {
   stnum = 1;
   prevwpp = nullptr;
@@ -250,16 +237,19 @@ subrip_wr_init(const QString& fname)
   fout = gbfopen(fname, "wb", MYNAME);
 }
 
-static void
-subrip_wr_deinit()
+void
+SubripFormat::wr_deinit()
 {
   gbfclose(fout);
 }
 
-static void
-subrip_write()
+void
+SubripFormat::write()
 {
-  track_disp_all(nullptr, nullptr, subrip_trkpt_pr);
+  auto subrip_trkpt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    subrip_trkpt_pr(waypointp);
+  };
+  track_disp_all(nullptr, nullptr, subrip_trkpt_pr_lambda);
 
   /*
    * Due to the necessary hack, one waypoint is still in memory (unless we
@@ -269,30 +259,3 @@ subrip_write()
     subrip_prevwp_pr(nullptr);
   }
 }
-
-/* arguments: definitions of format-specific arguments */
-
-static QVector<arglist_t> subrip_args = {
-  {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_date", &opt_gpsdate, "GPS date at position video_time (yyyymmdd, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-};
-
-/* manifest: capabilities of this module, pointers to exported functions and others */
-
-ff_vecs_t subrip_vecs = {
-  ff_type_file,
-  { ff_cap_none, ff_cap_write, ff_cap_none }, // waypoints, track, route; for now, we just do tracks
-  nullptr,
-  subrip_wr_init,
-  nullptr,
-  subrip_wr_deinit,
-  nullptr,
-  subrip_write,
-  nullptr,
-  &subrip_args,
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS,
-  nullptr
-};
