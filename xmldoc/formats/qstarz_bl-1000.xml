@@ -1,0 +1,7 @@
+<para>
+This format is used by the Qstarz BL-1000GT and BL-1000ST.
+</para>
+
+<para>
+These Qstarz devices are file based. GPS logs are saved as *.BIN files to the SESSION/GPSLog folder.
+</para>
