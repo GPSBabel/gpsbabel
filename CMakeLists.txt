@@ -121,6 +121,7 @@ set(HEADERS
   gbser.h
   gbser_private.h
   gbversion.h
+  geojson.h
   ggv_bin.h
   gpx.h
   grtcirc.h
@@ -146,10 +147,13 @@ set(HEADERS
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
   legacyformat.h
+  lowranceusr.h
   magellan.h
   mapsend.h
   mynav.h
   navilink.h
+  nmea.h
+  random.h
   session.h
   shape.h
   shapelib/shapefil.h
@@ -262,8 +266,8 @@ add_definitions(-DFILTERS_ENABLED)
 add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
-add_executable(GPSBabel ${SOURCES} ${HEADERS})
-target_link_libraries(GPSBabel ${Qt5Core_LIBRARIES} ${LIBS})
+add_executable(gpsbabel ${SOURCES} ${HEADERS})
+target_link_libraries(gpsbabel ${Qt5Core_LIBRARIES} ${LIBS})
 
 message("Sources are:")
 message("${SOURCES}")
@@ -277,5 +281,5 @@ message("${LIBS}")
 
 if(UNIX)
   # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
-  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/GPSBabel ./testo DEPENDS GPSBabel)
+  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/gpsbabel ./testo DEPENDS gpsbabel)
 endif()

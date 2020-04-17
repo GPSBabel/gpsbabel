@@ -19,24 +19,35 @@
 
  */
 
-#include "defs.h"
-#include "cet_util.h"
-#include "src/core/file.h"
-#include "xmlgeneric.h"
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QHash>                 // for QHash
+#include <QtCore/QIODevice>             // for QIODevice, QIODevice::ReadOnly
+#include <QtCore/QLatin1Char>           // for QLatin1Char
+#include <QtCore/QList>
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QTextCodec>            // for QTextCodec
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
+#include <QtCore/QtGlobal>              // for qPrintable
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QXmlStreamReader>
+#include "defs.h"
+#include "xmlgeneric.h"
+#include "src/core/file.h"              // for File
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
 #include <QtCore/QDebug>
 #endif
 
-static xg_tag_mapping* xg_tag_tbl;
-static QSet<QString> xg_ignore_taglist;
+enum xg_shortcut {
+  xg_shortcut_none = 0,
+  xg_shortcut_skip,
+  xg_shortcut_ignore
+};
+
+static QList<xg_tag_map_entry>* xg_tag_tbl;
+static bool dynamic_tag_tbl;
+static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
 
 static QString rd_fname;
 static QByteArray reader_data;
@@ -56,22 +67,25 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
  * xml strains and insulates us from a lot of the grubbiness of expat.
  */
 
-xg_callback*
+XgCallbackBase*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
-  for (xg_tag_mapping* tm = xg_tag_tbl; tm->tag_cb != nullptr; tm++) {
-    if (str_match(CSTR(tag), tm->tag_name) && (cb_type == tm->cb_type)) {
-      return tm->tag_cb;
+  const QByteArray key = tag.toUtf8();
+  const char* keyptr = key.constData();
+  for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+    if ((cb_type == tm.cb_type) && str_match(keyptr, tm.tag_name)) {
+      return tm.tag_cb;
     }
   }
   return nullptr;
 }
 
 void
-xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
+xml_common_init(const QString& fname, const char* encoding,
+         const char** ignorelist, const char** skiplist)
 {
   rd_fname = fname;
-  xg_tag_tbl = tbl;
+
   xg_encoding = encoding;
   if (encoding) {
     QTextCodec* tcodec = QTextCodec::codecForName(encoding);
@@ -79,35 +93,86 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
       codec = tcodec;
     }
   }
+
+  xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
+  if (ignorelist != nullptr) {
+    for (; ignorelist && *ignorelist; ++ignorelist) {
+      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut_ignore);
+    }
+  }
+  if (skiplist != nullptr) {
+    for (; skiplist && *skiplist; ++skiplist) {
+      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut_skip);
+    }
+  }
+}
+
+void
+xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
+         const char** ignorelist, const char** skiplist, bool dynamic_tbl)
+{
+  xg_tag_tbl = tbl;
+  dynamic_tag_tbl = dynamic_tbl;
+
+  xml_common_init(fname, encoding, ignorelist, skiplist);
+}
+
+void
+xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
+         const char** ignorelist, const char** skiplist)
+{
+  xg_tag_tbl = new QList<xg_tag_map_entry>;
+  dynamic_tag_tbl = true;
+  for (xg_tag_mapping* tm = tbl; tm->tag_cb != nullptr; ++tm) {
+  auto* cb = new XgFunctionPtrCallback(tm->tag_cb);
+    xg_tag_tbl->append({cb, tm->cb_type, tm->tag_name});
+  }
+
+  xml_common_init(fname, encoding, ignorelist, skiplist);
 }
 
 void
 xml_deinit()
 {
+  if (dynamic_tag_tbl) {
+    for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+      delete tm.tag_cb;
+    }
+    delete xg_tag_tbl;
+  }
+  xg_tag_tbl = nullptr;
+
   reader_data.clear();
   rd_fname.clear();
-  xg_tag_tbl = nullptr;
+
   xg_encoding = nullptr;
   codec = utf8_codec;
+
+  delete xg_shortcut_taglist;
+  xg_shortcut_taglist = nullptr;
 }
 
-static bool
-xml_consider_ignoring(const QStringRef& name)
+static xg_shortcut
+xml_shortcut(const QStringRef& name)
 {
-  return xg_ignore_taglist.contains(name.toString());
+   QString key = name.toString();
+   if (xg_shortcut_taglist->contains(key)) {
+     return xg_shortcut_taglist->value(key);
+   }
+  return xg_shortcut_none;
 }
 
 static void
 xml_run_parser(QXmlStreamReader& reader)
 {
-  xg_callback* cb;
+  XgCallbackBase* cb;
   QString current_tag;
 
   while (!reader.atEnd()) {
     switch (reader.tokenType()) {
     case QXmlStreamReader::StartDocument:
       if (!reader.documentEncoding().isEmpty()) {
-        codec = QTextCodec::codecForName(CSTR(reader.documentEncoding().toString()));
+        codec = QTextCodec::codecForName(reader.documentEncoding().toUtf8());
       }
       if (codec == nullptr) {
         // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we
@@ -118,17 +183,23 @@ xml_run_parser(QXmlStreamReader& reader)
       break;
 
     case QXmlStreamReader::StartElement:
-      if (xml_consider_ignoring(reader.name())) {
+      switch (xml_shortcut(reader.name())) {
+      case xg_shortcut_skip:
+        reader.skipCurrentElement();
         goto readnext;
-      }
+      case xg_shortcut_ignore:
+        goto readnext;
+      default:
+        break;
+     }
 
-      current_tag.append("/");
+      current_tag.append(QLatin1Char('/'));
       current_tag.append(reader.qualifiedName());
 
       cb = xml_tbl_lookup(current_tag, cb_start);
       if (cb) {
         const QXmlStreamAttributes attrs = reader.attributes();
-        cb(nullptr, &attrs);
+        (*cb)(nullptr, &attrs);
       }
 
       cb = xml_tbl_lookup(current_tag, cb_cdata);
@@ -138,19 +209,19 @@ xml_run_parser(QXmlStreamReader& reader)
         // thus we will not process the EndElement case as we will issue a readNext first.
         // does a caller ever expect to be able to use both a cb_cdata and a
         // cb_end callback?
-        cb(c, nullptr);
+        (*cb)(c, nullptr);
         current_tag.chop(reader.qualifiedName().length() + 1);
       }
       break;
 
     case QXmlStreamReader::EndElement:
-      if (xml_consider_ignoring(reader.name())) {
+      if (xml_shortcut(reader.name()) == xg_shortcut_skip) {
         goto readnext;
       }
 
       cb = xml_tbl_lookup(current_tag, cb_end);
       if (cb) {
-        cb(reader.name().toString(), nullptr);
+        (*cb)(reader.name().toString(), nullptr);
       }
       current_tag.chop(reader.qualifiedName().length() + 1);
       break;
@@ -181,18 +252,11 @@ void xml_read()
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           qPrintable(file.fileName()),
-          (long) reader.lineNumber(),
-          (long) reader.columnNumber());
-  }
-}
-
-void xml_ignore_tags(const char** taglist)
-{
-  for (; taglist && *taglist; taglist++) {
-    xg_ignore_taglist.insert(QString::fromUtf8(*taglist));
+          reader.lineNumber(),
+          reader.columnNumber());
   }
 }
 
@@ -213,11 +277,11 @@ void xml_readstring(const char* str)
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           "unknown",
-          (long) reader.lineNumber(),
-          (long) reader.columnNumber());
+          reader.lineNumber(),
+          reader.columnNumber());
   }
 }
 

@@ -29,10 +29,14 @@
 
 #include "defs.h"
 #include "format.h"
+#include "geojson.h"
 #include "ggv_bin.h"
 #include "gpx.h"
 #include "legacyformat.h"
+#include "lowranceusr.h"
 #include "mynav.h"
+#include "nmea.h"
+#include "random.h"
 #include "shape.h"
 #include "xcsv.h"
 #include "yahoo.h"
@@ -46,13 +50,11 @@ extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
-extern ff_vecs_t nmea_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t kml_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t gpsutil_vecs;
-extern ff_vecs_t lowranceusr_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
@@ -122,7 +124,6 @@ extern ff_vecs_t g7towin_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
-extern ff_vecs_t random_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t dg100_vecs;
 extern ff_vecs_t dg200_vecs;
@@ -172,7 +173,6 @@ extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
 extern ff_vecs_t energympro_vecs;
-extern ff_vecs_t geojson_vecs;
 extern ff_vecs_t globalsat_sport_vecs;
 #endif // MAXIMAL_ENABLED
 
@@ -276,13 +276,13 @@ private:
   LegacyFormat gdb_fmt {gdb_vecs};
   LegacyFormat mapsend_fmt {mapsend_vecs};
   LegacyFormat mps_fmt {mps_vecs};
-  LegacyFormat nmea_fmt {nmea_vecs};
+  NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   LegacyFormat pcx_fmt {pcx_vecs};
   LegacyFormat kml_fmt {kml_vecs};
 #if MAXIMAL_ENABLED
   LegacyFormat gpsutil_fmt {gpsutil_vecs};
-  LegacyFormat lowranceusr_fmt {lowranceusr_vecs};
+  LowranceusrFormat lowranceusr_fmt;
   LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
@@ -355,7 +355,7 @@ private:
 #endif // CSVFMTS_ENABLED
   LegacyFormat garmin_gpi_fmt {garmin_gpi_vecs};
   LegacyFormat lmx_fmt {lmx_vecs};
-  LegacyFormat random_fmt {random_vecs};
+  RandomFormat random_fmt;
   LegacyFormat xol_fmt {xol_vecs};
   LegacyFormat dg100_fmt {dg100_vecs};
   LegacyFormat dg200_fmt {dg200_vecs};
@@ -406,7 +406,7 @@ private:
   LegacyFormat mapfactor_fmt {mapfactor_vecs};
   LegacyFormat energympro_fmt {energympro_vecs};
   MyNavFormat mynav_fmt;
-  LegacyFormat geojson_fmt {geojson_vecs};
+  GeoJsonFormat geojson_fmt;
   GgvBinFormat ggv_bin_fmt;
   LegacyFormat globalsat_sport_fmt {globalsat_sport_vecs};
 #endif // MAXIMAL_ENABLED

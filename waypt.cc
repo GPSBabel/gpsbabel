@@ -198,12 +198,6 @@ waypt_swap(WaypointList& other)
 }
 
 void
-waypt_sort(WaypointList::Compare cmp)
-{
-  global_waypoint_list->sort(cmp);
-}
-
-void
 waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text)
 {
   wpt->AddUrlLink(UrlLink(link, url_link_text));
@@ -744,9 +738,4 @@ void WaypointList::swap(WaypointList& other)
   const WaypointList tmp_list = *this;
   *this = other;
   other = tmp_list;
-}
-
-void WaypointList::sort(Compare cmp)
-{
-  std::stable_sort(begin(), end(), cmp);
 }

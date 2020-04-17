@@ -56,7 +56,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
       if (waypointp->extra_data) {
         ed = (extra_data*) waypointp->extra_data;
       } else {
-        ed = (extra_data*) xcalloc(1, sizeof(*ed));
+        ed = new extra_data;
         ed->distance = BADVAL;
       }
       if (ed->distance == BADVAL || projectopt || ed->distance >= pos_dist) {
@@ -206,7 +206,7 @@ void ArcDistanceFilter::process()
                   qPrintable(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
-      xfree(ed);
+      delete ed;
     }
   }
   if (global_opts.verbose_status > 0) {

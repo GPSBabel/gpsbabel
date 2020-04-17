@@ -484,6 +484,7 @@ str_match(const char* str, const char* match)
         return 0;  /* incomplete escape sequence */
       }
     /* pass-through next character */
+    /* fallthrough */
 
     default:
       if (*m != *s) {

@@ -643,8 +643,8 @@ File Types (-i and -o options):
 	  gps-week-rollover     GPS week rollover period we're in (-1: best guess) 
 	subrip                SubRip subtitles for video mapping (.srt)
 	  video_time            Video position for which exact GPS time is known ( 
-	  gps_time              GPS time at position video_time (hhmmss, default i 
-	  gps_date              GPS date at position video_time (hhmmss, default i 
+	  gps_time              GPS time at position video_time (hhmmss[.sss], def 
+	  gps_date              GPS date at position video_time (yyyymmdd, default 
 	  format                Format for subtitles 
 	stmsdf                Suunto Trek Manager (STM) .sdf files
 	  index                 Index of route (if more than one in source) 

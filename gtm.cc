@@ -437,21 +437,24 @@ gtm_rd_deinit()
   gbfclose(file_in);
 }
 
-static void count_route_waypts(const Waypoint*)
+static void count_track_styles(const route_head* rte)
 {
-  rt_count++;
-}
-static void count_track_waypts(const Waypoint*)
-{
-  tr_count++;
+  if (rte->rte_waypt_ct > 0) {
+    ts_count++;
+  }
 }
 
 static void
 gtm_wr_init(const QString& fname)
 {
-  rt_count = tr_count = 0;
-  track_disp_all(nullptr, nullptr, count_track_waypts);
-  route_disp_all(nullptr, nullptr, count_route_waypts);
+  // Count the number of track style entires.
+  // We don't output a track style for any track that doesn't have any
+  // waypoints.
+  // Note that it is impossible to store a track without any waypoints
+  // in this format as every tracklog entry represents a waypoint,
+  // and a new track is defined by a tracklog entry with the tracklog flag set.
+  ts_count = 0;
+  track_disp_all(count_track_styles, nullptr, nullptr);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);	/* little endian */
 
@@ -470,14 +473,14 @@ gtm_wr_init(const QString& fname)
   fwrite_long(file_out, waypt_count() ? 4 : 0); /* num waypoint styles */
   fwrite_long(file_out, 0);
   fwrite_long(file_out, waypt_count()); /* num waypoints */
-  fwrite_long(file_out, tr_count);
-  fwrite_long(file_out, rt_count);
+  fwrite_long(file_out, track_waypt_count());
+  fwrite_long(file_out, route_waypt_count());
   fwrite_single(file_out, 0); /* maxlon */
   fwrite_single(file_out, 0); /* minlon */
   fwrite_single(file_out, 0); /* maxlat */
   fwrite_single(file_out, 0); /* minlat */
   fwrite_long(file_out, 0);
-  fwrite_long(file_out, track_count()); /* num tracklog styles */
+  fwrite_long(file_out, ts_count); /* num tracklog styles */
   fwrite_single(file_out, 0);
   fwrite_single(file_out, 0);
   fwrite_bool(file_out, 0);
@@ -690,12 +693,14 @@ static void write_trk_waypt(const Waypoint* wpt)
 
 static void write_trk_style(const route_head* trk)
 {
-  fwrite_string(file_out, trk->rte_name);
-  fwrite_byte(file_out, 1);
-  fwrite_long(file_out, 0);
-  fwrite_single(file_out, 0);
-  fwrite_byte(file_out, 0);
-  fwrite_integer(file_out, 0);
+  if (trk->rte_waypt_ct > 0) {
+    fwrite_string(file_out, trk->rte_name);
+    fwrite_byte(file_out, 1);
+    fwrite_long(file_out, 0);
+    fwrite_single(file_out, 0);
+    fwrite_byte(file_out, 0);
+    fwrite_integer(file_out, 0);
+  }
 }
 
 static void write_rte_waypt(const Waypoint* wpt)

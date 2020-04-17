@@ -18,76 +18,44 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <cstdlib>           // for atoi
-#include <random>            // for mt19937
+#include <cstdlib>              // for atoi
+#include <random>               // for mt19937
 
-#include <QtCore/QDateTime>  // for QDateTime
-#include <QtCore/QString>    // for QString
-#include <QtCore/QThread>    // for QThread
-#include <QtCore/QVector>    // for QVector
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QByteRef>      // for QByteRef
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QString>       // for QString
+#include <QtCore/QThread>       // for QThread
 
 #include "defs.h"
-#include "garmin_fs.h"       // for garmin_fs_t, GMSD_SET, garmin_fs_flags_t, garmin_fs_alloc
+#include "random.h"
+#include "formspec.h"           // for FormatSpecificDataList
+#include "garmin_fs.h"          // for garmin_fs_t, GMSD_SET, garmin_fs_flags_t, garmin_fs_alloc
+#include "src/core/datetime.h"  // for DateTime
 
-#define MYNAME "random"
 
-static char* opt_points, *opt_seed, *opt_nodelay;
-
-static QVector<arglist_t> random_args = {
-  {
-    "points", &opt_points, "Generate # points", nullptr,
-    ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "seed", &opt_seed, "Starting seed of the internal number generator", nullptr,
-    ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "nodelay", &opt_nodelay, "Output realtime points without delay", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-};
-
-//  this generator is invariant across platforms.
-static std::mt19937* generator;
-
-// we do this cheesy distribution function because we need it to be invariant across platforms.
-// note uniform_int_distribution is not invariant.
-template <typename T>
-static T
-rand_num(const T max)
-{
-  T retval;
-  // scalefactor expression assumes generator is mt19937.
-  constexpr double scalefactor = 1.0 / std::mt19937::max();
-  do {
-    retval = static_cast<T>(static_cast<double>(max) * scalefactor * (*generator)());
-  } while (retval >= max);
-  return retval;
-}
-
-static double
-rand_dbl(const double max)
+double
+RandomFormat::rand_dbl(const double max)
 {
   return rand_num(max);
 }
 
-static float
-rand_flt(const float max)
+float
+RandomFormat::rand_flt(const float max)
 {
   return rand_num(max);
 }
 
-static int
-rand_int(const int max)
+int
+RandomFormat::rand_int(const int max)
 {
   return rand_num(max);
 }
 
 /* rand_str always returns a valid string with len >= 0 */
 
-static QString
-rand_str(const int maxlen, const char* fmt)
+QString
+RandomFormat::rand_str(const int maxlen, const char* fmt)
 {
   int len = rand_int(maxlen) + 1;
 
@@ -109,8 +77,8 @@ rand_str(const int maxlen, const char* fmt)
          QString::asprintf(fmt, res.constData()) : QString(res);
 }
 
-static void
-random_set_generator()
+void
+RandomFormat::random_set_generator()
 {
   generator = new std::mt19937;
   if (opt_seed) {
@@ -120,119 +88,118 @@ random_set_generator()
   }
 }
 
-static void
-random_rd_init(const QString&)
+void
+RandomFormat::rd_init(const QString&)
 {
   random_set_generator();
 }
 
-static void
-random_rd_deinit()
+void
+RandomFormat::rd_deinit()
 {
   delete generator;
 }
 
 #define RND(a) (rand_int(a) > 0)
 
-static Waypoint*
-random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
+Waypoint*
+RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
-    auto wpt = new Waypoint;
-    garmin_fs_t* gmsd = garmin_fs_alloc(-1);
-    wpt->fs.FsChainAdd(gmsd);
+  auto wpt = new Waypoint;
+  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  wpt->fs.FsChainAdd(gmsd);
 
-    do {
-      wpt->shortname = rand_str(8, "Wpt_%s");
-    } while (wpt->shortname == nullptr);
+  do {
+    wpt->shortname = rand_str(8, "Wpt_%s");
+  } while (wpt->shortname == nullptr);
 
-    wpt->latitude = rand_dbl(180.0) - 90.0;
-    wpt->longitude = rand_dbl(360.0) - 180.0;
+  wpt->latitude = rand_dbl(180.0) - 90.0;
+  wpt->longitude = rand_dbl(360.0) - 180.0;
 
-    /* !!! "if RND(3) ..." produces some leaks in generated data !!! */
+  /* !!! "if RND(3) ..." produces some leaks in generated data !!! */
 
+  if RND(3) {
+    wpt->altitude = rand_dbl(100.0);
+  }
+  if RND(3) {
+    WAYPT_SET(wpt, temperature, rand_flt(32.0f));
+  }
+  if RND(3) {
+    WAYPT_SET(wpt, proximity, rand_dbl(1000.0));
+  }
+  if RND(3) {
+    WAYPT_SET(wpt, depth, rand_dbl(1000.0));
+  }
+  if RND(3) {
+    wpt->AddUrlLink(rand_str(8, "http://link1.example.com/%s"));
     if RND(3) {
-      wpt->altitude = rand_dbl(100.0);
+      wpt->AddUrlLink(rand_str(8, "http://link2.example.com/%s"));
     }
-    if RND(3) {
-      WAYPT_SET(wpt, temperature, rand_flt(32.0f));
-    }
-    if RND(3) {
-      WAYPT_SET(wpt, proximity, rand_dbl(1000.0));
-    }
-    if RND(3) {
-      WAYPT_SET(wpt, depth, rand_dbl(1000.0));
-    }
-    if RND(3) {
-      wpt->AddUrlLink(rand_str(8, "http://link1.example.com/%s"));
-      if RND(3) {
-        wpt->AddUrlLink(rand_str(8, "http://link2.example.com/%s"));
-      }
-    }
-    if RND(3) {
-      wpt->icon_descr = rand_str(3, "Icon_%s");
-    }
+  }
+  if RND(3) {
+    wpt->icon_descr = rand_str(3, "Icon_%s");
+  }
 
-    wpt->SetCreationTime(time);
+  wpt->SetCreationTime(time);
 
-    if (doing_trks || doing_posn) {
-      if (i > 0) {
-        wpt->latitude = prev->latitude + rand_dbl(0.001);
-        wpt->longitude = prev->longitude + rand_dbl(0.001);
-        WAYPT_SET(wpt, course, waypt_course(prev, wpt));
-        WAYPT_SET(wpt, speed, waypt_speed(prev, wpt));
-      }
-      wpt->sat = rand_int(12 + 1);
-      wpt->hdop = rand_flt(50.0f);
-      wpt->vdop = rand_flt(50.0f);
-      wpt->pdop = rand_flt(50.0f);
-      wpt->fix = (fix_type)(rand_int(6) - 1);
-      if RND(3) {
-        wpt->cadence = rand_int(255);
-      }
-      if RND(3) {
-        wpt->heartrate = rand_int(255);
-      }
-    } else {
-      if (doing_rtes && (i > 0)) {
-        wpt->latitude = prev->latitude + rand_dbl(0.01);
-        wpt->longitude = prev->longitude + rand_dbl(0.01);
-      }
-      if RND(3) {
-        wpt->description = rand_str(16, "Des_%s");
-      }
-      if RND(3) {
-        wpt->notes = rand_str(16, "Nts_%s");
-      }
-      if RND(3) {
-        garmin_fs_t::set_addr(gmsd, rand_str(8, "Adr_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_city(gmsd, rand_str(8, "Cty_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_facility(gmsd, rand_str(8, "Fac_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_country(gmsd, rand_str(8, "Ctr_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_state(gmsd, rand_str(8, "Sta_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_phone_nr(gmsd, rand_str(8, "Pnr_%s"));
-      }
-      if RND(3) {
-        garmin_fs_t::set_postal_code(gmsd, rand_str(8, "Pcd_%s"));
-      }
+  if (doing_trks || doing_posn) {
+    if (i > 0) {
+      wpt->latitude = prev->latitude + rand_dbl(0.001);
+      wpt->longitude = prev->longitude + rand_dbl(0.001);
+      WAYPT_SET(wpt, course, waypt_course(prev, wpt));
+      WAYPT_SET(wpt, speed, waypt_speed(prev, wpt));
     }
+    wpt->sat = rand_int(12 + 1);
+    wpt->hdop = rand_flt(50.0f);
+    wpt->vdop = rand_flt(50.0f);
+    wpt->pdop = rand_flt(50.0f);
+    wpt->fix = (fix_type)(rand_int(6) - 1);
+    if RND(3) {
+      wpt->cadence = rand_int(255);
+    }
+    if RND(3) {
+      wpt->heartrate = rand_int(255);
+    }
+  } else {
+    if (doing_rtes && (i > 0)) {
+      wpt->latitude = prev->latitude + rand_dbl(0.01);
+      wpt->longitude = prev->longitude + rand_dbl(0.01);
+    }
+    if RND(3) {
+      wpt->description = rand_str(16, "Des_%s");
+    }
+    if RND(3) {
+      wpt->notes = rand_str(16, "Nts_%s");
+    }
+    if RND(3) {
+      garmin_fs_t::set_addr(gmsd, rand_str(8, "Adr_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_city(gmsd, rand_str(8, "Cty_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_facility(gmsd, rand_str(8, "Fac_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_country(gmsd, rand_str(8, "Ctr_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_state(gmsd, rand_str(8, "Sta_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_phone_nr(gmsd, rand_str(8, "Pnr_%s"));
+    }
+    if RND(3) {
+      garmin_fs_t::set_postal_code(gmsd, rand_str(8, "Pcd_%s"));
+    }
+  }
 
   return wpt;
 }
 
-static void
-random_read()
+void
+RandomFormat::read()
 {
-
   route_head* head;
   Waypoint* prev = nullptr;
   QDateTime time = current_time().toUTC();
@@ -248,7 +215,7 @@ random_read()
       route_add_head(head);
     }
     head->rte_desc = rand_str(16, nullptr);
-	if RND(3) {
+    if RND(3) {
       head->rte_urls.AddUrlLink(UrlLink(rand_str(8, "http://rteurl.example.com/%s")));
     }
   } else {
@@ -270,16 +237,8 @@ random_read()
   }
 }
 
-struct realtime_data {
-  QDateTime time;
-  int points{-1};
-  int point_count{0};
-  Waypoint prev;
-};
-static realtime_data* realtime;
-
 void
-random_rd_posn_init(const QString&)
+RandomFormat::rd_position_init(const QString&)
 {
   random_set_generator();
   realtime = new realtime_data;
@@ -290,19 +249,19 @@ random_rd_posn_init(const QString&)
 }
 
 void
-random_rd_posn_deinit()
+RandomFormat::rd_position_deinit()
 {
   delete generator;
   delete realtime;
 }
 
-static Waypoint*
-random_rd_posn(posn_status* p_status)
+Waypoint*
+RandomFormat::rd_position(posn_status* status)
 {
   Waypoint* wpt = random_generate_wpt(realtime->point_count, realtime->time, &(realtime->prev));
 
-  if (p_status && (realtime->points > 0) && (realtime->point_count >= realtime->points)) {
-    p_status->request_terminate = 1;
+  if (status && (realtime->points > 0) && (realtime->point_count >= realtime->points)) {
+    status->request_terminate = 1;
   }
   ++realtime->point_count;
 
@@ -319,26 +278,3 @@ random_rd_posn(posn_status* p_status)
 
   return wpt;
 }
-
-ff_vecs_t random_vecs = {
-  ff_type_internal,
-  {
-    ff_cap_read /* waypoints */,
-    ff_cap_read /* tracks */,
-    ff_cap_read /* routes */
-  },
-  random_rd_init,
-  nullptr,	/* wr_init */
-  random_rd_deinit,
-  nullptr,	/* wr_deinit */
-  random_read,
-  nullptr,	/* write */
-  nullptr,	/* exit */
-  &random_args,
-  CET_CHARSET_ASCII, 1,			/* fixed */
-  {
-  random_rd_posn_init, random_rd_posn, random_rd_posn_deinit,
-  nullptr, nullptr, nullptr,
-  },
-  nullptr
-};

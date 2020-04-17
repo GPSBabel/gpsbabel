@@ -785,7 +785,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
   case 0xc:	/* POI item (same structure as full) */
     poi = 1;
-    /* fall through: */
+    /* fallthrough */
 
   case 0x2:	/* Multi HZ item */
     if (len < MULTI_HZ_ITEM_LEN) {
@@ -822,7 +822,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
   case 0x6:	/* POI item (same structure as full) */
     poi = 1;
-    /* fall through: */
+    /* fallthrough */
 
   case 0x4:	/* full item */
     if (len < FULL_ITEM_LEN) {

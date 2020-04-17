@@ -212,12 +212,6 @@ route_swap(RouteList& other)
 }
 
 void
-route_sort(RouteList::Compare cmp)
-{
-  global_route_list->sort(cmp);
-}
-
-void
 track_backup(RouteList** head_bak)
 {
   global_track_list->copy(head_bak);
@@ -233,12 +227,6 @@ void
 track_swap(RouteList& other)
 {
   global_track_list->swap(other);
-}
-
-void
-track_sort(RouteList::Compare cmp)
-{
-  global_track_list->sort(cmp);
 }
 
 /*
@@ -509,9 +497,4 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
-}
-
-void RouteList::sort(Compare cmp)
-{
-  std::sort(begin(), end(), cmp);
 }
