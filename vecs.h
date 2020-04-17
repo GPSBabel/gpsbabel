@@ -35,7 +35,9 @@
 #include "legacyformat.h"
 #include "lowranceusr.h"
 #include "mynav.h"
+#include "qstarz_bl_1000.h"
 #include "nmea.h"
+#include "qstarz_bl_1000.h"
 #include "random.h"
 #include "shape.h"
 #include "xcsv.h"
@@ -409,6 +411,7 @@ private:
   GeoJsonFormat geojson_fmt;
   GgvBinFormat ggv_bin_fmt;
   LegacyFormat globalsat_sport_fmt {globalsat_sport_vecs};
+  QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -1311,6 +1314,13 @@ private:
       &globalsat_sport_fmt,
       "globalsat",
       "GlobalSat GH625XT GPS training watch",
+      nullptr,
+      nullptr,
+    },
+    {
+      &qstarz_bl_1000_fmt,
+      "qstarz_bl-1000",
+      "Qstarz BL-1000",
       nullptr,
       nullptr,
     }

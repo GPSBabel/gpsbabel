@@ -130,6 +130,7 @@ file	rwrwrw	ozi		OziExplorer
 file	--rw--	pocketfms_bc		PocketFMS breadcrumbs
 file	r---r-	pocketfms_fp	xml	PocketFMS flightplan (.xml)
 file	rw----	pocketfms_wp	txt	PocketFMS waypoints (.txt)
+file	r-r---	qstarz_bl-1000		Qstarz BL-1000
 file	rw--rw	raymarine	rwf	Raymarine Waypoint File (.rwf)
 file	--rw--	ricoh	log	Ricoh GPS Log File
 file	rw----	cup	cup	See You flight analysis data

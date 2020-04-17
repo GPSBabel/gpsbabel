@@ -85,7 +85,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
 	subrip.o garmin_xt.o garmin_fit.o \
 	mtk_locus.o googledir.o mapbar_track.o f90g_track.o mapfactor.o energympro.o \
-	mynav.o ggv_bin.o globalsat_sport.o geojson.o
+	mynav.o ggv_bin.o globalsat_sport.o geojson.o qstarz_bl_1000.o
 
 FMTS=@FMTS@
 
@@ -922,6 +922,9 @@ position.o: position.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
 psitrex.o: psitrex.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   garmin_tables.h
+qstarz_bl_1000.o: qstarz_bl_1000.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
+  formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
+  src/core/optional.h format.h
 radius.o: radius.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   radius.h filter.h grtcirc.h
