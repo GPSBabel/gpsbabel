@@ -254,6 +254,8 @@ option	exif	overwrite	!OVERWRITE! the original file. Default=N	boolean	N			https
 
 file	--r---	energympro	cpo	Energympro GPS training watch	energympro
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_energympro.html
+option	energympro	timezone	Time zone ID	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_energympro.html#fmt_energympro_o_timezone
+
 file	----rw	enigma	ert	Enigma binary waypoint file (.ert)	enigma
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_enigma.html
 file	rwrwrw	shape	shp	ESRI shapefile	shape
@@ -523,6 +525,8 @@ option	globalsat	track	get track	integer	0			https://www.gpsbabel.org/WEB_DOC_DI
 option	globalsat	dump-file	Dump raw data to this file	outfile				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_dump-file
 
 option	globalsat	input-is-dump-file	Dump raw data to this file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_input-is-dump-file
+
+option	globalsat	timezone	Time zone ID	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_timezone
 
 file	--r---	googledir	xml	Google Directions XML	googledir
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googledir.html

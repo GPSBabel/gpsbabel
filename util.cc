@@ -41,13 +41,14 @@
 #include <QtCore/QTextStream>          // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <QtCore/QXmlStreamAttribute>  // for QXmlStreamAttribute
 #include <QtCore/Qt>                   // for CaseInsensitive
+#include <QtCore/QTimeZone>            // for QTimeZone
 #include <QtCore/QtGlobal>             // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "cet.h"                       // for cet_utf8_to_ucs4
 #include "src/core/datetime.h"         // for DateTime
+#include "src/core/logging.h"          // for Warning
 #include "src/core/xmltag.h"           // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
-
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -1762,6 +1763,19 @@ list_codecs()
       info << alias;
     }
     info << endl;
+  }
+}
+
+void list_timezones()
+{
+  QList<QByteArray> zoneids = QTimeZone::availableTimeZoneIds();
+  auto alpha = [](const QByteArray& a, const QByteArray& b)->bool {
+    return QString::compare(a, b, Qt::CaseInsensitive) < 0;
+  };
+  std::sort(zoneids.begin(), zoneids.end(), alpha);
+  Warning() << "Available timezones are:";
+  for (const auto& id : zoneids) {
+    Warning() << id;
   }
 }
 

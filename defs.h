@@ -1209,6 +1209,7 @@ void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
 void list_codecs();
+void list_timezones();
 
 /*
  *  From parse.c

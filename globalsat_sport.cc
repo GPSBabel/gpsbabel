@@ -35,12 +35,26 @@
  *
  */
 
+#include <cstdint>
+#include <cstdio>               // for printf
+#include <cstdlib>              // for free, malloc
+
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QDate>         // for QDate
+#include <QtCore/QDateTime>     // for QDateTime
+#include <QtCore/QString>       // for QString
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/QTimeZone>     // for QTimeZone
+#include <QtCore/QVector>       // for QVector
+#include <QtCore/Qt>            // for LocalTime
+#include <QtCore/QtGlobal>      // for qPrintable
 
 #include "defs.h"
-#include "gbser.h"
-#include <cctype>
-#include <climits>
-#include <cstdio>
+#include "gbfile.h"             // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
+#include "gbser.h"              // for gbser_deinit, gbser_flush, gbser_init, gbser_readc_wait, gbser_set_speed, gbser_writec, gbser_ERROR, gbser_NOTHING, gbser_OK
+#include "src/core/datetime.h"  // for DateTime
+
+
 
 #define MYNAME "GlobalsatSport"
 
@@ -52,8 +66,10 @@ static char* track = nullptr;                  // if not 0 only download this tr
 
 static char* opt_dump_file = nullptr;          // dump raw data to this file (optional)
 static char* opt_input_dump_file = nullptr;    // if true input is from a dump-file instead of serial console
+static char* opt_timezone = nullptr;
 static gbfile* dumpfile = nullptr;             // used for creating bin/RAW datadump files, useful for testing
 static gbfile* in_file = nullptr;              // used for reading from bin/RAW datadump files, useful for testing
+static QTimeZone* timezn = nullptr;
 
 static
 QVector<arglist_t> globalsat_args = {
@@ -61,6 +77,7 @@ QVector<arglist_t> globalsat_args = {
   {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   {"dump-file", &opt_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
   {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
+  {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
 };
 
 enum globalsat_commands_e {
@@ -419,6 +436,16 @@ rd_init(const QString& fname)
     is_fatal(!in_file, "Could not open dumpfile for input: %s", qPrintable(fname));
 
   }
+  if (opt_timezone) {
+    if (QTimeZone::isTimeZoneIdAvailable(opt_timezone)) {
+      timezn = new QTimeZone(opt_timezone);
+    } else {
+      list_timezones();
+      fatal(MYNAME ": Requested time zone \"%s\" not available.\n", opt_timezone);
+    }
+  } else {
+    timezn = nullptr;
+  }
   globalsat_probe_device();
 }
 
@@ -438,6 +465,10 @@ rd_deinit()
   if (dumpfile) {
     gbfclose(dumpfile);
     dumpfile = nullptr;
+  }
+  if (timezn != nullptr) {
+    delete timezn;
+    timezn = nullptr;
   }
   if (global_opts.debug_level > 1) {
     printf(MYNAME " rd_deinit() Done\n");
@@ -641,9 +672,12 @@ track_read()
            */
 
           QDate gpsDate = QDate(header.dateStart.Year+2000,header.dateStart.Month,header.dateStart.Day);
-          QTime gpsTime = QTime(header.timeStart.Hour-2,header.timeStart.Minute,header.timeStart.Second);
-          gpsDateTime = gpsbabel::DateTime(gpsDate,gpsTime);
-          gpsDateTime.setTimeSpec(Qt::UTC);
+          QTime gpsTime = QTime(header.timeStart.Hour,header.timeStart.Minute,header.timeStart.Second);
+          if (timezn != nullptr) {
+            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,*timezn).toUTC());
+          } else {
+            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,Qt::LocalTime).toUTC());
+          }
 
           int laps_in_package = header.gh_laprec.LapIndex - header.gh_ptrec.Index + 1;
 //					printf("Lap Data:\n");
@@ -740,10 +774,7 @@ track_read()
 
               //Time from last point in sec's * 10 (e.g. point.IntervalTime is sec multiplied with 10)
               // convert to millisecs
-              gpsbabel::DateTime gpsbabeltime = gpsDateTime.addMSecs(point.IntervalTime*100);
-              gpsbabeltime.setTimeSpec(Qt::UTC);
-              gpsDateTime.setDate(gpsbabeltime.date());
-              gpsDateTime.setTime(gpsbabeltime.time());
+              gpsDateTime = gpsDateTime.addMSecs(point.IntervalTime*100);
 
               // if (global_opts.debug_level > 1) {
               //   qDebug() << "DateTime2:" << gpsDateTime.toString();
@@ -757,7 +788,7 @@ track_read()
 
               auto* wpt = new Waypoint(); // waypt_new();
               //wpt->creation_time = mkgmtime(&gpstime);
-              wpt->SetCreationTime(gpsbabeltime);
+              wpt->SetCreationTime(gpsDateTime);
               wpt->longitude = ((int32_t) point.Longitude) / 1000000.0;
               wpt->latitude = ((int32_t) point.Latitude) / 1000000.0;
               wpt->altitude = point.Altitude;
