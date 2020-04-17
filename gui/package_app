@@ -112,7 +112,7 @@ if [ "${machine}" = "Linux" ]; then
   cp gmapbase.html "${APPDIR}"
   cp COPYING.txt "${APPDIR}"
 else # Mac
-  cp ../GPSBabel "${APPDIR}/Contents/MacOS/gpsbabel"
+  cp ../gpsbabel "${APPDIR}/Contents/MacOS/gpsbabel"
   cp gmapbase.html "${APPDIR}/Contents/MacOS"
   cp COPYING.txt "${APPDIR}/Contents/MacOS"
   rm -f GPSBabelFE.dmg

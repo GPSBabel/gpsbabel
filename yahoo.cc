@@ -20,36 +20,19 @@
  */
 
 
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+
 #include "defs.h"
 #include "yahoo.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include "xmlgeneric.h"                 // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
 
 
 #define MYNAME "yahoo"
 
-// static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
-// static xg_callback 	wpt_addr /*, wpt_city, wpt_state, wpt_zip, wpt_country*/;
-#if 0
-static xg_tag_mapping gl_map[] = {
-  { wpt_s,	cb_start, "/ResultSet/Result" },
-  { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
-  { wpt_lon,	cb_cdata, "/ResultSet/Result/Longitude" },
-  { wpt_addr,	cb_cdata, "/ResultSet/Result/Address" },
-  { wpt_addr,	cb_cdata, "/ResultSet/Result/City" },
-  { wpt_addr,	cb_cdata, "/ResultSet/Result/State" },
-  { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
-  { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
-  { wpt_e,	cb_end,   "/ResultSet/Result" },
-  { nullptr,	(xg_cb_type)0,         nullptr}
-};
-#endif
-
 void
 YahooFormat::rd_init(const QString& fname)
 {
-abort();
-//  xml_init(fname, gl_map, nullptr);
+  xml_init(fname, build_xg_tag_map(this, gl_map), nullptr, nullptr, nullptr, true);
 }
 
 void
@@ -97,20 +80,3 @@ YahooFormat::wpt_addr(xg_string args, const QXmlStreamAttributes*)
   }
   wpt_tmp->notes += args;
 }
-#if 0
-ff_vecs_t yahoo_vecs = {
-  ff_type_file,
-  { ff_cap_read, ff_cap_none, ff_cap_none },
-  yahoo_rd_init,
-  nullptr,
-  yahoo_rd_deinit,
-  nullptr,
-  yahoo_read,
-  nullptr,
-  nullptr,
-  &yahoo_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-};
-#endif

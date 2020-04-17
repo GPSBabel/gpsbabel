@@ -176,7 +176,7 @@ public:
     return name;
   }
 
-  void set_name(QString nm)
+  void set_name(const QString& nm)
   {
     name = nm;
   }

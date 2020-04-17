@@ -1,112 +1,112 @@
-bend	Add points before and after bends in routes	https://www.gpsbabel.org/htmldoc-1.6.0/filter_bend.html
-option	bend	distance	Distance to the bend in meters where the new points will be added	float	25			https://www.gpsbabel.org/htmldoc-1.6.0/filter_bend.html#fmt_bend_o_distance
-option	bend	minangle	Minimum bend angle in degrees	float	5			https://www.gpsbabel.org/htmldoc-1.6.0/filter_bend.html#fmt_bend_o_minangle
-polygon	Include Only Points Inside Polygon	https://www.gpsbabel.org/htmldoc-1.6.0/filter_polygon.html
-option	polygon	file	File containing vertices of polygon	file				https://www.gpsbabel.org/htmldoc-1.6.0/filter_polygon.html#fmt_polygon_o_file
-option	polygon	exclude	Exclude points inside the polygon	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_polygon.html#fmt_polygon_o_exclude
-arc	Include Only Points Within Distance of Arc	https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html
-option	arc	file	File containing vertices of arc	file				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_file
-option	arc	rte	Route(s) are vertices of arc	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_rte
-option	arc	trk	Track(s) are vertices of arc	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_trk
-option	arc	distance	Maximum distance from arc	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_distance
-option	arc	exclude	Exclude points close to the arc	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_exclude
-option	arc	points	Use distance from vertices not lines	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_points
-option	arc	project	Move waypoints to its projection on lines or vertices	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_arc.html#fmt_arc_o_project
-radius	Include Only Points Within Radius	https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html
-option	radius	lat	Latitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_lat
-option	radius	lon	Longitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_lon
-option	radius	distance	Maximum distance from center	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_distance
-option	radius	exclude	Exclude points close to center	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_exclude
-option	radius	nosort	Inhibit sort by distance to center	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_nosort
-option	radius	maxcount	Output no more than this number of points	integer		1		https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_maxcount
-option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_radius.html#fmt_radius_o_asroute
-interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/htmldoc-1.6.0/filter_interpolate.html
-option	interpolate	time	Time interval in seconds	integer		0		https://www.gpsbabel.org/htmldoc-1.6.0/filter_interpolate.html#fmt_interpolate_o_time
-option	interpolate	distance	Distance interval in miles or kilometers	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_interpolate.html#fmt_interpolate_o_distance
-option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_interpolate.html#fmt_interpolate_o_route
-height	Manipulate altitudes	https://www.gpsbabel.org/htmldoc-1.6.0/filter_height.html
-option	height	add	Adds a constant value to every altitude (meter, append "f" (x.xxf) for feet)	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_height.html#fmt_height_o_add
-option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_height.html#fmt_height_o_wgs84tomsl
-track	Manipulate track lists	https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html
-option	track	move	Correct trackpoint timestamps by a delta	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_move
-option	track	pack	Pack all tracks into one	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_pack
-option	track	split	Split by date or time interval (see README)	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_split
-option	track	sdistance	Split by distance	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_sdistance
-option	track	merge	Merge multiple tracks for the same way	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_merge
-option	track	name	Use only track(s) where title matches given name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_name
-option	track	start	Use only track points after this timestamp	integer				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_start
-option	track	stop	Use only track points before this timestamp	integer				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_stop
-option	track	title	Basic title for new track(s)	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_title
-option	track	fix	Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_fix
-option	track	course	Synthesize course	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_course
-option	track	speed	Synthesize speed	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_speed
-option	track	seg2trk	Split track at segment boundaries into multiple tracks	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_seg2trk
-option	track	trk2seg	Merge tracks inserting segment separators at boundaries	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_trk2seg
-option	track	segment	segment tracks with abnormally long gaps	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_segment
-option	track	faketime	Add specified timestamp to each trackpoint	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_faketime
-option	track	discard	Discard track points without timestamps during merge	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_discard
-option	track	minimum_points	Discard tracks with fewer than these points	integer		0	50	https://www.gpsbabel.org/htmldoc-1.6.0/filter_track.html#fmt_track_o_minimum_points
-sort	Rearrange waypoints, routes and/or tracks by resorting	https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html
-option	sort	description	Sort waypoints by description	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_description
-option	sort	gcid	Sort waypoints by numeric geocache ID	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_gcid
-option	sort	shortname	Sort waypoints by short name	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_shortname
-option	sort	time	Sort waypoints by time	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_time
-option	sort	rtedesc	Sort routes by description	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_rtedesc
-option	sort	rtename	Sort routes by name	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_rtename
-option	sort	rtenum	Sort routes by number	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_rtenum
-option	sort	trkdesc	Sort tracks by description	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_trkdesc
-option	sort	trkname	Sort tracks by name	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_trkname
-option	sort	trknum	Sort tracks by number	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_sort.html#fmt_sort_o_trknum
-nuketypes	Remove all waypoints, tracks, or routes	https://www.gpsbabel.org/htmldoc-1.6.0/filter_nuketypes.html
-option	nuketypes	waypoints	Remove all waypoints from data stream	boolean	0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_nuketypes.html#fmt_nuketypes_o_waypoints
-option	nuketypes	tracks	Remove all tracks from data stream	boolean	0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_nuketypes.html#fmt_nuketypes_o_tracks
-option	nuketypes	routes	Remove all routes from data stream	boolean	0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_nuketypes.html#fmt_nuketypes_o_routes
-duplicate	Remove Duplicates	https://www.gpsbabel.org/htmldoc-1.6.0/filter_duplicate.html
-option	duplicate	shortname	Suppress duplicate waypoints based on name	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_duplicate.html#fmt_duplicate_o_shortname
-option	duplicate	location	Suppress duplicate waypoint based on coords	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_duplicate.html#fmt_duplicate_o_location
-option	duplicate	all	Suppress all instances of duplicates	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_duplicate.html#fmt_duplicate_o_all
-option	duplicate	correct	Use coords from duplicate points	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_duplicate.html#fmt_duplicate_o_correct
-position	Remove Points Within Distance	https://www.gpsbabel.org/htmldoc-1.6.0/filter_position.html
-option	position	distance	Maximum positional distance	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_position.html#fmt_position_o_distance
-option	position	all	Suppress all points close to other points	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_position.html#fmt_position_o_all
-option	position	time	Maximum time in seconds between two points	float				https://www.gpsbabel.org/htmldoc-1.6.0/filter_position.html#fmt_position_o_time
-discard	Remove unreliable points with high hdop or vdop	https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html
-option	discard	hdop	Suppress points with higher hdop	float	-1.0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_hdop
-option	discard	vdop	Suppress points with higher vdop	float	-1.0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_vdop
-option	discard	hdopandvdop	Link hdop and vdop suppression with AND	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_hdopandvdop
-option	discard	sat	Minimum sats to keep points	integer	-1.0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_sat
-option	discard	fixnone	Suppress points without fix	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_fixnone
-option	discard	fixunknown	Suppress points with unknown fix	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_fixunknown
-option	discard	elemin	Suppress points below given elevation in meters	integer				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_elemin
-option	discard	elemax	Suppress points above given elevation in meters	integer				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_elemax
-option	discard	matchname	Suppress points where name matches given name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_matchname
-option	discard	matchdesc	Suppress points where description matches given name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_matchdesc
-option	discard	matchcmt	Suppress points where comment matches given name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_matchcmt
-option	discard	matchicon	Suppress points where type matches given name	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_discard.html#fmt_discard_o_matchicon
-reverse	Reverse stops within routes	https://www.gpsbabel.org/htmldoc-1.6.0/filter_reverse.html
-stack	Save and restore waypoint lists	https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html
-option	stack	push	Push waypoint list onto stack	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_push
-option	stack	pop	Pop waypoint list from stack	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_pop
-option	stack	swap	Swap waypoint list with <depth> item on stack	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_swap
-option	stack	copy	(push) Copy waypoint list	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_copy
-option	stack	append	(pop) Append list	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_append
-option	stack	discard	(pop) Discard top of stack	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_discard
-option	stack	replace	(pop) Replace list (default)	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_replace
-option	stack	depth	(swap) Item to use (default=1)	integer		0		https://www.gpsbabel.org/htmldoc-1.6.0/filter_stack.html#fmt_stack_o_depth
-simplify	Simplify routes	https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html
-option	simplify	count	Maximum number of points in route	integer		1		https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html#fmt_simplify_o_count
-option	simplify	error	Maximum error	string		0		https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html#fmt_simplify_o_error
-option	simplify	crosstrack	Use cross-track error (default)	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html#fmt_simplify_o_crosstrack
-option	simplify	length	Use arclength error	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html#fmt_simplify_o_length
-option	simplify	relative	Use relative error	boolean				https://www.gpsbabel.org/htmldoc-1.6.0/filter_simplify.html#fmt_simplify_o_relative
-swap	Swap latitude and longitude of all loaded points	https://www.gpsbabel.org/htmldoc-1.6.0/filter_swap.html
-transform	Transform waypoints into a route, tracks into routes, ...	https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html
-option	transform	wpt	Transform track(s) or route(s) into waypoint(s) [R/T]	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_wpt
-option	transform	rte	Transform waypoint(s) or track(s) into route(s) [W/T]	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_rte
-option	transform	trk	Transform waypoint(s) or route(s) into tracks(s) [W/R]	string				https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_trk
-option	transform	rptdigits	Number of digits in generated names	integer		2		https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_rptdigits
-option	transform	rptname	Use source name for route point names	boolean	N			https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_rptname
-option	transform	del	Delete source data after transformation	boolean	N			https://www.gpsbabel.org/htmldoc-1.6.0/filter_transform.html#fmt_transform_o_del
-validate	Validate internal data structures	https://www.gpsbabel.org/htmldoc-1.6.0/filter_validate.html
-option	validate	checkempty	Check for empty input	boolean	0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_validate.html#fmt_validate_o_checkempty
-option	validate	debug	Output debug messages instead of possibly issuing a fatal error	boolean	0			https://www.gpsbabel.org/htmldoc-1.6.0/filter_validate.html#fmt_validate_o_debug
+bend	Add points before and after bends in routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_bend.html
+option	bend	distance	Distance to the bend in meters where the new points will be added	float	25			https://www.gpsbabel.org/WEB_DOC_DIR/filter_bend.html#fmt_bend_o_distance
+option	bend	minangle	Minimum bend angle in degrees	float	5			https://www.gpsbabel.org/WEB_DOC_DIR/filter_bend.html#fmt_bend_o_minangle
+polygon	Include Only Points Inside Polygon	https://www.gpsbabel.org/WEB_DOC_DIR/filter_polygon.html
+option	polygon	file	File containing vertices of polygon	file				https://www.gpsbabel.org/WEB_DOC_DIR/filter_polygon.html#fmt_polygon_o_file
+option	polygon	exclude	Exclude points inside the polygon	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_polygon.html#fmt_polygon_o_exclude
+arc	Include Only Points Within Distance of Arc	https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html
+option	arc	file	File containing vertices of arc	file				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_file
+option	arc	rte	Route(s) are vertices of arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_rte
+option	arc	trk	Track(s) are vertices of arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_trk
+option	arc	distance	Maximum distance from arc	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_distance
+option	arc	exclude	Exclude points close to the arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_exclude
+option	arc	points	Use distance from vertices not lines	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_points
+option	arc	project	Move waypoints to its projection on lines or vertices	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_project
+radius	Include Only Points Within Radius	https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html
+option	radius	lat	Latitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_lat
+option	radius	lon	Longitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_lon
+option	radius	distance	Maximum distance from center	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_distance
+option	radius	exclude	Exclude points close to center	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_exclude
+option	radius	nosort	Inhibit sort by distance to center	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_nosort
+option	radius	maxcount	Output no more than this number of points	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_maxcount
+option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_asroute
+interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html
+option	interpolate	time	Time interval in seconds	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
+option	interpolate	distance	Distance interval in miles or kilometers	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
+option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
+height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
+option	height	add	Adds a constant value to every altitude (meter, append "f" (x.xxf) for feet)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
+option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_wgs84tomsl
+track	Manipulate track lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html
+option	track	move	Correct trackpoint timestamps by a delta	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_move
+option	track	pack	Pack all tracks into one	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_pack
+option	track	split	Split by date or time interval (see README)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_split
+option	track	sdistance	Split by distance	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_sdistance
+option	track	merge	Merge multiple tracks for the same way	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_merge
+option	track	name	Use only track(s) where title matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_name
+option	track	start	Use only track points after this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
+option	track	stop	Use only track points before this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
+option	track	title	Basic title for new track(s)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_title
+option	track	fix	Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_fix
+option	track	course	Synthesize course	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_course
+option	track	speed	Synthesize speed	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_speed
+option	track	seg2trk	Split track at segment boundaries into multiple tracks	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_seg2trk
+option	track	trk2seg	Merge tracks inserting segment separators at boundaries	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_trk2seg
+option	track	segment	segment tracks with abnormally long gaps	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_segment
+option	track	faketime	Add specified timestamp to each trackpoint	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_faketime
+option	track	discard	Discard track points without timestamps during merge	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_discard
+option	track	minimum_points	Discard tracks with fewer than these points	integer		0	50	https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_minimum_points
+sort	Rearrange waypoints, routes and/or tracks by resorting	https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html
+option	sort	description	Sort waypoints by description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_description
+option	sort	gcid	Sort waypoints by numeric geocache ID	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_gcid
+option	sort	shortname	Sort waypoints by short name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_shortname
+option	sort	time	Sort waypoints by time	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_time
+option	sort	rtedesc	Sort routes by description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_rtedesc
+option	sort	rtename	Sort routes by name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_rtename
+option	sort	rtenum	Sort routes by number	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_rtenum
+option	sort	trkdesc	Sort tracks by description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_trkdesc
+option	sort	trkname	Sort tracks by name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_trkname
+option	sort	trknum	Sort tracks by number	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_sort.html#fmt_sort_o_trknum
+nuketypes	Remove all waypoints, tracks, or routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_nuketypes.html
+option	nuketypes	waypoints	Remove all waypoints from data stream	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_nuketypes.html#fmt_nuketypes_o_waypoints
+option	nuketypes	tracks	Remove all tracks from data stream	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_nuketypes.html#fmt_nuketypes_o_tracks
+option	nuketypes	routes	Remove all routes from data stream	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_nuketypes.html#fmt_nuketypes_o_routes
+duplicate	Remove Duplicates	https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html
+option	duplicate	shortname	Suppress duplicate waypoints based on name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_shortname
+option	duplicate	location	Suppress duplicate waypoint based on coords	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_location
+option	duplicate	all	Suppress all instances of duplicates	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_all
+option	duplicate	correct	Use coords from duplicate points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_correct
+position	Remove Points Within Distance	https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html
+option	position	distance	Maximum positional distance	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_distance
+option	position	all	Suppress all points close to other points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_all
+option	position	time	Maximum time in seconds between two points	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_time
+discard	Remove unreliable points with high hdop or vdop	https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html
+option	discard	hdop	Suppress points with higher hdop	float	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_hdop
+option	discard	vdop	Suppress points with higher vdop	float	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_vdop
+option	discard	hdopandvdop	Link hdop and vdop suppression with AND	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_hdopandvdop
+option	discard	sat	Minimum sats to keep points	integer	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_sat
+option	discard	fixnone	Suppress points without fix	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_fixnone
+option	discard	fixunknown	Suppress points with unknown fix	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_fixunknown
+option	discard	elemin	Suppress points below given elevation in meters	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_elemin
+option	discard	elemax	Suppress points above given elevation in meters	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_elemax
+option	discard	matchname	Suppress points where name matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchname
+option	discard	matchdesc	Suppress points where description matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchdesc
+option	discard	matchcmt	Suppress points where comment matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchcmt
+option	discard	matchicon	Suppress points where type matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchicon
+reverse	Reverse stops within routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_reverse.html
+stack	Save and restore waypoint lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html
+option	stack	push	Push waypoint list onto stack	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_push
+option	stack	pop	Pop waypoint list from stack	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_pop
+option	stack	swap	Swap waypoint list with <depth> item on stack	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_swap
+option	stack	copy	(push) Copy waypoint list	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_copy
+option	stack	append	(pop) Append list	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_append
+option	stack	discard	(pop) Discard top of stack	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_discard
+option	stack	replace	(pop) Replace list (default)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_replace
+option	stack	depth	(swap) Item to use (default=1)	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_depth
+simplify	Simplify routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html
+option	simplify	count	Maximum number of points in route	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_count
+option	simplify	error	Maximum error	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_error
+option	simplify	crosstrack	Use cross-track error (default)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_crosstrack
+option	simplify	length	Use arclength error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_length
+option	simplify	relative	Use relative error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_relative
+swap	Swap latitude and longitude of all loaded points	https://www.gpsbabel.org/WEB_DOC_DIR/filter_swap.html
+transform	Transform waypoints into a route, tracks into routes, ...	https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html
+option	transform	wpt	Transform track(s) or route(s) into waypoint(s) [R/T]	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_wpt
+option	transform	rte	Transform waypoint(s) or track(s) into route(s) [W/T]	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_rte
+option	transform	trk	Transform waypoint(s) or route(s) into tracks(s) [W/R]	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_trk
+option	transform	rptdigits	Number of digits in generated names	integer		2		https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_rptdigits
+option	transform	rptname	Use source name for route point names	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_rptname
+option	transform	del	Delete source data after transformation	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_del
+validate	Validate internal data structures	https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html
+option	validate	checkempty	Check for empty input	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html#fmt_validate_o_checkempty
+option	validate	debug	Output debug messages instead of possibly issuing a fatal error	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html#fmt_validate_o_debug

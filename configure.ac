@@ -8,7 +8,7 @@ AC_INIT([GPSBabel], [1.6.0])
 DOCVERSION=1.6.0
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-#DOCVERSION=development
+DOCVERSION=development
 
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
@@ -317,7 +317,7 @@ AC_ARG_WITH([doc],
 		[--with-doc=DIR],
 		[Path where the documentation will be stored.])],
 	[DOCDIR="$withval"],
-	[DOCDIR="../babelweb/"])
+	[DOCDIR="../babelweb"])
 AC_SUBST(DOCDIR)
 AC_MSG_RESULT([$DOCDIR])
 
@@ -366,5 +366,6 @@ AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
 AS_MKDIR_P([mac/libusb])
 
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc win32/gpsbabel.rc])
+AC_CONFIG_FILES([tools/mkcapabilities], [chmod +x tools/mkcapabilities])
 AC_OUTPUT
