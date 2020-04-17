@@ -3,10 +3,15 @@
 
 versuffix=${1:+_$1} # tag name must be lower case
 tag=$(date -u +%Y%m%dT%H%M%SZ)
-docker build --pull --file Dockerfile${versuffix} --tag gpsbabel_build_environment${versuffix}:latest .
-docker tag gpsbabel_build_environment${versuffix}:latest gpsbabel_build_environment${versuffix}:$tag
-docker tag gpsbabel_build_environment${versuffix}:latest tsteven4/gpsbabel_build_environment${versuffix}:latest 
-docker tag gpsbabel_build_environment${versuffix}:latest tsteven4/gpsbabel_build_environment${versuffix}:$tag
+TMPDIR=$(mktemp -d)
+
+cp Dockerfile${versuffix} $TMPDIR
+
+docker build --pull --file Dockerfile${versuffix} \
+             --tag tsteven4/gpsbabel_build_environment${versuffix}:latest \
+             --tag tsteven4/gpsbabel_build_environment${versuffix}:$tag \
+             $TMPDIR
+/bin/rm -fr $TMPDIR
 docker push tsteven4/gpsbabel_build_environment${versuffix}:$tag
 docker push tsteven4/gpsbabel_build_environment${versuffix}:latest
 docker image ls
