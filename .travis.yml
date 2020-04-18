@@ -62,6 +62,7 @@ jobs:
           - $HOME/Cache
         timeout: 600
     - os: osx
+      osx_image: xcode10.3
       compiler: clang
       env: QT_VERSION="5.12.8"
       cache:
