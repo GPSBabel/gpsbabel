@@ -84,17 +84,25 @@ fi
 
 unset DISPLAY
 
+# platform minimal doesn't work on macos 10.14, 10.15.  It did work on 10.13.
+# https://bugreports.qt.io/browse/QTIFW-1471
+PLATFORM="--platform minimal"
+if [ "$(uname)" = "Darwin" ]; then
+  vn=$(sw_vers -productVersion | cut -d. -f2,2)
+  if [ $vn -ge 14 ]; then
+     unset PLATFORM
+  fi
+fi
+
 if [ -n "$DISABLE_PROGRESS_REPORT" ]
 then
-	QT_QPA_PLATFORM=minimal $INSTALLER --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" 
+	$INSTALLER $PLATFORM --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" 
 else
-	ARGS="-v"
-
 	if [ -n "$VERBOSE" ]
 	then
-		QT_QPA_PLATFORM=minimal $INSTALLER $ARGS --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT"
+		$INSTALLER --verbose $PLATFORM --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT"
 	else
-		QT_QPA_PLATFORM=minimal $INSTALLER $ARGS --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" | grep "\(QTCI\|operation\)"
+		$INSTALLER --verbose $PLATFORM --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" | grep "\(QTCI\|operation\)"
 	fi
 fi
 
