@@ -972,19 +972,28 @@ void setshort_defname(short_handle, const char* s);
 #define ARG_NOMINMAX nullptr, nullptr
 
 struct arglist_t {
-  const char* argstring;
-  char** argval;
-  const char* helpstring;
-  const char* defaultvalue;
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-  const uint32_t argtype{ARGTYPE_UNKNOWN};
-#else
-  /* MSVC 2015 generates C2440, C2664 errors with the above. */
-  uint32_t argtype;
+  /* MSVC 2015 generates C2440, C2664 errors without some help. */
+#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
+  arglist_t() = default;
+  arglist_t(const char* astr, char** aval, const char* hstr, const char* dval,
+            const uint32_t atyp, const char* minv, const char* maxv, char* avp) :
+            argstring(astr),
+            argval(aval),
+            helpstring(hstr),
+            defaultvalue(dval),
+            argtype(atyp),
+            minvalue(minv),
+            maxvalue(maxv),
+            argvalptr(avp) {}
 #endif
-  const char* minvalue;		/* minimum value for numeric options */
-  const char* maxvalue;		/* maximum value for numeric options */
-  char* argvalptr;	/* !!! internal helper. Not used in definitions !!! */
+  const char* argstring{nullptr};
+  char** argval{nullptr};
+  const char* helpstring{nullptr};
+  const char* defaultvalue{nullptr};
+  const uint32_t argtype{ARGTYPE_UNKNOWN};
+  const char* minvalue{nullptr};    /* minimum value for numeric options */
+  const char* maxvalue{nullptr};    /* maximum value for numeric options */
+  char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
 };
 
 enum ff_type {
