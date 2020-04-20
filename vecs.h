@@ -30,6 +30,7 @@
 #include "defs.h"
 #include "format.h"
 #include "energympro.h"
+#include "garmin_fit.h"
 #include "geojson.h"
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
@@ -172,7 +173,6 @@ extern ff_vecs_t miniHomer_vecs;
 extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
-extern ff_vecs_t format_fit_vecs;
 extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
@@ -402,7 +402,7 @@ private:
   LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
-  LegacyFormat format_fit_fmt {format_fit_vecs};
+  GarminFitFormat format_fit_fmt;
   LegacyFormat mapbar_track_fmt {mapbar_track_vecs};
   LegacyFormat f90g_track_fmt {f90g_track_vecs};
   LegacyFormat mapfactor_fmt {mapfactor_vecs};

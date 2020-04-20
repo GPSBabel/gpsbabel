@@ -114,6 +114,7 @@ set(HEADERS
   format.h
   formspec.h
   garmin_device_xml.h
+  garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
   garmin_icon_tables.h
