@@ -180,6 +180,7 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
+  src/core/optional.h
   src/core/textstream.h
   src/core/usasciicodec.h
   src/core/xmlstreamwriter.h
