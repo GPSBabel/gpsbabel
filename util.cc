@@ -1774,7 +1774,7 @@ void list_timezones()
   };
   std::sort(zoneids.begin(), zoneids.end(), alpha);
   Warning() << "Available timezones are:";
-  for (const auto& id : zoneids) {
+  for (const auto& id : qAsConst(zoneids)) {
     Warning() << id;
   }
 }

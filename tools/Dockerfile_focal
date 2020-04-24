@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:eoan
+FROM ubuntu:focal
 
 LABEL maintainer="https://github.com/tsteven4"
 
