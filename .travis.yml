@@ -29,7 +29,7 @@ jobs:
       compiler: gcc
       env:
         - BUILD_TYPE="docker"
-        - DOCKER_IMG="eoan"
+        - DOCKER_IMG="focal"
         - DOCKER_SCRIPT="./tools/build_extra_tests"
     - os: linux
       dist: xenial
