@@ -90,7 +90,7 @@ data_read()
   char* ibuf;
   char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
   char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
-  char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
+  QString desc;
   double lat = 0, lon = 0;
   int line_no = 0;
   int stealth_num = 0, whitespace_num = 0;
@@ -240,10 +240,10 @@ data_read()
     }
 
     if (snmac) {
-      snprintf(desc, sizeof desc, "%s/%d Mbps/Ch %d", ssid, speed, channel);
+      desc = QString("%1/%2 Mbps/Ch %3").arg(ssid).arg(speed).arg(channel);
       wpt_tmp->shortname = (mac);
     } else {
-      snprintf(desc, sizeof desc, "%d Mbps/Ch %d/%s", speed, channel, mac);
+      desc = QString("%1 Mbps/Ch %2/%3").arg(speed).arg(channel).arg(mac);
       wpt_tmp->shortname = (ssid);
     }
 
