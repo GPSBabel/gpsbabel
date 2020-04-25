@@ -20,10 +20,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-
-
-#if CSVFMTS_ENABLED
-
 #include <cstdio>                  // for sscanf, snprintf
 #include <cstdlib>                 // for atof, atoi
 #include <cstring>                 // for memset
@@ -40,6 +36,8 @@
 #include "gbfile.h"                // for gbfprintf, gbfclose, gbfgetstr, gbfopen, gbfile, gbfputs
 #include "src/core/datetime.h"     // for DateTime
 
+
+#if CSVFMTS_ENABLED
 
 static gbfile* fin, *fout;
 static route_head* track, *route;
