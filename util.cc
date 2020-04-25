@@ -19,36 +19,39 @@
 
  */
 
-#include <cctype>                      // for isspace, isalpha, ispunct, tolower, toupper
-#include <cerrno>                      // for errno
-#include <cmath>                       // for fabs, floor
-#include <cstdarg>                     // for va_list, va_end, va_start, va_copy
-#include <cstdio>                      // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
-#include <cstdint>                     // for uint32_t
-#include <cstdlib>                     // for abs, getenv, calloc, free, malloc, realloc
-#include <cstring>                     // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <ctime>                       // for mktime, localtime
+#include <algorithm>                    // for sort
+#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cerrno>                       // for errno
+#include <cmath>                        // for fabs, floor
+#include <cstdarg>                      // for va_list, va_end, va_start, va_copy
+#include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
+#include <cstdint>                      // for uint32_t
+#include <cstdlib>                      // for abs, getenv, calloc, free, malloc, realloc
+#include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <ctime>                        // for mktime, localtime
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for QChar, operator<=, operator>=
-#include <QtCore/QCharRef>             // for QCharRef
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QFileInfo>            // for QFileInfo
-#include <QtCore/QList>                // for QList
-#include <QtCore/QString>              // for QString
-#include <QtCore/QStringRef>           // for QStringRef
-#include <QtCore/QTextCodec>           // for QTextCodec
-#include <QtCore/QTextStream>          // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QtCore/QXmlStreamAttribute>  // for QXmlStreamAttribute
-#include <QtCore/Qt>                   // for CaseInsensitive
-#include <QtCore/QTimeZone>            // for QTimeZone
-#include <QtCore/QtGlobal>             // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QChar>                 // for QChar, operator<=, operator>=
+#include <QtCore/QCharRef>              // for QCharRef
+#include <QtCore/QDateTime>             // for QDateTime
+#include <QtCore/QFileInfo>             // for QFileInfo
+#include <QtCore/QList>                 // for QList
+#include <QtCore/QScopedPointer>        // for QScopedPointer
+#include <QtCore/QString>               // for QString
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QTextCodec>            // for QTextCodec
+#include <QtCore/QTextStream>           // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/Qt>                    // for CaseInsensitive
+#include <QtCore/QTimeZone>             // for QTimeZone
+#include <QtCore/QtGlobal>              // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
-#include "cet.h"                       // for cet_utf8_to_ucs4
-#include "src/core/datetime.h"         // for DateTime
-#include "src/core/logging.h"          // for Warning
-#include "src/core/xmltag.h"           // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
+#include "cet.h"                        // for cet_utf8_to_ucs4
+#include "src/core/datetime.h"          // for DateTime
+#include "src/core/logging.h"           // for Warning
+#include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -249,6 +252,20 @@ xasprintf(QString* strp, const char* fmt, ...)
   int res = xvasprintf(&cstrp, fmt, args);
   *strp = cstrp;
   xfree(cstrp);
+  va_end(args);
+
+  return res;
+}
+
+int
+xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...)
+{
+  va_list args;
+
+  va_start(args, fmt);
+  char* cstrp;
+  int res = xvasprintf(&cstrp, fmt, args);
+  strp.reset(cstrp);
   va_end(args);
 
   return res;

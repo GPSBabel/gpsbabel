@@ -19,38 +19,39 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <algorithm>            // for sort, stable_sort
-#include <cmath>                // for M_PI
-#include <cstdarg>              // for va_list
-#include <cstddef>              // for NULL, nullptr_t, size_t
-#include <cstdint>              // for int32_t, uint32_t
-#include <cstdio>               // for NULL, fprintf, FILE, stdout
-#include <ctime>                // for time_t
-#include <utility>              // for move
+#include <algorithm>              // for sort, stable_sort
+#include <cmath>                  // for M_PI
+#include <cstdarg>                // for va_list
+#include <cstddef>                // for NULL, nullptr_t, size_t
+#include <cstdint>                // for int32_t, uint32_t
+#include <cstdio>                 // for NULL, fprintf, FILE, stdout
+#include <ctime>                  // for time_t
+#include <utility>                // for move
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 #if HAVE_LIBZ
-#include <zlib.h>               // doesn't really belong here, but is missing elsewhere.
+#include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
-#include "zlib.h"               // doesn't really belong here, but is missing elsewhere.
+#include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QList>         // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QtCore/QString>       // for QString
-#include <QtCore/QStringRef>    // for QStringRef
-#include <QtCore/QTextCodec>    // for QTextCodec
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for foreach
+#include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QtCore/QScopedPointer>  // for QScopedPointer
+#include <QtCore/QString>         // for QString
+#include <QtCore/QStringRef>      // for QStringRef
+#include <QtCore/QTextCodec>      // for QTextCodec
+#include <QtCore/QVector>         // for QVector
+#include <QtCore/Qt>              // for CaseInsensitive
+#include <QtCore/QtGlobal>        // for foreach
 
-#include "formspec.h"           // for FormatSpecificData
-#include "inifile.h"            // for inifile_t
-#include "gbfile.h"             // doesn't really belong here, but is missing elsewhere.
-#include "session.h"            // for session_t
-#include "src/core/datetime.h"  // for DateTime
-#include "src/core/optional.h"  // for optional
+#include "formspec.h"             // for FormatSpecificData
+#include "inifile.h"              // for inifile_t
+#include "gbfile.h"               // doesn't really belong here, but is missing elsewhere.
+#include "session.h"              // for session_t
+#include "src/core/datetime.h"    // for DateTime
+#include "src/core/optional.h"    // for optional
 
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
@@ -1108,6 +1109,7 @@ void rtrim(char* s);
 char* lrtrim(char* buff);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
+int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
