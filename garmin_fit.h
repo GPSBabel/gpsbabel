@@ -26,6 +26,7 @@
 
 #include <cstdint>              // for uint8_t, uint16_t, uint32_t
 #include <deque>                // for deque
+#include <stdexcept>            // for runtime_error
 #include <utility>              // for pair
 #include <vector>               // for vector
 
@@ -82,12 +83,12 @@ private:
   /* Types */
 
   struct fit_field_t {
-  /* MSVC 2015 generates C2664 errors without some help. */
+    /* MSVC 2015 generates C2664 errors without some help. */
 #if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
     fit_field_t() = default;
     fit_field_t(int i, int s, int t) : id(i), size(s), type(t) {}
 #endif
-    int id{};
+    int id {};
     int size{};
     int type{};
   };
@@ -124,6 +125,11 @@ private:
     QString shortname;
     bool is_course_point;
     unsigned int course_point_type;
+  };
+
+  class ReaderException : public std::runtime_error
+  {
+    using std::runtime_error::runtime_error;
   };
 
   /* Constants */
@@ -218,6 +224,7 @@ private:
 
   static constexpr int kWriteHeaderLen = 12;
   static constexpr int kWriteHeaderCrcLen = 14;
+  static constexpr int kReadHeaderCrcLen = 14;
 
   static constexpr double kSynthSpeed = 10.0 * 1000 / 3600; /* speed in m/s */
 
@@ -233,6 +240,7 @@ private:
   void fit_parse_data_message(uint8_t header);
   void fit_parse_compressed_message(uint8_t header);
   void fit_parse_record();
+  void fit_check_file_crc() const;
   void fit_write_message_def(uint8_t local_id, uint16_t global_id, const std::vector<fit_field_t>& fields) const;
   static uint16_t fit_crc16(uint8_t data, uint16_t crc);
   void fit_write_timestamp(const gpsbabel::DateTime& t) const;
@@ -255,6 +263,7 @@ private:
   /* Data Members */
 
   char* opt_allpoints = nullptr;
+  char* opt_recoverymode = nullptr;
   int lap_ct = 0;
   bool new_trkseg = false;
   bool write_header_msgs = false;
@@ -263,6 +272,11 @@ private:
     {
       "allpoints", &opt_allpoints,
       "Read all points even if latitude or longitude is missing",
+      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "recoverymode", &opt_recoverymode,
+      "Attempt to recovery data from corrupt file",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };

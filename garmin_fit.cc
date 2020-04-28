@@ -22,22 +22,26 @@
 
  */
 
-#include <cstdint>            // for uint8_t, uint16_t, uint32_t, int32_t, int8_t, uint64_t
-#include <cstdio>             // for EOF, SEEK_SET, snprintf
-#include <deque>              // for deque, _Deque_iterator, operator!=
-#include <memory>             // for allocator_traits<>::value_type
-#include <utility>            // for pair
-#include <vector>             // for vector
+#include <cstdint>             // for uint8_t, uint16_t, uint32_t, int32_t, int8_t, uint64_t
+#include <cstdio>              // for EOF, SEEK_SET, snprintf
+#include <deque>               // for deque, _Deque_iterator, operator!=
+#include <memory>              // for allocator_traits<>::value_type
+#include <string>              // for operator+, to_string, char_traits
+#include <utility>             // for pair
+#include <vector>              // for vector
 
-#include <QtCore/QByteArray>  // for QByteArray
-#include <QtCore/QDateTime>   // for QDateTime
-#include <QtCore/QString>     // for QString
-#include <QtCore/Qt>          // for CaseInsensitive
+#include <QtCore/QByteArray>   // for QByteArray
+#include <QtCore/QDateTime>    // for QDateTime
+#include <QtCore/QFileInfo>    // for QFileInfo
+#include <QtCore/QString>      // for QString
+#include <QtCore/Qt>           // for CaseInsensitive
+#include <QtCore/QtGlobal>     // for qint64
 
 #include "defs.h"
 #include "garmin_fit.h"
-#include "gbfile.h"           // for gbfputc, gbfputuint16, gbfputuint32, gbfgetc, gbfread, gbfseek, gbfclose, gbfgetuint16, gbfopen_le, gbfputint32, gbfflush, gbfgetuint32, gbfputs, gbftell, gbfwrite, gbfile, gbsize_t
-#include "jeeps/gpsmath.h"    // for GPS_Math_Semi_To_Deg, GPS_Math_Gtime_To_Utime, GPS_Math_Deg_To_Semi, GPS_Math_Utime_To_Gtime
+#include "gbfile.h"            // for gbfputc, gbfputuint16, gbfputuint32, gbfgetc, gbfread, gbfseek, gbfclose, gbfgetuint16, gbfopen_le, gbfputint32, gbfflush, gbfgetuint32, gbfputs, gbftell, gbfwrite, gbfile, gbsize_t
+#include "jeeps/gpsmath.h"     // for GPS_Math_Semi_To_Deg, GPS_Math_Gtime_To_Utime, GPS_Math_Deg_To_Semi, GPS_Math_Utime_To_Gtime
+#include "src/core/logging.h"  // for Warning, Fatal
 
 
 #define MYNAME "fit"
@@ -127,10 +131,41 @@ GarminFitFormat::fit_parse_header()
     debug_print(1,"%s: fit_data.len=%d\n", MYNAME, fit_data.len);
   }
 
-  if (len > 12) {
-    // Unused according to Ingo Arndt
-    gbfgetuint16(fin);
+  // Header CRC may be omitted entirely
+  if (len >= kReadHeaderCrcLen) {
+    uint16_t hdr_crc = gbfgetuint16(fin);
+    // Header CRC may be set to 0, or contain the CRC over previous bytes.
+    if (hdr_crc != 0) {
+      // Check the header CRC
+      uint16_t crc = 0;
+      gbfseek(fin, 0, SEEK_SET);
+      for (unsigned int i = 0; i < kReadHeaderCrcLen; ++i) {
+        int data = gbfgetc(fin);
+        if (data == EOF) {
+          fatal(MYNAME ": File %s truncated\n", fin->name);
+        }
+        crc = fit_crc16(data, crc);
+      }
+      if (crc != 0) {
+        Warning().nospace() << MYNAME ": Header CRC mismatch in file " <<  fin->name << ".";
+        if (!opt_recoverymode) {
+          Fatal().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.";
+        }
+      } else if (global_opts.debug_level >= 1) {
+        debug_print(1, MYNAME ": Header CRC verified.\n");
+      }
+    }
   }
+
+  QFileInfo fi(fin->name);
+  qint64 size = fi.size();
+  if ((len + fit_data.len + 2) != size) {
+    Warning() << MYNAME ": File size" << size << "is not expected given header len" << len << ", data length" << fit_data.len << "and a 2 byte file CRC.";
+  } else if (global_opts.debug_level >= 1) {
+    debug_print(1, MYNAME ": File size matches expectations from information in the header.\n");
+  }
+  
+  gbfseek(fin, len, SEEK_SET);
 
   fit_data.global_utc_offset = 0;
 }
@@ -138,21 +173,15 @@ GarminFitFormat::fit_parse_header()
 uint8_t
 GarminFitFormat::fit_getuint8()
 {
-  if (fit_data.len == 0) {
-    // fail gracefully for GARMIN Edge 800 with newest firmware, seems to write a wrong record length
-    // for the last record.
-    //fatal(MYNAME ": record truncated: fit_data.len=0\n");
-    if (global_opts.debug_level >= 1) {
-      warning("%s: record truncated: fit_data.len=0\n", MYNAME);
-    }
-    return 0;
+  if (fit_data.len < 1) {
+    throw ReaderException("record truncated: expecting char[1], but only got " + std::to_string(fit_data.len) + ".");
   }
   int val = gbfgetc(fin);
   if (val == EOF) {
-    fatal(MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
+    throw ReaderException("unexpected end of file with fit_data.len=" + std::to_string(fit_data.len) + ".");
   }
-  fit_data.len--;
-  return (uint8_t)val;
+  --fit_data.len;
+  return static_cast<uint8_t>(val);
 }
 
 uint16_t
@@ -161,10 +190,12 @@ GarminFitFormat::fit_getuint16()
   char buf[2];
 
   if (fit_data.len < 2) {
-    fatal(MYNAME ": record truncated: expecting char[2], but only got %d\n",fit_data.len);
+    throw ReaderException("record truncated: expecting char[2], but only got " + std::to_string(fit_data.len) + ".");
   }
-  is_fatal(gbfread(buf, 2, 1, fin) != 1,
-           MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
+  gbsize_t count = gbfread(buf, 2, 1, fin);
+  if (count != 1) {
+    throw ReaderException("unexpected end of file with fit_data.len=" + std::to_string(fit_data.len) + ".");
+  }
   fit_data.len -= 2;
   if (fit_data.endian) {
     return be_read16(buf);
@@ -179,10 +210,12 @@ GarminFitFormat::fit_getuint32()
   char buf[4];
 
   if (fit_data.len < 4) {
-    fatal(MYNAME ": record truncated: expecting char[4], but only got %d\n",fit_data.len);
+    throw ReaderException("record truncated: expecting char[4], but only got " + std::to_string(fit_data.len) + ".");
   }
-  is_fatal(gbfread(buf, 4, 1, fin) != 1,
-           MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
+  gbsize_t count = gbfread(buf, 4, 1, fin);
+  if (count != 1) {
+    throw ReaderException("unexpected end of file with fit_data.len=" + std::to_string(fit_data.len) + ".");
+  }
   fit_data.len -= 4;
   if (fit_data.endian) {
     return be_read32(buf);
@@ -206,7 +239,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   // second byte is endianness
   def->endian = fit_getuint8();
   if (def->endian > 1) {
-    warning(MYNAME ": Unusual endian field (interpreting as big endian): %d\n",def->endian);
+    throw ReaderException(QString("Bad endian field 0x%1 at file position 0x%2.").arg(def->endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
   fit_data.endian = def->endian;
 
@@ -661,6 +694,7 @@ GarminFitFormat::fit_parse_compressed_message(uint8_t header)
 void
 GarminFitFormat::fit_parse_record()
 {
+  gbsize_t position = gbftell(fin);
   uint8_t header = fit_getuint8();
   // high bit 7 set -> compressed message (0 for normal)
   // second bit 6 set -> 0 for data message, 1 for definition message
@@ -672,23 +706,51 @@ GarminFitFormat::fit_parse_record()
   // bits 3..0 -> local message type
   if (header & 0x80) {
     if (global_opts.debug_level >= 6) {
-      debug_print(6,"%s: got compressed message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(6,"%s: got compressed message at file position 0x%x, fit_data.len=%d", MYNAME, position, fit_data.len);
       debug_print(0," ...local message type 0x%X\n", header&0x0f);
     }
     fit_parse_compressed_message(header);
   } else if (header & 0x40) {
     if (global_opts.debug_level >= 6) {
-      debug_print(6,"%s: got definition message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(6,"%s: got definition message at file position 0x%x, fit_data.len=%d", MYNAME, position, fit_data.len);
       debug_print(0," ...local message type 0x%X\n", header&0x0f);
     }
     fit_parse_definition_message(header);
   } else {
     if (global_opts.debug_level >= 6) {
-      debug_print(6,"%s: got data message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(6,"%s: got data message at file position 0x%x, fit_data.len=%d", MYNAME, position, fit_data.len);
       debug_print(0," ...local message type 0x%X\n", header&0x0f);
     }
     fit_parse_data_message(header);
   }
+}
+
+void
+GarminFitFormat::fit_check_file_crc() const
+{
+  // Check file CRC
+
+  gbsize_t position = gbftell(fin);
+
+  uint16_t crc = 0;
+  gbfseek(fin, 0, SEEK_SET);
+  while (true) {
+    int data = gbfgetc(fin);
+    if (data == EOF) {
+      break;
+    }
+    crc = fit_crc16(data, crc);
+  }
+  if (crc != 0) {
+    Warning().nospace() << MYNAME ": File CRC mismatch in file " <<  fin->name << ".";
+    if (!opt_recoverymode) {
+      Fatal().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.";
+    }
+  } else if (global_opts.debug_level >= 1) {
+    debug_print(1, MYNAME ": File CRC verified.\n");
+  }
+
+  gbfseek(fin, position, SEEK_SET);
 }
 
 /*******************************************************************************
@@ -699,6 +761,8 @@ GarminFitFormat::fit_parse_record()
 void
 GarminFitFormat::read()
 {
+  fit_check_file_crc();
+
   fit_parse_header();
 
   fit_data.track = new route_head;
@@ -706,8 +770,17 @@ GarminFitFormat::read()
   if (global_opts.debug_level >= 1) {
     debug_print(1,"%s: starting to read data with fit_data.len=%d\n", MYNAME, fit_data.len);
   }
-  while (fit_data.len) {
-    fit_parse_record();
+  try {
+    while (fit_data.len) {
+      fit_parse_record();
+    }
+  } catch (ReaderException& e) {
+    if (opt_recoverymode) {
+      warning(MYNAME ": %s\n",e.what());
+      warning(MYNAME ": Aborting read and continuning processing.\n");
+    } else {
+      fatal(MYNAME ": %s  Use recoverymode option at your risk.\n",e.what());
+    }
   }
 }
 
