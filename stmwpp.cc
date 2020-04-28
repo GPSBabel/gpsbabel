@@ -20,16 +20,24 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cstdio>                  // for sscanf, snprintf
+#include <cstdlib>                 // for atof, atoi
+#include <cstring>                 // for memset
+#include <ctime>                   // for tm
+
+#include <QtCore/QDateTime>        // for QDateTime
+#include <QtCore/QString>          // for QString
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/QVector>          // for QVector
 
 #include "defs.h"
+#include "cet_util.h"              // for cet_convert_init
+#include "csv_util.h"              // for csv_lineparse
+#include "gbfile.h"                // for gbfprintf, gbfclose, gbfgetstr, gbfopen, gbfile, gbfputs
+#include "src/core/datetime.h"     // for DateTime
+
 
 #if CSVFMTS_ENABLED
-
-#include "csv_util.h"
-#include "cet_util.h"
-#include <cctype>
-#include <cstdio>
-#include <cstdlib>
 
 static gbfile* fin, *fout;
 static route_head* track, *route;
@@ -229,19 +237,9 @@ stmwpp_write_double(const double val)
 static void
 stmwpp_waypt_cb(const Waypoint* wpt)
 {
-  char cdate[16], ctime[16];
-
   if (track_index != track_num) {
     return;
   }
-
-  const time_t tt = wpt->GetCreationTime().toTime_t();
-  struct tm tm = *gmtime(&tt);
-  tm.tm_year += 1900;
-  tm.tm_mon++;
-
-  snprintf(cdate, sizeof(cdate), "%02d/%02d/%04d", tm.tm_mon, tm.tm_mday, tm.tm_year);
-  snprintf(ctime, sizeof(ctime), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   QString sn;
   switch (what) {
@@ -262,7 +260,8 @@ stmwpp_waypt_cb(const Waypoint* wpt)
   }
   stmwpp_write_double(wpt->latitude);
   stmwpp_write_double(wpt->longitude);
-  gbfprintf(fout, "%s,%s", cdate, ctime);
+  QString datetime = wpt->GetCreationTime().toUTC().toString("MM/dd/yyyy,HH:mm:ss");
+  gbfputs(datetime, fout);
   switch (what) {
   case STM_WAYPT:
   case STM_RTEPT:

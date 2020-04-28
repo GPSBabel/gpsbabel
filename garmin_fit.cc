@@ -362,11 +362,11 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   uint8_t cadence = 0xff;
   uint16_t power = 0xffff;
   int8_t temperature = 0x7f;
-  int32_t startlat = 0x7fffffff;
-  int32_t startlon = 0x7fffffff;
+  //int32_t startlat = 0x7fffffff;
+  //int32_t startlon = 0x7fffffff;
   int32_t endlat = 0x7fffffff;
   int32_t endlon = 0x7fffffff;
-  uint32_t starttime = 0; // ??? default ?
+  //uint32_t starttime = 0; // ??? default ?
   uint8_t event = 0xff;
   uint8_t eventtype = 0xff;
 
@@ -500,19 +500,19 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: starttime=%d\n", MYNAME, val);
           }
-          starttime = val;
+          //starttime = val;
           break;
         case kFieldStartLatitude:
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: startlat=%d\n", MYNAME, val);
           }
-          startlat = val;
+          //startlat = val;
           break;
         case kFieldStartLongitude:
           if (global_opts.debug_level >= 7) {
             debug_print(7,"%s: parsing fit data: startlon=%d\n", MYNAME, val);
           }
-          startlon = val;
+          //startlon = val;
           break;
         case kFieldEndLatitude:
           if (global_opts.debug_level >= 7) {
@@ -587,9 +587,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     auto* lappt = new Waypoint;
     lappt->latitude = GPS_Math_Semi_To_Deg(endlat);
     lappt->longitude = GPS_Math_Semi_To_Deg(endlon);
-    char cbuf[10];
-    snprintf(cbuf, sizeof(cbuf), "LAP%03d", ++lap_ct);
-    lappt->shortname = cbuf;
+    lappt->shortname = QString("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
     waypt_add(lappt);
   }
   break;

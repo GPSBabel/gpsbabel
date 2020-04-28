@@ -408,8 +408,7 @@ print_categories(uint16_t categories)
     if ((categories & 1) != 0) {
       QString c;
       if (global_opts.inifile != nullptr) {
-        char key[3];
-        snprintf(key, sizeof(key), "%d", i + 1);
+        QString key = QString::number(i + 1);
         c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       }
 

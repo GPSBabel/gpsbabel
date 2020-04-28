@@ -285,12 +285,7 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
   } else if (global_opts.inifile != nullptr) {
     // Do we have a gpsbabel.ini that maps category names to category #'s?
     for (i = 0; i < 16; i++) {
-      char key[3];
-
-      // use assertion to silence gcc 7.3 warning
-      // warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 3 [-Wformat-truncation=]
-      assert((i>=0) && (i<16));
-      snprintf(key, sizeof(key), "%d", i + 1);
+      QString key = QString::number(i + 1);
       QString c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       if (c.compare(category_name, Qt::CaseInsensitive) == 0) {
         cat = (1 << i);
