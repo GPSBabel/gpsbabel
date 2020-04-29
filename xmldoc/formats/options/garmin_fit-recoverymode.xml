@@ -1,0 +1,12 @@
+<para>
+In the default mode the reader will issue a fatal error if it encounters indications of a corrupt file. These indications include:
+<itemizedlist>
+<listitem><para>a bad Header or File CRC</para></listitem>
+<listitem><para>a bad endian field</para></listitem>
+<listitem><para>an attempt to read when the data section doesn't have sufficient data</para></listitem>
+<listitem><para>an attempt to read past the end of file</para></listitem>
+</itemizedlist>
+In recovery mode when we encounter one of these errors we will abort
+read processing and continue. This allows any writer to use data that
+was recovered previous to the read abort.
+</para>
