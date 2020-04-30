@@ -30,6 +30,7 @@
 #include <utility>              // for pair
 #include <vector>               // for vector
 
+#include <QtCore/QHash>         // for QHash
 #include <QtCore/QList>         // for QList
 #include <QtCore/QString>       // for QString
 #include <QtCore/QVector>       // for QVector
@@ -105,7 +106,7 @@ private:
     route_head* track{nullptr};
     uint32_t last_timestamp{};
     uint32_t global_utc_offset{};
-    fit_message_def message_def[16];
+    QHash<int, fit_message_def> message_def;
   };
 
   struct FitCourseRecordPoint {

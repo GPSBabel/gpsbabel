@@ -3,10 +3,11 @@ In the default mode the reader will issue a fatal error if it encounters indicat
 <itemizedlist>
 <listitem><para>a bad Header or File CRC</para></listitem>
 <listitem><para>a bad endian field</para></listitem>
+<listitem><para>an attempt to use a message type that hasn't been previously defined</para></listitem>
 <listitem><para>an attempt to read when the data section doesn't have sufficient data</para></listitem>
 <listitem><para>an attempt to read past the end of file</para></listitem>
 </itemizedlist>
-In recovery mode when we encounter one of these errors we will abort
+In recovery mode if we encounter a CRC error we will ignore it.  If we encounter one of the other errors we will abort
 read processing and continue. This allows any writer to use data that
 was recovered previous to the read abort.
 </para>

@@ -33,6 +33,7 @@
 #include <QtCore/QByteArray>   // for QByteArray
 #include <QtCore/QDateTime>    // for QDateTime
 #include <QtCore/QFileInfo>    // for QFileInfo
+#include <QtCore/QLatin1Char>  // for QLatin1Char
 #include <QtCore/QString>      // for QString
 #include <QtCore/Qt>           // for CaseInsensitive
 #include <QtCore/QtGlobal>     // for qint64
@@ -71,10 +72,7 @@ GarminFitFormat::rd_init(const QString& fname)
 void
 GarminFitFormat::rd_deinit()
 {
-  for (auto& local_id : fit_data.message_def) {
-    // QList::clear() will not deallocate
-    local_id.fields = QList<fit_field_t>();
-  }
+  fit_data = fit_data_t();
 
   gbfclose(fin);
 }
@@ -164,7 +162,7 @@ GarminFitFormat::fit_parse_header()
   } else if (global_opts.debug_level >= 1) {
     debug_print(1, MYNAME ": File size matches expectations from information in the header.\n");
   }
-  
+
   gbfseek(fin, len, SEEK_SET);
 
   fit_data.global_utc_offset = 0;
@@ -228,23 +226,21 @@ void
 GarminFitFormat::fit_parse_definition_message(uint8_t header)
 {
   int local_id = header & 0x0f;
-  fit_message_def* def = &fit_data.message_def[local_id];
-
-  def->fields = QList<fit_field_t>();
+  fit_message_def def;
 
   // first byte is reserved.  It's usually 0 and we don't know what it is,
   // but we've seen some files that are 0x40.  So we just read it and toss it.
   (void) fit_getuint8();
 
   // second byte is endianness
-  def->endian = fit_getuint8();
-  if (def->endian > 1) {
-    throw ReaderException(QString("Bad endian field 0x%1 at file position 0x%2.").arg(def->endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
+  def.endian = fit_getuint8();
+  if (def.endian > 1) {
+    throw ReaderException(QString("Bad endian field 0x%1 at file position 0x%2.").arg(def.endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
-  fit_data.endian = def->endian;
+  fit_data.endian = def.endian;
 
   // next two bytes are the global message number
-  def->global_id = fit_getuint16();
+  def.global_id = fit_getuint16();
 
   // byte 5 has the number of records in the remainder of the definition message
   int num_fields = fit_getuint8();
@@ -262,7 +258,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
       debug_print(8,"%s: record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
                   MYNAME, i, field.id, field.size, field.type, fit_data.len);
     }
-    def->fields.append(field);
+    def.fields.append(field);
   }
 
   // If we have developer fields (since version 2.0) they must be read too
@@ -292,26 +288,26 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
     if (global_opts.debug_level >= 8) {
       debug_print(8,"%s: definition message contains %d developer records\n",MYNAME, numOfDevFields);
     }
-    if (numOfDevFields == 0) {
-      return;
-    }
-
-    int numOfFields = num_fields + numOfDevFields;
-    for (int i = num_fields; i < numOfFields; ++i) {
-      int id   = fit_getuint8();
-      int size = fit_getuint8();
-      int type = fit_getuint8();
-      fit_field_t field = {id, size, type};
-      if (global_opts.debug_level >= 8) {
-        debug_print(8,"%s: developer record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
-                    MYNAME, i - num_fields, field.id, field.size, field.type, fit_data.len);
+    if (numOfDevFields > 0) {
+      int numOfFields = num_fields + numOfDevFields;
+      for (int i = num_fields; i < numOfFields; ++i) {
+        int id   = fit_getuint8();
+        int size = fit_getuint8();
+        int type = fit_getuint8();
+        fit_field_t field = {id, size, type};
+        if (global_opts.debug_level >= 8) {
+          debug_print(8,"%s: developer record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
+                      MYNAME, i - num_fields, field.id, field.size, field.type, fit_data.len);
+        }
+        // Because we parse developer fields like normal fields and we do not want
+        // that the field id interfere which valid id's from the normal fields
+        field.id = kFieldInvalid;
+        def.fields.append(field);
       }
-      // Because we parse developer fields like normal fields and we do not want
-      // that the field id interfere which valid id's from the normal fields
-      field.id = kFieldInvalid;
-      def->fields.append(field);
     }
   }
+
+  fit_data.message_def.insert(local_id, def);
 }
 
 uint32_t
@@ -678,14 +674,26 @@ void
 GarminFitFormat::fit_parse_data_message(uint8_t header)
 {
   int local_id = header & 0x0f;
-  fit_parse_data(fit_data.message_def[local_id], 0);
+  if (fit_data.message_def.contains(local_id)) {
+    fit_parse_data(fit_data.message_def.value(local_id), 0);
+  } else {
+    throw ReaderException(
+      QString("Message %1 hasn't been defined before being used at file position 0x%2.").
+      arg(local_id).arg(gbftell(fin) - 1, 0, 16).toStdString());
+  }
 }
 
 void
 GarminFitFormat::fit_parse_compressed_message(uint8_t header)
 {
   int local_id = (header >> 5) & 3;
-  fit_parse_data(fit_data.message_def[local_id], header & 0x1f);
+  if (fit_data.message_def.contains(local_id)) {
+    fit_parse_data(fit_data.message_def.value(local_id), header & 0x1f);
+  } else {
+    throw ReaderException(
+      QString("Compressed message %1 hasn't been defined before being used at file position 0x%2.").
+      arg(local_id).arg(gbftell(fin) - 1, 0, 16).toStdString());
+  }
 }
 
 /*******************************************************************************
