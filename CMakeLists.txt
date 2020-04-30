@@ -149,6 +149,7 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
+  kml.h
   legacyformat.h
   lowranceusr.h
   magellan.h

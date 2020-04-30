@@ -35,10 +35,10 @@
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
 #include "gpx.h"
+#include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
 #include "mynav.h"
-#include "qstarz_bl_1000.h"
 #include "nmea.h"
 #include "qstarz_bl_1000.h"
 #include "random.h"
@@ -58,7 +58,6 @@ extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t pcx_vecs;
-extern ff_vecs_t kml_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t gpsutil_vecs;
 extern ff_vecs_t holux_vecs;
@@ -281,7 +280,7 @@ private:
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   LegacyFormat pcx_fmt {pcx_vecs};
-  LegacyFormat kml_fmt {kml_vecs};
+  KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LegacyFormat gpsutil_fmt {gpsutil_vecs};
   LowranceusrFormat lowranceusr_fmt;
