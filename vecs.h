@@ -44,6 +44,7 @@
 #include "random.h"
 #include "shape.h"
 #include "subrip.h"
+#include "unicsv.h"
 #include "xcsv.h"
 #include "yahoo.h"
 
@@ -111,7 +112,6 @@ extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t compegps_vecs;
 #endif // CSVFMTS_ENABLED
 // extern ff_vecs_t yahoo_vecs;
-extern ff_vecs_t unicsv_vecs;
 extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
@@ -338,7 +338,7 @@ private:
   LegacyFormat compegps_fmt {compegps_vecs};
 #endif // CSVFMTS_ENABLED
   YahooFormat yahoo_fmt;
-  LegacyFormat unicsv_fmt {unicsv_vecs};
+  UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
   LegacyFormat gpssim_fmt {gpssim_vecs};
 #if CSVFMTS_ENABLED

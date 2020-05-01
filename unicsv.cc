@@ -42,7 +42,9 @@
 #include <QtCore/QtGlobal>         // for qPrintable
 
 #include "defs.h"
+#include "unicsv.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
+#include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
 #include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
@@ -54,279 +56,121 @@
 
 #define MYNAME "unicsv"
 
-/* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
-
-#define UNICSV_FIELD_SEP	","
-#define UNICSV_LINE_SEP		"\r\n"
-#define UNICSV_QUOT_CHAR	"\""
-
-/* GPSBabel internal and calculated fields */
-
-enum field_e {
-  fld_shortname = 0,
-  fld_latitude,
-  fld_longitude,
-  fld_description,
-  fld_notes,
-  fld_url,
-  fld_altitude,
-  fld_utm_zone,
-  fld_utm_zone_char,
-  fld_utm_northing,
-  fld_utm_easting,
-  fld_utm,
-  fld_bng,
-  fld_bng_zone,
-  fld_bng_northing,
-  fld_bng_easting,
-  fld_swiss,
-  fld_swiss_northing,
-  fld_swiss_easting,
-  fld_hdop,
-  fld_pdop,
-  fld_vdop,
-  fld_sat,
-  fld_fix,
-  fld_utc_date,
-  fld_utc_time,
-  fld_course,
-  fld_speed,
-  fld_temperature,
-  fld_temperature_f,
-  fld_heartrate,
-  fld_cadence,
-  fld_power,
-  fld_proximity,
-  fld_depth,
-  fld_symbol,
-  fld_date,
-  fld_time,
-  fld_datetime,
-  fld_iso_time,
-  fld_year,
-  fld_month,
-  fld_day,
-  fld_hour,
-  fld_min,
-  fld_sec,
-  fld_ns,
-  fld_ew,
-
-  fld_garmin_city,
-  fld_garmin_postal_code,
-  fld_garmin_state,
-  fld_garmin_country,
-  fld_garmin_addr,
-  fld_garmin_phone_nr,
-  fld_garmin_phone_nr2,
-  fld_garmin_fax_nr,
-  fld_garmin_email,
-  fld_garmin_facility,
-  fld_gc_id,
-  fld_gc_type,
-  fld_gc_container,
-  fld_gc_terr,
-  fld_gc_diff,
-  fld_gc_is_archived,
-  fld_gc_is_available,
-  fld_gc_exported,
-  fld_gc_last_found,
-  fld_gc_placer,
-  fld_gc_placer_id,
-  fld_gc_hint,
-  fld_terminator
-};
-
-#define STR_LEFT	1
-#define STR_RIGHT	2
-#define STR_ANY		4
-#define STR_EQUAL	8
-#define STR_CASE	16
-
-#define unicsv_unknown	1e25
-
-struct field_t {
-  const char* name;
-  field_e type;
-  uint32_t options;
-};
-
 /*
  * ! Please use always underscores in field names !
  * we check a second time after replacing underscores with spaces
  */
-static field_t fields_def[] = {
+const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   /* unhandled columns */
-  { "index",	fld_terminator, STR_ANY },
-  { "no",		fld_terminator, STR_EQUAL },
-  { "mini",	fld_terminator, STR_ANY },	/* maybe minimum anything, so
+  { "index",	fld_terminator, kStrAny },
+  { "no",		fld_terminator, kStrEqual },
+  { "mini",	fld_terminator, kStrAny },	/* maybe minimum anything, so
 							   avoid detection as 'min' for minute */
   /* handled columns */
-  { "name",	fld_shortname, STR_ANY },
-  { "title",	fld_shortname, STR_ANY },
-  { "desc",	fld_description, STR_ANY },
-  { "notes",	fld_notes, STR_ANY },
-  { "omment",	fld_notes, STR_ANY },		/* works also for German "Kommentar" */
-  { "text",	fld_notes, STR_ANY },
-  { "url",	fld_url, STR_ANY },
-  { "icon",	fld_symbol, STR_ANY },
-  { "symb",	fld_symbol, STR_ANY },
-  { "lat",	fld_latitude, STR_ANY },
-  { "lon",	fld_longitude, STR_ANY },
-  { "lng",	fld_longitude, STR_ANY },
-  { "x",		fld_longitude, STR_EQUAL },
-  { "y",		fld_latitude, STR_EQUAL },
-  { "z",		fld_altitude, STR_EQUAL },
-  { "x_pos",	fld_longitude, STR_ANY },
-  { "y_pos",	fld_latitude, STR_ANY },
-  { "alt",	fld_altitude, STR_ANY },
-  { "ele",	fld_altitude, STR_ANY },
-  { "height",	fld_altitude, STR_ANY },
-  { "utm_z",	fld_utm_zone, STR_ANY },
-  { "utm_c",	fld_utm_zone_char, STR_ANY },
-  { "utm_zc",	fld_utm_zone_char, STR_ANY },
-  { "utm_n",	fld_utm_northing, STR_ANY },
-  { "utm_e",	fld_utm_easting, STR_ANY },
-  { "utm",	fld_utm, STR_EQUAL },
-  { "utm_coo",	fld_utm, STR_ANY },
-  { "utm_pos",	fld_utm, STR_ANY },
-  { "bng_z",	fld_bng_zone, STR_ANY },
-  { "bng_n",	fld_bng_northing, STR_ANY },
-  { "bng_e",	fld_bng_easting, STR_ANY },
-  { "bng",	fld_bng, STR_EQUAL },
-  { "bng_coo",	fld_bng, STR_ANY },
-  { "bng_pos",	fld_bng, STR_ANY },
-  { "swiss_e",	fld_swiss_easting, STR_ANY },
-  { "swiss_n",	fld_swiss_northing, STR_ANY },
-  { "swiss",	fld_swiss, STR_EQUAL },
-  { "swiss_coo",	fld_swiss, STR_ANY },
-  { "swiss_pos",	fld_swiss, STR_ANY },
-  { "hdop",	fld_hdop, STR_ANY },
-  { "pdop",	fld_pdop, STR_ANY },
-  { "vdop",	fld_vdop, STR_ANY },
-  { "sat",	fld_sat, STR_ANY },
-  { "fix",	fld_fix, STR_ANY },
-  { "utc_d",	fld_utc_date, STR_ANY },
-  { "utc_t",	fld_utc_time, STR_ANY },
-  { "head",	fld_course, STR_ANY },
-  { "cour",	fld_course, STR_ANY },
-  { "speed",	fld_speed, STR_ANY },
-  { "velo",	fld_speed, STR_ANY },
-  { "geschw",	fld_speed, STR_ANY },		/* speed in german */
-  { "tempf",	fld_temperature_f, STR_EQUAL },	/* degrees fahrenheit */
-  { "temp",	fld_temperature, STR_ANY },	/* degrees celsius by default */
-  { "heart",	fld_heartrate, STR_ANY },
-  { "caden",	fld_cadence, STR_ANY },
-  { "power",	fld_power, STR_ANY },
-  { "prox",	fld_proximity, STR_ANY },
-  { "depth",	fld_depth, STR_ANY },
-  { "date",	fld_date, STR_ANY },
-  { "datum",	fld_date, STR_ANY },
-  { "time",	fld_time, STR_ANY },
-  { "zeit",	fld_time, STR_ANY },
-  { "hour",	fld_hour, STR_LEFT },
-  { "min",	fld_min, STR_LEFT },
-  { "sec",	fld_sec, STR_LEFT },
-  { "year",	fld_year, STR_LEFT },
-  { "month",	fld_month, STR_LEFT },
-  { "day",	fld_day, STR_LEFT },
-  { "n/s",	fld_ns, STR_ANY },
-  { "e/w",	fld_ew, STR_ANY },
+  { "name",	fld_shortname, kStrAny },
+  { "title",	fld_shortname, kStrAny },
+  { "desc",	fld_description, kStrAny },
+  { "notes",	fld_notes, kStrAny },
+  { "omment",	fld_notes, kStrAny },		/* works also for German "Kommentar" */
+  { "text",	fld_notes, kStrAny },
+  { "url",	fld_url, kStrAny },
+  { "icon",	fld_symbol, kStrAny },
+  { "symb",	fld_symbol, kStrAny },
+  { "lat",	fld_latitude, kStrAny },
+  { "lon",	fld_longitude, kStrAny },
+  { "lng",	fld_longitude, kStrAny },
+  { "x",		fld_longitude, kStrEqual },
+  { "y",		fld_latitude, kStrEqual },
+  { "z",		fld_altitude, kStrEqual },
+  { "x_pos",	fld_longitude, kStrAny },
+  { "y_pos",	fld_latitude, kStrAny },
+  { "alt",	fld_altitude, kStrAny },
+  { "ele",	fld_altitude, kStrAny },
+  { "height",	fld_altitude, kStrAny },
+  { "utm_z",	fld_utm_zone, kStrAny },
+  { "utm_c",	fld_utm_zone_char, kStrAny },
+  { "utm_zc",	fld_utm_zone_char, kStrAny },
+  { "utm_n",	fld_utm_northing, kStrAny },
+  { "utm_e",	fld_utm_easting, kStrAny },
+  { "utm",	fld_utm, kStrEqual },
+  { "utm_coo",	fld_utm, kStrAny },
+  { "utm_pos",	fld_utm, kStrAny },
+  { "bng_z",	fld_bng_zone, kStrAny },
+  { "bng_n",	fld_bng_northing, kStrAny },
+  { "bng_e",	fld_bng_easting, kStrAny },
+  { "bng",	fld_bng, kStrEqual },
+  { "bng_coo",	fld_bng, kStrAny },
+  { "bng_pos",	fld_bng, kStrAny },
+  { "swiss_e",	fld_swiss_easting, kStrAny },
+  { "swiss_n",	fld_swiss_northing, kStrAny },
+  { "swiss",	fld_swiss, kStrEqual },
+  { "swiss_coo",	fld_swiss, kStrAny },
+  { "swiss_pos",	fld_swiss, kStrAny },
+  { "hdop",	fld_hdop, kStrAny },
+  { "pdop",	fld_pdop, kStrAny },
+  { "vdop",	fld_vdop, kStrAny },
+  { "sat",	fld_sat, kStrAny },
+  { "fix",	fld_fix, kStrAny },
+  { "utc_d",	fld_utc_date, kStrAny },
+  { "utc_t",	fld_utc_time, kStrAny },
+  { "head",	fld_course, kStrAny },
+  { "cour",	fld_course, kStrAny },
+  { "speed",	fld_speed, kStrAny },
+  { "velo",	fld_speed, kStrAny },
+  { "geschw",	fld_speed, kStrAny },		/* speed in german */
+  { "tempf",	fld_temperature_f, kStrEqual },	/* degrees fahrenheit */
+  { "temp",	fld_temperature, kStrAny },	/* degrees celsius by default */
+  { "heart",	fld_heartrate, kStrAny },
+  { "caden",	fld_cadence, kStrAny },
+  { "power",	fld_power, kStrAny },
+  { "prox",	fld_proximity, kStrAny },
+  { "depth",	fld_depth, kStrAny },
+  { "date",	fld_date, kStrAny },
+  { "time",	fld_time, kStrAny },
+  { "zeit",	fld_time, kStrAny },
+  { "hour",	fld_hour, kStrLeft },
+  { "min",	fld_min, kStrLeft },
+  { "sec",	fld_sec, kStrLeft },
+  { "year",	fld_year, kStrLeft },
+  { "month",	fld_month, kStrLeft },
+  { "day",	fld_day, kStrLeft },
+  { "n/s",	fld_ns, kStrAny },
+  { "e/w",	fld_ew, kStrAny },
 
   /* garmin specials */
-  { "addr",	fld_garmin_addr, STR_ANY },
-  { "street",	fld_garmin_addr, STR_ANY },
-  { "city",	fld_garmin_city, STR_ANY },
-  { "country",	fld_garmin_country, STR_ANY },
-  { "post",	fld_garmin_postal_code, STR_ANY },
-  { "zip",	fld_garmin_postal_code, STR_ANY },
-  { "phone",	fld_garmin_phone_nr, STR_ANY },
-  { "phone2",	fld_garmin_phone_nr2, STR_ANY },
-  { "fax",	fld_garmin_fax_nr, STR_ANY },
-  { "email",	fld_garmin_email, STR_ANY },
-  { "state",	fld_garmin_state, STR_ANY },
-  { "faci",	fld_garmin_facility, STR_ANY },
+  { "addr",	fld_garmin_addr, kStrAny },
+  { "street",	fld_garmin_addr, kStrAny },
+  { "city",	fld_garmin_city, kStrAny },
+  { "country",	fld_garmin_country, kStrAny },
+  { "post",	fld_garmin_postal_code, kStrAny },
+  { "zip",	fld_garmin_postal_code, kStrAny },
+  { "phone",	fld_garmin_phone_nr, kStrAny },
+  { "phone2",	fld_garmin_phone_nr2, kStrAny },
+  { "fax",	fld_garmin_fax_nr, kStrAny },
+  { "email",	fld_garmin_email, kStrAny },
+  { "state",	fld_garmin_state, kStrAny },
+  { "faci",	fld_garmin_facility, kStrAny },
   /* geocache details */
-  { "gcid",	fld_gc_id, STR_ANY },
-  { "type",	fld_gc_type, STR_ANY },
-  { "cont",	fld_gc_container, STR_ANY },
-  { "terr",	fld_gc_terr, STR_ANY },
-  { "diff",	fld_gc_diff, STR_ANY },
-  { "arch",	fld_gc_is_archived, STR_ANY },
-  { "avail",	fld_gc_is_available, STR_ANY },
-  { "exported",	fld_gc_exported, STR_ANY },
-  { "found",	fld_gc_last_found, STR_ANY },
-  { "placer_id",	fld_gc_placer_id, STR_ANY },
-  { "placer",	fld_gc_placer, STR_ANY },
-  { "hint",	fld_gc_hint, STR_ANY },
+  { "gcid",	fld_gc_id, kStrAny },
+  { "type",	fld_gc_type, kStrAny },
+  { "cont",	fld_gc_container, kStrAny },
+  { "terr",	fld_gc_terr, kStrAny },
+  { "diff",	fld_gc_diff, kStrAny },
+  { "arch",	fld_gc_is_archived, kStrAny },
+  { "avail",	fld_gc_is_available, kStrAny },
+  { "exported",	fld_gc_exported, kStrAny },
+  { "found",	fld_gc_last_found, kStrAny },
+  { "placer_id",	fld_gc_placer_id, kStrAny },
+  { "placer",	fld_gc_placer, kStrAny },
+  { "hint",	fld_gc_hint, kStrAny },
   { nullptr,		fld_terminator, 0 }
 };
-
-static QVector<field_e> unicsv_fields_tab;
-static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
-;
-static const char* unicsv_fieldsep;
-static gpsbabel::TextStream* fin = nullptr;
-static gpsbabel::TextStream* fout = nullptr;
-static gpsdata_type unicsv_data_type;
-static route_head* unicsv_track, *unicsv_route;
-static char unicsv_outp_flags[(fld_terminator + 8) / 8];
-static grid_type unicsv_grid_idx;
-static int unicsv_datum_idx;
-static char* opt_datum;
-static char* opt_grid;
-static char* opt_utc;
-static char* opt_filename;
-static char* opt_format;
-static char* opt_prec;
-static char* opt_fields;
-static char* opt_codec;
-static int unicsv_waypt_ct;
-static char unicsv_detect;
-static int llprec;
-
-static QVector<arglist_t> unicsv_args = {
-  {
-    "datum", &opt_datum, "GPS datum (def. WGS 84)",
-    "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "grid",  &opt_grid,  "Write position using this grid.",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-    nullptr, ARGTYPE_INT, "-23", "+23", nullptr
-  },
-  {
-    "format", &opt_format,   "Write name(s) of format(s) from input session(s)",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "filename", &opt_filename,   "Write filename(s) from input session(s)",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "prec", &opt_prec,   "Precision of numerical coordinates (no grid set)",
-    "6", ARGTYPE_INT | ARGTYPE_HIDDEN, "0", "15", nullptr
-  },
-  {
-    "fields",  &opt_fields,  "Name and order of input fields, separated by '+'",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "codec", &opt_codec, "codec to use for reading and writing strings (default UTF-8)",
-    "UTF-8", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-
 /* helpers */
 
 // Parse GC-Code / geo cache reference code into int64 (GC-ID)
 // (see also https://api.groundspeak.com/documentation#referencecodes)
-static long long
-unicsv_parse_gc_code(const QString& str)
+long long
+UnicsvFormat::unicsv_parse_gc_code(const QString& str) const
 {
   if (! str.startsWith("GC")) {
     return 0;
@@ -382,8 +226,8 @@ unicsv_parse_gc_code(const QString& str)
   return res;
 }
 
-static time_t
-unicsv_parse_date(const char* str, int* consumed)
+time_t
+UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
   int p1, p2, p3;
   char sep[2];
@@ -438,8 +282,8 @@ unicsv_parse_date(const char* str, int* consumed)
   return mkgmtime(&tm);
 }
 
-static time_t
-unicsv_parse_time(const char* str, int* usec, time_t* date)
+time_t
+UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date) const
 {
   int hour, min, sec;
   int consumed = 0;
@@ -471,14 +315,14 @@ unicsv_parse_time(const char* str, int* usec, time_t* date)
   return ((hour * SECONDS_PER_HOUR) + (min * 60) + sec);
 }
 
-static time_t
-unicsv_parse_time(const QString& str, int* msec, time_t* date)
+time_t
+UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date) const
 {
   return unicsv_parse_time(CSTR(str), msec, date);
 }
 
-static status_type
-unicsv_parse_status(const QString& str)
+status_type
+UnicsvFormat::unicsv_parse_status(const QString& str)
 {
   if (str.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0 ||
       str.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0 ||
@@ -493,8 +337,8 @@ unicsv_parse_status(const QString& str)
   return status_unknown;
 }
 
-static QDateTime
-unicsv_adjust_time(const time_t time, const time_t* date)
+QDateTime
+UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
 {
   time_t res = time;
   if (date) {
@@ -509,25 +353,25 @@ unicsv_adjust_time(const time_t time, const time_t* date)
   return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
 }
 
-static bool
-unicsv_compare_fields(const QString& s, const field_t* f)
+bool
+UnicsvFormat::unicsv_compare_fields(const QString& s, const field_t* f)
 {
   QString name = f->name;
   QString test = s;
   bool result = false;
 
-  if (!(f->options & STR_CASE)) {
+  if (!(f->options & kStrCase)) {
     test = test.toUpper();
     name = name.toUpper();
   }
 
-  if (f->options & STR_EQUAL) {
+  if (f->options & kStrEqual) {
     result = test == name;
-  } else if (f->options & STR_ANY) {
+  } else if (f->options & kStrAny) {
     result = test.contains(name);
-  } else if (f->options & STR_LEFT) {
+  } else if (f->options & kStrLeft) {
     result = test.startsWith(name);
-  } else if (f->options & STR_RIGHT) {
+  } else if (f->options & kStrRight) {
     result = test.endsWith(name);
   }
 
@@ -543,8 +387,8 @@ unicsv_compare_fields(const QString& s, const field_t* f)
   return result;
 }
 
-static void
-unicsv_fondle_header(QString header)
+void
+UnicsvFormat::unicsv_fondle_header(QString header)
 {
   /* Convert the entire header to lower case for convenience.
    * If we see a tab in that header, we decree it to be tabsep.
@@ -563,7 +407,7 @@ unicsv_fondle_header(QString header)
   for (auto value : values) {
     value = value.trimmed();
 
-    field_t* f = &fields_def[0];
+    const field_t* f = &fields_def[0];
 
     unicsv_fields_tab.append(fld_terminator);
     while (f->name) {
@@ -595,14 +439,14 @@ unicsv_fondle_header(QString header)
     }
     if ((f->type == fld_time) || (f->type == fld_date)) {
       if (value.contains("iso")) {
-        f->type = fld_iso_time;
+        unicsv_fields_tab.last() = fld_iso_time;
       }
     }
   }
 }
 
-static void
-unicsv_rd_init(const QString& fname)
+void
+UnicsvFormat::rd_init(const QString& fname)
 {
   QString buff;
   unicsv_altscale = 1.0;
@@ -628,8 +472,8 @@ unicsv_rd_init(const QString& fname)
   }
 }
 
-static void
-unicsv_rd_deinit()
+void
+UnicsvFormat::rd_deinit()
 {
   fin->close();
   delete fin;
@@ -637,8 +481,8 @@ unicsv_rd_deinit()
   unicsv_fields_tab.clear();
 }
 
-static void
-unicsv_parse_one_line(const QString& ibuf)
+void
+UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 {
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -646,10 +490,10 @@ unicsv_parse_one_line(const QString& ibuf)
   char utm_zc = 'N';
   // Zones are always two bytes.  Spare one for null termination..
   char bng_zone[3] = "";
-  double bng_easting = unicsv_unknown;
-  double bng_northing = unicsv_unknown;
-  double swiss_easting = unicsv_unknown;
-  double swiss_northing = unicsv_unknown;
+  double bng_easting = kUnicsvUnknown;
+  double bng_northing = kUnicsvUnknown;
+  double swiss_easting = kUnicsvUnknown;
+  double swiss_northing = kUnicsvUnknown;
   int checked = 0;
   time_t date = -1;
   time_t time = -1;
@@ -663,8 +507,8 @@ unicsv_parse_one_line(const QString& ibuf)
   int ew = 1;
   geocache_data* gc_data = nullptr;
   auto* wpt = new Waypoint;
-  wpt->latitude = unicsv_unknown;
-  wpt->longitude = unicsv_unknown;
+  wpt->latitude = kUnicsvUnknown;
+  wpt->longitude = kUnicsvUnknown;
   memset(&ymd, 0, sizeof(ymd));
 
   int column = -1;
@@ -1179,11 +1023,11 @@ unicsv_parse_one_line(const QString& ibuf)
 
   /* utm/bng/swiss can be optional */
 
-  if ((wpt->latitude == unicsv_unknown) && (wpt->longitude == unicsv_unknown)) {
+  if ((wpt->latitude == kUnicsvUnknown) && (wpt->longitude == kUnicsvUnknown)) {
     if (utm_zone != -9999) {
       GPS_Math_UTM_EN_To_Known_Datum(&wpt->latitude, &wpt->longitude,
                                      utm_easting, utm_northing, utm_zone, utm_zc, unicsv_datum_idx);
-    } else if ((bng_easting != unicsv_unknown) && (bng_northing != unicsv_unknown)) {
+    } else if ((bng_easting != kUnicsvUnknown) && (bng_northing != kUnicsvUnknown)) {
       if (bng_zone[0] == '\0') { // OS easting northing
         // Grid references may also be quoted as a pair of numbers: eastings then northings in metres, measured from the southwest corner of the SV square.
         double bnge;
@@ -1208,7 +1052,7 @@ unicsv_parse_one_line(const QString& ibuf)
                 bng_zone, bng_easting, bng_northing);
       }
       src_datum = DATUM_WGS84;	/* don't convert afterwards */
-    } else if ((swiss_easting != unicsv_unknown) && (swiss_northing != unicsv_unknown)) {
+    } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
                                  &wpt->latitude, &wpt->longitude);
       src_datum = DATUM_WGS84;	/* don't convert afterwards */
@@ -1216,7 +1060,7 @@ unicsv_parse_one_line(const QString& ibuf)
   }
 
   if ((src_datum != DATUM_WGS84) &&
-      (wpt->latitude != unicsv_unknown) && (wpt->longitude != unicsv_unknown)) {
+      (wpt->latitude != kUnicsvUnknown) && (wpt->longitude != kUnicsvUnknown)) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &wpt->latitude, &wpt->longitude, &alt, src_datum);
@@ -1242,8 +1086,8 @@ unicsv_parse_one_line(const QString& ibuf)
   }
 }
 
-static void
-unicsv_rd()
+void
+UnicsvFormat::read()
 {
   QString buff;
 
@@ -1262,8 +1106,8 @@ unicsv_rd()
 
 /* =========================================================================== */
 
-static void
-unicsv_fatal_outside(const Waypoint* wpt)
+void
+UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
@@ -1272,13 +1116,13 @@ unicsv_fatal_outside(const Waypoint* wpt)
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
 
-static void
-unicsv_print_str(const QString& s)
+void
+UnicsvFormat::unicsv_print_str(const QString& s) const
 {
   *fout << unicsv_fieldsep;
   QString t;
   if (!s.isEmpty()) {
-    t = csv_enquote(s, UNICSV_QUOT_CHAR);
+    t = csv_enquote(s, kUnicsvQuoteChar);
     // I'm not sure these three replacements are necessary; they're just a
     // slavish re-implementation of (what I think) the original C code
     // was doing.
@@ -1289,8 +1133,8 @@ unicsv_print_str(const QString& s)
   *fout << t.trimmed();
 }
 
-static void
-unicsv_print_data_time(const QDateTime& idt)
+void
+UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
 {
   if (!idt.isValid()) {
     return;
@@ -1307,8 +1151,8 @@ unicsv_print_data_time(const QDateTime& idt)
 
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
 
-static void
-unicsv_waypt_enum_cb(const Waypoint* wpt)
+void
+UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
@@ -1457,8 +1301,8 @@ unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 }
 
-static void
-unicsv_waypt_disp_cb(const Waypoint* wpt)
+void
+UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
   char* cout = nullptr;
@@ -1495,9 +1339,9 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
     cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
     char* sep = strchr(cout, ',');
     *sep = '\0';
-    QString tmp = csv_enquote(cout, UNICSV_QUOT_CHAR);
+    QString tmp = csv_enquote(cout, kUnicsvQuoteChar);
     *fout << tmp << unicsv_fieldsep;
-    tmp = csv_enquote(sep+1, UNICSV_QUOT_CHAR);
+    tmp = csv_enquote(sep+1, kUnicsvQuoteChar);
     *fout << tmp;
   }
   break;
@@ -1861,23 +1705,23 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
     unicsv_print_str(wpt->session->filename);
   }
 
-  *fout << UNICSV_LINE_SEP;
+  *fout << kUnicsvLineSep;
 }
 
 /* --------------------------------------------------------------------------- */
 
 
-static void
-unicsv_wr_init(const QString& filename)
+void
+UnicsvFormat::wr_init(const QString& fname)
 {
   fout = new gpsbabel::TextStream;
-  fout->open(filename, QIODevice::WriteOnly, MYNAME, opt_codec);
+  fout->open(fname, QIODevice::WriteOnly, MYNAME, opt_codec);
   fout->setRealNumberNotation(QTextStream::FixedNotation);
 
   memset(&unicsv_outp_flags, 0, sizeof(unicsv_outp_flags));
   unicsv_grid_idx = grid_unknown;
   unicsv_datum_idx = DATUM_WGS84;
-  unicsv_fieldsep = UNICSV_FIELD_SEP;
+  unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
   if (opt_grid != nullptr) {
@@ -1909,8 +1753,8 @@ unicsv_wr_init(const QString& filename)
   llprec = atoi(opt_prec);
 }
 
-static void
-unicsv_wr_deinit()
+void
+UnicsvFormat::wr_deinit()
 {
   fout->close();
   delete fout;
@@ -1922,8 +1766,8 @@ unicsv_wr_deinit()
 // of -w.  It's pretty weak, but it's better than letting the last flag
 // 'win' which can result in no data silently being displayed.
 
-static void
-unicsv_check_modes(bool test)
+void
+UnicsvFormat::unicsv_check_modes(bool test)
 {
   if (test) {
     Fatal() << MYNAME <<
@@ -1931,23 +1775,25 @@ unicsv_check_modes(bool test)
   }
 }
 
-
-static void
-unicsv_wr()
+void
+UnicsvFormat::write()
 {
+  auto unicsv_waypt_enum_cb_lambda = [this](const Waypoint* waypointp)->void {
+    unicsv_waypt_enum_cb(waypointp);
+  };
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
     unicsv_check_modes(doing_rtes || doing_trks);
-    waypt_disp_all(unicsv_waypt_enum_cb);
+    waypt_disp_all(unicsv_waypt_enum_cb_lambda);
     break;
   case trkdata:
     unicsv_check_modes(doing_rtes);
-    track_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
+    track_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb_lambda);
     break;
   case rtedata:
     unicsv_check_modes(doing_trks);
-    route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
+    route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb_lambda);
     break;
   case posndata:
     Fatal() << MYNAME << ": Realtime positioning not supported.";
@@ -2114,17 +1960,20 @@ unicsv_wr()
     *fout << unicsv_fieldsep << "Filename";
   }
 
-  *fout << UNICSV_LINE_SEP;
+  *fout << kUnicsvLineSep;
 
+  auto unicsv_waypt_disp_cb_lambda =  [this](const Waypoint* waypointp)->void {
+    unicsv_waypt_disp_cb(waypointp);
+  };
   switch (global_opts.objective) {
   case wptdata:
-    waypt_disp_all(unicsv_waypt_disp_cb);
+    waypt_disp_all(unicsv_waypt_disp_cb_lambda);
     break;
   case trkdata:
-    track_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb);
+    track_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb_lambda);
     break;
   case rtedata:
-    route_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb);
+    route_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb_lambda);
     break;
   default:
     break;
@@ -2132,19 +1981,3 @@ unicsv_wr()
 }
 
 /* --------------------------------------------------------------------------- */
-
-ff_vecs_t unicsv_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  unicsv_rd_init,
-  unicsv_wr_init,
-  unicsv_rd_deinit,
-  unicsv_wr_deinit,
-  unicsv_rd,
-  unicsv_wr,
-  nullptr,
-  &unicsv_args,
-  CET_CHARSET_UTF8, 0
-  , NULL_POS_OPS,
-  nullptr
-};
