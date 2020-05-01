@@ -145,6 +145,7 @@ File Types (-i and -o options):
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff 
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m 
+	  recoverymode          (0/1) Attempt to recovery data from corrupt file 
 	flysight              FlySight GPS File
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 

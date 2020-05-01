@@ -274,6 +274,8 @@ file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activi
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html
 option	garmin_fit	allpoints	Read all points even if latitude or longitude is missing	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_allpoints
 
+option	garmin_fit	recoverymode	Attempt to recovery data from corrupt file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_recoverymode
+
 file	rw----	flysight	csv	FlySight GPS File	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html
 option	flysight	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_snlen
