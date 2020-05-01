@@ -227,7 +227,7 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   track_add_head(trk_head);
 
   const auto vecs = args.simplified().split(' ');
-  for(const auto& vec : vecs) {
+  for (const auto& vec : vecs) {
     const QStringList coords = vec.split(',');
     auto csize = coords.size();
     auto* trkpt = new Waypoint;
@@ -453,7 +453,7 @@ void KmlFormat::kml_output_linestyle(char* /*color*/, int width) const
 
 
 void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bitmap,
-                                    int highlighted, int force_heading) const
+                                        int highlighted, int force_heading) const
 {
   int is_track = style.startsWith("track");
   int is_multitrack = style.startsWith("multiTrack");
@@ -499,7 +499,7 @@ void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bit
  * to magnify slightly on a rollover.
  */
 void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap,
-                                   const QString& customstyle) const
+                                       const QString& customstyle) const
 {
   int force_heading = 0;
   QString style;
@@ -663,9 +663,7 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
 
 void KmlFormat::kml_output_header(const route_head* header, const computed_trkdata* td) const
 {
-  if (!realtime_positioning)  {
-    writer->writeStartElement(QStringLiteral("Folder"));
-  }
+  writer->writeStartElement(QStringLiteral("Folder"));
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
@@ -962,9 +960,7 @@ void KmlFormat::kml_output_tailer(const route_head* header)
     writer->writeEndElement(); // Close Placemark tag
   }
 
-  if (!realtime_positioning)  {
-    writer->writeEndElement();  // Close folder tag
-  }
+  writer->writeEndElement();  // Close folder tag
 }
 
 /*
@@ -1492,8 +1488,8 @@ void KmlFormat::kml_track_tlr(const route_head* header)
  */
 
 void KmlFormat::kml_mt_simple_array(const route_head* header,
-                                const char* name,
-                                wp_field member) const
+                                    const char* name,
+                                    wp_field member) const
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
@@ -1707,7 +1703,7 @@ void KmlFormat::kml_write_AbstractView()
       // ensure the right edge of that time slider includes us.
       //
       gpsbabel::DateTime time_max = realtime_positioning ? kml_time_max.addSecs(600)
-                                      : kml_time_max;
+                                    : kml_time_max;
       writer->writeTextElement(QStringLiteral("end"), time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag
@@ -1737,7 +1733,7 @@ void KmlFormat::kml_write_AbstractView()
 }
 
 void KmlFormat::kml_mt_array_schema(const char* field_name, const char* display_name,
-                         const char* type) const
+                                    const char* type) const
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayField"));
   writer->writeAttribute(QStringLiteral("name"), field_name);
@@ -1956,6 +1952,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
 
   if (!posn_trk_head) {
     posn_trk_head = new route_head;
+    posn_trk_head->rte_name = "Track";
     track_add_head(posn_trk_head);
   }
 
@@ -1988,7 +1985,9 @@ void KmlFormat::wr_position(Waypoint* wpt)
   /* In order to avoid clutter while we're sitting still, don't add
      track points if we've not moved a minimum distance from the
      beginning of our accumulated track. */
-  {
+  if (posn_trk_head->waypoint_list.empty()) {
+    track_add_wpt(posn_trk_head, new Waypoint(*wpt));
+  } else {
     Waypoint* newest_posn= posn_trk_head->waypoint_list.back();
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),

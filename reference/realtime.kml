@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS position</name>
+    <LookAt>
+      <gx:TimeSpan>
+        <begin>1970-01-01T00:00:03.464Z</begin>
+        <end>1970-01-01T00:10:29.519Z</end>
+      </gx:TimeSpan>
+      <longitude>-32.056227</longitude>
+      <latitude>30.474664</latitude>
+      <range>1728.780603</range>
+    </LookAt>
+    <!-- Normal track style -->
+    <Style id="track_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track style -->
+    <Style id="track_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal multiTrack style -->
+    <Style id="multiTrack_n">
+      <IconStyle>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <!-- Highlighted multiTrack style -->
+    <Style id="multiTrack_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>8</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="multiTrack">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#multiTrack_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#multiTrack_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Schema id="schema">
+      <gx:SimpleArrayField name="heartrate" type="int">
+        <displayName>Heart Rate</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="cadence" type="int">
+        <displayName>Cadence</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="temperature" type="float">
+        <displayName>Temperature</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="depth" type="float">
+        <displayName>Depth</displayName>
+      </gx:SimpleArrayField>
+    </Schema>
+    <Placemark>
+      <name>Wpt_hCT</name>
+      <snippet/>
+      <description>http://link1.example.com/q31hGd</description>
+      <TimeStamp>
+        <when>1970-01-01T00:00:29.519Z</when>
+      </TimeStamp>
+      <Style>
+        <IconStyle>
+          <Icon>
+            <href>https://earth.google.com/images/kml-icons/youarehere-0.png</href>
+          </Icon>
+        </IconStyle>
+      </Style>
+      <Point>
+        <coordinates>-32.051141,30.478722</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Track</name>
+      <styleUrl>#multiTrack</styleUrl>
+      <gx:Track>
+        <when/>
+        <when>1970-01-01T00:00:03.464Z</when>
+        <when>1970-01-01T00:00:04.834Z</when>
+        <when>1970-01-01T00:00:06.126Z</when>
+        <when>1970-01-01T00:00:07.686Z</when>
+        <when>1970-01-01T00:00:09.493Z</when>
+        <when>1970-01-01T00:00:12.434Z</when>
+        <when>1970-01-01T00:00:14.191Z</when>
+        <when>1970-01-01T00:00:16.984Z</when>
+        <when>1970-01-01T00:00:18.913Z</when>
+        <when>1970-01-01T00:00:20.628Z</when>
+        <when>1970-01-01T00:00:22.594Z</when>
+        <when>1970-01-01T00:00:23.968Z</when>
+        <when>1970-01-01T00:00:25.135Z</when>
+        <when>1970-01-01T00:00:26.718Z</when>
+        <when>1970-01-01T00:00:28.139Z</when>
+        <when>1970-01-01T00:00:29.519Z</when>
+        <gx:coord>-32.061312 30.470605 26.03</gx:coord>
+        <gx:coord>-32.060351 30.471588</gx:coord>
+        <gx:coord>-32.059442 30.471933 30.62</gx:coord>
+        <gx:coord>-32.058752 30.472451 75.70</gx:coord>
+        <gx:coord>-32.058143 30.473278</gx:coord>
+        <gx:coord>-32.057275 30.474104 26.70</gx:coord>
+        <gx:coord>-32.056245 30.474413 72.49</gx:coord>
+        <gx:coord>-32.056020 30.475032</gx:coord>
+        <gx:coord>-32.055280 30.475289 57.64</gx:coord>
+        <gx:coord>-32.054461 30.475367 91.16</gx:coord>
+        <gx:coord>-32.054306 30.475838</gx:coord>
+        <gx:coord>-32.053593 30.476512 77.01</gx:coord>
+        <gx:coord>-32.052896 30.476701 2.66</gx:coord>
+        <gx:coord>-32.052293 30.477107 59.30</gx:coord>
+        <gx:coord>-32.051494 30.477113</gx:coord>
+        <gx:coord>-32.051415 30.477953 30.00</gx:coord>
+        <gx:coord>-32.051141 30.478722</gx:coord>
+        <ExtendedData>
+          <SchemaData schemaUrl="#schema">
+            <gx:SimpleArrayData name="cadence">
+              <gx:value>245</gx:value>
+              <gx:value>19</gx:value>
+              <gx:value>227</gx:value>
+              <gx:value>97</gx:value>
+              <gx:value>112</gx:value>
+              <gx:value>142</gx:value>
+              <gx:value>222</gx:value>
+              <gx:value>130</gx:value>
+              <gx:value>142</gx:value>
+              <gx:value>118</gx:value>
+              <gx:value>64</gx:value>
+              <gx:value>0</gx:value>
+              <gx:value>186</gx:value>
+              <gx:value>155</gx:value>
+              <gx:value>210</gx:value>
+              <gx:value>0</gx:value>
+              <gx:value>0</gx:value>
+            </gx:SimpleArrayData>
+            <gx:SimpleArrayData name="depth">
+              <gx:value>0.0</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>162.6</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>170.7</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>421.8</gx:value>
+              <gx:value>830.1</gx:value>
+              <gx:value>218.1</gx:value>
+              <gx:value>292.2</gx:value>
+              <gx:value>426.2</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>911.3</gx:value>
+              <gx:value>174.5</gx:value>
+              <gx:value>804.5</gx:value>
+              <gx:value>52.5</gx:value>
+              <gx:value>640.0</gx:value>
+            </gx:SimpleArrayData>
+            <gx:SimpleArrayData name="heartrate">
+              <gx:value>25</gx:value>
+              <gx:value>0</gx:value>
+              <gx:value>41</gx:value>
+              <gx:value>244</gx:value>
+              <gx:value>250</gx:value>
+              <gx:value>253</gx:value>
+              <gx:value>33</gx:value>
+              <gx:value>194</gx:value>
+              <gx:value>238</gx:value>
+              <gx:value>0</gx:value>
+              <gx:value>227</gx:value>
+              <gx:value>164</gx:value>
+              <gx:value>246</gx:value>
+              <gx:value>52</gx:value>
+              <gx:value>90</gx:value>
+              <gx:value>53</gx:value>
+              <gx:value>96</gx:value>
+            </gx:SimpleArrayData>
+            <gx:SimpleArrayData name="temperature">
+              <gx:value>0.0</gx:value>
+              <gx:value>17.8</gx:value>
+              <gx:value>4.4</gx:value>
+              <gx:value>12.7</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>2.2</gx:value>
+              <gx:value>7.9</gx:value>
+              <gx:value>4.7</gx:value>
+              <gx:value>31.9</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>24.3</gx:value>
+              <gx:value>23.2</gx:value>
+              <gx:value>28.0</gx:value>
+              <gx:value>21.8</gx:value>
+              <gx:value>0.0</gx:value>
+              <gx:value>0.0</gx:value>
+            </gx:SimpleArrayData>
+          </SchemaData>
+        </ExtendedData>
+      </gx:Track>
+    </Placemark>
+    <Folder>
+      <name>Track</name>
+      <snippet/>
+      <description>
+<![CDATA[<table>
+<tr><td><b>Distance</b> 4761.1 ft </td></tr>
+<tr><td><b>Min Alt</b> 8.740 ft </td></tr>
+<tr><td><b>Max Alt</b> 299.085 ft </td></tr>
+<tr><td><b>Min Speed</b> 57.9 mph </td></tr>
+<tr><td><b>Max Speed</b> 156.4 mph </td></tr>
+<tr><td><b>Avg Speed</b> 124.6 mph </td></tr>
+<tr><td><b>Avg Heart Rate</b> 147.1 bpm </td></tr>
+<tr><td><b>Min Heart Rate</b> 25 bpm </td></tr>
+<tr><td><b>Max Heart Rate</b> 253 bpm </td></tr>
+<tr><td><b>Avg Cadence</b> 147.8 rpm </td></tr>
+<tr><td><b>Max Cadence</b> 245 rpm </td></tr>
+<tr><td><b>Start Time</b>1970-01-01T00:00:03.464Z</td></tr>
+<tr><td><b>End Time</b>1970-01-01T00:00:29.519Z</td></tr>
+</table>]]>
+</description>
+      <TimeSpan>
+        <begin>1970-01-01T00:00:03.464Z</begin>
+        <end>1970-01-01T00:00:29.519Z</end>
+      </TimeSpan>
+      <Folder>
+        <name>Points</name>
+        <Placemark>
+          <name>Wpt_QB</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.061312 </td></tr>
+<tr><td>Latitude: 30.470605 </td></tr>
+<tr><td>Altitude: 85.400 ft </td></tr>
+<tr><td>Heart rate: 25 </td></tr>
+<tr><td>Cadence: 245 </td></tr>
+<tr><td>Heading: 317.9 </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.061312</longitude>
+            <latitude>30.470605</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.061312,30.470605,26.03</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_Y8GPuG</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.060351 </td></tr>
+<tr><td>Latitude: 30.471588 </td></tr>
+<tr><td>Cadence: 19 </td></tr>
+<tr><td>Temperature: 17.8 </td></tr>
+<tr><td>Speed: 146.2 mph </td></tr>
+<tr><td>Heading: 40.1 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:03.464Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.060351</longitude>
+            <latitude>30.471588</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:03.464Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.060351,30.471588</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_hTiV</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.059442 </td></tr>
+<tr><td>Latitude: 30.471933 </td></tr>
+<tr><td>Altitude: 100.458 ft </td></tr>
+<tr><td>Heart rate: 41 </td></tr>
+<tr><td>Cadence: 227 </td></tr>
+<tr><td>Temperature: 4.4 </td></tr>
+<tr><td>Depth: 533.4 ft </td></tr>
+<tr><td>Speed: 155.7 mph </td></tr>
+<tr><td>Heading: 66.3 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:04.834Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.059442</longitude>
+            <latitude>30.471933</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:04.834Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.059442,30.471933,30.62</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_Fr0VTZa</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.058752 </td></tr>
+<tr><td>Latitude: 30.472451 </td></tr>
+<tr><td>Altitude: 248.355 ft </td></tr>
+<tr><td>Heart rate: 244 </td></tr>
+<tr><td>Cadence: 97 </td></tr>
+<tr><td>Temperature: 12.7 </td></tr>
+<tr><td>Speed: 152.0 mph </td></tr>
+<tr><td>Heading: 48.9 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:06.126Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.058752</longitude>
+            <latitude>30.472451</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:06.126Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.058752,30.472451,75.70</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_8f</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.058143 </td></tr>
+<tr><td>Latitude: 30.473278 </td></tr>
+<tr><td>Heart rate: 250 </td></tr>
+<tr><td>Cadence: 112 </td></tr>
+<tr><td>Depth: 560.0 ft </td></tr>
+<tr><td>Speed: 156.4 mph </td></tr>
+<tr><td>Heading: 32.4 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:07.686Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.058143</longitude>
+            <latitude>30.473278</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:07.686Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.058143,30.473278</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_R</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.057275 </td></tr>
+<tr><td>Latitude: 30.474104 </td></tr>
+<tr><td>Altitude: 87.606 ft </td></tr>
+<tr><td>Heart rate: 253 </td></tr>
+<tr><td>Cadence: 142 </td></tr>
+<tr><td>Speed: 153.6 mph </td></tr>
+<tr><td>Heading: 42.2 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:09.493Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.057275</longitude>
+            <latitude>30.474104</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:09.493Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.057275,30.474104,26.70</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>ESTIMATED Position</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.056245 </td></tr>
+<tr><td>Latitude: 30.474413 </td></tr>
+<tr><td>Altitude: 237.843 ft </td></tr>
+<tr><td>Heart rate: 33 </td></tr>
+<tr><td>Cadence: 222 </td></tr>
+<tr><td>Temperature: 2.2 </td></tr>
+<tr><td>Depth: 1383.8 ft </td></tr>
+<tr><td>Speed: 83.3 mph </td></tr>
+<tr><td>Heading: 70.8 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:12.434Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.056245</longitude>
+            <latitude>30.474413</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:12.434Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.056245,30.474413,72.49</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_8JwVPYQ</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.056020 </td></tr>
+<tr><td>Latitude: 30.475032 </td></tr>
+<tr><td>Heart rate: 194 </td></tr>
+<tr><td>Cadence: 130 </td></tr>
+<tr><td>Temperature: 7.9 </td></tr>
+<tr><td>Depth: 2723.3 ft </td></tr>
+<tr><td>Speed: 91.8 mph </td></tr>
+<tr><td>Heading: 17.4 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:14.191Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.056020</longitude>
+            <latitude>30.475032</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:14.191Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.056020,30.475032</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_e</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.055280 </td></tr>
+<tr><td>Latitude: 30.475289 </td></tr>
+<tr><td>Altitude: 189.100 ft </td></tr>
+<tr><td>Heart rate: 238 </td></tr>
+<tr><td>Cadence: 142 </td></tr>
+<tr><td>Temperature: 4.7 </td></tr>
+<tr><td>Depth: 715.4 ft </td></tr>
+<tr><td>Speed: 57.9 mph </td></tr>
+<tr><td>Heading: 68.0 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:16.984Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.055280</longitude>
+            <latitude>30.475289</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:16.984Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.055280,30.475289,57.64</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>ESTIMATED Position</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.054461 </td></tr>
+<tr><td>Latitude: 30.475367 </td></tr>
+<tr><td>Altitude: 299.085 ft </td></tr>
+<tr><td>Cadence: 118 </td></tr>
+<tr><td>Temperature: 31.9 </td></tr>
+<tr><td>Depth: 958.6 ft </td></tr>
+<tr><td>Speed: 91.8 mph </td></tr>
+<tr><td>Heading: 83.7 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:18.913Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.054461</longitude>
+            <latitude>30.475367</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:18.913Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.054461,30.475367,91.16</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>ESTIMATED Position</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.054306 </td></tr>
+<tr><td>Latitude: 30.475838 </td></tr>
+<tr><td>Heart rate: 227 </td></tr>
+<tr><td>Cadence: 64 </td></tr>
+<tr><td>Depth: 1398.4 ft </td></tr>
+<tr><td>Speed: 71.0 mph </td></tr>
+<tr><td>Heading: 15.8 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:20.628Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.054306</longitude>
+            <latitude>30.475838</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:20.628Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.054306,30.475838</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_4</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.053593 </td></tr>
+<tr><td>Latitude: 30.476512 </td></tr>
+<tr><td>Altitude: 252.661 ft </td></tr>
+<tr><td>Heart rate: 164 </td></tr>
+<tr><td>Temperature: 24.3 </td></tr>
+<tr><td>Speed: 115.5 mph </td></tr>
+<tr><td>Heading: 42.4 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:22.594Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.053593</longitude>
+            <latitude>30.476512</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:22.594Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.053593,30.476512,77.01</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_25dSc2Mb</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.052896 </td></tr>
+<tr><td>Latitude: 30.476701 </td></tr>
+<tr><td>Altitude: 8.740 ft </td></tr>
+<tr><td>Heart rate: 246 </td></tr>
+<tr><td>Cadence: 186 </td></tr>
+<tr><td>Temperature: 23.2 </td></tr>
+<tr><td>Depth: 2989.8 ft </td></tr>
+<tr><td>Speed: 114.1 mph </td></tr>
+<tr><td>Heading: 72.5 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:23.968Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.052896</longitude>
+            <latitude>30.476701</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:23.968Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.052896,30.476701,2.66</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_iHp8</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.052293 </td></tr>
+<tr><td>Latitude: 30.477107 </td></tr>
+<tr><td>Altitude: 194.545 ft </td></tr>
+<tr><td>Heart rate: 52 </td></tr>
+<tr><td>Cadence: 155 </td></tr>
+<tr><td>Temperature: 28.0 </td></tr>
+<tr><td>Depth: 572.3 ft </td></tr>
+<tr><td>Speed: 140.7 mph </td></tr>
+<tr><td>Heading: 52.0 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:25.135Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.052293</longitude>
+            <latitude>30.477107</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:25.135Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.052293,30.477107,59.30</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_lFMiR</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.051494 </td></tr>
+<tr><td>Latitude: 30.477113 </td></tr>
+<tr><td>Heart rate: 90 </td></tr>
+<tr><td>Cadence: 210 </td></tr>
+<tr><td>Temperature: 21.8 </td></tr>
+<tr><td>Depth: 2639.6 ft </td></tr>
+<tr><td>Speed: 108.3 mph </td></tr>
+<tr><td>Heading: 89.5 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:26.718Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.051494</longitude>
+            <latitude>30.477113</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:26.718Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.051494,30.477113</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_k2lz15k</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.051415 </td></tr>
+<tr><td>Latitude: 30.477953 </td></tr>
+<tr><td>Altitude: 98.438 ft </td></tr>
+<tr><td>Heart rate: 53 </td></tr>
+<tr><td>Depth: 172.3 ft </td></tr>
+<tr><td>Speed: 147.6 mph </td></tr>
+<tr><td>Heading: 4.6 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:28.139Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.051415</longitude>
+            <latitude>30.477953</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:28.139Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.051415,30.477953,30.00</coordinates>
+          </Point>
+        </Placemark>
+        <Placemark>
+          <name>Wpt_hCT</name>
+          <snippet/>
+          <description><![CDATA[
+<table>
+<tr><td>Longitude: -32.051141 </td></tr>
+<tr><td>Latitude: 30.478722 </td></tr>
+<tr><td>Heart rate: 96 </td></tr>
+<tr><td>Depth: 2099.9 ft </td></tr>
+<tr><td>Speed: 145.1 mph </td></tr>
+<tr><td>Heading: 17.1 </td></tr>
+<tr><td>Time: 1970-01-01T00:00:29.519Z </td></tr>
+</table>
+]]></description>
+          <LookAt>
+            <longitude>-32.051141</longitude>
+            <latitude>30.478722</latitude>
+            <tilt>66</tilt>
+          </LookAt>
+          <TimeStamp>
+            <when>1970-01-01T00:00:29.519Z</when>
+          </TimeStamp>
+          <styleUrl>#track</styleUrl>
+          <Point>
+            <coordinates>-32.051141,30.478722</coordinates>
+          </Point>
+        </Placemark>
+      </Folder>
+      <Placemark>
+        <name>Path</name>
+        <styleUrl>#lineStyle</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+-32.061312,30.470605,26.03
+-32.060351,30.471588
+-32.059442,30.471933,30.62
+-32.058752,30.472451,75.70
+-32.058143,30.473278
+-32.057275,30.474104,26.70
+-32.056245,30.474413,72.49
+-32.056020,30.475032
+-32.055280,30.475289,57.64
+-32.054461,30.475367,91.16
+-32.054306,30.475838
+-32.053593,30.476512,77.01
+-32.052896,30.476701,2.66
+-32.052293,30.477107,59.30
+-32.051494,30.477113
+-32.051415,30.477953,30.00
+-32.051141,30.478722
+</coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
