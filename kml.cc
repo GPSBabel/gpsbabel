@@ -20,10 +20,6 @@
 
  */
 
-#ifdef __WIN32__
-# include <windows.h>
-#endif
-
 #include <cctype>                       // for tolower, toupper
 #include <cmath>                        // for fabs
 #include <cstdio>                       // for sscanf, printf

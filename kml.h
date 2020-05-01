@@ -22,10 +22,6 @@
 #ifndef KML_H_INCLUDED_
 #define KML_H_INCLUDED_
 
-#ifdef __WIN32__
-# include <windows.h>
-#endif
-
 #include <tuple>                        // for tuple, make_tuple, tie
 
 #include <QtCore/QList>                 // for QList
