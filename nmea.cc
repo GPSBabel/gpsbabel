@@ -1199,8 +1199,6 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
   char obuf[200];
   char fix='0';
   int cksum;
-  time_t hms;
-  time_t ymd;
 
   if (opt_sleep) {
     gbfflush(file_out);
@@ -1220,14 +1218,11 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
   double lat = degrees2ddmm(wpt->latitude);
   double lon = degrees2ddmm(wpt->longitude);
 
-  time_t ct = wpt->GetCreationTime().toTime_t();
-  struct tm* tm = gmtime(&ct);
-  if (tm) {
-    hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
-    ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
-  } else {
-    hms = 0;
-    ymd = 0;
+  QByteArray dmy("");
+  QByteArray hms("");
+  if (wpt->GetCreationTime().isValid()) {
+    dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
+    hms = wpt->GetCreationTime().toUTC().toString("hhmmss.zzz").toUtf8();
   }
 
   switch (wpt->fix) {
@@ -1246,14 +1241,14 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
   }
 
   if (opt_gprmc) {
-    snprintf(obuf, sizeof(obuf), "GPRMC,%010.3f,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
-             (double) hms + (wpt->GetCreationTime().time().msec() / 1000.0),
+    snprintf(obuf, sizeof(obuf), "GPRMC,%s,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%s,,",
+             hms.constData(),
              fix=='0' ? 'V' : 'A',
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
              WAYPT_HAS(wpt, speed) ? MPS_TO_KNOTS(wpt->speed):(0),
              WAYPT_HAS(wpt, course) ? (wpt->course):(0),
-             (int) ymd);
+             dmy.constData());
     cksum = nmea_cksum(obuf);
 
     /* GISTeq doesn't care about the checksum, but wants this prefixed, so
@@ -1265,8 +1260,8 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
   if (opt_gpgga) {
-    snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,%.1f,M,,",
-             (double) hms + (wpt->GetCreationTime().time().msec() / 1000.0),
+    snprintf(obuf, sizeof(obuf), "GPGGA,%s,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,%.1f,M,,",
+             hms.constData(),
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
              fix,
