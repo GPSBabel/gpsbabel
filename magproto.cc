@@ -20,6 +20,7 @@
 
  */
 
+#include <cassert>                 // for assert
 #include <cctype>                  // for isprint, toupper
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for sscanf, size_t
@@ -28,7 +29,7 @@
 #include <ctime>                   // for gmtime
 
 #include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QDir>             // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
 #include <QtCore/QFileInfo>        // for QFileInfo
 #include <QtCore/QFileInfoList>    // for QFileInfoList
@@ -38,6 +39,7 @@
 #include <QtCore/QString>          // for QString, operator==
 #include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QTime>            // for QTime
+#include <QtCore/QVector>          // for QVector
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for qPrintable, foreach
 
@@ -1407,27 +1409,20 @@ static
 void mag_track_disp(const Waypoint* waypointp)
 {
   QScopedPointer<char, QScopedPointerPodDeleter> obuf;
-  int hms=0;
-  int fracsec=0;
-  int date=0;
 
   double ilat = waypointp->latitude;
   double ilon = waypointp->longitude;
-  struct tm* tm = nullptr;
+  
+  QByteArray dmy("");
+  QByteArray hms("");
   if (waypointp->creation_time.isValid()) {
-    const time_t ct = waypointp->GetCreationTime().toTime_t();
-    tm = gmtime(&ct);
-    if (tm) {
-      hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
-            tm->tm_sec;
-      date = tm->tm_mday * 10000 + tm->tm_mon * 100 +
-             tm->tm_year;
-      fracsec = lround(waypointp->GetCreationTime().time().msec()/10.0);
-    }
-  }
-  if (!tm) {
-    date = 0;
-    fracsec = 0;
+    // Round to hundredths of seconds before conversion to string.
+    // Rounding can ripple all the way from the msec to the year.
+    QDateTime dt = waypointp->GetCreationTime().toUTC();
+    dt = dt.addMSecs(10 * lround(dt.time().msec()/10.0) - dt.time().msec());
+    assert((dt.time().msec() % 10) == 0);
+    dmy = dt.toString("ddMMyy").toUtf8();
+    hms = dt.toString("hhmmss.zzz").left(9).toUtf8();
   }
 
   double lon = fabs(ilon);
@@ -1442,12 +1437,12 @@ void mag_track_disp(const Waypoint* waypointp)
   lon = (lon_deg * 100.0 + lon);
   lat = (lat_deg * 100.0 + lat);
 
-  xasprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.0f,%c,%06d.%02d,A,,%06d",
+  xasprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.0f,%c,%s,A,,%s",
           lat, ilat < 0 ? 'S' : 'N',
           lon, ilon < 0 ? 'W' : 'E',
           waypointp->altitude == unknown_alt ?
           0 : waypointp->altitude,
-          'M', hms, fracsec, date);
+          'M', hms.constData(), dmy.constData());
   mag_writemsg(obuf.data());
 }
 

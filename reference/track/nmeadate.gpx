@@ -64,6 +64,18 @@
         <vdop>4.600000</vdop>
         <pdop>4.900000</pdop>
       </trkpt>
+      <trkpt lat="42.530488333" lon="-88.121730000">
+        <ele>209.600</ele>
+        <time>2002-12-31T23:59:59.999Z</time>
+        <course>140.399994</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>3d</fix>
+        <sat>5</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.600000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
     </trkseg>
   </trk>
 </gpx>

@@ -18,3 +18,5 @@ gpsbabel -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F 
 gpsbabel -r -i magellanx -f ${TMPDIR}/magxfile.rte -o magellanx -F ${TMPDIR}/magxfile2.rte
 compare ${REFERENCE}/route/magexplorist.rte ${TMPDIR}/magxfile2.rte
 
+gpsbabel -t -i gpx -f ${REFERENCE}/track/nmeadate.gpx -o magellanx -F ${TMPDIR}/magellandate.log
+compare ${REFERENCE}/track/magellandate.log ${TMPDIR}/magellandate.log
