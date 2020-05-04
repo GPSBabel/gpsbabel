@@ -511,12 +511,12 @@ filter_vecs.o: filter_vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   format.h energympro.h garmin_fit.h geojson.h src/core/file.h ggv_bin.h \
   globalsat_sport.h gpx.h src/core/xmlstreamwriter.h src/core/xmltag.h \
   kml.h xmlgeneric.h legacyformat.h lowranceusr.h mynav.h nmea.h \
-  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h xcsv.h \
-  garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
-  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h \
-  yahoo.h
+  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h \
+  unicsv.h src/core/textstream.h xcsv.h garmin_fs.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h yahoo.h
 formspec.o: formspec.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h
@@ -537,8 +537,8 @@ garmin.o: garmin.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   energympro.h garmin_fit.h geojson.h src/core/file.h ggv_bin.h \
   globalsat_sport.h gpx.h src/core/xmlstreamwriter.h src/core/xmltag.h \
   kml.h xmlgeneric.h legacyformat.h lowranceusr.h mynav.h nmea.h \
-  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h xcsv.h \
-  src/core/textstream.h yahoo.h
+  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h \
+  unicsv.h src/core/textstream.h xcsv.h yahoo.h
 garmin_device_xml.o: garmin_device_xml.cc defs.h config.h zlib/zlib.h \
   zlib/zconf.h formspec.h inifile.h gbfile.h session.h \
   src/core/datetime.h src/core/optional.h garmin_device_xml.h \
@@ -546,7 +546,7 @@ garmin_device_xml.o: garmin_device_xml.cc defs.h config.h zlib/zlib.h \
 garmin_fit.o: garmin_fit.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h garmin_fit.h format.h jeeps/gpsmath.h \
-  jeeps/gpsport.h
+  jeeps/gpsport.h src/core/logging.h
 garmin_fs.o: garmin_fs.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
@@ -824,12 +824,12 @@ magproto.o: magproto.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   energympro.h garmin_fit.h geojson.h src/core/file.h ggv_bin.h \
   globalsat_sport.h gpx.h src/core/xmlstreamwriter.h src/core/xmltag.h \
   kml.h xmlgeneric.h legacyformat.h lowranceusr.h mynav.h nmea.h \
-  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h xcsv.h \
-  garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
-  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h src/core/textstream.h \
-  yahoo.h
+  qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h subrip.h \
+  unicsv.h src/core/textstream.h xcsv.h garmin_fs.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h yahoo.h
 main.o: main.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   cet_util.h csv_util.h filter.h filter_vecs.h arcdist.h bend.h \
@@ -840,11 +840,11 @@ main.o: main.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   garmin_fit.h geojson.h ggv_bin.h globalsat_sport.h gpx.h \
   src/core/xmlstreamwriter.h src/core/xmltag.h kml.h xmlgeneric.h \
   legacyformat.h lowranceusr.h mynav.h nmea.h qstarz_bl_1000.h random.h \
-  shape.h shapelib/shapefil.h subrip.h xcsv.h garmin_fs.h jeeps/gps.h \
-  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
-  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
-  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
-  jeeps/gpsrqst.h src/core/textstream.h yahoo.h
+  shape.h shapelib/shapefil.h subrip.h unicsv.h src/core/textstream.h \
+  xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h yahoo.h
 mapasia.o: mapasia.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 mapbar_track.o: mapbar_track.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
@@ -1037,11 +1037,12 @@ transform.o: transform.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   src/core/optional.h transform.h filter.h
 unicsv.o: unicsv.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  csv_util.h garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
+  unicsv.h format.h src/core/textstream.h src/core/file.h csv_util.h \
+  garmin_fs.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h garmin_tables.h \
-  src/core/logging.h src/core/textstream.h src/core/file.h
+  src/core/logging.h
 units.o: units.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   units.h
@@ -1063,11 +1064,11 @@ vecs.o: vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   ggv_bin.h globalsat_sport.h gpx.h src/core/xmlstreamwriter.h \
   src/core/xmltag.h kml.h xmlgeneric.h legacyformat.h lowranceusr.h \
   mynav.h nmea.h qstarz_bl_1000.h random.h shape.h shapelib/shapefil.h \
-  subrip.h xcsv.h garmin_fs.h jeeps/gps.h jeeps/../defs.h \
-  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
-  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
-  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  src/core/textstream.h yahoo.h gbversion.h src/core/logging.h
+  subrip.h unicsv.h src/core/textstream.h xcsv.h garmin_fs.h jeeps/gps.h \
+  jeeps/../defs.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h yahoo.h gbversion.h src/core/logging.h
 vidaone.o: vidaone.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
 vitosmt.o: vitosmt.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \

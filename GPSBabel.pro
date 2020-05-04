@@ -148,6 +148,7 @@ HEADERS =  \
 	shapelib/shapefil.h \
 	strptime.h \
 	subrip.h \
+	unicsv.h \
 	units.h \
 	vecs.h \
 	xcsv.h \
