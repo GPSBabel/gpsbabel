@@ -125,12 +125,10 @@ gpssim_write_pt(const Waypoint* wpt)
   if (wpt->creation_time.isValid()) {
     char tbuf[20];
 
-    const time_t tt = wpt->GetCreationTime().toTime_t();
-    struct tm* tm = gmtime(&tt);
-    int hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
-    int ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
+    QByteArray dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
+    QByteArray hms = wpt->GetCreationTime().toUTC().toString("hhmmss").toUtf8();
 
-    snprintf(tbuf, sizeof(tbuf), ",%d,%d",ymd, hms);
+    snprintf(tbuf, sizeof(tbuf), ",%s,%s",dmy.constData(), hms.constData());
     strcat(obuf, tbuf);
   }
 
