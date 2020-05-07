@@ -28,3 +28,6 @@ gpsbabel -t -i nmea -f ${REFERENCE}/track/backfilldate.nmea -o unicsv,utc=0 -F $
 compare ${REFERENCE}/track/backfilldate.csv ${TMPDIR}/backfilldate.csv
 gpsbabel -t -i nmea -f ${REFERENCE}/track/backfilldate2.nmea -o unicsv,utc=0 -F ${TMPDIR}/backfilldate2.csv
 compare ${REFERENCE}/track/backfilldate2.csv ${TMPDIR}/backfilldate2.csv
+
+gpsbabel -i gpx -f ${REFERENCE}/track/nmeadate.gpx -o nmea -F ${TMPDIR}/nmeadate.nmea
+compare ${REFERENCE}/track/nmeadate.nmea ${TMPDIR}/nmeadate.nmea

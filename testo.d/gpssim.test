@@ -5,3 +5,6 @@ gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o gpssim -F ${TMPDIR}/waypoints.
 compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
 gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
 compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track
+gpsbabel -i gpx -f ${REFERENCE}/track/nmeadate.gpx -o gpssim -F ${TMPDIR}/nmeadate.gpssim
+compare ${REFERENCE}/track/nmeadate.gpssim ${TMPDIR}/nmeadate.gpssim
+
