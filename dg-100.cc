@@ -31,13 +31,14 @@
 
 #include <cassert>                     // for assert
 #include <cstdarg>                     // for va_end, va_list, va_start
-#include <cstdint>                     // for uint8_t, int16_t, uint16_t
+#include <cstdint>                     // for uint8_t, uint16_t, int16_t
 #include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
 #include <cstdlib>                     // for abs
 #include <cstring>                     // for memcpy, strlen, memcmp, strcmp, strncpy
 #include <ctime>                       // for ctime, gmtime, strftime, time_t
 
 #include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QList>                // for QList
 #include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
 #include <QtCore/QString>              // for QString
 #include <QtCore/QVector>              // for QVector
@@ -117,12 +118,6 @@ static struct dg100_command dg200_commands[] = {
   { dg200cmd_reset   ,       24,   0,    0, "reset" }
 };
 
-struct dynarray16 {
-  unsigned count; /* number of elements used */
-  unsigned limit; /* number of elements allocated */
-  int16_t* data;
-};
-
 /* helper functions */
 static struct dg100_command*
 dg100_findcmd(int id) {
@@ -134,31 +129,6 @@ dg100_findcmd(int id) {
   }
 
   return nullptr;
-}
-
-static void
-dynarray16_init(struct dynarray16* a, unsigned limit)
-{
-  a->count = 0;
-  a->limit = limit;
-  a->data = (int16_t*) xmalloc(sizeof(a->data[0]) * a->limit);
-}
-
-static int16_t*
-dynarray16_alloc(struct dynarray16* a, unsigned n)
-{
-  const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
-
-  unsigned oldcount = a->count;
-  a->count += n;
-
-  if (a->count > a->limit) {
-    unsigned need = a->count - a->limit;
-    need = (need > elements_per_chunk) ? need : elements_per_chunk;
-    a->limit += need;
-    a->data = (int16_t*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
-  }
-  return(a->data + oldcount);
 }
 
 static time_t
@@ -610,9 +580,10 @@ dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 }
 
 /* higher level communication functions */
-static void
-dg100_getfileheaders(struct dynarray16* headers)
+static QList<int>
+dg100_getfileheaders()
 {
+  QList<int> headers;
   uint8_t request[2];
   uint8_t answer[FRAME_MAXLEN];
 
@@ -632,11 +603,10 @@ dg100_getfileheaders(struct dynarray16* headers)
       break;
     }
 
-    int16_t*h = dynarray16_alloc(headers, numheaders);
     for (int i = 0; i < numheaders; i++) {
       int offset = 4 + i * 12;
       int seqnum = be_read32(answer + offset + 8);
-      h[i] = seqnum;
+      headers.append(seqnum);
       if (global_opts.debug_level) {
         int time   = be_read32(answer + offset) & 0x7FFFFFFF;
         int date   = be_read32(answer + offset + 4);
@@ -646,6 +616,8 @@ dg100_getfileheaders(struct dynarray16* headers)
       }
     }
   } while (nextheader != 0);
+
+  return headers;
 }
 
 static void
@@ -670,17 +642,10 @@ dg100_getfile(int16_t num, route_head** track)
 static void
 dg100_getfiles()
 {
-  struct dynarray16 headers;
   route_head* track = nullptr;
 
-  /* maximum number of headers observed so far: 672
-   * if necessary, the dynarray will grow even further */
-  dynarray16_init(&headers, 1024);
-
-  dg100_getfileheaders(&headers);
-
-  for (unsigned int i = 0; i < headers.count; i++) {
-    int filenum = headers.data[i];
+  const QList<int> headers = dg100_getfileheaders();
+  for (int filenum : headers) {
     dg100_getfile(filenum, &track);
   }
   /* Different DG-100 devices seem to return different numbers of bytes
