@@ -28,13 +28,25 @@
     http://www.usglobalsat.com/s-176-developer-information.aspx
  */
 
-#include "defs.h"
-#include <cctype>
 
-#include "gbser.h"
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
+#include <cassert>                     // for assert
+#include <cstdarg>                     // for va_end, va_list, va_start
+#include <cstdint>                     // for uint8_t, int16_t, uint16_t
+#include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
+#include <cstdlib>                     // for abs
+#include <cstring>                     // for memcpy, strlen, memcmp, strcmp, strncpy
+#include <ctime>                       // for ctime, gmtime, strftime, time_t
+
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
+#include <QtCore/QString>              // for QString
+#include <QtCore/QVector>              // for QVector
+#include <QtCore/QtGlobal>             // for qPrintable
+
+#include "defs.h"
+#include "gbfile.h"                    // for gbfread, gbfclose, gbfgetc, gbfopen, gbfile
+#include "gbser.h"                     // for gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_set_speed, gbser_write, gbser_ERROR, gbser_OK, gbser_NOTHING
+
 
 #define MYNAME "DG-100"
 
@@ -50,6 +62,9 @@ struct model_t {
 static const model_t* model;
 
 static void* serial_handle;
+
+static gbfile* fin{nullptr};
+static bool isfile{false};
 
 /* maximum frame size observed so far: 1817 bytes
  *   (dg100cmd_getfileheader returning 150 entries)
@@ -346,7 +361,20 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   be_write16(frame + framelen - 4, checksum);
   be_write16(frame + framelen - 2, 0xB0B3);
 
-  int n = gbser_write(serial_handle, frame, framelen);
+  int n;
+  if (isfile) {
+    QScopedArrayPointer<uint8_t> buf(new uint8_t[framelen]);
+    if (gbfread(buf.data(), 1, framelen, fin) != framelen) {
+      fatal("failed to get data to compare to sent data.\n");
+    }
+    if (memcmp(frame, buf.data(), framelen) != 0) {
+      fatal("sent data does not match expected value.\n");
+    }
+
+    n = gbser_OK;
+  } else {
+    n = gbser_write(serial_handle, frame, framelen);
+  }
 
   if (global_opts.debug_level) {
     struct dg100_command* cmdp = dg100_findcmd(cmd);
@@ -368,14 +396,33 @@ dg100_recv_byte()
 {
   /* allow for a delay of 40s;
    *  erasing the whole DG-100 memory takes about 21s */
-  int result = gbser_readc_wait(serial_handle, 40000);
-  switch (result) {
-  case gbser_ERROR:
-    fatal("dg100_recv_byte(): error reading one byte\n");
-  case gbser_NOTHING:
-    fatal("dg100_recv_byte(): read timeout\n");
+
+  int result;
+  if (isfile) {
+    result = gbfgetc(fin);
+    if (result < 0) {
+      fatal("dg100_recv_byte(): read error\n");
+    }
+  } else {
+    result = gbser_readc_wait(serial_handle, 40000);
+    switch (result) {
+    case gbser_ERROR:
+      fatal("dg100_recv_byte(): error reading one byte\n");
+    case gbser_NOTHING:
+      fatal("dg100_recv_byte(): read timeout\n");
+    }
   }
   return result;
+}
+
+static int
+dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
+{
+  if (isfile) {
+    return gbfread(buf, 1, len, fin);
+  } else {
+    return gbser_read_wait(handle, buf, len, ms);
+  }
 }
 
 /* payload returns a pointer into a static buffer (which also contains the
@@ -420,7 +467,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
    */
 
   /* read Payload Length, Command ID, and two further bytes */
-  int i = gbser_read_wait(serial_handle, &buf[2], 5, 1000);
+  int i = dg100_read_wait(serial_handle, &buf[2], 5, 1000);
   if (i < 5) {
     fatal("Expected to read 5 bytes, but got %d\n", i);
   }
@@ -472,7 +519,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
           frame_len, FRAME_MAXLEN);
   }
 
-  i = gbser_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
+  i = dg100_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
   if (i < frame_len - 7) {
     fatal("Expected to read %d bytes, but got %d\n",
           frame_len - 7, i);
@@ -684,15 +731,19 @@ QVector<arglist_t> dg100_args = {
 static void
 common_rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-    fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+  if (isfile) {
+    fin = gbfopen(fname, "rb", MYNAME);
+  } else {
+    if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
+      fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+    }
+    if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
+      fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
+    }
+    // Toss anything that came in before our speed was set, particularly
+    // for the bluetooth BT-335 product.
+    gbser_flush(serial_handle);
   }
-  if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-    fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
-  }
-  // Toss anything that came in before our speed was set, particularly
-  // for the bluetooth BT-335 product.
-  gbser_flush(serial_handle);
 }
 
 static void
@@ -704,6 +755,20 @@ dg100_rd_init(const QString& fname)
 }
 
 static void
+dg100_rd_serial_init(const QString& fname)
+{
+  isfile = false;
+  dg100_rd_init(fname);
+}
+
+static void
+dg100_rd_file_init(const QString& fname)
+{
+  isfile = true;
+  dg100_rd_init(fname);
+}
+
+static void
 dg200_rd_init(const QString& fname)
 {
   static const model_t dg200_model = { "DG-200", 230400, 0, 0, dg200_commands, sizeof(dg200_commands) / sizeof(struct dg100_command) };
@@ -712,10 +777,29 @@ dg200_rd_init(const QString& fname)
 }
 
 static void
+dg200_rd_serial_init(const QString& fname)
+{
+  isfile = false;
+  dg200_rd_init(fname);
+}
+
+static void
+dg200_rd_file_init(const QString& fname)
+{
+  isfile = true;
+  dg200_rd_init(fname);
+}
+
+static void
 dg100_rd_deinit()
 {
-  gbser_deinit(serial_handle);
-  serial_handle = nullptr;
+  if (isfile) {
+    gbfclose(fin);
+    fin = nullptr;
+  } else {
+    gbser_deinit(serial_handle);
+    serial_handle = nullptr;
+  }
 }
 
 static void
@@ -742,7 +826,28 @@ ff_vecs_t dg100_vecs = {
     ff_cap_read 			/* tracks */,
     ff_cap_none 			/* routes */
   },
-  dg100_rd_init,
+  dg100_rd_serial_init,
+  nullptr,
+  dg100_rd_deinit,
+  nullptr,
+  dg100_read,
+  nullptr,
+  nullptr,
+  &dg100_args,
+  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
+};
+
+ff_vecs_t dg100_fvecs = {
+  ff_type_internal, /* This is a regression test, hide from GUI. */
+  {
+    ff_cap_read			/* waypoints */,
+    ff_cap_read 			/* tracks */,
+    ff_cap_none 			/* routes */
+  },
+  dg100_rd_file_init,
   nullptr,
   dg100_rd_deinit,
   nullptr,
@@ -763,7 +868,28 @@ ff_vecs_t dg200_vecs = {
     ff_cap_read 			/* tracks */,
     ff_cap_none 			/* routes */
   },
-  dg200_rd_init,
+  dg200_rd_serial_init,
+  nullptr,
+  dg100_rd_deinit,
+  nullptr,
+  dg100_read,
+  nullptr,
+  nullptr,
+  &dg100_args,
+  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
+};
+
+ff_vecs_t dg200_fvecs = {
+  ff_type_internal, /* This is a regression test, hide from GUI. */
+  {
+    ff_cap_read			/* waypoints */,
+    ff_cap_read 			/* tracks */,
+    ff_cap_none 			/* routes */
+  },
+  dg200_rd_file_init,
   nullptr,
   dg100_rd_deinit,
   nullptr,
