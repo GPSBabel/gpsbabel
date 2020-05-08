@@ -394,9 +394,6 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
 static int
 dg100_recv_byte()
 {
-  /* allow for a delay of 40s;
-   *  erasing the whole DG-100 memory takes about 21s */
-
   int result;
   if (isfile) {
     result = gbfgetc(fin);
@@ -404,6 +401,9 @@ dg100_recv_byte()
       fatal("dg100_recv_byte(): read error\n");
     }
   } else {
+    /* allow for a delay of 40s;
+     *  erasing the whole DG-100 memory takes about 21s */
+
     result = gbser_readc_wait(serial_handle, 40000);
     switch (result) {
     case gbser_ERROR:
