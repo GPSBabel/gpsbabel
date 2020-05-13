@@ -317,8 +317,16 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   be_write16(frame + 2, payload_len);
   frame[4] = cmd;
 
-  /* copy payload */
-  memcpy(frame + 5, payload, param_len);
+  /*
+   * The behavior of memcpy is undefined if dest or src is nullptr,
+   * even with count zero!
+   * Note the dg100cmd_getconfig will have src == nullptr and count == 0!
+   */
+  if (param_len > 0) {
+    assert(payload != nullptr);
+    /* copy payload */
+    memcpy(frame + 5, payload, param_len);
+  }
 
   /* create frame tail */
   uint16_t checksum = dg100_checksum(frame + 4, framelen - 8);
