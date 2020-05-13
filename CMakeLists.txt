@@ -107,6 +107,7 @@ set(HEADERS
   cet_util.h
   csv_util.h
   defs.h
+  dg-100.h
   energympro.h
   explorist_ini.h
   filter.h

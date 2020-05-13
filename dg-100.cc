@@ -43,60 +43,18 @@
 #include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
 #include <QtCore/QString>              // for QString
 #include <QtCore/QTime>                // for QTime
-#include <QtCore/QVector>              // for QVector
 #include <QtCore/Qt>                   // for TextDate, UTC
 #include <QtCore/QtGlobal>             // for qPrintable
 
 #include "defs.h"
+#include "dg-100.h"
 #include "gbfile.h"                    // for gbfread, gbfclose, gbfgetc, gbfopen, gbfile
 #include "gbser.h"                     // for gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_set_speed, gbser_write, gbser_ERROR, gbser_OK, gbser_NOTHING
 
 
 #define MYNAME "DG-100"
 
-struct model_t {
-  const char *name;
-  unsigned speed;
-  int has_trailing_bytes;
-  int has_payload_end_seq;
-  struct dg100_command *commands;
-  unsigned int numcommands;
-};
-
-static const model_t* model;
-
-static void* serial_handle;
-
-static gbfile* fin{nullptr};
-static bool isfile{false};
-
-/* maximum frame size observed so far: 1817 bytes
- *   (dg100cmd_getfileheader returning 150 entries)
- * dg100cmd_getfileheader is the only answer type of variable length,
- * answers of other types are always shorter than 1817 bytes */
-#define FRAME_MAXLEN 4096
-
-enum dg100_command_id {
-  dg100cmd_getconfig     = 0xB7,
-  dg100cmd_setconfig     = 0xB8,
-  dg100cmd_getfileheader = 0xBB,
-  dg100cmd_getfile       = 0xB5,
-  dg100cmd_erase         = 0xBA,
-  dg100cmd_getid         = 0xBF,
-  dg100cmd_setid         = 0xC0,
-  dg100cmd_gpsmouse      = 0xBC,
-  dg200cmd_reset         = 0x80
-};
-
-struct dg100_command {
-  int  id;
-  int  sendsize;
-  int  recvsize;
-  int  trailing_bytes;
-  const char* text;	/* Textual description for debugging */
-};
-
-static struct dg100_command dg100_commands[] = {
+const Dg100Format::dg100_command Dg100Format::dg100_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
@@ -108,7 +66,7 @@ static struct dg100_command dg100_commands[] = {
   { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" }
 };
 
-static struct dg100_command dg200_commands[] = {
+const Dg100Format::dg100_command Dg100Format::dg200_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
@@ -122,8 +80,9 @@ static struct dg100_command dg200_commands[] = {
 };
 
 /* helper functions */
-static struct dg100_command*
-dg100_findcmd(int id) {
+const Dg100Format::dg100_command*
+Dg100Format::dg100_findcmd(int id) const
+{
   /* linear search should be OK as long as dg100_numcommands is small */
   for (unsigned int i = 0; i < model->numcommands; i++) {
     if (model->commands[i].id == id) {
@@ -134,8 +93,8 @@ dg100_findcmd(int id) {
   return nullptr;
 }
 
-static QDateTime
-bintime2utc(int date, int time)
+QDateTime
+Dg100Format::bintime2utc(int date, int time)
 {
   int sec   = time % 100;
   time /= 100;
@@ -153,8 +112,8 @@ bintime2utc(int date, int time)
   return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), Qt::UTC);
 }
 
-static void
-dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
+void
+Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
 {
   /* Only give byte dumps for higher debug levels */
   if (global_opts.debug_level < 5) {
@@ -172,8 +131,8 @@ dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
   }
 }
 
-static void
-dg100_log(const char* fmt, ...)
+void
+Dg100Format::dg100_log(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -185,8 +144,8 @@ dg100_log(const char* fmt, ...)
 
 
 /* TODO: check whether negative lat/lon (West/South) are handled correctly */
-static float
-bin2deg(int val)
+float
+Dg100Format::bin2deg(int val) const
 {
   /* Assume that val prints in decimal digits as [-]dddmmffff
    * ddd:  degrees
@@ -208,8 +167,8 @@ bin2deg(int val)
   return(deg);
 }
 
-static void
-process_gpsfile(uint8_t data[], route_head** track)
+void
+Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
 {
   const int recordsizes[3] = {8, 20, 32};
 
@@ -285,8 +244,8 @@ process_gpsfile(uint8_t data[], route_head** track)
   }
 }
 
-static uint16_t
-dg100_checksum(const uint8_t buf[], int count)
+uint16_t
+Dg100Format::dg100_checksum(const uint8_t buf[], int count)
 {
   uint16_t sum = 0;
 
@@ -299,8 +258,8 @@ dg100_checksum(const uint8_t buf[], int count)
 }
 
 /* communication functions */
-static size_t
-dg100_send(uint8_t cmd, const void* payload, size_t param_len)
+size_t
+Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) const
 {
   uint8_t frame[FRAME_MAXLEN];
 
@@ -349,7 +308,7 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   }
 
   if (global_opts.debug_level) {
-    struct dg100_command* cmdp = dg100_findcmd(cmd);
+    const dg100_command* cmdp = dg100_findcmd(cmd);
 
     dg100_debug(n == 0 ? "Sent: " : "Error Sending:",
                 1, framelen, frame);
@@ -363,8 +322,8 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   return (n);
 }
 
-static int
-dg100_recv_byte()
+int
+Dg100Format::dg100_recv_byte() const
 {
   int result;
   if (isfile) {
@@ -387,8 +346,8 @@ dg100_recv_byte()
   return result;
 }
 
-static int
-dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
+int
+Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms) const
 {
   if (isfile) {
     return gbfread(buf, 1, len, fin);
@@ -400,8 +359,8 @@ dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 /* payload returns a pointer into a static buffer (which also contains the
  * framing around the data), so the caller must copy the data before calling
  * this function again */
-static int
-dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
+int
+Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload) const
 {
   static uint8_t buf[FRAME_MAXLEN];
   uint16_t payload_end_seq;
@@ -458,7 +417,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
     cmd = dg100cmd_setconfig;
   }
 
-  struct dg100_command* cmdinfo = dg100_findcmd(cmd);
+  const dg100_command* cmdinfo = dg100_findcmd(cmd);
   if (!cmdinfo) {
     /* TODO: consume data until frame end signature,
      * then report failure to the caller? */
@@ -530,10 +489,10 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
 }
 
 /* return value: number of bytes copied into buf, -1 on error */
-static int
-dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
+int
+Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 {
-  struct dg100_command* cmdinfo;
+  const dg100_command* cmdinfo;
   uint8_t* data;
 
   int n = dg100_recv_frame(&cmdinfo, &data);
@@ -559,10 +518,10 @@ dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
-static int
-dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
+int
+Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count) const
 {
-  struct dg100_command* cmdinfo = dg100_findcmd(cmd);
+  const dg100_command* cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != nullptr);
   dg100_send(cmd, sendbuf, cmdinfo->sendsize);
 
@@ -582,8 +541,8 @@ dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 }
 
 /* higher level communication functions */
-static QList<int>
-dg100_getfileheaders()
+QList<int>
+Dg100Format::dg100_getfileheaders() const
 {
   QList<int> headers;
   uint8_t request[2];
@@ -623,16 +582,16 @@ dg100_getfileheaders()
   return headers;
 }
 
-static void
-dg100_getconfig()
+void
+Dg100Format::dg100_getconfig() const
 {
   uint8_t answer[45];
 
   dg100_request(dg100cmd_getconfig, nullptr, answer, sizeof(answer));
 }
 
-static void
-dg100_getfile(int16_t num, route_head** track)
+void
+Dg100Format::dg100_getfile(int16_t num, route_head** track) const
 {
   uint8_t request[2];
   uint8_t answer[2048];
@@ -642,8 +601,8 @@ dg100_getfile(int16_t num, route_head** track)
   process_gpsfile(answer, track);
 }
 
-static void
-dg100_getfiles()
+void
+Dg100Format::dg100_getfiles() const
 {
   route_head* track = nullptr;
 
@@ -661,8 +620,8 @@ dg100_getfiles()
   }
 }
 
-static int
-dg100_erase()
+int
+Dg100Format::dg100_erase() const
 {
   uint8_t request[2] = { 0xFF, 0xFF };
   uint8_t answer[4];
@@ -675,29 +634,12 @@ dg100_erase()
   return(0);
 }
 
-/* GPSBabel integration */
-
-static char* erase;
-static char* erase_only;
-
-static
-QVector<arglist_t> dg100_args = {
-  {
-    "erase", &erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "erase_only", &erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-};
-
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-common_rd_init(const QString& fname)
+void
+Dg100Format::common_rd_init(const QString& fname)
 {
   if (isfile) {
     fin = gbfopen(fname, "rb", MYNAME);
@@ -714,52 +656,26 @@ common_rd_init(const QString& fname)
   }
 }
 
-static void
-dg100_rd_init(const QString& fname)
+void
+Dg100Format::dg100_rd_init(const QString& fname, bool isfile)
 {
-  static const model_t dg100_model = { "DG-100", 115200, 1, 1, dg100_commands, sizeof(dg100_commands) / sizeof(struct dg100_command) };
+  static const model_t dg100_model = { "DG-100", 115200, true, true, dg100_commands, sizeof(dg100_commands) / sizeof(dg100_command) };
   model = &dg100_model;
+  this->isfile = isfile;
   common_rd_init(fname);
 }
 
-static void
-dg100_rd_serial_init(const QString& fname)
+void
+Dg100Format::dg200_rd_init(const QString& fname, bool isfile)
 {
-  isfile = false;
-  dg100_rd_init(fname);
-}
-
-static void
-dg100_rd_file_init(const QString& fname)
-{
-  isfile = true;
-  dg100_rd_init(fname);
-}
-
-static void
-dg200_rd_init(const QString& fname)
-{
-  static const model_t dg200_model = { "DG-200", 230400, 0, 0, dg200_commands, sizeof(dg200_commands) / sizeof(struct dg100_command) };
+  static const model_t dg200_model = { "DG-200", 230400, false, false, dg200_commands, sizeof(dg200_commands) / sizeof(dg100_command) };
   model = &dg200_model;
+  this->isfile = isfile;
   common_rd_init(fname);
 }
 
-static void
-dg200_rd_serial_init(const QString& fname)
-{
-  isfile = false;
-  dg200_rd_init(fname);
-}
-
-static void
-dg200_rd_file_init(const QString& fname)
-{
-  isfile = true;
-  dg200_rd_init(fname);
-}
-
-static void
-dg100_rd_deinit()
+void
+Dg100Format::rd_deinit()
 {
   if (isfile) {
     gbfclose(fin);
@@ -770,8 +686,8 @@ dg100_rd_deinit()
   }
 }
 
-static void
-dg100_read()
+void
+Dg100Format::read()
 {
   if (*erase_only == '1') {
     dg100_erase();
@@ -782,92 +698,3 @@ dg100_read()
     dg100_erase();
   }
 }
-
-/**************************************************************************/
-
-// capabilities below means: we can read tracks and waypoints
-
-ff_vecs_t dg100_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg100_rd_serial_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-ff_vecs_t dg100_fvecs = {
-  ff_type_internal, /* This is a regression test, hide from GUI. */
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg100_rd_file_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-ff_vecs_t dg200_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg200_rd_serial_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-ff_vecs_t dg200_fvecs = {
-  ff_type_internal, /* This is a regression test, hide from GUI. */
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg200_rd_file_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-/**************************************************************************/
