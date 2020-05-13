@@ -34,14 +34,17 @@
 #include <cstdint>                     // for uint8_t, uint16_t, int16_t
 #include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
 #include <cstdlib>                     // for abs
-#include <cstring>                     // for memcpy, strlen, memcmp, strcmp, strncpy
-#include <ctime>                       // for ctime, gmtime, strftime, time_t
+#include <cstring>                     // for memcpy, memcmp, strcmp
 
 #include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QDate>                // for QDate
+#include <QtCore/QDateTime>            // for QDateTime
 #include <QtCore/QList>                // for QList
 #include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
 #include <QtCore/QString>              // for QString
+#include <QtCore/QTime>                // for QTime
 #include <QtCore/QVector>              // for QVector
+#include <QtCore/Qt>                   // for TextDate, UTC
 #include <QtCore/QtGlobal>             // for qPrintable
 
 #include "defs.h"
@@ -131,28 +134,23 @@ dg100_findcmd(int id) {
   return nullptr;
 }
 
-static time_t
+static QDateTime
 bintime2utc(int date, int time)
 {
-  struct tm gpstime;
-
-  gpstime.tm_sec   = time % 100;
+  int sec   = time % 100;
   time /= 100;
-  gpstime.tm_min   = time % 100;
+  int min   = time % 100;
   time /= 100;
-  gpstime.tm_hour  = time;
+  int hour  = time;
 
-  /*
-   * GPS year: 2000+; struct tm year: 1900+
-   * GPS month: 1-12, struct tm month: 0-11
-   */
-  gpstime.tm_year  = date % 100 + 100;
+  /* GPS year: 2000+ */
+  int year  = date % 100 + 2000;
   date /= 100;
-  gpstime.tm_mon   = date % 100 - 1;
+  int mon   = date % 100;
   date /= 100;
-  gpstime.tm_mday  = date;
+  int day  = date;
 
-  return(mkgmtime(&gpstime));
+  return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), Qt::UTC);
 }
 
 static void
@@ -241,16 +239,12 @@ process_gpsfile(uint8_t data[], route_head** track)
     }
 
     if (*track == nullptr) {
-      time_t creation_time;
-      char buf[1024];
       int bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       int bindate = be_read32(data + i + 12);
-      creation_time = bintime2utc(bindate, bintime);
-      strncpy(buf, model->name, sizeof(buf));
-      strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
-               gmtime(&creation_time));
+      QDateTime creation_time = bintime2utc(bindate, bintime);
+      QString datetime = creation_time.toString("yyyy/MM/dd hh:mm:ss");
       *track = new route_head;
-      (*track)->rte_name = buf;
+      (*track)->rte_name = QString("%1 tracklog (%2)").arg(model->name, datetime);
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }
@@ -323,8 +317,16 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   be_write16(frame + 2, payload_len);
   frame[4] = cmd;
 
-  /* copy payload */
-  memcpy(frame + 5, payload, param_len);
+  /*
+   * The behavior of memcpy is undefined if dest or src is nullptr,
+   * even with count zero!
+   * Note the dg100cmd_getconfig will have src == nullptr and count == 0!
+   */
+  if (param_len > 0) {
+    assert(payload != nullptr);
+    /* copy payload */
+    memcpy(frame + 5, payload, param_len);
+  }
 
   /* create frame tail */
   uint16_t checksum = dg100_checksum(frame + 4, framelen - 8);
@@ -610,9 +612,10 @@ dg100_getfileheaders()
       if (global_opts.debug_level) {
         int time   = be_read32(answer + offset) & 0x7FFFFFFF;
         int date   = be_read32(answer + offset + 4);
-        time_t ti = bintime2utc(date, time);
-        dg100_log("Header #%d: Seq: %d Time: %s",
-                  i, seqnum, ctime(&ti));
+        QDateTime ti = bintime2utc(date, time);
+        QByteArray datetime = ti.toLocalTime().toString(Qt::TextDate).toUtf8();
+        dg100_log("Header #%d: Seq: %d Time: %s\n",
+                  i, seqnum, datetime.constData());
       }
     }
   } while (nextheader != 0);
