@@ -28,6 +28,7 @@
 #include <QtCore/QVector>       // for QVector<>::iterator, QVector
 
 #include "defs.h"
+#include "dg-100.h"
 #include "format.h"
 #include "energympro.h"
 #include "garmin_fit.h"
@@ -130,10 +131,6 @@ extern ff_vecs_t g7towin_vecs;
 extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
-extern ff_vecs_t dg100_vecs;
-extern ff_vecs_t dg100_fvecs;
-extern ff_vecs_t dg200_vecs;
-extern ff_vecs_t dg200_fvecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t osm_vecs;
@@ -360,10 +357,10 @@ private:
   LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
   LegacyFormat xol_fmt {xol_vecs};
-  LegacyFormat dg100_fmt {dg100_vecs};
-  LegacyFormat dg100_ffmt {dg100_fvecs};
-  LegacyFormat dg200_fmt {dg200_vecs};
-  LegacyFormat dg200_ffmt {dg200_fvecs};
+  Dg100SerialFormat dg100_fmt;
+  Dg100FileFormat dg100_ffmt;
+  Dg200SerialFormat dg200_fmt;
+  Dg200FileFormat dg200_ffmt;
   LegacyFormat navilink_fmt {navilink_vecs};
   LegacyFormat ik3d_fmt {ik3d_vecs};
   LegacyFormat osm_fmt {osm_vecs};
