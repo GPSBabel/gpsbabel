@@ -116,6 +116,7 @@ protected:
   static constexpr int FRAME_MAXLEN = 4096;
 
   /* Member Functions */
+
   const dg100_command* dg100_findcmd(int id) const;
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
