@@ -184,7 +184,7 @@ raymarine_read()
     QString str, name, lat, lon;
 
     /* built section identifier */
-    snprintf(sect, sizeof(sect), "Wp%d", ix);
+    snprintf(sect, sizeof(sect), "Wp%u", ix);
 
     /* try to read our most expected values */
     name = inifile_readstr(fin, sect, "Name");

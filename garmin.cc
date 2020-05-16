@@ -969,7 +969,7 @@ waypoint_prepare()
     } else {
       if (global_opts.smart_names &&
           wpt->gc_data->diff && wpt->gc_data->terr) {
-        snprintf(obuf, sizeof(obuf), "%s%d/%d %s",
+        snprintf(obuf, sizeof(obuf), "%s%u/%u %s",
                  get_gc_info(wpt),
                  wpt->gc_data->diff, wpt->gc_data->terr,
                  CSTRc(src));
