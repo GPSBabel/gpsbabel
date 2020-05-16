@@ -43,15 +43,15 @@
 //           local helper functions
 //*******************************************************************************
 void
-EnergymproFormat::read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime) const
+EnergymproFormat::read_point(route_head* gpsbabel_route, gpsbabel::DateTime& gpsDateTime) const
 {
   tw_point point{};
-  gbfread(&point,sizeof(tw_point),1,file_in);
+  gbfread(&point, sizeof(tw_point), 1, file_in);
   if (global_opts.debug_level > 1) {
-    printf("Point: lat:%8u long:%8u alt:%8d ",point.Latitude,point.Longitude,point.Altitude);
-    printf("speed:%6u dist:%5u time:%5d Status:%1u", point.Speed,point.IntervalDist,point.lntervalTime,point.Status);
-    printf("HR:(%3d,%1d)", point.HR_Heartrate,point.HR_Status);
-    printf("Speed:(%8d,%1d)", point.Speed_Speed,point.Speed_Status);
+    printf("Point: lat:%8u long:%8u alt:%8d ", point.Latitude, point.Longitude, point.Altitude);
+    printf("speed:%6u dist:%5u time:%5u Status:%1u", point.Speed, point.IntervalDist, point.lntervalTime, point.Status);
+    printf("HR:(%3d,%1d)", point.HR_Heartrate, point.HR_Status);
+    printf("Speed:(%8u,%1d)", point.Speed_Speed, point.Speed_Status);
     printf("Cad:(%3d,%1d)", point.Cadence_Cadence, point.Cadence_Status);
     printf("Power (Cad:%6d Pow:%6d,%2d)Temp:%3d\n", point.Power_Cadence, point.Power_Power, point.Power_Status, point.Temp);
 
@@ -95,15 +95,15 @@ void
 EnergymproFormat::read_lap() const
 {
   tw_lap lap{};
-  gbfread(&lap,sizeof(tw_lap),1,file_in);
+  gbfread(&lap, sizeof(tw_lap), 1, file_in);
   if (global_opts.debug_level > 1) {
-    printf("LAP: splitTime:%6ds TotalTime:%6ds LapNumber:%5d ",lap.splitTime/10,lap.TotalTime/10,lap.Number);
-    printf("dist:%08dm Cal:%5d Speed:(%6d,%6d) ", lap.lDistance,lap.Calorie,lap.MaxSpeed,lap.AvgSpeed);
-    printf("HR:(%3d,%3d)", lap.MaxHeartrate,lap.AvgHeartrate);
-    printf("Alt:(%6d,%6d) ", lap.MinAlti,lap.MaxAlti);
-    printf("Cad:(%3d,%3d) ", lap.AvgCad,lap.MaxCad);
-    printf("Power:(%3d,%3d)w ", lap.AvgPower,lap.MaxPower);
-    printf("Pt:(%6d,%6d)\n", lap.StartRecPt,lap.FinishRecPt);
+    printf("LAP: splitTime:%6us TotalTime:%6us LapNumber:%5d ", lap.splitTime/10, lap.TotalTime/10, lap.Number);
+    printf("dist:%08um Cal:%5u Speed:(%6u,%6u) ", lap.lDistance, lap.Calorie, lap.MaxSpeed, lap.AvgSpeed);
+    printf("HR:(%3d,%3d)", lap.MaxHeartrate, lap.AvgHeartrate);
+    printf("Alt:(%6d,%6d) ", lap.MinAlti, lap.MaxAlti);
+    printf("Cad:(%3d,%3d) ", lap.AvgCad, lap.MaxCad);
+    printf("Power:(%3d,%3d)w ", lap.AvgPower, lap.MaxPower);
+    printf("Pt:(%6d,%6d)\n", lap.StartRecPt, lap.FinishRecPt);
   }
 }
 
@@ -123,7 +123,7 @@ EnergymproFormat::rd_init(const QString& fname)
   file_in = gbfopen(nullptr, "wb", MYNAME);
   gbsize_t size = gbfcopyfrom(file_in, fileorg_in, 0x7FFFFFFF);
   if (global_opts.debug_level > 1) {
-    printf(MYNAME "  filesize=%d\n",size);
+    printf(MYNAME "  filesize=%u\n", size);
   }
   gbfclose(fileorg_in);
   if (opt_timezone) {
@@ -178,21 +178,21 @@ EnergymproFormat::track_read()
   workout.AvgHeart = gbfgetc(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf("%04d-%02d-%02d ", workout.dateStart.Year+2000,workout.dateStart.Month, workout.dateStart.Day);
-    printf("%02d:%02d:%02d ", workout.timeStart.Hour,workout.timeStart.Minute, workout.timeStart.Second);
-    printf("Total(RecPt:%6d Time:%6ds Dist:%9dm) LapNumber:%5d \n",workout.TotalRecPt,workout.TotalTime/10, workout.TotalDist, workout.LapNumber);
+    printf("%04d-%02d-%02d ", workout.dateStart.Year+2000, workout.dateStart.Month, workout.dateStart.Day);
+    printf("%02d:%02d:%02d ", workout.timeStart.Hour, workout.timeStart.Minute, workout.timeStart.Second);
+    printf("Total(RecPt:%6d Time:%6us Dist:%9um) LapNumber:%5d \n", workout.TotalRecPt, workout.TotalTime/10, workout.TotalDist, workout.LapNumber);
   }
 
   /*
    * GPS year: 2000+; struct tm year: 1900+
    */
-  QDate gpsDate = QDate(workout.dateStart.Year+2000,workout.dateStart.Month,workout.dateStart.Day);
-  QTime gpsTime = QTime(workout.timeStart.Hour,workout.timeStart.Minute,workout.timeStart.Second);
+  QDate gpsDate = QDate(workout.dateStart.Year+2000, workout.dateStart.Month, workout.dateStart.Day);
+  QTime gpsTime = QTime(workout.timeStart.Hour, workout.timeStart.Minute, workout.timeStart.Second);
   gpsbabel::DateTime gpsDateTime;
   if (timezn != nullptr) {
-    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,*timezn).toUTC());
+    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, *timezn).toUTC());
   } else {
-    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,Qt::LocalTime).toUTC());
+    gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, Qt::LocalTime).toUTC());
   }
 
   auto* gpsbabel_route = new route_head;
@@ -201,7 +201,7 @@ EnergymproFormat::track_read()
   gbfseek(file_in, 0L, SEEK_SET);
 
   for (int point=0; point<workout.TotalRecPt; point++) {
-    read_point(gpsbabel_route,gpsDateTime);
+    read_point(gpsbabel_route, gpsDateTime);
   }
 
   gbfseek(file_in, sizeof(tw_point)*(workout.TotalRecPt), SEEK_SET);
