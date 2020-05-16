@@ -249,7 +249,9 @@ write_packet(unsigned type, const void* payload, unsigned length)
   packet[1] = 0xa2;
   le_write16(packet + 2, length + 1);
   packet[4] = type;
-  memcpy(packet + 5, payload, length);
+  if (length > 0) {
+    memcpy(packet + 5, payload, length);
+  }
   le_write16(packet + length + 5, navilink_checksum_packet(packet + 4, length + 1));
   packet[length + 7] = 0xb0;
   packet[length + 8] = 0xb3;
