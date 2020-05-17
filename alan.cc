@@ -24,8 +24,18 @@
 
  */
 
+#include <cctype>                  // for isprint
+#include <cstdio>                  // for snprintf, sprintf, SEEK_SET, size_t
+#include <cstdint>                 // for int16_t, int32_t, uint8_t, uint32_t, uint16_t, int8_t
+#include <cstring>                 // for memset, strlen, strncpy, memcpy, strncmp
+#include <ctime>                   // for gmtime, time, time_t
+
+#include <QtCore/QString>          // for QString
+#include <QtCore/QVector>          // for QVector
+
 #include "defs.h"
-#include <cstdio>
+#include "gbfile.h"                // for gbfwrite, gbfile, gbfread, gbfclose, gbfopen, gbfseek
+#include "src/core/datetime.h"     // for DateTime
 
 #define MYNAME "alan"
 
@@ -195,9 +205,16 @@ static QVector<arglist_t> trl_args = {
 // FIXME: Why is this code doing its own byte order conversion?
 static unsigned int byte_order()
 {
-  unsigned long test = BYTEORDER_TEST;
+  // avoid cppcheck error: The address of local variable 'test' is accessed at non-zero index.
+  // avoid undefined behavior accessing inactive union member.
+  // avoid  "strict aliasing" warnings.
+  // see https://en.cppreference.com/w/cpp/language/reinterpret_cast#Notes
+  uint32_t test = BYTEORDER_TEST;
+  unsigned char ptr[4];
+  
+  static_assert(sizeof ptr == sizeof test, "byte order test construction failure.");
+  memcpy(&ptr[0], &test, sizeof test);
 
-  auto* ptr = (unsigned char*)(&test);
   unsigned int order = (ptr[0] << 12) | (ptr[1] << 8) | (ptr[2] << 4) | ptr[3];
 
   return order;
