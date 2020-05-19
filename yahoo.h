@@ -67,8 +67,8 @@ public:
   void rd_deinit() override;
 
 private:
-  Waypoint* wpt_tmp;
-  char* as;
+  Waypoint* wpt_tmp{};
+  char* as{};
 
   QVector<arglist_t> yahoo_args = {
     {

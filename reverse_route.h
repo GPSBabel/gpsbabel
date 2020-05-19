@@ -39,7 +39,7 @@ public:
   void process() override;
 
 private:
-  int prev_new_trkseg;
+  int prev_new_trkseg{};
   QVector<arglist_t> args = {
   };
 

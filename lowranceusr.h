@@ -452,37 +452,37 @@ private:
 
   /* Data Members */
 
-  gbfile*        file_in;
-  gbfile*        file_out;
-  short_handle   mkshort_handle;
+  gbfile*        file_in{};
+  gbfile*        file_out{};
+  short_handle   mkshort_handle{};
 
-  route_head*    trk_head;
-  route_head*    rte_head;
+  route_head*    trk_head{};
+  route_head*    rte_head{};
 
-  int            waypt_uid;
-  int            route_uid;
-  int            trail_uid;
+  int            waypt_uid{};
+  int            route_uid{};
+  int            trail_uid{};
 
-  char*          opt_ignoreicons;
-  char*          opt_writeasicons;
-  char*          opt_seg_break;
-  char*          opt_wversion;
-  char*          opt_title;
-  char*          opt_content_descr;
-  char*          opt_serialnum;
-  int            opt_serialnum_i;
+  char*          opt_ignoreicons{};
+  char*          opt_writeasicons{};
+  char*          opt_seg_break{};
+  char*          opt_wversion{};
+  char*          opt_title{};
+  char*          opt_content_descr{};
+  char*          opt_serialnum{};
+  int            opt_serialnum_i{};
 
   QList<const Waypoint*>* waypt_table{nullptr};
 
-  unsigned short waypt_out_count;
-  int            trail_count, lowrance_route_count;
-  int            trail_point_count;
+  unsigned short waypt_out_count{};
+  int            trail_count{}, lowrance_route_count{};
+  int            trail_point_count{};
   char           continuous = 1;
-  short          num_section_points;
-  char*          merge;
-  int            reading_version;
-  int            rstream_version;
-  int            writing_version;
+  short          num_section_points{};
+  char*          merge{};
+  int            reading_version{};
+  int            rstream_version{};
+  int            writing_version{};
   QTextCodec*    utf16le_codec{nullptr};
 
   template <typename T>

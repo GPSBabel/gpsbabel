@@ -41,7 +41,7 @@ public:
   void deinit() override;
 
 private:
-  double pos_dist;
+  double pos_dist{};
   char* distopt = nullptr;
   char* latopt = nullptr;
   char* lonopt = nullptr;
@@ -49,9 +49,9 @@ private:
   char* nosort = nullptr;
   char* maxctarg = nullptr;
   char* routename = nullptr;
-  int maxct;
+  int maxct{};
 
-  Waypoint* home_pos;
+  Waypoint* home_pos{};
 
   struct extra_data {
     double distance;

@@ -175,7 +175,7 @@ private:
   QList<route_head*> track_list;
   int opt_interval = 0;
   int opt_distance = 0;
-  bool need_time;		/* initialized within trackfilter_init */
+  bool need_time{};		/* initialized within trackfilter_init */
 
   int trackfilter_opt_count();
   qint64 trackfilter_parse_time_opt(const char* arg);

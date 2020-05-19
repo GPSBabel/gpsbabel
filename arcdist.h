@@ -40,7 +40,7 @@ public:
   void process() override;
 
 private:
-  double pos_dist;
+  double pos_dist{};
   char* distopt = nullptr;
   char* arcfileopt = nullptr;
   char* rteopt = nullptr;

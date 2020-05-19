@@ -66,7 +66,7 @@ private:
 
 private:
   struct fl_vecs_t {
-    Filter* vec;
+    Filter* vec{};
     QString name;
     QString desc;
   };

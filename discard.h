@@ -58,13 +58,13 @@ private:
   char* iconopt = nullptr;
   QRegExp icon_regex;
 
-  double hdopf;
-  double vdopf;
-  int satpf;
-  int eleminpf;
-  int elemaxpf;
+  double hdopf{};
+  double vdopf{};
+  int satpf{};
+  int eleminpf{};
+  int elemaxpf{};
   gpsdata_type what;
-  route_head* head;
+  route_head* head{};
 
   QVector<arglist_t> args = {
     {
