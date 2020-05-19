@@ -643,7 +643,7 @@ static void tpo_process_tracks()
     //  (what are correct values for KML or other outputs??)
     track_temp->line_width = styles[track_style].wide;
 
-    if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
+    if (DEBUG) printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
                         qPrintable(track_name), line_type, 
                         qPrintable(styles[track_style].name),
                         styles[track_style].wide,

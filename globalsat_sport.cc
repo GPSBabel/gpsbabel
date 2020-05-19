@@ -268,10 +268,10 @@ GlobalsatSportFormat::rd_init(const QString& fname)
   if (opt_dump_file) {
     dumpfile = gbfopen(opt_dump_file, "wb", MYNAME);
     if (!dumpfile) {
-      printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n",opt_dump_file);
+      printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n", opt_dump_file);
     } else {
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n",opt_dump_file);
+        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n", opt_dump_file);
       }
     }
   }
@@ -389,16 +389,16 @@ GlobalsatSportFormat::track_read()
       header.DataType = hdr[28];
 
       if (showlist || global_opts.debug_level > 1) {
-        printf("Track[%02i]: %02d-%02d-%02d ", i,header.dateStart.Year,header.dateStart.Month, header.dateStart.Day);
-        printf("%02d:%02d:%02d ", header.timeStart.Hour,header.timeStart.Minute, header.timeStart.Second);
+        printf("Track[%02i]: %02d-%02d-%02d ", i, header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
+        printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
         int time_s=header.TotalTime / 10;
         int time_h=time_s/(60*60);
         time_s-=time_h*(60*60);
         int time_m=time_s/60;
         time_s-=time_m*60;
-        printf("Points:%6d Time:%02d:%02d:%02d Dist:%9dm LapCnts:%5d ",	header.TotalPoint, time_h,time_m,time_s, header.TotalDistance, header.LapCnts);
-        printf("Index/StartPt:%d ", header.gh_ptrec.Index);
-        printf("LapIndex/EndPt:%d ", header.gh_laprec.LapIndex);
+        printf("Points:%6u Time:%02d:%02d:%02d Dist:%9um LapCnts:%5d ", header.TotalPoint, time_h, time_m, time_s, header.TotalDistance, header.LapCnts);
+        printf("Index/StartPt:%u ", header.gh_ptrec.Index);
+        printf("LapIndex/EndPt:%u ", header.gh_laprec.LapIndex);
         printf("DataType:0x%x\n", header.DataType);
       }
 
@@ -427,7 +427,9 @@ GlobalsatSportFormat::track_read()
         uint8_t trackDeviceCommand;
         int track_length;
         uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
-        is_fatal(((track_length == 0) || (track_payload == nullptr)), "track length is 0 bytes or payload nonexistent");
+        if ((track_length == 0) || (track_payload == nullptr)) {
+          fatal(MYNAME ": track length is 0 bytes or payload nonexistent.\n");
+        }
         //      printf("Got track package!!! Train data\n");
 
         uint8_t* dbtrain = track_payload;
@@ -464,11 +466,11 @@ GlobalsatSportFormat::track_read()
         db_train.Sport5 = dbtrain[57];
 
         if (global_opts.debug_level > 1) {
-          printf("\nTrainData:%02d-%02d-%02d ", db_train.dateStart.Year,db_train.dateStart.Month, db_train.dateStart.Day);
+          printf("\nTrainData:%02d-%02d-%02d ", db_train.dateStart.Year, db_train.dateStart.Month, db_train.dateStart.Day);
           printf("%02d:%02d:%02d ", db_train.timeStart.Hour, db_train.timeStart.Minute, db_train.timeStart.Second);
-          printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", db_train.TotalPoint,db_train.TotalTime / 10,db_train.TotalDistance, db_train.LapCnts);
-          printf("Index/StartPt:%d ", db_train.gh_ptrec.Index);
-          printf("LapIndex/EndPt:%d ", db_train.gh_laprec.LapIndex);
+          printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", db_train.TotalPoint, db_train.TotalTime / 10, db_train.TotalDistance, db_train.LapCnts);
+          printf("Index/StartPt:%u ", db_train.gh_ptrec.Index);
+          printf("LapIndex/EndPt:%u ", db_train.gh_laprec.LapIndex);
           printf("MultiSport:0x%x ", db_train.MultiSport);
         }
         int total_laps = db_train.LapCnts;
@@ -482,7 +484,9 @@ GlobalsatSportFormat::track_read()
         while (total_laps_left > 0) {
           globalsat_send_simple(CommandGetNextTrackSection);
           track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
-          is_fatal(((track_length == 0) || (track_payload == nullptr)), "track length is 0 bytes or payload nonexistent");
+          if ((track_length == 0) || (track_payload == nullptr)) {
+            fatal(MYNAME ": track length is 0 bytes or payload nonexistent.\n");
+          }
           //	printf("Got track package!!! Laps data\n");
 
           uint8_t* hdr = track_payload;
@@ -505,9 +509,9 @@ GlobalsatSportFormat::track_read()
           if (global_opts.debug_level > 1) {
             printf("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
             printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-            printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", header.TotalPoint,header.TotalTime / 10, header.TotalDistance, header.LapCnts);
-            printf("Index/StartPt:%d ", header.gh_ptrec.Index);
-            printf("LapIndex/EndPt:%d ", header.gh_laprec.LapIndex);
+            printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
+            printf("Index/StartPt:%u ", header.gh_ptrec.Index);
+            printf("LapIndex/EndPt:%u ", header.gh_laprec.LapIndex);
             printf("DataType:0x%x\n", header.DataType);
           }
 
@@ -516,12 +520,12 @@ GlobalsatSportFormat::track_read()
            * GPS month: 1-12, struct tm month: 0-11
            */
 
-          QDate gpsDate = QDate(header.dateStart.Year+2000,header.dateStart.Month,header.dateStart.Day);
-          QTime gpsTime = QTime(header.timeStart.Hour,header.timeStart.Minute,header.timeStart.Second);
+          QDate gpsDate = QDate(header.dateStart.Year+2000, header.dateStart.Month, header.dateStart.Day);
+          QTime gpsTime = QTime(header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
           if (timezn != nullptr) {
-            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,*timezn).toUTC());
+            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, *timezn).toUTC());
           } else {
-            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate,gpsTime,Qt::LocalTime).toUTC());
+            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, Qt::LocalTime).toUTC());
           }
 
           int laps_in_package = header.gh_laprec.LapIndex - header.gh_ptrec.Index + 1;
@@ -549,13 +553,13 @@ GlobalsatSportFormat::track_read()
             db_lap.EndPt = be_read32(dblap+37);
 
             if (global_opts.debug_level > 1) {
-              printf("     lap[%d] AccruedTime:%ds TotalTime:%ds TotalDist:%dm", lap, db_lap.AccruedTime, db_lap.TotalTime / 10, db_lap.TotalDistance);
-              printf(" Calory:%d MaxSpeed:%d Hearth max:%d avg:%d ", db_lap.Calory, db_lap.MaxSpeed, db_lap.MaxHeart, db_lap.AvgHeart);
+              printf("     lap[%d] AccruedTime:%us TotalTime:%us TotalDist:%um", lap, db_lap.AccruedTime, db_lap.TotalTime / 10, db_lap.TotalDistance);
+              printf(" Calory:%d MaxSpeed:%u Hearth max:%d avg:%d ", db_lap.Calory, db_lap.MaxSpeed, db_lap.MaxHeart, db_lap.AvgHeart);
               printf(" Alt min:%d max:%d", db_lap.MinAlti, db_lap.MaxAlti);
               printf(" Cadns avg:%d best:%d", db_lap.AvgCadns, db_lap.BestCadns);
               printf(" Power avg:%d Max:%d", db_lap.AvgPower, db_lap.MaxPower);
               printf(" MultisportIndex:%d", db_lap.MultiSportIndex);
-              printf(" StartPt:%d EndPt:%d\n", db_lap.StartPt, db_lap.EndPt);
+              printf(" StartPt:%u EndPt:%u\n", db_lap.StartPt, db_lap.EndPt);
             }
           }
           free(track_payload);
@@ -595,9 +599,9 @@ GlobalsatSportFormat::track_read()
             if (global_opts.debug_level > 1) {
               printf("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
               printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-              printf("Total(points:%6d time:%6ds dist:%9dm) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
-              printf("StartPt:%d ", header.gh_ptrec.StartPt);
-              printf("EndPt:%d ", header.gh_laprec.EndPt);
+              printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
+              printf("StartPt:%u ", header.gh_ptrec.StartPt);
+              printf("EndPt:%u ", header.gh_laprec.EndPt);
               printf("DataType:0x%x\n", header.DataType);
             }
 
@@ -625,10 +629,10 @@ GlobalsatSportFormat::track_read()
               //   qDebug() << "DateTime2:" << gpsDateTime.toString();
               // }
               if (global_opts.debug_level > 1) {
-                printf("     recpoint[%2d] Lat:%f Long:%f Alt:%dm", recpoint,(double)((int32_t) point.Latitude) / 1000000.0,(double)((int32_t) point.Longitude) / 1000000.0, point.Altitude);
-                printf(" Speed:%f HR:%d",(double) point.Speed / 100, point.HeartRate);
-                printf(" Time:%d Cadence:%d", point.IntervalTime, point.Cadence);
-                printf(" PwrCadense:%d Power:%d\n", point.PwrCadence,point.Power);
+                printf("     recpoint[%2d] Lat:%f Long:%f Alt:%dm", recpoint, (double)((int32_t) point.Latitude) / 1000000.0, (double)((int32_t) point.Longitude) / 1000000.0, point.Altitude);
+                printf(" Speed:%f HR:%d", (double) point.Speed / 100, point.HeartRate);
+                printf(" Time:%u Cadence:%d", point.IntervalTime, point.Cadence);
+                printf(" PwrCadense:%d Power:%d\n", point.PwrCadence, point.Power);
               }
 
               auto* wpt = new Waypoint(); // waypt_new();

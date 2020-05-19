@@ -316,11 +316,11 @@ gopal_read()
           ((speed>maxspeed)||(speed<minspeed)))
        ) {
       if (global_opts.debug_level > 1) {
-        fprintf(stderr,"Problem in or around line %5lu: \"%s\" %lf km/h\n",line,buff,speed);
+        fprintf(stderr,"Problem in or around line %5ld: \"%s\" %lf km/h\n",line,buff,speed);
       }
     } else {
       if (global_opts.debug_level > 1) {
-        fprintf(stderr,"valid                line %5lu: \"%s\" %lf km/h\n",line,buff,speed);
+        fprintf(stderr,"valid                line %5ld: \"%s\" %lf km/h\n",line,buff,speed);
       }
       lastwpt=wpt;
       lat_old=wpt->latitude;

@@ -105,6 +105,6 @@ private:
       nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
     },
   };
-#endif /* SHAPELIB_ENABLED */
 };
+#endif /* SHAPELIB_ENABLED */
 #endif // SHAPE_H_INCLUDED_
