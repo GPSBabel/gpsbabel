@@ -700,6 +700,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -779,6 +780,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1031,6 +1033,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1168,7 +1179,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1321,6 +1332,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2199,7 +2211,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 DOCVERSION=1.6.0
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-#DOCVERSION=development
+DOCVERSION=development
 
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
@@ -6318,45 +6330,6 @@ esac
 
 
 case "$target" in #(
-  *-linux-*) :
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Linux HID interface" >&5
-$as_echo_n "checking for Linux HID interface... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-		#include <sys/ioctl.h>
-		#include <linux/types.h>
-		#include <linux/hiddev.h>
-		#include <linux/hidraw.h>
-		void f(void) {
-			struct hidraw_devinfo info;
-			struct hiddev_field_info finfo;
-			struct hiddev_usage_ref_multi urefm;
-			struct hiddev_report_info rinfo;
-			ioctl(0, HIDIOCGRAWINFO, &info);
-			ioctl(0, HIDIOCGFIELDINFO, &finfo);
-			ioctl(0, HIDIOCSUSAGES, &urefm);
-			ioctl(0, HIDIOCSREPORT, &rinfo);
-		}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_LINUX_HID 1" >>confdefs.h
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- ;; #(
-  *) :
-     ;;
-esac
-
-case "$target" in #(
   *-*-darwin*) :
 
  ;; #(
@@ -6491,7 +6464,7 @@ $as_echo_n "checking for docdir... " >&6; }
 if test "${with_doc+set}" = set; then :
   withval=$with_doc; DOCDIR="$withval"
 else
-  DOCDIR="../babelweb/"
+  DOCDIR="../babelweb"
 fi
 
 
@@ -6565,7 +6538,9 @@ as_dir=zlib/contrib/minizip; as_fn_mkdir_p
 as_dir=testo.d; as_fn_mkdir_p
 as_dir=mac/libusb; as_fn_mkdir_p
 
-ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc"
+ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc win32/gpsbabel.rc"
+
+ac_config_files="$ac_config_files tools/mkcapabilities"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7264,8 +7239,8 @@ do
     "gbversion.h") CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
     "gui/setup.iss") CONFIG_FILES="$CONFIG_FILES gui/setup.iss" ;;
     "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
-    "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
     "win32/gpsbabel.rc") CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;
+    "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -7816,6 +7791,11 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "tools/mkcapabilities":F) chmod +x tools/mkcapabilities ;;
+
+  esac
 done # for ac_tag
 
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="42.530485000" minlon="-88.121766667" maxlat="42.530528333" maxlon="-88.121706667"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="42.530485000" lon="-88.121721667">
+        <ele>209.800</ele>
+        <time>1998-08-07T03:29:08.379Z</time>
+        <course>138.919998</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>2d</fix>
+        <sat>5</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.500000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+      <trkpt lat="42.530485000" lon="-88.121723333">
+        <ele>209.700</ele>
+        <time>1999-08-07T03:29:09.379Z</time>
+        <course>145.850006</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>3d</fix>
+        <sat>6</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.500000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+      <trkpt lat="42.530486667" lon="-88.121726667">
+        <ele>209.700</ele>
+        <time>2000-08-07T03:29:10.379Z</time>
+        <course>143.250000</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>dgps</fix>
+        <sat>7</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.500000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+      <trkpt lat="42.530486667" lon="-88.121726667">
+        <ele>209.600</ele>
+        <time>2001-08-07T03:29:11.379Z</time>
+        <course>145.759995</course>
+        <speed>0.111111</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>pps</fix>
+        <sat>8</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.600000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+      <trkpt lat="42.530486667" lon="-88.121728333">
+        <ele>209.600</ele>
+        <time>2002-08-07T03:29:12.379Z</time>
+        <course>141.440002</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>2d</fix>
+        <sat>9</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.600000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+      <trkpt lat="42.530488333" lon="-88.121730000">
+        <ele>209.600</ele>
+        <time>2002-12-31T23:59:59.999Z</time>
+        <course>140.399994</course>
+        <speed>0.083333</speed>
+        <geoidheight>-34.2</geoidheight>
+        <fix>3d</fix>
+        <sat>5</sat>
+        <hdop>1.600000</hdop>
+        <vdop>4.600000</vdop>
+        <pdop>4.900000</pdop>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

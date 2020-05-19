@@ -111,9 +111,9 @@ ng_convert_datum(Waypoint* wpt)
 {
   double lat, lon;
 
-  double east = (double) WPNC.wp_data.East;
-  double north = (double) WPNC.wp_data.North;
-  double alt = (double) WPNC.wp_data.Alt;
+  auto east = (double) WPNC.wp_data.East;
+  auto north = (double) WPNC.wp_data.North;
+  auto alt = (double) WPNC.wp_data.Alt;
 
   GPS_Math_ICS_EN_To_WGS84(east, north, &lat, &lon);
   wpt->latitude = lat;
@@ -362,13 +362,13 @@ static void
 data_read()
 {
   if (process_rte) {
-    rte_head = route_head_alloc();
+    rte_head = new route_head;
     route_add_head(rte_head);
   }
 
   for (int n = 0; n < nof_wp; ++n) {
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     /* Read waypoint data */
 

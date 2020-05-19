@@ -20,32 +20,37 @@
 
  */
 
+#include <cassert>                 // for assert
 #include <cctype>                  // for isprint, toupper
 #include <cmath>                   // for fabs, lround
-#include <cstdio>                  // for sprintf, sscanf, snprintf, size_t
+#include <cstdio>                  // for sscanf, size_t
 #include <cstdlib>                 // for atoi, atof, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 #include <ctime>                   // for gmtime
 
 #include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QCharRef>         // for QCharRef
+#include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QDir>             // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
 #include <QtCore/QFileInfo>        // for QFileInfo
 #include <QtCore/QFileInfoList>    // for QFileInfoList
 #include <QtCore/QLatin1String>    // for QLatin1String
 #include <QtCore/QList>            // for QList
+#include <QtCore/QScopedPointer>   // for QScopedPointer
 #include <QtCore/QString>          // for QString, operator==
 #include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QTime>            // for QTime
+#include <QtCore/QVector>          // for QVector
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for qPrintable, foreach
 
 #include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
+#include "format.h"                // for Format
 #include "gbfile.h"                // for gbfclose, gbfeof, gbfgets, gbfopen, gbfwrite, gbfile
 #include "gbser.h"                 // for gbser_deinit, gbser_init, gbser_is_serial, gbser_read_line, gbser_set_port, gbser_write, gbser_OK
 #include "magellan.h"              // for mm_meridian, mm_sportrak, magellan_icon_mapping_t, mm_gps315320, mm_unknown, mm_map330, mm_map410, pid_to_model_t, mm_gps310, m330_cleanse, mag_checksum, mag_find_descr_from_token, mag_find_token_from_descr, mag_rteparse, mag_trkparse
 #include "src/core/datetime.h"     // for DateTime
+#include "vecs.h"                  // for Vecs
 
 
 static int bitrate = 4800;
@@ -59,7 +64,7 @@ static int broken_sportrak;
 #define debug_serial  (global_opts.debug_level > 1)
 
 static QString termread(char* ibuf, int size);
-static void termwrite(char* obuf, int size);
+static void termwrite(const char* obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon();
 static void mag_handoff();
@@ -76,7 +81,7 @@ static QString curfname;
 static int extension_hint;
 // For Explorist GC/510/610/710 families, bludgeon in GPX support.
 // (This has nothing to do with the Explorist 100...600 products.)
-static ff_vecs_t* gpx_vec;
+static Format* gpx_vec;
 static mag_info* explorist_info;
 static QStringList os_gpx_files(const char* dirname);
 
@@ -311,7 +316,7 @@ mag_writemsg(const char* const buf)
 {
   unsigned int osum = mag_checksum(buf);
   int retry_cnt = 5;
-  char obuf[1000];
+  QScopedPointer<char, QScopedPointerPodDeleter> obuf;
 
   if (debug_serial) {
     warning("WRITE: $%s*%02X\r\n",buf, osum);
@@ -319,8 +324,8 @@ mag_writemsg(const char* const buf)
 
 retry:
 
-  int i = sprintf(obuf, "$%s*%02X\r\n",buf, osum);
-  termwrite(obuf, i);
+  int i = xasprintf(obuf, "$%s*%02X\r\n",buf, osum);
+  termwrite(obuf.data(), i);
   if (magrxstate == mrs_handon || magrxstate == mrs_awaiting_ack) {
     magrxstate = mrs_awaiting_ack;
     mag_readmsg(trkdata);
@@ -343,25 +348,25 @@ retry:
 static void
 mag_writeack(int osum)
 {
-  char obuf[200];
-  char nbuf[200];
+  QScopedPointer<char, QScopedPointerPodDeleter> nbuf;
+  QScopedPointer<char, QScopedPointerPodDeleter> obuf;
 
   if (is_file) {
     return;
   }
 
-  (void) sprintf(nbuf, "PMGNCSM,%02X", osum);
-  unsigned int nsum = mag_checksum(nbuf);
-  int i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
+  (void) xasprintf(nbuf, "PMGNCSM,%02X", osum);
+  unsigned int nsum = mag_checksum(nbuf.data());
+  int i = xasprintf(obuf, "$%s*%02X\r\n",nbuf.data(), nsum);
 
   if (debug_serial) {
-    warning("ACK WRITE: %s",obuf);
+    warning("ACK WRITE: %s",obuf.data());
   }
   /*
    * Don't call mag_writemsg here so we don't get into ack feedback
    * loops.
    */
-  termwrite(obuf, i);
+  termwrite(obuf.data(), i);
 }
 
 static void
@@ -530,7 +535,7 @@ retry:
        * from input filename.
        */
 
-      trk_head = route_head_alloc();
+      trk_head = new route_head;
 
       /* Whack trailing extension if present. */
       QString s = get_filename(curfname);
@@ -654,7 +659,7 @@ mag_dequote(char* ibuf)
 }
 
 static void
-termwrite(char* obuf, int size)
+termwrite(const char* obuf, int size)
 {
   if (is_file) {
     size_t nw;
@@ -783,7 +788,7 @@ mag_rd_init_common(const QString& portname)
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      gpx_vec = find_vec("gpx");
+      gpx_vec = Vecs::Instance().find_vec("gpx");
     }
     return;
   }
@@ -970,7 +975,7 @@ mag_trkparse(char* trkmsg)
   int fracsecs;
   struct tm tm;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -1090,7 +1095,7 @@ mag_rteparse(char* rtemsg)
       *p = '\0';
     }
 
-    mag_rte_elem* rte_elem = new mag_rte_elem;
+    auto* rte_elem = new mag_rte_elem;
 
     rte_elem->wpt_name = next_stop;
     rte_elem->wpt_icon = abuf;
@@ -1119,7 +1124,7 @@ mag_rteparse(char* rtemsg)
    */
   if (frag == mag_rte_head->nelems) {
 
-    route_head* rte_head = route_head_alloc();
+    auto* rte_head = new route_head;
     route_add_head(rte_head);
     rte_head->rte_num = rtenum;
     rte_head->rte_name = rte_name;
@@ -1138,7 +1143,7 @@ mag_rteparse(char* rtemsg)
        */
       foreach (const Waypoint* waypt, rte_wpt_tmp) {
         if (waypt->shortname == re->wpt_name) {
-          Waypoint* wpt = new Waypoint(*waypt);
+          auto* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
           break;
         }
@@ -1206,7 +1211,7 @@ mag_wptparse(char* trkmsg)
   descr[0] = 0;
   icon_token[0] = 0;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]",
          &latdeg,&latdir,
@@ -1328,8 +1333,8 @@ static
 void
 mag_waypt_pr(const Waypoint* waypointp)
 {
-  char obuf[200];
-  char ofmtdesc[200];
+  QScopedPointer<char, QScopedPointerPodDeleter> obuf;
+  QScopedPointer<char, QScopedPointerPodDeleter> ofmtdesc;
   QString icon_token;
 
   double ilat = waypointp->latitude;
@@ -1366,9 +1371,9 @@ mag_waypt_pr(const Waypoint* waypointp)
   if (global_opts.smart_icons &&
       waypointp->gc_data->diff && waypointp->gc_data->terr) {
     // It's a string and compactness counts, so "1.0" is OK to be "10".
-    sprintf(ofmtdesc, "%ud/%ud %s", waypointp->gc_data->diff,
+    xasprintf(ofmtdesc, "%ud/%ud %s", waypointp->gc_data->diff,
             waypointp->gc_data->terr, CSTRc(odesc));
-    odesc = mag_cleanse(ofmtdesc);
+    odesc = mag_cleanse(ofmtdesc.data());
   } else {
     odesc = mag_cleanse(CSTRc(odesc));
   }
@@ -1379,10 +1384,10 @@ mag_waypt_pr(const Waypoint* waypointp)
    * cap on the comments delivered so we leave space for it to route.
    */
   if (!odesc.isEmpty() && (wptcmtcnt++ >= wptcmtcnt_max)) {
-    odesc[0] = 0;
+    odesc.clear();
   }
 
-  sprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.0f,M,%-.*s,%-.46s,%s",
+  xasprintf(obuf, "PMGNWPL,%4.3f,%c,%09.3f,%c,%07.0f,M,%-.*s,%-.46s,%s",
           lat, ilat < 0 ? 'S' : 'N',
           lon, ilon < 0 ? 'W' : 'E',
           waypointp->altitude == unknown_alt ?
@@ -1391,11 +1396,11 @@ mag_waypt_pr(const Waypoint* waypointp)
           CSTRc(owpt),
           CSTRc(odesc),
           CSTR(icon_token));
-  mag_writemsg(obuf);
+  mag_writemsg(obuf.data());
 
   if (!is_file) {
     if (mag_error) {
-      warning("Protocol error Writing '%s'\n", obuf);
+      warning("Protocol error Writing '%s'\n", obuf.data());
     }
   }
 }
@@ -1403,28 +1408,21 @@ mag_waypt_pr(const Waypoint* waypointp)
 static
 void mag_track_disp(const Waypoint* waypointp)
 {
-  char obuf[200];
-  int hms=0;
-  int fracsec=0;
-  int date=0;
+  QScopedPointer<char, QScopedPointerPodDeleter> obuf;
 
   double ilat = waypointp->latitude;
   double ilon = waypointp->longitude;
-  struct tm* tm = nullptr;
+  
+  QByteArray dmy("");
+  QByteArray hms("");
   if (waypointp->creation_time.isValid()) {
-    const time_t ct = waypointp->GetCreationTime().toTime_t();
-    tm = gmtime(&ct);
-    if (tm) {
-      hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
-            tm->tm_sec;
-      date = tm->tm_mday * 10000 + tm->tm_mon * 100 +
-             tm->tm_year;
-      fracsec = lround(waypointp->GetCreationTime().time().msec()/10.0);
-    }
-  }
-  if (!tm) {
-    date = 0;
-    fracsec = 0;
+    // Round to hundredths of seconds before conversion to string.
+    // Rounding can ripple all the way from the msec to the year.
+    QDateTime dt = waypointp->GetCreationTime().toUTC();
+    dt = dt.addMSecs(10 * lround(dt.time().msec()/10.0) - dt.time().msec());
+    assert((dt.time().msec() % 10) == 0);
+    dmy = dt.toString("ddMMyy").toUtf8();
+    hms = dt.toString("hhmmss.zzz").left(9).toUtf8();
   }
 
   double lon = fabs(ilon);
@@ -1439,13 +1437,13 @@ void mag_track_disp(const Waypoint* waypointp)
   lon = (lon_deg * 100.0 + lon);
   lat = (lat_deg * 100.0 + lat);
 
-  sprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.0f,%c,%06d.%02d,A,,%06d",
+  xasprintf(obuf,"PMGNTRK,%4.3f,%c,%09.3f,%c,%05.0f,%c,%s,A,,%s",
           lat, ilat < 0 ? 'S' : 'N',
           lon, ilon < 0 ? 'W' : 'E',
           waypointp->altitude == unknown_alt ?
           0 : waypointp->altitude,
-          'M',hms,fracsec,date);
-  mag_writemsg(obuf);
+          'M', hms.constData(), dmy.constData());
+  mag_writemsg(obuf.data());
 }
 
 static
@@ -1470,9 +1468,10 @@ and to replace the 2nd name with "<<>>", but I haven't seen one of those.
 static void
 mag_route_trl(const route_head* rte)
 {
-  char obuff[256];
-  char buff1[64], buff2[64];
-  char* pbuff;
+  QScopedPointer<char, QScopedPointerPodDeleter> obuff;
+  QString buff1;
+  QString buff2;
+  QString* pbuff;
   QString icon_token;
 
   /* count waypoints for this route */
@@ -1495,31 +1494,29 @@ mag_route_trl(const route_head* rte)
     }
 
     if (i == 1) {
-      pbuff = buff1;
+      pbuff = &buff1;
     } else {
-      pbuff = buff2;
+      pbuff = &buff2;
     }
     // Write name, icon tuple into alternating buff1/buff2 buffer.
-    sprintf(pbuff, "%s,%s", CSTR(waypointp->shortname), CSTR(icon_token));
+    *pbuff = waypointp->shortname + ',' + icon_token;
 
     if ((waypointp == rte->waypoint_list.back()) || ((i % 2) == 0)) {
-      char expbuf[1024];
+      QString expbuf;
       thisline++;
-      expbuf[0] = 0;
       if (explorist) {
-        snprintf(expbuf, sizeof(expbuf), "%s,",
-                 CSTRc(rte->rte_name));
+        expbuf = rte->rte_name + ',';
       }
 
-      sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s%s,%s",
+      xasprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s%s,%s",
               numlines, thisline,
               rte->rte_num ? rte->rte_num : route_out_count,
-              expbuf,
-              buff1, buff2);
+              CSTRc(expbuf),
+              CSTR(buff1), CSTR(buff2));
 
-      mag_writemsg(obuff);
-      buff1[0] = '\0';
-      buff2[0] = '\0';
+      mag_writemsg(obuff.data());
+      buff1.clear();
+      buff2.clear();
       i = 0;
     }
   }

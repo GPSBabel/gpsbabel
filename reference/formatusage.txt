@@ -1,0 +1,11 @@
+
+	gpx                   GPX XML
+	  snlen                 Length of generated shortnames 
+	  suppresswhite         (0/1) No whitespace in generated shortnames 
+	  logpoint              (0/1) Create waypoints from geocache log entries 
+	  urlbase               Base URL for link tag in output 
+	  gpxver                Target GPX version for output 
+	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension 
+	  garminextensions      (0/1) Add info (depth) as Garmin extension 
+	  elevprec              Precision of elevations, number of decimals 
+

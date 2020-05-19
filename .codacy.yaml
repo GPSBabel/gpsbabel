@@ -8,3 +8,5 @@ exclude_paths:
   - strptime.[ch]
   - jeeps/gpsproj.cc
   - jeeps/gpsproj.h
+  - tools/qtci/README.md
+  - tools/uploadtool/README.md

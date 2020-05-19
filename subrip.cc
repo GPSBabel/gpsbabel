@@ -19,46 +19,34 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#include <QtCore/QDate>         // for QDate
+#include <QtCore/QDateTime>     // for QDateTime, operator<<
+#include <QtCore/QDebug>        // for QDebug
+#include <QtCore/QString>       // for QString
+#include <QtCore/QTime>         // for QTime
+#include <QtCore/Qt>            // for UTC
 
 #include "defs.h"
-#include <cstdio> /* for gmtime */
+#include "subrip.h"
+#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"   // for Fatal
+
 
 #define MYNAME "subrip"
 
-static char* opt_videotime;
-static char* opt_gpstime;
-static char* opt_gpsdate;
-static char* opt_format;
-static time_t time_offset;
-static int stnum;
-static gbfile* fout;
-static const Waypoint* prevwpp;
-static double vspeed;
-static double gradient;
-
 /* internal helper functions */
 
-static time_t
-sync_time(time_t arg_gpstime, char* arg_videotime)
+QTime
+SubripFormat::video_time(const QDateTime& dt) const
 {
-  static time_t videotime_t;
-  static struct tm* ptm_video;
-  static time_t result;
-
-  videotime_t = 0;
-  ptm_video = gmtime(&videotime_t);
-  if (arg_videotime) {
-    sscanf(arg_videotime, "%2d%2d%2d", &ptm_video->tm_hour, &ptm_video->tm_min, &ptm_video->tm_sec);
-  }
-  videotime_t = mkgmtime(ptm_video);
-  result = (arg_gpstime - videotime_t);
-  return result;
+  return QTime::fromMSecsSinceStartOfDay(video_datetime.msecsTo(dt));
 }
 
-static void
-subrip_prevwp_pr(const Waypoint* waypointp)
+void
+SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 {
-  QDateTime enddtime;
+  static long long deltaoffset;
 
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
@@ -67,74 +55,80 @@ subrip_prevwp_pr(const Waypoint* waypointp)
   /* If this condition is not true, the waypoint is before the beginning of
    * the video and will be ignored
    */
-  if (prevwpp->GetCreationTime().toTime_t() < time_offset) {
+  if (prevwpp->GetCreationTime() < video_datetime) {
     return;
   }
 
   gbfprintf(fout, "%d\n", stnum++);
 
   /* Writes start and end time for subtitle display to file. */
-  QDateTime startdtime = prevwpp->GetCreationTime().addSecs(-time_offset);
+  QDateTime end_datetime;
   if (!waypointp) {
-    enddtime = startdtime.addSecs(1);
+    // prevwpp is the last waypoint, so we don't have a datetime for the
+    // next waypoint.  Instead, estimate it from length of the previous
+    // video frame.
+    end_datetime = prevwpp->GetCreationTime().addMSecs(deltaoffset);
   } else {
-    enddtime = waypointp->GetCreationTime().addSecs(-time_offset);
+    end_datetime = waypointp->GetCreationTime();
+    deltaoffset = prevwpp->GetCreationTime().msecsTo(waypointp->GetCreationTime());
   }
-  QTime starttime = startdtime.toUTC().time();
-  QTime endtime = enddtime.toUTC().time();
+  QTime starttime = video_time(prevwpp->GetCreationTime());
+  QTime endtime = video_time(end_datetime);
   gbfprintf(fout, "%02d:%02d:%02d,%03d --> %02d:%02d:%02d,%03d\n",
-    starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
-    endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
+            starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
+            endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
 
   for (char* c = opt_format; *c != '\0' ; c++) {
     char fmt;
 
     switch (*c) {
     case '%':
-      fmt = *++c;   
+      fmt = *++c;
       is_fatal(fmt == '\0', "No character after %% in subrip format");
-      
+
       switch (fmt) {
       case 's':
-        if WAYPT_HAS(prevwpp, speed)
-           gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
-        else  
-           gbfprintf(fout, "--.-");
+        if WAYPT_HAS(prevwpp, speed) {
+          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
+        } else {
+          gbfprintf(fout, "--.-");
+        }
         break;
       case 'e':
-        if (prevwpp->altitude != unknown_alt)  
-          gbfprintf(fout, "%4d", (int)prevwpp->altitude);
-        else
+        if (prevwpp->altitude != unknown_alt) {
+          gbfprintf(fout, "%4.0f", prevwpp->altitude);
+        } else {
           gbfprintf(fout, "   -");
+        }
         break;
       case 'v':
         gbfprintf(fout, "%2.2f", vspeed);
         break;
       case 'g':
-          gbfprintf(fout, "%2.1f%%", gradient);
-          break;
-      case 't':
-        {
-          QTime t = prevwpp->GetCreationTime().toUTC().time();
-          gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
-          break;
-        }
+        gbfprintf(fout, "%2.1f%%", gradient);
+        break;
+      case 't': {
+        QTime t = prevwpp->GetCreationTime().toUTC().time();
+        gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
+        break;
+      }
       case 'l':
-        // The +.00005 is for rounding.
         gbfprintf(fout, "Lat=%0.5lf Lon=%0.5lf",
-          prevwpp->latitude+.000005, prevwpp->longitude+.000005);
+                  prevwpp->latitude, prevwpp->longitude);
         break;
       case 'c':
-        if (prevwpp->cadence != 0)
+        if (prevwpp->cadence != 0) {
           gbfprintf(fout, "%3u", prevwpp->cadence);
-        else
+        } else {
           gbfprintf(fout, "  -");
+        }
         break;
       case 'h':
-        if (prevwpp->heartrate != 0)
+        if (prevwpp->heartrate != 0) {
           gbfprintf(fout, "%3u", prevwpp->heartrate);
-        else
+        } else {
           gbfprintf(fout, "  -");
+        }
         break;
       }
 
@@ -158,8 +152,8 @@ subrip_prevwp_pr(const Waypoint* waypointp)
 
 /* callback functions */
 
-static void
-subrip_trkpt_pr(const Waypoint* waypointp)
+void
+SubripFormat::subrip_trkpt_pr(const Waypoint* waypointp)
 {
   /*
    * To determine the duration of the subtitle, we need the timestamp of the
@@ -171,16 +165,22 @@ subrip_trkpt_pr(const Waypoint* waypointp)
    * but also pre-previous, so we calculate vspeed right before forgetting
    * the previous.
    */
-  if ((stnum == 1) && (time_offset == 0))
-    /*
-     * esoteric bug: GPS tracks created on Jan 1, 1970 at midnight would cause
-     * undesirable behavior here. But if you run into this problem, I assume
-     * you are capable of time-travel as well as inventing a high-tech system
-     * some 20 years before the rest of mankind does, so finding a prettier
-     * way of solving this should be trivial to you :-)
-     */
-  {
-    time_offset = sync_time(waypointp->GetCreationTime().toTime_t(), opt_videotime);
+  if (!video_datetime.isValid()) {
+    if (!gps_datetime.isValid()) {
+      // If gps_date and gps_time options weren't used, then we use the
+      // datetime of the first waypoint to sync to the video.
+      gps_datetime = waypointp->GetCreationTime().toUTC();
+    }
+    video_datetime = gps_datetime.addMSecs(-video_offset_ms).toUTC();
+    if (global_opts.debug_level >= 2) {
+      qDebug().noquote() << "GPS track start is           "
+                         << waypointp->GetCreationTime().toUTC().toString(Qt::ISODateWithMs);
+      qDebug().noquote() << "Synchronizing"
+                         << video_time(gps_datetime).toString("HH:mm:ss,zzz")
+                         << "to" << gps_datetime.toString(Qt::ISODateWithMs);
+      qDebug().noquote() << "Video start   00:00:00,000 is"
+                         << video_datetime.toString(Qt::ISODateWithMs);
+    }
   }
 
   if (prevwpp) {
@@ -193,61 +193,63 @@ subrip_trkpt_pr(const Waypoint* waypointp)
 
 /* global callback (exported) functions */
 
-static void
-subrip_wr_init(const QString& fname)
+void
+SubripFormat::wr_init(const QString& fname)
 {
-  time_t gpstime_t;
-
   stnum = 1;
-
-  time_offset = 0;
-
   prevwpp = nullptr;
   vspeed = 0;
   gradient = 0;
 
+  if ((opt_gpstime == nullptr) != (opt_gpsdate == nullptr)) {
+    Fatal() << MYNAME ": Either both or neither of the gps_date and gps_time options must be supplied!";
+  }
+  gps_datetime = QDateTime();
   if ((opt_gpstime != nullptr) && (opt_gpsdate != nullptr)) {
-    time(&gpstime_t);
-    struct tm* ptm_gps = gmtime(&gpstime_t);
-    if (opt_gpstime) {
-      sscanf(opt_gpstime, "%2d%2d%2d", &ptm_gps->tm_hour, &ptm_gps->tm_min, &ptm_gps->tm_sec);
+    QDate gps_date = QDate::fromString(opt_gpsdate, "yyyyMMdd");
+    if (!gps_date.isValid()) {
+      Fatal().nospace() << MYNAME ": option gps_date value (" << opt_gpsdate << ") is invalid.  Expected yyyymmdd.";
     }
-    if (opt_gpsdate) {
-      sscanf(opt_gpsdate, "%4d%2d%2d", &ptm_gps->tm_year, &ptm_gps->tm_mon, &ptm_gps->tm_mday);
-      /*
-       * Don't ask me why we need to do this nonsense, but it seems to be necessary:
-       * Years are two-digit since this was fashionable in the mid-1900s.
-       * For dates after 2000, just add 100 to the year.
-       * Months are zero-based (0 is January), but days are one-based.
-       * Makes sense, eh?
-       * Btw: correct dates will result in incorrect timestamps and you'll
-       * never figure out why. Suppose that's to confuse the Russians,
-       * given that the system was developed during the Cold War. But that
-       * is true for most of Unix.
-       * Make a difference - contribute to ReactOS.
-       */
-      ptm_gps->tm_year-=1900;
-      ptm_gps->tm_mon--;
+    QTime gps_time = QTime::fromString(opt_gpstime, "HHmmss");
+    if (!gps_time.isValid()) {
+      gps_time = QTime::fromString(opt_gpstime, "HHmmss.z");
+      if (!gps_time.isValid()) {
+        Fatal().nospace() << MYNAME ": option gps_time value (" << opt_gpstime << ") is invalid.  Expected hhmmss[.sss]";
+      }
     }
-    gpstime_t = mkgmtime(ptm_gps);
-    time_offset = sync_time(gpstime_t, opt_videotime);
-
+    gps_datetime = QDateTime(gps_date, gps_time, Qt::UTC);
   }
 
-  fout = gbfopen(fname, "wb", MYNAME);
+  video_offset_ms = 0;
+  if (opt_videotime != nullptr) {
+    QTime video_time = QTime::fromString(opt_videotime, "HHmmss");
+    if (!video_time.isValid()) {
+      video_time = QTime::fromString(opt_videotime, "HHmmss.z");
+      if (!video_time.isValid()) {
+        Fatal().nospace() << MYNAME ": option video_time value (" << opt_videotime << ") is invalid.  Expected hhmmss[.sss].";
+      }
+    }
+    video_offset_ms = video_time.msecsSinceStartOfDay();
+  }
 
+  video_datetime = QDateTime();
+
+  fout = gbfopen(fname, "wb", MYNAME);
 }
 
-static void
-subrip_wr_deinit()
+void
+SubripFormat::wr_deinit()
 {
   gbfclose(fout);
 }
 
-static void
-subrip_write()
+void
+SubripFormat::write()
 {
-  track_disp_all(nullptr, nullptr, subrip_trkpt_pr);
+  auto subrip_trkpt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    subrip_trkpt_pr(waypointp);
+  };
+  track_disp_all(nullptr, nullptr, subrip_trkpt_pr_lambda);
 
   /*
    * Due to the necessary hack, one waypoint is still in memory (unless we
@@ -257,31 +259,3 @@ subrip_write()
     subrip_prevwp_pr(nullptr);
   }
 }
-
-/* arguments: definitions of format-specific arguments */
-
-static QVector<arglist_t> subrip_args = {
-  // FIXME: document that gps_date and gps_time must be specified together or they will both be ignored and the timestamp of the first trackpoint will be used.
-  {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_date", &opt_gpsdate, "GPS date at position video_time (hhmmss, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-};
-
-/* manifest: capabilities of this module, pointers to exported functions and others */
-
-ff_vecs_t subrip_vecs = {
-  ff_type_file,
-  { ff_cap_none, ff_cap_write, ff_cap_none }, // waypoints, track, route; for now, we just do tracks
-  nullptr,
-  subrip_wr_init,
-  nullptr,
-  subrip_wr_deinit,
-  nullptr,
-  subrip_write,
-  nullptr,
-  &subrip_args,
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS,
-  nullptr
-};

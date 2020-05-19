@@ -32,7 +32,7 @@
 #line 1 "xcsv_tokens.in"
 struct xt_mapping {const char *name; int xt_token; };
 
-#define TOTAL_KEYWORDS 86
+#define TOTAL_KEYWORDS 87
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 21
 #define MIN_HASH_VALUE 7
@@ -111,177 +111,179 @@ Perfect_Hash::in_word_set (const char *str, size_t len)
 {
   static struct xt_mapping wordlist[] =
     {
-#line 41 "xcsv_tokens.in"
+#line 42 "xcsv_tokens.in"
       {"LAT_DIR", XT_LAT_DIR},
-#line 69 "xcsv_tokens.in"
+#line 70 "xcsv_tokens.in"
       {"POWER", XT_POWER},
-#line 45 "xcsv_tokens.in"
+#line 46 "xcsv_tokens.in"
       {"LAT_DDMMDIR", XT_LAT_DDMMDIR},
-#line 51 "xcsv_tokens.in"
+#line 52 "xcsv_tokens.in"
       {"LON_DIR", XT_LON_DIR},
-#line 38 "xcsv_tokens.in"
+#line 39 "xcsv_tokens.in"
       {"LAT_DECIMALDIR", XT_LAT_DECIMALDIR},
-#line 54 "xcsv_tokens.in"
+#line 55 "xcsv_tokens.in"
       {"LON_DDMMDIR", XT_LON_DDMMDIR},
-#line 48 "xcsv_tokens.in"
+#line 49 "xcsv_tokens.in"
       {"LON_DECIMALDIR", XT_LON_DECIMALDIR},
-#line 58 "xcsv_tokens.in"
+#line 59 "xcsv_tokens.in"
       {"NET_TIME", XT_NET_TIME},
-#line 30 "xcsv_tokens.in"
+#line 31 "xcsv_tokens.in"
       {"HEART_RATE", XT_HEART_RATE},
-#line 73 "xcsv_tokens.in"
+#line 74 "xcsv_tokens.in"
       {"STREET_ADDR", XT_STREET_ADDR},
 #line 6 "xcsv_tokens.in"
       {"CADENCE", XT_CADENCE},
-#line 46 "xcsv_tokens.in"
+#line 47 "xcsv_tokens.in"
       {"LAT_NMEA", XT_LAT_NMEA},
-#line 70 "xcsv_tokens.in"
+#line 71 "xcsv_tokens.in"
       {"ROUTE_NAME", XT_ROUTE_NAME},
-#line 68 "xcsv_tokens.in"
+#line 69 "xcsv_tokens.in"
       {"POSTAL_CODE", XT_POSTAL_CODE},
-#line 55 "xcsv_tokens.in"
+#line 56 "xcsv_tokens.in"
       {"LON_NMEA", XT_LON_NMEA},
-#line 72 "xcsv_tokens.in"
+#line 73 "xcsv_tokens.in"
       {"STATE", XT_STATE},
-#line 22 "xcsv_tokens.in"
+#line 23 "xcsv_tokens.in"
       {"GEOCACHE_TERR", XT_GEOCACHE_TERR},
-#line 21 "xcsv_tokens.in"
+#line 22 "xcsv_tokens.in"
       {"GEOCACHE_PLACER", XT_GEOCACHE_PLACER},
-#line 82 "xcsv_tokens.in"
+#line 83 "xcsv_tokens.in"
       {"UTM", XT_UTM},
-#line 18 "xcsv_tokens.in"
-      {"GEOCACHE_ISARCHIVED", XT_GEOCACHE_ISARCHIVED},
 #line 19 "xcsv_tokens.in"
+      {"GEOCACHE_ISARCHIVED", XT_GEOCACHE_ISARCHIVED},
+#line 20 "xcsv_tokens.in"
       {"GEOCACHE_ISAVAILABLE", XT_GEOCACHE_ISAVAILABLE},
 #line 5 "xcsv_tokens.in"
       {"ANYNAME", XT_ANYNAME},
-#line 24 "xcsv_tokens.in"
+#line 25 "xcsv_tokens.in"
       {"GMT_TIME", XT_GMT_TIME},
-#line 76 "xcsv_tokens.in"
+#line 77 "xcsv_tokens.in"
       {"TIMET_TIME", XT_TIMET_TIME},
-#line 14 "xcsv_tokens.in"
+#line 15 "xcsv_tokens.in"
       {"FORMAT", XT_FORMAT},
-#line 13 "xcsv_tokens.in"
+#line 14 "xcsv_tokens.in"
       {"FILENAME", XT_FILENAME},
-#line 33 "xcsv_tokens.in"
+#line 34 "xcsv_tokens.in"
       {"ICON_DESCR", XT_ICON_DESCR},
 #line 10 "xcsv_tokens.in"
       {"DESCRIPTION", XT_DESCRIPTION},
-#line 16 "xcsv_tokens.in"
-      {"GEOCACHE_DIFF", XT_GEOCACHE_DIFF},
-#line 15 "xcsv_tokens.in"
-      {"GEOCACHE_CONTAINER", XT_GEOCACHE_CONTAINER},
-#line 79 "xcsv_tokens.in"
-      {"TRACK_NEW", XT_TRACK_NEW},
-#line 78 "xcsv_tokens.in"
-      {"TRACK_NAME", XT_TRACK_NAME},
-#line 81 "xcsv_tokens.in"
-      {"URL", XT_URL},
-#line 66 "xcsv_tokens.in"
-      {"PATH_SPEED", XT_PATH_SPEED},
-#line 59 "xcsv_tokens.in"
-      {"PATH_COURSE", XT_PATH_COURSE},
 #line 17 "xcsv_tokens.in"
+      {"GEOCACHE_DIFF", XT_GEOCACHE_DIFF},
+#line 16 "xcsv_tokens.in"
+      {"GEOCACHE_CONTAINER", XT_GEOCACHE_CONTAINER},
+#line 80 "xcsv_tokens.in"
+      {"TRACK_NEW", XT_TRACK_NEW},
+#line 79 "xcsv_tokens.in"
+      {"TRACK_NAME", XT_TRACK_NAME},
+#line 82 "xcsv_tokens.in"
+      {"URL", XT_URL},
+#line 67 "xcsv_tokens.in"
+      {"PATH_SPEED", XT_PATH_SPEED},
+#line 60 "xcsv_tokens.in"
+      {"PATH_COURSE", XT_PATH_COURSE},
+#line 18 "xcsv_tokens.in"
       {"GEOCACHE_HINT", XT_GEOCACHE_HINT},
-#line 39 "xcsv_tokens.in"
+#line 40 "xcsv_tokens.in"
       {"LAT_DECIMAL", XT_LAT_DECIMAL},
 #line 9 "xcsv_tokens.in"
       {"COUNTRY", XT_COUNTRY},
-#line 42 "xcsv_tokens.in"
+#line 43 "xcsv_tokens.in"
       {"LAT_HUMAN_READABLE", XT_LAT_HUMAN_READABLE},
-#line 47 "xcsv_tokens.in"
+#line 48 "xcsv_tokens.in"
       {"LOCAL_TIME", XT_LOCAL_TIME},
-#line 49 "xcsv_tokens.in"
+#line 50 "xcsv_tokens.in"
       {"LON_DECIMAL", XT_LON_DECIMAL},
-#line 52 "xcsv_tokens.in"
+#line 53 "xcsv_tokens.in"
       {"LON_HUMAN_READABLE", XT_LON_HUMAN_READABLE},
-#line 71 "xcsv_tokens.in"
+#line 72 "xcsv_tokens.in"
       {"SHORTNAME", XT_SHORTNAME},
-#line 67 "xcsv_tokens.in"
+#line 68 "xcsv_tokens.in"
       {"PHONE_NR", XT_PHONE_NR},
 #line 7 "xcsv_tokens.in"
       {"CITY", XT_CITY},
-#line 74 "xcsv_tokens.in"
+#line 75 "xcsv_tokens.in"
       {"TEMPERATURE", XT_TEMPERATURE},
-#line 37 "xcsv_tokens.in"
+#line 38 "xcsv_tokens.in"
       {"ISO_TIME", XT_ISO_TIME},
 #line 3 "xcsv_tokens.in"
       {"ALT_FEET", XT_ALT_FEET},
-#line 32 "xcsv_tokens.in"
+#line 33 "xcsv_tokens.in"
       {"HMSL_TIME", XT_HMSL_TIME},
-#line 56 "xcsv_tokens.in"
+#line 57 "xcsv_tokens.in"
       {"MAP_EN_BNG", XT_MAP_EN_BNG},
-#line 34 "xcsv_tokens.in"
-      {"IGNORE", XT_IGNORE},
-#line 75 "xcsv_tokens.in"
-      {"TEMPERATURE_F", XT_TEMPERATURE_F},
-#line 40 "xcsv_tokens.in"
-      {"LAT_DIRDECIMAL", XT_LAT_DIRDECIMAL},
 #line 35 "xcsv_tokens.in"
+      {"IGNORE", XT_IGNORE},
+#line 76 "xcsv_tokens.in"
+      {"TEMPERATURE_F", XT_TEMPERATURE_F},
+#line 41 "xcsv_tokens.in"
+      {"LAT_DIRDECIMAL", XT_LAT_DIRDECIMAL},
+#line 36 "xcsv_tokens.in"
       {"INDEX", XT_INDEX},
-#line 83 "xcsv_tokens.in"
+#line 84 "xcsv_tokens.in"
       {"UTM_ZONE", XT_UTM_ZONE},
-#line 50 "xcsv_tokens.in"
+#line 51 "xcsv_tokens.in"
       {"LON_DIRDECIMAL", XT_LON_DIRDECIMAL},
-#line 44 "xcsv_tokens.in"
+#line 45 "xcsv_tokens.in"
       {"LATLON_HUMAN_READABLE", XT_LATLON_HUMAN_READABLE},
 #line 8 "xcsv_tokens.in"
       {"CONSTANT", XT_CONSTANT},
-#line 20 "xcsv_tokens.in"
+#line 21 "xcsv_tokens.in"
       {"GEOCACHE_LAST_FOUND", XT_GEOCACHE_LAST_FOUND},
-#line 11 "xcsv_tokens.in"
-      {"EXCEL_TIME", XT_EXCEL_TIME},
-#line 86 "xcsv_tokens.in"
-      {"UTM_EASTING", XT_UTM_EASTING},
-#line 23 "xcsv_tokens.in"
-      {"GEOCACHE_TYPE", XT_GEOCACHE_TYPE},
-#line 85 "xcsv_tokens.in"
-      {"UTM_ZONEF", XT_UTM_ZONEF},
-#line 88 "xcsv_tokens.in"
-      {"YYYYMMDD_TIME", XT_YYYYMMDD_TIME},
-#line 31 "xcsv_tokens.in"
-      {"HMSG_TIME", XT_HMSG_TIME},
-#line 60 "xcsv_tokens.in"
-      {"PATH_DISTANCE_KM", XT_PATH_DISTANCE_KM},
 #line 12 "xcsv_tokens.in"
+      {"EXCEL_TIME", XT_EXCEL_TIME},
+#line 87 "xcsv_tokens.in"
+      {"UTM_EASTING", XT_UTM_EASTING},
+#line 24 "xcsv_tokens.in"
+      {"GEOCACHE_TYPE", XT_GEOCACHE_TYPE},
+#line 86 "xcsv_tokens.in"
+      {"UTM_ZONEF", XT_UTM_ZONEF},
+#line 89 "xcsv_tokens.in"
+      {"YYYYMMDD_TIME", XT_YYYYMMDD_TIME},
+#line 32 "xcsv_tokens.in"
+      {"HMSG_TIME", XT_HMSG_TIME},
+#line 61 "xcsv_tokens.in"
+      {"PATH_DISTANCE_KM", XT_PATH_DISTANCE_KM},
+#line 13 "xcsv_tokens.in"
       {"FACILITY", XT_FACILITY},
-#line 80 "xcsv_tokens.in"
+#line 81 "xcsv_tokens.in"
       {"URL_LINK_TEXT", XT_URL_LINK_TEXT},
-#line 84 "xcsv_tokens.in"
+#line 85 "xcsv_tokens.in"
       {"UTM_ZONEC", XT_UTM_ZONEC},
-#line 25 "xcsv_tokens.in"
+#line 26 "xcsv_tokens.in"
       {"GPS_FIX", XT_GPS_FIX},
-#line 77 "xcsv_tokens.in"
+#line 78 "xcsv_tokens.in"
       {"TIMET_TIME_MS", XT_TIMET_TIME_MS},
-#line 57 "xcsv_tokens.in"
+#line 58 "xcsv_tokens.in"
       {"NOTES", XT_NOTES},
-#line 65 "xcsv_tokens.in"
+#line 66 "xcsv_tokens.in"
       {"PATH_SPEED_MPH", XT_PATH_SPEED_MPH},
-#line 64 "xcsv_tokens.in"
+#line 65 "xcsv_tokens.in"
       {"PATH_SPEED_KPH", XT_PATH_SPEED_KPH},
-#line 36 "xcsv_tokens.in"
+#line 37 "xcsv_tokens.in"
       {"ISO_TIME_MS", XT_ISO_TIME_MS},
-#line 29 "xcsv_tokens.in"
+#line 30 "xcsv_tokens.in"
       {"GPS_VDOP", XT_GPS_VDOP},
 #line 4 "xcsv_tokens.in"
       {"ALT_METERS", XT_ALT_METERS},
-#line 28 "xcsv_tokens.in"
+#line 29 "xcsv_tokens.in"
       {"GPS_SAT", XT_GPS_SAT},
-#line 62 "xcsv_tokens.in"
-      {"PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES},
-#line 61 "xcsv_tokens.in"
-      {"PATH_DISTANCE_METERS", XT_PATH_DISTANCE_METERS},
 #line 63 "xcsv_tokens.in"
+      {"PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES},
+#line 62 "xcsv_tokens.in"
+      {"PATH_DISTANCE_METERS", XT_PATH_DISTANCE_METERS},
+#line 64 "xcsv_tokens.in"
       {"PATH_SPEED_KNOTS", XT_PATH_SPEED_KNOTS},
-#line 43 "xcsv_tokens.in"
+#line 11 "xcsv_tokens.in"
+      {"EMAIL", XT_EMAIL},
+#line 44 "xcsv_tokens.in"
       {"LAT_INT32DEG", XT_LAT_INT32DEG},
-#line 53 "xcsv_tokens.in"
+#line 54 "xcsv_tokens.in"
       {"LON_INT32DEG", XT_LON_INT32DEG},
-#line 87 "xcsv_tokens.in"
+#line 88 "xcsv_tokens.in"
       {"UTM_NORTHING", XT_UTM_NORTHING},
-#line 26 "xcsv_tokens.in"
-      {"GPS_HDOP", XT_GPS_HDOP},
 #line 27 "xcsv_tokens.in"
+      {"GPS_HDOP", XT_GPS_HDOP},
+#line 28 "xcsv_tokens.in"
       {"GPS_PDOP", XT_GPS_PDOP}
     };
 
@@ -300,11 +302,11 @@ Perfect_Hash::in_word_set (const char *str, size_t len)
       -1, -1, -1, -1, -1, -1, -1, -1, 70, -1, 71, -1, -1, -1,
       -1, -1, -1, -1, -1, 72, -1, -1, -1, -1, 73, -1, 74, -1,
       75, -1, 76, -1, 77, -1, 78, 79, 80, -1, -1, -1, -1, -1,
+      -1, -1, -1, 81, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, 81, -1, -1, -1, -1, 82, -1,
-      -1, -1, -1, 83, 84, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 85
+      -1, -1, -1, -1, -1, -1, -1, 82, -1, -1, -1, -1, 83, -1,
+      -1, -1, -1, 84, 85, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 86
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)

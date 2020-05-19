@@ -273,7 +273,7 @@ static void tpo_read_2_x()
 
   for (int i = 0; i < track_count; i++) {
 
-    route_head* track_temp = route_head_alloc();
+    auto* track_temp = new route_head;
     track_add_head(track_temp);
 
     /* generate a generic track name */
@@ -338,7 +338,7 @@ static void tpo_read_2_x()
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
     for (int j = 0; j < waypoint_count; j++) {
 
-      Waypoint* waypoint_temp = new Waypoint;
+      auto* waypoint_temp = new Waypoint;
       double amt;
       /* convert incoming NAD27/CONUS coordinates to WGS84 */
       GPS_Math_Known_Datum_To_WGS84_M(
@@ -373,7 +373,7 @@ static void tpo_read_2_x()
 //
 static int tpo_read_int()
 {
-  unsigned char val = (unsigned char) gbfgetc(tpo_file_in);
+  auto val = (unsigned char) gbfgetc(tpo_file_in);
 
   switch (val) {
 
@@ -447,7 +447,7 @@ static int tpo_find_block(unsigned int block_desired)
 //
 static Waypoint* tpo_convert_ll(int lat, int lon)
 {
-  Waypoint* waypoint_temp = new Waypoint;
+  auto* waypoint_temp = new Waypoint;
 
   double latitude = (double)lat / 0x800000;
   double longitude = (double)lon / 0x800000;
@@ -603,7 +603,7 @@ static void tpo_process_tracks()
     char rgb[7],bgr[7];
 
     // Allocate the track struct
-    route_head* track_temp = route_head_alloc();
+    auto* track_temp = new route_head;
     track_add_head(track_temp);
 
 //UNKNOWN DATA LENGTH
@@ -643,7 +643,7 @@ static void tpo_process_tracks()
     //  (what are correct values for KML or other outputs??)
     track_temp->line_width = styles[track_style].wide;
 
-    if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
+    if (DEBUG) printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
                         qPrintable(track_name), line_type, 
                         qPrintable(styles[track_style].name),
                         styles[track_style].wide,
@@ -671,7 +671,7 @@ static void tpo_process_tracks()
     // proper place for the next track.
 
     // Read the track bytes into a buffer
-    unsigned char* buf = (unsigned char*) xmalloc(track_byte_count);
+    auto* buf = (unsigned char*) xmalloc(track_byte_count);
     gbfread(buf, 1, track_byte_count, tpo_file_in);
 
     int latscale = 0;
@@ -857,7 +857,7 @@ static void tpo_process_waypoints()
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
-    Waypoint* waypoint_temp2 = new Waypoint(*waypoint_temp);
+    auto* waypoint_temp2 = new Waypoint(*waypoint_temp);
 
     // Attach the copy to our index
     tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
@@ -1116,7 +1116,7 @@ static void tpo_process_routes()
   //
   for (unsigned int ii = 0; ii < route_count; ii++) {
     // Allocate the route struct
-    route_head* route_temp = route_head_alloc();
+    auto* route_temp = new route_head;
     route_add_head(route_temp);
 
 //UNKNOWN DATA LENGTH
@@ -1162,7 +1162,7 @@ static void tpo_process_routes()
 //printf("val: %x\t\t", val);
 
       // Duplicate a waypoint from our index of waypoints.
-      Waypoint* waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
+      auto* waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
 
       // Add the waypoint to the route
       route_add_wpt(route_temp, waypoint_temp);

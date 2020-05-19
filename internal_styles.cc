@@ -174,7 +174,7 @@ static char custom[] =
   "IFIELD	LON_DIRDECIMAL, \"\", \"%c/%f\"\n"
   "IFIELD	LAT_INT32DEG, \"\", \"%ld\"\n"
   "IFIELD	LON_INT32DEG, \"\", \"%ld\"\n"
-  "IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
+  "IFIELD	TIMET_TIME, \"\", \"%lld\"\n"
   "IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
 
   "# EPILOGUE:\n"
@@ -309,7 +309,7 @@ static char garmin301[] =
   "#\n"
   "# INDIVIDUAL DATA FIELDS:\n"
   "#\n"
-  "IFIELD	TIMET_TIME,\"\",\"%ld\"\n"
+  "IFIELD	TIMET_TIME,\"\",\"%lld\"\n"
   "IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
   "IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
   "IFIELD	ALT_FEET, \"\", \"%fF\"\n"
@@ -612,7 +612,7 @@ static char gpsman[] =
   "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
   ;
 static char iblue747[] =
-  "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
+  "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
   "# Author: Christian Barmala http://www.barmala.de/\n"
   "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
 
@@ -656,7 +656,7 @@ static char iblue747[] =
   "IFIELD PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
   ;
 static char iblue757[] =
-  "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
+  "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
   "# Author: iBlue747csv by Christian Barmala http://www.barmala.de/\n"
   "#		  edited by Anthony Vella to suit the iBlue757 csv format (date format changed)\n"
   "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
@@ -969,7 +969,7 @@ static char motoactv[] =
   "IFIELD IGNORE,\"\",\"%s\" # repetitions\n"
   "IFIELD TEMPERATURE,\"\",\"%.1f\"\n"
   "IFIELD IGNORE,\"\",\"%s\" # instant torque crank\n"
-  "IFIELD TIMET_TIME_MS,\"\",\"%ld\"\n"
+  "IFIELD TIMET_TIME_MS,\"\",\"%lld\"\n"
   "IFIELD ALT_METERS,\"\",\"%.1f\"\n"
   "IFIELD POWER,\"\",\"%.0f\"\n"
   "IFIELD IGNORE,\"\",\"%s\" # strides\n"
@@ -1294,7 +1294,7 @@ static char tabsep[] =
   "IFIELD	ALT_FEET, \"\", \"%fF\"\n"
   "IFIELD	ALT_METERS, \"\", \"%fM\"\n"
   "IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
-  "IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
+  "IFIELD	TIMET_TIME, \"\", \"%lld\"\n"
   "IFIELD  GEOCACHE_DIFF,\"\",\"%3.1f\"\n"
   "IFIELD  GEOCACHE_TERR,\"\",\"%3.1f\"\n"
   "IFIELD  GEOCACHE_CONTAINER,\"\",\"%s\"\n"

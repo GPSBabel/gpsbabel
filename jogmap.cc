@@ -44,14 +44,14 @@ static QVector<arglist_t> jogmap_args = {
 static void
 jogmap_markers(xg_string, const QXmlStreamAttributes*)
 {
-  trk = route_head_alloc();
+  trk = new route_head;
   track_add_head(trk);
 }
 
 static void
 jogmap_marker(xg_string, const QXmlStreamAttributes* attrv)
 {
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   if (attrv->hasAttribute("lat")) {
     wpt->latitude = attrv->value("lat").toString().toDouble();

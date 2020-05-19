@@ -22,39 +22,13 @@
 #ifndef CET_UTIL_H_INCLUDED_
 #define CET_UTIL_H_INCLUDED_
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <QtCore/QString>
-#include "cet.h"
 #include "defs.h"
 
-cet_cs_vec_t* cet_find_cs_by_name(const QString& name);
-void cet_register();
-void cet_deregister();
-
-extern cet_cs_vec_t cet_cs_vec_cp1252;
-
-extern cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968;
-
-short* cet_str_utf8_to_uni(const char* src, int* length);
-
-extern cet_cs_vec_t cet_cs_vec_utf8;
-
-
-/* helpers */
-
-char* cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec);
-
-/* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
-char* cet_convert_string(char* str);
-const char* cet_convert_string(const QString& str);
 
 /* gpsbabel extensions */
 
 void cet_convert_init(const QString& cs_name, int force);
-void cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format);
 void cet_convert_deinit();
 
 #endif  // CET_UTIL_H_INCLUDED_

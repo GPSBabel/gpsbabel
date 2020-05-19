@@ -209,16 +209,15 @@ struct gpi_bitmap_header_t {
 };
 
 struct gpi_waypt_t {
-  int sz;
-  int alerts;
-  short mask;
-  char addr_is_dynamic;
-  char* addr;
-  char* city;
-  char* country;
-  char* phone_nr;
-  char* postal_code;
-  char* state;
+  int sz{0};
+  int alerts{0};
+  short mask{0};
+  QString addr;
+  QString city;
+  QString country;
+  QString phone_nr;
+  QString postal_code;
+  QString state;
 };
 
 static gbfile* fin, *fout;
@@ -244,13 +243,13 @@ static time_t gpi_timestamp = 0;
 static garmin_fs_t*
 gpi_gmsd_init(Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (wpt == nullptr) {
     fatal(MYNAME ": Error in file structure.\n");
   }
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
+    wpt->fs.FsChainAdd(gmsd);
   }
   return gmsd;
 }
@@ -561,7 +560,6 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
   double speed;
   short mask;
   QString str;
-  char* cstr;
   garmin_fs_t* gmsd;
 
   int sz = gbfgetint32(fin);
@@ -664,45 +662,45 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 #ifdef GPI_DBG
     dbginfo("GPI Address field mask: %d (0x%02x)\n", mask, mask);
 #endif
-    if ((mask & GPI_ADDR_CITY) && (cstr = gpi_read_string_old("City"))) {
+    if ((mask & GPI_ADDR_CITY) && !(str = gpi_read_string("City")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(city, cstr);
+      garmin_fs_t::set_city(gmsd, str);
     }
-    if ((mask & GPI_ADDR_COUNTRY) && (cstr = gpi_read_string_old("Country"))) {
+    if ((mask & GPI_ADDR_COUNTRY) && !(str = gpi_read_string("Country")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(country, cstr);
+      garmin_fs_t::set_country(gmsd, str);
     }
-    if ((mask & GPI_ADDR_STATE) && (cstr = gpi_read_string_old("State"))) {
+    if ((mask & GPI_ADDR_STATE) && !(str = gpi_read_string("State")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(state, cstr);
+      garmin_fs_t::set_state(gmsd, str);
     }
-    if ((mask & GPI_ADDR_POSTAL_CODE) && (cstr = gpi_read_string_old("Postal code"))) {
+    if ((mask & GPI_ADDR_POSTAL_CODE) && !(str = gpi_read_string("Postal code")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(postal_code, cstr);
+      garmin_fs_t::set_postal_code(gmsd, str);
     }
-    if ((mask & GPI_ADDR_ADDR) && (cstr = gpi_read_string_old("Street address"))) {
+    if ((mask & GPI_ADDR_ADDR) && !(str = gpi_read_string("Street address")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(addr, cstr);
+      garmin_fs_t::set_addr(gmsd, str);
     }
     break;
 
   case 0xc:
     mask = gbfgetint16(fin);
-    if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
+    if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, cstr);
+      garmin_fs_t::set_phone_nr(gmsd, str);
     }
-    if ((mask & 2) && (cstr = gpi_read_string_old("Phone2"))) {
+    if ((mask & 2) && !(str = gpi_read_string("Phone2")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr2, cstr);
+      garmin_fs_t::set_phone_nr2(gmsd, str);
     }
-    if ((mask & 4) && (cstr = gpi_read_string_old("Fax"))) {
+    if ((mask & 4) && !(str = gpi_read_string("Fax")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(fax_nr, cstr);
+      garmin_fs_t::set_fax_nr(gmsd, str);
     }
-    if ((mask & 8) && (cstr = gpi_read_string_old("Email"))) {
+    if ((mask & 8) && !(str = gpi_read_string("Email")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(email, cstr);
+      garmin_fs_t::set_email(gmsd, str);
     }
     if ((mask & 0x10) && (str = gpi_read_string("Link"), !str.isEmpty())) {
       waypt_add_url(wpt, str, str);
@@ -717,9 +715,9 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 #ifdef GPI_DBG
     dbginfo("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
 #endif
-    if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
+    if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, cstr);
+      garmin_fs_t::set_phone_nr(gmsd, str);
     }
     break;
 
@@ -803,11 +801,8 @@ wdata_free(writer_data_t* data)
   foreach (Waypoint* wpt, data->waypt_list) {
 
     if (wpt->extra_data) {
-      gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
-      if (dt->addr_is_dynamic) {
-        xfree(dt->addr);
-      }
-      xfree(dt);
+      auto* dt = (gpi_waypt_t*) wpt->extra_data;
+      delete dt;
     }
     delete wpt;
   }
@@ -923,7 +918,7 @@ wdata_compute_size(writer_data_t* data)
       res += 10;  /* tag(4) */
     }
 
-    gpi_waypt_t* dt = (gpi_waypt_t*) xcalloc(1, sizeof(*dt));
+    auto* dt = new gpi_waypt_t;
     wpt->extra_data = dt;
 
     if (alerts) {
@@ -961,7 +956,7 @@ wdata_compute_size(writer_data_t* data)
       }
     }
 
-    QString str = QString();
+    QString str;
     if (opt_descr) {
       if (!wpt->description.isEmpty()) {
         str = wpt->description;
@@ -976,36 +971,35 @@ wdata_compute_size(writer_data_t* data)
 
 
     if (!str.isEmpty()) {
-      dt->addr_is_dynamic = 1;
-      dt->addr = xstrdup(str);
+      dt->addr = str;
       dt->mask |= GPI_ADDR_ADDR;
-      dt->sz += (8 + strlen(dt->addr));
+      dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
     }
 
-    if ((gmsd = GMSD_FIND(wpt))) {
-      if ((dt->mask == 0) && ((dt->addr = GMSD_GET(addr, NULL)))) {
+    if ((gmsd = garmin_fs_t::find(wpt))) {
+      if ((dt->mask == 0) && !(dt->addr = garmin_fs_t::get_addr(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_ADDR;
-        dt->sz += (8 + strlen(dt->addr));
+        dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
       }
-      if ((dt->city = GMSD_GET(city, NULL))) {
+      if (!(dt->city = garmin_fs_t::get_city(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_CITY;
-        dt->sz += (8 + strlen(dt->city));
+        dt->sz += (8 + strlen(STRFROMUNICODE(dt->city)));
       }
-      if ((dt->country = GMSD_GET(country, NULL))) {
+      if (!(dt->country = garmin_fs_t::get_country(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_COUNTRY;
-        dt->sz += (8 + strlen(dt->country));
+        dt->sz += (8 + strlen(STRFROMUNICODE(dt->country)));
       }
-      if ((dt->state = GMSD_GET(state, NULL))) {
+      if (!(dt->state = garmin_fs_t::get_state(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_STATE;
-        dt->sz += (8 + strlen(dt->state));
+        dt->sz += (8 + strlen(STRFROMUNICODE(dt->state)));
       }
-      if ((dt->postal_code = GMSD_GET(postal_code, NULL))) {
+      if (!(dt->postal_code = garmin_fs_t::get_postal_code(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_POSTAL_CODE;
-        dt->sz += (2 + strlen(dt->postal_code));	/* short form */
+        dt->sz += (2 + strlen(STRFROMUNICODE(dt->postal_code)));	/* short form */
       }
 
-      if ((dt->phone_nr = GMSD_GET(phone_nr, NULL))) {
-        res += (12 + 4 +  strlen(dt->phone_nr));
+      if (!(dt->phone_nr = garmin_fs_t::get_phone_nr(gmsd, nullptr)).isEmpty()) {
+        res += (12 + 4 +  strlen(STRFROMUNICODE(dt->phone_nr)));
       }
     }
     if (dt->mask) {
@@ -1072,7 +1066,7 @@ wdata_write(const writer_data_t* data)
 
   foreach (const Waypoint* wpt, data->waypt_list) {
     int s1;
-    gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
+    auto* dt = (gpi_waypt_t*) wpt->extra_data;
 
     QString str = wpt->description;
     if (str.isEmpty()) {
@@ -1090,8 +1084,8 @@ wdata_write(const writer_data_t* data)
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
     }
-    if (dt->phone_nr) {
-      s0 += (12 + 4 + strlen(dt->phone_nr));
+    if (!dt->phone_nr.isEmpty()) {
+      s0 += (12 + 4 + strlen(STRFROMUNICODE(dt->phone_nr)));
     }
     if (dt->alerts) {
       s0 += 20;  /* tag(3) */
@@ -1152,28 +1146,28 @@ wdata_write(const writer_data_t* data)
       gbfputint32(0x2, fout);			/* ? always 2 ? */
       gbfputint16(dt->mask, fout);
       if (dt->mask & GPI_ADDR_CITY) {
-        write_string(dt->city, 1);
+        write_string(STRFROMUNICODE(dt->city), 1);
       }
       if (dt->mask & GPI_ADDR_COUNTRY) {
-        write_string(dt->country, 1);
+        write_string(STRFROMUNICODE(dt->country), 1);
       }
       if (dt->mask & GPI_ADDR_STATE) {
-        write_string(dt->state, 1);
+        write_string(STRFROMUNICODE(dt->state), 1);
       }
       if (dt->mask & GPI_ADDR_POSTAL_CODE) {
-        write_string(dt->postal_code, 0);
+        write_string(STRFROMUNICODE(dt->postal_code), 0);
       }
       if (dt->mask & GPI_ADDR_ADDR) {
-        write_string(dt->addr, 1);
+        write_string(STRFROMUNICODE(dt->addr), 1);
       }
     }
 
-    if (dt->phone_nr) {
+    if (!dt->phone_nr.isEmpty()) {
       gbfputint32(0x8000c, fout);
-      gbfputint32(strlen(dt->phone_nr) + 2 + 2, fout);
+      gbfputint32(strlen(STRFROMUNICODE(dt->phone_nr)) + 2 + 2, fout);
       gbfputint32(0x2, fout);			/* ? always 2 ? */
       gbfputint16(1, fout);			/* mask */
-      write_string(dt->phone_nr, 0);
+      write_string(STRFROMUNICODE(dt->phone_nr), 0);
     }
   }
 
@@ -1267,7 +1261,7 @@ enum_waypt_cb(const Waypoint* ref)
     }
   }
 
-  Waypoint* wpt = new Waypoint(*ref);
+  auto* wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
     wpt->shortname = mkshort(short_h, wpt->shortname);
@@ -1462,7 +1456,7 @@ garmin_gpi_rd_init(const QString& fname)
 static void
 garmin_gpi_wr_init(const QString& fname)
 {
-  if (gpi_timestamp != 0) {			/* not the first gpi output session */
+  if ((gpi_timestamp != 0) && !gpsbabel_testmode()) {			/* not the first gpi output session */
     time_t t = time(nullptr);
     if (t <= gpi_timestamp) {
       gpi_timestamp++;  /* don't create files with same timestamp */
@@ -1470,7 +1464,7 @@ garmin_gpi_wr_init(const QString& fname)
       gpi_timestamp = t;
     }
   } else {
-    gpi_timestamp = gpsbabel_time;  /* always ZERO during 'testo' */
+    gpi_timestamp = gpsbabel_time;
   }
 
   fout = gbfopen_le(fname, "wb", MYNAME);
@@ -1553,7 +1547,7 @@ garmin_gpi_wr_deinit()
   mkshort_del_handle(&short_h);
   gbfclose(fout);
 
-  if ((opt_sleep) && (gpi_timestamp != 0)) {	/* don't sleep during 'testo' */
+  if ((opt_sleep) && !gpsbabel_testmode()) {	/* don't sleep during 'testo' */
     int sleep = atoi(opt_sleep);
     if (sleep < 1) {
       sleep = 1;

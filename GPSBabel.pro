@@ -15,11 +15,8 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 
 QT -= gui
 
-linux: {
-  TARGET = gpsbabel
-} else {
-  TARGET = GPSBabel
-}
+TARGET = gpsbabel
+
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14
@@ -49,7 +46,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
-        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
+        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
 
 DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
 
@@ -92,23 +89,30 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
 HEADERS =  \
 	an1sym.h \
 	cet.h \
-	cet/ansi_x3_4_1968.h \
-	cet/cp1252.h \
-	cet/iso_8859_8.h \
 	cet_util.h \
 	csv_util.h \
 	defs.h \
+	dg-100.h \
+	energympro.h \
 	explorist_ini.h \
 	filter.h \
-	filterdefs.h \
+	filter_vecs.h \
+	format.h \
+	formspec.h \
 	garmin_device_xml.h \
+	garmin_fit.h \
 	garmin_fs.h \
 	garmin_gpi.h \
+	garmin_icon_tables.h \
 	garmin_tables.h \
 	gbfile.h \
 	gbser.h \
 	gbser_private.h \
 	gbversion.h \
+	geojson.h \
+	ggv_bin.h \
+	globalsat_sport.h \
+	gpx.h \
 	grtcirc.h \
 	heightgrid.h \
 	holux.h \
@@ -131,15 +135,26 @@ HEADERS =  \
 	jeeps/gpsusbcommon.h \
 	jeeps/gpsusbint.h \
 	jeeps/gpsutil.h \
+	kml.h \
+	legacyformat.h \
+	lowranceusr.h \
 	magellan.h \
 	mapsend.h \
+	mynav.h \
 	navilink.h \
+	nmea.h \
+	random.h \
 	session.h \
+	shape.h \
 	shapelib/shapefil.h \
 	strptime.h \
+	subrip.h \
+	unicsv.h \
 	units.h \
+	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
+	yahoo.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
 	zlib/gzguts.h \
@@ -154,6 +169,7 @@ HEADERS =  \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
+	src/core/optional.h \
 	src/core/textstream.h \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
@@ -167,7 +183,7 @@ load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
-macx|linux {
+macx|linux|openbsd {
   qtCompileTest(unistd) {
     # this is used by zlib
     DEFINES += HAVE_UNISTD_H
@@ -200,8 +216,7 @@ win32-msvc* {
   QMAKE_CXXFLAGS += /MP -wd4100
 }
 
-linux {
-  DEFINES += HAVE_LINUX_HID
+linux|openbsd {
   LIBS += "-lusb-1.0"
 }
 
@@ -244,14 +259,14 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-macx|linux{
+macx|linux|openbsd{
   check.commands = PNAME=./$(TARGET) ./testo
   check.depends = $(TARGET)
   QMAKE_EXTRA_TARGETS += check
 }
 
 # build the compilation data base used by clang tools including clang-tidy.
-macx|linux{
+macx|linux|openbsd{
   compile_command_database.target = compile_commands.json
   compile_command_database.commands = make clean; bear make
   QMAKE_EXTRA_TARGETS += compile_command_database
@@ -276,7 +291,6 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 linux{
   coverage.commands = make clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
-  coverage.commands += ln -sf GPSBabel gpsbabel;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
   coverage.commands += gcov -r -o . $(SOURCES) &&
@@ -288,3 +302,13 @@ linux{
 
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
+
+gpsbabel.pdf.depends = FORCE
+gpsbabel.pdf.commands += perl xmldoc/makedoc && 
+gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
+gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
+gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
+gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+#gpsbabel.pdf.commands += cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
+QMAKE_EXTRA_TARGETS += gpsbabel.pdf
+

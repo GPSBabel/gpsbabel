@@ -57,12 +57,12 @@ navitel_read_track()
     int lon = gbfgetint32(fin);
     int lat = gbfgetint32(fin);
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     wpt->latitude = GPS_Math_Semi_To_Deg(lat & 0x7FFFFFFF);
     wpt->longitude = GPS_Math_Semi_To_Deg(lon);
 
     if ((lat >> 31) || (trk == nullptr)) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
     track_add_wpt(trk, wpt);

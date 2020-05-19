@@ -39,7 +39,7 @@ struct inifile_t {
 inifile_t* inifile_init(const QString& filename, const char* myname);
 void inifile_done(inifile_t* inifile);
 
-bool inifile_has_section(const inifile_t* inifile, const char* section);
+bool inifile_has_section(const inifile_t* inifile, const QString& section);
 
 /*
      inifile_readstr:
@@ -59,6 +59,6 @@ int inifile_readint(const inifile_t* inifile, const QString& section, const QStr
      inifile_readint_def:
        if found inifile_readint_def returns value of key, otherwise a default value "def"
  */
-int inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, int def);
+int inifile_readint_def(const inifile_t* inifile, const QString& section, const QString& key, int def);
 
 #endif

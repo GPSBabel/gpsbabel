@@ -155,7 +155,7 @@ parse_wpt(char* buff)
 {
   int col = -1;
   char* cx;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   struct tm tm;
   int has_time = 0;
   memset(&tm, 0, sizeof(tm));
@@ -272,7 +272,7 @@ parse_trkpt(char* buff)
 {
   int col = -1;
   struct tm tm;
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
 
   char* c = strstr(buff, "A ");
   if (c == buff) {
@@ -425,7 +425,7 @@ compegps_data_read()
       }
       break;
     case 'R':
-      route = route_head_alloc();
+      route = new route_head;
       route_add_head(route);
       parse_rte_info(ctail, route);
       break;
@@ -449,7 +449,7 @@ compegps_data_read()
       wpt = parse_trkpt(ctail);
       if (wpt != nullptr) {
         if (track == nullptr) {
-          track = route_head_alloc();
+          track = new route_head;
           track_add_head(track);
         }
         track_add_wpt(track, wpt);

@@ -5,11 +5,11 @@
   <para>
 GPSBabel is distributed "ready to run" on most common
 operating systems via the
-<ulink url="http://www.gpsbabel.org/download.html">download page</ulink>.
+<ulink url="https://www.gpsbabel.org/download.html">download page</ulink>.
 </para>
   <para> As GPSBabel runs on a wide variety of operating systems,
 be sure to visit the
-<ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
+<ulink url="https://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
 additional information.
 </para>
 </sect1>
@@ -24,7 +24,7 @@ Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris,
 etc.   Both Clang/LLVM and GNU C++ are regularly exercised via automation.
 </para>
 <para>
-You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
+You can grab a release from the <ulink url="https://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
 </para>
 <para>There are external requirements for bulding.</para>
 <variablelist>

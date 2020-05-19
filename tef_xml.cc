@@ -23,10 +23,16 @@
 
 */
 
-#include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QLatin1String>         // for QLatin1String
+#include <QtCore/QString>               // for QString
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QVector>               // for QVector
+#include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/Qt>                    // for CaseInsensitive
 
 #include "defs.h"
-#include "xmlgeneric.h"
+#include "xmlgeneric.h"                 // for cb_start, cb_end, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
 
 static Waypoint* wpt_tmp;
 static int item_count;
@@ -65,12 +71,12 @@ xg_tag_mapping tef_xml_map[] = {
  * tef_start: check for comment "TourExchangeFormat"
  */
 
-void
+static void
 tef_start(xg_string, const QXmlStreamAttributes* attrv)
 {
   bool valid = false;
 
-  foreach(QXmlStreamAttribute attr, *attrv) {
+  for (const auto& attr : *attrv) {
     if (attr.name().compare(QLatin1String("Comment"), Qt::CaseInsensitive) == 0) {
       if (attr.value().compare(QLatin1String("TourExchangeFormat"), Qt::CaseInsensitive) == 0) {
         valid = true;
@@ -92,8 +98,8 @@ tef_start(xg_string, const QXmlStreamAttributes* attrv)
 static void
 tef_header(xg_string, const QXmlStreamAttributes* attrv)
 {
-  route = route_head_alloc();
-  foreach(QXmlStreamAttribute attr, *attrv) {
+  route = new route_head;
+  for (const auto& attr : *attrv) {
     if (attr.name().compare(QLatin1String("Name"), Qt::CaseInsensitive) == 0) {
       route->rte_name = attr.value().toString().trimmed();
     } else if (attr.name().compare(QLatin1String("Software"), Qt::CaseInsensitive) == 0) {
@@ -113,9 +119,11 @@ tef_list_start(xg_string, const QXmlStreamAttributes* attrv)
 
 #if OMG
 
-TODO: this whole horrible mess is not covered at all in the test suite,
-so just stub it all out until someone cares. (TEF is rarely used from 
-what we can tell.)
+/*
+ * TODO: this whole horrible mess is not covered at all in the test suite,
+ * so just stub it all out until someone cares. (TEF is rarely used from 
+ * what we can tell.)
+ */
 
 
 /* in "TourExchangeFormat" the following can happen:
@@ -205,7 +213,7 @@ waypoint_final()
 
   if (route != nullptr) {
     if ((via != 0) || (routevia == nullptr)) {
-      Waypoint* wpt = new Waypoint(*wpt_tmp);
+      auto* wpt = new Waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }
@@ -242,7 +250,7 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
     wpt_tmp->wpt_flags.fmt_use ++;
   }
 
-  foreach(QXmlStreamAttribute attr, *attrv) {
+  for (const auto& attr : *attrv) {
     QString attrstr = attr.value().toString();
 
     if (attr.name().compare(QLatin1String("SegDescription"), Qt::CaseInsensitive) == 0) {

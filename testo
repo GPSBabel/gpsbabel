@@ -52,6 +52,15 @@ compare()
 	}
 }
 
+compare_nole()
+{
+	${DIFF} -u --strip-trailing-cr $* ||  {
+		echo ERROR comparing $*
+		errorcount=`expr $errorcount + 1`
+		#exit 1
+	}
+}
+
 compare_with_alternate()
 {
 	${DIFF} -u -b -w $1 $3 1>${TMPDIR}/compare.log ||  {
@@ -75,9 +84,9 @@ sort_and_compare()
 
 gpsbabel()
 {
-	${PNAME} $* || {
+	${PNAME} "$@" || {
 		echo "$PNAME returned error $?"
-		echo "($PNAME $*)"
+		echo "($PNAME $@)"
 		errorcount=`expr $errorcount + 1`
 		#exit 1
 	}

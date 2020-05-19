@@ -10,6 +10,7 @@
 
 ver=${1}
 versuffix=${ver:+_$1}
+script=${2:-./build_and_test}
 docker run \
 --rm \
 --mount type=bind,source="$(pwd)",target=/app \
@@ -19,5 +20,6 @@ docker run \
 --mount type=bind,source=/etc/passwd,target=/etc/passwd,readonly \
 --mount type=bind,source=/etc/group,target=/etc/group,readonly \
 --user "$(id -u):$(id -g)" \
+--cap-add SYS_PTRACE \
 tsteven4/gpsbabel_build_environment${versuffix} \
-bash -c "if [ -n ${ver} ]; then if [ -e /opt/${ver}.env ]; then . /opt/${ver}.env; fi; fi; ./build_and_test"
+bash -c "if [ -n ${ver} ]; then if [ -e /opt/${ver}.env ]; then . /opt/${ver}.env; fi; fi; ${script}"

@@ -42,37 +42,20 @@ class DateTime : public QDateTime {
 public:
   // As a crutch, mimic the old behaviour of an uninitialized creation time
   // being 1/1/1970.
-  DateTime() {
-    setTime_t(0);
+  // The choice of Qt::TimeSpec here can be critical to performance.
+  // With a Qt::LocalTime conversions between Qt::UTC and Qt::LocalTime
+  // can be required when using a method such as *Epoch, add*.
+  // Using Qt::Utc avoids these conversions.
+  // The lowranceusr regression test was measured taking 2.7x longer,
+  // and the entire regression suite took 1.7x longer, with
+  // Qt::LocalTime compared to Qt::UTC on ubuntu bionic.
+  // Note that these conversions can be required if the Qt::TimeSpec is
+  // set to Qt:LocalTime after construction.
+  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC)) {
   }
 
   DateTime(const QDate& date, const QTime& time) : QDateTime(date, time) {}
   DateTime(const QDateTime& dt) : QDateTime(dt) {}
-
-  // TODO: this should go away in favor of .addSecs().
-  // add time_t without losing any existing milliseconds.
-  DateTime& operator+=(const time_t& t) {
-    QDateTime dt = addSecs(t);
-    setDate(dt.date());
-    setTime(dt.time());
-    return *this;
-  }
-
-  // Integer form: YYMMDD
-  int ymd() const {
-    QDate d(date());
-    return d.year() * 10000 + d.month() * 100 + d.day();
-  }
-
-  int ddmmyy() const {
-    QDate d(date());
-    return d.day() * 10000 + d.month() * 100 + d.year();
-  }
-
-  int hms() const {
-    QTime t(time());
-    return t.hour() * 10000 + t.minute() * 100 + t.second();
-  }
 
   // Temporary: Override the standard, also handle time_t 0 as invalid.
   bool isValid() const {

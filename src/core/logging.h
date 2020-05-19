@@ -19,49 +19,34 @@
 #ifndef gpsbabel_logging_h_included
 #define gpsbabel_logging_h_included
 
-// A wrapper for QTextStream that provides a sensible Warning() and Fatal()
-// with convenient stream operators.
+// A wrapper for QDebug that provides a sensible Warning() and Fatal()
+// with convenient functions, stream operators and manipulators.
 
-#include <QtCore/QTextStream>
-#include <QtCore/QFile>
-#include <cstdlib> //exit()
+#include <QtCore/QDebug>       // for QDebug
+#include <QtCore/QFile>        // for QFile
+#include <QtCore/QIODevice>    // for QIODevice, QIODevice::WriteOnly
+#include <QtCore/QString>      // for QString
+#include <QtCore/QTextStream>  // for QTextStream
+#include <cstdio>              // for stderr
+#include <cstdlib>             // for exit
 
-class Warning {
- public:
-    explicit Warning(bool fatal = false) :
-   fatal_(fatal) {
-    file_.open(stderr, QIODevice::WriteOnly);
-    fileStream_.setDevice(&file_);
+
+class Warning : public QDebug {
+public:
+  explicit Warning(bool fatal = false) : QDebug(&msg_), fatal_(fatal) {
   }
   ~Warning() {
-    fileStream_ << '\n';
+    QFile file;
+    file.open(stderr, QIODevice::WriteOnly);
+    QTextStream fileStream(&file);
+    fileStream << msg_ << '\n';
+    file.close();
     if (fatal_) {
-      fileStream_.flush();
       exit(1);
     }
   }
-  inline Warning& operator << (char d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (signed short d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (unsigned short d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (signed int d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (unsigned int d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (signed long d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (unsigned long d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (qint64 d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (quint64 d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (float d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (double d) { fileStream_ << d; return optionalSpace(); }
-  inline Warning& operator << (const char* d) { fileStream_ << QString::fromUtf8(d); return optionalSpace(); }
-  inline Warning& operator << (const QString& d) { fileStream_ << '\"' << d << '\"'; return optionalSpace(); }
-  inline Warning& operator << (const void* d) { fileStream_ << '\"' << d << '\"'; return optionalSpace(); }
-
-  inline Warning& optionalSpace() {
-    fileStream_ << ' ';
-    return *this;
-  }
 private:
-  QFile file_;
-  QTextStream fileStream_;
+  QString msg_;
   bool fatal_;
 };
 

@@ -176,10 +176,8 @@ gopal_read()
   double lat_old = 0;
   
 
-  route_head* route = route_head_alloc();
-  QDateTime qtx;
-  qtx.setTimeSpec(Qt::UTC);
-  qtx.setTime_t(tx);
+  auto* route = new route_head;
+  QDateTime qtx = QDateTime::fromSecsSinceEpoch(tx, Qt::UTC);
   route->rte_name = "Tracklog ";
   route->rte_name += qtx.toString(Qt::ISODate);
   route_add_head(route);
@@ -202,7 +200,7 @@ gopal_read()
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...
@@ -290,7 +288,7 @@ gopal_read()
         if (!strptime(c, "%Y%m%d", &tm2)) {
           fatal("Bad date '%s'.\n", c);
         }
-        wpt->creation_time += mkgmtime(&tm2);
+        wpt->creation_time = wpt->creation_time.addSecs(mkgmtime(&tm2));
         break;
       case 10:  // Unknown.  Ignored.
       case 11:  // Bearing.  Ignored.
@@ -318,11 +316,11 @@ gopal_read()
           ((speed>maxspeed)||(speed<minspeed)))
        ) {
       if (global_opts.debug_level > 1) {
-        fprintf(stderr,"Problem in or around line %5lu: \"%s\" %lf km/h\n",line,buff,speed);
+        fprintf(stderr,"Problem in or around line %5ld: \"%s\" %lf km/h\n",line,buff,speed);
       }
     } else {
       if (global_opts.debug_level > 1) {
-        fprintf(stderr,"valid                line %5lu: \"%s\" %lf km/h\n",line,buff,speed);
+        fprintf(stderr,"valid                line %5ld: \"%s\" %lf km/h\n",line,buff,speed);
       }
       lastwpt=wpt;
       lat_old=wpt->latitude;
@@ -335,11 +333,10 @@ gopal_read()
 static void
 gopal_write_waypt(const Waypoint* wpt)
 {
-  char tbuffer[64];
   int fix=fix_unknown;
   //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  UN; HDOP;     SAT
   //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
-  snprintf(tbuffer, sizeof(tbuffer), "%06d", wpt->creation_time.hms());
+  QString tbuffer = wpt->creation_time.toString("HHmmss");
   if (wpt->fix!=fix_unknown) {
     switch (wpt->fix) {
     case fix_none:
@@ -355,7 +352,7 @@ gopal_write_waypt(const Waypoint* wpt)
   }
   //MSVC handles time_t as int64, gcc and mac only int32, so convert it:
   unsigned long timestamp = (unsigned long)wpt->GetCreationTime().toTime_t();
-  gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
+  gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp, CSTR(tbuffer),  wpt->longitude, wpt->latitude,wpt->altitude,
             wpt->speed,fix,wpt->hdop,wpt->sat);
 }
 

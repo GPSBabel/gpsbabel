@@ -10,3 +10,9 @@ compare ${REFERENCE}/gc/GCGCA8~html.txt ${TMPDIR}/gc.html
 
 gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o html,logs -F ${TMPDIR}/gc_logs.html
 compare ${REFERENCE}/gc/GCGCA8_logs~html.txt ${TMPDIR}/gc_logs.html
+
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx \
+  -o html,logs -F ${TMPDIR}/GC7FA4.html \
+  -o text,logs -F ${TMPDIR}/GC7FA4.text
+compare ${REFERENCE}/gc/GC7FA4.html ${TMPDIR}/GC7FA4.html
+compare ${REFERENCE}/gc/GC7FA4.text ${TMPDIR}/GC7FA4.text

@@ -36,7 +36,7 @@ if [ "$(uname)" = "Darwin" ]; then
   INSTALLER_NAME=${INSTALLER%.*}
   APPFILE=/Volumes/${INSTALLER_NAME}/${INSTALLER_NAME}.app/Contents/MacOS/${INSTALLER_NAME}
   hdiutil attach ${PWD}/${INSTALLER}
-  extract-qt-installer $APPFILE ${QT_TARGET_CATALOG}/Qt
+  sandbox-exec -n no-network extract-qt-installer $APPFILE ${QT_TARGET_CATALOG}/Qt
   # workaround apparent exit of extract-qt-installer before finished,
   # which results in hdiutil "hdiutil: couldn't unmount "disk1" - Resource busy"
   # and the install resources not being available.
@@ -49,7 +49,7 @@ if [ "$(uname)" = "Darwin" ]; then
     sleep 5
   done
 elif [ "$(uname)" = "Linux" ]; then
-  extract-qt-installer ${PWD}/${INSTALLER} ${QT_TARGET_CATALOG}/Qt
+  unshare -r -n extract-qt-installer ${PWD}/${INSTALLER} ${QT_TARGET_CATALOG}/Qt
 fi
 
 echo Create ${ENVFILE}

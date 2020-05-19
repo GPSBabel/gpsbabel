@@ -28,56 +28,33 @@
     http://www.usglobalsat.com/s-176-developer-information.aspx
  */
 
-#include "defs.h"
-#include <cctype>
 
-#include "gbser.h"
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
+#include <cassert>                     // for assert
+#include <cstdarg>                     // for va_end, va_list, va_start
+#include <cstdint>                     // for uint8_t, uint16_t, int16_t
+#include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
+#include <cstdlib>                     // for abs
+#include <cstring>                     // for memcpy, memcmp, strcmp
+
+#include <QtCore/QByteArray>           // for QByteArray
+#include <QtCore/QDate>                // for QDate
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QList>                // for QList
+#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
+#include <QtCore/QString>              // for QString
+#include <QtCore/QTime>                // for QTime
+#include <QtCore/Qt>                   // for TextDate, UTC
+#include <QtCore/QtGlobal>             // for qPrintable
+
+#include "defs.h"
+#include "dg-100.h"
+#include "gbfile.h"                    // for gbfread, gbfclose, gbfgetc, gbfopen, gbfile
+#include "gbser.h"                     // for gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_set_speed, gbser_write, gbser_ERROR, gbser_OK, gbser_NOTHING
+
 
 #define MYNAME "DG-100"
 
-struct model_t {
-  const char *name;
-  unsigned speed;
-  int has_trailing_bytes;
-  int has_payload_end_seq;
-  struct dg100_command *commands;
-  unsigned int numcommands;
-};
-
-static const model_t* model;
-
-static void* serial_handle;
-
-/* maximum frame size observed so far: 1817 bytes
- *   (dg100cmd_getfileheader returning 150 entries)
- * dg100cmd_getfileheader is the only answer type of variable length,
- * answers of other types are always shorter than 1817 bytes */
-#define FRAME_MAXLEN 4096
-
-enum dg100_command_id {
-  dg100cmd_getconfig     = 0xB7,
-  dg100cmd_setconfig     = 0xB8,
-  dg100cmd_getfileheader = 0xBB,
-  dg100cmd_getfile       = 0xB5,
-  dg100cmd_erase         = 0xBA,
-  dg100cmd_getid         = 0xBF,
-  dg100cmd_setid         = 0xC0,
-  dg100cmd_gpsmouse      = 0xBC,
-  dg200cmd_reset         = 0x80
-};
-
-struct dg100_command {
-  int  id;
-  int  sendsize;
-  int  recvsize;
-  int  trailing_bytes;
-  const char* text;	/* Textual description for debugging */
-};
-
-static struct dg100_command dg100_commands[] = {
+const Dg100Format::dg100_command Dg100Format::dg100_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
@@ -89,7 +66,7 @@ static struct dg100_command dg100_commands[] = {
   { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" }
 };
 
-static struct dg100_command dg200_commands[] = {
+const Dg100Format::dg100_command Dg100Format::dg200_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
@@ -102,15 +79,10 @@ static struct dg100_command dg200_commands[] = {
   { dg200cmd_reset   ,       24,   0,    0, "reset" }
 };
 
-struct dynarray16 {
-  unsigned count; /* number of elements used */
-  unsigned limit; /* number of elements allocated */
-  int16_t* data;
-};
-
 /* helper functions */
-static struct dg100_command*
-dg100_findcmd(int id) {
+const Dg100Format::dg100_command*
+Dg100Format::dg100_findcmd(int id) const
+{
   /* linear search should be OK as long as dg100_numcommands is small */
   for (unsigned int i = 0; i < model->numcommands; i++) {
     if (model->commands[i].id == id) {
@@ -121,57 +93,27 @@ dg100_findcmd(int id) {
   return nullptr;
 }
 
-static void
-dynarray16_init(struct dynarray16* a, unsigned limit)
+QDateTime
+Dg100Format::bintime2utc(int date, int time)
 {
-  a->count = 0;
-  a->limit = limit;
-  a->data = (int16_t*) xmalloc(sizeof(a->data[0]) * a->limit);
-}
-
-static int16_t*
-dynarray16_alloc(struct dynarray16* a, unsigned n)
-{
-  const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
-
-  unsigned oldcount = a->count;
-  a->count += n;
-
-  if (a->count > a->limit) {
-    unsigned need = a->count - a->limit;
-    need = (need > elements_per_chunk) ? need : elements_per_chunk;
-    a->limit += need;
-    a->data = (int16_t*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
-  }
-  return(a->data + oldcount);
-}
-
-static time_t
-bintime2utc(int date, int time)
-{
-  struct tm gpstime;
-
-  gpstime.tm_sec   = time % 100;
+  int sec   = time % 100;
   time /= 100;
-  gpstime.tm_min   = time % 100;
+  int min   = time % 100;
   time /= 100;
-  gpstime.tm_hour  = time;
+  int hour  = time;
 
-  /*
-   * GPS year: 2000+; struct tm year: 1900+
-   * GPS month: 1-12, struct tm month: 0-11
-   */
-  gpstime.tm_year  = date % 100 + 100;
+  /* GPS year: 2000+ */
+  int year  = date % 100 + 2000;
   date /= 100;
-  gpstime.tm_mon   = date % 100 - 1;
+  int mon   = date % 100;
   date /= 100;
-  gpstime.tm_mday  = date;
+  int day  = date;
 
-  return(mkgmtime(&gpstime));
+  return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), Qt::UTC);
 }
 
-static void
-dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
+void
+Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
 {
   /* Only give byte dumps for higher debug levels */
   if (global_opts.debug_level < 5) {
@@ -189,8 +131,8 @@ dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
   }
 }
 
-static void
-dg100_log(const char* fmt, ...)
+void
+Dg100Format::dg100_log(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -202,8 +144,8 @@ dg100_log(const char* fmt, ...)
 
 
 /* TODO: check whether negative lat/lon (West/South) are handled correctly */
-static float
-bin2deg(int val)
+float
+Dg100Format::bin2deg(int val) const
 {
   /* Assume that val prints in decimal digits as [-]dddmmffff
    * ddd:  degrees
@@ -225,8 +167,8 @@ bin2deg(int val)
   return(deg);
 }
 
-static void
-process_gpsfile(uint8_t data[], route_head** track)
+void
+Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
 {
   const int recordsizes[3] = {8, 20, 32};
 
@@ -256,21 +198,17 @@ process_gpsfile(uint8_t data[], route_head** track)
     }
 
     if (*track == nullptr) {
-      time_t creation_time;
-      char buf[1024];
       int bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       int bindate = be_read32(data + i + 12);
-      creation_time = bintime2utc(bindate, bintime);
-      strncpy(buf, model->name, sizeof(buf));
-      strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
-               gmtime(&creation_time));
-      *track = route_head_alloc();
-      (*track)->rte_name = buf;
+      QDateTime creation_time = bintime2utc(bindate, bintime);
+      QString datetime = creation_time.toString("yyyy/MM/dd hh:mm:ss");
+      *track = new route_head;
+      (*track)->rte_name = QString("%1 tracklog (%2)").arg(model->name, datetime);
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
     float latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;
@@ -306,8 +244,8 @@ process_gpsfile(uint8_t data[], route_head** track)
   }
 }
 
-static uint16_t
-dg100_checksum(const uint8_t buf[], int count)
+uint16_t
+Dg100Format::dg100_checksum(const uint8_t buf[], int count)
 {
   uint16_t sum = 0;
 
@@ -320,8 +258,8 @@ dg100_checksum(const uint8_t buf[], int count)
 }
 
 /* communication functions */
-static size_t
-dg100_send(uint8_t cmd, const void* payload, size_t param_len)
+size_t
+Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) const
 {
   uint8_t frame[FRAME_MAXLEN];
 
@@ -338,18 +276,39 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   be_write16(frame + 2, payload_len);
   frame[4] = cmd;
 
-  /* copy payload */
-  memcpy(frame + 5, payload, param_len);
+  /*
+   * The behavior of memcpy is undefined if dest or src is nullptr,
+   * even with count zero!
+   * Note the dg100cmd_getconfig will have src == nullptr and count == 0!
+   */
+  if (param_len > 0) {
+    assert(payload != nullptr);
+    /* copy payload */
+    memcpy(frame + 5, payload, param_len);
+  }
 
   /* create frame tail */
   uint16_t checksum = dg100_checksum(frame + 4, framelen - 8);
   be_write16(frame + framelen - 4, checksum);
   be_write16(frame + framelen - 2, 0xB0B3);
 
-  int n = gbser_write(serial_handle, frame, framelen);
+  int n;
+  if (isfile) {
+    QScopedArrayPointer<uint8_t> buf(new uint8_t[framelen]);
+    if (gbfread(buf.data(), 1, framelen, fin) != framelen) {
+      fatal("failed to get data to compare to sent data.\n");
+    }
+    if (memcmp(frame, buf.data(), framelen) != 0) {
+      fatal("sent data does not match expected value.\n");
+    }
+
+    n = gbser_OK;
+  } else {
+    n = gbser_write(serial_handle, frame, framelen);
+  }
 
   if (global_opts.debug_level) {
-    struct dg100_command* cmdp = dg100_findcmd(cmd);
+    const dg100_command* cmdp = dg100_findcmd(cmd);
 
     dg100_debug(n == 0 ? "Sent: " : "Error Sending:",
                 1, framelen, frame);
@@ -363,26 +322,45 @@ dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   return (n);
 }
 
-static int
-dg100_recv_byte()
+int
+Dg100Format::dg100_recv_byte() const
 {
-  /* allow for a delay of 40s;
-   *  erasing the whole DG-100 memory takes about 21s */
-  int result = gbser_readc_wait(serial_handle, 40000);
-  switch (result) {
-  case gbser_ERROR:
-    fatal("dg100_recv_byte(): error reading one byte\n");
-  case gbser_NOTHING:
-    fatal("dg100_recv_byte(): read timeout\n");
+  int result;
+  if (isfile) {
+    result = gbfgetc(fin);
+    if (result < 0) {
+      fatal("dg100_recv_byte(): read error\n");
+    }
+  } else {
+    /* allow for a delay of 40s;
+     *  erasing the whole DG-100 memory takes about 21s */
+
+    result = gbser_readc_wait(serial_handle, 40000);
+    switch (result) {
+    case gbser_ERROR:
+      fatal("dg100_recv_byte(): error reading one byte\n");
+    case gbser_NOTHING:
+      fatal("dg100_recv_byte(): read timeout\n");
+    }
   }
   return result;
+}
+
+int
+Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms) const
+{
+  if (isfile) {
+    return gbfread(buf, 1, len, fin);
+  } else {
+    return gbser_read_wait(handle, buf, len, ms);
+  }
 }
 
 /* payload returns a pointer into a static buffer (which also contains the
  * framing around the data), so the caller must copy the data before calling
  * this function again */
-static int
-dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
+int
+Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload) const
 {
   static uint8_t buf[FRAME_MAXLEN];
   uint16_t payload_end_seq;
@@ -420,7 +398,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
    */
 
   /* read Payload Length, Command ID, and two further bytes */
-  int i = gbser_read_wait(serial_handle, &buf[2], 5, 1000);
+  int i = dg100_read_wait(serial_handle, &buf[2], 5, 1000);
   if (i < 5) {
     fatal("Expected to read 5 bytes, but got %d\n", i);
   }
@@ -439,7 +417,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
     cmd = dg100cmd_setconfig;
   }
 
-  struct dg100_command* cmdinfo = dg100_findcmd(cmd);
+  const dg100_command* cmdinfo = dg100_findcmd(cmd);
   if (!cmdinfo) {
     /* TODO: consume data until frame end signature,
      * then report failure to the caller? */
@@ -472,7 +450,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
           frame_len, FRAME_MAXLEN);
   }
 
-  i = gbser_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
+  i = dg100_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
   if (i < frame_len - 7) {
     fatal("Expected to read %d bytes, but got %d\n",
           frame_len - 7, i);
@@ -511,10 +489,10 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
 }
 
 /* return value: number of bytes copied into buf, -1 on error */
-static int
-dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
+int
+Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 {
-  struct dg100_command* cmdinfo;
+  const dg100_command* cmdinfo;
   uint8_t* data;
 
   int n = dg100_recv_frame(&cmdinfo, &data);
@@ -540,17 +518,17 @@ dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
-static int
-dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
+int
+Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count) const
 {
-  struct dg100_command* cmdinfo = dg100_findcmd(cmd);
+  const dg100_command* cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != nullptr);
   dg100_send(cmd, sendbuf, cmdinfo->sendsize);
 
   /* the number of frames the answer will comprise */
   int frames = (cmd == dg100cmd_getfile) ? 2 : 1;
   /* alias pointer for easy typecasting */
-  uint8_t* buf = (uint8_t*) recvbuf;
+  auto* buf = (uint8_t*) recvbuf;
   int fill = 0;
   for (int i = 0; i < frames; i++) {
     int n = dg100_recv(cmd, buf + fill, count - fill);
@@ -563,9 +541,10 @@ dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 }
 
 /* higher level communication functions */
-static void
-dg100_getfileheaders(struct dynarray16* headers)
+QList<int>
+Dg100Format::dg100_getfileheaders() const
 {
+  QList<int> headers;
   uint8_t request[2];
   uint8_t answer[FRAME_MAXLEN];
 
@@ -585,32 +564,34 @@ dg100_getfileheaders(struct dynarray16* headers)
       break;
     }
 
-    int16_t*h = dynarray16_alloc(headers, numheaders);
     for (int i = 0; i < numheaders; i++) {
       int offset = 4 + i * 12;
       int seqnum = be_read32(answer + offset + 8);
-      h[i] = seqnum;
+      headers.append(seqnum);
       if (global_opts.debug_level) {
         int time   = be_read32(answer + offset) & 0x7FFFFFFF;
         int date   = be_read32(answer + offset + 4);
-        time_t ti = bintime2utc(date, time);
-        dg100_log("Header #%d: Seq: %d Time: %s",
-                  i, seqnum, ctime(&ti));
+        QDateTime ti = bintime2utc(date, time);
+        QByteArray datetime = ti.toLocalTime().toString(Qt::TextDate).toUtf8();
+        dg100_log("Header #%d: Seq: %d Time: %s\n",
+                  i, seqnum, datetime.constData());
       }
     }
   } while (nextheader != 0);
+
+  return headers;
 }
 
-static void
-dg100_getconfig()
+void
+Dg100Format::dg100_getconfig() const
 {
   uint8_t answer[45];
 
   dg100_request(dg100cmd_getconfig, nullptr, answer, sizeof(answer));
 }
 
-static void
-dg100_getfile(int16_t num, route_head** track)
+void
+Dg100Format::dg100_getfile(int16_t num, route_head** track) const
 {
   uint8_t request[2];
   uint8_t answer[2048];
@@ -620,27 +601,27 @@ dg100_getfile(int16_t num, route_head** track)
   process_gpsfile(answer, track);
 }
 
-static void
-dg100_getfiles()
+void
+Dg100Format::dg100_getfiles() const
 {
-  struct dynarray16 headers;
   route_head* track = nullptr;
 
-  /* maximum number of headers observed so far: 672
-   * if necessary, the dynarray will grow even further */
-  dynarray16_init(&headers, 1024);
-
-  dg100_getfileheaders(&headers);
-
-  for (unsigned int i = 0; i < headers.count; i++) {
-    int filenum = headers.data[i];
+  const QList<int> headers = dg100_getfileheaders();
+  for (int filenum : headers) {
     dg100_getfile(filenum, &track);
   }
-  dg100_getconfig();       // To light on the green LED on the DG-200
+  /* Different DG-100 devices seem to return different numbers of bytes
+   * from the getconfig command.  This can result in a mismatched checksum,
+   * which we treat as a fatal error.  Avoid this mess by not issuing the
+   * getconfig command on DG-100 devices.
+   */
+  if (strcmp(model->name, "DG-100") != 0) {
+    dg100_getconfig();       // To light on the green LED on the DG-200
+  }
 }
 
-static int
-dg100_erase()
+int
+Dg100Format::dg100_erase() const
 {
   uint8_t request[2] = { 0xFF, 0xFF };
   uint8_t answer[4];
@@ -653,66 +634,60 @@ dg100_erase()
   return(0);
 }
 
-/* GPSBabel integration */
-
-static char* erase;
-static char* erase_only;
-
-static
-QVector<arglist_t> dg100_args = {
-  {
-    "erase", &erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "erase_only", &erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-};
-
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-common_rd_init(const QString& fname)
+void
+Dg100Format::common_rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-    fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+  if (isfile) {
+    fin = gbfopen(fname, "rb", MYNAME);
+  } else {
+    if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
+      fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+    }
+    if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
+      fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
+    }
+    // Toss anything that came in before our speed was set, particularly
+    // for the bluetooth BT-335 product.
+    gbser_flush(serial_handle);
   }
-  if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-    fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
-  }
-  // Toss anything that came in before our speed was set, particularly
-  // for the bluetooth BT-335 product.
-  gbser_flush(serial_handle);
 }
 
-static void
-dg100_rd_init(const QString& fname)
+void
+Dg100Format::dg100_rd_init(const QString& fname, bool isfile)
 {
-  static const model_t dg100_model = { "DG-100", 115200, 1, 1, dg100_commands, sizeof(dg100_commands) / sizeof(struct dg100_command) };
+  static const model_t dg100_model = { "DG-100", 115200, true, true, dg100_commands, sizeof(dg100_commands) / sizeof(dg100_command) };
   model = &dg100_model;
+  this->isfile = isfile;
   common_rd_init(fname);
 }
 
-static void
-dg200_rd_init(const QString& fname)
+void
+Dg100Format::dg200_rd_init(const QString& fname, bool isfile)
 {
-  static const model_t dg200_model = { "DG-200", 230400, 0, 0, dg200_commands, sizeof(dg200_commands) / sizeof(struct dg100_command) };
+  static const model_t dg200_model = { "DG-200", 230400, false, false, dg200_commands, sizeof(dg200_commands) / sizeof(dg100_command) };
   model = &dg200_model;
+  this->isfile = isfile;
   common_rd_init(fname);
 }
 
-static void
-dg100_rd_deinit()
+void
+Dg100Format::rd_deinit()
 {
-  gbser_deinit(serial_handle);
-  serial_handle = nullptr;
+  if (isfile) {
+    gbfclose(fin);
+    fin = nullptr;
+  } else {
+    gbser_deinit(serial_handle);
+    serial_handle = nullptr;
+  }
 }
 
-static void
-dg100_read()
+void
+Dg100Format::read()
 {
   if (*erase_only == '1') {
     dg100_erase();
@@ -723,50 +698,3 @@ dg100_read()
     dg100_erase();
   }
 }
-
-/**************************************************************************/
-
-// capabilities below means: we can read tracks and waypoints
-
-ff_vecs_t dg100_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg100_rd_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-ff_vecs_t dg200_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  dg200_rd_init,
-  nullptr,
-  dg100_rd_deinit,
-  nullptr,
-  dg100_read,
-  nullptr,
-  nullptr,
-  &dg100_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-/**************************************************************************/

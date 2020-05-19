@@ -1,0 +1,36 @@
+GPSBabel Version 1.6.0.  https://www.gpsbabel.org
+
+Usage:
+    ./gpsbabel [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE
+    ./gpsbabel [options] -i INTYPE -o OUTTYPE INFILE [filter] OUTFILE
+
+    Converts GPS route and waypoint data from one format type to another.
+    The input type and filename are specified with the -i INTYPE
+    and -f INFILE options. The output type and filename are specified
+    with the -o OUTTYPE and -F OUTFILE options.
+    If '-' is used for INFILE or OUTFILE, stdin or stdout will be used.
+
+    In the second form of the command, INFILE and OUTFILE are the
+    first and second positional (non-option) arguments.
+
+    INTYPE and OUTTYPE must be one of the supported file types and
+    may include options valid for that file type.  For example:
+      'gpx', 'gpx,snlen=10' and 'ozi,snlen=10,snwhite=1'
+    (without the quotes) are all valid file type specifications.
+
+Options:
+    -p               Preferences file (gpsbabel.ini)
+    -s               Synthesize shortnames
+    -r               Process route information
+    -t               Process track information
+    -T               Process realtime tracking information
+    -w               Process waypoint information [default]
+    -b               Process command file (batch mode)
+    -x filtername    Invoke filter (placed between inputs and output) 
+    -D level         Set debug level [0]
+    -h, -?           Print detailed help and exit
+    -V               Print GPSBabel version and exit
+
+
+
+[Press enter]

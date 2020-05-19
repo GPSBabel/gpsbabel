@@ -140,7 +140,7 @@ glogbook_write()
 
 void	gl_trk_s(xg_string, const QXmlStreamAttributes*)
 {
-  trk_head = route_head_alloc();
+  trk_head = new route_head;
   track_add_head(trk_head);
 }
 

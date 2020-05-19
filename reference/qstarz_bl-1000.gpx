@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="25.067766267" minlon="121.591293783" maxlat="25.068748717" maxlon="121.592796933"/>
+  <wpt lat="25.068690117" lon="121.592073833">
+    <ele>8.092</ele>
+    <time>2020-02-19T01:25:08Z</time>
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+    <fix>3d</fix>
+    <sat>4</sat>
+    <hdop>0.660000</hdop>
+    <vdop>0.980000</vdop>
+  </wpt>
+  <wpt lat="25.068722683" lon="121.592244900">
+    <ele>17.455</ele>
+    <time>2020-02-19T01:25:16Z</time>
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+    <fix>3d</fix>
+    <sat>8</sat>
+    <hdop>1.450000</hdop>
+    <vdop>0.910000</vdop>
+  </wpt>
+  <wpt lat="25.068716800" lon="121.592409367">
+    <ele>21.537</ele>
+    <time>2020-02-19T01:25:28Z</time>
+    <name>WPT003</name>
+    <cmt>WPT003</cmt>
+    <desc>WPT003</desc>
+    <fix>3d</fix>
+    <sat>9</sat>
+    <hdop>1.110000</hdop>
+    <vdop>0.850000</vdop>
+  </wpt>
+  <wpt lat="25.068719650" lon="121.592491517">
+    <ele>25.720</ele>
+    <time>2020-02-19T01:25:32Z</time>
+    <name>WPT004</name>
+    <cmt>WPT004</cmt>
+    <desc>WPT004</desc>
+    <fix>3d</fix>
+    <sat>9</sat>
+    <hdop>1.110000</hdop>
+    <vdop>0.850000</vdop>
+  </wpt>
+  <wpt lat="25.068741317" lon="121.592633783">
+    <ele>33.871</ele>
+    <time>2020-02-19T01:25:39Z</time>
+    <name>WPT005</name>
+    <cmt>WPT005</cmt>
+    <desc>WPT005</desc>
+    <fix>3d</fix>
+    <sat>9</sat>
+    <hdop>1.110000</hdop>
+    <vdop>0.850000</vdop>
+  </wpt>
+  <wpt lat="25.068576050" lon="121.592748250">
+    <ele>39.305</ele>
+    <time>2020-02-19T01:26:01Z</time>
+    <name>WPT006</name>
+    <cmt>WPT006</cmt>
+    <desc>WPT006</desc>
+    <fix>3d</fix>
+    <sat>9</sat>
+    <hdop>1.110000</hdop>
+    <vdop>0.850000</vdop>
+  </wpt>
+  <wpt lat="25.068591733" lon="121.592583867">
+    <ele>38.290</ele>
+    <time>2020-02-19T01:26:11Z</time>
+    <name>WPT007</name>
+    <cmt>WPT007</cmt>
+    <desc>WPT007</desc>
+    <fix>3d</fix>
+    <sat>10</sat>
+    <hdop>1.010000</hdop>
+    <vdop>0.840000</vdop>
+  </wpt>
+  <wpt lat="25.068619717" lon="121.592520650">
+    <ele>39.093</ele>
+    <time>2020-02-19T01:26:15Z</time>
+    <name>WPT008</name>
+    <cmt>WPT008</cmt>
+    <desc>WPT008</desc>
+    <fix>3d</fix>
+    <sat>10</sat>
+    <hdop>1.010000</hdop>
+    <vdop>0.840000</vdop>
+  </wpt>
+  <wpt lat="25.068635300" lon="121.592396133">
+    <ele>40.247</ele>
+    <time>2020-02-19T01:26:22Z</time>
+    <name>WPT009</name>
+    <cmt>WPT009</cmt>
+    <desc>WPT009</desc>
+    <fix>3d</fix>
+    <sat>11</sat>
+    <hdop>0.910000</hdop>
+    <vdop>0.820000</vdop>
+  </wpt>
+  <wpt lat="25.068635000" lon="121.592197950">
+    <ele>36.111</ele>
+    <time>2020-02-19T01:26:34Z</time>
+    <name>WPT010</name>
+    <cmt>WPT010</cmt>
+    <desc>WPT010</desc>
+    <fix>3d</fix>
+    <sat>12</sat>
+    <hdop>0.850000</hdop>
+    <vdop>0.800000</vdop>
+  </wpt>
+  <wpt lat="25.068633367" lon="121.592121017">
+    <ele>35.846</ele>
+    <time>2020-02-19T01:26:40Z</time>
+    <name>WPT011</name>
+    <cmt>WPT011</cmt>
+    <desc>WPT011</desc>
+    <fix>3d</fix>
+    <sat>12</sat>
+    <hdop>0.860000</hdop>
+    <vdop>0.800000</vdop>
+  </wpt>
+  <wpt lat="25.068310867" lon="121.591895733">
+    <ele>33.704</ele>
+    <time>2020-02-19T01:27:17Z</time>
+    <name>WPT012</name>
+    <cmt>WPT012</cmt>
+    <desc>WPT012</desc>
+    <fix>3d</fix>
+    <sat>12</sat>
+    <hdop>0.860000</hdop>
+    <vdop>0.800000</vdop>
+  </wpt>
+  <wpt lat="25.068250817" lon="121.591895567">
+    <ele>32.540</ele>
+    <time>2020-02-19T01:27:23Z</time>
+    <name>WPT013</name>
+    <cmt>WPT013</cmt>
+    <desc>WPT013</desc>
+    <fix>3d</fix>
+    <sat>12</sat>
+    <hdop>0.860000</hdop>
+    <vdop>0.800000</vdop>
+  </wpt>
+  <trk>
+    <trkseg>
+      <trkpt lat="25.068724217" lon="121.592175767">
+        <ele>16.226</ele>
+        <time>2020-02-19T01:25:10Z</time>
+        <course>85.070000</course>
+        <speed>1.533044</speed>
+        <fix>3d</fix>
+        <sat>7</sat>
+        <hdop>1.660000</hdop>
+        <vdop>0.940000</vdop>
+      </trkpt>
+      <trkpt lat="25.068719300" lon="121.592279017">
+        <ele>18.556</ele>
+        <time>2020-02-19T01:25:19Z</time>
+        <course>94.059998</course>
+        <speed>1.095767</speed>
+        <fix>3d</fix>
+        <sat>8</sat>
+        <hdop>1.240000</hdop>
+        <vdop>0.860000</vdop>
+      </trkpt>
+      <trkpt lat="25.068718450" lon="121.592378533">
+        <ele>21.337</ele>
+        <time>2020-02-19T01:25:26Z</time>
+        <course>93.800003</course>
+        <speed>1.476456</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068733517" lon="121.592596617">
+        <ele>32.409</ele>
+        <time>2020-02-19T01:25:37Z</time>
+        <course>95.839996</course>
+        <speed>1.394144</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068748717" lon="121.592695933">
+        <ele>34.995</ele>
+        <time>2020-02-19T01:25:43Z</time>
+        <course>88.519997</course>
+        <speed>1.389000</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068713983" lon="121.592780483">
+        <ele>36.327</ele>
+        <time>2020-02-19T01:25:50Z</time>
+        <course>156.889999</course>
+        <speed>1.352989</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068618400" lon="121.592796933">
+        <ele>38.900</ele>
+        <time>2020-02-19T01:25:56Z</time>
+        <course>177.429993</course>
+        <speed>1.507322</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068576400" lon="121.592715783">
+        <ele>38.710</ele>
+        <time>2020-02-19T01:26:03Z</time>
+        <course>267.480011</course>
+        <speed>1.275822</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068580567" lon="121.592616733">
+        <ele>38.318</ele>
+        <time>2020-02-19T01:26:09Z</time>
+        <course>273.649994</course>
+        <speed>1.383856</speed>
+        <fix>3d</fix>
+        <sat>9</sat>
+        <hdop>1.110000</hdop>
+        <vdop>0.850000</vdop>
+      </trkpt>
+      <trkpt lat="25.068634067" lon="121.592416350">
+        <ele>40.410</ele>
+        <time>2020-02-19T01:26:21Z</time>
+        <course>273.959991</course>
+        <speed>1.414722</speed>
+        <fix>3d</fix>
+        <sat>11</sat>
+        <hdop>0.910000</hdop>
+        <vdop>0.820000</vdop>
+      </trkpt>
+      <trkpt lat="25.068633717" lon="121.592302667">
+        <ele>38.466</ele>
+        <time>2020-02-19T01:26:27Z</time>
+        <course>267.760010</course>
+        <speed>1.409578</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068631217" lon="121.592091617">
+        <ele>35.997</ele>
+        <time>2020-02-19T01:26:42Z</time>
+        <course>270.010010</course>
+        <speed>1.342700</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068634350" lon="121.591979617">
+        <ele>37.212</ele>
+        <time>2020-02-19T01:26:49Z</time>
+        <course>281.559998</course>
+        <speed>0.967156</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068571433" lon="121.591917883">
+        <ele>34.867</ele>
+        <time>2020-02-19T01:26:58Z</time>
+        <course>214.130005</course>
+        <speed>1.275822</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068471617" lon="121.591905467">
+        <ele>34.900</ele>
+        <time>2020-02-19T01:27:06Z</time>
+        <course>202.059998</course>
+        <speed>1.280967</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068369067" lon="121.591883350">
+        <ele>34.622</ele>
+        <time>2020-02-19T01:27:12Z</time>
+        <course>188.479996</course>
+        <speed>1.157500</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068280867" lon="121.591898483">
+        <ele>32.953</ele>
+        <time>2020-02-19T01:27:20Z</time>
+        <course>181.250000</course>
+        <speed>0.992878</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068196600" lon="121.591858000">
+        <ele>31.464</ele>
+        <time>2020-02-19T01:27:29Z</time>
+        <course>176.839996</course>
+        <speed>1.193511</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068103933" lon="121.591850117">
+        <ele>32.151</ele>
+        <time>2020-02-19T01:27:35Z</time>
+        <course>181.100006</course>
+        <speed>1.275822</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068021083" lon="121.591807433">
+        <ele>30.846</ele>
+        <time>2020-02-19T01:27:43Z</time>
+        <course>179.210007</course>
+        <speed>1.399289</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067953800" lon="121.591735383">
+        <ele>30.044</ele>
+        <time>2020-02-19T01:27:51Z</time>
+        <course>180.139999</course>
+        <speed>1.172933</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067854500" lon="121.591744733">
+        <ele>27.201</ele>
+        <time>2020-02-19T01:28:00Z</time>
+        <course>185.139999</course>
+        <speed>1.440444</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067766267" lon="121.591716267">
+        <ele>26.132</ele>
+        <time>2020-02-19T01:28:08Z</time>
+        <course>217.850006</course>
+        <speed>0.972300</speed>
+        <fix>3d</fix>
+        <sat>11</sat>
+        <hdop>0.940000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067775067" lon="121.591609500">
+        <ele>25.763</ele>
+        <time>2020-02-19T01:28:16Z</time>
+        <course>283.320007</course>
+        <speed>1.301545</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067802917" lon="121.591498883">
+        <ele>25.861</ele>
+        <time>2020-02-19T01:28:23Z</time>
+        <course>285.540009</course>
+        <speed>1.301545</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067827400" lon="121.591394617">
+        <ele>27.001</ele>
+        <time>2020-02-19T01:28:30Z</time>
+        <course>289.260010</course>
+        <speed>1.352989</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067852283" lon="121.591293783">
+        <ele>26.668</ele>
+        <time>2020-02-19T01:28:40Z</time>
+        <course>291.989990</course>
+        <speed>1.327267</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.067943367" lon="121.591317283">
+        <ele>23.075</ele>
+        <time>2020-02-19T01:28:47Z</time>
+        <course>22.600000</course>
+        <speed>1.301545</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068022600" lon="121.591378883">
+        <ele>21.345</ele>
+        <time>2020-02-19T01:28:53Z</time>
+        <course>32.419998</course>
+        <speed>1.471311</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068101633" lon="121.591450433">
+        <ele>18.598</ele>
+        <time>2020-02-19T01:29:00Z</time>
+        <course>44.570000</course>
+        <speed>1.172933</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068162300" lon="121.591526817">
+        <ele>21.046</ele>
+        <time>2020-02-19T01:29:05Z</time>
+        <course>63.330002</course>
+        <speed>1.394144</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+      <trkpt lat="25.068210767" lon="121.591609750">
+        <ele>21.881</ele>
+        <time>2020-02-19T01:29:13Z</time>
+        <course>35.980000</course>
+        <speed>1.162645</speed>
+        <fix>3d</fix>
+        <sat>12</sat>
+        <hdop>0.860000</hdop>
+        <vdop>0.800000</vdop>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

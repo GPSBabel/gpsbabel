@@ -1,0 +1,6 @@
+
+gpsbabel -i dg-100-bin -f ${REFERENCE}/track/dg100.bin -o gpx -F ${TMPDIR}/dg100.gpx
+compare ${REFERENCE}/track/dg100.gpx ${TMPDIR}/dg100.gpx
+
+gpsbabel -i dg-200-bin -f ${REFERENCE}/track/dg200.bin -o gpx -F ${TMPDIR}/dg200.gpx
+compare ${REFERENCE}/track/dg200.gpx ${TMPDIR}/dg200.gpx

@@ -143,7 +143,7 @@ vpl_read()
 
   // Set up a track
   if (track_head == nullptr) {
-    track_head = route_head_alloc();
+    track_head = new route_head;
     track_add_head(track_head);
   }
 
@@ -186,7 +186,7 @@ vpl_parse_75_sentence(const char* ibuf)
   ymd /= 100;
   tm.tm_year = ymd % 100 + 100;
 
-  Waypoint* waypt = new Waypoint;
+  auto* waypt = new Waypoint;
 
   // Lat/Lon are both stored *0xE1000 which we have to divide out
   // for decimal degrees

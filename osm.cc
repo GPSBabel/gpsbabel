@@ -575,7 +575,7 @@ osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 static void
 osm_way(xg_string, const QXmlStreamAttributes* attrv)
 {
-  rte = route_head_alloc();
+  rte = new route_head;
   // create a wpt to represent the route center if it has a center tag
   wpt = new Waypoint;
   if (attrv->hasAttribute("id")) {
@@ -591,7 +591,7 @@ osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 
     if (waypoints.contains(atstr)) {
       const Waypoint* ctmp = waypoints.value(atstr);
-      Waypoint* tmp = new Waypoint(*ctmp);
+      auto* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));
@@ -763,7 +763,7 @@ static void
 osm_release_ids(const Waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    Waypoint* tmp = const_cast<Waypoint*>(wpt);
+    auto* tmp = const_cast<Waypoint*>(wpt);
     xfree(tmp->extra_data);
     tmp->extra_data = nullptr;
   }
@@ -837,7 +837,7 @@ osm_waypt_disp(const Waypoint* wpt)
 
   if (strlen(created_by) !=0) {
     gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (gpsbabel_time != 0)
+    if (!gpsbabel_testmode())
       if (strcmp("GPSBabel",created_by)==0) {
         gbfprintf(fout, "-%s", gpsbabel_version);
       }
@@ -892,7 +892,7 @@ osm_rte_disp_trail(const route_head* rte)
 
   if (strlen(created_by) !=0) {
     gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (gpsbabel_time != 0)
+    if (!gpsbabel_testmode())
       if (strcmp("GPSBabel",created_by)==0) {
         gbfprintf(fout, "-%s", gpsbabel_version);
       }
@@ -926,7 +926,7 @@ osm_write()
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
   gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
-  if (gpsbabel_time != 0) {
+  if (!gpsbabel_testmode()) {
     gbfprintf(fout, "-%s", gpsbabel_version);
   }
   gbfprintf(fout, "'>\n");

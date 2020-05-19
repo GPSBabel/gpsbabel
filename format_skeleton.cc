@@ -89,7 +89,7 @@ format_skeleton_read()
 //
 // For routes:
 //
-//         route = route_head_alloc();
+//         route = new route_head;
 //         populate struct route_hdr
 //	   route_add_head(route);
 //         while (have more routepoints) {

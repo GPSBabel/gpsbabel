@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include "nmea.h"
 
 #define MYNAME "jtr"
 
@@ -206,7 +207,7 @@ jtr_read()
       continue;
     }
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -236,7 +237,7 @@ jtr_read()
     }
 
     if (trk == nullptr) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
 
@@ -302,11 +303,11 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
             scourse,
             CSTR(sdate));
 
-  xasprintf(&tmp, "%s*%02X", str, nmea_cksum(str));
+  xasprintf(&tmp, "%s*%02X", str, NmeaFormat::nmea_cksum(str));
   xfree(str);
   str = tmp;
 
-  xasprintf(&tmp, "%s,,,E,,E*%02X\r", str, nmea_cksum(str));
+  xasprintf(&tmp, "%s,,,E,,E*%02X\r", str, NmeaFormat::nmea_cksum(str));
   xfree(str);
   str = tmp;
 

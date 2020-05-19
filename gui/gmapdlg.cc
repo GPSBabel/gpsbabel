@@ -162,7 +162,7 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
     wptItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void*)&wpt));
+    it->setData(QVariant::fromValue((void*)&wpt));
     appendWaypointInfo(it, wpt);
     wptList_ << it;
   }
@@ -177,7 +177,7 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
     trkItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void*)&trk));
+    it->setData(QVariant::fromValue((void*)&trk));
     appendTrackInfo(it, trk);
     trkList_ << it;
   }
@@ -192,7 +192,7 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
     rteItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
-    it->setData(qVariantFromValue((void*)&rte));
+    it->setData(QVariant::fromValue((void*)&rte));
     appendRouteInfo(it, rte);
     rteList_ << it;
   }

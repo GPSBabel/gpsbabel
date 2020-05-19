@@ -84,7 +84,7 @@ static void data_read()
 
   memset(&tm, 0, sizeof(tm));
 
-  unsigned char* HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
+  auto* HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
 
   /* read the wpo file to the data-array */
   int iDataRead = gbfread(HxWpt, 1, GM100_WPO_FILE_SIZE, file_in);
@@ -97,7 +97,7 @@ static void data_read()
 
   /* Get the waypoints */
   for (int iCount = 0; iCount < iWptNum ; iCount ++) {
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     int iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
     WPT* pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
@@ -164,7 +164,7 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
   setshort_length(mkshort_handle, sLen);
   setshort_mustuniq(mkshort_handle, 0);
 
-  char* shortstr = mkshort(mkshort_handle, stIn);
+  char* shortstr = mkshort(mkshort_handle, stIn, false);
   strcpy(strTmp,shortstr);
   xfree(shortstr);
 
@@ -191,6 +191,11 @@ static void holux_disp(const Waypoint* wpt)
   }
 
   short sIndex = le_read16(&((WPTHDR*)HxWFile)->num);
+
+  if (sIndex >= MAXWPT) {
+    fatal(MYNAME ": too many waypoints.  Max is %d.\n", MAXWPT);
+  }
+
   ((WPTHDR*)HxWFile)->idx[sIndex] = sIndex;          /* set the waypoint index  */
   le_write16(&((WPTHDR*)HxWFile)->idx[sIndex], sIndex);          /* set the waypoint index  */
   ((WPTHDR*)HxWFile)->used[sIndex] = 0xff;            /* Waypoint used */

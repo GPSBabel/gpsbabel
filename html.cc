@@ -19,12 +19,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cstdint>
+#include <ctime>                   // for localtime
+
+#include <QtCore/QString>          // for QString, operator!=
+#include <QtCore/QVector>          // for QVector
+#include <QtCore/Qt>               // for CaseInsensitive
 
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include "src/core/xmltag.h"
-#include <cstdio>
-#include <cstdlib>
+#include "formspec.h"              // for FsChainFind, kFsGpx
+#include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfile
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/xmltag.h"       // for xml_findfirst, xml_attribute, xml_tag, fs_xml, xml_findnext
+
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -89,9 +97,9 @@ html_disp(const Waypoint* wpt)
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
 
-  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTRc(wpt->shortname));
+  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTR(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
-  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname));
+  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname));
   char* cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
   gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
   xfree(cout);
@@ -101,12 +109,12 @@ html_disp(const Waypoint* wpt)
   gbfprintf(file_out, "<br>\n");
   if (wpt->description != wpt->shortname) {
     if (wpt->HasUrlLink()) {
-      char* d = html_entitize(CSTRc(wpt->description));
+      char* d = html_entitize(CSTR(wpt->description));
       UrlLink link = wpt->GetUrlLink();
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", CSTR(link.url_), d);
       xfree(d);
     } else {
-      gbfprintf(file_out, "%s", CSTRc(wpt->description));
+      gbfprintf(file_out, "%s", CSTR(wpt->description));
     }
     if (!wpt->gc_data->placer.isEmpty()) {
       gbfprintf(file_out, " by %s", CSTR(wpt->gc_data->placer));
@@ -146,84 +154,74 @@ html_disp(const Waypoint* wpt)
     }
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", CSTR(hint));
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
+    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTR(wpt->notes));
   }
 
-  fs_xml* fs_gpx = nullptr;
   if (includelogs) {
-    fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
-  }
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
+    if (fs_gpx && fs_gpx->tag) {
+      xml_tag* root = fs_gpx->tag;
+      xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+      while (curlog) {
+        time_t logtime = 0;
+        gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
 
-  if (fs_gpx && fs_gpx->tag) {
-    xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
-    while (curlog) {
-      time_t logtime = 0;
-      gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
+        xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+        if (logpart) {
+          gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
+        }
 
-      xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
-      if (logpart) {
-        gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
-      }
+        logpart = xml_findfirst(curlog, "groundspeak:finder");
+        if (logpart) {
+          char* f = html_entitize(CSTR(logpart->cdata));
+          gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
+          xfree(f);
+        }
 
-      logpart = xml_findfirst(curlog, "groundspeak:finder");
-      if (logpart) {
-        char* f = html_entitize(CSTR(logpart->cdata));
-        gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
-        xfree(f);
-      }
+        logpart = xml_findfirst(curlog, "groundspeak:date");
+        if (logpart) {
+          logtime = xml_parse_time(logpart->cdata).toTime_t();
+          struct tm* logtm = localtime(&logtime);
+          if (logtm) {
+            gbfprintf(file_out,
+                      "<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
+                      logtm->tm_year+1900,
+                      logtm->tm_mon+1,
+                      logtm->tm_mday);
+          }
+        }
 
-      logpart = xml_findfirst(curlog, "groundspeak:date");
-      if (logpart) {
-        logtime = xml_parse_time(logpart->cdata).toTime_t();
-        struct tm* logtm = localtime(&logtime);
-        if (logtm) {
+        logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
+        if (logpart) {
+          double lat = xml_attribute(logpart->attributes, "lat").toDouble();
+          double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+          char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
           gbfprintf(file_out,
-                    "<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
-                    logtm->tm_year+1900,
-                    logtm->tm_mon+1,
-                    logtm->tm_mday);
+                    "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
+                    coordstr);
+          xfree(coordstr);
         }
+
+        logpart = xml_findfirst(curlog, "groundspeak:text");
+        if (logpart) {
+          QString encstr = xml_attribute(logpart->attributes, "encoded");
+          bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
+
+          QString s;
+          if (html_encrypt && encoded) {
+            s = rot13(logpart->cdata);
+          } else {
+            s = logpart->cdata;
+          }
+
+          char* t = html_entitize(s);
+          gbfputs(t, file_out);
+          xfree(t);
+        }
+
+        gbfprintf(file_out, "</p>\n");
+        curlog = xml_findnext(root, curlog, "groundspeak:log");
       }
-
-      logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
-      if (logpart) {
-        double lat = 0;
-        double lon = 0;
-        char* coordstr = xml_attribute(logpart, "lat");
-        if (coordstr) {
-          lat = atof(coordstr);
-        }
-        coordstr = xml_attribute(logpart, "lon");
-        if (coordstr) {
-          lon = atof(coordstr);
-        }
-        coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
-        gbfprintf(file_out,
-                  "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
-                  coordstr);
-        xfree(coordstr);
-      }
-
-      logpart = xml_findfirst(curlog, "groundspeak:text");
-      if (logpart) {
-        char* encstr = xml_attribute(logpart, "encoded");
-        int encoded = (toupper(encstr[0]) != 'F');
-
-        QString s;
-        if (html_encrypt && encoded) {
-          s = rot13(logpart->cdata);
-        } else {
-          s = logpart->cdata;
-        }
-
-        char* t = html_entitize(s);
-        gbfputs(t, file_out);
-        xfree(t);
-      }
-
-      gbfprintf(file_out, "</p>\n");
-      curlog = xml_findnext(root, curlog, "groundspeak:log");
     }
   }
   gbfprintf(file_out, "</td></tr></table>\n");
@@ -253,7 +251,7 @@ data_write()
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
-  if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
+  if (!gpsbabel_testmode()) {
     gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
   }
   gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");

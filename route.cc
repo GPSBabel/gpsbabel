@@ -72,14 +72,6 @@ track_count()
   return global_track_list->count();	/* total # of tracks */
 }
 
-// FIXME: provide a method to deallocate a head that isn't added onto a route list,
-// or just let the users allocate with new and deallocate with delete.
-route_head*
-route_head_alloc()
-{
-  return new route_head;
-}
-
 void
 route_add_head(route_head* rte)
 {
@@ -220,12 +212,6 @@ route_swap(RouteList& other)
 }
 
 void
-route_sort(RouteList::Compare cmp)
-{
-  global_route_list->sort(cmp);
-}
-
-void
 track_backup(RouteList** head_bak)
 {
   global_track_list->copy(head_bak);
@@ -241,12 +227,6 @@ void
 track_swap(RouteList& other)
 {
   global_track_list->swap(other);
-}
-
-void
-track_sort(RouteList::Compare cmp)
-{
-  global_track_list->sort(cmp);
 }
 
 /*
@@ -379,8 +359,6 @@ computed_trkdata track_recompute(const route_head* trk)
 route_head::route_head() :
   rte_num(0),
   rte_waypt_ct(0),
-  fs(nullptr),
-  cet_converted(0),
   // line_color(),
   line_width(-1),
   session(curr_session())
@@ -390,9 +368,7 @@ route_head::route_head() :
 route_head::~route_head()
 {
   waypoint_list.flush();
-  if (fs) {
-    fs_chain_destroy(fs);
-  }
+  fs.FsChainDestroy();
 }
 
 int RouteList::waypt_count() const
@@ -485,12 +461,17 @@ RouteList::copy(RouteList** dst) const
 
   const char RPT[] = "RPT";
   foreach (const route_head* rte_old, *this) {
-    route_head* rte_new = route_head_alloc();
+    auto* rte_new = new route_head;
+    // waypoint_list created below with add_wpt.
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->rte_urls = rte_old->rte_urls;
-    rte_new->fs = fs_chain_copy(rte_old->fs);
     rte_new->rte_num = rte_old->rte_num;
+    // rte_waypt_ct created below with add_wpt.
+    rte_new->fs = rte_old->fs.FsChainCopy();
+    rte_new->line_color = rte_old->line_color;
+    rte_new->line_width = rte_old->line_width;
+    rte_new->session = rte_old->session;
     (*dst)->add_head(rte_new);
     foreach (const Waypoint* old_wpt, rte_old->waypoint_list) {
       (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
@@ -516,9 +497,4 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
-}
-
-void RouteList::sort(Compare cmp)
-{
-  std::sort(begin(), end(), cmp);
 }

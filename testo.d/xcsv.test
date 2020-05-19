@@ -11,7 +11,7 @@ echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
 echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
 echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
 rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
 gpsbabel -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
 compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 
@@ -39,8 +39,8 @@ echo 'EXTENSION csv' >>${TMPDIR}/track1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track1.style
 echo 'DATATYPE TRACK' >>${TMPDIR}/track1.style
-echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track1.style
 echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/track1.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track1.style
 echo 'IFIELD TRACK_NAME,"","%s"' >>${TMPDIR}/track1.style
 echo 'IFIELD TRACK_NEW,"","%d"' >>${TMPDIR}/track1.style
 gpsbabel -i xcsv,style=${TMPDIR}/track1.style -f ${REFERENCE}/track/track1.csv -o gpx -F ${TMPDIR}/track1~csv.gpx
@@ -52,8 +52,8 @@ echo 'EXTENSION csv' >>${TMPDIR}/track2.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track2.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track2.style
 echo 'DATATYPE TRACK' >>${TMPDIR}/track2.style
-echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track2.style
 echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/track2.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/track2.style
 echo 'IFIELD TRACK_NEW,"","%d"' >>${TMPDIR}/track2.style
 echo 'IFIELD TRACK_NAME,"","%s"' >>${TMPDIR}/track2.style
 gpsbabel -i xcsv,style=${TMPDIR}/track2.style -f ${REFERENCE}/track/track2.csv -o gpx -F ${TMPDIR}/track2~csv.gpx
@@ -65,8 +65,30 @@ echo 'EXTENSION csv' >>${TMPDIR}/route1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/route1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/route1.style
 echo 'DATATYPE ROUTE' >>${TMPDIR}/route1.style
-echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/route1.style
 echo 'IFIELD LAT_DECIMAL,"","%f"' >>${TMPDIR}/route1.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >>${TMPDIR}/route1.style
 echo 'IFIELD ROUTE_NAME,"","%s"' >>${TMPDIR}/route1.style
 gpsbabel -i xcsv,style=${TMPDIR}/route1.style -f ${REFERENCE}/route/route1.csv -o gpx -F ${TMPDIR}/route1~csv.gpx
 compare ${REFERENCE}/route/route1~csv.gpx ${TMPDIR}/route1~csv.gpx
+
+# gmsd fields
+echo 'DESCRIPTION gmsd test' >> ${TMPDIR}/gmsd.style
+echo 'EXTENSION csv' >> ${TMPDIR}/gmsd.style
+echo 'FIELD_DELIMITER TAB' >> ${TMPDIR}/gmsd.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD SHORTNAME,"","%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD DESCRIPTION,"","%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD URL,"","%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD STREET_ADDR, "", "%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD CITY, "", "%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD COUNTRY, "", "%s"' >> ${TMPDIR}/gmsd.style
+#echo 'IFIELD FACILITY, "", "%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD PHONE_NR, "", "%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD POSTAL_CODE, "", "%s"' >> ${TMPDIR}/gmsd.style
+echo 'IFIELD EMAIL, "", "%s"' >> ${TMPDIR}/gmsd.style
+gpsbabel -i unicsv -f ${REFERENCE}/gmsd.unicsv -o xcsv,style=${TMPDIR}/gmsd.style -F ${TMPDIR}/gmsd.xcsv
+compare ${REFERENCE}/gmsd.xcsv ${TMPDIR}/gmsd.xcsv
+gpsbabel -i xcsv,style=${TMPDIR}/gmsd.style -f ${REFERENCE}/gmsd.xcsv -o unicsv -F ${TMPDIR}/gmsd.unicsv
+compare ${REFERENCE}/gmsd.unicsv ${TMPDIR}/gmsd.unicsv

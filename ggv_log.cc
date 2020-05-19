@@ -108,7 +108,7 @@ ggv_log_read()
     break;
   }
 
-  signed char* buf = (signed char*) xmalloc(bufsz);
+  auto* buf = (signed char*) xmalloc(bufsz);
 
   while ((len = gbfread(buf, 1, bufsz, fin))) {
     struct tm tm;
@@ -118,13 +118,13 @@ ggv_log_read()
     }
 
     if (trk == nullptr) {
-      trk = route_head_alloc();
+      trk = new route_head;
       track_add_head(trk);
     }
 
     memset(&tm, 0, sizeof(tm));
 
-    Waypoint* wpt = new Waypoint;
+    auto* wpt = new Waypoint;
 
     int deg = (int16_t) le_read16(&buf[0]);
     int min = le_read16(&buf[2]);

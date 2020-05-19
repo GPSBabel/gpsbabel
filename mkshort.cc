@@ -29,7 +29,6 @@
 
 #include "defs.h"
 #include "cet.h"            // for cet_utf8_strdup, cet_utf8_strlen, cet_utf8_strndup
-#include "cet_util.h"       // for cet_cs_vec_utf8
 
 
 #define MYNAME	"mkshort"
@@ -64,7 +63,6 @@ struct  mkshort_handle_imp {
   bool whitespaceok{true};
   bool repeating_whitespaceok{false};
   bool must_uniq{true};
-  bool is_utf8{false};
 };
 
 static struct replacements {
@@ -104,7 +102,6 @@ mkshort_new_handle()
 
   h->badchars = xstrdup(DEFAULT_BADCHARS);
   h->defname = xstrdup("WPT");
-  h->is_utf8 = (global_opts.charset == &cet_cs_vec_utf8);
 
   return h;
 }
@@ -128,7 +125,7 @@ void
 add_to_hashlist(mkshort_handle_imp* h, char* name)
 {
   int hash = hash_string(name);
-  uniq_shortname* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
+  auto* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
 
   s->orig_shortname = xstrdup(name);
   h->namelist[hash].append(s);
@@ -162,7 +159,7 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
 void
 mkshort_del_handle(short_handle* h)
 {
-  mkshort_handle_imp* hdr = (mkshort_handle_imp*) *h;
+  auto* hdr = (mkshort_handle_imp*) *h;
 
   if (!h || !hdr) {
     return;
@@ -256,7 +253,7 @@ replace_constants(char* s)
 void
 setshort_length(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   if (l == 0) {
     hdl->target_len = default_target_len;
   } else {
@@ -271,7 +268,7 @@ setshort_length(short_handle h, int l)
 void
 setshort_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->whitespaceok = l;
 }
 
@@ -283,7 +280,7 @@ setshort_whitespace_ok(short_handle h, int l)
 void
 setshort_repeating_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->repeating_whitespaceok = l;
 }
 
@@ -294,7 +291,7 @@ setshort_repeating_whitespace_ok(short_handle h, int l)
 void
 setshort_defname(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   if (s == nullptr) {
     fatal("setshort_defname called without a valid name.");
   }
@@ -312,7 +309,7 @@ setshort_defname(short_handle h, const char* s)
 void
 setshort_badchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
   if ((hdl->badchars != nullptr)) {
     xfree(hdl->badchars);
@@ -327,7 +324,7 @@ setshort_badchars(short_handle h, const char* s)
 void
 setshort_goodchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->goodchars != nullptr) {
     xfree(hdl->goodchars);
@@ -345,7 +342,7 @@ setshort_goodchars(short_handle h, const char* s)
 void
 setshort_mustupper(short_handle h, int i)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->mustupper = i;
 }
 
@@ -357,30 +354,20 @@ setshort_mustupper(short_handle h, int i)
 void
 setshort_mustuniq(short_handle h, int i)
 {
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
   hdl->must_uniq = i;
 }
 
-/*
- *  Declare that actually characters are (or are not) encoded in UTF-8.
- */
-void
-setshort_is_utf8(short_handle h, const int is_utf8)
-{
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
-  hdl->is_utf8 = is_utf8;
-}
-
 char*
-mkshort(short_handle h, const char* istring)
+mkshort(short_handle h, const char* istring, bool is_utf8)
 {
   char* ostring;
   char* tstring;
   char* cp;
   int i, l, replaced;
-  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
+  auto* hdl = (mkshort_handle_imp*) h;
 
-  if (hdl->is_utf8) {
+  if (is_utf8) {
     ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */
   } else {
     ostring = xstrdup(istring);
@@ -529,7 +516,7 @@ mkshort(short_handle h, const char* istring)
    * If the numeric component alone is longer than our target string
    * length, use only what'll fit.
    */
-  if (hdl->is_utf8) {
+  if (is_utf8) {
     /* ToDo: Keep trailing numeric data as described above! */
     if (cet_utf8_strlen(ostring) > hdl->target_len) {
       char* tmp = cet_utf8_strndup(ostring, hdl->target_len);
@@ -564,7 +551,7 @@ mkshort(short_handle h, const char* istring)
 QString
 mkshort(short_handle h, const QString& istring)
 {
-  char* t =  mkshort(h, CSTR(istring));
+  char* t =  mkshort(h, CSTR(istring), true);
   QString r(t);
   xfree(t);
   return r;

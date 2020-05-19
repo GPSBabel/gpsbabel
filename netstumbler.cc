@@ -43,7 +43,7 @@ static char* sneicon = nullptr;
 static char* snmac = nullptr;
 static int macstumbler;
 
-static void	fix_netstumbler_dupes();
+static void	fix_netstumbler_dupes(const WaypointList*);
 
 #define MYNAME "NETSTUMBLER"
 
@@ -90,7 +90,7 @@ data_read()
   char* ibuf;
   char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
   char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
-  char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
+  QString desc;
   double lat = 0, lon = 0;
   int line_no = 0;
   int stealth_num = 0, whitespace_num = 0;
@@ -98,6 +98,7 @@ data_read()
   int speed = 0, channel = 0;
   struct tm tm;
   int line = 0;
+  WaypointList tmp_waypt_list;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -218,7 +219,7 @@ data_read()
       continue;
     }
 
-    Waypoint* wpt_tmp = new Waypoint;
+    auto* wpt_tmp = new Waypoint;
 
     if (stealth) {
       if (!snmac) {
@@ -239,10 +240,10 @@ data_read()
     }
 
     if (snmac) {
-      snprintf(desc, sizeof desc, "%s/%d Mbps/Ch %d", ssid, speed, channel);
+      desc = QString("%1/%2 Mbps/Ch %3").arg(ssid).arg(speed).arg(channel);
       wpt_tmp->shortname = (mac);
     } else {
-      snprintf(desc, sizeof desc, "%d Mbps/Ch %d/%s", speed, channel, mac);
+      desc = QString("%1 Mbps/Ch %2/%3").arg(speed).arg(channel).arg(mac);
       wpt_tmp->shortname = (ssid);
     }
 
@@ -251,9 +252,14 @@ data_read()
     wpt_tmp->latitude = lat;
     wpt_tmp->SetCreationTime(mktime(&tm));
 
-    waypt_add(wpt_tmp);
+    tmp_waypt_list.waypt_add(wpt_tmp);
   }
-  fix_netstumbler_dupes();
+
+  fix_netstumbler_dupes(&tmp_waypt_list);
+
+  for (Waypoint* wpt : tmp_waypt_list) {
+    waypt_add(wpt);
+  }
 }
 
 struct htable_t {
@@ -296,19 +302,16 @@ compare(const void* a, const void* b)
 
 static
 void
-fix_netstumbler_dupes()
+fix_netstumbler_dupes(const WaypointList* waypt_list)
 {
-  int ct = waypt_count(), serial = 0;
+  int ct = waypt_list->count(), serial = 0;
   unsigned long last_crc;
 
-  htable_t* htable = (htable_t*) xmalloc(ct * sizeof *htable);
+  auto* htable = (htable_t*) xmalloc(ct * sizeof(htable_t));
   htable_t* bh = htable;
 
   int i = 0;
-  // Why, oh, why is this format running over the entire waypoint list and
-  // modifying it?  This seems wrong.
-  extern WaypointList* global_waypoint_list;
-  foreach(Waypoint* waypointp, *global_waypoint_list) {
+  for (Waypoint* waypointp : *waypt_list) {
     bh->wpt = waypointp;
     QString snptr = bh->wpt->shortname;
     QString tmp_sn = snptr.toLower();

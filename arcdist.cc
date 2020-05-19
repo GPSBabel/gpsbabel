@@ -19,15 +19,22 @@
 
  */
 
+#include <cmath>                // for round
+#include <cstdio>               // for printf, sscanf
+#include <cstdlib>              // for strtod
+#include <cstring>              // for strchr, strlen, strncmp, strspn
+
+#include <QtCore/QByteArray>    // for QByteArray
+#include <QtCore/QString>       // for QString
+#include <QtCore/QtGlobal>      // for foreach, qPrintable, qint64
 
 #include "defs.h"
 #include "arcdist.h"
-#include "grtcirc.h"
+#include "gbfile.h"             // for gbfclose, gbfgetstr, gbfopen, gbfile
+#include "grtcirc.h"            // for RAD, gcdist, linedistprj, radtomi
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"   // for Fatal
 
-#include <cmath>
-#include <cstdio>
-#include <cstdlib> // strtod
-#include <src/core/logging.h>
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"
@@ -36,28 +43,30 @@
 
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
-  static Waypoint* arcpt1 = nullptr;
-  double prjlat, prjlon, frac;
+  static const Waypoint* arcpt1 = nullptr;
+  double prjlat;
+  double prjlon;
+  double frac;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
                   (arcpt1->latitude != BADVAL && arcpt1->longitude != BADVAL)))) {
     foreach (Waypoint* waypointp, *global_waypoint_list) {
-      double dist;
       extra_data* ed;
       if (waypointp->extra_data) {
         ed = (extra_data*) waypointp->extra_data;
       } else {
-        ed = (extra_data*) xcalloc(1, sizeof(*ed));
+        ed = new extra_data;
         ed->distance = BADVAL;
       }
       if (ed->distance == BADVAL || projectopt || ed->distance >= pos_dist) {
+        double dist;
         if (ptsopt) {
           dist = gcdist(RAD(arcpt2->latitude),
                         RAD(arcpt2->longitude),
                         RAD(waypointp->latitude),
                         RAD(waypointp->longitude));
-          prjlat =  arcpt2->latitude;
+          prjlat = arcpt2->latitude;
           prjlon = arcpt2->longitude;
           frac = 1.0;
         } else {
@@ -87,14 +96,14 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
             ed->prjlongitude = prjlon;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
-            ed->arcpt2 = const_cast<Waypoint*>(arcpt2);
+            ed->arcpt2 = arcpt2;
           }
         }
         waypointp->extra_data = ed;
       }
     }
   }
-  arcpt1 = const_cast<Waypoint*>(arcpt2);
+  arcpt1 = arcpt2;
 }
 
 void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
@@ -114,8 +123,8 @@ void ArcDistanceFilter::process()
 
     gbfile* file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-    Waypoint* arcpt1 = new Waypoint;
-    Waypoint* arcpt2 = new Waypoint;
+    auto* arcpt1 = new Waypoint;
+    auto* arcpt2 = new Waypoint;
     arcdist_arc_disp_hdr_cb(nullptr);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
@@ -154,7 +163,7 @@ void ArcDistanceFilter::process()
 
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
-    extra_data* ed = (extra_data*) wp->extra_data;
+    auto* ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
     if (ed) {
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
@@ -184,12 +193,12 @@ void ArcDistanceFilter::process()
             wp->SetCreationTime(ed->arcpt2->GetCreationTime());
           } else {
             // Apply the multiplier to the difference between the times
-            // of the two points.   Add that to the first for the
+            // of the two points.  Add that to the first for the
             // interpolated time.
-            int scaled_time = ed->frac *
-                              ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
-            QDateTime new_time(ed->arcpt1->GetCreationTime().addMSecs(scaled_time));
-            wp->SetCreationTime(new_time);
+            qint64 span =
+              ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
+            qint64 offset = std::round(ed->frac * span);
+            wp->SetCreationTime(ed->arcpt1->GetCreationTime().addMSecs(offset));
           }
         }
         if (global_opts.debug_level >= 1) {
@@ -197,7 +206,7 @@ void ArcDistanceFilter::process()
                   qPrintable(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
-      xfree(ed);
+      delete ed;
     }
   }
   if (global_opts.verbose_status > 0) {
@@ -222,7 +231,7 @@ void ArcDistanceFilter::init()
 
     if ((*fm == 'k') || (*fm == 'K')) {
       /* distance is kilometers, convert to mile */
-      pos_dist *= .6214;
+      pos_dist *= kMilesPerKilometer;
     }
   }
 }

@@ -66,7 +66,7 @@ QVector<arglist_t> saroute_args = {
 static unsigned char*
 ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char* result = (unsigned char*) xmalloc(size);
+  auto* result = (unsigned char*) xmalloc(size);
 
   (void)gbfread(result, size, 1, f);
   return result;
@@ -168,7 +168,7 @@ my_read()
    * here lie the route description records
    */
   if (version < 6 || (control == 1)) {
-    track_head = route_head_alloc();
+    track_head = new route_head;
     route_add_head(track_head);
     if (control) {
       track_head->rte_name = "control points";
@@ -216,7 +216,7 @@ my_read()
         wpt_tmp->shortname = "booger";
         wpt_tmp->notes = "goober";
       } else {
-        wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+        wpt_tmp->shortname = QString::asprintf("\\%5.5x", serial++);
       }
       if (control == 2) {
         waypt_add(wpt_tmp);
@@ -268,7 +268,7 @@ my_read()
      */
     count = ReadLong(infile);
     if (count) {
-      track_head = route_head_alloc();
+      track_head = new route_head;
       if (timesynth) {
         track_add_head(track_head);
       } else {
@@ -287,7 +287,7 @@ my_read()
       if (split && stringlen) {
         if (track_head->rte_waypt_ct) {
           old_track_head = track_head;
-          track_head = route_head_alloc();
+          track_head = new route_head;
           if (timesynth) {
             track_add_head(track_head);
           } else {
@@ -306,7 +306,7 @@ my_read()
                               (record + 2 + stringlen + 0x30));
         transittime = le_read32((uint32_t*)
                                 (record + 2 + stringlen + 0x10));
-        seglen /= 5280*12*2.54/100000; /* to miles */
+        seglen *= kMilesPerKilometer; /* to miles */
       }
 
       uint16_t coordcount = le_read16((uint16_t*)
@@ -336,7 +336,7 @@ my_read()
         if (stringlen && ((coordcount>1) || count)) {
           wpt_tmp->shortname = QString(((char*)record)+2);
         } else {
-          wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+          wpt_tmp->shortname = QString::asprintf("\\%5.5x", serial++);
         }
         if (timesynth) {
           if (!first) {
