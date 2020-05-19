@@ -1,8 +1,8 @@
-#include <QtCore/QDebug>
 /*
 
     Support for MapSource Text Export (Tab delimited) files.
-
+    
+    Copyright (C) 2004-2020 Robert Lipe, robertlipe+source@gpsbabel.org
     Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
