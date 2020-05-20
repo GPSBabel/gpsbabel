@@ -1,7 +1,7 @@
 /*
 
     Support for MapSource Text Export (Tab delimited) files.
-    
+
     Copyright (C) 2004-2020 Robert Lipe, robertlipe+source@gpsbabel.org
     Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
 
@@ -47,7 +47,7 @@
 #include "inifile.h"               // for inifile_readstr
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
 #include "src/core/datetime.h"     // for DateTime
-#include "src/core/logging.h".     // for Fatal
+#include "src/core/logging.h"      // for Fatal
 #include "src/core/textstream.h"   // for TextStream
 #include "strptime.h"              // for strptime
 
@@ -1076,7 +1076,7 @@ parse_waypoint()
   auto* wpt = new Waypoint;
   garmin_fs_t* gmsd = garmin_fs_alloc(-1);
   wpt->fs.FsChainAdd(gmsd);
-  
+
   while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int i;
     double d;
@@ -1170,46 +1170,38 @@ parse_waypoint()
 static void
 parse_route_header()
 {
-  char* str;
-  int column = -1;
-
   auto* rte = new route_head;
-
-  bind_fields(route_header);
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
-    int field_no = header_fields[route_header][column];
-    switch (field_no) {
-    case 1:
-      rte->rte_name = str;
-      break;
-    case 5:
-      rte->rte_urls.AddUrlLink(UrlLink(str));
-      break;
-    }
-  }
   route_add_head(rte);
   current_rte = rte;
+
+  auto tokens = current_line_text.split("\t");
+   if (tokens.size() < 1) {
+     Fatal() << MYNAME ": Bad route header at " << current_line;
+   }
+  if (tokens.size() > 1) {
+    rte->rte_name = tokens.at(1);
+  }
+  if (tokens.size() > 5) {
+    rte->rte_urls.AddUrlLink(UrlLink(tokens.at(5)));
+  }
 }
 
 static void
 parse_track_header()
 {
-  char* str;
-  int column = -1;
-
-  bind_fields(track_header);
   auto* trk = new route_head;
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
-    int field_no = header_fields[track_header][column];
-    switch (field_no) {
-    case 1:
-      trk->rte_name = str;
-      break;
-    case 6:
-      trk->rte_urls.AddUrlLink(UrlLink(str));
-      break;
-    }
+
+  auto tokens = current_line_text.split("\t");
+   if (tokens.size() < 1) {
+     Fatal() << MYNAME ": Bad route header at " << current_line;
+   }
+  if (tokens.size() > 1) {
+    trk->rte_name = tokens.at(1);
   }
+  if (tokens.size() > 6) {
+    trk->rte_urls.AddUrlLink(UrlLink(tokens.at(6)));
+  }
+
   track_add_head(trk);
   current_trk = trk;
 }
@@ -1225,7 +1217,7 @@ parse_route_waypoint()
 
   auto wpt = find_waypt_by_name(tokens.at(1));
   if (wpt == nullptr) {
-    Fatal() << MYNAME ": Route waypoint " << tokens.at(1) << 
+    Fatal() << MYNAME ": Route waypoint " << tokens.at(1) <<
       " not in waypoint list (line " << current_line << ")!\n";
   }
 
