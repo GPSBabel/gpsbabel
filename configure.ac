@@ -229,14 +229,17 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 	QT_SYSINC_OPT="-iframework"
 ], [
 	GBSER=gbser_posix.o
-	AC_MSG_CHECKING(for libusb-1.0)
+	AC_ARG_WITH([libusb],
+		[AS_HELP_STRING([--without-libusb], [disable support for libusb])],
+		[],
+		[with_libusb=yes])
 	AS_IF([test "$with_libusb" = "no"], [
-		AC_MSG_RESULT(check not done)
 		OSJEEPS=jeeps/gpsusbstub.o
 	], [
-
-		AC_CHECK_LIB([usb-1.0], [libusb_init])
-		OSJEEPS=jeeps/gpslibusb.o
+    # Die if libusb-1.0 not found. This prevents link failures later.
+		AC_CHECK_LIB([usb-1.0], [libusb_init], [],
+			[AC_MSG_FAILURE(libusb-1.0 not found (--without-libusb to disable))])
+			OSJEEPS=jeeps/gpslibusb.o
 	])
 ])
 
