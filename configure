@@ -6328,7 +6328,7 @@ as_fn_error $? "libusb-1.0 not found (--without-libusb to disable)
 See \`config.log' for more details" "$LINENO" 5; }
 fi
 
-			OSJEEPS=jeeps/gpslibusb.o
+		OSJEEPS=jeeps/gpslibusb.o
 
 fi
  ;;

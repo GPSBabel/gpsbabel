@@ -239,7 +239,7 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
     # Die if libusb-1.0 not found. This prevents link failures later.
 		AC_CHECK_LIB([usb-1.0], [libusb_init], [],
 			[AC_MSG_FAILURE(libusb-1.0 not found (--without-libusb to disable))])
-			OSJEEPS=jeeps/gpslibusb.o
+		OSJEEPS=jeeps/gpslibusb.o
 	])
 ])
 
