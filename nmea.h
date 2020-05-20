@@ -126,47 +126,47 @@ private:
 
   /* Data Members */
 
-  gbfile* file_in, *file_out;
-  route_head* trk_head;
-  short_handle mkshort_handle;
+  gbfile* file_in{}, *file_out{};
+  route_head* trk_head{};
+  short_handle mkshort_handle{};
   preferred_posn_type posn_type;
-  struct tm tm;
-  Waypoint* curr_waypt;
-  Waypoint* last_waypt;
-  void* gbser_handle;
+  struct tm tm{};
+  Waypoint* curr_waypt{};
+  Waypoint* last_waypt{};
+  void* gbser_handle{};
   QString posn_fname;
   QList<Waypoint*> pcmpt_head;
 
-  int without_date;	/* number of created trackpoints without a valid date */
-  struct tm opt_tm;	/* converted "date" parameter */
+  int without_date{};	/* number of created trackpoints without a valid date */
+  struct tm opt_tm{};	/* converted "date" parameter */
 
-  char* opt_gprmc;
-  char* opt_gpgga;
-  char* opt_gpvtg;
-  char* opt_gpgsa;
-  char* snlenopt;
-  char* optdate;
-  char* getposnarg;
-  char* opt_sleep;
-  char* opt_baud;
-  char* opt_append;
-  char* opt_gisteq;
-  char* opt_ignorefix;
+  char* opt_gprmc{};
+  char* opt_gpgga{};
+  char* opt_gpvtg{};
+  char* opt_gpgsa{};
+  char* snlenopt{};
+  char* optdate{};
+  char* getposnarg{};
+  char* opt_sleep{};
+  char* opt_baud{};
+  char* opt_append{};
+  char* opt_gisteq{};
+  char* opt_ignorefix{};
 
-  long sleepus;
-  int getposn;
-  int append_output;
-  bool amod_waypoint;
+  long sleepus{};
+  int getposn{};
+  int append_output{};
+  bool amod_waypoint{};
 
-  time_t last_time;
-  double last_read_time;   /* Last timestamp of GGA or PRMC */
-  int datum;
-  int had_checksum;
+  time_t last_time{};
+  double last_read_time{};   /* Last timestamp of GGA or PRMC */
+  int datum{};
+  int had_checksum{};
 
   Waypoint* nmea_rd_posn(posn_status*);
   void nmea_rd_posn_init(const QString& fname);
 
-  int wpt_not_added_yet;
+  int wpt_not_added_yet{};
 
   QVector<arglist_t> nmea_args = {
     {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },

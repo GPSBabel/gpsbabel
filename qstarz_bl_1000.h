@@ -43,13 +43,13 @@ struct qstarz_bl_1000_fsdata : FormatSpecificData {
     return new qstarz_bl_1000_fsdata(*this);
   }
 
-  char rcr; // record reason. possible values are listed in switch-case in .cc file
-  float accelerationX; // horizonal acceleration value measured in acceleration due to gravity or g
-  float accelerationY; // vertical acceleration value measured in acceleration due to gravity or g
-  float accelerationZ; // depth acceleration value measured in acceleration due to gravity or g
-  quint16 maxSNR;
-  qint8 satTotal; // satellite count (view)
-  quint8 batteryPercent;
+  char rcr{}; // record reason. possible values are listed in switch-case in .cc file
+  float accelerationX{}; // horizonal acceleration value measured in acceleration due to gravity or g
+  float accelerationY{}; // vertical acceleration value measured in acceleration due to gravity or g
+  float accelerationZ{}; // depth acceleration value measured in acceleration due to gravity or g
+  quint16 maxSNR{};
+  qint8 satTotal{}; // satellite count (view)
+  quint8 batteryPercent{};
 };
 
 class QstarzBL1000Format : public Format

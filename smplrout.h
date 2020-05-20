@@ -87,7 +87,7 @@ private:
   char* xteopt = nullptr;
   char* lenopt = nullptr;
   char* relopt = nullptr;
-  void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
+  void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt){};
 
   QVector<arglist_t> args = {
     {

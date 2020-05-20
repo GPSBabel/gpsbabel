@@ -41,14 +41,14 @@ public:
   void process() override;
 
 private:
-  char current_target;
-  route_head* current_trk;
-  route_head* current_rte;
+  char current_target{};
+  route_head* current_trk{};
+  route_head* current_rte{};
 
-  char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete, *rpt_name_digits, *opt_rpt_name;
+  char* opt_routes{}, *opt_tracks{}, *opt_waypts{}, *opt_delete{}, *rpt_name_digits{}, *opt_rpt_name{};
   QString current_namepart;
 
-  int name_digits, use_src_name;
+  int name_digits{}, use_src_name{};
 
   const QString RPT = "RPT";
 

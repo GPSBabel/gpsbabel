@@ -40,14 +40,14 @@ public:
   void process() override;
 
 private:
-  char* opt_debug;
-  bool debug;
-  char* opt_checkempty;
-  bool checkempty;
-  unsigned int point_ct;
-  unsigned int head_ct;
-  unsigned int segment_ct_start;
-  const char* segment_type;
+  char* opt_debug{};
+  bool debug{};
+  char* opt_checkempty{};
+  bool checkempty{};
+  unsigned int point_ct{};
+  unsigned int head_ct{};
+  unsigned int segment_ct_start{};
+  const char* segment_type{};
   QVector<arglist_t> args = {
     {
       "checkempty", &opt_checkempty, "Check for empty input",
