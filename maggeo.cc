@@ -22,7 +22,6 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "magellan.h"
-#include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
 #include <cstdio>
