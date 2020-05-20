@@ -47,6 +47,7 @@
 #include "inifile.h"               // for inifile_readstr
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
 #include "src/core/datetime.h"     // for DateTime
+#include "src/core/logging.h".     // for Fatal
 #include "src/core/textstream.h"   // for TextStream
 #include "strptime.h"              // for strptime
 
@@ -74,6 +75,7 @@ static const char* datum_str;
 static int current_line;
 static char* date_time_format = nullptr;
 static int precision = 3;
+static QString current_line_text;
 static time_t utc_offs = 0;
 static gtxt_flags_t gtxt_flags;
 
