@@ -5,7 +5,7 @@ supported by EasyGPS, ExpertGPS, and many other programs described at
 </para>
 <para>
 GPSBabel's reader of this module attempts to preserve tags it doesn't
-really understand.   It also tries to glean interesting data from
+really understand.   It also tries to glean interesting data from:
 <itemizedlist>
   <listitem><para><ulink url="http://www.geocaching.com">pocket queries from Geocaching.com,</ulink></para></listitem>
   <listitem><para>Garmin's "gpxx" GPX extensions,</para></listitem>
