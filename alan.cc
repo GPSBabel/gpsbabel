@@ -811,24 +811,23 @@ static void trl_track_hdr(const route_head* TL)
     fatal(MYNAME ": Can't store more than %u tracklogs", MAXTRK);
   }
 
-  if (TL->rte_name != nullptr) {
-    strncpy(trkhdr[idx].name, CSTRc(TL->rte_name), TRK_NAME_LEN);
+  if (!TL->rte_name.isEmpty()) {
+    strncpy(trkhdr[idx].name, CSTRc(TL->rte_name), TRK_NAME_LEN - 1);
   }
   if (*(trkhdr[idx].name) == '\0') {
     sprintf(trkhdr[idx].name, "T%03d", idx);
   }
   trkhdr[idx].name[TRK_NAME_LEN-1] = '\0';
 
-  if (TL->rte_desc != nullptr) {
-    strncpy(trkhdr[idx].comment, CSTRc(TL->rte_desc), TRK_COMMENT_LEN);
+  if (!TL->rte_desc.isEmpty()) {
+    strncpy(trkhdr[idx].comment, CSTRc(TL->rte_desc), TRK_COMMENT_LEN - 1);
     int l = strlen(CSTRc(TL->rte_desc));
     if (l < TRK_COMMENT_LEN-1) {
-      memset(trkhdr[idx].comment + l, ' ', TRK_COMMENT_LEN - l);
+      memset(trkhdr[idx].comment + l, ' ', TRK_COMMENT_LEN - 1 - l);
     }
   }
   trkhdr[idx].comment[TRK_COMMENT_LEN-1] = '\0';
 
-  trkhdr[idx].comment[TRK_COMMENT_LEN-1] = '\0';
   trkhdr[idx].occupied = TRK_USED;
   trkhdr[idx].totalpt = 0;
   trkhdr[idx].next = 0;
