@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="CUSTOM_SCOPE_NAME" value="Project Source Files" />
+    <option name="SHOW_STRUCTURE" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="gpsbabel" targetName="GPSBabel" />
+      <config projectName="gpsbabel" targetName="check" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3a284925-7de6-4867-82b2-c979bff68de5" name="Default" comment="Move format-specific code into formspec.h, start constexpr work.">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/defs.h" beforeDir="false" afterPath="$PROJECT_DIR$/defs.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/garmin_fit.cc" beforeDir="false" afterPath="$PROJECT_DIR$/garmin_fit.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_de.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_de.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_es.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_es.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_fr.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_fr.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_hu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_hu.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_it.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_it.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/coretool/gpsbabel_ru.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/coretool/gpsbabel_ru.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_de.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_de.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_es.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_es.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_fr.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_fr.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_hu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_hu.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_it.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_it.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/gpsbabelfe_ru.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gui/gpsbabelfe_ru.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hiketech.cc" beforeDir="false" afterPath="$PROJECT_DIR$/hiketech.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/datetime.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/datetime.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/file.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/file.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/logging.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/logging.h" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FavoritesManager">
+    <favorites_list name="gpsbabel" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>kkkkkk</find>
+      <find>flush</find>
+      <find>facd</find>
+      <find>isDLE</find>
+      <find>n_clp</find>
+      <find>n_trk</find>
+      <find>rcv_len</find>
+      <find>checksum</find>
+      <find>recv_byte</find>
+      <find>malloc</find>
+      <find>alloc</find>
+      <find>read_package</find>
+      <find>mkgmtime</find>
+      <find>free</find>
+      <find>latopt</find>
+      <find>time</find>
+      <find>xcalloc</find>
+      <find>strncpy</find>
+      <find>class</find>
+      <find>unknown_alt</find>
+      <find>format_specific</find>
+      <find>format_spec</find>
+      <find>forward</find>
+      <find>color</find>
+      <find>&quot;unit_conversions.h&quot;</find>
+      <find>#include &quot;unit_conversions.h&quot;</find>
+      <find>cet_ucs4_to_char</find>
+      <find>8_to_any</find>
+      <find>stdout</find>
+      <find>time_t</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>#include &quot;src/core/unit_conversions.h&quot;</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-GPSBabel" />
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/dictionaries/robertlipe.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="61" />
+    <option name="y" value="23" />
+    <option name="width" value="1364" />
+    <option name="height" value="699" />
+  </component>
+  <component name="ProjectId" id="1TDw5AKrnBp2YgRTkxMwl4qS16A" />
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="language.cpp.clangd" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="CMake Application.Build All">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GPSBabel" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gpsbabel" TARGET_NAME="GPSBabel" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="gpsbabel" RUN_TARGET_NAME="GPSBabel">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="check" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gpsbabel" TARGET_NAME="check" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.Build All" />
+      <item itemvalue="CMake Application.GPSBabel" />
+      <item itemvalue="CMake Application.check" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3a284925-7de6-4867-82b2-c979bff68de5" name="Default" comment="" />
+      <created>1532152300466</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1532152300466</updated>
+      <workItem from="1532152303018" duration="495000" />
+      <workItem from="1532153154653" duration="2501000" />
+      <workItem from="1543808962549" duration="778000" />
+      <workItem from="1543810521878" duration="9719000" />
+      <workItem from="1544241723516" duration="190000" />
+      <workItem from="1544247988998" duration="209000" />
+      <workItem from="1545190229123" duration="9870000" />
+      <workItem from="1545203719072" duration="7758000" />
+      <workItem from="1545531824698" duration="5264000" />
+      <workItem from="1547440985444" duration="50000" />
+      <workItem from="1547441099366" duration="8230000" />
+      <workItem from="1547453970564" duration="494000" />
+      <workItem from="1550765983922" duration="653000" />
+      <workItem from="1550766762635" duration="13000" />
+      <workItem from="1556408944794" duration="12127000" />
+      <workItem from="1559448360028" duration="522000" />
+      <workItem from="1572677805570" duration="98000" />
+      <workItem from="1572677976846" duration="1540000" />
+      <workItem from="1572801370457" duration="4032000" />
+      <workItem from="1573007798512" duration="207000" />
+    </task>
+    <task id="LOCAL-00001" summary="Move format-specific code into formspec.h, start constexpr work.">
+      <created>1556420216496</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1556420216497</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Auto-move unit conversions into src/core.">
+      <created>1556422562996</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556422562996</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Move format-specific code into formspec.h, start constexpr work.">
+      <created>1556423058600</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1556423058601</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Auto-move unit conversions into src/core." />
+    <MESSAGE value="Move format-specific code into formspec.h, start constexpr work." />
+    <option name="LAST_COMMIT_MESSAGE" value="Move format-specific code into formspec.h, start constexpr work." />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
