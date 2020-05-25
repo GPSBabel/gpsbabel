@@ -728,6 +728,7 @@ enable_csv
 enable_most
 enable_filters
 with_zlib
+with_libusb
 with_doc
 '
       ac_precious_vars='build_alias
@@ -1377,6 +1378,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-zlib=(included)|system|no
 
+  --without-libusb        disable support for libusb
   --with-doc=DIR          Path where the documentation will be stored.
 
 Some influential environment variables:
@@ -6261,17 +6263,21 @@ fi
   *) :
 
 	GBSER=gbser_posix.o
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb-1.0" >&5
-$as_echo_n "checking for libusb-1.0... " >&6; }
+
+# Check whether --with-libusb was given.
+if test "${with_libusb+set}" = set; then :
+  withval=$with_libusb;
+else
+  with_libusb=yes
+fi
+
 	if test "$with_libusb" = "no"; then :
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: check not done" >&5
-$as_echo "check not done" >&6; }
 		OSJEEPS=jeeps/gpsusbstub.o
 
 else
 
-
+    # Die if libusb-1.0 not found. This prevents link failures later.
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb_init in -lusb-1.0" >&5
 $as_echo_n "checking for libusb_init in -lusb-1.0... " >&6; }
 if ${ac_cv_lib_usb_1_0_libusb_init+:} false; then :
@@ -6315,6 +6321,11 @@ _ACEOF
 
   LIBS="-lusb-1.0 $LIBS"
 
+else
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "libusb-1.0 not found (--without-libusb to disable)
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 
 		OSJEEPS=jeeps/gpslibusb.o
