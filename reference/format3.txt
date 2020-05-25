@@ -816,8 +816,6 @@ option	kompass_wp	prefer_shortnames	Use shortname instead of description	boolean
 
 option	kompass_wp	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_datum
 
-file	rwrwrw	psitrex		KuDaTa PsiTrex text	psitrex
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_psitrex.html
 file	rwrwrw	lowranceusr	usr	Lowrance USR	lowranceusr
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html
 option	lowranceusr	ignoreicons	(USR input) Ignore event marker icons on read	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_ignoreicons
