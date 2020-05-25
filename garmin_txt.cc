@@ -91,7 +91,7 @@ inline header_type& operator++(header_type& s) // prefix
 {
   return s = static_cast<header_type>(s + 1);
 }
-inline const header_type operator++(header_type& s, int) // postfix
+inline header_type operator++(header_type& s, int) // postfix
 {
   header_type ret(s);
   s = ++s;
@@ -102,7 +102,7 @@ inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
 {
   return s = static_cast<gt_display_modes_e>(s + 1);
 }
-inline const gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
+inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
 {
   gt_display_modes_e ret(s);
   s = ++s;

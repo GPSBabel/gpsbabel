@@ -14,12 +14,9 @@ These values are also used internally by the
     ,
 
     <link linkend="fmt_mapsource">Mapsource</link>
-    ,
-
-    <link linkend="fmt_pcx">PCX</link>
     , and
 
-    <link linkend="fmt_psitrex">PSITrex</link>
+    <link linkend="fmt_pcx">PCX</link>
     formats.</para>
   <simplelist columns="5">
     <member>ATV</member>

@@ -51,7 +51,7 @@ inline state_t& operator++(state_t& s) // prefix
 {
   return s = static_cast<state_t>(s + 1);
 }
-inline const state_t operator++(state_t& s, int) // postfix
+inline state_t operator++(state_t& s, int) // postfix
 {
   state_t ret(s);
   s = ++s;
