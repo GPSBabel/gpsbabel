@@ -17,6 +17,7 @@ These values are also used internally by the
     , and
 
     <link linkend="fmt_pcx">PCX</link>
+
     formats.</para>
   <simplelist columns="5">
     <member>ATV</member>
