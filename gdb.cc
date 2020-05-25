@@ -841,7 +841,7 @@ read_route()
     rte->line_color.bbggrr = gt_color_value(color_idx);
     int autoroute = FREAD_C;
     if (autoroute == 1) {
-      FREAD(buf, 6); /* unknown bytes */
+      FREAD(tbuf, 6); /* unknown bytes */
       int route_style = FREAD_C;
       int calc_type = FREAD_i32;
       int vehicle_type = FREAD_C;
@@ -852,7 +852,7 @@ read_route()
       driving_speed[2] = FREAD_DBL;
       driving_speed[3] = FREAD_DBL;
       driving_speed[4] = FREAD_DBL;
-      FREAD(buf, 8); /* unknown bytes */
+      FREAD(tbuf, 8); /* unknown bytes */
 #if GDB_DEBUG
       DBG(GDB_DBG_RTE, 1)
       printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
