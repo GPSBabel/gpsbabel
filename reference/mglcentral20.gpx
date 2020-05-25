@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="39.908805847" minlon="-105.226089478" maxlat="40.039367676" maxlon="-105.117195129"/>
+  <rte>
+    <rtept lat="40.039367676" lon="-105.226089478">
+      <ele>1611.782</ele>
+      <name>KBDU</name>
+      <cmt>BOULDER MUNI</cmt>
+      <desc>BOULDER MUNI</desc>
+    </rtept>
+    <rtept lat="39.908805847" lon="-105.117195129">
+      <ele>1729.130</ele>
+      <name>KBJC</name>
+      <cmt>ROCKY MOUNTAIN METROPOLITAN</cmt>
+      <desc>ROCKY MOUNTAIN METROPOLITAN</desc>
+    </rtept>
+  </rte>
+</gpx>

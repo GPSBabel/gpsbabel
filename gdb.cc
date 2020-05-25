@@ -19,6 +19,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+  A format description obtained from reverse-engineering is at 
+  https://www.memotech.franken.de/FileFormats/Garmin_MPS_GDB_and_GFI_Format.pdf
 */
 
 #include <cmath>                   // for fabs
@@ -836,8 +839,34 @@ read_route()
 
     int color_idx = FREAD_i32;
     rte->line_color.bbggrr = gt_color_value(color_idx);
-    QString ubuf;
-    FREAD(ubuf, 1);			/* ?????????????????????????????????? */
+    int autoroute = FREAD_C;
+    if (autoroute == 1) {
+      FREAD(buf, 6); /* unknown bytes */
+      int route_style = FREAD_C;
+      int calc_type = FREAD_i32;
+      int vehicle_type = FREAD_C;
+      int road_selection = FREAD_i32;
+      double driving_speed[5];
+      driving_speed[0] = FREAD_DBL;
+      driving_speed[1] = FREAD_DBL;
+      driving_speed[2] = FREAD_DBL;
+      driving_speed[3] = FREAD_DBL;
+      driving_speed[4] = FREAD_DBL;
+      FREAD(buf, 8); /* unknown bytes */
+#if GDB_DEBUG
+      DBG(GDB_DBG_RTE, 1)
+      printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
+                    "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
+           route_style, calc_type, vehicle_type, road_selection,
+           driving_speed[0], driving_speed[1], driving_speed[2], driving_speed[3], driving_speed[4]);
+#else
+      Q_UNUSED(route_style);
+      Q_UNUSED(calc_type);
+      Q_UNUSED(vehicle_type);
+      Q_UNUSED(road_selection);
+      Q_UNUSED(driving_speed);
+#endif
+    }
 
     rte->rte_desc = fread_cstr();
 #if 0

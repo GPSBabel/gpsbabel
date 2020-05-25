@@ -46,7 +46,7 @@ public:
 private:
   char* addopt        = nullptr;
   char* wgs84tomslopt = nullptr;
-  double addf;
+  double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.
   #include "heightgrid.h"
 

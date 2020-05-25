@@ -229,15 +229,15 @@ private:
   void gpx_waypt_bound_calc(const Waypoint* waypointp);
   void gpx_write_bounds();
 
-  QXmlStreamReader* reader;
-  xml_tag* cur_tag;
+  QXmlStreamReader* reader{};
+  xml_tag* cur_tag{};
   QString cdatastr;
   char* opt_logpoint = nullptr;
   char* opt_humminbirdext = nullptr;
   char* opt_garminext = nullptr;
   char* opt_elevation_precision = nullptr;
   int logpoint_ct = 0;
-  int elevation_precision;
+  int elevation_precision{};
 
   // to check if two numbers are equivalent use normalized values.
   const QVersionNumber gpx_1_0 = QVersionNumber(1,0).normalized();
@@ -249,14 +249,14 @@ private:
 
   QString current_tag;
 
-  Waypoint* wpt_tmp;
-  UrlLink* link_;
-  UrlLink* rh_link_;
-  bool cache_descr_is_html;
-  gpsbabel::File* iqfile;
-  gpsbabel::File* oqfile;
-  gpsbabel::XmlStreamWriter* writer;
-  short_handle mkshort_handle;
+  Waypoint* wpt_tmp{};
+  UrlLink* link_{};
+  UrlLink* rh_link_{};
+  bool cache_descr_is_html{};
+  gpsbabel::File* iqfile{};
+  gpsbabel::File* oqfile{};
+  gpsbabel::XmlStreamWriter* writer{};
+  short_handle mkshort_handle{};
   QString link_url;
   QString link_text;
   QString link_type;
@@ -265,14 +265,14 @@ private:
   char* snlen = nullptr;
   char* suppresswhite = nullptr;
   char* urlbase = nullptr;
-  route_head* trk_head;
-  route_head* rte_head;
-  const route_head* current_trk_head;		// Output.
+  route_head* trk_head{};
+  route_head* rte_head{};
+  const route_head* current_trk_head{};		// Output.
   /* used for bounds calculation on output */
-  bounds all_bounds;
-  int next_trkpt_is_new_seg;
+  bounds all_bounds{};
+  int next_trkpt_is_new_seg{};
 
-  FormatSpecificDataList* fs_ptr;
+  FormatSpecificDataList* fs_ptr{};
 
   /*
    * The file-level information.

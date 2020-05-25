@@ -233,7 +233,7 @@ bushnell_write_one(const Waypoint* wpt)
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr), file_out);
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
-  strncpy(tbuf, CSTRc(wpt->shortname), sizeof(tbuf));
+  strncpy(tbuf, CSTRc(wpt->shortname), sizeof(tbuf) - 1);
   tbuf[sizeof(tbuf)-1] = 0;
   gbfwrite(tbuf, sizeof(tbuf), 1, file_out);
 

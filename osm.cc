@@ -20,11 +20,22 @@
 
 */
 
+#include <cstring>                      // for strlen, strchr, strcmp
+
+#include <QtCore/QByteArray>            // for QByteArray
+#include <QtCore/QHash>                 // for QHash
+#include <QtCore/QLatin1String>         // for QLatin1String
+#include <QtCore/QPair>                 // for QPair, operator==
+#include <QtCore/QString>               // for QString, operator+, operator==
+#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QVector>               // for QVector
+#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtCore/QtGlobal>              // for qPrintable
 
 #include "defs.h"
-#include "xmlgeneric.h"
-#include <QtCore/QHash>
-#include <QtCore/QXmlStreamAttributes>
+#include "gbfile.h"                     // for gbfprintf, gbfclose, gbfopen, gbfile
+#include "src/core/datetime.h"          // for DateTime
+#include "xmlgeneric.h"                 // for cb_start, cb_end, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
 
 static char* opt_tag, *opt_tagnd, *created_by;
 
@@ -40,7 +51,7 @@ static QHash<QString, const Waypoint*> waypoints;
 
 static QHash<QString, int> keys;
 struct osm_icon_mapping_t;
-static QHash<QString, const osm_icon_mapping_t*> values;
+static QHash<QPair<int, QString>, const osm_icon_mapping_t*> values;
 static QHash<QString, const osm_icon_mapping_t*> icons;
 
 static gbfile* fout;
@@ -410,20 +421,14 @@ static const osm_icon_mapping_t osm_icon_mappings[] = {
 static void
 osm_features_init()
 {
-  int i;
-
   /* the first of osm_features is a place holder */
-  for (i = 1; osm_features[i]; i++) {
-    keys.insert(QString::fromUtf8(osm_features[i]), i);
+  for (int i = 1; osm_features[i]; ++i) {
+    keys.insert(osm_features[i], i);
   }
 
-  for (i = 0; osm_icon_mappings[i].value; i++) {
-    char buff[128];
-
-    buff[0] = osm_icon_mappings[i].key;
-    strncpy(&buff[1], osm_icon_mappings[i].value, sizeof(buff) - 1);
-
-    values.insert(QString::fromUtf8(buff), &osm_icon_mappings[i]);
+  for (int i = 0; osm_icon_mappings[i].value; ++i) {
+    QPair<int, QString> key(osm_icon_mappings[i].key, osm_icon_mappings[i].value);
+    values.insert(key, &osm_icon_mappings[i]);
   }
 }
 
@@ -438,12 +443,7 @@ osm_feature_ikey(const QString& key)
 static QString
 osm_feature_symbol(const int ikey, const char* value)
 {
-  char buff[128];
-
-  buff[0] = ikey;
-  strncpy(&buff[1], value, sizeof(buff) - 1);
-
-  QString key = QString::fromUtf8(buff);
+  QPair<int, QString> key(ikey, value);
 
   QString result;
   if (values.contains(key)) {
@@ -705,9 +705,8 @@ osm_init_icons()
     return;
   }
 
-  for (int i = 0; osm_icon_mappings[i].value; i++) {
-    icons.insert(QString::fromUtf8(osm_icon_mappings[i].icon),
-                 &osm_icon_mappings[i]);
+  for (int i = 0; osm_icon_mappings[i].value; ++i) {
+    icons.insert(osm_icon_mappings[i].icon, &osm_icon_mappings[i]);
   }
 }
 

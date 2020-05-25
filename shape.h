@@ -79,18 +79,18 @@ private:
   void poly_point(const Waypoint* wpt);
   void poly_deinit(const route_head* rte);
 
-  SHPHandle ihandle;
-  DBFHandle ihandledb;
-  SHPHandle ohandle;
-  DBFHandle ohandledb;
+  SHPHandle ihandle{};
+  DBFHandle ihandledb{};
+  SHPHandle ohandle{};
+  DBFHandle ohandledb{};
 
-  int poly_count;
-  double* polybufx;
-  double* polybufy;
-  double* polybufz;
+  int poly_count{};
+  double* polybufx{};
+  double* polybufy{};
+  double* polybufz{};
   QString ifname;
   QString ofname;
-  int nameFieldIdx;	// the field index of the field with fieldName "name" in the output DBF.
+  int nameFieldIdx{};	// the field index of the field with fieldName "name" in the output DBF.
 
   char* opt_name = nullptr;
   char* opt_url = nullptr;

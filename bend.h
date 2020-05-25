@@ -45,8 +45,8 @@ private:
   char* distopt = nullptr;
   char* minangleopt = nullptr;
 
-  double maxDist;
-  double minAngle;
+  double maxDist{};
+  double minAngle{};
 
   RouteList* routes_orig = nullptr;
 

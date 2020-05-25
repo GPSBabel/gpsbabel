@@ -6,3 +6,10 @@ gpsbabel -i gpx -f ${REFERENCE}/enigma.gpx -o enigma -F ${TMPDIR}/enigma.ert
 compare ${REFERENCE}/enigma-gpsb.ert ${TMPDIR}/enigma.ert
 gpsbabel -i enigma -f ${REFERENCE}/enigma-pfms.ert -o gpx -F ${TMPDIR}/enigma.gpx
 compare ${REFERENCE}/enigma.gpx ${TMPDIR}/enigma.gpx
+
+# mglcentral20.ert was produced by MGL Central version 2.0.
+# don't care values in character string are evident,
+# which makes it impossible to compare "identical" enigma files.
+gpsbabel -i enigma -f ${REFERENCE}/mglcentral20.ert -o gpx -F ${TMPDIR}/mglcentral20.gpx
+compare ${REFERENCE}/mglcentral20.gpx ${TMPDIR}/mglcentral20.gpx
+

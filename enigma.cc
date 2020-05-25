@@ -67,10 +67,10 @@ struct enigma_wpt {
   int32_t			longitude;
   union wpt_data  data;
   uint8_t         waypoint_type;
-  uint8_t         shortname_len;
-  char            shortname[6];
-  uint8_t         longname_len;
-  char            longname[27];
+  uint8_t         shortname_len;  // number of used characters in shortname
+  char            shortname[6];   // ASCII, unused characters are "don't care" values
+  uint8_t         longname_len;   // number of used characters in longname
+  char            longname[27];   // ASCII, unused characters are "don't care" values
 };
 
 static gbfile* file_in, *file_out;
@@ -181,11 +181,11 @@ enigma_waypt_disp(const Waypoint* wpt)
   }
   if (wpt->shortname != nullptr) {
     ewpt.shortname_len = (uint8_t) min(6, strlen(CSTRc(wpt->shortname)));
-    strncpy(ewpt.shortname, CSTRc(wpt->shortname), 6);
+    memcpy(ewpt.shortname, CSTRc(wpt->shortname), ewpt.shortname_len);
   }
   if (wpt->description != nullptr) {
     ewpt.longname_len = (uint8_t) min(27, strlen(CSTRc(wpt->description)));
-    strncpy(ewpt.longname, CSTRc(wpt->description), 27);
+    memcpy(ewpt.longname, CSTRc(wpt->description), ewpt.longname_len);
   }
   gbfwrite(&ewpt, sizeof(ewpt), 1, file_out);
 }

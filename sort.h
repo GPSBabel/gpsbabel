@@ -60,9 +60,9 @@ private:
   SortModeRteHd rte_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
   SortModeRteHd trk_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
 
-  char* opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
-  char* opt_sm_rtenum, *opt_sm_rtename, *opt_sm_rtedesc;
-  char* opt_sm_trknum, *opt_sm_trkname, *opt_sm_trkdesc;
+  char* opt_sm_gcid{}, *opt_sm_shortname{}, *opt_sm_description{}, *opt_sm_time{};
+  char* opt_sm_rtenum{}, *opt_sm_rtename{}, *opt_sm_rtedesc{};
+  char* opt_sm_trknum{}, *opt_sm_trkname{}, *opt_sm_trkdesc{};
 
   QVector<arglist_t> args = {
     {

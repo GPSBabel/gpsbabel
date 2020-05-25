@@ -1053,7 +1053,8 @@ route_hdr_pr(const route_head* rte)
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
     strncpy((*cur_tx_routelist_entry)->rte_ident, CSTRc(rte->rte_name),
-            sizeof((*cur_tx_routelist_entry)->rte_ident));
+            sizeof((*cur_tx_routelist_entry)->rte_ident) - 1);
+    (*cur_tx_routelist_entry)->rte_ident[sizeof((*cur_tx_routelist_entry)->rte_ident) - 1] = 0;
   }
 }
 
@@ -1103,7 +1104,7 @@ route_waypt_pr(const Waypoint* wpt)
   if (wpt->description.isEmpty()) {
     rte->cmnt[0] = 0;
   } else {
-    strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt));
+    strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt) - 1);
     rte->cmnt[sizeof(rte->cmnt)-1] = 0;
   }
   cur_tx_routelist_entry++;
@@ -1130,7 +1131,7 @@ track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = true;
   if (!trk_head->rte_name.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident));
+    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   } else {
     sprintf((*cur_tx_tracklist_entry)->trk_ident, "TRACK%02d", my_track_count);
@@ -1147,7 +1148,7 @@ track_waypt_pr(const Waypoint* wpt)
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
   (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();
   if (!wpt->shortname.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident));
+    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   }
   (*cur_tx_tracklist_entry)->tnew = wpt->wpt_flags.new_trkseg;
