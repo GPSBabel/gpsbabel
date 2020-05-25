@@ -235,7 +235,7 @@ stmwpp_write_double(const double val)
 }
 
 static void
-stmwpp_waypt_cb(const Waypoint* wpt)
+stmwpp_waypt_cb(const Waypoint* waypoint)
 {
   if (track_index != track_num) {
     return;
@@ -247,9 +247,9 @@ stmwpp_waypt_cb(const Waypoint* wpt)
   case STM_WAYPT:
   case STM_RTEPT:
     if (global_opts.synthesize_shortnames) {
-      sn = mkshort_from_wpt(short_h, wpt);
+      sn = mkshort_from_wpt(short_h, waypoint);
     } else {
-      sn = mkshort(short_h, wpt->shortname);
+      sn = mkshort(short_h, waypoint->shortname);
     }
     gbfprintf(fout, "WP,D,%s,", CSTRc(sn));
     break;
@@ -258,9 +258,9 @@ stmwpp_waypt_cb(const Waypoint* wpt)
     gbfprintf(fout, "TP,D,");
     break;
   }
-  stmwpp_write_double(wpt->latitude);
-  stmwpp_write_double(wpt->longitude);
-  QString datetime = wpt->GetCreationTime().toUTC().toString("MM/dd/yyyy,HH:mm:ss");
+  stmwpp_write_double(waypoint->latitude);
+  stmwpp_write_double(waypoint->longitude);
+  QString datetime = waypoint->GetCreationTime().toUTC().toString("MM/dd/yyyy,HH:mm:ss");
   gbfputs(datetime, fout);
   switch (what) {
   case STM_WAYPT:
@@ -268,7 +268,7 @@ stmwpp_waypt_cb(const Waypoint* wpt)
     gbfprintf(fout, ".%02d", 0);
     break;
   case STM_TRKPT:
-    gbfprintf(fout, ".%03d", wpt->GetCreationTime().time().msec());
+    gbfprintf(fout, ".%03d", waypoint->GetCreationTime().time().msec());
     break;
   }
   gbfprintf(fout, ",\r\n");

@@ -460,7 +460,7 @@ RouteList::copy(RouteList** dst) const
   }
 
   const char RPT[] = "RPT";
-  foreach (const route_head* rte_old, *this) {
+  for (const auto& rte_old : *this) {
     auto* rte_new = new route_head;
     // waypoint_list created below with add_wpt.
     rte_new->rte_name = rte_old->rte_name;
@@ -473,7 +473,7 @@ RouteList::copy(RouteList** dst) const
     rte_new->line_width = rte_old->line_width;
     rte_new->session = rte_old->session;
     (*dst)->add_head(rte_new);
-    foreach (const Waypoint* old_wpt, rte_old->waypoint_list) {
+    for (const auto& old_wpt : rte_old->waypoint_list) {
       (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
     }
   }

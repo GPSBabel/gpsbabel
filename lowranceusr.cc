@@ -1002,7 +1002,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
 
     while (num_trail_points && !gbfeof(file_in)) {
       /* num section points */
-      short int num_section_points = gbfgetint16(file_in);
+      num_section_points = gbfgetint16(file_in);
 
       if (global_opts.debug_level > 1) {
         printf(MYNAME " parse_trails: Num Section Points = %d\n", num_section_points);
@@ -1013,9 +1013,10 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
         wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
         wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
 
-        /* continuous */
-        char continuous = gbfgetc(file_in);
-        if (!continuous && opt_seg_break && j) {
+        // It's not clear if this should be the continuous global or
+        // a local continuous_flag.
+        char continuous_flag = gbfgetc(file_in);
+        if (!continuous_flag && opt_seg_break && j) {
           /* option to break trails into segments was specified */
           auto* trk_tmp = new route_head;
           trk_tmp->rte_num = ++(*trail_num);

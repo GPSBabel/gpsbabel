@@ -795,11 +795,11 @@ NmeaFormat::pcmpt_parse(char* ibuf)
      * we can rip through the queue forward now to get our
      * handy-dandy reversing effect.
      */
-    auto* trk_head = new route_head;
-    track_add_head(trk_head);
+    auto* trk_head_2 = new route_head;
+    track_add_head(trk_head_2);
     while (!pcmpt_head.isEmpty()) {
       Waypoint* wpt = pcmpt_head.takeFirst();
-      nmea_add_wpt(wpt, trk_head);
+      nmea_add_wpt(wpt, trk_head_2);
     }
   }
 }

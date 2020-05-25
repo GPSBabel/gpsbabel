@@ -372,46 +372,46 @@ GlobalsatSportFormat::track_read()
 
     for (int i = 0; i < number_headers; i++) {
       int pos = i * 29; //29=packed sizeof(gh_trainheader)
-      uint8_t* hdr = & (payload[pos]);
-      gh_trainheader header;
-      header.dateStart.Year = hdr[0];
-      header.dateStart.Month = hdr[1];
-      header.dateStart.Day = hdr[2];
-      header.timeStart.Hour = hdr[3];
-      header.timeStart.Minute = hdr[4];
-      header.timeStart.Second = hdr[5];
-      header.TotalPoint = be_read32(hdr+6);
-      header.TotalTime = be_read32(hdr+10);
-      header.TotalDistance = be_read32(hdr+14);
-      header.LapCnts = be_read16(hdr+18);
-      header.gh_ptrec.Index = be_read32(hdr+20);
-      header.gh_laprec.LapIndex = be_read32(hdr+24);
-      header.DataType = hdr[28];
+      uint8_t* th_hdr = & (payload[pos]);
+      gh_trainheader th_header;
+      th_header.dateStart.Year = th_hdr[0];
+      th_header.dateStart.Month = th_hdr[1];
+      th_header.dateStart.Day = th_hdr[2];
+      th_header.timeStart.Hour = th_hdr[3];
+      th_header.timeStart.Minute = th_hdr[4];
+      th_header.timeStart.Second = th_hdr[5];
+      th_header.TotalPoint = be_read32(th_hdr+6);
+      th_header.TotalTime = be_read32(th_hdr+10);
+      th_header.TotalDistance = be_read32(th_hdr+14);
+      th_header.LapCnts = be_read16(th_hdr+18);
+      th_header.gh_ptrec.Index = be_read32(th_hdr+20);
+      th_header.gh_laprec.LapIndex = be_read32(th_hdr+24);
+      th_header.DataType = th_hdr[28];
 
       if (showlist || global_opts.debug_level > 1) {
-        printf("Track[%02i]: %02d-%02d-%02d ", i, header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
-        printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-        int time_s=header.TotalTime / 10;
+        printf("Track[%02i]: %02d-%02d-%02d ", i, th_header.dateStart.Year, th_header.dateStart.Month, th_header.dateStart.Day);
+        printf("%02d:%02d:%02d ", th_header.timeStart.Hour, th_header.timeStart.Minute, th_header.timeStart.Second);
+        int time_s=th_header.TotalTime / 10;
         int time_h=time_s/(60*60);
         time_s-=time_h*(60*60);
         int time_m=time_s/60;
         time_s-=time_m*60;
-        printf("Points:%6u Time:%02d:%02d:%02d Dist:%9um LapCnts:%5d ", header.TotalPoint, time_h, time_m, time_s, header.TotalDistance, header.LapCnts);
-        printf("Index/StartPt:%u ", header.gh_ptrec.Index);
-        printf("LapIndex/EndPt:%u ", header.gh_laprec.LapIndex);
-        printf("DataType:0x%x\n", header.DataType);
+        printf("Points:%6u Time:%02d:%02d:%02d Dist:%9um LapCnts:%5d ", th_header.TotalPoint, time_h, time_m, time_s, th_header.TotalDistance, th_header.LapCnts);
+        printf("Index/StartPt:%u ", th_header.gh_ptrec.Index);
+        printf("LapIndex/EndPt:%u ", th_header.gh_laprec.LapIndex);
+        printf("DataType:0x%x\n", th_header.DataType);
       }
 
       if (!showlist) {
         auto* trk = new route_head;
 
         trk->rte_name = QString::asprintf("%02d-%02d-%02d_%02d:%02d:%02d",
-                                          header.dateStart.Year,
-                                          header.dateStart.Month,
-                                          header.dateStart.Day,
-                                          header.timeStart.Hour,
-                                          header.timeStart.Minute,
-                                          header.timeStart.Second);
+                                          th_header.dateStart.Year,
+                                          th_header.dateStart.Month,
+                                          th_header.dateStart.Day,
+                                          th_header.timeStart.Hour,
+                                          th_header.timeStart.Minute,
+                                          th_header.timeStart.Second);
         trk->rte_desc = QString("GH625XT GPS tracklog data");
 
         track_add_head(trk);
@@ -420,8 +420,8 @@ GlobalsatSportFormat::track_read()
         GetTrack[0] = CommandGetTrackFileSections;
         GetTrack[1] = 0x0;
         GetTrack[2] = 0x1;
-        GetTrack[3] = (0xFF00 & header.gh_ptrec.Index) >> 8;
-        GetTrack[4] = 0xFF & header.gh_ptrec.Index;
+        GetTrack[3] = (0xFF00 & th_header.gh_ptrec.Index) >> 8;
+        GetTrack[4] = 0xFF & th_header.gh_ptrec.Index;
         globalsat_write_package(GetTrack, 5);
 
         uint8_t trackDeviceCommand;
@@ -579,33 +579,33 @@ GlobalsatSportFormat::track_read()
           track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
           if ((track_length > 0) && (track_payload != nullptr)) {
             //	  printf("Got track package!!! Train data\n");
-            uint8_t* hdr = track_payload;
-            gh_trainheader header;
-            header.dateStart.Year = hdr[0];
-            header.dateStart.Month = hdr[1];
-            header.dateStart.Day = hdr[2];
-            header.timeStart.Hour = hdr[3];
-            header.timeStart.Minute = hdr[4];
-            header.timeStart.Second = hdr[5];
-            header.TotalPoint = be_read32(hdr+6);
-            header.TotalTime = be_read32(hdr+10);
-            header.TotalDistance = be_read32(hdr+14);
-            header.LapCnts = be_read16(hdr+18);
-            header.gh_ptrec.StartPt = be_read32(hdr+20);
-            header.gh_laprec.EndPt = be_read32(hdr+24);
-            header.DataType = hdr[28];
+            uint8_t* laptrain_hdr = track_payload;
+            gh_trainheader laptrain_header;
+            laptrain_header.dateStart.Year = laptrain_hdr[0];
+            laptrain_header.dateStart.Month = laptrain_hdr[1];
+            laptrain_header.dateStart.Day = laptrain_hdr[2];
+            laptrain_header.timeStart.Hour = laptrain_hdr[3];
+            laptrain_header.timeStart.Minute = laptrain_hdr[4];
+            laptrain_header.timeStart.Second = laptrain_hdr[5];
+            laptrain_header.TotalPoint = be_read32(laptrain_hdr+6);
+            laptrain_header.TotalTime = be_read32(laptrain_hdr+10);
+            laptrain_header.TotalDistance = be_read32(laptrain_hdr+14);
+            laptrain_header.LapCnts = be_read16(laptrain_hdr+18);
+            laptrain_header.gh_ptrec.StartPt = be_read32(laptrain_hdr+20);
+            laptrain_header.gh_laprec.EndPt = be_read32(laptrain_hdr+24);
+            laptrain_header.DataType = laptrain_hdr[28];
 
 
             if (global_opts.debug_level > 1) {
-              printf("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
-              printf("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-              printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
-              printf("StartPt:%u ", header.gh_ptrec.StartPt);
-              printf("EndPt:%u ", header.gh_laprec.EndPt);
-              printf("DataType:0x%x\n", header.DataType);
+              printf("Lap Trainheader: %02d-%02d-%02d ", laptrain_header.dateStart.Year, laptrain_header.dateStart.Month, laptrain_header.dateStart.Day);
+              printf("%02d:%02d:%02d ", laptrain_header.timeStart.Hour, laptrain_header.timeStart.Minute, laptrain_header.timeStart.Second);
+              printf("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", laptrain_header.TotalPoint, laptrain_header.TotalTime / 10, laptrain_header.TotalDistance, laptrain_header.LapCnts);
+              printf("StartPt:%u ", laptrain_header.gh_ptrec.StartPt);
+              printf("EndPt:%u ", laptrain_header.gh_laprec.EndPt);
+              printf("DataType:0x%x\n", laptrain_header.DataType);
             }
 
-            int recpoints_in_package = header.gh_laprec.EndPt - header.gh_ptrec.StartPt + 1;
+            int recpoints_in_package = laptrain_header.gh_laprec.EndPt - laptrain_header.gh_ptrec.StartPt + 1;
             //	  printf("Recpoints Data:\n");
             uint8_t* recpoints_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
             for (int recpoint = 0; recpoint < recpoints_in_package; recpoint++) {

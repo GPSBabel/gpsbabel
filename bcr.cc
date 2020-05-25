@@ -244,19 +244,15 @@ bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 static void
 bcr_data_read()
 {
-  QString str;
-
   auto* route = new route_head;
-
-  str = inifile_readstr(ini, "client", "routename");
-  if (!str.isNull()) {
-    route->rte_name = str;
-  }
-
   route_add_head(route);
 
-  for (int index = 1; index > 0; index ++) {
+  QString routename = inifile_readstr(ini, "client", "routename");
+  if (!routename.isNull()) {
+    route->rte_name = routename;
+  }
 
+  for (int index = 1; index > 0; index ++) {
     char station[32];
     QString str;
     int mlat, mlon;		/* mercator data */
@@ -323,17 +319,17 @@ bcr_wr_deinit()
   gbfclose(fout);
 }
 
-static void bcr_write_line(gbfile* fout, const QString& key, const int* index, const QString& value)
+static void bcr_write_line(gbfile* fileout, const QString& key,
+    const int* index, const QString& value)
 {
-  if (value.isEmpty()) {			/* this is mostly used in the world of windows */
-    /* so we respectfully add a CR/LF on each line */
-    gbfprintf(fout, "%s\r\n", CSTR(key));
+  if (value.isEmpty()) { // Windows. Add CR/LF on output.
+    gbfprintf(fileout, "%s\r\n", CSTR(key));
   } else {
     char* tmp = (value != nullptr) ? xstrdup(value) : xstrdup("");
     if (index != nullptr) {
-      gbfprintf(fout, "%s%d=%s\r\n", CSTR(key), *index, tmp);
+      gbfprintf(fileout, "%s%d=%s\r\n", CSTR(key), *index, tmp);
     } else {
-      gbfprintf(fout, "%s=%s\r\n", CSTR(key), tmp);
+      gbfprintf(fileout, "%s=%s\r\n", CSTR(key), tmp);
     }
     xfree(tmp);
   }

@@ -421,15 +421,12 @@ static int read_tag(const char* caller, int tag, Waypoint* wpt);
 static void
 read_poi(const int sz, const int tag)
 {
-  int pos, len;
-  Waypoint* wpt;
-
 #ifdef GPI_DBG
   PP;
   dbginfo("> reading poi (size %d)\n", sz);
 #endif
   PP;
-  len = 0;
+  int len = 0;
   if (tag == 0x80002) {
     len = gbfgetint32(fin);	/* sub-header size */
   }
@@ -437,9 +434,9 @@ read_poi(const int sz, const int tag)
   dbginfo("poi sublen = %1$d (0x%1$x)\n", len);
 #endif
   (void) len;
-  pos = gbftell(fin);
+  int pos = gbftell(fin);
 
-  wpt = new Waypoint;
+  Waypoint* wpt = new Waypoint;
   wpt->icon_descr = DEFAULT_ICON;
 
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
@@ -450,8 +447,8 @@ read_poi(const int sz, const int tag)
   wpt->shortname = gpi_read_string("Shortname");
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
-    int tag = gbfgetint32(fin);
-    if (! read_tag("read_poi", tag, wpt)) {
+    int skip_tag = gbfgetint32(fin);
+    if (! read_tag("read_poi", skip_tag, wpt)) {
       break;
     }
   }

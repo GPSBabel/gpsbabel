@@ -657,20 +657,20 @@ Dg100Format::common_rd_init(const QString& fname)
 }
 
 void
-Dg100Format::dg100_rd_init(const QString& fname, bool isfile)
+Dg100Format::dg100_rd_init(const QString& fname, bool is_file)
 {
   static const model_t dg100_model = { "DG-100", 115200, true, true, dg100_commands, sizeof(dg100_commands) / sizeof(dg100_command) };
   model = &dg100_model;
-  this->isfile = isfile;
+  this->isfile = is_file;
   common_rd_init(fname);
 }
 
 void
-Dg100Format::dg200_rd_init(const QString& fname, bool isfile)
+Dg100Format::dg200_rd_init(const QString& fname, bool is_file)
 {
   static const model_t dg200_model = { "DG-200", 230400, false, false, dg200_commands, sizeof(dg200_commands) / sizeof(dg100_command) };
   model = &dg200_model;
-  this->isfile = isfile;
+  this->isfile = is_file;
   common_rd_init(fname);
 }
 

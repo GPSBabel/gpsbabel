@@ -189,12 +189,12 @@ static const char* humminbird_icons[] = {
   "Snapshot"      /* 29 */
 };
 
-static gbfile* fin;
-static gbfile* fout;
+static gbfile* fin_;
+static gbfile* fout_;
 static int waypoint_num;
 static short_handle wptname_sh, rtename_sh, trkname_sh;
 static humminbird_rte_t* humrte;
-static int rte_num;
+static int rte_num_;
 static QMap<QString, Waypoint*> map;
 
 static
@@ -251,13 +251,13 @@ inverse_gudermannian_i1924(const double x)
 static void
 humminbird_rd_init(const QString& fname)
 {
-  fin = gbfopen_be(fname, "rb", MYNAME);
+  fin_ = gbfopen_be(fname, "rb", MYNAME);
 }
 
 static void
 humminbird_rd_deinit()
 {
-  gbfclose(fin);
+  gbfclose(fin_);
 }
 
 static void
@@ -587,22 +587,22 @@ humminbird_read_track_old(gbfile* fin)
 static void
 humminbird_read()
 {
-  while (! gbfeof(fin)) {
-    uint32_t signature = gbfgetuint32(fin);
+  while (! gbfeof(fin_)) {
+    uint32_t signature = gbfgetuint32(fin_);
 
     switch (signature) {
     case WPT_MAGIC:
     case WPT_MAGIC2:
-      humminbird_read_wpt(fin);
+      humminbird_read_wpt(fin_);
       break;
     case RTE_MAGIC:
-      humminbird_read_route(fin);
+      humminbird_read_route(fin_);
       break;
     case TRK_MAGIC:
-      humminbird_read_track(fin);
+      humminbird_read_track(fin_);
       return; /* Don't continue. The rest of the file is all zeores */
     case TRK_MAGIC2:
-      humminbird_read_track_old(fin);
+      humminbird_read_track_old(fin_);
       return; /* Don't continue. The rest of the file is all zeores */
     default:
       fatal(MYNAME ": Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
@@ -616,7 +616,7 @@ humminbird_read()
 static void
 humminbird_wr_init(const QString& fname)
 {
-  fout = gbfopen_be(fname, "wb", MYNAME);
+  fout_ = gbfopen_be(fname, "wb", MYNAME);
 
   wptname_sh = mkshort_new_handle();
 
@@ -647,7 +647,7 @@ humminbird_wr_init(const QString& fname)
   setshort_defname(trkname_sh, "Track");
 
   waypoint_num = 0;
-  rte_num = 0;
+  rte_num_ = 0;
 }
 
 static void
@@ -656,7 +656,7 @@ humminbird_wr_deinit()
   mkshort_del_handle(&wptname_sh);
   mkshort_del_handle(&rtename_sh);
   mkshort_del_handle(&trkname_sh);
-  gbfclose(fout);
+  gbfclose(fout_);
 }
 
 static void
@@ -711,8 +711,8 @@ humminbird_write_waypoint(const Waypoint* wpt)
   memset(&hum.name, 0, sizeof(hum.name));
   memcpy(&hum.name, CSTR(name), name.length());
 
-  gbfputuint32(WPT_MAGIC, fout);
-  gbfwrite(&hum, sizeof(hum), 1, fout);
+  gbfputuint32(WPT_MAGIC, fout_);
+  gbfwrite(&hum, sizeof(hum), 1, fout_);
 }
 
 static humminbird_trk_header_t* trk_head;
@@ -764,10 +764,10 @@ humminbird_track_tail(const route_head*)
   /* Actually write it out */
 
 
-  gbfputuint32(TRK_MAGIC, fout);
-  gbfwrite(trk_head, 1, sizeof(humminbird_trk_header_t), fout);
-  gbfwrite(trk_points, max_points, sizeof(humminbird_trk_point_t), fout);
-  gbfputuint16(0, fout); /* Odd but true. The format doesn't fit an int nr of entries. */
+  gbfputuint32(TRK_MAGIC, fout_);
+  gbfwrite(trk_head, 1, sizeof(humminbird_trk_header_t), fout_);
+  gbfwrite(trk_points, max_points, sizeof(humminbird_trk_point_t), fout_);
+  gbfputuint16(0, fout_); /* Odd but true. The format doesn't fit an int nr of entries. */
 
   xfree(trk_head);
   xfree(trk_points);
@@ -865,7 +865,7 @@ humminbird_rte_tail(const route_head* rte)
   }
 
   if (humrte->count > 0) {
-    humrte->num = rte_num++;
+    humrte->num = rte_num_++;
     humrte->time = gpsbabel_time;
     for (int i = 0; i < humrte->count; i++) {
       be_write16(&humrte->points[i], humrte->points[i]);
@@ -877,8 +877,8 @@ humminbird_rte_tail(const route_head* rte)
     QString name = mkshort(rtename_sh, rte->rte_name);
     strncpy(humrte->name, CSTR(name), sizeof(humrte->name));
 
-    gbfputuint32(RTE_MAGIC, fout);
-    gbfwrite(humrte, sizeof(*humrte), 1, fout);
+    gbfputuint32(RTE_MAGIC, fout_);
+    gbfwrite(humrte, sizeof(*humrte), 1, fout_);
   }
 
   xfree(humrte);

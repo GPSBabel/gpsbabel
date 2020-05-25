@@ -817,7 +817,7 @@ garmin_txt_write()
   grid_str = grid_str.replace('*', "°");
   *fout << "Grid\t" << grid_str << "\r\n";
 
-  const char* datum_str = gt_get_mps_datum_name(datum_index);
+  datum_str = gt_get_mps_datum_name(datum_index);
   *fout << QString::asprintf("Datum\t%s\r\n\r\n", datum_str);
 
   waypoints = 0;

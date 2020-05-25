@@ -43,6 +43,7 @@
 #include <QtCore/QDate>            // for QDate
 #include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QFile>            // for QFile
+#include <QtCore/QFileInfo>        // for QFileInfo
 #include <QtCore/QList>            // for QList<>::iterator, QList
 #include <QtCore/QPair>            // for QPair
 #include <QtCore/QRegExp>          // for QRegExp
@@ -140,12 +141,12 @@ struct ExifTag {
 
   // grow data vector, initializing any new elements to type T with value 0.
   template <typename T>
-  void grow(const int size)
+  void grow(const int new_size)
   {
     int old_size = data.size();
-    if (size > old_size) {
-      data.resize(size);
-      for (int idx = old_size; idx < size; ++idx) {
+    if (new_size > old_size) {
+      data.resize(new_size);
+      for (int idx = old_size; idx < new_size; ++idx) {
         data[idx] = 0;
       }
     }
@@ -185,9 +186,9 @@ struct ExifApp {
   }
 };
 
-static gbfile* fin, *fout;
+static gbfile* fin_, *fout_;
 static QList<ExifApp>* exif_apps;
-static ExifApp* exif_app;
+static ExifApp* exif_app_;
 static const Waypoint* exif_wpt_ref;
 static QDateTime exif_time_ref;
 static char exif_success;
@@ -368,32 +369,32 @@ exif_ifd_size(ExifIfd* ifd)
 static ExifApp*
 exif_load_apps()
 {
-  ExifApp* exif_app = nullptr;
+  exif_app_ = nullptr;
 
-  while (! gbfeof(fin)) {
+  while (! gbfeof(fin_)) {
     exif_apps->append(ExifApp());
     ExifApp* app = &exif_apps->last();
     app->fcache = gbfopen(nullptr, "wb", MYNAME);
 
-    app->marker = gbfgetuint16(fin);
-    app->len = gbfgetuint16(fin);
+    app->marker = gbfgetuint16(fin_);
+    app->len = gbfgetuint16(fin_);
     if (global_opts.debug_level >= 3) {
-      printf(MYNAME ": api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
+      printf(MYNAME ": api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin_));
     }
-    if (exif_app || (app->marker == 0xFFDA)) { /* compressed data */
-      gbfcopyfrom(app->fcache, fin, 0x7FFFFFFF);
+    if (exif_app_ || (app->marker == 0xFFDA)) { /* compressed data */
+      gbfcopyfrom(app->fcache, fin_, 0x7FFFFFFF);
       if (global_opts.debug_level >= 3) {
         printf(MYNAME ": compressed data size = %u\n", gbftell(app->fcache));
       }
     } else {
-      gbfcopyfrom(app->fcache, fin, app->len - 2);
+      gbfcopyfrom(app->fcache, fin_, app->len - 2);
       if (app->marker == 0xFFE1) {
-        exif_app = app;
+        exif_app_ = app;
       }
     }
   }
 
-  return exif_app;
+  return exif_app_;
 }
 
 #ifndef NDEBUG
@@ -770,10 +771,10 @@ exif_get_exif_time(ExifApp* app)
     }
 
     if (offset_tag) {
-      char* str = exif_read_str(offset_tag);
+      char* time_tag = exif_read_str(offset_tag);
       // string should be +HH:MM or -HH:MM
       QRegExp re("([+-])(\\d{2})(?::)(\\d{2})");
-      if (re.exactMatch(str)) {
+      if (re.exactMatch(time_tag)) {
         // Correct the date time by supplying the offset from UTC.
         int offset_hours = re.cap(1).append(re.cap(2)).toInt();
         int offset_mins = re.cap(1).append(re.cap(3)).toInt();
@@ -887,7 +888,6 @@ exif_waypt_from_exif_app(ExifApp* app)
       fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum);
     }
     if (idatum != DATUM_WGS84) {
-      double alt;
       GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
                                       &wpt->latitude, &wpt->longitude, &alt, idatum);
     }
@@ -977,24 +977,9 @@ exif_waypt_from_exif_app(ExifApp* app)
   }
 
   if (opt_filename) {
-    char* c;
-    char* str = xstrdup(fin->name);
-
-    char* cx = str;
-    if ((c = strrchr(cx, ':'))) {
-      cx = c + 1;
-    }
-    if ((c = strrchr(cx, '\\'))) {
-      cx = c + 1;
-    }
-    if ((c = strrchr(cx, '/'))) {
-      cx = c + 1;
-    }
-    if (((c = strchr(cx, '.'))) && (c != cx)) {
-      *c = '\0';
-    }
-    wpt->shortname = cx;
-    xfree(str);
+    QFileInfo fi(fin_->name);
+    // No directory, no extension.
+    wpt->shortname = fi.baseName();
   }
 
   return wpt;
@@ -1069,13 +1054,13 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
   ExifTag* tag = nullptr;
   uint16_t size;
 
-  ExifIfd* ifd = exif_find_ifd(exif_app, ifd_nr);
+  ExifIfd* ifd = exif_find_ifd(exif_app_, ifd_nr);
   if (ifd == nullptr) {
-    exif_app->ifds.append(ExifIfd());
-    ifd = &exif_app->ifds.last();
+    exif_app_->ifds.append(ExifIfd());
+    ifd = &exif_app_->ifds.last();
     ifd->nr = ifd_nr;
   } else {
-    tag = exif_find_tag(exif_app, ifd_nr, tag_id);
+    tag = exif_find_tag(exif_app_, ifd_nr, tag_id);
   }
 
   uint16_t item_size = exif_type_size(type);
@@ -1368,14 +1353,14 @@ exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
 static void
 exif_write_apps()
 {
-  gbfputuint16(0xFFD8, fout);
+  gbfputuint16(0xFFD8, fout_);
 
   for (auto& app_instance : *exif_apps) {
     ExifApp* app = &app_instance;
 
-    gbfputuint16(app->marker, fout);
+    gbfputuint16(app->marker, fout_);
 
-    if (app == exif_app) {
+    if (app == exif_app_) {
       assert(app->marker == 0xFFE1);
       uint32_t len = 8;
 
@@ -1465,15 +1450,15 @@ exif_write_apps()
 
       len = gbftell(ftmp);
       gbfrewind(ftmp);
-      gbfputuint16(len + 8, fout);
-      gbfwrite("Exif\0\0", 6, 1, fout);
-      gbfcopyfrom(fout, ftmp, len);
+      gbfputuint16(len + 8, fout_);
+      gbfwrite("Exif\0\0", 6, 1, fout_);
+      gbfcopyfrom(fout_, ftmp, len);
 
       gbfclose(ftmp);
     } else {
-      gbfputuint16(app->len, fout);
+      gbfputuint16(app->len, fout_);
       gbfrewind(app->fcache);
-      gbfcopyfrom(fout, app->fcache, 0x7FFFFFFF);
+      gbfcopyfrom(fout_, app->fcache, 0x7FFFFFFF);
     }
   }
 }
@@ -1485,7 +1470,7 @@ exif_write_apps()
 static void
 exif_rd_init(const QString& fname)
 {
-  fin = gbfopen_be(fname, "rb", MYNAME);
+  fin_ = gbfopen_be(fname, "rb", MYNAME);
   exif_apps = new QList<ExifApp>;
 }
 
@@ -1493,20 +1478,20 @@ static void
 exif_rd_deinit()
 {
   exif_release_apps();
-  gbfclose(fin);
+  gbfclose(fin_);
 }
 
 static void
 exif_read()
 {
-  uint16_t soi = gbfgetuint16(fin);
+  uint16_t soi = gbfgetuint16(fin_);
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");  /* only jpeg for now */
 
-  exif_app = exif_load_apps();
-  is_fatal(exif_app == nullptr, MYNAME ": No EXIF header in source file \"%s\".", fin->name);
+  exif_app_ = exif_load_apps();
+  is_fatal(exif_app_ == nullptr, MYNAME ": No EXIF header in source file \"%s\".", fin_->name);
 
-  exif_examine_app(exif_app);
-  Waypoint* wpt = exif_waypt_from_exif_app(exif_app);
+  exif_examine_app(exif_app_);
+  Waypoint* wpt = exif_waypt_from_exif_app(exif_app_);
   if (wpt) {
     waypt_add(wpt);
   }
@@ -1520,24 +1505,24 @@ exif_wr_init(const QString& fname)
 
   exif_apps = new QList<ExifApp>;
 
-  fin = gbfopen_be(fname, "rb", MYNAME);
-  is_fatal(fin->is_pipe, MYNAME ": Sorry, this format cannot be used with pipes!");
+  fin_ = gbfopen_be(fname, "rb", MYNAME);
+  is_fatal(fin_->is_pipe, MYNAME ": Sorry, this format cannot be used with pipes!");
 
-  uint16_t soi = gbfgetuint16(fin);
+  uint16_t soi = gbfgetuint16(fin_);
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");
-  exif_app = exif_load_apps();
-  is_fatal(exif_app == nullptr, MYNAME ": No EXIF header found in source file \"%s\".", fin->name);
-  exif_examine_app(exif_app);
-  gbfclose(fin);
+  exif_app_ = exif_load_apps();
+  is_fatal(exif_app_ == nullptr, MYNAME ": No EXIF header found in source file \"%s\".", fin_->name);
+  exif_examine_app(exif_app_);
+  gbfclose(fin_);
 
-  exif_time_ref = exif_get_exif_time(exif_app);
+  exif_time_ref = exif_get_exif_time(exif_app_);
   if (!exif_time_ref.isValid()) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }
 
   QString filename(fname);
   filename += ".jpg";
-  fout = gbfopen_be(filename, "wb", MYNAME);
+  fout_ = gbfopen_be(filename, "wb", MYNAME);
 }
 
 static void
@@ -1545,8 +1530,8 @@ exif_wr_deinit()
 {
 
   exif_release_apps();
-  QString tmpname = QString(fout->name);
-  gbfclose(fout);
+  QString tmpname = QString(fout_->name);
+  gbfclose(fout_);
 
   if (exif_success) {
     if (*opt_overwrite == '1') {
@@ -1586,8 +1571,8 @@ exif_write()
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
     } else if (labs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)) > frame) {
-      QString str = exif_time_str(exif_time_ref);
-      warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(str));
+      QString time_str = exif_time_str(exif_time_ref);
+      warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(time_str));
       if (exif_wpt_ref != nullptr) {
         QString str = exif_time_str(exif_wpt_ref->creation_time);
         warning(MYNAME ": Best is from %s, %ld second(s) away.\n",

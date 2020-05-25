@@ -66,7 +66,7 @@ skyforce_parse_coords(const char* str)
 
 
 static Waypoint*
-skyforce_parse_wpt(const char* str, int* rte_num)
+skyforce_parse_wpt(const char* str, int* rte_num_out)
 {
   Waypoint* wpt = skyforce_parse_coords(str);
   if (wpt == nullptr) {
@@ -78,8 +78,8 @@ skyforce_parse_wpt(const char* str, int* rte_num)
   // Grab "BEARHILL" and whack trailing space.
   wpt->shortname = QString(str).mid(10,9).trimmed();
 
-  if (rte_num) {
-    *rte_num = atoi(str + 2);
+  if (rte_num_out) {
+    *rte_num_out = atoi(str + 2);
   }
 
   return wpt;

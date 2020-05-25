@@ -148,8 +148,8 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
           m1 = Get_Pkt_Type((*packet).type, (*packet).data[0], &m2);
           if (gps_show_bytes) {
             GPS_Diag(" ");
-            for (unsigned i = 0; i < packet->n; i++) {
-              char c = (*packet).data[i];
+            for (unsigned j = 0; j < packet->n; j++) {
+              char c = (*packet).data[j];
               GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
             }
             GPS_Diag(" ");

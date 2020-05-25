@@ -171,7 +171,7 @@ ignr_rw_deinit()
 }
 
 static void
-ignr_write_track_hdr(const route_head* track)
+ignr_write_track_hdr(const route_head* track_hdr)
 {
   track_num++;
 
@@ -180,24 +180,24 @@ ignr_write_track_hdr(const route_head* track)
   }
 
   gbfprintf(fout, "\t<INFORMATIONS>\n");
-  gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
-  if (track->rte_desc != nullptr) {
-    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", CSTRc(track->rte_desc));
+  gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track_hdr->rte_waypt_ct);
+  if (!track_hdr->rte_desc.isEmpty()) {
+    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", CSTRc(track_hdr->rte_desc));
   }
   gbfprintf(fout, "\t</INFORMATIONS>\n");
 }
 
 static void
-ignr_write_waypt(const Waypoint* wpt)
+ignr_write_waypt(const Waypoint* waypoint)
 {
   if (track_num != track_index) {
     return;
   }
 
   gbfprintf(fout, "\t<ETAPE>\n");
-  gbfprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
-  if (wpt->altitude != unknown_alt) {
-    gbfprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
+  gbfprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", waypoint->latitude, waypoint->longitude);
+  if (waypoint->altitude != unknown_alt) {
+    gbfprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", waypoint->altitude);
   }
   gbfprintf(fout, "\t</ETAPE>\n");
 }

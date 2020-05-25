@@ -140,7 +140,6 @@ int DuplicateFilter::compare(const void* a, const void* b)
 
 void DuplicateFilter::process()
 {
-  Waypoint* waypointp;
   btree_node* newnode, * btmp, * sup_tree = nullptr;
   btree_node* oldnode = nullptr;
   unsigned long crc = 0;
@@ -166,7 +165,7 @@ void DuplicateFilter::process()
   qsort(htable, ct, sizeof(*htable), compare);
 
   for (i=0; i<ct; i++) {
-    waypointp = htable[i].wpt;
+    auto waypointp = htable[i].wpt;
 
     memset(&dupe, '\0', sizeof(dupe));
 
