@@ -406,7 +406,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	psitrex               KuDaTa PsiTrex text
 	lowranceusr           Lowrance USR
 	  ignoreicons           (0/1) (USR input) Ignore event marker icons on read 
 	  writeasicons          (0/1) (USR output) Treat waypoints as icons on write 

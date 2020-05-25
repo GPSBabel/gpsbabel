@@ -71,7 +71,6 @@ extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
-extern ff_vecs_t psit_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
 extern ff_vecs_t html_vecs;
@@ -292,7 +291,6 @@ private:
   LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
   LegacyFormat navicache_fmt {navicache_vecs};
-  LegacyFormat psit_fmt {psit_vecs};
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
@@ -591,13 +589,6 @@ private:
       &navicache_fmt,
       "navicache",
       "Navicache.com XML",
-      nullptr,
-      nullptr,
-    },
-    {	/* MRCB */
-      &psit_fmt,
-      "psitrex",
-      "KuDaTa PsiTrex text",
       nullptr,
       nullptr,
     },

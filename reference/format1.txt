@@ -86,7 +86,6 @@ file	jtr	jtr	Jelbert GeoTagger data file
 file	jogmap	xml	Jogmap.de XML format
 file	kompass_tk	wp	Kompass (DAV) Track (.tk)
 file	kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
-file	psitrex		KuDaTa PsiTrex text
 file	lowranceusr	usr	Lowrance USR
 file	maggeo	gs	Magellan Explorist Geocaching
 file	mapsend		Magellan Mapsend

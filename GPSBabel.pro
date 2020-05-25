@@ -30,7 +30,7 @@ MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc mapsource.
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
         xcsv.cc tiger.cc easygps.cc \
-        saroute.cc navicache.cc psitrex.cc delgpl.cc \
+        saroute.cc navicache.cc delgpl.cc \
         ozi.cc text.cc html.cc netstumbler.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
         vcf.cc lowranceusr.cc an1.cc tomtom.cc \
@@ -48,7 +48,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
 
-DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
+DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc psitrex.cc
 
 DEPRECATED_HEADERS=geo.h quovadis.h
 DEPRECATED_SHAPE=pdbfile.cc

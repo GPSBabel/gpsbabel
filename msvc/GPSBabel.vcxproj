@@ -275,7 +275,6 @@
     <ClCompile Include="pocketfms_wp.cc" />
     <ClCompile Include="polygon.cc" />
     <ClCompile Include="position.cc" />
-    <ClCompile Include="psitrex.cc" />
     <ClCompile Include="radius.cc" />
     <ClCompile Include="random.cc" />
     <ClCompile Include="raymarine.cc" />

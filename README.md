@@ -1,7 +1,7 @@
 # GPSBabel
 This is the source code for [GPSBabel](https://www.gpsbabel.org), the free software project to manage GPS data (waypoints, tracks, routes) in your GPSes or in related programs.
 
-# Welcome newbie open source contributors!
+# Welcome new open source contributors
 
 We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib).
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8f55bf8b8f454b4a9b1116c9268e26c6)](https://app.codacy.com/app/gpsbabel/gpsbabel?utm_source=github.com&utm_medium=referral&utm_content=gpsbabel/gpsbabel&utm_campaign=Badge_Grade_Settings)
@@ -13,7 +13,6 @@ The absolute [latest GPSBabel build](https://travis-ci.org/gpsbabel/gpsbabel) ma
 
 If you aren't a programmer or a writer, we need help with gear, hosting costs, tool license prices, answering questions on the mailing lists, etc. Please [support GPSBabel](https://www.gpsbabel.org/contribute.html) any way you can.
 <!-- consider sites like forthebadge.com for others -->
-
 
 <!--
 ## News

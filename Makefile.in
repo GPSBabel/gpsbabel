@@ -69,7 +69,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	skytraq.o \
 	holux.o tmpro.o tpg.o tpo.o \
 	tiger.o easygps.o  \
-	saroute.o navicache.o psitrex.o delgpl.o \
+	saroute.o navicache.o delgpl.o \
 	text.o html.o netstumbler.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o  \
 	vcf.o lowranceusr.o an1.o tomtom.o \
@@ -926,9 +926,6 @@ polygon.o: polygon.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
 position.o: position.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h grtcirc.h position.h filter.h
-psitrex.o: psitrex.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
-  garmin_tables.h
 qstarz_bl_1000.o: qstarz_bl_1000.cc qstarz_bl_1000.h defs.h config.h \
   zlib/zlib.h zlib/zconf.h formspec.h inifile.h gbfile.h session.h \
   src/core/datetime.h src/core/optional.h format.h src/core/logging.h
