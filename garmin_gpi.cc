@@ -46,23 +46,27 @@
 
 #include <algorithm>               // for stable_sort
 #include <cctype>                  // for tolower
-#include <cstdio>                  // for NULL, SEEK_CUR, SEEK_SET
+#include <cstdint>                 // for int32_t, int16_t, uint16_t
+#include <cstdio>                  // for SEEK_CUR, SEEK_SET
 #include <cstdlib>                 // for atoi
-#include <cstdint>
-#include <cstring>                 // for strcmp, strlen, strncmp, strncpy
-#include <ctime>                   // for time, gmtime
+#include <cstring>                 // for strlen, strncmp
+#include <ctime>                   // for time, time_t, gmtime
 
+#include <QtCore/QByteArray>       // for QByteArray, operator==
+#include <QtCore/QByteRef>         // for QByteRef
 #include <QtCore/QList>            // for QList<>::iterator, QList
 #include <QtCore/QString>          // for QString, operator+, operator<
 #include <QtCore/QThread>          // for QThread
+#include <QtCore/QVector>          // for QVector
 #include <QtCore/Qt>               // for CaseInsensitive
 #include <QtCore/QtGlobal>         // for foreach, Q_UNUSED
 
 #include "defs.h"
 #include "garmin_gpi.h"
 #include "cet_util.h"              // for cet_convert_init
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_SET, GMSD_GET, garmin_fs_alloc, GMSD_FIND
-#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfile, gbfopen_le, gbsize_t, gbfgetuint16
+#include "formspec.h"              // for FormatSpecificDataList
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
+#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbfile, gbsize_t
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 
 
@@ -254,92 +258,81 @@ gpi_gmsd_init(Waypoint* wpt)
   return gmsd;
 }
 
-static char*
-gpi_read_lc_string_old(char* languagecode, short* length)
+struct lc_string {
+  QByteArray lc;
+  QByteArray str;
+  int strlen{0};
+};
+
+static lc_string
+gpi_read_lc_string()
 {
-  char lc[3];
+  lc_string result;
 
-  gbfread(lc, 1, 2, fin);
-  lc[2] = '\0';
-  short len = gbfgetint16(fin);
-
-  if ((lc[0] < 'A') || (lc[0] > 'Z') || (lc[1] < 'A') || (lc[1] > 'Z')) {
-    fatal(MYNAME ": Invalid language code %s!\n", lc);
+  result.lc.resize(2);
+  gbfread(result.lc.data(), 1, 2, fin);
+  if ((result.lc.at(0) < 'A') || (result.lc.at(0) > 'Z') ||
+      (result.lc.at(1) < 'A') || (result.lc.at(1) > 'Z')) {
+    fatal(MYNAME ": Invalid language code %s!\n", result.lc.constData());
   }
-  char* res = (char*) xmalloc(len + 1);
-  res[len] = '\0';
+
+  result.strlen = gbfgetint16(fin);
+
   PP;
-  if (len > 0) {
-    gbfread(res, 1, len, fin);
+  if (result.strlen > 0) {
+    result.str.resize(result.strlen);
+    gbfread(result.str.data(), 1, result.strlen, fin);
   }
 
-  strncpy(languagecode, lc, sizeof(lc));
-  *length = len;
-  return res;
+  return result;
 }
 
 /* read a standard string with or without 'EN' (or whatever) header */
-static char*
-gpi_read_string_old(const char* field)
+static QString
+gpi_read_string(const char* field)
 {
-  char* res = nullptr;
+  QByteArray string;
 
   int l0 = gbfgetint16(fin);
   if (l0 > 0) {
     char first = gbfgetc(fin);
     if (first == 0) {
-      short l1;
-      short l2;
-      char lc1[3] = "";
-      char lc2[3] = "";
 
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      char* res1 = gpi_read_lc_string_old(lc1,  &l1);
-      if ((l1 + 4) < l0) { // dual language?
-        char* res2 = gpi_read_lc_string_old(lc2,  &l2);
-        is_fatal((l1 + 4 + l2 + 4 != l0),
-                 MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
-        if (opt_lang && (strcmp(opt_lang, lc1) == 0)) {
-          res = res1;
-          xfree(res2);
-        } else if (opt_lang && (strcmp(opt_lang, lc2) == 0)) {
-          res = res2;
-          xfree(res1);
+      lc_string res1 = gpi_read_lc_string();
+      if ((res1.strlen + 4) < l0) { // dual language?
+        lc_string res2 = gpi_read_lc_string();
+        is_fatal((res1.strlen + 4 + res2.strlen + 4 != l0),
+                 MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, res1.strlen, res2.strlen, field);
+        if (opt_lang && (opt_lang  == res1.lc)) {
+          string = res1.str;
+        } else if (opt_lang && (opt_lang == res2.lc)) {
+          string = res2.str;
         } else {
-          fatal(MYNAME ": Must select language code, %s and %s found.\n", lc1, lc2);
+          fatal(MYNAME ": Must select language code, %s and %s found.\n", res1.lc.constData(), res2.lc.constData());
         }
       } else { // normal case, single language
-        is_fatal((l1 + 4 != l0),
-                 MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, l1, field);
-        res = res1;
+        is_fatal((res1.strlen + 4 != l0),
+                 MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, res1.strlen, field);
+        string = res1.str;
       }
     } else {
-      res = (char*) xmalloc(l0 + 1);
-      *res = first;
-      *(res + l0) = '\0';
+      string.resize(l0);
+      string[0] = first;
       PP;
-      l0--;
-      if (l0 > 0) {
-        gbfread(res + 1, 1, l0, fin);
+      if (l0 > 1) {
+        gbfread(string.data() + 1, 1, l0 - 1, fin);
       }
-
     }
   }
-#ifdef GPI_DBG
-  dbginfo("%s: \"%s\"\n", field, (res == NULL) ? "<NULL>" : res);
-#endif
-  return res;
-}
 
-static QString
-gpi_read_string(const char* field)
-{
-  char* s = gpi_read_string_old(field);
-  QString rv = STRTOUNICODE(s).trimmed();
-  xfree(s);
-  return rv;
+  QString result = STRTOUNICODE(string).trimmed();
+#ifdef GPI_DBG
+  dbginfo("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
+#endif
+  return result;
 }
 
 static void
