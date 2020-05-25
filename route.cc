@@ -473,7 +473,8 @@ RouteList::copy(RouteList** dst) const
     rte_new->line_width = rte_old->line_width;
     rte_new->session = rte_old->session;
     (*dst)->add_head(rte_new);
-    for (const auto& old_wpt : rte_old->waypoint_list) {
+    const auto& old_list = rte_old->waypoint_list;
+    for (const auto& old_wpt : old_list) {
       (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
     }
   }
