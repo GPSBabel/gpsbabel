@@ -65,7 +65,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
 {
   this->resize(400, 220);
   this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
-  QVBoxLayout* layout = new QVBoxLayout(this);
+  auto* layout = new QVBoxLayout(this);
 
   textEdit_ = new QPlainTextEdit(this);
   textEdit_->setReadOnly(true);

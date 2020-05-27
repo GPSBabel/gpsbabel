@@ -126,7 +126,7 @@ public:
         prevPt = thisPt;
       }
     }
-    double* dptr = (double*)(&cachedLength);  // big cheat
+    auto* dptr = (double*)(&cachedLength);  // big cheat
     *dptr = dist;
     return cachedLength;
   }
@@ -352,7 +352,7 @@ public:
         }
       }
     }
-    double* dptr = (double*)(&cachedLength);  // big cheat
+    auto* dptr = (double*)(&cachedLength);  // big cheat
     *dptr = dist;
     return cachedLength;
   }

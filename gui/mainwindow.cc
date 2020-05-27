@@ -888,10 +888,10 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  QProcess* proc = new QProcess(nullptr);
+  auto* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
   proc->start(QApplication::applicationDirPath() + '/' + name, args);
-  ProcessWaitDialog* waitDlg = new ProcessWaitDialog(nullptr, proc);
+  auto* waitDlg = new ProcessWaitDialog(nullptr, proc);
 
   if (proc->state() == QProcess::NotRunning) {
     errorString = QString(tr("Process \"%1\" did not start")).arg(name);

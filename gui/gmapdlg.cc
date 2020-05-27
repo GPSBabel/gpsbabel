@@ -145,7 +145,7 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   gpx_.read(gpxFileName);
 
   mapWidget_ = new Map(this, gpx_, te);
-  QHBoxLayout* lay = new QHBoxLayout(ui_.frame);
+  auto* lay = new QHBoxLayout(ui_.frame);
   lay->setContentsMargins(0, 0, 0, 0);
   lay->addWidget(mapWidget_);
 

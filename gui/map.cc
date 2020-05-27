@@ -81,8 +81,8 @@ Map::Map(QWidget* parent,
   this->logTime("Start map constructor");
 
 #if HAVE_WEBENGINE
-  MarkerClicker* mclicker = new MarkerClicker(this);
-  QWebChannel* channel = new QWebChannel(this->page());
+  auto* mclicker = new MarkerClicker(this);
+  auto* channel = new QWebChannel(this->page());
   this->page()->setWebChannel(channel);
   // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
