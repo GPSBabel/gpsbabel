@@ -57,7 +57,6 @@ extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t mapsend_vecs;
-extern ff_vecs_t mps_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t pcx_vecs;
 #if MAXIMAL_ENABLED
@@ -274,7 +273,6 @@ private:
   LegacyFormat garmin_fmt {garmin_vecs};
   LegacyFormat gdb_fmt {gdb_vecs};
   LegacyFormat mapsend_fmt {mapsend_vecs};
-  LegacyFormat mps_fmt {mps_vecs};
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   LegacyFormat pcx_fmt {pcx_vecs};
@@ -477,13 +475,6 @@ private:
       "mapsend",
       "Magellan Mapsend",
       nullptr,
-      nullptr,
-    },
-    {
-      &mps_fmt,
-      "mapsource",
-      "Garmin MapSource - mps",
-      "mps",
       nullptr,
     },
     {

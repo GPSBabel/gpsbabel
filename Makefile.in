@@ -61,7 +61,7 @@ LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
 INSTALL_DIR=$(DESTDIR)/$(PREFIX)
 
-MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
+MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o garmin.o \
 	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o \
 	wbt-200.o ozi.o pcx.o gdb.o gtrnctr.o xcsv.o explorist_ini.o
 
@@ -856,9 +856,6 @@ mapfactor.o: mapfactor.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
 mapsend.o: mapsend.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   mapsend.h magellan.h
-mapsource.o: mapsource.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
-  formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
-  src/core/optional.h garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h
 mkshort.o: mkshort.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   cet.h
