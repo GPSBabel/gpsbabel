@@ -52,7 +52,7 @@ protected:
 class GpxRoutePoint: public GpxItem
 {
 public:
-  GpxRoutePoint(): GpxItem(), location(LatLng()), name(QString())
+  GpxRoutePoint():  location(LatLng()), name(QString())
   {
   }
 
@@ -85,7 +85,7 @@ private:
 class GpxRoute: public GpxItem
 {
 public:
-  GpxRoute(): GpxItem(),name(QString()), cachedLength(-1) {}
+  GpxRoute(): name(QString()), cachedLength(-1) {}
 
   GpxRoute(const GpxRoute& c)
     :GpxItem(c.visible),
@@ -165,7 +165,7 @@ private:
 class GpxTrackPoint: public GpxItem
 {
 public:
-  GpxTrackPoint(): GpxItem(), location(LatLng()), elevation(0), dateTime(QDateTime())
+  GpxTrackPoint():  location(LatLng()), elevation(0), dateTime(QDateTime())
   {
   }
 
@@ -248,7 +248,7 @@ private:
 class GpxTrack: public GpxItem
 {
 public:
-  GpxTrack(): GpxItem(), number(1), name(QString()), comment(QString()), description(QString()), cachedLength(-1.0) {}
+  GpxTrack():  number(1), name(QString()), comment(QString()), description(QString()), cachedLength(-1.0) {}
 
   GpxTrack(const GpxTrack& c)
     :GpxItem(c.visible),
@@ -370,7 +370,7 @@ private:
 class GpxWaypoint: public GpxItem
 {
 public:
-  GpxWaypoint(): GpxItem(),
+  GpxWaypoint(): 
     location_(LatLng(0, 0)),
     elevation_(-1.0E-100),
     name_(QString()),
