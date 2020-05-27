@@ -1043,7 +1043,8 @@ void MainWindow::applyActionX()
   ui_.outputWindow->clear();
   ui_.outputWindow->appendPlainText("gpsbabel " + args.join(" "));
 
-  QString errorString, outputString;
+  QString errorString;
+  QString outputString;
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   bool x = runGpsbabel(args, errorString, outputString);
   QApplication::restoreOverrideCursor();

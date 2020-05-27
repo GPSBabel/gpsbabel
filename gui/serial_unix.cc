@@ -43,7 +43,8 @@ static QStringList dynamicDevices()
     const char* path = udev_list_entry_get_name(device);
     struct udev_device* dev = udev_device_new_from_syspath(udev, path);
 
-    bool okMaj, okMin;
+    bool okMaj;
+    bool okMin;
     int major = QString(udev_device_get_property_value(dev, "MAJOR")).toInt(&okMaj);
     int minor = QString(udev_device_get_property_value(dev, "MINOR")).toInt(&okMin);
     if (!okMaj || !okMin) {
