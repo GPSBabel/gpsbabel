@@ -325,8 +325,9 @@ qsort_cb(const void* a, const void* b)
   return wa->shortname.compare(wb->shortname);
 }
 
+// TODO: this first arg is both a global and a param. That's weird.
 static void
-write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char* location)
+write_waypoint(gbfile* fileout, const Waypoint* wpt, const int waypt_no, const char* location)
 {
   QString notes = wpt->notes;
   if (notes == nullptr) {
@@ -339,14 +340,14 @@ write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char
   double time = wpt->creation_time.isValid() ? TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()) : TIMET_TO_EXCEL(gpsbabel_time);
   char* name = (char*)wpt->extra_data;
 
-  gbfprintf(fout, "[Wp%d]" LINE_FEED
+  gbfprintf(fileout, "[Wp%d]" LINE_FEED
             "Loc=%s" LINE_FEED
             "Name=%s" LINE_FEED
             "Lat=%.15f" LINE_FEED
             "Long=%.15f" LINE_FEED,
             waypt_no, location, name, wpt->latitude, wpt->longitude
            );
-  gbfprintf(fout, "Rng=%.15f" LINE_FEED
+  gbfprintf(fileout, "Rng=%.15f" LINE_FEED
             "Bear=%.15f" LINE_FEED
             "Bmp=%d" LINE_FEED
             "Fixed=1" LINE_FEED
@@ -356,7 +357,7 @@ write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char
             find_symbol_num(wpt->icon_descr),
             CSTR(notes)
            );
-  gbfprintf(fout, "Rel=" LINE_FEED
+  gbfprintf(fileout, "Rel=" LINE_FEED
             "RelSet=0" LINE_FEED
             "RcCount=0" LINE_FEED
             "RcRadius=%.15f" LINE_FEED

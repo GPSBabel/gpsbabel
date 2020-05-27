@@ -640,7 +640,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
-    (void) u16;
+    Q_UNUSED(u16);
   }
 
   int tp = gbfgetint16(fin);
@@ -661,12 +661,12 @@ mmo_read_CObjTrack(mmo_data_t* data)
     if (unk != 0) {
       uint16_t ux = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
-      (void) ux;
+      Q_UNUSED(ux);
       if (unk > 1) {
-        uint16_t ux;
-        ux = gbfgetuint16(fin);
-        DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
-        (void) ux;
+        uint16_t unknown;
+        unknown = gbfgetuint16(fin);
+        DBG((sobj, "unknown value = 0x%04X (%d)\n", unknown, unknown));
+        Q_UNUSED(unknown);
       }
     }
     track_add_wpt(trk, wpt);
@@ -690,7 +690,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     trk->line_color.bbggrr = gbfgetuint32(fin); 	/* rgb color */
     trk->line_color.opacity = 255;
     DBG((sobj, "color = 0x%06X\n", trk->line_color.bbggrr));
-    (void) u32;
+    Q_UNUSED(u32);
   }
 
   if (mmo_version >= 0x12) {
@@ -717,7 +717,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
       u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
-      (void) u16;
+      Q_UNUSED(u16);
     }
   }
 
@@ -743,8 +743,8 @@ mmo_read_CObjText(mmo_data_t*)
   double lat = gbfgetdbl(fin);
   double lon = gbfgetdbl(fin);
   DBG((sobj, "coordinates = %f / %f\n", lat, lon));
-  (void) lat;
-  (void) lon;
+  Q_UNUSED(lat);
+  Q_UNUSED(lon);
 
   // Don't construct a QString we aren't going to use.
   // avoid clazy-unused-non-trivial-variable
@@ -787,8 +787,8 @@ mmo_read_CObjCurrentPosition(mmo_data_t*)
   double lat = gbfgetdbl(fin);
   double lon = gbfgetdbl(fin);
   DBG((sobj, "coordinates = %f / %f\n", lat, lon));
-  (void) lat;
-  (void) lon;
+  Q_UNUSED(lat);
+  Q_UNUSED(lon);
 
   mmo_fillbuf(buf, 24, 1);
   if (mmo_version >= 0x18) {

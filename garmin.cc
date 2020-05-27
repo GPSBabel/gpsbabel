@@ -124,7 +124,7 @@ static int d103_icon_number_from_symbol(const QString& s);
 static void
 rw_init(const QString& fname)
 {
-  int receiver_must_upper = 1;
+  receiver_must_upper = 1;
   const char* receiver_charset = nullptr;
 
   if (!mkshort_handle) {

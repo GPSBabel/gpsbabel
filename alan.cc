@@ -211,7 +211,7 @@ static unsigned int byte_order()
   // see https://en.cppreference.com/w/cpp/language/reinterpret_cast#Notes
   uint32_t test = BYTEORDER_TEST;
   unsigned char ptr[4];
-  
+
   static_assert(sizeof ptr == sizeof test, "byte order test construction failure.");
   memcpy(&ptr[0], &test, sizeof test);
 
@@ -511,9 +511,9 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   xfree(s);
   for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {}
   if (j >= 0) {
-    char *s = xstrndup(wpt->comment, j+1);
-    WP->description = s;
-    xfree(s);
+    char *descr = xstrndup(wpt->comment, j+1);
+    WP->description = descr;
+    xfree(descr);
   } else {
     WP->description = "";
   }
@@ -562,9 +562,9 @@ static void wpr_read()
     xfree(s);
     for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {}
     if (j >= 0) {
-      char *s = xstrndup(rte->comment,j+1);
-      RT->rte_desc = s;
-      xfree(s);
+      char *desc = xstrndup(rte->comment,j+1);
+      RT->rte_desc = desc;
+      xfree(desc);
     } else {
       RT->rte_desc = "";
     }

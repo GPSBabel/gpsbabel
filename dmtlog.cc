@@ -399,11 +399,9 @@ read_datum(gbfile* f)
 static void
 read_CTrackFile(const int version)
 {
-  char buf[128];
-  int i;
-
   int16_t u1 = gbfgetint16(fin);
 
+  char buf[128];
   gbfread(buf, 1, 10, fin);
   if ((u1 != 0x0a) || (strncmp("CTrackFile", buf, 10) != 0)) {
     fatal(MYNAME ": Unknown or invalid track file.\n");
@@ -426,7 +424,7 @@ read_CTrackFile(const int version)
   track_add_head(track);
 
   /* S1 .. S9: comments, hints, jokes, aso */
-  for (i = 0; i < 9; i++) {
+  for (int i = 0; i < 9; i++) {
     char* s = read_str(fin);
     xfree(s);
   }
@@ -469,7 +467,7 @@ read_CTrackFile(const int version)
 
   if (version == 8) {
 
-    i = gbfgetint16(fin);
+    int i = gbfgetint16(fin);
     i = gbfgetc(fin);
     if (i == 0) {
       return;

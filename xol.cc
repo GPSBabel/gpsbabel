@@ -30,8 +30,8 @@
 #include <QtCore/QXmlStreamAttributes>
 #include <QtCore/QXmlStreamWriter>
 
-static Waypoint* wpt;
-static route_head* trk;
+static Waypoint* wpt_;
+static route_head* trk_;
 static bounds all_bounds;
 static short_handle short_h;
 
@@ -66,54 +66,54 @@ static void xol_overlay(xg_string, const QXmlStreamAttributes* attrv) {
 static void xol_shape(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("type")) {
     if (attrv->value("type") == "waypoint") {
-      wpt = new Waypoint;
+      wpt_ = new Waypoint;
     } else if (attrv->value("type") == "polyline") {
-      trk = new route_head;
-      track_add_head(trk);
+      trk_ = new route_head;
+      track_add_head(trk_);
     }
   }
 
   if (attrv->hasAttribute("name")) {
-    if (wpt) {
-      wpt->shortname = attrv->value("name").toString();
-    } else if (trk) {
-      trk->rte_name = attrv->value("name").toString();
+    if (wpt_) {
+      wpt_->shortname = attrv->value("name").toString();
+    } else if (trk_) {
+      trk_->rte_name = attrv->value("name").toString();
     }
   }
 
-  if (wpt) {
+  if (wpt_) {
     if (attrv->hasAttribute("comment")) {
-      wpt->notes = attrv->value("comment").toString();
+      wpt_->notes = attrv->value("comment").toString();
     }
 
     if (attrv->hasAttribute("alt")) {
-      wpt->altitude = attrv->value("alt").toString().toDouble();
+      wpt_->altitude = attrv->value("alt").toString().toDouble();
     }
 
     if (attrv->hasAttribute("timestamp")) {
-      wpt->creation_time = xml_parse_time(
+      wpt_->creation_time = xml_parse_time(
           attrv->value("timestamp").toString().toUtf8().constData());
     }
 
     if (attrv->hasAttribute("icon")) {
-      wpt->icon_descr = attrv->value("icon").toString();
+      wpt_->icon_descr = attrv->value("icon").toString();
     }
   }
 }
 
 static void xol_shape_end(xg_string, const QXmlStreamAttributes*) {
-  if (wpt) {
-    if (trk) {
-      track_add_wpt(trk, wpt);
+  if (wpt_) {
+    if (trk_) {
+      track_add_wpt(trk_, wpt_);
     } else {
-      waypt_add(wpt);
+      waypt_add(wpt_);
     }
-    wpt = nullptr;
-  } else if (trk) {
-    if (trk->rte_waypt_ct == 0) {
-      track_del_head(trk);
+    wpt_ = nullptr;
+  } else if (trk_) {
+    if (trk_->rte_waypt_ct == 0) {
+      track_del_head(trk_);
     }
-    trk = nullptr;
+    trk_ = nullptr;
   }
 }
 
@@ -128,12 +128,12 @@ static void xol_waypt(xg_string, const QXmlStreamAttributes* attrv) {
     x = attrv->value("x").toString().toInt();
   }
 
-  GPS_Math_Swiss_EN_To_WGS84(x, y, &wpt->latitude, &wpt->longitude);
+  GPS_Math_Swiss_EN_To_WGS84(x, y, &wpt_->latitude, &wpt_->longitude);
 }
 
 static void xol_rd_init(const QString& fname) {
-  trk = nullptr;
-  wpt = nullptr;
+  trk_ = nullptr;
+  wpt_ = nullptr;
 
   xml_init(fname, xol_map, nullptr);
 }
@@ -144,15 +144,15 @@ static void xol_rd_deinit() { xml_deinit(); }
 
 /* writer */
 
-static void xol_fatal_outside(const Waypoint* wpt) {
+static void xol_fatal_outside(const Waypoint* waypoint) {
   fatal(MYNAME ": %s (%s) is outside of convertible area \"%s\"!\n",
-        wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
+        waypoint->shortname.isEmpty() ? "Waypoint" : qPrintable(waypoint->shortname),
+        pretty_deg_format(waypoint->latitude, waypoint->longitude, 'd', nullptr, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
 }
 
-static void xol_waypt_bound_calc(const Waypoint* wpt) {
-  waypt_add_to_bounds(&all_bounds, wpt);
+static void xol_waypt_bound_calc(const Waypoint* waypoint) {
+  waypt_add_to_bounds(&all_bounds, waypoint);
 }
 
 static void xol_wr_init(const QString& fname) {

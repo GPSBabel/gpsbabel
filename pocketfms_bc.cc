@@ -128,8 +128,10 @@ pocketfms_waypt_disp(const Waypoint* wpt)
   const time_t tt = wpt->GetCreationTime().toTime_t();
   struct tm* tm = localtime(&tt);
   if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime().toTime_t();
-    tm = gmtime(&tt);
+    // It seems odd to reread waypoint time here, but this whole format
+    // is likely short-lived.
+    const time_t tt2 = wpt->GetCreationTime().toTime_t();
+    tm = gmtime(&tt2);
   }
 
   strcpy(bc.id, header_id);

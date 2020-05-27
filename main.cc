@@ -262,7 +262,7 @@ run(const char* prog_name)
    */
   argn = 1;
   while (argn < qargs.size()) {
-    QString optarg;
+    QString argument;
 
 //  we must check the length for afl input fuzzing to work.
 //    if (qargs.at(argn).at(0).toLatin1() != '-') {
@@ -298,25 +298,25 @@ run(const char* prog_name)
 
     switch (c) {
     case 'i':
-      optarg = FETCH_OPTARG;
-      ivecs = Vecs::Instance().find_vec(optarg);
+      argument = FETCH_OPTARG;
+      ivecs = Vecs::Instance().find_vec(argument);
       if (ivecs == nullptr) {
-        fatal("Input type '%s' not recognized\n", qPrintable(optarg));
+        fatal("Input type '%s' not recognized\n", qPrintable(argument));
       }
       break;
     case 'o':
       if (ivecs == nullptr) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
-      optarg = FETCH_OPTARG;
-      ovecs = Vecs::Instance().find_vec(optarg);
+      argument = FETCH_OPTARG;
+      ovecs = Vecs::Instance().find_vec(argument);
       if (ovecs == nullptr) {
-        fatal("Output type '%s' not recognized\n", qPrintable(optarg));
+        fatal("Output type '%s' not recognized\n", qPrintable(argument));
       }
       break;
     case 'f':
-      optarg = FETCH_OPTARG;
-      fname = optarg;
+      argument = FETCH_OPTARG;
+      fname = argument;
       if (fname.isEmpty()) {
         fatal("No file or device name specified.\n");
       }
@@ -344,8 +344,8 @@ run(const char* prog_name)
       did_something = true;
       break;
     case 'F':
-      optarg = FETCH_OPTARG;
-      ofname = optarg;
+      argument = FETCH_OPTARG;
+      ofname = argument;
       if (ofname.isEmpty()) {
         fatal("No output file or device name specified.\n");
       }
@@ -398,8 +398,8 @@ run(const char* prog_name)
       }
       break;
     case 'x':
-      optarg = FETCH_OPTARG;
-      filter = FilterVecs::Instance().find_filter_vec(optarg);
+      argument = FETCH_OPTARG;
+      filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
         filter->init();
@@ -407,14 +407,14 @@ run(const char* prog_name)
         filter->deinit();
         FilterVecs::free_filter_vec(filter);
       }  else {
-        fatal("Unknown filter '%s'\n",qPrintable(optarg));
+        fatal("Unknown filter '%s'\n",qPrintable(argument));
       }
       break;
     case 'D':
-      optarg = FETCH_OPTARG;
+      argument = FETCH_OPTARG;
       {
         bool ok;
-        global_opts.debug_level = optarg.toInt(&ok);
+        global_opts.debug_level = argument.toInt(&ok);
         if (!ok) {
           fatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
         }
@@ -476,18 +476,18 @@ run(const char* prog_name)
       usage(prog_name,0);
       return 0;
     case 'p':
-      optarg = FETCH_OPTARG;
+      argument = FETCH_OPTARG;
       inifile_done(global_opts.inifile);
-      if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
+      if (argument.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = nullptr;
       } else {
-        global_opts.inifile = inifile_init(optarg, MYNAME);
+        global_opts.inifile = inifile_init(argument, MYNAME);
       }
       break;
     case 'b':
-      optarg = FETCH_OPTARG;
+      argument = FETCH_OPTARG;
       qargs_stack.push(QargStackElement(argn, qargs));
-      qargs = load_args(optarg, qargs.at(0));
+      qargs = load_args(argument, qargs.at(0));
       if (qargs.empty()) {
         QargStackElement ele = qargs_stack.pop();
         argn = ele.argn;

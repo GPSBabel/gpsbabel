@@ -206,9 +206,9 @@ static QString fread_cstr()
 }
 
 static char*
-gdb_fread_cstr(gbfile* fin)
+gdb_fread_cstr(gbfile* file_in)
 {
-  char* result = gbfgetcstr_old(fin);
+  char* result = gbfgetcstr_old(file_in);
 
   if (result && (*result == '\0')) {
     xfree(result);
@@ -221,7 +221,6 @@ gdb_fread_cstr(gbfile* fin)
 static QString
 gdb_fread_strlist()
 {
-//  char* res = NULL;
   QString res;
 
   int count = FREAD_i32;
@@ -235,7 +234,6 @@ gdb_fread_strlist()
   }
 
   QString qres = res;
-//  xfree(res);
   return qres;
 }
 
@@ -427,12 +425,9 @@ static Waypoint*
 read_waypoint(gt_waypt_classes_e* waypt_class_out)
 {
   char buf[128];		/* used for temporary stuff */
-  int display, icon;
   gt_waypt_classes_e wpt_class;
-  int i;
   Waypoint* res;
   garmin_fs_t* gmsd;
-  QString str;
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22];
 #endif
@@ -495,13 +490,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
            qPrintable(res->shortname), wpt_class, res->proximity / 1000);
 #endif
   }
-  i = FREAD_i32;
+  int display = FREAD_i32;
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, i)
   printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
-         qPrintable(res->shortname), wpt_class, i);
+         qPrintable(res->shortname), wpt_class, display);
 #endif
-  switch (i) {			/* display value */
+  switch (display) {			/* display value */
   case gt_gdb_display_mode_symbol:
     display = gt_display_mode_symbol;
     break;
@@ -515,7 +510,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   garmin_fs_t::set_display(gmsd, display);
 
   FREAD_i32;				/* color !not implemented! */
-  icon = FREAD_i32;
+  int icon = FREAD_i32;
   garmin_fs_t::set_icon(gmsd, icon);
   garmin_fs_t::set_city(gmsd, fread_cstr());
   garmin_fs_t::set_state(gmsd, fread_cstr());
@@ -591,14 +586,14 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   printf(MYNAME "-wpt \"%s\" (%d): url = %s\n",
          qPrintable(res->shortname), wpt_class, qPrintable(res->urls.GetUrlLink().url_));
 #endif
-  i = FREAD_i16;
-  if (i != 0) {
-    garmin_fs_t::set_category(gmsd, i);
+  int category = FREAD_i16;
+  if (category != 0) {
+    garmin_fs_t::set_category(gmsd, category);
   }
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, i)
+  DBG(GDB_DBG_WPTe, category)
   printf(MYNAME "-wpt \"%s\" (%d): category = %d\n",
-         qPrintable(res->shortname), wpt_class, i);
+         qPrintable(res->shortname), wpt_class, category);
 #endif
 
   if (FREAD_C == 1) {
@@ -637,6 +632,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
          qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
 #endif
+  QString str;
   if (!(str = garmin_fs_t::get_cc(gmsd, nullptr)).isEmpty()) {
     if (! (garmin_fs_t::has_country(gmsd))) {
       garmin_fs_t::set_country(gmsd, gt_get_icao_country(str));
@@ -658,15 +654,14 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 static route_head*
 read_route()
 {
-  char buf[128];
-  bounds bounds;
-
   rte_ct++;
   int warnings = 0;
 
   auto* rte = new route_head;
   rte->rte_name = fread_cstr();
-  FREAD(buf, 1);			/* display/autoname - 1 byte */
+
+  char tbuf[128];
+  FREAD(tbuf, 1);			/* display/autoname - 1 byte */
 
   if (FREAD_C == 0) {		/* max. data flag */
     /* maxlat = */ (void) FREAD_i32;
@@ -720,8 +715,8 @@ read_route()
       }
       warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", qPrintable(wpt->shortname), wpt_class);
       warning(MYNAME "-rte_pt (dump):");
-      for (int i = 0; i < 18; i++) {
-        warning(" %02x", (unsigned char)buf[i]);
+      for (int idx = 0; idx < 18; idx++) {
+        warning(" %02x", (unsigned char)buf[idx]);
       }
       warning("\n");
     }
@@ -771,6 +766,7 @@ read_route()
 #endif
     }
 
+    bounds bounds;
     waypt_init_bounds(&bounds);
 
     if (FREAD_C == 0) {		/* interlink bounds */
@@ -843,10 +839,9 @@ read_route()
 
     int color_idx = FREAD_i32;
     rte->line_color.bbggrr = gt_color_value(color_idx);
-
     int autoroute = FREAD_C;
     if (autoroute == 1) {
-      FREAD(buf, 6); /* unknown bytes */
+      FREAD(tbuf, 6); /* unknown bytes */
       int route_style = FREAD_C;
       int calc_type = FREAD_i32;
       int vehicle_type = FREAD_C;
@@ -857,7 +852,7 @@ read_route()
       driving_speed[2] = FREAD_DBL;
       driving_speed[3] = FREAD_DBL;
       driving_speed[4] = FREAD_DBL;
-      FREAD(buf, 8); /* unknown bytes */
+      FREAD(tbuf, 8); /* unknown bytes */
 #if GDB_DEBUG
       DBG(GDB_DBG_RTE, 1)
       printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"

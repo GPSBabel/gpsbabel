@@ -387,7 +387,6 @@ compegps_data_read()
 {
   char* buff;
   int line = 0;
-  int input_datum;
   Waypoint* wpt = nullptr;
   route_head* route = nullptr;
   route_head* track = nullptr;

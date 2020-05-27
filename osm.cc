@@ -721,10 +721,10 @@ osm_write_tag(const QString& key, const QString& value)
 }
 
 static void
-osm_disp_feature(const Waypoint* wpt)
+osm_disp_feature(const Waypoint* waypoint)
 {
-  if (icons.contains(wpt->icon_descr)) {
-    const osm_icon_mapping_t* map = icons.value(wpt->icon_descr);
+  if (icons.contains(waypoint->icon_descr)) {
+    const osm_icon_mapping_t* map = icons.value(waypoint->icon_descr);
     osm_write_tag(osm_features[map->key], map->value);
   }
 }
@@ -759,61 +759,61 @@ osm_write_opt_tag(const char* atag)
 }
 
 static void
-osm_release_ids(const Waypoint* wpt)
+osm_release_ids(const Waypoint* waypoint)
 {
-  if (wpt && wpt->extra_data) {
-    auto* tmp = const_cast<Waypoint*>(wpt);
+  if (waypoint && waypoint->extra_data) {
+    auto* tmp = const_cast<Waypoint*>(waypoint);
     xfree(tmp->extra_data);
     tmp->extra_data = nullptr;
   }
 }
 
 static QString
-osm_name_from_wpt(const Waypoint* wpt)
+osm_name_from_wpt(const Waypoint* waypoint)
 {
   QString name = QString("%1\01%2\01%3")
-                 .arg(wpt->shortname)
-                 .arg(wpt->latitude)
-                 .arg(wpt->longitude);
+                 .arg(waypoint->shortname)
+                 .arg(waypoint->latitude)
+                 .arg(waypoint->longitude);
   return name;
 }
 
 static void
-osm_waypt_disp(const Waypoint* wpt)
+osm_waypt_disp(const Waypoint* waypoint)
 {
-  QString name = osm_name_from_wpt(wpt);
+  QString name = osm_name_from_wpt(waypoint);
 
   if (waypoints.contains(name)) {
     return;
   }
 
-  waypoints.insert(name, wpt);
+  waypoints.insert(name, waypoint);
 
   int* id = (int*) xmalloc(sizeof(*id));
   *id = --node_id;
-  (const_cast<Waypoint*>(wpt))->extra_data = id;
+  (const_cast<Waypoint*>(waypoint))->extra_data = id;
 
-  gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
-  if (wpt->creation_time.isValid()) {
-    QString time_string = wpt->CreationTimeXML();
+  gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, waypoint->latitude, waypoint->longitude);
+  if (waypoint->creation_time.isValid()) {
+    QString time_string = waypoint->CreationTimeXML();
     gbfprintf(fout, " timestamp='%s'", qPrintable(time_string));
   }
   gbfprintf(fout, ">\n");
 
-  if (wpt->hdop) {
-    gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", wpt->hdop);
+  if (waypoint->hdop) {
+    gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", waypoint->hdop);
   }
-  if (wpt->vdop) {
-    gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", wpt->vdop);
+  if (waypoint->vdop) {
+    gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", waypoint->vdop);
   }
-  if (wpt->pdop) {
-    gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", wpt->pdop);
+  if (waypoint->pdop) {
+    gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", waypoint->pdop);
   }
-  if (wpt->sat > 0) {
-    gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", wpt->sat);
+  if (waypoint->sat > 0) {
+    gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", waypoint->sat);
   }
 
-  switch (wpt->fix) {
+  switch (waypoint->fix) {
   case fix_2d:
     gbfprintf(fout, "    <tag k='gps:fix' v='2d' />\n");
     break;
@@ -843,10 +843,10 @@ osm_waypt_disp(const Waypoint* wpt)
     gbfprintf(fout, "'/>\n");
   }
 
-  osm_write_tag("name", wpt->shortname);
-  osm_write_tag("note", (wpt->notes.isEmpty()) ? wpt->description : wpt->notes);
-  if (!wpt->icon_descr.isNull()) {
-    osm_disp_feature(wpt);
+  osm_write_tag("name", waypoint->shortname);
+  osm_write_tag("note", (waypoint->notes.isEmpty()) ? waypoint->description : waypoint->notes);
+  if (!waypoint->icon_descr.isNull()) {
+    osm_disp_feature(waypoint);
   }
 
   osm_write_opt_tag(opt_tagnd);
@@ -855,9 +855,9 @@ osm_waypt_disp(const Waypoint* wpt)
 }
 
 static void
-osm_rte_disp_head(const route_head* rte)
+osm_rte_disp_head(const route_head* route)
 {
-  skip_rte = (rte->rte_waypt_ct <= 0);
+  skip_rte = (route->rte_waypt_ct <= 0);
 
   if (skip_rte) {
     return;
@@ -876,14 +876,14 @@ osm_rtept_disp(const Waypoint* wpt_ref)
   }
 
   if (waypoints.contains(name)) {
-    const Waypoint* wpt = waypoints.value(name);
-    int* id = (int*) wpt->extra_data;
+    const Waypoint* waypoint = waypoints.value(name);
+    int* id = (int*) waypoint->extra_data;
     gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
   }
 }
 
 static void
-osm_rte_disp_trail(const route_head* rte)
+osm_rte_disp_trail(const route_head* route)
 {
   if (skip_rte) {
     return;
@@ -898,8 +898,8 @@ osm_rte_disp_trail(const route_head* rte)
     gbfprintf(fout, "'/>\n");
   }
 
-  osm_write_tag("name", rte->rte_name);
-  osm_write_tag("note", rte->rte_desc);
+  osm_write_tag("name", route->rte_name);
+  osm_write_tag("note", route->rte_desc);
 
   if (opt_tag && (case_ignore_strncmp(opt_tag, "tagnd", 5) != 0)) {
     osm_write_opt_tag(opt_tag);

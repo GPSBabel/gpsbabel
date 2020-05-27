@@ -920,20 +920,20 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         gc_data->is_available = unicsv_parse_status(value);
         break;
       case fld_gc_exported: {
-        time_t time, date;
-        int usec;
-        time = unicsv_parse_time(value, &usec, &date);
-        if (date || time) {
-          gc_data->exported = unicsv_adjust_time(time, &date);
+        time_t etime, edate;
+        int eusec;
+        etime = unicsv_parse_time(value, &eusec, &edate);
+        if (edate || etime) {
+          gc_data->exported = unicsv_adjust_time(etime, &edate);
         }
       }
       break;
       case fld_gc_last_found: {
-        time_t time, date;
-        int usec;
-        time = unicsv_parse_time(value, &usec, &date);
-        if (date || time) {
-          gc_data->last_found = unicsv_adjust_time(time, &date);
+        time_t ftime, fdate;
+        int fusec;
+        ftime = unicsv_parse_time(value, &fusec, &fdate);
+        if (fdate || ftime) {
+          gc_data->last_found = unicsv_adjust_time(ftime, &fdate);
         }
       }
       break;

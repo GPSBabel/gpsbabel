@@ -356,14 +356,15 @@ write_bounds()
 }
 
 static void
-draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const Waypoint* wpt)
+draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, 
+                   const OVL_COLOR_TYP point_color, const Waypoint* wpt)
 {
   symbol_ct++;
 
   gbfprintf(fout, "[Symbol %d]\n", symbol_ct);
   gbfprintf(fout, "Typ=%d\n", typ);
   gbfprintf(fout, "Group=%d\n", group_ct);
-  gbfprintf(fout, "Col=%d\n", color);
+  gbfprintf(fout, "Col=%d\n", point_color);
   if (art >= 0) {
     gbfprintf(fout, "Art=%d\n", art);
   }
