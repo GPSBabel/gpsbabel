@@ -56,7 +56,7 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   connect(ui_.disableAllButton, SIGNAL(clicked()), this, SLOT(disableAllClicked()));
 
   for (int i = 0; i < formatList_.size(); i++) {
-    FormatListEntry* item = new FormatListEntry(formatList[i]);
+    auto* item = new FormatListEntry(formatList[i]);
 
     ui_.enabledFormatsList->addItem(item);
   }

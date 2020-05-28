@@ -93,23 +93,23 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   if (htmlArg.isEmpty()) {
     html_ = "fmt_" + fmtName + ".html";
   }
-  QVBoxLayout* verticalLayout = new QVBoxLayout(this);
+  auto* verticalLayout = new QVBoxLayout(this);
   for (int k=0; k<options_.size(); k++) {
-    QHBoxLayout* horizontalLayout = new QHBoxLayout();
+    auto* horizontalLayout = new QHBoxLayout();
 
-    QCheckBox* checkBox = new QCheckBox(this);
+    auto* checkBox = new QCheckBox(this);
     checkBox->setText(options_[k].getDescription());
     horizontalLayout->addWidget(checkBox);
     checkBox->setChecked(options_[k].getSelected());
     //checkBox->setWhatsThis(options[k].getHtml());
 
-    QSpacerItem* horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    auto* horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
 
     QWidget* w = nullptr;
     switch (options_[k].getType()) {
     case FormatOption::OPTstring: {
-      QLineEdit* lineEdit = new QLineEdit(this);
+      auto* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
       lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
@@ -120,8 +120,8 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     case FormatOption::OPTinFile:
     case FormatOption::OPToutFile: {
       bool inFile = options_[k].getType() == FormatOption::OPTinFile;
-      QLineEdit* lineEdit = new QLineEdit(this);
-      QToolButton* button = new QToolButton(this);
+      auto* lineEdit = new QLineEdit(this);
+      auto* button = new QToolButton(this);
       lineEdit->setText(getOptionValue(options_, k).toString());
       button->setIcon(QIcon(inFile ? ":/images/open.png" : ":/images/save.png"));
       w = lineEdit;
@@ -139,14 +139,14 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
       break;
 
     case FormatOption::OPTfloat: {
-      QLineEdit* lineEdit = new QLineEdit(this);
+      auto* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
       lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
       double minVal = options_[k].getMinValue().toDouble();
       double maxVal = options_[k].getMaxValue().toDouble();
       if (minVal < maxVal) {
-        QDoubleValidator* v = new QDoubleValidator(this);
+        auto* v = new QDoubleValidator(this);
         v->setRange(minVal, maxVal);
         lineEdit->setValidator(v);
       }
@@ -155,13 +155,13 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     break;
 
     case FormatOption::OPTint: {
-      QLineEdit* lineEdit = new QLineEdit(this);
+      auto* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
       w = lineEdit;
       int minVal = options_[k].getMinValue().toInt();
       int maxVal = options_[k].getMaxValue().toInt();
       if (minVal < maxVal) {
-        QIntValidator* iv = new QIntValidator(this);
+        auto* iv = new QIntValidator(this);
         iv->setRange(minVal, maxVal);
         lineEdit->setValidator(iv);
       }
@@ -171,7 +171,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     break;
 
     case FormatOption::OPTboundedInt: {
-      QSpinBox* spinBox = new QSpinBox(this);
+      auto* spinBox = new QSpinBox(this);
       spinBox->setRange(options_[k].getMinValue().toInt(),
                         options_[k].getMaxValue().toInt());
       spinBox->setValue(getOptionValue(options_, k).toInt());
@@ -197,11 +197,11 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
 
     verticalLayout->addLayout(horizontalLayout);
   }
-  QPushButton* helpButton = new QPushButton(this);
+  auto* helpButton = new QPushButton(this);
   helpButton->setIcon(QIcon(":/images/help.png"));
   helpButton->setText(tr("Help"));
 
-  QHBoxLayout* lay = new QHBoxLayout();
+  auto* lay = new QHBoxLayout();
   lay->addWidget(helpButton);
 
   buttonBox_ = new QDialogButtonBox(this);

@@ -43,9 +43,9 @@ public:
   UpgradeCheck::updateStatus checkForUpgrade(const QString& babelVersion,
       const QDateTime& lastCheckTime,
       bool allowBeta);
-  QDateTime getUpgradeWarningTime(void);
-  UpgradeCheck::updateStatus getStatus(void);
-  static bool isTestMode(void);
+  QDateTime getUpgradeWarningTime();
+  UpgradeCheck::updateStatus getStatus();
+  static bool isTestMode();
 
 protected:
 
