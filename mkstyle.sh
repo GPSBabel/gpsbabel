@@ -12,34 +12,32 @@ export LC_COLLATE
 # require gnu sed even though we aren't using gnu extensions.
 # this avoids portability issues with other seds.
 if gsed v /dev/null 1>/dev/null 2>&1; then
-    SED=gsed
+  SED=gsed
 elif sed v /dev/null 1>/dev/null 2>&1; then
-	# sed is gnu sed
-    SED=sed
-elif [ `uname -s` = "FreeBSD" ]; then
-       # BSD sed is fine
-    SED=/usr/bin/sed
+  # sed is gnu sed
+  SED=sed
+elif [ "$(uname -s)" = "FreeBSD" ]; then
+  # BSD sed is fine
+  SED=/usr/bin/sed
 else
-	echo "Error: can't find gnu sed" 1>&2
-	exit 1
+  echo "Error: can't find gnu sed" 1>&2
+  exit 1
 fi
 
 echo "#include <QtCore/QVector>"
 echo "#include \"defs.h\""
 echo "#if CSVFMTS_ENABLED"
-for i in `dirname $0`/style/*.style
+for i in "$(dirname "$0")"/style/*.style
 do
-	A=`basename $i | sed "s/.style$//"`
-	[ $A = "README" ] && continue
-	[ $A = "custom.style" ] && continue
+  A=$(basename "$i" .style)
   if [ "x${ALIST}" = "x" ]; then
-	  ALIST="{ \"$A\", $A }"
+    ALIST="{ \"$A\", $A }"
   else
-	  ALIST="{ \"$A\", $A }, $ALIST"
+    ALIST="{ \"$A\", $A }, $ALIST"
   fi
-	echo "static char $A[] ="
-	$SED 's/\\/\\\\/;s/"/\\"/g;s/^\(.\)/"\1/g;s/\(.\)$/\1\\n"/g;s/^\(.\)/  \1/' $i
-	echo "  ;"
+  echo "static char $A[] ="
+  $SED 's/\\/\\\\/;s/"/\\"/g;s/^\(.\)/"\1/g;s/\(.\)$/\1\\n"/g;s/^\(.\)/  \1/' "$i"
+  echo "  ;"
 done
 echo "const QVector<style_vecs_t> style_list = {$ALIST};"
 echo "#else /* CSVFMTS_ENABLED */"
