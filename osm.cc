@@ -26,58 +26,21 @@
 #include <QtCore/QHash>                 // for QHash
 #include <QtCore/QLatin1String>         // for QLatin1String
 #include <QtCore/QPair>                 // for QPair, operator==
-#include <QtCore/QString>               // for QString, operator+, operator==
+#include <QtCore/QString>               // for QString, operator==, operator+
 #include <QtCore/QStringRef>            // for QStringRef
-#include <QtCore/QVector>               // for QVector
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QtGlobal>              // for qPrintable
+#include <QtCore/QtGlobal>              // for qPrintable, QAddConst<>::Type
 
 #include "defs.h"
-#include "gbfile.h"                     // for gbfprintf, gbfclose, gbfopen, gbfile
+#include "osm.h"
+#include "gbfile.h"                     // for gbfprintf, gbfclose, gbfopen
 #include "src/core/datetime.h"          // for DateTime
-#include "xmlgeneric.h"                 // for cb_start, cb_end, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
+#include "xmlgeneric.h"                 // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
 
-static char* opt_tag, *opt_tagnd, *created_by;
-
-static QVector<arglist_t> osm_args = {
-  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-};
 
 #define MYNAME "osm"
 
-static QHash<QString, const Waypoint*> waypoints;
-
-static QHash<QString, int> keys;
-struct osm_icon_mapping_t;
-static QHash<QPair<int, QString>, const osm_icon_mapping_t*> values;
-static QHash<QString, const osm_icon_mapping_t*> icons;
-
-static gbfile* fout;
-static int node_id;
-static int skip_rte;
-
-static route_head* rte;
-static Waypoint* wpt;
-
-static xg_callback	osm_node, osm_node_tag, osm_node_end;
-static xg_callback	osm_way, osm_way_nd, osm_way_tag, osm_way_center, osm_way_end;
-
-static
-xg_tag_mapping osm_map[] = {
-  { osm_node,	cb_start,	"/osm/node" },
-  { osm_node_tag,	cb_start,	"/osm/node/tag" },
-  { osm_node_end,	cb_end,		"/osm/node" },
-  { osm_way,	cb_start,	"/osm/way" },
-  { osm_way_nd,	cb_start,	"/osm/way/nd" },
-  { osm_way_tag,	cb_start,	"/osm/way/tag" },
-  { osm_way_center,	cb_start,	"/osm/way/center" },
-  { osm_way_end,	cb_end,		"/osm/way" },
-  { nullptr,	(xg_cb_type)0,		nullptr }
-};
-
-static const char* osm_features[] = {
+const char* const OsmFormat::osm_features[] = {
   "- dummy -",	/*  0 */
   "aeroway",	/*  1 */
   "amenity",	/*  2 */
@@ -101,16 +64,9 @@ static const char* osm_features[] = {
   nullptr
 };
 
-struct osm_icon_mapping_t {
-  int key;
-  const char* value;
-  const char* icon;
-};
+  /* based on <http://wiki.openstreetmap.org/index.php/Map_Features> */
 
-
-/* based on <http://wiki.openstreetmap.org/index.php/Map_Features> */
-
-static const osm_icon_mapping_t osm_icon_mappings[] = {
+const OsmFormat::osm_icon_mapping_t OsmFormat::osm_icon_mappings[] = {
 
   /* cycleway ...*/
 
@@ -413,13 +369,12 @@ static const osm_icon_mapping_t osm_icon_mappings[] = {
   { -1, nullptr, nullptr }
 };
 
-
 /*******************************************************************************/
 /*                                   READER                                    */
 /*-----------------------------------------------------------------------------*/
 
-static void
-osm_features_init()
+void
+OsmFormat::osm_features_init()
 {
   /* the first of osm_features is a place holder */
   for (int i = 1; osm_features[i]; ++i) {
@@ -432,16 +387,14 @@ osm_features_init()
   }
 }
 
-
-static char
-osm_feature_ikey(const QString& key)
+char
+OsmFormat::osm_feature_ikey(const QString& key) const
 {
   return keys.value(key, -1);
 }
 
-
-static QString
-osm_feature_symbol(const int ikey, const char* value)
+QString
+OsmFormat::osm_feature_symbol(const int ikey, const char* value) const
 {
   QPair<int, QString> key(ikey, value);
 
@@ -454,16 +407,15 @@ osm_feature_symbol(const int ikey, const char* value)
   return result;
 }
 
-
-static char*
-osm_strip_html(const char* str)
+char*
+OsmFormat::osm_strip_html(const char* str)
 {
   utf_string utf(true, str);
   return strip_html(&utf);	// util.cc
 }
 
-static QString
-osm_strip_html(const QString& str)
+QString
+OsmFormat::osm_strip_html(const QString& str) const
 {
   char* r = osm_strip_html(CSTR(str));
   QString rv(r);
@@ -471,9 +423,8 @@ osm_strip_html(const QString& str)
   return rv;
 }
 
-
-static void
-osm_node_end(xg_string, const QXmlStreamAttributes*)
+void
+OsmFormat::osm_node_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -485,9 +436,8 @@ osm_node_end(xg_string, const QXmlStreamAttributes*)
   }
 }
 
-
-static void
-osm_node(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_node(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   wpt = new Waypoint;
 
@@ -517,9 +467,8 @@ osm_node(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-
-static void
-osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_node_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   signed char ikey;
@@ -571,9 +520,8 @@ osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-
-static void
-osm_way(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_way(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   rte = new route_head;
   // create a wpt to represent the route center if it has a center tag
@@ -583,8 +531,8 @@ osm_way(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static void
-osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_way_nd(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
@@ -599,8 +547,8 @@ osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static void
-osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_way_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   signed char ikey;
@@ -636,8 +584,8 @@ osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static void
-osm_way_center(xg_string, const QXmlStreamAttributes* attrv)
+void
+OsmFormat::osm_way_center(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   wpt->wpt_flags.fmt_use = 1;
 
@@ -649,8 +597,8 @@ osm_way_center(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static void
-osm_way_end(xg_string, const QXmlStreamAttributes*)
+void
+OsmFormat::osm_way_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (rte) {
     route_add_head(rte);
@@ -661,14 +609,14 @@ osm_way_end(xg_string, const QXmlStreamAttributes*)
     if (wpt->wpt_flags.fmt_use) {
       waypt_add(wpt);
     } else {
-      delete(wpt);
+      delete wpt;
       wpt = nullptr;
     }
   }
 }
 
-static void
-osm_rd_init(const QString& fname)
+void
+OsmFormat::rd_init(const QString& fname)
 {
   wpt = nullptr;
   rte = nullptr;
@@ -678,17 +626,17 @@ osm_rd_init(const QString& fname)
     osm_features_init();
   }
 
-  xml_init(fname, osm_map, nullptr);
+  xml_init(fname, build_xg_tag_map(this, osm_map), nullptr, nullptr, nullptr, true);
 }
 
-static void
-osm_read()
+void
+OsmFormat::read()
 {
   xml_read();
 }
 
-static void
-osm_rd_deinit()
+void
+OsmFormat::rd_deinit()
 {
   xml_deinit();
   waypoints.clear();
@@ -698,8 +646,8 @@ osm_rd_deinit()
 /*                                   WRITER                                    */
 /*-----------------------------------------------------------------------------*/
 
-static void
-osm_init_icons()
+void
+OsmFormat::osm_init_icons()
 {
   if (!icons.isEmpty()) {
     return;
@@ -710,8 +658,8 @@ osm_init_icons()
   }
 }
 
-static void
-osm_write_tag(const QString& key, const QString& value)
+void
+OsmFormat::osm_write_tag(const QString& key, const QString& value) const
 {
   if (!value.isEmpty()) {
     char* str = xml_entitize(CSTR(value));
@@ -720,8 +668,8 @@ osm_write_tag(const QString& key, const QString& value)
   }
 }
 
-static void
-osm_disp_feature(const Waypoint* waypoint)
+void
+OsmFormat::osm_disp_feature(const Waypoint* waypoint) const
 {
   if (icons.contains(waypoint->icon_descr)) {
     const osm_icon_mapping_t* map = icons.value(waypoint->icon_descr);
@@ -729,8 +677,8 @@ osm_disp_feature(const Waypoint* waypoint)
   }
 }
 
-static void
-osm_write_opt_tag(const char* atag)
+void
+OsmFormat::osm_write_opt_tag(const char* atag)
 {
   char* cin;
 
@@ -758,18 +706,17 @@ osm_write_opt_tag(const char* atag)
   xfree(tag);
 }
 
-static void
-osm_release_ids(const Waypoint* waypoint)
+void
+OsmFormat::osm_release_ids(const Waypoint* waypoint)
 {
   if (waypoint && waypoint->extra_data) {
-    auto* tmp = const_cast<Waypoint*>(waypoint);
-    xfree(tmp->extra_data);
-    tmp->extra_data = nullptr;
+    delete static_cast<int*>(waypoint->extra_data);
+    const_cast<Waypoint*>(waypoint)->extra_data = nullptr;
   }
 }
 
-static QString
-osm_name_from_wpt(const Waypoint* waypoint)
+QString
+OsmFormat::osm_name_from_wpt(const Waypoint* waypoint)
 {
   QString name = QString("%1\01%2\01%3")
                  .arg(waypoint->shortname)
@@ -778,8 +725,8 @@ osm_name_from_wpt(const Waypoint* waypoint)
   return name;
 }
 
-static void
-osm_waypt_disp(const Waypoint* waypoint)
+void
+OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
 {
   QString name = osm_name_from_wpt(waypoint);
 
@@ -789,9 +736,9 @@ osm_waypt_disp(const Waypoint* waypoint)
 
   waypoints.insert(name, waypoint);
 
-  int* id = (int*) xmalloc(sizeof(*id));
+  auto* id = new int;
   *id = --node_id;
-  (const_cast<Waypoint*>(waypoint))->extra_data = id;
+  const_cast<Waypoint*>(waypoint)->extra_data = id;
 
   gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, waypoint->latitude, waypoint->longitude);
   if (waypoint->creation_time.isValid()) {
@@ -844,7 +791,7 @@ osm_waypt_disp(const Waypoint* waypoint)
   }
 
   osm_write_tag("name", waypoint->shortname);
-  osm_write_tag("note", (waypoint->notes.isEmpty()) ? waypoint->description : waypoint->notes);
+  osm_write_tag("note", waypoint->notes.isEmpty() ? waypoint->description : waypoint->notes);
   if (!waypoint->icon_descr.isNull()) {
     osm_disp_feature(waypoint);
   }
@@ -854,10 +801,10 @@ osm_waypt_disp(const Waypoint* waypoint)
   gbfprintf(fout, "  </node>\n");
 }
 
-static void
-osm_rte_disp_head(const route_head* route)
+void
+OsmFormat::osm_rte_disp_head(const route_head* route)
 {
-  skip_rte = (route->rte_waypt_ct <= 0);
+  skip_rte = route->rte_waypt_ct <= 0;
 
   if (skip_rte) {
     return;
@@ -866,8 +813,8 @@ osm_rte_disp_head(const route_head* route)
   gbfprintf(fout, "  <way id='%d' visible='true'>\n", --node_id);
 }
 
-static void
-osm_rtept_disp(const Waypoint* wpt_ref)
+void
+OsmFormat::osm_rtept_disp(const Waypoint* wpt_ref) const
 {
   QString name = osm_name_from_wpt(wpt_ref);
 
@@ -877,13 +824,13 @@ osm_rtept_disp(const Waypoint* wpt_ref)
 
   if (waypoints.contains(name)) {
     const Waypoint* waypoint = waypoints.value(name);
-    int* id = (int*) waypoint->extra_data;
+    auto* id = static_cast<int*>(waypoint->extra_data);
     gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
   }
 }
 
-static void
-osm_rte_disp_trail(const route_head* route)
+void
+OsmFormat::osm_rte_disp_trail(const route_head* route)
 {
   if (skip_rte) {
     return;
@@ -910,8 +857,8 @@ osm_rte_disp_trail(const route_head* route)
 
 /*-----------------------------------------------------------------------------*/
 
-static void
-osm_wr_init(const QString& fname)
+void
+OsmFormat::wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 
@@ -920,8 +867,8 @@ osm_wr_init(const QString& fname)
   node_id = 0;
 }
 
-static void
-osm_write()
+void
+OsmFormat::write()
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
   gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
@@ -930,30 +877,45 @@ osm_write()
   }
   gbfprintf(fout, "'>\n");
 
-  waypt_disp_all(osm_waypt_disp);
-  route_disp_all(nullptr, nullptr, osm_waypt_disp);
-  track_disp_all(nullptr, nullptr, osm_waypt_disp);
+  auto osm_waypt_disp_lambda = [this](const Waypoint* waypointp)->void {
+    osm_waypt_disp(waypointp);
+  };
+  waypt_disp_all(osm_waypt_disp_lambda);
+  route_disp_all(nullptr, nullptr, osm_waypt_disp_lambda);
+  track_disp_all(nullptr, nullptr, osm_waypt_disp_lambda);
 
-  route_disp_all(osm_rte_disp_head, osm_rte_disp_trail, osm_rtept_disp);
-  track_disp_all(osm_rte_disp_head, osm_rte_disp_trail, osm_rtept_disp);
+  auto osm_rte_disp_head_lambda = [this](const route_head* rte)->void {
+    osm_rte_disp_head(rte);
+  };
+  auto osm_rte_disp_trail_lambda = [this](const route_head* rte)->void {
+    osm_rte_disp_trail(rte);
+  };
+  auto osm_rtept_disp_lambda = [this](const Waypoint* waypointp)->void {
+    osm_rtept_disp(waypointp);
+  };
+  route_disp_all(osm_rte_disp_head_lambda, osm_rte_disp_trail_lambda, osm_rtept_disp_lambda);
+  track_disp_all(osm_rte_disp_head_lambda, osm_rte_disp_trail_lambda, osm_rtept_disp_lambda);
 
   gbfprintf(fout, "</osm>\n");
 }
 
-static void
-osm_wr_deinit()
+void
+OsmFormat::wr_deinit()
 {
   gbfclose(fout);
 
-  waypt_disp_all(osm_release_ids);
-  route_disp_all(nullptr, nullptr, osm_release_ids);
-  track_disp_all(nullptr, nullptr, osm_release_ids);
+  auto osm_release_ids_lambda = [](const Waypoint* waypointp)->void {
+    osm_release_ids(waypointp);
+  };
+  waypt_disp_all(osm_release_ids_lambda);
+  route_disp_all(nullptr, nullptr, osm_release_ids_lambda);
+  track_disp_all(nullptr, nullptr, osm_release_ids_lambda);
 
   waypoints.clear();
 }
 
-static void
-osm_exit()
+void
+OsmFormat::exit()
 {
   keys.clear();
   values.clear();
@@ -961,22 +923,3 @@ osm_exit()
 }
 
 /*-----------------------------------------------------------------------------*/
-
-ff_vecs_t osm_vecs = {
-  ff_type_file,
-  {
-    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
-    ff_cap_write 			/* tracks */,
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* routes */,
-  },
-  osm_rd_init,
-  osm_wr_init,
-  osm_rd_deinit,
-  osm_wr_deinit,
-  osm_read,
-  osm_write,
-  osm_exit,
-  &osm_args,
-  CET_CHARSET_UTF8, 0
-  , NULL_POS_OPS,
-  nullptr};

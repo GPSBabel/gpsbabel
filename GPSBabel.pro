@@ -143,6 +143,7 @@ HEADERS =  \
 	mynav.h \
 	navilink.h \
 	nmea.h \
+	osm.h \
 	random.h \
 	session.h \
 	shape.h \
