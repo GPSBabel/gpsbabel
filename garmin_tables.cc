@@ -40,7 +40,7 @@
 
 /* source: https://en.wikipedia.org/wiki/ICAO_airport_code */
 
-gt_country_code_t gt_country_codes[] = {
+const gt_country_code_t gt_country_codes[] = {
   { "ZM,", "Mongolia" },
   { "ZK,", "North Korea" },
   { "Z*,", "China" },
@@ -268,7 +268,7 @@ gt_country_code_t gt_country_codes[] = {
 };
 
 /* gt_waypt_classes: gdb internal order */
-const char* gt_waypt_class_names[] = {
+const char* const gt_waypt_class_names[] = {
   "User Waypoint",
   "Airport",
   "Intersection",
@@ -286,7 +286,7 @@ const char* gt_waypt_class_names[] = {
 };
 
 /* gt_display_mode_names: this order is used by most devices */
-const char* gt_display_mode_names[] = {
+const char* const gt_display_mode_names[] = {
   "Symbol & Name",
   "Symbol",
   "Symbol & Description"
@@ -300,7 +300,7 @@ struct grid_mapping_t {
 
 /* gt_mps_grid_names: !!! degree sign substituted with '*' !!! */
 
-grid_mapping_t gt_mps_grid_names[] = {
+static const grid_mapping_t gt_mps_grid_names[] = {
   { "ddd",	"Lat/Lon hddd.ddddd*",		grid_lat_lon_ddd },
   { "dmm",	"Lat/Lon hddd*mm.mmm'",		grid_lat_lon_dmm },
   { "dms",	"Lat/Lon hddd*mm'ss.s\"",	grid_lat_lon_dms },
@@ -318,7 +318,7 @@ struct datum_mapping_t {
 };
 
 /* will be continued (when requested) */
-static datum_mapping_t gt_mps_datum_names[] = {
+static const datum_mapping_t gt_mps_datum_names[] = {
   { "Alaska-NAD27",	"NAD27 Alaska" },
   { "Bahamas NAD27",	"NAD27 Bahamas" },
   { "Canada_Mean(NAD27)",	"NAD27 Canada" },
@@ -339,7 +339,7 @@ struct garmin_color_t {
   int32_t rgb;
 };
 
-static garmin_color_t gt_colors[] = {
+static const garmin_color_t gt_colors[] = {
   { "Unknown",		unknown_color },
   { "Black", 		0x000000 },
   { "DarkRed",		0x00008B },
@@ -547,7 +547,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
 const char*
 gt_get_icao_country(const QString& cc)
 {
-  gt_country_code_t* x = &gt_country_codes[0];
+  const gt_country_code_t* x = &gt_country_codes[0];
 
   if (cc.isEmpty()) {
     return nullptr;
@@ -578,7 +578,7 @@ const char*
 gt_get_icao_cc(const QString& country, const QString& shortname)
 {
   static char res[3];
-  gt_country_code_t* x = &gt_country_codes[0];
+  const gt_country_code_t* x = &gt_country_codes[0];
 
   if (country.isEmpty()) {
     if (shortname == nullptr) {
@@ -644,7 +644,7 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
 grid_type
 gt_lookup_grid_type(const char* grid_name, const QString& module)
 {
-  for (grid_mapping_t* g = gt_mps_grid_names; (g->shortname); g++) {
+  for (const grid_mapping_t* g = gt_mps_grid_names; (g->shortname); g++) {
     if (QString::compare(grid_name, g->shortname, Qt::CaseInsensitive) == 0 ||
         QString::compare(grid_name, g->longname,Qt::CaseInsensitive) == 0) {
       return g->grid;
@@ -672,7 +672,7 @@ gt_get_mps_datum_name(const int datum_index)
 {
   const char* result = GPS_Math_Get_Datum_Name(datum_index);
 
-  for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++)
+  for (const datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++)
     if (QString::compare(result, d->jeeps_name, Qt::CaseInsensitive) == 0) {
       return d->mps_name;
     }
@@ -685,7 +685,7 @@ gt_lookup_datum_index(const char* datum_str, const QString& module)
 {
   const char* name = datum_str;
 
-  for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++) {
+  for (const datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++) {
     if (QString::compare(name, d->mps_name, Qt::CaseInsensitive) == 0) {
       name = d->jeeps_name;
       break;

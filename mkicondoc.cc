@@ -15,19 +15,11 @@
 int main()
 {
   QVector<icon_mapping_t> table;
-  for (int index = 0; true ; ++index) {
-    icon_mapping_t entry = garmin_icon_table[index];
-    if (entry.icon == nullptr) {
-      break;
-    }
-    table.append(entry);
+  for (const icon_mapping_t* entry = garmin_icon_table; entry->icon; entry++) {
+    table.append(*entry);
   }
-  for (int index = 0; true ; ++index) {
-    icon_mapping_t entry = garmin_smart_icon_table[index];
-    if (entry.icon == nullptr) {
-      break;
-    }
-    table.append(entry);
+  for (const icon_mapping_t* entry = garmin_smart_icon_table; entry->icon; entry++) {
+    table.append(*entry);
   }
   
   auto sort_lambda = [](const icon_mapping_t& a, const icon_mapping_t& b)->bool {
