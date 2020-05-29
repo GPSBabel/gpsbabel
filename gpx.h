@@ -216,7 +216,7 @@ private:
   void gpx_write_common_acc(const Waypoint* waypointp) const;
   void gpx_write_common_position(const Waypoint* waypointp, gpx_point_type point_type) const;
   void gpx_write_common_extensions(const Waypoint* waypointp, gpx_point_type point_type) const;
-  void gpx_write_common_description(const Waypoint* waypointp, const QString& oname) const;
+  void gpx_write_common_description(const Waypoint* waypointp, const QString& oname, bool isRtept = false) const;
   void gpx_waypt_pr(const Waypoint* waypointp) const;
   void gpx_track_hdr(const route_head* rte);
   void gpx_track_disp(const Waypoint* waypointp) const;

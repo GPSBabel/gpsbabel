@@ -524,6 +524,7 @@ public:
   float odometer_distance; /* Meters? */
   geocache_data* gc_data;
   FormatSpecificDataList fs;
+  unsigned int duration; /* expected travel time to next route point, in seconds, only when auto-routed */
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 

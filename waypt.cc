@@ -397,6 +397,7 @@ Waypoint::Waypoint() :
   power(0),
   temperature(0),
   odometer_distance(0),
+  duration(0),
   gc_data(&Waypoint::empty_gc_data),
   session(curr_session()),
   extra_data(nullptr)
@@ -437,6 +438,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   cadence(other.cadence),
   power(other.power),
   temperature(other.temperature),
+  duration(other.duration),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
   session(other.session),
@@ -494,6 +496,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     gc_data = rhs.gc_data;
     session = rhs.session;
     extra_data = rhs.extra_data;
+    duration = rhs.duration;
     // deep copy geocache data unless it is the special static empty_gc_data.
     if (rhs.gc_data != &Waypoint::empty_gc_data) {
       gc_data = new geocache_data(*rhs.gc_data);

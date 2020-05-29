@@ -1354,7 +1354,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
 }
 
 void
-GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString& oname) const
+GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString& oname, bool isRtept) const
 {
   writer->writeOptionalTextElement(QStringLiteral("name"), oname);
 
@@ -1364,7 +1364,12 @@ GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString
   } else {
     writer->writeOptionalTextElement(QStringLiteral("desc"), waypointp->description);
   }
-  /* TODO: src should go here */
+  if (isRtept && waypointp->duration != 0u) {
+	  uint seconds = waypointp->duration;
+	  QString source = "AUTOROUTE:";
+	  source.append( QString("duration=%1;").arg(seconds) );
+	  writer->writeOptionalTextElement(QStringLiteral("src"), source );
+  }
   write_gpx_url(waypointp);
   writer->writeOptionalTextElement(QStringLiteral("sym"), waypointp->icon_descr);
   /* TODO: type should go here */
@@ -1549,7 +1554,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp) const
                   mkshort_from_wpt(mkshort_handle, waypointp) :
                   waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_route);
-  gpx_write_common_description(waypointp, oname);
+  gpx_write_common_description(waypointp, oname, true);
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
