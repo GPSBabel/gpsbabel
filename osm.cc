@@ -904,12 +904,9 @@ OsmFormat::wr_deinit()
 {
   gbfclose(fout);
 
-  auto osm_release_ids_lambda = [](const Waypoint* waypointp)->void {
-    osm_release_ids(waypointp);
-  };
-  waypt_disp_all(osm_release_ids_lambda);
-  route_disp_all(nullptr, nullptr, osm_release_ids_lambda);
-  track_disp_all(nullptr, nullptr, osm_release_ids_lambda);
+  waypt_disp_all(osm_release_ids);
+  route_disp_all(nullptr, nullptr, osm_release_ids);
+  track_disp_all(nullptr, nullptr, osm_release_ids);
 
   waypoints.clear();
 }
