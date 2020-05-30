@@ -47,7 +47,7 @@ void InterpolateFilter::process()
   }
 
   if (backuproute.empty()) {
-    Fatal() << MYNAME ": Found no routes or tracks to operate on.";
+    fatal(FatalMsg() << MYNAME ": Found no routes or tracks to operate on.");
   }
 
   for (const auto* rte_old : qAsConst(backuproute)) {
@@ -93,7 +93,7 @@ void InterpolateFilter::process()
         double npts = 0;
         if (opt_time != nullptr) {
           if (!timespan.has_value()) {
-            Fatal() << MYNAME ": points must have valid times to interpolate by time!";
+            fatal(FatalMsg() << MYNAME ": points must have valid times to interpolate by time!");
           }
           // interpolate even if time is running backwards.
           npts = std::abs(timespan.value()) / max_time_step;
@@ -105,7 +105,7 @@ void InterpolateFilter::process()
           npts = distspan / max_dist_step;
         }
         if (!std::isfinite(npts) || (npts >= INT_MAX)) {
-          Fatal() << MYNAME ": interpolation interval too small!";
+          fatal(FatalMsg() << MYNAME ": interpolation interval too small!");
         }
 
         // Insert the required points
@@ -162,13 +162,13 @@ void InterpolateFilter::init()
 {
   char* fm;
   if ((opt_time != nullptr) && (opt_dist != nullptr)) {
-    Fatal() << MYNAME ": Can't interpolate on both time and distance.";
+    fatal(FatalMsg() << MYNAME ": Can't interpolate on both time and distance.");
   } else if ((opt_time != nullptr) && (opt_route != nullptr)) {
-    Fatal() << MYNAME ": Can't interpolate routes on time.";
+    fatal(FatalMsg() << MYNAME ": Can't interpolate routes on time.");
   } else if (opt_time != nullptr) {
     max_time_step = 1000 * strtod(opt_time, nullptr); // milliseconds
     if (max_time_step <= 0) {
-      Fatal() << MYNAME ": interpolation time should be positve!";
+      fatal(FatalMsg() << MYNAME ": interpolation time should be positve!");
     }
   } else if (opt_dist != nullptr) {
     max_dist_step = strtod(opt_dist, &fm);
@@ -177,10 +177,10 @@ void InterpolateFilter::init()
       max_dist_step *= kMilesPerKilometer;
     }
     if (max_dist_step <= 0) {
-      Fatal() << MYNAME ": interpolation distance should be positve!";
+      fatal(FatalMsg() << MYNAME ": interpolation distance should be positve!");
     }
   } else {
-    Fatal() << MYNAME ": No interval specified.";
+    fatal(FatalMsg() << MYNAME ": No interval specified.");
   }
 }
 

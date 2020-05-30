@@ -149,7 +149,7 @@ parse_header(char* line)
       } else if (key == "TYPE") {
         filetype = qstr.toInt(&ok);
         if (!ok) {
-          Fatal() << MYNAME << "Unknown file type " << key;
+          fatal(FatalMsg() << MYNAME << "Unknown file type " << key);
         }
         switch (filetype) {
         case 4:	/* M9 TrackLog (Suunto Sail Manager) */
@@ -278,7 +278,7 @@ parse_point(char *line) {
           auto year = v[2].toInt();
           dt = QDate(year, month, day);
         } else {
-          Fatal() << MYNAME << "Invalid date" << qstr;
+          fatal(FatalMsg() << MYNAME << "Invalid date" << qstr);
         }
         break;
       }
@@ -291,20 +291,20 @@ parse_point(char *line) {
           auto sec = v[2].toInt();
           tm = QTime(hour, min, sec);
         } else {
-          Fatal() << MYNAME << "Invalid Time" << qstr;
+          fatal(FatalMsg() << MYNAME << "Invalid Time" << qstr);
         }
         break;
       }
       case 4:
         wpt->latitude = qstr.toDouble(&ok);
         if (!ok) {
-          Fatal() << MYNAME << "Invalid latitude" << qstr;
+          fatal(FatalMsg() << MYNAME << "Invalid latitude" << qstr);
         }
         break;
       case 5:
         wpt->longitude = qstr.toDouble(&ok);
         if (!ok) {
-          Fatal() << MYNAME << "Invalid longitude" << qstr;
+          fatal(FatalMsg() << MYNAME << "Invalid longitude" << qstr);
         }
         break;
       case 6: {

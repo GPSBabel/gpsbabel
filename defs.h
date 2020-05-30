@@ -37,6 +37,7 @@
 #include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
+#include <QtCore/QDebug>          // for QDebug
 #include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
 #include <QtCore/QScopedPointer>  // for QScopedPointer
 #include <QtCore/QString>         // for QString
@@ -1062,6 +1063,7 @@ struct style_vecs_t {
 };
 extern const QVector<style_vecs_t> style_list;
 
+[[noreturn]] void fatal(QDebug& msginstance);
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);

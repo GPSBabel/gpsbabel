@@ -49,7 +49,7 @@ cet_convert_init(const QString& cs_name, const int force)
       global_opts.codec = QTextCodec::codecForName(CSTR(cs_name));
     }
     if (!global_opts.codec) {
-      Fatal() << "Unsupported character set \"" << cs_name << ".";
+      fatal(FatalMsg() << "Unsupported character set \"" << cs_name << ".");
     }
   }
 }

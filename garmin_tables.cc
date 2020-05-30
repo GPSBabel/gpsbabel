@@ -651,8 +651,8 @@ gt_lookup_grid_type(const char* grid_name, const QString& module)
     }
   }
 
-  Fatal() << module << ": Unsupported grid (" << grid_name <<
-                       ". See GPSBabel help for supported grids.\n";
+  fatal(FatalMsg() << module << ": Unsupported grid (" << grid_name <<
+                       ". See GPSBabel help for supported grids.\n");
 
   return grid_unknown;	/* (warnings) */
 }
@@ -701,8 +701,8 @@ gt_lookup_datum_index(const char* datum_str, const QString& module)
   }
 
   if (result < 0) {
-    Fatal() << module << ": Unsupported datum (" << datum_str <<
-                         "). See GPSBabel help for supported datums.";
+    fatal(FatalMsg() << module << ": Unsupported datum (" << datum_str <<
+                         "). See GPSBabel help for supported datums.");
   }
   return result;
 }

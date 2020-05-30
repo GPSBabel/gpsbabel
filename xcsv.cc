@@ -212,14 +212,14 @@ QString XcsvStyle::dequote(const QString& in) {
 
 void XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output) {
   if (fmp.key.isEmpty()) {
-    Fatal() << MYNAME << ": xcsv style is missing" <<
-            (is_output ? "output" : "input") << "field type.";
+    fatal(FatalMsg() << MYNAME << ": xcsv style is missing" <<
+            (is_output ? "output" : "input") << "field type.");
   }
   if (fmp.val.isNull()) {
-    Fatal() << MYNAME << ": xcsv style" << fmp.key.constData() << "is missing default.";
+    fatal(FatalMsg() << MYNAME << ": xcsv style" << fmp.key.constData() << "is missing default.");
   }
   if (is_output && fmp.printfc.isNull()) {
-    Fatal() << MYNAME << ": xcsv style" << fmp.key.constData() << "output is missing format specifier.";
+    fatal(FatalMsg() << MYNAME << ": xcsv style" << fmp.key.constData() << "output is missing format specifier.");
   }
 }
 
@@ -1759,13 +1759,13 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     } else if (p == "WAYPOINT") {
       style->datatype = wptdata;
     } else {
-      Fatal() << MYNAME << ": Unknown data type" << p;
+      fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
     }
   } else
 
   if (op == "IFIELD") {
     if (tokens.size() < 3) {
-      Fatal() << "Invalid IFIELD line: " << tokenstr;
+      fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
     }
 
     // The key ("LAT_DIR") should never contain quotes.
@@ -1785,7 +1785,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     unsigned options = 0;
       // Note: simplified() has to run after split().
     if (tokens.size() < 3) {
-      Fatal() << "Invalid OFIELD line: " << tokenstr;
+      fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
     }
 
     // The key ("LAT_DIR") should never contain quotes.

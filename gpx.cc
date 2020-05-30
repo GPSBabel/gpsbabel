@@ -972,8 +972,8 @@ GpxFormat::wr_init(const QString& fname)
   // It's a good thing 0, 0.0, 0.0.0 aren't valid gpx versions,
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
-    Fatal() << MYNAME ": gpx version number"
-            << gpx_write_version << "not valid.";
+    fatal(FatalMsg() << MYNAME ": gpx version number"
+            << gpx_write_version << "not valid.");
   }
 
   writer->setAutoFormatting(true);
@@ -1122,10 +1122,10 @@ GpxFormat::read()
   }
 
   if (reader->hasError())  {
-    Fatal() << MYNAME << "Read error:" << reader->errorString()
+    fatal(FatalMsg() << MYNAME << "Read error:" << reader->errorString()
             << "File:" << iqfile->fileName()
             << "Line:" << reader->lineNumber()
-            << "Column:" << reader->columnNumber();
+            << "Column:" << reader->columnNumber());
   }
 }
 
