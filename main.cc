@@ -19,7 +19,7 @@
 
 #include <clocale>                    // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                    // for signal, SIGINT, SIG_ERR
-#include <cstdio>                     // for printf, fgetc, fprintf, stderr, stdin
+#include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
 #include <QtCore/QByteArray>          // for QByteArray
@@ -193,6 +193,8 @@ print_extended_info()
 
 static void MessageHandler(QtMsgType /* type */, const QMessageLogContext& /* context */, const QString& msg)
 {
+  /* flush any buffered standard output */
+  fflush(stdout);
   fprintf(stderr, "%s\n", qPrintable(msg));
 }
 
