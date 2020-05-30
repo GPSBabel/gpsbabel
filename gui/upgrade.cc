@@ -293,7 +293,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     QDomElement upgrade = upgradeNode.toElement();
     QString updateVersion = upgrade.attribute("version");
     if (upgrade.attribute("downloadURL").isEmpty()) {
-      downloadUrl = "http://www.gpsbabel.org/download.html";
+      downloadUrl = "https://www.gpsbabel.org/download.html";
     } else {
       downloadUrl = upgrade.attribute("downloadURL");
     }
