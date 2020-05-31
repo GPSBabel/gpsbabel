@@ -23,9 +23,12 @@
 #ifndef GPX_H
 #define GPX_H
 
-#include <QString>
-#include <QDateTime>
-#include "latlng.h"
+#include <QDateTime>             // for QDateTime
+#include <QList>                 // for QList
+#include <QString>               // for QString
+#include <QtGlobal>              // for foreach
+#include "latlng.h"              // for LatLng
+
 
 //------------------------------------------------------------------------
 class GpxItem
