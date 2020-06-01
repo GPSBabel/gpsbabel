@@ -59,14 +59,14 @@ enum gt_waypt_classes_e {
   gt_waypt_class_map_line
 };
 
-extern const char* gt_waypt_class_names[];
+extern const char* const gt_waypt_class_names[];
 
 struct gt_country_code_t {
   const char* cc;
   const char* country;
 };
 
-extern gt_country_code_t gt_country_codes[];
+extern const gt_country_code_t gt_country_codes[];
 
 const char* gt_get_icao_country(const QString& cc);
 const char* gt_get_icao_cc(const QString& country, const QString& shortname);
@@ -78,7 +78,7 @@ enum gt_display_modes_e {
   gt_display_mode_symbol_and_comment
 };
 
-extern const char* gt_display_mode_names[];
+extern const char* const gt_display_mode_names[];
 
 #define GT_DISPLAY_MODE_MIN gt_display_mode_symbol_and_name
 #define GT_DISPLAY_MODE_MAX gt_display_mode_symbol_and_comment
