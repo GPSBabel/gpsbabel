@@ -41,6 +41,7 @@
 #include "lowranceusr.h"
 #include "mynav.h"
 #include "nmea.h"
+#include "osm.h"
 #include "qstarz_bl_1000.h"
 #include "random.h"
 #include "shape.h"
@@ -132,7 +133,6 @@ extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
-extern ff_vecs_t osm_vecs;
 extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
@@ -361,7 +361,7 @@ private:
   Dg200FileFormat dg200_ffmt;
   LegacyFormat navilink_fmt {navilink_vecs};
   LegacyFormat ik3d_fmt {ik3d_vecs};
-  LegacyFormat osm_fmt {osm_vecs};
+  OsmFormat osm_fmt;
   LegacyFormat destinator_poi_fmt {destinator_poi_vecs};
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
