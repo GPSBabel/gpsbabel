@@ -22,10 +22,11 @@
 //------------------------------------------------------------------------
 
 
-#include <QFile>
-#include <QXmlInputSource>
-#include <QXmlSimpleReader>
-#include <QXmlDefaultHandler>
+#include <QFile>                 // for QFile
+#include <QIODevice>             // for QIODevice, QIODevice::ReadOnly
+#include <QStringRef>            // for QStringRef
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
 #include "gpx.h"
 
 
@@ -46,7 +47,7 @@ static bool trackIsEmpty(const GpxTrack& trk)
   return count <=2 ;
 }
 
-class GpxHandler: public QXmlDefaultHandler
+class GpxHandler
 {
 public:
   GpxHandler()
@@ -74,9 +75,8 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  bool startElement(const QString& /*namespaceURI*/,
-                    const QString& localName, const QString& /*qName*/,
-                    const QXmlAttributes& atts) override
+  void startElement(const QStringRef& localName,
+                    const QXmlStreamAttributes& atts)
   {
     if (localName == "wpt") {
       currentWpt = GpxWaypoint();
@@ -131,12 +131,9 @@ public:
       //fprintf(stderr, "localName:  %s     name:  %s\n",
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
-    return true;
   }
 
-  bool endElement(const QString& /*namespaceURI*/,
-                  const QString& localName,
-                  const QString& /*qName*/) override
+  void endElement(const QStringRef& localName)
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
@@ -204,13 +201,11 @@ public:
       //fprintf(stderr, "end ---- localName:  %s     name:  %s\n\n",
       //localName.toStdString().c_str(), qName.toStdString().c_str());
     }
-    return true;
   }
 
-  bool characters(const QString& x) override
+  void characters(const QString& x)
   {
     textChars = x;
-    return true;
   }
 };
 
@@ -224,13 +219,36 @@ bool Gpx::read(const QString& fileName)
     return false;
   }
 
-  QXmlInputSource xmlIn(&file);
-
-  QXmlSimpleReader reader;
+  QXmlStreamReader reader(&file);
   GpxHandler gpxHandler;
-  reader.setContentHandler(&gpxHandler);
 
-  if (reader.parse(xmlIn)) {
+  for (bool atEnd = false; !reader.atEnd() && !atEnd;)  {
+    reader.readNext();
+    // do processing
+    switch (reader.tokenType()) {
+    case QXmlStreamReader::StartElement:
+      gpxHandler.startElement(reader.name(), reader.attributes());
+      break;
+
+    case QXmlStreamReader::EndElement:
+      gpxHandler.endElement(reader.name());
+      break;
+
+    case QXmlStreamReader::Characters:
+      gpxHandler.characters(reader.text().toString());
+      break;
+
+    case QXmlStreamReader::EndDocument:
+    case QXmlStreamReader::Invalid:
+      atEnd = true;
+      break;
+
+    default:
+      break;
+    }
+  }
+
+  if (!reader.hasError()) {
     wayPoints = gpxHandler.wptList;
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
