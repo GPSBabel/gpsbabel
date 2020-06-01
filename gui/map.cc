@@ -117,11 +117,11 @@ Map::~Map()
 #ifdef DEBUG_JS_GENERATION
   if (dbgout_) {
     delete dbgout_;
-    dbgout_ = NULL;
+    dbgout_ = nullptr;
   }
   if (dbgdata_) {
     delete dbgdata_;
-    dbgdata_ = NULL;
+    dbgdata_ = nullptr;
   }
 #endif
 }
