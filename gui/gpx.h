@@ -27,6 +27,7 @@
 #include <QList>                 // for QList
 #include <QString>               // for QString
 #include <QtGlobal>              // for foreach
+#include <limits>                // for numeric_limits
 #include "latlng.h"              // for LatLng
 
 
@@ -34,9 +35,6 @@
 class GpxItem
 {
 public:
-  GpxItem(): visible(true) {}
-  GpxItem(bool visible): visible(visible) {}
-
   void setVisible(bool b)
   {
     visible = b;
@@ -48,17 +46,13 @@ public:
   }
 
 protected:
-  bool visible;
+  bool visible{true};
 };
 
 //------------------------------------------------------------------------
 class GpxRoutePoint: public GpxItem
 {
 public:
-  GpxRoutePoint():  location(LatLng()), name(QString())
-  {
-  }
-
   void setLocation(const LatLng& pt)
   {
     location = pt;
@@ -88,29 +82,6 @@ private:
 class GpxRoute: public GpxItem
 {
 public:
-  GpxRoute(): name(QString()), cachedLength(-1) {}
-
-  GpxRoute(const GpxRoute& c)
-    :GpxItem(c.visible),
-     name(c.name), cachedLength(c.cachedLength)
-  {
-    routePoints.clear();
-    foreach (GpxRoutePoint sg, c.routePoints) {
-      routePoints << sg;
-    }
-  }
-  GpxRoute& operator = (const GpxRoute& c)
-  {
-    visible = c.visible;
-    name = c.name;
-    cachedLength = c.cachedLength;
-    routePoints.clear();
-    foreach (GpxRoutePoint sg, c.routePoints) {
-      routePoints << sg;
-    }
-    return *this;
-  }
-
   double length() const
   {
     if (cachedLength >=0.0) {
@@ -161,17 +132,13 @@ public:
 private:
   QString name;
   QList <GpxRoutePoint> routePoints;
-  double cachedLength;
+  double cachedLength{-1.0};
 };
 
 //------------------------------------------------------------------------
 class GpxTrackPoint: public GpxItem
 {
 public:
-  GpxTrackPoint():  location(LatLng()), elevation(0), dateTime(QDateTime())
-  {
-  }
-
   void setLocation(const LatLng& pt)
   {
     location = pt;
@@ -204,7 +171,7 @@ public:
 
 private:
   LatLng location;
-  double  elevation;
+  double elevation{std::numeric_limits<double>::lowest()};
   QDateTime dateTime;
 };
 
@@ -212,24 +179,6 @@ private:
 class GpxTrackSegment: public GpxItem
 {
 public:
-  GpxTrackSegment() {}
-
-  GpxTrackSegment(const GpxTrackSegment& c): GpxItem(c.visible)
-  {
-    trackPoints.clear();
-    foreach (GpxTrackPoint pt, c.trackPoints) {
-      trackPoints << pt;
-    }
-  }
-  GpxTrackSegment& operator = (const GpxTrackSegment& c)
-  {
-    visible = c.visible;
-    trackPoints.clear();
-    foreach (GpxTrackPoint pt, c.trackPoints) {
-      trackPoints << pt;
-    }
-    return *this;
-  }
   void addPoint(const GpxTrackPoint& pt)
   {
     trackPoints << pt;
@@ -247,40 +196,11 @@ public:
 private:
   QList <GpxTrackPoint> trackPoints;
 };
+
 //------------------------------------------------------------------------
 class GpxTrack: public GpxItem
 {
 public:
-  GpxTrack():  number(1), name(QString()), comment(QString()), description(QString()), cachedLength(-1.0) {}
-
-  GpxTrack(const GpxTrack& c)
-    :GpxItem(c.visible),
-     number(c.number),
-     name(c.name),
-     comment(c.comment),
-     description(c.description),
-     cachedLength(c.cachedLength)
-  {
-    trackSegments.clear();
-    foreach (GpxTrackSegment sg, c.trackSegments) {
-      trackSegments << sg;
-    }
-  }
-  GpxTrack& operator = (const GpxTrack& c)
-  {
-    visible = c.visible;
-    number = c.number;
-    name = c.name;
-    comment = c.comment;
-    description = c.description;
-    cachedLength = c.cachedLength;
-    trackSegments.clear();
-    foreach (GpxTrackSegment sg, c.trackSegments) {
-      trackSegments << sg;
-    }
-    return *this;
-  }
-
   void setNumber(int n)
   {
     number = n;
@@ -361,27 +281,18 @@ public:
   }
 
 private:
-  int     number;
+  int number{1};
   QString name;
   QString comment;
   QString description;
   QList <GpxTrackSegment> trackSegments;
-  double cachedLength;
+  double cachedLength{-1.0};
 };
 
 //------------------------------------------------------------------------
 class GpxWaypoint: public GpxItem
 {
 public:
-  GpxWaypoint(): 
-    location_(LatLng(0, 0)),
-    elevation_(-1.0E-100),
-    name_(QString()),
-    comment_(QString()),
-    description_(QString()),
-    symbol_(QString())
-  {}
-
   void setLocation(const LatLng& pt)
   {
     location_ = pt;
@@ -444,7 +355,7 @@ public:
 
 private:
   LatLng location_;
-  double  elevation_;
+  double elevation_{std::numeric_limits<double>::lowest()};
   QString name_;
   QString comment_;
   QString description_;
@@ -455,7 +366,6 @@ private:
 class Gpx
 {
 public:
-  Gpx() {}
   bool read(const QString& fileName);
 
   QList <GpxWaypoint>& getWaypoints()
@@ -463,12 +373,12 @@ public:
     return wayPoints;
   } // nonconst
 
-  QList <GpxTrack>&    getTracks()
+  QList <GpxTrack>& getTracks()
   {
     return tracks;
   }
 
-  QList <GpxRoute>&    getRoutes()
+  QList <GpxRoute>& getRoutes()
   {
     return routes;
   }
@@ -478,21 +388,20 @@ public:
     return wayPoints;
   }
 
-  const QList <GpxTrack>& getTracks()       const
+  const QList <GpxTrack>& getTracks() const
   {
     return tracks;
   }
 
-  const QList <GpxRoute>& getRoutes()       const
+  const QList <GpxRoute>& getRoutes() const
   {
     return routes;
   }
 
 private:
   QList <GpxWaypoint> wayPoints;
-  QList <GpxTrack>    tracks;
-  QList <GpxRoute>    routes;
+  QList <GpxTrack> tracks;
+  QList <GpxRoute> routes;
 };
-
 
 #endif
