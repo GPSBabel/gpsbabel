@@ -20,7 +20,7 @@
  */
 
 #include <cstdarg>             // for va_end, va_list, va_start
-#include <cstdio>              // for vfprintf, stderr, fprintf
+#include <cstdio>              // for vfprintf, stderr, fflush, fprintf, stdout
 #include <cstdlib>             // for exit
 
 #include "defs.h"              // for Fatal, debug_print, fatal, warning
@@ -38,6 +38,9 @@
 [[noreturn]] void
 fatal(const char* fmt, ...)
 {
+  /* flush any buffered standard output */
+  fflush(stdout);
+
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
