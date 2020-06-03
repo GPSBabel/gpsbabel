@@ -896,8 +896,6 @@ static void trl_write()
     }
   }
 
-  free(trkbuf);
-
   fill = 0x1000 - sizeof(struct loghdr);
   auto logbuf = new char[fill];
   memset(logbuf, 0xff, fill);
@@ -906,7 +904,6 @@ static void trl_write()
       gbfwrite(logbuf, fill, 1, fout) != 1) {
     fatal(MYNAME ": Write error on %s\n", fout->name);
   }
-  free(logbuf);
 }
 
 /**************************************************************************/
