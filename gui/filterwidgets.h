@@ -103,7 +103,7 @@ public:
 class BoolFilterOption: public FilterOption
 {
 public:
-  BoolFilterOption(bool& b, QAbstractButton* ck): FilterOption(), b(b), checkBox(ck)
+  BoolFilterOption(bool& b, QAbstractButton* ck):  b(b), checkBox(ck)
   {
   }
   void setWidgetValue()
@@ -124,7 +124,7 @@ private:
 class IntSpinFilterOption: public FilterOption
 {
 public:
-  IntSpinFilterOption(int& val, QSpinBox* sb, int bottom = -100, int top = 100): FilterOption(), val(val), spinBox(sb)
+  IntSpinFilterOption(int& val, QSpinBox* sb, int bottom = -100, int top = 100):  val(val), spinBox(sb)
   {
     sb->setRange(bottom, top);
   }
@@ -146,7 +146,7 @@ private:
 class StringFilterOption: public FilterOption
 {
 public:
-  StringFilterOption(QString& val, QLineEdit* le): FilterOption(), val(val), lineEdit(le)
+  StringFilterOption(QString& val, QLineEdit* le):  val(val), lineEdit(le)
   {
   }
   void setWidgetValue()
@@ -172,7 +172,7 @@ public:
                      double maxVal = 1.0E308,
                      int decimals = -1,
                      char format = 'g'
-                    ): FilterOption(), val(val), lineEdit(le), minVal(minVal),
+                    ):  val(val), lineEdit(le), minVal(minVal),
     maxVal(maxVal), decimals(decimals), format(format)
   {
     le->setValidator(new QDoubleValidator(minVal, maxVal, decimals, le));
@@ -200,7 +200,7 @@ private:
 class DateTimeFilterOption: public FilterOption
 {
 public:
-  DateTimeFilterOption(QDateTime& val, QDateTimeEdit* w): FilterOption(), val(val), w(w)
+  DateTimeFilterOption(QDateTime& val, QDateTimeEdit* w):  val(val), w(w)
   {
   }
   void setWidgetValue()
@@ -221,7 +221,7 @@ private:
 class ComboFilterOption: public FilterOption
 {
 public:
-  ComboFilterOption(int& val, QComboBox* w): FilterOption(), val(val), w(w)
+  ComboFilterOption(int& val, QComboBox* w):  val(val), w(w)
   {
   }
   void setWidgetValue()

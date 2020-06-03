@@ -43,7 +43,7 @@ public:
 class IntSetting: public VarSetting
 {
 public:
-  IntSetting(const QString& name, int& var): VarSetting(), name_(name), var_(var) { }
+  IntSetting(const QString& name, int& var):  name_(name), var_(var) { }
   void saveSetting(QSettings& st)
   {
     st.setValue(name_, var_);
@@ -64,7 +64,7 @@ private:
 class DoubleSetting: public VarSetting
 {
 public:
-  DoubleSetting(const QString& name, double& var): VarSetting(), name_(name), var_(var) { }
+  DoubleSetting(const QString& name, double& var):  name_(name), var_(var) { }
   void saveSetting(QSettings& st)
   {
     st.setValue(name_, var_);
@@ -85,7 +85,7 @@ private:
 class StringSetting: public VarSetting
 {
 public:
-  StringSetting(const QString& name, QString& var): VarSetting(), name_(name), var_(var) { }
+  StringSetting(const QString& name, QString& var):  name_(name), var_(var) { }
   void saveSetting(QSettings& st)
   {
     st.setValue(name_, var_);
@@ -106,7 +106,7 @@ private:
 class BoolSetting: public VarSetting
 {
 public:
-  BoolSetting(const QString& name, bool& var): VarSetting(), name_(name), var_(var) { }
+  BoolSetting(const QString& name, bool& var):  name_(name), var_(var) { }
   void saveSetting(QSettings& st)
   {
     st.setValue(name_, var_);
@@ -127,7 +127,7 @@ private:
 class DateTimeSetting: public VarSetting
 {
 public:
-  DateTimeSetting(const QString& name, QDateTime& var):VarSetting(), name_(name), var_(var) { }
+  DateTimeSetting(const QString& name, QDateTime& var): name_(name), var_(var) { }
   void saveSetting(QSettings& st)
   {
     st.setValue(name_, var_);

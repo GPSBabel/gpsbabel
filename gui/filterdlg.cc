@@ -34,7 +34,7 @@ FilterDialog::FilterDialog(QWidget* parent, AllFiltersData& fd): QDialog(parent)
   ui_.filterList->clear();
 
   widgetStack_ = new QStackedWidget(ui_.frame);
-  QHBoxLayout* layout = new QHBoxLayout(ui_.frame);
+  auto* layout = new QHBoxLayout(ui_.frame);
   layout->addWidget(widgetStack_);
   layout->setContentsMargins(2, 2, 2, 2);
 
@@ -74,7 +74,7 @@ FilterDialog::FilterDialog(QWidget* parent, AllFiltersData& fd): QDialog(parent)
 //------------------------------------------------------------------------
 void FilterDialog::addFilterPage(const QString& name, FilterWidget* fw, bool* use)
 {
-  QListWidgetItem* it = new QListWidgetItem(name);
+  auto* it = new QListWidgetItem(name);
   it->setCheckState(*use? Qt::Checked:Qt::Unchecked);
   fw->setEnabled(*use);
   ui_.filterList->addItem(it);

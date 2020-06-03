@@ -95,7 +95,8 @@ void GMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
 //------------------------------------------------------------------------
 void GMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
 {
-  QDateTime startTime, stopTime;
+  QDateTime startTime;
+  QDateTime stopTime;
   bool first = true;
   int count = 0;
   foreach (const GpxTrackSegment& seg, trk.getTrackSegments()) {
@@ -145,7 +146,7 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   gpx_.read(gpxFileName);
 
   mapWidget_ = new Map(this, gpx_, te);
-  QHBoxLayout* lay = new QHBoxLayout(ui_.frame);
+  auto* lay = new QHBoxLayout(ui_.frame);
   lay->setContentsMargins(0, 0, 0, 0);
   lay->addWidget(mapWidget_);
 
