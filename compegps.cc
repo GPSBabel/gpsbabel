@@ -65,6 +65,7 @@
 #include "jeeps/gpsmath.h"
 #include <cstdlib>
 #include <cstdio>
+#include <QtCore/QDateTime>
 
 #define MYNAME "CompeGPS"
 
@@ -121,31 +122,30 @@ void fix_datum(double* lat, double* lon)
   }
 }
 
-static void
-compegps_parse_date(const char* c, struct tm* tm)
+static QDate
+compegps_parse_date(const char* c)
 {
   char month[4];
-  tm->tm_mday = atoi(c);
+  int day = atoi(c);
   strncpy(month, c+3, 3);
   month[3] = 0;
-  tm->tm_mon = month_lookup(month);
+  int mon = month_lookup(month) + 1;
   int year = atoi(c + 7);
+
   if (year < 70) {
     year += 100;
   }
   if (year > 1900) {
     year -= 1900;
   }
-  tm->tm_year = year;
-  // if (tm->tm_year < 70) tm->tm_year += 100;
+
+  return QDate(1900 + year, mon, day);
 }
 
-static void
-compegps_parse_time(const char* c, struct tm* tm)
+static QTime
+compegps_parse_time(const char* c)
 {
-  tm->tm_hour = atoi(c);
-  tm->tm_min = atoi(c+3);
-  tm->tm_sec = atoi(c+6);
+  return QTime::fromString(c, "hh:mm:ss");
 }
 
 /* specialized readers */
@@ -156,14 +156,14 @@ parse_wpt(char* buff)
   int col = -1;
   char* cx;
   auto* wpt = new Waypoint;
-  struct tm tm;
-  int has_time = 0;
-  memset(&tm, 0, sizeof(tm));
+  bool has_time{false};
 
   char* c = strstr(buff, "A ");
   if (c == buff) {
     col++;
   }
+  QDate date;
+  QTime time;
 
   c = csv_lineparse(buff, " ", "", col++);
   while (c != nullptr) {
@@ -195,14 +195,14 @@ parse_wpt(char* buff)
         /* always "27-MAR-62 00:00:00" */
       case 4:
         if (strcmp(c, "27-MAR-62")) {
-          has_time = 1;
-          compegps_parse_date(c, &tm);
+          has_time = true;
+          date = compegps_parse_date(c);
         }
         break;
       case 5:
         if (has_time) {
-          compegps_parse_time(c, &tm);
-          wpt->SetCreationTime(mkgmtime(&tm));
+          time = compegps_parse_time(c);
+          wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
         }
         break;
       case 6:
@@ -271,15 +271,14 @@ static Waypoint*
 parse_trkpt(char* buff)
 {
   int col = -1;
-  struct tm tm;
   auto* wpt = new Waypoint;
 
   char* c = strstr(buff, "A ");
   if (c == buff) {
     col++;
   }
-
-  memset(&tm, 0, sizeof(tm));
+  QDate tdate;
+  QTime ttime;
   c = csv_lineparse(buff, " ", "", col++);
   while (c != nullptr) {
     c = lrtrim(c);
@@ -295,11 +294,11 @@ parse_trkpt(char* buff)
         human_to_dec(c, nullptr, &wpt->longitude, 2);
         break;
       case 4:
-        compegps_parse_date(c, &tm);
+        tdate = compegps_parse_date(c);
         break;
       case 5:
-        compegps_parse_time(c, &tm);
-        wpt->SetCreationTime(mkgmtime(&tm));
+        ttime = compegps_parse_time(c);
+        wpt->SetCreationTime(QDateTime(tdate, ttime, Qt::UTC));
         break;
       case 7:
         wpt->altitude = atof(c);
