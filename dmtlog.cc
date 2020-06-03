@@ -418,6 +418,7 @@ read_CTrackFile(const int version)
   /* S1 .. S9: comments, hints, jokes, aso */
   for (int i = 0; i < 9; i++) {
     auto s = read_str(fin);
+    Q_UNUSED(s);
   }
 
   int32_t tcount = gbfgetint32(fin);
