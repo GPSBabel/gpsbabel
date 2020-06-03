@@ -1,7 +1,7 @@
 /*
     Read Netstumbler data files.
 
-    Copyright (C) 2004, 2005 Robert Lipe, robertlipe+source@gpsbabel.org and
+    Copyright (C) 2004-2020 Robert Lipe, robertlipe+source@gpsbabel.org and
     John Temples; gpsns@xargs.com
 
     This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,8 @@
 #include <cstdio>                  // for snprintf
 #include <cstdlib>                 // for atoi, atof, qsort, strtol
 #include <cstring>                 // for strcpy, strlen, memset, strncmp, strstr
-#include <ctime>                   // for mktime
 
+#include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QString>          // for QString
 #include <QtCore/QtGlobal>         // for foreach
 
@@ -96,15 +96,15 @@ data_read()
   int stealth_num = 0, whitespace_num = 0;
   long flags = 0;
   int speed = 0, channel = 0;
-  struct tm tm;
   int line = 0;
   WaypointList tmp_waypt_list;
-
-  memset(&tm, 0, sizeof(tm));
+  QDate date;
+  QTime time;
 
   while ((ibuf = gbfgetstr(file_in))) {
     int len;
     int stealth = 0;
+
 
     if ((line++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -116,9 +116,7 @@ data_read()
 
     if (ibuf[0] == '#') {
       if (strncmp(&ibuf[2], "$DateGMT:", 9) == 0) {
-        tm.tm_year = atoi(&ibuf[12]) - 1900;
-        tm.tm_mon = atoi(&ibuf[17]) - 1;
-        tm.tm_mday = atoi(&ibuf[20]);
+        date = QDate::fromString(ibuf + 12, "yyyy-MM-dd");
       }
 
       /*
@@ -185,9 +183,7 @@ data_read()
         break;
 
       case 5:			/* time */
-        tm.tm_hour = atoi(field);
-        tm.tm_min = atoi(&field[3]);
-        tm.tm_sec = atoi(&field[6]);
+        time = QTime::fromString(field, "hh:mm:ss");
         break;
 
       case 8:					/* flags */
@@ -250,7 +246,7 @@ data_read()
     wpt_tmp->description = desc;
     wpt_tmp->longitude = lon;
     wpt_tmp->latitude = lat;
-    wpt_tmp->SetCreationTime(mktime(&tm));
+    wpt_tmp->SetCreationTime(QDateTime(date, time, Qt::UTC));
 
     tmp_waypt_list.waypt_add(wpt_tmp);
   }
