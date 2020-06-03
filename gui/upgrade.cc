@@ -52,7 +52,7 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
   QObject(parent),
   manager_(nullptr),
   replyId_(nullptr),
-  upgradeUrl_(QUrl("https://www.gpsbabel.org/upgrade_check.html")),
+  upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList),
   updateStatus_(updateUnknown),
   babelData_(bd)
