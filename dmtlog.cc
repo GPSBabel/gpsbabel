@@ -336,13 +336,7 @@ read_str(gbfile* f)
   if (i == 0xff) {
     i = gbfgetint16(f);
   }
-
-  char* res = (char*) xmalloc(i + 1);
-  res[i] = '\0';
-  if (i) {
-    gbfread(res, 1, i, f);
-  }
-
+  auto res = gbfreadbuf(i, f);
   return QString(res);
 }
 
