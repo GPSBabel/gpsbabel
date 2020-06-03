@@ -425,8 +425,6 @@ free_blocks(struct blockheader* block)
 static void
 data_write()
 {
-  int ct = waypt_count();
-  struct hdr* htable, *bh;
   extern WaypointList* global_waypoint_list;
   double minlon = 200;
   double maxlon = -200;
@@ -434,8 +432,9 @@ data_write()
   double maxlat = -200;
   struct blockheader* blocks = nullptr;
 
-  htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
-  bh = htable;
+  int ct = waypt_count();
+  hdr htable[ct];
+  hdr* bh = htable;
 
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
@@ -459,7 +458,6 @@ data_write()
   write_blocks(file_out, blocks);
   free_blocks(blocks);
 
-  xfree(htable);
 }
 
 ff_vecs_t tomtom_vecs = {

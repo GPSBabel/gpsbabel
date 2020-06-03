@@ -506,14 +506,11 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
   for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {}
-  char *s = xstrndup(wpt->name,j+1);
-  WP->shortname = s;
-  xfree(s);
+  WP->shortname = QByteArray(wpt->name, j + 1);
+
   for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {}
   if (j >= 0) {
-    char *descr = xstrndup(wpt->comment, j+1);
-    WP->description = descr;
-    xfree(descr);
+    WP->description = QByteArray(wpt->comment, j + 1);
   } else {
     WP->description = "";
   }
@@ -557,14 +554,11 @@ static void wpr_read()
     auto* RT = new route_head;
     RT->rte_num = i;
     for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {}
-    char *s = xstrndup(rte->name,j+1);
-    RT->rte_name = s;
-    xfree(s);
+    RT->rte_name = QByteArray(rte->name, j + 1);
+
     for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {}
     if (j >= 0) {
-      char *desc = xstrndup(rte->comment,j+1);
-      RT->rte_desc = desc;
-      xfree(desc);
+      RT->rte_desc = QByteArray(rte->comment, j + 1);
     } else {
       RT->rte_desc = "";
     }
@@ -608,21 +602,17 @@ static void trl_read()
       continue;
     }
     auto* TL = new route_head;
+    TL->rte_num = i;
+
     for (j=TRK_NAME_LEN-1;
          j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
          j--) {}
-    char *s1 = xstrndup(trkhdr->name,j+1);
-    TL->rte_name = s1;
-    xfree(s1);
-    /*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
+    TL->rte_name = QByteArray(trkhdr->name, j + 1);
+
     for (j=TRK_COMMENT_LEN-1;
          j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
          j--) {}
-    s1 = xstrndup(trkhdr->comment,j+1);
-    TL->rte_desc = s1;
-    xfree(s1);
-    /*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
-    TL->rte_num = i;
+    TL->rte_desc = QByteArray(trkhdr->comment, j + 1);
 
     track_add_head(TL);
 
@@ -896,32 +886,27 @@ static void trl_write()
   trl_swap(&TRL);
 
   size_t fill = 0x10000 - 2 * sizeof(struct trklog);
-  void* buf = xmalloc(fill);
-  if (buf == nullptr) {
-    fatal(MYNAME ": Not enough memory\n");
-  }
-  memset(buf, 0xff, fill);
+  auto trkbuf = new char[fill];
+  memset(trkbuf, 0xff, fill);
 
   for (i=0; i<MAXTRK; i+=2) {
     if (gbfwrite(&(TRL.trklog[i]), sizeof(struct trklog), 2, fout) != 2 ||
-        gbfwrite(buf, fill, 1, fout) != 1) {
+        gbfwrite(trkbuf, fill, 1, fout) != 1) {
       fatal(MYNAME ": Write error on %s\n", fout->name);
     }
   }
-  xfree(buf);
+
+  free(trkbuf);
 
   fill = 0x1000 - sizeof(struct loghdr);
-  buf = xmalloc(fill);
-  if (buf == nullptr) {
-    fatal(MYNAME ": Not enough memory\n");
-  }
-  memset(buf, 0xff, fill);
+  auto logbuf = new char[fill];
+  memset(logbuf, 0xff, fill);
 
   if (gbfwrite(&(TRL.loghdr), sizeof(struct loghdr), 1, fout) != 1 ||
-      gbfwrite(buf, fill, 1, fout) != 1) {
+      gbfwrite(logbuf, fill, 1, fout) != 1) {
     fatal(MYNAME ": Write error on %s\n", fout->name);
   }
-  xfree(buf);
+  free(logbuf);
 }
 
 /**************************************************************************/

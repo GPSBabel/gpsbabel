@@ -303,7 +303,7 @@ fix_netstumbler_dupes(const WaypointList* waypt_list)
   int ct = waypt_list->count(), serial = 0;
   unsigned long last_crc;
 
-  auto* htable = (htable_t*) xmalloc(ct * sizeof(htable_t));
+  htable_t htable[ct];
   htable_t* bh = htable;
 
   int i = 0;
@@ -312,8 +312,8 @@ fix_netstumbler_dupes(const WaypointList* waypt_list)
     QString snptr = bh->wpt->shortname;
     QString tmp_sn = snptr.toLower();
     bh->crc = get_crc32(CSTR(tmp_sn), tmp_sn.length());
-    i ++;
-    bh ++;
+    i++;
+    bh++;
   }
 
   qsort(htable, ct, sizeof *htable, compare);
@@ -327,8 +327,6 @@ fix_netstumbler_dupes(const WaypointList* waypt_list)
       last_crc = bh->crc;
     }
   }
-
-  xfree(htable);
 }
 
 ff_vecs_t netstumbler_vecs = {

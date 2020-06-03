@@ -152,7 +152,7 @@ void DuplicateFilter::process()
 
   int ct = waypt_count();
 
-  auto* htable = (wpt_ptr*) xmalloc(ct * sizeof(wpt_ptr));
+  wpt_ptr htable[ct];
   wpt_ptr* bh = htable;
 
   int i = 0;
@@ -218,7 +218,6 @@ void DuplicateFilter::process()
 
   delete delwpt;
 
-  xfree(htable);
   if (sup_tree) {
     free_tree(sup_tree);
   }

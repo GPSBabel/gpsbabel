@@ -1260,7 +1260,7 @@ enum_waypt_cb(const Waypoint* ref)
   wdata_add_wpt(wdata, wpt);
 }
 
-
+// TODO: This signature should return a std::pair of (data,size).
 static void
 load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 {
@@ -1268,7 +1268,6 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  int* color_table = nullptr;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
@@ -1325,8 +1324,8 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
     fatal(MYNAME ": Sorry, we don't support compressed bitmaps.\n");
   }
 
+  int color_table[4 * src_h.used_colors];
   if (src_h.used_colors > 0) {
-    color_table = (int*) xmalloc(4 * src_h.used_colors);
     gbfread(color_table, 1, 4 * src_h.used_colors, f);
     for (i = 0; i < src_h.used_colors; i++) {
       int color = color_table[i];
@@ -1409,9 +1408,6 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
     }
   }
 
-  if (color_table) {
-    xfree(color_table);
-  }
   gbfclose(f);
 }
 
