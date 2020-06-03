@@ -28,7 +28,7 @@
 #include <QWebView>
 #endif
 #include <QPlainTextEdit>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QTextStream>
 #include "gpx.h"
@@ -113,7 +113,7 @@ private:
   const Gpx& gpx_;
   bool mapPresent_;
   bool busyCursor_;
-  QTime stopWatch_;
+  QElapsedTimer stopWatch_;
   QPlainTextEdit* textEdit_;
 
   void evaluateJS(const QString& s, bool update = true);

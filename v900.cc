@@ -328,11 +328,11 @@ v900_read()
       wpt->pdop = atof(line.adv.pdop);
 
       /* handle fix mode (2d, 3d, etc.) */
-      if (!strcmp(line.adv.valid,"DGPS")) {
+      if (!strncmp(line.adv.valid,"DGPS", sizeof line.adv.valid)) {
         wpt->fix = fix_dgps;
-      } else if (!strcmp(line.adv.fixmode,"3D")) {
+      } else if (!strncmp(line.adv.fixmode,"3D", sizeof line.adv.fixmode)) {
         wpt->fix = fix_3d;
-      } else if (!strcmp(line.adv.fixmode,"2D")) {
+      } else if (!strncmp(line.adv.fixmode,"2D", sizeof line.adv.fixmode)) {
         wpt->fix = fix_2d;
       } else
         /* possible values: fix_unknown,fix_none,fix_2d,fix_3d,fix_dgps,fix_pps */

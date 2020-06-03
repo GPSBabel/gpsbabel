@@ -59,7 +59,7 @@ public:
 class TrackFilterData: public FilterData
 {
 public:
-  TrackFilterData(): FilterData(), title(false), titleString(QString()),
+  TrackFilterData():  title(false), titleString(QString()),
     move(false),  weeks(0), days(0), hours(0), mins(0), secs(0),
     TZ(false),
     start(false),
@@ -136,7 +136,7 @@ public:
 class WayPtsFilterData: public FilterData
 {
 public:
-  WayPtsFilterData(): FilterData(),
+  WayPtsFilterData(): 
     duplicates(false), shortNames(true), locations(false),
     position(false), radius(false),
     positionVal(0.0), radiusVal(0.0),
@@ -175,7 +175,7 @@ public:
 class RtTrkFilterData: public FilterData
 {
 public:
-  RtTrkFilterData(): FilterData(),
+  RtTrkFilterData(): 
     simplify_(false),
     reverse_(false),
     limitTo_(100)
@@ -200,7 +200,7 @@ public:
 class MiscFltFilterData: public FilterData
 {
 public:
-  MiscFltFilterData(): FilterData(),
+  MiscFltFilterData(): 
     nukeRoutes_(false),
     nukeTracks_(false),
     nukeWaypoints_(false),
