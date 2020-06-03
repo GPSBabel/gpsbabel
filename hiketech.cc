@@ -22,7 +22,10 @@
 #include "defs.h"
 #include "src/core/xmlstreamwriter.h"
 #include "xmlgeneric.h"
+
+#include <QtCore/QDateTime>
 #include <QtCore/QXmlStreamAttributes>
+
 #include <cstdio>
 
 static gbfile* ofd;
@@ -265,19 +268,9 @@ void	ht_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
 static
 void	ht_trk_utc(xg_string args, const QXmlStreamAttributes*)
 {
-  struct tm tm;
-
-  sscanf(CSTRc(args), "%d-%d-%d %d:%d:%d",
-         &tm.tm_year, &tm.tm_mon,
-         &tm.tm_mday, &tm.tm_hour,
-         &tm.tm_min, &tm.tm_sec);
-  tm.tm_mon -= 1;
-  tm.tm_year -= 1900;
-  tm.tm_isdst = 0;
-
-  time_t utc = mkgmtime(&tm);
-
-  wpt_tmp->SetCreationTime(utc);
+  QDateTime dt = QDateTime::fromString(args, "yyyy-MM-dd hh:mm:ss");
+  dt.setTimeSpec(Qt::UTC);
+  wpt_tmp->SetCreationTime(dt);
 }
 
 static
