@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="47.702875000" minlon="-91.015786700" maxlat="47.718261700" maxlon="-90.997521700"/>
+  <wpt lat="47.711118300" lon="-91.012175000">
+    <time>2004-06-05T07:22:09Z</time>
+    <name>linksys</name>
+    <cmt>11 Mbps/Ch 6/0f:06:25:77:0d:1f</cmt>
+    <desc>11 Mbps/Ch 6/0f:06:25:77:0d:1f</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.710885000" lon="-91.012061700">
+    <time>2004-06-05T06:22:18Z</time>
+    <name>default</name>
+    <cmt>0 Mbps/Ch 6/0f:05:5d:fa:f3:34</cmt>
+    <desc>0 Mbps/Ch 6/0f:05:5d:fa:f3:34</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.709603300" lon="-91.014330000">
+    <time>2004-06-05T06:24:16Z</time>
+    <name>Stealth/1</name>
+    <cmt>11 Mbps/Ch 6/0f:40:96:44:c0:cc</cmt>
+    <desc>11 Mbps/Ch 6/0f:40:96:44:c0:cc</desc>
+    <sym>Red Diamond</sym>
+  </wpt>
+  <wpt lat="47.708885000" lon="-91.014668300">
+    <time>2004-06-05T06:24:31Z</time>
+    <name>msu88</name>
+    <cmt>11 Mbps/Ch 6/0f:0c:41:bc:2a:8c</cmt>
+    <desc>11 Mbps/Ch 6/0f:0c:41:bc:2a:8c</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.707715000" lon="-91.015133300">
+    <time>2004-06-05T06:24:53Z</time>
+    <name>linksys/3</name>
+    <cmt>11 Mbps/Ch 6/0f:06:25:a4:77:2e</cmt>
+    <desc>11 Mbps/Ch 6/0f:06:25:a4:77:2e</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.707286700" lon="-91.015263300">
+    <time>2004-06-05T06:25:04Z</time>
+    <name>default/9</name>
+    <cmt>54 Mbps/Ch 6/0f:0d:88:8d:16:4f</cmt>
+    <desc>54 Mbps/Ch 6/0f:0d:88:8d:16:4f</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.706951700" lon="-91.015313300">
+    <time>2004-06-05T06:25:10Z</time>
+    <name>silicon</name>
+    <cmt>11 Mbps/Ch 6/0f:30:bd:c1:3b:16</cmt>
+    <desc>11 Mbps/Ch 6/0f:30:bd:c1:3b:16</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.706610000" lon="-91.015368300">
+    <time>2004-06-05T06:25:19Z</time>
+    <name>purnet</name>
+    <cmt>54 Mbps/Ch 6/0f:0c:41:ab:45:66</cmt>
+    <desc>54 Mbps/Ch 6/0f:0c:41:ab:45:66</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.706678300" lon="-91.015786700">
+    <time>2004-06-05T06:25:30Z</time>
+    <name>Harvey</name>
+    <cmt>11 Mbps/Ch 8/0f:0d:88:1e:a5:6e</cmt>
+    <desc>11 Mbps/Ch 8/0f:0d:88:1e:a5:6e</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.706655000" lon="-91.013636700">
+    <time>2004-06-05T06:26:19Z</time>
+    <name>X6604</name>
+    <cmt>11 Mbps/Ch 6/0f:a0:c5:69:65:10</cmt>
+    <desc>11 Mbps/Ch 6/0f:a0:c5:69:65:10</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.706760000" lon="-91.013390000">
+    <time>2004-06-05T06:26:39Z</time>
+    <name>Scott</name>
+    <cmt>54 Mbps/Ch 10/0f:0d:93:88:3f:c1</cmt>
+    <desc>54 Mbps/Ch 10/0f:0d:93:88:3f:c1</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.707058300" lon="-91.012893300">
+    <time>2004-06-05T06:26:44Z</time>
+    <name>NETGEAR</name>
+    <cmt>11 Mbps/Ch 11/0f:09:5b:6e:59:90</cmt>
+    <desc>11 Mbps/Ch 11/0f:09:5b:6e:59:90</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.706996700" lon="-91.012986700">
+    <time>2004-06-05T06:26:49Z</time>
+    <name>Stealth/2</name>
+    <cmt>54 Mbps/Ch 5/00:05:5d:fb:02:bf</cmt>
+    <desc>54 Mbps/Ch 5/00:05:5d:fb:02:bf</desc>
+    <sym>Red Diamond</sym>
+  </wpt>
+  <wpt lat="47.706230000" lon="-91.011806700">
+    <time>2004-06-05T06:38:14Z</time>
+    <name>cones</name>
+    <cmt>2 Mbps/Ch 6/0f:40:96:25:a2:b1</cmt>
+    <desc>2 Mbps/Ch 6/0f:40:96:25:a2:b1</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.702875000" lon="-91.008276700">
+    <time>2004-06-05T06:39:23Z</time>
+    <name>default/10</name>
+    <cmt>54 Mbps/Ch 6/0f:0f:3d:00:d2:3f</cmt>
+    <desc>54 Mbps/Ch 6/0f:0f:3d:00:d2:3f</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.711835000" lon="-91.010883300">
+    <time>2004-06-05T06:49:38Z</time>
+    <name>McKee</name>
+    <cmt>54 Mbps/Ch 3/0f:0c:41:74:6b:96</cmt>
+    <desc>54 Mbps/Ch 3/0f:0c:41:74:6b:96</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.711730000" lon="-91.010935000">
+    <time>2004-06-05T07:22:33Z</time>
+    <name>airport</name>
+    <cmt>54 Mbps/Ch 10/0f:0a:95:f2:aa:0e</cmt>
+    <desc>54 Mbps/Ch 10/0f:0a:95:f2:aa:0e</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.711638300" lon="-91.010993300">
+    <time>2004-06-05T07:22:36Z</time>
+    <name>merv</name>
+    <cmt>11 Mbps/Ch 6/0f:06:25:f0:e0:85</cmt>
+    <desc>11 Mbps/Ch 6/0f:06:25:f0:e0:85</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.710971700" lon="-91.011308300">
+    <time>2004-06-05T07:22:45Z</time>
+    <name>home network</name>
+    <cmt>54 Mbps/Ch 6/0f:0f:66:2d:d0:bf</cmt>
+    <desc>54 Mbps/Ch 6/0f:0f:66:2d:d0:bf</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.710886700" lon="-91.011345000">
+    <time>2004-06-05T07:22:55Z</time>
+    <name>Whitespace/1</name>
+    <cmt>11 Mbps/Ch 1/0f:02:2d:2b:81:cf</cmt>
+    <desc>11 Mbps/Ch 1/0f:02:2d:2b:81:cf</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.710771700" lon="-91.011556700">
+    <time>2004-06-05T07:23:02Z</time>
+    <name>wifi</name>
+    <cmt>2 Mbps/Ch 6/0f:40:96:43:5b:9d</cmt>
+    <desc>2 Mbps/Ch 6/0f:40:96:43:5b:9d</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.714478300" lon="-91.013976700">
+    <time>2004-06-05T07:32:40Z</time>
+    <name>dsppower</name>
+    <cmt>54 Mbps/Ch 6/0f:06:25:f7:6c:c9</cmt>
+    <desc>54 Mbps/Ch 6/0f:06:25:f7:6c:c9</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.714456700" lon="-91.014010000">
+    <time>2004-06-05T07:32:41Z</time>
+    <name>linksys/4</name>
+    <cmt>11 Mbps/Ch 6/0f:0c:41:3e:1a:e8</cmt>
+    <desc>11 Mbps/Ch 6/0f:0c:41:3e:1a:e8</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.718261700" lon="-90.998576700">
+    <time>2004-06-05T07:44:44Z</time>
+    <name>CAMELOT</name>
+    <cmt>11 Mbps/Ch 6/0f:06:25:05:24:3d</cmt>
+    <desc>11 Mbps/Ch 6/0f:06:25:05:24:3d</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.718141700" lon="-90.997521700">
+    <time>2004-06-05T07:44:44Z</time>
+    <name>linksys/6</name>
+    <cmt>11 Mbps/Ch 6/0f:0c:41:b6:fe:62</cmt>
+    <desc>11 Mbps/Ch 6/0f:0c:41:b6:fe:62</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.718231700" lon="-90.997986700">
+    <time>2004-06-05T07:44:48Z</time>
+    <name>linksys/7</name>
+    <cmt>54 Mbps/Ch 1/0f:0c:41:74:d0:76</cmt>
+    <desc>54 Mbps/Ch 1/0f:0c:41:74:d0:76</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.718246700" lon="-90.998141700">
+    <time>2004-06-05T07:44:49Z</time>
+    <name>house_net</name>
+    <cmt>54 Mbps/Ch 2/0f:0f:66:0b:cf:0f</cmt>
+    <desc>54 Mbps/Ch 2/0f:0f:66:0b:cf:0f</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.718260000" lon="-90.998291700">
+    <time>2004-06-05T07:44:53Z</time>
+    <name>NETGEAR/2</name>
+    <cmt>11 Mbps/Ch 11/0f:09:5b:6f:a7:88</cmt>
+    <desc>11 Mbps/Ch 11/0f:09:5b:6f:a7:88</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.718246700" lon="-90.998716700">
+    <time>2004-06-05T07:44:53Z</time>
+    <name>linksys/5</name>
+    <cmt>11 Mbps/Ch 6/0f:0c:41:43:87:14</cmt>
+    <desc>11 Mbps/Ch 6/0f:0c:41:43:87:14</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.717883300" lon="-90.998921700">
+    <time>2004-06-05T07:45:06Z</time>
+    <name>Richard</name>
+    <cmt>54 Mbps/Ch 6/4a:e2:7d:43:b0:49</cmt>
+    <desc>54 Mbps/Ch 6/4a:e2:7d:43:b0:49</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.717990000" lon="-90.998890000">
+    <time>2004-06-05T07:45:06Z</time>
+    <name>Wireless/1</name>
+    <cmt>11 Mbps/Ch 11/0f:09:5b:39:ae:a2</cmt>
+    <desc>11 Mbps/Ch 11/0f:09:5b:39:ae:a2</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.717883300" lon="-90.998921700">
+    <time>2004-06-05T07:45:08Z</time>
+    <name>Nordge</name>
+    <cmt>54 Mbps/Ch 6/0f:0d:88:ea:b7:24</cmt>
+    <desc>54 Mbps/Ch 6/0f:0d:88:ea:b7:24</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.713376700" lon="-91.013156700">
+    <time>2004-06-06T08:26:38Z</time>
+    <name>tom</name>
+    <cmt>2 Mbps/Ch 11/0f:06:25:60:6c:b1</cmt>
+    <desc>2 Mbps/Ch 11/0f:06:25:60:6c:b1</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.713376700" lon="-91.013156700">
+    <time>2004-06-06T08:26:38Z</time>
+    <name>default/8</name>
+    <cmt>22 Mbps/Ch 6/0f:0d:88:86:cf:c9</cmt>
+    <desc>22 Mbps/Ch 6/0f:0d:88:86:cf:c9</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.713376700" lon="-91.013156700">
+    <time>2004-06-06T08:26:38Z</time>
+    <name>JJ</name>
+    <cmt>11 Mbps/Ch 1/0f:60:1d:f6:90:40</cmt>
+    <desc>11 Mbps/Ch 1/0f:60:1d:f6:90:40</desc>
+    <sym>Red Square</sym>
+  </wpt>
+  <wpt lat="47.708516700" lon="-91.013463300">
+    <time>2004-06-06T08:32:42Z</time>
+    <name>purell</name>
+    <cmt>11 Mbps/Ch 6/0f:0c:41:bc:2b:00</cmt>
+    <desc>11 Mbps/Ch 6/0f:0c:41:bc:2b:00</desc>
+    <sym>Green Square</sym>
+  </wpt>
+  <wpt lat="47.710598300" lon="-91.011196700">
+    <time>2004-06-06T08:38:38Z</time>
+    <name>Wireless</name>
+    <cmt>11 Mbps/Ch 1/0f:30:ab:16:7e:50</cmt>
+    <desc>11 Mbps/Ch 1/0f:30:ab:16:7e:50</desc>
+    <sym>Green Square</sym>
+  </wpt>
+</gpx>

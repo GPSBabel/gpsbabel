@@ -28,7 +28,7 @@ include_directories(AFTER SYSTEM ${Qt5Core_INCLUDE_DIRS})
 add_definitions(${Qt5Core_DEFINITIONS})
 
 set(MINIMAL_FMTS
-  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc mapsource.cc garmin.cc
+  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc
   garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc
   kml.cc wbt-200.cc
 )
