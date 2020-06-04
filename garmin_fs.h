@@ -67,7 +67,8 @@ public:
   phone_nr2(0),
   fax_nr(0),
   postal_code(0),
-  email(0)
+  email(0),
+  duration(0)
 #ifdef GMSD_EXPERIMENTAL
   , subclass(0)
 #endif
@@ -89,6 +90,7 @@ public:
   unsigned int fax_nr:1;
   unsigned int postal_code:1;
   unsigned int email:1;
+  unsigned int duration:1;
 #ifdef GMSD_EXPERIMENTAL
   unsigned int subclass:1;
 #endif
@@ -116,6 +118,8 @@ public:
   QString fax_nr;				/* fax number */
   QString postal_code;	/* postal code */
   QString email;				/* email address */
+  unsigned int duration; /* expected travel time to next route point, in seconds, only when auto-routed */
+
   garmin_ilink_t* ilinks{nullptr};
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22]{};
@@ -163,6 +167,7 @@ public:
   GEN_GMSD_METHODS(wpt_class)
   GEN_GMSD_METHODS(display)
   GEN_GMSD_METHODS(category)
+  GEN_GMSD_METHODS(duration)
 
 #undef GEN_GMSD_METHODS
 

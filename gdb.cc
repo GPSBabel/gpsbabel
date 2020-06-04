@@ -563,14 +563,15 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     garmin_fs_t::set_addr(gmsd, fread_cstr());
 
     FREAD(buf, 1);
-    res->duration = (unsigned int) FREAD_i32;
+    unsigned int duration = (unsigned int) FREAD_i32;
+    if (duration != 0) {
+    	garmin_fs_t::set_duration(gmsd, duration);
 #if GDB_DEBUG
-    if (res->duration != 0) {
-      DBG(GDB_DBG_WPTe, 1)
-      printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
-          qPrintable(res->shortname), wpt_class, res->duration);
-    }
+        DBG(GDB_DBG_WPTe, 1)
+        printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
+          qPrintable(res->shortname), wpt_class, duration);
 #endif
+    }
 
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     int url_ct = FREAD_i32;

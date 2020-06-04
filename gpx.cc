@@ -1364,8 +1364,9 @@ GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString
   } else {
     writer->writeOptionalTextElement(QStringLiteral("desc"), waypointp->description);
   }
-  if (isRtept && waypointp->duration != 0u) {
-	  uint seconds = waypointp->duration;
+  auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
+  if (isRtept && garmin_fs_t::has_duration(gmsd)) {
+	  uint seconds = garmin_fs_t::get_duration(gmsd, 0u);
 	  QString source = "AUTOROUTE:";
 	  source.append( QString("duration=%1;").arg(seconds) );
 	  writer->writeOptionalTextElement(QStringLiteral("src"), source );
