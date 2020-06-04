@@ -20,20 +20,20 @@
 
  */
 
-#include <cctype>                  // for isspace
-#include <cstdio>                  // for snprintf
-#include <cstdlib>                 // for atoi, atof, qsort, strtol
-#include <cstring>                 // for strcpy, strlen, memset, strncmp, strstr
-
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QString>          // for QString
-#include <QtCore/QtGlobal>         // for foreach
-
-#include "defs.h"
-#include "cet_util.h"              // for cet_convert_init
-#include "csv_util.h"              // for csv_lineparse
-#include "gbfile.h"                // for gbfclose, gbfgetstr, gbfopen, gbfile
-
+#include <QtCore/QDate>      // for QDate
+#include <QtCore/QDateTime>  // for QDateTime
+#include <QtCore/QString>    // for QString
+#include <QtCore/QTime>      // for QTime
+#include <QtCore/QVector>    // for QVector
+#include <QtCore/Qt>         // for UTC
+#include <cctype>            // for isspace
+#include <cstdio>            // for snprintf
+#include <cstdlib>           // for atof, atoi, qsort, strtol
+#include <cstring>           // for strcpy, strlen, strncmp, strstr
+#include "cet_util.h"        // for cet_convert_init
+#include "csv_util.h"        // for csv_lineparse
+#include "defs.h"            // for arglist_t, Waypoint, ff_cap, WaypointList, ff_cap_none, ddmm2degrees, ARG_NOMINMAX, ARGTYPE_STRING, ff_cap_read, get_crc32, lrtrim, waypt_add, xfree, xmalloc, ff_type_file, ARGTYPE_BOOL, CET_CHARSET_ASCII, CET_CHARSET_UTF8, CSTR, NULL_POS_OPS, ff_vecs_t
+#include "gbfile.h"          // for gbfclose, gbfgetstr, gbfopen, gbfile
 
 static gbfile* file_in;
 static char* nseicon = nullptr;
