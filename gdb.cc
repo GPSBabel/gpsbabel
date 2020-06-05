@@ -563,7 +563,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     garmin_fs_t::set_addr(gmsd, fread_cstr());
 
     FREAD(buf, 1);
-    unsigned int duration = (unsigned int) FREAD_i32;
+    unsigned int duration = gbfgetuint32(fin);
     if (duration != 0) {
     	garmin_fs_t::set_duration(gmsd, duration);
 #if GDB_DEBUG
