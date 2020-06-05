@@ -244,7 +244,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;	/* for a possible date */
       return 0;
     }
-    Fatal() << MYNAME << ": Could not parse date string (" << str << ").\n";
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
   }
 
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -273,7 +273,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;
       return 0;	/* don't stop here */
     }
-    Fatal() << MYNAME << ": Could not parse date string (" << str << ").\n";
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
   }
 
   tm.tm_year -= 1900;
@@ -1770,8 +1770,8 @@ void
 UnicsvFormat::unicsv_check_modes(bool test)
 {
   if (test) {
-    Fatal() << MYNAME <<
-            " : Invalid combination of -w, -t, -r selected. Use only one.";
+    fatal(FatalMsg() << MYNAME <<
+            " : Invalid combination of -w, -t, -r selected. Use only one.");
   }
 }
 
@@ -1796,7 +1796,7 @@ UnicsvFormat::write()
     route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb_lambda);
     break;
   case posndata:
-    Fatal() << MYNAME << ": Realtime positioning not supported.";
+    fatal(FatalMsg() << MYNAME << ": Realtime positioning not supported.");
   }
 
   *fout << "No" << unicsv_fieldsep;

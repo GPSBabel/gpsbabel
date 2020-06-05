@@ -17,42 +17,43 @@
 
  */
 
-#include <clocale>                  // for setlocale, LC_NUMERIC, LC_TIME
-#include <csignal>                  // for signal, SIGINT, SIG_ERR
-#include <cstdio>                   // for printf, fgetc, stdin
-#include <cstring>                  // for strcmp
+#include <clocale>                    // for setlocale, LC_NUMERIC, LC_TIME
+#include <csignal>                    // for signal, SIGINT, SIG_ERR
+#include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
+#include <cstring>                    // for strcmp
 
-#include <QtCore/QByteArray>        // for QByteArray
-#include <QtCore/QChar>             // for QChar
-#include <QtCore/QCoreApplication>  // for QCoreApplication
-#include <QtCore/QFile>             // for QFile
-#include <QtCore/QIODevice>         // for QIODevice::ReadOnly
-#include <QtCore/QLocale>           // for QLocale
-#include <QtCore/QStack>            // for QStack
-#include <QtCore/QString>           // for QString
-#include <QtCore/QStringList>       // for QStringList
-#include <QtCore/QSysInfo>          // for QSysInfo
-#include <QtCore/QTextCodec>        // for QTextCodec
-#include <QtCore/QTextStream>       // for QTextStream
-#include <QtCore/QtConfig>          // for QT_VERSION_STR
-#include <QtCore/QtGlobal>          // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
+#include <QtCore/QByteArray>          // for QByteArray
+#include <QtCore/QChar>               // for QChar
+#include <QtCore/QCoreApplication>    // for QCoreApplication
+#include <QtCore/QFile>               // for QFile
+#include <QtCore/QIODevice>           // for QIODevice::ReadOnly
+#include <QtCore/QLocale>             // for QLocale
+#include <QtCore/QMessageLogContext>  // for QMessageLogContext
+#include <QtCore/QStack>              // for QStack
+#include <QtCore/QString>             // for QString
+#include <QtCore/QStringList>         // for QStringList
+#include <QtCore/QSysInfo>            // for QSysInfo
+#include <QtCore/QTextCodec>          // for QTextCodec
+#include <QtCore/QTextStream>         // for QTextStream
+#include <QtCore/QtConfig>            // for QT_VERSION_STR
+#include <QtCore/QtGlobal>            // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
 
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
 #endif
 
 #include "defs.h"
-#include "cet_util.h"               // for cet_convert_init, cet_convert_deinit
-#include "csv_util.h"               // for csv_linesplit
-#include "filter.h"                 // for Filter
-#include "filter_vecs.h"            // for FilterVecs
-#include "format.h"                 // for Format
-#include "inifile.h"                // for inifile_done, inifile_init
-#include "session.h"                // for start_session, session_exit, session_init
-#include "src/core/datetime.h"      // for DateTime
-#include "src/core/file.h"          // for File
-#include "src/core/usasciicodec.h"  // for UsAsciiCodec
-#include "vecs.h"                   // for Vecs
+#include "cet_util.h"                 // for cet_convert_init, cet_convert_deinit
+#include "csv_util.h"                 // for csv_linesplit
+#include "filter.h"                   // for Filter
+#include "filter_vecs.h"              // for FilterVecs
+#include "format.h"                   // for Format
+#include "inifile.h"                  // for inifile_done, inifile_init
+#include "session.h"                  // for start_session, session_exit, session_init
+#include "src/core/datetime.h"        // for DateTime
+#include "src/core/file.h"            // for File
+#include "src/core/usasciicodec.h"    // for UsAsciiCodec
+#include "vecs.h"                     // for Vecs
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
@@ -188,6 +189,13 @@ print_extended_info()
 #endif
 
     "\n");
+}
+
+static void MessageHandler(QtMsgType /* type */, const QMessageLogContext& /* context */, const QString& msg)
+{
+  /* flush any buffered standard output */
+  fflush(stdout);
+  fprintf(stderr, "%s\n", qPrintable(msg));
 }
 
 static void
@@ -685,6 +693,8 @@ main(int argc, char* argv[])
     printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
 #endif
   }
+
+  qInstallMessageHandler(MessageHandler);
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 

@@ -19,12 +19,28 @@
 
  */
 
-#include "defs.h"
-#include <cstdio>
-#include <cstdlib>
+#include <cstdarg>             // for va_end, va_list, va_start
+#include <cstdio>              // for vfprintf, stderr, fflush, fprintf, stdout
+#include <cstdlib>             // for exit
+
+#include "defs.h"              // for Fatal, debug_print, fatal, warning
+#include "src/core/logging.h"  // for FatalMsg
+
+
+[[noreturn]] void fatal(QDebug& msginstance)
+{
+  auto* myinstance = new FatalMsg;
+  myinstance->swap(msginstance);
+  delete myinstance;
+  exit(1);
+}
+
 [[noreturn]] void
 fatal(const char* fmt, ...)
 {
+  /* flush any buffered standard output */
+  fflush(stdout);
+
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
