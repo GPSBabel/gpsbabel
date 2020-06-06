@@ -1354,7 +1354,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
 }
 
 void
-GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString& oname, bool isRtept) const
+GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString& oname) const
 {
   writer->writeOptionalTextElement(QStringLiteral("name"), oname);
 
@@ -1364,12 +1364,7 @@ GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString
   } else {
     writer->writeOptionalTextElement(QStringLiteral("desc"), waypointp->description);
   }
-  auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
-  if (isRtept && garmin_fs_t::has_duration(gmsd)) {
-	  uint seconds = garmin_fs_t::get_duration(gmsd, 0u);
-	  QString source = QString("AUTOROUTE:duration=%1;").arg(seconds);
-	  writer->writeOptionalTextElement(QStringLiteral("src"), source );
-  }
+  /* TODO: src should go here */
   write_gpx_url(waypointp);
   writer->writeOptionalTextElement(QStringLiteral("sym"), waypointp->icon_descr);
   /* TODO: type should go here */
@@ -1554,7 +1549,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp) const
                   mkshort_from_wpt(mkshort_handle, waypointp) :
                   waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_route);
-  gpx_write_common_description(waypointp, oname, true);
+  gpx_write_common_description(waypointp, oname);
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
@@ -1626,7 +1621,11 @@ GpxFormat::write()
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
-    gpx_waypt_pr(waypointp);
+	auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
+	auto wc = garmin_fs_t::get_wpt_class(gmsd, 0);
+	if (wc != gt_waypt_class_map_intersection && wc != gt_waypt_class_map_line) {
+		gpx_waypt_pr(waypointp);
+	}
   };
   waypt_disp_all(gpx_waypt_pr_lambda);
   gpx_reset_short_handle();

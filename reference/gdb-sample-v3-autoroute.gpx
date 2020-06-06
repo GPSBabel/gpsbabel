@@ -2,34 +2,6 @@
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="44.521450996" minlon="-68.208982944" maxlat="44.522766536" maxlon="-68.204090595"/>
-  <wpt lat="44.522766452" lon="-68.208928211">
-    <ele>37.273</ele>
-    <name>0001</name>
-    <cmt>Get on Manor Ln and drive south</cmt>
-    <desc>Get on Manor Ln and drive south</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="44.522588253" lon="-68.208982944">
-    <ele>37.160</ele>
-    <name>0002</name>
-    <cmt>Turn left onto Us1</cmt>
-    <desc>Turn left onto Us1</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="44.521901608" lon="-68.204090595">
-    <ele>40.863</ele>
-    <name>0003</name>
-    <cmt>Turn right onto Miramar Ave</cmt>
-    <desc>Turn right onto Miramar Ave</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="44.521506736" lon="-68.204822838">
-    <ele>40.180</ele>
-    <name>0004</name>
-    <cmt>0004</cmt>
-    <desc>0004</desc>
-    <sym>Waypoint</sym>
-  </wpt>
   <wpt lat="44.522766536" lon="-68.208928127">
     <time>2020-05-22T12:02:08Z</time>
     <name>7 Manor Ln</name>
@@ -67,31 +39,28 @@ Sullivan Twn, ME, 04664, USA</desc>
       <ele>37.273</ele>
       <name>0001</name>
       <cmt>Get on Manor Ln and drive south</cmt>
-      <desc>Get on Manor Ln and drive south</desc>
-      <src>AUTOROUTE:duration=2;</src>
+      <desc>[PT2S]</desc>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="44.522588253" lon="-68.208982944">
       <ele>37.160</ele>
       <name>0002</name>
       <cmt>Turn left onto Us1</cmt>
-      <desc>Turn left onto Us1</desc>
-      <src>AUTOROUTE:duration=87;</src>
+      <desc>[PT1M27S]</desc>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="44.521901608" lon="-68.204090595">
       <ele>40.863</ele>
       <name>0003</name>
       <cmt>Turn right onto Miramar Ave</cmt>
-      <desc>Turn right onto Miramar Ave</desc>
-      <src>AUTOROUTE:duration=54;</src>
+      <desc>[PT54S]</desc>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="44.521506736" lon="-68.204822838">
       <ele>40.180</ele>
       <name>0004</name>
       <cmt>0004</cmt>
-      <desc>0004</desc>
+      <desc>[PT0S]</desc>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="44.521450996" lon="-68.204820156">

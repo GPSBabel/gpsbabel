@@ -303,6 +303,32 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
   return res;
 }
 
+QString gdb_to_ISO8601_duration( unsigned int seconds ) {
+	if (seconds == 0u)
+		return QString("PT0S");
+	unsigned int days = seconds / 86400u;
+	QString out = "P";
+	if (days != 0) {
+		out.append( QString("D%1").arg(days));
+		seconds -= 86400u * days;
+	}
+	out.append( QString("T") );
+	unsigned int hours = seconds / 3600u;
+	if (hours != 0) {
+		out.append(QString("%1H").arg(hours));
+		seconds -= 3600u * hours;
+	}
+	unsigned int minutes = seconds / 60u;
+	if (minutes != 0) {
+		out.append(QString("%1M").arg(minutes));
+		seconds -= 60u * minutes;
+	}
+	if (seconds != 0) {
+		out.append(QString("%1S").arg(seconds));
+	}
+	return out;
+}
+
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
@@ -564,16 +590,21 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
     FREAD(buf, 1);
     unsigned int duration = gbfgetuint32(fin);
-    if (duration != 0) {
+
+   	res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
+    auto wc = garmin_fs_t::get_wpt_class(gmsd, 0);
+    if (wc == gt_waypt_class_map_intersection || wc == gt_waypt_class_map_line) {
     	garmin_fs_t::set_duration(gmsd, duration);
+    	if (res->description.length() == 0) {
+    		res->description = res->shortname;
+    	}
+    	res->notes = QString("[%1]").arg( gdb_to_ISO8601_duration( duration ) );
 #if GDB_DEBUG
         DBG(GDB_DBG_WPTe, 1)
         printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
           qPrintable(res->shortname), wpt_class, duration);
 #endif
     }
-
-    res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     int url_ct = FREAD_i32;
     for (int i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
