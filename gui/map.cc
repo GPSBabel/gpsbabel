@@ -419,7 +419,7 @@ void Map::resizeEvent(QResizeEvent* ev)
   QWebView::resizeEvent(ev);
 #endif
   if (mapPresent_) {
-    evaluateJS(QString("map.checkResize();"));
+    evaluateJS(QString("google.maps.event.trigger(map, 'resize');"));
   }
 }
 
