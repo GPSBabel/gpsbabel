@@ -497,10 +497,10 @@ void GMapDialog::hideAllRoutes()
 //------------------------------------------------------------------------
 void GMapDialog::showOnlyThisWaypoint()
 {
-  QList <GpxWaypoint>& tlist = gpx_.getWaypoints();
-  for (int i=0; i<tlist.size(); i++) {
-    tlist[i].setVisible(i == menuIndex_);
-    trkList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
+  QList <GpxWaypoint>& wlist = gpx_.getWaypoints();
+  for (int i=0; i<wlist.size(); i++) {
+    wlist[i].setVisible(i == menuIndex_);
+    wptList_[i]->setCheckState(i==menuIndex_? Qt::Checked: Qt::Unchecked);
   }
   wptItem_->setCheckState(Qt::Checked);
   mapWidget_->showWaypoints(gpx_.getWaypoints());

@@ -362,20 +362,6 @@ option	gdb	via	Drop route points that do not have an equivalent waypoint (hidden
 
 option	gdb	roadbook	Include major turn points (with description) from calculated route	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_roadbook
 
-file	rwrwrw	mapsource	mps	Garmin MapSource - mps	mapsource
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html
-option	mapsource	snlen	Length of generated shortnames	integer	10	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_snlen
-
-option	mapsource	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_snwhite
-
-option	mapsource	mpsverout	Version of mapsource file to generate (3,4,5)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_mpsverout
-
-option	mapsource	mpsmergeout	Merge output with existing file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_mpsmergeout
-
-option	mapsource	mpsusedepth	Use depth values on output (default is ignore)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_mpsusedepth
-
-option	mapsource	mpsuseprox	Use proximity values on output (default is ignore)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsource.html#fmt_mapsource_o_mpsuseprox
-
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)	garmin_txt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html
 option	garmin_txt	date	Read/Write date format (i.e. yyyy/mm/dd)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_date

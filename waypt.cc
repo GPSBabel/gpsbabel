@@ -602,12 +602,12 @@ WaypointList::waypt_add(Waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    Fatal() << wpt->session->name
+    fatal(FatalMsg() << wpt->session->name
             << "Invalid latitude" << lat_orig << "in waypoint"
-            << wpt->shortname;
+            << wpt->shortname);
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    Fatal() << "Invalid longitude" << lon_orig << "in waypoint"
-            << wpt->shortname;
+    fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
+            << wpt->shortname);
 
   /*
    * Some input may not have one or more of these types so we

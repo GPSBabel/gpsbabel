@@ -23,7 +23,7 @@ CONFIG += c++14
 
 TEMPLATE = app
 
-MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc mapsource.cc garmin.cc \
+MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc \
                garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
                kml.cc wbt-200.cc
 

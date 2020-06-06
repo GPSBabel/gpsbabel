@@ -71,10 +71,10 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
           frac = 1.0;
         } else {
           if (waypointp == nullptr) {
-            Fatal() << "Internal error. Attempt to project through a waypoint that doesn't exist";
+            fatal(FatalMsg() << "Internal error. Attempt to project through a waypoint that doesn't exist");
           }
           if (arcpt1 == nullptr) {
-            Fatal() << "Internal error: Attempt to project waypoint without predecessor";
+            fatal(FatalMsg() << "Internal error: Attempt to project waypoint without predecessor");
           }
 
           dist = linedistprj(arcpt1->latitude,

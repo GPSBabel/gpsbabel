@@ -147,7 +147,7 @@ GarminFitFormat::fit_parse_header()
       if (crc != 0) {
         Warning().nospace() << MYNAME ": Header CRC mismatch in file " <<  fin->name << ".";
         if (!opt_recoverymode) {
-          Fatal().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.";
+          fatal(FatalMsg().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
         }
       } else if (global_opts.debug_level >= 1) {
         debug_print(1, MYNAME ": Header CRC verified.\n");
@@ -752,7 +752,7 @@ GarminFitFormat::fit_check_file_crc() const
   if (crc != 0) {
     Warning().nospace() << MYNAME ": File CRC mismatch in file " <<  fin->name << ".";
     if (!opt_recoverymode) {
-      Fatal().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.";
+      fatal(FatalMsg().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
     }
   } else if (global_opts.debug_level >= 1) {
     debug_print(1, MYNAME ": File CRC verified.\n");

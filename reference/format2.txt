@@ -39,7 +39,6 @@ file	rw----	garmin301		Garmin 301 Custom position and heartrate
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file
 file	--rw--	glogbook	xml	Garmin Logbook XML
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb
-file	rwrwrw	mapsource	mps	Garmin MapSource - mps
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)
 file	rwrwrw	pcx	pcx	Garmin PCX5
 file	rw----	garmin_poi		Garmin POI database

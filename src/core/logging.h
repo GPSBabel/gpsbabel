@@ -19,40 +19,34 @@
 #ifndef gpsbabel_logging_h_included
 #define gpsbabel_logging_h_included
 
-// A wrapper for QDebug that provides a sensible Warning() and Fatal()
+// A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
-#include <QtCore/QDebug>       // for QDebug
-#include <QtCore/QFile>        // for QFile
-#include <QtCore/QIODevice>    // for QIODevice, QIODevice::WriteOnly
-#include <QtCore/QString>      // for QString
-#include <QtCore/QTextStream>  // for QTextStream
-#include <cstdio>              // for stderr
-#include <cstdlib>             // for exit
+#include <QtCore/QDebug>     // for QDebug
+#include <QtCore/QtGlobal>   // for QtCriticalMsg, QtWarningMsg
 
 
-class Warning : public QDebug {
+class Warning : public QDebug
+{
 public:
-  explicit Warning(bool fatal = false) : QDebug(&msg_), fatal_(fatal) {
-  }
-  ~Warning() {
-    QFile file;
-    file.open(stderr, QIODevice::WriteOnly);
-    QTextStream fileStream(&file);
-    fileStream << msg_ << '\n';
-    file.close();
-    if (fatal_) {
-      exit(1);
-    }
-  }
-private:
-  QString msg_;
-  bool fatal_;
+  explicit Warning() : QDebug(QtWarningMsg) {}
 };
 
-class Fatal : public Warning {
- public:
-  Fatal() : Warning(true) {}
+/*
+ * To use a FatalMsg pass it to fatal(), e.g.
+ * fatal(FatalMsg() << "bye bye");
+ *
+ * This
+ * 1) allows the noreturn attribute on fatal to be use by analysis
+ *    tools such as cppcheck.
+ * 2) allows fatal to throw an exception instead of calling exit.
+ *    This could be caught by main for a cleaner exit from a fatal error.
+ */ 
+class FatalMsg : public QDebug
+{
+public:
+  // We don't use QtFatalMsg here because we don't want the destructor to call abort.
+  explicit FatalMsg() : QDebug(QtCriticalMsg) {}
 };
 
 #endif //  gpsbabel_logging_h_included

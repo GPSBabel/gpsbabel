@@ -189,13 +189,6 @@ File Types (-i and -o options):
 	  ver                   Version of gdb file to generate (1..3) 
 	  via                   (0/1) Drop route points that do not have an equivalent w 
 	  roadbook              (0/1) Include major turn points (with description) from  
-	mapsource             Garmin MapSource - mps
-	  snlen                 Length of generated shortnames 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  mpsverout             Version of mapsource file to generate (3,4,5) 
-	  mpsmergeout           (0/1) Merge output with existing file 
-	  mpsusedepth           (0/1) Use depth values on output (default is ignore) 
-	  mpsuseprox            (0/1) Use proximity values on output (default is ignore) 
 	garmin_txt            Garmin MapSource - txt (tab delimited)
 	  date                  Read/Write date format (i.e. yyyy/mm/dd) 
 	  datum                 GPS datum (def. WGS 84) 
