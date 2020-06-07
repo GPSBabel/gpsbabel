@@ -378,7 +378,7 @@ void Map::hideAllRoutes()
 //------------------------------------------------------------------------
 void Map::setWaypointVisibility(int i, bool show)
 {
-  evaluateJS(QString("waypts[%1].setVisible(%2);\n")
+  evaluateJS(QString("waypts[%1].setVisible(%2);")
              .arg(i).arg(show?"true": "false"));
 }
 
