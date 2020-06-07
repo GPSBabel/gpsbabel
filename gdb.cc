@@ -75,7 +75,7 @@
 
 #define GDB_DEBUG		(GDB_DBG_WPTe) /* | GDB_DBG_RTE) */
 #undef GDB_DEBUG
-#define GDB_DEBUG 0xff
+// #define GDB_DEBUG 0xff
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
