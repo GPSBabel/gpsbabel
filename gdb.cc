@@ -75,7 +75,7 @@
 
 #define GDB_DEBUG		(GDB_DBG_WPTe) /* | GDB_DBG_RTE) */
 #undef GDB_DEBUG
-// #define GDB_DEBUG 0xff
+#define GDB_DEBUG 0xff
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
@@ -518,7 +518,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
   int display = FREAD_i32;
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, i)
+  DBG(GDB_DBG_WPTe, 1)
   printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
          qPrintable(res->shortname), wpt_class, display);
 #endif
@@ -591,18 +591,17 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     FREAD(buf, 1);
     unsigned int duration = gbfgetuint32(fin);
 
-   	res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
-    auto wc = garmin_fs_t::get_wpt_class(gmsd, 0);
-    if (wc == gt_waypt_class_map_intersection || wc == gt_waypt_class_map_line) {
-    	garmin_fs_t::set_duration(gmsd, duration);
-    	if (res->description.length() == 0) {
-    		res->description = res->shortname;
-    	}
-    	res->notes = QString("[%1]").arg( gdb_to_ISO8601_duration( duration ) );
+    res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
+    if (wpt_class == gt_waypt_class_map_intersection || wpt_class == gt_waypt_class_map_line) {
+      garmin_fs_t::set_duration(gmsd, duration);
+      if (res->description.isEmpty()) {  //
+        res->description = res->shortname;
+      }
+      res->notes = QString("[%1]").arg( gdb_to_ISO8601_duration( duration ) );
 #if GDB_DEBUG
-        DBG(GDB_DBG_WPTe, 1)
-        printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
-          qPrintable(res->shortname), wpt_class, duration);
+      DBG(GDB_DBG_WPTe, 1)
+      printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
+             qPrintable(res->shortname), wpt_class, duration);
 #endif
     }
     int url_ct = FREAD_i32;
