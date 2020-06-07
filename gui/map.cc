@@ -219,13 +219,12 @@ void Map::showGpxData()
   num = 0;
   foreach (const GpxTrack& trk, gpx_.getTracks()) {
     vector <LatLng> pts;
-    QString path;
     foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
       foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
         pts.push_back(pt.getLocation());
       }
     }
-    path = makePath(pts);
+    QString path = makePath(pts);
 
     scriptStr
         << QString("trks[%1] = new RTPolyline(\n"
@@ -249,11 +248,10 @@ void Map::showGpxData()
   num = 0;
   foreach (const GpxRoute& rte, gpx_.getRoutes()) {
     vector <LatLng> pts;
-    QString path;
     foreach (const GpxRoutePoint& pt, rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
-    path = makePath(pts);
+    QString path = makePath(pts);
 
     scriptStr
         << QString("rtes[%1] = new RTPolyline(\n"
