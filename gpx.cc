@@ -1621,7 +1621,11 @@ GpxFormat::write()
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
-    gpx_waypt_pr(waypointp);
+	auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
+	auto wc = garmin_fs_t::get_wpt_class(gmsd, 0);
+	if (wc != gt_waypt_class_map_intersection && wc != gt_waypt_class_map_line) {
+		gpx_waypt_pr(waypointp);
+	}
   };
   waypt_disp_all(gpx_waypt_pr_lambda);
   gpx_reset_short_handle();
