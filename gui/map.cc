@@ -219,13 +219,12 @@ void Map::showGpxData()
   num = 0;
   foreach (const GpxTrack& trk, gpx_.getTracks()) {
     vector <LatLng> pts;
-    QString path;
     foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
       foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
         pts.push_back(pt.getLocation());
       }
     }
-    path = makePath(pts);
+    QString path = makePath(pts);
 
     scriptStr
         << QString("trks[%1] = new RTPolyline(\n"
@@ -249,11 +248,10 @@ void Map::showGpxData()
   num = 0;
   foreach (const GpxRoute& rte, gpx_.getRoutes()) {
     vector <LatLng> pts;
-    QString path;
     foreach (const GpxRoutePoint& pt, rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
-    path = makePath(pts);
+    QString path = makePath(pts);
 
     scriptStr
         << QString("rtes[%1] = new RTPolyline(\n"
@@ -378,30 +376,20 @@ void Map::hideAllRoutes()
 //------------------------------------------------------------------------
 void Map::setWaypointVisibility(int i, bool show)
 {
-  evaluateJS(QString("waypts[%1].setVisible(%2);\n")
+  evaluateJS(QString("waypts[%1].setVisible(%2);")
              .arg(i).arg(show?"true": "false"));
 }
 
 //------------------------------------------------------------------------
 void Map::setTrackVisibility(int i, bool show)
 {
-  QString x = show?"show": "hide";
-  QStringList scriptStr;
-  scriptStr
-      << QString("trks[%1].%2();").arg(i).arg(x)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QString("trks[%1].%2();").arg(i).arg(show?"show": "hide"));
 }
 
 //------------------------------------------------------------------------
 void Map::setRouteVisibility(int i, bool show)
 {
-  QString x = show?"show": "hide";
-  QStringList scriptStr;
-  scriptStr
-      << QString("rtes[%1].%2();").arg(i).arg(x)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QString("rtes[%1].%2();").arg(i).arg(show?"show": "hide"));
 }
 
 //------------------------------------------------------------------------
@@ -419,7 +407,7 @@ void Map::resizeEvent(QResizeEvent* ev)
   QWebView::resizeEvent(ev);
 #endif
   if (mapPresent_) {
-    evaluateJS(QString("map.checkResize();"));
+    evaluateJS(QString("google.maps.event.trigger(map, 'resize');"));
   }
 }
 
@@ -465,8 +453,7 @@ void Map::frameRoute(int i)
 void Map::evaluateJS(const QString& s, bool upd)
 {
 #ifdef DEBUG_JS_GENERATION
-  *dbgout_ << s;
-  *dbgout_ << '\n';
+  *dbgout_ << s << '\n';
   dbgout_->flush();
 #endif
 #if HAVE_WEBENGINE
@@ -482,5 +469,5 @@ void Map::evaluateJS(const QString& s, bool upd)
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QStringList& s, bool upd)
 {
-  evaluateJS(s.join("\n"), upd);
+  evaluateJS(s.join('\n'), upd);
 }
