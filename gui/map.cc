@@ -385,23 +385,13 @@ void Map::setWaypointVisibility(int i, bool show)
 //------------------------------------------------------------------------
 void Map::setTrackVisibility(int i, bool show)
 {
-  QString x = show?"show": "hide";
-  QStringList scriptStr;
-  scriptStr
-      << QString("trks[%1].%2();").arg(i).arg(x)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QString("trks[%1].%2();").arg(i).arg(show?"show": "hide"));
 }
 
 //------------------------------------------------------------------------
 void Map::setRouteVisibility(int i, bool show)
 {
-  QString x = show?"show": "hide";
-  QStringList scriptStr;
-  scriptStr
-      << QString("rtes[%1].%2();").arg(i).arg(x)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QString("rtes[%1].%2();").arg(i).arg(show?"show": "hide"));
 }
 
 //------------------------------------------------------------------------
