@@ -455,8 +455,7 @@ void Map::frameRoute(int i)
 void Map::evaluateJS(const QString& s, bool upd)
 {
 #ifdef DEBUG_JS_GENERATION
-  *dbgout_ << s;
-  *dbgout_ << '\n';
+  *dbgout_ << s << '\n';
   dbgout_->flush();
 #endif
 #if HAVE_WEBENGINE
@@ -472,5 +471,5 @@ void Map::evaluateJS(const QString& s, bool upd)
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QStringList& s, bool upd)
 {
-  evaluateJS(s.join("\n"), upd);
+  evaluateJS(s.join('\n'), upd);
 }
