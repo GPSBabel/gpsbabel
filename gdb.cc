@@ -601,11 +601,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     if (wpt_class == gt_waypt_class_map_intersection || wpt_class == gt_waypt_class_map_line) {
       garmin_fs_t::set_duration(gmsd, duration);
-#if 0
-      if (res->description.isEmpty()) {  //
-        res->description = res->shortname;
-      }
-#endif
       res->notes = QString("[%1]").arg(gdb_to_ISO8601_duration(duration));
 #if GDB_DEBUG
       DBG(GDB_DBG_WPTe, 1)
@@ -1812,39 +1807,33 @@ write_data()
 
 /*******************************************************************************/
 
-#define GDB_OPT_VER		"ver"
-#define GDB_OPT_VIA		"via"
-#define GDB_OPT_CATEGORY	"cat"
-#define GDB_OPT_BITCATEGORY	"bitscategory"
-#define GDB_OPT_ROADBOOK	"roadbook"
-
 static QVector<arglist_t> gdb_args = {
   {
-    GDB_OPT_CATEGORY, &gdb_opt_category,
+    "cat", &gdb_opt_category,
     "Default category on output (1..16)",
     nullptr, ARGTYPE_INT, "1", "16", nullptr
   },
   {
-    GDB_OPT_BITCATEGORY, &gdb_opt_bitcategory, "Bitmap of categories",
+    "bitscategory", &gdb_opt_bitcategory, "Bitmap of categories",
     nullptr, ARGTYPE_INT, "1", "65535", nullptr
   },
   {
-    GDB_OPT_VER, &gdb_opt_ver,
+    "ver", &gdb_opt_ver,
     "Version of gdb file to generate (1..3)",
     "2", ARGTYPE_INT, "1", "3", nullptr
   },
   {
-    GDB_OPT_VIA, &gdb_opt_via,
+    "via", &gdb_opt_via,
     "Drop route points that do not have an equivalent waypoint (hidden points)",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "drop", &gdb_opt_drop_hidden_wpt,
-    "Don't create waypoints for hidden points",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "dropwpt", &gdb_opt_drop_hidden_wpt,
+    "Don't create waypoints for non-user points",
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    GDB_OPT_ROADBOOK, &gdb_opt_roadbook,
+    "roadbook", &gdb_opt_roadbook,
     "Include major turn points (with description) from calculated route",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },

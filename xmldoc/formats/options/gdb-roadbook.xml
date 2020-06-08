@@ -1,8 +1,8 @@
 <para>
   If this option is specified, GPSBabel drops all calculated route points, 
   with exception of points with a description (i.e. "Make U-turns until you know where you are.").
-  The priority of this option is higher than of the <option>via</option> option. 
-  A value of 1 or y overwrites the <option>via</option> settings.
+  The priority of this option is higher than of the <option>via</option> and <option>dropwpt</option> options. 
+  A value of 1 or y overwrites the <option>via</option> and <option>dropwpt</option> settings.
 </para>
 <example id="gdb_roadbook_option">
   <title>Using gdb option <option>roadbook</option> to create simple html roadbook</title>
