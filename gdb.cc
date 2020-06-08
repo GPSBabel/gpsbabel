@@ -85,7 +85,10 @@
 static char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
 
 static gbfile* fin, *fout, *ftmp;
-static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
+static int gdb_ver, gdb_category;
+static bool gdb_roadbook;
+static bool gdb_hide_wpt;
+static bool gdb_hide_rpt;
 
 static QList<Waypoint*> wayptq_in, wayptq_out, wayptq_in_hidden;
 static short_handle short_h;
@@ -95,6 +98,7 @@ static char* gdb_opt_ver;
 static char* gdb_opt_via;
 static char* gdb_opt_roadbook;
 static char* gdb_opt_bitcategory;
+static char* gdb_opt_drop_hidden_wpt;
 
 static int waypt_flag;
 static int route_flag;
@@ -295,7 +299,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
   }
   Waypoint* res = nullptr;
   int turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !tmp->description.isEmpty());
-  if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
+  if (turn_point || !gdb_hide_rpt || (wpt_class < gt_waypt_class_map_point)) {
     res = new Waypoint(*tmp);
     route_add_wpt(rte, res);
   }
@@ -597,9 +601,11 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     if (wpt_class == gt_waypt_class_map_intersection || wpt_class == gt_waypt_class_map_line) {
       garmin_fs_t::set_duration(gmsd, duration);
+#if 0
       if (res->description.isEmpty()) {  //
         res->description = res->shortname;
       }
+#endif
       res->notes = QString("[%1]").arg(gdb_to_ISO8601_duration(duration));
 #if GDB_DEBUG
       DBG(GDB_DBG_WPTe, 1)
@@ -1001,11 +1007,11 @@ gdb_rd_init(const QString& fname)
   wayptq_in.clear();
   wayptq_in_hidden.clear();
 
-  gdb_via = (gdb_opt_via && *gdb_opt_via) ? atoi(gdb_opt_via) : 0;
+  bool via = (gdb_opt_via && *gdb_opt_via) ? atoi(gdb_opt_via) : 0;
+  bool drop_wpt = (gdb_opt_drop_hidden_wpt && *gdb_opt_drop_hidden_wpt) ? atoi(gdb_opt_drop_hidden_wpt) : 0;
   gdb_roadbook = (gdb_opt_roadbook && *gdb_opt_roadbook) ? atoi(gdb_opt_roadbook) : 0;
-  if (gdb_roadbook) { /* higher priority */
-    gdb_via = 1;
-  }
+  gdb_hide_wpt = via || drop_wpt || gdb_roadbook;
+  gdb_hide_rpt = via || gdb_roadbook;
 
   waypt_ct = 0;
   waypth_ct = 0;
@@ -1058,7 +1064,7 @@ read_data()
     switch (typ) {
     case 'W':
       wpt = read_waypoint(&wpt_class);
-      if ((gdb_via == 0) || (wpt_class == 0)) {
+      if (!gdb_hide_wpt || (wpt_class == 0)) {
         waypt_add(wpt);
         auto* dupe = new Waypoint(*wpt);
         wayptq_in.append(dupe);
@@ -1830,6 +1836,11 @@ static QVector<arglist_t> gdb_args = {
   {
     GDB_OPT_VIA, &gdb_opt_via,
     "Drop route points that do not have an equivalent waypoint (hidden points)",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "drop", &gdb_opt_drop_hidden_wpt,
+    "Don't create waypoints for hidden points",
     nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {

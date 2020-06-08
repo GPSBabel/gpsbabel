@@ -27,5 +27,5 @@ gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample-v3.gdb -o gpx -F ${TMPDIR}/gdb-sa
 compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 
 # don't choke if autoroute information is present.
-gpsbabel -i gdb -f ${REFERENCE}/gdb-sample-v3-autoroute.gdb -o gpx -F ${TMPDIR}/gdb-sample-v3-autoroute.gpx
+gpsbabel -i gdb,drop -f ${REFERENCE}/gdb-sample-v3-autoroute.gdb -o gpx -F ${TMPDIR}/gdb-sample-v3-autoroute.gpx
 compare ${REFERENCE}/gdb-sample-v3-autoroute.gpx ${TMPDIR}/gdb-sample-v3-autoroute.gpx
