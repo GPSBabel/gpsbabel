@@ -303,7 +303,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
   return res;
 }
 
-QString gdb_to_ISO8601_duration(unsigned int seconds)
+static QString gdb_to_ISO8601_duration(unsigned int seconds)
 {
   if (seconds == 0u) {
     return QString("PT0S");
@@ -721,7 +721,6 @@ read_route()
     }
   }
 
-  int links = 0;
   int points = FREAD_i32;
 
 #if GDB_DEBUG
@@ -764,7 +763,7 @@ read_route()
       warning("\n");
     }
 
-    links = FREAD_i32;
+    int links = FREAD_i32;
     garmin_ilink_t* il_anchor = nullptr;
     garmin_ilink_t* il_root = nullptr;
 #if GDB_DEBUG
