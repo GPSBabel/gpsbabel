@@ -188,7 +188,7 @@ File Types (-i and -o options):
 	  bitscategory          Bitmap of categories 
 	  ver                   Version of gdb file to generate (1..3) 
 	  via                   (0/1) Drop route points that do not have an equivalent w 
-	  dropwpt               (0/1) Don't create waypoints for hidden points 
+	  dropwpt               (0/1) Don't create waypoints for non-user points 
 	  roadbook              (0/1) Include major turn points (with description) from  
 	garmin_txt            Garmin MapSource - txt (tab delimited)
 	  date                  Read/Write date format (i.e. yyyy/mm/dd) 
