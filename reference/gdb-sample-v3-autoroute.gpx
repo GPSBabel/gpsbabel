@@ -1,79 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="44.521450996" minlon="-68.208982944" maxlat="44.522766536" maxlon="-68.204090595"/>
-  <wpt lat="44.522766536" lon="-68.208928127">
-    <time>2020-05-22T12:02:08Z</time>
-    <name>7 Manor Ln</name>
-    <cmt>7 Manor Ln
-Sullivan Twn, ME, 04664, USA</cmt>
-    <desc>7 Manor Ln
-Sullivan Twn, ME, 04664, USA</desc>
-    <sym>Flag, Blue</sym>
+  <bounds minlat="44.380856138" minlon="-68.195466539" maxlat="44.520120621" maxlon="-68.031334877"/>
+  <wpt lat="44.391460419" lon="-68.031334877">
+    <time>2020-06-08T18:35:29Z</time>
+    <name>Birch Harbor</name>
+    <cmt>Birch Harbor</cmt>
+    <desc>Birch Harbor</desc>
+    <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="44.521450996" lon="-68.204820156">
-    <time>2020-05-22T12:02:28Z</time>
-    <name>Acadia Bay Inn</name>
-    <cmt>Acadia Bay Inn
-12 Miramar Ave
-Sullivan Twn, Maine, 04664, United States
-207-422-0127</cmt>
-    <desc>Acadia Bay Inn
-12 Miramar Ave
-Sullivan Twn, Maine, 04664, United States
-207-422-0127</desc>
-    <sym>Lodging</sym>
+  <wpt lat="44.477913380" lon="-68.038501740">
+    <time>2020-06-08T18:35:58Z</time>
+    <name>Gouldsboro</name>
+    <cmt>Gouldsboro</cmt>
+    <desc>Gouldsboro</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="44.380860329" lon="-68.068499565">
+    <time>2020-06-08T11:09:27Z</time>
+    <name>Schoodic Woods Campground</name>
+    <cmt>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</cmt>
+    <desc>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</desc>
+    <sym>Campground</sym>
+  </wpt>
+  <wpt lat="44.520120621" lon="-68.195464611">
+    <time>2019-04-29T21:00:49Z</time>
+    <name>Sullivan Twn</name>
+    <cmt>Sullivan Twn</cmt>
+    <desc>Sullivan Twn</desc>
+    <sym>City (Small)</sym>
   </wpt>
   <rte>
-    <name>7 Manor Ln to Acadia Bay Inn</name>
-    <rtept lat="44.522766536" lon="-68.208928127">
-      <time>2020-05-22T12:02:08Z</time>
-      <name>7 Manor Ln</name>
-      <cmt>7 Manor Ln
-Sullivan Twn, ME, 04664, USA</cmt>
-      <desc>7 Manor Ln
-Sullivan Twn, ME, 04664, USA</desc>
-      <sym>Flag, Blue</sym>
+    <name>Trip to Schoodic Woods Campground - Day 1</name>
+    <rtept lat="44.520120621" lon="-68.195464611">
+      <time>2019-04-29T21:00:49Z</time>
+      <name>Sullivan Twn</name>
+      <cmt>Sullivan Twn</cmt>
+      <desc>Sullivan Twn</desc>
+      <sym>City (Small)</sym>
     </rtept>
-    <rtept lat="44.522766452" lon="-68.208928211">
-      <ele>37.273</ele>
+    <rtept lat="44.520110060" lon="-68.195466539">
+      <ele>45.738</ele>
       <name>0001</name>
-      <cmt>Get on Manor Ln and drive south</cmt>
-      <desc>[PT2S]</desc>
+      <cmt>Get on Us1 and drive east</cmt>
+      <desc>[PT6S]</desc>
       <sym>Waypoint</sym>
     </rtept>
-    <rtept lat="44.522588253" lon="-68.208982944">
-      <ele>37.160</ele>
+    <rtept lat="44.519991875" lon="-68.194198608">
+      <ele>45.563</ele>
       <name>0002</name>
-      <cmt>Turn left onto Us1</cmt>
-      <desc>[PT1M27S]</desc>
+      <desc>[PT23S]</desc>
       <sym>Waypoint</sym>
     </rtept>
-    <rtept lat="44.521901608" lon="-68.204090595">
-      <ele>40.863</ele>
+    <rtept lat="44.518661499" lon="-68.190057278">
+      <ele>44.266</ele>
       <name>0003</name>
-      <cmt>Turn right onto Miramar Ave</cmt>
-      <desc>[PT54S]</desc>
+      <desc>[PT2M3S]</desc>
       <sym>Waypoint</sym>
     </rtept>
-    <rtept lat="44.521506736" lon="-68.204822838">
-      <ele>40.180</ele>
+    <rtept lat="44.509477615" lon="-68.162934780">
+      <ele>28.781</ele>
       <name>0004</name>
+      <desc>[PT1M28S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.498791695" lon="-68.146262169">
+      <ele>26.887</ele>
+      <name>0005</name>
+      <desc>[PT1M21S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.487698078" lon="-68.126349449">
+      <ele>20.605</ele>
+      <name>0006</name>
+      <desc>[PT1M52S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.473836422" lon="-68.097617626">
+      <ele>38.840</ele>
+      <name>0007</name>
+      <cmt>Turn right onto S Gouldsboro Rd</cmt>
+      <desc>[PT3M4S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.459760189" lon="-68.103024960">
+      <ele>34.777</ele>
+      <name>0008</name>
+      <desc>[PT2M12S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.440083504" lon="-68.112123013">
+      <ele>38.371</ele>
+      <name>0009</name>
+      <desc>[PT3S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.439697266" lon="-68.112144470">
+      <ele>38.293</ele>
+      <name>0010</name>
+      <desc>[PT1M29S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.427831173" lon="-68.107531071">
+      <ele>36.547</ele>
+      <name>0011</name>
+      <desc>[PT1M11S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.417660236" lon="-68.096179962">
+      <ele>24.645</ele>
+      <name>0012</name>
+      <desc>[PT1M3S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.407660961" lon="-68.088026047">
+      <ele>15.426</ele>
+      <name>0013</name>
+      <desc>[PT49S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.400794506" lon="-68.086137772">
+      <ele>11.945</ele>
+      <name>0014</name>
+      <desc>[PT1M1S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.394829273" lon="-68.084120750">
+      <ele>9.000</ele>
+      <name>0015</name>
+      <cmt>Turn left onto Main St</cmt>
+      <desc>[PT1M35S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.395301342" lon="-68.077855110">
+      <ele>15.344</ele>
+      <name>0016</name>
+      <desc>[PT23S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.393928051" lon="-68.073670864">
+      <ele>21.840</ele>
+      <name>0017</name>
+      <cmt>Turn right onto Moore Rd</cmt>
+      <desc>[PT1M37S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.380856138" lon="-68.068539295">
+      <ele>41.480</ele>
+      <name>0018</name>
       <desc>[PT0S]</desc>
       <sym>Waypoint</sym>
     </rtept>
-    <rtept lat="44.521450996" lon="-68.204820156">
-      <time>2020-05-22T12:02:28Z</time>
-      <name>Acadia Bay Inn</name>
-      <cmt>Acadia Bay Inn
-12 Miramar Ave
-Sullivan Twn, Maine, 04664, United States
-207-422-0127</cmt>
-      <desc>Acadia Bay Inn
-12 Miramar Ave
-Sullivan Twn, Maine, 04664, United States
-207-422-0127</desc>
-      <sym>Lodging</sym>
+    <rtept lat="44.380860329" lon="-68.068499565">
+      <time>2020-06-08T11:09:27Z</time>
+      <name>Schoodic Woods Campground</name>
+      <cmt>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</cmt>
+      <desc>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</desc>
+      <sym>Campground</sym>
+    </rtept>
+    <rtept lat="44.380856138" lon="-68.068539295">
+      <ele>41.480</ele>
+      <name>0019</name>
+      <cmt>Get on Moore Rd and drive north</cmt>
+      <desc>[PT1M16S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.393928051" lon="-68.073670864">
+      <ele>21.840</ele>
+      <name>0020</name>
+      <cmt>Turn right onto Birch Harbor Rd</cmt>
+      <desc>[PT1M13S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.393627644" lon="-68.070151806">
+      <ele>29.652</ele>
+      <name>0021</name>
+      <desc>[PT1M39S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0022</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0023</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.390710322" lon="-68.045376912">
+      <time>2020-06-08T18:39:00Z</time>
+      <name>1 Birch Harbor Rd</name>
+      <desc>1 Birch Harbor Rd
+Winter Harbor, ME, 04693, USA</desc>
+      <sym>Flag, Blue</sym>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0024</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0025</name>
+      <desc>[PT6M9S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.393627644" lon="-68.070151806">
+      <ele>29.652</ele>
+      <name>0026</name>
+      <desc>[PT18S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.393928051" lon="-68.073670864">
+      <ele>21.840</ele>
+      <name>0027</name>
+      <desc>[PT31S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.395301342" lon="-68.077855110">
+      <ele>15.344</ele>
+      <name>0028</name>
+      <desc>[PT51S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.394829273" lon="-68.084120750">
+      <ele>9.000</ele>
+      <name>0029</name>
+      <cmt>Turn right onto Newman St</cmt>
+      <desc>[PT1M27S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.400794506" lon="-68.086137772">
+      <ele>11.945</ele>
+      <name>0030</name>
+      <desc>[PT49S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.407660961" lon="-68.088026047">
+      <ele>15.426</ele>
+      <name>0031</name>
+      <desc>[PT1M3S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.417660236" lon="-68.096179962">
+      <ele>24.645</ele>
+      <name>0032</name>
+      <desc>[PT1M11S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.427831173" lon="-68.107531071">
+      <ele>36.547</ele>
+      <name>0033</name>
+      <desc>[PT1M29S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.439697266" lon="-68.112144470">
+      <ele>38.293</ele>
+      <name>0034</name>
+      <desc>[PT3S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.440083504" lon="-68.112123013">
+      <ele>38.371</ele>
+      <name>0035</name>
+      <desc>[PT2M12S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.459760189" lon="-68.103024960">
+      <ele>34.777</ele>
+      <name>0036</name>
+      <desc>[PT2M16S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.473836422" lon="-68.097617626">
+      <ele>38.840</ele>
+      <name>0037</name>
+      <cmt>Turn right onto Us1</cmt>
+      <desc>[PT1M15S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.472048394" lon="-68.095197100">
+      <ele>36.152</ele>
+      <name>0038</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="44.472033978" lon="-68.095214367">
+      <time>2020-06-08T18:39:36Z</time>
+      <name>Post Office-Gouldsboro</name>
+      <desc>Post Office-Gouldsboro
+411 Route 1
+Gouldsboro Twn, Maine, 04607, United States
+207-963-7148</desc>
+      <sym>Post Office</sym>
     </rtept>
   </rte>
 </gpx>

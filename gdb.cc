@@ -1002,9 +1002,9 @@ gdb_rd_init(const QString& fname)
   wayptq_in.clear();
   wayptq_in_hidden.clear();
 
-  bool via = (gdb_opt_via && *gdb_opt_via) ? atoi(gdb_opt_via) : 0;
-  bool drop_wpt = (gdb_opt_drop_hidden_wpt && *gdb_opt_drop_hidden_wpt) ? atoi(gdb_opt_drop_hidden_wpt) : 0;
-  gdb_roadbook = (gdb_opt_roadbook && *gdb_opt_roadbook) ? atoi(gdb_opt_roadbook) : 0;
+  bool via = gdb_opt_via;
+  bool drop_wpt = gdb_opt_drop_hidden_wpt;
+  gdb_roadbook = gdb_opt_roadbook;
   gdb_hide_wpt = via || drop_wpt || gdb_roadbook;
   gdb_hide_rpt = via || gdb_roadbook;
 
@@ -1830,7 +1830,7 @@ static QVector<arglist_t> gdb_args = {
   {
     "dropwpt", &gdb_opt_drop_hidden_wpt,
     "Don't create waypoints for non-user points",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "roadbook", &gdb_opt_roadbook,
