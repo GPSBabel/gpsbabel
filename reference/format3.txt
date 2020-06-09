@@ -360,7 +360,7 @@ option	gdb	ver	Version of gdb file to generate (1..3)	integer	2	1	3	https://www.
 
 option	gdb	via	Drop route points that do not have an equivalent waypoint (hidden points)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_via
 
-option	gdb	dropwpt	Don't create waypoints for non-user points	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_dropwpt
+option	gdb	dropwpt	Don't create waypoints for non-user points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_dropwpt
 
 option	gdb	roadbook	Include major turn points (with description) from calculated route	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_roadbook
 
