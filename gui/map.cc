@@ -22,40 +22,40 @@
 //------------------------------------------------------------------------
 #include "map.h"
 
-#include <QNetworkRequest>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
+#include <QApplication>           // for QApplication
+#include <QChar>                  // for QChar, operator!=
+#include <QCursor>                // for QCursor
+#include <QFile>                  // for QFile
+#include <QIODevice>              // for operator|, QIODevice, QIODevice::Truncate, QIODevice::WriteOnly
+#include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
+#include <QMessageBox>            // for QMessageBox
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QTextStream>            // for QTextStream
+#include <QUrl>                   // for QUrl
 #if HAVE_WEBENGINE
-#include <QWebEngineView>
-#include <QWebEnginePage>
-#include <QWebChannel>
+#include <QWebChannel>            // for QWebChannel
+#include <QWebEnginePage>         // for QWebEnginePage
+#include <QWebEngineView>         // for QWebEngineView
 #else
-#include <QWebView>
 #include <QWebFrame>
 #include <QWebPage>
+#include <QWebView>
 #endif
-#include <QApplication>
-#include <QCursor>
-#include <QFile>
-#include <QTextStream>
+#include <QtCore>                 // for SIGNAL, SLOT, emit, WaitCursor
 
-#include <math.h>
-#include <string>
-#include <vector>
-#include "appname.h"
+#include <vector>                 // for vector
 
-using std::string;
+#include "appname.h"              // for appName
+
+
 using std::vector;
 
 //------------------------------------------------------------------------
 static QString stripDoubleQuotes(const QString& s)
 {
-  QString out;
-  foreach (QChar c, s) {
-    if (c != QChar('"')) {
-      out += c;
-    }
-  }
+  QString out(s);
+  out.remove(QChar('"'));
   return out;
 }
 
@@ -147,13 +147,13 @@ static QString fmtLatLng(const LatLng& l)
 }
 
 //------------------------------------------------------------------------
-static QString makePath(const vector <LatLng>& pts)
+static QString makePath(const vector<LatLng>& pts)
 {
   // maps v3 Polylines do not use encoded paths.
   QString path;
   int lncount = 0;
   bool someoutput = false;
-  foreach (const LatLng ll, pts) {
+  for (const LatLng& ll : pts) {
     if (lncount == 0) {
       if (someoutput) {
         path.append(QChar(','));
@@ -198,7 +198,7 @@ void Map::showGpxData()
 
   // Waypoints.
   int num=0;
-  foreach (const  GpxWaypoint& pt, gpx_.getWaypoints()) {
+  for (const GpxWaypoint& pt : gpx_.getWaypoints()) {
     scriptStr
         << QString("waypts[%1] = new google.maps.Marker({map: map, position: %2, "
                    "title: \"%3\", icon: blueIcon});")
@@ -217,10 +217,10 @@ void Map::showGpxData()
 
   // Tracks
   num = 0;
-  foreach (const GpxTrack& trk, gpx_.getTracks()) {
-    vector <LatLng> pts;
-    foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
-      foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
+  for (const GpxTrack& trk : gpx_.getTracks()) {
+    vector<LatLng> pts;
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
         pts.push_back(pt.getLocation());
       }
     }
@@ -246,9 +246,9 @@ void Map::showGpxData()
 
   // Routes
   num = 0;
-  foreach (const GpxRoute& rte, gpx_.getRoutes()) {
-    vector <LatLng> pts;
-    foreach (const GpxRoutePoint& pt, rte.getRoutePoints()) {
+  for (const GpxRoute& rte : gpx_.getRoutes()) {
+    vector<LatLng> pts;
+    for (const GpxRoutePoint& pt : rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
     QString path = makePath(pts);
@@ -305,13 +305,11 @@ void Map::logTime(const QString& s)
   stopWatch_.start();
 }
 //------------------------------------------------------------------------
-void Map::showTracks(const QList<GpxTrack>& tracks)
+void Map::showTracks(const QVector<bool>& visible)
 {
   QStringList scriptStr;
-  int i=0;
-  foreach (const GpxTrack& trk, tracks) {
-    scriptStr << QString("trks[%1].%2();").arg(i).arg(trk.getVisible()?"show":"hide");
-    i++;
+  for (int i = 0; i < visible.size(); ++i) {
+    scriptStr << QString("trks[%1].%2();").arg(i).arg(visible[i]?"show":"hide");
   }
   evaluateJS(scriptStr);
 }
@@ -329,13 +327,12 @@ void Map::hideAllTracks()
 }
 
 //------------------------------------------------------------------------
-// TACKY: we assume the waypoints list and JS waypts[] are parallel.
-void Map::showWaypoints(const QList<GpxWaypoint>& waypoints)
+// TACKY: we assume visible and JS waypts[] are parallel.
+void Map::showWaypoints(const QVector<bool>& visible)
 {
   QStringList scriptStr;
-  int i=0;
-  foreach (const GpxWaypoint& pt, waypoints) {
-    scriptStr << QString("waypts[%1].setVisible(%2);").arg(i++).arg(pt.getVisible()?"true":"false");
+  for (int i = 0; i < visible.size(); ++i) {
+    scriptStr << QString("waypts[%1].setVisible(%2);").arg(i).arg(visible[i]?"true":"false");
   }
   evaluateJS(scriptStr);
 }
@@ -352,13 +349,11 @@ void Map::hideAllWaypoints()
 }
 
 //------------------------------------------------------------------------
-void Map::showRoutes(const QList<GpxRoute>& routes)
+void Map::showRoutes(const QVector<bool>& visible)
 {
   QStringList scriptStr;
-  int i=0;
-  foreach (const GpxRoute& rt, routes) {
-    scriptStr << QString("rtes[%1].%2();").arg(i).arg(rt.getVisible()?"show":"hide");
-    i++;
+  for (int i = 0; i < visible.size(); ++i) {
+    scriptStr << QString("rtes[%1].%2();").arg(i).arg(visible[i]?"show":"hide");
   }
   evaluateJS(scriptStr);
 }

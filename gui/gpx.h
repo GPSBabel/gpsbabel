@@ -32,25 +32,7 @@
 
 
 //------------------------------------------------------------------------
-class GpxItem
-{
-public:
-  void setVisible(bool b)
-  {
-    visible = b;
-  }
-
-  bool getVisible() const
-  {
-    return visible;
-  }
-
-protected:
-  bool visible{true};
-};
-
-//------------------------------------------------------------------------
-class GpxRoutePoint: public GpxItem
+class GpxRoutePoint
 {
 public:
   void setLocation(const LatLng& pt)
@@ -79,7 +61,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxRoute: public GpxItem
+class GpxRoute
 {
 public:
   double length() const
@@ -136,7 +118,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrackPoint: public GpxItem
+class GpxTrackPoint
 {
 public:
   void setLocation(const LatLng& pt)
@@ -176,7 +158,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrackSegment: public GpxItem
+class GpxTrackSegment
 {
 public:
   void addPoint(const GpxTrackPoint& pt)
@@ -198,7 +180,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrack: public GpxItem
+class GpxTrack
 {
 public:
   void setNumber(int n)
@@ -290,7 +272,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxWaypoint: public GpxItem
+class GpxWaypoint
 {
 public:
   void setLocation(const LatLng& pt)
@@ -367,21 +349,6 @@ class Gpx
 {
 public:
   bool read(const QString& fileName);
-
-  QList <GpxWaypoint>& getWaypoints()
-  {
-    return wayPoints;
-  } // nonconst
-
-  QList <GpxTrack>& getTracks()
-  {
-    return tracks;
-  }
-
-  QList <GpxRoute>& getRoutes()
-  {
-    return routes;
-  }
 
   const QList <GpxWaypoint>& getWaypoints() const
   {

@@ -22,20 +22,28 @@
 //------------------------------------------------------------------------
 #ifndef MAP_H
 #define MAP_H
+#include <QElapsedTimer>          // for QElapsedTimer
+#include <QFile>                  // for QFile
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QObject>                // for QObject
+#include <QPlainTextEdit>         // for QPlainTextEdit
+#include <QResizeEvent>           // for QResizeEvent
+#include <QString>                // for QString
+#include <QStringList>            // for QStringList
+#include <QTextStream>            // for QTextStream
+#include <QVector>                // for QVector
 #if HAVE_WEBENGINE
-#include <QWebEngineView>
+#include <QWebEngineView>         // for QWebEngineView
 #else
 #include <QWebView>
 #endif
-#include <QPlainTextEdit>
-#include <QElapsedTimer>
-#include <QFile>
-#include <QTextStream>
-#include "gpx.h"
+#include <QWidget>                // for QWidget
 
-//#define DEBUG_JS_GENERATION
+#include "gpx.h"                  // for Gpx
+#include "latlng.h"               // for LatLng
 
-class QNetworkAccessManager;
+
+#define DEBUG_JS_GENERATION
 
 
 class MarkerClicker: public QObject
@@ -43,7 +51,7 @@ class MarkerClicker: public QObject
   Q_OBJECT
 
 public:
-  MarkerClicker(QObject* parent): QObject(parent) {}
+  explicit MarkerClicker(QObject* parent): QObject(parent) {}
 
 public slots:
   void clickedX(int t, int i)
@@ -77,15 +85,15 @@ public:
 public slots:
   void showGpxData();
 
-  void showTracks(const QList<GpxTrack>& tracks);
+  void showTracks(const QVector<bool>& visible);
   void hideAllTracks();
   void setTrackVisibility(int i, bool show);
 
-  void showWaypoints(const QList<GpxWaypoint>& waypoints);
+  void showWaypoints(const QVector<bool>& visible);
   void hideAllWaypoints();
   void setWaypointVisibility(int i, bool show);
 
-  void showRoutes(const QList<GpxRoute>& routes);
+  void showRoutes(const QVector<bool>& visible);
   void hideAllRoutes();
   void setRouteVisibility(int i, bool show);
 

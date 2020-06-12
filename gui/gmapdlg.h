@@ -23,12 +23,23 @@
 #ifndef GMAPDLG_H
 #define GMAPDLG_H
 
-#include <QStackedWidget>
-#include <QStandardItem>
-#include <QModelIndex>
-#include "ui_gmapui.h"
-#include "gpx.h"
-#include "map.h"
+#include <QDialog>             // for QDialog
+#include <QItemSelection>      // for QItemSelection
+#include <QList>               // for QList
+#include <QModelIndex>         // for QModelIndex
+#include <QObject>             // for QObject
+#include <QPlainTextEdit>      // for QPlainTextEdit
+#include <QPoint>              // for QPoint
+#include <QStandardItem>       // for QStandardItem
+#include <QStandardItemModel>  // for QStandardItemModel
+#include <QString>             // for QString
+#include <QVector>             // for QVector
+#include <QWidget>             // for QWidget
+
+#include "gpx.h"               // for Gpx, GpxRoute, GpxTrack, GpxWaypoint
+#include "map.h"               // for Map
+#include "ui_gmapui.h"         // for Ui_GMapDlg
+
 
 class GMapDialog: public QDialog
 {
@@ -53,6 +64,7 @@ private:
   int trackIndex(QStandardItem* it);
   int routeIndex(QStandardItem* it);
   QString formatLength(double l);
+  QVector<bool> getVisibility(const QList<QStandardItem*>& li);
 
   //
 private slots:
@@ -67,9 +79,9 @@ private slots:
 
 
   void expandCollapseAll(const QList<QStandardItem*>& li,
-                         QStandardItem* it, bool exp);
+                         QStandardItem* top, bool exp);
   void checkUncheckAll(const QList<QStandardItem*>& li,
-                       QStandardItem* it, bool exp);
+                       QStandardItem* top, bool ck);
   void expandAllWaypoints();
   void expandAllTracks();
   void expandAllRoutes();
