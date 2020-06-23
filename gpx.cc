@@ -1289,10 +1289,10 @@ void
 GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_point_type point_type) const
 {
   // gpx version we are writing is >= 1.1.
-  garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
+  garmin_fs_t* gmsd = (opt_garminext) ? garmin_fs_t::find(waypointp) : nullptr;  // only needed if garmin extensions selected
 
   if ((opt_humminbirdext && (WAYPT_HAS(waypointp, depth) || WAYPT_HAS(waypointp, temperature))) ||
-      (opt_garminext && gmsd != NULL && gmsd->ilinks != NULL)  ||
+      (opt_garminext && gpxpt_route==point_type && gmsd != nullptr && gmsd->ilinks != nullptr)  ||
       (opt_garminext && gpxpt_waypoint==point_type && (WAYPT_HAS(waypointp, proximity) || WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth))) ||
       (opt_garminext && gpxpt_track==point_type && (WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth) || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
     writer->writeStartElement(QStringLiteral("extensions"));
@@ -1328,12 +1328,12 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
         }
         break;
       case gpxpt_route:
-        if (gmsd != NULL && gmsd->ilinks != NULL) {
+        if (gmsd != nullptr && gpxpt_route==point_type && gmsd->ilinks != nullptr) {
           writer->writeStartElement(QStringLiteral("gpxx:RoutePointExtension"));
           garmin_ilink_t* link = gmsd->ilinks;
-          garmin_ilink_t* prior = NULL;
-          while (link != NULL) {
-            if (prior == NULL || prior->lat != link->lat || prior->lon != link->lon) {
+          garmin_ilink_t* prior = nullptr;  // GDB files sometime contain repeated point; omit them
+          while (link != nullptr) {
+            if (prior == nullptr || prior->lat != link->lat || prior->lon != link->lon) {
               writer->writeStartElement(QStringLiteral("gpxx:rpt"));
               writer->writeAttribute(QStringLiteral("lat"), toString(link->lat));
               writer->writeAttribute(QStringLiteral("lon"), toString(link->lon));
