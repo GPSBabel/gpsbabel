@@ -52,7 +52,7 @@ use Docker.
 is needed to communicate with use with older USB Garmins.
 For MacOS, we use an included copy.
 Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
-need to 'yum install libusb-dev' or look in tools/Docker* for inspiration
+need to 'apt install libusb-dev' or look in tools/Docker* for inspiration
 from our automated Docker builds.</para>
 </listitem>
 </varlistentry>
