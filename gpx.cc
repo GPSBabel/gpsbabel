@@ -1337,7 +1337,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
               writer->writeStartElement(QStringLiteral("gpxx:rpt"));
               writer->writeAttribute(QStringLiteral("lat"), toString(link->lat));
               writer->writeAttribute(QStringLiteral("lon"), toString(link->lon));
-              writer->writeEndElement(); // "gpxx:RoutePointExtension"
+              writer->writeEndElement(); // "gpxx:rpt"
             }
             prior = link;
             link = link->next;
