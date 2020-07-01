@@ -4,11 +4,11 @@
 AC_PREREQ([2.59])
 
 #PACKAGE_RELEASE=
-AC_INIT([GPSBabel], [1.6.0])
-DOCVERSION=1.6.0
+AC_INIT([GPSBabel], [1.7.0])
+DOCVERSION=1.7.0
 
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-DOCVERSION=development
+#DOCVERSION=development
 
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)

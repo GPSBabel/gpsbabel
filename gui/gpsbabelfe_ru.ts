@@ -337,91 +337,91 @@ p, li { white-space: pre-wrap; }
         <translation>Высота: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="123"/>
+        <location filename="gmapdlg.cc" line="124"/>
         <source>Start: %1</source>
         <translation>Начало: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="125"/>
+        <location filename="gmapdlg.cc" line="126"/>
         <source>Stop: %1</source>
         <translation>Конец: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="128"/>
+        <location filename="gmapdlg.cc" line="129"/>
         <source>Points: %1</source>
         <translation>Точек: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="155"/>
+        <location filename="gmapdlg.cc" line="156"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="170"/>
+        <location filename="gmapdlg.cc" line="171"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="185"/>
+        <location filename="gmapdlg.cc" line="186"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="540"/>
+        <location filename="gmapdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation>Показать все маршрутные точки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation>Скрыть все маршрутные точки</translation>
-    </message>
-    <message>
-        <location filename="gmapdlg.cc" line="542"/>
-        <location filename="gmapdlg.cc" line="549"/>
-        <location filename="gmapdlg.cc" line="556"/>
-        <source>Expand All</source>
-        <translation>Развернуть все</translation>
     </message>
     <message>
         <location filename="gmapdlg.cc" line="543"/>
         <location filename="gmapdlg.cc" line="550"/>
         <location filename="gmapdlg.cc" line="557"/>
+        <source>Expand All</source>
+        <translation>Развернуть все</translation>
+    </message>
+    <message>
+        <location filename="gmapdlg.cc" line="544"/>
+        <location filename="gmapdlg.cc" line="551"/>
+        <location filename="gmapdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation>Свернуть все</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="547"/>
+        <location filename="gmapdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation>Показать все маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="548"/>
+        <location filename="gmapdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation>Скрыть все маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="554"/>
+        <location filename="gmapdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation>Показать все треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="555"/>
+        <location filename="gmapdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation>Скрыть все треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="561"/>
+        <location filename="gmapdlg.cc" line="562"/>
         <source>Show Only This Waypoint</source>
         <translation>Показать только эту маршрутную точку</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="566"/>
+        <location filename="gmapdlg.cc" line="567"/>
         <source>Show Only This Track</source>
         <translation>Показать только этот трек</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="571"/>
+        <location filename="gmapdlg.cc" line="572"/>
         <source>Show Only This Route</source>
         <translation>Показать только этот маршрут</translation>
     </message>
@@ -796,33 +796,33 @@ This program cannot continue.</source>
         <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1053"/>
+        <location filename="mainwindow.cc" line="1054"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1063"/>
+        <location filename="mainwindow.cc" line="1064"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1183"/>
+        <location filename="mainwindow.cc" line="1184"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1207"/>
+        <location filename="mainwindow.cc" line="1208"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1250"/>
+        <location filename="mainwindow.cc" line="1251"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1252"/>
+        <location filename="mainwindow.cc" line="1253"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>

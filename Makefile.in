@@ -501,7 +501,8 @@ f90g_track.o: f90g_track.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h
 fatal.o: fatal.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
-  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h
+  inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
+  src/core/logging.h
 filter_vecs.o: filter_vecs.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
   formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
   src/core/optional.h filter_vecs.h arcdist.h filter.h bend.h discard.h \
@@ -882,9 +883,9 @@ navilink.o: navilink.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
 navitel.o: navitel.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   jeeps/gpsmath.h jeeps/gpsport.h
-netstumbler.o: netstumbler.cc defs.h config.h zlib/zlib.h zlib/zconf.h \
-  formspec.h inifile.h gbfile.h session.h src/core/datetime.h \
-  src/core/optional.h cet_util.h csv_util.h
+netstumbler.o: netstumbler.cc cet_util.h defs.h config.h zlib/zlib.h \
+  zlib/zconf.h formspec.h inifile.h gbfile.h session.h \
+  src/core/datetime.h src/core/optional.h csv_util.h
 nmea.o: nmea.cc defs.h config.h zlib/zlib.h zlib/zconf.h formspec.h \
   inifile.h gbfile.h session.h src/core/datetime.h src/core/optional.h \
   nmea.h format.h cet_util.h gbser.h jeeps/gpsmath.h jeeps/gpsport.h \
