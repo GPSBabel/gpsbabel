@@ -4,5 +4,14 @@
  *
  * Isn't simplification via automation grand?
  */
+#ifdef RC_INVOKED
+// These defines are for the Microsoft resource compiler scripts
+// win32/gpsbabel.rc and gui/app.rc
+#define VER_FILE @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
+#define VER_PRODUCT @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
+#define VER_FILE_STR "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
+#define VER_PRODUCT_STR  "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
+#else
 #define VERSION "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
 #define WEB_DOC_DIR "https://www.gpsbabel.org/htmldoc-@DOCVERSION@"
+#endif

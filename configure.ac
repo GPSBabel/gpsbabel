@@ -13,7 +13,7 @@ DOCVERSION=1.7.0
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc.in which is used by the setup program,
-GBBUILD=30
+GBBUILD=31
 # PACKAGE_RELEASE="-beta20190413"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)
@@ -369,6 +369,6 @@ AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
 AS_MKDIR_P([mac/libusb])
 
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc win32/gpsbabel.rc])
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc])
 AC_CONFIG_FILES([tools/mkcapabilities], [chmod +x tools/mkcapabilities])
 AC_OUTPUT

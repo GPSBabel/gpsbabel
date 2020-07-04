@@ -2218,7 +2218,7 @@ DOCVERSION=1.7.0
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc.in which is used by the setup program,
-GBBUILD=30
+GBBUILD=31
 # PACKAGE_RELEASE="-beta20190413"
 
 cat >>confdefs.h <<_ACEOF
@@ -6549,7 +6549,7 @@ as_dir=zlib/contrib/minizip; as_fn_mkdir_p
 as_dir=testo.d; as_fn_mkdir_p
 as_dir=mac/libusb; as_fn_mkdir_p
 
-ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc win32/gpsbabel.rc"
+ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc"
 
 ac_config_files="$ac_config_files tools/mkcapabilities"
 
@@ -7250,7 +7250,6 @@ do
     "gbversion.h") CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
     "gui/setup.iss") CONFIG_FILES="$CONFIG_FILES gui/setup.iss" ;;
     "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
-    "win32/gpsbabel.rc") CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;
     "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
