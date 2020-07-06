@@ -62,8 +62,8 @@ device capabilities.
 Some early systems also supported entities called event marker icons.
 Event icon markers are represented by symbol, latitude and longitude data only.
 By default, event marker icons are converted by GPSBabel to waypoints on read with their name being generated
-in the format "Event Marker XXX"
-where XXX is replaced by the squence number of the Event Marker ICON found in the input data.
+in the format "Event Marker NNN"
+where NNN is replaced by the squence number of the Event Marker ICON found in the input data.
 You have the option to ignore Event Icon Markers
 effectively removing them from the output data using the input option <emphasis>ignoreicons</emphasis>.
 On output, you can use the write option <emphasis>writeasicons</emphasis> to create event marker icons

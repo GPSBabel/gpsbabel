@@ -358,19 +358,19 @@ merged data to multiple destinations.
     <example id="realtime_reading">
       <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
       <para>
-        <userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput>
+        <userinput>gpsbabel -T -i garmin -f usb: -o kml -F example.kml</userinput>
       </para>
-      <para>Will read the USB-connected Garmin and rewrite 'xxx.kml' atomically,
+      <para>Will read the USB-connected Garmin and rewrite 'example.kml' atomically,
           suitable for a self-refreshing network link in Google Earth.
         </para>
     </example>
     <example id="realtime_reading_wintec">
       <title>Read realtime positioning from Wintec WBT-201 via Bluetooth on Mac, write to Keyhole Markup</title>
       <para>
-        <userinput>gpsbabel -T -i nmea -f /dev/cu.G-Rays2-SPPslave-1 -o kml -F xxx.kml</userinput>
+        <userinput>gpsbabel -T -i nmea -f /dev/cu.G-Rays2-SPPslave-1 -o kml -F example.kml</userinput>
       </para>
       <para>Will read the Wintec WBT-201 via Bluetooth, using the name that
-    the Mac assigned it, and rewrite 'xxx.kml' atomically,
+    the Mac assigned it, and rewrite 'example.kml' atomically,
           suitable for a self-refreshing network link in Google Earth.
         </para>
     </example>
