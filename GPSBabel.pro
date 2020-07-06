@@ -210,6 +210,7 @@ win32 {
   HEADERS += gbser_win.h
   JEEPS += jeeps/gpsusbwin.cc
   LIBS += "-lsetupapi" 
+  RC_FILE = win32/gpsbabel.rc
 }
 
 win32-msvc* {

@@ -378,91 +378,91 @@ p, li { white-space: pre-wrap; }
         <translation>Ele: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="123"/>
+        <location filename="gmapdlg.cc" line="124"/>
         <source>Start: %1</source>
         <translation>Comenzar: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="125"/>
+        <location filename="gmapdlg.cc" line="126"/>
         <source>Stop: %1</source>
         <translation>Parar: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="128"/>
+        <location filename="gmapdlg.cc" line="129"/>
         <source>Points: %1</source>
         <translation>Puntos: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="155"/>
+        <location filename="gmapdlg.cc" line="156"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="170"/>
+        <location filename="gmapdlg.cc" line="171"/>
         <source>Tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="185"/>
+        <location filename="gmapdlg.cc" line="186"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="540"/>
+        <location filename="gmapdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation>Mostrar todos los puntos de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation>Ocultar todos los puntos de interés</translation>
-    </message>
-    <message>
-        <location filename="gmapdlg.cc" line="542"/>
-        <location filename="gmapdlg.cc" line="549"/>
-        <location filename="gmapdlg.cc" line="556"/>
-        <source>Expand All</source>
-        <translation>Expandir todo</translation>
     </message>
     <message>
         <location filename="gmapdlg.cc" line="543"/>
         <location filename="gmapdlg.cc" line="550"/>
         <location filename="gmapdlg.cc" line="557"/>
+        <source>Expand All</source>
+        <translation>Expandir todo</translation>
+    </message>
+    <message>
+        <location filename="gmapdlg.cc" line="544"/>
+        <location filename="gmapdlg.cc" line="551"/>
+        <location filename="gmapdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation>Colapsar todo</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="547"/>
+        <location filename="gmapdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation>Mostrar todas las rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="548"/>
+        <location filename="gmapdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation>Ocultar todas las rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="554"/>
+        <location filename="gmapdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation>Mostrar todos los trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="555"/>
+        <location filename="gmapdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation>Ocultar todos los trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="561"/>
+        <location filename="gmapdlg.cc" line="562"/>
         <source>Show Only This Waypoint</source>
         <translation>Mostras sólo este punto de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="566"/>
+        <location filename="gmapdlg.cc" line="567"/>
         <source>Show Only This Track</source>
         <translation>Mostrar sólo este trazado</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="571"/>
+        <location filename="gmapdlg.cc" line="572"/>
         <source>Show Only This Route</source>
         <translation>Mostrar sólo esta ruta</translation>
     </message>
@@ -644,33 +644,33 @@ This program cannot continue.</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1053"/>
+        <location filename="mainwindow.cc" line="1054"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1063"/>
+        <location filename="mainwindow.cc" line="1064"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1183"/>
+        <location filename="mainwindow.cc" line="1184"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1207"/>
+        <location filename="mainwindow.cc" line="1208"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1250"/>
+        <location filename="mainwindow.cc" line="1251"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1252"/>
+        <location filename="mainwindow.cc" line="1253"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
