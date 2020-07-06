@@ -227,6 +227,7 @@ if(WIN32)
   set(HEADERS ${HEADERS} gbser_win.h)
   set(JEEPS ${JEEPS} jeeps/gpsusbwin.cc)
   set(LIBS ${LIBS} setupapi)
+  set(RC_FILE win32/gpsbabel.rc)
 endif()
 
 if(MSVC)
