@@ -198,7 +198,7 @@ rd_buf(uint8_t* buf, int len)
     db(1, MYNAME ": rd_buf(): Read error (%d)\n", rc);
     return res_ERROR;
   } else if (rc < len) {
-    db(1, MYNAME ": rd_buf(): Read timout\n");
+    db(1, MYNAME ": rd_buf(): Read timeout\n");
     return res_ERROR;
   }
 

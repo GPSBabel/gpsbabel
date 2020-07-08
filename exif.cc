@@ -684,17 +684,17 @@ exif_examine_app(ExifApp* app)
   uint32_t ident = gbfgetuint32(ftmp);
   is_fatal(ident != 0x66697845, MYNAME ": Invalid EXIF header magic.");
   is_fatal(gbfgetint16(ftmp) != 0, MYNAME ": Error in EXIF header.");
-  uint16_t endianess = gbfgetint16(ftmp);
+  uint16_t endianness = gbfgetint16(ftmp);
 
   if (global_opts.debug_level >= 3) {
-    printf(MYNAME ": endianess = 0x%04X\n", endianess);
+    printf(MYNAME ": endianness = 0x%04X\n", endianness);
   }
-  if (endianess == 0x4949) {
+  if (endianness == 0x4949) {
     ftmp->big_endian = 0;
-  } else if (endianess == 0x4D4D) {
+  } else if (endianness == 0x4D4D) {
     ftmp->big_endian = 1;
   } else {
-    fatal(MYNAME ": Invalid endianess identifier 0x%04X!\n", endianess);
+    fatal(MYNAME ": Invalid endianness identifier 0x%04X!\n", endianness);
   }
 
   gbfseek(ftmp, 6, SEEK_SET);
