@@ -37,7 +37,11 @@ AdvDlg::AdvDlg(QWidget* parent,
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
+#if HAVE_WEBENGINE || HAVE_WEBKIT
   ui_.previewGmap->setChecked(previewGmap);
+#else // HAVE_WEBENGINE || HAVE_WEBKIT
+  ui_.previewGmap->hide();
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/ok.png"));

@@ -18,7 +18,10 @@ qtHaveModule(webenginewidgets) {
   QT += webenginewidgets webchannel
   DEFINES += HAVE_WEBENGINE
 } else {
-  QT += webkit webkitwidgets 
+  qtHaveModule(webkitwidgets) {
+    QT += webkit webkitwidgets 
+    DEFINES += HAVE_WEBKIT
+  }
 }
 
 unix:DESTDIR = objects

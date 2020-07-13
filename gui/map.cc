@@ -20,6 +20,7 @@
 //  USA.
 //
 //------------------------------------------------------------------------
+#if HAVE_WEBENGINE || HAVE_WEBKIT
 #include "map.h"
 
 #include <QNetworkRequest>
@@ -471,3 +472,4 @@ void Map::evaluateJS(const QStringList& s, bool upd)
 {
   evaluateJS(s.join('\n'), upd);
 }
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT

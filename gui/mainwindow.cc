@@ -62,7 +62,9 @@
 #include "donate.h"                    // for Donate
 #include "filterdlg.h"                 // for FilterDialog
 #include "formatload.h"                // for FormatLoad
+#if HAVE_WEBENGINE || HAVE_WEBKIT
 #include "gmapdlg.h"                   // for GMapDialog
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT
 #include "help.h"                      // for ShowHelp
 #include "optionsdlg.h"                // for OptionsDlg
 #include "preferences.h"               // for Preferences
@@ -1023,6 +1025,7 @@ void MainWindow::applyActionX()
   }
 
   // Now output for preview in google maps
+#if HAVE_WEBENGINE || HAVE_WEBKIT
   QString tempName;
   if (babelData_.previewGmap_) {
     QTemporaryFile ftemp;
@@ -1039,6 +1042,7 @@ void MainWindow::applyActionX()
     args << "gpx";
     args << "-F" << tempName;
   }
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT
 
   ui_.outputWindow->clear();
   ui_.outputWindow->appendPlainText("gpsbabel " + args.join(" "));
@@ -1052,6 +1056,7 @@ void MainWindow::applyActionX()
   ui_.outputWindow->appendPlainText(outputString);
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
+#if HAVE_WEBENGINE || HAVE_WEBKIT
     if (babelData_.previewGmap_) {
       this->hide();
       GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
@@ -1060,6 +1065,7 @@ void MainWindow::applyActionX()
       QFile(tempName).remove();
       this->show();
     }
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT
   } else {
     ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
   }

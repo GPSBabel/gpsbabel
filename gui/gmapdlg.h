@@ -20,6 +20,7 @@
 //  USA.
 //
 //------------------------------------------------------------------------
+#if HAVE_WEBENGINE || HAVE_WEBKIT
 #ifndef GMAPDLG_H
 #define GMAPDLG_H
 
@@ -92,3 +93,4 @@ private slots:
 };
 
 #endif
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT

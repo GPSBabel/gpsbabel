@@ -21,6 +21,7 @@
 //
 //------------------------------------------------------------------------
 
+#if HAVE_WEBENGINE || HAVE_WEBKIT
 #include <QStandardItemModel>
 #include <QMenu>
 #include <QHeaderView>
@@ -580,3 +581,4 @@ void GMapDialog::copyButtonClickedX()
 {
 
 }
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT

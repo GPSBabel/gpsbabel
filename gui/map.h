@@ -20,6 +20,7 @@
 //  USA.
 //
 //------------------------------------------------------------------------
+#if HAVE_WEBENGINE || HAVE_WEBKIT
 #ifndef MAP_H
 #define MAP_H
 #if HAVE_WEBENGINE
@@ -127,3 +128,4 @@ protected:
 
 
 #endif // HEADER_H
+#endif // HAVE_WEBENGINE || HAVE_WEBKIT
