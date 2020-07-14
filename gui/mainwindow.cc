@@ -62,7 +62,9 @@
 #include "donate.h"                    // for Donate
 #include "filterdlg.h"                 // for FilterDialog
 #include "formatload.h"                // for FormatLoad
+#ifndef DISABLE_MAPPREVIEW
 #include "gmapdlg.h"                   // for GMapDialog
+#endif
 #include "help.h"                      // for ShowHelp
 #include "optionsdlg.h"                // for OptionsDlg
 #include "preferences.h"               // for Preferences
@@ -1052,6 +1054,7 @@ void MainWindow::applyActionX()
   ui_.outputWindow->appendPlainText(outputString);
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
+#ifndef DISABLE_MAPPREVIEW
     if (babelData_.previewGmap_) {
       this->hide();
       GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
@@ -1060,6 +1063,7 @@ void MainWindow::applyActionX()
       QFile(tempName).remove();
       this->show();
     }
+#endif
   } else {
     ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
   }

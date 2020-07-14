@@ -14,11 +14,15 @@ QT += core \
       widgets \
       xml
 
-qtHaveModule(webenginewidgets) {
-  QT += webenginewidgets webchannel
-  DEFINES += HAVE_WEBENGINE
+disable-mappreview {
+  DEFINES += DISABLE_MAPPREVIEW
 } else {
-  QT += webkit webkitwidgets 
+  qtHaveModule(webenginewidgets) {
+    QT += webenginewidgets webchannel
+    DEFINES += HAVE_WEBENGINE
+  } else {
+    QT += webkit webkitwidgets 
+  }
 }
 
 unix:DESTDIR = objects
@@ -57,7 +61,9 @@ FORMS += aboutui.ui
 FORMS += advui.ui
 FORMS += donate.ui
 FORMS += filterui.ui
-FORMS += gmapui.ui
+!disable-mappreview {
+  FORMS += gmapui.ui
+}
 FORMS += mainwinui.ui
 FORMS += miscfltui.ui
 FORMS += preferences.ui
@@ -76,13 +82,17 @@ SOURCES += filterdlg.cc
 SOURCES += filterwidgets.cc
 SOURCES += format.cc
 SOURCES += formatload.cc
-SOURCES += gmapdlg.cc
-SOURCES += gpx.cc
+!disable-mappreview{
+  SOURCES += gmapdlg.cc
+  SOURCES += gpx.cc
+}
 SOURCES += help.cc
 SOURCES += latlng.cc
 SOURCES += main.cc
 SOURCES += mainwindow.cc
-SOURCES += map.cc
+!disable-mappreview{
+  SOURCES += map.cc
+}
 SOURCES += optionsdlg.cc
 SOURCES += preferences.cc
 SOURCES += processwait.cc
@@ -106,11 +116,15 @@ HEADERS += filterdlg.h
 HEADERS += filterwidgets.h
 HEADERS += format.h
 HEADERS += formatload.h
-HEADERS += gmapdlg.h
-HEADERS += gpx.h
+!disable-mappreview {
+  HEADERS += gmapdlg.h
+  HEADERS += gpx.h
+}
 HEADERS += help.h
 HEADERS += mainwindow.h
-HEADERS += map.h
+!disable-mappreview {
+  HEADERS += map.h
+}
 HEADERS += optionsdlg.h
 HEADERS += preferences.h
 HEADERS += processwait.h

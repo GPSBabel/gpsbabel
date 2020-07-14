@@ -45,6 +45,10 @@ AdvDlg::AdvDlg(QWidget* parent,
 #endif // Q_OS_WIN
   connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
   connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
+
+#ifdef DISABLE_MAPPREVIEW
+  ui_.previewGmap->hide();
+#endif
 }
 
 void AdvDlg::acceptClicked()
