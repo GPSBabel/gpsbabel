@@ -402,11 +402,13 @@ NmeaFormat::gpgga_parse(char* ibuf)
   double hms = 0;
   if (fields.size() > 1) hms = fields[1].toDouble();
   double latdeg = 0;
-  if (fields.size() > 2) latdeg = fields[2].toDouble();
+  bool lat_ok = false;
+  if (fields.size() > 2) latdeg = fields[2].toDouble(&lat_ok);
   QChar latdir = 'N';
   if (fields.size() > 3) latdir = fields[3][0];
   double lngdeg = 0;
-  if (fields.size() > 4) lngdeg = fields[4].toDouble();
+  bool lng_ok = false;
+  if (fields.size() > 4) lngdeg = fields[4].toDouble(&lng_ok);
   QChar lngdir = 'W';
   if (fields.size() > 5) lngdir = fields[5][0];
   int fix = fix_unknown;
@@ -431,7 +433,7 @@ NmeaFormat::gpgga_parse(char* ibuf)
    * that is more comfortable than nothing at all...
    */
   CHECK_BOOL(opt_ignorefix);
-  if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
+  if ((fix <= 0) && (read_mode != rm_serial || !lat_ok || !lng_ok) && (!opt_ignorefix)) {
     return;
   }
 
