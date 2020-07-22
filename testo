@@ -84,7 +84,7 @@ sort_and_compare()
 
 gpsbabel()
 {
-	${PNAME} "$@" || {
+	"${PNAME}" "$@" || {
 		echo "$PNAME returned error $?"
 		echo "($PNAME $@)"
 		errorcount=`expr $errorcount + 1`
