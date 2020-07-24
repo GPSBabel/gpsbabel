@@ -32,7 +32,13 @@
 
 #include "defs.h"
 #include "shape.h"
-#include "shapelib/shapefil.h"
+#ifdef SHAPEFILE_H_SYSTEM_INCLUDE
+#  include <shapefil.h>
+#elif SHAPEFILE_H_LOCAL_INCLUDE
+#  include "shapelib/shapefil.h"
+#else
+#  include "shapelib/shapefil.h"
+#endif
 
 
 #if SHAPELIB_ENABLED
