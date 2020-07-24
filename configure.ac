@@ -369,6 +369,5 @@ AS_MKDIR_P([zlib/contrib/minizip])
 AS_MKDIR_P([testo.d])
 AS_MKDIR_P([mac/libusb])
 
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc])
-AC_CONFIG_FILES([tools/mkcapabilities], [chmod +x tools/mkcapabilities])
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss])
 AC_OUTPUT
