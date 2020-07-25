@@ -331,15 +331,16 @@ QMAKE_EXTRA_TARGETS += index.html
 
 #
 # The .fo and PDF versions depend on additional tools.
-# 'fop' must be obtained from http://xmlgraphics.apache.org/fop/
+# 'fop' must be obtained from your distribution or http://xmlgraphics.apache.org/fop/
 #   0.92beta seems to work OK, BUT.
 #   * If you have a package called 'docbook-xml-website' it's reported
 #     to prevent the build from working.   Remove it. (Suse)
 #   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
 #     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
 #     Get it from http://www.java.com
-# The Hyphenation package must be installed from
-#   http://offo.sourceforge.net/hyphenation/index.html - be sure to get the
+# The Hyphenation package must be installed.  Perhaps your distribution has
+#   a package, e.g. Ubuntu libfop-java, or you can go to the project site at
+#   http://offo.sourceforge.net/ - be sure to get the
 #   version that corresponds to the version of FOP that you used above.
 # The docbook XSL must be 1.71.1 or higher.
 #   * Remember to update /etc/xml/catalogs if you manually update this.
