@@ -34,7 +34,7 @@ typedef struct gpsdevh gpsdevh;
 int
 gusb_init(const char* portname, gpsdevh** dh)
 {
-  Fatal() << no_usb;
+  fatal(no_usb);
   return 0;
 }
 
