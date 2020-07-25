@@ -261,7 +261,7 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-check.depends = $(TARGET)
+check.depends = $(TARGET) FORCE
 check.commands = @PNAME=./$(TARGET) $${PWD}/testo
 QMAKE_EXTRA_TARGETS += check
 
