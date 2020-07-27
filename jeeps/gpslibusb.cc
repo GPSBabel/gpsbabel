@@ -29,9 +29,15 @@
 #endif
 #if HAVE_LIBUSB_1_0
 #ifdef LIBUSB_H_INCLUDE
+// Warning: LIBUSB_H_INCLUDE necessarily includes bracket or double quote
+//          characters.
+//          qmake -tp vc doesn't properly quote these characters, and the
+//          produced project file is invalid.  However, we don't use libusb
+//          at all on windows, so this isn't an issue in this application.
 #  include LIBUSB_H_INCLUDE
-#else
+#else  // TODO: delete this clause when configure is removed and CMakeLists updated.
 #  if __APPLE__
+// We use our own libusb.
 #    include "mac/libusb/libusb.h"
 #  else
 #    include <libusb-1.0/libusb.h>

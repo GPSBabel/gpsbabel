@@ -6,9 +6,7 @@ equals(WITH_ZLIB, no) {
   equals(WITH_ZLIB, pkgconfig) {
     message("Using zlib found by pkg-config")
     PKGCONFIG += $$shell_quote(zlib > 1.2.8)
-    # This gets trashed on windows with qmake -tp vc:
-    #DEFINES += ZLIB_H_INCLUDE=$$shell_quote(<zlib.h>)
-    DEFINES += ZLIB_H_SYSTEM_INCLUDE
+    DEFINES += HAVE_LIBZ
   } else:equals(WITH_ZLIB, included) {
     # TODO: It would be better to create an archive and link to it
     #       to separate library build requirements from gpsbabel requirements.
@@ -27,8 +25,6 @@ equals(WITH_ZLIB, no) {
                zlib/gzread.c \
                zlib/gzwrite.c \
                zlib/zutil.c
-    #DEFINES += ZLIB_H_INCLUDE=$$shell_quote(\"zlib/zlib.h\")
-    DEFINES += ZLIB_H_LOCAL_INCLUDE
     INCLUDEPATH += zlib
     HEADERS += zlib/crc32.h \
                zlib/deflate.h \
@@ -44,8 +40,7 @@ equals(WITH_ZLIB, no) {
   } else:equals(WITH_ZLIB, custom) {
     message("zlib is enabled but but must be manually configured")
     message("  e.g. qmake WITH_ZLIB=custom LIBS+=... INCLUDEPATH+=...")
-    #DEFINES += ZLIB_H_INCLUDE=$$shell_quote(<zlib.h>)
-    DEFINES += ZLIB_H_SYSTEM_INCLUDE
+    DEFINES += HAVE_LIBZ
   } else {
     error("WITH_ZLIB=no|pkgconfig|included*|custom");
   }

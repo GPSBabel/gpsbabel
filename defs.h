@@ -31,16 +31,10 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-#ifdef ZLIB_H_SYSTEM_INCLUDE
-#  include <zlib.h>                   // doesn't really belong here, but is missing elsewhere.
-#elif ZLIB_H_LOCAL_INCLUDE
-#  include "zlib/zlib.h"              // doesn't really belong here, but is missing elsewhere.
-#else
-#  if HAVE_LIBZ
-#    include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
-#  elif !ZLIB_INHIBITED
-#    include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
-#  endif
+#if HAVE_LIBZ
+#include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
+#elif !ZLIB_INHIBITED
+#include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
 #include <QtCore/QDebug>          // for QDebug
