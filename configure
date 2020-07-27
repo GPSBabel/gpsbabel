@@ -6549,9 +6549,7 @@ as_dir=zlib/contrib/minizip; as_fn_mkdir_p
 as_dir=testo.d; as_fn_mkdir_p
 as_dir=mac/libusb; as_fn_mkdir_p
 
-ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc"
-
-ac_config_files="$ac_config_files tools/mkcapabilities"
+ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7249,8 +7247,6 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "gbversion.h") CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
     "gui/setup.iss") CONFIG_FILES="$CONFIG_FILES gui/setup.iss" ;;
-    "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
-    "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -7801,11 +7797,6 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
-
-  case $ac_file$ac_mode in
-    "tools/mkcapabilities":F) chmod +x tools/mkcapabilities ;;
-
-  esac
 done # for ac_tag
 
 

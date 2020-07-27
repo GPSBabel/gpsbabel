@@ -16,6 +16,7 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 QT -= gui
 
 TARGET = gpsbabel
+VERSION = 1.7.0
 
 CONFIG += console
 CONFIG -= app_bundle
@@ -262,12 +263,72 @@ linux{
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
 
-gpsbabel.pdf.depends = FORCE
-gpsbabel.pdf.commands += perl xmldoc/makedoc &&
+!defined(WEB, var) {
+  WEB = ../babelweb
+}
+!defined(DOCVERSION, var) {
+  DOCVERSION=$${VERSION}
+}
+
+index.html.depends = gpsbabel FORCE
+index.html.commands += web=\$\${WEB:-$${WEB}} &&
+index.html.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
+index.html.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
+index.html.commands += perl xmldoc/makedoc &&
+index.html.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
+index.html.commands += xmllint --noout --valid xmldoc/readme.xml &&    #validate
+index.html.commands += xsltproc \
+  --stringparam base.dir "\$\${web}/htmldoc-\$\${docversion}/" \
+  --stringparam root.filename "index" \
+  xmldoc/babelmain.xsl \
+  xmldoc/readme.xml &&
+index.html.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} "GPSBabel \$\${docversion}:" &&
+index.html.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion}
+QMAKE_EXTRA_TARGETS += index.html
+
+#
+# The gpsbabel.pdf target depends on additional tools.
+# On macOS you can 'brew install fop' to get fop and the hyphenation package.
+# On Debian/Ubuntu you can 'apt-get install fop' to get fop and the hyphenation package.
+# 'fop' must be obtained from your distribution or http://xmlgraphics.apache.org/fop/
+#   0.92beta seems to work OK, BUT.
+#   * If you have a package called 'docbook-xml-website' it's reported
+#     to prevent the build from working.   Remove it. (Suse)
+#   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
+#     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#     Get it from http://www.java.com
+# The Hyphenation package must be obtained from your distribution or
+#   the project site at http://offo.sourceforge.net/ - be sure to get the
+#   version that corresponds to the version of FOP that you used above.
+#
+#
+# The docbook XSL must be 1.71.1 or higher.
+#   * Remember to update /etc/xml/catalogs if you manually update this.
+#
+
+gpsbabel.html.depends = gpsbabel FORCE
+gpsbabel.html.commands += perl xmldoc/makedoc &&
+gpsbabel.html.commands += xsltproc \
+   --output gpsbabel.html \
+   --stringparam toc.section.depth "1" \
+   --stringparam html.cleanup "1" \
+   --stringparam make.clean.html "1" \
+   --stringparam html.valid.html "1" \
+   --stringparam html.stylesheet \
+   "https://www.gpsbabel.org/style3.css" \
+   http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+ xmldoc/readme.xml
+QMAKE_EXTRA_TARGETS += gpsbabel.html
+
+gpsbabel.pdf.depends = gpsbabel FORCE
+gpsbabel.pdf.commands += web=\$\${WEB:-$${WEB}} &&
+gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
+gpsbabel.pdf.commands += perl xmldoc/makedoc && 
 gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
 gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
 gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
-#gpsbabel.pdf.commands += cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
+gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf &&
+gpsbabel.pdf.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
+gpsbabel.pdf.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
