@@ -29,6 +29,7 @@
 #include "defs.h"
 #include "gbfile.h"
 #include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
 
 #define MYNAME "f90g_track"
 #define TTRECORDSIZE      249
@@ -69,7 +70,7 @@ f90g_track_rd_init(const QString& fname)
     // start the track list
     track = new route_head;
     is_fatal((track == nullptr), MYNAME ": memory non-enough");
-    track->rte_name = fname;
+    track->rte_name = QFileInfo(fname).fileName();
     track_add_head(track);
   }
 }

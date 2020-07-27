@@ -21,6 +21,7 @@
 #define SRC_CORE_FILE_INCLUDED_H_
 
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 #include <QtCore/QIODevice>
 #include <cstdio>
 #include "defs.h"
@@ -51,7 +52,7 @@ public:
 
     if (!status) {
       fatal("Cannot open '%s' for %s.  Error was '%s'.\n",
-            qPrintable(QFile::fileName()),
+            gpsbabel_testmode()? qPrintable(QFileInfo(*this).fileName()) : qPrintable(QFile::fileName()),
             (mode & QIODevice::WriteOnly)? "write" : "read",
             qPrintable(QFile::errorString()));
     }

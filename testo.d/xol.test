@@ -15,10 +15,8 @@ rm -f ${TMPDIR}/xol-sample_si.gpx
 ${PNAME} -i xol -f ${REFERENCE}/doesnotexist -o gpx -F ${TMPDIR}/xol-sample_si.gpx 2> ${TMPDIR}/nonexistent.err && {
          echo "${PNAME} succeeded! (it shouldn't have with this input...)"
 }
-# check error message is what we expected
-# Note that the reference file nonexistent.err includes the file path,
-# so this will fail when starting from a directory other than gpsbabel.
-# the message can vary depending on the c runtime, .i.e. msvc and gcc are slightly different.
+# check error message is what we expected.
+# The message can vary depending on the c runtime, .i.e. msvc and gcc are slightly different.
 compare_with_alternate ${REFERENCE}/nonexistent.err ${REFERENCE}/nonexistent_alternate.err ${TMPDIR}/nonexistent.err
 
 

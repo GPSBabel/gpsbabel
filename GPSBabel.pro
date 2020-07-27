@@ -215,11 +215,14 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-macx|linux|openbsd{
-  check.commands = PNAME=./$(TARGET) ./testo
-  check.depends = $(TARGET)
-  QMAKE_EXTRA_TARGETS += check
-}
+check.depends = $(TARGET) FORCE
+check.commands = @PNAME=./$(TARGET) $${PWD}/testo
+QMAKE_EXTRA_TARGETS += check
+
+check-vtesto.depends = $(TARGET) FORCE
+check-vtesto.commands += @$(MAKE) -s -f $${PWD}/Makefile_vtesto srcdir=$${PWD} builddir=$${OUT_PWD} check-vtesto
+QMAKE_EXTRA_TARGETS += check-vtesto
+QMAKE_CLEAN += $${OUT_PWD}/testo.d/*.vglog
 
 # build the compilation data base used by clang tools including clang-tidy.
 macx|linux|openbsd{
