@@ -4,6 +4,7 @@ macx|linux|openbsd {
     linux|openbsd: WITH_LIBUSB = system
   }
   equals(WITH_LIBUSB, no) {
+    message("libusb-1.0 disabled")
     JEEPS += jeeps/gpsusbstub.cc
   } else {
     DEFINES += HAVE_LIBUSB_1_0
