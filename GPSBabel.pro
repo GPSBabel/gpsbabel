@@ -10,7 +10,7 @@ count(MIN_QT_VERSION_PATCH, 0): MIN_QT_VERSION_PATCH = 0
 lessThan(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR) | \
 if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):lessThan(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR)) | \
 if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR):lessThan(QT_PATCH_VERSION, $$MIN_QT_VERSION_PATCH)) {
-  error("$$QMAKE_QMAKE uses Qt version $$QT_VERSION but version $${MIN_QT_VERSION_MAJOR}.$${MIN_QT_VERSION_MINOR}.$${MIN_QT_VERSION_PATCH} or newer is required.")  
+  error("$$QMAKE_QMAKE uses Qt version $$QT_VERSION but version $${MIN_QT_VERSION_MAJOR}.$${MIN_QT_VERSION_MINOR}.$${MIN_QT_VERSION_PATCH} or newer is required.")
 }
 
 QT -= gui
@@ -21,6 +21,7 @@ VERSION = 1.7.0
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14
+CONFIG += link_pkgconfig
 
 TEMPLATE = app
 
@@ -62,13 +63,6 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
 FILTER_HEADERS = $$FILTERS
 FILTER_HEADERS ~= s/\.cc/.h/g
 
-SHAPE=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
-
-ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
-        zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
-        zlib/uncompr.c zlib/gzlib.c zlib/gzclose.c zlib/gzread.c \
-        zlib/gzwrite.c zlib/zutil.c
-
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
          jeeps/gpsprot.cc jeeps/gpsread.cc \
@@ -85,7 +79,7 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc \
           src/core/textstream.cc \
           src/core/usasciicodec.cc \
-          src/core/xmlstreamwriter.cc 
+          src/core/xmlstreamwriter.cc
 
 HEADERS =  \
 	an1sym.h \
@@ -148,7 +142,6 @@ HEADERS =  \
 	random.h \
 	session.h \
 	shape.h \
-	shapelib/shapefil.h \
 	strptime.h \
 	subrip.h \
 	unicsv.h \
@@ -157,17 +150,6 @@ HEADERS =  \
 	xcsv.h \
 	xmlgeneric.h \
 	yahoo.h \
-	zlib/crc32.h \
-	zlib/deflate.h \
-	zlib/gzguts.h \
-	zlib/inffast.h \
-	zlib/inffixed.h \
-	zlib/inflate.h \
-	zlib/inftrees.h \
-	zlib/trees.h \
-	zlib/zconf.h \
-	zlib/zlib.h \
-	zlib/zutil.h \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
@@ -178,8 +160,6 @@ HEADERS =  \
 	src/core/xmltag.h
 
 HEADERS += $$FILTER_HEADERS
-
-INCLUDEPATH += zlib
 
 load(configure)
 
@@ -194,23 +174,21 @@ macx|linux|openbsd {
     # this is used by zlib
     DEFINES += HAVE_STDARG_H
   }
-  DEFINES += HAVE_LIBUSB_1_0
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
-  JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
 }
 
 win32 {
   DEFINES += __WIN32__ _CONSOLE
-  DEFINES -= UNICODE ZLIB_INHIBITED
+  DEFINES -= UNICODE
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
   }
   SOURCES += gbser_win.cc
   HEADERS += gbser_win.h
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "-lsetupapi" 
+  LIBS += "-lsetupapi"
   RC_FILE = win32/gpsbabel.rc
 }
 
@@ -219,39 +197,15 @@ win32-msvc* {
   QMAKE_CXXFLAGS += /MP -wd4100
 }
 
-linux|openbsd {
-  LIBS += "-lusb-1.0"
-}
+include(shapelib.pri)
+include(zlib.pri)
+include(libusb.pri)
 
-macx {
-  LIBS += -lobjc -framework IOKit -framework CoreFoundation
-  INCLUDEPATH += mac/libusb \
-                 mac/libusb/Xcode
-  SOURCES += mac/libusb/core.c \
-             mac/libusb/descriptor.c \
-             mac/libusb/hotplug.c \
-             mac/libusb/io.c \
-             mac/libusb/strerror.c \
-             mac/libusb/sync.c \
-             mac/libusb/os/darwin_usb.c \
-             mac/libusb/os/poll_posix.c \
-             mac/libusb/os/threads_posix.c
-  HEADERS += mac/libusb/hotplug.h \
-             mac/libusb/libusb.h \
-             mac/libusb/libusbi.h \
-             mac/libusb/version.h \
-             mac/libusb/version_nano.h \
-             mac/libusb/os/darwin_usb.h \
-             mac/libusb/os/poll_posix.h \
-             mac/libusb/os/threads_posix.h
-}
-
-SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
+SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
-DEFINES += SHAPELIB_ENABLED
 DEFINES += CSVFMTS_ENABLED
 
 # Creator insists on adding -W to -Wall which results in a completely
@@ -279,7 +233,7 @@ macx|linux|openbsd{
 # example usage:
 # make clang-tidy RUN_CLANG_TIDY_FLAGS="-header-filter=.*\\\.h -checks=-*,modernize-use-nullptr -fix"
 # It seems to be better to use run-clang-tidy with the compilation database as opposed to
-# running clang-tidy directly and listing the 
+# running clang-tidy directly and listing the
 # compilation options on the clang-tidy line after --.
 # An example is modernize-use-override which inserts repeadted overrides when run directly,
 # but works as expected when run with run-clang-tidy.
