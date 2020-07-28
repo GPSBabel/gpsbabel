@@ -228,7 +228,7 @@ QMAKE_CLEAN += $${OUT_PWD}/testo.d/*.vglog
 # build the compilation data base used by clang tools including clang-tidy.
 macx|linux|openbsd{
   compile_command_database.target = compile_commands.json
-  compile_command_database.commands = make clean; bear make
+  compile_command_database.commands = $(MAKE) clean; bear $(MAKE)
   QMAKE_EXTRA_TARGETS += compile_command_database
 }
 
@@ -249,7 +249,7 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 # dependencies:
 # extra ubuntu bionic packages: gcovr lcov
 linux{
-  coverage.commands = make clean;
+  coverage.commands = $(MAKE) clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
@@ -323,7 +323,7 @@ QMAKE_EXTRA_TARGETS += gpsbabel.html
 gpsbabel.pdf.depends = gpsbabel FORCE
 gpsbabel.pdf.commands += web=\$\${WEB:-$${WEB}} &&
 gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
-gpsbabel.pdf.commands += perl xmldoc/makedoc && 
+gpsbabel.pdf.commands += perl xmldoc/makedoc &&
 gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
 gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
 gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
@@ -331,4 +331,18 @@ gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf &&
 gpsbabel.pdf.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
 gpsbabel.pdf.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
+
+gui.depends = $(TARGET) FORCE
+gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+QMAKE_EXTRA_TARGETS += gui
+
+unix-gui.depends = gui FORCE
+unix-gui.commands += cd gui; $(MAKE) package
+QMAKE_EXTRA_TARGETS += unix-gui
+
+toolinfo.depends = FORCE
+toolinfo.commands += $(CC) --version;
+toolinfo.commands += $(CXX) --version;
+toolinfo.commands += $(QMAKE) -v;
+QMAKE_EXTRA_TARGETS += toolinfo
 
