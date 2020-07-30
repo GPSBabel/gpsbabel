@@ -25,8 +25,37 @@ CONFIG += link_pkgconfig
 
 TEMPLATE = app
 
+# use GB variable to express ownership intention and
+# avoid conflict with documented and undocumented qmake variables
+GB.VERSION_COMPONENTS = $$split(VERSION, .)
+GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
+GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
+GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
+# Increase GB.BUILD for a new release (why? Where is this ever used?)
+# A: it's used by win32/gpsbabel.rc which includes gbversion.h
+GB.BUILD = 31
+# GB.PACKAGE_RELEASE = "-beta20190413"
+
+# may be overwridden on qmake command line
+!defined(GB.DOCVERSION, var) {
+  GB.DOCVERSION=$${VERSION}
+}
+
+# may be overwridden on qmake command line
+!defined(GB.WEB, var) {
+  GB.WEB = ../babelweb
+}
+
+# use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
+GB.versionfile.input = gbversion.h.qmake.in
+GB.versionfile.output = gbversion.h
+QMAKE_SUBSTITUTES += GB.versionfile
+GB.setupfile.input = gui/setup.iss.qmake.in
+GB.setupfile.output = gui/setup.iss
+QMAKE_SUBSTITUTES += GB.setupfile
+
 MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc \
-               garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
+               garmin_device_xml.cc garmin_tables.cc nmea.cc \
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
@@ -161,6 +190,47 @@ HEADERS =  \
 
 HEADERS += $$FILTER_HEADERS
 
+win32-msvc*: {
+  # avoid attempts by cmd.exe to execute mkstyle.sh
+  SOURCES += internal_styles.cc
+} else {
+  # It would be nice to do this when make runs instead of qmake, but we will
+  # monitor the style directory to catch new or deleted .style files.
+  STYLE_FILES = $$files($${PWD}/style/*.style)
+  # It's a bit tacky, but this may modify source files when doing an out of source build.
+  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
+  # and we want to make sure it is up to date on commit.
+  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
+  styles.CONFIG += combine
+  styles.depends += $${PWD}/mkstyle.sh
+  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
+  styles.input = STYLE_FILES
+  styles.output = $${PWD}/internal_styles.cc
+  styles.variable_out = SOURCES
+  QMAKE_EXTRA_COMPILERS += styles
+}
+
+win32-msvc*: {
+  # assume gperf not available.
+  HEADERS += xcsv_tokens.gperf
+} else {
+  TOKEN_FILES = $${PWD}/xcsv_tokens.in
+  equals(PWD, $${OUT_PWD}) {
+    tokens.commands += gperf --output-file=xcsv_tokens.gperf -L C++ -D -t xcsv_tokens.in
+  } else {
+    # Require in source builds.
+    # The the output must be checked in and the output depends on
+    # the --output-file parameter and the input file.
+    tokens.commands += echo "compilation of xcsv_tokens is not supported for out of source builds.";
+    tokens.commands += exit 1;
+  }
+  tokens.CONFIG += no_link
+  tokens.input = TOKEN_FILES
+  tokens.output = $${PWD}/xcsv_tokens.gperf
+  tokens.variable_out = HEADERS
+  QMAKE_EXTRA_COMPILERS += tokens
+}
+
 load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
@@ -263,16 +333,9 @@ linux{
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
 
-!defined(WEB, var) {
-  WEB = ../babelweb
-}
-!defined(DOCVERSION, var) {
-  DOCVERSION=$${VERSION}
-}
-
 index.html.depends = gpsbabel FORCE
-index.html.commands += web=\$\${WEB:-$${WEB}} &&
-index.html.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
+index.html.commands += web=\$\${WEB:-$${GB.WEB}} &&
+index.html.commands += docversion=\$\${DOCVERSION:-$${GB.DOCVERSION}} &&
 index.html.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
 index.html.commands += perl xmldoc/makedoc &&
 index.html.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
@@ -321,8 +384,8 @@ gpsbabel.html.commands += xsltproc \
 QMAKE_EXTRA_TARGETS += gpsbabel.html
 
 gpsbabel.pdf.depends = gpsbabel FORCE
-gpsbabel.pdf.commands += web=\$\${WEB:-$${WEB}} &&
-gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
+gpsbabel.pdf.commands += web=\$\${WEB:-$${GB.WEB}} &&
+gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${GB.DOCVERSION}} &&
 gpsbabel.pdf.commands += perl xmldoc/makedoc &&
 gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
 gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
