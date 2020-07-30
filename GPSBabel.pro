@@ -90,7 +90,7 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
         validate.cc
 FILTER_HEADERS = $$FILTERS
-FILTER_HEADERS ~= s/\.cc/.h/g
+FILTER_HEADERS ~= s/\\.cc/.h/g
 
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
@@ -190,7 +190,7 @@ HEADERS =  \
 
 HEADERS += $$FILTER_HEADERS
 
-win32-msvc*: {
+win32-msvc* {
   # avoid attempts by cmd.exe to execute mkstyle.sh
   SOURCES += internal_styles.cc
 } else {
@@ -210,7 +210,7 @@ win32-msvc*: {
   QMAKE_EXTRA_COMPILERS += styles
 }
 
-win32-msvc*: {
+win32-msvc* {
   # assume gperf not available.
   HEADERS += xcsv_tokens.gperf
 } else {
