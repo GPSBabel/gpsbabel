@@ -22,7 +22,7 @@ touch internal_styles.cc
 # build and test keeping output within the pwd.
 export GBTEMP=$(pwd)/gbtemp
 mkdir -p $GBTEMP
-qmake WEB=$(pwd)/gpsbabel_docdir DOCVERSION=$(git rev-parse --short HEAD)
+qmake WEB=$(pwd)/gpsbabel_docdir
 # As of 2018-10, all the virtualized travis build images are two cores per:
 # https://docs.travis-ci.com/user/reference/overview/
 # We'll be slightly abusive on CPU knowing that I/O is virtualized.
@@ -32,7 +32,7 @@ make -j 3
 make -j 3 unix-gui
 make gpsbabel.html
 make gpsbabel.pdf
-make index.html
+make gpsbabel.org
 make check
 # test for mangled encoding of command line arguments
 ./test_encoding_latin1

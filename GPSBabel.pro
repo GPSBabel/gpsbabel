@@ -37,13 +37,13 @@ GB.BUILD = 31
 # GB.PACKAGE_RELEASE = "-beta20190413"
 
 # may be overwridden on qmake command line
-!defined(GB.DOCVERSION, var) {
-  GB.DOCVERSION=$${VERSION}
+!defined(DOCVERSION, var) {
+  DOCVERSION=$${VERSION}
 }
 
 # may be overwridden on qmake command line
-!defined(GB.WEB, var) {
-  GB.WEB = ../babelweb
+!defined(WEB, var) {
+  WEB = ../babelweb
 }
 
 # use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
@@ -201,7 +201,7 @@ win32-msvc* {
   # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
   # and we want to make sure it is up to date on commit.
   styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
-  styles.CONFIG += combine
+  styles.CONFIG += combine no_clean
   styles.depends += $${PWD}/mkstyle.sh
   styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
   styles.input = STYLE_FILES
@@ -224,7 +224,7 @@ win32-msvc* {
     tokens.commands += echo "compilation of xcsv_tokens is not supported for out of source builds.";
     tokens.commands += exit 1;
   }
-  tokens.CONFIG += no_link
+  tokens.CONFIG += no_link no_clean
   tokens.input = TOKEN_FILES
   tokens.output = $${PWD}/xcsv_tokens.gperf
   tokens.variable_out = HEADERS
@@ -333,21 +333,22 @@ linux{
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
 
-index.html.depends = gpsbabel FORCE
-index.html.commands += web=\$\${WEB:-$${GB.WEB}} &&
-index.html.commands += docversion=\$\${DOCVERSION:-$${GB.DOCVERSION}} &&
-index.html.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
-index.html.commands += perl xmldoc/makedoc &&
-index.html.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
-index.html.commands += xmllint --noout --valid xmldoc/readme.xml &&    #validate
-index.html.commands += xsltproc \
+gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
+gpsbabel.org.commands += web=\$\${WEB:-$${WEB}} &&
+gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
+gpsbabel.org.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
+gpsbabel.org.commands += perl xmldoc/makedoc &&
+gpsbabel.org.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
+gpsbabel.org.commands += xmllint --noout --valid xmldoc/readme.xml &&    #validate
+gpsbabel.org.commands += xsltproc \
   --stringparam base.dir "\$\${web}/htmldoc-\$\${docversion}/" \
   --stringparam root.filename "index" \
   xmldoc/babelmain.xsl \
   xmldoc/readme.xml &&
-index.html.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} "GPSBabel \$\${docversion}:" &&
-index.html.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion}
-QMAKE_EXTRA_TARGETS += index.html
+gpsbabel.org.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} "GPSBabel \$\${docversion}:" &&
+gpsbabel.org.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion} &&
+gpsbabel.org.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
+QMAKE_EXTRA_TARGETS += gpsbabel.org
 
 #
 # The gpsbabel.pdf target depends on additional tools.
@@ -384,15 +385,11 @@ gpsbabel.html.commands += xsltproc \
 QMAKE_EXTRA_TARGETS += gpsbabel.html
 
 gpsbabel.pdf.depends = gpsbabel FORCE
-gpsbabel.pdf.commands += web=\$\${WEB:-$${GB.WEB}} &&
-gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${GB.DOCVERSION}} &&
 gpsbabel.pdf.commands += perl xmldoc/makedoc &&
 gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
 gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
 gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf &&
-gpsbabel.pdf.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
-gpsbabel.pdf.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
+gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
 gui.depends = $(TARGET) FORCE
