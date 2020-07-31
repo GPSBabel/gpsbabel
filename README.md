@@ -4,10 +4,9 @@ This is the source code for [GPSBabel](https://www.gpsbabel.org), the free softw
 # Welcome new open source contributors
 
 We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib).
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8f55bf8b8f454b4a9b1116c9268e26c6)](https://app.codacy.com/app/gpsbabel/gpsbabel?utm_source=github.com&utm_medium=referral&utm_content=gpsbabel/gpsbabel&utm_campaign=Badge_Grade_Settings)
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 </br> 
-Current status of the trunk build is [![Build Status](https://travis-ci.com/gpsbabel/gpsbabel.svg?branch=master)]. Passing is good. We like passing. 
+Current status of the trunk build is ![Build Status](https://travis-ci.com/gpsbabel/gpsbabel.svg?branch=master). Passing is good. We like passing. 
 
 The absolute [latest GPSBabel build](https://travis-ci.com/gpsbabel/gpsbabel) may not have made the front page yet. It takes about an hour to run our rigorous [presubmit testing](https://www.gpsbabel.org/quality.html) via [Appveyor for GPSBabel Windows](https://ci.appveyor.com/project/gpsbabel/gpsbabel) and [Travis for GPSBabel on Linux and macOS](https://travis-ci.com/gpsbabel/gpsbabel/). We are proud of our rating on Codacy: [![Codacy Badge](https://api.codacy.com/project/badge/Grade/362d2edacb5a4d73a9af023f08525a54)](https://www.codacy.com/app/gpsbabel/gpsbabel?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gpsbabel/gpsbabel&amp;utm_campaign=Badge_Grade)
 
