@@ -16,6 +16,12 @@ if gsed v /dev/null 1>/dev/null 2>&1; then
 elif sed v /dev/null 1>/dev/null 2>&1; then
   # sed is gnu sed
   SED=sed
+elif [ "$(uname -s)" = "Darwin" ]; then
+  # BSD sed is usually fine, but if a style file is encoded in ISO-8859 then it
+  # can echo a warning "sed: RE error: illegal byte sequence" to stderr and the
+  # output can be corrupted, while return exit status 0.  Since we no longer use
+  # this encoding for style files allow Darwin's sed.
+  SED=/usr/bin/sed
 elif [ "$(uname -s)" = "FreeBSD" ]; then
   # BSD sed is fine
   SED=/usr/bin/sed
