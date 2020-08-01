@@ -345,7 +345,7 @@ gpsbabel.org.commands += xsltproc \
   --stringparam root.filename "index" \
   xmldoc/babelmain.xsl \
   xmldoc/readme.xml &&
-gpsbabel.org.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} "GPSBabel \$\${docversion}:" &&
+gpsbabel.org.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} \"GPSBabel \$\${docversion}:\" &&
 gpsbabel.org.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion} &&
 gpsbabel.org.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
 QMAKE_EXTRA_TARGETS += gpsbabel.org

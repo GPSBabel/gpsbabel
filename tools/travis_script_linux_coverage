@@ -7,7 +7,7 @@
 # as of 3/16/2019 with coverage reporter 4.0.3 java 8 is not required.
 
 qmake
-make coverage
+make -j 3 coverage
 
 # debug tokens
 "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
