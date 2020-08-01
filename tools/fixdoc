@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 # set -e
 
@@ -11,17 +11,17 @@
 DIR=$1
 TITLE=$2
 
-SED=sed
+SED="sed"
 # MacOS using Homebrew
 [ -f /usr/local/bin/gsed ] && SED=/usr/local/bin/gsed
 [ -f /opt/local/bin/gsed ] && SED=/opt/local/bin/gsed
 
-[ ! -d $DIR/tpl ] && mkdir -p $DIR/tpl
+[ ! -d "$DIR/tpl" ] && mkdir -p "$DIR/tpl"
 
 
-for f in $DIR/*.html
+for f in "$DIR"/*.html
 do
-  base=$(echo $f | sed "s/.html$//")
+  base=$(echo "$f" | sed "s/.html$//")
   $SED -i \
   -e '/^<?xml/d' \
   -e '/^<!DOCTYPE head/d' \
@@ -29,9 +29,9 @@ do
   -e 's#<\/title>.*#{/block}#' \
   -e '/^<head/d' \
   -e 's#style="clear: both"##' \
-  $f
-  mv ${base}.html $(dirname $base)/tpl/$(basename $f .html).tpl
-  cat > ${base}.html  << EOF
+  "$f"
+  mv "${base}.html" "$(dirname "$base")/tpl/$(basename "$f" .html).tpl"
+  cat > "${base}.html"  << EOF
 <?php
 require("../lib/smarty_common.php");
 \$smarty->display(\$template);

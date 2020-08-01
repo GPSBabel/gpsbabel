@@ -334,20 +334,14 @@ cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config
 QMAKE_EXTRA_TARGETS += cppcheck
 
 gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
-gpsbabel.org.commands += web=\$\${WEB:-$${WEB}} &&
-gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
-gpsbabel.org.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
-gpsbabel.org.commands += perl xmldoc/makedoc &&
-gpsbabel.org.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
-gpsbabel.org.commands += xmllint --noout --valid xmldoc/readme.xml &&    #validate
-gpsbabel.org.commands += xsltproc \
-  --stringparam base.dir "\$\${web}/htmldoc-\$\${docversion}/" \
-  --stringparam root.filename "index" \
-  xmldoc/babelmain.xsl \
-  xmldoc/readme.xml &&
-gpsbabel.org.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} \"GPSBabel \$\${docversion}:\" &&
-gpsbabel.org.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion} &&
-gpsbabel.org.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
+  gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}};
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" \"\$\${docversion}\";
+} else {
+  gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
+  gpsbabel.org.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.org
 
 #
@@ -371,25 +365,21 @@ QMAKE_EXTRA_TARGETS += gpsbabel.org
 #
 
 gpsbabel.html.depends = gpsbabel FORCE
-gpsbabel.html.commands += perl xmldoc/makedoc &&
-gpsbabel.html.commands += xsltproc \
-   --output gpsbabel.html \
-   --stringparam toc.section.depth "1" \
-   --stringparam html.cleanup "1" \
-   --stringparam make.clean.html "1" \
-   --stringparam html.valid.html "1" \
-   --stringparam html.stylesheet \
-   "https://www.gpsbabel.org/style3.css" \
-   http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
- xmldoc/readme.xml
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.html.commands += tools/make_gpsbabel_html.sh
+} else {
+  gpsbabel.html.commands += echo "target gpsbabel.html is not supported for out of source builds.";
+  gpsbabel.html.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.html
 
 gpsbabel.pdf.depends = gpsbabel FORCE
-gpsbabel.pdf.commands += perl xmldoc/makedoc &&
-gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
-gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
-gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.pdf.commands += tools/make_gpsbabel_pdf.sh
+} else {
+  gpsbabel.pdf.commands += echo "target gpsbabel.pdf is not supported for out of source builds.";
+  gpsbabel.pdf.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
 gui.depends = $(TARGET) FORCE

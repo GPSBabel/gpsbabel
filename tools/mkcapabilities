@@ -21,12 +21,12 @@ function getcap(type, cap, sname, lname) {
 }
 
 getcap($1, $2, $3, $5)
-' > ${capabilitiesdir}/capabilities.inc
+' > "${capabilitiesdir}/capabilities.inc"
 
-FMTS=`./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}'`
+FMTS=$(./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}')
 for f in $FMTS
 do
-	[ ! -f ${htmldocdir}/fmt_${f}.html ] && echo Missing doc for $f
+	[ ! -f "${htmldocdir}/fmt_${f}.html" ] && echo Missing doc for "$f"
 done
 
 exit 0
