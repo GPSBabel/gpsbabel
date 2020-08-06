@@ -53,16 +53,12 @@
 #include "src/core/logging.h"           // for Warning
 #include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
 
-// First test Apple's clever macro that's really a runtime test so
-// that our universal binaries work right.
-#if defined __BIG_ENDIAN__
-#define i_am_little_endian !__BIG_ENDIAN__
-#else
-#if defined WORDS_BIGENDIAN
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
 # define i_am_little_endian 0
-#else
+#elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 # define i_am_little_endian 1
-#endif
+#else
+# error Unhandled Endianness
 #endif
 
 void*
