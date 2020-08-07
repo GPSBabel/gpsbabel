@@ -1,0 +1,64 @@
+The use of the autotools based build system (configure) is deprecated and may
+be removed in a future release!
+
+The use of cmake is experimental.  The implementation is not complete.  It is
+untested by continuous integration.  It is not recommended for production use.
+
+The recommended build uses Qt's qmake:
+
+The following options may be set on the qmake command line.
+
+WITH_LIBUSB=no|pkgconfig|system*|included*|custom
+  note that libusb is NOT used on windows.
+  no: build without libusb-1.0.  functionality will be limited.
+  pkgconfig: build with libusb-1.0 found by pkg-config.
+  system: build with libusb-1.0 found on system library path and under
+    libusb-1.0 on system include path (default, linux, openbsd).
+  included: build with libusb-1.0 included with gpsbabel (default, macOS only).
+  custom: build with user supplied libusb-1.0. LIBS and INCLUDEPATH may need to
+    be set, e.g. LIBS+=... INCLUDEPATH+=...
+
+WITH_SHAPELIB=no|pkgconfig|included*|custom
+  no: build without shapelib.  functionality will be limited.
+  pkgconfig: build with shapelib found by pkg-config.
+  included: build with shapelib included with gpsbabel (default).
+  custom: build with user supplied shapelib. LIBS and INCLUDEPATH may need to
+    be set, e.g. LIBS+=... INCLUDEPATH+=...
+
+WITH_ZLIB=no|pkgconfig|included*|custom
+  no: build without zlib.  functionality will be limited.
+  pkgconfig: build with zlib found by pkg-config.
+  included: build with zlib included with gpsbabel (default).
+  custom: build with user supplied zlib. LIBS and INCLUDEPATH may need to be
+    set, e.g. LIBS+=... INCLUDEPATH+=...
+
+DOCVERSION=...
+  string appended to documentation location for www.gpsbabel.org.  The default
+  value is the version string, e.g. "1.7.0".  This is used by the gpsbabel.org
+  target, you are unlikely to need it unless you are maintaining
+  www.gpsbabel.org.
+WEB=DIR
+  Path where the documentation will be stored for www.gpsbabel.org.  This is
+  used by the gpsbabel.org target, you are unlikely to need it unless you are
+  maintaining www.gpsbabel.org.  The default location is "../babelweb"
+  
+Make targets:
+
+check: Run the basic test suite.
+check-vtesto: Run valgrind memcheck.
+gpsbabel: Build the command line tool.
+gpsbabel.hmtl: Create the html documentation.
+gpsbabel.org: Create documentation for use on www.gpsbabel.org.
+gpsbabel.pdf: Create the pdf documentation.
+gui: Build the graphical user interface.
+unix-gui: Build the graphical user interface and collect the components for
+  distribution.  On Linux the gpsbabel generated components will be under
+  gui/GPSBabelFE, any dynamically linked required libraries are not included.
+  On macOS an app bundle will be created at gui/GPSBabelFE.app and an apple disk
+  image will be created at gui/GPSBabelFE.dmg.
+
+Windows builds:
+  Two build methods are supported with MSVC tools.
+  1. "qmake -tp vc" will create a visual studio project that can be built with msbuild.
+  2. "qmake" will create a Makefile that can be built with nmake.
+

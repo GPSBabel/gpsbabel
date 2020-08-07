@@ -25,8 +25,37 @@ CONFIG += link_pkgconfig
 
 TEMPLATE = app
 
+# use GB variable to express ownership intention and
+# avoid conflict with documented and undocumented qmake variables
+GB.VERSION_COMPONENTS = $$split(VERSION, .)
+GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
+GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
+GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
+# Increase GB.BUILD for a new release (why? Where is this ever used?)
+# A: it's used by win32/gpsbabel.rc which includes gbversion.h
+GB.BUILD = 31
+# GB.PACKAGE_RELEASE = "-beta20190413"
+
+# may be overwridden on qmake command line
+!defined(DOCVERSION, var) {
+  DOCVERSION=$${VERSION}
+}
+
+# may be overwridden on qmake command line
+!defined(WEB, var) {
+  WEB = ../babelweb
+}
+
+# use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
+GB.versionfile.input = gbversion.h.qmake.in
+GB.versionfile.output = gbversion.h
+QMAKE_SUBSTITUTES += GB.versionfile
+GB.setupfile.input = gui/setup.iss.qmake.in
+GB.setupfile.output = gui/setup.iss
+QMAKE_SUBSTITUTES += GB.setupfile
+
 MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc \
-               garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
+               garmin_device_xml.cc garmin_tables.cc nmea.cc \
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
@@ -61,7 +90,7 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
         validate.cc
 FILTER_HEADERS = $$FILTERS
-FILTER_HEADERS ~= s/\.cc/.h/g
+FILTER_HEADERS ~= s/\\.cc/.h/g
 
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
@@ -161,6 +190,47 @@ HEADERS =  \
 
 HEADERS += $$FILTER_HEADERS
 
+win32-msvc* {
+  # avoid attempts by cmd.exe to execute mkstyle.sh
+  SOURCES += internal_styles.cc
+} else {
+  # It would be nice to do this when make runs instead of qmake, but we will
+  # monitor the style directory to catch new or deleted .style files.
+  STYLE_FILES = $$files($${PWD}/style/*.style)
+  # It's a bit tacky, but this may modify source files when doing an out of source build.
+  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
+  # and we want to make sure it is up to date on commit.
+  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
+  styles.CONFIG += combine no_clean
+  styles.depends += $${PWD}/mkstyle.sh
+  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
+  styles.input = STYLE_FILES
+  styles.output = $${PWD}/internal_styles.cc
+  styles.variable_out = SOURCES
+  QMAKE_EXTRA_COMPILERS += styles
+}
+
+win32-msvc* {
+  # assume gperf not available.
+  HEADERS += xcsv_tokens.gperf
+} else {
+  TOKEN_FILES = $${PWD}/xcsv_tokens.in
+  equals(PWD, $${OUT_PWD}) {
+    tokens.commands += gperf --output-file=xcsv_tokens.gperf -L C++ -D -t xcsv_tokens.in
+  } else {
+    # Require in source builds.
+    # The the output must be checked in and the output depends on
+    # the --output-file parameter and the input file.
+    tokens.commands += echo "compilation of xcsv_tokens is not supported for out of source builds.";
+    tokens.commands += exit 1;
+  }
+  tokens.CONFIG += no_link no_clean
+  tokens.input = TOKEN_FILES
+  tokens.output = $${PWD}/xcsv_tokens.gperf
+  tokens.variable_out = HEADERS
+  QMAKE_EXTRA_COMPILERS += tokens
+}
+
 load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
@@ -228,7 +298,7 @@ QMAKE_CLEAN += $${OUT_PWD}/testo.d/*.vglog
 # build the compilation data base used by clang tools including clang-tidy.
 macx|linux|openbsd{
   compile_command_database.target = compile_commands.json
-  compile_command_database.commands = make clean; bear make
+  compile_command_database.commands = $(MAKE) clean; bear $(MAKE)
   QMAKE_EXTRA_TARGETS += compile_command_database
 }
 
@@ -249,7 +319,7 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 # dependencies:
 # extra ubuntu bionic packages: gcovr lcov
 linux{
-  coverage.commands = make clean;
+  coverage.commands = $(MAKE) clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
@@ -263,28 +333,16 @@ linux{
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
 
-!defined(WEB, var) {
-  WEB = ../babelweb
+gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
+  gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}};
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" \"\$\${docversion}\";
+} else {
+  gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
+  gpsbabel.org.commands += exit 1;
 }
-!defined(DOCVERSION, var) {
-  DOCVERSION=$${VERSION}
-}
-
-index.html.depends = gpsbabel FORCE
-index.html.commands += web=\$\${WEB:-$${WEB}} &&
-index.html.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
-index.html.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
-index.html.commands += perl xmldoc/makedoc &&
-index.html.commands += xmlwf xmldoc/readme.xml &&  #check for well-formedness
-index.html.commands += xmllint --noout --valid xmldoc/readme.xml &&    #validate
-index.html.commands += xsltproc \
-  --stringparam base.dir "\$\${web}/htmldoc-\$\${docversion}/" \
-  --stringparam root.filename "index" \
-  xmldoc/babelmain.xsl \
-  xmldoc/readme.xml &&
-index.html.commands += tools/fixdoc \$\${web}/htmldoc-\$\${docversion} "GPSBabel \$\${docversion}:" &&
-index.html.commands += tools/mkcapabilities \$\${web} \$\${web}/htmldoc-\$\${docversion}
-QMAKE_EXTRA_TARGETS += index.html
+QMAKE_EXTRA_TARGETS += gpsbabel.org
 
 #
 # The gpsbabel.pdf target depends on additional tools.
@@ -307,28 +365,34 @@ QMAKE_EXTRA_TARGETS += index.html
 #
 
 gpsbabel.html.depends = gpsbabel FORCE
-gpsbabel.html.commands += perl xmldoc/makedoc &&
-gpsbabel.html.commands += xsltproc \
-   --output gpsbabel.html \
-   --stringparam toc.section.depth "1" \
-   --stringparam html.cleanup "1" \
-   --stringparam make.clean.html "1" \
-   --stringparam html.valid.html "1" \
-   --stringparam html.stylesheet \
-   "https://www.gpsbabel.org/style3.css" \
-   http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
- xmldoc/readme.xml
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.html.commands += tools/make_gpsbabel_html.sh
+} else {
+  gpsbabel.html.commands += echo "target gpsbabel.html is not supported for out of source builds.";
+  gpsbabel.html.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.html
 
 gpsbabel.pdf.depends = gpsbabel FORCE
-gpsbabel.pdf.commands += web=\$\${WEB:-$${WEB}} &&
-gpsbabel.pdf.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}} &&
-gpsbabel.pdf.commands += perl xmldoc/makedoc && 
-gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
-gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
-gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf &&
-gpsbabel.pdf.commands += mkdir -p \$\${web}/htmldoc-\$\${docversion} &&
-gpsbabel.pdf.commands += cp gpsbabel.pdf \$\${web}/htmldoc-\$\${docversion}/gpsbabel-\$\${docversion}.pdf
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.pdf.commands += tools/make_gpsbabel_pdf.sh
+} else {
+  gpsbabel.pdf.commands += echo "target gpsbabel.pdf is not supported for out of source builds.";
+  gpsbabel.pdf.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
+
+gui.depends = $(TARGET) FORCE
+gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+QMAKE_EXTRA_TARGETS += gui
+
+unix-gui.depends = gui FORCE
+unix-gui.commands += cd gui; $(MAKE) package
+QMAKE_EXTRA_TARGETS += unix-gui
+
+toolinfo.depends = FORCE
+toolinfo.commands += $(CC) --version;
+toolinfo.commands += $(CXX) --version;
+toolinfo.commands += $(QMAKE) -v;
+QMAKE_EXTRA_TARGETS += toolinfo
 
