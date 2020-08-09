@@ -90,13 +90,18 @@ Map::Map(QWidget* parent,
   connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
 #endif
 
+  // We search the following locations:
+  // 1. In the file system in the same directory as the executable.
+  // 2. In the Qt resource system.  This is useful if the resource was compiled
+  //    into the executable.
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
-  if (!QFile(baseFile).exists()) {
+  if (QFile(baseFile).exists()) {
+    this->load(QUrl::fromLocalFile(baseFile));
+  } else if (QFile(":/gmapbase.html").exists()) {
+    this->load(QUrl("qrc:///gmapbase.html"));
+  } else {
     QMessageBox::critical(nullptr, appName,
                           tr("Missing \"gmapbase.html\" file.  Check installation"));
-  } else {
-    QString urlStr = "file:///" + baseFile;
-    this->load(QUrl(urlStr));
   }
 
 #ifdef DEBUG_JS_GENERATION
