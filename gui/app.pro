@@ -130,24 +130,11 @@ unix:!mac {
   !defined(EMBED_MAP, var):EMBED_MAP = on
 }
 equals(EMBED_TRANSLATIONS, on) {
-  MY_RESOURCES += translations.qrc
+  RESOURCES += translations.qrc
 }
 equals(EMBED_MAP, on) {
-  MY_RESOURCES += map.qrc
+  RESOURCES += map.qrc
 }
-qtPrepareTool(MY_RCC, rcc, _DEP)
-myresourcecompiler.commands = $$MY_RCC --output ${QMAKE_FILE_OUT} --name ${QMAKE_FILE_BASE} ${QMAKE_FILE_IN}
-myresourcecompiler.CONFIG += add_inputs_as_makefile_deps dep_lines
-myresourcecompiler.depends += $$MY_RCC_EXE
-myresourcecompiler.depend_command = $$MY_RCC_DEP --list ${QMAKE_FILE_IN}
-myresourcecompiler.input = MY_RESOURCES
-isEmpty(RCC_DIR) {
-  myresourcecompiler.output = qrc_${QMAKE_FILE_BASE}.cc
-} else {
-  myresourcecompiler.output = $${RCC_DIR}/qrc_${QMAKE_FILE_BASE}.cc
-}
-myresourcecompiler.variable_out = SOURCES
-QMAKE_EXTRA_COMPILERS += myresourcecompiler
 
 macx|linux{
   package.commands = QMAKE=$(QMAKE) ./package_app
