@@ -1,5 +1,5 @@
-The use of the autotools based build system (configure) is deprecated and may
-be removed in a future release!
+The autotools based build system (configure) is no longer suppored and has
+been removed.
 
 The use of cmake is experimental.  The implementation is not complete.  It is
 untested by continuous integration.  It is not recommended for production use.
@@ -41,7 +41,7 @@ WEB=DIR
   Path where the documentation will be stored for www.gpsbabel.org.  This is
   used by the gpsbabel.org target, you are unlikely to need it unless you are
   maintaining www.gpsbabel.org.  The default location is "../babelweb"
-  
+
 Make targets:
 
 check: Run the basic test suite.
