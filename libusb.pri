@@ -44,14 +44,14 @@ macx|linux|openbsd {
                      mac/libusb/os/darwin_usb.c \
                      mac/libusb/os/poll_posix.c \
                      mac/libusb/os/threads_posix.c
-          HEADERS += mac/libusb/hotplug.h \
+          HEADERS += mac/libusb/os/poll_posix.h \
+                     mac/libusb/os/threads_posix.h \
+                     mac/libusb/hotplug.h \
                      mac/libusb/libusb.h \
                      mac/libusb/libusbi.h \
                      mac/libusb/version.h \
                      mac/libusb/version_nano.h \
-                     mac/libusb/os/darwin_usb.h \
-                     mac/libusb/os/poll_posix.h \
-                     mac/libusb/os/threads_posix.h
+                     mac/libusb/os/darwin_usb.h
         } else:equals(WITH_LIBUSB, custom) {
           message("libusb-1.0 is enabled but but must be manually configured")
           message("  e.g. qmake WITH_LIBUSB=custom LIBS+=... INCLUDEPATH+=...")
