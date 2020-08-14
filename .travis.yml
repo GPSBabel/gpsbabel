@@ -32,28 +32,35 @@ jobs:
         - DOCKER_IMG="focal"
         - DOCKER_SCRIPT="./tools/build_extra_tests"
     - os: linux
-      dist: xenial
+      dist: bionic
+      services: docker
       compiler: gcc
       env:
-        - BUILD_TYPE="local"
-        - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
-      addons:
-        apt:
-          packages:
-            - expat
-            - fop
-            - valgrind
-            - xsltproc
-            - libxml2-utils
-            - libusb-1.0-0-dev
-            - docbook-xml
-            - docbook-xsl
-            - libgl1-mesa-dev
-            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
-      cache:
-        directories:
-          - $HOME/Cache
-        timeout: 600
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG="f32"
+    #- os: linux
+    #  dist: xenial
+    #  compiler: gcc
+    #  env:
+    #    - BUILD_TYPE="local"
+    #    - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+    #  addons:
+    #    apt:
+    #      packages:
+    #        - expat
+    #        - fop
+    #        - valgrind
+    #        - xsltproc
+    #        - libxml2-utils
+    #        - libusb-1.0-0-dev
+    #        - docbook-xml
+    #        - docbook-xsl
+    #        - libgl1-mesa-dev
+    #        - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
+    #  cache:
+    #    directories:
+    #      - $HOME/Cache
+    #    timeout: 600
     - os: osx
       compiler: clang
       env:
