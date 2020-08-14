@@ -26,11 +26,14 @@
 #include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
 #include <QtCore/QFile>                // for QFile
 #include <QtCore/QFileInfo>            // for QFileInfo
+#include <QtCore/QLibraryInfo>         // for QLibraryInfo, QLibraryInfo::TranslationsPath
 #include <QtCore/QLocale>              // for QLocale
 #include <QtCore/QMimeData>            // for QMimeData
 #include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
 #include <QtCore/QRegExp>              // for QRegExp
 #include <QtCore/QSettings>            // for QSettings
+#include <QtCore/QString>              // for QString
+#include <QtCore/QStringList>          // for QStringList
 #include <QtCore/QTemporaryFile>       // for QTemporaryFile
 #include <QtCore/QTime>                // for QTime
 #include <QtCore/QUrl>                 // for QUrl
@@ -219,9 +222,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui_.outputWindow->setReadOnly(true);
 
-  langPath_ = QApplication::applicationDirPath();
-  langPath_.append("/translations/");
-
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   loadFormats();
@@ -311,9 +311,25 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   // remove the old translator
   qApp->removeTranslator(&translator);
 
-  // load the new translator
-  if (translator.load(filename, langPath_)) {
-    qApp->installTranslator(&translator);
+  // Set a list of locations to search for the translation file.
+  // 1. In the file system in the translations directory relative to the
+  //    location of the executable.
+  // 2. In the Qt resource system under the translations path.  This is useful
+  //    if the resource was compiled into the executable.
+  // 3. In the translations path for Qt.  This is useful to find translations
+  //    included with Qt.
+  const QStringList directories = {
+    QApplication::applicationDirPath() + "/translations",
+    ":/translations",
+    QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+  };
+
+  // Load the new translator.
+  for (const auto& directory : directories) {
+    if (translator.load(filename, directory)) {
+      qApp->installTranslator(&translator);
+      break;
+    }
   }
 }
 

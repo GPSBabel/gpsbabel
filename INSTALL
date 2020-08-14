@@ -57,6 +57,14 @@ unix-gui: Build the graphical user interface and collect the components for
   On macOS an app bundle will be created at gui/GPSBabelFE.app and an apple disk
   image will be created at gui/GPSBabelFE.dmg.
 
+Dependencies:
+On non-macOS unix builds by default we now compile in the gpsbabel generated
+translation files, i.e. gpsbabelfe_*.qm, gpsbabel_*.qm, as well as
+gmapbase.html.  When compiled in these files do not need to be distributed.
+These are used by the GUI.  Additional translation files from Qt will also be
+used if they are found.  They may be in a package such as qttranslations5-l10n
+or qt5-qttranslations.
+
 Windows builds:
   Two build methods are supported with MSVC tools.
   1. "qmake -tp vc" will create a visual studio project that can be built with msbuild.
