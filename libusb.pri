@@ -32,6 +32,14 @@ macx|linux|openbsd {
           # TODO: It would be better to create an archive and link to it
           #       to separate library build requirements from gpsbabel requirements.
           DEFINES += LIBUSB_H_INCLUDE=$$shell_quote(\"mac/libusb/libusb.h\")
+          DEFINES += DEFAULT_VISIBILITY=/**/
+          DEFINES += THREADS_POSIX
+          DEFINES += HAVE_POLL_H
+          DEFINES += ENABLE_LOGGING
+          DEFINES += HAVE_SYS_TIME_H
+          DEFINES += OS_DARWIN
+          DEFINES += POLL_NFDS_TYPE=nfds_t
+          DEFINES += _GNU_SOURCE
           LIBS += -lobjc -framework IOKit -framework CoreFoundation
           INCLUDEPATH += mac/libusb \
                          mac/libusb/Xcode
@@ -44,14 +52,14 @@ macx|linux|openbsd {
                      mac/libusb/os/darwin_usb.c \
                      mac/libusb/os/poll_posix.c \
                      mac/libusb/os/threads_posix.c
-          HEADERS += mac/libusb/os/poll_posix.h \
-                     mac/libusb/os/threads_posix.h \
-                     mac/libusb/hotplug.h \
+          HEADERS += mac/libusb/hotplug.h \
                      mac/libusb/libusb.h \
                      mac/libusb/libusbi.h \
                      mac/libusb/version.h \
                      mac/libusb/version_nano.h \
-                     mac/libusb/os/darwin_usb.h
+                     mac/libusb/os/darwin_usb.h \
+                     mac/libusb/os/poll_posix.h \
+                     mac/libusb/os/threads_posix.h
         } else:equals(WITH_LIBUSB, custom) {
           message("libusb-1.0 is enabled but but must be manually configured")
           message("  e.g. qmake WITH_LIBUSB=custom LIBS+=... INCLUDEPATH+=...")
