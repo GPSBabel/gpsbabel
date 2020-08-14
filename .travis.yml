@@ -32,6 +32,13 @@ jobs:
         - DOCKER_IMG="focal"
         - DOCKER_SCRIPT="./tools/build_extra_tests"
     - os: linux
+      dist: bionic
+      services: docker
+      compiler: gcc
+      env:
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG="f32"
+    - os: linux
       dist: xenial
       compiler: gcc
       env:
