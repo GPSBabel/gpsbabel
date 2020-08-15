@@ -163,7 +163,8 @@ enum xcsv_token {
   XT_YYYYMMDD_TIME
 };
 
-#include "xcsv_tokens.gperf"       // for Perfect_Hash, xt_mapping
+//#include "xcsv_tokens.gperf"       // for Perfect_Hash, xt_mapping
+#include "xcsv_tokens.cc"
 
 /* a table of config file constants mapped to chars */
 const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
@@ -234,9 +235,13 @@ XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
+#if 0
   struct xt_mapping* xm = Perfect_Hash::in_word_set(key.constData(), strlen(key.constData()));
 
   field_map fmp(key, val, pfc, xm ? xm->xt_token : -1);
+#else
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey));
+#endif
   validate_fieldmap(fmp, false);
 
   style->ifields.append(fmp);
@@ -253,9 +258,15 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
+#if 0
   struct xt_mapping* xm = Perfect_Hash::in_word_set(key.constData(), strlen(key.constData()));
-
   field_map fmp(key, val, pfc, xm ? xm->xt_token : -1, options);
+#else
+  if (!xcsv_tokens.contains(key)) {
+    warning("Missing key: %s\n", CSTR(qkey));
+  }
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey));
+#endif
   validate_fieldmap(fmp, true);
 
   style->ofields.append(fmp);
