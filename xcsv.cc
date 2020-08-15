@@ -822,6 +822,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case -1:
+  case 0:
     if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
       wpt->longitude = atof(s) / pow(10.0, atof(fmp.key.constData()+7));
     } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
@@ -832,7 +833,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
 
   default:
-    fatal("This can't happen\n");
+    fatal("Unknown style directive: %s - %d\n", fmp.key.constData(), fmp.hashed_key);
     break;
   }
 }
@@ -1547,6 +1548,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(wpt->session->name));
       break;
     case -1:
+    case 0:
       if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
         buff = QString::asprintf(fmp.printfc.constData(), lon * pow(10.0, atof(fmp.key.constData()+7)));
       } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
