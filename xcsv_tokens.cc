@@ -1,7 +1,7 @@
 
 #include <QtCore/QHash>
 
-QHash<QString, xcsv_token> xcsv_tokens {
+const QHash<QString, xcsv_token> xcsv_tokens {
       {"ALT_FEET", XT_ALT_FEET},
       {"ALT_METERS", XT_ALT_METERS},
       {"ANYNAME", XT_ANYNAME},
