@@ -35,34 +35,37 @@
  */
 
 #include "defs.h"
-#include "garmin_tables.h"         // for gt_lookup_datum_index
-#include "gbfile.h"                // for gbfile, gbfclose, gbfcopyfrom, gbfseek, gbfwrite, gbfopen_be, gbftell, gbfputuint16, gbfputuint32, gbfgetuint16, gbfgetuint32, gbfread, gbfrewind, gbfgetflt
-#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_Known_Datum_M
-#include "src/core/datetime.h"     // for DateTime
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QDate>            // for QDate
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QFile>            // for QFile
-#include <QtCore/QFileInfo>        // for QFileInfo
-#include <QtCore/QList>            // for QList<>::iterator, QList
-#include <QtCore/QPair>            // for QPair
-#include <QtCore/QRegExp>          // for QRegExp
-#include <QtCore/QString>          // for QString
-#include <QtCore/QTextCodec>       // for QTextCodec
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVariant>         // for QVariant
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for UTC, ISODate
-#include <QtCore/QtGlobal>         // for qPrintable
-#include <algorithm>               // for sort, min
-#include <cassert>                 // for assert
-#include <cctype>                  // for isprint, isspace
-#include <cfloat>                  // for DBL_EPSILON
-#include <cmath>                   // for fabs, modf, copysign, round, fmax
-#include <cstdint>                 // for int32_t, int16_t, uint16_t, uint32_t, uint8_t, INT32_MAX
-#include <cstdio>                  // for printf, snprintf, SEEK_SET, SEEK_CUR
-#include <cstdlib>                 // for labs, atoi
-#include <cstring>                 // for strrchr, memcmp, strchr, strlen
+#include "garmin_tables.h"                 // for gt_lookup_datum_index
+#include "gbfile.h"                        // for gbfputuint32, gbfputuint16, gbfgetuint16, gbfgetuint32, gbfile, gbfseek, gbftell, gbfclose, gbfcopyfrom, gbfwrite, gbfopen_be, gbfread, gbfrewind, gbfgetflt, gbfgetint16, gbfopen, gbfputc, gbfputflt, gbsize_t, gbfeof, gbfgetdbl, gbfputdbl, gbfile...
+#include "jeeps/gpsmath.h"                 // for GPS_Math_WGS84_To_Known_Datum_M
+#include "src/core/datetime.h"             // for DateTime
+
+#include <QtCore/QByteArray>               // for QByteArray
+#include <QtCore/QDate>                    // for QDate
+#include <QtCore/QDateTime>                // for QDateTime
+#include <QtCore/QFile>                    // for QFile
+#include <QtCore/QFileInfo>                // for QFileInfo
+#include <QtCore/QList>                    // for QList<>::iterator, QList
+#include <QtCore/QPair>                    // for QPair
+#include <QtCore/QRegularExpression>       // for QRegularExpression
+#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
+#include <QtCore/QString>                  // for QString
+#include <QtCore/QTextCodec>               // for QTextCodec
+#include <QtCore/QTime>                    // for QTime
+#include <QtCore/QVariant>                 // for QVariant
+#include <QtCore/QVector>                  // for QVector
+#include <QtCore/Qt>                       // for UTC, ISODate
+#include <QtCore/QtGlobal>                 // for qSwap, qPrintable, qint64
+
+#include <algorithm>                       // for sort, min
+#include <cassert>                         // for assert
+#include <cctype>                          // for isprint, isspace
+#include <cfloat>                          // for DBL_EPSILON
+#include <cmath>                           // for fabs, modf, copysign, round, fmax
+#include <cstdint>                         // for uint32_t, int32_t, uint16_t, uint8_t, int16_t, INT32_MAX
+#include <cstdio>                          // for printf, SEEK_SET, snprintf, SEEK_CUR
+#include <cstdlib>                         // for labs, atoi
+#include <cstring>                         // for memcmp, strlen
 
 #define MYNAME "exif"
 
@@ -773,11 +776,13 @@ exif_get_exif_time(ExifApp* app)
     if (offset_tag) {
       char* time_tag = exif_read_str(offset_tag);
       // string should be +HH:MM or -HH:MM
-      QRegExp re("([+-])(\\d{2})(?::)(\\d{2})");
-      if (re.exactMatch(time_tag)) {
+      const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
+      assert(re.isValid());
+      QRegularExpressionMatch match = re.match(time_tag);
+      if (match.hasMatch()) {
         // Correct the date time by supplying the offset from UTC.
-        int offset_hours = re.cap(1).append(re.cap(2)).toInt();
-        int offset_mins = re.cap(1).append(re.cap(3)).toInt();
+        int offset_hours = match.captured(1).append(match.captured(2)).toInt();
+        int offset_mins = match.captured(1).append(match.captured(3)).toInt();
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
       }
     }
