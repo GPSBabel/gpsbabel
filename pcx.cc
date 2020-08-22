@@ -19,14 +19,30 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cmath>                      // for fabs
+#include <cstdlib>                    // for atoi
+#include <cstring>                    // for strstr, strncmp
+
+#include <QtCore/QChar>               // for operator==, QChar
+#include <QtCore/QCharRef>            // for QCharRef
+#include <QtCore/QDate>               // for QDate
+#include <QtCore/QDateTime>           // for QDateTime
+#include <QtCore/QList>               // for QList
+#include <QtCore/QRegularExpression>  // for QRegularExpression
+#include <QtCore/QString>             // for QString, QString::KeepEmptyParts, QString::SectionSkipEmpty
+#include <QtCore/QStringList>         // for QStringList
+#include <QtCore/QStringRef>          // for QStringRef
+#include <QtCore/QTime>               // for QTime
+#include <QtCore/QVector>             // for QVector
+#include <QtCore/Qt>                  // for CaseInsensitive, UTC
+
 #include "defs.h"
-#include "cet_util.h"
-#include "csv_util.h"
-#include "garmin_tables.h"
-#include <QtCore/QDebug>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include "cet_util.h"                 // for cet_convert_init
+#include "csv_util.h"                 // for human_to_dec
+#include "garmin_tables.h"            // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
+#include "gbfile.h"                   // for gbfprintf, gbfclose, gbfopen, gbfgetstr, gbfile
+#include "src/core/datetime.h"        // for DateTime
+
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
@@ -71,7 +87,7 @@ static void wr_deinit() {
 // Find the first token in string |in| when there may be leading whitespace.
 // These files have weird mixtures of spaces and tabs.
 static QString FirstTokenAt(const QString& in, int index) {
-  static const QRegExp sep("\\s+");
+  static const QRegularExpression sep(QRegularExpression(R"(\s+)"));
   return in.mid(index, -1).section(sep, 0, 0, QString::SectionSkipEmpty);
 }
 
@@ -104,6 +120,7 @@ static void data_read() {
 
   read_as_degrees = 0;
   int points = 0;
+  const QRegularExpression sep(QRegularExpression(R"(\s+)"));
 
   // Each line is both |buff| as a C string and |line| as a QString.
   while ((buff = gbfgetstr(file_in))) {
@@ -116,7 +133,7 @@ static void data_read() {
     switch (ibuf[0]) {
       case 'W': {
         QStringList tokens =
-            line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
+            line.split(sep, QString::KeepEmptyParts);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse waypoint, not all required columns "
@@ -216,7 +233,7 @@ static void data_read() {
         break;
       case 'T': {
         QStringList tokens =
-            line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
+            line.split(sep, QString::KeepEmptyParts);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse trackpoint, not all required columns "
