@@ -210,27 +210,6 @@ win32-msvc* {
   QMAKE_EXTRA_COMPILERS += styles
 }
 
-win32-msvc* {
-  # assume gperf not available.
-  HEADERS += xcsv_tokens.gperf
-} else {
-  TOKEN_FILES = $${PWD}/xcsv_tokens.in
-  equals(PWD, $${OUT_PWD}) {
-    tokens.commands += gperf --output-file=xcsv_tokens.gperf -L C++ -D -t xcsv_tokens.in
-  } else {
-    # Require in source builds.
-    # The the output must be checked in and the output depends on
-    # the --output-file parameter and the input file.
-    tokens.commands += echo "compilation of xcsv_tokens is not supported for out of source builds.";
-    tokens.commands += exit 1;
-  }
-  tokens.CONFIG += no_link no_clean
-  tokens.input = TOKEN_FILES
-  tokens.output = $${PWD}/xcsv_tokens.gperf
-  tokens.variable_out = HEADERS
-  QMAKE_EXTRA_COMPILERS += tokens
-}
-
 load(configure)
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
