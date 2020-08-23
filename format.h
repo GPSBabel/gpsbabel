@@ -132,7 +132,7 @@ public:
 
   virtual void rd_position_init(const QString& /* fname */)
   {
-    fatal("Realtime tracking (-T) is not suppored by this input type.\n");
+    fatal("Realtime tracking (-T) is not supported by this input type.\n");
   }
 
   virtual Waypoint* rd_position(posn_status* /* status */)

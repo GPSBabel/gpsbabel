@@ -41,7 +41,7 @@
   </tgroup>
 </table>
 
-<table>
+<table id="vito_point">
   <title>Vito SmartMap track point (32 bytes)</title>
   <tgroup cols="2">
   <thead>

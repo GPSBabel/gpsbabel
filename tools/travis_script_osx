@@ -14,11 +14,14 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z $(git show -s --format=
 "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
 
 # build and test the CLI
-$QMAKE GPSBabel.pro && make -j 2 && make check
+$QMAKE GPSBabel.pro
+make -j 3
+make check
 
 # build the GUI
 pushd gui
-$QMAKE app.pro && make -j 2
+$QMAKE app.pro
+make -j 3
 make package
 popd
 
@@ -28,5 +31,4 @@ find /Volumes/GPSBabelFE -ls
 hdiutil detach /Volumes/GPSBabelFE
 
 mv gui/GPSBabelFE.dmg gui/GPSBabel-${VERSIONID}.dmg
-
 

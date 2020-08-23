@@ -2375,7 +2375,7 @@ static void GPS_D108_Send(UC* data, GPS_PWay way, int32* len)
   p+=sizeof(int32);
 
   if (way->alt_is_unknown) {
-    GPS_Util_Put_Float(p,(const float) 1.0e25);
+    GPS_Util_Put_Float(p, 1.0e25f);
   } else {
     GPS_Util_Put_Float(p,way->alt);
   }
@@ -2460,7 +2460,7 @@ static void GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid)
   GPS_Util_Put_Int(p,GPS_Math_Deg_To_Semi(way->lon));
   p+=sizeof(int32);
   if (way->alt_is_unknown) {
-    GPS_Util_Put_Float(p,(const float) 1.0e25);
+    GPS_Util_Put_Float(p, 1.0e25f);
   } else {
     GPS_Util_Put_Float(p,way->alt);
   }

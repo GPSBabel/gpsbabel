@@ -70,7 +70,6 @@ private:
   QTranslator     translatorCore_; // translation for the core application.
   QTranslator     translatorQt_;   // translations for Qt.
   QString         currLang_;       // currently loaded language.
-  QString         langPath_;       // Absolute path of language files.
 
 private:
   void loadFormats();

@@ -23,7 +23,7 @@
 class FormatListEntry : public QListWidgetItem
 {
 public:
-  FormatListEntry(Format& fmt) /*: fmt_(fmt)*/
+  FormatListEntry(Format& fmt) /* : fmt_(fmt) */
   {
     setText(fmt.getDescription());
     bool enabled = !fmt.isHidden();

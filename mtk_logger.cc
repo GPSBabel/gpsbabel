@@ -473,7 +473,7 @@ static void mtk_rd_init(const QString& fname)
     rc |= do_cmd("$PHLX810*35\r\n", "PHLX852,", nullptr, 10);
     rc |= do_cmd("$PHLX826*30\r\n", "PHLX859*38", nullptr, 10);
     if (rc != 0) {
-      dbg(2, "Greeting not successfull.\n");
+      dbg(2, "Greeting not successful.\n");
     }
   }
   xfree(model);
@@ -484,7 +484,7 @@ static void mtk_rd_deinit()
   if (mtk_device == HOLUX_GR245) {
     int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", nullptr, 10);
     if (rc != 0) {
-      dbg(2, "Goodbye not successfull.\n");
+      dbg(2, "Goodbye not successful.\n");
     }
   }
 
