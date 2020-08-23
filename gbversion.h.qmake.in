@@ -1,0 +1,17 @@
+/*
+ * gbversion.h is generated from gbversion.h.in which uses autoconf voodoo
+ * to get the version number from configure.ac.
+ *
+ * Isn\'t simplification via automation grand?
+ */
+#ifdef RC_INVOKED
+// These defines are for the Microsoft resource compiler scripts
+// win32/gpsbabel.rc and gui/app.rc
+#define VER_FILE $${GB.MAJOR},$${GB.MINOR},$${GB.MICRO},$${GB.BUILD}
+#define VER_PRODUCT $${GB.MAJOR},$${GB.MINOR},$${GB.MICRO},$${GB.BUILD}
+#define VER_FILE_STR \"$${GB.MAJOR}.$${GB.MINOR}.$${GB.MICRO}$${GB.PACKAGE_RELEASE}\"
+#define VER_PRODUCT_STR  \"$${GB.MAJOR}.$${GB.MINOR}.$${GB.MICRO}$${GB.PACKAGE_RELEASE}\"
+#else
+#define VERSION \"$${GB.MAJOR}.$${GB.MINOR}.$${GB.MICRO}$${GB.PACKAGE_RELEASE}\"
+#define WEB_DOC_DIR \"https://www.gpsbabel.org/htmldoc-$${DOCVERSION}\"
+#endif

@@ -10,21 +10,52 @@ count(MIN_QT_VERSION_PATCH, 0): MIN_QT_VERSION_PATCH = 0
 lessThan(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR) | \
 if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):lessThan(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR)) | \
 if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR):lessThan(QT_PATCH_VERSION, $$MIN_QT_VERSION_PATCH)) {
-  error("$$QMAKE_QMAKE uses Qt version $$QT_VERSION but version $${MIN_QT_VERSION_MAJOR}.$${MIN_QT_VERSION_MINOR}.$${MIN_QT_VERSION_PATCH} or newer is required.")  
+  error("$$QMAKE_QMAKE uses Qt version $$QT_VERSION but version $${MIN_QT_VERSION_MAJOR}.$${MIN_QT_VERSION_MINOR}.$${MIN_QT_VERSION_PATCH} or newer is required.")
 }
 
 QT -= gui
 
 TARGET = gpsbabel
+VERSION = 1.7.0
 
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14
+CONFIG += link_pkgconfig
 
 TEMPLATE = app
 
+# use GB variable to express ownership intention and
+# avoid conflict with documented and undocumented qmake variables
+GB.VERSION_COMPONENTS = $$split(VERSION, .)
+GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
+GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
+GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
+# Increase GB.BUILD for a new release (why? Where is this ever used?)
+# A: it's used by win32/gpsbabel.rc which includes gbversion.h
+GB.BUILD = 31
+# GB.PACKAGE_RELEASE = "-beta20190413"
+
+# may be overwridden on qmake command line
+!defined(DOCVERSION, var) {
+  DOCVERSION=$${VERSION}
+}
+
+# may be overwridden on qmake command line
+!defined(WEB, var) {
+  WEB = ../babelweb
+}
+
+# use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
+GB.versionfile.input = gbversion.h.qmake.in
+GB.versionfile.output = gbversion.h
+QMAKE_SUBSTITUTES += GB.versionfile
+GB.setupfile.input = gui/setup.iss.qmake.in
+GB.setupfile.output = gui/setup.iss
+QMAKE_SUBSTITUTES += GB.setupfile
+
 MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc \
-               garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
+               garmin_device_xml.cc garmin_tables.cc nmea.cc \
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
@@ -59,14 +90,7 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
         validate.cc
 FILTER_HEADERS = $$FILTERS
-FILTER_HEADERS ~= s/\.cc/.h/g
-
-SHAPE=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
-
-ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
-        zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
-        zlib/uncompr.c zlib/gzlib.c zlib/gzclose.c zlib/gzread.c \
-        zlib/gzwrite.c zlib/zutil.c
+FILTER_HEADERS ~= s/\\.cc/.h/g
 
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
@@ -84,7 +108,7 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc \
           src/core/textstream.cc \
           src/core/usasciicodec.cc \
-          src/core/xmlstreamwriter.cc 
+          src/core/xmlstreamwriter.cc
 
 HEADERS =  \
 	an1sym.h \
@@ -147,7 +171,6 @@ HEADERS =  \
 	random.h \
 	session.h \
 	shape.h \
-	shapelib/shapefil.h \
 	strptime.h \
 	subrip.h \
 	unicsv.h \
@@ -156,17 +179,6 @@ HEADERS =  \
 	xcsv.h \
 	xmlgeneric.h \
 	yahoo.h \
-	zlib/crc32.h \
-	zlib/deflate.h \
-	zlib/gzguts.h \
-	zlib/inffast.h \
-	zlib/inffixed.h \
-	zlib/inflate.h \
-	zlib/inftrees.h \
-	zlib/trees.h \
-	zlib/zconf.h \
-	zlib/zlib.h \
-	zlib/zutil.h \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
@@ -178,7 +190,46 @@ HEADERS =  \
 
 HEADERS += $$FILTER_HEADERS
 
-INCLUDEPATH += zlib
+win32-msvc* {
+  # avoid attempts by cmd.exe to execute mkstyle.sh
+  SOURCES += internal_styles.cc
+} else {
+  # It would be nice to do this when make runs instead of qmake, but we will
+  # monitor the style directory to catch new or deleted .style files.
+  STYLE_FILES = $$files($${PWD}/style/*.style)
+  # It's a bit tacky, but this may modify source files when doing an out of source build.
+  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
+  # and we want to make sure it is up to date on commit.
+  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
+  styles.CONFIG += combine no_clean
+  styles.depends += $${PWD}/mkstyle.sh
+  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
+  styles.input = STYLE_FILES
+  styles.output = $${PWD}/internal_styles.cc
+  styles.variable_out = SOURCES
+  QMAKE_EXTRA_COMPILERS += styles
+}
+
+win32-msvc* {
+  # assume gperf not available.
+  HEADERS += xcsv_tokens.gperf
+} else {
+  TOKEN_FILES = $${PWD}/xcsv_tokens.in
+  equals(PWD, $${OUT_PWD}) {
+    tokens.commands += gperf --output-file=xcsv_tokens.gperf -L C++ -D -t xcsv_tokens.in
+  } else {
+    # Require in source builds.
+    # The the output must be checked in and the output depends on
+    # the --output-file parameter and the input file.
+    tokens.commands += echo "compilation of xcsv_tokens is not supported for out of source builds.";
+    tokens.commands += exit 1;
+  }
+  tokens.CONFIG += no_link no_clean
+  tokens.input = TOKEN_FILES
+  tokens.output = $${PWD}/xcsv_tokens.gperf
+  tokens.variable_out = HEADERS
+  QMAKE_EXTRA_COMPILERS += tokens
+}
 
 load(configure)
 
@@ -193,23 +244,22 @@ macx|linux|openbsd {
     # this is used by zlib
     DEFINES += HAVE_STDARG_H
   }
-  DEFINES += HAVE_LIBUSB_1_0
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
-  JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
 }
 
 win32 {
   DEFINES += __WIN32__ _CONSOLE
-  DEFINES -= UNICODE ZLIB_INHIBITED
+  DEFINES -= UNICODE
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
   }
   SOURCES += gbser_win.cc
   HEADERS += gbser_win.h
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "-lsetupapi" 
+  LIBS += "-lsetupapi"
+  RC_FILE = win32/gpsbabel.rc
 }
 
 win32-msvc* {
@@ -217,39 +267,15 @@ win32-msvc* {
   QMAKE_CXXFLAGS += /MP -wd4100
 }
 
-linux|openbsd {
-  LIBS += "-lusb-1.0"
-}
+include(shapelib.pri)
+include(zlib.pri)
+include(libusb.pri)
 
-macx {
-  LIBS += -lobjc -framework IOKit -framework CoreFoundation
-  INCLUDEPATH += mac/libusb \
-                 mac/libusb/Xcode
-  SOURCES += mac/libusb/core.c \
-             mac/libusb/descriptor.c \
-             mac/libusb/hotplug.c \
-             mac/libusb/io.c \
-             mac/libusb/strerror.c \
-             mac/libusb/sync.c \
-             mac/libusb/os/darwin_usb.c \
-             mac/libusb/os/poll_posix.c \
-             mac/libusb/os/threads_posix.c
-  HEADERS += mac/libusb/hotplug.h \
-             mac/libusb/libusb.h \
-             mac/libusb/libusbi.h \
-             mac/libusb/version.h \
-             mac/libusb/version_nano.h \
-             mac/libusb/os/darwin_usb.h \
-             mac/libusb/os/poll_posix.h \
-             mac/libusb/os/threads_posix.h
-}
-
-SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
+SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
-DEFINES += SHAPELIB_ENABLED
 DEFINES += CSVFMTS_ENABLED
 
 # Creator insists on adding -W to -Wall which results in a completely
@@ -260,16 +286,19 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-macx|linux|openbsd{
-  check.commands = PNAME=./$(TARGET) ./testo
-  check.depends = $(TARGET)
-  QMAKE_EXTRA_TARGETS += check
-}
+check.depends = $(TARGET) FORCE
+check.commands = @PNAME=./$(TARGET) $${PWD}/testo
+QMAKE_EXTRA_TARGETS += check
+
+check-vtesto.depends = $(TARGET) FORCE
+check-vtesto.commands += @$(MAKE) -s -f $${PWD}/Makefile_vtesto srcdir=$${PWD} builddir=$${OUT_PWD} check-vtesto
+QMAKE_EXTRA_TARGETS += check-vtesto
+QMAKE_CLEAN += $${OUT_PWD}/testo.d/*.vglog
 
 # build the compilation data base used by clang tools including clang-tidy.
 macx|linux|openbsd{
   compile_command_database.target = compile_commands.json
-  compile_command_database.commands = make clean; bear make
+  compile_command_database.commands = $(MAKE) clean; bear $(MAKE)
   QMAKE_EXTRA_TARGETS += compile_command_database
 }
 
@@ -277,7 +306,7 @@ macx|linux|openbsd{
 # example usage:
 # make clang-tidy RUN_CLANG_TIDY_FLAGS="-header-filter=.*\\\.h -checks=-*,modernize-use-nullptr -fix"
 # It seems to be better to use run-clang-tidy with the compilation database as opposed to
-# running clang-tidy directly and listing the 
+# running clang-tidy directly and listing the
 # compilation options on the clang-tidy line after --.
 # An example is modernize-use-override which inserts repeadted overrides when run directly,
 # but works as expected when run with run-clang-tidy.
@@ -290,7 +319,7 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 # dependencies:
 # extra ubuntu bionic packages: gcovr lcov
 linux{
-  coverage.commands = make clean;
+  coverage.commands = $(MAKE) clean;
   coverage.commands += rm -f gpsbabel_coverage.xml;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
@@ -304,12 +333,66 @@ linux{
 cppcheck.commands = cppcheck --enable=all --force --config-exclude=zlib --config-exclude=shapelib $(INCPATH) $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 QMAKE_EXTRA_TARGETS += cppcheck
 
-gpsbabel.pdf.depends = FORCE
-gpsbabel.pdf.commands += perl xmldoc/makedoc && 
-gpsbabel.pdf.commands += xmlwf xmldoc/readme.xml && #check for well-formedness
-gpsbabel.pdf.commands += xmllint --noout --valid xmldoc/readme.xml &&   #validate
-gpsbabel.pdf.commands += xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml &&
-gpsbabel.pdf.commands += HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
-#gpsbabel.pdf.commands += cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
+gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
+  gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}};
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" \"\$\${docversion}\";
+} else {
+  gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
+  gpsbabel.org.commands += exit 1;
+}
+QMAKE_EXTRA_TARGETS += gpsbabel.org
+
+#
+# The gpsbabel.pdf target depends on additional tools.
+# On macOS you can 'brew install fop' to get fop and the hyphenation package.
+# On Debian/Ubuntu you can 'apt-get install fop' to get fop and the hyphenation package.
+# 'fop' must be obtained from your distribution or http://xmlgraphics.apache.org/fop/
+#   0.92beta seems to work OK, BUT.
+#   * If you have a package called 'docbook-xml-website' it's reported
+#     to prevent the build from working.   Remove it. (Suse)
+#   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
+#     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#     Get it from http://www.java.com
+# The Hyphenation package must be obtained from your distribution or
+#   the project site at http://offo.sourceforge.net/ - be sure to get the
+#   version that corresponds to the version of FOP that you used above.
+#
+#
+# The docbook XSL must be 1.71.1 or higher.
+#   * Remember to update /etc/xml/catalogs if you manually update this.
+#
+
+gpsbabel.html.depends = gpsbabel FORCE
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.html.commands += tools/make_gpsbabel_html.sh
+} else {
+  gpsbabel.html.commands += echo "target gpsbabel.html is not supported for out of source builds.";
+  gpsbabel.html.commands += exit 1;
+}
+QMAKE_EXTRA_TARGETS += gpsbabel.html
+
+gpsbabel.pdf.depends = gpsbabel FORCE
+equals(PWD, $${OUT_PWD}) {
+  gpsbabel.pdf.commands += tools/make_gpsbabel_pdf.sh
+} else {
+  gpsbabel.pdf.commands += echo "target gpsbabel.pdf is not supported for out of source builds.";
+  gpsbabel.pdf.commands += exit 1;
+}
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
+
+gui.depends = $(TARGET) FORCE
+gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+QMAKE_EXTRA_TARGETS += gui
+
+unix-gui.depends = gui FORCE
+unix-gui.commands += cd gui; $(MAKE) package
+QMAKE_EXTRA_TARGETS += unix-gui
+
+toolinfo.depends = FORCE
+toolinfo.commands += $(CC) --version;
+toolinfo.commands += $(CXX) --version;
+toolinfo.commands += $(QMAKE) -v;
+QMAKE_EXTRA_TARGETS += toolinfo
 

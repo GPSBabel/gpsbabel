@@ -42,10 +42,10 @@ unix {
 
 UI_DIR = tmp
 
-RESOURCES = app.qrc 
+RESOURCES = app.qrc
 RC_FILE = app.rc
 
-win32 { 
+win32 {
   TARGET=GPSBabelFE
 }
 win32-g++ {
@@ -138,6 +138,17 @@ TRANSLATIONS += gpsbabelfe_es.ts
 TRANSLATIONS += gpsbabelfe_fr.ts
 TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
+
+unix:!mac {
+  !defined(EMBED_TRANSLATIONS, var):EMBED_TRANSLATIONS = on
+  !defined(EMBED_MAP, var):EMBED_MAP = on
+}
+equals(EMBED_TRANSLATIONS, on) {
+  RESOURCES += translations.qrc
+}
+equals(EMBED_MAP, on) {
+  RESOURCES += map.qrc
+}
 
 macx|linux{
   package.commands = QMAKE=$(QMAKE) ./package_app

@@ -3,7 +3,7 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="40.804915000" minlon="-124.126895000" maxlat="40.847798333" maxlon="-124.082008333"/>
   <trk>
-    <name>./reference/track/f90g-sample.map</name>
+    <name>f90g-sample.map</name>
     <trkseg>
       <trkpt lat="40.847798333" lon="-124.082008333">
         <time>2014-04-27T17:39:52Z</time>

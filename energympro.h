@@ -119,7 +119,7 @@ private:
     uint32_t  Speed;
     uint16_t  IntervalDist;          // Interval Distance
     uint16_t  reserved2;
-    uint32_t  lntervalTime;          // Interval time
+    uint32_t  IntervalTime;          // Interval time
     uint8_t   Status;                //Status (0 = ok, 1 = miss, 2 = no good, 3 = bad)
     uint8_t   HR_Heartrate;
     uint8_t   HR_Status;
