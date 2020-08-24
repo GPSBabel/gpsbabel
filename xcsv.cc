@@ -66,105 +66,6 @@
 
 #define MYNAME	"XCSV"
 
-/*
- * Internal numeric value to associate with each keyword in a style file.
- * To add new keywords, just add an entry here, handle it in the switch
- * statements below, add it to xcsv_tokens.in, and rebuild on a system
- * that has GNU gperf on it.
- */
-enum xcsv_token {
-  XT_unused = 0,
-  XT_ALT_FEET,
-  XT_ALT_METERS,
-  XT_ANYNAME,
-  XT_CADENCE,
-  XT_CITY,
-  XT_CONSTANT,
-  XT_COUNTRY,
-  XT_DESCRIPTION,
-  XT_EMAIL,
-  XT_EXCEL_TIME,
-  XT_FACILITY,
-  XT_FILENAME,
-  XT_FORMAT,
-  XT_GEOCACHE_CONTAINER,
-  XT_GEOCACHE_DIFF,
-  XT_GEOCACHE_HINT,
-  XT_GEOCACHE_LAST_FOUND,
-  XT_GEOCACHE_PLACER,
-  XT_GEOCACHE_TERR,
-  XT_GEOCACHE_TYPE,
-  XT_GEOCACHE_ISAVAILABLE,
-  XT_GEOCACHE_ISARCHIVED,
-  XT_GMT_TIME,
-  XT_GPS_FIX,
-  XT_GPS_HDOP,
-  XT_GPS_PDOP,
-  XT_GPS_SAT,
-  XT_GPS_VDOP,
-  XT_HEART_RATE,
-  XT_HMSG_TIME,
-  XT_HMSL_TIME,
-  XT_ICON_DESCR,
-  XT_IGNORE,
-  XT_INDEX,
-  XT_ISO_TIME,
-  XT_ISO_TIME_MS,
-  XT_LATLON_HUMAN_READABLE,
-  XT_LAT_DECIMAL,
-  XT_LAT_DECIMALDIR,
-  XT_LAT_DIR,
-  XT_LAT_DIRDECIMAL,
-  XT_LAT_HUMAN_READABLE,
-  XT_LAT_INT32DEG,
-  XT_LAT_DDMMDIR,
-  XT_LAT_NMEA,
-  XT_LOCAL_TIME,
-  XT_LON_DECIMAL,
-  XT_LON_DECIMALDIR,
-  XT_LON_DIR,
-  XT_LON_DIRDECIMAL,
-  XT_LON_HUMAN_READABLE,
-  XT_LON_INT32DEG,
-  XT_LON_DDMMDIR,
-  XT_LON_NMEA,
-  XT_MAP_EN_BNG,
-  XT_NOTES,
-  XT_NET_TIME,
-  XT_PATH_COURSE,
-  XT_PATH_DISTANCE_KM,
-  XT_PATH_DISTANCE_METERS,
-  XT_PATH_DISTANCE_MILES,
-  XT_PATH_SPEED,
-  XT_PATH_SPEED_KNOTS,
-  XT_PATH_SPEED_KPH,
-  XT_PATH_SPEED_MPH,
-  XT_PHONE_NR,
-  XT_POSTAL_CODE,
-  XT_POWER,
-  XT_ROUTE_NAME,
-  XT_SHORTNAME,
-  XT_STATE,
-  XT_STREET_ADDR,
-  XT_TEMPERATURE,
-  XT_TEMPERATURE_F,
-  XT_TIMET_TIME,
-  XT_TIMET_TIME_MS,
-  XT_TRACK_NAME,
-  XT_TRACK_NEW,
-  XT_URL,
-  XT_UTM,
-  XT_UTM_ZONE,
-  XT_UTM_ZONEC,
-  XT_UTM_ZONEF,
-  XT_UTM_EASTING,
-  XT_UTM_NORTHING,
-  XT_URL_LINK_TEXT,
-  XT_YYYYMMDD_TIME
-};
-
-#include "xcsv_tokens.gperf"          // for Perfect_Hash, xt_mapping
-
 /* a table of config file constants mapped to chars */
 const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
   { "COMMA",		"," 	},
@@ -234,9 +135,7 @@ XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
-  struct xt_mapping* xm = Perfect_Hash::in_word_set(key.constData(), strlen(key.constData()));
-
-  field_map fmp(key, val, pfc, xm ? xm->xt_token : -1);
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey));
   validate_fieldmap(fmp, false);
 
   style->ifields.append(fmp);
@@ -253,9 +152,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
-  struct xt_mapping* xm = Perfect_Hash::in_word_set(key.constData(), strlen(key.constData()));
-
-  field_map fmp(key, val, pfc, xm ? xm->xt_token : -1, options);
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey));
   validate_fieldmap(fmp, true);
 
   style->ofields.append(fmp);
@@ -810,7 +707,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     garmin_fs_t::set_email(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case -1:
+  case XT_unused:
     if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
       wpt->longitude = atof(s) / pow(10.0, atof(fmp.key.constData()+7));
     } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
@@ -821,7 +718,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
 
   default:
-    fatal("This can't happen\n");
+    fatal("Unknown style directive: %s - %d\n", fmp.key.constData(), fmp.hashed_key);
     break;
   }
 }
@@ -1535,7 +1432,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XT_FORMAT:
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(wpt->session->name));
       break;
-    case -1:
+    case XT_unused:
       if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
         buff = QString::asprintf(fmp.printfc.constData(), lon * pow(10.0, atof(fmp.key.constData()+7)));
       } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
