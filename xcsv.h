@@ -155,13 +155,14 @@ public:
     QByteArray key;
     QByteArray val;
     QByteArray printfc;
-    int hashed_key{0};
+    xcsv_token hashed_key{XT_unused};
     unsigned options{0};
 
     field_map() = default;
-    field_map(QByteArray k, QByteArray v, QByteArray p, int hk) : key{std::move(k)},val{std::move(v)},printfc{std::move(p)},hashed_key{hk} {}
-    field_map(QByteArray k, QByteArray v, QByteArray p, int hk, unsigned o) : key{std::move(k)},val{std::move(v)},printfc{
-      std::move(p)},hashed_key{hk},options{o} {}
+    field_map(QByteArray k, QByteArray v, QByteArray p, xcsv_token hk) :
+      key{std::move(k)}, val{std::move(v)}, printfc{std::move(p)}, hashed_key{hk} {}
+    field_map(QByteArray k, QByteArray v, QByteArray p, xcsv_token hk, unsigned o) :
+      key{std::move(k)}, val{std::move(v)}, printfc{std::move(p)}, hashed_key{hk}, options{o} {}
   };
 
   /* Constants */
