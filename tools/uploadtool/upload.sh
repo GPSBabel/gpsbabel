@@ -32,7 +32,7 @@ fi
 # If this build was triggered by a tag, call the result a Release
 if [ ! -z "$UPLOADTOOL_SUFFIX" ] ; then
   if [ "$UPLOADTOOL_SUFFIX" = "$TRAVIS_TAG" ] ; then
-    RELEASE_NAME=$TRAVIS_TAG
+    RELEASE_NAME="$TRAVIS_TAG"
     RELEASE_TITLE="Release build ($TRAVIS_TAG)"
     is_prerelease="false"
   else
@@ -41,21 +41,18 @@ if [ ! -z "$UPLOADTOOL_SUFFIX" ] ; then
     is_prerelease="true"
   fi
 else
-  RELEASE_NAME="continuous" # Do not use "latest" as it is reserved by GitHub
+  # Do not use "latest" as it is reserved by GitHub
+  RELEASE_NAME="continuous"
   RELEASE_TITLE="Continuous build"
   is_prerelease="true"
 fi
 
 if [ "$TRAVIS_EVENT_TYPE" == "pull_request" ] ; then
-  echo "Release uploading disabled for pull requests, uploading to transfer.sh instead"
+  echo "Release uploading disabled for pull requests, uploading to transfersh.com instead"
   rm -f ./uploaded-to
   for FILE in "$@" ; do
     BASENAME="$(basename "${FILE}")"
-
-    echo "Uploading $BASENAME to upload.sh has been suspended as o 03/16 -- rjl"
-    break
-
-    curl --upload-file $FILE "https://transfer.sh/$BASENAME" > ./one-upload
+      curl --upload-file $FILE "https://transfersh.com/$BASENAME" > ./one-upload
     echo "$(cat ./one-upload)" # this way we get a newline
     echo -n "$(cat ./one-upload)\\n" >> ./uploaded-to # this way we get a \n but no newline
   done
@@ -91,7 +88,7 @@ else
   # We are not running on Travis CI
   echo "Not running on Travis CI"
   if [ -z "$REPO_SLUG" ] ; then
-    read -r -s -p "Repo Slug (GitHub and Travis CI username/reponame): " REPO_SLUG
+    read -r -p "Repo Slug (GitHub and Travis CI username/reponame): " REPO_SLUG
   fi
   if [ -z "$GITHUB_TOKEN" ] ; then
     read -r -s -p "Token (https://github.com/settings/tokens): " GITHUB_TOKEN
@@ -136,7 +133,7 @@ if [ "$TRAVIS_COMMIT" != "$target_commit_sha" ] ; then
   # curl -XGET --header "Authorization: token ${GITHUB_TOKEN}" \
   #     "$release_url"
 
-  if [ "$is_prerelease" = "true" ] ; then
+  if [ "$RELEASE_NAME" == "continuous" ] ; then
     # if this is a continuous build tag, then delete the old tag
     # in preparation for the new release
     echo "Delete the tag..."
@@ -155,8 +152,7 @@ if [ "$TRAVIS_COMMIT" != "$target_commit_sha" ] ; then
 
   if [ ! -z "$TRAVIS_JOB_ID" ] ; then
     if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
-      # TODO: The host could be travis-ci.org (legacy open source) or travis-ci.com (subscription or latest open source).
-      BODY="Travis CI build log: https://travis-ci.com/$REPO_SLUG/builds/$TRAVIS_BUILD_ID/"
+      BODY="Travis CI build log: ${TRAVIS_BUILD_WEB_URL}"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
