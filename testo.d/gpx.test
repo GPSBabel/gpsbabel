@@ -54,3 +54,7 @@ compare ${REFERENCE}/global.gpx ${TMPDIR}/global.gpx
 rm -f ${TMPDIR}/metadata.gpx
 gpsbabel -i gpx -f ${REFERENCE}/metadata.gpx -o gpx -F ${TMPDIR}/metadata.gpx
 compare ${REFERENCE}/metadata~gpx.gpx ${TMPDIR}/metadata.gpx
+
+# output ilinks if gpx garamextensions specified
+gpsbabel -i gdb,dropwpt -f ${REFERENCE}/gdb-sample-v3-ilinks.gdb -o gpx,garminextensions -F ${TMPDIR}/gdb-sample-v3-ilinks.gpx
+compare ${REFERENCE}/gdb-sample-v3-ilinks.gpx ${TMPDIR}/gdb-sample-v3-ilinks.gpx

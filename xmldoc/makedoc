@@ -31,14 +31,14 @@ sub expandrw {
 sub expandoptions {
    my $opts = shift;
    my $res = "  <para role=\"fmtcapshdr\">\n    This format can...\n    <itemizedlist>\n";
-   
+
    $res .= expandrw( substr($opts,0,1), substr($opts,1,1), 'waypoints' );
    $res .= expandrw( substr($opts,2,1), substr($opts,3,1), 'tracks' );
    $res .= expandrw( substr($opts,4,1), substr($opts,5,1), 'routes' );
- 
+
    $res .= "    </itemizedlist></para>\n";
 
-   $res;  
+   $res;
 }
 
 sub expandsuboptions {
@@ -51,11 +51,11 @@ sub expandsuboptions {
 
   # Comma separate the human-readable variation.
   $olist =~ s/> </>, </g;
- 
+
   $res .= "<para>This format has the following options: ";
   $res .= $olist;
   $res .= ".</para>";
- 
+
   $res;
 }
 
@@ -89,7 +89,6 @@ sub includef {
 
 
 
-@dir=`mkdir -p @DOCDIR@`;
 $dir = $0;
 $dir =~ s:/.*$::;
 

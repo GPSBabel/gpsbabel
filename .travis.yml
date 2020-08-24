@@ -32,31 +32,40 @@ jobs:
         - DOCKER_IMG="focal"
         - DOCKER_SCRIPT="./tools/build_extra_tests"
     - os: linux
-      dist: xenial
+      dist: bionic
+      services: docker
       compiler: gcc
       env:
-        - BUILD_TYPE="local"
-        - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
-      addons:
-        apt:
-          packages:
-            - expat
-            - fop
-            - valgrind
-            - xsltproc
-            - libxml2-utils
-            - libusb-1.0-0-dev
-            - docbook-xml
-            - docbook-xsl
-            - libgl1-mesa-dev
-            - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
-      cache:
-        directories:
-          - $HOME/Cache
-        timeout: 600
+        - BUILD_TYPE="docker"
+        - DOCKER_IMG="f32"
+    #- os: linux
+    #  dist: xenial
+    #  compiler: gcc
+    #  env:
+    #    - BUILD_TYPE="local"
+    #    - QT_VERSION="5.9.9" # 5.12.1 vtesto stmsdf fails with valgrind 3.11.0 which is on xenial
+    #  addons:
+    #    apt:
+    #      packages:
+    #        - expat
+    #        - fop
+    #        - valgrind
+    #        - xsltproc
+    #        - libxml2-utils
+    #        - libusb-1.0-0-dev
+    #        - docbook-xml
+    #        - docbook-xsl
+    #        - libgl1-mesa-dev
+    #        - libxkbcommon-x11-0 # for qt onliner installer 3.2.1
+    #  cache:
+    #    directories:
+    #      - $HOME/Cache
+    #    timeout: 600
     - os: osx
       compiler: clang
-      env: QT_VERSION="5.9.9"
+      env:
+        - QT_VERSION="5.9.9"
+        - QT_INSTALL_METHOD="installer"
       cache:
         directories:
           - $HOME/Cache
@@ -64,7 +73,19 @@ jobs:
     - os: osx
       osx_image: xcode10.3
       compiler: clang
-      env: QT_VERSION="5.12.9"
+      env:
+        - QT_VERSION="5.12.9"
+        - QT_INSTALL_METHOD="installer"
+      cache:
+        directories:
+          - $HOME/Cache
+        timeout: 600
+    - os: osx
+      osx_image: xcode11.6
+      compiler: clang
+      env:
+        - QT_VERSION="5.15.0"
+        - QT_INSTALL_METHOD="artifactory"
       cache:
         directories:
           - $HOME/Cache
@@ -84,7 +105,7 @@ jobs:
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "local" ]; then ./tools/travis_install_linux_local ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx ${QT_VERSION} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx ${QT_VERSION} ${QT_INSTALL_METHOD} && source ${HOME}/Cache/qt-${QT_VERSION}.env; fi
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${BUILD_TYPE}" = "coverage" ]; then ./tools/travis_script_linux_coverage; fi

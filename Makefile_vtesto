@@ -1,0 +1,34 @@
+#
+# Legacy makefile hook for GPSBabel.pro
+# This lets us determine the tests when make is run instead
+# of when qmake is run.
+# The make parallel execution feature can be used.
+#
+# GPSBabel requires a reasonably recent version of GNU Make.
+# We rely on very few fancy features of make so the exact version
+# probably doesn't much matter.  GNU Make 3.81 seems a reasonable target.
+#
+
+srcdir = .
+builddir = .
+
+TESTCASES := $(sort $(wildcard $(srcdir)/testo.d/*.test))
+VGLOGS := $(addprefix $(builddir)/testo.d/, $(addsuffix .vglog, $(basename $(notdir $(TESTCASES)))))
+
+%.vglog: FORCE
+	@mkdir -p $(builddir)/testo.d
+	@$(srcdir)/vtesto -l -j $@ $(basename $(notdir $@))
+
+# Declaring a target PHONY whose names matches a subdirectory can be
+# particularly important, e.g. gui.
+.PHONY: all clean check-vtesto
+
+all: check-vtesto
+
+clean:
+	rm -f $(VGLOGS)
+
+check-vtesto:
+	@$(MAKE) -f $(srcdir)/Makefile_vtesto $(VGLOGS)
+
+FORCE:

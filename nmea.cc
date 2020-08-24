@@ -426,11 +426,12 @@ NmeaFormat::gpgga_parse(char* ibuf)
 
   /*
    * In serial mode, allow the fix with an invalid position through
+   * (unless if the position lat/lng is absent or completely bogus)
    * as serial units will often spit a remembered position up and
    * that is more comfortable than nothing at all...
    */
   CHECK_BOOL(opt_ignorefix);
-  if ((fix <= 0) && (read_mode != rm_serial) && (!opt_ignorefix)) {
+  if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
     return;
   }
 

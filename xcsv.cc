@@ -23,49 +23,48 @@
 
  */
 
-#include <cassert>                 // for assert
-#include <cctype>                  // for isdigit, tolower
-#include <cmath>                   // for fabs, pow
-#include <cstdio>                  // for snprintf, sscanf
-#include <cstdlib>                 // for atof, atoi, strtod, atol
-#include <cstring>                 // for strlen, strncmp, strcmp, strncpy, memset
-#include <ctime>                   // for gmtime, localtime, mktime, strftime
+#include <cassert>                    // for assert
+#include <cctype>                     // for isdigit, tolower
+#include <cmath>                      // for fabs, pow
+#include <cstdio>                     // for snprintf, sscanf
+#include <cstdlib>                    // for atof, atoi, strtod
+#include <cstring>                    // for strlen, strncmp, strcmp, memset
+#include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar
-#include <QtCore/QCharRef>         // for QCharRef
-#include <QtCore/QDate>            // for QDate
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QHash>            // for QHash
-#include <QtCore/QIODevice>        // for operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>            // for QList
-#include <QtCore/QRegExp>          // for QRegExp
-#include <QtCore/QString>          // for QString, operator+, operator==, QByteArray::append
-#include <QtCore/QStringList>      // for QStringList
-#include <QtCore/QTextStream>      // for QTextStream
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QtGlobal>         // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtCore/QByteArray>          // for QByteArray
+#include <QtCore/QChar>               // for QChar
+#include <QtCore/QDate>               // for QDate
+#include <QtCore/QDateTime>           // for QDateTime
+#include <QtCore/QDebug>              // for QDebug
+#include <QtCore/QHash>               // for QHash
+#include <QtCore/QIODevice>           // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QtCore/QList>               // for QList
+#include <QtCore/QRegularExpression>  // for QRegularExpression
+#include <QtCore/QString>             // for QString, operator+, operator==
+#include <QtCore/QStringList>         // for QStringList
+#include <QtCore/QTextStream>         // for QTextStream
+#include <QtCore/QtGlobal>            // for qAsConst, qPrintable
 
 #include "defs.h"
-#include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_FIND, GMSD_GET, GMSD_SET, garmin_fs_alloc
-#include "gbfile.h"                // for gbfgetstr, gbfclose, gbfopen, gbfile
-#include "grtcirc.h"               // for RAD, gcdist, radtomiles
-#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
-#include "jeeps/gpsport.h"         // for int32
-#include "session.h"               // for session_t
-#include "src/core/datetime.h"     // for DateTime
-#include "src/core/logging.h"      // for Warning, Fatal
-#include "src/core/optional.h"     // for optional
-#include "src/core/textstream.h"
-#include "strptime.h"              // for strptime
+#include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
+#include "formspec.h"                 // for FormatSpecificDataList
+#include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
+#include "gbfile.h"                   // for gbfgetstr, gbfclose, gbfopen, gbfile
+#include "grtcirc.h"                  // for RAD, gcdist, radtomiles
+#include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
+#include "jeeps/gpsport.h"            // for int32
+#include "session.h"                  // for session_t
+#include "src/core/datetime.h"        // for DateTime
+#include "src/core/logging.h"         // for FatalMsg
+#include "src/core/optional.h"        // for optional
+#include "src/core/textstream.h"      // for TextStream
+#include "strptime.h"                 // for strptime
 #include "xcsv.h"
 
 
 #if CSVFMTS_ENABLED
 
 #define MYNAME	"XCSV"
-
 
 /* a table of config file constants mapped to chars */
 const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
@@ -1557,7 +1556,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   }
 
   // Separate op and tokens.
-  int sep = line.indexOf(QRegExp("\\s+"));
+  int sep = line.indexOf(QRegularExpression(R"(\s+)"));
 
   // the first token is the operation, e.g. "IFIELD"
   QString op = line.mid(0, sep).trimmed().toUpper();

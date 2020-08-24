@@ -5,10 +5,10 @@
 
 #debug failed install
 function debug() {
-  cat ${CACHEDIR}/qt-${QT_VERSION}.env
-  find ${CACHEDIR}/Qt -maxdepth 3 -ls
-  cat ${CACHEDIR}/Qt/InstallationLog.txt
-  cat ${CACHEDIR}/Qt/components.xml
+  cat "${CACHEDIR}/qt-${QT_VERSION}.env"
+  find "${CACHEDIR}" -maxdepth 3 -ls
+  cat "${CACHEDIR}/Qt/InstallationLog.txt"
+  cat "${CACHEDIR}/Qt/components.xml"
   echo "$1" >&2
   exit 1
 }
@@ -17,7 +17,8 @@ function debug() {
 function validate() {
   (
     set +e
-    source ${CACHEDIR}/qt-${QT_VERSION}.env
+    # shellcheck source=/dev/null
+    source "${CACHEDIR}/qt-${QT_VERSION}.env"
     if [ "$(qmake -query QT_INSTALL_BINS)" != "${QTDIR}/bin" ]; then
       debug "ERROR: unexpected Qt location."
     fi
@@ -28,7 +29,7 @@ function validate() {
 }
 
 QT_VERSION=${1:-5.12.2}
-QT_VERSION_SHORT=${QT_VERSION//./}
+METHOD=${2:-artifactory}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
@@ -40,19 +41,44 @@ if [ -d "${QTDIR}/bin" ]; then
   echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
   if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
     # the cache is being used.  modify it to reset expiration date.
-    date > ${CACHEDIR}/timestamp
+    date > "${CACHEDIR}/timestamp"
   fi
   if [ -f "${CACHEDIR}/timestamp" ]; then
     echo -n "Cache timestamp: "
     cat "${CACHEDIR}/timestamp"
   fi
 else
-  rm -fr ${CACHEDIR}
-  mkdir -p ${CACHEDIR}
-  pushd ${CACHEDIR}
-  # install-qt creates the install at $PWD/Qt.
-  QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt ${QT_VERSION}
+  rm -fr "${CACHEDIR}"
+  mkdir -p "${CACHEDIR}"
+  pushd "${CACHEDIR}"
+
+  if [ "$METHOD" = "artifactory" ]; then
+    (
+      # Do not leak keys
+      set +x
+      if [ -z "${ARTIFACTORY_API_KEY}" ]; then
+        echo "An untrusted build cannot load cache from artifactory."
+        echo "A PR from a forked repo will be an untrusted build."
+        echo "The cache can be loaded from a trusted build of the default branch."
+        echo "A PR from the original repo will be trusted, but has it's own cache."
+        echo "However, when that PR is merged it will build cache for the default branch."
+        echo "Also, the cron job should rebuild the cache for the default branch, if necessary,"
+        echo "once that flavor of build in .travis.yml makes it into the default branch."
+        exit 1
+      else
+        archive=qt-${QT_VERSION}-release-macos.tar.xz
+        curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
+        tar -x -J -f "/tmp/${archive}"
+        echo "export PATH=${CACHEDIR}/Qt/${QT_VERSION}/clang_64/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
+        rm -f "/tmp/${archive}"
+      fi
+     )
+  else
+    # install-qt creates the install at $PWD/Qt.
+    QT_VERSION_SHORT=${QT_VERSION//./}
+    QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt "${QT_VERSION}"
+    rm "${CACHEDIR}"/qt-opensource*.dmg
+  fi
   popd
   validate
-  rm ${CACHEDIR}/qt-opensource*.dmg
 fi

@@ -21,9 +21,16 @@
 
  */
 
+#include <cmath>           // for fabs, lround
+#include <cstdint>         // for int32_t, uint8_t, uint32_t
+#include <cstdlib>         // for abs
+#include <cstring>         // for strlen, memcpy, memset
+
+#include <QtCore/QString>  // for QString
+
 #include "defs.h"
-#include <cmath>
-#include <cstdlib>
+#include "gbfile.h"        // for gbfclose, gbfopen_le, gbfread, gbfwrite, gbfile
+
 
 #define MYNAME "Enigma binary route and waypoint file format"
 
@@ -177,7 +184,7 @@ enigma_waypt_disp(const Waypoint* wpt)
   le_write32(&ewpt.longitude, decToEnigmaPosition(wpt->longitude));
   ewpt.waypoint_type = WTYPE_WAYPOINT;
   if (wpt->altitude != unknown_alt) {
-    le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
+    le_write32(&ewpt.data.wp_altitude, lround(METERS_TO_FEET(wpt->altitude)) + 1000);
   }
   if (wpt->shortname != nullptr) {
     ewpt.shortname_len = (uint8_t) min(6, strlen(CSTRc(wpt->shortname)));

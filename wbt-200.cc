@@ -416,7 +416,7 @@ static int rd_buf(void* buf, int len)
   if (rc = gbser_read_wait(fd, buf, len, TIMEOUT), rc < 0) {
     fatal(MYNAME ": Read error (%d)\n", rc);
   } else if (rc < len) {
-    db(2, MYNAME ": Read timout, got %i of %i bytes\n", rc, len);
+    db(2, MYNAME ": Read timeout, got %i of %i bytes\n", rc, len);
     return 0;
   }
   return 1;
