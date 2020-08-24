@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="44.380856138" minlon="-68.195466539" maxlat="44.520120621" maxlon="-68.025605679"/>
+  </metadata>
+  <wpt lat="44.391460419" lon="-68.031334877">
+    <time>2020-06-08T18:35:29Z</time>
+    <name>Birch Harbor</name>
+    <cmt>Birch Harbor</cmt>
+    <desc>Birch Harbor</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="44.477913380" lon="-68.038501740">
+    <time>2020-06-08T18:35:58Z</time>
+    <name>Gouldsboro</name>
+    <cmt>Gouldsboro</cmt>
+    <desc>Gouldsboro</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="44.409549236" lon="-68.025605679">
+    <time>2020-06-10T22:00:50Z</time>
+    <name>Prospect Harbor</name>
+    <cmt>Prospect Harbor</cmt>
+    <desc>Prospect Harbor</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="44.380860329" lon="-68.068499565">
+    <time>2020-06-08T11:09:27Z</time>
+    <name>Schoodic Woods Campground</name>
+    <cmt>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</cmt>
+    <desc>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</desc>
+    <sym>Campground</sym>
+  </wpt>
+  <wpt lat="44.520120621" lon="-68.195464611">
+    <time>2019-04-29T21:00:49Z</time>
+    <name>Sullivan Twn</name>
+    <cmt>Sullivan Twn</cmt>
+    <desc>Sullivan Twn</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <rte>
+    <name>Trip to Schoodic Woods Campground - Day 1</name>
+    <extensions>
+      <gpxx:RouteExtension>
+        <gpxx:IsAutoNamed>false</gpxx:IsAutoNamed>
+        <gpxx:DisplayColor>Magenta</gpxx:DisplayColor>
+      </gpxx:RouteExtension>
+    </extensions>
+    <rtept lat="44.520120621" lon="-68.195464611">
+      <time>2019-04-29T21:00:49Z</time>
+      <name>Sullivan Twn</name>
+      <cmt>Sullivan Twn</cmt>
+      <desc>Sullivan Twn</desc>
+      <sym>City (Small)</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.520120621" lon="-68.195464611"/>
+          <gpxx:rpt lat="44.520110060" lon="-68.195466539"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.520110060" lon="-68.195466539">
+      <ele>45.738</ele>
+      <name>0001</name>
+      <cmt>Get on Us1 and drive east</cmt>
+      <desc>[PT6S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.520110060" lon="-68.195466539"/>
+          <gpxx:rpt lat="44.519991875" lon="-68.194198608"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.519991875" lon="-68.194198608">
+      <ele>45.563</ele>
+      <name>0002</name>
+      <desc>[PT23S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.519991875" lon="-68.194198608"/>
+          <gpxx:rpt lat="44.519670010" lon="-68.192825317"/>
+          <gpxx:rpt lat="44.519584179" lon="-68.192567825"/>
+          <gpxx:rpt lat="44.519133568" lon="-68.190958500"/>
+          <gpxx:rpt lat="44.518661499" lon="-68.190057278"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.518661499" lon="-68.190057278">
+      <ele>44.266</ele>
+      <name>0003</name>
+      <desc>[PT2M3S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.518661499" lon="-68.190057278"/>
+          <gpxx:rpt lat="44.518296719" lon="-68.189499378"/>
+          <gpxx:rpt lat="44.517052174" lon="-68.188233376"/>
+          <gpxx:rpt lat="44.516451359" lon="-68.187439442"/>
+          <gpxx:rpt lat="44.512460232" lon="-68.180830479"/>
+          <gpxx:rpt lat="44.512288570" lon="-68.180508614"/>
+          <gpxx:rpt lat="44.511945248" lon="-68.179714680"/>
+          <gpxx:rpt lat="44.511880875" lon="-68.179435730"/>
+          <gpxx:rpt lat="44.511859417" lon="-68.179306984"/>
+          <gpxx:rpt lat="44.511709213" lon="-68.178470135"/>
+          <gpxx:rpt lat="44.511623383" lon="-68.177525997"/>
+          <gpxx:rpt lat="44.511730671" lon="-68.174543381"/>
+          <gpxx:rpt lat="44.511730671" lon="-68.174135685"/>
+          <gpxx:rpt lat="44.511730671" lon="-68.171989918"/>
+          <gpxx:rpt lat="44.511687756" lon="-68.171067238"/>
+          <gpxx:rpt lat="44.511430264" lon="-68.168857098"/>
+          <gpxx:rpt lat="44.511129856" lon="-68.166475296"/>
+          <gpxx:rpt lat="44.510979652" lon="-68.165810108"/>
+          <gpxx:rpt lat="44.510614872" lon="-68.164844513"/>
+          <gpxx:rpt lat="44.510185719" lon="-68.164093494"/>
+          <gpxx:rpt lat="44.509477615" lon="-68.162934780"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.509477615" lon="-68.162934780">
+      <ele>28.781</ele>
+      <name>0004</name>
+      <desc>[PT1M28S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.509477615" lon="-68.162934780"/>
+          <gpxx:rpt lat="44.507675171" lon="-68.160037994"/>
+          <gpxx:rpt lat="44.506752491" lon="-68.158514500"/>
+          <gpxx:rpt lat="44.506022930" lon="-68.157312870"/>
+          <gpxx:rpt lat="44.505314827" lon="-68.156068325"/>
+          <gpxx:rpt lat="44.505057335" lon="-68.155488968"/>
+          <gpxx:rpt lat="44.504821301" lon="-68.154845238"/>
+          <gpxx:rpt lat="44.504263401" lon="-68.153064251"/>
+          <gpxx:rpt lat="44.503877163" lon="-68.152120113"/>
+          <gpxx:rpt lat="44.503405094" lon="-68.151304722"/>
+          <gpxx:rpt lat="44.502954483" lon="-68.150660992"/>
+          <gpxx:rpt lat="44.502117634" lon="-68.149652481"/>
+          <gpxx:rpt lat="44.501860142" lon="-68.149330616"/>
+          <gpxx:rpt lat="44.501194954" lon="-68.148643970"/>
+          <gpxx:rpt lat="44.500057697" lon="-68.147614002"/>
+          <gpxx:rpt lat="44.499177933" lon="-68.146712780"/>
+          <gpxx:rpt lat="44.498791695" lon="-68.146262169"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.498791695" lon="-68.146262169">
+      <ele>26.887</ele>
+      <name>0005</name>
+      <desc>[PT1M21S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.498791695" lon="-68.146262169"/>
+          <gpxx:rpt lat="44.497096539" lon="-68.144073486"/>
+          <gpxx:rpt lat="44.495315552" lon="-68.141713142"/>
+          <gpxx:rpt lat="44.494736195" lon="-68.140811920"/>
+          <gpxx:rpt lat="44.494521618" lon="-68.140382767"/>
+          <gpxx:rpt lat="44.493491650" lon="-68.137636185"/>
+          <gpxx:rpt lat="44.493384361" lon="-68.137335777"/>
+          <gpxx:rpt lat="44.493019581" lon="-68.136370182"/>
+          <gpxx:rpt lat="44.492890835" lon="-68.136048317"/>
+          <gpxx:rpt lat="44.492783546" lon="-68.135790825"/>
+          <gpxx:rpt lat="44.492332935" lon="-68.134717941"/>
+          <gpxx:rpt lat="44.492268562" lon="-68.134589195"/>
+          <gpxx:rpt lat="44.491388798" lon="-68.132829666"/>
+          <gpxx:rpt lat="44.487698078" lon="-68.126349449"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.487698078" lon="-68.126349449">
+      <ele>20.605</ele>
+      <name>0006</name>
+      <desc>[PT1M52S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.487698078" lon="-68.126349449"/>
+          <gpxx:rpt lat="44.487311840" lon="-68.125469685"/>
+          <gpxx:rpt lat="44.486925602" lon="-68.124225140"/>
+          <gpxx:rpt lat="44.486002922" lon="-68.120234013"/>
+          <gpxx:rpt lat="44.485509396" lon="-68.118388653"/>
+          <gpxx:rpt lat="44.485015869" lon="-68.117079735"/>
+          <gpxx:rpt lat="44.484651089" lon="-68.116242886"/>
+          <gpxx:rpt lat="44.484522343" lon="-68.116006851"/>
+          <gpxx:rpt lat="44.484007359" lon="-68.115019798"/>
+          <gpxx:rpt lat="44.482655525" lon="-68.112723827"/>
+          <gpxx:rpt lat="44.479672909" lon="-68.106672764"/>
+          <gpxx:rpt lat="44.479029179" lon="-68.105320930"/>
+          <gpxx:rpt lat="44.478256702" lon="-68.103582859"/>
+          <gpxx:rpt lat="44.477677345" lon="-68.102145195"/>
+          <gpxx:rpt lat="44.477140903" lon="-68.101136684"/>
+          <gpxx:rpt lat="44.476518631" lon="-68.100321293"/>
+          <gpxx:rpt lat="44.475917816" lon="-68.099741936"/>
+          <gpxx:rpt lat="44.475252628" lon="-68.099076748"/>
+          <gpxx:rpt lat="44.473836422" lon="-68.097617626"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.473836422" lon="-68.097617626">
+      <ele>38.840</ele>
+      <name>0007</name>
+      <cmt>Turn right onto S Gouldsboro Rd</cmt>
+      <desc>[PT3M4S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.473836422" lon="-68.097617626"/>
+          <gpxx:rpt lat="44.472870827" lon="-68.098819256"/>
+          <gpxx:rpt lat="44.472484589" lon="-68.099098206"/>
+          <gpxx:rpt lat="44.472033978" lon="-68.099076748"/>
+          <gpxx:rpt lat="44.471175671" lon="-68.098454475"/>
+          <gpxx:rpt lat="44.469244480" lon="-68.097059727"/>
+          <gpxx:rpt lat="44.468836784" lon="-68.096587658"/>
+          <gpxx:rpt lat="44.468536377" lon="-68.096029758"/>
+          <gpxx:rpt lat="44.467978477" lon="-68.094935417"/>
+          <gpxx:rpt lat="44.467699528" lon="-68.094506264"/>
+          <gpxx:rpt lat="44.467399120" lon="-68.094162941"/>
+          <gpxx:rpt lat="44.466862679" lon="-68.094184399"/>
+          <gpxx:rpt lat="44.465317726" lon="-68.094356060"/>
+          <gpxx:rpt lat="44.464137554" lon="-68.094913960"/>
+          <gpxx:rpt lat="44.463386536" lon="-68.095278740"/>
+          <gpxx:rpt lat="44.463236332" lon="-68.095364571"/>
+          <gpxx:rpt lat="44.462935925" lon="-68.095514774"/>
+          <gpxx:rpt lat="44.462463856" lon="-68.095793724"/>
+          <gpxx:rpt lat="44.462056160" lon="-68.096158504"/>
+          <gpxx:rpt lat="44.461691380" lon="-68.096759319"/>
+          <gpxx:rpt lat="44.461133480" lon="-68.097896576"/>
+          <gpxx:rpt lat="44.460425377" lon="-68.099377155"/>
+          <gpxx:rpt lat="44.460210800" lon="-68.099806309"/>
+          <gpxx:rpt lat="44.459888935" lon="-68.101007938"/>
+          <gpxx:rpt lat="44.459760189" lon="-68.103024960"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.459760189" lon="-68.103024960">
+      <ele>34.777</ele>
+      <name>0008</name>
+      <desc>[PT2M12S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.459760189" lon="-68.103024960"/>
+          <gpxx:rpt lat="44.459609985" lon="-68.103818893"/>
+          <gpxx:rpt lat="44.459159374" lon="-68.105041981"/>
+          <gpxx:rpt lat="44.458687305" lon="-68.106265068"/>
+          <gpxx:rpt lat="44.458215237" lon="-68.107616901"/>
+          <gpxx:rpt lat="44.457700253" lon="-68.108839989"/>
+          <gpxx:rpt lat="44.457292557" lon="-68.109655380"/>
+          <gpxx:rpt lat="44.456884861" lon="-68.110363483"/>
+          <gpxx:rpt lat="44.455575943" lon="-68.112359047"/>
+          <gpxx:rpt lat="44.455232620" lon="-68.112938404"/>
+          <gpxx:rpt lat="44.454889297" lon="-68.113324642"/>
+          <gpxx:rpt lat="44.454674721" lon="-68.113410473"/>
+          <gpxx:rpt lat="44.453966618" lon="-68.113560677"/>
+          <gpxx:rpt lat="44.452593327" lon="-68.113796711"/>
+          <gpxx:rpt lat="44.451842308" lon="-68.113903999"/>
+          <gpxx:rpt lat="44.451541901" lon="-68.113882542"/>
+          <gpxx:rpt lat="44.451155663" lon="-68.113839626"/>
+          <gpxx:rpt lat="44.450533390" lon="-68.113582134"/>
+          <gpxx:rpt lat="44.450211525" lon="-68.113367558"/>
+          <gpxx:rpt lat="44.449911118" lon="-68.113088608"/>
+          <gpxx:rpt lat="44.448752403" lon="-68.111758232"/>
+          <gpxx:rpt lat="44.448559284" lon="-68.111608028"/>
+          <gpxx:rpt lat="44.448237419" lon="-68.111393452"/>
+          <gpxx:rpt lat="44.447700977" lon="-68.111157417"/>
+          <gpxx:rpt lat="44.446907043" lon="-68.111050129"/>
+          <gpxx:rpt lat="44.445533752" lon="-68.111436367"/>
+          <gpxx:rpt lat="44.444396496" lon="-68.111650944"/>
+          <gpxx:rpt lat="44.441220760" lon="-68.112015724"/>
+          <gpxx:rpt lat="44.440813065" lon="-68.112058640"/>
+          <gpxx:rpt lat="44.440083504" lon="-68.112123013"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.440083504" lon="-68.112123013">
+      <ele>38.371</ele>
+      <name>0009</name>
+      <desc>[PT3S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.440083504" lon="-68.112123013"/>
+          <gpxx:rpt lat="44.439697266" lon="-68.112144470"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.439697266" lon="-68.112144470">
+      <ele>38.293</ele>
+      <name>0010</name>
+      <desc>[PT1M29S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.439697266" lon="-68.112144470"/>
+          <gpxx:rpt lat="44.438517094" lon="-68.111758232"/>
+          <gpxx:rpt lat="44.438023567" lon="-68.111693859"/>
+          <gpxx:rpt lat="44.437658787" lon="-68.111715317"/>
+          <gpxx:rpt lat="44.437251091" lon="-68.111779690"/>
+          <gpxx:rpt lat="44.437079430" lon="-68.111801147"/>
+          <gpxx:rpt lat="44.436285496" lon="-68.111929893"/>
+          <gpxx:rpt lat="44.436199665" lon="-68.111929893"/>
+          <gpxx:rpt lat="44.435641766" lon="-68.111779690"/>
+          <gpxx:rpt lat="44.434590340" lon="-68.111329079"/>
+          <gpxx:rpt lat="44.431865215" lon="-68.110127449"/>
+          <gpxx:rpt lat="44.431285858" lon="-68.109869957"/>
+          <gpxx:rpt lat="44.430685043" lon="-68.109548092"/>
+          <gpxx:rpt lat="44.430062771" lon="-68.109097481"/>
+          <gpxx:rpt lat="44.429655075" lon="-68.108818531"/>
+          <gpxx:rpt lat="44.427831173" lon="-68.107531071"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.427831173" lon="-68.107531071">
+      <ele>36.547</ele>
+      <name>0011</name>
+      <desc>[PT1M11S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.427831173" lon="-68.107531071"/>
+          <gpxx:rpt lat="44.427080154" lon="-68.106801510"/>
+          <gpxx:rpt lat="44.426393509" lon="-68.106050491"/>
+          <gpxx:rpt lat="44.421715736" lon="-68.100492954"/>
+          <gpxx:rpt lat="44.419827461" lon="-68.098261356"/>
+          <gpxx:rpt lat="44.417660236" lon="-68.096179962"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.417660236" lon="-68.096179962">
+      <ele>24.645</ele>
+      <name>0012</name>
+      <desc>[PT1M3S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.417660236" lon="-68.096179962"/>
+          <gpxx:rpt lat="44.410986900" lon="-68.089978695"/>
+          <gpxx:rpt lat="44.410386086" lon="-68.089485168"/>
+          <gpxx:rpt lat="44.409441948" lon="-68.088884354"/>
+          <gpxx:rpt lat="44.408540726" lon="-68.088390827"/>
+          <gpxx:rpt lat="44.407660961" lon="-68.088026047"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.407660961" lon="-68.088026047">
+      <ele>15.426</ele>
+      <name>0013</name>
+      <desc>[PT49S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.407660961" lon="-68.088026047"/>
+          <gpxx:rpt lat="44.405601025" lon="-68.087468147"/>
+          <gpxx:rpt lat="44.402060509" lon="-68.086588383"/>
+          <gpxx:rpt lat="44.400794506" lon="-68.086137772"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.400794506" lon="-68.086137772">
+      <ele>11.945</ele>
+      <name>0014</name>
+      <desc>[PT1M1S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.400794506" lon="-68.086137772"/>
+          <gpxx:rpt lat="44.398884773" lon="-68.085408211"/>
+          <gpxx:rpt lat="44.397811890" lon="-68.084979057"/>
+          <gpxx:rpt lat="44.396781921" lon="-68.084678650"/>
+          <gpxx:rpt lat="44.394829273" lon="-68.084120750"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.394829273" lon="-68.084120750">
+      <ele>9.000</ele>
+      <name>0015</name>
+      <cmt>Turn left onto Main St</cmt>
+      <desc>[PT1M35S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.394829273" lon="-68.084120750"/>
+          <gpxx:rpt lat="44.395065308" lon="-68.083562851"/>
+          <gpxx:rpt lat="44.395301342" lon="-68.082983494"/>
+          <gpxx:rpt lat="44.395601749" lon="-68.081395626"/>
+          <gpxx:rpt lat="44.395623207" lon="-68.080945015"/>
+          <gpxx:rpt lat="44.395623207" lon="-68.080279827"/>
+          <gpxx:rpt lat="44.395623207" lon="-68.079957962"/>
+          <gpxx:rpt lat="44.395387173" lon="-68.078370094"/>
+          <gpxx:rpt lat="44.395301342" lon="-68.077855110"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.395301342" lon="-68.077855110">
+      <ele>15.344</ele>
+      <name>0016</name>
+      <desc>[PT23S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.395301342" lon="-68.077855110"/>
+          <gpxx:rpt lat="44.394850731" lon="-68.076524734"/>
+          <gpxx:rpt lat="44.394550323" lon="-68.075816631"/>
+          <gpxx:rpt lat="44.394292831" lon="-68.075001240"/>
+          <gpxx:rpt lat="44.393928051" lon="-68.073670864"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.393928051" lon="-68.073670864">
+      <ele>21.840</ele>
+      <name>0017</name>
+      <cmt>Turn right onto Moore Rd</cmt>
+      <desc>[PT1M37S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.393928051" lon="-68.073670864"/>
+          <gpxx:rpt lat="44.393670559" lon="-68.073713779"/>
+          <gpxx:rpt lat="44.392747879" lon="-68.073670864"/>
+          <gpxx:rpt lat="44.390408993" lon="-68.072876930"/>
+          <gpxx:rpt lat="44.390130043" lon="-68.072726727"/>
+          <gpxx:rpt lat="44.389593601" lon="-68.072254658"/>
+          <gpxx:rpt lat="44.388670921" lon="-68.070838451"/>
+          <gpxx:rpt lat="44.388241768" lon="-68.070473671"/>
+          <gpxx:rpt lat="44.385795593" lon="-68.069722652"/>
+          <gpxx:rpt lat="44.381418228" lon="-68.068649769"/>
+          <gpxx:rpt lat="44.380856138" lon="-68.068539295"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.380856138" lon="-68.068539295">
+      <ele>41.480</ele>
+      <name>0018</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.380856138" lon="-68.068539295"/>
+          <gpxx:rpt lat="44.380860329" lon="-68.068499565"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.380860329" lon="-68.068499565">
+      <time>2020-06-08T11:09:27Z</time>
+      <name>Schoodic Woods Campground</name>
+      <cmt>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</cmt>
+      <desc>Schoodic Woods Campground
+Schoodic Loop Rd
+Winter Harbor Twn, Maine, 04693, United States
+207-288-1300</desc>
+      <sym>Campground</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.380860329" lon="-68.068499565"/>
+          <gpxx:rpt lat="44.380856138" lon="-68.068539295"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.380856138" lon="-68.068539295">
+      <ele>41.480</ele>
+      <name>0019</name>
+      <cmt>Get on Moore Rd and drive north</cmt>
+      <desc>[PT1M16S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.380856138" lon="-68.068539295"/>
+          <gpxx:rpt lat="44.381418228" lon="-68.068649769"/>
+          <gpxx:rpt lat="44.385795593" lon="-68.069722652"/>
+          <gpxx:rpt lat="44.388241768" lon="-68.070473671"/>
+          <gpxx:rpt lat="44.388670921" lon="-68.070838451"/>
+          <gpxx:rpt lat="44.389593601" lon="-68.072254658"/>
+          <gpxx:rpt lat="44.390130043" lon="-68.072726727"/>
+          <gpxx:rpt lat="44.390408993" lon="-68.072876930"/>
+          <gpxx:rpt lat="44.392747879" lon="-68.073670864"/>
+          <gpxx:rpt lat="44.393670559" lon="-68.073713779"/>
+          <gpxx:rpt lat="44.393928051" lon="-68.073670864"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.393928051" lon="-68.073670864">
+      <ele>21.840</ele>
+      <name>0020</name>
+      <cmt>Turn right onto Birch Harbor Rd</cmt>
+      <desc>[PT1M13S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.393928051" lon="-68.073670864"/>
+          <gpxx:rpt lat="44.393734932" lon="-68.071718216"/>
+          <gpxx:rpt lat="44.393627644" lon="-68.070151806"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.393627644" lon="-68.070151806">
+      <ele>29.652</ele>
+      <name>0021</name>
+      <desc>[PT1M39S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.393627644" lon="-68.070151806"/>
+          <gpxx:rpt lat="44.393649101" lon="-68.068649769"/>
+          <gpxx:rpt lat="44.393970966" lon="-68.066740036"/>
+          <gpxx:rpt lat="44.393992424" lon="-68.065667152"/>
+          <gpxx:rpt lat="44.393820763" lon="-68.064701557"/>
+          <gpxx:rpt lat="44.393477440" lon="-68.063521385"/>
+          <gpxx:rpt lat="44.393348694" lon="-68.062791824"/>
+          <gpxx:rpt lat="44.392812252" lon="-68.058221340"/>
+          <gpxx:rpt lat="44.392361641" lon="-68.056139946"/>
+          <gpxx:rpt lat="44.392104149" lon="-68.054380417"/>
+          <gpxx:rpt lat="44.391911030" lon="-68.052170277"/>
+          <gpxx:rpt lat="44.391739368" lon="-68.051226139"/>
+          <gpxx:rpt lat="44.391460419" lon="-68.049058914"/>
+          <gpxx:rpt lat="44.391288757" lon="-68.048372269"/>
+          <gpxx:rpt lat="44.391052723" lon="-68.047385216"/>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0022</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0023</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+          <gpxx:rpt lat="44.390710322" lon="-68.045376912"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.390710322" lon="-68.045376912">
+      <time>2020-06-08T18:39:00Z</time>
+      <name>1 Birch Harbor Rd</name>
+      <desc>1 Birch Harbor Rd
+Winter Harbor, ME, 04693, USA</desc>
+      <sym>Flag, Blue</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.390710322" lon="-68.045376912"/>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0024</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.390752316" lon="-68.045368195">
+      <ele>29.453</ele>
+      <name>0025</name>
+      <desc>[PT41S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.390752316" lon="-68.045368195"/>
+          <gpxx:rpt lat="44.390258789" lon="-68.042793274"/>
+          <gpxx:rpt lat="44.390130043" lon="-68.042299747"/>
+          <gpxx:rpt lat="44.389400482" lon="-68.039917946"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.389400482" lon="-68.039917946">
+      <ele>22.574</ele>
+      <name>0026</name>
+      <desc>[PT1M29S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.389400482" lon="-68.039917946"/>
+          <gpxx:rpt lat="44.388992786" lon="-68.038780689"/>
+          <gpxx:rpt lat="44.388885498" lon="-68.038351536"/>
+          <gpxx:rpt lat="44.388949871" lon="-68.036913872"/>
+          <gpxx:rpt lat="44.388992786" lon="-68.036184311"/>
+          <gpxx:rpt lat="44.389121532" lon="-68.035604954"/>
+          <gpxx:rpt lat="44.389636517" lon="-68.033909798"/>
+          <gpxx:rpt lat="44.390001297" lon="-68.032815456"/>
+          <gpxx:rpt lat="44.390344620" lon="-68.032193184"/>
+          <gpxx:rpt lat="44.390773773" lon="-68.031721115"/>
+          <gpxx:rpt lat="44.391396046" lon="-68.031377792"/>
+          <gpxx:rpt lat="44.391524792" lon="-68.031291962"/>
+          <gpxx:rpt lat="44.393091202" lon="-68.030476570"/>
+          <gpxx:rpt lat="44.393541813" lon="-68.030133247"/>
+          <gpxx:rpt lat="44.394550323" lon="-68.029189110"/>
+          <gpxx:rpt lat="44.395816326" lon="-68.027279377"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.395816326" lon="-68.027279377">
+      <ele>13.723</ele>
+      <name>0027</name>
+      <desc>[PT2M28S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.395816326" lon="-68.027279377"/>
+          <gpxx:rpt lat="44.396696091" lon="-68.025498390"/>
+          <gpxx:rpt lat="44.397211075" lon="-68.024339676"/>
+          <gpxx:rpt lat="44.397339821" lon="-68.023910522"/>
+          <gpxx:rpt lat="44.397318363" lon="-68.023738861"/>
+          <gpxx:rpt lat="44.397082329" lon="-68.022966385"/>
+          <gpxx:rpt lat="44.397146702" lon="-68.022236824"/>
+          <gpxx:rpt lat="44.397296906" lon="-68.021893501"/>
+          <gpxx:rpt lat="44.397554398" lon="-68.021764755"/>
+          <gpxx:rpt lat="44.397854805" lon="-68.021657467"/>
+          <gpxx:rpt lat="44.398112297" lon="-68.021721840"/>
+          <gpxx:rpt lat="44.398391247" lon="-68.022279739"/>
+          <gpxx:rpt lat="44.398605824" lon="-68.022751808"/>
+          <gpxx:rpt lat="44.398713112" lon="-68.022902012"/>
+          <gpxx:rpt lat="44.399120808" lon="-68.023245335"/>
+          <gpxx:rpt lat="44.399528503" lon="-68.023502827"/>
+          <gpxx:rpt lat="44.400901794" lon="-68.024404049"/>
+          <gpxx:rpt lat="44.401416779" lon="-68.024618626"/>
+          <gpxx:rpt lat="44.402039051" lon="-68.024768829"/>
+          <gpxx:rpt lat="44.402940273" lon="-68.025305271"/>
+          <gpxx:rpt lat="44.405407906" lon="-68.026313782"/>
+          <gpxx:rpt lat="44.406673908" lon="-68.026957512"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.406673908" lon="-68.026957512">
+      <ele>13.098</ele>
+      <name>0028</name>
+      <desc>[PT20S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.406673908" lon="-68.026957512"/>
+          <gpxx:rpt lat="44.407360554" lon="-68.026828766"/>
+          <gpxx:rpt lat="44.408090115" lon="-68.026528358"/>
+          <gpxx:rpt lat="44.408626556" lon="-68.026227951"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.408626556" lon="-68.026227951">
+      <ele>12.836</ele>
+      <name>0029</name>
+      <desc>[PT18S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.408626556" lon="-68.026227951"/>
+          <gpxx:rpt lat="44.409560636" lon="-68.025641553"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.409560636" lon="-68.025641553">
+      <ele>12.707</ele>
+      <name>0030</name>
+      <desc>[PT0S]</desc>
+      <sym>Waypoint</sym>
+      <extensions>
+        <gpxx:RoutePointExtension>
+          <gpxx:rpt lat="44.409560636" lon="-68.025641553"/>
+          <gpxx:rpt lat="44.409549236" lon="-68.025605679"/>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="44.409549236" lon="-68.025605679">
+      <time>2020-06-10T22:00:50Z</time>
+      <name>Prospect Harbor</name>
+      <cmt>Prospect Harbor</cmt>
+      <desc>Prospect Harbor</desc>
+      <sym>City (Small)</sym>
+    </rtept>
+  </rte>
+</gpx>

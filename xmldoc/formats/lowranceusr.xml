@@ -1204,7 +1204,7 @@ Lowrance only provides minimal
 support for GPX export data on their HOOK2 series (only data available to the author).  Refer to
 the official <ulink url="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</ulink> for the complete schema.
 </para>
-<example>
+<example id="lowrance-export">
   <title>Lowrance GPX Export Data</title>
   <programlisting>
     &lt;metadata>

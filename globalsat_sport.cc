@@ -120,12 +120,12 @@ GlobalsatSportFormat::recv_byte()
   if (!opt_input_dump_file) {
     result=serial_recv_byte();
   } else {
-    int bytes = gbfread(&result, 1, 1, in_file);
-    is_fatal((bytes != 1), MYNAME ": read error");
+    result = gbfgetc(in_file);
+    is_fatal((result < 0), MYNAME ": read error");
   }
   // Check if byte should be dumped also into a file
   if (dumpfile) {
-    gbfwrite(&result, 1, 1, dumpfile);
+    gbfputc(result, dumpfile);
   }
   return result;
 }

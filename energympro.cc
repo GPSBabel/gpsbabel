@@ -33,7 +33,7 @@
 
 #include "defs.h"
 #include "energympro.h"
-#include "gbfile.h"             // for gbfgetc, gbfseek, gbfclose, gbfopen, gbfread, gbfgetuint32, gbfcopyfrom, gbfgetuint16, gbfile, gbsize_t
+#include "gbfile.h"             // for gbfgetc, gbfgetuint16, gbfgetuint32, gbfseek, gbfgetint16, gbfclose, gbfopen, gbfcopyfrom, gbfile, gbsize_t
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -46,22 +46,48 @@ void
 EnergymproFormat::read_point(route_head* gpsbabel_route, gpsbabel::DateTime& gpsDateTime) const
 {
   tw_point point{};
-  gbfread(&point, sizeof(tw_point), 1, file_in);
+  point.Latitude = gbfgetuint32(file_in);
+  point.Longitude = gbfgetuint32(file_in);
+  point.Altitude = gbfgetint16(file_in);
+  point.reserved1 = gbfgetuint16(file_in);
+  point.Speed = gbfgetuint32(file_in);
+  point.IntervalDist = gbfgetuint16(file_in);
+  point.reserved2 = gbfgetuint16(file_in);
+  point.IntervalTime = gbfgetuint32(file_in);
+  point.Status = gbfgetc(file_in);
+  point.HR_Heartrate = gbfgetc(file_in);
+  point.HR_Status = gbfgetc(file_in);
+  point.reserved3 = gbfgetc(file_in);
+  point.Speed_Speed = gbfgetuint32(file_in);
+  point.Speed_Status = gbfgetc(file_in);
+  point.reserved4 = gbfgetc(file_in);
+  point.reserved5 = gbfgetc(file_in);
+  point.reserved6 = gbfgetc(file_in);
+  point.Cadence_Cadence = gbfgetc(file_in);
+  point.Cadence_Status = gbfgetc(file_in);
+  point.Power_Cadence = gbfgetuint16(file_in);
+  point.Power_Power = gbfgetuint16(file_in);
+  point.Power_Status = gbfgetc(file_in);
+  point.reserved7 = gbfgetc(file_in);
+  point.Temp = gbfgetc(file_in);
+  point.reserved8 = gbfgetc(file_in);
+  point.reserved9 = gbfgetc(file_in);
+  point.reserved10 = gbfgetc(file_in);
   if (global_opts.debug_level > 1) {
     printf("Point: lat:%8u long:%8u alt:%8d ", point.Latitude, point.Longitude, point.Altitude);
-    printf("speed:%6u dist:%5u time:%5u Status:%1u", point.Speed, point.IntervalDist, point.lntervalTime, point.Status);
+    printf("speed:%6u dist:%5u time:%5u Status:%1u", point.Speed, point.IntervalDist, point.IntervalTime, point.Status);
     printf("HR:(%3d,%1d)", point.HR_Heartrate, point.HR_Status);
     printf("Speed:(%8u,%1d)", point.Speed_Speed, point.Speed_Status);
     printf("Cad:(%3d,%1d)", point.Cadence_Cadence, point.Cadence_Status);
     printf("Power (Cad:%6d Pow:%6d,%2d)Temp:%3d\n", point.Power_Cadence, point.Power_Power, point.Power_Status, point.Temp);
 
     qDebug() << "DateTime1:" << gpsDateTime.toString();
-    qDebug() << "point.lntervalTime:" << point.lntervalTime;
+    qDebug() << "point.IntervalTime:" << point.IntervalTime;
   }
 
-  //Time from last point in sec's * 10 (e.g. point.lntervalTime is sec multiplied with 10)
+  //Time from last point in sec's * 10 (e.g. point.IntervalTime is sec multiplied with 10)
   // convert to millisecs
-  gpsDateTime = gpsDateTime.addMSecs(point.lntervalTime*100);
+  gpsDateTime = gpsDateTime.addMSecs(point.IntervalTime*100);
 
   auto waypt = new Waypoint;
   waypt->latitude = (point.Latitude / 1000000.0);
@@ -95,7 +121,25 @@ void
 EnergymproFormat::read_lap() const
 {
   tw_lap lap{};
-  gbfread(&lap, sizeof(tw_lap), 1, file_in);
+  lap.splitTime = gbfgetuint32(file_in);
+  lap.TotalTime = gbfgetuint32(file_in);
+  lap.Number = gbfgetuint16(file_in);
+  lap.reserved1 = gbfgetuint16(file_in);
+  lap.lDistance = gbfgetuint32(file_in);
+  lap.Calorie = gbfgetuint16(file_in);
+  lap.reserved2 = gbfgetuint16(file_in);
+  lap.MaxSpeed = gbfgetuint32(file_in);
+  lap.AvgSpeed = gbfgetuint32(file_in);
+  lap.MaxHeartrate = gbfgetc(file_in);
+  lap.AvgHeartrate = gbfgetc(file_in);
+  lap.MinAlti = gbfgetint16(file_in);
+  lap.MaxAlti = gbfgetint16(file_in);
+  lap.AvgCad = gbfgetc(file_in);
+  lap.MaxCad = gbfgetc(file_in);
+  lap.AvgPower = gbfgetuint16(file_in);
+  lap.MaxPower = gbfgetuint16(file_in);
+  lap.StartRecPt = gbfgetuint16(file_in);
+  lap.FinishRecPt = gbfgetuint16(file_in);
   if (global_opts.debug_level > 1) {
     printf("LAP: splitTime:%6us TotalTime:%6us LapNumber:%5d ", lap.splitTime/10, lap.TotalTime/10, lap.Number);
     printf("dist:%08um Cal:%5u Speed:(%6u,%6u) ", lap.lDistance, lap.Calorie, lap.MaxSpeed, lap.AvgSpeed);
