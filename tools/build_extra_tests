@@ -18,7 +18,6 @@ git --no-pager log -n 1
 # some of our targets are part of the svn repository to allow a
 # minimal set of build tools to be used.
 # touch these targets to make sure they aren't considered out of date.
-touch xcsv_tokens.gperf
 touch internal_styles.cc
 
 # build and test keeping output within the pwd.
