@@ -888,9 +888,11 @@ bool MainWindow::isOkToGo()
     return false;
   }
 
-  if (babelData_.outputType_ == BabelData::noType_ && babelData_.previewGmap_) {
-  }
+#ifndef DISABLE_MAPPREVIEW
   if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
+#else
+  if (babelData_.outputType_ == BabelData::noType_) {
+#endif
     QMessageBox::information(nullptr, QString(appName), tr("No valid output specified"));
     return false;
   }
@@ -1040,6 +1042,7 @@ void MainWindow::applyActionX()
     formatList_[fidx].bumpWriteUseCount(1);
   }
 
+#ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
   QString tempName;
   if (babelData_.previewGmap_) {
@@ -1057,6 +1060,7 @@ void MainWindow::applyActionX()
     args << "gpx";
     args << "-F" << tempName;
   }
+#endif
 
   ui_.outputWindow->clear();
   ui_.outputWindow->appendPlainText("gpsbabel " + args.join(" "));
