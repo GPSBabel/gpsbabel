@@ -225,7 +225,7 @@ XcsvStyle::xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
-  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey));
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey, XT_unused));
   validate_fieldmap(fmp, false);
 
   style->ifields.append(fmp);
@@ -242,7 +242,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
   QByteArray val = qval.toUtf8();
   QByteArray pfc = qpfc.toUtf8();
 
-  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey), options);
+  field_map fmp(key, val, pfc, xcsv_tokens.value(qkey, XT_unused), options);
   validate_fieldmap(fmp, true);
 
   style->ofields.append(fmp);
