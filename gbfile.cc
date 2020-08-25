@@ -26,7 +26,6 @@
 
 #include <cassert>             // for assert
 #include <cctype>              // for tolower
-#include <cerrno>              // for errno
 #include <cstdarg>             // for va_list, va_end, va_copy, va_start
 #include <cstdio>              // for EOF, ferror, ftell, SEEK_SET, SEEK_CUR, SEEK_END, clearerr, fclose, feof, fflush, fileno, fread, fseek, fwrite, ungetc, vsnprintf, FILE, stdin, stdout
 #include <cstring>             // for memcpy, strlen, strchr, strcpy, strncat
@@ -306,12 +305,12 @@ stdapi_seek(gbfile* self, int32_t offset, int whence)
 static gbsize_t
 stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
-  int errno;
+  int error_number;
   gbsize_t result = fread(buf, size, members, self->handle.std);
 
-  if ((result < members) && (errno = ferror(self->handle.std))) {
+  if ((result < members) && (error_number = ferror(self->handle.std))) {
     fatal("%s: Error %d occurred during read of file '%s'!\n",
-          self->module, errno, self->name);
+          self->module, error_number, self->name);
   }
   return result;
 }
