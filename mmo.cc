@@ -1300,7 +1300,7 @@ mmo_write_rte_head_cb(const route_head* rte)
   mmo_rte = rte;
 
   foreach (const Waypoint* wpt, rte->waypoint_list) {
-    QDateTime t = wpt->GetCreationTime();
+    gpsbabel::DateTime t = wpt->GetCreationTime();
     if ((t.isValid()) && (t.toTime_t() < time)) {
       time = t.toTime_t();
     }
