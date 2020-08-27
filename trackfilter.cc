@@ -230,7 +230,7 @@ void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 * track title producers
 *******************************************************************************/
 
-void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDateTime& dt)
+void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsbabel::DateTime& dt)
 {
   QString datetimestring;
 
@@ -259,12 +259,12 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDate
   }
 }
 
-void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const QDateTime& default_time)
+void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbabel::DateTime& default_time)
 {
   if (strchr(opt_title, '%') != nullptr) {
     // Uggh.  strftime format exposed to user.
 
-    QDateTime dt;
+    gpsbabel::DateTime dt;
     if (track->rte_waypt_ct == 0) {
       dt = default_time;
     } else {

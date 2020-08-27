@@ -187,8 +187,8 @@ private:
   void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
   void trackfilter_minpoint_list_cb(const route_head* track);
 
-  void trackfilter_split_init_rte_name(route_head* track, const QDateTime& dt);
-  void trackfilter_pack_init_rte_name(route_head* track, const QDateTime& default_time);
+  void trackfilter_split_init_rte_name(route_head* track, const gpsbabel::DateTime& dt);
+  void trackfilter_pack_init_rte_name(route_head* track, const gpsbabel::DateTime& default_time);
 
   void trackfilter_title();
 
