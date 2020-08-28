@@ -177,20 +177,10 @@ struct ExifApp {
   gbfile* fcache{nullptr};
   gbfile* fexif{nullptr};
   QList<ExifIfd> ifds;
-
-  ~ExifApp()
-  {
-    if (fcache) {
-      gbfclose(fcache);
-    }
-    if (fexif) {
-      gbfclose(fexif);
-    }
-  }
 };
 
 static gbfile* fin_, *fout_;
-static QList<ExifApp>* exif_apps;
+static QList<ExifApp*>* exif_apps;
 static ExifApp* exif_app_;
 static const Waypoint* exif_wpt_ref;
 static QDateTime exif_time_ref;
@@ -345,6 +335,15 @@ exif_read_datestamp(const ExifTag* tag)
 static void
 exif_release_apps()
 {
+  for (auto* app : qAsConst(*exif_apps)) {
+    if (app->fcache) {
+      gbfclose(app->fcache);
+    }
+    if (app->fexif) {
+      gbfclose(app->fexif);
+    }
+    delete app;
+  }
   delete exif_apps;
   exif_apps = nullptr;
 }
@@ -375,8 +374,8 @@ exif_load_apps()
   exif_app_ = nullptr;
 
   while (! gbfeof(fin_)) {
-    exif_apps->append(ExifApp());
-    ExifApp* app = &exif_apps->last();
+    exif_apps->append(new ExifApp);
+    ExifApp* app = exif_apps->last();
     app->fcache = gbfopen(nullptr, "wb", MYNAME);
 
     app->marker = gbfgetuint16(fin_);
@@ -1360,8 +1359,7 @@ exif_write_apps()
 {
   gbfputuint16(0xFFD8, fout_);
 
-  for (auto& app_instance : *exif_apps) {
-    ExifApp* app = &app_instance;
+  for (auto* app : qAsConst(*exif_apps)) {
 
     gbfputuint16(app->marker, fout_);
 
@@ -1476,7 +1474,7 @@ static void
 exif_rd_init(const QString& fname)
 {
   fin_ = gbfopen_be(fname, "rb", MYNAME);
-  exif_apps = new QList<ExifApp>;
+  exif_apps = new QList<ExifApp*>;
 }
 
 static void
@@ -1508,7 +1506,7 @@ exif_wr_init(const QString& fname)
   exif_success = 0;
   exif_fout_name = fname;
 
-  exif_apps = new QList<ExifApp>;
+  exif_apps = new QList<ExifApp*>;
 
   fin_ = gbfopen_be(fname, "rb", MYNAME);
   is_fatal(fin_->is_pipe, MYNAME ": Sorry, this format cannot be used with pipes!");
