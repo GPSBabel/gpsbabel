@@ -30,7 +30,6 @@
 #include <QtCore/QLocale>              // for QLocale
 #include <QtCore/QMimeData>            // for QMimeData
 #include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
-#include <QtCore/QRegExp>              // for QRegExp
 #include <QtCore/QSettings>            // for QSettings
 #include <QtCore/QString>              // for QString
 #include <QtCore/QStringList>          // for QStringList
@@ -100,8 +99,6 @@ QString MainWindow::findBabelVersion()
   isBeta_ = str.contains("-beta");
   str.replace("Version",  "");
   str.replace("GPSBabel",  "");
-  str.replace(QRegExp("^[\\s]*"),  "");
-  str.replace(QRegExp("[\\s]+$"),  "");
   str = str.simplified();
   return str;
 }
@@ -510,8 +507,8 @@ void MainWindow::outputFileNameEdited()
 QString MainWindow::filterForFormat(int idx)
 {
   QString str = formatList_[idx].getDescription();
-  str.replace(QRegExp("\\("), "[");
-  str.replace(QRegExp("\\)"), "]");
+  str.replace('(', '[');
+  str.replace(')', ']');
   QStringList extensions = formatList_[idx].getExtensions();
 
   // If we don't have any meaningful extensions available for this format,

@@ -21,8 +21,13 @@
 //
 
 #include "aboutdlg.h"
-#include "appname.h"
-#include "upgrade.h"
+#include <QtCore/QRegularExpression>  // for QRegularExpression
+#include <QtGui/QTextCursor>          // for QTextCursor
+#include <QtGui/QTextDocument>        // for QTextDocument
+#include <QtWidgets/QTextEdit>        // for QTextEdit
+#include "appname.h"                  // for appName
+#include "upgrade.h"                  // for UpgradeCheck
+
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
                    const QString& ver2, const QString& installationId): QDialog(parent)
@@ -31,13 +36,13 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
   QTextDocument* doc = ui_.textEdit->document();
   ui_.textEdit->setReadOnly(true);
   QString tt = doc->toHtml();
-  tt.replace(QRegExp("\\$appname\\$"),  QString(appName));
-  tt.replace(QRegExp("\\$babelversion\\$"),  ver1);
-  tt.replace(QRegExp("\\$babelfeversion\\$"),  ver2);
-  tt.replace(QRegExp("\\$installationId\\$"),  installationId);
+  tt.replace(QRegularExpression(R"(\$appname\$)"), QString(appName));
+  tt.replace(QRegularExpression(R"(\$babelversion\$)"), ver1);
+  tt.replace(QRegularExpression(R"(\$babelfeversion\$)"), ver2);
+  tt.replace(QRegularExpression(R"(\$installationId\$)"), installationId);
 
   // Not localized as it should never be seen.
-  tt.replace(QRegExp("\\$upgradetestmode\\$"),
+  tt.replace(QRegularExpression(R"(\$upgradetestmode\$)"),
              UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
 
   doc->setHtml(tt);

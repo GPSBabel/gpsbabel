@@ -21,24 +21,24 @@
 //
 //------------------------------------------------------------------------
 
-#include <QtCore/QByteArray>        // for QByteArray
-#include <QtCore/QChar>             // for operator==, QChar
-#include <QtCore/QCharRef>          // for QCharRef
-#include <QtCore/QCoreApplication>  // for QCoreApplication
-#ifdef GENERATE_CORE_STRINGS
-#include <QtCore/QDebug>
-#endif
-#include <QtCore/QObject>           // for QObject
-#include <QtCore/QProcess>          // for QProcess
-#include <QtCore/QRegExp>           // for QRegExp
-#include <QtCore/QString>           // for QString, operator+
-#include <QtCore/QTextStream>       // for QTextStream
-#include <QtCore/QVariant>          // for QVariant
-#include <QtWidgets/QApplication>   // for QApplication
-#include <QtWidgets/QMessageBox>    // for QMessageBox
-
 #include "formatload.h"
-#include "appname.h"                // for appName
+#include <QtCore/QByteArray>               // for QByteArray
+#include <QtCore/QChar>                    // for operator==, QChar
+#include <QtCore/QCharRef>                 // for QCharRef
+#include <QtCore/QCoreApplication>         // for QCoreApplication
+#ifdef GENERATE_CORE_STRINGS
+#include <QtCore/QDebug>                   // for QDebug, operator<<
+#endif
+#include <QtCore/QObject>                  // for QObject
+#include <QtCore/QProcess>                 // for QProcess
+#include <QtCore/QRegularExpression>       // for QRegularExpression
+#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
+#include <QtCore/QString>                  // for QString, operator+
+#include <QtCore/QTextStream>              // for QTextStream
+#include <QtCore/QVariant>                 // for QVariant
+#include <QtWidgets/QApplication>          // for QApplication
+#include <QtWidgets/QMessageBox>           // for QMessageBox
+#include "appname.h"                       // for appName
 
 
 //------------------------------------------------------------------------
@@ -53,8 +53,8 @@ static QString xlt(const QString& f)
 //------------------------------------------------------------------------
 bool FormatLoad::skipToValidLine()
 {
-  QRegExp regex("^(file|serial)");
-  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) != 0) {
+  QRegularExpression regex("^file|serial");
+  while ((currentLine_ < lines_.size()) && !regex.match(lines_[currentLine_]).hasMatch()) {
     currentLine_++;
   }
   return (currentLine_<lines_.size());
@@ -67,13 +67,11 @@ bool FormatLoad::processFormat(Format& format)
   if (hfields.size() < 5) {
     return false;
   }
-  QString htmlPage = lines_[currentLine_++];
-  htmlPage.replace(QRegExp("^[\\s]*"), "");
-  htmlPage.replace(QRegExp("[\\s]$"), "");
+  QString htmlPage = lines_[currentLine_++].trimmed();
 
-  QRegExp regex("^option");
+  QRegularExpression regex("^option");
   QList <FormatOption> optionList;
-  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) == 0) {
+  while ((currentLine_ < lines_.size()) && regex.match(lines_[currentLine_]).hasMatch()) {
     QStringList ofields = lines_[currentLine_].split("\t");
     if (ofields.size() < 9) {
       return false;
@@ -131,7 +129,7 @@ bool FormatLoad::processFormat(Format& format)
 #ifndef GENERATE_CORE_STRINGS
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
     QString base = htmlPage;
-    base.replace(QRegExp("/[^/]+$"), "/");
+    base.replace(QRegularExpression("/[^/]+$"), "/");
     Format::setHtmlBase(base);
   }
 #endif
@@ -162,7 +160,7 @@ bool FormatLoad::getFormats(QList<Format>& formatList)
   while (!tstream.atEnd()) {
     QString l = tstream.readLine();
     k++;
-    if (!QRegExp("^[\\s]*$").exactMatch(l)) {
+    if (!l.trimmed().isEmpty()) {
       lines_ << l;
       lineList<<k;
     }
