@@ -23,9 +23,10 @@
 #ifndef ABOUTDLG_H
 #define ABOUTDLG_H
 
-#include <QDialog>
-
-#include "ui_aboutui.h"
+#include <QtCore/QString>     // for QString
+#include <QtWidgets/QDialog>  // for QDialog
+#include <QtWidgets/QWidget>  // for QWidget
+#include "ui_aboutui.h"       // for Ui_AboutDlg
 
 class AboutDlg: public QDialog
 {

@@ -22,7 +22,7 @@
 
 #ifndef HELP_H
 #define HELP_H
-#include <QString>
+#include <QtCore/QString>  // for QString
 
 extern void ShowHelp(const QString& name);
 

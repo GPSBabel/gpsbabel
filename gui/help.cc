@@ -20,22 +20,22 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QUrl>
-#include <QDesktopServices>
-
 #include "help.h"
-#include "format.h"
+
+#include <QtCore/QRegularExpression>  // for QRegularExpression
+#include <QtCore/QString>             // for QString
+#include <QtCore/QUrl>                // for QUrl
+#include <QtGui/QDesktopServices>     // for QDesktopServices
+
+#include "format.h"                   // for Format
 
 //------------------------------------------------------------------------
 void ShowHelp(const QString& urlIn)
 
 {
   QString url = urlIn;
-  if (!url.contains(QRegExp("^http://"))) {
+  if (!url.contains(QRegularExpression(R"(^https?://)"))) {
     url = Format::getHtmlBase() + url;
   }
   QDesktopServices::openUrl(QUrl(url));
 }
-
-
-
