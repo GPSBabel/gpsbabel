@@ -21,7 +21,6 @@
 //
 
 #include "aboutdlg.h"
-#include <QtCore/QRegularExpression>  // for QRegularExpression
 #include <QtGui/QTextCursor>          // for QTextCursor
 #include <QtGui/QTextDocument>        // for QTextDocument
 #include <QtWidgets/QTextEdit>        // for QTextEdit
@@ -36,13 +35,13 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
   QTextDocument* doc = ui_.textEdit->document();
   ui_.textEdit->setReadOnly(true);
   QString tt = doc->toHtml();
-  tt.replace(QRegularExpression(R"(\$appname\$)"), QString(appName));
-  tt.replace(QRegularExpression(R"(\$babelversion\$)"), ver1);
-  tt.replace(QRegularExpression(R"(\$babelfeversion\$)"), ver2);
-  tt.replace(QRegularExpression(R"(\$installationId\$)"), installationId);
+  tt.replace("$appname$", appName);
+  tt.replace("$babelversion$", ver1);
+  tt.replace("$babelfeversion$", ver2);
+  tt.replace("$installationId$", installationId);
 
   // Not localized as it should never be seen.
-  tt.replace(QRegularExpression(R"(\$upgradetestmode\$)"),
+  tt.replace("$upgradetestmode$",
              UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
 
   doc->setHtml(tt);

@@ -69,9 +69,8 @@ bool FormatLoad::processFormat(Format& format)
   }
   QString htmlPage = lines_[currentLine_++].trimmed();
 
-  QRegularExpression regex("^option");
   QList <FormatOption> optionList;
-  while ((currentLine_ < lines_.size()) && regex.match(lines_[currentLine_]).hasMatch()) {
+  while ((currentLine_ < lines_.size()) && lines_[currentLine_].startsWith("option")) {
     QStringList ofields = lines_[currentLine_].split("\t");
     if (ofields.size() < 9) {
       return false;
