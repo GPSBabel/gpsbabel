@@ -30,6 +30,23 @@ init:
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %arch%
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %arch%
 
+install:
+  - ps: |
+      if ($env:qt -eq "5.12\msvc2017")
+      {
+        iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/build-images/master/scripts/Windows/install_qt_module.ps1'))
+        Install-QtComponent -Version '5.12.9' -Name 'win32_msvc2017' -ExcludeDocs -ExcludeExamples
+        Install-QtComponent -Version '5.12.9' -Name 'qtwebengine.win32_msvc2017' -ExcludeDocs -ExcludeExamples
+        ConfigureQtVersion 'C:\Qt' '5.12.9'
+      }
+      if ($env:qt -eq "5.12\msvc2017_64")
+      {
+        iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/build-images/master/scripts/Windows/install_qt_module.ps1'))
+        Install-QtComponent -Version '5.12.9' -Name 'win64_msvc2017_64' -ExcludeDocs -ExcludeExamples
+        Install-QtComponent -Version '5.12.9' -Name 'qtwebengine.win64_msvc2017_64' -ExcludeDocs -ExcludeExamples
+        ConfigureQtVersion 'C:\Qt' '5.12.9'
+      }
+
 build_script:
   - ps: |
       # be aware that vcvarsall will reset platform amd64 to X64!
