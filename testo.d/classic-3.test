@@ -1,13 +1,6 @@
 #!/bin/sh
 
 #
-# IGN Rando tests
-#
-gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
-gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
-compare ${REFERENCE}/track/ignrando-sample.gpx ${TMPDIR}/ignrando-sample.gpx
-
-#
 # Testing the 'nuketypes' filter is funky.
 # Convert a GPX file to GPX to eliminate jitter.
 # Then nuke the all but the three individual types, merge the result together
