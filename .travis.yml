@@ -84,7 +84,7 @@ jobs:
       osx_image: xcode11.6
       compiler: clang
       env:
-        - QT_VERSION="5.15.0"
+        - QT_VERSION="5.15.1"
         - QT_INSTALL_METHOD="artifactory"
       cache:
         directories:
