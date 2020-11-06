@@ -25,6 +25,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    container: tsteven4/gpsbabel_build_environment
 
     strategy:
       fail-fast: false
