@@ -931,7 +931,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   *stream << qSetRealNumberPrecision(0) << alt << ",6,0,17\r\n";
 
   if (faked_fsdata) {
-    xfree(fs);
+    delete fs;
   }
 }
 
