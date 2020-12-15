@@ -17,8 +17,8 @@ make -j 3 coverage
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if [ -v CODACY_PROJECT_TOKEN ] ; then
   # upload coverate report to codacy.
-  wget -nv -c https://github.com/codacy/codacy-coverage-reporter/releases/download/6.2.0/codacy-coverage-reporter-assembly-6.2.0.jar
-  java -jar codacy-coverage-reporter-assembly-6.2.0.jar report -l cpp -f -r gpsbabel_coverage.xml
+  wget -nv -c https://github.com/codacy/codacy-coverage-reporter/releases/download/11.4.1/codacy-coverage-reporter-assembly-11.4.1.jar
+  java -jar codacy-coverage-reporter-assembly-11.4.1.jar report -l cpp -f -r gpsbabel_coverage.xml
 else
   echo "Skipping codacy coverage upload as CODACY_PROJECT_TOKEN is not set."
 fi
