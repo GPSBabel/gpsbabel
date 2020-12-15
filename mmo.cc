@@ -929,7 +929,7 @@ mmo_finalize_rtept_cb(const Waypoint* wptref)
 {
   auto* wpt = const_cast<Waypoint*>(wptref);
 
-  if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
+  if ((wpt->shortname[0] == '\01') && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;
     Waypoint* wpt2;
 
