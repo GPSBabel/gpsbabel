@@ -91,7 +91,7 @@ jobs:
           - $HOME/Cache
         timeout: 600
     - os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       env:
         - BUILD_TYPE="coverage"
