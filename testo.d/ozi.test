@@ -17,3 +17,11 @@ compare ${REFERENCE}/track/20070813_short~plt.gpx ${TMPDIR}/20070813_short~plt.g
 gpsbabel -i ozi -f ${REFERENCE}/track/20070813_short.plt -o ozi -F ${TMPDIR}/20070813_short~plt.plt
 compare ${REFERENCE}/track/20070813_short~plt.plt ${TMPDIR}/20070813_short~plt.plt
 
+# test ozi tracks with multilple tracks which will be written to separate files
+gpsbabel -i gpx -f ${REFERENCE}/track/ozitracks.gpx -o ozi -F ${TMPDIR}/ozitracks~gpx.plt
+compare ${REFERENCE}/track/ozitracks~gpx.plt ${TMPDIR}/ozitracks~gpx.plt
+compare ${REFERENCE}/track/ozitracks~gpx-1.plt ${TMPDIR}/ozitracks~gpx-1.plt
+compare ${REFERENCE}/track/ozitracks~gpx-2.plt ${TMPDIR}/ozitracks~gpx-2.plt
+
+# test ozi with no output making sure we don't throw an error or segmentation fault.
+gpsbabel -i gpx -f ${REFERENCE}/track/ozitracks.gpx -x nuketypes,waypoints,tracks,routes -o ozi -F ${TMPDIR}/empty.plt
