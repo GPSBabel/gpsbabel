@@ -172,6 +172,9 @@ ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
 static void
 ozi_close_io()
 {
+  if (!stream) {
+    return;
+  }
   stream->close();
   delete stream;
   stream = nullptr;
