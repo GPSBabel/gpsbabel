@@ -26,7 +26,6 @@
 #include <cstdio>                  // for sscanf, size_t
 #include <cstdlib>                 // for atoi, atof, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
-#include <ctime>                   // for gmtime
 
 #include <QtCore/QByteArray>       // for QByteArray
 #include <QtCore/QDateTime>        // for QDateTime
@@ -995,20 +994,19 @@ mag_trkparse(char* trkmsg)
   /* Field 8 is constant */
   /* Field nine is optional track name */
   int dmy = atoi(ifield[10]);
-
-  tm.tm_sec = hms % 100;
+  int sec = hms % 100;
   hms = hms / 100;
-  tm.tm_min = hms % 100;
+  int min = hms % 100;
   hms = hms / 100;
-  tm.tm_hour = hms % 100;
+  int hour = hms % 100;
 
-  tm.tm_year = 100 + dmy % 100;
+  int year = 100 + dmy % 100 + 1900;
   dmy = dmy / 100;
-  tm.tm_mon =  dmy % 100 - 1;
+  int mon =  dmy % 100;
   dmy = dmy / 100;
-  tm.tm_mday = dmy % 100;
-
-  waypt->SetCreationTime(mkgmtime(&tm), 10.0 * fracsecs);
+  int day = dmy % 100;
+  QDateTime dt(QDate(year, mon, day), QTime(hour, min, sec, fracsecs * 10), Qt::UTC);
+  waypt->SetCreationTime(dt);
 
   if (latdir == 'S') {
     latdeg = -latdeg;

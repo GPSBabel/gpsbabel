@@ -757,25 +757,6 @@ current_time()
 }
 
 /*
- * Return the (zero based) month number of the year or -1 for failure.
- */
-signed int
-month_lookup(const char* m)
-{
-  static const char* months[] = {
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", nullptr
-  };
-
-  for (const char** mp = months; *mp; mp++) {
-    if (0 == case_ignore_strcmp(*mp, m)) {
-      return mp - months;
-    }
-  }
-  return -1;
-}
-
-/*
  * Microsoft dot net's time format is the number of 100 nanosecond intervals
  * since midnight Jan 1, 0001.   We have time_t deeply ingrained into our
  * internals and since we're in the GPS biz, timestamps before 1/1/1970 aren't
