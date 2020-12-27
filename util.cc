@@ -1764,8 +1764,8 @@ list_codecs()
       maxlen = codec->name().size();
     }
   }
-  info << "Available Codecs:" << Qt::endl;
-  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << Qt::endl;
+  info << "Available Codecs:" << endl;
+  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
   for (auto mib : mibs) {
     auto codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
@@ -1779,7 +1779,7 @@ list_codecs()
       }
       info << alias;
     }
-    info << Qt::endl;
+    info << endl;
   }
 }
 
