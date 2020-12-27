@@ -22,8 +22,10 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStringBuilder>
 #include <QtCore/QIODevice>
 #include <cstdio>
+#include "src/core/logging.h"
 #include "defs.h"
 
 // Mimic gbfile open services
@@ -51,10 +53,15 @@ public:
     }
 
     if (!status) {
-      fatal("Cannot open '%s' for %s.  Error was '%s'.\n",
-            gpsbabel_testmode()? qPrintable(QFileInfo(*this).fileName()) : qPrintable(QFile::fileName()),
-            (mode & QIODevice::WriteOnly)? "write" : "read",
-            qPrintable(QFile::errorString()));
+      fatal(FatalMsg().noquote() << "Cannot open '" %
+        (gpsbabel_testmode() ?
+          QFileInfo(*this).fileName() :
+          QFileInfo(*this).absoluteFilePath()) %
+        "' for " %
+        (mode & QIODevice::WriteOnly ? "write" : "read") %
+        ".  Error was '" %
+        QFile::errorString()  %
+        "'.");
     }
     return status;
   }

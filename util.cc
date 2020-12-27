@@ -179,8 +179,12 @@ xfopen(const char* fname, const char* type, const char* errtxt)
   }
   FILE* f = ufopen(QString::fromUtf8(fname), type);
   if (nullptr == f) {
+    // There are some possible vagaries of using Qt for the full pathname
+    // vs. the STD C library used for the actual file I/O. It's worth it
+    // to get a better error message.
+    QFileInfo info(fname);
     fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
-          errtxt, fname,
+          errtxt, qPrintable(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));
   }
@@ -1760,8 +1764,8 @@ list_codecs()
       maxlen = codec->name().size();
     }
   }
-  info << "Available Codecs:" << endl;
-  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
+  info << "Available Codecs:" << Qt::endl;
+  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << Qt::endl;
   for (auto mib : mibs) {
     auto codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
@@ -1775,7 +1779,7 @@ list_codecs()
       }
       info << alias;
     }
-    info << endl;
+    info << Qt::endl;
   }
 }
 
