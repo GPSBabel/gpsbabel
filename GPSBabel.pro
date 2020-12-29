@@ -243,6 +243,7 @@ win32 {
 
 win32-msvc* {
   DEFINES += _CRT_SECURE_NO_DEPRECATE
+  QMAKE_CFLAGS += /MP -wd4100 -wd4267
   QMAKE_CXXFLAGS += /MP -wd4100 -wd4267
 }
 
