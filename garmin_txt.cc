@@ -516,7 +516,7 @@ print_string(const char* fmt, const QString& string)
 {
   /* remove unwanted characters from source string */
   QString cleanstring;
-  for (const auto chr : string) {
+  for (const auto& chr : string) {
     if (chr.category() != QChar::Other_Control) {
       cleanstring.append(chr);
     } else {
