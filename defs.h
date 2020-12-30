@@ -1121,7 +1121,6 @@ time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
-signed int month_lookup(const char* m);
 const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);
