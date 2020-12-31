@@ -4,16 +4,16 @@ version: 1.0.{build}
 
 environment:
   matrix:
-  - arch: x86
-    qt: 5.12\msvc2017
+  - arch: x86_amd64
+    qt: 5.12\msvc2017_64
     flow: nmake
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  - arch: x86
-    qt: 5.12\msvc2017
-    flow: msbuild
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
   - arch: x86_amd64
     qt: 5.12\msvc2017_64
+    flow: msbuild
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  - arch: x86
+    qt: 5.12\msvc2017
     flow: nmake
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
   - arch: x86
@@ -37,7 +37,7 @@ build_script:
       echo "qt: $env:qt"
       qmake -query
       Get-Location
-      if (($env:flow -eq "nmake") -and ($env:arch -eq "x86") -and ($env:qt -eq "5.12\msvc2017"))
+      if (($env:flow -eq "nmake") -and ($env:arch -eq "x86_amd64") -and ($env:qt -eq "5.12\msvc2017_64"))
       {
         # full build and deploy of our release configuration
         & ".\tools\make_windows_release.ps1" -flow $env:flow -buildinstaller "true"
@@ -71,7 +71,7 @@ deploy_script:
   - ps: |
       $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
       C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ./tools/ci_tokens"
-      if (($env:flow -eq "nmake") -and ($env:arch -eq "x86") -and ($env:qt -eq "5.12\msvc2017") -and ($env:APPVEYOR_REPO_BRANCH -eq "master"))
+      if (($env:flow -eq "nmake") -and ($env:arch -eq "x86_amd64") -and ($env:qt -eq "5.12\msvc2017_64") -and ($env:APPVEYOR_REPO_BRANCH -eq "master"))
       {
         $verid=(Get-Date -UFormat "%Y%m%dT%H%MZ" -Date (Get-Date -Date (git show -s --format="%aI" HEAD)).toUniversalTime()) `
                + '-' + (git rev-parse --short=7 HEAD)
