@@ -8,7 +8,7 @@
 # powershell.exe -ExecutionPolicy Unrestricted -File tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_9_3_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_9_3_MSVC2015_64bit-Release"
 #
 # Be aware this script is used by appveyor.yml
-# 
+#
 # The defaults should be compatible with appveyor builds.
 Param(
   $windeployqt = "windeployqt.exe",
@@ -16,7 +16,8 @@ Param(
   $gpsbabel_build_dir_name = "build-GPSBabel-Desktop-Release",
   $gui_build_dir_name = "build-app-Desktop-Release",
   $flow = "nmake",
-  $buildinstaller = "false"
+  $buildinstaller = "false",
+  $platform = "x86"
 )
 $ErrorActionPreference = "Stop"
 # verify we are in the top of the gpsbabel clone
@@ -42,7 +43,7 @@ switch ($flow) {
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch ($flow) {
   "mingw"   { ming32-make }
-  "msbuild" { msbuild GPSBabel.vcxproj -property:Configuration=Release }
+  "msbuild" { msbuild GPSBabel.vcxproj -property:Configuration=Release -property:Platform=$platform }
   "nmake"   { nmake /NOLOGO }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
@@ -63,7 +64,7 @@ switch ($flow) {
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch ($flow) {
   "mingw"   { ming32-make }
-  "msbuild" { msbuild GPSBabelFE.vcxproj -property:Configuration=Release }
+  "msbuild" { msbuild GPSBabelFE.vcxproj -property:Configuration=Release -property:Platform=$platform }
   "nmake"   { nmake /NOLOGO }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
