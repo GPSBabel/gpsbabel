@@ -133,8 +133,7 @@ gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
   if (transferred != (int) sz) {
-    warning("Bad cmdsend transferred %d sz %lud\n", transferred,
-            (unsigned long) sz);
+    warning("Bad cmdsend transferred %d sz %zu\n", transferred, sz);
   }
 
   return transferred;

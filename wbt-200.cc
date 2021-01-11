@@ -226,8 +226,8 @@ static void buf_update_checksum(struct buf_head* h, const void* data, size_t len
 {
   auto* cp = (unsigned char*) data;
 
-  db(4, "Updating checksum with %p, %lu, before: %02x ",
-     data, (unsigned long) len, h->checksum);
+  db(4, "Updating checksum with %p, %zu, before: %02x ",
+     data, len, h->checksum);
   for (unsigned i = 0; i < len; i++) {
     h->checksum ^= cp[i];
   }
@@ -678,7 +678,7 @@ static int want_bytes(struct buf_head* h, size_t len)
 {
   char buf[512];
 
-  db(3, "Reading %lu bytes from device\n", (unsigned long) len);
+  db(3, "Reading %zu bytes from device\n", len);
 
   while (len > 0) {
     size_t want = sizeof(buf);
@@ -739,7 +739,7 @@ static void wbt200_data_read()
       fatal(MYNAME ": Internal error: formats not ordered in ascending size order\n");
     }
 
-    db(3, "Want %lu bytes of data\n", (unsigned long) want);
+    db(3, "Want %zu bytes of data\n", want);
 
     /* Top up the buffer */
     want_bytes(&st.data, want - st.data.used);
