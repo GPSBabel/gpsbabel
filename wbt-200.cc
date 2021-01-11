@@ -891,7 +891,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   }
 
   if (cs != st->data.checksum) {
-    db(2, "Checksums don't match. Got %02x, expected %02\n", cs, st->data.checksum);
+    db(2, "Checksums don't match. Got %02lx, expected %02\n", cs, st->data.checksum);
     return 0;
   }
 

@@ -560,7 +560,7 @@ static void mtk_read()
   fseek(dout, 0L,SEEK_END);
   unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %d\n", qPrintable(TEMP_DATA_BIN),
+    dbg(1, "Temp %s file exists. with size %lu\n", qPrintable(TEMP_DATA_BIN),
         dsize);
     dpos = 0;
     init_scan = 1;
@@ -1302,7 +1302,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
     } else {
       dbg(1,"Missing '*' !\n");
       if (data[i] == 0xff) {  // in some case star-crc hasn't been written on power off.
-        dbg(1, "Bad data point @0x%.6x - skip %d bytes\n", (fl!=nullptr)?ftell(fl):-1, i+2);
+        dbg(1, "Bad data point @0x%.6lx - skip %d bytes\n", (fl!=nullptr)?ftell(fl):-1, i+2);
         return i+2; // include '*' and crc
       }
     }
@@ -1315,7 +1315,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   }
 
   if (data[i] != crc) {
-    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6x)\n", count, data[i], crc, (fl!=nullptr)?ftell(fl):-1);
+    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6lx)\n", count, data[i], crc, (fl!=nullptr)?ftell(fl):-1);
   }
   i++; // crc
   count++;
