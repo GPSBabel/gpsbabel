@@ -16,10 +16,6 @@ option	xcsv	prefer_shortnames	Use shortname instead of description	boolean				ht
 
 option	xcsv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_datum
 
-file	--rw--	alantrl	trl	Alan Map500 tracklogs (.trl)	alantrl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_alantrl.html
-file	rw--rw	alanwpr	wpr	Alan Map500 waypoints and routes (.wpr)	alanwpr
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_alanwpr.html
 internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
 option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
@@ -135,26 +131,6 @@ option	iblue757	urlbase	Basename prepended to URL on output	string				https://ww
 option	iblue757	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_prefer_shortnames
 
 option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_datum
-
-file	rw-wrw	an1	an1	DeLorme .an1 (drawing) file	an1
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html
-option	an1	type	Type of .an1 file	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_type
-
-option	an1	road	Road type changes	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_road
-
-option	an1	nogc	Do not add geocache data to description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_nogc
-
-option	an1	nourl	Do not add URLs to description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_nourl
-
-option	an1	deficon	Symbol to use for point data	string	Red Flag			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_deficon
-
-option	an1	color	Color for lines or mapnotes	string	red			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_color
-
-option	an1	zoom	Zoom level to reduce points	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_zoom
-
-option	an1	wpt_type	Waypoint type	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_wpt_type
-
-option	an1	radius	Radius for circles	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_an1.html#fmt_an1_o_radius
 
 file	--rw--	gpl	gpl	DeLorme GPL	gpl
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpl.html
@@ -1080,12 +1056,6 @@ file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)	sbp
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbp.html
 file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)	sbn
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbn.html
-file	rw----	naviguide	twl	Naviguide binary route file (.twl)	naviguide
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_naviguide.html
-option	naviguide	output	'wp' - Create waypoint file , 'rte' - Create route file	string	rte			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_naviguide.html#fmt_naviguide_o_output
-
-option	naviguide	reorder	'n' - Keep the existing wp name, 'y' - rename waypoints	string	n			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_naviguide.html#fmt_naviguide_o_reorder
-
 file	--rw--	navitel_trk	bin	Navitel binary track (.bin)	navitel_trk
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navitel_trk.html
 file	rw----	dna	dna	Navitrak DNA marker format	xcsv
@@ -1103,18 +1073,6 @@ option	dna	urlbase	Basename prepended to URL on output	string				https://www.gps
 option	dna	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dna.html#fmt_dna_o_prefer_shortnames
 
 option	dna	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dna.html#fmt_dna_o_datum
-
-file	r-----	netstumbler		NetStumbler Summary File (text)	netstumbler
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html
-option	netstumbler	nseicon	Non-stealth encrypted icon name	string	Red Square			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html#fmt_netstumbler_o_nseicon
-
-option	netstumbler	nsneicon	Non-stealth non-encrypted icon name	string	Green Square			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html#fmt_netstumbler_o_nsneicon
-
-option	netstumbler	seicon	Stealth encrypted icon name	string	Red Diamond			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html#fmt_netstumbler_o_seicon
-
-option	netstumbler	sneicon	Stealth non-encrypted icon name	string	Green Diamond			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html#fmt_netstumbler_o_sneicon
-
-option	netstumbler	snmac	Shortname is MAC address	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_netstumbler.html#fmt_netstumbler_o_snmac
 
 file	rw----	nima		NIMA/GNIS Geographic Names File	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nima.html
