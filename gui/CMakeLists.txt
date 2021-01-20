@@ -65,7 +65,7 @@ endif()
 set(RESOURCES app.qrc)
 
 if (WIN32)
-  set(RC_FILE app.rc)
+  set(RESOURCES ${RESOURCES} app.rc)
 endif()
 
 if (UNIX AND NOT APPLE)
