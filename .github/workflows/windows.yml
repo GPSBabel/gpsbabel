@@ -20,39 +20,45 @@ jobs:
         include:
           - QT_VERSION: '5.12.10'
             ARCH: 'amd64'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
-            PLATFORM: 'x64'
             FLOW: 'nmake'
             RELEASE: true
           - QT_VERSION: '5.12.10'
             ARCH: 'amd64'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
-            PLATFORM: 'x64'
             FLOW: 'msbuild'
             RELEASE: false
           - QT_VERSION: '5.12.10'
             ARCH: 'amd64'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
-            PLATFORM: 'x64'
+            FLOW: 'cmake'
+            RELEASE: false
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
             VCVERSION: '14.16'
             FLOW: 'nmake'
             RELEASE: false
           - QT_VERSION: '5.12.10'
             ARCH: 'amd64'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
-            PLATFORM: 'x64'
             VCVERSION: '14.0'
             FLOW: 'nmake'
             RELEASE: false
           - QT_VERSION: '5.12.10'
             ARCH: 'x86'
-            PLATFORM: 'Win32'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017'
             RELEASE: false
             FLOW: 'nmake'
           - QT_VERSION: '5.12.10'
             ARCH: 'x86'
-            PLATFORM: 'Win32'
+            HOST_ARCH: 'x86'
             COMPILER: 'msvc2017'
             RELEASE: false
             FLOW: 'msbuild'
@@ -77,11 +83,10 @@ jobs:
     - name: Build
       shell: powershell
       run: |
-        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch ${{ matrix.ARCH }} -vcversion "${{ matrix.VCVERSION }}"
-        .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller ${{ matrix.RELEASE }} -flow ${{ matrix.FLOW }} -platform ${{ matrix.PLATFORM }}
+        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch ${{ matrix.ARCH }} -host_arch ${{ matrix.HOST_ARCH }} -vcversion "${{ matrix.VCVERSION }}"
+        .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller true -flow ${{ matrix.FLOW }} -arch ${{ matrix.ARCH }}
 
     - name: Rename
-      if: matrix.RELEASE
       shell: bash
       run: |
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
@@ -107,11 +112,10 @@ jobs:
         ./tools/uploadtool/upload_github.sh gui/release/GPSBabel-*-Setup.exe
 
     - name: 'Upload Artifacts'
-      if: matrix.RELEASE
       uses: actions/upload-artifact@v2
       with:
-        name: Windows_Installer
+        name: Windows_Installer ${{ join(matrix.*) }}
         path: |
           ./gui/release/GPSBabel-*-Setup.exe
           ./gui/release/GPSBabel-*-Manifest.txt
-        retention-days: 14
+        retention-days: 7

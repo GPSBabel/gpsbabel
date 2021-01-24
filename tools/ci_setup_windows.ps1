@@ -8,7 +8,8 @@
 
 Param(
     [string] $qtdir = "C:\Qt\Qt5.12.10\5.12.10\msvc2017_64",
-    [string] $arch = "amd64",
+    [ValidateSet("x86", "amd64")][string] $arch = "amd64",
+    [ValidateSet("x86", "amd64")][string] $host_arch = "amd64",
     [string] $vcversion
 )
 
@@ -19,7 +20,7 @@ Param(
 # TODO: check for an error when the bat file is run.
 function Invoke-QtEnvironment($installationPath) {
     $Command = Join-Path $installationPath "bin\qtenv2.bat"
-    & "${env:COMSPEC}" /s /c "`"$Command`" && set" | Foreach-Object {
+    & "${env:COMSPEC}" /s /c "`"$Command`" && set" | ForEach-Object {
         if ($_ -match '^([^=]+)=(.*)') {
             [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
         }
@@ -29,14 +30,14 @@ function Invoke-QtEnvironment($installationPath) {
 # TODO: check for an error when the bat file is run.
 # One way to generate an error is to request a vcvars_ver version that isn't
 # available.
-function Invoke-VSDevEnvironment($arch, $vcversion) {
+function Invoke-VSDevEnvironment($arch, $host_arch, $vcversion) {
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     $installationPath = & $vswhere -legacy -latest -property installationPath
     if ( $vcversion ) {
-      $vcvars_ver = "-vcvars_ver=$vcversion"
+        $vcvars_ver = "-vcvars_ver=$vcversion"
     }
     $Command = Join-Path $installationPath "Common7\Tools\vsdevcmd.bat"
-    & "${env:COMSPEC}" /s /c "`"$Command`" -no_logo -arch=$arch $vcvars_ver && set" | Foreach-Object {
+    & "${env:COMSPEC}" /s /c "`"$Command`" -no_logo -arch=$arch -host_arch=$host_arch $vcvars_ver && set" | ForEach-Object {
         if ($_ -match '^([^=]+)=(.*)') {
             [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
         }
@@ -49,6 +50,6 @@ Invoke-QtEnvironment $qtdir
 # verify qmake can be found.
 Get-Command qmake.exe | Format-Table -AutoSize -Wrap
 
-Invoke-VSDevEnvironment $arch $vcversion
+Invoke-VSDevEnvironment -arch $arch -host_arch $host_arch -vcversion $vcversion
 # verify the c compiler can be found.
 Get-Command cl.exe | Format-Table -AutoSize -Wrap
