@@ -5,9 +5,10 @@
 # tested against MSVC 2017 which included 3.11.* 2018/07/05
 cmake_minimum_required(VERSION 3.5.1)
 
-project(gpsbabelfe)
+project(gpsbabelfe LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -19,56 +20,39 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core Gui Network Xml REQUIRED)
-#message("Qt5Core_VERSION String describing the version of the module: \"${Qt5Core_VERSION}\"")
-#message("Qt5Core_LIBRARIES List of libraries for use with the target_link_libraries command: \"${Qt5Core_LIBRARIES}\"")
-#message("Qt5Core_INCLUDE_DIRS List of directories for use with the include_directories command: \"${Qt5Core_INCLUDE_DIRS}\"")
-#message("Qt5Core_DEFINITIONS List of definitions for use with add_definitions: \"${Qt5Core_DEFINITIONS}\"")
-#message("Qt5Core_COMPILE_DEFINITIONS List of definitions for use with the COMPILE_DEFINITIONS target property: \"${Qt5Core_COMPILE_DEFINITIONS}\"")
-#message("Qt5Core_FOUND Boolean describing whether the module was found successfully: \"${Qt5Core_FOUND}\"")
-#message("Qt5Core_EXECUTABLE_COMPILE_FLAGS String of flags to be used when building executables: \"${Qt5Core_EXECUTABLE_COMPILE_FLAGS}\"")
-if (${Qt5Core_VERSION} VERSION_LESS 5.9)
+find_package(Qt5 COMPONENTS Core Gui Network Widgets Xml REQUIRED)
+list(APPEND QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets Qt5::Xml)
+if(${Qt5Core_VERSION} VERSION_LESS 5.9)
   message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+else()
+  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
 endif()
 
 # hard code webengine instead of webkit for now
 find_package(Qt5 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+list(APPEND QT_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
+add_definitions(-DHAVE_WEBENGINE)
 
-set(QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Network_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS} ${Qt5WebEngineWidgets_INCLUDE_DIRS} ${Qt5WebChannel_INCLUDE_DIRS})
-list(REMOVE_DUPLICATES QT_INCLUDE_DIRS)
-message("QT INCLUDE DIRS: \"${QT_INCLUDE_DIRS}\"\n")
-
-set(QT_DEFINITIONS ${Qt5Core_DEFINITIONS} ${QT5Gui_DEFINITIONS} ${Qt5Network_DEFINITIONS} ${Qt5Xml_DEFINITIONS} ${Qt5WebEngineWidgets_DEFINITIONS} ${Qt5WwebChannel_DEFINITIONS})
-list(REMOVE_DUPLICATES QT_DEFINITIONS)
-message("QT DEFS: \"${QT_DEFINITIONS}\"\n")
-
-set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5Xml_LIBRARIES} ${Qt5WebEngineWidgets_LIBRARIES} ${Qt5WebChannel_LIBRARIES})
-#list(REMOVE_DUPLICATES QT_LIBRARIES)
-message("QT LIBS: \"${QT_LIBRARIES}\"\n")
-
-include_directories(AFTER SYSTEM ${QT_INCLUDE_DIRS})
-add_definitions(${QT_DEFINITIONS} -DHAVE_WEBENGINE)
-
-if (APPLE)
+if(APPLE)
   find_library(IOKIT_LIBRARIES IOKit)
   find_library(COREFOUNDATION_LIBRARIES CoreFoundation)
 endif()
 
-if (UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(LIBUDEV libudev)
-  if (${LIBUDEV_FOUND})
+  if(${LIBUDEV_FOUND})
     add_definitions(-DHAVE_UDEV)
   endif()
 endif()
 
 set(RESOURCES app.qrc)
 
-if (WIN32)
+if(WIN32)
   set(RESOURCES ${RESOURCES} app.rc)
 endif()
 
-if (UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
   set(TARGET gpsbabelfe)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
 else()
@@ -115,11 +99,11 @@ set(SOURCES
   version_mismatch.cc
 )
 
-if (UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
   set(SOURCES ${SOURCES} serial_unix.cc)
-elseif (APPLE)
+elseif(APPLE)
   set(SOURCES ${SOURCES} serial_mac.cc)
-elseif (WIN32)
+elseif(WIN32)
   set(SOURCES ${SOURCES} serial_win.cc)
 endif()
 
@@ -147,7 +131,7 @@ set(HEADERS
   version_mismatch.h
 )
 
-if (APPLE)
+if(APPLE)
   set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
   set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -167,13 +151,13 @@ set(LIBS ${QT_LIBRARIES} ${LIBUDEV_LIBRARIES} ${IOKIT_LIBRARIES} ${COREFOUNDATIO
 list(REMOVE_DUPLICATES LIBS)
 target_link_libraries(${TARGET} ${LIBS})
 
-message("Sources are: \"${SOURCES}\"\n")
-message("Headers are: \"${HEADERS}\"\n")
+message(STATUS "Sources are: \"${SOURCES}\"")
+message(STATUS "Headers are: \"${HEADERS}\"")
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
-message("Defines are: \"${DirDefs}\"\n")
+message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs ${TARGET} LINK_LIBRARIES)
-message("Libs are: \"${LnkLibs}\"\n")
+message(STATUS "Libs are: \"${LnkLibs}\"")
 get_directory_property(IncDirs INCLUDE_DIRECTORIES)
-message("Include Directores are: \"${IncDirs}\"\n")
+message(STATUS "Include Directores are: \"${IncDirs}\"")
 
-add_custom_target(package COMMAND ./package_app DEPENDS ${TARGET})
+add_custom_target(package_app COMMAND ./package_app DEPENDS ${TARGET})

@@ -26,6 +26,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     expat \
     libxml2-utils \
     bear \
+    cmake \
+    ninja-build \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler

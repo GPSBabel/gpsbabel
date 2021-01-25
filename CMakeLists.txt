@@ -5,27 +5,21 @@
 # tested against MSVC 2017 which included 3.11.* 2018/07/05
 cmake_minimum_required(VERSION 3.5.1)
 
-project(gpsbabel)
+project(gpsbabel LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Find the Qt5Core library
 find_package(Qt5 COMPONENTS Core REQUIRED)
-message("Qt5Core_VERSION String describing the version of the module: \"${Qt5Core_VERSION}\"")
-message("Qt5Core_LIBRARIES List of libraries for use with the target_link_libraries command: \"${Qt5Core_LIBRARIES}\"")
-message("Qt5Core_INCLUDE_DIRS List of directories for use with the include_directories command: \"${Qt5Core_INCLUDE_DIRS}\"")
-message("Qt5Core_DEFINITIONS List of definitions for use with add_definitions: \"${Qt5Core_DEFINITIONS}\"")
-message("Qt5Core_COMPILE_DEFINITIONS List of definitions for use with the COMPILE_DEFINITIONS target property: \"${Qt5Core_COMPILE_DEFINITIONS}\"")
-message("Qt5Core_FOUND Boolean describing whether the module was found successfully: \"${Qt5Core_FOUND}\"")
-message("Qt5Core_EXECUTABLE_COMPILE_FLAGS String of flags to be used when building executables: \"${Qt5Core_EXECUTABLE_COMPILE_FLAGS}\"")
-if (${Qt5Core_VERSION} VERSION_LESS 5.9)
+if(${Qt5Core_VERSION} VERSION_LESS 5.9)
   message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+else()
+  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
 endif()
-include_directories(AFTER SYSTEM ${Qt5Core_INCLUDE_DIRS})
-add_definitions(${Qt5Core_DEFINITIONS})
 
 set(MINIMAL_FMTS
   magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc
@@ -82,7 +76,7 @@ set(ZLIB
 
 set(JEEPS
   jeeps/gpsapp.cc jeeps/gpscom.cc
-  jeeps/gpsmath.cc jeeps/gpsmem.cc 
+  jeeps/gpsmath.cc jeeps/gpsmem.cc
   jeeps/gpsprot.cc jeeps/gpsread.cc
   jeeps/gpsdevice.cc jeeps/gpsdevice_ser.cc jeeps/gpsdevice_usb.cc
   jeeps/gpsrqst.cc jeeps/gpssend.cc jeeps/gpsserial.cc jeeps/jgpsutil.cc
@@ -98,7 +92,7 @@ set(SUPPORT
   gbfile.cc parse.cc session.cc main.cc globals.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
-  src/core/xmlstreamwriter.cc 
+  src/core/xmlstreamwriter.cc
 )
 
 set(HEADERS
@@ -197,15 +191,15 @@ set(HEADERS ${HEADERS} ${FILTER_HEADERS})
 
 include_directories(AFTER zlib)
 
-INCLUDE (CheckIncludeFile)
+include(CheckIncludeFile)
 if(UNIX)
   # this is used by zlib
-  CHECK_INCLUDE_FILE("unistd.h" HAVE_UNISTD_H)
+  check_include_file("unistd.h" HAVE_UNISTD_H)
   if(${HAVE_UNISTD_H})
     add_definitions(-DHAVE_UNISTD_H)
   endif()
   # this is used by zlib
-  CHECK_INCLUDE_FILE("stdarg.h" HAVE_STDARG_H)
+  check_include_file("stdarg.h" HAVE_STDARG_H)
   if(${HAVE_STDARG_H})
     add_definitions(-DHAVE_STDARG_H)
   endif()
@@ -235,11 +229,11 @@ if(MSVC)
   add_compile_options(/MP -wd4100 -wd4267)
 endif()
 
-if (UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
   set(LIBS ${LIBS} usb-1.0)
 endif()
 
-if (APPLE)
+if(APPLE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
   include_directories(AFTER mac/libusb mac/libusb/Xcode)
   set(SOURCES ${SOURCES}
@@ -277,17 +271,16 @@ add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
 add_executable(gpsbabel ${SOURCES} ${HEADERS})
-target_link_libraries(gpsbabel ${Qt5Core_LIBRARIES} ${LIBS})
+target_link_libraries(gpsbabel Qt5::Core ${LIBS})
 
-message("Sources are:")
-message("${SOURCES}")
-message("Headers are:")
-message("${HEADERS}")
-message("Defines are:")
-get_directory_property( DirDefs COMPILE_DEFINITIONS)
-message("${DirDefs}")
-message("Libs are:")
-message("${LIBS}")
+message(STATUS "Sources are: \"${SOURCES}\"")
+message(STATUS "Headers are: \"${HEADERS}\"")
+get_directory_property(DirDefs COMPILE_DEFINITIONS)
+message(STATUS "Defines are: \"${DirDefs}\"")
+get_target_property(LnkLibs gpsbabel LINK_LIBRARIES)
+message(STATUS "Libs are: \"${LnkLibs}\"")
+get_directory_property(IncDirs INCLUDE_DIRECTORIES)
+message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
   # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
