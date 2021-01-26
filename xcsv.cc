@@ -879,10 +879,10 @@ XcsvFormat::read()
 
       // If XT_LAT_DIR(XT_LON_DIR) was an input field, and the latitude(longitude) is positive,
       // assume the latitude(longitude) was the absolute value and take the sign from XT_LAT_DIR(XT_LON_DIR).
-      if (parse_data.lat_dir_positive.has_value() && !parse_data.lat_dir_positive.value() && (wpt_tmp->latitude > 0.0)) {
+      if (parse_data.lat_dir_positive.has_value() && !(*parse_data.lat_dir_positive) && (wpt_tmp->latitude > 0.0)) {
         wpt_tmp->latitude = -wpt_tmp->latitude;
       }
-      if (parse_data.lon_dir_positive.has_value() && !parse_data.lon_dir_positive.value() && (wpt_tmp->longitude > 0.0)) {
+      if (parse_data.lon_dir_positive.has_value() && !(*parse_data.lon_dir_positive) && (wpt_tmp->longitude > 0.0)) {
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
