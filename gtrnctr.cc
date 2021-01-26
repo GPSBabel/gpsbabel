@@ -348,7 +348,7 @@ gtc_fake_hdr(const computed_trkdata& tdata)
   }
 
   /* write these in either case, course or activity format */
-  gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
+  gtc_write_xml(0, "<TotalTimeSeconds>%ld</TotalTimeSeconds>\n", secs);
   gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata.distance_meters);
   if (gtc_course_flag) { /* course format */
     gtc_write_xml(1, "<BeginPosition>\n");
