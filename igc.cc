@@ -29,6 +29,7 @@
 #include <cstring>                   // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
 #include <ctime>                     // for gmtime, ctime
 #include <iterator>                  // for reverse_iterator, operator==, prev, next
+#include <optional>                  // for optional
 
 #include <QtCore/QByteArray>         // for QByteArray
 #include <QtCore/QList>              // for QList<>::const_iterator
@@ -40,7 +41,6 @@
 #include "cet_util.h"                // for cet_convert_init
 #include "gbfile.h"                  // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"       // for DateTime
-#include "src/core/optional.h"       // for optional
 
 
 static gbfile* file_in, *file_out;
@@ -815,8 +815,8 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
  */
 static double interpolate_alt(const route_head* track, time_t time)
 {
-  static gpsbabel_optional::optional<WaypointList::const_iterator> prev_wpt;
-  static gpsbabel_optional::optional<WaypointList::const_iterator> curr_wpt;
+  static std::optional<WaypointList::const_iterator> prev_wpt;
+  static std::optional<WaypointList::const_iterator> curr_wpt;
   int time_diff;
 
   // Start search at the beginning of the track

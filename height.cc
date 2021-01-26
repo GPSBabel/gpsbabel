@@ -32,15 +32,6 @@
 
 #if FILTERS_ENABLED
 
-// Until c++17 we have to define odr-used constexpr static data members at namespace scope.
-#if __cplusplus < 201703L
-constexpr double HeightFilter::geoid_grid_deg;
-constexpr double HeightFilter::geoid_scale;
-constexpr int HeightFilter::geoid_row;
-constexpr int HeightFilter::geoid_col;
-constexpr int8_t HeightFilter::geoid_delta[geoid_row][geoid_col];
-#endif
-
 double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
 {
   if (y1 == y2 && x1 == x2) {

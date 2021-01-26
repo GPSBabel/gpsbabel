@@ -30,6 +30,7 @@
 #include <cstdlib>                    // for atof, atoi, strtod
 #include <cstring>                    // for strlen, strncmp, strcmp, memset
 #include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
+#include <optional>                   // for optional
 
 #include <QtCore/QByteArray>          // for QByteArray
 #include <QtCore/QChar>               // for QChar
@@ -56,7 +57,6 @@
 #include "session.h"                  // for session_t
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/logging.h"         // for FatalMsg
-#include "src/core/optional.h"        // for optional
 #include "src/core/textstream.h"      // for TextStream
 #include "strptime.h"                 // for strptime
 #include "xcsv.h"

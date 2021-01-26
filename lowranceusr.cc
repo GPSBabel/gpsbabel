@@ -118,33 +118,6 @@ extern WaypointList* global_waypoint_list;
 
 #define MYNAME "Lowrance USR"
 
-// Until c++17 we have to define odr-used constexpr static data members at namespace scope.
-#if __cplusplus < 201703L
-constexpr int LowranceusrFormat::DEF_ICON;
-constexpr int LowranceusrFormat::X_1_ICON;
-constexpr const char* LowranceusrFormat::DISABLED_CACHE_TXT;
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[];
-#else
-constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[134];
-#endif
-constexpr int LowranceusrFormat::DEF_USR4_ICON;
-constexpr int LowranceusrFormat::DEF_USR4_COLOR;
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[];
-#else
-constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[22];
-#endif
-constexpr int LowranceusrFormat::MAXUSRSTRINGSIZE;
-constexpr double LowranceusrFormat::SEMIMINOR;
-constexpr double LowranceusrFormat::DEGREESTORADIANS;
-constexpr int LowranceusrFormat::MAX_TRAIL_POINTS;
-constexpr double LowranceusrFormat::UNKNOWN_USR_ALTITUDE;
-constexpr time_t LowranceusrFormat::base_time_secs;
-#endif
-
 /* below couple of functions mostly borrowed from raymarine.c */
 
 /* make waypoint shortnames unique */

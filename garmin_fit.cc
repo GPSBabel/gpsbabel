@@ -47,18 +47,6 @@
 
 #define MYNAME "fit"
 
-// Until c++17 we have to define odr-used constexpr static data members at namespace scope.
-#if __cplusplus < 201703L
-constexpr int GarminFitFormat::kTypeEnum;
-constexpr int GarminFitFormat::kTypeUint8;
-constexpr int GarminFitFormat::kTypeString;
-constexpr int GarminFitFormat::kTypeUint16;
-constexpr int GarminFitFormat::kTypeSint32;
-constexpr int GarminFitFormat::kTypeUint32;
-constexpr int GarminFitFormat::kCoursePointTypeLeft;
-constexpr int GarminFitFormat::kCoursePointTypeRight;
-#endif
-
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/

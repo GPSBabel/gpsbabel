@@ -44,13 +44,6 @@ jobs:
             FLOW: 'nmake'
             RELEASE: false
           - QT_VERSION: '5.12.10'
-            ARCH: 'amd64'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017_64'
-            VCVERSION: '14.0'
-            FLOW: 'nmake'
-            RELEASE: false
-          - QT_VERSION: '5.12.10'
             ARCH: 'x86'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017'

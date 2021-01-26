@@ -22,6 +22,7 @@
 #define XCSV_H_INCLUDED_
 
 #include <ctime>
+#include <optional>               // for optional
 #include <utility>                // for move
 
 #include <QtCore/QByteArray>      // for QByteArray
@@ -36,7 +37,6 @@
 #include "format.h"
 #include "garmin_fs.h"
 #include "src/core/datetime.h"    // for DateTime
-#include "src/core/optional.h"    // for optional
 #include "src/core/textstream.h"  // for TextStream
 
 #if CSVFMTS_ENABLED
@@ -235,10 +235,10 @@ public:
   gpsdata_type datatype{unknown_gpsdata};
 
   /* SHORTLEN from style file */
-  gpsbabel_optional::optional<int> shortlen;
+  std::optional<int> shortlen;
 
   /* SHORTWHITE from style file */
-  gpsbabel_optional::optional<int> whitespace_ok;
+  std::optional<int> whitespace_ok;
 
 private:
   /* Types */
@@ -346,8 +346,8 @@ private:
     double utm_zone{0};
     char utm_zonec{'N'};
     UrlLink* link_{nullptr};
-    gpsbabel_optional::optional<bool> lat_dir_positive;
-    gpsbabel_optional::optional<bool> lon_dir_positive;
+    std::optional<bool> lat_dir_positive;
+    std::optional<bool> lon_dir_positive;
   };
 
   /* Constants */

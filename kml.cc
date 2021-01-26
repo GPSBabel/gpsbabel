@@ -25,6 +25,7 @@
 #include <cstdio>                       // for sscanf, printf
 #include <cstdlib>                      // for atoi, atol, atof
 #include <cstring>                      // for strcmp
+#include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
 
 #include <QtCore/QByteArray>            // for QByteArray
@@ -49,7 +50,6 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/logging.h"           // for Warning, Fatal
-#include "src/core/optional.h"          // for optional
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute

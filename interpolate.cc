@@ -22,6 +22,7 @@
 #include <climits>              // for INT_MAX
 #include <cmath>                // for abs, ceil, isfinite, round
 #include <cstdlib>              // for abs, atoi, strtod
+#include <optional>             // for optional
 
 #include <QtCore/QString>       // for QString
 #include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type
@@ -31,7 +32,6 @@
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
-#include "src/core/optional.h"  // for optional
 
 
 #if FILTERS_ENABLED
@@ -79,12 +79,12 @@ void InterpolateFilter::process()
       if (first) {
         first = false;
       } else {
-        gpsbabel_optional::optional<qint64> timespan;
+        std::optional<qint64> timespan;
         if (wpt->creation_time.isValid() && time1.isValid()) {
           timespan = wpt->creation_time.toMSecsSinceEpoch() -
                      time1.toMSecsSinceEpoch();
         }
-        gpsbabel_optional::optional<double> altspan;
+        std::optional<double> altspan;
         if (altitude1 != unknown_alt && wpt->altitude != unknown_alt) {
           altspan = wpt->altitude - altitude1;
         }

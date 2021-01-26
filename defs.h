@@ -26,6 +26,7 @@
 #include <cstdint>                // for int32_t, uint32_t
 #include <cstdio>                 // for NULL, fprintf, FILE, stdout
 #include <ctime>                  // for time_t
+#include <optional>               // for optional
 #include <utility>                // for move
 
 #if HAVE_CONFIG_H
@@ -52,7 +53,6 @@
 #include "gbfile.h"               // doesn't really belong here, but is missing elsewhere.
 #include "session.h"              // for session_t
 #include "src/core/datetime.h"    // for DateTime
-#include "src/core/optional.h"    // for optional
 
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
@@ -676,17 +676,17 @@ waypt_disp_all(T cb)
  */
 struct computed_trkdata {
   double distance_meters{0.0};
-  gpsbabel_optional::optional<double> max_alt;	/* Meters */
-  gpsbabel_optional::optional<double> min_alt;	/* Meters */
-  gpsbabel_optional::optional<double> max_spd;	/* Meters/sec */
-  gpsbabel_optional::optional<double> min_spd;	/* Meters/sec */
-  gpsbabel_optional::optional<double> avg_hrt;	/* Avg Heartrate */
-  gpsbabel_optional::optional<double> avg_cad;	/* Avg Cadence */
+  std::optional<double> max_alt;	/* Meters */
+  std::optional<double> min_alt;	/* Meters */
+  std::optional<double> max_spd;	/* Meters/sec */
+  std::optional<double> min_spd;	/* Meters/sec */
+  std::optional<double> avg_hrt;	/* Avg Heartrate */
+  std::optional<double> avg_cad;	/* Avg Cadence */
   gpsbabel::DateTime start;		/* Min time */
   gpsbabel::DateTime end;		/* Max time */
-  gpsbabel_optional::optional<int> min_hrt;			/* Min Heartrate */
-  gpsbabel_optional::optional<int> max_hrt;			/* Max Heartrate */
-  gpsbabel_optional::optional<int> max_cad;			/* Max Cadence */
+  std::optional<int> min_hrt;			/* Min Heartrate */
+  std::optional<int> max_hrt;			/* Max Heartrate */
+  std::optional<int> max_cad;			/* Max Cadence */
 };
 
 class route_head
@@ -974,20 +974,6 @@ void setshort_defname(short_handle, const char* s);
 #define ARG_NOMINMAX nullptr, nullptr
 
 struct arglist_t {
-  /* MSVC 2015 generates C2440, C2664 errors without some help. */
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-  arglist_t() = default;
-  arglist_t(const char* astr, char** aval, const char* hstr, const char* dval,
-            const uint32_t atyp, const char* minv, const char* maxv, char* avp) :
-            argstring(astr),
-            argval(aval),
-            helpstring(hstr),
-            defaultvalue(dval),
-            argtype(atyp),
-            minvalue(minv),
-            maxvalue(maxv),
-            argvalptr(avp) {}
-#endif
   const char* argstring{nullptr};
   char** argval{nullptr};
   const char* helpstring{nullptr};

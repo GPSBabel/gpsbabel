@@ -5,6 +5,7 @@ CONFIG += qt
 CONFIG(debug, debug|release) {
   CONFIG += console
 }
+CONFIG += c++17
 
 ICON = images/appicon.icns
 
