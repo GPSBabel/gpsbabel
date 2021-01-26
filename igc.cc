@@ -825,32 +825,32 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_wpt = track->waypoint_list.cbegin();
   }
   // Find the track points either side of the requested time
-  while ((track->waypoint_list.cend() != curr_wpt.value()) &&
-         ((*curr_wpt.value())->GetCreationTime().toTime_t() < time)) {
-    prev_wpt = curr_wpt.value();
-    curr_wpt = std::next(prev_wpt.value());
+  while ((track->waypoint_list.cend() != *curr_wpt) &&
+         ((**curr_wpt)->GetCreationTime().toTime_t() < time)) {
+    prev_wpt = *curr_wpt;
+    curr_wpt = std::next(*prev_wpt);
   }
-  if (track->waypoint_list.cend() == curr_wpt.value()) {
+  if (track->waypoint_list.cend() == *curr_wpt) {
     // Requested time later than all track points, we can't interpolate
     return unknown_alt;
   }
 
-  if (track->waypoint_list.cbegin() == curr_wpt.value()) {
-    if ((*curr_wpt.value())->GetCreationTime().toTime_t() == time) {
+  if (track->waypoint_list.cbegin() == *curr_wpt) {
+    if ((**curr_wpt)->GetCreationTime().toTime_t() == time) {
       // First point's creation time is an exact match so use it's altitude
-      return (*curr_wpt.value())->altitude;
+      return (**curr_wpt)->altitude;
     } else {
       // Requested time is prior to any track points, we can't interpolate
       return unknown_alt;
     }
   }
   // Interpolate
-  if (0 == (time_diff = (*curr_wpt.value())->GetCreationTime().toTime_t() - (*prev_wpt.value())->GetCreationTime().toTime_t())) {
+  if (0 == (time_diff = (**curr_wpt)->GetCreationTime().toTime_t() - (**prev_wpt)->GetCreationTime().toTime_t())) {
     // Avoid divide by zero
-    return (*curr_wpt.value())->altitude;
+    return (**curr_wpt)->altitude;
   }
-  double alt_diff = (*curr_wpt.value())->altitude - (*prev_wpt.value())->altitude;
-  return (*prev_wpt.value())->altitude + (alt_diff / time_diff) * (time - (*prev_wpt.value())->GetCreationTime().toTime_t());
+  double alt_diff = (**curr_wpt)->altitude - (**prev_wpt)->altitude;
+  return (**prev_wpt)->altitude + (alt_diff / time_diff) * (time - (**prev_wpt)->GetCreationTime().toTime_t());
 }
 
 /*
