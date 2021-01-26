@@ -1,0 +1,121 @@
+name: "windows"
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+
+jobs:
+
+  windows:
+    name: windows Build
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
+            FLOW: 'nmake'
+            RELEASE: true
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
+            FLOW: 'msbuild'
+            RELEASE: false
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
+            FLOW: 'cmake'
+            RELEASE: false
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
+            VCVERSION: '14.16'
+            FLOW: 'nmake'
+            RELEASE: false
+          - QT_VERSION: '5.12.10'
+            ARCH: 'amd64'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017_64'
+            VCVERSION: '14.0'
+            FLOW: 'nmake'
+            RELEASE: false
+          - QT_VERSION: '5.12.10'
+            ARCH: 'x86'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017'
+            RELEASE: false
+            FLOW: 'nmake'
+          - QT_VERSION: '5.12.10'
+            ARCH: 'x86'
+            HOST_ARCH: 'x86'
+            COMPILER: 'msvc2017'
+            RELEASE: false
+            FLOW: 'msbuild'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Qt
+      uses: actions/cache@v2
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
+
+    - name: Install Qt
+      env:
+        CI_BUILD_DIR: ${{ github.workspace }}
+      shell: bash
+      run: |
+        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }}
+
+    - name: Build
+      shell: powershell
+      run: |
+        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch ${{ matrix.ARCH }} -host_arch ${{ matrix.HOST_ARCH }} -vcversion "${{ matrix.VCVERSION }}"
+        .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller true -flow ${{ matrix.FLOW }} -arch ${{ matrix.ARCH }}
+
+    - name: Rename
+      shell: bash
+      run: |
+        VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
+        mv gui/release/GPSBabel-*-Setup.exe gui/release/GPSBabel-${VERSION_ID}-Setup.exe
+        mv gui/release/GPSBabel-*-Manifest.txt gui/release/GPSBabel-${VERSION_ID}-Manifest.txt
+
+    - name: Test
+      shell: bash
+      run: |
+        PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
+        PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-${{ runner.os }}
+      run: |
+        ./tools/uploadtool/upload_github.sh gui/release/GPSBabel-*-Setup.exe
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: Windows_Installer ${{ join(matrix.*) }}
+        path: |
+          ./gui/release/GPSBabel-*-Setup.exe
+          ./gui/release/GPSBabel-*-Manifest.txt
+        retention-days: 7

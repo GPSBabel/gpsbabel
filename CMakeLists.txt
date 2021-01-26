@@ -227,12 +227,12 @@ if(WIN32)
   set(HEADERS ${HEADERS} gbser_win.h)
   set(JEEPS ${JEEPS} jeeps/gpsusbwin.cc)
   set(LIBS ${LIBS} setupapi)
-  set(RC_FILE win32/gpsbabel.rc)
+  set(RESOURCES ${RESOURCES} win32/gpsbabel.rc)
 endif()
 
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_compile_options(/MP -wd4100)
+  add_compile_options(/MP -wd4100 -wd4267)
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -267,7 +267,7 @@ if (APPLE)
 endif()
 
 set(SOURCES
-  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS}
+  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
 )
 
 # We don't care about stripping things out of the build.  Full monty, baby.

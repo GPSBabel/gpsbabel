@@ -1,0 +1,87 @@
+name: "macos"
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+
+jobs:
+  macos_release:
+    name: macos release Build
+    runs-on: macos-latest
+    env:
+      QT_VERSION: '5.12.10'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Qt
+      uses: actions/cache@v2
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+
+    - name: Qt install
+      env:
+        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+      run: |
+        ./tools/travis_install_osx ${QT_VERSION} installer
+
+    - name: Script
+      run: |
+        source ${HOME}/Cache/qt-${QT_VERSION}.env
+        sudo xcode-select --switch /Applications/Xcode_11.7.app
+        ./tools/travis_script_osx
+        echo GITHUB_REF: $GITHUB_REF
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-${{ runner.os }}
+      run: |
+        ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS_Installer
+        path: gui/GPSBabel-*.dmg
+        retention-days: 14
+
+  macos_edge:
+    name: macos edge Build
+    runs-on: macos-latest
+    env:
+      QT_VERSION: '5.15.2'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Qt
+      uses: actions/cache@v2
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+
+    - name: Qt install
+      env:
+        ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+        ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+        ARTIFACTORY_BASE_URL: ${{ secrets.ARTIFACTORY_BASE_URL }}
+      run: |
+        ./tools/travis_install_osx ${QT_VERSION} artifactory
+
+    - name: Script
+      run: |
+        source ${HOME}/Cache/qt-${QT_VERSION}.env
+        sudo xcode-select --switch /Applications/Xcode_12.1.1.app
+        ./tools/travis_script_osx
