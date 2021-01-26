@@ -15,7 +15,7 @@ make -j 3 coverage
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # don't leak unhashed tokens!
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if [ -v CODACY_PROJECT_TOKEN ] ; then
+if [ -n "${CODACY_PROJECT_TOKEN:+x}" ] ; then
   # upload coverate report to codacy.
   bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CPP -r gpsbabel_coverage.xml
 else
