@@ -20,43 +20,20 @@
 #ifndef XMLSTREAMWRITER_H
 #define XMLSTREAMWRITER_H
 
-#include <QtCore/QTextCodec>
-#include <QtCore/QXmlStreamWriter>
-
-class QFile;
+#include <QtCore/QString>           // for QString
+#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
 
 namespace gpsbabel
 {
 
-// From the "vendor" range, see:
-// https://www.iana.org/assignments/character-sets/character-sets.xhtml
-const int UTF8_FOR_XML_MIB = 2000;
-
-class XmlTextCodec : public QTextCodec
-{
-private:
-  QTextCodec* utf8Codec;
-public:
-  XmlTextCodec();
-  static XmlTextCodec *instance;
-  QByteArray name() const override;
-  int mibEnum() const override;
-protected:
-  QByteArray convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const override;
-  QString convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const override;
-};
-
 class XmlStreamWriter : public QXmlStreamWriter
 {
 public:
-  explicit XmlStreamWriter(QString* string);
-  explicit XmlStreamWriter(QFile* f);
+  using QXmlStreamWriter::QXmlStreamWriter;
 
-  void writeStartDocument();
   void writeOptionalTextElement(const QString& qualifiedName, const QString& text);
 };
 
 } // namespace gpsbabel
 
 #endif // XMLSTREAMWRITER_H
-
