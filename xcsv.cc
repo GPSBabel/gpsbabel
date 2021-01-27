@@ -30,6 +30,7 @@
 #include <cstdlib>                    // for atof, atoi, strtod
 #include <cstring>                    // for strlen, strncmp, strcmp, memset
 #include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
+#include <optional>                   // for optional
 
 #include <QtCore/QByteArray>          // for QByteArray
 #include <QtCore/QChar>               // for QChar
@@ -56,7 +57,6 @@
 #include "session.h"                  // for session_t
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/logging.h"         // for FatalMsg
-#include "src/core/optional.h"        // for optional
 #include "src/core/textstream.h"      // for TextStream
 #include "strptime.h"                 // for strptime
 #include "xcsv.h"
@@ -879,10 +879,10 @@ XcsvFormat::read()
 
       // If XT_LAT_DIR(XT_LON_DIR) was an input field, and the latitude(longitude) is positive,
       // assume the latitude(longitude) was the absolute value and take the sign from XT_LAT_DIR(XT_LON_DIR).
-      if (parse_data.lat_dir_positive.has_value() && !parse_data.lat_dir_positive.value() && (wpt_tmp->latitude > 0.0)) {
+      if (parse_data.lat_dir_positive.has_value() && !(*parse_data.lat_dir_positive) && (wpt_tmp->latitude > 0.0)) {
         wpt_tmp->latitude = -wpt_tmp->latitude;
       }
-      if (parse_data.lon_dir_positive.has_value() && !parse_data.lon_dir_positive.value() && (wpt_tmp->longitude > 0.0)) {
+      if (parse_data.lon_dir_positive.has_value() && !(*parse_data.lon_dir_positive) && (wpt_tmp->longitude > 0.0)) {
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 

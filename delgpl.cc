@@ -42,7 +42,7 @@ static void
 gpl_rd_init(const QString& fname)
 {
   gplfile_in = gbfopen_le(fname, "rb", MYNAME);
-  if (sizeof(gpl_point_t) != 56) {
+  if constexpr (sizeof(gpl_point_t) != 56) {
     fatal(MYNAME ": gpl_point is %zu instead of 56.\n",
           sizeof(gpl_point_t));
   }

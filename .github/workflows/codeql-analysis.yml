@@ -25,7 +25,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    container: tsteven4/gpsbabel_build_environment
+    container: tsteven4/gpsbabel_build_environment_focal
 
     strategy:
       fail-fast: false

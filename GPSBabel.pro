@@ -1,6 +1,6 @@
 # Enforce minimum Qt version.
 # versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
-MIN_QT_VERSION = 5.9 # major[.minor[.patch]]
+MIN_QT_VERSION = 5.12 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
 MIN_QT_VERSION_MINOR = $$member(MIN_QT_VERSION_COMPONENTS, 1)
@@ -20,7 +20,7 @@ VERSION = 1.7.0
 
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG += c++14
+CONFIG += c++17
 CONFIG += link_pkgconfig
 
 TEMPLATE = app
@@ -182,7 +182,6 @@ HEADERS =  \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
-	src/core/optional.h \
 	src/core/textstream.h \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \

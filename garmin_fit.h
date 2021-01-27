@@ -84,11 +84,6 @@ private:
   /* Types */
 
   struct fit_field_t {
-    /* MSVC 2015 generates C2664 errors without some help. */
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-    fit_field_t() = default;
-    fit_field_t(int i, int s, int t) : id(i), size(s), type(t) {}
-#endif
     int id {};
     int size{};
     int type{};

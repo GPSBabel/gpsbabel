@@ -22,6 +22,7 @@
 #include <climits>              // for INT_MAX
 #include <cmath>                // for abs, ceil, isfinite, round
 #include <cstdlib>              // for abs, atoi, strtod
+#include <optional>             // for optional
 
 #include <QtCore/QString>       // for QString
 #include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type
@@ -31,7 +32,6 @@
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
-#include "src/core/optional.h"  // for optional
 
 
 #if FILTERS_ENABLED
@@ -79,12 +79,12 @@ void InterpolateFilter::process()
       if (first) {
         first = false;
       } else {
-        gpsbabel_optional::optional<qint64> timespan;
+        std::optional<qint64> timespan;
         if (wpt->creation_time.isValid() && time1.isValid()) {
           timespan = wpt->creation_time.toMSecsSinceEpoch() -
                      time1.toMSecsSinceEpoch();
         }
-        gpsbabel_optional::optional<double> altspan;
+        std::optional<double> altspan;
         if (altitude1 != unknown_alt && wpt->altitude != unknown_alt) {
           altspan = wpt->altitude - altitude1;
         }
@@ -96,7 +96,7 @@ void InterpolateFilter::process()
             fatal(FatalMsg() << MYNAME ": points must have valid times to interpolate by time!");
           }
           // interpolate even if time is running backwards.
-          npts = std::abs(timespan.value()) / max_time_step;
+          npts = std::abs(*timespan) / max_time_step;
         } else if (opt_dist != nullptr) {
           double distspan = radtomiles(gcdist(RAD(lat1),
                                               RAD(lon1),
@@ -122,7 +122,7 @@ void InterpolateFilter::process()
           wpt_new->description = QString();
           if (timespan.has_value()) {
             wpt_new->SetCreationTime(0, time1.toMSecsSinceEpoch() +
-                                     round(frac * timespan.value()));
+                                     round(frac * *timespan));
           } else {
             wpt_new->creation_time = gpsbabel::DateTime();
           }
@@ -132,7 +132,7 @@ void InterpolateFilter::process()
                    &wpt_new->latitude,
                    &wpt_new->longitude);
           if (altspan.has_value()) {
-            wpt_new->altitude = altitude1 + (frac * altspan.value());
+            wpt_new->altitude = altitude1 + (frac * *altspan);
           } else {
             wpt_new->altitude = unknown_alt;
           }

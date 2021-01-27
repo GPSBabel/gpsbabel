@@ -128,17 +128,17 @@ static QVector<arglist_t> igo8_options = {
 // Sanity check
 static void igo8_check_type_sizes()
 {
-  if (sizeof(igo8_point) != 12) {
+  if constexpr (sizeof(igo8_point) != 12) {
     fatal(MYNAME ": igo8_point is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_point));
   }
 
-  if (sizeof(igo8_information_block) != 12) {
+  if constexpr (sizeof(igo8_information_block) != 12) {
     fatal(MYNAME ": igo8_information_block is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_information_block));
   }
 
-  if (sizeof(igo8_id_block) != 20) {
+  if constexpr (sizeof(igo8_id_block) != 20) {
     fatal(MYNAME ": igo8_id_block is %ld bytes instead of the required 20.\n",
           (long) sizeof(igo8_id_block));
   }

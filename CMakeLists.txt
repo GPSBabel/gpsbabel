@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(gpsbabel LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
@@ -15,7 +15,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Find the Qt5Core library
 find_package(Qt5 COMPONENTS Core REQUIRED)
-if(${Qt5Core_VERSION} VERSION_LESS 5.9)
+if(${Qt5Core_VERSION} VERSION_LESS 5.12)
   message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
 else()
   message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
@@ -179,7 +179,6 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
-  src/core/optional.h
   src/core/textstream.h
   src/core/usasciicodec.h
   src/core/xmlstreamwriter.h

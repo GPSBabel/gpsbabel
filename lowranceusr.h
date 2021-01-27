@@ -193,12 +193,7 @@ private:
   static constexpr int X_1_ICON = 10003;
   static constexpr const char* DISABLED_CACHE_TXT = "Disabled Cache";
 
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
   static constexpr lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
-#else
-  static constexpr lowranceusr_icon_mapping_t lowranceusr_icon_value_table[134] = {
-#endif
 
     /* Taken from iFinder 1.8 */
 
@@ -361,12 +356,7 @@ private:
   static constexpr int DEF_USR4_ICON = 2;
   static constexpr int DEF_USR4_COLOR = 0;
 
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
   static constexpr lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[] = {
-#else
-  static constexpr lowranceusr4_icon_mapping_t lowranceusr4_icon_value_table[22] = {
-#endif
 
     /*  USR     GPX Symbol                COLOR1     COLOR2     COLOR3    COLOR4     COLOR5    COLOR6      COLOR7         HOOK2 Displays */
 

@@ -182,11 +182,6 @@ private:
   };
 
   struct tag_mapping {
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-    /* avoid MSVC 2015 C2664 errors. */
-    tag_mapping() = default;
-    tag_mapping(tag_type t, bool p) : type(t),passthrough(p) {}
-#endif
     tag_type type{tt_unknown};		/* enum from above for this tag */
     bool passthrough{true};		/* true if we don't generate this */
   };

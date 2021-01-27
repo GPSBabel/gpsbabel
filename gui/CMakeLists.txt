@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(gpsbabelfe LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
@@ -22,7 +22,7 @@ set(CMAKE_AUTORCC ON)
 # Find the Qt5Core library
 find_package(Qt5 COMPONENTS Core Gui Network Widgets Xml REQUIRED)
 list(APPEND QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets Qt5::Xml)
-if(${Qt5Core_VERSION} VERSION_LESS 5.9)
+if(${Qt5Core_VERSION} VERSION_LESS 5.12)
   message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
 else()
   message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")

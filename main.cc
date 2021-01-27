@@ -645,9 +645,15 @@ main(int argc, char* argv[])
   int rc = 0;
   const char* prog_name = argv[0]; /* may not match QCoreApplication::arguments().at(0)! */
 
-// MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-#if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
+// MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
+// arguments in main.cc and gui/main.cc and the version check in
+// CMakeLists.txt, gui/CMakeLists.txt.
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 #error This version of Qt is not supported.
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
+#error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
 #ifdef DEBUG_LOCALE

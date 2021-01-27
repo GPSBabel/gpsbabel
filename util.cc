@@ -501,7 +501,7 @@ str_match(const char* str, const char* match)
         return 0;  /* incomplete escape sequence */
       }
     /* pass-through next character */
-    /* fallthrough */
+    [[fallthrough]];
 
     default:
       if (*m != *s) {
@@ -632,7 +632,7 @@ le_read64(void* dest, const void* src)
   char* cdest = (char*) dest;
   const char* csrc = (const char*) src;
 
-  if (i_am_little_endian) {
+  if constexpr (i_am_little_endian) {
     memcpy(dest, src, 8);
   } else {
     int i;

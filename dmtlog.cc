@@ -585,7 +585,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
     switch (res) {
     case Z_NEED_DICT:
       res = Z_DATA_ERROR;
-      /* fallthrough */
+      [[fallthrough]];
     case Z_DATA_ERROR:
     case Z_MEM_ERROR:
       (void)inflateEnd(&strm);

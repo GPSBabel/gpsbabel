@@ -14,7 +14,7 @@ jobs:
     name: basic Build
     runs-on: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
       env:
         LC_ALL: 'C.UTF-8'
 
