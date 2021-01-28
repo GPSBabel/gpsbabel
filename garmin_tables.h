@@ -38,7 +38,7 @@ struct icon_mapping_t {
 
 enum garmin_formats_e {MAPSOURCE, PCX, GARMIN_SERIAL, GDB};
 
-const QString gt_find_desc_from_icon_number(int icon, garmin_formats_e garmin_format);
+QString gt_find_desc_from_icon_number(int icon, garmin_formats_e garmin_format);
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format);
 
 extern const icon_mapping_t garmin_icon_table[];

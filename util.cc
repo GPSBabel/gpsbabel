@@ -1679,9 +1679,9 @@ QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& att
   return QString();
 }
 
-const QString get_filename(const QString& fname)
+QString get_filename(const QString& fname)
 {
-  return  QFileInfo(fname).fileName();
+  return QFileInfo(fname).fileName();
 }
 
 /* bit manipulation functions */

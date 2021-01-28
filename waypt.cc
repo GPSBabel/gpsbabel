@@ -521,12 +521,6 @@ Waypoint::GetUrlLink() const
   return urls.GetUrlLink();
 }
 
-[[deprecated]] const QList<UrlLink>
-Waypoint::GetUrlLinks() const
-{
-  return urls;
-}
-
 void
 Waypoint::AddUrlLink(const UrlLink& l)
 {
