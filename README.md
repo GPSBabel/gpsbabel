@@ -7,12 +7,11 @@ We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 Current status of the master branch build is:
-- [![CodeQL](https://github.com/GPSBabel/gpsbabel/workflows/CodeQL/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3ACodeQL)
-- [![Fedora](https://github.com/GPSBabel/gpsbabel/workflows/fedora/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Afedora)
-- [![macOS](https://github.com/GPSBabel/gpsbabel/workflows/macos/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Amacos)
-- [![ubuntu](https://github.com/GPSBabel/gpsbabel/workflows/ubuntu/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Aubuntu)
-- [![windows](https://github.com/GPSBabel/gpsbabel/workflows/windows/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Awindows)
-
+-   [![CodeQL](https://github.com/GPSBabel/gpsbabel/workflows/CodeQL/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3ACodeQL)
+-   [![Fedora](https://github.com/GPSBabel/gpsbabel/workflows/fedora/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Afedora)
+-   [![macOS](https://github.com/GPSBabel/gpsbabel/workflows/macos/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Amacos)
+-   [![ubuntu](https://github.com/GPSBabel/gpsbabel/workflows/ubuntu/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Aubuntu)
+-   [![windows](https://github.com/GPSBabel/gpsbabel/workflows/windows/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Awindows)
 Passing is good. We like passing. 
 
 The absolute latest pre-release GPSBabel [macOS](https://github.com/GPSBabel/gpsbabel/releases/tag/Continuous-macOS) and [Windows](https://github.com/GPSBabel/gpsbabel/releases/tag/Continuous-Windows) builds may not have made the front page yet. It takes about an half an hour to run our rigorous [presubmit testing](https://www.gpsbabel.org/quality.html) via [GitHub Actions](https://github.com/GPSBabel/gpsbabel/actions).  The latest [official release](http://www.gpsbabel.org/download.html) is also available.
