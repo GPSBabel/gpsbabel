@@ -597,11 +597,11 @@ WaypointList::waypt_add(Waypoint* wpt)
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
     fatal(FatalMsg() << wpt->session->name
-            << "Invalid latitude" << lat_orig << "in waypoint"
-            << wpt->shortname);
+          << "Invalid latitude" << lat_orig << "in waypoint"
+          << wpt->shortname);
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
-            << wpt->shortname);
+          << wpt->shortname);
 
   /*
    * Some input may not have one or more of these types so we
@@ -642,10 +642,10 @@ WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QStri
 {
   append(wpt);
 
-   if (synth && wpt->shortname.isEmpty()) {
-     wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
-     wpt->wpt_flags.shortname_is_synthetic = 1;
-   }
+  if (synth && wpt->shortname.isEmpty()) {
+    wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
+    wpt->wpt_flags.shortname_is_synthetic = 1;
+  }
 }
 
 void
@@ -662,7 +662,7 @@ WaypointList::del_rte_waypt(Waypoint* wpt)
   const int idx = indexOf(wpt);
   assert(idx >= 0);
   if (wpt->wpt_flags.new_trkseg && ((idx+1) < size())) {
-    auto wpt_next = at(idx+1);
+    auto* wpt_next = at(idx+1);
     wpt_next->wpt_flags.new_trkseg = 1;
   }
   wpt->wpt_flags.new_trkseg = 0;
@@ -709,7 +709,7 @@ WaypointList::copy(WaypointList** dst) const
   if (*dst == nullptr) {
     *dst = new WaypointList;
   }
-    
+
   foreach (const Waypoint* wpt_old, *this) {
     (*dst)->waypt_add(new Waypoint(*wpt_old));
   }

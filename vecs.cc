@@ -269,7 +269,7 @@ Format* Vecs::find_vec(const QString& vecname)
      * format that utilized an internal style file, then we need to let
      * xcsv know the internal style file is no longer in play.
      */
-     xcsv_fmt.xcsv_setup_internal_style(nullptr);
+    xcsv_fmt.xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
     return vec.vec;
@@ -533,7 +533,7 @@ void Vecs::disp_v1(ff_type t)
 
 void Vecs::disp_v2(const vecinfo_t& v)
 {
-  for (auto& i : v.cap) {
+  for (const auto& i : v.cap) {
     putchar((i & ff_cap_read) ? 'r' : '-');
     putchar((i & ff_cap_write) ? 'w' : '-');
   }

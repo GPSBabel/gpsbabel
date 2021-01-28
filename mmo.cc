@@ -994,7 +994,7 @@ mmo_rd_deinit()
 
   icons.clear();
 
-  for (auto value : qAsConst(objects)) {
+  for (auto* value : qAsConst(objects)) {
     mmo_free_object(value);
   }
   objects.clear();
@@ -1429,7 +1429,7 @@ mmo_wr_deinit()
   mmobjects.clear();
   category_names.clear();
 
-  for (auto value : qAsConst(objects)) {
+  for (auto* value : qAsConst(objects)) {
     mmo_free_object(value);
   }
   objects.clear();

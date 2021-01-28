@@ -123,7 +123,7 @@ char** os_get_garmin_mountpoints()
 static int
 gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  auto buf = const_cast<unsigned char*>(&opkt->dbuf[0]);
+  auto* buf = const_cast<unsigned char*>(&opkt->dbuf[0]);
   int transferred;
 
   int ret = libusb_bulk_transfer(udev, gusb_bulk_out_ep, buf, sz,
@@ -400,7 +400,7 @@ garmin_usb_start(struct libusb_device* dev,
       const struct libusb_interface_descriptor* altsetting = &interface->altsetting[j];
       /*
        * FIXME: Since we never use libusb_set_interface_alt_setting()
-       * shouldn't we only look at the default interface descriptor, i.e. 
+       * shouldn't we only look at the default interface descriptor, i.e.
        * the one that has a bAlternateSetting of 0 and/or the one
        * that has index 0?
        * From the USB spec:
@@ -543,7 +543,7 @@ int
 gusb_init(const char* portname, gpsdevh** dh)
 {
   int req_unit_number = 0;
-  auto lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
+  auto* lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
 
   *dh = (gpsdevh*) lud;
 

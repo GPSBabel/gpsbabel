@@ -46,7 +46,7 @@ void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
 {
   QList<WptRecord> qlist;
 
-  for (const auto waypointp : qAsConst(*waypt_list)) {
+  for (auto* const waypointp : qAsConst(*waypt_list)) {
     qlist.append(WptRecord(waypointp));
   }
   int nelems = qlist.size();
