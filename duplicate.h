@@ -70,7 +70,7 @@ private:
     Waypoint* wpt;
   };
 
-  btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
+  static btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
   void free_tree(btree_node* tree);
 
   struct wpt_ptr {

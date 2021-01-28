@@ -105,7 +105,7 @@ RandomFormat::rd_deinit()
 Waypoint*
 RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
-  auto wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   garmin_fs_t* gmsd = garmin_fs_alloc(-1);
   wpt->fs.FsChainAdd(gmsd);
 

@@ -71,12 +71,12 @@ GpxFormat::gpx_add_to_global(QStringList& ge, const QString& s)
 // Temporarily mock the old GPX writer's hardcoded fixed length for float/double
 // types.  This can be removed once we have time/interest in regenerating all our
 // zillion reference files.
-inline QString GpxFormat::toString(double d) const
+inline QString GpxFormat::toString(double d)
 {
   return QString::number(d, 'f', 9);
 }
 
-inline QString GpxFormat::toString(float f) const
+inline QString GpxFormat::toString(float f)
 {
   return QString::number(f, 'f', 6);
 }

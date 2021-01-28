@@ -268,7 +268,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
     if (track->rte_waypt_ct == 0) {
       dt = default_time;
     } else {
-      auto wpt = track->waypoint_list.front();
+      auto* wpt = track->waypoint_list.front();
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
@@ -294,7 +294,7 @@ void TrackFilter::trackfilter_title()
   if (strlen(opt_title) == 0) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
-  for (auto track : qAsConst(track_list)) {
+  for (auto* track : qAsConst(track_list)) {
     trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, Qt::UTC));
   }
 }
@@ -376,7 +376,7 @@ void TrackFilter::trackfilter_merge()
 
     Waypoint* prev = nullptr;
 
-    for (auto wpt : buff) {
+    for (auto* wpt : buff) {
       if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
         track_add_wpt(master, wpt);
         prev = wpt;
@@ -571,7 +571,7 @@ void TrackFilter::trackfilter_move()
     return;
   }
 
-  for (auto track : qAsConst(track_list)) {
+  for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
       wpt->creation_time = wpt->creation_time.addSecs(delta);
     }
@@ -593,7 +593,7 @@ void TrackFilter::trackfilter_synth()
 
   fix_type fix = trackfilter_parse_fix(&nsats);
 
-  for (auto track : qAsConst(track_list)) {
+  for (auto* track : qAsConst(track_list)) {
     bool first = true;
     foreach (Waypoint* wpt, track->waypoint_list) {
       if (opt_fix) {
@@ -742,7 +742,7 @@ void TrackFilter::trackfilter_seg2trk()
 {
   if (!track_list.isEmpty()) {
     QList<route_head*> new_track_list;
-    for (auto src : qAsConst(track_list)) {
+    for (auto* src : qAsConst(track_list)) {
       new_track_list.append(src);
       route_head* dest = nullptr;
       route_head* insert_point = src;
@@ -863,7 +863,7 @@ void TrackFilter::trackfilter_faketime()
   assert(opt_faketime != nullptr);
   faketime_t faketime = trackfilter_faketime_check(opt_faketime);
 
-  for (auto track : qAsConst(track_list)) {
+  for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
 
       if (!wpt->creation_time.isValid() || faketime.force) {
@@ -907,7 +907,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   const double ktoo_close = 0.000005;
 
   for (auto it = rte->waypoint_list.cbegin(); it != rte->waypoint_list.cend(); ++it) {
-    auto wpt = *it;
+    auto* wpt = *it;
     if (index > 0) {
       double cur_dist = gcdist(RAD(prev_wpt->latitude),
                                RAD(prev_wpt->longitude),
@@ -920,7 +920,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
       if (cur_dist < ktoo_close) {
         if (wpt != rte->waypoint_list.back()) {
-          auto next_wpt = *std::next(it);
+          auto* next_wpt = *std::next(it);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
             track_del_wpt(const_cast<route_head*>(rte), wpt);

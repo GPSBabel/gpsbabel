@@ -421,7 +421,7 @@ gt_switch_display_mode_value(const unsigned char display_mode, const int protoid
   }
 }
 
-const QString
+QString
 gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
   if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563)) {

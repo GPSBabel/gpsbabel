@@ -128,17 +128,17 @@ static QVector<arglist_t> igo8_options = {
 // Sanity check
 static void igo8_check_type_sizes()
 {
-  if constexpr (sizeof(igo8_point) != 12) {
+  if constexpr(sizeof(igo8_point) != 12) {
     fatal(MYNAME ": igo8_point is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_point));
   }
 
-  if constexpr (sizeof(igo8_information_block) != 12) {
+  if constexpr(sizeof(igo8_information_block) != 12) {
     fatal(MYNAME ": igo8_information_block is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_information_block));
   }
 
-  if constexpr (sizeof(igo8_id_block) != 20) {
+  if constexpr(sizeof(igo8_id_block) != 20) {
     fatal(MYNAME ": igo8_id_block is %ld bytes instead of the required 20.\n",
           (long) sizeof(igo8_id_block));
   }
@@ -275,7 +275,7 @@ static void write_header()
 {
   char header[IGO8_HEADER_SIZE] = {};
   igo8_id_block tmp_id_block;
-  auto id_block = (p_igo8_id_block)header;
+  auto* id_block = (p_igo8_id_block)header;
   uint32_t current_position = 0;
   const char* title = "Title";
   const char* description = "Description";

@@ -165,7 +165,7 @@ void DuplicateFilter::process()
   qsort(htable, ct, sizeof(*htable), compare);
 
   for (i=0; i<ct; i++) {
-    auto waypointp = htable[i].wpt;
+    auto* waypointp = htable[i].wpt;
 
     memset(&dupe, '\0', sizeof(dupe));
 

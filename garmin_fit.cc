@@ -1184,7 +1184,7 @@ GarminFitFormat::fit_collect_waypt(const Waypoint* waypointp)
 
   // Try to find a better course point type than "generic", based on the
   // course point name
-  for (auto& cptm: kCoursePointTypeMapping) {
+  for (const auto& cptm: kCoursePointTypeMapping) {
     if (crpt.shortname.contains(cptm.first, Qt::CaseInsensitive)) {
       crpt.course_point_type = cptm.second;
       break;

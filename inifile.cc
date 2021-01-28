@@ -148,7 +148,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
   }
 }
 
-static const QString
+static QString
 inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QString& key)
 {
   if (inifile == nullptr) {

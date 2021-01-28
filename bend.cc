@@ -52,7 +52,7 @@ void BendFilter::init()
 }
 
 Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
-                                      double long_orig, double lat_orig_adj, double long_orig_adj)
+                                      double long_orig, double lat_orig_adj, double long_orig_adj) const
 {
   double distance = gcdist(lat_orig, long_orig,
                            lat_orig_adj, long_orig_adj);
@@ -77,7 +77,7 @@ Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
 
 int BendFilter::is_small_angle(double lat_orig, double long_orig, double lat_orig_prev,
                                double long_orig_prev, double lat_orig_next,
-                               double long_orig_next)
+                               double long_orig_next) const
 {
   double heading_prev = heading_true_degrees(lat_orig, long_orig,
                         lat_orig_prev, long_orig_prev);

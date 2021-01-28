@@ -74,7 +74,7 @@ private:
     explicit WptRecord(Waypoint* w) : wpt(w) {}
   };
 
-  double gc_distance(double lat1, double lon1, double lat2, double lon2);
+  static double gc_distance(double lat1, double lon1, double lat2, double lon2);
   void position_runqueue(WaypointList* waypt_list, int qtype);
   void position_process_any_route(const route_head* rh, int type);
   void position_process_rte(const route_head* rh);

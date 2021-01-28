@@ -126,7 +126,7 @@ private:
     const Waypoint* wpt{nullptr};
   };
 
-  void free_xte(struct xte* xte_rec);
+  static void free_xte(struct xte* xte_rec);
 
   struct xte_intermed* tmpprev = nullptr;
   int xte_count = 0;

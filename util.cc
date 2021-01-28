@@ -211,11 +211,12 @@ ufopen(const QString& fname, const char* mode)
 /*
  * OS-abstracting wrapper for getting Unicode environment variables.
  */
-QString ugetenv(const char* env_var) {
+QString ugetenv(const char* env_var)
+{
 #ifdef __WIN32__
   // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
   return QString::fromWCharArray(
-      _wgetenv((const wchar_t*) QString(env_var).utf16()));
+           _wgetenv((const wchar_t*) QString(env_var).utf16()));
 #else
   // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
   return QString::fromLocal8Bit(std::getenv(env_var));
@@ -500,8 +501,8 @@ str_match(const char* str, const char* match)
       if (*m == '\0') {
         return 0;  /* incomplete escape sequence */
       }
-    /* pass-through next character */
-    [[fallthrough]];
+      /* pass-through next character */
+      [[fallthrough]];
 
     default:
       if (*m != *s) {
@@ -632,7 +633,7 @@ le_read64(void* dest, const void* src)
   char* cdest = (char*) dest;
   const char* csrc = (const char*) src;
 
-  if constexpr (i_am_little_endian) {
+  if constexpr(i_am_little_endian) {
     memcpy(dest, src, 8);
   } else {
     int i;
@@ -1679,9 +1680,9 @@ QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& att
   return QString();
 }
 
-const QString get_filename(const QString& fname)
+QString get_filename(const QString& fname)
 {
-  return  QFileInfo(fname).fileName();
+  return QFileInfo(fname).fileName();
 }
 
 /* bit manipulation functions */
@@ -1740,7 +1741,7 @@ list_codecs()
   const auto mibs = QTextCodec::availableMibs();
   int maxlen = 0;
   for (auto mib : mibs) {
-    auto codec = QTextCodec::codecForMib(mib);
+    auto* codec = QTextCodec::codecForMib(mib);
     if (codec->name().size() > maxlen) {
       maxlen = codec->name().size();
     }
@@ -1748,7 +1749,7 @@ list_codecs()
   info << "Available Codecs:" << endl;
   info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
   for (auto mib : mibs) {
-    auto codec = QTextCodec::codecForMib(mib);
+    auto* codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
     bool first = true;
     const auto aliases = codec->aliases();

@@ -46,7 +46,7 @@ void ReverseRouteFilter::reverse_route_wpt(const Waypoint* waypointp)
 void ReverseRouteFilter::reverse_route_head(const route_head* rte_hd)
 {
   /* Cast away const-ness */
-  auto rh = const_cast<route_head*>(rte_hd);
+  auto* rh = const_cast<route_head*>(rte_hd);
   std::reverse(rh->waypoint_list.begin(), rh->waypoint_list.end());
   prev_new_trkseg = 1;
 }

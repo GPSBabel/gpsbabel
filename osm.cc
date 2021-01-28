@@ -415,7 +415,7 @@ OsmFormat::osm_strip_html(const char* str)
 }
 
 QString
-OsmFormat::osm_strip_html(const QString& str) const
+OsmFormat::osm_strip_html(const QString& str)
 {
   char* r = osm_strip_html(CSTR(str));
   QString rv(r);

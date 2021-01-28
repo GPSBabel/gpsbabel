@@ -178,7 +178,7 @@ private:
   bool need_time{};		/* initialized within trackfilter_init */
 
   int trackfilter_opt_count();
-  qint64 trackfilter_parse_time_opt(const char* arg);
+  static qint64 trackfilter_parse_time_opt(const char* arg);
   static bool trackfilter_init_sort_cb(const route_head* ha, const route_head* hb);
   static bool trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb);
   fix_type trackfilter_parse_fix(int* nsats);
@@ -202,7 +202,7 @@ private:
 
   void trackfilter_synth();
 
-  QDateTime trackfilter_range_check(const char* timestr);
+  static QDateTime trackfilter_range_check(const char* timestr);
   void trackfilter_range();
 
   void trackfilter_seg2trk();
@@ -215,9 +215,9 @@ private:
     bool   force{false};
   };
 
-  faketime_t trackfilter_faketime_check(const char* timestr);
+  static faketime_t trackfilter_faketime_check(const char* timestr);
   void trackfilter_faketime();             /* returns number of track points left after filtering */
-  bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
+  static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
 
   void trackfilter_segment_head(const route_head* rte);
 

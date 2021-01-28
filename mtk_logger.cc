@@ -303,7 +303,7 @@ static void dbg(int l, const char* msg, ...)
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static const QString GetTempName(bool backup)
+static QString GetTempName(bool backup)
 {
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";

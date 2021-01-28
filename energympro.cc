@@ -89,7 +89,7 @@ EnergymproFormat::read_point(route_head* gpsbabel_route, gpsbabel::DateTime& gps
   // convert to millisecs
   gpsDateTime = gpsDateTime.addMSecs(point.IntervalTime*100);
 
-  auto waypt = new Waypoint;
+  auto* waypt = new Waypoint;
   waypt->latitude = (point.Latitude / 1000000.0);
   waypt->longitude = (point.Longitude / 1000000.0);
   waypt->altitude = point.Altitude;

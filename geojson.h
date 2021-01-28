@@ -71,7 +71,7 @@ private:
 
   void geojson_waypt_pr(const Waypoint* waypoint) const;
   static Waypoint* waypoint_from_coordinates(const QJsonArray& coordinates);
-  void routes_from_polygon_coordinates(const QJsonArray& polygon);
+  static void routes_from_polygon_coordinates(const QJsonArray& polygon);
   void geojson_track_hdr(const route_head* track);
   void geojson_track_disp(const Waypoint* trackpoint) const;
   void geojson_track_tlr(const route_head* unused);

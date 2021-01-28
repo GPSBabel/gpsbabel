@@ -194,17 +194,23 @@ XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 
 // Remove outer quotes.
 // Should probably be in csv_util.
-QString XcsvStyle::dequote(const QString& in) {
+QString XcsvStyle::dequote(const QString& in)
+{
   QString r = in.simplified();
-  if (r.startsWith("\"")) r = r.mid(1);
-  if (r.endsWith("\"")) r.chop(1);
+  if (r.startsWith("\"")) {
+    r = r.mid(1);
+  }
+  if (r.endsWith("\"")) {
+    r.chop(1);
+  }
   return r;
 }
 
-void XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output) {
+void XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output)
+{
   if (fmp.key.isEmpty()) {
     fatal(FatalMsg() << MYNAME << ": xcsv style is missing" <<
-            (is_output ? "output" : "input") << "field type.");
+          (is_output ? "output" : "input") << "field type.");
   }
   if (fmp.val.isNull()) {
     fatal(FatalMsg() << MYNAME << ": xcsv style" << fmp.key.constData() << "is missing default.");
@@ -351,8 +357,8 @@ XcsvFormat::writehms(const char* format, time_t t, int gmt)
   }
 
   return QString::asprintf(format,
-                            stmp->tm_hour, stmp->tm_min, stmp->tm_sec,
-                            (stmp->tm_hour >= 12 ? "PM" : "AM"));
+                           stmp->tm_hour, stmp->tm_min, stmp->tm_sec,
+                           (stmp->tm_hour >= 12 ? "PM" : "AM"));
 }
 
 QString
@@ -383,9 +389,9 @@ XcsvFormat::gmsd_init(Waypoint* wpt)
 /* xcsv_parse_val() - parse incoming data into the waypt structure.          */
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
-void 
+void
 XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp,
-               xcsv_parse_data* parse_data, const int line_no)
+                           xcsv_parse_data* parse_data, const int line_no)
 {
   const char* enclosure = "";
   geocache_data* gc_data = nullptr;
@@ -440,7 +446,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->icon_descr = value.trimmed();
     break;
 
-    /* LATITUDE CONVERSIONS**************************************************/
+  /* LATITUDE CONVERSIONS**************************************************/
   case XcsvStyle::XT_LAT_DECIMAL:
     /* latitude as a pure decimal value */
     wpt->latitude = atof(s);
@@ -463,8 +469,8 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_LAT_NMEA:
     wpt->latitude = ddmm2degrees(atof(s));
     break;
-    // XT_LAT_10E is handled outside the switch.
-    /* LONGITUDE CONVERSIONS ***********************************************/
+  // XT_LAT_10E is handled outside the switch.
+  /* LONGITUDE CONVERSIONS ***********************************************/
   case XcsvStyle::XT_LON_DECIMAL:
     /* longitude as a pure decimal value */
     wpt->longitude = atof(s);
@@ -487,12 +493,12 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_LON_NMEA:
     wpt->longitude = ddmm2degrees(atof(s));
     break;
-    // case XcsvStyle::XT_LON_10E is handled outside the switch.
-    /* LAT AND LON CONVERSIONS ********************************************/
+  // case XcsvStyle::XT_LON_10E is handled outside the switch.
+  /* LAT AND LON CONVERSIONS ********************************************/
   case XcsvStyle::XT_LATLON_HUMAN_READABLE:
     human_to_dec(s, &wpt->latitude, &wpt->longitude, 0);
     break;
-    /* DIRECTIONS **********************************************************/
+  /* DIRECTIONS **********************************************************/
   case XcsvStyle::XT_LAT_DIR:
     /* latitude N/S. */
     if (*s == 'n' || *s == 'N') {
@@ -506,14 +512,14 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_LON_DIR:
     /* longitude E/W. */
     if (*s == 'e' || *s == 'E') {
-      parse_data->lon_dir_positive = true; 
+      parse_data->lon_dir_positive = true;
     } else if (*s == 'w' || *s == 'W') {
       parse_data->lon_dir_positive = false;
     } else {
       warning("parse of string '%s' on line number %d as LON_DIR failed.  Expected 'e', 'E', 'w' or 'W'.\n", s, line_no);
     }
     break;
-    /* SPECIAL COORDINATES/GRID */
+  /* SPECIAL COORDINATES/GRID */
   case XcsvStyle::XT_MAP_EN_BNG:
     parse_coordinates(s, DATUM_OSGB36, grid_bng,
                       &wpt->latitude, &wpt->longitude, MYNAME);
@@ -550,7 +556,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   break;
   /* ALTITUDE CONVERSIONS ************************************************/
   case XcsvStyle::XT_ALT_FEET: {
-    char *endptr;
+    char* endptr;
     double val = strtod(s, &endptr);
     if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
@@ -563,7 +569,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_ALT_METERS: {
-    char *endptr;
+    char* endptr;
     double val = strtod(s, &endptr);
     if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
@@ -576,7 +582,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
 
-    /* PATH CONVERSIONS ************************************************/
+  /* PATH CONVERSIONS ************************************************/
   case XcsvStyle::XT_PATH_SPEED:
     WAYPT_SET(wpt, speed, atof(s));
     break;
@@ -593,7 +599,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     WAYPT_SET(wpt, course, atof(s));
     break;
 
-    /* TIME CONVERSIONS ***************************************************/
+  /* TIME CONVERSIONS ***************************************************/
   case XcsvStyle::XT_EXCEL_TIME:
     /* Time as Excel Time  */
     wpt->SetCreationTime(excel_to_timet(atof(s)));
@@ -630,8 +636,8 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 1));
     }
     break;
-    /* Useful when time and date are in separate fields
-    	GMT / Local offset is handled by the two cases above */
+  /* Useful when time and date are in separate fields
+  	GMT / Local offset is handled by the two cases above */
   case XcsvStyle::XT_HMSG_TIME:
   case XcsvStyle::XT_HMSL_TIME:
     wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
@@ -650,7 +656,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->AllocGCData()->last_found = yyyymmdd_to_time(s);
     break;
 
-    /* GEOCACHING STUFF ***************************************************/
+  /* GEOCACHING STUFF ***************************************************/
   case XcsvStyle::XT_GEOCACHE_DIFF:
     /* Geocache Difficulty as an int */
     wpt->AllocGCData()->diff = atof(s) * 10;
@@ -693,7 +699,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
     break;
 
-    /* GPS STUFF *******************************************************/
+  /* GPS STUFF *******************************************************/
   case XcsvStyle::XT_GPS_HDOP:
     wpt->hdop = atof(s);
     break;
@@ -720,7 +726,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       }
     }
     break;
-    /* Tracks and routes *********************************************/
+  /* Tracks and routes *********************************************/
   case XcsvStyle::XT_ROUTE_NAME:
     parse_data->rte_name = csv_stringtrim(s, enclosure);
     break;
@@ -731,7 +737,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     parse_data->trk_name = csv_stringtrim(s, enclosure);
     break;
 
-    /* OTHER STUFF ***************************************************/
+  /* OTHER STUFF ***************************************************/
   case XcsvStyle::XT_PATH_DISTANCE_METERS:
     wpt->odometer_distance = atof(s);
     break;
@@ -756,7 +762,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_TEMPERATURE_F:
     wpt->temperature = (FAHRENHEIT_TO_CELSIUS(atof(s)));
     break;
-    /* GMSD ****************************************************************/
+  /* GMSD ****************************************************************/
   case XcsvStyle::XT_COUNTRY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_country(gmsd, csv_stringtrim(value, enclosure, 0));
@@ -826,7 +832,7 @@ XcsvFormat::read()
 
   while (true) {
     QString buff = xcsv_file->stream.readLine();
-    if (buff.isNull()) { 
+    if (buff.isNull()) {
       break;
     }
     linecount++;
@@ -834,8 +840,8 @@ XcsvFormat::read()
      * is whitespace and we have leading whitespace.
      */
     // This could be hoisted out as a generic rtrim() if we need such a thing.
-    while(buff.size() > 0 && buff.at(buff.size() - 1).isSpace()) {
-      buff.chop(1); 
+    while (buff.size() > 0 && buff.at(buff.size() - 1).isSpace()) {
+      buff.chop(1);
     }
 
     /* skip over x many lines on the top for the prologue... */
@@ -847,18 +853,18 @@ XcsvFormat::read()
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-    for(const auto& ogp : qAsConst(xcsv_style->epilogue)) {
-       if (ogp.startsWith(buff)) {
-         buff.clear();
-         break;
-       }
+    for (const auto& ogp : qAsConst(xcsv_style->epilogue)) {
+      if (ogp.startsWith(buff)) {
+        buff.clear();
+        break;
+      }
     }
     if (!buff.isEmpty()) {
       auto* wpt_tmp = new Waypoint;
       // initialize parse data for accumulation of line results from all fields in this line.
       xcsv_parse_data parse_data;
       const QStringList values = csv_linesplit(buff, xcsv_style->field_delimiter,
-                        xcsv_style->field_encloser, linecount);
+                                 xcsv_style->field_encloser, linecount);
 
       if (xcsv_style->ifields.isEmpty()) {
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", qPrintable(xcsv_style->description)? qPrintable(xcsv_style->description) : "unknown");
@@ -1060,12 +1066,11 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     }
     break;
     case XcsvStyle::XT_SHORTNAME:
-		buff = QString::asprintf(fmp.printfc.constData(),
-                shortname.isEmpty() ? fmp.val.constData() : CSTR(shortname));
+      buff = QString::asprintf(fmp.printfc.constData(),
+                               shortname.isEmpty() ? fmp.val.constData() : CSTR(shortname));
 
       break;
-    case XcsvStyle::XT_ANYNAME:
-      {
+    case XcsvStyle::XT_ANYNAME: {
       QString anyname = wpt->shortname;
       if (anyname.isEmpty()) {
         anyname = mkshort(xcsv_file->mkshort_handle, wpt->description);
@@ -1080,16 +1085,16 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
         anyname = fmp.val.constData();
       }
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(anyname));
-      }
+    }
 
-      break;
+    break;
     case XcsvStyle::XT_DESCRIPTION:
       buff = QString::asprintf(fmp.printfc.constData(),
-                description.isEmpty() ? fmp.val.constData() : CSTR(description));
+                               description.isEmpty() ? fmp.val.constData() : CSTR(description));
       break;
     case XcsvStyle::XT_NOTES:
       buff = QString::asprintf(fmp.printfc.constData(),
-                wpt->notes.isEmpty() ? fmp.val.constData() : CSTR(wpt->notes));
+                               wpt->notes.isEmpty() ? fmp.val.constData() : CSTR(wpt->notes));
       break;
     case XcsvStyle::XT_URL: {
       if (xcsv_urlbase) {
@@ -1107,16 +1112,16 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->HasUrlLink()) {
         UrlLink l = wpt->GetUrlLink();
         buff = QString::asprintf(fmp.printfc.constData(),
-                 !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp.val.constData());
+                                 !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp.val.constData());
       }
       break;
     case XcsvStyle::XT_ICON_DESCR:
       buff = QString::asprintf(fmp.printfc.constData(),
-                (!wpt->icon_descr.isNull()) ?
-                CSTR(wpt->icon_descr) : fmp.val.constData());
+                               (!wpt->icon_descr.isNull()) ?
+                               CSTR(wpt->icon_descr) : fmp.val.constData());
       break;
 
-      /* LATITUDE CONVERSION***********************************************/
+    /* LATITUDE CONVERSION***********************************************/
     case XcsvStyle::XT_LAT_DECIMAL:
       /* latitude as a pure decimal value */
       buff = QString::asprintf(fmp.printfc.constData(), lat);
@@ -1124,18 +1129,18 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_LAT_DECIMALDIR:
       /* latitude as a decimal value with N/S after it */
       buff = QString::asprintf(fmp.printfc.constData(), fabs(lat),
-               lat_dir(lat));
+                               lat_dir(lat));
       break;
     case XcsvStyle::XT_LAT_DIRDECIMAL:
       /* latitude as a decimal value with N/S before it */
       buff = QString::asprintf(fmp.printfc.constData(),
-               lat_dir(lat),
-               fabs(lat));
+                               lat_dir(lat),
+                               fabs(lat));
       break;
     case XcsvStyle::XT_LAT_INT32DEG:
       /* latitude as an integer offset from 0 degrees */
       buff = QString::asprintf(fmp.printfc.constData(),
-                dec_to_intdeg(lat));
+                               dec_to_intdeg(lat));
       break;
     case XcsvStyle::XT_LAT_DDMMDIR:
       /*latitude as (degrees * 100) + decimal minutes, with N/S after it */
@@ -1147,8 +1152,8 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_LAT_NMEA:
       buff = QString::asprintf(fmp.printfc.constData(), degrees2ddmm(lat));
       break;
-      // case XcsvStyle::XT_LAT_10E is handled outside the switch.
-      /* LONGITUDE CONVERSIONS*********************************************/
+    // case XcsvStyle::XT_LAT_10E is handled outside the switch.
+    /* LONGITUDE CONVERSIONS*********************************************/
     case XcsvStyle::XT_LON_DECIMAL:
       /* longitude as a pure decimal value */
       buff = QString::asprintf(fmp.printfc.constData(), lon);
@@ -1156,19 +1161,19 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_LON_DECIMALDIR:
       /* latitude as a decimal value with N/S after it */
       buff = QString::asprintf(fmp.printfc.constData(),
-               fabs(lon),
-               lon_dir(lon));
+                               fabs(lon),
+                               lon_dir(lon));
       break;
     case XcsvStyle::XT_LON_DIRDECIMAL:
       /* latitude as a decimal value with N/S before it */
       buff = QString::asprintf(fmp.printfc.constData(),
-               lon_dir(lon),
-               fabs(lon));
+                               lon_dir(lon),
+                               fabs(lon));
       break;
     case XcsvStyle::XT_LON_INT32DEG:
       /* longitude as an integer offset from 0 degrees */
       buff = QString::asprintf(fmp.printfc.constData(),
-                dec_to_intdeg(lon));
+                               dec_to_intdeg(lon));
       break;
     case XcsvStyle::XT_LON_DDMMDIR:
       /* longitude as (degrees * 100) + decimal minutes, with W/E after it*/
@@ -1179,7 +1184,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_LATLON_HUMAN_READABLE:
       buff = dec_to_human(fmp.printfc.constData(), "SN", lat);
-        buff += " ";
+      buff += " ";
       buff += dec_to_human(fmp.printfc.constData(), "WE", lon);
       // Tidy up leading, trailing, middle whitespace.
       buff = buff.simplified();
@@ -1187,20 +1192,20 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_LON_NMEA:
       buff = QString::asprintf(fmp.printfc.constData(), degrees2ddmm(lon));
       break;
-      // case XcsvStyle::XT_LON_10E is handled outside the switch.
-      /* DIRECTIONS *******************************************************/
+    // case XcsvStyle::XT_LON_10E is handled outside the switch.
+    /* DIRECTIONS *******************************************************/
     case XcsvStyle::XT_LAT_DIR:
       /* latitude N/S as a char */
       buff = QString::asprintf(fmp.printfc.constData(),
-                lat_dir(lat));
+                               lat_dir(lat));
       break;
     case XcsvStyle::XT_LON_DIR:
       /* longitude E/W as a char */
       buff = QString::asprintf(fmp.printfc.constData(),
-                lon_dir(lon));
+                               lon_dir(lon));
       break;
 
-      /* SPECIAL COORDINATES */
+    /* SPECIAL COORDINATES */
     case XcsvStyle::XT_MAP_EN_BNG: {
       char map[3];
       double north, east;
@@ -1249,25 +1254,25 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), utme);
       break;
 
-      /* ALTITUDE CONVERSIONS**********************************************/
+    /* ALTITUDE CONVERSIONS**********************************************/
     case XcsvStyle::XT_ALT_FEET:
       /* altitude in feet as a decimal value */
       if (wpt->altitude != unknown_alt) {
         buff = QString::asprintf(fmp.printfc.constData(),
-                  METERS_TO_FEET(wpt->altitude));
+                                 METERS_TO_FEET(wpt->altitude));
       }
       break;
     case XcsvStyle::XT_ALT_METERS:
       /* altitude in meters as a decimal value */
       if (wpt->altitude != unknown_alt) {
         buff = QString::asprintf(fmp.printfc.constData(),
-                  wpt->altitude);
+                                 wpt->altitude);
       }
       break;
 
-      /* DISTANCE CONVERSIONS**********************************************/
-      /* prefer odometer distance. */
-      /* if not available, use calculated distance from positions */
+    /* DISTANCE CONVERSIONS**********************************************/
+    /* prefer odometer distance. */
+    /* if not available, use calculated distance from positions */
     case XcsvStyle::XT_PATH_DISTANCE_MILES:
       /* path (route/track) distance in miles */
       if (wpt->odometer_distance) {
@@ -1308,15 +1313,15 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), wpt->course);
       break;
 
-      /* HEART RATE CONVERSION***********************************************/
+    /* HEART RATE CONVERSION***********************************************/
     case XcsvStyle::XT_HEART_RATE:
       buff = QString::asprintf(fmp.printfc.constData(), wpt->heartrate);
       break;
-      /* CADENCE CONVERSION***********************************************/
+    /* CADENCE CONVERSION***********************************************/
     case XcsvStyle::XT_CADENCE:
       buff = QString::asprintf(fmp.printfc.constData(), wpt->cadence);
       break;
-      /* POWER CONVERSION***********************************************/
+    /* POWER CONVERSION***********************************************/
     case XcsvStyle::XT_POWER:
       buff = QString::asprintf(fmp.printfc.constData(), wpt->power);
       break;
@@ -1326,7 +1331,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_TEMPERATURE_F:
       buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature));
       break;
-      /* TIME CONVERSIONS**************************************************/
+    /* TIME CONVERSIONS**************************************************/
     case XcsvStyle::XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
       buff = QString::asprintf(fmp.printfc.constData(), timet_to_excel(wpt->GetCreationTime().toTime_t()));
@@ -1363,7 +1368,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
       buff = QString::asprintf(fmp.printfc.constData(), time_to_yyyymmdd(wpt->gc_data->last_found));
       break;
-      /* GEOCACHE STUFF **************************************************/
+    /* GEOCACHE STUFF **************************************************/
     case XcsvStyle::XT_GEOCACHE_DIFF:
       /* Geocache Difficulty as a double */
       buff = QString::asprintf(fmp.printfc.constData(), wpt->gc_data->diff / 10.0);
@@ -1410,7 +1415,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
         buff = QString::asprintf(fmp.printfc.constData(), "Unknown");
       }
       break;
-      /* Tracks and Routes ***********************************************/
+    /* Tracks and Routes ***********************************************/
     case XcsvStyle::XT_TRACK_NEW:
       if (csv_track) {
         if (WAYPT_HAS(wpt,new_trkseg)) {
@@ -1431,7 +1436,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
 
-      /* GPS STUFF *******************************************************/
+    /* GPS STUFF *******************************************************/
     case XcsvStyle::XT_GPS_HDOP:
       buff = QString::asprintf(fmp.printfc.constData(), wpt->hdop);
       field_is_unknown = !wpt->hdop;
@@ -1567,25 +1572,26 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
 
 // return |original| after performing token replacement.
 QString
-XcsvFormat::xcsv_replace_tokens(const QString& original) const {
+XcsvFormat::xcsv_replace_tokens(const QString& original) const
+{
   QString replacement = original;
-    // Don't do potentially expensive replacements if token prefix
-    // isn't present;
-    if (original.contains("__")) {
-      replacement.replace("__FILE__", xcsv_file->fname);
-      replacement.replace("__VERSION__", gpsbabel_testmode()? "" : gpsbabel_version);
+  // Don't do potentially expensive replacements if token prefix
+  // isn't present;
+  if (original.contains("__")) {
+    replacement.replace("__FILE__", xcsv_file->fname);
+    replacement.replace("__VERSION__", gpsbabel_testmode()? "" : gpsbabel_version);
 
-      QDateTime dt = current_time().toUTC();
+    QDateTime dt = current_time().toUTC();
 
-      QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
-      replacement.replace("__DATE_AND_TIME__", dts);
+    QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
+    replacement.replace("__DATE_AND_TIME__", dts);
 
-      QString d = dt.toString("MM/dd/yyyy");
-      replacement.replace("__DATE__", d);
+    QString d = dt.toString("MM/dd/yyyy");
+    replacement.replace("__DATE__", d);
 
-      QString t = dt.toString("hh:mm:ss");
-      replacement.replace("__TIME__", t);
-    }
+    QString t = dt.toString("hh:mm:ss");
+    replacement.replace("__TIME__", t);
+  }
   return replacement;
 }
 
@@ -1601,7 +1607,7 @@ XcsvFormat::write()
 
   /* output prologue lines, if any. */
   for (const auto& line : qAsConst(xcsv_style->prologue)) {
-   QString line_to_write = xcsv_replace_tokens(line);
+    QString line_to_write = xcsv_replace_tokens(line);
     xcsv_file->stream << line_to_write <<  xcsv_style->record_delimiter;
   }
 
@@ -1658,7 +1664,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     style->field_delimiter = cp;
 
     char* p = csv_stringtrim(CSTR(style->field_delimiter), " ", 0);
-      /* field delimiters are always bad characters */
+    /* field delimiters are always bad characters */
     if (0 == strcmp(p, "\\w")) {
       style->badchars = " \n\r";
     } else {
@@ -1668,136 +1674,136 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
   } else
 
-  if (op == "FIELD_ENCLOSER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-    style->field_encloser = cp;
+    if (op == "FIELD_ENCLOSER") {
+      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+      style->field_encloser = cp;
 
-    char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
-    style->badchars += p;
-    xfree(p);
-  } else
+      char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
+      style->badchars += p;
+      xfree(p);
+    } else
 
-  if (op == "RECORD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-    style->record_delimiter = cp;
+      if (op == "RECORD_DELIMITER") {
+        auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+        style->record_delimiter = cp;
 
-      // Record delimiters are always bad characters.
-    auto p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
-    style->badchars += p;
-    xfree(p);
+        // Record delimiters are always bad characters.
+        auto* p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
+        style->badchars += p;
+        xfree(p);
 
-  } else
+      } else
 
-  if (op == "FORMAT_TYPE") {
-    if (tokens[0] == "INTERNAL") {
-      style->type = ff_type_internal;
-    }
-      // this is almost inconceivable...
-    if (tokens[0] == "SERIAL") {
-      style->type = ff_type_serial;
-    }
-  } else
+        if (op == "FORMAT_TYPE") {
+          if (tokens[0] == "INTERNAL") {
+            style->type = ff_type_internal;
+          }
+          // this is almost inconceivable...
+          if (tokens[0] == "SERIAL") {
+            style->type = ff_type_serial;
+          }
+        } else
 
-  if (op == "DESCRIPTION") {
-    style->description = tokens[0];
-  } else
+          if (op == "DESCRIPTION") {
+            style->description = tokens[0];
+          } else
 
-  if (op == "EXTENSION") {
-    style->extension = tokens[0];
-  } else
+            if (op == "EXTENSION") {
+              style->extension = tokens[0];
+            } else
 
-  if (op == "SHORTLEN") {
-    style->shortlen = tokens[0].toInt();
-  } else
+              if (op == "SHORTLEN") {
+                style->shortlen = tokens[0].toInt();
+              } else
 
-  if (op == "SHORTWHITE") {
-    style->whitespace_ok = tokens[0].toInt();
-  } else
+                if (op == "SHORTWHITE") {
+                  style->whitespace_ok = tokens[0].toInt();
+                } else
 
-  if (op == "BADCHARS") {
-    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
-    QString cp = xcsv_get_char_from_constant_table(sp);
-    style->badchars += cp;
-    xfree(sp);
-  } else
+                  if (op == "BADCHARS") {
+                    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
+                    QString cp = xcsv_get_char_from_constant_table(sp);
+                    style->badchars += cp;
+                    xfree(sp);
+                  } else
 
-  if (op =="PROLOGUE") {
-    style->prologue.append(tokenstr);
-  } else
+                    if (op =="PROLOGUE") {
+                      style->prologue.append(tokenstr);
+                    } else
 
-  if (op == "EPILOGUE") {
-    style->epilogue.append(tokenstr);
-  } else
+                      if (op == "EPILOGUE") {
+                        style->epilogue.append(tokenstr);
+                      } else
 
-  if (op == "ENCODING") {
-    style->codecname = tokens[0];
-  } else
+                        if (op == "ENCODING") {
+                          style->codecname = tokens[0];
+                        } else
 
-  if (op == "DATUM") {
-    style->gps_datum_name = tokens[0];
-  } else
+                          if (op == "DATUM") {
+                            style->gps_datum_name = tokens[0];
+                          } else
 
-  if (op == "DATATYPE") {
-    QString p = tokens[0].toUpper();
-    if (p == "TRACK") {
-      style->datatype = trkdata;
-    } else if (p == "ROUTE") {
-      style->datatype = rtedata;
-    } else if (p == "WAYPOINT") {
-      style->datatype = wptdata;
-    } else {
-      fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
-    }
-  } else
+                            if (op == "DATATYPE") {
+                              QString p = tokens[0].toUpper();
+                              if (p == "TRACK") {
+                                style->datatype = trkdata;
+                              } else if (p == "ROUTE") {
+                                style->datatype = rtedata;
+                              } else if (p == "WAYPOINT") {
+                                style->datatype = wptdata;
+                              } else {
+                                fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
+                              }
+                            } else
 
-  if (op == "IFIELD") {
-    if (tokens.size() < 3) {
-      fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
-    }
+                              if (op == "IFIELD") {
+                                if (tokens.size() < 3) {
+                                  fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
+                                }
 
-    // The key ("LAT_DIR") should never contain quotes.
+                                // The key ("LAT_DIR") should never contain quotes.
 
-    const QString key = tokens[0].simplified();
-    const QString val = dequote(tokens[1]);
-    const QString pfc = dequote(tokens[2]);
-    xcsv_ifield_add(style, key, val, pfc);
-  } else
+                                const QString key = tokens[0].simplified();
+                                const QString val = dequote(tokens[1]);
+                                const QString pfc = dequote(tokens[2]);
+                                xcsv_ifield_add(style, key, val, pfc);
+                              } else
 
-      //
-      //  as OFIELDs are implemented as an after-thought, I'll
-      //  leave this as it's own parsing for now.  We could
-      //  change the world on ifield vs ofield format later..
-      //
-  if (op == "OFIELD") {
-    unsigned options = 0;
-      // Note: simplified() has to run after split().
-    if (tokens.size() < 3) {
-      fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
-    }
+                                //
+                                //  as OFIELDs are implemented as an after-thought, I'll
+                                //  leave this as it's own parsing for now.  We could
+                                //  change the world on ifield vs ofield format later..
+                                //
+                                if (op == "OFIELD") {
+                                  unsigned options = 0;
+                                  // Note: simplified() has to run after split().
+                                  if (tokens.size() < 3) {
+                                    fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
+                                  }
 
-    // The key ("LAT_DIR") should never contain quotes.
-    const QString key = tokens[0].simplified();
-    const QString val = dequote(tokens[1]);
-    const QString pfc = dequote(tokens[2]);
+                                  // The key ("LAT_DIR") should never contain quotes.
+                                  const QString key = tokens[0].simplified();
+                                  const QString val = dequote(tokens[1]);
+                                  const QString pfc = dequote(tokens[2]);
 
-    // This is pretty lazy way to parse write options.
-    // They've very rarely used, so we'll go for simple.
-    // We may have split the optional fourth and final field which can contain
-    // option[s], so look at all the remaining tokens.
-    for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
-      QString options_string = tokens[token_idx].simplified();
-      if (options_string.contains("no_delim_before")) {
-        options |= options_nodelim;
-      }
-      if (options_string.contains("absolute")) {
-        options |= options_absolute;
-      }
-      if (options_string.contains("optional")) {
-        options |= options_optional;
-      }
-    }
-    xcsv_ofield_add(style, key, val, pfc, options);
-  }
+                                  // This is pretty lazy way to parse write options.
+                                  // They've very rarely used, so we'll go for simple.
+                                  // We may have split the optional fourth and final field which can contain
+                                  // option[s], so look at all the remaining tokens.
+                                  for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
+                                    QString options_string = tokens[token_idx].simplified();
+                                    if (options_string.contains("no_delim_before")) {
+                                      options |= options_nodelim;
+                                    }
+                                    if (options_string.contains("absolute")) {
+                                      options |= options_absolute;
+                                    }
+                                    if (options_string.contains("optional")) {
+                                      options |= options_optional;
+                                    }
+                                  }
+                                  xcsv_ofield_add(style, key, val, pfc, options);
+                                }
 }
 
 
@@ -1822,7 +1828,7 @@ XcsvStyle::xcsv_read_style(const char* fname)
 {
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
   XcsvStyle style;
-  for  (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
+  for (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
     sbuff = sbuff.trimmed();
     xcsv_parse_style_line(&style, sbuff);
   }

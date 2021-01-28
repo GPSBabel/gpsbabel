@@ -778,7 +778,7 @@ compare_strings(const QString& s1, const QString& s2)
 static writer_data_t*
 wdata_alloc()
 {
-  auto res = new writer_data_t;
+  auto* res = new writer_data_t;
   waypt_init_bounds(&res->bds);
 
   return res;
