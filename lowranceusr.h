@@ -397,8 +397,8 @@ private:
 
   static char same_points(const Waypoint*, const Waypoint*);
   void register_waypt(const Waypoint*) const;
-  const Waypoint* lowranceusr4_find_waypt(uint, int, int) const;
-  const Waypoint* lowranceusr4_find_global_waypt(uint, uint, uint, uint) const;
+  static const Waypoint* lowranceusr4_find_waypt(uint, int, int);
+  static const Waypoint* lowranceusr4_find_global_waypt(uint, uint, uint, uint);
   QString lowranceusr4_readstr(gbfile*, int) const;
   void lowranceusr4_writestr(const QString&, gbfile*, int) const;
   static gpsbabel::DateTime lowranceusr4_get_timestamp(unsigned int, unsigned int);

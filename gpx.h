@@ -188,8 +188,8 @@ private:
 
 
   static void gpx_add_to_global(QStringList& ge, const QString& s);
-  inline QString toString(double d) const;
-  inline QString toString(float f) const;
+  static inline QString toString(double d);
+  static inline QString toString(float f);
   void gpx_reset_short_handle();
   void gpx_write_gdata(const QStringList& ge, const QString& tag) const;
   tag_mapping get_tag(const QString& t) const;

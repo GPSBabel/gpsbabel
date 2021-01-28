@@ -145,7 +145,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
 
 /* TODO: check whether negative lat/lon (West/South) are handled correctly */
 float
-Dg100Format::bin2deg(int val) const
+Dg100Format::bin2deg(int val)
 {
   /* Assume that val prints in decimal digits as [-]dddmmffff
    * ddd:  degrees

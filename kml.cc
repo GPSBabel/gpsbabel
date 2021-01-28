@@ -670,7 +670,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   }
 }
 
-int KmlFormat::kml_altitude_known(const Waypoint* waypoint) const
+int KmlFormat::kml_altitude_known(const Waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
     return 0;

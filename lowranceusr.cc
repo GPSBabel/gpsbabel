@@ -150,7 +150,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt) const
 /* end borrowed from raymarine.c */
 
 const Waypoint*
-LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high) const
+LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
@@ -171,7 +171,7 @@ LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int u
 }
 
 const Waypoint*
-LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4) const
+LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {

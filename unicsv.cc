@@ -170,7 +170,7 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
 // Parse GC-Code / geo cache reference code into int64 (GC-ID)
 // (see also https://api.groundspeak.com/documentation#referencecodes)
 long long
-UnicsvFormat::unicsv_parse_gc_code(const QString& str) const
+UnicsvFormat::unicsv_parse_gc_code(const QString& str)
 {
   if (! str.startsWith("GC")) {
     return 0;
@@ -283,7 +283,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 }
 
 time_t
-UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date) const
+UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
 {
   int hour, min, sec;
   int consumed = 0;
