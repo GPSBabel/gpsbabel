@@ -316,7 +316,7 @@ UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
 }
 
 time_t
-UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date) const
+UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
 {
   return unicsv_parse_time(CSTR(str), msec, date);
 }
