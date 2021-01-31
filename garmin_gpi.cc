@@ -429,7 +429,7 @@ read_poi(const int sz, const int tag)
   (void) len;
   int pos = gbftell(fin);
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->icon_descr = DEFAULT_ICON;
 
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));

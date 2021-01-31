@@ -286,12 +286,12 @@ static double
 exif_read_double(const ExifTag* tag, const int index)
 {
   if (tag->type == EXIF_TYPE_RAT) {
-    uint32_t num = tag->data.at(index * 2).value<uint32_t>();
-    uint32_t den = tag->data.at((index * 2) + 1).value<uint32_t>();
+    auto num = tag->data.at(index * 2).value<uint32_t>();
+    auto den = tag->data.at((index * 2) + 1).value<uint32_t>();
     return (double)num / (double)den;
   } else { // EXIF_TYPE_SRAT
-    int32_t num = tag->data.at(index * 2).value<int32_t>();
-    int32_t den = tag->data.at((index * 2) + 1).value<int32_t>();
+    auto num = tag->data.at(index * 2).value<int32_t>();
+    auto den = tag->data.at((index * 2) + 1).value<int32_t>();
     return (double)num / (double)den;
   }
 }
@@ -1399,8 +1399,8 @@ exif_write_apps()
         if (tag_size == nullptr) {
           fatal(MYNAME ": Invalid image file, in IFD1 both JPEGInterchangeFormat and JPEGInterchangeFormatLength must exist for compressed thumbnails.");
         }
-        uint32_t offset = tag_offset->data.at(0).value<uint32_t>();
-        uint32_t size = tag_size->data.at(0).value<uint32_t>();
+        auto offset = tag_offset->data.at(0).value<uint32_t>();
+        auto size = tag_size->data.at(0).value<uint32_t>();
         image_data.append(QPair<uint32_t, uint32_t>(offset, size));
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
         len += size;
@@ -1411,8 +1411,8 @@ exif_write_apps()
           fatal(MYNAME ": Invalid image file, in IFD1 both StripOffsets and StripByteCounts must exist and have equal counts for uncompressed thumbnails.");
         }
         for (unsigned idx = 0; idx < tag_offset->count; idx++) {
-          uint32_t offset = tag_offset->data.at(idx).value<uint32_t>();
-          uint32_t size = tag_size->data.at(idx).value<uint32_t>();
+          auto offset = tag_offset->data.at(idx).value<uint32_t>();
+          auto size = tag_size->data.at(idx).value<uint32_t>();
           image_data.append(QPair<uint32_t, uint32_t>(offset, size));
           if (tag_offset->type == EXIF_TYPE_SHORT) {
             exif_put_short(IFD1, IFD1_TAG_STRIP_OFFS, idx, len);

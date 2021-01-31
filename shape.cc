@@ -20,7 +20,7 @@
 
  */
 
-#include <assert.h>              // for assert
+#include <cassert>               // for assert
 
 #include <QtCore/QByteArray>     // for QByteArray
 #include <QtCore/QLatin1String>  // for QLatin1String
