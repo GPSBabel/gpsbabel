@@ -41,12 +41,7 @@ public:
     OPToutFile,
   } optionType;
 
-  FormatOption(): name_(QString()), description_(QString()), type_(OPTbool),
-    defaultValue_(QVariant()),
-    minValue_(QVariant()), maxValue_(QVariant()),
-    html_(QString()), value_(QVariant()), isSelected_(false)
-  {
-  }
+  FormatOption() = default;
   FormatOption(const QString& name,
                const QString& description,
                optionType type,
@@ -54,24 +49,22 @@ public:
                QVariant minValue = QVariant(),
                QVariant maxValue = QVariant(),
                QString html = QString()
-              ): name_(name), description_(description), type_(type),
-    defaultValue_(defaultValue), minValue_(minValue), maxValue_(maxValue), html_(html)
+              ):
+    name_(name),
+    description_(description),
+    type_(type),
+    defaultValue_(defaultValue),
+    minValue_(minValue),
+    maxValue_(maxValue),
+    html_(html)
   {
-    value_ = QVariant();
     // Boolean values pay more attention to 'selected' than value.  Make
     // them match here. For non-bools, just make them unchecked.
-    if (type_ == OPTbool && defaultValue.toBool() == true) {
+    if ((type_ == OPTbool) && defaultValue_.toBool()) {
       isSelected_ = true;
     } else {
       isSelected_ = false;
     }
-  }
-
-  FormatOption(const FormatOption& c)
-    : name_(c.name_), description_(c.description_), type_(c.type_),
-      defaultValue_(c.defaultValue_), minValue_(c.minValue_), maxValue_(c.maxValue_), html_(c.html_),
-      value_(c.value_), isSelected_(c.isSelected_)
-  {
   }
 
   QString  getName() const
@@ -125,13 +118,13 @@ public:
 private:
   QString name_;
   QString description_;
-  optionType type_;
+  optionType type_{OPTbool};
   QVariant defaultValue_;
   QVariant minValue_;
   QVariant maxValue_;
   QString  html_;
   QVariant value_;
-  bool     isSelected_;
+  bool isSelected_{false};
 };
 
 
@@ -139,66 +132,38 @@ private:
 class Format
 {
 public:
-  Format():name_(QString()),
-    description_(QString()),
-    readWaypoints_(false),
-    readTracks_(false),
-    readRoutes_(false),
-    writeWaypoints_(false),
-    writeTracks_(false),
-    writeRoutes_(false),
-    fileFormat_(false),
-    deviceFormat_(false),
-    hidden_(false),
-    extensions_(QStringList()),
-    html_(QString()),
-    readUseCount_(0),
-    writeUseCount_(0)
-  {
-    inputOptions_.clear();
-    outputOptions_.clear();
-  }
-
+  Format() = default;
   Format(const QString& name,
          const QString& description,
-         bool readWaypoints, bool readTracks, bool readRoutes,
-         bool writeWaypoints, bool writeTracks, bool writeRoutes,
-         bool fileFormat, bool deviceFormat,
+         bool readWaypoints,
+         bool readTracks,
+         bool readRoutes,
+         bool writeWaypoints,
+         bool writeTracks,
+         bool writeRoutes,
+         bool fileFormat,
+         bool deviceFormat,
          const QStringList& extensions,
          QList<FormatOption>& inputOptions,
          QList<FormatOption>& outputOptions,
          const QString& html):
-    name_(name), description_(description),
-    readWaypoints_(readWaypoints), readTracks_(readTracks), readRoutes_(readRoutes),
-    writeWaypoints_(writeWaypoints), writeTracks_(writeTracks), writeRoutes_(writeRoutes),
-    fileFormat_(fileFormat), deviceFormat_(deviceFormat),
+    name_(name),
+    description_(description),
+    readWaypoints_(readWaypoints),
+    readTracks_(readTracks),
+    readRoutes_(readRoutes),
+    writeWaypoints_(writeWaypoints),
+    writeTracks_(writeTracks),
+    writeRoutes_(writeRoutes),
+    fileFormat_(fileFormat),
+    deviceFormat_(deviceFormat),
     hidden_(false),
     extensions_(extensions),
     inputOptions_(inputOptions),
-    outputOptions_(outputOptions),
-    html_(QString()),
-    readUseCount_(0),
-    writeUseCount_(0)
+    outputOptions_(outputOptions)
   {
     (void)html; // suppress 'unused' warning.
   }
-
-  Format(const Format& c):
-    name_(c.name_), description_(c.description_),
-    readWaypoints_(c.readWaypoints_), readTracks_(c.readTracks_), readRoutes_(c.readRoutes_),
-    writeWaypoints_(c.writeWaypoints_), writeTracks_(c.writeTracks_), writeRoutes_(c.writeRoutes_),
-    fileFormat_(c.fileFormat_), deviceFormat_(c.deviceFormat_),
-    hidden_(false),
-    extensions_(c.extensions_),
-    inputOptions_(c.inputOptions_),
-    outputOptions_(c.outputOptions_),
-    html_(c.html_),
-    readUseCount_(0),
-    writeUseCount_(0)
-  {
-  }
-
-  ~Format() {}
 
   bool isReadWaypoints() const
   {
@@ -335,17 +300,24 @@ public:
   }
 
 private:
-  QString name_, description_;
-  bool readWaypoints_, readTracks_, readRoutes_;
-  bool writeWaypoints_, writeTracks_, writeRoutes_;
-  bool fileFormat_, deviceFormat_, hidden_;
+  QString name_;
+  QString description_;
+  bool readWaypoints_{false};
+  bool readTracks_{false};
+  bool readRoutes_{false};
+  bool writeWaypoints_{false};
+  bool writeTracks_{false};
+  bool writeRoutes_{false};
+  bool fileFormat_{false};
+  bool deviceFormat_{false};
+  bool hidden_{false};
   QStringList extensions_;
   QList<FormatOption>inputOptions_;
   QList<FormatOption>outputOptions_;
   QString html_;
   static QString htmlBase_;
-  int      readUseCount_;
-  int      writeUseCount_;
+  int readUseCount_{0};
+  int writeUseCount_{0};
 
 };
 
