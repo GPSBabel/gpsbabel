@@ -331,13 +331,14 @@ static mmo_data_t* mmo_read_object();
 static void
 mmo_end_of_route(mmo_data_t* data)
 {
-#ifdef MMO_DBG
-  const char* sobj = "CObjRoute";
-#endif
   auto* rte = (route_head*) data->data;
-  char buf[7];
 
   if (mmo_version >= 0x12) {
+#ifdef MMO_DBG
+    const char* sobj = "CObjRoute";
+#endif
+    char buf[7];
+
     mmo_fillbuf(buf, 7, 1);
     DBG((sobj, "route data (since 0x12): "));
 #ifdef MMO_DBG

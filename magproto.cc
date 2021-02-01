@@ -1037,7 +1037,6 @@ mag_rteparse(char* rtemsg)
   char xbuf[100],next_stop[100],abuf[100];
   char* currtemsg;
   static mag_rte_head_t* mag_rte_head;
-  char* p;
 
 #if 0
   sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n",
@@ -1089,7 +1088,7 @@ mag_rteparse(char* rtemsg)
     }
 
     /* trim CRC from waypoint icon string */
-    if ((p = strchr(abuf, '*')) != nullptr) {
+    if (char* p = strchr(abuf, '*'); p != nullptr) {
       *p = '\0';
     }
 
@@ -1469,7 +1468,6 @@ mag_route_trl(const route_head* rte)
   QScopedPointer<char, QScopedPointerPodDeleter> obuff;
   QString buff1;
   QString buff2;
-  QString* pbuff;
   QString icon_token;
 
   /* count waypoints for this route */
@@ -1491,6 +1489,7 @@ mag_route_trl(const route_head* rte)
       icon_token = mag_find_token_from_descr(waypointp->icon_descr);
     }
 
+    QString* pbuff;
     if (i == 1) {
       pbuff = &buff1;
     } else {

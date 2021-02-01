@@ -164,17 +164,10 @@ tpg_waypt_pr(const Waypoint* wpt)
 {
   double lon, lat;
   double amt;
-  char tbuf[64];
   char ocount;
   QString shortname;
   QString description;
   int i;
-
-  /* these unknown 4 are probably point properties (color, icon, etc..) */
-  unsigned char unknown4[] = { 0x78, 0x56, 0x34, 0x12 };
-
-  /* these 2 appear to be constant across test files */
-  unsigned char unknown2[] = { 0x01, 0x80 };
 
   /* our personal waypoint counter */
   waypt_out_count++;
@@ -258,7 +251,8 @@ tpg_waypt_pr(const Waypoint* wpt)
   gbfputint16(elev, tpg_file_out);
 
   /* 4 unknown bytes */
-  memset(tbuf, '\0', sizeof(tbuf));
+  /* these unknown 4 are probably point properties (color, icon, etc..) */
+  unsigned char unknown4[] = { 0x78, 0x56, 0x34, 0x12 };
   gbfwrite(unknown4, 1, 4, tpg_file_out);
 
   /* pascal-like description */
@@ -270,6 +264,8 @@ tpg_waypt_pr(const Waypoint* wpt)
     /* last point gets 0x0000 instead of 0x0180 */
     gbfputint16(0, tpg_file_out);
   } else {
+    /* these 2 appear to be constant across test files */
+    unsigned char unknown2[] = { 0x01, 0x80 };
     gbfwrite(unknown2, 1, 2, tpg_file_out);
   }
 }

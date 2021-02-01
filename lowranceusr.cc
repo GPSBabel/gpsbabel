@@ -1832,7 +1832,6 @@ void
 LowranceusrFormat::write()
 {
   QString buf;
-  int len;
 
   setshort_length(mkshort_handle, 15);
 
@@ -1867,7 +1866,7 @@ LowranceusrFormat::write()
     gbfputint32(DataStreamVersion, file_out);
 
     /* file title */
-    if ((len = strlen(opt_title)) == 0) {
+    if (int len = strlen(opt_title); len == 0) {
       buf = QString("GPSBabel generated USR data file");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
@@ -1897,7 +1896,7 @@ LowranceusrFormat::write()
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
-    if ((len = strlen(opt_content_descr)) == 0) {
+    if (int len = strlen(opt_content_descr); len == 0) {
       buf = QString("Waypoints, routes, and trails");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
