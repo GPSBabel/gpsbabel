@@ -193,10 +193,10 @@ static char** get_garmin_mountpoints(void)
   char* p = szTemp;
   char** dlist = (char **) xmalloc(sizeof(*dlist));
 
-  int i = 0;
   dlist[0] = NULL;
 
   if (GetLogicalDriveStringsA(BUFSIZE-1, szTemp)) {
+    int i = 0;
     while (*p) {
       dlist = (char **) xrealloc(dlist, sizeof(*dlist) * (++i + 1));
       //            fprintf(stderr, "Found: %d, %s\n", i, p);
