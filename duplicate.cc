@@ -140,9 +140,9 @@ int DuplicateFilter::compare(const void* a, const void* b)
 
 void DuplicateFilter::process()
 {
-  btree_node* newnode, * btmp, * sup_tree = nullptr;
+  btree_node* btmp = nullptr;
+  btree_node* sup_tree = nullptr;
   btree_node* oldnode = nullptr;
-  unsigned long crc = 0;
   struct {
     char shortname[32];
     char lat[13];
@@ -186,9 +186,9 @@ void DuplicateFilter::process()
 
     }
 
-    crc = get_crc32(&dupe, sizeof(dupe));
+    unsigned long crc = get_crc32(&dupe, sizeof(dupe));
 
-    newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
+    auto* newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
     newnode->data = crc;
     newnode->wpt = waypointp;
 

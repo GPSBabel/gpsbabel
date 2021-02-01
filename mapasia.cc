@@ -210,13 +210,13 @@ static void
 tr7_disp_waypt_cb(const Waypoint* wpt)
 {
   unsigned char buff[TR7_S_SIZE];
-  double speed, course;
 
   memset(buff, 0, sizeof(buff));
 
   le_write32(&buff[TR7_S_LON], (int)(wpt->longitude * 1000000.0));
   le_write32(&buff[TR7_S_LAT], (int)(wpt->latitude * 1000000.0));
 
+  double course;
   if WAYPT_HAS(wpt, course) {
     course = wpt->course;
   } else if (wpt_tmp != nullptr) {
@@ -241,6 +241,7 @@ tr7_disp_waypt_cb(const Waypoint* wpt)
     buff[TR7_S_MIN] = t.minute();
     buff[TR7_S_SEC] = t.second();
 
+    double speed;
     if WAYPT_HAS(wpt, speed) {
       speed = wpt->speed;
     } else if (wpt_tmp != nullptr) {

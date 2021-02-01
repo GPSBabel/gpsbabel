@@ -369,9 +369,8 @@ rw_deinit()
 static int
 waypt_read_cb(int total_ct, GPS_PWay* )
 {
-  static int i;
-
   if (global_opts.verbose_status) {
+    static int i;
     i++;
     waypt_status_disp(total_ct, i);
   }
@@ -872,10 +871,10 @@ sane_GPS_Way_New()
 static int
 waypt_write_cb(GPS_PWay*)
 {
-  static int i;
   int n = waypt_count();
 
   if (global_opts.verbose_status) {
+    static int i;
     i++;
     waypt_status_disp(n, i);
   }
@@ -1028,11 +1027,9 @@ waypoint_prepare()
 static void
 waypoint_write()
 {
-  int32 ret;
-
   int n = waypoint_prepare();
 
-  if ((ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb)) < 0) {
+  if (int32 ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
     fatal(MYNAME ":communication error sending waypoints..\n");
   }
 

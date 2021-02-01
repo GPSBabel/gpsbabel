@@ -167,13 +167,11 @@ inline state_t operator++(state_t& s, int) // postfix
  */
 static void igc_task_rec(const char* rec)
 {
-  static char flight_date[7];
   static unsigned int num_tp, tp_ct;
   static route_head* rte_head;
   static time_t creation;
 
   char task_num[5];
-  char task_desc[MAXRECLEN];
   unsigned int lat_deg, lat_min, lat_frac;
   unsigned int lon_deg, lon_min, lon_frac;
   char lat_hemi[2], lon_hemi[2];
@@ -184,6 +182,8 @@ static void igc_task_rec(const char* rec)
 
   // First task record identifies the task to follow
   if (id == state) {
+    static char flight_date[7];
+    char task_desc[MAXRECLEN];
     task_desc[0] = '\0';
     if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%78[^\r]\r\n",
                &tm.tm_mday, &tm.tm_mon, &tm.tm_year,
@@ -596,7 +596,6 @@ static void wr_header()
   time_t date;
   static const char dflt_str[] = "Unknown";
   const char* str = nullptr;
-  Waypoint* wpt;
 
   get_tracks(&pres_track, &track);
   if (!track && pres_track) {
@@ -624,7 +623,7 @@ static void wr_header()
 // FIXME: This almost certainly introduces a memory leak because str
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
-    if (nullptr != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
+    if (const Waypoint* wpt = find_waypt_by_name("PILOT"); (nullptr != wpt) && !wpt->description.isEmpty()) {
       xfree(str);
       str = xstrdup(CSTRc(wpt->description));
     } else {

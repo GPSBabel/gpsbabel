@@ -917,10 +917,9 @@ bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
 
   waitDlg->show();
   waitDlg->exec();
-  int exitCode = -1;
   bool retStatus = false;
   if (waitDlg->getExitedNormally()) {
-    exitCode = waitDlg->getExitCode();
+    int exitCode = waitDlg->getExitCode();
     if (exitCode == 0) {
       retStatus = true;
     } else  {

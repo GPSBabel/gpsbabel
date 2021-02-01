@@ -79,7 +79,6 @@ static QString optionDate(const QDateTime& dt, bool useLocal)
 //------------------------------------------------------------------------
 QStringList TrackFilterData::makeOptionString()
 {
-  static const char* fixStrings[] = {"none", "pps", "dgpss", "3d", "2d"}; // match with designer!
   QStringList args;
   if (!inUse_) {
     return args;
@@ -87,6 +86,7 @@ QStringList TrackFilterData::makeOptionString()
 
   QString s;
   if (GPSFixes) {
+    static const char* fixStrings[] = {"none", "pps", "dgpss", "3d", "2d"}; // match with designer!
     s += QString(",fix=%1").arg(fixStrings[GPSFixesVal]);
   }
   if (course) {
@@ -201,7 +201,7 @@ QStringList MiscFltFilterData::makeOptionString()
       "rte=wpt",
       "wpt=rte",
       "rte=trk",
-      "trk=wpt",
+      "trk=wpt"
     };
     args << QString("-x");
     QString s= QString("transform,%1").arg(xformStr[transformVal_]);

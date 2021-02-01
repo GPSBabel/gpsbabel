@@ -980,7 +980,6 @@ static void file_read()
 {
   char                buf[512];
   struct read_state   st;
-  int                 fmt;
 
   const char*         tk1_magic     = TK1_MAGIC;
   size_t              tk1_magic_len = strlen(tk1_magic) + 1;
@@ -1016,6 +1015,7 @@ static void file_read()
     db(1, "Got bin file\n");
 
     /* Try to guess the data format */
+    int fmt;
     for (fmt = 0; fmt_version[fmt].reclen != 0; fmt++) {
       size_t reclen = fmt_version[fmt].reclen;
       if ((st.data.used % reclen) == 0 && is_valid(&st.data, fmt)) {
