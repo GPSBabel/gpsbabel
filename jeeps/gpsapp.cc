@@ -385,19 +385,14 @@ carry_on:
 ************************************************************************/
 static void GPS_A001(GPS_PPacket& packet)
 {
-  int32 entries;
-  int32 i;
-  UC* p;
-  US tag;
-  US data;
   US lasta=0;
 
-  entries = packet.n / 3;
-  p = packet.data;
+  int32 entries = packet.n / 3;
+  UC* p = packet.data;
 
-  for (i=0; i<entries; ++i,p+=3) {
-    tag = *p;
-    data = GPS_Util_Get_Short(p+1);
+  for (int32 i=0; i<entries; ++i,p+=3) {
+    US tag = *p;
+    US data = GPS_Util_Get_Short(p+1);
 
     switch (tag) {
       /* Only one type of P[hysical] so far */
@@ -7557,8 +7552,6 @@ static UC Is_Trackpoint_Invalid(GPS_PTrack trk)
 ************************************************************************/
 void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n)
 {
-  int32 i, j;
-
   /* D303/304 marks track segments with two consecutive invalid track
    * points instead of the tnew flag. Create them unless we're at the
    * beginning of a track or there are already invalid track points
@@ -7566,12 +7559,12 @@ void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n)
    * done here because it will change the number of track points.
    */
   if (gps_trk_type == pD303 || gps_trk_type == pD304) {
-    for (i=0; i<*n; ++i) {
+    for (int32 i=0; i<*n; ++i) {
       if ((*trk)[i]->tnew && i>0 && !(*trk)[i]->ishdr && !(*trk)[i-1]->ishdr) {
         /* Create invalid points based on the data from the point
          * marked with tnew and the one before it.
          */
-        for (j=i-1; j<=i; j++) {
+        for (int32 j=i-1; j<=i; ++j) {
           if (!Is_Trackpoint_Invalid((*trk)[j])) {
             GPS_PTrack trkpt = GPS_Track_New();
             *trkpt = *((*trk)[j]);
