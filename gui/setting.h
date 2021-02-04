@@ -31,8 +31,17 @@
 class VarSetting
 {
 public:
-  VarSetting() {}
-  virtual ~VarSetting() {}
+
+  /* Special Member Functions */
+
+  VarSetting() = default;
+  VarSetting(const VarSetting&) = default;
+  VarSetting& operator=(const VarSetting&) = default;
+  VarSetting(VarSetting&&) = default;
+  VarSetting& operator=(VarSetting&&) = default;
+  virtual ~VarSetting() = default;
+
+  /* Member Functions */
 
   virtual void saveSetting(QSettings&) = 0;
   virtual void restoreSetting(QSettings&) = 0;
@@ -43,12 +52,18 @@ public:
 class IntSetting: public VarSetting
 {
 public:
-  IntSetting(const QString& name, int& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+
+  /* Special Member Functions */
+
+  IntSetting(const QString& name, int& var):  name_(name), var_(var) {}
+
+  /* Member Functions */
+
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toInt();
@@ -56,6 +71,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   int& var_;
 };
@@ -64,12 +82,18 @@ private:
 class DoubleSetting: public VarSetting
 {
 public:
-  DoubleSetting(const QString& name, double& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+
+  /* Special Member Functions */
+
+  DoubleSetting(const QString& name, double& var):  name_(name), var_(var) {}
+
+  /* Member Functions */
+
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toDouble();
@@ -77,6 +101,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   double& var_;
 };
@@ -85,12 +112,18 @@ private:
 class StringSetting: public VarSetting
 {
 public:
-  StringSetting(const QString& name, QString& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+
+  /* Special Member Functions */
+
+  StringSetting(const QString& name, QString& var):  name_(name), var_(var) {}
+
+  /* Member Functions */
+
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toString();
@@ -98,6 +131,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   QString& var_;
 };
@@ -106,12 +142,18 @@ private:
 class BoolSetting: public VarSetting
 {
 public:
-  BoolSetting(const QString& name, bool& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+
+  /* Special Member Functions */
+
+  BoolSetting(const QString& name, bool& var):  name_(name), var_(var) {}
+
+  /* Member Functions */
+
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toBool();
@@ -119,6 +161,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   bool& var_;
 };
@@ -127,12 +172,18 @@ private:
 class DateTimeSetting: public VarSetting
 {
 public:
-  DateTimeSetting(const QString& name, QDateTime& var): name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+
+  /* Special Member Functions */
+
+  DateTimeSetting(const QString& name, QDateTime& var): name_(name), var_(var) {}
+
+  /* Member Functions */
+
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toDateTime();
@@ -140,6 +191,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   QDateTime& var_;
 };
@@ -149,36 +203,47 @@ private:
 class SettingGroup
 {
 public:
-  SettingGroup() {}
+
+  /* Special Member Functions */
+
+  SettingGroup() = default;
+  SettingGroup(const SettingGroup&) = default;
+  // copy assignment would need to free memory like dtor.
+  SettingGroup& operator=(const SettingGroup&) = delete;
+  SettingGroup(SettingGroup&&) = default;
+  // move assignment would need to free memory like dtor.
+  SettingGroup& operator=(SettingGroup&&) = delete;
   ~SettingGroup()
   {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      delete settingGroup_[i];
+    for (auto& i : settingGroup_) {
+      delete i;
     }
   }
 
+  /* Member Functions */
+
   void saveSettings(QSettings& st)
   {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      settingGroup_[i]->saveSetting(st);
+    for (auto& i : settingGroup_) {
+      i->saveSetting(st);
     }
   }
   void restoreSettings(QSettings& st)
   {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      settingGroup_[i]->restoreSetting(st);
+    for (auto& i : settingGroup_) {
+      i->restoreSetting(st);
     }
   }
-
   void addVarSetting(VarSetting* vs)
   {
     settingGroup_ << vs;
   }
 
 private:
+
+  /* Data Members */
+
   QList <VarSetting*> settingGroup_;
 };
 
 #endif
-
-

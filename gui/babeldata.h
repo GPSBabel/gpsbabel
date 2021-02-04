@@ -32,62 +32,26 @@
 class BabelData
 {
 public:
-  BabelData():
-    inputType_(fileType_),
-    inputFileFormat_(QString()),
-    inputDeviceFormat_(QString()),
-    inputFileNames_(QStringList()),
-    inputDeviceName_(QString()),
-    inputCharSet_(QString()),
-    xlateWayPts_(true),
-    xlateRoutes_(true),
-    xlateTracks_(true),
-    outputType_(fileType_),
-    outputFileFormat_(QString()),
-    outputDeviceFormat_(QString()),
-    outputFileName_(QString()),
-    outputDeviceName_(QString()),
-    outputCharSet_(QString()),
-    synthShortNames_(false),
-    forceGPSTypes_(false),
-    enableCharSetXform_(false),
-    debugLevel_(-1),
-    inputBrowse_(QString()),
-    outputBrowse_(QString()),
-    previewGmap_(false),
-    upgradeCheckMethod_(0),
-    upgradeCheckTime_(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
-    installationUuid_(QUuid::createUuid().toString()),
-    upgradeCallbacks_(0),
-    upgradeAccept_(0),
-    upgradeDeclines_(0),
-    upgradeErrors_(0),
-    upgradeOffers_(0),
-    runCount_(0),
-    startupVersionCheck_(true),
-    reportStatistics_(true),
-    allowBetaUpgrades_(false),
-    ignoreVersionMismatch_(false),
-    disableDonateDialog_(false),
-    donateSplashed_(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
-  {
-  }
+
+  /* Constants */
+
+  static constexpr int noType_ = -1;
+  static constexpr int fileType_ = 0;
+  static constexpr int deviceType_ = 1;
+
+  /* Member Functions */
 
   void saveSettings(QSettings& st)
   {
-    SettingGroup sg;
-    makeSettingGroup(sg);
-    sg.saveSettings(st);
+    makeSettingGroup().saveSettings(st);
   }
   void restoreSettings(QSettings& st)
   {
-    SettingGroup sg;
-    makeSettingGroup(sg);
-    sg.restoreSettings(st);
+    makeSettingGroup().restoreSettings(st);
   }
-
-  void makeSettingGroup(SettingGroup& sg)
+  SettingGroup makeSettingGroup()
   {
+    SettingGroup sg;
     sg.addVarSetting(new IntSetting("app.inputType", inputType_));
     sg.addVarSetting(new StringSetting("app.inputFileFormat", inputFileFormat_));
     sg.addVarSetting(new StringSetting("app.inputDeviceFormat", inputDeviceFormat_));
@@ -130,55 +94,55 @@ public:
     sg.addVarSetting(new BoolSetting("app.ignoreVersionMismatch", ignoreVersionMismatch_));
     sg.addVarSetting(new BoolSetting("app.disableDonateDialog", disableDonateDialog_));
 
+    return sg;
   }
 
-  static const int noType_;
-  static const int fileType_;
-  static const int deviceType_;
+  /* Data Members */
 
-  int inputType_;
+  int inputType_{fileType_};
   QString inputFileFormat_;
   QString inputDeviceFormat_;
   QStringList inputFileNames_;
   QString inputDeviceName_;
   QString inputCharSet_;
 
-  bool xlateWayPts_;
-  bool xlateRoutes_;
-  bool xlateTracks_;
+  bool xlateWayPts_{true};
+  bool xlateRoutes_{true};
+  bool xlateTracks_{true};
 
-  int outputType_;
+  int outputType_{fileType_};
   QString outputFileFormat_;
   QString outputDeviceFormat_;
   QString outputFileName_;
   QString outputDeviceName_;
   QString outputCharSet_;
 
-  bool synthShortNames_;
-  bool forceGPSTypes_;
-  bool enableCharSetXform_;
-  int  debugLevel_;
+  bool synthShortNames_{false};
+  bool forceGPSTypes_{false};
+  bool enableCharSetXform_{false};
+  int debugLevel_{-1};
 
-  QString inputBrowse_, outputBrowse_;
+  QString inputBrowse_;
+  QString outputBrowse_;
 
-  bool  previewGmap_;
-  int   upgradeCheckMethod_;
-  QDateTime upgradeCheckTime_;
-  QString installationUuid_;
-  int upgradeCallbacks_;
-  int upgradeAccept_;
-  int upgradeDeclines_;
-  int upgradeErrors_;
-  int upgradeOffers_;
-  int runCount_;
+  bool previewGmap_{false};
+  int upgradeCheckMethod_{0};
+  QDateTime upgradeCheckTime_{QDateTime(QDate(2001, 1, 1), QTime(0, 0))};
+  QString installationUuid_{QUuid::createUuid().toString()};
+  int upgradeCallbacks_{0};
+  int upgradeAccept_{0};
+  int upgradeDeclines_{0};
+  int upgradeErrors_{0};
+  int upgradeOffers_{0};
+  int runCount_{0};
 
   // Global preferences.
-  bool startupVersionCheck_;
-  bool reportStatistics_;
-  bool allowBetaUpgrades_;
-  bool ignoreVersionMismatch_;
-  bool disableDonateDialog_;
-  QDateTime donateSplashed_;
+  bool startupVersionCheck_{true};
+  bool reportStatistics_{true};
+  bool allowBetaUpgrades_{false};
+  bool ignoreVersionMismatch_{false};
+  bool disableDonateDialog_{false};
+  QDateTime donateSplashed_{QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0))};
 
 };
 

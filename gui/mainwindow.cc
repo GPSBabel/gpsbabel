@@ -75,11 +75,6 @@
 #include "version_mismatch.h"          // for VersionMismatch
 
 
-
-const int BabelData::noType_ = -1;
-const int BabelData::fileType_ = 0;
-const int BabelData::deviceType_ = 1;
-
 #define FAKE_LANGUAGE_MENU 0
 
 //------------------------------------------------------------------------
