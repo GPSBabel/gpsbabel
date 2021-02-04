@@ -50,10 +50,10 @@ public:
   FormatOption(const QString& name,
                const QString& description,
                optionType type,
-               QVariant defaultValue = QVariant(),
-               QVariant minValue = QVariant(),
-               QVariant maxValue = QVariant(),
-               QString html = QString()
+               const QVariant& defaultValue = QVariant(),
+               const QVariant& minValue = QVariant(),
+               const QVariant& maxValue = QVariant(),
+               const QString& html = QString()
               ):
     name_(name),
     description_(description),
@@ -106,7 +106,7 @@ public:
   {
     return defaultValue_;
   }
-  void setValue(QVariant v)
+  void setValue(const QVariant& v)
   {
     value_ = v;
   }
