@@ -82,7 +82,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   btn->setText(tr("Stop Process"));
   layout->addWidget(buttonBox_);
 
-  connect(process, SIGNAL(error(QProcess::ProcessError)),
+  connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)),
           this,    SLOT(errorX(QProcess::ProcessError)));
   connect(process, SIGNAL(finished(int,QProcess::ExitStatus)),
           this,    SLOT(finishedX(int,QProcess::ExitStatus)));
