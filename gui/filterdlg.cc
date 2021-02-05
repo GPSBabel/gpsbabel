@@ -50,14 +50,14 @@ FilterDialog::FilterDialog(QWidget* parent, AllFiltersData& fd): QDialog(parent)
   addFilterPage(tr("Miscellaneous"),
                 new MiscFltWidget(widgetStack_, fd.miscFltFilterData), &fd.miscFltFilterData.inUse_);
 
-  connect(ui_.filterList, SIGNAL(currentRowChanged(int)),
-          this, SLOT(pageSelectionChanged(int)));
+  connect(ui_.filterList, &QListWidget::currentRowChanged,
+          this, &FilterDialog::pageSelectionChanged);
 
-  connect(ui_.filterList, SIGNAL(itemClicked(QListWidgetItem*)),
-          this, SLOT(itemClickedX(QListWidgetItem*)));
+  connect(ui_.filterList, &QListWidget::itemClicked,
+          this, &FilterDialog::itemClickedX);
 
-  connect(ui_.helpButton, SIGNAL(clicked()), this, SLOT(helpX()));
-  connect(ui_.resetButton, SIGNAL(clicked()), this, SLOT(resetX()));
+  connect(ui_.helpButton, &QAbstractButton::clicked, this, &FilterDialog::helpX);
+  connect(ui_.resetButton, &QAbstractButton::clicked, this, &FilterDialog::resetX);
 
 #if defined (Q_OS_WIN)
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/ok.png"));

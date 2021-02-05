@@ -43,8 +43,8 @@ AdvDlg::AdvDlg(QWidget* parent,
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/ok.png"));
   ui_.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":/images/cancel.png"));
 #endif // Q_OS_WIN
-  connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
-  connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
+  connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &AdvDlg::acceptClicked);
+  connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &AdvDlg::rejectClicked);
 
 #ifdef DISABLE_MAPPREVIEW
   ui_.previewGmap->hide();

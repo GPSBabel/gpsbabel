@@ -111,8 +111,8 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
 
   manager_ = new QNetworkAccessManager;
 
-  connect(manager_, SIGNAL(finished(QNetworkReply*)),
-          this, SLOT(httpRequestFinished(QNetworkReply*)));
+  connect(manager_, &QNetworkAccessManager::finished,
+          this, &UpgradeCheck::httpRequestFinished);
 
   QNetworkRequest request = QNetworkRequest(upgradeUrl_);
 

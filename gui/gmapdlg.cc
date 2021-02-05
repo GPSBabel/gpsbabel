@@ -201,21 +201,21 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   ui_.treeView->header()->hide();
   ui_.treeView->setModel(model_);
   ui_.treeView->setExpandsOnDoubleClick(false);
-  connect(model_, SIGNAL(itemChanged(QStandardItem*)),
-          this,  SLOT(itemChangedX(QStandardItem*)));
-  connect(mapWidget_, SIGNAL(waypointClicked(int)), this, SLOT(waypointClickedX(int)));
-  connect(mapWidget_, SIGNAL(routeClicked(int)), this, SLOT(routeClickedX(int)));
-  connect(mapWidget_, SIGNAL(trackClicked(int)), this, SLOT(trackClickedX(int)));
-  connect(ui_.treeView, SIGNAL(doubleClicked(QModelIndex)),
-          this, SLOT(treeDoubleClicked(QModelIndex)));
-  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(selectionChangedX(QItemSelection,QItemSelection)));
+  connect(model_, &QStandardItemModel::itemChanged,
+          this,  &GMapDialog::itemChangedX);
+  connect(mapWidget_, &Map::waypointClicked, this, &GMapDialog::waypointClickedX);
+  connect(mapWidget_, &Map::routeClicked, this, &GMapDialog::routeClickedX);
+  connect(mapWidget_, &Map::trackClicked, this, &GMapDialog::trackClickedX);
+  connect(ui_.treeView, &QAbstractItemView::doubleClicked,
+          this, &GMapDialog::treeDoubleClicked);
+  connect(ui_.treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &GMapDialog::selectionChangedX);
 
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(ui_.treeView, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(showContextMenu(QPoint)));
+  connect(ui_.treeView, &QWidget::customContextMenuRequested,
+          this, &GMapDialog::showContextMenu);
 
-  connect(ui_.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
+  connect(ui_.copyButton, &QAbstractButton::clicked, this, &GMapDialog::copyButtonClickedX);
 
   ui_.copyButton->hide(); // Hide for now, not working
 }

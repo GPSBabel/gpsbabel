@@ -159,43 +159,43 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
 
-  connect(ui_.inputFileOptBtn,        SIGNAL(clicked()), this, SLOT(inputFileOptBtnClicked()));
-  connect(ui_.inputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(inputDeviceOptBtnClicked()));
-  connect(ui_.inputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseInputFile()));
+  connect(ui_.inputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::inputFileOptBtnClicked);
+  connect(ui_.inputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::inputDeviceOptBtnClicked);
+  connect(ui_.inputFileNameBrowseBtn, &QAbstractButton::clicked, this, &MainWindow::browseInputFile);
 
   ui_.outputFileOptBtn->setAutoExclusive(false);
   ui_.outputDeviceOptBtn->setAutoExclusive(false);
-  connect(ui_.outputFileOptBtn,        SIGNAL(clicked()), this, SLOT(outputFileOptBtnClicked()));
-  connect(ui_.outputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(outputDeviceOptBtnClicked()));
-  connect(ui_.outputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseOutputFile()));
+  connect(ui_.outputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::outputFileOptBtnClicked);
+  connect(ui_.outputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::outputDeviceOptBtnClicked);
+  connect(ui_.outputFileNameBrowseBtn, &QAbstractButton::clicked, this, &MainWindow::browseOutputFile);
 
-  connect(ui_.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
-  connect(ui_.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
-  connect(ui_.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
-  connect(ui_.actionVisit_Website, SIGNAL(triggered()), this, SLOT(visitWebsiteActionX()));
-  connect(ui_.actionMake_a_Donation, SIGNAL(triggered()), this, SLOT(donateActionX()));
-  connect(ui_.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
-  connect(ui_.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
+  connect(ui_.actionQuit, &QAction::triggered, this, &MainWindow::closeActionX);
+  connect(ui_.actionHelp, &QAction::triggered, this, &MainWindow::helpActionX);
+  connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
+  connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
+  connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+  connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+  connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
-  connect(ui_.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
-          this,                 SLOT(inputFormatChanged(int)));
-  connect(ui_.outputFormatCombo, SIGNAL(currentIndexChanged(int)),
-          this,                 SLOT(outputFormatChanged(int)));
-  connect(ui_.inputOptionsBtn,   SIGNAL(clicked()),
-          this,                 SLOT(inputOptionButtonClicked()));
-  connect(ui_.outputOptionsBtn, SIGNAL(clicked()),
-          this,                 SLOT(outputOptionButtonClicked()));
-  connect(ui_.moreOptionButton, SIGNAL(clicked()),
-          this,                 SLOT(moreOptionButtonClicked()));
+  connect(ui_.inputFormatCombo,  qOverload<int>(&QComboBox::currentIndexChanged),
+          this,                 &MainWindow::inputFormatChanged);
+  connect(ui_.outputFormatCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+          this,                 &MainWindow::outputFormatChanged);
+  connect(ui_.inputOptionsBtn,   &QAbstractButton::clicked,
+          this,                 &MainWindow::inputOptionButtonClicked);
+  connect(ui_.outputOptionsBtn, &QAbstractButton::clicked,
+          this,                 &MainWindow::outputOptionButtonClicked);
+  connect(ui_.moreOptionButton, &QAbstractButton::clicked,
+          this,                 &MainWindow::moreOptionButtonClicked);
 
-  connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(applyActionX()));
-  connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
-  connect(ui_.buttonBox, SIGNAL(helpRequested()), this, SLOT(helpActionX()));
+  connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::applyActionX);
+  connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &MainWindow::closeActionX);
+  connect(ui_.buttonBox, &QDialogButtonBox::helpRequested, this, &MainWindow::helpActionX);
 
-  connect(ui_.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
+  connect(ui_.xlateFiltersBtn, &QAbstractButton::clicked, this, &MainWindow::filtersClicked);
 
-  connect(ui_.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
-  connect(ui_.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
+  connect(ui_.inputFileNameText, &QLineEdit::textEdited, this, &MainWindow::inputFileNameEdited);
+  connect(ui_.outputFileNameText, &QLineEdit::textEdited, this, &MainWindow::outputFileNameEdited);
 
 #if defined (Q_OS_WIN)
   // Windows users like the colored buttons.  They look out of place elsewhere.
@@ -1170,8 +1170,8 @@ void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
                 babelData_.previewGmap_, babelData_.debugLevel_);
-  connect(advDlg.formatButton(), SIGNAL(clicked()),
-          this, SLOT(resetFormatDefaults()));
+  connect(advDlg.formatButton(), &QAbstractButton::clicked,
+          this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
 }
 //------------------------------------------------------------------------
