@@ -362,7 +362,10 @@ equals(PWD, $${OUT_PWD}) {
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
 gui.depends = $(TARGET) FORCE
-gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+disable-mappreview {
+  guiconfig = "CONFIG+=disable-mappreview"
+}
+gui.commands += cd gui; $(QMAKE) $${guiconfig} app.pro && $(MAKE)
 QMAKE_EXTRA_TARGETS += gui
 
 unix-gui.depends = gui FORCE

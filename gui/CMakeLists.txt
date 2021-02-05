@@ -31,7 +31,6 @@ endif()
 # hard code webengine instead of webkit for now
 find_package(Qt5 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
 list(APPEND QT_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
-add_definitions(-DHAVE_WEBENGINE)
 
 if(APPLE)
   find_library(IOKIT_LIBRARIES IOKit)
