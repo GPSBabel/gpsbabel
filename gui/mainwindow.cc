@@ -80,8 +80,6 @@ const int BabelData::noType_ = -1;
 const int BabelData::fileType_ = 0;
 const int BabelData::deviceType_ = 1;
 
-#define FAKE_LANGUAGE_MENU 0
-
 //------------------------------------------------------------------------
 QString MainWindow::findBabelVersion()
 {
@@ -224,9 +222,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   loadFormats();
-#if FAKE_LANGUAGE_MENU
-  createLanguageMenu();
-#endif
 
   //--- Restore from registry
   restoreSettings();
@@ -252,48 +247,6 @@ MainWindow::~MainWindow()
   delete upgrade;
 
 }
-//------------------------------------------------------------------------
-// Dynamic language switching courtesy of
-// http://developer.qt.nokia.com/wiki/How_to_create_a_multi_language_application
-// We create the menu entries dynamically, dependant on the existing
-// translations.
-#if FAKE_LANGUAGE_MENU
-void MainWindow::createLanguageMenu(void)
-{
-  QActionGroup* langGroup = new QActionGroup(ui.menuHelp);
-  langGroup->setExclusive(true);
-  connect(langGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotLanguageChanged(QAction*)));
-
-  // format systems language
-  QString defaultLocale = QLocale::system().name();       // e.g. "de_DE"
-  defaultLocale.truncate(defaultLocale.lastIndexOf('_')); // e.g. "de"
-
-  QDir dir(langPath);
-  QStringList fileNames = dir.entryList(QStringList("GPSBabelFE*.qm"));
-
-  for (int i = 0; i < fileNames.size(); ++i) {
-    // get locale extracted by filename
-    QString locale;
-    locale = fileNames[i];                  // "TranslationExample_de.qm"
-    locale.truncate(locale.lastIndexOf('.'));   // "TranslationExample_de"
-    locale.remove(0, locale.indexOf('_') + 1);   // "de"
-
-    QString lang = QLocale::languageToString(QLocale(locale).language());
-
-    QAction* action = new QAction(lang, this);
-    action->setCheckable(true);
-    action->setData(locale);
-
-    ui.menuHelp->addAction(action);
-    langGroup->addAction(action);
-
-    // set default translators and language checked
-    if (defaultLocale == locale) {
-      action->setChecked(true);
-    }
-  }
-}
-#endif //  FAKE_LANGUAGE_MENU
 
 //------------------------------------------------------------------------
 // Called every time, when a menu entry of the language menu is called
