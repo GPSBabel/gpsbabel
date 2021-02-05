@@ -32,11 +32,17 @@ WITH_ZLIB=no|pkgconfig|included*|custom
   custom: build with user supplied zlib. LIBS and INCLUDEPATH may need to be
     set, e.g. LIBS+=... INCLUDEPATH+=...
 
+CONFIG+=disable-mappreview
+  This options disables the map preview feature.  With the feature disabled
+  QtWebEngine and QtWebEngineWdigets are not used. Note that QtWebKit and
+  QtWebKitWidgets are not longer supported.
+
 DOCVERSION=...
   string appended to documentation location for www.gpsbabel.org.  The default
   value is the version string, e.g. "1.7.0".  This is used by the gpsbabel.org
   target, you are unlikely to need it unless you are maintaining
   www.gpsbabel.org.
+
 WEB=DIR
   Path where the documentation will be stored for www.gpsbabel.org.  This is
   used by the gpsbabel.org target, you are unlikely to need it unless you are

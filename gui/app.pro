@@ -18,12 +18,7 @@ QT += core \
 disable-mappreview {
   DEFINES += DISABLE_MAPPREVIEW
 } else {
-  qtHaveModule(webenginewidgets) {
-    QT += webenginewidgets webchannel
-    DEFINES += HAVE_WEBENGINE
-  } else {
-    QT += webkit webkitwidgets 
-  }
+  QT += webenginewidgets webchannel
 }
 
 unix:DESTDIR = objects
