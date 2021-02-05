@@ -528,38 +528,38 @@ void GMapDialog::showContextMenu(const QPoint& pt)
   int j;
   if (model_->indexFromItem(wptItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(tr("Show All Waypoints"), this, SLOT(showAllWaypoints()));
-    menu.addAction(tr("Hide All Waypoints"), this, SLOT(hideAllWaypoints()));
-    menu.addAction(tr("Expand All"), this, SLOT(expandAllWaypoints()));
-    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllWaypoints()));
+    menu.addAction(tr("Show All Waypoints"), this, &GMapDialog::showAllWaypoints);
+    menu.addAction(tr("Hide All Waypoints"), this, &GMapDialog::hideAllWaypoints);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllWaypoints);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllWaypoints);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(rteItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(tr("Show All Routes"), this, SLOT(showAllRoutes()));
-    menu.addAction(tr("Hide All Routes"), this, SLOT(hideAllRoutes()));
-    menu.addAction(tr("Expand All"), this, SLOT(expandAllRoutes()));
-    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllRoutes()));
+    menu.addAction(tr("Show All Routes"), this, &GMapDialog::showAllRoutes);
+    menu.addAction(tr("Hide All Routes"), this, &GMapDialog::hideAllRoutes);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllRoutes);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllRoutes);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(trkItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(tr("Show All Tracks"), this, SLOT(showAllTracks()));
-    menu.addAction(tr("Hide All Tracks"), this, SLOT(hideAllTracks()));
-    menu.addAction(tr("Expand All"), this, SLOT(expandAllTracks()));
-    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllTracks()));
+    menu.addAction(tr("Show All Tracks"), this, &GMapDialog::showAllTracks);
+    menu.addAction(tr("Hide All Tracks"), this, &GMapDialog::hideAllTracks);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllTracks);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllTracks);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = waypointIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(tr("Show Only This Waypoint"), this, SLOT(showOnlyThisWaypoint()));
+    menu.addAction(tr("Show Only This Waypoint"), this, &GMapDialog::showOnlyThisWaypoint);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = trackIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(tr("Show Only This Track"), this, SLOT(showOnlyThisTrack()));
+    menu.addAction(tr("Show Only This Track"), this, &GMapDialog::showOnlyThisTrack);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = routeIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(tr("Show Only This Route"), this, SLOT(showOnlyThisRoute()));
+    menu.addAction(tr("Show Only This Route"), this, &GMapDialog::showOnlyThisRoute);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else {
