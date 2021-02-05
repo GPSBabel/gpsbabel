@@ -39,16 +39,6 @@ public:
 };
 
 //------------------------------------------------------------------------
-class TreeAction: public QAction
-{
-public:
-  TreeAction(const QString& text,
-             QObject* obj, const char* member,  QObject* parent): QAction(text, parent)
-  {
-    connect(this, SIGNAL(triggered()), obj, member);
-  }
-};
-//------------------------------------------------------------------------
 QString GMapDialog::formatLength(double l)
 {
   double metricLength = l;
@@ -538,38 +528,38 @@ void GMapDialog::showContextMenu(const QPoint& pt)
   int j;
   if (model_->indexFromItem(wptItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Waypoints"), this, SLOT(showAllWaypoints()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Waypoints"), this, SLOT(hideAllWaypoints()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllWaypoints()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllWaypoints()),&menu));
+    menu.addAction(tr("Show All Waypoints"), this, SLOT(showAllWaypoints()));
+    menu.addAction(tr("Hide All Waypoints"), this, SLOT(hideAllWaypoints()));
+    menu.addAction(tr("Expand All"), this, SLOT(expandAllWaypoints()));
+    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllWaypoints()));
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(rteItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Routes"), this, SLOT(showAllRoutes()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Routes"), this, SLOT(hideAllRoutes()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllRoutes()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllRoutes()),&menu));
+    menu.addAction(tr("Show All Routes"), this, SLOT(showAllRoutes()));
+    menu.addAction(tr("Hide All Routes"), this, SLOT(hideAllRoutes()));
+    menu.addAction(tr("Expand All"), this, SLOT(expandAllRoutes()));
+    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllRoutes()));
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(trkItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Tracks"), this, SLOT(showAllTracks()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Tracks"), this, SLOT(hideAllTracks()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllTracks()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllTracks()),&menu));
+    menu.addAction(tr("Show All Tracks"), this, SLOT(showAllTracks()));
+    menu.addAction(tr("Hide All Tracks"), this, SLOT(hideAllTracks()));
+    menu.addAction(tr("Expand All"), this, SLOT(expandAllTracks()));
+    menu.addAction(tr("Collapse All"), this, SLOT(collapseAllTracks()));
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = waypointIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Waypoint"), this, SLOT(showOnlyThisWaypoint()), &menu));
+    menu.addAction(tr("Show Only This Waypoint"), this, SLOT(showOnlyThisWaypoint()));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = trackIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Track"), this, SLOT(showOnlyThisTrack()), &menu));
+    menu.addAction(tr("Show Only This Track"), this, SLOT(showOnlyThisTrack()));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = routeIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Route"), this, SLOT(showOnlyThisRoute()), &menu));
+    menu.addAction(tr("Show Only This Route"), this, SLOT(showOnlyThisRoute()));
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else {
