@@ -66,8 +66,8 @@ Map::Map(QWidget* parent,
   stopWatch_.start();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   manager_ = new QNetworkAccessManager(this);
-  connect(this,SIGNAL(loadFinished(bool)),
-          this,SLOT(loadFinishedX(bool)));
+  connect(this,&QWebEngineView::loadFinished,
+          this,&Map::loadFinishedX);
   this->logTime("Start map constructor");
 
   auto* mclicker = new MarkerClicker(this);
@@ -75,8 +75,8 @@ Map::Map(QWidget* parent,
   this->page()->setWebChannel(channel);
   // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
-  connect(mclicker, SIGNAL(markerClicked(int,int)), this, SLOT(markerClicked(int,int)));
-  connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
+  connect(mclicker, &MarkerClicker::markerClicked, this, &Map::markerClicked);
+  connect(mclicker, &MarkerClicker::logTime, this, &Map::logTime);
 
   // We search the following locations:
   // 1. In the file system in the same directory as the executable.

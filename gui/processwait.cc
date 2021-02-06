@@ -82,16 +82,18 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   btn->setText(tr("Stop Process"));
   layout->addWidget(buttonBox_);
 
-  connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)),
-          this,    SLOT(errorX(QProcess::ProcessError)));
-  connect(process, SIGNAL(finished(int,QProcess::ExitStatus)),
-          this,    SLOT(finishedX(int,QProcess::ExitStatus)));
-  connect(process, SIGNAL(readyReadStandardError()),
-          this,    SLOT(readyReadStandardErrorX()));
-  connect(process, SIGNAL(readyReadStandardOutput()),
-          this,    SLOT(readyReadStandardOutputX()));
-  connect(btn,     SIGNAL(clicked()),
-          this,    SLOT(stopClickedX()));
+  connect(process, &QProcess::errorOccurred,
+          this,    &ProcessWaitDialog::errorX);
+// TODO: Qt6 combined the obsolete overloaded signal QProcess::finished(int exitCode)
+// that required using qOverload.
+  connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+          this,    &ProcessWaitDialog::finishedX);
+  connect(process, &QProcess::readyReadStandardError,
+          this,    &ProcessWaitDialog::readyReadStandardErrorX);
+  connect(process, &QProcess::readyReadStandardOutput,
+          this,    &ProcessWaitDialog::readyReadStandardOutputX);
+  connect(btn,     &QAbstractButton::clicked,
+          this,    &ProcessWaitDialog::stopClickedX);
   exitStatus_ = QProcess::CrashExit;  // Assume all errors are crashes for now.
 
   bufferedOut_ = "";
@@ -108,7 +110,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   timer_ = new QTimer(this);
   timer_->setInterval(100);
   timer_->setSingleShot(false);
-  connect(timer_, SIGNAL(timeout()), this, SLOT(timeoutX()));
+  connect(timer_, &QTimer::timeout, this, &ProcessWaitDialog::timeoutX);
   stopCount_ = -1;
   ecode_ = 0;
   timer_->start();
