@@ -84,6 +84,8 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
 
   connect(process, &QProcess::errorOccurred,
           this,    &ProcessWaitDialog::errorX);
+// TODO: Qt6 combined the obsolete overloaded signal QProcess::finished(int exitCode)
+// that required using qOverload.
   connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
           this,    &ProcessWaitDialog::finishedX);
   connect(process, &QProcess::readyReadStandardError,
