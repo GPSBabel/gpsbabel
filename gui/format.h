@@ -31,7 +31,10 @@
 class FormatOption
 {
 public:
-  typedef enum {
+
+  /* Types */
+
+  enum optionType {
     OPTstring,
     OPTbool,
     OPTint,
@@ -39,16 +42,18 @@ public:
     OPTfloat,
     OPTinFile,
     OPToutFile,
-  } optionType;
+  };
+
+  /* Special Member Functions */
 
   FormatOption() = default;
   FormatOption(const QString& name,
                const QString& description,
                optionType type,
-               QVariant defaultValue = QVariant(),
-               QVariant minValue = QVariant(),
-               QVariant maxValue = QVariant(),
-               QString html = QString()
+               const QVariant& defaultValue = QVariant(),
+               const QVariant& minValue = QVariant(),
+               const QVariant& maxValue = QVariant(),
+               const QString& html = QString()
               ):
     name_(name),
     description_(description),
@@ -66,6 +71,8 @@ public:
       isSelected_ = false;
     }
   }
+
+  /* Member Functions */
 
   QString  getName() const
   {
@@ -100,7 +107,7 @@ public:
     return defaultValue_;
   }
 
-  void setValue(QVariant v)
+  void setValue(const QVariant& v)
   {
     value_ = v;
   }
@@ -116,6 +123,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   QString description_;
   optionType type_{OPTbool};
@@ -132,6 +142,9 @@ private:
 class Format
 {
 public:
+
+  /* Special Member Functions */
+
   Format() = default;
   Format(const QString& name,
          const QString& description,
@@ -157,13 +170,15 @@ public:
     writeRoutes_(writeRoutes),
     fileFormat_(fileFormat),
     deviceFormat_(deviceFormat),
-    hidden_(false),
+
     extensions_(extensions),
     inputOptions_(inputOptions),
     outputOptions_(outputOptions)
   {
     (void)html; // suppress 'unused' warning.
   }
+
+  /* Member Functions */
 
   bool isReadWaypoints() const
   {
@@ -300,6 +315,9 @@ public:
   }
 
 private:
+
+  /* Data Members */
+
   QString name_;
   QString description_;
   bool readWaypoints_{false};
