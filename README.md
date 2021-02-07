@@ -15,7 +15,7 @@ Current status of the master branch build is:
 
 Passing is good. We like passing. 
 
-The absolute latest pre-release GPSBabel [macOS](https://github.com/GPSBabel/gpsbabel/releases/tag/Continuous-macOS) and [Windows](https://github.com/GPSBabel/gpsbabel/releases/tag/Continuous-Windows) builds may not have made the front page yet. It takes about an half an hour to run our rigorous [presubmit testing](https://www.gpsbabel.org/quality.html) via [GitHub Actions](https://github.com/GPSBabel/gpsbabel/actions).  The latest [official release](http://www.gpsbabel.org/download.html) is also available.
+The latest official release is available at http://www.gpsbabel.org/download.html.
 
 We are proud of our rating on Codacy: [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6b90fe0b5ad74df58752a680141afc88)](https://www.codacy.com/gh/gpsbabel/gpsbabel/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gpsbabel/gpsbabel&amp;utm_campaign=Badge_Grade)
 
