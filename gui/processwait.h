@@ -44,7 +44,6 @@ class ProcessWaitDialog: public QDialog
 public:
   //
   ProcessWaitDialog(QWidget* parent, QProcess* process_);
-  ~ProcessWaitDialog();
 
   bool getExitedNormally();
   int getExitCode();

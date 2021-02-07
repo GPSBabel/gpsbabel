@@ -119,9 +119,6 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
 }
 
 //------------------------------------------------------------------------
-ProcessWaitDialog::~ProcessWaitDialog()
-= default;
-//------------------------------------------------------------------------
 bool ProcessWaitDialog::getExitedNormally()
 {
   return (errorString_.length() == 0);
