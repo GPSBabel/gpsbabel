@@ -61,10 +61,6 @@ QVariant getOptionValue(QList<FormatOption> opts, int k)
 }
 
 //------------------------------------------------------------------------
-FileDlgManager::~FileDlgManager()
-  = default;
-
-//------------------------------------------------------------------------
 void FileDlgManager::buttonClicked()
 {
   QString str;
