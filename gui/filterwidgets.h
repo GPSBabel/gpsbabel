@@ -302,7 +302,9 @@ protected:
 
 //------------------------------------------------------------------------
 
-class TrackWidget: public FilterWidget
+// quiet clang-analyzer-optin.cplusplus.VirtualCall warnings by declaring
+// TrackWidget final.  We don't intend to inhereit from this class anyway.
+class TrackWidget final: public FilterWidget
 {
   Q_OBJECT
 public:
