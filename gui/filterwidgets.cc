@@ -22,6 +22,11 @@
 
 #include "filterwidgets.h"
 
+#include <QtCore/QChar>            // for QChar
+#include <QtWidgets/QCheckBox>     // for QCheckBox
+#include <QtWidgets/QLabel>        // for QLabel
+#include <QtWidgets/QRadioButton>  // for QRadioButton
+
 
 //------------------------------------------------------------------------
 TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(parent), tfd(tfd)
@@ -63,35 +68,35 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
 
   // Collect the data fields.
-  fopts << new BoolFilterOption(tfd.title,  ui.titleCheck);
-  fopts << new BoolFilterOption(tfd.move,   ui.moveCheck);
-  fopts << new BoolFilterOption(tfd.TZ,     ui.TZCheck);
-  fopts << new BoolFilterOption(tfd.start,  ui.startCheck);
-  fopts << new BoolFilterOption(tfd.stop,   ui.stopCheck);
-  fopts << new BoolFilterOption(tfd.pack,   ui.packCheck);
-  fopts << new BoolFilterOption(tfd.merge,  ui.mergeCheck);
-  fopts << new BoolFilterOption(tfd.splitByDate,  ui.splitDateCheck);
-  fopts << new BoolFilterOption(tfd.splitByTime,  ui.splitTimeCheck);
-  fopts << new BoolFilterOption(tfd.splitByDistance,  ui.splitDistanceCheck);
-  fopts << new BoolFilterOption(tfd.GPSFixes,  ui.GPSFixesCheck);
-  fopts << new BoolFilterOption(tfd.course, ui.courseCheck);
-  fopts << new BoolFilterOption(tfd.speed,  ui.speedCheck);
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.title,  ui.titleCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.move,   ui.moveCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.TZ,     ui.TZCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.start,  ui.startCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.stop,   ui.stopCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.pack,   ui.packCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.merge,  ui.mergeCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.splitByDate,  ui.splitDateCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.splitByTime,  ui.splitTimeCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.splitByDistance,  ui.splitDistanceCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.GPSFixes,  ui.GPSFixesCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.course, ui.courseCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(tfd.speed,  ui.speedCheck));
 
-  fopts << new IntSpinFilterOption(tfd.weeks,  ui.weeksSpin, ui.weeksSpin->minimum(), ui.weeksSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.days,  ui.daysSpin, ui.daysSpin->minimum(), ui.daysSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.hours, ui.hoursSpin, ui.hoursSpin->minimum(), ui.hoursSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.mins,  ui.minsSpin, ui.minsSpin->minimum(), ui.minsSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.secs,  ui.secsSpin, ui.secsSpin->minimum(), ui.secsSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.splitTime,  ui.splitTimeSpin, 0, 1000);
-  fopts << new IntSpinFilterOption(tfd.splitDist,  ui.splitDistSpin, 0, 5280);
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.weeks,  ui.weeksSpin, ui.weeksSpin->minimum(), ui.weeksSpin->maximum()));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.days,  ui.daysSpin, ui.daysSpin->minimum(), ui.daysSpin->maximum()));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.hours, ui.hoursSpin, ui.hoursSpin->minimum(), ui.hoursSpin->maximum()));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.mins,  ui.minsSpin, ui.minsSpin->minimum(), ui.minsSpin->maximum()));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.secs,  ui.secsSpin, ui.secsSpin->minimum(), ui.secsSpin->maximum()));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.splitTime,  ui.splitTimeSpin, 0, 1000));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(tfd.splitDist,  ui.splitDistSpin, 0, 5280));
 
-  fopts << new DateTimeFilterOption(tfd.startTime, ui.startEdit);
-  fopts << new DateTimeFilterOption(tfd.stopTime,  ui.stopEdit);
+  fopts << QSharedPointer<DateTimeFilterOption>(new DateTimeFilterOption(tfd.startTime, ui.startEdit));
+  fopts << QSharedPointer<DateTimeFilterOption>(new DateTimeFilterOption(tfd.stopTime,  ui.stopEdit));
 
-  fopts << new StringFilterOption(tfd.titleString, ui.titleText);
-  fopts << new ComboFilterOption(tfd.GPSFixesVal,  ui.GPSFixesCombo);
-  fopts << new ComboFilterOption(tfd.splitTimeUnit,  ui.splitTimeCombo);
-  fopts << new ComboFilterOption(tfd.splitDistUnit,  ui.splitDistCombo);
+  fopts << QSharedPointer<StringFilterOption>(new StringFilterOption(tfd.titleString, ui.titleText));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(tfd.GPSFixesVal,  ui.GPSFixesCombo));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(tfd.splitTimeUnit,  ui.splitTimeCombo));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(tfd.splitDistUnit,  ui.splitDistCombo));
   setWidgetValues();
   checkChecks();
 }
@@ -171,17 +176,17 @@ WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget
                   QList<QWidget*>() << ui.latLabel << ui.latText << ui.longLabel <<
                   ui.longText << ui.radiusUnitCombo << ui.radiusText);
 
-  fopts << new BoolFilterOption(wfd.duplicates, ui.duplicatesCheck);
-  fopts << new BoolFilterOption(wfd.shortNames, ui.shortNamesCheck);
-  fopts << new BoolFilterOption(wfd.locations, ui.locationsCheck);
-  fopts << new BoolFilterOption(wfd.position, ui.positionCheck);
-  fopts << new BoolFilterOption(wfd.radius, ui.radiusCheck);
-  fopts << new DoubleFilterOption(wfd.positionVal, ui.positionText, 0.0, 1.0E308);
-  fopts << new DoubleFilterOption(wfd.radiusVal, ui.radiusText, 0.0, 1.0E308);
-  fopts << new DoubleFilterOption(wfd.longVal, ui.longText, -180, 180, 7, 'f');
-  fopts << new DoubleFilterOption(wfd.latVal, ui.latText,  -90, 90, 7, 'f');
-  fopts << new ComboFilterOption(wfd.positionUnit, ui.positionUnitCombo);
-  fopts << new ComboFilterOption(wfd.radiusUnit, ui.radiusUnitCombo);
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(wfd.duplicates, ui.duplicatesCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(wfd.shortNames, ui.shortNamesCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(wfd.locations, ui.locationsCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(wfd.position, ui.positionCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(wfd.radius, ui.radiusCheck));
+  fopts << QSharedPointer<DoubleFilterOption>(new DoubleFilterOption(wfd.positionVal, ui.positionText, 0.0, 1.0E308));
+  fopts << QSharedPointer<DoubleFilterOption>(new DoubleFilterOption(wfd.radiusVal, ui.radiusText, 0.0, 1.0E308));
+  fopts << QSharedPointer<DoubleFilterOption>(new DoubleFilterOption(wfd.longVal, ui.longText, -180, 180, 7, 'f'));
+  fopts << QSharedPointer<DoubleFilterOption>(new DoubleFilterOption(wfd.latVal, ui.latText,  -90, 90, 7, 'f'));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(wfd.positionUnit, ui.positionUnitCombo));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(wfd.radiusUnit, ui.radiusUnitCombo));
 
   connect(ui.shortNamesCheck, &QAbstractButton::clicked, this, &WayPtsWidget::shortNamesCkX);
   connect(ui.locationsCheck, &QAbstractButton::clicked, this, &WayPtsWidget::locationsCkX);
@@ -211,9 +216,9 @@ RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(pa
   addCheckEnabler(ui.simplifyCheck,
                   QList<QWidget*>() << ui.limitToLabel << ui.limitToSpin << ui.pointLabel);
 
-  fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
-  fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
-  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000);
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(rfd.simplify_, ui.simplifyCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(rfd.reverse_, ui.reverseCheck));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000));
   setWidgetValues();
   checkChecks();
 }
@@ -235,19 +240,19 @@ MiscFltWidget::MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd): FilterWid
   addCheckEnabler(ui.sortRteCheck, ui.sortRteBy);
   addCheckEnabler(ui.sortTrkCheck, ui.sortTrkBy);
 
-  fopts << new BoolFilterOption(mfd.transform_, ui.transformCheck);
-  fopts << new BoolFilterOption(mfd.swap_, ui.swapCheck);
-  fopts << new BoolFilterOption(mfd.del_, ui.deleteCheck);
-  fopts << new BoolFilterOption(mfd.nukeTracks_, ui.nukeTracks);
-  fopts << new BoolFilterOption(mfd.nukeRoutes_, ui.nukeRoutes);
-  fopts << new BoolFilterOption(mfd.nukeWaypoints_, ui.nukeWaypoints);
-  fopts << new BoolFilterOption(mfd.sortWpt_, ui.sortWptCheck);
-  fopts << new BoolFilterOption(mfd.sortRte_, ui.sortRteCheck);
-  fopts << new BoolFilterOption(mfd.sortTrk_, ui.sortTrkCheck);
-  fopts << new ComboFilterOption(mfd.transformVal_,  ui.transformCombo);
-  fopts << new ComboFilterOption(mfd.sortWptBy_, ui.sortWptBy);
-  fopts << new ComboFilterOption(mfd.sortRteBy_, ui.sortRteBy);
-  fopts << new ComboFilterOption(mfd.sortTrkBy_, ui.sortTrkBy);
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.transform_, ui.transformCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.swap_, ui.swapCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.del_, ui.deleteCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.nukeTracks_, ui.nukeTracks));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.nukeRoutes_, ui.nukeRoutes));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.nukeWaypoints_, ui.nukeWaypoints));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.sortWpt_, ui.sortWptCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.sortRte_, ui.sortRteCheck));
+  fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(mfd.sortTrk_, ui.sortTrkCheck));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(mfd.transformVal_,  ui.transformCombo));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(mfd.sortWptBy_, ui.sortWptBy));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(mfd.sortRteBy_, ui.sortRteBy));
+  fopts << QSharedPointer<ComboFilterOption>(new ComboFilterOption(mfd.sortTrkBy_, ui.sortTrkBy));
 
   setWidgetValues();
   checkChecks();

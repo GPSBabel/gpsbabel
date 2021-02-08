@@ -23,15 +23,28 @@
 #ifndef FILTERWIDGETS_H
 #define FILTERWIDGETS_H
 
+#include <QtCore/QDateTime>           // for QDateTime
+#include <QtCore/QList>               // for QList
+#include <QtCore/QObject>             // for QObject
+#include <QtCore/QSharedPointer>      // for QSharedPointer
+#include <QtCore/QString>             // for QString
+#include <QtGui/QDoubleValidator>     // for QDoubleValidator
+#include <QtWidgets/QAbstractButton>  // for QAbstractButton
+#include <QtWidgets/QComboBox>        // for QComboBox
+#include <QtWidgets/QDateTimeEdit>    // for QDateTimeEdit
+#include <QtWidgets/QLineEdit>        // for QLineEdit
+#include <QtWidgets/QSpinBox>         // for QSpinBox
+#include <QtWidgets/QWidget>          // for QWidget
 
-#include "ui_trackui.h"
-#include "ui_wayptsui.h"
-#include "ui_rttrkui.h"
-#include "ui_miscfltui.h"
-#include "filterdata.h"
+#include <algorithm>                  // for clamp
 
-class CheckEnabler;
-class FilterOption;
+#include "filterdata.h"               // for MiscFltFilterData, RtTrkFilterData, TrackFilterData, WayPtsFilterData
+#include "ui_miscfltui.h"             // for Ui_MiscFltWidget
+#include "ui_rttrkui.h"               // for Ui_RtTrkWidget
+#include "ui_trackui.h"               // for Ui_TrackWidget
+#include "ui_wayptsui.h"              // for Ui_WayPtsWidget
+
+
 //------------------------------------------------------------------------
 class CheckEnabler: public QObject
 {
@@ -93,8 +106,13 @@ private:
 class FilterOption
 {
 public:
-  FilterOption() {}
-  virtual ~FilterOption() {}
+  FilterOption() = default;
+  FilterOption(const FilterOption&) = delete;
+  FilterOption& operator=(const FilterOption&) = delete;
+  FilterOption(FilterOption&&) = delete;
+  FilterOption& operator=(FilterOption&&) = delete;
+  virtual ~FilterOption() = default;
+
   virtual void setWidgetValue() = 0;
   virtual void getWidgetValue() = 0;
 };
@@ -106,11 +124,12 @@ public:
   BoolFilterOption(bool& b, QAbstractButton* ck):  b(b), checkBox(ck)
   {
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     checkBox->setChecked(b);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     b = checkBox->isChecked();
   }
@@ -128,11 +147,12 @@ public:
   {
     sb->setRange(bottom, top);
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     spinBox->setValue(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = spinBox->value();
   }
@@ -149,11 +169,12 @@ public:
   StringFilterOption(QString& val, QLineEdit* le):  val(val), lineEdit(le)
   {
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     lineEdit->setText(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = lineEdit->text();
   }
@@ -177,21 +198,21 @@ public:
   {
     le->setValidator(new QDoubleValidator(minVal, maxVal, decimals, le));
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     lineEdit->setText(QString("%1").arg(val, 0, format, decimals));
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
-    val = lineEdit->text().toDouble();
-    val = qMin(val, maxVal);
-    val = qMax(val, minVal);
+    val = std::clamp(lineEdit->text().toDouble(), minVal, maxVal);
   }
 
 private:
   double& val;
   QLineEdit* lineEdit;
-  double minVal, maxVal;
+  double minVal;
+  double maxVal;
   int decimals;
   char format;
 };
@@ -203,11 +224,12 @@ public:
   DateTimeFilterOption(QDateTime& val, QDateTimeEdit* w):  val(val), w(w)
   {
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     w->setDateTime(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = w->dateTime();
   }
@@ -224,11 +246,12 @@ public:
   ComboFilterOption(int& val, QComboBox* w):  val(val), w(w)
   {
   }
-  void setWidgetValue()
+
+  void setWidgetValue() override
   {
     w->setCurrentIndex(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = w->currentIndex();
   }
@@ -244,12 +267,6 @@ class FilterWidget: public QWidget
 {
 public:
   FilterWidget(QWidget* parent) : QWidget(parent) {}
-  ~FilterWidget()
-  {
-    for (int i=0; i<fopts.size(); i++) {
-      delete fopts[i];
-    }
-  }
 
   void getWidgetValues()
   {
@@ -279,8 +296,8 @@ public:
   }
 
 protected:
-  QList <FilterOption*> fopts;
-  QList <CheckEnabler*> enbls;
+  QList<QSharedPointer<FilterOption>> fopts;
+  QList<CheckEnabler*> enbls;
 };
 
 //------------------------------------------------------------------------
@@ -291,7 +308,7 @@ class TrackWidget: public FilterWidget
 public:
   TrackWidget(QWidget* parent, TrackFilterData& tf);
 
-  virtual void checkChecks()
+  void checkChecks() override
   {
     otherCheckX();
     FilterWidget::checkChecks();
@@ -331,7 +348,7 @@ class RtTrkWidget: public FilterWidget
 {
   Q_OBJECT
 public:
-  RtTrkWidget(QWidget* parent, RtTrkFilterData& wf);
+  RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd);
 
 private:
   Ui_RtTrkWidget ui;
@@ -342,7 +359,7 @@ class MiscFltWidget: public FilterWidget
 {
   Q_OBJECT
 public:
-  MiscFltWidget(QWidget*, MiscFltFilterData&);
+  MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd);
 
 private:
   Ui_MiscFltWidget ui;
