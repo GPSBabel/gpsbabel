@@ -1,7 +1,7 @@
 #ifndef gpsmath_h
 #define gpsmath_h
 
-#include "gpsport.h"
+#include "jeeps/gpsport.h"
 
 #define GPS_PI 3.141592653589
 #define GPS_FLTMIN 1.75494351E-38

@@ -2,7 +2,7 @@
 #define gpsread_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
   time_t GPS_Time_Now();
   int32  GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet);

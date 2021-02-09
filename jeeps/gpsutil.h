@@ -2,7 +2,7 @@
 #define gpsutil_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
   int32  GPS_Util_Little();
 

@@ -224,7 +224,6 @@ macx|linux|openbsd {
   }
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
-  INCLUDEPATH += jeeps
 }
 
 win32 {

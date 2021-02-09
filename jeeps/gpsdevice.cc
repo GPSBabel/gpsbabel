@@ -19,9 +19,9 @@
 
  */
 
-#include "gps.h"
-#include "gpsdevice.h"
-#include "gpsserial.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsserial.h"
 
 extern gps_device_ops gps_serial_ops;
 extern gps_device_ops gps_usb_ops;

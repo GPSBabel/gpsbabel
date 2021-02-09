@@ -19,10 +19,10 @@
 
  */
 
-#include "gps.h"
-#include "gpsdevice.h"
-#include "gpsread.h"
-#include "gpsserial.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsread.h"
+#include "jeeps/gpsserial.h"
 
 gps_device_ops  gps_serial_ops = {
   GPS_Serial_On,
