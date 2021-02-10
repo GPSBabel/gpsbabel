@@ -20,7 +20,7 @@
  */
 
 
-#include "../defs.h"
+#include "defs.h"
 
 #if !HAVE_LIBUSB_1_0
 

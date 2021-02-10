@@ -18,9 +18,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include "garminusb.h"
-#include "gps.h"
-#include "gpsusbint.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsusbint.h"
 #include <cctype>
 
 /*

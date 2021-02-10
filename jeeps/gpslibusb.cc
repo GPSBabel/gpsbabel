@@ -40,11 +40,11 @@
 #    include <libusb-1.0/libusb.h>
 #  endif
 #endif
-#include "../defs.h"
-#include "garminusb.h"
-#include "gpsdevice.h"
-#include "gpsusbcommon.h"
-#include "../garmin_device_xml.h"
+#include "defs.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsusbcommon.h"
+#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 

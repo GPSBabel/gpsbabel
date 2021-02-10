@@ -2,7 +2,7 @@
 #define gpsapp_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
   int32  GPS_Init(const char* port);
 

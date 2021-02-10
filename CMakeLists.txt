@@ -206,7 +206,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
-  include_directories(AFTER jeeps)
   add_compile_options(-O2 -Wall)
 endif()
 

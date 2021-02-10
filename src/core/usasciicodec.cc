@@ -17,7 +17,7 @@
 
  */
 
-#include "usasciicodec.h"
+#include "src/core/usasciicodec.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QChar>
 #include <QtCore/QLatin1Char>

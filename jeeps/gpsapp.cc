@@ -23,7 +23,7 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -36,9 +36,9 @@
  * This violates the layering design, but is needed for device discovery.
  * See the use of gps_is_usb and GPS_Packet_Read_usb below.
  */
-#include "garminusb.h"
-#include "gpsserial.h"
-#include "gpsusbint.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsserial.h"
+#include "jeeps/gpsusbint.h"
 
 time_t gps_save_time;
 double gps_save_lat;

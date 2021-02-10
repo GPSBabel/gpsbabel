@@ -23,7 +23,7 @@
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
 #define COMMON
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <cstdio>
 
 #define GPS_TAGUNK  20
