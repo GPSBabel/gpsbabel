@@ -29,9 +29,6 @@
 #include <optional>               // for optional
 #include <utility>                // for move
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 #if HAVE_LIBZ
 #include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
