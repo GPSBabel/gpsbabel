@@ -19,9 +19,9 @@
 
  */
 
-#include "gps.h"
-#include "garminusb.h"
-#include "gpsusbcommon.h"
+#include "jeeps/gps.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsusbcommon.h"
 
 /*
  * This receive logic is a little convoluted as we go to some efforts here

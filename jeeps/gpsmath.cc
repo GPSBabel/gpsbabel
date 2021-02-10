@@ -21,8 +21,8 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "gps.h"
-#include "gpsdatum.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsdatum.h"
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
