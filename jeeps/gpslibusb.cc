@@ -24,9 +24,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#if HAVE_CONFIG_H
-#include "jeeps/config.h"
-#endif
 #if HAVE_LIBUSB_1_0
 #ifdef LIBUSB_H_INCLUDE
 // Warning: LIBUSB_H_INCLUDE necessarily includes bracket or double quote
