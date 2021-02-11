@@ -1755,11 +1755,6 @@ void KmlFormat::write()
   precision = atol(opt_precision);
 
   writer->writeStartDocument();
-  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
-  // to include just enough whitespace between <xml/> and <gpx...> to pass
-  // diff -w.  It's here for now to shim compatibility with our zillion
-  // reference files, but this blank link can go away some day.
-  writer->writeCharacters(QStringLiteral("\n"));
 
   writer->setAutoFormatting(true);
 
