@@ -101,12 +101,11 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   bool allowBeta)
 {
   currentVersion_ = currentVersionIn;
-  currentVersion_.remove("GPSBabel Version ");
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
     // Not time to check yet.
-    return UpgradeCheck::updateUnknown;
+    return updateUnknown;
   }
 
   manager_ = new QNetworkAccessManager;
@@ -164,7 +163,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
 
   replyId_ = manager_->post(request, args.toUtf8());
 
-  return UpgradeCheck::updateUnknown;
+  return updateUnknown;
 }
 
 QDateTime UpgradeCheck::getUpgradeWarningTime()
