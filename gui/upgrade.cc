@@ -61,18 +61,6 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
 {
 }
 
-UpgradeCheck::~UpgradeCheck()
-{
-  if (replyId_ != nullptr) {
-    replyId_->abort();
-    replyId_ = nullptr;
-  }
-  if (manager_ != nullptr) {
-    delete manager_;
-    manager_ = nullptr;
-  }
-}
-
 bool UpgradeCheck::isTestMode()
 {
   return testing;
@@ -96,11 +84,11 @@ QString UpgradeCheck::getCpuArchitecture()
 }
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
-  const QString& currentVersionIn,
+  const QString& currentVersion,
   const QDateTime& lastCheckTime,
   bool allowBeta)
 {
-  currentVersion_ = currentVersionIn;
+  currentVersion_ = currentVersion;
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
@@ -108,7 +96,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     return updateUnknown;
   }
 
-  manager_ = new QNetworkAccessManager;
+  manager_ = new QNetworkAccessManager(this);
 
   connect(manager_, &QNetworkAccessManager::finished,
           this, &UpgradeCheck::httpRequestFinished);

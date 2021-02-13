@@ -36,7 +36,6 @@ class UpgradeCheck : public QObject
   Q_OBJECT
 public:
   UpgradeCheck(QWidget* parent, QList<Format>& formatList, BabelData& bd);
-  ~UpgradeCheck();
 
   enum updateStatus {
     updateUnknown,
@@ -44,14 +43,12 @@ public:
     updateNeeded,
   };
 
-  UpgradeCheck::updateStatus checkForUpgrade(const QString& babelVersion,
+  UpgradeCheck::updateStatus checkForUpgrade(const QString& currentVersion,
       const QDateTime& lastCheckTime,
       bool allowBeta);
   QDateTime getUpgradeWarningTime();
   UpgradeCheck::updateStatus getStatus();
   static bool isTestMode();
-
-protected:
 
 private:
   QString currentVersion_;
@@ -64,14 +61,13 @@ private:
   updateStatus updateStatus_;
   BabelData& babelData_;
 
-  QString getOsName();
-  QString getOsVersion();
-  QString getCpuArchitecture();
-  bool suggestUpgrade(const QString& from, const QString& to);
+  static QString getOsName();
+  static QString getOsVersion();
+  static QString getCpuArchitecture();
+  static bool suggestUpgrade(const QString& from, const QString& to);
 
 private slots:
   void httpRequestFinished(QNetworkReply* reply);
-
 
 };
 

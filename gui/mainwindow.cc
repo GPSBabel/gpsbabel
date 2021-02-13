@@ -230,7 +230,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
-  upgrade = new UpgradeCheck(parent, formatList_, babelData_);
+  upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
@@ -242,14 +242,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
-}
-
-//------------------------------------------------------------------------
-MainWindow::~MainWindow()
-{
-
-  delete upgrade;
-
 }
 
 //------------------------------------------------------------------------
@@ -1062,8 +1054,6 @@ void MainWindow::closeActionX()
     babelData_.donateSplashed_ = now;
   }
   saveSettings();
-  delete upgrade;
-  upgrade = nullptr;
   qApp->exit(0);
 }
 
