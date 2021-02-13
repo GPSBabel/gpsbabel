@@ -38,11 +38,11 @@ public:
   UpgradeCheck(QWidget* parent, QList<Format>& formatList, BabelData& bd);
   ~UpgradeCheck();
 
-  typedef enum {
+  enum updateStatus {
     updateUnknown,
     updateCurrent,
     updateNeeded,
-  } updateStatus;
+  };
 
   UpgradeCheck::updateStatus checkForUpgrade(const QString& babelVersion,
       const QDateTime& lastCheckTime,
