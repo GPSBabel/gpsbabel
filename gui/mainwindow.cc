@@ -862,21 +862,14 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  auto* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
-  proc->start(QApplication::applicationDirPath() + '/' + name, args);
-  auto* waitDlg = new ProcessWaitDialog(nullptr, proc);
-
-  if (proc->state() == QProcess::NotRunning) {
-    errorString = QString(tr("Process \"%1\" did not start")).arg(name);
-    return false;
-  }
-
-  waitDlg->show();
-  waitDlg->exec();
+  QString program = QApplication::applicationDirPath() + '/' + name;
+  ProcessWaitDialog waitDlg = ProcessWaitDialog(nullptr, program, args);
+  waitDlg.show();
+  waitDlg.exec();
   bool retStatus = false;
-  if (waitDlg->getExitedNormally()) {
-    int exitCode = waitDlg->getExitCode();
+  if (waitDlg.getExitedNormally()) {
+    int exitCode = waitDlg.getExitCode();
     if (exitCode == 0) {
       retStatus = true;
     } else  {
@@ -887,11 +880,9 @@ bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
     }
   } else {
     retStatus = false;
-    errorString = waitDlg->getErrorString();
+    errorString = waitDlg.getErrorString();
   }
-  outputString = waitDlg->getOutputString();
-  delete proc;
-  delete waitDlg;
+  outputString = waitDlg.getOutputString();
   return retStatus;
 }
 

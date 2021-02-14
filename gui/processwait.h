@@ -23,18 +23,21 @@
 #ifndef PROCESSWAIT_H
 #define PROCESSWAIT_H
 
+#include <QtCore/QObject>              // for QObject
+#include <QtCore/QProcess>             // for QProcess, QProcess::ExitStatus, QProcess::ProcessError
+#include <QtCore/QString>              // for QString
+#include <QtCore/QStringList>          // for QStringList
+#include <QtCore/QTimer>               // for QTimer
+#include <QtGui/QCloseEvent>           // for QCloseEvent
+#include <QtWidgets/QDialog>           // for QDialog
+#include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
+#include <QtWidgets/QPlainTextEdit>    // for QPlainTextEdit
+#include <QtWidgets/QProgressBar>      // for QProgressBar
+#include <QtWidgets/QWidget>           // for QWidget
 
-#include <QProcess>
-#include <QDialog>
-#include <vector>
-#include <string>
-using std::string;
-using std::vector;
+#include <string>                      // for string
 
-class QProgressBar;
-class QPlainTextEdit;
-class QDialogButtonBox;
-class QTimer;
+
 //------------------------------------------------------------------------
 class ProcessWaitDialog: public QDialog
 {
@@ -42,45 +45,43 @@ class ProcessWaitDialog: public QDialog
   Q_OBJECT
 
 public:
-  //
-  ProcessWaitDialog(QWidget* parent, QProcess* process_);
+  ProcessWaitDialog(QWidget* parent, const QString& program,
+                    const QStringList& arguments);
 
   bool getExitedNormally();
-  int getExitCode();
+  [[nodiscard]] int getExitCode() const;
   QString getErrorString();
-  QString getOutputString() const
+  QString getOutputString()
   {
     return outputString_;
   }
 
 protected:
-  void closeEvent(QCloseEvent* event);
-  void appendToText(const char*);
-  QString processErrorString(QProcess::ProcessError err);
-
+  void closeEvent(QCloseEvent* event) override;
+  void appendToText(const char* ptr);
+  static QString processErrorString(QProcess::ProcessError err);
 
 private slots:
-  void errorX(QProcess::ProcessError);
-  void finishedX(int exitCode, QProcess::ExitStatus);
+  void errorX(QProcess::ProcessError err);
+  void finishedX(int exitCode, QProcess::ExitStatus es);
   void readyReadStandardErrorX();
   void readyReadStandardOutputX();
   void timeoutX();
   void stopClickedX();
 
 private:
-  vector <int> progressVals_;
-  int          progressIndex_;
-  int          stopCount_;
-  string       bufferedOut_;
+  int progressIndex_;
+  int stopCount_;
+  std::string bufferedOut_;
   QProcess::ExitStatus exitStatus_;
-  int                  ecode_;
-  QProcess*     process_;
+  int ecode_;
+  QProcess* process_;
   QProgressBar* progressBar_;
   QPlainTextEdit* textEdit_;
   QDialogButtonBox* buttonBox_;
-  QTimer*           timer_;
-  QString          errorString_;
-  QString          outputString_;
+  QTimer* timer_;
+  QString errorString_;
+  QString outputString_;
 };
 
 #endif

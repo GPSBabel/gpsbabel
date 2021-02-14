@@ -20,17 +20,19 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QProcess>
-#include <QStringList>
-#include <QPlainTextEdit>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QDialog>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QTimer>
 #include "processwait.h"
-#include "appname.h"
+
+#include <QtCore/QByteArray>          // for QByteArray
+#include <QtCore/QNonConstOverload>   // for QNonConstOverload
+#include <QtCore/Qt>                  // for Horizontal
+#include <QtCore/QtGlobal>            // for QOverload, qOverload
+#include <QtWidgets/QAbstractButton>  // for QAbstractButton
+#include <QtWidgets/QPushButton>      // for QPushButton
+#include <QtWidgets/QVBoxLayout>      // for QVBoxLayout
+
+#include <cstdlib>                    // for abs
+
+#include "appname.h"                  // for appName
 
 
 //------------------------------------------------------------------------
@@ -60,8 +62,9 @@ QString ProcessWaitDialog::processErrorString(QProcess::ProcessError err)
   return QString("");
 }
 //------------------------------------------------------------------------
-ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
-  QDialog(parent), process_(process)
+ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, const QString& program,
+                                     const QStringList& arguments):
+  QDialog(parent)
 {
   this->resize(400, 220);
   this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
@@ -82,15 +85,16 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   btn->setText(tr("Stop Process"));
   layout->addWidget(buttonBox_);
 
-  connect(process, &QProcess::errorOccurred,
+  process_ = new QProcess(this);
+  connect(process_, &QProcess::errorOccurred,
           this,    &ProcessWaitDialog::errorX);
 // TODO: Qt6 combined the obsolete overloaded signal QProcess::finished(int exitCode)
 // that required using qOverload.
-  connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+  connect(process_, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
           this,    &ProcessWaitDialog::finishedX);
-  connect(process, &QProcess::readyReadStandardError,
+  connect(process_, &QProcess::readyReadStandardError,
           this,    &ProcessWaitDialog::readyReadStandardErrorX);
-  connect(process, &QProcess::readyReadStandardOutput,
+  connect(process_, &QProcess::readyReadStandardOutput,
           this,    &ProcessWaitDialog::readyReadStandardOutputX);
   connect(btn,     &QAbstractButton::clicked,
           this,    &ProcessWaitDialog::stopClickedX);
@@ -98,14 +102,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
 
   bufferedOut_ = "";
 
-  //
-  for (int i=0; i<=100; i+=2) {
-    progressVals_.push_back(i);
-  }
-  for (int i=98; i>0; i-=2) {
-    progressVals_.push_back(i);
-  }
-  progressIndex_ = progressVals_.size()/2;
+  progressIndex_= 0;
 
   timer_ = new QTimer(this);
   timer_->setInterval(100);
@@ -116,6 +113,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, QProcess* process):
   timer_->start();
   errorString_ = "";
 
+  process_->start(program, arguments);
 }
 
 //------------------------------------------------------------------------
@@ -131,7 +129,7 @@ QString ProcessWaitDialog::getErrorString()
 }
 
 //------------------------------------------------------------------------
-int ProcessWaitDialog::getExitCode()
+int ProcessWaitDialog::getExitCode() const
 {
   return ecode_;
 }
@@ -145,9 +143,10 @@ void ProcessWaitDialog::stopClickedX()
 //------------------------------------------------------------------------
 void ProcessWaitDialog::timeoutX()
 {
-  progressIndex_++;
-  int idx = progressIndex_ % progressVals_.size();
-  progressBar_->setValue(progressVals_[idx]);
+  ++progressIndex_;
+  progressIndex_ %= 100;
+  int progress = 100 - 2 * std::abs(progressIndex_ - 50);
+  progressBar_->setValue(progress);
   if (stopCount_ >=0) {
     stopCount_++;
   }
