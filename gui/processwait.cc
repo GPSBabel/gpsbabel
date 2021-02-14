@@ -68,6 +68,8 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget* parent, const QString& program,
 {
   this->resize(400, 220);
   this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
+  // turn off Help Button which can appear on windows as a '?'.
+  this->setWindowFlag(Qt::WindowContextHelpButtonHint, false);
   auto* layout = new QVBoxLayout(this);
 
   textEdit_ = new QPlainTextEdit(this);
