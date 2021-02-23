@@ -43,6 +43,8 @@
 #include <QtGui/QDesktopServices>      // for QDesktopServices
 #include <QtGui/QIcon>                 // for QIcon
 #include <QtGui/QImage>                // for QImage
+#include <QtGui/QTextCharFormat>       // for QTextCharFormat
+#include <QtWidgets/QAbstractButton>   // for QAbstractButton
 #include <QtWidgets/QApplication>      // for QApplication, qApp
 #include <QtWidgets/QCheckBox>         // for QCheckBox
 #include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
@@ -70,7 +72,7 @@
 #include "help.h"                      // for ShowHelp
 #include "optionsdlg.h"                // for OptionsDlg
 #include "preferences.h"               // for Preferences
-#include "processwait.h"               // for ProcessWaitDialog
+#include "runmachine.h"                // for RunMachine
 #include "upgrade.h"                   // for UpgradeCheck
 #include "version_mismatch.h"          // for VersionMismatch
 
@@ -862,36 +864,13 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  auto* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
-  proc->start(QApplication::applicationDirPath() + '/' + name, args);
-  auto* waitDlg = new ProcessWaitDialog(nullptr, proc);
+  QString program = QApplication::applicationDirPath() + '/' + name;
+  RunMachine runMachine(this, program, args);
+  int retStatus = runMachine.exec();
 
-  if (proc->state() == QProcess::NotRunning) {
-    errorString = QString(tr("Process \"%1\" did not start")).arg(name);
-    return false;
-  }
-
-  waitDlg->show();
-  waitDlg->exec();
-  bool retStatus = false;
-  if (waitDlg->getExitedNormally()) {
-    int exitCode = waitDlg->getExitCode();
-    if (exitCode == 0) {
-      retStatus = true;
-    } else  {
-      errorString =
-        QString(tr("Process exited unsuccessfully with code %1"))
-        .arg(exitCode);
-      retStatus = false;
-    }
-  } else {
-    retStatus = false;
-    errorString = waitDlg->getErrorString();
-  }
-  outputString = waitDlg->getOutputString();
-  delete proc;
-  delete waitDlg;
+  errorString = runMachine.getErrorString();
+  outputString = runMachine.getOutputString();
   return retStatus;
 }
 
@@ -1038,7 +1017,14 @@ void MainWindow::applyActionX()
     }
 #endif
   } else {
+    QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+    QTextCharFormat errorFormat = defaultFormat;
+    errorFormat.setForeground(Qt::red);
+    errorFormat.setFontItalic(true);
+
+    ui_.outputWindow->setCurrentCharFormat(errorFormat);
     ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
+    ui_.outputWindow->setCurrentCharFormat(defaultFormat);
   }
 }
 

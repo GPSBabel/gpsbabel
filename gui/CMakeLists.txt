@@ -94,6 +94,7 @@ set(SOURCES
   optionsdlg.cc
   preferences.cc
   processwait.cc
+  runmachine.cc
   upgrade.cc
   version_mismatch.cc
 )
@@ -125,6 +126,7 @@ set(HEADERS
   optionsdlg.h
   preferences.h
   processwait.h
+  runmachine.h
   setting.h
   upgrade.h
   version_mismatch.h

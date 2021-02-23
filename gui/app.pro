@@ -92,6 +92,7 @@ SOURCES += mainwindow.cc
 SOURCES += optionsdlg.cc
 SOURCES += preferences.cc
 SOURCES += processwait.cc
+SOURCES += runmachine.cc
 SOURCES += upgrade.cc
 SOURCES += version_mismatch.cc
 unix:!mac {
@@ -124,6 +125,7 @@ HEADERS += mainwindow.h
 HEADERS += optionsdlg.h
 HEADERS += preferences.h
 HEADERS += processwait.h
+HEADERS += runmachine.h
 HEADERS += setting.h
 HEADERS += upgrade.h
 HEADERS += version_mismatch.h
