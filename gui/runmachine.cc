@@ -191,7 +191,7 @@ void RunMachine::execute(SignalId id,
       } else {
         // Console applications on Windows that do not run an event loop, or
         // whose event loop does not handle the WM_CLOSE message, can only be
-        // terminated
+        // terminated by calling kill().
         process_->kill();
       }
       break;
