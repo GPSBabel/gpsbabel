@@ -53,7 +53,6 @@ class MainWindow: public QMainWindow
 
 public:
   MainWindow(QWidget* parent);
-  ~MainWindow();
 
 
 private:
