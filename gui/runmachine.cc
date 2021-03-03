@@ -131,8 +131,17 @@ void RunMachine::execute(SignalId id,
 
   switch (state_) {
   case init:
-    process_->start(program_, args_);
-    state_ = starting;
+    switch (id) {
+    case start:
+      process_->start(program_, args_);
+      state_ = starting;
+      break;
+    default:
+      if constexpr(debug) {
+        qDebug() << "signal" << id << "UNEXPECTED in init state!";
+      }
+      break;
+    };
     break;
 
   case starting:
