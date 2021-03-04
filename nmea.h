@@ -108,7 +108,7 @@ private:
   void nmea_add_wpt(Waypoint* wpt, route_head* trk) const;
   static void nmea_release_wpt(Waypoint* wpt);
   void nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time);
-  QTime nmea_parse_hms(const QString& str);
+  static QTime nmea_parse_hms(const QString& str);
   void gpgll_parse(const QString& ibuf);
   void gpgga_parse(const QString& ibuf);
   void gprmc_parse(const QString& ibuf);
