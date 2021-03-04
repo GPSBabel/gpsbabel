@@ -22,8 +22,6 @@
 #ifndef NMEA_H_INCLUDED_
 #define NMEA_H_INCLUDED_
 
-#include <ctime>              // for time_t
-
 #include <QtCore/QByteArray>  // for QByteArray
 #include <QtCore/QDate>       // for QDate
 #include <QtCore/QDateTime>   // for QDateTime
@@ -158,12 +156,13 @@ private:
   char* opt_gisteq{};
   char* opt_ignorefix{};
 
-  long sleepus{};
+  long sleepms{};
   int getposn{};
   int append_output{};
   bool amod_waypoint{};
 
-  time_t last_time{};
+  QDateTime last_write_time;
+  bool first_trkpt{};
   QTime last_read_time;   /* Last timestamp of GGL, GGA or RMC */
   int datum{};
   bool had_checksum{};

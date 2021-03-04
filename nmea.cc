@@ -221,7 +221,6 @@ NmeaFormat::rd_init(const QString& fname)
 {
   curr_waypt = nullptr;
   last_waypt = nullptr;
-  last_time = -1;
   datum = DATUM_WGS84;
   had_checksum = false;
 
@@ -289,12 +288,12 @@ NmeaFormat::wr_init(const QString& fname)
 
   file_out = gbfopen(fname, append_output ? "a+" : "w+", MYNAME);
 
-  sleepus = -1;
+  sleepms = -1;
   if (opt_sleep) {
     if (*opt_sleep) {
-      sleepus = 1e6 * atof(opt_sleep);
+      sleepms = 1e3 * atof(opt_sleep);
     } else {
-      sleepus = -1;
+      sleepms = -1;
     }
   }
 
@@ -1161,16 +1160,16 @@ NmeaFormat::nmea_wayptpr(const Waypoint* wpt) const
           );
   int cksum = nmea_cksum(obuf);
   gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
-  if (sleepus >= 0) {
+  if (sleepms >= 0) {
     gbfflush(file_out);
-    QThread::usleep(sleepus);
+    QThread::msleep(sleepms);
   }
 }
 
 void
 NmeaFormat::nmea_track_init(const route_head* /*unused*/)
 {
-  last_time = -1;
+  first_trkpt = true;
 }
 
 void
@@ -1182,17 +1181,19 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
 
   if (opt_sleep) {
     gbfflush(file_out);
-    if (last_time > 0) {
-      if (sleepus >= 0) {
-        QThread::usleep(sleepus);
+    if (!first_trkpt) {
+      if (sleepms >= 0) {
+        QThread::msleep(sleepms);
       } else {
-        long wait_time = wpt->GetCreationTime().toTime_t() - last_time;
+        // wait_time will be 0 if either creation time is invalid.
+        long wait_time = last_write_time.msecsTo(wpt->GetCreationTime());
         if (wait_time > 0) {
-          QThread::usleep(wait_time * 1000000);
+          QThread::msleep(wait_time);
         }
       }
     }
-    last_time = wpt->GetCreationTime().toTime_t();
+    last_write_time = wpt->GetCreationTime();
+    first_trkpt = false;
   }
 
   double lat = degrees2ddmm(wpt->latitude);
@@ -1368,6 +1369,6 @@ void NmeaFormat::reset_sirf_to_nmea(int br)
   pkt[27] = br & 0xff;
 
   sirf_write(pkt);
-  QThread::usleep(250 * 1000);
+  QThread::msleep(250);
   gbser_flush(gbser_handle);
 }
