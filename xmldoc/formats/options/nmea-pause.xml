@@ -10,7 +10,7 @@ either a whole number of seconds or a fraction (e.g. 0.5 for a 1/2 second
 pause between trackpoints.)
 </para>
 <para>
-If this option is specified without a value, the time between adjacent 
+If this option is specified with a negative value, the time between adjacent 
 trackpoints will be computed and used for the length of the pause.  That is,
 if your trackpoints are 5 seconds apart, GPSBabel will pause 5 seconds 
 between trackpoints.

@@ -22,15 +22,17 @@
 #ifndef NMEA_H_INCLUDED_
 #define NMEA_H_INCLUDED_
 
-#include <ctime>                   // for gmtime
-
-#include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString, QString::KeepEmptyParts
-#include <QtCore/QVector>          // for QVector
+#include <QtCore/QByteArray>  // for QByteArray
+#include <QtCore/QDate>       // for QDate
+#include <QtCore/QDateTime>   // for QDateTime
+#include <QtCore/QList>       // for QList
+#include <QtCore/QString>     // for QString
+#include <QtCore/QTime>       // for QTime
+#include <QtCore/QVector>     // for QVector
 
 #include "defs.h"
-#include "format.h"
-#include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
+#include "format.h"           // for Format
+#include "gbfile.h"           // for gbfile
 
 
 class NmeaFormat : public Format
@@ -103,19 +105,20 @@ private:
   Waypoint* nmea_new_wpt();
   void nmea_add_wpt(Waypoint* wpt, route_head* trk) const;
   static void nmea_release_wpt(Waypoint* wpt);
-  void nmea_set_waypoint_time(Waypoint* wpt, tm* time, double fsec);
-  void gpgll_parse(char* ibuf);
-  void gpgga_parse(char* ibuf);
-  void gprmc_parse(char* ibuf);
-  void gpwpl_parse(char* ibuf);
-  void gpzda_parse(char* ibuf);
-  void gpgsa_parse(char* ibuf) const;
-  void gpvtg_parse(char* ibuf) const;
+  void nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time);
+  static QTime nmea_parse_hms(const QString& str);
+  void gpgll_parse(const QString& ibuf);
+  void gpgga_parse(const QString& ibuf);
+  void gprmc_parse(const QString& ibuf);
+  void gpwpl_parse(const QString& ibuf);
+  void gpzda_parse(const QString& ibuf);
+  void gpgsa_parse(const QString& ibuf) const;
+  void gpvtg_parse(const QString& ibuf) const;
   static double pcmpt_deg(int d);
-  void pcmpt_parse(char* ibuf);
+  void pcmpt_parse(const char* ibuf);
   void nmea_fix_timestamps(route_head* track);
-  static int notalkerid_strmatch(const char* s1, const char* sentenceFormatterMnemonicCode);
-  void nmea_parse_one_line(char* ibuf);
+  static bool notalkerid_strmatch(const QByteArray& s1, const char* sentenceFormatterMnemonicCode);
+  void nmea_parse_one_line(const QByteArray& ibuf);
   static void safe_print(int cnt, const char* b);
   int hunt_sirf();
   void nmea_wayptpr(const Waypoint* wpt) const;
@@ -130,7 +133,7 @@ private:
   route_head* trk_head{};
   short_handle mkshort_handle{};
   preferred_posn_type posn_type;
-  struct tm tm{};
+  QDateTime prev_datetime;
   Waypoint* curr_waypt{};
   Waypoint* last_waypt{};
   void* gbser_handle{};
@@ -138,7 +141,7 @@ private:
   QList<Waypoint*> pcmpt_head;
 
   int without_date{};	/* number of created trackpoints without a valid date */
-  struct tm opt_tm{};	/* converted "date" parameter */
+  QDate opt_tm;	/* converted "date" parameter */
 
   char* opt_gprmc{};
   char* opt_gpgga{};
@@ -153,18 +156,16 @@ private:
   char* opt_gisteq{};
   char* opt_ignorefix{};
 
-  long sleepus{};
+  long sleepms{};
   int getposn{};
   int append_output{};
   bool amod_waypoint{};
 
-  time_t last_time{};
-  double last_read_time{};   /* Last timestamp of GGA or PRMC */
+  QDateTime last_write_time;
+  bool first_trkpt{};
+  QTime last_read_time;   /* Last timestamp of GGL, GGA or RMC */
   int datum{};
-  int had_checksum{};
-
-  Waypoint* nmea_rd_posn(posn_status*);
-  void nmea_rd_posn_init(const QString& fname);
+  bool had_checksum{};
 
   int wpt_not_added_yet{};
 
