@@ -132,7 +132,7 @@ static void data_read() {
 
     switch (ibuf[0]) {
       case 'W': {
-        QStringList tokens =
+        const QStringList tokens =
             line.split(sep, QString::KeepEmptyParts);
         if (tokens.size() < 6) {
           fatal(MYNAME
@@ -232,7 +232,7 @@ static void data_read() {
         route_add_head(route);
         break;
       case 'T': {
-        QStringList tokens =
+        const QStringList tokens =
             line.split(sep, QString::KeepEmptyParts);
         if (tokens.size() < 6) {
           fatal(MYNAME
