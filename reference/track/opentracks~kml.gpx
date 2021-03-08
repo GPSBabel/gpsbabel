@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="48.503537000" minlon="8.970803000" maxlat="48.503623000" maxlon="8.970829000"/>
+  <trk>
+    <name>Wurmlinger Kapelle</name>
+    <trkseg>
+      <trkpt lat="48.503537000" lon="8.970803000">
+        <ele>405.014</ele>
+        <time>2021-03-02T09:30:41.890Z</time>
+      </trkpt>
+      <trkpt lat="48.503623000" lon="8.970829000">
+        <ele>401.120</ele>
+        <time>2021-03-02T12:34:53.912Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

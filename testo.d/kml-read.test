@@ -16,3 +16,6 @@ compare ${REFERENCE}/track/google_ext~kml.gpx ${TMPDIR}/google_ext~kml.gpx
 gpsbabel -i kml -f ${REFERENCE}/track/skydrop.kml -o igc -F - | grep -v "^L" > ${TMPDIR}/skydrop~kml.igc
 compare ${REFERENCE}/track/skydrop~kml.igc ${TMPDIR}/skydrop~kml.igc
 
+# Track with empty gx:coord elements.
+gpsbabel -i kml -f ${REFERENCE}/track/opentracks.kml -o gpx -F ${TMPDIR}/opentracks~kml.gpx
+compare ${REFERENCE}/track/opentracks~kml.gpx ${TMPDIR}/opentracks~kml.gpx
