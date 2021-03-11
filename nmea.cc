@@ -32,7 +32,7 @@
 #include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QDebug>           // for QDebug
 #include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString, QString::KeepEmptyParts
+#include <QtCore/QString>          // for QString
 #include <QtCore/QStringList>      // for QStringList
 #include <QtCore/QTextStream>      // for hex
 #include <QtCore/QThread>          // for QThread
@@ -358,7 +358,7 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
     track_add_head(trk_head);
   }
 
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
 
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
@@ -405,7 +405,7 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
     track_add_head(trk_head);
   }
 
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
   QTime hms;
   if (fields.size() > 1) hms = nmea_parse_hms(fields[1]);
   double latdeg = 0;
@@ -495,7 +495,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
     track_add_head(trk_head);
   }
 
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
   QTime hms;
   if (fields.size() > 1) hms = nmea_parse_hms(fields[1]);
   QChar fix = 'V'; // V == "Invalid"
@@ -576,7 +576,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
 void
 NmeaFormat::gpwpl_parse(const QString& ibuf)
 {
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
 
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
@@ -608,7 +608,7 @@ NmeaFormat::gpwpl_parse(const QString& ibuf)
 void
 NmeaFormat::gpzda_parse(const QString& ibuf)
 {
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
   if (fields.size() > 4) {
     QTime time = nmea_parse_hms(fields[1]);
     QString datestr = QString("%1%2%3").arg(fields[2], fields[3], fields[4]);
@@ -634,7 +634,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
   int  prn[12] = {0};
   memset(prn,0xff,sizeof(prn));
 
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
   int nfields = fields.size();
   // 0 = "GPGSA"
   // 1 = Mode. Ignored
@@ -678,7 +678,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
 void
 NmeaFormat::gpvtg_parse(const QString& ibuf) const
 {
-  const QStringList fields = ibuf.split(',', QString::KeepEmptyParts);
+  const QStringList fields = ibuf.split(',');
   double course = 0;
   if (fields.size() > 1) course = fields[1].toDouble();
   double speed_n = 0;
