@@ -140,7 +140,7 @@ gpl_trackpt(const Waypoint* wpt)
     status = 3;   // a strategic lie for fix_unknown.
   }
 
-  gpl_point_t gp = {0};
+  gpl_point_t gp{};
   le_write32(&gp.status, status);
   le_write_double(&gp.lat, wpt->latitude);
   le_write_double(&gp.lon, wpt->longitude);
