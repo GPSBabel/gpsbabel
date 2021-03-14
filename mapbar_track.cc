@@ -90,7 +90,6 @@ static void
 mapbar_track_read()
 {
   auto* track = new route_head;
-  is_fatal((track == nullptr), MYNAME ": memory non-enough");
   track_add_head(track);
 
   (void) read_datetime(); // start_time currently unused
