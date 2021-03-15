@@ -41,7 +41,7 @@
 void
 MyNavFormat::read_line(const QString& line, route_head* track)
 {
-  QStringList fields = line.split("|");
+  const QStringList fields = line.split('|');
 
   if (global_opts.debug_level > 1) {
     qDebug() << "line: " << line;

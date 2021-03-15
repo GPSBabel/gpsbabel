@@ -1657,7 +1657,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   // the first token is the operation, e.g. "IFIELD"
   QString op = line.mid(0, sep).trimmed().toUpper();
   QString tokenstr = line.mid(sep).trimmed();
-  QStringList tokens = tokenstr.split(",");
+  const QStringList tokens = tokenstr.split(',');
 
   if (op == "FIELD_DELIMITER") {
     auto cp = xcsv_get_char_from_constant_table(tokens[0]);

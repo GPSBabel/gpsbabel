@@ -132,8 +132,7 @@ static void data_read() {
 
     switch (ibuf[0]) {
       case 'W': {
-        QStringList tokens =
-            line.split(sep);
+        const QStringList tokens = line.split(sep);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse waypoint, not all required columns "
@@ -232,8 +231,7 @@ static void data_read() {
         route_add_head(route);
         break;
       case 'T': {
-        QStringList tokens =
-            line.split(sep);
+        const QStringList tokens = line.split(sep);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse trackpoint, not all required columns "

@@ -218,7 +218,7 @@ ShapeFormat::read()
     if (qopt_name.contains('+')) {
       // form a compound name from one or more fields.
       nameidx = -2;
-      QStringList opt_name_fields = qopt_name.split('+', QString::SkipEmptyParts);
+      const QStringList opt_name_fields = qopt_name.split('+', QString::SkipEmptyParts);
       nameindices.reserve(opt_name_fields.size());
       for (int oidx=0; oidx<opt_name_fields.size(); oidx++) {
         bool ok;
