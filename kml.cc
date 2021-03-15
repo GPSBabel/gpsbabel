@@ -341,7 +341,7 @@ void KmlFormat::gx_trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs
 
   double lat, lon, alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
-  if (0 != n && 2 != n && 3 != n) {
+  if (EOF != n && 2 != n && 3 != n) {
     fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));
   }
   gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
