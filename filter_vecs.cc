@@ -126,6 +126,16 @@ void FilterVecs::exit_filter_vecs()
 {
   for (const auto& vec : filter_vec_list) {
     (vec.vec->exit)();
+    QVector<arglist_t>* args = vec.vec->get_args();
+    if (args && !args->isEmpty()) {
+      assert(args->isDetached());
+      for (auto& arg : *args) {
+        if (arg.argvalptr) {
+          xfree(arg.argvalptr);
+          *arg.argval = arg.argvalptr = nullptr;
+        }
+      }
+    }
   }
 }
 
