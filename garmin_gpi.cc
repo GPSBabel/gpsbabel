@@ -912,23 +912,20 @@ wdata_compute_size(writer_data_t* data)
     wpt->extra_data = dt;
 
     if (alerts) {
-      int pidx;
-      if ((pidx = wpt->shortname.indexOf('@')) != -1) {
-        const char* pos = CSTR(wpt->shortname.mid(pidx));
-        double speed, scale;
+      if (int pidx = wpt->shortname.indexOf('@'); pidx != -1) {
+        double scale;
         if (units == 's') {
           scale = MPH_TO_MPS(1);
         } else {
           scale = KPH_TO_MPS(1);
         }
-        parse_speed(pos + 1, &speed, scale, MYNAME);
+        double speed = 0;
+        parse_speed(wpt->shortname.mid(pidx + 1), &speed, scale, MYNAME);
         if (speed > 0) {
           WAYPT_SET(wpt, speed, speed);
         }
 #if 0
-        if (pos > wpt->shortname) {
-          wpt->shortname[pos - wpt->shortname] = '\0';
-        }
+        wpt->shortname.truncate(pidx);
 #endif
       } else if ((opt_speed) && (! WAYPT_HAS(wpt, speed))) {
         WAYPT_SET(wpt, speed, defspeed);
