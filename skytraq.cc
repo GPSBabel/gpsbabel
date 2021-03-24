@@ -696,7 +696,7 @@ make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
   auto* wpt = new Waypoint;
 
-  wpt->shortname = QString::asprintf("TP%04d", ++st->tpn);
+  wpt->shortname = QString("TP%1").arg(++st->tpn, 4, 10, QLatin1Char('0'));
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
