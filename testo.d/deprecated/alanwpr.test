@@ -1,0 +1,8 @@
+#
+# Alan MAp500 waypoint & route test
+#
+rm -f ${TMPDIR}/alanwpr*
+gpsbabel -i alanwpr -f ${REFERENCE}/alanwpr.wpr -o alanwpr -F ${TMPDIR}/alanwpr-new.wpr
+gpsbabel -i alanwpr -f ${TMPDIR}/alanwpr-new.wpr -o gpx -F ${TMPDIR}/alanwpr-new.gpx
+compare ${REFERENCE}/alanwpr.gpx ${TMPDIR}/alanwpr-new.gpx 
+

@@ -1,0 +1,8 @@
+#
+# Alan Map500 tracklogs< test
+#
+rm -f ${TMPDIR}/alantrl*
+gpsbabel -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
+gpsbabel -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
+compare ${REFERENCE}/alantrl.gpx ${TMPDIR}/alantrl-new.gpx 
+
