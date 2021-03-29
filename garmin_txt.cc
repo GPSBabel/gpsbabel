@@ -94,7 +94,7 @@ inline header_type& operator++(header_type& s) // prefix
 inline header_type operator++(header_type& s, int) // postfix
 {
   header_type ret(s);
-  s = ++s;
+  ++s;
   return ret;
 }
 
@@ -105,7 +105,7 @@ inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
 inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
 {
   gt_display_modes_e ret(s);
-  s = ++s;
+  ++s;
   return ret;
 }
 

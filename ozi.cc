@@ -822,13 +822,9 @@ data_read()
         }
         break;
       case rtedata:
-        if (linecount > 5 && wpt_tmp) {/* skipping over file header */
+        if ((linecount > 5) && !header) {/* skipping over file header */
           ozi_convert_datum(wpt_tmp);
-          if (!header) {
-            route_add_wpt(rte_head, wpt_tmp);
-          } else {
-            delete wpt_tmp;
-          }
+          route_add_wpt(rte_head, wpt_tmp);
         } else {
           delete wpt_tmp;
         }

@@ -156,7 +156,7 @@ inline state_t& operator++(state_t& s) // prefix
 inline state_t operator++(state_t& s, int) // postfix
 {
   state_t ret(s);
-  s = ++s;
+  ++s;
   return ret;
 }
 

@@ -901,7 +901,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     auto* w = new Waypoint(*trk);
 
-    w->shortname = QString::asprintf("WP%06d", waypt_count()+1);
+    w->shortname = QString("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of
