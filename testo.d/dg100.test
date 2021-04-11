@@ -4,3 +4,7 @@ compare ${REFERENCE}/track/dg100.gpx ${TMPDIR}/dg100.gpx
 
 gpsbabel -i dg-200-bin -f ${REFERENCE}/track/dg200.bin -o gpx -F ${TMPDIR}/dg200.gpx
 compare ${REFERENCE}/track/dg200.gpx ${TMPDIR}/dg200.gpx
+
+# make sure we don't drop the options when the file is provided as a positional parameter
+gpsbabel -D3 -i dg-200-bin,erase -o gpx ${REFERENCE}/dg200erase.bin ${TMPDIR}/dg200erase.gpx 2>${TMPDIR}/dg200erase.log 1>/dev/null
+compare ${REFERENCE}/dg200erase.log ${TMPDIR}/dg200erase.log

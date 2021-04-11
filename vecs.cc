@@ -272,6 +272,7 @@ Format* Vecs::find_vec(const QString& vecname)
     xcsv_fmt.xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
+    vec.vec->set_argstring(vecname);  /* needed for positional parameters */
     return vec.vec;
 
   }
@@ -319,6 +320,7 @@ Format* Vecs::find_vec(const QString& vecname)
 #endif // CSVFMTS_ENABLED
 
     vec_list[0].vec->set_name(svec.name);	/* needed for session information */
+    vec_list[0].vec->set_argstring(vecname);  /* needed for positional parameters */
     return vec_list[0].vec;
   }
 
