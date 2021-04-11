@@ -1,9 +1,3 @@
-GPSBabel Version: 1.7.0
-main: Compiled with Qt 5.12.8 for architecture x86_64-little_endian-lp64
-main: Running with Qt 5.12.8 on Ubuntu 20.04.2 LTS, x86_64
-main: QLocale::system() is en_US
-main: QLocale() is en_US
-main: QTextCodec::codecForLocale() is UTF-8, mib 106
 TX: Frame Start a0 a2 Payload_Len 0003 Cmd: getfileheader
 RX: Start a0a2 Len 0005 Cmd: getfileheader
 found 0 headers, nextheader=0
