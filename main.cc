@@ -431,7 +431,7 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s \n", gpsbabel_version);
+        warning("GPSBabel Version: %s\n", gpsbabel_version);
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
@@ -535,7 +535,7 @@ run(const char* prog_name)
     }
 
     /* reinitialize xcsv in case two formats that use xcsv were given */
-    (void) Vecs::Instance().find_vec(ivecs->get_name());
+    (void) Vecs::Instance().find_vec(ivecs->get_argstring());
 
     cet_convert_init(ivecs->get_encode(), 1);
 
@@ -548,7 +548,7 @@ run(const char* prog_name)
 
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
-      (void) Vecs::Instance().find_vec(ovecs->get_name());
+      (void) Vecs::Instance().find_vec(ovecs->get_argstring());
 
       cet_convert_init(ovecs->get_encode(), 1);
 
