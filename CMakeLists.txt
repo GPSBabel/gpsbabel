@@ -32,18 +32,18 @@ set(ALL_FMTS
   skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc
   xcsv.cc tiger.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
-  ozi.cc text.cc html.cc netstumbler.cc
+  ozi.cc text.cc html.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc lowranceusr.cc an1.cc tomtom.cc
+  vcf.cc lowranceusr.cc tomtom.cc
   tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
   ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
   yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
-  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc
+  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
   ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
   navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc
   igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
   jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
-  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
+  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc
   vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
   subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
@@ -96,7 +96,6 @@ set(SUPPORT
 )
 
 set(HEADERS
-  an1sym.h
   cet.h
   cet_util.h
   csv_util.h

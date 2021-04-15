@@ -1,6 +1,4 @@
 internal	rw----	xcsv		? Character Separated Values
-file	--rw--	alantrl	trl	Alan Map500 tracklogs (.trl)
-file	rw--rw	alanwpr	wpr	Alan Map500 waypoints and routes (.wpr)
 internal	rw----	tabsep		All database fields on one tab-separated line
 serial	--r---	baroiq		Brauniger IQ Series Barograph Download
 file	--rw--	bushnell_trl	trl	Bushnell GPS Trail file
@@ -13,7 +11,6 @@ file	rwrwrw	compegps		CompeGPS data files (.wpt/.trk/.rte)
 internal	rw----	custom		Custom "Everything" Style
 file	--rw--	iblue747	csv	Data Logger iBlue747 csv
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv
-file	rw-wrw	an1	an1	DeLorme .an1 (drawing) file
 file	--rw--	gpl	gpl	DeLorme GPL
 file	rw----	saplus		DeLorme Street Atlas Plus
 file	--r---	saroute	anr	DeLorme Street Atlas Route
@@ -118,10 +115,8 @@ file	rw----	navigonwpt		Navigon Waypoints
 serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download
 file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
 file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-file	rw----	naviguide	twl	Naviguide binary route file (.twl)
 file	--rw--	navitel_trk	bin	Navitel binary track (.bin)
 file	rw----	dna	dna	Navitrak DNA marker format
-file	r-----	netstumbler		NetStumbler Summary File (text)
 file	rw----	nima		NIMA/GNIS Geographic Names File
 file	rwrw--	nmea		NMEA 0183 sentences
 file	rw----	lmx		Nokia Landmark Exchange

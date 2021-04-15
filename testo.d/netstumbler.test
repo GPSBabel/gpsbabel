@@ -1,7 +1,0 @@
-#
-# NetStumbler Summary File (read-only)
-#
-rm -f ${TMPDIR}/netstumbler.gpx
-gpsbabel -i netstumbler -f ${REFERENCE}/netstumbler.txt -o gpx -F ${TMPDIR}/netstumbler.gpx
-compare ${TMPDIR}/netstumbler.gpx ${REFERENCE}/netstumbler.gpx
-
