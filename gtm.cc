@@ -79,8 +79,7 @@ static QString
 fread_string(gbfile* fd)
 {
   int len = fread_integer(fd);
-  QByteArray bytes = gbfreadbuf(len, fd);
-  return QString(bytes).trimmed();
+  return gbfreadbuf(len, fd);
 }
 
 static void
@@ -92,8 +91,7 @@ fread_string_discard(gbfile* fd)
 static QString
 fread_fixedstring(gbfile* fd, int len)
 {
-  QByteArray bytes = gbfreadbuf(len, fd);
-  return QString(bytes);
+  return gbfreadbuf(len, fd);
 }
 
 /* Write functions, according to specification. */

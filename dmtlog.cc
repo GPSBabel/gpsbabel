@@ -338,8 +338,7 @@ read_str(gbfile* f)
     i = gbfgetint16(f);
   }
 
-  auto res = gbfreadbuf(i, f);
-  return QString(res);
+  return gbfreadbuf(i, f);
 }
 
 static void
@@ -418,8 +417,7 @@ read_CTrackFile(const int version)
 
   /* S1 .. S9: comments, hints, jokes, aso */
   for (int i = 0; i < 9; i++) {
-    auto s = read_str(fin);
-    Q_UNUSED(s);
+    (void) read_str(fin);
   }
 
   int32_t tcount = gbfgetint32(fin);
