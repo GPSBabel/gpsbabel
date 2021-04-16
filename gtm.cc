@@ -80,7 +80,7 @@ fread_string(gbfile* fd)
 {
   int len = fread_integer(fd);
   QByteArray bytes = gbfreadbuf(len, fd);
-  return QString(bytes);
+  return QString(bytes).trimmed();
 }
 
 static void
