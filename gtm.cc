@@ -79,20 +79,8 @@ static QString
 fread_string(gbfile* fd)
 {
   int len = fread_integer(fd);
-
-  if (len == 0) {
-    return nullptr;
-  }
-
-  char* val = (char*) xmalloc(len+1);
-  gbfread(val, 1, len, fd);
-  while (len != 0 && val[len-1] == ' ') {
-    len--;
-  }
-  val[len] = 0;
-  QString v(val);
-  xfree(val);
-  return v;
+  QByteArray bytes = gbfreadbuf(len, fd);
+  return QString(bytes);
 }
 
 static void
@@ -104,17 +92,8 @@ fread_string_discard(gbfile* fd)
 static QString
 fread_fixedstring(gbfile* fd, int len)
 {
-  char* val = (char*) xmalloc(len+1);
-
-  gbfread(val, 1, len, fd);
-  while (len != 0 && val[len-1] == ' ') {
-    len--;
-  }
-  val[len] = 0;
-  QString v(val);
-  xfree(val);
-
-  return v;
+  QByteArray bytes = gbfreadbuf(len, fd);
+  return QString(bytes);
 }
 
 /* Write functions, according to specification. */

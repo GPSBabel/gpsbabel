@@ -33,6 +33,7 @@
 #include "defs.h"
 #include "gbfile.h"                     // for gbfgetdbl, gbfgetint32, gbfputint32, gbfgetint16, gbfputdbl, gbfputc, gbfread, gbfseek, gbfgetc, gbfile, gbfclose, gbfungetc, gbfeof, gbfputs, gbfwrite, gbfopen_le, gbfgetuint32, gbfputuint16, gbfputuint32
 #include "jeeps/gpsmath.h"              // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_C, GPS_Math_NGENToAiry1830LatLon
+#include "src/core/logging.h"           // for FatalMsg
 #include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, xml_deinit, xml_init, cb_end, cb_start, xg_cb_type, xml_read, xml_readstring, xg_tag_mapping
 
 
@@ -329,7 +330,7 @@ tlog3b_xgcb_wpten(xg_string, const QXmlStreamAttributes*)
 }
 
 
-static char*
+static QString
 read_str(gbfile* f)
 {
   int i = gbfgetc(f);
@@ -337,13 +338,8 @@ read_str(gbfile* f)
     i = gbfgetint16(f);
   }
 
-  char* res = (char*) xmalloc(i + 1);
-  res[i] = '\0';
-  if (i) {
-    gbfread(res, 1, i, f);
-  }
-
-  return res;
+  auto res = gbfreadbuf(i, f);
+  return QString(res);
 }
 
 static void
@@ -380,17 +376,14 @@ write_str(const QString& str, gbfile* f)
 static int
 read_datum(gbfile* f)
 {
-  char* d = read_str(f);
-  char* g = read_str(f);
+  auto d = read_str(f);
+  auto g = read_str(f);
 
   int res = GPS_Lookup_Datum_Index(d);
 
-  if (*g && (strcmp(d, g) != 0)) {
-    fatal(MYNAME ": Unsupported combination of datum '%s' and grid '%s'!\n",
-          d, g);
+  if (d.compare(g))  {
+    fatal(FatalMsg() << MYNAME << ": Unsupported combination of datum '" << d << "' and grid '" << g << "''!\n");
   }
-  xfree(d);
-  xfree(g);
 
   return res;
 }
@@ -425,8 +418,8 @@ read_CTrackFile(const int version)
 
   /* S1 .. S9: comments, hints, jokes, aso */
   for (int i = 0; i < 9; i++) {
-    char* s = read_str(fin);
-    xfree(s);
+    auto s = read_str(fin);
+    Q_UNUSED(s);
   }
 
   int32_t tcount = gbfgetint32(fin);
@@ -534,8 +527,8 @@ read_CTrackFile(const int version)
     // variants of shortname
 
     for (int32_t i = 0; i < namect; i++) {
-      char* name = read_str(fin);
-      if (name && *name) {
+      auto name = read_str(fin);
+      if (!name.isEmpty()) {
         switch (i) {
         case 0:
           wpt->description = name;
@@ -545,7 +538,6 @@ read_CTrackFile(const int version)
           break;
         }
       }
-      xfree(name);
     }
 
     waypt_add(wpt);
