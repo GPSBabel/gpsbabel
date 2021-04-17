@@ -547,7 +547,7 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
         QByteArray qba(tag->count, 0);
         gbfread(qba.data(), tag->count, 1, fin);
         tag->data.append(qba);
-      } else for (uint16_t i = 0; i < tag->count; i++) {
+      } else for (unsigned i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
@@ -1318,7 +1318,7 @@ exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
     if (tag->size > 4) {
       if BYTE_TYPE(tag->type) {
         gbfwrite(tag->data.at(0).toByteArray().constData(), tag->size, 1, fout);
-      } else for (uint16_t i = 0; i < tag->count; i++) {
+      } else for (unsigned i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:

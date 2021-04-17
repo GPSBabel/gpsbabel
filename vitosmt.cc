@@ -69,11 +69,8 @@ static void
 vitosmt_read()
 {
   route_head* rte = nullptr;
-  struct tm tmStruct;
-  int  serial  =0;
+  int serial = 0;
 
-
-  memset(&tmStruct, 0, sizeof(tmStruct));
   /*
    * 24 bytes header
    */
@@ -128,20 +125,15 @@ vitosmt_read()
 
     auto* wpt_tmp = new Waypoint;
 
-    wpt_tmp->latitude =DEG(latrad);
-    wpt_tmp->longitude =DEG(lonrad);
-    wpt_tmp->altitude =elev;
+    wpt_tmp->latitude = DEG(latrad);
+    wpt_tmp->longitude = DEG(lonrad);
+    wpt_tmp->altitude = elev;
 
-    tmStruct.tm_year =timestamp[0]+100;
-    tmStruct.tm_mon =timestamp[1]-1;
-    tmStruct.tm_mday =timestamp[2];
-    tmStruct.tm_hour =timestamp[3];
-    tmStruct.tm_min =timestamp[4];
-    tmStruct.tm_sec  =(int)floor(seconds);
-    tmStruct.tm_isdst =-1;
+    wpt_tmp->SetCreationTime(QDateTime(
+      QDate(timestamp[0] + 2000, timestamp[1], timestamp[2]),
+      QTime(timestamp[3], timestamp[4]),
+      Qt::UTC).addMSecs(lround(seconds*1000.0)));
 
-    double usec = fmod(1000000*seconds+0.5,1000000);
-    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), lround(usec/1000.0));
     wpt_tmp->shortname = QString::asprintf("WP%04d", ++serial);
 
     WAYPT_SET(wpt_tmp, speed, KNOTS_TO_MPS(speed)); /* meters per second */
