@@ -143,7 +143,6 @@ file	tomtom_itn	itn	TomTom Itineraries (.itn)
 file	tomtom_itn_places	itn	TomTom Places Itineraries (.itn)
 file	tomtom_asc	asc	TomTom POI file (.asc)
 file	tomtom	ov2	TomTom POI file (.ov2)
-file	tmpro	tmpro	TopoMapPro Places File
 file	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	tiger		U.S. Census Bureau Tiger Mapping Service
 file	unicsv		Universal csv with field structure in first line

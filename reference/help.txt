@@ -666,7 +666,6 @@ File Types (-i and -o options):
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
 	tomtom                TomTom POI file (.ov2)
-	tmpro                 TopoMapPro Places File
 	dmtlog                TrackLogs digital mapping (.trl)
 	  index                 Index of track (if more than one in source) 
 	tiger                 U.S. Census Bureau Tiger Mapping Service

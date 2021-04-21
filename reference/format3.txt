@@ -1336,8 +1336,6 @@ option	tomtom_asc	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.o
 
 file	rw----	tomtom	ov2	TomTom POI file (.ov2)	tomtom
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tomtom.html
-file	rw----	tmpro	tmpro	TopoMapPro Places File	tmpro
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tmpro.html
 file	rwrw--	dmtlog	trl	TrackLogs digital mapping (.trl)	dmtlog
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dmtlog.html
 option	dmtlog	index	Index of track (if more than one in source)	integer	1	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dmtlog.html#fmt_dmtlog_o_index
