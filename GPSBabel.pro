@@ -59,7 +59,7 @@ MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc 
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
-        skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
+        skytraq.cc holux.cc tpg.cc tpo.cc \
         xcsv.cc tiger.cc easygps.cc \
         saroute.cc navicache.cc delgpl.cc \
         ozi.cc text.cc html.cc \
