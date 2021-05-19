@@ -39,12 +39,10 @@ static QDateTime decodeDateTime(const QString& s)
 static bool trackIsEmpty(const GpxTrack& trk)
 {
   int count = 0;
-  for (int i=0; i< trk.getTrackSegments().size(); i++) {
-    for (int j=0; j<trk.getTrackSegments()[i].getTrackPoints().size(); j++) {
-      count++;
-    }
+  for (const auto& segment : trk.getTrackSegments()) {
+    count += segment.getTrackPoints().size();
   }
-  return count <=2 ;
+  return count <= 1;
 }
 
 class GpxHandler
@@ -179,7 +177,7 @@ public:
 
     else if (localName == "rte") {
       state = stateStack.takeLast();
-      if (currentRte.getRoutePoints().size()>=2) {
+      if (currentRte.getRoutePoints().size() >= 2) {
         rteList << currentRte;
       }
     }
