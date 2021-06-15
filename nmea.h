@@ -29,6 +29,7 @@
 #include <QtCore/QString>     // for QString
 #include <QtCore/QTime>       // for QTime
 #include <QtCore/QVector>     // for QVector
+#include <map>
 
 #include "defs.h"
 #include "format.h"           // for Format
@@ -168,6 +169,8 @@ private:
   bool had_checksum{};
 
   int wpt_not_added_yet{};
+
+  std::map<std::string, int> counter;
 
   QVector<arglist_t> nmea_args = {
     {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },

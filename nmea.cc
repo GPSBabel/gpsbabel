@@ -25,6 +25,7 @@
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
 #include <cstdlib>                 // for atoi, atof, strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
+#include <iostream>                // for std::cout
 #include <iterator>                // for operator!=, reverse_iterator
 
 #include <QtCore/QByteArray>       // for QByteArray
@@ -273,6 +274,18 @@ NmeaFormat::rd_deinit()
 
   posn_fname.clear();
 
+  int warnings = 0;
+  for (const auto& [key, value] : counter) {
+    if (value > 0) {
+      warnings++;
+      std::cout << MYNAME << ": discarded lines with " << key << " = " << value << "\n";
+    }
+  }
+
+  if (warnings) {
+    std::cout << "\n";
+  }
+
 }
 
 void
@@ -374,6 +387,7 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
   if (fields.size() > 6) valid = fields[6].startsWith('A');
 
   if (!valid) {
+    counter["invalid_gpgll"]++;
     return;
   }
 
@@ -439,6 +453,7 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
    */
   CHECK_BOOL(opt_ignorefix);
   if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
+    counter["invalid_gpgga"]++;
     return;
   }
 
@@ -520,6 +535,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   }
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
+    counter["invalid_gprmc"] = 0;
     return;
   }
 
@@ -643,7 +659,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
     fix = fields[2][0];
   }
 
-  // 12 fields, index 3 through 14. 
+  // 12 fields, index 3 through 14.
   for (int cnt = 0; cnt <= 11; cnt++) {
     if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
   }
@@ -956,6 +972,10 @@ NmeaFormat::read()
   if (getposn) {
     return;
   }
+
+  counter["invalid_gprmc"] = 0;
+  counter["invalid_gpgll"] = 0;
+  counter["invalid_gpgga"] = 0;
 
   if (optdate) {
     opt_tm = QDate::fromString(optdate, "yyyyMMdd");
