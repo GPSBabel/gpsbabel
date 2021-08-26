@@ -97,6 +97,7 @@ static const char* deviceNames[] = {
   "/dev/ttyS2",
   "/dev/ttyS3",
   "/dev/ttyUSB0",
+  "/dev/ttyACM0",
   "/dev/rfcomm0",
   nullptr
 };
