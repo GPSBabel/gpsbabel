@@ -34,10 +34,6 @@ option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/W
 
 serial	--r---	baroiq		Brauniger IQ Series Barograph Download	baroiq
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_baroiq.html
-file	--rw--	bushnell_trl	trl	Bushnell GPS Trail file	bushnell_trl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bushnell_trl.html
-file	rw----	bushnell	wpt	Bushnell GPS Waypoint file	bushnell
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bushnell.html
 file	rw----	cambridge	dat	Cambridge/Winpilot glider software	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html
 option	cambridge	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snlen

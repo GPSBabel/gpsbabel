@@ -149,8 +149,6 @@ extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
-extern ff_vecs_t bushnell_vecs;
-extern ff_vecs_t bushnell_trl_vecs;
 extern ff_vecs_t skyforce_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
@@ -372,8 +370,6 @@ private:
   LegacyFormat sbp_fmt {sbp_vecs};
   LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat mmo_fmt {mmo_vecs};
-  LegacyFormat bushnell_fmt {bushnell_vecs};
-  LegacyFormat bushnell_trl_fmt {bushnell_trl_vecs};
   LegacyFormat skyforce_fmt {skyforce_vecs};
   LegacyFormat pocketfms_bc_fmt {pocketfms_bc_vecs};
   LegacyFormat pocketfms_fp_fmt {pocketfms_fp_vecs};
@@ -1091,20 +1087,6 @@ private:
       "mmo",
       "Memory-Map Navigator overlay files (.mmo)",
       "mmo",
-      nullptr,
-    },
-    {
-      &bushnell_fmt,
-      "bushnell",
-      "Bushnell GPS Waypoint file",
-      "wpt",
-      nullptr,
-    },
-    {
-      &bushnell_trl_fmt,
-      "bushnell_trl",
-      "Bushnell GPS Trail file",
-      "trl",
       nullptr,
     },
     {

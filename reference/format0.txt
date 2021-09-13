@@ -1,6 +1,4 @@
 baroiq		Brauniger IQ Series Barograph Download
-bushnell_trl	trl	Bushnell GPS Trail file
-bushnell	wpt	Bushnell GPS Waypoint file
 cambridge	dat	Cambridge/Winpilot glider software
 cst	cst	CarteSurTable data file
 v900		Columbus/Visiontac V900 files (.csv)

@@ -33,8 +33,6 @@ Options:
 
 File Types (-i and -o options):
 	baroiq                Brauniger IQ Series Barograph Download
-	bushnell_trl          Bushnell GPS Trail file
-	bushnell              Bushnell GPS Waypoint file
 	cambridge             Cambridge/Winpilot glider software
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 

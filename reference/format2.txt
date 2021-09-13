@@ -1,8 +1,6 @@
 internal	rw----	xcsv		? Character Separated Values
 internal	rw----	tabsep		All database fields on one tab-separated line
 serial	--r---	baroiq		Brauniger IQ Series Barograph Download
-file	--rw--	bushnell_trl	trl	Bushnell GPS Trail file
-file	rw----	bushnell	wpt	Bushnell GPS Waypoint file
 file	rw----	cambridge	dat	Cambridge/Winpilot glider software
 file	r-r-r-	cst	cst	CarteSurTable data file
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)
