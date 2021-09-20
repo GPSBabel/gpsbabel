@@ -88,6 +88,9 @@ The quality of the results will vary depending on the density of points in the o
        <property name="toolTip">
         <string>Maximum number points in track or route. </string>
        </property>
+       <property name="stepType">
+        <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+       </property>
       </widget>
      </item>
      <item>
