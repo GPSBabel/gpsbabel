@@ -39,7 +39,6 @@
 #include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
 #include <QtCore/QScopedPointer>  // for QScopedPointer
 #include <QtCore/QString>         // for QString
-#include <QtCore/QStringRef>      // for QStringRef
 #include <QtCore/QTextCodec>      // for QTextCodec
 #include <QtCore/QVector>         // for QVector
 #include <QtCore/Qt>              // for CaseInsensitive

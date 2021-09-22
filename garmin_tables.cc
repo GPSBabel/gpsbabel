@@ -24,7 +24,6 @@
 #include <cstring>               // for strncpy, strchr, strlen, strncmp
 #include <QtCore/QChar>          // for operator==, QChar
 #include <QtCore/QDebug>         // for QDebug
-#include <QtCore/QStringRef>     // for QStringRef
 #include <QtCore/Qt>             // for CaseInsensitive
 #include "defs.h"
 #include "garmin_tables.h"

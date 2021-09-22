@@ -31,7 +31,6 @@
 #include <QtCore/QRegularExpression>  // for QRegularExpression
 #include <QtCore/QString>             // for QString, QString::SectionSkipEmpty
 #include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QStringRef>          // for QStringRef
 #include <QtCore/QTime>               // for QTime
 #include <QtCore/QVector>             // for QVector
 #include <QtCore/Qt>                  // for CaseInsensitive, UTC

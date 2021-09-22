@@ -92,7 +92,6 @@
 
 #include <QtCore/QList>         // for QList
 #include <QtCore/QString>       // for QString
-#include <QtCore/QStringRef>    // for QStringRef
 #include <QtCore/QTextCodec>    // for QTextCodec
 #include <QtCore/QVector>       // for QVector
 #include <QtCore/Qt>            // for CaseInsensitive
