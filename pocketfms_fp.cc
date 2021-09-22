@@ -20,7 +20,6 @@
  */
 
 #include <QtCore/QString>               // for QString
-#include <QtCore/QStringRef>            // for QStringRef
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 #include "defs.h"

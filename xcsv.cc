@@ -258,7 +258,7 @@ QDateTime
 XcsvFormat::yyyymmdd_to_time(const char* s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
-  return QDateTime(d);
+  return QDateTime(d.startOfDay());
 }
 
 
@@ -984,7 +984,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   latitude = oldlat = wpt->latitude;
 
   QString write_delimiter;
-  if (xcsv_style->field_delimiter == "\\w") {
+  if (xcsv_style->field_delimiter == u"\\w") {
     write_delimiter = " ";
   } else {
     write_delimiter = xcsv_style->field_delimiter;
@@ -1659,7 +1659,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   QString tokenstr = line.mid(sep).trimmed();
   const QStringList tokens = tokenstr.split(',');
 
-  if (op == "FIELD_DELIMITER") {
+  if (op == u"FIELD_DELIMITER") {
     auto cp = xcsv_get_char_from_constant_table(tokens[0]);
     style->field_delimiter = cp;
 
@@ -1674,7 +1674,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
   } else
 
-    if (op == "FIELD_ENCLOSER") {
+    if (op == u"FIELD_ENCLOSER") {
       auto cp = xcsv_get_char_from_constant_table(tokens[0]);
       style->field_encloser = cp;
 
@@ -1683,7 +1683,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
       xfree(p);
     } else
 
-      if (op == "RECORD_DELIMITER") {
+      if (op == u"RECORD_DELIMITER") {
         auto cp = xcsv_get_char_from_constant_table(tokens[0]);
         style->record_delimiter = cp;
 
@@ -1694,33 +1694,33 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
       } else
 
-        if (op == "FORMAT_TYPE") {
-          if (tokens[0] == "INTERNAL") {
+        if (op == u"FORMAT_TYPE") {
+          if (tokens[0] == u"INTERNAL") {
             style->type = ff_type_internal;
           }
           // this is almost inconceivable...
-          if (tokens[0] == "SERIAL") {
+          if (tokens[0] == u"SERIAL") {
             style->type = ff_type_serial;
           }
         } else
 
-          if (op == "DESCRIPTION") {
+          if (op == u"DESCRIPTION") {
             style->description = tokens[0];
           } else
 
-            if (op == "EXTENSION") {
+            if (op == u"EXTENSION") {
               style->extension = tokens[0];
             } else
 
-              if (op == "SHORTLEN") {
+              if (op == u"SHORTLEN") {
                 style->shortlen = tokens[0].toInt();
               } else
 
-                if (op == "SHORTWHITE") {
+                if (op == u"SHORTWHITE") {
                   style->whitespace_ok = tokens[0].toInt();
                 } else
 
-                  if (op == "BADCHARS") {
+                  if (op == u"BADCHARS") {
                     char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
                     QString cp = xcsv_get_char_from_constant_table(sp);
                     style->badchars += cp;
@@ -1731,32 +1731,32 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
                       style->prologue.append(tokenstr);
                     } else
 
-                      if (op == "EPILOGUE") {
+                      if (op == u"EPILOGUE") {
                         style->epilogue.append(tokenstr);
                       } else
 
-                        if (op == "ENCODING") {
+                        if (op == u"ENCODING") {
                           style->codecname = tokens[0];
                         } else
 
-                          if (op == "DATUM") {
+                          if (op == u"DATUM") {
                             style->gps_datum_name = tokens[0];
                           } else
 
-                            if (op == "DATATYPE") {
+                            if (op == u"DATATYPE") {
                               QString p = tokens[0].toUpper();
-                              if (p == "TRACK") {
+                              if (p == u"TRACK") {
                                 style->datatype = trkdata;
-                              } else if (p == "ROUTE") {
+                              } else if (p == u"ROUTE") {
                                 style->datatype = rtedata;
-                              } else if (p == "WAYPOINT") {
+                              } else if (p == u"WAYPOINT") {
                                 style->datatype = wptdata;
                               } else {
                                 fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
                               }
                             } else
 
-                              if (op == "IFIELD") {
+                              if (op == u"IFIELD") {
                                 if (tokens.size() < 3) {
                                   fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
                                 }
@@ -1774,7 +1774,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
                                 //  leave this as it's own parsing for now.  We could
                                 //  change the world on ifield vs ofield format later..
                                 //
-                                if (op == "OFIELD") {
+                                if (op == u"OFIELD") {
                                   unsigned options = 0;
                                   // Note: simplified() has to run after split().
                                   if (tokens.size() < 3) {

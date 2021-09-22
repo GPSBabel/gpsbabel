@@ -25,7 +25,7 @@
 
 #include <QtCore/QLatin1String>         // for QLatin1String
 #include <QtCore/QString>               // for QString
-#include <QtCore/QStringRef>            // for QStringRef
+#include <QtCore/QStringView>           // for QStringView
 #include <QtCore/QVector>               // for QVector
 #include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
@@ -273,7 +273,7 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
 }
 
 static double
-tef_read_comma_float(const QStringRef& value)
+tef_read_comma_float(const QStringView& value)
 {
   QString svalue = value.toString();
 

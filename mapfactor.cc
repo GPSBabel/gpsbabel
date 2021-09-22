@@ -44,9 +44,9 @@ static void MapfactorRead()
   Waypoint* wpt = nullptr;
 
   while (!reader.atEnd()) {
-    QStringRef tag_name = reader.name();
+    auto tag_name = reader.name();
     if (reader.tokenType()==QXmlStreamReader::StartElement) {
-      if (tag_name == "item") {
+      if (tag_name == u"item") {
         wpt = new Waypoint;
 
         QXmlStreamAttributes a = reader.attributes();
@@ -57,7 +57,7 @@ static void MapfactorRead()
     }
 
     if (reader.tokenType() == QXmlStreamReader::EndElement) {
-      if (wpt && reader.name() == "item") {
+      if (wpt && reader.name() == u"item") {
         waypt_add(wpt);
       }
     }

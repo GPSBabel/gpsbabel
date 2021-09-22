@@ -38,7 +38,6 @@
 #include <QtCore/QList>                 // for QList
 #include <QtCore/QScopedPointer>        // for QScopedPointer
 #include <QtCore/QString>               // for QString
-#include <QtCore/QStringRef>            // for QStringRef
 #include <QtCore/QTextCodec>            // for QTextCodec
 #include <QtCore/QTextStream>           // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute

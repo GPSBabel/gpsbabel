@@ -27,7 +27,6 @@
 #include <QtCore/QLatin1String>         // for QLatin1String
 #include <QtCore/QPair>                 // for QPair, operator==
 #include <QtCore/QString>               // for QString, operator==, operator+
-#include <QtCore/QStringRef>            // for QStringRef
 #include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
 #include <QtCore/QtGlobal>              // for qPrintable, QAddConst<>::Type
 
