@@ -894,7 +894,7 @@ void
 GpxFormat::gpx_cdata(const QStringView& s)
 {
   QString* cdata;
-  cdatastr += s;
+  cdatastr += s.toString();
 
   if (!cur_tag) {
     return;
