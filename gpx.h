@@ -197,12 +197,12 @@ private:
   void tag_wpt(const QXmlStreamAttributes& attr);
   void tag_cache_desc(const QXmlStreamAttributes& attr);
   void tag_gs_cache(const QXmlStreamAttributes& attr) const;
-  void start_something_else(const QStringView& el, const QXmlStreamAttributes& attr);
+  void start_something_else(QStringView el, const QXmlStreamAttributes& attr);
   void end_something_else();
   void tag_log_wpt(const QXmlStreamAttributes& attr) const;
-  void gpx_start(const QStringView& el, const QXmlStreamAttributes& attr);
-  void gpx_end(const QStringView& unused);
-  void gpx_cdata(const QStringView& s);
+  void gpx_start(QStringView el, const QXmlStreamAttributes& attr);
+  void gpx_end(QStringView unused);
+  void gpx_cdata(QStringView s);
   void write_attributes(const QXmlStreamAttributes& attributes) const;
   void fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;
