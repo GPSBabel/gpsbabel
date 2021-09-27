@@ -273,7 +273,7 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
 }
 
 static double
-tef_read_comma_float(const QStringView& value)
+tef_read_comma_float(QStringView value)
 {
   QString svalue = value.toString();
 

@@ -153,7 +153,7 @@ xml_deinit()
 }
 
 static xg_shortcut
-xml_shortcut(const QStringView& name)
+xml_shortcut(QStringView name)
 {
    QString key = name.toString();
    if (xg_shortcut_taglist->contains(key)) {
