@@ -183,7 +183,7 @@ nav_read()
 
   while (!reader.atEnd()) {
     if (reader.tokenType() == QXmlStreamReader::StartElement) {
-      if (reader.name() == "CacheDetails") {
+      if (reader.name() == u"CacheDetails") {
         NaviReadCache(reader);
       }
     }
