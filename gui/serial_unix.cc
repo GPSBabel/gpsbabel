@@ -23,11 +23,11 @@
 #ifdef HAVE_UDEV
 #include <libudev.h>            // for udev_device_get_property_value, udev_device_get_devnode, udev_device_new_from_syspath, udev_device_unref, udev_enumerate_add_match_subsystem, udev_enumerate_get_list_entry, udev_enumerate_new, udev_enumerate_scan_devices, udev_enumerate_unref, udev_list_ent...
 
-#include <QtCore/QDebug>        // for QDebug
-#include <QtCore/QSet>          // for QSet
-#include <QtCore/QString>       // for QString, operator==
-#include <QtCore/QStringList>   // for QStringList
-#include <QtWidgets/QComboBox>  // for QComboBox
+#include <QDebug>               // for QDebug
+#include <QSet>                 // for QSet
+#include <QString>              // for QString, operator==
+#include <QStringList>          // for QStringList
+#include <QComboBox>            // for QComboBox
 
 #include "mainwindow.h"         // for MainWindow
 

@@ -26,8 +26,8 @@
  * we don't implement that at this time in GPSBabel.
  */
 
-#include <QtCore/QString>               // for QString
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QString>                      // for QString
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "gbfile.h"                     // for gbfputc, gbfprintf, gbfclose, gbfopen, gbfputcstr, gbfputs, gbfile, gbfputuint16

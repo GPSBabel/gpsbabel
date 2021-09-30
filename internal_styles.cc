@@ -1,7 +1,7 @@
 /* This file is machine-generated from the contents of style/ */
 /* by mkstyle.sh.   Editing it by hand is an exceedingly bad idea. */
 
-#include <QtCore/QVector>
+#include <QVector>
 #include "defs.h"
 #if CSVFMTS_ENABLED
 static char arc[] =

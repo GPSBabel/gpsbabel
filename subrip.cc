@@ -19,12 +19,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime, operator<<
-#include <QtCore/QDebug>        // for QDebug
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/Qt>            // for UTC
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime, operator<<
+#include <QDebug>               // for QDebug
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <Qt>                   // for UTC
 
 #include "defs.h"
 #include "subrip.h"

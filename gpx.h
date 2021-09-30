@@ -21,14 +21,14 @@
 #ifndef GPX_H_INCLUDED_
 #define GPX_H_INCLUDED_
 
-#include <QtCore/QHash>                 // for QHash
-#include <QtCore/QString>               // for QString
-#include <QtCore/QStringList>           // for QStringList
-#include <QtCore/QStringView>           // for QStringView
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QVersionNumber>        // for QVersionNumber
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamReader>      // for QXmlStreamReader
+#include <QHash>                        // for QHash
+#include <QString>                      // for QString
+#include <QStringList>                  // for QStringList
+#include <QStringView>                  // for QStringView
+#include <QVector>                      // for QVector
+#include <QVersionNumber>               // for QVersionNumber
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QXmlStreamReader>             // for QXmlStreamReader
 
 #include "defs.h"
 #include "format.h"                     // for Format

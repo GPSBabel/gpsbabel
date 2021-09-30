@@ -67,10 +67,10 @@
 #include <cstdlib>              // for atoi
 #include <cstring>              // for memset
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QString>       // for QString
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/QtGlobal>      // for ushort
+#include <QChar>                // for QChar
+#include <QString>              // for QString
+#include <QVector>              // for QVector
+#include <QtGlobal>             // for ushort
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfwrite, gbfclose, gbfseek, gbfgetint32, gbfread, gbfile, gbfopen_le

@@ -28,8 +28,8 @@
 #include "defs.h"
 #include "garmin_device_xml.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QFile>
+#include <QXmlStreamAttributes>
+#include <QFile>
 #include <cstdio>
 
 #define MYNAME "whatever"

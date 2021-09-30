@@ -47,7 +47,7 @@
 #include "csv_util.h"
 #include "inifile.h"
 
-#include <QtCore/QString>
+#include <QString>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>

@@ -19,8 +19,8 @@
 
  */
 
-#include <QtCore/QString>               // for QString
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QString>                      // for QString
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, cb_start, cb_end, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping

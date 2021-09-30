@@ -28,11 +28,11 @@
 #include <cstring>              // for memcpy, strlen, strncpy, strchr
 #include <ctime>                // for time_t
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QString>       // for QString
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for qPrintable, foreach
+#include <QByteArray>           // for QByteArray
+#include <QChar>                // for QChar
+#include <QString>              // for QString
+#include <Qt>                   // for CaseInsensitive
+#include <QtGlobal>             // for qPrintable, foreach
 
 #include "defs.h"
 #include "cet_util.h"           // for cet_convert_init, cet_cs_vec_utf8
@@ -357,7 +357,7 @@ rw_deinit()
       gps_baud_rate = baud;
     }
   }
-  
+
   if (mkshort_handle) {
     mkshort_del_handle(&mkshort_handle);
   }

@@ -35,14 +35,14 @@
 #include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QDebug>          // for QDebug
-#include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString
-#include <QtCore/QTextCodec>      // for QTextCodec
-#include <QtCore/QVector>         // for QVector
-#include <QtCore/Qt>              // for CaseInsensitive
-#include <QtCore/QtGlobal>        // for foreach
+#include <QDebug>                 // for QDebug
+#include <QList>                  // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString
+#include <QTextCodec>             // for QTextCodec
+#include <QVector>                // for QVector
+#include <Qt>                     // for CaseInsensitive
+#include <QtGlobal>               // for foreach
 
 #include "formspec.h"             // for FormatSpecificData
 #include "inifile.h"              // for inifile_t
@@ -742,7 +742,7 @@ public:
   void disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc);
 
   // Only expose methods from our underlying container that won't corrupt our private data.
-  // Our contained element (route_head) also contains a container (waypoint_list), 
+  // Our contained element (route_head) also contains a container (waypoint_list),
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
   // public types

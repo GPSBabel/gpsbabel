@@ -24,25 +24,25 @@
 #include <cstdlib>                                 // for atoi, strtod
 #include <cstring>                                 // for strchr, strncpy
 
-#include <QtCore/QDate>                            // for QDate
-#include <QtCore/QDateTime>                        // for QDateTime
-#include <QtCore/QHash>                            // for QHash
-#include <QtCore/QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QLatin1Char>                      // for QLatin1Char
-#include <QtCore/QLatin1String>                    // for QLatin1String
-#include <QtCore/QStaticStringData>                // for QStaticStringData
-#include <QtCore/QString>                          // for QString, QStringLiteral, operator+, operator==
-#include <QtCore/QStringList>                      // for QStringList
-#include <QtCore/QStringView>                      // for QStringView
-#include <QtCore/QTime>                            // for QTime
-#include <QtCore/QVersionNumber>                   // for QVersionNumber
-#include <QtCore/QXmlStreamAttribute>              // for QXmlStreamAttribute
-#include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamNamespaceDeclaration>   // for QXmlStreamNamespaceDeclaration
-#include <QtCore/QXmlStreamNamespaceDeclarations>  // for QXmlStreamNamespaceDeclarations
-#include <QtCore/QXmlStreamReader>                 // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
-#include <QtCore/Qt>                               // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>                         // for qAsConst, QAddConst<>::Type
+#include <QDate>                                   // for QDate
+#include <QDateTime>                               // for QDateTime
+#include <QHash>                                   // for QHash
+#include <QIODevice>                               // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QLatin1Char>                             // for QLatin1Char
+#include <QLatin1String>                           // for QLatin1String
+#include <QStaticStringData>                       // for QStaticStringData
+#include <QString>                                 // for QString, QStringLiteral, operator+, operator==
+#include <QStringList>                             // for QStringList
+#include <QStringView>                             // for QStringView
+#include <QTime>                                   // for QTime
+#include <QVersionNumber>                          // for QVersionNumber
+#include <QXmlStreamAttribute>                     // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
+#include <QXmlStreamNamespaceDeclaration>          // for QXmlStreamNamespaceDeclaration
+#include <QXmlStreamNamespaceDeclarations>         // for QXmlStreamNamespaceDeclarations
+#include <QXmlStreamReader>                        // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
+#include <Qt>                                      // for CaseInsensitive, UTC
+#include <QtGlobal>                                // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "gpx.h"

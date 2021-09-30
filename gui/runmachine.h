@@ -20,11 +20,11 @@
 #ifndef RUNMACHINE_H
 #define RUNMACHINE_H
 
-#include <QtCore/QObject>      // for QObject
-#include <QtCore/QProcess>     // for QProcess, QProcess::ExitStatus, QProcess::ProcessError, qt_getEnumName
-#include <QtCore/QString>      // for QString
-#include <QtCore/QStringList>  // for QStringList
-#include <QtWidgets/QWidget>   // for QWidget
+#include <QObject>             // for QObject
+#include <QProcess>            // for QProcess, QProcess::ExitStatus, QProcess::ProcessError, qt_getEnumName
+#include <QString>             // for QString
+#include <QStringList>         // for QStringList
+#include <QWidget>             // for QWidget
 
 #include <optional>            // for optional, nullopt
 

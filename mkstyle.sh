@@ -2,7 +2,7 @@
 
 echo "/* This file is machine-generated from the contents of style/ */"
 echo "/* by mkstyle.sh.   Editing it by hand is an exceedingly bad idea. */"
-echo 
+echo
 
 # set the locale for sorting so that the collate order doesn't depend
 # on the users environment.
@@ -30,7 +30,7 @@ else
   exit 1
 fi
 
-echo "#include <QtCore/QVector>"
+echo "#include <QVector>"
 echo "#include \"defs.h\""
 echo "#if CSVFMTS_ENABLED"
 for i in "$(dirname "$0")"/style/*.style

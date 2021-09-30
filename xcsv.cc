@@ -32,19 +32,19 @@
 #include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                   // for optional
 
-#include <QtCore/QByteArray>          // for QByteArray
-#include <QtCore/QChar>               // for QChar
-#include <QtCore/QDate>               // for QDate
-#include <QtCore/QDateTime>           // for QDateTime
-#include <QtCore/QDebug>              // for QDebug
-#include <QtCore/QHash>               // for QHash
-#include <QtCore/QIODevice>           // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>               // for QList
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString, operator+, operator==
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QTextStream>         // for QTextStream
-#include <QtCore/QtGlobal>            // for qAsConst, qPrintable
+#include <QByteArray>                 // for QByteArray
+#include <QChar>                      // for QChar
+#include <QDate>                      // for QDate
+#include <QDateTime>                  // for QDateTime
+#include <QDebug>                     // for QDebug
+#include <QHash>                      // for QHash
+#include <QIODevice>                  // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                      // for QList
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString, operator+, operator==
+#include <QStringList>                // for QStringList
+#include <QTextStream>                // for QTextStream
+#include <QtGlobal>                   // for qAsConst, qPrintable
 
 #include "defs.h"
 #include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit

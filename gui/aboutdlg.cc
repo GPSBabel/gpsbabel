@@ -21,9 +21,9 @@
 //
 
 #include "aboutdlg.h"
-#include <QtGui/QTextCursor>          // for QTextCursor
-#include <QtGui/QTextDocument>        // for QTextDocument
-#include <QtWidgets/QTextEdit>        // for QTextEdit
+#include <QTextCursor>                // for QTextCursor
+#include <QTextDocument>              // for QTextDocument
+#include <QTextEdit>                  // for QTextEdit
 #include "appname.h"                  // for appName
 #include "upgrade.h"                  // for UpgradeCheck
 

@@ -33,10 +33,10 @@
 #include <cstdint>           // for uint8_t, int16_t, uint16_t
 #include <cstdio>            // for size_t
 
-#include <QtCore/QDateTime>  // for QDateTime
-#include <QtCore/QList>      // for QList
-#include <QtCore/QString>    // for QString
-#include <QtCore/QVector>    // for QVector
+#include <QDateTime>         // for QDateTime
+#include <QList>             // for QList
+#include <QString>           // for QString
+#include <QVector>           // for QVector
 
 #include "defs.h"
 #include "format.h"          // for Format

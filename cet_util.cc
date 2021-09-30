@@ -19,9 +19,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QDebug>         // for QDebug
-#include <QtCore/QTextCodec>     // for QTextCodec
+#include <QByteArray>            // for QByteArray
+#include <QDebug>                // for QDebug
+#include <QTextCodec>            // for QTextCodec
 
 #include "defs.h"
 #include "cet_util.h"

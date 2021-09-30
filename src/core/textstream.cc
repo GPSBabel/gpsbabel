@@ -17,9 +17,9 @@
 
  */
 
-#include <QtCore/QFile>        // for QFile
-#include <QtCore/QFlags>     // for QFlags
-#include <QtCore/QIODevice>  // for QIODevice, QIODevice::OpenMode, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QFile>               // for QFile
+#include <QFlags>            // for QFlags
+#include <QIODevice>         // for QIODevice, QIODevice::OpenMode, QIODevice::ReadOnly, QIODevice::WriteOnly
 
 #include "defs.h"              // for fatal, list_codecs
 #include "src/core/textstream.h"

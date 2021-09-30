@@ -26,7 +26,7 @@
 
 #include "defs.h"
 #include "jeeps/gpsmath.h"
-#include <QtCore/QList>
+#include <QList>
 
 static gbfile* file_in, *file_out;
 static int indatum;

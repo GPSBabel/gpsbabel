@@ -40,22 +40,22 @@
 #include "jeeps/gpsmath.h"                 // for GPS_Math_WGS84_To_Known_Datum_M
 #include "src/core/datetime.h"             // for DateTime
 
-#include <QtCore/QByteArray>               // for QByteArray
-#include <QtCore/QDate>                    // for QDate
-#include <QtCore/QDateTime>                // for QDateTime
-#include <QtCore/QFile>                    // for QFile
-#include <QtCore/QFileInfo>                // for QFileInfo
-#include <QtCore/QList>                    // for QList<>::iterator, QList
-#include <QtCore/QPair>                    // for QPair
-#include <QtCore/QRegularExpression>       // for QRegularExpression
-#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
-#include <QtCore/QString>                  // for QString
-#include <QtCore/QTextCodec>               // for QTextCodec
-#include <QtCore/QTime>                    // for QTime
-#include <QtCore/QVariant>                 // for QVariant
-#include <QtCore/QVector>                  // for QVector
-#include <QtCore/Qt>                       // for UTC, ISODate
-#include <QtCore/QtGlobal>                 // for qSwap, qPrintable, qint64
+#include <QByteArray>                      // for QByteArray
+#include <QDate>                           // for QDate
+#include <QDateTime>                       // for QDateTime
+#include <QFile>                           // for QFile
+#include <QFileInfo>                       // for QFileInfo
+#include <QList>                           // for QList<>::iterator, QList
+#include <QPair>                           // for QPair
+#include <QRegularExpression>              // for QRegularExpression
+#include <QRegularExpressionMatch>         // for QRegularExpressionMatch
+#include <QString>                         // for QString
+#include <QTextCodec>                      // for QTextCodec
+#include <QTime>                           // for QTime
+#include <QVariant>                        // for QVariant
+#include <QVector>                         // for QVector
+#include <Qt>                              // for UTC, ISODate
+#include <QtGlobal>                        // for qSwap, qPrintable, qint64
 
 #include <algorithm>                       // for sort, min
 #include <cassert>                         // for assert

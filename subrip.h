@@ -22,10 +22,10 @@
 #ifndef SUBRIP_H_INCLUDED_
 #define SUBRIP_H_INCLUDED_
 
-#include <QtCore/QDateTime>  // for QDateTime, operator<<
-#include <QtCore/QString>    // for QString
-#include <QtCore/QTime>      // for QTime
-#include <QtCore/QVector>    // for QVector
+#include <QDateTime>         // for QDateTime, operator<<
+#include <QString>           // for QString
+#include <QTime>             // for QTime
+#include <QVector>           // for QVector
 
 #include "defs.h"
 #include "format.h"          // for Format

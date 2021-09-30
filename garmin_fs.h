@@ -27,8 +27,8 @@
 #include <cstddef>                  // for size_t
 #include <cstdint>                  // for int32_t, int16_t, uint16_t
 
-#include <QtCore/QString>           // for QString
-#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
+#include <QString>                  // for QString
+#include <QXmlStreamWriter>         // for QXmlStreamWriter
 
 #include "defs.h"
 #include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData

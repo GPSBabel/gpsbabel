@@ -20,7 +20,7 @@
 #ifndef QUSASCIICODEC_H
 #define QUSASCIICODEC_H
 
-#include <QtCore/QTextCodec>
+#include <QTextCodec>
 
 namespace gpsbabel
 {

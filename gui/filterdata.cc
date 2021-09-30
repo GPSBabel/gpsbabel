@@ -227,7 +227,7 @@ QStringList MiscFltFilterData::makeOptionString()
       s += QString(",%1").arg(trkopts.at(sortTrkBy_));
     }
     args << s;
-    
+
   }
   return args;
 }

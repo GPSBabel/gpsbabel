@@ -23,8 +23,8 @@
 #ifndef MYNAV_H_INCLUDED_
 #define MYNAV_H_INCLUDED_
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
+#include <QString>
+#include <QVector>
 
 #include "defs.h"
 #include "format.h"

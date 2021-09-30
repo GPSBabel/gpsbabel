@@ -39,14 +39,14 @@
 #include <cstdio>               // for printf
 #include <cstdlib>              // for free, malloc
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QTimeZone>     // for QTimeZone
-#include <QtCore/Qt>            // for LocalTime
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QByteArray>           // for QByteArray
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QTimeZone>            // for QTimeZone
+#include <Qt>                   // for LocalTime
+#include <QtGlobal>             // for qPrintable
 
 #include "defs.h"
 #include "globalsat_sport.h"

@@ -20,9 +20,9 @@
 
  */
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QString>      // for QString
-#include <QtCore/QtGlobal>     // for qPrintable
+#include <QByteArray>          // for QByteArray
+#include <QString>             // for QString
+#include <QtGlobal>            // for qPrintable
 
 #include <cassert>             // for assert
 #include <cctype>              // for tolower
@@ -647,7 +647,7 @@ gbfgetc(gbfile* file)
  * gbfgets: (as fgets)
  */
 
-QString 
+QString
 gbfgets(char* buf, int len, gbfile* file)
 {
   char* result = buf;
@@ -695,8 +695,8 @@ gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file)
 
 // goofy) calling signature.
 gbsize_t
-gbfread(QString& buf, const gbsize_t size, 
-        const gbsize_t members, gbfile* file) 
+gbfread(QString& buf, const gbsize_t size,
+        const gbsize_t members, gbfile* file)
 {
   QByteArray tmp;
   tmp.resize(members * size);
@@ -1018,7 +1018,7 @@ gbfgetcstr(gbfile* file)
   char* result = gbfgetcstr_old(file);
   QString rv(result);
   xfree(result);
-  return rv; 
+  return rv;
 }
 
 QByteArray
@@ -1027,7 +1027,7 @@ gbfgetnativecstr(gbfile* file)
   char* result = gbfgetcstr_old(file);
   QByteArray rv(result);
   xfree(result);
-  return rv; 
+  return rv;
 }
 
 /*

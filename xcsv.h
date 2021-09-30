@@ -25,13 +25,13 @@
 #include <optional>               // for optional
 #include <utility>                // for move
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QHash>           // for QHash
-#include <QtCore/QList>           // for QList
-#include <QtCore/QString>         // for QString
-#include <QtCore/QStringList>     // for QStringList
-#include <QtCore/QVector>         // for QVector
+#include <QByteArray>             // for QByteArray
+#include <QDateTime>              // for QDateTime
+#include <QHash>                  // for QHash
+#include <QList>                  // for QList
+#include <QString>                // for QString
+#include <QStringList>            // for QStringList
+#include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"

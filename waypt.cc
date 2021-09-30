@@ -24,12 +24,12 @@
 #include <cstdio>               // for printf, fflush, fprintf, stdout
 #include <algorithm>            // for stable_sort
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QList>         // for QList
-#include <QtCore/QString>       // for QString, operator==
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QChar>                // for QChar
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList
+#include <QString>              // for QString, operator==
+#include <QTime>                // for QTime
+#include <QtGlobal>             // for qPrintable
 
 #include "defs.h"
 #include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND

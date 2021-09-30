@@ -17,14 +17,14 @@
 
  */
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QIODevice>        // for operator|, QIODevice, QIODevice::ReadOnly, QIODevice::Text
-#include <QtCore/QJsonArray>       // for QJsonArray
-#include <QtCore/QJsonDocument>    // for QJsonDocument, QJsonDocument::Compact, QJsonDocument::Indented, QJsonDocument::JsonFormat
-#include <QtCore/QJsonObject>      // for QJsonObject
-#include <QtCore/QJsonParseError>  // for QJsonParseError
-#include <QtCore/QJsonValue>       // for QJsonValue
-#include <QtCore/QJsonValueRef>    // for QJsonValueRef
+#include <QByteArray>              // for QByteArray
+#include <QIODevice>               // for operator|, QIODevice, QIODevice::ReadOnly, QIODevice::Text
+#include <QJsonArray>              // for QJsonArray
+#include <QJsonDocument>           // for QJsonDocument, QJsonDocument::Compact, QJsonDocument::Indented, QJsonDocument::JsonFormat
+#include <QJsonObject>             // for QJsonObject
+#include <QJsonParseError>         // for QJsonParseError
+#include <QJsonValue>              // for QJsonValue
+#include <QJsonValueRef>           // for QJsonValueRef
 
 #include "defs.h"
 #include "geojson.h"

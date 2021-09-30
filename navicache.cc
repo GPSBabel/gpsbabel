@@ -19,7 +19,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "src/core/file.h"
-#include <QtCore/QXmlStreamReader>
+#include <QXmlStreamReader>
 
 static char* noretired = nullptr;
 static QString read_fname;

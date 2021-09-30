@@ -21,11 +21,11 @@
 
 */
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QtEndian>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDebug>
+#include <QFile>
+#include <QtEndian>
 
 #include "ggv_bin.h"
 

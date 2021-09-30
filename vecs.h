@@ -23,9 +23,9 @@
 
 #include <cstdint>
 
-#include <QtCore/QString>       // for QString
-#include <QtCore/QStringList>   // for QStringList
-#include <QtCore/QVector>       // for QVector<>::iterator, QVector
+#include <QString>              // for QString
+#include <QStringList>          // for QStringList
+#include <QVector>              // for QVector<>::iterator, QVector
 
 #include "defs.h"
 #include "dg-100.h"
