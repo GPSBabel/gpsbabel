@@ -91,7 +91,7 @@ static struct {
 static void* fd;
 static FILE* fl;
 static char* port;
-static char* erase;
+static char* opt_erase;
 
 enum wintec_gps_types {
   UNKNOWN, WBT200, WBT201, WSG1000
@@ -758,7 +758,7 @@ static void wbt200_data_read()
 
   /* Erase data? */
 
-  if (*erase != '0') {
+  if (*opt_erase != '0') {
     int f;
     db(1, "Erasing data\n");
     for (f = 27; f <= 31; f++) {
@@ -967,7 +967,7 @@ static void wbt201_data_read()
     }
   }
 
-  if (*erase != '0') {
+  if (*opt_erase != '0') {
     /* erase device */
     do_simple("@AL,5,6", BUFSPEC(line_buf));
   }
@@ -1056,7 +1056,7 @@ static void data_read()
 
 static QVector<arglist_t> wbt_sargs = {
   {
-    "erase", &erase, "Erase device data after download",
+    "erase", &opt_erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 };
