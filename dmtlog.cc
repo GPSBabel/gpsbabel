@@ -777,7 +777,7 @@ dmtlog_write()
   gbfputint32(4, fout);
   gbfputint32(1, fout);
   gbfputint32(0x100001, fout);
-  gbfputuint32((const uint32_t)gpsbabel_time, fout);
+  gbfputuint32((uint32_t)gpsbabel_time, fout);
 
   header_written = 0;
   this_index = 0;
