@@ -24,8 +24,8 @@
 #include <cstdlib>              // for abs, atoi, strtod
 #include <optional>             // for optional
 
-#include <QtCore/QString>       // for QString
-#include <QtCore/QtGlobal>      // for qAsConst, QAddConst<>::Type
+#include <QString>              // for QString
+#include <QtGlobal>             // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "interpolate.h"

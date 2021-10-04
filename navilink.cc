@@ -26,7 +26,7 @@
 #include "gbser.h"
 #include "jeeps/gpsmath.h"
 #include "navilink.h"
-#include <QtCore/QThread>
+#include <QThread>
 
 #define MYNAME "NAVILINK"
 

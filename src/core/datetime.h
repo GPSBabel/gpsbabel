@@ -25,14 +25,14 @@
 
 #include <ctime>
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
+#include <QtGlobal>
+#include <QDateTime>
+#include <QString>
 
 // As this code began in C, we have several hundred places that set and
 // read creation_time as a time_t.  Provide some operator overloads to make
 // that less painful.
-// Probably all of these should eventually go away and be replaced by 
+// Probably all of these should eventually go away and be replaced by
 // "Better" code in the callers.
 
 // Consider putting in a namespace instead of prefixing 'gb'.

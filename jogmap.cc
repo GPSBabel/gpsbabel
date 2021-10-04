@@ -25,7 +25,7 @@
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 
 static route_head* trk;
 

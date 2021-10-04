@@ -21,7 +21,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <cassert>                 // for assert
 #include <cmath>                   // for fabs, lround
@@ -30,14 +30,14 @@
 #include <cstring>                 // for strcmp, memmove, memset, strlen
 #include <ctime>                   // for gmtime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QScopedPointer>   // for QScopedPointer
-#include <QtCore/QString>          // for QString
-#include <QtCore/QTextCodec>       // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextDecoder>     // for QTextDecoder
-#include <QtCore/QTextEncoder>     // for QTextEncoder
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
+#include <QByteArray>              // for QByteArray
+#include <QScopedPointer>          // for QScopedPointer
+#include <QString>                 // for QString
+#include <QTextCodec>              // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextDecoder>            // for QTextDecoder
+#include <QTextEncoder>            // for QTextEncoder
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
 
 #include "defs.h"
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, GMSD_GET, GMSD_SETSTRQ, garmin_fs_alloc, GMSD_FIND
@@ -109,7 +109,7 @@ read_until_wcstr(const QString& str)
   QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
   QByteArray target = encoder->fromUnicode(str).append(2, 0);
   assert((target.size() % 2) == 0);
-  
+
   int eos = 0;
 
   int sz = target.size();

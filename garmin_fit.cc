@@ -30,13 +30,13 @@
 #include <utility>             // for pair
 #include <vector>              // for vector
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QDateTime>    // for QDateTime
-#include <QtCore/QFileInfo>    // for QFileInfo
-#include <QtCore/QLatin1Char>  // for QLatin1Char
-#include <QtCore/QString>      // for QString
-#include <QtCore/Qt>           // for CaseInsensitive
-#include <QtCore/QtGlobal>     // for qint64
+#include <QByteArray>          // for QByteArray
+#include <QDateTime>           // for QDateTime
+#include <QFileInfo>           // for QFileInfo
+#include <QLatin1Char>         // for QLatin1Char
+#include <QString>             // for QString
+#include <Qt>                  // for CaseInsensitive
+#include <QtGlobal>            // for qint64
 
 #include "defs.h"
 #include "garmin_fit.h"

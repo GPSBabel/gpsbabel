@@ -23,11 +23,11 @@
 
 #include <cstdio>               // for SEEK_CUR
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QVector>       // for QVector
+#include <QChar>                // for QChar
+#include <QDate>                // for QDate
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QVector>              // for QVector
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfgetint16, gbfgetint32, gbfseek, gbfclose, gbfopen, gbfile

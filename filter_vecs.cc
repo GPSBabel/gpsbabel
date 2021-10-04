@@ -19,12 +19,12 @@
 
  */
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QString>      // for QString
-#include <QtCore/QStringList>  // for QStringList
-#include <QtCore/QVector>      // for QVector<>::iterator, QVector
-#include <QtCore/Qt>           // for CaseInsensitive
-#include <QtCore/QtGlobal>     // for qPrintable
+#include <QByteArray>          // for QByteArray
+#include <QString>             // for QString
+#include <QStringList>         // for QStringList
+#include <QVector>             // for QVector<>::iterator, QVector
+#include <Qt>                  // for CaseInsensitive
+#include <QtGlobal>            // for qPrintable
 
 #include <algorithm>           // for sort
 #include <cassert>             // for assert

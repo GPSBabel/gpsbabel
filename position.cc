@@ -22,8 +22,8 @@
 #include <cmath>            // for fabs
 #include <cstdlib>          // for strtod
 
-#include <QtCore/QList>     // for QList
-#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type
+#include <QList>            // for QList
+#include <QtGlobal>         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "grtcirc.h"        // for RAD, gcdist, radtometers

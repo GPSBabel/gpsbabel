@@ -23,7 +23,7 @@
 #ifndef BEND_H_INCLUDED_
 #define BEND_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for route_head (ptr only), ARGTYPE_FLOAT, ARG_NOMINMAX
 #include "filter.h"  // for Filter

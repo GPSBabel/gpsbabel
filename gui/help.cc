@@ -22,10 +22,10 @@
 //------------------------------------------------------------------------
 #include "help.h"
 
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString
-#include <QtCore/QUrl>                // for QUrl
-#include <QtGui/QDesktopServices>     // for QDesktopServices
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString
+#include <QUrl>                       // for QUrl
+#include <QDesktopServices>           // for QDesktopServices
 
 #include "format.h"                   // for Format
 

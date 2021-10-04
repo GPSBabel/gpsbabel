@@ -28,20 +28,20 @@
 #include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QChar>                 // for QChar
-#include <QtCore/QDate>                 // for QDate
-#include <QtCore/QDateTime>             // for QDateTime
-#include <QtCore/QFile>                 // for QFile
-#include <QtCore/QIODevice>             // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QStaticStringData>     // for QStaticStringData
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QStringList>           // for QStringList
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for ISODate
-#include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QChar>                        // for QChar
+#include <QDate>                        // for QDate
+#include <QDateTime>                    // for QDateTime
+#include <QFile>                        // for QFile
+#include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                        // for QList
+#include <QStaticStringData>            // for QStaticStringData
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                  // for QStringList
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for ISODate
+#include <QtGlobal>                     // for foreach, qint64, qPrintable
 
 #include "defs.h"
 #include "kml.h"

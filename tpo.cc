@@ -77,12 +77,12 @@
 #include <cstring>                     // for strncmp, strlen, memset
 #include <vector>                      // for vector
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for operator==, QChar
-#include <QtCore/QCharRef>             // for QCharRef
-#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
-#include <QtCore/QString>              // for QString
-#include <QtCore/QtGlobal>             // for qPrintable, Q_UNUSED
+#include <QByteArray>                  // for QByteArray
+#include <QChar>                       // for operator==, QChar
+#include <QCharRef>                    // for QCharRef
+#include <QScopedArrayPointer>         // for QScopedArrayPointer
+#include <QString>                     // for QString
+#include <QtGlobal>                    // for qPrintable, Q_UNUSED
 
 #include "defs.h"
 #include "gbfile.h"                    // for gbfread, gbfgetc, gbfgetint32, gbfwrite, gbfputint16, gbfseek, gbfgetdbl, gbfgetint16, gbfputdbl, gbfclose, gbfputint32, gbfile, gbfopen_le, gbfgetuint16
@@ -644,13 +644,13 @@ static void tpo_process_tracks()
     track_temp->line_width = styles[track_style].wide;
 
     if (DEBUG) printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-                        qPrintable(track_name), line_type, 
+                        qPrintable(track_name), line_type,
                         qPrintable(styles[track_style].name),
                         styles[track_style].wide,
                         styles[track_style].dash,rgb);
 
     // Track description
-    track_temp->rte_desc = 
+    track_temp->rte_desc =
       QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
                          .arg(styles[track_style].name)
                          .arg(styles[track_style].wide)

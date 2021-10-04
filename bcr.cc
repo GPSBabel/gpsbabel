@@ -30,9 +30,9 @@
 #include <cstdio>           // for printf, snprintf, sscanf
 #include <cstdlib>          // for atof, atoi
 
-#include <QtCore/QString>   // for QString, operator+
-#include <QtCore/Qt>        // for CaseInsensitive
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>          // for QString, operator+
+#include <Qt>               // for CaseInsensitive
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "csv_util.h"       // for csv_stringclean

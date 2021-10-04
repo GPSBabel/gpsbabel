@@ -36,13 +36,13 @@
 #include <cstring>                 // for memcpy, strcmp, strlen, strncmp
 #include <ctime>                   // for gmtime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QDate>            // for QDate
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QString>          // for QString
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/Qt>               // for UTC
-#include <QtCore/QtGlobal>         // for qPrintable
+#include <QByteArray>              // for QByteArray
+#include <QDate>                   // for QDate
+#include <QDateTime>               // for QDateTime
+#include <QString>                 // for QString
+#include <QTime>                   // for QTime
+#include <Qt>                      // for UTC
+#include <QtGlobal>                // for qPrintable
 
 #include "defs.h"
 #include "gbser.h"                 // for gbser_read_line, gbser_write, gbser_deinit, gbser_flush, gbser_init, gbser_is_serial, gbser_read_wait, gbser_ERROR, gbser_OK
@@ -276,7 +276,7 @@ decode_itracku_time(uint32_t date)
   int day = (date >> 17) & 31;
   int month = ((date >> 22) & 15);
   int year = ((date >> 26) & 63) + 2000;
-  QDate qdate(year, month, day); 
+  QDate qdate(year, month, day);
 
   return QDateTime(qdate, qtime, Qt::UTC);
 }

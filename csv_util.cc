@@ -26,8 +26,8 @@
 #include <cctype>          // for isspace
 #include <cstring>         // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
-#include <QtCore/QRegExp>  // for QRegExp
-#include <QtCore/QString>  // for QString
+#include <QRegExp>         // for QRegExp
+#include <QString>         // for QString
 
 #include "defs.h"
 #include "csv_util.h"

@@ -21,8 +21,8 @@
 
 #include <cstdlib>          // for atoi, strtod
 
-#include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
+#include <QString>          // for QString
+#include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"           // for Waypoint, waypt_del, route_add_head, route_add_wpt, route_head, waypt_add, waypt_count, xcalloc, xfree, kMilesPerKilometer
 #include "radius.h"

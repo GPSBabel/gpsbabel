@@ -21,7 +21,7 @@
 #ifndef CSV_UTIL_H_INCLUDED_
 #define CSV_UTIL_H_INCLUDED_
 
-#include <QtCore/QString>      // for QString
+#include <QString>             // for QString
 
 #include "defs.h"
 

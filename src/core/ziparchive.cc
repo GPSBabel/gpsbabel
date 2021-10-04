@@ -29,8 +29,8 @@
 #include "zlib/contrib/minizip/zip.h"
 #endif
 
-#include <QtCore/QFile>
-#include <QtCore/QDebug>
+#include <QFile>
+#include <QDebug>
 
 ZipArchive::ZipArchive(QString filename)
 : filename_(filename), valid_(false) {

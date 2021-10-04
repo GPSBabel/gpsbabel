@@ -20,20 +20,20 @@
  */
 
 #include "upgrade.h"
-#include <QtCore/qglobal.h>                 // for qDebug
-#include <QtCore/QByteArray>                // for QByteArray
-#include <QtCore/QDebug>                    // for QDebug
-#include <QtCore/QLocale>                   // for QLocale
-#include <QtCore/QSysInfo>                  // for QSysInfo
-#include <QtCore/QUrl>                      // for QUrl
-#include <QtCore/QVariant>                  // for QVariant
-#include <QtCore/QVersionNumber>            // for QVersionNumber, operator<, operator==
-#include <QtCore/Qt>                        // for ISODate, RichText
-#include <QtGui/QDesktopServices>           // for QDesktopServices
-#include <QtNetwork/QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QtNetwork/QNetworkReply>          // for QNetworkReply, QNetworkReply::NoError
-#include <QtNetwork/QNetworkRequest>        // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::Redi...
-#include <QtWidgets/QMessageBox>            // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
+#include <qglobal.h>                        // for qDebug
+#include <QByteArray>                       // for QByteArray
+#include <QDebug>                           // for QDebug
+#include <QLocale>                          // for QLocale
+#include <QSysInfo>                         // for QSysInfo
+#include <QUrl>                             // for QUrl
+#include <QVariant>                         // for QVariant
+#include <QVersionNumber>                   // for QVersionNumber, operator<, operator==
+#include <Qt>                               // for ISODate, RichText
+#include <QDesktopServices>                 // for QDesktopServices
+#include <QNetworkAccessManager>            // for QNetworkAccessManager
+#include <QNetworkReply>                    // for QNetworkReply, QNetworkReply::NoError
+#include <QNetworkRequest>                  // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::Redi...
+#include <QMessageBox>                      // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
 #include <QtXml/QDomDocument>               // for QDomDocument
 #include <QtXml/QDomElement>                // for QDomElement
 #include <QtXml/QDomNode>                   // for QDomNode

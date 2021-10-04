@@ -19,10 +19,10 @@
 #ifndef SRC_CORE_TEXTSTREAM_INCLUDED_H_
 #define SRC_CORE_TEXTSTREAM_INCLUDED_H_
 
-#include <QtCore/QIODevice>    // for QIODevice, QIODevice::OpenMode
-#include <QtCore/QString>      // for QString
-#include <QtCore/QTextCodec>   // for QTextCodec
-#include <QtCore/QTextStream>  // for QTextStream
+#include <QIODevice>           // for QIODevice, QIODevice::OpenMode
+#include <QString>             // for QString
+#include <QTextCodec>          // for QTextCodec
+#include <QTextStream>         // for QTextStream
 
 #include "src/core/file.h"     // for File
 

@@ -36,14 +36,14 @@
 #include <cstring>                    // for strchr
 #include <ctime>                      // for localtime, strftime
 
-#include <QtCore/QDate>               // for QDate
-#include <QtCore/QDateTime>           // for QDateTime
-#include <QtCore/QList>               // for QList<>::iterator, QList
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString, operator+
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QTime>               // for QTime
-#include <QtCore/QtGlobal>            // for qAsConst, QAddConst<>::Type
+#include <QDate>                      // for QDate
+#include <QDateTime>                  // for QDateTime
+#include <QList>                      // for QList<>::iterator, QList
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString, operator+
+#include <QStringList>                // for QStringList
+#include <QTime>                      // for QTime
+#include <QtGlobal>                   // for qAsConst, QAddConst<>::Type
 
 #include "cet_util.h"                 // for cet_convert_init
 #include "csv_util.h"                 // for csv_lineparse

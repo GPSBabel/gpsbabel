@@ -24,8 +24,8 @@
 
 #include <optional>             // for optional
 
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/QtGlobal>      // for qint64
+#include <QVector>              // for QVector
+#include <QtGlobal>             // for qint64
 
 #include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
 #include "filter.h"             // for Filter

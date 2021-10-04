@@ -19,16 +19,16 @@
 
  */
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QHash>                 // for QHash
-#include <QtCore/QIODevice>             // for QIODevice, QIODevice::ReadOnly
-#include <QtCore/QLatin1Char>           // for QLatin1Char
-#include <QtCore/QList>
-#include <QtCore/QStringView>           // for QStringView
-#include <QtCore/QTextCodec>            // for QTextCodec
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
-#include <QtCore/QtGlobal>              // for qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QHash>                        // for QHash
+#include <QIODevice>                    // for QIODevice, QIODevice::ReadOnly
+#include <QLatin1Char>                  // for QLatin1Char
+#include <QList>
+#include <QStringView>                  // for QStringView
+#include <QTextCodec>                   // for QTextCodec
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QXmlStreamReader>             // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
+#include <QtGlobal>                     // for qPrintable
 
 #include "defs.h"
 #include "xmlgeneric.h"
@@ -36,7 +36,7 @@
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
-#include <QtCore/QDebug>
+#include <QDebug>
 #endif
 
 enum xg_shortcut {

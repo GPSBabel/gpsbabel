@@ -30,10 +30,10 @@
 #include <utility>              // for pair
 #include <vector>               // for vector
 
-#include <QtCore/QHash>         // for QHash
-#include <QtCore/QList>         // for QList
-#include <QtCore/QString>       // for QString
-#include <QtCore/QVector>       // for QVector
+#include <QHash>                // for QHash
+#include <QList>                // for QList
+#include <QString>              // for QString
+#include <QVector>              // for QVector
 
 #include "defs.h"
 #include "format.h"             // for Format

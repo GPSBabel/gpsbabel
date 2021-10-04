@@ -31,14 +31,14 @@
 #include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
 #include <ctime>                   // for gmtime, localtime, strftime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar, QChar::Other_Control
-#include <QtCore/QIODevice>        // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
-#include <QtCore/QString>          // for QString, operator!=
-#include <QtCore/QTextStream>      // for QTextStream
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable
+#include <QByteArray>              // for QByteArray
+#include <QChar>                   // for QChar, QChar::Other_Control
+#include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QString>                 // for QString, operator!=
+#include <QTextStream>             // for QTextStream
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qPrintable
 
 #include "csv_util.h"              // for csv_lineparse
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, GMSD_SECTION_CATEGORIES

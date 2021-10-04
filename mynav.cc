@@ -23,12 +23,12 @@
 
  */
 
-#include <QtCore/QChar>
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QtGlobal>
+#include <QChar>
+#include <QDebug>
+#include <QIODevice>
+#include <QString>
+#include <QStringList>
+#include <QtGlobal>
 
 #include <src/core/textstream.h>
 

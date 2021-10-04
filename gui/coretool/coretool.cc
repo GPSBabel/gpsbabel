@@ -1,5 +1,5 @@
-#include <QtCore/QList>
-#include <QtWidgets/QApplication>
+#include <QList>
+#include <QApplication>
 
 #include "format.h"
 #include "formatload.h"

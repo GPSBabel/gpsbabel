@@ -92,18 +92,18 @@
 #include <cstring>                // for strcmp, strlen
 #include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QDate>           // for QDate
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QLatin1String>   // for QLatin1String
-#include <QtCore/QList>           // for QList
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextEncoder>    // for QTextEncoder
-#include <QtCore/QTime>           // for QTime
-#include <QtCore/Qt>              // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
+#include <QDateTime>              // for QDateTime
+#include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString, operator+, operator==, operator!=
+#include <QTextCodec>             // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>           // for QTextEncoder
+#include <QTime>                  // for QTime
+#include <Qt>                     // for CaseInsensitive, UTC
+#include <QtGlobal>               // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "lowranceusr.h"

@@ -27,8 +27,8 @@
 #include "src/core/xmlstreamwriter.h"
 #include "xmlgeneric.h"
 
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QXmlStreamWriter>
+#include <QXmlStreamAttributes>
+#include <QXmlStreamWriter>
 
 static Waypoint* wpt_;
 static route_head* trk_;

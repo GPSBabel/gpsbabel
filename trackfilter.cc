@@ -32,20 +32,20 @@
 
 #include <algorithm>                       // for sort, stable_sort
 
-#include <QtCore/QByteArray>               // for QByteArray
-#include <QtCore/QChar>                    // for QChar
-#include <QtCore/QDate>                    // for QDate
-#include <QtCore/QDateTime>                // for QDateTime
+#include <QByteArray>                      // for QByteArray
+#include <QChar>                           // for QChar
+#include <QDate>                           // for QDate
+#include <QDateTime>                       // for QDateTime
 #ifdef TRACKF_DBG
-#include <QtCore/QDebug>
+#include <QDebug>
 #endif
-#include <QtCore/QList>                    // for QList<>::iterator, QList, QList<>::const_iterator
-#include <QtCore/QRegExp>                  // for QRegExp, QRegExp::WildcardUnix
-#include <QtCore/QRegularExpression>       // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
-#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
-#include <QtCore/QString>                  // for QString
-#include <QtCore/Qt>                       // for UTC, CaseInsensitive
-#include <QtCore/QtGlobal>                 // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
+#include <QList>                           // for QList<>::iterator, QList, QList<>::const_iterator
+#include <QRegExp>                         // for QRegExp, QRegExp::WildcardUnix
+#include <QRegularExpression>              // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
+#include <QRegularExpressionMatch>         // for QRegularExpressionMatch
+#include <QString>                         // for QString
+#include <Qt>                              // for UTC, CaseInsensitive
+#include <QtGlobal>                        // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
 
 #include "defs.h"
 #include "trackfilter.h"

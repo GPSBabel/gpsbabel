@@ -20,9 +20,9 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QtCore/QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
-#include <QtGui/QIcon>             // for QIcon
-#include <QtWidgets/QApplication>  // for QApplication
+#include <QtGlobal>                // for QT_VERSION, QT_VERSION_CHECK
+#include <QIcon>                   // for QIcon
+#include <QApplication>            // for QApplication
 
 #include "mainwindow.h"             // for MainWindow
 

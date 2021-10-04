@@ -25,10 +25,10 @@
 #include <cstdlib>                      // for atoi
 #include <cstring>                      // for strncmp, memcpy, strcmp, strlen
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QString>               // for QString, operator+
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QtGlobal>              // for qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QString>                      // for QString, operator+
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QtGlobal>                     // for qPrintable
 
 #include "defs.h"
 #include "gbfile.h"                     // for gbfgetdbl, gbfgetint32, gbfputint32, gbfgetint16, gbfputdbl, gbfputc, gbfread, gbfseek, gbfgetc, gbfile, gbfclose, gbfungetc, gbfeof, gbfputs, gbfwrite, gbfopen_le, gbfgetuint32, gbfputuint16, gbfputuint32
@@ -707,7 +707,7 @@ write_header(const route_head* trk)
     write_str(trk->rte_name, fout);
   }
 
-  // This fails for internationalization, but as this text is in the 
+  // This fails for internationalization, but as this text is in the
   // file itself, it shouldn't be localized.
   QString cout = QString::number(count) + " trackpoints and " +
                  QString::number(waypt_count()) + " waypoints";

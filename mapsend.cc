@@ -24,10 +24,10 @@
 #include <cstring>              // for strncpy
 #include <ctime>
 
-#include <QtCore/QCharRef>      // for QCharRef
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QtGlobal>      // for Q_UNUSED
+#include <QCharRef>             // for QCharRef
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QtGlobal>             // for Q_UNUSED
 
 #include "defs.h"
 #include "mapsend.h"

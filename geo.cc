@@ -18,9 +18,9 @@
  */
 #include "defs.h"
 #include "src/core/file.h"
-#include <QtCore/QDebug>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QXmlStreamWriter>
+#include <QDebug>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 static char* deficon = nullptr;
 static char* nuke_placer;

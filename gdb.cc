@@ -31,12 +31,12 @@
 #include <ctime>                   // for strftime
 #include <iterator>                // for next
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString, operator!=, operator==
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable, Q_UNUSED, foreach
+#include <QByteArray>              // for QByteArray
+#include <QList>                   // for QList
+#include <QString>                 // for QString, operator!=, operator==
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qPrintable, Q_UNUSED, foreach
 
 #include "defs.h"
 

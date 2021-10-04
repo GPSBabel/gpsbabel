@@ -22,13 +22,13 @@
 
 #include <cassert>               // for assert
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QLatin1String>  // for QLatin1String
-#include <QtCore/QString>        // for QString, QString::SkipEmptyParts
-#include <QtCore/QStringList>    // for QStringList
-#include <QtCore/QVector>        // for QVector
-#include <QtCore/Qt>             // for CaseInsensitive
-#include <QtCore/QtGlobal>       // for qPrintable
+#include <QByteArray>            // for QByteArray
+#include <QLatin1String>         // for QLatin1String
+#include <QString>               // for QString, QString::SkipEmptyParts
+#include <QStringList>           // for QStringList
+#include <QVector>               // for QVector
+#include <Qt>                    // for CaseInsensitive
+#include <QtGlobal>              // for qPrintable
 
 #include "defs.h"
 #include "shape.h"

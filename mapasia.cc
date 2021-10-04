@@ -23,12 +23,12 @@
 #include <cmath>                // for fabs
 #include <cstring>              // for memset
 
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/Qt>            // for UTC
-#include <QtCore/QtGlobal>      // for foreach
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <Qt>                   // for UTC
+#include <QtGlobal>             // for foreach
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfclose, gbfeof, gbfgetint32, gbfputint32, gbfread, gbfwrite, gbfile, gbfopen_le

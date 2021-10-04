@@ -25,11 +25,11 @@
 #include <cstdlib>                   // for atof
 #include <cstring>                   // for strncpy
 
-#include <QtCore/QByteArray>         // for QByteArray
-#include <QtCore/QStaticStringData>  // for QStaticStringData
-#include <QtCore/QString>            // for QString, QStringLiteral
-#include <QtCore/QXmlStreamWriter>   // for QXmlStreamWriter
-#include <QtCore/Qt>                 // for CaseInsensitive
+#include <QByteArray>                // for QByteArray
+#include <QStaticStringData>         // for QStaticStringData
+#include <QString>                   // for QString, QStringLiteral
+#include <QXmlStreamWriter>          // for QXmlStreamWriter
+#include <Qt>                        // for CaseInsensitive
 
 #include "defs.h"
 #include "garmin_fs.h"

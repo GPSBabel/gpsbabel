@@ -19,11 +19,11 @@
 
 #include "runmachine.h"
 
-#include <QtCore/QDebug>             // for qDebug
-#include <QtCore/QEventLoop>         // for QEventLoop
-#include <QtCore/QNonConstOverload>  // for QNonConstOverload
-#include <QtCore/QtGlobal>           // for QOverload, qOverload
-#include <QtWidgets/QDialog>         // for QDialog
+#include <QDebug>                    // for qDebug
+#include <QEventLoop>                // for QEventLoop
+#include <QNonConstOverload>         // for QNonConstOverload
+#include <QtGlobal>                  // for QOverload, qOverload
+#include <QDialog>                   // for QDialog
 
 #include "appname.h"                 // for appName
 

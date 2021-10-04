@@ -24,9 +24,9 @@
 
 #include <cstdint>              // for uint8_t, uint16_t, uint32_t, int16_t
 
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTimeZone>     // for QTimeZone
-#include <QtCore/QVector>       // for QVector
+#include <QString>              // for QString
+#include <QTimeZone>            // for QTimeZone
+#include <QVector>              // for QVector
 
 #include "defs.h"
 #include "format.h"             // for Format
