@@ -146,7 +146,7 @@ static QString makePath(const vector <LatLng>& pts)
   QString path;
   int lncount = 0;
   bool someoutput = false;
-  foreach (const LatLng ll, pts) {
+  for (const auto& ll : pts) {
     if (lncount == 0) {
       if (someoutput) {
         path.append(QChar(','));
