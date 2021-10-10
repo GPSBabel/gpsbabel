@@ -20,18 +20,23 @@
 
  */
 
-#include <cmath>           // for fabs
-#include <cstdio>          // for size_t
-#include <cstdlib>         // for atof, strtod
-#include <cctype>          // for isspace
-#include <cstring>         // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
+#include <assert.h>            // for assert
+#include <cctype>              // for isspace
+#include <cmath>               // for fabs
+#include <cstdio>              // for size_t
+#include <cstdlib>             // for atof, strtod
+#include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
-#include <QRegExp>         // for QRegExp
-#include <QString>         // for QString
+#include <QChar>               // for QChar
+#include <QDebug>              // for QDebug
+#include <QRegularExpression>  // for QRegularExpression
+#include <QString>             // for QString, operator+
+#include <QStringRef>          // for QStringRef
 
 #include "defs.h"
 #include "csv_util.h"
-#include "src/core/logging.h"
+#include "src/core/logging.h"  // for Warning
+
 
 #define MYNAME "CSV_UTIL"
 
@@ -48,8 +53,12 @@ QString
 csv_stringclean(const QString& source, const QString& to_nuke)
 {
   QString r = source;
-  QString regex = QString("[%1]").arg(to_nuke);
-  return r.remove(QRegExp(regex));
+  // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
+  // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
+  // or one can imagine [^a] when we meant the characters '^' and 'a'.
+  QRegularExpression regex = QRegularExpression(QString("[%1]").arg(QRegularExpression::escape(to_nuke)));
+  assert(regex.isValid());
+  return r.remove(regex);
 }
 
 // csv_stringtrim() - trim whitespace and leading and trailing
