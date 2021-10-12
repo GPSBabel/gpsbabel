@@ -24,7 +24,6 @@
 #include "formatload.h"
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for operator==, QChar
-#include <QCharRef>                        // for QCharRef
 #include <QCoreApplication>                // for QCoreApplication
 #ifdef GENERATE_CORE_STRINGS
 #include <QDebug>                          // for QDebug, operator<<
