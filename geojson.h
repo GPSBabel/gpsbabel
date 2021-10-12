@@ -21,7 +21,6 @@
 
 #include <QJsonArray>                // for QJsonArray
 #include <QJsonObject>               // for QJsonObject
-#include <QStaticStringData>         // for QStaticStringData
 #include <QString>                   // for QString, QStringLiteral
 #include <QVector>                   // for QVector
 
