@@ -22,7 +22,6 @@
 #include <random>               // for mt19937
 
 #include <QByteArray>           // for QByteArray
-#include <QByteRef>             // for QByteRef
 #include <QDateTime>            // for QDateTime
 #include <QString>              // for QString
 #include <QThread>              // for QThread
