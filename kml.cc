@@ -35,7 +35,6 @@
 #include <QFile>                        // for QFile
 #include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
 #include <QList>                        // for QList
-#include <QStaticStringData>            // for QStaticStringData
 #include <QString>                      // for QString, QStringLiteral, operator+, operator!=
 #include <QStringList>                  // for QStringList
 #include <QVector>                      // for QVector

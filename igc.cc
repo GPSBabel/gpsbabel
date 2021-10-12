@@ -33,7 +33,6 @@
 
 #include <QByteArray>                // for QByteArray
 #include <QList>                     // for QList<>::const_iterator
-#include <QStaticStringData>         // for QStaticStringData
 #include <QString>                   // for QString, operator+, QStringLiteral
 #include <QtGlobal>                  // for foreach, qPrintable
 

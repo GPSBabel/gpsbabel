@@ -85,7 +85,6 @@
 
 */
 
-#include <algorithm>              // for min
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdlib>                // for atoi, abs
@@ -1598,9 +1597,8 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   } else {
     name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
-  int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
-  name.truncate(text_len);
-  gbfputint32(text_len, file_out);
+  name.truncate(MAXUSRSTRINGSIZE);
+  gbfputint32(name.size(), file_out);
   gbfputs(name, file_out);
 
   /* num legs */
@@ -1713,9 +1711,8 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
       name = QString::asprintf("Babel %d", trail_count);
     }
 
-    int text_len = std::min(MAXUSRSTRINGSIZE, name.size());
-    name.truncate(text_len);
-    gbfputint32(text_len, file_out);
+    name.truncate(MAXUSRSTRINGSIZE);
+    gbfputint32(name.size(), file_out);
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {

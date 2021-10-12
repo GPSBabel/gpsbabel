@@ -30,7 +30,6 @@
 #include <QIODevice>                               // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1Char>                             // for QLatin1Char
 #include <QLatin1String>                           // for QLatin1String
-#include <QStaticStringData>                       // for QStaticStringData
 #include <QString>                                 // for QString, QStringLiteral, operator+, operator==
 #include <QStringList>                             // for QStringList
 #include <QStringView>                             // for QStringView
