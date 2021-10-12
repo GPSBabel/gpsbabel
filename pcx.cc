@@ -24,7 +24,6 @@
 #include <cstring>                    // for strstr, strncmp
 
 #include <QChar>                      // for operator==, QChar
-#include <QCharRef>                   // for QCharRef
 #include <QDate>                      // for QDate
 #include <QDateTime>                  // for QDateTime
 #include <QList>                      // for QList

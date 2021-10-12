@@ -28,7 +28,6 @@
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
-#include <QCharRef>                // for QCharRef
 #include <QDateTime>               // for QDateTime
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
 #include <QLatin1Char>             // for QLatin1Char
