@@ -42,7 +42,6 @@
 
 #include <QByteArray>             // for QByteArray
 #include <QChar>                  // for operator==, QChar
-#include <QCharRef>               // for QCharRef
 #include <QFile>                  // for QFile
 #include <QFileInfo>              // for QFileInfo
 #include <QIODevice>              // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag

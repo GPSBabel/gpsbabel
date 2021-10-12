@@ -31,7 +31,6 @@
 
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for operator==, QChar
-#include <QCharRef>              // for QCharRef
 #include <QDateTime>             // for QDateTime
 #include <QHash>                 // for QHash, QHash<>::const_iterator
 #include <QLatin1String>         // for QLatin1String

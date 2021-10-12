@@ -32,7 +32,6 @@
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
-#include <QCharRef>                     // for QCharRef
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList

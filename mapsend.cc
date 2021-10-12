@@ -24,7 +24,6 @@
 #include <cstring>              // for strncpy
 #include <ctime>
 
-#include <QCharRef>             // for QCharRef
 #include <QString>              // for QString
 #include <QTime>                // for QTime
 #include <QtGlobal>             // for Q_UNUSED
