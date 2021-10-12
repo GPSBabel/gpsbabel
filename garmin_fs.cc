@@ -26,7 +26,6 @@
 #include <cstring>                   // for strncpy
 
 #include <QByteArray>                // for QByteArray
-#include <QStaticStringData>         // for QStaticStringData
 #include <QString>                   // for QString, QStringLiteral
 #include <QXmlStreamWriter>          // for QXmlStreamWriter
 #include <Qt>                        // for CaseInsensitive
