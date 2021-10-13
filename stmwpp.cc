@@ -25,10 +25,10 @@
 #include <cstring>                 // for memset
 #include <ctime>                   // for tm
 
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QString>          // for QString
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
+#include <QDateTime>               // for QDateTime
+#include <QString>                 // for QString
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
 
 #include "defs.h"
 #include "cet_util.h"              // for cet_convert_init

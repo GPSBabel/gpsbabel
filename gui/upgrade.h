@@ -19,14 +19,14 @@
 
  */
 
-#include <QtCore/QDateTime>                 // for QDateTime
-#include <QtCore/QList>                     // for QList
-#include <QtCore/QObject>                   // for QObject
-#include <QtCore/QString>                   // for QString
-#include <QtCore/QUrl>                      // for QUrl
-#include <QtNetwork/QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QtNetwork/QNetworkReply>          // for QNetworkReply
-#include <QtWidgets/QWidget>                // for QWidget
+#include <QDateTime>                        // for QDateTime
+#include <QList>                            // for QList
+#include <QObject>                          // for QObject
+#include <QString>                          // for QString
+#include <QUrl>                             // for QUrl
+#include <QNetworkAccessManager>            // for QNetworkAccessManager
+#include <QNetworkReply>                    // for QNetworkReply
+#include <QWidget>                          // for QWidget
 #include "babeldata.h"                      // for BabelData
 #include "format.h"                         // for Format
 
@@ -36,22 +36,19 @@ class UpgradeCheck : public QObject
   Q_OBJECT
 public:
   UpgradeCheck(QWidget* parent, QList<Format>& formatList, BabelData& bd);
-  ~UpgradeCheck();
 
-  typedef enum {
+  enum updateStatus {
     updateUnknown,
     updateCurrent,
     updateNeeded,
-  } updateStatus;
+  };
 
-  UpgradeCheck::updateStatus checkForUpgrade(const QString& babelVersion,
+  UpgradeCheck::updateStatus checkForUpgrade(const QString& currentVersion,
       const QDateTime& lastCheckTime,
       bool allowBeta);
   QDateTime getUpgradeWarningTime();
   UpgradeCheck::updateStatus getStatus();
   static bool isTestMode();
-
-protected:
 
 private:
   QString currentVersion_;
@@ -64,14 +61,13 @@ private:
   updateStatus updateStatus_;
   BabelData& babelData_;
 
-  QString getOsName();
-  QString getOsVersion();
-  QString getCpuArchitecture();
-  bool suggestUpgrade(const QString& from, const QString& to);
+  static QString getOsName();
+  static QString getOsVersion();
+  static QString getCpuArchitecture();
+  static bool suggestUpgrade(const QString& from, const QString& to);
 
 private slots:
   void httpRequestFinished(QNetworkReply* reply);
-
 
 };
 

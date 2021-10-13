@@ -61,16 +61,14 @@
 
 */
 
-#include <algorithm>
 #include <cstdio>               // for SEEK_SET
 #include <cstdint>
 #include <cstdlib>              // for atoi
 #include <cstring>              // for memset
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QString>       // for QString
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/QtGlobal>      // for ushort
+#include <QChar>                // for QChar
+#include <QString>              // for QString
+#include <QVector>              // for QVector
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfwrite, gbfclose, gbfseek, gbfgetint32, gbfread, gbfile, gbfopen_le
@@ -128,17 +126,17 @@ static QVector<arglist_t> igo8_options = {
 // Sanity check
 static void igo8_check_type_sizes()
 {
-  if (sizeof(igo8_point) != 12) {
+  if constexpr(sizeof(igo8_point) != 12) {
     fatal(MYNAME ": igo8_point is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_point));
   }
 
-  if (sizeof(igo8_information_block) != 12) {
+  if constexpr(sizeof(igo8_information_block) != 12) {
     fatal(MYNAME ": igo8_information_block is %ld bytes instead of the required 12.\n",
           (long) sizeof(igo8_information_block));
   }
 
-  if (sizeof(igo8_id_block) != 20) {
+  if constexpr(sizeof(igo8_id_block) != 20) {
     fatal(MYNAME ": igo8_id_block is %ld bytes instead of the required 20.\n",
           (long) sizeof(igo8_id_block));
   }
@@ -261,7 +259,7 @@ static unsigned int print_unicode(char* dst, int dst_max_length, const QString& 
   }
   // Write as many characters from the source as possible
   // while leaving space for a terminator.
-  int n_src_qchars = std::min(max_qchars - 1, src.size());
+  int n_src_qchars =  src.size() > (max_qchars - 1) ? max_qchars - 1 : src.size();
   for (int i = 0; i < n_src_qchars; ++i) {
     le_write16(dst, src.at(i).unicode());
     dst += 2;
@@ -275,7 +273,7 @@ static void write_header()
 {
   char header[IGO8_HEADER_SIZE] = {};
   igo8_id_block tmp_id_block;
-  auto id_block = (p_igo8_id_block)header;
+  auto* id_block = (p_igo8_id_block)header;
   uint32_t current_position = 0;
   const char* title = "Title";
   const char* description = "Description";

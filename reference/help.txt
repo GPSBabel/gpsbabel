@@ -32,11 +32,7 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	alantrl               Alan Map500 tracklogs (.trl)
-	alanwpr               Alan Map500 waypoints and routes (.wpr)
 	baroiq                Brauniger IQ Series Barograph Download
-	bushnell_trl          Bushnell GPS Trail file
-	bushnell              Bushnell GPS Waypoint file
 	cambridge             Cambridge/Winpilot glider software
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -76,16 +72,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	an1                   DeLorme .an1 (drawing) file
-	  type                  Type of .an1 file 
-	  road                  Road type changes 
-	  nogc                  (0/1) Do not add geocache data to description 
-	  nourl                 (0/1) Do not add URLs to description 
-	  deficon               Symbol to use for point data 
-	  color                 Color for lines or mapnotes 
-	  zoom                  Zoom level to reduce points 
-	  wpt_type              Waypoint type 
-	  radius                Radius for circles 
 	gpl                   DeLorme GPL
 	saplus                DeLorme Street Atlas Plus
 	  snlen                 Max synthesized shortname length 
@@ -538,9 +524,6 @@ File Types (-i and -o options):
 	  power_off             (0/1) Command unit to power itself down 
 	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
 	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-	naviguide             Naviguide binary route file (.twl)
-	  output                'wp' - Create waypoint file , 'rte' - Create route 
-	  reorder               'n' - Keep the existing wp name, 'y' - rename wayp 
 	navitel_trk           Navitel binary track (.bin)
 	dna                   Navitrak DNA marker format
 	  snlen                 Max synthesized shortname length 
@@ -550,12 +533,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	netstumbler           NetStumbler Summary File (text)
-	  nseicon               Non-stealth encrypted icon name 
-	  nsneicon              Non-stealth non-encrypted icon name 
-	  seicon                Stealth encrypted icon name 
-	  sneicon               Stealth non-encrypted icon name 
-	  snmac                 (0/1) Shortname is MAC address 
 	nima                  NIMA/GNIS Geographic Names File
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 

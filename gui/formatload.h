@@ -25,23 +25,30 @@
 #ifndef FORMATLOAD_H
 #define FORMATLOAD_H
 
-#include <QtCore/QList>        // for QList
-#include <QtCore/QStringList>  // for QStringList
+#include <QList>               // for QList
+#include <QStringList>         // for QStringList
 
 #include "format.h"            // for Format
 
 class FormatLoad
 {
 public:
-  FormatLoad() : currentLine_(0) {}
-  ~FormatLoad() {}
+
+  /* Member Functions */
 
   bool getFormats(QList<Format>& formatList);
+
 private:
-  QStringList lines_;
-  int currentLine_;
+
+  /* Member Functions */
+
   bool skipToValidLine();
   bool processFormat(Format& format);
+
+  /* Data Members */
+
+  QStringList lines_;
+  int currentLine_{0};
 };
 
 #endif

@@ -5,27 +5,21 @@
 # tested against MSVC 2017 which included 3.11.* 2018/07/05
 cmake_minimum_required(VERSION 3.5.1)
 
-project(gpsbabel)
+project(gpsbabel LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Find the Qt5Core library
 find_package(Qt5 COMPONENTS Core REQUIRED)
-message("Qt5Core_VERSION String describing the version of the module: \"${Qt5Core_VERSION}\"")
-message("Qt5Core_LIBRARIES List of libraries for use with the target_link_libraries command: \"${Qt5Core_LIBRARIES}\"")
-message("Qt5Core_INCLUDE_DIRS List of directories for use with the include_directories command: \"${Qt5Core_INCLUDE_DIRS}\"")
-message("Qt5Core_DEFINITIONS List of definitions for use with add_definitions: \"${Qt5Core_DEFINITIONS}\"")
-message("Qt5Core_COMPILE_DEFINITIONS List of definitions for use with the COMPILE_DEFINITIONS target property: \"${Qt5Core_COMPILE_DEFINITIONS}\"")
-message("Qt5Core_FOUND Boolean describing whether the module was found successfully: \"${Qt5Core_FOUND}\"")
-message("Qt5Core_EXECUTABLE_COMPILE_FLAGS String of flags to be used when building executables: \"${Qt5Core_EXECUTABLE_COMPILE_FLAGS}\"")
-if (${Qt5Core_VERSION} VERSION_LESS 5.9)
+if(${Qt5Core_VERSION} VERSION_LESS 5.12)
   message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+else()
+  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
 endif()
-include_directories(AFTER SYSTEM ${Qt5Core_INCLUDE_DIRS})
-add_definitions(${Qt5Core_DEFINITIONS})
 
 set(MINIMAL_FMTS
   magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc
@@ -38,19 +32,19 @@ set(ALL_FMTS
   skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc
   xcsv.cc tiger.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
-  ozi.cc text.cc html.cc netstumbler.cc
+  ozi.cc text.cc html.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc lowranceusr.cc an1.cc tomtom.cc
+  vcf.cc lowranceusr.cc tomtom.cc
   tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
   ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
   yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
-  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc
+  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
   ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
   navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc
   igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
   jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
-  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
-  vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
+  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc
+  vpl.cc teletype.cc jogmap.cc wintec_tes.cc
   subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -82,7 +76,7 @@ set(ZLIB
 
 set(JEEPS
   jeeps/gpsapp.cc jeeps/gpscom.cc
-  jeeps/gpsmath.cc jeeps/gpsmem.cc 
+  jeeps/gpsmath.cc jeeps/gpsmem.cc
   jeeps/gpsprot.cc jeeps/gpsread.cc
   jeeps/gpsdevice.cc jeeps/gpsdevice_ser.cc jeeps/gpsdevice_usb.cc
   jeeps/gpsrqst.cc jeeps/gpssend.cc jeeps/gpsserial.cc jeeps/jgpsutil.cc
@@ -98,11 +92,10 @@ set(SUPPORT
   gbfile.cc parse.cc session.cc main.cc globals.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
-  src/core/xmlstreamwriter.cc 
+  src/core/xmlstreamwriter.cc
 )
 
 set(HEADERS
-  an1sym.h
   cet.h
   cet_util.h
   csv_util.h
@@ -185,7 +178,6 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
-  src/core/optional.h
   src/core/textstream.h
   src/core/usasciicodec.h
   src/core/xmlstreamwriter.h
@@ -197,15 +189,15 @@ set(HEADERS ${HEADERS} ${FILTER_HEADERS})
 
 include_directories(AFTER zlib)
 
-INCLUDE (CheckIncludeFile)
+include(CheckIncludeFile)
 if(UNIX)
   # this is used by zlib
-  CHECK_INCLUDE_FILE("unistd.h" HAVE_UNISTD_H)
+  check_include_file("unistd.h" HAVE_UNISTD_H)
   if(${HAVE_UNISTD_H})
     add_definitions(-DHAVE_UNISTD_H)
   endif()
   # this is used by zlib
-  CHECK_INCLUDE_FILE("stdarg.h" HAVE_STDARG_H)
+  check_include_file("stdarg.h" HAVE_STDARG_H)
   if(${HAVE_STDARG_H})
     add_definitions(-DHAVE_STDARG_H)
   endif()
@@ -213,7 +205,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
-  include_directories(AFTER jeeps)
   add_compile_options(-O2 -Wall)
 endif()
 
@@ -227,19 +218,19 @@ if(WIN32)
   set(HEADERS ${HEADERS} gbser_win.h)
   set(JEEPS ${JEEPS} jeeps/gpsusbwin.cc)
   set(LIBS ${LIBS} setupapi)
-  set(RC_FILE win32/gpsbabel.rc)
+  set(RESOURCES ${RESOURCES} win32/gpsbabel.rc)
 endif()
 
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_compile_options(/MP -wd4100)
+  add_compile_options(/MP -wd4100 -wd4267)
 endif()
 
-if (UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE)
   set(LIBS ${LIBS} usb-1.0)
 endif()
 
-if (APPLE)
+if(APPLE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
   include_directories(AFTER mac/libusb mac/libusb/Xcode)
   set(SOURCES ${SOURCES}
@@ -267,7 +258,7 @@ if (APPLE)
 endif()
 
 set(SOURCES
-  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS}
+  ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
 )
 
 # We don't care about stripping things out of the build.  Full monty, baby.
@@ -277,17 +268,16 @@ add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
 add_executable(gpsbabel ${SOURCES} ${HEADERS})
-target_link_libraries(gpsbabel ${Qt5Core_LIBRARIES} ${LIBS})
+target_link_libraries(gpsbabel Qt5::Core ${LIBS})
 
-message("Sources are:")
-message("${SOURCES}")
-message("Headers are:")
-message("${HEADERS}")
-message("Defines are:")
-get_directory_property( DirDefs COMPILE_DEFINITIONS)
-message("${DirDefs}")
-message("Libs are:")
-message("${LIBS}")
+message(STATUS "Sources are: \"${SOURCES}\"")
+message(STATUS "Headers are: \"${HEADERS}\"")
+get_directory_property(DirDefs COMPILE_DEFINITIONS)
+message(STATUS "Defines are: \"${DirDefs}\"")
+get_target_property(LnkLibs gpsbabel LINK_LIBRARIES)
+message(STATUS "Libs are: \"${LnkLibs}\"")
+get_directory_property(IncDirs INCLUDE_DIRECTORIES)
+message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
   # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.

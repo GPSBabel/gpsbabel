@@ -2,7 +2,7 @@
 #define gpsmem_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
   GPS_PPvt_Data     GPS_Pvt_New();
   void              GPS_Pvt_Del(GPS_PPvt_Data* thys);
   GPS_PAlmanac      GPS_Almanac_New();

@@ -19,12 +19,12 @@
 
  */
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QString>       // for QString
-#include <QtCore/QStringList>   // for QStringList
-#include <QtCore/QVector>       // for QVector<>::iterator, QVector
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QByteArray>           // for QByteArray
+#include <QString>              // for QString
+#include <QStringList>          // for QStringList
+#include <QVector>              // for QVector<>::iterator, QVector
+#include <Qt>                   // for CaseInsensitive
+#include <QtGlobal>             // for qPrintable
 
 #include <algorithm>            // for sort
 #include <cassert>              // for assert
@@ -269,9 +269,10 @@ Format* Vecs::find_vec(const QString& vecname)
      * format that utilized an internal style file, then we need to let
      * xcsv know the internal style file is no longer in play.
      */
-     xcsv_fmt.xcsv_setup_internal_style(nullptr);
+    xcsv_fmt.xcsv_setup_internal_style(nullptr);
 #endif // CSVFMTS_ENABLED
     vec.vec->set_name(vec.name);	/* needed for session information */
+    vec.vec->set_argstring(vecname);  /* needed for positional parameters */
     return vec.vec;
 
   }
@@ -319,6 +320,7 @@ Format* Vecs::find_vec(const QString& vecname)
 #endif // CSVFMTS_ENABLED
 
     vec_list[0].vec->set_name(svec.name);	/* needed for session information */
+    vec_list[0].vec->set_argstring(vecname);  /* needed for positional parameters */
     return vec_list[0].vec;
   }
 
@@ -533,7 +535,7 @@ void Vecs::disp_v1(ff_type t)
 
 void Vecs::disp_v2(const vecinfo_t& v)
 {
-  for (auto& i : v.cap) {
+  for (const auto& i : v.cap) {
     putchar((i & ff_cap_read) ? 'r' : '-');
     putchar((i & ff_cap_write) ? 'w' : '-');
   }

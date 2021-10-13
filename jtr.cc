@@ -21,7 +21,7 @@
  */
 #include "defs.h"
 #include "csv_util.h"
-#include <QtCore/QHash>
+#include <QHash>
 //#include <cassert>
 #include <cmath>
 #include <cstdio>
@@ -37,44 +37,37 @@ QVector<arglist_t> jtr_args = {
 static gbfile* fin, *fout;
 static QHash<QString, const Waypoint*> trkpts;
 
-static time_t
-jtr_parse_time(const char* str, struct tm* tm, int* milli)
+void
+jtr_parse_date(const char* str, QDate& date)
 {
-  char* dot;
-
-  long int hms = strtol(str, &dot, 10);
-  if (hms > 0) {
-    tm->tm_sec = hms % 100;
-    hms = hms / 100;
-    tm->tm_min = hms % 100;
-    hms = hms / 100;
-    tm->tm_hour = hms % 100;
-
-    if ((*dot == '.') && (milli != nullptr)) {
-      *milli = atoi(dot + 1) * 10;
-    }
-
-    return mkgmtime(tm);
-  } else {
-    return 0;
+  int dmy = atoi(str);
+  if (dmy > 0) {
+    int year= dmy % 100 + 2000;
+    dmy = dmy / 100;
+    int month = dmy % 100;
+    dmy = dmy / 100;
+    int day = dmy;
+    date = QDate(year, month, day);
   }
 }
 
-static time_t
-jtr_parse_date(const char* str, struct tm* tm)
+void
+jtr_parse_time(const char* str, QTime& time)
 {
-  int dmy = atoi(str);
+  char* dot;
+  long int hms = strtol(str, &dot, 10);
+  int sec = hms % 100;
+  hms = hms / 100;
+  int min  = hms % 100;
+  hms = hms / 100;
+  int hour = hms % 100;
 
-  if (dmy > 0) {
-    tm->tm_year = dmy % 100 + 100;
-    dmy = dmy / 100;
-    tm->tm_mon  = dmy % 100 - 1;
-    dmy = dmy / 100;
-    tm->tm_mday = dmy;
-    return mkgmtime(tm);
-  } else {
-    return 0;
+  if (*dot == '.') {
+    int milli = atoi(dot + 1) * 10;
+    sec += milli / 1000;
   }
+
+  time = QTime(hour, min, sec);
 }
 
 /*******************************************************************************
@@ -102,13 +95,11 @@ jtr_read()
   route_head* trk = nullptr;
 
   while ((str = gbfgetstr(fin))) {
-    struct tm tm;
+    QDate date;
+    QTime time;
     char valid = 'V';
     double lon;
     float course, mcourse, mvar, mdev;
-    time_t time = 0;
-    int mills = 0;
-    char buf[32];
     char mdevdir;
 
     line++;
@@ -122,7 +113,6 @@ jtr_read()
       fatal(MYNAME ": Unknown or unsupported file (missing \"GEOTAG2\")!\n");
     }
 
-    memset(&tm, 0, sizeof(tm));
     double lat = lon = 999;
     float speed = course = mcourse = mvar = mdev = -1;
     char mvardir = mdevdir = 0;
@@ -140,7 +130,7 @@ jtr_read()
       case 0:
         break;		/* GEOTAG2 */
       case 1:
-        jtr_parse_time(str, &tm, &mills);
+        jtr_parse_time(str, time);
         break;
       case 2:
         valid = *str;
@@ -168,7 +158,7 @@ jtr_read()
         course = atof(str);
         break;
       case 9:
-        jtr_parse_date(str, &tm);
+        jtr_parse_date(str, date);
         break;
       case 13:
         mcourse = atof(str);
@@ -194,16 +184,14 @@ jtr_read()
       continue;
     }
 
-    if (tm.tm_year > 0) {
-      time = mkgmtime(&tm);
-    } else {
-      time = 0;
-    }
+    QDateTime dt = QDateTime(date, time, Qt::UTC);
 
     /* check for duplicates as suggested in format description */
-
-    snprintf(buf, sizeof(buf), "%.6f\01%.6f\01%ld", lat, lon, (long)time);
-    if (trkpts.contains(QString::fromUtf8(buf))) {
+    QString buf = QString("%1\01%2\01%3")
+                  .arg(QString::number(lat, 'f', 6),
+                       QString::number(lon, 'f', 6),
+                       QString::number(dt.toSecsSinceEpoch()));
+    if (trkpts.contains(buf)) {
       continue;
     }
 
@@ -211,7 +199,7 @@ jtr_read()
 
     wpt->latitude = lat;
     wpt->longitude = lon;
-    wpt->SetCreationTime(time, mills);
+    wpt->SetCreationTime(dt);
     if (speed >= 0) {
       WAYPT_SET(wpt, speed, speed);
     }
@@ -241,7 +229,7 @@ jtr_read()
       track_add_head(trk);
     }
 
-    trkpts.insert(QString::fromUtf8(buf), wpt);
+    trkpts.insert(buf, wpt);
     track_add_wpt(trk, wpt);
   }
 }

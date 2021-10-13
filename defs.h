@@ -26,33 +26,29 @@
 #include <cstdint>                // for int32_t, uint32_t
 #include <cstdio>                 // for NULL, fprintf, FILE, stdout
 #include <ctime>                  // for time_t
+#include <optional>               // for optional
 #include <utility>                // for move
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 #if HAVE_LIBZ
 #include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
 #include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QDebug>          // for QDebug
-#include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString
-#include <QtCore/QStringRef>      // for QStringRef
-#include <QtCore/QTextCodec>      // for QTextCodec
-#include <QtCore/QVector>         // for QVector
-#include <QtCore/Qt>              // for CaseInsensitive
-#include <QtCore/QtGlobal>        // for foreach
+#include <QDebug>                 // for QDebug
+#include <QList>                  // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString
+#include <QTextCodec>             // for QTextCodec
+#include <QVector>                // for QVector
+#include <Qt>                     // for CaseInsensitive
+#include <QtGlobal>               // for foreach
 
 #include "formspec.h"             // for FormatSpecificData
 #include "inifile.h"              // for inifile_t
 #include "gbfile.h"               // doesn't really belong here, but is missing elsewhere.
 #include "session.h"              // for session_t
 #include "src/core/datetime.h"    // for DateTime
-#include "src/core/optional.h"    // for optional
 
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
@@ -536,7 +532,6 @@ public:
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
-  [[deprecated]] const QList<UrlLink> GetUrlLinks() const;
   void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
   gpsbabel::DateTime GetCreationTime() const;
@@ -676,17 +671,17 @@ waypt_disp_all(T cb)
  */
 struct computed_trkdata {
   double distance_meters{0.0};
-  gpsbabel_optional::optional<double> max_alt;	/* Meters */
-  gpsbabel_optional::optional<double> min_alt;	/* Meters */
-  gpsbabel_optional::optional<double> max_spd;	/* Meters/sec */
-  gpsbabel_optional::optional<double> min_spd;	/* Meters/sec */
-  gpsbabel_optional::optional<double> avg_hrt;	/* Avg Heartrate */
-  gpsbabel_optional::optional<double> avg_cad;	/* Avg Cadence */
+  std::optional<double> max_alt;	/* Meters */
+  std::optional<double> min_alt;	/* Meters */
+  std::optional<double> max_spd;	/* Meters/sec */
+  std::optional<double> min_spd;	/* Meters/sec */
+  std::optional<double> avg_hrt;	/* Avg Heartrate */
+  std::optional<double> avg_cad;	/* Avg Cadence */
   gpsbabel::DateTime start;		/* Min time */
   gpsbabel::DateTime end;		/* Max time */
-  gpsbabel_optional::optional<int> min_hrt;			/* Min Heartrate */
-  gpsbabel_optional::optional<int> max_hrt;			/* Max Heartrate */
-  gpsbabel_optional::optional<int> max_cad;			/* Max Cadence */
+  std::optional<int> min_hrt;			/* Min Heartrate */
+  std::optional<int> max_hrt;			/* Max Heartrate */
+  std::optional<int> max_cad;			/* Max Cadence */
 };
 
 class route_head
@@ -747,7 +742,7 @@ public:
   void disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc);
 
   // Only expose methods from our underlying container that won't corrupt our private data.
-  // Our contained element (route_head) also contains a container (waypoint_list), 
+  // Our contained element (route_head) also contains a container (waypoint_list),
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
   // public types
@@ -974,20 +969,6 @@ void setshort_defname(short_handle, const char* s);
 #define ARG_NOMINMAX nullptr, nullptr
 
 struct arglist_t {
-  /* MSVC 2015 generates C2440, C2664 errors without some help. */
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-  arglist_t() = default;
-  arglist_t(const char* astr, char** aval, const char* hstr, const char* dval,
-            const uint32_t atyp, const char* minv, const char* maxv, char* avp) :
-            argstring(astr),
-            argval(aval),
-            helpstring(hstr),
-            defaultvalue(dval),
-            argtype(atyp),
-            minvalue(minv),
-            maxvalue(maxv),
-            argvalptr(avp) {}
-#endif
   const char* argstring{nullptr};
   char** argval{nullptr};
   const char* helpstring{nullptr};
@@ -1121,7 +1102,6 @@ time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
-signed int month_lookup(const char* m);
 const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);
@@ -1133,7 +1113,7 @@ char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m
 char* convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 char* pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
-const QString get_filename(const QString& fname);			/* extract the filename portion */
+QString get_filename(const QString& fname);			/* extract the filename portion */
 
 /*
  * Character encoding transformations.

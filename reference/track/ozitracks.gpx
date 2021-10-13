@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>2020-12-17T13:49:58.329Z</time>
+  <bounds minlat="0.000000000" minlon="1.000000000" maxlat="2.000030000" maxlon="3.000030000"/>
+  <trk>
+    <name>track0</name>
+    <trkseg>
+      <trkpt lat="0.000000000" lon="1.000000000">
+        <time>2010-01-02T03:04:05Z</time>
+      </trkpt>
+      <trkpt lat="0.000010000" lon="1.000020000">
+        <time>2010-01-02T03:04:06Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track1</name>
+    <trkseg>
+      <trkpt lat="1.000000000" lon="2.000000000">
+        <time>2010-01-02T03:04:07Z</time>
+      </trkpt>
+      <trkpt lat="1.000010000" lon="2.000010000">
+        <time>2010-01-02T03:04:08Z</time>
+      </trkpt>
+      <trkpt lat="1.000020000" lon="2.000020000">
+        <time>2010-01-02T03:04:09Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track2</name>
+    <trkseg>
+      <trkpt lat="2.000000000" lon="3.000000000">
+        <time>2010-01-02T03:04:10Z</time>
+      </trkpt>
+      <trkpt lat="2.000010000" lon="3.000010000">
+        <time>2010-01-02T03:04:11Z</time>
+      </trkpt>
+      <trkpt lat="2.000020000" lon="3.000020000">
+        <time>2010-01-02T03:04:12Z</time>
+      </trkpt>
+      <trkpt lat="2.000030000" lon="3.000030000">
+        <time>2010-01-02T03:04:13Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

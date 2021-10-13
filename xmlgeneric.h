@@ -22,8 +22,8 @@
 #ifndef XMLGENERIC_H_INCLUDED_
 #define XMLGENERIC_H_INCLUDED_
 
-#include <QtCore/QString>               // for QString
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QString>                      // for QString
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 // Maybe the XmlGeneric string callback really shouldn't have a type
 // of its own; this was a crutch during the move from char* to QString.
@@ -81,7 +81,7 @@ private:
 };
 
 // xml processing uses a QList<xg_tag_map_entry>.
-// You may generated this yourself.  See method 1 below. 
+// You may generated this yourself.  See method 1 below.
 // Or it may be generated for you using one of the subsequent
 // methods.
 struct xg_tag_map_entry {
@@ -147,7 +147,7 @@ QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<my_fun
  *    You must set the dynamic_tbl parameter to true to free the generated table
  *    resources when xml_deinit is called.
  *
- */ 
+ */
 void xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
               const char** ignorelist = nullptr,
               const char** skiplist = nullptr, bool dynamic_tbl = false);

@@ -1,8 +1,4 @@
-alantrl	trl	Alan Map500 tracklogs (.trl)
-alanwpr	wpr	Alan Map500 waypoints and routes (.wpr)
 baroiq		Brauniger IQ Series Barograph Download
-bushnell_trl	trl	Bushnell GPS Trail file
-bushnell	wpt	Bushnell GPS Waypoint file
 cambridge	dat	Cambridge/Winpilot glider software
 cst	cst	CarteSurTable data file
 v900		Columbus/Visiontac V900 files (.csv)
@@ -10,7 +6,6 @@ csv		Comma separated values
 compegps		CompeGPS data files (.wpt/.trk/.rte)
 iblue747	csv	Data Logger iBlue747 csv
 iblue757	csv	Data Logger iBlue757 csv
-an1	an1	DeLorme .an1 (drawing) file
 gpl	gpl	DeLorme GPL
 saplus		DeLorme Street Atlas Plus
 saroute	anr	DeLorme Street Atlas Route
@@ -112,10 +107,8 @@ navigonwpt		Navigon Waypoints
 navilink		NaviGPS GT-11/BGT-11 Download
 sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
 sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-naviguide	twl	Naviguide binary route file (.twl)
 navitel_trk	bin	Navitel binary track (.bin)
 dna	dna	Navitrak DNA marker format
-netstumbler		NetStumbler Summary File (text)
 nima		NIMA/GNIS Geographic Names File
 nmea		NMEA 0183 sentences
 lmx		Nokia Landmark Exchange

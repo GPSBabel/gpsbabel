@@ -15,10 +15,12 @@ make -j 3 coverage
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # don't leak unhashed tokens!
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if [ -v CODACY_PROJECT_TOKEN ] ; then
+set +x
+# this shell parameter expansion also protects the token from accidental exposure
+# by substituting x for the token if the token is set and not null.
+if [ -n "${CODACY_PROJECT_TOKEN:+x}" ] ; then
   # upload coverate report to codacy.
-  wget -nv -c https://github.com/codacy/codacy-coverage-reporter/releases/download/6.2.0/codacy-coverage-reporter-assembly-6.2.0.jar
-  java -jar codacy-coverage-reporter-assembly-6.2.0.jar report -l cpp -f -r gpsbabel_coverage.xml
+  bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CPP -r gpsbabel_coverage.xml
 else
   echo "Skipping codacy coverage upload as CODACY_PROJECT_TOKEN is not set."
 fi

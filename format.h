@@ -181,8 +181,18 @@ public:
     name = nm;
   }
 
+  QString get_argstring() const
+  {
+    return argstring;
+  }
+
+  void set_argstring(const QString& string)
+  {
+    argstring = string;
+  }
 private:
   QString name;
+  QString argstring;
 
 protected:
   template <class MyFormat>

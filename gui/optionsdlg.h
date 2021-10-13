@@ -40,8 +40,6 @@ public:
                  QLineEdit* le,
                  QToolButton* tb, bool isInFile);
 
-  ~FileDlgManager();
-
 private:
   QLineEdit* le;
   QToolButton* tb;

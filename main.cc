@@ -22,21 +22,21 @@
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
-#include <QtCore/QByteArray>          // for QByteArray
-#include <QtCore/QChar>               // for QChar
-#include <QtCore/QCoreApplication>    // for QCoreApplication
-#include <QtCore/QFile>               // for QFile
-#include <QtCore/QIODevice>           // for QIODevice::ReadOnly
-#include <QtCore/QLocale>             // for QLocale
-#include <QtCore/QMessageLogContext>  // for QMessageLogContext
-#include <QtCore/QStack>              // for QStack
-#include <QtCore/QString>             // for QString
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QSysInfo>            // for QSysInfo
-#include <QtCore/QTextCodec>          // for QTextCodec
-#include <QtCore/QTextStream>         // for QTextStream
-#include <QtCore/QtConfig>            // for QT_VERSION_STR
-#include <QtCore/QtGlobal>            // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
+#include <QByteArray>                 // for QByteArray
+#include <QChar>                      // for QChar
+#include <QCoreApplication>           // for QCoreApplication
+#include <QFile>                      // for QFile
+#include <QIODevice>                  // for QIODevice::ReadOnly
+#include <QLocale>                    // for QLocale
+#include <QMessageLogContext>         // for QMessageLogContext
+#include <QStack>                     // for QStack
+#include <QString>                    // for QString
+#include <QStringList>                // for QStringList
+#include <QSysInfo>                   // for QSysInfo
+#include <QTextCodec>                 // for QTextCodec
+#include <QTextStream>                // for QTextStream
+#include <QtConfig>                   // for QT_VERSION_STR
+#include <QtGlobal>                   // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
 
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
@@ -231,7 +231,7 @@ public:
              qPrintable(wpt->shortname),
              qPrintable(wpt->description));
     }
-  
+
     if (wpt->altitude != unknown_alt) {
       printf(" %f", wpt->altitude);
     }
@@ -431,7 +431,7 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s \n", gpsbabel_version);
+        warning("GPSBabel Version: %s\n", gpsbabel_version);
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
@@ -535,7 +535,7 @@ run(const char* prog_name)
     }
 
     /* reinitialize xcsv in case two formats that use xcsv were given */
-    (void) Vecs::Instance().find_vec(ivecs->get_name());
+    (void) Vecs::Instance().find_vec(ivecs->get_argstring());
 
     cet_convert_init(ivecs->get_encode(), 1);
 
@@ -548,7 +548,7 @@ run(const char* prog_name)
 
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
-      (void) Vecs::Instance().find_vec(ovecs->get_name());
+      (void) Vecs::Instance().find_vec(ovecs->get_argstring());
 
       cet_convert_init(ovecs->get_encode(), 1);
 
@@ -645,9 +645,15 @@ main(int argc, char* argv[])
   int rc = 0;
   const char* prog_name = argv[0]; /* may not match QCoreApplication::arguments().at(0)! */
 
-// MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
-#if (QT_VERSION < QT_VERSION_CHECK(5, 9, 0))
+// MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
+// arguments in main.cc and gui/main.cc and the version check in
+// CMakeLists.txt, gui/CMakeLists.txt.
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 #error This version of Qt is not supported.
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
+#error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
 #ifdef DEBUG_LOCALE

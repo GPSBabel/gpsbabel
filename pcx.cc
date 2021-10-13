@@ -23,18 +23,16 @@
 #include <cstdlib>                    // for atoi
 #include <cstring>                    // for strstr, strncmp
 
-#include <QtCore/QChar>               // for operator==, QChar
-#include <QtCore/QCharRef>            // for QCharRef
-#include <QtCore/QDate>               // for QDate
-#include <QtCore/QDateTime>           // for QDateTime
-#include <QtCore/QList>               // for QList
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString, QString::KeepEmptyParts, QString::SectionSkipEmpty
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QStringRef>          // for QStringRef
-#include <QtCore/QTime>               // for QTime
-#include <QtCore/QVector>             // for QVector
-#include <QtCore/Qt>                  // for CaseInsensitive, UTC
+#include <QChar>                      // for operator==, QChar
+#include <QDate>                      // for QDate
+#include <QDateTime>                  // for QDateTime
+#include <QList>                      // for QList
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString, QString::SectionSkipEmpty
+#include <QStringList>                // for QStringList
+#include <QTime>                      // for QTime
+#include <QVector>                    // for QVector
+#include <Qt>                         // for CaseInsensitive, UTC
 
 #include "defs.h"
 #include "cet_util.h"                 // for cet_convert_init
@@ -132,8 +130,7 @@ static void data_read() {
 
     switch (ibuf[0]) {
       case 'W': {
-        QStringList tokens =
-            line.split(sep, QString::KeepEmptyParts);
+        const QStringList tokens = line.split(sep);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse waypoint, not all required columns "
@@ -232,8 +229,7 @@ static void data_read() {
         route_add_head(route);
         break;
       case 'T': {
-        QStringList tokens =
-            line.split(sep, QString::KeepEmptyParts);
+        const QStringList tokens = line.split(sep);
         if (tokens.size() < 6) {
           fatal(MYNAME
                 ": Unable to parse trackpoint, not all required columns "

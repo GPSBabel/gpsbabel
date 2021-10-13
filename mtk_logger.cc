@@ -57,9 +57,9 @@
 #include "defs.h"
 #include "gbfile.h" /* used for csv output */
 #include "gbser.h"
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
+#include <QDir>
+#include <QFile>
+#include <QThread>
 #include <cerrno>
 #include <cmath>
 #include <cstdlib>
@@ -303,7 +303,7 @@ static void dbg(int l, const char* msg, ...)
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static const QString GetTempName(bool backup)
+static QString GetTempName(bool backup)
 {
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";
@@ -560,7 +560,7 @@ static void mtk_read()
   fseek(dout, 0L,SEEK_END);
   unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %d\n", qPrintable(TEMP_DATA_BIN),
+    dbg(1, "Temp %s file exists. with size %lu\n", qPrintable(TEMP_DATA_BIN),
         dsize);
     dpos = 0;
     init_scan = 1;
@@ -901,7 +901,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     auto* w = new Waypoint(*trk);
 
-    w->shortname = QString::asprintf("WP%06d", waypt_count()+1);
+    w->shortname = QString("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of
@@ -1302,7 +1302,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
     } else {
       dbg(1,"Missing '*' !\n");
       if (data[i] == 0xff) {  // in some case star-crc hasn't been written on power off.
-        dbg(1, "Bad data point @0x%.6x - skip %d bytes\n", (fl!=nullptr)?ftell(fl):-1, i+2);
+        dbg(1, "Bad data point @0x%.6lx - skip %d bytes\n", (fl!=nullptr)?ftell(fl):-1, i+2);
         return i+2; // include '*' and crc
       }
     }
@@ -1315,7 +1315,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   }
 
   if (data[i] != crc) {
-    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6x)\n", count, data[i], crc, (fl!=nullptr)?ftell(fl):-1);
+    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6lx)\n", count, data[i], crc, (fl!=nullptr)?ftell(fl):-1);
   }
   i++; // crc
   count++;

@@ -25,15 +25,9 @@
 #include <QNetworkRequest>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
-#if HAVE_WEBENGINE
 #include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebChannel>
-#else
-#include <QWebView>
-#include <QWebFrame>
-#include <QWebPage>
-#endif
 #include <QApplication>
 #include <QCursor>
 #include <QFile>
@@ -62,11 +56,7 @@ static QString stripDoubleQuotes(const QString& s)
 //------------------------------------------------------------------------
 Map::Map(QWidget* parent,
          const Gpx&  gpx, QPlainTextEdit* te):
-#if HAVE_WEBENGINE
   QWebEngineView(parent),
-#else
-  QWebView(parent),
-#endif
   gpx_(gpx),
   mapPresent_(false),
   busyCursor_(false),
@@ -76,19 +66,17 @@ Map::Map(QWidget* parent,
   stopWatch_.start();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   manager_ = new QNetworkAccessManager(this);
-  connect(this,SIGNAL(loadFinished(bool)),
-          this,SLOT(loadFinishedX(bool)));
+  connect(this,&QWebEngineView::loadFinished,
+          this,&Map::loadFinishedX);
   this->logTime("Start map constructor");
 
-#if HAVE_WEBENGINE
   auto* mclicker = new MarkerClicker(this);
   auto* channel = new QWebChannel(this->page());
   this->page()->setWebChannel(channel);
   // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
-  connect(mclicker, SIGNAL(markerClicked(int,int)), this, SLOT(markerClicked(int,int)));
-  connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
-#endif
+  connect(mclicker, &MarkerClicker::markerClicked, this, &Map::markerClicked);
+  connect(mclicker, &MarkerClicker::logTime, this, &Map::logTime);
 
   // We search the following locations:
   // 1. In the file system in the same directory as the executable.
@@ -158,7 +146,7 @@ static QString makePath(const vector <LatLng>& pts)
   QString path;
   int lncount = 0;
   bool someoutput = false;
-  foreach (const LatLng ll, pts) {
+  for (const auto& ll : pts) {
     if (lncount == 0) {
       if (someoutput) {
         path.append(QChar(','));
@@ -177,15 +165,6 @@ static QString makePath(const vector <LatLng>& pts)
 //------------------------------------------------------------------------
 void Map::showGpxData()
 {
-
-#if !defined(HAVE_WEBENGINE)
-  // Historically this was done here in showGpxData.
-  MarkerClicker* mclicker = new MarkerClicker(this);
-  this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
-  connect(mclicker, SIGNAL(markerClicked(int,int)), this, SLOT(markerClicked(int,int)));
-  connect(mclicker, SIGNAL(logTime(QString)), this, SLOT(logTime(QString)));
-#endif
-
   this->logTime("Start defining JS string");
   QStringList scriptStr;
   scriptStr
@@ -406,11 +385,7 @@ void Map::panTo(const LatLng& loc)
 //------------------------------------------------------------------------
 void Map::resizeEvent(QResizeEvent* ev)
 {
-#if HAVE_WEBENGINE
   QWebEngineView::resizeEvent(ev);
-#else
-  QWebView::resizeEvent(ev);
-#endif
   if (mapPresent_) {
     evaluateJS(QString("google.maps.event.trigger(map, 'resize');"));
   }
@@ -461,11 +436,7 @@ void Map::evaluateJS(const QString& s, bool upd)
   *dbgout_ << s << '\n';
   dbgout_->flush();
 #endif
-#if HAVE_WEBENGINE
   this->page()->runJavaScript(s);
-#else
-  this->page()->mainFrame()->evaluateJavaScript(s);
-#endif
   if (upd) {
     this->update();
   }

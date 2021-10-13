@@ -36,15 +36,15 @@
 #include <cstdlib>                     // for abs
 #include <cstring>                     // for memcpy, memcmp, strcmp
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QList>                // for QList
-#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
-#include <QtCore/QString>              // for QString
-#include <QtCore/QTime>                // for QTime
-#include <QtCore/Qt>                   // for TextDate, UTC
-#include <QtCore/QtGlobal>             // for qPrintable
+#include <QByteArray>                  // for QByteArray
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QList>                       // for QList
+#include <QScopedArrayPointer>         // for QScopedArrayPointer
+#include <QString>                     // for QString
+#include <QTime>                       // for QTime
+#include <Qt>                          // for TextDate, UTC
+#include <QtGlobal>                    // for qPrintable
 
 #include "defs.h"
 #include "dg-100.h"
@@ -145,7 +145,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
 
 /* TODO: check whether negative lat/lon (West/South) are handled correctly */
 float
-Dg100Format::bin2deg(int val) const
+Dg100Format::bin2deg(int val)
 {
   /* Assume that val prints in decimal digits as [-]dddmmffff
    * ddd:  degrees

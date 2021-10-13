@@ -28,8 +28,8 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "gps.h"
-#include "gpsserial.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsserial.h"
 
 
 /* @func GPS_Time_Now ***********************************************

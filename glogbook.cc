@@ -23,8 +23,8 @@
 #include "src/core/file.h"
 #include "xmlgeneric.h"
 
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QXmlStreamWriter>
+#include <QXmlStreamAttributes>
+#include <QXmlStreamWriter>
 
 static gbfile* ofd;
 static QString ostring;

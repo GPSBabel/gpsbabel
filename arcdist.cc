@@ -24,9 +24,9 @@
 #include <cstdlib>              // for strtod
 #include <cstring>              // for strchr, strlen, strncmp, strspn
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QString>       // for QString
-#include <QtCore/QtGlobal>      // for foreach, qPrintable, qint64
+#include <QByteArray>           // for QByteArray
+#include <QString>              // for QString
+#include <QtGlobal>             // for foreach, qPrintable, qint64
 
 #include "defs.h"
 #include "arcdist.h"

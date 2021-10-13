@@ -23,10 +23,10 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "gps.h"
-#include "../gbser.h"
-#include "gpsserial.h"
-#include <QtCore/QThread>
+#include "jeeps/gps.h"
+#include "gbser.h"
+#include "jeeps/gpsserial.h"
+#include <QThread>
 #include <cerrno>
 #include <cstdio>
 #include <ctime>

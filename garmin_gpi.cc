@@ -52,14 +52,13 @@
 #include <cstring>                 // for strlen, strncmp
 #include <ctime>                   // for time, time_t, gmtime
 
-#include <QtCore/QByteArray>       // for QByteArray, operator==
-#include <QtCore/QByteRef>         // for QByteRef
-#include <QtCore/QList>            // for QList<>::iterator, QList
-#include <QtCore/QString>          // for QString, operator+, operator<
-#include <QtCore/QThread>          // for QThread
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for foreach, Q_UNUSED
+#include <QByteArray>              // for QByteArray, operator==
+#include <QList>                   // for QList<>::iterator, QList
+#include <QString>                 // for QString, operator+, operator<
+#include <QThread>                 // for QThread
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for foreach, Q_UNUSED
 
 #include "defs.h"
 #include "garmin_gpi.h"
@@ -429,7 +428,7 @@ read_poi(const int sz, const int tag)
   (void) len;
   int pos = gbftell(fin);
 
-  Waypoint* wpt = new Waypoint;
+  auto* wpt = new Waypoint;
   wpt->icon_descr = DEFAULT_ICON;
 
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
@@ -778,7 +777,7 @@ compare_strings(const QString& s1, const QString& s2)
 static writer_data_t*
 wdata_alloc()
 {
-  auto res = new writer_data_t;
+  auto* res = new writer_data_t;
   waypt_init_bounds(&res->bds);
 
   return res;
@@ -912,23 +911,20 @@ wdata_compute_size(writer_data_t* data)
     wpt->extra_data = dt;
 
     if (alerts) {
-      int pidx;
-      if ((pidx = wpt->shortname.indexOf('@')) != -1) {
-        const char* pos = CSTR(wpt->shortname.mid(pidx));
-        double speed, scale;
+      if (int pidx = wpt->shortname.indexOf('@'); pidx != -1) {
+        double scale;
         if (units == 's') {
           scale = MPH_TO_MPS(1);
         } else {
           scale = KPH_TO_MPS(1);
         }
-        parse_speed(pos + 1, &speed, scale, MYNAME);
+        double speed = 0;
+        parse_speed(wpt->shortname.mid(pidx + 1), &speed, scale, MYNAME);
         if (speed > 0) {
           WAYPT_SET(wpt, speed, speed);
         }
 #if 0
-        if (pos > wpt->shortname) {
-          wpt->shortname[pos - wpt->shortname] = '\0';
-        }
+        wpt->shortname.truncate(pidx);
 #endif
       } else if ((opt_speed) && (! WAYPT_HAS(wpt, speed))) {
         WAYPT_SET(wpt, speed, defspeed);

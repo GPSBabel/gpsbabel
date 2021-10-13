@@ -1,0 +1,32 @@
+name: "fedora"
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+
+jobs:
+
+  fedora:
+    name: fedora Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['32', '33', '34']
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_f${{ matrix.version }}
+      env:
+        LC_ALL: C.UTF-8
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_and_test
+      run: |
+        ./build_and_test

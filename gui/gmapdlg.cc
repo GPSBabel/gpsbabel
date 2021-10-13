@@ -39,16 +39,6 @@ public:
 };
 
 //------------------------------------------------------------------------
-class TreeAction: public QAction
-{
-public:
-  TreeAction(const QString& text,
-             QObject* obj, const char* member,  QObject* parent): QAction(text, parent)
-  {
-    connect(this, SIGNAL(triggered()), obj, member);
-  }
-};
-//------------------------------------------------------------------------
 QString GMapDialog::formatLength(double l)
 {
   double metricLength = l;
@@ -201,21 +191,21 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   ui_.treeView->header()->hide();
   ui_.treeView->setModel(model_);
   ui_.treeView->setExpandsOnDoubleClick(false);
-  connect(model_, SIGNAL(itemChanged(QStandardItem*)),
-          this,  SLOT(itemChangedX(QStandardItem*)));
-  connect(mapWidget_, SIGNAL(waypointClicked(int)), this, SLOT(waypointClickedX(int)));
-  connect(mapWidget_, SIGNAL(routeClicked(int)), this, SLOT(routeClickedX(int)));
-  connect(mapWidget_, SIGNAL(trackClicked(int)), this, SLOT(trackClickedX(int)));
-  connect(ui_.treeView, SIGNAL(doubleClicked(QModelIndex)),
-          this, SLOT(treeDoubleClicked(QModelIndex)));
-  connect(ui_.treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(selectionChangedX(QItemSelection,QItemSelection)));
+  connect(model_, &QStandardItemModel::itemChanged,
+          this,  &GMapDialog::itemChangedX);
+  connect(mapWidget_, &Map::waypointClicked, this, &GMapDialog::waypointClickedX);
+  connect(mapWidget_, &Map::routeClicked, this, &GMapDialog::routeClickedX);
+  connect(mapWidget_, &Map::trackClicked, this, &GMapDialog::trackClickedX);
+  connect(ui_.treeView, &QAbstractItemView::doubleClicked,
+          this, &GMapDialog::treeDoubleClicked);
+  connect(ui_.treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &GMapDialog::selectionChangedX);
 
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(ui_.treeView, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(showContextMenu(QPoint)));
+  connect(ui_.treeView, &QWidget::customContextMenuRequested,
+          this, &GMapDialog::showContextMenu);
 
-  connect(ui_.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
+  connect(ui_.copyButton, &QAbstractButton::clicked, this, &GMapDialog::copyButtonClickedX);
 
   ui_.copyButton->hide(); // Hide for now, not working
 }
@@ -538,38 +528,38 @@ void GMapDialog::showContextMenu(const QPoint& pt)
   int j;
   if (model_->indexFromItem(wptItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Waypoints"), this, SLOT(showAllWaypoints()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Waypoints"), this, SLOT(hideAllWaypoints()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllWaypoints()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllWaypoints()),&menu));
+    menu.addAction(tr("Show All Waypoints"), this, &GMapDialog::showAllWaypoints);
+    menu.addAction(tr("Hide All Waypoints"), this, &GMapDialog::hideAllWaypoints);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllWaypoints);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllWaypoints);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(rteItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Routes"), this, SLOT(showAllRoutes()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Routes"), this, SLOT(hideAllRoutes()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllRoutes()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllRoutes()),&menu));
+    menu.addAction(tr("Show All Routes"), this, &GMapDialog::showAllRoutes);
+    menu.addAction(tr("Hide All Routes"), this, &GMapDialog::hideAllRoutes);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllRoutes);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllRoutes);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if (model_->indexFromItem(trkItem_) == idx) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show All Tracks"), this, SLOT(showAllTracks()), &menu));
-    menu.addAction(new TreeAction(tr("Hide All Tracks"), this, SLOT(hideAllTracks()),&menu));
-    menu.addAction(new TreeAction(tr("Expand All"), this, SLOT(expandAllTracks()),&menu));
-    menu.addAction(new TreeAction(tr("Collapse All"), this, SLOT(collapseAllTracks()),&menu));
+    menu.addAction(tr("Show All Tracks"), this, &GMapDialog::showAllTracks);
+    menu.addAction(tr("Hide All Tracks"), this, &GMapDialog::hideAllTracks);
+    menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllTracks);
+    menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllTracks);
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = waypointIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Waypoint"), this, SLOT(showOnlyThisWaypoint()), &menu));
+    menu.addAction(tr("Show Only This Waypoint"), this, &GMapDialog::showOnlyThisWaypoint);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = trackIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Track"), this, SLOT(showOnlyThisTrack()), &menu));
+    menu.addAction(tr("Show Only This Track"), this, &GMapDialog::showOnlyThisTrack);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else if ((j = routeIndex(it)) >=0) {
     QMenu menu(this);
-    menu.addAction(new TreeAction(tr("Show Only This Route"), this, SLOT(showOnlyThisRoute()), &menu));
+    menu.addAction(tr("Show Only This Route"), this, &GMapDialog::showOnlyThisRoute);
     menuIndex_ = j;
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else {

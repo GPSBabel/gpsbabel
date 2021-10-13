@@ -19,75 +19,28 @@
 
 #include "src/core/xmlstreamwriter.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-#include <QtCore/QXmlStreamWriter>
+#include <QString>                  // for QString
+#include <QXmlStreamWriter>         // for QXmlStreamWriter
+#include <QtGlobal>                 // for QT_VERSION, QT_VERSION_CHECK
 
 // As this code began in C, we have several hundred places that write
 // c strings.  Add a test that the string contains anything useful
 // before serializing an empty tag.
-// We also strip out characters that are illegal in xml.  These can creep
-// into our structures from other formats where they are legal.
+// We rely on Qt to strip out characters that are illegal in xml.  These can
+// creep into our structures from other formats where they are legal.
+
+// Verify Qt is new enough to strip out illegal characters.
+// This fix went into Qt 5.11.0. See
+// https://github.com/GPSBabel/gpsbabel/issues/637
+// https://bugreports.qt.io/browse/QTBUG-63150
+// https://github.com/qt/qtbase/commit/3b5b8f1d4ab8092e5dd337b7b4e32d85fda2e0b7
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+#error We rely on the fix for QTBUG-63150 introduced in Qt 5.11.0.
+#endif
+
 
 namespace gpsbabel
 {
-
-XmlTextCodec* XmlTextCodec::instance = new XmlTextCodec();
-
-XmlTextCodec::XmlTextCodec() : QTextCodec()
-{
-  utf8Codec = QTextCodec::codecForName("UTF-8");
-}
-
-QByteArray XmlTextCodec::convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const
-{
-// Qt 4.7.4, 4.6.2 don't have IgnoreHeader set on the first call, which can
-// result in a BOM being output by utf8Codec.
-  state->flags |= QTextCodec::IgnoreHeader;
-  QByteArray r = utf8Codec->fromUnicode(chars, len, state);
-  char* data = r.data();
-  for (int i = 0; i < r.size(); i++) {
-    if ((0x00 <= data[i] && data[i] <= 0x08) ||
-        (0x0b <= data[i] && data[i] <= 0x0c) ||
-        (0x0e <= data[i] && data[i] <= 0x1f)) {
-      data[i] = ' ';
-    }
-  }
-  return r;
-}
-
-QString XmlTextCodec::convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const
-{
-  return utf8Codec->toUnicode(chars, len, state);
-}
-
-int XmlTextCodec::mibEnum() const
-{
-  return UTF8_FOR_XML_MIB;
-}
-
-// Our name must not overlap with UTF-8 or it may be returned by QTextCodec::codecForName("UTF-8")
-QByteArray XmlTextCodec::name() const
-{
-  return QByteArray("UTF-8-XML");
-}
-
-XmlStreamWriter::XmlStreamWriter(QString* string) : QXmlStreamWriter(string)
-{
-}
-
-XmlStreamWriter::XmlStreamWriter(QFile* f) : QXmlStreamWriter(f)
-{
-  setCodec(XmlTextCodec::instance);
-}
-
-// We must override the encoding, we don't want to use XmlTextCode::name().
-void XmlStreamWriter::writeStartDocument()
-{
-  writeProcessingInstruction(QStringLiteral("xml version=\"1.0\" encoding=\"UTF-8\""));
-}
-
 // Dont emit the element if there's nothing interesting in it.
 void XmlStreamWriter::writeOptionalTextElement(const QString& qualifiedName, const QString& text)
 {

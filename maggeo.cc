@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "magellan.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

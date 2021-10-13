@@ -18,9 +18,9 @@
  */
 #include "defs.h"
 #include "src/core/file.h"
-#include <QtCore/QDebug>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QXmlStreamWriter>
+#include <QDebug>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 static char* deficon = nullptr;
 static char* nuke_placer;
@@ -48,42 +48,42 @@ static void GeoReadLoc()
   QString current_tag;
 
   while (!reader.atEnd()) {
-    QStringRef tag_name = reader.name();
+    auto tag_name = reader.name();
     if (reader.tokenType()==QXmlStreamReader::StartElement) {
       current_tag.append("/");
       current_tag.append(tag_name);
-      if (current_tag == "/loc/waypoint") {
+      if (current_tag == u"/loc/waypoint") {
         wpt = new Waypoint;
         wpt->AllocGCData();
         // There is no 'unknown' alt value and so many reference files have
         // leaked it that we just paper over that here.
         wpt->altitude = 0;
-      } else if (current_tag == "/loc/waypoint/name") {
+      } else if (current_tag == u"/loc/waypoint/name") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->shortname = a.value("id").toString();
         wpt->description = reader.readElementText();
-      } else if (current_tag == "/loc/waypoint/coord") {
+      } else if (current_tag == u"/loc/waypoint/coord") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->latitude = a.value("lat").toString().toDouble();
         wpt->longitude = a.value("lon").toString().toDouble();
-      } else if (current_tag == "/loc/waypoint/type") {
+      } else if (current_tag == u"/loc/waypoint/type") {
         wpt->icon_descr = reader.readElementText();
-      } else if (current_tag == "/loc/waypoint/link") {
+      } else if (current_tag == u"/loc/waypoint/link") {
         QXmlStreamAttributes a = reader.attributes();
         waypt_add_url(wpt,
                       reader.readElementText(), a.value("text").toString());
-      } else if (current_tag == "/loc/waypoint/difficulty") {
+      } else if (current_tag == u"/loc/waypoint/difficulty") {
         wpt->gc_data->diff = reader.readElementText().toDouble() * 10;
-      } else if (current_tag == "/loc/waypoint/terrain") {
+      } else if (current_tag == u"/loc/waypoint/terrain") {
         wpt->gc_data->terr = reader.readElementText().toDouble() * 10;
-      } else if (current_tag == "/loc/waypoint/container") {
+      } else if (current_tag == u"/loc/waypoint/container") {
         wpt->gc_data->container = wpt_container(reader.readElementText());
       }
     }
 
     // The tokenType may have changed to EndElement as a result of readElementText.
     if (reader.tokenType() == QXmlStreamReader::EndElement) {
-      if (current_tag == "/loc/waypoint") {
+      if (current_tag == u"/loc/waypoint") {
         waypt_add(wpt);
       }
       current_tag.chop(tag_name.length() + 1);

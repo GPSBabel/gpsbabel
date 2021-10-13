@@ -7,12 +7,12 @@ void fatal(const char *msg, ...) {
 }
 
 // Forward decls to make the signature match.
-class Waypoint; 
+class Waypoint;
 class route_head;
 class QString;
 class route;
 
-// These functions "claim" their arguments 
+// These functions "claim" their arguments
 void
 waypt_add(Waypoint* wpt) {
   __coverity_escape__(wpt);
@@ -31,7 +31,7 @@ void route_add_wpt(route_head* rte, Waypoint* wpt) {
 void track_add_wpt(route_head* rte, Waypoint* wpt) {
   __coverity_escape__(wpt);
 }
-void route_add_wpt_named(route_head* rte, Waypoint* wpt, 
+void route_add_wpt_named(route_head* rte, Waypoint* wpt,
                          const QString& namepart, int number_digits) {
   __coverity_escape__(wpt);
 }

@@ -59,7 +59,7 @@
 #include <cstdlib>              // for qsort, strtol
 #include <utility>              // for swap
 
-#include <QtCore/QDateTime>     // for QDateTime
+#include <QDateTime>            // for QDateTime
 
 #include "defs.h"
 #include "smplrout.h"

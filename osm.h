@@ -22,12 +22,12 @@
 #ifndef OSM_H_INCLUDED_
 #define OSM_H_INCLUDED_
 
-#include <QtCore/QHash>                 // for QHash
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QPair>                 // for QPair
-#include <QtCore/QString>               // for QString
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QHash>                        // for QHash
+#include <QList>                        // for QList
+#include <QPair>                        // for QPair
+#include <QString>                      // for QString
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"                     // for Format
@@ -97,7 +97,7 @@ private:
   char osm_feature_ikey(const QString& key) const;
   QString osm_feature_symbol(int ikey, const char* value) const;
   static char* osm_strip_html(const char* str);
-  QString osm_strip_html(const QString& str) const;
+  static QString osm_strip_html(const QString& str);
   void osm_node_end(xg_string /* unused */, const QXmlStreamAttributes* /* unused */);
   void osm_node(xg_string /* unused */, const QXmlStreamAttributes* attrv);
   void osm_node_tag(xg_string /* unused */, const QXmlStreamAttributes* attrv);

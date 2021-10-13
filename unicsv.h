@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <ctime>                  // for gmtime
 
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QString>         // for QString, operator!=, operator==
-#include <QtCore/QVector>         // for QVector
+#include <QDateTime>              // for QDateTime
+#include <QString>                // for QString, operator!=, operator==
+#include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
@@ -172,10 +172,10 @@ private:
 
   /* Member Functions */
 
-  long long int unicsv_parse_gc_code(const QString& str) const;
+  static long long int unicsv_parse_gc_code(const QString& str);
   static time_t unicsv_parse_date(const char* str, int* consumed);
-  time_t unicsv_parse_time(const char* str, int* usec, time_t* date) const;
-  time_t unicsv_parse_time(const QString& str, int* msec, time_t* date) const;
+  static time_t unicsv_parse_time(const char* str, int* usec, time_t* date);
+  static time_t unicsv_parse_time(const QString& str, int* msec, time_t* date);
   static status_type unicsv_parse_status(const QString& str);
   QDateTime unicsv_adjust_time(time_t time, const time_t* date) const;
   static bool unicsv_compare_fields(const QString& s, const field_t* f);

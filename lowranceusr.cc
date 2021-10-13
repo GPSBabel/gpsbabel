@@ -85,25 +85,24 @@
 
 */
 
-#include <algorithm>              // for min
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdlib>                // for atoi, abs
 #include <cstring>                // for strcmp, strlen
 #include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QDate>           // for QDate
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QLatin1String>   // for QLatin1String
-#include <QtCore/QList>           // for QList
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextEncoder>    // for QTextEncoder
-#include <QtCore/QTime>           // for QTime
-#include <QtCore/Qt>              // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
+#include <QDateTime>              // for QDateTime
+#include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString, operator+, operator==, operator!=
+#include <QTextCodec>             // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>           // for QTextEncoder
+#include <QTime>                  // for QTime
+#include <Qt>                     // for CaseInsensitive, UTC
+#include <QtGlobal>               // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "lowranceusr.h"
@@ -117,33 +116,6 @@
 extern WaypointList* global_waypoint_list;
 
 #define MYNAME "Lowrance USR"
-
-// Until c++17 we have to define odr-used constexpr static data members at namespace scope.
-#if __cplusplus < 201703L
-constexpr int LowranceusrFormat::DEF_ICON;
-constexpr int LowranceusrFormat::X_1_ICON;
-constexpr const char* LowranceusrFormat::DISABLED_CACHE_TXT;
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[];
-#else
-constexpr LowranceusrFormat::lowranceusr_icon_mapping_t LowranceusrFormat::lowranceusr_icon_value_table[134];
-#endif
-constexpr int LowranceusrFormat::DEF_USR4_ICON;
-constexpr int LowranceusrFormat::DEF_USR4_COLOR;
-// MSVC 2015 will error with C2373 if the array length isn't explicitly included.
-#if !defined(_MSC_VER) || (_MSC_VER >= 1910) /* !MSVC or MSVC 2017 or newer */
-constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[];
-#else
-constexpr LowranceusrFormat::lowranceusr4_icon_mapping_t LowranceusrFormat::lowranceusr4_icon_value_table[22];
-#endif
-constexpr int LowranceusrFormat::MAXUSRSTRINGSIZE;
-constexpr double LowranceusrFormat::SEMIMINOR;
-constexpr double LowranceusrFormat::DEGREESTORADIANS;
-constexpr int LowranceusrFormat::MAX_TRAIL_POINTS;
-constexpr double LowranceusrFormat::UNKNOWN_USR_ALTITUDE;
-constexpr time_t LowranceusrFormat::base_time_secs;
-#endif
 
 /* below couple of functions mostly borrowed from raymarine.c */
 
@@ -177,7 +149,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt) const
 /* end borrowed from raymarine.c */
 
 const Waypoint*
-LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high) const
+LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
@@ -198,7 +170,7 @@ LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int u
 }
 
 const Waypoint*
-LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4) const
+LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   // Iterate with waypt_disp_all?
   for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
@@ -1625,9 +1597,8 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   } else {
     name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
-  int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
-  name.truncate(text_len);
-  gbfputint32(text_len, file_out);
+  name.truncate(MAXUSRSTRINGSIZE);
+  gbfputint32(name.size(), file_out);
   gbfputs(name, file_out);
 
   /* num legs */
@@ -1740,9 +1711,8 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
       name = QString::asprintf("Babel %d", trail_count);
     }
 
-    int text_len = std::min(MAXUSRSTRINGSIZE, name.size());
-    name.truncate(text_len);
-    gbfputint32(text_len, file_out);
+    name.truncate(MAXUSRSTRINGSIZE);
+    gbfputint32(name.size(), file_out);
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
@@ -1859,7 +1829,6 @@ void
 LowranceusrFormat::write()
 {
   QString buf;
-  int len;
 
   setshort_length(mkshort_handle, 15);
 
@@ -1894,7 +1863,7 @@ LowranceusrFormat::write()
     gbfputint32(DataStreamVersion, file_out);
 
     /* file title */
-    if ((len = strlen(opt_title)) == 0) {
+    if (int len = strlen(opt_title); len == 0) {
       buf = QString("GPSBabel generated USR data file");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
@@ -1924,7 +1893,7 @@ LowranceusrFormat::write()
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
-    if ((len = strlen(opt_content_descr)) == 0) {
+    if (int len = strlen(opt_content_descr); len == 0) {
       buf = QString("Waypoints, routes, and trails");
     } else {
       if (len > MAXUSRSTRINGSIZE) {

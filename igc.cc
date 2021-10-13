@@ -29,18 +29,17 @@
 #include <cstring>                   // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
 #include <ctime>                     // for gmtime, ctime
 #include <iterator>                  // for reverse_iterator, operator==, prev, next
+#include <optional>                  // for optional
 
-#include <QtCore/QByteArray>         // for QByteArray
-#include <QtCore/QList>              // for QList<>::const_iterator
-#include <QtCore/QStaticStringData>  // for QStaticStringData
-#include <QtCore/QString>            // for QString, operator+, QStringLiteral
-#include <QtCore/QtGlobal>           // for foreach, qPrintable
+#include <QByteArray>                // for QByteArray
+#include <QList>                     // for QList<>::const_iterator
+#include <QString>                   // for QString, operator+, QStringLiteral
+#include <QtGlobal>                  // for foreach, qPrintable
 
 #include "defs.h"
 #include "cet_util.h"                // for cet_convert_init
 #include "gbfile.h"                  // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"       // for DateTime
-#include "src/core/optional.h"       // for optional
 
 
 static gbfile* file_in, *file_out;
@@ -156,7 +155,7 @@ inline state_t& operator++(state_t& s) // prefix
 inline state_t operator++(state_t& s, int) // postfix
 {
   state_t ret(s);
-  s = ++s;
+  ++s;
   return ret;
 }
 
@@ -167,13 +166,11 @@ inline state_t operator++(state_t& s, int) // postfix
  */
 static void igc_task_rec(const char* rec)
 {
-  static char flight_date[7];
   static unsigned int num_tp, tp_ct;
   static route_head* rte_head;
   static time_t creation;
 
   char task_num[5];
-  char task_desc[MAXRECLEN];
   unsigned int lat_deg, lat_min, lat_frac;
   unsigned int lon_deg, lon_min, lon_frac;
   char lat_hemi[2], lon_hemi[2];
@@ -184,6 +181,8 @@ static void igc_task_rec(const char* rec)
 
   // First task record identifies the task to follow
   if (id == state) {
+    static char flight_date[7];
+    char task_desc[MAXRECLEN];
     task_desc[0] = '\0';
     if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%78[^\r]\r\n",
                &tm.tm_mday, &tm.tm_mon, &tm.tm_year,
@@ -501,7 +500,7 @@ static void detect_other_track(const route_head* rh)
   }
   // Find other track with the most waypoints
   if (rh->rte_waypt_ct > max_waypt_ct &&
-      (rh->rte_name.isEmpty() || 
+      (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(PRESTRKNAME) &&
        !rh->rte_name.startsWith(GNSSTRKNAME)))) {
     head = rh;
@@ -596,7 +595,6 @@ static void wr_header()
   time_t date;
   static const char dflt_str[] = "Unknown";
   const char* str = nullptr;
-  Waypoint* wpt;
 
   get_tracks(&pres_track, &track);
   if (!track && pres_track) {
@@ -624,7 +622,7 @@ static void wr_header()
 // FIXME: This almost certainly introduces a memory leak because str
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
-    if (nullptr != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
+    if (const Waypoint* wpt = find_waypt_by_name("PILOT"); (nullptr != wpt) && !wpt->description.isEmpty()) {
       xfree(str);
       str = xstrdup(CSTRc(wpt->description));
     } else {
@@ -684,7 +682,7 @@ static void wr_task_hdr(const route_head* rte)
   }
 
   if (!rte->rte_desc.isEmpty()) {
-    // desc will be something like "IGCDATE160701: 500KTri" 
+    // desc will be something like "IGCDATE160701: 500KTri"
     sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
   }
 
@@ -815,8 +813,8 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
  */
 static double interpolate_alt(const route_head* track, time_t time)
 {
-  static gpsbabel_optional::optional<WaypointList::const_iterator> prev_wpt;
-  static gpsbabel_optional::optional<WaypointList::const_iterator> curr_wpt;
+  static std::optional<WaypointList::const_iterator> prev_wpt;
+  static std::optional<WaypointList::const_iterator> curr_wpt;
   int time_diff;
 
   // Start search at the beginning of the track
@@ -825,32 +823,32 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_wpt = track->waypoint_list.cbegin();
   }
   // Find the track points either side of the requested time
-  while ((track->waypoint_list.cend() != curr_wpt.value()) &&
-         ((*curr_wpt.value())->GetCreationTime().toTime_t() < time)) {
-    prev_wpt = curr_wpt.value();
-    curr_wpt = std::next(prev_wpt.value());
+  while ((track->waypoint_list.cend() != *curr_wpt) &&
+         ((**curr_wpt)->GetCreationTime().toTime_t() < time)) {
+    prev_wpt = *curr_wpt;
+    curr_wpt = std::next(*prev_wpt);
   }
-  if (track->waypoint_list.cend() == curr_wpt.value()) {
+  if (track->waypoint_list.cend() == *curr_wpt) {
     // Requested time later than all track points, we can't interpolate
     return unknown_alt;
   }
 
-  if (track->waypoint_list.cbegin() == curr_wpt.value()) {
-    if ((*curr_wpt.value())->GetCreationTime().toTime_t() == time) {
+  if (track->waypoint_list.cbegin() == *curr_wpt) {
+    if ((**curr_wpt)->GetCreationTime().toTime_t() == time) {
       // First point's creation time is an exact match so use it's altitude
-      return (*curr_wpt.value())->altitude;
+      return (**curr_wpt)->altitude;
     } else {
       // Requested time is prior to any track points, we can't interpolate
       return unknown_alt;
     }
   }
   // Interpolate
-  if (0 == (time_diff = (*curr_wpt.value())->GetCreationTime().toTime_t() - (*prev_wpt.value())->GetCreationTime().toTime_t())) {
+  if (0 == (time_diff = (**curr_wpt)->GetCreationTime().toTime_t() - (**prev_wpt)->GetCreationTime().toTime_t())) {
     // Avoid divide by zero
-    return (*curr_wpt.value())->altitude;
+    return (**curr_wpt)->altitude;
   }
-  double alt_diff = (*curr_wpt.value())->altitude - (*prev_wpt.value())->altitude;
-  return (*prev_wpt.value())->altitude + (alt_diff / time_diff) * (time - (*prev_wpt.value())->GetCreationTime().toTime_t());
+  double alt_diff = (**curr_wpt)->altitude - (**prev_wpt)->altitude;
+  return (**prev_wpt)->altitude + (alt_diff / time_diff) * (time - (**prev_wpt)->GetCreationTime().toTime_t());
 }
 
 /*

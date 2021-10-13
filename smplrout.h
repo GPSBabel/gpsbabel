@@ -59,7 +59,7 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for route_head (ptr only), Waypoint (ptr only), ARGT...
 #include "filter.h"  // for Filter
@@ -126,7 +126,7 @@ private:
     const Waypoint* wpt{nullptr};
   };
 
-  void free_xte(struct xte* xte_rec);
+  static void free_xte(struct xte* xte_rec);
 
   struct xte_intermed* tmpprev = nullptr;
   int xte_count = 0;

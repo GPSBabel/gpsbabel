@@ -8,16 +8,16 @@
 # don't leak unhashed tokens!
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 set +x
-if [ ! -z "${CODACY_PROJECT_TOKEN+x}" ] ; then
+if [ -n "${CODACY_PROJECT_TOKEN:+x}" ] ; then
   echo -n "CODACY_PROJECT_TOKEN hash: "
   echo -n "$CODACY_PROJECT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
 else
-  echo CODACY_PROJECT_TOKEN not set.
+  echo CODACY_PROJECT_TOKEN null or not set.
 fi
-if [ ! -z "${GITHUB_TOKEN+x}" ] ; then
+if [ -n "${GITHUB_TOKEN:+x}" ] ; then
   echo -n "GITHUB_TOKEN hash: "
   echo -n "$GITHUB_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
 else
-  echo GITHUB_TOKEN not set.
+  echo GITHUB_TOKEN null or not set.
 fi
 set -x

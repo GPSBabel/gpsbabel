@@ -19,8 +19,8 @@
 #ifndef SRC_CORE_XMLTAG_H
 #define SRC_CORE_XMLTAG_H
 
-#include <QtCore/QString>                          // for QString
-#include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
+#include <QString>                                 // for QString
+#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
 
 #include "defs.h"
 

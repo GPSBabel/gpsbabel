@@ -24,9 +24,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 #if HAVE_LIBUSB_1_0
 #ifdef LIBUSB_H_INCLUDE
 // Warning: LIBUSB_H_INCLUDE necessarily includes bracket or double quote
@@ -43,11 +40,11 @@
 #    include <libusb-1.0/libusb.h>
 #  endif
 #endif
-#include "../defs.h"
-#include "garminusb.h"
-#include "gpsdevice.h"
-#include "gpsusbcommon.h"
-#include "../garmin_device_xml.h"
+#include "defs.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsusbcommon.h"
+#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
@@ -123,7 +120,7 @@ char** os_get_garmin_mountpoints()
 static int
 gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  auto buf = const_cast<unsigned char*>(&opkt->dbuf[0]);
+  auto* buf = const_cast<unsigned char*>(&opkt->dbuf[0]);
   int transferred;
 
   int ret = libusb_bulk_transfer(udev, gusb_bulk_out_ep, buf, sz,
@@ -133,8 +130,7 @@ gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
   if (transferred != (int) sz) {
-    warning("Bad cmdsend transferred %d sz %lud\n", transferred,
-            (unsigned long) sz);
+    warning("Bad cmdsend transferred %d sz %zu\n", transferred, sz);
   }
 
   return transferred;
@@ -401,7 +397,7 @@ garmin_usb_start(struct libusb_device* dev,
       const struct libusb_interface_descriptor* altsetting = &interface->altsetting[j];
       /*
        * FIXME: Since we never use libusb_set_interface_alt_setting()
-       * shouldn't we only look at the default interface descriptor, i.e. 
+       * shouldn't we only look at the default interface descriptor, i.e.
        * the one that has a bAlternateSetting of 0 and/or the one
        * that has index 0?
        * From the USB spec:
@@ -544,7 +540,7 @@ int
 gusb_init(const char* portname, gpsdevh** dh)
 {
   int req_unit_number = 0;
-  auto lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
+  auto* lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
 
   *dh = (gpsdevh*) lud;
 

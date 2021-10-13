@@ -22,7 +22,7 @@
 #ifndef RADIUS_H_INCLUDED_
 #define RADIUS_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED
 #include "filter.h"  // for Filter
@@ -88,7 +88,7 @@ private:
     },
   };
 
-  double gc_distance(double lat1, double lon1, double lat2, double lon2);
+  static double gc_distance(double lat1, double lon1, double lat2, double lon2);
 
 };
 #endif // FILTERS_ENABLED

@@ -1,0 +1,96 @@
+name: "ubuntu"
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+
+jobs:
+  basic:
+    name: basic Build
+    runs-on: ubuntu-latest
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      env:
+        LC_ALL: 'C.UTF-8'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_and_test
+      run: |
+        ./build_and_test
+
+  qtio_gcc:
+    name: qtio gcc Build
+    runs-on: ubuntu-latest
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
+      env:
+        LC_ALL: 'C.UTF-8'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_and_test
+      run: |
+        . /opt/qtio.env
+        ./build_and_test
+
+  qtio_clang:
+    name: qtio clang Build
+    runs-on: ubuntu-latest
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
+      env:
+        QMAKESPEC: 'linux-clang'
+        LC_ALL: 'C.UTF-8'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_and_test
+      run: |
+        . /opt/qtio.env
+        ./build_and_test
+
+  advanced:
+    name: advanced Build
+    runs-on: ubuntu-latest
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      env:
+        LC_ALL: 'C.UTF-8'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_extra_tests
+      run: |
+        ./tools/build_extra_tests
+
+  coverage:
+    name: coverage Build
+    runs-on: ubuntu-20.04
+    steps:
+    - name: install
+      run: |
+        sudo apt-get update
+        sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: script
+      env:
+        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      run: |
+        ./tools/travis_script_linux_coverage

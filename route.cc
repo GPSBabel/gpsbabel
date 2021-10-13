@@ -21,17 +21,17 @@
 #include <cstddef>              // for nullptr_t
 #include <algorithm>            // for sort
 #include <iterator>
+#include <optional>             // for optional, operator>, operator<
 
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QList>         // for QList<>::iterator
-#include <QtCore/QString>       // for QString
-#include <QtCore/QtGlobal>      // for foreach
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList<>::iterator
+#include <QString>              // for QString
+#include <QtGlobal>             // for foreach
 
 #include "defs.h"
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t (ptr only)
 #include "src/core/datetime.h"  // for DateTime
-#include "src/core/optional.h"  // for optional, operator>, operator<
 
 
 RouteList* global_route_list;

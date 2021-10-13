@@ -25,22 +25,22 @@
 #include <cstdio>                       // for sscanf, printf
 #include <cstdlib>                      // for atoi, atol, atof
 #include <cstring>                      // for strcmp
+#include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QChar>                 // for QChar
-#include <QtCore/QDate>                 // for QDate
-#include <QtCore/QDateTime>             // for QDateTime
-#include <QtCore/QFile>                 // for QFile
-#include <QtCore/QIODevice>             // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QStaticStringData>     // for QStaticStringData
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QStringList>           // for QStringList
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for ISODate
-#include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QChar>                        // for QChar
+#include <QDate>                        // for QDate
+#include <QDateTime>                    // for QDateTime
+#include <QFile>                        // for QFile
+#include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                        // for QList
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                  // for QStringList
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for ISODate
+#include <QtGlobal>                     // for foreach, qint64, qPrintable
 
 #include "defs.h"
 #include "kml.h"
@@ -49,7 +49,6 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/logging.h"           // for Warning, Fatal
-#include "src/core/optional.h"          // for optional
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
@@ -341,7 +340,7 @@ void KmlFormat::gx_trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs
 
   double lat, lon, alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
-  if (0 != n && 2 != n && 3 != n) {
+  if (EOF != n && 2 != n && 3 != n) {
     fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));
   }
   gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
@@ -670,7 +669,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   }
 }
 
-int KmlFormat::kml_altitude_known(const Waypoint* waypoint) const
+int KmlFormat::kml_altitude_known(const Waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
     return 0;
@@ -1755,11 +1754,6 @@ void KmlFormat::write()
   precision = atol(opt_precision);
 
   writer->writeStartDocument();
-  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
-  // to include just enough whitespace between <xml/> and <gpx...> to pass
-  // diff -w.  It's here for now to shim compatibility with our zillion
-  // reference files, but this blank link can go away some day.
-  writer->writeCharacters(QStringLiteral("\n"));
 
   writer->setAutoFormatting(true);
 

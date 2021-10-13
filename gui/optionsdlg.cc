@@ -47,7 +47,7 @@ FileDlgManager::FileDlgManager(QObject* parent,
                                QToolButton* tb, bool isInFile):
   QObject(parent), le(le), tb(tb), isInFile(isInFile)
 {
-  connect(tb, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+  connect(tb, &QAbstractButton::clicked, this, &FileDlgManager::buttonClicked);
 }
 
 //------------------------------------------------------------------------
@@ -59,10 +59,6 @@ QVariant getOptionValue(QList<FormatOption> opts, int k)
   return opts[k].getDefaultValue();
 
 }
-
-//------------------------------------------------------------------------
-FileDlgManager::~FileDlgManager()
-  = default;
 
 //------------------------------------------------------------------------
 void FileDlgManager::buttonClicked()
@@ -214,9 +210,9 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   buttonBox_->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":/images/cancel.png"));
 #endif // Q_OS_WIN
 
-  connect(buttonBox_, SIGNAL(accepted()), this, SLOT(acceptClicked()));
-  connect(buttonBox_, SIGNAL(rejected()), this, SLOT(rejectClicked()));
-  connect(helpButton, SIGNAL(clicked()), this,  SLOT(helpClicked()));
+  connect(buttonBox_, &QDialogButtonBox::accepted, this, &OptionsDlg::acceptClicked);
+  connect(buttonBox_, &QDialogButtonBox::rejected, this, &OptionsDlg::rejectClicked);
+  connect(helpButton, &QAbstractButton::clicked, this,  &OptionsDlg::helpClicked);
 }
 
 //------------------------------------------------------------------------

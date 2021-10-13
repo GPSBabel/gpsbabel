@@ -35,7 +35,7 @@ QStringList WayPtsFilterData::makeOptionString()
     args << QString("radius,distance=%1%2,lat=%3,lon=%4")
          .arg(radiusVal).arg("MK"[radiusUnit]).arg(latVal, 0, 'f', 8).arg(longVal, 0, 'f', 8);
   }
-  if (duplicates && ((shortNames ^ locations) != 0)) {
+  if (duplicates && (shortNames || locations)) {
     args << QString("-x");
     QString s = "duplicate";
     if (shortNames) {
@@ -79,7 +79,6 @@ static QString optionDate(const QDateTime& dt, bool useLocal)
 //------------------------------------------------------------------------
 QStringList TrackFilterData::makeOptionString()
 {
-  static const char* fixStrings[] = {"none", "pps", "dgpss", "3d", "2d"}; // match with designer!
   QStringList args;
   if (!inUse_) {
     return args;
@@ -87,6 +86,7 @@ QStringList TrackFilterData::makeOptionString()
 
   QString s;
   if (GPSFixes) {
+    static const char* fixStrings[] = {"none", "pps", "dgpss", "3d", "2d"}; // match with designer!
     s += QString(",fix=%1").arg(fixStrings[GPSFixesVal]);
   }
   if (course) {
@@ -201,7 +201,7 @@ QStringList MiscFltFilterData::makeOptionString()
       "rte=wpt",
       "wpt=rte",
       "rte=trk",
-      "trk=wpt",
+      "trk=wpt"
     };
     args << QString("-x");
     QString s= QString("transform,%1").arg(xformStr[transformVal_]);
@@ -227,7 +227,7 @@ QStringList MiscFltFilterData::makeOptionString()
       s += QString(",%1").arg(trkopts.at(sortTrkBy_));
     }
     args << s;
-    
+
   }
   return args;
 }

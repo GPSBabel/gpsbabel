@@ -20,4 +20,3 @@ RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl f
     dnf clean all
 # create a link as fedora uses the name qmake-qt5 for Qt5's qmake.
 RUN alternatives --install /usr/bin/qmake qt /usr/lib64/qt5/bin/qmake 100
-

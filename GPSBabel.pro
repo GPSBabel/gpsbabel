@@ -1,6 +1,6 @@
 # Enforce minimum Qt version.
 # versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
-MIN_QT_VERSION = 5.9 # major[.minor[.patch]]
+MIN_QT_VERSION = 5.12 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
 MIN_QT_VERSION_MINOR = $$member(MIN_QT_VERSION_COMPONENTS, 1)
@@ -20,7 +20,7 @@ VERSION = 1.7.0
 
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG += c++14
+CONFIG += c++17
 CONFIG += link_pkgconfig
 
 TEMPLATE = app
@@ -62,19 +62,19 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
         xcsv.cc tiger.cc easygps.cc \
         saroute.cc navicache.cc delgpl.cc \
-        ozi.cc text.cc html.cc netstumbler.cc \
+        ozi.cc text.cc html.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
-        vcf.cc lowranceusr.cc an1.cc tomtom.cc \
+        vcf.cc lowranceusr.cc tomtom.cc \
         tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
         ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
         yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
-        stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc \
+        stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
         ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
         navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
         igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
         jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
-        pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
-        vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
+        pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc \
+        vpl.cc teletype.cc jogmap.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -111,7 +111,6 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           src/core/xmlstreamwriter.cc
 
 HEADERS =  \
-	an1sym.h \
 	cet.h \
 	cet_util.h \
 	csv_util.h \
@@ -182,7 +181,6 @@ HEADERS =  \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
-	src/core/optional.h \
 	src/core/textstream.h \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
@@ -225,7 +223,6 @@ macx|linux|openbsd {
   }
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
-  INCLUDEPATH += jeeps
 }
 
 win32 {
@@ -243,7 +240,8 @@ win32 {
 
 win32-msvc* {
   DEFINES += _CRT_SECURE_NO_DEPRECATE
-  QMAKE_CXXFLAGS += /MP -wd4100
+  QMAKE_CFLAGS += /MP -wd4100 -wd4267
+  QMAKE_CXXFLAGS += /MP -wd4100 -wd4267
 }
 
 include(shapelib.pri)
@@ -362,7 +360,10 @@ equals(PWD, $${OUT_PWD}) {
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
 gui.depends = $(TARGET) FORCE
-gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+disable-mappreview {
+  guiconfig = "CONFIG+=disable-mappreview"
+}
+gui.commands += cd gui; $(QMAKE) $${guiconfig} app.pro && $(MAKE)
 QMAKE_EXTRA_TARGETS += gui
 
 unix-gui.depends = gui FORCE

@@ -33,10 +33,10 @@
 #include <cstdint>           // for uint8_t, int16_t, uint16_t
 #include <cstdio>            // for size_t
 
-#include <QtCore/QDateTime>  // for QDateTime
-#include <QtCore/QList>      // for QList
-#include <QtCore/QString>    // for QString
-#include <QtCore/QVector>    // for QVector
+#include <QDateTime>         // for QDateTime
+#include <QList>             // for QList
+#include <QString>           // for QString
+#include <QVector>           // for QVector
 
 #include "defs.h"
 #include "format.h"          // for Format
@@ -121,7 +121,7 @@ protected:
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
   static void dg100_log(const char* fmt, ...);
-  float bin2deg(int val) const;
+  static float bin2deg(int val);
   void process_gpsfile(uint8_t* data, route_head** track) const;
   static uint16_t dg100_checksum(const uint8_t* buf, int count);
   size_t dg100_send(uint8_t cmd, const void* payload, size_t param_len) const;

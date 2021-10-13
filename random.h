@@ -22,9 +22,9 @@
 
 #include <random>            // for mt19937
 
-#include <QtCore/QDateTime>  // for QDateTime
-#include <QtCore/QString>    // for QString
-#include <QtCore/QVector>    // for QVector
+#include <QDateTime>         // for QDateTime
+#include <QString>           // for QString
+#include <QVector>           // for QVector
 
 #include "defs.h"
 #include "format.h"

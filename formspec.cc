@@ -19,7 +19,7 @@
 
  */
 
-#include <QtCore/QList>  // for QList
+#include <QList>         // for QList
 
 #include "defs.h"
 #include "formspec.h"    // for FormatSpecificData, FsChainAdd, FsChainCopy, FsChainDestroy, FsChainFind

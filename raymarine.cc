@@ -47,7 +47,7 @@
 #include "csv_util.h"
 #include "inifile.h"
 
-#include <QtCore/QString>
+#include <QString>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -219,7 +219,7 @@ raymarine_read()
     if (!str.isEmpty()) {
       unsigned int symbol = str.toInt();
 
-      if ((symbol < 3) && (symbol >= RAYMARINE_SYMBOL_CT)) {
+      if ((symbol < 3) || (symbol >= RAYMARINE_SYMBOL_CT)) {
         symbol = RAYMARINE_STD_SYMBOL;
       }
       wpt->icon_descr = raymarine_symbols[symbol].name;

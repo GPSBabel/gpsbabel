@@ -7,11 +7,8 @@
 ; Uses the Inno setup compiler.
 ; windeployqt should be run to prepare the necessary Qt files before
 ; running Inno Setup.
-#ifndef gui_build_dir_name
-  #define gui_build_dir_name "build-app-Desktop_Qt_5_5_1_MinGW_32bit-Release"
-#endif
-#ifndef gpsbabel_build_dir_name
-  #define gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_5_1_MinGW_32bit-Release"
+#ifndef package_dir
+  #define package_dir "..\build-app-Desktop-Release\package"
 #endif
 
 [Setup]
@@ -25,6 +22,8 @@ AppPublisher=GPSBabel
 AppPublisherURL=https://www.gpsbabel.org
 AppSupportURL=https://www.gpsbabel.org
 AppUpdatesURL=https://www.gpsbabel.org
+ArchitecturesAllowed=x64
+ArchitecturesInstallIn64BitMode=x64
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
@@ -45,10 +44,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: "..\{#gui_build_dir_name}\release\*"; Excludes: "app.res,vcredist_*.exe,*.cpp,*.h,*.o,*.obj"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\{#gui_build_dir_name}\release\vcredist_x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
-Source: "..\{#gui_build_dir_name}\release\vcredist_x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
-Source: "..\..\{#gpsbabel_build_dir_name}\release\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
+Source: "{#package_dir}\*"; Excludes: "vc_redist.*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#package_dir}\vc_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#package_dir}\vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#package_dir}\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
@@ -74,8 +73,8 @@ Name: "{group}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"
 Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\vcredist_x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
-Filename: "{app}\vcredist_x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
 [Registry]

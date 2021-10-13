@@ -20,7 +20,7 @@
  */
 
 
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "yahoo.h"

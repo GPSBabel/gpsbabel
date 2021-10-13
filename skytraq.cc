@@ -25,7 +25,7 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <QtCore/QThread>
+#include <QThread>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -696,7 +696,7 @@ make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
   auto* wpt = new Waypoint;
 
-  wpt->shortname = QString::asprintf("TP%04d", ++st->tpn);
+  wpt->shortname = QString("TP%1").arg(++st->tpn, 4, 10, QLatin1Char('0'));
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
@@ -785,7 +785,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
   case 0xc:	/* POI item (same structure as full) */
     poi = 1;
-    /* fallthrough */
+    [[fallthrough]];
 
   case 0x2:	/* Multi HZ item */
     if (len < MULTI_HZ_ITEM_LEN) {
@@ -822,7 +822,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 
   case 0x6:	/* POI item (same structure as full) */
     poi = 1;
-    /* fallthrough */
+    [[fallthrough]];
 
   case 0x4:	/* full item */
     if (len < FULL_ITEM_LEN) {
@@ -1209,7 +1209,6 @@ skytraq_probe()
     uint8_t odm_ver[4];
     uint8_t revision[4];
   } MSG_SOFTWARE_VERSION;
-  int rc;
 
   // TODO: get current serial port baud rate and try that first
   // (only sensible if init to 4800 can be disabled...)
@@ -1223,9 +1222,9 @@ skytraq_probe()
     db(1, MYNAME ": Probing SkyTraq Venus at %ibaud...\n", baud_rates[i]);
 
     rd_drain();
-    if ((rc = gbser_set_speed(serial_handle, baud_rates[i])) != gbser_OK) {
+    if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
       db(1, MYNAME ": Set baud rate to %d failed (%d), retrying...\n", baud_rates[i], rc);
-      if ((rc = gbser_set_speed(serial_handle, baud_rates[i])) != gbser_OK) {
+      if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
         db(1, MYNAME ": Set baud rate to %d failed (%d)\n", baud_rates[i], rc);
         continue;
       }
@@ -1235,11 +1234,11 @@ skytraq_probe()
 
     skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                    sizeof(MSG_QUERY_SOFTWARE_VERSION));
-    if ((rc = skytraq_expect_ack(0x02)) != res_OK) {
+    if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
       db(2, "Didn't receive ACK (%d), retrying...\n", rc);
       skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                      sizeof(MSG_QUERY_SOFTWARE_VERSION));
-      if ((rc = skytraq_expect_ack(0x02)) != res_OK) {
+      if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
         db(2, "Didn't receive ACK (%d)\n", rc);
         continue;
       }
@@ -1250,8 +1249,8 @@ skytraq_probe()
     		{
     			continue;
     		}*/
-    rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
-    if (rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
+    if (int rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
+        rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
       db(2, "Didn't receive expected reply (%d)\n", rc);
     } else {
       db(1, MYNAME ": Venus device found: Kernel version = %i.%i.%i, ODM version = %i.%i.%i, "\
@@ -1437,8 +1436,8 @@ ff_vecs_t skytraq_vecs = {
   nullptr,
   &skytraq_args,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
- , NULL_POS_OPS,
- nullptr
+  , NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t skytraq_fvecs = {
@@ -1457,8 +1456,8 @@ ff_vecs_t skytraq_fvecs = {
   nullptr,
   &skytraq_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
- , NULL_POS_OPS,
- nullptr
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/
 /*
@@ -1557,7 +1556,7 @@ static void miniHomer_get_poi()
 
     // todo - how to determine not-set POIs ?
     if (ecef_x < 100.0 && ecef_y < 100.0 && ecef_z < 100.0) {
-      db(2, MYNAME" : skipped poi %d for X=%f, y=%f, Z=%f\n", ecef_x, ecef_y, ecef_z);
+      db(2, MYNAME" : skipped poi %u for X=%f, y=%f, Z=%f\n", poi, ecef_x, ecef_y, ecef_z);
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
@@ -1604,7 +1603,7 @@ static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
        */
       int n = sscanf(opt_poi, "%lf:%lf:%lf", &lat, &lng, &alt);
       if (n >= 2) {
-        db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f over=%s\n", n, opt_poi, poinames[poinum], poinum, lat, lng, alt);
+        db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, opt_poi, poinames[poinum], poinum, lat, lng, alt);
         lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
         db(1, MYNAME ": set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
         be_write16(MSG_SET_POI+1, poinum);

@@ -22,7 +22,7 @@
 #ifndef DUPLICATE_H_INCLUDED_
 #define DUPLICATE_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint (ptr only)
 #include "filter.h"  // for Filter
@@ -70,7 +70,7 @@ private:
     Waypoint* wpt;
   };
 
-  btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
+  static btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
   void free_tree(btree_node* tree);
 
   struct wpt_ptr {

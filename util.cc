@@ -30,22 +30,20 @@
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QChar>                 // for QChar, operator<=, operator>=
-#include <QtCore/QCharRef>              // for QCharRef
-#include <QtCore/QDateTime>             // for QDateTime
-#include <QtCore/QFileInfo>             // for QFileInfo
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QScopedPointer>        // for QScopedPointer
-#include <QtCore/QString>               // for QString
-#include <QtCore/QStringRef>            // for QStringRef
-#include <QtCore/QTextCodec>            // for QTextCodec
-#include <QtCore/QTextStream>           // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for CaseInsensitive
-#include <QtCore/QTimeZone>             // for QTimeZone
-#include <QtCore/QtGlobal>              // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QChar>                        // for QChar, operator<=, operator>=
+#include <QDateTime>                    // for QDateTime
+#include <QFileInfo>                    // for QFileInfo
+#include <QList>                        // for QList
+#include <QScopedPointer>               // for QScopedPointer
+#include <QString>                      // for QString
+#include <QTextCodec>                   // for QTextCodec
+#include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for CaseInsensitive
+#include <QTimeZone>                    // for QTimeZone
+#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "cet.h"                        // for cet_utf8_to_ucs4
@@ -67,7 +65,7 @@ xmalloc(size_t size)
   void* obj = malloc(size);
 
   if (!obj) {
-    fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) size);
+    fatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", size);
   }
 
   return obj;
@@ -79,7 +77,7 @@ xcalloc(size_t nmemb, size_t size)
   void* obj = calloc(nmemb, size);
 
   if (!obj) {
-    fatal("gpsbabel: Unable to allocate %ld units of %ld bytes of memory.\n", (unsigned long) nmemb, (unsigned long) size);
+    fatal("gpsbabel: Unable to allocate %zu units of %zu bytes of memory.\n", nmemb, size);
   }
 
   return obj;
@@ -97,7 +95,7 @@ xstrdup(const char* s)
   char* o = s ? strdup(s) : strdup("");
 
   if (!o) {
-    fatal("gpsbabel: Unable to allocate %ld bytes of memory.\n", (unsigned long) strlen(s));
+    fatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", strlen(s));
   }
 
   return o;
@@ -135,7 +133,7 @@ xrealloc(void* p, size_t s)
   char* o = (char*) realloc(p, s);
 
   if (!o) {
-    fatal("gpsbabel: Unable to realloc %ld bytes of memory.\n", (unsigned long) s);
+    fatal("gpsbabel: Unable to realloc %zu bytes of memory.\n", s);
   }
 
   return o;
@@ -179,8 +177,12 @@ xfopen(const char* fname, const char* type, const char* errtxt)
   }
   FILE* f = ufopen(QString::fromUtf8(fname), type);
   if (nullptr == f) {
+    // There are some possible vagaries of using Qt for the full pathname
+    // vs. the STD C library used for the actual file I/O. It's worth it
+    // to get a better error message.
+    QFileInfo info(fname);
     fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
-          errtxt, fname,
+          errtxt, qPrintable(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));
   }
@@ -207,11 +209,12 @@ ufopen(const QString& fname, const char* mode)
 /*
  * OS-abstracting wrapper for getting Unicode environment variables.
  */
-QString ugetenv(const char* env_var) {
+QString ugetenv(const char* env_var)
+{
 #ifdef __WIN32__
   // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
   return QString::fromWCharArray(
-      _wgetenv((const wchar_t*) QString(env_var).utf16()));
+           _wgetenv((const wchar_t*) QString(env_var).utf16()));
 #else
   // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
   return QString::fromLocal8Bit(std::getenv(env_var));
@@ -496,8 +499,8 @@ str_match(const char* str, const char* match)
       if (*m == '\0') {
         return 0;  /* incomplete escape sequence */
       }
-    /* pass-through next character */
-    /* fallthrough */
+      /* pass-through next character */
+      [[fallthrough]];
 
     default:
       if (*m != *s) {
@@ -628,7 +631,7 @@ le_read64(void* dest, const void* src)
   char* cdest = (char*) dest;
   const char* csrc = (const char*) src;
 
-  if (i_am_little_endian) {
+  if constexpr(i_am_little_endian) {
     memcpy(dest, src, 8);
   } else {
     int i;
@@ -754,25 +757,6 @@ current_time()
   }
 
   return QDateTime::currentDateTimeUtc();
-}
-
-/*
- * Return the (zero based) month number of the year or -1 for failure.
- */
-signed int
-month_lookup(const char* m)
-{
-  static const char* months[] = {
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", nullptr
-  };
-
-  for (const char** mp = months; *mp; mp++) {
-    if (0 == case_ignore_strcmp(*mp, m)) {
-      return mp - months;
-    }
-  }
-  return -1;
 }
 
 /*
@@ -1694,9 +1678,9 @@ QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& att
   return QString();
 }
 
-const QString get_filename(const QString& fname)
+QString get_filename(const QString& fname)
 {
-  return  QFileInfo(fname).fileName();
+  return QFileInfo(fname).fileName();
 }
 
 /* bit manipulation functions */
@@ -1755,7 +1739,7 @@ list_codecs()
   const auto mibs = QTextCodec::availableMibs();
   int maxlen = 0;
   for (auto mib : mibs) {
-    auto codec = QTextCodec::codecForMib(mib);
+    auto* codec = QTextCodec::codecForMib(mib);
     if (codec->name().size() > maxlen) {
       maxlen = codec->name().size();
     }
@@ -1763,7 +1747,7 @@ list_codecs()
   info << "Available Codecs:" << endl;
   info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
   for (auto mib : mibs) {
-    auto codec = QTextCodec::codecForMib(mib);
+    auto* codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
     bool first = true;
     const auto aliases = codec->aliases();

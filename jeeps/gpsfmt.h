@@ -2,7 +2,7 @@
 #define gpsfmt_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <cstdio>
 #include <ctime>
 

@@ -24,7 +24,7 @@
 
 #include <QFile>                 // for QFile
 #include <QIODevice>             // for QIODevice, QIODevice::ReadOnly
-#include <QStringRef>            // for QStringRef
+#include <QStringView>           // for QStringView
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 #include <QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
 #include "gpx.h"
@@ -39,12 +39,10 @@ static QDateTime decodeDateTime(const QString& s)
 static bool trackIsEmpty(const GpxTrack& trk)
 {
   int count = 0;
-  for (int i=0; i< trk.getTrackSegments().size(); i++) {
-    for (int j=0; j<trk.getTrackSegments()[i].getTrackPoints().size(); j++) {
-      count++;
-    }
+  for (const auto& segment : trk.getTrackSegments()) {
+    count += segment.getTrackPoints().size();
   }
-  return count <=2 ;
+  return count <= 1;
 }
 
 class GpxHandler
@@ -75,10 +73,10 @@ public:
   elementState state;
   QList <elementState> stateStack;
 
-  void startElement(const QStringRef& localName,
+  void startElement(QStringView localName,
                     const QXmlStreamAttributes& atts)
   {
-    if (localName == "wpt") {
+    if (localName == u"wpt") {
       currentWpt = GpxWaypoint();
       double lat = atts.value("lat").toDouble();
       double lon = atts.value("lon").toDouble();
@@ -87,19 +85,19 @@ public:
       state = e_wpt;
     }
 
-    else if (localName == "trk") {
+    else if (localName == u"trk") {
       stateStack << state;
       state = e_trk;
       currentTrk.clear();
     }
 
-    else if (localName == "trkseg") {
+    else if (localName == u"trkseg") {
       stateStack << state;
       state = e_trkseg;
       currentTrkSeg.clear();
     }
 
-    else if (localName == "trkpt") {
+    else if (localName == u"trkpt") {
       currentTrkPt = GpxTrackPoint();
       double lat = atts.value("lat").toDouble();
       double lon = atts.value("lon").toDouble();
@@ -108,13 +106,13 @@ public:
       state = e_trkpt;
     }
 
-    else if (localName == "rte") {
+    else if (localName == u"rte") {
       stateStack << state;
       state = e_rte;
       currentRte.clear();
     }
 
-    else if (localName == "rtept") {
+    else if (localName == u"rtept") {
       currentRtePt = GpxRoutePoint();
       double lat = atts.value("lat").toDouble();
       double lon = atts.value("lon").toDouble();
@@ -133,67 +131,67 @@ public:
     }
   }
 
-  void endElement(const QStringRef& localName)
+  void endElement(QStringView localName)
   {
-    if (localName == "wpt") {
+    if (localName == u"wpt") {
       state = stateStack.takeLast();
       wptList << currentWpt;
-    } else if (localName == "ele" && state == e_wpt) {
+    } else if (localName == u"ele" && state == e_wpt) {
       currentWpt.setElevation(textChars.toDouble());
-    } else if (localName == "name" && state == e_wpt) {
+    } else if (localName == u"name" && state == e_wpt) {
       currentWpt.setName(textChars);
-    } else if (localName == "cmt" && state == e_wpt) {
+    } else if (localName == u"cmt" && state == e_wpt) {
       currentWpt.setComment(textChars);
-    } else if (localName == "desc" && state == e_wpt) {
+    } else if (localName == u"desc" && state == e_wpt) {
       currentWpt.setDescription(textChars);
-    } else if (localName == "sym" && state == e_wpt) {
+    } else if (localName == u"sym" && state == e_wpt) {
       currentWpt.setSymbol(textChars);
     }
 
-    else if (localName == "trkpt") {
+    else if (localName == u"trkpt") {
       state = stateStack.takeLast();
       currentTrkSeg.addPoint(currentTrkPt);
-    } else if (localName == "ele" && state == e_trkpt) {
+    } else if (localName == u"ele" && state == e_trkpt) {
       currentTrkPt.setElevation(textChars.toDouble());
-    } else if (localName == "time" && state == e_trkpt) {
+    } else if (localName == u"time" && state == e_trkpt) {
       currentTrkPt.setDateTime(decodeDateTime(textChars));
     }
 
-    else if (localName == "trkseg") {
+    else if (localName == u"trkseg") {
       state = stateStack.takeLast();
       currentTrk.addSegment(currentTrkSeg);
     }
 
-    else if (localName == "trk") {
+    else if (localName == u"trk") {
       state = stateStack.takeLast();
       if (!trackIsEmpty(currentTrk)) {
         trkList << currentTrk;
       }
     }
 
-    else if (localName == "name" && state == e_trk) {
+    else if (localName == u"name" && state == e_trk) {
       currentTrk.setName(textChars);
-    } else if (localName == "number" && state == e_trk) {
+    } else if (localName == u"number" && state == e_trk) {
       currentTrk.setNumber(textChars.toInt());
     }
 
-    else if (localName == "rte") {
+    else if (localName == u"rte") {
       state = stateStack.takeLast();
-      if (currentRte.getRoutePoints().size()>=2) {
+      if (currentRte.getRoutePoints().size() >= 2) {
         rteList << currentRte;
       }
     }
 
-    else if (localName == "rtept") {
+    else if (localName == u"rtept") {
       state = stateStack.takeLast();
       currentRte.addPoint(currentRtePt);
     }
 
-    else if (localName == "name" && state == e_rtept) {
+    else if (localName == u"name" && state == e_rtept) {
       currentRtePt.setName(textChars);
     }
 
-    else if (localName == "name" && state == e_rte) {
+    else if (localName == u"name" && state == e_rte) {
       currentRte.setName(textChars);
     }
 

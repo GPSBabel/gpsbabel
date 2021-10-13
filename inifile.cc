@@ -21,16 +21,16 @@
 #include "defs.h"              // for fatal, ugetenv, warning
 #include "inifile.h"
 #include "src/core/file.h"     // for File
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QChar>        // for operator==, QChar
-#include <QtCore/QDir>         // for QDir
-#include <QtCore/QFile>        // for QFile
-#include <QtCore/QFileInfo>    // for QFileInfo
-#include <QtCore/QHash>        // for QHash
-#include <QtCore/QIODevice>    // for QIODevice::ReadOnly, QIODevice
-#include <QtCore/QTextStream>  // for QTextStream
-#include <QtCore/Qt>           // for CaseInsensitive
-#include <QtCore/QtGlobal>     // for qPrintable
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for operator==, QChar
+#include <QDir>                // for QDir
+#include <QFile>               // for QFile
+#include <QFileInfo>           // for QFileInfo
+#include <QHash>               // for QHash
+#include <QIODevice>           // for QIODevice::ReadOnly, QIODevice
+#include <QTextStream>         // for QTextStream
+#include <Qt>                  // for CaseInsensitive
+#include <QtGlobal>            // for qPrintable
 #include <utility>
 
 #define MYNAME "inifile"
@@ -148,7 +148,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
   }
 }
 
-static const QString
+static QString
 inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QString& key)
 {
   if (inifile == nullptr) {

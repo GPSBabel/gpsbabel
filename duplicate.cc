@@ -23,8 +23,8 @@
 #include <cstdlib>              // for qsort
 #include <cstring>              // for memset, strncpy
 
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QtGlobal>      // for foreach
+#include <QDateTime>            // for QDateTime
+#include <QtGlobal>             // for foreach
 
 #include "defs.h"
 #include "duplicate.h"
@@ -140,9 +140,9 @@ int DuplicateFilter::compare(const void* a, const void* b)
 
 void DuplicateFilter::process()
 {
-  btree_node* newnode, * btmp, * sup_tree = nullptr;
+  btree_node* btmp = nullptr;
+  btree_node* sup_tree = nullptr;
   btree_node* oldnode = nullptr;
-  unsigned long crc = 0;
   struct {
     char shortname[32];
     char lat[13];
@@ -165,7 +165,7 @@ void DuplicateFilter::process()
   qsort(htable, ct, sizeof(*htable), compare);
 
   for (i=0; i<ct; i++) {
-    auto waypointp = htable[i].wpt;
+    auto* waypointp = htable[i].wpt;
 
     memset(&dupe, '\0', sizeof(dupe));
 
@@ -186,9 +186,9 @@ void DuplicateFilter::process()
 
     }
 
-    crc = get_crc32(&dupe, sizeof(dupe));
+    unsigned long crc = get_crc32(&dupe, sizeof(dupe));
 
-    newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
+    auto* newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
     newnode->data = crc;
     newnode->wpt = waypointp;
 

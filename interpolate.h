@@ -22,12 +22,13 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/QtGlobal>      // for qint64
+#include <optional>             // for optional
+
+#include <QVector>              // for QVector
+#include <QtGlobal>             // for qint64
 
 #include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
 #include "filter.h"             // for Filter
-#include "src/core/optional.h"  // for optional
 
 #if FILTERS_ENABLED
 

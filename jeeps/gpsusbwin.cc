@@ -27,11 +27,11 @@
 #include <setupapi.h>
 #include <winioctl.h>
 
-#include "../garmin_device_xml.h"
-#include "garminusb.h"
-#include "gps.h"
-#include "gpsapp.h"
-#include "gpsusbcommon.h"
+#include "garmin_device_xml.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsapp.h"
+#include "jeeps/gpsusbcommon.h"
 
 /* Constants from Garmin doc. */
 
@@ -193,10 +193,10 @@ static char** get_garmin_mountpoints(void)
   char* p = szTemp;
   char** dlist = (char **) xmalloc(sizeof(*dlist));
 
-  int i = 0;
   dlist[0] = NULL;
 
   if (GetLogicalDriveStringsA(BUFSIZE-1, szTemp)) {
+    int i = 0;
     while (*p) {
       dlist = (char **) xrealloc(dlist, sizeof(*dlist) * (++i + 1));
       //            fprintf(stderr, "Found: %d, %s\n", i, p);

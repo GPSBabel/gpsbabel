@@ -2,7 +2,7 @@
 #define gpscom_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <ctime>
 
   int32  GPS_Command_Off(const char* port);

@@ -23,7 +23,7 @@
 #include <cctype>           // for toupper
 #include <cstdlib>          // for atoi
 
-#include <QtCore/QtGlobal>  // for foreach
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "transform.h"

@@ -23,9 +23,9 @@
 #include <cstdio>           // for sprintf, size_t
 #include <cstring>          // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
-#include <QtCore/QList>     // for QList
-#include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for foreach
+#include <QList>            // for QList
+#include <QString>          // for QString
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "cet.h"            // for cet_utf8_strdup, cet_utf8_strlen, cet_utf8_strndup
@@ -98,7 +98,7 @@ unsigned int hash_string(const char* key)
 short_handle
 mkshort_new_handle()
 {
-  auto h = new mkshort_handle_imp;
+  auto* h = new mkshort_handle_imp;
 
   h->badchars = xstrdup(DEFAULT_BADCHARS);
   h->defname = xstrdup("WPT");
@@ -165,7 +165,7 @@ mkshort_del_handle(short_handle* h)
     return;
   }
 
-  for (auto &i : hdr->namelist) {
+  for (auto& i : hdr->namelist) {
     while (!i.isEmpty()) {
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {
@@ -173,7 +173,7 @@ mkshort_del_handle(short_handle* h)
                 s->conflictctr, s->orig_shortname);
       }
 #endif
-      auto s = i.takeFirst();
+      auto* s = i.takeFirst();
       xfree(s->orig_shortname);
       xfree(s);
     }

@@ -24,12 +24,12 @@
 #include <cstdio>               // for printf, fflush, fprintf, stdout
 #include <algorithm>            // for stable_sort
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QList>         // for QList
-#include <QtCore/QString>       // for QString, operator==
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QChar>                // for QChar
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList
+#include <QString>              // for QString, operator==
+#include <QTime>                // for QTime
+#include <QtGlobal>             // for qPrintable
 
 #include "defs.h"
 #include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
@@ -521,12 +521,6 @@ Waypoint::GetUrlLink() const
   return urls.GetUrlLink();
 }
 
-[[deprecated]] const QList<UrlLink>
-Waypoint::GetUrlLinks() const
-{
-  return urls;
-}
-
 void
 Waypoint::AddUrlLink(const UrlLink& l)
 {
@@ -603,11 +597,11 @@ WaypointList::waypt_add(Waypoint* wpt)
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
     fatal(FatalMsg() << wpt->session->name
-            << "Invalid latitude" << lat_orig << "in waypoint"
-            << wpt->shortname);
+          << "Invalid latitude" << lat_orig << "in waypoint"
+          << wpt->shortname);
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
-            << wpt->shortname);
+          << wpt->shortname);
 
   /*
    * Some input may not have one or more of these types so we
@@ -623,7 +617,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      wpt->shortname = QString::asprintf("WPT%03d", waypt_count());
+      wpt->shortname = QString("WPT%1").arg(waypt_count(), 3, 10, QLatin1Char('0'));
     }
   }
 
@@ -648,10 +642,10 @@ WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QStri
 {
   append(wpt);
 
-   if (synth && wpt->shortname.isEmpty()) {
-     wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
-     wpt->wpt_flags.shortname_is_synthetic = 1;
-   }
+  if (synth && wpt->shortname.isEmpty()) {
+    wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
+    wpt->wpt_flags.shortname_is_synthetic = 1;
+  }
 }
 
 void
@@ -668,7 +662,7 @@ WaypointList::del_rte_waypt(Waypoint* wpt)
   const int idx = indexOf(wpt);
   assert(idx >= 0);
   if (wpt->wpt_flags.new_trkseg && ((idx+1) < size())) {
-    auto wpt_next = at(idx+1);
+    auto* wpt_next = at(idx+1);
     wpt_next->wpt_flags.new_trkseg = 1;
   }
   wpt->wpt_flags.new_trkseg = 0;
@@ -715,7 +709,7 @@ WaypointList::copy(WaypointList** dst) const
   if (*dst == nullptr) {
     *dst = new WaypointList;
   }
-    
+
   foreach (const Waypoint* wpt_old, *this) {
     (*dst)->waypt_add(new Waypoint(*wpt_old));
   }

@@ -122,30 +122,21 @@ void fix_datum(double* lat, double* lon)
 }
 
 static void
-compegps_parse_date(const char* c, struct tm* tm)
+compegps_parse_date(const char* c, QDate& date)
 {
-  char month[4];
-  tm->tm_mday = atoi(c);
-  strncpy(month, c+3, 3);
-  month[3] = 0;
-  tm->tm_mon = month_lookup(month);
-  int year = atoi(c + 7);
-  if (year < 70) {
-    year += 100;
+  date = QDate::fromString(c, "dd-MMM-yy");
+  // If that worked, fix 1900 bias to 2000 bias. Some have full 4 digits.
+  if (date.isValid()) {
+    date = date.addYears(100);
+  } else {
+    date = QDate::fromString(c, "dd-MMM-yyyy");
   }
-  if (year > 1900) {
-    year -= 1900;
-  }
-  tm->tm_year = year;
-  // if (tm->tm_year < 70) tm->tm_year += 100;
 }
 
 static void
-compegps_parse_time(const char* c, struct tm* tm)
+compegps_parse_time(const char* c, QTime& time)
 {
-  tm->tm_hour = atoi(c);
-  tm->tm_min = atoi(c+3);
-  tm->tm_sec = atoi(c+6);
+  time = QTime::fromString(c, "hh:mm:ss");
 }
 
 /* specialized readers */
@@ -156,9 +147,9 @@ parse_wpt(char* buff)
   int col = -1;
   char* cx;
   auto* wpt = new Waypoint;
-  struct tm tm;
   int has_time = 0;
-  memset(&tm, 0, sizeof(tm));
+  QDate date;
+  QTime time;
 
   char* c = strstr(buff, "A ");
   if (c == buff) {
@@ -196,13 +187,13 @@ parse_wpt(char* buff)
       case 4:
         if (strcmp(c, "27-MAR-62")) {
           has_time = 1;
-          compegps_parse_date(c, &tm);
+          compegps_parse_date(c, date);
         }
         break;
       case 5:
         if (has_time) {
-          compegps_parse_time(c, &tm);
-          wpt->SetCreationTime(mkgmtime(&tm));
+          compegps_parse_time(c, time);
+          wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
         }
         break;
       case 6:
@@ -271,15 +262,15 @@ static Waypoint*
 parse_trkpt(char* buff)
 {
   int col = -1;
-  struct tm tm;
   auto* wpt = new Waypoint;
+  QDate date;
+  QTime time;
 
   char* c = strstr(buff, "A ");
   if (c == buff) {
     col++;
   }
 
-  memset(&tm, 0, sizeof(tm));
   c = csv_lineparse(buff, " ", "", col++);
   while (c != nullptr) {
     c = lrtrim(c);
@@ -295,11 +286,11 @@ parse_trkpt(char* buff)
         human_to_dec(c, nullptr, &wpt->longitude, 2);
         break;
       case 4:
-        compegps_parse_date(c, &tm);
+        compegps_parse_date(c, date);
         break;
       case 5:
-        compegps_parse_time(c, &tm);
-        wpt->SetCreationTime(mkgmtime(&tm));
+        compegps_parse_time(c, time);
+        wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
         break;
       case 7:
         wpt->altitude = atof(c);
@@ -539,31 +530,19 @@ write_track_hdr_cb(const route_head* trk)
 static void
 write_trkpt_cb(const Waypoint* wpt)
 {
-  char buff[128];
-
   if ((curr_index != target_index) || (wpt == nullptr)) {
     return;
   }
 
-  buff[0] = '\0';
-
-// TOOD: This should probably attempt a gmtime and then fall back to the 1-1-1970
-// case or bypass the time_t completely and build string representations directly.
-  if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime().toTime_t();
-    struct tm tm = *gmtime(&tt);
-
-    strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);
-    strupper(buff);
-  } else {
-    strncpy(buff, "01-JAN-70 00:00:00", sizeof(buff));
-  }
+  QDateTime default_dt(QDate(1970,1,1), QTime(0,0,0), Qt::UTC);
+  auto dt = wpt->creation_time.isValid() ? wpt->GetCreationTime() : default_dt;
+  QString buff = dt.toString("dd-MMM-yy hh:mm:ss").toUpper();
 
   gbfprintf(fout, "T  A %.10f%c%c %.10f%c%c ",
             fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S',
             fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
   gbfprintf(fout, "%s s %.1f %.1f %.1f %.1f %d ",
-            buff,
+            CSTR(buff),
             wpt->altitude,
             0.0,
             0.0,

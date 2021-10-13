@@ -91,7 +91,7 @@ static struct {
 static void* fd;
 static FILE* fl;
 static char* port;
-static char* erase;
+static char* opt_erase;
 
 enum wintec_gps_types {
   UNKNOWN, WBT200, WBT201, WSG1000
@@ -226,8 +226,8 @@ static void buf_update_checksum(struct buf_head* h, const void* data, size_t len
 {
   auto* cp = (unsigned char*) data;
 
-  db(4, "Updating checksum with %p, %lu, before: %02x ",
-     data, (unsigned long) len, h->checksum);
+  db(4, "Updating checksum with %p, %zu, before: %02x ",
+     data, len, h->checksum);
   for (unsigned i = 0; i < len; i++) {
     h->checksum ^= cp[i];
   }
@@ -678,7 +678,7 @@ static int want_bytes(struct buf_head* h, size_t len)
 {
   char buf[512];
 
-  db(3, "Reading %lu bytes from device\n", (unsigned long) len);
+  db(3, "Reading %zu bytes from device\n", len);
 
   while (len > 0) {
     size_t want = sizeof(buf);
@@ -739,7 +739,7 @@ static void wbt200_data_read()
       fatal(MYNAME ": Internal error: formats not ordered in ascending size order\n");
     }
 
-    db(3, "Want %lu bytes of data\n", (unsigned long) want);
+    db(3, "Want %zu bytes of data\n", want);
 
     /* Top up the buffer */
     want_bytes(&st.data, want - st.data.used);
@@ -758,7 +758,7 @@ static void wbt200_data_read()
 
   /* Erase data? */
 
-  if (*erase != '0') {
+  if (*opt_erase != '0') {
     int f;
     db(1, "Erasing data\n");
     for (f = 27; f <= 31; f++) {
@@ -891,7 +891,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   }
 
   if (cs != st->data.checksum) {
-    db(2, "Checksums don't match. Got %02x, expected %02\n", cs, st->data.checksum);
+    db(2, "Checksums don't match. Got %02lx, expected %02\n", cs, st->data.checksum);
     return 0;
   }
 
@@ -967,7 +967,7 @@ static void wbt201_data_read()
     }
   }
 
-  if (*erase != '0') {
+  if (*opt_erase != '0') {
     /* erase device */
     do_simple("@AL,5,6", BUFSPEC(line_buf));
   }
@@ -980,7 +980,6 @@ static void file_read()
 {
   char                buf[512];
   struct read_state   st;
-  int                 fmt;
 
   const char*         tk1_magic     = TK1_MAGIC;
   size_t              tk1_magic_len = strlen(tk1_magic) + 1;
@@ -1016,6 +1015,7 @@ static void file_read()
     db(1, "Got bin file\n");
 
     /* Try to guess the data format */
+    int fmt;
     for (fmt = 0; fmt_version[fmt].reclen != 0; fmt++) {
       size_t reclen = fmt_version[fmt].reclen;
       if ((st.data.used % reclen) == 0 && is_valid(&st.data, fmt)) {
@@ -1056,7 +1056,7 @@ static void data_read()
 
 static QVector<arglist_t> wbt_sargs = {
   {
-    "erase", &erase, "Erase device data after download",
+    "erase", &opt_erase, "Erase device data after download",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 };

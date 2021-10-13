@@ -196,7 +196,7 @@ vpl_parse_75_sentence(const char* ibuf)
   waypt->sat       = sats;
   // Speed comes in (MPH x 0x10) which we have to convert to m/s
   WAYPT_SET(waypt, speed, (speed_raw / (double) 0x10) * 0.44704);
-  waypt->course    = hdg_raw * (double)(360/65535);
+  WAYPT_SET(waypt, course, hdg_raw * (360.0f/65535.0f));
   waypt->hdop      = hdop_raw / 8.0;
   waypt->vdop      = vdop_raw / 8.0;
 

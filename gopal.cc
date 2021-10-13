@@ -57,8 +57,8 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
+#include <QDateTime>
+#include <QString>
 
 #define MYNAME "gopal"
 
@@ -174,7 +174,7 @@ gopal_read()
   char tbuffer[64];
   struct tm tm2;
   double lat_old = 0;
-  
+
 
   auto* route = new route_head;
   QDateTime qtx = QDateTime::fromSecsSinceEpoch(tx, Qt::UTC);

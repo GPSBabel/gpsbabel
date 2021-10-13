@@ -24,10 +24,10 @@
 
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QList>                        // for QList
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"
@@ -134,7 +134,7 @@ private:
   static void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data);
   void kml_output_trkdescription(const route_head* header, const computed_trkdata* td) const;
   void kml_output_header(const route_head* header, const computed_trkdata* td) const;
-  int kml_altitude_known(const Waypoint* waypoint) const;
+  static int kml_altitude_known(const Waypoint* waypoint);
   void kml_write_coordinates(const Waypoint* waypointp) const;
   void kml_output_lookat(const Waypoint* waypointp) const;
   void kml_output_positioning(bool tessellate) const;

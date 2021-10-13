@@ -23,12 +23,12 @@
 #include <cmath>                // for fabs
 #include <cstring>              // for memset
 
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/Qt>            // for UTC
-#include <QtCore/QtGlobal>      // for foreach
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <Qt>                   // for UTC
+#include <QtGlobal>             // for foreach
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfclose, gbfeof, gbfgetint32, gbfputint32, gbfread, gbfwrite, gbfile, gbfopen_le
@@ -210,13 +210,13 @@ static void
 tr7_disp_waypt_cb(const Waypoint* wpt)
 {
   unsigned char buff[TR7_S_SIZE];
-  double speed, course;
 
   memset(buff, 0, sizeof(buff));
 
   le_write32(&buff[TR7_S_LON], (int)(wpt->longitude * 1000000.0));
   le_write32(&buff[TR7_S_LAT], (int)(wpt->latitude * 1000000.0));
 
+  double course;
   if WAYPT_HAS(wpt, course) {
     course = wpt->course;
   } else if (wpt_tmp != nullptr) {
@@ -241,6 +241,7 @@ tr7_disp_waypt_cb(const Waypoint* wpt)
     buff[TR7_S_MIN] = t.minute();
     buff[TR7_S_SEC] = t.second();
 
+    double speed;
     if WAYPT_HAS(wpt, speed) {
       speed = wpt->speed;
     } else if (wpt_tmp != nullptr) {

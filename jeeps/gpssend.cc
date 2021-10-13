@@ -27,8 +27,8 @@
 #include <cerrno>
 #include <cstdio>
 
-#include "gps.h"
-#include "gpsserial.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsserial.h"
 
 /* @funcstatic Build_Serial_Packet *************************************
 **

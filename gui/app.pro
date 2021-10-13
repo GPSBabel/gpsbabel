@@ -5,6 +5,7 @@ CONFIG += qt
 CONFIG(debug, debug|release) {
   CONFIG += console
 }
+CONFIG += c++17
 
 ICON = images/appicon.icns
 
@@ -17,12 +18,7 @@ QT += core \
 disable-mappreview {
   DEFINES += DISABLE_MAPPREVIEW
 } else {
-  qtHaveModule(webenginewidgets) {
-    QT += webenginewidgets webchannel
-    DEFINES += HAVE_WEBENGINE
-  } else {
-    QT += webkit webkitwidgets 
-  }
+  QT += webenginewidgets webchannel
 }
 
 unix:DESTDIR = objects
@@ -96,6 +92,7 @@ SOURCES += mainwindow.cc
 SOURCES += optionsdlg.cc
 SOURCES += preferences.cc
 SOURCES += processwait.cc
+SOURCES += runmachine.cc
 SOURCES += upgrade.cc
 SOURCES += version_mismatch.cc
 unix:!mac {
@@ -128,6 +125,7 @@ HEADERS += mainwindow.h
 HEADERS += optionsdlg.h
 HEADERS += preferences.h
 HEADERS += processwait.h
+HEADERS += runmachine.h
 HEADERS += setting.h
 HEADERS += upgrade.h
 HEADERS += version_mismatch.h

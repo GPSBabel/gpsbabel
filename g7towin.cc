@@ -188,7 +188,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
       if (strcmp(cin, "1.0e25") == 0) {
         break;
       }
-      /* fallthrough */
+      [[fallthrough]];
     case WPT_cD_OFS + 1:
     case WPT_cB_OFS + 6:
       WAYPT_SET(wpt, temperature, atof(cin));

@@ -22,7 +22,7 @@
 #ifndef POLYGON_H_INCLUDED_
 #define POLYGON_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BOOL, ARGTYPE_FILE
 #include "filter.h"  // for Filter
@@ -58,7 +58,7 @@ private:
     },
   };
 
-  void polytest(double lat1, double lon1,
+  static void polytest(double lat1, double lon1,
                 double lat2, double lon2,
                 double wlat, double wlon,
                 unsigned short* state, int first, int last);

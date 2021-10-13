@@ -21,8 +21,18 @@
 
  */
 
+#include <cstdio>               // for SEEK_CUR
+
+#include <QChar>                // for QChar
+#include <QDate>                // for QDate
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QVector>              // for QVector
+
 #include "defs.h"
-#include <QtCore/QDebug>
+#include "gbfile.h"             // for gbfgetint16, gbfgetint32, gbfseek, gbfclose, gbfopen, gbfile
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define MYNAME "mapbar_track"
 
@@ -58,7 +68,6 @@ read_datetime()
   int mon = gbfgetint16(fin);
   int mday = gbfgetint16(fin);
   gpsbabel::DateTime t(QDate(year, mon, mday), QTime(hour, min, sec));
-// qDebug() << t;
   return t;
 }
 
@@ -81,22 +90,21 @@ static void
 mapbar_track_read()
 {
   auto* track = new route_head;
-  is_fatal((track == nullptr), MYNAME ": memory non-enough");
   track_add_head(track);
 
   (void) read_datetime(); // start_time currently unused
   (void) read_datetime(); // end_time currently unused
 
-  ushort name[101];
+  QChar name[101];
   // read 100 UCS-2 characters that are each stored little endian.
   // note gbfread wouldn't get this right on big endian machines.
   for (int idx=0; idx<100; idx++) {
     name[idx] = gbfgetint16(fin);
   }
-  name[100] = 0;
+  name[100] = u'\0';
   // At this point, name is a UCS-2 encoded, zero terminated string.
   // All our internals use Qt encoding, so convert now.
-  track->rte_name = QString::fromUtf16(name);
+  track->rte_name = QString(name);
 
   // skip two pair waypoint
   gbfseek(fin, 8*4, SEEK_CUR);
@@ -106,11 +114,7 @@ mapbar_track_read()
   gbfseek(fin, 4, SEEK_CUR);
 
   int end_flag = gbfgetint32(fin);
-  for (;;) {
-    if (end_flag) {
-      break;
-    }
-
+  while (!end_flag) {
     int length = gbfgetint32(fin);
     is_fatal((length < 1) || (length > 1600), MYNAME ": get bad buffer length");
 

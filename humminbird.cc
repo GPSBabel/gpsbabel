@@ -20,7 +20,7 @@
  */
 
 #include "defs.h"
-#include <QtCore/QMap>
+#include <QMap>
 #include <cmath>
 #include <cstdio>
 

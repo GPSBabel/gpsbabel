@@ -76,12 +76,11 @@
 #include <cstring>                     // for strncmp, strlen, memset
 #include <vector>                      // for vector
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for operator==, QChar
-#include <QtCore/QCharRef>             // for QCharRef
-#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
-#include <QtCore/QString>              // for QString
-#include <QtCore/QtGlobal>             // for qPrintable, Q_UNUSED
+#include <QByteArray>                  // for QByteArray
+#include <QChar>                       // for operator==, QChar
+#include <QScopedArrayPointer>         // for QScopedArrayPointer
+#include <QString>                     // for QString
+#include <QtGlobal>                    // for qPrintable, Q_UNUSED
 
 #include "defs.h"
 #include "gbfile.h"                    // for gbfread, gbfgetc, gbfgetint32, gbfwrite, gbfputint16, gbfseek, gbfgetdbl, gbfgetint16, gbfputdbl, gbfclose, gbfputint32, gbfile, gbfopen_le, gbfgetuint16

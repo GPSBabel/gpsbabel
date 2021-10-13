@@ -22,8 +22,8 @@
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
-#include <QtCore/QDebug>     // for QDebug
-#include <QtCore/QtGlobal>   // for QtCriticalMsg, QtWarningMsg
+#include <QDebug>            // for QDebug
+#include <QtGlobal>          // for QtCriticalMsg, QtWarningMsg
 
 
 class Warning : public QDebug
@@ -41,7 +41,7 @@ public:
  *    tools such as cppcheck.
  * 2) allows fatal to throw an exception instead of calling exit.
  *    This could be caught by main for a cleaner exit from a fatal error.
- */ 
+ */
 class FatalMsg : public QDebug
 {
 public:

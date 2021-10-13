@@ -27,7 +27,7 @@
 Donate::Donate(QWidget* parent) : QDialog(parent)
 {
   ui_.setupUi(this);
-  connect(ui_.contributeButton, SIGNAL(clicked()), this, SLOT(contributeClicked()));
+  connect(ui_.contributeButton, &QAbstractButton::clicked, this, &Donate::contributeClicked);
 }
 
 void Donate::contributeClicked()

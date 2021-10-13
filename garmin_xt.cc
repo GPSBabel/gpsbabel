@@ -151,7 +151,7 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 static void
 format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 {
-  uint8_t j = 12;
+  int j = 12;
   while (j<(Count-1)) {
     for (uint8_t i = j; i < Count; i++) {
       TrackBlock[i] = TrackBlock[i] >> 1;
@@ -274,7 +274,7 @@ format_garmin_xt_proc_strk()
       format_garmin_xt_decrypt_trk_blk(Count, TrackBlock);
 
       // process each track point in the loaded TrackBlock
-      for (uint8_t ii = 1; ii <= ((Count-1) / 12); ii++) {
+      for (auto ii = 1; ii <= ((Count-1) / 12); ii++) {
         // decompose loaded track block part (track point)
         format_garmin_xt_decomp_trk_blk(ii, TrackBlock, &PrevEle, &Lat, &Lon, &Time);
 
