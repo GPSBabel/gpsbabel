@@ -102,9 +102,6 @@ mapfactor_wr_init(const QString& fname)
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
   writer = new gpsbabel::XmlStreamWriter(oqfile);
 
-  // Override the "UTF-8-XML" with ... the default.
-  writer->setCodec("utf-8");
-
   writer->setAutoFormatting(true);
   writer->setAutoFormattingIndent(2);
   writer->writeStartDocument();
