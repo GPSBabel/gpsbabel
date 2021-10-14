@@ -557,7 +557,7 @@ static void tpo_process_tracks()
     tmp = gbfgetc(tpo_file_in);
     // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
     if (DEBUG > 1) {
-      printf("Track style %d has %u-byte (0x%x) name\n", ii, tmp, tmp);
+      printf("Track style %u has %d-byte (0x%x) name\n", ii, tmp, tmp);
     }
     if (tmp >= TRACKNAMELENGTH) {
       printf("ERROR! Found track style name over %d chars, skipping all tracks!\n",TRACKNAMELENGTH);
