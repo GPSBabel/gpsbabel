@@ -571,10 +571,6 @@ static void tpo_process_tracks()
 #ifdef Tracks2012
     //TBD: Should this be TRACKNAMELENGTH?
     for (unsigned xx = 0; xx < 3; xx++) {
-#else
-    // Should limit be TRACKNAMELENGTH? No! But also should not be '3' like it was.
-    for (unsigned xx = 0; (styles[ii].name[xx] != 0); xx++) {
-#endif
       if (styles[ii].name[xx] == ',') {
         styles[ii].name[xx] = '_';
       }
@@ -582,6 +578,11 @@ static void tpo_process_tracks()
         styles[ii].name[xx] = '_';
       }
     }
+#else
+    // Should limit be TRACKNAMELENGTH? No! But also should not be '3' like it was.
+    styles[ii].name.replace(',', '_');
+    styles[ii].name.replace('=', '_');
+#endif
 
     // one byte for line width (value 1-4), one byte for 'dashed' boolean
     styles[ii].wide = (uint8_t) gbfgetc(tpo_file_in);
