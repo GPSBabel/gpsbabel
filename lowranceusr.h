@@ -500,7 +500,7 @@ private:
      * Also return the icon number for descriptions of "icon-"
      * followed by a numeric icon number.
      */
-    int n = desc.midRef(desc.startsWith("icon-") ? 5 : 0).toInt();
+    int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
     if (n)  {
       return n;
     }

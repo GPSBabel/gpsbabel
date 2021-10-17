@@ -49,12 +49,13 @@ jobs:
             COMPILER: 'msvc2017'
             RELEASE: false
             FLOW: 'nmake'
-          - QT_VERSION: '5.12.10'
-            ARCH: 'x86'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017'
+          - QT_VERSION: '6.2.0'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2019_64'
+            AQTARCH: 'win64_msvc2019_64'
             RELEASE: false
-            FLOW: 'msbuild'
+            FLOW: 'nmake'
 
     steps:
     - name: Checkout repository
@@ -62,11 +63,26 @@ jobs:
 
     - name: Cache Qt
       uses: actions/cache@v2
+      id: cache
       with:
         path: ~/Cache
         key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
 
+    - name: Install Qt setup(aqt)
+      if: ${{ (steps.cache.outputs.cache-hit != 'true') && startsWith(matrix.QT_VERSION, '6') }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install Qt(aqt)
+      if: ${{ (steps.cache.outputs.cache-hit != 'true') && startsWith(matrix.QT_VERSION, '6') }}
+      shell: bash
+      run: |
+        pip3 install aqtinstall>=2.0.0
+        ./tools/ci_install_qt.sh windows ${{ matrix.QT_VERSION }} ${{ matrix.AQTARCH }} ${HOME}/Cache/Qt
+
     - name: Install Qt
+      if: ${{ (steps.cache.outputs.cache-hit != 'true') && !startsWith(matrix.QT_VERSION, '6') }}
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash

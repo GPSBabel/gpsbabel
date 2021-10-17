@@ -182,8 +182,8 @@ static void data_read() {
           wpt_tmp->longitude = lon;
           wpt_tmp->latitude = lat;
         } else {
-          lat = tbuf.midRef(1, -1).toDouble();
-          lon = nbuf.midRef(1, -1).toDouble();
+          lat = tbuf.mid(1, -1).toDouble();
+          lon = nbuf.mid(1, -1).toDouble();
           if (tbuf[0] == 'S') {
             lat = -lat;
           }
@@ -254,8 +254,8 @@ static void data_read() {
           wpt_tmp->longitude = lon;
           wpt_tmp->latitude = lat;
         } else {
-          lat = tbuf.midRef(1, -1).toDouble();
-          lon = nbuf.midRef(1, -1).toDouble();
+          lat = tbuf.mid(1, -1).toDouble();
+          lon = nbuf.mid(1, -1).toDouble();
           if (tbuf[0] == 'S') {
             lat = -lat;
           }

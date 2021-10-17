@@ -580,6 +580,7 @@ public:
   using QList<Waypoint*>::count; // a.k.a. size()
   using QList<Waypoint*>::crbegin;
   using QList<Waypoint*>::crend;
+  using QList<Waypoint*>::detach; // silence Qt6 foreach warnings
   using QList<Waypoint*>::empty; // a.k.a. isEmpty()
   using QList<Waypoint*>::end;
   using QList<Waypoint*>::front; // a.k.a. first()
@@ -758,6 +759,7 @@ public:
   using QList<route_head*>::count; // a.k.a. size()
   using QList<route_head*>::crbegin;
   using QList<route_head*>::crend;
+  using QList<route_head*>::detach; // silence Qt6 foreach warnings
   using QList<route_head*>::empty; // a.k.a. isEmpty()
   using QList<route_head*>::end;
   using QList<route_head*>::front; // a.k.a. first()
@@ -1080,7 +1082,7 @@ case_ignore_strcmp(const QString& s1, const QString& s2)
 // In 95% of the callers, this could be s1.startsWith(s2)...
 inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 {
-  return s1.leftRef(n).compare(s2.left(n), Qt::CaseInsensitive);
+  return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
 int str_match(const char* str, const char* match);

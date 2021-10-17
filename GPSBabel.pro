@@ -14,6 +14,7 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 }
 
 QT -= gui
+versionAtLeast(QT_VERSION, 6.0): QT += core5compat
 
 TARGET = gpsbabel
 VERSION = 1.7.0
@@ -110,6 +111,8 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           src/core/usasciicodec.cc \
           src/core/xmlstreamwriter.cc
 
+versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
+
 HEADERS =  \
 	cet.h \
 	cet_util.h \
@@ -185,6 +188,8 @@ HEADERS =  \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
+
+versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
 HEADERS += $$FILTER_HEADERS
 

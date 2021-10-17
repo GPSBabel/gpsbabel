@@ -13,12 +13,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core REQUIRED)
-if(${Qt5Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+# Find the QtCore library
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
-  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
+  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
+endif()
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
+  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
 set(MINIMAL_FMTS
@@ -94,6 +100,9 @@ set(SUPPORT
   src/core/usasciicodec.cc
   src/core/xmlstreamwriter.cc
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
+endif()
 
 set(HEADERS
   cet.h
@@ -183,6 +192,9 @@ set(HEADERS
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(HEADERS ${HEADERS} src/core/codecdevice.h)
+endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
@@ -268,7 +280,7 @@ add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
 add_executable(gpsbabel ${SOURCES} ${HEADERS})
-target_link_libraries(gpsbabel Qt5::Core ${LIBS})
+target_link_libraries(gpsbabel ${QT_LIBRARIES} ${LIBS})
 
 message(STATUS "Sources are: \"${SOURCES}\"")
 message(STATUS "Headers are: \"${HEADERS}\"")

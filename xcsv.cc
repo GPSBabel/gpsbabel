@@ -258,7 +258,11 @@ QDateTime
 XcsvFormat::yyyymmdd_to_time(const char* s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
   return QDateTime(d);
+#else
+  return d.startOfDay();
+#endif
 }
 
 

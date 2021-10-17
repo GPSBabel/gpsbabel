@@ -876,7 +876,7 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
       if (ok) {
         int ckval = nmea_cksum(tbuf.mid(1, ckidx - 1));
         if (ckval != ckcmp) {
-          Warning().nospace() <<  hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
+          Warning().nospace() <<  Qt::hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
           return;
         }
         checked = true;
