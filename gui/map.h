@@ -41,7 +41,7 @@
 #include "latlng.h"               // for LatLng
 
 
-#define DEBUG_JS_GENERATION
+//#define DEBUG_JS_GENERATION
 
 
 class MarkerClicker: public QObject
