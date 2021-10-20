@@ -22,16 +22,26 @@
 //------------------------------------------------------------------------
 #ifndef MAP_H
 #define MAP_H
-#include <QWebEngineView>
-#include <QPlainTextEdit>
-#include <QElapsedTimer>
-#include <QFile>
-#include <QTextStream>
-#include "gpx.h"
+
+#include <QByteArray>             // for QByteArray
+#include <QElapsedTimer>          // for QElapsedTimer
+#include <QFile>                  // for QFile
+#include <QList>                  // for QList
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QObject>                // for QObject, Q_OBJECT, emit, signals, slots
+#include <QPlainTextEdit>         // for QPlainTextEdit
+#include <QResizeEvent>           // for QResizeEvent
+#include <QString>                // for QString
+#include <QStringList>            // for QStringList
+#include <QTextStream>            // for QTextStream
+#include <QWebEngineView>         // for QWebEngineView
+#include <QWidget>                // for QWidget
+
+#include "gpx.h"                  // for Gpx, GpxRoute, GpxTrack, GpxWaypoint
+#include "latlng.h"               // for LatLng
+
 
 //#define DEBUG_JS_GENERATION
-
-class QNetworkAccessManager;
 
 
 class MarkerClicker: public QObject
@@ -90,6 +100,10 @@ public slots:
   void frameRoute(int i);
 
   void logTime(const QString&);
+
+private:
+  QByteArray encodeKey(const QByteArray& key);
+  QByteArray decodeKey(const QByteArray& key);
 
 signals:
   void waypointClicked(int i);

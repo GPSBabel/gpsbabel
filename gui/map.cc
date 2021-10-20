@@ -22,21 +22,30 @@
 //------------------------------------------------------------------------
 #include "map.h"
 
-#include <QNetworkRequest>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QWebEngineView>
-#include <QWebEnginePage>
-#include <QWebChannel>
-#include <QApplication>
-#include <QCursor>
-#include <QFile>
-#include <QTextStream>
+#include <QApplication>           // for QApplication
+#include <QChar>                  // for QChar, operator!=
+#include <QCursor>                // for QCursor
+#include <QFile>                  // for QFile
+#include <QIODevice>              // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Truncate, QIODevice::WriteOnly
+#include <QLatin1String>          // for QLatin1String
+#include <QMessageBox>            // for QMessageBox
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QStringLiteral>         // for QStringLiteral
+#include <QUrl>                   // for QUrl
+#include <QWebChannel>            // for QWebChannel
+#include <QWebEnginePage>         // for QWebEnginePage
+#include <QWebEngineView>         // for QWebEngineView
+#include <Qt>                     // for WaitCursor
+#include <QtGlobal>               // for foreach
 
-#include <math.h>
-#include <string>
-#include <vector>
-#include "appname.h"
+#include <algorithm>              // for max
+#include <string>                 // for string
+#include <vector>                 // for vector
+
+#include "appname.h"              // for appName
+#include "gpx.h"                  // for GpxRoute, GpxTrack, GpxWaypoint, Gpx, GpxRoutePoint, GpxTrackPoint, GpxTrackSegment
+#include "latlng.h"               // for LatLng
+
 
 using std::string;
 using std::vector;
@@ -83,10 +92,28 @@ Map::Map(QWidget* parent,
   // 2. In the Qt resource system.  This is useful if the resource was compiled
   //    into the executable.
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+  QString fileName;
+  QUrl baseUrl;
   if (QFile(baseFile).exists()) {
-    this->load(QUrl::fromLocalFile(baseFile));
+    fileName = baseFile;
+    baseUrl = QUrl::fromLocalFile(baseFile);
   } else if (QFile(":/gmapbase.html").exists()) {
-    this->load(QUrl("qrc:///gmapbase.html"));
+    fileName = ":/gmapbase.html";
+    baseUrl = QUrl("qrc:///gmapbase.html");
+  }
+
+  if (!fileName.isEmpty()) {
+    QFile htmlFile(fileName);
+    if (htmlFile.open(QIODevice::ReadOnly)) {
+      QByteArray content = htmlFile.readAll();
+      htmlFile.close();
+      const QByteArray encodedKey = QByteArray::fromBase64("Qkp7YlR6Q3k6RFRiS2JQZWRENlRXM01uYltbQzdGUHlHbjJpTUk1");
+      content.replace("APIKEY", decodeKey(encodedKey));
+      this->setContent(content, "text/html;charset=UTF-8", baseUrl);
+    } else {
+      QMessageBox::critical(nullptr, appName,
+                            tr("Error opening \"gmapbase.html\" file.  Check installation"));
+    }
   } else {
     QMessageBox::critical(nullptr, appName,
                           tr("Missing \"gmapbase.html\" file.  Check installation"));
@@ -94,11 +121,31 @@ Map::Map(QWidget* parent,
 
 #ifdef DEBUG_JS_GENERATION
   dbgdata_ = new QFile("mapdebug.js");
-  if (dbgdata_->open(QFile::WriteOnly | QIODevice::Truncate)) {
+  if (dbgdata_->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     dbgout_ = new QTextStream(dbgdata_);
   }
 #endif
 
+}
+
+//------------------------------------------------------------------------
+QByteArray Map::encodeKey(const QByteArray& key)
+{
+  QByteArray rv;
+  for (const auto c: key) {
+    rv.append(c+1);
+  }
+  return rv;
+}
+
+//------------------------------------------------------------------------
+QByteArray Map::decodeKey(const QByteArray& key)
+{
+  QByteArray rv;
+  for (const auto c: key) {
+    rv.append(c-1);
+  }
+  return rv;
 }
 
 //------------------------------------------------------------------------
