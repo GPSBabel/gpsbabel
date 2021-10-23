@@ -35,7 +35,7 @@ You can grab a release from the <ulink url="https://www.gpsbabel.org/download.ht
 <para>
 Qt version 5.12 or newer is required for all builds.  MacOS and Windows users can download
 binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
-Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qtbase5-dev'. Package names
+Fedora or CentOS users may need to 'dnf install qt5-qtbase-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt5-default'. Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in tools/Docker* for inspiration for our automated builds that
 use Docker.
