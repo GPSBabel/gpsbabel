@@ -32,6 +32,7 @@
 #include "filter.h"         // for Filter
 #include "height.h"         // for HeightFilter
 #include "interpolate.h"    // for InterpolateFilter
+#include "kalmanfilter.h"   // for KalmanFilter
 #include "nukedata.h"       // for NukeDataFilter
 #include "polygon.h"        // for PolygonFilter
 #include "position.h"       // for PositionFilter
@@ -93,6 +94,7 @@ private:
   DuplicateFilter duplicate;
   HeightFilter height;
   InterpolateFilter interpolate;
+  KalmanFilter kalmanfilter;
   NukeDataFilter nukedata;
   PolygonFilter polygon;
   PositionFilter position;
@@ -132,6 +134,11 @@ private:
       &interpolate,
       "interpolate",
       "Interpolate between trackpoints"
+    },
+    {
+      &kalmanfilter,
+      "kalman",
+      "Kalman filtering for noisy tracks"
     },
     {
       &nukedata,
