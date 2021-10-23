@@ -241,7 +241,7 @@ if(APPLE)
     mac/libusb/strerror.c
     mac/libusb/sync.c
     mac/libusb/os/darwin_usb.c
-    mac/libusb/os/poll_posix.c
+    mac/libusb/os/events_posix.c
     mac/libusb/os/threads_posix.c
   )
   set(HEADERS ${HEADERS}
@@ -251,7 +251,7 @@ if(APPLE)
     mac/libusb/version.h
     mac/libusb/version_nano.h
     mac/libusb/os/darwin_usb.h
-    mac/libusb/os/poll_posix.h
+    mac/libusb/os/events_posix.h
     mac/libusb/os/threads_posix.h
   )
   add_compile_options(-Wall -Wsign-compare)

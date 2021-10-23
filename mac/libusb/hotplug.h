@@ -36,16 +36,16 @@ enum usbi_hotplug_flags {
 	 */
 
 	/* The vendor_id field is valid for matching */
-	USBI_HOTPLUG_VENDOR_ID_VALID = (1 << 3),
+	USBI_HOTPLUG_VENDOR_ID_VALID = (1U << 3),
 
 	/* The product_id field is valid for matching */
-	USBI_HOTPLUG_PRODUCT_ID_VALID = (1 << 4),
+	USBI_HOTPLUG_PRODUCT_ID_VALID = (1U << 4),
 
 	/* The dev_class field is valid for matching */
-	USBI_HOTPLUG_DEV_CLASS_VALID = (1 << 5),
+	USBI_HOTPLUG_DEV_CLASS_VALID = (1U << 5),
 
 	/* This callback has been unregistered and needs to be freed */
-	USBI_HOTPLUG_NEEDS_FREE = (1 << 6),
+	USBI_HOTPLUG_NEEDS_FREE = (1U << 6),
 };
 
 /** \ingroup hotplug
@@ -90,10 +90,16 @@ struct libusb_hotplug_message {
 	struct list_head list;
 };
 
+#define for_each_hotplug_cb(ctx, c) \
+	for_each_helper(c, &(ctx)->hotplug_cbs, struct libusb_hotplug_callback)
+
+#define for_each_hotplug_cb_safe(ctx, c, n) \
+	for_each_safe_helper(c, n, &(ctx)->hotplug_cbs, struct libusb_hotplug_callback)
+
 void usbi_hotplug_deregister(struct libusb_context *ctx, int forced);
 void usbi_hotplug_match(struct libusb_context *ctx, struct libusb_device *dev,
-			libusb_hotplug_event event);
+	libusb_hotplug_event event);
 void usbi_hotplug_notification(struct libusb_context *ctx, struct libusb_device *dev,
-			libusb_hotplug_event event);
+	libusb_hotplug_event event);
 
 #endif
