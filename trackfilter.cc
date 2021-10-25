@@ -36,11 +36,8 @@
 #include <QChar>                           // for QChar
 #include <QDate>                           // for QDate
 #include <QDateTime>                       // for QDateTime
-#ifdef TRACKF_DBG
 #include <QDebug>
-#endif
 #include <QList>                           // for QList<>::iterator, QList, QList<>::const_iterator
-#include <QRegExp>                         // for QRegExp, QRegExp::WildcardUnix
 #include <QRegularExpression>              // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
 #include <QRegularExpressionMatch>         // for QRegularExpressionMatch
 #include <QString>                         // for QString
@@ -52,6 +49,7 @@
 
 #include "grtcirc.h"                       // for RAD, gcdist, radtometers, heading_true_degrees
 #include "src/core/datetime.h"             // for DateTime
+#include "src/core/logging.h"              // for FatalMsg
 
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
@@ -187,7 +185,12 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
   }
 
   if (opt_name != nullptr) {
-    if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
+    QRegularExpression regex(QRegularExpression::wildcardToRegularExpression(opt_name),
+                             QRegularExpression::CaseInsensitiveOption);
+    if (!regex.isValid()) {
+      fatal(FatalMsg() << "track: name option is an invalid expression.");
+    }
+    if (!regex.match(track->rte_name).hasMatch()) {
       foreach (Waypoint* wpt, track->waypoint_list) {
         track_del_wpt(const_cast<route_head*>(track), wpt);
         delete wpt;
