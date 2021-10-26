@@ -23,6 +23,7 @@ qtlottie \
 qtnetworkauth \
 qtquick3d \
 qtquicktimeline \
+qtwebglplugin \
 qtshadertools \
 qtvirtualkeyboard \
 qtwaylandcompositor \

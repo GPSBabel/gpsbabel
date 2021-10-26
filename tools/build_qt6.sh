@@ -6,7 +6,6 @@ if [ $# -ne 1 ]; then
 fi
 version=${1}
 
-scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"
 sourcetype=git
 #flavor=debug
 flavor=release
@@ -20,12 +19,10 @@ if [ "$(uname -s)" = "Darwin" ]; then
   installdir=/Users/travis/Cache/Qt
   compilerdir=clang_64
   archive=qt-${version}-${flavor}-macos
-  parallel=-j4
 else
   installdir=/home/travis/Cache/Qt
   compilerdir=gcc_64
   archive=qt-${version}-${flavor}-linux
-  parallel=-j2
 fi
 
 
