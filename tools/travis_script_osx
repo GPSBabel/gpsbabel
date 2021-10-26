@@ -2,6 +2,8 @@
 #
 # this script is run on travis for the script stage of mac builds
 #
+ 
+function version_ge() { test "$(printf "%s\n%s" $1 $2 | sort -rV | head -n 1)" == "$1"; }
 
 QMAKE=${QMAKE:-qmake}
 LUPDATE=${LUPDATE:-lupdate}
@@ -14,13 +16,21 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z $(git show -s --format=
 "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
 
 # build and test the CLI
-$QMAKE GPSBabel.pro
+if version_ge $($QMAKE -query QT_VERSION) 6.0.0; then
+  $QMAKE GPSBabel.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+else
+  $QMAKE GPSBabel.pro
+fi
 make -j 3
 make check
 
 # build the GUI
 pushd gui
-$QMAKE app.pro
+if version_ge $($QMAKE -query QT_VERSION) 6.0.0; then
+  $QMAKE app.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+else
+  $QMAKE app.pro
+fi
 make -j 3
 make package
 popd

@@ -480,7 +480,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
       base = 7680;
     }
     if (base) {
-      n = desc.midRef(7).toInt();
+      n = desc.mid(7).toInt();
       return n + base;
     }
   }

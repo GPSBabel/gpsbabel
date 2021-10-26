@@ -49,4 +49,15 @@ public:
   explicit FatalMsg() : QDebug(QtCriticalMsg) {}
 };
 
+/*
+ * Kludge any used QTextStream modifiers into Qt namespace as they are in newer
+ * versions of Qt.  This makes source compatiblity easier.
+ */
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+namespace Qt
+{
+  inline QTextStream& hex(QTextStream &s) { return ::hex(s); }
+  inline QTextStream& endl(QTextStream &s) { return ::endl(s); }
+}
+#endif
 #endif //  gpsbabel_logging_h_included

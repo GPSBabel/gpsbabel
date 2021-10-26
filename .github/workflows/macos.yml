@@ -85,3 +85,46 @@ jobs:
         source ${HOME}/Cache/qt-${QT_VERSION}.env
         sudo xcode-select --switch /Applications/Xcode_12.1.1.app
         ./tools/travis_script_osx
+
+  macos_qt6:
+    name: macos Qt6 Build
+    runs-on: macos-11
+    env:
+      QT_VERSION: '6.2.0'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Qt
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+
+    - name: Qt install setup
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Qt install
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        pip3 install aqtinstall>=2.0.0
+        ./tools/ci_install_qt.sh mac ${QT_VERSION} clang_64 ${HOME}/Cache/Qt
+        echo "export PATH=${HOME}/Cache/Qt/${QT_VERSION}/macos/bin:\$PATH" > "${HOME}/Cache/qt-${QT_VERSION}.env"
+
+    - name: Script
+      run: |
+        source ${HOME}/Cache/qt-${QT_VERSION}.env
+        sudo xcode-select --switch /Applications/Xcode_12.5.1.app
+        ./tools/travis_script_osx
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS_Installer_Qt6
+        path: gui/GPSBabel-*.dmg
+        retention-days: 14
