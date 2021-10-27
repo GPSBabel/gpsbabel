@@ -90,7 +90,7 @@ jobs:
     name: macos Qt6 Build
     runs-on: macos-11
     env:
-      QT_VERSION: '6.2.0'
+      QT_VERSION: '6.2.1'
 
     steps:
     - name: Checkout repository
