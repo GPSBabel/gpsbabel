@@ -39,6 +39,8 @@ else
   QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
 fi
 
+TOOLSDIR=$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)
+
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
   echo "If you need to clear the cache see"
@@ -79,7 +81,7 @@ else
      )
   elif [ "$METHOD" = "aqt" ]; then
     pip3 install aqtinstall>=2.0.0
-    "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_install_qt.sh mac ${QT_VERSION} clang_64 ${CACHEDIR}/Qt
+    "${TOOLSDIR}"/ci_install_qt.sh mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${CACHEDIR}/Qt/${QT_VERSION}/macos/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
 
   else
