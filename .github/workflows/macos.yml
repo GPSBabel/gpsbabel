@@ -111,10 +111,10 @@ jobs:
 
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        TRAVIS_BUILD_DIR: ${{ github.workspace }}
       run: |
-        pip3 install aqtinstall>=2.0.0
-        ./tools/ci_install_qt.sh mac ${QT_VERSION} clang_64 ${HOME}/Cache/Qt
-        echo "export PATH=${HOME}/Cache/Qt/${QT_VERSION}/macos/bin:\$PATH" > "${HOME}/Cache/qt-${QT_VERSION}.env"
+        ./tools/travis_install_osx ${QT_VERSION} aqt
 
     - name: Script
       run: |

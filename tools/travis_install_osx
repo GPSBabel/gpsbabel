@@ -33,7 +33,11 @@ METHOD=${2:-artifactory}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
-QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
+if [ "$METHOD" = "aqt" ]; then
+  QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/macos
+else
+  QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
+fi
 
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
@@ -73,6 +77,10 @@ else
         rm -f "/tmp/${archive}"
       fi
      )
+  elif [ "$METHOD" = "aqt" ]; then
+    pip3 install aqtinstall>=2.0.0
+    "${TRAVIS_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
+    echo "export PATH=${CACHEDIR}/Qt/${QT_VERSION}/macos/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     # install-qt creates the install at $PWD/Qt.
     QT_VERSION_SHORT=${QT_VERSION//./}
