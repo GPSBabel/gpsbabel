@@ -53,7 +53,7 @@ jobs:
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
-            AQTARCH: 'win64_msvc2019_64'
+            METHOD: 'aqt'
             RELEASE: false
             FLOW: 'nmake'
 
@@ -69,25 +69,18 @@ jobs:
         key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
 
     - name: Install Qt setup(aqt)
-      if: ${{ (steps.cache.outputs.cache-hit != 'true') && startsWith(matrix.QT_VERSION, '6') }}
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v2
       with:
         python-version: '3.9'
 
-    - name: Install Qt(aqt)
-      if: ${{ (steps.cache.outputs.cache-hit != 'true') && startsWith(matrix.QT_VERSION, '6') }}
-      shell: bash
-      run: |
-        pip3 install aqtinstall>=2.0.0
-        ./tools/ci_install_qt.sh windows ${{ matrix.QT_VERSION }} ${{ matrix.AQTARCH }} ${HOME}/Cache/Qt
-
     - name: Install Qt
-      if: ${{ (steps.cache.outputs.cache-hit != 'true') && !startsWith(matrix.QT_VERSION, '6') }}
+      if: steps.cache.outputs.cache-hit != 'true'
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }}
+        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }} ${{ matrix.METHOD }}
 
     - name: Build
       shell: powershell
