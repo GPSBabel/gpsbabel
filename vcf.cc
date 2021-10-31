@@ -64,7 +64,10 @@ vcf_print_utf(const utf_string* s)
     return;
   }
 
-  QString stripped_html = strip_html(s);
+  char *string = strip_html(s);
+  QString stripped_html = string;
+  xfree(string);
+
   stripped_html.replace("\n", "\\n");
   stripped_html.replace("<p>", "\\n");
   stripped_html.replace(";", "\\;");
