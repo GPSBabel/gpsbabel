@@ -3,6 +3,8 @@
 # This script is run on travis for the install stage of mac builds.
 #
 
+function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
+
 #debug failed install
 function debug() {
   cat "${CACHEDIR}/qt-${QT_VERSION}.env"
@@ -34,7 +36,11 @@ METHOD=${2:-artifactory}
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
 if [ "$METHOD" = "aqt" ]; then
-  QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/macos
+  if version_ge "${QT_VERSION}" 6.1.2; then
+    QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/macos
+  else
+    QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
+  fi
 else
   QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
 fi
@@ -73,14 +79,14 @@ else
         archive=qt-${QT_VERSION}-release-macos.tar.xz
         curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
         tar -x -J -f "/tmp/${archive}"
-        echo "export PATH=${CACHEDIR}/Qt/${QT_VERSION}/clang_64/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
+        echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
         rm -f "/tmp/${archive}"
       fi
      )
   elif [ "$METHOD" = "aqt" ]; then
     pip3 install aqtinstall>=2.0.0
     "${TRAVIS_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
-    echo "export PATH=${CACHEDIR}/Qt/${QT_VERSION}/macos/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
+    echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     # install-qt creates the install at $PWD/Qt.
     QT_VERSION_SHORT=${QT_VERSION//./}
