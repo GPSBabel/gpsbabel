@@ -85,6 +85,7 @@ vcf_print(const char* s)
 
   QString cleaned = s;
   cleaned.replace("\n", "\\n", Qt::CaseInsensitive);
+  cleaned.replace(",", "\\,");
   gbfputs(cleaned, file_out);
 }
 
