@@ -3,7 +3,7 @@
 # This script is run on travis for the install stage of mac builds.
 #
 
-function version_ge() { test "$(printf "%s\n%s" $1 $2 | sort -rV | head -n 1)" == "$1"; }
+function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
 
 #debug failed install
 function debug() {
@@ -36,7 +36,7 @@ METHOD=${2:-artifactory}
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
 if [ "$METHOD" = "aqt" ]; then
-  if version_ge $($QMAKE -query QT_VERSION) 6.1.2; then
+  if version_ge "${QT_VERSION}" 6.1.2; then
     QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/macos
   else
     QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/clang_64
