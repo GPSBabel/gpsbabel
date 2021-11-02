@@ -128,6 +128,7 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
   { "PATH_DISTANCE_KM", XT_PATH_DISTANCE_KM },
   { "PATH_DISTANCE_METERS", XT_PATH_DISTANCE_METERS },
   { "PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES },
+  { "PATH_DISTANCE_NAUTICAL_MILES", XT_PATH_DISTANCE_NAUTICAL_MILES },
   { "PATH_SPEED", XT_PATH_SPEED },
   { "PATH_SPEED_KNOTS", XT_PATH_SPEED_KNOTS },
   { "PATH_SPEED_KPH", XT_PATH_SPEED_KPH },
@@ -751,6 +752,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_PATH_DISTANCE_MILES:
     wpt->odometer_distance = MILES_TO_METERS(atof(s));
     break;
+  case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
+    wpt->odometer_distance = NMILES_TO_METERS(atof(s));
+    break;
   case XcsvStyle::XT_HEART_RATE:
     wpt->heartrate = atoi(s);
     break;
@@ -1281,6 +1285,14 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       /* path (route/track) distance in miles */
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_MILES(wpt->odometer_distance));
+      } else {
+        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
+      }
+      break;
+    case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
+      /* path (route/track) distance in miles */
+      if (wpt->odometer_distance) {
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_NMILES(wpt->odometer_distance));
       } else {
         buff = QString::asprintf(fmp.printfc.constData(), pathdist);
       }
