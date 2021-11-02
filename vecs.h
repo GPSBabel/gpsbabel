@@ -66,7 +66,6 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
@@ -277,7 +276,6 @@ private:
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
-  LegacyFormat tmpro_fmt {tmpro_vecs};
   LegacyFormat tiger_fmt {tiger_vecs};
   LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
@@ -532,13 +530,6 @@ private:
       "tpo3",
       "National Geographic Topo 3.x/4.x .tpo",
       "tpo",
-      nullptr,
-    },
-    {
-      &tmpro_fmt,
-      "tmpro",
-      "TopoMapPro Places File",
-      "tmpro",
       nullptr,
     },
     {

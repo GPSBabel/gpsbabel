@@ -35,7 +35,7 @@ set(MINIMAL_FMTS
 
 set(ALL_FMTS
   ${MINIMAL_FMTS} gtm.cc gpsutil.cc pcx.cc
-  skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc
+  skytraq.cc holux.cc tpg.cc tpo.cc
   xcsv.cc tiger.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
   ozi.cc text.cc html.cc
