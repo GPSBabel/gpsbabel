@@ -527,7 +527,7 @@ public:
   unsigned char cadence;	 /* revolutions per minute */
   float power; /* watts, as measured by cyclists */
   float temperature; /* Degrees celsius */
-  float odometer_distance; /* Meters? */
+  float odometer_distance; /* Meters */
   geocache_data* gc_data;
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */

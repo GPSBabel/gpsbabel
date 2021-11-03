@@ -51,7 +51,7 @@
 #include "formspec.h"                 // for FormatSpecificDataList
 #include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
 #include "gbfile.h"                   // for gbfgetstr, gbfclose, gbfopen, gbfile
-#include "grtcirc.h"                  // for RAD, gcdist, radtomiles
+#include "grtcirc.h"                  // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
 #include "jeeps/gpsport.h"            // for int32
 #include "session.h"                  // for session_t
@@ -985,8 +985,8 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   char utmzc;
 
   if (oldlon < 900) {
-    pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
-                                  RAD(wpt->latitude),RAD(wpt->longitude)));
+    pathdist += radtometers(gcdist(RAD(oldlat),RAD(oldlon),
+                                   RAD(wpt->latitude),RAD(wpt->longitude)));
   }
   longitude = oldlon = wpt->longitude;
   latitude = oldlat = wpt->latitude;
@@ -1286,7 +1286,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_MILES(wpt->odometer_distance));
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_MILES(pathdist));
       }
       break;
     case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
@@ -1294,7 +1294,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_NMILES(wpt->odometer_distance));
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_NMILES(pathdist));
       }
       break;
     case XcsvStyle::XT_PATH_DISTANCE_METERS:
@@ -1302,7 +1302,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->odometer_distance);
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), MILES_TO_METERS(pathdist));
+        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
       }
       break;
     case XcsvStyle::XT_PATH_DISTANCE_KM:
@@ -1310,7 +1310,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->odometer_distance / 1000.0);
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), MILES_TO_METERS(pathdist) / 1000.0);
+        buff = QString::asprintf(fmp.printfc.constData(), pathdist / 1000.0);
       }
       break;
     case XcsvStyle::XT_PATH_SPEED:
