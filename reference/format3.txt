@@ -190,22 +190,6 @@ option	xmap2006	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	xmap2006	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_datum
 
-file	rw----	xmapwpt		DeLorme XMat HH Street Atlas USA .WPT (PPC)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html
-option	xmapwpt	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_snlen
-
-option	xmapwpt	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_snwhite
-
-option	xmapwpt	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_snupper
-
-option	xmapwpt	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_snunique
-
-option	xmapwpt	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_urlbase
-
-option	xmapwpt	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_prefer_shortnames
-
-option	xmapwpt	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmapwpt.html#fmt_xmapwpt_o_datum
-
 file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)	destinator_itn
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_itn.html
 file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)	destinator_poi
