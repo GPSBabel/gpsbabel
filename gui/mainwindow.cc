@@ -1091,7 +1091,9 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setComboToDevice(QComboBox* comboBox, const QString& name)
 {
   for (int i=0; i<comboBox->count(); i++) {
-    if (comboBox->itemText(i) == name) {
+    QString value = comboBox->itemData(i).isValid()?
+      comboBox->itemData(i).toString() : comboBox->itemText(i);
+    if (value == name) {
       comboBox->setCurrentIndex(i);
       break;
     }
@@ -1266,7 +1268,8 @@ void MainWindow::getWidgetValues()
     babelData_.inputType_ = BabelData::deviceType_;
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
-  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentText();
+  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentData().isValid()?
+    ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1279,7 +1282,8 @@ void MainWindow::getWidgetValues()
   } else {
     babelData_.outputType_ = BabelData::noType_;
   }
-  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentText();
+  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
+    ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();

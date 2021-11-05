@@ -30,6 +30,10 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox* box)
 {
   const auto ports = QSerialPortInfo::availablePorts();
   for (const auto& info : ports) {
-    box->addItem(info.portName());
+    if (info.description().isEmpty()) {
+      box->addItem(info.portName());
+    } else {
+      box->addItem(QString("%1 (%2)").arg(info.description(), info.portName()), info.portName());
+    }
   }
 }
