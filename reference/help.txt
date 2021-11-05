@@ -87,22 +87,6 @@ File Types (-i and -o options):
 	  split                 (0/1) Split into multiple routes at turns 
 	  controls              Read control points as waypoint/route/none 
 	  times                 (0/1) Synthesize track times 
-	xmap                  DeLorme XMap HH Native .WPT
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	xmap2006              DeLorme XMap/SAHH 2006 Native .TXT
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	destinator_itn        Destinator Itineraries (.dat)
 	destinator_poi        Destinator Points of Interest (.dat)
 	destinator_trl        Destinator TrackLogs (.dat)
