@@ -3,6 +3,7 @@ polygon	Include Only Points Inside Polygon
 arc	Include Only Points Within Distance of Arc
 radius	Include Only Points Within Radius
 interpolate	Interpolate between trackpoints
+kalman	Kalman filtering for noisy tracks
 height	Manipulate altitudes
 track	Manipulate track lists
 sort	Rearrange waypoints, routes and/or tracks by resorting
