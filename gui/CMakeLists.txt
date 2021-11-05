@@ -19,18 +19,18 @@ set(CMAKE_AUTOUIC ON)
 # Handle the Qt rcc code generator automatically
 set(CMAKE_AUTORCC ON)
 
-# Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core Gui Network Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets Qt5::Xml)
-if(${Qt5Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+# Find the QtCore library
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network Widgets Xml REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
-  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
+  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
 endif()
 
-# hard code webengine instead of webkit for now
-find_package(Qt5 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
-list(APPEND QT_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
 
 if(APPLE)
   find_library(IOKIT_LIBRARIES IOKit)

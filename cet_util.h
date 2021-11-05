@@ -22,7 +22,7 @@
 #ifndef CET_UTIL_H_INCLUDED_
 #define CET_UTIL_H_INCLUDED_
 
-#include <QtCore/QString>
+#include <QString>
 #include "defs.h"
 
 

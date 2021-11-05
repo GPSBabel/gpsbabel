@@ -25,7 +25,7 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <QtCore/QThread>
+#include <QThread>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

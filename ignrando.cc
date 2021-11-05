@@ -19,13 +19,30 @@
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
+#include <cstdio>                  // for sscanf
+#include <cstdlib>                 // for atoi
+#include <ctime>                   // for strftime, localtime, time_t, tm
+
+#include <QByteArray>              // for QByteArray
+#include <QIODevice>               // for QIODevice, QIODeviceBase::ReadOnly
+#include <QList>                   // for QList
+#include <QString>                 // for QString, operator==
+#include <QXmlStreamAttributes>    // for QXmlStreamAttributes
+#include <QtGlobal>                // for QT_VERSION, QT_VERSION_CHECK, qPrintable
+
 #include "defs.h"
-#include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
-#include <cstdio>
+#include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfile
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/file.h"         // for File
+#include "xmlgeneric.h"            // for xg_callback, xg_string, cb_cdata, xml_deinit, xml_init, xml_readunicode, cb_start, cb_end, xg_cb_type, xg_tag_mapping
+
 
 #define MYNAME "IGNRando"
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+static QString rd_fname;
+#endif
 static gbfile* fout;
 
 static route_head* track;
@@ -114,7 +131,7 @@ ignr_etape_pos(xg_string args, const QXmlStreamAttributes*)
 {
   ignr_xml_error((wpt == nullptr) || (args.isEmpty()));
 
-  if (2 != sscanf(CSTRc(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
+  if (2 != sscanf(STRFROMUNICODE(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
     fatal(MYNAME ": Invalid coordinates \"%s\"!\n", qPrintable(args));
   }
 }
@@ -127,7 +144,7 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes*)
     return;
   }
 
-  if (1 != sscanf(CSTRc(args), "%lf", &wpt->altitude)) {
+  if (1 != sscanf(STRFROMUNICODE(args), "%lf", &wpt->altitude)) {
     fatal(MYNAME ": Invalid altitude \"%s\"!\n", qPrintable(args));
   }
 }
@@ -137,7 +154,12 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes*)
 static void
 ignr_rd_init(const QString& fname)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   xml_init(fname, ignr_xml_map, nullptr);
+#else
+  rd_fname = fname;
+  xml_init(nullptr, ignr_xml_map, nullptr);
+#endif
   wpt = nullptr;
   track = nullptr;
 }
@@ -146,12 +168,29 @@ static void
 ignr_rd_deinit()
 {
   xml_deinit();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  rd_fname.clear();
+#endif
 }
 
 static void
 ignr_read()
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  // QXmlStreamReader had access to the windows-1252 QTextCodec that we expect
+  // to find in the XMLDecl.
   xml_read();
+#else
+  // QXmlStreamReader doesn't have access to a windows-1252 QStringDecoder,
+  // and will throw an error if we pass a QIODevice when it sees windows-1252
+  // in the XMLDecl.
+  // Therfore we must decode the input manually and pass a QString.
+  // With a QString QXmlStreamReader will ignore the XMLDecl.
+  gpsbabel::File file(rd_fname);
+  file.open(QIODevice::ReadOnly);
+  xml_readunicode(STRTOUNICODE(file.readAll()));
+  file.close();
+#endif
 }
 
 /* write support */
@@ -182,7 +221,7 @@ ignr_write_track_hdr(const route_head* track_hdr)
   gbfprintf(fout, "\t<INFORMATIONS>\n");
   gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track_hdr->rte_waypt_ct);
   if (!track_hdr->rte_desc.isEmpty()) {
-    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", CSTRc(track_hdr->rte_desc));
+    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", STRFROMUNICODE(track_hdr->rte_desc));
   }
   gbfprintf(fout, "\t</INFORMATIONS>\n");
 }

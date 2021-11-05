@@ -32,26 +32,24 @@
 
 #include <algorithm>                       // for sort, stable_sort
 
-#include <QtCore/QByteArray>               // for QByteArray
-#include <QtCore/QChar>                    // for QChar
-#include <QtCore/QDate>                    // for QDate
-#include <QtCore/QDateTime>                // for QDateTime
-#ifdef TRACKF_DBG
-#include <QtCore/QDebug>
-#endif
-#include <QtCore/QList>                    // for QList<>::iterator, QList, QList<>::const_iterator
-#include <QtCore/QRegExp>                  // for QRegExp, QRegExp::WildcardUnix
-#include <QtCore/QRegularExpression>       // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
-#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
-#include <QtCore/QString>                  // for QString
-#include <QtCore/Qt>                       // for UTC, CaseInsensitive
-#include <QtCore/QtGlobal>                 // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
+#include <QByteArray>                      // for QByteArray
+#include <QChar>                           // for QChar
+#include <QDate>                           // for QDate
+#include <QDateTime>                       // for QDateTime
+#include <QDebug>
+#include <QList>                           // for QList<>::iterator, QList, QList<>::const_iterator
+#include <QRegularExpression>              // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
+#include <QRegularExpressionMatch>         // for QRegularExpressionMatch
+#include <QString>                         // for QString
+#include <Qt>                              // for UTC, CaseInsensitive
+#include <QtGlobal>                        // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
 
 #include "defs.h"
 #include "trackfilter.h"
 
 #include "grtcirc.h"                       // for RAD, gcdist, radtometers, heading_true_degrees
 #include "src/core/datetime.h"             // for DateTime
+#include "src/core/logging.h"              // for FatalMsg
 
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
@@ -187,7 +185,12 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
   }
 
   if (opt_name != nullptr) {
-    if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
+    QRegularExpression regex(QRegularExpression::wildcardToRegularExpression(opt_name),
+                             QRegularExpression::CaseInsensitiveOption);
+    if (!regex.isValid()) {
+      fatal(FatalMsg() << "track: name option is an invalid expression.");
+    }
+    if (!regex.match(track->rte_name).hasMatch()) {
       foreach (Waypoint* wpt, track->waypoint_list) {
         track_del_wpt(const_cast<route_head*>(track), wpt);
         delete wpt;

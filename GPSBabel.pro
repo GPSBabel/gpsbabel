@@ -14,6 +14,7 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 }
 
 QT -= gui
+versionAtLeast(QT_VERSION, 6.0): QT += core5compat
 
 TARGET = gpsbabel
 VERSION = 1.7.0
@@ -59,7 +60,7 @@ MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc 
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
-        skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
+        skytraq.cc holux.cc tpg.cc tpo.cc \
         xcsv.cc tiger.cc easygps.cc \
         saroute.cc navicache.cc delgpl.cc \
         ozi.cc text.cc html.cc \
@@ -109,6 +110,8 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           src/core/textstream.cc \
           src/core/usasciicodec.cc \
           src/core/xmlstreamwriter.cc
+
+versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
 
 HEADERS =  \
 	cet.h \
@@ -185,6 +188,8 @@ HEADERS =  \
 	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
+
+versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
 HEADERS += $$FILTER_HEADERS
 

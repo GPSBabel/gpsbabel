@@ -24,25 +24,24 @@
 #include <cstdlib>                                 // for atoi, strtod
 #include <cstring>                                 // for strchr, strncpy
 
-#include <QtCore/QDate>                            // for QDate
-#include <QtCore/QDateTime>                        // for QDateTime
-#include <QtCore/QHash>                            // for QHash
-#include <QtCore/QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QLatin1Char>                      // for QLatin1Char
-#include <QtCore/QLatin1String>                    // for QLatin1String
-#include <QtCore/QStaticStringData>                // for QStaticStringData
-#include <QtCore/QString>                          // for QString, QStringLiteral, operator+, operator==
-#include <QtCore/QStringList>                      // for QStringList
-#include <QtCore/QStringView>                      // for QStringView
-#include <QtCore/QTime>                            // for QTime
-#include <QtCore/QVersionNumber>                   // for QVersionNumber
-#include <QtCore/QXmlStreamAttribute>              // for QXmlStreamAttribute
-#include <QtCore/QXmlStreamAttributes>             // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamNamespaceDeclaration>   // for QXmlStreamNamespaceDeclaration
-#include <QtCore/QXmlStreamNamespaceDeclarations>  // for QXmlStreamNamespaceDeclarations
-#include <QtCore/QXmlStreamReader>                 // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
-#include <QtCore/Qt>                               // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>                         // for qAsConst, QAddConst<>::Type
+#include <QDate>                                   // for QDate
+#include <QDateTime>                               // for QDateTime
+#include <QHash>                                   // for QHash
+#include <QIODevice>                               // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QLatin1Char>                             // for QLatin1Char
+#include <QLatin1String>                           // for QLatin1String
+#include <QString>                                 // for QString, QStringLiteral, operator+, operator==
+#include <QStringList>                             // for QStringList
+#include <QStringView>                             // for QStringView
+#include <QTime>                                   // for QTime
+#include <QVersionNumber>                          // for QVersionNumber
+#include <QXmlStreamAttribute>                     // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
+#include <QXmlStreamNamespaceDeclaration>          // for QXmlStreamNamespaceDeclaration
+#include <QXmlStreamNamespaceDeclarations>         // for QXmlStreamNamespaceDeclarations
+#include <QXmlStreamReader>                        // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
+#include <Qt>                                      // for CaseInsensitive, UTC
+#include <QtGlobal>                                // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "gpx.h"
@@ -213,7 +212,7 @@ GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr) const
 }
 
 void
-GpxFormat::start_something_else(const QStringView& el, const QXmlStreamAttributes& attr)
+GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr)
 {
   if (!fs_ptr) {
     return;
@@ -308,7 +307,7 @@ GpxFormat::tag_log_wpt(const QXmlStreamAttributes& attr) const
 }
 
 void
-GpxFormat::gpx_start(const QStringView& el, const QXmlStreamAttributes& attr)
+GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
 {
   /*
    * Reset end-of-string without actually emptying/reallocing cdatastr.
@@ -551,7 +550,7 @@ xml_parse_time(const QString& dateTimeString)
 }
 
 void
-GpxFormat::gpx_end(const QStringView& /*unused*/)
+GpxFormat::gpx_end(QStringView /*unused*/)
 {
   static QDateTime gc_log_date;
 
@@ -891,7 +890,7 @@ GpxFormat::gpx_end(const QStringView& /*unused*/)
 
 
 void
-GpxFormat::gpx_cdata(const QStringView& s)
+GpxFormat::gpx_cdata(QStringView s)
 {
   QString* cdata;
   cdatastr += s.toString();

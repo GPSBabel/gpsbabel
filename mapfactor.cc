@@ -19,9 +19,9 @@
 #include "defs.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
-#include <QtCore/QDebug>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QXmlStreamWriter>
+#include <QDebug>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 static gpsbabel::File* oqfile;
 static QXmlStreamWriter* writer;
@@ -101,9 +101,6 @@ mapfactor_wr_init(const QString& fname)
   oqfile = new gpsbabel::File(fname);
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
   writer = new gpsbabel::XmlStreamWriter(oqfile);
-
-  // Override the "UTF-8-XML" with ... the default.
-  writer->setCodec("utf-8");
 
   writer->setAutoFormatting(true);
   writer->setAutoFormattingIndent(2);

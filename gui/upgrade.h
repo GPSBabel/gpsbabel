@@ -19,14 +19,14 @@
 
  */
 
-#include <QtCore/QDateTime>                 // for QDateTime
-#include <QtCore/QList>                     // for QList
-#include <QtCore/QObject>                   // for QObject
-#include <QtCore/QString>                   // for QString
-#include <QtCore/QUrl>                      // for QUrl
-#include <QtNetwork/QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QtNetwork/QNetworkReply>          // for QNetworkReply
-#include <QtWidgets/QWidget>                // for QWidget
+#include <QDateTime>                        // for QDateTime
+#include <QList>                            // for QList
+#include <QObject>                          // for QObject
+#include <QString>                          // for QString
+#include <QUrl>                             // for QUrl
+#include <QNetworkAccessManager>            // for QNetworkAccessManager
+#include <QNetworkReply>                    // for QNetworkReply
+#include <QWidget>                          // for QWidget
 #include "babeldata.h"                      // for BabelData
 #include "format.h"                         // for Format
 

@@ -19,8 +19,8 @@
 
  */
 
-#include <QtCore/QString>               // for QString
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QString>                      // for QString
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "xmlgeneric.h"                 // for cb_cdata, xg_callback, xg_string, cb_start, cb_end, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
@@ -165,7 +165,7 @@ void	wpt_altitude(xg_string, const QXmlStreamAttributes* attrv)
     wpt_to->altitude = attrv->value("Value").toString().toDouble();
   }
   if (attrv->hasAttribute("Unit")) {
-    isFeet = (attrv->value("Unit") == "ft");
+    isFeet = (attrv->value("Unit") == u"ft");
   }
   if (isFeet) {
     wpt_to->altitude = FEET_TO_METERS(wpt_to->altitude);

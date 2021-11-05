@@ -90,12 +90,12 @@
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <ctime>                  // for time_t
 
-#include <QtCore/QList>         // for QList
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTextCodec>    // for QTextCodec
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for uint
+#include <QList>                // for QList
+#include <QString>              // for QString
+#include <QTextCodec>           // for QTextCodec
+#include <QVector>              // for QVector
+#include <Qt>                   // for CaseInsensitive
+#include <QtGlobal>             // for uint
 
 #include "defs.h"
 #include "format.h"
@@ -500,7 +500,7 @@ private:
      * Also return the icon number for descriptions of "icon-"
      * followed by a numeric icon number.
      */
-    int n = desc.midRef(desc.startsWith("icon-") ? 5 : 0).toInt();
+    int n = desc.mid(desc.startsWith("icon-") ? 5 : 0).toInt();
     if (n)  {
       return n;
     }

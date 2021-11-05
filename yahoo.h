@@ -21,10 +21,10 @@
 #ifndef YAHOO_H_INCLUDED_
 #define YAHOO_H_INCLUDED_
 
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QString>               // for QString
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QList>                        // for QList
+#include <QString>                      // for QString
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"                     // for Format

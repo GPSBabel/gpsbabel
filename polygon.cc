@@ -22,7 +22,7 @@
 #include <cstdio>           // for sscanf
 #include <cstring>          // for strchr, strlen, strspn
 
-#include <QtCore/QtGlobal>  // for foreach
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "polygon.h"

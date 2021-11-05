@@ -22,13 +22,13 @@
 
 #include <cstring>                      // for strlen, strchr, strcmp
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QHash>                 // for QHash
-#include <QtCore/QLatin1String>         // for QLatin1String
-#include <QtCore/QPair>                 // for QPair, operator==
-#include <QtCore/QString>               // for QString, operator==, operator+
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QtGlobal>              // for qPrintable, QAddConst<>::Type
+#include <QByteArray>                   // for QByteArray
+#include <QHash>                        // for QHash
+#include <QLatin1String>                // for QLatin1String
+#include <QPair>                        // for QPair, operator==
+#include <QString>                      // for QString, operator==, operator+
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QtGlobal>                     // for qPrintable, QAddConst<>::Type
 
 #include "defs.h"
 #include "osm.h"

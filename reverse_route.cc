@@ -20,7 +20,7 @@
  */
 #include <algorithm>     // for reverse
 
-#include <QtCore/QList>  // for QList<>::iterator
+#include <QList>         // for QList<>::iterator
 
 #include "defs.h"
 #include "reverse_route.h"

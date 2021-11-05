@@ -31,11 +31,10 @@
 #include <iterator>                  // for reverse_iterator, operator==, prev, next
 #include <optional>                  // for optional
 
-#include <QtCore/QByteArray>         // for QByteArray
-#include <QtCore/QList>              // for QList<>::const_iterator
-#include <QtCore/QStaticStringData>  // for QStaticStringData
-#include <QtCore/QString>            // for QString, operator+, QStringLiteral
-#include <QtCore/QtGlobal>           // for foreach, qPrintable
+#include <QByteArray>                // for QByteArray
+#include <QList>                     // for QList<>::const_iterator
+#include <QString>                   // for QString, operator+, QStringLiteral
+#include <QtGlobal>                  // for foreach, qPrintable
 
 #include "defs.h"
 #include "cet_util.h"                // for cet_convert_init
@@ -501,7 +500,7 @@ static void detect_other_track(const route_head* rh)
   }
   // Find other track with the most waypoints
   if (rh->rte_waypt_ct > max_waypt_ct &&
-      (rh->rte_name.isEmpty() || 
+      (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(PRESTRKNAME) &&
        !rh->rte_name.startsWith(GNSSTRKNAME)))) {
     head = rh;
@@ -683,7 +682,7 @@ static void wr_task_hdr(const route_head* rte)
   }
 
   if (!rte->rte_desc.isEmpty()) {
-    // desc will be something like "IGCDATE160701: 500KTri" 
+    // desc will be something like "IGCDATE160701: 500KTri"
     sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
   }
 

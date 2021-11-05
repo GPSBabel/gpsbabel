@@ -26,7 +26,7 @@
 #include <cstdlib>         // for abs
 #include <cstring>         // for strlen, memcpy, memset
 
-#include <QtCore/QString>  // for QString
+#include <QString>         // for QString
 
 #include "defs.h"
 #include "gbfile.h"        // for gbfclose, gbfopen_le, gbfread, gbfwrite, gbfile

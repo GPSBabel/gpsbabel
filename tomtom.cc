@@ -41,8 +41,8 @@
 #include <cstdlib>          // for qsort
 #include <cstring>          // for strlen
 
-#include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>          // for QString
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "gbfile.h"         // for gbfgetint32, gbfputint32, gbfclose, gbfgetc, gbfputc, gbfseek, gbfile, gbfeof, gbfread, gbftell, gbfwrite, gbfopen_le

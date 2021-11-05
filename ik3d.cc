@@ -23,7 +23,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 
 static QVector<arglist_t> ikt_args = {
 };

@@ -22,7 +22,7 @@
 #ifndef SESSION_H_INCLUDED_
 #define SESSION_H_INCLUDED_
 
-#include <QtCore/QString>  // for QString
+#include <QString>         // for QString
 #include <utility>
 
 struct session_t {

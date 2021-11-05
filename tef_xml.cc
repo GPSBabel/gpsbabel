@@ -23,13 +23,13 @@
 
 */
 
-#include <QtCore/QLatin1String>         // for QLatin1String
-#include <QtCore/QString>               // for QString
-#include <QtCore/QStringView>           // for QStringView
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for CaseInsensitive
+#include <QLatin1String>                // for QLatin1String
+#include <QString>                      // for QString
+#include <QStringView>                  // for QStringView
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for CaseInsensitive
 
 #include "defs.h"
 #include "xmlgeneric.h"                 // for cb_start, cb_end, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
@@ -121,7 +121,7 @@ tef_list_start(xg_string, const QXmlStreamAttributes* attrv)
 
 /*
  * TODO: this whole horrible mess is not covered at all in the test suite,
- * so just stub it all out until someone cares. (TEF is rarely used from 
+ * so just stub it all out until someone cares. (TEF is rarely used from
  * what we can tell.)
  */
 
@@ -184,7 +184,7 @@ Xfix_notes(const QString& name, const QString& notes)
   return r;
 }
 #else
-static QString 
+static QString
 fix_notes(const QString&, const QString& notes){
     return notes;
 }
@@ -273,7 +273,7 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
 }
 
 static double
-tef_read_comma_float(const QStringView& value)
+tef_read_comma_float(QStringView value)
 {
   QString svalue = value.toString();
 

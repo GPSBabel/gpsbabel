@@ -27,18 +27,18 @@
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
 #include <iterator>                // for operator!=, reverse_iterator
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar, operator==, operator!=
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QDebug>           // for QDebug
-#include <QtCore/QList>            // for QList
-#include <QtCore/QString>          // for QString
-#include <QtCore/QStringList>      // for QStringList
-#include <QtCore/QTextStream>      // for hex
-#include <QtCore/QThread>          // for QThread
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/Qt>               // for UTC
-#include <QtCore/QtGlobal>         // for qPrintable, foreach
+#include <QByteArray>              // for QByteArray
+#include <QChar>                   // for QChar, operator==, operator!=
+#include <QDateTime>               // for QDateTime
+#include <QDebug>                  // for QDebug
+#include <QList>                   // for QList
+#include <QString>                 // for QString
+#include <QStringList>             // for QStringList
+#include <QTextStream>             // for hex
+#include <QThread>                 // for QThread
+#include <QTime>                   // for QTime
+#include <Qt>                      // for UTC
+#include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
 #include "nmea.h"
@@ -643,7 +643,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
     fix = fields[2][0];
   }
 
-  // 12 fields, index 3 through 14. 
+  // 12 fields, index 3 through 14.
   for (int cnt = 0; cnt <= 11; cnt++) {
     if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
   }
@@ -876,7 +876,7 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
       if (ok) {
         int ckval = nmea_cksum(tbuf.mid(1, ckidx - 1));
         if (ckval != ckcmp) {
-          Warning().nospace() <<  hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
+          Warning().nospace() <<  Qt::hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
           return;
         }
         checked = true;

@@ -30,21 +30,20 @@
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QChar>                 // for QChar, operator<=, operator>=
-#include <QtCore/QCharRef>              // for QCharRef
-#include <QtCore/QDateTime>             // for QDateTime
-#include <QtCore/QFileInfo>             // for QFileInfo
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QScopedPointer>        // for QScopedPointer
-#include <QtCore/QString>               // for QString
-#include <QtCore/QTextCodec>            // for QTextCodec
-#include <QtCore/QTextStream>           // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QtCore/QXmlStreamAttribute>   // for QXmlStreamAttribute
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for CaseInsensitive
-#include <QtCore/QTimeZone>             // for QTimeZone
-#include <QtCore/QtGlobal>              // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QChar>                        // for QChar, operator<=, operator>=
+#include <QDateTime>                    // for QDateTime
+#include <QFileInfo>                    // for QFileInfo
+#include <QList>                        // for QList
+#include <QScopedPointer>               // for QScopedPointer
+#include <QString>                      // for QString
+#include <QTextCodec>                   // for QTextCodec
+#include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
+#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for CaseInsensitive
+#include <QTimeZone>                    // for QTimeZone
+#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "cet.h"                        // for cet_utf8_to_ucs4
@@ -1745,8 +1744,8 @@ list_codecs()
       maxlen = codec->name().size();
     }
   }
-  info << "Available Codecs:" << endl;
-  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << endl;
+  info << "Available Codecs:" << Qt::endl;
+  info << qSetFieldWidth(8) << "MIBenum" << qSetFieldWidth(maxlen+1) << "Name" << qSetFieldWidth(0) << "Aliases" << Qt::endl;
   for (auto mib : mibs) {
     auto* codec = QTextCodec::codecForMib(mib);
     info << qSetFieldWidth(8) << mib << qSetFieldWidth(maxlen+1) << codec->name() << qSetFieldWidth(0);
@@ -1760,7 +1759,7 @@ list_codecs()
       }
       info << alias;
     }
-    info << endl;
+    info << Qt::endl;
   }
 }
 

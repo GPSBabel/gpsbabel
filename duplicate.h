@@ -22,7 +22,7 @@
 #ifndef DUPLICATE_H_INCLUDED_
 #define DUPLICATE_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint (ptr only)
 #include "filter.h"  // for Filter

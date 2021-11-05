@@ -27,20 +27,20 @@
 #include <cstdlib>                 // for atoi, atof, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QDir>             // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
-#include <QtCore/QFileInfo>        // for QFileInfo
-#include <QtCore/QFileInfoList>    // for QFileInfoList
-#include <QtCore/QLatin1String>    // for QLatin1String
-#include <QtCore/QList>            // for QList
-#include <QtCore/QScopedPointer>   // for QScopedPointer
-#include <QtCore/QString>          // for QString, operator==
-#include <QtCore/QStringList>      // for QStringList
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable, foreach
+#include <QByteArray>              // for QByteArray
+#include <QDateTime>               // for QDateTime
+#include <QDir>                    // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
+#include <QFileInfo>               // for QFileInfo
+#include <QFileInfoList>           // for QFileInfoList
+#include <QLatin1String>           // for QLatin1String
+#include <QList>                   // for QList
+#include <QScopedPointer>          // for QScopedPointer
+#include <QString>                 // for QString, operator==
+#include <QStringList>             // for QStringList
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
@@ -1409,7 +1409,7 @@ void mag_track_disp(const Waypoint* waypointp)
 
   double ilat = waypointp->latitude;
   double ilon = waypointp->longitude;
-  
+
   QByteArray dmy("");
   QByteArray hms("");
   if (waypointp->creation_time.isValid()) {

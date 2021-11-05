@@ -23,8 +23,8 @@
 #include <cmath>            // macos wants abs from here!
 #include <cstdlib>          // for strtod, abs
 
-#include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type, foreach
+#include <QString>          // for QString
+#include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
 
 #include "defs.h"
 #include "bend.h"

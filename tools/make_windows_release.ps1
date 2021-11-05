@@ -105,7 +105,7 @@ New-Item "$($gui_build_dir)\package" -type directory -Force | Out-Null
 Copy-Item "$($gpsbabel_build_dir)\release\GPSBabel.exe" "$($gui_build_dir)\package\GPSBabel.exe"
 Copy-Item "$($gui_build_dir)\release\GPSBabelFE.exe" "$($gui_build_dir)\package\GPSBabelFE.exe"
 # use --plugindir option to locate the plugins.
-& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe
+& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe package\GPSBabel.exe
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 if ($buildinstaller -eq "true") {
     Set-Location "$($gpsbabel_src_dir)\gui"
