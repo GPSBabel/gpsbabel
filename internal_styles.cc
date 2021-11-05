@@ -1458,39 +1458,7 @@ static char xmap2006[] =
 
 
   ;
-static char xmapwpt[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: DeLorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"
-  "# Author: Alex Mottram\n"
-  "#   Date: 12/09/2002\n"
-  "#\n"
-  "#\n"
-  "DESCRIPTION 		DeLorme XMat HH Street Atlas USA .WPT (PPC)\n"
-  "SHORTLEN		32\n"
-  "SHORTWHITE		0\n"
-
-  "#\n"
-  "#\n"
-  "# FILE LAYOUT DEFINITIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		COLON\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS		COLON\n"
-
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD	CONSTANT, \"1296126539\", \"%s\"\n"
-  "IFIELD	CONSTANT, \"1481466224\", \"%s\"\n"
-  "IFIELD	LAT_INT32DEG, \"\", \"%d\"\n"
-  "IFIELD	LON_INT32DEG, \"\", \"%d\"\n"
-  "IFIELD	CONSTANT, \"3137157\", \"%s\"\n"
-  "IFIELD	SHORTNAME, \"\", \"%-.31s\"\n"
-  "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
-  "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
-  ;
-const QVector<style_vecs_t> style_list = {{ "xmapwpt", xmapwpt }, { "xmap2006", xmap2006 }, { "xmap", xmap }, { "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsman", gpsman }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
+const QVector<style_vecs_t> style_list = {{ "xmap2006", xmap2006 }, { "xmap", xmap }, { "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsman", gpsman }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
 #else /* CSVFMTS_ENABLED */
 const QVector<style_vecs_t> style_list;
 #endif /* CSVFMTS_ENABLED */
