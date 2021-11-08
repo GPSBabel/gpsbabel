@@ -158,38 +158,6 @@ option	saroute	controls	Read control points as waypoint/route/none	string	none		
 
 option	saroute	times	Synthesize track times	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_times
 
-file	rw----	xmap	wpt	DeLorme XMap HH Native .WPT	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html
-option	xmap	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_snlen
-
-option	xmap	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_snwhite
-
-option	xmap	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_snupper
-
-option	xmap	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_snunique
-
-option	xmap	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_urlbase
-
-option	xmap	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_prefer_shortnames
-
-option	xmap	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap.html#fmt_xmap_o_datum
-
-file	rw----	xmap2006	txt	DeLorme XMap/SAHH 2006 Native .TXT	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html
-option	xmap2006	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_snlen
-
-option	xmap2006	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_snwhite
-
-option	xmap2006	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_snupper
-
-option	xmap2006	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_snunique
-
-option	xmap2006	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_urlbase
-
-option	xmap2006	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_prefer_shortnames
-
-option	xmap2006	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xmap2006.html#fmt_xmap2006_o_datum
-
 file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)	destinator_itn
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_itn.html
 file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)	destinator_poi
