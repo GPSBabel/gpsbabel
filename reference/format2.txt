@@ -1,10 +1,6 @@
 internal	rw----	xcsv		? Character Separated Values
-file	--rw--	alantrl	trl	Alan Map500 tracklogs (.trl)
-file	rw--rw	alanwpr	wpr	Alan Map500 waypoints and routes (.wpr)
 internal	rw----	tabsep		All database fields on one tab-separated line
 serial	--r---	baroiq		Brauniger IQ Series Barograph Download
-file	--rw--	bushnell_trl	trl	Bushnell GPS Trail file
-file	rw----	bushnell	wpt	Bushnell GPS Waypoint file
 file	rw----	cambridge	dat	Cambridge/Winpilot glider software
 file	r-r-r-	cst	cst	CarteSurTable data file
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)
@@ -13,13 +9,11 @@ file	rwrwrw	compegps		CompeGPS data files (.wpt/.trk/.rte)
 internal	rw----	custom		Custom "Everything" Style
 file	--rw--	iblue747	csv	Data Logger iBlue747 csv
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv
-file	rw-wrw	an1	an1	DeLorme .an1 (drawing) file
 file	--rw--	gpl	gpl	DeLorme GPL
 file	rw----	saplus		DeLorme Street Atlas Plus
 file	--r---	saroute	anr	DeLorme Street Atlas Route
 file	rw----	xmap	wpt	DeLorme XMap HH Native .WPT
 file	rw----	xmap2006	txt	DeLorme XMap/SAHH 2006 Native .TXT
-file	rw----	xmapwpt		DeLorme XMat HH Street Atlas USA .WPT (PPC)
 file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)
 file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)
 file	--rw--	destinator_trl	dat	Destinator TrackLogs (.dat)
@@ -118,10 +112,8 @@ file	rw----	navigonwpt		Navigon Waypoints
 serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download
 file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
 file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-file	rw----	naviguide	twl	Naviguide binary route file (.twl)
 file	--rw--	navitel_trk	bin	Navitel binary track (.bin)
 file	rw----	dna	dna	Navitrak DNA marker format
-file	r-----	netstumbler		NetStumbler Summary File (text)
 file	rw----	nima		NIMA/GNIS Geographic Names File
 file	rwrw--	nmea		NMEA 0183 sentences
 file	rw----	lmx		Nokia Landmark Exchange
@@ -148,7 +140,6 @@ file	----rw	tomtom_itn	itn	TomTom Itineraries (.itn)
 file	----rw	tomtom_itn_places	itn	TomTom Places Itineraries (.itn)
 file	rw----	tomtom_asc	asc	TomTom POI file (.asc)
 file	rw----	tomtom	ov2	TomTom POI file (.ov2)
-file	rw----	tmpro	tmpro	TopoMapPro Places File
 file	rwrw--	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	rw----	tiger		U.S. Census Bureau Tiger Mapping Service
 file	rwrwrw	unicsv		Universal csv with field structure in first line

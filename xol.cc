@@ -27,8 +27,8 @@
 #include "src/core/xmlstreamwriter.h"
 #include "xmlgeneric.h"
 
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QXmlStreamWriter>
+#include <QXmlStreamAttributes>
+#include <QXmlStreamWriter>
 
 static Waypoint* wpt_;
 static route_head* trk_;
@@ -56,7 +56,7 @@ static xg_tag_mapping xol_map[] = {
 
 static void xol_overlay(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("version")) {
-    if (attrv->value("version") != "1.0") {
+    if (attrv->value("version") != u"1.0") {
       fatal(MYNAME ": Unsupported version %s.\n",
             qPrintable(attrv->value("version").toString()));
     }
@@ -65,9 +65,9 @@ static void xol_overlay(xg_string, const QXmlStreamAttributes* attrv) {
 
 static void xol_shape(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("type")) {
-    if (attrv->value("type") == "waypoint") {
+    if (attrv->value("type") == u"waypoint") {
       wpt_ = new Waypoint;
-    } else if (attrv->value("type") == "polyline") {
+    } else if (attrv->value("type") == u"polyline") {
       trk_ = new route_head;
       track_add_head(trk_);
     }

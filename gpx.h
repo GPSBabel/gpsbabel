@@ -21,14 +21,14 @@
 #ifndef GPX_H_INCLUDED_
 #define GPX_H_INCLUDED_
 
-#include <QtCore/QHash>                 // for QHash
-#include <QtCore/QString>               // for QString
-#include <QtCore/QStringList>           // for QStringList
-#include <QtCore/QStringRef>            // for QStringRef
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QVersionNumber>        // for QVersionNumber
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QXmlStreamReader>      // for QXmlStreamReader
+#include <QHash>                        // for QHash
+#include <QString>                      // for QString
+#include <QStringList>                  // for QStringList
+#include <QStringView>                  // for QStringView
+#include <QVector>                      // for QVector
+#include <QVersionNumber>               // for QVersionNumber
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QXmlStreamReader>             // for QXmlStreamReader
 
 #include "defs.h"
 #include "format.h"                     // for Format
@@ -197,12 +197,12 @@ private:
   void tag_wpt(const QXmlStreamAttributes& attr);
   void tag_cache_desc(const QXmlStreamAttributes& attr);
   void tag_gs_cache(const QXmlStreamAttributes& attr) const;
-  void start_something_else(const QStringRef& el, const QXmlStreamAttributes& attr);
+  void start_something_else(QStringView el, const QXmlStreamAttributes& attr);
   void end_something_else();
   void tag_log_wpt(const QXmlStreamAttributes& attr) const;
-  void gpx_start(const QStringRef& el, const QXmlStreamAttributes& attr);
-  void gpx_end(const QStringRef& unused);
-  void gpx_cdata(const QStringRef& s);
+  void gpx_start(QStringView el, const QXmlStreamAttributes& attr);
+  void gpx_end(QStringView unused);
+  void gpx_cdata(QStringView s);
   void write_attributes(const QXmlStreamAttributes& attributes) const;
   void fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;

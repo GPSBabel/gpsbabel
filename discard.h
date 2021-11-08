@@ -22,12 +22,12 @@
 #ifndef DISCARD_H_INCLUDED_
 #define DISCARD_H_INCLUDED_
 
-// Can't use QRegularExpression because Linux won't get Qt 5 for years.
-#include <QtCore/QRegExp>  // for QRegExp
-#include <QtCore/QVector>  // for QVector
+#include <QRegularExpression>  // for QRegularExpression
+#include <QString>             // for QString
+#include <QVector>             // for QVector
 
-#include "defs.h"          // for ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_S...
-#include "filter.h"        // for Filter
+#include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_STRING, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_FLOAT, route_head, ARGTYPE_END_REQ, Waypoint, gpsdata_type
+#include "filter.h"            // for Filter
 
 #if FILTERS_ENABLED
 class DiscardFilter:public Filter
@@ -41,6 +41,9 @@ public:
   void process() override;
 
 private:
+  QRegularExpression generateRegExp(const QString& glob_pattern);
+
+private:
   char* hdopopt = nullptr;
   char* vdopopt = nullptr;
   char* andopt = nullptr;
@@ -50,13 +53,13 @@ private:
   char* eleminopt = nullptr;
   char* elemaxopt = nullptr;
   char* nameopt = nullptr;
-  QRegExp name_regex;
+  QRegularExpression name_regex;
   char* descopt = nullptr;
-  QRegExp desc_regex;
+  QRegularExpression desc_regex;
   char* cmtopt = nullptr;
-  QRegExp cmt_regex;
+  QRegularExpression cmt_regex;
   char* iconopt = nullptr;
-  QRegExp icon_regex;
+  QRegularExpression icon_regex;
 
   double hdopf{};
   double vdopf{};

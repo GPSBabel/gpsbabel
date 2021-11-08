@@ -24,7 +24,7 @@
  * http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd
  */
 
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"

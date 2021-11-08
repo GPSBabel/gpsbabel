@@ -28,11 +28,11 @@
 #include <cstring>              // for memcpy, strlen, strncpy, strchr
 #include <ctime>                // for time_t
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QString>       // for QString
-#include <QtCore/Qt>            // for CaseInsensitive
-#include <QtCore/QtGlobal>      // for qPrintable, foreach
+#include <QByteArray>           // for QByteArray
+#include <QChar>                // for QChar
+#include <QString>              // for QString
+#include <Qt>                   // for CaseInsensitive
+#include <QtGlobal>             // for qPrintable, foreach
 
 #include "defs.h"
 #include "cet_util.h"           // for cet_convert_init, cet_cs_vec_utf8
@@ -357,7 +357,7 @@ rw_deinit()
       gps_baud_rate = baud;
     }
   }
-  
+
   if (mkshort_handle) {
     mkshort_del_handle(&mkshort_handle);
   }
@@ -369,9 +369,8 @@ rw_deinit()
 static int
 waypt_read_cb(int total_ct, GPS_PWay* )
 {
-  static int i;
-
   if (global_opts.verbose_status) {
+    static int i;
     i++;
     waypt_status_disp(total_ct, i);
   }
@@ -872,10 +871,10 @@ sane_GPS_Way_New()
 static int
 waypt_write_cb(GPS_PWay*)
 {
-  static int i;
   int n = waypt_count();
 
   if (global_opts.verbose_status) {
+    static int i;
     i++;
     waypt_status_disp(n, i);
   }
@@ -1028,11 +1027,9 @@ waypoint_prepare()
 static void
 waypoint_write()
 {
-  int32 ret;
-
   int n = waypoint_prepare();
 
-  if ((ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb)) < 0) {
+  if (int32 ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
     fatal(MYNAME ":communication error sending waypoints..\n");
   }
 

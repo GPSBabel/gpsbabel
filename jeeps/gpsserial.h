@@ -2,7 +2,7 @@
 #define gpsserial_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
 #define usecDELAY 180000	/* Microseconds before GPS sends A001 */
 #define DEFAULT_BAUD 9600

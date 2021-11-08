@@ -28,8 +28,8 @@
 #include "defs.h"
 #include "garmin_device_xml.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
-#include <QtCore/QFile>
+#include <QXmlStreamAttributes>
+#include <QFile>
 #include <cstdio>
 
 #define MYNAME "whatever"
@@ -79,7 +79,7 @@ void dir_s(xg_string args, const QXmlStreamAttributes*)
   if (type) {
     return;
   }
-  if ((args == "OutputFromUnit")) {
+  if (args == "OutputFromUnit") {
     xasprintf(&my_gdx_info->from_device.path,  "%s%c%s",
               mountpoint, GB_PATHSEP, path);
     my_gdx_info->from_device.basename = xstrdup(base);
@@ -88,7 +88,7 @@ void dir_s(xg_string args, const QXmlStreamAttributes*)
               my_gdx_info->from_device.path,
               my_gdx_info->from_device.basename,
               my_gdx_info->from_device.extension);
-  } if ((args == "InputToUnit")) {
+  } else if (args == "InputToUnit") {
     xasprintf(&my_gdx_info->to_device.path,  "%s%c%s",
               mountpoint, GB_PATHSEP, path);
     my_gdx_info->to_device.basename = xstrdup(base);

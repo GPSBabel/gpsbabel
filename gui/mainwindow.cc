@@ -19,39 +19,41 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QDir>                 // for QDir
-#include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
-#include <QtCore/QFile>                // for QFile
-#include <QtCore/QFileInfo>            // for QFileInfo
-#include <QtCore/QLibraryInfo>         // for QLibraryInfo, QLibraryInfo::TranslationsPath
-#include <QtCore/QLocale>              // for QLocale
-#include <QtCore/QMimeData>            // for QMimeData
-#include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
-#include <QtCore/QSettings>            // for QSettings
-#include <QtCore/QString>              // for QString
-#include <QtCore/QStringList>          // for QStringList
-#include <QtCore/QTemporaryFile>       // for QTemporaryFile
-#include <QtCore/QTime>                // for QTime
-#include <QtCore/QUrl>                 // for QUrl
-#include <QtCore/QVariant>             // for QVariant
-#include <QtCore/Qt>                   // for SmoothTransformation, WaitCursor
-#include <QtCore/QtGlobal>             // for foreach
-#include <QtGui/QCursor>               // for QCursor
-#include <QtGui/QDesktopServices>      // for QDesktopServices
-#include <QtGui/QIcon>                 // for QIcon
-#include <QtGui/QImage>                // for QImage
-#include <QtWidgets/QApplication>      // for QApplication, qApp
-#include <QtWidgets/QCheckBox>         // for QCheckBox
-#include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
-#include <QtWidgets/QFileDialog>       // for QFileDialog
-#include <QtWidgets/QMessageBox>       // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
-#include <QtWidgets/QPlainTextEdit>    // for QPlainTextEdit
-#include <QtWidgets/QPushButton>       // for QPushButton
-#include <QtWidgets/QRadioButton>      // for QRadioButton
-#include <QtWidgets/QStackedWidget>    // for QStackedWidget
+#include <QByteArray>                  // for QByteArray
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QDir>                        // for QDir
+#include <QEvent>                      // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
+#include <QFile>                       // for QFile
+#include <QFileInfo>                   // for QFileInfo
+#include <QLibraryInfo>                // for QLibraryInfo, QLibraryInfo::TranslationsPath
+#include <QLocale>                     // for QLocale
+#include <QMimeData>                   // for QMimeData
+#include <QProcess>                    // for QProcess, QProcess::NotRunning
+#include <QSettings>                   // for QSettings
+#include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
+#include <QTemporaryFile>              // for QTemporaryFile
+#include <QTime>                       // for QTime
+#include <QUrl>                        // for QUrl
+#include <QVariant>                    // for QVariant
+#include <Qt>                          // for SmoothTransformation, WaitCursor
+#include <QtGlobal>                    // for foreach
+#include <QCursor>                     // for QCursor
+#include <QDesktopServices>            // for QDesktopServices
+#include <QIcon>                       // for QIcon
+#include <QImage>                      // for QImage
+#include <QTextCharFormat>             // for QTextCharFormat
+#include <QAbstractButton>             // for QAbstractButton
+#include <QApplication>                // for QApplication, qApp
+#include <QCheckBox>                   // for QCheckBox
+#include <QDialogButtonBox>            // for QDialogButtonBox
+#include <QFileDialog>                 // for QFileDialog
+#include <QMessageBox>                 // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
+#include <QPlainTextEdit>              // for QPlainTextEdit
+#include <QPushButton>                 // for QPushButton
+#include <QRadioButton>                // for QRadioButton
+#include <QStackedWidget>              // for QStackedWidget
 
 #include <cstdlib>                     // for exit
 
@@ -70,7 +72,7 @@
 #include "help.h"                      // for ShowHelp
 #include "optionsdlg.h"                // for OptionsDlg
 #include "preferences.h"               // for Preferences
-#include "processwait.h"               // for ProcessWaitDialog
+#include "runmachine.h"                // for RunMachine
 #include "upgrade.h"                   // for UpgradeCheck
 #include "version_mismatch.h"          // for VersionMismatch
 
@@ -79,8 +81,6 @@
 const int BabelData::noType_ = -1;
 const int BabelData::fileType_ = 0;
 const int BabelData::deviceType_ = 1;
-
-#define FAKE_LANGUAGE_MENU 0
 
 //------------------------------------------------------------------------
 QString MainWindow::findBabelVersion()
@@ -161,43 +161,47 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
 
-  connect(ui_.inputFileOptBtn,        SIGNAL(clicked()), this, SLOT(inputFileOptBtnClicked()));
-  connect(ui_.inputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(inputDeviceOptBtnClicked()));
-  connect(ui_.inputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseInputFile()));
+  connect(ui_.inputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::inputFileOptBtnClicked);
+  connect(ui_.inputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::inputDeviceOptBtnClicked);
+  connect(ui_.inputFileNameBrowseBtn, &QAbstractButton::clicked, this, &MainWindow::browseInputFile);
 
   ui_.outputFileOptBtn->setAutoExclusive(false);
   ui_.outputDeviceOptBtn->setAutoExclusive(false);
-  connect(ui_.outputFileOptBtn,        SIGNAL(clicked()), this, SLOT(outputFileOptBtnClicked()));
-  connect(ui_.outputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(outputDeviceOptBtnClicked()));
-  connect(ui_.outputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseOutputFile()));
+  connect(ui_.outputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::outputFileOptBtnClicked);
+  connect(ui_.outputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::outputDeviceOptBtnClicked);
+  connect(ui_.outputFileNameBrowseBtn, &QAbstractButton::clicked, this, &MainWindow::browseOutputFile);
 
-  connect(ui_.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
-  connect(ui_.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
-  connect(ui_.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
-  connect(ui_.actionVisit_Website, SIGNAL(triggered()), this, SLOT(visitWebsiteActionX()));
-  connect(ui_.actionMake_a_Donation, SIGNAL(triggered()), this, SLOT(donateActionX()));
-  connect(ui_.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
-  connect(ui_.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
+  connect(ui_.actionQuit, &QAction::triggered, this, &MainWindow::closeActionX);
+  connect(ui_.actionHelp, &QAction::triggered, this, &MainWindow::helpActionX);
+  connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
+  connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
+  connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+  connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+  connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
-  connect(ui_.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
-          this,                 SLOT(inputFormatChanged(int)));
-  connect(ui_.outputFormatCombo, SIGNAL(currentIndexChanged(int)),
-          this,                 SLOT(outputFormatChanged(int)));
-  connect(ui_.inputOptionsBtn,   SIGNAL(clicked()),
-          this,                 SLOT(inputOptionButtonClicked()));
-  connect(ui_.outputOptionsBtn, SIGNAL(clicked()),
-          this,                 SLOT(outputOptionButtonClicked()));
-  connect(ui_.moreOptionButton, SIGNAL(clicked()),
-          this,                 SLOT(moreOptionButtonClicked()));
+// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
+// that required using qOverload.
+  connect(ui_.inputFormatCombo,  qOverload<int>(&QComboBox::currentIndexChanged),
+          this,                 &MainWindow::inputFormatChanged);
+// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
+// that required using qOverload.
+  connect(ui_.outputFormatCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+          this,                 &MainWindow::outputFormatChanged);
+  connect(ui_.inputOptionsBtn,   &QAbstractButton::clicked,
+          this,                 &MainWindow::inputOptionButtonClicked);
+  connect(ui_.outputOptionsBtn, &QAbstractButton::clicked,
+          this,                 &MainWindow::outputOptionButtonClicked);
+  connect(ui_.moreOptionButton, &QAbstractButton::clicked,
+          this,                 &MainWindow::moreOptionButtonClicked);
 
-  connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(applyActionX()));
-  connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
-  connect(ui_.buttonBox, SIGNAL(helpRequested()), this, SLOT(helpActionX()));
+  connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &MainWindow::applyActionX);
+  connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &MainWindow::closeActionX);
+  connect(ui_.buttonBox, &QDialogButtonBox::helpRequested, this, &MainWindow::helpActionX);
 
-  connect(ui_.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
+  connect(ui_.xlateFiltersBtn, &QAbstractButton::clicked, this, &MainWindow::filtersClicked);
 
-  connect(ui_.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
-  connect(ui_.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
+  connect(ui_.inputFileNameText, &QLineEdit::textEdited, this, &MainWindow::inputFileNameEdited);
+  connect(ui_.outputFileNameText, &QLineEdit::textEdited, this, &MainWindow::outputFileNameEdited);
 
 #if defined (Q_OS_WIN)
   // Windows users like the colored buttons.  They look out of place elsewhere.
@@ -224,14 +228,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   loadFormats();
-#if FAKE_LANGUAGE_MENU
-  createLanguageMenu();
-#endif
 
   //--- Restore from registry
   restoreSettings();
 
-  upgrade = new UpgradeCheck(parent, formatList_, babelData_);
+  upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
@@ -244,56 +245,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
 }
-
-//------------------------------------------------------------------------
-MainWindow::~MainWindow()
-{
-
-  delete upgrade;
-
-}
-//------------------------------------------------------------------------
-// Dynamic language switching courtesy of
-// http://developer.qt.nokia.com/wiki/How_to_create_a_multi_language_application
-// We create the menu entries dynamically, dependant on the existing
-// translations.
-#if FAKE_LANGUAGE_MENU
-void MainWindow::createLanguageMenu(void)
-{
-  QActionGroup* langGroup = new QActionGroup(ui.menuHelp);
-  langGroup->setExclusive(true);
-  connect(langGroup, SIGNAL(triggered(QAction*)), this, SLOT(slotLanguageChanged(QAction*)));
-
-  // format systems language
-  QString defaultLocale = QLocale::system().name();       // e.g. "de_DE"
-  defaultLocale.truncate(defaultLocale.lastIndexOf('_')); // e.g. "de"
-
-  QDir dir(langPath);
-  QStringList fileNames = dir.entryList(QStringList("GPSBabelFE*.qm"));
-
-  for (int i = 0; i < fileNames.size(); ++i) {
-    // get locale extracted by filename
-    QString locale;
-    locale = fileNames[i];                  // "TranslationExample_de.qm"
-    locale.truncate(locale.lastIndexOf('.'));   // "TranslationExample_de"
-    locale.remove(0, locale.indexOf('_') + 1);   // "de"
-
-    QString lang = QLocale::languageToString(QLocale(locale).language());
-
-    QAction* action = new QAction(lang, this);
-    action->setCheckable(true);
-    action->setData(locale);
-
-    ui.menuHelp->addAction(action);
-    langGroup->addAction(action);
-
-    // set default translators and language checked
-    if (defaultLocale == locale) {
-      action->setChecked(true);
-    }
-  }
-}
-#endif //  FAKE_LANGUAGE_MENU
 
 //------------------------------------------------------------------------
 // Called every time, when a menu entry of the language menu is called
@@ -905,37 +856,13 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  auto* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
-  proc->start(QApplication::applicationDirPath() + '/' + name, args);
-  auto* waitDlg = new ProcessWaitDialog(nullptr, proc);
+  QString program = QApplication::applicationDirPath() + '/' + name;
+  RunMachine runMachine(this, program, args);
+  int retStatus = runMachine.exec();
 
-  if (proc->state() == QProcess::NotRunning) {
-    errorString = QString(tr("Process \"%1\" did not start")).arg(name);
-    return false;
-  }
-
-  waitDlg->show();
-  waitDlg->exec();
-  int exitCode = -1;
-  bool retStatus = false;
-  if (waitDlg->getExitedNormally()) {
-    exitCode = waitDlg->getExitCode();
-    if (exitCode == 0) {
-      retStatus = true;
-    } else  {
-      errorString =
-        QString(tr("Process exited unsuccessfully with code %1"))
-        .arg(exitCode);
-      retStatus = false;
-    }
-  } else {
-    retStatus = false;
-    errorString = waitDlg->getErrorString();
-  }
-  outputString = waitDlg->getOutputString();
-  delete proc;
-  delete waitDlg;
+  errorString = runMachine.getErrorString();
+  outputString = runMachine.getOutputString();
   return retStatus;
 }
 
@@ -1082,7 +1009,14 @@ void MainWindow::applyActionX()
     }
 #endif
   } else {
+    QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+    QTextCharFormat errorFormat = defaultFormat;
+    errorFormat.setForeground(Qt::red);
+    errorFormat.setFontItalic(true);
+
+    ui_.outputWindow->setCurrentCharFormat(errorFormat);
     ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
+    ui_.outputWindow->setCurrentCharFormat(defaultFormat);
   }
 }
 
@@ -1106,8 +1040,6 @@ void MainWindow::closeActionX()
     babelData_.donateSplashed_ = now;
   }
   saveSettings();
-  delete upgrade;
-  upgrade = nullptr;
   qApp->exit(0);
 }
 
@@ -1159,7 +1091,9 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setComboToDevice(QComboBox* comboBox, const QString& name)
 {
   for (int i=0; i<comboBox->count(); i++) {
-    if (comboBox->itemText(i) == name) {
+    QString value = comboBox->itemData(i).isValid()?
+      comboBox->itemData(i).toString() : comboBox->itemText(i);
+    if (value == name) {
       comboBox->setCurrentIndex(i);
       break;
     }
@@ -1218,8 +1152,8 @@ void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
                 babelData_.previewGmap_, babelData_.debugLevel_);
-  connect(advDlg.formatButton(), SIGNAL(clicked()),
-          this, SLOT(resetFormatDefaults()));
+  connect(advDlg.formatButton(), &QAbstractButton::clicked,
+          this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
 }
 //------------------------------------------------------------------------
@@ -1334,7 +1268,8 @@ void MainWindow::getWidgetValues()
     babelData_.inputType_ = BabelData::deviceType_;
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
-  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentText();
+  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentData().isValid()?
+    ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1347,7 +1282,8 @@ void MainWindow::getWidgetValues()
   } else {
     babelData_.outputType_ = BabelData::noType_;
   }
-  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentText();
+  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
+    ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();

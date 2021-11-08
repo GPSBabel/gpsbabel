@@ -40,18 +40,17 @@
 #include <cmath>                  // for lround
 #include <cstdlib>                // for atoi
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QChar>           // for operator==, QChar
-#include <QtCore/QCharRef>        // for QCharRef
-#include <QtCore/QFile>           // for QFile
-#include <QtCore/QFileInfo>       // for QFileInfo
-#include <QtCore/QIODevice>       // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
-#include <QtCore/QString>         // for QString
-#include <QtCore/QStringList>     // for QStringList
-#include <QtCore/QTextStream>     // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
-#include <QtCore/QVector>         // for QVector
-#include <QtCore/Qt>              // for CaseInsensitive
-#include <QtCore/QtGlobal>        // for qPrintable
+#include <QByteArray>             // for QByteArray
+#include <QChar>                  // for operator==, QChar
+#include <QFile>                  // for QFile
+#include <QFileInfo>              // for QFileInfo
+#include <QIODevice>              // for operator|, QIODevice::WriteOnly, QIODevice::ReadOnly, QIODevice, QIODevice::OpenModeFlag
+#include <QString>                // for QString
+#include <QStringList>            // for QStringList
+#include <QTextStream>            // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
+#include <QVector>                // for QVector
+#include <Qt>                     // for CaseInsensitive
+#include <QtGlobal>               // for qPrintable
 
 #include "defs.h"
 #include "csv_util.h"             // for csv_stringclean
@@ -263,7 +262,7 @@ ozi_openfile(const QString& fname)
   if (stream != nullptr) {
     ozi_close_io();
   }
- 
+
   ozi_open_io(tmpname, QFile::WriteOnly);
 }
 
@@ -822,13 +821,9 @@ data_read()
         }
         break;
       case rtedata:
-        if (linecount > 5 && wpt_tmp) {/* skipping over file header */
+        if ((linecount > 5) && !header) {/* skipping over file header */
           ozi_convert_datum(wpt_tmp);
-          if (!header) {
-            route_add_wpt(rte_head, wpt_tmp);
-          } else {
-            delete wpt_tmp;
-          }
+          route_add_wpt(rte_head, wpt_tmp);
         } else {
           delete wpt_tmp;
         }

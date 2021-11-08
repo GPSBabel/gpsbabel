@@ -21,6 +21,7 @@
 //
 
 #include "filterwidgets.h"
+#include <limits>
 
 
 //------------------------------------------------------------------------
@@ -50,14 +51,14 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
                    <<ui.splitDistSpin
                    <<ui.splitDistCombo));
 
-  connect(ui.mergeCheck, SIGNAL(clicked()), this, SLOT(mergeCheckX()));
-  connect(ui.packCheck,  SIGNAL(clicked()),  this, SLOT(packCheckX()));
-  connect(ui.startCheck, SIGNAL(clicked()),  this, SLOT(otherCheckX()));
-  connect(ui.stopCheck,   SIGNAL(clicked()), this, SLOT(otherCheckX()));
+  connect(ui.mergeCheck, &QAbstractButton::clicked, this, &TrackWidget::mergeCheckX);
+  connect(ui.packCheck,  &QAbstractButton::clicked,  this, &TrackWidget::packCheckX);
+  connect(ui.startCheck, &QAbstractButton::clicked,  this, &TrackWidget::otherCheckX);
+  connect(ui.stopCheck,   &QAbstractButton::clicked, this, &TrackWidget::otherCheckX);
 
-  connect(ui.splitDateCheck,   SIGNAL(clicked()), this, SLOT(splitDateX()));
-  connect(ui.splitTimeCheck,   SIGNAL(clicked()), this, SLOT(splitTimeX()));
-  connect(ui.splitDistanceCheck,   SIGNAL(clicked()), this, SLOT(splitDistanceX()));
+  connect(ui.splitDateCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitDateX);
+  connect(ui.splitTimeCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitTimeX);
+  connect(ui.splitDistanceCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitDistanceX);
 
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
@@ -183,8 +184,8 @@ WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget
   fopts << new ComboFilterOption(wfd.positionUnit, ui.positionUnitCombo);
   fopts << new ComboFilterOption(wfd.radiusUnit, ui.radiusUnitCombo);
 
-  connect(ui.shortNamesCheck, SIGNAL(clicked()), this, SLOT(shortNamesCkX()));
-  connect(ui.locationsCheck, SIGNAL(clicked()), this, SLOT(locationsCkX()));
+  connect(ui.shortNamesCheck, &QAbstractButton::clicked, this, &WayPtsWidget::shortNamesCkX);
+  connect(ui.locationsCheck, &QAbstractButton::clicked, this, &WayPtsWidget::locationsCkX);
   setWidgetValues();
   checkChecks();
 }
@@ -213,7 +214,7 @@ RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(pa
 
   fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
   fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
-  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000);
+  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, std::numeric_limits<int>::max());
   setWidgetValues();
   checkChecks();
 }

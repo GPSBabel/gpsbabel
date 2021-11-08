@@ -13,12 +13,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core REQUIRED)
-if(${Qt5Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+# Find the QtCore library
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
-  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
+  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
+endif()
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
+  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
 set(MINIMAL_FMTS
@@ -29,22 +35,22 @@ set(MINIMAL_FMTS
 
 set(ALL_FMTS
   ${MINIMAL_FMTS} gtm.cc gpsutil.cc pcx.cc
-  skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc
+  skytraq.cc holux.cc tpg.cc tpo.cc
   xcsv.cc tiger.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
-  ozi.cc text.cc html.cc netstumbler.cc
+  ozi.cc text.cc html.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc lowranceusr.cc an1.cc tomtom.cc
+  vcf.cc lowranceusr.cc tomtom.cc
   tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
   ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
   yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
-  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc
+  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
   ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
   navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc
   igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
   jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
-  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
-  vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
+  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc
+  vpl.cc teletype.cc jogmap.cc wintec_tes.cc
   subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -94,9 +100,11 @@ set(SUPPORT
   src/core/usasciicodec.cc
   src/core/xmlstreamwriter.cc
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
+endif()
 
 set(HEADERS
-  an1sym.h
   cet.h
   cet_util.h
   csv_util.h
@@ -184,6 +192,9 @@ set(HEADERS
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(HEADERS ${HEADERS} src/core/codecdevice.h)
+endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
@@ -206,7 +217,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
-  include_directories(AFTER jeeps)
   add_compile_options(-O2 -Wall)
 endif()
 
@@ -243,7 +253,7 @@ if(APPLE)
     mac/libusb/strerror.c
     mac/libusb/sync.c
     mac/libusb/os/darwin_usb.c
-    mac/libusb/os/poll_posix.c
+    mac/libusb/os/events_posix.c
     mac/libusb/os/threads_posix.c
   )
   set(HEADERS ${HEADERS}
@@ -253,7 +263,7 @@ if(APPLE)
     mac/libusb/version.h
     mac/libusb/version_nano.h
     mac/libusb/os/darwin_usb.h
-    mac/libusb/os/poll_posix.h
+    mac/libusb/os/events_posix.h
     mac/libusb/os/threads_posix.h
   )
   add_compile_options(-Wall -Wsign-compare)
@@ -270,7 +280,7 @@ add_definitions(-DSHAPELIB_ENABLED)
 add_definitions(-DCSVFMTS_ENABLED)
 
 add_executable(gpsbabel ${SOURCES} ${HEADERS})
-target_link_libraries(gpsbabel Qt5::Core ${LIBS})
+target_link_libraries(gpsbabel ${QT_LIBRARIES} ${LIBS})
 
 message(STATUS "Sources are: \"${SOURCES}\"")
 message(STATUS "Headers are: \"${HEADERS}\"")

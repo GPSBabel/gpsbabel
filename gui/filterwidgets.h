@@ -40,7 +40,7 @@ public:
   CheckEnabler(QObject* parent, QAbstractButton* ck, QWidget* w): QObject(parent), checkBox(ck)
   {
     widgetList << w;
-    connect(ck, SIGNAL(clicked()), this, SLOT(checkStatusChanged()));
+    connect(ck, &QAbstractButton::clicked, this, &CheckEnabler::checkStatusChanged);
     checkStatusChanged();
     fixWhatsThis();
   }
@@ -48,7 +48,7 @@ public:
     QObject(parent), checkBox(ck)
   {
     widgetList = wl;
-    connect(ck, SIGNAL(clicked()), this, SLOT(checkStatusChanged()));
+    connect(ck, &QAbstractButton::clicked, this, &CheckEnabler::checkStatusChanged);
     checkStatusChanged();
     fixWhatsThis();
   }

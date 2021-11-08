@@ -24,10 +24,10 @@
 
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QList>                        // for QList
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"

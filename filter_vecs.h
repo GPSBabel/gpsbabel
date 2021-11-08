@@ -21,8 +21,8 @@
 #ifndef FILTER_VECS_H_INCLUDED_
 #define FILTER_VECS_H_INCLUDED_
 
-#include <QtCore/QString>      // for QString
-#include <QtCore/QVector>      // for QVector<>::iterator, QVector
+#include <QString>             // for QString
+#include <QVector>             // for QVector<>::iterator, QVector
 
 #include "defs.h"           // for arglist_t
 #include "arcdist.h"        // for ArcDistanceFilter

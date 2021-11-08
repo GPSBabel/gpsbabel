@@ -17,12 +17,12 @@
 
  */
 
-#include "usasciicodec.h"
-#include <QtCore/QByteArray>
-#include <QtCore/QChar>
-#include <QtCore/QLatin1Char>
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include "src/core/usasciicodec.h"
+#include <QByteArray>
+#include <QChar>
+#include <QLatin1Char>
+#include <QList>
+#include <QString>
 
 // The availability of a US-ASCII codec is not promised by QTextCodec.
 // On Mac OS X is is likely one will not be available.

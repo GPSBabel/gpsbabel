@@ -14,6 +14,7 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 }
 
 QT -= gui
+versionAtLeast(QT_VERSION, 6.0): QT += core5compat
 
 TARGET = gpsbabel
 VERSION = 1.7.0
@@ -59,22 +60,22 @@ MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc 
                kml.cc wbt-200.cc
 
 ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
-        skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
+        skytraq.cc holux.cc tpg.cc tpo.cc \
         xcsv.cc tiger.cc easygps.cc \
         saroute.cc navicache.cc delgpl.cc \
-        ozi.cc text.cc html.cc netstumbler.cc \
+        ozi.cc text.cc html.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
-        vcf.cc lowranceusr.cc an1.cc tomtom.cc \
+        vcf.cc lowranceusr.cc tomtom.cc \
         tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
         ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
         yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
-        stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc \
+        stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
         ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
         navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
         igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
         jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
-        pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
-        vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
+        pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc \
+        vpl.cc teletype.cc jogmap.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -110,8 +111,9 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           src/core/usasciicodec.cc \
           src/core/xmlstreamwriter.cc
 
+versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
+
 HEADERS =  \
-	an1sym.h \
 	cet.h \
 	cet_util.h \
 	csv_util.h \
@@ -187,6 +189,8 @@ HEADERS =  \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
 
+versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
+
 HEADERS += $$FILTER_HEADERS
 
 win32-msvc* {
@@ -224,7 +228,6 @@ macx|linux|openbsd {
   }
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
-  INCLUDEPATH += jeeps
 }
 
 win32 {
@@ -362,7 +365,10 @@ equals(PWD, $${OUT_PWD}) {
 QMAKE_EXTRA_TARGETS += gpsbabel.pdf
 
 gui.depends = $(TARGET) FORCE
-gui.commands += cd gui; $(QMAKE) app.pro && $(MAKE)
+disable-mappreview {
+  guiconfig = "CONFIG+=disable-mappreview"
+}
+gui.commands += cd gui; $(QMAKE) $${guiconfig} app.pro && $(MAKE)
 QMAKE_EXTRA_TARGETS += gui
 
 unix-gui.depends = gui FORCE

@@ -40,22 +40,22 @@
 #include "jeeps/gpsmath.h"                 // for GPS_Math_WGS84_To_Known_Datum_M
 #include "src/core/datetime.h"             // for DateTime
 
-#include <QtCore/QByteArray>               // for QByteArray
-#include <QtCore/QDate>                    // for QDate
-#include <QtCore/QDateTime>                // for QDateTime
-#include <QtCore/QFile>                    // for QFile
-#include <QtCore/QFileInfo>                // for QFileInfo
-#include <QtCore/QList>                    // for QList<>::iterator, QList
-#include <QtCore/QPair>                    // for QPair
-#include <QtCore/QRegularExpression>       // for QRegularExpression
-#include <QtCore/QRegularExpressionMatch>  // for QRegularExpressionMatch
-#include <QtCore/QString>                  // for QString
-#include <QtCore/QTextCodec>               // for QTextCodec
-#include <QtCore/QTime>                    // for QTime
-#include <QtCore/QVariant>                 // for QVariant
-#include <QtCore/QVector>                  // for QVector
-#include <QtCore/Qt>                       // for UTC, ISODate
-#include <QtCore/QtGlobal>                 // for qSwap, qPrintable, qint64
+#include <QByteArray>                      // for QByteArray
+#include <QDate>                           // for QDate
+#include <QDateTime>                       // for QDateTime
+#include <QFile>                           // for QFile
+#include <QFileInfo>                       // for QFileInfo
+#include <QList>                           // for QList<>::iterator, QList
+#include <QPair>                           // for QPair
+#include <QRegularExpression>              // for QRegularExpression
+#include <QRegularExpressionMatch>         // for QRegularExpressionMatch
+#include <QString>                         // for QString
+#include <QTextCodec>                      // for QTextCodec
+#include <QTime>                           // for QTime
+#include <QVariant>                        // for QVariant
+#include <QVector>                         // for QVector
+#include <Qt>                              // for UTC, ISODate
+#include <QtGlobal>                        // for qSwap, qPrintable, qint64
 
 #include <algorithm>                       // for sort, min
 #include <cassert>                         // for assert
@@ -286,12 +286,12 @@ static double
 exif_read_double(const ExifTag* tag, const int index)
 {
   if (tag->type == EXIF_TYPE_RAT) {
-    uint32_t num = tag->data.at(index * 2).value<uint32_t>();
-    uint32_t den = tag->data.at((index * 2) + 1).value<uint32_t>();
+    auto num = tag->data.at(index * 2).value<uint32_t>();
+    auto den = tag->data.at((index * 2) + 1).value<uint32_t>();
     return (double)num / (double)den;
   } else { // EXIF_TYPE_SRAT
-    int32_t num = tag->data.at(index * 2).value<int32_t>();
-    int32_t den = tag->data.at((index * 2) + 1).value<int32_t>();
+    auto num = tag->data.at(index * 2).value<int32_t>();
+    auto den = tag->data.at((index * 2) + 1).value<int32_t>();
     return (double)num / (double)den;
   }
 }
@@ -547,7 +547,7 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
         QByteArray qba(tag->count, 0);
         gbfread(qba.data(), tag->count, 1, fin);
         tag->data.append(qba);
-      } else for (uint16_t i = 0; i < tag->count; i++) {
+      } else for (unsigned i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
@@ -1318,7 +1318,7 @@ exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
     if (tag->size > 4) {
       if BYTE_TYPE(tag->type) {
         gbfwrite(tag->data.at(0).toByteArray().constData(), tag->size, 1, fout);
-      } else for (uint16_t i = 0; i < tag->count; i++) {
+      } else for (unsigned i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
@@ -1399,8 +1399,8 @@ exif_write_apps()
         if (tag_size == nullptr) {
           fatal(MYNAME ": Invalid image file, in IFD1 both JPEGInterchangeFormat and JPEGInterchangeFormatLength must exist for compressed thumbnails.");
         }
-        uint32_t offset = tag_offset->data.at(0).value<uint32_t>();
-        uint32_t size = tag_size->data.at(0).value<uint32_t>();
+        auto offset = tag_offset->data.at(0).value<uint32_t>();
+        auto size = tag_size->data.at(0).value<uint32_t>();
         image_data.append(QPair<uint32_t, uint32_t>(offset, size));
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
         len += size;
@@ -1411,8 +1411,8 @@ exif_write_apps()
           fatal(MYNAME ": Invalid image file, in IFD1 both StripOffsets and StripByteCounts must exist and have equal counts for uncompressed thumbnails.");
         }
         for (unsigned idx = 0; idx < tag_offset->count; idx++) {
-          uint32_t offset = tag_offset->data.at(idx).value<uint32_t>();
-          uint32_t size = tag_size->data.at(idx).value<uint32_t>();
+          auto offset = tag_offset->data.at(idx).value<uint32_t>();
+          auto size = tag_size->data.at(idx).value<uint32_t>();
           image_data.append(QPair<uint32_t, uint32_t>(offset, size));
           if (tag_offset->type == EXIF_TYPE_SHORT) {
             exif_put_short(IFD1, IFD1_TAG_STRIP_OFFS, idx, len);

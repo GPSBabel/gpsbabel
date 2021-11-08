@@ -22,8 +22,8 @@
 #ifndef SHAPE_H_INCLUDED_
 #define SHAPE_H_INCLUDED_
 
-#include <QtCore/QString>       // for QString
-#include <QtCore/QVector>       // for QVector
+#include <QString>              // for QString
+#include <QVector>              // for QVector
 
 #include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, CET_CHARSET_ASCII, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"             // for Format

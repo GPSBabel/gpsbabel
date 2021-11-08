@@ -59,7 +59,7 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for route_head (ptr only), Waypoint (ptr only), ARGT...
 #include "filter.h"  // for Filter

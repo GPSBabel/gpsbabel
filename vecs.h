@@ -23,9 +23,9 @@
 
 #include <cstdint>
 
-#include <QtCore/QString>       // for QString
-#include <QtCore/QStringList>   // for QStringList
-#include <QtCore/QVector>       // for QVector<>::iterator, QVector
+#include <QString>              // for QString
+#include <QStringList>          // for QStringList
+#include <QVector>              // for QVector<>::iterator, QVector
 
 #include "defs.h"
 #include "dg-100.h"
@@ -66,7 +66,6 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t tmpro_vecs;
 extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
@@ -74,7 +73,6 @@ extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
 extern ff_vecs_t html_vecs;
-extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
@@ -93,7 +91,6 @@ extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t maggeo_vecs;
-extern ff_vecs_t an1_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t vitosmt_vecs;
@@ -120,8 +117,6 @@ extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
-extern ff_vecs_t alanwpr_vecs;
-extern ff_vecs_t alantrl_vecs;
 extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
 #if CSVFMTS_ENABLED
@@ -153,14 +148,11 @@ extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
-extern ff_vecs_t bushnell_vecs;
-extern ff_vecs_t bushnell_trl_vecs;
 extern ff_vecs_t skyforce_vecs;
 extern ff_vecs_t pocketfms_bc_vecs;
 extern ff_vecs_t pocketfms_fp_vecs;
 extern ff_vecs_t pocketfms_wp_vecs;
 extern ff_vecs_t v900_vecs;
-extern ff_vecs_t ng_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t skytraq_vecs;
 extern ff_vecs_t teletype_vecs;
@@ -284,7 +276,6 @@ private:
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
-  LegacyFormat tmpro_fmt {tmpro_vecs};
   LegacyFormat tiger_fmt {tiger_vecs};
   LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
@@ -295,7 +286,6 @@ private:
   LegacyFormat gpl_fmt {gpl_vecs};
   LegacyFormat text_fmt {text_vecs};
   LegacyFormat html_fmt {html_vecs};
-  LegacyFormat netstumbler_fmt {netstumbler_vecs};
   LegacyFormat igc_fmt {igc_vecs};
   LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
@@ -314,7 +304,6 @@ private:
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat maggeo_fmt {maggeo_vecs};
-  LegacyFormat an1_fmt {an1_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
   LegacyFormat tef_xml_fmt {tef_xml_vecs};
   LegacyFormat vitosmt_fmt {vitosmt_vecs};
@@ -342,8 +331,6 @@ private:
   LegacyFormat gtc_fmt {gtc_vecs};
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
-  LegacyFormat alanwpr_fmt {alanwpr_vecs};
-  LegacyFormat alantrl_fmt {alantrl_vecs};
   LegacyFormat vitovtt_fmt {vitovtt_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};
 #if CSVFMTS_ENABLED
@@ -381,14 +368,11 @@ private:
   LegacyFormat sbp_fmt {sbp_vecs};
   LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat mmo_fmt {mmo_vecs};
-  LegacyFormat bushnell_fmt {bushnell_vecs};
-  LegacyFormat bushnell_trl_fmt {bushnell_trl_vecs};
   LegacyFormat skyforce_fmt {skyforce_vecs};
   LegacyFormat pocketfms_bc_fmt {pocketfms_bc_vecs};
   LegacyFormat pocketfms_fp_fmt {pocketfms_fp_vecs};
   LegacyFormat pocketfms_wp_fmt {pocketfms_wp_vecs};
   LegacyFormat v900_fmt {v900_vecs};
-  LegacyFormat ng_fmt {ng_vecs};
   LegacyFormat enigma_fmt {enigma_vecs};
   LegacyFormat skytraq_fmt {skytraq_vecs};
   LegacyFormat teletype_fmt {teletype_vecs};
@@ -549,13 +533,6 @@ private:
       nullptr,
     },
     {
-      &tmpro_fmt,
-      "tmpro",
-      "TopoMapPro Places File",
-      "tmpro",
-      nullptr,
-    },
-    {
       &tiger_fmt,
       "tiger",
       "U.S. Census Bureau Tiger Mapping Service",
@@ -611,13 +588,6 @@ private:
       "html",
       "HTML Output",
       "html",
-      nullptr,
-    },
-    {
-      &netstumbler_fmt,
-      "netstumbler",
-      "NetStumbler Summary File (text)",
-      nullptr,
       nullptr,
     },
     {
@@ -732,13 +702,6 @@ private:
       "maggeo",
       "Magellan Explorist Geocaching",
       "gs",
-      nullptr,
-    },
-    {
-      &an1_fmt,
-      "an1",
-      "DeLorme .an1 (drawing) file",
-      "an1",
       nullptr,
     },
     {
@@ -880,20 +843,6 @@ private:
       "raymarine",
       "Raymarine Waypoint File (.rwf)",
       "rwf",
-      nullptr,
-    },
-    {
-      &alanwpr_fmt,
-      "alanwpr",
-      "Alan Map500 waypoints and routes (.wpr)",
-      "wpr",
-      nullptr,
-    },
-    {
-      &alantrl_fmt,
-      "alantrl",
-      "Alan Map500 tracklogs (.trl)",
-      "trl",
       nullptr,
     },
     {
@@ -1132,20 +1081,6 @@ private:
       nullptr,
     },
     {
-      &bushnell_fmt,
-      "bushnell",
-      "Bushnell GPS Waypoint file",
-      "wpt",
-      nullptr,
-    },
-    {
-      &bushnell_trl_fmt,
-      "bushnell_trl",
-      "Bushnell GPS Trail file",
-      "trl",
-      nullptr,
-    },
-    {
       &skyforce_fmt,
       "skyforce",
       "Skymap / KMD150 ascii files",
@@ -1178,13 +1113,6 @@ private:
       "v900",
       "Columbus/Visiontac V900 files (.csv)",
       nullptr,
-      nullptr,
-    },
-    {
-      &ng_fmt,
-      "naviguide",
-      "Naviguide binary route file (.twl)",
-      "twl",
       nullptr,
     },
     {

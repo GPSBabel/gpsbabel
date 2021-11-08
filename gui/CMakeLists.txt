@@ -19,32 +19,18 @@ set(CMAKE_AUTOUIC ON)
 # Handle the Qt rcc code generator automatically
 set(CMAKE_AUTORCC ON)
 
-# Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core Gui Network Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets Qt5::Xml)
-if(${Qt5Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+# Find the QtCore library
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
-  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
+  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
 endif()
 
-# hard code webengine instead of webkit for now
-find_package(Qt5 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
-list(APPEND QT_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
-add_definitions(-DHAVE_WEBENGINE)
-
-if(APPLE)
-  find_library(IOKIT_LIBRARIES IOKit)
-  find_library(COREFOUNDATION_LIBRARIES CoreFoundation)
-endif()
-
-if(UNIX AND NOT APPLE)
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(LIBUDEV libudev)
-  if(${LIBUDEV_FOUND})
-    add_definitions(-DHAVE_UDEV)
-  endif()
-endif()
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
 
 set(RESOURCES app.qrc)
 
@@ -95,14 +81,13 @@ set(SOURCES
   optionsdlg.cc
   preferences.cc
   processwait.cc
+  runmachine.cc
   upgrade.cc
   version_mismatch.cc
 )
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
   set(SOURCES ${SOURCES} serial_unix.cc)
-elseif(APPLE)
-  set(SOURCES ${SOURCES} serial_mac.cc)
 elseif(WIN32)
   set(SOURCES ${SOURCES} serial_win.cc)
 endif()
@@ -126,6 +111,7 @@ set(HEADERS
   optionsdlg.h
   preferences.h
   processwait.h
+  runmachine.h
   setting.h
   upgrade.h
   version_mismatch.h
@@ -147,7 +133,7 @@ else()
   add_executable(${TARGET} ${SOURCES} ${HEADERS} ${RESOURCES})
 endif()
 
-set(LIBS ${QT_LIBRARIES} ${LIBUDEV_LIBRARIES} ${IOKIT_LIBRARIES} ${COREFOUNDATION_LIBRARIES})
+set(LIBS ${QT_LIBRARIES})
 list(REMOVE_DUPLICATES LIBS)
 target_link_libraries(${TARGET} ${LIBS})
 

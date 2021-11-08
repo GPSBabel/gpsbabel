@@ -19,11 +19,11 @@
 
  */
 
-#include "gps.h"
-#include "garminusb.h"
-#include "gpsdevice.h"
-#include "gpsusbcommon.h"
-#include "gpsusbint.h"
+#include "jeeps/gps.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsusbcommon.h"
+#include "jeeps/gpsusbint.h"
 
 garmin_unit_info_t garmin_unit_info[GUSB_MAX_UNITS];
 

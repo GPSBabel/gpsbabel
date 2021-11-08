@@ -19,9 +19,9 @@
 
  */
 
-#include "gps.h"
-#include "garminusb.h"
-#include "gpsusbint.h"
+#include "jeeps/gps.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsusbint.h"
 #include <cerrno>
 #include <cstdio>
 

@@ -1,0 +1,68 @@
+# This covers conversions to and from various speed units.
+echo 'DESCRIPTION  Speed Test' > speed.style
+echo 'EXTENSION csv' >> speed.style
+echo 'FIELD_DELIMITER COMMA' >> speed.style
+echo 'RECORD_DELIMITER NEWLINE' >> speed.style
+echo 'DATATYPE TRACK' >> speed.style
+echo 'PROLOGUE Lat,Lon,Speed(m/s),Speed(km/hr),Speed(mile/hr),Speed(knots)' >> speed.style
+echo 'OFIELD LAT_DECIMAL,"","%f"' >> speed.style
+echo 'OFIELD LON_DECIMAL,"","%f"' >> speed.style
+echo 'OFIELD PATH_SPEED,"","%.6e"' >> speed.style
+echo 'OFIELD PATH_SPEED_KPH,"","%.6e"' >> speed.style
+echo 'OFIELD PATH_SPEED_MPH,"","%.6e"' >> speed.style
+echo 'OFIELD PATH_SPEED_KNOTS,"","%.6e"' >> speed.style
+
+gpsbabel -t -i unicsv -f ${REFERENCE}/speed.csv -o xcsv,style=speed.style -F ${TMPDIR}/speed~csv.csv
+compare ${REFERENCE}/speed~csv.csv ${TMPDIR}/speed~csv.csv
+
+# This covers distance conversions to meters, but only a couple from meters.
+echo 'DESCRIPTION  Distance Test' > distance.style
+echo 'EXTENSION csv' >> distance.style
+echo 'FIELD_DELIMITER COMMA' >> distance.style
+echo 'RECORD_DELIMITER NEWLINE' >> distance.style
+echo 'DATATYPE TRACK' >> distance.style
+echo 'PROLOGUE Lat,Lon,Alt(m),Alt(ft)' >> distance.style
+echo 'OFIELD LAT_DECIMAL,"","%f"' >> distance.style
+echo 'OFIELD LON_DECIMAL,"","%f"' >> distance.style
+echo 'OFIELD ALT_METERS,"","%.6e"' >> distance.style
+echo 'OFIELD ALT_FEET,"","%.6e"' >> distance.style
+
+gpsbabel -t -i unicsv -f ${REFERENCE}/distance.csv -o xcsv,style=distance.style -F ${TMPDIR}/distance~csv.csv
+compare ${REFERENCE}/distance~csv.csv ${TMPDIR}/distance~csv.csv
+
+# This covers additional distance conversions from meters.
+echo 'DESCRIPTION  Distance 2 Test' > distance2.style
+echo 'EXTENSION csv' >> distance2.style
+echo 'FIELD_DELIMITER COMMA' >> distance2.style
+echo 'RECORD_DELIMITER NEWLINE' >> distance2.style
+echo 'DATATYPE TRACK' >> distance2.style
+echo 'PROLOGUE Lat,Lon,Dist(m),Dist(mile),Dist(nautical miles)' >> distance2.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >> distance2.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >> distance2.style
+echo 'IFIELD PATH_DISTANCE_METERS,"","%.6e"' >> distance2.style
+echo 'OFIELD LAT_DECIMAL,"","%f"' >> distance2.style
+echo 'OFIELD LON_DECIMAL,"","%f"' >> distance2.style
+echo 'OFIELD PATH_DISTANCE_METERS,"","%.6e"' >> distance2.style
+echo 'OFIELD PATH_DISTANCE_MILES,"","%.6e"' >> distance2.style
+echo 'OFIELD PATH_DISTANCE_NAUTICAL_MILES,"","%.6e"' >> distance2.style
+
+gpsbabel -t -i xcsv,style=distance2.style -f ${REFERENCE}/distance2.csv -o xcsv,style=distance2.style -F ${TMPDIR}/distance2~csv.csv
+compare ${REFERENCE}/distance2~csv.csv ${TMPDIR}/distance2~csv.csv
+
+# This covers xcsv path distances.
+# Reference has points ~1000m apart.
+echo 'DESCRIPTION  Distance 3 Test' > distance3.style
+echo 'EXTENSION csv' >> distance3.style
+echo 'FIELD_DELIMITER COMMA' >> distance3.style
+echo 'RECORD_DELIMITER NEWLINE' >> distance3.style
+echo 'DATATYPE TRACK' >> distance3.style
+echo 'PROLOGUE Utm,Dist(m),Dist(km),Dist(mile),Dist(nautical miles)' >> distance3.style
+echo 'IFIELD UTM,"","%s"' >> distance3.style
+echo 'OFIELD UTM,"","%s"' >> distance3.style
+echo 'OFIELD PATH_DISTANCE_METERS,"","%.6e"' >> distance3.style
+echo 'OFIELD PATH_DISTANCE_KM,"","%.6e"' >> distance3.style
+echo 'OFIELD PATH_DISTANCE_MILES,"","%.6e"' >> distance3.style
+echo 'OFIELD PATH_DISTANCE_NAUTICAL_MILES,"","%.6e"' >> distance3.style
+
+gpsbabel -t -i xcsv,style=distance3.style -f ${REFERENCE}/distance3.csv -o xcsv,style=distance3.style -F ${TMPDIR}/distance3~csv.csv
+compare ${REFERENCE}/distance3~csv.csv ${TMPDIR}/distance3~csv.csv

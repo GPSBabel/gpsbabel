@@ -21,7 +21,7 @@
 #ifndef FORMSPEC_H_INCLUDED_
 #define FORMSPEC_H_INCLUDED_
 
-#include <QtCore/QList>  // for QList
+#include <QList>         // for QList
 
 enum FsType {
   kFsUnknown = 0L,

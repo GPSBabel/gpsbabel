@@ -33,7 +33,6 @@ class FilterDialog: public QDialog
   Q_OBJECT
 public:
   FilterDialog(QWidget* parent, AllFiltersData& fd_);
-  ~FilterDialog() {}
 
   void runDialog();
 

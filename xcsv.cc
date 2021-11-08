@@ -32,26 +32,26 @@
 #include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                   // for optional
 
-#include <QtCore/QByteArray>          // for QByteArray
-#include <QtCore/QChar>               // for QChar
-#include <QtCore/QDate>               // for QDate
-#include <QtCore/QDateTime>           // for QDateTime
-#include <QtCore/QDebug>              // for QDebug
-#include <QtCore/QHash>               // for QHash
-#include <QtCore/QIODevice>           // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>               // for QList
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString, operator+, operator==
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QTextStream>         // for QTextStream
-#include <QtCore/QtGlobal>            // for qAsConst, qPrintable
+#include <QByteArray>                 // for QByteArray
+#include <QChar>                      // for QChar
+#include <QDate>                      // for QDate
+#include <QDateTime>                  // for QDateTime
+#include <QDebug>                     // for QDebug
+#include <QHash>                      // for QHash
+#include <QIODevice>                  // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                      // for QList
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString, operator+, operator==
+#include <QStringList>                // for QStringList
+#include <QTextStream>                // for QTextStream
+#include <QtGlobal>                   // for qAsConst, qPrintable
 
 #include "defs.h"
 #include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "formspec.h"                 // for FormatSpecificDataList
 #include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
 #include "gbfile.h"                   // for gbfgetstr, gbfclose, gbfopen, gbfile
-#include "grtcirc.h"                  // for RAD, gcdist, radtomiles
+#include "grtcirc.h"                  // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
 #include "jeeps/gpsport.h"            // for int32
 #include "session.h"                  // for session_t
@@ -128,6 +128,7 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
   { "PATH_DISTANCE_KM", XT_PATH_DISTANCE_KM },
   { "PATH_DISTANCE_METERS", XT_PATH_DISTANCE_METERS },
   { "PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES },
+  { "PATH_DISTANCE_NAUTICAL_MILES", XT_PATH_DISTANCE_NAUTICAL_MILES },
   { "PATH_SPEED", XT_PATH_SPEED },
   { "PATH_SPEED_KNOTS", XT_PATH_SPEED_KNOTS },
   { "PATH_SPEED_KPH", XT_PATH_SPEED_KPH },
@@ -258,7 +259,11 @@ QDateTime
 XcsvFormat::yyyymmdd_to_time(const char* s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
   return QDateTime(d);
+#else
+  return d.startOfDay();
+#endif
 }
 
 
@@ -747,6 +752,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_PATH_DISTANCE_MILES:
     wpt->odometer_distance = MILES_TO_METERS(atof(s));
     break;
+  case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
+    wpt->odometer_distance = NMILES_TO_METERS(atof(s));
+    break;
   case XcsvStyle::XT_HEART_RATE:
     wpt->heartrate = atoi(s);
     break;
@@ -977,14 +985,14 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   char utmzc;
 
   if (oldlon < 900) {
-    pathdist += radtomiles(gcdist(RAD(oldlat),RAD(oldlon),
-                                  RAD(wpt->latitude),RAD(wpt->longitude)));
+    pathdist += radtometers(gcdist(RAD(oldlat),RAD(oldlon),
+                                   RAD(wpt->latitude),RAD(wpt->longitude)));
   }
   longitude = oldlon = wpt->longitude;
   latitude = oldlat = wpt->latitude;
 
   QString write_delimiter;
-  if (xcsv_style->field_delimiter == "\\w") {
+  if (xcsv_style->field_delimiter == u"\\w") {
     write_delimiter = " ";
   } else {
     write_delimiter = xcsv_style->field_delimiter;
@@ -1278,7 +1286,15 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_MILES(wpt->odometer_distance));
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_MILES(pathdist));
+      }
+      break;
+    case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
+      /* path (route/track) distance in miles */
+      if (wpt->odometer_distance) {
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_NMILES(wpt->odometer_distance));
+      } else {
+        buff = QString::asprintf(fmp.printfc.constData(), METERS_TO_NMILES(pathdist));
       }
       break;
     case XcsvStyle::XT_PATH_DISTANCE_METERS:
@@ -1286,7 +1302,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->odometer_distance);
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), MILES_TO_METERS(pathdist));
+        buff = QString::asprintf(fmp.printfc.constData(), pathdist);
       }
       break;
     case XcsvStyle::XT_PATH_DISTANCE_KM:
@@ -1294,7 +1310,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->odometer_distance) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->odometer_distance / 1000.0);
       } else {
-        buff = QString::asprintf(fmp.printfc.constData(), MILES_TO_METERS(pathdist) / 1000.0);
+        buff = QString::asprintf(fmp.printfc.constData(), pathdist / 1000.0);
       }
       break;
     case XcsvStyle::XT_PATH_SPEED:
@@ -1657,9 +1673,9 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   // the first token is the operation, e.g. "IFIELD"
   QString op = line.mid(0, sep).trimmed().toUpper();
   QString tokenstr = line.mid(sep).trimmed();
-  QStringList tokens = tokenstr.split(",");
+  const QStringList tokens = tokenstr.split(',');
 
-  if (op == "FIELD_DELIMITER") {
+  if (op == u"FIELD_DELIMITER") {
     auto cp = xcsv_get_char_from_constant_table(tokens[0]);
     style->field_delimiter = cp;
 
@@ -1674,7 +1690,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
   } else
 
-    if (op == "FIELD_ENCLOSER") {
+    if (op == u"FIELD_ENCLOSER") {
       auto cp = xcsv_get_char_from_constant_table(tokens[0]);
       style->field_encloser = cp;
 
@@ -1683,7 +1699,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
       xfree(p);
     } else
 
-      if (op == "RECORD_DELIMITER") {
+      if (op == u"RECORD_DELIMITER") {
         auto cp = xcsv_get_char_from_constant_table(tokens[0]);
         style->record_delimiter = cp;
 
@@ -1694,33 +1710,33 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
       } else
 
-        if (op == "FORMAT_TYPE") {
-          if (tokens[0] == "INTERNAL") {
+        if (op == u"FORMAT_TYPE") {
+          if (tokens[0] == u"INTERNAL") {
             style->type = ff_type_internal;
           }
           // this is almost inconceivable...
-          if (tokens[0] == "SERIAL") {
+          if (tokens[0] == u"SERIAL") {
             style->type = ff_type_serial;
           }
         } else
 
-          if (op == "DESCRIPTION") {
+          if (op == u"DESCRIPTION") {
             style->description = tokens[0];
           } else
 
-            if (op == "EXTENSION") {
+            if (op == u"EXTENSION") {
               style->extension = tokens[0];
             } else
 
-              if (op == "SHORTLEN") {
+              if (op == u"SHORTLEN") {
                 style->shortlen = tokens[0].toInt();
               } else
 
-                if (op == "SHORTWHITE") {
+                if (op == u"SHORTWHITE") {
                   style->whitespace_ok = tokens[0].toInt();
                 } else
 
-                  if (op == "BADCHARS") {
+                  if (op == u"BADCHARS") {
                     char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
                     QString cp = xcsv_get_char_from_constant_table(sp);
                     style->badchars += cp;
@@ -1731,32 +1747,32 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
                       style->prologue.append(tokenstr);
                     } else
 
-                      if (op == "EPILOGUE") {
+                      if (op == u"EPILOGUE") {
                         style->epilogue.append(tokenstr);
                       } else
 
-                        if (op == "ENCODING") {
+                        if (op == u"ENCODING") {
                           style->codecname = tokens[0];
                         } else
 
-                          if (op == "DATUM") {
+                          if (op == u"DATUM") {
                             style->gps_datum_name = tokens[0];
                           } else
 
-                            if (op == "DATATYPE") {
+                            if (op == u"DATATYPE") {
                               QString p = tokens[0].toUpper();
-                              if (p == "TRACK") {
+                              if (p == u"TRACK") {
                                 style->datatype = trkdata;
-                              } else if (p == "ROUTE") {
+                              } else if (p == u"ROUTE") {
                                 style->datatype = rtedata;
-                              } else if (p == "WAYPOINT") {
+                              } else if (p == u"WAYPOINT") {
                                 style->datatype = wptdata;
                               } else {
                                 fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
                               }
                             } else
 
-                              if (op == "IFIELD") {
+                              if (op == u"IFIELD") {
                                 if (tokens.size() < 3) {
                                   fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
                                 }
@@ -1774,7 +1790,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
                                 //  leave this as it's own parsing for now.  We could
                                 //  change the world on ifield vs ofield format later..
                                 //
-                                if (op == "OFIELD") {
+                                if (op == u"OFIELD") {
                                   unsigned options = 0;
                                   // Note: simplified() has to run after split().
                                   if (tokens.size() < 3) {

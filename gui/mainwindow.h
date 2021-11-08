@@ -22,22 +22,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtCore/QEvent>          // for QEvent
-#include <QtCore/QList>           // for QList
-#include <QtCore/QObject>         // for QObject (& Q_OBJECT, slots)
-#include <QtCore/QString>         // for QString
-#include <QtCore/QStringList>     // for QStringList
-#include <QtCore/QTranslator>     // for QTranslator
-#include <QtGui/QCloseEvent>      // for QCloseEvent
-#include <QtGui/QDragEnterEvent>  // for QDragEnterEvent
-#include <QtGui/QDropEvent>       // for QDropEvent
-#include <QtGui/QPixmap>          // for QPixmap
-#include <QtWidgets/QAction>      // for QAction
-#include <QtWidgets/QComboBox>    // for QComboBox
-#include <QtWidgets/QLabel>       // for QLabel
-#include <QtWidgets/QLineEdit>    // for QLineEdit
-#include <QtWidgets/QMainWindow>  // for QMainWindow
-#include <QtWidgets/QWidget>      // for QWidget
+#include <QEvent>                 // for QEvent
+#include <QList>                  // for QList
+#include <QObject>                // for QObject (& Q_OBJECT, slots)
+#include <QString>                // for QString
+#include <QStringList>            // for QStringList
+#include <QTranslator>            // for QTranslator
+#include <QCloseEvent>            // for QCloseEvent
+#include <QDragEnterEvent>        // for QDragEnterEvent
+#include <QDropEvent>             // for QDropEvent
+#include <QPixmap>                // for QPixmap
+#include <QAction>                // for QAction
+#include <QComboBox>              // for QComboBox
+#include <QLabel>                 // for QLabel
+#include <QLineEdit>              // for QLineEdit
+#include <QMainWindow>            // for QMainWindow
+#include <QWidget>                // for QWidget
 
 #include "babeldata.h"            // for BabelData
 #include "filterdata.h"           // for AllFiltersData
@@ -53,7 +53,6 @@ class MainWindow: public QMainWindow
 
 public:
   MainWindow(QWidget* parent);
-  ~MainWindow();
 
 
 private:
@@ -75,7 +74,6 @@ private:
   void loadFormats();
   void loadLanguage(const QString& rLanguage);
   void switchTranslator(QTranslator&, const QString&);
-  void createLanguageMenu();
   QString filterForFormat(int idx);
   QString ensureExtensionPresent(const QString& nanme, int idx);
   QString findBabelVersion();

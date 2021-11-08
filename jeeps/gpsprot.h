@@ -5,7 +5,7 @@
 #define COMMON extern
 #endif
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
   /*
    *  Link protocols

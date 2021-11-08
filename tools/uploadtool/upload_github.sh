@@ -92,7 +92,7 @@ if [ "{$GITHUB_SHA}" != "$target_commit_sha" ] ; then
         "${delete_url}"
   fi
 
-  if [ "$RELEASE_NAME" == "continuous" ] ; then
+  if [ "$(expr "$RELEASE_NAME" : '.*[Cc]\(ontinuous\).*')" == "ontinuous" ] ; then
     # if this is a continuous build tag, then delete the old tag
     # in preparation for the new release
     echo "Delete the tag..."

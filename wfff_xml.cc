@@ -19,7 +19,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 #include <cstdio>
 
 /* argument storage */
@@ -107,8 +107,8 @@ void wfff_s(xg_string, const QXmlStreamAttributes*)
   ap_lon=0.0;
 }
 
-void wfff_mac(const QString& args, const QXmlStreamAttributes*) { 
-  ap_mac = args; 
+void wfff_mac(const QString& args, const QXmlStreamAttributes*) {
+  ap_mac = args;
 }
 void wfff_ssid(const QString& args, const QXmlStreamAttributes*) {
   ap_ssid = args;

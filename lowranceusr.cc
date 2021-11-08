@@ -85,25 +85,24 @@
 
 */
 
-#include <algorithm>              // for min
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdlib>                // for atoi, abs
 #include <cstring>                // for strcmp, strlen
 #include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QDate>           // for QDate
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QLatin1String>   // for QLatin1String
-#include <QtCore/QList>           // for QList
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextEncoder>    // for QTextEncoder
-#include <QtCore/QTime>           // for QTime
-#include <QtCore/Qt>              // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
+#include <QDateTime>              // for QDateTime
+#include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString, operator+, operator==, operator!=
+#include <QTextCodec>             // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>           // for QTextEncoder
+#include <QTime>                  // for QTime
+#include <Qt>                     // for CaseInsensitive, UTC
+#include <QtGlobal>               // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "lowranceusr.h"
@@ -1598,9 +1597,8 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   } else {
     name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
-  int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
-  name.truncate(text_len);
-  gbfputint32(text_len, file_out);
+  name.truncate(MAXUSRSTRINGSIZE);
+  gbfputint32(name.size(), file_out);
   gbfputs(name, file_out);
 
   /* num legs */
@@ -1713,9 +1711,8 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
       name = QString::asprintf("Babel %d", trail_count);
     }
 
-    int text_len = std::min(MAXUSRSTRINGSIZE, name.size());
-    name.truncate(text_len);
-    gbfputint32(text_len, file_out);
+    name.truncate(MAXUSRSTRINGSIZE);
+    gbfputint32(name.size(), file_out);
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
@@ -1832,7 +1829,6 @@ void
 LowranceusrFormat::write()
 {
   QString buf;
-  int len;
 
   setshort_length(mkshort_handle, 15);
 
@@ -1867,7 +1863,7 @@ LowranceusrFormat::write()
     gbfputint32(DataStreamVersion, file_out);
 
     /* file title */
-    if ((len = strlen(opt_title)) == 0) {
+    if (int len = strlen(opt_title); len == 0) {
       buf = QString("GPSBabel generated USR data file");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
@@ -1897,7 +1893,7 @@ LowranceusrFormat::write()
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
-    if ((len = strlen(opt_content_descr)) == 0) {
+    if (int len = strlen(opt_content_descr); len == 0) {
       buf = QString("Waypoints, routes, and trails");
     } else {
       if (len > MAXUSRSTRINGSIZE) {

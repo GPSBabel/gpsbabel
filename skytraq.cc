@@ -25,7 +25,7 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <QtCore/QThread>
+#include <QThread>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -696,7 +696,7 @@ make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
   auto* wpt = new Waypoint;
 
-  wpt->shortname = QString::asprintf("TP%04d", ++st->tpn);
+  wpt->shortname = QString("TP%1").arg(++st->tpn, 4, 10, QLatin1Char('0'));
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
@@ -1209,7 +1209,6 @@ skytraq_probe()
     uint8_t odm_ver[4];
     uint8_t revision[4];
   } MSG_SOFTWARE_VERSION;
-  int rc;
 
   // TODO: get current serial port baud rate and try that first
   // (only sensible if init to 4800 can be disabled...)
@@ -1223,9 +1222,9 @@ skytraq_probe()
     db(1, MYNAME ": Probing SkyTraq Venus at %ibaud...\n", baud_rates[i]);
 
     rd_drain();
-    if ((rc = gbser_set_speed(serial_handle, baud_rates[i])) != gbser_OK) {
+    if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
       db(1, MYNAME ": Set baud rate to %d failed (%d), retrying...\n", baud_rates[i], rc);
-      if ((rc = gbser_set_speed(serial_handle, baud_rates[i])) != gbser_OK) {
+      if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
         db(1, MYNAME ": Set baud rate to %d failed (%d)\n", baud_rates[i], rc);
         continue;
       }
@@ -1235,11 +1234,11 @@ skytraq_probe()
 
     skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                    sizeof(MSG_QUERY_SOFTWARE_VERSION));
-    if ((rc = skytraq_expect_ack(0x02)) != res_OK) {
+    if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
       db(2, "Didn't receive ACK (%d), retrying...\n", rc);
       skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                      sizeof(MSG_QUERY_SOFTWARE_VERSION));
-      if ((rc = skytraq_expect_ack(0x02)) != res_OK) {
+      if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
         db(2, "Didn't receive ACK (%d)\n", rc);
         continue;
       }
@@ -1250,8 +1249,8 @@ skytraq_probe()
     		{
     			continue;
     		}*/
-    rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
-    if (rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
+    if (int rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
+        rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
       db(2, "Didn't receive expected reply (%d)\n", rc);
     } else {
       db(1, MYNAME ": Venus device found: Kernel version = %i.%i.%i, ODM version = %i.%i.%i, "\
@@ -1437,8 +1436,8 @@ ff_vecs_t skytraq_vecs = {
   nullptr,
   &skytraq_args,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
- , NULL_POS_OPS,
- nullptr
+  , NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t skytraq_fvecs = {
@@ -1457,8 +1456,8 @@ ff_vecs_t skytraq_fvecs = {
   nullptr,
   &skytraq_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
- , NULL_POS_OPS,
- nullptr
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/
 /*

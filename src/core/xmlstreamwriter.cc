@@ -19,9 +19,9 @@
 
 #include "src/core/xmlstreamwriter.h"
 
-#include <QtCore/QString>           // for QString
-#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
-#include <QtCore/QtGlobal>          // for QT_VERSION, QT_VERSION_CHECK
+#include <QString>                  // for QString
+#include <QXmlStreamWriter>         // for QXmlStreamWriter
+#include <QtGlobal>                 // for QT_VERSION, QT_VERSION_CHECK
 
 // As this code began in C, we have several hundred places that write
 // c strings.  Add a test that the string contains anything useful

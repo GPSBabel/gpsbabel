@@ -19,7 +19,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "src/core/file.h"
-#include <QtCore/QXmlStreamReader>
+#include <QXmlStreamReader>
 
 static char* noretired = nullptr;
 static QString read_fname;
@@ -183,7 +183,7 @@ nav_read()
 
   while (!reader.atEnd()) {
     if (reader.tokenType() == QXmlStreamReader::StartElement) {
-      if (reader.name() == "CacheDetails") {
+      if (reader.name() == u"CacheDetails") {
         NaviReadCache(reader);
       }
     }

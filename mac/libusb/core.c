@@ -20,37 +20,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "config.h"
-
-#include <errno.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#endif
-#ifdef HAVE_SYSLOG_H
-#include <syslog.h>
-#endif
+#include "libusbi.h"
+#include "hotplug.h"
+#include "version.h"
 
 #ifdef __ANDROID__
 #include <android/log.h>
 #endif
+#include <stdio.h>
+#include <string.h>
+#ifdef HAVE_SYSLOG
+#include <syslog.h>
+#endif
 
-#include "libusbi.h"
-#include "hotplug.h"
-
-struct libusb_context *usbi_default_context = NULL;
+struct libusb_context *usbi_default_context;
 static const struct libusb_version libusb_version_internal =
 	{ LIBUSB_MAJOR, LIBUSB_MINOR, LIBUSB_MICRO, LIBUSB_NANO,
 	  LIBUSB_RC, "http://libusb.info" };
-static int default_context_refcnt = 0;
+static int default_context_refcnt;
 static usbi_mutex_static_t default_context_lock = USBI_MUTEX_INITIALIZER;
-static struct timespec timestamp_origin = { 0, 0 };
+static struct timespec timestamp_origin;
+#if defined(ENABLE_LOGGING) && !defined(USE_SYSTEM_LOGGING_FACILITY)
+static libusb_log_cb log_handler;
+#endif
 
 usbi_mutex_static_t active_contexts_lock = USBI_MUTEX_INITIALIZER;
 struct list_head active_contexts_list;
@@ -61,7 +53,7 @@ struct list_head active_contexts_list;
  * \section intro Introduction
  *
  * libusb is an open source library that allows you to communicate with USB
- * devices from userspace. For more info, see the
+ * devices from user space. For more info, see the
  * <a href="http://libusb.info">libusb homepage</a>.
  *
  * This documentation is aimed at application developers wishing to
@@ -165,6 +157,36 @@ struct list_head active_contexts_list;
 /**
  * \page libusb_caveats Caveats
  *
+ * \section threadsafety Thread safety
+ *
+ * libusb is designed to be completely thread-safe, but as with any API it
+ * cannot prevent a user from sabotaging themselves, either intentionally or
+ * otherwise.
+ *
+ * Observe the following general guidelines:
+ *
+ * - Calls to functions that release a resource (e.g. libusb_close(),
+ *   libusb_free_config_descriptor()) should not be called concurrently on
+ *   the same resource. This is no different than concurrently calling free()
+ *   on the same allocated pointer.
+ * - Each individual \ref libusb_transfer should be prepared by a single
+ *   thread. In other words, no two threads should ever be concurrently
+ *   filling out the fields of a \ref libusb_transfer. You can liken this to
+ *   calling sprintf() with the same destination buffer from multiple threads.
+ *   The results will likely not be what you want unless the input parameters
+ *   are all the same, but its best to avoid this situation entirely.
+ * - Both the \ref libusb_transfer structure and its associated data buffer
+ *   should not be accessed between the time the transfer is submitted and the
+ *   time the completion callback is invoked. You can think of "ownership" of
+ *   these things as being transferred to libusb while the transfer is active.
+ * - The various "setter" functions (e.g. libusb_set_log_cb(),
+ *   libusb_set_pollfd_notifiers()) should not be called concurrently on the
+ *   resource. Though doing so will not lead to any undefined behavior, it
+ *   will likely produce results that the application does not expect.
+ *
+ * Rules for multiple threads and asynchronous I/O are detailed
+ * \ref libusb_mtasync "here".
+ *
  * \section fork Fork considerations
  *
  * libusb is <em>not</em> designed to work across fork() calls. Depending on
@@ -191,12 +213,12 @@ struct list_head active_contexts_list;
  * you when this has happened, so if someone else resets your device it will
  * not be clear to your own program why the device state has changed.
  *
- * Ultimately, this is a limitation of writing drivers in userspace.
+ * Ultimately, this is a limitation of writing drivers in user space.
  * Separation from the USB stack in the underlying kernel makes it difficult
  * for the operating system to deliver such notifications to your program.
  * The Linux kernel USB stack allows such reset notifications to be delivered
  * to in-kernel USB drivers, but it is not clear how such notifications could
- * be delivered to second-class drivers that live in userspace.
+ * be delivered to second-class drivers that live in user space.
  *
  * \section blockonly Blocking-only functionality
  *
@@ -424,6 +446,7 @@ if (cfg != desired)
   * - libusb_set_auto_detach_kernel_driver()
   * - libusb_set_configuration()
   * - libusb_set_debug()
+  * - libusb_set_log_cb()
   * - libusb_set_interface_alt_setting()
   * - libusb_set_iso_packet_lengths()
   * - libusb_set_option()
@@ -438,6 +461,7 @@ if (cfg != desired)
   * - libusb_unlock_event_waiters()
   * - libusb_unref_device()
   * - libusb_wait_for_event()
+  * - libusb_wrap_sys_device()
   *
   * \section Structures
   * - libusb_bos_descriptor
@@ -466,6 +490,7 @@ if (cfg != desired)
   * - \ref libusb_class_code
   * - \ref libusb_descriptor_type
   * - \ref libusb_endpoint_direction
+  * - \ref libusb_endpoint_transfer_type
   * - \ref libusb_error
   * - \ref libusb_iso_sync_type
   * - \ref libusb_iso_usage_type
@@ -674,17 +699,12 @@ struct libusb_device *usbi_alloc_device(struct libusb_context *ctx,
 	unsigned long session_id)
 {
 	size_t priv_size = usbi_backend.device_priv_size;
-	struct libusb_device *dev = calloc(1, sizeof(*dev) + priv_size);
-	int r;
+	struct libusb_device *dev = calloc(1, PTR_ALIGN(sizeof(*dev)) + priv_size);
 
 	if (!dev)
 		return NULL;
 
-	r = usbi_mutex_init(&dev->lock);
-	if (r) {
-		free(dev);
-		return NULL;
-	}
+	usbi_mutex_init(&dev->lock);
 
 	dev->ctx = ctx;
 	dev->refcnt = 1;
@@ -742,21 +762,22 @@ void usbi_disconnect_device(struct libusb_device *dev)
  * to the discovered device list. */
 int usbi_sanitize_device(struct libusb_device *dev)
 {
-	int r;
 	uint8_t num_configurations;
 
-	r = usbi_device_cache_descriptor(dev);
-	if (r < 0)
-		return r;
+	if (dev->device_descriptor.bLength != LIBUSB_DT_DEVICE_SIZE ||
+	    dev->device_descriptor.bDescriptorType != LIBUSB_DT_DEVICE) {
+		usbi_err(DEVICE_CTX(dev), "invalid device descriptor");
+		return LIBUSB_ERROR_IO;
+	}
 
 	num_configurations = dev->device_descriptor.bNumConfigurations;
 	if (num_configurations > USB_MAXCONFIG) {
 		usbi_err(DEVICE_CTX(dev), "too many configurations");
 		return LIBUSB_ERROR_IO;
-	} else if (0 == num_configurations)
+	} else if (0 == num_configurations) {
 		usbi_dbg("zero configurations, maybe an unauthorized device");
+	}
 
-	dev->num_configurations = num_configurations;
 	return 0;
 }
 
@@ -770,11 +791,12 @@ struct libusb_device *usbi_get_device_by_session_id(struct libusb_context *ctx,
 	struct libusb_device *ret = NULL;
 
 	usbi_mutex_lock(&ctx->usb_devs_lock);
-	list_for_each_entry(dev, &ctx->usb_devs, list, struct libusb_device)
+	for_each_device(ctx, dev) {
 		if (dev->session_data == session_id) {
 			ret = libusb_ref_device(dev);
 			break;
 		}
+	}
 	usbi_mutex_unlock(&ctx->usb_devs_lock);
 
 	return ret;
@@ -807,11 +829,13 @@ ssize_t API_EXPORTED libusb_get_device_list(libusb_context *ctx,
 	struct libusb_device **ret;
 	int r = 0;
 	ssize_t i, len;
-	USBI_GET_CONTEXT(ctx);
-	usbi_dbg("");
+
+	usbi_dbg(" ");
 
 	if (!discdevs)
 		return LIBUSB_ERROR_NO_MEM;
+
+	ctx = usbi_get_context(ctx);
 
 	if (libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG)) {
 		/* backend provides hotplug support */
@@ -821,7 +845,7 @@ ssize_t API_EXPORTED libusb_get_device_list(libusb_context *ctx,
 			usbi_backend.hotplug_poll();
 
 		usbi_mutex_lock(&ctx->usb_devs_lock);
-		list_for_each_entry(dev, &ctx->usb_devs, list, struct libusb_device) {
+		for_each_device(ctx, dev) {
 			discdevs = discovered_devs_append(discdevs, dev);
 
 			if (!discdevs) {
@@ -841,8 +865,8 @@ ssize_t API_EXPORTED libusb_get_device_list(libusb_context *ctx,
 	}
 
 	/* convert discovered_devs into a list */
-	len = discdevs->len;
-	ret = calloc(len + 1, sizeof(struct libusb_device *));
+	len = (ssize_t)discdevs->len;
+	ret = calloc((size_t)len + 1, sizeof(struct libusb_device *));
 	if (!ret) {
 		len = LIBUSB_ERROR_NO_MEM;
 		goto out;
@@ -925,7 +949,7 @@ uint8_t API_EXPORTED libusb_get_port_number(libusb_device *dev)
  * \returns LIBUSB_ERROR_OVERFLOW if the array is too small
  */
 int API_EXPORTED libusb_get_port_numbers(libusb_device *dev,
-	uint8_t* port_numbers, int port_numbers_len)
+	uint8_t *port_numbers, int port_numbers_len)
 {
 	int i = port_numbers_len;
 	struct libusb_context *ctx = DEVICE_CTX(dev);
@@ -948,10 +972,10 @@ int API_EXPORTED libusb_get_port_numbers(libusb_device *dev,
 }
 
 /** \ingroup libusb_dev
- * Deprecated please use libusb_get_port_numbers instead.
+ * \deprecated Please use \ref libusb_get_port_numbers() instead.
  */
 int API_EXPORTED libusb_get_port_path(libusb_context *ctx, libusb_device *dev,
-	uint8_t* port_numbers, uint8_t port_numbers_len)
+	uint8_t *port_numbers, uint8_t port_numbers_len)
 {
 	UNUSED(ctx);
 
@@ -966,7 +990,7 @@ int API_EXPORTED libusb_get_port_path(libusb_context *ctx, libusb_device *dev,
  * function and make sure that you only access the parent before issuing
  * \ref libusb_free_device_list(). The reason is that libusb currently does
  * not maintain a permanent list of device instances, and therefore can
- * only guarantee that parents are fully instantiated within a 
+ * only guarantee that parents are fully instantiated within a
  * libusb_get_device_list() - libusb_free_device_list() block.
  */
 DEFAULT_VISIBILITY
@@ -1075,7 +1099,9 @@ out:
  * If acting on an isochronous or interrupt endpoint, this function will
  * multiply the value found in bits 0:10 by the number of transactions per
  * microframe (determined by bits 11:12). Otherwise, this function just
- * returns the numeric value found in bits 0:10.
+ * returns the numeric value found in bits 0:10. For USB 3.0 device, it
+ * will attempts to retrieve the Endpoint Companion Descriptor to return
+ * wBytesPerInterval.
  *
  * This function is useful for setting up isochronous transfers, for example
  * you might pass the return value from this function to
@@ -1095,9 +1121,11 @@ int API_EXPORTED libusb_get_max_iso_packet_size(libusb_device *dev,
 {
 	struct libusb_config_descriptor *config;
 	const struct libusb_endpoint_descriptor *ep;
-	enum libusb_transfer_type ep_type;
+	struct libusb_ss_endpoint_companion_descriptor *ss_ep_cmp;
+	enum libusb_endpoint_transfer_type ep_type;
 	uint16_t val;
 	int r;
+	int speed;
 
 	r = libusb_get_active_config_descriptor(dev, &config);
 	if (r < 0) {
@@ -1112,13 +1140,25 @@ int API_EXPORTED libusb_get_max_iso_packet_size(libusb_device *dev,
 		goto out;
 	}
 
-	val = ep->wMaxPacketSize;
-	ep_type = (enum libusb_transfer_type) (ep->bmAttributes & 0x3);
+	speed = libusb_get_device_speed(dev);
+	if (speed >= LIBUSB_SPEED_SUPER) {
+		r = libusb_get_ss_endpoint_companion_descriptor(dev->ctx, ep, &ss_ep_cmp);
+		if (r == LIBUSB_SUCCESS) {
+			r = ss_ep_cmp->wBytesPerInterval;
+			libusb_free_ss_endpoint_companion_descriptor(ss_ep_cmp);
+		}
+	}
 
-	r = val & 0x07ff;
-	if (ep_type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS
-			|| ep_type == LIBUSB_TRANSFER_TYPE_INTERRUPT)
-		r *= (1 + ((val >> 11) & 3));
+	/* If the device isn't a SuperSpeed device or retrieving the SS endpoint didn't worked. */
+	if (speed < LIBUSB_SPEED_SUPER || r < 0) {
+		val = ep->wMaxPacketSize;
+		ep_type = (enum libusb_endpoint_transfer_type) (ep->bmAttributes & 0x3);
+
+		r = val & 0x07ff;
+		if (ep_type == LIBUSB_ENDPOINT_TRANSFER_TYPE_ISOCHRONOUS
+		    || ep_type == LIBUSB_ENDPOINT_TRANSFER_TYPE_INTERRUPT)
+			r *= (1 + ((val >> 11) & 3));
+	}
 
 out:
 	libusb_free_config_descriptor(config);
@@ -1173,40 +1213,69 @@ void API_EXPORTED libusb_unref_device(libusb_device *dev)
 	}
 }
 
-/*
- * Signal the event pipe so that the event handling thread will be
- * interrupted to process an internal event.
+/** \ingroup libusb_dev
+ * Wrap a platform-specific system device handle and obtain a libusb device
+ * handle for the underlying device. The handle allows you to use libusb to
+ * perform I/O on the device in question.
+ *
+ * Must call libusb_set_option(NULL, LIBUSB_OPTION_WEAK_AUTHORITY)
+ * before libusb_init if don't have authority to access the usb device directly.
+ *
+ * On Linux, the system device handle must be a valid file descriptor opened
+ * on the device node.
+ *
+ * The system device handle must remain open until libusb_close() is called.
+ * The system device handle will not be closed by libusb_close().
+ *
+ * Internally, this function creates a temporary device and makes it
+ * available to you through libusb_get_device(). This device is destroyed
+ * during libusb_close(). The device shall not be opened through libusb_open().
+ *
+ * This is a non-blocking function; no requests are sent over the bus.
+ *
+ * \param ctx the context to operate on, or NULL for the default context
+ * \param sys_dev the platform-specific system device handle
+ * \param dev_handle output location for the returned device handle pointer. Only
+ * populated when the return code is 0.
+ * \returns 0 on success
+ * \returns LIBUSB_ERROR_NO_MEM on memory allocation failure
+ * \returns LIBUSB_ERROR_ACCESS if the user has insufficient permissions
+ * \returns LIBUSB_ERROR_NOT_SUPPORTED if the operation is not supported on this
+ * platform
+ * \returns another LIBUSB_ERROR code on other failure
  */
-int usbi_signal_event(struct libusb_context *ctx)
+int API_EXPORTED libusb_wrap_sys_device(libusb_context *ctx, intptr_t sys_dev,
+	libusb_device_handle **dev_handle)
 {
-	unsigned char dummy = 1;
-	ssize_t r;
+	struct libusb_device_handle *_dev_handle;
+	size_t priv_size = usbi_backend.device_handle_priv_size;
+	int r;
 
-	/* write some data on event pipe to interrupt event handlers */
-	r = usbi_write(ctx->event_pipe[1], &dummy, sizeof(dummy));
-	if (r != sizeof(dummy)) {
-		usbi_warn(ctx, "internal signalling write failed");
-		return LIBUSB_ERROR_IO;
+	usbi_dbg("wrap_sys_device 0x%" PRIxPTR, (uintptr_t)sys_dev);
+
+	ctx = usbi_get_context(ctx);
+
+	if (!usbi_backend.wrap_sys_device)
+		return LIBUSB_ERROR_NOT_SUPPORTED;
+
+	_dev_handle = calloc(1, PTR_ALIGN(sizeof(*_dev_handle)) + priv_size);
+	if (!_dev_handle)
+		return LIBUSB_ERROR_NO_MEM;
+
+	usbi_mutex_init(&_dev_handle->lock);
+
+	r = usbi_backend.wrap_sys_device(ctx, _dev_handle, sys_dev);
+	if (r < 0) {
+		usbi_dbg("wrap_sys_device 0x%" PRIxPTR " returns %d", (uintptr_t)sys_dev, r);
+		usbi_mutex_destroy(&_dev_handle->lock);
+		free(_dev_handle);
+		return r;
 	}
 
-	return 0;
-}
-
-/*
- * Clear the event pipe so that the event handling will no longer be
- * interrupted.
- */
-int usbi_clear_event(struct libusb_context *ctx)
-{
-	unsigned char dummy;
-	ssize_t r;
-
-	/* read some data on event pipe to clear it */
-	r = usbi_read(ctx->event_pipe[0], &dummy, sizeof(dummy));
-	if (r != sizeof(dummy)) {
-		usbi_warn(ctx, "internal signalling read failed");
-		return LIBUSB_ERROR_IO;
-	}
+	usbi_mutex_lock(&ctx->open_devs_lock);
+	list_add(&_dev_handle->list, &ctx->open_devs);
+	usbi_mutex_unlock(&ctx->open_devs_lock);
+	*dev_handle = _dev_handle;
 
 	return 0;
 }
@@ -1243,20 +1312,13 @@ int API_EXPORTED libusb_open(libusb_device *dev,
 		return LIBUSB_ERROR_NO_DEVICE;
 	}
 
-	_dev_handle = malloc(sizeof(*_dev_handle) + priv_size);
+	_dev_handle = calloc(1, PTR_ALIGN(sizeof(*_dev_handle)) + priv_size);
 	if (!_dev_handle)
 		return LIBUSB_ERROR_NO_MEM;
 
-	r = usbi_mutex_init(&_dev_handle->lock);
-	if (r) {
-		free(_dev_handle);
-		return LIBUSB_ERROR_OTHER;
-	}
+	usbi_mutex_init(&_dev_handle->lock);
 
 	_dev_handle->dev = libusb_ref_device(dev);
-	_dev_handle->auto_detach_kernel_driver = 0;
-	_dev_handle->claimed_interfaces = 0;
-	memset(&_dev_handle->os_priv, 0, priv_size);
 
 	r = usbi_backend.open(_dev_handle);
 	if (r < 0) {
@@ -1337,7 +1399,7 @@ static void do_close(struct libusb_context *ctx,
 	usbi_mutex_lock(&ctx->flying_transfers_lock);
 
 	/* safe iteration because transfers may be being deleted */
-	list_for_each_entry_safe(itransfer, tmp, &ctx->flying_transfers, list, struct usbi_transfer) {
+	for_each_transfer_safe(ctx, itransfer, tmp) {
 		struct libusb_transfer *transfer =
 			USBI_TRANSFER_TO_LIBUSB_TRANSFER(itransfer);
 
@@ -1395,12 +1457,12 @@ static void do_close(struct libusb_context *ctx,
 void API_EXPORTED libusb_close(libusb_device_handle *dev_handle)
 {
 	struct libusb_context *ctx;
+	unsigned int event_flags;
 	int handling_events;
-	int pending_events;
 
 	if (!dev_handle)
 		return;
-	usbi_dbg("");
+	usbi_dbg(" ");
 
 	ctx = HANDLE_CTX(dev_handle);
 	handling_events = usbi_handling_events(ctx);
@@ -1417,10 +1479,11 @@ void API_EXPORTED libusb_close(libusb_device_handle *dev_handle)
 		/* Record that we are closing a device.
 		 * Only signal an event if there are no prior pending events. */
 		usbi_mutex_lock(&ctx->event_data_lock);
-		pending_events = usbi_pending_events(ctx);
-		ctx->device_close++;
-		if (!pending_events)
-			usbi_signal_event(ctx);
+		event_flags = ctx->event_flags;
+		if (!ctx->device_close++)
+			ctx->event_flags |= USBI_EVENT_DEVICE_CLOSE;
+		if (!event_flags)
+			usbi_signal_event(&ctx->event);
 		usbi_mutex_unlock(&ctx->event_data_lock);
 
 		/* take event handling lock */
@@ -1434,10 +1497,10 @@ void API_EXPORTED libusb_close(libusb_device_handle *dev_handle)
 		/* We're done with closing this device.
 		 * Clear the event pipe if there are no further pending events. */
 		usbi_mutex_lock(&ctx->event_data_lock);
-		ctx->device_close--;
-		pending_events = usbi_pending_events(ctx);
-		if (!pending_events)
-			usbi_clear_event(ctx);
+		if (!--ctx->device_close)
+			ctx->event_flags &= ~USBI_EVENT_DEVICE_CLOSE;
+		if (!ctx->event_flags)
+			usbi_clear_event(&ctx->event);
 		usbi_mutex_unlock(&ctx->event_data_lock);
 
 		/* Release event handling lock and wake up event waiters */
@@ -1482,29 +1545,30 @@ int API_EXPORTED libusb_get_configuration(libusb_device_handle *dev_handle,
 	int *config)
 {
 	int r = LIBUSB_ERROR_NOT_SUPPORTED;
+	uint8_t tmp = 0;
 
-	usbi_dbg("");
+	usbi_dbg(" ");
 	if (usbi_backend.get_configuration)
-		r = usbi_backend.get_configuration(dev_handle, config);
+		r = usbi_backend.get_configuration(dev_handle, &tmp);
 
 	if (r == LIBUSB_ERROR_NOT_SUPPORTED) {
-		uint8_t tmp = 0;
 		usbi_dbg("falling back to control message");
 		r = libusb_control_transfer(dev_handle, LIBUSB_ENDPOINT_IN,
 			LIBUSB_REQUEST_GET_CONFIGURATION, 0, 0, &tmp, 1, 1000);
-		if (r == 0) {
+		if (r == 1) {
+			r = 0;
+		} else if (r == 0) {
 			usbi_err(HANDLE_CTX(dev_handle), "zero bytes returned in ctrl transfer?");
 			r = LIBUSB_ERROR_IO;
-		} else if (r == 1) {
-			r = 0;
-			*config = tmp;
 		} else {
 			usbi_dbg("control failed, error %d", r);
 		}
 	}
 
-	if (r == 0)
-		usbi_dbg("active config %d", *config);
+	if (r == 0) {
+		usbi_dbg("active config %u", tmp);
+		*config = (int)tmp;
+	}
 
 	return r;
 }
@@ -1522,6 +1586,11 @@ int API_EXPORTED libusb_get_configuration(libusb_device_handle *dev_handle,
  * it will issue a SET_CONFIGURATION request using the current configuration,
  * causing most USB-related device state to be reset (altsetting reset to zero,
  * endpoint halts cleared, toggles reset).
+ *
+ * Not all backends support setting the configuration from user space, which
+ * will be indicated by the return code LIBUSB_ERROR_NOT_SUPPORTED. As this
+ * suggests that the platform is handling the device configuration itself,
+ * this error should generally be safe to ignore.
  *
  * You cannot change/reset configuration if your application has claimed
  * interfaces. It is advised to set the desired configuration before claiming
@@ -1552,6 +1621,8 @@ int API_EXPORTED libusb_get_configuration(libusb_device_handle *dev_handle,
  * \returns 0 on success
  * \returns LIBUSB_ERROR_NOT_FOUND if the requested configuration does not exist
  * \returns LIBUSB_ERROR_BUSY if interfaces are currently claimed
+ * \returns LIBUSB_ERROR_NOT_SUPPORTED if setting or changing the configuration
+ * is not supported by the backend
  * \returns LIBUSB_ERROR_NO_DEVICE if the device has been disconnected
  * \returns another LIBUSB_ERROR code on other failure
  * \see libusb_set_auto_detach_kernel_driver()
@@ -1560,6 +1631,8 @@ int API_EXPORTED libusb_set_configuration(libusb_device_handle *dev_handle,
 	int configuration)
 {
 	usbi_dbg("configuration %d", configuration);
+	if (configuration < -1 || configuration > (int)UINT8_MAX)
+		return LIBUSB_ERROR_INVALID_PARAM;
 	return usbi_backend.set_configuration(dev_handle, configuration);
 }
 
@@ -1597,19 +1670,19 @@ int API_EXPORTED libusb_claim_interface(libusb_device_handle *dev_handle,
 	int r = 0;
 
 	usbi_dbg("interface %d", interface_number);
-	if (interface_number >= USB_MAXINTERFACES)
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
 		return LIBUSB_ERROR_INVALID_PARAM;
 
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
 	usbi_mutex_lock(&dev_handle->lock);
-	if (dev_handle->claimed_interfaces & (1 << interface_number))
+	if (dev_handle->claimed_interfaces & (1U << interface_number))
 		goto out;
 
-	r = usbi_backend.claim_interface(dev_handle, interface_number);
+	r = usbi_backend.claim_interface(dev_handle, (uint8_t)interface_number);
 	if (r == 0)
-		dev_handle->claimed_interfaces |= 1 << interface_number;
+		dev_handle->claimed_interfaces |= 1U << interface_number;
 
 out:
 	usbi_mutex_unlock(&dev_handle->lock);
@@ -1641,18 +1714,18 @@ int API_EXPORTED libusb_release_interface(libusb_device_handle *dev_handle,
 	int r;
 
 	usbi_dbg("interface %d", interface_number);
-	if (interface_number >= USB_MAXINTERFACES)
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
 		return LIBUSB_ERROR_INVALID_PARAM;
 
 	usbi_mutex_lock(&dev_handle->lock);
-	if (!(dev_handle->claimed_interfaces & (1 << interface_number))) {
+	if (!(dev_handle->claimed_interfaces & (1U << interface_number))) {
 		r = LIBUSB_ERROR_NOT_FOUND;
 		goto out;
 	}
 
-	r = usbi_backend.release_interface(dev_handle, interface_number);
+	r = usbi_backend.release_interface(dev_handle, (uint8_t)interface_number);
 	if (r == 0)
-		dev_handle->claimed_interfaces &= ~(1 << interface_number);
+		dev_handle->claimed_interfaces &= ~(1U << interface_number);
 
 out:
 	usbi_mutex_unlock(&dev_handle->lock);
@@ -1685,7 +1758,9 @@ int API_EXPORTED libusb_set_interface_alt_setting(libusb_device_handle *dev_hand
 {
 	usbi_dbg("interface %d altsetting %d",
 		interface_number, alternate_setting);
-	if (interface_number >= USB_MAXINTERFACES)
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
+		return LIBUSB_ERROR_INVALID_PARAM;
+	if (alternate_setting < 0 || alternate_setting > (int)UINT8_MAX)
 		return LIBUSB_ERROR_INVALID_PARAM;
 
 	usbi_mutex_lock(&dev_handle->lock);
@@ -1694,14 +1769,14 @@ int API_EXPORTED libusb_set_interface_alt_setting(libusb_device_handle *dev_hand
 		return LIBUSB_ERROR_NO_DEVICE;
 	}
 
-	if (!(dev_handle->claimed_interfaces & (1 << interface_number))) {
+	if (!(dev_handle->claimed_interfaces & (1U << interface_number))) {
 		usbi_mutex_unlock(&dev_handle->lock);
 		return LIBUSB_ERROR_NOT_FOUND;
 	}
 	usbi_mutex_unlock(&dev_handle->lock);
 
-	return usbi_backend.set_interface_altsetting(dev_handle, interface_number,
-		alternate_setting);
+	return usbi_backend.set_interface_altsetting(dev_handle,
+		(uint8_t)interface_number, (uint8_t)alternate_setting);
 }
 
 /** \ingroup libusb_dev
@@ -1751,11 +1826,14 @@ int API_EXPORTED libusb_clear_halt(libusb_device_handle *dev_handle,
  */
 int API_EXPORTED libusb_reset_device(libusb_device_handle *dev_handle)
 {
-	usbi_dbg("");
+	usbi_dbg(" ");
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
-	return usbi_backend.reset_device(dev_handle);
+	if (usbi_backend.reset_device)
+		return usbi_backend.reset_device(dev_handle);
+	else
+		return LIBUSB_ERROR_NOT_SUPPORTED;
 }
 
 /** \ingroup libusb_asyncio
@@ -1782,7 +1860,10 @@ int API_EXPORTED libusb_reset_device(libusb_device_handle *dev_handle)
 int API_EXPORTED libusb_alloc_streams(libusb_device_handle *dev_handle,
 	uint32_t num_streams, unsigned char *endpoints, int num_endpoints)
 {
-	usbi_dbg("streams %u eps %d", (unsigned) num_streams, num_endpoints);
+	usbi_dbg("streams %u eps %d", (unsigned)num_streams, num_endpoints);
+
+	if (!num_streams || !endpoints || num_endpoints <= 0)
+		return LIBUSB_ERROR_INVALID_PARAM;
 
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
@@ -1811,6 +1892,9 @@ int API_EXPORTED libusb_free_streams(libusb_device_handle *dev_handle,
 {
 	usbi_dbg("eps %d", num_endpoints);
 
+	if (!endpoints || num_endpoints <= 0)
+		return LIBUSB_ERROR_INVALID_PARAM;
+
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
@@ -1833,7 +1917,7 @@ int API_EXPORTED libusb_free_streams(libusb_device_handle *dev_handle,
  * the same cache lines) when a transfer is in progress, although it is legal
  * to have several transfers going on within the same memory block.
  *
- * Will return NULL on failure. Many systems do not support such zerocopy
+ * Will return NULL on failure. Many systems do not support such zero-copy
  * and will always return NULL. Memory allocated with this function must be
  * freed with \ref libusb_dev_mem_free. Specifically, this means that the
  * flag \ref LIBUSB_TRANSFER_FREE_BUFFER cannot be used to free memory allocated
@@ -1897,11 +1981,14 @@ int API_EXPORTED libusb_kernel_driver_active(libusb_device_handle *dev_handle,
 {
 	usbi_dbg("interface %d", interface_number);
 
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
+		return LIBUSB_ERROR_INVALID_PARAM;
+
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
 	if (usbi_backend.kernel_driver_active)
-		return usbi_backend.kernel_driver_active(dev_handle, interface_number);
+		return usbi_backend.kernel_driver_active(dev_handle, (uint8_t)interface_number);
 	else
 		return LIBUSB_ERROR_NOT_SUPPORTED;
 }
@@ -1932,11 +2019,14 @@ int API_EXPORTED libusb_detach_kernel_driver(libusb_device_handle *dev_handle,
 {
 	usbi_dbg("interface %d", interface_number);
 
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
+		return LIBUSB_ERROR_INVALID_PARAM;
+
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
 	if (usbi_backend.detach_kernel_driver)
-		return usbi_backend.detach_kernel_driver(dev_handle, interface_number);
+		return usbi_backend.detach_kernel_driver(dev_handle, (uint8_t)interface_number);
 	else
 		return LIBUSB_ERROR_NOT_SUPPORTED;
 }
@@ -1966,11 +2056,14 @@ int API_EXPORTED libusb_attach_kernel_driver(libusb_device_handle *dev_handle,
 {
 	usbi_dbg("interface %d", interface_number);
 
+	if (interface_number < 0 || interface_number >= USB_MAXINTERFACES)
+		return LIBUSB_ERROR_INVALID_PARAM;
+
 	if (!dev_handle->dev->attached)
 		return LIBUSB_ERROR_NO_DEVICE;
 
 	if (usbi_backend.attach_kernel_driver)
-		return usbi_backend.attach_kernel_driver(dev_handle, interface_number);
+		return usbi_backend.attach_kernel_driver(dev_handle, (uint8_t)interface_number);
 	else
 		return LIBUSB_ERROR_NOT_SUPPORTED;
 }
@@ -2014,7 +2107,7 @@ int API_EXPORTED libusb_set_auto_detach_kernel_driver(
 void API_EXPORTED libusb_set_debug(libusb_context *ctx, int level)
 {
 #if defined(ENABLE_LOGGING) && !defined(ENABLE_DEBUG_LOGGING)
-	USBI_GET_CONTEXT(ctx);
+	ctx = usbi_get_context(ctx);
 	if (!ctx->debug_fixed) {
 		level = CLAMP(level, LIBUSB_LOG_LEVEL_NONE, LIBUSB_LOG_LEVEL_DEBUG);
 		ctx->debug = (enum libusb_log_level)level;
@@ -2022,6 +2115,50 @@ void API_EXPORTED libusb_set_debug(libusb_context *ctx, int level)
 #else
 	UNUSED(ctx);
 	UNUSED(level);
+#endif
+}
+
+/** \ingroup libusb_lib
+ * Set log handler.
+ *
+ * libusb will redirect its log messages to the provided callback function.
+ * libusb supports redirection of per context and global log messages.
+ * Log messages sent to the context will be sent to the global log handler too.
+ *
+ * If libusb is compiled without message logging or USE_SYSTEM_LOGGING_FACILITY
+ * is defined then global callback function will never be called.
+ * If ENABLE_DEBUG_LOGGING is defined then per context callback function will
+ * never be called.
+ *
+ * \param ctx context on which to assign log handler, or NULL for the default
+ * context. Parameter ignored if only LIBUSB_LOG_CB_GLOBAL mode is requested.
+ * \param cb pointer to the callback function, or NULL to stop log
+ * messages redirection
+ * \param mode mode of callback function operation. Several modes can be
+ * selected for a single callback function, see \ref libusb_log_cb_mode for
+ * a description.
+ * \see libusb_log_cb, libusb_log_cb_mode
+ */
+void API_EXPORTED libusb_set_log_cb(libusb_context *ctx, libusb_log_cb cb,
+	int mode)
+{
+#if defined(ENABLE_LOGGING) && (!defined(ENABLE_DEBUG_LOGGING) || !defined(USE_SYSTEM_LOGGING_FACILITY))
+#if !defined(USE_SYSTEM_LOGGING_FACILITY)
+	if (mode & LIBUSB_LOG_CB_GLOBAL)
+		log_handler = cb;
+#endif
+#if !defined(ENABLE_DEBUG_LOGGING)
+	if (mode & LIBUSB_LOG_CB_CONTEXT) {
+		ctx = usbi_get_context(ctx);
+		ctx->log_handler = cb;
+	}
+#else
+	UNUSED(ctx);
+#endif
+#else
+	UNUSED(ctx);
+	UNUSED(cb);
+	UNUSED(mode);
 #endif
 }
 
@@ -2043,6 +2180,7 @@ void API_EXPORTED libusb_set_debug(libusb_context *ctx, int level)
  * \returns LIBUSB_ERROR_INVALID_PARAM if the option or arguments are invalid
  * \returns LIBUSB_ERROR_NOT_SUPPORTED if the option is valid but not supported
  * on this platform
+ * \returns LIBUSB_ERROR_NOT_FOUND if LIBUSB_OPTION_USE_USBDK is valid on this platform but UsbDk is not available
  */
 int API_EXPORTED libusb_set_option(libusb_context *ctx,
 	enum libusb_option option, ...)
@@ -2050,7 +2188,7 @@ int API_EXPORTED libusb_set_option(libusb_context *ctx,
 	int arg, r = LIBUSB_SUCCESS;
 	va_list ap;
 
-	USBI_GET_CONTEXT(ctx);
+	ctx = usbi_get_context(ctx);
 
 	va_start(ap, option);
 	switch (option) {
@@ -2068,6 +2206,7 @@ int API_EXPORTED libusb_set_option(libusb_context *ctx,
 
 	/* Handle all backend-specific options here */
 	case LIBUSB_OPTION_USE_USBDK:
+	case LIBUSB_OPTION_WEAK_AUTHORITY:
 		if (usbi_backend.set_option)
 			r = usbi_backend.set_option(ctx, option, ap);
 		else
@@ -2125,9 +2264,8 @@ int API_EXPORTED libusb_init(libusb_context **context)
 
 	usbi_mutex_static_lock(&default_context_lock);
 
-	if (!timestamp_origin.tv_sec) {
-		usbi_backend.clock_gettime(USBI_CLOCK_REALTIME, &timestamp_origin);
-	}
+	if (!timestamp_origin.tv_sec)
+		usbi_get_monotonic_time(&timestamp_origin);
 
 	if (!context && usbi_default_context) {
 		usbi_dbg("reusing default context");
@@ -2136,7 +2274,7 @@ int API_EXPORTED libusb_init(libusb_context **context)
 		return 0;
 	}
 
-	ctx = calloc(1, sizeof(*ctx) + priv_size);
+	ctx = calloc(1, PTR_ALIGN(sizeof(*ctx)) + priv_size);
 	if (!ctx) {
 		r = LIBUSB_ERROR_NO_MEM;
 		goto err_unlock;
@@ -2169,7 +2307,7 @@ int API_EXPORTED libusb_init(libusb_context **context)
 	usbi_mutex_static_lock(&active_contexts_lock);
 	if (first_init) {
 		first_init = 0;
-		list_init (&active_contexts_list);
+		list_init(&active_contexts_list);
 	}
 	list_add (&ctx->list, &active_contexts_list);
 	usbi_mutex_static_unlock(&active_contexts_lock);
@@ -2201,11 +2339,11 @@ err_free_ctx:
 	}
 
 	usbi_mutex_static_lock(&active_contexts_lock);
-	list_del (&ctx->list);
+	list_del(&ctx->list);
 	usbi_mutex_static_unlock(&active_contexts_lock);
 
 	usbi_mutex_lock(&ctx->usb_devs_lock);
-	list_for_each_entry_safe(dev, next, &ctx->usb_devs, list, struct libusb_device) {
+	for_each_device_safe(ctx, dev, next) {
 		list_del(&dev->list);
 		libusb_unref_device(dev);
 	}
@@ -2226,30 +2364,47 @@ err_unlock:
  * before your application terminates.
  * \param ctx the context to deinitialize, or NULL for the default context
  */
-void API_EXPORTED libusb_exit(struct libusb_context *ctx)
+void API_EXPORTED libusb_exit(libusb_context *ctx)
 {
 	struct libusb_device *dev, *next;
 	struct timeval tv = { 0, 0 };
+	int destroying_default_context = 0;
 
-	usbi_dbg("");
-	USBI_GET_CONTEXT(ctx);
+	usbi_dbg(" ");
+
+	ctx = usbi_get_context(ctx);
 
 	/* if working with default context, only actually do the deinitialization
 	 * if we're the last user */
 	usbi_mutex_static_lock(&default_context_lock);
 	if (ctx == usbi_default_context) {
+		if (!usbi_default_context) {
+			usbi_dbg("no default context, not initialized?");
+			usbi_mutex_static_unlock(&default_context_lock);
+			return;
+		}
+
 		if (--default_context_refcnt > 0) {
 			usbi_dbg("not destroying default context");
 			usbi_mutex_static_unlock(&default_context_lock);
 			return;
 		}
 		usbi_dbg("destroying default context");
-		usbi_default_context = NULL;
+
+		/*
+		 * Setting this flag without unlocking the default context, as
+		 * we are actually destroying the default context.
+		 * usbi_default_context is not set to NULL yet, as all activities
+		 * would only stop after usbi_backend->exit() returns.
+		 */
+		destroying_default_context = 1;
+	} else {
+		/* Unlock default context, as we're not modifying it. */
+		usbi_mutex_static_unlock(&default_context_lock);
 	}
-	usbi_mutex_static_unlock(&default_context_lock);
 
 	usbi_mutex_static_lock(&active_contexts_lock);
-	list_del (&ctx->list);
+	list_del(&ctx->list);
 	usbi_mutex_static_unlock(&active_contexts_lock);
 
 	if (libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG)) {
@@ -2268,7 +2423,7 @@ void API_EXPORTED libusb_exit(struct libusb_context *ctx)
 			libusb_handle_events_timeout(ctx, &tv);
 
 		usbi_mutex_lock(&ctx->usb_devs_lock);
-		list_for_each_entry_safe(dev, next, &ctx->usb_devs, list, struct libusb_device) {
+		for_each_device_safe(ctx, dev, next) {
 			list_del(&dev->list);
 			libusb_unref_device(dev);
 		}
@@ -2290,6 +2445,11 @@ void API_EXPORTED libusb_exit(struct libusb_context *ctx)
 	usbi_mutex_destroy(&ctx->usb_devs_lock);
 	usbi_mutex_destroy(&ctx->hotplug_cbs_lock);
 	free(ctx);
+
+	if (destroying_default_context) {
+		usbi_default_context = NULL;
+		usbi_mutex_static_unlock(&default_context_lock);
+	}
 }
 
 /** \ingroup libusb_misc
@@ -2321,89 +2481,90 @@ int API_EXPORTED libusb_has_capability(uint32_t capability)
 #ifdef LIBUSB_PRINTF_WIN32
 /*
  * Prior to VS2015, Microsoft did not provide the snprintf() function and
- * provided a vsnprintf() that did not guarantee NULL-terminated output.
+ * provided a vsnprintf() that did not guarantee NUL-terminated output.
  * Microsoft did provide a _snprintf() function, but again it did not
  * guarantee NULL-terminated output.
  *
- * The below implementations guarantee NULL-terminated output and are
+ * The below implementations guarantee NUL-terminated output and are
  * C99 compliant.
  */
 
 int usbi_snprintf(char *str, size_t size, const char *format, ...)
 {
-	va_list ap;
+	va_list args;
 	int ret;
 
-	va_start(ap, format);
-	ret = usbi_vsnprintf(str, size, format, ap);
-	va_end(ap);
+	va_start(args, format);
+	ret = usbi_vsnprintf(str, size, format, args);
+	va_end(args);
 
 	return ret;
 }
 
-int usbi_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+int usbi_vsnprintf(char *str, size_t size, const char *format, va_list args)
 {
 	int ret;
 
-	ret = _vsnprintf(str, size, format, ap);
+	ret = _vsnprintf(str, size, format, args);
 	if (ret < 0 || ret == (int)size) {
-		/* Output is truncated, ensure buffer is NULL-terminated and
+		/* Output is truncated, ensure buffer is NUL-terminated and
 		 * determine how many characters would have been written. */
 		str[size - 1] = '\0';
 		if (ret < 0)
-			ret = _vsnprintf(NULL, 0, format, ap);
+			ret = _vsnprintf(NULL, 0, format, args);
 	}
 
 	return ret;
 }
 #endif /* LIBUSB_PRINTF_WIN32 */
 
-static void usbi_log_str(enum libusb_log_level level, const char *str)
+static void log_str(enum libusb_log_level level, const char *str)
 {
 #if defined(USE_SYSTEM_LOGGING_FACILITY)
-#if defined(OS_WINDOWS)
-	OutputDebugString(str);
-#elif defined(OS_WINCE)
-	/* Windows CE only supports the Unicode version of OutputDebugString. */
-	WCHAR wbuf[USBI_MAX_LOG_LEN];
-	MultiByteToWideChar(CP_UTF8, 0, str, -1, wbuf, sizeof(wbuf));
-	OutputDebugStringW(wbuf);
-#elif defined(__ANDROID__)
-	int priority = ANDROID_LOG_UNKNOWN;
+#if defined(__ANDROID__)
+	int priority;
 	switch (level) {
-	case LIBUSB_LOG_LEVEL_NONE: return;
+	case LIBUSB_LOG_LEVEL_NONE: return;	/* Impossible, but keeps compiler happy */
 	case LIBUSB_LOG_LEVEL_ERROR: priority = ANDROID_LOG_ERROR; break;
 	case LIBUSB_LOG_LEVEL_WARNING: priority = ANDROID_LOG_WARN; break;
 	case LIBUSB_LOG_LEVEL_INFO: priority = ANDROID_LOG_INFO; break;
 	case LIBUSB_LOG_LEVEL_DEBUG: priority = ANDROID_LOG_DEBUG; break;
+	default: priority = ANDROID_LOG_UNKNOWN;
 	}
 	__android_log_write(priority, "libusb", str);
-#elif defined(HAVE_SYSLOG_FUNC)
-	int syslog_level = LOG_INFO;
+#elif defined(_WIN32)
+	UNUSED(level);
+	OutputDebugStringA(str);
+#elif defined(HAVE_SYSLOG)
+	int syslog_level;
 	switch (level) {
-	case LIBUSB_LOG_LEVEL_NONE: return;
+	case LIBUSB_LOG_LEVEL_NONE: return;	/* Impossible, but keeps compiler happy */
 	case LIBUSB_LOG_LEVEL_ERROR: syslog_level = LOG_ERR; break;
 	case LIBUSB_LOG_LEVEL_WARNING: syslog_level = LOG_WARNING; break;
 	case LIBUSB_LOG_LEVEL_INFO: syslog_level = LOG_INFO; break;
 	case LIBUSB_LOG_LEVEL_DEBUG: syslog_level = LOG_DEBUG; break;
+	default: syslog_level = LOG_INFO;
 	}
 	syslog(syslog_level, "%s", str);
-#else /* All of gcc, Clang, XCode seem to use #warning */
+#else /* All of gcc, Clang, Xcode seem to use #warning */
 #warning System logging is not supported on this platform. Logging to stderr will be used instead.
+	UNUSED(level);
 	fputs(str, stderr);
 #endif
 #else
-	fputs(str, stderr);
+	/* Global log handler */
+	if (log_handler)
+		log_handler(NULL, level, str);
+	else
+		fputs(str, stderr);
 #endif /* USE_SYSTEM_LOGGING_FACILITY */
-	UNUSED(level);
 }
 
-void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
+static void log_v(struct libusb_context *ctx, enum libusb_log_level level,
 	const char *function, const char *format, va_list args)
 {
 	const char *prefix;
 	char buf[USBI_MAX_LOG_LEN];
-	struct timespec now;
 	int global_debug, header_len, text_len;
 	static int has_debug_header_been_displayed = 0;
 
@@ -2411,41 +2572,22 @@ void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
 	global_debug = 1;
 	UNUSED(ctx);
 #else
-	enum libusb_log_level ctx_level = LIBUSB_LOG_LEVEL_NONE;
+	enum libusb_log_level ctx_level;
 
-	USBI_GET_CONTEXT(ctx);
+	ctx = usbi_get_context(ctx);
 	if (ctx)
 		ctx_level = ctx->debug;
 	else
 		ctx_level = get_env_debug_level();
 
-	if (ctx_level == LIBUSB_LOG_LEVEL_NONE)
-		return;
-	if (level == LIBUSB_LOG_LEVEL_WARNING && ctx_level < LIBUSB_LOG_LEVEL_WARNING)
-		return;
-	if (level == LIBUSB_LOG_LEVEL_INFO && ctx_level < LIBUSB_LOG_LEVEL_INFO)
-		return;
-	if (level == LIBUSB_LOG_LEVEL_DEBUG && ctx_level < LIBUSB_LOG_LEVEL_DEBUG)
+	if (ctx_level < level)
 		return;
 
 	global_debug = (ctx_level == LIBUSB_LOG_LEVEL_DEBUG);
 #endif
 
-	usbi_backend.clock_gettime(USBI_CLOCK_REALTIME, &now);
-	if ((global_debug) && (!has_debug_header_been_displayed)) {
-		has_debug_header_been_displayed = 1;
-		usbi_log_str(LIBUSB_LOG_LEVEL_DEBUG, "[timestamp] [threadID] facility level [function call] <message>" USBI_LOG_LINE_END);
-		usbi_log_str(LIBUSB_LOG_LEVEL_DEBUG, "--------------------------------------------------------------------------------" USBI_LOG_LINE_END);
-	}
-	if (now.tv_nsec < timestamp_origin.tv_nsec) {
-		now.tv_sec--;
-		now.tv_nsec += 1000000000L;
-	}
-	now.tv_sec -= timestamp_origin.tv_sec;
-	now.tv_nsec -= timestamp_origin.tv_nsec;
-
 	switch (level) {
-	case LIBUSB_LOG_LEVEL_NONE:
+	case LIBUSB_LOG_LEVEL_NONE:	/* Impossible, but keeps compiler happy */
 		return;
 	case LIBUSB_LOG_LEVEL_ERROR:
 		prefix = "error";
@@ -2465,35 +2607,51 @@ void usbi_log_v(struct libusb_context *ctx, enum libusb_log_level level,
 	}
 
 	if (global_debug) {
+		struct timespec timestamp;
+
+		if (!has_debug_header_been_displayed) {
+			has_debug_header_been_displayed = 1;
+			log_str(LIBUSB_LOG_LEVEL_DEBUG, "[timestamp] [threadID] facility level [function call] <message>" USBI_LOG_LINE_END);
+			log_str(LIBUSB_LOG_LEVEL_DEBUG, "--------------------------------------------------------------------------------" USBI_LOG_LINE_END);
+		}
+
+		usbi_get_monotonic_time(&timestamp);
+		TIMESPEC_SUB(&timestamp, &timestamp_origin, &timestamp);
+
 		header_len = snprintf(buf, sizeof(buf),
-			"[%2d.%06d] [%08x] libusb: %s [%s] ",
-			(int)now.tv_sec, (int)(now.tv_nsec / 1000L), usbi_get_tid(), prefix, function);
+			"[%2ld.%06ld] [%08x] libusb: %s [%s] ",
+			(long)timestamp.tv_sec, (long)(timestamp.tv_nsec / 1000L), usbi_get_tid(), prefix, function);
 	} else {
 		header_len = snprintf(buf, sizeof(buf),
 			"libusb: %s [%s] ", prefix, function);
 	}
 
 	if (header_len < 0 || header_len >= (int)sizeof(buf)) {
-		/* Somehow snprintf failed to write to the buffer,
+		/* Somehow snprintf() failed to write to the buffer,
 		 * remove the header so something useful is output. */
 		header_len = 0;
 	}
-	/* Make sure buffer is NUL terminated */
-	buf[header_len] = '\0';
-	text_len = vsnprintf(buf + header_len, sizeof(buf) - header_len,
+
+	text_len = vsnprintf(buf + header_len, sizeof(buf) - (size_t)header_len,
 		format, args);
 	if (text_len < 0 || text_len + header_len >= (int)sizeof(buf)) {
 		/* Truncated log output. On some platforms a -1 return value means
 		 * that the output was truncated. */
-		text_len = sizeof(buf) - header_len;
+		text_len = (int)sizeof(buf) - header_len;
 	}
-	if (header_len + text_len + sizeof(USBI_LOG_LINE_END) >= sizeof(buf)) {
+	if (header_len + text_len + (int)sizeof(USBI_LOG_LINE_END) >= (int)sizeof(buf)) {
 		/* Need to truncate the text slightly to fit on the terminator. */
-		text_len -= (header_len + text_len + sizeof(USBI_LOG_LINE_END)) - sizeof(buf);
+		text_len -= (header_len + text_len + (int)sizeof(USBI_LOG_LINE_END)) - (int)sizeof(buf);
 	}
 	strcpy(buf + header_len + text_len, USBI_LOG_LINE_END);
 
-	usbi_log_str(level, buf);
+	log_str(level, buf);
+
+	/* Per-context log handler */
+#ifndef ENABLE_DEBUG_LOGGING
+	if (ctx && ctx->log_handler)
+		ctx->log_handler(ctx, level, buf);
+#endif
 }
 
 void usbi_log(struct libusb_context *ctx, enum libusb_log_level level,
@@ -2501,9 +2659,9 @@ void usbi_log(struct libusb_context *ctx, enum libusb_log_level level,
 {
 	va_list args;
 
-	va_start (args, format);
-	usbi_log_v(ctx, level, function, format, args);
-	va_end (args);
+	va_start(args, format);
+	log_v(ctx, level, function, format, args);
+	va_end(args);
 }
 
 #endif /* ENABLE_LOGGING */

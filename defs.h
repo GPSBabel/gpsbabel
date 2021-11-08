@@ -29,24 +29,20 @@
 #include <optional>               // for optional
 #include <utility>                // for move
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 #if HAVE_LIBZ
 #include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
 #include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QtCore/QDebug>          // for QDebug
-#include <QtCore/QList>           // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString
-#include <QtCore/QStringRef>      // for QStringRef
-#include <QtCore/QTextCodec>      // for QTextCodec
-#include <QtCore/QVector>         // for QVector
-#include <QtCore/Qt>              // for CaseInsensitive
-#include <QtCore/QtGlobal>        // for foreach
+#include <QDebug>                 // for QDebug
+#include <QList>                  // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString
+#include <QTextCodec>             // for QTextCodec
+#include <QVector>                // for QVector
+#include <Qt>                     // for CaseInsensitive
+#include <QtGlobal>               // for foreach
 
 #include "formspec.h"             // for FormatSpecificData
 #include "inifile.h"              // for inifile_t
@@ -81,40 +77,49 @@ constexpr double kMetersPerMile = 1609.344; /* exact in decimal notation */
 constexpr double kMilesPerMeter = 1.0 / kMetersPerMile;
 constexpr double kKilometersPerMile = 1.609344; /* exact in decimal notation */
 constexpr double kMilesPerKilometer = 1.0 / kKilometersPerMile;
+constexpr double kMetersPerNMile = 1852.0; /* exact in decimal notation */
+constexpr double kNMilesPerMeter = 1.0 / kMetersPerNMile;
 
-constexpr double FEET_TO_METERS(double feetsies) { return (feetsies) * kMetersPerFoot; }
-constexpr double METERS_TO_FEET(double meetsies) { return (meetsies) * kFeetPerMeter; }
+constexpr double FEET_TO_METERS(double feetsies) { return feetsies * kMetersPerFoot;}
+constexpr double METERS_TO_FEET(double meetsies) { return meetsies * kFeetPerMeter;}
 
-constexpr double NMILES_TO_METERS(double a) { return a * 1852.0;}	/* nautical miles */
-constexpr double METERS_TO_NMILES(double a) { return a / 1852.0;}
+constexpr double NMILES_TO_METERS(double a) { return a * kMetersPerNMile;}	/* nautical miles */
+constexpr double METERS_TO_NMILES(double a) { return a * kNMilesPerMeter;}
 
-constexpr double MILES_TO_METERS(double a) { return (a) * kMetersPerMile;}
-constexpr double METERS_TO_MILES(double a) { return (a) * kMilesPerMeter;}
-constexpr double FATHOMS_TO_METERS(double a) { return (a) * 1.8288;}
+constexpr double MILES_TO_METERS(double a) { return a * kMetersPerMile;}
+constexpr double METERS_TO_MILES(double a) { return a * kMilesPerMeter;}
+constexpr double FATHOMS_TO_METERS(double a) { return a * 1.8288;}
 
-constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (((a) * 1.8) + 32.0);}
-constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (((a) - 32.0) / 1.8);}
+constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (a * 1.8) + 32.0;}
+constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (a - 32.0) / 1.8;}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
 
+constexpr double kKPHPerMPS = SECONDS_PER_HOUR / 1000.0;
+constexpr double kMPSPerKPH = 1.0 / kKPHPerMPS;
+constexpr double kMPHPerMPS = kMilesPerMeter * SECONDS_PER_HOUR;
+constexpr double kMPSPerMPH = 1.0 / kMPHPerMPS;
+constexpr double kKnotsPerMPS = kNMilesPerMeter * SECONDS_PER_HOUR;
+constexpr double kMPSPerKnot = 1.0 / kKnotsPerMPS;
+
 /* meters/second to kilometers/hour */
-constexpr double MPS_TO_KPH(double a) { return (a)*SECONDS_PER_HOUR/1000.0;}
+constexpr double MPS_TO_KPH(double a) { return a * kKPHPerMPS;}
 
 /* meters/second to miles/hour */
-constexpr double MPS_TO_MPH(double a) { return METERS_TO_MILES(a) * SECONDS_PER_HOUR;}
+constexpr double MPS_TO_MPH(double a) { return a * kMPHPerMPS;}
 
-/* meters/second to knots */
-constexpr double MPS_TO_KNOTS(double a) { return MPS_TO_KPH((a)/1.852);}
+/* meters/second to knots(nautical miles/hour) */
+constexpr double MPS_TO_KNOTS(double a) { return a * kKnotsPerMPS;}
 
 /* kilometers/hour to meters/second */
-constexpr double KPH_TO_MPS(double a) { return a * 1000.0/SECONDS_PER_HOUR;}
+constexpr double KPH_TO_MPS(double a) { return a * kMPSPerKPH;}
 
 /* miles/hour to meters/second */
-#define MPH_TO_MPS(a) (MILES_TO_METERS(a) / SECONDS_PER_HOUR)
+constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 
-/* knots to meters/second */
-constexpr double KNOTS_TO_MPS(double a)  {return KPH_TO_MPS(a) * 1.852; }
+/* knots(nautical miles/hour) to meters/second */
+constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
 #define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
@@ -522,7 +527,7 @@ public:
   unsigned char cadence;	 /* revolutions per minute */
   float power; /* watts, as measured by cyclists */
   float temperature; /* Degrees celsius */
-  float odometer_distance; /* Meters? */
+  float odometer_distance; /* Meters */
   geocache_data* gc_data;
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
@@ -584,6 +589,7 @@ public:
   using QList<Waypoint*>::count; // a.k.a. size()
   using QList<Waypoint*>::crbegin;
   using QList<Waypoint*>::crend;
+  using QList<Waypoint*>::detach; // silence Qt6 foreach warnings
   using QList<Waypoint*>::empty; // a.k.a. isEmpty()
   using QList<Waypoint*>::end;
   using QList<Waypoint*>::front; // a.k.a. first()
@@ -746,7 +752,7 @@ public:
   void disp_all(std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc);
 
   // Only expose methods from our underlying container that won't corrupt our private data.
-  // Our contained element (route_head) also contains a container (waypoint_list), 
+  // Our contained element (route_head) also contains a container (waypoint_list),
   // and we maintain a total count the elements in these contained containers, i.e.
   // the total number of waypoints in all the routes in the RouteList.
   // public types
@@ -762,6 +768,7 @@ public:
   using QList<route_head*>::count; // a.k.a. size()
   using QList<route_head*>::crbegin;
   using QList<route_head*>::crend;
+  using QList<route_head*>::detach; // silence Qt6 foreach warnings
   using QList<route_head*>::empty; // a.k.a. isEmpty()
   using QList<route_head*>::end;
   using QList<route_head*>::front; // a.k.a. first()
@@ -1084,7 +1091,7 @@ case_ignore_strcmp(const QString& s1, const QString& s2)
 // In 95% of the callers, this could be s1.startsWith(s2)...
 inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 {
-  return s1.leftRef(n).compare(s2.left(n), Qt::CaseInsensitive);
+  return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
 int str_match(const char* str, const char* match);

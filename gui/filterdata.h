@@ -136,7 +136,7 @@ public:
 class WayPtsFilterData: public FilterData
 {
 public:
-  WayPtsFilterData(): 
+  WayPtsFilterData():
     duplicates(false), shortNames(true), locations(false),
     position(false), radius(false),
     positionVal(0.0), radiusVal(0.0),
@@ -175,7 +175,7 @@ public:
 class RtTrkFilterData: public FilterData
 {
 public:
-  RtTrkFilterData(): 
+  RtTrkFilterData():
     simplify_(false),
     reverse_(false),
     limitTo_(100)
@@ -200,7 +200,7 @@ public:
 class MiscFltFilterData: public FilterData
 {
 public:
-  MiscFltFilterData(): 
+  MiscFltFilterData():
     nukeRoutes_(false),
     nukeTracks_(false),
     nukeWaypoints_(false),

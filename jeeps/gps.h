@@ -1,8 +1,8 @@
 #ifndef gps_h
 #define gps_h
 
-#include "../defs.h"
-#include "gpsport.h"
+#include "defs.h"
+#include "jeeps/gpsport.h"
 #include <ctime>
 
 #define FRAMING_ERROR  -1
@@ -249,17 +249,17 @@ typedef struct GPS_SCourse_Limits {
 
 typedef int (*pcb_fn)(int, struct GPS_SWay**);
 
-#include "gpsdevice.h"
-#include "gpssend.h"
-#include "gpsread.h"
-#include "gpsutil.h"
-#include "gpsapp.h"
-#include "gpsprot.h"
-#include "gpscom.h"
-#include "gpsfmt.h"
-#include "gpsmath.h"
-#include "gpsmem.h"
-#include "gpsrqst.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpssend.h"
+#include "jeeps/gpsread.h"
+#include "jeeps/gpsutil.h"
+#include "jeeps/gpsapp.h"
+#include "jeeps/gpsprot.h"
+#include "jeeps/gpscom.h"
+#include "jeeps/gpsfmt.h"
+#include "jeeps/gpsmath.h"
+#include "jeeps/gpsmem.h"
+#include "jeeps/gpsrqst.h"
 
 extern time_t gps_save_time;
 extern double gps_save_lat;

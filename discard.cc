@@ -19,13 +19,16 @@
 
  */
 
-#include "defs.h"
 #include "discard.h"
-#include <cstdlib>
-// Can't use QRegularExpression because Linux won't get Qt 5 for years.
-#include <QtCore/QRegExp>
-#include <cstdio>
-#include <cstdlib>
+
+#include <QDebug>              // for QDebug
+#include <QRegularExpression>  // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpressionMatch
+
+#include <cstdlib>             // for atoi, atof
+
+#include "defs.h"              // for Waypoint, fatal, route_del_wpt, route_disp_all, track_del_wpt, track_disp_all, waypt_del, waypt_disp_all, route_head, rtedata, trkdata, wptdata, fix_none, fix_unknown
+#include "src/core/logging.h"  // for FatalMsg
+
 
 #if FILTERS_ENABLED
 
@@ -73,16 +76,16 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
     del = 1;
   }
 
-  if (nameopt && name_regex.indexIn(waypointp->shortname) >= 0) {
+  if (nameopt && name_regex.match(waypointp->shortname).hasMatch()) {
     del = 1;
   }
-  if (descopt && desc_regex.indexIn(waypointp->description) >= 0) {
+  if (descopt && desc_regex.match(waypointp->description).hasMatch()) {
     del = 1;
   }
-  if (cmtopt && cmt_regex.indexIn(waypointp->notes) >= 0) {
+  if (cmtopt && cmt_regex.match(waypointp->notes).hasMatch()) {
     del = 1;
   }
-  if (iconopt && icon_regex.indexIn(waypointp->icon_descr) >= 0) {
+  if (iconopt && icon_regex.match(waypointp->icon_descr).hasMatch()) {
     del = 1;
   }
 
@@ -130,6 +133,19 @@ void DiscardFilter::process()
 
 }
 
+QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
+{
+  QRegularExpression regex;
+  regex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+  QString pattern = QRegularExpression::wildcardToRegularExpression(glob_pattern);
+  // un-anchor the pattern, we allow partial matches.
+  if (pattern.startsWith("\\A") && pattern.endsWith("\\z")) {
+    pattern = pattern.mid(2,pattern.size()-4);
+  }
+  regex.setPattern(pattern);
+  return regex;
+}
+
 void DiscardFilter::init()
 {
   if (hdopopt) {
@@ -159,24 +175,28 @@ void DiscardFilter::init()
   }
 
   if (nameopt) {
-    name_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    name_regex.setPatternSyntax(QRegExp::WildcardUnix);
-    name_regex.setPattern(nameopt);
+    name_regex = generateRegExp(nameopt);
+    if (!name_regex.isValid()) {
+      fatal(FatalMsg() << "discard: matchname option is an invalid expression.");
+    }
   }
   if (descopt) {
-    desc_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    desc_regex.setPatternSyntax(QRegExp::WildcardUnix);
-    desc_regex.setPattern(descopt);
+    desc_regex = generateRegExp(descopt);
+    if (!desc_regex.isValid()) {
+      fatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
+    }
   }
   if (cmtopt) {
-    cmt_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    cmt_regex.setPatternSyntax(QRegExp::WildcardUnix);
-    cmt_regex.setPattern(cmtopt);
+    cmt_regex = generateRegExp(cmtopt);
+    if (!cmt_regex.isValid()) {
+      fatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
+    }
   }
   if (iconopt) {
-    icon_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    icon_regex.setPatternSyntax(QRegExp::WildcardUnix);
-    icon_regex.setPattern(iconopt);
+    icon_regex = generateRegExp(iconopt);
+    if (!icon_regex.isValid()) {
+      fatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
+    }
   }
 }
 

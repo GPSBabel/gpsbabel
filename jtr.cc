@@ -21,7 +21,7 @@
  */
 #include "defs.h"
 #include "csv_util.h"
-#include <QtCore/QHash>
+#include <QHash>
 //#include <cassert>
 #include <cmath>
 #include <cstdio>
@@ -100,7 +100,6 @@ jtr_read()
     char valid = 'V';
     double lon;
     float course, mcourse, mvar, mdev;
-    char buf[32];
     char mdevdir;
 
     line++;
@@ -188,8 +187,11 @@ jtr_read()
     QDateTime dt = QDateTime(date, time, Qt::UTC);
 
     /* check for duplicates as suggested in format description */
-    snprintf(buf, sizeof(buf), "%.6f\01%.6f\01%ld", lat, lon, (long)dt.toTime_t());
-    if (trkpts.contains(QString::fromUtf8(buf))) {
+    QString buf = QString("%1\01%2\01%3")
+                  .arg(QString::number(lat, 'f', 6),
+                       QString::number(lon, 'f', 6),
+                       QString::number(dt.toSecsSinceEpoch()));
+    if (trkpts.contains(buf)) {
       continue;
     }
 
@@ -227,7 +229,7 @@ jtr_read()
       track_add_head(trk);
     }
 
-    trkpts.insert(QString::fromUtf8(buf), wpt);
+    trkpts.insert(buf, wpt);
     track_add_wpt(trk, wpt);
   }
 }

@@ -22,7 +22,7 @@
 #ifndef ARCDIST_H_INCLUDED_
 #define ARCDIST_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_BOOL, Waypoint (ptr only)
 #include "filter.h"  // for Filter

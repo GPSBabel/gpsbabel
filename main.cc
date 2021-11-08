@@ -22,21 +22,21 @@
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
-#include <QtCore/QByteArray>          // for QByteArray
-#include <QtCore/QChar>               // for QChar
-#include <QtCore/QCoreApplication>    // for QCoreApplication
-#include <QtCore/QFile>               // for QFile
-#include <QtCore/QIODevice>           // for QIODevice::ReadOnly
-#include <QtCore/QLocale>             // for QLocale
-#include <QtCore/QMessageLogContext>  // for QMessageLogContext
-#include <QtCore/QStack>              // for QStack
-#include <QtCore/QString>             // for QString
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QSysInfo>            // for QSysInfo
-#include <QtCore/QTextCodec>          // for QTextCodec
-#include <QtCore/QTextStream>         // for QTextStream
-#include <QtCore/QtConfig>            // for QT_VERSION_STR
-#include <QtCore/QtGlobal>            // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
+#include <QByteArray>                 // for QByteArray
+#include <QChar>                      // for QChar
+#include <QCoreApplication>           // for QCoreApplication
+#include <QFile>                      // for QFile
+#include <QIODevice>                  // for QIODevice::ReadOnly
+#include <QLocale>                    // for QLocale
+#include <QMessageLogContext>         // for QMessageLogContext
+#include <QStack>                     // for QStack
+#include <QString>                    // for QString
+#include <QStringList>                // for QStringList
+#include <QSysInfo>                   // for QSysInfo
+#include <QTextCodec>                 // for QTextCodec
+#include <QTextStream>                // for QTextStream
+#include <QtConfig>                   // for QT_VERSION_STR
+#include <QtGlobal>                   // for qPrintable, qVersion, QT_VERSION, QT_VERSION_CHECK
 
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
@@ -231,7 +231,7 @@ public:
              qPrintable(wpt->shortname),
              qPrintable(wpt->description));
     }
-  
+
     if (wpt->altitude != unknown_alt) {
       printf(" %f", wpt->altitude);
     }
@@ -431,7 +431,7 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s \n", gpsbabel_version);
+        warning("GPSBabel Version: %s\n", gpsbabel_version);
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
@@ -535,7 +535,7 @@ run(const char* prog_name)
     }
 
     /* reinitialize xcsv in case two formats that use xcsv were given */
-    (void) Vecs::Instance().find_vec(ivecs->get_name());
+    (void) Vecs::Instance().find_vec(ivecs->get_argstring());
 
     cet_convert_init(ivecs->get_encode(), 1);
 
@@ -548,7 +548,7 @@ run(const char* prog_name)
 
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
-      (void) Vecs::Instance().find_vec(ovecs->get_name());
+      (void) Vecs::Instance().find_vec(ovecs->get_argstring());
 
       cet_convert_init(ovecs->get_encode(), 1);
 

@@ -34,7 +34,7 @@ make clean
 make -j 3
 make check
 
-export CLAZY_CHECKS=level0,level1,no-non-pod-global-static
+export CLAZY_CHECKS=level0,level1,no-non-pod-global-static,no-qstring-ref
 qmake -spec linux-clang "CONFIG+=debug" "QMAKE_CXX=clazy"
 make clean
 make -j 3 2>&1 | tee clazy.log

@@ -23,8 +23,8 @@
 #ifndef GBFILE_H
 #define GBFILE_H
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QString>       // for QString
+#include <QByteArray>           // for QByteArray
+#include <QString>              // for QString
 
 #include <cstdarg>             // for va_list
 #include <cstdint>             // for int32_t, int16_t, uint32_t

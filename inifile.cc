@@ -21,16 +21,16 @@
 #include "defs.h"              // for fatal, ugetenv, warning
 #include "inifile.h"
 #include "src/core/file.h"     // for File
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QChar>        // for operator==, QChar
-#include <QtCore/QDir>         // for QDir
-#include <QtCore/QFile>        // for QFile
-#include <QtCore/QFileInfo>    // for QFileInfo
-#include <QtCore/QHash>        // for QHash
-#include <QtCore/QIODevice>    // for QIODevice::ReadOnly, QIODevice
-#include <QtCore/QTextStream>  // for QTextStream
-#include <QtCore/Qt>           // for CaseInsensitive
-#include <QtCore/QtGlobal>     // for qPrintable
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for operator==, QChar
+#include <QDir>                // for QDir
+#include <QFile>               // for QFile
+#include <QFileInfo>           // for QFileInfo
+#include <QHash>               // for QHash
+#include <QIODevice>           // for QIODevice::ReadOnly, QIODevice
+#include <QTextStream>         // for QTextStream
+#include <Qt>                  // for CaseInsensitive
+#include <QtGlobal>            // for qPrintable
 #include <utility>
 
 #define MYNAME "inifile"
@@ -185,7 +185,11 @@ inifile_init(const QString& filename, const char* myname)
   gpsbabel::File file(name);
   file.open(QFile::ReadOnly);
   QTextStream stream(&file);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  // default for QTextStream::setCodec in Qt5 is QTextCodec::codecForLocale()
+  // default for QTextStream::setEncoding in Qt6 is QStringConverter::Utf8
   stream.setCodec("UTF-8");
+#endif
   stream.setAutoDetectUnicode(true);
 
   auto* result = new inifile_t;

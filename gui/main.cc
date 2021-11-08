@@ -20,9 +20,9 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QtCore/QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
-#include <QtGui/QIcon>             // for QIcon
-#include <QtWidgets/QApplication>  // for QApplication
+#include <QtGlobal>                // for QT_VERSION, QT_VERSION_CHECK
+#include <QIcon>                   // for QIcon
+#include <QApplication>            // for QApplication
 
 #include "mainwindow.h"             // for MainWindow
 
@@ -44,7 +44,5 @@ int main(int argc, char** argv)
 
   MainWindow mainWindow(nullptr);
   mainWindow.show();
-  QApplication::exec();
-
-  return 0;
+  return QApplication::exec();
 }

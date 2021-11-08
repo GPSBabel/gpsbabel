@@ -373,7 +373,7 @@ private:
 class GpxWaypoint: public GpxItem
 {
 public:
-  GpxWaypoint(): 
+  GpxWaypoint():
     location_(LatLng(0, 0)),
     elevation_(-1.0E-100),
     name_(QString()),

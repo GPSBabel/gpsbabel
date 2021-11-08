@@ -26,10 +26,10 @@
 #ifndef QSTARZ_BL1000_H_INCLUDED_
 #define QSTARZ_BL1000_H_INCLUDED_
 
-#include <QtCore/QDataStream>  // for QDataStream
-#include <QtCore/QString>      // for QString
-#include <QtCore/QVector>      // for QVector
-#include <QtCore/QtGlobal>     // for qint8, quint16, quint8
+#include <QDataStream>         // for QDataStream
+#include <QString>             // for QString
+#include <QVector>             // for QVector
+#include <QtGlobal>            // for qint8, quint16, quint8
 
 #include "defs.h"              // for ff_cap, ff_cap_read, ff_cap_none, CET_CHARSET_ASCII, ff_type, ff_type_file, route_head
 #include "format.h"            // for Format

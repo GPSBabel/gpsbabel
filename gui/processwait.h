@@ -23,18 +23,19 @@
 #ifndef PROCESSWAIT_H
 #define PROCESSWAIT_H
 
+#include <QByteArray>                  // for QByteArray
+#include <QObject>                     // for QObject
+#include <QProcess>                    // for QProcess, QProcess::ExitStatus, QProcess::ProcessError
+#include <QString>                     // for QString
+#include <QTimer>                      // for QTimer
+#include <QCloseEvent>                 // for QCloseEvent
+#include <QDialog>                     // for QDialog
+#include <QDialogButtonBox>            // for QDialogButtonBox
+#include <QPlainTextEdit>              // for QPlainTextEdit
+#include <QProgressBar>                // for QProgressBar
+#include <QWidget>                     // for QWidget
 
-#include <QProcess>
-#include <QDialog>
-#include <vector>
-#include <string>
-using std::string;
-using std::vector;
 
-class QProgressBar;
-class QPlainTextEdit;
-class QDialogButtonBox;
-class QTimer;
 //------------------------------------------------------------------------
 class ProcessWaitDialog: public QDialog
 {
@@ -42,46 +43,28 @@ class ProcessWaitDialog: public QDialog
   Q_OBJECT
 
 public:
-  //
-  ProcessWaitDialog(QWidget* parent, QProcess* process_);
-  ~ProcessWaitDialog();
+  ProcessWaitDialog(QWidget* parent, QProcess* process);
 
-  bool getExitedNormally();
-  int getExitCode();
-  QString getErrorString();
-  QString getOutputString() const
+  QString getOutputString()
   {
-    return outputString_;
+    return QString::fromLocal8Bit(outputString_);
   }
 
 protected:
-  void closeEvent(QCloseEvent* event);
-  void appendToText(const char*);
-  QString processErrorString(QProcess::ProcessError err);
-
+  void closeEvent(QCloseEvent* event) override;
+  void appendToText(const QByteArray& text);
 
 private slots:
-  void errorX(QProcess::ProcessError);
-  void finishedX(int exitCode, QProcess::ExitStatus);
-  void readyReadStandardErrorX();
-  void readyReadStandardOutputX();
   void timeoutX();
-  void stopClickedX();
 
 private:
-  vector <int> progressVals_;
-  int          progressIndex_;
-  int          stopCount_;
-  string       bufferedOut_;
-  QProcess::ExitStatus exitStatus_;
-  int                  ecode_;
-  QProcess*     process_;
-  QProgressBar* progressBar_;
-  QPlainTextEdit* textEdit_;
-  QDialogButtonBox* buttonBox_;
-  QTimer*           timer_;
-  QString          errorString_;
-  QString          outputString_;
+  int progressIndex_{0};
+  QProcess* process_{nullptr};
+  QProgressBar* progressBar_{nullptr};
+  QPlainTextEdit* textEdit_{nullptr};
+  QDialogButtonBox* buttonBox_{nullptr};
+  QTimer* timer_{nullptr};
+  QByteArray outputString_;
 };
 
 #endif

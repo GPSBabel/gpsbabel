@@ -36,14 +36,14 @@
 #include <cstring>                    // for strchr
 #include <ctime>                      // for localtime, strftime
 
-#include <QtCore/QDate>               // for QDate
-#include <QtCore/QDateTime>           // for QDateTime
-#include <QtCore/QList>               // for QList<>::iterator, QList
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString, operator+, QString::KeepEmptyParts
-#include <QtCore/QStringList>         // for QStringList
-#include <QtCore/QTime>               // for QTime
-#include <QtCore/QtGlobal>            // for qAsConst, QAddConst<>::Type
+#include <QDate>                      // for QDate
+#include <QDateTime>                  // for QDateTime
+#include <QList>                      // for QList<>::iterator, QList
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString, operator+
+#include <QStringList>                // for QStringList
+#include <QTime>                      // for QTime
+#include <QtGlobal>                   // for qAsConst, QAddConst<>::Type
 
 #include "cet_util.h"                 // for cet_convert_init
 #include "csv_util.h"                 // for csv_lineparse
@@ -270,7 +270,7 @@ parse_point(char *line) {
         break;
       case 2: {
         // Date is in format dd.mm.yyyy
-        auto v = qstr.split('.', QString::KeepEmptyParts);
+        const auto v = qstr.split('.');
 
         if (v.size() == 3) {
           auto day = v[0].toInt();
@@ -284,7 +284,7 @@ parse_point(char *line) {
       }
       case 3: {
         // Time is hh:mm.ss - yes, colon and period.
-        auto v = qstr.split(QRegularExpression("[.:]"), QString::KeepEmptyParts);
+        const auto v = qstr.split(QRegularExpression("[.:]"));
         if (v.size() == 3) {
           auto hour = v[0].toInt();
           auto min = v[1].toInt();

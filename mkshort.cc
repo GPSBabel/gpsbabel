@@ -23,9 +23,9 @@
 #include <cstdio>           // for sprintf, size_t
 #include <cstring>          // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
-#include <QtCore/QList>     // for QList
-#include <QtCore/QString>   // for QString
-#include <QtCore/QtGlobal>  // for foreach
+#include <QList>            // for QList
+#include <QString>          // for QString
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "cet.h"            // for cet_utf8_strdup, cet_utf8_strlen, cet_utf8_strndup

@@ -20,11 +20,7 @@
  */
 
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../defs.h"
+#include "defs.h"
 
 #if !HAVE_LIBUSB_1_0
 

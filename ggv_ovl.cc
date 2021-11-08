@@ -22,9 +22,9 @@
 
 #include <cmath>            // for sin, cos, acos
 
-#include <QtCore/QString>   // for QString
-#include <QtCore/QVector>   // for QVector
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>          // for QString
+#include <QVector>          // for QVector
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "gbfile.h"         // for gbfprintf, gbfclose, gbfopen, gbfile
@@ -356,7 +356,7 @@ write_bounds()
 }
 
 static void
-draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, 
+draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art,
                    const OVL_COLOR_TYP point_color, const Waypoint* wpt)
 {
   symbol_ct++;

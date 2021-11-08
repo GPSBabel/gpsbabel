@@ -23,13 +23,13 @@
 #include <cstdint>              // for int32_t
 #include <cstdio>               // for printf, SEEK_SET, SEEK_CUR, SEEK_END
 
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QDebug>        // for QDebug
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QTimeZone>     // for QTimeZone
-#include <QtCore/Qt>            // for UTC
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QDebug>               // for QDebug
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QTimeZone>            // for QTimeZone
+#include <Qt>                   // for UTC
 
 #include "defs.h"
 #include "energympro.h"

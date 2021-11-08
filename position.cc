@@ -22,8 +22,8 @@
 #include <cmath>            // for fabs
 #include <cstdlib>          // for strtod
 
-#include <QtCore/QList>     // for QList
-#include <QtCore/QtGlobal>  // for qAsConst, QAddConst<>::Type
+#include <QList>            // for QList
+#include <QtGlobal>         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "grtcirc.h"        // for RAD, gcdist, radtometers
@@ -52,9 +52,9 @@ void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
   int nelems = qlist.size();
 
   for (int i = 0 ; i < nelems ; ++i) {
-    bool something_deleted = false;
-
     if (!qlist.at(i).deleted) {
+      bool something_deleted = false;
+
       for (int j = i + 1 ; j < nelems ; ++j) {
         if (!qlist.at(j).deleted) {
           double dist = gc_distance(qlist.at(j).wpt->latitude,

@@ -19,9 +19,9 @@
 
  */
 
-#include "gps.h"
-#include "garminusb.h"
-#include "gpsusbcommon.h"
+#include "jeeps/gps.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsusbcommon.h"
 
 /*
  * This receive logic is a little convoluted as we go to some efforts here
@@ -153,28 +153,26 @@ top:
 int
 gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  unsigned int rv, i;
-
   auto* obuf = (unsigned char*) &opkt->dbuf;
-  const char* m1, *m2;
+  const char* m2;
 
-  rv = gusb_llops->llop_send(opkt, sz);
+  unsigned int rv = gusb_llops->llop_send(opkt, sz);
 
   if (gps_show_bytes) {
     const unsigned short pkttype = le_read16(&opkt->gusb_pkt.databuf[0]);
     const unsigned short pkt_id = le_read16(&opkt->gusb_pkt.pkt_id);
     GPS_Diag("TX [%zu]:", sz);
 
-    for (i=0; i<sz; i++) {
+    for (unsigned int i=0; i<sz; ++i) {
       GPS_Diag("%02x ", obuf[i]);
     }
 
-    for (i=0; i<sz; i++) {
+    for (unsigned int i=0; i<sz; ++i) {
       int c = obuf[i];
       GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
     }
 
-    m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
+    const char* m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
 
     GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
   }

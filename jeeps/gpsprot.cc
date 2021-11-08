@@ -23,7 +23,7 @@
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
 #define COMMON
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <cstdio>
 
 #define GPS_TAGUNK  20
@@ -43,7 +43,7 @@ struct COMMANDDATA COMMAND_ID[2]= {
   ,
   /* Device Command Protocol 2 (A011) */
   {
-    0,4,0,17,8,20,0,21,26,0,0
+    0,4,0,17,8,20,0,21,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   }
 };
 

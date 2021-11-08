@@ -22,9 +22,9 @@
 #include <cstdint>
 #include <ctime>                   // for localtime
 
-#include <QtCore/QString>          // for QString, operator!=
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
+#include <QString>                 // for QString, operator!=
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
 
 #include "defs.h"
 #include "formspec.h"              // for FsChainFind, kFsGpx

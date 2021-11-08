@@ -31,3 +31,11 @@ compare ${REFERENCE}/track/backfilldate2.csv ${TMPDIR}/backfilldate2.csv
 
 gpsbabel -i gpx -f ${REFERENCE}/track/nmeadate.gpx -o nmea -F ${TMPDIR}/nmeadate.nmea
 compare ${REFERENCE}/track/nmeadate.nmea ${TMPDIR}/nmeadate.nmea
+
+
+gpsbabel -t -i nmea,date=20190308 -f ${REFERENCE}/track/addmultipledaysfwd.nmea -o unicsv,utc=0 -F ${TMPDIR}/addmultipledaysfwd.csv
+compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysfwd.csv
+gpsbabel -t -i nmea -f ${REFERENCE}/track/addmultipledaysbkw.nmea -o unicsv,utc=0 -F ${TMPDIR}/addmultipledaysbkw.csv
+compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysbkw.csv
+gpsbabel -t -i nmea -f ${REFERENCE}/track/addmultipledaysmid.nmea -o unicsv,utc=0 -F ${TMPDIR}/addmultipledaysmid.csv
+compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysmid.csv

@@ -1,7 +1,7 @@
 # $Id: app.pro,v 1.19 2010-11-01 03:30:42 robertl Exp $
 #
 
-CONFIG += qt
+#CONFIG += qt causes link failure on msvc.  Qt6EntryPoint.lib not added to libs.
 CONFIG(debug, debug|release) {
   CONFIG += console
 }
@@ -12,18 +12,14 @@ ICON = images/appicon.icns
 QT += core \
       gui \
       network \
+      serialport \
       widgets \
       xml
 
 disable-mappreview {
   DEFINES += DISABLE_MAPPREVIEW
 } else {
-  qtHaveModule(webenginewidgets) {
-    QT += webenginewidgets webchannel
-    DEFINES += HAVE_WEBENGINE
-  } else {
-    QT += webkit webkitwidgets 
-  }
+  QT += webenginewidgets webchannel
 }
 
 unix:DESTDIR = objects
@@ -31,15 +27,6 @@ unix:MOC_DIR = objects
 unix:OBJECTS_DIR = objects
 unix:RCC_DIR = objects
 mac:DESTDIR = .
-
-mac:LIBS += -framework IOKit -framework CoreFoundation
-unix {
-    CONFIG += link_pkgconfig
-    packagesExist(libudev) {
-        DEFINES += HAVE_UDEV
-        PKGCONFIG += libudev
-    }
-}
 
 UI_DIR = tmp
 
@@ -97,12 +84,11 @@ SOURCES += mainwindow.cc
 SOURCES += optionsdlg.cc
 SOURCES += preferences.cc
 SOURCES += processwait.cc
+SOURCES += runmachine.cc
 SOURCES += upgrade.cc
 SOURCES += version_mismatch.cc
-unix:!mac {
+unix {
   SOURCES += serial_unix.cc
-} else:mac {
-  SOURCES += serial_mac.cc
 } else:windows {
   SOURCES += serial_win.cc
 }
@@ -129,6 +115,7 @@ HEADERS += mainwindow.h
 HEADERS += optionsdlg.h
 HEADERS += preferences.h
 HEADERS += processwait.h
+HEADERS += runmachine.h
 HEADERS += setting.h
 HEADERS += upgrade.h
 HEADERS += version_mismatch.h
