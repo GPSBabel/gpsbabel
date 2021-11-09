@@ -213,18 +213,25 @@ win32-msvc* {
   QMAKE_EXTRA_COMPILERS += styles
 }
 
-load(configure)
-
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
 macx|linux|openbsd {
-  qtCompileTest(unistd) {
-    # this is used by zlib
+  if (equals(MAKEFILE_GENERATOR, XCODE)) {
+    # "Configure tests are not supported with the XCODE Makefile generator"
+    # assume we have the following headers
+    # these are used by zlib
     DEFINES += HAVE_UNISTD_H
-  }
-  qtCompileTest(stdarg) {
-    # this is used by zlib
     DEFINES += HAVE_STDARG_H
+  } else {
+    load(configure)
+    qtCompileTest(unistd) {
+      # this is used by zlib
+      DEFINES += HAVE_UNISTD_H
+    }
+    qtCompileTest(stdarg) {
+      # this is used by zlib
+      DEFINES += HAVE_STDARG_H
+    }
   }
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
