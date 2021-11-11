@@ -41,7 +41,7 @@ LatLon::LatLon(double latitude, double longitude)
 
 NVector::NVector(double latitude_degrees, double longitude_degrees)
 {
-  // this implements equation 3.
+  // This implements equation 3.
 
   // The coordinate system choice matches
   // A_Nonsingular_Horizontal_Position_Representation.pdf
@@ -66,7 +66,7 @@ NVector::NVector(const Vector3D& v)
 
 std::pair<NVector, double> PVector::toNVectorAndHeight() const
 {
-  // this implements equation 23.
+  // This implements equation 23.
   constexpr double a = WGS84_SEMI_MAJOR_AXIS_METERS;
   constexpr double a2 = a * a;
   constexpr double e2 = WGS84_ECCENTRICITY_SQUARED;
@@ -99,7 +99,7 @@ std::pair<NVector, double> PVector::toNVectorAndHeight() const
 
 double NVector::latitude() const
 {
-  // this implements equation 6.
+  // This implements equation 6.
   double latitude_radians = atan2(x, sqrt(y*y + z*z));
   double latitude_degrees = latitude_radians * 180.0/M_PI;
   return latitude_degrees;
@@ -107,7 +107,7 @@ double NVector::latitude() const
 
 double NVector::longitude() const
 {
-  // this implements equation 5.
+  // This implements equation 5.
   double longitude_radians = atan2(y, -z);
   double longitude_degrees = longitude_radians * 180.0/M_PI;
   return longitude_degrees;
@@ -116,7 +116,7 @@ double NVector::longitude() const
 // great circle distance in radians
 double NVector::distance_radians(const NVector& n_EA_E, const NVector& n_EB_E)
 {
-  // this implements equation 16 using arctan for numerical accuracy.
+  // This implements equation 16 using arctan for numerical accuracy.
   double result = atan2(crossProduct(n_EA_E, n_EB_E).norm(),
                         dotProduct(n_EA_E, n_EB_E));
   return result;
@@ -237,7 +237,7 @@ NVector NVector::linepart(const NVector& n_EA_E, const NVector& n_EB_E, double f
   if (dp_a_b >= (1.0-8.0*DBL_EPSILON)) {
     // The points are so close we will have trouble constructing a basis.
     // Since they are so close the non-linearities in direct n vector
-    // interpolation are negligble.
+    // interpolation are negligible.
     Vector3D result = (n_EA_E + (n_EB_E-n_EA_E)*fraction).normalize();
     return result;
   }
@@ -248,7 +248,7 @@ NVector NVector::linepart(const NVector& n_EA_E, const NVector& n_EB_E, double f
     Vector3D result(nan(""), nan(""), nan(""));
     return result;
   }
-  // Form an orthonormal basis with one component perpendicuar to the great
+  // Form an orthonormal basis with one component perpendicular to the great
   // circle containing A and B, and one component being A.
   // Call this the W frame.
   // The columns of the rotation matrix from E to W are w1, w2 and w3.
@@ -258,7 +258,7 @@ NVector NVector::linepart(const NVector& n_EA_E, const NVector& n_EB_E, double f
   // Rotate A and B to the W frame.
   // Vector3D n_EA_W = Vector3D(w1*n_EA_E, w2*n_EA_E, w3*n_EA_E);
   Vector3D n_EB_W = Vector3D(w1*n_EB_E, w2*n_EB_E, w3*n_EB_E);
-  // By construciton n_EA_W.y is (1, 0, 0),
+  // By construction n_EA_W.y is (1, 0, 0),
   // n_EB_W.y is zero,
   // and both n_EA_W and n_EB_W are unit vectors.
   // The information is all in the angle between them,
@@ -312,7 +312,7 @@ NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB
   // Compute the normal to the great circle defined by Y and X:
   Vector3D x_cross_y = crossProduct(x, n_EY_E);
   // A candidate projection from X onto the great circle defined by A and B is
-  // c_candidate, the other possibity is -c_candidate.
+  // c_candidate, the other possibility is -c_candidate.
   Vector3D c_candidate = crossProduct(a_cross_b, x_cross_y).normalize();
   // pick the candidate closest to Y.
   Vector3D c = dotProduct(c_candidate, n_EY_E) >= 0.0 ? c_candidate : -c_candidate;
@@ -325,7 +325,7 @@ NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB
   // of closest approach is either A or B, whichever is close to C.
   // Note that A, B, C, M all are all on the great circle defined by A and B, so
   // the dot product of any of these two unit vectors monotonically decreases
-  // the farther apart they are on the great cirle.
+  // the farther apart they are on the great circle.
   Vector3D result;
   if (dotProduct(n_EA_E, m) < dotProduct(c, m)) {
     result = c;
@@ -339,7 +339,7 @@ NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB
 #else
 NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB_E, const NVector& n_EY_E)
 {
-  // Form an orthonormal basis with one component perpendicuar to the great
+  // Form an orthonormal basis with one component perpendicular to the great
   // circle containing A and B, and one component being A.
   // Call this the W frame.
   // The columns of the rotation matrix from E to W are w1, w2 and w3.
@@ -348,10 +348,10 @@ NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB
   Vector3D w3 = crossProduct(n_EA_E,w2);
   // Rotate Y to the W frame.
   Vector3D n_EY_W = Vector3D(w1*n_EY_E, w2*n_EY_E, w3*n_EY_E);
-  // By construciton n_EA_W.y is (1, 0, 0),
+  // By construction n_EA_W.y is (1, 0, 0),
   // n_EB_W.y is zero,
   // and both n_EA_W and n_EB_W are unit vectors.
-  // The projection of Y onto the great cricle defined by A and B
+  // The projection of Y onto the great circle defined by A and B
   // is just the n_EY_W with the y component set to zero.
   Vector3D n_EC_W = Vector3D(n_EY_W.getx(), 0.0, n_EY_W.getz()).normalize();
   // Translate the projected point back to the E frame.
@@ -370,7 +370,7 @@ NVector NVector::crossTrackProjection(const NVector& n_EA_E, const NVector& n_EB
   // of closest approach is either A or B, whichever is close to C.
   // Note that A, B, C, M all are all on the great circle defined by A and B, so
   // the dot product of any of these two unit vectors monotonically decreases
-  // the farther apart they are on the great cirle.
+  // the farther apart they are on the great circle.
   Vector3D result;
   if (dotProduct(n_EA_E, n_EM_E) < dotProduct(n_EC_E, n_EM_E)) {
     result = n_EC_E;
