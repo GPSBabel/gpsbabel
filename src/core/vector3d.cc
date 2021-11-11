@@ -29,30 +29,30 @@ namespace gpsbabel
 
 Vector3D::Vector3D(double xi, double yi, double zi)
 {
-  x = xi;
-  y = yi;
-  z = zi;
+  x_ = xi;
+  y_ = yi;
+  z_ = zi;
 }
 
 double Vector3D::norm() const
 {
-  double norm = sqrt(x*x + y*y + z*z);
+  double norm = sqrt(x_*x_ + y_*y_ + z_*z_);
   return norm;
 }
 
 double Vector3D::getx() const
 {
-  return x;
+  return x_;
 }
 
 double Vector3D::gety() const
 {
-  return y;
+  return y_;
 }
 
 double Vector3D::getz() const
 {
-  return z;
+  return z_;
 }
 
 Vector3D& Vector3D::normalize()
@@ -63,33 +63,33 @@ Vector3D& Vector3D::normalize()
 
 Vector3D& Vector3D::operator+=(const Vector3D& rhs)
 {
-  x += rhs.x;
-  y += rhs.y;
-  z += rhs.z;
+  x_ += rhs.x_;
+  y_ += rhs.y_;
+  z_ += rhs.z_;
   return *this;
 }
 
 Vector3D& Vector3D::operator-=(const Vector3D& rhs)
 {
-  x -= rhs.x;
-  y -= rhs.y;
-  z -= rhs.z;
+  x_ -= rhs.x_;
+  y_ -= rhs.y_;
+  z_ -= rhs.z_;
   return *this;
 }
 
 Vector3D& Vector3D::operator*=(double rhs)
 {
-  x *= rhs;
-  y *= rhs;
-  z *= rhs;
+  x_ *= rhs;
+  y_ *= rhs;
+  z_ *= rhs;
   return *this;
 }
 
 Vector3D& Vector3D::operator/=(double rhs)
 {
-  x /= rhs;
-  y /= rhs;
-  z /= rhs;
+  x_ /= rhs;
+  y_ /= rhs;
+  z_ /= rhs;
   return *this;
 }
 
@@ -123,19 +123,19 @@ Vector3D Vector3D::operator/ (double rhs) const
 
 Vector3D Vector3D::operator- () const
 {
-  Vector3D result(-x,-y,-z);
+  Vector3D result(-x_,-y_,-z_);
   return result;
 }
 
 double Vector3D::operator* (const Vector3D& b) const
 {
-  double result = x*b.x + y*b.y + z*b.z;
+  double result = x_*b.x_ + y_*b.y_ + z_*b.z_;
   return result;
 }
 
 double Vector3D::dotProduct(const Vector3D& a, const Vector3D& b)
 {
-  double dotproduct = a.x*b.x + a.y*b.y + a.z*b.z;
+  double dotproduct = a.x_*b.x_ + a.y_*b.y_ + a.z_*b.z_;
   return dotproduct;
 }
 
@@ -143,9 +143,9 @@ Vector3D Vector3D::crossProduct(const Vector3D& b, const Vector3D& c)
 {
   // a = b x c
   Vector3D a;
-  a.x = b.y*c.z - b.z*c.y;
-  a.y = b.z*c.x - b.x*c.z;
-  a.z = b.x*c.y - b.y*c.x;
+  a.x_ = b.y_*c.z_ - b.z_*c.y_;
+  a.y_ = b.z_*c.x_ - b.x_*c.z_;
+  a.z_ = b.x_*c.y_ - b.y_*c.x_;
   return a;
 }
 

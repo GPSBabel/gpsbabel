@@ -54,9 +54,9 @@ public:
   static double dotProduct(const Vector3D& a, const Vector3D& b);
 
 protected:
-  double x{};
-  double y{};
-  double z{};
+  double x_{};
+  double y_{};
+  double z_{};
 };
 Vector3D operator* (double lhs, const Vector3D& rhs);
 std::ostream& operator<< (std::ostream& os, const Vector3D& v);

@@ -52,16 +52,16 @@ NVector::NVector(double latitude_degrees, double longitude_degrees)
   // z points to latitude 0, longitude +180, the antimeridian
   double latitude_radians = latitude_degrees * M_PI/180.0;
   double longitude_radians = longitude_degrees * M_PI/180.0;
-  x = sin(latitude_radians);
-  y = sin(longitude_radians)*cos(latitude_radians);
-  z = -cos(longitude_radians)*cos(latitude_radians);
+  x_ = sin(latitude_radians);
+  y_ = sin(longitude_radians)*cos(latitude_radians);
+  z_ = -cos(longitude_radians)*cos(latitude_radians);
 }
 
 NVector::NVector(const Vector3D& v)
 {
-  x = v.getx();
-  y = v.gety();
-  z = v.getz();
+  x_ = v.getx();
+  y_ = v.gety();
+  z_ = v.getz();
 }
 
 std::pair<NVector, double> PVector::toNVectorAndHeight() const
@@ -100,7 +100,7 @@ std::pair<NVector, double> PVector::toNVectorAndHeight() const
 double NVector::latitude() const
 {
   // This implements equation 6.
-  double latitude_radians = atan2(x, sqrt(y*y + z*z));
+  double latitude_radians = atan2(x_, sqrt(y_*y_ + z_*z_));
   double latitude_degrees = latitude_radians * 180.0/M_PI;
   return latitude_degrees;
 }
@@ -108,7 +108,7 @@ double NVector::latitude() const
 double NVector::longitude() const
 {
   // This implements equation 5.
-  double longitude_radians = atan2(y, -z);
+  double longitude_radians = atan2(y_, -z_);
   double longitude_degrees = longitude_radians * 180.0/M_PI;
   return longitude_degrees;
 }
@@ -436,16 +436,16 @@ PVector::PVector(const NVector& n_EA_E, double h=0.0)
   constexpr double asq_over_bsq = 1.0 / (WGS84_ASPECT_RATIO * WGS84_ASPECT_RATIO);
 
   double denom = sqrt(n_EA_E.getx()*n_EA_E.getx() + n_EA_E.gety()*n_EA_E.gety()*asq_over_bsq + n_EA_E.getz()*n_EA_E.getz()*asq_over_bsq);
-  x = (b/denom)*n_EA_E.getx() + h*n_EA_E.getx();
-  y = (b/denom)*asq_over_bsq*n_EA_E.gety() + h*n_EA_E.gety();
-  z = (b/denom)*asq_over_bsq*n_EA_E.getz() + h*n_EA_E.getz();
+  x_ = (b/denom)*n_EA_E.getx() + h*n_EA_E.getx();
+  y_ = (b/denom)*asq_over_bsq*n_EA_E.gety() + h*n_EA_E.gety();
+  z_ = (b/denom)*asq_over_bsq*n_EA_E.getz() + h*n_EA_E.getz();
 }
 
 PVector::PVector(const Vector3D& v)
 {
-  x = v.getx();
-  y = v.gety();
-  z = v.getz();
+  x_ = v.getx();
+  y_ = v.gety();
+  z_ = v.getz();
 }
 
 } // namespace gpsbabel
