@@ -25,6 +25,8 @@
 #include <cstdio>
 #include <iostream>
 #include <utility>
+
+#include "defs.h"
 #include "nvector.h"
 #include "vector3d.h"
 
