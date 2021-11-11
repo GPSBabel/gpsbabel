@@ -1239,7 +1239,7 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     if (logpart) {
       gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
       if (t.isValid()) {
-        r += t.date().toString(Qt::ISODate);
+        r = r + " " + t.date().toString(Qt::ISODate);
       }
     }
 
