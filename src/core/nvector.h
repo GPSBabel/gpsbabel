@@ -54,7 +54,6 @@ public:
 
 class NVector : public Vector3D
 {
-//  friend class PVector;
 
 public:
   NVector() = default;
