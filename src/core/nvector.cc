@@ -72,9 +72,9 @@ std::pair<NVector, double> PVector::toNVectorAndHeight() const
   constexpr double e2 = WGS84_ECCENTRICITY_SQUARED;
   constexpr double e4 = e2 * e2;
 
-  double px2 = getx() * getx();
-  double py2 = gety() * gety();
-  double pz2 = getz() * getz();
+  double px2 = x_ * x_;
+  double py2 = y_ * y_;
+  double pz2 = z_ * z_;
 
   double q = ((1.0-e2)/(a2)) * px2;
   double p = (py2 + pz2) / (a2);
@@ -90,9 +90,9 @@ std::pair<NVector, double> PVector::toNVectorAndHeight() const
   double sf2 = k / (k+e2);
 
   double height = ((k+e2-1.0)/k) * sqrt(d*d+px2);
-  double nx = sf * getx();
-  double ny = sf * sf2 * gety();
-  double nz = sf * sf2 * getz();
+  double nx = sf * x_;
+  double ny = sf * sf2 * y_;
+  double nz = sf * sf2 * z_;
 
   return {Vector3D(nx, ny, nz), height};
 }
