@@ -20,6 +20,7 @@
 #ifndef NVECTOR_H
 #define NVECTOR_H
 
+#include "defs.h"
 #include "vector3d.h"
 
 namespace gpsbabel
@@ -40,6 +41,9 @@ constexpr double WGS84_FLATTENING = 1.0/298.257223563; // (a-b)/a
 constexpr double WGS84_ASPECT_RATIO = 1.0 - WGS84_FLATTENING; // b/a
 constexpr double WGS84_SEMI_MINOR_AXIS_METERS = WGS84_SEMI_MAJOR_AXIS_METERS * WGS84_ASPECT_RATIO; // b
 constexpr double WGS84_ECCENTRICITY_SQUARED = 1.0 - (WGS84_ASPECT_RATIO * WGS84_ASPECT_RATIO);
+
+constexpr double kRadiansPerDegree = M_PI/180.0;
+constexpr double kDegreesPerRadian = 1.0/kRadiansPerDegree;
 
 class PVector;
 

@@ -26,7 +26,6 @@
 #include <iostream>
 #include <utility>
 
-#include "defs.h"
 #include "nvector.h"
 #include "vector3d.h"
 
@@ -50,8 +49,8 @@ NVector::NVector(double latitude_degrees, double longitude_degrees)
   // x points to North pole
   // y points towards latitude 0, longitude +90 (east)
   // z points to latitude 0, longitude +180, the antimeridian
-  double latitude_radians = latitude_degrees * M_PI/180.0;
-  double longitude_radians = longitude_degrees * M_PI/180.0;
+  double latitude_radians = latitude_degrees * kRadiansPerDegree;
+  double longitude_radians = longitude_degrees * kRadiansPerDegree;
   x_ = sin(latitude_radians);
   y_ = sin(longitude_radians)*cos(latitude_radians);
   z_ = -cos(longitude_radians)*cos(latitude_radians);
@@ -101,7 +100,7 @@ double NVector::latitude() const
 {
   // This implements equation 6.
   double latitude_radians = atan2(x_, sqrt(y_*y_ + z_*z_));
-  double latitude_degrees = latitude_radians * 180.0/M_PI;
+  double latitude_degrees = latitude_radians * kDegreesPerRadian;
   return latitude_degrees;
 }
 
@@ -109,7 +108,7 @@ double NVector::longitude() const
 {
   // This implements equation 5.
   double longitude_radians = atan2(y_, -z_);
-  double longitude_degrees = longitude_radians * 180.0/M_PI;
+  double longitude_degrees = longitude_radians * kDegreesPerRadian;
   return longitude_degrees;
 }
 
@@ -163,7 +162,7 @@ double NVector::azimuth_radians(const NVector& n_EA_E, const NVector& n_EB_E, do
 double NVector::azimuth(const NVector& n_EA_E, const NVector& n_EB_E, double height_a, double height_b)
 {
   double azimuth = azimuth_radians(n_EA_E, n_EB_E, height_a, height_b);
-  double azimuth_degrees = azimuth * 180.0/M_PI;
+  double azimuth_degrees = azimuth * kDegreesPerRadian;
   return azimuth_degrees;
 }
 

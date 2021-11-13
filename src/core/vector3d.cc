@@ -40,21 +40,6 @@ double Vector3D::norm() const
   return norm;
 }
 
-double Vector3D::getx() const
-{
-  return x_;
-}
-
-double Vector3D::gety() const
-{
-  return y_;
-}
-
-double Vector3D::getz() const
-{
-  return z_;
-}
-
 Vector3D& Vector3D::normalize()
 {
   *this = *this/this->norm();

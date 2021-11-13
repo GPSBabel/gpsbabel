@@ -34,9 +34,9 @@ public:
   Vector3D(double xi, double yi, double zi);
 
   [[nodiscard]] double norm() const;
-  [[nodiscard]] double getx() const;
-  [[nodiscard]] double gety() const;
-  [[nodiscard]] double getz() const;
+  [[nodiscard]] double getx() const {return x_;}
+  [[nodiscard]] double gety() const {return y_;}
+  [[nodiscard]] double getz() const {return z_;}
   Vector3D& normalize();
 
   Vector3D& operator+=(const Vector3D& rhs);
