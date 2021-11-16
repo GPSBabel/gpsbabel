@@ -1,0 +1,5 @@
+
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/sim.csv -x resample,interpolate=2,average=2 -o unicsv,utc=0 -F ${TMPDIR}/simint.csv
+compare ${REFERENCE}/track/simint.csv ${TMPDIR}/simint.csv
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/sim.csv -x resample,average=4,decimate=2 -o unicsv,utc=0 -F ${TMPDIR}/simdec.csv
+compare ${REFERENCE}/track/simdec.csv ${TMPDIR}/simdec.csv

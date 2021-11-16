@@ -1,0 +1,3 @@
+<para>
+This options is used to decrease the sample rate.  The value of this option is an integer factor to decrease the sample rate by. If using this option the minimum value is two. Normally decimation would also use averaging, but it is not required.  This option may be useful in the case of very long tracks that were sampled at an inappropriately high rate.
+</para>

@@ -742,6 +742,10 @@ Supported data filters:
 	  nosort                Inhibit sort by distance to center 
 	  maxcount              Output no more than this number of points 
 	  asroute               Put resulting waypoints in route of this name 
+	resample              Resample Track                                    
+	  decimate              Decimate, decrease sample rate by a factor of n 
+	  interpolate           Interpolate, increase sample rate by a factor of n 
+	  average               Running average of n points 
 	simplify              Simplify routes                                   
 	  count                 Maximum number of points in route 
 	  error                 Maximum error 
