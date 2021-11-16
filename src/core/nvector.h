@@ -26,7 +26,7 @@
 namespace gpsbabel
 {
 
-#define COMPARE_BEARING_TO_GRTCIRC
+//#define COMPARE_BEARING_TO_GRTCIRC
 #ifdef COMPARE_BEARING_TO_GRTCIRC
 constexpr double MEAN_EARTH_RADIUS_METERS = 6378137.0;
 #else
