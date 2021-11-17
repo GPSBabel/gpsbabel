@@ -8,10 +8,10 @@
         <end>2010-05-28T02:41:44Z</end>
       </gx:TimeSpan>
       <longitude>-122.139608</longitude>
-      <latitude>37.382794</latitude>
+      <latitude>37.382814</latitude>
       <range>19819.321245</range>
     </LookAt>
-<!-- Normal track style -->
+    <!-- Normal track style -->
     <Style id="track_n">
       <IconStyle>
         <scale>.5</scale>
@@ -23,7 +23,7 @@
         <scale>0</scale>
       </LabelStyle>
     </Style>
-<!-- Highlighted track style -->
+    <!-- Highlighted track style -->
     <Style id="track_h">
       <IconStyle>
         <scale>1.2</scale>
@@ -42,7 +42,7 @@
         <styleUrl>#track_h</styleUrl>
       </Pair>
     </StyleMap>
-<!-- Normal multiTrack style -->
+    <!-- Normal multiTrack style -->
     <Style id="multiTrack_n">
       <IconStyle>
         <Icon>
@@ -54,7 +54,7 @@
         <width>6</width>
       </LineStyle>
     </Style>
-<!-- Highlighted multiTrack style -->
+    <!-- Highlighted multiTrack style -->
     <Style id="multiTrack_h">
       <IconStyle>
         <scale>1.2</scale>
@@ -77,7 +77,7 @@
         <styleUrl>#multiTrack_h</styleUrl>
       </Pair>
     </StyleMap>
-<!-- Normal waypoint style -->
+    <!-- Normal waypoint style -->
     <Style id="waypoint_n">
       <IconStyle>
         <Icon>
@@ -85,7 +85,7 @@
         </Icon>
       </IconStyle>
     </Style>
-<!-- Highlighted waypoint style -->
+    <!-- Highlighted waypoint style -->
     <Style id="waypoint_h">
       <IconStyle>
         <scale>1.2</scale>
@@ -112,13 +112,13 @@
     </Style>
     <Schema id="schema">
       <gx:SimpleArrayField name="heartrate" type="int">
-          <displayName>Heart Rate</displayName>
+        <displayName>Heart Rate</displayName>
       </gx:SimpleArrayField>
       <gx:SimpleArrayField name="cadence" type="int">
-          <displayName>Cadence</displayName>
+        <displayName>Cadence</displayName>
       </gx:SimpleArrayField>
       <gx:SimpleArrayField name="power" type="float">
-          <displayName>Power</displayName>
+        <displayName>Power</displayName>
       </gx:SimpleArrayField>
     </Schema>
     <Folder>

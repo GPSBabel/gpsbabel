@@ -49,11 +49,13 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/logging.h"           // for Warning, Fatal
+#include "src/core/nvector.h"           // for NVector
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
+using gpsbabel::NVector;
 
 //  Icons provided and hosted by Google.  Used with permission.
 #define ICON_BASE "https://earth.google.com/images/kml-icons/"
@@ -1237,7 +1239,7 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     if (logpart) {
       gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
       if (t.isValid()) {
-        r += t.date().toString(Qt::ISODate);
+        r = r + " " + t.date().toString(Qt::ISODate);
       }
     }
 
@@ -1704,15 +1706,19 @@ void KmlFormat::kml_write_AbstractView()
     writer->writeEndElement(); // Close gx:TimeSpan tag
   }
 
-// If our BB spans the antemeridian, flip sign on one.
-// This doesn't make our BB optimal, but it at least prevents us from
-// zooming to the wrong hemisphere.
-  if (kml_bounds.min_lon * kml_bounds.max_lon < 0) {
-    kml_bounds.min_lon = -kml_bounds.max_lon;
-  }
+  // Uses NVectors to compute the middle of the bounding box.
+  // This works even if the BB spans the antimeridian.
+  // This prevents us from zooming to the wrong hemisphere.
+  // Gade, K. (2010). A Non-singular Horizontal Position Representation, The Journal of Navigation, Volume 63, Issue 03, pp 395-417, July 2010.
+  // 5.3.6. Horizontal geographical mean, equation 17.
+  NVector bb_1(kml_bounds.min_lat, kml_bounds.min_lon);
+  NVector bb_2(kml_bounds.min_lat, kml_bounds.max_lon);
+  NVector bb_3(kml_bounds.max_lat, kml_bounds.min_lon);
+  NVector bb_4(kml_bounds.max_lat, kml_bounds.max_lon);
+  NVector bb_mid = (bb_1 + bb_2 + bb_3 + bb_4).normalize();
 
-  writer->writeTextElement(QStringLiteral("longitude"), QString::number((kml_bounds.min_lon + kml_bounds.max_lon) / 2, 'f', precision));
-  writer->writeTextElement(QStringLiteral("latitude"), QString::number((kml_bounds.min_lat + kml_bounds.max_lat) / 2, 'f', precision));
+  writer->writeTextElement(QStringLiteral("longitude"), QString::number(bb_mid.longitude(), 'f', precision));
+  writer->writeTextElement(QStringLiteral("latitude"), QString::number(bb_mid.latitude(), 'f', precision));
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
