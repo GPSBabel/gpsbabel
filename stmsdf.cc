@@ -605,7 +605,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   calculate(wpt, &dist, &speed, &course, nullptr, nullptr);
   trkpt_dist = trkpt_dist + dist;
 
-  if (track_points == trk_out->rte_waypt_ct) {	/* I'm the last in that list */
+  if (track_points == trk_out->rte_waypt_ct()) {	/* I'm the last in that list */
     if (all_track_points != saved_track_points) {	/* but not the overall latest */
       flag = 1;
     }

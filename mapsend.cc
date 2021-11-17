@@ -359,7 +359,7 @@ mapsend_route_hdr(const route_head* rte)
   gbfputint32(rte->rte_num, mapsend_file_out);
 
   /* # of waypoints to follow... */
-  gbfputint32(rte->rte_waypt_ct, mapsend_file_out);
+  gbfputint32(rte->rte_waypt_ct(), mapsend_file_out);
 }
 
 static void
