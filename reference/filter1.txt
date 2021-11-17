@@ -24,6 +24,7 @@ interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR
 option	interpolate	time	Time interval in seconds	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
 option	interpolate	distance	Distance interval in miles or kilometers	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
+kalman	Kalman filtering for noisy tracks	https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
 option	height	add	Adds a constant value to every altitude (meter, append "f" (x.xxf) for feet)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
 option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_wgs84tomsl

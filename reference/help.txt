@@ -723,6 +723,7 @@ Supported data filters:
 	  time                  Time interval in seconds 
 	  distance              Distance interval in miles or kilometers 
 	  route                 Interpolate routes instead 
+        kalman                Kalman filtering for noisy tracks
 	nuketypes             Remove all waypoints, tracks, or routes           
 	  waypoints             Remove all waypoints from data stream 
 	  tracks                Remove all tracks from data stream 

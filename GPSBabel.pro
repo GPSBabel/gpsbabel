@@ -89,7 +89,7 @@ DEPRECATED_SHAPE=pdbfile.cc
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
-        validate.cc
+        validate.cc kalmanfilter.cc
 FILTER_HEADERS = $$FILTERS
 FILTER_HEADERS ~= s/\\.cc/.h/g
 
