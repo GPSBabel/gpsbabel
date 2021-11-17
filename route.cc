@@ -357,10 +357,10 @@ computed_trkdata track_recompute(const route_head* trk)
 }
 
 route_head::route_head() :
-        rte_num(0),
+  rte_num(0),
   // line_color(),
   line_width(-1),
-        session(curr_session())
+  session(curr_session())
 {
 }
 
