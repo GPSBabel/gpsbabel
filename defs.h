@@ -702,7 +702,6 @@ public:
   QString rte_desc;
   UrlList rte_urls;
   int rte_num;
-  int rte_waypt_ct;		/* # waypoints in waypoint list */
   FormatSpecificDataList fs;
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
@@ -716,6 +715,8 @@ public:
   route_head(const route_head& other) = delete;
   route_head& operator=(const route_head& rhs) = delete;
   ~route_head();
+
+  int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
 };
 
 using route_hdr = void (*)(const route_head*);

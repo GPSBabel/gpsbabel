@@ -499,12 +499,12 @@ static void detect_other_track(const route_head* rh)
     max_waypt_ct = 0;
   }
   // Find other track with the most waypoints
-  if (rh->rte_waypt_ct > max_waypt_ct &&
+  if (rh->rte_waypt_ct() > max_waypt_ct &&
       (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(PRESTRKNAME) &&
        !rh->rte_name.startsWith(GNSSTRKNAME)))) {
     head = rh;
-    max_waypt_ct = rh->rte_waypt_ct;
+    max_waypt_ct = rh->rte_waypt_ct();
   }
 }
 
@@ -651,7 +651,7 @@ static void wr_task_hdr(const route_head* rte)
   unsigned char have_takeoff = 0;
   char flight_date[7] = "000000";
   char task_desc[MAXRECLEN] = "";
-  int num_tps = rte->rte_waypt_ct - 2;
+  int num_tps = rte->rte_waypt_ct() - 2;
   struct tm* tm;
   time_t rte_time;
   static unsigned int task_num = 1;

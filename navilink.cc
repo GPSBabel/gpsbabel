@@ -684,7 +684,7 @@ serial_read_routes(Waypoint** waypts)
 static void
 serial_write_route_start(const route_head* route)
 {
-  route_ids = (unsigned int*) xmalloc(route->rte_waypt_ct * sizeof(unsigned));
+  route_ids = (unsigned int*) xmalloc(route->rte_waypt_ct() * sizeof(unsigned));
   route_id_ptr = 0;
 }
 

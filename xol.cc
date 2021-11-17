@@ -110,7 +110,7 @@ static void xol_shape_end(xg_string, const QXmlStreamAttributes*) {
     }
     wpt_ = nullptr;
   } else if (trk_) {
-    if (trk_->rte_waypt_ct == 0) {
+    if (trk_->rte_waypt_ct() == 0) {
       track_del_head(trk_);
     }
     trk_ = nullptr;

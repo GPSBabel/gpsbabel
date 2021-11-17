@@ -1471,7 +1471,7 @@ mag_route_trl(const route_head* rte)
   QString icon_token;
 
   /* count waypoints for this route */
-  int i = rte->rte_waypt_ct;
+  int i = rte->rte_waypt_ct();
 
   /* number of output PMGNRTE messages at 2 points per line */
   int numlines = (i / 2) + (i % 2);

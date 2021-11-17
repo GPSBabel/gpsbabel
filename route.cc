@@ -357,11 +357,10 @@ computed_trkdata track_recompute(const route_head* trk)
 }
 
 route_head::route_head() :
-  rte_num(0),
-  rte_waypt_ct(0),
+        rte_num(0),
   // line_color(),
   line_width(-1),
-  session(curr_session())
+        session(curr_session())
 {
 }
 
@@ -389,7 +388,7 @@ RouteList::add_head(route_head* rte)
 void
 RouteList::del_head(route_head* rte)
 {
-  waypt_ct -= rte->rte_waypt_ct;
+  waypt_ct -= rte->rte_waypt_ct();
   const int idx = this->indexOf(rte);
   assert(idx >= 0);
   removeAt(idx);
@@ -411,7 +410,6 @@ RouteList::insert_head(route_head* rte, route_head* predecessor)
 void
 RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
 {
-  rte->rte_waypt_ct++;	/* waypoints in this route */
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
   if ((this == global_route_list) || (this == global_track_list)) {
@@ -423,7 +421,6 @@ void
 RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 {
   rte->waypoint_list.del_rte_waypt(wpt);
-  rte->rte_waypt_ct--;
   --waypt_ct;
 }
 
@@ -467,7 +464,6 @@ RouteList::copy(RouteList** dst) const
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->rte_urls = rte_old->rte_urls;
     rte_new->rte_num = rte_old->rte_num;
-    // rte_waypt_ct created below with add_wpt.
     rte_new->fs = rte_old->fs.FsChainCopy();
     rte_new->line_color = rte_old->line_color;
     rte_new->line_width = rte_old->line_width;
