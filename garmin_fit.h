@@ -33,6 +33,7 @@
 #include <QHash>                // for QHash
 #include <QList>                // for QList
 #include <QString>              // for QString
+#include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 
 #include "defs.h"
@@ -240,7 +241,7 @@ private:
   uint32_t fit_getuint32();
   QString fit_getstring(int size);
   void fit_parse_definition_message(uint8_t header);
-  uint32_t fit_read_field(const fit_field_t& f);
+  QVariant fit_read_field(const fit_field_t& f);
   void fit_parse_data(const fit_message_def& def, int time_offset);
   void fit_parse_data_message(uint8_t header);
   void fit_parse_compressed_message(uint8_t header);

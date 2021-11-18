@@ -34,6 +34,7 @@
 #include <QDateTime>           // for QDateTime
 #include <QFileInfo>           // for QFileInfo
 #include <QLatin1Char>         // for QLatin1Char
+#include <QMetaType>           // for QMetaType, QMetaType::UInt
 #include <QString>             // for QString
 #include <Qt>                  // for CaseInsensitive
 #include <QtGlobal>            // for qint64
@@ -214,7 +215,7 @@ QString
 GarminFitFormat::fit_getstring(int size)
 {
   if (fit_data.len < size) {
-      throw ReaderException("record truncated: expecting " + std::to_string(size) + " bytes, but only got " + std::to_string(fit_data.len) + ".");
+    throw ReaderException("record truncated: expecting " + std::to_string(size) + " bytes, but only got " + std::to_string(fit_data.len) + ".");
   }
   QByteArray buf(size + 1, 0);
   gbsize_t count = gbfread(buf.data(), size, 1, fin);
@@ -313,7 +314,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   fit_data.message_def.insert(local_id, def);
 }
 
-uint32_t
+QVariant
 GarminFitFormat::fit_read_field(const fit_field_t& f)
 {
   /* https://forums.garmin.com/showthread.php?223645-Vivoactive-problems-plus-suggestions-for-future-firmwares&p=610929#post610929
@@ -345,6 +346,9 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
       }
       return -1;
     }
+  case 0x7:
+    return fit_getstring(f.size);
+
   case 0x83: // sint16
   case 0x84: // uint16
     if (f.size == 2) {
@@ -412,22 +416,31 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       debug_print(7,"%s: parsing field %d\n", MYNAME, i);
     }
     const fit_field_t& f = def.fields.at(i);
-    if (f.type == 7) {
-      QString val = fit_getstring(f.size);
+    QVariant field = fit_read_field(f);
+    uint32_t val = -1;
+    if (field.canConvert(QMetaType::UInt)) {
+      val = field.toUInt();
+    }
+    if (f.id == kFieldTimestamp) {
+      if (global_opts.debug_level >= 7) {
+        debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
+      }
+      timestamp = val;
+      // if the timestamp is < 0x10000000, this value represents
+      // system time; to convert it to UTC, add the global utc offset to it
+      if (timestamp < 0x10000000) {
+        timestamp += fit_data.global_utc_offset;
+      }
+      fit_data.last_timestamp = timestamp;
+    } else {
       switch (def.global_id) {
-      case kIdLocations:
+      case kIdDeviceSettings: // device settings message
         switch (f.id) {
-        case kFieldLocationName:
+        case kFieldGlobalUtcOffset:
           if (global_opts.debug_level >= 7) {
-            debug_print(7,"%s: parsing fit data: location name=%s\n", MYNAME, val.toLocal8Bit().constData());
+            debug_print(7,"%s: parsing fit data: global utc_offset=%d\n", MYNAME, val);
           }
-          name = val;
-          break;
-        case kFieldLocationDescription:
-          if (global_opts.debug_level >= 7) {
-            debug_print(7,"%s: parsing fit data: location description=%s\n", MYNAME, val.toLocal8Bit().constData());
-          }
-          description = val;
+          fit_data.global_utc_offset = val;
           break;
         default:
           if (global_opts.debug_level >= 1) {
@@ -435,6 +448,206 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           }
           break;
         } // switch (f.id)
+        // end of case def.global_id = kIdDeviceSettings
+        break;
+
+      case kIdRecord: // record message - trkType is a track
+        switch (f.id) {
+        case kFieldLatitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
+          }
+          lat = val;
+          break;
+        case kFieldLongitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
+          }
+          lon = val;
+          break;
+        case kFieldAltitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            alt = val;
+          }
+          break;
+        case kFieldHeartRate:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: heartrate=%d\n", MYNAME, val);
+          }
+          heartrate = val;
+          break;
+        case kFieldCadence:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: cadence=%d\n", MYNAME, val);
+          }
+          cadence = val;
+          break;
+        case kFieldDistance:
+          // NOTE: 5 is DISTANCE in cm ... unused.
+          if (global_opts.debug_level >= 7) {
+            debug_print(7, "%s: unrecognized data type in GARMIN FIT record: f.id=%d\n", MYNAME, f.id);
+          }
+          break;
+        case kFieldSpeed:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: speed=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            speed = val;
+          }
+          break;
+        case kFieldPower:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: power=%d\n", MYNAME, val);
+          }
+          power = val;
+          break;
+        case kFieldTemperature:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: temperature=%d\n", MYNAME, val);
+          }
+          temperature = val;
+          break;
+        case kFieldEnhancedSpeed:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: enhanced_speed=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            speed = val;
+          }
+          break;
+        case kFieldEnhancedAltitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: enhanced_altitude=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            alt = val;
+          }
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f.id=%d\n", MYNAME, f.id);
+          }
+          break;
+        } // switch (f.id)
+        // end of case def.global_id = kIdRecord
+        break;
+
+      case kIdLap: // lap wptType , endlat+lon is wpt
+        switch (f.id) {
+        case kFieldStartTime:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: starttime=%d\n", MYNAME, val);
+          }
+          //starttime = val;
+          break;
+        case kFieldStartLatitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: startlat=%d\n", MYNAME, val);
+          }
+          //startlat = val;
+          break;
+        case kFieldStartLongitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: startlon=%d\n", MYNAME, val);
+          }
+          //startlon = val;
+          break;
+        case kFieldEndLatitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: endlat=%d\n", MYNAME, val);
+          }
+          endlat = val;
+          break;
+        case kFieldEndLongitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: endlon=%d\n", MYNAME, val);
+          }
+          endlon = val;
+          break;
+        case kFieldElapsedTime:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: elapsedtime=%d\n", MYNAME, val);
+          }
+          //elapsedtime = val;
+          break;
+        case kFieldTotalDistance:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: totaldistance=%d\n", MYNAME, val);
+          }
+          //totaldistance = val;
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT lap: f.id=%d\n", MYNAME, f.id);
+          }
+          break;
+        } // switch (f.id)
+        // end of case def.global_id = kIdLap
+        break;
+
+      case kIdEvent:
+        switch (f.id) {
+        case kFieldEvent:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: event=%d\n", MYNAME, val);
+          }
+          event = val;
+          break;
+        case kFieldEventType:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: eventtype=%d\n", MYNAME, val);
+          }
+          eventtype = val;
+          break;
+        } // switch (f.id)
+        // end of case def.global_id = kIdEvent
+        break;
+
+      case kIdLocations:
+        switch (f.id) {
+        case kFieldLocLatitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
+          }
+          lat = val;
+          break;
+        case kFieldLocLongitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
+          }
+          lon = val;
+          break;
+        case kFieldLocAltitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            alt = val;
+          }
+          break;
+        case kFieldLocationName:
+          name = field.toString();
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: location name=%s\n", MYNAME, qPrintable(name));
+          }
+          break;
+        case kFieldLocationDescription:
+          description = field.toString();
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: location description=%s\n", MYNAME, qPrintable(description));
+          }
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT locations: f.id=%d\n", MYNAME, f.id);
+          }
+          break;
+        } // switch (f.id)
+        // end of case def.global_id = kIdLocations
         break;
       default:
         if (global_opts.debug_level >= 1) {
@@ -442,226 +655,6 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         }
         break;
       } // switch (def.global_id)
-    } else {
-      uint32_t val = fit_read_field(f);
-      if (f.id == kFieldTimestamp) {
-        if (global_opts.debug_level >= 7) {
-          debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
-        }
-        timestamp = val;
-        // if the timestamp is < 0x10000000, this value represents
-        // system time; to convert it to UTC, add the global utc offset to it
-        if (timestamp < 0x10000000) {
-          timestamp += fit_data.global_utc_offset;
-        }
-        fit_data.last_timestamp = timestamp;
-      } else {
-        switch (def.global_id) {
-        case kIdDeviceSettings: // device settings message
-          switch (f.id) {
-          case kFieldGlobalUtcOffset:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: global utc_offset=%d\n", MYNAME, val);
-            }
-            fit_data.global_utc_offset = val;
-            break;
-          default:
-            if (global_opts.debug_level >= 1) {
-              debug_print(1, "%s: unrecognized data type in GARMIN FIT device settings: f.id=%d\n", MYNAME, f.id);
-            }
-            break;
-          } // switch (f.id)
-          // end of case def.global_id = kIdDeviceSettings
-          break;
-
-        case kIdRecord: // record message - trkType is a track
-          switch (f.id) {
-          case kFieldLatitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
-            }
-            lat = val;
-            break;
-          case kFieldLongitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
-            }
-            lon = val;
-            break;
-          case kFieldAltitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
-            }
-            if (val != 0xffff) {
-              alt = val;
-            }
-            break;
-          case kFieldHeartRate:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: heartrate=%d\n", MYNAME, val);
-            }
-            heartrate = val;
-            break;
-          case kFieldCadence:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: cadence=%d\n", MYNAME, val);
-            }
-            cadence = val;
-            break;
-          case kFieldDistance:
-            // NOTE: 5 is DISTANCE in cm ... unused.
-            if (global_opts.debug_level >= 7) {
-              debug_print(7, "%s: unrecognized data type in GARMIN FIT record: f.id=%d\n", MYNAME, f.id);
-            }
-            break;
-          case kFieldSpeed:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: speed=%d\n", MYNAME, val);
-            }
-            if (val != 0xffff) {
-              speed = val;
-            }
-            break;
-          case kFieldPower:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: power=%d\n", MYNAME, val);
-            }
-            power = val;
-            break;
-          case kFieldTemperature:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: temperature=%d\n", MYNAME, val);
-            }
-            temperature = val;
-            break;
-          case kFieldEnhancedSpeed:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: enhanced_speed=%d\n", MYNAME, val);
-            }
-            if (val != 0xffff) {
-              speed = val;
-            }
-            break;
-          case kFieldEnhancedAltitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: enhanced_altitude=%d\n", MYNAME, val);
-            }
-            if (val != 0xffff) {
-              alt = val;
-            }
-            break;
-          default:
-            if (global_opts.debug_level >= 1) {
-              debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f.id=%d\n", MYNAME, f.id);
-            }
-            break;
-          } // switch (f.id)
-          // end of case def.global_id = kIdRecord
-          break;
-
-        case kIdLap: // lap wptType , endlat+lon is wpt
-          switch (f.id) {
-          case kFieldStartTime:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: starttime=%d\n", MYNAME, val);
-            }
-            //starttime = val;
-            break;
-          case kFieldStartLatitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: startlat=%d\n", MYNAME, val);
-            }
-            //startlat = val;
-            break;
-          case kFieldStartLongitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: startlon=%d\n", MYNAME, val);
-            }  
-            //startlon = val;
-            break;
-          case kFieldEndLatitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: endlat=%d\n", MYNAME, val);
-            }
-            endlat = val;
-            break;
-          case kFieldEndLongitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: endlon=%d\n", MYNAME, val);
-            }
-            endlon = val;
-            break;
-          case kFieldElapsedTime:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: elapsedtime=%d\n", MYNAME, val);
-            }
-            //elapsedtime = val;
-            break;
-          case kFieldTotalDistance:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: totaldistance=%d\n", MYNAME, val);  
-            }
-            //totaldistance = val;
-            break;
-          default:
-            if (global_opts.debug_level >= 1) {
-              debug_print(1, "%s: unrecognized data type in GARMIN FIT lap: f.id=%d\n", MYNAME, f.id);
-            }
-            break;
-          } // switch (f.id)
-          // end of case def.global_id = kIdLap
-          break;
-
-        case kIdEvent:
-          switch (f.id) {
-          case kFieldEvent:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: event=%d\n", MYNAME, val);
-            }
-            event = val;
-            break;
-          case kFieldEventType:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: eventtype=%d\n", MYNAME, val);
-            }
-            eventtype = val;
-            break;
-          } // switch (f.id)
-          // end of case def.global_id = kIdEvent
-          break;
-
-        case kIdLocations:
-          switch (f.id) {
-          case kFieldLocLatitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
-            }
-            lat = val;
-            break;
-          case kFieldLocLongitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
-            }
-            lon = val;
-            break;
-          case kFieldLocAltitude:
-            if (global_opts.debug_level >= 7) {
-              debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
-            }
-            if (val != 0xffff) {
-              alt = val;
-            }
-            break;
-          } // switch (f.id)
-          // end of case def.global_id = kIdLocations
-          break;
-        default:
-          if (global_opts.debug_level >= 1) {
-            debug_print(1, "%s: unrecognized/unhandled global ID for GARMIN FIT: %d\n", MYNAME, def.global_id);
-          }
-          break;
-        } // switch (def.global_id)
-      }
     }
   }
 
@@ -737,12 +730,15 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     if (global_opts.debug_level >= 7) {
       debug_print(7,"%s: storing fit data location %d\n", MYNAME, def.global_id);
     }
-    auto* lappt = new Waypoint;
-    lappt->latitude = GPS_Math_Semi_To_Deg(lat);
-    lappt->longitude = GPS_Math_Semi_To_Deg(lon);
-    lappt->shortname = name;
-    lappt->description = description;
-    waypt_add(lappt);
+    auto* locpt = new Waypoint;
+    locpt->latitude = GPS_Math_Semi_To_Deg(lat);
+    locpt->longitude = GPS_Math_Semi_To_Deg(lon);
+    if (alt != 0xffff) {
+      locpt->altitude = (alt / 5.0) - 500;
+    }
+    locpt->shortname = name;
+    locpt->description = description;
+    waypt_add(locpt);
   }
   break;
   }
