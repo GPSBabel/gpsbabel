@@ -217,13 +217,13 @@ GarminFitFormat::fit_getstring(int size)
   if (fit_data.len < size) {
     throw ReaderException("record truncated: expecting " + std::to_string(size) + " bytes, but only got " + std::to_string(fit_data.len) + ".");
   }
-  QByteArray buf(size + 1, 0);
+  QByteArray buf(size + 1, 0); // almost certainly an extra byte, QByteArray should guarnatee a terminator.
   gbsize_t count = gbfread(buf.data(), size, 1, fin);
   if (count != 1) {
     throw ReaderException("unexpected end of file with fit_data.len=" + std::to_string(fit_data.len) + ".");
   }
   fit_data.len -= size;
-  return QString(buf);
+  return QString(buf.constData());
 }
 
 void
