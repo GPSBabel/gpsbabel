@@ -34,6 +34,7 @@
 #include <QDateTime>           // for QDateTime
 #include <QFileInfo>           // for QFileInfo
 #include <QLatin1Char>         // for QLatin1Char
+#include <QMetaType>           // for QMetaType, QMetaType::UInt
 #include <QString>             // for QString
 #include <Qt>                  // for CaseInsensitive
 #include <QtGlobal>            // for qint64
@@ -210,6 +211,21 @@ GarminFitFormat::fit_getuint32()
   }
 }
 
+QString
+GarminFitFormat::fit_getstring(int size)
+{
+  if (fit_data.len < size) {
+    throw ReaderException("record truncated: expecting " + std::to_string(size) + " bytes, but only got " + std::to_string(fit_data.len) + ".");
+  }
+  QByteArray buf(size + 1, 0);
+  gbsize_t count = gbfread(buf.data(), size, 1, fin);
+  if (count != 1) {
+    throw ReaderException("unexpected end of file with fit_data.len=" + std::to_string(fit_data.len) + ".");
+  }
+  fit_data.len -= size;
+  return QString(buf);
+}
+
 void
 GarminFitFormat::fit_parse_definition_message(uint8_t header)
 {
@@ -298,7 +314,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   fit_data.message_def.insert(local_id, def);
 }
 
-uint32_t
+QVariant
 GarminFitFormat::fit_read_field(const fit_field_t& f)
 {
   /* https://forums.garmin.com/showthread.php?223645-Vivoactive-problems-plus-suggestions-for-future-firmwares&p=610929#post610929
@@ -330,6 +346,9 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
       }
       return -1;
     }
+  case 0x7:
+    return fit_getstring(f.size);
+
   case 0x83: // sint16
   case 0x84: // uint16
     if (f.size == 2) {
@@ -386,6 +405,8 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   //uint32_t starttime = 0; // ??? default ?
   uint8_t event = 0xff;
   uint8_t eventtype = 0xff;
+  QString name;
+  QString description;
 
   if (global_opts.debug_level >= 7) {
     debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def.global_id, def.fields.size());
@@ -395,7 +416,11 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       debug_print(7,"%s: parsing field %d\n", MYNAME, i);
     }
     const fit_field_t& f = def.fields.at(i);
-    uint32_t val = fit_read_field(f);
+    QVariant field = fit_read_field(f);
+    uint32_t val = -1;
+    if (field.canConvert(QMetaType::UInt)) {
+      val = field.toUInt();
+    }
     if (f.id == kFieldTimestamp) {
       if (global_opts.debug_level >= 7) {
         debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
@@ -581,6 +606,49 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         } // switch (f.id)
         // end of case def.global_id = kIdEvent
         break;
+
+      case kIdLocations:
+        switch (f.id) {
+        case kFieldLocLatitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
+          }
+          lat = val;
+          break;
+        case kFieldLocLongitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
+          }
+          lon = val;
+          break;
+        case kFieldLocAltitude:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
+          }
+          if (val != 0xffff) {
+            alt = val;
+          }
+          break;
+        case kFieldLocationName:
+          name = field.toString();
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: location name=%s\n", MYNAME, qPrintable(name));
+          }
+          break;
+        case kFieldLocationDescription:
+          description = field.toString();
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: location description=%s\n", MYNAME, qPrintable(description));
+          }
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT locations: f.id=%d\n", MYNAME, f.id);
+          }
+          break;
+        } // switch (f.id)
+        // end of case def.global_id = kIdLocations
+        break;
       default:
         if (global_opts.debug_level >= 1) {
           debug_print(1, "%s: unrecognized/unhandled global ID for GARMIN FIT: %d\n", MYNAME, def.global_id);
@@ -655,6 +723,24 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       new_trkseg = true;
     }
     break;
+  case kIdLocations: { // locations message
+    if (lat == 0x7fffffff || lon == 0x7fffffff) {
+      break;
+    }
+    if (global_opts.debug_level >= 7) {
+      debug_print(7,"%s: storing fit data location %d\n", MYNAME, def.global_id);
+    }
+    auto* locpt = new Waypoint;
+    locpt->latitude = GPS_Math_Semi_To_Deg(lat);
+    locpt->longitude = GPS_Math_Semi_To_Deg(lon);
+    if (alt != 0xffff) {
+      locpt->altitude = (alt / 5.0) - 500;
+    }
+    locpt->shortname = name;
+    locpt->description = description;
+    waypt_add(locpt);
+  }
+  break;
   }
 }
 

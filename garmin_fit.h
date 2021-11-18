@@ -33,6 +33,7 @@
 #include <QHash>                // for QHash
 #include <QList>                // for QList
 #include <QString>              // for QString
+#include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 
 #include "defs.h"
@@ -136,6 +137,7 @@ private:
   static constexpr int kIdLap = 19;
   static constexpr int kIdRecord = 20;
   static constexpr int kIdEvent = 21;
+  static constexpr int kIdLocations = 29;
   static constexpr int kIdCourse = 31;
   static constexpr int kIdCoursePoint = 32;
 
@@ -187,6 +189,13 @@ private:
   static constexpr int kFieldEventType = 1;
   static constexpr int kEnumEventTypeStart = 0;
   static constexpr int kFieldEventGroup = 4;
+// for global ID: locations
+  static constexpr int kFieldLocationName = 0;
+  static constexpr int kFieldLocLatitude = 1;
+  static constexpr int kFieldLocLongitude = 2;
+  static constexpr int kEnumLocationIcon = 3;
+  static constexpr int kFieldLocAltitude = 4;
+  static constexpr int kFieldLocationDescription = 6;
 // for global ID: course
   static constexpr int kFieldSport = 4;
   static constexpr int kFieldName = 5;
@@ -230,8 +239,9 @@ private:
   uint8_t fit_getuint8();
   uint16_t fit_getuint16();
   uint32_t fit_getuint32();
+  QString fit_getstring(int size);
   void fit_parse_definition_message(uint8_t header);
-  uint32_t fit_read_field(const fit_field_t& f);
+  QVariant fit_read_field(const fit_field_t& f);
   void fit_parse_data(const fit_message_def& def, int time_offset);
   void fit_parse_data_message(uint8_t header);
   void fit_parse_compressed_message(uint8_t header);
