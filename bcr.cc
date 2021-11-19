@@ -297,7 +297,7 @@ bcr_data_read()
   }
 
   /* remove empty route */
-  if (route->rte_waypt_ct == 0) {
+  if (route->rte_waypt_ct() == 0) {
     route_del_head(route);
   } else {
     bcr_create_waypts_from_route(route);

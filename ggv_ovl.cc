@@ -266,7 +266,7 @@ waypt_disp_cb(const Waypoint* wpt)
 static void
 track_disp_cb(const route_head* trk)
 {
-  int waypt_ct = trk->rte_waypt_ct;
+  int waypt_ct = trk->rte_waypt_ct();
 
   if (waypt_ct <= 0) {
     return;
@@ -294,7 +294,7 @@ track_disp_cb(const route_head* trk)
 static void
 route_disp_cb(const route_head* rte)
 {
-  int waypt_ct = rte->rte_waypt_ct;
+  int waypt_ct = rte->rte_waypt_ct();
 
   if (waypt_ct <= 0) {
     return;

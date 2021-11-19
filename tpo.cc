@@ -1943,7 +1943,7 @@ tpo_track_hdr(const route_head* rte)
   gbfwrite(bounding_box, 1, sizeof(bounding_box), tpo_file_out);
 
   /* number of route points */
-  gbfputint16(rte->rte_waypt_ct, tpo_file_out);
+  gbfputint16(rte->rte_waypt_ct(), tpo_file_out);
 
   /* initialize the track length computation */
   track_length = 0;
