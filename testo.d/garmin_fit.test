@@ -33,8 +33,8 @@ compare ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx ${T
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/fitlocations-sample.fit -o gpx -F ${TMPDIR}/fitlocations-sample.gpx
 compare ${REFERENCE}/track/fitlocations-sample.gpx ${TMPDIR}/fitlocations-sample.gpx
 
-gpsbabel -i garmin_fit -f ${REFERENCE}/Lctns_Instinct.fit -o unicsv,utc=0 -F ${TMPDIR}/Lctns_Instinct.csv
-compare ${REFERENCE}/Lctns_Instinct.csv ${TMPDIR}/Lctns_Instinct.csv
+gpsbabel -i garmin_fit -f ${REFERENCE}/Lctns_Instinct.fit -o gpx -F ${TMPDIR}/Lctns_Instinct.gpx
+compare ${REFERENCE}/Lctns_Instinct.gpx ${TMPDIR}/Lctns_Instinct.gpx
 
 #
 # Basic FIT tests (write)
