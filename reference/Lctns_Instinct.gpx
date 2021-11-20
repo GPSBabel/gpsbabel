@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="-89.999998994" minlon="0.000000000" maxlat="89.999998994" maxlon="107.685910994"/>
+  <wpt lat="51.477255989" lon="0.000000922">
+    <ele>46.000</ele>
+    <name>Greenwich ele46</name>
+    <cmt>Greenwich ele46</cmt>
+    <desc>Greenwich ele46</desc>
+  </wpt>
+  <wpt lat="51.480122935" lon="0.000000000">
+    <ele>47.000</ele>
+    <name>Unseen4AllTrail</name>
+    <cmt>Unseen4AllTrail</cmt>
+    <desc>Unseen4AllTrail</desc>
+  </wpt>
+  <wpt lat="89.999998994" lon="0.000000922">
+    <ele>2.000</ele>
+    <name>North pole ele2</name>
+    <cmt>North pole ele2</cmt>
+    <desc>North pole ele2</desc>
+  </wpt>
+  <wpt lat="-89.999998994" lon="0.000000922">
+    <ele>2835.000</ele>
+    <name>South pole 2835</name>
+    <cmt>South pole 2835</cmt>
+    <desc>South pole 2835</desc>
+  </wpt>
+  <wpt lat="31.759320963" lon="35.503906952">
+    <name>Elevation unset</name>
+    <cmt>Elevation unset</cmt>
+    <desc>Elevation unset</desc>
+  </wpt>
+  <wpt lat="53.037396977" lon="107.685910994">
+    <ele>449.000</ele>
+    <name>Байкал</name>
+    <cmt>Байкал</cmt>
+    <desc>Байкал</desc>
+  </wpt>
+  <wpt lat="52.386673959" lon="13.287545945">
+    <name>Händelstraße</name>
+    <cmt>Händelstraße</cmt>
+    <desc>Händelstraße</desc>
+  </wpt>
+  <wpt lat="31.703055929" lon="35.195555929">
+    <name>בית לחם</name>
+    <cmt>בית לחם</cmt>
+    <desc>בית לחם</desc>
+  </wpt>
+  <wpt lat="29.314826997" lon="47.709621945">
+    <name>الكويت</name>
+    <cmt>الكويت</cmt>
+    <desc>الكويت</desc>
+  </wpt>
+  <wpt lat="39.161056951" lon="20.983910942">
+    <name>Θέατρο</name>
+    <cmt>Θέατρο</cmt>
+    <desc>Θέατρο</desc>
+  </wpt>
+  <trk/>
+</gpx>
