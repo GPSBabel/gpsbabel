@@ -1,0 +1,4 @@
+<para>
+This options is used to increase the sample rate.  The value of this option is an integer factor to increase the sample rate by. If using this option the minimum value is two.
+If using this option the average option must be used with average value greater than or equal to the interpolate value.  It is recommended to use an average value that is an integer multiple of the interpolate value.
+</para>

@@ -1,0 +1,28 @@
+<para>
+The resampling filter can be used to change the sample rate of a track.  It is intended to be used with track points that have been sampled at a constant rate. It can be used to change the sample rate by a rational factor.  It can also be used to smooth a track with or without changing the sample rate.  The filter works across the antimeridian.
+</para>
+
+<example id="example_resample_filter_interpolate">
+<title>Interpolation with the resampling filter</title>
+<para>
+This examples doubles the sample rate.  The data is filtered after interpolation regardless of the order of the options.
+</para>
+<para><userinput>gpsbabel -t -i unicsv -f data.csv -x resample,interpolate=2,average=2 -o unicsv,utc=0 -F fast.csv</userinput></para>
+</example>
+
+<example id="example_resample_filter_decimate">
+<title>Decimation with the resampling filter</title>
+<para>
+This examples reduces the sample rate by a factor of 4.  The data if filtered before decimation regardless of the order of the options.
+</para>
+<para><userinput>gpsbabel -t -i unicsv -f data.csv -x resample,average=4,decimate=2 -o unicsv,utc=0 -F slow.csv</userinput></para>
+</example>
+
+<example id="example_resample_filter_average">
+<title>Averaging with the resampling filter</title>
+<para>
+This examples averages the adjacent points.  A running average filter of length two samples is applied in the forward and reverse directions.
+</para>
+<para><userinput>gpsbabel -t -i unicsv -f data.csv -x resample,average=2 -o unicsv,utc=0 -F smooth.csv</userinput></para>
+</example>
+
