@@ -346,8 +346,25 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
 
 QTime NmeaFormat::nmea_parse_hms(const QString& str)
 {
-  QString format = str.contains('.')? "hhmmss.zzz" : "hhmmss";
-  return QTime::fromString(str, format);
+  // QTime::fromString z expects 1 to 3 digit fractional part of seconds.
+  // It specifically does not accept 0 digits or > 3 digits.
+  // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
+  QTime retval; /* invalid time */
+  const QStringList parts = str.trimmed().split('.');
+  if ((parts.size() == 1) || (parts.size() == 2)) {
+    retval = QTime::fromString(parts.at(0), "hhmmss");
+    if (retval.isValid() && parts.size() == 2) {
+      bool ok;
+      // prepend "0.".  prepending "." won't work if there are no trailing digits.
+      long msec = lround(1000.0 * QString("0.%1").arg(parts.at(1)).toDouble(&ok));
+      if (ok) {
+        retval = retval.addMSecs(msec);
+      } else {
+        retval = QTime(); /* invalid time */
+      }
+    }
+  }
+  return retval;
 }
 
 void
@@ -876,7 +893,7 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
       if (ok) {
         int ckval = nmea_cksum(tbuf.mid(1, ckidx - 1));
         if (ckval != ckcmp) {
-          Warning().nospace() <<  Qt::hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
+          Warning().nospace() << qSetFieldWidth(2) << qSetPadChar('0') <<  Qt::hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
           return;
         }
         checked = true;
