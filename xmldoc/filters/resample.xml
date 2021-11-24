@@ -13,7 +13,7 @@ This examples doubles the sample rate.  The data is filtered after interpolation
 <example id="example_resample_filter_decimate">
 <title>Decimation with the resampling filter</title>
 <para>
-This examples reduces the sample rate by a factor of 4.  The data if filtered before decimation regardless of the order of the options.
+This examples reduces the sample rate by a factor of 4.  The data is filtered before decimation regardless of the order of the options.
 </para>
 <para><userinput>gpsbabel -t -i unicsv -f data.csv -x resample,average=4,decimate=2 -o unicsv,utc=0 -F slow.csv</userinput></para>
 </example>
