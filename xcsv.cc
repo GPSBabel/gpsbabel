@@ -179,11 +179,8 @@ const QHash<QString, QString> XcsvStyle::xcsv_char_table {
 QString
 XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 {
-  if (xcsv_char_table.contains(key)) {
-    return xcsv_char_table[key];
-  }
   // No substitution found? Just return original.
-  return key;
+  return xcsv_char_table.value(key, key);
 }
 
 // Remove outer quotes.
