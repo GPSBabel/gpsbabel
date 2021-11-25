@@ -266,6 +266,9 @@ include(libusb.pri)
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
 
+SOURCES = $$sorted(SOURCES)
+HEADERS = $$sorted(HEADERS)
+
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
