@@ -3,9 +3,9 @@
   <Document>
     <name>GPS device</name>
     <LookAt>
-      <longitude>-117.144015</longitude>
-      <latitude>36.438270</latitude>
-      <range>87257.203848</range>
+      <longitude>-117.155510</longitude>
+      <latitude>36.443045</latitude>
+      <range>68977.917101</range>
     </LookAt>
     <!-- Normal track style -->
     <Style id="track_n">

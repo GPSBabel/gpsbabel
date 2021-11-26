@@ -7,9 +7,9 @@
         <begin>2002-05-25T17:06:21.250Z</begin>
         <end>2002-05-25T19:05:57.980Z</end>
       </gx:TimeSpan>
-      <longitude>-91.600158</longitude>
-      <latitude>30.054150</latitude>
-      <range>3611.461364</range>
+      <longitude>-91.600224</longitude>
+      <latitude>30.055900</latitude>
+      <range>3264.506393</range>
     </LookAt>
     <!-- Normal track-none style -->
     <Style id="track-none_n">

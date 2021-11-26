@@ -7,9 +7,9 @@
         <begin>2007-07-27T05:24:05Z</begin>
         <end>2007-07-27T05:35:00Z</end>
       </gx:TimeSpan>
-      <longitude>-86.841461</longitude>
+      <longitude>-86.841519</longitude>
       <latitude>35.831217</latitude>
-      <range>1944.793167</range>
+      <range>1901.181635</range>
     </LookAt>
     <!-- Normal track style -->
     <Style id="track_n">
