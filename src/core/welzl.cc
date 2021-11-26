@@ -163,7 +163,7 @@ Circle Welzl::b_mindisk(QVector<NVector> P, QVector<NVector> R)
   return D;
 }
 
-// Return the center and radius of the smallest circle containg the points.
+// Return the center and radius of the smallest circle containing the points.
 // This works across the antimeridian and at the poles.
 Circle Welzl::welzl(QVector<NVector> Points)
 {
