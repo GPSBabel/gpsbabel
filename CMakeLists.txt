@@ -100,6 +100,7 @@ set(SUPPORT
   src/core/textstream.cc
   src/core/usasciicodec.cc
   src/core/vector3d.cc
+  src/core/welzl.cc
   src/core/xmlstreamwriter.cc
 )
 if(${QT_VERSION_MAJOR} EQUAL "6")
@@ -193,6 +194,7 @@ set(HEADERS
   src/core/textstream.h
   src/core/usasciicodec.h
   src/core/vector3d.h
+  src/core/welzl.h
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )

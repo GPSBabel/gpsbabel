@@ -111,6 +111,7 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           src/core/textstream.cc \
           src/core/usasciicodec.cc \
           src/core/vector3d.cc \
+          src/core/welzl.cc \
           src/core/xmlstreamwriter.cc
 
 versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
@@ -190,6 +191,7 @@ HEADERS =  \
 	src/core/textstream.h \
 	src/core/usasciicodec.h \
 	src/core/vector3d.h \
+        src/core/welzl.h \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
 

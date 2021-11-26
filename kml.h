@@ -33,6 +33,7 @@
 #include "format.h"
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
+#include "src/core/nvector.h"
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
@@ -216,7 +217,7 @@ private:
   gpsbabel::XmlStreamWriter* writer{nullptr};
 
   int realtime_positioning{};
-  bounds kml_bounds{};
+  QVector<gpsbabel::NVector> kml_points;
   gpsbabel::DateTime kml_time_max;
   gpsbabel::DateTime kml_time_min;
 
