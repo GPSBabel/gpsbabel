@@ -38,10 +38,6 @@
 namespace gpsbabel
 {
 
-//using gpsbabel::NVector;
-//using gpsbabel::Vector3D;
-
-
 Circle Welzl::b_md(QVector<NVector> R)
 {
   NVector center;
