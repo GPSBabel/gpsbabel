@@ -49,6 +49,7 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/logging.h"           // for Warning, Fatal
+#include "src/core/welzl.h"
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
 #include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
@@ -364,7 +365,7 @@ void KmlFormat::rd_deinit()
 void KmlFormat::wr_init(const QString& fname)
 {
   char u = 's';
-  waypt_init_bounds(&kml_bounds);
+  kml_points.clear();
   kml_time_min = QDateTime();
   kml_time_max = QDateTime();
 
@@ -814,7 +815,7 @@ void KmlFormat::kml_recompute_time_bounds(const Waypoint* waypointp)
 
 void KmlFormat::kml_add_to_bounds(const Waypoint* waypointp)
 {
-  waypt_add_to_bounds(&kml_bounds, waypointp);
+  kml_points.push_back(gpsbabel::NVector(waypointp->latitude, waypointp->longitude));
   kml_recompute_time_bounds(waypointp);
 }
 
@@ -1682,6 +1683,8 @@ void KmlFormat::kml_write_AbstractView()
     route_disp_all(nullptr, nullptr, kml_add_to_bounds_lambda);
   }
 
+  gpsbabel::Circle bounds = gpsbabel::Welzl::welzl(kml_points);
+
   writer->writeStartElement(QStringLiteral("LookAt"));
 
   if (kml_time_min.isValid() || kml_time_max.isValid()) {
@@ -1704,25 +1707,19 @@ void KmlFormat::kml_write_AbstractView()
     writer->writeEndElement(); // Close gx:TimeSpan tag
   }
 
-// If our BB spans the antemeridian, flip sign on one.
-// This doesn't make our BB optimal, but it at least prevents us from
-// zooming to the wrong hemisphere.
-  if (kml_bounds.min_lon * kml_bounds.max_lon < 0) {
-    kml_bounds.min_lon = -kml_bounds.max_lon;
-  }
-
-  writer->writeTextElement(QStringLiteral("longitude"), QString::number((kml_bounds.min_lon + kml_bounds.max_lon) / 2, 'f', precision));
-  writer->writeTextElement(QStringLiteral("latitude"), QString::number((kml_bounds.min_lat + kml_bounds.max_lat) / 2, 'f', precision));
+  writer->writeTextElement(QStringLiteral("longitude"), QString::number(bounds.center().longitude(), 'f', precision));
+  writer->writeTextElement(QStringLiteral("latitude"), QString::number(bounds.center().latitude(), 'f', precision));
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
-  double bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
-                             kml_bounds.max_lat, kml_bounds.max_lon);
+  // TODO: we can easily calculate a range such that the camera sees a bit beyond the points
+  // for the cases that the range is reasonable.
+  double bb_size = 2.0 * bounds.radius();
   // Clamp bottom zoom level.  Otherwise, a single point zooms to grass.
   if (bb_size < 1000) {
     bb_size = 1000;
   }
-  writer->writeTextElement(QStringLiteral("range"), QString::number(bb_size * 1.3, 'f', 6));
+  writer->writeTextElement(QStringLiteral("range"), QString::number(bb_size * 1.3, 'f', 3));
 
   writer->writeEndElement(); // Close LookAt tag
 }
