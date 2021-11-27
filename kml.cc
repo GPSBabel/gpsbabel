@@ -1719,7 +1719,7 @@ void KmlFormat::kml_write_AbstractView()
   if (bb_size < 1000) {
     bb_size = 1000;
   }
-  writer->writeTextElement(QStringLiteral("range"), QString::number(bb_size * 1.3, 'f', 6));
+  writer->writeTextElement(QStringLiteral("range"), QString::number(bb_size * 1.3, 'f', 3));
 
   writer->writeEndElement(); // Close LookAt tag
 }

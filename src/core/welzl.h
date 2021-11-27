@@ -55,6 +55,7 @@ public:
 private:
   static Circle b_md(QVector<NVector> R);
   static bool outside(Circle D, NVector n);
+  static QVector<NVector> unionof(QVector<NVector> R, NVector p);
   static Circle b_mindisk(QVector<NVector> P, QVector<NVector> R);
 };
 

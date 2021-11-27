@@ -9,7 +9,7 @@
       </gx:TimeSpan>
       <longitude>-80.472308</longitude>
       <latitude>41.234430</latitude>
-      <range>2106968.144089</range>
+      <range>2106968.144</range>
     </LookAt>
     <!-- Normal waypoint style -->
     <Style id="waypoint_n">

@@ -5,7 +5,7 @@
     <LookAt>
       <longitude>-122.276195</longitude>
       <latitude>37.523328</latitude>
-      <range>5678.471387</range>
+      <range>5678.471</range>
     </LookAt>
     <!-- Normal track style -->
     <Style id="track_n">

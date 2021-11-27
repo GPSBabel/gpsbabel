@@ -9,7 +9,7 @@
       </gx:TimeSpan>
       <longitude>-82.179826</longitude>
       <latitude>36.694478</latitude>
-      <range>2974869.802840</range>
+      <range>2974869.803</range>
     </LookAt>
     <!-- Normal route style -->
     <Style id="route_n">

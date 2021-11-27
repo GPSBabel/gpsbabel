@@ -20,7 +20,7 @@
     Welzl, Emo (1991), "Smallest enclosing disks (balls and ellipsoids)",
     in Maurer, H. (ed.), New Results and New Trends in Computer Science,
     Lecture Notes in Computer Science, 555, Springer-Verlag, pp. 359–370
-    
+
  */
 
 #include "src/core/welzl.h"
@@ -70,29 +70,11 @@ Circle Welzl::b_md(QVector<NVector> R)
     //qDebug() << "center2 check" << NVector::distance(center, R.at(0)) << NVector::distance(center, R.at(1));
     break;
 
-  case 3:
+  case 3: {
     auto n_EA_E = R.at(0);
     auto n_EB_E = R.at(1);
     auto n_EC_E = R.at(2);
 
-    double dp_a_b = NVector::dotProduct(n_EA_E, n_EB_E);
-    if (dp_a_b >= (1.0-8.0*DBL_EPSILON)) {
-      // The points are so close we will have trouble constructing a basis.
-      QVector<NVector> Rprime{(n_EA_E + n_EB_E).normalize(), n_EC_E};
-      return (b_md(Rprime));
-    }
-    double dp_a_c = NVector::dotProduct(n_EA_E, n_EC_E);
-    if (dp_a_c >= (1.0-8.0*DBL_EPSILON)) {
-      // The points are so close we will have trouble constructing a basis.
-      QVector<NVector> Rprime{(n_EA_E + n_EC_E).normalize(), n_EB_E};
-      return (b_md(Rprime));
-    }
-    double dp_b_c = NVector::dotProduct(n_EB_E, n_EC_E);
-    if (dp_b_c >= (1.0-8.0*DBL_EPSILON)) {
-      // The points are so close we will have trouble constructing a basis.
-      QVector<NVector> Rprime{(n_EB_E + n_EC_E).normalize(), n_EA_E};
-      return (b_md(Rprime));
-    }
     // Form an orthonormal basis with two components being in the plane
     // of n_EA_E, n_EB_E and n_EC_E, and the third being perpendicular
     // to this plane.
@@ -128,12 +110,33 @@ Circle Welzl::b_md(QVector<NVector> R)
     //qDebug() << "center3 check" << NVector::distance(center, R.at(0)) << NVector::distance(center, R.at(1)) << NVector::distance(center, R.at(2));
     break;
   }
+
+  default:
+    fatal("welzl should not occur");
+  }
   return Circle(center, radius);
 };
 
 bool Welzl::outside(Circle D, NVector n)
 {
   return NVector::distance(D.center(), n) > D.radius();
+}
+
+QVector<NVector> Welzl::unionof(QVector<NVector> R, NVector p)
+{
+  bool contains = false;
+  for (const auto& e : R) {
+    double dp_e_p = NVector::dotProduct(e, p);
+    if (dp_e_p >= (1.0-8.0*DBL_EPSILON)) {
+      contains = true;
+      break;
+    }
+  }
+  auto Rprime(R);
+  if (!contains) {
+    Rprime.append(p);
+  }
+  return Rprime;
 }
 
 /* This is Welzl's algorithm */
@@ -149,11 +152,7 @@ Circle Welzl::b_mindisk(QVector<NVector> P, QVector<NVector> R)
     Pprime.removeLast();
     D = b_mindisk(Pprime, R);
     if (outside(D, p)) {
-      auto Pprime(P);
-      Pprime.removeLast();
-      auto Rprime(R);
-      Rprime.append(p);
-      D = b_mindisk(Pprime, Rprime);
+      D = b_mindisk(Pprime, unionof(R, p));
     }
   }
   return D;

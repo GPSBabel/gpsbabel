@@ -9,7 +9,7 @@
       </gx:TimeSpan>
       <longitude>-122.131432</longitude>
       <latitude>37.382993</latitude>
-      <range>18292.113024</range>
+      <range>18292.113</range>
     </LookAt>
     <!-- Normal track style -->
     <Style id="track_n">
