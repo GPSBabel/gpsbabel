@@ -80,7 +80,7 @@ Circle Welzl::b_md(const PointContainer& R)
     // Call this the W frame.
     // The columns of the rotation matrix from E to W are w1, w2 and w3.
     Vector3D w1 = (n_EA_E - n_EB_E).normalize();
-    Vector3D w3 = NVector::crossProduct(w1, (n_EA_E - n_EC_E).normalize()).normalize();
+    Vector3D w3 = NVector::crossProduct(w1, (n_EA_E - n_EC_E)).normalize();
     Vector3D w2 = NVector::crossProduct(w1, w3);
     // Rotate A to the W frame.
     Vector3D n_EA_W = Vector3D(w1*n_EA_E, w2*n_EA_E, w3*n_EA_E);
