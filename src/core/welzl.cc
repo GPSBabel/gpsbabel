@@ -25,20 +25,19 @@
 
 #include "src/core/welzl.h"
 
-#include <algorithm>
-#include <cfloat>
-#include <random>
+#include <algorithm>            // for shuffle
+#include <cfloat>               // for DBL_EPSILON
+#include <random>               // for random_device, mt19937
 
-#include <QVector>
-
-#include "src/core/nvector.h"
-#include "src/core/vector3d.h"
+#include "defs.h"               // for fatal
+#include "src/core/nvector.h"   // for NVector
+#include "src/core/vector3d.h"  // for Vector3D
 
 
 namespace gpsbabel
 {
 
-Circle Welzl::b_md(QVector<NVector> R)
+Circle Welzl::b_md(PointContainer R)
 {
   NVector center;
   double radius;
@@ -122,7 +121,7 @@ bool Welzl::outside(Circle D, NVector n)
   return NVector::distance(D.center(), n) > D.radius();
 }
 
-QVector<NVector> Welzl::unionof(QVector<NVector> R, NVector p)
+PointContainer Welzl::unionof(PointContainer R, NVector p)
 {
   bool contains = false;
   for (const auto& e : R) {
@@ -134,22 +133,22 @@ QVector<NVector> Welzl::unionof(QVector<NVector> R, NVector p)
   }
   auto Rprime(R);
   if (!contains) {
-    Rprime.append(p);
+    Rprime.push_back(p);
   }
   return Rprime;
 }
 
 /* This is Welzl's algorithm */
-Circle Welzl::b_mindisk(QVector<NVector> P, QVector<NVector> R)
+Circle Welzl::b_mindisk(PointContainer P, PointContainer R)
 {
   Circle D;
 
-  if (P.isEmpty() || (R.size() == 3)) {
+  if (P.empty() || (R.size() == 3)) {
     D = b_md(R);
   } else {
-    auto p = P.last();
+    auto p = P.back();
     auto Pprime(P);
-    Pprime.removeLast();
+    Pprime.pop_back();
     D = b_mindisk(Pprime, R);
     if (outside(D, p)) {
       D = b_mindisk(Pprime, unionof(R, p));
@@ -160,13 +159,13 @@ Circle Welzl::b_mindisk(QVector<NVector> P, QVector<NVector> R)
 
 // Return the center and radius of the smallest circle containing the points.
 // This works across the antimeridian and at the poles.
-Circle Welzl::welzl(QVector<NVector> Points)
+Circle Welzl::welzl(PointContainer Points)
 {
   // randomize order of Points
   std::random_device rd;
   std::mt19937 generator(rd());
   std::shuffle(Points.begin(), Points.end(), generator);
-  Circle bound = b_mindisk(Points, QVector<NVector>());
+  Circle bound = b_mindisk(Points, PointContainer());
   //qDebug() << bound.center_.latitude() << bound.center_.longitude() << bound.radius_;
   return bound;
 }

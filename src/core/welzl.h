@@ -26,8 +26,8 @@
 #ifndef SRC_CORE_WELZL_H
 #define SRC_CORE_WELZL_H
 
-#include <QVector>
-#include "src/core/nvector.h"
+#include <vector>              // for vector
+#include "src/core/nvector.h"  // for NVector
 
 
 namespace gpsbabel
@@ -47,16 +47,18 @@ private:
   double radius_;
 };
 
+//using PointContainer = QVector<NVector>;
+using PointContainer = std::vector<NVector>;
 class Welzl
 {
 public:
-  static Circle welzl(QVector<NVector>);
+  static Circle welzl(PointContainer);
 
 private:
-  static Circle b_md(QVector<NVector> R);
+  static Circle b_md(PointContainer R);
   static bool outside(Circle D, NVector n);
-  static QVector<NVector> unionof(QVector<NVector> R, NVector p);
-  static Circle b_mindisk(QVector<NVector> P, QVector<NVector> R);
+  static PointContainer unionof(PointContainer R, NVector p);
+  static Circle b_mindisk(PointContainer P, PointContainer R);
 };
 
 } // namespace gpsbabel

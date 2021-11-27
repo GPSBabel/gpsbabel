@@ -815,7 +815,7 @@ void KmlFormat::kml_recompute_time_bounds(const Waypoint* waypointp)
 
 void KmlFormat::kml_add_to_bounds(const Waypoint* waypointp)
 {
-  kml_points.append(gpsbabel::NVector(waypointp->latitude, waypointp->longitude));
+  kml_points.push_back(gpsbabel::NVector(waypointp->latitude, waypointp->longitude));
   kml_recompute_time_bounds(waypointp);
 }
 
