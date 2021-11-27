@@ -55,10 +55,10 @@ public:
   static Circle welzl(PointContainer);
 
 private:
-  static Circle b_md(PointContainer R);
-  static bool outside(Circle D, NVector n);
-  static PointContainer unionof(PointContainer R, NVector p);
-  static Circle b_mindisk(PointContainer P, PointContainer R);
+  static Circle b_md(const PointContainer& R);
+  static bool outside(const Circle& D, const NVector& n);
+  static PointContainer unionof(const PointContainer& R, const NVector& p);
+  static Circle b_mindisk(const PointContainer& P, const PointContainer& R);
 };
 
 } // namespace gpsbabel

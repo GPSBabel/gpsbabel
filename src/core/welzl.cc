@@ -37,7 +37,7 @@
 namespace gpsbabel
 {
 
-Circle Welzl::b_md(PointContainer R)
+Circle Welzl::b_md(const PointContainer& R)
 {
   NVector center;
   double radius;
@@ -104,8 +104,6 @@ Circle Welzl::b_md(PointContainer R)
     center = n_EX_E;
     radius = NVector::distance(center, R.at(0));
 
-    //qDebug() << R.at(0) << R.at(1) << R.at(2);
-    //qDebug() << center;
     //qDebug() << "center3 check" << NVector::distance(center, R.at(0)) << NVector::distance(center, R.at(1)) << NVector::distance(center, R.at(2));
     break;
   }
@@ -116,12 +114,14 @@ Circle Welzl::b_md(PointContainer R)
   return Circle(center, radius);
 };
 
-bool Welzl::outside(Circle D, NVector n)
+int containment_count{0};
+bool Welzl::outside(const Circle& D, const NVector& n)
 {
+  ++containment_count;
   return NVector::distance(D.center(), n) > D.radius();
 }
 
-PointContainer Welzl::unionof(PointContainer R, NVector p)
+PointContainer Welzl::unionof(const PointContainer& R, const NVector& p)
 {
   bool contains = false;
   for (const auto& e : R) {
@@ -139,7 +139,7 @@ PointContainer Welzl::unionof(PointContainer R, NVector p)
 }
 
 /* This is Welzl's algorithm */
-Circle Welzl::b_mindisk(PointContainer P, PointContainer R)
+Circle Welzl::b_mindisk(const PointContainer& P, const PointContainer& R)
 {
   Circle D;
 
@@ -151,7 +151,8 @@ Circle Welzl::b_mindisk(PointContainer P, PointContainer R)
     Pprime.pop_back();
     D = b_mindisk(Pprime, R);
     if (outside(D, p)) {
-      D = b_mindisk(Pprime, unionof(R, p));
+      PointContainer Rprime = unionof(R, p);
+      D = b_mindisk(Pprime, Rprime);
     }
   }
   return D;
@@ -165,8 +166,9 @@ Circle Welzl::welzl(PointContainer Points)
   std::random_device rd;
   std::mt19937 generator(rd());
   std::shuffle(Points.begin(), Points.end(), generator);
-  Circle bound = b_mindisk(Points, PointContainer());
-  //qDebug() << bound.center_.latitude() << bound.center_.longitude() << bound.radius_;
+  PointContainer BoundaryPoints;
+  Circle bound = b_mindisk(Points, BoundaryPoints);
+  qDebug() << "containment count per point" << containment_count / Points.size();
   return bound;
 }
 
