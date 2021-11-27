@@ -168,7 +168,7 @@ Circle Welzl::welzl(PointContainer Points)
   std::shuffle(Points.begin(), Points.end(), generator);
   PointContainer BoundaryPoints;
   Circle bound = b_mindisk(Points, BoundaryPoints);
-  qDebug() << "containment count per point" << containment_count / Points.size();
+  //qDebug() << "containment count per point" << containment_count / Points.size();
   return bound;
 }
 
