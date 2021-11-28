@@ -277,6 +277,9 @@ set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
 )
 
+list(SORT SOURCES)
+list(SORT HEADERS)
+
 # We don't care about stripping things out of the build.  Full monty, baby.
 add_definitions(-DMAXIMAL_ENABLED)
 add_definitions(-DFILTERS_ENABLED)

@@ -158,7 +158,7 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
 };
 
 /* a table of config file constants mapped to chars */
-const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
+const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COMMA",		"," 	},
   { "COMMASPACE",		", " 	},
   { "SINGLEQUOTE",	"'"	},
@@ -172,25 +172,15 @@ const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
   { "SPACE",  		" "	},
   { "HASH",  		"#"	},
   { "WHITESPACE",		"\\w"	},
-  { "PIPE",		"|"	},
-  { nullptr, 		nullptr	}
+  { "PIPE",		"|"	}
 };
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
 XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 {
-  static QHash<QString, QString> substitutions;
-  if (substitutions.empty()) {
-    for (const char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
-      substitutions.insert(cm->key, cm->chars);
-    }
-  }
-  if (substitutions.contains(key)) {
-    return substitutions[key];
-  }
   // No substitution found? Just return original.
-  return key;
+  return xcsv_char_table.value(key, key);
 }
 
 // Remove outer quotes.

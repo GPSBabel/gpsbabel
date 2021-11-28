@@ -699,7 +699,7 @@ write_header(const route_head* trk)
 
   int count = 0;
   if (trk != nullptr) {
-    count = trk->waypoint_list.count();
+    count = trk->rte_waypt_ct();
   }
   if (!trk || trk->rte_name.isEmpty()) {
     write_str("Name", fout);
