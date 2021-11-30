@@ -104,7 +104,7 @@ JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
 
 SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
-          formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
+          formspec.cc xmltag.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc units.cc gbser.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc \
           src/core/nvector.cc \
@@ -116,7 +116,6 @@ SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
 versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
 
 HEADERS =  \
-	cet.h \
 	cet_util.h \
 	csv_util.h \
 	defs.h \
