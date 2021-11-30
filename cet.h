@@ -32,4 +32,10 @@
 int cet_utf8_to_ucs4(const char* str, int* bytes, int* value);
 int cet_ucs4_to_utf8(char* dest, size_t dest_size, int value);
 
+/* UTF-8 string manipulation functions */
+
+unsigned int cet_utf8_strlen(const char* str);
+char* cet_utf8_strdup(const char* str);
+char* cet_utf8_strndup(const char* str, int maxlen);
+
 #endif
