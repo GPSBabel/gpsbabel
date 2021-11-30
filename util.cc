@@ -37,6 +37,7 @@
 #include <QList>                        // for QList
 #include <QScopedPointer>               // for QScopedPointer
 #include <QString>                      // for QString
+#include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <QXmlStreamAttribute>          // for QXmlStreamAttribute
@@ -1776,3 +1777,24 @@ void list_timezones()
   }
 }
 
+QString grapheme_truncate(const QString& input, unsigned int count)
+{
+  QString output(input);
+  QTextBoundaryFinder boundary(QTextBoundaryFinder::Grapheme, input);
+  boundary.toStart();
+  unsigned int grapheme_cnt = 0;
+  QList<int> boundaries{0};
+  while (boundary.toNextBoundary() >= 0) {
+    ++grapheme_cnt;
+    boundaries.append(boundary.position());
+  }
+  if (grapheme_cnt > count) {
+    output.truncate(boundaries.at(count));
+  }
+  if constexpr(false) {
+    qDebug() << input << "->" << output <<  boundaries << ", limit:" <<
+             count << ", input QChars:" << input.size() << ",input graphemes:" << grapheme_cnt <<
+             ", output QChars:" << output.size();
+  }
+  return output;
+}

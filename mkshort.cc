@@ -19,16 +19,17 @@
 
  */
 
-#include <cctype>           // for isspace, toupper, isdigit
-#include <cstdio>           // for sprintf, size_t
-#include <cstring>          // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
+#include <cctype>      // for isspace, toupper, isdigit
+#include <cstdio>      // for sprintf, size_t
+#include <cstring>     // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
-#include <QList>            // for QList
-#include <QString>          // for QString
-#include <QtGlobal>         // for foreach
+#include <QByteArray>  // for QByteArray
+#include <QChar>       // for QChar, QChar::ReplacementCharacter
+#include <QList>       // for QList
+#include <QString>     // for QString
+#include <QtGlobal>    // for foreach
 
 #include "defs.h"
-#include "cet.h"            // for cet_utf8_strdup, cet_utf8_strlen, cet_utf8_strndup
 
 
 #define MYNAME	"mkshort"
@@ -368,7 +369,12 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
   auto* hdl = (mkshort_handle_imp*) h;
 
   if (is_utf8) {
-    ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */
+    /* clean UTF-8 string */
+    QString result = QString::fromUtf8(istring);
+    // QString::fromUtf8() doesn't quite promise to use QChar::ReplacementCharacter,
+    // but if it did toss them.
+    result.remove(QChar::ReplacementCharacter);
+    ostring = xstrdup(result.toUtf8().constData());
   } else {
     ostring = xstrdup(istring);
   }
@@ -518,11 +524,9 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
    */
   if (is_utf8) {
     /* ToDo: Keep trailing numeric data as described above! */
-    if (cet_utf8_strlen(ostring) > hdl->target_len) {
-      char* tmp = cet_utf8_strndup(ostring, hdl->target_len);
-      xfree(ostring);
-      ostring = tmp;
-    }
+    QString result = grapheme_truncate(QString::fromUtf8(ostring), hdl->target_len);
+    xfree(ostring);
+    ostring = xstrdup(result.toUtf8().constData());
   } else if ((/*i = */strlen(ostring)) > hdl->target_len) {
     char* dp = &ostring[hdl->target_len] - nlen;
     if (dp < ostring) {
