@@ -252,7 +252,7 @@ bcr_data_read()
     route->rte_name = routename;
   }
 
-  for (int index = 1; index > 0; index ++) {
+  for (int index = 1; ; index++) {
     char station[32];
     QString str;
     int mlat, mlon;		/* mercator data */
