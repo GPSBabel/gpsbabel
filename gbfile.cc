@@ -1056,9 +1056,9 @@ gbfgetutf16char(gbfile* file)
     int c1 = gbfgetc(file);
 
     if (c1 == EOF) {
-        fatal("%s: Incomplete unicode (UTF-16%sE) character at EOF!\n",
+        fatal("%s: Incomplete unicode (UTF-16%cE) character at EOF!\n",
               file->module,
-              file->big_endian ? "B" : "L");
+              file->big_endian ? 'B' : 'L');
     }
 
     unsigned char cell;
@@ -1073,28 +1073,9 @@ gbfgetutf16char(gbfile* file)
     return QChar(cell, row);
 }
 
-static void
-gbfungetutf16char(QChar ch, gbfile* file)
-{
-  unsigned char c0;
-  unsigned char c1;
-
-  if (file->big_endian) {
-    c1 = ch.cell();
-    c0 = ch.row();
-  } else {
-    c0 = ch.cell();
-    c1 = ch.row();
-  }
-  gbfungetc(c1, file);
-  // ungetc may require an intervening repositioning, e.g. gzapi_ungetc.
-  gbfseek(file, 0, SEEK_CUR);
-  gbfungetc(c0, file);
-}
-
 /*
  * Reads a string from utf16 encoded file.
- * Terminates at EOF or a line ending(\r\n, \r, \n).
+ * Terminates at EOF or a line ending(\r\n, \n).
  * Line endings are not included in the returned string.
  * Returns a nullptr if at EOF, otherwise it returns a pointer
  * to a possibly empty null terminated utf-8 character array.
@@ -1122,8 +1103,11 @@ gbfgetutf16str(gbfile* file)
 
     if (qch == u'\r') {
       QChar qch2 = gbfgetutf16char(file);
-      if (qch2 != u'\n') {
-        gbfungetutf16char(qch2, file);
+      if (qch2 != u'\n') {  // including qch2.isNull()
+        // Putting back two chars may not be supported, e.g. with gzapi_ungetc.
+        fatal("%s: Invalid unicode (UTF-16%cE) line break!\n",
+              file->module,
+              file->big_endian ? 'B' : 'L');
       }
       break;
     } else if (qch == u'\n') {
@@ -1131,23 +1115,18 @@ gbfgetutf16str(gbfile* file)
     }
 
     if (qch.isLowSurrogate()) {
-      fatal("%s: Leading unicode (UTF-16%sE) low surrogate!\n",
+      fatal("%s: Leading unicode (UTF-16%cE) low surrogate!\n",
             file->module,
-            file->big_endian ? "B" : "L");
+            file->big_endian ? 'B' : 'L');
     }
 
     QString str(qch);
     if (qch.isHighSurrogate()) {
       QChar qch2 = gbfgetutf16char(file);
-      if (qch2.isNull()) {
-        fatal("%s: Incomplete unicode (UTF-16%sE) surrogate pair!\n",
+      if (!qch2.isLowSurrogate()) { // including qch2.isNull()
+        fatal("%s: Missing unicode (UTF-16%cE) low surrogate!\n",
               file->module,
-              file->big_endian ? "B" : "L");
-      }
-      if (!qch2.isLowSurrogate()) {
-        fatal("%s: Missing unicode (UTF-16%sE) low surrogate!\n",
-              file->module,
-              file->big_endian ? "B" : "L");
+              file->big_endian ? 'B' : 'L');
       }
       str.append(qch2);
     }

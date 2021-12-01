@@ -51,7 +51,3 @@ compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16.gpx
 #   with \r\n line endings
 gpsbabel -i nmea -f ${REFERENCE}/track/nmea_utf16_dos -o gpx -F ${TMPDIR}/nmea_utf16_dos.gpx
 compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16_dos.gpx
-#   with \r line endings
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea_utf16_mac -o gpx -F ${TMPDIR}/nmea_utf16_mac.gpx
-compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16_mac.gpx
-
