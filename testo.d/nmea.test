@@ -43,11 +43,3 @@ compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysmid.csv
 # test date time parsing
 gpsbabel -t -i nmea -f ${REFERENCE}/track/nmeadatetime.nmea -o unicsv,utc=0 -F ${TMPDIR}/nmeadatetime.csv
 compare ${REFERENCE}/track/nmeadatetime.csv ${TMPDIR}/nmeadatetime.csv
-
-# these are here to test gbfile utf16 reads.
-#   with \d line endings
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea_utf16 -o gpx -F ${TMPDIR}/nmea_utf16.gpx
-compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16.gpx
-#   with \r\n line endings
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea_utf16_dos -o gpx -F ${TMPDIR}/nmea_utf16_dos.gpx
-compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16_dos.gpx
