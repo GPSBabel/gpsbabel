@@ -11,5 +11,5 @@ compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea_utf16_dos.gpx
 # Assumes pcx reader is still using gbgetstr.
 # These are handcrafted input files, they may not be legal pcx files.
 #   with a unicode character from the supplemental plane encoded in utf16le.
-./gpsbabel -i pcx -f ${REFERENCE}/testsupplementalplane.pcx -o unicsv -F ${TMPDIR}/testsupplementalplane.csv
+gpsbabel -i pcx -f ${REFERENCE}/testsupplementalplane.pcx -o unicsv -F ${TMPDIR}/testsupplementalplane.csv
 compare ${REFERENCE}/testsupplementalplane.csv ${TMPDIR}/testsupplementalplane.csv
