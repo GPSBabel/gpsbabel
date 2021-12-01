@@ -54,7 +54,7 @@ jobs:
             METHOD: 'aqt'
             RELEASE: false
             FLOW: 'nmake'
-          - QT_VERSION: '6.2.1'
+          - QT_VERSION: '6.2.2'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
