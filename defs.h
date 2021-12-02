@@ -1215,6 +1215,7 @@ int gb_ptr2int(const void* p);
 
 void list_codecs();
 void list_timezones();
+QString grapheme_truncate(const QString& input, unsigned int count);
 
 /*
  *  From parse.c
