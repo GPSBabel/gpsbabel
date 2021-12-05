@@ -990,8 +990,12 @@ gbfgetcstr_old(gbfile* file)
   for (;;) {
     int c = gbfgetc(file);
 
-    if ((c == 0) || (c == EOF)) {
+    if (c == 0) {
       break;
+    }
+
+    if (c == EOF) {
+      fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
     }
 
     if (len == file->buffsz) {
@@ -1030,17 +1034,20 @@ gbfgetnativecstr(gbfile* file)
 }
 
 /*
- * gbfgetpstr: Reads a pascal string (first byte is length) from file.
- *             The result is a temporary allocated entity: use it or free it!
+ * gbfgetpstr: Reads a pascal short string (first byte is length) from file.
  */
 
 QString
 gbfgetpstr(gbfile* file)
 {
   int len = gbfgetc(file);
+  if (len == EOF) {
+    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  }
   QByteArray ba;
   ba.resize(len);
-  gbfread(ba.data(), 1, len, file);
+  is_fatal((gbfread(ba.data(), 1, len, file) != (gbsize_t) len),
+           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   return QString(ba);
 }
