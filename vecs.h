@@ -103,7 +103,6 @@ extern ff_vecs_t stmsdf_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t stmwpp_vecs;
 #endif // CSVFMTS_ENABLED
-extern ff_vecs_t cst_vecs;
 extern ff_vecs_t nmn4_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t compegps_vecs;
@@ -316,7 +315,6 @@ private:
 #if CSVFMTS_ENABLED
   LegacyFormat stmwpp_fmt {stmwpp_vecs};
 #endif // CSVFMTS_ENABLED
-  LegacyFormat cst_fmt {cst_vecs};
   LegacyFormat nmn4_fmt {nmn4_vecs};
 #if CSVFMTS_ENABLED
   LegacyFormat compegps_fmt {compegps_vecs};
@@ -764,13 +762,6 @@ private:
       nullptr,
     },
 #endif //  CSVFMTS_ENABLED
-    {
-      &cst_fmt,
-      "cst",
-      "CarteSurTable data file",
-      "cst",
-      nullptr,
-    },
     {
       &nmn4_fmt,
       "nmn4",

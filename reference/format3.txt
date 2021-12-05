@@ -50,8 +50,6 @@ option	cambridge	prefer_shortnames	Use shortname instead of description	boolean	
 
 option	cambridge	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_datum
 
-file	r-r-r-	cst	cst	CarteSurTable data file	cst
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cst.html
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)	v900
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html
 file	rw----	csv		Comma separated values	xcsv
