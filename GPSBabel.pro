@@ -67,7 +67,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
         vcf.cc lowranceusr.cc tomtom.cc \
         tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
-        ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
+        ignrando.cc stmwpp.cc nmn4.cc compegps.cc \
         yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
         stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
         ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
