@@ -50,8 +50,6 @@ option	cambridge	prefer_shortnames	Use shortname instead of description	boolean	
 
 option	cambridge	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_datum
 
-file	r-r-r-	cst	cst	CarteSurTable data file	cst
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cst.html
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)	v900
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html
 file	rw----	csv		Comma separated values	xcsv
@@ -69,16 +67,6 @@ option	csv	urlbase	Basename prepended to URL on output	string				https://www.gps
 option	csv	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_prefer_shortnames
 
 option	csv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_datum
-
-file	rwrwrw	compegps		CompeGPS data files (.wpt/.trk/.rte)	compegps
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_compegps.html
-option	compegps	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_compegps.html#fmt_compegps_o_deficon
-
-option	compegps	index	Index of route/track to write (if more than one in source)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_compegps.html#fmt_compegps_o_index
-
-option	compegps	radius	Give points (waypoints/route points) a default radius (proximity)	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_compegps.html#fmt_compegps_o_radius
-
-option	compegps	snlen	Length of generated shortnames (default 16)	integer	16	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_compegps.html#fmt_compegps_o_snlen
 
 internal	rw----	custom		Custom "Everything" Style	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html
@@ -286,8 +274,6 @@ option	fugawi	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	fugawi	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_datum
 
-file	r-r-r-	g7towin	g7t	G7ToWin data files (.g7t)	g7towin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_g7towin.html
 file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html
 option	garmin301	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snlen
@@ -353,12 +339,6 @@ option	garmin_txt	temp	Temperature unit [c=Celsius, f=Fahrenheit]	string	c			htt
 option	garmin_txt	time	Read/Write time format (i.e. HH:mm:ss xx)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_time
 
 option	garmin_txt	utc	Write timestamps with offset x to UTC time	integer		-23	+23	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_utc
-
-file	rwrwrw	pcx	pcx	Garmin PCX5	pcx
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pcx.html
-option	pcx	deficon	Default icon name	string	Waypoint			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pcx.html#fmt_pcx_o_deficon
-
-option	pcx	cartoexploreur	Write tracks compatible with Carto Exploreur	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pcx.html#fmt_pcx_o_cartoexploreur
 
 file	rw----	garmin_poi		Garmin POI database	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html
@@ -538,16 +518,6 @@ option	kml	prec	Precision of coordinates, number of decimals	integer	6			https:/
 
 file	--rw--	gnav_trl	trl	Google Navigator Tracklines (.trl)	gnav_trl
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gnav_trl.html
-file	--rw--	gopal	trk	GoPal GPS track log (.trk)	gopal
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gopal.html
-option	gopal	date	Complete date-free tracks with given date (YYYYMMDD).	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gopal.html#fmt_gopal_o_date
-
-option	gopal	maxspeed	The maximum speed (km/h) traveling from waypoint to waypoint.	integer	200	1	1000	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gopal.html#fmt_gopal_o_maxspeed
-
-option	gopal	minspeed	The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints	integer	0	0	999	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gopal.html#fmt_gopal_o_minspeed
-
-option	gopal	clean	Cleanup common errors in trackdata	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gopal.html#fmt_gopal_o_clean
-
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
@@ -630,8 +600,6 @@ option	gpsman	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	gpsman	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsman.html#fmt_gpsman_o_datum
 
-file	rw----	gpsutil		gpsutil	gpsutil
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsutil.html
 file	rwrwrw	gpx	gpx	GPX XML	gpx
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpx.html
 option	gpx	snlen	Length of generated shortnames	integer	32	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpx.html#fmt_gpx_o_snlen
@@ -670,8 +638,6 @@ option	m241	csv	MTK compatible CSV output file	string				https://www.gpsbabel.or
 
 option	m241	block_size_kb	Size of blocks in KB to request from device	integer	1	1	64	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_m241.html#fmt_m241_o_block_size_kb
 
-file	--r---	vpl		Honda/Acura Navigation System VP Log File Format	vpl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vpl.html
 file	-w----	html	html	HTML Output	html
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_html.html
 option	html	stylesheet	Path to HTML style sheet	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_html.html#fmt_html_o_stylesheet
@@ -740,8 +706,6 @@ option	random	seed	Starting seed of the internal number generator	integer		1		ht
 
 option	random	nodelay	Output realtime points without delay	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html#fmt_random_o_nodelay
 
-file	--rw--	jtr	jtr	Jelbert GeoTagger data file	jtr
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_jtr.html
 file	--r---	jogmap	xml	Jogmap.de XML format	jogmap
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_jogmap.html
 file	--rw--	kompass_tk	wp	Kompass (DAV) Track (.tk)	xcsv
@@ -793,12 +757,6 @@ option	lowranceusr	title	(USR output) Output file title string	string				https:/
 option	lowranceusr	serialnum	(USR output) Device serial number	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_serialnum
 
 option	lowranceusr	description	(USR output) Output file content description	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_description
-
-file	rw----	maggeo	gs	Magellan Explorist Geocaching	maggeo
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_maggeo.html
-file	rwrwrw	mapsend		Magellan Mapsend	mapsend
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsend.html
-option	mapsend	trkver	MapSend version TRK file to generate (3,4)	integer	4	3	4	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapsend.html#fmt_mapsend_o_trkver
 
 file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)	magellanx
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html
@@ -1014,10 +972,6 @@ file	r-----	navicache		Navicache.com XML	navicache
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navicache.html
 option	navicache	noretired	Suppress retired geocaches	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navicache.html#fmt_navicache_o_noretired
 
-file	----rw	nmn4	rte	Navigon Mobile Navigator .rte files	nmn4
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmn4.html
-option	nmn4	index	Index of route to write (if more than one in source)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmn4.html#fmt_nmn4_o_index
-
 file	rw----	navigonwpt		Navigon Waypoints	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navigonwpt.html
 option	navigonwpt	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navigonwpt.html#fmt_navigonwpt_o_snlen
@@ -1148,12 +1102,6 @@ option	ozi	proxunit	Unit used in proximity values	string	miles			https://www.gps
 
 option	ozi	codec	codec to use for reading and writing strings (default windows-1252)	string	windows-1252			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_codec
 
-file	--rw--	pocketfms_bc		PocketFMS breadcrumbs	pocketfms_bc
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pocketfms_bc.html
-file	r---r-	pocketfms_fp	xml	PocketFMS flightplan (.xml)	pocketfms_fp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pocketfms_fp.html
-file	rw----	pocketfms_wp	txt	PocketFMS waypoints (.txt)	pocketfms_wp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_pocketfms_wp.html
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000	qstarz_bl-1000
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_qstarz_bl-1000.html
 file	rw--rw	raymarine	rwf	Raymarine Waypoint File (.rwf)	raymarine
@@ -1192,8 +1140,6 @@ option	cup	prefer_shortnames	Use shortname instead of description	boolean				htt
 
 option	cup	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_datum
 
-file	rwrwrw	skyforce		Skymap / KMD150 ascii files	skyforce
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skyforce.html
 serial	r-r---	skytraq		SkyTraq Venus based loggers (download)	skytraq
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html
 option	skytraq	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html#fmt_skytraq_o_erase
@@ -1239,14 +1185,6 @@ option	subrip	gps_time	GPS time at position video_time (hhmmss[.sss], default is
 option	subrip	gps_date	GPS date at position video_time (yyyymmdd, default is first timestamp of track)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_subrip.html#fmt_subrip_o_gps_date
 
 option	subrip	format	Format for subtitles	string	%s km/h %e m\n%t %l			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_subrip.html#fmt_subrip_o_format
-
-file	--rwrw	stmsdf	sdf	Suunto Trek Manager (STM) .sdf files	stmsdf
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_stmsdf.html
-option	stmsdf	index	Index of route (if more than one in source)	integer	1	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_stmsdf.html#fmt_stmsdf_o_index
-
-file	rwrwrw	stmwpp	txt	Suunto Trek Manager (STM) WaypointPlus files	stmwpp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_stmwpp.html
-option	stmwpp	index	Index of route/track to write (if more than one in source)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_stmwpp.html#fmt_stmwpp_o_index
 
 file	rwrw--	xol	xol	Swiss Map 25/50/100 (.xol)	xol
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xol.html
@@ -1336,32 +1274,6 @@ file	rwrw--	dmtlog	trl	TrackLogs digital mapping (.trl)	dmtlog
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dmtlog.html
 option	dmtlog	index	Index of track (if more than one in source)	integer	1	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dmtlog.html#fmt_dmtlog_o_index
 
-file	rw----	tiger		U.S. Census Bureau Tiger Mapping Service	tiger
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html
-option	tiger	nolabels	Suppress labels on generated pins	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_nolabels
-
-option	tiger	genurl	Generate file with lat/lon for centering map	outfile				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_genurl
-
-option	tiger	margin	Margin for map.  Degrees or percentage	float	15%			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_margin
-
-option	tiger	snlen	Max shortname length when used with -s	integer	10	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_snlen
-
-option	tiger	oldthresh	Days after which points are considered old	integer	14			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_oldthresh
-
-option	tiger	oldmarker	Marker type for old points	string	redpin			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_oldmarker
-
-option	tiger	newmarker	Marker type for new points	string	greenpin			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_newmarker
-
-option	tiger	suppresswhite	Suppress whitespace in generated shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_suppresswhite
-
-option	tiger	unfoundmarker	Marker type for unfound points	string	bluepin			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_unfoundmarker
-
-option	tiger	xpixels	Width in pixels of map	integer	768			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_xpixels
-
-option	tiger	ypixels	Height in pixels of map	integer	768			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_ypixels
-
-option	tiger	iconismarker	The icon description is already the marker	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tiger.html#fmt_tiger_o_iconismarker
-
 file	rwrwrw	unicsv		Universal csv with field structure in first line	unicsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html
 option	unicsv	datum	GPS datum (def. WGS 84)	string	WGS 84			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html#fmt_unicsv_o_datum
@@ -1392,18 +1304,6 @@ file	rwrwrw	vitosmt	smt	Vito Navigator II tracks	vitosmt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vitosmt.html
 file	--r---	vitovtt	vtt	Vito SmartMap tracks (.vtt)	vitovtt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vitovtt.html
-file	r-----	wfff	xml	WiFiFoFum 2.0 for PocketPC XML	wfff
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html
-option	wfff	aicicon	Infrastructure closed icon name	string	Red Square			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html#fmt_wfff_o_aicicon
-
-option	wfff	aioicon	Infrastructure open icon name	string	Green Square			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html#fmt_wfff_o_aioicon
-
-option	wfff	ahcicon	Ad-hoc closed icon name	string	Red Diamond			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html#fmt_wfff_o_ahcicon
-
-option	wfff	ahoicon	Ad-hoc open icon name	string	Green Diamond			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html#fmt_wfff_o_ahoicon
-
-option	wfff	snmac	Shortname is MAC address	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wfff.html#fmt_wfff_o_snmac
-
 file	r-r---	wintec_tes	tes	Wintec TES file	wintec_tes
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wintec_tes.html
 file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format	wbt-bin
@@ -1425,8 +1325,4 @@ file	rwrw--	itracku-bin	bin	XAiOX iTrackU Logger Binary File Format	itracku-bin
 option	itracku-bin	backup	Appends the input to a backup file	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_itracku-bin.html#fmt_itracku-bin_o_backup
 
 option	itracku-bin	new	Only waypoints that are not the backup file	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_itracku-bin.html#fmt_itracku-bin_o_new
-
-file	r-----	yahoo		Yahoo Geocode API data	yahoo
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_yahoo.html
-option	yahoo	addrsep	String to separate concatenated address fields (default=", ")	string	, 			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_yahoo.html#fmt_yahoo_o_addrsep
 

@@ -55,27 +55,27 @@ GB.setupfile.input = gui/setup.iss.qmake.in
 GB.setupfile.output = gui/setup.iss
 QMAKE_SUBSTITUTES += GB.setupfile
 
-MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc \
+MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc garmin.cc \
                garmin_device_xml.cc garmin_tables.cc nmea.cc \
                kml.cc wbt-200.cc
 
-ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
+ALL_FMTS=$$MINIMAL_FMTS gtm.cc \
         skytraq.cc holux.cc tpg.cc tpo.cc \
-        xcsv.cc tiger.cc easygps.cc \
+        xcsv.cc easygps.cc \
         saroute.cc navicache.cc delgpl.cc \
         ozi.cc text.cc html.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
         vcf.cc lowranceusr.cc tomtom.cc \
-        tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
-        ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
-        yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
-        stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
-        ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
+        tef_xml.cc vitosmt.cc gdb.cc bcr.cc \
+        ignrando.cc \
+        unicsv.cc garmin_txt.cc gpssim.cc \
+        gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
+        ggv_log.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
         navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
-        igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
-        jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
-        pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc \
-        vpl.cc teletype.cc jogmap.cc wintec_tes.cc \
+        igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
+        sbp.cc sbn.cc mmo.cc itracku.cc v900.cc \
+        enigma.cc \
+        teletype.cc jogmap.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -165,7 +165,6 @@ HEADERS =  \
 	legacyformat.h \
 	lowranceusr.h \
 	magellan.h \
-	mapsend.h \
 	mynav.h \
 	navilink.h \
 	nmea.h \
@@ -180,7 +179,6 @@ HEADERS =  \
 	vecs.h \
 	xcsv.h \
 	xmlgeneric.h \
-	yahoo.h \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
