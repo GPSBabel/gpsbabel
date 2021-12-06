@@ -765,22 +765,12 @@ current_time()
  * internals and since we're in the GPS biz, timestamps before 1/1/1970 aren't
  * that interesting to us anyway.
  */
-#define EPOCH_TICKS 621355968000000000.0
-void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs)
+QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
-  // TODO: replace this with better interface with normal return values
-  // and called via a QDateTime.
-  *t = (dotnet - EPOCH_TICKS) / 10000000.;
-#if LATER
-  // TODO: work out fractional seconds.
-  if (millisecs) {
-    *millisecs = dotnet % 10000;
-  }
-#else
-  (void)millisecs;
-#endif
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  qint64 millisecs = (dotnet + 5000)/ 10000;
+  return epoch.addMSecs(millisecs);
 }
-
 
 /*
  * Return a pointer to a constant string that is suitable for icon lookup
