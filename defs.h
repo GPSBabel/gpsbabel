@@ -1113,7 +1113,7 @@ time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
-void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
+QDateTime dotnet_time_to_qdatetime(long long dotnet);
 const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);

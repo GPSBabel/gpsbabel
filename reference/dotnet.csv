@@ -1,0 +1,6 @@
+0,40,105 # .net epoch midnight Jan 1, 1
+4999,40.5,105.5 # should round down
+5001,40.5,105.5 # should round up
+864000000000,41,106 # (60sec/min * 60min/hr * 24hr/day) / 100e-9 sec = midnight Jan 2, 1.
+637739532350000000,42,107 # GMT / UTC Date Time 2021-12-01 11:00:35 + 0.0000000 second
+

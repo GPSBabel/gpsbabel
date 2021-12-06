@@ -641,9 +641,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XcsvStyle::XT_NET_TIME: {
-    fatal("XT_NET_TIME can't have possibly ever worked.");
-//    time_t tt = wpt->GetCreationTime();
-//    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
+    bool ok;
+    wpt->SetCreationTime(dotnet_time_to_qdatetime(value.toLongLong(&ok)));
+    if (!ok) {
+      warning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
+    }
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND:

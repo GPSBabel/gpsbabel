@@ -66,3 +66,16 @@ echo 'OFIELD PATH_DISTANCE_NAUTICAL_MILES,"","%.6e"' >> ${TMPDIR}/distance3.styl
 
 gpsbabel -t -i xcsv,style=${TMPDIR}/distance3.style -f ${REFERENCE}/distance3.csv -o xcsv,style=${TMPDIR}/distance3.style -F ${TMPDIR}/distance3~csv.csv
 compare ${REFERENCE}/distance3~csv.csv ${TMPDIR}/distance3~csv.csv
+
+echo 'DESCRIPTION	dotnet test' > ${TMPDIR}/dotnet.style
+echo 'EXTENSION	csv' >> ${TMPDIR}/dotnet.style
+echo 'DATATYPE	WAYPOINT' >> ${TMPDIR}/dotnet.style
+echo 'FIELD_DELIMITER		COMMA' >> ${TMPDIR}/dotnet.style
+echo 'RECORD_DELIMITER	NEWLINE' >> ${TMPDIR}/dotnet.style
+echo 'BADCHARS	COMMA' >> ${TMPDIR}/dotnet.style
+echo 'IFIELD	NET_TIME, "","%lld"' >> ${TMPDIR}/dotnet.style
+echo 'IFIELD	LAT_DECIMAL,"","%.9f"' >> ${TMPDIR}/dotnet.style
+echo 'IFIELD	LON_DECIMAL,"","%.9f"' >> ${TMPDIR}/dotnet.style
+gpsbabel -i xcsv,style=${TMPDIR}/dotnet.style -f ${REFERENCE}/dotnet.csv -o unicsv,utc=0 -F ${TMPDIR}/dotnet.csv
+compare ${REFERENCE}/dotnet~csv.csv ${TMPDIR}/dotnet.csv
+
