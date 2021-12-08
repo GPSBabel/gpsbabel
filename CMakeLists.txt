@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
 endif()
 
 set(MINIMAL_FMTS
-  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc
+  magproto.cc explorist_ini.cc gpx.cc geo.cc garmin.cc
   garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc
   kml.cc wbt-200.cc
 )
@@ -36,27 +36,28 @@ set(MINIMAL_FMTS
 set(ALL_FMTS
   ${MINIMAL_FMTS} gtm.cc gpsutil.cc pcx.cc
   skytraq.cc holux.cc tpg.cc tpo.cc
-  xcsv.cc tiger.cc easygps.cc
+  xcsv.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
   ozi.cc text.cc html.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
   vcf.cc lowranceusr.cc tomtom.cc
-  tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
-  ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
-  yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
-  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
-  ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
+  tef_xml.cc vitosmt.cc gdb.cc bcr.cc
+  ignrando.cc
+  unicsv.cc garmin_txt.cc gpssim.cc
+  gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
+  ggv_log.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
   navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc
-  igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
-  jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
-  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc enigma.cc
-  vpl.cc teletype.cc jogmap.cc wintec_tes.cc
+  igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
+  sbp.cc sbn.cc mmo.cc itracku.cc v900.cc
+  enigma.cc
+  teletype.cc jogmap.cc wintec_tes.cc
   subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
 )
 
-#DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc psitrex.cc
+#DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc psitrex.cc mapsend.cc tiger.cc maggeo.cc stmwpp.cc cst.cc nmn4.cc compegps.cc yahoo.cc wfff_xml gpssim.cc stmsdf.cc vitovtt.cc gopal.cc jtr.cc pocketfms_fp.cc pocketfms_wp.cc jtr.cc skyforce.cc  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc vpl.cc
+
 
 #DEPRECATED_HEADERS=geo.h quovadis.h
 #DEPRECATED_SHAPE=pdbfile.cc
