@@ -32,12 +32,10 @@ grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
 compare ${REFERENCE}/wbt-201.gpx ${TMPDIR}/wbt-201.gpx2
 
 #
-# gzipped file i/o
+# gzipped file i/o (reading only)
 #
-gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
-compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
-gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
-compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx
+gpsbabel -i nmea -f ${REFERENCE}/waypoints.nmea.gz -o nmea -F ${TMPDIR}/waypoints.nmea
+compare ${REFERENCE}/waypoints.nmea ${TMPDIR}/waypoints.nmea
 
 #
 # GPX version detection
