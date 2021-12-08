@@ -34,7 +34,7 @@ set(MINIMAL_FMTS
 )
 
 set(ALL_FMTS
-  ${MINIMAL_FMTS} gtm.cc gpsutil.cc pcx.cc
+  ${MINIMAL_FMTS} gtm.cc
   skytraq.cc holux.cc tpg.cc tpo.cc
   xcsv.cc easygps.cc
   saroute.cc navicache.cc delgpl.cc
@@ -157,7 +157,6 @@ set(HEADERS
   legacyformat.h
   lowranceusr.h
   magellan.h
-  mapsend.h
   mynav.h
   navilink.h
   nmea.h
