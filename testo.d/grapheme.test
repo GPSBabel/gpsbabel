@@ -1,0 +1,6 @@
+# test mkshort utf8 to see it breaks on grapheme boundaries
+# and tosses invalid sequences.
+# note grapheme.csv uses the combining diacritical mark U+0308.
+# note grapheme.csv has an invalid byte 0xff.
+gpsbabel -s -i unicsv -f ${REFERENCE}/grapheme.csv -o gpx,snlen=6 -F ${TMPDIR}/grapheme.gpx
+compare ${REFERENCE}/grapheme.gpx ${TMPDIR}/grapheme.gpx

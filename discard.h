@@ -41,7 +41,7 @@ public:
   void process() override;
 
 private:
-  QRegularExpression generateRegExp(const QString& glob_pattern);
+  static QRegularExpression generateRegExp(const QString& glob_pattern);
 
 private:
   char* hdopopt = nullptr;

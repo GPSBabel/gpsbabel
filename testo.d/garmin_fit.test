@@ -29,6 +29,13 @@ compare ${REFERENCE}/track/garmin-oregon-700-output.gpx ${TMPDIR}/fit-sample-gar
 gpsbabel -i garmin_fit,recoverymode -f ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.fit -o gpx -F ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx 2>/dev/null
 compare ${REFERENCE}/track/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx ${TMPDIR}/lezyne_super_gps-garmin_fit-sample-bad-endian.gpx
 
+# fitlocations-sample.fit is from a Garmin Edge Explore, edited to remove sensitive data.
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/fitlocations-sample.fit -o gpx -F ${TMPDIR}/fitlocations-sample.gpx
+compare ${REFERENCE}/track/fitlocations-sample.gpx ${TMPDIR}/fitlocations-sample.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/Lctns_Instinct.fit -o gpx -F ${TMPDIR}/Lctns_Instinct.gpx
+compare ${REFERENCE}/Lctns_Instinct.gpx ${TMPDIR}/Lctns_Instinct.gpx
+
 #
 # Basic FIT tests (write)
 #

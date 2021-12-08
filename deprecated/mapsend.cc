@@ -359,7 +359,7 @@ mapsend_route_hdr(const route_head* rte)
   gbfputint32(rte->rte_num, mapsend_file_out);
 
   /* # of waypoints to follow... */
-  gbfputint32(rte->rte_waypt_ct, mapsend_file_out);
+  gbfputint32(rte->rte_waypt_ct(), mapsend_file_out);
 }
 
 static void
@@ -430,7 +430,7 @@ static void mapsend_track_hdr(const route_head* trk)
   gbfputpstr(tname, mapsend_file_out);
 
   /* total nodes (waypoints) this track */
-  int i = trk->waypoint_list.count();
+  int i = trk->rte_waypt_ct();
 
   gbfputint32(i, mapsend_file_out);
 

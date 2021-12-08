@@ -112,7 +112,7 @@ static int trk_ct;	/* informational: total number of tracks in/out */
 
 /*******************************************************************************/
 
-#define ELEMENTS(a) a->rte_waypt_ct
+#define ELEMENTS(a) a->rte_waypt_ct()
 #define NOT_EMPTY(a) (a && *a)
 
 static void

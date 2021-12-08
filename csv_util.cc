@@ -20,7 +20,7 @@
 
  */
 
-#include <assert.h>            // for assert
+#include <cassert>             // for assert
 #include <cctype>              // for isspace
 #include <cmath>               // for fabs
 #include <cstdio>              // for size_t

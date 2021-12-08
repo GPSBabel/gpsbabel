@@ -244,12 +244,6 @@ public:
 private:
   /* Types */
 
-  /* something to map config file constants to chars */
-  struct char_map_t {
-    const QString key;
-    const QString chars;
-  };
-
   /* Member Functions */
 
   static QString dequote(const QString& in);
@@ -264,7 +258,7 @@ private:
   static const QHash<QString, xcsv_token> xcsv_tokens;
 
   /* a table of config file constants mapped to chars */
-  static const char_map_t xcsv_char_table[];
+  static const QHash<QString, QString> xcsv_char_table;
 };
 
 class XcsvFormat : public Format

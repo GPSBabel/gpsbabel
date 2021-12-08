@@ -499,12 +499,12 @@ static void detect_other_track(const route_head* rh)
     max_waypt_ct = 0;
   }
   // Find other track with the most waypoints
-  if (rh->rte_waypt_ct > max_waypt_ct &&
+  if (rh->rte_waypt_ct() > max_waypt_ct &&
       (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(PRESTRKNAME) &&
        !rh->rte_name.startsWith(GNSSTRKNAME)))) {
     head = rh;
-    max_waypt_ct = rh->rte_waypt_ct;
+    max_waypt_ct = rh->rte_waypt_ct();
   }
 }
 
@@ -593,8 +593,6 @@ static void wr_header()
   const route_head* track;
   struct tm* tm;
   time_t date;
-  static const char dflt_str[] = "Unknown";
-  const char* str = nullptr;
 
   get_tracks(&pres_track, &track);
   if (!track && pres_track) {
@@ -611,28 +609,27 @@ static void wr_header()
 
   // Other header data may have been stored in track description
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
-    char *rd = xstrdup(track->rte_desc);
-    for (str = strtok(rd + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
-         str; str = strtok(nullptr, HDRDELIM)) {
-      gbfprintf(file_out, "%s\r\n", str);
+    QString desc = track->rte_desc.mid(QString(HDRMAGIC).size());
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+    const QStringList fields = desc.split(HDRDELIM, QString::SkipEmptyParts);
+#else
+    const QStringList fields = desc.split(HDRDELIM, Qt::SkipEmptyParts);
+#endif
+    for (const auto& field : fields) {
+      gbfprintf(file_out, "%s\r\n", CSTR(field));
     }
-    xfree(rd);
-    rd = nullptr;
   } else {
-// FIXME: This almost certainly introduces a memory leak because str
-// is a c string that's used for totally too many things.  Just let it
-// leak for now. 2013-12-31 robertl
-    if (const Waypoint* wpt = find_waypt_by_name("PILOT"); (nullptr != wpt) && !wpt->description.isEmpty()) {
-      xfree(str);
-      str = xstrdup(CSTRc(wpt->description));
+    // IGC header info not found so synthesise it.
+    QString pilot;
+    // If a waypoint is supplied with a short name of "PILOT", use
+    // its description as the pilot's name in the header.
+    const Waypoint* wpt = find_waypt_by_name("PILOT");
+    if ((nullptr != wpt) && !wpt->description.isEmpty()) {
+      pilot = wpt->description;
     } else {
-      // IGC header info not found so synthesise it.
-      // If a waypoint is supplied with a short name of "PILOT", use
-      // its description as the pilot's name in the header.
-      str = xstrdup(dflt_str);
+      pilot = "Unknown";
     }
-    gbfprintf(file_out, "HFPLTPILOT:%s\r\n", str);
-    xfree(str);
+    gbfprintf(file_out, "HFPLTPILOT:%s\r\n", CSTRc(pilot));
   }
 }
 
@@ -651,7 +648,7 @@ static void wr_task_hdr(const route_head* rte)
   unsigned char have_takeoff = 0;
   char flight_date[7] = "000000";
   char task_desc[MAXRECLEN] = "";
-  int num_tps = rte->rte_waypt_ct - 2;
+  int num_tps = rte->rte_waypt_ct() - 2;
   struct tm* tm;
   time_t rte_time;
   static unsigned int task_num = 1;

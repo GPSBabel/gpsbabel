@@ -67,7 +67,7 @@ set(FILTERS
   position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc
   reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc
   nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc
-  validate.cc
+  validate.cc resample.cc
 )
 
 set(SHAPE
@@ -94,11 +94,13 @@ set(JEEPS
 set(SUPPORT
   route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc
   csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc
-  formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc
+  formspec.cc xmltag.cc cet_util.cc fatal.cc rgbcolors.cc
   inifile.cc garmin_fs.cc units.cc gbser.cc
   gbfile.cc parse.cc session.cc main.cc globals.cc
+  src/core/nvector.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
+  src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
 )
 if(${QT_VERSION_MAJOR} EQUAL "6")
@@ -106,7 +108,6 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
 endif()
 
 set(HEADERS
-  cet.h
   cet_util.h
   csv_util.h
   defs.h
@@ -187,8 +188,10 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
+  src/core/nvector.h
   src/core/textstream.h
   src/core/usasciicodec.h
+  src/core/vector3d.h
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
@@ -272,6 +275,9 @@ endif()
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
 )
+
+list(SORT SOURCES)
+list(SORT HEADERS)
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 add_definitions(-DMAXIMAL_ENABLED)

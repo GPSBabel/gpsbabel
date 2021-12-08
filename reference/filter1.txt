@@ -83,6 +83,10 @@ option	discard	matchname	Suppress points where name matches given name	string			
 option	discard	matchdesc	Suppress points where description matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchdesc
 option	discard	matchcmt	Suppress points where comment matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchcmt
 option	discard	matchicon	Suppress points where type matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_matchicon
+resample	Resample Track	https://www.gpsbabel.org/WEB_DOC_DIR/filter_resample.html
+option	resample	decimate	Decimate, decrease sample rate by a factor of n	integer		2		https://www.gpsbabel.org/WEB_DOC_DIR/filter_resample.html#fmt_resample_o_decimate
+option	resample	interpolate	Interpolate, increase sample rate by a factor of n	integer		2		https://www.gpsbabel.org/WEB_DOC_DIR/filter_resample.html#fmt_resample_o_interpolate
+option	resample	average	Running average of n points	integer		2		https://www.gpsbabel.org/WEB_DOC_DIR/filter_resample.html#fmt_resample_o_average
 reverse	Reverse stops within routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_reverse.html
 stack	Save and restore waypoint lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html
 option	stack	push	Push waypoint list onto stack	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_push

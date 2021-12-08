@@ -1,0 +1,6 @@
+path_classifiers:
+  test:
+    - reference
+  library:
+    - shapelib
+    - zlib

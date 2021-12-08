@@ -89,7 +89,7 @@ DEPRECATED_SHAPE=pdbfile.cc
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
-        validate.cc
+        validate.cc resample.cc
 FILTER_HEADERS = $$FILTERS
 FILTER_HEADERS ~= s/\\.cc/.h/g
 
@@ -104,17 +104,18 @@ JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
 
 SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
-          formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
+          formspec.cc xmltag.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc units.cc gbser.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc \
+          src/core/nvector.cc \
           src/core/textstream.cc \
           src/core/usasciicodec.cc \
+          src/core/vector3d.cc \
           src/core/xmlstreamwriter.cc
 
 versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
 
 HEADERS =  \
-	cet.h \
 	cet_util.h \
 	csv_util.h \
 	defs.h \
@@ -182,8 +183,10 @@ HEADERS =  \
 	src/core/datetime.h \
 	src/core/file.h \
 	src/core/logging.h \
+	src/core/nvector.h \
 	src/core/textstream.h \
 	src/core/usasciicodec.h \
+	src/core/vector3d.h \
 	src/core/xmlstreamwriter.h \
 	src/core/xmltag.h
 
@@ -211,18 +214,25 @@ win32-msvc* {
   QMAKE_EXTRA_COMPILERS += styles
 }
 
-load(configure)
-
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
 macx|linux|openbsd {
-  qtCompileTest(unistd) {
-    # this is used by zlib
+  if (equals(MAKEFILE_GENERATOR, XCODE)) {
+    # "Configure tests are not supported with the XCODE Makefile generator"
+    # assume we have the following headers
+    # these are used by zlib
     DEFINES += HAVE_UNISTD_H
-  }
-  qtCompileTest(stdarg) {
-    # this is used by zlib
     DEFINES += HAVE_STDARG_H
+  } else {
+    load(configure)
+    qtCompileTest(unistd) {
+      # this is used by zlib
+      DEFINES += HAVE_UNISTD_H
+    }
+    qtCompileTest(stdarg) {
+      # this is used by zlib
+      DEFINES += HAVE_STDARG_H
+    }
   }
   SOURCES += gbser_posix.cc
   HEADERS += gbser_posix.h
@@ -252,6 +262,9 @@ include(zlib.pri)
 include(libusb.pri)
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$JEEPS
+
+SOURCES = $$sorted(SOURCES)
+HEADERS = $$sorted(HEADERS)
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED

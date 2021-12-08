@@ -21,8 +21,8 @@ set(CMAKE_AUTORCC ON)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
 if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
   message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
@@ -31,19 +31,6 @@ endif()
 
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
 list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
-
-if(APPLE)
-  find_library(IOKIT_LIBRARIES IOKit)
-  find_library(COREFOUNDATION_LIBRARIES CoreFoundation)
-endif()
-
-if(UNIX AND NOT APPLE)
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(LIBUDEV libudev)
-  if(${LIBUDEV_FOUND})
-    add_definitions(-DHAVE_UDEV)
-  endif()
-endif()
 
 set(RESOURCES app.qrc)
 
@@ -99,10 +86,8 @@ set(SOURCES
   version_mismatch.cc
 )
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
   set(SOURCES ${SOURCES} serial_unix.cc)
-elseif(APPLE)
-  set(SOURCES ${SOURCES} serial_mac.cc)
 elseif(WIN32)
   set(SOURCES ${SOURCES} serial_win.cc)
 endif()
@@ -148,7 +133,7 @@ else()
   add_executable(${TARGET} ${SOURCES} ${HEADERS} ${RESOURCES})
 endif()
 
-set(LIBS ${QT_LIBRARIES} ${LIBUDEV_LIBRARIES} ${IOKIT_LIBRARIES} ${COREFOUNDATION_LIBRARIES})
+set(LIBS ${QT_LIBRARIES})
 list(REMOVE_DUPLICATES LIBS)
 target_link_libraries(${TARGET} ${LIBS})
 

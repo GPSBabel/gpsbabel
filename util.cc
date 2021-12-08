@@ -37,6 +37,7 @@
 #include <QList>                        // for QList
 #include <QScopedPointer>               // for QScopedPointer
 #include <QString>                      // for QString
+#include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <QXmlStreamAttribute>          // for QXmlStreamAttribute
@@ -46,7 +47,6 @@
 #include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
-#include "cet.h"                        // for cet_utf8_to_ucs4
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/logging.h"           // for Warning
 #include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
@@ -765,22 +765,12 @@ current_time()
  * internals and since we're in the GPS biz, timestamps before 1/1/1970 aren't
  * that interesting to us anyway.
  */
-#define EPOCH_TICKS 621355968000000000.0
-void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs)
+QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
-  // TODO: replace this with better interface with normal return values
-  // and called via a QDateTime.
-  *t = (dotnet - EPOCH_TICKS) / 10000000.;
-#if LATER
-  // TODO: work out fractional seconds.
-  if (millisecs) {
-    *millisecs = dotnet % 10000;
-  }
-#else
-  (void)millisecs;
-#endif
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  qint64 millisecs = (dotnet + 5000)/ 10000;
+  return epoch.addMSecs(millisecs);
 }
-
 
 /*
  * Return a pointer to a constant string that is suitable for icon lookup
@@ -1524,16 +1514,13 @@ static
 char*
 entitize(const char* str, bool is_html)
 {
-  int ecount;
-  int nsecount;
   char* p;
   char* tmp;
   char* xstr;
 
-  int bytes = 0;
-  int value = 0;
   entity_types* ep = stdentities;
-  int elen = ecount = nsecount = 0;
+  int elen = 0;
+  int ecount = 0;
 
   /* figure # of entity replacements and additional size. */
   while (ep->text) {
@@ -1546,28 +1533,9 @@ entitize(const char* str, bool is_html)
     ep++;
   }
 
-  /* figure the same for other than standard entities (i.e. anything
-   * that isn't in the range U+0000 to U+007F */
-
-#if 0
-  for (cp = str; *cp; cp++) {
-    if (*cp & 0x80) {
-      cet_utf8_to_ucs4(cp, &bytes, &value);
-      cp += bytes-1;
-      elen += sprintf(tmpsub, "&#x%x;", value) - bytes;
-      nsecount++;
-    }
-  }
-#endif
-
   /* enough space for the whole string plus entity replacements, if any */
   tmp = (char*) xcalloc((strlen(str) + elen + 1), 1);
   strcpy(tmp, str);
-
-  /* no entity replacements */
-  if (ecount == 0 && nsecount == 0) {
-    return (tmp);
-  }
 
   if (ecount != 0) {
     for (ep = stdentities; ep->text; ep++) {
@@ -1590,27 +1558,6 @@ entitize(const char* str, bool is_html)
     }
   }
 
-  if (nsecount != 0) {
-    p = tmp;
-    while (*p) {
-      if (*p & 0x80) {
-        cet_utf8_to_ucs4(p, &bytes, &value);
-        if (p[bytes]) {
-          xstr = xstrdup(p + bytes);
-        } else {
-          xstr = nullptr;
-        }
-        sprintf(p, "&#x%x;", value);
-        p = p+strlen(p);
-        if (xstr) {
-          strcpy(p, xstr);
-          xfree(xstr);
-        }
-      } else {
-        p++;
-      }
-    }
-  }
   return (tmp);
 }
 
@@ -1776,3 +1723,24 @@ void list_timezones()
   }
 }
 
+QString grapheme_truncate(const QString& input, unsigned int count)
+{
+  QString output(input);
+  QTextBoundaryFinder boundary(QTextBoundaryFinder::Grapheme, input);
+  boundary.toStart();
+  unsigned int grapheme_cnt = 0;
+  QList<int> boundaries{0};
+  while (boundary.toNextBoundary() >= 0) {
+    ++grapheme_cnt;
+    boundaries.append(boundary.position());
+  }
+  if (grapheme_cnt > count) {
+    output.truncate(boundaries.at(count));
+  }
+  if constexpr(false) {
+    qDebug() << input << "->" << output <<  boundaries << ", limit:" <<
+             count << ", input QChars:" << input.size() << ",input graphemes:" << grapheme_cnt <<
+             ", output QChars:" << output.size();
+  }
+  return output;
+}

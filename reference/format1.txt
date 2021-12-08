@@ -10,9 +10,6 @@ file	iblue757	csv	Data Logger iBlue757 csv
 file	gpl	gpl	DeLorme GPL
 file	saplus		DeLorme Street Atlas Plus
 file	saroute	anr	DeLorme Street Atlas Route
-file	xmap	wpt	DeLorme XMap HH Native .WPT
-file	xmap2006	txt	DeLorme XMap/SAHH 2006 Native .TXT
-file	xmapwpt		DeLorme XMat HH Street Atlas USA .WPT (PPC)
 file	destinator_itn	dat	Destinator Itineraries (.dat)
 file	destinator_poi	dat	Destinator Points of Interest (.dat)
 file	destinator_trl	dat	Destinator TrackLogs (.dat)

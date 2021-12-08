@@ -39,3 +39,7 @@ gpsbabel -t -i nmea -f ${REFERENCE}/track/addmultipledaysbkw.nmea -o unicsv,utc=
 compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysbkw.csv
 gpsbabel -t -i nmea -f ${REFERENCE}/track/addmultipledaysmid.nmea -o unicsv,utc=0 -F ${TMPDIR}/addmultipledaysmid.csv
 compare ${REFERENCE}/track/addmultipledays.csv ${TMPDIR}/addmultipledaysmid.csv
+
+# test date time parsing
+gpsbabel -t -i nmea -f ${REFERENCE}/track/nmeadatetime.nmea -o unicsv,utc=0 -F ${TMPDIR}/nmeadatetime.csv
+compare ${REFERENCE}/track/nmeadatetime.csv ${TMPDIR}/nmeadatetime.csv

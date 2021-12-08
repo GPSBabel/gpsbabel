@@ -50,7 +50,6 @@
 #include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "formspec.h"                 // for FormatSpecificDataList
 #include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
-#include "gbfile.h"                   // for gbfgetstr, gbfclose, gbfopen, gbfile
 #include "grtcirc.h"                  // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
 #include "jeeps/gpsport.h"            // for int32
@@ -158,7 +157,7 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
 };
 
 /* a table of config file constants mapped to chars */
-const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
+const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COMMA",		"," 	},
   { "COMMASPACE",		", " 	},
   { "SINGLEQUOTE",	"'"	},
@@ -172,25 +171,15 @@ const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
   { "SPACE",  		" "	},
   { "HASH",  		"#"	},
   { "WHITESPACE",		"\\w"	},
-  { "PIPE",		"|"	},
-  { nullptr, 		nullptr	}
+  { "PIPE",		"|"	}
 };
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
 XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 {
-  static QHash<QString, QString> substitutions;
-  if (substitutions.empty()) {
-    for (const char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
-      substitutions.insert(cm->key, cm->chars);
-    }
-  }
-  if (substitutions.contains(key)) {
-    return substitutions[key];
-  }
   // No substitution found? Just return original.
-  return key;
+  return xcsv_char_table.value(key, key);
 }
 
 // Remove outer quotes.
@@ -652,9 +641,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XcsvStyle::XT_NET_TIME: {
-    fatal("XT_NET_TIME can't have possibly ever worked.");
-//    time_t tt = wpt->GetCreationTime();
-//    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
+    bool ok;
+    wpt->SetCreationTime(dotnet_time_to_qdatetime(value.toLongLong(&ok)));
+    if (!ok) {
+      warning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
+    }
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
@@ -1842,18 +1833,20 @@ XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
 XcsvStyle
 XcsvStyle::xcsv_read_style(const char* fname)
 {
-  gbfile* fp = gbfopen(fname, "rb", MYNAME);
   XcsvStyle style;
-  for (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
-    sbuff = sbuff.trimmed();
-    xcsv_parse_style_line(&style, sbuff);
+
+  gpsbabel::TextStream stream;
+  stream.open(fname, QIODevice::ReadOnly, MYNAME);
+  QString sbuff;
+  while (stream.readLineInto(&sbuff)) {
+    xcsv_parse_style_line(&style, sbuff.trimmed());
   }
+  stream.close();
 
   /* if we have no output fields, use input fields as output fields */
   if (style.ofields.isEmpty()) {
     style.ofields = style.ifields;
   }
-  gbfclose(fp);
 
   return style;
 }

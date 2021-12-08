@@ -219,7 +219,7 @@ ignr_write_track_hdr(const route_head* track_hdr)
   }
 
   gbfprintf(fout, "\t<INFORMATIONS>\n");
-  gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track_hdr->rte_waypt_ct);
+  gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track_hdr->rte_waypt_ct());
   if (!track_hdr->rte_desc.isEmpty()) {
     gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", STRFROMUNICODE(track_hdr->rte_desc));
   }

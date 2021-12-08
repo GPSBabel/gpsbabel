@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="48.946400000" minlon="8.669400000" maxlat="49.835100000" maxlon="9.953400000"/>
+  <wpt lat="49.791300000" lon="9.953400000">
+    <name>Würzbr</name>
+    <cmt>Würzburg</cmt>
+    <desc>Würzburg</desc>
+  </wpt>
+  <wpt lat="49.835100000" lon="9.864100000">
+    <name>Margts</name>
+    <cmt>Margetshöchheim</cmt>
+    <desc>Margetshöchheim</desc>
+  </wpt>
+  <wpt lat="48.946400000" lon="8.669400000">
+    <name>Eingen</name>
+    <cmt>�Eingen</cmt>
+    <desc>�Eingen</desc>
+  </wpt>
+</gpx>

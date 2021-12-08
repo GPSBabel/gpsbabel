@@ -123,7 +123,7 @@ static void
 skyforce_head_disp_cb(const route_head* head)
 {
   prev_wpt = nullptr;
-  if (head->rte_waypt_ct <= 0) {
+  if (head->rte_waypt_ct() <= 0) {
     return;
   }
 
