@@ -20,7 +20,7 @@ You've collected a list of your favorite locations as waypoints and you'd
 like to be able to share them.  Unfortunately, his copy of
          <link linkend="fmt_gdb">Garmin Mapsource</link>
          won't read data created by your copy of
-         <link linkend="fmt_mapsend">Magellan Mapsend DirectRoute</link>
+         <link linkend="fmt_tpg">National Geographic Topo</link>
          .  What you need
 is a program that converts data between the two programs.</para>
       <para>GPSBabel actually solves that problem for you and much more...
