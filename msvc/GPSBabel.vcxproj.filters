@@ -60,7 +60,6 @@
     <ClCompile Include="cet_util.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="compegps.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="zlib\compress.c">
@@ -69,7 +68,6 @@
     <ClCompile Include="zlib\crc32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cst.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="csv_util.cc">
@@ -126,7 +124,6 @@
     <ClCompile Include="formspec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="g7towin.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="garmin.cc">
@@ -195,7 +192,6 @@
     <ClCompile Include="googledir.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gopal.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="jeeps\gpsapp.cc">
@@ -249,7 +245,6 @@
     <ClCompile Include="jeeps\gpsusbwin.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpsutil.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gpx.cc">
@@ -294,7 +289,6 @@
     <ClCompile Include="igc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ignrando.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="igo8.cc">
@@ -327,13 +321,10 @@
     <ClCompile Include="itracku.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jeeps\jgpsutil.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jogmap.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jtr.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="kml.cc">
@@ -345,7 +336,6 @@
     <ClCompile Include="lowranceusr.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="maggeo.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="magproto.cc">
@@ -363,7 +353,6 @@
     <ClCompile Include="mapfactor.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mapsend.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mapsource.cc">
@@ -417,16 +406,12 @@
     <ClCompile Include="parse.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pcx.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pocketfms_bc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pocketfms_fp.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pocketfms_wp.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="polygon.cc">
@@ -441,7 +426,6 @@
     <ClCompile Include="radius.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="random.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="raymarine.cc">
@@ -477,7 +461,6 @@
     <ClCompile Include="shapelib\shpopen.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="skyforce.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="skytraq.cc">
@@ -492,10 +475,8 @@
     <ClCompile Include="stackfilter.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stmsdf.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stmwpp.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="strptime.c">
@@ -516,7 +497,6 @@
     <ClCompile Include="text.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tiger.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tmpro.cc">
@@ -570,16 +550,12 @@
     <ClCompile Include="vecs.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vidaone.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vitosmt.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vitovtt.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vpl.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="waypt.cc">
@@ -588,7 +564,6 @@
     <ClCompile Include="wbt-200.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wfff_xml.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wintec_tes.cc">
@@ -609,7 +584,6 @@
     <ClCompile Include="xol.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="yahoo.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="zlib\zutil.c">
@@ -749,7 +723,6 @@
     <ClInclude Include="jeeps\gpsusbint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jeeps\gpsutil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="grtcirc.h">
@@ -794,7 +767,6 @@
     <ClInclude Include="magellan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mapsend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="navilink.h">
