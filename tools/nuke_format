@@ -7,22 +7,21 @@ EDITOR="${EDITOR:-vim}"
 
 
 remove_word() {
-#  git add $2
-set -x
   # This uses a GNU extension ? for zero or more, letting us match with last
   # entry in a line which has no following whitespace
   $SED -i "s/$1\s*//g" $2
+  git add $2
 }
 
 remove_line_containing() {
-#  git add $2
   $SED -i "/$1/d" $2
+  git add $2
 }
 
 # For things it's easier to just edit away.:1
 remove_manually() {
   grep $1 $2 && $EDITOR +/$1 $2
-  # git add $2
+  git add $2
 }
 
 remove_word $1.cc CMakelists.txt

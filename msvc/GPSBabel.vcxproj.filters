@@ -330,7 +330,6 @@
     <ClCompile Include="jeeps\jgpsutil.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jogmap.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="jtr.cc">
@@ -570,7 +569,6 @@
     <ClCompile Include="vecs.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vidaone.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
       <Filter>Source Files</Filter>
@@ -607,7 +605,6 @@
     <ClCompile Include="xol.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="yahoo.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="zlib\zutil.c">

@@ -240,7 +240,6 @@
     <ClCompile Include="interpolate.cc" />
     <ClCompile Include="itracku.cc" />
     <ClCompile Include="jeeps\jgpsutil.cc" />
-    <ClCompile Include="jogmap.cc" />
     <ClCompile Include="jtr.cc" />
     <ClCompile Include="kml.cc" />
     <ClCompile Include="lmx.cc" />
@@ -319,7 +318,6 @@
     <ClCompile Include="validate.cc" />
     <ClCompile Include="vcf.cc" />
     <ClCompile Include="vecs.cc" />
-    <ClCompile Include="vidaone.cc" />
     <ClCompile Include="vpl.cc" />
     <ClCompile Include="waypt.cc" />
     <ClCompile Include="wbt-200.cc" />
@@ -330,7 +328,6 @@
     <ClCompile Include="src\core\xmlstreamwriter.cc" />
     <ClCompile Include="xmltag.cc" />
     <ClCompile Include="xol.cc" />
-    <ClCompile Include="yahoo.cc" />
     <ClCompile Include="zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>

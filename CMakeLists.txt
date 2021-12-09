@@ -50,7 +50,7 @@ set(ALL_FMTS
   igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
   sbp.cc sbn.cc mmo.cc itracku.cc v900.cc
   enigma.cc
-  teletype.cc jogmap.cc wintec_tes.cc
+  teletype.cc wintec_tes.cc
   subrip.cc garmin_xt.cc garmin_fit.cc
   mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
   energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
@@ -167,7 +167,7 @@ set(HEADERS
   vecs.h
   xcsv.h
   xmlgeneric.h
-  yahoo.h
+  
   zlib/crc32.h
   zlib/deflate.h
   zlib/gzguts.h
