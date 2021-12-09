@@ -55,135 +55,250 @@ GB.setupfile.input = gui/setup.iss.qmake.in
 GB.setupfile.output = gui/setup.iss
 QMAKE_SUBSTITUTES += GB.setupfile
 
-MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc garmin.cc \
-               garmin_device_xml.cc garmin_tables.cc nmea.cc \
-               kml.cc wbt-200.cc
+# MINIMAL_FMTS
+MINIMAL_FMTS = \
+  explorist_ini.cc \
+  garmin.cc \
+  garmin_device_xml.cc \
+  garmin_tables.cc \
+  geo.cc \
+  gpx.cc \
+  kml.cc \
+  magproto.cc \
+  nmea.cc \
+  wbt-200.cc
 
-ALL_FMTS=$$MINIMAL_FMTS gtm.cc \
-        skytraq.cc holux.cc tpg.cc tpo.cc \
-        xcsv.cc easygps.cc \
-        saroute.cc navicache.cc delgpl.cc \
-        ozi.cc text.cc html.cc \
-        igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
-        vcf.cc lowranceusr.cc tomtom.cc \
-        tef_xml.cc gdb.cc bcr.cc \
-        ignrando.cc \
-        unicsv.cc garmin_txt.cc gpssim.cc \
-        gtrnctr.cc dmtlog.cc raymarine.cc \
-        ggv_log.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
-        navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc \
-        igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
-        sbp.cc sbn.cc mmo.cc itracku.cc v900.cc \
-        enigma.cc \
-        teletype.cc wintec_tes.cc \
-        subrip.cc garmin_xt.cc garmin_fit.cc \
-        mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
-        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
+# ALL_FMTS
+ALL_FMTS = $$MINIMAL_FMTS \
+  bcr.cc \
+  brauniger_iq.cc \
+  delgpl.cc \
+  destinator.cc \
+  dg-100.cc \
+  dmtlog.cc \
+  easygps.cc \
+  energympro.cc \
+  enigma.cc \
+  exif.cc \
+  f90g_track.cc \
+  garmin_fit.cc \
+  garmin_gpi.cc \
+  garmin_txt.cc \
+  garmin_xt.cc \
+  gdb.cc \
+  geojson.cc \
+  ggv_bin.cc \
+  ggv_log.cc \
+  ggv_ovl.cc \
+  globalsat_sport.cc \
+  glogbook.cc \
+  gnav_trl.cc \
+  googledir.cc \
+  gpssim.cc \
+  gtm.cc \
+  gtrnctr.cc \
+  hiketech.cc \
+  holux.cc \
+  html.cc \
+  humminbird.cc \
+  igc.cc \
+  ignrando.cc \
+  igo8.cc \
+  ik3d.cc \
+  itracku.cc \
+  lmx.cc \
+  lowranceusr.cc \
+  mapasia.cc \
+  mapbar_track.cc \
+  mapfactor.cc \
+  mmo.cc \
+  mtk_locus.cc \
+  mtk_logger.cc \
+  mynav.cc \
+  navicache.cc \
+  navilink.cc \
+  navitel.cc \
+  osm.cc \
+  ozi.cc \
+  qstarz_bl_1000.cc \
+  random.cc \
+  raymarine.cc \
+  saroute.cc \
+  sbn.cc \
+  sbp.cc \
+  shape.cc \
+  skytraq.cc \
+  subrip.cc \
+  tef_xml.cc \
+  teletype.cc \
+  text.cc \
+  tomtom.cc \
+  tpg.cc \
+  tpo.cc \
+  unicsv.cc \
+  v900.cc \
+  vcf.cc \
+  wintec_tes.cc \
+  xcsv.cc \
+  xol.cc
 
-# ALL_FMTS=$$MINIMAL_FMTS
-FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
-        reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
-        nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
-        validate.cc resample.cc
+# ALL_FMTS = $$MINIMAL_FMTS
+
+# FILTERS
+FILTERS = \
+  arcdist.cc \
+  bend.cc \
+  discard.cc \
+  duplicate.cc \
+  height.cc \
+  interpolate.cc \
+  nukedata.cc \
+  polygon.cc \
+  position.cc \
+  radius.cc \
+  resample.cc \
+  reverse_route.cc \
+  smplrout.cc \
+  sort.cc \
+  stackfilter.cc \
+  swapdata.cc \
+  trackfilter.cc \
+  transform.cc \
+  validate.cc
 FILTER_HEADERS = $$FILTERS
 FILTER_HEADERS ~= s/\\.cc/.h/g
 
-JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
-         jeeps/gpsmath.cc jeeps/gpsmem.cc  \
-         jeeps/gpsprot.cc jeeps/gpsread.cc \
-         jeeps/gpsdevice.cc jeeps/gpsdevice_ser.cc jeeps/gpsdevice_usb.cc \
-         jeeps/gpsrqst.cc jeeps/gpssend.cc jeeps/gpsserial.cc jeeps/jgpsutil.cc \
-         jeeps/gpsusbread.cc jeeps/gpsusbsend.cc \
-         jeeps/gpsusbcommon.cc
+# JEEPS
+JEEPS += \
+  jeeps/gpsapp.cc \
+  jeeps/gpscom.cc \
+  jeeps/gpsdevice.cc \
+  jeeps/gpsdevice_ser.cc \
+  jeeps/gpsdevice_usb.cc \
+  jeeps/gpsmath.cc \
+  jeeps/gpsmem.cc \
+  jeeps/gpsprot.cc \
+  jeeps/gpsread.cc \
+  jeeps/gpsrqst.cc \
+  jeeps/gpssend.cc \
+  jeeps/gpsserial.cc \
+  jeeps/gpsusbcommon.cc \
+  jeeps/gpsusbread.cc \
+  jeeps/gpsusbsend.cc \
+  jeeps/jgpsutil.cc
 
 
-SUPPORT = route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
-          csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
-          formspec.cc xmltag.cc cet_util.cc fatal.cc rgbcolors.cc \
-          inifile.cc garmin_fs.cc units.cc gbser.cc \
-          gbfile.cc parse.cc session.cc main.cc globals.cc \
-          src/core/nvector.cc \
-          src/core/textstream.cc \
-          src/core/usasciicodec.cc \
-          src/core/vector3d.cc \
-          src/core/xmlstreamwriter.cc
+# SUPPORT
+SUPPORT = \
+  cet_util.cc \
+  csv_util.cc \
+  fatal.cc \
+  filter_vecs.cc \
+  formspec.cc \
+  garmin_fs.cc \
+  gbfile.cc \
+  gbser.cc \
+  globals.cc \
+  grtcirc.cc \
+  inifile.cc \
+  main.cc \
+  mkshort.cc \
+  parse.cc \
+  rgbcolors.cc \
+  route.cc \
+  session.cc \
+  src/core/nvector.cc \
+  src/core/textstream.cc \
+  src/core/usasciicodec.cc \
+  src/core/vector3d.cc \
+  src/core/xmlstreamwriter.cc \
+  strptime.c \
+  units.cc \
+  util.cc \
+  util_crc.cc \
+  vecs.cc \
+  waypt.cc \
+  xmlgeneric.cc \
+  xmltag.cc
 
 versionAtLeast(QT_VERSION, 6.0): SUPPORT += src/core/codecdevice.cc
 
+# HEADERS
 HEADERS =  \
-	cet_util.h \
-	csv_util.h \
-	defs.h \
-	dg-100.h \
-	energympro.h \
-	explorist_ini.h \
-	filter.h \
-	filter_vecs.h \
-	format.h \
-	formspec.h \
-	garmin_device_xml.h \
-	garmin_fit.h \
-	garmin_fs.h \
-	garmin_gpi.h \
-	garmin_icon_tables.h \
-	garmin_tables.h \
-	gbfile.h \
-	gbser.h \
-	gbser_private.h \
-	gbversion.h \
-	geojson.h \
-	ggv_bin.h \
-	globalsat_sport.h \
-	gpx.h \
-	grtcirc.h \
-	heightgrid.h \
-	holux.h \
-	inifile.h \
-	jeeps/garminusb.h \
-	jeeps/gps.h \
-	jeeps/gpsapp.h \
-	jeeps/gpscom.h \
-	jeeps/gpsdatum.h \
-	jeeps/gpsdevice.h \
-	jeeps/gpsfmt.h \
-	jeeps/gpsmath.h \
-	jeeps/gpsmem.h \
-	jeeps/gpsport.h \
-	jeeps/gpsprot.h \
-	jeeps/gpsread.h \
-	jeeps/gpsrqst.h \
-	jeeps/gpssend.h \
-	jeeps/gpsserial.h \
-	jeeps/gpsusbcommon.h \
-	jeeps/gpsusbint.h \
-	jeeps/gpsutil.h \
-	kml.h \
-	legacyformat.h \
-	lowranceusr.h \
-	magellan.h \
-	mynav.h \
-	navilink.h \
-	nmea.h \
-	osm.h \
-	random.h \
-	session.h \
-	shape.h \
-	strptime.h \
-	subrip.h \
-	unicsv.h \
-	units.h \
-	vecs.h \
-	xcsv.h \
-	xmlgeneric.h \
-	src/core/datetime.h \
-	src/core/file.h \
-	src/core/logging.h \
-	src/core/nvector.h \
-	src/core/textstream.h \
-	src/core/usasciicodec.h \
-	src/core/vector3d.h \
-	src/core/xmlstreamwriter.h \
-	src/core/xmltag.h
+  cet_util.h \
+  csv_util.h \
+  defs.h \
+  dg-100.h \
+  energympro.h \
+  explorist_ini.h \
+  filter.h \
+  filter_vecs.h \
+  format.h \
+  formspec.h \
+  garmin_device_xml.h \
+  garmin_fit.h \
+  garmin_fs.h \
+  garmin_gpi.h \
+  garmin_icon_tables.h \
+  garmin_tables.h \
+  gbfile.h \
+  gbser.h \
+  gbser_private.h \
+  gbversion.h \
+  geojson.h \
+  ggv_bin.h \
+  globalsat_sport.h \
+  gpx.h \
+  grtcirc.h \
+  heightgrid.h \
+  holux.h \
+  inifile.h \
+  jeeps/garminusb.h \
+  jeeps/gps.h \
+  jeeps/gpsapp.h \
+  jeeps/gpscom.h \
+  jeeps/gpsdatum.h \
+  jeeps/gpsdevice.h \
+  jeeps/gpsfmt.h \
+  jeeps/gpsmath.h \
+  jeeps/gpsmem.h \
+  jeeps/gpsport.h \
+  jeeps/gpsprot.h \
+  jeeps/gpsread.h \
+  jeeps/gpsrqst.h \
+  jeeps/gpssend.h \
+  jeeps/gpsserial.h \
+  jeeps/gpsusbcommon.h \
+  jeeps/gpsusbint.h \
+  jeeps/gpsutil.h \
+  kml.h \
+  legacyformat.h \
+  lowranceusr.h \
+  magellan.h \
+  mynav.h \
+  navilink.h \
+  nmea.h \
+  osm.h \
+  random.h \
+  session.h \
+  shape.h \
+  strptime.h \
+  subrip.h \
+  unicsv.h \
+  units.h \
+  vecs.h \
+  xcsv.h \
+  xmlgeneric.h \
+
+  src/core/datetime.h \
+  src/core/file.h \
+  src/core/logging.h \
+  src/core/nvector.h \
+  src/core/textstream.h \
+  src/core/usasciicodec.h \
+  src/core/vector3d.h \
+  src/core/xmlstreamwriter.h \
+  src/core/xmltag.h
 
 versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
