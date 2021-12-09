@@ -1246,10 +1246,6 @@ file	-w----	vcard	vcf	Vcard Output (for iPod)	vcard
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html
 option	vcard	encrypt	Encrypt hints using ROT13	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html#fmt_vcard_o_encrypt
 
-file	rwrwrw	vitosmt	smt	Vito Navigator II tracks	vitosmt
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vitosmt.html
-file	--r---	vitovtt	vtt	Vito SmartMap tracks (.vtt)	vitovtt
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vitovtt.html
 file	r-r---	wintec_tes	tes	Wintec TES file	wintec_tes
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wintec_tes.html
 file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format	wbt-bin

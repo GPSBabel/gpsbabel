@@ -573,10 +573,8 @@
     <ClCompile Include="vidaone.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vitosmt.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vitovtt.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vpl.cc">

@@ -320,8 +320,6 @@
     <ClCompile Include="vcf.cc" />
     <ClCompile Include="vecs.cc" />
     <ClCompile Include="vidaone.cc" />
-    <ClCompile Include="vitosmt.cc" />
-    <ClCompile Include="vitovtt.cc" />
     <ClCompile Include="vpl.cc" />
     <ClCompile Include="waypt.cc" />
     <ClCompile Include="wbt-200.cc" />

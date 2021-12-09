@@ -86,7 +86,6 @@ extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
-extern ff_vecs_t vitosmt_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t gtm_vecs;
@@ -97,7 +96,6 @@ extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
-extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
@@ -269,7 +267,6 @@ private:
   LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
   LegacyFormat tef_xml_fmt {tef_xml_vecs};
-  LegacyFormat vitosmt_fmt {vitosmt_vecs};
   LegacyFormat bcr_fmt {bcr_vecs};
   LegacyFormat ignr_fmt {ignr_vecs};
   UnicsvFormat unicsv_fmt;
@@ -281,7 +278,6 @@ private:
   LegacyFormat gtc_fmt {gtc_vecs};
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
-  LegacyFormat vitovtt_fmt {vitovtt_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};
   LegacyFormat garmin_gpi_fmt {garmin_gpi_vecs};
   LegacyFormat lmx_fmt {lmx_vecs};
@@ -614,13 +610,6 @@ private:
       nullptr,
     },
     {
-      &vitosmt_fmt,
-      "vitosmt",
-      "Vito Navigator II tracks",
-      "smt",
-      nullptr,
-    },
-    {
       &bcr_fmt,
       "bcr",
       "Motorrad Routenplaner (Map&Guide) .bcr files",
@@ -683,13 +672,6 @@ private:
       "raymarine",
       "Raymarine Waypoint File (.rwf)",
       "rwf",
-      nullptr,
-    },
-    {
-      &vitovtt_fmt,
-      "vitovtt",
-      "Vito SmartMap tracks (.vtt)",
-      "vtt",
       nullptr,
     },
     {

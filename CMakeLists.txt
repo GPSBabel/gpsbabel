@@ -41,10 +41,10 @@ set(ALL_FMTS
   ozi.cc text.cc html.cc
   igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
   vcf.cc lowranceusr.cc tomtom.cc
-  tef_xml.cc vitosmt.cc gdb.cc bcr.cc
+  tef_xml.cc gdb.cc bcr.cc
   ignrando.cc
   unicsv.cc garmin_txt.cc gpssim.cc
-  gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc
+  gtrnctr.cc dmtlog.cc raymarine.cc 
   ggv_log.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
   navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc
   igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc

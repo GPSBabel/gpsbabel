@@ -620,8 +620,6 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa 
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13 
-	vitosmt               Vito Navigator II tracks
-	vitovtt               Vito SmartMap tracks (.vtt)
 	wintec_tes            Wintec TES file
 	wbt-bin               Wintec WBT-100/200 Binary File Format
 	wbt                   Wintec WBT-100/200 GPS Download

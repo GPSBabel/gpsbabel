@@ -123,8 +123,6 @@ file	rw----	tomtom	ov2	TomTom POI file (.ov2)
 file	rwrw--	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	rwrwrw	unicsv		Universal csv with field structure in first line
 file	-w----	vcard	vcf	Vcard Output (for iPod)
-file	rwrwrw	vitosmt	smt	Vito Navigator II tracks
-file	--r---	vitovtt	vtt	Vito SmartMap tracks (.vtt)
 file	r-r---	wintec_tes	tes	Wintec TES file
 file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
 serial	r-r---	wbt		Wintec WBT-100/200 GPS Download
