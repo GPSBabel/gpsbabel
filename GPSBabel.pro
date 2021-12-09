@@ -156,7 +156,7 @@ HEADERS =  \
 	jeeps/gpsserial.h \
 	jeeps/gpsusbcommon.h \
 	jeeps/gpsusbint.h \
-	jeeps/\
+	jeeps/gpsutil.h \
 	kml.h \
 	legacyformat.h \
 	lowranceusr.h \
