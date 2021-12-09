@@ -254,24 +254,6 @@ set(HEADERS
   heightgrid.h
   holux.h
   inifile.h
-  jeeps/garminusb.h
-  jeeps/gps.h
-  jeeps/gpsapp.h
-  jeeps/gpscom.h
-  jeeps/gpsdatum.h
-  jeeps/gpsdevice.h
-  jeeps/gpsfmt.h
-  jeeps/gpsmath.h
-  jeeps/gpsmem.h
-  jeeps/gpsport.h
-  jeeps/gpsprot.h
-  jeeps/gpsread.h
-  jeeps/gpsrqst.h
-  jeeps/gpssend.h
-  jeeps/gpsserial.h
-  jeeps/gpsusbcommon.h
-  jeeps/gpsusbint.h
-  jeeps/gpsutil.h
   kml.h
   legacyformat.h
   lowranceusr.h
@@ -290,7 +272,24 @@ set(HEADERS
   vecs.h
   xcsv.h
   xmlgeneric.h
-  
+  jeeps/garminusb.h
+  jeeps/gps.h
+  jeeps/gpsapp.h
+  jeeps/gpscom.h
+  jeeps/gpsdatum.h
+  jeeps/gpsdevice.h
+  jeeps/gpsfmt.h
+  jeeps/gpsmath.h
+  jeeps/gpsmem.h
+  jeeps/gpsport.h
+  jeeps/gpsprot.h
+  jeeps/gpsread.h
+  jeeps/gpsrqst.h
+  jeeps/gpssend.h
+  jeeps/gpsserial.h
+  jeeps/gpsusbcommon.h
+  jeeps/gpsusbint.h
+  jeeps/gpsutil.h
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
