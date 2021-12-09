@@ -1,0 +1,56 @@
+# usage nuke_format format_name
+
+SED=$(which gsed)
+EDITOR="${EDITOR:-vim}"
+
+# $1 = format $2 = file in all functions
+
+
+remove_word() {
+#  git add $2
+set -x
+  # This uses a GNU extension ? for zero or more, letting us match with last
+  # entry in a line which has no following whitespace
+  $SED -i "s/$1\s*//g" $2
+}
+
+remove_line_containing() {
+#  git add $2
+  $SED -i "/$1/d" $2
+}
+
+# For things it's easier to just edit away.:1
+remove_manually() {
+  grep $1 $2 && $EDITOR +/$1 $2
+  # git add $2
+}
+
+remove_word $1.cc CMakelists.txt
+remove_word $1.h CMakelists.txt
+remove_word $1.cc GPSBabel.pro
+remove_word $1.h GPSBabel.pro
+
+remove_manually $1 reference/help.txt
+
+# Take out the boilerplate entries in vecs.h ...
+remove_line_containing extern.*$1 vecs.h
+remove_line_containing Format.*$1 vecs.h
+remove_line_containing include.*$1 vecs.h
+# ... then let a human nerd snip3 the actual table entry awy
+remove_manually $1 vecs.h
+
+remove_line_containing $1 reference/format0.txt
+remove_line_containing $1 reference/format1.txt
+remove_line_containing $1 reference/format2.txt
+# This breaks these, but at least it leaves a clue in version history.
+remove_line_containing $1 msvc/GPSBabel.vcxproj
+remove_line_containing $1 msvc/GPSBabel.vcxproj.filters
+
+git rm -f reference/$1*
+git rm -f xmldoc/formats/$1.xml
+git rm -f xmldoc/formats/options/$1.xml
+git rm -f testo.d/$1.test
+git mv $1.cc deprecated/
+git mv $1.h deprecated/
+
+# make && ./testo

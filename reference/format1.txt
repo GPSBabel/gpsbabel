@@ -66,7 +66,6 @@ file	igoprimo_poi	upoi	iGo Primo points of interest (.upoi)
 file	igo2008_poi	upoi	iGO2008 points of interest (.upoi)
 file	igo8	trk	IGO8 .trk
 internal	random		Internal GPS data generator
-file	jogmap	xml	Jogmap.de XML format
 file	kompass_tk	wp	Kompass (DAV) Track (.tk)
 file	kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
 file	lowranceusr	usr	Lowrance USR
@@ -124,7 +123,6 @@ file	tomtom	ov2	TomTom POI file (.ov2)
 file	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	unicsv		Universal csv with field structure in first line
 file	vcard	vcf	Vcard Output (for iPod)
-file	vidaone	gpb	VidaOne GPS for Pocket PC (.gpb)
 file	vitosmt	smt	Vito Navigator II tracks
 file	vitovtt	vtt	Vito SmartMap tracks (.vtt)
 file	wintec_tes	tes	Wintec TES file

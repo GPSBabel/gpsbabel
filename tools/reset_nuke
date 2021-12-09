@@ -1,0 +1,30 @@
+# Temporary script to undo what
+
+rm reference/format?.txt reference/help.txt
+# git rm  reference/format?.txt reference/help.txt
+git reset  reference/format?.txt reference/help.txt
+git checkout reference/format0.txt
+git checkout reference/format1.txt
+git checkout reference/format2.txt
+git checkout reference/format3.txt reference/help.txt
+
+rm GPSBabel.pro vecs.h vecs.cc
+# git rm GPSBabel.pro vecs.h
+#git reset GPSBabel.pro
+#git reset vecs.h
+git checkout GPSBabel.pro vecs.h vecs.cc
+
+# This part of the code devalues almot immediately once pushed upstream
+echo "Now re-killing formats to exercise the script. ^C to cancel. <enter> to ontinue"
+read x
+
+for f in  compegps cst destinator g7to2in gopal gpsutil jtr maggeo mapsend nm4 pcx pocketfms skyforce stmsdf stmwpp tiger vpl wfff yahoo
+do
+  git checkout $f.cc $f.h
+  tools/nuke_format  $f
+done
+
+# nuke_format is also believed to work on:
+# gpsutil destinator exif gopal gpsutil jogmap jtr maggeo
+# mapsend pcx skyforce stmsdf stmwpp tiger vidaone vpl yahoo
+

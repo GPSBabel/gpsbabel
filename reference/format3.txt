@@ -658,8 +658,6 @@ option	random	seed	Starting seed of the internal number generator	integer		1		ht
 
 option	random	nodelay	Output realtime points without delay	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html#fmt_random_o_nodelay
 
-file	--r---	jogmap	xml	Jogmap.de XML format	jogmap
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_jogmap.html
 file	--rw--	kompass_tk	wp	Kompass (DAV) Track (.tk)	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html
 option	kompass_tk	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_snlen
@@ -1247,10 +1245,6 @@ option	unicsv	codec	codec to use for reading and writing strings (default UTF-8)
 file	-w----	vcard	vcf	Vcard Output (for iPod)	vcard
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html
 option	vcard	encrypt	Encrypt hints using ROT13	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html#fmt_vcard_o_encrypt
-
-file	--rw--	vidaone	gpb	VidaOne GPS for Pocket PC (.gpb)	vidaone
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vidaone.html
-option	vidaone	ver	Version of VidaOne file to read or write (1 or 2)	integer	1	1	2	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vidaone.html#fmt_vidaone_o_ver
 
 file	rwrwrw	vitosmt	smt	Vito Navigator II tracks	vitosmt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vitosmt.html

@@ -60,7 +60,6 @@ ignrando	rdn	IGN Rando track files
 igoprimo_poi	upoi	iGo Primo points of interest (.upoi)
 igo2008_poi	upoi	iGO2008 points of interest (.upoi)
 igo8	trk	IGO8 .trk
-jogmap	xml	Jogmap.de XML format
 kompass_tk	wp	Kompass (DAV) Track (.tk)
 kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
 lowranceusr	usr	Lowrance USR
@@ -118,7 +117,6 @@ tomtom	ov2	TomTom POI file (.ov2)
 dmtlog	trl	TrackLogs digital mapping (.trl)
 unicsv		Universal csv with field structure in first line
 vcard	vcf	Vcard Output (for iPod)
-vidaone	gpb	VidaOne GPS for Pocket PC (.gpb)
 vitosmt	smt	Vito Navigator II tracks
 vitovtt	vtt	Vito SmartMap tracks (.vtt)
 wintec_tes	tes	Wintec TES file

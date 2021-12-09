@@ -108,7 +108,6 @@ extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t exif_vecs;
-extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
@@ -129,7 +128,6 @@ extern ff_vecs_t skytraq_vecs;
 extern ff_vecs_t teletype_vecs;
 extern ff_vecs_t skytraq_fvecs;
 extern ff_vecs_t miniHomer_vecs;
-extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t mapbar_track_vecs;
@@ -300,7 +298,6 @@ private:
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
   LegacyFormat exif_fmt {exif_vecs};
-  LegacyFormat vidaone_fmt {vidaone_vecs};
   LegacyFormat igo8_fmt {igo8_vecs};
   LegacyFormat humminbird_fmt {humminbird_vecs};
   LegacyFormat humminbird_ht_fmt {humminbird_ht_vecs};
@@ -319,7 +316,6 @@ private:
   LegacyFormat teletype_fmt {teletype_vecs};
   LegacyFormat skytraq_ffmt {skytraq_fvecs};
   LegacyFormat miniHomer_fmt {miniHomer_vecs};
-  LegacyFormat jogmap_fmt {jogmap_vecs};
   LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
@@ -809,13 +805,6 @@ private:
       nullptr,
     },
     {
-      &vidaone_fmt,
-      "vidaone",
-      "VidaOne GPS for Pocket PC (.gpb)",
-      "gpb",
-      nullptr,
-    },
-    {
       &igo8_fmt,
       "igo8",
       "IGO8 .trk",
@@ -939,13 +928,6 @@ private:
       "miniHomer",
       "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
       nullptr,
-      nullptr,
-    },
-    {
-      &jogmap_fmt,
-      "jogmap",
-      "Jogmap.de XML format",
-      "xml",
       nullptr,
     },
     {

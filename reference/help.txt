@@ -327,7 +327,6 @@ File Types (-i and -o options):
 	  tracknum              Track identification number 
 	  title                 Track title 
 	  description           Track description 
-	jogmap                Jogmap.de XML format
 	kompass_tk            Kompass (DAV) Track (.tk)
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -621,8 +620,6 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa 
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13 
-	vidaone               VidaOne GPS for Pocket PC (.gpb)
-	  ver                   Version of VidaOne file to read or write (1 or 2) 
 	vitosmt               Vito Navigator II tracks
 	vitovtt               Vito SmartMap tracks (.vtt)
 	wintec_tes            Wintec TES file

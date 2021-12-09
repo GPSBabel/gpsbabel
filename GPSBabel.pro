@@ -71,19 +71,14 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc \
         unicsv.cc garmin_txt.cc gpssim.cc \
         gtrnctr.cc dmtlog.cc raymarine.cc vitovtt.cc \
         ggv_log.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
-        navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
+        navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc \
         igo8.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
         sbp.cc sbn.cc mmo.cc itracku.cc v900.cc \
         enigma.cc \
-        teletype.cc jogmap.cc wintec_tes.cc \
+        teletype.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
-
-DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc psitrex.cc
-
-DEPRECATED_HEADERS=geo.h quovadis.h
-DEPRECATED_SHAPE=pdbfile.cc
 
 # ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
