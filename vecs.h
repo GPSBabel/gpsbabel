@@ -29,8 +29,8 @@
 
 #include "defs.h"
 #include "dg-100.h"
-#include "format.h"
 #include "energympro.h"
+#include "format.h"
 #include "garmin_fit.h"
 #include "geojson.h"
 #include "ggv_bin.h"
@@ -48,7 +48,6 @@
 #include "subrip.h"
 #include "unicsv.h"
 #include "xcsv.h"
-
 
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t mag_svecs;

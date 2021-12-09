@@ -64,7 +64,6 @@
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
       <DisableSpecificWarnings>4100;4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
@@ -85,7 +84,6 @@
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkIncremental>false</LinkIncremental>
       <OutputFile>$(OutDir)\GPSBabel.exe</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
@@ -106,7 +104,6 @@
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4100;4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <ExceptionHandling>Sync</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
@@ -125,7 +122,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <OutputFile>$(OutDir)\GPSBabel.exe</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
@@ -150,10 +146,8 @@
     <ClCompile Include="bushnell_trl.cc" />
     <ClCompile Include="cet.cc" />
     <ClCompile Include="cet_util.cc" />
-    <ClCompile Include="compegps.cc" />
     <ClCompile Include="zlib\compress.c" />
     <ClCompile Include="zlib\crc32.c" />
-    <ClCompile Include="cst.cc" />
     <ClCompile Include="csv_util.cc" />
     <ClCompile Include="shapelib\dbfopen.c" />
     <ClCompile Include="zlib\deflate.c" />
@@ -172,7 +166,6 @@
     <ClCompile Include="fatal.cc" />
     <ClCompile Include="filter_vecs.cc" />
     <ClCompile Include="formspec.cc" />
-    <ClCompile Include="g7towin.cc" />
     <ClCompile Include="garmin.cc" />
     <ClCompile Include="garmin_device_xml.cc" />
     <ClCompile Include="garmin_fit.cc" />
@@ -195,7 +188,6 @@
     <ClCompile Include="glogbook.cc" />
     <ClCompile Include="gnav_trl.cc" />
     <ClCompile Include="googledir.cc" />
-    <ClCompile Include="gopal.cc" />
     <ClCompile Include="jeeps\gpsapp.cc" />
     <ClCompile Include="jeeps\gpscom.cc" />
     <ClCompile Include="jeeps\gpsdevice.cc" />
@@ -213,7 +205,6 @@
     <ClCompile Include="jeeps\gpsusbread.cc" />
     <ClCompile Include="jeeps\gpsusbsend.cc" />
     <ClCompile Include="jeeps\gpsusbwin.cc" />
-    <ClCompile Include="gpsutil.cc" />
     <ClCompile Include="gpx.cc" />
     <ClCompile Include="grtcirc.cc" />
     <ClCompile Include="gtm.cc" />
@@ -228,7 +219,6 @@
     <ClCompile Include="html.cc" />
     <ClCompile Include="humminbird.cc" />
     <ClCompile Include="igc.cc" />
-    <ClCompile Include="ignrando.cc" />
     <ClCompile Include="igo8.cc" />
     <ClCompile Include="ik3d.cc" />
     <ClCompile Include="zlib\infback.c" />
@@ -239,18 +229,14 @@
     <ClCompile Include="internal_styles.cc" />
     <ClCompile Include="interpolate.cc" />
     <ClCompile Include="itracku.cc" />
-    <ClCompile Include="jeeps\jgpsutil.cc" />
-    <ClCompile Include="jtr.cc" />
     <ClCompile Include="kml.cc" />
     <ClCompile Include="lmx.cc" />
     <ClCompile Include="lowranceusr.cc" />
-    <ClCompile Include="maggeo.cc" />
     <ClCompile Include="magproto.cc" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="mapasia.cc" />
     <ClCompile Include="mapbar_track.cc" />
     <ClCompile Include="mapfactor.cc" />
-    <ClCompile Include="mapsend.cc" />
     <ClCompile Include="mapsource.cc" />
     <ClCompile Include="mkshort.cc" />
     <ClCompile Include="mmo.cc" />
@@ -268,14 +254,9 @@
     <ClCompile Include="osm.cc" />
     <ClCompile Include="ozi.cc" />
     <ClCompile Include="parse.cc" />
-    <ClCompile Include="pcx.cc" />
-    <ClCompile Include="pocketfms_bc.cc" />
-    <ClCompile Include="pocketfms_fp.cc" />
-    <ClCompile Include="pocketfms_wp.cc" />
     <ClCompile Include="polygon.cc" />
     <ClCompile Include="position.cc" />
     <ClCompile Include="radius.cc" />
-    <ClCompile Include="random.cc" />
     <ClCompile Include="raymarine.cc" />
     <ClCompile Include="reverse_route.cc" />
     <ClCompile Include="rgbcolors.cc" />
@@ -287,20 +268,16 @@
     <ClCompile Include="session.cc" />
     <ClCompile Include="shape.cc" />
     <ClCompile Include="shapelib\shpopen.c" />
-    <ClCompile Include="skyforce.cc" />
     <ClCompile Include="skytraq.cc" />
     <ClCompile Include="smplrout.cc" />
     <ClCompile Include="sort.cc" />
     <ClCompile Include="stackfilter.cc" />
-    <ClCompile Include="stmsdf.cc" />
-    <ClCompile Include="stmwpp.cc" />
     <ClCompile Include="strptime.c" />
     <ClCompile Include="subrip.cc" />
     <ClCompile Include="swapdata.cc" />
     <ClCompile Include="tef_xml.cc" />
     <ClCompile Include="teletype.cc" />
     <ClCompile Include="text.cc" />
-    <ClCompile Include="tiger.cc" />
     <ClCompile Include="tmpro.cc" />
     <ClCompile Include="tomtom.cc" />
     <ClCompile Include="tpg.cc" />
@@ -318,10 +295,8 @@
     <ClCompile Include="validate.cc" />
     <ClCompile Include="vcf.cc" />
     <ClCompile Include="vecs.cc" />
-    <ClCompile Include="vpl.cc" />
     <ClCompile Include="waypt.cc" />
     <ClCompile Include="wbt-200.cc" />
-    <ClCompile Include="wfff_xml.cc" />
     <ClCompile Include="wintec_tes.cc" />
     <ClCompile Include="xcsv.cc" />
     <ClCompile Include="xmlgeneric.cc" />
@@ -375,7 +350,6 @@
     <ClInclude Include="jeeps\gpsserial.h" />
     <ClInclude Include="jeeps\gpsusbcommon.h" />
     <ClInclude Include="jeeps\gpsusbint.h" />
-    <ClInclude Include="jeeps\gpsutil.h" />
     <ClInclude Include="grtcirc.h" />
     <ClInclude Include="zlib\gzguts.h" />
     <ClInclude Include="height.h" />
@@ -390,7 +364,6 @@
     <ClInclude Include="cet\iso_8859_8.h" />
     <ClInclude Include="src\core\logging.h" />
     <ClInclude Include="magellan.h" />
-    <ClInclude Include="mapsend.h" />
     <ClInclude Include="navilink.h" />
     <ClInclude Include="nukedata.h" />
     <ClInclude Include="polygon.h" />
@@ -423,14 +396,12 @@
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
       <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">cl -BxC:\Qt\5.12.2\msvc2017\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus /MP -wd4100 -Zi -MDd -std:c++14 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp 2>NUL >debug\moc_predefs.h</Command>
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">Generate moc_predefs.h</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">cl -BxC:\Qt\5.12.2\msvc2017\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus /MP -wd4100 -O2 -MD -std:c++14 -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\5.12.2\msvc2017\mkspecs\features\data\dummy.cpp 2>NUL >release\moc_predefs.h</Command>
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Generate moc_predefs.h</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\moc_predefs.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
