@@ -52,7 +52,6 @@ file	gtm	gtm	GPS TrackMaker
 file	arc	txt	GPSBabel arc filter file
 file	gpsdrive		GpsDrive Format
 file	gpsdrivetrack		GpsDrive Format for Tracks
-file	gpsman		GPSman
 file	gpx	gpx	GPX XML
 file	hiketech	gps	HikeTech
 file	holux	wpo	Holux (gm-100) .wpo Format

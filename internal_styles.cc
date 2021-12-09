@@ -575,42 +575,6 @@ static char gpsdrivetrack[] =
   "# IFIELD	GMT_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
   "IFIELD	LOCAL_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
   ;
-static char gpsman[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: GPSMAN Format\n"
-  "# Author: Alex Mottram\n"
-  "#   Date: 12/09/2002\n"
-  "#\n"
-  "#\n"
-  "# As defined in gpsman.c\n"
-  "#\n"
-  "#\n"
-
-  "DESCRIPTION		GPSman\n"
-  "SHORTLEN		8\n"
-  "SHORTWHITE		0\n"
-
-  "# FILE LAYOUT DEFINITIIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		TAB\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS		TAB\n"
-
-  "PROLOGUE	!Format: DDD 1 WGS 84\n"
-  "PROLOGUE	!W:\n"
-
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD	SHORTNAME, \"\", \"%-8.8s\"\n"
-  "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-  "IFIELD	LAT_DIRDECIMAL, \"\", \"%c%f\"\n"
-  "IFIELD	LON_DIRDECIMAL, \"\", \"%c%f\"\n"
-  "IFIELD	IGNORE, \"\", \"%s\"\n"
-
-  "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
-  ;
 static char iblue747[] =
   "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
   "# Author: Christian Barmala http://www.barmala.de/\n"
@@ -1385,7 +1349,7 @@ static char tomtom_itn_places[] =
   "IFIELD	SHORTNAME, \"\", \"%s\"\n"
   "IFIELD	CONSTANT, \"2\", \"%s\"\n"
   ;
-const QVector<style_vecs_t> style_list = {{ "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsman", gpsman }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
+const QVector<style_vecs_t> style_list = {{ "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
 #else /* CSVFMTS_ENABLED */
 const QVector<style_vecs_t> style_list;
 #endif /* CSVFMTS_ENABLED */

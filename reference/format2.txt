@@ -52,7 +52,6 @@ file	rwrwrw	gtm	gtm	GPS TrackMaker
 file	rw----	arc	txt	GPSBabel arc filter file
 file	rw----	gpsdrive		GpsDrive Format
 file	rw----	gpsdrivetrack		GpsDrive Format for Tracks
-file	rw----	gpsman		GPSman
 file	rwrwrw	gpx	gpx	GPX XML
 file	rwrw--	hiketech	gps	HikeTech
 file	rw----	holux	wpo	Holux (gm-100) .wpo Format
