@@ -29,8 +29,8 @@
 
 #include "defs.h"
 #include "dg-100.h"
-#include "format.h"
 #include "energympro.h"
+#include "format.h"
 #include "garmin_fit.h"
 #include "geojson.h"
 #include "ggv_bin.h"
@@ -48,8 +48,6 @@
 #include "subrip.h"
 #include "unicsv.h"
 #include "xcsv.h"
-#include "yahoo.h"
-
 
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t mag_svecs;
@@ -57,16 +55,12 @@ extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t gdb_vecs;
-extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t ozi_vecs;
-extern ff_vecs_t pcx_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t gpsutil_vecs;
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t tiger_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t navicache_vecs;
@@ -83,31 +77,16 @@ extern ff_vecs_t mtk_locus_vecs;
 #endif // MAXIMAL_ENABLED
 extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t vpl_vecs;
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
-extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t tef_xml_vecs;
-extern ff_vecs_t vitosmt_vecs;
-extern ff_vecs_t wfff_xml_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t ignr_vecs;
-#if CSVFMTS_ENABLED
-extern ff_vecs_t stmsdf_vecs;
-#endif // CSVFMTS_ENABLED
-#if CSVFMTS_ENABLED
-extern ff_vecs_t stmwpp_vecs;
-#endif // CSVFMTS_ENABLED
-extern ff_vecs_t nmn4_vecs;
-#if CSVFMTS_ENABLED
-extern ff_vecs_t compegps_vecs;
-#endif // CSVFMTS_ENABLED
-// extern ff_vecs_t yahoo_vecs;
 extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
@@ -116,11 +95,7 @@ extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
-extern ff_vecs_t vitovtt_vecs;
 extern ff_vecs_t ggv_log_vecs;
-#if CSVFMTS_ENABLED
-extern ff_vecs_t g7towin_vecs;
-#endif // CSVFMTS_ENABLED
 extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
@@ -130,9 +105,7 @@ extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t exif_vecs;
-extern ff_vecs_t vidaone_vecs;
 extern ff_vecs_t igo8_vecs;
-extern ff_vecs_t gopal_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
@@ -140,24 +113,18 @@ extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
 #if CSVFMTS_ENABLED
-extern ff_vecs_t jtr_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
-extern ff_vecs_t skyforce_vecs;
-extern ff_vecs_t pocketfms_bc_vecs;
-extern ff_vecs_t pocketfms_fp_vecs;
-extern ff_vecs_t pocketfms_wp_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t skytraq_vecs;
 extern ff_vecs_t teletype_vecs;
 extern ff_vecs_t skytraq_fvecs;
 extern ff_vecs_t miniHomer_vecs;
-extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t mapbar_track_vecs;
@@ -263,19 +230,15 @@ private:
   LegacyFormat magX_ffmt {magX_fvecs};
   LegacyFormat garmin_fmt {garmin_vecs};
   LegacyFormat gdb_fmt {gdb_vecs};
-  LegacyFormat mapsend_fmt {mapsend_vecs};
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
-  LegacyFormat pcx_fmt {pcx_vecs};
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
-  LegacyFormat gpsutil_fmt {gpsutil_vecs};
   LowranceusrFormat lowranceusr_fmt;
   LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
-  LegacyFormat tiger_fmt {tiger_vecs};
   LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
   LegacyFormat navicache_fmt {navicache_vecs};
@@ -295,31 +258,16 @@ private:
 #endif // MAXIMAL_ENABLED
   LegacyFormat wbt_sfmt {wbt_svecs};
 #if MAXIMAL_ENABLED
-  LegacyFormat vpl_fmt {vpl_vecs};
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat hiketech_fmt {hiketech_vecs};
   LegacyFormat glogbook_fmt {glogbook_vecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
-  LegacyFormat maggeo_fmt {maggeo_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
   LegacyFormat tef_xml_fmt {tef_xml_vecs};
-  LegacyFormat vitosmt_fmt {vitosmt_vecs};
-  LegacyFormat wfff_xml_fmt {wfff_xml_vecs};
   LegacyFormat bcr_fmt {bcr_vecs};
   LegacyFormat ignr_fmt {ignr_vecs};
-#if CSVFMTS_ENABLED
-  LegacyFormat stmsdf_fmt {stmsdf_vecs};
-#endif // CSVFMTS_ENABLED
-#if CSVFMTS_ENABLED
-  LegacyFormat stmwpp_fmt {stmwpp_vecs};
-#endif // CSVFMTS_ENABLED
-  LegacyFormat nmn4_fmt {nmn4_vecs};
-#if CSVFMTS_ENABLED
-  LegacyFormat compegps_fmt {compegps_vecs};
-#endif // CSVFMTS_ENABLED
-  YahooFormat yahoo_fmt;
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
   LegacyFormat gpssim_fmt {gpssim_vecs};
@@ -329,11 +277,7 @@ private:
   LegacyFormat gtc_fmt {gtc_vecs};
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
-  LegacyFormat vitovtt_fmt {vitovtt_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};
-#if CSVFMTS_ENABLED
-  LegacyFormat g7towin_fmt {g7towin_vecs};
-#endif // CSVFMTS_ENABLED
   LegacyFormat garmin_gpi_fmt {garmin_gpi_vecs};
   LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
@@ -349,34 +293,24 @@ private:
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
   LegacyFormat exif_fmt {exif_vecs};
-  LegacyFormat vidaone_fmt {vidaone_vecs};
   LegacyFormat igo8_fmt {igo8_vecs};
-  LegacyFormat gopal_fmt {gopal_vecs};
   LegacyFormat humminbird_fmt {humminbird_vecs};
   LegacyFormat humminbird_ht_fmt {humminbird_ht_vecs};
   LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
   LegacyFormat gnav_trl_fmt {gnav_trl_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
   LegacyFormat ggv_ovl_fmt {ggv_ovl_vecs};
-#if CSVFMTS_ENABLED
-  LegacyFormat jtr_fmt {jtr_vecs};
-#endif // CSVFMTS_ENABLED
   LegacyFormat itracku_fmt {itracku_vecs};
   LegacyFormat itracku_ffmt {itracku_fvecs};
   LegacyFormat sbp_fmt {sbp_vecs};
   LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat mmo_fmt {mmo_vecs};
-  LegacyFormat skyforce_fmt {skyforce_vecs};
-  LegacyFormat pocketfms_bc_fmt {pocketfms_bc_vecs};
-  LegacyFormat pocketfms_fp_fmt {pocketfms_fp_vecs};
-  LegacyFormat pocketfms_wp_fmt {pocketfms_wp_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   LegacyFormat enigma_fmt {enigma_vecs};
   LegacyFormat skytraq_fmt {skytraq_vecs};
   LegacyFormat teletype_fmt {teletype_vecs};
   LegacyFormat skytraq_ffmt {skytraq_fvecs};
   LegacyFormat miniHomer_fmt {miniHomer_vecs};
-  LegacyFormat jogmap_fmt {jogmap_vecs};
   LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
@@ -453,13 +387,6 @@ private:
       nullptr,
     },
     {
-      &mapsend_fmt,
-      "mapsend",
-      "Magellan Mapsend",
-      nullptr,
-      nullptr,
-    },
-    {
       &nmea_fmt,
       "nmea",
       "NMEA 0183 sentences",
@@ -474,13 +401,6 @@ private:
       nullptr,
     },
     {
-      &pcx_fmt,
-      "pcx",
-      "Garmin PCX5",
-      "pcx",
-      nullptr,
-    },
-    {
       &kml_fmt,
       "kml",
       "Google Earth (Keyhole) Markup Language",
@@ -488,13 +408,6 @@ private:
       nullptr,
     },
 #if MAXIMAL_ENABLED
-    {
-      &gpsutil_fmt,
-      "gpsutil",
-      "gpsutil",
-      nullptr,
-      nullptr,
-    },
     {
       &lowranceusr_fmt,
       "lowranceusr",
@@ -528,13 +441,6 @@ private:
       "tpo3",
       "National Geographic Topo 3.x/4.x .tpo",
       "tpo",
-      nullptr,
-    },
-    {
-      &tiger_fmt,
-      "tiger",
-      "U.S. Census Bureau Tiger Mapping Service",
-      nullptr,
       nullptr,
     },
     {
@@ -647,13 +553,6 @@ private:
     },
 #if MAXIMAL_ENABLED
     {
-      &vpl_fmt,
-      "vpl",
-      "Honda/Acura Navigation System VP Log File Format",
-      nullptr,
-      nullptr,
-    },
-    {
       &wbt_ffmt,
       "wbt-bin",
       "Wintec WBT-100/200 Binary File Format",
@@ -696,13 +595,6 @@ private:
       nullptr,
     },
     {
-      &maggeo_fmt,
-      "maggeo",
-      "Magellan Explorist Geocaching",
-      "gs",
-      nullptr,
-    },
-    {
       &tomtom_fmt,
       "tomtom",
       "TomTom POI file (.ov2)",
@@ -713,20 +605,6 @@ private:
       &tef_xml_fmt,
       "tef",
       "Map&Guide 'TourExchangeFormat' XML",
-      "xml",
-      nullptr,
-    },
-    {
-      &vitosmt_fmt,
-      "vitosmt",
-      "Vito Navigator II tracks",
-      "smt",
-      nullptr,
-    },
-    {
-      &wfff_xml_fmt,
-      "wfff",
-      "WiFiFoFum 2.0 for PocketPC XML",
       "xml",
       nullptr,
     },
@@ -742,47 +620,6 @@ private:
       "ignrando",
       "IGN Rando track files",
       "rdn",
-      nullptr,
-    },
-#if CSVFMTS_ENABLED
-    {
-      &stmsdf_fmt,
-      "stmsdf",
-      "Suunto Trek Manager (STM) .sdf files",
-      "sdf",
-      nullptr,
-    },
-#endif
-#if CSVFMTS_ENABLED
-    {
-      &stmwpp_fmt,
-      "stmwpp",
-      "Suunto Trek Manager (STM) WaypointPlus files",
-      "txt",
-      nullptr,
-    },
-#endif //  CSVFMTS_ENABLED
-    {
-      &nmn4_fmt,
-      "nmn4",
-      "Navigon Mobile Navigator .rte files",
-      "rte",
-      nullptr,
-    },
-#if CSVFMTS_ENABLED
-    {
-      &compegps_fmt,
-      "compegps",
-      "CompeGPS data files (.wpt/.trk/.rte)",
-      nullptr,
-      nullptr,
-    },
-#endif //CSVFMTS_ENABLED
-    {
-      &yahoo_fmt,
-      "yahoo",
-      "Yahoo Geocode API data",
-      nullptr,
       nullptr,
     },
     {
@@ -837,28 +674,12 @@ private:
       nullptr,
     },
     {
-      &vitovtt_fmt,
-      "vitovtt",
-      "Vito SmartMap tracks (.vtt)",
-      "vtt",
-      nullptr,
-    },
-    {
       &ggv_log_fmt,
       "ggv_log",
       "Geogrid-Viewer tracklogs (.log)",
       "log",
       nullptr,
     },
-#if CSVFMTS_ENABLED
-    {
-      &g7towin_fmt,
-      "g7towin",
-      "G7ToWin data files (.g7t)",
-      "g7t",
-      nullptr,
-    },
-#endif
     {
       &garmin_gpi_fmt,
       "garmin_gpi",
@@ -965,23 +786,9 @@ private:
       nullptr,
     },
     {
-      &vidaone_fmt,
-      "vidaone",
-      "VidaOne GPS for Pocket PC (.gpb)",
-      "gpb",
-      nullptr,
-    },
-    {
       &igo8_fmt,
       "igo8",
       "IGO8 .trk",
-      "trk",
-      nullptr,
-    },
-    {
-      &gopal_fmt,
-      "gopal",
-      "GoPal GPS track log (.trk)",
       "trk",
       nullptr,
     },
@@ -1027,15 +834,6 @@ private:
       "ovl",
       nullptr,
     },
-#if CSVFMTS_ENABLED
-    {
-      &jtr_fmt,
-      "jtr",
-      "Jelbert GeoTagger data file",
-      "jtr",
-      nullptr,
-    },
-#endif
     {
       &itracku_fmt,
       "itracku",
@@ -1069,34 +867,6 @@ private:
       "mmo",
       "Memory-Map Navigator overlay files (.mmo)",
       "mmo",
-      nullptr,
-    },
-    {
-      &skyforce_fmt,
-      "skyforce",
-      "Skymap / KMD150 ascii files",
-      nullptr,
-      nullptr,
-    },
-    {
-      &pocketfms_bc_fmt,
-      "pocketfms_bc",
-      "PocketFMS breadcrumbs",
-      nullptr,
-      nullptr,
-    },
-    {
-      &pocketfms_fp_fmt,
-      "pocketfms_fp",
-      "PocketFMS flightplan (.xml)",
-      "xml",
-      nullptr,
-    },
-    {
-      &pocketfms_wp_fmt,
-      "pocketfms_wp",
-      "PocketFMS waypoints (.txt)",
-      "txt",
       nullptr,
     },
     {
@@ -1139,13 +909,6 @@ private:
       "miniHomer",
       "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
       nullptr,
-      nullptr,
-    },
-    {
-      &jogmap_fmt,
-      "jogmap",
-      "Jogmap.de XML format",
-      "xml",
       nullptr,
     },
     {
