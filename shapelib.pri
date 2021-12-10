@@ -10,8 +10,12 @@ equals(WITH_SHAPELIB, no) {
   } else:equals(WITH_SHAPELIB, included) {
     # TODO: It would be better to create an archive and link to it
     #       to separate library build requirements from gpsbabel requirements.
-    SOURCES += shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
-    HEADERS += shapelib/shapefil.h
+    SOURCES += \
+      shapelib/dbfopen.c \
+      shapelib/safileio.c \
+      shapelib/shpopen.c
+    HEADERS += \
+      shapelib/shapefil.h
   } else:equals(WITH_SHAPELIB, custom) {
     message("shapelib is enabled but but must be manually configured")
     message("  e.g. qmake WITH_SHAPELIB=custom LIBS+=... INCLUDEPATH+=...")
