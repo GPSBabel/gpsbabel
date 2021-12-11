@@ -1679,138 +1679,121 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     }
     xfree(p);
 
-  } else
+  } else if (op == u"FIELD_ENCLOSER") {
+    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    style->field_encloser = cp;
 
-    if (op == u"FIELD_ENCLOSER") {
-      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-      style->field_encloser = cp;
+    char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
+    style->badchars += p;
+    xfree(p);
 
-      char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
-      style->badchars += p;
-      xfree(p);
-    } else
+  } else if (op == u"RECORD_DELIMITER") {
+    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    style->record_delimiter = cp;
 
-      if (op == u"RECORD_DELIMITER") {
-        auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-        style->record_delimiter = cp;
+    // Record delimiters are always bad characters.
+    auto* p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
+    style->badchars += p;
+    xfree(p);
 
-        // Record delimiters are always bad characters.
-        auto* p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
-        style->badchars += p;
-        xfree(p);
+  } else if (op == u"FORMAT_TYPE") {
+    if (tokens[0] == u"INTERNAL") {
+      style->type = ff_type_internal;
+    }
+    // this is almost inconceivable...
+    if (tokens[0] == u"SERIAL") {
+      style->type = ff_type_serial;
+    }
 
-      } else
+  } else if (op == u"DESCRIPTION") {
+    style->description = tokens[0];
 
-        if (op == u"FORMAT_TYPE") {
-          if (tokens[0] == u"INTERNAL") {
-            style->type = ff_type_internal;
-          }
-          // this is almost inconceivable...
-          if (tokens[0] == u"SERIAL") {
-            style->type = ff_type_serial;
-          }
-        } else
+  } else if (op == u"EXTENSION") {
+    style->extension = tokens[0];
 
-          if (op == u"DESCRIPTION") {
-            style->description = tokens[0];
-          } else
+  } else if (op == u"SHORTLEN") {
+    style->shortlen = tokens[0].toInt();
 
-            if (op == u"EXTENSION") {
-              style->extension = tokens[0];
-            } else
+  } else if (op == u"SHORTWHITE") {
+    style->whitespace_ok = tokens[0].toInt();
 
-              if (op == u"SHORTLEN") {
-                style->shortlen = tokens[0].toInt();
-              } else
+  } else if (op == u"BADCHARS") {
+    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
+    QString cp = xcsv_get_char_from_constant_table(sp);
+    style->badchars += cp;
+    xfree(sp);
 
-                if (op == u"SHORTWHITE") {
-                  style->whitespace_ok = tokens[0].toInt();
-                } else
+  } else if (op =="PROLOGUE") {
+    style->prologue.append(tokenstr);
 
-                  if (op == u"BADCHARS") {
-                    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
-                    QString cp = xcsv_get_char_from_constant_table(sp);
-                    style->badchars += cp;
-                    xfree(sp);
-                  } else
+  } else if (op == u"EPILOGUE") {
+    style->epilogue.append(tokenstr);
 
-                    if (op =="PROLOGUE") {
-                      style->prologue.append(tokenstr);
-                    } else
+  } else if (op == u"ENCODING") {
+    style->codecname = tokens[0];
 
-                      if (op == u"EPILOGUE") {
-                        style->epilogue.append(tokenstr);
-                      } else
+  } else if (op == u"DATUM") {
+    style->gps_datum_name = tokens[0];
 
-                        if (op == u"ENCODING") {
-                          style->codecname = tokens[0];
-                        } else
+  } else if (op == u"DATATYPE") {
+    QString p = tokens[0].toUpper();
+    if (p == u"TRACK") {
+      style->datatype = trkdata;
+    } else if (p == u"ROUTE") {
+      style->datatype = rtedata;
+    } else if (p == u"WAYPOINT") {
+      style->datatype = wptdata;
+    } else {
+      fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
+    }
 
-                          if (op == u"DATUM") {
-                            style->gps_datum_name = tokens[0];
-                          } else
+  } else if (op == u"IFIELD") {
+    if (tokens.size() < 3) {
+      fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
+    }
 
-                            if (op == u"DATATYPE") {
-                              QString p = tokens[0].toUpper();
-                              if (p == u"TRACK") {
-                                style->datatype = trkdata;
-                              } else if (p == u"ROUTE") {
-                                style->datatype = rtedata;
-                              } else if (p == u"WAYPOINT") {
-                                style->datatype = wptdata;
-                              } else {
-                                fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
-                              }
-                            } else
+    // The key ("LAT_DIR") should never contain quotes.
 
-                              if (op == u"IFIELD") {
-                                if (tokens.size() < 3) {
-                                  fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
-                                }
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
+    xcsv_ifield_add(style, key, val, pfc);
 
-                                // The key ("LAT_DIR") should never contain quotes.
+  } else if (op == u"OFIELD") {
+    //
+    //  as OFIELDs are implemented as an after-thought, I'll
+    //  leave this as it's own parsing for now.  We could
+    //  change the world on ifield vs ofield format later..
+    //
+    unsigned options = 0;
+    // Note: simplified() has to run after split().
+    if (tokens.size() < 3) {
+      fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
+    }
 
-                                const QString key = tokens[0].simplified();
-                                const QString val = dequote(tokens[1]);
-                                const QString pfc = dequote(tokens[2]);
-                                xcsv_ifield_add(style, key, val, pfc);
-                              } else
+    // The key ("LAT_DIR") should never contain quotes.
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
 
-                                //
-                                //  as OFIELDs are implemented as an after-thought, I'll
-                                //  leave this as it's own parsing for now.  We could
-                                //  change the world on ifield vs ofield format later..
-                                //
-                                if (op == u"OFIELD") {
-                                  unsigned options = 0;
-                                  // Note: simplified() has to run after split().
-                                  if (tokens.size() < 3) {
-                                    fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
-                                  }
-
-                                  // The key ("LAT_DIR") should never contain quotes.
-                                  const QString key = tokens[0].simplified();
-                                  const QString val = dequote(tokens[1]);
-                                  const QString pfc = dequote(tokens[2]);
-
-                                  // This is pretty lazy way to parse write options.
-                                  // They've very rarely used, so we'll go for simple.
-                                  // We may have split the optional fourth and final field which can contain
-                                  // option[s], so look at all the remaining tokens.
-                                  for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
-                                    QString options_string = tokens[token_idx].simplified();
-                                    if (options_string.contains("no_delim_before")) {
-                                      options |= options_nodelim;
-                                    }
-                                    if (options_string.contains("absolute")) {
-                                      options |= options_absolute;
-                                    }
-                                    if (options_string.contains("optional")) {
-                                      options |= options_optional;
-                                    }
-                                  }
-                                  xcsv_ofield_add(style, key, val, pfc, options);
-                                }
+    // This is pretty lazy way to parse write options.
+    // They've very rarely used, so we'll go for simple.
+    // We may have split the optional fourth and final field which can contain
+    // option[s], so look at all the remaining tokens.
+    for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
+      QString options_string = tokens[token_idx].simplified();
+      if (options_string.contains("no_delim_before")) {
+        options |= options_nodelim;
+      }
+      if (options_string.contains("absolute")) {
+        options |= options_absolute;
+      }
+      if (options_string.contains("optional")) {
+        options |= options_optional;
+      }
+    }
+    xcsv_ofield_add(style, key, val, pfc, options);
+  }
 }
 
 
