@@ -245,7 +245,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
 }
 
 QDateTime
-XcsvFormat::yyyymmdd_to_time(const char* s)
+XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
@@ -387,7 +387,7 @@ void
 XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp,
                            xcsv_parse_data* parse_data, const int line_no)
 {
-  const char* enclosure = "";
+  QString enclosure = "";
   geocache_data* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
@@ -617,7 +617,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_YYYYMMDD_TIME:
-    wpt->SetCreationTime(yyyymmdd_to_time(s));
+    wpt->SetCreationTime(yyyymmdd_to_time(value));
     break;
   case XcsvStyle::XT_GMT_TIME:
     wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), 1));
@@ -649,7 +649,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
-    wpt->AllocGCData()->last_found = yyyymmdd_to_time(s);
+    wpt->AllocGCData()->last_found = yyyymmdd_to_time(value);
     break;
 
   /* GEOCACHING STUFF ***************************************************/

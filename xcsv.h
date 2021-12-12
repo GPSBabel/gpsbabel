@@ -370,7 +370,7 @@ private:
 
   /* Member Functions */
 
-  static QDateTime yyyymmdd_to_time(const char* s);
+  static QDateTime yyyymmdd_to_time(const QString& s);
   static time_t sscanftime(const char* s, const char* format, int gmt);
   static time_t addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
