@@ -663,10 +663,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_TYPE:
     /* Geocache Type */
-    wpt->AllocGCData()->type = gs_mktype(s);
+    wpt->AllocGCData()->type = gs_mktype(value);
     break;
   case XcsvStyle::XT_GEOCACHE_CONTAINER:
-    wpt->AllocGCData()->container = gs_mkcont(s);
+    wpt->AllocGCData()->container = gs_mkcont(value);
     break;
   case XcsvStyle::XT_GEOCACHE_HINT:
     wpt->AllocGCData()->hint = value.trimmed();
@@ -711,11 +711,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_GPS_FIX:
     wpt->fix = (fix_type)(atoi(s)-(fix_type)1);
     if (wpt->fix < fix_2d) {
-      if (!case_ignore_strcmp(s, "none")) {
+      if (!case_ignore_strcmp(value, "none")) {
         wpt->fix = fix_none;
-      } else if (!case_ignore_strcmp(s, "dgps")) {
+      } else if (!case_ignore_strcmp(value, "dgps")) {
         wpt->fix = fix_dgps;
-      } else if (!case_ignore_strcmp(s, "pps")) {
+      } else if (!case_ignore_strcmp(value, "pps")) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
