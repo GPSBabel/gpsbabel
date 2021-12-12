@@ -416,13 +416,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* IGNORE -- Calculated Sequence # For Output*/
     break;
   case XcsvStyle::XT_SHORTNAME:
-    wpt->shortname = csv_stringtrim(s, enclosure);
+    wpt->shortname = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_DESCRIPTION:
-    wpt->description = csv_stringtrim(s, enclosure);
+    wpt->description = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_NOTES:
-    wpt->notes = csv_stringtrim(s, "");
+    wpt->notes = value.trimmed();
     break;
   case XcsvStyle::XT_URL:
     if (!parse_data->link_) {
@@ -676,9 +676,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
+    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
       gc_data->is_available = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
+    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
       gc_data->is_available = status_true;
     } else {
       gc_data->is_available = status_unknown;
@@ -686,9 +686,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
+    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
       gc_data->is_archived = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
+    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
       gc_data->is_archived = status_true;
     } else {
       gc_data->is_archived = status_unknown;
@@ -724,13 +724,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   /* Tracks and routes *********************************************/
   case XcsvStyle::XT_ROUTE_NAME:
-    parse_data->rte_name = csv_stringtrim(s, enclosure);
+    parse_data->rte_name = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_TRACK_NEW:
     parse_data->new_track = atoi(s);
     break;
   case XcsvStyle::XT_TRACK_NAME:
-    parse_data->trk_name = csv_stringtrim(s, enclosure);
+    parse_data->trk_name = csv_stringtrim(value, enclosure, 0);
     break;
 
   /* OTHER STUFF ***************************************************/
@@ -1667,34 +1667,31 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   const QStringList tokens = tokenstr.split(',');
 
   if (op == u"FIELD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
     style->field_delimiter = cp;
 
-    char* p = csv_stringtrim(CSTR(style->field_delimiter), " ", 0);
     /* field delimiters are always bad characters */
-    if (0 == strcmp(p, "\\w")) {
+    if (cp == u"\\w") {
       style->badchars = " \n\r";
     } else {
-      style->badchars += p;
+      style->badchars += cp;
     }
-    xfree(p);
 
   } else if (op == u"FIELD_ENCLOSER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
     style->field_encloser = cp;
 
-    char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
-    style->badchars += p;
-    xfree(p);
+    style->badchars += cp;
 
   } else if (op == u"RECORD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
     style->record_delimiter = cp;
 
     // Record delimiters are always bad characters.
-    auto* p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
-    style->badchars += p;
-    xfree(p);
+    style->badchars += cp;
 
   } else if (op == u"FORMAT_TYPE") {
     if (tokens[0] == u"INTERNAL") {
@@ -1718,10 +1715,9 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     style->whitespace_ok = tokens[0].toInt();
 
   } else if (op == u"BADCHARS") {
-    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
-    QString cp = xcsv_get_char_from_constant_table(sp);
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
     style->badchars += cp;
-    xfree(sp);
 
   } else if (op =="PROLOGUE") {
     style->prologue.append(tokenstr);

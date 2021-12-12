@@ -35,12 +35,14 @@
 #include <QChar>                   // for QChar, QChar::Other_Control
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
 #include <QString>                 // for QString, operator!=
+#include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream
 #include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
 #include <QtGlobal>                // for qPrintable
 
-#include "csv_util.h"              // for csv_lineparse
+#include "csv_util.h"              // for csv_linesplit
+#include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, GMSD_SECTION_CATEGORIES
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
 #include "inifile.h"               // for inifile_readstr
@@ -123,7 +125,6 @@ static int header_ct[unknown_header + 1];
 /* macros */
 
 #define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
-#define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? ((a)) : NULL
 
 static char* opt_datum = nullptr;
 static char* opt_dist = nullptr;
@@ -884,20 +885,22 @@ free_header(const header_type ht)
 /* data parsers */
 
 static int
-parse_date_and_time(char* str, time_t* value)
+parse_date_and_time(const QString& str, time_t* value)
 {
   struct tm tm;
 
   memset(&tm, 0, sizeof(tm));
-  char* cin = lrtrim(str);
-  if (*cin == '\0') {
+  QString tstr = str.trimmed();
+  if (tstr.isEmpty()) {
     return 0;
   }
 
+  const QByteArray ba = tstr.toUtf8();
+  const char* cin = ba.constData();
   char* cerr = strptime(cin, date_time_format, &tm);
   if (cerr == nullptr) {
     cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", cin, current_line);
+    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
   }
 
 //	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
@@ -908,22 +911,19 @@ parse_date_and_time(char* str, time_t* value)
 }
 
 static uint16_t
-parse_categories(const char* str)
+parse_categories(const QString& str)
 {
   char buff[256];
   uint16_t val;
   uint16_t res = 0;
   char* cx;
 
-  if (*str == '\0') {
+  QString tstr = str.trimmed();
+  if (tstr.isEmpty()) {
     return 0;
   }
-
-  strncpy(buff, str, sizeof(buff));
-  char* cin = lrtrim(buff);
-  if (*cin == '\0') {
-    return 0;
-  }
+  strncpy(buff, CSTR(tstr), sizeof(buff));
+  char* cin = buff;
 
   strcat(cin, ",");
 
@@ -943,16 +943,16 @@ parse_categories(const char* str)
 }
 
 static int
-parse_temperature(const char* str, double* temperature)
+parse_temperature(const QString& str, double* temperature)
 {
   double value;
   unsigned char unit;
 
-  if ((str == nullptr) || (*str == '\0')) {
+  if (str.isEmpty()) {
     return 0;
   }
 
-  if (sscanf(str, "%lf %c", &value, &unit) == 2) {
+  if (sscanf(CSTR(str), "%lf %c", &value, &unit) == 2) {
     unit = toupper(unit);
     switch (unit) {
     case 'C':
@@ -966,20 +966,20 @@ parse_temperature(const char* str, double* temperature)
     }
     return 1;
   } else {
-    fatal(MYNAME ": Invalid temperature \"%s\" at line %d!\n", str, current_line);
+    fatal(MYNAME ": Invalid temperature \"%s\" at line %d!\n", qPrintable(str), current_line);
   }
   return 0;
 }
 
 static void
-parse_header()
+parse_header(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
 
   free_header(unknown_header);
 
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     header_lines[unknown_header][column] = strupper(xstrdup(str));
     header_ct[unknown_header]++;
     if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
@@ -989,9 +989,9 @@ parse_header()
 }
 
 static int
-parse_display(const char* str, int* val)
+parse_display(const QString& str, int* val)
 {
-  if ((str == nullptr) || (*str == '\0')) {
+  if (str.isEmpty()) {
     return 0;
   }
 
@@ -1001,7 +1001,7 @@ parse_display(const char* str, int* val)
       return 1;
     }
   }
-  warning(MYNAME ": Unknown display mode \"%s\" at line %d.\n", str, current_line);
+  warning(MYNAME ": Unknown display mode \"%s\" at line %d.\n", qPrintable(str), current_line);
   return 0;
 }
 
@@ -1049,11 +1049,13 @@ bind_fields(const header_type ht)
 }
 
 static void
-parse_grid()
+parse_grid(const QStringList& lineparts)
 {
-  char* str = csv_lineparse(nullptr, "\t", "", 1);
-
-  if (str != nullptr) {
+  if (lineparts.size() < 1) {
+    fatal(MYNAME ": Missing grid headline!\n");
+  } else {
+    const QByteArray ba = lineparts.at(0).toUtf8();
+    const char* str = ba.constData();
     if (strstr(str, "dd.ddddd") != nullptr) {
       grid_index = grid_lat_lon_ddd;
     } else if (strstr(str, "mm.mmm") != nullptr) {
@@ -1063,27 +1065,23 @@ parse_grid()
     } else {
       grid_index = gt_lookup_grid_type(str, MYNAME);
     }
-  } else {
-    fatal(MYNAME ": Missing grid headline!\n");
   }
 }
 
 static void
-parse_datum()
+parse_datum(const QStringList& lineparts)
 {
-  char* str = csv_lineparse(nullptr, "\t", "", 1);
-
-  if (str != nullptr) {
-    datum_index = gt_lookup_datum_index(str, MYNAME);
-  } else {
+  if (lineparts.size() < 1) {
     fatal(MYNAME ": Missing GPS datum headline!\n");
+  } else {
+    const auto& str = lineparts.at(0);
+    datum_index = gt_lookup_datum_index(CSTR(str), MYNAME);
   }
 }
 
 static void
-parse_waypoint()
+parse_waypoint(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
 
   bind_fields(waypt_header);
@@ -1092,17 +1090,22 @@ parse_waypoint()
   garmin_fs_t* gmsd = garmin_fs_alloc(-1);
   wpt->fs.FsChainAdd(gmsd);
 
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     int i;
     double d;
     int field_no = header_fields[waypt_header][column];
 
     switch (field_no) {
     case  1:
-      wpt->shortname = DUPSTR(str);
+      if (!str.isEmpty()) {
+        wpt->shortname = str;
+      }
       break;
     case  2:
-      wpt->notes = DUPSTR(str);
+      if (!str.isEmpty()) {
+        wpt->notes = str;
+      }
       break;
     case  3:
       for (i = 0; i <= gt_waypt_class_map_line; i++) {
@@ -1183,19 +1186,21 @@ parse_waypoint()
 }
 
 static void
-parse_route_header()
+parse_route_header(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
 
   auto* rte = new route_head;
 
   bind_fields(route_header);
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     int field_no = header_fields[route_header][column];
     switch (field_no) {
     case 1:
-      rte->rte_name = DUPSTR(str);
+      if (!str.isEmpty()) {
+        rte->rte_name = str;
+      }
       break;
     case 5:
       rte->rte_urls.AddUrlLink(UrlLink(str));
@@ -1207,18 +1212,20 @@ parse_route_header()
 }
 
 static void
-parse_track_header()
+parse_track_header(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
 
   bind_fields(track_header);
   auto* trk = new route_head;
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     int field_no = header_fields[track_header][column];
     switch (field_no) {
     case 1:
-      trk->rte_name = DUPSTR(str);
+      if (!str.isEmpty()) {
+        trk->rte_name = str;
+      }
       break;
     case 6:
       trk->rte_urls.AddUrlLink(UrlLink(str));
@@ -1230,21 +1237,21 @@ parse_track_header()
 }
 
 static void
-parse_route_waypoint()
+parse_route_waypoint(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
   Waypoint* wpt = nullptr;
 
   bind_fields(rtept_header);
 
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     int field_no = header_fields[rtept_header][column];
     switch (field_no) {
     case 1:
-      is_fatal((*str == '\0'), MYNAME ": Route waypoint without name at line %d!\n", current_line);
+      is_fatal((str.isEmpty()), MYNAME ": Route waypoint without name at line %d!\n", current_line);
       wpt = find_waypt_by_name(str);
-      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
+      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
       wpt = new Waypoint(*wpt);
       break;
     }
@@ -1255,18 +1262,18 @@ parse_route_waypoint()
 }
 
 static void
-parse_track_waypoint()
+parse_track_waypoint(const QStringList& lineparts)
 {
-  char* str;
   int column = -1;
 
   bind_fields(trkpt_header);
   auto* wpt = new Waypoint;
 
-  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
+  for (const auto& str : lineparts) {
+    column++;
     double x;
 
-    if (! *str) {
+    if (str.isEmpty()) {
       continue;
     }
 
@@ -1304,7 +1311,7 @@ parse_track_waypoint()
       }
       break;
     case 9:
-      WAYPT_SET(wpt, course, atoi(str));
+      WAYPT_SET(wpt, course, atoi(CSTR(str)));
       break;
     }
   }
@@ -1354,37 +1361,35 @@ garmin_txt_read()
       continue;
     }
 
-    /* bail back to a (utf-8) char string, this format isn't worth the conversion work */
-    QByteArray utf8str = buff.toUtf8();
-    char* cin = csv_lineparse(utf8str.constData(), "\t", "", 0);
+    QStringList lineparts = csv_linesplit(buff, "\t", "", 0);
 
-    if (cin == nullptr) {
+    if (lineparts.size() < 1) {
       continue;
     }
+    auto linetype = lineparts.at(0);
+    lineparts.removeFirst();
 
-    if (case_ignore_strcmp(cin, "Header") == 0) {
-      parse_header();
-    } else if (case_ignore_strcmp(cin, "Grid") == 0) {
-      parse_grid();
-    } else if (case_ignore_strcmp(cin, "Datum") == 0) {
-      parse_datum();
-    } else if (case_ignore_strcmp(cin, "Waypoint") == 0) {
-      parse_waypoint();
-    } else if (case_ignore_strcmp(cin, "Route Waypoint") == 0) {
-      parse_route_waypoint();
-    } else if (case_ignore_strcmp(cin, "Trackpoint") == 0) {
-      parse_track_waypoint();
-    } else if (case_ignore_strcmp(cin, "Route") == 0) {
-      parse_route_header();
-    } else if (case_ignore_strcmp(cin, "Track") == 0) {
-      parse_track_header();
-    } else if (case_ignore_strcmp(cin, "Map") == 0) /* do nothing */ ;
+    if (case_ignore_strcmp(linetype, "Header") == 0) {
+      parse_header(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Grid") == 0) {
+      parse_grid(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Datum") == 0) {
+      parse_datum(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Waypoint") == 0) {
+      parse_waypoint(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Route Waypoint") == 0) {
+      parse_route_waypoint(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Trackpoint") == 0) {
+      parse_track_waypoint(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Route") == 0) {
+      parse_route_header(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Track") == 0) {
+      parse_track_header(lineparts);
+    } else if (case_ignore_strcmp(linetype, "Map") == 0) /* do nothing */ ;
     else {
-      fatal(MYNAME ": Unknown identifier (%s) at line %d!\n", cin, current_line);
+      fatal(MYNAME ": Unknown identifier (%s) at line %d!\n", qPrintable(linetype), current_line);
     }
 
-    /* flush pending data */
-    while (csv_lineparse(nullptr, "\t", "", 0));
   }
 }
 
