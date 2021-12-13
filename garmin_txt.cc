@@ -884,7 +884,7 @@ free_header(const header_type ht)
 
 /* data parsers */
 
-static int
+static bool
 parse_date_and_time(const QString& str, time_t* value)
 {
   struct tm tm;
@@ -892,7 +892,7 @@ parse_date_and_time(const QString& str, time_t* value)
   memset(&tm, 0, sizeof(tm));
   QString tstr = str.trimmed();
   if (tstr.isEmpty()) {
-    return 0;
+    return false;
   }
 
   const QByteArray ba = tstr.toUtf8();
@@ -907,49 +907,37 @@ parse_date_and_time(const QString& str, time_t* value)
 //		tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   *value = mklocaltime(&tm);
-  return 1;
+  return true;
 }
 
 static uint16_t
 parse_categories(const QString& str)
 {
-  char buff[256];
-  uint16_t val;
   uint16_t res = 0;
-  char* cx;
 
-  QString tstr = str.trimmed();
-  if (tstr.isEmpty()) {
-    return 0;
-  }
-  strncpy(buff, CSTR(tstr), sizeof(buff));
-  char* cin = buff;
-
-  strcat(cin, ",");
-
-  while ((cx = strchr(cin, ','))) {
-    *cx++ = '\0';
-    cin = lrtrim(cin);
-    if (*cin != '\0') {
-      if (!garmin_fs_convert_category(cin, &val)) {
-        warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", cin, current_line);
+  const QStringList catstrings = str.split(',');
+  for (const auto& catstring : catstrings) {
+    QString cin = catstring.trimmed();
+    if (!cin.isEmpty()) {
+      uint16_t val;
+      if (!garmin_fs_convert_category(CSTR(cin), &val)) {
+        warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", qPrintable(cin), current_line);
       } else {
         res = res | val;
       }
     }
-    cin = cx;
   }
   return res;
 }
 
-static int
+static bool
 parse_temperature(const QString& str, double* temperature)
 {
   double value;
   unsigned char unit;
 
   if (str.isEmpty()) {
-    return 0;
+    return false;
   }
 
   if (sscanf(CSTR(str), "%lf %c", &value, &unit) == 2) {
@@ -964,11 +952,11 @@ parse_temperature(const QString& str, double* temperature)
     default:
       fatal(MYNAME ": Unknown temperature unit \"%c\" at line %d!\n", unit, current_line);
     }
-    return 1;
+    return true;
   } else {
     fatal(MYNAME ": Invalid temperature \"%s\" at line %d!\n", qPrintable(str), current_line);
   }
-  return 0;
+  return false;
 }
 
 static void
@@ -988,21 +976,21 @@ parse_header(const QStringList& lineparts)
   }
 }
 
-static int
+static bool
 parse_display(const QString& str, int* val)
 {
   if (str.isEmpty()) {
-    return 0;
+    return false;
   }
 
   for (gt_display_modes_e i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; ++i) {
     if (case_ignore_strcmp(str, gt_display_mode_names[i]) == 0) {
       *val = i;
-      return 1;
+      return true;
     }
   }
   warning(MYNAME ": Unknown display mode \"%s\" at line %d.\n", qPrintable(str), current_line);
-  return 0;
+  return false;
 }
 
 static void
@@ -1053,18 +1041,18 @@ parse_grid(const QStringList& lineparts)
 {
   if (lineparts.size() < 1) {
     fatal(MYNAME ": Missing grid headline!\n");
+  }
+
+  const QByteArray ba = lineparts.at(0).toUtf8();
+  const char* str = ba.constData();
+  if (strstr(str, "dd.ddddd") != nullptr) {
+    grid_index = grid_lat_lon_ddd;
+  } else if (strstr(str, "mm.mmm") != nullptr) {
+    grid_index = grid_lat_lon_dmm;
+  } else if (strstr(str, "mm'ss.s") != nullptr) {
+    grid_index = grid_lat_lon_dms;
   } else {
-    const QByteArray ba = lineparts.at(0).toUtf8();
-    const char* str = ba.constData();
-    if (strstr(str, "dd.ddddd") != nullptr) {
-      grid_index = grid_lat_lon_ddd;
-    } else if (strstr(str, "mm.mmm") != nullptr) {
-      grid_index = grid_lat_lon_dmm;
-    } else if (strstr(str, "mm'ss.s") != nullptr) {
-      grid_index = grid_lat_lon_dms;
-    } else {
-      grid_index = gt_lookup_grid_type(str, MYNAME);
-    }
+    grid_index = gt_lookup_grid_type(str, MYNAME);
   }
 }
 
@@ -1073,10 +1061,10 @@ parse_datum(const QStringList& lineparts)
 {
   if (lineparts.size() < 1) {
     fatal(MYNAME ": Missing GPS datum headline!\n");
-  } else {
-    const auto& str = lineparts.at(0);
-    datum_index = gt_lookup_datum_index(CSTR(str), MYNAME);
   }
+
+  const auto& str = lineparts.at(0);
+  datum_index = gt_lookup_datum_index(CSTR(str), MYNAME);
 }
 
 static void
