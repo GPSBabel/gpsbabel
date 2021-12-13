@@ -1673,7 +1673,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
 
     /* field delimiters are always bad characters */
     if (cp == u"\\w") {
-      style->badchars = " \n\r";
+      style->badchars += " \n\r";
     } else {
       style->badchars += cp;
     }
