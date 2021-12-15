@@ -875,7 +875,7 @@ humminbird_rte_tail(const route_head* rte)
     be_write32(&humrte->time, humrte->time);
 
     QString name = mkshort(rtename_sh, rte->rte_name);
-    strncpy(humrte->name, CSTR(name), sizeof(humrte->name));
+    strncpy(humrte->name, CSTR(name), sizeof(humrte->name)-1);
 
     gbfputuint32(RTE_MAGIC, fout_);
     gbfwrite(humrte, sizeof(*humrte), 1, fout_);
