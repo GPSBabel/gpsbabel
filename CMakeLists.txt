@@ -206,6 +206,7 @@ set(SUPPORT
   rgbcolors.cc
   route.cc
   session.cc
+  src/core/logging.cc
   src/core/nvector.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
