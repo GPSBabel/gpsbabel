@@ -25,6 +25,7 @@
 #include <cstdint>             // for uint8_t, uint16_t, uint32_t, int32_t, int8_t, uint64_t
 #include <cstdio>              // for EOF, SEEK_SET, snprintf
 #include <deque>               // for deque, _Deque_iterator, operator!=
+#include <inttypes.h>          // for PRItNN
 #include <memory>              // for allocator_traits<>::value_type
 #include <string>              // for operator+, to_string, char_traits
 #include <utility>             // for pair
@@ -409,7 +410,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   QString description;
 
   if (global_opts.debug_level >= 7) {
-    debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def.global_id, def.fields.size());
+    debug_print(7,"%s: parsing fit data ID %d with num_fields=%" PRId64 "\n", MYNAME, def.global_id, def.fields.size());
   }
   for (int i = 0; i < def.fields.size(); ++i) {
     if (global_opts.debug_level >= 7) {
@@ -659,7 +660,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   }
 
   if (global_opts.debug_level >= 7) {
-    debug_print(7,"%s: storing fit data with num_fields=%d\n", MYNAME, def.fields.size());
+    debug_print(7,"%s: storing fit data with num_fields=%" PRId64 "\n", MYNAME, def.fields.size());
   }
   switch (def.global_id) {
   case kIdLap: { // lap message

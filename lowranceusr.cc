@@ -90,6 +90,7 @@
 #include <cstdlib>                // for atoi, abs
 #include <cstring>                // for strcmp, strlen
 #include <ctime>                  // for time_t
+#include <inttypes.h>             // for PRIxNN
 
 #include <QByteArray>             // for QByteArray
 #include <QDate>                  // for QDate
@@ -139,7 +140,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt) const
   }
 
   if (global_opts.debug_level >= 2) {
-    printf(MYNAME " adding waypt %s (%s) to table at index %d\n",
+    printf(MYNAME " adding waypt %s (%s) to table at index %" PRId64 "\n",
            qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table->size());
   }
 
@@ -606,7 +607,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
         printf("%08x %08x %08x %08x ",
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
       }
-      printf(" %10u %8d %8d %8d %6d",
+      printf(" %10u %8d %8d %8d %6" PRId64,
              fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
              waypoint_version, name.length());
       if (name.length() > 16) {
@@ -621,9 +622,9 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
       printf(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
              (fsdata->color_desc == nullptr ? "unk" : qPrintable(fsdata->color_desc)));
       if (desc.length() > 16) {
-        printf(" %6d %.13s...", desc.length(), qPrintable(desc));
+        printf(" %6" PRId64 " %.13s...", desc.length(), qPrintable(desc));
       } else {
-        printf(" %6d %16s", desc.length(), qPrintable(desc));
+        printf(" %6" PRId64 " %16s", desc.length(), qPrintable(desc));
       }
       printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
       printf(" %08x %8.3f %08x %08x %08x\n",
@@ -1483,7 +1484,7 @@ LowranceusrFormat::lowranceusr4_write_waypoints()
   route_disp_all(nullptr, nullptr, register_waypt_lambda);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %d waypoints\n", waypt_table->size());
+    printf(MYNAME " writing %" PRId64 " waypoints\n", waypt_table->size());
   }
 
   gbfputint32(waypt_table->size(), file_out);
