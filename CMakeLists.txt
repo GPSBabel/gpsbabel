@@ -88,7 +88,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   mtk_locus.cc
   mtk_logger.cc
   mynav.cc
-  navicache.cc
   navilink.cc
   navitel.cc
   osm.cc

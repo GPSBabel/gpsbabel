@@ -902,10 +902,6 @@ file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo	tpo2
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo2.html
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo	tpo3
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo3.html
-file	r-----	navicache		Navicache.com XML	navicache
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navicache.html
-option	navicache	noretired	Suppress retired geocaches	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navicache.html#fmt_navicache_o_noretired
-
 file	rw----	navigonwpt		Navigon Waypoints	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navigonwpt.html
 option	navigonwpt	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navigonwpt.html#fmt_navigonwpt_o_snlen

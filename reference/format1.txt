@@ -92,7 +92,6 @@ file	mynav	trc	MyNav TRC format
 file	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-file	navicache		Navicache.com XML
 file	navigonwpt		Navigon Waypoints
 serial	navilink		NaviGPS GT-11/BGT-11 Download
 file	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)

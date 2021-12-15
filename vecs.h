@@ -63,7 +63,6 @@ extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
-extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
 extern ff_vecs_t html_vecs;
@@ -241,7 +240,6 @@ private:
   LegacyFormat tpo3_fmt {tpo3_vecs};
   LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
-  LegacyFormat navicache_fmt {navicache_vecs};
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
@@ -455,13 +453,6 @@ private:
       "saroute",
       "DeLorme Street Atlas Route",
       "anr",
-      nullptr,
-    },
-    {
-      &navicache_fmt,
-      "navicache",
-      "Navicache.com XML",
-      nullptr,
       nullptr,
     },
 #if SHAPELIB_ENABLED
