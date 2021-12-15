@@ -52,7 +52,7 @@ public:
 class DebugIndent
 {
 public:
-  DebugIndent(int l) : level(l) {}
+  explicit DebugIndent(int l) : level(l) {}
 
   int level;
 };
@@ -63,7 +63,7 @@ class Debug : public QDebug
 {
 public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
-  Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
+  explicit Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
 };
 
 /*
