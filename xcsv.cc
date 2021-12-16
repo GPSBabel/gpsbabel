@@ -1894,7 +1894,9 @@ XcsvFormat::rd_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
@@ -1973,7 +1975,9 @@ XcsvFormat::wr_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 

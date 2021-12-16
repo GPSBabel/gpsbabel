@@ -760,7 +760,9 @@ garmin_txt_wr_init(const QString& fname)
   init_date_and_time_format();
   if (opt_precision) {
     precision = atoi(opt_precision);
-    is_fatal(precision < 0, MYNAME ": Invalid precision (%s)!", opt_precision);
+    if (precision < 0) {
+      fatal(MYNAME ": Invalid precision (%s)!", opt_precision);
+    }
   }
 
   datum_str = get_option_val(opt_datum, nullptr);
@@ -900,7 +902,9 @@ parse_date_and_time(const QString& str, time_t* value)
   char* cerr = strptime(cin, date_time_format, &tm);
   if (cerr == nullptr) {
     cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
+    if (cerr == nullptr) {
+      fatal(MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
+    }
   }
 
 //	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
@@ -996,7 +1000,9 @@ parse_display(const QString& str, int* val)
 static void
 bind_fields(const header_type ht)
 {
-  is_fatal((grid_index < 0) || (datum_index < 0), MYNAME ": Incomplete or invalid file header!");
+  if ((grid_index < 0) || (datum_index < 0)) {
+    fatal(MYNAME ": Incomplete or invalid file header!");
+  }
 
   if (header_ct[unknown_header] <= 0) {
     return;
@@ -1237,9 +1243,13 @@ parse_route_waypoint(const QStringList& lineparts)
     int field_no = header_fields[rtept_header][column];
     switch (field_no) {
     case 1:
-      is_fatal((str.isEmpty()), MYNAME ": Route waypoint without name at line %d!\n", current_line);
+      if ((str.isEmpty())) {
+        fatal(MYNAME ": Route waypoint without name at line %d!\n", current_line);
+      }
       wpt = find_waypt_by_name(str);
-      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
+      if ((wpt == nullptr)) {
+        fatal(MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
+      }
       wpt = new Waypoint(*wpt);
       break;
     }

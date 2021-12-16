@@ -107,7 +107,9 @@ GarminFitFormat::fit_parse_header()
   // data length
   fit_data.len = gbfgetuint32(fin);
   // File signature
-  is_fatal(gbfread(sig, 4, 1, fin) != 1, MYNAME ": Unexpected end of file\n");
+  if (gbfread(sig, 4, 1, fin) != 1) {
+    fatal(MYNAME ": Unexpected end of file\n");
+  }
   if (sig[0] != '.' || sig[1] != 'F' || sig[2] != 'I' || sig[3] != 'T') {
     fatal(MYNAME ": .FIT signature missing\n");
   }
