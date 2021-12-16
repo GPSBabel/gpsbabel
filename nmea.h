@@ -26,10 +26,10 @@
 #include <QDate>              // for QDate
 #include <QDateTime>          // for QDateTime
 #include <QList>              // for QList
+#include <QMap>               // for QMap
 #include <QString>            // for QString
 #include <QTime>              // for QTime
 #include <QVector>            // for QVector
-#include <map>
 
 #include "defs.h"
 #include "format.h"           // for Format
@@ -170,7 +170,7 @@ private:
 
   int wpt_not_added_yet{};
 
-  std::map<std::string, int> counter;
+  QMap<QString, int> warning_entries;
 
   QVector<arglist_t> nmea_args = {
     {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
