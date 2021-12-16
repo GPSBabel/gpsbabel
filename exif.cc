@@ -1488,7 +1488,8 @@ static void
 exif_read()
 {
   uint16_t soi = gbfgetuint16(fin_);
-  is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");  /* only jpeg for now */
+  /* only jpeg for now */
+  is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");
 
   exif_app_ = exif_load_apps();
   is_fatal(exif_app_ == nullptr, MYNAME ": No EXIF header in source file \"%s\".", fin_->name);

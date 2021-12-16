@@ -427,16 +427,14 @@ read_file_header()
   is_fatal(drec.at(0) != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
 
   gdb_ver = drec.at(1) - 'k' + 1;
-  is_fatal((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX),
-           MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
+  is_fatal((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX), MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
 
   if (global_opts.verbose_status > 0) {
     printf(MYNAME ": Reading Garmin GPS Database version %d.0\n", gdb_ver);
   }
 
   reclen = FREAD_i32;
-  is_fatal((reclen + 1 > int(sizeof(buf))),
-           MYNAME ": Invalid record length\n");
+  is_fatal((reclen + 1 > int(sizeof(buf))), MYNAME ": Invalid record length\n");
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
@@ -1745,8 +1743,7 @@ gdb_wr_init(const QString& fname)
   gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
 
   if (gdb_category) {
-    is_fatal((gdb_category < 1) || (gdb_category > 16),
-             MYNAME ": cat must be between 1 and 16!");
+    is_fatal((gdb_category < 1) || (gdb_category > 16), MYNAME ": cat must be between 1 and 16!");
     gdb_category = 1 << (gdb_category - 1);
   }
 

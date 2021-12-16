@@ -415,8 +415,7 @@ write_route_wpt_cb(const Waypoint* wpt)
 static void
 enum_route_hdr_cb(const route_head* rte)
 {
-  is_fatal(rte->rte_waypt_ct() > 50,
-           MYNAME ": Routes with more than 50 points are not supported by Raymarine!");
+  is_fatal(rte->rte_waypt_ct() > 50, MYNAME ": Routes with more than 50 points are not supported by Raymarine!");
 }
 
 static short_handle

@@ -917,8 +917,7 @@ gbfgetint32(gbfile* file)
 {
   char buf[4];
 
-  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
-           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)), "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   if (file->big_endian) {
     return be_read32(buf);
@@ -936,8 +935,7 @@ gbfgetint16(gbfile* file)
 {
   char buf[2];
 
-  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
-           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)), "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   if (file->big_endian) {
     return be_read16(buf);
@@ -955,8 +953,7 @@ gbfgetdbl(gbfile* file)
 {
   char buf[8];
 
-  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
-           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)), "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   return endian_read_double(buf, ! file->big_endian);
 }
@@ -970,8 +967,7 @@ gbfgetflt(gbfile* file)
 {
   char buf[4];
 
-  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)),
-           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  is_fatal((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)), "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   return endian_read_float(buf, ! file->big_endian);
 }
@@ -1046,8 +1042,7 @@ gbfgetpstr(gbfile* file)
   }
   QByteArray ba;
   ba.resize(len);
-  is_fatal((gbfread(ba.data(), 1, len, file) != (gbsize_t) len),
-           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  is_fatal((gbfread(ba.data(), 1, len, file) != (gbsize_t) len), "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   return QString(ba);
 }
