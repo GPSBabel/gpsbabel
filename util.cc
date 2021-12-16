@@ -533,23 +533,6 @@ printposn(const double c, int is_lat)
   printf("%f%c ", fabs(c), d);
 }
 
-void
-is_fatal(const int condition, const char* fmt, ...)
-{
-  va_list args;
-  char buff[128];
-
-  if (condition == 0) {
-    return;
-  }
-
-  va_start(args, fmt);
-  vsnprintf(buff, sizeof(buff), fmt, args);
-  va_end(args);
-
-  fatal("%s\n", buff);
-}
-
 /*
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
@@ -1136,7 +1119,9 @@ convert_human_date_format(const char* human_datef)
       okay = 0;
     }
 
-    is_fatal(okay == 0, "Invalid character \"%c\" in date format!", *cin);
+    if (okay == 0) {
+      fatal("Invalid character \"%c\" in date format!", *cin);
+    }
   }
   return result;
 }
@@ -1226,7 +1211,9 @@ convert_human_time_format(const char* human_timef)
       okay = 0;
     }
 
-    is_fatal(okay == 0, "Invalid character \"%c\" in time format!", *cin);
+    if (okay == 0) {
+      fatal("Invalid character \"%c\" in time format!", *cin);
+    }
   }
   return result;
 }

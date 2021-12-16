@@ -1058,7 +1058,6 @@ extern const QVector<style_vecs_t> style_list;
 
 [[noreturn]] void fatal(QDebug& msginstance);
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 
 void printposn(double c, int is_lat);

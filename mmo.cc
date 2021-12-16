@@ -826,7 +826,9 @@ mmo_read_object()
     objid = mmo_object_id++;
 
     uint16_t version = gbfgetuint16(fin);
-    is_fatal(version != mmo_version, MYNAME ": Invalid version identifier!\n");
+    if (version != mmo_version) {
+      fatal(MYNAME ": Invalid version identifier!\n");
+    }
 
     int len = gbfgetint16(fin);
 
