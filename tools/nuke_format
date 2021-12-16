@@ -37,7 +37,7 @@ remove_manually $1 reference/format3.txt
 remove_line_containing extern.*$1 vecs.h
 remove_line_containing Format.*$1 vecs.h
 remove_line_containing include.*$1 vecs.h
-# ... then let a human nerd snipe the actual table entry away.
+# ... then let a human nerd snip the actual table entry away.
 remove_manually $1 vecs.h
 
 remove_line_containing $1 reference/format0.txt
