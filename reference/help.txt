@@ -449,8 +449,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27) 
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navicache             Navicache.com XML
-	  noretired             (0/1) Suppress retired geocaches 
 	navigonwpt            Navigon Waypoints
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
