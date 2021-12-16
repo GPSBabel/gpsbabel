@@ -297,14 +297,14 @@ gpi_read_string(const char* field)
     char first = gbfgetc(fin);
     if (first == 0) {
 
-      if ((gbfgetc(fin) != 0)) {
+      if (gbfgetc(fin) != 0) {
         fatal(MYNAME ": Error reading field '%s'!", field);
       }
 
       lc_string res1 = gpi_read_lc_string();
       if ((res1.strlen + 4) < l0) { // dual language?
         lc_string res2 = gpi_read_lc_string();
-        if ((res1.strlen + 4 + res2.strlen + 4 != l0)) {
+        if (res1.strlen + 4 + res2.strlen + 4 != l0) {
           fatal(MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, res1.strlen, res2.strlen, field);
         }
         if (opt_lang && (opt_lang  == res1.lc)) {
@@ -315,7 +315,7 @@ gpi_read_string(const char* field)
           fatal(MYNAME ": Must select language code, %s and %s found.\n", res1.lc.constData(), res2.lc.constData());
         }
       } else { // normal case, single language
-        if ((res1.strlen + 4 != l0)) {
+        if (res1.strlen + 4 != l0) {
           fatal(MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, res1.strlen, field);
         }
         string = res1.str;

@@ -440,7 +440,7 @@ read_file_header()
   }
 
   reclen = FREAD_i32;
-  if ((reclen + 1 > int(sizeof(buf)))) {
+  if (reclen + 1 > int(sizeof(buf))) {
     fatal(MYNAME ": Invalid record length\n");
   }
   (void) FREAD(buf, reclen + 1);

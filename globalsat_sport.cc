@@ -121,7 +121,7 @@ GlobalsatSportFormat::recv_byte()
     result=serial_recv_byte();
   } else {
     result = gbfgetc(in_file);
-    if ((result < 0)) {
+    if (result < 0) {
       fatal(MYNAME ": read error");
     }
   }

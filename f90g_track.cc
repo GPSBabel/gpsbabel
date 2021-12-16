@@ -90,7 +90,7 @@ f90g_track_read()
   char northSouth, eastWest, velocityMark, ttRec[TTRECORDSIZE], tempBuf[20];
   int year, mon, mday, hour, min, sec, latitudeDeg, latitudeMin, longitudeDeg, longitudeMin, velocity;
 
-  if ((track == nullptr)) {
+  if (track == nullptr) {
     fatal(MYNAME "Track setup error");
   }
   for (;;) {

@@ -919,7 +919,7 @@ gbfgetint32(gbfile* file)
 {
   char buf[4];
 
-  if ((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf))) {
+  if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
     fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
   }
 
@@ -939,7 +939,7 @@ gbfgetint16(gbfile* file)
 {
   char buf[2];
 
-  if ((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf))) {
+  if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
     fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
   }
 
@@ -959,7 +959,7 @@ gbfgetdbl(gbfile* file)
 {
   char buf[8];
 
-  if ((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf))) {
+  if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
     fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
   }
 
@@ -975,7 +975,7 @@ gbfgetflt(gbfile* file)
 {
   char buf[4];
 
-  if ((gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf))) {
+  if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
     fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
   }
 
@@ -1052,7 +1052,7 @@ gbfgetpstr(gbfile* file)
   }
   QByteArray ba;
   ba.resize(len);
-  if ((gbfread(ba.data(), 1, len, file) != (gbsize_t) len)) {
+  if (gbfread(ba.data(), 1, len, file) != (gbsize_t) len) {
     fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
   }
 

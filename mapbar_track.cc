@@ -120,7 +120,7 @@ mapbar_track_read()
       fatal(MYNAME ": get bad buffer length");
     }
 
-    if ((length % 8 != 0)) {
+    if (length % 8 != 0) {
       fatal(MYNAME ": bad buffer size");
     }
     gbfseek(fin, 16, SEEK_CUR);

@@ -1243,11 +1243,11 @@ parse_route_waypoint(const QStringList& lineparts)
     int field_no = header_fields[rtept_header][column];
     switch (field_no) {
     case 1:
-      if ((str.isEmpty())) {
+      if (str.isEmpty()) {
         fatal(MYNAME ": Route waypoint without name at line %d!\n", current_line);
       }
       wpt = find_waypt_by_name(str);
-      if ((wpt == nullptr)) {
+      if (wpt == nullptr) {
         fatal(MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
       }
       wpt = new Waypoint(*wpt);
