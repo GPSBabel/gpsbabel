@@ -25,7 +25,6 @@
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
 #include <cstdlib>                 // for atoi, atof, strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
-#include <iostream>                // for std::cout
 #include <iterator>                // for operator!=, reverse_iterator
 
 #include <QByteArray>              // for QByteArray
@@ -285,7 +284,7 @@ NmeaFormat::rd_deinit()
   }
 
   if (warnings) {
-    Warnings().nospace() << "\n";
+    Warning().nospace() << "\n";
   }
 
 }
