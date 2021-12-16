@@ -75,7 +75,7 @@ do_over:
    * haven't been observed so far.
    * 484 = Forerunner 305
    * 450 = Edge 205, confirmed with Ian Dent on 2015/11/16.
-   * All Edge, Forerunner, and Foretracker [23]05 are probably 
+   * All Edge, Forerunner, and Foretracker [23]05 are probably
    * similarly affected, but we don't know their device ID.
    */
   if ((gps_save_id == 484 || gps_save_id == 450)

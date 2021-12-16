@@ -1,0 +1,54 @@
+# usage nuke_format format_name
+
+SED=$(which gsed)
+EDITOR="${EDITOR:-vim}"
+
+# $1 = format $2 = file in all functions
+
+
+remove_line() {
+  # This uses a GNU extension \? for zero or one, letting us match a
+  # qmake continuation character that may or may not be at the end of
+  # the line.
+  $SED -i "/^\s*$1\s*[\]\?/d" $2
+  git add $2
+}
+
+remove_line_containing() {
+  $SED -i "/$1/d" $2
+  git add $2
+}
+
+# For things it's easier to just edit away.:1
+remove_manually() {
+  grep $1 $2 && $EDITOR +/$1 $2
+  git add $2
+}
+
+remove_line $1.cc CMakeLists.txt
+remove_line $1.h CMakeLists.txt
+remove_line $1.cc GPSBabel.pro
+remove_line $1.h GPSBabel.pro
+
+remove_manually $1 reference/help.txt
+remove_manually $1 reference/format3.txt
+
+# Take out the boilerplate entries in vecs.h ...
+remove_line_containing extern.*$1 vecs.h
+remove_line_containing Format.*$1 vecs.h
+remove_line_containing include.*$1 vecs.h
+# ... then let a human nerd snip the actual table entry away.
+remove_manually $1 vecs.h
+
+remove_line_containing $1 reference/format0.txt
+remove_line_containing $1 reference/format1.txt
+remove_line_containing $1 reference/format2.txt
+
+git rm -f reference/$1*
+git rm -f xmldoc/formats/$1.xml
+git rm -f xmldoc/formats/options/$1.xml
+git rm -f testo.d/$1.test
+[ -f $1.cc ] && git mv $1.cc deprecated/
+[ -f $1.h ] && git mv $1.h deprecated/
+
+# make && ./testo

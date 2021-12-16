@@ -285,7 +285,7 @@ my_read()
       record = ReadRecord(infile, recsize);
       stringlen = le_read16((uint16_t*)record);
       if (split && stringlen) {
-        if (track_head->rte_waypt_ct) {
+        if (track_head->rte_waypt_ct()) {
           old_track_head = track_head;
           track_head = new route_head;
           if (timesynth) {

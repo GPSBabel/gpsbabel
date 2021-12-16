@@ -22,13 +22,13 @@
 
 #include <cassert>               // for assert
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QLatin1String>  // for QLatin1String
-#include <QtCore/QString>        // for QString, QString::SkipEmptyParts
-#include <QtCore/QStringList>    // for QStringList
-#include <QtCore/QVector>        // for QVector
-#include <QtCore/Qt>             // for CaseInsensitive
-#include <QtCore/QtGlobal>       // for qPrintable
+#include <QByteArray>            // for QByteArray
+#include <QLatin1String>         // for QLatin1String
+#include <QString>               // for QString, Qt::SkipEmptyParts
+#include <QStringList>           // for QStringList
+#include <QVector>               // for QVector
+#include <Qt>                    // for CaseInsensitive
+#include <QtGlobal>              // for qPrintable
 
 #include "defs.h"
 #include "shape.h"
@@ -218,7 +218,11 @@ ShapeFormat::read()
     if (qopt_name.contains('+')) {
       // form a compound name from one or more fields.
       nameidx = -2;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
       const QStringList opt_name_fields = qopt_name.split('+', QString::SkipEmptyParts);
+#else
+      const QStringList opt_name_fields = qopt_name.split('+', Qt::SkipEmptyParts);
+#endif
       nameindices.reserve(opt_name_fields.size());
       for (int oidx=0; oidx<opt_name_fields.size(); oidx++) {
         bool ok;
@@ -418,7 +422,7 @@ ShapeFormat::write_wpt(const Waypoint* wpt) const
 void
 ShapeFormat::poly_init(const route_head* rte)
 {
-  const int ct = rte->rte_waypt_ct;
+  const int ct = rte->rte_waypt_ct();
   poly_count = 0;
   polybufx = new double[ct];
   polybufy = new double[ct];
@@ -442,7 +446,7 @@ ShapeFormat::poly_deinit(const route_head* rte)
   // to SHPT_ARC.
   // We could potentially write SHPT_ARCZ, but we would have
   // to address what to do when we don't have altitude data.
-  assert(rte->rte_waypt_ct == poly_count);
+  assert(rte->rte_waypt_ct() == poly_count);
   SHPObject* shpobject = SHPCreateSimpleObject(SHPT_ARC, poly_count,
                          polybufx, polybufy, polybufz);
   int iShape = SHPWriteObject(ohandle, -1,  shpobject);

@@ -22,13 +22,13 @@
 #ifndef NMEA_H_INCLUDED_
 #define NMEA_H_INCLUDED_
 
-#include <QtCore/QByteArray>  // for QByteArray
-#include <QtCore/QDate>       // for QDate
-#include <QtCore/QDateTime>   // for QDateTime
-#include <QtCore/QList>       // for QList
-#include <QtCore/QString>     // for QString
-#include <QtCore/QTime>       // for QTime
-#include <QtCore/QVector>     // for QVector
+#include <QByteArray>         // for QByteArray
+#include <QDate>              // for QDate
+#include <QDateTime>          // for QDateTime
+#include <QList>              // for QList
+#include <QString>            // for QString
+#include <QTime>              // for QTime
+#include <QVector>            // for QVector
 #include <map>
 
 #include "defs.h"

@@ -10,10 +10,6 @@ rm -f ${TMPDIR}/ov2.out
 gpsbabel -i geo -f ${REFERENCE}/gl.loc -o tomtom -F ${TMPDIR}/ov2.out
 compare ${REFERENCE}/ov2-geo-out.ref ${TMPDIR}/ov2.out
 
-rm -f ${TMPDIR}/ov2.out
-gpsbabel -i tomtom -f ${REFERENCE}/ov2-geo-out.ref -o gpsutil -F ${TMPDIR}/ov2.out
-compare ${REFERENCE}/ov2-in.ref ${TMPDIR}/ov2.out
-
 # round trip test including CP-1252 conversion
 rm -f ${TMPDIR}/tomtom.gpx
 gpsbabel -i tomtom -f ${REFERENCE}/tomtom.ov2 -o gpx -F ${TMPDIR}/tomtom.gpx

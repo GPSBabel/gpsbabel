@@ -20,8 +20,8 @@
 #ifndef XMLSTREAMWRITER_H
 #define XMLSTREAMWRITER_H
 
-#include <QtCore/QString>           // for QString
-#include <QtCore/QXmlStreamWriter>  // for QXmlStreamWriter
+#include <QString>                  // for QString
+#include <QXmlStreamWriter>         // for QXmlStreamWriter
 
 namespace gpsbabel
 {

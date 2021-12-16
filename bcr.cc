@@ -30,9 +30,9 @@
 #include <cstdio>           // for printf, snprintf, sscanf
 #include <cstdlib>          // for atof, atoi
 
-#include <QtCore/QString>   // for QString, operator+
-#include <QtCore/Qt>        // for CaseInsensitive
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>          // for QString, operator+
+#include <Qt>               // for CaseInsensitive
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "csv_util.h"       // for csv_stringclean
@@ -252,7 +252,7 @@ bcr_data_read()
     route->rte_name = routename;
   }
 
-  for (int index = 1; index > 0; index ++) {
+  for (int index = 1; ; index++) {
     char station[32];
     QString str;
     int mlat, mlon;		/* mercator data */
@@ -297,7 +297,7 @@ bcr_data_read()
   }
 
   /* remove empty route */
-  if (route->rte_waypt_ct == 0) {
+  if (route->rte_waypt_ct() == 0) {
     route_del_head(route);
   } else {
     bcr_create_waypts_from_route(route);

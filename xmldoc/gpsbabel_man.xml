@@ -1,10 +1,19 @@
 <!DOCTYPE refentry
-  PUBLIC '-//OASIS//DTD DocBook XML V4.1.2//EN'
-  'http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd'>
-<refentry id="ls">
+  PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN'
+  'http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd'>
+<refentry id="gpsbabel">
+  <refentryinfo>
+    <author>
+      <authorblurb>
+        <para>Robert Lipe et al.</para>
+      </authorblurb>
+    </author>
+  </refentryinfo>
   <refmeta>
     <refentrytitle>gpsbabel</refentrytitle>
     <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GPSBabel</refmiscinfo>
+    <refmiscinfo class="manual">GPSBabel manual</refmiscinfo>
   </refmeta>
   <refnamediv>
     <refname>gpsbabel</refname>
@@ -13,7 +22,7 @@
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
-      <userinput>gpsbabel</userinput>
+      <command>gpsbabel</command>
       <arg choice="opt">
         <option>iofFxsh</option>
       </arg>
@@ -39,7 +48,7 @@ or as the backend for other tools. </para>
   <refsect1>
     <title>Options</title>
     <para>GPSBabel accepts the following options and processes them in order
-  from left to right..  Additional options are documented in the
+  from left to right.  Additional options are documented in the
   docbook help.
 </para>
     <variablelist>
@@ -103,13 +112,13 @@ or as the backend for other tools. </para>
           <option>-s</option>
         </term>
         <listitem>
-          <para>Generate smart names for waypoints on output.</para>
+          <para>Generate short names for waypoints on output.</para>
         </listitem>
       </varlistentry>
       <varlistentry>
         <term>
           <option>-h</option>
-          <arg choice="opt">format</arg>
+          <optional>format</optional>
         </term>
         <listitem>
           <para>Display help that is more exhaustive than this page.  If

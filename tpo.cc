@@ -2,11 +2,13 @@
     National Geographic Topo! TPO file support.
     2.x support contributed to gpsbabel by Steve Chamberlin.
     3.x support contributed to gpsbabel by Curt Mills.
+    4.x files read properly when treated as 3.x (final release was 4.5)
+    track parsing bugs fixed by Steve Eckert in 2012 and 2020
 
-    Topo! version 2.x:  Tracks are implemented.
-    Topo! version 3.x:  Reading of Tracks/Waypoints/Routes is
-                        implemented.  Also extracts Map Notes/
-                        Symbols/Text Labels as Waypoints.
+    Topo! version 2.x:      Tracks are implemented.
+    Topo! version 3.x/4.x:  Reading of Tracks/Waypoints/Routes is
+                            implemented.  Also extracts Map Notes/
+                            Symbols/Text Labels as Waypoints.
 
     Copyright (C) 2005 Steve Chamberlin, slc at alum.mit.edu
     Portions Copyright (C) 2006 Curtis E. Mills, archer at eskimo dot com
@@ -27,13 +29,6 @@
 
  */
 
-
-/*
- ***** This format has problems and the author hasn't returned emails
- * on it, so we've set the format type to 'ff_type_internal' to make it
- * disappear from the various lists...
- */
-
 /*
  TPO format notes:
  -----------------
@@ -50,6 +45,10 @@
 
  Older (pre-3.0) format does not have the above string.  Contains
  only tracks.  Waypoints are saved in a separate .TPG file.
+
+ Track parsing has been problematic and may still not be right!
+ See further notes and clues in tpo_process_tracks()
+ (can #define Tracks2012 to revert to pre-2020 code in tpo_process_tracks)
 
  May contain these strings:
     Frmt:   String:
@@ -77,12 +76,11 @@
 #include <cstring>                     // for strncmp, strlen, memset
 #include <vector>                      // for vector
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QChar>                // for operator==, QChar
-#include <QtCore/QCharRef>             // for QCharRef
-#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
-#include <QtCore/QString>              // for QString
-#include <QtCore/QtGlobal>             // for qPrintable, Q_UNUSED
+#include <QByteArray>                  // for QByteArray
+#include <QChar>                       // for operator==, QChar
+#include <QScopedArrayPointer>         // for QScopedArrayPointer
+#include <QString>                     // for QString
+#include <QtGlobal>                    // for qPrintable, Q_UNUSED
 
 #include "defs.h"
 #include "gbfile.h"                    // for gbfread, gbfgetc, gbfgetint32, gbfwrite, gbfputint16, gbfseek, gbfgetdbl, gbfgetint16, gbfputdbl, gbfclose, gbfputint32, gbfile, gbfopen_le, gbfgetuint16
@@ -99,10 +97,14 @@ static char* output_state = nullptr;
 #ifdef ENABLE_TPO_WRITE
 static
 QVector<arglist_t> tpo2_args = {
-	{ "dumpheader", &dumpheader, "Display the file header bytes",
-		"0", ARGTYPE_BOOL, ARG_NOMINMAX} ,
-	{ "state", &output_state, "State map format to write, default=CA",
-	  "CA", ARGTYPE_STRING, ARG_NOMINMAX} ,
+  {
+    "dumpheader", &dumpheader, "Display the file header bytes",
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "state", &output_state, "State map format to write, default=CA",
+    "CA", ARGTYPE_STRING, ARG_NOMINMAX
+  },
 };
 #else
 //
@@ -373,23 +375,31 @@ static void tpo_read_2_x()
 //
 static int tpo_read_int()
 {
+  constexpr int debug = 0;
+
   auto val = (unsigned char) gbfgetc(tpo_file_in);
 
   switch (val) {
 
   case 0xff:  // 32-bit value
-//printf("Found 32-bit value indicator: %x\n", val);
-    return(gbfgetint32(tpo_file_in));
+    if constexpr(debug) {
+      printf("Found 32-bit value indicator: %x\n", val);
+    }
+    return (gbfgetint32(tpo_file_in));
     break;
 
   case 0xfe:  // 16-bit value
-//printf("Found 16-bit value indicator: %x\n", val);
-    return(gbfgetuint16(tpo_file_in));
+    if constexpr(debug) {
+      printf("Found 16-bit value indicator: %x\n", val);
+    }
+    return (gbfgetuint16(tpo_file_in));
     break;
 
   default:    // 8-bit value
-//printf("Found 8-bit value: %x\n", val);
-    return((int)val);
+    if constexpr(debug) {
+      printf("Found 8-bit value: %x\n", val);
+    }
+    return ((int)val);
     break;
   }
 }
@@ -407,12 +417,12 @@ static int tpo_read_int()
 // Returns -1 if block not found
 //          0 if block found
 //
-// For version 3.x files.
+// For version 3.x/4.x files.
 //
 static int tpo_find_block(unsigned int block_desired)
 {
   unsigned int block_type;
-
+  constexpr int debug = 0;
 
   // Skip 512 byte fixed-length header
   unsigned int block_offset = 512;
@@ -424,16 +434,18 @@ static int tpo_find_block(unsigned int block_desired)
 
     // Read record type
     block_type = gbfgetint32(tpo_file_in);
-// printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
+    if constexpr(debug) {
+      printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
+    }
 
     // Read offset to next record
     block_offset = gbfgetint32(tpo_file_in);
   } while (block_type != block_desired && block_offset != 0);
 
   if (block_type == block_desired) {
-    return(0);
+    return (0);
   } else {
-    return(-1);
+    return (-1);
   }
 }
 
@@ -476,37 +488,39 @@ static Waypoint* tpo_convert_ll(int lat, int lon)
 
 //printf("lat: %f\tlon: %f\tNew Height: %f\n", waypoint_temp->latitude, waypoint_temp->longitude, height);
 
-  return(waypoint_temp);
+  return (waypoint_temp);
 }
 
 #define TRACKNAMELENGTH 255
-class StyleInfo {
+class StyleInfo
+{
 public:
   QString name;
-  uint8_t color[3]{0, 0, 0};  // keep R/G/B values separate because line_color needs BGR
+  uint8_t color[3] {0, 0, 0}; // keep R/G/B values separate because line_color needs BGR
   uint8_t wide{0};
   uint8_t dash{0};
 };
 
-// Track decoder for version 3.x files.  This block contains tracks
-// (called "freehand routes" or just "routes" in Topo).
-//
+// Track decoder for version 3.x/4.x files.
+// This block contains tracks (called "freehand routes" in Topo).
 static void tpo_process_tracks()
 {
-  const int DEBUG = 0;
+  constexpr int debug = 0; // 0-4 for increasingly verbose output in this subroutine)
 
-  if (DEBUG) {
+  if constexpr(debug) {
     printf("Processing Track Styles... (added in 2012 by SRE)\n");
   }
   // Find block 0x050000 (definitions of styles for free-hand routes)
   if (tpo_find_block(0x050000)) {
-    // printf("Found no track styles, skipping tracks\n");
+    if constexpr(debug) {
+      printf("Found no track styles, skipping tracks entirely\n");
+    }
     return;
   }
   // Read the number of track styles.
   unsigned int track_style_count = tpo_read_int(); // 8 bit value
 
-  if (DEBUG) {
+  if constexpr(debug) {
     printf("Unpacking %u track styles...\n",track_style_count);
   }
 
@@ -518,29 +532,35 @@ static void tpo_process_tracks()
     for (unsigned xx = 0; xx < 2; xx++) {
       unsigned int skipped = (unsigned char) gbfgetc(tpo_file_in);
       Q_UNUSED(skipped)
-      // printf("Skipping unknown (visibility?) byte 0x%x\n", skipped);
+      if constexpr(debug > 1) {
+        printf("Skipping unknown byte 0x%x (? per-zoom-level visibility ?)\n", skipped);
+      }
     }
 
     // next three bytes are RGB color, fourth is unknown
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
-    for (unsigned char &xx : styles[ii].color) {
+    for (unsigned char& xx : styles[ii].color) {
       int col = gbfgetc(tpo_file_in);
       if ((col < 0) || (col >255)) {
-        col = 0; // assign black if out of range 0x00 to 0xff
+        col = 0; // assign black if out of range (0x00 to 0xff)
       }
-        xx = (uint8_t)col;
+      xx = (uint8_t)col;
     }
 
     unsigned char tmp = gbfgetc(tpo_file_in);
     Q_UNUSED(tmp)
-    // printf("Skipping unknown byte 0x%x after color\n",tmp);
+    if constexpr(debug > 2) {
+      printf("Skipping unknown byte 0x%x after color (? always zero ?)\n",tmp);
+    }
 
-    // byte for name length, then name
+    // byte for track style name length, then name itself
     tmp = gbfgetc(tpo_file_in);
     // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
-    // printf("Track %d has %d-byte (0x%x) name\n", ii, tmp, tmp);
+    if constexpr(debug > 1) {
+      printf("Track style %u has %d-byte (0x%x) name\n", ii, tmp, tmp);
+    }
     if (tmp >= TRACKNAMELENGTH) {
-      printf("ERROR! Found track style over TRACKNAMELENGTH chars, skipping all tracks!\n");
+      printf("ERROR! Found track style name over %d chars, skipping all tracks!\n",TRACKNAMELENGTH);
       return;
     }
     if (tmp) {
@@ -548,6 +568,7 @@ static void tpo_process_tracks()
     } else { // Assign a generic style name
       styles[ii].name = QString("STYLE %1").arg(ii);
     }
+#ifdef Tracks2012
     //TBD: Should this be TRACKNAMELENGTH?
     for (unsigned xx = 0; xx < 3; xx++) {
       if (styles[ii].name[xx] == ',') {
@@ -557,6 +578,11 @@ static void tpo_process_tracks()
         styles[ii].name[xx] = '_';
       }
     }
+#else
+    // Should limit be TRACKNAMELENGTH? No! But also should not be '3' like it was.
+    styles[ii].name.replace(',', '_');
+    styles[ii].name.replace('=', '_');
+#endif
 
     // one byte for line width (value 1-4), one byte for 'dashed' boolean
     styles[ii].wide = (uint8_t) gbfgetc(tpo_file_in);
@@ -565,39 +591,49 @@ static void tpo_process_tracks()
     // clumsy way to skip two undefined bytes
     for (unsigned xx = 0; xx < 2; xx++) {
       tmp = gbfgetc(tpo_file_in);
-      // printf("Skipping final byte 0x%x\n", tmp);
+      if constexpr(debug > 2) {
+        printf("Skipping trailing line style byte 0x%x (? always zero ?)\n", tmp);
+      }
     }
 
-    if (DEBUG) {
+    if constexpr(debug) {
       printf("Track style %u: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",
-             ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2],
-             styles[ii].wide, styles[ii].dash, qPrintable(styles[ii].name));
+             ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2], styles[ii].wide, styles[ii].dash, qPrintable(styles[ii].name));
     }
   }
 
-  if (DEBUG) {
-    printf("Processing Tracks... found %u track styles\n", track_style_count);
+  if constexpr(debug) {
+    printf("Done Processing Track Styles... found %u styles\n", track_style_count);
   }
 
   // Find block 0x060000 (free-hand routes) (original track code, pre-2012, without styles)
   if (tpo_find_block(0x060000)) {
+    if constexpr(debug) {
+      printf("Found no track data block, skipping all tracks!\n");
+    }
     return;
   }
 
   // Read the number of tracks.  Can be 8/16/32-bit value.
   unsigned int track_count = tpo_read_int();
 
-  if (DEBUG) {
-    printf("Total Tracks: %u\n", track_count);
+  if constexpr(debug) {
+    printf("Number of tracks in file: %u\n", track_count);
   }
 
   if (track_count == 0) {
+    if constexpr(debug) {
+      printf("Found no track data, even though there was a track data block!\n");
+    }
     return;
   }
 
   // Read/process each track in the file
   //
   for (unsigned ii = 0; ii < track_count; ii++) {
+    if constexpr(debug > 1) {
+      printf("\nStarting Track %u",ii+1);
+    }
     int lat = 0;
     int lon = 0;
     char rgb[7],bgr[7];
@@ -613,7 +649,7 @@ static void tpo_process_tracks()
     unsigned int track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
     track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
 
-    // Can be 8/16/32-bit value - never used?
+    // Can be 8/16/32-bit value - never used? length in meters?
     track_length = tpo_read_int();
 
 //UNKNOWN DATA LENGTH
@@ -621,9 +657,15 @@ static void tpo_process_tracks()
     QString track_name;
     if (name_length) {
       gbfread(track_name, 1, name_length, tpo_file_in);
+      if constexpr(debug > 2) {
+        printf(", length %.0fm?, named %s\n", track_length, qPrintable(track_name));
+      }
     } else { // Assign a generic track name
       track_name = "TRK ";
       track_name += QString::number(ii + 1);
+      if constexpr(debug > 2) {
+        printf(", length %.0fm?, inventing name %s\n", track_length, qPrintable(track_name));
+      }
     }
     track_temp->rte_name = track_name;
 
@@ -643,19 +685,17 @@ static void tpo_process_tracks()
     //  (what are correct values for KML or other outputs??)
     track_temp->line_width = styles[track_style].wide;
 
-    if (DEBUG) printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-                        qPrintable(track_name), line_type, 
-                        qPrintable(styles[track_style].name),
-                        styles[track_style].wide,
-                        styles[track_style].dash,rgb);
+    if constexpr(debug) {
+      printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
+             qPrintable(track_name), line_type, qPrintable(styles[track_style].name), styles[track_style].wide, styles[track_style].dash,rgb);
+    }
 
     // Track description
-    track_temp->rte_desc = 
-      QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
-                         .arg(styles[track_style].name)
-                         .arg(styles[track_style].wide)
-                         .arg(styles[track_style].dash)
-                         .arg(rgb);
+    track_temp->rte_desc = QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
+                           .arg(styles[track_style].name)
+                           .arg(styles[track_style].wide)
+                           .arg(styles[track_style].dash)
+                           .arg(rgb);
 
     // Route number
     track_temp->rte_num = ii + 1;
@@ -664,31 +704,103 @@ static void tpo_process_tracks()
     unsigned int track_byte_count = tpo_read_int();
 
     // Read the number of bytes specified for the track.  These
-    // contain scaling factors, long/lat's, and offsets from
-    // those long/lat's.  First will be a long/lat (8 bytes).
+    // contain scaling factors, lon/lat's, and offsets from
+    // those long/lat's.  First will be a lon/lat (8 bytes).
     // Keep track of the bytes as we go so that we know how many
     // we've read.  We need to do this so that we start at the
     // proper place for the next track.
+
+    /* track points vs. hex data - best guess as of 2020
+     - must start with full coords for track point, 8 bytes total (4 lon, then 4 lat)
+     - note that most significant byte is at the right end below
+     - double zero bytes in the next 4-byte segment implies scale factor (possible future bug)
+     - WARNING: scale factor appears to be either lon or lon-then-lat (may be 4 or 8 bytes!)
+     - after read scale factors, 1 or 2, next data is a single byte per scaled trackpoint
+     - zero single byte implies end to scaled points, full point OR scaling follows
+     - full point is followed by scaled points UNLESS next byte is 0x88 tag
+     - scale factor(s) remain(s) the same until re-specified
+
+    SAMPLE HEX DATA:
+    lon tpt 1 = byte 0: 44 7e a7 c4 (most  significant bytes can NOT be zero for points - REALLY??)
+    lat tpt 2 = byte 4: f1 22 4d 12 (least significant bytes can NOT be 0x88 for points - REALLY??)
+        + after full point, can have scaling or 0x88 for another full point or single byte to be scaled
+    lonscale =  byte 8: fe 00 00 00 (look-ahead in segments of 4 bytes, 2 zeros implies scaling)
+    latscale =  byte12: cd 00 00 00
+        + after scaling (one or two), can have 0x88 for full point or more scaling or single byte to be scaled
+    adj tpt 2     byte 16: f4
+    adj tpt 3     byte 17: 04
+    adj tpt 4     byte 18: 04
+    zero found at byte 19: 00 (next will be full wpt, because next does not have two zeros)
+        + list of single bytes to be scaled can only end with 0x00, can then have full point or scaling
+    lon tpt 5 = byte 20: f2 7c a7 c4
+    lat tpt 5 = byte 24: 16 30 4d 12
+        + after full point, can have scaling or 0x88 for another full point or single byte to be scaled
+    adj tpt 6     byte 28: 20
+    adj tpt 7     byte 29: 13
+    adj tpt 8     byte 30: dc
+    zero found at byte 31: 00 (but next is NOT full wpt) two zeros case not handled until 2020
+        + list of single bytes to be scaled can only end with 0x00, can then have full point or scaling
+    lonscale =  byte 32: 66 00 00 00 (apparently OK to skip latscale, and to specify scale but not use it!)
+        + after scaling (one or two), can have 0x88 for full point or more scaling or single byte to be scaled
+    0x88 at byte 36: 88 (next will be full wpt)
+    lon: f6 7a a7 c4
+    lat: 7d 36 4d 12
+        + after full point, can have scaling or 0x88 for another full point or single byte to be scaled
+    0x88 at byte 45: 88 (next will be full wpt)
+    lon: fe 76 a7 c4
+    lat: e3 3c 4d 12
+    (etc)
+    */
 
     // Read the track bytes into a buffer
     auto* buf = (unsigned char*) xmalloc(track_byte_count);
     gbfread(buf, 1, track_byte_count, tpo_file_in);
 
+    // these can be set repeatedly, and retain their value between settings
+    //  (even if not used for every trackpoint)
     int latscale = 0;
     int lonscale = 0;
 
-    // Process the track bytes
-    int llvalid = 0;
-    for (unsigned int jj = 0; jj < track_byte_count;) {
-      Waypoint* waypoint_temp;
+#ifdef Tracks2012
+    int llvalid = 0; // boolean has been replaced with multiple modes
+#else
+#define EndScalePoints 0
+#define CheckLonScale  1
+#define CheckLatScale  2
+#define Check0x88Tag   3
+#define ScaleOneByte   4
+#define CheckZeroTag   5
+#define GetFullPoint   6
+    const char* tpmodeshow[7] = { "EndScalePoints", "CheckLonScale", "CheckLatScale", "Check0x88Tag", "ScaleOneByte", "CheckZeroTag", "GetFullPoint" };
+    int tpmode = GetFullPoint; // prior to 2020 we used "llvalid" (boolean), which did not provide enough flow control
+#define EndScaleTag    0x00
+#define FullPointTag   0x88
+#endif
 
+    // Process the track bytes - ugly flow control due to many special cases in file structure
+    int cnttp = 0; // just for debug stroking
+    float lastlat = 0.0; // to catch discontinuities we can't seem to fix
+    float lastlon = 0.0;
+    for (unsigned int jj = 0; jj < track_byte_count;) { // NO INCREMENT - advance "jj" in the loop
+      Waypoint* waypoint_temp;
+#ifdef Tracks2012
+      if constexpr(debug > 3) {
+        printf("%02x %02x %02x %02x - byte %u, track %u, llvallid=%d\n",
+               buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], jj, ii+1, llvalid);
+      }
       // Time to read a new latlong?
       if (!llvalid) {
 
         lon = le_read32(buf+jj);
+        if constexpr(debug > 3) {
+          printf("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
+        }
         jj+=4;
 
         lat = le_read32(buf+jj);
+        if constexpr(debug > 3) {
+          printf("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
+        }
         jj+=4;
 
 //printf("L");
@@ -702,6 +814,9 @@ static void tpo_process_tracks()
             && !buf[jj+2]) {
 
           lonscale = le_read32(buf+jj);
+          if constexpr(debug > 3) {
+            printf("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
+          }
 //printf(" LONSCALE:");
 //printf("%02x%02x%02x%02x", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
           jj+=4;
@@ -715,6 +830,9 @@ static void tpo_process_tracks()
             && !buf[jj+2]) {
 
           latscale = le_read32(buf+jj);
+          if constexpr(debug > 3) {
+            printf("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
+          }
 //printf(" LATSCALE:");
 //printf("%02x%02x%02x%02x ", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
           jj+=4;
@@ -723,18 +841,124 @@ static void tpo_process_tracks()
 
         waypoint_temp = tpo_convert_ll(lat, lon);
         track_add_wpt(track_temp, waypoint_temp);
+        cnttp++;
+        if constexpr(debug > 3) {
+          printf("Adding BASIC trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+        }
+      }
+#else
+      if constexpr(debug > 3) {
+        printf("%02x %02x %02x %02x = bytes %u-%u (track %u, mode now %s)\n",
+               buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], jj, jj+3, ii+1, tpmodeshow[tpmode]);
       }
 
+      // read 8-byte lon+lat, required at start of track or after 0x88 tag
+      if (tpmode == GetFullPoint) {
+        lon = le_read32(buf+jj);
+        if constexpr(debug > 3) {
+          printf("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
+        }
+        jj+=4;
+
+        lat = le_read32(buf+jj);
+        if constexpr(debug > 3) {
+          printf("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
+        }
+        jj+=4;
+
+        waypoint_temp = tpo_convert_ll(lat, lon);
+        track_add_wpt(track_temp, waypoint_temp);
+        cnttp++;
+        if (((abs(waypoint_temp->latitude - lastlat) > 1.0) && lastlat) || ((abs(waypoint_temp->longitude - lastlon) > 1.0) && lastlon)) {
+          printf("WARNING! Track '%s' point #%d is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", qPrintable(track_name), cnttp);
+        }
+        lastlat = waypoint_temp->latitude;
+        lastlon = waypoint_temp->longitude;
+
+        if constexpr(debug > 3) {
+          printf("Adding BASIC trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+        }
+
+        // after full point, can have scaling or 0x88 for another full point or single byte to be scaled
+        if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
+          tpmode = CheckLonScale;
+        } else {
+          tpmode = Check0x88Tag;
+        }
+        continue; // for jj
+      }
+
+      // look ahead to identify 4 bytes of scale factor (lon first, then lat optional)
+      // last two bytes must be zero, allow 16 bits of "offset" to calculate trackpoints from deltas
+      // Note that lonscale can begin with 0x88, which should not be confused with GetFullPoint tags.
+      if (tpmode == CheckLonScale) {
+        if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
+          lonscale = le_read32(buf+jj);
+          if constexpr(debug > 3) {
+            printf("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
+          }
+          jj+=4;
+          tpmode = CheckLatScale;
+          continue; // for jj
+        }
+
+        // after scaling (one or two), can have 0x88 for full point or more scaling (above) or single byte to be scaled
+        tpmode = Check0x88Tag;
+        continue; // for jj
+      }
+
+      // look ahead to identify 4 bytes of scale factor (lat is optional)
+      // last two bytes must be zero, allow 16 bits of "offset" to calculate trackpoints from deltas
+      // Note that latscale can begin with 0x88, which should not be confused with GetFullPoint tags.
+      if (tpmode == CheckLatScale) {
+        if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
+          latscale = le_read32(buf+jj);
+          if constexpr(debug > 3) {
+            printf("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
+          }
+          jj+=4;
+        }
+
+        // after scaling (two), can have 0x88 for full point or single byte to be scaled
+        tpmode = Check0x88Tag;
+        continue; // for jj
+      }
+#endif
+
+#ifdef Tracks2012
       // Check whether there's a lonlat coming up instead of
       // offsets.
       else if (buf[jj] == 0x88) {
+        if constexpr(debug > 3) {
+          printf("%02x should mean full lat/lon comes next (byte %u)\n",buf[jj],jj);
+        }
         jj++;
         llvalid = 0;
       }
+#else
+      // Check whether 8 bytes of lon+lat are next, instead of offsets or another scaling spec.
+      // 0x88 is a tag that signals a full trackpoint will follow
+      if (tpmode == Check0x88Tag) {
+        if (buf[jj] == FullPointTag) {
+          if constexpr(debug > 3) {
+            printf("%02x should mean full lat/lon comes next (byte %u)\n",buf[jj],jj);
+          }
+          jj++;
+          tpmode = GetFullPoint;
+          continue;
+        }
+        tpmode = ScaleOneByte; // only if no 0x88 tag
+        continue; // for jj
+      }
+#endif
 
+#ifdef Tracks2012
       // Check whether there's a lonlat + lonscale/latscale
       // combo embedded in this track next.
       else if (buf[jj] == 0x00) {
+        if constexpr(debug > 3) {
+          printf("%02x should mean full lat/lon or lonscale/latscale comes next (at byte %u)\n",buf[jj],jj);
+        }
 //printf(" ZERO ");
         jj++;
         llvalid = 0;
@@ -743,6 +967,9 @@ static void tpo_process_tracks()
       // Process the delta
       else {
         static const int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1};
+        if constexpr(debug) {
+          printf("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
+        }
 
 
         if (buf[jj] == 0) {
@@ -753,22 +980,95 @@ static void tpo_process_tracks()
           fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
         }
 
+
+        if constexpr(debug > 3) {
+          printf("%02x - adjusting prev lat/lon from %i/%i", buf[jj], lat, lon);
+        }
         lon += lonscale * scarray[buf[jj] >> 4];
         lat += latscale * scarray[(buf[jj] & 0xf)];
+        if constexpr(debug > 3) {
+          printf(" to %i/%i, byte %u\n", lat, lon, jj);
+        }
 //printf(".");
         jj++;
 
         waypoint_temp = tpo_convert_ll(lat, lon);
         track_add_wpt(track_temp, waypoint_temp);
+        cnttp++;
+        if constexpr(debug > 3) {
+          printf("Adding ADJUSTED trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+        }
       }
-    }
+#else
+      // ScaleOneByte applies lonscale and latscale to a single byte to create an 8-byte lat+lon
+      // EndScalePoints (0) is a tag that signals an end to adjusted trackpoints (full point or scale may follow)
+      if (tpmode == ScaleOneByte) {
 
+        // list of single bytes to be scaled can only end with 0x00, can then have full point or scaling
+        if (buf[jj] == EndScaleTag) {
+          if constexpr(debug > 3) {
+            printf("%02x should mean full lat/lon or lonscale/latscale comes next (at byte %u)\n",buf[jj],jj);
+          }
+          jj++;
+          tpmode = GetFullPoint;
+          if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
+            tpmode = CheckLonScale;
+          }
+          continue; // for jj
+        }
+
+        if (buf[jj] == FullPointTag) {
+          if constexpr(debug > 3) {
+            printf("%02x should mean full lat/lon comes next (at byte %u)\n",buf[jj],jj);
+          }
+          jj++;
+          tpmode = GetFullPoint;
+          continue; // for jj
+        }
+
+        // Process the delta: stored only one byte per track point, expand into full coords here
+        static const int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1}; // MAGIC! (no idea where this comes from)
+
+        if constexpr(debug) {
+          printf("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
+        }
+        if (buf[jj] == 0) {
+          fatal(MYNAME ": Found unexpected ZERO\n");
+        }
+
+        if ((latscale == 0) || (lonscale == 0)) {
+          fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x while trying to scale a single byte trackpoint\n", lonscale, latscale);
+        }
+
+        if constexpr(debug > 3) {
+          printf("%02x - adjusting prev lat/lon from %i/%i", buf[jj], lat, lon);
+        }
+        lon += lonscale * scarray[buf[jj] >> 4];
+        lat += latscale * scarray[(buf[jj] & 0xf)];
+        if constexpr(debug > 3) {
+          printf(" to %i/%i, byte %u\n", lat, lon, jj);
+        }
+        jj++;
+
+        waypoint_temp = tpo_convert_ll(lat, lon);
+        track_add_wpt(track_temp, waypoint_temp);
+        cnttp++;
+        if constexpr(debug > 3) {
+          printf("Adding ADJUSTED trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+        }
+
+        if (((abs(waypoint_temp->latitude - lastlat) > 1) && lastlat) || ((abs(waypoint_temp->longitude - lastlon) > 1) && lastlon)) {
+          printf("WARNING! Track '%s' point #%i is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", qPrintable(track_name), cnttp);
+        }
+        lastlat = waypoint_temp->latitude;
+        lastlon = waypoint_temp->longitude;
+      } // if ScaleOneByte
+#endif
+
+    } // end for jj track_byte_count
     xfree(buf);
-  }
-}
-
-
-
+  } // end for ii track_count
+} // end of tpo_process_tracks
 
 
 // Global index to waypoints, needed for routes, filled in by
@@ -1643,7 +1943,7 @@ tpo_track_hdr(const route_head* rte)
   gbfwrite(bounding_box, 1, sizeof(bounding_box), tpo_file_out);
 
   /* number of route points */
-  gbfputint16(rte->rte_waypt_ct, tpo_file_out);
+  gbfputint16(rte->rte_waypt_ct(), tpo_file_out);
 
   /* initialize the track length computation */
   track_length = 0;

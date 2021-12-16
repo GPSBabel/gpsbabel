@@ -21,19 +21,17 @@
 #ifndef CSV_UTIL_H_INCLUDED_
 #define CSV_UTIL_H_INCLUDED_
 
-#include <QtCore/QString>      // for QString
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
 
 #include "defs.h"
+
 
 /* function prototypes */
 
 QString
 csv_stringclean(const QString& source, const QString& to_nuke);
 
-char*
-csv_stringtrim(const char* string, const char* enclosure, int strip_max);
-QString
-csv_stringtrim(const QString& source, const QString& enclosure);
 QString
 csv_stringtrim(const QString& string, const QString& enclosure, int strip_max);
 QString
@@ -43,8 +41,6 @@ csv_dequote(const QString& string, const QString& enclosure);
 
 enum class CsvQuoteMethod {historic, rfc4180};
 
-char*
-csv_lineparse(const char* stringstart, const char* delimited_by, const char* enclosed_in, int line_no);
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
               const QString& enclosed_in, const int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic);

@@ -26,9 +26,9 @@
 #include <cstdint>                 // for int16_t
 #include <ctime>                   // for gmtime
 
-#include <QtCore/QString>          // for QString
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QtGlobal>         // for foreach
+#include <QString>                 // for QString
+#include <QTime>                   // for QTime
+#include <QtGlobal>                // for foreach
 
 #include "defs.h"
 #include "gbfile.h"                // for gbfputint16, gbfclose, gbfopen, gbfputflt, gbfgetc, gbfputcstr, gbfputdbl, gbfread, gbfile

@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "src/core/xmlstreamwriter.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 #include <cstdio>
 
 static gbfile* ofd;
@@ -134,9 +134,9 @@ hiketech_format_time(const QDateTime& t)
 static void
 hiketech_trkpt_pr(const Waypoint* waypointp)
 {
-  writer.writeStartElement(QStringLiteral("pnt")); 
+  writer.writeStartElement(QStringLiteral("pnt"));
   if (waypointp->creation_time.isValid()) {
-    writer.writeTextElement(QStringLiteral("utc"), 
+    writer.writeTextElement(QStringLiteral("utc"),
                             hiketech_format_time(waypointp->GetCreationTime()));
   }
   writer.writeTextElement(QStringLiteral("lat"), QString::number(waypointp->latitude,'f', 6));
@@ -150,13 +150,13 @@ hiketech_trkpt_pr(const Waypoint* waypointp)
 static void
 hiketech_waypt_pr(const Waypoint* wpt)
 {
-  writer.writeStartElement(QStringLiteral("wpt")); 
+  writer.writeStartElement(QStringLiteral("wpt"));
   writer.setAutoFormattingIndent(-1);
   writer.writeTextElement(QStringLiteral("ident"), wpt->shortname);
   writer.writeTextElement(QStringLiteral("sym"), wpt->icon_descr);
   writer.writeTextElement(QStringLiteral("lat"), QString::number(wpt->latitude, 'f', 6));
   writer.writeTextElement(QStringLiteral("long"), QString::number(wpt->longitude, 'f', 6));
-  writer.writeStartElement(QStringLiteral("color")); 
+  writer.writeStartElement(QStringLiteral("color"));
   writer.writeTextElement(QStringLiteral("lbl"), QStringLiteral("FAFFB4"));
   writer.writeTextElement(QStringLiteral("obj"), QStringLiteral("FF8000"));
   writer.writeEndElement(); // color

@@ -23,7 +23,7 @@
 #ifndef VALIDATE_H_INCLUDED_
 #define VALIDATE_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for route_head (ptr only), ARGTYPE_BOOL, ARG_NOMINMAX
 #include "filter.h"  // for Filter

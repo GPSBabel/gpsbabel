@@ -1,6 +1,7 @@
 /*
  * darwin backend for libusb 1.0
- * Copyright © 2008-2015 Nathan Hjelm <hjelmn@users.sourceforge.net>
+ * Copyright © 2008-2019 Nathan Hjelm <hjelmn@users.sourceforge.net>
+ * Copyright © 2019      Google LLC. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +20,8 @@
 
 #if !defined(LIBUSB_DARWIN_H)
 #define LIBUSB_DARWIN_H
+
+#include <stdbool.h>
 
 #include "libusbi.h"
 
@@ -155,13 +158,14 @@ struct darwin_cached_device {
   UInt32                location;
   UInt64                parent_session;
   UInt64                session;
-  UInt16                address;
+  USBDeviceAddress      address;
   char                  sys_path[21];
   usb_device_t        **device;
   int                   open_count;
-  UInt8                 first_config, active_config, port;  
+  UInt8                 first_config, active_config, port;
   int                   can_enumerate;
   int                   refcount;
+  bool                  in_reenumerate;
 };
 
 struct darwin_device_priv {
@@ -169,7 +173,7 @@ struct darwin_device_priv {
 };
 
 struct darwin_device_handle_priv {
-  int                  is_open;
+  bool                 is_open;
   CFRunLoopSourceRef   cfSource;
 
   struct darwin_interface {

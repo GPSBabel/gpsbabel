@@ -191,10 +191,10 @@ bintime2utc(int date, int time) {
   int day = date % 100;
   date /= 100;
   int month = date % 100;
-  date /= 100; 
+  date /= 100;
   // What's left in 'date' is year.
   QDate dt(date + 2000, month, day);
-  
+
   return QDateTime(dt, tm, Qt::UTC);
 }
 

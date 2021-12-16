@@ -2,8 +2,8 @@
 # Polygon filter
 #
 rm -f ${TMPDIR}/polygon.txt
-gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
+gpsbabel -i unicsv -f ${REFERENCE}/arcdist_input.txt \
          -x polygon,file=${REFERENCE}/polygon_allencty.txt \
-         -o xmap -F ${TMPDIR}/polygon.txt
+         -o unicsv -F ${TMPDIR}/polygon.txt
 compare ${REFERENCE}/polygon_output.txt ${TMPDIR}/polygon.txt
 

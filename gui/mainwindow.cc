@@ -19,41 +19,41 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QDir>                 // for QDir
-#include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
-#include <QtCore/QFile>                // for QFile
-#include <QtCore/QFileInfo>            // for QFileInfo
-#include <QtCore/QLibraryInfo>         // for QLibraryInfo, QLibraryInfo::TranslationsPath
-#include <QtCore/QLocale>              // for QLocale
-#include <QtCore/QMimeData>            // for QMimeData
-#include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
-#include <QtCore/QSettings>            // for QSettings
-#include <QtCore/QString>              // for QString
-#include <QtCore/QStringList>          // for QStringList
-#include <QtCore/QTemporaryFile>       // for QTemporaryFile
-#include <QtCore/QTime>                // for QTime
-#include <QtCore/QUrl>                 // for QUrl
-#include <QtCore/QVariant>             // for QVariant
-#include <QtCore/Qt>                   // for SmoothTransformation, WaitCursor
-#include <QtCore/QtGlobal>             // for foreach
-#include <QtGui/QCursor>               // for QCursor
-#include <QtGui/QDesktopServices>      // for QDesktopServices
-#include <QtGui/QIcon>                 // for QIcon
-#include <QtGui/QImage>                // for QImage
-#include <QtGui/QTextCharFormat>       // for QTextCharFormat
-#include <QtWidgets/QAbstractButton>   // for QAbstractButton
-#include <QtWidgets/QApplication>      // for QApplication, qApp
-#include <QtWidgets/QCheckBox>         // for QCheckBox
-#include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
-#include <QtWidgets/QFileDialog>       // for QFileDialog
-#include <QtWidgets/QMessageBox>       // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
-#include <QtWidgets/QPlainTextEdit>    // for QPlainTextEdit
-#include <QtWidgets/QPushButton>       // for QPushButton
-#include <QtWidgets/QRadioButton>      // for QRadioButton
-#include <QtWidgets/QStackedWidget>    // for QStackedWidget
+#include <QByteArray>                  // for QByteArray
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QDir>                        // for QDir
+#include <QEvent>                      // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
+#include <QFile>                       // for QFile
+#include <QFileInfo>                   // for QFileInfo
+#include <QLibraryInfo>                // for QLibraryInfo, QLibraryInfo::TranslationsPath
+#include <QLocale>                     // for QLocale
+#include <QMimeData>                   // for QMimeData
+#include <QProcess>                    // for QProcess, QProcess::NotRunning
+#include <QSettings>                   // for QSettings
+#include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
+#include <QTemporaryFile>              // for QTemporaryFile
+#include <QTime>                       // for QTime
+#include <QUrl>                        // for QUrl
+#include <QVariant>                    // for QVariant
+#include <Qt>                          // for SmoothTransformation, WaitCursor
+#include <QtGlobal>                    // for foreach
+#include <QCursor>                     // for QCursor
+#include <QDesktopServices>            // for QDesktopServices
+#include <QIcon>                       // for QIcon
+#include <QImage>                      // for QImage
+#include <QTextCharFormat>             // for QTextCharFormat
+#include <QAbstractButton>             // for QAbstractButton
+#include <QApplication>                // for QApplication, qApp
+#include <QCheckBox>                   // for QCheckBox
+#include <QDialogButtonBox>            // for QDialogButtonBox
+#include <QFileDialog>                 // for QFileDialog
+#include <QMessageBox>                 // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
+#include <QPlainTextEdit>              // for QPlainTextEdit
+#include <QPushButton>                 // for QPushButton
+#include <QRadioButton>                // for QRadioButton
+#include <QStackedWidget>              // for QStackedWidget
 
 #include <cstdlib>                     // for exit
 
@@ -1091,7 +1091,9 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setComboToDevice(QComboBox* comboBox, const QString& name)
 {
   for (int i=0; i<comboBox->count(); i++) {
-    if (comboBox->itemText(i) == name) {
+    QString value = comboBox->itemData(i).isValid()?
+      comboBox->itemData(i).toString() : comboBox->itemText(i);
+    if (value == name) {
       comboBox->setCurrentIndex(i);
       break;
     }
@@ -1266,7 +1268,8 @@ void MainWindow::getWidgetValues()
     babelData_.inputType_ = BabelData::deviceType_;
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
-  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentText();
+  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentData().isValid()?
+    ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1279,7 +1282,8 @@ void MainWindow::getWidgetValues()
   } else {
     babelData_.outputType_ = BabelData::noType_;
   }
-  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentText();
+  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
+    ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();

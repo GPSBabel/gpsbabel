@@ -25,10 +25,10 @@
 #include <cstdlib>                      // for atoi
 #include <cstring>                      // for strncmp, memcpy, strcmp, strlen
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QString>               // for QString, operator+
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/QtGlobal>              // for qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QString>                      // for QString, operator+
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QtGlobal>                     // for qPrintable
 
 #include "defs.h"
 #include "gbfile.h"                     // for gbfgetdbl, gbfgetint32, gbfputint32, gbfgetint16, gbfputdbl, gbfputc, gbfread, gbfseek, gbfgetc, gbfile, gbfclose, gbfungetc, gbfeof, gbfputs, gbfwrite, gbfopen_le, gbfgetuint32, gbfputuint16, gbfputuint32
@@ -699,7 +699,7 @@ write_header(const route_head* trk)
 
   int count = 0;
   if (trk != nullptr) {
-    count = trk->waypoint_list.count();
+    count = trk->rte_waypt_ct();
   }
   if (!trk || trk->rte_name.isEmpty()) {
     write_str("Name", fout);
@@ -707,7 +707,7 @@ write_header(const route_head* trk)
     write_str(trk->rte_name, fout);
   }
 
-  // This fails for internationalization, but as this text is in the 
+  // This fails for internationalization, but as this text is in the
   // file itself, it shouldn't be localized.
   QString cout = QString::number(count) + " trackpoints and " +
                  QString::number(waypt_count()) + " waypoints";
@@ -777,7 +777,7 @@ dmtlog_write()
   gbfputint32(4, fout);
   gbfputint32(1, fout);
   gbfputint32(0x100001, fout);
-  gbfputuint32((const uint32_t)gpsbabel_time, fout);
+  gbfputuint32((uint32_t)gpsbabel_time, fout);
 
   header_written = 0;
   this_index = 0;

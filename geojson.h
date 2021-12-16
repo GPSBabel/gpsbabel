@@ -19,11 +19,10 @@
 #ifndef GEOJSON_H_INCLUDED_
 #define GEOJSON_H_INCLUDED_
 
-#include <QtCore/QJsonArray>         // for QJsonArray
-#include <QtCore/QJsonObject>        // for QJsonObject
-#include <QtCore/QStaticStringData>  // for QStaticStringData
-#include <QtCore/QString>            // for QString, QStringLiteral
-#include <QtCore/QVector>            // for QVector
+#include <QJsonArray>                // for QJsonArray
+#include <QJsonObject>               // for QJsonObject
+#include <QString>                   // for QString, QStringLiteral
+#include <QVector>                   // for QVector
 
 #include "defs.h"
 #include "format.h"                  // for Format

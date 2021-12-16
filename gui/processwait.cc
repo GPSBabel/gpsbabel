@@ -22,12 +22,12 @@
 //------------------------------------------------------------------------
 #include "processwait.h"
 
-#include <QtCore/QByteArray>          // for QByteArray
-#include <QtCore/Qt>                  // for Horizontal, WindowContextHelpButtonHint
-#include <QtGui/QTextCursor>          // for QTextCursor, QTextCursor::End
-#include <QtWidgets/QAbstractButton>  // for QAbstractButton
-#include <QtWidgets/QPushButton>      // for QPushButton
-#include <QtWidgets/QVBoxLayout>      // for QVBoxLayout
+#include <QByteArray>                 // for QByteArray
+#include <Qt>                         // for Horizontal, WindowContextHelpButtonHint
+#include <QTextCursor>                // for QTextCursor, QTextCursor::End
+#include <QAbstractButton>            // for QAbstractButton
+#include <QPushButton>                // for QPushButton
+#include <QVBoxLayout>                // for QVBoxLayout
 
 #include <cstdlib>                    // for abs
 #include <string>                     // for string

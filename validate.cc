@@ -37,10 +37,10 @@ void ValidateFilter::validate_head_trl(const route_head* header)
 {
   int segment_waypt_ct = point_ct - segment_ct_start;
   if (debug) {
-    fprintf(stderr, "%s %d ct: %d, waypt_count: %d\n", segment_type, header->rte_num,  segment_waypt_ct, header->rte_waypt_ct);
+    fprintf(stderr, "%s %d ct: %d, waypt_count: %d\n", segment_type, header->rte_num,  segment_waypt_ct, header->rte_waypt_ct());
   }
-  if (!debug && (segment_waypt_ct != header->rte_waypt_ct)) {
-    fatal(MYNAME ":%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct, segment_waypt_ct);
+  if (!debug && (segment_waypt_ct != header->rte_waypt_ct())) {
+    fatal(MYNAME ":%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), segment_waypt_ct);
   }
 }
 

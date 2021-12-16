@@ -1,7 +1,7 @@
 /* This file is machine-generated from the contents of style/ */
 /* by mkstyle.sh.   Editing it by hand is an exceedingly bad idea. */
 
-#include <QtCore/QVector>
+#include <QVector>
 #include "defs.h"
 #if CSVFMTS_ENABLED
 static char arc[] =
@@ -574,42 +574,6 @@ static char gpsdrivetrack[] =
   "# originally thought.\n"
   "# IFIELD	GMT_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
   "IFIELD	LOCAL_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
-  ;
-static char gpsman[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: GPSMAN Format\n"
-  "# Author: Alex Mottram\n"
-  "#   Date: 12/09/2002\n"
-  "#\n"
-  "#\n"
-  "# As defined in gpsman.c\n"
-  "#\n"
-  "#\n"
-
-  "DESCRIPTION		GPSman\n"
-  "SHORTLEN		8\n"
-  "SHORTWHITE		0\n"
-
-  "# FILE LAYOUT DEFINITIIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		TAB\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS		TAB\n"
-
-  "PROLOGUE	!Format: DDD 1 WGS 84\n"
-  "PROLOGUE	!W:\n"
-
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD	SHORTNAME, \"\", \"%-8.8s\"\n"
-  "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-  "IFIELD	LAT_DIRDECIMAL, \"\", \"%c%f\"\n"
-  "IFIELD	LON_DIRDECIMAL, \"\", \"%c%f\"\n"
-  "IFIELD	IGNORE, \"\", \"%s\"\n"
-
-  "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
   ;
 static char iblue747[] =
   "# GPSBabel XCSV Style File https://www.gpsbabel.org/htmldoc-development/Styles.html\n"
@@ -1385,112 +1349,7 @@ static char tomtom_itn_places[] =
   "IFIELD	SHORTNAME, \"\", \"%s\"\n"
   "IFIELD	CONSTANT, \"2\", \"%s\"\n"
   ;
-static char xmap[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: DeLorme Xmap Conduit\n"
-  "# Author: Alex Mottram\n"
-  "#   Date: 12/09/2002\n"
-  "#\n"
-  "#\n"
-  "# As defined in csv.c/xmap\n"
-  "#\n"
-
-  "DESCRIPTION		DeLorme XMap HH Native .WPT\n"
-  "EXTENSION		wpt\n"
-
-  "#\n"
-  "# FILE LAYOUT DEFINITIIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		COMMASPACE\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS		COMMA\n"
-
-  "PROLOGUE	BEGIN SYMBOL\n"
-  "EPILOGUE	END\n"
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD	LAT_HUMAN_READABLE, \"\", \"%08.5f\"\n"
-  "IFIELD	LON_HUMAN_READABLE, \"\", \"%08.5f\"\n"
-  "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-
-  "OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
-  "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
-  "OFIELD	DESCRIPTION, \"\", \"%s\"\n"
-  ;
-static char xmap2006[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: DeLorme Xmap/Street Atlas Handheld 2006 Conduit\n"
-  "# Author: Pasha Phares\n"
-  "#   Date: 5/5/2006\n"
-  "#\n"
-  "# Amazingly, 2006 won't read the \"COMMASPACE\" that we used in\n"
-  "# in Xmap prior to this and versions before 2006 won't read files\n"
-  "# separated by only a comma.\n"
-  "#\n"
-
-  "DESCRIPTION			DeLorme XMap/SAHH 2006 Native .TXT\n"
-  "EXTENSION			txt\n"
-
-  "#\n"
-  "# FILE LAYOUT DEFINITIIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		COMMA\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS			COMMA\n"
-
-  "PROLOGUE	BEGIN SYMBOL\n"
-  "EPILOGUE	END\n"
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD				LAT_HUMAN_READABLE, \"\", \"%.12g\"\n"
-  "IFIELD				LON_HUMAN_READABLE, \"\", \"%.12g\"\n"
-  "IFIELD				SHORTNAME, \"\", \"%s\"\n"
-
-  "OFIELD				LAT_DECIMAL, \"\", \"%.12g\"\n"
-  "OFIELD				LON_DECIMAL, \"\", \"%.12g\"\n"
-  "OFIELD				SHORTNAME, \"\", \"%s\"\n"
-
-
-
-
-  ;
-static char xmapwpt[] =
-  "# gpsbabel XCSV style file\n"
-  "#\n"
-  "# Format: DeLorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"
-  "# Author: Alex Mottram\n"
-  "#   Date: 12/09/2002\n"
-  "#\n"
-  "#\n"
-  "DESCRIPTION 		DeLorme XMat HH Street Atlas USA .WPT (PPC)\n"
-  "SHORTLEN		32\n"
-  "SHORTWHITE		0\n"
-
-  "#\n"
-  "#\n"
-  "# FILE LAYOUT DEFINITIONS:\n"
-  "#\n"
-  "FIELD_DELIMITER		COLON\n"
-  "RECORD_DELIMITER	NEWLINE\n"
-  "BADCHARS		COLON\n"
-
-  "#\n"
-  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
-  "#\n"
-  "IFIELD	CONSTANT, \"1296126539\", \"%s\"\n"
-  "IFIELD	CONSTANT, \"1481466224\", \"%s\"\n"
-  "IFIELD	LAT_INT32DEG, \"\", \"%d\"\n"
-  "IFIELD	LON_INT32DEG, \"\", \"%d\"\n"
-  "IFIELD	CONSTANT, \"3137157\", \"%s\"\n"
-  "IFIELD	SHORTNAME, \"\", \"%-.31s\"\n"
-  "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
-  "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
-  ;
-const QVector<style_vecs_t> style_list = {{ "xmapwpt", xmapwpt }, { "xmap2006", xmap2006 }, { "xmap", xmap }, { "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsman", gpsman }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
+const QVector<style_vecs_t> style_list = {{ "tomtom_itn_places", tomtom_itn_places }, { "tomtom_itn", tomtom_itn }, { "tomtom_asc", tomtom_asc }, { "tabsep", tabsep }, { "saplus", saplus }, { "s_and_t", s_and_t }, { "ricoh", ricoh }, { "openoffice", openoffice }, { "nima", nima }, { "navigonwpt", navigonwpt }, { "mxf", mxf }, { "motoactv", motoactv }, { "mapconverter", mapconverter }, { "mainnav", mainnav }, { "land_air_sea", land_air_sea }, { "kompass_wp", kompass_wp }, { "kompass_tk", kompass_tk }, { "igoprimo_poi", igoprimo_poi }, { "igo2008_poi", igo2008_poi }, { "iblue757", iblue757 }, { "iblue747", iblue747 }, { "gpsdrivetrack", gpsdrivetrack }, { "gpsdrive", gpsdrive }, { "geonet", geonet }, { "garmin_poi", garmin_poi }, { "garmin_g1000", garmin_g1000 }, { "garmin301", garmin301 }, { "fugawi", fugawi }, { "flysight", flysight }, { "dna", dna }, { "custom", custom }, { "cup", cup }, { "csv", csv }, { "cambridge", cambridge }, { "arc", arc }};
 #else /* CSVFMTS_ENABLED */
 const QVector<style_vecs_t> style_list;
 #endif /* CSVFMTS_ENABLED */

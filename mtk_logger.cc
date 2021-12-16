@@ -57,9 +57,9 @@
 #include "defs.h"
 #include "gbfile.h" /* used for csv output */
 #include "gbser.h"
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QThread>
+#include <QDir>
+#include <QFile>
+#include <QThread>
 #include <cerrno>
 #include <cmath>
 #include <cstdlib>

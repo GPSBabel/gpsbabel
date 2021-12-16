@@ -28,20 +28,19 @@
 #include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QByteArray>            // for QByteArray
-#include <QtCore/QChar>                 // for QChar
-#include <QtCore/QDate>                 // for QDate
-#include <QtCore/QDateTime>             // for QDateTime
-#include <QtCore/QFile>                 // for QFile
-#include <QtCore/QIODevice>             // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QStaticStringData>     // for QStaticStringData
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QStringList>           // for QStringList
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore/Qt>                    // for ISODate
-#include <QtCore/QtGlobal>              // for foreach, qint64, qPrintable
+#include <QByteArray>                   // for QByteArray
+#include <QChar>                        // for QChar
+#include <QDate>                        // for QDate
+#include <QDateTime>                    // for QDateTime
+#include <QFile>                        // for QFile
+#include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                        // for QList
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                  // for QStringList
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <Qt>                           // for ISODate
+#include <QtGlobal>                     // for foreach, qint64, qPrintable
 
 #include "defs.h"
 #include "kml.h"
@@ -252,12 +251,12 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   if (wpt_timespan_begin.isValid() && wpt_timespan_end.isValid()) {
 
     // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-    if (trk_head->rte_waypt_ct > 0) {
+    if (trk_head->rte_waypt_ct() > 0) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
-      if (trk_head->rte_waypt_ct < 2) {
+      if (trk_head->rte_waypt_ct() < 2) {
         fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
       }
-      qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct - 1);
+      qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct() - 1);
       foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
         trackpoint->SetCreationTime(wpt_timespan_begin);
         wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
@@ -316,7 +315,7 @@ void KmlFormat::gx_trk_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs
     }
   }
 
-  if (!gx_trk_head->rte_waypt_ct) {
+  if (!gx_trk_head->rte_waypt_ct()) {
     track_del_head(gx_trk_head);
   }
   delete gx_trk_times;
@@ -663,7 +662,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
-  if (export_points && header->rte_waypt_ct > 0) {
+  if (export_points && header->rte_waypt_ct() > 0) {
     // Put the points in a subfolder
     writer->writeStartElement(QStringLiteral("Folder"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Points"));
@@ -881,12 +880,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 void KmlFormat::kml_output_tailer(const route_head* header)
 {
 
-  if (export_points && header->rte_waypt_ct > 0) {
+  if (export_points && header->rte_waypt_ct() > 0) {
     writer->writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
-  if (export_lines && header->rte_waypt_ct > 0) {
+  if (export_lines && header->rte_waypt_ct() > 0) {
     int needs_multigeometry = 0;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
@@ -1460,7 +1459,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
 void KmlFormat::kml_track_hdr(const route_head* header) const
 {
   computed_trkdata td = track_recompute(header);
-  if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
+  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
     kml_output_header(header, &td);
   }
 }
@@ -1472,7 +1471,7 @@ void KmlFormat::kml_track_disp(const Waypoint* waypointp) const
 
 void KmlFormat::kml_track_tlr(const route_head* header)
 {
-  if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
+  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
     kml_output_tailer(header);
   }
 }
@@ -2003,7 +2002,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
    * head here.
    */
   while (max_position_points &&
-         (posn_trk_head->rte_waypt_ct >= max_position_points)) {
+         (posn_trk_head->rte_waypt_ct() >= max_position_points)) {
     Waypoint* tonuke = posn_trk_head->waypoint_list.front();
     track_del_wpt(posn_trk_head, tonuke);
   }

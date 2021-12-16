@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "session.h"
 
-#include <QtCore/QList>  // for QList
+#include <QList>         // for QList
 
 static QList<session_t> session_list;
 

@@ -22,9 +22,9 @@
 
 #include <cmath>            // for sin, cos, acos
 
-#include <QtCore/QString>   // for QString
-#include <QtCore/QVector>   // for QVector
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>          // for QString
+#include <QVector>          // for QVector
+#include <QtGlobal>         // for foreach
 
 #include "defs.h"
 #include "gbfile.h"         // for gbfprintf, gbfclose, gbfopen, gbfile
@@ -266,7 +266,7 @@ waypt_disp_cb(const Waypoint* wpt)
 static void
 track_disp_cb(const route_head* trk)
 {
-  int waypt_ct = trk->rte_waypt_ct;
+  int waypt_ct = trk->rte_waypt_ct();
 
   if (waypt_ct <= 0) {
     return;
@@ -294,7 +294,7 @@ track_disp_cb(const route_head* trk)
 static void
 route_disp_cb(const route_head* rte)
 {
-  int waypt_ct = rte->rte_waypt_ct;
+  int waypt_ct = rte->rte_waypt_ct();
 
   if (waypt_ct <= 0) {
     return;
@@ -356,7 +356,7 @@ write_bounds()
 }
 
 static void
-draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, 
+draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art,
                    const OVL_COLOR_TYP point_color, const Waypoint* wpt)
 {
   symbol_ct++;

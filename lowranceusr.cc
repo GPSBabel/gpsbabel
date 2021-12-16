@@ -85,25 +85,24 @@
 
 */
 
-#include <algorithm>              // for min
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdlib>                // for atoi, abs
 #include <cstring>                // for strcmp, strlen
 #include <ctime>                  // for time_t
 
-#include <QtCore/QByteArray>      // for QByteArray
-#include <QtCore/QDate>           // for QDate
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QLatin1String>   // for QLatin1String
-#include <QtCore/QList>           // for QList
-#include <QtCore/QScopedPointer>  // for QScopedPointer
-#include <QtCore/QString>         // for QString, operator+, operator==, operator!=
-#include <QtCore/QTextCodec>      // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextEncoder>    // for QTextEncoder
-#include <QtCore/QTime>           // for QTime
-#include <QtCore/Qt>              // for CaseInsensitive, UTC
-#include <QtCore/QtGlobal>        // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
+#include <QDateTime>              // for QDateTime
+#include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
+#include <QScopedPointer>         // for QScopedPointer
+#include <QString>                // for QString, operator+, operator==, operator!=
+#include <QTextCodec>             // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>           // for QTextEncoder
+#include <QTime>                  // for QTime
+#include <Qt>                     // for CaseInsensitive, UTC
+#include <QtGlobal>               // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "lowranceusr.h"
@@ -1561,7 +1560,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
 
-  auto num_trail_points = (short) trk->rte_waypt_ct;
+  auto num_trail_points = (short) trk->rte_waypt_ct();
   short max_trail_size = MAX_TRAIL_POINTS;
   if (num_trail_points > max_trail_size) {
     num_trail_points = max_trail_size;
@@ -1598,13 +1597,12 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   } else {
     name = QString::asprintf("Babel R%d", ++lowrance_route_count);
   }
-  int text_len = std::min(name.size(), MAXUSRSTRINGSIZE);
-  name.truncate(text_len);
-  gbfputint32(text_len, file_out);
+  name.truncate(MAXUSRSTRINGSIZE);
+  gbfputint32(name.size(), file_out);
   gbfputs(name, file_out);
 
   /* num legs */
-  auto num_legs = (short) rte->rte_waypt_ct;
+  auto num_legs = (short) rte->rte_waypt_ct();
   gbfputint16(num_legs, file_out);
   char route_reversed=0;
   gbfwrite(&route_reversed, 1, 1, file_out);
@@ -1619,7 +1617,7 @@ LowranceusrFormat::lowranceusr4_route_hdr(const route_head* rte)
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing route #%d (%s) with %d waypts\n",
-           route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
+           route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct());
   }
 
   const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(rte->fs.FsChainFind(kFsLowranceusr4));
@@ -1644,7 +1642,7 @@ LowranceusrFormat::lowranceusr4_route_hdr(const route_head* rte)
   lowranceusr4_writestr(rte->rte_name, file_out, 2);
 
   /* Num Legs */
-  gbfputint32(rte->rte_waypt_ct, file_out);
+  gbfputint32(rte->rte_waypt_ct(), file_out);
 }
 
 void
@@ -1713,9 +1711,8 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
       name = QString::asprintf("Babel %d", trail_count);
     }
 
-    int text_len = std::min(MAXUSRSTRINGSIZE, name.size());
-    name.truncate(text_len);
-    gbfputint32(text_len, file_out);
+    name.truncate(MAXUSRSTRINGSIZE);
+    gbfputint32(name.size(), file_out);
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
@@ -1723,7 +1720,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
     }
   }
 
-  trail_point_count += (short) trk->rte_waypt_ct;
+  trail_point_count += (short) trk->rte_waypt_ct();
 }
 
 void
@@ -1759,7 +1756,7 @@ LowranceusrFormat::lowranceusr4_trail_hdr(const route_head* trail)
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing trail %d (%s) with %d trailpoints\n",
-           trail_uid, qPrintable(trail->rte_name), trail->rte_waypt_ct);
+           trail_uid, qPrintable(trail->rte_name), trail->rte_waypt_ct());
   }
 
   /* UID unit number */
@@ -1806,7 +1803,7 @@ LowranceusrFormat::lowranceusr4_trail_hdr(const route_head* trail)
 //  }
 
   /* Trackpoint count */
-  gbfputint32(trail->rte_waypt_ct, file_out);
+  gbfputint32(trail->rte_waypt_ct(), file_out);
 }
 
 void

@@ -23,8 +23,8 @@
 #include <cstdlib>              // for qsort
 #include <cstring>              // for memset, strncpy
 
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QtGlobal>      // for foreach
+#include <QDateTime>            // for QDateTime
+#include <QtGlobal>             // for foreach
 
 #include "defs.h"
 #include "duplicate.h"

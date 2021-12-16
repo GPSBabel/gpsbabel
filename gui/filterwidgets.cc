@@ -21,6 +21,7 @@
 //
 
 #include "filterwidgets.h"
+#include <limits>
 
 
 //------------------------------------------------------------------------
@@ -213,7 +214,7 @@ RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(pa
 
   fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
   fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
-  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000);
+  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, std::numeric_limits<int>::max());
   setWidgetValues();
   checkChecks();
 }

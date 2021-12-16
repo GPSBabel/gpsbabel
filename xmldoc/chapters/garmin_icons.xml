@@ -8,12 +8,9 @@
 These values are also used internally by the
 
     <link linkend="fmt_gdb">GDB</link>
-    ,
-
-    <link linkend="fmt_bcr">BCR</link>
     , and
 
-    <link linkend="fmt_pcx">PCX</link>
+    <link linkend="fmt_bcr">BCR</link>
 
     formats.</para>
   <simplelist columns="5">

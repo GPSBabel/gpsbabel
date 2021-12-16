@@ -20,9 +20,10 @@
 
  */
 
-#include <QtCore/QByteArray>   // for QByteArray
-#include <QtCore/QString>      // for QString
-#include <QtCore/QtGlobal>     // for qPrintable
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar, operator==, operator!=
+#include <QString>             // for QString
+#include <QtGlobal>            // for qPrintable
 
 #include <cassert>             // for assert
 #include <cctype>              // for tolower
@@ -33,8 +34,6 @@
 #include "defs.h"
 #include "gbfile.h"
 #include "src/core/logging.h"
-
-#include "cet.h"               // for cet_ucs4_to_utf8
 
 #if __WIN32__
 /* taken from minigzip.c (part of the zlib project) */
@@ -647,7 +646,7 @@ gbfgetc(gbfile* file)
  * gbfgets: (as fgets)
  */
 
-QString 
+QString
 gbfgets(char* buf, int len, gbfile* file)
 {
   char* result = buf;
@@ -695,8 +694,8 @@ gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file)
 
 // goofy) calling signature.
 gbsize_t
-gbfread(QString& buf, const gbsize_t size, 
-        const gbsize_t members, gbfile* file) 
+gbfread(QString& buf, const gbsize_t size,
+        const gbsize_t members, gbfile* file)
 {
   QByteArray tmp;
   tmp.resize(members * size);
@@ -991,8 +990,12 @@ gbfgetcstr_old(gbfile* file)
   for (;;) {
     int c = gbfgetc(file);
 
-    if ((c == 0) || (c == EOF)) {
+    if (c == 0) {
       break;
+    }
+
+    if (c == EOF) {
+      fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
     }
 
     if (len == file->buffsz) {
@@ -1018,7 +1021,7 @@ gbfgetcstr(gbfile* file)
   char* result = gbfgetcstr_old(file);
   QString rv(result);
   xfree(result);
-  return rv; 
+  return rv;
 }
 
 QByteArray
@@ -1027,84 +1030,122 @@ gbfgetnativecstr(gbfile* file)
   char* result = gbfgetcstr_old(file);
   QByteArray rv(result);
   xfree(result);
-  return rv; 
+  return rv;
 }
 
 /*
- * gbfgetpstr: Reads a pascal string (first byte is length) from file.
- *             The result is a temporary allocated entity: use it or free it!
+ * gbfgetpstr: Reads a pascal short string (first byte is length) from file.
  */
 
 QString
 gbfgetpstr(gbfile* file)
 {
   int len = gbfgetc(file);
+  if (len == EOF) {
+    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+  }
   QByteArray ba;
   ba.resize(len);
-  gbfread(ba.data(), 1, len, file);
+  is_fatal((gbfread(ba.data(), 1, len, file) != (gbsize_t) len),
+           "%s: Unexpected end of file (%s)!\n", file->module, file->name);
 
   return QString(ba);
 }
 
+static QChar
+gbfgetutf16char(gbfile* file)
+{
+    int c0 = gbfgetc(file);
+    if (c0 == EOF) {
+      return QChar();
+    }
+
+    int c1 = gbfgetc(file);
+
+    if (c1 == EOF) {
+        fatal("%s: Incomplete unicode (UTF-16%cE) character at EOF!\n",
+              file->module,
+              file->big_endian ? 'B' : 'L');
+    }
+
+    unsigned char cell;
+    unsigned char row;
+    if (file->big_endian) {
+      cell = static_cast<unsigned char>(c1);
+      row = static_cast<unsigned char>(c0);
+    } else {
+      cell = static_cast<unsigned char>(c0);
+      row = static_cast<unsigned char>(c1);
+    }
+    return QChar(cell, row);
+}
+
+/*
+ * Reads a string from utf16 encoded file.
+ * Terminates at EOF or a line ending(\r\n, \n).
+ * Line endings are not included in the returned string.
+ * Returns a nullptr if at EOF, otherwise it returns a pointer
+ * to a possibly empty null terminated utf-8 character array.
+ * Fatal errors can occur if:
+ * i) the file ends with either an incomplete utf-16 character, or
+ * ii) the file ends with an incomplete surrogate pair, or
+ * iii) a high surrogate is not followd by a low surrogate, or
+ * iv) a low surrogate isn't preceeded by a high surrogate.
+ */
 static char*
-gbfgetucs2str(gbfile* file)
+gbfgetutf16str(gbfile* file)
 {
   int len = 0;
   char* result = file->buff;
 
   for (;;) {
-    char buff[8];
-
-    int c0 = gbfgetc(file);
-    if ((c0 == EOF) && (len == 0)) {
-      return nullptr;
-    }
-    int c1 = gbfgetc(file);
-    if ((c1 == EOF) && (len == 0)) {
-      return nullptr;
-    }
-
-    if (file->big_endian) {
-      c0 = c1 | (c0 << 8);
-    } else {
-      c0 = c0 | (c1 << 8);
-    }
-
-    if (c0 == '\r') {
-
-      c0 = gbfgetc(file);
-      if ((c0 == EOF) && (len == 0)) {
+    QChar qch = gbfgetutf16char(file);
+    if (qch.isNull()) {
+      if (len == 0) {
         return nullptr;
-      }
-      c1 = gbfgetc(file);
-      if ((c1 == EOF) && (len == 0)) {
-        return nullptr;
-      }
-
-      if (file->big_endian) {
-        c0 = c1 | (c0 << 8);
       } else {
-        c0 = c0 | (c1 << 8);
+        break;
       }
+    }
 
-      if (c0 != '\n')
-        fatal("%s: Invalid unicode (UCS-2/%s endian) line break!\n",
+    if (qch == u'\r') {
+      QChar qch2 = gbfgetutf16char(file);
+      if (qch2 != u'\n') {  // including qch2.isNull()
+        // Putting back two chars may not be supported, e.g. with gzapi_ungetc.
+        fatal("%s: Invalid unicode (UTF-16%cE) line break!\n",
               file->module,
-              file->big_endian ? "Big" : "Little");
+              file->big_endian ? 'B' : 'L');
+      }
+      break;
+    } else if (qch == u'\n') {
       break;
     }
 
-    int clen = cet_ucs4_to_utf8(buff, sizeof(buff), c0);
-    if (clen < 1) {
-      Warning() << "Malformed UCS character" << c0 << "found.";
-      return nullptr;
+    if (qch.isLowSurrogate()) {
+      fatal("%s: Leading unicode (UTF-16%cE) low surrogate!\n",
+            file->module,
+            file->big_endian ? 'B' : 'L');
     }
+
+    QString str(qch);
+    if (qch.isHighSurrogate()) {
+      QChar qch2 = gbfgetutf16char(file);
+      if (!qch2.isLowSurrogate()) { // including qch2.isNull()
+        fatal("%s: Missing unicode (UTF-16%cE) low surrogate!\n",
+              file->module,
+              file->big_endian ? 'B' : 'L');
+      }
+      str.append(qch2);
+    }
+
+    QByteArray ba = str.toUtf8();
+    int clen = ba.size();
 
     if (len+clen >= file->buffsz) {
       file->buffsz += 64;
       result = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
     }
-    memcpy(&result[len], buff, clen);
+    memcpy(&result[len], ba.constData(), clen);
     len += clen;
   }
   result[len] = '\0';	// terminate resulting string
@@ -1124,7 +1165,7 @@ gbfgetstr(gbfile* file)
   char* result = file->buff;
 
   if (file->unicode) {
-    return gbfgetucs2str(file);
+    return gbfgetutf16str(file);
   }
 
   for (;;) {
@@ -1150,11 +1191,11 @@ gbfgetstr(gbfile* file)
         if (cx == 0xFEFF) {
           file->unicode = 1;
           file->big_endian = 0;
-          return gbfgetucs2str(file);
+          return gbfgetutf16str(file);
         } else if (cx == 0xFFFE) {
           file->unicode = 1;
           file->big_endian = 1;
-          return gbfgetucs2str(file);
+          return gbfgetutf16str(file);
         } else {
           gbfungetc(c1, file);
         }

@@ -28,8 +28,8 @@
 
 #include "defs.h"
 #include "gbfile.h"
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QFileInfo>
 
 #define MYNAME "f90g_track"
 #define TTRECORDSIZE      249

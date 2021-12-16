@@ -21,8 +21,8 @@
 #ifndef FILTER_VECS_H_INCLUDED_
 #define FILTER_VECS_H_INCLUDED_
 
-#include <QtCore/QString>      // for QString
-#include <QtCore/QVector>      // for QVector<>::iterator, QVector
+#include <QString>             // for QString
+#include <QVector>             // for QVector<>::iterator, QVector
 
 #include "defs.h"           // for arglist_t
 #include "arcdist.h"        // for ArcDistanceFilter
@@ -36,6 +36,7 @@
 #include "polygon.h"        // for PolygonFilter
 #include "position.h"       // for PositionFilter
 #include "radius.h"         // for RadiusFilter
+#include "resample.h"       // for ResampleFilter
 #include "reverse_route.h"  // for ReverseRouteFilter
 #include "smplrout.h"       // for SimplifyRouteFilter
 #include "sort.h"           // for SortFilter
@@ -97,6 +98,7 @@ private:
   PolygonFilter polygon;
   PositionFilter position;
   RadiusFilter radius;
+  ResampleFilter resample;
   ReverseRouteFilter reverse_route;
   SimplifyRouteFilter routesimple;
   SortFilter sort;
@@ -152,6 +154,11 @@ private:
       &radius,
       "radius",
       "Include Only Points Within Radius",
+    },
+    {
+      &resample,
+      "resample",
+      "Resample Track",
     },
     {
       &routesimple,

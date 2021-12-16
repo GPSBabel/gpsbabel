@@ -19,8 +19,8 @@
 
  */
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QString>
+#include <QStringList>
 #include "defs.h"
 #ifdef HAVE_LIBMINIZIP
 #include <minizip/zip.h>

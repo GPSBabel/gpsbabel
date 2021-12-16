@@ -52,14 +52,13 @@
 #include <cstring>                 // for strlen, strncmp
 #include <ctime>                   // for time, time_t, gmtime
 
-#include <QtCore/QByteArray>       // for QByteArray, operator==
-#include <QtCore/QByteRef>         // for QByteRef
-#include <QtCore/QList>            // for QList<>::iterator, QList
-#include <QtCore/QString>          // for QString, operator+, operator<
-#include <QtCore/QThread>          // for QThread
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for foreach, Q_UNUSED
+#include <QByteArray>              // for QByteArray, operator==
+#include <QList>                   // for QList<>::iterator, QList
+#include <QString>                 // for QString, operator+, operator<
+#include <QThread>                 // for QThread
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for foreach, Q_UNUSED
 
 #include "defs.h"
 #include "garmin_gpi.h"

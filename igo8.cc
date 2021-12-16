@@ -61,16 +61,14 @@
 
 */
 
-#include <algorithm>
 #include <cstdio>               // for SEEK_SET
 #include <cstdint>
 #include <cstdlib>              // for atoi
 #include <cstring>              // for memset
 
-#include <QtCore/QChar>         // for QChar
-#include <QtCore/QString>       // for QString
-#include <QtCore/QVector>       // for QVector
-#include <QtCore/QtGlobal>      // for ushort
+#include <QChar>                // for QChar
+#include <QString>              // for QString
+#include <QVector>              // for QVector
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfwrite, gbfclose, gbfseek, gbfgetint32, gbfread, gbfile, gbfopen_le
@@ -261,7 +259,7 @@ static unsigned int print_unicode(char* dst, int dst_max_length, const QString& 
   }
   // Write as many characters from the source as possible
   // while leaving space for a terminator.
-  int n_src_qchars = std::min(max_qchars - 1, src.size());
+  int n_src_qchars =  src.size() > (max_qchars - 1) ? max_qchars - 1 : src.size();
   for (int i = 0; i < n_src_qchars; ++i) {
     le_write16(dst, src.at(i).unicode());
     dst += 2;

@@ -22,67 +22,63 @@
 #define LIBUSB_THREADS_POSIX_H
 
 #include <pthread.h>
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#endif
+
+#define PTHREAD_CHECK(expression)	ASSERT_EQ(expression, 0)
 
 #define USBI_MUTEX_INITIALIZER	PTHREAD_MUTEX_INITIALIZER
 typedef pthread_mutex_t usbi_mutex_static_t;
 static inline void usbi_mutex_static_lock(usbi_mutex_static_t *mutex)
 {
-	(void)pthread_mutex_lock(mutex);
+	PTHREAD_CHECK(pthread_mutex_lock(mutex));
 }
 static inline void usbi_mutex_static_unlock(usbi_mutex_static_t *mutex)
 {
-	(void)pthread_mutex_unlock(mutex);
+	PTHREAD_CHECK(pthread_mutex_unlock(mutex));
 }
 
 typedef pthread_mutex_t usbi_mutex_t;
-static inline int usbi_mutex_init(usbi_mutex_t *mutex)
+static inline void usbi_mutex_init(usbi_mutex_t *mutex)
 {
-	return pthread_mutex_init(mutex, NULL);
+	PTHREAD_CHECK(pthread_mutex_init(mutex, NULL));
 }
 static inline void usbi_mutex_lock(usbi_mutex_t *mutex)
 {
-	(void)pthread_mutex_lock(mutex);
+	PTHREAD_CHECK(pthread_mutex_lock(mutex));
 }
 static inline void usbi_mutex_unlock(usbi_mutex_t *mutex)
 {
-	(void)pthread_mutex_unlock(mutex);
+	PTHREAD_CHECK(pthread_mutex_unlock(mutex));
 }
 static inline int usbi_mutex_trylock(usbi_mutex_t *mutex)
 {
-	return pthread_mutex_trylock(mutex);
+	return pthread_mutex_trylock(mutex) == 0;
 }
 static inline void usbi_mutex_destroy(usbi_mutex_t *mutex)
 {
-	(void)pthread_mutex_destroy(mutex);
+	PTHREAD_CHECK(pthread_mutex_destroy(mutex));
 }
 
 typedef pthread_cond_t usbi_cond_t;
-static inline void usbi_cond_init(pthread_cond_t *cond)
+void usbi_cond_init(pthread_cond_t *cond);
+static inline void usbi_cond_wait(usbi_cond_t *cond, usbi_mutex_t *mutex)
 {
-	(void)pthread_cond_init(cond, NULL);
-}
-static inline int usbi_cond_wait(usbi_cond_t *cond, usbi_mutex_t *mutex)
-{
-	return pthread_cond_wait(cond, mutex);
+	PTHREAD_CHECK(pthread_cond_wait(cond, mutex));
 }
 int usbi_cond_timedwait(usbi_cond_t *cond,
 	usbi_mutex_t *mutex, const struct timeval *tv);
 static inline void usbi_cond_broadcast(usbi_cond_t *cond)
 {
-	(void)pthread_cond_broadcast(cond);
+	PTHREAD_CHECK(pthread_cond_broadcast(cond));
 }
 static inline void usbi_cond_destroy(usbi_cond_t *cond)
 {
-	(void)pthread_cond_destroy(cond);
+	PTHREAD_CHECK(pthread_cond_destroy(cond));
 }
 
 typedef pthread_key_t usbi_tls_key_t;
 static inline void usbi_tls_key_create(usbi_tls_key_t *key)
 {
-	(void)pthread_key_create(key, NULL);
+	PTHREAD_CHECK(pthread_key_create(key, NULL));
 }
 static inline void *usbi_tls_key_get(usbi_tls_key_t key)
 {
@@ -90,13 +86,13 @@ static inline void *usbi_tls_key_get(usbi_tls_key_t key)
 }
 static inline void usbi_tls_key_set(usbi_tls_key_t key, void *ptr)
 {
-	(void)pthread_setspecific(key, ptr);
+	PTHREAD_CHECK(pthread_setspecific(key, ptr));
 }
 static inline void usbi_tls_key_delete(usbi_tls_key_t key)
 {
-	(void)pthread_key_delete(key);
+	PTHREAD_CHECK(pthread_key_delete(key));
 }
 
-int usbi_get_tid(void);
+unsigned int usbi_get_tid(void);
 
 #endif /* LIBUSB_THREADS_POSIX_H */

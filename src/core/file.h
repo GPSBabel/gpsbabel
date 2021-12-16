@@ -20,10 +20,10 @@
 #ifndef SRC_CORE_FILE_INCLUDED_H_
 #define SRC_CORE_FILE_INCLUDED_H_
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringBuilder>
-#include <QtCore/QIODevice>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringBuilder>
+#include <QIODevice>
 #include <cstdio>
 #include "src/core/logging.h"
 #include "defs.h"

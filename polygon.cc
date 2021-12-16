@@ -19,14 +19,14 @@
 
  */
 
-#include <cstdio>           // for sscanf
-#include <cstring>          // for strchr, strlen, strspn
+#include <cstdio>                 // for sscanf
 
-#include <QtCore/QtGlobal>  // for foreach
+#include <QString>                // for QString
+#include <QtGlobal>               // for foreach
 
 #include "defs.h"
 #include "polygon.h"
-#include "gbfile.h"         // for gbfclose, gbfgetstr, gbfopen, gbfile
+#include "src/core/textstream.h"  // for TextStream
 
 
 #if FILTERS_ENABLED
@@ -225,9 +225,10 @@ void PolygonFilter::process()
   int fileline = 0;
   int first = 1;
   int last = 0;
-  char* line;
+  QString line;
 
-  gbfile* file_in = gbfopen(polyfileopt, "r", MYNAME);
+  gpsbabel::TextStream stream;
+  stream.open(polyfileopt, QIODevice::ReadOnly, MYNAME);
 
   double olat = BADVAL;
   double olon = BADVAL;
@@ -235,18 +236,18 @@ void PolygonFilter::process()
   double lon1 = BADVAL;
   double lat2 = BADVAL;
   double lon2 = BADVAL;
-  while ((line = gbfgetstr(file_in))) {
+  while (stream.readLineInto(&line)) {
     fileline++;
 
-    char* pound = strchr(line, '#');
-    if (pound) {
-      *pound = '\0';
+    auto pound = line.indexOf('#');
+    if (pound >= 0) {
+      line.truncate(pound);
     }
 
     lat2 = lon2 = BADVAL;
-    int argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
+    int argsfound = sscanf(CSTR(line), "%lf %lf", &lat2, &lon2);
 
-    if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
+    if ((argsfound != 2) && (line.trimmed().size() > 0)) {
       warning(MYNAME
               ": Warning: Polygon file contains unusable vertex on line %d.\n",
               fileline);
@@ -294,7 +295,7 @@ void PolygonFilter::process()
       lon1 = lon2;
     }
   }
-  gbfclose(file_in);
+  stream.close();
 
   foreach (Waypoint* wp, *global_waypoint_list) {
     ed = (extra_data*) wp->extra_data;

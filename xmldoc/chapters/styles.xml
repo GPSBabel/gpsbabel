@@ -928,7 +928,7 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD NET_TIME,&quot;&quot;,&quot;%f&quot;
+         <screen format="linespecific">IFIELD NET_TIME,&quot;&quot;,&quot;%lld&quot;
 </screen>
       </section>
       <section id="style_def_geodiff">
@@ -1041,6 +1041,12 @@ longitude)
 </para>
          <screen format="linespecific">PATH_DISTANCE_MILES,&quot;&quot;,&quot;%f&quot;
 </screen>
+      </section>
+      <section id="style_def_pathdistnm">
+         <title>PATH_DISTANCE_NAUTICAL_MILES</title>
+         <para>PATH_DISTANCE_NAUTICAL_MILES is like PATH_DISTANCE_MILES except it outputs the
+   length in nautical miles.
+</para>
       </section>
       <section id="style_def_pathdistkm">
          <title>PATH_DISTANCE_KM</title>

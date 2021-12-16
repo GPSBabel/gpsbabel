@@ -33,8 +33,6 @@ Options:
 
 File Types (-i and -o options):
 	baroiq                Brauniger IQ Series Barograph Download
-	bushnell_trl          Bushnell GPS Trail file
-	bushnell              Bushnell GPS Waypoint file
 	cambridge             Cambridge/Winpilot glider software
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -43,7 +41,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	cst                   CarteSurTable data file
 	v900                  Columbus/Visiontac V900 files (.csv)
 	csv                   Comma separated values
 	  snlen                 Max synthesized shortname length 
@@ -53,11 +50,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	compegps              CompeGPS data files (.wpt/.trk/.rte)
-	  deficon               Default icon name 
-	  index                 Index of route/track to write (if more than one in 
-	  radius                Give points (waypoints/route points) a default rad 
-	  snlen                 Length of generated shortnames (default 16) 
 	iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -89,30 +81,6 @@ File Types (-i and -o options):
 	  split                 (0/1) Split into multiple routes at turns 
 	  controls              Read control points as waypoint/route/none 
 	  times                 (0/1) Synthesize track times 
-	xmap                  DeLorme XMap HH Native .WPT
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	xmap2006              DeLorme XMap/SAHH 2006 Native .TXT
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	xmapwpt               DeLorme XMat HH Street Atlas USA .WPT (PPC)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	destinator_itn        Destinator Itineraries (.dat)
 	destinator_poi        Destinator Points of Interest (.dat)
 	destinator_trl        Destinator TrackLogs (.dat)
@@ -153,7 +121,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	g7towin               G7ToWin data files (.g7t)
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -187,9 +154,6 @@ File Types (-i and -o options):
 	  temp                  Temperature unit [c=Celsius, f=Fahrenheit] 
 	  time                  Read/Write time format (i.e. HH:mm:ss xx) 
 	  utc                   Write timestamps with offset x to UTC time 
-	pcx                   Garmin PCX5
-	  deficon               Default icon name 
-	  cartoexploreur        (0/1) Write tracks compatible with Carto Exploreur 
 	garmin_poi            Garmin POI database
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -273,11 +237,6 @@ File Types (-i and -o options):
 	  rotate_colors         Rotate colors for tracks and routes (default autom 
 	  prec                  Precision of coordinates, number of decimals 
 	gnav_trl              Google Navigator Tracklines (.trl)
-	gopal                 GoPal GPS track log (.trk)
-	  date                  Complete date-free tracks with given date (YYYYMMD 
-	  maxspeed              The maximum speed (km/h) traveling from waypoint t 
-	  minspeed              The minimum speed (km/h) traveling from waypoint t 
-	  clean                 (0/1) Cleanup common errors in trackdata 
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -311,15 +270,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	gpsman                GPSman
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	gpsutil               gpsutil
 	gpx                   GPX XML
 	  snlen                 Length of generated shortnames 
 	  suppresswhite         (0/1) No whitespace in generated shortnames 
@@ -339,7 +289,6 @@ File Types (-i and -o options):
 	  log_enable            (0/1) Enable logging after download 
 	  csv                   MTK compatible CSV output file 
 	  block_size_kb         Size of blocks in KB to request from device 
-	vpl                   Honda/Acura Navigation System VP Log File Format
 	html                  HTML Output
 	  stylesheet            Path to HTML style sheet 
 	  encrypt               (0/1) Encrypt hints using ROT13 
@@ -370,8 +319,6 @@ File Types (-i and -o options):
 	  tracknum              Track identification number 
 	  title                 Track title 
 	  description           Track description 
-	jtr                   Jelbert GeoTagger data file
-	jogmap                Jogmap.de XML format
 	kompass_tk            Kompass (DAV) Track (.tk)
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -397,9 +344,6 @@ File Types (-i and -o options):
 	  title                 (USR output) Output file title string 
 	  serialnum             (USR output) Device serial number 
 	  description           (USR output) Output file content description 
-	maggeo                Magellan Explorist Geocaching
-	mapsend               Magellan Mapsend
-	  trkver                MapSend version TRK file to generate (3,4) 
 	magellanx             Magellan SD files (as for eXplorist)
 	  deficon               Default icon name 
 	  maxcmts               Max number of comments to write (maxcmts=200) 
@@ -505,10 +449,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27) 
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navicache             Navicache.com XML
-	  noretired             (0/1) Suppress retired geocaches 
-	nmn4                  Navigon Mobile Navigator .rte files
-	  index                 Index of route to write (if more than one in sourc 
 	navigonwpt            Navigon Waypoints
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -574,9 +514,6 @@ File Types (-i and -o options):
 	  altunit               Unit used in altitude values 
 	  proxunit              Unit used in proximity values 
 	  codec                 codec to use for reading and writing strings (defa 
-	pocketfms_bc          PocketFMS breadcrumbs
-	pocketfms_fp          PocketFMS flightplan (.xml)
-	pocketfms_wp          PocketFMS waypoints (.txt)
 	qstarz_bl-1000        Qstarz BL-1000
 	raymarine             Raymarine Waypoint File (.rwf)
 	  location              Default location 
@@ -596,7 +533,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	skyforce              Skymap / KMD150 ascii files
 	skytraq               SkyTraq Venus based loggers (download)
 	  erase                 (0/1) Erase device data after download 
 	  targetlocation        Set location finder target location as lat,lng 
@@ -620,10 +556,6 @@ File Types (-i and -o options):
 	  gps_time              GPS time at position video_time (hhmmss[.sss], def 
 	  gps_date              GPS date at position video_time (yyyymmdd, default 
 	  format                Format for subtitles 
-	stmsdf                Suunto Trek Manager (STM) .sdf files
-	  index                 Index of route (if more than one in source) 
-	stmwpp                Suunto Trek Manager (STM) WaypointPlus files
-	  index                 Index of route/track to write (if more than one in 
 	xol                   Swiss Map 25/50/100 (.xol)
 	openoffice            Tab delimited fields useful for OpenOffice
 	  snlen                 Max synthesized shortname length 
@@ -666,22 +598,8 @@ File Types (-i and -o options):
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
 	tomtom                TomTom POI file (.ov2)
-	tmpro                 TopoMapPro Places File
 	dmtlog                TrackLogs digital mapping (.trl)
 	  index                 Index of track (if more than one in source) 
-	tiger                 U.S. Census Bureau Tiger Mapping Service
-	  nolabels              (0/1) Suppress labels on generated pins 
-	  genurl                Generate file with lat/lon for centering map 
-	  margin                Margin for map.  Degrees or percentage 
-	  snlen                 Max shortname length when used with -s 
-	  oldthresh             Days after which points are considered old 
-	  oldmarker             Marker type for old points 
-	  newmarker             Marker type for new points 
-	  suppresswhite         (0/1) Suppress whitespace in generated shortnames 
-	  unfoundmarker         Marker type for unfound points 
-	  xpixels               Width in pixels of map 
-	  ypixels               Height in pixels of map 
-	  iconismarker          (0/1) The icon description is already the marker 
 	unicsv                Universal csv with field structure in first line
 	  datum                 GPS datum (def. WGS 84) 
 	  grid                  Write position using this grid. 
@@ -692,16 +610,6 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa 
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13 
-	vidaone               VidaOne GPS for Pocket PC (.gpb)
-	  ver                   Version of VidaOne file to read or write (1 or 2) 
-	vitosmt               Vito Navigator II tracks
-	vitovtt               Vito SmartMap tracks (.vtt)
-	wfff                  WiFiFoFum 2.0 for PocketPC XML
-	  aicicon               Infrastructure closed icon name 
-	  aioicon               Infrastructure open icon name 
-	  ahcicon               Ad-hoc closed icon name 
-	  ahoicon               Ad-hoc open icon name 
-	  snmac                 (0/1) Shortname is MAC address 
 	wintec_tes            Wintec TES file
 	wbt-bin               Wintec WBT-100/200 Binary File Format
 	wbt                   Wintec WBT-100/200 GPS Download
@@ -713,8 +621,6 @@ File Types (-i and -o options):
 	itracku-bin           XAiOX iTrackU Logger Binary File Format
 	  backup                Appends the input to a backup file 
 	  new                   Only waypoints that are not the backup file 
-	yahoo                 Yahoo Geocode API data
-	  addrsep               String to separate concatenated address fields (de 
 
 Supported data filters:
 	arc                   Include Only Points Within Distance of Arc        
@@ -769,6 +675,10 @@ Supported data filters:
 	  nosort                Inhibit sort by distance to center 
 	  maxcount              Output no more than this number of points 
 	  asroute               Put resulting waypoints in route of this name 
+	resample              Resample Track                                    
+	  decimate              Decimate, decrease sample rate by a factor of n 
+	  interpolate           Interpolate, increase sample rate by a factor of n 
+	  average               Running average of n points 
 	simplify              Simplify routes                                   
 	  count                 Maximum number of points in route 
 	  error                 Maximum error 

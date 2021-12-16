@@ -59,7 +59,7 @@
 #include <cstdlib>              // for qsort, strtol
 #include <utility>              // for swap
 
-#include <QtCore/QDateTime>     // for QDateTime
+#include <QDateTime>            // for QDateTime
 
 #include "defs.h"
 #include "smplrout.h"
@@ -195,16 +195,16 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
   totalerror = 0;
 
   /* short-circuit if we already have fewer than the max points */
-  if (countopt && count >= rte->rte_waypt_ct) {
+  if (countopt && count >= rte->rte_waypt_ct()) {
     return;
   }
 
   /* short-circuit if the route is impossible to simplify, too. */
-  if (2 >= rte->rte_waypt_ct) {
+  if (2 >= rte->rte_waypt_ct()) {
     return;
   }
 
-  xte_recs = new struct xte[rte->rte_waypt_ct];
+  xte_recs = new struct xte[rte->rte_waypt_ct()];
   cur_rte = rte;
 
 }

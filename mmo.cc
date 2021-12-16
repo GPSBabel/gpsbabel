@@ -29,19 +29,18 @@
 #include <cstring>               // for strcmp, strlen, memset, strchr, strncmp
 #include <ctime>
 
-#include <QtCore/QByteArray>     // for QByteArray
-#include <QtCore/QChar>          // for operator==, QChar
-#include <QtCore/QCharRef>       // for QCharRef
-#include <QtCore/QDateTime>      // for QDateTime
-#include <QtCore/QHash>          // for QHash, QHash<>::const_iterator
-#include <QtCore/QLatin1String>  // for QLatin1String
-#include <QtCore/QScopedPointer> // for QScopedPointer
-#include <QtCore/QString>        // for QString, operator==
-#include <QtCore/QTextCodec>     // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QtCore/QTextEncoder>   // for QTextEncoder
-#include <QtCore/QVector>        // for QVector
-#include <QtCore/Qt>             // for CaseInsensitive
-#include <QtCore/QtGlobal>       // for qAsConst, QAddConst<>::Type, foreach, Q_UNUSED
+#include <QByteArray>            // for QByteArray
+#include <QChar>                 // for operator==, QChar
+#include <QDateTime>             // for QDateTime
+#include <QHash>                 // for QHash, QHash<>::const_iterator
+#include <QLatin1String>         // for QLatin1String
+#include <QScopedPointer>        // for QScopedPointer
+#include <QString>               // for QString, operator==
+#include <QTextCodec>            // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>          // for QTextEncoder
+#include <QVector>               // for QVector
+#include <Qt>                    // for CaseInsensitive
+#include <QtGlobal>              // for qAsConst, QAddConst<>::Type, foreach, Q_UNUSED
 
 #include "defs.h"
 #include "gbfile.h"              // for gbfputc, gbfgetuint16, gbfgetc, gbfgetdbl, gbfgetuint32, gbfputflt, gbfputuint32, gbfgetint16, gbfputdbl, gbfputuint16, gbfclose, gbfread, gbfseek, gbfputint16, gbfwrite, gbfcopyfrom, gbfeof, gbfgetflt, gbfgetint32, gbfile, gbfopen, gbfrewind, gbsize_t
@@ -351,7 +350,7 @@ mmo_end_of_route(mmo_data_t* data)
     DBG((sobj, "for \"%s\" \n", data->name));
   }
 
-  if (rte->rte_waypt_ct == 0) {	/* don't keep empty routes */
+  if (rte->rte_waypt_ct() == 0) {	/* don't keep empty routes */
     route_del_head(rte);
     data->data = nullptr;
   }
@@ -722,7 +721,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     }
   }
 
-  if (trk->rte_waypt_ct == 0) {
+  if (trk->rte_waypt_ct() == 0) {
     track_del_head(trk);
     data->data = nullptr;
   }
@@ -1128,7 +1127,7 @@ mmo_enum_waypt_cb(const Waypoint*)
 static void
 mmo_enum_route_cb(const route_head* rte)
 {
-  if (rte->rte_waypt_ct > 0) {
+  if (rte->rte_waypt_ct() > 0) {
     mmo_obj_ct++;
   }
 }
@@ -1294,7 +1293,7 @@ mmo_write_rte_head_cb(const route_head* rte)
 {
   time_t time = 0x7FFFFFFF;
 
-  if (rte->rte_waypt_ct <= 0) {
+  if (rte->rte_waypt_ct() <= 0) {
     return;
   }
 
@@ -1314,18 +1313,18 @@ mmo_write_rte_head_cb(const route_head* rte)
   mmo_register_object(objid, rte, rtedata);
   mmo_write_category("CCategory", "Route");
   gbfputc(0, fout); /* unknown */
-  gbfputuint16(rte->rte_waypt_ct, fout);
+  gbfputuint16(rte->rte_waypt_ct(), fout);
 }
 
 
 static void
 mmo_write_rte_tail_cb(const route_head* rte)
 {
-  if (rte->rte_waypt_ct <= 0) {
+  if (rte->rte_waypt_ct() <= 0) {
     return;
   }
 
-  DBG(("write", "route with %d point(s).\n", rte->rte_waypt_ct));
+  DBG(("write", "route with %d point(s).\n", rte->rte_waypt_ct()));
 
   if (mmo_version >= 0x12) {
     if (rte->line_color.bbggrr < 0) {
@@ -1351,14 +1350,14 @@ mmo_write_rte_tail_cb(const route_head* rte)
 static void
 mmo_write_trk_head_cb(const route_head* trk)
 {
-  if (trk->rte_waypt_ct <= 0) {
+  if (trk->rte_waypt_ct() <= 0) {
     return;
   }
   int objid = mmo_write_obj_head("CObjTrack",
                                  trk->rte_name.isEmpty() ? "Track" : CSTR(trk->rte_name), gpsbabel_time, obj_type_trk);
 
   mmo_write_category("CCategory", "Track");
-  gbfputuint16(trk->rte_waypt_ct, fout);
+  gbfputuint16(trk->rte_waypt_ct(), fout);
 
   mmo_register_object(objid, trk, trkdata);
 }
@@ -1367,7 +1366,7 @@ mmo_write_trk_head_cb(const route_head* trk)
 static void
 mmo_write_trk_tail_cb(const route_head* trk)
 {
-  if (trk->rte_waypt_ct <= 0) {
+  if (trk->rte_waypt_ct() <= 0) {
     return;
   }
 

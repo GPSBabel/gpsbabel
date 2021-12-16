@@ -21,7 +21,7 @@
 #ifndef REVERSE_ROUTE_H_INCLUDED_
 #define REVERSE_ROUTE_H_INCLUDED_
 
-#include <QtCore/QVector>  // for QVector
+#include <QVector>         // for QVector
 
 #include "defs.h"    // for Waypoint (ptr only), arglist_t, route_head (ptr ...
 #include "filter.h"  // for Filter

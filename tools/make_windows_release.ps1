@@ -42,7 +42,7 @@ if ( "$flow" -eq "msbuild" ) {
     }
 }
 if ( "$flow" -eq "cmake" ) {
-    $Qt5_DIR = "$(Join-Path "$((Get-Command qmake) | Split-Path)"  '..\lib\cmake\Qt5' -Resolve)"
+    $CMAKE_PREFIX_PATH = "$(Join-Path "$((Get-Command qmake) | Split-Path)"  '..' -Resolve)"
 }
 # mimic creator shadow build to match Inno setup file
 # make sure we are staring with a clean build directory
@@ -58,7 +58,7 @@ switch ($flow) {
     #WARNING: Could not parse Compiler option '-std:c++14'; added to AdditionalOptions.
     "msbuild" { $ErrorActionPreference = "Continue"; qmake -tp vc "$($gpsbabel_src_dir)\GPSBabel.pro"; $ErrorActionPreference = "Stop" }
     "nmake" { qmake "$($gpsbabel_src_dir)\GPSBabel.pro" -spec "win32-msvc" }
-    "cmake" { cmake -G "Ninja" -DCMAKE_BUILD_TYPE:STRING="Release" -DQt5_DIR:PATH="$($Qt5_DIR)" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH="$($gpsbabel_build_dir)\release" "$($gpsbabel_src_dir)" }
+    "cmake" { cmake -G "Ninja" -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_PREFIX_PATH:PATH="$($CMAKE_PREFIX_PATH)" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH="$($gpsbabel_build_dir)\release" "$($gpsbabel_src_dir)" }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch ($flow) {
@@ -81,7 +81,7 @@ switch ($flow) {
     "mingw" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-g++" }
     "msbuild" { qmake -tp vc "$($gpsbabel_src_dir)\gui\app.pro" }
     "nmake" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-msvc" }
-    "cmake" { cmake -G "Ninja" -DCMAKE_BUILD_TYPE:STRING:="Release" -DQt5_DIR:PATH="$($Qt5_DIR)" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH="$($gui_build_dir)\release" "$($gpsbabel_src_dir)\gui" }
+    "cmake" { cmake -G "Ninja" -DCMAKE_BUILD_TYPE:STRING:="Release" -DCMAKE_PREFIX_PATH:PATH="$($CMAKE_PREFIX_PATH)" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH="$($gui_build_dir)\release" "$($gpsbabel_src_dir)\gui" }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch ($flow) {
@@ -105,7 +105,7 @@ New-Item "$($gui_build_dir)\package" -type directory -Force | Out-Null
 Copy-Item "$($gpsbabel_build_dir)\release\GPSBabel.exe" "$($gui_build_dir)\package\GPSBabel.exe"
 Copy-Item "$($gui_build_dir)\release\GPSBabelFE.exe" "$($gui_build_dir)\package\GPSBabelFE.exe"
 # use --plugindir option to locate the plugins.
-& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe
+& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe package\GPSBabel.exe
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 if ($buildinstaller -eq "true") {
     Set-Location "$($gpsbabel_src_dir)\gui"

@@ -28,7 +28,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <QtCore/QXmlStreamAttributes>
+#include <QXmlStreamAttributes>
 
 static QString encoded_points;
 static QString instructions;

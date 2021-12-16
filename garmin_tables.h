@@ -24,7 +24,7 @@
 #define GARMIN_TABLES_H
 
 #include <cstdint>              // for uint32_t
-#include <QtCore/QString>       // for QString
+#include <QString>              // for QString
 #include "defs.h"               // for grid_type
 
 #define DEFAULT_ICON_DESCR "Waypoint"

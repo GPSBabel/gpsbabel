@@ -26,7 +26,7 @@
 #include "jeeps/gps.h"
 #include "gbser.h"
 #include "jeeps/gpsserial.h"
-#include <QtCore/QThread>
+#include <QThread>
 #include <cerrno>
 #include <cstdio>
 #include <ctime>
