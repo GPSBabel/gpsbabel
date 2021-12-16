@@ -275,15 +275,17 @@ NmeaFormat::rd_deinit()
   posn_fname.clear();
 
   int warnings = 0;
-  for (const auto& [key, value] : counter) {
-    if (value > 0) {
+  QMap<QString, int>::const_iterator i = warning_entries.constBegin();
+  while (i != warning_entries.constEnd()) {
+    if (i.value() > 0) {
       warnings++;
-      std::cout << MYNAME << ": discarded lines with " << key << " = " << value << "\n";
+      Warning().nospace() << MYNAME << ": discarded lines with " << i.key() << " = " << i.value() << "\n";
     }
+    ++i;
   }
 
   if (warnings) {
-    std::cout << "\n";
+    Warnings().nospace() << "\n";
   }
 
 }
@@ -404,7 +406,7 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
   if (fields.size() > 6) valid = fields[6].startsWith('A');
 
   if (!valid) {
-    counter["invalid_gpgll"]++;
+    warning_entries["invalid_gpgll"]++;
     return;
   }
 
@@ -470,7 +472,7 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
    */
   CHECK_BOOL(opt_ignorefix);
   if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
-    counter["invalid_gpgga"]++;
+    warning_entries["invalid_gpgga"]++;
     return;
   }
 
@@ -552,7 +554,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   }
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
-    counter["invalid_gprmc"] = 0;
+    warning_entries["invalid_gprmc"] = 0;
     return;
   }
 
@@ -910,6 +912,7 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
         int ckval = nmea_cksum(tbuf.mid(1, ckidx - 1));
         if (ckval != ckcmp) {
           Warning().nospace() << qSetFieldWidth(2) << qSetPadChar('0') <<  Qt::hex << "Invalid NMEA checksum.  Computed 0x" << ckval << " but found 0x" << ckcmp << ".  Ignoring sentence.";
+          warning_entries["invalid_checksum"];
           return;
         }
         checked = true;
@@ -990,9 +993,9 @@ NmeaFormat::read()
     return;
   }
 
-  counter["invalid_gprmc"] = 0;
-  counter["invalid_gpgll"] = 0;
-  counter["invalid_gpgga"] = 0;
+  warning_entries["invalid_gprmc"] = 0;
+  warning_entries["invalid_gpgll"] = 0;
+  warning_entries["invalid_gpgga"] = 0;
 
   if (optdate) {
     opt_tm = QDate::fromString(optdate, "yyyyMMdd");
