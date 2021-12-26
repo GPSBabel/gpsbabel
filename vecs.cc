@@ -133,8 +133,9 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
       c = "0";
     } else {
       int test;
-      is_fatal(1 != sscanf(c, "%d", &test),
-               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      if (1 != sscanf(c, "%d", &test)) {
+        fatal("%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      }
     }
     break;
   case ARGTYPE_FLOAT:
@@ -142,8 +143,9 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
       c = "0";
     } else {
       double test;
-      is_fatal(1 != sscanf(c, "%lf", &test),
-               "%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      if (1 != sscanf(c, "%lf", &test)) {
+        fatal("%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      }
     }
     break;
   case ARGTYPE_BOOL:

@@ -116,9 +116,13 @@ mapbar_track_read()
   int end_flag = gbfgetint32(fin);
   while (!end_flag) {
     int length = gbfgetint32(fin);
-    is_fatal((length < 1) || (length > 1600), MYNAME ": get bad buffer length");
+    if ((length < 1) || (length > 1600)) {
+      fatal(MYNAME ": get bad buffer length");
+    }
 
-    is_fatal((length % 8 != 0), MYNAME ": bad buffer size");
+    if (length % 8 != 0) {
+      fatal(MYNAME ": bad buffer size");
+    }
     gbfseek(fin, 16, SEEK_CUR);
 
     const int amount = length/8;

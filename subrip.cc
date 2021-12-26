@@ -84,7 +84,9 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     switch (*c) {
     case '%':
       fmt = *++c;
-      is_fatal(fmt == '\0', "No character after %% in subrip format");
+      if (fmt == '\0') {
+        fatal("No character after %% in subrip format");
+      }
 
       switch (fmt) {
       case 's':
@@ -136,7 +138,9 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 
     case '\\':
       fmt = *++c;
-      is_fatal(fmt == '\0', "No character after \\ in subrip format");
+      if (fmt == '\0') {
+        fatal("No character after \\ in subrip format");
+      }
       switch (fmt) {
       case 'n':
         gbfprintf(fout, "\n");
