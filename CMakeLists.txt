@@ -1,9 +1,4 @@
-
-# It isn't clear what the minimum required version is.
-# tested against 3.10.2 on ubuntu bionic 2018/07/05
-# tested against 3.5.1 on ubuntu xenial 2018/07/05
-# tested against MSVC 2017 which included 3.11.* 2018/07/05
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.11)
 
 project(gpsbabel LANGUAGES C CXX)
 
@@ -12,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+add_executable(gpsbabel)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
@@ -323,32 +320,34 @@ set(HEADERS ${HEADERS} ${FILTER_HEADERS})
 
 set(SOURCES ${SOURCES} internal_styles.cc)
 
-include_directories(AFTER zlib)
+target_include_directories(gpsbabel PRIVATE zlib)
 
 include(CheckIncludeFile)
 if(UNIX)
   # this is used by zlib
   check_include_file("unistd.h" HAVE_UNISTD_H)
   if(${HAVE_UNISTD_H})
-    add_definitions(-DHAVE_UNISTD_H)
+    target_compile_definitions(gpsbabel PRIVATE HAVE_UNISTD_H)
   endif()
   # this is used by zlib
   check_include_file("stdarg.h" HAVE_STDARG_H)
   if(${HAVE_STDARG_H})
-    add_definitions(-DHAVE_STDARG_H)
+    target_compile_definitions(gpsbabel PRIVATE HAVE_STDARG_H)
   endif()
-  add_definitions(-DHAVE_LIBUSB_1_0)
+  target_compile_definitions(gpsbabel PRIVATE HAVE_LIBUSB_1_0)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
-  add_compile_options(-O2 -Wall)
+  target_compile_options(gpsbabel PRIVATE -Wall)
 endif()
 
 if(WIN32)
-  add_definitions(-D__WIN32__ -D_CONSOLE)
-  remove_definitions(-DUNICODE -DZLIB_INHIBITED)
+  target_compile_definitions(gpsbabel PRIVATE __WIN32__)
+  if(${QT_VERSION_MAJOR} EQUAL "6")
+    qt_disable_unicode_defines(gpsbabel)
+  endif()
   if(CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(-D_DEBUG)
+    target_compile_definitions(gpsbabel PRIVATE _DEBUG)
   endif()
   set(SOURCES ${SOURCES} gbser_win.cc)
   set(HEADERS ${HEADERS} gbser_win.h)
@@ -358,8 +357,8 @@ if(WIN32)
 endif()
 
 if(MSVC)
-  add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_compile_options(/MP -wd4100 -wd4267)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_DEPRECATE)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -368,7 +367,7 @@ endif()
 
 if(APPLE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
-  include_directories(AFTER mac/libusb mac/libusb/Xcode)
+  target_include_directories(gpsbabel PRIVATE mac/libusb mac/libusb/Xcode)
   set(SOURCES ${SOURCES}
     mac/libusb/core.c
     mac/libusb/descriptor.c
@@ -390,7 +389,7 @@ if(APPLE)
     mac/libusb/os/events_posix.h
     mac/libusb/os/threads_posix.h
   )
-  add_compile_options(-Wall -Wsign-compare)
+  target_compile_options(gpsbabel PRIVATE -Wall -Wsign-compare)
 endif()
 
 set(SOURCES
@@ -400,22 +399,23 @@ set(SOURCES
 list(SORT SOURCES)
 list(SORT HEADERS)
 
-# We don't care about stripping things out of the build.  Full monty, baby.
-add_definitions(-DMAXIMAL_ENABLED)
-add_definitions(-DFILTERS_ENABLED)
-add_definitions(-DSHAPELIB_ENABLED)
-add_definitions(-DCSVFMTS_ENABLED)
+target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
 
-add_executable(gpsbabel ${SOURCES} ${HEADERS})
+# We don't care about stripping things out of the build.  Full monty, baby.
+target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
+
 target_link_libraries(gpsbabel ${QT_LIBRARIES} ${LIBS})
 
-message(STATUS "Sources are: \"${SOURCES}\"")
-message(STATUS "Headers are: \"${HEADERS}\"")
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
+get_target_property(Srcs gpsbabel SOURCES)
+message(STATUS "Sources are: \"${Srcs}\"")
+get_target_property(DirDefs gpsbabel COMPILE_DEFINITIONS)
 message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs gpsbabel LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
-get_directory_property(IncDirs INCLUDE_DIRECTORIES)
+get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)

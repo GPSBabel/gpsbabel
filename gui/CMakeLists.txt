@@ -1,9 +1,4 @@
-
-# It isn't clear what the minimum required version is.
-# tested against 3.10.2 on ubuntu bionic 2018/07/05
-# tested against 3.5.1 on ubuntu xenial 2018/07/05
-# tested against MSVC 2017 which included 3.11.* 2018/07/05
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.11)
 
 project(gpsbabelfe LANGUAGES CXX)
 
@@ -19,6 +14,15 @@ set(CMAKE_AUTOUIC ON)
 # Handle the Qt rcc code generator automatically
 set(CMAKE_AUTORCC ON)
 
+if(UNIX AND NOT APPLE)
+  set(TARGET gpsbabelfe)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
+else()
+  set(TARGET GPSBabelFE)
+endif()
+
+add_executable(${TARGET} WIN32 MACOSX_BUNDLE)
+
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
@@ -29,13 +33,18 @@ else()
   message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
 endif()
 
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
+set(MAPPREVIEW ON CACHE BOOL "enable map preview")
+if (MAPPREVIEW)
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
+else()
+  target_compile_definitions(${TARGET} PRIVATE DISABLE_MAPPREVIEW)
+endif()
 
-set(RESOURCES app.qrc)
+list(APPEND RESOURCES app.qrc)
 
 if(WIN32)
-  set(RESOURCES ${RESOURCES} app.rc)
+  list(APPEND RESOURCES app.rc)
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -45,84 +54,105 @@ else()
   set(TARGET GPSBabelFE)
 endif()
 
-set(FORMS
-  aboutui.ui
-  advui.ui
-  donate.ui
-  filterui.ui
-  gmapui.ui
-  mainwinui.ui
-  miscfltui.ui
-  preferences.ui
-  rttrkui.ui
-  trackui.ui
-  upgrade.ui
-  version_mismatch.ui
-  wayptsui.ui
-)
+# FORMS
+list(APPEND FORMS aboutui.ui)
+list(APPEND FORMS advui.ui)
+list(APPEND FORMS donate.ui)
+list(APPEND FORMS filterui.ui)
+if (MAPPREVIEW)
+  list(APPEND FORMS gmapui.ui)
+endif()
+list(APPEND FORMS mainwinui.ui)
+list(APPEND FORMS miscfltui.ui)
+list(APPEND FORMS preferences.ui)
+list(APPEND FORMS rttrkui.ui)
+list(APPEND FORMS trackui.ui)
+list(APPEND FORMS upgrade.ui)
+list(APPEND FORMS version_mismatch.ui)
+list(APPEND FORMS wayptsui.ui)
 
-set(SOURCES
-  aboutdlg.cc
-  advdlg.cc
-  donate.cc
-  dpencode.cc
-  filterdata.cc
-  filterdlg.cc
-  filterwidgets.cc
-  format.cc
-  formatload.cc
-  gmapdlg.cc
-  gpx.cc
-  help.cc
-  latlng.cc
-  main.cc
-  mainwindow.cc
-  map.cc
-  optionsdlg.cc
-  preferences.cc
-  processwait.cc
-  runmachine.cc
-  upgrade.cc
-  version_mismatch.cc
-)
+# SOURCES
+list(APPEND SOURCES aboutdlg.cc)
+list(APPEND SOURCES advdlg.cc)
+list(APPEND SOURCES donate.cc)
+list(APPEND SOURCES dpencode.cc)
+list(APPEND SOURCES filterdata.cc)
+list(APPEND SOURCES filterdlg.cc)
+list(APPEND SOURCES filterwidgets.cc)
+list(APPEND SOURCES format.cc)
+list(APPEND SOURCES formatload.cc)
+if (MAPPREVIEW)
+  list(APPEND SOURCES gmapdlg.cc)
+  list(APPEND SOURCES gpx.cc)
+endif()
+list(APPEND SOURCES help.cc)
+list(APPEND SOURCES latlng.cc)
+list(APPEND SOURCES main.cc)
+list(APPEND SOURCES mainwindow.cc)
+if (MAPPREVIEW)
+  list(APPEND SOURCES map.cc)
+endif()
+list(APPEND SOURCES optionsdlg.cc)
+list(APPEND SOURCES preferences.cc)
+list(APPEND SOURCES processwait.cc)
+list(APPEND SOURCES runmachine.cc)
+list(APPEND SOURCES upgrade.cc)
+list(APPEND SOURCES version_mismatch.cc)
 
 if(UNIX)
-  set(SOURCES ${SOURCES} serial_unix.cc)
+  list(APPEND SOURCES serial_unix.cc)
 elseif(WIN32)
-  set(SOURCES ${SOURCES} serial_win.cc)
+  list(APPEND SOURCES serial_win.cc)
 endif()
 
-set(HEADERS
-  aboutdlg.h
-  advdlg.h
-  appname.h
-  babeldata.h
-  donate.h
-  filterdata.h
-  filterdlg.h
-  filterwidgets.h
-  format.h
-  formatload.h
-  gmapdlg.h
-  gpx.h
-  help.h
-  mainwindow.h
-  map.h
-  optionsdlg.h
-  preferences.h
-  processwait.h
-  runmachine.h
-  setting.h
-  upgrade.h
-  version_mismatch.h
-)
+# HEADERS
+list(APPEND HEADERS aboutdlg.h)
+list(APPEND HEADERS advdlg.h)
+list(APPEND HEADERS appname.h)
+list(APPEND HEADERS babeldata.h)
+list(APPEND HEADERS donate.h)
+list(APPEND HEADERS filterdata.h)
+list(APPEND HEADERS filterdlg.h)
+list(APPEND HEADERS filterwidgets.h)
+list(APPEND HEADERS format.h)
+list(APPEND HEADERS formatload.h)
+if (MAPPREVIEW)
+  list(APPEND HEADERS gmapdlg.h)
+  list(APPEND HEADERS gpx.h)
+endif()
+list(APPEND HEADERS help.h)
+list(APPEND HEADERS mainwindow.h)
+if (MAPPREVIEW)
+  list(APPEND HEADERS map.h)
+endif()
+list(APPEND HEADERS optionsdlg.h)
+list(APPEND HEADERS preferences.h)
+list(APPEND HEADERS processwait.h)
+list(APPEND HEADERS runmachine.h)
+list(APPEND HEADERS setting.h)
+list(APPEND HEADERS upgrade.h)
+list(APPEND HEADERS version_mismatch.h)
+
+if(UNIX AND NOT APPLE)
+  set(EMBED_TRANSLATIONS ON CACHE BOOL "embed translations")
+  set(EMBED_MAP ON CACHE BOOL "embed map html")
+else()
+  set(EMBED_TRANSLATIONS OFF CACHE BOOL "embed translations")
+  set(EMBED_MAP OFF CACHE BOOL "embed map html")
+endif()
+if (EMBED_TRANSLATIONS)
+  list(APPEND RESOURCES translations.qrc)
+endif()
+if (EMBED_MAP)
+  list(APPEND RESOURCES map.qrc)
+endif()
 
 if(APPLE)
   set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
   set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-  add_executable(${TARGET} MACOSX_BUNDLE ${SOURCES} ${HEADERS} ${ICON_FILE} ${RESOURCES})
+  target_sources(${TARGET} PRIVATE ${SOURCES} ${HEADERS} ${ICON_FILE} ${RESOURCES})
 
   # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
   set_target_properties(${TARGET} PROPERTIES
@@ -130,20 +160,18 @@ if(APPLE)
     MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
   )
 else()
-  add_executable(${TARGET} ${SOURCES} ${HEADERS} ${RESOURCES})
+  target_sources(${TARGET} PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
 endif()
 
-set(LIBS ${QT_LIBRARIES})
-list(REMOVE_DUPLICATES LIBS)
-target_link_libraries(${TARGET} ${LIBS})
+target_link_libraries(${TARGET} ${QT_LIBRARIES})
 
-message(STATUS "Sources are: \"${SOURCES}\"")
-message(STATUS "Headers are: \"${HEADERS}\"")
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
+get_target_property(Srcs ${TARGET} SOURCES)
+message(STATUS "Sources are: \"${Srcs}\"")
+get_target_property(DirDefs ${TARGET} COMPILE_DEFINITIONS)
 message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs ${TARGET} LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
-get_directory_property(IncDirs INCLUDE_DIRECTORIES)
+get_target_property(IncDirs ${TARGET} INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 add_custom_target(package_app COMMAND ./package_app DEPENDS ${TARGET})
