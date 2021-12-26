@@ -57,8 +57,8 @@ Controller.prototype.WelcomePageCallback = function() {
 
     var widget = gui.currentPageWidget();
 
-    /* 
-	   Online installer 3.0.6 
+    /*
+	   Online installer 3.0.6
 	   - It must disconnect the completeChanged callback after used, otherwise it will click the 'next' button on another pages
 	 */
     var callback = function() {
@@ -170,8 +170,8 @@ Controller.prototype.IntroductionPageCallback = function() {
     log("Introduction Page");
     log("Retrieving meta information from remote repository");
 
-    /* 
-	   Online installer 3.0.6 
+    /*
+	   Online installer 3.0.6
 	   - Don't click buttons.NextButton directly. It will skip the componenet selection.
     */
 
@@ -228,7 +228,7 @@ Controller.prototype.FinishedPageCallback = function() {
     tryFinish();
 }
 
-// Telemetry disabled 
+// Telemetry disabled
 Controller.prototype.DynamicTelemetryPluginFormCallback = function()
 {
     log("TelemetryPluginFormCallback");

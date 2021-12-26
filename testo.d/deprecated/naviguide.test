@@ -1,5 +1,5 @@
 #
-# Naivguide 
+# Naivguide
 #
 gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
 compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx

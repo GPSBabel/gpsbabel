@@ -1,5 +1,5 @@
 <para>
-This function is identical to the init-baud file function of skytraq module. 
+This function is identical to the init-baud file function of skytraq module.
 </para>
 <para>The "initbaud" option might be helpful if autodetection fails or takes too long. With this option you
 can tell GPSBabel the baud rate the device is currently set to. In contrast, the option "baud" specifies

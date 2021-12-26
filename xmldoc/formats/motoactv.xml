@@ -1,7 +1,7 @@
 <para>
 The <productname>MotoACTV</productname> smart watch creates csv
 format files. GPSBabel can read and write these files through
-the xcsv format when using the included motoactv.style specification. 
+the xcsv format when using the included motoactv.style specification.
 </para>
 <para>
 The specific format of the csv file has changed over time, to

@@ -3,7 +3,7 @@
   it is currently only able to generate USR format 2, 3, or 4 due to the lack of
   detailed information on some of the data contained in the other formats.
 </para>
- 
+
 <para>
   By default, GPSBabel will generate USR version 2 data if the output format is
   specified as <emphasis>lowranceusr</emphasis>.
@@ -24,7 +24,7 @@ is exactly the same as
   USR file format that adds waypoint depth.  Lowrance recommends that this USR version
   be used when transferring user data to systems such as
   LMS, LCX, and so on.   Specify "3" to output USR version 3 data
-  on write.  
+  on write.
 </para>
 
 <para>

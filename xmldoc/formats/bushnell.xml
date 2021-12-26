@@ -1,11 +1,11 @@
 <para>
-This format supports reading and writing wayponts to 
-<ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink> 
+This format supports reading and writing wayponts to
+<ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink>
 receivers, notably the <productname>Onix 400</productname>.
 </para>
 <para>
-It's an oddity for many GPSBabel norms that this format requires each 
-waypoint be in a separate file.   Our "output filename" argument, -F is 
+It's an oddity for many GPSBabel norms that this format requires each
+waypoint be in a separate file.   Our "output filename" argument, -F is
 modified to take an "output filename template".   The output filename
 you specify will have a dash, and a sequentially increasing integer,
 and the ".wpt" extension appended to it.  When the names are shown on
@@ -30,7 +30,7 @@ Windows users may prefer the spelling:
 <para>
 At least for the 200CR, the directory name used by the device is "WAYPOINT"
 in the root directory.  It's also worth mentioning that its USB Mass Storage
-protocol appears to not work on (at least) Snow Leopard 10.6.2.  It's not 
+protocol appears to not work on (at least) Snow Leopard 10.6.2.  It's not
 known if other Onix models have a more compatible USB implementation.
 </para>
 

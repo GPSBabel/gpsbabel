@@ -1,6 +1,6 @@
 <para>
-  Specifies the maximum time in seconds between any two points. If the 
-  time difference is larger than what's specified here, the points will 
+  Specifies the maximum time in seconds between any two points. If the
+  time difference is larger than what's specified here, the points will
   not be discarded.
 </para>
 <para>

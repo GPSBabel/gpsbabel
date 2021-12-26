@@ -1,4 +1,4 @@
-0) Ensure 'changes' file is up to date.   
+0) Ensure 'changes' file is up to date.
    Regenerate capabilties. (done by 'make doc')
    Refresh public web version.
 1) Bump version in configure.ac.   Commit that.

@@ -13,7 +13,7 @@ gpsbabel -r -i mapsend -f ${REFERENCE}/route/route.mapsend -o mapsend \
 bincompare ${TMPDIR}/route.mapsend ${REFERENCE}/route/route.mapsend
 
 #
-# MAPSEND track format 
+# MAPSEND track format
 #
 rm -f ${TMPDIR}/mapsend.trk
 gpsbabel -t -i mapsend -f ${REFERENCE}/track/mapsend.trk -o mapsend,trkver=3 \

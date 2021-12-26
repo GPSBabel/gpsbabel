@@ -459,9 +459,9 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
   QString rname;
 
   /* total nodes (waypoints) this route */
-  //if (rte->waypoint_list.next) { 
+  //if (rte->waypoint_list.next) {
   if (true) {
-    // this test doesn't do what I w ant i.e test if this is a valid 
+    // this test doesn't do what I w ant i.e test if this is a valid
     // route - treat as a placeholder for now .
     time_t uniqueValue = 0;
     unsigned int rte_datapoints = 0;

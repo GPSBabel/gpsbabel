@@ -1,4 +1,4 @@
-# PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
+# PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an
 # intermediate format to avoid binary FP anomalies on compareerent platforms.
 rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
 gpsbabel -i psp -f ${REFERENCE}/ps.psp -o mxf -F ${TMPDIR}/psp.mxf

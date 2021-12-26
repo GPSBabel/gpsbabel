@@ -49,7 +49,7 @@
      <item>
       <widget class="QComboBox" name="debugCombo">
        <property name="toolTip">
-        <string>Debugging diagnostics.  
+        <string>Debugging diagnostics.
 Higher number provides more detailed diagnostics.</string>
        </property>
        <item>

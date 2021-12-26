@@ -1,6 +1,6 @@
 
 #
-# Position filter -  Since very small distances are essentialy a duplicate 
+# Position filter -  Since very small distances are essentialy a duplicate
 # position filter, we can test very similarly to the duplicate filter.
 #
 rm -f ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2

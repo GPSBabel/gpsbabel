@@ -9,7 +9,7 @@ while (<FF>) {
 	$out =~ s/"/\\"/g;
 	print "QT_TR_NOOP(\"$out\"),\n";
     }
-    
+
     if (/^option/) {
 	my @x = split(/\t/, $_);
 	my $out = $x[3];

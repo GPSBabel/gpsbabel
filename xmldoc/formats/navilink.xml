@@ -1,6 +1,6 @@
 <para>
 	GPSBabel supports the Navilink protocol used by the
-	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</ulink> 
+	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</ulink>
 	and
 	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=30">GT-31</ulink>
 	GPS receivers. These are sold under a variety of names including:
@@ -28,8 +28,8 @@
 <para>
 	To access the device using the serial protocol over USB the
 	device needs to be in Navilink mode, which can be activated
-	from the main menu of the device. This device uses a Prolific 
-	PL2303 USB/Serial adapter internally and that's how it will 
+	from the main menu of the device. This device uses a Prolific
+	PL2303 USB/Serial adapter internally and that's how it will
 	present itself to the host operating system. You thus need
 	USB drivers for the PL2303, such as those from the 'Download'
 	section of

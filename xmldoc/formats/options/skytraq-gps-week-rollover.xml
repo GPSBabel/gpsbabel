@@ -10,7 +10,7 @@ which roll over to 0 every 1024 weeks (close to 20 years).
 <thead>
 <row>
  <entry>Starting from:</entry>
- <entry>gps-week-rollover value:</entry> 
+ <entry>gps-week-rollover value:</entry>
 </row>
 </thead>
 <tbody>

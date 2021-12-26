@@ -3,7 +3,7 @@ Mapconverter is a format that is read by Mapopolis.com's
 mapconverter application.
 </para>
 <para>
-Mapconverter is an application used to create userland maps and map data for 
+Mapconverter is an application used to create userland maps and map data for
 Mapopolis.com's Mapopolis program.  The mapconverter format is essentially
 waypoint data prepared in a format that the mapconverter application will
 accept.
@@ -30,7 +30,7 @@ on your PDA.
 <listitem>
 <para>
 GPSBabel will write the name of its own output file in the output file
-  it creates as the input for Mapconverter.   Mapconverter will replace 
+  it creates as the input for Mapconverter.   Mapconverter will replace
   the extension of this filename with ".pdb".
 </para>
 </listitem>
@@ -52,7 +52,7 @@ Mapconverter only works with Mapopolis version 3.x.  Mapopolis version
 <para>
 Mapconverter is no longer available from the Mapopolis website.  If you
   need a copy of mapconverter, ask on your local GPS Software discussion
-  forum and I'm sure someone will have it.  As far as I know, It was never 
+  forum and I'm sure someone will have it.  As far as I know, It was never
   actually acknowledged/supported by Mapopolis to begin with.
 </para>
 </listitem>

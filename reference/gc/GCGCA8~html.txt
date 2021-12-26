@@ -19,7 +19,7 @@
 <td align="right"><p class="gpsbabelcacheinfo">3 / 2<br>
 Unknown Cache / Unknown</p></td></tr>
 <tr><td colspan="2"><p class="gpsbabeldescshort">The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.</p>
-<p class="gpsbabeldesclong">So if the cache isn't at the above coordinates, where is it?  
+<p class="gpsbabeldesclong">So if the cache isn't at the above coordinates, where is it?
 
 <ul>
 

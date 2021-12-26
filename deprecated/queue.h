@@ -64,7 +64,7 @@ queue* dequeue(queue* element);
 		(element) = (tmp))
 
 // FIXME: g++ 7.3.0, -O2, with T=route_head yields warnings.
-//        implementing QueueList as a template was meant to 
+//        implementing QueueList as a template was meant to
 //        i) avoid reinterpret_casts all over the code as with QUEUE_FOR_EACH
 //        ii) allow use of range based for loops.
 //        If this isn't fixed then QueueList doesn't need to be a template, T == queue.

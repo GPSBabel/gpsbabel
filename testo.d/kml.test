@@ -5,7 +5,7 @@
 gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
 compare  ${REFERENCE}/earth-gc.kml ${TMPDIR}/ge-gc.kml
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
-compare ${REFERENCE}/earth-expertgps.kml ${TMPDIR}/ge-eg.kml 
+compare ${REFERENCE}/earth-expertgps.kml ${TMPDIR}/ge-eg.kml
 
 # And again, but with tracks.
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
@@ -41,14 +41,14 @@ compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
 # 1) ostring wasn't cleared, so writing two KML files would accumulate them.
 # 2) There is, IMO, a bug when reinitializing the QXmlWriter that results
 #    in a blank line at the beginning of the output, which makes Google Earth
-#    grumpy.  This totally tanks the realtime tracking mode which relies on 
+#    grumpy.  This totally tanks the realtime tracking mode which relies on
 #    this heavily.
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
   -F ${TMPDIR}/ge-eg-track1.kml \
   -F ${TMPDIR}/ge-eg-track2.kml \
   -F ${TMPDIR}/ge-eg-track3.kml
 
-# 1 should be == 2. 2 should be == 3. 
+# 1 should be == 2. 2 should be == 3.
 compare ${TMPDIR}/ge-eg-track1.kml ${TMPDIR}/ge-eg-track2.kml
 compare ${TMPDIR}/ge-eg-track2.kml ${TMPDIR}/ge-eg-track3.kml
 
@@ -76,7 +76,7 @@ if [ "${RUNNINGVALGRIND}" != "0" ]; then
     KMLS=$(find ${REFERENCE} -name \*.kml)
     for f in $KMLS
     do
-      case $f in 
+      case $f in
         # Argue with the KML wizards about this.  It was the intent for that
         # to be legal in Earth GX 2.2.
         ${REFERENCE}/track/segmented_tracks-track.kml) continue;;

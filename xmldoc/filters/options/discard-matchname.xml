@@ -1,5 +1,5 @@
 <para>
-This option discards points that have shortnames that match the 
+This option discards points that have shortnames that match the
 provided regular expression.
 </para>
 <example id="discarding_points_with_names">

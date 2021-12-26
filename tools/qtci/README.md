@@ -56,7 +56,7 @@ Usage
     extract-qt-installer --list-packages qt-installer
 ```
 
-Extract Qt from the installer to the target path (for Qt 5.5 or above). If --list-packages is given, it will show the available packages from the installer and terminate immediately. 
+Extract Qt from the installer to the target path (for Qt 5.5 or above). If --list-packages is given, it will show the available packages from the installer and terminate immediately.
 
 Example:
 
@@ -68,7 +68,7 @@ Environment Variables
 
     VERBOSE [Optional] Set to "true" will enable VERBOSE output
     QT_CI_PACKAGES [Optional] Select the components to be installed instead of using default (eg. QT_CI_PACKAGES="qt.59.gcc_64")
-    QT_CI_LOGIN [Optional] The login name 
+    QT_CI_LOGIN [Optional] The login name
     QT_CI_PASSWORD [Optional] The password of login
 
 The arguments and environment required could be different due to the installer changes. Check the recipes folder or the wiki of known issues to find out the correct setting.
@@ -143,7 +143,7 @@ Example
     #Change to the installation path
 
     qt-5.5.1-android-19 # Install Qt 5.5.1 and Android SDK
-    
+
     source qt-5.5.1-android-19.env # Add installed Qt path to $PATH
 
 

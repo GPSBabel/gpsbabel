@@ -7,8 +7,8 @@
          <para><userinput> gpsbabel -t -i gpx -f in.gpx -x track,split,title="ACTIVE LOG # %Y%m%d" -o gpx -F out.gpx</userinput></para>
          <para> If the input has multiple tracks, pack them together before
 splitting them back apart per day thusly: </para>
-         <para><userinput>     	    gpsbabel -t   -i gpx -f in.gpx  
-     -x track,pack,split,title="ACTIVE LOG # %D"  	
+         <para><userinput>     	    gpsbabel -t   -i gpx -f in.gpx
+     -x track,pack,split,title="ACTIVE LOG # %D"
      -o gpx -F out.gpx</userinput></para>
          <para> Additionally you can add an interval to the split
          option.  With this the track will be split if the time
@@ -19,9 +19,9 @@ splitting them back apart per day thusly: </para>
 </para>
          <para> For example, to split a track based on an four hour
          interval, use this:</para>
-         <para><userinput>            
-gpsbabel -t 
-     -i gpx -f in.gpx 
-     -x track,pack,split=4h,title="LOG # %c" 
+         <para><userinput>
+gpsbabel -t
+     -i gpx -f in.gpx
+     -x track,pack,split=4h,title="LOG # %c"
      -o gpx -F out.gpx
 </userinput></para>

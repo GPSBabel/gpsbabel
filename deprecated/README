@@ -14,12 +14,12 @@ was.
 
 Epitaths
 
-* cetus, copilot, coto, gcdb, geoniche, gpilots, gpspilot, mag_pdb, magnav, 
+* cetus, copilot, coto, gcdb, geoniche, gpilots, gpspilot, mag_pdb, magnav,
   mapopolis, palmdoc, pathaway, pdbfile, quovadis: Palm/OS has been in decline
   for years.  We've seen no list traffic about these in years.  Many of them
   have particularly grubby internal implementations.  None of these programs
   have been updated since the demise of Palm/OS.
-* hsa_ndv: Zero list traffic from anyone other than original author, 
+* hsa_ndv: Zero list traffic from anyone other than original author,
   who has quit responding to email, contributed it ten years ago.
   Use of "raw" expat (which we're removing), strange structure, poor test
   suite coverage.  Company that created HSA is gone.
@@ -28,9 +28,9 @@ Epitaths
   hsa_ndv if there's interest.
 * msroute: Long a problematic format when it was added in 2005.  It read
   Microsoft AutoRoute 2002 files.  It somewhat worked until about 2007 but
-  pretty much every annual Microsoft update broke it.  As AutoRoute and 
+  pretty much every annual Microsoft update broke it.  As AutoRoute and
   Streets & Trips has added GPX, this format has outlived its usefulness.
-* psp: If desktop Microsoft S&T from 2002 was dead (see msroute) 
+* psp: If desktop Microsoft S&T from 2002 was dead (see msroute)
   PocketStreets 2002 Pushpin is even more dead.  Not used or made in years.
 * axim_gpb: Dell Axim Navigation (their iPaq-wannabe) hasn't been used or
   made in years.  Usage stats are near zero.

@@ -19,7 +19,7 @@ set -e #quit on error
 
 if [ "$GETOPT_RET_CODE" != "4" ]
 then
-    echo "Warning: gnu-getopt is not installed. Long parameter like '--list-package' will not be working. Please install gnu-getopt by 'brew install gnu-getopt'"   
+    echo "Warning: gnu-getopt is not installed. Long parameter like '--list-package' will not be working. Please install gnu-getopt by 'brew install gnu-getopt'"
 else
 
 	OPTS=`getopt -o l --long list-packages --long disable-progress-report -n "extract-qt-installer" -- "$@"`
@@ -50,13 +50,13 @@ SCRIPT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/qt-install.qs
 PACKAGES=$QT_CI_PACKAGES
 
 if [ $LIST_PACKAGES -gt 0 ]
-then 
+then
 
 	if [ $# -lt 1 ]
 	then
 		usage
 	fi
-	
+
 	OUTPUT="/tmp/Qt"
 
 else
@@ -66,17 +66,17 @@ else
 		usage
 	fi
 
-	if [[ ! "${OUTPUT:0:1}" = "/" ]] 
-	then 
+	if [[ ! "${OUTPUT:0:1}" = "/" ]]
+	then
 		echo output path must be an absolute path
 		exit -1
 	fi
-    
+
 fi
 
 
 chmod u+x $1
-if [ -n "$QT_CI_DEBUG" ] 
+if [ -n "$QT_CI_DEBUG" ]
 then
 	$INSTALLER -v --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" | grep "\(QTCI\|operation\)"
 	exit 0
@@ -96,7 +96,7 @@ fi
 
 if [ -n "$DISABLE_PROGRESS_REPORT" ]
 then
-	$INSTALLER $PLATFORM --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT" 
+	$INSTALLER $PLATFORM --script $SCRIPT QTCI_LIST_PACKAGES="$LIST_PACKAGES" QTCI_PACKAGES="$PACKAGES" QTCI_OUTPUT="$OUTPUT"
 else
 	if [ -n "$VERBOSE" ]
 	then

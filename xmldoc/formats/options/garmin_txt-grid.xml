@@ -6,9 +6,9 @@
 <tgroup cols="4">
 <thead>
 <row>
- <entry># idx</entry> 
- <entry>short</entry> 
- <entry>file-header</entry> 
+ <entry># idx</entry>
+ <entry>short</entry>
+ <entry>file-header</entry>
  <entry>sample</entry>
 </row>
 </thead>

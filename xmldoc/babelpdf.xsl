@@ -15,7 +15,7 @@
 <!-- This template formats userinput as a block-level element and adds the
      background and border we use in the HTML doc, for consistency.  RLP -->
 <xsl:template match="userinput">
-  <fo:block background-color="#E5E9EB" padding="6pt" 
+  <fo:block background-color="#E5E9EB" padding="6pt"
 		border="1pt dashed #000000">
     <xsl:call-template name="inline.boldmonoseq"/>
   </fo:block>
@@ -52,7 +52,7 @@
     <xsl:attribute name="table-layout">fixed</xsl:attribute>
     <xsl:attribute name="width">
       <xsl:value-of select="$table.width"/>
-    </xsl:attribute>    
+    </xsl:attribute>
     <xsl:call-template name="simplelist.table.columns">
       <xsl:with-param name="cols">
         <xsl:choose>

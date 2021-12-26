@@ -3,7 +3,7 @@
 # so we first read a reference gopal file, and then write it out as gopal trk file, now with a computed timestamp.
 # Doing so results in more useful timestamps.
 # Next we convert this tst file to gpx to test the writing path, but gpx does not save speed, so do it twice...
-GoPalName=track20080703_173036.trk 
+GoPalName=track20080703_173036.trk
 rm -f ${TMPDIR}/${GoPalName}.*
 #step 1: reference file
 gpsbabel -i gopal -f ${REFERENCE}/track20080703_173036.trk -o gopal -F ${TMPDIR}/${GoPalName}.tst
