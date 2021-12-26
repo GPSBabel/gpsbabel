@@ -95,7 +95,7 @@ from our automated Docker builds.</para>
 <sect2 id="Configure">
   <title>Building with configure</title>
 <para>
-The GNU Build System (configure) is no longer suppored and has
+The GNU Build System (configure) is no longer supported and has
 been removed.  For command line builds please use <link linkend="qmake">qmake</link>.
 </para>
 </sect2>
