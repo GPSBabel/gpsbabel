@@ -47,13 +47,6 @@ if(WIN32)
   list(APPEND RESOURCES app.rc)
 endif()
 
-if(UNIX AND NOT APPLE)
-  set(TARGET gpsbabelfe)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
-else()
-  set(TARGET GPSBabelFE)
-endif()
-
 # FORMS
 list(APPEND FORMS aboutui.ui)
 list(APPEND FORMS advui.ui)
