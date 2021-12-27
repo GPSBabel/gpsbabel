@@ -348,8 +348,8 @@ macx|linux|openbsd {
 }
 
 win32 {
-  DEFINES += __WIN32__ _CONSOLE
-  DEFINES -= UNICODE
+  DEFINES += __WIN32__
+  DEFINES -= UNICODE _UNICODE
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
   }

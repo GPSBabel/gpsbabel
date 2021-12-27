@@ -45,6 +45,7 @@ mac:TARGET=GPSBabelFE
 # Set QMAKE_TARGET_BUNDLE_PREFIX so we get the correct CFBundleIdentifier in Info.plist
 darwin:QMAKE_TARGET_BUNDLE_PREFIX=org.gpsbabel
 
+# FORMS
 FORMS += aboutui.ui
 FORMS += advui.ui
 FORMS += donate.ui
@@ -61,6 +62,7 @@ FORMS += upgrade.ui
 FORMS += version_mismatch.ui
 FORMS += wayptsui.ui
 
+# SOURCES
 SOURCES += aboutdlg.cc
 SOURCES += advdlg.cc
 SOURCES += donate.cc
@@ -93,6 +95,7 @@ unix {
   SOURCES += serial_win.cc
 }
 
+# HEADERS
 HEADERS += aboutdlg.h
 HEADERS += advdlg.h
 HEADERS += appname.h
