@@ -351,6 +351,7 @@ styles.input = STYLE_FILES
 styles.output = $${OUT_PWD}/internal_styles.cc
 styles.variable_out = SOURCES
 QMAKE_EXTRA_COMPILERS += styles
+QMAKE_CLEAN += $${OUT_PWD}/internal_styles.cc
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
