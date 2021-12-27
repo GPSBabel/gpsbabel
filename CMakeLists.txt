@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
 
 project(gpsbabel LANGUAGES C CXX)
 
@@ -422,3 +422,49 @@ if(UNIX)
   # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
   add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/gpsbabel ./testo DEPENDS gpsbabel)
 endif()
+
+set(STYLE
+  style/arc.style
+  style/cambridge.style
+  style/csv.style
+  style/cup.style
+  style/custom.style
+  style/dna.style
+  style/flysight.style
+  style/fugawi.style
+  style/garmin301.style
+  style/garmin_g1000.style
+  style/garmin_poi.style
+  style/geonet.style
+  style/gpsdrive.style
+  style/gpsdrivetrack.style
+  style/iblue747.style
+  style/iblue757.style
+  style/igo2008_poi.style
+  style/igoprimo_poi.style
+  style/kompass_tk.style
+  style/kompass_wp.style
+  style/land_air_sea.style
+  style/mainnav.style
+  style/mapconverter.style
+  style/motoactv.style
+  style/mxf.style
+  style/navigonwpt.style
+  style/nima.style
+  style/openoffice.style
+  style/ricoh.style
+  style/s_and_t.style
+  style/saplus.style
+  style/tabsep.style
+  style/tomtom_asc.style
+  style/tomtom_itn_places.style
+  style/tomtom_itn.style
+)
+list(TRANSFORM STYLE PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+
+find_package(PythonInterp 3.6 REQUIRED)
+add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/internal_styles.cc"
+  COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/mkstyle.py"
+  ARGS -o "${CMAKE_CURRENT_BINARY_DIR}/internal_styles.cc" ${STYLE}
+  DEPENDS ${STYLE})
+

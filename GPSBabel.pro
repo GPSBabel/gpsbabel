@@ -303,25 +303,54 @@ versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
 HEADERS += $$FILTER_HEADERS
 
-win32-msvc* {
-  # avoid attempts by cmd.exe to execute mkstyle.sh
-  SOURCES += internal_styles.cc
-} else {
-  # It would be nice to do this when make runs instead of qmake, but we will
-  # monitor the style directory to catch new or deleted .style files.
-  STYLE_FILES = $$files($${PWD}/style/*.style)
-  # It's a bit tacky, but this may modify source files when doing an out of source build.
-  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
-  # and we want to make sure it is up to date on commit.
-  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
-  styles.CONFIG += combine no_clean
-  styles.depends += $${PWD}/mkstyle.sh
-  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
-  styles.input = STYLE_FILES
-  styles.output = $${PWD}/internal_styles.cc
-  styles.variable_out = SOURCES
-  QMAKE_EXTRA_COMPILERS += styles
+# STYLE
+STYLE = \
+  style/arc.style \
+  style/cambridge.style \
+  style/csv.style \
+  style/cup.style \
+  style/custom.style \
+  style/dna.style \
+  style/flysight.style \
+  style/fugawi.style \
+  style/garmin301.style \
+  style/garmin_g1000.style \
+  style/garmin_poi.style \
+  style/geonet.style \
+  style/gpsdrive.style \
+  style/gpsdrivetrack.style \
+  style/iblue747.style \
+  style/iblue757.style \
+  style/igo2008_poi.style \
+  style/igoprimo_poi.style \
+  style/kompass_tk.style \
+  style/kompass_wp.style \
+  style/land_air_sea.style \
+  style/mainnav.style \
+  style/mapconverter.style \
+  style/motoactv.style \
+  style/mxf.style \
+  style/navigonwpt.style \
+  style/nima.style \
+  style/openoffice.style \
+  style/ricoh.style \
+  style/s_and_t.style \
+  style/saplus.style \
+  style/tabsep.style \
+  style/tomtom_asc.style \
+  style/tomtom_itn_places.style \
+  style/tomtom_itn.style
+
+for(f, STYLE){
+    STYLE_FILES += $$shell_quote($${PWD}/$${f})
 }
+styles.commands += python3 $$shell_quote($${PWD}/mkstyle.py) -o $$shell_quote($${OUT_PWD}/internal_styles.cc) $${STYLE_FILES} || (rm -f $$shell_quote($${OUT_PWD}/internal_styles.cc); exit 1)
+styles.CONFIG += combine no_clean
+styles.depends += $${PWD}/mkstyle.py
+styles.input = STYLE_FILES
+styles.output = $${OUT_PWD}/internal_styles.cc
+styles.variable_out = SOURCES
+QMAKE_EXTRA_COMPILERS += styles
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
