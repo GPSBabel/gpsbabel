@@ -289,7 +289,7 @@ Format* Vecs::find_vec(const QString& vecname)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : style_list) {
+  for (const auto& svec : qAsConst(style_list)) {
     if (svecname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
