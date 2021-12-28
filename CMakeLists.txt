@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Handle the Qt rcc code generator automatically
+set(CMAKE_AUTORCC ON)
 
 add_executable(gpsbabel)
 
