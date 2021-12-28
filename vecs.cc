@@ -385,7 +385,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   for (const auto& fileinfo : fileinfolist) {
     if (!fileinfo.isReadable()) {
       fatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
-    };
+    }
 
     style_vec_t entry;
     entry.name = fileinfo.baseName();
