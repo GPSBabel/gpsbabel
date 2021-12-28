@@ -24,6 +24,9 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
+# RESOURCES
+set(RESOURCES gpsbabel.qrc)
+
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
   explorist_ini.cc
@@ -317,8 +320,6 @@ endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
-
-set(SOURCES ${SOURCES} internal_styles.cc)
 
 target_include_directories(gpsbabel PRIVATE zlib)
 

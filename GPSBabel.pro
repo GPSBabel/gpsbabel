@@ -55,6 +55,9 @@ GB.setupfile.input = gui/setup.iss.qmake.in
 GB.setupfile.output = gui/setup.iss
 QMAKE_SUBSTITUTES += GB.setupfile
 
+# RESOURCES
+RESOURCES = gpsbabel.qrc
+
 # MINIMAL_FMTS
 MINIMAL_FMTS = \
   explorist_ini.cc \
@@ -302,26 +305,6 @@ HEADERS =  \
 versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
 HEADERS += $$FILTER_HEADERS
-
-win32-msvc* {
-  # avoid attempts by cmd.exe to execute mkstyle.sh
-  SOURCES += internal_styles.cc
-} else {
-  # It would be nice to do this when make runs instead of qmake, but we will
-  # monitor the style directory to catch new or deleted .style files.
-  STYLE_FILES = $$files($${PWD}/style/*.style)
-  # It's a bit tacky, but this may modify source files when doing an out of source build.
-  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
-  # and we want to make sure it is up to date on commit.
-  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
-  styles.CONFIG += combine no_clean
-  styles.depends += $${PWD}/mkstyle.sh
-  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
-  styles.input = STYLE_FILES
-  styles.output = $${PWD}/internal_styles.cc
-  styles.variable_out = SOURCES
-  QMAKE_EXTRA_COMPILERS += styles
-}
 
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 

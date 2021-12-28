@@ -1039,12 +1039,6 @@ struct ff_vecs_t {
   void* unused; /* TODO: delete this field */
 };
 
-struct style_vecs_t {
-  const char* name;
-  const char* style_buf;
-};
-extern const QVector<style_vecs_t> style_list;
-
 [[noreturn]] void fatal(QDebug& msginstance);
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void warning(const char*, ...) PRINTFLIKE(1, 2);

@@ -1792,25 +1792,8 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   }
 }
 
-
-/*
- * A wrapper for xcsv_parse_style_line that reads until it hits
- * a terminating null.   Makes multiple calls to that function so
- * that "ignore to end of line" comments work right.
- */
 XcsvStyle
-XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
-{
-  XcsvStyle style;
-  const QStringList lines = QString(sbuff).split('\n');
-  for (const auto& line : lines) {
-    xcsv_parse_style_line(&style, line);
-  }
-  return style;
-}
-
-XcsvStyle
-XcsvStyle::xcsv_read_style(const char* fname)
+XcsvStyle::xcsv_read_style(const QString& fname)
 {
   XcsvStyle style;
 
@@ -1830,28 +1813,10 @@ XcsvStyle::xcsv_read_style(const char* fname)
   return style;
 }
 
-/*
- * Passed a pointer to an internal buffer that would be identical
- * to the series of bytes that would be in a style file, we set up
- * the xcsv parser and make it ready for general use.
- */
-XcsvStyle
-XcsvStyle::xcsv_read_internal_style(const char* style_buf)
-{
-  XcsvStyle style = xcsv_parse_style_buff(style_buf);
-
-  /* if we have no output fields, use input fields as output fields */
-  if (style.ofields.isEmpty()) {
-    style.ofields = style.ifields;
-  }
-
-  return style;
-}
-
 void
-XcsvFormat::xcsv_setup_internal_style(const char* style_buf)
+XcsvFormat::xcsv_setup_internal_style(const QString& style_filename)
 {
-  intstylebuf = style_buf;
+  intstylefile = style_filename;
 }
 
 void
@@ -1861,8 +1826,8 @@ XcsvFormat::rd_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
@@ -1918,8 +1883,8 @@ XcsvFormat::wr_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");

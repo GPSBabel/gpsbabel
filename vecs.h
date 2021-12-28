@@ -187,6 +187,12 @@ private:
     QVector<arginfo_t> arginfo;
   };
 
+  struct style_vec_t {
+    QString name;
+    QString style_filename;
+  };
+
+
 public:
   void init_vecs();
   void exit_vecs();
@@ -204,6 +210,7 @@ public:
 
 private:
   static int is_integer(const char* c);
+  static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;
   static void disp_v1(ff_type t);
   static void disp_v2(const vecinfo_t& v);
@@ -212,6 +219,7 @@ private:
   static bool validate_vec(const vecs_t& vec);
 
 private:
+  QVector<style_vec_t> style_list;
   /*
    * Having these LegacyFormat instances be non-static data members
    * prevents the static initialization order fiasco because
