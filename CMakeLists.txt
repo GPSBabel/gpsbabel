@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Handle the Qt rcc code generator automatically
+set(CMAKE_AUTORCC ON)
 
 add_executable(gpsbabel)
 
@@ -23,6 +25,9 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
+
+# RESOURCES
+set(RESOURCES gpsbabel.qrc)
 
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
@@ -317,8 +322,6 @@ endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
-
-set(SOURCES ${SOURCES} internal_styles.cc)
 
 target_include_directories(gpsbabel PRIVATE zlib)
 

@@ -20,6 +20,9 @@
  */
 
 #include <QByteArray>           // for QByteArray
+#include <QDir>                 // for QDir, QDir::Files, QDir::Name
+#include <QFileInfo>            // for QFileInfo
+#include <QFileInfoList>        // for QFileInfoList
 #include <QString>              // for QString
 #include <QStringList>          // for QStringList
 #include <QVector>              // for QVector<>::iterator, QVector
@@ -37,8 +40,8 @@
 #include "gbversion.h"          // for WEB_DOC_DIR
 #include "inifile.h"            // for inifile_readstr
 #include "legacyformat.h"
-#include "src/core/logging.h"   // for Warning
-#include "xcsv.h"               // for xcsv_setup_internal_style, XcsvStyle, xcsv_read_internal_style
+#include "src/core/logging.h"   // for Warning, FatalMsg
+#include "xcsv.h"               // for xcsv_setup_internal_style, XcsvStyle, xcsv_read_style
 
 
 #define MYNAME "vecs"
@@ -74,6 +77,7 @@ void Vecs::init_vecs()
       }
     }
   }
+  style_list = create_style_vec();
 }
 
 int Vecs::is_integer(const char* c)
@@ -96,6 +100,8 @@ void Vecs::exit_vecs()
       }
     }
   }
+  style_list.clear();
+  style_list.squeeze();
 }
 
 void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
@@ -283,7 +289,7 @@ Format* Vecs::find_vec(const QString& vecname)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : style_list) {
+  for (const auto& svec : qAsConst(style_list)) {
     if (svecname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
@@ -318,7 +324,7 @@ Format* Vecs::find_vec(const QString& vecname)
       disp_vec_options(svec.name, xcsv_args);
     }
 #if CSVFMTS_ENABLED
-    xcsv_fmt.xcsv_setup_internal_style(svec.style_buf);
+    xcsv_fmt.xcsv_setup_internal_style(svec.style_filename);
 #endif // CSVFMTS_ENABLED
 
     vec_list[0].vec->set_name(svec.name);	/* needed for session information */
@@ -361,6 +367,32 @@ QString Vecs::get_option(const QStringList& options, const char* argname)
     }
   }
   return rval;
+}
+
+QVector<Vecs::style_vec_t> Vecs::create_style_vec()
+{
+  QString styledir(":/style");
+  QDir dir(styledir);
+  if (!dir.isReadable()) {
+    fatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
+  }
+
+  dir.setNameFilters(QStringList("*.style"));
+  dir.setFilter(QDir::Files);
+  dir.setSorting(QDir::Name);
+  QFileInfoList fileinfolist = dir.entryInfoList();
+  QVector<style_vec_t> slist;
+  for (const auto& fileinfo : fileinfolist) {
+    if (!fileinfo.isReadable()) {
+      fatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
+    }
+
+    style_vec_t entry;
+    entry.name = fileinfo.baseName();
+    entry.style_filename = fileinfo.filePath();
+    slist.append(entry);
+  }
+  return slist;
 }
 
 /*
@@ -408,7 +440,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
-    XcsvStyle style = XcsvStyle::xcsv_read_internal_style(svec.style_buf);
+    XcsvStyle style = XcsvStyle::xcsv_read_style(svec.style_filename);
     vecinfo_t info;
     info.name = svec.name;
     info.desc = style.description;
