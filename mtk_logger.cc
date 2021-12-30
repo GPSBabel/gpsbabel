@@ -71,11 +71,6 @@
 
 #define MYNAME "mtk_logger"
 
-#ifdef __WIN32__
-#include <io.h>
-#define ftruncate _chsize
-#endif
-
 /* MTK packet id's -- currently unused... */
 enum MTK_NMEA_PACKET {
   PMTK_TEST = 0,
