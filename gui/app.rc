@@ -1,5 +1,5 @@
 #include <winver.h>
-#include "../gbversion.h"
+#include "gbversion.h"
 
 IDI_ICON1               ICON                    "images/appicon.ico"
 

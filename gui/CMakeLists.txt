@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(gpsbabelfe LANGUAGES CXX)
+include(../gbversion.cmake)
+configure_file(../gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
+configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
+project(gpsbabelfe LANGUAGES CXX VERSION ${GB.VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)

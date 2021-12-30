@@ -58,7 +58,7 @@
 #include <cstdlib>                     // for exit
 
 #include "mainwindow.h"
-#include "../gbversion.h"              // for VERSION
+#include "gbversion.h"                 // for VERSION
 #include "aboutdlg.h"                  // for AboutDlg
 #include "advdlg.h"                    // for AdvDlg
 #include "appname.h"                   // for appName

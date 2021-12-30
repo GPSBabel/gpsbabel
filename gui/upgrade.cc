@@ -38,7 +38,7 @@
 #include <QtXml/QDomElement>                // for QDomElement
 #include <QtXml/QDomNode>                   // for QDomNode
 #include <QtXml/QDomNodeList>               // for QDomNodeList
-#include "../gbversion.h"                   // for VERSION
+#include "gbversion.h"                      // for VERSION
 #include "babeldata.h"                      // for BabelData
 #include "format.h"                         // for Format
 
