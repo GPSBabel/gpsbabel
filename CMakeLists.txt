@@ -425,7 +425,14 @@ message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
   # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
-  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/gpsbabel ./testo DEPENDS gpsbabel)
+  configure_file(${CMAKE_SOURCE_DIR}/tools/testo_wrapper.sh.in
+                 ${CMAKE_BINARY_DIR}/tools/testo_wrapper.sh
+                 @ONLY
+                 NEWLINE_STYLE LF)
+  add_custom_target(check
+                    ${CMAKE_BINARY_DIR}/tools/testo_wrapper.sh $<TARGET_FILE:gpsbabel>
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif()
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)

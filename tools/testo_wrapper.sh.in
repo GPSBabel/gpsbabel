@@ -1,0 +1,4 @@
+#!/bin/sh
+set -x
+
+PNAME="$1" ./testo
