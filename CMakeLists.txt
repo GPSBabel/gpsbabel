@@ -424,13 +424,14 @@ get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
-  # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
-  configure_file(${CMAKE_SOURCE_DIR}/tools/testo_wrapper.sh.in
-                 ${CMAKE_BINARY_DIR}/tools/testo_wrapper.sh
-                 @ONLY
-                 NEWLINE_STYLE LF)
+  # these tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
   add_custom_target(check
-                    ${CMAKE_BINARY_DIR}/tools/testo_wrapper.sh $<TARGET_FILE:gpsbabel>
+                    ${CMAKE_SOURCE_DIR}/testo --pname $<TARGET_FILE:gpsbabel>
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+  # FIXME: parallelize
+  add_custom_target(check-vtesto
+                    ${CMAKE_SOURCE_DIR}/vtesto -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif()

@@ -11,6 +11,16 @@ export MALLOC_CHECK_
 LC_ALL=en_US.UTF-8
 export LC_ALL
 
+if [ "$1" = "--pname" ]; then
+  PNAME="$2"
+  shift 2
+elif [ "$1" = "--valgrind" ]; then
+  VALGRIND="$2"
+  VALGRIND_OPTS=$3
+  PNAME="$4"
+  shift 4
+fi
+
 BASEPATH=`dirname $0`
 PNAME=${PNAME:-${BASEPATH}/gpsbabel}
 DIFF=${DIFF:-diff}
@@ -23,7 +33,7 @@ else
 fi
 XMLWF=xmlwf
 # set up a variable so we can skip extra tests when running valgrind
-echo "${PNAME}" | grep -q valgrind
+[ -z ${VALGRIND} ]
 RUNNINGVALGRIND=$?
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
@@ -84,12 +94,21 @@ sort_and_compare()
 
 gpsbabel()
 {
-	${PNAME} "$@" || {
-		echo "$PNAME returned error $?"
-		echo "($PNAME $@)"
-		errorcount=`expr $errorcount + 1`
-		#exit 1
-	}
+  if [ ${RUNNINGVALGRIND} -eq 0 ]; then
+  	"${PNAME}" "$@" || {
+  		echo "$PNAME returned error $?"
+  		echo "($PNAME $@)"
+  		errorcount=`expr $errorcount + 1`
+  		#exit 1
+  	}
+  else
+  	"${VALGRIND}" ${VALGRIND_OPTS} "${PNAME}" "$@" || {
+  		echo "$PNAME returned error $?"
+  		echo "($PNAME $@)"
+  		errorcount=`expr $errorcount + 1`
+  		#exit 1
+  	}
+  fi
 }
 
 utf8bomcheck()
