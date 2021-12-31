@@ -33,7 +33,7 @@ else
 fi
 XMLWF=xmlwf
 # set up a variable so we can skip extra tests when running valgrind
-[ -z ${VALGRIND} ]
+[ -n "${VALGRIND}" ]
 RUNNINGVALGRIND=$?
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
@@ -94,7 +94,7 @@ sort_and_compare()
 
 gpsbabel()
 {
-  if [ ${RUNNINGVALGRIND} -eq 0 ]; then
+  if [ ${RUNNINGVALGRIND} -ne 0 ]; then
   	"${PNAME}" "$@" || {
   		echo "$PNAME returned error $?"
   		echo "($PNAME $@)"

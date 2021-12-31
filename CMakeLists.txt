@@ -424,16 +424,20 @@ get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
-  # these tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
+  # This test only works if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
   add_custom_target(check
                     ${CMAKE_SOURCE_DIR}/testo --pname $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-  # FIXME: parallelize
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
+endif()
+if(UNIX AND NOT APPLE)
+  # This test only works if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
   add_custom_target(check-vtesto
-                    ${CMAKE_SOURCE_DIR}/vtesto -p $<TARGET_FILE:gpsbabel>
+                    find testo.d -maxdepth 1 -name "*.test" -print0 | xargs -0 basename -s .test | sort | xargs -n 1 -P 3 ${CMAKE_SOURCE_DIR}/vtesto -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
 endif()
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
