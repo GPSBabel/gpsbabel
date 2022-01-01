@@ -15,10 +15,10 @@ if [ "$1" = "--pname" ]; then
   PNAME="$2"
   shift 2
 elif [ "$1" = "--valgrind" ]; then
-  VALGRIND="$2"
-  VALGRIND_OPTS=$3
-  PNAME="$4"
-  shift 4
+  VALGRIND=valgrind
+  VALGRIND_OPTS=$2
+  PNAME="$3"
+  shift 3
 fi
 
 BASEPATH=`dirname $0`
@@ -94,21 +94,12 @@ sort_and_compare()
 
 gpsbabel()
 {
-  if [ ${RUNNINGVALGRIND} -ne 0 ]; then
-  	"${PNAME}" "$@" || {
-  		echo "$PNAME returned error $?"
-  		echo "($PNAME $@)"
-  		errorcount=`expr $errorcount + 1`
-  		#exit 1
-  	}
-  else
-  	"${VALGRIND}" ${VALGRIND_OPTS} "${PNAME}" "$@" || {
-  		echo "$PNAME returned error $?"
-  		echo "($PNAME $@)"
-  		errorcount=`expr $errorcount + 1`
-  		#exit 1
-  	}
-  fi
+	${VALGRIND} ${VALGRIND_OPTS} "${PNAME}" "$@" || {
+ 	echo "$PNAME returned error $?"
+ 	echo "($PNAME $@)"
+ 	errorcount=`expr $errorcount + 1`
+ 	#exit 1
+ }
 }
 
 utf8bomcheck()
