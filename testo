@@ -31,9 +31,6 @@ else
 	OD=${OD:-od -Ax -txC -v}
 fi
 XMLWF=xmlwf
-# set up a variable so we can skip extra tests when running valgrind
-[ -n "${VALGRIND}" ]
-RUNNINGVALGRIND=$?
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
@@ -103,7 +100,7 @@ gpsbabel()
 
 utf8bomcheck()
 {
-  if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  if [ -z "${VALGRIND}" ]; then
     if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" = $'\xef\xbb\xbf' ]; then
       echo "ERROR: UTF-8 BOM found in $1"
       errorcount=`expr $errorcount + 1`
@@ -167,7 +164,7 @@ fi
 #cp LineStyles.gpx.badchar ${TMPDIR}/bad.gpx
 XMLS=$(find ${TMPDIR} -name "*.gpx" -o -name "*.kml")
 
-if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+if [ -z "${VALGRIND}" ]; then
   echo "Running UTF-8 BOM test"
   for i in ${XMLS}
   do
@@ -175,7 +172,7 @@ if [ ${RUNNINGVALGRIND} -ne  0 ]; then
   done
 fi
 
-if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+if [ -z "${VALGRIND}" ]; then
   if which ${XMLWF} >/dev/null 2>&1; then
     echo "Running well-formed XML test"
     for i in ${XMLS}
