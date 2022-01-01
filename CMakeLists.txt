@@ -424,7 +424,8 @@ get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
-  # This test only works if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
   add_custom_target(check
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
@@ -432,10 +433,13 @@ if(UNIX)
                     VERBATIM)
 endif()
 if(UNIX AND NOT APPLE)
-  # This test only works if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
+  # This test only works if the pwd is top level source dir due to the
+  #file name getting embedded in the file nonexistent.err.
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
   add_custom_target(check-vtesto
-                    find testo.d -maxdepth 1 -name "*.test" -print0 | xargs -0 basename -s .test | sort | xargs -n 1 -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
+                    find testo.d -maxdepth 1 -name "*.test" -print0 | xargs -0 basename -s .test | sort |
+                    xargs -n 1 -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto
+                    -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     VERBATIM)
