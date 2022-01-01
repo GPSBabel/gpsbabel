@@ -52,11 +52,11 @@ shift $(($OPTIND -1))
 PNAME=${PNAME:-./gpsbabel}
 
 if [ "x$LOG" = "x" ]; then
-  ${BASEPATH}/testo --valgrind "$OPTS --error-exitcode=125 $QUIET"            "$PNAME" $*
+  ${BASEPATH}/testo -v "valgrind $OPTS --error-exitcode=125 $QUIET"            -p "$PNAME" $*
 else
 # By default valgrind output goes to file descriptor 2, stderr.
 # Some of our tests redirect file descriptor 2 to a file and compare it to an expected result.
 # These compares will fail if valgrind sends output to file descriptor 2.
 # This option avoids those valgrind induced miscompares by using an alternate file descriptor.
-  ${BASEPATH}/testo --valgrind "$OPTS --error-exitcode=125 $QUIET --log-fd=3" "$PNAME" $* 3>$LOG
+  ${BASEPATH}/testo -v "valgrind $OPTS --error-exitcode=125 $QUIET --log-fd=3" -p "$PNAME" $* 3>$LOG
 fi

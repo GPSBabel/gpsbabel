@@ -426,7 +426,7 @@ message(STATUS "Include Directores are: \"${IncDirs}\"")
 if(UNIX)
   # This test only works if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
   add_custom_target(check
-                    ${CMAKE_SOURCE_DIR}/testo --pname $<TARGET_FILE:gpsbabel>
+                    ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     VERBATIM)
