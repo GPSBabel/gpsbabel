@@ -26,7 +26,7 @@ jobs:
       run: |
         ./build_and_test
 
-  basic:
+  cmake:
     name: cmake Build
     runs-on: ubuntu-latest
     container:
