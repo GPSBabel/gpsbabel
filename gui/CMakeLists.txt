@@ -1,3 +1,7 @@
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+  message(FATAL_ERROR "Please use CMakeLists.txt in the project root directory to generate a build system.")
+endif()
+
 configure_file(${CMAKE_SOURCE_DIR}/gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
 
