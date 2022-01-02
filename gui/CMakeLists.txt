@@ -1,12 +1,5 @@
-cmake_minimum_required(VERSION 3.11)
-
-include(../gbversion.cmake)
-configure_file(../gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
+configure_file(${CMAKE_SOURCE_DIR}/gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
-project(gpsbabelfe LANGUAGES CXX VERSION ${GB.VERSION})
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

@@ -26,12 +26,7 @@ cmake --build . --target gpsbabel.html
 cmake --build . --target gpsbabel.pdf
 cmake --build . --target gpsbabel.org
 cmake --build . --target check
-#make -j 3 unix-gui
-# FIXME: use hierarchical build
-pushd gui
-cmake . -G Ninja
-cmake --build .
-popd
+cmake --build . --target gpsbabelfe
 # test for mangled encoding of command line arguments
 ./test_encoding_latin1
 ./test_encoding_utf8
