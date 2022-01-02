@@ -1,10 +1,8 @@
 # Use GB variable to express ownership intention and avoid conflict with
 # documented and undocumented cmake variables.
 
-# Until we do a hierarchical build the build directory for gpsbabel and
-# the build directory for GPSBabelFE are independent.  Only the source
-# directories have a known relationship.  Including this pri file from the
-# source tree will generate the version file in the current build directory.
+# Including this pri file from ${CMAKE_SOURCE_DIR} will generate the version
+# file in the current build directory, i.e. ${CMAKE_CURRENT_BINARY_DIR}.
 
 # Note some of these variables are also used in the gui to generate setup.iss.
 # Note some of these variables are also used in the cli to generate documents.

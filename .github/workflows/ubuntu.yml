@@ -24,7 +24,7 @@ jobs:
 
     - name: build_and_test
       run: |
-        ./build_and_test
+        ./tools/build_and_test.sh
 
   cmake:
     name: cmake Build
@@ -40,7 +40,7 @@ jobs:
 
     - name: build_and_test
       run: |
-        ./tools/build_and_test_cmake
+        ./tools/build_and_test_cmake.sh
 
   qtio_gcc:
     name: qtio gcc Build
@@ -57,7 +57,7 @@ jobs:
     - name: build_and_test
       run: |
         . /opt/qtio.env
-        ./build_and_test
+        ./tools/build_and_test.sh
 
   qtio_clang:
     name: qtio clang Build
@@ -75,7 +75,7 @@ jobs:
     - name: build_and_test
       run: |
         . /opt/qtio.env
-        ./build_and_test
+        ./tools/build_and_test.sh
 
   advanced:
     name: advanced Build
@@ -91,7 +91,7 @@ jobs:
 
     - name: build_extra_tests
       run: |
-        ./tools/build_extra_tests
+        ./tools/build_extra_tests.sh
 
   coverage:
     name: coverage Build

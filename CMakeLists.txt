@@ -1,11 +1,19 @@
 cmake_minimum_required(VERSION 3.11)
 
 include(gbversion.cmake)
-configure_file(gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Do this after we set up common variables but before creating other
+# variables that will be inherited.
+add_subdirectory(gui)
+
+# FIXME: When we rearrange the project directory structure everything
+# below here should be in it's own CMakeList.txt
+
+configure_file(gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -249,7 +257,6 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
-  gbversion.h
   geojson.h
   ggv_bin.h
   globalsat_sport.h

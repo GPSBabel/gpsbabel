@@ -30,4 +30,4 @@ jobs:
 
     - name: build_and_test
       run: |
-        ./build_and_test
+        ./tools/build_and_test.sh

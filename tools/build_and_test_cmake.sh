@@ -14,24 +14,24 @@ fi
 git --no-pager log -n 1
 # build and test keeping output within the pwd.
 export GBTEMP=$(pwd)/gbtemp
-mkdir -p $GBTEMP
-qmake WEB=$(pwd)/gpsbabel_docdir
+mkdir -p "$GBTEMP"
+cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DWEB="$(pwd)/gpsbabel_docdir"
 # As of 2018-10, all the virtualized travis build images are two cores per:
 # https://docs.travis-ci.com/user/reference/overview/
 # We'll be slightly abusive on CPU knowing that I/O is virtualized.
-make toolinfo
-make clean
-make -j 3
-make -j 3 unix-gui
-make gpsbabel.html
-make gpsbabel.pdf
-make gpsbabel.org
-make check
+#make toolinfo
+cmake --build . --target clean
+cmake --build . --target gpsbabel
+cmake --build . --target gpsbabel.html
+cmake --build . --target gpsbabel.pdf
+cmake --build . --target gpsbabel.org
+cmake --build . --target check
+cmake --build . --target gpsbabelfe
 # test for mangled encoding of command line arguments
 ./test_encoding_latin1
 ./test_encoding_utf8
 #make torture
-make -k -j2 check-vtesto
+cmake --build . --target check-vtesto
 # eat the verbose output from test-all, including crash.output
 # this is a bit risky, if test-all generates an error we won't see what happened.
 echo "test-all in progress... (read/write test between all possible formats)"
