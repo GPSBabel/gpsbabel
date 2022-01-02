@@ -26,6 +26,22 @@ jobs:
       run: |
         ./build_and_test
 
+  cmake:
+    name: cmake Build
+    runs-on: ubuntu-latest
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      env:
+        LC_ALL: 'C.UTF-8'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: build_and_test
+      run: |
+        ./tools/build_and_test_cmake
+
   qtio_gcc:
     name: qtio gcc Build
     runs-on: ubuntu-latest

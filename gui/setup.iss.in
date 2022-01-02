@@ -10,6 +10,9 @@
 #ifndef package_dir
   #define package_dir "..\build-app-Desktop-Release\package"
 #endif
+#ifndef source_dir
+  #define source_dir "."
+#endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -17,7 +20,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
 AppName=GPSBabel
-AppVerName=GPSBabel @PACKAGE_VERSION@@PACKAGE_RELEASE@
+AppVerName=GPSBabel @GB.VERSION@@GB.PACKAGE_RELEASE@
 AppPublisher=GPSBabel
 AppPublisherURL=https://www.gpsbabel.org
 AppSupportURL=https://www.gpsbabel.org
@@ -27,11 +30,12 @@ ArchitecturesInstallIn64BitMode=x64
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabel-@PACKAGE_VERSION@@PACKAGE_RELEASE@-Setup
-OutputManifestFile=GPSBabel-@PACKAGE_VERSION@@PACKAGE_RELEASE@-Manifest.txt
+OutputBaseFilename=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Setup
+OutputManifestFile=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Manifest.txt
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
+SourceDir="{#source_dir}"
 LicenseFile=COPYING.txt
 
 [Languages]

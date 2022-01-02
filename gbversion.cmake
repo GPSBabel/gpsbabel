@@ -1,0 +1,30 @@
+# Use GB variable to express ownership intention and avoid conflict with
+# documented and undocumented cmake variables.
+
+# Until we do a hierarchical build the build directory for gpsbabel and
+# the build directory for GPSBabelFE are independent.  Only the source
+# directories have a known relationship.  Including this pri file from the
+# source tree will generate the version file in the current build directory.
+
+# Note some of these variables are also used in the gui to generate setup.iss.
+# Note some of these variables are also used in the cli to generate documents.
+
+# FIXME: when we have a hierarchical build we can set the version directly
+# in the top level CMakeLists.txt file, and the version components will
+# be automatically available in as variables.  But today we have multiple
+# independent CMakeLists.txt files all with their own project commands.
+# By defining the version here we minimize the number of locations
+# containing the definition to gbversion.pri and gbversion.cmake.
+
+set(GB.VERSION 1.7.0) # also change in gbversion.pri
+string(REPLACE "." ";" VERSION_COMPONENTS ${GB.VERSION})
+list(GET VERSION_COMPONENTS 0 GB.MAJOR)
+list(GET VERSION_COMPONENTS 1 GB.MINOR)
+list(GET VERSION_COMPONENTS 2 GB.MICRO)
+# Increase GB.BUILD for a new release (why? Where is this ever used?)
+# A: it's used by win32/gpsbabel.rc which includes gbversion.h
+set(GB.BUILD 31 CACHE STRING "Fourth component of Windows VERSIONINFO resource FILEVERSION and PRODUCTVERSION parameters.")
+set(GB.PACKAGE_RELEASE "" CACHE STRING "String to append to VERSION tuple.") # .e.g. "-beta20190413"
+
+# may be overridden on cmake command line
+set(DOCVERSION ${GB.VERSION} CACHE STRING "String appended to documentation location for www.gpsbabel.org.")

@@ -22,12 +22,12 @@ BASEPATH=`dirname $0`
 # valgrind 3.11.0 has this problem with Qt 5.12.1.
 # It is unknown if 3.12.0 has this problem with Qt 5.12.1.
 # valgrind 3.13.0 does not have this problem with Qt 5.12.1.
-# valgrind 3.11.0 is find with Qt 5.9.7.
+# valgrind 3.11.0 is fine with Qt 5.9.7.
 # vex amd64->IR: unhandled instruction bytes: 0xF 0xC7 0xF2 0xB9 0x1 0x0 0x0 0x0
 vgmajor=$(valgrind --version| cut -d- -f 2 | cut -d. -f 1)
 vgminor=$(valgrind --version| cut -d- -f 2 | cut -d. -f 2)
 if [ ${vgmajor} -lt 3 ]; then
-  vg_vesion_warning
+  vg_version_warning
 fi
 if [ ${vgmajor} -eq 3 ] ; then
   if [ ${vgminor} -le 12 ]; then
@@ -35,26 +35,28 @@ if [ ${vgmajor} -eq 3 ] ; then
   fi
 fi
 
-# newer versons of Qt, e.g. 5.12.x, use a JIT compiler for QRegularExpression.
+# newer versions of Qt, e.g. 5.12.x, use a JIT compiler for QRegularExpression.
 # JITs use of self-modifying code can confuse valgrind.
 # We disable JIT with this environmental variable to keep valgrind happy.
 # https://doc.qt.io/qt-5/qregularexpression.html#debugging-code-that-uses-qregularexpression
 export QT_ENABLE_REGEXP_JIT=0
 
-while getopts "lj:" opt; do
+while getopts "lj:p:" opt; do
   case $opt in
     l) OPTS="--leak-check=full --show-reachable=yes --num-callers=24 --suppressions=${BASEPATH}/gpsbabel.supp" ; QUIET="";;
     j) LOG=$OPTARG;;
+    p) PNAME="$OPTARG";;
   esac
 done
 shift $(($OPTIND -1))
+PNAME=${PNAME:-./gpsbabel}
 
 if [ "x$LOG" = "x" ]; then
-  PNAME="valgrind $OPTS --error-exitcode=125 $QUIET            ./gpsbabel" ${BASEPATH}/testo $*
+  ${BASEPATH}/testo -v "valgrind $OPTS --error-exitcode=125 $QUIET"            -p "$PNAME" $*
 else
 # By default valgrind output goes to file descriptor 2, stderr.
 # Some of our tests redirect file descriptor 2 to a file and compare it to an expected result.
 # These compares will fail if valgrind sends output to file descriptor 2.
 # This option avoids those valgrind induced miscompares by using an alternate file descriptor.
-  PNAME="valgrind $OPTS --error-exitcode=125 $QUIET --log-fd=3 ./gpsbabel" ${BASEPATH}/testo $* 3>$LOG
+  ${BASEPATH}/testo -v "valgrind $OPTS --error-exitcode=125 $QUIET --log-fd=3" -p "$PNAME" $* 3>$LOG
 fi

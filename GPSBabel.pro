@@ -1,5 +1,5 @@
 # Enforce minimum Qt version.
-# versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
+# versionAtLeast() was introduced in Qt 5.10, so we cannot count on it being available.
 MIN_QT_VERSION = 5.12 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
@@ -16,8 +16,11 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 QT -= gui
 versionAtLeast(QT_VERSION, 6.0): QT += core5compat
 
+# set VERSION related variables and generate gbversion.h
+include(gbversion.pri)
+
 TARGET = gpsbabel
-VERSION = 1.7.0
+VERSION = $$GB.VERSION
 
 CONFIG += console
 CONFIG -= app_bundle
@@ -25,35 +28,6 @@ CONFIG += c++17
 CONFIG += link_pkgconfig
 
 TEMPLATE = app
-
-# use GB variable to express ownership intention and
-# avoid conflict with documented and undocumented qmake variables
-GB.VERSION_COMPONENTS = $$split(VERSION, .)
-GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
-GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
-GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
-# Increase GB.BUILD for a new release (why? Where is this ever used?)
-# A: it's used by win32/gpsbabel.rc which includes gbversion.h
-GB.BUILD = 31
-# GB.PACKAGE_RELEASE = "-beta20190413"
-
-# may be overwridden on qmake command line
-!defined(DOCVERSION, var) {
-  DOCVERSION=$${VERSION}
-}
-
-# may be overwridden on qmake command line
-!defined(WEB, var) {
-  WEB = ../babelweb
-}
-
-# use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
-GB.versionfile.input = gbversion.h.qmake.in
-GB.versionfile.output = gbversion.h
-QMAKE_SUBSTITUTES += GB.versionfile
-GB.setupfile.input = gui/setup.iss.qmake.in
-GB.setupfile.output = gui/setup.iss
-QMAKE_SUBSTITUTES += GB.setupfile
 
 # RESOURCES
 RESOURCES = gpsbabel.qrc
@@ -420,9 +394,14 @@ QMAKE_EXTRA_TARGETS += cppcheck
 
 gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
 equals(PWD, $${OUT_PWD}) {
+  # may be overridden on qmake command line
+  !defined(WEB, var) {
+    WEB = ../babelweb
+  }
+  # Allow WEB to be overridden when running make.
+  # DOCVERSION must be overridden at qmake time as it also affects the object code.
   gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
-  gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}};
-  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" \"\$\${docversion}\";
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" $$shell_quote($$DOCVERSION);
 } else {
   gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
   gpsbabel.org.commands += exit 1;

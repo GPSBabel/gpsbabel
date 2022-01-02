@@ -11,6 +11,15 @@ export MALLOC_CHECK_
 LC_ALL=en_US.UTF-8
 export LC_ALL
 
+while :
+do
+  case "$1" in
+  -p) PNAME=$2; shift 2;;
+  -v) VALGRIND=$2; shift 2;;
+  *) break;;
+  esac
+done
+
 BASEPATH=`dirname $0`
 PNAME=${PNAME:-${BASEPATH}/gpsbabel}
 DIFF=${DIFF:-diff}
@@ -22,9 +31,6 @@ else
 	OD=${OD:-od -Ax -txC -v}
 fi
 XMLWF=xmlwf
-# set up a variable so we can skip extra tests when running valgrind
-echo "${PNAME}" | grep -q valgrind
-RUNNINGVALGRIND=$?
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
@@ -84,17 +90,17 @@ sort_and_compare()
 
 gpsbabel()
 {
-	${PNAME} "$@" || {
-		echo "$PNAME returned error $?"
-		echo "($PNAME $@)"
-		errorcount=`expr $errorcount + 1`
-		#exit 1
-	}
+	${VALGRIND} "${PNAME}" "$@" || {
+ 	echo "$PNAME returned error $?"
+ 	echo "($PNAME $@)"
+ 	errorcount=`expr $errorcount + 1`
+ 	#exit 1
+ }
 }
 
 utf8bomcheck()
 {
-  if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  if [ -z "${VALGRIND}" ]; then
     if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" = $'\xef\xbb\xbf' ]; then
       echo "ERROR: UTF-8 BOM found in $1"
       errorcount=`expr $errorcount + 1`
@@ -104,7 +110,7 @@ utf8bomcheck()
 
 xmlwfcheck()
 {
-  if [ ${RUNNINGVALGRIND} -ne 0 ]; then
+  if [ -z "${VALGRIND}" ]; then
     if which ${XMLWF} >/dev/null 2>&1; then
       # xmlwf is a bit lame, exit status is always 0
       rm -f ${TMPDIR}/xmlwf.out
@@ -158,7 +164,7 @@ fi
 #cp LineStyles.gpx.badchar ${TMPDIR}/bad.gpx
 XMLS=$(find ${TMPDIR} -name "*.gpx" -o -name "*.kml")
 
-if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+if [ -z "${VALGRIND}" ]; then
   echo "Running UTF-8 BOM test"
   for i in ${XMLS}
   do
@@ -166,7 +172,7 @@ if [ ${RUNNINGVALGRIND} -ne  0 ]; then
   done
 fi
 
-if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+if [ -z "${VALGRIND}" ]; then
   if which ${XMLWF} >/dev/null 2>&1; then
     echo "Running well-formed XML test"
     for i in ${XMLS}

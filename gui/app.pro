@@ -1,6 +1,15 @@
 # $Id: app.pro,v 1.19 2010-11-01 03:30:42 robertl Exp $
 #
 
+# set VERSION related variables and generate gbversion.h
+include(../gbversion.pri)
+
+GB.setupfile.input = setup.iss.qmake.in
+GB.setupfile.output = setup.iss
+QMAKE_SUBSTITUTES += GB.setupfile
+
+VERSION = $$GB.VERSION
+
 #CONFIG += qt causes link failure on msvc.  Qt6EntryPoint.lib not added to libs.
 CONFIG(debug, debug|release) {
   CONFIG += console
@@ -30,20 +39,22 @@ mac:DESTDIR = .
 
 UI_DIR = tmp
 
-RESOURCES = app.qrc
-RC_FILE = app.rc
-
-win32 {
+unix:!mac{
+  TARGET=gpsbabelfe
+} else {
   TARGET=GPSBabelFE
 }
+
 win32-g++ {
   QMAKE_LFLAGS_RELEASE += -static-libgcc
 }
-unix:TARGET=gpsbabelfe
-mac:TARGET=GPSBabelFE
 
 # Set QMAKE_TARGET_BUNDLE_PREFIX so we get the correct CFBundleIdentifier in Info.plist
 darwin:QMAKE_TARGET_BUNDLE_PREFIX=org.gpsbabel
+
+# RESOURCES
+RESOURCES = app.qrc
+RC_FILE = app.rc
 
 # FORMS
 FORMS += aboutui.ui
@@ -156,4 +167,3 @@ macx|linux{
   QMAKE_EXTRA_TARGETS += compile_command_database
   QMAKE_DISTCLEAN += compile_commands.json
 }
-

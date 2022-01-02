@@ -8,3 +8,5 @@
 /tmp/
 /release/
 /debug/
+/gbversion.h
+/setup.iss

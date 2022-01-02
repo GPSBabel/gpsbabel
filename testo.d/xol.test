@@ -12,7 +12,7 @@ compare ${REFERENCE}/xol-sample.gpx ${TMPDIR}/xol-sample.gpx
 # check xmlgeneric can detect no input file
 # we expect this to fail
 rm -f ${TMPDIR}/xol-sample_si.gpx
-${PNAME} -i xol -f ${REFERENCE}/doesnotexist -o gpx -F ${TMPDIR}/xol-sample_si.gpx 2> ${TMPDIR}/nonexistent.err && {
+${VALGRIND} "${PNAME}" -i xol -f ${REFERENCE}/doesnotexist -o gpx -F ${TMPDIR}/xol-sample_si.gpx 2> ${TMPDIR}/nonexistent.err && {
          echo "${PNAME} succeeded! (it shouldn't have with this input...)"
 }
 # check error message is what we expected.

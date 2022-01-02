@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(gpsbabel LANGUAGES C CXX)
+include(gbversion.cmake)
+configure_file(gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
+project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -422,6 +424,56 @@ get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 if(UNIX)
-  # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
-  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/gpsbabel ./testo DEPENDS gpsbabel)
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
+  add_custom_target(check
+                    ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
+endif()
+if(UNIX AND NOT APPLE)
+  # This test only works if the pwd is top level source dir due to the
+  #file name getting embedded in the file nonexistent.err.
+  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
+  add_custom_target(check-vtesto
+                    find testo.d -maxdepth 1 -name "*.test" -print0 | xargs -0 basename -s .test | sort |
+                    xargs -n 1 -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto
+                    -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+  # If using a makefile generator WEB can be overridden on the make
+  # command line, e.g.  make gpsbabel.org WEB=/tmp.  If not overridden on
+  # the make command line, or not using a makefile generator, or if using
+  # "cmake --build dir --target gpsbabel.org", then the cache variable
+  # WEB will be used.  The cache variable can be overridden in the usual
+  # way when configuring, i.e. "cmake dir -DWEB:PATH=/tmp".
+
+  # FIXME: Is overriding WEB on the make command line worth the trouble of
+  # using configure_file to build a wrapper script?
+
+  configure_file(${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org_wrapper.sh.in
+                 ${CMAKE_BINARY_DIR}/tools/make_gpsbabel_org_wrapper.sh
+                 @ONLY
+                 NEWLINE_STYLE LF)
+  add_custom_target(gpsbabel.org
+                    ${CMAKE_BINARY_DIR}/tools/make_gpsbabel_org_wrapper.sh
+                    DEPENDS gpsbabel gpsbabel.pdf)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  add_custom_target(gpsbabel.html
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
+                    DEPENDS gpsbabel)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  add_custom_target(gpsbabel.pdf
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
+                    DEPENDS gpsbabel)
 endif()

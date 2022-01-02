@@ -40,3 +40,5 @@ CMakeFiles/
 /autogen/
 /makedoc
 /empty
+/gbversion.h
+/qrc_gpsbabel.cpp

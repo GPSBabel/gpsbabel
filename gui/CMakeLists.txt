@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(gpsbabelfe LANGUAGES CXX)
+include(../gbversion.cmake)
+configure_file(../gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
+configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
+project(gpsbabelfe LANGUAGES CXX VERSION ${GB.VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -16,7 +19,6 @@ set(CMAKE_AUTORCC ON)
 
 if(UNIX AND NOT APPLE)
   set(TARGET gpsbabelfe)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
 else()
   set(TARGET GPSBabelFE)
 endif()
@@ -41,8 +43,12 @@ else()
   target_compile_definitions(${TARGET} PRIVATE DISABLE_MAPPREVIEW)
 endif()
 
-list(APPEND RESOURCES app.qrc)
+if(UNIX AND NOT APPLE)
+  set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
+endif()
 
+# RESOURCES
+list(APPEND RESOURCES app.qrc)
 if(WIN32)
   list(APPEND RESOURCES app.rc)
 endif()
