@@ -21,7 +21,7 @@ cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DWEB=$(pwd)/gpsbabel_docdir
 # We'll be slightly abusive on CPU knowing that I/O is virtualized.
 #make toolinfo
 cmake --build . --target clean
-cmake --build .
+cmake --build . --target gpsbabel
 cmake --build . --target gpsbabel.html
 cmake --build . --target gpsbabel.pdf
 cmake --build . --target gpsbabel.org
