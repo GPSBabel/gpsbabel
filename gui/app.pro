@@ -39,20 +39,22 @@ mac:DESTDIR = .
 
 UI_DIR = tmp
 
-RESOURCES = app.qrc
-RC_FILE = app.rc
-
-win32 {
+unix:!mac{
+  TARGET=gpsbabelfe
+} else {
   TARGET=GPSBabelFE
 }
+
 win32-g++ {
   QMAKE_LFLAGS_RELEASE += -static-libgcc
 }
-unix:TARGET=gpsbabelfe
-mac:TARGET=GPSBabelFE
 
 # Set QMAKE_TARGET_BUNDLE_PREFIX so we get the correct CFBundleIdentifier in Info.plist
 darwin:QMAKE_TARGET_BUNDLE_PREFIX=org.gpsbabel
+
+# RESOURCES
+RESOURCES = app.qrc
+RC_FILE = app.rc
 
 # FORMS
 FORMS += aboutui.ui

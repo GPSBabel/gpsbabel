@@ -19,7 +19,6 @@ set(CMAKE_AUTORCC ON)
 
 if(UNIX AND NOT APPLE)
   set(TARGET gpsbabelfe)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
 else()
   set(TARGET GPSBabelFE)
 endif()
@@ -44,8 +43,12 @@ else()
   target_compile_definitions(${TARGET} PRIVATE DISABLE_MAPPREVIEW)
 endif()
 
-list(APPEND RESOURCES app.qrc)
+if(UNIX AND NOT APPLE)
+  set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
+endif()
 
+# RESOURCES
+list(APPEND RESOURCES app.qrc)
 if(WIN32)
   list(APPEND RESOURCES app.rc)
 endif()
