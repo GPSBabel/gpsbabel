@@ -556,7 +556,6 @@ list(SORT TESTS)
 if(UNIX)
   # This test only works if the pwd is top level source dir due to the
   # file name getting embedded in the file nonexistent.err.
-  # FIXME: each test runs the bom and xmlwf tests.
   enable_testing()
   foreach(TESTNAME IN LISTS TESTS)
     add_test(NAME test-${TESTNAME}
