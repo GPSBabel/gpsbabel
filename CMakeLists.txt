@@ -430,6 +430,141 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+set(TESTS
+  arc-project
+  arc
+  batch
+  bcr
+  bend
+  classic-1
+  classic-2
+  classic-3
+  delgpl
+  destinator
+  dg100
+  dmtlog
+  dna
+  dop_filter
+  duplicate
+  easygps
+  energympro
+  enigma
+  exif
+  f90g
+  fugawi
+  garmin_fit
+  garmin_g1000
+  garmin_gpi
+  garmin_txt
+  garmin_xt
+  gbfile
+  gdb
+  geojson
+  geo
+  ggv_bin
+  ggv_log
+  ggv_ovl
+  globalsat_sport
+  glogbook
+  gnav_trl
+  googledir
+  gpsdrive
+  gpssim
+  gpx
+  grapheme
+  gtm
+  gtrnctr
+  height
+  hiketech
+  holux
+  humminbird
+  iblue747
+  igc
+  ignrando
+  igo2008_poi
+  igo8
+  igoprimo_poi
+  ik3d
+  interpolate
+  itracku
+  kml-read
+  kml
+  lmx
+  lowranceusr
+  magellan_sd
+  magellan
+  mainnav
+  mapasia
+  mapbar
+  mapfactor
+  mmo
+  motoactv
+  mtk
+  multiurlgpx
+  mxf
+  mynav
+  navilink
+  navitel
+  nmea
+  osm
+  ozi
+  polygon
+  position
+  qstarz_bl_1000
+  radius
+  raymarine
+  realtime
+  resample
+  route_reverse
+  saroute
+  sbn
+  sbp
+  serialization
+  shape
+  simplify-relative
+  simplify
+  skytraq
+  sort
+  stackfilter
+  subrip
+  swap
+  tef
+  teletype
+  text
+  tomtom_asc
+  tomtom_itn
+  tomtom
+  tpg
+  tpo
+  track-discard
+  track
+  transform
+  unicsv_grids
+  unicsv
+  unitconversion
+  v900
+  validate_formats
+  validate
+  vcard
+  wintec_tes
+  xcsv
+  xol
+)
+
+list(SORT TESTS)
+
+if(UNIX)
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
+  enable_testing()
+  foreach(TESTNAME IN LISTS TESTS)
+    add_test(NAME test-${TESTNAME}
+             COMMAND ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel> ${TESTNAME}
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            )
+  endforeach()
+endif()
+
 if(UNIX)
   # This test only works if the pwd is top level source dir due to the
   # file name getting embedded in the file nonexistent.err.
@@ -441,11 +576,12 @@ if(UNIX)
 endif()
 if(UNIX AND NOT APPLE)
   # This test only works if the pwd is top level source dir due to the
-  #file name getting embedded in the file nonexistent.err.
+  # file name getting embedded in the file nonexistent.err.
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
+  list(JOIN TESTS "\\n" VTESTS)
   add_custom_target(check-vtesto
-                    find testo.d -maxdepth 1 -name "*.test" -print0 | xargs -0 basename -s .test | sort |
-                    xargs -n 1 -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto
+                    printf "${VTESTS}" |
+                    xargs -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto
                     -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
