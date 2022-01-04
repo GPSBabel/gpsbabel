@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
+include(CMakeDependentOption)
+include(CheckIncludeFile)
+
 include(gbversion.cmake)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
@@ -152,32 +155,6 @@ set(FILTERS
   validate.cc
 )
 
-# SHAPE
-set(SHAPE
-  shapelib/dbfopen.c
-  shapelib/safileio.c
-  shapelib/shpopen.c
-)
-
-# ZLIB
-set(ZLIB
-  zlib/adler32.c
-  zlib/compress.c
-  zlib/crc32.c
-  zlib/deflate.c
-  zlib/gzclose.c
-  zlib/gzlib.c
-  zlib/gzread.c
-  zlib/gzwrite.c
-  zlib/infback.c
-  zlib/inffast.c
-  zlib/inflate.c
-  zlib/inftrees.c
-  zlib/trees.c
-  zlib/uncompr.c
-  zlib/zutil.c
-)
-
 # JEEPS
 set(JEEPS
   jeeps/gpsapp.cc
@@ -310,20 +287,6 @@ set(HEADERS
   src/core/vector3d.h
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
-
-  shapelib/shapefil.h
-
-  zlib/crc32.h
-  zlib/deflate.h
-  zlib/gzguts.h
-  zlib/inffast.h
-  zlib/inffixed.h
-  zlib/inflate.h
-  zlib/inftrees.h
-  zlib/trees.h
-  zlib/zconf.h
-  zlib/zlib.h
-  zlib/zutil.h
 )
 if(${QT_VERSION_MAJOR} EQUAL "6")
   set(HEADERS ${HEADERS} src/core/codecdevice.h)
@@ -332,24 +295,9 @@ endif()
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
 
-target_include_directories(gpsbabel PRIVATE zlib)
-
-include(CheckIncludeFile)
 if(UNIX)
-  # this is used by zlib
-  check_include_file("unistd.h" HAVE_UNISTD_H)
-  if(${HAVE_UNISTD_H})
-    target_compile_definitions(gpsbabel PRIVATE HAVE_UNISTD_H)
-  endif()
-  # this is used by zlib
-  check_include_file("stdarg.h" HAVE_STDARG_H)
-  if(${HAVE_STDARG_H})
-    target_compile_definitions(gpsbabel PRIVATE HAVE_STDARG_H)
-  endif()
-  target_compile_definitions(gpsbabel PRIVATE HAVE_LIBUSB_1_0)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
-  set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
   target_compile_options(gpsbabel PRIVATE -Wall)
 endif()
 
@@ -373,36 +321,18 @@ if(MSVC)
   target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 
-if(UNIX AND NOT APPLE)
-  set(LIBS ${LIBS} usb-1.0)
-endif()
-
 if(APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
-  target_include_directories(gpsbabel PRIVATE mac/libusb mac/libusb/Xcode)
-  set(SOURCES ${SOURCES}
-    mac/libusb/core.c
-    mac/libusb/descriptor.c
-    mac/libusb/hotplug.c
-    mac/libusb/io.c
-    mac/libusb/strerror.c
-    mac/libusb/sync.c
-    mac/libusb/os/darwin_usb.c
-    mac/libusb/os/events_posix.c
-    mac/libusb/os/threads_posix.c
-  )
-  set(HEADERS ${HEADERS}
-    mac/libusb/hotplug.h
-    mac/libusb/libusb.h
-    mac/libusb/libusbi.h
-    mac/libusb/version.h
-    mac/libusb/version_nano.h
-    mac/libusb/os/darwin_usb.h
-    mac/libusb/os/events_posix.h
-    mac/libusb/os/threads_posix.h
-  )
   target_compile_options(gpsbabel PRIVATE -Wall -Wsign-compare)
 endif()
+
+include(shapelib.cmake)
+include(zlib.cmake)
+include(libusb.cmake)
+
+set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
+list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
+set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")
+target_include_directories(gpsbabel PRIVATE ${GPSBABEL_EXTRA_INCLUDE_DIRECTORIES})
 
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
@@ -419,7 +349,7 @@ target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
-target_link_libraries(gpsbabel ${QT_LIBRARIES} ${LIBS})
+target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})
 
 get_target_property(Srcs gpsbabel SOURCES)
 message(STATUS "Sources are: \"${Srcs}\"")
