@@ -16,7 +16,9 @@ else()
       shapelib/shpopen.c
       shapelib/shapefil.h
     )
-    # target_include_directories(shp PUBLIC shape)
+    # note gpsbabel has conditional code include "shapelib/shapefil.h",
+    # so it doesn't actually rely on the include directory being PUBLIC/INTERFACE
+    target_include_directories(shp PUBLIC shape)
     list(APPEND LIBS shp)
   elseif(GPSBABEL_WITH_SHAPELIB STREQUAL "custom")
     message(STATUS "shapelib is enabled but but must be manually configured.")
