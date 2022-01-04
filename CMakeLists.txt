@@ -325,111 +325,14 @@ if(APPLE)
   target_compile_options(gpsbabel PRIVATE -Wall -Wsign-compare)
 endif()
 
-option(GPSBABEL_USE_SHAPELIB "build with shapelib." ON)
-if(GPSBABEL_USE_SHAPELIB)
-  add_library(shp STATIC
-    shapelib/dbfopen.c
-    shapelib/safileio.c
-    shapelib/shpopen.c
-    shapelib/shapefil.h
-  )
-  target_include_directories(shp PUBLIC shape)
-  target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
-  list(APPEND LIBS shp)
-endif()
+include(shapelib.cmake)
+include(zlib.cmake)
+include(libusb.cmake)
 
-option(GPSBABEL_USE_ZLIB "build with zlib." ON)
-cmake_dependent_option(GPSBABEL_EXTERNAL_ZLIB "build with externally supplied zlib." OFF "GPSBABEL_USE_ZLIB" OFF)
-if(GPSBABEL_USE_ZLIB)
-  if(GPSBABEL_EXTERNAL_ZLIB)
-    find_package(ZLIB 1.2.9 REQUIRED)
-    set(LIBS ${LIBS} ZLIB::ZLIB)
-  else()
-    add_library(z STATIC
-      zlib/adler32.c
-      zlib/compress.c
-      zlib/crc32.c
-      zlib/deflate.c
-      zlib/inffast.c
-      zlib/inflate.c
-      zlib/infback.c
-      zlib/inftrees.c
-      zlib/trees.c
-      zlib/uncompr.c
-      zlib/gzlib.c
-      zlib/gzclose.c
-      zlib/gzread.c
-      zlib/gzwrite.c
-      zlib/zutil.c
-      zlib/crc32.h
-      zlib/deflate.h
-      zlib/gzguts.h
-      zlib/inffast.h
-      zlib/inffixed.h
-      zlib/inflate.h
-      zlib/inftrees.h
-      zlib/trees.h
-      zlib/zconf.h
-      zlib/zlib.h
-      zlib/zutil.h
-    )
-    if(UNIX)
-      # this is used by zlib
-      check_include_file(unistd.h HAVE_UNISTD_H)
-      if(HAVE_UNISTD_H)
-        target_compile_definitions(z PRIVATE HAVE_UNISTD_H)
-      endif()
-      # this is used by zlib
-      check_include_file(stdarg.h HAVE_STDARG_H)
-      if(HAVE_STDARG_H)
-        target_compile_definitions(z PRIVATE HAVE_STDARG_H)
-      endif()
-    endif()
-    target_include_directories(z PUBLIC zlib)
-    list(APPEND LIBS z)
-  endif()
-else()
-  target_compile_definitions(gpsbabel PRIVATE ZLIB_INHIBITED)
-endif()
-
-if(UNIX)
-  option(GPSBABEL_USE_LIBUSB "build with libusb-1.0." ON)
-  if(GPSBABEL_USE_LIBUSB)
-    target_compile_definitions(gpsbabel PRIVATE HAVE_LIBUSB_1_0)
-    list(APPEND JEEPS jeeps/gpslibusb.cc)
-    if(UNIX AND NOT APPLE)
-      list(APPEND LIBS usb-1.0)
-      target_compile_definitions(gpsbabel PRIVATE LIBUSB_H_INCLUDE=<libusb-1.0/libusb.h>)
-    else()
-      add_library(usb-1.0 STATIC
-        mac/libusb/core.c
-        mac/libusb/descriptor.c
-        mac/libusb/hotplug.c
-        mac/libusb/io.c
-        mac/libusb/strerror.c
-        mac/libusb/sync.c
-        mac/libusb/os/darwin_usb.c
-        mac/libusb/os/events_posix.c
-        mac/libusb/os/threads_posix.c
-        mac/libusb/hotplug.h
-        mac/libusb/libusb.h
-        mac/libusb/libusbi.h
-        mac/libusb/version.h
-        mac/libusb/version_nano.h
-        mac/libusb/os/darwin_usb.h
-        mac/libusb/os/events_posix.h
-        mac/libusb/os/threads_posix.h
-        mac/libusb/XCode/config.h
-      )
-      target_include_directories(usb-1.0 PRIVATE mac/libusb/XCode PUBLIC mac/libusb)
-      target_link_libraries(usb-1.0 INTERFACE objc "-framework IOKit" "-framework CoreFoundation")
-      target_compile_definitions(gpsbabel PRIVATE "LIBUSB_H_INCLUDE=\"mac/libusb/libusb.h\"")
-      list(APPEND LIBS usb-1.0)
-    endif()
-  else()
-    list(APPEND JEEPS jeeps/gpsusbstub.cc)
-  endif()
-endif()
+set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
+list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
+set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")
+target_include_directories(gpsbabel PRIVATE ${GPSBABEL_EXTRA_INCLUDE_DIRECTORIES})
 
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
