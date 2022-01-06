@@ -25,8 +25,6 @@
 #ifndef LIBUSB_H
 #define LIBUSB_H
 
-#include "mac/libusb/Xcode/config.h"
-
 #if defined(_MSC_VER)
 /* on MS environments, the inline keyword is available in C++ only */
 #if !defined(__cplusplus)
