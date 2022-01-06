@@ -6,6 +6,6 @@
   route-planning software with a 3-dimensional environment.
 </para>
 <para>
-  The project files are XML based and we can read the main GPS items (names and coordinates). 
+  The project files are XML based and we can read the main GPS items (names and coordinates).
   For an output these files are too complex.
 </para>

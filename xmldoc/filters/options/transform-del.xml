@@ -1,6 +1,6 @@
 <para>
 This option, when used in connection with the wpt, rte, or trk options, tells
-GPSBabel to delete the source data after conversion.  This is most useful if 
+GPSBabel to delete the source data after conversion.  This is most useful if
 you are trying to avoid duplicated data in the output.
 </para>
 <example id="transform_del">

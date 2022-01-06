@@ -27,7 +27,7 @@
 
 
 <xsl:template name="user.header.navigation">
-  <xsl:text> 
+  <xsl:text>
   </xsl:text>
 </xsl:template>
 
@@ -53,29 +53,29 @@
       <xsl:call-template name="body.attributes"/>
   {block name=body}{literal}
                       <xsl:call-template name="user.header.navigation"/>
-               
+
                       <xsl:call-template name="header.navigation">
                         <xsl:with-param name="prev" select="$prev"/>
                         <xsl:with-param name="next" select="$next"/>
                         <xsl:with-param name="nav.context" select="$nav.context"/>
                       </xsl:call-template>
-               
+
                       <xsl:call-template name="user.header.content"/>
-               
+
                       <xsl:copy-of select="$content"/>
-               
+
                       <xsl:call-template name="user.footer.content"/>
-               
+
                       <xsl:call-template name="footer.navigation">
                         <xsl:with-param name="prev" select="$prev"/>
                         <xsl:with-param name="next" select="$next"/>
                         <xsl:with-param name="nav.context" select="$nav.context"/>
                       </xsl:call-template>
-               
+
                       <xsl:call-template name="user.footer.navigation"/>
       {/literal}{/block}
   <xsl:value-of select="$chunk.append"/>
 </xsl:template>
 
- 
+
 </xsl:stylesheet>

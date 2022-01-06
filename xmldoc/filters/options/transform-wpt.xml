@@ -1,5 +1,5 @@
 <para>
-This option selects the destination type of this filter to be waypoints.  
+This option selects the destination type of this filter to be waypoints.
 Choose this when you want to convert tracks or routes into waypoints.
 </para>
 <example id="transform_to_wpt">

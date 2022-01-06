@@ -1,10 +1,10 @@
-<para> 
-KML, the Keyhole Markup Language format, was used by Keyhole and is used by 
-<ulink url="http://earth.google.com">Google Earth</ulink>.  
+<para>
+KML, the Keyhole Markup Language format, was used by Keyhole and is used by
+<ulink url="http://earth.google.com">Google Earth</ulink>.
 </para>
-<para>There are concepts in KML that GPSBabel can't support very well on 
+<para>There are concepts in KML that GPSBabel can't support very well on
 read because they don't map well into other programs.  For example, KML has
-ideas of camera views and names and descriptions can have arbitrarily 
+ideas of camera views and names and descriptions can have arbitrarily
 complicated HTML in them.   KML files may have tiered "Styles" which
 can identify sizing info and URLs of associated icons.   Reading such
 files with GPSBabel - even if your goal it to write it back out as KML - can often
@@ -19,9 +19,9 @@ and several file format imports and exports.
 In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple KML on read fairly well, but if you're dealing with handcrafted KML that uses extensive features that have no analog in other formats like nested folders, ringgeometry, camera angles, and such, don't expect GPSBabel to do well with them on read.
 </para>
 <para>
-  Google Earth 4.0 and later have a feature that can surprise users of this 
+  Google Earth 4.0 and later have a feature that can surprise users of this
   format.   Earth's "time slider" feature controls what timestamped data
-  gets displayed.  If you're using data that has timestamps (e.g. GPX 
+  gets displayed.  If you're using data that has timestamps (e.g. GPX
   points that contain time or almost any track data) this will be important
   to you.  The time slider defaults to the far left position and fully closed.
   This means that only the first data point will be displayed.  You can

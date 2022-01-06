@@ -1,12 +1,12 @@
 <para>
-This format supports tracks from 
-<ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink> 
+This format supports tracks from
+<ulink url="http://www.bushnell.com/products/gps/">Bushnell GPS</ulink>
 receivers, notably the <productname>Onix 400</productname>.
 </para>
 <para>
 This format reads individual .trl files as written by the GPS.  As this is
-a reverse-engineered format, it's not understood how (or even if) long 
-tracks, in 
+a reverse-engineered format, it's not understood how (or even if) long
+tracks, in
 particular, span multiple files so initially this format is most effective
 on tracks under a few thousand points.
 </para>
@@ -15,7 +15,7 @@ on tracks under a few thousand points.
   most we believe these units can represent in a track.
 </para>
 <para>
-  The output base filename, converted to uppercase and stripped of 
-  everything but letters and digits, is used for the trail name inside 
+  The output base filename, converted to uppercase and stripped of
+  everything but letters and digits, is used for the trail name inside
   the file itself.
 </para>

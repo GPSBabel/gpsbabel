@@ -3,8 +3,8 @@
 </para>
 <para>
   The basic information was found at <ulink url="http://mozoft.com/d3log.html">mozoft.com</ulink>.
-  In addition to the standard GPS track data of coordinates and timestamp, this format also stores the 
-  position fix and the number of satellites seen during recording. 
+  In addition to the standard GPS track data of coordinates and timestamp, this format also stores the
+  position fix and the number of satellites seen during recording.
 </para>
 <para>
   <productname>Destinator</productname> by

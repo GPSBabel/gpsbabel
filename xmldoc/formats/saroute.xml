@@ -1,4 +1,4 @@
-<para> 
+<para>
 This format reads route files from many DeLorme mapping products.
 It supports the anr, rte, and rtd formats as either tracks or
 routes.</para>
@@ -6,4 +6,4 @@ routes.</para>
 versions of DeLorme software; older versions didn't store the turn
 information with the route.
 </para>
-    
+

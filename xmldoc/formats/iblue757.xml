@@ -1,14 +1,14 @@
 <para>
-  This is the format used by the software that comes with the 
+  This is the format used by the software that comes with the
    <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81290">
      Transystem i-Blue757 Pro GPS
    </ulink>.
-   It is very similar to the <link linkend="fmt_iblue747">iBlue747</link> 
+   It is very similar to the <link linkend="fmt_iblue747">iBlue747</link>
    format, apart from the date format being reversed.
 </para>
 
 <para>
-  The csv log file can be extracted from the GPS receiver using 
+  The csv log file can be extracted from the GPS receiver using
   the BT747 software available from <ulink url="http://www.bt747.org"></ulink>
 </para>
 
