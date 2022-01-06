@@ -521,8 +521,9 @@ endif()
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
   add_custom_target(gpsbabel.org
-                    ${CMAKE_BINARY_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
-                    DEPENDS gpsbabel gpsbabel.pdf)
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
+                    DEPENDS gpsbabel gpsbabel.pdf
+                    VERBATIM)
 endif()
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
