@@ -423,12 +423,12 @@ destinator_trkpt_disp(const Waypoint* wpt)
   }
 
   if (wpt->creation_time.isValid()) {
-    QDate dt = wpt->GetCreationTime().date();
+    QDate dt = wpt->GetCreationTime().toUTC().date();
     double milliseconds = 0;
     int date = dt.day() * 10000 + (dt.month() - 1) * 100 + (dt.year() - 1900);
     gbfputint32(date, fout);
 
-    QTime tm = wpt->GetCreationTime().time();
+    QTime tm = wpt->GetCreationTime().toUTC().time();
     milliseconds = tm.hour() * 10000 + tm.minute() * 100 + tm.second();
     milliseconds = milliseconds * 1000 + tm.msec();
 
