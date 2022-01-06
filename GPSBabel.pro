@@ -397,10 +397,7 @@ equals(PWD, $${OUT_PWD}) {
   !defined(WEB, var) {
     WEB = ../babelweb
   }
-  # Allow WEB to be overridden when running make.
-  # DOCVERSION must be overridden at qmake time as it also affects the object code.
-  gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
-  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" $$shell_quote($$DOCVERSION);
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh $$shell_quote($$WEB) $$shell_quote($$DOCVERSION);
 } else {
   gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
   gpsbabel.org.commands += exit 1;
