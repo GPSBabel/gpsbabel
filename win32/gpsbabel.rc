@@ -24,7 +24,7 @@ BEGIN
             VALUE "FileDescription", "GPS format converter"
             VALUE "FileVersion", VER_FILE_STR
             VALUE "InternalName", "gpsbabel.exe"
-            VALUE "LegalCopyright", L"\x00a9 2002-2020 Robert Lipe"
+            VALUE "LegalCopyright", L"\x00a9 2002-2022 Robert Lipe"
             VALUE "OriginalFilename", "gpsbabel.exe"
             VALUE "ProductName", "GPSBabel"
             VALUE "ProductVersion", VER_PRODUCT_STR

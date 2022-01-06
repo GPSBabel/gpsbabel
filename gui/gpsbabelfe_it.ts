@@ -228,12 +228,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cc" line="72"/>
+        <location filename="optionsdlg.cc" line="68"/>
         <source>Select input file</source>
         <translation>Seleziona il file di origine</translation>
     </message>
     <message>
-        <location filename="optionsdlg.cc" line="76"/>
+        <location filename="optionsdlg.cc" line="72"/>
         <source>Select output file</source>
         <translation>Seleziona il file di destinazione</translation>
     </message>
@@ -292,138 +292,138 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GMapDialog</name>
     <message>
-        <location filename="gmapdlg.cc" line="55"/>
+        <location filename="gmapdlg.cc" line="45"/>
         <source>meters</source>
         <translation>metri</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="64"/>
+        <location filename="gmapdlg.cc" line="54"/>
         <source>feet</source>
         <translation>piede</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="68"/>
+        <location filename="gmapdlg.cc" line="58"/>
         <source>miles</source>
         <translation>miglia</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="71"/>
+        <location filename="gmapdlg.cc" line="61"/>
         <source>Length: %1 %2
   %3 %4</source>
         <translation>Lunghezza: %1 %2
   %3 %4</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="81"/>
+        <location filename="gmapdlg.cc" line="71"/>
         <source>Lat: %1</source>
         <translation>Lat: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="82"/>
+        <location filename="gmapdlg.cc" line="72"/>
         <source>Lng: %1</source>
         <translation>Lng: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="84"/>
+        <location filename="gmapdlg.cc" line="74"/>
         <source>Desc: %1</source>
         <translation>Desc: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="87"/>
+        <location filename="gmapdlg.cc" line="77"/>
         <source>Cmt: %1</source>
         <translation>Cmt: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="90"/>
+        <location filename="gmapdlg.cc" line="80"/>
         <source>Ele: %1</source>
         <translation>Alt: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="124"/>
+        <location filename="gmapdlg.cc" line="114"/>
         <source>Start: %1</source>
         <translation>Avvio: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="126"/>
+        <location filename="gmapdlg.cc" line="116"/>
         <source>Stop: %1</source>
         <translation>Stop: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="129"/>
+        <location filename="gmapdlg.cc" line="119"/>
         <source>Points: %1</source>
         <translation>Punti: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="156"/>
+        <location filename="gmapdlg.cc" line="146"/>
         <source>Waypoints</source>
         <translation>Punti di interesse</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="171"/>
+        <location filename="gmapdlg.cc" line="161"/>
         <source>Tracks</source>
         <translation>Tracce</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="186"/>
+        <location filename="gmapdlg.cc" line="176"/>
         <source>Routes</source>
         <translation>Rotte</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="531"/>
         <source>Show All Waypoints</source>
         <translation>Mostra tutti i punti di interesse</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="542"/>
+        <location filename="gmapdlg.cc" line="532"/>
         <source>Hide All Waypoints</source>
         <translation>Nascondi tutti i punti di interesse</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="543"/>
-        <location filename="gmapdlg.cc" line="550"/>
-        <location filename="gmapdlg.cc" line="557"/>
+        <location filename="gmapdlg.cc" line="533"/>
+        <location filename="gmapdlg.cc" line="540"/>
+        <location filename="gmapdlg.cc" line="547"/>
         <source>Expand All</source>
         <translation>Espandi tutto</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="544"/>
-        <location filename="gmapdlg.cc" line="551"/>
-        <location filename="gmapdlg.cc" line="558"/>
+        <location filename="gmapdlg.cc" line="534"/>
+        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="548"/>
         <source>Collapse All</source>
         <translation>Contrai tutto</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="548"/>
+        <location filename="gmapdlg.cc" line="538"/>
         <source>Show All Routes</source>
         <translation>Mostra tutte le rotte</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="549"/>
+        <location filename="gmapdlg.cc" line="539"/>
         <source>Hide All Routes</source>
         <translation>Nascondi tutte le rotte</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="555"/>
+        <location filename="gmapdlg.cc" line="545"/>
         <source>Show All Tracks</source>
         <translation>Mostra tutte le tracce</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="556"/>
+        <location filename="gmapdlg.cc" line="546"/>
         <source>Hide All Tracks</source>
         <translation>Nascondi tutte le tracce</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="562"/>
+        <location filename="gmapdlg.cc" line="552"/>
         <source>Show Only This Waypoint</source>
         <translation>Mostra solo questo punto di interesse</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="567"/>
+        <location filename="gmapdlg.cc" line="557"/>
         <source>Show Only This Track</source>
         <translation>Mostra solo questa traccia</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="572"/>
+        <location filename="gmapdlg.cc" line="562"/>
         <source>Show Only This Route</source>
         <translation>Mostra solo questa rotta</translation>
     </message>
@@ -685,17 +685,17 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">predefinite</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="526"/>
         <source>Select one or more input files</source>
         <translation>Selezionare uno o più file in ingresso</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="588"/>
+        <location filename="mainwindow.cc" line="554"/>
         <source>Output File Name</source>
         <translation>Nome del file in uscita</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="652"/>
+        <location filename="mainwindow.cc" line="618"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -704,7 +704,7 @@ This program cannot continue.</source>
 Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="663"/>
+        <location filename="mainwindow.cc" line="629"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -713,7 +713,7 @@ This program cannot continue.</source>
 Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="684"/>
+        <location filename="mainwindow.cc" line="650"/>
         <source>Input and output formats do not support %1</source>
         <translation>I formati di ingresso e di uscita non supportano %1</translation>
     </message>
@@ -726,110 +726,108 @@ Questo programma non può proseguire.</translation>
         <translation type="vanished">Il formato in ingresso supporta %1, il formato di destinazione non supporta %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="653"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">L&apos;ingresso non supporta %1, il formato di destinazione supporta %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">Il formato in ingresso supporta %1, il formato di destinazione non supporta %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Both input and output formats support %1</source>
         <translation>I formati di origine e di destinazione supportano %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="714"/>
+        <location filename="mainwindow.cc" line="680"/>
         <source>waypoints</source>
         <translation>punti di interesse</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="715"/>
+        <location filename="mainwindow.cc" line="681"/>
         <source>tracks</source>
         <translation>tracce</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="716"/>
+        <location filename="mainwindow.cc" line="682"/>
         <source>routes</source>
         <translation>rotte</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="811"/>
+        <location filename="mainwindow.cc" line="777"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Non ci sono opzioni in ingresso per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="817"/>
-        <location filename="mainwindow.cc" line="836"/>
+        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="802"/>
         <source>Options for %1</source>
         <translation>Opzioni per %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="830"/>
+        <location filename="mainwindow.cc" line="796"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Non ci sono opzioni in uscita per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="816"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Non è stato specificato alcun punto di interesse/rotta/traccia</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="869"/>
+        <location filename="mainwindow.cc" line="835"/>
         <source>No input file specified</source>
         <translation>Il file di origine non è stato specificato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="876"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No valid output specified</source>
         <translation>Non è stata specificata una destinazione valida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="881"/>
+        <location filename="mainwindow.cc" line="849"/>
         <source>No output file specified</source>
         <translation>Il file di destinazione non è stato specificato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="897"/>
         <source>Process &quot;%1&quot; did not start</source>
-        <translation>Il processo &quot;%1&quot; non è stato avviato</translation>
+        <translation type="vanished">Il processo &quot;%1&quot; non è stato avviato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="911"/>
         <source>Process exited unsuccessfully with code %1</source>
-        <translation>Il processo è terminato con il codice di errorre %1</translation>
+        <translation type="vanished">Il processo è terminato con il codice di errorre %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1054"/>
+        <location filename="mainwindow.cc" line="1000"/>
         <source>Translation successful</source>
         <translation>Traduzione terminata con successo</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1064"/>
+        <location filename="mainwindow.cc" line="1018"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Errore durante l&apos;esecuzione di gpsbabel: %1
 </translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1184"/>
+        <location filename="mainwindow.cc" line="1139"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Si è certi di voler reimpostare tutte le opzioni dei formati ai valori predefiniti?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1208"/>
+        <location filename="mainwindow.cc" line="1163"/>
         <source>About %1</source>
         <translation>Informazioni su %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1251"/>
+        <location filename="mainwindow.cc" line="1206"/>
         <source>One or more data filters are active</source>
         <translation>È attivo uno o più filtri di dati</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1253"/>
+        <location filename="mainwindow.cc" line="1208"/>
         <source>No data filters are active</source>
         <translation>Nessun filtro di dati è attivo</translation>
     </message>
@@ -837,12 +835,17 @@ Questo programma non può proseguire.</translation>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="96"/>
+        <location filename="map.cc" line="115"/>
+        <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="119"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>Il file &quot;gmapbase.html&quot; manca. Verifica l&apos;installazione</translation>
     </message>
     <message>
-        <location filename="map.cc" line="134"/>
+        <location filename="map.cc" line="174"/>
         <source>Failed to load Google maps base page</source>
         <translation>Non è stato possibile caricare la pagina di base delle mappe di Google</translation>
     </message>
@@ -866,28 +869,28 @@ Questo programma non può proseguire.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="229"/>
         <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Routes</source>
         <translation>Rotte</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
-        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="231"/>
+        <location filename="filterwidgets.cc" line="232"/>
         <source>Tracks</source>
         <translation>Tracce</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="226"/>
-        <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="229"/>
-        <location filename="filterwidgets.cc" line="231"/>
+        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="232"/>
         <source>Waypoints</source>
         <translation>Punti di interesse</translation>
     </message>
@@ -996,8 +999,8 @@ Qualche formato di dati del GPS supporta solo un sottoinsieme di punti di intere
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cc" line="191"/>
-        <location filename="optionsdlg.cc" line="202"/>
+        <location filename="optionsdlg.cc" line="187"/>
+        <location filename="optionsdlg.cc" line="198"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
@@ -1053,60 +1056,52 @@ Qualche formato di dati del GPS supporta solo un sottoinsieme di punti di intere
 <context>
     <name>ProcessWaitDialog</name>
     <message>
-        <location filename="processwait.cc" line="42"/>
         <source>Process failed to start</source>
-        <translation>Si è verificato un errore durante l&apos;avvio del processo</translation>
+        <translation type="vanished">Si è verificato un errore durante l&apos;avvio del processo</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="45"/>
         <source>Process crashed</source>
-        <translation>Il processo si è interrotto</translation>
+        <translation type="vanished">Il processo si è interrotto</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="48"/>
         <source>Process timedout</source>
-        <translation>Il processo non è terminato entro il tempo limite</translation>
+        <translation type="vanished">Il processo non è terminato entro il tempo limite</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="51"/>
         <source>Error while trying to write to process</source>
-        <translation>Errore durante la scrittura nel processo</translation>
+        <translation type="vanished">Errore durante la scrittura nel processo</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="54"/>
         <source>Error while trying to read from process</source>
-        <translation>Errore durante la lettura dal processo</translation>
+        <translation type="vanished">Errore durante la lettura dal processo</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="58"/>
         <source>Unknown process error</source>
-        <translation>Errore sconosciuto nel processo</translation>
+        <translation type="vanished">Errore sconosciuto nel processo</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="67"/>
+        <location filename="processwait.cc" line="44"/>
         <source> ... Process GPSBabel</source>
         <translation>... processo GPSBabel</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="82"/>
+        <location filename="processwait.cc" line="61"/>
         <source>Stop Process</source>
         <translation>Arresta il processo</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="157"/>
         <source>Process did not terminate successfully</source>
-        <translation>Il processo non è terminato correttamente</translation>
+        <translation type="vanished">Il processo non è terminato correttamente</translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="176"/>
         <source>Process crashed while running</source>
-        <translation>Il processo si è interrotto</translation>
+        <translation type="vanished">Il processo si è interrotto</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="177"/>
+        <location filename="formatload.cc" line="173"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation>Si è verificato un errore durante l&apos;elaborazione dei formati da parte del processo di lavoro &quot;gpsbabel -^3&quot; alla linea %1</translation>
     </message>
@@ -1181,26 +1176,75 @@ La qualità dei risultati dipenderà dalla densità dei punti e dalla lunghezza 
         <translation>Numero massimo di punti nella traccia o rotta. </translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="96"/>
+        <location filename="rttrkui.ui" line="99"/>
         <source>Points</source>
         <translation>Punti</translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="118"/>
+        <location filename="rttrkui.ui" line="121"/>
         <source>Reverse tracks and routes</source>
         <translation>Inverti e rotte</translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="121"/>
+        <location filename="rttrkui.ui" line="124"/>
         <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
         <translation>L&apos;inversione è effettuata nel modo più pigro possibile. Date ed ore sono mantenute con i punti di interesse originali in modo che la traccia o rotta risultante avrà la caratteristica interessante che il tempo scorre all&apos;indietro. Questo comporta, in particolare, che Magellan MapSend si comporti in modo strano e inserisca ogni punti di interesse in un giorno diverso.
 Inoltre, se stai usando questa operazione per invertire una rotta che percorre, ad esempio, una rampa di uscita o una strada a senso unico, potrai incappare in un giro poco piacevoli. L&apos;applicazione si preoccupa di data e ora</translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="125"/>
+        <location filename="rttrkui.ui" line="128"/>
         <source>Reverse</source>
         <translation>Inverti</translation>
+    </message>
+</context>
+<context>
+    <name>RunMachine</name>
+    <message>
+        <location filename="runmachine.cc" line="35"/>
+        <source>Process failed to start</source>
+        <translation type="unfinished">Si è verificato un errore durante l&apos;avvio del processo</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="38"/>
+        <source>Process crashed</source>
+        <translation type="unfinished">Il processo si è interrotto</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="41"/>
+        <source>Process timedout</source>
+        <translation type="unfinished">Il processo non è terminato entro il tempo limite</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="44"/>
+        <source>Error while trying to write to process</source>
+        <translation type="unfinished">Errore durante la scrittura nel processo</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="47"/>
+        <source>Error while trying to read from process</source>
+        <translation type="unfinished">Errore durante la lettura dal processo</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="51"/>
+        <source>Unknown process error</source>
+        <translation type="unfinished">Errore sconosciuto nel processo</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="150"/>
+        <source>Process &quot;%1&quot; did not start</source>
+        <translation type="unfinished">Il processo &quot;%1&quot; non è stato avviato</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="182"/>
+        <source>Process exited unsuccessfully with code %1</source>
+        <translation type="unfinished">Il processo è terminato con il codice di errorre %1</translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="186"/>
+        <location filename="runmachine.cc" line="197"/>
+        <source>Process crashed while running</source>
+        <translation type="unfinished">Il processo si è interrotto</translation>
     </message>
 </context>
 <context>
@@ -1515,49 +1559,49 @@ Questa opzione calcola (o ricalcola) un valore per la direzione del GPS in ogni 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="213"/>
-        <location filename="upgrade.cc" line="217"/>
-        <location filename="upgrade.cc" line="251"/>
+        <location filename="upgrade.cc" line="207"/>
+        <location filename="upgrade.cc" line="211"/>
+        <location filename="upgrade.cc" line="245"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="214"/>
+        <location filename="upgrade.cc" line="208"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="218"/>
+        <location filename="upgrade.cc" line="212"/>
         <source>Download failed: %1.</source>
         <translation>Scaricamento non riuscito: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="252"/>
+        <location filename="upgrade.cc" line="246"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="268"/>
+        <location filename="upgrade.cc" line="262"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="269"/>
+        <location filename="upgrade.cc" line="263"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Dati ricevuti non validi alla linea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="311"/>
+        <location filename="upgrade.cc" line="305"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>È disponibile una nuova versione di GPSBabel.&lt;br /&gt;Versione corrente: %1 &lt;br /&gt;Nuova versione: %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="321"/>
+        <location filename="upgrade.cc" line="315"/>
         <source>Upgrade</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="328"/>
+        <location filename="upgrade.cc" line="322"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Si desidera scaricare un aggiornamento?</translation>
     </message>

@@ -1,4 +1,4 @@
-GPSBabel Version 1.7.0.  https://www.gpsbabel.org
+GPSBabel Version 1.8.0.  https://www.gpsbabel.org
 
 Usage:
     ./gpsbabel [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE
