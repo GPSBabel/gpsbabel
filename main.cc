@@ -433,8 +433,8 @@ run(const char* prog_name)
        */
       if (global_opts.debug_level > 0)  {
         warning("GPSBabel Version: %s\n", gpsbabel_version);
-        if(*VERSION_SHA != 0) {
-          warning(MYNAME ": Repository SHA: %s\n", VERSION_SHA);
+        if(sizeof(kVersionSHA) > 1) {
+          warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
         }
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,

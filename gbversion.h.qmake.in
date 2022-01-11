@@ -13,6 +13,6 @@
 #define VER_PRODUCT_STR  \"$${GB.MAJOR}.$${GB.MINOR}.$${GB.MICRO}$${GB.PACKAGE_RELEASE}\"
 #else
 #define VERSION \"$${GB.MAJOR}.$${GB.MINOR}.$${GB.MICRO}$${GB.PACKAGE_RELEASE}\"
-#define VERSION_SHA \"$${GB.SHA}\"
+constexpr char kVersionSHA[] = \"$${GB.SHA}\";
 #define WEB_DOC_DIR \"https://www.gpsbabel.org/htmldoc-$${DOCVERSION}\"
 #endif
