@@ -23,6 +23,7 @@ GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
 # A: it's used by win32/gpsbabel.rc which includes gbversion.h
 GB.BUILD = 32
 # GB.PACKAGE_RELEASE = "-beta20190413"
+GB.SHA = $$(GITHUB_SHA)
 
 # may be overridden on qmake command line
 !defined(DOCVERSION, var) {
