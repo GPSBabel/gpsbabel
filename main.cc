@@ -48,6 +48,7 @@
 #include "filter.h"                   // for Filter
 #include "filter_vecs.h"              // for FilterVecs
 #include "format.h"                   // for Format
+#include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
@@ -432,6 +433,9 @@ run(const char* prog_name)
        */
       if (global_opts.debug_level > 0)  {
         warning("GPSBabel Version: %s\n", gpsbabel_version);
+        if(sizeof(kVersionSHA) > 1) {
+          warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
+        }
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));

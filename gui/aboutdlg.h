@@ -32,7 +32,8 @@ class AboutDlg: public QDialog
 {
 public:
   AboutDlg(QWidget* parent,  const QString& ver1,
-           const QString& ver2, const QString& installationId);
+           const QString& ver2, const QString& ver3,
+           const QString& installationId);
 
 private:
   Ui_AboutDlg  ui_;
