@@ -14,14 +14,14 @@
 # definition to gbversion.pri and gbversion.cmake. When we retire qmake
 # we will be back to only one place for version to be defined.
 
-GB.VERSION = 1.7.0 # Also change in gbversion.cmake
+GB.VERSION = 1.8.0 # Also change in gbversion.cmake
 GB.VERSION_COMPONENTS = $$split(GB.VERSION, .)
 GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
 GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
 GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
 # Increase GB.BUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc which includes gbversion.h
-GB.BUILD = 31
+GB.BUILD = 32
 # GB.PACKAGE_RELEASE = "-beta20190413"
 GB.SHA = $$(GITHUB_SHA)
 

@@ -9,47 +9,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="aboutui.ui" line="74"/>
+        <location filename="aboutui.ui" line="80"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;$babelfeversion$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;Copyright (C) 2009-2016 Robert Lipe&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;GUI designed and contributed by  S. Khai Mong&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;(Using backend $babelversion$)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;$upgradetestmode$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;Installation ID: $installationId$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;This program is free software; you can redistribute it and/or  modify it under the terms of the GNU General Public License as  published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;$babelfeversion$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;Copyright (C) 2009-2014 Robert Lipe&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;GUI designed and contributed by  S. Khai Mong&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;(Using backend $babelversion$)&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;$upgradetestmode$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;Installation ID: $installationId$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;This program is free software; you can redistribute it and/or  modify it under the terms of the GNU General Public License as  published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2022 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -66,92 +47,82 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="36"/>
-        <source>Enable character set transformation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="advui.ui" line="43"/>
+        <location filename="advui.ui" line="30"/>
         <source>Preview in Google Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="57"/>
+        <location filename="advui.ui" line="44"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="62"/>
+        <location filename="advui.ui" line="49"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="67"/>
+        <location filename="advui.ui" line="54"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="72"/>
+        <location filename="advui.ui" line="59"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="77"/>
+        <location filename="advui.ui" line="64"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="82"/>
+        <location filename="advui.ui" line="69"/>
         <source>4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="87"/>
+        <location filename="advui.ui" line="74"/>
         <source>5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="92"/>
+        <location filename="advui.ui" line="79"/>
         <source>6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="97"/>
+        <location filename="advui.ui" line="84"/>
         <source>7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="102"/>
+        <location filename="advui.ui" line="89"/>
         <source>8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="107"/>
+        <location filename="advui.ui" line="94"/>
         <source>9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="115"/>
+        <location filename="advui.ui" line="102"/>
         <source>Debugging Diagnostics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="139"/>
+        <location filename="advui.ui" line="126"/>
         <source>Set all format input/output options to default values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="142"/>
+        <location filename="advui.ui" line="129"/>
         <source>Default Format Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="advui.ui" line="33"/>
-        <source>Convert character set encoding between input and output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="advui.ui" line="52"/>
+        <location filename="advui.ui" line="39"/>
         <source>Debugging diagnostics.  
 Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished"></translation>
@@ -170,36 +141,27 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="47"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
+        <location filename="donate.ui" line="52"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="61"/>
+        <location filename="donate.ui" line="78"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="71"/>
+        <location filename="donate.ui" line="88"/>
         <source>Never show this message again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="93"/>
+        <location filename="donate.ui" line="123"/>
         <source>No, Thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="100"/>
+        <location filename="donate.ui" line="130"/>
         <source>Contribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -207,12 +169,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cc" line="72"/>
+        <location filename="optionsdlg.cc" line="68"/>
         <source>Select input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optionsdlg.cc" line="76"/>
+        <location filename="optionsdlg.cc" line="72"/>
         <source>Select output file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,137 +233,137 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GMapDialog</name>
     <message>
-        <location filename="gmapdlg.cc" line="55"/>
+        <location filename="gmapdlg.cc" line="45"/>
         <source>meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="64"/>
+        <location filename="gmapdlg.cc" line="54"/>
         <source>feet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="68"/>
+        <location filename="gmapdlg.cc" line="58"/>
         <source>miles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="71"/>
+        <location filename="gmapdlg.cc" line="61"/>
         <source>Length: %1 %2
   %3 %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="81"/>
+        <location filename="gmapdlg.cc" line="71"/>
         <source>Lat: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="82"/>
+        <location filename="gmapdlg.cc" line="72"/>
         <source>Lng: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="84"/>
+        <location filename="gmapdlg.cc" line="74"/>
         <source>Desc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="87"/>
+        <location filename="gmapdlg.cc" line="77"/>
         <source>Cmt: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="90"/>
+        <location filename="gmapdlg.cc" line="80"/>
         <source>Ele: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="124"/>
+        <location filename="gmapdlg.cc" line="114"/>
         <source>Start: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="126"/>
+        <location filename="gmapdlg.cc" line="116"/>
         <source>Stop: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="129"/>
+        <location filename="gmapdlg.cc" line="119"/>
         <source>Points: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="156"/>
+        <location filename="gmapdlg.cc" line="146"/>
         <source>Waypoints</source>
         <translation type="unfinished">Útpontok</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="171"/>
+        <location filename="gmapdlg.cc" line="161"/>
         <source>Tracks</source>
         <translation type="unfinished">Nyomvonalak</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="186"/>
+        <location filename="gmapdlg.cc" line="176"/>
         <source>Routes</source>
         <translation type="unfinished">Útvonalak</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="531"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="542"/>
+        <location filename="gmapdlg.cc" line="532"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="543"/>
-        <location filename="gmapdlg.cc" line="550"/>
-        <location filename="gmapdlg.cc" line="557"/>
+        <location filename="gmapdlg.cc" line="533"/>
+        <location filename="gmapdlg.cc" line="540"/>
+        <location filename="gmapdlg.cc" line="547"/>
         <source>Expand All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="544"/>
-        <location filename="gmapdlg.cc" line="551"/>
-        <location filename="gmapdlg.cc" line="558"/>
+        <location filename="gmapdlg.cc" line="534"/>
+        <location filename="gmapdlg.cc" line="541"/>
+        <location filename="gmapdlg.cc" line="548"/>
         <source>Collapse All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="548"/>
+        <location filename="gmapdlg.cc" line="538"/>
         <source>Show All Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="549"/>
+        <location filename="gmapdlg.cc" line="539"/>
         <source>Hide All Routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="555"/>
+        <location filename="gmapdlg.cc" line="545"/>
         <source>Show All Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="556"/>
+        <location filename="gmapdlg.cc" line="546"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="562"/>
+        <location filename="gmapdlg.cc" line="552"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="567"/>
+        <location filename="gmapdlg.cc" line="557"/>
         <source>Show Only This Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="572"/>
+        <location filename="gmapdlg.cc" line="562"/>
         <source>Show Only This Route</source>
         <translation type="unfinished"></translation>
     </message>
@@ -470,138 +432,128 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="526"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="588"/>
+        <location filename="mainwindow.cc" line="554"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="652"/>
+        <location filename="mainwindow.cc" line="618"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="663"/>
+        <location filename="mainwindow.cc" line="629"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="684"/>
+        <location filename="mainwindow.cc" line="650"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="653"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="714"/>
+        <location filename="mainwindow.cc" line="680"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="715"/>
+        <location filename="mainwindow.cc" line="681"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="716"/>
+        <location filename="mainwindow.cc" line="682"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="811"/>
+        <location filename="mainwindow.cc" line="777"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="817"/>
-        <location filename="mainwindow.cc" line="836"/>
+        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="802"/>
         <source>Options for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="830"/>
+        <location filename="mainwindow.cc" line="796"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="816"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="869"/>
+        <location filename="mainwindow.cc" line="835"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="876"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="881"/>
+        <location filename="mainwindow.cc" line="849"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="897"/>
-        <source>Process &quot;%1&quot; did not start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cc" line="911"/>
-        <source>Process exited unsuccessfully with code %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cc" line="1054"/>
+        <location filename="mainwindow.cc" line="984"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1064"/>
+        <location filename="mainwindow.cc" line="1002"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1184"/>
+        <location filename="mainwindow.cc" line="1125"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1208"/>
+        <location filename="mainwindow.cc" line="1149"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1251"/>
+        <location filename="mainwindow.cc" line="1192"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1253"/>
+        <location filename="mainwindow.cc" line="1194"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -825,12 +777,17 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="96"/>
+        <location filename="map.cc" line="115"/>
+        <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="119"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map.cc" line="134"/>
+        <location filename="map.cc" line="174"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished"></translation>
     </message>
@@ -839,28 +796,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="226"/>
         <location filename="filterwidgets.cc" line="227"/>
-        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="231"/>
+        <location filename="filterwidgets.cc" line="232"/>
         <source>Tracks</source>
         <translation type="unfinished">Nyomvonalak</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="226"/>
-        <location filename="filterwidgets.cc" line="228"/>
+        <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="229"/>
-        <location filename="filterwidgets.cc" line="231"/>
+        <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="232"/>
         <source>Waypoints</source>
         <translation type="unfinished">Útpontok</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="227"/>
         <location filename="filterwidgets.cc" line="228"/>
         <location filename="filterwidgets.cc" line="229"/>
         <location filename="filterwidgets.cc" line="230"/>
+        <location filename="filterwidgets.cc" line="231"/>
         <source>Routes</source>
         <translation type="unfinished">Útvonalak</translation>
     </message>
@@ -982,8 +939,8 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cc" line="191"/>
-        <location filename="optionsdlg.cc" line="202"/>
+        <location filename="optionsdlg.cc" line="187"/>
+        <location filename="optionsdlg.cc" line="198"/>
         <source>Help</source>
         <translation type="unfinished">Segítség</translation>
     </message>
@@ -1039,60 +996,20 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>ProcessWaitDialog</name>
     <message>
-        <location filename="processwait.cc" line="42"/>
-        <source>Process failed to start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="45"/>
-        <source>Process crashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="48"/>
-        <source>Process timedout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="51"/>
-        <source>Error while trying to write to process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="54"/>
-        <source>Error while trying to read from process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="58"/>
-        <source>Unknown process error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="67"/>
+        <location filename="processwait.cc" line="44"/>
         <source> ... Process GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="processwait.cc" line="82"/>
+        <location filename="processwait.cc" line="61"/>
         <source>Stop Process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="157"/>
-        <source>Process did not terminate successfully</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="processwait.cc" line="176"/>
-        <source>Process crashed while running</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="177"/>
+        <location filename="formatload.cc" line="173"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1142,17 +1059,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="96"/>
+        <location filename="rttrkui.ui" line="99"/>
         <source>Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="118"/>
+        <location filename="rttrkui.ui" line="121"/>
         <source>Reverse tracks and routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="125"/>
+        <location filename="rttrkui.ui" line="128"/>
         <source>Reverse</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1171,9 +1088,58 @@ The quality of the results will vary depending on the density of points in the o
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="rttrkui.ui" line="121"/>
+        <location filename="rttrkui.ui" line="124"/>
         <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RunMachine</name>
+    <message>
+        <location filename="runmachine.cc" line="35"/>
+        <source>Process failed to start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="37"/>
+        <source>Process crashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="39"/>
+        <source>Process timedout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="41"/>
+        <source>Error while trying to write to process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="43"/>
+        <source>Error while trying to read from process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="46"/>
+        <source>Unknown process error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="145"/>
+        <source>Process &quot;%1&quot; did not start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="177"/>
+        <source>Process exited unsuccessfully with code %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="runmachine.cc" line="181"/>
+        <location filename="runmachine.cc" line="192"/>
+        <source>Process crashed while running</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1473,49 +1439,49 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="213"/>
-        <location filename="upgrade.cc" line="217"/>
-        <location filename="upgrade.cc" line="251"/>
+        <location filename="upgrade.cc" line="207"/>
+        <location filename="upgrade.cc" line="211"/>
+        <location filename="upgrade.cc" line="245"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="214"/>
+        <location filename="upgrade.cc" line="208"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="218"/>
+        <location filename="upgrade.cc" line="212"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="252"/>
+        <location filename="upgrade.cc" line="246"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="268"/>
+        <location filename="upgrade.cc" line="262"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="269"/>
+        <location filename="upgrade.cc" line="263"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="311"/>
+        <location filename="upgrade.cc" line="305"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="328"/>
+        <location filename="upgrade.cc" line="322"/>
         <source>Do you wish to download an upgrade?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="321"/>
+        <location filename="upgrade.cc" line="315"/>
         <source>Upgrade</source>
         <translation type="unfinished"></translation>
     </message>
