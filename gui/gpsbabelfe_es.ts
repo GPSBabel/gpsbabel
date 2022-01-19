@@ -9,7 +9,31 @@
         <translation>Acerca de GPSBabel</translation>
     </message>
     <message>
-        <location filename="aboutui.ui" line="74"/>
+        <location filename="aboutui.ui" line="80"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2022 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -50,7 +74,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -125,92 +149,90 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Forzar el uso de los formatos GPS seleccionados (filtro nuketypes)</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="36"/>
         <source>Enable character set transformation</source>
-        <translation>Permitir el cambio de codificación (caracteres)</translation>
+        <translation type="vanished">Permitir el cambio de codificación (caracteres)</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="43"/>
+        <location filename="advui.ui" line="30"/>
         <source>Preview in Google Maps</source>
         <translation>Ver en Google Maps</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="57"/>
+        <location filename="advui.ui" line="44"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="62"/>
+        <location filename="advui.ui" line="49"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="67"/>
+        <location filename="advui.ui" line="54"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="72"/>
+        <location filename="advui.ui" line="59"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="77"/>
+        <location filename="advui.ui" line="64"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="82"/>
+        <location filename="advui.ui" line="69"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="87"/>
+        <location filename="advui.ui" line="74"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="92"/>
+        <location filename="advui.ui" line="79"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="97"/>
+        <location filename="advui.ui" line="84"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="102"/>
+        <location filename="advui.ui" line="89"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="107"/>
+        <location filename="advui.ui" line="94"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="115"/>
+        <location filename="advui.ui" line="102"/>
         <source>Debugging Diagnostics</source>
         <translation>Depurar errores (debugging)</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="139"/>
+        <location filename="advui.ui" line="126"/>
         <source>Set all format input/output options to default values</source>
         <translation>Asignar a todas las opciones de entrada y salida los valores por defecto</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="142"/>
+        <location filename="advui.ui" line="129"/>
         <source>Default Format Options</source>
         <translation>Opciones de formato por defecto</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="33"/>
         <source>Convert character set encoding between input and output</source>
-        <translation>Convertir la codificación de la entrada a la salida</translation>
+        <translation type="vanished">Convertir la codificación de la entrada a la salida</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="52"/>
+        <location filename="advui.ui" line="39"/>
         <source>Debugging diagnostics.  
 Higher number provides more detailed diagnostics.</source>
         <translation>Depurar errores. Cuanto mayor es el número, el diagnóstico es más detallado.</translation>
@@ -229,36 +251,27 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="47"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
+        <location filename="donate.ui" line="52"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="61"/>
+        <location filename="donate.ui" line="78"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="71"/>
+        <location filename="donate.ui" line="88"/>
         <source>Never show this message again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="93"/>
+        <location filename="donate.ui" line="123"/>
         <source>No, Thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="100"/>
+        <location filename="donate.ui" line="130"/>
         <source>Contribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -642,33 +655,33 @@ This program cannot continue.</source>
         <translation type="vanished">El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1000"/>
+        <location filename="mainwindow.cc" line="984"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1018"/>
+        <location filename="mainwindow.cc" line="1002"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1139"/>
+        <location filename="mainwindow.cc" line="1125"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1149"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1206"/>
+        <location filename="mainwindow.cc" line="1192"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1208"/>
+        <location filename="mainwindow.cc" line="1194"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -1281,43 +1294,43 @@ Además, si se utiliza este filtro para navegar por una ruta invertida que se mu
         <translation type="unfinished">El proceso no se inició</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="38"/>
+        <location filename="runmachine.cc" line="37"/>
         <source>Process crashed</source>
         <translation type="unfinished">El proceso falló</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="41"/>
+        <location filename="runmachine.cc" line="39"/>
         <source>Process timedout</source>
         <translation type="unfinished">Se ha excedido un tiempo razonable de espera sin que nada ocurra</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="44"/>
+        <location filename="runmachine.cc" line="41"/>
         <source>Error while trying to write to process</source>
         <translation type="unfinished">Error cuando se trataba de escribir al proceso</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="47"/>
+        <location filename="runmachine.cc" line="43"/>
         <source>Error while trying to read from process</source>
         <translation type="unfinished">Error cuando se trataba de leer desde el proceso</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="51"/>
+        <location filename="runmachine.cc" line="46"/>
         <source>Unknown process error</source>
         <translation type="unfinished">Error desconocido en el proceso</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="150"/>
+        <location filename="runmachine.cc" line="145"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation type="unfinished">El proceso &quot;%1&quot; no comenzó</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="182"/>
+        <location filename="runmachine.cc" line="177"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation type="unfinished">El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="186"/>
-        <location filename="runmachine.cc" line="197"/>
+        <location filename="runmachine.cc" line="181"/>
+        <location filename="runmachine.cc" line="192"/>
         <source>Process crashed while running</source>
         <translation type="unfinished">El proceso falló cuando estaba ejecutándose</translation>
     </message>
