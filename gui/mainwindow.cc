@@ -878,22 +878,6 @@ int MainWindow::formatIndexFromName(bool isFile, const QString& nm)
 }
 
 //------------------------------------------------------------------------
-QString MainWindow::charSetFromCombo(QComboBox* combo)
-{
-  int i = combo->itemData((combo->currentIndex())).toInt();
-  return (i >=0) ? charSets_[i] : QString();
-}
-
-//------------------------------------------------------------------------
-void MainWindow::setComboToCharSet(QComboBox* combo, const QString& cset)
-{
-  for (int i=0; i<charSets_.size(); i++) {
-    if (charSets_[i] == cset) {
-      combo->setCurrentIndex(i+1); // first index is default;
-    }
-  }
-}
-//------------------------------------------------------------------------
 void MainWindow::applyActionX()
 {
   getWidgetValues();
@@ -1030,13 +1014,15 @@ void MainWindow::closeActionX()
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if ((babelData_.runCount_ == 1) ||
-      ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30))) {
+  if (!babelData_.disableDonateDialog_ &&
+      ((babelData_.runCount_ == 1) ||
+       ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)))) {
     Donate donate(nullptr);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1)) {
       donate.showNever(false);
     }
     donate.exec();
+    babelData_.disableDonateDialog_ = donate.neverAgain();
     babelData_.donateSplashed_ = now;
   }
   saveSettings();
