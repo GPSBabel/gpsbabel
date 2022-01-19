@@ -45,7 +45,7 @@ class ProcessWaitDialog: public QDialog
 public:
   ProcessWaitDialog(QWidget* parent, QProcess* process);
 
-  QString getOutputString()
+  QString getOutputString() const
   {
     return QString::fromLocal8Bit(outputString_);
   }
