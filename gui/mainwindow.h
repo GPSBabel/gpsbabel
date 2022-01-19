@@ -61,7 +61,6 @@ private:
   QString        babelVersion_;
   bool		 isBeta_;
   QPixmap        lights_[4];
-  QStringList    charSets_;
   AllFiltersData filterData_;
   BabelData      babelData_;
   bool           fmtChgInterlock_;
@@ -100,8 +99,6 @@ private:
   void loadOutputDeviceNameCombo(const QString& format);
   bool formatSupportsUSB(const QString& format);
   bool formatSupportsSerial(const QString& format);
-  void loadCharSetCombos();
-  void checkCharSetCombos();
   void updateFilterStatus();
   void setWidgetValues();
   void getWidgetValues();
