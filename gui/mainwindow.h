@@ -102,8 +102,6 @@ private:
   bool formatSupportsSerial(const QString& format);
   void loadCharSetCombos();
   void checkCharSetCombos();
-  QString charSetFromCombo(QComboBox*);
-  void setComboToCharSet(QComboBox*, const QString&);
   void updateFilterStatus();
   void setWidgetValues();
   void getWidgetValues();
