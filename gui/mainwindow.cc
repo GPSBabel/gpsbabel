@@ -878,22 +878,6 @@ int MainWindow::formatIndexFromName(bool isFile, const QString& nm)
 }
 
 //------------------------------------------------------------------------
-QString MainWindow::charSetFromCombo(QComboBox* combo)
-{
-  int i = combo->itemData((combo->currentIndex())).toInt();
-  return (i >=0) ? charSets_[i] : QString();
-}
-
-//------------------------------------------------------------------------
-void MainWindow::setComboToCharSet(QComboBox* combo, const QString& cset)
-{
-  for (int i=0; i<charSets_.size(); i++) {
-    if (charSets_[i] == cset) {
-      combo->setCurrentIndex(i+1); // first index is default;
-    }
-  }
-}
-//------------------------------------------------------------------------
 void MainWindow::applyActionX()
 {
   getWidgetValues();
