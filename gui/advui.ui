@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>185</height>
+    <width>288</width>
+    <height>196</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,19 +21,6 @@
      </property>
      <property name="text">
       <string>Synthesize short names</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="enableCharSetXform">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="toolTip">
-      <string>Convert character set encoding between input and output</string>
-     </property>
-     <property name="text">
-      <string>Enable character set transformation</string>
      </property>
     </widget>
    </item>

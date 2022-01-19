@@ -50,7 +50,6 @@ public:
     outputCharSet_(QString()),
     synthShortNames_(false),
     forceGPSTypes_(false),
-    enableCharSetXform_(false),
     debugLevel_(-1),
     inputBrowse_(QString()),
     outputBrowse_(QString()),
@@ -106,7 +105,6 @@ public:
 
     sg.addVarSetting(new BoolSetting("app.synthShortNames", synthShortNames_));
     sg.addVarSetting(new BoolSetting("app.forceGPSTypes", forceGPSTypes_));
-    sg.addVarSetting(new BoolSetting("app.enableCharSetXform", enableCharSetXform_));
 
     sg.addVarSetting(new StringSetting("app.inputBrowse", inputBrowse_));
     sg.addVarSetting(new StringSetting("app.outputBrowse", outputBrowse_));
@@ -156,7 +154,6 @@ public:
 
   bool synthShortNames_;
   bool forceGPSTypes_;
-  bool enableCharSetXform_;
   int  debugLevel_;
 
   QString inputBrowse_, outputBrowse_;
