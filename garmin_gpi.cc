@@ -205,7 +205,7 @@ struct gpi_bitmap_header_t {
   int16_t fixed_0;
   int32_t image_size;
   int32_t fixed_2c;
-  int32_t flag1;
+  int32_t palette_size;
   int32_t tr_color;
   int32_t flag2;
   int32_t size_2c;
@@ -1267,7 +1267,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  int* color_table = nullptr;
+  uint32_t* color_table = nullptr;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
@@ -1327,13 +1327,12 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   }
 
   if (src_h.used_colors > 0) {
-    color_table = (int*) xmalloc(4 * src_h.used_colors);
+    color_table = new uint32_t[src_h.used_colors];
     gbfread(color_table, 1, 4 * src_h.used_colors, f);
     for (i = 0; i < src_h.used_colors; i++) {
-      int color = color_table[i];
+      uint32_t color = color_table[i];
       /* swap blue and red value */
-      color = (color >> 16) | (color << 16) | (color & 0x00ff00);
-      color_table[i] = color & 0xffffff;
+      color_table[i] = ((color & 0x00ff0000) >> 16) | ((color & 0x000000ff) << 16) | (color & 0x0000ff00);
     }
   }
 
@@ -1356,6 +1355,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   }
 
   ptr = (unsigned char*) xmalloc(sz);
+  const unsigned char* const startptr = ptr;
   dest_h = (gpi_bitmap_header_t*)ptr;
   *data = ptr;
   *data_sz = sz;
@@ -1368,7 +1368,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   le_write16(&dest_h->fixed_0, 0);		/* seems to be fixed */
   le_write32(&dest_h->image_size, dest_line_sz * src_h.height);
   le_write32(&dest_h->fixed_2c, 0x2c);		/* seems to be fixed */
-  le_write32(&dest_h->flag1, (dest_bpp == 8) ? 0x100 : 0);
+  le_write32(&dest_h->palette_size, src_h.used_colors);
   le_write32(&dest_h->tr_color, 0xff00ff);	/* magenta = transparent color */
   le_write32(&dest_h->flag2, 0x1);		/* ? enable transparent mode ? */
   le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
@@ -1395,10 +1395,12 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
       }
       ptr -= dest_line_sz;
     }
-  } else for (i = 0; i < src_h.height; i++) {
+  } else {
+    for (i = 0; i < src_h.height; i++) {
       gbfread(ptr, 1, src_line_sz, f);
       ptr -= dest_line_sz;
     }
+  }
 
   if (src_h.used_colors > 0) {
     ptr = (unsigned char*)dest_h;
@@ -1410,9 +1412,11 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
     }
   }
 
-  if (color_table) {
-    xfree(color_table);
+  auto bytesout = ptr - startptr;
+  if (bytesout != *data_sz) {
+    warning(MYNAME ": Code error in load_bitmap_from_file, expected output size %d, actual output %td.", *data_sz, bytesout);
   }
+  delete[] color_table;
   gbfclose(f);
 }
 
