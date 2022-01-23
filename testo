@@ -111,7 +111,7 @@ utf8bomcheck()
 xmlwfcheck()
 {
   if [ -z "${VALGRIND}" ]; then
-    if which ${XMLWF} >/dev/null 2>&1; then
+    if command -v ${XMLWF} >/dev/null 2>&1; then
       # xmlwf is a bit lame, exit status is always 0
       rm -f ${TMPDIR}/xmlwf.out
       ${XMLWF} $1 2>&1 | tee ${TMPDIR}/xmlwf.out
@@ -173,7 +173,7 @@ if [ -z "${VALGRIND}" ]; then
 fi
 
 if [ -z "${VALGRIND}" ]; then
-  if which ${XMLWF} >/dev/null 2>&1; then
+  if command -v ${XMLWF} >/dev/null 2>&1; then
     echo "Running well-formed XML test"
     for i in ${XMLS}
     do
