@@ -1,7 +1,7 @@
-macx|linux|openbsd {
+macx|linux|openbsd|hurd {
   !defined(WITH_LIBUSB, var) {
     macx: WITH_LIBUSB = included
-    linux|openbsd: WITH_LIBUSB = system
+    linux|openbsd|hurd: WITH_LIBUSB = system
   }
   equals(WITH_LIBUSB, no) {
     message("libusb-1.0 disabled")
@@ -14,7 +14,7 @@ macx|linux|openbsd {
       PKGCONFIG += libusb-1.0
       DEFINES += LIBUSB_H_INCLUDE=$$shell_quote(<libusb.h>)
     } else {
-      linux|openbsd {
+      linux|openbsd|hurd {
         equals(WITH_LIBUSB, system) {
           LIBS += "-lusb-1.0"
           DEFINES += LIBUSB_H_INCLUDE=$$shell_quote(<libusb-1.0/libusb.h>)
