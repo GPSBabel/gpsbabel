@@ -1,6 +1,6 @@
 # usage nuke_format format_name
 
-SED=$(which gsed)
+SED=$(command -v gsed)
 EDITOR="${EDITOR:-vim}"
 
 # $1 = format $2 = file in all functions
