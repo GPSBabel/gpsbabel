@@ -79,7 +79,7 @@ SkytraqBase::db(int l, const char* msg, ...)
 }
 
 void
-SkytraqBase::rd_drain()
+SkytraqBase::rd_drain() const
 {
   if (gbser_flush(serial_handle)) {
     db(1, MYNAME ": rd_drain(): Comm error\n");
@@ -87,7 +87,7 @@ SkytraqBase::rd_drain()
 }
 
 int
-SkytraqBase::rd_char(int* errors)
+SkytraqBase::rd_char(int* errors) const
 {
   while (*errors > 0) {
     int c = gbser_readc_wait(serial_handle, TIMEOUT);
@@ -104,7 +104,7 @@ SkytraqBase::rd_char(int* errors)
 }
 
 int
-SkytraqBase::rd_buf(uint8_t* buf, int len)
+SkytraqBase::rd_buf(uint8_t* buf, int len) const
 {
   char dump[16*3+16+2];
 
@@ -147,7 +147,7 @@ SkytraqBase::rd_buf(uint8_t* buf, int len)
 }
 
 int
-SkytraqBase::rd_word()
+SkytraqBase::rd_word() const
 {
   int errors = 5;		/* allow this many errors */
   int c;
@@ -174,7 +174,7 @@ SkytraqBase::rd_word()
 }
 
 void
-SkytraqBase::wr_char(int c)
+SkytraqBase::wr_char(int c) const
 {
   int rc;
   db(4, "Sending: %02x '%c'\n", (unsigned)c, isprint(c) ? c : '.');
@@ -184,7 +184,7 @@ SkytraqBase::wr_char(int c)
 }
 
 void
-SkytraqBase::wr_buf(const unsigned char* str, int len)
+SkytraqBase::wr_buf(const unsigned char* str, int len) const
 {
   for (int i = 0; i < len; i++) {
     wr_char(str[i]);
@@ -206,7 +206,7 @@ SkytraqBase::skytraq_calc_checksum(const unsigned char* buf, int len)
 }
 
 int
-SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
+SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len) const
 {
   int errors = 5;		// Allow this many receiver errors silently.
   unsigned int c, i, state;
@@ -259,7 +259,7 @@ SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
 }
 
 void
-SkytraqBase::skytraq_wr_msg(const uint8_t* payload, int len)
+SkytraqBase::skytraq_wr_msg(const uint8_t* payload, int len) const
 {
   rd_drain();
 
@@ -274,7 +274,7 @@ SkytraqBase::skytraq_wr_msg(const uint8_t* payload, int len)
 }
 
 int
-SkytraqBase::skytraq_expect_ack(uint8_t id)
+SkytraqBase::skytraq_expect_ack(uint8_t id) const
 {
   uint8_t ack_msg[2];
   //int rcv_len;
@@ -313,7 +313,7 @@ SkytraqBase::skytraq_expect_ack(uint8_t id)
 }
 
 int
-SkytraqBase::skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
+SkytraqBase::skytraq_expect_msg(uint8_t id, uint8_t* payload, int len) const
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     int rc = skytraq_rd_msg(payload, len);
@@ -329,7 +329,7 @@ SkytraqBase::skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
 }
 
 int
-SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len)
+SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len) const
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     if (i > 0) {
@@ -348,7 +348,7 @@ SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len)
 }
 
 int
-SkytraqBase::skytraq_system_restart()
+SkytraqBase::skytraq_system_restart() const
 {
   uint8_t MSG_SYSTEM_RESTART[15] =
   { 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -358,7 +358,7 @@ SkytraqBase::skytraq_system_restart()
 }
 
 int
-SkytraqBase::skytraq_set_baud(int baud)
+SkytraqBase::skytraq_set_baud(int baud) const
 {
   /* Note: according to AN0003_v3.pdf, attrib == 0x00 means write to SRAM only, however
    * it seems to write to flash too. The Windows software sends 0x02 so we do here too.
@@ -413,7 +413,7 @@ SkytraqBase::skytraq_set_baud(int baud)
 }
 
 int
-SkytraqBase::skytraq_configure_logging()
+SkytraqBase::skytraq_configure_logging() const
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
@@ -450,7 +450,7 @@ SkytraqBase::skytraq_configure_logging()
 }
 
 int
-SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total)
+SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total) const
 {
   uint8_t MSG_LOG_STATUS_CONTROL = 0x17;
   struct {
@@ -502,7 +502,7 @@ unsigned int SkytraqBase::me_read32(const unsigned char* p)
 }
 
 time_t
-SkytraqBase::gpstime_to_timet(int week, int sec)
+SkytraqBase::gpstime_to_timet(int week, int sec) const
 {
   /* Notes:
    *   * week rollover period can be specified using option
@@ -560,10 +560,10 @@ void
 SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, double* alt)
 {
   /* constants: */
-  const double CA   = 6378137.0;
-  const double CB   = 6356752.31424518;
-  const double CE2  = (CA*CA - CB*CB) / (CA*CA);    /* =e^2 */
-  const double CE_2 = (CA*CA - CB*CB) / (CB*CB);    /* =e'^2 */
+  constexpr double CA   = 6378137.0;
+  constexpr double CB   = 6356752.31424518;
+  constexpr double CE2  = (CA*CA - CB*CB) / (CA*CA);    /* =e^2 */
+  constexpr double CE_2 = (CA*CA - CB*CB) / (CB*CB);    /* =e'^2 */
 
   /* auxiliary values: */
   double AP = sqrt(x*x + y*y);
@@ -602,7 +602,7 @@ SkytraqBase::state_init(struct read_state* pst)
 }
 
 Waypoint*
-SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt)
+SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt) const
 {
   auto* wpt = new Waypoint;
 
@@ -625,7 +625,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
 
 int
-SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len)
+SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len) const
 {
   int res = 0;
   double lat;
@@ -768,7 +768,7 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
 }
 
 int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len)
+SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len) const
 {
   int plen, ilen;
 
@@ -785,7 +785,7 @@ SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int
 
 /* Note: the buffer is being padded with 0xFFs if necessary so there are always SECTOR_SIZE valid bytes */
 int
-SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
+SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
 {
   uint8_t MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (uint8_t)(sector) };
   int errors = 5;		/* allow this many errors */
@@ -876,7 +876,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
 }
 
 int
-SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf)
+SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf) const
 {
   uint8_t MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
   unsigned int i;
@@ -924,7 +924,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
 }
 
 void
-SkytraqBase::skytraq_read_tracks()
+SkytraqBase::skytraq_read_tracks() const
 {
   struct read_state st;
   uint32_t log_wr_ptr;
@@ -1054,7 +1054,7 @@ SkytraqBase::skytraq_read_tracks()
 }
 
 int
-SkytraqBase::skytraq_probe()
+SkytraqBase::skytraq_probe() const
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
@@ -1128,7 +1128,7 @@ SkytraqBase::skytraq_probe()
 }
 
 int
-SkytraqBase::skytraq_erase()
+SkytraqBase::skytraq_erase() const
 {
   uint8_t MSG_LOG_ERASE = 0x19;
 
@@ -1142,7 +1142,7 @@ SkytraqBase::skytraq_erase()
 }
 
 void
-SkytraqBase::skytraq_set_location()
+SkytraqBase::skytraq_set_location() const
 {
   double lat, lng;
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -1190,7 +1190,7 @@ SkytraqBase::rd_deinit()
 }
 
 void
-SkytraqBase::read()
+SkytraqBase::read() const
 {
   if (opt_set_location) {
     skytraq_set_location();
@@ -1342,7 +1342,7 @@ void MinihomerFormat::lla2ecef(double lat, double lng, double alt, double* ecef_
   *ecef_y = (double)((n+lalt) * cos(llat) * sin(llng));
   *ecef_z = (double)((n*(1-esqr) + lalt)* sin(llat));
 }
-void MinihomerFormat::miniHomer_get_poi()
+void MinihomerFormat::miniHomer_get_poi() const
 {
   uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
   uint8_t buf[32];
@@ -1384,7 +1384,7 @@ void MinihomerFormat::miniHomer_get_poi()
  * -1 in case of errors
  *  the number of the POI will not be checked - if it is not correct, miniHome will send NACK
  */
-int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
+int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) const
 {
 #define MSG_SET_POI_SIZE (sizeof(uint8_t)+sizeof(uint16_t)+3*sizeof(double)+sizeof(uint8_t))
   uint8_t MSG_SET_POI[MSG_SET_POI_SIZE] = {

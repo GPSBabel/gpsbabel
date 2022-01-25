@@ -112,37 +112,37 @@ protected:
   /* Member Functions */
 
   static void db(int l, const char* msg, ...);
-  void rd_drain();
-  int rd_char(int* errors);
-  int rd_buf(uint8_t* buf, int len);
-  int rd_word();
-  void wr_char(int c);
-  void wr_buf(const unsigned char* str, int len);
+  void rd_drain() const;
+  int rd_char(int* errors) const;
+  int rd_buf(uint8_t* buf, int len) const;
+  int rd_word() const;
+  void wr_char(int c) const;
+  void wr_buf(const unsigned char* str, int len) const;
   static int skytraq_calc_checksum(const unsigned char* buf, int len);
-  int skytraq_rd_msg(void* payload, unsigned int len);
-  void skytraq_wr_msg(const uint8_t* payload, int len);
-  int skytraq_expect_ack(uint8_t id);
-  int skytraq_expect_msg(uint8_t id, uint8_t* payload, int len);
-  int skytraq_wr_msg_verify(const uint8_t* payload, int len);
-  int skytraq_system_restart();
-  int skytraq_set_baud(int baud);
-  int skytraq_configure_logging();
-  int skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total);
+  int skytraq_rd_msg(void* payload, unsigned int len) const;
+  void skytraq_wr_msg(const uint8_t* payload, int len) const;
+  int skytraq_expect_ack(uint8_t id) const;
+  int skytraq_expect_msg(uint8_t id, uint8_t* payload, int len) const;
+  int skytraq_wr_msg_verify(const uint8_t* payload, int len) const;
+  int skytraq_system_restart() const;
+  int skytraq_set_baud(int baud) const;
+  int skytraq_configure_logging() const;
+  int skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total) const;
   static unsigned int me_read32(const unsigned char* p);
-  time_t gpstime_to_timet(int week, int sec);
+  time_t gpstime_to_timet(int week, int sec) const;
   static void ECEF_to_LLA(double x, double y, long int z, double* lat, double* lon, double* alt);
   static void state_init(read_state* pst);
-  Waypoint* make_trackpoint(read_state* st, double lat, double lon, double alt);
-  int process_data_item(read_state* pst, const item_frame* pitem, int len);
-  int process_data_sector(read_state* pst, const uint8_t* buf, int len);
-  int skytraq_read_single_sector(unsigned int sector, uint8_t* buf);
-  int skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf);
-  void skytraq_read_tracks();
-  int skytraq_probe();
-  int skytraq_erase();
-  void skytraq_set_location();
+  Waypoint* make_trackpoint(read_state* st, double lat, double lon, double alt) const;
+  int process_data_item(read_state* pst, const item_frame* pitem, int len) const;
+  int process_data_sector(read_state* pst, const uint8_t* buf, int len) const;
+  int skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const;
+  int skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf) const;
+  void skytraq_read_tracks() const;
+  int skytraq_probe() const;
+  int skytraq_erase() const;
+  void skytraq_set_location() const;
   void rd_init(const QString& fname);
-  void read();
+  void read() const;
   void rd_deinit();
 
   /* Data Members */
@@ -359,8 +359,8 @@ private:
   /* Member Functions */
 
   static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z);
-  void miniHomer_get_poi();
-  int miniHomer_set_poi(uint16_t poinum, const char* opt_poi);
+  void miniHomer_get_poi() const;
+  int miniHomer_set_poi(uint16_t poinum, const char* opt_poi) const;
 
   /* Data Members */
 
