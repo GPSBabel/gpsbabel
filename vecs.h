@@ -45,6 +45,7 @@
 #include "qstarz_bl_1000.h"
 #include "random.h"
 #include "shape.h"
+#include "skytraq.h"
 #include "subrip.h"
 #include "unicsv.h"
 #include "xcsv.h"
@@ -120,10 +121,7 @@ extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
-extern ff_vecs_t skytraq_vecs;
 extern ff_vecs_t teletype_vecs;
-extern ff_vecs_t skytraq_fvecs;
-extern ff_vecs_t miniHomer_vecs;
 extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t mapbar_track_vecs;
@@ -313,10 +311,10 @@ private:
   LegacyFormat mmo_fmt {mmo_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   LegacyFormat enigma_fmt {enigma_vecs};
-  LegacyFormat skytraq_fmt {skytraq_vecs};
+  SkytraqFormat skytraq_fmt;
   LegacyFormat teletype_fmt {teletype_vecs};
-  LegacyFormat skytraq_ffmt {skytraq_fvecs};
-  LegacyFormat miniHomer_fmt {miniHomer_vecs};
+  SkytraqfileFormat skytraq_ffmt;
+  MinihomerFormat miniHomer_fmt;
   LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
