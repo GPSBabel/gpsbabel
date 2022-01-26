@@ -30,6 +30,7 @@
 #include "defs.h"
 #include "dg-100.h"
 #include "energympro.h"
+#include "exif.h"
 #include "format.h"
 #include "garmin_fit.h"
 #include "geojson.h"
@@ -103,7 +104,6 @@ extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
-extern ff_vecs_t exif_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
@@ -298,7 +298,7 @@ private:
   LegacyFormat destinator_poi_fmt {destinator_poi_vecs};
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
-  LegacyFormat exif_fmt {exif_vecs};
+  ExifFormat exif_fmt;
   LegacyFormat igo8_fmt {igo8_vecs};
   LegacyFormat humminbird_fmt {humminbird_vecs};
   LegacyFormat humminbird_ht_fmt {humminbird_ht_vecs};
