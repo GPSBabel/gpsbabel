@@ -2,4 +2,4 @@
 encountered.
 We observed that sometimes the device doesn't report the correct number of used sectors, which confuses the Windows
 software, so that it might not get all trackpoints.
-In contrast, our algorithm ensures that everything is being read (please report if it doesn't work for you).</para> 
+In contrast, our algorithm ensures that everything is being read (please report if it doesn't work for you).</para>

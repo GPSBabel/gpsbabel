@@ -28,7 +28,6 @@
 #include <cstdio>                  // for NULL, SEEK_CUR, snprintf
 #include <cstdint>
 #include <cstring>                 // for strcmp, memmove, memset, strlen
-#include <ctime>                   // for gmtime
 
 #include <QByteArray>              // for QByteArray
 #include <QScopedPointer>          // for QScopedPointer
@@ -270,8 +269,6 @@ destinator_read_trk()
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    struct tm tm;
-    char buff[20];
 
     recno++;
 
@@ -294,8 +291,8 @@ destinator_read_trk()
 
     gbfseek(fin, 12 * sizeof(int32_t), SEEK_CUR);	/* SAT info */
 
-    int date = gbfgetint32(fin);
-    double milliseconds = gbfgetflt(fin);
+    int date_dmy = gbfgetint32(fin);
+    double time_ms = gbfgetflt(fin);
 
     gbfseek(fin, 2 * 12, SEEK_CUR);			/* SAT info */
 
@@ -306,12 +303,26 @@ destinator_read_trk()
 
     gbfseek(fin, 13, SEEK_CUR);			/* unknown */
 
-    memset(&tm, 0, sizeof(tm));
+    int year = 100 + date_dmy % 100 + 1900;
+    date_dmy = date_dmy / 100;
+    int mon = date_dmy % 100;
+    date_dmy = date_dmy / 100;
+    int day = date_dmy % 100;
+    QDate date(year, mon, day);
 
-    snprintf(buff, sizeof(buff), "%06d%.f", date, milliseconds);
-    strptime(buff, "%d%m%y%H%M%S", &tm);
-    int millisecs = lround(milliseconds) % 1000;
-    wpt->SetCreationTime(mkgmtime(&tm), millisecs);
+    int hhms = (int) time_ms/1000;
+    int sec = hhms % 100;
+    hhms = hhms / 100;
+    int min = hhms % 100;
+    hhms = hhms / 100;
+    int hour = hhms % 100;
+    QTime tim(hour, min, sec);
+
+    int ms = (int) time_ms % 1000 ;
+    tim = tim.addMSecs(ms);
+
+    QDateTime datetime(date, tim, Qt::UTC);
+    wpt->SetCreationTime(datetime);
 
     if (wpt->fix > 0) {
       wpt->fix = (fix_type)(wpt->fix + 1);
@@ -412,15 +423,14 @@ destinator_trkpt_disp(const Waypoint* wpt)
   }
 
   if (wpt->creation_time.isValid()) {
-    const time_t ct = wpt->GetCreationTime().toTime_t();
-    struct tm tm = *gmtime(&ct);
-    tm.tm_mon += 1;
-    tm.tm_year -= 100;
-    int date = (tm.tm_mday * 10000) + (tm.tm_mon * 100) + tm.tm_year;
+    QDate dt = wpt->GetCreationTime().toUTC().date();
+    double milliseconds = 0;
+    int date = dt.day() * 10000 + (dt.month() - 1) * 100 + (dt.year() - 1900);
     gbfputint32(date, fout);
-    double milliseconds = (tm.tm_hour * 10000) +
-      (tm.tm_min * 100) + tm.tm_sec;
-    milliseconds = (milliseconds * 1000) + (wpt->GetCreationTime().time().msec());
+
+    QTime tm = wpt->GetCreationTime().toUTC().time();
+    milliseconds = tm.hour() * 10000 + tm.minute() * 100 + tm.second();
+    milliseconds = milliseconds * 1000 + tm.msec();
 
     gbfputflt(milliseconds, fout);
   } else {

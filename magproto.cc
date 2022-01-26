@@ -1049,10 +1049,14 @@ mag_rteparse(char* rtemsg)
   QString rte_name;
   if (explorist) {
     char* ca = rtemsg + n;
-    is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (*ca++ != ',') {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     char* ce = strchr(ca, ',');
-    is_fatal(ce == nullptr, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (ce == nullptr) {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     if (ca == ce) {
       rte_name = "Route";
@@ -1471,7 +1475,7 @@ mag_route_trl(const route_head* rte)
   QString icon_token;
 
   /* count waypoints for this route */
-  int i = rte->rte_waypt_ct;
+  int i = rte->rte_waypt_ct();
 
   /* number of output PMGNRTE messages at 2 points per line */
   int numlines = (i / 2) + (i % 2);

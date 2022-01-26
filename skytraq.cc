@@ -663,14 +663,16 @@ ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, double* alt)
   *lon = *lon /M_PI*180;
 }
 
-struct read_state {
-  route_head*          route_head_;
-  unsigned            wpn, tpn;
-
-  unsigned gps_week;
-  unsigned gps_sec;
-  long x, y, z;
-};
+namespace { // fix ODR violation with wbt-200
+  struct read_state {
+    route_head*          route_head_;
+    unsigned            wpn, tpn;
+  
+    unsigned gps_week;
+    unsigned gps_sec;
+    long x, y, z;
+  };
+}
 
 static void
 state_init(struct read_state* pst)

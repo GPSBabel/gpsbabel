@@ -56,16 +56,3 @@ warning(const char* fmt, ...)
   vfprintf(stderr, fmt, ap);
   va_end(ap);
 }
-
-void
-debug_print(int level, const char* fmt, ...)
-{
-  va_list ap;
-  for (int i = 1; i<level; i++) {
-    fprintf(stderr, ".");
-  }
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
-  va_end(ap);
-}
-

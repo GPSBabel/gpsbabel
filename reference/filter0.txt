@@ -10,6 +10,7 @@ nuketypes	Remove all waypoints, tracks, or routes
 duplicate	Remove Duplicates
 position	Remove Points Within Distance
 discard	Remove unreliable points with high hdop or vdop
+resample	Resample Track
 reverse	Reverse stops within routes
 stack	Save and restore waypoint lists
 simplify	Simplify routes

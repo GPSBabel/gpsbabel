@@ -684,8 +684,12 @@ exif_examine_app(ExifApp* app)
 
   gbfrewind(ftmp);
   uint32_t ident = gbfgetuint32(ftmp);
-  is_fatal(ident != 0x66697845, MYNAME ": Invalid EXIF header magic.");
-  is_fatal(gbfgetint16(ftmp) != 0, MYNAME ": Error in EXIF header.");
+  if (ident != 0x66697845) {
+    fatal(MYNAME ": Invalid EXIF header magic.");
+  }
+  if (gbfgetint16(ftmp) != 0) {
+    fatal(MYNAME ": Error in EXIF header.");
+  }
   uint16_t endianness = gbfgetint16(ftmp);
 
   if (global_opts.debug_level >= 3) {
@@ -1488,10 +1492,15 @@ static void
 exif_read()
 {
   uint16_t soi = gbfgetuint16(fin_);
-  is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");  /* only jpeg for now */
+  /* only jpeg for now */
+  if (soi != 0xFFD8) {
+    fatal(MYNAME ": Unknown image file.");
+  }
 
   exif_app_ = exif_load_apps();
-  is_fatal(exif_app_ == nullptr, MYNAME ": No EXIF header in source file \"%s\".", fin_->name);
+  if (exif_app_ == nullptr) {
+    fatal(MYNAME ": No EXIF header in source file \"%s\".", fin_->name);
+  }
 
   exif_examine_app(exif_app_);
   Waypoint* wpt = exif_waypt_from_exif_app(exif_app_);
@@ -1509,12 +1518,18 @@ exif_wr_init(const QString& fname)
   exif_apps = new QList<ExifApp*>;
 
   fin_ = gbfopen_be(fname, "rb", MYNAME);
-  is_fatal(fin_->is_pipe, MYNAME ": Sorry, this format cannot be used with pipes!");
+  if (fin_->is_pipe) {
+    fatal(MYNAME ": Sorry, this format cannot be used with pipes!");
+  }
 
   uint16_t soi = gbfgetuint16(fin_);
-  is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");
+  if (soi != 0xFFD8) {
+    fatal(MYNAME ": Unknown image file.");
+  }
   exif_app_ = exif_load_apps();
-  is_fatal(exif_app_ == nullptr, MYNAME ": No EXIF header found in source file \"%s\".", fin_->name);
+  if (exif_app_ == nullptr) {
+    fatal(MYNAME ": No EXIF header found in source file \"%s\".", fin_->name);
+  }
   exif_examine_app(exif_app_);
   gbfclose(fin_);
 

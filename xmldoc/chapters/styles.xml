@@ -928,7 +928,7 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD NET_TIME,&quot;&quot;,&quot;%f&quot;
+         <screen format="linespecific">IFIELD NET_TIME,&quot;&quot;,&quot;%lld&quot;
 </screen>
       </section>
       <section id="style_def_geodiff">

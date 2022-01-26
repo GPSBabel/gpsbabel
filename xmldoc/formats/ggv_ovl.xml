@@ -1,5 +1,5 @@
 <para>
-   Overlay files used by <productname>Geogrid</productname>-Viewer has to be in ASCII format. 
+   Overlay files used by <productname>Geogrid</productname>-Viewer has to be in ASCII format.
    Make sure you save the files correctly.
 </para>
 <para>
@@ -7,7 +7,7 @@
    converted to tracks, except they are grouped. In this case GPSBabel creates routes.
 </para>
 <para>
-   During the creation of an overlay file, a circle will be added to each 
+   During the creation of an overlay file, a circle will be added to each
    position of a waypoint or a route.
 </para>
 

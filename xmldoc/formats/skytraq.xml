@@ -11,9 +11,9 @@ use this format to read its memory.</para>
 <tgroup cols="4">
 <thead>
 <row>
- <entry>Manufacturer</entry> 
- <entry>Model</entry> 
- <entry>USB (baud)</entry> 
+ <entry>Manufacturer</entry>
+ <entry>Model</entry>
+ <entry>USB (baud)</entry>
  <entry>Bluetooth (baud)</entry>
 </row>
 </thead>

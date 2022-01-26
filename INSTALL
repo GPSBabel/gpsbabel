@@ -1,4 +1,4 @@
-The autotools based build system (configure) is no longer suppored and has
+The autotools based build system (configure) is no longer supported and has
 been removed.
 
 The use of cmake is experimental.  The implementation is not complete.  It is

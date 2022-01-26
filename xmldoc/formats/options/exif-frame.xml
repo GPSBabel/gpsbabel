@@ -1,6 +1,6 @@
 <para>
    Frame means the maximum time difference that we accept between the EXIF time information
-   of a picture and the timestamp of a track-, route- and waypoint used for tagging. 
+   of a picture and the timestamp of a track-, route- and waypoint used for tagging.
    Without this option the maximum time frame is 10 seconds.
 </para>
 <para>

@@ -13,7 +13,7 @@
    </simplelist>
 </para>
 <para>
-  If you do "save all nav data" on the device, you'll get a 
+  If you do "save all nav data" on the device, you'll get a
   <filename>data.hwr</filename> and a <filename>000.ht</filename> file on the
   flash card (on a 797 in the <filename>matrix</filename> directory).
 </para>
@@ -22,11 +22,11 @@
   tell it which ones to write. By default, you get a <filename>.hwr</filename>
   file, to get a track (<filename>.ht</filename> file), use the
   "humminbird-track" format.
-</para> 
+</para>
 <para>
   <informalfigure><mediaobject><imageobject>
     <imagedata fileref="humminbird.png" format="PNG"/>
-  </imageobject> </mediaobject> </informalfigure> 
+  </imageobject> </mediaobject> </informalfigure>
 </para>
 <para>
 Note:<filename>.dat</filename> files are read-only, they only make sense
@@ -38,7 +38,7 @@ together with their images.
     <member>797c2i SI</member>
   </simplelist>
  (They should all work, but this is the only one tested so far.)
- </para> 
+ </para>
 <para>
   Known limits:
   <simplelist>

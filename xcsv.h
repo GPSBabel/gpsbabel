@@ -175,8 +175,7 @@ public:
   /* Member Functions */
 
   static QString xcsv_get_char_from_constant_table(const QString& key);
-  static XcsvStyle xcsv_read_internal_style(const char* style_buf);
-  static XcsvStyle xcsv_read_style(const char* fname);
+  static XcsvStyle xcsv_read_style(const QString& fname);
 
   /* Data Members */
 
@@ -244,12 +243,6 @@ public:
 private:
   /* Types */
 
-  /* something to map config file constants to chars */
-  struct char_map_t {
-    const QString key;
-    const QString chars;
-  };
-
   /* Member Functions */
 
   static QString dequote(const QString& in);
@@ -257,14 +250,13 @@ private:
   static void xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc);
   static void xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned int options);
   static void xcsv_parse_style_line(XcsvStyle* style, QString line);
-  static XcsvStyle xcsv_parse_style_buff(const char* sbuff);
 
   /* Data Members */
 
   static const QHash<QString, xcsv_token> xcsv_tokens;
 
   /* a table of config file constants mapped to chars */
-  static const char_map_t xcsv_char_table[];
+  static const QHash<QString, QString> xcsv_char_table;
 };
 
 class XcsvFormat : public Format
@@ -306,7 +298,7 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
-  void xcsv_setup_internal_style(const char* style_buf);
+  void xcsv_setup_internal_style(const QString& style_filename);
 
 private:
   /* Types */
@@ -376,7 +368,7 @@ private:
 
   /* Member Functions */
 
-  static QDateTime yyyymmdd_to_time(const char* s);
+  static QDateTime yyyymmdd_to_time(const QString& s);
   static time_t sscanftime(const char* s, const char* format, int gmt);
   static time_t addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
@@ -411,7 +403,7 @@ private:
   char* xcsv_urlbase = nullptr;
   char* opt_datum = nullptr;
 
-  const char* intstylebuf = nullptr;
+  QString intstylefile;
 
   QVector<arglist_t> xcsv_args = {
     {

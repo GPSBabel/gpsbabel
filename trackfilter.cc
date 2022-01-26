@@ -179,7 +179,7 @@ QDateTime TrackFilter::trackfilter_get_last_time(const route_head* track)
 
 void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_disp_all */
 {
-  if (track->rte_waypt_ct == 0) {
+  if (track->rte_waypt_ct() == 0) {
     track_del_head(const_cast<route_head*>(track));
     return;
   }
@@ -223,7 +223,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
 
 void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 {
-  if (track->rte_waypt_ct < minimum_points) {
+  if (track->rte_waypt_ct() < minimum_points) {
     track_del_head(const_cast<route_head*>(track));
     return;
   }
@@ -268,7 +268,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
     // Uggh.  strftime format exposed to user.
 
     gpsbabel::DateTime dt;
-    if (track->rte_waypt_ct == 0) {
+    if (track->rte_waypt_ct() == 0) {
       dt = default_time;
     } else {
       auto* wpt = track->waypoint_list.front();
@@ -388,7 +388,7 @@ void TrackFilter::trackfilter_merge()
       }
     }
 
-    if (master->rte_waypt_ct == 0) {
+    if (master->rte_waypt_ct() == 0) {
       track_del_head(master);
       track_list.clear();
     }
@@ -412,7 +412,7 @@ void TrackFilter::trackfilter_split()
     fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
   } else if (!track_list.isEmpty()) {
     route_head* master = track_list.first();
-    int count = master->rte_waypt_ct;
+    int count = master->rte_waypt_ct();
 
     int i, j;
     double interval = -1; /* seconds */
@@ -724,7 +724,7 @@ void TrackFilter::trackfilter_range()
       }
     }
 
-    if (track->rte_waypt_ct == 0) {
+    if (track->rte_waypt_ct() == 0) {
       track_del_head(track);
       it = track_list.erase(it);
     } else {

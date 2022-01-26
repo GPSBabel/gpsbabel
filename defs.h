@@ -126,25 +126,14 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
-/*
- * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in
- * C99 (albeit with slightly different semantics) but it isn't in C89.
- * This tweaks allows us to use snprintf on the holdout.
- */
 #if __WIN32__
-#  define snprintf _snprintf
-#  define vsnprintf _vsnprintf
 #  ifndef fileno
 #    define fileno _fileno
 #  endif
 #  define strdup _strdup
 #endif
 
-/* Turn off numeric conversion warning */
 #if __WIN32__
-#  if _MSC_VER
-#    pragma warning(disable:4244)
-#  endif
 #if !defined _CRT_SECURE_NO_DEPRECATE
 #  define _CRT_SECURE_NO_DEPRECATE 1
 #endif
@@ -702,7 +691,6 @@ public:
   QString rte_desc;
   UrlList rte_urls;
   int rte_num;
-  int rte_waypt_ct;		/* # waypoints in waypoint list */
   FormatSpecificDataList fs;
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
@@ -716,6 +704,8 @@ public:
   route_head(const route_head& other) = delete;
   route_head& operator=(const route_head& rhs) = delete;
   ~route_head();
+
+  int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -1049,17 +1039,9 @@ struct ff_vecs_t {
   void* unused; /* TODO: delete this field */
 };
 
-struct style_vecs_t {
-  const char* name;
-  const char* style_buf;
-};
-extern const QVector<style_vecs_t> style_list;
-
 [[noreturn]] void fatal(QDebug& msginstance);
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void is_fatal(int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
-void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
 void printposn(double c, int is_lat);
 
@@ -1112,7 +1094,7 @@ time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
-void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
+QDateTime dotnet_time_to_qdatetime(long long dotnet);
 const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);
@@ -1214,6 +1196,7 @@ int gb_ptr2int(const void* p);
 
 void list_codecs();
 void list_timezones();
+QString grapheme_truncate(const QString& input, unsigned int count);
 
 /*
  *  From parse.c

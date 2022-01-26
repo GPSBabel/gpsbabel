@@ -252,7 +252,7 @@ bcr_data_read()
     route->rte_name = routename;
   }
 
-  for (int index = 1; index > 0; index ++) {
+  for (int index = 1; ; index++) {
     char station[32];
     QString str;
     int mlat, mlon;		/* mercator data */
@@ -297,7 +297,7 @@ bcr_data_read()
   }
 
   /* remove empty route */
-  if (route->rte_waypt_ct == 0) {
+  if (route->rte_waypt_ct() == 0) {
     route_del_head(route);
   } else {
     bcr_create_waypts_from_route(route);

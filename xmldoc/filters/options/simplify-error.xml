@@ -2,11 +2,11 @@
 This option specifies the maximum allowable error that may be introduced
 by removing a single point. Used with the <option>length</option>
 and <option>crosstrack</option> methods, the value of this option is a distance,
-specified in miles by default.  You may also specify the distance in 
+specified in miles by default.  You may also specify the distance in
 kilometers by adding a 'k' to the end of the number.
 For the <option>relative</option> method it is a dimensionless quantity.
 </para>
-<para> 
+<para>
 How the error is determined depends on whether the <option>length</option>,
 <option>crosstrack</option>, or <option>relative</option> method is used.
 If you are using the length method, the error is the change in the length of

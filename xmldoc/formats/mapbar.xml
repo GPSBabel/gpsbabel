@@ -2,7 +2,7 @@
   This format is the Mapbar navigation programs used on phones such as
   the Sonim XP3300 popular in China.
   The files are found on the sd card in /mapbar/userdata/tracks.
-  This format just logs track point by latitude and longitude; no time 
+  This format just logs track point by latitude and longitude; no time
   information is available.
 </para>
 <para>
@@ -11,7 +11,7 @@ software version: 3.73.47.39836, data version: B29.
 </para>
 <para>
 The following devices of using mapbar navigation are supported. Other
-devices with using mapbar navigation maybe be supported, but not have 
+devices with using mapbar navigation maybe be supported, but not have
 not been tested:
 <simplelist columns="1">
 <member>Sonim Xp3300(China version)</member>

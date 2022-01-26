@@ -1,16 +1,12 @@
 baroiq		Brauniger IQ Series Barograph Download
 cambridge	dat	Cambridge/Winpilot glider software
-cst	cst	CarteSurTable data file
 v900		Columbus/Visiontac V900 files (.csv)
 csv		Comma separated values
-compegps		CompeGPS data files (.wpt/.trk/.rte)
 iblue747	csv	Data Logger iBlue747 csv
 iblue757	csv	Data Logger iBlue757 csv
 gpl	gpl	DeLorme GPL
 saplus		DeLorme Street Atlas Plus
 saroute	anr	DeLorme Street Atlas Route
-xmap	wpt	DeLorme XMap HH Native .WPT
-xmap2006	txt	DeLorme XMap/SAHH 2006 Native .TXT
 destinator_itn	dat	Destinator Itineraries (.dat)
 destinator_poi	dat	Destinator Points of Interest (.dat)
 destinator_trl	dat	Destinator TrackLogs (.dat)
@@ -25,13 +21,11 @@ garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file
 flysight	csv	FlySight GPS File
 gpssim	gpssim	Franson GPSGate Simulation
 fugawi	txt	Fugawi
-g7towin	g7t	G7ToWin data files (.g7t)
 garmin301		Garmin 301 Custom position and heartrate
 garmin_g1000	csv	Garmin G1000 datalog input filter file
 glogbook	xml	Garmin Logbook XML
 gdb	gdb	Garmin MapSource - gdb
 garmin_txt	txt	Garmin MapSource - txt (tab delimited)
-pcx	pcx	Garmin PCX5
 garmin_poi		Garmin POI database
 garmin_gpi	gpi	Garmin Points of Interest (.gpi)
 garmin		Garmin serial/USB protocol
@@ -48,20 +42,16 @@ globalsat		GlobalSat GH625XT GPS training watch
 googledir	xml	Google Directions XML
 kml	kml	Google Earth (Keyhole) Markup Language
 gnav_trl	trl	Google Navigator Tracklines (.trl)
-gopal	trk	GoPal GPS track log (.trk)
 land_air_sea	txt	GPS Tracking Key Pro text
 gtm	gtm	GPS TrackMaker
 arc	txt	GPSBabel arc filter file
 gpsdrive		GpsDrive Format
 gpsdrivetrack		GpsDrive Format for Tracks
-gpsman		GPSman
-gpsutil		gpsutil
 gpx	gpx	GPX XML
 hiketech	gps	HikeTech
 holux	wpo	Holux (gm-100) .wpo Format
 m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 m241		Holux M-241 (MTK based) download
-vpl		Honda/Acura Navigation System VP Log File Format
 html	html	HTML Output
 humminbird_ht	ht	Humminbird tracks (.ht)
 humminbird	hwr	Humminbird waypoints and routes (.hwr)
@@ -69,13 +59,9 @@ ignrando	rdn	IGN Rando track files
 igoprimo_poi	upoi	iGo Primo points of interest (.upoi)
 igo2008_poi	upoi	iGO2008 points of interest (.upoi)
 igo8	trk	IGO8 .trk
-jtr	jtr	Jelbert GeoTagger data file
-jogmap	xml	Jogmap.de XML format
 kompass_tk	wp	Kompass (DAV) Track (.tk)
 kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
 lowranceusr	usr	Lowrance USR
-maggeo	gs	Magellan Explorist Geocaching
-mapsend		Magellan Mapsend
 magellanx	upt	Magellan SD files (as for eXplorist)
 magellan		Magellan SD files (as for Meridian)
 magellan		Magellan serial protocol
@@ -100,8 +86,6 @@ mynav	trc	MyNav TRC format
 tpg	tpg	National Geographic Topo .tpg (waypoints)
 tpo2	tpo	National Geographic Topo 2.x .tpo
 tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-navicache		Navicache.com XML
-nmn4	rte	Navigon Mobile Navigator .rte files
 navigonwpt		Navigon Waypoints
 navilink		NaviGPS GT-11/BGT-11 Download
 sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
@@ -113,19 +97,13 @@ nmea		NMEA 0183 sentences
 lmx		Nokia Landmark Exchange
 osm	osm	OpenStreetMap data files
 ozi		OziExplorer
-pocketfms_bc		PocketFMS breadcrumbs
-pocketfms_fp	xml	PocketFMS flightplan (.xml)
-pocketfms_wp	txt	PocketFMS waypoints (.txt)
 qstarz_bl-1000		Qstarz BL-1000
 raymarine	rwf	Raymarine Waypoint File (.rwf)
 ricoh	log	Ricoh GPS Log File
 cup	cup	See You flight analysis data
-skyforce		Skymap / KMD150 ascii files
 skytraq		SkyTraq Venus based loggers (download)
 skytraq-bin	bin	SkyTraq Venus based loggers Binary File Format
 subrip	srt	SubRip subtitles for video mapping (.srt)
-stmsdf	sdf	Suunto Trek Manager (STM) .sdf files
-stmwpp	txt	Suunto Trek Manager (STM) WaypointPlus files
 xol	xol	Swiss Map 25/50/100 (.xol)
 openoffice		Tab delimited fields useful for OpenOffice
 teletype		Teletype [ Get Jonathon Johnson to describe
@@ -135,17 +113,11 @@ tomtom_itn_places	itn	TomTom Places Itineraries (.itn)
 tomtom_asc	asc	TomTom POI file (.asc)
 tomtom	ov2	TomTom POI file (.ov2)
 dmtlog	trl	TrackLogs digital mapping (.trl)
-tiger		U.S. Census Bureau Tiger Mapping Service
 unicsv		Universal csv with field structure in first line
 vcard	vcf	Vcard Output (for iPod)
-vidaone	gpb	VidaOne GPS for Pocket PC (.gpb)
-vitosmt	smt	Vito Navigator II tracks
-vitovtt	vtt	Vito SmartMap tracks (.vtt)
-wfff	xml	WiFiFoFum 2.0 for PocketPC XML
 wintec_tes	tes	Wintec TES file
 wbt-bin	bin	Wintec WBT-100/200 Binary File Format
 wbt		Wintec WBT-100/200 GPS Download
 wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format
 itracku		XAiOX iTrackU Logger
 itracku-bin	bin	XAiOX iTrackU Logger Binary File Format
-yahoo		Yahoo Geocode API data

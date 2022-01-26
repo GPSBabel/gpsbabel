@@ -2,15 +2,15 @@
 This module supports a subset of the <ulink url="http://geojson.org/">GeoJSON</ulink> format.
 </para>
 <para>
-GeoJSON is a poor fit for GPSBabel's internal data structures as GPSBabel 
-was designed more around common GPS features (waypoints, tracks, routes) 
+GeoJSON is a poor fit for GPSBabel's internal data structures as GPSBabel
+was designed more around common GPS features (waypoints, tracks, routes)
 than about GIS-style concepts like MultiPolygons or Geometry Collections.
 In reality, for all but the most simple uses (such as converting a format
 that GPSBabel supports well to something like Leaflet, you should not expect
 high fidelity transfers through this format.
 </para>
 <para>
-Waypoints are mapped to a FeatureCollection of Points.  
+Waypoints are mapped to a FeatureCollection of Points.
 The properties for name and description are written, where available.
 Tracks are converted to a LineString.
 MultiPoint are converted to Waypoints.
@@ -18,7 +18,7 @@ LineString, Polygon and MultiPolygon are converted to routes.
 MultiLineString are converted to tracks.
 </para>
 <para>
-The potentially nested/recursive nature of GeoJSON in general would be 
+The potentially nested/recursive nature of GeoJSON in general would be
 an awkward implementation.
 </para>
 <para>

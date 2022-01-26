@@ -729,7 +729,7 @@ humminbird_track_head(const route_head* trk)
 
   trk_head = nullptr;
   last_time = 0;
-  if (trk->rte_waypt_ct > 0) {
+  if (trk->rte_waypt_ct() > 0) {
     trk_head = (humminbird_trk_header_t*) xcalloc(1, sizeof(humminbird_trk_header_t));
     trk_points = (humminbird_trk_point_t*) xcalloc(max_points, sizeof(humminbird_trk_point_t));
 
@@ -852,7 +852,7 @@ static void
 humminbird_rte_head(const route_head* rte)
 {
   humrte = nullptr;
-  if (rte->rte_waypt_ct > 0) {
+  if (rte->rte_waypt_ct() > 0) {
     humrte = (humminbird_rte_t*) xcalloc(1, sizeof(*humrte));
   }
 }
@@ -875,7 +875,7 @@ humminbird_rte_tail(const route_head* rte)
     be_write32(&humrte->time, humrte->time);
 
     QString name = mkshort(rtename_sh, rte->rte_name);
-    strncpy(humrte->name, CSTR(name), sizeof(humrte->name));
+    strncpy(humrte->name, CSTR(name), sizeof(humrte->name)-1);
 
     gbfputuint32(RTE_MAGIC, fout_);
     gbfwrite(humrte, sizeof(*humrte), 1, fout_);

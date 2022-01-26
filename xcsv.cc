@@ -50,7 +50,6 @@
 #include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "formspec.h"                 // for FormatSpecificDataList
 #include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
-#include "gbfile.h"                   // for gbfgetstr, gbfclose, gbfopen, gbfile
 #include "grtcirc.h"                  // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
 #include "jeeps/gpsport.h"            // for int32
@@ -158,7 +157,7 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
 };
 
 /* a table of config file constants mapped to chars */
-const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
+const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COMMA",		"," 	},
   { "COMMASPACE",		", " 	},
   { "SINGLEQUOTE",	"'"	},
@@ -172,25 +171,15 @@ const XcsvStyle::char_map_t XcsvStyle::xcsv_char_table[] = {
   { "SPACE",  		" "	},
   { "HASH",  		"#"	},
   { "WHITESPACE",		"\\w"	},
-  { "PIPE",		"|"	},
-  { nullptr, 		nullptr	}
+  { "PIPE",		"|"	}
 };
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
 XcsvStyle::xcsv_get_char_from_constant_table(const QString& key)
 {
-  static QHash<QString, QString> substitutions;
-  if (substitutions.empty()) {
-    for (const char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
-      substitutions.insert(cm->key, cm->chars);
-    }
-  }
-  if (substitutions.contains(key)) {
-    return substitutions[key];
-  }
   // No substitution found? Just return original.
-  return key;
+  return xcsv_char_table.value(key, key);
 }
 
 // Remove outer quotes.
@@ -256,7 +245,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
 }
 
 QDateTime
-XcsvFormat::yyyymmdd_to_time(const char* s)
+XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
@@ -398,7 +387,7 @@ void
 XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp,
                            xcsv_parse_data* parse_data, const int line_no)
 {
-  const char* enclosure = "";
+  QString enclosure = "";
   geocache_data* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
@@ -427,13 +416,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* IGNORE -- Calculated Sequence # For Output*/
     break;
   case XcsvStyle::XT_SHORTNAME:
-    wpt->shortname = csv_stringtrim(s, enclosure);
+    wpt->shortname = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_DESCRIPTION:
-    wpt->description = csv_stringtrim(s, enclosure);
+    wpt->description = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_NOTES:
-    wpt->notes = csv_stringtrim(s, "");
+    wpt->notes = value.trimmed();
     break;
   case XcsvStyle::XT_URL:
     if (!parse_data->link_) {
@@ -628,7 +617,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_YYYYMMDD_TIME:
-    wpt->SetCreationTime(yyyymmdd_to_time(s));
+    wpt->SetCreationTime(yyyymmdd_to_time(value));
     break;
   case XcsvStyle::XT_GMT_TIME:
     wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), 1));
@@ -652,13 +641,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XcsvStyle::XT_NET_TIME: {
-    fatal("XT_NET_TIME can't have possibly ever worked.");
-//    time_t tt = wpt->GetCreationTime();
-//    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
+    bool ok;
+    wpt->SetCreationTime(dotnet_time_to_qdatetime(value.toLongLong(&ok)));
+    if (!ok) {
+      warning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
+    }
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
-    wpt->AllocGCData()->last_found = yyyymmdd_to_time(s);
+    wpt->AllocGCData()->last_found = yyyymmdd_to_time(value);
     break;
 
   /* GEOCACHING STUFF ***************************************************/
@@ -672,10 +663,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_TYPE:
     /* Geocache Type */
-    wpt->AllocGCData()->type = gs_mktype(s);
+    wpt->AllocGCData()->type = gs_mktype(value);
     break;
   case XcsvStyle::XT_GEOCACHE_CONTAINER:
-    wpt->AllocGCData()->container = gs_mkcont(s);
+    wpt->AllocGCData()->container = gs_mkcont(value);
     break;
   case XcsvStyle::XT_GEOCACHE_HINT:
     wpt->AllocGCData()->hint = value.trimmed();
@@ -685,9 +676,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
+    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
       gc_data->is_available = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
+    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
       gc_data->is_available = status_true;
     } else {
       gc_data->is_available = status_unknown;
@@ -695,9 +686,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
+    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
       gc_data->is_archived = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
+    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
       gc_data->is_archived = status_true;
     } else {
       gc_data->is_archived = status_unknown;
@@ -720,11 +711,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_GPS_FIX:
     wpt->fix = (fix_type)(atoi(s)-(fix_type)1);
     if (wpt->fix < fix_2d) {
-      if (!case_ignore_strcmp(s, "none")) {
+      if (!case_ignore_strcmp(value, "none")) {
         wpt->fix = fix_none;
-      } else if (!case_ignore_strcmp(s, "dgps")) {
+      } else if (!case_ignore_strcmp(value, "dgps")) {
         wpt->fix = fix_dgps;
-      } else if (!case_ignore_strcmp(s, "pps")) {
+      } else if (!case_ignore_strcmp(value, "pps")) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
@@ -733,13 +724,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   /* Tracks and routes *********************************************/
   case XcsvStyle::XT_ROUTE_NAME:
-    parse_data->rte_name = csv_stringtrim(s, enclosure);
+    parse_data->rte_name = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_TRACK_NEW:
     parse_data->new_track = atoi(s);
     break;
   case XcsvStyle::XT_TRACK_NAME:
-    parse_data->trk_name = csv_stringtrim(s, enclosure);
+    parse_data->trk_name = csv_stringtrim(value, enclosure, 0);
     break;
 
   /* OTHER STUFF ***************************************************/
@@ -1676,197 +1667,143 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   const QStringList tokens = tokenstr.split(',');
 
   if (op == u"FIELD_DELIMITER") {
-    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
     style->field_delimiter = cp;
 
-    char* p = csv_stringtrim(CSTR(style->field_delimiter), " ", 0);
     /* field delimiters are always bad characters */
-    if (0 == strcmp(p, "\\w")) {
-      style->badchars = " \n\r";
+    if (cp == u"\\w") {
+      style->badchars += " \n\r";
     } else {
-      style->badchars += p;
+      style->badchars += cp;
     }
-    xfree(p);
 
-  } else
+  } else if (op == u"FIELD_ENCLOSER") {
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
+    style->field_encloser = cp;
 
-    if (op == u"FIELD_ENCLOSER") {
-      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-      style->field_encloser = cp;
+    style->badchars += cp;
 
-      char* p = csv_stringtrim(CSTR(style->field_encloser), " ", 0);
-      style->badchars += p;
-      xfree(p);
-    } else
+  } else if (op == u"RECORD_DELIMITER") {
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
+    style->record_delimiter = cp;
 
-      if (op == u"RECORD_DELIMITER") {
-        auto cp = xcsv_get_char_from_constant_table(tokens[0]);
-        style->record_delimiter = cp;
+    // Record delimiters are always bad characters.
+    style->badchars += cp;
 
-        // Record delimiters are always bad characters.
-        auto* p = csv_stringtrim(CSTR(style->record_delimiter), " ", 0);
-        style->badchars += p;
-        xfree(p);
+  } else if (op == u"FORMAT_TYPE") {
+    if (tokens[0] == u"INTERNAL") {
+      style->type = ff_type_internal;
+    }
+    // this is almost inconceivable...
+    if (tokens[0] == u"SERIAL") {
+      style->type = ff_type_serial;
+    }
 
-      } else
+  } else if (op == u"DESCRIPTION") {
+    style->description = tokens[0];
 
-        if (op == u"FORMAT_TYPE") {
-          if (tokens[0] == u"INTERNAL") {
-            style->type = ff_type_internal;
-          }
-          // this is almost inconceivable...
-          if (tokens[0] == u"SERIAL") {
-            style->type = ff_type_serial;
-          }
-        } else
+  } else if (op == u"EXTENSION") {
+    style->extension = tokens[0];
 
-          if (op == u"DESCRIPTION") {
-            style->description = tokens[0];
-          } else
+  } else if (op == u"SHORTLEN") {
+    style->shortlen = tokens[0].toInt();
 
-            if (op == u"EXTENSION") {
-              style->extension = tokens[0];
-            } else
+  } else if (op == u"SHORTWHITE") {
+    style->whitespace_ok = tokens[0].toInt();
 
-              if (op == u"SHORTLEN") {
-                style->shortlen = tokens[0].toInt();
-              } else
+  } else if (op == u"BADCHARS") {
+    auto sp = csv_stringtrim(tokenstr, "\"", 1);
+    auto cp = xcsv_get_char_from_constant_table(sp);
+    style->badchars += cp;
 
-                if (op == u"SHORTWHITE") {
-                  style->whitespace_ok = tokens[0].toInt();
-                } else
+  } else if (op =="PROLOGUE") {
+    style->prologue.append(tokenstr);
 
-                  if (op == u"BADCHARS") {
-                    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
-                    QString cp = xcsv_get_char_from_constant_table(sp);
-                    style->badchars += cp;
-                    xfree(sp);
-                  } else
+  } else if (op == u"EPILOGUE") {
+    style->epilogue.append(tokenstr);
 
-                    if (op =="PROLOGUE") {
-                      style->prologue.append(tokenstr);
-                    } else
+  } else if (op == u"ENCODING") {
+    style->codecname = tokens[0];
 
-                      if (op == u"EPILOGUE") {
-                        style->epilogue.append(tokenstr);
-                      } else
+  } else if (op == u"DATUM") {
+    style->gps_datum_name = tokens[0];
 
-                        if (op == u"ENCODING") {
-                          style->codecname = tokens[0];
-                        } else
+  } else if (op == u"DATATYPE") {
+    QString p = tokens[0].toUpper();
+    if (p == u"TRACK") {
+      style->datatype = trkdata;
+    } else if (p == u"ROUTE") {
+      style->datatype = rtedata;
+    } else if (p == u"WAYPOINT") {
+      style->datatype = wptdata;
+    } else {
+      fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
+    }
 
-                          if (op == u"DATUM") {
-                            style->gps_datum_name = tokens[0];
-                          } else
+  } else if (op == u"IFIELD") {
+    if (tokens.size() < 3) {
+      fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
+    }
 
-                            if (op == u"DATATYPE") {
-                              QString p = tokens[0].toUpper();
-                              if (p == u"TRACK") {
-                                style->datatype = trkdata;
-                              } else if (p == u"ROUTE") {
-                                style->datatype = rtedata;
-                              } else if (p == u"WAYPOINT") {
-                                style->datatype = wptdata;
-                              } else {
-                                fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
-                              }
-                            } else
+    // The key ("LAT_DIR") should never contain quotes.
 
-                              if (op == u"IFIELD") {
-                                if (tokens.size() < 3) {
-                                  fatal(FatalMsg() << "Invalid IFIELD line: " << tokenstr);
-                                }
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
+    xcsv_ifield_add(style, key, val, pfc);
 
-                                // The key ("LAT_DIR") should never contain quotes.
+  } else if (op == u"OFIELD") {
+    //
+    //  as OFIELDs are implemented as an after-thought, I'll
+    //  leave this as it's own parsing for now.  We could
+    //  change the world on ifield vs ofield format later..
+    //
+    unsigned options = 0;
+    // Note: simplified() has to run after split().
+    if (tokens.size() < 3) {
+      fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
+    }
 
-                                const QString key = tokens[0].simplified();
-                                const QString val = dequote(tokens[1]);
-                                const QString pfc = dequote(tokens[2]);
-                                xcsv_ifield_add(style, key, val, pfc);
-                              } else
+    // The key ("LAT_DIR") should never contain quotes.
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
 
-                                //
-                                //  as OFIELDs are implemented as an after-thought, I'll
-                                //  leave this as it's own parsing for now.  We could
-                                //  change the world on ifield vs ofield format later..
-                                //
-                                if (op == u"OFIELD") {
-                                  unsigned options = 0;
-                                  // Note: simplified() has to run after split().
-                                  if (tokens.size() < 3) {
-                                    fatal(FatalMsg() << "Invalid OFIELD line: " << tokenstr);
-                                  }
-
-                                  // The key ("LAT_DIR") should never contain quotes.
-                                  const QString key = tokens[0].simplified();
-                                  const QString val = dequote(tokens[1]);
-                                  const QString pfc = dequote(tokens[2]);
-
-                                  // This is pretty lazy way to parse write options.
-                                  // They've very rarely used, so we'll go for simple.
-                                  // We may have split the optional fourth and final field which can contain
-                                  // option[s], so look at all the remaining tokens.
-                                  for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
-                                    QString options_string = tokens[token_idx].simplified();
-                                    if (options_string.contains("no_delim_before")) {
-                                      options |= options_nodelim;
-                                    }
-                                    if (options_string.contains("absolute")) {
-                                      options |= options_absolute;
-                                    }
-                                    if (options_string.contains("optional")) {
-                                      options |= options_optional;
-                                    }
-                                  }
-                                  xcsv_ofield_add(style, key, val, pfc, options);
-                                }
+    // This is pretty lazy way to parse write options.
+    // They've very rarely used, so we'll go for simple.
+    // We may have split the optional fourth and final field which can contain
+    // option[s], so look at all the remaining tokens.
+    for (int token_idx = 3; token_idx < tokens.size(); ++token_idx) {
+      QString options_string = tokens[token_idx].simplified();
+      if (options_string.contains("no_delim_before")) {
+        options |= options_nodelim;
+      }
+      if (options_string.contains("absolute")) {
+        options |= options_absolute;
+      }
+      if (options_string.contains("optional")) {
+        options |= options_optional;
+      }
+    }
+    xcsv_ofield_add(style, key, val, pfc, options);
+  }
 }
 
-
-/*
- * A wrapper for xcsv_parse_style_line that reads until it hits
- * a terminating null.   Makes multiple calls to that function so
- * that "ignore to end of line" comments work right.
- */
 XcsvStyle
-XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
+XcsvStyle::xcsv_read_style(const QString& fname)
 {
   XcsvStyle style;
-  const QStringList lines = QString(sbuff).split('\n');
-  for (const auto& line : lines) {
-    xcsv_parse_style_line(&style, line);
+
+  gpsbabel::TextStream stream;
+  stream.open(fname, QIODevice::ReadOnly, MYNAME);
+  QString sbuff;
+  while (stream.readLineInto(&sbuff)) {
+    xcsv_parse_style_line(&style, sbuff.trimmed());
   }
-  return style;
-}
-
-XcsvStyle
-XcsvStyle::xcsv_read_style(const char* fname)
-{
-  gbfile* fp = gbfopen(fname, "rb", MYNAME);
-  XcsvStyle style;
-  for (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
-    sbuff = sbuff.trimmed();
-    xcsv_parse_style_line(&style, sbuff);
-  }
-
-  /* if we have no output fields, use input fields as output fields */
-  if (style.ofields.isEmpty()) {
-    style.ofields = style.ifields;
-  }
-  gbfclose(fp);
-
-  return style;
-}
-
-/*
- * Passed a pointer to an internal buffer that would be identical
- * to the series of bytes that would be in a style file, we set up
- * the xcsv parser and make it ready for general use.
- */
-XcsvStyle
-XcsvStyle::xcsv_read_internal_style(const char* style_buf)
-{
-  XcsvStyle style = xcsv_parse_style_buff(style_buf);
+  stream.close();
 
   /* if we have no output fields, use input fields as output fields */
   if (style.ofields.isEmpty()) {
@@ -1877,9 +1814,9 @@ XcsvStyle::xcsv_read_internal_style(const char* style_buf)
 }
 
 void
-XcsvFormat::xcsv_setup_internal_style(const char* style_buf)
+XcsvFormat::xcsv_setup_internal_style(const QString& style_filename)
 {
-  intstylebuf = style_buf;
+  intstylefile = style_filename;
 }
 
 void
@@ -1889,8 +1826,8 @@ XcsvFormat::rd_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
@@ -1922,7 +1859,9 @@ XcsvFormat::rd_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
@@ -1944,8 +1883,8 @@ XcsvFormat::wr_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
@@ -2001,7 +1940,9 @@ XcsvFormat::wr_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 

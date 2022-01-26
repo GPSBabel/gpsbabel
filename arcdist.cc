@@ -19,21 +19,20 @@
 
  */
 
-#include <cmath>                // for round
-#include <cstdio>               // for printf, sscanf
-#include <cstdlib>              // for strtod
-#include <cstring>              // for strchr, strlen, strncmp, strspn
+#include <cmath>                  // for round
+#include <cstdio>                 // for printf, sscanf
+#include <cstdlib>                // for strtod
 
-#include <QByteArray>           // for QByteArray
-#include <QString>              // for QString
-#include <QtGlobal>             // for foreach, qPrintable, qint64
+#include <QByteArray>             // for QByteArray
+#include <QString>                // for QString
+#include <QtGlobal>               // for foreach, qPrintable, qint64
 
 #include "defs.h"
 #include "arcdist.h"
-#include "gbfile.h"             // for gbfclose, gbfgetstr, gbfopen, gbfile
-#include "grtcirc.h"            // for RAD, gcdist, linedistprj, radtomi
-#include "src/core/datetime.h"  // for DateTime
-#include "src/core/logging.h"   // for Fatal
+#include "grtcirc.h"              // for RAD, gcdist, linedistprj, radtomi
+#include "src/core/datetime.h"    // for DateTime
+#include "src/core/logging.h"     // for Fatal
+#include "src/core/textstream.h"  // for TextStream
 
 
 #if FILTERS_ENABLED
@@ -119,30 +118,31 @@ void ArcDistanceFilter::process()
 
   if (arcfileopt) {
     int fileline = 0;
-    char* line;
+    QString line;
 
-    gbfile* file_in = gbfopen(arcfileopt, "r", MYNAME);
+    gpsbabel::TextStream stream;
+    stream.open(arcfileopt, QIODevice::ReadOnly, MYNAME);
 
     auto* arcpt1 = new Waypoint;
     auto* arcpt2 = new Waypoint;
     arcdist_arc_disp_hdr_cb(nullptr);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
-    while ((line = gbfgetstr(file_in))) {
+    while (stream.readLineInto(&line)) {
       fileline++;
 
-      char* pound = strchr(line, '#');
-      if (pound) {
-        if (0 == strncmp(pound, "#break", 6)) {
+      auto pound = line.indexOf('#');
+      if (pound >= 0) {
+        if (line.mid(pound, 6) == u"#break") {
           arcdist_arc_disp_hdr_cb(nullptr);
         }
-        *pound = '\0';
+        line.truncate(pound);
       }
 
       arcpt2->latitude = arcpt2->longitude = BADVAL;
-      int argsfound = sscanf(line, "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
+      int argsfound = sscanf(CSTR(line), "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
-      if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
+      if ((argsfound != 2) && (line.trimmed().size() > 0)) {
         warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
         Waypoint* arcpttmp = arcpt1;
@@ -154,7 +154,7 @@ void ArcDistanceFilter::process()
     delete arcpt1;
     delete arcpt2;
 
-    gbfclose(file_in);
+    stream.close();
   } else if (rteopt) {
     route_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   } else if (trkopt) {

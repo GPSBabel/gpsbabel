@@ -153,9 +153,9 @@ format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 {
   int j = 12;
   while (j<(Count-1)) {
-    for (uint8_t i = j; i < Count; i++) {
+    for (int i = j; i < Count; i++) {
       TrackBlock[i] = TrackBlock[i] >> 1;
-      if (i<(Count)) {
+      if (i<(Count-1)) {
         TrackBlock[i] = TrackBlock[i] + (TrackBlock[i+1] % 2) * 128;
       }
     }
@@ -227,10 +227,10 @@ format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
   int TracksCompleted = 0; // Number of processed tracks
-  uint8_t	TrackBlock[STRK_BLOCK_SIZE + 1]; // File Block
+  uint8_t	TrackBlock[STRK_BLOCK_SIZE]; // File Block
   double		Lat = 0, Lon = 0; // wpt data
   double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
-  uint32_t	Time = 0; // wpt data
+  uint32_t	Time = 0, PrevTime = 0; // wpt data
   uint8_t	trk_color = 0xff;
 
   // Skip 12 bytes from the BOF
@@ -287,7 +287,7 @@ format_garmin_xt_proc_strk()
           wpt->latitude = PrevLat;	/* Degrees */
           wpt->longitude = PrevLon; 	/* Degrees */
           wpt->altitude = PrevEle; 			/* Meters. */
-          wpt->SetCreationTime(Time);  		/* Unix Time adjusted to Garmin time */
+          wpt->SetCreationTime(PrevTime);  		/* Unix Time adjusted to Garmin time */
 
           // add way point to the track
           track_add_wpt(tmp_track, wpt);
@@ -296,6 +296,7 @@ format_garmin_xt_proc_strk()
         }
         PrevLat = Lat;
         PrevLon = Lon;
+        PrevTime = Time;
       }
     }
 
@@ -312,7 +313,7 @@ format_garmin_xt_proc_strk()
     wpt->latitude = PrevLat;	/* Degrees */
     wpt->longitude = PrevLon; 	/* Degrees */
     wpt->altitude = PrevEle; 			/* Meters. */
-    wpt->SetCreationTime(Time);  		/* Unix Time adjusted to Garmin time */
+    wpt->SetCreationTime(PrevTime);  		/* Unix Time adjusted to Garmin time */
 
     // add way point to the track
     track_add_wpt(tmp_track, wpt);

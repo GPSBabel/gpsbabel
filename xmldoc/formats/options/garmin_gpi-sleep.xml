@@ -1,6 +1,6 @@
 <para>
-  The Garmin units seem to use the creation timestamp of GPI files for internal purposes. 
-  In other words,  if you load GPI files with same creation timestamp on your device, 
+  The Garmin units seem to use the creation timestamp of GPI files for internal purposes.
+  In other words,  if you load GPI files with same creation timestamp on your device,
   strange things will happen,  such as having missing or repeated POIs. With the sleep option, GPSBabel waits a given
   number of seconds after the GPI file was written.
 </para>

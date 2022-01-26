@@ -1,7 +1,7 @@
 <para>
   This option isn't entirely clear.  It appears to be a unique number
   for each track that is used for coloring on the main display.  So if you
-  want two tracks to have different colors, set the track numbers to 
+  want two tracks to have different colors, set the track numbers to
   different values.
 </para>
 <para>

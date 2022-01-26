@@ -5,14 +5,14 @@
   <ulink url="/formats/s_and_t/Importing_into_Microsoft_Streets_and_Trips_2003.html">gpsbabel.org</ulink>
 </para>
 <para>
-  We have an additional page describing how to solve the 
-  <ulink url="/formats/s_and_t/TripPlanning.html">traveling salesman problem with 
-  Streets &amp; Trips</ulink> to efficiently optimize a trip with many stops, such as 
+  We have an additional page describing how to solve the
+  <ulink url="/formats/s_and_t/TripPlanning.html">traveling salesman problem with
+  Streets &amp; Trips</ulink> to efficiently optimize a trip with many stops, such as
   is often made by geocachers.
 </para>
 <!--
 <para>
-  This format has nothing to do with the <link linkend="fmt_msroute1"> .est/axe format</link> 
+  This format has nothing to do with the <link linkend="fmt_msroute1"> .est/axe format</link>
   used by this program to store routes.
 </para>
 -->
@@ -20,4 +20,4 @@
   Since modern versions of Streets and Trips support reading GPX, this format is probably
   not so useful.
 </para>
-    
+

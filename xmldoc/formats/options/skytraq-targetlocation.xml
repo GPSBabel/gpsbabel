@@ -12,9 +12,9 @@
 0 -o unicsv -F -</userinput>
   </para>
   <para>
-       Sets latitude and longitude of the location finder to N12.34 and 
-	W56.78 respectively. 
-       The arrows on the device will point you to this location as soon as 
+       Sets latitude and longitude of the location finder to N12.34 and
+	W56.78 respectively.
+       The arrows on the device will point you to this location as soon as
 	it has a satellite fix.
  </para>
 </example>

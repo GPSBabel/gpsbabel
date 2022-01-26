@@ -300,7 +300,9 @@ UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
     }
   }
   int ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
-  is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
+  if (ct < 5) {
+    fatal(MYNAME ": Could not parse time string (%s).\n", str);
+  }
   if (ct == 6) {
     *usec = lround((us * 1000000));
     if (*usec > 999999) {

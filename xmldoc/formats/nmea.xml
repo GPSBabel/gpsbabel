@@ -1,6 +1,6 @@
-    
-      
-<para> This format is the file representation of the NMEA 
+
+
+<para> This format is the file representation of the NMEA
 (National Marine Electronics Association) 0183
 log and waypoint format for GPS devices.  Some hardware and software
 that work with NMEA-0183 formatted data include:
@@ -42,14 +42,14 @@ that work with NMEA-0183 formatted data include:
 <member>
   Sony GPS_CS1
 </member>
-</simplelist>  
+</simplelist>
 <para>
-This module also supports <link linkend="tracking">realtime tracking</link> 
-which allows realtime position reports from a GPS, such as one connected 
+This module also supports <link linkend="tracking">realtime tracking</link>
+which allows realtime position reports from a GPS, such as one connected
 serially, over Bluetooth, or a USB module emulating a serial port, to be used
 with selected output formats.  Just specify an input file that is the device
 name such as COM1: for Windows or a device-dependent name like
-/dev/cu.usbserial for Mac or /dev/ttyUSB0 for Linux.  (Note that serial 
+/dev/cu.usbserial for Mac or /dev/ttyUSB0 for Linux.  (Note that serial
 device names vary on Mac and Linux.)
 </para>
 <para>
