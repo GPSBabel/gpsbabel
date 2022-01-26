@@ -73,7 +73,7 @@ private:
 
   /* Data Members */
 
-  gbfile* fin;
+  gbfile* fin{};
 
   QVector<arglist_t> wintec_tes_args = {
   };
