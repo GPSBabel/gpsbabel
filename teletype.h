@@ -68,8 +68,8 @@ public:
 private:
   /* Data Members */
 
-  uint32_t tty_wpt_count;
-  gbfile* fin;
+  uint32_t tty_wpt_count{};
+  gbfile* fin{};
 
   QVector<arglist_t> teletype_args = {
   };
