@@ -36,6 +36,7 @@
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
 #include "gpx.h"
+#include "html.h"
 #include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
@@ -65,7 +66,6 @@ extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
-extern ff_vecs_t html_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
@@ -253,7 +253,7 @@ private:
 #endif
   LegacyFormat gpl_fmt {gpl_vecs};
   LegacyFormat text_fmt {text_vecs};
-  LegacyFormat html_fmt {html_vecs};
+  HtmlFormat html_fmt;
   LegacyFormat igc_fmt {igc_vecs};
   LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
