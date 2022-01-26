@@ -149,7 +149,6 @@ protected:
 
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
-  gbfile* file_handle = nullptr;		/* file descriptor (used by skytraq-bin format) */
   
   char* opt_erase = nullptr;		/* erase after read? (0/1) */
   char* opt_initbaud = nullptr;		/* baud rate used to init device */
@@ -287,6 +286,8 @@ public:
 private:
 
   /* Data Members */
+
+  gbfile* file_handle = nullptr;		/* file descriptor (used by skytraq-bin format) */
 
   QVector<arglist_t> skytraq_fargs = {
     {
