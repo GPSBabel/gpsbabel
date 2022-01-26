@@ -1302,12 +1302,6 @@ SkytraqfileFormat::read()
 #undef MYNAME
 #endif
 #define MYNAME "miniHomer"
-/*
- * Names of the POIs on miniHomer
- */
-const char* MinihomerFormat::poinames[] = {
-  "Home", "Car", "Boat", "Heart", "Bar"
-};
 #define NUMPOI (sizeof poinames/sizeof poinames[0])
 #ifdef DEAD_CODE_IS_REBORN
 int MinihomerFormat::getPoiByName(char* name)

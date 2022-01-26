@@ -165,7 +165,7 @@ protected:
   char* opt_gps_week_rollover = nullptr;
 };
 
-class SkytraqFormat : public Format, public SkytraqBase
+class SkytraqFormat : public Format, private SkytraqBase
 {
 public:
   QVector<arglist_t>* get_args() override
@@ -252,7 +252,7 @@ private:
   };
 };
 
-class SkytraqfileFormat : public Format, public SkytraqBase
+class SkytraqfileFormat : public Format, private SkytraqBase
 {
 public:
   QVector<arglist_t>* get_args() override
@@ -315,7 +315,7 @@ private:
  * http://navin.com.tw/miniHomer.htm
  * 2010-10-23	Josef Reisinger
  */
-class MinihomerFormat : public Format, public SkytraqBase
+class MinihomerFormat : public Format, private SkytraqBase
 {
 public:
   QVector<arglist_t>* get_args() override
@@ -354,7 +354,9 @@ private:
   /*
    * Names of the POIs on miniHomer
    */
-  static const char* poinames[];
+  static constexpr const char* poinames[] = {
+    "Home", "Car", "Boat", "Heart", "Bar"
+  };
 
   /* Member Functions */
 
