@@ -44,12 +44,12 @@ protected:
   struct read_state {
     route_head*          route_head_;
     unsigned            wpn, tpn;
-  
+
     unsigned gps_week;
     unsigned gps_sec;
     long x, y, z;
   };
-  
+
   struct full_item {
     uint32_t gps_week;
     uint32_t gps_sec;
@@ -57,14 +57,14 @@ protected:
     int32_t  y;
     int32_t  z;
   };
-  
+
   struct compact_item {
     uint16_t dt;
     int16_t dx;
     int16_t dy;
     int16_t dz;
   };
-  
+
   struct multi_hz_item {
     uint32_t gps_week;
     uint32_t gps_sec;
@@ -72,20 +72,19 @@ protected:
     int32_t  lon;
     int32_t  alt;
   };
-  
-  
+
   struct full_item_frame {
     unsigned char ts[4];
     unsigned char x[4];
     unsigned char y[4];
     unsigned char z[4];
   };
-  
+
   struct compact_item_frame {
     unsigned char dt[2]; /* big endian unsigned short */
     unsigned char dpos[4];
   };
-  
+
   struct multi_hz_item_frame {
     unsigned char v_kmh[2];
     unsigned char ts[4];
@@ -93,7 +92,7 @@ protected:
     unsigned char lon[4];
     unsigned char alt[4];
   };
-  
+
   struct item_frame {
     unsigned char type_and_speed[2];
     union {
@@ -149,7 +148,7 @@ protected:
 
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
-  
+
   char* opt_erase = nullptr;		/* erase after read? (0/1) */
   char* opt_initbaud = nullptr;		/* baud rate used to init device */
   char* opt_dlbaud = nullptr;		/* baud rate used for downloading tracks */
@@ -372,7 +371,7 @@ private:
   char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
   char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
   char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
-  
+
   QVector<arglist_t> miniHomer_args = {
     { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
     { "dump-file",    &opt_dump_file,     "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
