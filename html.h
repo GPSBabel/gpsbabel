@@ -69,8 +69,8 @@ private:
 
   /* Data Members */
 
-  gbfile* file_out;
-  short_handle mkshort_handle;
+  gbfile* file_out{};
+  short_handle mkshort_handle{};
 
   char* stylesheet = nullptr;
   char* html_encrypt = nullptr;
