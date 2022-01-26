@@ -147,7 +147,9 @@ static void rd_deinit()
   gbfclose(file_in);
 }
 
-enum state_t { id, takeoff, start, turnpoint, finish, landing };
+namespace { // fix ODR violation with brauniger_iq
+  enum state_t { id, takeoff, start, turnpoint, finish, landing };
+}
 inline state_t& operator++(state_t& s) // prefix
 {
   return s = static_cast<state_t>(s + 1);
