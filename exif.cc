@@ -725,7 +725,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
 }
 
 Waypoint*
-ExifFormat::exif_waypt_from_exif_app(ExifApp* app)
+ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
 {
   ExifTag* tag;
   char lat_ref = '\0';
@@ -977,7 +977,7 @@ ExifFormat::Rational<int32_t> ExifFormat::exif_dec2frac(double val, double toler
 }
 
 ExifFormat::ExifTag*
-ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, const int count, const int index, const void* data)
+ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, const int count, const int index, const void* data) const
 {
   ExifTag* tag = nullptr;
   uint16_t size;
@@ -1080,7 +1080,7 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
 
 
 void
-ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index, const double val)
+ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index, const double val) const
 {
   // TODO: It seems wrong to throw away the sign.
   double d = fabs(val);
@@ -1089,14 +1089,14 @@ ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index,
 
 
 void
-ExifFormat::exif_put_str(const int ifd_nr, const int tag_id, const char* val)
+ExifFormat::exif_put_str(const int ifd_nr, const int tag_id, const char* val) const
 {
   int len = (val) ? strlen(val) + 1 : 0;
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_ASCII, len, 0, val);
 }
 
 void
-ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val)
+ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val) const
 {
   double vdeg;
   double vmin;
@@ -1112,19 +1112,19 @@ ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val)
 }
 
 void
-ExifFormat::exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t val)
+ExifFormat::exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t val) const
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_LONG, 1, index, &val);
 }
 
 void
-ExifFormat::exif_put_short(const int ifd_nr, const int tag_id, const int index, const int16_t val)
+ExifFormat::exif_put_short(const int ifd_nr, const int tag_id, const int index, const int16_t val) const
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_SHORT, 1, index, &val);
 }
 
 void
-ExifFormat::exif_remove_tag(const int ifd_nr, const int tag_id)
+ExifFormat::exif_remove_tag(const int ifd_nr, const int tag_id) const
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_BYTE, 0, 0, nullptr);
 }
@@ -1279,7 +1279,7 @@ ExifFormat::exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
 }
 
 void
-ExifFormat::exif_write_apps()
+ExifFormat::exif_write_apps() const
 {
   gbfputuint16(0xFFD8, fout_);
 
