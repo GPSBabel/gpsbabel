@@ -198,17 +198,21 @@ private:
 
   /* Data Members */
 
-  gbfile* fin_, *fout_;
-  QList<ExifApp*>* exif_apps;
-  ExifApp* exif_app_;
-  const Waypoint* exif_wpt_ref;
+  gbfile* fin_{};
+  gbfile* fout_{};
+  QList<ExifApp*>* exif_apps{};
+  ExifApp* exif_app_{};
+  const Waypoint* exif_wpt_ref{};
   QDateTime exif_time_ref;
-  char exif_success;
+  char exif_success{};
   QString exif_fout_name;
 
-  char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
+  char* opt_filename{};
+  char* opt_overwrite{};
+  char* opt_frame{};
+  char* opt_name{};
 
-  uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
+  static constexpr uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
