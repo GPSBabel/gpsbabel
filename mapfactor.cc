@@ -107,7 +107,7 @@ MapfactorFormat::wr_deinit()
 }
 
 void
-MapfactorFormat::mapfactor_waypt_pr(const Waypoint* waypointp)
+MapfactorFormat::mapfactor_waypt_pr(const Waypoint* waypointp) const
 {
   writer->writeStartElement(QStringLiteral("item"));
 

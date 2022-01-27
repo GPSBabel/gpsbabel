@@ -72,7 +72,7 @@ private:
   /* Member Functions */
 
   void MapfactorRead();
-  void mapfactor_waypt_pr(const Waypoint* waypointp);
+  void mapfactor_waypt_pr(const Waypoint* waypointp) const;
 
   /* Data Members */
 
