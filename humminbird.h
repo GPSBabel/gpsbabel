@@ -91,7 +91,6 @@ protected:
   void humminbird_read();
   void humminbird_wr_init(const QString& fname);
   void humminbird_wr_deinit();
-  void humminbird_write_waypoint(const Waypoint* wpt);
 
   /* Data Members */
 
@@ -155,6 +154,7 @@ private:
   void humminbird_rte_head(const route_head* rte);
   void humminbird_rte_tail(const route_head* rte);
   void humminbird_write_rtept(const Waypoint* wpt) const;
+  void humminbird_write_waypoint(const Waypoint* wpt);
   void humminbird_write_waypoint_wrapper(const Waypoint* wpt);
 
   /* Data Members */
