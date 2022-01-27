@@ -36,6 +36,7 @@
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
 #include "gpx.h"
+#include "humminbird.h"
 #include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
@@ -105,8 +106,6 @@ extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t exif_vecs;
 extern ff_vecs_t igo8_vecs;
-extern ff_vecs_t humminbird_vecs;
-extern ff_vecs_t humminbird_ht_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
@@ -300,8 +299,8 @@ private:
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
   LegacyFormat exif_fmt {exif_vecs};
   LegacyFormat igo8_fmt {igo8_vecs};
-  LegacyFormat humminbird_fmt {humminbird_vecs};
-  LegacyFormat humminbird_ht_fmt {humminbird_ht_vecs};
+  HumminbirdFormat humminbird_fmt;
+  HumminbirdHTFormat humminbird_ht_fmt;
   LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
   LegacyFormat gnav_trl_fmt {gnav_trl_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
