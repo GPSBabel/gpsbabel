@@ -72,8 +72,8 @@ private:
 
   /* Member Functions */
 
-  gpsbabel::DateTime read_datetime();
-  Waypoint* read_waypoint();
+  gpsbabel::DateTime read_datetime() const;
+  Waypoint* read_waypoint() const;
 
   /* Data Members */
 

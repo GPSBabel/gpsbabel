@@ -54,7 +54,7 @@ MapbarTrackFormat::rd_deinit()
 }
 
 gpsbabel::DateTime
-MapbarTrackFormat::read_datetime()
+MapbarTrackFormat::read_datetime() const
 {
   int hour = gbfgetint16(fin);
   int min = gbfgetint16(fin);
@@ -67,7 +67,7 @@ MapbarTrackFormat::read_datetime()
 }
 
 Waypoint*
-MapbarTrackFormat::read_waypoint()
+MapbarTrackFormat::read_waypoint() const
 {
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
