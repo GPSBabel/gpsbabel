@@ -163,8 +163,8 @@ struct HumminbirdBase::group_body_t {
 double
 HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 {
-  const double cos_ae = 0.9966349016452;
-  const double cos2_ae = cos_ae * cos_ae;
+  constexpr double cos_ae = 0.9966349016452;
+  constexpr double cos2_ae = cos_ae * cos_ae;
   const double gdr = gd_lat *M_PI / 180.0;
 
   return atan(cos2_ae * tan(gdr)) * 180.0/M_PI;
@@ -175,8 +175,8 @@ HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 double
 HumminbirdBase::geocentric_to_geodetic_hwr(const double gc_lat)
 {
-  const double cos_ae = 0.9966349016452;
-  const double cos2_ae = cos_ae * cos_ae;
+  constexpr double cos_ae = 0.9966349016452;
+  constexpr double cos2_ae = cos_ae * cos_ae;
   const double gcr = gc_lat *M_PI / 180.0;
 
   return atan(tan(gcr)/cos2_ae) * 180.0/M_PI;
@@ -212,7 +212,7 @@ HumminbirdBase::humminbird_rd_init(const QString& fname)
 }
 
 void
-HumminbirdBase::humminbird_rd_deinit()
+HumminbirdBase::humminbird_rd_deinit() const
 {
   gbfclose(fin_);
 }
@@ -285,7 +285,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 }
 
 void
-HumminbirdBase::humminbird_read_route(gbfile* fin)
+HumminbirdBase::humminbird_read_route(gbfile* fin) const
 {
 
   humminbird_rte_t hrte{};
@@ -439,7 +439,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
 {
 
   humminbird_trk_header_old_t th{};
-  const int file_len = 8048;
+  constexpr int file_len = 8048;
   char namebuf[TRK_NAME_LEN];
 
 
@@ -844,7 +844,7 @@ HumminbirdFormat::humminbird_rte_tail(const route_head* rte)
 }
 
 void
-HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt)
+HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
 {
   if (humrte == nullptr) {
     return;

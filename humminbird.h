@@ -83,9 +83,9 @@ protected:
   static double gudermannian_i1924(double x);
   static double inverse_gudermannian_i1924(double x);
   void humminbird_rd_init(const QString& fname);
-  void humminbird_rd_deinit();
+  void humminbird_rd_deinit() const;
   void humminbird_read_wpt(gbfile* fin);
-  void humminbird_read_route(gbfile* fin);
+  void humminbird_read_route(gbfile* fin) const;
   static void humminbird_read_track(gbfile* fin);
   static void humminbird_read_track_old(gbfile* fin);
   void humminbird_read();
@@ -154,7 +154,7 @@ private:
 
   void humminbird_rte_head(const route_head* rte);
   void humminbird_rte_tail(const route_head* rte);
-  void humminbird_write_rtept(const Waypoint* wpt);
+  void humminbird_write_rtept(const Waypoint* wpt) const;
   void humminbird_write_waypoint_wrapper(const Waypoint* wpt);
 
   /* Data Members */
