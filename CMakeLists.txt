@@ -221,6 +221,7 @@ set(HEADERS
   dg-100.h
   energympro.h
   explorist_ini.h
+  f90g_track.h
   filter.h
   filter_vecs.h
   format.h
