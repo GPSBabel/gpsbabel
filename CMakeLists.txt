@@ -246,6 +246,7 @@ set(HEADERS
   legacyformat.h
   lowranceusr.h
   magellan.h
+  mapbar_track.h
   mynav.h
   navilink.h
   nmea.h
