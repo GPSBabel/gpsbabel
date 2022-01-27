@@ -36,6 +36,7 @@
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
 #include "gpx.h"
+#include "gtrnctr.h"
 #include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
@@ -91,7 +92,6 @@ extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
-extern ff_vecs_t gtc_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t ggv_log_vecs;
@@ -280,7 +280,7 @@ private:
 #if CSVFMTS_ENABLED
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
 #endif // CSVFMTS_ENABLED
-  LegacyFormat gtc_fmt {gtc_vecs};
+  GtrnctrFormat gtc_fmt;
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};

@@ -239,6 +239,7 @@ set(HEADERS
   globalsat_sport.h
   gpx.h
   grtcirc.h
+  gtrnctr.h
   heightgrid.h
   holux.h
   inifile.h

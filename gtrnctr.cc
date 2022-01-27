@@ -24,140 +24,27 @@
  * http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd
  */
 
-#include <QXmlStreamAttributes>
+#include "gtrnctr.h"
 
-#include "defs.h"
-#include "xmlgeneric.h"
-#include <cstdio>
+#include <QByteArray>            // for QByteArray
+#include <QDateTime>             // for QDateTime
+#include <QIntegerForSize>       // for qPrintable
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
-static gbfile* ofd;
-static int lap_ct = 0;
-static int lap_s = 0;
-static Waypoint* wpt_tmp;
-static route_head* trk_head;
+#include <cstdarg>               // for va_end, va_list, va_start
+#include <cstdio>                // for snprintf
+#include <cstdlib>               // for atoi
+#include <iterator>              // for size
+#include <optional>              // for optional
+#include <type_traits>           // for add_const<>::type
+
+#include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, case_ignore_strncmp, track_add_head, track_add_wpt, track_recompute, xml_parse_time, CSTR, wp_flags, WAYPT_SET, unknown_alt
+#include "xmlgeneric.h"          // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
+
 
 #define MYNAME "gtc"
 
-#define GTC_MAX_NAME_LEN 15
-
-#define MAX_SPORTS 4
-static char gtc_sportlist[MAX_SPORTS][16] = { "Biking", "Running", "MultiSport", "Other" };
-static int gtc_sport = 0;
-static int gtc_course_flag;
-
-static gpsbabel::DateTime gtc_least_time;
-static gpsbabel::DateTime gtc_most_time;
-static double gtc_start_lat;
-static double gtc_start_long;
-static double gtc_end_lat;
-static double gtc_end_long;
-
-static char* opt_sport, *opt_course;
-
-static
-QVector<arglist_t> gtc_args = {
-  {
-    "course", &opt_course, "Write course rather than history, default yes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other",
-    "Biking", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-/* Tracks */
-static xg_callback	gtc_trk_s;
-static xg_callback	gtc_trk_ident;
-static xg_callback	gtc_trk_lap_s, gtc_trk_lap_e;
-static xg_callback	gtc_trk_pnt_s, gtc_trk_pnt_e;
-static xg_callback	gtc_trk_utc;
-static xg_callback	gtc_trk_lat;
-static xg_callback	gtc_trk_long;
-static xg_callback	gtc_trk_alt;
-static xg_callback	gtc_trk_dist;
-static xg_callback	gtc_trk_hr;
-static xg_callback	gtc_trk_cad;
-static xg_callback	gtc_trk_pwr;
-static xg_callback	gtc_trk_spd;
-static xg_callback	gtc_wpt_crs_s, gtc_wpt_crs_e;
-static xg_callback	gtc_wpt_pnt_s, gtc_wpt_pnt_e;
-static xg_callback	gtc_wpt_ident;
-static xg_callback	gtc_wpt_lat;
-static xg_callback	gtc_wpt_long;
-static xg_callback	gtc_wpt_icon;
-static xg_callback	gtc_wpt_notes;
-
-static xg_tag_mapping gtc_map[] = {
-  /* courses tcx v1 & v2 */
-  { gtc_trk_s,    cb_start, "/Courses/Course" },
-  { gtc_trk_ident,cb_cdata, "/Courses/Course/Name"},
-  { gtc_trk_pnt_s,cb_start, "/Courses/Course/Track/Trackpoint" },
-  { gtc_trk_pnt_e,cb_end,   "/Courses/Course/Track/Trackpoint" },
-  { gtc_trk_utc,  cb_cdata, "/Courses/Course/Track/Trackpoint/Time" },
-  { gtc_trk_lat,  cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LatitudeDegrees" },
-  { gtc_trk_long, cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LongitudeDegrees" },
-  { gtc_trk_alt,  cb_cdata, "/Courses/Course/Track/Trackpoint/AltitudeMeters" },
-  { gtc_trk_hr,   cb_cdata, "/Courses/Course/Track/Trackpoint/HeartRateBpm" },
-  { gtc_trk_cad,  cb_cdata, "/Courses/Course/Track/Trackpoint/Cadence" },
-  { gtc_wpt_crs_s,cb_start, "/Courses/Course/CoursePoint" },
-  { gtc_wpt_crs_e,cb_end,   "/Courses/Course/CoursePoint" },
-  { gtc_wpt_ident,cb_cdata, "/Courses/Course/CoursePoint/Name"},
-  { gtc_trk_utc,  cb_cdata, "/Courses/Course/CoursePoint/Time"},
-  { gtc_wpt_lat,  cb_cdata, "/Courses/Course/CoursePoint/Position/LatitudeDegrees"},
-  { gtc_wpt_long, cb_cdata, "/Courses/Course/CoursePoint/Position/LongitudeDegrees"},
-  { gtc_trk_alt,  cb_cdata, "/Courses/Course/CoursePoint/AltitudeMeters" },
-  { gtc_wpt_icon, cb_cdata, "/Courses/Course/CoursePoint/PointType" },
-  { gtc_wpt_notes,cb_cdata, "/Courses/Course/CoursePoint/Notes" },
-
-  /* history tcx v2 (activities) */
-  { gtc_trk_s,    cb_start, "/Activities/Activity" },
-  { gtc_trk_ident,cb_cdata, "/Activities/Activity/Id" },
-  { gtc_trk_lap_s,cb_start, "/Activities/Activity/Lap" },
-  { gtc_trk_lap_e,cb_end,   "/Activities/Activity/Lap" },
-  { gtc_trk_pnt_s,cb_start, "/Activities/Activity/Lap/Track/Trackpoint" },
-  { gtc_trk_pnt_e,cb_end,   "/Activities/Activity/Lap/Track/Trackpoint" },
-  { gtc_trk_utc,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Time" },
-  { gtc_trk_lat,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
-  { gtc_trk_long, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
-  { gtc_trk_alt,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
-  { gtc_trk_dist, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/DistanceMeters" },
-  { gtc_trk_hr,   cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
-  { gtc_trk_cad,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
-  { gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
-  // Sample from Marcelo Kittlein 5/2014 declares a default namespace with the start tag of the TPX element,
-  // and thus doesn't use prefixes.
-  { gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Watts" },
-  // It looks like Speed and Watts should be siblings, but Garmin can't get
-  // their namespace act very consistent.  This works for a sample provided
-  // by Laurent Desmons in 5/2013.
-  { gtc_trk_spd,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Speed" },
-
-  /* history tcx v1 */
-  { gtc_trk_s,    cb_start, "/History/Run" },
-  { gtc_trk_ident,cb_cdata, "/History/Run/Id" },
-  { gtc_trk_lap_s,cb_start, "/History/Run/Lap" },
-  { gtc_trk_lap_e,cb_end,   "/History/Run/Lap" },
-  { gtc_trk_pnt_s,cb_start, "/History/Run/Lap/Track/Trackpoint" },
-  { gtc_trk_pnt_e,cb_end,   "/History/Run/Lap/Track/Trackpoint" },
-  { gtc_trk_utc,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Time" },
-  { gtc_trk_lat,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
-  { gtc_trk_long, cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
-  { gtc_trk_alt,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/AltitudeMeters" },
-  { gtc_trk_hr,   cb_cdata, "/History/Run/Lap/Track/Trackpoint/HeartRateBpm" },
-  { gtc_trk_cad,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Cadence" },
-
-  { gtc_wpt_pnt_s,cb_start, "/Courses/Course/Lap/BeginPosition" },
-  { gtc_wpt_pnt_e,cb_end, "/Courses/Course/Lap/BeginPosition" },
-  { gtc_wpt_lat,  cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
-  { gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
-  { gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" },
-
-  { nullptr,	(xg_cb_type)0,         nullptr}
-};
-
-static const char*
-gtc_tags_to_ignore[] = {
+const char* GtrnctrFormat::gtc_tags_to_ignore[] = {
   "TrainingCenterDatabase",
   "CourseFolder",
   "Running",
@@ -167,31 +54,31 @@ gtc_tags_to_ignore[] = {
   nullptr,
 };
 
-static void
-gtc_rd_init(const QString& fname)
+void
+GtrnctrFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, gtc_map, nullptr, gtc_tags_to_ignore);
+  xml_init(fname, build_xg_tag_map(this, gtc_map), nullptr, gtc_tags_to_ignore, nullptr, true);
 }
 
-static void
-gtc_read()
+void
+GtrnctrFormat::read()
 {
   xml_read();
 }
 
-static void
-gtc_rd_deinit()
+void
+GtrnctrFormat::rd_deinit()
 {
   xml_deinit();
 }
 
-static void
-gtc_wr_init(const QString& fname)
+void
+GtrnctrFormat::wr_init(const QString& fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 
   if (opt_sport) {
-    for (int i = 0; i < MAX_SPORTS; i++) {
+    for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {
       if (0 == case_ignore_strncmp(opt_sport, gtc_sportlist[i], 2)) {
         gtc_sport = i;
         break;
@@ -201,16 +88,14 @@ gtc_wr_init(const QString& fname)
   gtc_course_flag = atoi(opt_course);
 }
 
-static void
-gtc_wr_deinit()
+void
+GtrnctrFormat::wr_deinit()
 {
   gbfclose(ofd);
 }
 
-static int gtc_indent_level;
-
-static void
-gtc_write_xml(int indent, const char* fmt, ...)
+void
+GtrnctrFormat::gtc_write_xml(int indent, const char* fmt, ...)
 {
   va_list args;
 
@@ -230,8 +115,8 @@ gtc_write_xml(int indent, const char* fmt, ...)
   va_end(args);
 }
 
-static void
-gtc_write_xml(int indent, const QString& s)
+void
+GtrnctrFormat::gtc_write_xml(int indent, const QString& s)
 {
   if (indent < 0) {
     gtc_indent_level--;
@@ -245,21 +130,21 @@ gtc_write_xml(int indent, const QString& s)
 
 }
 
-static void
-gtc_lap_start(const route_head*)
+void
+GtrnctrFormat::gtc_lap_start(const route_head* /*unused*/)
 {
   gtc_least_time = gpsbabel::DateTime();
   gtc_most_time = gpsbabel::DateTime();
 }
 
-static computed_trkdata
-gtc_new_study_lap(const route_head* rte)
+computed_trkdata
+GtrnctrFormat::gtc_new_study_lap(const route_head* rte)
 {
   return track_recompute(rte);
 }
 
-static void
-gtc_study_lap(const Waypoint* wpt)
+void
+GtrnctrFormat::gtc_study_lap(const Waypoint* wpt)
 {
   if (wpt->creation_time.isValid() && (!gtc_least_time.isValid())) {
     gtc_least_time = wpt->GetCreationTime();
@@ -279,8 +164,8 @@ gtc_study_lap(const Waypoint* wpt)
   }
 }
 
-static void
-gtc_waypt_pr(const Waypoint* wpt)
+void
+GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
 {
   if (wpt->wpt_flags.is_split != 0) {
     gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
@@ -335,8 +220,8 @@ gtc_waypt_pr(const Waypoint* wpt)
   gtc_write_xml(-1, "</Trackpoint>\n");
 }
 
-static void
-gtc_fake_hdr(const computed_trkdata& tdata)
+void
+GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
 {
   /* handle the CourseLap_t or the ActivityLap_t types. */
   /* note that the elements must appear in the order required by the schema. */
@@ -387,13 +272,16 @@ gtc_fake_hdr(const computed_trkdata& tdata)
 
 }
 
-static void
-gtc_act_hdr(const route_head* rte)
+void
+GtrnctrFormat::gtc_act_hdr(const route_head* rte)
 {
   gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
-  route_disp(rte, gtc_study_lap);
+  auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {
+    gtc_study_lap(waypointp);
+  };
+  route_disp(rte, gtc_study_lap_lambda);
   if (gtc_least_time.isValid()) {
     gtc_write_xml(0, "<Id>%s</Id>\n",
                   CSTR(gtc_least_time.toPrettyString()));
@@ -406,25 +294,28 @@ gtc_act_hdr(const route_head* rte)
   gtc_write_xml(1,"<Track>\n");
 }
 
-static void
-gtc_act_ftr(const route_head*)
+void
+GtrnctrFormat::gtc_act_ftr(const route_head* /*unused*/)
 {
   gtc_write_xml(-1, "</Track>\n");
   gtc_write_xml(-1, "</Lap>\n");
   gtc_write_xml(-1, "</Activity>\n");
 }
 
-static void
-gtc_crs_hdr(const route_head* rte)
+void
+GtrnctrFormat::gtc_crs_hdr(const route_head* rte)
 {
 
   gtc_write_xml(1, "<Course>\n");
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
-  route_disp(rte, gtc_study_lap);
+  auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {
+    gtc_study_lap(waypointp);
+  };
+  route_disp(rte, gtc_study_lap_lambda);
 
   if (!rte->rte_name.isEmpty()) {
-    QString name = rte->rte_name.left(GTC_MAX_NAME_LEN);
+    QString name = rte->rte_name.left(kGtcMaxNameLen);
     gtc_write_xml(0, QString("<Name>%1</Name>\n").arg(name));
   } else {
     gtc_write_xml(0, "<Name>New Course</Name>\n");
@@ -436,27 +327,42 @@ gtc_crs_hdr(const route_head* rte)
   gtc_write_xml(1,"<Track>\n");
 }
 
-static void
-gtc_crs_ftr(const route_head*)
+void
+GtrnctrFormat::gtc_crs_ftr(const route_head* /*unused*/)
 {
   gtc_write_xml(-1,"</Track>\n");
   gtc_write_xml(-1, "</Course>\n");
 
 }
 
-static void
-gtc_write()
+void
+GtrnctrFormat::write()
 {
   gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");
   gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
 
+  auto gtc_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    gtc_waypt_pr(waypointp);
+  };
   if (gtc_course_flag) {
     gtc_write_xml(1, "<Courses>\n");
-    track_disp_all(gtc_crs_hdr, gtc_crs_ftr, gtc_waypt_pr);
+    auto gtc_crs_hdr_lambda = [this](const route_head* rte)->void {
+      gtc_crs_hdr(rte);
+    };
+    auto gtc_crs_ftr_lambda = [this](const route_head* rte)->void {
+      gtc_crs_ftr(rte);
+    };
+    track_disp_all(gtc_crs_hdr_lambda, gtc_crs_ftr_lambda, gtc_waypt_pr_lambda);
     gtc_write_xml(-1, "</Courses>\n");
   } else {
     gtc_write_xml(1, "<Activities>\n");
-    track_disp_all(gtc_act_hdr, gtc_act_ftr, gtc_waypt_pr);
+    auto gtc_act_hdr_lambda = [this](const route_head* rte)->void {
+      gtc_act_hdr(rte);
+    };
+    auto gtc_act_ftr_lambda = [this](const route_head* rte)->void {
+      gtc_act_ftr(rte);
+    };
+    track_disp_all(gtc_act_hdr_lambda, gtc_act_ftr_lambda, gtc_waypt_pr_lambda);
     gtc_write_xml(-1, "</Activities>\n");
   }
 
@@ -464,39 +370,39 @@ gtc_write()
 }
 
 void
-gtc_trk_s(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   trk_head = new route_head;
   track_add_head(trk_head);
 }
 
 void
-gtc_trk_ident(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_ident(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   trk_head->rte_name = args;
 }
 
 void
-gtc_trk_lap_s(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_lap_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   lap_ct++;
   lap_s = 1;
 }
 
 void
-gtc_trk_lap_e(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_lap_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   lap_s = 0;
 }
 
 void
-gtc_trk_pnt_s(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_pnt_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp = new Waypoint;
 }
 
 void
-gtc_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_pnt_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     if (lap_s) {
@@ -519,62 +425,62 @@ gtc_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
 }
 
 void
-gtc_trk_utc(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_utc(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->creation_time = xml_parse_time(args);
 }
 
 void
-gtc_trk_lat(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_lat(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->latitude = args.toDouble();
 }
 
 void
-gtc_trk_long(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_long(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->longitude = args.toDouble();
 }
 
 void
-gtc_trk_alt(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_alt(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->altitude = args.toDouble();
 }
 
-void gtc_trk_dist(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_trk_dist(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->odometer_distance = args.toDouble();
 }
-void gtc_trk_hr(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_trk_hr(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->heartrate = args.toDouble();
 }
-void gtc_trk_cad(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_trk_cad(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->cadence = args.toDouble();
 }
 
 void
-gtc_trk_pwr(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_pwr(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->power = args.toDouble();
 }
 
 void
-gtc_trk_spd(xg_string args, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_trk_spd(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
   WAYPT_SET(wpt_tmp, speed, args.toDouble());
 }
 
 void
-gtc_wpt_crs_s(const QString&, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_wpt_crs_s(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp = new Waypoint;
 }
 
 void
-gtc_wpt_crs_e(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_wpt_crs_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -586,14 +492,14 @@ gtc_wpt_crs_e(xg_string, const QXmlStreamAttributes*)
 }
 
 void
-gtc_wpt_pnt_s(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_wpt_pnt_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp = new Waypoint;
   lap_ct++;
 }
 
 void
-gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
+GtrnctrFormat::gtc_wpt_pnt_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
@@ -607,45 +513,25 @@ gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
   wpt_tmp = nullptr;
 }
 
-void gtc_wpt_ident(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_wpt_ident(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->shortname = (args);
   /* Set also as notes for compatibility with garmin usb format */
   wpt_tmp->notes = (args);
 }
-void gtc_wpt_lat(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_wpt_lat(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->latitude = args.toDouble();
 }
-void gtc_wpt_long(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_wpt_long(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->longitude = args.toDouble();
 }
-void gtc_wpt_icon(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_wpt_icon(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->icon_descr = args;
 }
-void gtc_wpt_notes(const QString& args, const QXmlStreamAttributes*)
+void GtrnctrFormat::gtc_wpt_notes(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->description = args;
 }
-
-ff_vecs_t gtc_vecs = {
-  ff_type_file,
-  {
-    ff_cap_read 			/* waypoints */,
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  gtc_rd_init,
-  gtc_wr_init,
-  gtc_rd_deinit,
-  gtc_wr_deinit,
-  gtc_read,
-  gtc_write,
-  nullptr,
-  &gtc_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-};
