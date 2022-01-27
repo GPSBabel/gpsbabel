@@ -21,10 +21,16 @@
 
 #include "humminbird.h"
 
-#include "defs.h"
-#include <QMap>
-#include <cmath>
-#include <cstdio>
+#include <QMap>                 // for QMap
+#include <Qt>                   // for CaseInsensitive
+
+#include <cmath>                // for atan, tan, M_PI, log, sinh
+#include <cstdio>               // for snprintf, SEEK_SET
+#include <cstring>              // for strncpy, memcpy, memset
+
+#include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, si_round, xcalloc, track_add_wpt, xstrndup, mkshort, mkshort_del_handle, mkshort_new_handle, setshort_badchars, setshort_defname, setshort_length, setshort_mustuniq, setshort_...
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define MYNAME "humminbird"
 

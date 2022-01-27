@@ -21,11 +21,16 @@
 #ifndef HUMMINBIRD_H_INCLUDED_
 #define HUMMINBIRD_H_INCLUDED_
 
-#include "defs.h"
-#include <QMap>
-#include <cmath>
-#include <cstdio>
-#include "format.h"
+#include <QMap>      // for QMap
+#include <QString>   // for QString
+#include <QVector>   // for QVector
+
+#include <cstdint>   // for int32_t, uint32_t
+
+#include "defs.h"    // for ff_cap, arglist_t, ff_cap_read, Waypoint, route_head, ff_cap_write, short_handle, CET_CHARSET_ASCII, ff_type, ff_type_file
+#include "format.h"  // for Format
+#include "gbfile.h"  // for gbfile
+
 
 class HumminbirdBase
 {
