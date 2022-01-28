@@ -282,7 +282,7 @@ TefXMLFormat::rd_init(const QString& fname)
   item_count = -1;
   version = 1.5;
 
-  xml_init(fname, build_xg_tag_map(this, tef_xml_map), nullptr);
+  xml_init(fname, build_xg_tag_map(this, tef_xml_map), nullptr, nullptr, nullptr, true);
 }
 
 void
