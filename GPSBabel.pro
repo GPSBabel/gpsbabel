@@ -242,6 +242,7 @@ HEADERS =  \
   shape.h \
   strptime.h \
   subrip.h \
+  tef_xml.h \
   unicsv.h \
   units.h \
   vecs.h \
