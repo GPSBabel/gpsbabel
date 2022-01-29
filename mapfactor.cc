@@ -16,30 +16,24 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include "defs.h"
-#include "src/core/file.h"
-#include "src/core/xmlstreamwriter.h"
-#include <QDebug>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
+#include "mapfactor.h"
 
-static gpsbabel::File* oqfile;
-static QXmlStreamWriter* writer;
+#include <QByteArray>                  // for QByteArray
+#include <QIODevice>                   // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QtGlobal>                    // for qPrintable
+#include <QStringLiteral>              // for QStringLiteral
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
+#include <QXmlStreamReader>            // for QXmlStreamReader, QXmlStreamReader::EndElement, QXmlStreamReader::StartElement
+#include <QXmlStreamWriter>            // for QXmlStreamWriter
 
-static
-QVector<arglist_t> mapfactor_args = {
-};
+#include "defs.h"                      // for Waypoint, fatal, waypt_add, waypt_disp_all
+#include "src/core/file.h"             // for File
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+
 
 #define MYNAME "mapfactor"
 
-// This really should be class-local...
-static QXmlStreamReader reader;
-static QString mapfactor_read_fname;
-static  const double milliarcseconds = 60.0 * 60.0 * 1000.0;
-
-geocache_container wpt_container(const QString&);
-
-static void MapfactorRead()
+void MapfactorFormat::MapfactorRead()
 {
   Waypoint* wpt = nullptr;
 
@@ -66,14 +60,14 @@ static void MapfactorRead()
   }
 }
 
-static void
-mapfactor_rd_init(const QString& fname)
+void
+MapfactorFormat::rd_init(const QString& fname)
 {
   mapfactor_read_fname = fname;
 }
 
-static void
-mapfactor_read()
+void
+MapfactorFormat::read()
 {
   gpsbabel::File file(mapfactor_read_fname);
   file.open(QIODevice::ReadOnly);
@@ -89,14 +83,8 @@ mapfactor_read()
   }
 }
 
-
-static void
-mapfactor_rd_deinit()
-{
-}
-
-static void
-mapfactor_wr_init(const QString& fname)
+void
+MapfactorFormat::wr_init(const QString& fname)
 {
   oqfile = new gpsbabel::File(fname);
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
@@ -107,8 +95,8 @@ mapfactor_wr_init(const QString& fname)
   writer->writeStartDocument();
 }
 
-static void
-mapfactor_wr_deinit()
+void
+MapfactorFormat::wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -118,8 +106,8 @@ mapfactor_wr_deinit()
   oqfile = nullptr;
 }
 
-static void
-mapfactor_waypt_pr(const Waypoint* waypointp)
+void
+MapfactorFormat::mapfactor_waypt_pr(const Waypoint* waypointp) const
 {
   writer->writeStartElement(QStringLiteral("item"));
 
@@ -129,30 +117,17 @@ mapfactor_waypt_pr(const Waypoint* waypointp)
   writer->writeEndElement();
 }
 
-static void
-mapfactor_write()
+void
+MapfactorFormat::write()
 {
   writer->writeStartElement(QStringLiteral("favourites"));
   writer->writeAttribute(QStringLiteral("version"), QStringLiteral("1"));
   // TODO: This could be moved to wr_init, but the pre GPX version put the two
   // lines above this, so mimic that behaviour exactly.
   writer->setAutoFormatting(true);
-  waypt_disp_all(mapfactor_waypt_pr);
+  auto mapfactor_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    mapfactor_waypt_pr(waypointp);
+  };
+  waypt_disp_all(mapfactor_waypt_pr_lambda);
   writer->writeEndElement();
 }
-
-ff_vecs_t mapfactor_vecs = {
-  ff_type_file,
-  { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none },
-  mapfactor_rd_init,
-  mapfactor_wr_init,
-  mapfactor_rd_deinit,
-  mapfactor_wr_deinit,
-  mapfactor_read,
-  mapfactor_write,
-  nullptr,
-  &mapfactor_args,
-  CET_CHARSET_UTF8, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-};

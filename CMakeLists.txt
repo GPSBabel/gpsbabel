@@ -220,6 +220,7 @@ set(HEADERS
   defs.h
   dg-100.h
   energympro.h
+  exif.h
   explorist_ini.h
   filter.h
   filter_vecs.h
@@ -239,14 +240,17 @@ set(HEADERS
   globalsat_sport.h
   gpx.h
   grtcirc.h
+  gtrnctr.h
   heightgrid.h
   holux.h
+  html.h
   inifile.h
   kml.h
   legacyformat.h
   lowranceusr.h
   magellan.h
   mapbar_track.h
+  mapfactor.h
   mynav.h
   navilink.h
   nmea.h
@@ -254,11 +258,14 @@ set(HEADERS
   random.h
   session.h
   shape.h
+  skytraq.h
   strptime.h
   subrip.h
+  teletype.h
   unicsv.h
   units.h
   vecs.h
+  wintec_tes.h
   xcsv.h
   xmlgeneric.h
   jeeps/garminusb.h
