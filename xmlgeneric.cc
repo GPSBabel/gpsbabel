@@ -67,7 +67,7 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
  * xml strains and insulates us from a lot of the grubbiness of expat.
  */
 
-XgCallbackBase*
+static XgCallbackBase*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   const QByteArray key = tag.toUtf8();
@@ -80,9 +80,9 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
   return nullptr;
 }
 
-void
+static void
 xml_common_init(const QString& fname, const char* encoding,
-         const char** ignorelist, const char** skiplist)
+                const char* const* ignorelist, const char* const* skiplist)
 {
   rd_fname = fname;
 
@@ -109,7 +109,7 @@ xml_common_init(const QString& fname, const char* encoding,
 
 void
 xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
-         const char** ignorelist, const char** skiplist, bool dynamic_tbl)
+         const char* const* ignorelist, const char* const* skiplist, bool dynamic_tbl)
 {
   xg_tag_tbl = tbl;
   dynamic_tag_tbl = dynamic_tbl;
@@ -119,12 +119,12 @@ xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encodin
 
 void
 xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding,
-         const char** ignorelist, const char** skiplist)
+         const char* const* ignorelist, const char* const* skiplist)
 {
   xg_tag_tbl = new QList<xg_tag_map_entry>;
   dynamic_tag_tbl = true;
   for (xg_tag_mapping* tm = tbl; tm->tag_cb != nullptr; ++tm) {
-  auto* cb = new XgFunctionPtrCallback(tm->tag_cb);
+    auto* cb = new XgFunctionPtrCallback(tm->tag_cb);
     xg_tag_tbl->append({cb, tm->cb_type, tm->tag_name});
   }
 
@@ -155,10 +155,10 @@ xml_deinit()
 static xg_shortcut
 xml_shortcut(QStringView name)
 {
-   QString key = name.toString();
-   if (xg_shortcut_taglist->contains(key)) {
-     return xg_shortcut_taglist->value(key);
-   }
+  QString key = name.toString();
+  if (xg_shortcut_taglist->contains(key)) {
+    return xg_shortcut_taglist->value(key);
+  }
   return xg_shortcut_none;
 }
 
@@ -191,7 +191,7 @@ xml_run_parser(QXmlStreamReader& reader)
         goto readnext;
       default:
         break;
-     }
+      }
 
       current_tag.append(QLatin1Char('/'));
       current_tag.append(reader.qualifiedName());
