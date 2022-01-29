@@ -253,12 +253,14 @@ set(HEADERS
   random.h
   session.h
   shape.h
+  skytraq.h
   strptime.h
   subrip.h
   teletype.h
   unicsv.h
   units.h
   vecs.h
+  wintec_tes.h
   xcsv.h
   xmlgeneric.h
   jeeps/garminusb.h
