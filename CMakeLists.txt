@@ -256,6 +256,7 @@ set(HEADERS
   skytraq.h
   strptime.h
   subrip.h
+  teletype.h
   unicsv.h
   units.h
   vecs.h
