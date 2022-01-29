@@ -19,74 +19,40 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <cstdint>
-#include <ctime>                   // for localtime
+#include "html.h"
 
 #include <QString>                 // for QString, operator!=
-#include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
 
-#include "defs.h"
-#include "formspec.h"              // for FsChainFind, kFsGpx
-#include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfile
+#include <cstdint>                 // for int32_t
+#include <ctime>                   // for localtime, time_t, tm
+
+#include "defs.h"                  // for Waypoint, xfree, geocache_data, html_entitize, CSTR, pretty_deg_format, rot13, strip_nastyhtml, waypt_disp_all, utf_string, METERS_TO_FEET, gpsbabel_testmode, gs_get_cachetype, gs_get_container, mkshort_del_handle, mkshort_from_wpt, mkshort_new_handle
+#include "formspec.h"              // for FormatSpecificDataList, kFsGpx
+#include "gbfile.h"                // for gbfprintf, gbfclose, gbfopen, gbfputs
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
-#include "src/core/xmltag.h"       // for xml_findfirst, xml_attribute, xml_tag, fs_xml, xml_findnext
+#include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
-
-static gbfile* file_out;
-static short_handle mkshort_handle;
-
-static char* stylesheet = nullptr;
-static char* html_encrypt = nullptr;
-static char* includelogs = nullptr;
-static char* degformat = nullptr;
-static char* altunits = nullptr;
 
 #define MYNAME "HTML"
 
-static
-QVector<arglist_t> html_args = {
-  {
-    "stylesheet", &stylesheet,
-    "Path to HTML style sheet", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "encrypt", &html_encrypt,
-    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "logs", &includelogs,
-    "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "degformat", &degformat,
-    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "altunits", &altunits,
-    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-
-
-static void
-wr_init(const QString& fname)
+void
+HtmlFormat::wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
 }
 
-static void
-wr_deinit()
+void
+HtmlFormat::wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
 }
 
-static void
-html_disp(const Waypoint* wpt)
+void
+HtmlFormat::html_disp(const Waypoint* wpt) const
 {
   int32_t utmz;
   double utme;
@@ -227,8 +193,8 @@ html_disp(const Waypoint* wpt)
   gbfprintf(file_out, "</td></tr></table>\n");
 }
 
-static void
-html_index(const Waypoint* wpt)
+void
+HtmlFormat::html_index(const Waypoint* wpt) const
 {
   char* sn = html_entitize(wpt->shortname);
   char* d = html_entitize(wpt->description);
@@ -239,8 +205,8 @@ html_index(const Waypoint* wpt)
   xfree(d);
 }
 
-static void
-data_write()
+void
+HtmlFormat::write()
 {
   setshort_length(mkshort_handle, 6);
 
@@ -266,29 +232,20 @@ data_write()
   gbfprintf(file_out, "<body>\n");
 
   gbfprintf(file_out, "<p class=\"index\">\n");
-  waypt_disp_all(html_index);
+
+  auto html_index_lambda = [this](const Waypoint* waypointp)->void {
+    html_index(waypointp);
+  };
+
+  waypt_disp_all(html_index_lambda);
   gbfprintf(file_out, "</p>\n");
 
-  waypt_disp_all(html_disp);
+  auto html_disp_lambda = [this](const Waypoint* waypointp)->void {
+    html_disp(waypointp);
+  };
+  waypt_disp_all(html_disp_lambda);
 
   gbfprintf(file_out, "</body>");
   gbfprintf(file_out, "</html>");
 
 }
-
-
-ff_vecs_t html_vecs = {
-  ff_type_file,
-  { ff_cap_write, ff_cap_none, ff_cap_none },
-  nullptr,
-  wr_init,
-  nullptr,
-  wr_deinit,
-  nullptr,
-  data_write,
-  nullptr,
-  &html_args,
-  CET_CHARSET_UTF8, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-};
