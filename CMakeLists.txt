@@ -259,6 +259,7 @@ set(HEADERS
   unicsv.h
   units.h
   vecs.h
+  wintec_tes.h
   xcsv.h
   xmlgeneric.h
   jeeps/garminusb.h

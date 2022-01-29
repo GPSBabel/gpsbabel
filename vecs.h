@@ -48,6 +48,7 @@
 #include "skytraq.h"
 #include "subrip.h"
 #include "unicsv.h"
+#include "wintec_tes.h"
 #include "xcsv.h"
 
 extern ff_vecs_t geo_vecs;
@@ -122,7 +123,6 @@ extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t teletype_vecs;
-extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
@@ -315,7 +315,7 @@ private:
   LegacyFormat teletype_fmt {teletype_vecs};
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
-  LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
+  WintecTesFormat wintec_tes_fmt;
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
