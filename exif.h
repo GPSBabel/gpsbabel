@@ -157,6 +157,10 @@ private:
     Rational(T n, T d) : num{n}, den{d} {}
   };
 
+  /* Constants */
+
+  static constexpr uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
+
   /* Member Functions */
 
   static void print_buff(const char* buf, int sz, const char* cmt);
@@ -211,8 +215,6 @@ private:
   char* opt_overwrite{};
   char* opt_frame{};
   char* opt_name{};
-
-  static constexpr uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
