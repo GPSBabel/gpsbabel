@@ -253,6 +253,7 @@ set(HEADERS
   random.h
   session.h
   shape.h
+  skytraq.h
   strptime.h
   subrip.h
   unicsv.h
