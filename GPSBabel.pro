@@ -228,6 +228,7 @@ HEADERS =  \
   grtcirc.h \
   heightgrid.h \
   holux.h \
+  html.h \
   inifile.h \
   kml.h \
   legacyformat.h \
