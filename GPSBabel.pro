@@ -236,6 +236,7 @@ HEADERS =  \
   legacyformat.h \
   lowranceusr.h \
   magellan.h \
+  mapfactor.h \
   mynav.h \
   navilink.h \
   nmea.h \
