@@ -178,6 +178,7 @@ public:
 
   QVector<ff_cap> get_cap() const override
   {
+    /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
@@ -265,6 +266,7 @@ public:
 
   QVector<ff_cap> get_cap() const override
   {
+    /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
@@ -330,6 +332,7 @@ public:
 
   QVector<ff_cap> get_cap() const override
   {
+    /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
