@@ -44,6 +44,7 @@ public:
 
   QVector<ff_cap> get_cap() const override
   {
+    /*          waypoints,      tracks,      routes */
     return { ff_cap_write, ff_cap_none, ff_cap_none };
   }
 
