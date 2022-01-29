@@ -42,6 +42,7 @@
 #include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
+#include "mapbar_track.h"
 #include "mapfactor.h"
 #include "mynav.h"
 #include "nmea.h"
@@ -125,7 +126,6 @@ extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
-extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
 #endif // MAXIMAL_ENABLED
 
@@ -319,7 +319,7 @@ private:
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
-  LegacyFormat mapbar_track_fmt {mapbar_track_vecs};
+  MapbarTrackFormat mapbar_track_fmt;
   LegacyFormat f90g_track_fmt {f90g_track_vecs};
   MapfactorFormat mapfactor_fmt;
   EnergymproFormat energympro_fmt;
