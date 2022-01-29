@@ -261,6 +261,7 @@ set(HEADERS
   skytraq.h
   strptime.h
   subrip.h
+  tef_xml.h
   teletype.h
   unicsv.h
   units.h

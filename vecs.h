@@ -52,6 +52,7 @@
 #include "shape.h"
 #include "skytraq.h"
 #include "subrip.h"
+#include "tef_xml.h"
 #include "teletype.h"
 #include "unicsv.h"
 #include "wintec_tes.h"
@@ -90,7 +91,6 @@ extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
-extern ff_vecs_t tef_xml_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t gtm_vecs;
@@ -269,7 +269,7 @@ private:
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
-  LegacyFormat tef_xml_fmt {tef_xml_vecs};
+  TefXMLFormat tef_xml_fmt;
   LegacyFormat bcr_fmt {bcr_vecs};
   LegacyFormat ignr_fmt {ignr_vecs};
   UnicsvFormat unicsv_fmt;
