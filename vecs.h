@@ -30,6 +30,7 @@
 #include "defs.h"
 #include "dg-100.h"
 #include "energympro.h"
+#include "exif.h"
 #include "format.h"
 #include "garmin_fit.h"
 #include "geojson.h"
@@ -37,6 +38,7 @@
 #include "globalsat_sport.h"
 #include "gpx.h"
 #include "gtrnctr.h"
+#include "html.h"
 #include "kml.h"
 #include "legacyformat.h"
 #include "lowranceusr.h"
@@ -46,8 +48,11 @@
 #include "qstarz_bl_1000.h"
 #include "random.h"
 #include "shape.h"
+#include "skytraq.h"
 #include "subrip.h"
+#include "teletype.h"
 #include "unicsv.h"
+#include "wintec_tes.h"
 #include "xcsv.h"
 
 extern ff_vecs_t geo_vecs;
@@ -66,7 +71,6 @@ extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t text_vecs;
-extern ff_vecs_t html_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
@@ -103,7 +107,6 @@ extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
-extern ff_vecs_t exif_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t humminbird_vecs;
 extern ff_vecs_t humminbird_ht_vecs;
@@ -120,11 +123,6 @@ extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
-extern ff_vecs_t skytraq_vecs;
-extern ff_vecs_t teletype_vecs;
-extern ff_vecs_t skytraq_fvecs;
-extern ff_vecs_t miniHomer_vecs;
-extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t mapbar_track_vecs;
 extern ff_vecs_t f90g_track_vecs;
@@ -253,7 +251,7 @@ private:
 #endif
   LegacyFormat gpl_fmt {gpl_vecs};
   LegacyFormat text_fmt {text_vecs};
-  LegacyFormat html_fmt {html_vecs};
+  HtmlFormat html_fmt;
   LegacyFormat igc_fmt {igc_vecs};
   LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
@@ -298,7 +296,7 @@ private:
   LegacyFormat destinator_poi_fmt {destinator_poi_vecs};
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
-  LegacyFormat exif_fmt {exif_vecs};
+  ExifFormat exif_fmt;
   LegacyFormat igo8_fmt {igo8_vecs};
   LegacyFormat humminbird_fmt {humminbird_vecs};
   LegacyFormat humminbird_ht_fmt {humminbird_ht_vecs};
@@ -313,11 +311,11 @@ private:
   LegacyFormat mmo_fmt {mmo_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   LegacyFormat enigma_fmt {enigma_vecs};
-  LegacyFormat skytraq_fmt {skytraq_vecs};
-  LegacyFormat teletype_fmt {teletype_vecs};
-  LegacyFormat skytraq_ffmt {skytraq_fvecs};
-  LegacyFormat miniHomer_fmt {miniHomer_vecs};
-  LegacyFormat wintec_tes_fmt {wintec_tes_vecs};
+  SkytraqFormat skytraq_fmt;
+  TeletypeFormat teletype_fmt;
+  SkytraqfileFormat skytraq_ffmt;
+  MinihomerFormat miniHomer_fmt;
+  WintecTesFormat wintec_tes_fmt;
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;

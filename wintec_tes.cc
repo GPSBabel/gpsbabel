@@ -20,26 +20,30 @@
 
  */
 
-#include "defs.h"
+#include "wintec_tes.h"
+
+#include <ctime>                   // for time_t, tm
+#include <cstring>                 // for memset
+
+#include "defs.h"                  // for Waypoint, mkgmtime, track_add_head, track_add_wpt, waypt_add, route_head
+
 
 #define MYNAME "wintec_tes"
 
-static gbfile* fin;
-
-static void
-wintec_tes_rd_init(const QString& fname)
+void
+WintecTesFormat::rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
 
-static void
-wintec_tes_rd_deinit()
+void
+WintecTesFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-static time_t
-wintec_date_to_time(uint32_t w)
+time_t
+WintecTesFormat::wintec_date_to_time(uint32_t w)
 {
   struct tm tm;
   memset(&tm, 0, sizeof(tm));
@@ -53,8 +57,8 @@ wintec_date_to_time(uint32_t w)
   return mkgmtime(&tm);
 }
 
-static void
-wintec_tes_read()
+void
+WintecTesFormat::read()
 {
   auto* trk = new route_head;
   track_add_head(trk);
@@ -91,28 +95,3 @@ wintec_tes_read()
     track_add_wpt(trk, wpt);
   }
 }
-
-static
-QVector<arglist_t> wintec_tes_args = {
-};
-
-ff_vecs_t wintec_tes_vecs = {
-  ff_type_file,
-  {
-    ff_cap_read 			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  wintec_tes_rd_init,
-  nullptr,
-  wintec_tes_rd_deinit,
-  nullptr,
-  wintec_tes_read,
-  nullptr,
-  nullptr,
-  &wintec_tes_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};

@@ -124,14 +124,12 @@ struct buf_head {
   unsigned            checksum;
 };
 
-namespace { // fix ODR violation with skytraq
-  struct read_state {
-    route_head*          route_head_;
-    unsigned            wpn, tpn;
-  
-    struct buf_head     data;
-  };
-}
+struct read_state {
+  route_head*          route_head_;
+  unsigned            wpn, tpn;
+
+  struct buf_head     data;
+};
 
 static void db(int l, const char* msg, ...)
 {

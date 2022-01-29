@@ -207,6 +207,7 @@ HEADERS =  \
   defs.h \
   dg-100.h \
   energympro.h \
+  exif.h \
   explorist_ini.h \
   filter.h \
   filter_vecs.h \
@@ -229,6 +230,7 @@ HEADERS =  \
   gtrnctr.h \
   heightgrid.h \
   holux.h \
+  html.h \
   inifile.h \
   kml.h \
   legacyformat.h \
@@ -241,11 +243,14 @@ HEADERS =  \
   random.h \
   session.h \
   shape.h \
+  skytraq.h \
   strptime.h \
   subrip.h \
+  teletype.h \
   unicsv.h \
   units.h \
   vecs.h \
+  wintec_tes.h \
   xcsv.h \
   xmlgeneric.h \
   jeeps/garminusb.h \
