@@ -44,16 +44,6 @@
 
 #define MYNAME "gtc"
 
-const char* GtrnctrFormat::gtc_tags_to_ignore[] = {
-  "TrainingCenterDatabase",
-  "CourseFolder",
-  "Running",
-  "Biking",
-  "Other",
-  "Multisport",
-  nullptr,
-};
-
 void
 GtrnctrFormat::rd_init(const QString& fname)
 {

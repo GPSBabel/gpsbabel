@@ -83,6 +83,16 @@ private:
   static constexpr int kGtcMaxNameLen = 15;
   static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "MultiSport", "Other" };
 
+  static constexpr const char* gtc_tags_to_ignore[] = {
+    "TrainingCenterDatabase",
+    "CourseFolder",
+    "Running",
+    "Biking",
+    "Other",
+    "Multisport",
+    nullptr,
+  };
+
   /* Member Functions */
 
   void gtc_write_xml(int indent, const char* fmt, ...);
@@ -219,8 +229,6 @@ private:
     { &GtrnctrFormat::gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
     { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" }
   };
-
-  static const char* gtc_tags_to_ignore[];
 
   int gtc_indent_level{};
 };
