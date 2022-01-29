@@ -140,9 +140,9 @@ protected:
   int skytraq_probe() const;
   int skytraq_erase() const;
   void skytraq_set_location() const;
-  void rd_init(const QString& fname);
-  void read() const;
-  void rd_deinit();
+  void skytraq_rd_init(const QString& fname);
+  void skytraq_read() const;
+  void skytraq_rd_deinit();
 
   /* Data Members */
 
@@ -191,9 +191,9 @@ public:
     return 1;
   }
 
-  void rd_init(const QString& fname) override;
-  void read() override;
-  void rd_deinit() override;
+  void rd_init(const QString& fname) override {rd_init(fname);}
+  void read() override {read();}
+  void rd_deinit() override {rd_deinit();}
 
 private:
   /* Data Members */

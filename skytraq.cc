@@ -1172,7 +1172,7 @@ SkytraqBase::skytraq_set_location() const
 *******************************************************************************/
 
 void
-SkytraqBase::rd_init(const QString& fname)
+SkytraqBase::skytraq_rd_init(const QString& fname)
 {
   if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
     fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
@@ -1183,14 +1183,14 @@ SkytraqBase::rd_init(const QString& fname)
 }
 
 void
-SkytraqBase::rd_deinit()
+SkytraqBase::skytraq_rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = nullptr;
 }
 
 void
-SkytraqBase::read() const
+SkytraqBase::skytraq_read() const
 {
   if (opt_set_location) {
     skytraq_set_location();
@@ -1220,24 +1220,6 @@ SkytraqBase::read() const
     skytraq_set_baud(skytraq_baud);		// note that _system_restart resets baud rate anyway...
   }
   skytraq_system_restart();
-}
-
-void
-SkytraqFormat::rd_init(const QString& fname)
-{
-  SkytraqBase::rd_init(fname);
-}
-
-void
-SkytraqFormat::rd_deinit()
-{
-  SkytraqBase::rd_deinit();
-}
-
-void
-SkytraqFormat::read()
-{
-  SkytraqBase::read();
 }
 
 void
@@ -1428,13 +1410,13 @@ void
 MinihomerFormat::rd_init(const QString& fname)
 {
   opt_set_location=nullptr;	// otherwise it will lead to bus error
-  SkytraqBase::rd_init(fname);	// sets global var serial_handle
+  skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;
 }
 void
 MinihomerFormat::rd_deinit()
 {
-  SkytraqBase::rd_deinit();
+  skytraq_rd_deinit();
   mhport.clear();
 }
 #define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
@@ -1461,11 +1443,11 @@ MinihomerFormat::read()
     npoi++;
   }
   if (npoi == 0) {				// do not read if POIs are set (consider set & read distinct operations)
-    SkytraqBase::read();				// first read tracks (if not suppressed by cmd line params)
+    skytraq_read();				// first read tracks (if not suppressed by cmd line params)
     // we need this call it initialized waypoint list etc...
-    SkytraqBase::rd_deinit(); 		// skytraq_read called system_reset, which changes the baud rate.
+    skytraq_rd_deinit(); 		// skytraq_read called system_reset, which changes the baud rate.
 
-    SkytraqBase::rd_init(mhport);    // Lets start from scratch and re-init the port
+    skytraq_rd_init(mhport);    // Lets start from scratch and re-init the port
     miniHomer_get_poi();		// add POI as waypoints to the waypoints of the track
   }
 }
