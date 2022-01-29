@@ -149,11 +149,11 @@ QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<my_fun
  *
  */
 void xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
-              const char** ignorelist = nullptr,
-              const char** skiplist = nullptr, bool dynamic_tbl = false);
+              const char* const* ignorelist = nullptr,
+              const char* const* skiplist = nullptr, bool dynamic_tbl = false);
 void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding,
-              const char** ignorelist = nullptr,
-              const char** skiplist = nullptr);
+              const char* const* ignorelist = nullptr,
+              const char* const* skiplist = nullptr);
 void xml_read();
 void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
