@@ -28,7 +28,7 @@
 
 #include <QByteArray>            // for QByteArray
 #include <QDateTime>             // for QDateTime
-#include <QIntegerForSize>       // for qPrintable
+#include <QtGlobal>              // for qPrintable
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 #include <cstdarg>               // for va_end, va_list, va_start
