@@ -51,6 +51,7 @@ public:
 
   QVector<ff_cap> get_cap() const override
   {
+    /*         waypoints,      tracks,      routes */
     return { ff_cap_none, ff_cap_none, ff_cap_read };
   }
 
@@ -82,7 +83,6 @@ private:
   void tef_item_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv);
   void tef_point(xg_string /*unused*/, const QXmlStreamAttributes* attrv);
 
-
   /* Data Members */
 
   Waypoint* wpt_tmp{};
@@ -97,7 +97,7 @@ private:
     {
       "routevia", &routevia, "Include only via stations in route",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-    },
+    }
   };
 
   QList<xg_functor_map_entry<TefXMLFormat>>  tef_xml_map = {
