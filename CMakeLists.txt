@@ -220,6 +220,7 @@ set(HEADERS
   defs.h
   dg-100.h
   energympro.h
+  exif.h
   explorist_ini.h
   filter.h
   filter_vecs.h
