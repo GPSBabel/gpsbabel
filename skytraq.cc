@@ -26,7 +26,7 @@
 #include "skytraq.h"
 
 #include <QByteArray>       // for QByteArray
-#include <QIntegerForSize>  // for qPrintable
+#include <QtGlobal>         // for qPrintable
 #include <QLatin1Char>      // for QLatin1Char
 #include <QThread>          // for QThread
 

@@ -191,9 +191,9 @@ public:
     return 1;
   }
 
-  void rd_init(const QString& fname) override {rd_init(fname);}
-  void read() override {read();}
-  void rd_deinit() override {rd_deinit();}
+  void rd_init(const QString& fname) override {skytraq_rd_init(fname);}
+  void read() override {skytraq_read();}
+  void rd_deinit() override {skytraq_rd_deinit();}
 
 private:
   /* Data Members */
