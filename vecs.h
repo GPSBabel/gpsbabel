@@ -30,6 +30,7 @@
 #include "defs.h"
 #include "dg-100.h"
 #include "energympro.h"
+#include "f90g_track.h"
 #include "exif.h"
 #include "format.h"
 #include "garmin_fit.h"
@@ -126,7 +127,6 @@ extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
-extern ff_vecs_t f90g_track_vecs;
 #endif // MAXIMAL_ENABLED
 
 class Vecs
@@ -320,7 +320,7 @@ private:
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
   MapbarTrackFormat mapbar_track_fmt;
-  LegacyFormat f90g_track_fmt {f90g_track_vecs};
+  F90gTrackFormat f90g_track_fmt;
   MapfactorFormat mapfactor_fmt;
   EnergymproFormat energympro_fmt;
   MyNavFormat mynav_fmt;

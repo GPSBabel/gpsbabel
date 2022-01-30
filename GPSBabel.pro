@@ -209,6 +209,7 @@ HEADERS =  \
   energympro.h \
   exif.h \
   explorist_ini.h \
+  f90g_track.h \
   filter.h \
   filter_vecs.h \
   format.h \
