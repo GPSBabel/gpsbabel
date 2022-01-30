@@ -207,7 +207,9 @@ HEADERS =  \
   defs.h \
   dg-100.h \
   energympro.h \
+  exif.h \
   explorist_ini.h \
+  f90g_track.h \
   filter.h \
   filter_vecs.h \
   format.h \
@@ -226,14 +228,18 @@ HEADERS =  \
   globalsat_sport.h \
   gpx.h \
   grtcirc.h \
+  gtrnctr.h \
   heightgrid.h \
   holux.h \
   humminbird.h \
+  html.h \
   inifile.h \
   kml.h \
   legacyformat.h \
   lowranceusr.h \
   magellan.h \
+  mapbar_track.h \
+  mapfactor.h \
   mynav.h \
   navilink.h \
   nmea.h \
@@ -241,11 +247,15 @@ HEADERS =  \
   random.h \
   session.h \
   shape.h \
+  skytraq.h \
   strptime.h \
   subrip.h \
+  tef_xml.h \
+  teletype.h \
   unicsv.h \
   units.h \
   vecs.h \
+  wintec_tes.h \
   xcsv.h \
   xmlgeneric.h \
   jeeps/garminusb.h \

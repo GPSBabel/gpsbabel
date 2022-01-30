@@ -110,21 +110,6 @@ void KmlFormat::kml_step_color()
   kml_color_sequencer.seq = kml_color_sequencer.seq + kml_color_sequencer.step;
 }
 
-const char* KmlFormat::kml_tags_to_ignore[] = {
-  "kml",
-  "Document",
-  "Folder",
-  nullptr
-};
-
-const char* KmlFormat::kml_tags_to_skip[] = {
-  "Camera",
-  "LookAt",
-  "styleUrl",
-  "snippet",
-  nullptr
-};
-
 void KmlFormat::wpt_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   if (wpt_tmp) {
