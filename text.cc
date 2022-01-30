@@ -19,69 +19,26 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <cstdint>
-#include <ctime>                   // for localtime
+#include "text.h"
 
 #include <QString>                 // for QString, operator!=
-#include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
 
-#include "defs.h"
-#include "formspec.h"              // for FsChainFind, kFsGpx
-#include "gbfile.h"                // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
+#include <cstdint>                 // for int32_t
+#include <ctime>                   // for localtime, time_t, tm
+
+#include "defs.h"                  // for Waypoint, xfree, geocache_data, pretty_deg_format, rot13, strip_html, xasprintf, CSTR, METERS_TO_FEET, gs_get_cachetype, gs_get_container, mkshort_del_handle, mkshort_from_wpt, mkshort_new_handle, setshort_length, waypt_disp_all, xml_parse_time, utf_string
+#include "formspec.h"              // for FormatSpecificDataList, kFsGpx
+#include "gbfile.h"                // for gbfprintf, gbfputs, gbfclose, gbfopen
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
-#include "src/core/xmltag.h"       // for xml_findfirst, xml_attribute, xml_tag, fs_xml, xml_findnext
+#include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
-
-static gbfile* file_out;
-static short_handle mkshort_handle;
-
-static char* suppresssep = nullptr;
-static char* txt_encrypt = nullptr;
-static char* includelogs = nullptr;
-static char* degformat = nullptr;
-static char* altunits = nullptr;
-static char* split_output = nullptr;
-static int waypoint_count;
-static QString output_name;
 
 #define MYNAME "TEXT"
 
-static
-QVector<arglist_t> text_args = {
-  {
-    "nosep", &suppresssep,
-    "Suppress separator lines between waypoints",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "encrypt", &txt_encrypt,
-    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "logs", &includelogs,
-    "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "degformat", &degformat,
-    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "altunits", &altunits,
-    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "splitoutput", &split_output,
-    "Write each waypoint in a separate file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-
-};
-
-
-
-static void
-wr_init(const QString& fname)
+void
+TextFormat::wr_init(const QString& fname)
 {
   waypoint_count = 0;
   output_name = fname;
@@ -91,8 +48,8 @@ wr_init(const QString& fname)
   mkshort_handle = mkshort_new_handle();
 }
 
-static void
-wr_deinit()
+void
+TextFormat::wr_deinit()
 {
   if (!split_output) {
     gbfclose(file_out);
@@ -101,8 +58,8 @@ wr_deinit()
   output_name.clear();
 }
 
-static void
-text_disp(const Waypoint* wpt)
+void
+TextFormat::text_disp(const Waypoint* wpt)
 {
   int32_t utmz;
   double utme, utmn;
@@ -248,30 +205,15 @@ text_disp(const Waypoint* wpt)
   }
 }
 
-static void
-data_write()
+void
+TextFormat::write()
 {
   if (! suppresssep && !split_output) {
     gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
   }
   setshort_length(mkshort_handle, 6);
-  waypt_disp_all(text_disp);
+  auto text_disp_lambda = [this](const Waypoint* waypointp)->void {
+    text_disp(waypointp);
+  };
+  waypt_disp_all(text_disp_lambda);
 }
-
-
-ff_vecs_t text_vecs = {
-  ff_type_file,
-  { ff_cap_write, ff_cap_none, ff_cap_none},
-  nullptr,
-  wr_init,
-  nullptr,
-  wr_deinit,
-  nullptr,
-  data_write,
-  nullptr,
-  &text_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
-
-};

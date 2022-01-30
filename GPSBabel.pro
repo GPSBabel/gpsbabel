@@ -252,6 +252,7 @@ HEADERS =  \
   subrip.h \
   tef_xml.h \
   teletype.h \
+  text.h \
   unicsv.h \
   units.h \
   vecs.h \
