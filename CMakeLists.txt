@@ -244,6 +244,7 @@ set(HEADERS
   gtrnctr.h
   heightgrid.h
   holux.h
+  humminbird.h
   html.h
   inifile.h
   kml.h
