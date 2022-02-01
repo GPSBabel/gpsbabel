@@ -291,25 +291,25 @@ private:
   /* Member Functions */
 
   static garmin_fs_t* gpi_gmsd_init(Waypoint* wpt);
-  lc_string gpi_read_lc_string();
-  QString gpi_read_string(const char* field);
+  lc_string gpi_read_lc_string() const;
+  QString gpi_read_string(const char* field) const;
   void read_header();
   void read_poi(int sz, int tag);
   void read_poi_list(int sz);
   void read_poi_group(int sz, int tag);
   int read_tag(const char* caller, int tag, Waypoint* wpt);
-  void write_string(const char* str, char long_format);
+  void write_string(const char* str, char long_format) const;
   static bool compare_wpt_cb(const Waypoint* a, const Waypoint* b);
   static char compare_strings(const QString& s1, const QString& s2);
   static writer_data_t* wdata_alloc();
-  void wdata_free(GarminGPIFormat::writer_data_t* data);
+  static void wdata_free(GarminGPIFormat::writer_data_t* data);
   static void wdata_add_wpt(GarminGPIFormat::writer_data_t* data, Waypoint* wpt);
-  void wdata_check(GarminGPIFormat::writer_data_t* data);
-  int wdata_compute_size(GarminGPIFormat::writer_data_t* data);
-  void wdata_write(const GarminGPIFormat::writer_data_t* data);
-  void write_category(const char* unused, const unsigned char* image, int image_sz);
-  void write_header();
-  void enum_waypt_cb(const Waypoint* ref);
+  void wdata_check(GarminGPIFormat::writer_data_t* data) const;
+  int wdata_compute_size(GarminGPIFormat::writer_data_t* data) const;
+  void wdata_write(const GarminGPIFormat::writer_data_t* data) const;
+  void write_category(const char* unused, const unsigned char* image, int image_sz) const;
+  void write_header() const;
+  void enum_waypt_cb(const Waypoint* ref) const;
   static void load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz);
 
   /* Data Members */

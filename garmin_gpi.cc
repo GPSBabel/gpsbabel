@@ -113,7 +113,7 @@ GarminGPIFormat::gpi_gmsd_init(Waypoint* wpt)
 }
 
 GarminGPIFormat::lc_string
-GarminGPIFormat::gpi_read_lc_string()
+GarminGPIFormat::gpi_read_lc_string() const
 {
   lc_string result;
 
@@ -137,7 +137,7 @@ GarminGPIFormat::gpi_read_lc_string()
 
 /* read a standard string with or without 'EN' (or whatever) header */
 QString
-GarminGPIFormat::gpi_read_string(const char* field)
+GarminGPIFormat::gpi_read_string(const char* field) const
 {
   QByteArray string;
 
@@ -598,7 +598,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 *******************************************************************************/
 
 void
-GarminGPIFormat::write_string(const char* str, const char long_format)
+GarminGPIFormat::write_string(const char* str, const char long_format) const
 {
   int len = strlen(str);
   if (long_format) {
@@ -666,7 +666,7 @@ GarminGPIFormat::wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
 }
 
 void
-GarminGPIFormat::wdata_check(writer_data_t* data)
+GarminGPIFormat::wdata_check(writer_data_t* data) const
 {
   double center_lon;
 
@@ -730,7 +730,7 @@ GarminGPIFormat::wdata_check(writer_data_t* data)
 }
 
 int
-GarminGPIFormat::wdata_compute_size(writer_data_t* data)
+GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
 {
   int res = 0;
 
@@ -873,7 +873,7 @@ skip_empty_block:
 }
 
 void
-GarminGPIFormat::wdata_write(const writer_data_t* data)
+GarminGPIFormat::wdata_write(const writer_data_t* data) const
 {
   if (data->waypt_list.isEmpty()) {
     goto skip_empty_block;  /* do not issue an empty block */
@@ -1016,7 +1016,7 @@ skip_empty_block:
 }
 
 void
-GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* image, const int image_sz)
+GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* image, const int image_sz) const
 {
   int sz = wdata_compute_size(wdata);
   sz += 8;	/* string header */
@@ -1041,7 +1041,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
 }
 
 void
-GarminGPIFormat::write_header()
+GarminGPIFormat::write_header() const
 {
   time_t time = gpi_timestamp;
 
@@ -1072,7 +1072,7 @@ GarminGPIFormat::write_header()
 }
 
 void
-GarminGPIFormat::enum_waypt_cb(const Waypoint* ref)
+GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 {
   foreach (const Waypoint* cmp, wdata->waypt_list) {
 
