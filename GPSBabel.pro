@@ -223,6 +223,7 @@ HEADERS =  \
   gbfile.h \
   gbser.h \
   gbser_private.h \
+  gdb.h \
   geojson.h \
   ggv_bin.h \
   globalsat_sport.h \
