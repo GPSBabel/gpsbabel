@@ -103,7 +103,7 @@ GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
 
 #if GDB_DEBUG
 void
-GdbFormat::disp_summary(const gbfile* f)
+GdbFormat::disp_summary(const gbfile* f) const
 {
   int i, len;
 
@@ -133,7 +133,10 @@ GdbFormat::disp_summary(const gbfile* f)
   warning("\n");
 }
 #else
-#define disp_summary(a)
+void
+GdbFormat::disp_summary(const gbfile* /* f */) const
+{
+}
 #endif
 
 /*******************************************************************************/
@@ -160,7 +163,7 @@ GdbFormat::disp_summary(const gbfile* f)
 
 #define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
 
-QString GdbFormat::fread_cstr()
+QString GdbFormat::fread_cstr() const
 {
   QString rv;
   char* s = gdb_fread_cstr(fin);
@@ -189,7 +192,7 @@ GdbFormat::gdb_fread_cstr(gbfile* file_in)
 }
 
 QString
-GdbFormat::gdb_fread_strlist()
+GdbFormat::gdb_fread_strlist() const
 {
   QString res;
 
@@ -227,7 +230,7 @@ GdbFormat::gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const
 }
 
 Waypoint*
-GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact)
+GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
 {
   Waypoint* res = gdb_find_wayptq(&wayptq_in, wpt, exact);
   if (res == nullptr) {
@@ -237,7 +240,7 @@ GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact)
 }
 
 Waypoint*
-GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
+GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class) const
 {
   Waypoint* tmp = gdb_reader_find_waypt(ref, 1);
   if (tmp == nullptr) {
@@ -304,7 +307,7 @@ QString GdbFormat::gdb_to_ISO8601_duration(unsigned int seconds)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-void GdbFormat::FWRITE_CSTR(const QString& a)
+void GdbFormat::FWRITE_CSTR(const QString& a) const
 {
   if (a.isEmpty()) {
     gbfputc(0, fout);
@@ -327,7 +330,7 @@ void GdbFormat::FWRITE_CSTR(const QString& a)
 #define FWRITE_LATLON(a) gbfputint32(GPS_Math_Deg_To_Semi((a)),fout)
 
 void
-GdbFormat::gdb_write_cstr_list(const char* str)
+GdbFormat::gdb_write_cstr_list(const char* str) const
 {
   if NOT_EMPTY(str) {
     gbfputint32(1, fout);
@@ -338,13 +341,13 @@ GdbFormat::gdb_write_cstr_list(const char* str)
 }
 
 void
-GdbFormat::gdb_write_cstr_list(const QString& str)
+GdbFormat::gdb_write_cstr_list(const QString& str) const
 {
   gdb_write_cstr_list(CSTRc(str));
 }
 
 void
-GdbFormat::gdb_write_dbl(const double value, const double def)
+GdbFormat::gdb_write_dbl(const double value, const double def) const
 {
   if (value == def) {
     gbfputc(0, fout);
@@ -355,7 +358,7 @@ GdbFormat::gdb_write_dbl(const double value, const double def)
 }
 
 void
-GdbFormat::gdb_write_time(const int time)
+GdbFormat::gdb_write_time(const int time) const
 {
   if (time > 0) {
     gbfputc(1, fout);
@@ -1131,7 +1134,7 @@ GdbFormat::reset_short_handle(const char* defname)
 /* ----------------------------------------------------------------------------*/
 
 void
-GdbFormat::write_header()
+GdbFormat::write_header() const
 {
   char buff[128], tbuff[32];
   char* c;
@@ -1376,7 +1379,7 @@ GdbFormat::route_compute_bounds(const route_head* rte, bounds* bounds)
 }
 
 void
-GdbFormat::route_write_bounds(bounds* bounds)
+GdbFormat::route_write_bounds(bounds* bounds) const
 {
   if (waypt_bounds_valid(bounds)) {
     FWRITE_C(0);

@@ -82,28 +82,29 @@ private:
   /* Member Functions */
 
   static void gdb_flush_waypt_queue(QList<Waypoint*>* Q);
-  QString fread_cstr();
+  void disp_summary(const gbfile* f) const;
+  QString fread_cstr() const;
   static char* gdb_fread_cstr(gbfile* file_in);
-  QString gdb_fread_strlist();
+  QString gdb_fread_strlist() const;
   static Waypoint* gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, char exact);
-  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, char exact);
-  Waypoint* gdb_add_route_waypt(route_head* rte, Waypoint* ref, int wpt_class);
+  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, char exact) const;
+  Waypoint* gdb_add_route_waypt(route_head* rte, Waypoint* ref, int wpt_class) const;
   static QString gdb_to_ISO8601_duration(unsigned int seconds);
-  void FWRITE_CSTR(const QString& a);
-  void gdb_write_cstr_list(const char* str);
-  void gdb_write_cstr_list(const QString& str);
-  void gdb_write_dbl(double value, double def);
-  void gdb_write_time(int time);
+  void FWRITE_CSTR(const QString& a) const;
+  void gdb_write_cstr_list(const char* str) const;
+  void gdb_write_cstr_list(const QString& str) const;
+  void gdb_write_dbl(double value, double def) const;
+  void gdb_write_time(int time) const;
   void read_file_header();
   Waypoint* read_waypoint(gt_waypt_classes_e* waypt_class_out);
   route_head* read_route();
   route_head* read_track();
   void reset_short_handle(const char* defname);
-  void write_header();
+  void write_header() const;
   static void gdb_check_waypt(Waypoint* wpt);
   void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);
-  void route_write_bounds(bounds* bounds);
+  void route_write_bounds(bounds* bounds) const;
   void write_route(const route_head* rte, const QString& rte_name);
   void write_track(const route_head* trk, const QString& trk_name);
   void finalize_item(gbfile* origin, char identifier);
@@ -170,24 +171,5 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     }
   };
-
-#if 0
-  ff_vecs_t gdb_vecs = {
-    ff_type_file,
-    FF_CAP_RW_ALL,
-    gdb_rd_init,
-    gdb_wr_init,
-    gdb_rd_deinit,
-    gdb_wr_deinit,
-    read_data,
-    write_data,
-    nullptr,
-    &gdb_args,
-    CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
-    /* because of utf8 strings since GDB V3 */
-    , NULL_POS_OPS,
-    nullptr
-  };
-#endif
 };
 #endif // GDB_H_INCLUDED_
