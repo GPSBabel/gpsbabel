@@ -570,9 +570,9 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 #ifdef GPI_DBG
   {
     int x;
-    unsigned char* b = (unsigned char*) xmalloc(sz);
+    std::unique_ptr<unsigned char[]> b(new unsigned char(sz));
     fprintf(stderr, "Tag: %x\n", tag);
-    gbfread(b, 1, sz, fin);
+    gbfread(b.get(), 1, sz, fin);
     fprintf(stderr, "\n");
     for (x = 0; x < sz; x++) {
       fprintf(stderr, "%02x ", b[x]);
@@ -1102,7 +1102,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  uint32_t* color_table = nullptr;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
@@ -1161,9 +1160,10 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
     fatal(MYNAME ": Sorry, we don't support compressed bitmaps.\n");
   }
 
+  std::unique_ptr<uint32_t[]> color_table;
   if (src_h.used_colors > 0) {
-    color_table = new uint32_t[src_h.used_colors];
-    gbfread(color_table, 1, 4 * src_h.used_colors, f);
+    color_table.reset(new uint32_t[src_h.used_colors]);
+    gbfread(color_table.get(), 1, 4 * src_h.used_colors, f);
     for (i = 0; i < src_h.used_colors; i++) {
       uint32_t color = color_table[i];
       /* swap blue and red value */
@@ -1251,7 +1251,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   if (bytesout != *data_sz) {
     warning(MYNAME ": Code error in load_bitmap_from_file, expected output size %d, actual output %td.", *data_sz, bytesout);
   }
-  delete[] color_table;
   gbfclose(f);
 }
 
