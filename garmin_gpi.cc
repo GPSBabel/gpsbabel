@@ -60,6 +60,7 @@
 #include <cstdlib>                 // for atoi
 #include <cstring>                 // for strlen, strncmp
 #include <ctime>                   // for time, gmtime, time_t, tm
+#include <memory>                  // for unique_ptr
 
 #include "defs.h"                  // for Waypoint, fatal, STRFROMUNICODE, le_write32, le_write16, wp_flags, warning, bounds, KPH_TO_MPS, MPH_TO_MPS, WAYPT_HAS, gpsbabel_testmode, parse_speed, WAYPT_SET, MILES_TO_METERS, MPS_TO_KPH, MPS_TO_MPH, mkgmtime, mkshort, mkshort_del_handle, mkshort_new_...
 #include "cet_util.h"              // for cet_convert_init
