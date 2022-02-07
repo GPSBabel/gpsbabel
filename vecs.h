@@ -34,6 +34,7 @@
 #include "exif.h"
 #include "format.h"
 #include "garmin_fit.h"
+#include "garmin_gpi.h"
 #include "geojson.h"
 #include "ggv_bin.h"
 #include "globalsat_sport.h"
@@ -103,7 +104,6 @@ extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t garmin_gpi_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
@@ -281,7 +281,7 @@ private:
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};
-  LegacyFormat garmin_gpi_fmt {garmin_gpi_vecs};
+  GarminGPIFormat garmin_gpi_fmt;
   LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
   LegacyFormat xol_fmt {xol_vecs};
