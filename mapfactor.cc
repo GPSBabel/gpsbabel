@@ -45,8 +45,8 @@ void MapfactorFormat::MapfactorRead()
 
         QXmlStreamAttributes a = reader.attributes();
         wpt->shortname = a.value("name").toString();
-        wpt->latitude = a.value("lat").toString().toDouble() / milliarcseconds;
-        wpt->longitude = a.value("lon").toString().toDouble() / milliarcseconds;
+        wpt->latitude = a.value("lat").toDouble() / milliarcseconds;
+        wpt->longitude = a.value("lon").toDouble() / milliarcseconds;
       }
     }
 

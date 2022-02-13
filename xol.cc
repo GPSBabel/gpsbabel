@@ -87,12 +87,12 @@ static void xol_shape(xg_string, const QXmlStreamAttributes* attrv) {
     }
 
     if (attrv->hasAttribute("alt")) {
-      wpt_->altitude = attrv->value("alt").toString().toDouble();
+      wpt_->altitude = attrv->value("alt").toDouble();
     }
 
     if (attrv->hasAttribute("timestamp")) {
       wpt_->creation_time = xml_parse_time(
-          attrv->value("timestamp").toString().toUtf8().constData());
+          attrv->value("timestamp").toString());
     }
 
     if (attrv->hasAttribute("icon")) {
@@ -121,11 +121,11 @@ static void xol_waypt(xg_string, const QXmlStreamAttributes* attrv) {
   int x = 0, y = 0;
 
   if (attrv->hasAttribute("y")) {
-    y = attrv->value("y").toString().toInt();
+    y = attrv->value("y").toInt();
   }
 
   if (attrv->hasAttribute("x")) {
-    x = attrv->value("x").toString().toInt();
+    x = attrv->value("x").toInt();
   }
 
   GPS_Math_Swiss_EN_To_WGS84(x, y, &wpt_->latitude, &wpt_->longitude);

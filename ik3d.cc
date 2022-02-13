@@ -74,10 +74,10 @@ static void
 iktobj_waypt(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("X")) {
-    waypt->longitude = attrv->value("X").toString().toDouble();
+    waypt->longitude = attrv->value("X").toDouble();
   }
   if (attrv->hasAttribute("Y")) {
-    waypt->latitude = attrv->value("Y").toString().toDouble();
+    waypt->latitude = attrv->value("Y").toDouble();
   }
 }
 

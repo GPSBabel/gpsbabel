@@ -64,8 +64,8 @@ static void GeoReadLoc()
         wpt->description = reader.readElementText();
       } else if (current_tag == u"/loc/waypoint/coord") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->latitude = a.value("lat").toString().toDouble();
-        wpt->longitude = a.value("lon").toString().toDouble();
+        wpt->latitude = a.value("lat").toDouble();
+        wpt->longitude = a.value("lon").toDouble();
       } else if (current_tag == u"/loc/waypoint/type") {
         wpt->icon_descr = reader.readElementText();
       } else if (current_tag == u"/loc/waypoint/link") {

@@ -54,7 +54,7 @@ TefXMLFormat::tef_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
         valid = true;
       }
     } else if (attr.name().compare(QLatin1String("Version"), Qt::CaseInsensitive) == 0) {
-      version = attr.value().toString().toDouble();
+      version = attr.value().toDouble();
     }
   }
 
@@ -85,7 +85,7 @@ void
 TefXMLFormat::tef_list_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ItemCount")) {
-    item_count = attrv->value("ItemCount").toString().toUInt();
+    item_count = attrv->value("ItemCount").toUInt();
   }
 }
 
