@@ -26,8 +26,11 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++17
 CONFIG += link_pkgconfig
+CONFIG += precompile_header
 
 TEMPLATE = app
+
+PRECOMPILED_HEADER = precompiled_headers.h
 
 # RESOURCES
 RESOURCES = gpsbabel.qrc
