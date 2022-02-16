@@ -26,11 +26,15 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++17
 CONFIG += link_pkgconfig
-CONFIG += precompile_header
+# avoid QTBUG-72404, QTBUG-79694 which were fixed in 5.14.0
+versionAtLeast(QT_VERSION, 5.14.0) | !contains(QMAKE_CXX, .*clang.*) {
+  CONFIG += precompile_header
+  PRECOMPILED_HEADER = precompiled_headers.h
+} else {
+  message("Not using precompiled headers due to QTBUG.")
+}
 
 TEMPLATE = app
-
-PRECOMPILED_HEADER = precompiled_headers.h
 
 # RESOURCES
 RESOURCES = gpsbabel.qrc
