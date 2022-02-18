@@ -36,6 +36,8 @@ class Vecs
 {
 // Meyers Singleton
 public:
+  /* Special Member Functions */
+
   static Vecs& Instance()
   {
     static Vecs instance;
@@ -46,13 +48,24 @@ public:
   Vecs(Vecs&&) = delete;
   Vecs& operator=(Vecs&&) = delete;
 
-private:
-  Vecs();
-  ~Vecs();
+  /* Member Functions */
+
+  void init_vecs();
+  void exit_vecs();
+  static void assign_option(const QString& module, arglist_t* arg, const char* val);
+  static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
+  static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
+  static QString get_option(const QStringList& options, const char* argname);
+  Format* find_vec(const QString& vecname);
+  void disp_vecs() const;
+  void disp_vec(const QString& vecname) const;
+  static const char* name_option(uint32_t type);
+  void disp_formats(int version) const;
+  static bool validate_args(const QString& name, const QVector<arglist_t>* args);
+  bool validate_formats() const;
 
 private:
-  struct Impl;                   // Not defined here
-  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
+  /* Types */
 
   struct vecs_t {
     Format* vec;
@@ -96,23 +109,13 @@ private:
     QString style_filename;
   };
 
+  /* Special Member Functions */
 
-public:
-  void init_vecs();
-  void exit_vecs();
-  static void assign_option(const QString& module, arglist_t* arg, const char* val);
-  static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
-  static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
-  static QString get_option(const QStringList& options, const char* argname);
-  Format* find_vec(const QString& vecname);
-  void disp_vecs() const;
-  void disp_vec(const QString& vecname) const;
-  static const char* name_option(uint32_t type);
-  void disp_formats(int version) const;
-  static bool validate_args(const QString& name, const QVector<arglist_t>* args);
-  bool validate_formats() const;
+  Vecs();
+  ~Vecs();
 
-private:
+  /* Member Functions */
+
   static int is_integer(const char* c);
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;
@@ -122,7 +125,11 @@ private:
   static void disp_v3(const vecinfo_t& vec);
   static bool validate_vec(const vecs_t& vec);
 
-private:
+  /* Data Members */
+
+  struct Impl;                   // Not defined here
+  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
+
   QVector<style_vec_t> style_list;
 
 };

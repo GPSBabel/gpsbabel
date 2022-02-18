@@ -33,6 +33,8 @@ class FilterVecs
 {
 // Meyers Singleton
 public:
+  /* Special Member Functions */
+
   static FilterVecs& Instance()
   {
     static FilterVecs instance;
@@ -43,13 +45,19 @@ public:
   FilterVecs(FilterVecs&&) = delete;
   FilterVecs& operator=(FilterVecs&&) = delete;
 
-private:
-  FilterVecs();
-  ~FilterVecs();
+  /* Member Functions */
+
+  Filter* find_filter_vec(const QString& vecname);
+  static void free_filter_vec(Filter* filter);
+  void init_filter_vecs();
+  void exit_filter_vecs();
+  void disp_filter_vecs() const;
+  void disp_filter_vec(const QString& vecname) const;
+  void disp_filters(int version) const;
+  bool validate_filters() const;
 
 private:
-  struct Impl;                   // Not defined here
-  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
+  /* Types */
 
   struct fl_vecs_t {
     Filter* vec;
@@ -57,19 +65,20 @@ private:
     QString desc;
   };
 
-public:
-Filter* find_filter_vec(const QString& vecname);
-static void free_filter_vec(Filter* filter);
-void init_filter_vecs();
-void exit_filter_vecs();
-void disp_filter_vecs() const;
-void disp_filter_vec(const QString& vecname) const;
-void disp_filters(int version) const;
-bool validate_filters() const;
+  /* Special Member Functions */
 
-private:
-static void disp_help_url(const fl_vecs_t& vec, const arglist_t* arg);
-static void disp_v1(const fl_vecs_t& vec);
-static bool validate_filter_vec(const fl_vecs_t& vec);
+  FilterVecs();
+  ~FilterVecs();
+
+  /* Member Functions */
+
+  static void disp_help_url(const fl_vecs_t& vec, const arglist_t* arg);
+  static void disp_v1(const fl_vecs_t& vec);
+  static bool validate_filter_vec(const fl_vecs_t& vec);
+
+  /* Data Members */
+
+  struct Impl;                   // Not defined here
+  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
 };
 #endif // FILTER_VECS_H_INCLUDED_
