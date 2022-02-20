@@ -36,7 +36,6 @@
 #include <cassert>             // for assert
 #include <cctype>              // for isdigit
 #include <cstdio>              // for printf, putchar, sscanf
-#include <memory>              // for unique_ptr, make_unique
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
@@ -932,7 +931,14 @@ struct Vecs::Impl
   };
 };
 
-Vecs::Vecs() : d_ptr_(std::make_unique<Impl>()) {}
+Vecs& Vecs::Instance()
+{
+  static Impl impl;
+  static Vecs instance(&impl);
+  return instance;
+}
+
+Vecs::Vecs(Impl* i) : d_ptr_(i) {}
 
 Vecs::~Vecs() = default;
 

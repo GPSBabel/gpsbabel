@@ -21,9 +21,7 @@
 #ifndef FILTER_VECS_H_INCLUDED_
 #define FILTER_VECS_H_INCLUDED_
 
-#include <QString>             // for QString
-
-#include <memory>
+#include <QString>          // for QString
 
 #include "defs.h"           // for arglist_t
 #include "filter.h"         // for Filter
@@ -35,11 +33,7 @@ class FilterVecs
 public:
   /* Special Member Functions */
 
-  static FilterVecs& Instance()
-  {
-    static FilterVecs instance;
-    return instance;
-  }
+  static FilterVecs& Instance();
   FilterVecs(const FilterVecs&) = delete;
   FilterVecs& operator= (const FilterVecs&) = delete;
   FilterVecs(FilterVecs&&) = delete;
@@ -59,6 +53,8 @@ public:
 private:
   /* Types */
 
+  struct Impl;                   // Not defined here
+
   struct fl_vecs_t {
     Filter* vec;
     QString name;
@@ -67,7 +63,7 @@ private:
 
   /* Special Member Functions */
 
-  FilterVecs();
+  FilterVecs(Impl* i);
   ~FilterVecs();
 
   /* Member Functions */
@@ -78,7 +74,6 @@ private:
 
   /* Data Members */
 
-  struct Impl;                   // Not defined here
-  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
+  Impl* d_ptr_;                  // Opaque pointer
 };
 #endif // FILTER_VECS_H_INCLUDED_

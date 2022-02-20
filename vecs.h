@@ -21,8 +21,7 @@
 #ifndef VECS_H_INCLUDED_
 #define VECS_H_INCLUDED_
 
-#include <cstdint>
-#include <memory>
+#include <cstdint>              // for uint32_t
 
 #include <QString>              // for QString
 #include <QStringList>          // for QStringList
@@ -38,11 +37,7 @@ class Vecs
 public:
   /* Special Member Functions */
 
-  static Vecs& Instance()
-  {
-    static Vecs instance;
-    return instance;
-  }
+  static Vecs& Instance();
   Vecs(const Vecs&) = delete;
   Vecs& operator= (const Vecs&) = delete;
   Vecs(Vecs&&) = delete;
@@ -66,6 +61,8 @@ public:
 
 private:
   /* Types */
+
+  struct Impl;                   // Not defined here
 
   struct vecs_t {
     Format* vec;
@@ -111,7 +108,7 @@ private:
 
   /* Special Member Functions */
 
-  Vecs();
+  Vecs(Impl* i);
   ~Vecs();
 
   /* Member Functions */
@@ -127,8 +124,7 @@ private:
 
   /* Data Members */
 
-  struct Impl;                   // Not defined here
-  std::unique_ptr<Impl> d_ptr_;  // Opaque pointer
+  Impl* d_ptr_;                  // Opaque pointer
 
   QVector<style_vec_t> style_list;
 

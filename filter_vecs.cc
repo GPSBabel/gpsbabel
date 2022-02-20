@@ -186,7 +186,14 @@ struct FilterVecs::Impl {
   };
 };
 
-FilterVecs::FilterVecs() : d_ptr_(std::make_unique<Impl>()) {}
+FilterVecs& FilterVecs::Instance()
+{
+  static Impl impl;
+  static FilterVecs instance(&impl);
+  return instance;
+}
+
+FilterVecs::FilterVecs(Impl* i) : d_ptr_(i) {}
 
 FilterVecs::~FilterVecs() = default;
 
