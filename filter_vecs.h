@@ -63,8 +63,8 @@ private:
 
   /* Special Member Functions */
 
-  FilterVecs(Impl* i);
-  ~FilterVecs();
+  explicit FilterVecs(Impl* i) : d_ptr_(i) {}
+  ~FilterVecs() = default;
 
   /* Member Functions */
 

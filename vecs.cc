@@ -938,10 +938,6 @@ Vecs& Vecs::Instance()
   return instance;
 }
 
-Vecs::Vecs(Impl* i) : d_ptr_(i) {}
-
-Vecs::~Vecs() = default;
-
 /*
  * When we modify an element on the list we need to be careful
  * that we are not modifying a Qt COW copy.

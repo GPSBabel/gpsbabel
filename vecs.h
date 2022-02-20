@@ -108,8 +108,8 @@ private:
 
   /* Special Member Functions */
 
-  Vecs(Impl* i);
-  ~Vecs();
+  explicit Vecs(Impl* i) : d_ptr_(i) {}
+  ~Vecs() = default;
 
   /* Member Functions */
 

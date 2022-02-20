@@ -193,10 +193,6 @@ FilterVecs& FilterVecs::Instance()
   return instance;
 }
 
-FilterVecs::FilterVecs(Impl* i) : d_ptr_(i) {}
-
-FilterVecs::~FilterVecs() = default;
-
 Filter* FilterVecs::find_filter_vec(const QString& vecname)
 {
   QStringList options = vecname.split(',');
