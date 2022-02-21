@@ -571,7 +571,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 #ifdef GPI_DBG
   {
     int x;
-    std::unique_ptr<unsigned char[]> b(new unsigned char(sz));
+    std::unique_ptr<unsigned char[]> b(new unsigned char[sz]);
     fprintf(stderr, "Tag: %x\n", tag);
     gbfread(b.get(), 1, sz, fin);
     fprintf(stderr, "\n");
