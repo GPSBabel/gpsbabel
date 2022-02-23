@@ -165,6 +165,5 @@ ff_vecs_t google_dir_vecs = {
   nullptr,
   nullptr,
   CET_CHARSET_UTF8, 1	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

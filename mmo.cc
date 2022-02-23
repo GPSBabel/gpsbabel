@@ -1480,9 +1480,7 @@ ff_vecs_t mmo_vecs = {
   nullptr,
   &mmo_args,
   CET_CHARSET_MS_ANSI, 0
-  , NULL_POS_OPS,
-  nullptr
-
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/

@@ -778,8 +778,7 @@ ff_vecs_t itracku_vecs = {
   &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, nullptr, nullptr, nullptr },
-  nullptr
+  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, nullptr, nullptr, nullptr }
 };
 
 ff_vecs_t itracku_fvecs = {
@@ -799,8 +798,7 @@ ff_vecs_t itracku_fvecs = {
   &itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },
-  nullptr
+  { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
 };
 
 

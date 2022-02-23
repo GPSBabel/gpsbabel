@@ -443,8 +443,7 @@ ff_vecs_t ggv_ovl_vecs = {
   nullptr,
   &ggv_ovl_args,
   CET_CHARSET_MS_ANSI, 0
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/

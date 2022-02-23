@@ -281,7 +281,6 @@ ff_vecs_t ggv_log_vecs = {
   nullptr,
   &ggv_log_args,
   CET_CHARSET_ASCII, 1
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 /**************************************************************************/

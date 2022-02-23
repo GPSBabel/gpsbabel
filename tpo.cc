@@ -2109,8 +2109,7 @@ ff_vecs_t tpo2_vecs = {
   nullptr,
   &tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 /* TPO 3.x format can read waypoints/tracks/routes */
@@ -2126,6 +2125,5 @@ ff_vecs_t tpo3_vecs = {
   nullptr,
   &tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

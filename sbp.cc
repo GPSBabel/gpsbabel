@@ -127,7 +127,6 @@ ff_vecs_t sbp_vecs = {
   &sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 /**************************************************************************/
