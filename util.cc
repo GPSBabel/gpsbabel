@@ -26,7 +26,7 @@
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdint>                      // for uint32_t
-#include <cstdlib>                      // for abs, getenv, calloc, free, malloc, realloc
+#include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
@@ -44,7 +44,7 @@
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -203,21 +203,6 @@ ufopen(const QString& fname, const char* mode)
 #else
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
-#endif
-}
-
-/*
- * OS-abstracting wrapper for getting Unicode environment variables.
- */
-QString ugetenv(const char* env_var)
-{
-#ifdef __WIN32__
-  // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
-  return QString::fromWCharArray(
-           _wgetenv((const wchar_t*) QString(env_var).utf16()));
-#else
-  // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
-  return QString::fromLocal8Bit(std::getenv(env_var));
 #endif
 }
 
@@ -721,7 +706,7 @@ mklocaltime(struct tm* t)
 bool
 gpsbabel_testmode()
 {
-  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  static bool testmode = qEnvironmentVariableIsSet("GPSBABEL_FREEZE_TIME");
   return testmode;
 }
 

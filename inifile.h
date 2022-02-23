@@ -22,7 +22,6 @@
 #define HAVE_INIFILE_H
 
 #include <QHash>           // for QHash
-#include <QList>           // for QList
 #include <QString>         // for QString
 
 class InifileSection;
