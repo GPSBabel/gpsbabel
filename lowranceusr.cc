@@ -85,6 +85,7 @@
 
 */
 
+#include <cinttypes>              // for PRId64
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdlib>                // for atoi, abs
@@ -459,7 +460,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   }
 
   /* Input is the number of seconds since Jan. 1, 2000 */
-  time_t waypt_time = gbfgetint32(file_in);
+  int64_t waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
     /* Waypoint needs the number of seconds since UNIX Epoch (Jan 1, 1970) */
     wpt_tmp->SetCreationTime(waypt_time += base_time_secs);
@@ -469,7 +470,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
     if (global_opts.debug_level == 99) {
       printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
     } else {
-      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %ld\n",
+      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
              qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
@@ -1256,7 +1257,7 @@ LowranceusrFormat::read()
 void
 LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
 {
-  int Time, SymbolId, alt;
+  int SymbolId, alt;
 
   int Lat = lat_deg_to_mm(wpt->latitude);
   int Lon = lon_deg_to_mm(wpt->longitude);
@@ -1327,22 +1328,23 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   }
 
   /* Waypoint creation time stored as seconds since UNIX Epoch (Jan 1, 1970) */
-  if ((Time = wpt->creation_time.toTime_t()) > base_time_secs) {
+  int64_t waypt_time;
+  if ((waypt_time = wpt->creation_time.toSecsSinceEpoch()) > base_time_secs) {
     /* This should always be true */
     /* Lowrance needs it as seconds since Jan 1, 2000 */
-    Time -= base_time_secs;
+    waypt_time -= base_time_secs;
     if (global_opts.debug_level >= 2) {
-      printf("creation_time %d, '%s'", Time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
+      printf("creation_time %" PRId64 ", '%s'", waypt_time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
     }
   } else {
     /* If false, make sure it is an unknown time value */
-    Time = 0;
+    waypt_time = 0;
     if (global_opts.debug_level >= 2) {
       printf("creation_time UNKNOWN");
     }
   }
 
-  gbfputint32(Time, file_out);
+  gbfputint32(waypt_time, file_out);
 
   if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
     SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
