@@ -72,9 +72,6 @@
 
 #define MYNAME "garmin_gpi"
 
-#define GPI_DBG 1
-#undef GPI_DBG
-
 #define DEFAULT_ICON	"Waypoint"
 #define WAYPOINTS_PER_BLOCK	128
 
