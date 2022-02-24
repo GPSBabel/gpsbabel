@@ -39,6 +39,29 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
+option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
+if (GPSBABEL_ENABLE_PCH)
+  target_precompile_headers(gpsbabel PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
+  )
+endif()
+
 # RESOURCES
 set(RESOURCES gpsbabel.qrc)
 

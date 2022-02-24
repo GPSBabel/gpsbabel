@@ -1036,7 +1036,6 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  void* unused; /* TODO: delete this field */
 };
 
 [[noreturn]] void fatal(QDebug& msginstance);
@@ -1058,9 +1057,6 @@ FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
-
-// OS-abstracting wrapper for getting Unicode environment variables.
-QString ugetenv(const char* env_var);
 
 // FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
 // just be replaced at the call sites.  These shims are just here to make

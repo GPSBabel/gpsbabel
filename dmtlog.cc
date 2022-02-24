@@ -811,9 +811,7 @@ ff_vecs_t dmtlog_vecs = {
   nullptr,
   &dmtlog_args,
   CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS,
-  nullptr
-
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/

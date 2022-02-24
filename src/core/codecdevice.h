@@ -18,11 +18,12 @@
  */
 
 #include <QIODevice>        // for QIODevice
+#include <QIODeviceBase>    // for QIODeviceBase::OpenMode
 #include <QString>          // for QString
 #include <QTextCodec>       // for QTextCodec
 #include <QTextDecoder>     // for QTextDecoder
 #include <QTextEncoder>     // for QTextEncoder
-#include <QtCore>           // for qint64, QIODeviceBase::OpenMode
+#include <QtGlobal>         // for qint64
 
 #include "src/core/file.h"  // for File
 

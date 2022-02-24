@@ -474,6 +474,5 @@ ff_vecs_t bcr_vecs = {
   nullptr,
   &bcr_args,
   CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

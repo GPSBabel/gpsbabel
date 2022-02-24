@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QtGlobal>
 
-#include <src/core/textstream.h>
+#include "src/core/textstream.h"
 
 #include "mynav.h"
 

@@ -152,9 +152,7 @@ ff_vecs_t gnav_trl_vecs = {
   nullptr,
   &gnav_trl_args,
   CET_CHARSET_UTF8, 1	/* CET - do nothing ! */
-  , NULL_POS_OPS,
-  nullptr
-
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/

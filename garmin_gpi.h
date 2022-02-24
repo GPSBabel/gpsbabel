@@ -57,7 +57,6 @@
 #include "defs.h"       // for arglist_t, ARG_NOMINMAX, ff_cap, Waypoint, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ARGTYPE_FILE, ARGTYPE_INT, CET_CHARSET_MS_ANSI, bounds, ff_cap_read, ff_cap_write, ff_type, ff_type_file, short_handle
 #include "format.h"     // for Format
 #include "garmin_fs.h"  // for garmin_fs_t
-#include "garmin_gpi.h"  // lines 66-66
 #include "gbfile.h"     // for gbfile
 
 

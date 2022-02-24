@@ -416,6 +416,5 @@ ff_vecs_t saroute_vecs = {
   nullptr,
   &saroute_args,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

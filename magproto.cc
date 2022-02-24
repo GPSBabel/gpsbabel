@@ -1594,8 +1594,7 @@ ff_vecs_t mag_svecs = {
   nullptr,
   &mag_sargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1610,8 +1609,7 @@ ff_vecs_t mag_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 /*
@@ -1629,6 +1627,5 @@ ff_vecs_t magX_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };

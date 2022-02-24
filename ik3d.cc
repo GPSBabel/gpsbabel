@@ -74,10 +74,10 @@ static void
 iktobj_waypt(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("X")) {
-    waypt->longitude = attrv->value("X").toString().toDouble();
+    waypt->longitude = attrv->value("X").toDouble();
   }
   if (attrv->hasAttribute("Y")) {
-    waypt->latitude = attrv->value("Y").toString().toDouble();
+    waypt->latitude = attrv->value("Y").toDouble();
   }
 }
 
@@ -158,6 +158,5 @@ ff_vecs_t ik3d_vecs = {
   nullptr,
   &ikt_args,
   CET_CHARSET_UTF8, 1
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

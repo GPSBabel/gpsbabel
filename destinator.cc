@@ -556,8 +556,8 @@ ff_vecs_t destinator_poi_vecs = {
   nullptr,
   &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-  , NULL_POS_OPS,
-  nullptr};
+  , NULL_POS_OPS
+};
 
 ff_vecs_t destinator_itn_vecs = {
   ff_type_file,
@@ -575,8 +575,8 @@ ff_vecs_t destinator_itn_vecs = {
   nullptr,
   &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-  , NULL_POS_OPS,
-  nullptr};
+  , NULL_POS_OPS
+};
 
 ff_vecs_t destinator_trl_vecs = {
   ff_type_file,
@@ -594,7 +594,7 @@ ff_vecs_t destinator_trl_vecs = {
   nullptr,
   &destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-  , NULL_POS_OPS,
-  nullptr };
+  , NULL_POS_OPS
+};
 
 /**************************************************************************/

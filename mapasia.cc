@@ -302,9 +302,7 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   nullptr,
   &tr7_args,
   CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
-  , NULL_POS_OPS,
-  nullptr
-
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/
