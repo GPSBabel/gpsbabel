@@ -87,8 +87,8 @@
 #ifndef LOWRANCEUSR_H_INCLUDED_
 #define LOWRANCEUSR_H_INCLUDED_
 
-#include <cmath>                  // for M_PI, round, atan, exp, log, tan
-#include <ctime>                  // for time_t
+#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cstdint>              // for int64_t
 
 #include <QList>                // for QList
 #include <QString>              // for QString
