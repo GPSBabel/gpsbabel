@@ -1863,8 +1863,7 @@ ff_vecs_t gdb_vecs = {
   &gdb_args,
   CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
   /* because of utf8 strings since GDB V3 */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 /*******************************************************************************/

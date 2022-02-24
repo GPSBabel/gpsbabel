@@ -1245,8 +1245,7 @@ ff_vecs_t garmin_vecs = {
   nullptr,
   &garmin_args,
   CET_CHARSET_ASCII, 0,
-  { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr },
-  nullptr
+  { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr }
 };
 
 static const char* d103_icons[16] = {

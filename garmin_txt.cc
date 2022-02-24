@@ -1410,8 +1410,7 @@ ff_vecs_t garmin_txt_vecs = {
    * so it doesn't attempt to re-convert any char strings including gmsd data.
    */
   CET_CHARSET_UTF8, 0
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 #endif // CSVFMTS_ENABLED

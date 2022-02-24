@@ -1036,7 +1036,6 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  void* unused; /* TODO: delete this field */
 };
 
 [[noreturn]] void fatal(QDebug& msginstance);

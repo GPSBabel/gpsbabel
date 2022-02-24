@@ -158,6 +158,5 @@ ff_vecs_t ik3d_vecs = {
   nullptr,
   &ikt_args,
   CET_CHARSET_UTF8, 1
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

@@ -292,7 +292,6 @@ ff_vecs_t hiketech_vecs = {
   nullptr,
   &hiketech_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 

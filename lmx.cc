@@ -412,6 +412,5 @@ ff_vecs_t lmx_vecs = {
   nullptr,
   &lmx_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
