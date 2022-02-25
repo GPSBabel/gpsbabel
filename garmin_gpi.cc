@@ -1119,19 +1119,19 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   }
 
   if (GPI_DBG) {
-    printf("data size:             0x%1$x (%1$d)\n", src_h.size);
-    printf("image data offset:     0x%1$x (%1$d)\n", src_h.image_offset);
-    printf("header size:           0x%1$x (%1$d)\n", src_h.header_size);
-    printf("image width:           0x%1$x (%1$d)\n", src_h.width);
-    printf("image height:          0x%1$x (%1$d)\n", src_h.height);
-    printf("number of planes:      0x%1$x (%1$d)\n", src_h.planes);
-    printf("bits per pixel:        0x%1$x (%1$d)\n", src_h.bpp);
-    printf("compression type:      0x%1$x (%1$d)\n", src_h.compression_type);
-    printf("image size:            0x%1$x (%1$d)\n", src_h.image_data_size);
-    printf("horizontal resolution: 0x%1$x (%1$d)\n", src_h.resolution_h);
-    printf("vertical resolution:   0x%1$x (%1$d)\n", src_h.resolution_v);
-    printf("number of colors:      0x%1$x (%1$d)\n", src_h.used_colors);
-    printf("important colors:      0x%1$x (%1$d)\n", src_h.important_colors);
+    printf("data size:             0x%x (%d)\n", src_h.size, src_h.size);
+    printf("image data offset:     0x%x (%d)\n", src_h.image_offset, src_h.image_offset);
+    printf("header size:           0x%x (%d)\n", src_h.header_size, src_h.header_size);
+    printf("image width:           0x%x (%d)\n", src_h.width, src_h.width);
+    printf("image height:          0x%x (%d)\n", src_h.height, src_h.height);
+    printf("number of planes:      0x%x (%d)\n", src_h.planes, src_h.planes);
+    printf("bits per pixel:        0x%x (%d)\n", src_h.bpp, src_h.bpp);
+    printf("compression type:      0x%x (%d)\n", src_h.compression_type, src_h.compression_type);
+    printf("image size:            0x%x (%d)\n", src_h.image_data_size, src_h.image_data_size);
+    printf("horizontal resolution: 0x%x (%d)\n", src_h.resolution_h, src_h.resolution_h);
+    printf("vertical resolution:   0x%x (%d)\n", src_h.resolution_v, src_h.resolution_v);
+    printf("number of colors:      0x%x (%d)\n", src_h.used_colors, src_h.used_colors);
+    printf("important colors:      0x%x (%d)\n", src_h.important_colors, src_h.important_colors);
   }
 
   /* sort out unsupported files */
