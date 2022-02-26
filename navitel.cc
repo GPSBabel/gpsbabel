@@ -141,8 +141,7 @@ ff_vecs_t navitel_trk_vecs = {
   nullptr,
   nullptr,
   CET_CHARSET_UTF8, 1			/* Nothing to convert */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 /**************************************************************************/

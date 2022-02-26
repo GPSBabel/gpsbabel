@@ -87,8 +87,8 @@
 #ifndef LOWRANCEUSR_H_INCLUDED_
 #define LOWRANCEUSR_H_INCLUDED_
 
-#include <cmath>                  // for M_PI, round, atan, exp, log, tan
-#include <ctime>                  // for time_t
+#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cstdint>              // for int64_t
 
 #include <QList>                // for QList
 #include <QString>              // for QString
@@ -390,7 +390,7 @@ private:
   static constexpr double DEGREESTORADIANS = M_PI/180.0;
   static constexpr int MAX_TRAIL_POINTS = 9999;
   static constexpr double UNKNOWN_USR_ALTITUDE = METERS_TO_FEET(-10000); /* -10000ft is how the unit stores unknown */
-  static constexpr time_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
+  static constexpr int64_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
 
   /* Member Functions */
 

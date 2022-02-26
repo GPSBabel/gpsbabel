@@ -79,8 +79,7 @@ ff_vecs_t mtk_locus_vecs = {
   nullptr, // exit
   &mtk_locus_args,
   CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 #define MYNAME "mtk_locus"

@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "defs.h"              // for fatal, ugetenv, warning
+#include "defs.h"              // for fatal, warning
 #include "inifile.h"
 #include "src/core/file.h"     // for File
 #include <QByteArray>          // for QByteArray
@@ -29,8 +29,7 @@
 #include <QHash>               // for QHash
 #include <QIODevice>           // for QIODevice::ReadOnly, QIODevice
 #include <QTextStream>         // for QTextStream
-#include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qPrintable
+#include <QtGlobal>            // for qEnvironmentVariable, qPrintable, QT_VERSION, QT_VERSION_CHECK
 #include <utility>
 
 #define MYNAME "inifile"
@@ -66,7 +65,7 @@ open_gpsbabel_inifile()
 {
   QString res;
 
-  QString envstr = ugetenv("GPSBABELINI");
+  QString envstr = qEnvironmentVariable("GPSBABELINI");
   if (!envstr.isNull()) {
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return envstr;
@@ -79,9 +78,9 @@ open_gpsbabel_inifile()
 #ifdef __WIN32__
     // Use &&'s early-out behaviour to try successive file locations: first
     // %APPDATA%, then %WINDIR%, then %SYSTEMROOT%.
-    (name = find_gpsbabel_inifile(ugetenv("APPDATA"))).isNull()
-    && (name = find_gpsbabel_inifile(ugetenv("WINDIR"))).isNull()
-    && (name = find_gpsbabel_inifile(ugetenv("SYSTEMROOT"))).isNull();
+    (name = find_gpsbabel_inifile(qEnvironmentVariable("APPDATA"))).isNull()
+    && (name = find_gpsbabel_inifile(qEnvironmentVariable("WINDIR"))).isNull()
+    && (name = find_gpsbabel_inifile(qEnvironmentVariable("SYSTEMROOT"))).isNull();
 #else
     // Use &&'s early-out behaviour to try successive file locations: first
     // ~/.gpsbabel, then /usr/local/etc, then /etc.

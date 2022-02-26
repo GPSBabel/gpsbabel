@@ -344,6 +344,5 @@ ff_vecs_t igo8_vecs = {
   &igo8_options,
   CET_CHARSET_UTF8,
   1
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

@@ -308,6 +308,5 @@ ff_vecs_t xol_vecs = {ff_type_file,
                       nullptr,
                       &xol_args,
                       CET_CHARSET_UTF8,
-                      0  , NULL_POS_OPS,
-  nullptr
+                      0  , NULL_POS_OPS
 };

@@ -259,6 +259,7 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  gdb.h
   geojson.h
   ggv_bin.h
   globalsat_sport.h
@@ -352,7 +353,8 @@ if(WIN32)
 endif()
 
 if(MSVC)
-  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_DEPRECATE)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
   target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 

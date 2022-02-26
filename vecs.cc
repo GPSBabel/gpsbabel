@@ -46,6 +46,7 @@
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
+#include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "ggv_bin.h"           // for GgvBinFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
@@ -81,7 +82,6 @@ extern ff_vecs_t mag_svecs;
 extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t garmin_vecs;
-extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t holux_vecs;
@@ -162,7 +162,7 @@ struct Vecs::Impl
   LegacyFormat mag_ffmt {mag_fvecs};
   LegacyFormat magX_ffmt {magX_fvecs};
   LegacyFormat garmin_fmt {garmin_vecs};
-  LegacyFormat gdb_fmt {gdb_vecs};
+  GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   KmlFormat kml_fmt;

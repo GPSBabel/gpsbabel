@@ -289,6 +289,5 @@ ff_vecs_t ignr_vecs = {
   nullptr,
   &ignr_args,
   CET_CHARSET_MS_ANSI, 1
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

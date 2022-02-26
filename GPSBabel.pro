@@ -232,6 +232,7 @@ HEADERS =  \
   gbfile.h \
   gbser.h \
   gbser_private.h \
+  gdb.h \
   geojson.h \
   ggv_bin.h \
   globalsat_sport.h \
@@ -338,9 +339,20 @@ win32 {
 }
 
 win32-msvc* {
-  DEFINES += _CRT_SECURE_NO_DEPRECATE
-  QMAKE_CFLAGS += /MP -wd4100 -wd4267
-  QMAKE_CXXFLAGS += /MP -wd4100 -wd4267
+  DEFINES += _CRT_SECURE_NO_WARNINGS
+  DEFINES += _CRT_NONSTDC_NO_WARNINGS
+  QMAKE_CFLAGS += /MP -wd4267
+  QMAKE_CXXFLAGS += /MP -wd4267
+  # The -wd (disable warning) and -w3 (change warning to level 3) options are exclusive.
+  # The win32-msvc makespec uses -w34100, which can interfer with -wd4100.
+  # Their are two qmake settings for warnings in CONFIG: warn_on and warn_off.
+  # This results in the warning showing with msbuild, but not with nmake, even if
+  # -wd4100 is included in QMAKE_CFLAGS and QMAKE_CXXFLAGS.
+  # Override win32-msvc, leaving these warnings at their default of level 4, which
+  # will not show up because we run at level 3.
+  # shapelib/shpopen.c can cause a C4100 error.
+  QMAKE_CFLAGS_WARN_ON -= -w34100
+  QMAKE_CXXFLAGS_WARN_ON -= -w34100
 }
 
 include(shapelib.pri)
