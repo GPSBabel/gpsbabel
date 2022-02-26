@@ -126,19 +126,6 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
-#if __WIN32__
-#  ifndef fileno
-#    define fileno _fileno
-#  endif
-#  define strdup _strdup
-#endif
-
-#if __WIN32__
-#if !defined _CRT_SECURE_NO_DEPRECATE
-#  define _CRT_SECURE_NO_DEPRECATE 1
-#endif
-#endif
-
 /* Pathname separator character */
 #if __WIN32__
 #  define GB_PATHSEP '\\'
