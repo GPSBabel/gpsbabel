@@ -33,12 +33,12 @@ remove_line $1.h GPSBabel.pro
 remove_manually $1 reference/help.txt
 remove_manually $1 reference/format3.txt
 
-# Take out the boilerplate entries in vecs.h ...
-remove_line_containing extern.*$1 vecs.h
-remove_line_containing Format.*$1 vecs.h
-remove_line_containing include.*$1 vecs.h
+# Take out the boilerplate entries in vecs.cc ...
+remove_line_containing extern.*$1 vecs.cc
+remove_line_containing Format.*$1 vecs.cc
+remove_line_containing include.*$1 vecs.cc
 # ... then let a human nerd snip the actual table entry away.
-remove_manually $1 vecs.h
+remove_manually $1 vecs.cc
 
 remove_line_containing $1 reference/format0.txt
 remove_line_containing $1 reference/format1.txt
