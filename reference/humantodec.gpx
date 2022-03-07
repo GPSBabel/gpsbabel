@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="-1.234000000" minlon="-5.678000000" maxlat="-1.234000000" maxlon="-5.678000000"/>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point0</name>
+    <cmt>point0</cmt>
+    <desc>point0</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point1</name>
+    <cmt>point1</cmt>
+    <desc>point1</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point2</name>
+    <cmt>point2</cmt>
+    <desc>point2</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point3</name>
+    <cmt>point3</cmt>
+    <desc>point3</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point4</name>
+    <cmt>point4</cmt>
+    <desc>point4</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point5</name>
+    <cmt>point5</cmt>
+    <desc>point5</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point6</name>
+    <cmt>point6</cmt>
+    <desc>point6</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point7</name>
+    <cmt>point7</cmt>
+    <desc>point7</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point8</name>
+    <cmt>point8</cmt>
+    <desc>point8</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point9</name>
+    <cmt>point9</cmt>
+    <desc>point9</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point10</name>
+    <cmt>point10</cmt>
+    <desc>point10</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point11</name>
+    <cmt>point11</cmt>
+    <desc>point11</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point12</name>
+    <cmt>point12</cmt>
+    <desc>point12</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point13</name>
+    <cmt>point13</cmt>
+    <desc>point13</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point14</name>
+    <cmt>point14</cmt>
+    <desc>point14</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point15</name>
+    <cmt>point15</cmt>
+    <desc>point15</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point16</name>
+    <cmt>point16</cmt>
+    <desc>point16</desc>
+  </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point17</name>
+    <cmt>point17</cmt>
+    <desc>point17</desc>
+  </wpt>
+</gpx>

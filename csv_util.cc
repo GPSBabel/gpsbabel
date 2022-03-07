@@ -331,14 +331,14 @@ ddmmdir_to_degrees(const char* ddmmdir)
 
 /*****************************************************************************
  * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
- * usage: human_to_dec( "N 41� 09.12' W 085� 09.36'", &lat, &lon );
+ * usage: human_to_dec( "N 41° 09.12′ W 085° 09.36′", &lat, &lon );
  *        human_to_dec( "41 9 5.652 N", &lat, &lon );
  *
  *        which: 0-no preference    1-prefer lat    2-prefer lon
  *****************************************************************************/
 
 void
-human_to_dec(const char* instr, double* outlat, double* outlon, int which)
+human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -347,21 +347,12 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
   int    lonsign = 0;
   int    unksign = 1;
 
-  const char* cur;
   double* numres = unk;
   int numind = 0;
-  char* buff = nullptr;
 
-  if (strchr(instr, ',') != nullptr) {
-    char* c;
-    buff = xstrdup(instr);
-    while ((c = strchr(buff, ','))) {
-      *c = '.';
-    }
-    cur = buff;
-  } else {
-    cur = instr;
-  }
+  // Allow comma as decimal separator.
+  const QByteArray inbytes = instr.toUtf8().replace(',', '.');
+  const char* cur = inbytes.constData();
 
   while (cur && *cur) {
     switch (*cur) {
@@ -424,9 +415,8 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     case '9':
     case '0':
     case '.':
-    case ',':
       numres[numind] = atof(cur);
-      while (cur && *cur && strchr("1234567890.,",*cur)) {
+      while (cur && *cur && strchr("1234567890.",*cur)) {
         cur++;
       }
       break;
@@ -494,9 +484,6 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     if (lonsign) {
       *outlon *= lonsign;
     }
-  }
-  if (buff) {
-    xfree(buff);
   }
 }
 
