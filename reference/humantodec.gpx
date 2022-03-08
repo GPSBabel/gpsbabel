@@ -92,4 +92,9 @@
     <cmt>point17</cmt>
     <desc>point17</desc>
   </wpt>
+  <wpt lat="-1.234000000" lon="-5.678000000">
+    <name>point18</name>
+    <cmt>point18</cmt>
+    <desc>point18</desc>
+  </wpt>
 </gpx>
