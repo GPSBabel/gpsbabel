@@ -21,12 +21,11 @@
  */
 
 #include <cassert>             // for assert
-#include <cctype>              // for isspace
 #include <cmath>               // for fabs
-#include <cstdio>              // for size_t
 #include <cstdlib>             // for atof, strtod
 #include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
+#include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
 #include <QDebug>              // for QDebug
 #include <QRegularExpression>  // for QRegularExpression
@@ -415,10 +414,9 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
     case '9':
     case '0':
     case '.':
-      numres[numind] = atof(cur);
-      while (cur && *cur && strchr("1234567890.",*cur)) {
-        cur++;
-      }
+      char* end;
+      numres[numind] = strtod(cur, &end);
+      cur = end;
       break;
     case '-':
       unksign = -1;
