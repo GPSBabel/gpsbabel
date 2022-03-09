@@ -271,6 +271,9 @@ NmeaFormat::rd_deinit()
     break;
   }
 
+  nmea_release_wpt(curr_waypt);
+  curr_waypt = nullptr;
+
   posn_fname.clear();
 
 }

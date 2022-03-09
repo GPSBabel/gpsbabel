@@ -41,3 +41,8 @@ compare ${REFERENCE}/libreoffice.text ${TMPDIR}/libreoffice.text
 gpsbabel -i unicsv -f ${REFERENCE}/libreoffice.csv -o unicsv -F ${TMPDIR}/libreoffice2.csv
 gpsbabel -i unicsv -f ${TMPDIR}/libreoffice2.csv -o text,degformat=ddd -F ${TMPDIR}/libreoffice2.text
 compare ${REFERENCE}/libreoffice.text ${TMPDIR}/libreoffice2.text
+
+gpsbabel -i unicsv -f ${REFERENCE}/humantodec1.csv -o gpx -F ${TMPDIR}/humantodec1.gpx
+compare ${REFERENCE}/humantodec.gpx ${TMPDIR}/humantodec1.gpx
+gpsbabel -i unicsv -f ${REFERENCE}/humantodec2.csv -o gpx -F ${TMPDIR}/humantodec2.gpx
+compare ${REFERENCE}/humantodec.gpx ${TMPDIR}/humantodec2.gpx
