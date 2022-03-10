@@ -1061,9 +1061,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 
 int str_match(const char* str, const char* match);
 
-char* strsub(const char* s, const char* search, const char* replace);
-char* gstrsub(const char* s, const char* search, const char* replace);
-
 void rtrim(char* s);
 char* lrtrim(char* buff);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
