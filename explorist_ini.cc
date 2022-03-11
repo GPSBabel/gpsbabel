@@ -30,20 +30,20 @@ explorist_ini_try(const char* path)
   info->track_path = nullptr;
   info->waypoint_path = nullptr;
 
-  char* s = xstrdup(inifile_readstr(inifile,  "UGDS", "WpFolder"));
-  if (s) {
-    s = gstrsub(s, "\\", "/");
-    xasprintf(&info->waypoint_path, "%s/%s", path, s);
+  QString s = inifile_readstr(inifile,  "UGDS", "WpFolder");
+  if (!s.isNull()) {
+    s.replace('\\', '/');
+    xasprintf(&info->waypoint_path, "%s/%s", path, CSTR(s));
   }
-  s = xstrdup(inifile_readstr(inifile,  "UGDS", "GcFolder"));
-  if (s) {
-    s = gstrsub(s, "\\", "/");
-    xasprintf(&info->geo_path, "%s/%s", path, s);
+  s = inifile_readstr(inifile,  "UGDS", "GcFolder");
+  if (!s.isNull()) {
+    s.replace('\\', '/');
+    xasprintf(&info->geo_path, "%s/%s", path, CSTR(s));
   }
-  s = xstrdup(inifile_readstr(inifile,  "UGDS", "TrkFolder"));
-  if (s) {
-    s = gstrsub(s, "\\", "/");
-    xasprintf(&info->track_path, "%s/%s", path, s);
+  s = inifile_readstr(inifile,  "UGDS", "TrkFolder");
+  if (!s.isNull()) {
+    s.replace('\\', '/');
+    xasprintf(&info->track_path, "%s/%s", path, CSTR(s));
   }
 
   inifile_done(inifile);
