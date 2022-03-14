@@ -152,7 +152,7 @@ private:
   public:
     T num;
     T den;
-  
+
     Rational() = default;
     Rational(T n, T d) : num{n}, den{d} {}
   };

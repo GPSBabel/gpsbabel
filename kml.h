@@ -107,7 +107,7 @@ private:
     "Folder",
     nullptr
   };
-  
+
   static constexpr const char* kml_tags_to_skip[] = {
     "Camera",
     "LookAt",

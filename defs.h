@@ -1092,12 +1092,9 @@ QString get_filename(const QString& fname);			/* extract the filename portion */
  * Character encoding transformations.
  */
 
-#define CET_NOT_CONVERTABLE_DEFAULT '$'
 #define CET_CHARSET_ASCII	"US-ASCII"
 #define CET_CHARSET_UTF8	"UTF-8"
-#define CET_CHARSET_HEBREW  "ISO-8859-8"
 #define CET_CHARSET_MS_ANSI	"windows-1252"
-#define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
