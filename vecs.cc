@@ -103,7 +103,6 @@ extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
-extern ff_vecs_t hiketech_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
@@ -190,7 +189,6 @@ struct Vecs::Impl
 #if MAXIMAL_ENABLED
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
-  LegacyFormat hiketech_fmt {hiketech_vecs};
   LegacyFormat glogbook_fmt {glogbook_vecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
@@ -487,20 +485,6 @@ struct Vecs::Impl
       "wbt-tk1",
       "Wintec WBT-201/G-Rays 2 Binary File Format",
       "tk1",
-      nullptr,
-    },
-    {
-      &hiketech_fmt,
-      "hiketech",
-      "HikeTech",
-      "gps",
-      nullptr,
-    },
-    {
-      &glogbook_fmt,
-      "glogbook",
-      "Garmin Logbook XML",
-      "xml",
       nullptr,
     },
     {

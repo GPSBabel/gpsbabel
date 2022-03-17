@@ -48,7 +48,6 @@ arc	txt	GPSBabel arc filter file
 gpsdrive		GpsDrive Format
 gpsdrivetrack		GpsDrive Format for Tracks
 gpx	gpx	GPX XML
-hiketech	gps	HikeTech
 holux	wpo	Holux (gm-100) .wpo Format
 m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 m241		Holux M-241 (MTK based) download

@@ -108,7 +108,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   gpssim.cc
   gtm.cc
   gtrnctr.cc
-  hiketech.cc
   holux.cc
   html.cc
   humminbird.cc
