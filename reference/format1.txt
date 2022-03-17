@@ -10,20 +10,11 @@ file	iblue757	csv	Data Logger iBlue757 csv
 file	gpl	gpl	DeLorme GPL
 file	saplus		DeLorme Street Atlas Plus
 file	saroute	anr	DeLorme Street Atlas Route
-file	destinator_itn	dat	Destinator Itineraries (.dat)
-file	destinator_poi	dat	Destinator Points of Interest (.dat)
-file	destinator_trl	dat	Destinator TrackLogs (.dat)
-file	easygps	loc	EasyGPS binary format
 file	exif	jpg	Embedded Exif-GPS data (.jpg)
-file	energympro	cpo	Energympro GPS training watch
-file	enigma	ert	Enigma binary waypoint file (.ert)
 file	shape	shp	ESRI shapefile
-file	f90g	map	F90G Automobile DVR GPS log file
 file	igc		FAI/IGC Flight Recorder Data Format
 file	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file
-file	flysight	csv	FlySight GPS File
 file	gpssim	gpssim	Franson GPSGate Simulation
-file	fugawi	txt	Fugawi
 file	garmin301		Garmin 301 Custom position and heartrate
 file	garmin_g1000	csv	Garmin G1000 datalog input filter file
 file	glogbook	xml	Garmin Logbook XML
