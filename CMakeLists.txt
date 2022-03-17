@@ -405,7 +405,6 @@ set(TESTS
   classic-1
   classic-2
   classic-3
-  delgpl
   destinator
   dg100
   dmtlog

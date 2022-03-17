@@ -7,7 +7,6 @@ file	csv		Comma separated values
 internal	custom		Custom "Everything" Style
 file	iblue747	csv	Data Logger iBlue747 csv
 file	iblue757	csv	Data Logger iBlue757 csv
-file	gpl	gpl	DeLorme GPL
 file	saplus		DeLorme Street Atlas Plus
 file	saroute	anr	DeLorme Street Atlas Route
 file	destinator_itn	dat	Destinator Itineraries (.dat)

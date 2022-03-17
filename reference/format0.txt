@@ -4,7 +4,6 @@ v900		Columbus/Visiontac V900 files (.csv)
 csv		Comma separated values
 iblue747	csv	Data Logger iBlue747 csv
 iblue757	csv	Data Logger iBlue757 csv
-gpl	gpl	DeLorme GPL
 saplus		DeLorme Street Atlas Plus
 saroute	anr	DeLorme Street Atlas Route
 destinator_itn	dat	Destinator Itineraries (.dat)

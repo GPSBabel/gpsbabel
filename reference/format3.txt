@@ -116,8 +116,6 @@ option	iblue757	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_datum
 
-file	--rw--	gpl	gpl	DeLorme GPL	gpl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpl.html
 file	rw----	saplus		DeLorme Street Atlas Plus	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html
 option	saplus	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snlen
