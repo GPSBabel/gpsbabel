@@ -409,7 +409,6 @@ set(TESTS
   dna
   dop_filter
   duplicate
-  easygps
   energympro
   enigma
   exif
