@@ -264,7 +264,6 @@ set(HEADERS
   legacyformat.h
   lowranceusr.h
   magellan.h
-  mapbar_track.h
   navilink.h
   nmea.h
   osm.h
@@ -437,17 +436,13 @@ set(TESTS
   itracku
   kml-read
   kml
-  lmx
   lowranceusr
   magellan_sd
   magellan
-  mapbar
   mapfactor
-  mmo
   motoactv
   mtk
   multiurlgpx
-  mynav
   navilink
   navitel
   nmea
