@@ -482,7 +482,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  saroute
   sbn
   sbp
   serialization
