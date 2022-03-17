@@ -90,7 +90,6 @@ extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
-extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
@@ -175,7 +174,6 @@ struct Vecs::Impl
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
-  LegacyFormat gpl_fmt {gpl_vecs};
   TextFormat text_fmt;
   HtmlFormat html_fmt;
   LegacyFormat igc_fmt {igc_vecs};
@@ -396,13 +394,6 @@ struct Vecs::Impl
       nullptr,
     },
 #endif
-    {
-      &gpl_fmt,
-      "gpl",
-      "DeLorme GPL",
-      "gpl",
-      nullptr,
-    },
     {
       &text_fmt,
       "text",
