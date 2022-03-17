@@ -87,7 +87,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   dg-100.cc
   dmtlog.cc
   exif.cc
-  f90g_track.cc
   garmin_fit.cc
   garmin_gpi.cc
   garmin_txt.cc
@@ -240,7 +239,6 @@ set(HEADERS
   dg-100.h
   exif.h
   explorist_ini.h
-  f90g_track.h
   filter.h
   filter_vecs.h
   format.h
@@ -402,17 +400,12 @@ set(TESTS
   classic-2
   classic-3
   delgpl
-  destinator
   dg100
   dmtlog
   dna
   dop_filter
   duplicate
-  energympro
-  enigma
   exif
-  f90g
-  fugawi
   garmin_fit
   garmin_g1000
   garmin_gpi
