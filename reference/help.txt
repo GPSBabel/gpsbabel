@@ -193,9 +193,6 @@ File Types (-i and -o options):
 	geo                   Geocaching.com .loc
 	  deficon               Default icon name 
 	  nuke_placer           (0/1) Omit Placer name 
-	ggv_ovl               Geogrid-Viewer ascii overlay file (.ovl)
-	ggv_bin               Geogrid-Viewer binary overlay file (.ovl)
-	ggv_log               Geogrid-Viewer tracklogs (.log)
 	geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off. 
 	geonet                GEOnet Names Server (GNS)

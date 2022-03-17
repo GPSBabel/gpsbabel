@@ -33,9 +33,6 @@ file	garmin_gpi	gpi	Garmin Points of Interest (.gpi)
 serial	garmin		Garmin serial/USB protocol
 file	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)
 file	geo	loc	Geocaching.com .loc
-file	ggv_ovl	ovl	Geogrid-Viewer ascii overlay file (.ovl)
-file	ggv_bin	ovl	Geogrid-Viewer binary overlay file (.ovl)
-file	ggv_log	log	Geogrid-Viewer tracklogs (.log)
 file	geojson	json	GeoJson
 file	geonet	txt	GEOnet Names Server (GNS)
 internal	dg-100-bin		GlobalSat DG-100/BT-335 Binary File

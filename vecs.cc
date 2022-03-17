@@ -115,7 +115,6 @@ extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
-extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
@@ -202,7 +201,6 @@ struct Vecs::Impl
   GtrnctrFormat gtc_fmt;
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
-  LegacyFormat ggv_log_fmt {ggv_log_vecs};
   GarminGPIFormat garmin_gpi_fmt;
   LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
@@ -577,13 +575,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &ggv_log_fmt,
-      "ggv_log",
-      "Geogrid-Viewer tracklogs (.log)",
-      "log",
-      nullptr,
-    },
-    {
       &garmin_gpi_fmt,
       "garmin_gpi",
       "Garmin Points of Interest (.gpi)",
@@ -721,13 +712,6 @@ struct Vecs::Impl
       "navitel_trk",
       "Navitel binary track (.bin)",
       "bin",
-      nullptr,
-    },
-    {
-      &ggv_ovl_fmt,
-      "ggv_ovl",
-      "Geogrid-Viewer ascii overlay file (.ovl)",
-      "ovl",
       nullptr,
     },
     {
@@ -875,13 +859,6 @@ struct Vecs::Impl
       "geojson",
       "GeoJson",
       "json",
-      nullptr,
-    },
-    {
-      &ggv_bin_fmt,
-      "ggv_bin",
-      "Geogrid-Viewer binary overlay file (.ovl)",
-      "ovl",
       nullptr,
     },
     {

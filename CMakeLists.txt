@@ -99,7 +99,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   gdb.cc
   geojson.cc
   ggv_bin.cc
-  ggv_log.cc
   ggv_ovl.cc
   globalsat_sport.cc
   googledir.cc

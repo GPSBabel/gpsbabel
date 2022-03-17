@@ -370,12 +370,6 @@ option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_
 
 option	geo	nuke_placer	Omit Placer name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_nuke_placer
 
-file	rwrwrw	ggv_ovl	ovl	Geogrid-Viewer ascii overlay file (.ovl)	ggv_ovl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_ovl.html
-file	--r---	ggv_bin	ovl	Geogrid-Viewer binary overlay file (.ovl)	ggv_bin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_bin.html
-file	--rw--	ggv_log	log	Geogrid-Viewer tracklogs (.log)	ggv_log
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_log.html
 file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
 option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
