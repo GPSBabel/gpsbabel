@@ -103,7 +103,6 @@ extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
-extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
@@ -126,7 +125,6 @@ extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
-extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
 extern ff_vecs_t itracku_vecs;
@@ -189,7 +187,6 @@ struct Vecs::Impl
 #if MAXIMAL_ENABLED
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
-  LegacyFormat glogbook_fmt {glogbook_vecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
@@ -225,7 +222,6 @@ struct Vecs::Impl
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
   LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
-  LegacyFormat gnav_trl_fmt {gnav_trl_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
   LegacyFormat ggv_ovl_fmt {ggv_ovl_vecs};
   LegacyFormat itracku_fmt {itracku_vecs};
@@ -718,13 +714,6 @@ struct Vecs::Impl
       "mapasia_tr7",
       "MapAsia track file (.tr7)",
       "tr7",
-      nullptr,
-    },
-    {
-      &gnav_trl_fmt,
-      "gnav_trl",
-      "Google Navigator Tracklines (.trl)",
-      "trl",
       nullptr,
     },
     {

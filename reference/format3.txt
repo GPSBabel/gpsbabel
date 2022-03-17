@@ -258,8 +258,6 @@ option	garmin_g1000	prefer_shortnames	Use shortname instead of description	boole
 
 option	garmin_g1000	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_datum
 
-file	--rw--	glogbook	xml	Garmin Logbook XML	glogbook
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_glogbook.html
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb	gdb
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html
 option	gdb	cat	Default category on output (1..16)	integer		1	16	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_cat
@@ -468,8 +466,6 @@ option	kml	rotate_colors	Rotate colors for tracks and routes (default automatic)
 
 option	kml	prec	Precision of coordinates, number of decimals	integer	6			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_prec
 
-file	--rw--	gnav_trl	trl	Google Navigator Tracklines (.trl)	gnav_trl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gnav_trl.html
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen

@@ -23,7 +23,6 @@ gpssim	gpssim	Franson GPSGate Simulation
 fugawi	txt	Fugawi
 garmin301		Garmin 301 Custom position and heartrate
 garmin_g1000	csv	Garmin G1000 datalog input filter file
-glogbook	xml	Garmin Logbook XML
 gdb	gdb	Garmin MapSource - gdb
 garmin_txt	txt	Garmin MapSource - txt (tab delimited)
 garmin_poi		Garmin POI database
@@ -41,7 +40,6 @@ dg-200		GlobalSat DG-200 Download
 globalsat		GlobalSat GH625XT GPS training watch
 googledir	xml	Google Directions XML
 kml	kml	Google Earth (Keyhole) Markup Language
-gnav_trl	trl	Google Navigator Tracklines (.trl)
 land_air_sea	txt	GPS Tracking Key Pro text
 gtm	gtm	GPS TrackMaker
 arc	txt	GPSBabel arc filter file

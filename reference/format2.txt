@@ -26,7 +26,6 @@ file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation
 file	rw----	fugawi	txt	Fugawi
 file	rw----	garmin301		Garmin 301 Custom position and heartrate
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file
-file	--rw--	glogbook	xml	Garmin Logbook XML
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)
 file	rw----	garmin_poi		Garmin POI database
@@ -46,7 +45,6 @@ serial	r-r---	dg-200		GlobalSat DG-200 Download
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch
 file	--r---	googledir	xml	Google Directions XML
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language
-file	--rw--	gnav_trl	trl	Google Navigator Tracklines (.trl)
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text
 file	rwrwrw	gtm	gtm	GPS TrackMaker
 file	rw----	arc	txt	GPSBabel arc filter file
