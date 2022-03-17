@@ -118,22 +118,6 @@ option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org
 
 file	--rw--	gpl	gpl	DeLorme GPL	gpl
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpl.html
-file	rw----	saplus		DeLorme Street Atlas Plus	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html
-option	saplus	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snlen
-
-option	saplus	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snwhite
-
-option	saplus	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snupper
-
-option	saplus	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snunique
-
-option	saplus	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_urlbase
-
-option	saplus	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_prefer_shortnames
-
-option	saplus	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_datum
-
 file	--r---	saroute	anr	DeLorme Street Atlas Route	saroute
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html
 option	saroute	turns_important	Keep turns if simplify filter is used	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_turns_important
