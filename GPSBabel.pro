@@ -59,7 +59,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   bcr.cc \
   brauniger_iq.cc \
   delgpl.cc \
-  destinator.cc \
   dg-100.cc \
   dmtlog.cc \
   exif.cc \
