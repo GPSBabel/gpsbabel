@@ -9,7 +9,6 @@ file	--rw--	iblue747	csv	Data Logger iBlue747 csv
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv
 file	--rw--	gpl	gpl	DeLorme GPL
 file	rw----	saplus		DeLorme Street Atlas Plus
-file	--r---	saroute	anr	DeLorme Street Atlas Route
 file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)
 file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)
 file	--rw--	destinator_trl	dat	Destinator TrackLogs (.dat)

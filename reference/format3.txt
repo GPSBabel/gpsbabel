@@ -134,18 +134,6 @@ option	saplus	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	saplus	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_datum
 
-file	--r---	saroute	anr	DeLorme Street Atlas Route	saroute
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html
-option	saroute	turns_important	Keep turns if simplify filter is used	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_turns_important
-
-option	saroute	turns_only	Only read turns; skip all other points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_turns_only
-
-option	saroute	split	Split into multiple routes at turns	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_split
-
-option	saroute	controls	Read control points as waypoint/route/none	string	none			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_controls
-
-option	saroute	times	Synthesize track times	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_times
-
 file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)	destinator_itn
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_itn.html
 file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)	destinator_poi
