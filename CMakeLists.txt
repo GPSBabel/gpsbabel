@@ -90,7 +90,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   energympro.cc
   enigma.cc
   exif.cc
-  f90g_track.cc
   garmin_fit.cc
   garmin_gpi.cc
   garmin_txt.cc
@@ -234,7 +233,6 @@ set(HEADERS
   energympro.h
   exif.h
   explorist_ini.h
-  f90g_track.h
   filter.h
   filter_vecs.h
   format.h
@@ -402,7 +400,6 @@ set(TESTS
   energympro
   enigma
   exif
-  f90g
   fugawi
   garmin_fit
   garmin_g1000
@@ -439,8 +436,6 @@ set(TESTS
   lowranceusr
   magellan_sd
   magellan
-  mapfactor
-  motoactv
   mtk
   multiurlgpx
   navilink
