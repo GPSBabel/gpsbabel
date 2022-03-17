@@ -41,7 +41,6 @@
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "energympro.h"        // for EnergymproFormat
 #include "exif.h"              // for ExifFormat
-#include "f90g_track.h"        // for F90gTrackFormat
 #include "format.h"            // for Format
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
@@ -58,9 +57,6 @@
 #include "kml.h"               // for KmlFormat
 #include "legacyformat.h"      // for LegacyFormat
 #include "lowranceusr.h"       // for LowranceusrFormat
-#include "mapbar_track.h"      // for MapbarTrackFormat
-#include "mapfactor.h"         // for MapfactorFormat
-#include "mynav.h"             // for MyNavFormat
 #include "nmea.h"              // for NmeaFormat
 #include "osm.h"               // for OsmFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
@@ -69,7 +65,6 @@
 #include "skytraq.h"           // for MinihomerFormat, SkytraqFormat, SkytraqfileFormat
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
-#include "tef_xml.h"           // for TefXMLFormat
 #include "teletype.h"          // for TeletypeFormat
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
@@ -97,7 +92,6 @@ extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
-extern ff_vecs_t mtk_locus_vecs;
 #endif // MAXIMAL_ENABLED
 extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
@@ -108,8 +102,6 @@ extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
-extern ff_vecs_t bcr_vecs;
-extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
@@ -118,15 +110,11 @@ extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t ik3d_vecs;
 extern ff_vecs_t destinator_poi_vecs;
 extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
-extern ff_vecs_t igo8_vecs;
-extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t ggv_ovl_vecs;
@@ -134,7 +122,6 @@ extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
-extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
@@ -184,7 +171,6 @@ struct Vecs::Impl
   LegacyFormat mtk_ffmt {mtk_fvecs};
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
-  LegacyFormat mtk_locus_fmt {mtk_locus_vecs};
 #endif // MAXIMAL_ENABLED
   LegacyFormat wbt_sfmt {wbt_svecs};
 #if MAXIMAL_ENABLED
@@ -195,9 +181,6 @@ struct Vecs::Impl
   LegacyFormat vcf_fmt {vcf_vecs};
   LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
-  TefXMLFormat tef_xml_fmt;
-  LegacyFormat bcr_fmt {bcr_vecs};
-  LegacyFormat ignr_fmt {ignr_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
   LegacyFormat gpssim_fmt {gpssim_vecs};
@@ -209,7 +192,6 @@ struct Vecs::Impl
   LegacyFormat raymarine_fmt {raymarine_vecs};
   LegacyFormat ggv_log_fmt {ggv_log_vecs};
   GarminGPIFormat garmin_gpi_fmt;
-  LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
   LegacyFormat xol_fmt {xol_vecs};
   Dg100SerialFormat dg100_fmt;
@@ -217,16 +199,13 @@ struct Vecs::Impl
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
   LegacyFormat navilink_fmt {navilink_vecs};
-  LegacyFormat ik3d_fmt {ik3d_vecs};
   OsmFormat osm_fmt;
   LegacyFormat destinator_poi_fmt {destinator_poi_vecs};
   LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
   LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
   ExifFormat exif_fmt;
-  LegacyFormat igo8_fmt {igo8_vecs};
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
   LegacyFormat gnav_trl_fmt {gnav_trl_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
   LegacyFormat ggv_ovl_fmt {ggv_ovl_vecs};
@@ -234,7 +213,6 @@ struct Vecs::Impl
   LegacyFormat itracku_ffmt {itracku_fvecs};
   LegacyFormat sbp_fmt {sbp_vecs};
   LegacyFormat sbn_fmt {sbn_vecs};
-  LegacyFormat mmo_fmt {mmo_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   LegacyFormat enigma_fmt {enigma_vecs};
   SkytraqFormat skytraq_fmt;
@@ -245,11 +223,7 @@ struct Vecs::Impl
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
-  MapbarTrackFormat mapbar_track_fmt;
-  F90gTrackFormat f90g_track_fmt;
-  MapfactorFormat mapfactor_fmt;
   EnergymproFormat energympro_fmt;
-  MyNavFormat mynav_fmt;
   GeoJsonFormat geojson_fmt;
   GgvBinFormat ggv_bin_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
@@ -459,13 +433,6 @@ struct Vecs::Impl
       "bin",
       nullptr,
     },
-    {
-      &mtk_locus_fmt,
-      "mtk_locus",
-      "MediaTek Locus",
-      nullptr,
-      nullptr,
-    },
 #endif // MAXIMAL_ENABLED
     {
       &wbt_sfmt,
@@ -522,27 +489,6 @@ struct Vecs::Impl
       "tomtom",
       "TomTom POI file (.ov2)",
       "ov2",
-      nullptr,
-    },
-    {
-      &tef_xml_fmt,
-      "tef",
-      "Map&Guide 'TourExchangeFormat' XML",
-      "xml",
-      nullptr,
-    },
-    {
-      &bcr_fmt,
-      "bcr",
-      "Motorrad Routenplaner (Map&Guide) .bcr files",
-      "bcr",
-      nullptr,
-    },
-    {
-      &ignr_fmt,
-      "ignrando",
-      "IGN Rando track files",
-      "rdn",
       nullptr,
     },
     {
@@ -611,13 +557,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &lmx_fmt,
-      "lmx",
-      "Nokia Landmark Exchange",
-      nullptr,
-      nullptr,
-    },
-    {
       &random_fmt,
       "random",
       "Internal GPS data generator",
@@ -667,13 +606,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &ik3d_fmt,
-      "ik3d",
-      "MagicMaps IK3D project file (.ikt)",
-      "ikt",
-      nullptr,
-    },
-    {
       &osm_fmt,
       "osm",
       "OpenStreetMap data files",
@@ -709,13 +641,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &igo8_fmt,
-      "igo8",
-      "IGO8 .trk",
-      "trk",
-      nullptr,
-    },
-    {
       &humminbird_fmt,
       "humminbird",
       "Humminbird waypoints and routes (.hwr)",
@@ -727,13 +652,6 @@ struct Vecs::Impl
       "humminbird_ht",
       "Humminbird tracks (.ht)",
       "ht",
-      nullptr,
-    },
-    {
-      &mapasia_tr7_fmt,
-      "mapasia_tr7",
-      "MapAsia track file (.tr7)",
-      "tr7",
       nullptr,
     },
     {
@@ -783,13 +701,6 @@ struct Vecs::Impl
       "sbn",
       "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
       "sbn",
-      nullptr,
-    },
-    {
-      &mmo_fmt,
-      "mmo",
-      "Memory-Map Navigator overlay files (.mmo)",
-      "mmo",
       nullptr,
     },
     {
@@ -863,38 +774,10 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &mapbar_track_fmt,
-      "mapbar",
-      "Mapbar (China) navigation track for Sonim Xp3300",
-      "trk",
-      nullptr,
-    },
-    {
-      &f90g_track_fmt,
-      "f90g",
-      "F90G Automobile DVR GPS log file",
-      "map",
-      nullptr,
-    },
-    {
-      &mapfactor_fmt,
-      "mapfactor",
-      "Mapfactor Navigator",
-      "xml",
-      nullptr,
-    },
-    {
       &energympro_fmt,
       "energympro",
       "Energympro GPS training watch",
       "cpo",
-      nullptr,
-    },
-    {
-      &mynav_fmt,
-      "mynav",
-      "MyNav TRC format",
-      "trc",
       nullptr,
     },
     {

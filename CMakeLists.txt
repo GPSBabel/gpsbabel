@@ -81,7 +81,6 @@ set(MINIMAL_FMTS
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  bcr.cc
   brauniger_iq.cc
   delgpl.cc
   destinator.cc
@@ -113,19 +112,10 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   html.cc
   humminbird.cc
   igc.cc
-  ignrando.cc
-  igo8.cc
-  ik3d.cc
   itracku.cc
-  lmx.cc
   lowranceusr.cc
-  mapasia.cc
   mapbar_track.cc
-  mapfactor.cc
-  mmo.cc
-  mtk_locus.cc
   mtk_logger.cc
-  mynav.cc
   navilink.cc
   navitel.cc
   osm.cc
@@ -276,8 +266,6 @@ set(HEADERS
   lowranceusr.h
   magellan.h
   mapbar_track.h
-  mapfactor.h
-  mynav.h
   navilink.h
   nmea.h
   osm.h

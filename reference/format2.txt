@@ -18,7 +18,6 @@ file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)
 file	--r---	energympro	cpo	Energympro GPS training watch
 file	----rw	enigma	ert	Enigma binary waypoint file (.ert)
 file	rwrwrw	shape	shp	ESRI shapefile
-file	--r---	f90g	map	F90G Automobile DVR GPS log file
 file	--rwrw	igc		FAI/IGC Flight Recorder Data Format
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file
 file	rw----	flysight	csv	FlySight GPS File
@@ -60,35 +59,16 @@ serial	--r---	m241		Holux M-241 (MTK based) download
 file	-w----	html	html	HTML Output
 file	r-rwr-	humminbird_ht	ht	Humminbird tracks (.ht)
 file	rwr-rw	humminbird	hwr	Humminbird waypoints and routes (.hwr)
-file	--rw--	ignrando	rdn	IGN Rando track files
-file	rw----	igoprimo_poi	upoi	iGo Primo points of interest (.upoi)
-file	rw----	igo2008_poi	upoi	iGO2008 points of interest (.upoi)
-file	--rw--	igo8	trk	IGO8 .trk
 internal	r-r-r-	random		Internal GPS data generator
-file	--rw--	kompass_tk	wp	Kompass (DAV) Track (.tk)
-file	rw----	kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
 file	rwrwrw	lowranceusr	usr	Lowrance USR
 file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)
 file	rwrwrw	magellan		Magellan SD files (as for Meridian)
 serial	rwrwrw	magellan		Magellan serial protocol
-file	r-r---	ik3d	ikt	MagicMaps IK3D project file (.ikt)
-file	--rw--	mainnav	nav	Mainnav
-file	----r-	tef	xml	Map&Guide 'TourExchangeFormat' XML
-file	--rw--	mapasia_tr7	tr7	MapAsia track file (.tr7)
-file	--r---	mapbar	trk	Mapbar (China) navigation track for Sonim Xp3300
-file	rw----	mapfactor	xml	Mapfactor Navigator
-file	rw----	mapconverter	txt	Mapopolis.com Mapconverter CSV
-file	rw----	mxf	mxf	MapTech Exchange Format
-file	r-r---	mtk_locus		MediaTek Locus
-file	rwrwrw	mmo	mmo	Memory-Map Navigator overlay files (.mmo)
 file	rw----	s_and_t	txt	Microsoft Streets and Trips 2002-2007
 serial	r-r---	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)
 file	--r---	garmin_xt		Mobile Garmin XT Track files
-file	rw----	motoactv	csv	Motoactiv CSV
-file	----rw	bcr	bcr	Motorrad Routenplaner (Map&Guide) .bcr files
 file	r-r---	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format
 serial	r-r---	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
-file	--r---	mynav	trc	MyNav TRC format
 file	rw----	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
@@ -100,7 +80,6 @@ file	--rw--	navitel_trk	bin	Navitel binary track (.bin)
 file	rw----	dna	dna	Navitrak DNA marker format
 file	rw----	nima		NIMA/GNIS Geographic Names File
 file	rwrw--	nmea		NMEA 0183 sentences
-file	rw----	lmx		Nokia Landmark Exchange
 file	rw-wrw	osm	osm	OpenStreetMap data files
 file	rwrwrw	ozi		OziExplorer
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000

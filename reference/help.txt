@@ -96,7 +96,6 @@ File Types (-i and -o options):
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf 
 	  url                   Source for URL field in .dbf 
-	f90g                  F90G Automobile DVR GPS log file
 	igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff 
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
@@ -297,44 +296,6 @@ File Types (-i and -o options):
 	  altunits              Units for altitude (f)eet or (m)etres 
 	humminbird_ht         Humminbird tracks (.ht)
 	humminbird            Humminbird waypoints and routes (.hwr)
-	ignrando              IGN Rando track files
-	  index                 Index of track to write (if more than one in sourc 
-	igoprimo_poi          iGo Primo points of interest (.upoi)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	igo2008_poi           iGO2008 points of interest (.upoi)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	igo8                  IGO8 .trk
-	  tracknum              Track identification number 
-	  title                 Track title 
-	  description           Track description 
-	kompass_tk            Kompass (DAV) Track (.tk)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	kompass_wp            Kompass (DAV) Waypoints (.wp)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	lowranceusr           Lowrance USR
 	  ignoreicons           (0/1) (USR input) Ignore event marker icons on read 
 	  writeasicons          (0/1) (USR output) Treat waypoints as icons on write 
@@ -356,46 +317,6 @@ File Types (-i and -o options):
 	  baud                  Numeric value of bitrate (baud=4800) 
 	  noack                 (0/1) Suppress use of handshaking in name of speed 
 	  nukewpt               (0/1) Delete all waypoints 
-	ik3d                  MagicMaps IK3D project file (.ikt)
-	mainnav               Mainnav
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	tef                   Map&Guide 'TourExchangeFormat' XML
-	  routevia              (0/1) Include only via stations in route 
-	mapasia_tr7           MapAsia track file (.tr7)
-	mapbar                Mapbar (China) navigation track for Sonim Xp3300
-	mapfactor             Mapfactor Navigator
-	mapconverter          Mapopolis.com Mapconverter CSV
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	mxf                   MapTech Exchange Format
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	mtk_locus             MediaTek Locus
-	  baudrate              Speed in bits per second of serial port (autodetec 
-	  download              (0/1) Download logged fixes 
-	  erase                 (0/1) Erase device data after download 
-	  status                (0/1) Show device status 
-	  enable                (0/1) Enable logging after download 
-	mmo                   Memory-Map Navigator overlay files (.mmo)
-	  locked                (0/1) Write items 'locked' [default no] 
-	  visible               (0/1) Write items 'visible' [default yes] 
-	  ver                   Write files with internal version [n] 
 	s_and_t               Microsoft Streets and Trips 2002-2007
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -423,19 +344,6 @@ File Types (-i and -o options):
 	garmin_xt             Mobile Garmin XT Track files
 	  ftype                 Garmin Mobile XT ([ATRK]/STRK) (required)
 	  trk_header            Track name processing option ([0]-nrm/1-ign) 
-	motoactv              Motoactiv CSV
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	bcr                   Motorrad Routenplaner (Map&Guide) .bcr files
-	  index                 Index of route to write (if more than one in sourc 
-	  name                  New name for the route 
-	  radius                Radius of our big earth (default 6371000 meters) 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
 	mtk-bin               MTK Logger (iBlue 747,...) Binary File Format
 	  csv                   MTK compatible CSV output file 
 	mtk                   MTK Logger (iBlue 747,Qstarz BT-1000,...) download
@@ -444,7 +352,6 @@ File Types (-i and -o options):
 	  log_enable            (0/1) Enable logging after download 
 	  csv                   MTK compatible CSV output file 
 	  block_size_kb         Size of blocks in KB to request from device 
-	mynav                 MyNav TRC format
 	tpg                   National Geographic Topo .tpg (waypoints)
 	  datum                 Datum (default=NAD27) 
 	tpo2                  National Geographic Topo 2.x .tpo
@@ -496,8 +403,6 @@ File Types (-i and -o options):
 	  baud                  Speed in bits per second of serial port (baud=4800 
 	  gisteq                (0/1) Write tracks for Gisteq Phototracker 
 	  ignore_fix            (0/1) Accept position fixes in gpgga marked invalid 
-	lmx                   Nokia Landmark Exchange
-	  binary                (0/1) Compact binary representation 
 	osm                   OpenStreetMap data files
 	  tag                   Write additional way tag key/value pairs 
 	  tagnd                 Write additional node tag key/value pairs 
