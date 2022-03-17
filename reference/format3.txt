@@ -374,22 +374,6 @@ file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
 option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
 
-file	rw----	geonet	txt	GEOnet Names Server (GNS)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html
-option	geonet	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snlen
-
-option	geonet	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snwhite
-
-option	geonet	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snupper
-
-option	geonet	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snunique
-
-option	geonet	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_urlbase
-
-option	geonet	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_prefer_shortnames
-
-option	geonet	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_datum
-
 internal	r-r---	dg-100-bin		GlobalSat DG-100/BT-335 Binary File	dg-100-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-100-bin.html
 option	dg-100-bin	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-100-bin.html#fmt_dg-100-bin_o_erase
@@ -426,8 +410,6 @@ option	globalsat	input-is-dump-file	Dump raw data to this file	boolean				https:
 
 option	globalsat	timezone	Time zone ID	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_timezone
 
-file	--r---	googledir	xml	Google Directions XML	googledir
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googledir.html
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language	kml
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html
 option	kml	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_deficon

@@ -101,7 +101,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   ggv_bin.cc
   ggv_ovl.cc
   globalsat_sport.cc
-  googledir.cc
   gpssim.cc
   gtm.cc
   gtrnctr.cc

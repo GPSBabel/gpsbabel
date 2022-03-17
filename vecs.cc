@@ -104,7 +104,6 @@ extern ff_vecs_t wbt_svecs;
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
-extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t ignr_vecs;
@@ -187,7 +186,6 @@ struct Vecs::Impl
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
-  LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
   TefXMLFormat tef_xml_fmt;
   LegacyFormat bcr_fmt {bcr_vecs};
@@ -486,13 +484,6 @@ struct Vecs::Impl
       "vcard",
       "Vcard Output (for iPod)",
       "vcf",
-      nullptr,
-    },
-    {
-      &google_dir_fmt,
-      "googledir",
-      "Google Directions XML",
-      "xml",
       nullptr,
     },
     {

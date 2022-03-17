@@ -195,14 +195,6 @@ File Types (-i and -o options):
 	  nuke_placer           (0/1) Omit Placer name 
 	geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off. 
-	geonet                GEOnet Names Server (GNS)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	dg-100                GlobalSat DG-100/BT-335 Download
 	  erase                 (0/1) Erase device data after download 
 	  erase_only            (0/1) Only erase device data, do not download anything 
@@ -215,7 +207,6 @@ File Types (-i and -o options):
 	  dump-file             Dump raw data to this file 
 	  input-is-dump-file    (0/1) Dump raw data to this file 
 	  timezone              Time zone ID 
-	googledir             Google Directions XML
 	kml                   Google Earth (Keyhole) Markup Language
 	  deficon               Default icon name 
 	  lines                 (0/1) Export linestrings for tracks and routes 
