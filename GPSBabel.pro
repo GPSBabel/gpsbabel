@@ -73,8 +73,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   garmin_xt.cc \
   gdb.cc \
   geojson.cc \
-  ggv_bin.cc \
-  ggv_ovl.cc \
   globalsat_sport.cc \
   gpssim.cc \
   gtm.cc \
@@ -229,7 +227,6 @@ HEADERS =  \
   gbser_private.h \
   gdb.h \
   geojson.h \
-  ggv_bin.h \
   globalsat_sport.h \
   gpx.h \
   grtcirc.h \

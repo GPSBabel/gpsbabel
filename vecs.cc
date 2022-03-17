@@ -48,7 +48,6 @@
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
-#include "ggv_bin.h"           // for GgvBinFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
 #include "gpx.h"               // for GpxFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
@@ -124,7 +123,6 @@ extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t navitel_trk_vecs;
-extern ff_vecs_t ggv_ovl_vecs;
 extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
@@ -219,7 +217,6 @@ struct Vecs::Impl
   HumminbirdHTFormat humminbird_ht_fmt;
   LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
-  LegacyFormat ggv_ovl_fmt {ggv_ovl_vecs};
   LegacyFormat itracku_fmt {itracku_vecs};
   LegacyFormat itracku_ffmt {itracku_fvecs};
   LegacyFormat sbp_fmt {sbp_vecs};
@@ -241,7 +238,6 @@ struct Vecs::Impl
   EnergymproFormat energympro_fmt;
   MyNavFormat mynav_fmt;
   GeoJsonFormat geojson_fmt;
-  GgvBinFormat ggv_bin_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
