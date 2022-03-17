@@ -114,7 +114,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   igc.cc
   itracku.cc
   lowranceusr.cc
-  mapbar_track.cc
   mtk_logger.cc
   navilink.cc
   navitel.cc
@@ -389,7 +388,6 @@ set(TESTS
   arc-project
   arc
   batch
-  bcr
   bend
   classic-1
   classic-2
@@ -435,11 +433,6 @@ set(TESTS
   humminbird
   iblue747
   igc
-  ignrando
-  igo2008_poi
-  igo8
-  igoprimo_poi
-  ik3d
   interpolate
   itracku
   kml-read
@@ -448,15 +441,12 @@ set(TESTS
   lowranceusr
   magellan_sd
   magellan
-  mainnav
-  mapasia
   mapbar
   mapfactor
   mmo
   motoactv
   mtk
   multiurlgpx
-  mxf
   mynav
   navilink
   navitel
@@ -483,7 +473,6 @@ set(TESTS
   stackfilter
   subrip
   swap
-  tef
   teletype
   text
   tomtom_asc
