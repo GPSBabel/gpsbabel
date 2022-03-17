@@ -420,13 +420,7 @@ set(TESTS
   gdb
   geojson
   geo
-  ggv_bin
-  ggv_log
-  ggv_ovl
   globalsat_sport
-  glogbook
-  gnav_trl
-  googledir
   gpsdrive
   gpssim
   gpx
@@ -434,7 +428,6 @@ set(TESTS
   gtm
   gtrnctr
   height
-  hiketech
   holux
   humminbird
   iblue747
