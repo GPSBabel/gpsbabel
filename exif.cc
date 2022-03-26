@@ -710,7 +710,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
     if (offset_tag) {
       char* time_tag = exif_read_str(offset_tag);
       // string should be +HH:MM or -HH:MM
-      const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
+      static const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(time_tag);
       if (match.hasMatch()) {
