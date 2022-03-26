@@ -105,7 +105,6 @@ extern ff_vecs_t raymarine_vecs;\
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
 extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
@@ -566,13 +565,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &gnav_trl_fmt,
-      "gnav_trl",
-      "Google Navigator Tracklines (.trl)",
-      "trl",
-      nullptr,
-    },
-    {
       &navitel_trk_fmt,
       "navitel_trk",
       "Navitel binary track (.bin)",
@@ -668,27 +660,6 @@ struct Vecs::Impl
       "garmin_fit",
       "Flexible and Interoperable Data Transfer (FIT) Activity file",
       "fit",
-      nullptr,
-    },
-    {
-      &mapbar_track_fmt,
-      "mapbar",
-      "Mapbar (China) navigation track for Sonim Xp3300",
-      "trk",
-      nullptr,
-    },
-    {
-      &mapfactor_fmt,
-      "mapfactor",
-      "Mapfactor Navigator",
-      "xml",
-      nullptr,
-    },
-    {
-      &mynav_fmt,
-      "mynav",
-      "MyNav TRC format",
-      "trc",
       nullptr,
     },
     {
