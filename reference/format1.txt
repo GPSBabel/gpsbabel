@@ -40,35 +40,16 @@ serial	m241		Holux M-241 (MTK based) download
 file	html	html	HTML Output
 file	humminbird_ht	ht	Humminbird tracks (.ht)
 file	humminbird	hwr	Humminbird waypoints and routes (.hwr)
-file	ignrando	rdn	IGN Rando track files
-file	igoprimo_poi	upoi	iGo Primo points of interest (.upoi)
-file	igo2008_poi	upoi	iGO2008 points of interest (.upoi)
-file	igo8	trk	IGO8 .trk
 internal	random		Internal GPS data generator
-file	kompass_tk	wp	Kompass (DAV) Track (.tk)
-file	kompass_wp	wp	Kompass (DAV) Waypoints (.wp)
 file	lowranceusr	usr	Lowrance USR
 file	magellanx	upt	Magellan SD files (as for eXplorist)
 file	magellan		Magellan SD files (as for Meridian)
 serial	magellan		Magellan serial protocol
-file	ik3d	ikt	MagicMaps IK3D project file (.ikt)
-file	mainnav	nav	Mainnav
-file	tef	xml	Map&Guide 'TourExchangeFormat' XML
-file	mapasia_tr7	tr7	MapAsia track file (.tr7)
-file	mapbar	trk	Mapbar (China) navigation track for Sonim Xp3300
-file	mapfactor	xml	Mapfactor Navigator
-file	mapconverter	txt	Mapopolis.com Mapconverter CSV
-file	mxf	mxf	MapTech Exchange Format
-file	mtk_locus		MediaTek Locus
-file	mmo	mmo	Memory-Map Navigator overlay files (.mmo)
 file	s_and_t	txt	Microsoft Streets and Trips 2002-2007
 serial	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)
 file	garmin_xt		Mobile Garmin XT Track files
-file	motoactv	csv	Motoactiv CSV
-file	bcr	bcr	Motorrad Routenplaner (Map&Guide) .bcr files
 file	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format
 serial	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
-file	mynav	trc	MyNav TRC format
 file	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
@@ -80,7 +61,6 @@ file	navitel_trk	bin	Navitel binary track (.bin)
 file	dna	dna	Navitrak DNA marker format
 file	nima		NIMA/GNIS Geographic Names File
 file	nmea		NMEA 0183 sentences
-file	lmx		Nokia Landmark Exchange
 file	osm	osm	OpenStreetMap data files
 file	ozi		OziExplorer
 file	qstarz_bl-1000		Qstarz BL-1000

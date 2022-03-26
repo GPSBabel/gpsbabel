@@ -1,3 +1,4 @@
+ilat,lon,descr,name,notes,color,unk
 35.97203, -87.13470, "Mountain Bike Heaven by susy1313", "GCEBB", "Mountain Bike Heaven by susy1313", ff0000, 47
 36.09068, -86.67955, "The Troll by a182pilot & Family", "GC1A37", "The Troll by a182pilot & Family", ff0000, 47
 35.99627, -86.62012, "Dive Bomber by JoGPS & family", "GC1C2B", "Dive Bomber by JoGPS & family", ff0000, 47

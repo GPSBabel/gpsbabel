@@ -1,11 +1,17 @@
 
 # TPG (NG Topo!) file format
 # This is hard to test as the datum conversions create minute
-# inconsistencies in the coordinates.  So..  we test our i/o 
+# inconsistencies in the coordinates.  So..  we test our i/o
 # against a format that rounds higher than we care to compare
-# for binary data. 
+# for binary data.
 rm -f ${TMPDIR}/topo.mxf ${TMPDIR}/tpg.mxf ${TMPDIR}/geo.tpg
+
+# Convert geo -> tpg - to test our writer
 gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o tpg -F ${TMPDIR}/geo.tpg
-gpsbabel -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
-gpsbabel -i tpg -f ${REFERENCE}/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
-compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
+
+# Convert THAT tpg to unicsv - to exercise our TPG reader
+gpsbabel -i tpg -f ${TMPDIR}/geo.tpg -o unicsv -F ${TMPDIR}/tpg.unicsv
+
+# Now compare those tw files to see if they match.
+gpsbabel -i tpg -f ${REFERENCE}/tpg.tpg -o unicsv -F ${TMPDIR}/topo.unicsv
+compare ${TMPDIR}/tpg.unicsv ${TMPDIR}/topo.unicsv

@@ -482,50 +482,6 @@ file	r-rwr-	humminbird_ht	ht	Humminbird tracks (.ht)	humminbird_ht
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_humminbird_ht.html
 file	rwr-rw	humminbird	hwr	Humminbird waypoints and routes (.hwr)	humminbird
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_humminbird.html
-file	--rw--	ignrando	rdn	IGN Rando track files	ignrando
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ignrando.html
-option	ignrando	index	Index of track to write (if more than one in source)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ignrando.html#fmt_ignrando_o_index
-
-file	rw----	igoprimo_poi	upoi	iGo Primo points of interest (.upoi)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html
-option	igoprimo_poi	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_snlen
-
-option	igoprimo_poi	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_snwhite
-
-option	igoprimo_poi	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_snupper
-
-option	igoprimo_poi	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_snunique
-
-option	igoprimo_poi	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_urlbase
-
-option	igoprimo_poi	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_prefer_shortnames
-
-option	igoprimo_poi	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igoprimo_poi.html#fmt_igoprimo_poi_o_datum
-
-file	rw----	igo2008_poi	upoi	iGO2008 points of interest (.upoi)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html
-option	igo2008_poi	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_snlen
-
-option	igo2008_poi	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_snwhite
-
-option	igo2008_poi	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_snupper
-
-option	igo2008_poi	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_snunique
-
-option	igo2008_poi	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_urlbase
-
-option	igo2008_poi	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_prefer_shortnames
-
-option	igo2008_poi	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo2008_poi.html#fmt_igo2008_poi_o_datum
-
-file	--rw--	igo8	trk	IGO8 .trk	igo8
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo8.html
-option	igo8	tracknum	Track identification number	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo8.html#fmt_igo8_o_tracknum
-
-option	igo8	title	Track title	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo8.html#fmt_igo8_o_title
-
-option	igo8	description	Track description	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igo8.html#fmt_igo8_o_description
-
 internal	r-r-r-	random		Internal GPS data generator	random
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html
 option	random	points	Generate # points	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html#fmt_random_o_points
@@ -533,38 +489,6 @@ option	random	points	Generate # points	integer		1		https://www.gpsbabel.org/WEB_
 option	random	seed	Starting seed of the internal number generator	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html#fmt_random_o_seed
 
 option	random	nodelay	Output realtime points without delay	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_random.html#fmt_random_o_nodelay
-
-file	--rw--	kompass_tk	wp	Kompass (DAV) Track (.tk)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html
-option	kompass_tk	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_snlen
-
-option	kompass_tk	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_snwhite
-
-option	kompass_tk	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_snupper
-
-option	kompass_tk	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_snunique
-
-option	kompass_tk	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_urlbase
-
-option	kompass_tk	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_prefer_shortnames
-
-option	kompass_tk	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_tk.html#fmt_kompass_tk_o_datum
-
-file	rw----	kompass_wp	wp	Kompass (DAV) Waypoints (.wp)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html
-option	kompass_wp	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_snlen
-
-option	kompass_wp	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_snwhite
-
-option	kompass_wp	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_snupper
-
-option	kompass_wp	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_snunique
-
-option	kompass_wp	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_urlbase
-
-option	kompass_wp	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_prefer_shortnames
-
-option	kompass_wp	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kompass_wp.html#fmt_kompass_wp_o_datum
 
 file	rwrwrw	lowranceusr	usr	Lowrance USR	lowranceusr
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html
@@ -607,86 +531,6 @@ option	magellan	baud	Numeric value of bitrate (baud=4800)	integer	4800			https:/
 option	magellan	noack	Suppress use of handshaking in name of speed	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_noack
 
 option	magellan	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_nukewpt
-
-file	r-r---	ik3d	ikt	MagicMaps IK3D project file (.ikt)	ik3d
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ik3d.html
-file	--rw--	mainnav	nav	Mainnav	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html
-option	mainnav	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_snlen
-
-option	mainnav	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_snwhite
-
-option	mainnav	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_snupper
-
-option	mainnav	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_snunique
-
-option	mainnav	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_urlbase
-
-option	mainnav	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_prefer_shortnames
-
-option	mainnav	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mainnav.html#fmt_mainnav_o_datum
-
-file	----r-	tef	xml	Map&Guide 'TourExchangeFormat' XML	tef
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tef.html
-option	tef	routevia	Include only via stations in route	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tef.html#fmt_tef_o_routevia
-
-file	--rw--	mapasia_tr7	tr7	MapAsia track file (.tr7)	mapasia_tr7
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapasia_tr7.html
-file	--r---	mapbar	trk	Mapbar (China) navigation track for Sonim Xp3300	mapbar
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapbar.html
-file	rw----	mapfactor	xml	Mapfactor Navigator	mapfactor
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapfactor.html
-file	rw----	mapconverter	txt	Mapopolis.com Mapconverter CSV	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html
-option	mapconverter	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_snlen
-
-option	mapconverter	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_snwhite
-
-option	mapconverter	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_snupper
-
-option	mapconverter	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_snunique
-
-option	mapconverter	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_urlbase
-
-option	mapconverter	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_prefer_shortnames
-
-option	mapconverter	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mapconverter.html#fmt_mapconverter_o_datum
-
-file	rw----	mxf	mxf	MapTech Exchange Format	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html
-option	mxf	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_snlen
-
-option	mxf	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_snwhite
-
-option	mxf	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_snupper
-
-option	mxf	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_snunique
-
-option	mxf	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_urlbase
-
-option	mxf	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_prefer_shortnames
-
-option	mxf	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mxf.html#fmt_mxf_o_datum
-
-file	r-r---	mtk_locus		MediaTek Locus	mtk_locus
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html
-option	mtk_locus	baudrate	Speed in bits per second of serial port (autodetect=0)	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html#fmt_mtk_locus_o_baudrate
-
-option	mtk_locus	download	Download logged fixes	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html#fmt_mtk_locus_o_download
-
-option	mtk_locus	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html#fmt_mtk_locus_o_erase
-
-option	mtk_locus	status	Show device status	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html#fmt_mtk_locus_o_status
-
-option	mtk_locus	enable	Enable logging after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk_locus.html#fmt_mtk_locus_o_enable
-
-file	rwrwrw	mmo	mmo	Memory-Map Navigator overlay files (.mmo)	mmo
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mmo.html
-option	mmo	locked	Write items 'locked' [default no]	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mmo.html#fmt_mmo_o_locked
-
-option	mmo	visible	Write items 'visible' [default yes]	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mmo.html#fmt_mmo_o_visible
-
-option	mmo	ver	Write files with internal version [n]	integer		17	18	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mmo.html#fmt_mmo_o_ver
 
 file	rw----	s_and_t	txt	Microsoft Streets and Trips 2002-2007	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_s_and_t.html
@@ -742,32 +586,6 @@ option	garmin_xt	ftype	Garmin Mobile XT ([ATRK]/STRK)	string	ATRK			https://www.
 
 option	garmin_xt	trk_header	Track name processing option ([0]-nrm/1-ign)	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_xt.html#fmt_garmin_xt_o_trk_header
 
-file	rw----	motoactv	csv	Motoactiv CSV	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html
-option	motoactv	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_snlen
-
-option	motoactv	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_snwhite
-
-option	motoactv	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_snupper
-
-option	motoactv	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_snunique
-
-option	motoactv	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_urlbase
-
-option	motoactv	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_prefer_shortnames
-
-option	motoactv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_motoactv.html#fmt_motoactv_o_datum
-
-file	----rw	bcr	bcr	Motorrad Routenplaner (Map&Guide) .bcr files	bcr
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bcr.html
-option	bcr	index	Index of route to write (if more than one in source)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bcr.html#fmt_bcr_o_index
-
-option	bcr	name	New name for the route	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bcr.html#fmt_bcr_o_name
-
-option	bcr	radius	Radius of our big earth (default 6371000 meters)	float	6371000			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bcr.html#fmt_bcr_o_radius
-
-option	bcr	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_bcr.html#fmt_bcr_o_prefer_shortnames
-
 file	r-r---	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format	mtk-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk-bin.html
 option	mtk-bin	csv	MTK compatible CSV output file	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk-bin.html#fmt_mtk-bin_o_csv
@@ -784,8 +602,6 @@ option	mtk	csv	MTK compatible CSV output file	string				https://www.gpsbabel.org
 
 option	mtk	block_size_kb	Size of blocks in KB to request from device	integer	1	1	64	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mtk.html#fmt_mtk_o_block_size_kb
 
-file	--r---	mynav	trc	MyNav TRC format	mynav
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_mynav.html
 file	rw----	tpg	tpg	National Geographic Topo .tpg (waypoints)	tpg
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpg.html
 option	tpg	datum	Datum (default=NAD27)	string	N. America 1927 mean			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpg.html#fmt_tpg_o_datum
@@ -887,10 +703,6 @@ option	nmea	baud	Speed in bits per second of serial port (baud=4800)	integer				
 option	nmea	gisteq	Write tracks for Gisteq Phototracker	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html#fmt_nmea_o_gisteq
 
 option	nmea	ignore_fix	Accept position fixes in gpgga marked invalid	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html#fmt_nmea_o_ignore_fix
-
-file	rw----	lmx		Nokia Landmark Exchange	lmx
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lmx.html
-option	lmx	binary	Compact binary representation	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lmx.html#fmt_lmx_o_binary
 
 file	rw-wrw	osm	osm	OpenStreetMap data files	osm
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_osm.html
