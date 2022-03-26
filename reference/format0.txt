@@ -5,9 +5,6 @@ csv		Comma separated values
 iblue747	csv	Data Logger iBlue747 csv
 iblue757	csv	Data Logger iBlue757 csv
 saplus		DeLorme Street Atlas Plus
-destinator_itn	dat	Destinator Itineraries (.dat)
-destinator_poi	dat	Destinator Points of Interest (.dat)
-destinator_trl	dat	Destinator TrackLogs (.dat)
 exif	jpg	Embedded Exif-GPS data (.jpg)
 shape	shp	ESRI shapefile
 igc		FAI/IGC Flight Recorder Data Format
