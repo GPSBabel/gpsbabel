@@ -8,7 +8,6 @@ saplus		DeLorme Street Atlas Plus
 destinator_itn	dat	Destinator Itineraries (.dat)
 destinator_poi	dat	Destinator Points of Interest (.dat)
 destinator_trl	dat	Destinator TrackLogs (.dat)
-easygps	loc	EasyGPS binary format
 exif	jpg	Embedded Exif-GPS data (.jpg)
 shape	shp	ESRI shapefile
 igc		FAI/IGC Flight Recorder Data Format
