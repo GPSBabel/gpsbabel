@@ -83,7 +83,6 @@ set(MINIMAL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   bcr.cc
   brauniger_iq.cc
-  delgpl.cc
   destinator.cc
   dg-100.cc
   dmtlog.cc
@@ -406,7 +405,6 @@ set(TESTS
   classic-1
   classic-2
   classic-3
-  delgpl
   destinator
   dg100
   dmtlog
