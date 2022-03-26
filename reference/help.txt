@@ -74,10 +74,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	destinator_itn        Destinator Itineraries (.dat)
-	destinator_poi        Destinator Points of Interest (.dat)
-	destinator_trl        Destinator TrackLogs (.dat)
-	easygps               EasyGPS binary format
 	exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename 
 	  frame                 Time-frame (in seconds) 

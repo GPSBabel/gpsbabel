@@ -132,15 +132,6 @@ option	saplus	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	saplus	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_datum
 
-file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)	destinator_itn
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_itn.html
-file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)	destinator_poi
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_poi.html
-file	--rw--	destinator_trl	dat	Destinator TrackLogs (.dat)	destinator_trl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_trl.html
-file	rw----	easygps	loc	EasyGPS binary format	easygps
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_easygps.html
-
 file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)	exif
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html
 option	exif	filename	Set waypoint name to source filename	boolean	Y			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_filename
