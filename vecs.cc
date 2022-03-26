@@ -39,9 +39,7 @@
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
-#include "energympro.h"        // for EnergymproFormat
 #include "exif.h"              // for ExifFormat
-#include "f90g_track.h"        // for F90gTrackFormat
 #include "format.h"            // for Format
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
@@ -87,7 +85,6 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
@@ -116,9 +113,6 @@ extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t ik3d_vecs;
-extern ff_vecs_t destinator_poi_vecs;
-extern ff_vecs_t destinator_itn_vecs;
-extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
 extern ff_vecs_t navitel_trk_vecs;
@@ -128,7 +122,6 @@ extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t mmo_vecs;
 extern ff_vecs_t v900_vecs;
-extern ff_vecs_t enigma_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
 
@@ -162,7 +155,6 @@ struct Vecs::Impl
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
-  LegacyFormat easygps_fmt {easygps_vecs};
   LegacyFormat saroute_fmt {saroute_vecs};
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
@@ -206,9 +198,6 @@ struct Vecs::Impl
   LegacyFormat navilink_fmt {navilink_vecs};
   LegacyFormat ik3d_fmt {ik3d_vecs};
   OsmFormat osm_fmt;
-  LegacyFormat destinator_poi_fmt {destinator_poi_vecs};
-  LegacyFormat destinator_itn_fmt {destinator_itn_vecs};
-  LegacyFormat destinator_trl_fmt {destinator_trl_vecs};
   ExifFormat exif_fmt;
   LegacyFormat igo8_fmt {igo8_vecs};
   HumminbirdFormat humminbird_fmt;
@@ -221,7 +210,6 @@ struct Vecs::Impl
   LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat mmo_fmt {mmo_vecs};
   LegacyFormat v900_fmt {v900_vecs};
-  LegacyFormat enigma_fmt {enigma_vecs};
   SkytraqFormat skytraq_fmt;
   TeletypeFormat teletype_fmt;
   SkytraqfileFormat skytraq_ffmt;
@@ -231,9 +219,7 @@ struct Vecs::Impl
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
   MapbarTrackFormat mapbar_track_fmt;
-  F90gTrackFormat f90g_track_fmt;
   MapfactorFormat mapfactor_fmt;
-  EnergymproFormat energympro_fmt;
   MyNavFormat mynav_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
@@ -355,13 +341,6 @@ struct Vecs::Impl
       "tpo3",
       "National Geographic Topo 3.x/4.x .tpo",
       "tpo",
-      nullptr,
-    },
-    {
-      &easygps_fmt,
-      "easygps",
-      "EasyGPS binary format",
-      "loc",
       nullptr,
     },
     {
@@ -630,27 +609,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &destinator_poi_fmt,
-      "destinator_poi",
-      "Destinator Points of Interest (.dat)",
-      "dat",
-      nullptr,
-    },
-    {
-      &destinator_itn_fmt,
-      "destinator_itn",
-      "Destinator Itineraries (.dat)",
-      "dat",
-      nullptr,
-    },
-    {
-      &destinator_trl_fmt,
-      "destinator_trl",
-      "Destinator TrackLogs (.dat)",
-      "dat",
-      nullptr,
-    },
-    {
       &exif_fmt,
       "exif",
       "Embedded Exif-GPS data (.jpg)",
@@ -735,13 +693,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &enigma_fmt,
-      "enigma",
-      "Enigma binary waypoint file (.ert)",
-      "ert",
-      nullptr,
-    },
-    {
       &skytraq_fmt,
       "skytraq",
       "SkyTraq Venus based loggers (download)",
@@ -805,24 +756,10 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &f90g_track_fmt,
-      "f90g",
-      "F90G Automobile DVR GPS log file",
-      "map",
-      nullptr,
-    },
-    {
       &mapfactor_fmt,
       "mapfactor",
       "Mapfactor Navigator",
       "xml",
-      nullptr,
-    },
-    {
-      &energympro_fmt,
-      "energympro",
-      "Energympro GPS training watch",
-      "cpo",
       nullptr,
     },
     {

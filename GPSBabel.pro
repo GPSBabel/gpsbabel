@@ -58,12 +58,8 @@ MINIMAL_FMTS = \
 ALL_FMTS = $$MINIMAL_FMTS \
   bcr.cc \
   brauniger_iq.cc \
-  destinator.cc \
   dg-100.cc \
   dmtlog.cc \
-  easygps.cc \
-  energympro.cc \
-  enigma.cc \
   exif.cc \
   f90g_track.cc \
   garmin_fit.cc \
@@ -207,7 +203,6 @@ HEADERS =  \
   csv_util.h \
   defs.h \
   dg-100.h \
-  energympro.h \
   exif.h \
   explorist_ini.h \
   f90g_track.h \

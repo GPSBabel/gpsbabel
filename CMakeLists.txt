@@ -83,14 +83,9 @@ set(MINIMAL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   bcr.cc
   brauniger_iq.cc
-  destinator.cc
   dg-100.cc
   dmtlog.cc
-  easygps.cc
-  energympro.cc
-  enigma.cc
   exif.cc
-  f90g_track.cc
   garmin_fit.cc
   garmin_gpi.cc
   garmin_txt.cc
@@ -234,10 +229,8 @@ set(HEADERS
   csv_util.h
   defs.h
   dg-100.h
-  energympro.h
   exif.h
   explorist_ini.h
-  f90g_track.h
   filter.h
   filter_vecs.h
   format.h
@@ -397,18 +390,12 @@ set(TESTS
   classic-1
   classic-2
   classic-3
-  destinator
   dg100
   dmtlog
   dna
   dop_filter
   duplicate
-  easygps
-  energympro
-  enigma
   exif
-  f90g
-  fugawi
   garmin_fit
   garmin_g1000
   garmin_gpi
