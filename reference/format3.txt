@@ -116,9 +116,6 @@ option	iblue757	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_datum
 
-file	--rw--	gpl	gpl	DeLorme GPL	gpl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpl.html
-
 file	--r---	saroute	anr	DeLorme Street Atlas Route	saroute
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html
 option	saroute	turns_important	Keep turns if simplify filter is used	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_turns_important
