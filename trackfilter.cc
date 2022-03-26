@@ -75,7 +75,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   qint64 result = 0;
 
-  QRegularExpression re("^([+-]?\\d+)([wdhms])(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?$", QRegularExpression::CaseInsensitiveOption);
+  static const QRegularExpression re("^([+-]?\\d+)([wdhms])(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?$", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
@@ -426,7 +426,7 @@ void TrackFilter::trackfilter_split()
 
     opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
     if (opt_interval != 0) {
-      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
+      static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_split);
       if (match.hasMatch()) {
@@ -462,7 +462,7 @@ void TrackFilter::trackfilter_split()
 
     opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
     if (opt_distance != 0) {
-      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
+      static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_sdistance);
       if (match.hasMatch()) {
@@ -665,7 +665,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  QRegularExpression re("^(\\d{0,14})$");
+  static const QRegularExpression re("^(\\d{0,14})$");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
@@ -826,7 +826,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 {
   faketime_t result;
 
-  QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
+  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
