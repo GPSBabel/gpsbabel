@@ -1659,7 +1659,8 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   }
 
   // Separate op and tokens.
-  int sep = line.indexOf(QRegularExpression(R"(\s+)"));
+  static const QRegularExpression re(R"(\s+)");
+  int sep = line.indexOf(re);
 
   // the first token is the operation, e.g. "IFIELD"
   QString op = line.mid(0, sep).trimmed().toUpper();

@@ -34,7 +34,8 @@ void ShowHelp(const QString& urlIn)
 
 {
   QString url = urlIn;
-  if (!url.contains(QRegularExpression(R"(^https?://)"))) {
+  static const QRegularExpression re(R"(^https?://)");
+  if (!url.contains(re)) {
     url = Format::getHtmlBase() + url;
   }
   QDesktopServices::openUrl(QUrl(url));

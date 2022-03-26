@@ -66,7 +66,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	gpl                   DeLorme GPL
 	saplus                DeLorme Street Atlas Plus
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -84,37 +83,17 @@ File Types (-i and -o options):
 	  frame                 Time-frame (in seconds) 
 	  name                  Locate waypoint for tagging by this name 
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N 
-	energympro            Energympro GPS training watch
-	  timezone              Time zone ID 
-	enigma                Enigma binary waypoint file (.ert)
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf 
 	  url                   Source for URL field in .dbf 
-	f90g                  F90G Automobile DVR GPS log file
 	igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff 
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m 
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file 
-	flysight              FlySight GPS File
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	gpssim                Franson GPSGate Simulation
 	  wayptspd              Default speed for waypoints (knots/hr) 
 	  split                 (0/1) Split input into separate files 
-	fugawi                Fugawi
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -131,7 +110,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	glogbook              Garmin Logbook XML
 	gdb                   Garmin MapSource - gdb
 	  cat                   Default category on output (1..16) 
 	  bitscategory          Bitmap of categories 
@@ -188,19 +166,8 @@ File Types (-i and -o options):
 	geo                   Geocaching.com .loc
 	  deficon               Default icon name 
 	  nuke_placer           (0/1) Omit Placer name 
-	ggv_ovl               Geogrid-Viewer ascii overlay file (.ovl)
-	ggv_bin               Geogrid-Viewer binary overlay file (.ovl)
-	ggv_log               Geogrid-Viewer tracklogs (.log)
 	geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off. 
-	geonet                GEOnet Names Server (GNS)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	dg-100                GlobalSat DG-100/BT-335 Download
 	  erase                 (0/1) Erase device data after download 
 	  erase_only            (0/1) Only erase device data, do not download anything 
@@ -213,7 +180,6 @@ File Types (-i and -o options):
 	  dump-file             Dump raw data to this file 
 	  input-is-dump-file    (0/1) Dump raw data to this file 
 	  timezone              Time zone ID 
-	googledir             Google Directions XML
 	kml                   Google Earth (Keyhole) Markup Language
 	  deficon               Default icon name 
 	  lines                 (0/1) Export linestrings for tracks and routes 
@@ -230,7 +196,6 @@ File Types (-i and -o options):
 	  max_position_point    Retain at most this number of position points  (0  
 	  rotate_colors         Rotate colors for tracks and routes (default autom 
 	  prec                  Precision of coordinates, number of decimals 
-	gnav_trl              Google Navigator Tracklines (.trl)
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -273,7 +238,6 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension 
 	  garminextensions      (0/1) Add info (depth) as Garmin extension 
 	  elevprec              Precision of elevations, number of decimals 
-	hiketech              HikeTech
 	holux                 Holux (gm-100) .wpo Format
 	m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file 
