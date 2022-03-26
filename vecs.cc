@@ -101,7 +101,7 @@ extern ff_vecs_t gpssim_vecs;
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t dmtlog_vecs;
-extern ff_vecs_t raymarine_vecs;\
+extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
