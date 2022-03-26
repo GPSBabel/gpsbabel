@@ -58,13 +58,8 @@ MINIMAL_FMTS = \
 ALL_FMTS = $$MINIMAL_FMTS \
   bcr.cc \
   brauniger_iq.cc \
-  delgpl.cc \
-  destinator.cc \
   dg-100.cc \
   dmtlog.cc \
-  easygps.cc \
-  energympro.cc \
-  enigma.cc \
   exif.cc \
   f90g_track.cc \
   garmin_fit.cc \
@@ -73,17 +68,10 @@ ALL_FMTS = $$MINIMAL_FMTS \
   garmin_xt.cc \
   gdb.cc \
   geojson.cc \
-  ggv_bin.cc \
-  ggv_log.cc \
-  ggv_ovl.cc \
   globalsat_sport.cc \
-  glogbook.cc \
-  gnav_trl.cc \
-  googledir.cc \
   gpssim.cc \
   gtm.cc \
   gtrnctr.cc \
-  hiketech.cc \
   holux.cc \
   html.cc \
   humminbird.cc \
@@ -215,7 +203,6 @@ HEADERS =  \
   csv_util.h \
   defs.h \
   dg-100.h \
-  energympro.h \
   exif.h \
   explorist_ini.h \
   f90g_track.h \
@@ -234,7 +221,6 @@ HEADERS =  \
   gbser_private.h \
   gdb.h \
   geojson.h \
-  ggv_bin.h \
   globalsat_sport.h \
   gpx.h \
   grtcirc.h \

@@ -52,7 +52,7 @@ static QString xlt(const QString& f)
 //------------------------------------------------------------------------
 bool FormatLoad::skipToValidLine()
 {
-  QRegularExpression regex("^file|serial");
+  static const QRegularExpression regex("^file|serial");
   while ((currentLine_ < lines_.size()) && !regex.match(lines_[currentLine_]).hasMatch()) {
     currentLine_++;
   }
@@ -127,7 +127,8 @@ bool FormatLoad::processFormat(Format& format)
 #ifndef GENERATE_CORE_STRINGS
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
     QString base = htmlPage;
-    base.replace(QRegularExpression("/[^/]+$"), "/");
+    static const QRegularExpression re("/[^/]+$");
+    base.replace(re, "/");
     Format::setHtmlBase(base);
   }
 #endif

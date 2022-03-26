@@ -31,7 +31,27 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Авторское право (C) Robert Lipe, 2009-2022&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Графический интерфейс пользователя разработан и предоставлен S. Khai Mong&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Кристальные значки LGPL авторства Elvarado Coehlo&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Используется модуль $babelversion$)&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Идентификатор установки: $installationId$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Эта программа является свободным программным обеспечением; вы можете распространять и/или модифицировать её согласно условиям стандартной общественной лицензии GNU, опубликованной Фондом свободного ПО; либо версии 2 лицензии, либо (по вашему выбору) любой более поздней версии.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Эта программа распространяется в надежде, что она будет полезной, но БЕЗ КАКИХ БЫ ТО НИ БЫЛО ГАРАНТИЙНЫХ ОБЯЗАТЕЛЬСТВ; даже без косвенных гарантийных обязательств, связанных с ПОТРЕБИТЕЛЬСКИМИ СВОЙСТВАМИ и ПРИГОДНОСТЬЮ ДЛЯ ОПРЕДЕЛЁННЫХ ЦЕЛЕЙ. Подробности читайте в стандартной общественной лицензии GNU.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Вы должны были получить копию стандартной общественной лицензии GNU вместе с этой программой. Если лицензии не было, напишите по адресу Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -208,32 +228,32 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="donate.ui" line="32"/>
         <source>Support GPSBabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержка GPSBabel</translation>
     </message>
     <message>
         <location filename="donate.ui" line="52"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel — свободная программа, которая создаётся и поддерживается силами добровольцев. Разработка и поддержка программы требуют большого количества времени, а также денежных средств на картографические программы, GPS-приёмники и оборудование для разработки. Вы можете поддержать проект, &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;уделив ему своё время или сделав пожертвование с помощью PayPal (наличие учётной записи не требуется).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="78"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Конечно, вы уже поддержали проект или просто не можете помочь, установите расположенный ниже флажок, чтобы больше не видеть это сообщение.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="88"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Больше не показывать это сообщение.</translation>
     </message>
     <message>
         <location filename="donate.ui" line="123"/>
         <source>No, Thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет, спасибо</translation>
     </message>
     <message>
         <location filename="donate.ui" line="130"/>
         <source>Contribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержать</translation>
     </message>
 </context>
 <context>
@@ -466,7 +486,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="mainwinui.ui" line="14"/>
         <source>GPSBabel</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
@@ -735,12 +755,12 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwindow.cc" line="653"/>
         <source>Input does not support %1; output format supports %1</source>
-        <translation type="unfinished">Входной формат не поддерживает %1; выходной формат поддерживает %1 {1;?}</translation>
+        <translation>Входной формат не поддерживает %1; выходной формат поддерживает %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="656"/>
         <source>Input format supports %1; output format does not support %1</source>
-        <translation type="unfinished">Входной формат поддерживает %1; выходной формат не поддерживаетt %1 {1;?}</translation>
+        <translation>Входной формат поддерживает %1; выходной формат не поддерживаетt %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="659"/>
@@ -843,7 +863,7 @@ This program cannot continue.</source>
     <message>
         <location filename="map.cc" line="115"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка открытия файла &quot;gmapbase.html&quot;.  Попробуйте переустановить программу</translation>
     </message>
     <message>
         <location filename="map.cc" line="119"/>
@@ -908,7 +928,7 @@ This program cannot continue.</source>
     <message>
         <location filename="miscfltui.ui" line="22"/>
         <source>Sort Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Упорядочить маршруты</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="34"/>
@@ -944,42 +964,42 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
         <location filename="miscfltui.ui" line="171"/>
         <location filename="miscfltui.ui" line="248"/>
         <source>By</source>
-        <translation type="unfinished"></translation>
+        <translation>по</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="124"/>
         <location filename="miscfltui.ui" line="179"/>
         <location filename="miscfltui.ui" line="256"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>описанию</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="129"/>
         <source>GCID</source>
-        <translation type="unfinished"></translation>
+        <translation>GCID</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="134"/>
         <location filename="miscfltui.ui" line="184"/>
         <location filename="miscfltui.ui" line="261"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>названию</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="139"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>времени</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="162"/>
         <source>Sort Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Упорядочить маршрутные точки</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="189"/>
         <location filename="miscfltui.ui" line="266"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>номеру</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="212"/>
@@ -999,7 +1019,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="miscfltui.ui" line="239"/>
         <source>Sort Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Упорядочить треки</translation>
     </message>
 </context>
 <context>
@@ -1036,7 +1056,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="preferences.ui" line="59"/>
         <source>Ignore mismatch between command line and GUI version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать несоответствие версии командной строки и версии графического интерфейса пользователя.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="68"/>
@@ -1209,48 +1229,48 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     <message>
         <location filename="runmachine.cc" line="35"/>
         <source>Process failed to start</source>
-        <translation type="unfinished">Неудача при запуске процесса</translation>
+        <translation>Неудача при запуске процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="37"/>
         <source>Process crashed</source>
-        <translation type="unfinished">Неудача</translation>
+        <translation>Аварийное завершение процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="39"/>
         <source>Process timedout</source>
-        <translation type="unfinished">Процесс остановлен</translation>
+        <translation>Истекло время ожидания процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="41"/>
         <source>Error while trying to write to process</source>
-        <translation type="unfinished">Ошибка записи процесса</translation>
+        <translation>Ошибка записи процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="43"/>
         <source>Error while trying to read from process</source>
-        <translation type="unfinished">Ошибка чтения процесса</translation>
+        <translation>Ошибка чтения процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="46"/>
         <source>Unknown process error</source>
-        <translation type="unfinished">Неизвестная ошибка</translation>
+        <translation>Неизвестная ошибка процесса</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="145"/>
         <source>Process &quot;%1&quot; did not start</source>
-        <translation type="unfinished">Процесс &quot;%1&quot; не запустился</translation>
+        <translation>Процесс &quot;%1&quot; не запустился</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="177"/>
         <source>Process exited unsuccessfully with code %1</source>
-        <translation type="unfinished">Процесс завершился неудачей с кодом %1</translation>
+        <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
         <location filename="runmachine.cc" line="181"/>
         <location filename="runmachine.cc" line="192"/>
         <source>Process crashed while running</source>
-        <translation type="unfinished">Неудача в процессе исполнения</translation>
+        <translation>Аварийное завершение процесса во время исполнения</translation>
     </message>
 </context>
 <context>
@@ -1314,7 +1334,7 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="93"/>
         <source>weeks</source>
-        <translation type="unfinished"></translation>
+        <translation>недель</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="117"/>
@@ -1574,7 +1594,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
     <message>
         <location filename="upgrade.cc" line="208"/>
         <source>Unexpected reply.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неожиданный ответ.</translation>
     </message>
     <message>
         <location filename="upgrade.cc" line="212"/>
@@ -1584,7 +1604,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
     <message>
         <location filename="upgrade.cc" line="246"/>
         <source>Download failed: %1: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка завершилась неудачей: %1: %2.</translation>
     </message>
     <message>
         <location filename="upgrade.cc" line="262"/>
@@ -1617,27 +1637,27 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
     <message>
         <location filename="version_mismatch.ui" line="32"/>
         <source>GPSBabel Version Mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>Несоответствие версий GPSBabel</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="38"/>
         <source>&lt;b&gt;A version mismatch has been detected.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Обнаружено несоответствие версий.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="47"/>
         <source>GPSBabel command line version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия командной строки GPSBabel:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="81"/>
         <source>GPSBabel GUI version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия графического интерфейса пользователя GPSBabel:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="115"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Больше не показывать это сообщение.</translation>
     </message>
 </context>
 <context>
