@@ -8,9 +8,6 @@ internal	custom		Custom "Everything" Style
 file	iblue747	csv	Data Logger iBlue747 csv
 file	iblue757	csv	Data Logger iBlue757 csv
 file	saplus		DeLorme Street Atlas Plus
-file	destinator_itn	dat	Destinator Itineraries (.dat)
-file	destinator_poi	dat	Destinator Points of Interest (.dat)
-file	destinator_trl	dat	Destinator TrackLogs (.dat)
 file	exif	jpg	Embedded Exif-GPS data (.jpg)
 file	shape	shp	ESRI shapefile
 file	igc		FAI/IGC Flight Recorder Data Format
