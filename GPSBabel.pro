@@ -77,7 +77,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   igc.cc \
   itracku.cc \
   lowranceusr.cc \
-  mapbar_track.cc \
   mtk_logger.cc \
   navilink.cc \
   navitel.cc \
