@@ -7,7 +7,6 @@ file	rw----	csv		Comma separated values
 internal	rw----	custom		Custom "Everything" Style
 file	--rw--	iblue747	csv	Data Logger iBlue747 csv
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv
-file	--r---	saroute	anr	DeLorme Street Atlas Route
 file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)
 file	rwrwrw	shape	shp	ESRI shapefile
 file	--rwrw	igc		FAI/IGC Flight Recorder Data Format

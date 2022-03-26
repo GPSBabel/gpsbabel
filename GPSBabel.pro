@@ -96,7 +96,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   qstarz_bl_1000.cc \
   random.cc \
   raymarine.cc \
-  saroute.cc \
   sbn.cc \
   sbp.cc \
   shape.cc \

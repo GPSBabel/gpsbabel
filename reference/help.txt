@@ -66,13 +66,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-  gpl                   DeLorme GPL
-	saroute               DeLorme Street Atlas Route
-	  turns_important       (0/1) Keep turns if simplify filter is used 
-	  turns_only            (0/1) Only read turns; skip all other points 
-	  split                 (0/1) Split into multiple routes at turns 
-	  controls              Read control points as waypoint/route/none 
-	  times                 (0/1) Synthesize track times 
 	exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename 
 	  frame                 Time-frame (in seconds) 
