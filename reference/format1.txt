@@ -25,7 +25,6 @@ file	gpssim	gpssim	Franson GPSGate Simulation
 file	fugawi	txt	Fugawi
 file	garmin301		Garmin 301 Custom position and heartrate
 file	garmin_g1000	csv	Garmin G1000 datalog input filter file
-file	glogbook	xml	Garmin Logbook XML
 file	gdb	gdb	Garmin MapSource - gdb
 file	garmin_txt	txt	Garmin MapSource - txt (tab delimited)
 file	garmin_poi		Garmin POI database
@@ -33,26 +32,19 @@ file	garmin_gpi	gpi	Garmin Points of Interest (.gpi)
 serial	garmin		Garmin serial/USB protocol
 file	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)
 file	geo	loc	Geocaching.com .loc
-file	ggv_ovl	ovl	Geogrid-Viewer ascii overlay file (.ovl)
-file	ggv_bin	ovl	Geogrid-Viewer binary overlay file (.ovl)
-file	ggv_log	log	Geogrid-Viewer tracklogs (.log)
 file	geojson	json	GeoJson
-file	geonet	txt	GEOnet Names Server (GNS)
 internal	dg-100-bin		GlobalSat DG-100/BT-335 Binary File
 serial	dg-100		GlobalSat DG-100/BT-335 Download
 internal	dg-200-bin		GlobalSat DG-200 Binary File
 serial	dg-200		GlobalSat DG-200 Download
 serial	globalsat		GlobalSat GH625XT GPS training watch
-file	googledir	xml	Google Directions XML
 file	kml	kml	Google Earth (Keyhole) Markup Language
-file	gnav_trl	trl	Google Navigator Tracklines (.trl)
 file	land_air_sea	txt	GPS Tracking Key Pro text
 file	gtm	gtm	GPS TrackMaker
 file	arc	txt	GPSBabel arc filter file
 file	gpsdrive		GpsDrive Format
 file	gpsdrivetrack		GpsDrive Format for Tracks
 file	gpx	gpx	GPX XML
-file	hiketech	gps	HikeTech
 file	holux	wpo	Holux (gm-100) .wpo Format
 file	m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 serial	m241		Holux M-241 (MTK based) download

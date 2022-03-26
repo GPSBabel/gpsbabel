@@ -48,7 +48,6 @@
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
-#include "ggv_bin.h"           // for GgvBinFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
 #include "gpx.h"               // for GpxFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
@@ -102,10 +101,7 @@ extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
-extern ff_vecs_t hiketech_vecs;
-extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t vcf_vecs;
-extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t ignr_vecs;
@@ -116,7 +112,6 @@ extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t dmtlog_vecs;
 extern ff_vecs_t raymarine_vecs;
-extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t lmx_vecs;
 extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
@@ -126,9 +121,7 @@ extern ff_vecs_t destinator_itn_vecs;
 extern ff_vecs_t destinator_trl_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t mapasia_tr7_vecs;
-extern ff_vecs_t gnav_trl_vecs;
 extern ff_vecs_t navitel_trk_vecs;
-extern ff_vecs_t ggv_ovl_vecs;
 extern ff_vecs_t itracku_vecs;
 extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
@@ -188,10 +181,7 @@ struct Vecs::Impl
 #if MAXIMAL_ENABLED
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
-  LegacyFormat hiketech_fmt {hiketech_vecs};
-  LegacyFormat glogbook_fmt {glogbook_vecs};
   LegacyFormat vcf_fmt {vcf_vecs};
-  LegacyFormat google_dir_fmt {google_dir_vecs};
   LegacyFormat tomtom_fmt {tomtom_vecs};
   TefXMLFormat tef_xml_fmt;
   LegacyFormat bcr_fmt {bcr_vecs};
@@ -205,7 +195,6 @@ struct Vecs::Impl
   GtrnctrFormat gtc_fmt;
   LegacyFormat dmtlog_fmt {dmtlog_vecs};
   LegacyFormat raymarine_fmt {raymarine_vecs};
-  LegacyFormat ggv_log_fmt {ggv_log_vecs};
   GarminGPIFormat garmin_gpi_fmt;
   LegacyFormat lmx_fmt {lmx_vecs};
   RandomFormat random_fmt;
@@ -225,9 +214,7 @@ struct Vecs::Impl
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
   LegacyFormat mapasia_tr7_fmt {mapasia_tr7_vecs};
-  LegacyFormat gnav_trl_fmt {gnav_trl_vecs};
   LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
-  LegacyFormat ggv_ovl_fmt {ggv_ovl_vecs};
   LegacyFormat itracku_fmt {itracku_vecs};
   LegacyFormat itracku_ffmt {itracku_fvecs};
   LegacyFormat sbp_fmt {sbp_vecs};
@@ -249,7 +236,6 @@ struct Vecs::Impl
   EnergymproFormat energympro_fmt;
   MyNavFormat mynav_fmt;
   GeoJsonFormat geojson_fmt;
-  GgvBinFormat ggv_bin_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
@@ -481,31 +467,10 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &hiketech_fmt,
-      "hiketech",
-      "HikeTech",
-      "gps",
-      nullptr,
-    },
-    {
-      &glogbook_fmt,
-      "glogbook",
-      "Garmin Logbook XML",
-      "xml",
-      nullptr,
-    },
-    {
       &vcf_fmt,
       "vcard",
       "Vcard Output (for iPod)",
       "vcf",
-      nullptr,
-    },
-    {
-      &google_dir_fmt,
-      "googledir",
-      "Google Directions XML",
-      "xml",
       nullptr,
     },
     {
@@ -585,13 +550,6 @@ struct Vecs::Impl
       "raymarine",
       "Raymarine Waypoint File (.rwf)",
       "rwf",
-      nullptr,
-    },
-    {
-      &ggv_log_fmt,
-      "ggv_log",
-      "Geogrid-Viewer tracklogs (.log)",
-      "log",
       nullptr,
     },
     {
@@ -728,24 +686,10 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &gnav_trl_fmt,
-      "gnav_trl",
-      "Google Navigator Tracklines (.trl)",
-      "trl",
-      nullptr,
-    },
-    {
       &navitel_trk_fmt,
       "navitel_trk",
       "Navitel binary track (.bin)",
       "bin",
-      nullptr,
-    },
-    {
-      &ggv_ovl_fmt,
-      "ggv_ovl",
-      "Geogrid-Viewer ascii overlay file (.ovl)",
-      "ovl",
       nullptr,
     },
     {
@@ -893,13 +837,6 @@ struct Vecs::Impl
       "geojson",
       "GeoJson",
       "json",
-      nullptr,
-    },
-    {
-      &ggv_bin_fmt,
-      "ggv_bin",
-      "Geogrid-Viewer binary overlay file (.ovl)",
-      "ovl",
       nullptr,
     },
     {
