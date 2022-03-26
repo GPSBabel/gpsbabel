@@ -85,7 +85,8 @@ extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t saroute_vecs;
+extern ff_vecs_t easygps_vecs;
+extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
@@ -155,7 +156,7 @@ struct Vecs::Impl
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
-  LegacyFormat saroute_fmt {saroute_vecs};
+  LegacyFormat easygps_fmt {easygps_vecs};
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
@@ -344,10 +345,10 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &saroute_fmt,
-      "saroute",
-      "DeLorme Street Atlas Route",
-      "anr",
+      &easygps_fmt,
+      "easygps",
+      "EasyGPS binary format",
+      "loc",
       nullptr,
     },
 #if SHAPELIB_ENABLED
