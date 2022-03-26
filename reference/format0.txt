@@ -4,7 +4,6 @@ v900		Columbus/Visiontac V900 files (.csv)
 csv		Comma separated values
 iblue747	csv	Data Logger iBlue747 csv
 iblue757	csv	Data Logger iBlue757 csv
-saplus		DeLorme Street Atlas Plus
 exif	jpg	Embedded Exif-GPS data (.jpg)
 shape	shp	ESRI shapefile
 igc		FAI/IGC Flight Recorder Data Format
