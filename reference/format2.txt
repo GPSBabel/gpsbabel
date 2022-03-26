@@ -7,25 +7,15 @@ file	rw----	csv		Comma separated values
 internal	rw----	custom		Custom "Everything" Style
 file	--rw--	iblue747	csv	Data Logger iBlue747 csv
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv
-file	--rw--	gpl	gpl	DeLorme GPL
 file	rw----	saplus		DeLorme Street Atlas Plus
 file	--r---	saroute	anr	DeLorme Street Atlas Route
-file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)
-file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)
-file	--rw--	destinator_trl	dat	Destinator TrackLogs (.dat)
-file	rw----	easygps	loc	EasyGPS binary format
 file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)
-file	--r---	energympro	cpo	Energympro GPS training watch
-file	----rw	enigma	ert	Enigma binary waypoint file (.ert)
 file	rwrwrw	shape	shp	ESRI shapefile
 file	--rwrw	igc		FAI/IGC Flight Recorder Data Format
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file
-file	rw----	flysight	csv	FlySight GPS File
 file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation
-file	rw----	fugawi	txt	Fugawi
 file	rw----	garmin301		Garmin 301 Custom position and heartrate
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file
-file	--rw--	glogbook	xml	Garmin Logbook XML
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)
 file	rw----	garmin_poi		Garmin POI database
@@ -33,26 +23,19 @@ file	rw----	garmin_gpi	gpi	Garmin Points of Interest (.gpi)
 serial	rwrwrw	garmin		Garmin serial/USB protocol
 file	r-rw--	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)
 file	rw----	geo	loc	Geocaching.com .loc
-file	rwrwrw	ggv_ovl	ovl	Geogrid-Viewer ascii overlay file (.ovl)
-file	--r---	ggv_bin	ovl	Geogrid-Viewer binary overlay file (.ovl)
-file	--rw--	ggv_log	log	Geogrid-Viewer tracklogs (.log)
 file	rwrwrw	geojson	json	GeoJson
-file	rw----	geonet	txt	GEOnet Names Server (GNS)
 internal	r-r---	dg-100-bin		GlobalSat DG-100/BT-335 Binary File
 serial	r-r---	dg-100		GlobalSat DG-100/BT-335 Download
 internal	r-r---	dg-200-bin		GlobalSat DG-200 Binary File
 serial	r-r---	dg-200		GlobalSat DG-200 Download
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch
-file	--r---	googledir	xml	Google Directions XML
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language
-file	--rw--	gnav_trl	trl	Google Navigator Tracklines (.trl)
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text
 file	rwrwrw	gtm	gtm	GPS TrackMaker
 file	rw----	arc	txt	GPSBabel arc filter file
 file	rw----	gpsdrive		GpsDrive Format
 file	rw----	gpsdrivetrack		GpsDrive Format for Tracks
 file	rwrwrw	gpx	gpx	GPX XML
-file	rwrw--	hiketech	gps	HikeTech
 file	rw----	holux	wpo	Holux (gm-100) .wpo Format
 file	r-r---	m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 serial	--r---	m241		Holux M-241 (MTK based) download

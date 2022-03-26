@@ -28,10 +28,13 @@ make clean
 make -j 3
 make check
 
+# run clazy on both gpsbabel and gpsbabelfe.
+# unlike qmake, cmake uses system includes for Qt which quiets warnings
+# from the Qt headers.
 export CLAZY_CHECKS=level0,level1,no-non-pod-global-static,no-qstring-ref
-qmake -spec linux-clang "CONFIG+=debug" "QMAKE_CXX=clazy"
-make clean
-make -j 3 2>&1 | tee clazy.log
+cmake . -DCMAKE_CXX_COMPILER=clazy -G "Ninja" -DCMAKE_BUILD_TYPE:STRING="Debug"
+cmake --build . --target clean
+cmake --build . 2>&1 | tee clazy.log
 if grep -- '-Wclazy' clazy.log; then
   exit 1
 else

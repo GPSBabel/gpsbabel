@@ -82,13 +82,8 @@ set(MINIMAL_FMTS
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   brauniger_iq.cc
-  delgpl.cc
-  destinator.cc
   dg-100.cc
   dmtlog.cc
-  easygps.cc
-  energympro.cc
-  enigma.cc
   exif.cc
   garmin_fit.cc
   garmin_gpi.cc
@@ -96,17 +91,10 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   garmin_xt.cc
   gdb.cc
   geojson.cc
-  ggv_bin.cc
-  ggv_log.cc
-  ggv_ovl.cc
   globalsat_sport.cc
-  glogbook.cc
-  gnav_trl.cc
-  googledir.cc
   gpssim.cc
   gtm.cc
   gtrnctr.cc
-  hiketech.cc
   holux.cc
   html.cc
   humminbird.cc
@@ -230,7 +218,6 @@ set(HEADERS
   csv_util.h
   defs.h
   dg-100.h
-  energympro.h
   exif.h
   explorist_ini.h
   filter.h
@@ -248,7 +235,6 @@ set(HEADERS
   gbser_private.h
   gdb.h
   geojson.h
-  ggv_bin.h
   globalsat_sport.h
   gpx.h
   grtcirc.h
@@ -389,18 +375,12 @@ set(TESTS
   classic-1
   classic-2
   classic-3
-  delgpl
-  destinator
   dg100
   dmtlog
   dna
   dop_filter
   duplicate
-  easygps
-  energympro
-  enigma
   exif
-  fugawi
   garmin_fit
   garmin_g1000
   garmin_gpi
@@ -410,13 +390,7 @@ set(TESTS
   gdb
   geojson
   geo
-  ggv_bin
-  ggv_log
-  ggv_ovl
   globalsat_sport
-  glogbook
-  gnav_trl
-  googledir
   gpsdrive
   gpssim
   gpx
@@ -424,7 +398,6 @@ set(TESTS
   gtm
   gtrnctr
   height
-  hiketech
   holux
   humminbird
   iblue747

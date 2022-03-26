@@ -116,8 +116,6 @@ option	iblue757	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_datum
 
-file	--rw--	gpl	gpl	DeLorme GPL	gpl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpl.html
 file	rw----	saplus		DeLorme Street Atlas Plus	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html
 option	saplus	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saplus.html#fmt_saplus_o_snlen
@@ -146,14 +144,6 @@ option	saroute	controls	Read control points as waypoint/route/none	string	none		
 
 option	saroute	times	Synthesize track times	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_saroute.html#fmt_saroute_o_times
 
-file	----rw	destinator_itn	dat	Destinator Itineraries (.dat)	destinator_itn
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_itn.html
-file	rw----	destinator_poi	dat	Destinator Points of Interest (.dat)	destinator_poi
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_poi.html
-file	--rw--	destinator_trl	dat	Destinator TrackLogs (.dat)	destinator_trl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_destinator_trl.html
-file	rw----	easygps	loc	EasyGPS binary format	easygps
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_easygps.html
 file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)	exif
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html
 option	exif	filename	Set waypoint name to source filename	boolean	Y			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_filename
@@ -164,12 +154,6 @@ option	exif	name	Locate waypoint for tagging by this name	string				https://www.
 
 option	exif	overwrite	!OVERWRITE! the original file. Default=N	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_overwrite
 
-file	--r---	energympro	cpo	Energympro GPS training watch	energympro
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_energympro.html
-option	energympro	timezone	Time zone ID	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_energympro.html#fmt_energympro_o_timezone
-
-file	----rw	enigma	ert	Enigma binary waypoint file (.ert)	enigma
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_enigma.html
 file	rwrwrw	shape	shp	ESRI shapefile	shape
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html
 option	shape	name	Source for name field in .dbf	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html#fmt_shape_o_name
@@ -186,43 +170,11 @@ option	garmin_fit	allpoints	Read all points even if latitude or longitude is mis
 
 option	garmin_fit	recoverymode	Attempt to recovery data from corrupt file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_recoverymode
 
-file	rw----	flysight	csv	FlySight GPS File	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html
-option	flysight	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_snlen
-
-option	flysight	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_snwhite
-
-option	flysight	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_snupper
-
-option	flysight	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_snunique
-
-option	flysight	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_urlbase
-
-option	flysight	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_prefer_shortnames
-
-option	flysight	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_flysight.html#fmt_flysight_o_datum
-
 file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation	gpssim
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html
 option	gpssim	wayptspd	Default speed for waypoints (knots/hr)	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_wayptspd
 
 option	gpssim	split	Split input into separate files	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_split
-
-file	rw----	fugawi	txt	Fugawi	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html
-option	fugawi	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_snlen
-
-option	fugawi	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_snwhite
-
-option	fugawi	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_snupper
-
-option	fugawi	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_snunique
-
-option	fugawi	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_urlbase
-
-option	fugawi	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_prefer_shortnames
-
-option	fugawi	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_fugawi.html#fmt_fugawi_o_datum
 
 file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html
@@ -256,8 +208,6 @@ option	garmin_g1000	prefer_shortnames	Use shortname instead of description	boole
 
 option	garmin_g1000	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_datum
 
-file	--rw--	glogbook	xml	Garmin Logbook XML	glogbook
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_glogbook.html
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb	gdb
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html
 option	gdb	cat	Default category on output (1..16)	integer		1	16	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html#fmt_gdb_o_cat
@@ -370,31 +320,9 @@ option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_
 
 option	geo	nuke_placer	Omit Placer name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_nuke_placer
 
-file	rwrwrw	ggv_ovl	ovl	Geogrid-Viewer ascii overlay file (.ovl)	ggv_ovl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_ovl.html
-file	--r---	ggv_bin	ovl	Geogrid-Viewer binary overlay file (.ovl)	ggv_bin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_bin.html
-file	--rw--	ggv_log	log	Geogrid-Viewer tracklogs (.log)	ggv_log
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ggv_log.html
 file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
 option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
-
-file	rw----	geonet	txt	GEOnet Names Server (GNS)	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html
-option	geonet	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snlen
-
-option	geonet	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snwhite
-
-option	geonet	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snupper
-
-option	geonet	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_snunique
-
-option	geonet	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_urlbase
-
-option	geonet	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_prefer_shortnames
-
-option	geonet	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geonet.html#fmt_geonet_o_datum
 
 internal	r-r---	dg-100-bin		GlobalSat DG-100/BT-335 Binary File	dg-100-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-100-bin.html
@@ -432,8 +360,6 @@ option	globalsat	input-is-dump-file	Dump raw data to this file	boolean				https:
 
 option	globalsat	timezone	Time zone ID	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_timezone
 
-file	--r---	googledir	xml	Google Directions XML	googledir
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googledir.html
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language	kml
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html
 option	kml	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_deficon
@@ -466,8 +392,6 @@ option	kml	rotate_colors	Rotate colors for tracks and routes (default automatic)
 
 option	kml	prec	Precision of coordinates, number of decimals	integer	6			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_prec
 
-file	--rw--	gnav_trl	trl	Google Navigator Tracklines (.trl)	gnav_trl
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gnav_trl.html
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
@@ -552,8 +476,6 @@ option	gpx	garminextensions	Add info (depth) as Garmin extension	boolean				http
 
 option	gpx	elevprec	Precision of elevations, number of decimals	integer	3			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpx.html#fmt_gpx_o_elevprec
 
-file	rwrw--	hiketech	gps	HikeTech	hiketech
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_hiketech.html
 file	rw----	holux	wpo	Holux (gm-100) .wpo Format	holux
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_holux.html
 file	r-r---	m241-bin	bin	Holux M-241 (MTK based) Binary File Format	m241-bin
