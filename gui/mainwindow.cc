@@ -54,6 +54,7 @@
 #include <QPushButton>                 // for QPushButton
 #include <QRadioButton>                // for QRadioButton
 #include <QStackedWidget>              // for QStackedWidget
+#include <QStandardPaths>              // for QStandardPaths
 
 #include <cstdlib>                     // for exit
 
@@ -262,17 +263,15 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   qApp->removeTranslator(&translator);
 
   // Set a list of locations to search for the translation file.
-  // 1. In the file system in the translations directory relative to the
-  //    location of the executable.
+  // 1. In the file system in the translations subdirectory of any
+  //    QStandardPaths::AppDataLocation directory.
   // 2. In the Qt resource system under the translations path.  This is useful
   //    if the resource was compiled into the executable.
   // 3. In the translations path for Qt.  This is useful to find translations
   //    included with Qt.
-  const QStringList directories = {
-    QApplication::applicationDirPath() + "/translations",
-    ":/translations",
-    QLibraryInfo::location(QLibraryInfo::TranslationsPath)
-  };
+  QStringList directories = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "translations", QStandardPaths::LocateDirectory);
+  directories.append(":/translations");
+  directories.append(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 
   // Load the new translator.
   for (const auto& directory : directories) {

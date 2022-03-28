@@ -30,6 +30,7 @@
 #include <QLatin1String>          // for QLatin1String
 #include <QMessageBox>            // for QMessageBox
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QStandardPaths>         // for QStandardPaths
 #include <QStringLiteral>         // for QStringLiteral
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
@@ -89,13 +90,13 @@ Map::Map(QWidget* parent,
   connect(mclicker, &MarkerClicker::logTime, this, &Map::logTime);
 
   // We search the following locations:
-  // 1. In the file system in the same directory as the executable.
+  // 1. In the file system in the QStandardPaths::AppDataLocation directories.
   // 2. In the Qt resource system.  This is useful if the resource was compiled
   //    into the executable.
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+  QString baseFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "gmapbase.html");
   QString fileName;
   QUrl baseUrl;
-  if (QFile(baseFile).exists()) {
+  if (!baseFile.isEmpty()) {
     fileName = baseFile;
     baseUrl = QUrl::fromLocalFile(baseFile);
   } else if (QFile(":/gmapbase.html").exists()) {
