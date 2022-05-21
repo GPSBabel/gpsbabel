@@ -32,7 +32,7 @@ unix {
           # TODO: It would be better to create an archive and link to it
           #       to separate library build requirements from gpsbabel requirements.
           DEFINES += LIBUSB_H_INCLUDE=$$shell_quote(\"mac/libusb/libusb.h\")
-          LIBS += -lobjc -framework IOKit -framework CoreFoundation
+          LIBS += -lobjc -framework IOKit -framework CoreFoundation -framework Security
           INCLUDEPATH += mac/libusb \
                          mac/libusb/Xcode
           SOURCES += \
@@ -46,7 +46,6 @@ unix {
             mac/libusb/os/events_posix.c \
             mac/libusb/os/threads_posix.c
           HEADERS += \
-            mac/libusb/hotplug.h \
             mac/libusb/libusb.h \
             mac/libusb/libusbi.h \
             mac/libusb/version.h \
