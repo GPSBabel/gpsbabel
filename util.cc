@@ -140,26 +140,6 @@ xrealloc(void* p, size_t s)
 }
 
 /*
-* For an allocated string, realloc it and append 's'
-*/
-char*
-xstrappend(char* src, const char* newd)
-{
-  if (!src) {
-    return xstrdup(newd);
-  }
-  if (!newd) {
-    return xstrdup(src);
-  }
-
-  size_t newsz = strlen(src) + strlen(newd) + 1;
-  src = (char*) xrealloc(src, newsz);
-  strcat(src, newd);
-
-  return src;
-}
-
-/*
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
 FILE*
