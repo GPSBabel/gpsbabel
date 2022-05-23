@@ -569,7 +569,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
       	fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
       }
       fprintf(stderr, "\n");
-=    }
+    }
   break;
   default:
     warning(MYNAME ": Unknown tag (0x%x). Please report!\n", tag);
