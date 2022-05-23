@@ -186,15 +186,19 @@ get_option_val(const char* option, const char* def)
 static void
 init_date_and_time_format()
 {
-  const char* f = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
-  date_time_format = convert_human_date_format(f);
+  // This is old, and weird, code.. date_time_format is a global that's
+  // explicitly malloced and freed elsewhere. This isn't very C++ at all,
+  // but this format is on its deathbead for deprecation.
+  const char* d = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
+  char* d1 = convert_human_date_format(d);
 
-  date_time_format = xstrappend(date_time_format, " ");
+  const char* t = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
+  char* t1 = convert_human_time_format(t);
 
-  f = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
-  const char* c = convert_human_time_format(f);
-  date_time_format = xstrappend(date_time_format, c);
-  xfree((void*) c);
+  xasprintf(&date_time_format, "%s %s", d1, t1);
+
+  xfree(d1);
+  xfree(t1);
 }
 
 static void

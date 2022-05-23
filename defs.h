@@ -1037,7 +1037,6 @@ void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const QString& s);
 char* xstrndup(const char* str, size_t sz);
-char* xstrappend(char* src, const char* newd);
 char* xstrdup(const char* s);
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);

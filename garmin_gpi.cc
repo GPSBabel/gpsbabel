@@ -562,11 +562,11 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
       gbfread(b.get(), 1, sz, fin);
       fprintf(stderr, "\n");
       for (x = 0; x < sz; x++) {
-	fprintf(stderr, "%02x ", b[x]);
+      	fprintf(stderr, "%02x ", b[x]);
       }
       fprintf(stderr, "\n");
       for (x = 0; x < sz; x++) {
-	fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
+      	fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
       }
       fprintf(stderr, "\n");
     }
