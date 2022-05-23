@@ -943,6 +943,5 @@ ff_vecs_t igc_vecs = {
   nullptr,
   &igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

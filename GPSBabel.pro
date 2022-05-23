@@ -26,6 +26,15 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++17
 CONFIG += link_pkgconfig
+!disable_pch {
+  # avoid QTBUG-72404, QTBUG-79694 which were fixed in 5.14.0
+  versionAtLeast(QT_VERSION, 5.14.0) | !contains(QMAKE_CXX, .*clang.*) {
+    CONFIG += precompile_header
+    PRECOMPILED_HEADER = precompiled_headers.h
+  } else {
+    message("Not using precompiled headers due to QTBUG.")
+  }
+}
 
 TEMPLATE = app
 
@@ -47,15 +56,9 @@ MINIMAL_FMTS = \
 
 # ALL_FMTS
 ALL_FMTS = $$MINIMAL_FMTS \
-  bcr.cc \
   brauniger_iq.cc \
-  delgpl.cc \
-  destinator.cc \
   dg-100.cc \
   dmtlog.cc \
-  easygps.cc \
-  energympro.cc \
-  enigma.cc \
   exif.cc \
   f90g_track.cc \
   garmin_fit.cc \
@@ -64,34 +67,17 @@ ALL_FMTS = $$MINIMAL_FMTS \
   garmin_xt.cc \
   gdb.cc \
   geojson.cc \
-  ggv_bin.cc \
-  ggv_log.cc \
-  ggv_ovl.cc \
   globalsat_sport.cc \
-  glogbook.cc \
-  gnav_trl.cc \
-  googledir.cc \
   gpssim.cc \
   gtm.cc \
   gtrnctr.cc \
-  hiketech.cc \
   holux.cc \
   html.cc \
   humminbird.cc \
   igc.cc \
-  ignrando.cc \
-  igo8.cc \
-  ik3d.cc \
   itracku.cc \
-  lmx.cc \
   lowranceusr.cc \
-  mapasia.cc \
-  mapbar_track.cc \
-  mapfactor.cc \
-  mmo.cc \
-  mtk_locus.cc \
   mtk_logger.cc \
-  mynav.cc \
   navilink.cc \
   navitel.cc \
   osm.cc \
@@ -99,7 +85,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   qstarz_bl_1000.cc \
   random.cc \
   raymarine.cc \
-  saroute.cc \
   sbn.cc \
   sbp.cc \
   shape.cc \
@@ -206,8 +191,9 @@ HEADERS =  \
   csv_util.h \
   defs.h \
   dg-100.h \
-  energympro.h \
+  exif.h \
   explorist_ini.h \
+  f90g_track.h \
   filter.h \
   filter_vecs.h \
   format.h \
@@ -221,30 +207,38 @@ HEADERS =  \
   gbfile.h \
   gbser.h \
   gbser_private.h \
+  gdb.h \
   geojson.h \
-  ggv_bin.h \
   globalsat_sport.h \
   gpx.h \
   grtcirc.h \
+  gtrnctr.h \
   heightgrid.h \
   holux.h \
+  humminbird.h \
+  html.h \
   inifile.h \
   kml.h \
   legacyformat.h \
   lowranceusr.h \
   magellan.h \
-  mynav.h \
+  mapbar_track.h \
   navilink.h \
   nmea.h \
   osm.h \
   random.h \
   session.h \
   shape.h \
+  skytraq.h \
   strptime.h \
   subrip.h \
+  tef_xml.h \
+  teletype.h \
+  text.h \
   unicsv.h \
   units.h \
   vecs.h \
+  wintec_tes.h \
   xcsv.h \
   xmlgeneric.h \
   jeeps/garminusb.h \
@@ -317,9 +311,20 @@ win32 {
 }
 
 win32-msvc* {
-  DEFINES += _CRT_SECURE_NO_DEPRECATE
-  QMAKE_CFLAGS += /MP -wd4100 -wd4267
-  QMAKE_CXXFLAGS += /MP -wd4100 -wd4267
+  DEFINES += _CRT_SECURE_NO_WARNINGS
+  DEFINES += _CRT_NONSTDC_NO_WARNINGS
+  QMAKE_CFLAGS += /MP -wd4267
+  QMAKE_CXXFLAGS += /MP -wd4267
+  # The -wd (disable warning) and -w3 (change warning to level 3) options are exclusive.
+  # The win32-msvc makespec uses -w34100, which can interfer with -wd4100.
+  # Their are two qmake settings for warnings in CONFIG: warn_on and warn_off.
+  # This results in the warning showing with msbuild, but not with nmake, even if
+  # -wd4100 is included in QMAKE_CFLAGS and QMAKE_CXXFLAGS.
+  # Override win32-msvc, leaving these warnings at their default of level 4, which
+  # will not show up because we run at level 3.
+  # shapelib/shpopen.c can cause a C4100 error.
+  QMAKE_CFLAGS_WARN_ON -= -w34100
+  QMAKE_CXXFLAGS_WARN_ON -= -w34100
 }
 
 include(shapelib.pri)

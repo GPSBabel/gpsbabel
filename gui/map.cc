@@ -34,6 +34,7 @@
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
 #include <QWebEnginePage>         // for QWebEnginePage
+#include <QWebEngineSettings>     // for QWebEngineSettings, QWebEngineSettings::LocalContentCanAccessRemoteUrls
 #include <QWebEngineView>         // for QWebEngineView
 #include <Qt>                     // for WaitCursor
 #include <QtGlobal>               // for foreach
@@ -101,6 +102,17 @@ Map::Map(QWidget* parent,
     fileName = ":/gmapbase.html";
     baseUrl = QUrl("qrc:///gmapbase.html");
   }
+
+  // If baseUrl is using the file scheme gmapbase.html will be local content,
+  // and it needs to be able to access https://maps.googleapis.com, which is
+  // remote.  Before 6.2.4 qrc was also considered a local scheme.
+  // This changed with QTBUG-96849 in 6.2.4,
+  // https://github.com/qt/qtwebengine/commit/dc7c2962a83a5eeb3c08e1a7312458ea5a18f4a5.
+  // As of 6.2.4 if we don't set this flag we get net::ERR_NETWORK_ACCESS_DENIED with
+  // the file scheme, and the map preview doesn't work.
+  // In 6.2.3 we got a number of "from origin 'file://' has been blocked by CORS policy"
+  // messages with the file scheme, but the map preview seemed to work.
+  this->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
   if (!fileName.isEmpty()) {
     QFile htmlFile(fileName);

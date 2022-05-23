@@ -126,19 +126,6 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
-#if __WIN32__
-#  ifndef fileno
-#    define fileno _fileno
-#  endif
-#  define strdup _strdup
-#endif
-
-#if __WIN32__
-#if !defined _CRT_SECURE_NO_DEPRECATE
-#  define _CRT_SECURE_NO_DEPRECATE 1
-#endif
-#endif
-
 /* Pathname separator character */
 #if __WIN32__
 #  define GB_PATHSEP '\\'
@@ -1036,7 +1023,6 @@ struct ff_vecs_t {
   QString encode;
   int fixed_encode;
   position_ops_t position_ops;
-  void* unused; /* TODO: delete this field */
 };
 
 [[noreturn]] void fatal(QDebug& msginstance);
@@ -1058,9 +1044,6 @@ FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
 
-// OS-abstracting wrapper for getting Unicode environment variables.
-QString ugetenv(const char* env_var);
-
 // FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
 // just be replaced at the call sites.  These shims are just here to make
 // them more accommodating of QString input.
@@ -1076,9 +1059,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 }
 
 int str_match(const char* str, const char* match);
-
-char* strsub(const char* s, const char* search, const char* replace);
-char* gstrsub(const char* s, const char* search, const char* replace);
 
 void rtrim(char* s);
 char* lrtrim(char* buff);
@@ -1111,12 +1091,9 @@ QString get_filename(const QString& fname);			/* extract the filename portion */
  * Character encoding transformations.
  */
 
-#define CET_NOT_CONVERTABLE_DEFAULT '$'
 #define CET_CHARSET_ASCII	"US-ASCII"
 #define CET_CHARSET_UTF8	"UTF-8"
-#define CET_CHARSET_HEBREW  "ISO-8859-8"
 #define CET_CHARSET_MS_ANSI	"windows-1252"
-#define CET_CHARSET_LATIN1	"ISO-8859-1"
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);

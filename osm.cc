@@ -454,10 +454,10 @@ OsmFormat::osm_node(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
   // if (attrv->hasAttribute("user")) ; // ignored
 
   if (attrv->hasAttribute("lat")) {
-    wpt->latitude = attrv->value("lat").toString().toDouble();
+    wpt->latitude = attrv->value("lat").toDouble();
   }
   if (attrv->hasAttribute("lon")) {
-    wpt->longitude = attrv->value("lon").toString().toDouble();
+    wpt->longitude = attrv->value("lon").toDouble();
   }
 
   if (attrv->hasAttribute("timestamp")) {
@@ -589,10 +589,10 @@ OsmFormat::osm_way_center(xg_string /*unused*/, const QXmlStreamAttributes* attr
   wpt->wpt_flags.fmt_use = 1;
 
   if (attrv->hasAttribute("lat")) {
-    wpt->latitude = attrv->value("lat").toString().toDouble();
+    wpt->latitude = attrv->value("lat").toDouble();
   }
   if (attrv->hasAttribute("lon")) {
-    wpt->longitude = attrv->value("lon").toString().toDouble();
+    wpt->longitude = attrv->value("lon").toDouble();
   }
 }
 

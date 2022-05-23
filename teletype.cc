@@ -20,24 +20,21 @@
 
  */
 
-#include "defs.h"
+#include "teletype.h"
+
+#include <cstdio>   // for SEEK_CUR
+#include "defs.h"   // for Waypoint, waypt_add
+
 
 #define MYNAME "teletype"
 
-
-static
-QVector<arglist_t> teletype_args = {
-};
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static uint32_t tty_wpt_count;
-static gbfile* fin;
-
-static void
-teletype_rd_init(const QString& fname)
+void
+TeletypeFormat::rd_init(const QString& fname)
 {
   char header[64];
 
@@ -47,14 +44,14 @@ teletype_rd_init(const QString& fname)
   tty_wpt_count = gbfgetint32(fin);
 }
 
-static void
-teletype_rd_deinit()
+void
+TeletypeFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-static void
-teletype_read()
+void
+TeletypeFormat::read()
 {
   for (uint32_t i = 0; i < tty_wpt_count; i++) {
     auto* wpt = new Waypoint;
@@ -79,30 +76,3 @@ teletype_read()
     waypt_add(wpt);
   }
 }
-
-/**************************************************************************/
-
-// capabilities below means: we can only read and write waypoints
-// please change this depending on your new module
-
-ff_vecs_t teletype_vecs = {
-  ff_type_file,
-  {
-    (ff_cap)(ff_cap_read) 	/* waypoints */,
-    ff_cap_none 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  teletype_rd_init,
-  nullptr,
-  teletype_rd_deinit,
-  nullptr,
-  teletype_read,
-  nullptr,
-  nullptr,
-  &teletype_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};
-/**************************************************************************/

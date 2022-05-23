@@ -26,7 +26,7 @@
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdint>                      // for uint32_t
-#include <cstdlib>                      // for abs, getenv, calloc, free, malloc, realloc
+#include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
@@ -44,7 +44,7 @@
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -183,21 +183,6 @@ ufopen(const QString& fname, const char* mode)
 #else
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
-#endif
-}
-
-/*
- * OS-abstracting wrapper for getting Unicode environment variables.
- */
-QString ugetenv(const char* env_var)
-{
-#ifdef __WIN32__
-  // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
-  return QString::fromWCharArray(
-           _wgetenv((const wchar_t*) QString(env_var).utf16()));
-#else
-  // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
-  return QString::fromLocal8Bit(std::getenv(env_var));
 #endif
 }
 
@@ -701,7 +686,7 @@ mklocaltime(struct tm* t)
 bool
 gpsbabel_testmode()
 {
-  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  static bool testmode = qEnvironmentVariableIsSet("GPSBABEL_FREEZE_TIME");
   return testmode;
 }
 
@@ -928,72 +913,6 @@ double degrees2ddmm(double deg_val)
 {
   auto deg = (signed int) deg_val;
   return (deg * 100.0) + ((deg_val - deg) * 60.0);
-}
-
-/*
- * replace a single occurrence of "search" in  "s" with "replace".
- * Returns an allocated copy if substitution was made, otherwise returns NULL.
- * Doesn't try to make an optimally sized dest buffer.
- */
-char*
-strsub(const char* s, const char* search, const char* replace)
-{
-  int len = strlen(s);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  const char* p = strstr(s, search);
-  if (!slen || !p) {
-    return nullptr;
-  }
-
-  char* d = (char*) xmalloc(len + rlen + 1);
-
-  /* Copy first part */
-  len = p - s;
-  memcpy(d, s, len);
-  d[len] = 0;
-
-  /* Copy replacement */
-  strcat(d, replace);
-
-  /* Copy last part */
-  strcat(d, p + slen);
-  return d;
-}
-
-/*
- *  As strsub, but do it globally.
- */
-char*
-gstrsub(const char* s, const char* search, const char* replace)
-{
-  int ooffs = 0;
-  const char* c;
-  const char* src = s;
-  int olen = strlen(src);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  char* o = (char*) xmalloc(olen + 1);
-
-  while ((c = strstr(src, search))) {
-    olen += (rlen - slen);
-    o = (char*) xrealloc(o, olen + 1);
-    memcpy(o + ooffs, src, c - src);
-    ooffs += (c - src);
-    src = c + slen;
-    if (rlen) {
-      memcpy(o + ooffs, replace, rlen);
-      ooffs += rlen;
-    }
-  }
-
-  if (ooffs < olen) {
-    memcpy(o + ooffs, src, olen - ooffs);
-  }
-  o[olen] = '\0';
-  return o;
 }
 
 /*

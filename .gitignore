@@ -36,6 +36,7 @@ CMakeFiles/
 *.swp
 /tmp/
 /mkcapabilities
+/gpsbabel.gch/
 /gpsbabel.rc
 /autogen/
 /makedoc

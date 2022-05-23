@@ -39,6 +39,29 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
+option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
+if (GPSBABEL_ENABLE_PCH)
+  target_precompile_headers(gpsbabel PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
+  )
+endif()
+
 # RESOURCES
 set(RESOURCES gpsbabel.qrc)
 
@@ -58,51 +81,27 @@ set(MINIMAL_FMTS
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  bcr.cc
   brauniger_iq.cc
-  delgpl.cc
-  destinator.cc
   dg-100.cc
   dmtlog.cc
-  easygps.cc
-  energympro.cc
-  enigma.cc
   exif.cc
-  f90g_track.cc
   garmin_fit.cc
   garmin_gpi.cc
   garmin_txt.cc
   garmin_xt.cc
   gdb.cc
   geojson.cc
-  ggv_bin.cc
-  ggv_log.cc
-  ggv_ovl.cc
   globalsat_sport.cc
-  glogbook.cc
-  gnav_trl.cc
-  googledir.cc
   gpssim.cc
   gtm.cc
   gtrnctr.cc
-  hiketech.cc
   holux.cc
   html.cc
   humminbird.cc
   igc.cc
-  ignrando.cc
-  igo8.cc
-  ik3d.cc
   itracku.cc
-  lmx.cc
   lowranceusr.cc
-  mapasia.cc
-  mapbar_track.cc
-  mapfactor.cc
-  mmo.cc
-  mtk_locus.cc
   mtk_logger.cc
-  mynav.cc
   navilink.cc
   navitel.cc
   osm.cc
@@ -110,7 +109,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   qstarz_bl_1000.cc
   random.cc
   raymarine.cc
-  saroute.cc
   sbn.cc
   sbp.cc
   shape.cc
@@ -219,7 +217,7 @@ set(HEADERS
   csv_util.h
   defs.h
   dg-100.h
-  energympro.h
+  exif.h
   explorist_ini.h
   filter.h
   filter_vecs.h
@@ -234,30 +232,37 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  gdb.h
   geojson.h
-  ggv_bin.h
   globalsat_sport.h
   gpx.h
   grtcirc.h
+  gtrnctr.h
   heightgrid.h
   holux.h
+  humminbird.h
+  html.h
   inifile.h
   kml.h
   legacyformat.h
   lowranceusr.h
   magellan.h
-  mynav.h
   navilink.h
   nmea.h
   osm.h
   random.h
   session.h
   shape.h
+  skytraq.h
   strptime.h
   subrip.h
+  tef_xml.h
+  teletype.h
+  text.h
   unicsv.h
   units.h
   vecs.h
+  wintec_tes.h
   xcsv.h
   xmlgeneric.h
   jeeps/garminusb.h
@@ -317,7 +322,8 @@ if(WIN32)
 endif()
 
 if(MSVC)
-  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_DEPRECATE)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
   target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 
@@ -364,24 +370,16 @@ set(TESTS
   arc-project
   arc
   batch
-  bcr
   bend
   classic-1
   classic-2
   classic-3
-  delgpl
-  destinator
   dg100
   dmtlog
   dna
   dop_filter
   duplicate
-  easygps
-  energympro
-  enigma
   exif
-  f90g
-  fugawi
   garmin_fit
   garmin_g1000
   garmin_gpi
@@ -391,13 +389,7 @@ set(TESTS
   gdb
   geojson
   geo
-  ggv_bin
-  ggv_log
-  ggv_ovl
   globalsat_sport
-  glogbook
-  gnav_trl
-  googledir
   gpsdrive
   gpssim
   gpx
@@ -405,34 +397,19 @@ set(TESTS
   gtm
   gtrnctr
   height
-  hiketech
   holux
   humminbird
   iblue747
   igc
-  ignrando
-  igo2008_poi
-  igo8
-  igoprimo_poi
-  ik3d
   interpolate
   itracku
   kml-read
   kml
-  lmx
   lowranceusr
   magellan_sd
   magellan
-  mainnav
-  mapasia
-  mapbar
-  mapfactor
-  mmo
-  motoactv
   mtk
   multiurlgpx
-  mxf
-  mynav
   navilink
   navitel
   nmea
@@ -446,7 +423,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  saroute
   sbn
   sbp
   serialization
@@ -458,7 +434,6 @@ set(TESTS
   stackfilter
   subrip
   swap
-  tef
   teletype
   text
   tomtom_asc

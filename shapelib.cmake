@@ -19,6 +19,11 @@ else()
     # note gpsbabel has conditional code include "shapelib/shapefil.h",
     # so it doesn't actually rely on the include directory being PUBLIC/INTERFACE
     target_include_directories(shp PUBLIC shape)
+    if(MSVC)
+      target_compile_definitions(shp PRIVATE _CRT_SECURE_NO_WARNINGS)
+      target_compile_definitions(shp PRIVATE _CRT_NONSTDC_NO_WARNINGS)
+      target_compile_options(shp PRIVATE /MP -wd4100 -wd4267)
+    endif()
     list(APPEND LIBS shp)
   elseif(GPSBABEL_WITH_SHAPELIB STREQUAL "custom")
     message(STATUS "shapelib is enabled but but must be manually configured.")

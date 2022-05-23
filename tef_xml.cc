@@ -23,56 +23,28 @@
 
 */
 
-#include <QLatin1String>                // for QLatin1String
-#include <QString>                      // for QString
-#include <QStringView>                  // for QStringView
-#include <QVector>                      // for QVector
-#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <Qt>                           // for CaseInsensitive
+#include "tef_xml.h"
 
-#include "defs.h"
-#include "xmlgeneric.h"                 // for cb_start, cb_end, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_init, xml_read, xg_tag_mapping
+#include <QLatin1String>         // for QLatin1String
+#include <QString>               // for QString, QStringView::toString
+#include <QXmlStreamAttribute>   // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <Qt>                    // for CaseInsensitive
 
-static Waypoint* wpt_tmp;
-static int item_count;
-static int waypoints;
-static double version;
-static route_head* route = nullptr;
+#include <type_traits>           // for add_const<>::type
 
-static char* routevia = nullptr;
+#include "defs.h"                // for Waypoint, fatal, wp_flags, route_add_head, route_add_wpt, route_head, waypt_add
+#include "xmlgeneric.h"          // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
 
-static QVector<arglist_t> tef_xml_args = {
-  {
-    "routevia", &routevia, "Include only via stations in route",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-};
 
 #define MYNAME "TourExchangeFormat"
-
-static xg_callback	tef_start, tef_header, tef_list_start, tef_list_end;
-static xg_callback	tef_item_start, tef_point, tef_item_end;
-
-static
-xg_tag_mapping tef_xml_map[] = {
-  { tef_start,		cb_start,	"/TEF" },
-  { tef_header,		cb_start,	"/TEF/Header" },
-  { tef_list_start,	cb_start,	"/TEF/WaypointList" },
-  { tef_item_start,	cb_start,	"/TEF/WaypointList/Item" },
-  { tef_point,		cb_start,	"/TEF/WaypointList/Item/Point" },
-  { tef_item_end,		cb_end,		"/TEF/WaypointList/Item" },
-  { tef_list_end,		cb_end,		"/TEF/WaypointList" },
-  { nullptr,	(xg_cb_type)0,		nullptr }
-};
-
 
 /*
  * tef_start: check for comment "TourExchangeFormat"
  */
 
-static void
-tef_start(xg_string, const QXmlStreamAttributes* attrv)
+void
+TefXMLFormat::tef_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   bool valid = false;
 
@@ -82,7 +54,7 @@ tef_start(xg_string, const QXmlStreamAttributes* attrv)
         valid = true;
       }
     } else if (attr.name().compare(QLatin1String("Version"), Qt::CaseInsensitive) == 0) {
-      version = attr.value().toString().toDouble();
+      version = attr.value().toDouble();
     }
   }
 
@@ -95,8 +67,8 @@ tef_start(xg_string, const QXmlStreamAttributes* attrv)
  * tef_header: "Name" > Route name, "Software" > Route descr.
  */
 
-static void
-tef_header(xg_string, const QXmlStreamAttributes* attrv)
+void
+TefXMLFormat::tef_header(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   route = new route_head;
   for (const auto& attr : *attrv) {
@@ -109,11 +81,11 @@ tef_header(xg_string, const QXmlStreamAttributes* attrv)
   route_add_head(route);
 }
 
-static void
-tef_list_start(xg_string, const QXmlStreamAttributes* attrv)
+void
+TefXMLFormat::tef_list_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ItemCount")) {
-    item_count = attrv->value("ItemCount").toString().toUInt();
+    item_count = attrv->value("ItemCount").toUInt();
   }
 }
 
@@ -136,8 +108,8 @@ tef_list_start(xg_string, const QXmlStreamAttributes* attrv)
  */
 // FIXME: the calling convention here is screwy.  notes is an input AND
 // output argument and may be modified.
-static char*
-fix_notes(const char* name, char* notes)
+char*
+TefXMLFormat::fix_notes(const char* name, char* notes)
 {
   const char* cleft, *cright, *cback;
   char* ctmp;
@@ -170,8 +142,8 @@ fix_notes(const char* name, char* notes)
   return notes;
 }
 
-static char*
-Xfix_notes(const QString& name, const QString& notes)
+char*
+TefXMLFormat::Xfix_notes(const QString& name, const QString& notes)
 {
 
   char* cname = xstrdup(name);
@@ -184,14 +156,14 @@ Xfix_notes(const QString& name, const QString& notes)
   return r;
 }
 #else
-static QString
-fix_notes(const QString&, const QString& notes){
+QString
+TefXMLFormat::fix_notes(const QString& /*unused*/, const QString& notes){
     return notes;
 }
 #endif
 
-static void
-waypoint_final()
+void
+TefXMLFormat::waypoint_final()
 {
   if (wpt_tmp == nullptr) {
     return;
@@ -225,14 +197,14 @@ waypoint_final()
   wpt_tmp = nullptr;
 }
 
-static void
-tef_item_end(xg_string, const QXmlStreamAttributes*)
+void
+TefXMLFormat::tef_item_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   waypoint_final();
 }
 
-static void
-tef_list_end(xg_string, const QXmlStreamAttributes*)
+void
+TefXMLFormat::tef_list_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   waypoint_final();
   if (waypoints != item_count)
@@ -240,8 +212,8 @@ tef_list_end(xg_string, const QXmlStreamAttributes*)
           waypoints, item_count);
 }
 
-static void
-tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
+void
+TefXMLFormat::tef_item_start(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
@@ -272,8 +244,8 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static double
-tef_read_comma_float(QStringView value)
+double
+TefXMLFormat::tef_read_comma_float(QStringView value)
 {
   QString svalue = value.toString();
 
@@ -286,8 +258,8 @@ tef_read_comma_float(QStringView value)
   return fixed.toDouble();
 }
 
-static void
-tef_point(xg_string, const QXmlStreamAttributes* attrv)
+void
+TefXMLFormat::tef_point(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 {
   if (!wpt_tmp) {
     return;
@@ -302,41 +274,25 @@ tef_point(xg_string, const QXmlStreamAttributes* attrv)
   }
 }
 
-static void
-tef_xml_rd_init(const QString& fname)
+void
+TefXMLFormat::rd_init(const QString& fname)
 {
   wpt_tmp = nullptr;
   waypoints = 0;
   item_count = -1;
   version = 1.5;
 
-  xml_init(fname, tef_xml_map, nullptr);
+  xml_init(fname, build_xg_tag_map(this, tef_xml_map), nullptr, nullptr, nullptr, true);
 }
 
-static void
-tef_xml_read()
+void
+TefXMLFormat::read()
 {
   xml_read();
 }
 
-static void
-tef_xml_rd_deinit()
+void
+TefXMLFormat::rd_deinit()
 {
   xml_deinit();
 }
-
-ff_vecs_t tef_xml_vecs = {
-  ff_type_file,
-  { ff_cap_none, ff_cap_none, ff_cap_read },
-  tef_xml_rd_init,
-  nullptr,
-  tef_xml_rd_deinit,
-  nullptr,
-  tef_xml_read,
-  nullptr,
-  nullptr,
-  &tef_xml_args,
-  CET_CHARSET_UTF8, 1
-  , NULL_POS_OPS,
-  nullptr
-};

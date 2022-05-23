@@ -511,6 +511,5 @@ ff_vecs_t raymarine_vecs = {
   nullptr,
   &raymarine_args,
   CET_CHARSET_ASCII, 0	/* should we force this to 1 ? */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
