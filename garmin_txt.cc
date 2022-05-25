@@ -118,7 +118,6 @@ static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
 static int header_ct[unknown_header + 1];
 
 #define GARMIN_UNKNOWN_ALT 1.0e25f
-#define DEFAULT_DISPLAY garmin_display_symbol_and_name
 #define DEFAULT_DATE_FORMAT "dd/mm/yyyy"
 #define DEFAULT_TIME_FORMAT "HH:mm:ss"
 

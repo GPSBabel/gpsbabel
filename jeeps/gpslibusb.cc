@@ -328,7 +328,7 @@ garmin_usb_start(struct libusb_device* dev,
   if (ret != LIBUSB_SUCCESS) {
     fatal("libusb_set_configuration failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
-  };
+  }
 #endif
 
 #if 0

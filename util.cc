@@ -623,8 +623,6 @@ si_round(double d)
 	works just like mktime but without all the mucking
 	around with timezones and daylight savings
 
-	obsoletes get_tz_offset()
-
 	Borrowed from lynx GPL source code
 	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
 
@@ -1456,10 +1454,6 @@ char* xml_entitize(const char* str)
   return entitize(str, false);
 }
 
-char* html_entitize(const char* str)
-{
-  return entitize(str, true);
-}
 char* html_entitize(const QString& str)
 {
   return entitize(CSTR(str), true);
