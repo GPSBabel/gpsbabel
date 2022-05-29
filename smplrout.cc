@@ -70,8 +70,6 @@
 #if FILTERS_ENABLED
 #define MYNAME "simplify"
 
-#define sqr(a) ((a)*(a))
-
 void SimplifyRouteFilter::free_xte(struct xte* xte_rec)
 {
   delete xte_rec->intermed;

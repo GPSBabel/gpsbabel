@@ -1068,7 +1068,6 @@ int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* 
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-signed int get_tz_offset();
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
@@ -1190,11 +1189,6 @@ int parse_speed(const QString& str, double* val, double scale, const char* modul
  *  From util_crc.c
  */
 unsigned long get_crc32(const void* data, int datalen);
-
-/*
- * From nmea.c
- */
-int nmea_cksum(const char* buf);
 
 /*
  * Color helpers.

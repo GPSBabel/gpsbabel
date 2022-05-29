@@ -52,8 +52,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-using guid_t = unsigned long long;
-
 static inifile_t* fin;
 static gbfile* fout;
 static Waypoint** waypt_table;
