@@ -59,4 +59,4 @@
     gps_device_op12 Write_Packet;
   } gps_device_ops;
 
-#endif /* gpsdevice.h */
+#endif /* gpsdevice_h */

@@ -75,7 +75,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   gbfprintf(file_out, "<br>\n");
   if (wpt->description != wpt->shortname) {
     if (wpt->HasUrlLink()) {
-      char* d = html_entitize(CSTR(wpt->description));
+      char* d = html_entitize(wpt->description);
       UrlLink link = wpt->GetUrlLink();
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", CSTR(link.url_), d);
       xfree(d);
@@ -139,7 +139,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = xml_findfirst(curlog, "groundspeak:finder");
         if (logpart) {
-          char* f = html_entitize(CSTR(logpart->cdata));
+          char* f = html_entitize(logpart->cdata);
           gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
           xfree(f);
         }

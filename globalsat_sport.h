@@ -255,4 +255,4 @@ private:
     {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   };
 };
-#endif // GPX_H_INCLUDED_
+#endif // GLOBALSATSPORT_H_INCLUDED_
