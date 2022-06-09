@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "swapdata.h"
+#include <utility>     // for swap
 
 #define MYNAME "swapdata"
 
@@ -30,10 +31,7 @@
 void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 {
   auto* wpt = const_cast<Waypoint*>(ref);
-
-  double x = wpt->latitude;
-  wpt->latitude = wpt->longitude;
-  wpt->longitude = x;
+  std::swap(wpt->latitude, wpt->longitude);
 }
 
 /*******************************************************************************
