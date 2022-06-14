@@ -1,4 +1,4 @@
 <para>
 This option tells
-GPSBabel to creating points without creation times instead of copying the creation time from the source point.
+GPSBabel to create points without creation times instead of copying the creation time from the source points.
 </para>
