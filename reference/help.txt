@@ -584,6 +584,7 @@ Supported data filters:
 	  rptdigits             Number of digits in generated names 
 	  rptname               Use source name for route point names 
 	  del                   Delete source data after transformation 
+	  timeless              Create transformed points without times 
 	height                Manipulate altitudes                              
 	  add                   Adds a constant value to every altitude (meter, ap 
 	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h 
