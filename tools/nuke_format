@@ -45,12 +45,13 @@ remove_manually $1 vecs.cc
 remove_line_containing $1 reference/format0.txt
 remove_line_containing $1 reference/format1.txt
 remove_line_containing $1 reference/format2.txt
+remove_line_containing $1 gpsbabel.qrc
 
 git rm -f reference/$1*
 git rm -f xmldoc/formats/$1.xml
 git rm -f xmldoc/formats/options/$1.xml
 git rm -f testo.d/$1.test
-git rm -f style/$1.test
+git rm -f style/$1.style
 [ -f $1.cc ] && git mv $1.cc deprecated/
 [ -f $1.h ] && git mv $1.h deprecated/
 [ -f style/$1.style ] && git mv style/$1.style deprecated/style/

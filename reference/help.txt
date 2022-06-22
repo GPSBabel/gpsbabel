@@ -264,14 +264,6 @@ File Types (-i and -o options):
 	  baud                  Numeric value of bitrate (baud=4800) 
 	  noack                 (0/1) Suppress use of handshaking in name of speed 
 	  nukewpt               (0/1) Delete all waypoints 
-	s_and_t               Microsoft Streets and Trips 2002-2007
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	miniHomer             MiniHomer, a skyTraq Venus 6 based logger (downloa
 	  baud                  Baud rate used for download 
 	  dump-file             Dump raw data to this file 
@@ -303,14 +295,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27) 
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navigonwpt            Navigon Waypoints
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	navilink              NaviGPS GT-11/BGT-11 Download
 	  nuketrk               (0/1) Delete all track points 
 	  nukerte               (0/1) Delete all routes 
@@ -320,23 +304,6 @@ File Types (-i and -o options):
 	  power_off             (0/1) Command unit to power itself down 
 	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
 	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-	navitel_trk           Navitel binary track (.bin)
-	dna                   Navitrak DNA marker format
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	nima                  NIMA/GNIS Geographic Names File
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	nmea                  NMEA 0183 sentences
 	  snlen                 Max length of waypoint name to write 
 	  gprmc                 (0/1) Read/write GPRMC sentences 
@@ -367,24 +334,6 @@ File Types (-i and -o options):
 	  proxunit              Unit used in proximity values 
 	  codec                 codec to use for reading and writing strings (defa 
 	qstarz_bl-1000        Qstarz BL-1000
-	raymarine             Raymarine Waypoint File (.rwf)
-	  location              Default location 
-	ricoh                 Ricoh GPS Log File
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	cup                   See You flight analysis data
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
 	skytraq               SkyTraq Venus based loggers (download)
 	  erase                 (0/1) Erase device data after download 
 	  targetlocation        Set location finder target location as lat,lng 
@@ -408,7 +357,6 @@ File Types (-i and -o options):
 	  gps_time              GPS time at position video_time (hhmmss[.sss], def 
 	  gps_date              GPS date at position video_time (yyyymmdd, default 
 	  format                Format for subtitles 
-	xol                   Swiss Map 25/50/100 (.xol)
 	openoffice            Tab delimited fields useful for OpenOffice
 	  snlen                 Max synthesized shortname length 
 	  snwhite               (0/1) Allow whitespace synth. shortnames 
@@ -417,7 +365,6 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output 
 	  prefer_shortnames     (0/1) Use shortname instead of description 
 	  datum                 GPS datum (def. WGS 84) 
-	teletype              Teletype [ Get Jonathon Johnson to describe
 	text                  Textual Output
 	  nosep                 (0/1) Suppress separator lines between waypoints 
 	  encrypt               (0/1) Encrypt hints using ROT13 
@@ -425,33 +372,6 @@ File Types (-i and -o options):
 	  degformat             Degrees output as 'ddd', 'dmm'(default) or 'dms' 
 	  altunits              Units for altitude (f)eet or (m)etres 
 	  splitoutput           (0/1) Write each waypoint in a separate file 
-	tomtom_itn            TomTom Itineraries (.itn)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	tomtom_itn_places     TomTom Places Itineraries (.itn)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	tomtom_asc            TomTom POI file (.asc)
-	  snlen                 Max synthesized shortname length 
-	  snwhite               (0/1) Allow whitespace synth. shortnames 
-	  snupper               (0/1) UPPERCASE synth. shortnames 
-	  snunique              (0/1) Make synth. shortnames unique 
-	  urlbase               Basename prepended to URL on output 
-	  prefer_shortnames     (0/1) Use shortname instead of description 
-	  datum                 GPS datum (def. WGS 84) 
-	tomtom                TomTom POI file (.ov2)
-	dmtlog                TrackLogs digital mapping (.trl)
-	  index                 Index of track (if more than one in source) 
 	unicsv                Universal csv with field structure in first line
 	  datum                 GPS datum (def. WGS 84) 
 	  grid                  Write position using this grid. 
@@ -462,17 +382,10 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa 
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13 
-	wintec_tes            Wintec TES file
 	wbt-bin               Wintec WBT-100/200 Binary File Format
 	wbt                   Wintec WBT-100/200 GPS Download
 	  erase                 (0/1) Erase device data after download 
 	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
-	itracku               XAiOX iTrackU Logger
-	  backup                Appends the input to a backup file 
-	  new                   Only waypoints that are not the backup file 
-	itracku-bin           XAiOX iTrackU Logger Binary File Format
-	  backup                Appends the input to a backup file 
-	  new                   Only waypoints that are not the backup file 
 
 Supported data filters:
 	arc                   Include Only Points Within Distance of Arc        
