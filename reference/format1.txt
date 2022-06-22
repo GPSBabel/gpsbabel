@@ -45,7 +45,6 @@ file	lowranceusr	usr	Lowrance USR
 file	magellanx	upt	Magellan SD files (as for eXplorist)
 file	magellan		Magellan SD files (as for Meridian)
 serial	magellan		Magellan serial protocol
-file	s_and_t	txt	Microsoft Streets and Trips 2002-2007
 serial	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)
 file	garmin_xt		Mobile Garmin XT Track files
 file	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format
@@ -53,37 +52,20 @@ serial	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 file	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-file	navigonwpt		Navigon Waypoints
 serial	navilink		NaviGPS GT-11/BGT-11 Download
 file	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
 file	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-file	navitel_trk	bin	Navitel binary track (.bin)
-file	dna	dna	Navitrak DNA marker format
-file	nima		NIMA/GNIS Geographic Names File
 file	nmea		NMEA 0183 sentences
 file	osm	osm	OpenStreetMap data files
 file	ozi		OziExplorer
 file	qstarz_bl-1000		Qstarz BL-1000
-file	raymarine	rwf	Raymarine Waypoint File (.rwf)
-file	ricoh	log	Ricoh GPS Log File
-file	cup	cup	See You flight analysis data
 serial	skytraq		SkyTraq Venus based loggers (download)
 file	skytraq-bin	bin	SkyTraq Venus based loggers Binary File Format
 file	subrip	srt	SubRip subtitles for video mapping (.srt)
-file	xol	xol	Swiss Map 25/50/100 (.xol)
 file	openoffice		Tab delimited fields useful for OpenOffice
-file	teletype		Teletype [ Get Jonathon Johnson to describe
 file	text	txt	Textual Output
-file	tomtom_itn	itn	TomTom Itineraries (.itn)
-file	tomtom_itn_places	itn	TomTom Places Itineraries (.itn)
-file	tomtom_asc	asc	TomTom POI file (.asc)
-file	tomtom	ov2	TomTom POI file (.ov2)
-file	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	unicsv		Universal csv with field structure in first line
 file	vcard	vcf	Vcard Output (for iPod)
-file	wintec_tes	tes	Wintec TES file
 file	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
 serial	wbt		Wintec WBT-100/200 GPS Download
 file	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format
-serial	itracku		XAiOX iTrackU Logger
-file	itracku-bin	bin	XAiOX iTrackU Logger Binary File Format

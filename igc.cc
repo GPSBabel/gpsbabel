@@ -154,12 +154,14 @@ inline state_t& operator++(state_t& s) // prefix
 {
   return s = static_cast<state_t>(s + 1);
 }
+#if 0 // No callers.
 inline state_t operator++(state_t& s, int) // postfix
 {
   state_t ret(s);
   ++s;
   return ret;
 }
+#endif
 
 /**
  * Handle pre- or post-flight task declarations.

@@ -58,7 +58,6 @@ MINIMAL_FMTS = \
 ALL_FMTS = $$MINIMAL_FMTS \
   brauniger_iq.cc \
   dg-100.cc \
-  dmtlog.cc \
   exif.cc \
   f90g_track.cc \
   garmin_fit.cc \
@@ -75,33 +74,25 @@ ALL_FMTS = $$MINIMAL_FMTS \
   html.cc \
   humminbird.cc \
   igc.cc \
-  itracku.cc \
   lowranceusr.cc \
   mtk_logger.cc \
   navilink.cc \
-  navitel.cc \
   osm.cc \
   ozi.cc \
   qstarz_bl_1000.cc \
   random.cc \
-  raymarine.cc \
   sbn.cc \
   sbp.cc \
   shape.cc \
   skytraq.cc \
   subrip.cc \
-  tef_xml.cc \
-  teletype.cc \
   text.cc \
-  tomtom.cc \
   tpg.cc \
   tpo.cc \
   unicsv.cc \
   v900.cc \
   vcf.cc \
-  wintec_tes.cc \
   xcsv.cc \
-  xol.cc
 
 # ALL_FMTS = $$MINIMAL_FMTS
 
@@ -232,13 +223,10 @@ HEADERS =  \
   skytraq.h \
   strptime.h \
   subrip.h \
-  tef_xml.h \
-  teletype.h \
   text.h \
   unicsv.h \
   units.h \
   vecs.h \
-  wintec_tes.h \
   xcsv.h \
   xmlgeneric.h \
   jeeps/garminusb.h \
