@@ -1148,12 +1148,12 @@ void Vecs::disp_vecs() const
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s %s\n",
+        printf("	  %-18.18s    %s%-.50s%s\n",
                qPrintable(arg.argstring),
                (arg.argtype & ARGTYPE_TYPEMASK) ==
                ARGTYPE_BOOL ? "(0/1) " : "",
                qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
       }
     }
   }
@@ -1171,12 +1171,12 @@ void Vecs::disp_vec(const QString& vecname) const
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s %s\n",
+        printf("	  %-18.18s    %s%-.50s%s\n",
                qPrintable(arg.argstring),
                (arg.argtype & ARGTYPE_TYPEMASK) ==
                ARGTYPE_BOOL ? "(0/1) " : "",
                qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
+               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
       }
     }
   }

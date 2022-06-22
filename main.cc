@@ -139,7 +139,7 @@ usage(const char* pname, int shorter)
     "    -T               Process realtime tracking information\n"
     "    -w               Process waypoint information [default]\n"
     "    -b               Process command file (batch mode)\n"
-    "    -x filtername    Invoke filter (placed between inputs and output) \n"
+    "    -x filtername    Invoke filter (placed between inputs and output)\n"
     "    -D level         Set debug level [%d]\n"
     "    -h, -?           Print detailed help and exit\n"
     "    -V               Print GPSBabel version and exit\n"

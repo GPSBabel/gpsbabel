@@ -1,10 +1,10 @@
 
-	radius                Include Only Points Within Radius                 
+	radius                Include Only Points Within Radius
 	  lat                   Latitude for center point (D.DDDDD) (required)
 	  lon                   Longitude for center point (D.DDDDD) (required)
 	  distance              Maximum distance from center (required)
-	  exclude               Exclude points close to center 
-	  nosort                Inhibit sort by distance to center 
-	  maxcount              Output no more than this number of points 
-	  asroute               Put resulting waypoints in route of this name 
+	  exclude               Exclude points close to center
+	  nosort                Inhibit sort by distance to center
+	  maxcount              Output no more than this number of points
+	  asroute               Put resulting waypoints in route of this name
 
