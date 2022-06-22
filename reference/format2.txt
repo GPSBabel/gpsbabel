@@ -45,7 +45,6 @@ file	rwrwrw	lowranceusr	usr	Lowrance USR
 file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)
 file	rwrwrw	magellan		Magellan SD files (as for Meridian)
 serial	rwrwrw	magellan		Magellan serial protocol
-file	rw----	s_and_t	txt	Microsoft Streets and Trips 2002-2007
 serial	r-r---	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)
 file	--r---	garmin_xt		Mobile Garmin XT Track files
 file	r-r---	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format
@@ -53,37 +52,20 @@ serial	r-r---	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 file	rw----	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-file	rw----	navigonwpt		Navigon Waypoints
 serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download
 file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
 file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-file	--rw--	navitel_trk	bin	Navitel binary track (.bin)
-file	rw----	dna	dna	Navitrak DNA marker format
-file	rw----	nima		NIMA/GNIS Geographic Names File
 file	rwrw--	nmea		NMEA 0183 sentences
 file	rw-wrw	osm	osm	OpenStreetMap data files
 file	rwrwrw	ozi		OziExplorer
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000
-file	rw--rw	raymarine	rwf	Raymarine Waypoint File (.rwf)
-file	--rw--	ricoh	log	Ricoh GPS Log File
-file	rw----	cup	cup	See You flight analysis data
 serial	r-r---	skytraq		SkyTraq Venus based loggers (download)
 file	r-r---	skytraq-bin	bin	SkyTraq Venus based loggers Binary File Format
 file	---w--	subrip	srt	SubRip subtitles for video mapping (.srt)
-file	rwrw--	xol	xol	Swiss Map 25/50/100 (.xol)
 file	rw----	openoffice		Tab delimited fields useful for OpenOffice
-file	r-----	teletype		Teletype [ Get Jonathon Johnson to describe
 file	-w----	text	txt	Textual Output
-file	----rw	tomtom_itn	itn	TomTom Itineraries (.itn)
-file	----rw	tomtom_itn_places	itn	TomTom Places Itineraries (.itn)
-file	rw----	tomtom_asc	asc	TomTom POI file (.asc)
-file	rw----	tomtom	ov2	TomTom POI file (.ov2)
-file	rwrw--	dmtlog	trl	TrackLogs digital mapping (.trl)
 file	rwrwrw	unicsv		Universal csv with field structure in first line
 file	-w----	vcard	vcf	Vcard Output (for iPod)
-file	r-r---	wintec_tes	tes	Wintec TES file
 file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
 serial	r-r---	wbt		Wintec WBT-100/200 GPS Download
 file	--r---	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format
-serial	r-r---	itracku		XAiOX iTrackU Logger
-file	rwrw--	itracku-bin	bin	XAiOX iTrackU Logger Binary File Format

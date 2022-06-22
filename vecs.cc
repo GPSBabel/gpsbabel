@@ -63,10 +63,8 @@
 #include "skytraq.h"           // for MinihomerFormat, SkytraqFormat, SkytraqfileFormat
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
-#include "teletype.h"          // for TeletypeFormat
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
-#include "wintec_tes.h"        // for WintecTesFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
 
 
@@ -94,20 +92,13 @@ extern ff_vecs_t wbt_svecs;
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
-extern ff_vecs_t tomtom_vecs;
 extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
-extern ff_vecs_t dmtlog_vecs;
-extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t xol_vecs;
 extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t navitel_trk_vecs;
-extern ff_vecs_t itracku_vecs;
-extern ff_vecs_t itracku_fvecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t v900_vecs;
@@ -161,7 +152,6 @@ struct Vecs::Impl
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
-  LegacyFormat tomtom_fmt {tomtom_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
   LegacyFormat gpssim_fmt {gpssim_vecs};
@@ -169,11 +159,8 @@ struct Vecs::Impl
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
 #endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
-  LegacyFormat dmtlog_fmt {dmtlog_vecs};
-  LegacyFormat raymarine_fmt {raymarine_vecs};
   GarminGPIFormat garmin_gpi_fmt;
   RandomFormat random_fmt;
-  LegacyFormat xol_fmt {xol_vecs};
   Dg100SerialFormat dg100_fmt;
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
@@ -183,17 +170,12 @@ struct Vecs::Impl
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat navitel_trk_fmt {navitel_trk_vecs};
-  LegacyFormat itracku_fmt {itracku_vecs};
-  LegacyFormat itracku_ffmt {itracku_fvecs};
   LegacyFormat sbp_fmt {sbp_vecs};
   LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
-  TeletypeFormat teletype_fmt;
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
-  WintecTesFormat wintec_tes_fmt;
   SubripFormat subrip_fmt;
   LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
   GarminFitFormat format_fit_fmt;
@@ -415,13 +397,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &tomtom_fmt,
-      "tomtom",
-      "TomTom POI file (.ov2)",
-      "ov2",
-      nullptr,
-    },
-    {
       &unicsv_fmt,
       "unicsv",
       "Universal csv with field structure in first line",
@@ -459,20 +434,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &dmtlog_fmt,
-      "dmtlog",
-      "TrackLogs digital mapping (.trl)",
-      "trl",
-      nullptr,
-    },
-    {
-      &raymarine_fmt,
-      "raymarine",
-      "Raymarine Waypoint File (.rwf)",
-      "rwf",
-      nullptr,
-    },
-    {
       &garmin_gpi_fmt,
       "garmin_gpi",
       "Garmin Points of Interest (.gpi)",
@@ -484,13 +445,6 @@ struct Vecs::Impl
       "random",
       "Internal GPS data generator",
       nullptr,
-      nullptr,
-    },
-    {
-      &xol_fmt,
-      "xol",
-      "Swiss Map 25/50/100 (.xol)",
-      "xol",
       nullptr,
     },
     {
@@ -557,27 +511,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &navitel_trk_fmt,
-      "navitel_trk",
-      "Navitel binary track (.bin)",
-      "bin",
-      nullptr,
-    },
-    {
-      &itracku_fmt,
-      "itracku",
-      "XAiOX iTrackU Logger",
-      nullptr,
-      nullptr,
-    },
-    {
-      &itracku_ffmt,
-      "itracku-bin",
-      "XAiOX iTrackU Logger Binary File Format",
-      "bin",
-      nullptr,
-    },
-    {
       &sbp_fmt,
       "sbp",
       "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
@@ -606,13 +539,6 @@ struct Vecs::Impl
       nullptr,
     },
     {
-      &teletype_fmt,
-      "teletype",
-      "Teletype [ Get Jonathon Johnson to describe",
-      nullptr,
-      nullptr,
-    },
-    {
       &skytraq_ffmt,
       "skytraq-bin",
       "SkyTraq Venus based loggers Binary File Format",
@@ -624,13 +550,6 @@ struct Vecs::Impl
       "miniHomer",
       "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
       nullptr,
-      nullptr,
-    },
-    {
-      &wintec_tes_fmt,
-      "wintec_tes",
-      "Wintec TES file",
-      "tes",
       nullptr,
     },
     {

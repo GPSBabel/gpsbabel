@@ -83,7 +83,6 @@ set(MINIMAL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   brauniger_iq.cc
   dg-100.cc
-  dmtlog.cc
   exif.cc
   garmin_fit.cc
   garmin_gpi.cc
@@ -99,33 +98,25 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   html.cc
   humminbird.cc
   igc.cc
-  itracku.cc
   lowranceusr.cc
   mtk_logger.cc
   navilink.cc
-  navitel.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  raymarine.cc
   sbn.cc
   sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
-  tef_xml.cc
-  teletype.cc
   text.cc
-  tomtom.cc
   tpg.cc
   tpo.cc
   unicsv.cc
   v900.cc
   vcf.cc
-  wintec_tes.cc
   xcsv.cc
-  xol.cc
 )
 
 # ALL_FMTS = $$MINIMAL_FMTS
@@ -256,13 +247,10 @@ set(HEADERS
   skytraq.h
   strptime.h
   subrip.h
-  tef_xml.h
-  teletype.h
   text.h
   unicsv.h
   units.h
   vecs.h
-  wintec_tes.h
   xcsv.h
   xmlgeneric.h
   jeeps/garminusb.h
@@ -375,8 +363,6 @@ set(TESTS
   classic-2
   classic-3
   dg100
-  dmtlog
-  dna
   dop_filter
   duplicate
   exif
@@ -402,7 +388,6 @@ set(TESTS
   iblue747
   igc
   interpolate
-  itracku
   kml-read
   kml
   lowranceusr
@@ -411,7 +396,6 @@ set(TESTS
   mtk
   multiurlgpx
   navilink
-  navitel
   nmea
   osm
   ozi
@@ -419,7 +403,6 @@ set(TESTS
   position
   qstarz_bl_1000
   radius
-  raymarine
   realtime
   resample
   route_reverse
@@ -434,11 +417,7 @@ set(TESTS
   stackfilter
   subrip
   swap
-  teletype
   text
-  tomtom_asc
-  tomtom_itn
-  tomtom
   tpg
   tpo
   track-discard
@@ -451,9 +430,7 @@ set(TESTS
   validate_formats
   validate
   vcard
-  wintec_tes
   xcsv
-  xol
 )
 
 list(SORT TESTS)
