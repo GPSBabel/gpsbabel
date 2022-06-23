@@ -23,12 +23,24 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "defs.h"
-#include "gbser.h"
-#include <QThread>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
+#include "skytraq.h"
+
+#include <QByteArray>       // for QByteArray
+#include <QtGlobal>         // for qPrintable
+#include <QLatin1Char>      // for QLatin1Char
+#include <QThread>          // for QThread
+
+#include <cctype>           // for isprint
+#include <cmath>            // for cos, sin, atan2, pow, sqrt, M_PI
+#include <cstdarg>          // for va_end, va_list, va_start
+#include <cstdio>           // for sscanf, snprintf, vprintf, SEEK_SET
+#include <cstdlib>          // for atoi, free
+#include <cstring>          // for memset
+#include <ctime>            // for time, time_t
+
+#include "defs.h"           // for fatal, le_readu32, Waypoint, be_write32, be_read16, be_read_double, be_write16, be_write_double, warning, KPH_TO_MPS, le_readu16, le_write_double, track_add_head, track_add_wpt, waypt_add, xfree, xmalloc, route_head, xasprintf, SECONDS_PER_DAY, WAYPT_SET, globa...
+#include "gbser.h"          // for gbser_set_speed, gbser_OK, gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_writec
+
 
 #define MYNAME "skytraq"
 
@@ -55,97 +67,8 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 
-static void* serial_handle = nullptr;		/* IO file descriptor */
-static int skytraq_baud = 0;		/* detected baud rate */
-static gbfile* file_handle = nullptr;		/* file descriptor (used by skytraq-bin format) */
-
-static char* opt_erase = nullptr;		/* erase after read? (0/1) */
-static char* opt_initbaud = nullptr;		/* baud rate used to init device */
-static char* opt_dlbaud = nullptr;		/* baud rate used for downloading tracks */
-static char* opt_read_at_once = nullptr;	/* number of sectors to read at once (Venus6 only) */
-static char* opt_first_sector = nullptr;	/* first sector to be read from the device (default: 0) */
-static char* opt_last_sector = nullptr;	/* last sector to be read from the device (default: smart read everything) */
-static char* opt_dump_file = nullptr;		/* dump raw data to this file (optional) */
-static char* opt_no_output = nullptr;		/* disable output? (0/1) */
-static char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
-static char* opt_configure_logging = nullptr;
-static char* opt_gps_utc_offset = nullptr;
-static char* opt_gps_week_rollover = nullptr;
-
-static
-QVector<arglist_t> skytraq_args = {
-  {
-    "erase", &opt_erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
-    nullptr, ARGTYPE_STRING, "", "", nullptr
-  },
-  {
-    "configlog", &opt_configure_logging, "Configure logging parameter as tmin:tmax:dmin:dmax",
-    nullptr, ARGTYPE_STRING, "", "", nullptr
-  },
-  {
-    "baud", &opt_dlbaud, "Baud rate used for download",
-    "230400", ARGTYPE_INT, "0", "230400", nullptr
-  },
-  {
-    "initbaud", &opt_initbaud, "Baud rate used to init device (0=autodetect)",
-    "0", ARGTYPE_INT, "4800", "230400", nullptr
-  },
-  {
-    "read-at-once", &opt_read_at_once, "Number of sectors to read at once (0=use single sector mode)",
-    "255", ARGTYPE_INT, "0", "255", nullptr
-  },
-  {
-    "first-sector", &opt_first_sector, "First sector to be read from the device",
-    "0", ARGTYPE_INT, "0", "65535", nullptr
-  },
-  {
-    "last-sector", &opt_last_sector, "Last sector to be read from the device (-1: smart read everything)",
-    "-1", ARGTYPE_INT, "-1", "65535", nullptr
-  },
-  {
-    "dump-file", &opt_dump_file, "Dump raw data to this file",
-    nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
-  },
-  {
-    "no-output", &opt_no_output, "Disable output (useful with erase)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
-    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-};
-
-static
-QVector<arglist_t> skytraq_fargs = {
-  {
-    "first-sector", &opt_first_sector, "First sector to be read from the file",
-    "0", ARGTYPE_INT, "0", "65535", nullptr
-  },
-  {
-    "last-sector", &opt_last_sector, "Last sector to be read from the file (-1: read till empty sector)",
-    "-1", ARGTYPE_INT, "-1", "65535", nullptr
-  },
-  {
-    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
-    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-};
-
-static void
-db(int l, const char* msg, ...)
+void
+SkytraqBase::db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -155,16 +78,16 @@ db(int l, const char* msg, ...)
   va_end(ap);
 }
 
-static void
-rd_drain()
+void
+SkytraqBase::rd_drain() const
 {
   if (gbser_flush(serial_handle)) {
     db(1, MYNAME ": rd_drain(): Comm error\n");
   }
 }
 
-static int
-rd_char(int* errors)
+int
+SkytraqBase::rd_char(int* errors) const
 {
   while (*errors > 0) {
     int c = gbser_readc_wait(serial_handle, TIMEOUT);
@@ -180,8 +103,8 @@ rd_char(int* errors)
   return -1;
 }
 
-static int
-rd_buf(uint8_t* buf, int len)
+int
+SkytraqBase::rd_buf(uint8_t* buf, int len) const
 {
   char dump[16*3+16+2];
 
@@ -223,8 +146,8 @@ rd_buf(uint8_t* buf, int len)
   return res_OK;
 }
 
-static int
-rd_word()
+int
+SkytraqBase::rd_word() const
 {
   int errors = 5;		/* allow this many errors */
   int c;
@@ -250,8 +173,8 @@ rd_word()
   return (buffer[0] << 8) | buffer[1];
 }
 
-static void
-wr_char(int c)
+void
+SkytraqBase::wr_char(int c) const
 {
   int rc;
   db(4, "Sending: %02x '%c'\n", (unsigned)c, isprint(c) ? c : '.');
@@ -260,8 +183,8 @@ wr_char(int c)
   }
 }
 
-static void
-wr_buf(const unsigned char* str, int len)
+void
+SkytraqBase::wr_buf(const unsigned char* str, int len) const
 {
   for (int i = 0; i < len; i++) {
     wr_char(str[i]);
@@ -272,12 +195,8 @@ wr_buf(const unsigned char* str, int len)
 * %%%        SkyTraq protocol implementation                               %%% *
 *******************************************************************************/
 
-static uint8_t NL[2] = { 0x0D, 0x0A };
-static uint8_t MSG_START[2] = { 0xA0, 0xA1 };
-static uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
-
-static int
-skytraq_calc_checksum(const unsigned char* buf, int len)
+int
+SkytraqBase::skytraq_calc_checksum(const unsigned char* buf, int len)
 {
   int cs = 0;
   for (int i = 0; i < len; i++) {
@@ -286,8 +205,8 @@ skytraq_calc_checksum(const unsigned char* buf, int len)
   return cs;
 }
 
-static int
-skytraq_rd_msg(void* payload, unsigned int len)
+int
+SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len) const
 {
   int errors = 5;		// Allow this many receiver errors silently.
   unsigned int c, i, state;
@@ -339,8 +258,8 @@ skytraq_rd_msg(void* payload, unsigned int len)
   return res_OK;
 }
 
-static void
-skytraq_wr_msg(const uint8_t* payload, int len)
+void
+SkytraqBase::skytraq_wr_msg(const uint8_t* payload, int len) const
 {
   rd_drain();
 
@@ -354,8 +273,8 @@ skytraq_wr_msg(const uint8_t* payload, int len)
   wr_buf(NL, sizeof(NL));
 }
 
-static int
-skytraq_expect_ack(uint8_t id)
+int
+SkytraqBase::skytraq_expect_ack(uint8_t id) const
 {
   uint8_t ack_msg[2];
   //int rcv_len;
@@ -393,8 +312,8 @@ skytraq_expect_ack(uint8_t id)
   return res_PROTOCOL_ERR;
 }
 
-static int
-skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
+int
+SkytraqBase::skytraq_expect_msg(uint8_t id, uint8_t* payload, int len) const
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     int rc = skytraq_rd_msg(payload, len);
@@ -409,8 +328,8 @@ skytraq_expect_msg(uint8_t id, uint8_t* payload, int len)
   return res_PROTOCOL_ERR;
 }
 
-static int
-skytraq_wr_msg_verify(const uint8_t* payload, int len)
+int
+SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len) const
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     if (i > 0) {
@@ -428,8 +347,8 @@ skytraq_wr_msg_verify(const uint8_t* payload, int len)
   return res_ERROR;
 }
 
-static int
-skytraq_system_restart()
+int
+SkytraqBase::skytraq_system_restart() const
 {
   uint8_t MSG_SYSTEM_RESTART[15] =
   { 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -438,8 +357,8 @@ skytraq_system_restart()
   return skytraq_wr_msg_verify(MSG_SYSTEM_RESTART, sizeof(MSG_SYSTEM_RESTART));
 }
 
-static int
-skytraq_set_baud(int baud)
+int
+SkytraqBase::skytraq_set_baud(int baud) const
 {
   /* Note: according to AN0003_v3.pdf, attrib == 0x00 means write to SRAM only, however
    * it seems to write to flash too. The Windows software sends 0x02 so we do here too.
@@ -493,8 +412,8 @@ skytraq_set_baud(int baud)
   return res_OK;
 }
 
-static int
-skytraq_configure_logging()
+int
+SkytraqBase::skytraq_configure_logging() const
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
@@ -530,8 +449,8 @@ skytraq_configure_logging()
   return skytraq_wr_msg_verify(MSG_LOG_CONFIGURE_CONTROL, sizeof(MSG_LOG_CONFIGURE_CONTROL));
 }
 
-static int
-skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total)
+int
+SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total) const
 {
   uint8_t MSG_LOG_STATUS_CONTROL = 0x17;
   struct {
@@ -577,13 +496,13 @@ skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint
 }
 
 /* reads 32-bit "middle-endian" fields */
-static unsigned int me_read32(const unsigned char* p)
+unsigned int SkytraqBase::me_read32(const unsigned char* p)
 {
   return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
-static time_t
-gpstime_to_timet(int week, int sec)
+time_t
+SkytraqBase::gpstime_to_timet(int week, int sec) const
 {
   /* Notes:
    *   * week rollover period can be specified using option
@@ -637,14 +556,14 @@ gpstime_to_timet(int week, int sec)
   return gps_timet;     /* returns UTC time */
 }
 
-static void
-ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, double* alt)
+void
+SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, double* alt)
 {
   /* constants: */
-  const double CA   = 6378137.0;
-  const double CB   = 6356752.31424518;
-  const double CE2  = (CA*CA - CB*CB) / (CA*CA);    /* =e^2 */
-  const double CE_2 = (CA*CA - CB*CB) / (CB*CB);    /* =e'^2 */
+  constexpr double CA   = 6378137.0;
+  constexpr double CB   = 6356752.31424518;
+  constexpr double CE2  = (CA*CA - CB*CB) / (CA*CA);    /* =e^2 */
+  constexpr double CE_2 = (CA*CA - CB*CB) / (CB*CB);    /* =e'^2 */
 
   /* auxiliary values: */
   double AP = sqrt(x*x + y*y);
@@ -663,17 +582,8 @@ ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, double* alt)
   *lon = *lon /M_PI*180;
 }
 
-struct read_state {
-  route_head*          route_head_;
-  unsigned            wpn, tpn;
-
-  unsigned gps_week;
-  unsigned gps_sec;
-  long x, y, z;
-};
-
-static void
-state_init(struct read_state* pst)
+void
+SkytraqBase::state_init(struct read_state* pst)
 {
   auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
@@ -691,8 +601,8 @@ state_init(struct read_state* pst)
   pst->z          = 0;
 }
 
-static Waypoint*
-make_trackpoint(struct read_state* st, double lat, double lon, double alt)
+Waypoint*
+SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt) const
 {
   auto* wpt = new Waypoint;
 
@@ -706,58 +616,6 @@ make_trackpoint(struct read_state* st, double lat, double lon, double alt)
   return wpt;
 }
 
-struct full_item {
-  uint32_t gps_week;
-  uint32_t gps_sec;
-  int32_t  x;
-  int32_t  y;
-  int32_t  z;
-};
-
-struct compact_item {
-  uint16_t dt;
-  int16_t dx;
-  int16_t dy;
-  int16_t dz;
-};
-
-struct multi_hz_item {
-  uint32_t gps_week;
-  uint32_t gps_sec;
-  int32_t  lat;
-  int32_t  lon;
-  int32_t  alt;
-};
-
-
-struct full_item_frame {
-  unsigned char ts[4];
-  unsigned char x[4];
-  unsigned char y[4];
-  unsigned char z[4];
-};
-
-struct compact_item_frame {
-  unsigned char dt[2]; /* big endian unsigned short */
-  unsigned char dpos[4];
-};
-
-struct multi_hz_item_frame {
-  unsigned char v_kmh[2];
-  unsigned char ts[4];
-  unsigned char lat[4];
-  unsigned char lon[4];
-  unsigned char alt[4];
-};
-
-struct item_frame {
-  unsigned char type_and_speed[2];
-  union {
-    multi_hz_item_frame multi_hz;
-    full_item_frame full;
-    compact_item_frame comp;
-  };
-};
 #define ITEM_WEEK_NUMBER(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x03) << 8))
 
 #define POW_2_M20 0.000000953674316
@@ -766,8 +624,8 @@ struct item_frame {
 #define ITEM_TYPE(item) (item->type_and_speed[0] >> 4)
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
 
-static int
-process_data_item(struct read_state* pst, const item_frame* pitem, int len)
+int
+SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len) const
 {
   int res = 0;
   double lat;
@@ -909,8 +767,8 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
   return res;
 }
 
-static int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-process_data_sector(struct read_state* pst, const uint8_t* buf, int len)
+int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
+SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len) const
 {
   int plen, ilen;
 
@@ -926,8 +784,8 @@ process_data_sector(struct read_state* pst, const uint8_t* buf, int len)
 }
 
 /* Note: the buffer is being padded with 0xFFs if necessary so there are always SECTOR_SIZE valid bytes */
-static int
-skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
+int
+SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
 {
   uint8_t MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (uint8_t)(sector) };
   int errors = 5;		/* allow this many errors */
@@ -1017,8 +875,8 @@ skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
   return res_OK;
 }
 
-static int
-skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf)
+int
+SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf) const
 {
   uint8_t MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
   unsigned int i;
@@ -1065,8 +923,8 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
   return res_OK;
 }
 
-static void
-skytraq_read_tracks()
+void
+SkytraqBase::skytraq_read_tracks() const
 {
   struct read_state st;
   uint32_t log_wr_ptr;
@@ -1195,8 +1053,8 @@ skytraq_read_tracks()
   }
 }
 
-static int
-skytraq_probe()
+int
+SkytraqBase::skytraq_probe() const
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
@@ -1269,8 +1127,8 @@ skytraq_probe()
   return res_NOTFOUND;
 }
 
-static int
-skytraq_erase()
+int
+SkytraqBase::skytraq_erase() const
 {
   uint8_t MSG_LOG_ERASE = 0x19;
 
@@ -1283,8 +1141,8 @@ skytraq_erase()
   return res_OK;
 }
 
-static void
-skytraq_set_location()
+void
+SkytraqBase::skytraq_set_location() const
 {
   double lat, lng;
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -1313,8 +1171,8 @@ skytraq_set_location()
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-skytraq_rd_init(const QString& fname)
+void
+SkytraqBase::skytraq_rd_init(const QString& fname)
 {
   if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
     fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
@@ -1324,15 +1182,15 @@ skytraq_rd_init(const QString& fname)
   }
 }
 
-static void
-skytraq_rd_deinit()
+void
+SkytraqBase::skytraq_rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = nullptr;
 }
 
-static void
-skytraq_read()
+void
+SkytraqBase::skytraq_read() const
 {
   if (opt_set_location) {
     skytraq_set_location();
@@ -1364,8 +1222,8 @@ skytraq_read()
   skytraq_system_restart();
 }
 
-static void
-file_init(const QString& fname)
+void
+SkytraqfileFormat::rd_init(const QString& fname)
 {
   db(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb", MYNAME)) == nullptr) {
@@ -1373,16 +1231,16 @@ file_init(const QString& fname)
   }
 }
 
-static void
-file_deinit()
+void
+SkytraqfileFormat::rd_deinit()
 {
   db(1, "Closing file...\n");
   gbfclose(file_handle);
   file_handle = nullptr;
 }
 
-static void
-file_read()
+void
+SkytraqfileFormat::read()
 {
   struct read_state st;
   int got_bytes;
@@ -1417,49 +1275,6 @@ file_read()
 }
 
 /**************************************************************************/
-
-// capabilities below means: we can only read tracks
-
-ff_vecs_t skytraq_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  skytraq_rd_init,
-  nullptr,
-  skytraq_rd_deinit,
-  nullptr,
-  skytraq_read,
-  nullptr,
-  nullptr,
-  &skytraq_args,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-ff_vecs_t skytraq_fvecs = {
-  ff_type_file,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  file_init,
-  nullptr,
-  file_deinit,
-  nullptr,
-  file_read,
-  nullptr,
-  nullptr,
-  &skytraq_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
-  , NULL_POS_OPS,
-  nullptr
-};
-/**************************************************************************/
 /*
  * support POI of skytraq based miniHomer device
  * http://navin.com.tw/miniHomer.htm
@@ -1469,43 +1284,9 @@ ff_vecs_t skytraq_fvecs = {
 #undef MYNAME
 #endif
 #define MYNAME "miniHomer"
-static char* opt_set_poi_home = nullptr;	/* set if a "poi" option was used */
-static char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
-static char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
-static char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
-static char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
-static QVector<arglist_t> miniHomer_args = {
-  { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
-  { "dump-file",    &opt_dump_file,     "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
-  { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  { "first-sector", &opt_first_sector,  "First sector to be read from the device", "0", ARGTYPE_INT, "0", "65535", nullptr },
-  { "initbaud",     &opt_initbaud,      "Baud rate used to init device (0=autodetect)", "38400", ARGTYPE_INT, "38400", "38400", nullptr },
-  { "last-sector",  &opt_last_sector,   "Last sector to be read from the device (-1: smart read everything)", "-1", ARGTYPE_INT, "-1", "65535", nullptr },
-  { "no-output",    &opt_no_output,     "Disable output (useful with erase)", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  { "read-at-once", &opt_read_at_once,  "Number of sectors to read at once (0=use single sector mode)", "255", ARGTYPE_INT, "0", "255", nullptr },
-  { "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
-  { "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
-  { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
-  { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
-  { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
-  {
-    "gps-utc-offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "gps-week-rollover", &opt_gps_week_rollover, "GPS week rollover period we're in (-1: best guess)",
-    "-1", ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-};
-/*
- * Names of the POIs on miniHomer
- */
-static const char* poinames[] = {
-  "Home", "Car", "Boat", "Heart", "Bar"
-};
 #define NUMPOI (sizeof poinames/sizeof poinames[0])
 #ifdef DEAD_CODE_IS_REBORN
-static int getPoiByName(char* name)
+int MinihomerFormat::getPoiByName(char* name)
 {
   unsigned int i;
   for (i=0; i<NUMPOI; i++) {
@@ -1521,7 +1302,7 @@ static int getPoiByName(char* name)
 // http://www.mathworks.com/matlabcentral/fileexchange/7942-covert-lat-lon-alt-to-ecef-cartesian
 // http://en.wikipedia.org/wiki/Geodetic_system#From_ECEF_to_geodetic
 // http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
-static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z)
+void MinihomerFormat::lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z)
 {
   long double a = 6378137.0;
   long double esqr = 6.69437999014e-3;
@@ -1537,7 +1318,7 @@ static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double*
   *ecef_y = (double)((n+lalt) * cos(llat) * sin(llng));
   *ecef_z = (double)((n*(1-esqr) + lalt)* sin(llat));
 }
-static void miniHomer_get_poi()
+void MinihomerFormat::miniHomer_get_poi() const
 {
   uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
   uint8_t buf[32];
@@ -1579,7 +1360,7 @@ static void miniHomer_get_poi()
  * -1 in case of errors
  *  the number of the POI will not be checked - if it is not correct, miniHome will send NACK
  */
-static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
+int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) const
 {
 #define MSG_SET_POI_SIZE (sizeof(uint8_t)+sizeof(uint16_t)+3*sizeof(double)+sizeof(uint8_t))
   uint8_t MSG_SET_POI[MSG_SET_POI_SIZE] = {
@@ -1625,23 +1406,22 @@ static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
   }
   return result;
 }
-static QString mhport;
-static void
-miniHomer_rd_init(const QString& fname)
+void
+MinihomerFormat::rd_init(const QString& fname)
 {
   opt_set_location=nullptr;	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;
 }
-static void
-miniHomer_rd_deinit()
+void
+MinihomerFormat::rd_deinit()
 {
   skytraq_rd_deinit();
   mhport.clear();
 }
 #define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
-static void
-miniHomer_read()
+void
+MinihomerFormat::read()
 {
   int npoi=0;
   /*
@@ -1671,23 +1451,3 @@ miniHomer_read()
     miniHomer_get_poi();		// add POI as waypoints to the waypoints of the track
   }
 }
-
-ff_vecs_t miniHomer_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read			/* waypoints */,
-    ff_cap_read 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  miniHomer_rd_init,
-  nullptr,
-  miniHomer_rd_deinit,
-  nullptr,
-  miniHomer_read,
-  nullptr,
-  nullptr,
-  &miniHomer_args,
-  CET_CHARSET_UTF8, 1,         /* master process: don't convert anything */
-  NULL_POS_OPS,
-  nullptr
-};

@@ -26,7 +26,7 @@
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdint>                      // for uint32_t
-#include <cstdlib>                      // for abs, getenv, calloc, free, malloc, realloc
+#include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
@@ -44,7 +44,7 @@
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -140,26 +140,6 @@ xrealloc(void* p, size_t s)
 }
 
 /*
-* For an allocated string, realloc it and append 's'
-*/
-char*
-xstrappend(char* src, const char* newd)
-{
-  if (!src) {
-    return xstrdup(newd);
-  }
-  if (!newd) {
-    return xstrdup(src);
-  }
-
-  size_t newsz = strlen(src) + strlen(newd) + 1;
-  src = (char*) xrealloc(src, newsz);
-  strcat(src, newd);
-
-  return src;
-}
-
-/*
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
 FILE*
@@ -203,21 +183,6 @@ ufopen(const QString& fname, const char* mode)
 #else
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
-#endif
-}
-
-/*
- * OS-abstracting wrapper for getting Unicode environment variables.
- */
-QString ugetenv(const char* env_var)
-{
-#ifdef __WIN32__
-  // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
-  return QString::fromWCharArray(
-           _wgetenv((const wchar_t*) QString(env_var).utf16()));
-#else
-  // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
-  return QString::fromLocal8Bit(std::getenv(env_var));
 #endif
 }
 
@@ -533,23 +498,6 @@ printposn(const double c, int is_lat)
   printf("%f%c ", fabs(c), d);
 }
 
-void
-is_fatal(const int condition, const char* fmt, ...)
-{
-  va_list args;
-  char buff[128];
-
-  if (condition == 0) {
-    return;
-  }
-
-  va_start(args, fmt);
-  vsnprintf(buff, sizeof(buff), fmt, args);
-  va_end(args);
-
-  fatal("%s\n", buff);
-}
-
 /*
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
@@ -675,8 +623,6 @@ si_round(double d)
 	works just like mktime but without all the mucking
 	around with timezones and daylight savings
 
-	obsoletes get_tz_offset()
-
 	Borrowed from lynx GPL source code
 	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
 
@@ -738,7 +684,7 @@ mklocaltime(struct tm* t)
 bool
 gpsbabel_testmode()
 {
-  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  static bool testmode = qEnvironmentVariableIsSet("GPSBABEL_FREEZE_TIME");
   return testmode;
 }
 
@@ -968,72 +914,6 @@ double degrees2ddmm(double deg_val)
 }
 
 /*
- * replace a single occurrence of "search" in  "s" with "replace".
- * Returns an allocated copy if substitution was made, otherwise returns NULL.
- * Doesn't try to make an optimally sized dest buffer.
- */
-char*
-strsub(const char* s, const char* search, const char* replace)
-{
-  int len = strlen(s);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  const char* p = strstr(s, search);
-  if (!slen || !p) {
-    return nullptr;
-  }
-
-  char* d = (char*) xmalloc(len + rlen + 1);
-
-  /* Copy first part */
-  len = p - s;
-  memcpy(d, s, len);
-  d[len] = 0;
-
-  /* Copy replacement */
-  strcat(d, replace);
-
-  /* Copy last part */
-  strcat(d, p + slen);
-  return d;
-}
-
-/*
- *  As strsub, but do it globally.
- */
-char*
-gstrsub(const char* s, const char* search, const char* replace)
-{
-  int ooffs = 0;
-  const char* c;
-  const char* src = s;
-  int olen = strlen(src);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  char* o = (char*) xmalloc(olen + 1);
-
-  while ((c = strstr(src, search))) {
-    olen += (rlen - slen);
-    o = (char*) xrealloc(o, olen + 1);
-    memcpy(o + ooffs, src, c - src);
-    ooffs += (c - src);
-    src = c + slen;
-    if (rlen) {
-      memcpy(o + ooffs, replace, rlen);
-      ooffs += rlen;
-    }
-  }
-
-  if (ooffs < olen) {
-    memcpy(o + ooffs, src, olen - ooffs);
-  }
-  o[olen] = '\0';
-  return o;
-}
-
-/*
  *
  */
 char*
@@ -1136,7 +1016,9 @@ convert_human_date_format(const char* human_datef)
       okay = 0;
     }
 
-    is_fatal(okay == 0, "Invalid character \"%c\" in date format!", *cin);
+    if (okay == 0) {
+      fatal("Invalid character \"%c\" in date format!", *cin);
+    }
   }
   return result;
 }
@@ -1226,7 +1108,9 @@ convert_human_time_format(const char* human_timef)
       okay = 0;
     }
 
-    is_fatal(okay == 0, "Invalid character \"%c\" in time format!", *cin);
+    if (okay == 0) {
+      fatal("Invalid character \"%c\" in time format!", *cin);
+    }
   }
   return result;
 }
@@ -1570,10 +1454,6 @@ char* xml_entitize(const char* str)
   return entitize(str, false);
 }
 
-char* html_entitize(const char* str)
-{
-  return entitize(str, true);
-}
 char* html_entitize(const QString& str)
 {
   return entitize(CSTR(str), true);

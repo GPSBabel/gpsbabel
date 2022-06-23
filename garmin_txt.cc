@@ -118,7 +118,6 @@ static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
 static int header_ct[unknown_header + 1];
 
 #define GARMIN_UNKNOWN_ALT 1.0e25f
-#define DEFAULT_DISPLAY garmin_display_symbol_and_name
 #define DEFAULT_DATE_FORMAT "dd/mm/yyyy"
 #define DEFAULT_TIME_FORMAT "HH:mm:ss"
 
@@ -186,15 +185,19 @@ get_option_val(const char* option, const char* def)
 static void
 init_date_and_time_format()
 {
-  const char* f = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
-  date_time_format = convert_human_date_format(f);
+  // This is old, and weird, code.. date_time_format is a global that's
+  // explicitly malloced and freed elsewhere. This isn't very C++ at all,
+  // but this format is on its deathbead for deprecation.
+  const char* d = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
+  char* d1 = convert_human_date_format(d);
 
-  date_time_format = xstrappend(date_time_format, " ");
+  const char* t = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
+  char* t1 = convert_human_time_format(t);
 
-  f = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
-  const char* c = convert_human_time_format(f);
-  date_time_format = xstrappend(date_time_format, c);
-  xfree((void*) c);
+  xasprintf(&date_time_format, "%s %s", d1, t1);
+
+  xfree(d1);
+  xfree(t1);
 }
 
 static void
@@ -760,7 +763,9 @@ garmin_txt_wr_init(const QString& fname)
   init_date_and_time_format();
   if (opt_precision) {
     precision = atoi(opt_precision);
-    is_fatal(precision < 0, MYNAME ": Invalid precision (%s)!", opt_precision);
+    if (precision < 0) {
+      fatal(MYNAME ": Invalid precision (%s)!", opt_precision);
+    }
   }
 
   datum_str = get_option_val(opt_datum, nullptr);
@@ -900,7 +905,9 @@ parse_date_and_time(const QString& str, time_t* value)
   char* cerr = strptime(cin, date_time_format, &tm);
   if (cerr == nullptr) {
     cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
+    if (cerr == nullptr) {
+      fatal(MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
+    }
   }
 
 //	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
@@ -996,7 +1003,9 @@ parse_display(const QString& str, int* val)
 static void
 bind_fields(const header_type ht)
 {
-  is_fatal((grid_index < 0) || (datum_index < 0), MYNAME ": Incomplete or invalid file header!");
+  if ((grid_index < 0) || (datum_index < 0)) {
+    fatal(MYNAME ": Incomplete or invalid file header!");
+  }
 
   if (header_ct[unknown_header] <= 0) {
     return;
@@ -1237,9 +1246,13 @@ parse_route_waypoint(const QStringList& lineparts)
     int field_no = header_fields[rtept_header][column];
     switch (field_no) {
     case 1:
-      is_fatal((str.isEmpty()), MYNAME ": Route waypoint without name at line %d!\n", current_line);
+      if (str.isEmpty()) {
+        fatal(MYNAME ": Route waypoint without name at line %d!\n", current_line);
+      }
       wpt = find_waypt_by_name(str);
-      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
+      if (wpt == nullptr) {
+        fatal(MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
+      }
       wpt = new Waypoint(*wpt);
       break;
     }
@@ -1400,8 +1413,7 @@ ff_vecs_t garmin_txt_vecs = {
    * so it doesn't attempt to re-convert any char strings including gmsd data.
    */
   CET_CHARSET_UTF8, 0
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 #endif // CSVFMTS_ENABLED

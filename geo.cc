@@ -64,8 +64,8 @@ static void GeoReadLoc()
         wpt->description = reader.readElementText();
       } else if (current_tag == u"/loc/waypoint/coord") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->latitude = a.value("lat").toString().toDouble();
-        wpt->longitude = a.value("lon").toString().toDouble();
+        wpt->latitude = a.value("lat").toDouble();
+        wpt->longitude = a.value("lon").toDouble();
       } else if (current_tag == u"/loc/waypoint/type") {
         wpt->icon_descr = reader.readElementText();
       } else if (current_tag == u"/loc/waypoint/link") {
@@ -266,6 +266,5 @@ ff_vecs_t geo_vecs = {
   nullptr,
   &geo_args,
   CET_CHARSET_UTF8, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

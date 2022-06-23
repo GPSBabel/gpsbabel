@@ -7,11 +7,12 @@
 #ifdef RC_INVOKED
 // These defines are for the Microsoft resource compiler scripts
 // win32/gpsbabel.rc and gui/app.rc
-#define VER_FILE @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
-#define VER_PRODUCT @GBMAJOR@,@GBMINOR@,@GBMICRO@,@GBBUILD@
-#define VER_FILE_STR "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
-#define VER_PRODUCT_STR  "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
+#define VER_FILE @GB.MAJOR@,@GB.MINOR@,@GB.MICRO@,@GB.BUILD@
+#define VER_PRODUCT @GB.MAJOR@,@GB.MINOR@,@GB.MICRO@,@GB.BUILD@
+#define VER_FILE_STR "@GB.MAJOR@.@GB.MINOR@.@GB.MICRO@@GB.PACKAGE_RELEASE@"
+#define VER_PRODUCT_STR "@GB.MAJOR@.@GB.MINOR@.@GB.MICRO@@GB.PACKAGE_RELEASE@"
 #else
-#define VERSION "@GBMAJOR@.@GBMINOR@.@GBMICRO@@PACKAGE_RELEASE@"
+#define VERSION "@GB.MAJOR@.@GB.MINOR@.@GB.MICRO@@GB.PACKAGE_RELEASE@"
+constexpr char kVersionSHA[] = "@GB.SHA@";
 #define WEB_DOC_DIR "https://www.gpsbabel.org/htmldoc-@DOCVERSION@"
 #endif

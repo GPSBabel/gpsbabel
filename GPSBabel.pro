@@ -1,5 +1,5 @@
 # Enforce minimum Qt version.
-# versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
+# versionAtLeast() was introduced in Qt 5.10, so we cannot count on it being available.
 MIN_QT_VERSION = 5.12 # major[.minor[.patch]]
 MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
 MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
@@ -16,44 +16,30 @@ if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$M
 QT -= gui
 versionAtLeast(QT_VERSION, 6.0): QT += core5compat
 
+# set VERSION related variables and generate gbversion.h
+include(gbversion.pri)
+
 TARGET = gpsbabel
-VERSION = 1.7.0
+VERSION = $$GB.VERSION
 
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++17
 CONFIG += link_pkgconfig
+!disable_pch {
+  # avoid QTBUG-72404, QTBUG-79694 which were fixed in 5.14.0
+  versionAtLeast(QT_VERSION, 5.14.0) | !contains(QMAKE_CXX, .*clang.*) {
+    CONFIG += precompile_header
+    PRECOMPILED_HEADER = precompiled_headers.h
+  } else {
+    message("Not using precompiled headers due to QTBUG.")
+  }
+}
 
 TEMPLATE = app
 
-# use GB variable to express ownership intention and
-# avoid conflict with documented and undocumented qmake variables
-GB.VERSION_COMPONENTS = $$split(VERSION, .)
-GB.MAJOR = $$member(GB.VERSION_COMPONENTS, 0)
-GB.MINOR = $$member(GB.VERSION_COMPONENTS, 1)
-GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
-# Increase GB.BUILD for a new release (why? Where is this ever used?)
-# A: it's used by win32/gpsbabel.rc which includes gbversion.h
-GB.BUILD = 31
-# GB.PACKAGE_RELEASE = "-beta20190413"
-
-# may be overwridden on qmake command line
-!defined(DOCVERSION, var) {
-  DOCVERSION=$${VERSION}
-}
-
-# may be overwridden on qmake command line
-!defined(WEB, var) {
-  WEB = ../babelweb
-}
-
-# use undocumented QMAKE_SUBSTITUTES variable to emulate AC_CONFIG_FILES
-GB.versionfile.input = gbversion.h.qmake.in
-GB.versionfile.output = gbversion.h
-QMAKE_SUBSTITUTES += GB.versionfile
-GB.setupfile.input = gui/setup.iss.qmake.in
-GB.setupfile.output = gui/setup.iss
-QMAKE_SUBSTITUTES += GB.setupfile
+# RESOURCES
+RESOURCES = gpsbabel.qrc
 
 # MINIMAL_FMTS
 MINIMAL_FMTS = \
@@ -70,15 +56,8 @@ MINIMAL_FMTS = \
 
 # ALL_FMTS
 ALL_FMTS = $$MINIMAL_FMTS \
-  bcr.cc \
   brauniger_iq.cc \
-  delgpl.cc \
-  destinator.cc \
   dg-100.cc \
-  dmtlog.cc \
-  easygps.cc \
-  energympro.cc \
-  enigma.cc \
   exif.cc \
   f90g_track.cc \
   garmin_fit.cc \
@@ -87,59 +66,33 @@ ALL_FMTS = $$MINIMAL_FMTS \
   garmin_xt.cc \
   gdb.cc \
   geojson.cc \
-  ggv_bin.cc \
-  ggv_log.cc \
-  ggv_ovl.cc \
   globalsat_sport.cc \
-  glogbook.cc \
-  gnav_trl.cc \
-  googledir.cc \
   gpssim.cc \
   gtm.cc \
   gtrnctr.cc \
-  hiketech.cc \
   holux.cc \
   html.cc \
   humminbird.cc \
   igc.cc \
-  ignrando.cc \
-  igo8.cc \
-  ik3d.cc \
-  itracku.cc \
-  lmx.cc \
   lowranceusr.cc \
-  mapasia.cc \
-  mapbar_track.cc \
-  mapfactor.cc \
-  mmo.cc \
-  mtk_locus.cc \
   mtk_logger.cc \
-  mynav.cc \
   navilink.cc \
-  navitel.cc \
   osm.cc \
   ozi.cc \
   qstarz_bl_1000.cc \
   random.cc \
-  raymarine.cc \
-  saroute.cc \
   sbn.cc \
   sbp.cc \
   shape.cc \
   skytraq.cc \
   subrip.cc \
-  tef_xml.cc \
-  teletype.cc \
   text.cc \
-  tomtom.cc \
   tpg.cc \
   tpo.cc \
   unicsv.cc \
   v900.cc \
   vcf.cc \
-  wintec_tes.cc \
   xcsv.cc \
-  xol.cc
 
 # ALL_FMTS = $$MINIMAL_FMTS
 
@@ -229,8 +182,9 @@ HEADERS =  \
   csv_util.h \
   defs.h \
   dg-100.h \
-  energympro.h \
+  exif.h \
   explorist_ini.h \
+  f90g_track.h \
   filter.h \
   filter_vecs.h \
   format.h \
@@ -244,28 +198,32 @@ HEADERS =  \
   gbfile.h \
   gbser.h \
   gbser_private.h \
-  gbversion.h \
+  gdb.h \
   geojson.h \
-  ggv_bin.h \
   globalsat_sport.h \
   gpx.h \
   grtcirc.h \
+  gtrnctr.h \
   heightgrid.h \
   holux.h \
+  humminbird.h \
+  html.h \
   inifile.h \
   kml.h \
   legacyformat.h \
   lowranceusr.h \
   magellan.h \
-  mynav.h \
+  mapbar_track.h \
   navilink.h \
   nmea.h \
   osm.h \
   random.h \
   session.h \
   shape.h \
+  skytraq.h \
   strptime.h \
   subrip.h \
+  text.h \
   unicsv.h \
   units.h \
   vecs.h \
@@ -303,29 +261,9 @@ versionAtLeast(QT_VERSION, 6.0): HEADERS += src/core/codecdevice.h
 
 HEADERS += $$FILTER_HEADERS
 
-win32-msvc* {
-  # avoid attempts by cmd.exe to execute mkstyle.sh
-  SOURCES += internal_styles.cc
-} else {
-  # It would be nice to do this when make runs instead of qmake, but we will
-  # monitor the style directory to catch new or deleted .style files.
-  STYLE_FILES = $$files($${PWD}/style/*.style)
-  # It's a bit tacky, but this may modify source files when doing an out of source build.
-  # The root of this is that internal_styles.cc is checked in as it can't be built on all platforms,
-  # and we want to make sure it is up to date on commit.
-  styles.commands += $${PWD}/mkstyle.sh > $${PWD}/internal_styles.cc || (rm -f $${PWD}/internal_styles.cc ; exit 1)
-  styles.CONFIG += combine no_clean
-  styles.depends += $${PWD}/mkstyle.sh
-  styles.depends += $${PWD}/style # this catches the creation/deletion of a style file.
-  styles.input = STYLE_FILES
-  styles.output = $${PWD}/internal_styles.cc
-  styles.variable_out = SOURCES
-  QMAKE_EXTRA_COMPILERS += styles
-}
-
 CONFIG(release, debug|release): DEFINES *= NDEBUG
 
-macx|linux|openbsd {
+unix {
   if (equals(MAKEFILE_GENERATOR, XCODE)) {
     # "Configure tests are not supported with the XCODE Makefile generator"
     # assume we have the following headers
@@ -348,8 +286,8 @@ macx|linux|openbsd {
 }
 
 win32 {
-  DEFINES += __WIN32__ _CONSOLE
-  DEFINES -= UNICODE
+  DEFINES += __WIN32__
+  DEFINES -= UNICODE _UNICODE
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
   }
@@ -361,9 +299,20 @@ win32 {
 }
 
 win32-msvc* {
-  DEFINES += _CRT_SECURE_NO_DEPRECATE
-  QMAKE_CFLAGS += /MP -wd4100 -wd4267
-  QMAKE_CXXFLAGS += /MP -wd4100 -wd4267
+  DEFINES += _CRT_SECURE_NO_WARNINGS
+  DEFINES += _CRT_NONSTDC_NO_WARNINGS
+  QMAKE_CFLAGS += /MP -wd4267
+  QMAKE_CXXFLAGS += /MP -wd4267
+  # The -wd (disable warning) and -w3 (change warning to level 3) options are exclusive.
+  # The win32-msvc makespec uses -w34100, which can interfer with -wd4100.
+  # Their are two qmake settings for warnings in CONFIG: warn_on and warn_off.
+  # This results in the warning showing with msbuild, but not with nmake, even if
+  # -wd4100 is included in QMAKE_CFLAGS and QMAKE_CXXFLAGS.
+  # Override win32-msvc, leaving these warnings at their default of level 4, which
+  # will not show up because we run at level 3.
+  # shapelib/shpopen.c can cause a C4100 error.
+  QMAKE_CFLAGS_WARN_ON -= -w34100
+  QMAKE_CXXFLAGS_WARN_ON -= -w34100
 }
 
 include(shapelib.pri)
@@ -398,7 +347,7 @@ QMAKE_EXTRA_TARGETS += check-vtesto
 QMAKE_CLEAN += $${OUT_PWD}/testo.d/*.vglog
 
 # build the compilation data base used by clang tools including clang-tidy.
-macx|linux|openbsd{
+unix {
   compile_command_database.target = compile_commands.json
   compile_command_database.commands = $(MAKE) clean; bear $(MAKE)
   QMAKE_EXTRA_TARGETS += compile_command_database
@@ -437,9 +386,11 @@ QMAKE_EXTRA_TARGETS += cppcheck
 
 gpsbabel.org.depends = gpsbabel gpsbabel.pdf FORCE
 equals(PWD, $${OUT_PWD}) {
-  gpsbabel.org.commands += web=\$\${WEB:-$${WEB}};
-  gpsbabel.org.commands += docversion=\$\${DOCVERSION:-$${DOCVERSION}};
-  gpsbabel.org.commands += tools/make_gpsbabel_org.sh \"\$\${web}\" \"\$\${docversion}\";
+  # may be overridden on qmake command line
+  !defined(WEB, var) {
+    WEB = ../babelweb
+  }
+  gpsbabel.org.commands += tools/make_gpsbabel_org.sh $$shell_quote($$WEB) $$shell_quote($$DOCVERSION);
 } else {
   gpsbabel.org.commands += echo "target gpsbabel.org is not supported for out of source builds.";
   gpsbabel.org.commands += exit 1;

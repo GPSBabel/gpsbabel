@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>style/arc.style</file>
+        <file>style/cambridge.style</file>
+        <file>style/csv.style</file>
+        <file>style/custom.style</file>
+        <file>style/garmin301.style</file>
+        <file>style/garmin_g1000.style</file>
+        <file>style/garmin_poi.style</file>
+        <file>style/gpsdrive.style</file>
+        <file>style/gpsdrivetrack.style</file>
+        <file>style/iblue747.style</file>
+        <file>style/iblue757.style</file>
+        <file>style/land_air_sea.style</file>
+        <file>style/openoffice.style</file>
+        <file>style/tabsep.style</file>
+    </qresource>
+</RCC>

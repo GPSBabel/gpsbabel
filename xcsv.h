@@ -175,8 +175,7 @@ public:
   /* Member Functions */
 
   static QString xcsv_get_char_from_constant_table(const QString& key);
-  static XcsvStyle xcsv_read_internal_style(const char* style_buf);
-  static XcsvStyle xcsv_read_style(const char* fname);
+  static XcsvStyle xcsv_read_style(const QString& fname);
 
   /* Data Members */
 
@@ -251,7 +250,6 @@ private:
   static void xcsv_ifield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc);
   static void xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString& qval, const QString& qpfc, unsigned int options);
   static void xcsv_parse_style_line(XcsvStyle* style, QString line);
-  static XcsvStyle xcsv_parse_style_buff(const char* sbuff);
 
   /* Data Members */
 
@@ -300,7 +298,7 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
-  void xcsv_setup_internal_style(const char* style_buf);
+  void xcsv_setup_internal_style(const QString& style_filename);
 
 private:
   /* Types */
@@ -405,7 +403,7 @@ private:
   char* xcsv_urlbase = nullptr;
   char* opt_datum = nullptr;
 
-  const char* intstylebuf = nullptr;
+  QString intstylefile;
 
   QVector<arglist_t> xcsv_args = {
     {

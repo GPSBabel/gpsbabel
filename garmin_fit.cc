@@ -34,10 +34,9 @@
 #include <QDateTime>           // for QDateTime
 #include <QFileInfo>           // for QFileInfo
 #include <QLatin1Char>         // for QLatin1Char
-#include <QMetaType>           // for QMetaType, QMetaType::UInt
 #include <QString>             // for QString
 #include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qint64
+#include <QtGlobal>            // for uint, qint64
 
 #include "defs.h"
 #include "garmin_fit.h"
@@ -107,8 +106,9 @@ GarminFitFormat::fit_parse_header()
   // data length
   fit_data.len = gbfgetuint32(fin);
   // File signature
-  is_fatal(gbfread(sig, 4, 1, fin) != 1,
-           MYNAME ": Unexpected end of file\n");
+  if (gbfread(sig, 4, 1, fin) != 1) {
+    fatal(MYNAME ": Unexpected end of file\n");
+  }
   if (sig[0] != '.' || sig[1] != 'F' || sig[2] != 'I' || sig[3] != 'T') {
     fatal(MYNAME ": .FIT signature missing\n");
   }
@@ -421,7 +421,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     const fit_field_t& f = def.fields.at(i);
     QVariant field = fit_read_field(f);
     uint32_t val = -1;
-    if (field.canConvert(QMetaType::UInt)) {
+    if (field.canConvert<uint>()) {
       val = field.toUInt();
     }
     if (f.id == kFieldTimestamp) {

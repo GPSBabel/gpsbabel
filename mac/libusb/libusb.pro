@@ -18,8 +18,7 @@ SOURCES = core.c \
   os/events_posix.c \
   os/threads_posix.c
 
-HEADERS = hotplug.h \
-  libusb.h \
+HEADERS = libusb.h \
   libusbi.h \
   version.h \
   version_nano.h \

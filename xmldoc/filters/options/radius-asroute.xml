@@ -5,8 +5,8 @@ The order of points in the route is by distance from the center (unless the
 <option>nosort</option> option is also specified.)
 </para>
 <para>
-Note that this route is not necessarily the most efficient route to visit 
-all of the points.  In fact, for some data sets, it might be the least 
+Note that this route is not necessarily the most efficient route to visit
+all of the points.  In fact, for some data sets, it might be the least
 efficient route.
 </para>
 

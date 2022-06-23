@@ -455,7 +455,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->latitude = intdeg_to_dec((int) atof(s));
     break;
   case XcsvStyle::XT_LAT_HUMAN_READABLE:
-    human_to_dec(s, &wpt->latitude, &wpt->longitude, 1);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1);
     break;
   case XcsvStyle::XT_LAT_DDMMDIR:
     wpt->latitude = ddmmdir_to_degrees(s);
@@ -479,7 +479,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->longitude = intdeg_to_dec((int) atof(s));
     break;
   case XcsvStyle::XT_LON_HUMAN_READABLE:
-    human_to_dec(s, &wpt->latitude, &wpt->longitude, 2);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2);
     break;
   case XcsvStyle::XT_LON_DDMMDIR:
     wpt->longitude = ddmmdir_to_degrees(s);
@@ -490,7 +490,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   // case XcsvStyle::XT_LON_10E is handled outside the switch.
   /* LAT AND LON CONVERSIONS ********************************************/
   case XcsvStyle::XT_LATLON_HUMAN_READABLE:
-    human_to_dec(s, &wpt->latitude, &wpt->longitude, 0);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0);
     break;
   /* DIRECTIONS **********************************************************/
   case XcsvStyle::XT_LAT_DIR:
@@ -638,7 +638,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_ISO_TIME:
   case XcsvStyle::XT_ISO_TIME_MS:
-    wpt->SetCreationTime(xml_parse_time(s));
+    wpt->SetCreationTime(xml_parse_time(value));
     break;
   case XcsvStyle::XT_NET_TIME: {
     bool ok;
@@ -1659,7 +1659,8 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   }
 
   // Separate op and tokens.
-  int sep = line.indexOf(QRegularExpression(R"(\s+)"));
+  static const QRegularExpression re(R"(\s+)");
+  int sep = line.indexOf(re);
 
   // the first token is the operation, e.g. "IFIELD"
   QString op = line.mid(0, sep).trimmed().toUpper();
@@ -1792,25 +1793,8 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
   }
 }
 
-
-/*
- * A wrapper for xcsv_parse_style_line that reads until it hits
- * a terminating null.   Makes multiple calls to that function so
- * that "ignore to end of line" comments work right.
- */
 XcsvStyle
-XcsvStyle::xcsv_parse_style_buff(const char* sbuff)
-{
-  XcsvStyle style;
-  const QStringList lines = QString(sbuff).split('\n');
-  for (const auto& line : lines) {
-    xcsv_parse_style_line(&style, line);
-  }
-  return style;
-}
-
-XcsvStyle
-XcsvStyle::xcsv_read_style(const char* fname)
+XcsvStyle::xcsv_read_style(const QString& fname)
 {
   XcsvStyle style;
 
@@ -1830,28 +1814,10 @@ XcsvStyle::xcsv_read_style(const char* fname)
   return style;
 }
 
-/*
- * Passed a pointer to an internal buffer that would be identical
- * to the series of bytes that would be in a style file, we set up
- * the xcsv parser and make it ready for general use.
- */
-XcsvStyle
-XcsvStyle::xcsv_read_internal_style(const char* style_buf)
-{
-  XcsvStyle style = xcsv_parse_style_buff(style_buf);
-
-  /* if we have no output fields, use input fields as output fields */
-  if (style.ofields.isEmpty()) {
-    style.ofields = style.ifields;
-  }
-
-  return style;
-}
-
 void
-XcsvFormat::xcsv_setup_internal_style(const char* style_buf)
+XcsvFormat::xcsv_setup_internal_style(const QString& style_filename)
 {
-  intstylebuf = style_buf;
+  intstylefile = style_filename;
 }
 
 void
@@ -1861,8 +1827,8 @@ XcsvFormat::rd_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
@@ -1894,7 +1860,9 @@ XcsvFormat::rd_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
@@ -1916,8 +1884,8 @@ XcsvFormat::wr_init(const QString& fname)
    * if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
    */
-  if (intstylebuf != nullptr) {
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_internal_style(intstylebuf));
+  if (!intstylefile.isEmpty()) {
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
@@ -1973,7 +1941,9 @@ XcsvFormat::wr_init(const QString& fname)
     datum_name = "WGS 84";
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
-  is_fatal(xcsv_file->gps_datum_idx < 0, MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  if (xcsv_file->gps_datum_idx < 0) {
+    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+  }
   assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 

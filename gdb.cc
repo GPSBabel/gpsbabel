@@ -24,26 +24,27 @@
   https://www.memotech.franken.de/FileFormats/Garmin_MPS_GDB_and_GFI_Format.pdf
 */
 
+#include "gdb.h"
+
+#include <QByteArray>              // for QByteArray, operator==
+#include <QList>                   // for QList<>::const_iterator, QList
+#include <QString>                 // for QString, operator!=, operator==
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for Q_UNUSED, qPrintable, foreach
+
 #include <cmath>                   // for fabs
-#include <cstdio>                  // for printf, snprintf, sscanf, SEEK_SET, NULL
-#include <cstdlib>                 // for atoi, strtol, NULL
-#include <cstring>                 // for memset, strcmp, strstr, strchr, strlen, strncpy
-#include <ctime>                   // for strftime
+#include <cstdio>                  // for printf, snprintf, sscanf, SEEK_SET
+#include <cstdlib>                 // for atoi, strtol
+#include <cstring>                 // for memset, strstr, strchr, strcmp, strlen, strncpy
+#include <ctime>                   // for strftime, tm
 #include <iterator>                // for next
 
-#include <QByteArray>              // for QByteArray
-#include <QList>                   // for QList
-#include <QString>                 // for QString, operator!=, operator==
-#include <QVector>                 // for QVector
-#include <Qt>                      // for CaseInsensitive
-#include <QtGlobal>                // for qPrintable, Q_UNUSED, foreach
-
-#include "defs.h"
-
+#include "defs.h"                  // for Waypoint, warning, fatal, route_head, UrlLink, bounds, mkshort, UrlList, unknown_alt, wp_flags, xfree, waypt_add_to_bounds, waypt_init_bounds, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, WAYPT_GET, WAYPT_SET, gb_color
 #include "cet_util.h"              // for cet_convert_init
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_flags_t, garmin_ilink_t, GMSD_GET, GMSD_SETSTR, GMSD_SET, garmin_fs_alloc, GMSD_FIND, GMSD_HAS
-#include "garmin_tables.h"         // for gt_get_icao_country, gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
-#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfread, gbfwrite, gbfgetc, gbfputc, gbfgetdbl, gbfgetcstr, gbfile, gbfclose, gbfputcstr, gbfcopyfrom, gbfrewind, gbfseek, gbftell, gbfopen_le, gbfgetcstr_old, gbfgetint16, gbfputdbl, gbfputint16
+#include "formspec.h"              // for FormatSpecificDataList
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
+#include "garmin_tables.h"         // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
+#include "gbfile.h"                // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfile, gbfputcstr, gbfcopyfrom, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl, gbfputint16
 #include "grtcirc.h"               // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 #include "src/core/datetime.h"     // for DateTime
@@ -79,44 +80,11 @@
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
-/*******************************************************************************/
-
-/* static char gdb_release[] = "$Revision: 1.74 $"; */
-static char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
-
-static gbfile* fin, *fout, *ftmp;
-static int gdb_ver, gdb_category;
-static bool gdb_roadbook;
-static bool gdb_hide_wpt;
-static bool gdb_hide_rpt;
-
-static QList<Waypoint*> wayptq_in, wayptq_out, wayptq_in_hidden;
-static short_handle short_h;
-
-static char* gdb_opt_category;
-static char* gdb_opt_ver;
-static char* gdb_opt_via;
-static char* gdb_opt_roadbook;
-static char* gdb_opt_bitcategory;
-static char* gdb_opt_drop_hidden_wpt;
-
-static int waypt_flag;
-static int route_flag;
-
-static int waypt_ct;	/* informational: total number of waypoints in/out */
-static int waypth_ct;	/* informational: total number of hidden waypoints in/out */
-static int rtept_ct;	/* informational: total number of route points in/out */
-static int trkpt_ct;	/* informational: total number of track points in/out */
-static int rte_ct;	/* informational: total number of routes in/out */
-static int trk_ct;	/* informational: total number of tracks in/out */
-
-/*******************************************************************************/
-
 #define ELEMENTS(a) a->rte_waypt_ct()
 #define NOT_EMPTY(a) (a && *a)
 
-static void
-gdb_flush_waypt_queue(QList<Waypoint*>* Q)
+void
+GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
 {
 
   while (!Q->isEmpty()) {
@@ -134,8 +102,8 @@ gdb_flush_waypt_queue(QList<Waypoint*>* Q)
 }
 
 #if GDB_DEBUG
-static void
-disp_summary(const gbfile* f)
+void
+GdbFormat::disp_summary(const gbfile* f) const
 {
   int i, len;
 
@@ -165,7 +133,10 @@ disp_summary(const gbfile* f)
   warning("\n");
 }
 #else
-#define disp_summary(a)
+void
+GdbFormat::disp_summary(const gbfile* /* f */) const
+{
+}
 #endif
 
 /*******************************************************************************/
@@ -192,9 +163,7 @@ disp_summary(const gbfile* f)
 
 #define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
 
-static char* gdb_fread_cstr(gbfile* fin);
-
-static QString fread_cstr()
+QString GdbFormat::fread_cstr() const
 {
   QString rv;
   char* s = gdb_fread_cstr(fin);
@@ -209,8 +178,8 @@ static QString fread_cstr()
   return rv;
 }
 
-static char*
-gdb_fread_cstr(gbfile* file_in)
+char*
+GdbFormat::gdb_fread_cstr(gbfile* file_in)
 {
   char* result = gbfgetcstr_old(file_in);
 
@@ -222,8 +191,8 @@ gdb_fread_cstr(gbfile* file_in)
   return result;
 }
 
-static QString
-gdb_fread_strlist()
+QString
+GdbFormat::gdb_fread_strlist() const
 {
   QString res;
 
@@ -241,8 +210,8 @@ gdb_fread_strlist()
   return qres;
 }
 
-static Waypoint*
-gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const char exact)
+Waypoint*
+GdbFormat::gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const char exact)
 {
   QString name = wpt->shortname;
   foreach (Waypoint* tmp, *Q) {
@@ -260,8 +229,8 @@ gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const char exact
   return nullptr;
 }
 
-static Waypoint*
-gdb_reader_find_waypt(const Waypoint* wpt, const char exact)
+Waypoint*
+GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
 {
   Waypoint* res = gdb_find_wayptq(&wayptq_in, wpt, exact);
   if (res == nullptr) {
@@ -270,8 +239,8 @@ gdb_reader_find_waypt(const Waypoint* wpt, const char exact)
   return res;
 }
 
-static Waypoint*
-gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
+Waypoint*
+GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class) const
 {
   Waypoint* tmp = gdb_reader_find_waypt(ref, 1);
   if (tmp == nullptr) {
@@ -307,7 +276,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
   return res;
 }
 
-static QString gdb_to_ISO8601_duration(unsigned int seconds)
+QString GdbFormat::gdb_to_ISO8601_duration(unsigned int seconds)
 {
   if (seconds == 0u) {
     return QString("PT0S");
@@ -338,7 +307,7 @@ static QString gdb_to_ISO8601_duration(unsigned int seconds)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-static void FWRITE_CSTR(const QString& a)
+void GdbFormat::FWRITE_CSTR(const QString& a) const
 {
   if (a.isEmpty()) {
     gbfputc(0, fout);
@@ -360,8 +329,8 @@ static void FWRITE_CSTR(const QString& a)
 #define FWRITE_CSTR_LIST(a) gdb_write_cstr_list((a))
 #define FWRITE_LATLON(a) gbfputint32(GPS_Math_Deg_To_Semi((a)),fout)
 
-static void
-gdb_write_cstr_list(const char* str)
+void
+GdbFormat::gdb_write_cstr_list(const char* str) const
 {
   if NOT_EMPTY(str) {
     gbfputint32(1, fout);
@@ -371,14 +340,14 @@ gdb_write_cstr_list(const char* str)
   }
 }
 
-static void
-gdb_write_cstr_list(const QString& str)
+void
+GdbFormat::gdb_write_cstr_list(const QString& str) const
 {
   gdb_write_cstr_list(CSTRc(str));
 }
 
-static void
-gdb_write_dbl(const double value, const double def)
+void
+GdbFormat::gdb_write_dbl(const double value, const double def) const
 {
   if (value == def) {
     gbfputc(0, fout);
@@ -388,8 +357,8 @@ gdb_write_dbl(const double value, const double def)
   }
 }
 
-static void
-gdb_write_time(const int time)
+void
+GdbFormat::gdb_write_time(const int time) const
 {
   if (time > 0) {
     gbfputc(1, fout);
@@ -403,8 +372,8 @@ gdb_write_time(const int time)
 /* GDB "Garmin Database" READER CODE */
 /*-----------------------------------------------------------------------------*/
 
-static void
-read_file_header()
+void
+GdbFormat::read_file_header()
 {
   char buf[128];
 
@@ -419,24 +388,30 @@ read_file_header()
   	The following message "local buffer overflow detected..." could be
   	misinterpreted.
   */
-  is_fatal(strcmp(buf, "MsRcf") != 0, MYNAME ": Invalid file \"%s\"!", fin->name);
+  if (strcmp(buf, "MsRcf") != 0) {
+    fatal(MYNAME ": Invalid file \"%s\"!", fin->name);
+  }
 
   int reclen = FREAD_i32;
   Q_UNUSED(reclen);
   QByteArray drec = FREAD_STR();
-  is_fatal(drec.at(0) != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
+  if (drec.at(0) != 'D') {
+    fatal(MYNAME ": Invalid file \"%s\"!", fin->name);
+  }
 
   gdb_ver = drec.at(1) - 'k' + 1;
-  is_fatal((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX),
-           MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
+  if ((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX)) {
+    fatal(MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
+  }
 
   if (global_opts.verbose_status > 0) {
     printf(MYNAME ": Reading Garmin GPS Database version %d.0\n", gdb_ver);
   }
 
   reclen = FREAD_i32;
-  is_fatal((reclen + 1 > int(sizeof(buf))),
-           MYNAME ": Invalid record length\n");
+  if (reclen + 1 > int(sizeof(buf))) {
+    fatal(MYNAME ": Invalid record length\n");
+  }
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
@@ -449,13 +424,15 @@ read_file_header()
   }
 
   QByteArray applicationField = FREAD_STR();
-  is_fatal(!((applicationField == "MapSource") || (applicationField == "BaseCamp")), MYNAME ": Not a recognized signature in header");
+  if (!((applicationField == "MapSource") || (applicationField == "BaseCamp"))) {
+    fatal(MYNAME ": Not a recognized signature in header");
+  }
 }
 
 /*-----------------------------------------------------------------------------*/
 
-static Waypoint*
-read_waypoint(gt_waypt_classes_e* waypt_class_out)
+Waypoint*
+GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 {
   char buf[128];		/* used for temporary stuff */
   gt_waypt_classes_e wpt_class;
@@ -695,8 +672,8 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
 /*-----------------------------------------------------------------------------*/
 
-static route_head*
-read_route()
+route_head*
+GdbFormat::read_route()
 {
   rte_ct++;
   int warnings = 0;
@@ -928,8 +905,8 @@ read_route()
 
 /*-----------------------------------------------------------------------------*/
 
-static route_head*
-read_track()
+route_head*
+GdbFormat::read_track()
 {
   char dummy;
 
@@ -987,8 +964,8 @@ read_track()
 
 /*******************************************************************************/
 
-static void
-gdb_rd_init(const QString& fname)
+void
+GdbFormat::rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
@@ -1015,8 +992,8 @@ gdb_rd_init(const QString& fname)
   trk_ct = 0;
 }
 
-static void
-gdb_rd_deinit()
+void
+GdbFormat::rd_deinit()
 {
   disp_summary(fin);
   gdb_flush_waypt_queue(&wayptq_in);
@@ -1025,8 +1002,8 @@ gdb_rd_deinit()
   gbfclose(fin);
 }
 
-static void
-read_data()
+void
+GdbFormat::read()
 {
   int incomplete = 0;	/* number of incomplete reads */
 
@@ -1084,7 +1061,9 @@ read_data()
     }
 
     int delta = len - gbftell(ftmp);
-    is_fatal(delta > 1000000, "Internal consistency error.  Delta too big");
+    if (delta > 1000000) {
+      fatal("Internal consistency error.  Delta too big");
+    }
 
     // Avoid finite loop on bogus beta files from '06.
     // THe 100000 is totally pulled from my hat.
@@ -1134,8 +1113,8 @@ read_data()
 /*
  * reset_short_handle: used for waypoint, route and track names
  */
-static void
-reset_short_handle(const char* defname)
+void
+GdbFormat::reset_short_handle(const char* defname)
 {
   if (short_h != nullptr) {
     mkshort_del_handle(&short_h);
@@ -1154,8 +1133,8 @@ reset_short_handle(const char* defname)
 
 /* ----------------------------------------------------------------------------*/
 
-static void
-write_header()
+void
+GdbFormat::write_header() const
 {
   char buff[128], tbuff[32];
   char* c;
@@ -1234,8 +1213,8 @@ write_header()
  *                  after each input module.
  */
 
-static void
-gdb_check_waypt(Waypoint* wpt)
+void
+GdbFormat::gdb_check_waypt(Waypoint* wpt)
 {
   double lat_orig = wpt->latitude;
   double lon_orig = wpt->longitude;
@@ -1261,8 +1240,8 @@ gdb_check_waypt(Waypoint* wpt)
 
 /*-----------------------------------------------------------------------------*/
 
-static void
-write_waypoint(
+void
+GdbFormat::write_waypoint(
   const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
   const int icon, const int display)
 {
@@ -1389,8 +1368,8 @@ write_waypoint(
   }
 }
 
-static void
-route_compute_bounds(const route_head* rte, bounds* bounds)
+void
+GdbFormat::route_compute_bounds(const route_head* rte, bounds* bounds)
 {
   waypt_init_bounds(bounds);
   foreach (Waypoint* wpt, rte->waypoint_list) {
@@ -1399,8 +1378,8 @@ route_compute_bounds(const route_head* rte, bounds* bounds)
   }
 }
 
-static void
-route_write_bounds(bounds* bounds)
+void
+GdbFormat::route_write_bounds(bounds* bounds) const
 {
   if (waypt_bounds_valid(bounds)) {
     FWRITE_C(0);
@@ -1415,8 +1394,8 @@ route_write_bounds(bounds* bounds)
   }
 }
 
-static void
-write_route(const route_head* rte, const QString& rte_name)
+void
+GdbFormat::write_route(const route_head* rte, const QString& rte_name)
 {
   bounds bounds;
   char zbuf[32], ffbuf[32];
@@ -1536,8 +1515,8 @@ write_route(const route_head* rte, const QString& rte_name)
   }
 }
 
-static void
-write_track(const route_head* trk, const QString& trk_name)
+void
+GdbFormat::write_track(const route_head* trk, const QString& trk_name)
 {
   int points = ELEMENTS(trk);
 
@@ -1582,8 +1561,8 @@ write_track(const route_head* trk, const QString& trk_name)
 
 /*-----------------------------------------------------------------------------*/
 
-static void
-finalize_item(gbfile* origin, const char identifier)
+void
+GdbFormat::finalize_item(gbfile* origin, const char identifier)
 {
   int len = gbftell(fout);
 
@@ -1600,8 +1579,8 @@ finalize_item(gbfile* origin, const char identifier)
 
 /*-----------------------------------------------------------------------------*/
 
-static void
-write_waypoint_cb(const Waypoint* refpt)
+void
+GdbFormat::write_waypoint_cb(const Waypoint* refpt)
 {
   /* do this when backup always happens in main */
 // but, but, casting away the const here is wrong...
@@ -1688,8 +1667,8 @@ write_waypoint_cb(const Waypoint* refpt)
   }
 }
 
-static void
-write_route_cb(const route_head* rte)
+void
+GdbFormat::write_route_cb(const route_head* rte)
 {
   if (ELEMENTS(rte) <= 0) {
     return;
@@ -1710,8 +1689,8 @@ write_route_cb(const route_head* rte)
   finalize_item(fsave, 'R');
 }
 
-static void
-write_track_cb(const route_head* trk)
+void
+GdbFormat::write_track_cb(const route_head* trk)
 {
   if (ELEMENTS(trk) <= 0) {
     return;
@@ -1735,8 +1714,8 @@ write_track_cb(const route_head* trk)
 
 /*-----------------------------------------------------------------------------*/
 
-static void
-gdb_wr_init(const QString& fname)
+void
+GdbFormat::wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
@@ -1745,8 +1724,9 @@ gdb_wr_init(const QString& fname)
   gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
 
   if (gdb_category) {
-    is_fatal((gdb_category < 1) || (gdb_category > 16),
-             MYNAME ": cat must be between 1 and 16!");
+    if ((gdb_category < 1) || (gdb_category > 16)) {
+      fatal(MYNAME ": cat must be between 1 and 16!");
+    }
     gdb_category = 1 << (gdb_category - 1);
   }
 
@@ -1769,8 +1749,8 @@ gdb_wr_init(const QString& fname)
   trk_ct = 0;
 }
 
-static void
-gdb_wr_deinit()
+void
+GdbFormat::wr_deinit()
 {
   disp_summary(fout);
   gdb_flush_waypt_queue(&wayptq_out);
@@ -1779,8 +1759,8 @@ gdb_wr_deinit()
   gbfclose(ftmp);
 }
 
-static void
-write_data()
+void
+GdbFormat::write()
 {
   if (gdb_opt_ver) {
     gdb_ver = atoi(gdb_opt_ver);
@@ -1789,71 +1769,26 @@ write_data()
 
   reset_short_handle("WPT");
   route_flag = 0;
-  waypt_disp_all(write_waypoint_cb);
+  auto write_waypoint_cb_lambda = [this](const Waypoint* waypointp)->void {
+    write_waypoint_cb(waypointp);
+  };
+  waypt_disp_all(write_waypoint_cb_lambda);
   route_flag = 1;
-  route_disp_all(nullptr, nullptr, write_waypoint_cb);
+  route_disp_all(nullptr, nullptr, write_waypoint_cb_lambda);
 
   reset_short_handle("Route");
-  route_disp_all(write_route_cb, nullptr, nullptr);
+  auto write_route_cb_lambda = [this](const route_head* rte)->void {
+    write_route_cb(rte);
+  };
+  route_disp_all(write_route_cb_lambda, nullptr, nullptr);
 
   reset_short_handle("Track");
-  track_disp_all(write_track_cb, nullptr, nullptr);
+  auto write_track_cb_lambda = [this](const route_head* rte)->void {
+    write_track_cb(rte);
+  };
+  track_disp_all(write_track_cb_lambda, nullptr, nullptr);
 
   FWRITE_i32(2);			/* finalize gdb with empty map segment */
   FWRITE_CSTR("V");
   FWRITE_C(1);
 }
-
-/*******************************************************************************/
-
-static QVector<arglist_t> gdb_args = {
-  {
-    "cat", &gdb_opt_category,
-    "Default category on output (1..16)",
-    nullptr, ARGTYPE_INT, "1", "16", nullptr
-  },
-  {
-    "bitscategory", &gdb_opt_bitcategory, "Bitmap of categories",
-    nullptr, ARGTYPE_INT, "1", "65535", nullptr
-  },
-  {
-    "ver", &gdb_opt_ver,
-    "Version of gdb file to generate (1..3)",
-    "2", ARGTYPE_INT, "1", "3", nullptr
-  },
-  {
-    "via", &gdb_opt_via,
-    "Drop route points that do not have an equivalent waypoint (hidden points)",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "dropwpt", &gdb_opt_drop_hidden_wpt,
-    "Don't create waypoints for non-user points",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "roadbook", &gdb_opt_roadbook,
-    "Include major turn points (with description) from calculated route",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-
-};
-
-ff_vecs_t gdb_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  gdb_rd_init,
-  gdb_wr_init,
-  gdb_rd_deinit,
-  gdb_wr_deinit,
-  read_data,
-  write_data,
-  nullptr,
-  &gdb_args,
-  CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
-  /* because of utf8 strings since GDB V3 */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-/*******************************************************************************/

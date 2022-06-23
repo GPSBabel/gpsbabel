@@ -27,25 +27,27 @@ static void* serial_handle;
 #define MYNAME "BRAUNIGER-IQ"
 #define PRESTRKNAME "PRESALTTRK"
 
-enum state_t {
-  st_sync,
-  st_fl_num,
-  st_data_len,
-  st_ser_num,
-  st_pilot_name,
-  st_start_date,
-  st_start_year,
-  st_max_alt_1,
-  st_max_alt_2,
-  st_max_climb,
-  st_flight_dur,
-  st_log_ival,
-  st_start_time,
-  st_end_time,
-  st_sample_alt,
-  st_sample_spd,
-  num_states
-};
+namespace { // fix ODR violation with igc
+  enum state_t {
+    st_sync,
+    st_fl_num,
+    st_data_len,
+    st_ser_num,
+    st_pilot_name,
+    st_start_date,
+    st_start_year,
+    st_max_alt_1,
+    st_max_alt_2,
+    st_max_climb,
+    st_flight_dur,
+    st_log_ival,
+    st_start_time,
+    st_end_time,
+    st_sample_alt,
+    st_sample_spd,
+    num_states
+  };
+}
 static state_t state;
 inline state_t& operator++(state_t& s) // prefix
 {
@@ -278,6 +280,5 @@ ff_vecs_t brauniger_iq_vecs = {
   nullptr,
   &brauniger_iq_args,
   CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

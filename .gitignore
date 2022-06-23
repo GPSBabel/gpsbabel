@@ -36,7 +36,10 @@ CMakeFiles/
 *.swp
 /tmp/
 /mkcapabilities
+/gpsbabel.gch/
 /gpsbabel.rc
 /autogen/
 /makedoc
 /empty
+/gbversion.h
+/qrc_gpsbabel.cpp

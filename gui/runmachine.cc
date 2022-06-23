@@ -33,19 +33,14 @@ QString RunMachine::decodeProcessError(QProcess::ProcessError err)
   switch (err) {
   case QProcess::FailedToStart:
     return tr("Process failed to start");
-    break;
   case QProcess::Crashed:
     return tr("Process crashed");
-    break;
   case QProcess::Timedout:
     return tr("Process timedout");
-    break;
   case QProcess::WriteError:
     return tr("Error while trying to write to process");
-    break;
   case QProcess::ReadError:
     return tr("Error while trying to read from process");
-    break;
   case QProcess::UnknownError:
   default:
     return tr("Unknown process error");
@@ -141,7 +136,7 @@ void RunMachine::execute(SignalId id,
         qDebug() << "signal" << id << "UNEXPECTED in init state!";
       }
       break;
-    };
+    }
     break;
 
   case starting:
@@ -161,7 +156,7 @@ void RunMachine::execute(SignalId id,
         qDebug() << "signal" << id << "UNEXPECTED in starting state!";
       }
       break;
-    };
+    }
     break;
 
   case running:
@@ -209,7 +204,7 @@ void RunMachine::execute(SignalId id,
         qDebug() << "signal" << id << "UNEXPECTED in running state!";
       }
       break;
-    };
+    }
     break;
 
   case done:
@@ -220,7 +215,7 @@ void RunMachine::execute(SignalId id,
       qDebug() << "UNEXPECTED State!";
     }
     break;
-  };
+  }
   if constexpr(debug) {
     qDebug() << "exec leaving" << state_ << id;
   }

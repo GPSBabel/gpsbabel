@@ -487,7 +487,9 @@ xml_parse_time(const QString& dateTimeString)
   int off_hr = 0;
   int off_min = 0;
   int off_sign = 1;
-  char* timestr = xstrdup(dateTimeString);
+
+  QByteArray dts = dateTimeString.toUtf8();
+  char* timestr = dts.data();
 
   char* offsetstr = strchr(timestr, 'Z');
   if (offsetstr) {
@@ -545,7 +547,6 @@ xml_parse_time(const QString& dateTimeString)
   } else {
     dt = QDateTime();
   }
-  xfree(timestr);
   return dt;
 }
 

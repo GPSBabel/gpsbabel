@@ -1049,10 +1049,14 @@ mag_rteparse(char* rtemsg)
   QString rte_name;
   if (explorist) {
     char* ca = rtemsg + n;
-    is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (*ca++ != ',') {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     char* ce = strchr(ca, ',');
-    is_fatal(ce == nullptr, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (ce == nullptr) {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     if (ca == ce) {
       rte_name = "Route";
@@ -1590,8 +1594,7 @@ ff_vecs_t mag_svecs = {
   nullptr,
   &mag_sargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1606,8 +1609,7 @@ ff_vecs_t mag_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 /*
@@ -1625,6 +1627,5 @@ ff_vecs_t magX_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };

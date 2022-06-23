@@ -65,11 +65,11 @@ public:
   static QString decodeProcessError(QProcess::ProcessError err);
   int exec();
   void open();
-  QString getOutputString()
+  QString getOutputString() const
   {
     return progress_->getOutputString();
   }
-  QString getErrorString()
+  QString getErrorString() const
   {
     return errorString_;
   }

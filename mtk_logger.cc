@@ -71,11 +71,6 @@
 
 #define MYNAME "mtk_logger"
 
-#ifdef __WIN32__
-#include <io.h>
-#define ftruncate _chsize
-#endif
-
 /* MTK packet id's -- currently unused... */
 enum MTK_NMEA_PACKET {
   PMTK_TEST = 0,
@@ -1677,8 +1672,7 @@ ff_vecs_t mtk_vecs = {
   &mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 ff_vecs_t mtk_m241_vecs = {
@@ -1698,8 +1692,7 @@ ff_vecs_t mtk_m241_vecs = {
   &mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 /* used for mtk-bin */
@@ -1723,8 +1716,7 @@ ff_vecs_t mtk_fvecs = {
   nullptr,
   &mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 
 ff_vecs_t mtk_m241_fvecs = {
@@ -1739,8 +1731,7 @@ ff_vecs_t mtk_m241_fvecs = {
   nullptr,
   &mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };
 /* End file: mtk_logger.c */
 /**************************************************************************/

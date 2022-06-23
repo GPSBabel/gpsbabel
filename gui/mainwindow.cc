@@ -58,7 +58,7 @@
 #include <cstdlib>                     // for exit
 
 #include "mainwindow.h"
-#include "../gbversion.h"              // for VERSION
+#include "gbversion.h"                 // for VERSION
 #include "aboutdlg.h"                  // for AboutDlg
 #include "advdlg.h"                    // for AdvDlg
 #include "appname.h"                   // for appName
@@ -271,7 +271,7 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   const QStringList directories = {
     QApplication::applicationDirPath() + "/translations",
     ":/translations",
-    QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
   };
 
   // Load the new translator.
@@ -878,22 +878,6 @@ int MainWindow::formatIndexFromName(bool isFile, const QString& nm)
 }
 
 //------------------------------------------------------------------------
-QString MainWindow::charSetFromCombo(QComboBox* combo)
-{
-  int i = combo->itemData((combo->currentIndex())).toInt();
-  return (i >=0) ? charSets_[i] : QString();
-}
-
-//------------------------------------------------------------------------
-void MainWindow::setComboToCharSet(QComboBox* combo, const QString& cset)
-{
-  for (int i=0; i<charSets_.size(); i++) {
-    if (charSets_[i] == cset) {
-      combo->setCurrentIndex(i+1); // first index is default;
-    }
-  }
-}
-//------------------------------------------------------------------------
 void MainWindow::applyActionX()
 {
   getWidgetValues();
@@ -1030,13 +1014,15 @@ void MainWindow::closeActionX()
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if ((babelData_.runCount_ == 1) ||
-      ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30))) {
+  if (!babelData_.disableDonateDialog_ &&
+      ((babelData_.runCount_ == 1) ||
+       ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)))) {
     Donate donate(nullptr);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1)) {
       donate.showNever(false);
     }
     donate.exec();
+    babelData_.disableDonateDialog_ = donate.neverAgain();
     babelData_.donateSplashed_ = now;
   }
   saveSettings();
@@ -1159,7 +1145,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), babelData_.installationUuid_);
+  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }

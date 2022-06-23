@@ -168,7 +168,7 @@ void InterpolateFilter::init()
   } else if (opt_time != nullptr) {
     max_time_step = 1000 * strtod(opt_time, nullptr); // milliseconds
     if (max_time_step <= 0) {
-      fatal(FatalMsg() << MYNAME ": interpolation time should be positve!");
+      fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
     }
   } else if (opt_dist != nullptr) {
     max_dist_step = strtod(opt_dist, &fm);
@@ -177,7 +177,7 @@ void InterpolateFilter::init()
       max_dist_step *= kMilesPerKilometer;
     }
     if (max_dist_step <= 0) {
-      fatal(FatalMsg() << MYNAME ": interpolation distance should be positve!");
+      fatal(FatalMsg() << MYNAME ": interpolation distance should be positive!");
     }
   } else {
     fatal(FatalMsg() << MYNAME ": No interval specified.");

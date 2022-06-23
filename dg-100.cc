@@ -609,6 +609,10 @@ Dg100Format::dg100_getfiles() const
   const QList<int> headers = dg100_getfileheaders();
   for (int filenum : headers) {
     dg100_getfile(filenum, &track);
+    if (global_opts.verbose_status) {
+      waypt_status_disp(headers.size(), filenum);
+    }
+
   }
   /* Different DG-100 devices seem to return different numbers of bytes
    * from the getconfig command.  This can result in a mismatched checksum,

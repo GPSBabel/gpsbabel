@@ -147,17 +147,21 @@ static void rd_deinit()
   gbfclose(file_in);
 }
 
-enum state_t { id, takeoff, start, turnpoint, finish, landing };
+namespace { // fix ODR violation with brauniger_iq
+  enum state_t { id, takeoff, start, turnpoint, finish, landing };
+}
 inline state_t& operator++(state_t& s) // prefix
 {
   return s = static_cast<state_t>(s + 1);
 }
+#if 0 // No callers.
 inline state_t operator++(state_t& s, int) // postfix
 {
   state_t ret(s);
   ++s;
   return ret;
 }
+#endif
 
 /**
  * Handle pre- or post-flight task declarations.
@@ -941,6 +945,5 @@ ff_vecs_t igc_vecs = {
   nullptr,
   &igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

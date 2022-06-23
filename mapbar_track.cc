@@ -21,45 +21,40 @@
 
  */
 
-#include <cstdio>               // for SEEK_CUR
+#include "mapbar_track.h"
 
 #include <QChar>                // for QChar
 #include <QDate>                // for QDate
 #include <QString>              // for QString
 #include <QTime>                // for QTime
-#include <QVector>              // for QVector
 
-#include "defs.h"
-#include "gbfile.h"             // for gbfgetint16, gbfgetint32, gbfseek, gbfclose, gbfopen, gbfile
+#include <cstdio>               // for SEEK_CUR
+
+#include "defs.h"               // for fatal, Waypoint, track_add_head, track_add_wpt, route_head
+#include "gbfile.h"             // for gbfgetint16, gbfgetint32, gbfseek, gbfclose, gbfopen
 #include "src/core/datetime.h"  // for DateTime
 
 
 #define MYNAME "mapbar_track"
 
-static gbfile* fin;
-
-static
-QVector<arglist_t> mapbar_track_args = {
-};
-
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-mapbar_track_rd_init(const QString& fname)
+void
+MapbarTrackFormat::rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
 
-static void
-mapbar_track_rd_deinit()
+void
+MapbarTrackFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-static gpsbabel::DateTime
-read_datetime()
+gpsbabel::DateTime
+MapbarTrackFormat::read_datetime() const
 {
   int hour = gbfgetint16(fin);
   int min = gbfgetint16(fin);
@@ -71,9 +66,8 @@ read_datetime()
   return t;
 }
 
-static const double DIV_RATE  = 100000.0f;
-static Waypoint*
-read_waypoint()
+Waypoint*
+MapbarTrackFormat::read_waypoint() const
 {
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
@@ -86,8 +80,8 @@ read_waypoint()
   return ret;
 }
 
-static void
-mapbar_track_read()
+void
+MapbarTrackFormat::read()
 {
   auto* track = new route_head;
   track_add_head(track);
@@ -116,9 +110,13 @@ mapbar_track_read()
   int end_flag = gbfgetint32(fin);
   while (!end_flag) {
     int length = gbfgetint32(fin);
-    is_fatal((length < 1) || (length > 1600), MYNAME ": get bad buffer length");
+    if ((length < 1) || (length > 1600)) {
+      fatal(MYNAME ": get bad buffer length");
+    }
 
-    is_fatal((length % 8 != 0), MYNAME ": bad buffer size");
+    if (length % 8 != 0) {
+      fatal(MYNAME ": bad buffer size");
+    }
     gbfseek(fin, 16, SEEK_CUR);
 
     const int amount = length/8;
@@ -130,22 +128,3 @@ mapbar_track_read()
     end_flag = gbfgetint32(fin);
   }
 }
-
-// capabilities below means: we can only read trackpoints.
-
-ff_vecs_t mapbar_track_vecs = {
-  ff_type_file,
-  { ff_cap_none, (ff_cap)(ff_cap_read), ff_cap_none },
-  mapbar_track_rd_init,
-  nullptr,
-  mapbar_track_rd_deinit,
-  nullptr,
-  mapbar_track_read,
-  nullptr,
-  nullptr,
-  &mapbar_track_args,
-  CET_CHARSET_UTF8, 0
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};

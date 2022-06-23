@@ -19,24 +19,179 @@
 
  */
 
-#include <QByteArray>          // for QByteArray
-#include <QString>             // for QString
-#include <QStringList>         // for QStringList
-#include <QVector>             // for QVector<>::iterator, QVector
-#include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qPrintable
-
-#include <algorithm>           // for sort
-#include <cassert>             // for assert
-#include <cstdio>              // for printf
-
-#include "defs.h"
 #include "filter_vecs.h"
-#include "filter.h"            // for Filter
-#include "gbversion.h"         // for WEB_DOC_DIR
-#include "inifile.h"           // for inifile_readstr
-#include "vecs.h"              // for Vecs
 
+#include <QByteArray>       // for QByteArray
+#include <QString>          // for QString
+#include <QStringList>      // for QStringList
+#include <QVector>          // for QVector
+#include <Qt>               // for CaseInsensitive
+#include <QtGlobal>         // for qPrintable
+
+#include <algorithm>        // for sort
+#include <cassert>          // for assert
+#include <cstdio>           // for printf
+
+#include "arcdist.h"        // for ArcDistanceFilter
+#include "bend.h"           // for BendFilter
+#include "defs.h"           // for arglist_t, CSTR, xfree, ARGTYPE_HIDDEN, fatal, global_options, global_opts, ARGTYPE_REQUIRED
+#include "discard.h"        // for DiscardFilter
+#include "duplicate.h"      // for DuplicateFilter
+#include "filter.h"         // for Filter
+#include "gbversion.h"      // for WEB_DOC_DIR
+#include "height.h"         // for HeightFilter
+#include "inifile.h"        // for inifile_readstr
+#include "interpolate.h"    // for InterpolateFilter
+#include "nukedata.h"       // for NukeDataFilter
+#include "polygon.h"        // for PolygonFilter
+#include "position.h"       // for PositionFilter
+#include "radius.h"         // for RadiusFilter
+#include "resample.h"       // for ResampleFilter
+#include "reverse_route.h"  // for ReverseRouteFilter
+#include "smplrout.h"       // for SimplifyRouteFilter
+#include "sort.h"           // for SortFilter
+#include "stackfilter.h"    // for StackFilter
+#include "swapdata.h"       // for SwapDataFilter
+#include "trackfilter.h"    // for TrackFilter
+#include "transform.h"      // for TransformFilter
+#include "validate.h"       // for ValidateFilter
+#include "vecs.h"           // for Vecs
+
+
+struct FilterVecs::Impl {
+  ArcDistanceFilter arcdist;
+  BendFilter bend;
+  DiscardFilter discard;
+  DuplicateFilter duplicate;
+  HeightFilter height;
+  InterpolateFilter interpolate;
+  NukeDataFilter nukedata;
+  PolygonFilter polygon;
+  PositionFilter position;
+  RadiusFilter radius;
+  ResampleFilter resample;
+  ReverseRouteFilter reverse_route;
+  SimplifyRouteFilter routesimple;
+  SortFilter sort;
+  StackFilter stackfilt;
+  SwapDataFilter swapdata;
+  TrackFilter trackfilter;
+  TransformFilter transform;
+  ValidateFilter validate;
+
+  const QVector<fl_vecs_t> filter_vec_list = {
+#if FILTERS_ENABLED
+    {
+      &arcdist,
+      "arc",
+      "Include Only Points Within Distance of Arc",
+    },
+    {
+      &bend,
+      "bend",
+      "Add points before and after bends in routes"
+    },
+    {
+      &discard,
+      "discard",
+      "Remove unreliable points with high hdop or vdop"
+    },
+    {
+      &duplicate,
+      "duplicate",
+      "Remove Duplicates",
+    },
+    {
+      &interpolate,
+      "interpolate",
+      "Interpolate between trackpoints"
+    },
+    {
+      &nukedata,
+      "nuketypes",
+      "Remove all waypoints, tracks, or routes"
+    },
+    {
+      &polygon,
+      "polygon",
+      "Include Only Points Inside Polygon",
+    },
+    {
+      &position,
+      "position",
+      "Remove Points Within Distance",
+    },
+    {
+      &radius,
+      "radius",
+      "Include Only Points Within Radius",
+    },
+    {
+      &resample,
+      "resample",
+      "Resample Track",
+    },
+    {
+      &routesimple,
+      "simplify",
+      "Simplify routes",
+    },
+    {
+      &sort,
+      "sort",
+      "Rearrange waypoints, routes and/or tracks by resorting",
+    },
+    {
+      &stackfilt,
+      "stack",
+      "Save and restore waypoint lists"
+    },
+    {
+      &reverse_route,
+      "reverse",
+      "Reverse stops within routes",
+    },
+    {
+      &trackfilter,
+      "track",
+      "Manipulate track lists"
+    },
+    {
+      &transform,
+      "transform",
+      "Transform waypoints into a route, tracks into routes, ..."
+    },
+    {
+      &height,
+      "height",
+      "Manipulate altitudes"
+    },
+    {
+      &swapdata,
+      "swap",
+      "Swap latitude and longitude of all loaded points"
+    },
+    {
+      &validate,
+      "validate",
+      "Validate internal data structures"
+    }
+#elif defined (MINIMAL_FILTERS)
+    {
+      &trackfilter,
+      "track",
+      "Manipulate track lists"
+    }
+#endif
+  };
+};
+
+FilterVecs& FilterVecs::Instance()
+{
+  static Impl impl;
+  static FilterVecs instance(&impl);
+  return instance;
+}
 
 Filter* FilterVecs::find_filter_vec(const QString& vecname)
 {
@@ -46,7 +201,7 @@ Filter* FilterVecs::find_filter_vec(const QString& vecname)
   }
   const QString svecname = options.takeFirst();
 
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     if (svecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
@@ -111,7 +266,7 @@ void FilterVecs::free_filter_vec(Filter* filter)
 
 void FilterVecs::init_filter_vecs()
 {
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     QVector<arglist_t>* args = vec.vec->get_args();
     if (args && !args->isEmpty()) {
       assert(args->isDetached());
@@ -124,7 +279,7 @@ void FilterVecs::init_filter_vecs()
 
 void FilterVecs::exit_filter_vecs()
 {
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     (vec.vec->exit)();
     QVector<arglist_t>* args = vec.vec->get_args();
     if (args && !args->isEmpty()) {
@@ -145,7 +300,7 @@ void FilterVecs::exit_filter_vecs()
  */
 void FilterVecs::disp_filter_vecs() const
 {
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     printf("	%-20.20s  %-50.50s\n",
            qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arglist_t>* args = vec.vec->get_args();
@@ -163,7 +318,7 @@ void FilterVecs::disp_filter_vecs() const
 
 void FilterVecs::disp_filter_vec(const QString& vecname) const
 {
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
@@ -220,7 +375,7 @@ void FilterVecs::disp_v1(const fl_vecs_t& vec)
  */
 void FilterVecs::disp_filters(int version) const
 {
-  auto sorted_filter_vec_list = filter_vec_list;
+  auto sorted_filter_vec_list = d_ptr_->filter_vec_list;
 
   auto alpha = [](const fl_vecs_t& a, const fl_vecs_t& b)->bool {
     return QString::compare(a.desc, b.desc, Qt::CaseInsensitive) < 0;
@@ -256,7 +411,7 @@ bool FilterVecs::validate_filters() const
 {
   bool ok = true;
 
-  for (const auto& vec : filter_vec_list) {
+  for (const auto& vec : d_ptr_->filter_vec_list) {
     ok = validate_filter_vec(vec) && ok;
   }
 

@@ -1,5 +1,5 @@
 #include <winver.h>
-#include "../gbversion.h"
+#include "gbversion.h"
 
 IDI_ICON1               ICON                    "images/appicon.ico"
 
@@ -24,7 +24,7 @@ BEGIN
             VALUE "FileDescription", "GPS format converter"
             VALUE "FileVersion", VER_FILE_STR
             VALUE "InternalName", "GPSBabelFE.exe"
-            VALUE "LegalCopyright", L"\x00a9 2002-2020 Robert Lipe"
+            VALUE "LegalCopyright", L"\x00a9 2002-2022 Robert Lipe"
             VALUE "OriginalFilename", "GPSBabelFE.exe"
             VALUE "ProductName", "GPSBabel"
             VALUE "ProductVersion", VER_PRODUCT_STR
