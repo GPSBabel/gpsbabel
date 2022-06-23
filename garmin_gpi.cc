@@ -53,11 +53,11 @@
 #define WAYPOINTS_PER_BLOCK  128
 
 /* flags used in the gpi address mask */
-#define GPI_ADDR_CITY       1
-#define GPI_ADDR_COUNTRY     2
-#define GPI_ADDR_STATE       4
-#define GPI_ADDR_POSTAL_CODE 8
-#define GPI_ADDR_ADDR      16
+#define GPI_ADDR_CITY         1
+#define GPI_ADDR_COUNTRY      2
+#define GPI_ADDR_STATE        4
+#define GPI_ADDR_POSTAL_CODE  8
+#define GPI_ADDR_ADDR        16
 
 #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
