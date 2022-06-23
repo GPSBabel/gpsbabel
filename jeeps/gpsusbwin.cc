@@ -27,11 +27,11 @@
 #include <setupapi.h>
 #include <winioctl.h>
 
-#include "../garmin_device_xml.h"
-#include "garminusb.h"
-#include "gps.h"
-#include "gpsapp.h"
-#include "gpsusbcommon.h"
+#include "garmin_device_xml.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsapp.h"
+#include "jeeps/gpsusbcommon.h"
 
 /* Constants from Garmin doc. */
 

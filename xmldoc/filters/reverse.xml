@@ -1,5 +1,5 @@
 
-         
+
          <para> The reverse filter is used to reverse tracks and routes.
 	It's mostly useful for those few formats where track/route
 	sequence matters and there isn't a way to reverse them using
@@ -16,4 +16,4 @@
          will be in for unpleasant ride. application cares about
          timestamps
 </para>
-      
+

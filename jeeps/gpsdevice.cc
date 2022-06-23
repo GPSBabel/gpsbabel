@@ -19,13 +19,13 @@
 
  */
 
-#include "gps.h"
-#include "gpsdevice.h"
-#include "gpsserial.h"
+#include "jeeps/gps.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsserial.h"
 
 extern gps_device_ops gps_serial_ops;
 extern gps_device_ops gps_usb_ops;
-gps_device_ops* ops = nullptr;
+static gps_device_ops* ops = nullptr;
 
 int32  GPS_Device_On(const char* port, gpsdevh** fd)
 {

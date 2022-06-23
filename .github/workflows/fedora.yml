@@ -17,7 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['32', '33']
+        # version 32, though obsolete, uses Qt 5.14 so we keep it for that.
+        version: ['32', '35']
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_f${{ matrix.version }}
       env:
@@ -29,4 +30,4 @@ jobs:
 
     - name: build_and_test
       run: |
-        ./build_and_test
+        ./tools/build_and_test.sh

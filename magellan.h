@@ -20,7 +20,7 @@
 #ifndef MAGELLAN_H_INCLUDED_
 #define MAGELLAN_H_INCLUDED_
 
-#include <QtCore/QString>
+#include <QString>
 #include "defs.h"
 
 /*

@@ -21,6 +21,7 @@
 //
 
 #include "filterwidgets.h"
+#include <limits>
 
 #include <QtCore/QChar>            // for QChar
 #include <QtWidgets/QCheckBox>     // for QCheckBox
@@ -218,7 +219,8 @@ RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(pa
 
   fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(rfd.simplify_, ui.simplifyCheck));
   fopts << QSharedPointer<BoolFilterOption>(new BoolFilterOption(rfd.reverse_, ui.reverseCheck));
-  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000));
+  fopts << QSharedPointer<IntSpinFilterOption>(new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, std::numeric_limits<int>::max()));
+
   setWidgetValues();
   checkChecks();
 }

@@ -23,22 +23,22 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "gps.h"
+#include "jeeps/gps.h"
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 
-#include <QtCore/QDateTime>
+#include <QDateTime>
 
 /*
  * This violates the layering design, but is needed for device discovery.
  * See the use of gps_is_usb and GPS_Packet_Read_usb below.
  */
-#include "garminusb.h"
-#include "gpsserial.h"
-#include "gpsusbint.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsserial.h"
+#include "jeeps/gpsusbint.h"
 
 time_t gps_save_time;
 double gps_save_lat;
@@ -329,7 +329,7 @@ static int32 GPS_A000(const char* port)
 
         // Garmin 276C serial - not USB - sees a zero here, so we changed
         // <= 0 to <0 on 2014-06-29 per Pierre Brial.
-         
+
         if (GPS_Packet_Read(fd, &rec) < 0) {
           goto carry_on;
         }
@@ -7590,7 +7590,7 @@ int32 GPS_Set_Baud_Rate(const char* port, int br)
 {
 
   gpsdevh* fd;
-  
+
   if (!GPS_Device_On(port, &fd)) {
     return gps_errno;
   }
@@ -7601,7 +7601,7 @@ int32 GPS_Set_Baud_Rate(const char* port, int br)
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
   }
-  
+
   return 0;
 
 }

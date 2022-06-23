@@ -19,8 +19,8 @@
 
  */
 
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QString>       // for operator<, QString
+#include <QDateTime>            // for QDateTime
+#include <QString>              // for operator<, QString
 
 #include "defs.h"
 #include "src/core/datetime.h"  // for DateTime
@@ -85,7 +85,7 @@ void SortFilter::process()
       fatal(MYNAME ": unknown waypoint sort mode.");
     }
   }
-  
+
   if (rte_sort_mode != SortModeRteHd::none) {
     switch (rte_sort_mode)  {
     case SortModeRteHd::description:

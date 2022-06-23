@@ -18,43 +18,49 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '5.12.10'
+          - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
+            METHOD: 'aqt'
             FLOW: 'nmake'
             RELEASE: true
-          - QT_VERSION: '5.12.10'
+          - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
+            METHOD: 'aqt'
             FLOW: 'msbuild'
             RELEASE: false
-          - QT_VERSION: '5.12.10'
+          - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
+            METHOD: 'aqt'
             FLOW: 'cmake'
             RELEASE: false
-          - QT_VERSION: '5.12.10'
+          - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
             VCVERSION: '14.16'
+            METHOD: 'aqt'
             FLOW: 'nmake'
             RELEASE: false
-          - QT_VERSION: '5.12.10'
+          - QT_VERSION: '5.12.12'
             ARCH: 'x86'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017'
+            METHOD: 'aqt'
             RELEASE: false
             FLOW: 'nmake'
-          - QT_VERSION: '5.12.10'
-            ARCH: 'x86'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017'
+          - QT_VERSION: '6.2.4'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2019_64'
+            METHOD: 'aqt'
             RELEASE: false
-            FLOW: 'msbuild'
+            FLOW: 'nmake'
 
     steps:
     - name: Checkout repository
@@ -62,16 +68,24 @@ jobs:
 
     - name: Cache Qt
       uses: actions/cache@v2
+      id: cache
       with:
         path: ~/Cache
         key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
 
+    - name: Install Qt setup(aqt)
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
     - name: Install Qt
+      if: steps.cache.outputs.cache-hit != 'true'
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }}
+        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }} ${{ matrix.METHOD }}
 
     - name: Build
       shell: powershell

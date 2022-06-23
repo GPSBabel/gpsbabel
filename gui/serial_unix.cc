@@ -18,97 +18,18 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include "mainwindow.h"
 
-#ifdef HAVE_UDEV
-#include <libudev.h>            // for udev_device_get_property_value, udev_device_get_devnode, udev_device_new_from_syspath, udev_device_unref, udev_enumerate_add_match_subsystem, udev_enumerate_get_list_entry, udev_enumerate_new, udev_enumerate_scan_devices, udev_enumerate_unref, udev_list_ent...
+#include <QComboBox>        // for QComboBox
+#include <QList>            // for QList
+#include <QSerialPortInfo>  // for QSerialPortInfo
 
-#include <QtCore/QDebug>        // for QDebug
-#include <QtCore/QSet>          // for QSet
-#include <QtCore/QString>       // for QString, operator==
-#include <QtCore/QStringList>   // for QStringList
-#include <QtWidgets/QComboBox>  // for QComboBox
+#include "mainwindow.h"     // for MainWindow
 
-#include "mainwindow.h"         // for MainWindow
-
-
-static QStringList dynamicDevices()
-{
-  struct udev* udev = udev_new();
-  if (!udev) {
-    qDebug() << "Can't create udev";
-    return QStringList();
-  }
-
-  QSet<QString> devices;
-
-  struct udev_enumerate* enumerate = udev_enumerate_new(udev);
-  udev_enumerate_add_match_subsystem(enumerate, "tty");
-  udev_enumerate_scan_devices(enumerate);
-
-  struct udev_list_entry* device;
-  udev_list_entry_foreach(device, udev_enumerate_get_list_entry(enumerate)) {
-    const char* path = udev_list_entry_get_name(device);
-    struct udev_device* dev = udev_device_new_from_syspath(udev, path);
-
-    bool okMaj;
-    bool okMin;
-    int major = QString(udev_device_get_property_value(dev, "MAJOR")).toInt(&okMaj);
-    int minor = QString(udev_device_get_property_value(dev, "MINOR")).toInt(&okMin);
-    if (!okMaj || !okMin) {
-      major = -1;
-      minor = -1;
-    }
-
-    // see Documentation/devices.txt in the linux tree
-    if (!((major == 4 || major == 5) && 0 <= minor && minor <= 63)) {
-      devices << QString::fromUtf8(udev_device_get_devnode(dev));
-      /*
-      udev_device_get_sysattr_list_entry(dev);
-      udev_device_get_tags_list_entry(dev);
-      struct udev_list_entry *prop;
-      qDebug() << "Device Node Path:" << udev_device_get_devnode(dev) << path;
-      udev_list_entry_foreach(prop, udev_device_get_properties_list_entry(dev)) {
-          qDebug() << "  " << udev_list_entry_get_name(prop)
-                   << "=>" << udev_list_entry_get_value(prop);
-      }
-      */
-    }
-    udev_device_unref(dev);
-  }
-  udev_enumerate_unref(enumerate);
-  udev_unref(udev);
-
-  QStringList list = devices.values();
-  list.sort();
-  return list;
-}
-#else
-static QStringList dynamicDevices()
-{
-  return QStringList();
-}
-#endif
-
-
-static const char* deviceNames[] = {
-  "/dev/ttyS0",
-  "/dev/ttyS1",
-  "/dev/ttyS2",
-  "/dev/ttyS3",
-  "/dev/ttyUSB0",
-  "/dev/rfcomm0",
-  nullptr
-};
 
 void MainWindow::osLoadDeviceNameCombos(QComboBox* box)
 {
-  const QStringList devices = dynamicDevices();
-  box->addItems(devices);
-
-  for (int i=0; deviceNames[i] != nullptr; i++) {
-    if (!devices.contains(deviceNames[i])) {
-      box->addItem(deviceNames[i]);
-    }
+  const auto ports = QSerialPortInfo::availablePorts();
+  for (const auto& info : ports) {
+    box->addItem(info.systemLocation());
   }
 }

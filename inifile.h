@@ -21,9 +21,8 @@
 #ifndef HAVE_INIFILE_H
 #define HAVE_INIFILE_H
 
-#include <QtCore/QHash>    // for QHash
-#include <QtCore/QList>    // for QList
-#include <QtCore/QString>  // for QString
+#include <QHash>           // for QHash
+#include <QString>         // for QString
 
 class InifileSection;
 struct inifile_t {

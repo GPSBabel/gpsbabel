@@ -18,7 +18,6 @@
 
 
 #include "preferences.h"
-#include "../gbversion.h"
 
 class FormatListEntry : public QListWidgetItem
 {
@@ -44,10 +43,6 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
-  // Because of an unfortunate bug in 1.4.0, we turn this off in 1.4.1.
-  if (VERSION == QString("1.4.1")) {
-    babelData_.ignoreVersionMismatch_ = false;
-  }
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
   connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &Preferences::rejectClicked);

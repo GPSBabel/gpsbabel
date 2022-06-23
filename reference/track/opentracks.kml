@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"
+xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name><![CDATA[Wurmlinger Kapelle]]></name>
+<Placemark>
+<name><![CDATA[Wurmlinger Kapelle]]></name>
+<gx:MultiTrack>
+<altitudeMode>absolute</altitudeMode>
+<gx:interpolate>1</gx:interpolate>
+<gx:Track>
+<when>2021-03-02T09:30:40.993Z</when>
+<when>2021-03-02T09:30:41.890Z</when>
+<when>2021-03-02T12:34:53.912Z</when>
+<when>2021-03-02T12:34:54.693Z</when>
+<gx:coord/>
+<gx:coord>8.970803 48.503537 405.01373291015625</gx:coord>
+<gx:coord>8.970829 48.503623 401.119873046875</gx:coord>
+<gx:coord/>
+</gx:Track>
+</gx:MultiTrack>
+</Placemark>
+</Document>
+</kml>

@@ -24,9 +24,9 @@
 #include <cstdint>
 #include <ctime>                  // for gmtime
 
-#include <QtCore/QDateTime>       // for QDateTime
-#include <QtCore/QString>         // for QString, operator!=, operator==
-#include <QtCore/QVector>         // for QVector
+#include <QDateTime>              // for QDateTime
+#include <QString>                // for QString, operator!=, operator==
+#include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format

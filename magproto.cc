@@ -27,20 +27,20 @@
 #include <cstdlib>                 // for atoi, atof, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QDir>             // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
-#include <QtCore/QFileInfo>        // for QFileInfo
-#include <QtCore/QFileInfoList>    // for QFileInfoList
-#include <QtCore/QLatin1String>    // for QLatin1String
-#include <QtCore/QList>            // for QList
-#include <QtCore/QScopedPointer>   // for QScopedPointer
-#include <QtCore/QString>          // for QString, operator==
-#include <QtCore/QStringList>      // for QStringList
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable, foreach
+#include <QByteArray>              // for QByteArray
+#include <QDateTime>               // for QDateTime
+#include <QDir>                    // for QDir, operator|, QDir::Files, QDir::Name, QDir::Readable
+#include <QFileInfo>               // for QFileInfo
+#include <QFileInfoList>           // for QFileInfoList
+#include <QLatin1String>           // for QLatin1String
+#include <QList>                   // for QList
+#include <QScopedPointer>          // for QScopedPointer
+#include <QString>                 // for QString, operator==
+#include <QStringList>             // for QStringList
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
 #include "explorist_ini.h"         // for explorist_ini_done, explorist_ini_get, mag_info
@@ -1049,10 +1049,14 @@ mag_rteparse(char* rtemsg)
   QString rte_name;
   if (explorist) {
     char* ca = rtemsg + n;
-    is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (*ca++ != ',') {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     char* ce = strchr(ca, ',');
-    is_fatal(ce == nullptr, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    if (ce == nullptr) {
+      fatal(MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    }
 
     if (ca == ce) {
       rte_name = "Route";
@@ -1409,7 +1413,7 @@ void mag_track_disp(const Waypoint* waypointp)
 
   double ilat = waypointp->latitude;
   double ilon = waypointp->longitude;
-  
+
   QByteArray dmy("");
   QByteArray hms("");
   if (waypointp->creation_time.isValid()) {
@@ -1471,7 +1475,7 @@ mag_route_trl(const route_head* rte)
   QString icon_token;
 
   /* count waypoints for this route */
-  int i = rte->rte_waypt_ct;
+  int i = rte->rte_waypt_ct();
 
   /* number of output PMGNRTE messages at 2 points per line */
   int numlines = (i / 2) + (i % 2);
@@ -1590,8 +1594,7 @@ ff_vecs_t mag_svecs = {
   nullptr,
   &mag_sargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1606,8 +1609,7 @@ ff_vecs_t mag_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };
 
 /*
@@ -1625,6 +1627,5 @@ ff_vecs_t magX_fvecs = {
   nullptr,
   &mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr,
+  NULL_POS_OPS
 };

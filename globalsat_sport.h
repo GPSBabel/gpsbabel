@@ -39,9 +39,9 @@
 
 #include <cstdint>           // for uint32_t, uint8_t, uint16_t, int16_t
 
-#include <QtCore/QString>    // for QString
-#include <QtCore/QTimeZone>  // for QTimeZone
-#include <QtCore/QVector>    // for QVector
+#include <QString>           // for QString
+#include <QTimeZone>         // for QTimeZone
+#include <QVector>           // for QVector
 
 #include "defs.h"
 #include "format.h"          // for Format
@@ -255,4 +255,4 @@ private:
     {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   };
 };
-#endif // GPX_H_INCLUDED_
+#endif // GLOBALSATSPORT_H_INCLUDED_

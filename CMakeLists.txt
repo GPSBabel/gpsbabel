@@ -1,108 +1,214 @@
+cmake_minimum_required(VERSION 3.11)
 
-# It isn't clear what the minimum required version is.
-# tested against 3.10.2 on ubuntu bionic 2018/07/05
-# tested against 3.5.1 on ubuntu xenial 2018/07/05
-# tested against MSVC 2017 which included 3.11.* 2018/07/05
-cmake_minimum_required(VERSION 3.5.1)
+include(CMakeDependentOption)
+include(CheckIncludeFile)
 
-project(gpsbabel LANGUAGES C CXX)
+include(gbversion.cmake)
+project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Do this after we set up common variables but before creating other
+# variables that will be inherited.
+add_subdirectory(gui)
+
+# FIXME: When we rearrange the project directory structure everything
+# below here should be in it's own CMakeList.txt
+
+configure_file(gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Handle the Qt rcc code generator automatically
+set(CMAKE_AUTORCC ON)
 
-# Find the Qt5Core library
-find_package(Qt5 COMPONENTS Core REQUIRED)
-if(${Qt5Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt5Core_VERSION} found, but version 5.9 or newer is required.")
+add_executable(gpsbabel)
+
+# Find the QtCore library
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
-  message(STATUS "Using Qt5 version ${Qt5Core_VERSION}")
+  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
+endif()
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
+  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
+option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
+if (GPSBABEL_ENABLE_PCH)
+  target_precompile_headers(gpsbabel PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
+  )
+endif()
+
+# RESOURCES
+set(RESOURCES gpsbabel.qrc)
+
+# MINIMAL_FMTS
 set(MINIMAL_FMTS
-  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc garmin.cc
-  garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc
-  kml.cc wbt-200.cc
+  explorist_ini.cc
+  garmin.cc
+  garmin_device_xml.cc
+  garmin_tables.cc
+  geo.cc
+  gpx.cc
+  kml.cc
+  magproto.cc
+  nmea.cc
+  wbt-200.cc
 )
 
-set(ALL_FMTS
-  ${MINIMAL_FMTS} gtm.cc gpsutil.cc pcx.cc
-  skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc
-  xcsv.cc tiger.cc easygps.cc
-  saroute.cc navicache.cc delgpl.cc
-  ozi.cc text.cc html.cc netstumbler.cc
-  igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc
-  vcf.cc lowranceusr.cc an1.cc tomtom.cc
-  tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc
-  ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc
-  yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc
-  stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc
-  ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc
-  navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc
-  igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc
-  jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc
-  pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc
-  vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc
-  subrip.cc garmin_xt.cc garmin_fit.cc
-  mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc
-  energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc qstarz_bl_1000.cc
+# ALL_FMTS
+set(ALL_FMTS ${MINIMAL_FMTS}
+  brauniger_iq.cc
+  dg-100.cc
+  exif.cc
+  garmin_fit.cc
+  garmin_gpi.cc
+  garmin_txt.cc
+  garmin_xt.cc
+  gdb.cc
+  geojson.cc
+  globalsat_sport.cc
+  gpssim.cc
+  gtm.cc
+  gtrnctr.cc
+  holux.cc
+  html.cc
+  humminbird.cc
+  igc.cc
+  lowranceusr.cc
+  mtk_logger.cc
+  navilink.cc
+  osm.cc
+  ozi.cc
+  qstarz_bl_1000.cc
+  random.cc
+  sbn.cc
+  sbp.cc
+  shape.cc
+  skytraq.cc
+  subrip.cc
+  text.cc
+  tpg.cc
+  tpo.cc
+  unicsv.cc
+  v900.cc
+  vcf.cc
+  xcsv.cc
 )
 
-#DEPRECATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc psitrex.cc
+# ALL_FMTS = $$MINIMAL_FMTS
 
-#DEPRECATED_HEADERS=geo.h quovadis.h
-#DEPRECATED_SHAPE=pdbfile.cc
-
-# ALL_FMTS=$$MINIMAL_FMTS
+# FILTERS
 set(FILTERS
-  position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc
-  reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc
-  nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc
+  arcdist.cc
+  bend.cc
+  discard.cc
+  duplicate.cc
+  height.cc
+  interpolate.cc
+  nukedata.cc
+  polygon.cc
+  position.cc
+  radius.cc
+  resample.cc
+  reverse_route.cc
+  smplrout.cc
+  sort.cc
+  stackfilter.cc
+  swapdata.cc
+  trackfilter.cc
+  transform.cc
   validate.cc
 )
 
-set(SHAPE
-  shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
-)
-
-set(ZLIB
-  zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c
-  zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c
-  zlib/uncompr.c zlib/gzlib.c zlib/gzclose.c zlib/gzread.c
-  zlib/gzwrite.c zlib/zutil.c
-)
-
+# JEEPS
 set(JEEPS
-  jeeps/gpsapp.cc jeeps/gpscom.cc
-  jeeps/gpsmath.cc jeeps/gpsmem.cc
-  jeeps/gpsprot.cc jeeps/gpsread.cc
-  jeeps/gpsdevice.cc jeeps/gpsdevice_ser.cc jeeps/gpsdevice_usb.cc
-  jeeps/gpsrqst.cc jeeps/gpssend.cc jeeps/gpsserial.cc jeeps/jgpsutil.cc
-  jeeps/gpsusbread.cc jeeps/gpsusbsend.cc
+  jeeps/gpsapp.cc
+  jeeps/gpscom.cc
+  jeeps/gpsdevice.cc
+  jeeps/gpsdevice_ser.cc
+  jeeps/gpsdevice_usb.cc
+  jeeps/gpsmath.cc
+  jeeps/gpsmem.cc
+  jeeps/gpsprot.cc
+  jeeps/gpsread.cc
+  jeeps/gpsrqst.cc
+  jeeps/gpssend.cc
+  jeeps/gpsserial.cc
   jeeps/gpsusbcommon.cc
+  jeeps/gpsusbread.cc
+  jeeps/gpsusbsend.cc
+  jeeps/jgpsutil.cc
 )
 
+# SUPPORT
 set(SUPPORT
-  route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc
-  csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc
-  formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc
-  inifile.cc garmin_fs.cc units.cc gbser.cc
-  gbfile.cc parse.cc session.cc main.cc globals.cc
+  cet_util.cc
+  csv_util.cc
+  fatal.cc
+  filter_vecs.cc
+  formspec.cc
+  garmin_fs.cc
+  gbfile.cc
+  gbser.cc
+  globals.cc
+  grtcirc.cc
+  inifile.cc
+  main.cc
+  mkshort.cc
+  parse.cc
+  rgbcolors.cc
+  route.cc
+  session.cc
+  src/core/logging.cc
+  src/core/nvector.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
+  src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
+  strptime.c
+  units.cc
+  util.cc
+  util_crc.cc
+  vecs.cc
+  waypt.cc
+  xmlgeneric.cc
+  xmltag.cc
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
+endif()
 
+# HEADERS
 set(HEADERS
-  an1sym.h
-  cet.h
   cet_util.h
   csv_util.h
   defs.h
   dg-100.h
-  energympro.h
+  exif.h
   explorist_ini.h
   filter.h
   filter_vecs.h
@@ -117,15 +223,36 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
-  gbversion.h
+  gdb.h
   geojson.h
-  ggv_bin.h
   globalsat_sport.h
   gpx.h
   grtcirc.h
+  gtrnctr.h
   heightgrid.h
   holux.h
+  humminbird.h
+  html.h
   inifile.h
+  kml.h
+  legacyformat.h
+  lowranceusr.h
+  magellan.h
+  navilink.h
+  nmea.h
+  osm.h
+  random.h
+  session.h
+  shape.h
+  skytraq.h
+  strptime.h
+  subrip.h
+  text.h
+  unicsv.h
+  units.h
+  vecs.h
+  xcsv.h
+  xmlgeneric.h
   jeeps/garminusb.h
   jeeps/gps.h
   jeeps/gpsapp.h
@@ -144,77 +271,36 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
-  kml.h
-  legacyformat.h
-  lowranceusr.h
-  magellan.h
-  mapsend.h
-  mynav.h
-  navilink.h
-  nmea.h
-  osm.h
-  random.h
-  session.h
-  shape.h
-  shapelib/shapefil.h
-  strptime.h
-  subrip.h
-  unicsv.h
-  units.h
-  vecs.h
-  xcsv.h
-  xmlgeneric.h
-  yahoo.h
-  zlib/crc32.h
-  zlib/deflate.h
-  zlib/gzguts.h
-  zlib/inffast.h
-  zlib/inffixed.h
-  zlib/inflate.h
-  zlib/inftrees.h
-  zlib/trees.h
-  zlib/zconf.h
-  zlib/zlib.h
-  zlib/zutil.h
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
+  src/core/nvector.h
   src/core/textstream.h
   src/core/usasciicodec.h
+  src/core/vector3d.h
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
+if(${QT_VERSION_MAJOR} EQUAL "6")
+  set(HEADERS ${HEADERS} src/core/codecdevice.h)
+endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
 
-include_directories(AFTER zlib)
-
-include(CheckIncludeFile)
 if(UNIX)
-  # this is used by zlib
-  check_include_file("unistd.h" HAVE_UNISTD_H)
-  if(${HAVE_UNISTD_H})
-    add_definitions(-DHAVE_UNISTD_H)
-  endif()
-  # this is used by zlib
-  check_include_file("stdarg.h" HAVE_STDARG_H)
-  if(${HAVE_STDARG_H})
-    add_definitions(-DHAVE_STDARG_H)
-  endif()
-  add_definitions(-DHAVE_LIBUSB_1_0)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
-  set(JEEPS ${JEEPS} jeeps/gpslibusb.cc)
-  include_directories(AFTER jeeps)
-  add_compile_options(-O2 -Wall)
+  target_compile_options(gpsbabel PRIVATE -Wall)
 endif()
 
 if(WIN32)
-  add_definitions(-D__WIN32__ -D_CONSOLE)
-  remove_definitions(-DUNICODE -DZLIB_INHIBITED)
+  target_compile_definitions(gpsbabel PRIVATE __WIN32__)
+  if(${QT_VERSION_MAJOR} EQUAL "6")
+    qt_disable_unicode_defines(gpsbabel)
+  endif()
   if(CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(-D_DEBUG)
+    target_compile_definitions(gpsbabel PRIVATE _DEBUG)
   endif()
   set(SOURCES ${SOURCES} gbser_win.cc)
   set(HEADERS ${HEADERS} gbser_win.h)
@@ -224,64 +310,182 @@ if(WIN32)
 endif()
 
 if(MSVC)
-  add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
-  add_compile_options(/MP -wd4100 -wd4267)
-endif()
-
-if(UNIX AND NOT APPLE)
-  set(LIBS ${LIBS} usb-1.0)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 
 if(APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lobjc -framework IOKit -framework CoreFoundation")
-  include_directories(AFTER mac/libusb mac/libusb/Xcode)
-  set(SOURCES ${SOURCES}
-    mac/libusb/core.c
-    mac/libusb/descriptor.c
-    mac/libusb/hotplug.c
-    mac/libusb/io.c
-    mac/libusb/strerror.c
-    mac/libusb/sync.c
-    mac/libusb/os/darwin_usb.c
-    mac/libusb/os/poll_posix.c
-    mac/libusb/os/threads_posix.c
-  )
-  set(HEADERS ${HEADERS}
-    mac/libusb/hotplug.h
-    mac/libusb/libusb.h
-    mac/libusb/libusbi.h
-    mac/libusb/version.h
-    mac/libusb/version_nano.h
-    mac/libusb/os/darwin_usb.h
-    mac/libusb/os/poll_posix.h
-    mac/libusb/os/threads_posix.h
-  )
-  add_compile_options(-Wall -Wsign-compare)
+  target_compile_options(gpsbabel PRIVATE -Wall -Wsign-compare)
 endif()
+
+include(shapelib.cmake)
+include(zlib.cmake)
+include(libusb.cmake)
+
+set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
+list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
+set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")
+target_include_directories(gpsbabel PRIVATE ${GPSBABEL_EXTRA_INCLUDE_DIRECTORIES})
 
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
 )
 
+list(SORT SOURCES)
+list(SORT HEADERS)
+
+target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
+
 # We don't care about stripping things out of the build.  Full monty, baby.
-add_definitions(-DMAXIMAL_ENABLED)
-add_definitions(-DFILTERS_ENABLED)
-add_definitions(-DSHAPELIB_ENABLED)
-add_definitions(-DCSVFMTS_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
+target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
-add_executable(gpsbabel ${SOURCES} ${HEADERS})
-target_link_libraries(gpsbabel Qt5::Core ${LIBS})
+target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})
 
-message(STATUS "Sources are: \"${SOURCES}\"")
-message(STATUS "Headers are: \"${HEADERS}\"")
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
+get_target_property(Srcs gpsbabel SOURCES)
+message(STATUS "Sources are: \"${Srcs}\"")
+get_target_property(DirDefs gpsbabel COMPILE_DEFINITIONS)
 message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs gpsbabel LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
-get_directory_property(IncDirs INCLUDE_DIRECTORIES)
+get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+set(TESTS
+  arc-project
+  arc
+  batch
+  bend
+  classic-1
+  classic-2
+  classic-3
+  dg100
+  dop_filter
+  duplicate
+  exif
+  garmin_fit
+  garmin_g1000
+  garmin_gpi
+  garmin_txt
+  garmin_xt
+  gbfile
+  gdb
+  geojson
+  geo
+  globalsat_sport
+  gpsdrive
+  gpssim
+  gpx
+  grapheme
+  gtm
+  gtrnctr
+  height
+  holux
+  humminbird
+  iblue747
+  igc
+  interpolate
+  kml-read
+  kml
+  lowranceusr
+  magellan_sd
+  magellan
+  mtk
+  multiurlgpx
+  navilink
+  nmea
+  osm
+  ozi
+  polygon
+  position
+  qstarz_bl_1000
+  radius
+  realtime
+  resample
+  route_reverse
+  sbn
+  sbp
+  serialization
+  shape
+  simplify-relative
+  simplify
+  skytraq
+  sort
+  stackfilter
+  subrip
+  swap
+  text
+  tpg
+  tpo
+  track-discard
+  track
+  transform
+  unicsv_grids
+  unicsv
+  unitconversion
+  v900
+  validate_formats
+  validate
+  vcard
+  xcsv
+)
+
+list(SORT TESTS)
+
 if(UNIX)
-  # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
-  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/gpsbabel ./testo DEPENDS gpsbabel)
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
+  enable_testing()
+  foreach(TESTNAME IN LISTS TESTS)
+    add_test(NAME test-${TESTNAME}
+             COMMAND ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel> ${TESTNAME}
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            )
+  endforeach()
+endif()
+
+if(UNIX)
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
+  add_custom_target(check
+                    ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
+endif()
+if(UNIX AND NOT APPLE)
+  # This test only works if the pwd is top level source dir due to the
+  # file name getting embedded in the file nonexistent.err.
+  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
+  list(JOIN TESTS "\\n" VTESTS)
+  add_custom_target(check-vtesto
+                    printf "${VTESTS}" |
+                    xargs -P 3 -I TESTNAME ${CMAKE_SOURCE_DIR}/vtesto
+                    -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
+                    DEPENDS gpsbabel
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    VERBATIM)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+  add_custom_target(gpsbabel.org
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
+                    DEPENDS gpsbabel gpsbabel.pdf
+                    VERBATIM)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  add_custom_target(gpsbabel.html
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
+                    DEPENDS gpsbabel)
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  add_custom_target(gpsbabel.pdf
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
+                    DEPENDS gpsbabel)
 endif()

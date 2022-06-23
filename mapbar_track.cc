@@ -21,35 +21,40 @@
 
  */
 
-#include "defs.h"
-#include <QtCore/QDebug>
+#include "mapbar_track.h"
+
+#include <QChar>                // for QChar
+#include <QDate>                // for QDate
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+
+#include <cstdio>               // for SEEK_CUR
+
+#include "defs.h"               // for fatal, Waypoint, track_add_head, track_add_wpt, route_head
+#include "gbfile.h"             // for gbfgetint16, gbfgetint32, gbfseek, gbfclose, gbfopen
+#include "src/core/datetime.h"  // for DateTime
+
 
 #define MYNAME "mapbar_track"
-
-static gbfile* fin;
-
-static
-QVector<arglist_t> mapbar_track_args = {
-};
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-mapbar_track_rd_init(const QString& fname)
+void
+MapbarTrackFormat::rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
 
-static void
-mapbar_track_rd_deinit()
+void
+MapbarTrackFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-static gpsbabel::DateTime
-read_datetime()
+gpsbabel::DateTime
+MapbarTrackFormat::read_datetime() const
 {
   int hour = gbfgetint16(fin);
   int min = gbfgetint16(fin);
@@ -58,13 +63,11 @@ read_datetime()
   int mon = gbfgetint16(fin);
   int mday = gbfgetint16(fin);
   gpsbabel::DateTime t(QDate(year, mon, mday), QTime(hour, min, sec));
-// qDebug() << t;
   return t;
 }
 
-static const double DIV_RATE  = 100000.0f;
-static Waypoint*
-read_waypoint()
+Waypoint*
+MapbarTrackFormat::read_waypoint() const
 {
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
@@ -77,26 +80,25 @@ read_waypoint()
   return ret;
 }
 
-static void
-mapbar_track_read()
+void
+MapbarTrackFormat::read()
 {
   auto* track = new route_head;
-  is_fatal((track == nullptr), MYNAME ": memory non-enough");
   track_add_head(track);
 
   (void) read_datetime(); // start_time currently unused
   (void) read_datetime(); // end_time currently unused
 
-  ushort name[101];
+  QChar name[101];
   // read 100 UCS-2 characters that are each stored little endian.
   // note gbfread wouldn't get this right on big endian machines.
   for (int idx=0; idx<100; idx++) {
     name[idx] = gbfgetint16(fin);
   }
-  name[100] = 0;
+  name[100] = u'\0';
   // At this point, name is a UCS-2 encoded, zero terminated string.
   // All our internals use Qt encoding, so convert now.
-  track->rte_name = QString::fromUtf16(name);
+  track->rte_name = QString(name);
 
   // skip two pair waypoint
   gbfseek(fin, 8*4, SEEK_CUR);
@@ -106,15 +108,15 @@ mapbar_track_read()
   gbfseek(fin, 4, SEEK_CUR);
 
   int end_flag = gbfgetint32(fin);
-  for (;;) {
-    if (end_flag) {
-      break;
+  while (!end_flag) {
+    int length = gbfgetint32(fin);
+    if ((length < 1) || (length > 1600)) {
+      fatal(MYNAME ": get bad buffer length");
     }
 
-    int length = gbfgetint32(fin);
-    is_fatal((length < 1) || (length > 1600), MYNAME ": get bad buffer length");
-
-    is_fatal((length % 8 != 0), MYNAME ": bad buffer size");
+    if (length % 8 != 0) {
+      fatal(MYNAME ": bad buffer size");
+    }
     gbfseek(fin, 16, SEEK_CUR);
 
     const int amount = length/8;
@@ -126,22 +128,3 @@ mapbar_track_read()
     end_flag = gbfgetint32(fin);
   }
 }
-
-// capabilities below means: we can only read trackpoints.
-
-ff_vecs_t mapbar_track_vecs = {
-  ff_type_file,
-  { ff_cap_none, (ff_cap)(ff_cap_read), ff_cap_none },
-  mapbar_track_rd_init,
-  nullptr,
-  mapbar_track_rd_deinit,
-  nullptr,
-  mapbar_track_read,
-  nullptr,
-  nullptr,
-  &mapbar_track_args,
-  CET_CHARSET_UTF8, 0
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};

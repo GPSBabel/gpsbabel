@@ -24,9 +24,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 #if HAVE_LIBUSB_1_0
 #ifdef LIBUSB_H_INCLUDE
 // Warning: LIBUSB_H_INCLUDE necessarily includes bracket or double quote
@@ -35,19 +32,12 @@
 //          produced project file is invalid.  However, we don't use libusb
 //          at all on windows, so this isn't an issue in this application.
 #  include LIBUSB_H_INCLUDE
-#else  // TODO: delete this clause when configure is removed and CMakeLists updated.
-#  if __APPLE__
-// We use our own libusb.
-#    include "mac/libusb/libusb.h"
-#  else
-#    include <libusb-1.0/libusb.h>
-#  endif
 #endif
-#include "../defs.h"
-#include "garminusb.h"
-#include "gpsdevice.h"
-#include "gpsusbcommon.h"
-#include "../garmin_device_xml.h"
+#include "defs.h"
+#include "jeeps/garminusb.h"
+#include "jeeps/gpsdevice.h"
+#include "jeeps/gpsusbcommon.h"
+#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
@@ -338,7 +328,7 @@ garmin_usb_start(struct libusb_device* dev,
   if (ret != LIBUSB_SUCCESS) {
     fatal("libusb_set_configuration failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
-  };
+  }
 #endif
 
 #if 0

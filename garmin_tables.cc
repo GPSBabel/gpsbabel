@@ -22,10 +22,9 @@
 
 #include <cstdint>               // for int32_t
 #include <cstring>               // for strncpy, strchr, strlen, strncmp
-#include <QtCore/QChar>          // for operator==, QChar
-#include <QtCore/QDebug>         // for QDebug
-#include <QtCore/QStringRef>     // for QStringRef
-#include <QtCore/Qt>             // for CaseInsensitive
+#include <QChar>                 // for operator==, QChar
+#include <QDebug>                // for QDebug
+#include <Qt>                    // for CaseInsensitive
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"       // for GPS_Lookup_Datum_Index, GPS_Math_Get_Datum_Name
@@ -481,7 +480,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
       base = 7680;
     }
     if (base) {
-      n = desc.midRef(7).toInt();
+      n = desc.mid(7).toInt();
       return n + base;
     }
   }

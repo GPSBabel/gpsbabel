@@ -1,5 +1,5 @@
-#include <QtCore/QString>
-#include <QtCore/QRegexp>
+#include <QString>
+#include <QRegexp>
 
 #include "shortname.h"
 

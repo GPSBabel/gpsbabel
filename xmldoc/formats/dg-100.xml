@@ -1,11 +1,11 @@
 <para>
-  Serial download protocol for the <productname>GlobalSat DG-100</productname>, 
-  <productname> GlobalSat BT-335</productname>, 
+  Serial download protocol for the <productname>GlobalSat DG-100</productname>,
+  <productname> GlobalSat BT-335</productname>,
   and <productname>GlboalSat BT-338X</productname>GPS data loggers.
 </para>
 <para>
-  While the DG-100 has a button to record waypoints, they seem to be indistinguishable 
-  from trackpoints. Therefore, all points will be presented as trackpoints, 
+  While the DG-100 has a button to record waypoints, they seem to be indistinguishable
+  from trackpoints. Therefore, all points will be presented as trackpoints,
   regardless of whether they were recorded automatically or manually.
 </para>
 <para>

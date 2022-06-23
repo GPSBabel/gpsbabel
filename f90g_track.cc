@@ -26,32 +26,32 @@
 
  */
 
-#include "defs.h"
-#include "gbfile.h"
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
+#include "f90g_track.h"
+
+#include <QDate>      // for QDate
+#include <QDateTime>  // for QDateTime
+#include <QFileInfo>  // for QFileInfo
+#include <QTime>      // for QTime
+#include <Qt>         // for UTC
+
+#include <cstdio>     // for sscanf, snprintf, SEEK_SET
+#include <cstring>    // for memcmp
+
+#include "defs.h"     // for fatal, Waypoint, track_add_head, track_add_wpt, route_head
+#include "gbfile.h"   // for gbfread, gbfclose, gbfopen, gbfseek
+
 
 #define MYNAME "f90g_track"
 #define TTRECORDSIZE      249
 #define HEADERRECORDSIZE  30
 #define FLIPEDBITS        0xaa
-
-
-
-static gbfile* fin = nullptr;
-static route_head* track = nullptr;
-
-
-static
-QVector<arglist_t> f90g_track_args = {
-};
+#define VALIDHEADER "MEDIA 1."
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
-#define VALIDHEADER "MEDIA 1."
-static void
-f90g_track_rd_init(const QString& fname)
+void
+F90gTrackFormat::rd_init(const QString& fname)
 {
   char header[HEADERRECORDSIZE];
 
@@ -69,29 +69,26 @@ f90g_track_rd_init(const QString& fname)
     }
     // start the track list
     track = new route_head;
-    is_fatal((track == nullptr), MYNAME ": memory non-enough");
     track->rte_name = QFileInfo(fname).fileName();
     track_add_head(track);
   }
 }
 
-static void
-f90g_track_rd_deinit()
+void
+F90gTrackFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-// needed conversion factors
-static const double MIN_PER_DEGREE  = 600000.0f;
-static const float  SPEED_CONVERSION = (10.0f)/(36.0f); // convert KPH to meters per second
-
-static void
-f90g_track_read()
+void
+F90gTrackFormat::read()
 {
   char northSouth, eastWest, velocityMark, ttRec[TTRECORDSIZE], tempBuf[20];
   int year, mon, mday, hour, min, sec, latitudeDeg, latitudeMin, longitudeDeg, longitudeMin, velocity;
 
-  is_fatal((track == nullptr), MYNAME "Track setup error");
+  if (track == nullptr) {
+    fatal(MYNAME "Track setup error");
+  }
   for (;;) {
     if ((gbfread((void*)ttRec, 1, 2, fin) != 2)
         || (memcmp(ttRec,"TT",2))) {
@@ -138,22 +135,3 @@ f90g_track_read()
     }
   }
 }
-
-// capabilities below means: we can only read trace file.
-
-ff_vecs_t f90g_track_vecs = {
-  ff_type_file,
-  { ff_cap_none, (ff_cap)(ff_cap_read), ff_cap_none },
-  f90g_track_rd_init,
-  nullptr,
-  f90g_track_rd_deinit,
-  nullptr,
-  f90g_track_read,
-  nullptr,
-  nullptr,
-  &f90g_track_args,
-  CET_CHARSET_UTF8, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
-};

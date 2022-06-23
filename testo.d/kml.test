@@ -71,7 +71,7 @@ compare ${REFERENCE}/realtime.kml ${TMPDIR}/realtime.kml
 
 if [ "${RUNNINGVALGRIND}" != "0" ]; then
   set -e
-  if which xmllint > /dev/null;
+  if command -v xmllint > /dev/null;
   then
     KMLS=$(find ${REFERENCE} -name \*.kml)
     for f in $KMLS

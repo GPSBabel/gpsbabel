@@ -36,15 +36,15 @@
 #include <cstdlib>                     // for abs
 #include <cstring>                     // for memcpy, memcmp, strcmp
 
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QList>                // for QList
-#include <QtCore/QScopedArrayPointer>  // for QScopedArrayPointer
-#include <QtCore/QString>              // for QString
-#include <QtCore/QTime>                // for QTime
-#include <QtCore/Qt>                   // for TextDate, UTC
-#include <QtCore/QtGlobal>             // for qPrintable
+#include <QByteArray>                  // for QByteArray
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QList>                       // for QList
+#include <QScopedArrayPointer>         // for QScopedArrayPointer
+#include <QString>                     // for QString
+#include <QTime>                       // for QTime
+#include <Qt>                          // for TextDate, UTC
+#include <QtGlobal>                    // for qPrintable
 
 #include "defs.h"
 #include "dg-100.h"
@@ -609,6 +609,10 @@ Dg100Format::dg100_getfiles() const
   const QList<int> headers = dg100_getfileheaders();
   for (int filenum : headers) {
     dg100_getfile(filenum, &track);
+    if (global_opts.verbose_status) {
+      waypt_status_disp(headers.size(), filenum);
+    }
+
   }
   /* Different DG-100 devices seem to return different numbers of bytes
    * from the getconfig command.  This can result in a mismatched checksum,

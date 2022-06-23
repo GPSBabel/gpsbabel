@@ -24,10 +24,10 @@
 
 #include <tuple>                        // for tuple, make_tuple, tie
 
-#include <QtCore/QList>                 // for QList
-#include <QtCore/QString>               // for QString, QStringLiteral, operator+, operator!=
-#include <QtCore/QVector>               // for QVector
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QList>                        // for QList
+#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
+#include <QVector>                      // for QVector
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"
@@ -100,6 +100,21 @@ private:
   /* Constants */
   static constexpr const char* default_precision = "6";
   static constexpr int kml_color_limit = 204;	/* allowed range [0,255] */
+
+  static constexpr const char* kml_tags_to_ignore[] = {
+    "kml",
+    "Document",
+    "Folder",
+    nullptr
+  };
+
+  static constexpr const char* kml_tags_to_skip[] = {
+    "Camera",
+    "LookAt",
+    "styleUrl",
+    "snippet",
+    nullptr
+  };
 
   // Multitrack ids to correlate Schema to SchemaData
   static constexpr const char* kmt_heartrate = "heartrate";
@@ -329,9 +344,6 @@ private:
     {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/MultiTrack/Track/when"}, // KML 2.3
     {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/MultiTrack/Track/coord"} // KML 2.3
   };
-
-  static const char* kml_tags_to_ignore[];
-  static const char* kml_tags_to_skip[];
 
   // The TimeSpan/begin and TimeSpan/end DateTimes:
   gpsbabel::DateTime wpt_timespan_begin, wpt_timespan_end;

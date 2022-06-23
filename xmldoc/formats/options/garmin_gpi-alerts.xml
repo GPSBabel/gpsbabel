@@ -4,8 +4,8 @@
    values are in kilometers per hour.
 </para>
 <para>
-   Proximity distance is also supported by <link linkend="fmt_gpx">GPX</link>, <link linkend="fmt_gdb">Garmin GDB</link>, <link linkend="fmt_ozi">OZI Explorer</link>, 
-   <link linkend="fmt_compegps">CompeGPS</link> and <link linkend="fmt_unicsv">Universal CSV</link>.
+   Proximity distance is also supported by <link linkend="fmt_gpx">GPX</link>, <link linkend="fmt_gdb">Garmin GDB</link>, <link linkend="fmt_ozi">OZI Explorer</link>,
+    and <link linkend="fmt_unicsv">Universal CSV</link>.
 </para>
 <para>
   <userinput>

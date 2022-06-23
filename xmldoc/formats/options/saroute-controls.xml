@@ -7,4 +7,4 @@ named 'control points' containing just the control points in order.
 Note that if your goal is to create an arc or other CSV file, you
 should use 'none' (or not use this option, which is the same
 thing.)</para>
-    
+

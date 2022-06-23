@@ -1,0 +1,5 @@
+rm -f ${TMPDIR}/GCGCA8.vcf
+
+gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o vcard -F ${TMPDIR}/GCGCA8.vcf
+compare ${TMPDIR}/GCGCA8.vcf ${REFERENCE}/gc/GCGCA8~vcard.vcf
+

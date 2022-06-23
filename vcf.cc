@@ -64,15 +64,16 @@ vcf_print_utf(const utf_string* s)
     return;
   }
 
-  char* stripped_html = strip_html(s);
-  char* p = gstrsub(stripped_html, "\n", "\\n");
-  char* p2 = gstrsub(p, "<p>", "\\n");
-  char* p3 = gstrsub(p2, ";", "\\;");
-  gbfputs(p3, file_out);
-  xfree(p);
-  xfree(p2);
-  xfree(p3);
-  xfree(stripped_html);
+  char *string = strip_html(s);
+  QString stripped_html = string;
+  xfree(string);
+
+  stripped_html.replace("\n", "\\n", Qt::CaseInsensitive);
+  stripped_html.replace("<p>", "\\n", Qt::CaseInsensitive);
+  stripped_html.replace(";", "\\;");
+  stripped_html.replace(",", "\\,");
+
+  gbfputs(stripped_html, file_out);
 }
 
 static void
@@ -82,9 +83,10 @@ vcf_print(const char* s)
     return;
   }
 
-  char* p = gstrsub(s, "\n", "\\n");
-  gbfputs(p, file_out);
-  xfree(p);
+  QString cleaned = s;
+  cleaned.replace("\n", "\\n", Qt::CaseInsensitive);
+  cleaned.replace(",", "\\,");
+  gbfputs(cleaned, file_out);
 }
 
 static void
@@ -117,7 +119,7 @@ vcf_disp(const Waypoint* wpt)
     QString s = rot13(wpt->gc_data->hint);
     vcf_print(s);
   } else {
-    vcf_print(CSTR(wpt->gc_data->hint));
+    vcf_print(wpt->gc_data->hint);
   }
 
   gbfprintf(file_out, "\nEND:VCARD\n");
@@ -143,6 +145,5 @@ ff_vecs_t vcf_vecs = {
   nullptr,
   &vcf_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  , NULL_POS_OPS
 };

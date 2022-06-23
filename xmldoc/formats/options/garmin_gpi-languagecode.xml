@@ -21,7 +21,7 @@ option to specify which language to use.
   <title>Example for specifying language with a garmin points of interest dual language file.</title>
   <para>
     <userinput>
-      gpsbabel -i garmin_gpi,languagecode=EN -f reference/spb_metro_norm.gpi 
+      gpsbabel -i garmin_gpi,languagecode=EN -f reference/spb_metro_norm.gpi
     </userinput>
     could produce the following output:
     <simplelist type="vert">

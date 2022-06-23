@@ -10,8 +10,8 @@ gpsbabel -t -w -i garmin,baud=115200 -f /dev/ttyUSB0 -o gpx -F garmin-serial.gpx
 </para>
 
 <para>
-At the end of the transfer, baud rate is switched to back to the default 
-of 9600. If connection breaks, the unit stucks at high baud rate, a power 
+At the end of the transfer, baud rate is switched to back to the default
+of 9600. If connection breaks, the unit stucks at high baud rate, a power
 cycle reverts to original state.
 </para>
 
@@ -21,7 +21,7 @@ This option does not affect USB transfer.
 
 <para>
 Because this feature uses undocumented Garmin protocols, it may or may
-not work on your device.  The author reported success with 
+not work on your device.  The author reported success with
 eTrex Vista, GPSMAP 76s, and GPS V, but it seems likely to be problematic
 on older units and may be more problematic for writing to the device than
 reading data from the device.

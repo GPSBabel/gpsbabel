@@ -21,15 +21,16 @@
 //
 
 #include "aboutdlg.h"
-#include <QtGui/QTextCursor>          // for QTextCursor
-#include <QtGui/QTextDocument>        // for QTextDocument
-#include <QtWidgets/QTextEdit>        // for QTextEdit
+#include <QTextCursor>                // for QTextCursor
+#include <QTextDocument>              // for QTextDocument
+#include <QTextEdit>                  // for QTextEdit
 #include "appname.h"                  // for appName
 #include "upgrade.h"                  // for UpgradeCheck
 
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
-                   const QString& ver2, const QString& installationId): QDialog(parent)
+                   const QString& ver2, const QString& ver3,
+                   const QString& installationId): QDialog(parent)
 {
   ui_.setupUi(this);
   QTextDocument* doc = ui_.textEdit->document();
@@ -38,6 +39,11 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
   tt.replace("$appname$", appName);
   tt.replace("$babelversion$", ver1);
   tt.replace("$babelfeversion$", ver2);
+  if (ver3.isEmpty()) {
+    tt.replace("$hash$", "");
+  } else {
+    tt.replace("$hash$", "Hash: " + ver3);
+  }
   tt.replace("$installationId$", installationId);
 
   // Not localized as it should never be seen.

@@ -1,7 +1,7 @@
 <para>
-  If this option is specified, GPSBabel drops all calculated route points, 
+  If this option is specified, GPSBabel drops all calculated route points,
   with exception of points with a description (i.e. "Make U-turns until you know where you are.").
-  The priority of this option is higher than of the <option>via</option> and <option>dropwpt</option> options. 
+  The priority of this option is higher than of the <option>via</option> and <option>dropwpt</option> options.
   A value of 1 or y overwrites the <option>via</option> and <option>dropwpt</option> settings.
 </para>
 <example id="gdb_roadbook_option">
@@ -14,6 +14,6 @@
   <para>
     Because gdb internally creates a route AND a waypoint list, you have to drop all
     waypoints and transform the route into waypoints in order to get a well ordered
-    html output. We suggest these steps for all waypoint-only formats as html. 
+    html output. We suggest these steps for all waypoint-only formats as html.
   </para>
 </example>

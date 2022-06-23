@@ -24,7 +24,7 @@
 
   typedef struct gpsdevh gpsdevh;
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
 #define usecDELAY 180000	/* Microseconds before GPS sends A001 */
 
@@ -59,4 +59,4 @@
     gps_device_op12 Write_Packet;
   } gps_device_ops;
 
-#endif /* gpsdevice.h */
+#endif /* gpsdevice_h */

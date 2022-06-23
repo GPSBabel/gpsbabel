@@ -14,7 +14,7 @@ jobs:
     name: macos release Build
     runs-on: macos-latest
     env:
-      QT_VERSION: '5.12.10'
+      QT_VERSION: '5.12.12'
 
     steps:
     - name: Checkout repository
@@ -22,15 +22,23 @@ jobs:
 
     - name: Cache Qt
       uses: actions/cache@v2
+      id: cache
       with:
         path: ~/Cache
         key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
 
+    - name: Qt install setup
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
     - name: Qt install
+      if: steps.cache.outputs.cache-hit != 'true'
       env:
         TRAVIS_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${QT_VERSION} installer
+        ./tools/travis_install_osx ${QT_VERSION} aqt
 
     - name: Script
       run: |
@@ -54,7 +62,7 @@ jobs:
       with:
         name: MacOS_Installer
         path: gui/GPSBabel-*.dmg
-        retention-days: 14
+        retention-days: 7
 
   macos_edge:
     name: macos edge Build
@@ -83,5 +91,55 @@ jobs:
     - name: Script
       run: |
         source ${HOME}/Cache/qt-${QT_VERSION}.env
-        sudo xcode-select --switch /Applications/Xcode_12.1.1.app
+        sudo xcode-select --switch /Applications/Xcode_12.4.app
         ./tools/travis_script_osx
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS_Installer_Edge
+        path: gui/GPSBabel-*.dmg
+        retention-days: 7
+
+  macos_qt6:
+    name: macos Qt6 Build
+    runs-on: macos-latest
+    env:
+      QT_VERSION: '6.2.4'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Qt
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+
+    - name: Qt install setup
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Qt install
+      if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+      run: |
+        ./tools/travis_install_osx ${QT_VERSION} aqt
+
+    - name: Script
+      run: |
+        source ${HOME}/Cache/qt-${QT_VERSION}.env
+        sudo xcode-select --switch /Applications/Xcode_12.5.1.app
+        ./tools/travis_script_osx
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v2
+      with:
+        name: MacOS_Installer_Qt6
+        path: gui/GPSBabel-*.dmg
+        retention-days: 7

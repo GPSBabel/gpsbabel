@@ -21,14 +21,11 @@
 #ifndef FORMSPEC_H_INCLUDED_
 #define FORMSPEC_H_INCLUDED_
 
-#include <QtCore/QList>  // for QList
+#include <QList>         // for QList
 
 enum FsType {
   kFsUnknown = 0L,
   kFsGpx = 0x67707800L,
-  kFsAn1W = 0x616e3177L,
-  kFsAn1L = 0x616e316cL,
-  kFsAn1V = 0x616e3176L,
   kFsOzi = 0x6f7a6900L,
   kFsGmsd = 0x474d5344L,	/* GMSD = Garmin specific data */
   kFsQstarzBl1000 = 0x5173747aL,

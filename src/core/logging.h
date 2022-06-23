@@ -22,8 +22,8 @@
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
-#include <QtCore/QDebug>     // for QDebug
-#include <QtCore/QtGlobal>   // for QtCriticalMsg, QtWarningMsg
+#include <QDebug>            // for QDebug
+#include <QtGlobal>          // for QtCriticalMsg, QtWarningMsg
 
 
 class Warning : public QDebug
@@ -41,7 +41,7 @@ public:
  *    tools such as cppcheck.
  * 2) allows fatal to throw an exception instead of calling exit.
  *    This could be caught by main for a cleaner exit from a fatal error.
- */ 
+ */
 class FatalMsg : public QDebug
 {
 public:
@@ -49,4 +49,34 @@ public:
   explicit FatalMsg() : QDebug(QtCriticalMsg) {}
 };
 
+class DebugIndent
+{
+public:
+  explicit DebugIndent(int l) : level(l) {}
+
+  int level;
+};
+
+QDebug operator<< (QDebug debug, const DebugIndent& indent);
+
+class Debug : public QDebug
+{
+public:
+  Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
+  explicit Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
+};
+
+/*
+ * Kludge any used QTextStream modifiers into Qt namespace as they are in newer
+ * versions of Qt.  This makes source compatiblity easier.
+ */
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+namespace Qt
+{
+  inline QTextStream& dec(QTextStream &s) { return ::dec(s); }
+  inline QTextStream& hex(QTextStream &s) { return ::hex(s); }
+  inline QTextStream& endl(QTextStream &s) { return ::endl(s); }
+  inline QTextStream& uppercasedigits(QTextStream &s) { return ::uppercasedigits(s); }
+}
+#endif
 #endif //  gpsbabel_logging_h_included

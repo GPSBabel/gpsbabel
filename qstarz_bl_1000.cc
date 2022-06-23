@@ -26,11 +26,11 @@
 #include "qstarz_bl_1000.h"
 
 #include <cmath>               // for round
-#include <QtCore/QChar>        // for QChar
-#include <QtCore/QDataStream>  // for QDataStream, QDataStream::SinglePrecision, QDataStream::DoublePrecision, QDataStream::LittleEndian, QDataStream::Ok
-#include <QtCore/QDebug>       // for QDebug
-#include <QtCore/QFile>        // for QFile
-#include <QtCore/QIODevice>    // for QIODevice, QIODevice::ReadOnly
+#include <QChar>               // for QChar
+#include <QDataStream>         // for QDataStream, QDataStream::SinglePrecision, QDataStream::DoublePrecision, QDataStream::LittleEndian, QDataStream::Ok
+#include <QDebug>              // for QDebug
+#include <QFile>               // for QFile
+#include <QIODevice>           // for QIODevice, QIODevice::ReadOnly
 #include "defs.h"              // for Waypoint, ddmm2degrees, route_head, track_add_head, track_add_wpt, waypt_add, waypt_count, wp_flags, fix_unknown, fix_2d, fix_3d, fix_dgps, fix_none, fix_pps, fix_type, global_options, global_opts
 #include "src/core/logging.h"  // for Fatal
 

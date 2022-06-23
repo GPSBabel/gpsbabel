@@ -25,8 +25,8 @@
 #ifndef FORMATLOAD_H
 #define FORMATLOAD_H
 
-#include <QtCore/QList>        // for QList
-#include <QtCore/QStringList>  // for QStringList
+#include <QList>               // for QList
+#include <QStringList>         // for QStringList
 
 #include "format.h"            // for Format
 

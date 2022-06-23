@@ -19,12 +19,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime, operator<<
-#include <QtCore/QDebug>        // for QDebug
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/Qt>            // for UTC
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime, operator<<
+#include <QDebug>               // for QDebug
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <Qt>                   // for UTC
 
 #include "defs.h"
 #include "subrip.h"
@@ -84,7 +84,9 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     switch (*c) {
     case '%':
       fmt = *++c;
-      is_fatal(fmt == '\0', "No character after %% in subrip format");
+      if (fmt == '\0') {
+        fatal("No character after %% in subrip format");
+      }
 
       switch (fmt) {
       case 's':
@@ -136,7 +138,9 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 
     case '\\':
       fmt = *++c;
-      is_fatal(fmt == '\0', "No character after \\ in subrip format");
+      if (fmt == '\0') {
+        fatal("No character after \\ in subrip format");
+      }
       switch (fmt) {
       case 'n':
         gbfprintf(fout, "\n");

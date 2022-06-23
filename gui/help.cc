@@ -22,10 +22,10 @@
 //------------------------------------------------------------------------
 #include "help.h"
 
-#include <QtCore/QRegularExpression>  // for QRegularExpression
-#include <QtCore/QString>             // for QString
-#include <QtCore/QUrl>                // for QUrl
-#include <QtGui/QDesktopServices>     // for QDesktopServices
+#include <QRegularExpression>         // for QRegularExpression
+#include <QString>                    // for QString
+#include <QUrl>                       // for QUrl
+#include <QDesktopServices>           // for QDesktopServices
 
 #include "format.h"                   // for Format
 
@@ -34,7 +34,8 @@ void ShowHelp(const QString& urlIn)
 
 {
   QString url = urlIn;
-  if (!url.contains(QRegularExpression(R"(^https?://)"))) {
+  static const QRegularExpression re(R"(^https?://)");
+  if (!url.contains(re)) {
     url = Format::getHtmlBase() + url;
   }
   QDesktopServices::openUrl(QUrl(url));

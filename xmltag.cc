@@ -19,8 +19,8 @@
 
  */
 
-#include <QtCore/QString>               // for QString
-#include <QtCore/QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QString>                      // for QString
+#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "src/core/xmltag.h"

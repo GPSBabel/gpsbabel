@@ -57,6 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qttools5-dev-tools \
     qttranslations5-l10n \
     qtwebengine5-dev \
+    libqt5serialport5-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs needed to generate coverage report:

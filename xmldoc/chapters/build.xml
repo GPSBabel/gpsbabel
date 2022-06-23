@@ -16,12 +16,12 @@ additional information.
 <sect1 id="Source">
 <title>Building from source.</title>
   <para>
- For operating systems where no binary is provided or if
+ For operating systems where no binary is provided, or if
 you want the latest development version, you will have to build it from
 source.  The code should be compilable on any system with
-ISO C++14. It's tested on Linux, Mac OS/X, and Windows cross compilers.
-Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris,
-etc.   Both Clang/LLVM and GNU C++ are regularly exercised via automation.
+ISO C++17. It's tested on Ubuntu, macOS, and Windows.
+Less frequently, someone will build on FreeBSD, OpenBSD, Solaris,
+etc.  Clang/LLVM, GNU C++, and MSVC are regularly exercised via automation.
 </para>
 <para>
 You can grab a release from the <ulink url="https://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
@@ -33,9 +33,9 @@ You can grab a release from the <ulink url="https://www.gpsbabel.org/download.ht
 <ulink url="http://qt-project.org">Qt</ulink></term>
 <listitem>
 <para>
-Qt version 5.9 or newer is required for all builds.  MacOS and Windows users can download
+Qt version 5.12 or newer is required for all builds.  MacOS and Windows users can download
 binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
-Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qtbase5-dev'. Package names
+Fedora or CentOS users may need to 'dnf install qt5-qtbase-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt5-default'. Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in tools/Docker* for inspiration for our automated builds that
 use Docker.
@@ -45,12 +45,12 @@ use Docker.
 
 <varlistentry>
   <term>
-   <ulink url="http://libusb.sourceforge.net">libusb</ulink>
+   <ulink url="http://libusb.sourceforge.net">libusb 1.0</ulink>
   </term>
 <listitem>
   <para>
 is needed to communicate with use with older USB Garmins.
-For MacOS, we use an included copy.
+For macOS, we use an included copy.
 Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
 need to 'apt install libusb-dev' or look in tools/Docker* for inspiration
 from our automated Docker builds.</para>
@@ -81,7 +81,7 @@ from our automated Docker builds.</para>
     editor and debugger. Its use is strongly encouraged for those new to C++.
     Once you have Qt correctly installed, just opening either the <filename>
     GPSBabel.pro</filename> or <filename>gui/app.pro</filename> files from
-    the OS file launcher (e.g. a double click in MacOS while seeing it in Finder)
+    the OS file launcher (e.g. a double click in macOS while seeing it in Finder)
     or from a File->Open in an already-running instance of <ulink url="https://www.qt.io/development-tools">Qt Creator</ulink> is the fastest and easiest way for most
     people to get to development because it handles things like build dependencies
     changing and class and method compilation.
@@ -95,41 +95,251 @@ from our automated Docker builds.</para>
 <sect2 id="Configure">
   <title>Building with configure</title>
 <para>
-  Those familiar with UNIX-y open source packages may be more comfortable
-  with configure. In most cases, the code is as simple to build as running:
+The GNU Build System (configure) is no longer supported and has
+been removed.  For command line builds please use <link linkend="qmake">qmake</link>.
 </para>
-<para><userinput> ./configure &amp;&amp; make</userinput></para>
-  <para>
-</para>
-
-<para>There are additional flags that can be passed to configure to
- customize your build of GPSBabel.
-</para>
-<para><userinput>./configure --help</userinput></para>
-<para>
-lists all the supported options, but of interest we have:</para><para>
- <option>--disable-shapefile</option> Excludes the shapefile support.
-</para>
-<para>
-  <option>--disable-csv</option> Excludes all support for our something-separated formats.
-</para>
-<para>
-  <option>--disable-filters</option> Excludes all filter support.
-</para>
-<para>
-  <option>--with-doc=</option><filename class="directory">dir</filename> Specifies that the doc should be created and installed in <filename class="directory">dir</filename>.
-</para>
-<para>
-  <option>--without-libusb</option> Disables use of libusb, even it's it's available.
-</para>
-<para>
- <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
-</para>
-<para>
-  There are some makefile targets that are useful mostly to the GPSBabel maintainers
-  that appear only in the configure-generated Makefiles. Their presence is considered
-  mostly a TODO bug and those items should be migrated to stand-alone tools.
-  </para>
 </sect2>
+<sect2 id="cmake">
+   <title>Building with cmake</title>
+<para>
+The use of cmake is experimental.  The implementation is not complete.  It is
+untested by continuous integration.  It is not recommended for production use.
+</para>
+</sect2>
+    <sect2 id="qmake">
+      <title>Building with qmake</title>
+      <para>
+Those familiar with the command line may be more comfortable
+using qmake from the command line. In most cases, the code is as simple to build as running:
+</para>
+      <para>
+        <userinput>qmake &amp;&amp; make</userinput>
+      </para>
+      <para>
+Two build methods are supported with MSVC tools.
+</para>
+      <simplelist>
+        <member>
+To create a visual studio project that can be built with msbuild:
+<userinput>qmake -tp vc</userinput>
+</member>
+        <member>
+To create a Makefile that can be built with nmake:
+<userinput>qmake</userinput>
+</member>
+      </simplelist>
+      <para>
+</para>
+      <para>There are additional flags that can be passed to qmake to
+customize your build of GPSBabel.
+</para>
+      <variablelist>
+        <varlistentry>
+          <term>WITH_LIBUSB=no|pkgconfig|system*|included*|custom</term>
+          <listitem>
+            <para>
+note that libusb is NOT used on windows.
+</para>
+            <variablelist>
+              <varlistentry>
+                <term>no</term>
+                <listitem>
+                  <para>build without libusb-1.0.  functionality will be limited.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>pkgconfig</term>
+                <listitem>
+                  <para>build with libusb-1.0 found by pkg-config.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>system</term>
+                <listitem>
+                  <para>build with libusb-1.0 found on system library path and under
+libusb-1.0 on system include path (default, linux, openbsd).</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>included</term>
+                <listitem>
+                  <para>build with libusb-1.0 included with gpsbabel (default, macOS only).</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>custom</term>
+                <listitem>
+                  <para>build with user supplied libusb-1.0. LIBS and INCLUDEPATH may need to
+be set, e.g. LIBS+=... INCLUDEPATH+=...</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WITH_SHAPELIB=no|pkgconfig|included*|custom</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>no</term>
+                <listitem>
+                  <para>build without shapelib.  functionality will be limited.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>pkgconfig</term>
+                <listitem>
+                  <para>build with shapelib found by pkg-config.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>included</term>
+                <listitem>
+                  <para>build with shapelib included with gpsbabel (default).</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>custom</term>
+                <listitem>
+                  <para>build with user supplied shapelib. LIBS and INCLUDEPATH may need to
+be set, e.g. LIBS+=... INCLUDEPATH+=...</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WITH_ZLIB=no|pkgconfig|included*|custom</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>no</term>
+                <listitem>
+                  <para>build without zlib.  functionality will be limited.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>pkgconfig</term>
+                <listitem>
+                  <para>build with zlib found by pkg-config.</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>included</term>
+                <listitem>
+                  <para>build with zlib included with gpsbabel (default).</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>custom</term>
+                <listitem>
+                  <para>build with user supplied zlib. LIBS and INCLUDEPATH may need to be
+set, e.g. LIBS+=... INCLUDEPATH+=...</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>CONFIG+=disable-mappreview</term>
+          <listitem>
+            <para>
+This options disables the map preview feature.  With the feature disabled
+QtWebEngine and QtWebEngineWdigets are not used. Note that QtWebKit and
+QtWebKitWidgets are not longer supported.
+</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>DOCVERSION=...</term>
+          <listitem>
+            <para>
+string appended to documentation location for www.gpsbabel.org.  The default
+value is the version string, e.g. "1.7.0".  This is used by the gpsbabel.org
+target, you are unlikely to need it unless you are maintaining
+www.gpsbabel.org.
+</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>WEB=DIR</term>
+          <listitem>
+            <para>
+Path where the documentation will be stored for www.gpsbabel.org.  This is
+used by the gpsbabel.org target, you are unlikely to need it unless you are
+maintaining www.gpsbabel.org.  The default location is "../babelweb"
+</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+Additional makefile targets are available for special purposes.
+</para>
+      <variablelist>
+        <varlistentry>
+          <term>check</term>
+          <listitem>
+            <para>Run the basic test suite.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>check-vtesto</term>
+          <listitem>
+            <para>Run valgrind memcheck.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>gpsbabel</term>
+          <listitem>
+            <para>Build the command line tool.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>gpsbabel.hmtl</term>
+          <listitem>
+            <para>Create the html documentation.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>gpsbabel.org</term>
+          <listitem>
+            <para>Create documentation for use on www.gpsbabel.org.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>gpsbabel.pdf</term>
+          <listitem>
+            <para>Create the pdf documentation.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>gui</term>
+          <listitem>
+            <para>Build the graphical user interface.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>unix-gui</term>
+          <listitem>
+            <para>Build the graphical user interface and collect the components for
+distribution.  On Linux the gpsbabel generated components will be under
+gui/GPSBabelFE, any dynamically linked required libraries are not included.
+On macOS an app bundle will be created at gui/GPSBabelFE.app and an apple disk
+image will be created at gui/GPSBabelFE.dmg.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 id="Runtime_Dependencies">
+      <title>Runtime Dependencies:</title>
+      <para>
+On non-macOS unix builds by default we now compile in the gpsbabel generated
+translation files, i.e. gpsbabelfe_*.qm, gpsbabel_*.qm, as well as
+gmapbase.html.  When compiled in these files do not need to be distributed.
+These are used by the GUI.  Additional translation files from Qt will also be
+used if they are found.  They may be in a package such as qttranslations5-l10n
+or qt5-qttranslations.
+</para>
+    </sect2>
 </sect1>
 </chapter>

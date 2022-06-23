@@ -20,18 +20,21 @@
 
  */
 
-#include <cmath>           // for fabs
-#include <cstdio>          // for size_t
-#include <cstdlib>         // for atof, strtod
-#include <cctype>          // for isspace
-#include <cstring>         // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
+#include <cassert>             // for assert
+#include <cmath>               // for fabs
+#include <cstdlib>             // for atof, strtod
+#include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
-#include <QtCore/QRegExp>  // for QRegExp
-#include <QtCore/QString>  // for QString
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar
+#include <QDebug>              // for QDebug
+#include <QRegularExpression>  // for QRegularExpression
+#include <QString>             // for QString, operator+
 
 #include "defs.h"
 #include "csv_util.h"
-#include "src/core/logging.h"
+#include "src/core/logging.h"  // for Warning
+
 
 #define MYNAME "CSV_UTIL"
 
@@ -48,76 +51,15 @@ QString
 csv_stringclean(const QString& source, const QString& to_nuke)
 {
   QString r = source;
-  QString regex = QString("[%1]").arg(to_nuke);
-  return r.remove(QRegExp(regex));
-}
-
-// csv_stringtrim() - trim whitespace and leading and trailing
-//                    enclosures (quotes)
-//                    returns a copy of the modified string
-//    usage: p = csv_stringtrim(string, "\"", 0)
-char*
-csv_stringtrim(const char* string, const char* enclosure, int strip_max)
-{
-  static const char* p1 = nullptr;
-  char* tmp = xstrdup(string);
-  size_t elen;
-
-  if (!strlen(string)) {
-    return (tmp);
+  if (!to_nuke.isEmpty()) {
+    // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
+    // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
+    // or one can imagine [^a] when we meant the characters '^' and 'a'.
+    QRegularExpression regex = QRegularExpression(QString("[%1]").arg(QRegularExpression::escape(to_nuke)));
+    assert(regex.isValid());
+    r.remove(regex);
   }
-
-  if (!enclosure) {
-    elen = 0;
-  } else {
-    elen = strlen(enclosure);
-  }
-
-  char* p2 = tmp + strlen(tmp) - 1;
-  p1 = tmp;
-
-  /* trim off trailing whitespace */
-  while ((p2 > p1) && isspace(*p2)) {
-    p2--;
-  }
-
-  /* advance p1 past any leading whitespace */
-  while ((p1 < p2) && (isspace(*p1))) {
-    p1++;
-  }
-
-  /* if no maximum strippage, assign a reasonable value to max */
-  strip_max = strip_max ? strip_max : 9999;
-
-  /* if we have enclosures, skip past them in pairs */
-  if (elen) {
-    int stripped = 0;
-    while (
-      (stripped < strip_max) &&
-      ((size_t)(p2 - p1 + 1) >= (elen * 2)) &&
-      (strncmp(p1, enclosure, elen) == 0) &&
-      (strncmp((p2 - elen + 1), enclosure, elen) == 0)) {
-      p2 -= elen;
-      p1 += elen;
-      stripped++;
-    }
-  }
-
-  /* copy what's left over back into tmp. */
-  memmove(tmp, p1, (p2 - p1) + 1);
-
-  tmp[(p2 - p1) + 1] = '\0';
-
-  return (tmp);
-}
-
-// Is this really the replacement for the above? No.
-QString
-csv_stringtrim(const QString& source, const QString& enclosure)
-{
-  QString r = source;
-  r.replace(enclosure, "");
-  return r.trimmed();
+  return r;
 }
 
 // csv_stringtrim() - trim whitespace and leading and trailing
@@ -204,121 +146,6 @@ csv_dequote(const QString& string, const QString& enclosure)
 
   return retval;
 }
-/*****************************************************************************/
-/* csv_lineparse() - extract data fields from a delimited string. designed   */
-/*                   to handle quoted and delimited data within quotes.      */
-/*                   returns temporary COPY of delimited data field (use it  */
-/*                   or lose it on the next call).                           */
-/*    usage: p = csv_lineparse(string, ",", "\"", line)  [initial call]      */
-/*           p = csv_lineparse(NULL, ",", "\"", line)    [subsequent calls]  */
-/*****************************************************************************/
-char*
-csv_lineparse(const char* stringstart, const char* delimited_by,
-              const char* enclosed_in, const int line_no)
-{
-  static const char* p = nullptr;
-  static char* tmp = nullptr;
-  size_t dlen = 0, elen = 0, efound = 0;
-  int enclosedepth = 0;
-  short int hyper_whitespace_delimiter = 0;
-
-  if (tmp) {
-    xfree(tmp);
-    tmp = nullptr;
-  }
-
-  if (strcmp(delimited_by, "\\w") == 0) {
-    hyper_whitespace_delimiter = 1;
-  }
-
-  /*
-   * This is tacky.  Our "csv" format is actually "commaspace" format.
-   * Changing that causes unwanted churn, but it also makes "real"
-   * comma separated data (such as likely to be produced by Excel, etc.)
-   * unreadable.   So we silently change it here on a read and let the
-   * whitespace eater consume the space.
-   */
-  if (strcmp(delimited_by, ", ") == 0) {
-    delimited_by = ",";
-  }
-
-  if (!p) {
-    /* first pass thru */
-    p =  stringstart;
-
-    if (!p) {
-      /* last pass out */
-      return (nullptr);
-    }
-  }
-
-  /* the beginning of the string we start with (this pass) */
-  const char* sp = p;
-
-  /* length of delimiters and enclosures */
-  if ((delimited_by) && (!hyper_whitespace_delimiter)) {
-    dlen = strlen(delimited_by);
-  }
-  if (enclosed_in) {
-    elen = strlen(enclosed_in);
-  }
-  short int dfound = 0;
-
-  while ((*p) && (!dfound)) {
-    if ((elen) && (strncmp(p, enclosed_in, elen) == 0)) {
-      efound = 1;
-      p+=elen;
-      if (enclosedepth) {
-        enclosedepth--;
-      } else {
-        enclosedepth++;
-      }
-      continue;
-    }
-
-    if (!enclosedepth) {
-      if ((dlen) && (strncmp(p, delimited_by, dlen) == 0)) {
-        dfound = 1;
-      } else if ((hyper_whitespace_delimiter) && (ISWHITESPACE(*p))) {
-        dfound = 1;
-        while (ISWHITESPACE(*p)) {
-          p++;
-        }
-      } else {
-        p++;
-      }
-    } else {
-      p++;
-    }
-  }
-
-  /* allocate enough space for this data field */
-  tmp = (char*) xcalloc((p - sp) + 1, sizeof(char));
-
-  strncpy(tmp, sp, (p - sp));
-  tmp[p - sp] = '\0';
-
-  if (elen && efound) {
-    char* c = csv_stringtrim(tmp, enclosed_in, 0);
-    xfree(tmp);
-    tmp = c;
-  }
-
-  if (dfound) {
-    /* skip over the delimited_by */
-    p += dlen;
-  } else {
-    /* end of the line */
-    p = nullptr;
-  }
-
-  if (enclosedepth != 0) {
-    warning(MYNAME
-            ": Warning- Unbalanced Field Enclosures (%s) on line %d\n",
-            enclosed_in, line_no);
-  }
-  return (tmp);
-}
 
 /*****************************************************************************/
 /* csv_linesplit() - extract data fields from a delimited string. designed   */
@@ -363,7 +190,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     const int sp = p;
 
     while (p < string.size() && !dfound) {
-      if ((elen > 0) && string.midRef(p).startsWith(enclosed_in)) {
+      if ((elen > 0) && string.mid(p).startsWith(enclosed_in)) {
         efound = true;
         p += elen;
         enclosed = !enclosed;
@@ -371,7 +198,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
       }
 
       if (!enclosed) {
-        if ((dlen > 0) && string.midRef(p).startsWith(delimiter)) {
+        if ((dlen > 0) && string.mid(p).startsWith(delimiter)) {
           dfound = true;
         } else if (hyper_whitespace_delimiter && string.at(p).isSpace()) {
           dfound = true;
@@ -503,14 +330,14 @@ ddmmdir_to_degrees(const char* ddmmdir)
 
 /*****************************************************************************
  * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
- * usage: human_to_dec( "N 41� 09.12' W 085� 09.36'", &lat, &lon );
+ * usage: human_to_dec( "N 41° 09.12′ W 085° 09.36′", &lat, &lon );
  *        human_to_dec( "41 9 5.652 N", &lat, &lon );
  *
  *        which: 0-no preference    1-prefer lat    2-prefer lon
  *****************************************************************************/
 
 void
-human_to_dec(const char* instr, double* outlat, double* outlon, int which)
+human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -519,21 +346,12 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
   int    lonsign = 0;
   int    unksign = 1;
 
-  const char* cur;
   double* numres = unk;
   int numind = 0;
-  char* buff = nullptr;
 
-  if (strchr(instr, ',') != nullptr) {
-    char* c;
-    buff = xstrdup(instr);
-    while ((c = strchr(buff, ','))) {
-      *c = '.';
-    }
-    cur = buff;
-  } else {
-    cur = instr;
-  }
+  // Allow comma as decimal separator.
+  const QByteArray inbytes = instr.toUtf8().replace(',', '.');
+  const char* cur = inbytes.constData();
 
   while (cur && *cur) {
     switch (*cur) {
@@ -596,11 +414,9 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     case '9':
     case '0':
     case '.':
-    case ',':
-      numres[numind] = atof(cur);
-      while (cur && *cur && strchr("1234567890.,",*cur)) {
-        cur++;
-      }
+      char* end;
+      numres[numind] = strtod(cur, &end);
+      cur = end;
       break;
     case '-':
       unksign = -1;
@@ -666,9 +482,6 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     if (lonsign) {
       *outlon *= lonsign;
     }
-  }
-  if (buff) {
-    xfree(buff);
   }
 }
 

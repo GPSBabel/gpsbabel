@@ -70,7 +70,7 @@ DWORD mkspeed(unsigned br)
     return CBR_115200;
   case 230400:
   // Per https://msdn.microsoft.com/en-us/library/windows/desktop/aa363214
-  // "This member can be an actual baud rate value, or one of the 
+  // "This member can be an actual baud rate value, or one of the
   // following indexes."
   // They provide a CBR_25600, which would be programmable on a 16450 only
   // with a bizarre oscillator crystal, but don't provide a 230400, such

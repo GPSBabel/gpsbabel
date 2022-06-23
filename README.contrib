@@ -12,18 +12,18 @@ functions.
 You may find format_skeleton.c and filter_skeleton.c in the source tree
 to be helpful examples. Just add meat!
 
-Prefer Qt objects/classes to ISO C/POSIX services.  
- * QStrings are reference counted, implicitly shared, and have a 
-   robust supporting library.  
- * QDateTime supports sub-second time and a range of dates far 
-   beyond 1970->2038 and are much more pleasant to work with 
-   than ctime/mktime/struct tm.  
+Prefer Qt objects/classes to ISO C/POSIX services.
+ * QStrings are reference counted, implicitly shared, and have a
+   robust supporting library.
+ * QDateTime supports sub-second time and a range of dates far
+   beyond 1970->2038 and are much more pleasant to work with
+   than ctime/mktime/struct tm.
  * QXmlStreamReader and Writer eliminate the need to explictly quote data.
 "But I see strcpy, sprintf, and struct tm and such in the code!"  It's
-true; GPSBabel is a tenured project of well over ten years.  We have 
-code that predates our move to C++/Qt that isn't well tested or has a 
-low payoff to modernize and uses old constructs.  Our actively 
-maintained/strategic formats like GPX and KML tend to be better 
+true; GPSBabel is a tenured project of well over ten years.  We have
+code that predates our move to C++/Qt that isn't well tested or has a
+low payoff to modernize and uses old constructs.  Our actively
+maintained/strategic formats like GPX and KML tend to be better
 examples of modern programming and are generally better models to
 follow. New code shouldn't be using xstrdup and gbfprintf.
 
@@ -64,7 +64,7 @@ If you are creating a new target your work should include the following files:
   GPSBabel.
 * Makefile.in - an updated Makefile telling the compiler how to build and link
   your conversion into GPSBabel
-* testo.d/$TARGET - an updated script that tests your conversion (this should 
+* testo.d/$TARGET - an updated script that tests your conversion (this should
   produce no output if all is good, see the current testo script for examples)
 * YourOutput - a sample file of code produced by your function (used in testo
   and lives in a directory called "reference").
@@ -77,37 +77,37 @@ occur frequently!
 Documentation
 -------------
 
-HTML and text documentation are generated automatically from DocBook 
-source located in the "xmldoc" directory.  That directory contains 
+HTML and text documentation are generated automatically from DocBook
+source located in the "xmldoc" directory.  That directory contains
 two subdirectories of interest: "formats" and "filters".  If your
 contribution adds or affects a format, you'll want to be in the "formats"
 directory.  Otherwise, you'll want to be in the "filters" directory.
 
 You should contribute a file called "yourname.xml", where "yourname" is the
-name you would give on the command-line to invoke your new format or filter.  
+name you would give on the command-line to invoke your new format or filter.
 For example, the arc filter is documented in "filters/arc.xml".
 
-This file contains a general description of your format or filter, any 
-limitations in your support for it, and anything else the end user should 
-know.  For file formats, links to manufacturers' websites are encouraged.  
-The contents of this file are not valid or even well-formed XML on their own; 
-they are included into a larger framework.  If you know DocBook, you should 
+This file contains a general description of your format or filter, any
+limitations in your support for it, and anything else the end user should
+know.  For file formats, links to manufacturers' websites are encouraged.
+The contents of this file are not valid or even well-formed XML on their own;
+they are included into a larger framework.  If you know DocBook, you should
 ensure that the contents of this file will validate if included in a <section>.
-If you do not know DocBook, see the other files in this directory for examples 
-or see http://docbook.org/tdg/en/html/docbook.html for the gory details.  Tags 
-of interest will almost certainly include <para> for paragraphs, 
-<ulink url="..."> for web links, and <screen format="linespecific"> for 
+If you do not know DocBook, see the other files in this directory for examples
+or see http://docbook.org/tdg/en/html/docbook.html for the gory details.  Tags
+of interest will almost certainly include <para> for paragraphs,
+<ulink url="..."> for web links, and <screen format="linespecific"> for
 example command lines.
 
 For each option supported by your format or filter, you should also contribute
 a file in the "options" subdirectory called "yourname-youroption.xml", again
-using the names you would use on the command line to invoke your format or 
+using the names you would use on the command line to invoke your format or
 filter with that particular option.  For example, the "distance" option to the
-"arc" filter is documented in "filters/options/arc-distance.xml".  These 
+"arc" filter is documented in "filters/options/arc-distance.xml".  These
 files are similar to the general description above, and should meet the same
 validation requirements.
 
-As of this writing, there are two formats that violate this rule: Magellan 
+As of this writing, there are two formats that violate this rule: Magellan
 serial and Microsoft Streets & Trips.  Because those formats have the same
 names as other formats, their descriptions are located in "magellan1.xml" and
 "msroute1.xml" respectively.  These are special cases, and you should do your

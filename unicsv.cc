@@ -26,20 +26,19 @@
 #include <cstring>                 // for memset, strchr, strncpy
 #include <ctime>                   // for gmtime
 
-#include <QtCore/QByteArray>       // for QByteArray
-#include <QtCore/QChar>            // for QChar
-#include <QtCore/QCharRef>         // for QCharRef
-#include <QtCore/QDateTime>        // for QDateTime
-#include <QtCore/QIODevice>        // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
-#include <QtCore/QLatin1Char>      // for QLatin1Char
-#include <QtCore/QLatin1String>    // for QLatin1String
-#include <QtCore/QString>          // for QString, operator!=, operator==
-#include <QtCore/QStringList>      // for QStringList
-#include <QtCore/QTextStream>      // for QTextStream, operator<<, qSetRealNumberPrecision, qSetFieldWidth, QTextStream::FixedNotation
-#include <QtCore/QTime>            // for QTime
-#include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for CaseInsensitive
-#include <QtCore/QtGlobal>         // for qPrintable
+#include <QByteArray>              // for QByteArray
+#include <QChar>                   // for QChar
+#include <QDateTime>               // for QDateTime
+#include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QLatin1Char>             // for QLatin1Char
+#include <QLatin1String>           // for QLatin1String
+#include <QString>                 // for QString, operator!=, operator==
+#include <QStringList>             // for QStringList
+#include <QTextStream>             // for QTextStream, operator<<, qSetRealNumberPrecision, qSetFieldWidth, QTextStream::FixedNotation
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qPrintable
 
 #include "defs.h"
 #include "unicsv.h"
@@ -301,7 +300,9 @@ UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
     }
   }
   int ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
-  is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
+  if (ct < 5) {
+    fatal(MYNAME ": Could not parse time string (%s).\n", str);
+  }
   if (ct == 6) {
     *usec = lround((us * 1000000));
     if (*usec > 999999) {

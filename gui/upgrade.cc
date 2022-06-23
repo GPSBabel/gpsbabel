@@ -20,25 +20,25 @@
  */
 
 #include "upgrade.h"
-#include <QtCore/qglobal.h>                 // for qDebug
-#include <QtCore/QByteArray>                // for QByteArray
-#include <QtCore/QDebug>                    // for QDebug
-#include <QtCore/QLocale>                   // for QLocale
-#include <QtCore/QSysInfo>                  // for QSysInfo
-#include <QtCore/QUrl>                      // for QUrl
-#include <QtCore/QVariant>                  // for QVariant
-#include <QtCore/QVersionNumber>            // for QVersionNumber, operator<, operator==
-#include <QtCore/Qt>                        // for ISODate, RichText
-#include <QtGui/QDesktopServices>           // for QDesktopServices
-#include <QtNetwork/QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QtNetwork/QNetworkReply>          // for QNetworkReply, QNetworkReply::NoError
-#include <QtNetwork/QNetworkRequest>        // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::Redi...
-#include <QtWidgets/QMessageBox>            // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
+#include <qglobal.h>                        // for qDebug
+#include <QByteArray>                       // for QByteArray
+#include <QDebug>                           // for QDebug
+#include <QLocale>                          // for QLocale
+#include <QSysInfo>                         // for QSysInfo
+#include <QUrl>                             // for QUrl
+#include <QVariant>                         // for QVariant
+#include <QVersionNumber>                   // for QVersionNumber, operator<, operator==
+#include <Qt>                               // for ISODate, RichText
+#include <QDesktopServices>                 // for QDesktopServices
+#include <QNetworkAccessManager>            // for QNetworkAccessManager
+#include <QNetworkReply>                    // for QNetworkReply, QNetworkReply::NoError
+#include <QNetworkRequest>                  // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::Redi...
+#include <QMessageBox>                      // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
 #include <QtXml/QDomDocument>               // for QDomDocument
 #include <QtXml/QDomElement>                // for QDomElement
 #include <QtXml/QDomNode>                   // for QDomNode
 #include <QtXml/QDomNodeList>               // for QDomNodeList
-#include "../gbversion.h"                   // for VERSION
+#include "gbversion.h"                      // for VERSION
 #include "babeldata.h"                      // for BabelData
 #include "format.h"                         // for Format
 
@@ -59,18 +59,6 @@ UpgradeCheck::UpgradeCheck(QWidget* parent, QList<Format>& formatList,
   updateStatus_(updateUnknown),
   babelData_(bd)
 {
-}
-
-UpgradeCheck::~UpgradeCheck()
-{
-  if (replyId_ != nullptr) {
-    replyId_->abort();
-    replyId_ = nullptr;
-  }
-  if (manager_ != nullptr) {
-    delete manager_;
-    manager_ = nullptr;
-  }
 }
 
 bool UpgradeCheck::isTestMode()
@@ -96,20 +84,19 @@ QString UpgradeCheck::getCpuArchitecture()
 }
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
-  const QString& currentVersionIn,
+  const QString& currentVersion,
   const QDateTime& lastCheckTime,
   bool allowBeta)
 {
-  currentVersion_ = currentVersionIn;
-  currentVersion_.remove("GPSBabel Version ");
+  currentVersion_ = currentVersion;
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
     // Not time to check yet.
-    return UpgradeCheck::updateUnknown;
+    return updateUnknown;
   }
 
-  manager_ = new QNetworkAccessManager;
+  manager_ = new QNetworkAccessManager(this);
 
   connect(manager_, &QNetworkAccessManager::finished,
           this, &UpgradeCheck::httpRequestFinished);
@@ -164,7 +151,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
 
   replyId_ = manager_->post(request, args.toUtf8());
 
-  return UpgradeCheck::updateUnknown;
+  return updateUnknown;
 }
 
 QDateTime UpgradeCheck::getUpgradeWarningTime()

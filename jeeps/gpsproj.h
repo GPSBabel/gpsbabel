@@ -2,7 +2,7 @@
 #define gpsproj_h
 
 
-#include "gps.h"
+#include "jeeps/gps.h"
 
   void GPS_Math_Albers_LatLon_To_EN(double phi, double lambda, double* E,
                                     double* N, double phi1, double phi2,

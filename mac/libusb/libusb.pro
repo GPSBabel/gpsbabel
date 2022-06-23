@@ -15,16 +15,15 @@ SOURCES = core.c \
   strerror.c \
   sync.c \
   os/darwin_usb.c \
-  os/poll_posix.c \
+  os/events_posix.c \
   os/threads_posix.c
 
-HEADERS = hotplug.h \
-  libusb.h \
+HEADERS = libusb.h \
   libusbi.h \
   version.h \
   version_nano.h \
   os/darwin_usb.h \
-  os/poll_posix.h \
+  os/events_posix.h \
   os/threads_posix.h
 
 # We use libusb-1.0.0's hardcoded config.h for Xcode

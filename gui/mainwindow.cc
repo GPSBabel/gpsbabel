@@ -19,44 +19,46 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QtCore/QByteArray>           // for QByteArray
-#include <QtCore/QDate>                // for QDate
-#include <QtCore/QDateTime>            // for QDateTime
-#include <QtCore/QDir>                 // for QDir
-#include <QtCore/QEvent>               // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
-#include <QtCore/QFile>                // for QFile
-#include <QtCore/QFileInfo>            // for QFileInfo
-#include <QtCore/QLibraryInfo>         // for QLibraryInfo, QLibraryInfo::TranslationsPath
-#include <QtCore/QLocale>              // for QLocale
-#include <QtCore/QMimeData>            // for QMimeData
-#include <QtCore/QProcess>             // for QProcess, QProcess::NotRunning
-#include <QtCore/QSettings>            // for QSettings
-#include <QtCore/QString>              // for QString
-#include <QtCore/QStringList>          // for QStringList
-#include <QtCore/QTemporaryFile>       // for QTemporaryFile
-#include <QtCore/QTime>                // for QTime
-#include <QtCore/QUrl>                 // for QUrl
-#include <QtCore/QVariant>             // for QVariant
-#include <QtCore/Qt>                   // for SmoothTransformation, WaitCursor
-#include <QtCore/QtGlobal>             // for foreach
-#include <QtGui/QCursor>               // for QCursor
-#include <QtGui/QDesktopServices>      // for QDesktopServices
-#include <QtGui/QIcon>                 // for QIcon
-#include <QtGui/QImage>                // for QImage
-#include <QtWidgets/QApplication>      // for QApplication, qApp
-#include <QtWidgets/QCheckBox>         // for QCheckBox
-#include <QtWidgets/QDialogButtonBox>  // for QDialogButtonBox
-#include <QtWidgets/QFileDialog>       // for QFileDialog
-#include <QtWidgets/QMessageBox>       // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
-#include <QtWidgets/QPlainTextEdit>    // for QPlainTextEdit
-#include <QtWidgets/QPushButton>       // for QPushButton
-#include <QtWidgets/QRadioButton>      // for QRadioButton
-#include <QtWidgets/QStackedWidget>    // for QStackedWidget
+#include <QByteArray>                  // for QByteArray
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QDir>                        // for QDir
+#include <QEvent>                      // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
+#include <QFile>                       // for QFile
+#include <QFileInfo>                   // for QFileInfo
+#include <QLibraryInfo>                // for QLibraryInfo, QLibraryInfo::TranslationsPath
+#include <QLocale>                     // for QLocale
+#include <QMimeData>                   // for QMimeData
+#include <QProcess>                    // for QProcess, QProcess::NotRunning
+#include <QSettings>                   // for QSettings
+#include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
+#include <QTemporaryFile>              // for QTemporaryFile
+#include <QTime>                       // for QTime
+#include <QUrl>                        // for QUrl
+#include <QVariant>                    // for QVariant
+#include <Qt>                          // for SmoothTransformation, WaitCursor
+#include <QtGlobal>                    // for foreach
+#include <QCursor>                     // for QCursor
+#include <QDesktopServices>            // for QDesktopServices
+#include <QIcon>                       // for QIcon
+#include <QImage>                      // for QImage
+#include <QTextCharFormat>             // for QTextCharFormat
+#include <QAbstractButton>             // for QAbstractButton
+#include <QApplication>                // for QApplication, qApp
+#include <QCheckBox>                   // for QCheckBox
+#include <QDialogButtonBox>            // for QDialogButtonBox
+#include <QFileDialog>                 // for QFileDialog
+#include <QMessageBox>                 // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
+#include <QPlainTextEdit>              // for QPlainTextEdit
+#include <QPushButton>                 // for QPushButton
+#include <QRadioButton>                // for QRadioButton
+#include <QStackedWidget>              // for QStackedWidget
 
 #include <cstdlib>                     // for exit
 
 #include "mainwindow.h"
-#include "../gbversion.h"              // for VERSION
+#include "gbversion.h"                 // for VERSION
 #include "aboutdlg.h"                  // for AboutDlg
 #include "advdlg.h"                    // for AdvDlg
 #include "appname.h"                   // for appName
@@ -70,7 +72,7 @@
 #include "help.h"                      // for ShowHelp
 #include "optionsdlg.h"                // for OptionsDlg
 #include "preferences.h"               // for Preferences
-#include "processwait.h"               // for ProcessWaitDialog
+#include "runmachine.h"                // for RunMachine
 #include "upgrade.h"                   // for UpgradeCheck
 #include "version_mismatch.h"          // for VersionMismatch
 
@@ -230,7 +232,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
-  upgrade = new UpgradeCheck(parent, formatList_, babelData_);
+  upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
@@ -242,14 +244,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
-}
-
-//------------------------------------------------------------------------
-MainWindow::~MainWindow()
-{
-
-  delete upgrade;
-
 }
 
 //------------------------------------------------------------------------
@@ -862,36 +856,13 @@ bool MainWindow::isOkToGo()
 bool MainWindow::runGpsbabel(const QStringList& args, QString& errorString,
                              QString& outputString)
 {
-  auto* proc = new QProcess(nullptr);
   QString name = "gpsbabel";
-  proc->start(QApplication::applicationDirPath() + '/' + name, args);
-  auto* waitDlg = new ProcessWaitDialog(nullptr, proc);
+  QString program = QApplication::applicationDirPath() + '/' + name;
+  RunMachine runMachine(this, program, args);
+  int retStatus = runMachine.exec();
 
-  if (proc->state() == QProcess::NotRunning) {
-    errorString = QString(tr("Process \"%1\" did not start")).arg(name);
-    return false;
-  }
-
-  waitDlg->show();
-  waitDlg->exec();
-  bool retStatus = false;
-  if (waitDlg->getExitedNormally()) {
-    int exitCode = waitDlg->getExitCode();
-    if (exitCode == 0) {
-      retStatus = true;
-    } else  {
-      errorString =
-        QString(tr("Process exited unsuccessfully with code %1"))
-        .arg(exitCode);
-      retStatus = false;
-    }
-  } else {
-    retStatus = false;
-    errorString = waitDlg->getErrorString();
-  }
-  outputString = waitDlg->getOutputString();
-  delete proc;
-  delete waitDlg;
+  errorString = runMachine.getErrorString();
+  outputString = runMachine.getOutputString();
   return retStatus;
 }
 
@@ -906,22 +877,6 @@ int MainWindow::formatIndexFromName(bool isFile, const QString& nm)
   return 0;
 }
 
-//------------------------------------------------------------------------
-QString MainWindow::charSetFromCombo(QComboBox* combo)
-{
-  int i = combo->itemData((combo->currentIndex())).toInt();
-  return (i >=0) ? charSets_[i] : QString();
-}
-
-//------------------------------------------------------------------------
-void MainWindow::setComboToCharSet(QComboBox* combo, const QString& cset)
-{
-  for (int i=0; i<charSets_.size(); i++) {
-    if (charSets_[i] == cset) {
-      combo->setCurrentIndex(i+1); // first index is default;
-    }
-  }
-}
 //------------------------------------------------------------------------
 void MainWindow::applyActionX()
 {
@@ -1038,7 +993,14 @@ void MainWindow::applyActionX()
     }
 #endif
   } else {
+    QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+    QTextCharFormat errorFormat = defaultFormat;
+    errorFormat.setForeground(Qt::red);
+    errorFormat.setFontItalic(true);
+
+    ui_.outputWindow->setCurrentCharFormat(errorFormat);
     ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
+    ui_.outputWindow->setCurrentCharFormat(defaultFormat);
   }
 }
 
@@ -1052,18 +1014,18 @@ void MainWindow::closeActionX()
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if ((babelData_.runCount_ == 1) ||
-      ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30))) {
+  if (!babelData_.disableDonateDialog_ &&
+      ((babelData_.runCount_ == 1) ||
+       ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)))) {
     Donate donate(nullptr);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1)) {
       donate.showNever(false);
     }
     donate.exec();
+    babelData_.disableDonateDialog_ = donate.neverAgain();
     babelData_.donateSplashed_ = now;
   }
   saveSettings();
-  delete upgrade;
-  upgrade = nullptr;
   qApp->exit(0);
 }
 
@@ -1115,7 +1077,9 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setComboToDevice(QComboBox* comboBox, const QString& name)
 {
   for (int i=0; i<comboBox->count(); i++) {
-    if (comboBox->itemText(i) == name) {
+    QString value = comboBox->itemData(i).isValid()?
+      comboBox->itemData(i).toString() : comboBox->itemText(i);
+    if (value == name) {
       comboBox->setCurrentIndex(i);
       break;
     }
@@ -1181,7 +1145,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), babelData_.installationUuid_);
+  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
@@ -1290,7 +1254,8 @@ void MainWindow::getWidgetValues()
     babelData_.inputType_ = BabelData::deviceType_;
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
-  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentText();
+  babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentData().isValid()?
+    ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1303,7 +1268,8 @@ void MainWindow::getWidgetValues()
   } else {
     babelData_.outputType_ = BabelData::noType_;
   }
-  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentText();
+  babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
+    ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();

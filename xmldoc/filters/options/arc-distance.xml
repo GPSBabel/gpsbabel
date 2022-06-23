@@ -1,9 +1,9 @@
 <para>
-This option is not required, but if it is not specified the distance 
+This option is not required, but if it is not specified the distance
 defaults to zero miles, which isn't very useful.
 </para>
 <para>
-This option specifies the maximum distance a point may be from the arc 
+This option specifies the maximum distance a point may be from the arc
 without being discarded.  Points that are closer to the arc are kept, while
 points that are further away are discarded.
 </para>

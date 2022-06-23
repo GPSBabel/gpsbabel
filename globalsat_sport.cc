@@ -39,14 +39,14 @@
 #include <cstdio>               // for printf
 #include <cstdlib>              // for free, malloc
 
-#include <QtCore/QByteArray>    // for QByteArray
-#include <QtCore/QDate>         // for QDate
-#include <QtCore/QDateTime>     // for QDateTime
-#include <QtCore/QString>       // for QString
-#include <QtCore/QTime>         // for QTime
-#include <QtCore/QTimeZone>     // for QTimeZone
-#include <QtCore/Qt>            // for LocalTime
-#include <QtCore/QtGlobal>      // for qPrintable
+#include <QByteArray>           // for QByteArray
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QString>              // for QString
+#include <QTime>                // for QTime
+#include <QTimeZone>            // for QTimeZone
+#include <Qt>                   // for LocalTime
+#include <QtGlobal>             // for qPrintable
 
 #include "defs.h"
 #include "globalsat_sport.h"
@@ -121,7 +121,9 @@ GlobalsatSportFormat::recv_byte()
     result=serial_recv_byte();
   } else {
     result = gbfgetc(in_file);
-    is_fatal((result < 0), MYNAME ": read error");
+    if (result < 0) {
+      fatal(MYNAME ": read error");
+    }
   }
   // Check if byte should be dumped also into a file
   if (dumpfile) {
@@ -280,7 +282,9 @@ GlobalsatSportFormat::rd_init(const QString& fname)
   } else {
     // read from dump-file instead of serial
     in_file = gbfopen(fname, "rb", MYNAME);
-    is_fatal(!in_file, "Could not open dumpfile for input: %s", qPrintable(fname));
+    if (!in_file) {
+      fatal("Could not open dumpfile for input: %s", qPrintable(fname));
+    }
 
   }
   if (opt_timezone) {
