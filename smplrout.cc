@@ -159,6 +159,9 @@ int SimplifyRouteFilter::compare_xte(const void* a, const void* b)
   const auto* xte_b = static_cast<const struct xte*>(b);
 
   if (HUGEVAL == xte_a->distance) {
+    if (HUGEVAL == xte_b->distance) {
+      return 0;
+    }
     return -1;
   }
 
