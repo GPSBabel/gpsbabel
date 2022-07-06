@@ -73,13 +73,6 @@ private:
   static btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
   void free_tree(btree_node* tree);
 
-  struct wpt_ptr {
-    Waypoint* wpt;
-    int index;
-  };
-
-  static int compare(const void* a, const void* b);
-
 };
 #endif
 #endif // DUPLICATE_H_INCLUDED_
