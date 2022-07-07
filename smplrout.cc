@@ -56,7 +56,8 @@
 	2008/08/20: added "relative" option, (Carsten Allefeld, carsten.allefeld@googlemail.com)
 */
 
-#include <cstdlib>              // for qsort, strtol
+#include <algorithm>            // for sort
+#include <cstdlib>              // for strtol
 #include <utility>              // for swap
 
 #include <QDateTime>            // for QDateTime
@@ -158,6 +159,9 @@ int SimplifyRouteFilter::compare_xte(const void* a, const void* b)
   const auto* xte_b = static_cast<const struct xte*>(b);
 
   if (HUGEVAL == xte_a->distance) {
+    if (HUGEVAL == xte_b->distance) {
+      return 0;
+    }
     return -1;
   }
 
@@ -238,7 +242,11 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 
 
   /* sort XTE array, lowest XTE last */
-  qsort(xte_recs, xte_count, sizeof(struct xte), compare_xte);
+  auto compare_xte_lambda = [](const xte& a, const xte& b)->bool {
+    return compare_xte(&a, &b) < 0;
+  };
+  std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  
 
   for (i = 0; i < xte_count; i++) {
     xte_recs[i].intermed->xte_rec = xte_recs+i;

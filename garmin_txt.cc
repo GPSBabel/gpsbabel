@@ -23,11 +23,12 @@
 #include "defs.h"
 
 #if CSVFMTS_ENABLED
+#include <algorithm>               // for sort
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
 #include <cstdio>                  // for NULL, snprintf, sscanf
 #include <cstdint>
-#include <cstdlib>                 // for atoi, abs, qsort
+#include <cstdlib>                 // for atoi, abs
 #include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
 #include <ctime>                   // for gmtime, localtime, strftime
 
@@ -239,15 +240,6 @@ enum_waypt_cb(const Waypoint* wpt)
   }
 
 }
-
-static int
-sort_waypt_cb(const void* a, const void* b)
-{
-  const Waypoint* wa = *(Waypoint**)a;
-  const Waypoint* wb = *(Waypoint**)b;
-  return wa->shortname.compare(wb->shortname, Qt::CaseInsensitive);
-}
-
 
 /* common route and track pre-work */
 
@@ -834,17 +826,19 @@ garmin_txt_write()
 
   if (waypoints > 0) {
     wpt_a_ct = 0;
-    wpt_a = (const Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
+    wpt_a = new const Waypoint*[waypoints]{};
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(nullptr, nullptr, enum_waypt_cb);
-    qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
+    auto sort_waypt_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
+      return wa->shortname.compare(wb->shortname, Qt::CaseInsensitive) < 0;
+    };
+    std::sort(wpt_a, wpt_a + waypoints, sort_waypt_lambda);
 
     *fout << QString::asprintf("Header\t%s\r\n\r\n", headers[waypt_header]);
     for (int i = 0; i < waypoints; i++) {
-      const Waypoint* wpt = wpt_a[i];
-      write_waypt(wpt);
+      write_waypt(wpt_a[i]);
     }
-    xfree(wpt_a);
+    delete[] wpt_a;
 
     route_idx = 0;
     route_info = (info_t*) xcalloc(route_count(), sizeof(info_t));
