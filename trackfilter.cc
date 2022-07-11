@@ -238,9 +238,9 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
   QString datetimestring;
 
   if (opt_interval != 0) {
-    datetimestring = dt.toUTC().toString("yyyyMMddhhmmss");
+    datetimestring = dt.toUTC().toString(u"yyyyMMddhhmmss");
   } else {
-    datetimestring = dt.toUTC().toString("yyyyMMdd");
+    datetimestring = dt.toUTC().toString(u"yyyyMMdd");
   }
 
   if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {

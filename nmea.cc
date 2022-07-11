@@ -1222,8 +1222,8 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
   QByteArray dmy("");
   QByteArray hms("");
   if (wpt->GetCreationTime().isValid()) {
-    dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
-    hms = wpt->GetCreationTime().toUTC().toString("hhmmss.zzz").toUtf8();
+    dmy = wpt->GetCreationTime().toUTC().toString(u"ddMMyy").toUtf8();
+    hms = wpt->GetCreationTime().toUTC().toString(u"hhmmss.zzz").toUtf8();
   }
 
   switch (wpt->fix) {

@@ -1301,7 +1301,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
   QString date_placed;
   if (waypointp->GetCreationTime().isValid()) {
-    date_placed = waypointp->GetCreationTime().toString("dd-MMM-yyyy");
+    date_placed = waypointp->GetCreationTime().toString(u"dd-MMM-yyyy");
   }
 
   writer->writeTextElement(QStringLiteral("styleUrl"), QStringLiteral("#geocache"));

@@ -125,8 +125,8 @@ gpssim_write_pt(const Waypoint* wpt)
   if (wpt->creation_time.isValid()) {
     char tbuf[20];
 
-    QByteArray dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
-    QByteArray hms = wpt->GetCreationTime().toUTC().toString("hhmmss").toUtf8();
+    QByteArray dmy = wpt->GetCreationTime().toUTC().toString(u"ddMMyy").toUtf8();
+    QByteArray hms = wpt->GetCreationTime().toUTC().toString(u"hhmmss").toUtf8();
 
     snprintf(tbuf, sizeof(tbuf), ",%s,%s",dmy.constData(), hms.constData());
     strcat(obuf, tbuf);

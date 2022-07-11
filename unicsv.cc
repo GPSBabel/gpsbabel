@@ -1147,7 +1147,7 @@ UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
     dt = dt.toUTC();
   }
 
-  unicsv_print_str(dt.toString("yyyy/MM/dd hh:mm:ss"));
+  unicsv_print_str(dt.toString(u"yyyy/MM/dd hh:mm:ss"));
 }
 
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
@@ -1547,7 +1547,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
       }
-      QString date = dt.toString("yyyy/MM/dd");
+      QString date = dt.toString(u"yyyy/MM/dd");
       *fout << unicsv_fieldsep << date;
     } else {
       *fout << unicsv_fieldsep;
@@ -1564,9 +1564,9 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       }
       QString out;
       if (t.msec() > 0) {
-        out = t.toString("hh:mm:ss.zzz");
+        out = t.toString(u"hh:mm:ss.zzz");
       } else {
-        out = t.toString("hh:mm:ss");
+        out = t.toString(u"hh:mm:ss");
       }
       *fout << unicsv_fieldsep << out;
     } else {
