@@ -1370,7 +1370,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
                                          &east, &north, &zone, &zonec, unicsv_datum_idx)) {
       unicsv_fatal_outside(wpt);
     }
-    *fout << QString("%1").arg(zone, 2, 10, QLatin1Char('0')) << unicsv_fieldsep
+    *fout << QStringLiteral("%1").arg(zone, 2, 10, QLatin1Char('0')) << unicsv_fieldsep
           << zonec  << unicsv_fieldsep
           << qSetRealNumberPrecision(0) << east << unicsv_fieldsep
           << north;

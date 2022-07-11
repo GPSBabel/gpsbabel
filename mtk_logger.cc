@@ -803,7 +803,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == nullptr || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
     trk_head = new route_head;
-    trk_head->rte_name = QString("track-%1").arg(1 + track_count());
+    trk_head->rte_name = QStringLiteral("track-%1").arg(1 + track_count());
 
     spds[0] = '\0';
     if (mtk_info.speed > 0) {
@@ -896,7 +896,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     auto* w = new Waypoint(*trk);
 
-    w->shortname = QString("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
+    w->shortname = QStringLiteral("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of

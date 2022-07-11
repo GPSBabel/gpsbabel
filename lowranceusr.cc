@@ -1549,7 +1549,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
   } else if (!trk->rte_desc.isEmpty()) {
     name = trk->rte_desc;
   } else {
-    name = name + QString("Babel %1").arg(trail_count);
+    name = name + QStringLiteral("Babel %1").arg(trail_count);
   }
 
   int text_len = name.length();

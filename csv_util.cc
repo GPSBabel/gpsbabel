@@ -55,7 +55,7 @@ csv_stringclean(const QString& source, const QString& to_nuke)
     // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
     // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
     // or one can imagine [^a] when we meant the characters '^' and 'a'.
-    QRegularExpression regex = QRegularExpression(QString("[%1]").arg(QRegularExpression::escape(to_nuke)));
+    QRegularExpression regex = QRegularExpression(QStringLiteral("[%1]").arg(QRegularExpression::escape(to_nuke)));
     assert(regex.isValid());
     r.remove(regex);
   }

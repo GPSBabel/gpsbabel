@@ -359,7 +359,7 @@ QTime NmeaFormat::nmea_parse_hms(const QString& str)
     if (retval.isValid() && parts.size() == 2) {
       bool ok;
       // prepend "0.".  prepending "." won't work if there are no trailing digits.
-      long msec = lround(1000.0 * QString("0.%1").arg(parts.at(1)).toDouble(&ok));
+      long msec = lround(1000.0 * QStringLiteral("0.%1").arg(parts.at(1)).toDouble(&ok));
       if (ok) {
         retval = retval.addMSecs(msec);
       } else {
@@ -631,7 +631,7 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
   const QStringList fields = ibuf.split(',');
   if (fields.size() > 4) {
     QTime time = nmea_parse_hms(fields[1]);
-    QString datestr = QString("%1%2%3").arg(fields[2], fields[3], fields[4]);
+    QString datestr = QStringLiteral("%1%2%3").arg(fields[2], fields[3], fields[4]);
     QDate date = QDate::fromString(datestr, "ddMMyyyy");
 
     // The prev_datetime data member might be used by

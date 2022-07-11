@@ -254,7 +254,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   if (qstarz_bl_1000_is_waypoint_type(type)) {
     if (global_opts.synthesize_shortnames) {
-      waypoint->shortname = QString("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
+      waypoint->shortname = QStringLiteral("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
       waypoint->wpt_flags.shortname_is_synthetic = 1;
     }
     waypt_add(waypoint);

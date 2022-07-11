@@ -395,7 +395,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
           speed = MPS_TO_KPH(speed);
         }
         QString base = wpt->shortname.isEmpty() ? "WPT" : wpt->shortname;
-        wpt->shortname = base + QString("@%1").arg(speed,0,'f',0);
+        wpt->shortname = base + QStringLiteral("@%1").arg(speed,0,'f',0);
       }
     }
 
@@ -1230,7 +1230,7 @@ GarminGPIFormat::rd_init(const QString& fname)
   read_header();
 
   if ((codepage >= 1250) && (codepage <= 1257)) {
-    QString qCodecName = QString("windows-%1").arg(codepage);
+    QString qCodecName = QStringLiteral("windows-%1").arg(codepage);
     cet_convert_init(CSTR(qCodecName), 1);
   } else if (codepage == 65001) {
     cet_convert_init("utf8", 1);
@@ -1273,7 +1273,7 @@ GarminGPIFormat::wr_init(const QString& fname)
   codepage = 0;
 
   for (int i = 1250; i <= 1257; i++) {
-    if (QString("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+    if (QStringLiteral("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
       codepage = i;
       break;
     }

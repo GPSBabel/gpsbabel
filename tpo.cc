@@ -279,7 +279,7 @@ static void tpo_read_2_x()
     track_add_head(track_temp);
 
     /* generate a generic track name */
-    track_temp->rte_name = QString("Track %1").arg(i+1);
+    track_temp->rte_name = QStringLiteral("Track %1").arg(i+1);
 
     /* zoom level 1-5 visibility flags */
     gbfread(&buff[0], 1, 10, tpo_file_in);
@@ -566,7 +566,7 @@ static void tpo_process_tracks()
     if (tmp) {
       styles[ii].name = gbfreadbuf(tmp, tpo_file_in);
     } else { // Assign a generic style name
-      styles[ii].name = QString("STYLE %1").arg(ii);
+      styles[ii].name = QStringLiteral("STYLE %1").arg(ii);
     }
 #ifdef Tracks2012
     //TBD: Should this be TRACKNAMELENGTH?
@@ -1219,7 +1219,7 @@ static void tpo_process_map_notes()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("NOTE %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("NOTE %1").arg(ii + 1);
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
@@ -1320,7 +1320,7 @@ static void tpo_process_symbols()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("SYM %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("SYM %1").arg(ii + 1);
 
     // Add the waypoint to the chain of waypoints
     waypt_add(waypoint_temp);
@@ -1363,7 +1363,7 @@ static void tpo_process_text_labels()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("TXT %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("TXT %1").arg(ii + 1);
 
     for (int jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH

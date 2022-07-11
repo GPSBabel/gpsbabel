@@ -306,7 +306,7 @@ GtrnctrFormat::gtc_crs_hdr(const route_head* rte)
 
   if (!rte->rte_name.isEmpty()) {
     QString name = rte->rte_name.left(kGtcMaxNameLen);
-    gtc_write_xml(0, QString("<Name>%1</Name>\n").arg(name));
+    gtc_write_xml(0, QStringLiteral("<Name>%1</Name>\n").arg(name));
   } else {
     gtc_write_xml(0, "<Name>New Course</Name>\n");
   }

@@ -203,7 +203,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
       QDateTime creation_time = bintime2utc(bindate, bintime);
       QString datetime = creation_time.toString("yyyy/MM/dd hh:mm:ss");
       *track = new route_head;
-      (*track)->rte_name = QString("%1 tracklog (%2)").arg(model->name, datetime);
+      (*track)->rte_name = QStringLiteral("%1 tracklog (%2)").arg(model->name, datetime);
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }

@@ -73,7 +73,7 @@ void TransformFilter::transform_rte_disp_hdr_cb(const route_head* rte)
     current_trk = new route_head;
     track_add_head(current_trk);
     if (!rte->rte_name.isEmpty()) {
-      current_trk->rte_desc = QString("Generated from route %1").arg(rte->rte_name);
+      current_trk->rte_desc = QStringLiteral("Generated from route %1").arg(rte->rte_name);
       current_trk->rte_name = rte->rte_name; /* name the new trk */
     }
   }
