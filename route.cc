@@ -339,7 +339,7 @@ computed_trkdata track_recompute(const route_head* trk)
     }
 
     if (thisw->shortname.isEmpty()) {
-      thisw->shortname = QString("%1-%2").arg(trk->rte_name).arg(tkpt);
+      thisw->shortname = QStringLiteral("%1-%2").arg(trk->rte_name).arg(tkpt);
     }
     tkpt++;
     prev = thisw;

@@ -284,22 +284,22 @@ QString GdbFormat::gdb_to_ISO8601_duration(unsigned int seconds)
   unsigned int days = seconds / 86400u;
   QString out = "P";
   if (days != 0) {
-    out.append(QString("D%1").arg(days));
+    out.append(QStringLiteral("D%1").arg(days));
     seconds -= 86400u * days;
   }
   out.append(QString("T"));
   unsigned int hours = seconds / 3600u;
   if (hours != 0) {
-    out.append(QString("%1H").arg(hours));
+    out.append(QStringLiteral("%1H").arg(hours));
     seconds -= 3600u * hours;
   }
   unsigned int minutes = seconds / 60u;
   if (minutes != 0) {
-    out.append(QString("%1M").arg(minutes));
+    out.append(QStringLiteral("%1M").arg(minutes));
     seconds -= 60u * minutes;
   }
   if (seconds != 0) {
-    out.append(QString("%1S").arg(seconds));
+    out.append(QStringLiteral("%1S").arg(seconds));
   }
   return out;
 }
@@ -578,7 +578,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     if (wpt_class == gt_waypt_class_map_intersection || wpt_class == gt_waypt_class_map_line) {
       garmin_fs_t::set_duration(gmsd, duration);
-      res->notes = QString("[%1]").arg(gdb_to_ISO8601_duration(duration));
+      res->notes = QStringLiteral("[%1]").arg(gdb_to_ISO8601_duration(duration));
 #if GDB_DEBUG
       DBG(GDB_DBG_WPTe, 1)
       printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",

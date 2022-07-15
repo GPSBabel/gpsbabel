@@ -197,7 +197,7 @@ ozi_get_time_str(const Waypoint* waypointp)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
-    return QString("%1").arg(time, 0, 'f', 7);
+    return QStringLiteral("%1").arg(time, 0, 'f', 7);
   }
   return QString("");
 }
@@ -243,7 +243,7 @@ ozi_openfile(const QString& fname)
 
   QString buff;
   if ((track_out_count) && (ozi_objective == trkdata)) {
-    buff = QString("-%1").arg(track_out_count);
+    buff = QStringLiteral("-%1").arg(track_out_count);
   } else {
     buff = QString("");
   }
@@ -256,7 +256,7 @@ ozi_openfile(const QString& fname)
     sname.chop(suffix_len + 1);
   }
 
-  QString tmpname = QString("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
+  QString tmpname = QStringLiteral("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
   if (stream != nullptr) {

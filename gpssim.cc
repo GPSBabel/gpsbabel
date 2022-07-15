@@ -125,8 +125,8 @@ gpssim_write_pt(const Waypoint* wpt)
   if (wpt->creation_time.isValid()) {
     char tbuf[20];
 
-    QByteArray dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
-    QByteArray hms = wpt->GetCreationTime().toUTC().toString("hhmmss").toUtf8();
+    QByteArray dmy = wpt->GetCreationTime().toUTC().toString(u"ddMMyy").toUtf8();
+    QByteArray hms = wpt->GetCreationTime().toUTC().toString(u"hhmmss").toUtf8();
 
     snprintf(tbuf, sizeof(tbuf), ",%s,%s",dmy.constData(), hms.constData());
     strcat(obuf, tbuf);
@@ -144,7 +144,7 @@ gpssim_trk_hdr(const route_head* rh)
       fatal(MYNAME ": output file already open.\n");
     }
 
-    QString ofname = QString("%1%2%3.gpssim").arg(fnamestr, doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
+    QString ofname = QStringLiteral("%1%2%3.gpssim").arg(fnamestr, doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
     fout = gbfopen(ofname, "wb", MYNAME);
   }
   (void) track_recompute(rh);

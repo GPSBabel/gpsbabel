@@ -1422,8 +1422,8 @@ void mag_track_disp(const Waypoint* waypointp)
     QDateTime dt = waypointp->GetCreationTime().toUTC();
     dt = dt.addMSecs(10 * lround(dt.time().msec()/10.0) - dt.time().msec());
     assert((dt.time().msec() % 10) == 0);
-    dmy = dt.toString("ddMMyy").toUtf8();
-    hms = dt.toString("hhmmss.zzz").left(9).toUtf8();
+    dmy = dt.toString(u"ddMMyy").toUtf8();
+    hms = dt.toString(u"hhmmss.zzz").left(9).toUtf8();
   }
 
   double lon = fabs(ilon);

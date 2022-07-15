@@ -1590,13 +1590,13 @@ XcsvFormat::xcsv_replace_tokens(const QString& original) const
 
     QDateTime dt = current_time().toUTC();
 
-    QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
+    QString dts = dt.toString(u"ddd MMM dd hh:mm:ss yyyy");
     replacement.replace("__DATE_AND_TIME__", dts);
 
-    QString d = dt.toString("MM/dd/yyyy");
+    QString d = dt.toString(u"MM/dd/yyyy");
     replacement.replace("__DATE__", d);
 
-    QString t = dt.toString("hh:mm:ss");
+    QString t = dt.toString(u"hh:mm:ss");
     replacement.replace("__TIME__", t);
   }
   return replacement;

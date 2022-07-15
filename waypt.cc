@@ -617,7 +617,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      wpt->shortname = QString("WPT%1").arg(waypt_count(), 3, 10, QLatin1Char('0'));
+      wpt->shortname = QStringLiteral("WPT%1").arg(waypt_count(), 3, 10, QLatin1Char('0'));
     }
   }
 
@@ -643,7 +643,7 @@ WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QStri
   append(wpt);
 
   if (synth && wpt->shortname.isEmpty()) {
-    wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
+    wpt->shortname = QStringLiteral("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
 }

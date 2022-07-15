@@ -239,7 +239,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   // second byte is endianness
   def.endian = fit_getuint8();
   if (def.endian > 1) {
-    throw ReaderException(QString("Bad endian field 0x%1 at file position 0x%2.").arg(def.endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
+    throw ReaderException(QStringLiteral("Bad endian field 0x%1 at file position 0x%2.").arg(def.endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
   fit_data.endian = def.endian;
 
@@ -675,7 +675,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     auto* lappt = new Waypoint;
     lappt->latitude = GPS_Math_Semi_To_Deg(endlat);
     lappt->longitude = GPS_Math_Semi_To_Deg(endlon);
-    lappt->shortname = QString("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
+    lappt->shortname = QStringLiteral("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
     waypt_add(lappt);
   }
   break;

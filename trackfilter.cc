@@ -238,9 +238,9 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
   QString datetimestring;
 
   if (opt_interval != 0) {
-    datetimestring = dt.toUTC().toString("yyyyMMddhhmmss");
+    datetimestring = dt.toUTC().toString(u"yyyyMMddhhmmss");
   } else {
-    datetimestring = dt.toUTC().toString("yyyyMMdd");
+    datetimestring = dt.toUTC().toString(u"yyyyMMdd");
   }
 
   if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {
@@ -253,10 +253,10 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
     } else {
-      track->rte_name = QString("%1-%2").arg(opt_title, datetimestring);
+      track->rte_name = QStringLiteral("%1-%2").arg(opt_title, datetimestring);
     }
   } else if (!track->rte_name.isEmpty()) {
-    track->rte_name = QString("%1-%2").arg(track->rte_name, datetimestring);
+    track->rte_name = QStringLiteral("%1-%2").arg(track->rte_name, datetimestring);
   } else {
     track->rte_name = datetimestring;
   }
@@ -759,7 +759,7 @@ void TrackFilter::trackfilter_seg2trk()
           dest->rte_num = src->rte_num;
           /* name in the form TRACKNAME #n */
           if (!src->rte_name.isEmpty()) {
-            dest->rte_name = QString("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
+            dest->rte_name = QStringLiteral("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
           }
 
           /* Insert after original track or after last newly

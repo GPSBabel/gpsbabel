@@ -391,7 +391,7 @@ void KmlFormat::wr_init(const QString& fname)
 void KmlFormat::wr_position_init(const QString& fname)
 {
   posnfilename = fname;
-  posnfilenametmp = QString("%1-").arg(fname);
+  posnfilenametmp = QStringLiteral("%1-").arg(fname);
   realtime_positioning = 1;
   max_position_points = atoi(opt_max_position_points);
 }
@@ -842,9 +842,9 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
       if (trackdirection && (pt_type == kmlpt_track)) {
         QString value;
         if (waypointp->speed < 1) {
-          value = QString("%1-none").arg(style);
+          value = QStringLiteral("%1-none").arg(style);
         } else {
-          value = QString("%1-%2").arg(style)
+          value = QStringLiteral("%1-%2").arg(style)
                   .arg((int)(waypointp->course / 22.5 + .5) % 16);
         }
         writer->writeTextElement(QStringLiteral("styleUrl"), value);
@@ -1141,7 +1141,7 @@ QString KmlFormat::kml_lookup_gc_icon(const Waypoint* waypointp)
     break;
   }
 
-  return QString("https://www.geocaching.com/images/kml/%1").arg(icon);
+  return QStringLiteral("https://www.geocaching.com/images/kml/%1").arg(icon);
 }
 
 const char* KmlFormat::kml_lookup_gc_container(const Waypoint* waypointp)
@@ -1184,9 +1184,9 @@ QString KmlFormat::kml_gc_mkstar(int rating)
   }
 
   if (0 == rating % 10) {
-    star_content = QString("stars%1").arg(rating / 10);
+    star_content = QStringLiteral("stars%1").arg(rating / 10);
   } else {
-    star_content = QString("stars%1_%2").arg(rating / 10).arg(rating % 10);
+    star_content = QStringLiteral("stars%1_%2").arg(rating / 10).arg(rating % 10);
   }
 
   return star_content;
@@ -1301,7 +1301,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
   QString date_placed;
   if (waypointp->GetCreationTime().isValid()) {
-    date_placed = waypointp->GetCreationTime().toString("dd-MMM-yyyy");
+    date_placed = waypointp->GetCreationTime().toString(u"dd-MMM-yyyy");
   }
 
   writer->writeTextElement(QStringLiteral("styleUrl"), QStringLiteral("#geocache"));
@@ -1770,7 +1770,7 @@ void KmlFormat::write()
     if (trackdirection) {
       kml_write_bitmap_style(kmlpt_other, ICON_TRK, "track-none");
       for (int i = 0; i < 16; ++i) {
-        kml_write_bitmap_style(kmlpt_other, QString(ICON_DIR).arg(i), QString("track-%1").arg(i));
+        kml_write_bitmap_style(kmlpt_other, QStringLiteral(ICON_DIR).arg(i), QStringLiteral("track-%1").arg(i));
       }
     } else {
       kml_write_bitmap_style(kmlpt_track, ICON_TRK, nullptr);

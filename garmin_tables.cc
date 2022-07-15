@@ -424,11 +424,11 @@ QString
 gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
   if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563)) {
-    return QString("Custom %1").arg(icon - 500);
+    return QStringLiteral("Custom %1").arg(icon - 500);
   }
 
   if ((garmin_format == PCX) && (icon >= 7680) && (icon <= 8191)) {
-    return QString("Custom %1").arg(icon - 7680);
+    return QStringLiteral("Custom %1").arg(icon - 7680);
   }
 
   for (const icon_mapping_t* i = garmin_icon_table; i->icon; i++) {

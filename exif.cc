@@ -194,10 +194,10 @@ ExifFormat::exif_type_size(const uint16_t type)
 QString
 ExifFormat::exif_time_str(const QDateTime& time)
 {
-  QString str = time.toString("yyyy/MM/dd hh:mm:ss t");
+  QString str = time.toString(u"yyyy/MM/dd hh:mm:ss t");
   if (time.timeSpec() != Qt::UTC) {
     str.append(" (");
-    str.append(time.toUTC().toString("yyyy/MM/dd hh:mm:ss t"));
+    str.append(time.toUTC().toString(u"yyyy/MM/dd hh:mm:ss t"));
     str.append(")");
   }
   return str;
@@ -1554,7 +1554,7 @@ ExifFormat::write()
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, dt.time().minute());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2, dt.time().second());
 
-      exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString("yyyy:MM:dd")));
+      exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString(u"yyyy:MM:dd")));
     } else {
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_TIMESTAMP);
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_DATESTAMP);

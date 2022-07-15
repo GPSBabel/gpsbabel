@@ -484,7 +484,7 @@ private:
     }
 
     // Didn't find it in table, default to leave it as the number found
-    return QString("icon-%1").arg(icon);
+    return QStringLiteral("icon-%1").arg(icon);
   }
 
   template <typename T>

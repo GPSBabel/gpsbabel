@@ -606,7 +606,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
 {
   auto* wpt = new Waypoint;
 
-  wpt->shortname = QString("TP%1").arg(++st->tpn, 4, 10, QLatin1Char('0'));
+  wpt->shortname = QStringLiteral("TP%1").arg(++st->tpn, 4, 10, QLatin1Char('0'));
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
