@@ -103,7 +103,7 @@ track_insert_head(route_head* rte, route_head* predecessor)
 }
 
 void
-route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -116,7 +116,7 @@ route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int numbe
 }
 
 void
-track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -408,7 +408,7 @@ RouteList::insert_head(route_head* rte, route_head* predecessor)
 // in the RouteList AND any routes that have had waypoints added but haven't been
 // added themselves yet.
 void
-RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
+RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
@@ -456,7 +456,6 @@ RouteList::copy(RouteList** dst) const
     *dst = new RouteList;
   }
 
-  const char RPT[] = "RPT";
   for (const auto& rte_old : *this) {
     auto* rte_new = new route_head;
     // waypoint_list created below with add_wpt.
@@ -471,7 +470,7 @@ RouteList::copy(RouteList** dst) const
     (*dst)->add_head(rte_new);
     const auto& old_list = rte_old->waypoint_list;
     for (const auto& old_wpt : old_list) {
-      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
+      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, u"RPT", 3);
     }
   }
 }

@@ -638,7 +638,7 @@ WaypointList::waypt_add(Waypoint* wpt)
 }
 
 void
-WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
+WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   append(wpt);
 

@@ -533,7 +533,7 @@ class WaypointList : private QList<Waypoint*>
 {
 public:
   void waypt_add(Waypoint* wpt); // a.k.a. append(), push_back()
-  void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
@@ -709,7 +709,7 @@ public:
   void del_head(route_head* rte); // a.k.a. erase()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void insert_head(route_head* rte, route_head* predecessor); // a.k.a. insert
-  void add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
@@ -767,8 +767,8 @@ void route_del_head(route_head* rte);
 void track_add_head(route_head* rte);
 void track_del_head(route_head* rte);
 void track_insert_head(route_head* rte, route_head* predecessor);
-void route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
-void track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
+void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
+void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
