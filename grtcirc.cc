@@ -24,7 +24,6 @@
 
 #include <cerrno>
 #include <cmath>
-#include <cmath>
 #include <cstdio>
 
 static const double EARTH_RAD = 6378137.0;
