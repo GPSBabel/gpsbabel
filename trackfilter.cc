@@ -950,7 +950,6 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
 void TrackFilter::init()
 {
-  RteHdFunctor<TrackFilter> trackfilter_segment_head_f(this, &TrackFilter::trackfilter_segment_head);
   RteHdFunctor<TrackFilter> trackfilter_fill_track_list_cb_f(this, &TrackFilter::trackfilter_fill_track_list_cb);
 
   /*
@@ -972,7 +971,7 @@ void TrackFilter::init()
 
   // Perform segmenting first.
   if (opt_segment) {
-    track_disp_all(trackfilter_segment_head_f, nullptr, nullptr);
+    track_disp_all(trackfilter_segment_head, nullptr, nullptr);
   }
 
   track_list.clear();
