@@ -19,16 +19,17 @@
 
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
-#include <algorithm>            // for sort
-#include <iterator>
 #include <optional>             // for optional, operator>, operator<
 
-#include <QDateTime>            // for QDateTime
-#include <QList>                // for QList<>::iterator
+#include <QDateTime>            // for operator>, QDateTime, operator<
+#include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString
-#include <QtGlobal>             // for foreach
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QStringView>          // for QStringView
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach
 
 #include "defs.h"
+#include "formspec.h"           // for FormatSpecificDataList
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t (ptr only)
 #include "src/core/datetime.h"  // for DateTime

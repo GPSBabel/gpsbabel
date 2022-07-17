@@ -21,22 +21,27 @@
 
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
-#include <cstdio>               // for printf, fflush, fprintf, stdout
-#include <algorithm>            // for stable_sort
+#include <cstdio>               // for fflush, fprintf, stdout
 
 #include <QChar>                // for QChar
 #include <QDateTime>            // for QDateTime
-#include <QList>                // for QList
+#include <QDebug>               // for QDebug
+#include <QLatin1Char>          // for QLatin1Char
+#include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString, operator==
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QStringView>          // for QStringView
 #include <QTime>                // for QTime
-#include <QtGlobal>             // for qPrintable
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
+#include "formspec.h"           // for FormatSpecificDataList
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
-#include "src/core/logging.h"   // for Warning, Fatal
+#include "src/core/logging.h"   // for FatalMsg
+
 
 WaypointList* global_waypoint_list;
 

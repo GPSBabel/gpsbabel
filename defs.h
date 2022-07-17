@@ -19,36 +19,39 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <algorithm>              // for sort, stable_sort
-#include <cmath>                  // for M_PI
-#include <cstdarg>                // for va_list
-#include <cstddef>                // for NULL, nullptr_t, size_t
-#include <cstdint>                // for int32_t, uint32_t
-#include <cstdio>                 // for NULL, fprintf, FILE, stdout
-#include <ctime>                  // for time_t
-#include <optional>               // for optional
-#include <utility>                // for move
+#include <algorithm>                 // for sort, stable_sort
+#include <cmath>                     // for M_PI
+#include <cstdarg>                   // for va_list
+#include <cstddef>                   // for NULL, nullptr_t, size_t
+#include <cstdint>                   // for int32_t, uint32_t
+#include <cstdio>                    // for NULL, fprintf, FILE, stdout
+#include <ctime>                     // for time_t
+#include <optional>                  // for optional
+#include <utility>                   // for move
 
 #if HAVE_LIBZ
-#include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
+#include <zlib.h>                    // doesn't really belong here, but is missing elsewhere.
 #elif !ZLIB_INHIBITED
-#include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
+#include "zlib.h"                    // doesn't really belong here, but is missing elsewhere.
 #endif
 
-#include <QDebug>                 // for QDebug
-#include <QList>                  // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QScopedPointer>         // for QScopedPointer
-#include <QString>                // for QString
-#include <QTextCodec>             // for QTextCodec
-#include <QVector>                // for QVector
-#include <Qt>                     // for CaseInsensitive
-#include <QtGlobal>               // for foreach
+#include <QDateTime>                 // for QDateTime
+#include <QDebug>                    // for QDebug
+#include <QList>                     // for QList, QList<>::const_iterator, QList<>::const_reverse_iterator, QList<>::count, QList<>::reverse_iterator
+#include <QScopedPointer>            // for QScopedPointer
+#include <QScopedPointerPodDeleter>  // for QScopedPointerPodDeleter
+#include <QString>                   // for QString
+#include <QStringView>               // for QStringView
+#include <QTextCodec>                // for QTextCodec
+#include <QVector>                   // for QVector
+#include <Qt>                        // for CaseInsensitive
+#include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
-#include "formspec.h"             // for FormatSpecificData
-#include "inifile.h"              // for inifile_t
-#include "gbfile.h"               // doesn't really belong here, but is missing elsewhere.
-#include "session.h"              // for session_t
-#include "src/core/datetime.h"    // for DateTime
+#include "formspec.h"                // for FormatSpecificData
+#include "inifile.h"                 // for inifile_t
+#include "gbfile.h"                  // doesn't really belong here, but is missing elsewhere.
+#include "session.h"                 // for session_t
+#include "src/core/datetime.h"       // for DateTime
 
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
