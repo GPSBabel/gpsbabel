@@ -31,7 +31,6 @@
 
 #if FILTERS_ENABLED
 
-#include <cctype>
 
 #define MYNAME "transform"
 

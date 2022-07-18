@@ -43,7 +43,7 @@ private:
   QVector<arglist_t> args = {
   };
 
-  void swapdata_cb(const Waypoint* ref);
+  static void swapdata_cb(const Waypoint* ref);
 
 };
 

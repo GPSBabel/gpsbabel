@@ -82,7 +82,7 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
-  static int nmea_cksum(const char* const buf);
+  static int nmea_cksum(const char* buf);
 
 private:
   /* Types */
