@@ -259,7 +259,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
     }
     waypt_add(waypoint);
   } else if (qstarz_bl_1000_is_trackpoint_type(type)) {
-    track_add_wpt(track_route, waypoint, "TP", 3);
+    track_add_wpt(track_route, waypoint, u"TP", 3);
   } else {
     delete waypoint;
   }
