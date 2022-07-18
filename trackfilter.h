@@ -220,7 +220,7 @@ private:
   void trackfilter_faketime();             /* returns number of track points left after filtering */
   static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
 
-  void trackfilter_segment_head(const route_head* rte);
+  static void trackfilter_segment_head(const route_head* rte);
 
 };
 
