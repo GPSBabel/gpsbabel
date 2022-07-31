@@ -962,7 +962,7 @@ rot13(const QString& s)
  * a format usable for strftime and others
  */
 
-char*
+QString
 convert_human_date_format(const char* human_datef)
 {
   char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
@@ -1020,7 +1020,9 @@ convert_human_date_format(const char* human_datef)
       fatal("Invalid character \"%c\" in date format!", *cin);
     }
   }
-  return result;
+  QString rv(result);
+  xfree(result);
+  return rv;
 }
 
 /*
@@ -1028,7 +1030,7 @@ convert_human_date_format(const char* human_datef)
  * a format usable for strftime and others
  */
 
-char*
+QString
 convert_human_time_format(const char* human_timef)
 {
   char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
@@ -1112,7 +1114,9 @@ convert_human_time_format(const char* human_timef)
       fatal("Invalid character \"%c\" in time format!", *cin);
     }
   }
-  return result;
+  QString rv(result);
+  xfree(result);
+  return rv;
 }
 
 
