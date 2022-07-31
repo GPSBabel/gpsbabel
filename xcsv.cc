@@ -1388,12 +1388,12 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_GEOCACHE_CONTAINER:
       /* Geocache Container */
-      buff = QString::asprintf(fmp.printfc.constData(), gs_get_container(wpt->gc_data->container));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(gs_get_container(wpt->gc_data->container)));
       field_is_unknown = wpt->gc_data->container == gc_unknown;
       break;
     case XcsvStyle::XT_GEOCACHE_TYPE:
       /* Geocache Type */
-      buff = QString::asprintf(fmp.printfc.constData(), gs_get_cachetype(wpt->gc_data->type));
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(gs_get_cachetype(wpt->gc_data->type)));
       field_is_unknown = wpt->gc_data->type == gt_unknown;
       break;
     case XcsvStyle::XT_GEOCACHE_HINT:

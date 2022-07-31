@@ -724,7 +724,7 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
  * a GPX file from geocaching.com.  Thus we sort of make all the other
  * formats do lookups based on these strings.
  */
-const char*
+QString
 get_cache_icon(const Waypoint* waypointp)
 {
   if (!global_opts.smart_icons) {

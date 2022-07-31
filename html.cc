@@ -90,11 +90,12 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   gbfprintf(file_out, "<td align=\"right\">");
   if (wpt->gc_data->terr) {
     gbfprintf(file_out, "<p class=\"gpsbabelcacheinfo\">%d%s / %d%s<br>\n",
-              (int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?"&frac12;":"",
-              (int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?"&frac12;":"");
-    gbfprintf(file_out, "%s / %s</p>",
-              gs_get_cachetype(wpt->gc_data->type),
-              gs_get_container(wpt->gc_data->container));
+              (int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10) ? "&frac12;" : "",
+              (int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10) ? "&frac12;" : "");
+    gbfputs(QStringLiteral("%1 / %2</p>")
+            .arg(gs_get_cachetype(wpt->gc_data->type),
+                 gs_get_container(wpt->gc_data->container)),
+            file_out);
   }
   gbfprintf(file_out, "</td></tr>\n");
 

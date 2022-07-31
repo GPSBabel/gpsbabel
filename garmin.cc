@@ -986,7 +986,7 @@ waypoint_prepare()
     if (deficon) {
       icon = gt_find_icon_number_from_desc(deficon, PCX);
     } else {
-      if (get_cache_icon(wpt)) {
+      if (!get_cache_icon(wpt).isEmpty()) {
         icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
       } else {
         icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
