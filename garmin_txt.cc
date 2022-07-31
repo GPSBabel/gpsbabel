@@ -360,7 +360,7 @@ print_position(const Waypoint* wpt)
     *fout << "#####\n";
     fatal(MYNAME ": %s (%s) is outside of convertible area \"%s\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-          pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
+          qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
           gt_get_mps_grid_longname(grid_index, MYNAME));
   }
 }

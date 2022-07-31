@@ -758,7 +758,7 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
         str = wpt->notes;
       }
     } else if (opt_pos) {
-      str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", 0);
+      str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", false);
     }
 
 
