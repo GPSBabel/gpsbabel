@@ -75,10 +75,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   gbfprintf(file_out, "<br>\n");
   if (wpt->description != wpt->shortname) {
     if (wpt->HasUrlLink()) {
-      char* d = html_entitize(wpt->description);
-      UrlLink link = wpt->GetUrlLink();
-      gbfprintf(file_out, "<a href=\"%s\">%s</a>", CSTR(link.url_), d);
-      xfree(d);
+      gbfputs(QStringLiteral("<a href=\"%1\">%2</a>")
+              .arg(wpt->GetUrlLink().url_, html_entitize(wpt->description)),
+              file_out);
     } else {
       gbfprintf(file_out, "%s", CSTR(wpt->description));
     }
@@ -139,9 +138,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = xml_findfirst(curlog, "groundspeak:finder");
         if (logpart) {
-          char* f = html_entitize(logpart->cdata);
-          gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
-          xfree(f);
+          gbfputs(QStringLiteral("<span class=\"gpsbabellogfinder\">%1</span> on ")
+                  .arg(html_entitize(logpart->cdata)),
+                  file_out);
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:date");
@@ -178,9 +177,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
             s = logpart->cdata;
           }
 
-          char* t = html_entitize(s);
-          gbfputs(t, file_out);
-          xfree(t);
+          gbfputs(html_entitize(s), file_out);
         }
 
         gbfprintf(file_out, "</p>\n");
@@ -194,13 +191,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 void
 HtmlFormat::html_index(const Waypoint* wpt) const
 {
-  char* sn = html_entitize(wpt->shortname);
-  char* d = html_entitize(wpt->description);
-
-  gbfprintf(file_out, "<a href=\"#%s\">%s - %s</a><br>\n", sn, sn, d);
-
-  xfree(sn);
-  xfree(d);
+  gbfputs(QStringLiteral("<a href=\"#%1\">%1 - %2</a><br>\n")
+          .arg(html_entitize(wpt->shortname), html_entitize(wpt->description)),
+          file_out);
 }
 
 void
