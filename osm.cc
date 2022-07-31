@@ -406,20 +406,11 @@ OsmFormat::osm_feature_symbol(const int ikey, const char* value) const
   return result;
 }
 
-char*
-OsmFormat::osm_strip_html(const char* str)
-{
-  utf_string utf(true, str);
-  return strip_html(&utf);	// util.cc
-}
-
 QString
 OsmFormat::osm_strip_html(const QString& str)
 {
-  char* r = osm_strip_html(CSTR(str));
-  QString rv(r);
-  xfree(r);
-  return rv;
+  utf_string utf(true, str);
+  return strip_html(&utf);	// util.cc
 }
 
 void

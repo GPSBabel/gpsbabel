@@ -64,9 +64,7 @@ vcf_print_utf(const utf_string* s)
     return;
   }
 
-  char *string = strip_html(s);
-  QString stripped_html = string;
-  xfree(string);
+  QString stripped_html = strip_html(s);
 
   stripped_html.replace("\n", "\\n", Qt::CaseInsensitive);
   stripped_html.replace("<p>", "\\n", Qt::CaseInsensitive);
