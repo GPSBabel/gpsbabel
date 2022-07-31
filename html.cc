@@ -102,14 +102,14 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
   gbfprintf(file_out, "<tr><td colspan=\"2\">");
   if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-    char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_short.utfstring);
-    gbfprintf(file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr);
-    xfree(tmpstr);
+    gbfputs(QStringLiteral("<p class=\"gpsbabeldescshort\">%1</p>\n")
+            .arg(strip_nastyhtml(wpt->gc_data->desc_short.utfstring)),
+            file_out);
   }
   if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-    char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_long.utfstring);
-    gbfprintf(file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr);
-    xfree(tmpstr);
+    gbfputs(QStringLiteral("<p class=\"gpsbabeldesclong\">%1</p>\n")
+            .arg(strip_nastyhtml(wpt->gc_data->desc_long.utfstring)),
+            file_out);
   }
   if (!wpt->gc_data->hint.isEmpty()) {
     QString hint;

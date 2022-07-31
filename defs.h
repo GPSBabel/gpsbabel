@@ -1081,8 +1081,8 @@ QString gs_get_cachetype(geocache_type t);
 QString gs_get_container(geocache_container t);
 QString xml_entitize(const QString& str);
 QString html_entitize(const QString& str);
-char* strip_html(const utf_string*);
-char* strip_nastyhtml(const QString& in);
+QString strip_html(const utf_string*);
+QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
 QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */

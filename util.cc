@@ -1167,7 +1167,7 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
-char*
+QString
 strip_nastyhtml(const QString& in)
 {
   char* returnstr;
@@ -1249,7 +1249,9 @@ strip_nastyhtml(const QString& in)
     *lcp = '*';
   }
   xfree(lcstr);
-  return (returnstr);
+  QString rv(returnstr);
+  xfree(returnstr);
+  return rv;
 }
 
 /*
@@ -1258,7 +1260,7 @@ strip_nastyhtml(const QString& in)
  *  pleasant for a human reader.   Yes, this falls down in all kinds of
  *  ways such as spaces within the tags, etc.
  */
-char*
+QString
 strip_html(const utf_string* in)
 {
 #if 0
@@ -1267,17 +1269,18 @@ strip_html(const utf_string* in)
   // or just say we don't do that any more.
   QTextDocument doc;
   doc.setHtml(in->utfstring);
-  return xstrdup(CSTR(doc.toPlainText().simplified()));
+  return doc.toPlainText().simplified();
 #else
+  if (!in->is_html) {
+    return in->utfstring;
+  }
+
   char* out;
   char* instr;
   char tag[8];
   unsigned short int taglen = 0;
 
   char* incopy = instr = xstrdup(in->utfstring);
-  if (!in->is_html) {
-    return instr;
-  }
   /*
    * We only shorten, so just dupe the input buf for space.
    */
@@ -1344,10 +1347,10 @@ strip_html(const utf_string* in)
     instr++;
   }
   *out++ = 0;
-  if (incopy) {
-    xfree(incopy);
-  }
-  return (outstring);
+  xfree(incopy);
+  QString rv(outstring);
+  xfree(outstring);
+  return rv;
 #endif
 }
 
