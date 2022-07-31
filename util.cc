@@ -1123,10 +1123,10 @@ convert_human_time_format(const char* human_timef)
  * sep = string between lat and lon (separator)
  * html = 1 for html output otherwise text
  */
-char*
-pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
+QString
+pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 {
-  char*	result;
+  QString	result;
   char latsig = lat < 0 ? 'S':'N';
   char lonsig = lon < 0 ? 'W':'E';
   int latint = abs((int) lat);
@@ -1139,17 +1139,17 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
     sep = " ";  /* default " " */
   }
   if (fmt == 'd') { /* ddd */
-    xasprintf(&result, "%c%6.5f%s%s%c%6.5f%s",
-              latsig, fabs(lat), html?"&deg;":"", sep,
-              lonsig, fabs(lon), html?"&deg;":"");
+    result = QStringLiteral("%1%2%3%4%5%6%7")
+             .arg(latsig).arg(fabs(lat), 6, 'f', 5).arg(html ? "&deg;" : "", sep)
+             .arg(lonsig).arg(fabs(lon), 6, 'f', 5).arg(html ? "&deg;" : "");
   } else if (fmt == 's') { /* dms */
-    xasprintf(&result, "%c%d%s%02d'%04.1f\"%s%c%d%s%02d'%04.1f\"",
-              latsig, latint, html?"&deg;":" ", (int)latmin, latsec, sep,
-              lonsig, lonint, html?"&deg;":" ", (int)lonmin, lonsec);
+    result = QStringLiteral("%1%2%3%4'%5\"%6%7%8%9%10'%11\"")
+             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg((int)latmin, 2, 10, QChar('0')).arg(latsec, 4, 'f', 1, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg((int)lonmin, 2, 10, QChar('0')).arg(lonsec, 4, 'f', 1, QChar('0'));
   } else { /* default dmm */
-    xasprintf(&result,  "%c%d%s%06.3f%s%c%d%s%06.3f",
-              latsig, latint, html?"&deg;":" ", latmin, sep,
-              lonsig, lonint, html?"&deg;":" ", lonmin);
+    result = QStringLiteral("%1%2%3%4%5%6%7%8%9")
+             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg(latmin, 6, 'f', 3, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg(lonmin, 6, 'f', 3, QChar('0'));
   }
   return result;
 }

@@ -46,3 +46,11 @@ gpsbabel -i unicsv -f ${REFERENCE}/humantodec1.csv -o gpx -F ${TMPDIR}/humantode
 compare ${REFERENCE}/humantodec.gpx ${TMPDIR}/humantodec1.gpx
 gpsbabel -i unicsv -f ${REFERENCE}/humantodec2.csv -o gpx -F ${TMPDIR}/humantodec2.gpx
 compare ${REFERENCE}/humantodec.gpx ${TMPDIR}/humantodec2.gpx
+
+# pretty degree format
+gpsbabel -i unicsv -f ${REFERENCE}/pretty_degree.csv -o unicsv,grid=0 -F ${TMPDIR}/pretty_degree0.csv
+compare ${REFERENCE}/pretty_degree0.csv ${TMPDIR}/pretty_degree0.csv
+gpsbabel -i unicsv -f ${REFERENCE}/pretty_degree.csv -o unicsv,grid=1 -F ${TMPDIR}/pretty_degree1.csv
+compare ${REFERENCE}/pretty_degree1.csv ${TMPDIR}/pretty_degree1.csv
+gpsbabel -i unicsv -f ${REFERENCE}/pretty_degree.csv -o unicsv,grid=2 -F ${TMPDIR}/pretty_degree2.csv
+compare ${REFERENCE}/pretty_degree2.csv ${TMPDIR}/pretty_degree2.csv

@@ -77,18 +77,18 @@ TextFormat::text_disp(const Waypoint* wpt)
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
-  char* tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 0);
   if (wpt->altitude != unknown_alt) {
     xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   } else {
     altout = (char*) "";
   }
-  xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout);
+  xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s",
+            CSTR(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", false)),
+            utmz, utmzc, utme, utmn, altout);
   gbfprintf(file_out, "%-16s  %59s\n",
             (global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname),
             tmpout2);
   xfree(tmpout2);
-  xfree(tmpout1);
   if (altout[0]) {
     xfree(altout);
   }
@@ -168,9 +168,8 @@ TextFormat::text_disp(const Waypoint* wpt)
         if (logpart) {
           double lat = xml_attribute(logpart->attributes, "lat").toDouble();
           double lon = xml_attribute(logpart->attributes, "lon").toDouble();
-          char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 0);
-          gbfprintf(file_out, "%s\n", coordstr);
-          xfree(coordstr);
+          gbfprintf(file_out, "%s\n",
+                    CSTR(pretty_deg_format(lat, lon, degformat[2], " ", false)));
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:text");

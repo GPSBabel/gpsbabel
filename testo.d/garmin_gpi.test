@@ -31,6 +31,10 @@ compare ${TMPDIR}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,category="Vinícolas",hide -F ${TMPDIR}/garmin_gpi_category~gpx.gpi
 compare ${REFERENCE}/garmin_gpi_category~gpx.gpi ${TMPDIR}/garmin_gpi_category~gpx.gpi
 
+# check position option 
+gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,position -F ${TMPDIR}/garmin_gpi_position~gpx.gpi
+compare ${REFERENCE}/garmin_gpi_position~gpx.gpi ${TMPDIR}/garmin_gpi_position~gpx.gpi
+
 # check dual language read
 # spb_metro_norm.gpi from https://www.garmin.ru/download/extras/poi.php or  https://files.navicom.ru/spb_metro_norm.gpi
 gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_ru~gpi.gpx

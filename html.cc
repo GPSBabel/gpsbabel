@@ -66,9 +66,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTR(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
   gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname));
-  char* cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
-  gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
-  xfree(cout);
+  gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)",
+            CSTR(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", true)),
+            utmz, utmzc, utme, utmn);
   if (wpt->altitude != unknown_alt) {
     gbfprintf(file_out, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   }
@@ -161,11 +161,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
         if (logpart) {
           double lat = xml_attribute(logpart->attributes, "lat").toDouble();
           double lon = xml_attribute(logpart->attributes, "lon").toDouble();
-          char* coordstr = pretty_deg_format(lat, lon, degformat[2], " ", 1);
           gbfprintf(file_out,
                     "<span class=\"gpsbabellogcoords\">%s</span><br>\n",
-                    coordstr);
-          xfree(coordstr);
+                    CSTR(pretty_deg_format(lat, lon, degformat[2], " ", true)));
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:text");

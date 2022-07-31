@@ -1113,7 +1113,7 @@ UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
+        qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
 
@@ -1306,7 +1306,6 @@ void
 UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
-  char* cout = nullptr;
   const geocache_data* gc_data = nullptr;
   unicsv_waypt_ct++;
 
@@ -1327,22 +1326,19 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   switch (unicsv_grid_idx) {
 
   case grid_lat_lon_ddd:
-    cout = pretty_deg_format(lat, lon, 'd', unicsv_fieldsep, 0);
-    *fout << cout;
+    *fout << pretty_deg_format(lat, lon, 'd', unicsv_fieldsep, false);
     break;
 
   case grid_lat_lon_dmm:
-    cout = pretty_deg_format(lat, lon, 'm', unicsv_fieldsep, 0);
-    *fout << cout;
+    *fout << pretty_deg_format(lat, lon, 'm', unicsv_fieldsep, false);
     break;
 
   case grid_lat_lon_dms: {
-    cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-    char* sep = strchr(cout, ',');
-    *sep = '\0';
-    QString tmp = csv_enquote(cout, kUnicsvQuoteChar);
+    QString position = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, false);
+    auto sep = position.indexOf(unicsv_fieldsep);
+    QString tmp = csv_enquote(position.left(sep), kUnicsvQuoteChar);
     *fout << tmp << unicsv_fieldsep;
-    tmp = csv_enquote(sep+1, kUnicsvQuoteChar);
+    tmp = csv_enquote(position.mid(sep+1), kUnicsvQuoteChar);
     *fout << tmp;
   }
   break;
@@ -1391,10 +1387,6 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     *fout << qSetRealNumberPrecision(llprec) << lat << unicsv_fieldsep
           << lon;
     break;
-  }
-
-  if (cout) {
-    xfree(cout);
   }
 
   if FIELD_USED(fld_shortname) {
