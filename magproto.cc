@@ -1359,7 +1359,7 @@ mag_waypt_pr(const Waypoint* waypointp)
     icon_token = mag_find_token_from_descr(waypointp->icon_descr);
   }
 
-  if (get_cache_icon(waypointp)) {
+  if (!get_cache_icon(waypointp).isEmpty()) {
     icon_token = mag_find_token_from_descr(get_cache_icon(waypointp));
   }
 

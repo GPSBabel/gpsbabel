@@ -101,10 +101,14 @@ TextFormat::text_disp(const Waypoint* wpt)
     }
   }
   if (wpt->gc_data->terr) {
-    gbfprintf(file_out, " - %s / %s - (%d%s / %d%s)\n",
-              gs_get_cachetype(wpt->gc_data->type), gs_get_container(wpt->gc_data->container),
-              (int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?".5":"",
-              (int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?".5":"");
+    gbfputs(QStringLiteral(" - %1 / %2 - (%3%4 / %5%6)\n")
+            .arg(gs_get_cachetype(wpt->gc_data->type),
+                 gs_get_container(wpt->gc_data->container))
+            .arg((int)(wpt->gc_data->diff / 10))
+            .arg((wpt->gc_data->diff%10) ? ".5" : "")
+            .arg((int)(wpt->gc_data->terr / 10))
+            .arg((wpt->gc_data->terr%10) ? ".5" : ""),
+            file_out);
     if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
       char* stripped_html = strip_html(&wpt->gc_data->desc_short);
       gbfprintf(file_out, "\n%s\n", stripped_html);

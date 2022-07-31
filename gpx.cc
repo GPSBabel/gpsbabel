@@ -442,7 +442,7 @@ gs_mktype(const QString& t)
   return gt_unknown;
 }
 
-const char*
+QString
 gs_get_cachetype(geocache_type t)
 {
   int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
@@ -468,7 +468,7 @@ gs_mkcont(const QString& t)
   return gc_unknown;
 }
 
-const char*
+QString
 gs_get_container(geocache_container t)
 {
   int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
