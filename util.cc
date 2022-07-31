@@ -1395,7 +1395,7 @@ entity_types stdentities[] =  {
 };
 
 static
-char*
+QString
 entitize(const char* str, bool is_html)
 {
   char* p;
@@ -1442,19 +1442,21 @@ entitize(const char* str, bool is_html)
     }
   }
 
-  return (tmp);
+  QString rv(tmp);
+  xfree(tmp);
+  return rv;
 }
 
 /*
  * Public callers for the above to hide the absence of &apos from HTML
  */
 
-char* xml_entitize(const char* str)
+QString xml_entitize(const QString& str)
 {
-  return entitize(str, false);
+  return entitize(CSTR(str), false);
 }
 
-char* html_entitize(const QString& str)
+QString html_entitize(const QString& str)
 {
   return entitize(CSTR(str), true);
 }
