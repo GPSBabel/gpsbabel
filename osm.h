@@ -22,17 +22,18 @@
 #ifndef OSM_H_INCLUDED_
 #define OSM_H_INCLUDED_
 
-#include <QHash>                        // for QHash
-#include <QList>                        // for QList
-#include <QPair>                        // for QPair
-#include <QString>                      // for QString
-#include <QVector>                      // for QVector
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QHash>                       // for QHash
+#include <QList>                       // for QList
+#include <QPair>                       // for QPair
+#include <QString>                     // for QString
+#include <QVector>                     // for QVector
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
 #include "defs.h"
-#include "format.h"                     // for Format
-#include "gbfile.h"                     // for gbfile
-#include "xmlgeneric.h"                 // for xg_functor_map_entry, cb_start, cb_end, xg_string
+#include "format.h"                    // for Format
+#include "src/core/file.h"             // for File
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "xmlgeneric.h"                // for xg_functor_map_entry, cb_start, cb_end, xg_string
 
 
 class OsmFormat : public Format
@@ -135,7 +136,8 @@ private:
   QHash<QPair<int, QString>, const osm_icon_mapping_t*> values;
   QHash<QString, const osm_icon_mapping_t*> icons;
 
-  gbfile* fout{};
+  gpsbabel::File* ofile{nullptr};
+  gpsbabel::XmlStreamWriter* fout{nullptr};
   int node_id{};
   int skip_rte{};
 

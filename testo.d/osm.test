@@ -9,3 +9,7 @@ compare ${REFERENCE}/osm-center-data.gpx ${TMPDIR}/osm-center-data.gpx
 
 # FIXME: implement a test for OSM writer, if possible.
 # compare ${REFERENCE}/osm-data.xml ${TMPDIR}/osm-out.xml 
+
+# OK, we can't compare our output to osm generated reference files, but at least make sure we produce consistent output
+compare ${REFERENCE}/osm-out.xml ${TMPDIR}/osm-out.xml
+compare ${REFERENCE}/osm-center-out.xml ${TMPDIR}/osm-center-out.xml
