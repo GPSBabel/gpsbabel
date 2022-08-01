@@ -1458,7 +1458,7 @@ entitize(const char* str, bool is_html)
  * Public callers for the above to hide the absence of &apos from HTML
  */
 
-QString xml_entitize(const QString& str)
+[[deprecated("Use xmlstreamwriter.")]] QString xml_entitize(const QString& str)
 {
   return entitize(CSTR(str), false);
 }

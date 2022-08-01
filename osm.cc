@@ -654,7 +654,7 @@ OsmFormat::osm_write_tag(const QString& key, const QString& value) const
   if (!value.isEmpty()) {
     fout->writeStartElement(QStringLiteral("tag"));
     fout->writeAttribute(QStringLiteral("k"), key);
-    fout->writeAttribute(QStringLiteral("v"), xml_entitize(value));
+    fout->writeAttribute(QStringLiteral("v"), value);
     fout->writeEndElement();
   }
 }
@@ -669,32 +669,15 @@ OsmFormat::osm_disp_feature(const Waypoint* waypoint) const
 }
 
 void
-OsmFormat::osm_write_opt_tag(const char* atag)
+OsmFormat::osm_write_opt_tag(const QString& atag)
 {
-  char* cin;
-
-  if (!atag) {
-    return;
-  }
-
-  char* tag = cin = xstrdup(atag);
-  char* ce = cin + strlen(cin);
-
-  while (cin < ce) {
-    char* sc, *dp;
-
-    if ((sc = strchr(cin, ';'))) {
-      *sc = '\0';
+  const QStringList tags = atag.split(';');
+  for (const auto& tag : tags) {
+    auto idx = tag.indexOf(':');
+    if (idx >= 0) {
+      osm_write_tag(tag.left(idx), tag.mid(idx+1));
     }
-
-    if ((dp = strchr(cin, ':'))) {
-      *dp++ = '\0';
-      osm_write_tag(cin, dp);
-    }
-    cin += strlen(cin) + 1;
   }
-
-  xfree(tag);
 }
 
 void
@@ -741,60 +724,33 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   }
 
   if (waypoint->hdop) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:hdop"));
-    fout->writeAttribute(QStringLiteral("v"), QString::number(waypoint->hdop, 'f'));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:hdop"), QString::number(waypoint->hdop, 'f'));
   }
   if (waypoint->vdop) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:vdop"));
-    fout->writeAttribute(QStringLiteral("v"), QString::number(waypoint->vdop, 'f'));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:vdop"), QString::number(waypoint->vdop, 'f'));
   }
   if (waypoint->pdop) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:pdop"));
-    fout->writeAttribute(QStringLiteral("v"), QString::number(waypoint->pdop, 'f'));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:pdop"), QString::number(waypoint->pdop, 'f'));
   }
   if (waypoint->sat > 0) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:sat"));
-    fout->writeAttribute(QStringLiteral("v"), QString::number(waypoint->sat));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:sat"), QString::number(waypoint->sat));
   }
 
   switch (waypoint->fix) {
   case fix_2d:
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:fix"));
-    fout->writeAttribute(QStringLiteral("v"), QStringLiteral("2d"));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("2d"));
     break;
   case fix_3d:
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:fix"));
-    fout->writeAttribute(QStringLiteral("v"), QStringLiteral("3d"));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("3d"));
     break;
   case fix_dgps:
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:fix"));
-    fout->writeAttribute(QStringLiteral("v"), QStringLiteral("dgps"));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("dgps"));
     break;
   case fix_pps:
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:fix"));
-    fout->writeAttribute(QStringLiteral("v"), QStringLiteral("pps"));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("pps"));
     break;
   case fix_none:
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("gps:fix"));
-    fout->writeAttribute(QStringLiteral("v"), QStringLiteral("none"));
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("none"));
     break;
   case fix_unknown:
   default:
@@ -802,8 +758,6 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   }
 
   if (strlen(created_by) !=0) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("created_by"));
     QString value(created_by);
     if (!gpsbabel_testmode()) {
       if (strcmp("GPSBabel",created_by)==0) {
@@ -811,9 +765,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
         value += gpsbabel_version;
       }
     }
-    fout->writeAttribute(QStringLiteral("v"), value);
-
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("created_by"), value);
   }
 
   osm_write_tag("name", waypoint->shortname);
@@ -867,8 +819,6 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
   }
 
   if (strlen(created_by) !=0) {
-    fout->writeStartElement(QStringLiteral("tag"));
-    fout->writeAttribute(QStringLiteral("k"), QStringLiteral("created_by"));
     QString value(created_by);
     if (!gpsbabel_testmode()) {
       if (strcmp("GPSBabel",created_by)==0) {
@@ -876,8 +826,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
         value += gpsbabel_version;
       }
     }
-    fout->writeAttribute(QStringLiteral("v"), value);
-    fout->writeEndElement();
+    osm_write_tag(QStringLiteral("created_by"), value);
   }
 
   osm_write_tag("name", route->rte_name);

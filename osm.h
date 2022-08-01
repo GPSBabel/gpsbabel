@@ -110,7 +110,7 @@ private:
   void osm_init_icons();
   void osm_write_tag(const QString& key, const QString& value) const;
   void osm_disp_feature(const Waypoint* waypoint) const;
-  void osm_write_opt_tag(const char* atag);
+  void osm_write_opt_tag(const QString& atag);
   static void osm_release_ids(const Waypoint* waypoint);
   static QString osm_name_from_wpt(const Waypoint* waypoint);
   void osm_waypt_disp(const Waypoint* waypoint);
