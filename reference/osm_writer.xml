@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="GPSBabel">
-  <node id="-1" visible="true" lat="40.7411920" lon="-88.7373990" timestamp="2009-07-06T21:14:11Z">
+  <node id="-1" visible="true" lat="40.7411920" lon="-88.7373990" timestamp="2009-07-06T15:14:11Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -10,7 +10,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-2" visible="true" lat="40.7414540" lon="-88.7374080" timestamp="2009-07-06T21:14:12Z">
+  <node id="-2" visible="true" lat="40.7414540" lon="-88.7374080" timestamp="2009-07-06T15:14:12Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -20,7 +20,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-3" visible="true" lat="40.7417170" lon="-88.7374150" timestamp="2009-07-06T21:14:13Z">
+  <node id="-3" visible="true" lat="40.7417170" lon="-88.7374150" timestamp="2009-07-06T15:14:13Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -30,7 +30,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-4" visible="true" lat="40.7419780" lon="-88.7374230" timestamp="2009-07-06T21:14:14Z">
+  <node id="-4" visible="true" lat="40.7419780" lon="-88.7374230" timestamp="2009-07-06T15:14:14Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -40,7 +40,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-5" visible="true" lat="40.7422380" lon="-88.7374310" timestamp="2009-07-06T21:14:15Z">
+  <node id="-5" visible="true" lat="40.7422380" lon="-88.7374310" timestamp="2009-07-06T15:14:15Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -50,7 +50,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-6" visible="true" lat="40.7425000" lon="-88.7374390" timestamp="2009-07-06T21:14:16Z">
+  <node id="-6" visible="true" lat="40.7425000" lon="-88.7374390" timestamp="2009-07-06T15:14:16Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -60,7 +60,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-7" visible="true" lat="40.7427630" lon="-88.7374470" timestamp="2009-07-06T21:14:17Z">
+  <node id="-7" visible="true" lat="40.7427630" lon="-88.7374470" timestamp="2009-07-06T15:14:17Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -70,7 +70,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-8" visible="true" lat="40.7430240" lon="-88.7374530" timestamp="2009-07-06T21:14:18Z">
+  <node id="-8" visible="true" lat="40.7430240" lon="-88.7374530" timestamp="2009-07-06T15:14:18Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -80,7 +80,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-9" visible="true" lat="40.7432860" lon="-88.7374610" timestamp="2009-07-06T21:14:19Z">
+  <node id="-9" visible="true" lat="40.7432860" lon="-88.7374610" timestamp="2009-07-06T15:14:19Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -90,7 +90,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-10" visible="true" lat="40.7435480" lon="-88.7374670" timestamp="2009-07-06T21:14:20Z">
+  <node id="-10" visible="true" lat="40.7435480" lon="-88.7374670" timestamp="2009-07-06T15:14:20Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -100,7 +100,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-11" visible="true" lat="40.7438100" lon="-88.7374750" timestamp="2009-07-06T21:14:21Z">
+  <node id="-11" visible="true" lat="40.7438100" lon="-88.7374750" timestamp="2009-07-06T15:14:21Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -110,7 +110,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-12" visible="true" lat="40.7440720" lon="-88.7374790" timestamp="2009-07-06T21:14:22Z">
+  <node id="-12" visible="true" lat="40.7440720" lon="-88.7374790" timestamp="2009-07-06T15:14:22Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -120,7 +120,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-13" visible="true" lat="40.7443340" lon="-88.7374840" timestamp="2009-07-06T21:14:23Z">
+  <node id="-13" visible="true" lat="40.7443340" lon="-88.7374840" timestamp="2009-07-06T15:14:23Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -130,7 +130,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-14" visible="true" lat="40.7445960" lon="-88.7374890" timestamp="2009-07-06T21:14:24Z">
+  <node id="-14" visible="true" lat="40.7445960" lon="-88.7374890" timestamp="2009-07-06T15:14:24Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -140,7 +140,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-15" visible="true" lat="40.7448580" lon="-88.7374950" timestamp="2009-07-06T21:14:25Z">
+  <node id="-15" visible="true" lat="40.7448580" lon="-88.7374950" timestamp="2009-07-06T15:14:25Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -150,7 +150,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-16" visible="true" lat="40.7451200" lon="-88.7375000" timestamp="2009-07-06T21:14:26Z">
+  <node id="-16" visible="true" lat="40.7451200" lon="-88.7375000" timestamp="2009-07-06T15:14:26Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -160,7 +160,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-17" visible="true" lat="40.7453830" lon="-88.7375030" timestamp="2009-07-06T21:14:27Z">
+  <node id="-17" visible="true" lat="40.7453830" lon="-88.7375030" timestamp="2009-07-06T15:14:27Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -170,7 +170,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-18" visible="true" lat="40.7456470" lon="-88.7375020" timestamp="2009-07-06T21:14:28Z">
+  <node id="-18" visible="true" lat="40.7456470" lon="-88.7375020" timestamp="2009-07-06T15:14:28Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -180,7 +180,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-19" visible="true" lat="40.7459090" lon="-88.7374910" timestamp="2009-07-06T21:14:29Z">
+  <node id="-19" visible="true" lat="40.7459090" lon="-88.7374910" timestamp="2009-07-06T15:14:29Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>
@@ -190,7 +190,7 @@
     <tag k="amenity" v="pub"/>
     <tag k="building" v="yes"/>
   </node>
-  <node id="-20" visible="true" lat="40.7461720" lon="-88.7374700" timestamp="2009-07-06T21:14:30Z">
+  <node id="-20" visible="true" lat="40.7461720" lon="-88.7374700" timestamp="2009-07-06T15:14:30Z">
     <tag k="gps:hdop" v="0.880000"/>
     <tag k="gps:vdop" v="1.500000"/>
     <tag k="gps:sat" v="11"/>

@@ -13,6 +13,6 @@ compare ${REFERENCE}/osm-center-out.xml ${TMPDIR}/osm-center-out.xml
 # compare ${REFERENCE}/osm-data.xml ${TMPDIR}/osm-out.xml 
 
 # OK, we can't compare our output to osm generated reference files, but at least make sure we produce consistent output
-gpsbabel -t -i unicsv -f ${REFERENCE}/osm_writer.csv -o osm,tagnd="amenity:pub;building:yes",tag="highway:motorway" -F ${TMPDIR}/osm_writer.xml
+gpsbabel -t -i unicsv,utc=0 -f ${REFERENCE}/osm_writer.csv -o osm,tagnd="amenity:pub;building:yes",tag="highway:motorway" -F ${TMPDIR}/osm_writer.xml
 compare ${REFERENCE}/osm_writer.xml ${TMPDIR}/osm_writer.xml
 
