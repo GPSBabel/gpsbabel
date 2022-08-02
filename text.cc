@@ -21,17 +21,20 @@
 
 #include "text.h"
 
+#include <QChar>                   // for QChar
+#include <QIODevice>               // for QIODevice, QIODevice::WriteOnly
 #include <QString>                 // for QString, operator!=
+#include <QTextStream>             // for QTextStream
 #include <Qt>                      // for CaseInsensitive
 
 #include <cstdint>                 // for int32_t
-#include <ctime>                   // for localtime, time_t, tm
+#include <ctime>                   // for localtime, time_t
 
-#include "defs.h"                  // for Waypoint, xfree, geocache_data, pretty_deg_format, rot13, strip_html, xasprintf, CSTR, METERS_TO_FEET, gs_get_cachetype, gs_get_container, mkshort_del_handle, mkshort_from_wpt, mkshort_new_handle, setshort_length, waypt_disp_all, xml_parse_time, utf_string
+#include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
-#include "gbfile.h"                // for gbfprintf, gbfputs, gbfclose, gbfopen
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
+#include "src/core/textstream.h"   // for TextStream
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
 
@@ -43,7 +46,8 @@ TextFormat::wr_init(const QString& fname)
   waypoint_count = 0;
   output_name = fname;
   if (!split_output) {
-    file_out = gbfopen(fname, "w", MYNAME);
+    file_out = new gpsbabel::TextStream;
+    file_out->open(fname, QIODevice::WriteOnly, MYNAME);
   }
   mkshort_handle = mkshort_new_handle();
 }
@@ -52,7 +56,9 @@ void
 TextFormat::wr_deinit()
 {
   if (!split_output) {
-    gbfclose(file_out);
+    file_out->close();
+    delete file_out;
+    file_out = nullptr;
   }
   mkshort_del_handle(&mkshort_handle);
   output_name.clear();
@@ -64,56 +70,50 @@ TextFormat::text_disp(const Waypoint* wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  char* tmpout2;
-  char* altout;
 
   waypoint_count++;
 
   if (split_output) {
     QString thisfname(output_name);
     thisfname += QString::number(waypoint_count);
-    file_out = gbfopen(thisfname, "w", MYNAME);
+    file_out = new gpsbabel::TextStream;
+    file_out->open(thisfname, QIODevice::WriteOnly, MYNAME);
   }
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
+  QString position = QStringLiteral("%1 (%2%3 %4 %5)")
+                     .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", false))
+                     .arg(utmz)
+                     .arg(utmzc)
+                     .arg(utme, 6, 'f', 0)
+                     .arg(utmn, 7, 'f', 0);
   if (wpt->altitude != unknown_alt) {
-    xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
-  } else {
-    altout = (char*) "";
+    position += QStringLiteral(" alt:%1").arg((int)((altunits[0]=='f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
   }
-  xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s",
-            CSTR(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", false)),
-            utmz, utmzc, utme, utmn, altout);
-  gbfprintf(file_out, "%-16s  %59s\n",
-            (global_opts.synthesize_shortnames) ? CSTR(mkshort_from_wpt(mkshort_handle, wpt)) : CSTR(wpt->shortname),
-            tmpout2);
-  xfree(tmpout2);
-  if (altout[0]) {
-    xfree(altout);
-  }
+  QString sn = global_opts.synthesize_shortnames ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname;
+  *file_out << sn.leftJustified(16) << "  " <<  position.rightJustified(59) << "\n";
 
   if (wpt->description != wpt->shortname) {
-    gbfputs(wpt->description, file_out);
+    *file_out << wpt->description;
     if (!wpt->gc_data->placer.isEmpty()) {
-      gbfputs(" by ", file_out);
-      gbfputs(wpt->gc_data->placer, file_out);
+      *file_out << " by ";
+      *file_out << wpt->gc_data->placer;
     }
   }
   if (wpt->gc_data->terr) {
-    gbfputs(QStringLiteral(" - %1 / %2 - (%3%4 / %5%6)\n")
-            .arg(gs_get_cachetype(wpt->gc_data->type),
-                 gs_get_container(wpt->gc_data->container))
-            .arg((int)(wpt->gc_data->diff / 10))
-            .arg((wpt->gc_data->diff%10) ? ".5" : "")
-            .arg((int)(wpt->gc_data->terr / 10))
-            .arg((wpt->gc_data->terr%10) ? ".5" : ""),
-            file_out);
+    *file_out << QStringLiteral(" - %1 / %2 - (%3%4 / %5%6)\n")
+              .arg(gs_get_cachetype(wpt->gc_data->type),
+                   gs_get_container(wpt->gc_data->container))
+              .arg((int)(wpt->gc_data->diff / 10))
+              .arg((wpt->gc_data->diff%10) ? ".5" : "")
+              .arg((int)(wpt->gc_data->terr / 10))
+              .arg((wpt->gc_data->terr%10) ? ".5" : "");
     if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-      gbfputs(QStringLiteral("\n%1\n").arg(strip_html(&wpt->gc_data->desc_short)), file_out);
+      *file_out << "\n" << strip_html(&wpt->gc_data->desc_short) << "\n";
     }
     if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-      gbfputs(QStringLiteral("\n%1\n").arg(strip_html(&wpt->gc_data->desc_long)), file_out);
+      *file_out << "\n" << strip_html(&wpt->gc_data->desc_long) << "\n";
     }
     if (!wpt->gc_data->hint.isEmpty()) {
       QString hint;
@@ -122,12 +122,10 @@ TextFormat::text_disp(const Waypoint* wpt)
       } else {
         hint = wpt->gc_data->hint;
       }
-      gbfprintf(file_out, "\nHint: %s\n", CSTR(hint));
+      *file_out << "\nHint: " << hint << "\n";
     }
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-    gbfputs("\n", file_out);
-    gbfputs(wpt->notes, file_out);
-    gbfputs("\n", file_out);
+    *file_out << "\n" << wpt->notes << "\n";
   }
 
   if (includelogs) {
@@ -137,18 +135,16 @@ TextFormat::text_disp(const Waypoint* wpt)
       xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
-        gbfprintf(file_out, "\n");
+        *file_out << "\n";
 
         xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
         if (logpart) {
-          gbfputs(logpart->cdata, file_out);
-          gbfputs(" by ", file_out);
+          *file_out << logpart->cdata << " by ";
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:finder");
         if (logpart) {
-          gbfputs(logpart->cdata, file_out);
-          gbfputs(" on ", file_out);
+          *file_out << logpart->cdata << " on ";
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:date");
@@ -156,11 +152,10 @@ TextFormat::text_disp(const Waypoint* wpt)
           logtime = xml_parse_time(logpart->cdata).toTime_t();
           struct tm* logtm = localtime(&logtime);
           if (logtm) {
-            gbfprintf(file_out,
-                      "%4.4d-%2.2d-%2.2d\n",
-                      logtm->tm_year+1900,
-                      logtm->tm_mon+1,
-                      logtm->tm_mday);
+            *file_out << QStringLiteral("%1-%2-%3\n")
+                      .arg(logtm->tm_year+1900, 4, 10, QChar('0'))
+                      .arg(logtm->tm_mon+1, 2, 10, QChar('0'))
+                      .arg(logtm->tm_mday, 2, 10, QChar('0'));
           }
         }
 
@@ -168,8 +163,7 @@ TextFormat::text_disp(const Waypoint* wpt)
         if (logpart) {
           double lat = xml_attribute(logpart->attributes, "lat").toDouble();
           double lon = xml_attribute(logpart->attributes, "lon").toDouble();
-          gbfprintf(file_out, "%s\n",
-                    CSTR(pretty_deg_format(lat, lon, degformat[2], " ", false)));
+          *file_out << pretty_deg_format(lat, lon, degformat[2], " ", false) << "\n";
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:text");
@@ -184,22 +178,23 @@ TextFormat::text_disp(const Waypoint* wpt)
             s = logpart->cdata;
           }
 
-          gbfputs(s, file_out);
+          *file_out << s;
         }
 
-        gbfprintf(file_out, "\n");
+        *file_out << "\n";
         curlog = xml_findnext(root, curlog, "groundspeak:log");
       }
     }
   }
-  if (! suppresssep) {
-    gbfprintf(file_out, "\n-----------------------------------------------------------------------------\n");
+  if (!suppresssep) {
+    *file_out << "\n-----------------------------------------------------------------------------\n";
   } else {
-    gbfprintf(file_out, "\n");
+    *file_out << "\n";
   }
 
   if (split_output) {
-    gbfclose(file_out);
+    file_out->close();
+    delete file_out;
     file_out = nullptr;
   }
 }
@@ -207,8 +202,8 @@ TextFormat::text_disp(const Waypoint* wpt)
 void
 TextFormat::write()
 {
-  if (! suppresssep && !split_output) {
-    gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
+  if (!suppresssep && !split_output) {
+    *file_out << "-----------------------------------------------------------------------------\n";
   }
   setshort_length(mkshort_handle, 6);
   auto text_disp_lambda = [this](const Waypoint* waypointp)->void {

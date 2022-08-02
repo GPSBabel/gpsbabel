@@ -21,12 +21,12 @@
 #ifndef TEXT_H_INCLUDED_
 #define TEXT_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
+#include <QString>                // for QString
+#include <QVector>                // for QVector
 
-#include "defs.h"    // for arglist_t, ff_cap, ARG_NOMINMAX, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, CET_CHARSET_ASCII, Waypoint, ff_cap_write, ff_type, ff_type_file, short_handle
-#include "format.h"  // for Format
-#include "gbfile.h"  // for gbfile
+#include "defs.h"
+#include "format.h"               // for Format
+#include "src/core/textstream.h"  // for TextStream
 
 
 class TextFormat : public Format
@@ -69,7 +69,7 @@ private:
 
   /* Data Members */
 
-  gbfile* file_out{};
+  gpsbabel::TextStream* file_out{nullptr};
   short_handle mkshort_handle{};
 
   char* suppresssep = nullptr;
