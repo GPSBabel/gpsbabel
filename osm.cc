@@ -652,10 +652,9 @@ void
 OsmFormat::osm_write_tag(const QString& key, const QString& value) const
 {
   if (!value.isEmpty()) {
-    fout->writeStartElement(QStringLiteral("tag"));
+    fout->writeEmptyElement(QStringLiteral("tag"));
     fout->writeAttribute(QStringLiteral("k"), key);
     fout->writeAttribute(QStringLiteral("v"), value);
-    fout->writeEndElement();
   }
 }
 
@@ -805,9 +804,8 @@ OsmFormat::osm_rtept_disp(const Waypoint* wpt_ref) const
   if (waypoints.contains(name)) {
     const Waypoint* waypoint = waypoints.value(name);
     auto* id = static_cast<int*>(waypoint->extra_data);
-    fout->writeStartElement(QStringLiteral("nd"));
+    fout->writeEmptyElement(QStringLiteral("nd"));
     fout->writeAttribute(QStringLiteral("ref"), QString::number(*id));
-    fout->writeEndElement();
   }
 }
 
