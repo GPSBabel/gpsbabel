@@ -20,21 +20,21 @@
 
 */
 
-#include <cstring>                      // for strlen, strchr, strcmp
+#include <cstring>                     // for strlen, strchr, st
 
-#include <QByteArray>                   // for QByteArray
-#include <QHash>                        // for QHash
-#include <QLatin1String>                // for QLatin1String
-#include <QPair>                        // for QPair, operator==
-#include <QString>                      // for QString, operator==, operator+
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <QtGlobal>                     // for qPrintable, QAddConst<>::Type
+#include <QByteArray>                  // for QByteArray
+#include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QLatin1String>               // for QLatin1String
+#include <QPair>                       // for QPair, operator==
+#include <QString>                     // for QString, operator==, operator+
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
+#include <QtGlobal>                    // for qMax, qPrintable
 
 #include "defs.h"
 #include "osm.h"
-#include "gbfile.h"                     // for gbfprintf, gbfclose, gbfopen
-#include "src/core/datetime.h"          // for DateTime
-#include "xmlgeneric.h"                 // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "xmlgeneric.h"                // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
 
 
 #define MYNAME "osm"
@@ -652,9 +652,9 @@ void
 OsmFormat::osm_write_tag(const QString& key, const QString& value) const
 {
   if (!value.isEmpty()) {
-    gbfputs(QStringLiteral("    <tag k='%1' v='%2'/>\n")
-            .arg(key, xml_entitize(value)),
-            fout);
+    fout->writeEmptyElement(QStringLiteral("tag"));
+    fout->writeAttribute(QStringLiteral("k"), key);
+    fout->writeAttribute(QStringLiteral("v"), value);
   }
 }
 
@@ -668,32 +668,15 @@ OsmFormat::osm_disp_feature(const Waypoint* waypoint) const
 }
 
 void
-OsmFormat::osm_write_opt_tag(const char* atag)
+OsmFormat::osm_write_opt_tag(const QString& atag)
 {
-  char* cin;
-
-  if (!atag) {
-    return;
-  }
-
-  char* tag = cin = xstrdup(atag);
-  char* ce = cin + strlen(cin);
-
-  while (cin < ce) {
-    char* sc, *dp;
-
-    if ((sc = strchr(cin, ';'))) {
-      *sc = '\0';
+  const QStringList tags = atag.split(';');
+  for (const auto& tag : tags) {
+    auto idx = tag.indexOf(':');
+    if (idx >= 0) {
+      osm_write_tag(tag.left(idx), tag.mid(idx+1));
     }
-
-    if ((dp = strchr(cin, ':'))) {
-      *dp++ = '\0';
-      osm_write_tag(cin, dp);
-    }
-    cin += strlen(cin) + 1;
   }
-
-  xfree(tag);
 }
 
 void
@@ -730,41 +713,43 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   *id = --node_id;
   const_cast<Waypoint*>(waypoint)->extra_data = id;
 
-  gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, waypoint->latitude, waypoint->longitude);
+  fout->writeStartElement(QStringLiteral("node"));
+  fout->writeAttribute(QStringLiteral("id"), QString::number(*id));
+  fout->writeAttribute(QStringLiteral("visible"), QStringLiteral("true"));
+  fout->writeAttribute(QStringLiteral("lat"), QString::number(waypoint->latitude, 'f', 7));
+  fout->writeAttribute(QStringLiteral("lon"), QString::number(waypoint->longitude, 'f', 7));
   if (waypoint->creation_time.isValid()) {
-    QString time_string = waypoint->CreationTimeXML();
-    gbfprintf(fout, " timestamp='%s'", qPrintable(time_string));
+    fout->writeAttribute(QStringLiteral("timestamp"), waypoint->CreationTimeXML());
   }
-  gbfprintf(fout, ">\n");
 
   if (waypoint->hdop) {
-    gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", waypoint->hdop);
+    osm_write_tag(QStringLiteral("gps:hdop"), QString::number(waypoint->hdop, 'f'));
   }
   if (waypoint->vdop) {
-    gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", waypoint->vdop);
+    osm_write_tag(QStringLiteral("gps:vdop"), QString::number(waypoint->vdop, 'f'));
   }
   if (waypoint->pdop) {
-    gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", waypoint->pdop);
+    osm_write_tag(QStringLiteral("gps:pdop"), QString::number(waypoint->pdop, 'f'));
   }
   if (waypoint->sat > 0) {
-    gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", waypoint->sat);
+    osm_write_tag(QStringLiteral("gps:sat"), QString::number(waypoint->sat));
   }
 
   switch (waypoint->fix) {
   case fix_2d:
-    gbfprintf(fout, "    <tag k='gps:fix' v='2d' />\n");
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("2d"));
     break;
   case fix_3d:
-    gbfprintf(fout, "    <tag k='gps:fix' v='3d' />\n");
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("3d"));
     break;
   case fix_dgps:
-    gbfprintf(fout, "    <tag k='gps:fix' v='dgps' />\n");
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("dgps"));
     break;
   case fix_pps:
-    gbfprintf(fout, "    <tag k='gps:fix' v='pps' />\n");
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("pps"));
     break;
   case fix_none:
-    gbfprintf(fout, "    <tag k='gps:fix' v='none' />\n");
+    osm_write_tag(QStringLiteral("gps:fix"), QStringLiteral("none"));
     break;
   case fix_unknown:
   default:
@@ -772,12 +757,14 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   }
 
   if (strlen(created_by) !=0) {
-    gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (!gpsbabel_testmode())
+    QString value(created_by);
+    if (!gpsbabel_testmode()) {
       if (strcmp("GPSBabel",created_by)==0) {
-        gbfprintf(fout, "-%s", gpsbabel_version);
+        value += '-';
+        value += gpsbabel_version;
       }
-    gbfprintf(fout, "'/>\n");
+    }
+    osm_write_tag(QStringLiteral("created_by"), value);
   }
 
   osm_write_tag("name", waypoint->shortname);
@@ -788,7 +775,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
 
   osm_write_opt_tag(opt_tagnd);
 
-  gbfprintf(fout, "  </node>\n");
+  fout->writeEndElement(); // node
 }
 
 void
@@ -800,7 +787,9 @@ OsmFormat::osm_rte_disp_head(const route_head* route)
     return;
   }
 
-  gbfprintf(fout, "  <way id='%d' visible='true'>\n", --node_id);
+  fout->writeStartElement(QStringLiteral("way"));
+  fout->writeAttribute(QStringLiteral("id"), QString::number(--node_id));
+  fout->writeAttribute(QStringLiteral("visible"), QStringLiteral("true"));
 }
 
 void
@@ -815,7 +804,8 @@ OsmFormat::osm_rtept_disp(const Waypoint* wpt_ref) const
   if (waypoints.contains(name)) {
     const Waypoint* waypoint = waypoints.value(name);
     auto* id = static_cast<int*>(waypoint->extra_data);
-    gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
+    fout->writeEmptyElement(QStringLiteral("nd"));
+    fout->writeAttribute(QStringLiteral("ref"), QString::number(*id));
   }
 }
 
@@ -827,12 +817,14 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
   }
 
   if (strlen(created_by) !=0) {
-    gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-    if (!gpsbabel_testmode())
+    QString value(created_by);
+    if (!gpsbabel_testmode()) {
       if (strcmp("GPSBabel",created_by)==0) {
-        gbfprintf(fout, "-%s", gpsbabel_version);
+        value += '-';
+        value += gpsbabel_version;
       }
-    gbfprintf(fout, "'/>\n");
+    }
+    osm_write_tag(QStringLiteral("created_by"), value);
   }
 
   osm_write_tag("name", route->rte_name);
@@ -842,7 +834,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
     osm_write_opt_tag(opt_tag);
   }
 
-  gbfprintf(fout, "  </way>\n");
+  fout->writeEndElement(); // way
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -850,7 +842,12 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
 void
 OsmFormat::wr_init(const QString& fname)
 {
-  fout = gbfopen(fname, "w", MYNAME);
+  ofile = new gpsbabel::File(fname);
+  ofile->open(QIODevice::WriteOnly | QIODevice::Text);
+
+  fout = new gpsbabel::XmlStreamWriter(ofile);
+  fout->setAutoFormatting(true);
+  fout->setAutoFormattingIndent(2);
 
   osm_init_icons();
   waypoints.clear();
@@ -860,12 +857,15 @@ OsmFormat::wr_init(const QString& fname)
 void
 OsmFormat::write()
 {
-  gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
-  gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
+  fout->writeStartDocument();
+  fout->writeStartElement(QStringLiteral("osm"));
+  fout->writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
+  QString value(QStringLiteral("GPSBabel"));
   if (!gpsbabel_testmode()) {
-    gbfprintf(fout, "-%s", gpsbabel_version);
+    value += '-';
+    value += gpsbabel_version;
   }
-  gbfprintf(fout, "'>\n");
+  fout->writeAttribute(QStringLiteral("generator"), value);
 
   auto osm_waypt_disp_lambda = [this](const Waypoint* waypointp)->void {
     osm_waypt_disp(waypointp);
@@ -886,13 +886,18 @@ OsmFormat::write()
   route_disp_all(osm_rte_disp_head_lambda, osm_rte_disp_trail_lambda, osm_rtept_disp_lambda);
   track_disp_all(osm_rte_disp_head_lambda, osm_rte_disp_trail_lambda, osm_rtept_disp_lambda);
 
-  gbfprintf(fout, "</osm>\n");
+  fout->writeEndElement(); // osm
 }
 
 void
 OsmFormat::wr_deinit()
 {
-  gbfclose(fout);
+  fout->writeEndDocument();
+  delete fout;
+  fout = nullptr;
+  ofile->close();
+  delete ofile;
+  ofile = nullptr;
 
   waypt_disp_all(osm_release_ids);
   route_disp_all(nullptr, nullptr, osm_release_ids);
