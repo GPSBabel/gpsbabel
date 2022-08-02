@@ -97,8 +97,7 @@ TextFormat::text_disp(const Waypoint* wpt)
   if (wpt->description != wpt->shortname) {
     *file_out << wpt->description;
     if (!wpt->gc_data->placer.isEmpty()) {
-      *file_out << " by ";
-      *file_out << wpt->gc_data->placer;
+      *file_out << " by " << wpt->gc_data->placer;
     }
   }
   if (wpt->gc_data->terr) {
