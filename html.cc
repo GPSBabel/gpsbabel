@@ -57,6 +57,13 @@ HtmlFormat::wr_deinit()
   mkshort_del_handle(&mkshort_handle);
 }
 
+QString HtmlFormat::create_id(int sequence_number)
+{
+  // It's easier to create a legal fragment and identifer from scratch than
+  // from user supplied text.
+  return QStringLiteral("WPT%1").arg(sequence_number, 3, 10, QChar('0'));
+}
+
 void
 HtmlFormat::html_disp(const Waypoint* wpt) const
 {
@@ -69,10 +76,12 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
 
-  *file_out << "\n<a name=\"" << wpt->shortname << "\"><hr></a>\n";
-  *file_out << "<table width=\"100%\">\n";
+  *file_out << "  <div id=\"" << create_id(waypoint_number) << "\"><hr>\n";
+  *file_out << "    <table style=\"width:100%\">\n";
   QString sn = global_opts.synthesize_shortnames ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname;
-  *file_out << "<tr><td><p class=\"gpsbabelwaypoint\">" << sn << " - ";
+  *file_out << "      <tr>\n";
+  *file_out << "        <td>\n";
+  *file_out << "          <p class=\"gpsbabelwaypoint\">" << sn << " - ";
   *file_out << QStringLiteral("%1 (%2%3 %4 %5)")
             .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", true))
             .arg(utmz)
@@ -89,35 +98,38 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
       *file_out << "<a href=\"" << wpt->GetUrlLink().url_ << "\">"
                 << html_entitize(wpt->description) << "</a>";
     } else {
-      *file_out << wpt->description;
+      *file_out << html_entitize(wpt->description);
     }
     if (!wpt->gc_data->placer.isEmpty()) {
       *file_out << " by " << wpt->gc_data->placer;
     }
   }
-  *file_out << "</p></td>\n";
+  *file_out << "</p>\n";
+  *file_out << "        </td>\n";
 
-  *file_out << "<td align=\"right\">";
+  *file_out << "        <td style=\"text-align:right\">\n";
   if (wpt->gc_data->terr) {
-    *file_out << QStringLiteral("<p class=\"gpsbabelcacheinfo\">%1%2 / %3%4<br>\n")
+    *file_out << QStringLiteral("          <p class=\"gpsbabelcacheinfo\">%1%2 / %3%4<br>\n")
               .arg((int)(wpt->gc_data->diff / 10))
               .arg((wpt->gc_data->diff%10) ? "&frac12;" : "")
               .arg((int)(wpt->gc_data->terr / 10))
               .arg((wpt->gc_data->terr%10) ? "&frac12;" : "");
     *file_out << gs_get_cachetype(wpt->gc_data->type) << " / "
-              << gs_get_container(wpt->gc_data->container) << "</p>";
+              << gs_get_container(wpt->gc_data->container) << "</p>\n";
   }
-  *file_out << "</td></tr>\n";
+  *file_out << "        </td>\n";
+  *file_out << "      </tr>\n";
 
 
-  *file_out << "<tr><td colspan=\"2\">";
+  *file_out << "      <tr>\n";
+  *file_out << "        <td colspan=\"2\">\n";
   if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-    *file_out << "<p class=\"gpsbabeldescshort\">"
-              << strip_nastyhtml(wpt->gc_data->desc_short.utfstring) << "</p>\n";
+    *file_out << "          <div><p class=\"gpsbabeldescshort\">"
+              << strip_nastyhtml(wpt->gc_data->desc_short.utfstring) << "</div>\n";
   }
   if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-    *file_out << "<p class=\"gpsbabeldesclong\">"
-              << strip_nastyhtml(wpt->gc_data->desc_long.utfstring) << "</p>\n";
+    *file_out << "          <div><p class=\"gpsbabeldesclong\">"
+              << strip_nastyhtml(wpt->gc_data->desc_long.utfstring) << "</div>\n";
   }
   if (!wpt->gc_data->hint.isEmpty()) {
     QString hint;
@@ -126,10 +138,10 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
     } else {
       hint = wpt->gc_data->hint;
     }
-    *file_out << "<p class=\"gpsbabelhint\"><strong>Hint:</strong> "
+    *file_out << "          <p class=\"gpsbabelhint\"><strong>Hint:</strong> "
               << hint << "</p>\n";
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-    *file_out << "<p class=\"gpsbabelnotes\">" << wpt->notes << "</p>\n";
+    *file_out << "          <p class=\"gpsbabelnotes\">" << wpt->notes << "</p>\n";
   }
 
   if (includelogs) {
@@ -139,7 +151,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
       xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
-        *file_out << "<p class=\"gpsbabellog\">\n";
+        *file_out << "          <p class=\"gpsbabellog\">\n";
 
         xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
         if (logpart) {
@@ -193,15 +205,18 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
       }
     }
   }
-  *file_out << "</td></tr>\n";
-  *file_out << "</table>\n";
+  *file_out << "        </td>\n";
+  *file_out << "      </tr>\n";
+  *file_out << "    </table>\n";
+  *file_out << "  </div>\n";
 }
 
 void
 HtmlFormat::html_index(const Waypoint* wpt) const
 {
-  *file_out << QStringLiteral("<a href=\"#%1\">%1 - %2</a><br>\n")
-            .arg(html_entitize(wpt->shortname), html_entitize(wpt->description));
+  *file_out << "    <a href=\"#" << create_id(waypoint_number) << "\">"
+            << html_entitize(wpt->shortname) << " - " << html_entitize(wpt->description)
+            << "</a><br>\n";
 }
 
 void
@@ -209,41 +224,45 @@ HtmlFormat::write()
 {
   setshort_length(mkshort_handle, 6);
 
-  *file_out << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n";
+  *file_out << "<!DOCTYPE html>\n";
   *file_out << "<html>\n";
   *file_out << "<head>\n";
-  *file_out << " <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n";
+  *file_out << "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
   if (!gpsbabel_testmode()) {
-    *file_out << " <meta name=\"Generator\" content=\"GPSBabel "
+    *file_out << "  <meta name=\"Generator\" content=\"GPSBabel "
               << gpsbabel_version << "\">\n";
   }
-  *file_out << " <title>GPSBabel HTML Output</title>\n";
+  *file_out << "  <title>GPSBabel HTML Output</title>\n";
   if (stylesheet) {
-    *file_out << " <link rel=\"stylesheet\" type=\"text/css\" href=\""
+    *file_out << "  <link rel=\"stylesheet\" type=\"text/css\" href=\""
               << stylesheet << "\">\n";
   } else {
-    *file_out << " <style>\n";
-    *file_out << "  p.gpsbabelwaypoint { font-size: 120%; font-weight: bold }\n";
-    *file_out << " </style>\n";
+    *file_out << "  <style>\n";
+    *file_out << "    p.gpsbabelwaypoint { font-size: 120%; font-weight: bold }\n";
+    *file_out << "  </style>\n";
   }
   *file_out << "</head>\n";
   *file_out << "<body>\n";
 
-  *file_out << "<p class=\"index\">\n";
+  *file_out << "  <p class=\"index\">\n";
 
   auto html_index_lambda = [this](const Waypoint* waypointp)->void {
+    waypoint_number++;
     html_index(waypointp);
   };
 
+  waypoint_number = 0;
   waypt_disp_all(html_index_lambda);
-  *file_out << "</p>\n";
+  *file_out << "  </p>\n";
 
   auto html_disp_lambda = [this](const Waypoint* waypointp)->void {
+    waypoint_number++;
     html_disp(waypointp);
   };
+  waypoint_number = 0;
   waypt_disp_all(html_disp_lambda);
 
   *file_out << "</body>\n";

@@ -65,6 +65,7 @@ public:
 private:
   /* Member Functions */
 
+  static QString create_id(int sequence_number);
   void html_disp(const Waypoint* wpt) const;
   void html_index(const Waypoint* wpt) const;
 
@@ -72,6 +73,8 @@ private:
 
   gpsbabel::TextStream* file_out{nullptr};
   short_handle mkshort_handle{};
+
+  int waypoint_number{};
 
   char* stylesheet = nullptr;
   char* html_encrypt = nullptr;
