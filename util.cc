@@ -1354,12 +1354,6 @@ strip_html(const utf_string* in)
 #endif
 }
 
-struct entity_types {
-  const char* text;
-  const char* entity;
-  int  not_html;
-};
-
 /*
  * xml_tag utilities
  */
