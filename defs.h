@@ -1079,8 +1079,6 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 QString get_cache_icon(const Waypoint* waypointp);
 QString gs_get_cachetype(geocache_type t);
 QString gs_get_container(geocache_container t);
-[[deprecated("Use xmlstreamwriter.")]] QString xml_entitize(const QString& str);
-QString html_entitize(const QString& str);
 QString strip_html(const utf_string*);
 QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
