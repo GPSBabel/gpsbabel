@@ -1239,7 +1239,7 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
       }
 
       r += "<br />";
-      r += html_entitize(s);
+      r += s.toHtmlEscaped();
     }
 
     r += "</p>";

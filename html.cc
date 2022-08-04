@@ -96,9 +96,9 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   if (wpt->description != wpt->shortname) {
     if (wpt->HasUrlLink()) {
       *file_out << "<a href=\"" << wpt->GetUrlLink().url_ << "\">"
-                << html_entitize(wpt->description) << "</a>";
+                << wpt->description.toHtmlEscaped() << "</a>";
     } else {
-      *file_out << html_entitize(wpt->description);
+      *file_out << wpt->description.toHtmlEscaped();
     }
     if (!wpt->gc_data->placer.isEmpty()) {
       *file_out << " by " << wpt->gc_data->placer;
@@ -162,7 +162,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
         logpart = xml_findfirst(curlog, "groundspeak:finder");
         if (logpart) {
           *file_out << "<span class=\"gpsbabellogfinder\">"
-                    << html_entitize(logpart->cdata) << "</span> on ";
+                    << logpart->cdata.toHtmlEscaped() << "</span> on ";
         }
 
         logpart = xml_findfirst(curlog, "groundspeak:date");
@@ -197,7 +197,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
             s = logpart->cdata;
           }
 
-          *file_out << html_entitize(s);
+          *file_out << s.toHtmlEscaped();
         }
 
         *file_out << "</p>\n";
@@ -215,7 +215,7 @@ void
 HtmlFormat::html_index(const Waypoint* wpt) const
 {
   *file_out << "    <a href=\"#" << create_id(waypoint_number) << "\">"
-            << html_entitize(wpt->shortname) << " - " << html_entitize(wpt->description)
+            << wpt->shortname.toHtmlEscaped() << " - " << wpt->description.toHtmlEscaped()
             << "</a><br>\n";
 }
 
