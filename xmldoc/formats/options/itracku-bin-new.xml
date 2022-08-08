@@ -1,4 +1,0 @@
-<para>
- When used in conjunction with the "backup" option to this format, it
-  will process only waypoints that don't already exist in the backup file.
-</para>
