@@ -59,7 +59,6 @@ ALL_FMTS = $$MINIMAL_FMTS \
   brauniger_iq.cc \
   dg-100.cc \
   exif.cc \
-  f90g_track.cc \
   garmin_fit.cc \
   garmin_gpi.cc \
   garmin_txt.cc \
@@ -184,7 +183,6 @@ HEADERS =  \
   dg-100.h \
   exif.h \
   explorist_ini.h \
-  f90g_track.h \
   filter.h \
   filter_vecs.h \
   format.h \
