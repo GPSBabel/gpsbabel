@@ -216,6 +216,7 @@ HEADERS =  \
   navilink.h \
   nmea.h \
   osm.h \
+  qstarz_bl_1000.h \
   random.h \
   session.h \
   shape.h \
