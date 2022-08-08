@@ -213,7 +213,6 @@ HEADERS =  \
   legacyformat.h \
   lowranceusr.h \
   magellan.h \
-  mapbar_track.h \
   navilink.h \
   nmea.h \
   osm.h \
