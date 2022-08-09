@@ -8,7 +8,16 @@ sleep 10
 sleep 120 
 grep ' OPEN ' log | sed 's/ OPEN //' | sort | uniq > used
 find reference/ -type f | sort | uniq > exists
-diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused
+diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused.dirty
+
+# whitelist some files used in encoding testing or unsed in the derivation of used files.
+cat delete_unused.dirty | \
+grep -v reference/gis.osm_places_free_1.license | \
+grep -v reference/gis.osm_places_free_1.prj | \
+grep -v reference/gis.osm_railways_free_1.license | \
+grep -v reference/gis.osm_railways_free_1.prj | \
+grep -v eference/track/mtk_logger_m241_alternate.csv > delete_unused
+
 . ./delete_unused
 ./testo
 
