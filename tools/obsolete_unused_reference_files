@@ -12,7 +12,6 @@ diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused.dirty
 
 # whitelist some files used in encoding testing or unsed in the derivation of used files.
 cat delete_unused.dirty | \
-grep -v reference/route/vieac.README | \
 grep -v reference/gis.osm_places_free_1.license | \
 grep -v reference/gis.osm_places_free_1.prj | \
 grep -v reference/gis.osm_railways_free_1.license | \
