@@ -6,8 +6,8 @@ sleep 10
 ./testo
 # wait to make sure inotifywait is done
 sleep 120 
-grep ' OPEN ' log | sed 's/ OPEN //' | sort | uniq > used
-find reference/ -type f | sort | uniq > exists
+grep ' OPEN ' log | sed 's/ OPEN //' | sort -u > used
+find reference/ -type f | sort -u > exists
 diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused.dirty
 
 # whitelist some files used in encoding testing or unsed in the derivation of used files.
