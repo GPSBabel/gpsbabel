@@ -1,0 +1,14 @@
+#!/bin/bash -ex
+# delay -t must be long enough for testo to complete
+inotifywait -r -m -t 120 reference > log&
+# wait to make sure inotifywait is monitoring
+sleep 10
+./testo
+# wait to make sure inotifywait is done
+sleep 120 
+grep ' OPEN ' log | sed 's/ OPEN //' | sort | uniq > used
+find reference/ -type f | sort | uniq > exists
+diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused
+. ./delete_unused
+./testo
+
