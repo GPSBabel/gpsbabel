@@ -24,7 +24,7 @@
 #include <cctype>                  // for isprint, toupper
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for sscanf, size_t
-#include <cstdlib>                 // for atof, strtoul
+#include <cstdlib>                 // for strtod, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 
 #include <QByteArray>              // for QByteArray
@@ -983,11 +983,11 @@ mag_trkparse(char* trkmsg)
    * for us.
    */
   parse_istring(trkmsg);
-  double latdeg = atof(ifield[1]);
+  double latdeg = strtod(ifield[1], nullptr);
   char latdir = ifield[2][0];
-  double lngdeg = atof(ifield[3]);
+  double lngdeg = strtod(ifield[3], nullptr);
   char lngdir = ifield[4][0];
-  int alt = atof(ifield[5]);
+  int alt = strtod(ifield[5], nullptr);
   char altunits = ifield[6][0];
   (void)altunits;
   sscanf(ifield[7], "%d.%d", &hms, &fracsecs);

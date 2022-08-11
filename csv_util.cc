@@ -22,7 +22,7 @@
 
 #include <cassert>             // for assert
 #include <cmath>               // for fabs
-#include <cstdlib>             // for atof, strtod
+#include <cstdlib>             // for strtod
 #include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
 #include <QByteArray>          // for QByteArray
@@ -322,9 +322,9 @@ ddmmdir_to_degrees(const char* ddmmdir)
   // if not N or E, prepend a '-' to ddmm2degrees input
   // see XT_LAT_NMEA which handles ddmm directly
   if (strchr(ddmmdir, 'W') || strchr(ddmmdir, 'S')) {
-    return ddmm2degrees(- atof(ddmmdir));
+    return ddmm2degrees(- strtod(ddmmdir, nullptr));
   }
-  return ddmm2degrees(atof(ddmmdir));
+  return ddmm2degrees(strtod(ddmmdir, nullptr));
 
 }
 

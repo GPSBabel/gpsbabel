@@ -23,7 +23,7 @@
 #include <cctype>                  // for isprint
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
-#include <cstdlib>                 // for atof, strtod
+#include <cstdlib>                 // for strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
 #include <iterator>                // for operator!=, reverse_iterator
 
@@ -294,7 +294,7 @@ NmeaFormat::wr_init(const QString& fname)
   sleepms = -1;
   if (opt_sleep) {
     if (*opt_sleep) {
-      sleepms = 1e3 * atof(opt_sleep);
+      sleepms = 1e3 * strtod(opt_sleep, nullptr);
     } else {
       sleepms = -1;
     }

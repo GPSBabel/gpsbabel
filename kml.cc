@@ -23,7 +23,7 @@
 #include <cctype>                       // for tolower, toupper
 #include <cmath>                        // for fabs
 #include <cstdio>                       // for sscanf, printf
-#include <cstdlib>                      // for atof
+#include <cstdlib>                      // for strtod
 #include <cstring>                      // for strcmp
 #include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
@@ -69,7 +69,7 @@
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
   if (rotate_colors) {
-    float color_step = atof(opt_rotate_colors);
+    float color_step = strtod(opt_rotate_colors, nullptr);
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
       kml_color_sequencer.step = ((float)kml_color_limit) * 6.0f * color_step / 360.0f;

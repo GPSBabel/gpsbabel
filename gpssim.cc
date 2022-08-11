@@ -168,7 +168,7 @@ gpssim_write()
       fout = gbfopen(ofname, "wb", MYNAME);
     }
     if (wayptspd && wayptspd[0]) {
-      gpssim_write_spd(atof(wayptspd));
+      gpssim_write_spd(strtod(wayptspd, nullptr));
     }
     waypt_disp_all(gpssim_write_pt);
     if (splitfiles) {

@@ -22,7 +22,6 @@
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <cstdint>
-#include <cstdlib>                 // for atoi
 #include <cstring>                 // for memset, strchr, strncpy
 #include <ctime>                   // for gmtime
 

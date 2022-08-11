@@ -495,7 +495,7 @@ static int get_param_int(const char* cmd)
 static double get_param_float(const char* cmd)
 {
   char buf[80];
-  return atof(get_param(cmd, buf, sizeof(buf)));
+  return strtod(get_param(cmd, buf, sizeof(buf)), nullptr);
 }
 
 /* Decompose binary date into discreet fields */
