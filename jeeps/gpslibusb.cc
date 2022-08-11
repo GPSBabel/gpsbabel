@@ -560,7 +560,7 @@ gusb_init(const char* portname, gpsdevh** dh)
     if (0 == strcmp(portname+4, "list")) {
       req_unit_number = -1;
     } else {
-      req_unit_number = atoi(portname + 4);
+      req_unit_number = xstrtoi(portname + 4, nullptr, 10);
     }
   }
   return garmin_usb_scan(lud, req_unit_number);
