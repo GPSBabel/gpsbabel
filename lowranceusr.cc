@@ -89,7 +89,7 @@
 #include <cmath>                  // for M_PI, round, atan, exp, log, tan
 #include <cstdio>                 // for printf, sprintf, SEEK_CUR
 #include <cstdint>                // for int64_t
-#include <cstdlib>                // for atoi, abs
+#include <cstdlib>                // for abs
 #include <cstring>                // for strcmp, strlen
 
 #include <QByteArray>             // for QByteArray
@@ -343,7 +343,7 @@ LowranceusrFormat::wr_init(const QString& fname)
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();
   waypt_out_count = 0;
-  writing_version = atoi(opt_wversion);
+  writing_version = xstrtoi(opt_wversion, nullptr, 10);
   if ((writing_version < 2) || (writing_version > 4)) {
     fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
   }
@@ -1891,7 +1891,7 @@ LowranceusrFormat::write()
     gbfputc(0, file_out);
 
     /* device serial number */
-    opt_serialnum_i = atoi(opt_serialnum);
+    opt_serialnum_i = xstrtoi(opt_serialnum, nullptr, 10);
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */

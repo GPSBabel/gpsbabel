@@ -34,7 +34,7 @@
 
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for printf, snprintf, sscanf, SEEK_SET
-#include <cstdlib>                 // for atoi, strtol
+#include <cstdlib>                 // for strtol
 #include <cstring>                 // for memset, strstr, strchr, strcmp, strlen, strncpy
 #include <ctime>                   // for strftime, tm
 #include <iterator>                // for next
@@ -1720,8 +1720,8 @@ GdbFormat::wr_init(const QString& fname)
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
 
-  gdb_category = (gdb_opt_category) ? atoi(gdb_opt_category) : 0;
-  gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
+  gdb_category = (gdb_opt_category) ? xstrtoi(gdb_opt_category, nullptr, 10) : 0;
+  gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? xstrtoi(gdb_opt_ver, nullptr, 10) : 0;
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
@@ -1763,7 +1763,7 @@ void
 GdbFormat::write()
 {
   if (gdb_opt_ver) {
-    gdb_ver = atoi(gdb_opt_ver);
+    gdb_ver = xstrtoi(gdb_opt_ver, nullptr, 10);
   }
   write_header();
 

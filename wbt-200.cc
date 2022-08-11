@@ -489,7 +489,7 @@ static char* get_param(const char* cmd, char* buf, int len)
 static int get_param_int(const char* cmd)
 {
   char buf[80];
-  return atoi(get_param(cmd, buf, sizeof(buf)));
+  return xstrtoi(get_param(cmd, buf, sizeof(buf)), nullptr, 10);
 }
 
 static double get_param_float(const char* cmd)

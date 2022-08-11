@@ -27,7 +27,7 @@
 #include <cctype>                     // for isdigit, tolower
 #include <cmath>                      // for fabs, pow
 #include <cstdio>                     // for snprintf, sscanf
-#include <cstdlib>                    // for atof, atoi, strtod
+#include <cstdlib>                    // for atof, strtod
 #include <cstring>                    // for strlen, strncmp, strcmp, memset
 #include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                   // for optional
@@ -519,13 +519,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
                       &wpt->latitude, &wpt->longitude, MYNAME);
     break;
   case XcsvStyle::XT_UTM_ZONE:
-    parse_data->utm_zone = atoi(s);
+    parse_data->utm_zone = xstrtoi(s, nullptr, 10);
     break;
   case XcsvStyle::XT_UTM_ZONEC:
     parse_data->utm_zonec = s[0];
     break;
   case XcsvStyle::XT_UTM_ZONEF:
-    parse_data->utm_zone = atoi(s);
+    parse_data->utm_zone = xstrtoi(s, nullptr, 10);
     parse_data->utm_zonec = s[strlen(s) - 1];
     break;
   case XcsvStyle::XT_UTM_EASTING:
@@ -706,10 +706,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->pdop = atof(s);
     break;
   case XcsvStyle::XT_GPS_SAT:
-    wpt->sat = atoi(s);
+    wpt->sat = xstrtoi(s, nullptr, 10);
     break;
   case XcsvStyle::XT_GPS_FIX:
-    wpt->fix = (fix_type)(atoi(s)-(fix_type)1);
+    wpt->fix = (fix_type)(xstrtoi(s, nullptr, 10)-(fix_type)1);
     if (wpt->fix < fix_2d) {
       if (!case_ignore_strcmp(value, "none")) {
         wpt->fix = fix_none;
@@ -727,7 +727,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     parse_data->rte_name = csv_stringtrim(value, enclosure, 0);
     break;
   case XcsvStyle::XT_TRACK_NEW:
-    parse_data->new_track = atoi(s);
+    parse_data->new_track = xstrtoi(s, nullptr, 10);
     break;
   case XcsvStyle::XT_TRACK_NAME:
     parse_data->trk_name = csv_stringtrim(value, enclosure, 0);
@@ -747,10 +747,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->odometer_distance = NMILES_TO_METERS(atof(s));
     break;
   case XcsvStyle::XT_HEART_RATE:
-    wpt->heartrate = atoi(s);
+    wpt->heartrate = xstrtoi(s, nullptr, 10);
     break;
   case XcsvStyle::XT_CADENCE:
-    wpt->cadence = atoi(s);
+    wpt->cadence = xstrtoi(s, nullptr, 10);
     break;
   case XcsvStyle::XT_POWER:
     wpt->power = atof(s);
@@ -1053,7 +1053,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString::asprintf(fmp.printfc.constData(), "");
       break;
     case XcsvStyle::XT_INDEX:
-      buff = QString::asprintf(fmp.printfc.constData(), waypt_out_count + atoi(fmp.val.constData()));
+      buff = QString::asprintf(fmp.printfc.constData(), waypt_out_count + xstrtoi(fmp.val.constData(), nullptr, 10));
       break;
     case XcsvStyle::XT_CONSTANT: {
       auto cp = XcsvStyle::xcsv_get_char_from_constant_table(fmp.val.constData());
@@ -1913,19 +1913,19 @@ XcsvFormat::wr_init(const QString& fname)
   if (global_opts.synthesize_shortnames) {
 
     if (snlenopt) {
-      setshort_length(xcsv_file->mkshort_handle, atoi(snlenopt));
+      setshort_length(xcsv_file->mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
     }
 
     if (snwhiteopt) {
-      setshort_whitespace_ok(xcsv_file->mkshort_handle, atoi(snwhiteopt));
+      setshort_whitespace_ok(xcsv_file->mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      setshort_mustupper(xcsv_file->mkshort_handle, atoi(snupperopt));
+      setshort_mustupper(xcsv_file->mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      setshort_mustuniq(xcsv_file->mkshort_handle, atoi(snuniqueopt));
+      setshort_mustuniq(xcsv_file->mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
     }
 
     setshort_badchars(xcsv_file->mkshort_handle, CSTR(xcsv_style->badchars));

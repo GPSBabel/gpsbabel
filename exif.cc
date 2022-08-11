@@ -1510,7 +1510,7 @@ ExifFormat::write()
     route_disp_all(nullptr, nullptr, exif_find_wpt_by_time_lambda);
     waypt_disp_all(exif_find_wpt_by_time_lambda);
 
-    qint64 frame = atoi(opt_frame);
+    qint64 frame = xstrtoi(opt_frame, nullptr, 10);
 
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");

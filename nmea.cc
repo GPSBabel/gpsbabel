@@ -23,7 +23,7 @@
 #include <cctype>                  // for isprint
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
-#include <cstdlib>                 // for atoi, atof, strtod
+#include <cstdlib>                 // for atof, strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
 #include <iterator>                // for operator!=, reverse_iterator
 
@@ -301,7 +301,7 @@ NmeaFormat::wr_init(const QString& fname)
   }
 
   mkshort_handle = mkshort_new_handle();
-  setshort_length(mkshort_handle, atoi(snlenopt));
+  setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
     opt_gpgga = nullptr;
@@ -1046,7 +1046,7 @@ NmeaFormat::rd_position_init(const QString& fname)
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
-    if (!gbser_set_speed(gbser_handle, atoi(opt_baud))) {
+    if (!gbser_set_speed(gbser_handle, xstrtoi(opt_baud, nullptr, 10))) {
       fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
     }
   }

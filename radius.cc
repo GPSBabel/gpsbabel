@@ -19,7 +19,7 @@
 
  */
 
-#include <cstdlib>          // for atoi, strtod
+#include <cstdlib>          // for strtod
 
 #include <QString>          // for QString
 #include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
@@ -112,7 +112,7 @@ void RadiusFilter::init()
   }
 
   if (maxctarg != nullptr) {
-    maxct = atoi(maxctarg);
+    maxct = xstrtoi(maxctarg, nullptr, 10);
   } else {
     maxct = 0;
   }

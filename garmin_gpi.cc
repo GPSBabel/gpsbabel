@@ -34,7 +34,6 @@
 #include <cctype>                  // for tolower
 #include <cstdint>                 // for uint32_t, int32_t
 #include <cstdio>                  // for SEEK_CUR, SEEK_SET
-#include <cstdlib>                 // for atoi
 #include <cstring>                 // for strlen, strncmp
 #include <ctime>                   // for time, gmtime, time_t, tm
 #include <memory>                  // for unique_ptr
@@ -1337,7 +1336,7 @@ GarminGPIFormat::wr_deinit()
   gbfclose(fout);
 
   if ((opt_sleep) && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */
-    int sleep = atoi(opt_sleep);
+    int sleep = xstrtoi(opt_sleep, nullptr, 10);
     if (sleep < 1) {
       sleep = 1;
     }

@@ -33,7 +33,6 @@
 
 #include <cstdarg>               // for va_end, va_list, va_start
 #include <cstdio>                // for snprintf
-#include <cstdlib>               // for atoi
 #include <iterator>              // for size
 #include <optional>              // for optional
 #include <type_traits>           // for add_const<>::type
@@ -75,7 +74,7 @@ GtrnctrFormat::wr_init(const QString& fname)
       }
     }
   }
-  gtc_course_flag = atoi(opt_course);
+  gtc_course_flag = xstrtoi(opt_course, nullptr, 10);
 }
 
 void

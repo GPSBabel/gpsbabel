@@ -60,7 +60,7 @@ gpssim_wr_init(const QString& fname)
 {
   fnamestr =  fname;
   trk_count = 0;
-  splitfiles = splitfiles_opt ? atoi(splitfiles_opt) : 0;
+  splitfiles = splitfiles_opt ? xstrtoi(splitfiles_opt, nullptr, 10) : 0;
 
   /* If writing to stdout, never split files */
   if (0 == strcmp("-",splitfiles_opt)) {

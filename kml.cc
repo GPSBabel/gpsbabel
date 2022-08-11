@@ -23,7 +23,7 @@
 #include <cctype>                       // for tolower, toupper
 #include <cmath>                        // for fabs
 #include <cstdio>                       // for sscanf, printf
-#include <cstdlib>                      // for atoi, atol, atof
+#include <cstdlib>                      // for atol, atof
 #include <cstring>                      // for strcmp
 #include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
@@ -393,7 +393,7 @@ void KmlFormat::wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QStringLiteral("%1-").arg(fname);
   realtime_positioning = 1;
-  max_position_points = atoi(opt_max_position_points);
+  max_position_points = xstrtoi(opt_max_position_points, nullptr, 10);
 }
 
 void KmlFormat::wr_deinit()
@@ -821,7 +821,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 
   if (export_points) {
     writer->writeStartElement(QStringLiteral("Placemark"));
-    if (atoi(opt_labels)) {
+    if (xstrtoi(opt_labels, nullptr, 10)) {
       writer->writeOptionalTextElement(QStringLiteral("name"), waypointp->shortname);
     }
     writer->writeEmptyElement(QStringLiteral("snippet"));

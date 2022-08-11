@@ -38,7 +38,6 @@
 
 #include <cctype>                 // for tolower
 #include <cmath>                  // for lround
-#include <cstdlib>                // for atoi
 
 #include <QByteArray>             // for QByteArray
 #include <QChar>                  // for operator==, QChar
@@ -466,18 +465,18 @@ wr_init(const QString& fname)
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    setshort_length(mkshort_handle, atoi(snlenopt));
+    setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
 
     if (snwhiteopt) {
-      setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
+      setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      setshort_mustupper(mkshort_handle, atoi(snupperopt));
+      setshort_mustupper(mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      setshort_mustuniq(mkshort_handle, atoi(snuniqueopt));
+      setshort_mustuniq(mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
     }
 
     setshort_badchars(mkshort_handle, "\",");

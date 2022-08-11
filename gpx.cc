@@ -21,7 +21,7 @@
 
 #include <cmath>                                   // for lround
 #include <cstdio>                                  // for sscanf
-#include <cstdlib>                                 // for atoi, strtod
+#include <cstdlib>                                 // for strtod
 #include <cstring>                                 // for strchr, strncpy
 
 #include <QDate>                                   // for QDate
@@ -98,7 +98,7 @@ GpxFormat::gpx_reset_short_handle()
     setshort_whitespace_ok(mkshort_handle, 0);
   }
 
-  setshort_length(mkshort_handle, atoi(snlen));
+  setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));
 }
 
 void
@@ -1635,7 +1635,7 @@ void
 GpxFormat::write()
 {
 
-  elevation_precision = atoi(opt_elevation_precision);
+  elevation_precision = xstrtoi(opt_elevation_precision, nullptr, 10);
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {

@@ -28,7 +28,7 @@
 #include <cmath>                   // for fabs, floor
 #include <cstdio>                  // for NULL, snprintf, sscanf
 #include <cstdint>
-#include <cstdlib>                 // for atoi, abs
+#include <cstdlib>                 // for abs
 #include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
 #include <ctime>                   // for gmtime, localtime, strftime
 
@@ -751,7 +751,7 @@ garmin_txt_wr_init(const QString& fname)
   gtxt_flags.celsius = (toupper(*get_option_val(opt_temp, "c")) == 'C');
   init_date_and_time_format();
   if (opt_precision) {
-    precision = atoi(opt_precision);
+    precision = xstrtoi(opt_precision, nullptr, 10);
     if (precision < 0) {
       fatal(MYNAME ": Invalid precision (%s)!", opt_precision);
     }
@@ -789,7 +789,7 @@ garmin_txt_wr_init(const QString& fname)
     if (case_ignore_strcmp(opt_utc, "utc") == 0) {
       utc_offs = 0;
     } else {
-      utc_offs = atoi(opt_utc);
+      utc_offs = xstrtoi(opt_utc, nullptr, 10);
     }
     utc_offs *= (60 * 60);
     gtxt_flags.utc = 1;
@@ -1303,7 +1303,7 @@ parse_track_waypoint(const QStringList& lineparts)
       }
       break;
     case 9:
-      WAYPT_SET(wpt, course, atoi(CSTR(str)));
+      WAYPT_SET(wpt, course, xstrtoi(CSTR(str), nullptr, 10));
       break;
     }
   }

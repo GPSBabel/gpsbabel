@@ -74,7 +74,7 @@ for a little more info, see structures:
 #include "defs.h"
 #include <cassert>
 #include <cstdio>
-#include <cstdlib> // atoi
+#include <cstdlib> // atof
 
 /* the start of each record (line) is common to both advanced and basic mode.
    it will be parsed by a single common code. hence, it will be easier and clearer
@@ -307,19 +307,19 @@ v900_read()
       wpt->longitude = -wpt->longitude;
     }
 
-    wpt->altitude = atoi(line.bas.common.height);
+    wpt->altitude = xstrtoi(line.bas.common.height, nullptr, 10);
 
     /* handle date/time fields */
     {
-      int date = atoi(line.bas.common.date);
-      int time = atoi(line.bas.common.time);
+      int date = xstrtoi(line.bas.common.date, nullptr, 10);
+      int time = xstrtoi(line.bas.common.time, nullptr, 10);
       wpt->SetCreationTime(bintime2utc(date, time));
     }
 
-    wpt->speed = KPH_TO_MPS(atoi(line.bas.common.speed));
+    wpt->speed = KPH_TO_MPS(xstrtoi(line.bas.common.speed, nullptr, 10));
     wpt->wpt_flags.speed = 1;
 
-    wpt->course = atoi(line.bas.common.heading);
+    wpt->course = xstrtoi(line.bas.common.heading, nullptr, 10);
     wpt->wpt_flags.course = 1;
 
     if (is_advanced_mode) {

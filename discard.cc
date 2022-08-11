@@ -161,17 +161,17 @@ void DiscardFilter::init()
   }
 
   if (satopt) {
-    satpf = atoi(satopt);
+    satpf = xstrtoi(satopt, nullptr, 10);
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = atoi(eleminopt);
+    eleminpf = xstrtoi(eleminopt, nullptr, 10);
   }
 
   if (elemaxopt) {
-    elemaxpf = atoi(elemaxopt);
+    elemaxpf = xstrtoi(elemaxopt, nullptr, 10);
   }
 
   if (nameopt) {
