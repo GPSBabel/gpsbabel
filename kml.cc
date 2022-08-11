@@ -23,7 +23,7 @@
 #include <cctype>                       // for tolower, toupper
 #include <cmath>                        // for fabs
 #include <cstdio>                       // for sscanf, printf
-#include <cstdlib>                      // for atol, atof
+#include <cstdlib>                      // for atof
 #include <cstring>                      // for strcmp
 #include <optional>                     // for optional
 #include <tuple>                        // for tuple, make_tuple, tie
@@ -1733,8 +1733,8 @@ void KmlFormat::write()
   rotate_colors = (!! opt_rotate_colors);
   trackdata = (!! strcmp("0", opt_trackdata));
   trackdirection = (!! strcmp("0", opt_trackdirection));
-  line_width = atol(opt_line_width);
-  precision = atol(opt_precision);
+  line_width = xstrtoi(opt_line_width, nullptr, 10);
+  precision = xstrtoi(opt_precision, nullptr, 10);
 
   writer->writeStartDocument();
 
