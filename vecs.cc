@@ -22,6 +22,7 @@
 #include "vecs.h"
 
 #include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar
 #include <QDebug>              // for QDebug
 #include <QDir>                // for QDir, QDir::Files, QDir::Name
 #include <QFileInfo>           // for QFileInfo
@@ -34,7 +35,6 @@
 
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
-#include <cctype>              // for isdigit
 #include <cstdio>              // for printf, putchar, sscanf
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
@@ -107,8 +107,7 @@ extern ff_vecs_t format_garmin_xt_vecs;
 
 #define MYNAME "vecs"
 
-struct Vecs::Impl
-{
+struct Vecs::Impl {
   /*
    * Having these LegacyFormat instances be non-static data members
    * prevents the static initialization order fiasco because
@@ -639,9 +638,64 @@ void Vecs::init_vecs()
   style_list = create_style_vec();
 }
 
-int Vecs::is_integer(const char* c)
+bool Vecs::is_integer(const QString& val)
 {
-  return isdigit(c[0]) || ((c[0] == '+' || c[0] == '-') && isdigit(c[1]));
+#if 1
+  /* FIXME: Using scanf to validate input is not recommened.
+   * Users may have taken advantage of this flexibilty
+   * when interpreting ARGTYPE_INT.
+   * INT05-C. Do not use input functions to convert character
+   * data if they cannot handle all possible inputs
+   */
+  // note sscanf doesn't do range checking
+  // note some users allow hex input.
+  // note some users may interpret trailing data after
+  // conversion, typically to denote a unit.
+  int test;
+  return 1 == sscanf(CSTR(val), "%d", &test);
+#else
+  try {
+    (void) std::stoi(val.toStdString(), nullptr, 10);
+  } catch (const std::invalid_argument&) {
+    return false;
+  } catch (const std::out_of_range&) {
+    return false;
+  }
+  return true;
+#endif
+}
+
+bool Vecs::is_float(const QString& val)
+{
+#if 1
+  /* FIXME: Using scanf to validate input is not recommened.
+   * Users may have taken advantage of this flexibilty
+   * when interpreting ARGTYPE_FLOAT.
+   * INT05-C. Do not use input functions to convert character
+   * data if they cannot handle all possible inputs
+   */
+  // note sscanf doesn't do range checking
+  // note some users may interpret trailing data after
+  // conversion, typically to denote a unit.
+  double test;
+  return 1 == sscanf(CSTR(val), "%lf", &test);
+#else
+  try {
+    (void) std::stod(val.toStdString(), nullptr);
+  } catch (const std::invalid_argument&) {
+    return false;
+  } catch (const std::out_of_range&) {
+    return false;
+  }
+  return true;
+#endif
+}
+
+bool Vecs::is_bool(const QString& val)
+{
+  return val.startsWith('y', Qt::CaseInsensitive) ||
+         val.startsWith('n', Qt::CaseInsensitive) ||
+         (!val.isEmpty() && val.at(0).isDigit());
 }
 
 void Vecs::exit_vecs()
@@ -663,12 +717,10 @@ void Vecs::exit_vecs()
   style_list.squeeze();
 }
 
-void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
+void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& val)
 {
-  const char* c;
-
   if (arg->argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!", qPrintable(module), arg->argstring);
+    fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg->argstring));
   }
 
   if (arg->argvalptr != nullptr) {
@@ -679,65 +731,51 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
     *arg->argval = nullptr;
   }
 
-  if (val == nullptr) {
+  if (val.isNull()) {
     return;
   }
 
-  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo"
-  // and want to set it to the value "foo", this code will prevent that from happening, but we seem to have
-  // code all over the place that relies on this. :-/
-  if (case_ignore_strcmp(val, arg->argstring) == 0) {
-    c = "";
-  } else {
-    c = val;
-  }
+  QString rval(val);
 
   switch (arg->argtype & ARGTYPE_TYPEMASK) {
   case ARGTYPE_INT:
-    if (*c == '\0') {
-      c = "0";
+    if (val.isEmpty()) {
+      rval = '0';
     } else {
-      int test;
-      if (1 != sscanf(c, "%d", &test)) {
-        fatal("%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      if (!is_integer(val)) {
+        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
       }
     }
     break;
   case ARGTYPE_FLOAT:
-    if (*c == '\0') {
-      c = "0";
+    if (val.isEmpty()) {
+      rval = '0';
     } else {
-      double test;
-      if (1 != sscanf(c, "%lf", &test)) {
-        fatal("%s: Invalid parameter value %s for option %s", qPrintable(module), val, arg->argstring);
+      if (!is_float(val)) {
+        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
       }
     }
     break;
   case ARGTYPE_BOOL:
-    if (*c == '\0') {
-      c = "1";
+    if (val.isEmpty()) {
+      rval = '1';
     } else {
-      switch (*c) {
-      case 'Y':
-      case 'y':
-        c = "1";
-        break;
-      case 'N':
-      case 'n':
-        c = "0";
-        break;
-      default:
-        if (isdigit(*c)) {
-          if (*c == '0') {
-            c = "0";
+      if (val.startsWith('y', Qt::CaseInsensitive)) {
+        rval = '1';
+      } else if (val.startsWith('n', Qt::CaseInsensitive)) {
+        rval = '0';
+      } else {
+        // This works for decimal digits in the BMP (and thus represented by one QChar).
+        if (val.at(0).isDigit()) {
+          if (0 == val.at(0).digitValue()) {
+            rval = '0';
           } else {
-            c = "1";
+            rval = '1';
           }
         } else {
-          warning(MYNAME ": Invalid logical value '%s' (%s)!\n", c, qPrintable(module));
-          c = "0";
+          warning("%s :Invalid logical value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
+          rval = '0';
         }
-        break;
       }
     }
     break;
@@ -746,10 +784,10 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const char* val)
   /* for bool options without default: don't set argval if "FALSE" */
 
   if (((arg->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      (*c == '0') && (arg->defaultvalue == nullptr)) {
+      rval.startsWith('0') && (arg->defaultvalue == nullptr)) {
     return;
   }
-  *arg->argval = arg->argvalptr = xstrdup(c);
+  *arg->argval = arg->argvalptr = xstrdup(rval);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
@@ -758,8 +796,8 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
     for (const auto& arg : *args) {
       if (*arg.argval && arg.argval) {
         printf("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), arg.argstring, *arg.argval);
-        if (arg.defaultvalue && (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0)) {
+               qPrintable(vecname), qPrintable(arg.argstring), *arg.argval);
+        if (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0) {
           printf(" (=default)");
         }
         printf("\n");
@@ -810,7 +848,7 @@ Format* Vecs::find_vec(const QString& vecname)
         if (!options.isEmpty()) {
           const QString opt = get_option(options, arg.argstring);
           if (!opt.isNull()) {
-            assign_option(vec.name, &arg, CSTR(opt));
+            assign_option(vec.name, &arg, opt);
             continue;
           }
         }
@@ -821,7 +859,7 @@ Format* Vecs::find_vec(const QString& vecname)
         if (qopt.isNull()) {
           assign_option(vec.name, &arg, arg.defaultvalue);
         } else {
-          assign_option(vec.name, &arg, CSTR(qopt));
+          assign_option(vec.name, &arg, qopt);
         }
       }
     }
@@ -863,7 +901,7 @@ Format* Vecs::find_vec(const QString& vecname)
         if (!options.isEmpty()) {
           const QString opt = get_option(options, arg.argstring);
           if (!opt.isNull()) {
-            assign_option(svec.name, &arg, CSTR(opt));
+            assign_option(svec.name, &arg, opt);
             continue;
           }
         }
@@ -874,7 +912,7 @@ Format* Vecs::find_vec(const QString& vecname)
         if (qopt.isNull()) {
           assign_option(svec.name, &arg, arg.defaultvalue);
         } else {
-          assign_option(svec.name, &arg, CSTR(qopt));
+          assign_option(svec.name, &arg, qopt);
         }
       }
     }
@@ -901,9 +939,9 @@ Format* Vecs::find_vec(const QString& vecname)
  * Find and return a specific argument in an arg list.
  * Modelled approximately after getenv.
  */
-QString Vecs::get_option(const QStringList& options, const char* argname)
+QString Vecs::get_option(const QStringList& options, const QString& argname)
 {
-  QString rval;
+  QString rval; // null
 
   for (const auto& option : options) {
     int split = option.indexOf('=');
@@ -919,7 +957,7 @@ QString Vecs::get_option(const QStringList& options, const char* argname)
         assert(!rval.isNull());
         break;
       } else {
-        rval = option_name; // not null, possibly empty.
+        rval = ""; // not null, empty
         assert(!rval.isNull());
         break;
       }
@@ -1174,9 +1212,9 @@ void Vecs::disp_v3(const vecinfo_t& vec)
              CSTR(arg.argstring),
              CSTR(arg.helpstring),
              name_option(arg.argtype),
-             arg.defaultvalue.isEmpty() ? "" : CSTR(arg.defaultvalue),
-             arg.minvalue.isEmpty() ? "" : CSTR(arg.minvalue),
-             arg.maxvalue.isEmpty() ? "" : CSTR(arg.maxvalue));
+             CSTR(arg.defaultvalue),
+             CSTR(arg.minvalue),
+             CSTR(arg.maxvalue));
     }
     disp_help_url(vec, arg.argstring);
     printf("\n");
@@ -1246,19 +1284,42 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
 #endif
     for (const auto& arg : *args) {
       if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
-        if (arg.defaultvalue &&
-            ! is_integer(arg.defaultvalue)) {
+        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (arg.minvalue &&
-            ! is_integer(arg.minvalue)) {
+        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue)) {
           Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
-        if (arg.maxvalue &&
-            ! is_integer(arg.maxvalue)) {
+        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue)) {
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
+          ok = false;
+        }
+      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_FLOAT) {
+        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue)) {
+          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
+          ok = false;
+        }
+        if (!arg.minvalue.isNull() && !is_float(arg.minvalue)) {
+          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
+          ok = false;
+        }
+        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue)) {
+          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
+          ok = false;
+        }
+      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) {
+        if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
+          ok = false;
+        }
+        if (!arg.minvalue.isNull() && !is_bool(arg.minvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not an bool.";
+          ok = false;
+        }
+        if (!arg.maxvalue.isNull() && !is_bool(arg.maxvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
       }

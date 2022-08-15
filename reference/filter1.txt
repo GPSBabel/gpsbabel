@@ -34,8 +34,8 @@ option	track	split	Split by date or time interval (see README)	string				https:/
 option	track	sdistance	Split by distance	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_sdistance
 option	track	merge	Merge multiple tracks for the same way	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_merge
 option	track	name	Use only track(s) where title matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_name
-option	track	start	Use only track points after this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
-option	track	stop	Use only track points before this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
+option	track	start	Use only track points after this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
+option	track	stop	Use only track points before this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
 option	track	title	Basic title for new track(s)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_title
 option	track	fix	Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_fix
 option	track	course	Synthesize course	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_course
