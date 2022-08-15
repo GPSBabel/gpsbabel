@@ -1519,3 +1519,18 @@ QString grapheme_truncate(const QString& input, unsigned int count)
   }
   return output;
 }
+
+int xstrtoi(const char* str, char** str_end, int base)
+{
+  
+  long value = strtol(str, str_end, base);
+  if (value > INT_MAX) {
+    errno = ERANGE;
+    return INT_MAX;
+  }
+  if (value < INT_MIN) {
+    errno = ERANGE;
+    return INT_MIN;
+  }
+  return value;
+}

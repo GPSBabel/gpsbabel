@@ -497,7 +497,7 @@ static int mtk_erase()
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &lstatus, 2);
   if (lstatus) {
-    log_status = atoi(lstatus);
+    log_status = xstrtoi(lstatus, nullptr, 10);
     dbg(3, "LOG Status '%s'\n", lstatus);
     xfree(lstatus);
     lstatus = nullptr;
@@ -565,7 +565,7 @@ static void mtk_read()
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
   if (fusage) {
-    log_enabled = (atoi(fusage) & 2)?1:0;
+    log_enabled = (xstrtoi(fusage, nullptr, 10) & 2)?1:0;
     dbg(3, "LOG Status '%s' -- log %s \n", fusage, log_enabled?"enabled":"disabled");
     xfree(fusage);
     fusage = nullptr;

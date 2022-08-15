@@ -24,7 +24,7 @@
 #include <cctype>                  // for isprint, toupper
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for sscanf, size_t
-#include <cstdlib>                 // for atoi, atof, strtoul
+#include <cstdlib>                 // for strtod, strtoul
 #include <cstring>                 // for strchr, strncmp, strlen, memmove, strrchr, memset
 
 #include <QByteArray>              // for QByteArray
@@ -793,7 +793,7 @@ mag_rd_init_common(const QString& portname)
   }
 
   if (bs) {
-    bitrate=atoi(bs);
+    bitrate=xstrtoi(bs, nullptr, 10);
   }
 
   if (!mkshort_handle) {
@@ -850,7 +850,7 @@ mag_wr_init_common(const QString& portname)
 {
   suppress_ack = 0;
   if (bs) {
-    bitrate=atoi(bs);
+    bitrate=xstrtoi(bs, nullptr, 10);
   }
 
   if (waypt_count() > 500) {
@@ -858,7 +858,7 @@ mag_wr_init_common(const QString& portname)
   }
 
   if (cmts) {
-    wptcmtcnt_max = atoi(cmts);
+    wptcmtcnt_max = xstrtoi(cmts, nullptr, 10);
   } else {
     wptcmtcnt_max = MAXCMTCT ;
   }
@@ -983,17 +983,17 @@ mag_trkparse(char* trkmsg)
    * for us.
    */
   parse_istring(trkmsg);
-  double latdeg = atof(ifield[1]);
+  double latdeg = strtod(ifield[1], nullptr);
   char latdir = ifield[2][0];
-  double lngdeg = atof(ifield[3]);
+  double lngdeg = strtod(ifield[3], nullptr);
   char lngdir = ifield[4][0];
-  int alt = atof(ifield[5]);
+  int alt = strtod(ifield[5], nullptr);
   char altunits = ifield[6][0];
   (void)altunits;
   sscanf(ifield[7], "%d.%d", &hms, &fracsecs);
   /* Field 8 is constant */
   /* Field nine is optional track name */
-  int dmy = atoi(ifield[10]);
+  int dmy = xstrtoi(ifield[10], nullptr, 10);
   int sec = hms % 100;
   hms = hms / 100;
   int min = hms % 100;

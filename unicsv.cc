@@ -22,7 +22,6 @@
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <cstdint>
-#include <cstdlib>                 // for atoi
 #include <cstring>                 // for memset, strchr, strncpy
 #include <ctime>                   // for gmtime
 
@@ -346,7 +345,7 @@ UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
     res += *date;
   }
   if (opt_utc) {
-    res += atoi(opt_utc) * SECONDS_PER_HOUR;
+    res += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
   } else {
     struct tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
@@ -1018,7 +1017,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     }
 
     if (opt_utc) {
-      wpt->creation_time = wpt->creation_time.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+      wpt->creation_time = wpt->creation_time.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
     }
   }
 
@@ -1142,8 +1141,8 @@ UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
   }
   QDateTime dt = idt;
   if (opt_utc) {
-    //time += atoi(opt_utc) * SECONDS_PER_HOUR;
-    dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+    //time += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
+    dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
     dt = dt.toUTC();
   }
 
@@ -1535,7 +1534,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       if (opt_utc) {
         dt = wpt->GetCreationTime().toUTC();
         // We might wrap to a different day by overriding the TZ offset.
-        dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+        dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
       }
@@ -1550,7 +1549,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       QTime t;
       if (opt_utc) {
         t = wpt->GetCreationTime().toUTC().time();
-        t = t.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+        t = t.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
       } else {
         t = wpt->GetCreationTime().toLocalTime().time();
       }
@@ -1743,7 +1742,7 @@ UnicsvFormat::wr_init(const QString& fname)
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
-  llprec = atoi(opt_prec);
+  llprec = xstrtoi(opt_prec, nullptr, 10);
 }
 
 void

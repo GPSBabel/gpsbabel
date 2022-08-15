@@ -34,7 +34,7 @@
 #include <cmath>            // for cos, sin, atan2, pow, sqrt, M_PI
 #include <cstdarg>          // for va_end, va_list, va_start
 #include <cstdio>           // for sscanf, snprintf, vprintf, SEEK_SET
-#include <cstdlib>          // for atoi, free
+#include <cstdlib>          // for free
 #include <cstring>          // for memset
 #include <ctime>            // for time, time_t
 
@@ -520,14 +520,14 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
    */
   time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
 
-  int week_rollover = atoi(opt_gps_week_rollover);
+  int week_rollover = xstrtoi(opt_gps_week_rollover, nullptr, 10);
   if (week_rollover < 0) {
     int current_week = (time(nullptr)-gps_timet)/(7*SECONDS_PER_DAY);
     week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
 
-  int override = atoi(opt_gps_utc_offset);
+  int override = xstrtoi(opt_gps_utc_offset, nullptr, 10);
   if (override) {
     gps_timet -= override;
     return gps_timet;
@@ -858,7 +858,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
   rd_char(&errors);
   rd_char(&errors);
   rd_char(&errors);
-  skytraq_set_baud(atoi(opt_dlbaud));
+  skytraq_set_baud(xstrtoi(opt_dlbaud, nullptr, 10));
 #endif
 
   cs = skytraq_calc_checksum(buf, i);
@@ -930,9 +930,9 @@ SkytraqBase::skytraq_read_tracks() const
   uint32_t log_wr_ptr;
   uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
   int t, rc, got_sectors, total_sectors_read = 0;
-  int read_at_once = MAX(atoi(opt_read_at_once), 1);
-  int opt_first_sector_val = atoi(opt_first_sector);
-  int opt_last_sector_val = atoi(opt_last_sector);
+  int read_at_once = MAX(xstrtoi(opt_read_at_once, nullptr, 10), 1);
+  int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
+  int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
   int multi_read_supported = 1;
   gbfile* dumpfile = nullptr;
 
@@ -985,7 +985,7 @@ SkytraqBase::skytraq_read_tracks() const
   db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
   for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
-      if (atoi(opt_read_at_once) == 0  ||  multi_read_supported == 0) {
+      if (xstrtoi(opt_read_at_once, nullptr, 10) == 0  ||  multi_read_supported == 0) {
         rc = skytraq_read_single_sector(i, buffer);
         if (rc == res_OK) {
           got_sectors = 1;
@@ -1001,7 +1001,7 @@ SkytraqBase::skytraq_read_tracks() const
         switch (rc) {
         case res_OK:
           got_sectors = read_at_once;
-          read_at_once = MIN(read_at_once*2, atoi(opt_read_at_once));
+          read_at_once = MIN(read_at_once*2, xstrtoi(opt_read_at_once, nullptr, 10));
           break;
 
         case res_NACK:
@@ -1058,7 +1058,7 @@ SkytraqBase::skytraq_probe() const
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
-  int initbaud = atoi(opt_initbaud);
+  int initbaud = xstrtoi(opt_initbaud, nullptr, 10);
   uint8_t MSG_QUERY_SOFTWARE_VERSION[2] = { 0x02, 0x01 };
   struct {
     uint8_t id;
@@ -1202,7 +1202,7 @@ SkytraqBase::skytraq_read() const
     return;
   }
 
-  int dlbaud = atoi(opt_dlbaud);
+  int dlbaud = xstrtoi(opt_dlbaud, nullptr, 10);
   if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
     skytraq_set_baud(dlbaud);
   }
@@ -1244,8 +1244,8 @@ SkytraqfileFormat::read()
 {
   struct read_state st;
   int got_bytes;
-  int opt_first_sector_val = atoi(opt_first_sector);
-  int opt_last_sector_val = atoi(opt_last_sector);
+  int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
+  int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
 
   state_init(&st);
   auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);

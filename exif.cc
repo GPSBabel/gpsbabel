@@ -59,7 +59,7 @@
 #include <cmath>                // for fabs, modf, copysign, round, fmax
 #include <cstdint>              // for uint32_t, int32_t, uint16_t, int16_t, uint8_t, INT32_MAX
 #include <cstdio>               // for printf, SEEK_SET, snprintf, SEEK_CUR
-#include <cstdlib>              // for labs, atoi
+#include <cstdlib>              // for labs
 #include <cstring>              // for memcmp, strlen
 #include <type_traits>          // for add_const<>::type
 
@@ -1510,7 +1510,7 @@ ExifFormat::write()
     route_disp_all(nullptr, nullptr, exif_find_wpt_by_time_lambda);
     waypt_disp_all(exif_find_wpt_by_time_lambda);
 
-    qint64 frame = atoi(opt_frame);
+    qint64 frame = xstrtoi(opt_frame, nullptr, 10);
 
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");

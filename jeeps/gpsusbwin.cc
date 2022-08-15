@@ -232,7 +232,7 @@ gusb_init(const char* pname, gpsdevh** dh)
     if (0 == strcmp(pname+4, "list")) {
       req_unit_number = -1;
     } else {
-      req_unit_number = atoi(pname+4);
+      req_unit_number = xstrtoi(pname+4, nullptr, 10);
     }
   }
 

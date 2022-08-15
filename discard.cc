@@ -24,7 +24,7 @@
 #include <QDebug>              // for QDebug
 #include <QRegularExpression>  // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpressionMatch
 
-#include <cstdlib>             // for atoi, atof
+#include <cstdlib>             // for strtod
 
 #include "defs.h"              // for Waypoint, fatal, route_del_wpt, route_disp_all, track_del_wpt, track_disp_all, waypt_del, waypt_disp_all, route_head, rtedata, trkdata, wptdata, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
@@ -149,29 +149,29 @@ QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
 void DiscardFilter::init()
 {
   if (hdopopt) {
-    hdopf = atof(hdopopt);
+    hdopf = strtod(hdopopt, nullptr);
   } else {
     hdopf = -1.0;
   }
 
   if (vdopopt) {
-    vdopf = atof(vdopopt);
+    vdopf = strtod(vdopopt, nullptr);
   } else {
     vdopf = -1.0;
   }
 
   if (satopt) {
-    satpf = atoi(satopt);
+    satpf = xstrtoi(satopt, nullptr, 10);
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = atoi(eleminopt);
+    eleminpf = xstrtoi(eleminopt, nullptr, 10);
   }
 
   if (elemaxopt) {
-    elemaxpf = atoi(elemaxopt);
+    elemaxpf = xstrtoi(elemaxopt, nullptr, 10);
   }
 
   if (nameopt) {

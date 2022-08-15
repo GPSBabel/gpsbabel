@@ -22,7 +22,7 @@
 
 #include <cassert>                   // for assert
 #include <cstdio>                    // for snprintf, sscanf
-#include <cstdlib>                   // for atof
+#include <cstdlib>                   // for strtod
 #include <cstring>                   // for strncpy
 
 #include <QByteArray>                // for QByteArray
@@ -216,17 +216,17 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint
   switch (tag) {
   case 1:
     if (*cdatastr) {
-      WAYPT_SET(waypt, proximity, atof(cdatastr));
+      WAYPT_SET(waypt, proximity, strtod(cdatastr, nullptr));
     }
     break;
   case 2:
     if (*cdatastr) {
-      WAYPT_SET(waypt, temperature, atof(cdatastr));
+      WAYPT_SET(waypt, temperature, strtod(cdatastr, nullptr));
     }
     break;
   case 3:
     if (*cdatastr) {
-      WAYPT_SET(waypt, depth, atof(cdatastr));
+      WAYPT_SET(waypt, depth, strtod(cdatastr, nullptr));
     }
     break;
   case 4:

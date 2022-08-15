@@ -21,7 +21,6 @@
  */
 
 #include <cctype>           // for toupper
-#include <cstdlib>          // for atoi
 
 #include <QtGlobal>         // for foreach
 
@@ -140,7 +139,7 @@ void TransformFilter::process()
 
   name_digits = 3;
   if (rpt_name_digits && *rpt_name_digits) {
-    name_digits = atoi(rpt_name_digits);
+    name_digits = xstrtoi(rpt_name_digits, nullptr, 10);
   }
 
   if (opt_waypts != nullptr) {

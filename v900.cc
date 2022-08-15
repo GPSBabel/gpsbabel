@@ -74,7 +74,7 @@ for a little more info, see structures:
 #include "defs.h"
 #include <cassert>
 #include <cstdio>
-#include <cstdlib> // atoi
+#include <cstdlib> // strtod
 
 /* the start of each record (line) is common to both advanced and basic mode.
    it will be parsed by a single common code. hence, it will be easier and clearer
@@ -293,7 +293,7 @@ v900_read()
     /* lat is a string in the form: 31.768380N */
     char c = line.bas.common.latitude_NS;	/* N/S */
     assert(c == 'N' || c == 'S');
-    wpt->latitude = atof(line.bas.common.latitude_num);
+    wpt->latitude = strtod(line.bas.common.latitude_num, nullptr);
     if (c == 'S') {
       wpt->latitude = -wpt->latitude;
     }
@@ -301,31 +301,31 @@ v900_read()
     /* lon is a string in the form: 035.209656E */
     c = line.bas.common.longitude_EW; /* get E/W */
     assert(c == 'E' || c == 'W');
-    line.bas.common.longitude_EW = 0; /* the E will confuse atof(), if not removed */
-    wpt->longitude = atof(line.bas.common.longitude_num);
+    line.bas.common.longitude_EW = 0; /* the E will confuse strtod(), if not removed */
+    wpt->longitude = strtod(line.bas.common.longitude_num, nullptr);
     if (c == 'W') {
       wpt->longitude = -wpt->longitude;
     }
 
-    wpt->altitude = atoi(line.bas.common.height);
+    wpt->altitude = xstrtoi(line.bas.common.height, nullptr, 10);
 
     /* handle date/time fields */
     {
-      int date = atoi(line.bas.common.date);
-      int time = atoi(line.bas.common.time);
+      int date = xstrtoi(line.bas.common.date, nullptr, 10);
+      int time = xstrtoi(line.bas.common.time, nullptr, 10);
       wpt->SetCreationTime(bintime2utc(date, time));
     }
 
-    wpt->speed = KPH_TO_MPS(atoi(line.bas.common.speed));
+    wpt->speed = KPH_TO_MPS(xstrtoi(line.bas.common.speed, nullptr, 10));
     wpt->wpt_flags.speed = 1;
 
-    wpt->course = atoi(line.bas.common.heading);
+    wpt->course = xstrtoi(line.bas.common.heading, nullptr, 10);
     wpt->wpt_flags.course = 1;
 
     if (is_advanced_mode) {
-      wpt->hdop = atof(line.adv.hdop);
-      wpt->vdop = atof(line.adv.vdop);
-      wpt->pdop = atof(line.adv.pdop);
+      wpt->hdop = strtod(line.adv.hdop, nullptr);
+      wpt->vdop = strtod(line.adv.vdop, nullptr);
+      wpt->pdop = strtod(line.adv.pdop, nullptr);
 
       /* handle fix mode (2d, 3d, etc.) */
       if (!strncmp(line.adv.valid,"DGPS", sizeof line.adv.valid)) {
