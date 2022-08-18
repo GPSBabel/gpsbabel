@@ -221,7 +221,7 @@ Filter* FilterVecs::find_filter_vec(const QString& vecname)
         if (qtemp.isNull()) {
           Vecs::assign_option(vec.name, &arg, arg.defaultvalue);
         } else {
-          Vecs::assign_option(vec.name, &arg, CSTR(qtemp));
+          Vecs::assign_option(vec.name, &arg, qtemp);
         }
       }
     }
@@ -233,7 +233,7 @@ Filter* FilterVecs::find_filter_vec(const QString& vecname)
         for (auto& arg : *args) {
           const QString opt = Vecs::get_option(options, arg.argstring);
           if (!opt.isNull()) {
-            Vecs::assign_option(vec.name, &arg, CSTR(opt));
+            Vecs::assign_option(vec.name, &arg, opt);
           }
         }
       }
@@ -308,7 +308,7 @@ void FilterVecs::disp_filter_vecs() const
       for (const auto& arg : *args) {
         if (!(arg.argtype & ARGTYPE_HIDDEN)) {
           printf("	  %-18.18s    %-.50s %s\n",
-                 arg.argstring, arg.helpstring,
+                 qPrintable(arg.argstring), qPrintable(arg.helpstring),
                  (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
         }
       }
@@ -329,7 +329,7 @@ void FilterVecs::disp_filter_vec(const QString& vecname) const
       for (const auto& arg : *args) {
         if (!(arg.argtype & ARGTYPE_HIDDEN)) {
           printf("	  %-18.18s    %-.50s %s\n",
-                 arg.argstring, arg.helpstring,
+                 qPrintable(arg.argstring), qPrintable(arg.helpstring),
                  (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
         }
       }
@@ -341,7 +341,7 @@ void FilterVecs::disp_help_url(const fl_vecs_t& vec, const arglist_t* arg)
 {
   printf("\t" WEB_DOC_DIR "/filter_%s.html", CSTR(vec.name));
   if (arg) {
-    printf("#fmt_%s_o_%s", CSTR(vec.name), arg->argstring);
+    printf("#fmt_%s_o_%s", CSTR(vec.name), CSTR(arg->argstring));
   }
 }
 
@@ -355,12 +355,12 @@ void FilterVecs::disp_v1(const fl_vecs_t& vec)
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {
         printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
                CSTR(vec.name),
-               arg.argstring,
-               arg.helpstring,
+               CSTR(arg.argstring),
+               CSTR(arg.helpstring),
                Vecs::name_option(arg.argtype),
-               arg.defaultvalue ? arg.defaultvalue : "",
-               arg.minvalue ? arg.minvalue : "",
-               arg.maxvalue ? arg.maxvalue : "");
+               CSTR(arg.defaultvalue),
+               CSTR(arg.minvalue),
+               CSTR(arg.maxvalue));
         disp_help_url(vec, &arg);
         printf("\n");
       }

@@ -960,13 +960,13 @@ void setshort_defname(short_handle, const char* s);
 #define ARG_NOMINMAX nullptr, nullptr
 
 struct arglist_t {
-  const char* argstring{nullptr};
-  char** argval{nullptr};
-  const char* helpstring{nullptr};
-  const char* defaultvalue{nullptr};
+  const QString argstring;
+  char** const argval{nullptr};
+  const QString helpstring;
+  const QString defaultvalue;
   const uint32_t argtype{ARGTYPE_UNKNOWN};
-  const char* minvalue{nullptr};    /* minimum value for numeric options */
-  const char* maxvalue{nullptr};    /* maximum value for numeric options */
+  const QString minvalue;    /* minimum value for numeric options */
+  const QString maxvalue;    /* maximum value for numeric options */
   char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
 };
 
