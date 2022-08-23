@@ -55,14 +55,9 @@ QStringList WayPtsFilterData::makeOptionString()
 }
 
 //------------------------------------------------------------------------
-static QString optionDate(const QDateTime& dt, bool useLocal)
+static QString optionDate(const QDateTime& dt)
 {
-  QDateTime d;
-  if (useLocal) {
-    d = dt.toLocalTime();
-  } else {
-    d = dt.toUTC();
-  }
+  QDateTime d = dt.toUTC();
 
   QDate date = d.date();
   QTime time = d.time();
@@ -130,10 +125,10 @@ QStringList TrackFilterData::makeOptionString()
   }
 
   if (start) {
-    s += QString(",start=%1").arg(optionDate(startTime, TZ));
+    s += QString(",start=%1").arg(optionDate(startTime));
   }
   if (stop) {
-    s += QString(",stop=%1").arg(optionDate(stopTime, TZ));
+    s += QString(",stop=%1").arg(optionDate(stopTime));
   }
   if (move) {
     s += QString(",move=%1w%2d%3h%4m%5s").arg(weeks).arg(days).arg(hours).arg(mins).arg(secs);

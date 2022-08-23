@@ -61,7 +61,7 @@ class TrackFilterData: public FilterData
 public:
   TrackFilterData():  title(false), titleString(QString()),
     move(false),  weeks(0), days(0), hours(0), mins(0), secs(0),
-    TZ(false),
+    TZ(true),
     start(false),
     stop(false),
     pack(false), merge(false), split(false),
