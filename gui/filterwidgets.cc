@@ -69,7 +69,8 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   connect(ui.splitTimeCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitTimeX);
   connect(ui.splitDistanceCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitDistanceX);
 
-  connect(ui.TZCheck, &QAbstractButton::clicked, this, &TrackWidget::TZX);
+  connect(ui.localTime, &QAbstractButton::clicked, this, &TrackWidget::TZX);
+  connect(ui.utc, &QAbstractButton::clicked, this, &TrackWidget::TZX);
 
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
@@ -82,15 +83,16 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   // If the two timeSpecs match Qt5 and Qt6 behave the same.
   ui.startEdit->setTimeSpec(tfd.startTime.timeSpec());
   ui.stopEdit->setTimeSpec(tfd.stopTime.timeSpec());
-  // Force TZ data to be in sync with startTime & stopTime time spec.
-  // This makes sure the initial state of the TZCheck box is in agreement
-  // with the startTime::timeSpec and stopTime::timeSpec.
-  tfd.TZ = tfd.startTime.timeSpec() == Qt::LocalTime;
+  // Make sure the initial state of the localTime and utc radio buttons
+  // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
+  tfd.localTime = tfd.startTime.timeSpec() == Qt::LocalTime;
+  tfd.utc = !tfd.localTime;
 
   // Collect the data fields.
   fopts << new BoolFilterOption(tfd.title,  ui.titleCheck);
   fopts << new BoolFilterOption(tfd.move,   ui.moveCheck);
-  fopts << new BoolFilterOption(tfd.TZ,     ui.TZCheck);
+  fopts << new BoolFilterOption(tfd.localTime,     ui.localTime);
+  fopts << new BoolFilterOption(tfd.utc,     ui.utc);
   fopts << new BoolFilterOption(tfd.start,  ui.startCheck);
   fopts << new BoolFilterOption(tfd.stop,   ui.stopCheck);
   fopts << new BoolFilterOption(tfd.pack,   ui.packCheck);
@@ -124,7 +126,8 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
 //------------------------------------------------------------------------
 void TrackWidget::otherCheckX()
 {
-  ui.TZCheck->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
+  ui.localTime->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
+  ui.utc->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
 
   ui.splitTimeSpin->setEnabled(ui.splitTimeCheck->isChecked());
   ui.splitTimeCombo->setEnabled(ui.splitTimeCheck->isChecked());
@@ -184,7 +187,7 @@ void TrackWidget::splitDistanceX()
 //------------------------------------------------------------------------
 void TrackWidget::TZX()
 {
-  if (ui.TZCheck->isChecked()) {
+  if (ui.localTime->isChecked()) {
     ui.startEdit->setTimeSpec(Qt::LocalTime);
     ui.stopEdit->setTimeSpec(Qt::LocalTime);
   } else {

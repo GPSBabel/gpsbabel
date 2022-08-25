@@ -61,7 +61,7 @@ class TrackFilterData: public FilterData
 public:
   TrackFilterData():  title(false), titleString(QString()),
     move(false),  weeks(0), days(0), hours(0), mins(0), secs(0),
-    TZ(true),
+    localTime(true), utc(false),
     start(false),
     stop(false),
     pack(false), merge(false), split(false),
@@ -96,7 +96,8 @@ public:
     sg.addVarSetting(new DateTimeSetting("trks.startTime", startTime));
     sg.addVarSetting(new BoolSetting("trks.stop", stop));
     sg.addVarSetting(new DateTimeSetting("trks.stopTime", stopTime));
-    sg.addVarSetting(new BoolSetting("trks.TZ", TZ));
+    sg.addVarSetting(new BoolSetting("trks.localTime", localTime));
+    sg.addVarSetting(new BoolSetting("trks.utc", utc));
     sg.addVarSetting(new BoolSetting("trks.move", move));
     sg.addVarSetting(new IntSetting("trks.weeks", weeks));
     sg.addVarSetting(new IntSetting("trks.days", days));
@@ -117,7 +118,7 @@ public:
   QString titleString;
   bool move;
   int  weeks, days, hours, mins, secs;
-  bool TZ;
+  bool localTime, utc;
 
   bool start;
   QDateTime startTime;
