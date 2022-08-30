@@ -529,6 +529,35 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>titleCheck</tabstop>
+  <tabstop>titleText</tabstop>
+  <tabstop>moveCheck</tabstop>
+  <tabstop>weeksSpin</tabstop>
+  <tabstop>daysSpin</tabstop>
+  <tabstop>hoursSpin</tabstop>
+  <tabstop>minsSpin</tabstop>
+  <tabstop>secsSpin</tabstop>
+  <tabstop>startCheck</tabstop>
+  <tabstop>startEdit</tabstop>
+  <tabstop>localTime</tabstop>
+  <tabstop>utc</tabstop>
+  <tabstop>stopCheck</tabstop>
+  <tabstop>stopEdit</tabstop>
+  <tabstop>packCheck</tabstop>
+  <tabstop>mergeCheck</tabstop>
+  <tabstop>splitDateCheck</tabstop>
+  <tabstop>splitTimeCheck</tabstop>
+  <tabstop>splitTimeSpin</tabstop>
+  <tabstop>splitTimeCombo</tabstop>
+  <tabstop>splitDistanceCheck</tabstop>
+  <tabstop>splitDistSpin</tabstop>
+  <tabstop>splitDistCombo</tabstop>
+  <tabstop>GPSFixesCheck</tabstop>
+  <tabstop>GPSFixesCombo</tabstop>
+  <tabstop>speedCheck</tabstop>
+  <tabstop>courseCheck</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <buttongroups>

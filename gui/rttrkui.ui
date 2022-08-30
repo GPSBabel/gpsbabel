@@ -144,6 +144,11 @@ Additionally, if you're using this to reverse a route that navigates, say, an ex
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>simplifyCheck</tabstop>
+  <tabstop>limitToSpin</tabstop>
+  <tabstop>reverseCheck</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

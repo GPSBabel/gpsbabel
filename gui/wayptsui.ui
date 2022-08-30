@@ -239,6 +239,19 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>duplicatesCheck</tabstop>
+  <tabstop>shortNamesCheck</tabstop>
+  <tabstop>locationsCheck</tabstop>
+  <tabstop>positionCheck</tabstop>
+  <tabstop>positionText</tabstop>
+  <tabstop>positionUnitCombo</tabstop>
+  <tabstop>radiusCheck</tabstop>
+  <tabstop>radiusText</tabstop>
+  <tabstop>radiusUnitCombo</tabstop>
+  <tabstop>latText</tabstop>
+  <tabstop>longText</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
