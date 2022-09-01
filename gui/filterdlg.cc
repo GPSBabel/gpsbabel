@@ -34,6 +34,7 @@ FilterDialog::FilterDialog(QWidget* parent, AllFiltersData& fd): QDialog(parent)
   ui_.filterList->clear();
 
   widgetStack_ = new QStackedWidget(ui_.frame);
+  widgetStack_->setObjectName("widgetStack");
   auto* layout = new QHBoxLayout(ui_.frame);
   layout->addWidget(widgetStack_);
   layout->setContentsMargins(2, 2, 2, 2);

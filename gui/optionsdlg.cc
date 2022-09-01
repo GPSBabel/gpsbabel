@@ -91,9 +91,11 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   }
   auto* verticalLayout = new QVBoxLayout(this);
   for (int k=0; k<options_.size(); k++) {
+    QString objName = fmtName_ + '_' + options_[k].getName();
     auto* horizontalLayout = new QHBoxLayout();
 
     auto* checkBox = new QCheckBox(this);
+    checkBox->setObjectName(objName);
     checkBox->setText(options_[k].getDescription());
     horizontalLayout->addWidget(checkBox);
     checkBox->setChecked(options_[k].getSelected());
@@ -106,6 +108,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     switch (options_[k].getType()) {
     case FormatOption::OPTstring: {
       auto* lineEdit = new QLineEdit(this);
+      lineEdit->setObjectName(objName);
       SetSizeStuff(lineEdit);
       lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
@@ -117,7 +120,9 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     case FormatOption::OPToutFile: {
       bool inFile = options_[k].getType() == FormatOption::OPTinFile;
       auto* lineEdit = new QLineEdit(this);
+      lineEdit->setObjectName(objName);
       auto* button = new QToolButton(this);
+      button->setObjectName(objName);
       lineEdit->setText(getOptionValue(options_, k).toString());
       button->setIcon(QIcon(inFile ? ":/images/open.png" : ":/images/save.png"));
       w = lineEdit;
@@ -136,6 +141,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
 
     case FormatOption::OPTfloat: {
       auto* lineEdit = new QLineEdit(this);
+      lineEdit->setObjectName(objName);
       SetSizeStuff(lineEdit);
       lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
@@ -152,6 +158,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
 
     case FormatOption::OPTint: {
       auto* lineEdit = new QLineEdit(this);
+      lineEdit->setObjectName(objName);
       SetSizeStuff(lineEdit);
       w = lineEdit;
       int minVal = options_[k].getMinValue().toInt();
@@ -168,6 +175,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
 
     case FormatOption::OPTboundedInt: {
       auto* spinBox = new QSpinBox(this);
+      spinBox->setObjectName(objName);
       spinBox->setRange(options_[k].getMinValue().toInt(),
                         options_[k].getMaxValue().toInt());
       spinBox->setValue(getOptionValue(options_, k).toInt());
@@ -185,6 +193,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     // functions added in Qt5.  Not worth it right now, but
     // an idea worth picking up later.
     QPushButton* help = new QPushButton(tr("Help"), this);
+    help->setObjectName(objName);
     help->setIcon(QIcon(":/images/help.png"));
     help->setProperty("page", options[k].getHtml();)
     connect(help, SIGNAL(clicked()), this,  SLOT(helpClicked()));
@@ -194,6 +203,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     verticalLayout->addLayout(horizontalLayout);
   }
   auto* helpButton = new QPushButton(this);
+  helpButton->setObjectName("helpButton");
   helpButton->setIcon(QIcon(":/images/help.png"));
   helpButton->setText(tr("Help"));
 
@@ -201,6 +211,7 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   lay->addWidget(helpButton);
 
   buttonBox_ = new QDialogButtonBox(this);
+  buttonBox_->setObjectName("buttonBox");
   buttonBox_->setOrientation(Qt::Horizontal);
   buttonBox_->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
   lay->addWidget(buttonBox_);

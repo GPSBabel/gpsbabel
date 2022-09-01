@@ -19,13 +19,19 @@ if(UNIX AND NOT APPLE)
 else()
   set(TARGET GPSBabelFE)
 endif()
+set(LIBTARGET ${TARGET}_lib)
+set(TESTTARGET ${TARGET}_test)
 
-add_executable(${TARGET} WIN32 MACOSX_BUNDLE)
+add_library(${LIBTARGET} STATIC)
+set(CMAKE_AUTOMOC OFF)
+set(CMAKE_AUTOUIC OFF)
+add_executable(${TARGET} WIN32 MACOSX_BUNDLE main.cc)
+add_executable(${TESTTARGET} WIN32 MACOSX_BUNDLE EXCLUDE_FROM_ALL test_main.cc test_main.h)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml Test REQUIRED)
+list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml Qt${QT_VERSION_MAJOR}::Test)
 if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
   message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
 else()
@@ -37,11 +43,19 @@ if (GPSBABEL_MAPPREVIEW)
   find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
 else()
-  target_compile_definitions(${TARGET} PRIVATE DISABLE_MAPPREVIEW)
+  target_compile_definitions(${LIBTARGET} PRIVATE DISABLE_MAPPREVIEW)
 endif()
+
+if (${QT_VERSION_MAJOR} EQUAL "5")
+  qt5_wrap_cpp(TESTTARGET_MOC test_main.h TARGET ${TESTTARGET})
+else()
+  qt_wrap_cpp(TESTTARGET_MOC test_main.h TARGET ${TESTTARGET})
+endif()
+target_sources(${TESTTARGET} PRIVATE ${TESTTARGET_MOC})
 
 if(UNIX AND NOT APPLE)
   set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
+  set_target_properties(${TESTTARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE_test)
 endif()
 
 # RESOURCES
@@ -83,7 +97,6 @@ if (GPSBABEL_MAPPREVIEW)
 endif()
 list(APPEND SOURCES help.cc)
 list(APPEND SOURCES latlng.cc)
-list(APPEND SOURCES main.cc)
 list(APPEND SOURCES mainwindow.cc)
 if (GPSBABEL_MAPPREVIEW)
   list(APPEND SOURCES map.cc)
@@ -138,28 +151,52 @@ else()
 endif()
 if (GPSBABEL_EMBED_TRANSLATIONS)
   list(APPEND RESOURCES translations.qrc)
+  target_compile_definitions(${TARGET} PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
+  target_compile_definitions(${TESTTARGET} PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
 endif()
 if (GPSBABEL_EMBED_MAP)
   list(APPEND RESOURCES map.qrc)
+  target_compile_definitions(${TARGET} PRIVATE HAVE_EMBEDDED_MAP)
+  target_compile_definitions(${TESTTARGET} PRIVATE HAVE_EMBEDDED_MAP)
 endif()
 
+target_sources(${LIBTARGET} PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
 if(APPLE)
   set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
   set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-  target_sources(${TARGET} PRIVATE ${SOURCES} ${HEADERS} ${ICON_FILE} ${RESOURCES})
+  target_sources(${TARGET} PRIVATE ${HEADERS} ${ICON_FILE})
+  target_sources(${TESTTARGET} PRIVATE ${HEADERS} ${ICON_FILE})
 
   # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
   set_target_properties(${TARGET} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.${TARGET}
     MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
   )
+  set_target_properties(${TESTTARGET} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.${TESTTARGET}
+    MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
+  )
 else()
-  target_sources(${TARGET} PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
+  target_sources(${TARGET} PRIVATE ${HEADERS})
+  target_sources(${TESTTARGET} PRIVATE ${HEADERS})
 endif()
 
-target_link_libraries(${TARGET} ${QT_LIBRARIES})
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(_isMultiConfig)
+  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${LIBTARGET}_autogen/include_$<CONFIG>)
+else()
+  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${LIBTARGET}_autogen/include)
+endif()
+target_include_directories(${LIBTARGET} INTERFACE $<BUILD_INTERFACE:${AUTOGEN_INCLUDE_DIR}>)
+
+target_link_libraries(${TARGET} ${LIBTARGET} ${QT_LIBRARIES})
+target_link_libraries(${TESTTARGET} ${LIBTARGET} ${QT_LIBRARIES})
+target_link_libraries(${LIBTARGET} ${QT_LIBRARIES})
+
+get_target_property(idirs ${LIBTARGET} INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "lib incs \"${idirs}\"")
 
 get_target_property(Srcs ${TARGET} SOURCES)
 message(STATUS "Sources are: \"${Srcs}\"")
@@ -171,3 +208,20 @@ get_target_property(IncDirs ${TARGET} INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
 add_custom_target(package_app COMMAND ./package_app DEPENDS ${TARGET})
+
+add_custom_command(
+  TARGET ${TESTTARGET} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:gpsbabel>" "$<TARGET_FILE_DIR:${TESTTARGET}>/gpsbabel"
+  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/gmapbase.html" "$<TARGET_FILE_DIR:${TESTTARGET}>"
+  VERBATIM
+)
+
+if(UNIX)
+  enable_testing()
+  add_test(NAME test-gui
+           COMMAND ${TESTTARGET}
+           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+          )
+endif()
+
+

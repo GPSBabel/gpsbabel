@@ -36,6 +36,14 @@ int main(int argc, char** argv)
 #error this version of Qt is not supported.
 #endif
 
+  Q_INIT_RESOURCE(app);
+#ifdef HAVE_EMBEDDED_MAP
+  Q_INIT_RESOURCE(map);
+#endif
+#ifdef HAVE_EMBEDDED_TRANSLATIONS
+  Q_INIT_RESOURCE(translations);
+#endif
+
   QApplication app(argc, argv);
   QApplication::setWindowIcon(QIcon(":/images/appicon.png"));
   QApplication::setOrganizationName("GPSBabel");

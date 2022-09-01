@@ -30,6 +30,8 @@
 
 class AboutDlg: public QDialog
 {
+  Q_OBJECT
+
 public:
   AboutDlg(QWidget* parent,  const QString& ver1,
            const QString& ver2, const QString& ver3,
