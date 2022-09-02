@@ -9,6 +9,8 @@ project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+enable_testing()
+
 # Do this after we set up common variables but before creating other
 # variables that will be inherited.
 add_subdirectory(gui)
@@ -439,7 +441,6 @@ list(SORT TESTS)
 if(UNIX)
   # This test only works if the pwd is top level source dir due to the
   # file name getting embedded in the file nonexistent.err.
-  enable_testing()
   foreach(TESTNAME IN LISTS TESTS)
     add_test(NAME test-${TESTNAME}
              COMMAND ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel> ${TESTNAME}

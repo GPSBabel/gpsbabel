@@ -427,7 +427,6 @@ void test1::FilterDialogTester(dialogStatus* status)
 void test1::GMapDialogTester(dialogStatus* status)
 {
   qDebug() << "GMap Dialog Tester";
-  QTest::qWait(2000);
   // Why can't we use activeModalWidget()?
   // Gnome application "is ready" notification?
   qDebug() << QApplication::activeModalWidget();
@@ -446,6 +445,15 @@ void test1::GMapDialogTester(dialogStatus* status)
     QTimer::singleShot(200, this, &test1::dialogcb);
     return;
   }
+  // Wait for the page to load
+  // we monitor the overrideCursor which map sets in the constructor and
+  // resets when loadFinished is emitted;
+  auto startload = QTime::currentTime();
+  (void) QTest::qWaitFor([]() {return qApp->overrideCursor() == nullptr;},
+		         30000);
+  auto stopload = QTime::currentTime();
+  qDebug() << "page load(s):" << startload.msecsTo(stopload)/1000.0;
+  QTest::qWait(3000);
   auto* gmapButtonBox = gmapwidget->findChild<QDialogButtonBox*>("buttonBox");
   DIALOGVERIFY(status, gmapwidget, gmapButtonBox != nullptr, "GMapDialog: can't find buttonBox");
   auto* gmapClose = gmapButtonBox->button(QDialogButtonBox::Close);
@@ -469,11 +477,10 @@ void test1::OptionsDialogTester(dialogStatus* status)
       DIALOGVERIFY(status, widget, precValue != nullptr, "OptionsDlg: can't find kml_prec QLineEdit");
 #ifdef Q_OS_MACOS
       QTest::keyClick(precValue, Qt::Key_A, Qt::MetaModifier); // select all
-      QTest::keyClick(precValue, Qt::Key_Delete);
 #else
-      QTest::keyClick(precValue, Qt::Key_Home); // move to beginning of line
-      QTest::keyClick(precValue, Qt::Key_K, Qt::ControlModifier); // delete to end of line
+      QTest::keyClick(precValue, Qt::Key_A, Qt::ControlModifier); // select all
 #endif
+      QTest::keyClick(precValue, Qt::Key_Delete);
       QTest::keyClicks(precValue, "3");
       QTest::qWait(1000);
 

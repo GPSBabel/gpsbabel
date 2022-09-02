@@ -26,7 +26,8 @@ add_library(${LIBTARGET} STATIC)
 set(CMAKE_AUTOMOC OFF)
 set(CMAKE_AUTOUIC OFF)
 add_executable(${TARGET} WIN32 MACOSX_BUNDLE main.cc)
-add_executable(${TESTTARGET} WIN32 MACOSX_BUNDLE EXCLUDE_FROM_ALL test_main.cc test_main.h)
+# Don't set WIN32 on TESTTARGET, we want to see qDebug messages.
+add_executable(${TESTTARGET} MACOSX_BUNDLE EXCLUDE_FROM_ALL test_main.cc test_main.h)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
@@ -216,12 +217,7 @@ add_custom_command(
   VERBATIM
 )
 
-if(UNIX)
-  enable_testing()
-  add_test(NAME test-gui
-           COMMAND ${TESTTARGET}
-           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-          )
-endif()
-
-
+add_test(NAME test-gui
+         COMMAND ${TESTTARGET}
+         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        )
