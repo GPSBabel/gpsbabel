@@ -49,7 +49,7 @@ jobs:
       env:
         TRAVIS_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${QT_VERSION} aqt
+        ./tools/travis_install_osx $${ matrix.QT_VERSION }} aqt
 
     - name: Script
       run: |
