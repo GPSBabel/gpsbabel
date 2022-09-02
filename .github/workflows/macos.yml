@@ -36,7 +36,7 @@ jobs:
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ env.XCODE_VERSION }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.XCODE_VERSION }}-${{ secrets.CACHE_VERSION }}
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
@@ -53,8 +53,8 @@ jobs:
 
     - name: Script
       run: |
-        source ${HOME}/Cache/qt-${QT_VERSION}.env
-        sudo xcode-select --switch /Applications/Xcode_${XCODE_VERSION}.app
+        source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
+        sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
         ./tools/travis_script_osx
 
     - name: Deploy
