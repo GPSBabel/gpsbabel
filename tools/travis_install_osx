@@ -30,8 +30,8 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.12.2}
-METHOD=${2:-artifactory}
+QT_VERSION=${1:-6.2.4}
+METHOD=${2:-aqt}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache

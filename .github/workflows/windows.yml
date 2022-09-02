@@ -24,7 +24,7 @@ jobs:
             COMPILER: 'msvc2017_64'
             METHOD: 'aqt'
             FLOW: 'nmake'
-            RELEASE: true
+            RELEASE: false
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
@@ -59,7 +59,7 @@ jobs:
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             FLOW: 'nmake'
 
     steps:
