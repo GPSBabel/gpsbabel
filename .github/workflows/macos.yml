@@ -36,7 +36,7 @@ jobs:
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.XCODE_VERSION }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
