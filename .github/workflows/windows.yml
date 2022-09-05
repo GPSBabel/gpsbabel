@@ -36,13 +36,6 @@ jobs:
             ARCH: 'amd64'
             HOST_ARCH: 'x86'
             COMPILER: 'msvc2017_64'
-            METHOD: 'aqt'
-            FLOW: 'cmake'
-            RELEASE: false
-          - QT_VERSION: '5.12.12'
-            ARCH: 'amd64'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017_64'
             VCVERSION: '14.16'
             METHOD: 'aqt'
             FLOW: 'nmake'
@@ -61,6 +54,13 @@ jobs:
             METHOD: 'aqt'
             RELEASE: true
             FLOW: 'nmake'
+          - QT_VERSION: '6.2.4'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2019_64'
+            METHOD: 'aqt'
+            RELEASE: false
+            FLOW: 'cmake'
 
     steps:
     - name: Checkout repository

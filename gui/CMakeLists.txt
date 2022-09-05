@@ -170,4 +170,15 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs ${TARGET} INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
-add_custom_target(package_app COMMAND ./package_app DEPENDS ${TARGET})
+if(APPLE)
+  add_custom_target(package_app
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:${TARGET}>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
+                    DEPENDS ${TARGET}
+                    VERBATIM)
+elseif(UNIX)
+  add_custom_target(package_app
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                    DEPENDS ${TARGET}
+                    VERBATIM)
+endif()
