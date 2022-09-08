@@ -1,66 +1,55 @@
-name: "windows"
+name: "windows ondemand"
 
 on:
-  push:
-    branches: [ '**']
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
+  workflow_dispatch: ~
 
 jobs:
 
   windows:
-    name: windows Build
-    runs-on: windows-latest
+    name: windows ondemand Build
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017_64'
             METHOD: 'aqt'
-            FLOW: 'nmake'
-            RELEASE: false
+            GENERATOR: 'Visual Studio 16 2019'
+            os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017_64'
+            TOOLSET: 'v141,version=14.16.27023'
             METHOD: 'aqt'
-            FLOW: 'msbuild'
-            RELEASE: false
-          - QT_VERSION: '5.12.12'
-            ARCH: 'amd64'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017_64'
-            VCVERSION: '14.16'
-            METHOD: 'aqt'
-            FLOW: 'nmake'
-            RELEASE: false
+            GENERATOR: 'Visual Studio 16 2019'
+            os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'x86'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017'
             METHOD: 'aqt'
-            RELEASE: false
-            FLOW: 'nmake'
+            GENERATOR: 'Visual Studio 16 2019'
+            os: windows-2019
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            RELEASE: true
-            FLOW: 'nmake'
+            GENERATOR: 'Visual Studio 16 2019'
+            os: windows-2019
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            RELEASE: false
-            GENERATOR: 'Ninja'
+            GENERATOR: 'Visual Studio 17 2022'
+            os: windows-latest
 
     steps:
     - name: Checkout repository
@@ -92,7 +81,7 @@ jobs:
       run: |
         .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
         if ( "${{ matrix.generator }}" ) {
-          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}"
+          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
         } else {
           .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller true -flow "${{ matrix.FLOW }}" -arch "${{ matrix.ARCH }}"
         }
@@ -110,17 +99,6 @@ jobs:
         # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-
-    - name: Deploy
-      # This only handles continous releases now, for other events artifacts may be saved in
-      # the 'Upload Artifacts' step.
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_NAME: Continuous-${{ runner.os }}
-      run: |
-        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v2

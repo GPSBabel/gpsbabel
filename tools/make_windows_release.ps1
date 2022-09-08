@@ -13,9 +13,8 @@
 Param(
     $windeployqt = "windeployqt.exe",
     $iscc = "C:\Program Files (x86)\Inno Setup 5\ISCC.exe",
-    $gpsbabel_build_dir_name = "build-GPSBabel-Desktop-Release",
-    $gui_build_dir_name = "build-app-Desktop-Release",
-    [ValidateSet("mingw", "msbuild", "nmake", "cmake")] $flow = "nmake",
+    $gpsbabel_build_dir_name = "bld",
+    [ValidateSet("mingw", "msbuild", "nmake")] $flow = "nmake",
     $buildinstaller = "false",
     [ValidateSet("x86", "amd64", "amd64_x86", "x86_amd64")] $arch = "amd64"
 )
@@ -30,12 +29,8 @@ $ErrorActionPreference = "Stop"
 # verify we are in the top of the gpsbabel clone
 Get-Item tools/make_windows_release.ps1 -ErrorAction Stop | Out-Null
 $gpsbabel_src_dir = "$Pwd"
-$gpsbabel_build_dir = "$($gpsbabel_src_dir)\..\$($gpsbabel_build_dir_name)"
-if ( "$flow" -eq "cmake" ) {
-  $gui_build_dir = "$($gpsbabel_build_dir)"
-} else {
-  $gui_build_dir = "$($gpsbabel_src_dir)\$($gui_build_dir_name)"
-}
+$gpsbabel_build_dir = "$($gpsbabel_src_dir)\$($gpsbabel_build_dir_name)"
+$gui_build_dir = "$($gpsbabel_build_dir)\gui"
 if ( "$flow" -eq "msbuild" ) {
     # translate target architecture to Platform property value.
     switch ($arch) {
@@ -44,9 +39,6 @@ if ( "$flow" -eq "msbuild" ) {
         "amd64_x86" { $platform = "Win32" }
         "x86_amd64" { $platform = "x64" }
     }
-}
-if ( "$flow" -eq "cmake" ) {
-    $CMAKE_PREFIX_PATH = "$(Join-Path "$((Get-Command qmake) | Split-Path)"  '..' -Resolve)"
 }
 # mimic creator shadow build to match Inno setup file
 # make sure we are staring with a clean build directory
@@ -62,39 +54,30 @@ switch ($flow) {
     #WARNING: Could not parse Compiler option '-std:c++14'; added to AdditionalOptions.
     "msbuild" { $ErrorActionPreference = "Continue"; qmake -tp vc "$($gpsbabel_src_dir)\GPSBabel.pro"; $ErrorActionPreference = "Stop" }
     "nmake" { qmake "$($gpsbabel_src_dir)\GPSBabel.pro" -spec "win32-msvc" }
-    "cmake" { cmake -G "Ninja" -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_PREFIX_PATH:PATH="$($CMAKE_PREFIX_PATH)" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH="$($gpsbabel_build_dir)\release" "$($gpsbabel_src_dir)" }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch ($flow) {
     "mingw" { ming32-make }
     "msbuild" { msbuild GPSBabel.vcxproj -property:Configuration=Release -property:Platform=$platform }
     "nmake" { nmake /NOLOGO }
-    "cmake" { cmake --build . }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-# copy GPSBabel.exe for use by test_script
-Remove-Item "$($gpsbabel_src_dir)\release" -Recurse -ErrorAction Ignore
-New-Item "$($gpsbabel_src_dir)\release" -type directory -Force | Out-Null
-Copy-Item "$($gpsbabel_build_dir)\release\GPSBabel.exe" "$($gpsbabel_src_dir)\release\GPSBabel.exe"
-if ( "$flow" -ne "cmake" ) {
-    Set-Location "$($gpsbabel_src_dir)"
-    # make sure we are staring with a clean build directory
-    Remove-Item "$($gui_build_dir)" -Recurse -ErrorAction Ignore
-    New-Item "$($gui_build_dir)" -type directory -Force | Out-Null
-    Set-Location "$($gui_build_dir)"
-    switch ($flow) {
-        "mingw" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-g++" }
-        "msbuild" { qmake -tp vc "$($gpsbabel_src_dir)\gui\app.pro" }
-        "nmake" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-msvc" }
-    }
-    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-    switch ($flow) {
-        "mingw" { ming32-make }
-        "msbuild" { msbuild GPSBabelFE.vcxproj -property:Configuration=Release -property:Platform=$platform }
-        "nmake" { nmake /NOLOGO }
-    }
-    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+# make sure we are staring with a clean build directory
+Remove-Item "$($gui_build_dir)" -Recurse -ErrorAction Ignore
+New-Item "$($gui_build_dir)" -type directory -Force | Out-Null
+Set-Location "$($gui_build_dir)"
+switch ($flow) {
+    "mingw" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-g++" }
+    "msbuild" { qmake -tp vc "$($gpsbabel_src_dir)\gui\app.pro" }
+    "nmake" { qmake "$($gpsbabel_src_dir)\gui\app.pro" -spec "win32-msvc" }
 }
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+switch ($flow) {
+    "mingw" { ming32-make }
+    "msbuild" { msbuild GPSBabelFE.vcxproj -property:Configuration=Release -property:Platform=$platform }
+    "nmake" { nmake /NOLOGO }
+}
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 Set-Location "$($gui_build_dir)"
 # work around errors with lupdate, lrelease misprocessing qtHaveModule(webenginewidgets)
 # and generating a message to stderr WARNING: Project ERROR: Unknown module(s) in QT: webkit webkitwidgets
@@ -107,17 +90,14 @@ $ErrorActionPreference = "Stop"
 # deploy to a clean directory as different build systems create differently named debris in release.
 Remove-Item "$($gui_build_dir)\package" -Recurse -ErrorAction Ignore
 New-Item "$($gui_build_dir)\package" -type directory -Force | Out-Null
-Copy-Item "$($gpsbabel_build_dir)\release\GPSBabel.exe" "$($gui_build_dir)\package\GPSBabel.exe"
+Copy-Item "$($gpsbabel_build_dir)\release\gpsbabel.exe" "$($gui_build_dir)\package\gpsbabel.exe"
 Copy-Item "$($gui_build_dir)\release\GPSBabelFE.exe" "$($gui_build_dir)\package\GPSBabelFE.exe"
 # use --plugindir option to locate the plugins.
-& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe package\GPSBabel.exe
+& "$($windeployqt)" --verbose 1 --plugindir package\plugins package\GPSBabelFE.exe package\gpsbabel.exe
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 if ($buildinstaller -eq "true") {
     # set location to location of generated setup.iss file.
-    if ( "$flow" -eq "cmake" ) {
-        Set-Location "$($gpsbabel_build_dir)/gui"
-    }
-    & "$($iscc)" /Dpackage_dir="$($gui_build_dir)\package" /Dsource_dir="$($gpsbabel_src_dir)\gui" setup.iss
+    & "$($iscc)" /Doutput_dir="$($gui_build_dir)" /Dsource_dir="$($gpsbabel_src_dir)\gui" setup.iss
     if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 }
 Set-Location "$($gpsbabel_src_dir)"

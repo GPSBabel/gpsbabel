@@ -181,4 +181,25 @@ elseif(UNIX)
                     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS ${TARGET}
                     VERBATIM)
+elseif(WIN32)
+  find_program(INNO_COMPILER NAMES iscc ISCC
+               PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
+  file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" win_binary_path)
+  file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" win_source_path)
+  add_custom_target(package_app
+                    COMMAND lupdate ${CMAKE_CURRENT_SOURCE_DIR}/app.pro
+                    COMMAND lrelease ${CMAKE_CURRENT_SOURCE_DIR}/app.pro
+                    # deploy to a clean directory as different build systems create differently named debris in release.
+                    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/package
+                    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/package
+                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${TARGET}> ${CMAKE_CURRENT_BINARY_DIR}/package
+                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_BINARY_DIR}/package
+                    # use --plugindir option to locate the plugins.
+                    COMMAND windeployqt --verbose 1 --plugindir ${CMAKE_CURRENT_BINARY_DIR}/package/plugins ${CMAKE_CURRENT_BINARY_DIR}/package/GPSBabelFE.exe ${CMAKE_CURRENT_BINARY_DIR}/package/GPSBabel.exe
+                    # set location to location of generated setup.iss file.
+                    COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${INNO_COMPILER} /Doutput_dir=${win_binary_path} /Dsource_dir=${win_source_path} setup.iss
+                    DEPENDS ${TARGET}
+                    VERBATIM
+                    USES_TERMINAL)
+
 endif()
