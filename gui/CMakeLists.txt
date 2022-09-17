@@ -2,6 +2,8 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   message(FATAL_ERROR "Please use CMakeLists.txt in the project root directory to generate a build system.")
 endif()
 
+add_subdirectory(coretool)
+
 configure_file(${CMAKE_SOURCE_DIR}/gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
 
@@ -170,36 +172,78 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs ${TARGET} INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+# FIXME: remove reliance an app.pro in package_app script.
+# FIXME: translations updated and released in source directory (and under version control).
+list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
+list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
+list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
+list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
+list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
+list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
+
 if(APPLE)
+  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
   add_custom_target(package_app
-                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                    COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
                     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:${TARGET}>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
-                    DEPENDS ${TARGET}
-                    VERBATIM)
-elseif(UNIX)
-  add_custom_target(package_app
-                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
-                    DEPENDS ${TARGET}
-                    VERBATIM)
-elseif(WIN32)
-  find_program(INNO_COMPILER NAMES iscc ISCC
-               PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
-  file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" win_binary_path)
-  file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" win_source_path)
-  add_custom_target(package_app
-                    COMMAND lupdate ${CMAKE_CURRENT_SOURCE_DIR}/app.pro
-                    COMMAND lrelease ${CMAKE_CURRENT_SOURCE_DIR}/app.pro
-                    # deploy to a clean directory as different build systems create differently named debris in release.
-                    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/package
-                    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/package
-                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${TARGET}> ${CMAKE_CURRENT_BINARY_DIR}/package
-                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_BINARY_DIR}/package
-                    # use --plugindir option to locate the plugins.
-                    COMMAND windeployqt --verbose 1 --plugindir ${CMAKE_CURRENT_BINARY_DIR}/package/plugins ${CMAKE_CURRENT_BINARY_DIR}/package/GPSBabelFE.exe ${CMAKE_CURRENT_BINARY_DIR}/package/GPSBabel.exe
-                    # set location to location of generated setup.iss file.
-                    COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${INNO_COMPILER} /Doutput_dir=${win_binary_path} /Dsource_dir=${win_source_path} setup.iss
                     DEPENDS ${TARGET}
                     VERBATIM
                     USES_TERMINAL)
+elseif(UNIX)
+  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+  add_custom_target(package_app
+                    COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                    DEPENDS ${TARGET}
+                    VERBATIM
+                    USES_TERMINAL)
+elseif(WIN32)
+  find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
+  if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+    message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, ${TARGET} translations cannot be updated or released, and application cannot be packaged.")
+  endif()
 
+  find_program(INNO_COMPILER NAMES iscc ISCC
+               PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
+  if (INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
+    message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
+  endif()
+
+  # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
+  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+  get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+  find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
+  if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
+    message(WARNING "windeployqt not found, application cannot be packaged.")
+  endif()
+
+  if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+    add_custom_target(${TARGET}_lupdate
+                      COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                      VERBATIM
+                      USES_TERMINAL)
+    add_custom_target(${TARGET}_lrelease
+                      COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                      DEPENDS ${TARGET}_lupdate
+                      VERBATIM
+                      USES_TERMINAL)
+    if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
+      file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
+      file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
+      add_custom_target(package_app
+                        # deploy to a clean directory as different build systems create differently named debris in release.
+                        COMMAND ${CMAKE_COMMAND} -E remove_directory package
+                        COMMAND ${CMAKE_COMMAND} -E make_directory package
+                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${TARGET}> package
+                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
+                        # use --plugindir option to locate the plugins.
+                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe
+                        # set location to location of generated setup.iss file.
+                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} setup.iss
+                        DEPENDS ${TARGET} ${TARGET}_lrelease
+                        VERBATIM
+                        USES_TERMINAL)
+    endif()
+  endif()
 endif()
