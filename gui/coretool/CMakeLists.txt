@@ -24,9 +24,11 @@ target_link_libraries(${TARGET} ${QT_LIBRARIES})
 # FIXME: core_strings.h generated in source directory (and under version control).
 # FIXME: translations updated and released in source directory (and under version control).
 
+get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
 add_custom_target(core_strings
                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_BINARY_DIR}
-                  COMMAND ${TARGET} 2> core_strings.h;
+                  COMMAND ${CMAKE_COMMAND} -DQTBINDIR=${_qt_bin_dir} -DCURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/coretool.cmake
                   DEPENDS ${TARGET}
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                   VERBATIM
