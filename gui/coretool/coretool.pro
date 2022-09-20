@@ -4,6 +4,7 @@
 # these strings.
 #
 CONFIG += console
+CONFIG -= app_bundle
 
 QT -= gui
 QT += core \
