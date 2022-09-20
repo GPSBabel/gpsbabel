@@ -40,11 +40,15 @@
 #include "appname.h"                       // for appName
 
 
+#ifdef GENERATE_CORE_STRINGS
+extern QTextStream* generate_output_stream;
+#endif
+
 //------------------------------------------------------------------------
 static QString xlt(const QString& f)
 {
 #ifdef GENERATE_CORE_STRINGS
-  qInfo().nospace() << "QT_TRANSLATE_NOOP(\"core\"," << f << ")";
+  *generate_output_stream << "QT_TRANSLATE_NOOP(\"core\",\"" << f << "\")" << Qt::endl;
 #endif
   return QCoreApplication::translate("core", f.toUtf8().constData());
 }
