@@ -43,8 +43,13 @@ list(APPEND TRANSLATIONS gpsbabel_ru.ts)
 
 find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
 if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+  # The line numbers are almost meaningless the way we generate corestrings.h, and we force everything to the same context.
+  # With line numbers and the similartext heuristic enabled translations can be copied from an old message to a new message,
+  # and marked as unfinished.  The threshold for similar is low.
+  # These will be used by the application, even though they really need to be checked.
+  # Disable the similartext heuristic to avoid these mistranslations.
   add_custom_target(coretool_lupdate
-                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate -locations absolute core_strings.h -ts ${TRANSLATIONS}
+                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate -disable-heuristic similartext core_strings.h -ts ${TRANSLATIONS}
                     DEPENDS core_strings
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     VERBATIM

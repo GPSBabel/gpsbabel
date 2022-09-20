@@ -10,5 +10,4 @@ if(WIN32)
   set(ENV{PATH} "${_qt_win_path};$ENV{PATH}")
 endif()
 execute_process(
-  COMMAND ${CURRENT_BINARY_DIR}/coretool
-  ERROR_FILE core_strings.h)
+  COMMAND ${CURRENT_BINARY_DIR}/coretool core_strings.h)
