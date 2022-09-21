@@ -186,14 +186,14 @@ if(APPLE)
   add_custom_target(package_app
                     COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
                     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:${TARGET}>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
-                    DEPENDS ${TARGET}
+                    DEPENDS ${TARGET} gpsbabel coretool_lrelease
                     VERBATIM
                     USES_TERMINAL)
 elseif(UNIX)
   get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
   add_custom_target(package_app
                     COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:${TARGET}> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
-                    DEPENDS ${TARGET}
+                    DEPENDS ${TARGET} gpsbabel coretool_lrelease
                     VERBATIM
                     USES_TERMINAL)
 elseif(WIN32)
@@ -241,7 +241,7 @@ elseif(WIN32)
                         COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe
                         # set location to location of generated setup.iss file.
                         COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} setup.iss
-                        DEPENDS ${TARGET} ${TARGET}_lrelease
+                        DEPENDS ${TARGET} gpsbabel ${TARGET}_lrelease coretool_lrelease
                         VERBATIM
                         USES_TERMINAL)
     endif()

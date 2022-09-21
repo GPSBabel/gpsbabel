@@ -26,10 +26,10 @@ target_link_libraries(${TARGET} ${QT_LIBRARIES})
 
 get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
 get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-add_custom_target(core_strings
+add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/core_strings.h
                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_BINARY_DIR}
                   COMMAND ${CMAKE_COMMAND} -DQTBINDIR=${_qt_bin_dir} -DCURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/coretool.cmake
-                  DEPENDS ${TARGET}
+                  DEPENDS ${TARGET} gpsbabel
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                   VERBATIM
                   USES_TERMINAL)
@@ -50,7 +50,7 @@ if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
   # Disable the similartext heuristic to avoid these mistranslations.
   add_custom_target(coretool_lupdate
                     COMMAND Qt${QT_VERSION_MAJOR}::lupdate -disable-heuristic similartext core_strings.h -ts ${TRANSLATIONS}
-                    DEPENDS core_strings
+                    DEPENDS core_strings.h
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
