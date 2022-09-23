@@ -14,32 +14,36 @@ jobs:
     name: basic Build
     runs-on: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
       env:
         LC_ALL: 'C.UTF-8'
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_and_test
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         ./tools/build_and_test.sh
 
   cmake:
     name: cmake Build
     runs-on: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
       env:
         LC_ALL: 'C.UTF-8'
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_and_test
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         ./tools/build_and_test_cmake.sh
 
   qtio_gcc:
@@ -52,10 +56,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_and_test
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         . /opt/qtio.env
         ./tools/build_and_test.sh
 
@@ -70,10 +76,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_and_test
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         . /opt/qtio.env
         ./tools/build_and_test.sh
 
@@ -81,16 +89,18 @@ jobs:
     name: advanced Build
     runs-on: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
       env:
         LC_ALL: 'C.UTF-8'
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_extra_tests
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         ./tools/build_extra_tests.sh
 
   coverage:
@@ -103,7 +113,7 @@ jobs:
         sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: script
       env:

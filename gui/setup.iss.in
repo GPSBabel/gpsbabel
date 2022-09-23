@@ -7,8 +7,8 @@
 ; Uses the Inno setup compiler.
 ; windeployqt should be run to prepare the necessary Qt files before
 ; running Inno Setup.
-#ifndef package_dir
-  #define package_dir "..\build-app-Desktop-Release\package"
+#ifndef output_dir
+  #define output_dir "."
 #endif
 #ifndef source_dir
   #define source_dir "."
@@ -29,7 +29,7 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
-OutputDir=release
+OutputDir="{#output_dir}"
 OutputBaseFilename=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Setup
 OutputManifestFile=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Manifest.txt
 SetupIconFile=images\babel2.ico
@@ -48,10 +48,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: "{#package_dir}\*"; Excludes: "vc_redist.*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#package_dir}\vc_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
-Source: "{#package_dir}\vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
-Source: "{#package_dir}\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
+Source: "{#output_dir}\package\*"; Excludes: "vc_redist.*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#output_dir}\package\vc_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#output_dir}\package\vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#output_dir}\package\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
