@@ -25,9 +25,6 @@
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for operator==, QChar
 #include <QCoreApplication>                // for QCoreApplication
-#ifdef GENERATE_CORE_STRINGS
-#include <QDebug>                          // for QDebug, operator<<
-#endif
 #include <QObject>                         // for QObject
 #include <QProcess>                        // for QProcess
 #include <QRegularExpression>              // for QRegularExpression
@@ -37,6 +34,9 @@
 #include <QVariant>                        // for QVariant
 #include <QApplication>                    // for QApplication
 #include <QMessageBox>                     // for QMessageBox
+#ifdef GENERATE_CORE_STRINGS
+#include <QtGlobal>                        // for QT_VERSION, QT_VERSION_CHECK
+#endif
 #include "appname.h"                       // for appName
 
 
@@ -48,7 +48,11 @@ extern QTextStream* generate_output_stream;
 static QString xlt(const QString& f)
 {
 #ifdef GENERATE_CORE_STRINGS
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+  *generate_output_stream << "QT_TRANSLATE_NOOP(\"core\",\"" << f << "\")" << endl;
+#else
   *generate_output_stream << "QT_TRANSLATE_NOOP(\"core\",\"" << f << "\")" << Qt::endl;
+#endif
 #endif
   return QCoreApplication::translate("core", f.toUtf8().constData());
 }
