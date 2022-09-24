@@ -271,7 +271,11 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   const QStringList directories = {
     QApplication::applicationDirPath() + "/translations",
     ":/translations",
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+#else
+    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+#endif
   };
 
   // Load the new translator.
