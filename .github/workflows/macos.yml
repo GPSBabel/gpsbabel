@@ -26,7 +26,7 @@ jobs:
             GENERATOR: qmake
             RELEASE: true
           - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '12.5.1'
+            XCODE_VERSION: '13.2.1'
             GENERATOR: 'Ninja'
             RELEASE: false
 
