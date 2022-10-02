@@ -43,7 +43,7 @@
 
 #define TK1_MAGIC       "WintecLogFormat"
 #define TK1_DATA_OFFSET 0x0400
-#define TK1_END_FLAG    0x04000000ul
+#define TK1_END_FLAG    0x0400'0000ul
 
 /* Used to sanity check data - from
  *   http://hypertextbook.com/facts/2001/DanaWollman.shtml
@@ -504,7 +504,7 @@ static double get_param_float(const char* cmd)
     int min    = (((tim) >>  6) & 0x3F); \
     int hour   = (((tim) >> 12) & 0x1F); \
     int mday   = (((tim) >> 17) & 0x1F); \
-    int mon    = (((tim) >> 22) & 0x0F); \
+    int mon    = (((tim) >> 22) & 0b0'1111); \
     int year   = (((tim) >> 26) & 0x3F);
 
 static time_t decode_date(uint32_t tim)
@@ -720,7 +720,7 @@ static void wbt200_data_read()
   /* Now we're into binary mode */
   rd_buf(line_buf, 6);            /* six byte header */
   unsigned long count = le_read16(line_buf + 2) + 1;
-  if (count == 0x10000) {
+  if (count == 0x1'0000) {
     count = 0;
   }
 
