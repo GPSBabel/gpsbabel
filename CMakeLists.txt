@@ -471,7 +471,8 @@ if(UNIX)
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 endif()
 if(UNIX AND NOT APPLE)
   # This test only works if the pwd is top level source dir due to the
