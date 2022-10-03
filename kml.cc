@@ -596,11 +596,13 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
     kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd && td->start.isValid() && td->end.isValid()) {
-    const char* spd_units;
     double elapsed = td->start.msecsTo(td->end)/1000.0;
-    double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
-    if (spd > 1.0)  {
-      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    if (elapsed > 0.0) {
+      const char* spd_units;
+      double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
+      if (spd > 1.0)  {
+        kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+      }
     }
   }
   if (td->avg_hrt) {
