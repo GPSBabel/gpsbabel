@@ -32,7 +32,7 @@ popd
 rm -rf bld-sanitizeundefined
 mkdir bld-sanitizeundefined
 pushd bld-sanitizeundefined
-cmake -DCMAKE_BUILD_TYPE=Debug -DGPSBABEL_EXTRA_COMPILE_OPTIONS="-fsanitize=undefined -fsanitize=float-divide-by-zero -fno-omit-frame-pointer" -DGPSBABEL_EXTRA_LINK_OPTIONS="-fsanitize=undefined -fsanitize=float-divide-by-zero" -G Ninja "${SOURCE_DIR}"
+cmake -DCMAKE_BUILD_TYPE=Debug -DGPSBABEL_EXTRA_COMPILE_OPTIONS="-fsanitize=undefined -fsanitize=float-divide-by-zero -fno-sanitize-recover=undefined,float-divide-by-zero -fno-omit-frame-pointer" -DGPSBABEL_EXTRA_LINK_OPTIONS="-fsanitize=undefined -fsanitize=float-divide-by-zero -fno-sanitize-recover=undefined,float-divide-by-zero" -G Ninja "${SOURCE_DIR}"
 cmake --build . --target gpsbabel --verbose
 cmake --build . --target check
 popd
