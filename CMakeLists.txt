@@ -330,6 +330,20 @@ set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
 set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")
 target_include_directories(gpsbabel PRIVATE ${GPSBABEL_EXTRA_INCLUDE_DIRECTORIES})
+set(GPSBABEL_EXTRA_COMPILE_OPTIONS "" CACHE STRING "extra compile options.")
+# Qt sanitize.conf used:
+#   -fsanitize=address -fno-omit-frame-pointer
+#   -fsanitize=undefined -fsanitize=float-divide-by-zero -fno-omit-frame-pointer
+# For coverage use --coverage
+separate_arguments(GPSBABEL_EXTRA_COMPILE_OPTIONS)
+target_compile_options(gpsbabel PRIVATE ${GPSBABEL_EXTRA_COMPILE_OPTIONS})
+set(GPSBABEL_EXTRA_LINK_OPTIONS "" CACHE STRING "extra link options.")
+# Qt sanitize.conf used:
+#   -fsanitize=address
+#   -fsanitize=undefined -fsanitize=float-divide-by-zero
+# For coverage use --coverage
+separate_arguments(GPSBABEL_EXTRA_LINK_OPTIONS)
+target_link_options(gpsbabel PRIVATE ${GPSBABEL_EXTRA_LINK_OPTIONS})
 
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
@@ -457,7 +471,8 @@ if(UNIX)
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 endif()
 if(UNIX AND NOT APPLE)
   # This test only works if the pwd is top level source dir due to the
