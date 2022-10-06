@@ -202,96 +202,8 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
 endif()
 
-# HEADERS
-set(HEADERS
-  cet_util.h
-  csv_util.h
-  defs.h
-  dg-100.h
-  exif.h
-  explorist_ini.h
-  filter.h
-  filter_vecs.h
-  format.h
-  formspec.h
-  garmin_device_xml.h
-  garmin_fit.h
-  garmin_fs.h
-  garmin_gpi.h
-  garmin_icon_tables.h
-  garmin_tables.h
-  gbfile.h
-  gbser.h
-  gbser_private.h
-  gdb.h
-  geojson.h
-  globalsat_sport.h
-  gpx.h
-  grtcirc.h
-  gtrnctr.h
-  heightgrid.h
-  holux.h
-  humminbird.h
-  html.h
-  inifile.h
-  kml.h
-  legacyformat.h
-  lowranceusr.h
-  magellan.h
-  navilink.h
-  nmea.h
-  osm.h
-  qstarz_bl_1000.h
-  random.h
-  session.h
-  shape.h
-  skytraq.h
-  strptime.h
-  subrip.h
-  text.h
-  unicsv.h
-  units.h
-  vecs.h
-  xcsv.h
-  xmlgeneric.h
-  jeeps/garminusb.h
-  jeeps/gps.h
-  jeeps/gpsapp.h
-  jeeps/gpscom.h
-  jeeps/gpsdatum.h
-  jeeps/gpsdevice.h
-  jeeps/gpsfmt.h
-  jeeps/gpsmath.h
-  jeeps/gpsmem.h
-  jeeps/gpsport.h
-  jeeps/gpsprot.h
-  jeeps/gpsread.h
-  jeeps/gpsrqst.h
-  jeeps/gpssend.h
-  jeeps/gpsserial.h
-  jeeps/gpsusbcommon.h
-  jeeps/gpsusbint.h
-  jeeps/gpsutil.h
-  src/core/datetime.h
-  src/core/file.h
-  src/core/logging.h
-  src/core/nvector.h
-  src/core/textstream.h
-  src/core/usasciicodec.h
-  src/core/vector3d.h
-  src/core/xmlstreamwriter.h
-  src/core/xmltag.h
-)
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  set(HEADERS ${HEADERS} src/core/codecdevice.h)
-endif()
-
-string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
-set(HEADERS ${HEADERS} ${FILTER_HEADERS})
-
 if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
-  set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
   # disable warning from strptime.c, which we don't want to own or modify
   set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
@@ -306,7 +218,6 @@ if(WIN32)
     target_compile_definitions(gpsbabel PRIVATE _DEBUG)
   endif()
   set(SOURCES ${SOURCES} gbser_win.cc)
-  set(HEADERS ${HEADERS} gbser_win.h)
   set(JEEPS ${JEEPS} jeeps/gpsusbwin.cc)
   set(LIBS ${LIBS} setupapi)
   set(RESOURCES ${RESOURCES} win32/gpsbabel.rc)
@@ -350,9 +261,8 @@ set(SOURCES
 )
 
 list(SORT SOURCES)
-list(SORT HEADERS)
 
-target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
+target_sources(gpsbabel PRIVATE ${SOURCES})
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
