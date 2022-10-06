@@ -489,22 +489,36 @@ if(UNIX AND NOT APPLE)
                     USES_TERMINAL)
 endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
-  add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
-                    DEPENDS gpsbabel gpsbabel.pdf
-                    VERBATIM)
-endif()
+set(WEB "${CMAKE_SOURCE_DIR}/../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+add_custom_target(xmldoc
+  COMMAND ${CMAKE_COMMAND} -E make_directory xmldoc
+  COMMAND perl "${CMAKE_SOURCE_DIR}/xmldoc/makedoc"
+  # The generated docs are linking various files from the source dir.
+  # Symlink them to output directory so that they can be resolved by validation and transformation.
+  COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/xmldoc/chapters xmldoc/chapters
+  COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/xmldoc/filters xmldoc/filters
+  COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/xmldoc/formats xmldoc/formats
+  COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/xmldoc/readme.xml xmldoc/readme.xml
+  COMMAND xmlwf xmldoc/readme.xml # Check for well-formedness
+  COMMAND xmllint --noout --valid xmldoc/readme.xml # Validate
+  DEPENDS gpsbabel
+)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  add_custom_target(gpsbabel.html
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel)
-endif()
+add_custom_target(gpsbabel.org
+  ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
+  DEPENDS
+    xmldoc
+    gpsbabel # For utils/mkcapabilities
+    gpsbabel.pdf
+  VERBATIM
+)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  add_custom_target(gpsbabel.pdf
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel)
-endif()
+add_custom_target(gpsbabel.html
+  ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
+  DEPENDS xmldoc
+)
+
+add_custom_target(gpsbabel.pdf
+  ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
+  DEPENDS xmldoc
+)

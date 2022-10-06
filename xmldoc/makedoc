@@ -1,8 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-#
-# makedoc.in is used to generate makedoc.   Editing makedoc is a bad idea.
-#
+use Cwd qw(getcwd);
 
 @options;
 
@@ -69,7 +67,7 @@ sub include {
    $d2 = $dir2;
    $d2 =~ s:/.*::;
    $name2 = $d2.'_'.$name2;
-   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "$dir2/$name.xml">\n);
    print FILE "\&inc_$name2;\n";
    if (! -e "$dir/$dir2/$name.xml") {
      open TMP, ">$dir/$dir2/$name.xml";
@@ -92,13 +90,15 @@ sub includef {
 $dir = $0;
 $dir =~ s:/.*$::;
 
-@agdir=`mkdir -p $dir/autogen`;
-open PARTS, ">$dir/autogen/_parts.xml";
+# CMake sets the working directory to the build directory.
+$agdir = getcwd;
+$agdir = "$agdir/xmldoc";
+open PARTS, ">$agdir/_parts.xml";
 print PARTS qq(<!-- This document is automatically generated. -->\n);
 print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
 print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open FORMATS, ">$dir/autogen/_formats.xml";
+open FORMATS, ">$agdir/_formats.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @formats = `./gpsbabel -^3`;
@@ -165,7 +165,7 @@ for (@formats) {
        $fmts{$id} = 1;
      }
      includef( 'fmt_'.$id );
-     open FILE, ">$dir/autogen/fmt_$id.xml";
+     open FILE, ">$agdir/fmt_$id.xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="fmt_$id">
@@ -211,7 +211,7 @@ if ($going) {
 }
 
 
-open FORMATS, ">$dir/autogen/_filters.xml";
+open FORMATS, ">$agdir/_filters.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @filters = `./gpsbabel -%1`;
@@ -244,7 +244,7 @@ END
        close FILE;
      }
      includef( 'filter_'.$line[0] );
-     open FILE, ">$dir/autogen/filter_$line[0].xml";
+     open FILE, ">$agdir/filter_$line[0].xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="filter_$line[0]">

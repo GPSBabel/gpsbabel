@@ -1,7 +1,6 @@
 #!/bin/sh
 set -ex
 
-perl xmldoc/makedoc
 xsltproc \
   --output gpsbabel.html \
   --stringparam toc.section.depth "1" \
