@@ -10,13 +10,37 @@ on:
     - cron: '27 4 * * 2'
 
 jobs:
-  basic:
-    name: basic Build
+  ubuntu:
+    name: ubuntu Build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - IMAGE: 'focal'
+            SCRIPT: './tools/build_and_test.sh'
+          - IMAGE: 'focal'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            SCRIPT: './tools/build_extra_tests.sh'
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
       env:
         LC_ALL: 'C.UTF-8'
+        JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_TOOLS: ${{ matrix.TOOLS }}
+        JOB_SCRIPT: ${{ matrix.SCRIPT }}
 
     steps:
     - name: Checkout repository
@@ -26,82 +50,17 @@ jobs:
       run: |
         # when using containers manually whitelist the checkout directory to allow git commands to work
         git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        ./tools/build_and_test.sh
-
-  cmake:
-    name: cmake Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: build_and_test
-      run: |
-        # when using containers manually whitelist the checkout directory to allow git commands to work
-        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        ./tools/build_and_test_cmake.sh
-
-  qtio_gcc:
-    name: qtio gcc Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: build_and_test
-      run: |
-        # when using containers manually whitelist the checkout directory to allow git commands to work
-        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
-
-  qtio_clang:
-    name: qtio clang Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
-      env:
-        QMAKESPEC: 'linux-clang'
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: build_and_test
-      run: |
-        # when using containers manually whitelist the checkout directory to allow git commands to work
-        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
-
-  advanced:
-    name: advanced Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: build_extra_tests
-      run: |
-        # when using containers manually whitelist the checkout directory to allow git commands to work
-        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        ./tools/build_extra_tests.sh
+        if [ -n "${JOB_CMAKE_PREFIX_PATH}" ]; then
+          CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
+          export CMAKE_PREFIX_PATH
+        fi
+        if [ "${JOB_TOOLS}" = "clang" ]; then
+          CC=clang
+          export CC
+          CXX=clang++
+          export CXX
+        fi
+        "${JOB_SCRIPT}"
 
   coverage:
     name: coverage Build

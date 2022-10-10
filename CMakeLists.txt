@@ -485,7 +485,8 @@ if(UNIX AND NOT APPLE)
                     -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 endif()
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
