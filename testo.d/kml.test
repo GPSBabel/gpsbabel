@@ -69,7 +69,7 @@ compare ${REFERENCE}/track/Placemark-Track-1~kml.gpx ${TMPDIR}/Placemark-Track-1
 gpsbabel -T -i random,points=20,seed=33,nodelay -f dummy -o kml,track -F  ${TMPDIR}/realtime.kml
 compare ${REFERENCE}/realtime.kml ${TMPDIR}/realtime.kml
 
-if [ "${RUNNINGVALGRIND}" != "0" ]; then
+if [ -z "${VALGRIND}" ]; then
   set -e
   if command -v xmllint > /dev/null;
   then
