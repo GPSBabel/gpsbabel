@@ -4,6 +4,7 @@
 # these strings.
 #
 CONFIG += console
+CONFIG -= app_bundle
 
 QT -= gui
 QT += core \
@@ -29,13 +30,18 @@ core_strings.target = core_strings.h
 core_strings.depends = $(TARGET)
 core_strings.depends += ../../gpsbabel
 core_strings.commands = $(COPY_FILE) ../../gpsbabel $(DESTDIR)gpsbabel &&
-core_strings.commands += ./$(TARGET) 2>core_strings.h;
+core_strings.commands += ./$(TARGET) core_strings.h;
 QMAKE_EXTRA_TARGETS += core_strings
 QMAKE_DISTCLEAN += $(DESTDIR)gpsbabel
 
+# The line numbers are almost meaningless the way we generate corestrings.h, and we force everything to the same context.
+# With line numbers and the similartext heuristic enabled translations can be copied from an old message to a new message,
+# and marked as unfinished.  The threshold for similar is low.
+# These will be used by the application, even though they really need to be checked.
+# Disable the similartext heuristic to avoid these mistranslations.
 qtPrepareTool(LUPDATE, lupdate)
 update.depends = core_strings.h
-update.commands = $$LUPDATE -locations absolute core.pro
+update.commands = $$LUPDATE -disable-heuristic similartext core.pro
 QMAKE_EXTRA_TARGETS += update
 
 qtPrepareTool(LRELEASE, lrelease)

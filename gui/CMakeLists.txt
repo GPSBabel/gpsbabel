@@ -2,6 +2,8 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   message(FATAL_ERROR "Please use CMakeLists.txt in the project root directory to generate a build system.")
 endif()
 
+add_subdirectory(coretool)
+
 configure_file(${CMAKE_SOURCE_DIR}/gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
 configure_file(setup.iss.in setup.iss @ONLY NEWLINE_STYLE CRLF)
 
@@ -14,20 +16,18 @@ set(CMAKE_AUTOUIC ON)
 # Handle the Qt rcc code generator automatically
 set(CMAKE_AUTORCC ON)
 
-if(UNIX AND NOT APPLE)
-  set(TARGET gpsbabelfe)
-else()
-  set(TARGET GPSBabelFE)
-endif()
-set(LIBTARGET ${TARGET}_lib)
-set(TESTTARGET ${TARGET}_test)
+add_library(gpsbabelfe_lib STATIC)
 
-add_library(${LIBTARGET} STATIC)
 set(CMAKE_AUTOMOC OFF)
 set(CMAKE_AUTOUIC OFF)
-add_executable(${TARGET} WIN32 MACOSX_BUNDLE main.cc)
+
+add_executable(gpsbabelfe WIN32 MACOSX_BUNDLE main.cc)
+if(NOT UNIX OR APPLE)
+  set_target_properties(gpsbabelfe PROPERTIES OUTPUT_NAME GPSBabelFE)
+endif()
+
 # Don't set WIN32 on TESTTARGET, we want to see qDebug messages.
-add_executable(${TESTTARGET} MACOSX_BUNDLE EXCLUDE_FROM_ALL test_main.cc test_main.h)
+add_executable(gpsbabelfe_test MACOSX_BUNDLE EXCLUDE_FROM_ALL test_main.cc test_main.h)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
@@ -44,19 +44,19 @@ if (GPSBABEL_MAPPREVIEW)
   find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
 else()
-  target_compile_definitions(${LIBTARGET} PRIVATE DISABLE_MAPPREVIEW)
+  target_compile_definitions(gpsbabelfe_lib PRIVATE DISABLE_MAPPREVIEW)
 endif()
 
 if (${QT_VERSION_MAJOR} EQUAL "5")
-  qt5_wrap_cpp(TESTTARGET_MOC test_main.h TARGET ${TESTTARGET})
+  qt5_wrap_cpp(TESTTARGET_MOC test_main.h TARGET gpsbabelfe_test)
 else()
-  qt_wrap_cpp(TESTTARGET_MOC test_main.h TARGET ${TESTTARGET})
+  qt_wrap_cpp(TESTTARGET_MOC test_main.h TARGET gpsbabelfe_test)
 endif()
-target_sources(${TESTTARGET} PRIVATE ${TESTTARGET_MOC})
+target_sources(gpsbabelfe_test PRIVATE ${TESTTARGET_MOC})
 
 if(UNIX AND NOT APPLE)
-  set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
-  set_target_properties(${TESTTARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE_test)
+  set_target_properties(gpsbabelfe PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
+  set_target_properties(gpsbabelfe_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE_test)
 endif()
 
 # RESOURCES
@@ -152,72 +152,145 @@ else()
 endif()
 if (GPSBABEL_EMBED_TRANSLATIONS)
   list(APPEND RESOURCES translations.qrc)
-  target_compile_definitions(${TARGET} PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
-  target_compile_definitions(${TESTTARGET} PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
+  target_compile_definitions(gpsbabelfe PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
+  target_compile_definitions(gpsbabelfe_test PRIVATE HAVE_EMBEDDED_TRANSLATIONS)
 endif()
 if (GPSBABEL_EMBED_MAP)
   list(APPEND RESOURCES map.qrc)
-  target_compile_definitions(${TARGET} PRIVATE HAVE_EMBEDDED_MAP)
-  target_compile_definitions(${TESTTARGET} PRIVATE HAVE_EMBEDDED_MAP)
+  target_compile_definitions(gpsbabelfe PRIVATE HAVE_EMBEDDED_MAP)
+  target_compile_definitions(gpsbabelfe_test PRIVATE HAVE_EMBEDDED_MAP)
 endif()
 
-target_sources(${LIBTARGET} PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
+target_sources(gpsbabelfe_lib PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
 if(APPLE)
   set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
   set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-  target_sources(${TARGET} PRIVATE ${HEADERS} ${ICON_FILE})
-  target_sources(${TESTTARGET} PRIVATE ${HEADERS} ${ICON_FILE})
+  target_sources(gpsbabelfe PRIVATE ${HEADERS} ${ICON_FILE})
+  target_sources(gpsbabelfe_test PRIVATE ${HEADERS} ${ICON_FILE})
 
   # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
-  set_target_properties(${TARGET} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.${TARGET}
+  set_target_properties(gpsbabelfe PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.gpsbabelfe
     MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
   )
-  set_target_properties(${TESTTARGET} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.${TESTTARGET}
+  set_target_properties(gpsbabelfe_test PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.gpsbabelfe_test
     MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
   )
 else()
-  target_sources(${TARGET} PRIVATE ${HEADERS})
-  target_sources(${TESTTARGET} PRIVATE ${HEADERS})
+  target_sources(gpsbabelfe PRIVATE ${HEADERS})
+  target_sources(gpsbabelfe_test PRIVATE ${HEADERS})
 endif()
 
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(_isMultiConfig)
-  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${LIBTARGET}_autogen/include_$<CONFIG>)
+  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/gpsbabelfe_lib_autogen/include_$<CONFIG>)
 else()
-  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${LIBTARGET}_autogen/include)
+  set(AUTOGEN_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/gpsbabelfe_lib_autogen/include)
 endif()
-target_include_directories(${LIBTARGET} INTERFACE $<BUILD_INTERFACE:${AUTOGEN_INCLUDE_DIR}>)
+target_include_directories(gpsbabelfe_lib INTERFACE $<BUILD_INTERFACE:${AUTOGEN_INCLUDE_DIR}>)
 
-target_link_libraries(${TARGET} ${LIBTARGET} ${QT_LIBRARIES})
-target_link_libraries(${TESTTARGET} ${LIBTARGET} ${QT_LIBRARIES})
-target_link_libraries(${LIBTARGET} ${QT_LIBRARIES})
+target_link_libraries(gpsbabelfe gpsbabelfe_lib ${QT_LIBRARIES})
+target_link_libraries(gpsbabelfe_test gpsbabelfe_lib ${QT_LIBRARIES})
+target_link_libraries(gpsbabelfe_lib ${QT_LIBRARIES})
 
-get_target_property(idirs ${LIBTARGET} INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(idirs gpsbabelfe_lib INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "lib incs \"${idirs}\"")
 
-get_target_property(Srcs ${TARGET} SOURCES)
+get_target_property(Srcs gpsbabelfe SOURCES)
 message(STATUS "Sources are: \"${Srcs}\"")
-get_target_property(DirDefs ${TARGET} COMPILE_DEFINITIONS)
+get_target_property(DirDefs gpsbabelfe COMPILE_DEFINITIONS)
 message(STATUS "Defines are: \"${DirDefs}\"")
-get_target_property(LnkLibs ${TARGET} LINK_LIBRARIES)
+get_target_property(LnkLibs gpsbabelfe LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
-get_target_property(IncDirs ${TARGET} INCLUDE_DIRECTORIES)
+get_target_property(IncDirs gpsbabelfe INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
-add_custom_target(package_app COMMAND ./package_app DEPENDS ${TARGET})
-
 add_custom_command(
-  TARGET ${TESTTARGET} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:gpsbabel>" "$<TARGET_FILE_DIR:${TESTTARGET}>/gpsbabel"
-  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/gmapbase.html" "$<TARGET_FILE_DIR:${TESTTARGET}>"
+  TARGET gpsbabelfe_test POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:gpsbabel>" "$<TARGET_FILE_DIR:gpsbabelfe_test>/gpsbabel"
+  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/gmapbase.html" "$<TARGET_FILE_DIR:gpsbabelfe_test>"
   VERBATIM
 )
 
 add_test(NAME test-gui
-         COMMAND ${TESTTARGET}
+         COMMAND gpsbabelfe_test
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         )
+
+find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
+if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+  message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
+else()
+# FIXME: remove reliance an app.pro in package_app script.
+# FIXME: translations updated and released in source directory (and under version control).
+  list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
+
+  add_custom_target(gpsbabelfe_lupdate
+                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    VERBATIM
+                    USES_TERMINAL)
+  add_custom_target(gpsbabelfe_lrelease
+                    COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    DEPENDS gpsbabelfe_lupdate
+                    VERBATIM
+                    USES_TERMINAL)
+
+  if(APPLE)
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    add_custom_target(package_app
+                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
+                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+                      VERBATIM
+                      USES_TERMINAL)
+  elseif(UNIX)
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    add_custom_target(package_app
+                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+                      VERBATIM
+                      USES_TERMINAL)
+  elseif(WIN32)
+    find_program(INNO_COMPILER NAMES iscc ISCC
+                 PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
+    if (INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
+      message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
+    endif()
+
+    # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+    find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
+    if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
+      message(WARNING "windeployqt not found, application cannot be packaged.")
+    endif()
+
+    if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
+      file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
+      file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
+      add_custom_target(package_app
+                        # deploy to a clean directory as different build systems create differently named debris in release.
+                        COMMAND ${CMAKE_COMMAND} -E remove_directory package
+                        COMMAND ${CMAKE_COMMAND} -E make_directory package
+                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabelfe> package
+                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
+                        # use --plugindir option to locate the plugins.
+                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe
+                        # set location to location of generated setup.iss file.
+                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} setup.iss
+                        DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
+                        VERBATIM
+                        USES_TERMINAL)
+    endif()
+  endif()
+endif()

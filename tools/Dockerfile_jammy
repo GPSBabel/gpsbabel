@@ -1,15 +1,21 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 LABEL maintainer="https://github.com/tsteven4"
 
 WORKDIR /app
 
 # update environment.
+# software-properties-common, gpg-agent, ppa:tsteven4/qt6-backports
+# are needed because of a build error in qt6-base 6.2.4+dfsg-2ubuntu1
+# https://bugs.launchpad.net/ubuntu/+source/qt6-base/+bug/1970057
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
+    software-properties-common \
+    gpg-agent \
+ && add-apt-repository ppa:tsteven4/qt6-backports \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -53,12 +59,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qt5-default \
+    qtbase5-dev \
     qttools5-dev \
     qttools5-dev-tools \
     qttranslations5-l10n \
     qtwebengine5-dev \
     libqt5serialport5-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with qt used by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    qt6-base-dev \
+    libqt6core5compat6-dev \
+    libqt6opengl6-dev \
+    libqt6serialport6-dev \
+    libqt6webenginecore6-bin \
+    libgl-dev \
+    libopengl-dev \
+    libvulkan-dev \
+    libx11-xcb-dev \
+    libxkbcommon-dev \
+    qt6-l10n-tools \
+    qt6-tools-dev \
+    qt6-tools-dev-tools \
+    qt6-translations-l10n \
+    qt6-webengine-dev \
+    qt6-webengine-dev-tools \
+    qt6-wayland \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs needed to generate coverage report:
@@ -73,4 +100,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
  && locale-gen \
  && locale -a
-

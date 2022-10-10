@@ -10,88 +10,57 @@ on:
     - cron: '27 4 * * 2'
 
 jobs:
-  basic:
-    name: basic Build
+  ubuntu:
+    name: ubuntu Build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - IMAGE: 'focal'
+            SCRIPT: './tools/build_and_test.sh'
+          - IMAGE: 'focal'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            SCRIPT: './tools/build_extra_tests.sh'
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
       env:
         LC_ALL: 'C.UTF-8'
+        JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_TOOLS: ${{ matrix.TOOLS }}
+        JOB_SCRIPT: ${{ matrix.SCRIPT }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: build_and_test
       run: |
-        ./tools/build_and_test.sh
-
-  cmake:
-    name: cmake Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_and_test
-      run: |
-        ./tools/build_and_test_cmake.sh
-
-  qtio_gcc:
-    name: qtio gcc Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_and_test
-      run: |
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
-
-  qtio_clang:
-    name: qtio clang Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
-      env:
-        QMAKESPEC: 'linux-clang'
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_and_test
-      run: |
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
-
-  advanced:
-    name: advanced Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_extra_tests
-      run: |
-        ./tools/build_extra_tests.sh
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+        if [ -n "${JOB_CMAKE_PREFIX_PATH}" ]; then
+          CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
+          export CMAKE_PREFIX_PATH
+        fi
+        if [ "${JOB_TOOLS}" = "clang" ]; then
+          CC=clang
+          export CC
+          CXX=clang++
+          export CXX
+        fi
+        "${JOB_SCRIPT}"
 
   coverage:
     name: coverage Build
@@ -100,10 +69,10 @@ jobs:
     - name: install
       run: |
         sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default
+        sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default  qtwebengine5-dev libqt5serialport5-dev ninja-build
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: script
       env:

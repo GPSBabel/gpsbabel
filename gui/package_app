@@ -74,6 +74,9 @@ LRELEASE="$(${QMAKE} -query QT_INSTALL_BINS)/lrelease"
 LCONVERT="$(${QMAKE} -query QT_INSTALL_BINS)/lconvert"
 MACDEPLOYQT="$(${QMAKE} -query QT_INSTALL_BINS)/macdeployqt"
 
+GPSBABEL=${2:-../gpsbabel}
+SOURCEDIR=${3:-.}
+
 case "$(uname -s)" in
   Linux*)     machine=Linux;;
   Darwin*)    machine=Mac;;
@@ -81,41 +84,42 @@ case "$(uname -s)" in
 esac
 
 # update our translations and compile them.
-"${LUPDATE}" app.pro
-"${LRELEASE}" app.pro
+"${LUPDATE}" "${SOURCEDIR}/app.pro"
+"${LRELEASE}" "${SOURCEDIR}/app.pro"
 
 if [ "${machine}" = "Linux" ]; then
   # need absolute paths for convert_qt_translations()
-  APPDIR="$(pwd)/GPSBabelFE"
+  APPDIR="$( cd "${1:-GPSBabelFE}" && pwd )"
   LANGDIR="${APPDIR}/translations"
 else
-  APPBUNDLE=GPSBabelFE.app
   # need absolute paths for convert_qt_translations()
-  APPDIR="$(pwd)/${APPBUNDLE}"
+  APPDIR="$( cd "${1:-GPSBabelFE.app}" && pwd )"
   LANGDIR="${APPDIR}/Contents/MacOS/translations"
+  APPBUNDLE=$(basename "$APPDIR")
 fi
 
 rm -fr "${LANGDIR}"
 mkdir -p "${LANGDIR}"
 
 # copy our compiled translations.
-cp gpsbabelfe_??.qm "${LANGDIR}"
-cp coretool/gpsbabel_??.qm "${LANGDIR}"
+cp "${SOURCEDIR}"/gpsbabelfe_??.qm "${LANGDIR}"
+cp "${SOURCEDIR}"/coretool/gpsbabel_??.qm "${LANGDIR}"
 
 # bundle Qt .qm files, deploy them with our .qm files,
 # and, for macos, make & deploy locversion.plist files.
 (convert_qt_translations)
 
 if [ "${machine}" = "Linux" ]; then
-  cp objects/gpsbabelfe "${APPDIR}"
-  cp ../gpsbabel "${APPDIR}"
-  cp gmapbase.html "${APPDIR}"
-  cp COPYING.txt "${APPDIR}"
+  cp "${GPSBABEL}" "${APPDIR}"
+  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}"
+  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}"
 else # Mac
-  cp ../gpsbabel "${APPDIR}/Contents/MacOS/gpsbabel"
-  cp gmapbase.html "${APPDIR}/Contents/MacOS"
-  cp COPYING.txt "${APPDIR}/Contents/MacOS"
+  cp "${GPSBABEL}" "${APPDIR}/Contents/MacOS/gpsbabel"
+  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/MacOS"
+  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/MacOS"
+  pushd "${APPDIR}/.."
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
+  popd
 fi
