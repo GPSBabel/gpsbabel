@@ -169,62 +169,61 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabelfe INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
+if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+  message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
+else()
 # FIXME: remove reliance an app.pro in package_app script.
 # FIXME: translations updated and released in source directory (and under version control).
-list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
-list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
-list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
-list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
-list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
-list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
 
-if(APPLE)
-  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
-  add_custom_target(package_app
-                    COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
-                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
-                    DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+  add_custom_target(gpsbabelfe_lupdate
+                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
-elseif(UNIX)
-  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
-  add_custom_target(package_app
-                    COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
-                    DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+  add_custom_target(gpsbabelfe_lrelease
+                    COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    DEPENDS gpsbabelfe_lupdate
                     VERBATIM
                     USES_TERMINAL)
-elseif(WIN32)
-  find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
-  if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
-    message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
-  endif()
 
-  find_program(INNO_COMPILER NAMES iscc ISCC
-               PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
-  if (INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
-    message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
-  endif()
-
-  # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
-  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
-  get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-  find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
-  if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
-    message(WARNING "windeployqt not found, application cannot be packaged.")
-  endif()
-
-  if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
-    add_custom_target(gpsbabelfe_lupdate
-                      COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
-                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  if(APPLE)
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    add_custom_target(package_app
+                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
+                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)
-    add_custom_target(gpsbabelfe_lrelease
-                      COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
-                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                      DEPENDS gpsbabelfe_lupdate
+  elseif(UNIX)
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    add_custom_target(package_app
+                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)
+  elseif(WIN32)
+    find_program(INNO_COMPILER NAMES iscc ISCC
+                 PATHS "C:/Program Files (x86)/Inno Setup 6" "C:/Program Files/Inno Setup 6")
+    if (INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
+      message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
+    endif()
+
+    # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
+    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+    find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
+    if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
+      message(WARNING "windeployqt not found, application cannot be packaged.")
+    endif()
+
     if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
