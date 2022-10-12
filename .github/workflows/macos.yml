@@ -36,10 +36,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Cache Qt
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: cache
       with:
         path: ~/Cache
@@ -47,7 +47,7 @@ jobs:
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -86,7 +86,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MacOS_Installer ${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg
