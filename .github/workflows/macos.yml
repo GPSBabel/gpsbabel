@@ -19,16 +19,20 @@ jobs:
         include:
           - QT_VERSION: '5.15.2'
             XCODE_VERSION: '12.4'
-            GENERATOR: qmake
+            GENERATOR: 'Ninja'
             RELEASE: false
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '12.5.1'
-            GENERATOR: qmake
-            RELEASE: true
+            GENERATOR: 'qmake'
+            RELEASE: false
+          - QT_VERSION: '6.2.4'
+            XCODE_VERSION: '12.5.1'
+            GENERATOR: 'Xcode'
+            RELEASE: false
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '12.5.1'
             GENERATOR: 'Ninja'
-            RELEASE: false
+            RELEASE: true
 
     steps:
     - name: Checkout repository

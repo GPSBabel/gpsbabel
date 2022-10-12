@@ -1,13 +1,9 @@
 name: "fedora"
 
 on:
-  push:
-    branches: [ '**']
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
   schedule:
-    - cron: '27 4 * * 2'
+    - cron: '27 3 * * 2'
+  workflow_dispatch: ~
 
 jobs:
 
