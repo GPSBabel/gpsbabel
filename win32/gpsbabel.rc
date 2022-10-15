@@ -1,6 +1,10 @@
 #include <winver.h>
 #include "gbversion.h"
 
+#define stringize_(S) #S
+#define stringize(S) stringize_(S)
+#define copyright_str(YEAR) stringize(\xa9 2002-##YEAR Robert Lipe)
+
 IDI_ICON1               ICON                    "gpsbabel.ico"
 
 VS_VERSION_INFO VERSIONINFO
@@ -24,7 +28,7 @@ BEGIN
             VALUE "FileDescription", "GPS format converter"
             VALUE "FileVersion", VER_FILE_STR
             VALUE "InternalName", "gpsbabel.exe"
-            VALUE "LegalCopyright", L"\x00a9 2002-VER_COPYRIGHT_YEAR Robert Lipe"
+            VALUE "LegalCopyright", copyright_str(VER_COPYRIGHT_YEAR)
             VALUE "OriginalFilename", "gpsbabel.exe"
             VALUE "ProductName", "GPSBabel"
             VALUE "ProductVersion", VER_PRODUCT_STR
