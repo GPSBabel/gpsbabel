@@ -42,7 +42,7 @@ function convert_qt_translations()
     echo '</plist>' >> "$resourceskel"
   fi
 
-  pushd "$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)" > /dev/null
+  pushd "${QT_INSTALL_TRANSLATIONS}" > /dev/null
   languages=($(echo qtbase_??.qm | sed 's/qtbase_\(..\).qm/\1/g'))
   for language in "${languages[@]}"
   do
@@ -67,35 +67,52 @@ function convert_qt_translations()
   fi
 }
 
-QMAKE="${QMAKE:-qmake}"
-
-LUPDATE="$(${QMAKE} -query QT_INSTALL_BINS)/lupdate"
-LRELEASE="$(${QMAKE} -query QT_INSTALL_BINS)/lrelease"
-LCONVERT="$(${QMAKE} -query QT_INSTALL_BINS)/lconvert"
-MACDEPLOYQT="$(${QMAKE} -query QT_INSTALL_BINS)/macdeployqt"
-
-GPSBABEL=${2:-../gpsbabel}
-SOURCEDIR=${3:-.}
-
 case "$(uname -s)" in
   Linux*)     machine=Linux;;
   Darwin*)    machine=Mac;;
   *)          echo "Unknown kernel name $(uname -s)." 1>&2; exit 1;;
 esac
 
-# update our translations and compile them.
-"${LUPDATE}" "${SOURCEDIR}/app.pro"
-"${LRELEASE}" "${SOURCEDIR}/app.pro"
+if [ "${machine}" = "Linux" ]; then
+  APPDIR=GPSBabelFE
+else
+  APPDIR=GPSBabelFE.app
+fi
+SKIP_UPDATE_RELEASE=
+GPSBABEL=../gpsbabel
+QMAKE=qmake
+SOURCEDIR=.
+while getopts a:lg:q:s: name
+do
+  case $name in
+    a) APPDIR="$OPTARG";;
+    l) SKIP_UPDATE_RELEASE=1;;
+    g) GPSBABEL="$OPTARG";;
+    q) QMAKE="$OPTARG";;
+    s) SOURCEDIR="$OPTARG";;
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-l] [-q qmake] [-s source_directory]\n" "$0"
+       exit 2;;
+  esac
+done
+# need absolute paths for convert_qt_translations()
+APPDIR="$( cd "${APPDIR}" && pwd )"
+
+LCONVERT="$(${QMAKE} -query QT_INSTALL_BINS)/lconvert"
+LUPDATE="$(${QMAKE} -query QT_INSTALL_BINS)/lupdate"
+LRELEASE="$(${QMAKE} -query QT_INSTALL_BINS)/lrelease"
+MACDEPLOYQT="$(${QMAKE} -query QT_INSTALL_BINS)/macdeployqt"
+QT_INSTALL_TRANSLATIONS="$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)"
+
+if [ -z "${SKIP_UPDATE_RELEASE}" ]; then
+  # update our translations and compile them.
+  "${LUPDATE}" "${SOURCEDIR}/app.pro"
+  "${LRELEASE}" "${SOURCEDIR}/app.pro"
+fi
 
 if [ "${machine}" = "Linux" ]; then
-  # need absolute paths for convert_qt_translations()
-  APPDIR="$( cd "${1:-GPSBabelFE}" && pwd )"
   LANGDIR="${APPDIR}/translations"
 else
-  # need absolute paths for convert_qt_translations()
-  APPDIR="$( cd "${1:-GPSBabelFE.app}" && pwd )"
   LANGDIR="${APPDIR}/Contents/MacOS/translations"
-  APPBUNDLE=$(basename "$APPDIR")
 fi
 
 rm -fr "${LANGDIR}"
@@ -120,6 +137,7 @@ else # Mac
   pushd "${APPDIR}/.."
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
+  APPBUNDLE="$(basename "$APPDIR")"
   "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
   popd
 fi

@@ -93,7 +93,7 @@ jobs:
       run: |
         .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
         if ( "${{ matrix.generator }}" ) {
-          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}"
+          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
         } else {
           .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller true -flow "${{ matrix.FLOW }}" -arch "${{ matrix.ARCH }}"
         }

@@ -151,8 +151,12 @@ if(APPLE)
 
   # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
   set_target_properties(gpsbabelfe PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME GPSBabel
+    MACOSX_BUNDLE_BUNDLE_VERSION ${GB.BUILD}
+    MACOSX_BUNDLE_COPYRIGHT "© 2002-${GB.COPYRIGHT_YEAR} Robert Lipe"
     MACOSX_BUNDLE_GUI_IDENTIFIER org.gpsbabel.gpsbabelfe
     MACOSX_BUNDLE_ICON_FILE ${MACOSX_BUNDLE_ICON_FILE}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
   )
 else()
   target_sources(gpsbabelfe PRIVATE ${SOURCES} ${HEADERS} ${RESOURCES})
@@ -197,16 +201,16 @@ else()
   if(APPLE)
     get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_BUNDLE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -l -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
-                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+                      DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)
   elseif(UNIX)
     get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND QMAKE=${_qmake_executable} ${CMAKE_CURRENT_SOURCE_DIR}/package_app $<TARGET_FILE_DIR:gpsbabelfe> $<TARGET_FILE:gpsbabel> ${CMAKE_CURRENT_SOURCE_DIR}
-                      DEPENDS gpsbabelfe gpsbabel coretool_lrelease
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -l -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
+                      DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)
   elseif(WIN32)

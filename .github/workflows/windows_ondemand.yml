@@ -20,6 +20,7 @@ jobs:
             COMPILER: 'msvc2017_64'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
+            RELEASE: false
             os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
@@ -28,6 +29,7 @@ jobs:
             TOOLSET: 'v141,version=14.16.27023'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
+            RELEASE: false
             os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'x86'
@@ -35,6 +37,7 @@ jobs:
             COMPILER: 'msvc2017'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
+            RELEASE: false
             os: windows-2019
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
@@ -42,6 +45,7 @@ jobs:
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
+            RELEASE: false
             os: windows-2019
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
@@ -49,6 +53,7 @@ jobs:
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 17 2022'
+            RELEASE: false
             os: windows-latest
 
     steps:
@@ -99,6 +104,17 @@ jobs:
         # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-${{ runner.os }}
+      run: |
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v3

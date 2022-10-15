@@ -24,6 +24,7 @@ GB.MICRO = $$member(GB.VERSION_COMPONENTS, 2)
 GB.BUILD = 32
 # GB.PACKAGE_RELEASE = "-beta20190413"
 GB.SHA = $$(GITHUB_SHA)
+GB.COPYRIGHT_YEAR = 2022
 
 # may be overridden on qmake command line
 !defined(DOCVERSION, var) {
