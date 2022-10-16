@@ -26,4 +26,6 @@ jobs:
 
     - name: build_and_test
       run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
         ./tools/build_and_test_cmake.sh
