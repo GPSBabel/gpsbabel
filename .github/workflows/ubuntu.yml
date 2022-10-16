@@ -19,8 +19,6 @@ jobs:
       matrix:
         include:
           - IMAGE: 'focal'
-            SCRIPT: './tools/build_and_test.sh'
-          - IMAGE: 'focal'
             SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'

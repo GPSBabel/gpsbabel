@@ -26,4 +26,4 @@ jobs:
 
     - name: build_and_test
       run: |
-        ./tools/build_and_test.sh
+        ./tools/build_and_test_cmake.sh

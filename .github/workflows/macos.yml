@@ -24,10 +24,6 @@ jobs:
             RELEASE: false
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '12.5.1'
-            GENERATOR: 'qmake'
-            RELEASE: false
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '12.5.1'
             GENERATOR: 'Xcode'
             RELEASE: false
           - QT_VERSION: '6.2.4'
@@ -69,11 +65,7 @@ jobs:
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
-        if [ "${{ matrix.GENERATOR }}" == qmake ]; then
-          ./tools/travis_script_osx
-        else
-          ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
-        fi
+        ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
