@@ -8,11 +8,10 @@ git checkout reference/format1.txt
 git checkout reference/format2.txt
 git checkout reference/format3.txt reference/help.txt
 
-rm GPSBabel.pro vecs.h vecs.cc
-# git rm GPSBabel.pro vecs.h
-#git reset GPSBabel.pro
+rm vecs.h vecs.cc
+# git rm  vecs.h
 #git reset vecs.h
-git checkout GPSBabel.pro vecs.h vecs.cc
+git checkout vecs.h vecs.cc
 
 # This part of the code devalues almot immediately once pushed upstream
 echo "Now re-killing formats to exercise the script. ^C to cancel. <enter> to ontinue"

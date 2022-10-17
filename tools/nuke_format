@@ -28,8 +28,6 @@ remove_manually() {
 remove_line $1.cc CMakeLists.txt
 remove_line $1.h CMakeLists.txt
 remove_line $1 CMakeLists.txt # for tests.
-remove_line $1.cc GPSBabel.pro
-remove_line $1.h GPSBabel.pro
 remove_line $1 gpsbabel.qrc
 
 remove_manually $1 reference/help.txt

@@ -82,15 +82,14 @@ SKIP_UPDATE_RELEASE=
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:lg:q:s: name
+while getopts a:g:q:s: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
-    l) SKIP_UPDATE_RELEASE=1;;
     g) GPSBABEL="$OPTARG";;
     q) QMAKE="$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
-    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-l] [-q qmake] [-s source_directory]\n" "$0"
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory]\n" "$0"
        exit 2;;
   esac
 done
@@ -98,16 +97,8 @@ done
 APPDIR="$( cd "${APPDIR}" && pwd )"
 
 LCONVERT="$(${QMAKE} -query QT_INSTALL_BINS)/lconvert"
-LUPDATE="$(${QMAKE} -query QT_INSTALL_BINS)/lupdate"
-LRELEASE="$(${QMAKE} -query QT_INSTALL_BINS)/lrelease"
 MACDEPLOYQT="$(${QMAKE} -query QT_INSTALL_BINS)/macdeployqt"
 QT_INSTALL_TRANSLATIONS="$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)"
-
-if [ -z "${SKIP_UPDATE_RELEASE}" ]; then
-  # update our translations and compile them.
-  "${LUPDATE}" "${SOURCEDIR}/app.pro"
-  "${LRELEASE}" "${SOURCEDIR}/app.pro"
-fi
 
 if [ "${machine}" = "Linux" ]; then
   LANGDIR="${APPDIR}/translations"
