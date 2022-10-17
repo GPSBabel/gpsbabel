@@ -92,18 +92,14 @@ directory it will create a buildsystem with the default generator (Unix Makefile
     <sect2 id="cmake">
       <title>Building from the command line</title>
       <para>
-Those familiar with the command line may be more comfortable
-using cmake from the command line. In most cases, the code is as simple to build as running:
-</para>
-      <para>
-        <userinput>cmake . &amp;&amp; cmake --build .</userinput>
-      </para>
-      <para>
+Those familiar with the command line may be more comfortable using cmake from the command line.
+It is important to set the CMAKE_BUILD_TYPE when generating a build system with single configuration generators such as Unix Makefiles and Ninja.
+With multi-configuration generators such as Visual Studio and Xcode the build type is selected at build time instead of when generating the build system.
       </para>
       <simplelist>
         <member>
 To create a buildsystem using Ninja:
-<userinput>cmake -G Ninja .</userinput>
+<userinput>cmake -G Ninja -DCMAKE_BUILD_TYPE=Release .</userinput>
 </member>
         <member>
 To create a visual studio project that can be built with msbuild:
