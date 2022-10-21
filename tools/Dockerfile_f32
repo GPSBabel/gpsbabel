@@ -7,7 +7,7 @@ LABEL maintainer="https://github.com/tsteven4"
 WORKDIR /app
 
 # basic tools to build
-RUN dnf install --assumeyes git make valgrind diffutils findutils langpacks-en && \
+RUN dnf install --assumeyes git make valgrind diffutils findutils langpacks-en ninja-build && \
     dnf clean all
 # libraries used by gpsbabel.  zlib and shapelib may or may not be used depending qmake options.
 RUN dnf install --assumeyes libusbx-devel zlib-devel shapelib-devel && \

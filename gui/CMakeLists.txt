@@ -177,7 +177,6 @@ find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
 if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
   message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
 else()
-# FIXME: remove reliance an app.pro in package_app script.
 # FIXME: translations updated and released in source directory (and under version control).
   list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
@@ -201,7 +200,7 @@ else()
   if(APPLE)
     get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -l -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
@@ -209,7 +208,7 @@ else()
   elseif(UNIX)
     get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -l -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)

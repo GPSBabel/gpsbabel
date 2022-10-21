@@ -1,14 +1,21 @@
-The autotools based build system (configure) is no longer supported and has
-been removed.
+The only build system generator supported is cmake.  The autotools based build
+system (configure) and the qmake based build system are no longer supported
+and have been removed.
 
-The use of cmake is experimental.  The implementation is not complete.  It is
-untested by continuous integration.  It is not recommended for production use.
+The Ninja generator is recommended and tested in continuous integration.
+The Visual Studio 16 2019, Visual Studio 17 2022 and Xcode generators are
+also tested in continuous integration.
 
-The recommended build uses Qt's qmake:
+An example to build the command line client gpsbabel and the graphical
+user interface gpsbabelfe from the top level directory is:
+mkdir bld;
+cd bld;
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/Qt -G Ninja ..
+cmake --build .
 
-The following options may be set on the qmake command line.
+The following cache variables can be used to control the build:
 
-WITH_LIBUSB=no|pkgconfig|system*|included*|custom
+GPSBABEL_WITH_LIBUSB:STRING=no|pkgconfig|system*|included*|custom
   note that libusb is NOT used on windows.
   no: build without libusb-1.0.  functionality will be limited.
   pkgconfig: build with libusb-1.0 found by pkg-config.
@@ -16,39 +23,66 @@ WITH_LIBUSB=no|pkgconfig|system*|included*|custom
     libusb-1.0 on system include path (default, linux, openbsd).
   included: build with libusb-1.0 included with gpsbabel (default, macOS only).
   custom: build with user supplied libusb-1.0. LIBS and INCLUDEPATH may need to
-    be set, e.g. LIBS+=... INCLUDEPATH+=...
+    be set with GPSBABEL_EXTRA_LINK_LIBRARIES and
+    GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.
 
-WITH_SHAPELIB=no|pkgconfig|included*|custom
+GPSBABEL_WITH_SHAPELIB:STRING=no|pkgconfig|included*|custom
   no: build without shapelib.  functionality will be limited.
   pkgconfig: build with shapelib found by pkg-config.
   included: build with shapelib included with gpsbabel (default).
   custom: build with user supplied shapelib. LIBS and INCLUDEPATH may need to
-    be set, e.g. LIBS+=... INCLUDEPATH+=...
+    be set with GPSBABEL_EXTRA_LINK_LIBRARIES and
+    GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.
 
-WITH_ZLIB=no|pkgconfig|included*|custom
+GPSBABEL_WITH_ZLIB:STRING=no|pkgconfig|included*|custom
   no: build without zlib.  functionality will be limited.
   pkgconfig: build with zlib found by pkg-config.
   included: build with zlib included with gpsbabel (default).
   custom: build with user supplied zlib. LIBS and INCLUDEPATH may need to be
-    set, e.g. LIBS+=... INCLUDEPATH+=...
+    set with GPSBABEL_EXTRA_LINK_LIBRARIES and
+    GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.
 
-CONFIG+=disable-mappreview
-  This options disables the map preview feature.  With the feature disabled
+GPSBABEL_MAPPREVIEW=ON*|OFF
+  This options enables the map preview feature.  With the feature disabled
   QtWebEngine and QtWebEngineWdigets are not used. Note that QtWebKit and
   QtWebKitWidgets are not longer supported.
 
-DOCVERSION=...
+GPSBABEL_EMBED_MAP:BOOL=ON|OFF
+  Embed gmapbase.html for map preview.  When using this option gmapbase.html
+  will be compiled into the executable and does not need to be distributed.
+
+GPSBABEL_EMBED_TRANSLATIONS:BOOL:ON|OFF
+  Embed translations.  When using this option the gpsbabel provided
+  translations will be compiled into the executable and do not need to be
+  distributed. The Qt provided translations still need to be distributed.
+
+GPSBABEL_ENABLE_PCH:BOOL 
+  Enable precompiled headers when building the target gpsbabel.
+
+GPSBABEL_EXTRA_COMPILE_OPTIONS:STRING
+  Extra compile options when building the target gpsbabel.
+
+GPSBABEL_EXTRA_INCLUDE_DIRECTORIES:STRING
+  Extra directories to include when building the target gpsbabel.
+
+GPSBABEL_EXTRA_LINK_LIBRARIES:STRING
+  Extra libraries to link when building the target gpsbabel.
+
+GPSBABEL_EXTRA_LINK_OPTIONS:STRING
+  Extra link options when building the target gpsbabel.
+
+DOCVERSION:STRING=...
   string appended to documentation location for www.gpsbabel.org.  The default
   value is the version string, e.g. "1.7.0".  This is used by the gpsbabel.org
   target, you are unlikely to need it unless you are maintaining
   www.gpsbabel.org.
 
-WEB=DIR
+WEB:STRING=DIR
   Path where the documentation will be stored for www.gpsbabel.org.  This is
   used by the gpsbabel.org target, you are unlikely to need it unless you are
   maintaining www.gpsbabel.org.  The default location is "../babelweb"
 
-Make targets:
+Targets:
 
 check: Run the basic test suite.
 check-vtesto: Run valgrind memcheck.
@@ -56,12 +90,14 @@ gpsbabel: Build the command line tool.
 gpsbabel.hmtl: Create the html documentation.
 gpsbabel.org: Create documentation for use on www.gpsbabel.org.
 gpsbabel.pdf: Create the pdf documentation.
-gui: Build the graphical user interface.
-unix-gui: Build the graphical user interface and collect the components for
-  distribution.  On Linux the gpsbabel generated components will be under
+gpsbabelfe: Build the graphical user interface.
+package_app: Collect the components for distribution.
+  On Linux the gpsbabel generated components will be under
   gui/GPSBabelFE, any dynamically linked required libraries are not included.
   On macOS an app bundle will be created at gui/GPSBabelFE.app and an apple disk
   image will be created at gui/GPSBabelFE.dmg.
+  On windows an image will be created in the directory gui/package, and an
+  installer will be created gui/Setup-x.y.z-Setup.exe.
 
 Dependencies:
 On non-macOS unix builds by default we now compile in the gpsbabel generated
@@ -70,9 +106,4 @@ gmapbase.html.  When compiled in these files do not need to be distributed.
 These are used by the GUI.  Additional translation files from Qt will also be
 used if they are found.  They may be in a package such as qttranslations5-l10n
 or qt5-qttranslations.
-
-Windows builds:
-  Two build methods are supported with MSVC tools.
-  1. "qmake -tp vc" will create a visual studio project that can be built with msbuild.
-  2. "qmake" will create a Makefile that can be built with nmake.
 
