@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+
+use URI::Escape;
+
+# we escape everthing but:
+# unreserved characters, i.e. "A-Za-z0-9\-\._~", and
+# the delimiter between path segments, i.e. "/".
+print uri_escape($ARGV[0], "^A-Za-z0-9\-\._~/");
