@@ -490,10 +490,10 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # We need to urlencode the xml entity system identifiers, e.g. if CMAKE_SOURCE_DIR contains a space character.
-find_package(Python3 REQUIRED)
-execute_process(COMMAND "${Python3_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode.py ${CMAKE_SOURCE_DIR}
+find_package(Perl REQUIRED)
+execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode ${CMAKE_SOURCE_DIR}
                 OUTPUT_VARIABLE GB.ENCODED_SOURCE_DIR)
-execute_process(COMMAND "${Python3_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode.py ${CMAKE_BINARY_DIR}
+execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode ${CMAKE_BINARY_DIR}
                 OUTPUT_VARIABLE GB.ENCODED_BINARY_DIR)
 configure_file(xmldoc/readme.xml.in xmldoc/readme.xml @ONLY NEWLINE_STYLE LF)
 configure_file(xmldoc/makedoc.in xmldoc/makedoc @ONLY NEWLINE_STYLE LF)

@@ -1,0 +1,5 @@
+#!/usr/bin/env perl
+
+use URI::Escape;
+
+print uri_escape($ARGV[0]);
