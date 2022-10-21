@@ -3,9 +3,9 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY % parts SYSTEM "autogen/_parts.xml">
+  <!ENTITY % parts SYSTEM "@GB.ENCODED_BINARY_DIR@/xmldoc/autogen/_parts.xml">
   %parts;
-  <!ENTITY % chaps SYSTEM "chapters/_chapters.xml">
+  <!ENTITY % chaps SYSTEM "@GB.ENCODED_SOURCE_DIR@/xmldoc/chapters/_chapters.xml">
   %chaps;
 ]
 >

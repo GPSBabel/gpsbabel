@@ -489,22 +489,50 @@ if(UNIX AND NOT APPLE)
                     USES_TERMINAL)
 endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
-  add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
-                    DEPENDS gpsbabel gpsbabel.pdf
-                    VERBATIM)
-endif()
+# We need to urlencode the xml entity system identifiers, e.g. if CMAKE_SOURCE_DIR contains a space character.
+find_package(Python3 REQUIRED)
+execute_process(COMMAND "${Python3_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode.py ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE GB.ENCODED_SOURCE_DIR)
+execute_process(COMMAND "${Python3_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlencode.py ${CMAKE_BINARY_DIR}
+                OUTPUT_VARIABLE GB.ENCODED_BINARY_DIR)
+configure_file(xmldoc/readme.xml.in xmldoc/readme.xml @ONLY NEWLINE_STYLE LF)
+configure_file(xmldoc/makedoc.in xmldoc/makedoc @ONLY NEWLINE_STYLE LF)
+set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+add_custom_target(xmldoc
+                  COMMAND xmldoc/makedoc
+                  COMMAND xmlwf xmldoc/readme.xml #check for well-formedness
+                  COMMAND xmllint --noout --valid xmldoc/readme.xml #validate
+                  DEPENDS gpsbabel
+                  VERBATIM)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  add_custom_target(gpsbabel.html
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel)
-endif()
+add_custom_target(gpsbabel.org
+                  COMMAND ${CMAKE_COMMAND} -E make_directory "${WEB}/htmldoc-${DOCVERSION}"
+                  COMMAND xsltproc
+                            --stringparam base.dir "${WEB}/htmldoc-${DOCVERSION}/"
+                            --stringparam root.filename "index"
+                            ${CMAKE_SOURCE_DIR}/xmldoc/babelmain.xsl
+                            xmldoc/readme.xml
+                  COMMAND ${CMAKE_SOURCE_DIR}/tools/fixdoc "${WEB}/htmldoc-${DOCVERSION}" "GPSBabel ${DOCVERSION}:"
+                  COMMAND ${CMAKE_SOURCE_DIR}/tools/mkcapabilities "${WEB}" "${WEB}/htmldoc-${DOCVERSION}"
+                  COMMAND ${CMAKE_COMMAND} -E copy gpsbabel.pdf "${WEB}/htmldoc-${DOCVERSION}/gpsbabel-${DOCVERSION}.pdf"
+                  DEPENDS xmldoc gpsbabel.pdf
+                  VERBATIM)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  add_custom_target(gpsbabel.pdf
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel)
-endif()
+add_custom_target(gpsbabel.html
+                  COMMAND xsltproc
+                            --output gpsbabel.html
+                            --stringparam toc.section.depth "1"
+                            --stringparam html.cleanup "1"
+                            --stringparam make.clean.html "1"
+                            --stringparam html.valid.html "1"
+                            --stringparam html.stylesheet "https://www.gpsbabel.org/style3.css"
+                            http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl
+                            xmldoc/readme.xml
+                  DEPENDS xmldoc
+                  VERBATIM)
+
+add_custom_target(gpsbabel.pdf
+                  COMMAND xsltproc -o gpsbabel.fo ${CMAKE_SOURCE_DIR}/xmldoc/babelpdf.xsl xmldoc/readme.xml
+                  COMMAND ${CMAKE_COMMAND} -E env HOME="${CMAKE_SOURCE_DIR}" fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+                  DEPENDS xmldoc
+                  VERBATIM)

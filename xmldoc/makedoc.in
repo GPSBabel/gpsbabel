@@ -69,10 +69,10 @@ sub include {
    $d2 = $dir2;
    $d2 =~ s:/.*::;
    $name2 = $d2.'_'.$name2;
-   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "$encodedsrcdir/$dir2/$name.xml">\n);
    print FILE "\&inc_$name2;\n";
-   if (! -e "$dir/$dir2/$name.xml") {
-     open TMP, ">$dir/$dir2/$name.xml";
+   if (! -e "$srcdir/$dir2/$name.xml") {
+     open TMP, ">$srcdir/$dir2/$name.xml";
      print TMP "\n";
      close TMP;
    }
@@ -89,16 +89,17 @@ sub includef {
 
 
 
-$dir = $0;
-$dir =~ s:/.*$::;
+$srcdir = "@CMAKE_SOURCE_DIR@/xmldoc";
+$encodedsrcdir = "@GB.ENCODED_SOURCE_DIR@/xmldoc";
+$bindir = "@CMAKE_BINARY_DIR@/xmldoc";
 
-@agdir=`mkdir -p $dir/autogen`;
-open PARTS, ">$dir/autogen/_parts.xml";
+@agdir=`mkdir -p "$bindir/autogen"`;
+open PARTS, ">$bindir/autogen/_parts.xml";
 print PARTS qq(<!-- This document is automatically generated. -->\n);
 print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
 print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open FORMATS, ">$dir/autogen/_formats.xml";
+open FORMATS, ">$bindir/autogen/_formats.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @formats = `./gpsbabel -^3`;
@@ -165,7 +166,7 @@ for (@formats) {
        $fmts{$id} = 1;
      }
      includef( 'fmt_'.$id );
-     open FILE, ">$dir/autogen/fmt_$id.xml";
+     open FILE, ">$bindir/autogen/fmt_$id.xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="fmt_$id">
@@ -211,7 +212,7 @@ if ($going) {
 }
 
 
-open FORMATS, ">$dir/autogen/_filters.xml";
+open FORMATS, ">$bindir/autogen/_filters.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
 @filters = `./gpsbabel -%1`;
@@ -244,7 +245,7 @@ END
        close FILE;
      }
      includef( 'filter_'.$line[0] );
-     open FILE, ">$dir/autogen/filter_$line[0].xml";
+     open FILE, ">$bindir/autogen/filter_$line[0].xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
 <section id="filter_$line[0]">
