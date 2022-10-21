@@ -532,8 +532,12 @@ add_custom_target(gpsbabel.html
                   DEPENDS xmldoc
                   VERBATIM)
 
+# the purpose of setting HOME with fop is to read .foprc to avoid INFO messages.
+# fop has a bug that causes it to die if HOME contains and embedded space character.
+# https://bugs.launchpad.net/ubuntu/+source/fop/+bug/1993853
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1022197
 add_custom_target(gpsbabel.pdf
                   COMMAND xsltproc -o gpsbabel.fo ${CMAKE_SOURCE_DIR}/xmldoc/babelpdf.xsl xmldoc/readme.xml
-                  COMMAND ${CMAKE_COMMAND} -E env HOME="${CMAKE_SOURCE_DIR}" fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
+                  COMMAND ${CMAKE_COMMAND} -E env "HOME=${CMAKE_SOURCE_DIR}" fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
                   DEPENDS xmldoc
                   VERBATIM)
