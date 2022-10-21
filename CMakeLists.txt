@@ -489,11 +489,11 @@ if(UNIX AND NOT APPLE)
                     USES_TERMINAL)
 endif()
 
-# We need to uriencode the xml entity system identifiers, e.g. if CMAKE_SOURCE_DIR contains a space character.
 find_package(Perl)
 if (NOT Perl_FOUND)
   message(WARNING "Perl was not found, documentation cannot be created.")
 else()
+  # We need to uriencode the xml entity system identifiers, e.g. if CMAKE_SOURCE_DIR contains a space character.
   execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/uriencode ${CMAKE_SOURCE_DIR}
                   OUTPUT_VARIABLE GB.ENCODED_SOURCE_DIR)
   execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/uriencode ${CMAKE_BINARY_DIR}
