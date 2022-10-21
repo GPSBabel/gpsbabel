@@ -497,9 +497,10 @@ execute_process(COMMAND "${Python3_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/urlenc
                 OUTPUT_VARIABLE GB.ENCODED_BINARY_DIR)
 configure_file(xmldoc/readme.xml.in xmldoc/readme.xml @ONLY NEWLINE_STYLE LF)
 configure_file(xmldoc/makedoc.in xmldoc/makedoc @ONLY NEWLINE_STYLE LF)
+find_package(Perl REQUIRED)
 set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
 add_custom_target(xmldoc
-                  COMMAND xmldoc/makedoc
+                  COMMAND "${PERL_EXECUTABLE}" xmldoc/makedoc
                   COMMAND xmlwf xmldoc/readme.xml #check for well-formedness
                   COMMAND xmllint --noout --valid xmldoc/readme.xml #validate
                   DEPENDS gpsbabel
