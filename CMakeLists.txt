@@ -495,9 +495,11 @@ if (NOT Perl_FOUND)
 else()
   # We need to uriencode the xml entity system identifiers, e.g. if CMAKE_SOURCE_DIR contains a space character.
   execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/uriencode ${CMAKE_SOURCE_DIR}
-                  OUTPUT_VARIABLE GB.ENCODED_SOURCE_DIR)
+                  OUTPUT_VARIABLE GB.ENCODED_SOURCE_DIR
+                  COMMAND_ERROR_IS_FATAL ANY)
   execute_process(COMMAND "${PERL_EXECUTABLE}" ${CMAKE_SOURCE_DIR}/tools/uriencode ${CMAKE_BINARY_DIR}
-                  OUTPUT_VARIABLE GB.ENCODED_BINARY_DIR)
+                  OUTPUT_VARIABLE GB.ENCODED_BINARY_DIR
+                  COMMAND_ERROR_IS_FATAL ANY)
   configure_file(xmldoc/readme.xml.in xmldoc/readme.xml @ONLY NEWLINE_STYLE LF)
   configure_file(xmldoc/makedoc.in xmldoc/makedoc @ONLY NEWLINE_STYLE LF)
   set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
