@@ -42,6 +42,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc \
     docbook-xml \
     docbook-xsl \
+    liburi-perl \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with libraries needed by gpsbabel
