@@ -60,8 +60,11 @@ jobs:
       run: |
         brew update
         brew install ninja
+        brew install docbook docbook-xsl
 
     - name: Script
+      env:
+        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app

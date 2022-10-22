@@ -6,8 +6,7 @@ docversion=$2
 
 mkdir -p "${web}/htmldoc-${docversion}"
 perl xmldoc/makedoc
-xmlwf xmldoc/readme.xml #check for well-formedness
-xmllint --noout --valid xmldoc/readme.xml #validate
+xmllint --noout --valid xmldoc/readme.xml #valid and well-formed
 xsltproc \
   --stringparam base.dir "${web}/htmldoc-${docversion}/" \
   --stringparam root.filename "index" \
