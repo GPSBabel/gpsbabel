@@ -60,7 +60,7 @@ jobs:
       run: |
         brew update
         brew install ninja
-        brew install docbook docbook-xsl fop
+        brew install docbook docbook-xsl fop gnu-sed
 
     - name: Script
       env:
