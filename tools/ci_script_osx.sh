@@ -46,6 +46,9 @@ Xcode | "Ninja Multi-Config")
   cmake --build .
   ctest
   cmake --build . --target package_app
+  cmake --build . --target gpsbabel.html
+  cmake --build . --target gpsbabel.pdf
+  cmake --build . --target gpsbabel.org
   ;;
 esac
 

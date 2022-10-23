@@ -489,22 +489,23 @@ if(UNIX AND NOT APPLE)
                     USES_TERMINAL)
 endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
+  set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
   add_custom_target(gpsbabel.org
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
                     DEPENDS gpsbabel gpsbabel.pdf
                     VERBATIM)
-endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   add_custom_target(gpsbabel.html
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel)
-endif()
+                    DEPENDS gpsbabel
+                    VERBATIM)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   add_custom_target(gpsbabel.pdf
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel)
+                    DEPENDS gpsbabel
+                    VERBATIM)
+else()
+  message(WARNING "Document generation is only supported for in-source builds with single configuration generators.")
 endif()
