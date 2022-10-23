@@ -1,1 +1,2 @@
+LOGCHOICE=-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog
 LOGLEVEL=-Dorg.apache.commons.logging.simplelog.defaultlog=WARN
