@@ -2,6 +2,12 @@
 set -ex
 
 perl xmldoc/makedoc
+if [ "$(uname -s)" = "Darwin" ]; then
+  # assume jing and docbook rng provided by homebrew
+  /usr/local/bin/jing /usr/local/opt/docbook/docbook/xml/5.0/rng/docbook.rng xmldoc/readme.xml
+else
+  jing /usr/share/xml/docbook/schema/rng/5.0/docbook.rng xmldoc/readme.xml
+fi
 xsltproc \
   --output gpsbabel.html \
   --stringparam toc.section.depth "1" \
