@@ -1,8 +1,8 @@
 <para>
 	Format for output subtitles.
 </para>
-<table id="subrip_format">
-<title>Supported format characters for subrip</title>
+<table xml:id="subrip_format"><info><title>Supported format characters for subrip</title></info>
+
 <tgroup cols="2">
 <thead>
 <row>

@@ -4,4 +4,3 @@
     gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,units=s -F "My Points.gpi"
   </userinput>
 </para>
-

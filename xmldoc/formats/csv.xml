@@ -1,14 +1,14 @@
 
       <para> There are a billion variants of Comma Separated Value
-data.  This is the one specifically that makes <ulink url="http://www.delorme.com">DeLorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
+data.  This is the one specifically that makes <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.delorme.com">DeLorme</link> <trademark>S&amp;A Deluxe 9</trademark> happy. It's
 also a very simple program and useful for many other programs like
 spreadsheets, but contains only a very minimal information. For general
 purpose use, you'll probably be more happy with our
 <link linkend="fmt_unicsv">universal csv (unicsv)</link> format.</para>
       <para> CSV is also the correct format for
-	<productname>Lowrance MapCreate</productname>,
+	<trademark>Lowrance MapCreate</trademark>,
 their commercial mapping program, or GDM6 (their free waypoint
-manager) for iFinder which is available at <ulink url="http://www.lowrance.com/Software/GDM6/Default.asp">lowrance.com</ulink>
+manager) for iFinder which is available at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com/Software/GDM6/Default.asp">lowrance.com</link>
          </para>
     <para>
 	On write, this format writes simple "latitude, longitude" pairs, but
@@ -18,7 +18,7 @@ on read it  will read anything supported by our <link linkend="style_def_lathuma
        For something-separated data that has headers identifying the various
 	fields, see our <link linkend="fmt_unicsv">universal csv</link> format.
     </para>
-<example id="csv_example"><title>Example 'csv' file</title>
+<example xml:id="csv_example"><info><title>Example 'csv' file</title></info>
 <programlisting>
 35.97203, -87.13470, Mountain Bike Heaven by susy1313
 36.09068, -86.67955, The Troll by a182pilot &amp; Family

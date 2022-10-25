@@ -25,8 +25,8 @@ compass or motion sensors or charging cables with different model numbers.
 If you can confirm success with others, please share with us.
 </para>
 
-<table id="mtk_devices">
-<title>Devices supported by MTK module</title>
+<table xml:id="mtk_devices"><info><title>Devices supported by MTK module</title></info>
+
 <tgroup cols="3">
 <thead>
 <row>
@@ -39,22 +39,22 @@ If you can confirm success with others, please share with us.
 <row>
  <entry>iBlue 821</entry>
  <entry>Yes</entry>
- <entry>Available from <ulink url="http://www.semsons.com/i821ulblgpsr.html">Semsons</ulink></entry>
+ <entry>Available from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.semsons.com/i821ulblgpsr.html">Semsons</link></entry>
 </row>
 <row>
  <entry>iBlue 747, 747A+</entry>
  <entry>Yes</entry>
- <entry>Available from <ulink url="http://www.semsons.com/i74blgpsdalo.html">Semsons</ulink></entry>
+ <entry>Available from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.semsons.com/i74blgpsdalo.html">Semsons</link></entry>
 </row>
 <row>
  <entry>QStarz BT-1000, BT-Q1000X, BT-1000eX</entry>
  <entry>Yes</entry>
- <entry></entry>
+ <entry/>
 </row>
 <row>
  <entry>iTrek Z1</entry>
- <entry></entry>
- <entry></entry>
+ <entry/>
+ <entry/>
 </row>
 </tbody>
 </tgroup>
@@ -66,7 +66,7 @@ If you can confirm success with others, please share with us.
   these devices typically look like Prolific, FTDI, or Silab usb/serial
   devices to the host OS.  You'll need drivers for that whatever chip
   your product uses for your operating system.  For the "A+ GPS Recorder",
-  the <ulink url="http://www.silabs.com/products/mcu/pages/usbtouartbridgevcpdrivers.aspx">Silicon Labs CP210x chip</ulink> is used.  On OS/X, you'll get
+  the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.silabs.com/products/mcu/pages/usbtouartbridgevcpdrivers.aspx">Silicon Labs CP210x chip</link> is used.  On OS/X, you'll get
   awesome device names like /dev/cu.usbmodem1d13410 - fortunately, our GUI
   makes that multiple choice so you don't have to guess.
 </para>
@@ -79,17 +79,17 @@ If you can confirm success with others, please share with us.
 
 
 <para>See <link linkend="fmt_mtk-bin">mtk-bin</link> on how trackpoints/waypoints are handled</para>
-<example id="mtk-on-linux">
-  <title>Command showing MTK download track and waypoints and erase on Linux</title>
+<example xml:id="mtk-on-linux"><info><title>Command showing MTK download track and waypoints and erase on Linux</title></info>
+  
   <para><userinput>gpsbabel -t -w -i mtk,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
 </example>
 
 <para>
   For more info and tweaks on MTK based loggers:
-   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81990">MTK Tips and Tweaks</ulink> and
-   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81315">iBlue 747 Logger</ulink>
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81990">MTK Tips and Tweaks</link> and
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81315">iBlue 747 Logger</link>
  For info about the used log format, see
-  <ulink url="http://spreadsheets.google.com/pub?key=pyCLH-0TdNe-5N-5tBokuOA&amp;gid=5">MTK binary format</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://spreadsheets.google.com/pub?key=pyCLH-0TdNe-5N-5tBokuOA&amp;gid=5">MTK binary format</link>
 </para>
 <para>
 Most of the loggers cannot receive bluetooth commands; they can only send

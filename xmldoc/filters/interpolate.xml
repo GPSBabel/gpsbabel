@@ -6,8 +6,8 @@ line (actually a great circle) between the adjacent points.  You
 must specify either the
 <option>distance</option> or the <option>time</option> option.
 </para>
-<example id="example_interpolate_filter">
-<title>Using the interpolate filter</title>
+<example xml:id="example_interpolate_filter"><info><title>Using the interpolate filter</title></info>
+
 <para>
 This command line reads track.gpx and inserts points wherever two adjacent
 trackpoints are more than 10 seconds apart:

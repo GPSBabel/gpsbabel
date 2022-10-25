@@ -4,8 +4,8 @@ we're currently in: skytraq log data contains dates in the form of GPS weeks,
 which roll over to 0 every 1024 weeks (close to 20 years).
 </para>
 
-<table id="gps_week_rollovers">
-<title>GPS week rollover dates</title>
+<table xml:id="gps_week_rollovers"><info><title>GPS week rollover dates</title></info>
+
 <tgroup cols="2">
 <thead>
 <row>

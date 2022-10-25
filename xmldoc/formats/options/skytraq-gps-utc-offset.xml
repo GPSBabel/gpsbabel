@@ -14,5 +14,5 @@ Indicates that GPS is ahead of UTC by fifteen seconds, as was the case in 2009.
 </para>
 
 <para>
-Consult formal explanation of <ulink url="http://tycho.usno.navy.mil/leapsec.html">GPS time vs. UTC time</ulink> if you're into that.
+Consult formal explanation of <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://tycho.usno.navy.mil/leapsec.html">GPS time vs. UTC time</link> if you're into that.
 </para>

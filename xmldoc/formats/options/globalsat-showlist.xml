@@ -1,8 +1,8 @@
 <para>
 The showlist argument displays the list of tracks stored on the device.
 </para>
-<example id="globalsat-option-showlist">
-  <title>Command showing list of tracks on device</title>
+<example xml:id="globalsat-option-showlist"><info><title>Command showing list of tracks on device</title></info>
+  
   <para>
     <userinput>gpsbabel -i globalsat,showlist=1 -f /dev/ttyUSB0</userinput>
   </para>

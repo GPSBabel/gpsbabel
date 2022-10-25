@@ -1,5 +1,5 @@
 <para>
-	This is the SD card format used by the <ulink url="http://www.magellangps.com">Magellan</ulink> Explorist 400,
+	This is the SD card format used by the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.magellangps.com">Magellan</link> Explorist 400,
 	Explorist 500, Explorist 600, and Explorist XL and internally on those devices plus the
 	Explorist 210.  Stored waypoints are identical to the <link linkend="fmt_magellan">Magellan SD format</link>
 	used by Meridian, but the newer models allow longer waypoint names.  Routes are
@@ -11,4 +11,3 @@
 	Similarly, routes should be named ".rte" and tracks should be
 	named ".log".
 </para>
-

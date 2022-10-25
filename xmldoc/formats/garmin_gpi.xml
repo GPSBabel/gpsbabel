@@ -1,7 +1,7 @@
 <para>
    The format garmin_gpi supports the binary POI (.gpi) files that are usable
    on newer Garmin GPS receivers.  See <link linkend="fmt_garmin_poi">garmin_poi</link> for additional information about Garmin's own Poiloader program.
-   <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</ulink> is the standard application that creates GPI files
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</link> is the standard application that creates GPI files
    with all possible features.
 </para>
 <para>
@@ -44,8 +44,8 @@
 	directly.
 </para>
 </important>
-<example id="all_garmin_gpi_options">
-  <title>Command showing garmin_gpi output example</title>
+<example xml:id="all_garmin_gpi_options"><info><title>Command showing garmin_gpi output example</title></info>
+  
   <para>
     <userinput>
       gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,category="Nice Restaurants",bitmap=restaurant.bmp,notes -F "My Points.gpi"

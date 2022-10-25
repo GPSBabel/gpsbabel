@@ -5,33 +5,33 @@
 log and waypoint format for GPS devices.  Some hardware and software
 that work with NMEA-0183 formatted data include:
 </para>
-<simplelist columns="3">
+<simplelist columns="3" type="vert">
 <member>
-  <ulink url="http://homepages.tig.com.au/~robk/datalogger.html">GPS Data Logger</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://homepages.tig.com.au/~robk/datalogger.html">GPS Data Logger</link>
 </member>
 <member>
-  <ulink url="http://www.gpstm.com/eng/features_eng.htm ">GPS TrackMaker</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpstm.com/eng/features_eng.htm ">GPS TrackMaker</link>
 </member>
 <member>
-  <ulink url="http://www.gpsmaster.nl/ ">GPSMaster</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpsmaster.nl/ ">GPSMaster</link>
 </member>
 <member>
-  <ulink url="http://www.silcom.com/~rwhately/index.html">NMEAlog</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.silcom.com/~rwhately/index.html">NMEAlog</link>
 </member>
 <member>
-  <ulink url="http://www.visualgps.net/VisualGPSce/default.htm">VisualGPS</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.visualgps.net/VisualGPSce/default.htm">VisualGPS</link>
 </member>
 <member>
-  <ulink url="http://www.gpsu.co.uk/">GPS Utility</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpsu.co.uk/">GPS Utility</link>
 </member>
 <member>
-  <ulink url="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">GeoConv</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.kolumbus.fi/eino.uikkanen/geoconvgb/index.htm">GeoConv</link>
 </member>
 <member>
-  <ulink url="http://www.commlinx.com.au/GPS_recorder.htm">CommLinx GPS recorder</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.commlinx.com.au/GPS_recorder.htm">CommLinx GPS recorder</link>
 </member>
 <member>
-  <ulink url="http://www.sparkfun.com/">SparkFun GPS Datalogger</ulink>
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.sparkfun.com/">SparkFun GPS Datalogger</link>
 </member>
 <member>
   AMOD 3080 GPS

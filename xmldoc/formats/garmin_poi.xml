@@ -1,5 +1,5 @@
 <para>
-  The <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI loader</ulink>
+  The <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI loader</link>
   loads custom points of interest into certain models of
   Garmin GPS receivers.  (As of this writing, only the models introduced
   in 2005 and later are supported.  See Garmin's site for more info.)

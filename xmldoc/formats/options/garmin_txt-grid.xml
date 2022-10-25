@@ -1,8 +1,8 @@
 <para>
   This value specifies the grid to be used on write.
 </para>
-<table id="garmin_grid">
-<title>Grid values for garmin_txt</title>
+<table xml:id="garmin_grid"><info><title>Grid values for garmin_txt</title></info>
+
 <tgroup cols="4">
 <thead>
 <row>
@@ -58,5 +58,3 @@
 <para>
   Idx or short are valid params for this option.
 </para>
-
-

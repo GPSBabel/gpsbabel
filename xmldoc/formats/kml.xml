@@ -1,6 +1,6 @@
 <para>
 KML, the Keyhole Markup Language format, was used by Keyhole and is used by
-<ulink url="http://earth.google.com">Google Earth</ulink>.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://earth.google.com">Google Earth</link>.
 </para>
 <para>There are concepts in KML that GPSBabel can't support very well on
 read because they don't map well into other programs.  For example, KML has
@@ -29,5 +29,5 @@ In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple
   you can widen the time slider to show the range of data of interest.
 </para>
 <para>
-  See <ulink url="http://earth.google.com/userguide/v4/ug_gps.html#timeline">Google Earth's documentation on timelines</ulink> for more info.
+  See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://earth.google.com/userguide/v4/ug_gps.html#timeline">Google Earth's documentation on timelines</link> for more info.
 </para>

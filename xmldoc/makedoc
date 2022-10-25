@@ -69,13 +69,18 @@ sub include {
    $d2 = $dir2;
    $d2 =~ s:/.*::;
    $name2 = $d2.'_'.$name2;
-   print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
-   print FILE "\&inc_$name2;\n";
+   #print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+   #print FILE "\&inc_$name2;\n";
    if (! -e "$dir/$dir2/$name.xml") {
      open TMP, ">$dir/$dir2/$name.xml";
      print TMP "\n";
      close TMP;
    }
+   open TMP2, "<$dir/$dir2/$name.xml";
+   while(<TMP2>) {
+     print FILE $_;
+   }
+   close TMP2;
 }
 
 sub includef {
@@ -168,8 +173,7 @@ for (@formats) {
      open FILE, ">$dir/autogen/fmt_$id.xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
-<section id="fmt_$id">
-  <title>$line[4] ($line[2])</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="fmt_$id"><info><title>$line[4] ($line[2])</title></info>
 END
      print FILE expandoptions($line[1]);
      print FILE expandsuboptions($id);
@@ -191,8 +195,7 @@ END
    elsif ($going && $dooptions && ($line[0] eq 'option')) {
      $nid = 'fmt_'.$id.'_o_'.$line[2];
      print FILE <<END;
-  <section id="$nid">
-    <title><option>$line[2]</option> option</title>
+  <section xml:id="$nid"><info><title><option>$line[2]</option> option</title></info>
     <para>
       $line[3].
     </para>
@@ -227,8 +230,7 @@ for (@filters) {
 
    if ($going && ($line[0] eq 'option')) {
      print FILE <<END;
-  <section id="fmt_$line[1]_o_$line[2]">
-    <title>$line[2] option</title>
+  <section xml:id="fmt_$line[1]_o_$line[2]"><info><title>$line[2] option</title></info>
     <para>
       $line[3].
     </para>
@@ -247,8 +249,7 @@ END
      open FILE, ">$dir/autogen/filter_$line[0].xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
-<section id="filter_$line[0]">
-  <title>$line[1] ($line[0])</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="filter_$line[0]"><info><title>$line[1] ($line[0])</title></info>
 END
      include($line[0],"filters");
      $going = $line[0];

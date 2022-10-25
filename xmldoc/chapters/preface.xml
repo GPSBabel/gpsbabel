@@ -1,12 +1,12 @@
-<preface id="Introduction">
-   <title>Introduction to GPSBabel</title>
-   <section id="The_Problem">
-      <title>The Problem: Too many incompatible GPS file formats</title>
+<preface xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Introduction"><info><title>Introduction to GPSBabel</title></info>
+   
+   <section xml:id="The_Problem"><info><title>The Problem: Too many incompatible GPS file formats</title></info>
+      
       <para>There are simply too many gratuitously different file formats
 to hold waypoint, track, and route information in various programs
 used by computers and GPS receivers.
 
-         <ulink url="http://www.topografix.com/gpx.asp">GPX</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.topografix.com/gpx.asp">GPX</link>
          defines a
 standard in XML to contain all the data, but there are too many
 programs that don't understand it yet and too much data in
@@ -26,14 +26,14 @@ is a program that converts data between the two programs.</para>
       <para>GPSBabel actually solves that problem for you and much more...
 </para>
    </section>
-   <section id="The_Solution">
-      <title>The Solution</title>
+   <section xml:id="The_Solution"><info><title>The Solution</title></info>
+      
       <para>The original author of GPSBabel,
-         <ulink url="/people/robertlipe.html">Robert Lipe</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/people/robertlipe.html">Robert Lipe</link>
          , needed to convert waypoints between a couple of formats, so he
 whipped up a converter and designed it upon an extensible foundation so
 that it was easy to add new formats and made the program freely available.
-         <ulink url="/people/index.html">Many others</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/people/index.html">Many others</link>
          have contributed to the program since then.</para>
       <para>Most file formats added so far have taken under 200
    lines of reasonable ISO C so they can be stamped

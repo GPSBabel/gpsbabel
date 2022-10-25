@@ -12,5 +12,3 @@ is done by comparing the time that it thinks that you landed on the GPS track
 and the barograph and adjusting accordingly:
 </para>
 <para><userinput>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</userinput></para>
-
-

@@ -6,8 +6,8 @@ The list of field names is exactly that allowed in the first line of a
 unicsv file without this option.
 </para>
 
-<example id="unicsv_fields">
-  <title>Example for unicsv fields option to describe input file.</title>
+<example xml:id="unicsv_fields"><info><title>Example for unicsv fields option to describe input file.</title></info>
+  
   <para>
     For example ...
     <userinput>

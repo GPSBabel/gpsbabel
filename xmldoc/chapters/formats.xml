@@ -1,4 +1,4 @@
-   <chapter id="The_Formats">
-    <title>The Formats</title>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="The_Formats"><info><title>The Formats</title></info>
+    
     &formats;
    </chapter>

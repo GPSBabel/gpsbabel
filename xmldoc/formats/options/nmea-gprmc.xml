@@ -8,4 +8,3 @@ GPRMC sentences contain the "recommended minimum" positional information,
 including date and time, heading, and velocity.  Note that they do not
 include altitude.  For altitude, you will have to include GPGGA sentences.
 </para>
-
