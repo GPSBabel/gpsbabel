@@ -77,9 +77,11 @@ sub include {
      close TMP;
    }
    open TMP2, "<$dir/$dir2/$name.xml";
+   print FILE qq(<!-- BEGIN inclusion of $dir/$dir2/$name.xml -->\n);
    while(<TMP2>) {
      print FILE $_;
    }
+   print FILE qq(<!-- END inclusion of $dir/$dir2/$name.xml -->\n);
    close TMP2;
 }
 
