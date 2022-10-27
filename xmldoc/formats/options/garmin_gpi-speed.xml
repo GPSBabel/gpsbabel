@@ -18,8 +18,8 @@
   </userinput>
 </para>
 <para>
-  <table xml:id="garmin_gpi_speed_units"><info><title>Supported speed units (garmin_gpi)</title></info>
-  
+  <table xml:id="garmin_gpi_speed_units">
+  <title>Supported speed units (garmin_gpi)</title>
   <tgroup cols="2">
   <thead>
   <row>

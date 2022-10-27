@@ -175,7 +175,8 @@ for (@formats) {
      open FILE, ">$dir/autogen/fmt_$id.xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="fmt_$id"><info><title>$line[4] ($line[2])</title></info>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="fmt_$id">
+  <title>$line[4] ($line[2])</title>
 END
      print FILE expandoptions($line[1]);
      print FILE expandsuboptions($id);
@@ -197,7 +198,8 @@ END
    elsif ($going && $dooptions && ($line[0] eq 'option')) {
      $nid = 'fmt_'.$id.'_o_'.$line[2];
      print FILE <<END;
-  <section xml:id="$nid"><info><title><option>$line[2]</option> option</title></info>
+  <section xml:id="$nid">
+    <title><option>$line[2]</option> option</title>
     <para>
       $line[3].
     </para>
@@ -232,7 +234,8 @@ for (@filters) {
 
    if ($going && ($line[0] eq 'option')) {
      print FILE <<END;
-  <section xml:id="fmt_$line[1]_o_$line[2]"><info><title>$line[2] option</title></info>
+  <section xml:id="flt_$line[1]_o_$line[2]">
+    <title>$line[2] option</title>
     <para>
       $line[3].
     </para>
@@ -251,7 +254,8 @@ END
      open FILE, ">$dir/autogen/filter_$line[0].xml";
      print FILE <<END;
 <!-- This document is automatically generated. -->
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="filter_$line[0]"><info><title>$line[1] ($line[0])</title></info>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="filter_$line[0]">
+  <title>$line[1] ($line[0])</title>
 END
      include($line[0],"filters");
      $going = $line[0];

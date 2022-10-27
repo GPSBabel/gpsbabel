@@ -7,14 +7,14 @@ for file in *.xml
 do
 if [ "$file" != "allchapters.xml" ]; then
 if [ "$file" !=  "_chapters.xml" ]; then
-  echo  converting "$file"
+  echo  "converting $file ($(wc -c "$file" | awk '{print $1}') bytes)"
   if [ "$encapsulate" = "yes" ]; then
-ls -l "$file"
     echo -e "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.5//EN\" \"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd\">\n<book><chapter><title>T</title>\n$(cat $file)" > "$file"
     echo "</chapter></book>" >> "$file"
   fi
   xmllint --noout --valid "$file" || true
-  xsltproc  -o "$file".new /usr/share/xml/docbook/stylesheet/docbook5/db4-upgrade.xsl "$file"
+  # db4-upgrade.xsl from https://docbook.org/xml/5.1/docbook-v5.1-os.zip
+  xsltproc  -o "$file".new /home/tsteven4/builds/docbook-v5.1/tools/db4-upgrade.xsl "$file"
   if [ "$encapsulate" == "yes" ]; then
     head --lines=-1 "$file".new | tail --lines=+3 > "$file"
   else
@@ -61,6 +61,8 @@ sed -e 's|\[\[\[formats\]\]\]|\&formats;|' -i formats.xml
 #sed -i -e '$a\' formats.xml
 #sed -i -e '$a\' filters.xml
 popd
+# the 5.1 version of db4-update.xsl drops the term/ulink
+patch -p0 <build.patch
 nonewlines=$(pcregrep -LMr '\n\Z' .)
 for file in ${nonewlines[@]}
 do

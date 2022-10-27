@@ -16,7 +16,7 @@ temperature units, and the representation of date and time fields. GPSBabel
 tries to read all items automatically. Problems with date and time format can
 be solved with the 'date' and 'time' options.
 </para>
-<example xml:id="all_garmin_txt_options"><info><title>Command showing garmin_txt output with all options</title></info>
-  
+<example xml:id="all_garmin_txt_options">
+  <title>Command showing garmin_txt output with all options</title>
   <para><userinput>gpsbabel -i garmin_txt,date="MM/DD/YYYY",time="hh:mm:ss xx" -f in.txt -o garmin_txt,date="DD.MM.YYYY",datum="WGS 72",dist=m,prec=6,temp=c,time="HH:mm:ss",utc=+2 -F out.txt</userinput></para>
 </example>

@@ -6,8 +6,8 @@
   This can be very helpful for locating specific waypoints (i.e. using the position filter)
   in more than one file.
 </para>
-<example xml:id="unicsv_filename"><info><title>Example for unicsv filename option to write filenames of input formats.</title></info>
-  
+<example xml:id="unicsv_filename">
+  <title>Example for unicsv filename option to write filenames of input formats.</title>
   <para>
     The next example ...
     <userinput>

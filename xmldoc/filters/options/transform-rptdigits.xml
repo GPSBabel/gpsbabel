@@ -7,7 +7,7 @@ When GPSBabel creates route points during the transformation process these point
 <para>
 Using this option GPSBabel can be configured to use less or more digits for the generated names. This option is best used in conjunction with the rptname option.
 </para>
-<example xml:id="transform_rptdigits"><info><title>Convert a GPX track to a GPX route, deleting the original track, using 2 digits for the generated numbers.</title></info>
-
+<example xml:id="transform_rptdigits">
+<title>Convert a GPX track to a GPX route, deleting the original track, using 2 digits for the generated numbers.</title>
 <para><userinput>gpsbabel -i gpx -f track.gpx -x transform,wpt=trk,del,rptdigits=2 -o gpx -F route.gpx</userinput></para>
 </example>

@@ -25,8 +25,8 @@ compass or motion sensors or charging cables with different model numbers.
 If you can confirm success with others, please share with us.
 </para>
 
-<table xml:id="mtk_devices"><info><title>Devices supported by MTK module</title></info>
-
+<table xml:id="mtk_devices">
+<title>Devices supported by MTK module</title>
 <tgroup cols="3">
 <thead>
 <row>
@@ -79,8 +79,8 @@ If you can confirm success with others, please share with us.
 
 
 <para>See <link linkend="fmt_mtk-bin">mtk-bin</link> on how trackpoints/waypoints are handled</para>
-<example xml:id="mtk-on-linux"><info><title>Command showing MTK download track and waypoints and erase on Linux</title></info>
-  
+<example xml:id="mtk-on-linux">
+  <title>Command showing MTK download track and waypoints and erase on Linux</title>
   <para><userinput>gpsbabel -t -w -i mtk,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
 </example>
 

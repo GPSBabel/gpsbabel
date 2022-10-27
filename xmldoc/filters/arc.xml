@@ -30,8 +30,8 @@ such a gap by inserting a line containing "#break" either on a line by
 itself or after the coordinates of the starting point of the new arc segment.
 </para>
 
-<example xml:id="example_arc_filter"><info><title>Using the arc filter</title></info>
-
+<example xml:id="example_arc_filter">
+<title>Using the arc filter</title>
 <para>
 Assuming the arc above is in a file called
 <filename>lima_rd.txt</filename>, the following command line

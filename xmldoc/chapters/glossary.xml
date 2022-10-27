@@ -1,8 +1,8 @@
-<glossary xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Glossary"><info><title>Glossary</title></info>
-  
+<glossary xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Glossary">
+  <title>Glossary</title>
   <para>Terms that are used in conjunction with GPSBabel.</para>
-  <glossdiv xml:id="G"><info><title>G</title></info>
-    
+  <glossdiv xml:id="G">
+    <title>G</title>
     <glossentry xml:id="gl_xml">
       <glossterm>Geocaching</glossterm>
       <glossdef>
@@ -12,8 +12,8 @@
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv><info><title>I</title></info>
-    
+  <glossdiv>
+    <title>I</title>
     <glossentry xml:id="gl_itinerary">
       <glossterm>Itinerary</glossterm>
       <glossdef>
@@ -21,8 +21,8 @@
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv xml:id="P"><info><title>P</title></info>
-    
+  <glossdiv xml:id="P">
+    <title>P</title>
     <glossentry xml:id="gl_poi">
       <glossterm>Points of Interest (POI)</glossterm>
       <glossdef>
@@ -31,8 +31,8 @@
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv xml:id="R"><info><title>R</title></info>
-    
+  <glossdiv xml:id="R">
+    <title>R</title>
     <glossentry xml:id="gl_route">
       <glossterm>Route</glossterm>
       <glossdef>
@@ -45,8 +45,8 @@
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv xml:id="T"><info><title>T</title></info>
-    
+  <glossdiv xml:id="T">
+    <title>T</title>
     <glossentry xml:id="gl_track">
       <glossterm>Track</glossterm>
       <glossdef>
@@ -59,8 +59,8 @@
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv xml:id="W"><info><title>W</title></info>
-    
+  <glossdiv xml:id="W">
+    <title>W</title>
     <glossentry xml:id="gl_waypoint">
       <glossterm>Waypoints</glossterm>
       <glossdef>

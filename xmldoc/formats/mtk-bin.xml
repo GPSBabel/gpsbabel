@@ -15,8 +15,8 @@ log session from the button press we would loose a trackpoint unless we include/
 <para>
 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.transystem.com.tw/p-gps-iblue747.htm">Transystem i-Blue 747</link>
 </para>
-<example xml:id="mtk-bin-on-linux"><info><title>Convert MTK binary trackpoints to GPX</title></info>
-  
+<example xml:id="mtk-bin-on-linux">
+  <title>Convert MTK binary trackpoints to GPX</title>
   <para>
   <userinput>gpsbabel -t -i mtk-bin,csv=extra.csv -f data.bin -o gpx -F out.gpx</userinput>
    Additionally a CSV output file is created.

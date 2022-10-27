@@ -4,8 +4,8 @@
   The priority of this option is higher than of the <option>via</option> and <option>dropwpt</option> options.
   A value of 1 or y overwrites the <option>via</option> and <option>dropwpt</option> settings.
 </para>
-<example xml:id="gdb_roadbook_option"><info><title>Using gdb option <option>roadbook</option> to create simple html roadbook</title></info>
-  
+<example xml:id="gdb_roadbook_option">
+  <title>Using gdb option <option>roadbook</option> to create simple html roadbook</title>
   <para>
     <userinput>
       gpsbabel -i gdb,roadbook -f sample.gdb -x nuketypes,waypoints,tracks -x transform,wpt=rte -o html -F roadbook.html

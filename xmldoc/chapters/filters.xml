@@ -1,5 +1,5 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Data_Filters"><info><title>Data Filters</title></info>
-      
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Data_Filters">
+      <title>Data Filters</title>
       <para> GPSBabel supports data filtering.  Data filters are
       invoked from the command line via the '-x' option.  It should be
       noted that data filters are invoked in the internal pipeline at

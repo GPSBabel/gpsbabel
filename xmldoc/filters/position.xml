@@ -4,8 +4,8 @@ For waypoints a point is removed if it is within the specified distance of a pre
 For routes and tracks consecutive points are removed until the distance between the bracketing points is greater than the specified distance.
 </para>
 
-<example xml:id="posn_to_suppress_close_points"><info><title>Using the position filter to suppress close points</title></info>
-
+<example xml:id="posn_to_suppress_close_points">
+<title>Using the position filter to suppress close points</title>
 <para>
 The following command removes multiple points that are within
 one foot of each other, leaving just one.

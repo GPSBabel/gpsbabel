@@ -44,8 +44,8 @@
 	directly.
 </para>
 </important>
-<example xml:id="all_garmin_gpi_options"><info><title>Command showing garmin_gpi output example</title></info>
-  
+<example xml:id="all_garmin_gpi_options">
+  <title>Command showing garmin_gpi output example</title>
   <para>
     <userinput>
       gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,category="Nice Restaurants",bitmap=restaurant.bmp,notes -F "My Points.gpi"

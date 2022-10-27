@@ -6,8 +6,8 @@
   You can leave altitude out, in which case it is assumed to be zero.
   Note that GPSBabel terminates after writing the location info to the device, i.e. no logging data will be read from it.
 </para>
-<example xml:id="miniHomer-Car"><info><title>Set the target location of the miniHomer Car POI</title></info>
-  
+<example xml:id="miniHomer-Car">
+  <title>Set the target location of the miniHomer Car POI</title>
   <para>
        <userinput>gpsbabel -i miniHomer,Car=-25.272309:153.235330 -f /dev/ttyUSB0 -o unicsv -F -</userinput>
   </para>

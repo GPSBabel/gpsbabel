@@ -11,12 +11,12 @@
 <para>
   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.globalsat.com.tw/eng/product_detail_00000090.htm">GlobalSat DG-100</link>
 </para>
-<example xml:id="dg-100-on-linux"><info><title>Command showing DG-100 download and erase on Linux</title></info>
-  
+<example xml:id="dg-100-on-linux">
+  <title>Command showing DG-100 download and erase on Linux</title>
   <para><userinput>gpsbabel -t -i dg-100,erase -o gpx /dev/ttyUSB0 outputfile.gpx</userinput></para>
 </example>
-<example xml:id="dg-100-on-linux-erase_only"><info><title>Command showing DG-100 erase_only option on Linux</title></info>
-  
+<example xml:id="dg-100-on-linux-erase_only">
+  <title>Command showing DG-100 erase_only option on Linux</title>
   <para><userinput>gpsbabel -t -i dg-100,erase_only /dev/ttyUSB0</userinput></para>
 </example>
 

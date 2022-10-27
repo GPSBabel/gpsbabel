@@ -1,7 +1,7 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Usage"><info><title>Usage</title></info>
-  
-  <section xml:id="Invocation"><info><title>Invocation</title></info>
-    
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Usage">
+  <title>Usage</title>
+  <section xml:id="Invocation">
+    <title>Invocation</title>
     <para>If you're using GPSBabel, you will need to know how to do at least two things:
 read data from a file, and write it to another file.  There are four basic
 options you need to know to do those things:
@@ -92,15 +92,15 @@ name of a file to be read or written.</para>
     <para>This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
          vary on other OSes; typically COMx: on Windows) and write them as a geocaching loc file.</para>
-    <example xml:id="linux_download_from_magellan"><info><title>Command showing Linux download from Magellan serial and writing to .loc file</title></info>
-      
+    <example xml:id="linux_download_from_magellan">
+      <title>Command showing Linux download from Magellan serial and writing to .loc file</title>
       <para>
         <userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput>
       </para>
     </example>
     <para>This second command does the same on Microsoft Windows.</para>
-    <example xml:id="windows_download_from_magellan"><info><title>Command showing Windows download from Magellan serial and writing to .loc file</title></info>
-      
+    <example xml:id="windows_download_from_magellan">
+      <title>Command showing Windows download from Magellan serial and writing to .loc file</title>
       <para>
         <userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput>
       </para>
@@ -127,8 +127,8 @@ name of a file to be read or written.</para>
       <userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</userinput>
     </para>
   </section>
-  <section xml:id="Suboptions"><info><title>Suboptions</title></info>
-    
+  <section xml:id="Suboptions">
+    <title>Suboptions</title>
     <para>Many of the available format options in GPSBabel can themselves
     take options.   While we try to make all the formats do the most
     sensible thing possible without any extra options; this allows
@@ -159,8 +159,8 @@ name of a file to be read or written.</para>
   the option itself.
   </para>
   </section>
-  <section xml:id="Advanced_Usage"><info><title>Advanced Usage</title></info>
-    
+  <section xml:id="Advanced_Usage">
+    <title>Advanced Usage</title>
     <para>Argument are processed in the order they appear on the command
 line and are translated internally into a pipeline that data flows
 through when executed. Normally one would: </para>
@@ -180,29 +180,29 @@ merged data to multiple destinations.
       argument is seen.
          Files are read in the order they appear. So you could merge
          three input files into one output file with: </para>
-    <example xml:id="merging_files"><info><title>Merging multiple files into one</title></info>
-      
+    <example xml:id="merging_files">
+      <title>Merging multiple files into one</title>
       <para>
         <userinput>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</userinput>
       </para>
     </example>
     <para>You can merge files of different types:</para>
-    <example xml:id="merging_different_types_of_files"><info><title>Merging multiple files of differing types.</title></info>
-      
+    <example xml:id="merging_different_types_of_files">
+      <title>Merging multiple files of differing types.</title>
       <para>
         <userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  -o gpsutil -F big.gps</userinput>
       </para>
     </example>
-    <example xml:id="multiple_writes"><info><title>Writing the same data in multiple output formats.</title></info>
-      
+    <example xml:id="multiple_writes">
+      <title>Writing the same data in multiple output formats.</title>
       <para>You can write the same data in different output formats:</para>
       <para>
         <userinput>gpsbabel -i geo -f 1.loc -o gpx -F 1.gpx -o pcx -F 1.wpt</userinput>
       </para>
     </example>
   </section>
-  <section xml:id="Route_And_Track_Modes"><info><title>Route and Track Modes</title></info>
-    
+  <section xml:id="Route_And_Track_Modes">
+    <title>Route and Track Modes</title>
     <para>Most formats supported by GPSBabel will make a reasonable attempt to work
          transparently with waypoints, tracks, and routes.  Some
          formats, like
@@ -253,8 +253,8 @@ merged data to multiple destinations.
       when tracks or
          routes are present.</para>
   </section>
-  <section xml:id="inifile"><info><title>Working with predefined options</title></info>
-    
+  <section xml:id="inifile">
+    <title>Working with predefined options</title>
     <para>GPSBabel can read a file on startup to set defaults for options. All
       module and filter options may be set this way.
     </para>
@@ -338,8 +338,8 @@ merged data to multiple destinations.
       <userinput>gpsbabel -p "" -i gpx -f something.gpx -o tiger -F -</userinput>
     </para>
   </section>
-  <section xml:id="tracking"><info><title>Realtime tracking</title></info>
-    
+  <section xml:id="tracking">
+    <title>Realtime tracking</title>
     <para>Introduced in GPSBabel 1.3.1, we now have an
       <emphasis>experimental</emphasis>
       feature for realtime tracking via the new
@@ -355,8 +355,8 @@ merged data to multiple destinations.
     inputs. KML, NMEA, and the various XCSV formats are supported on
     output.   Additional formats may be added by interested parties
     later.</para>
-    <example xml:id="realtime_reading"><info><title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title></info>
-      
+    <example xml:id="realtime_reading">
+      <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
       <para>
         <userinput>gpsbabel -T -i garmin -f usb: -o kml -F example.kml</userinput>
       </para>
@@ -364,8 +364,8 @@ merged data to multiple destinations.
           suitable for a self-refreshing network link in Google Earth.
         </para>
     </example>
-    <example xml:id="realtime_reading_wintec"><info><title>Read realtime positioning from Wintec WBT-201 via Bluetooth on Mac, write to Keyhole Markup</title></info>
-      
+    <example xml:id="realtime_reading_wintec">
+      <title>Read realtime positioning from Wintec WBT-201 via Bluetooth on Mac, write to Keyhole Markup</title>
       <para>
         <userinput>gpsbabel -T -i nmea -f /dev/cu.G-Rays2-SPPslave-1 -o kml -F example.kml</userinput>
       </para>
@@ -392,8 +392,8 @@ merged data to multiple destinations.
             (except the "usb:" parlance for Garmin USB) are assigned by
             your operating system.</para>
   </section>
-  <section xml:id="batchfile"><info><title>Batch mode (command files)</title></info>
-    
+  <section xml:id="batchfile">
+    <title>Batch mode (command files)</title>
     <para>In addition to reading arguments from the command line, GPSBabel can
   read directions from batch (or command) files via the
       <option>-b</option>
@@ -420,8 +420,8 @@ merged data to multiple destinations.
       <member>-x track,pack,split,title="LOG # %Y%m%d"</member>
     </simplelist>
   </section>
-  <section xml:id="all_options"><info><title>List of Options</title></info>
-    
+  <section xml:id="all_options">
+    <title>List of Options</title>
     <para>The complete list of available options to GPSBabel can be obtained by
    running
       <command>gpsbabel -h</command>

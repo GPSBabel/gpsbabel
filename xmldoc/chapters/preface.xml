@@ -1,7 +1,7 @@
-<preface xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Introduction"><info><title>Introduction to GPSBabel</title></info>
-   
-   <section xml:id="The_Problem"><info><title>The Problem: Too many incompatible GPS file formats</title></info>
-      
+<preface xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Introduction">
+   <title>Introduction to GPSBabel</title>
+   <section xml:id="The_Problem">
+      <title>The Problem: Too many incompatible GPS file formats</title>
       <para>There are simply too many gratuitously different file formats
 to hold waypoint, track, and route information in various programs
 used by computers and GPS receivers.
@@ -26,8 +26,8 @@ is a program that converts data between the two programs.</para>
       <para>GPSBabel actually solves that problem for you and much more...
 </para>
    </section>
-   <section xml:id="The_Solution"><info><title>The Solution</title></info>
-      
+   <section xml:id="The_Solution">
+      <title>The Solution</title>
       <para>The original author of GPSBabel,
          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/people/robertlipe.html">Robert Lipe</link>
          , needed to convert waypoints between a couple of formats, so he

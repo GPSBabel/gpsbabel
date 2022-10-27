@@ -7,8 +7,8 @@ specified point will be removed from the dataset.
 By default, all remaining points are sorted so that points closer to the
 center appear earlier in the output file.
 </para>
-<example xml:id="radius_to_find_points_close"><info><title>Using the radius filter to find points close to a given point</title></info>
- 
+<example xml:id="radius_to_find_points_close">
+ <title>Using the radius filter to find points close to a given point</title>
  <para>This example command line would include only points within 1 1/2 miles
        of N30.000 W 90.000</para>
 

@@ -16,71 +16,71 @@
 Field definitions:
 </para>
 
-<section xml:id="ib_index"><info><title>INDEX</title></info>  <para>
+<section xml:id="ib_index"> <title>INDEX</title> <para>
 A sequential integer which corresponds for each logged point in the file.
 </para><para>example 3308
 </para></section>
 
-<section xml:id="ib_rcr"><info><title>RCR</title></info><para>
+<section xml:id="ib_rcr"><title>RCR</title><para>
 ?
 </para><para>example 1: T
 </para><para>example 2: TD
 </para></section>
 
-<section xml:id="ib_title"><info><title>DATE</title></info><para>
+<section xml:id="ib_title"><title>DATE</title><para>
 Date that the point was recorded, in the format YYYY/MM/DD
 </para><para>example: 2011/05/14
 </para></section>
 
-<section xml:id="ib_time"><info><title>TIME</title></info><para>
+<section xml:id="ib_time"><title>TIME</title><para>
 Time that the point was recorded, 24-hr format H:MM:SS. Unsure how fractions of a second are handled.
 </para><para>example: 4:15:11
 </para></section>
 
-<section xml:id="ib_valid"><info><title>VALID</title></info><para>
+<section xml:id="ib_valid"><title>VALID</title><para>
 ?
 </para><para>example 1: DGPS
 </para><para>example 2: SPS
 </para></section>
 
-<section xml:id="ib_lat"><info><title>LATITUDE</title></info><para>
+<section xml:id="ib_lat"><title>LATITUDE</title><para>
 Degrees above the equator (use negative for south of the equator)
 </para><para>example: -33.803645
 </para></section>
 
-<section xml:id="ib_hemi"><info><title>N/S</title></info><para>
+<section xml:id="ib_hemi"><title>N/S</title><para>
 North (N)or South (S) of the equator
 </para><para>example: S
 </para></section>
 
-<section xml:id="ib_lon"><info><title>LONGITUDE</title></info><para>
+<section xml:id="ib_lon"><title>LONGITUDE</title><para>
 Degrees east of the Prime Meridian (use negative for east of the Prime Meridian/Greenwich)
 </para><para>example: 150.880499
 </para></section>
 
-<section xml:id="ib_ewhemi"><info><title>E/W</title></info><para>
+<section xml:id="ib_ewhemi"><title>E/W</title><para>
 East (E) or West (W) of Greenwich
 </para><para>example: E
 </para></section>
-<section xml:id="ib_height"><info><title>HEIGHT</title></info><para>
+<section xml:id="ib_height"><title>HEIGHT</title><para>
 Height above sea level in meters
 </para><para>example: 99.859 m
 </para></section>
 
-<section xml:id="ib_speed"><info><title>SPEED</title></info><para>
+<section xml:id="ib_speed"><title>SPEED</title><para>
 Speed in km/h
 </para><para>example: 0.302 km/h
 </para></section>
 
-<section xml:id="ib_dist"><info><title>DISTANCE</title></info><para>
+<section xml:id="ib_dist"><title>DISTANCE</title><para>
 Distance covered since last point in meters
 </para><para>example: 0.30 m
 </para></section>
 
-<section xml:id="ib_example"><info><title>Example File</title></info>
+<section xml:id="ib_example"><title>Example File</title>
 <para>
 Example 3.X. Example 'iBlue 757' file
-<literallayout class="normal">
+<literallayout>
 INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,DISTANCE
 3308,T,2011/05/14,4:15:11,DGPS,-33.803645,S,150.880499,E,99.859 m,0.207 km/h, 0.28 m
 3309,T,2011/05/14,4:15:12,DGPS,-33.803645,S,150.880499,E,100.137 m,0.362 km/h, 0.28 m

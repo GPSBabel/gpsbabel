@@ -107,8 +107,8 @@
    If processing data from the UK, GPSBabel can process coordinates using X,Y values (often referred to as Eastings/Northings) as shown in <xref linkend="uk_unicsv_1"/> or the full 12 figure alpha numeric, as shown in <xref linkend="uk_unicsv_2"/>.
    Note in <xref linkend="uk_unicsv_2"/> you need to split your original X,Y values into the 100Km 2 character code,
    eastings and northing values.
-   <example xml:id="uk_unicsv_1"><info><title>CSV input for UK data with XY coordinates</title></info>
-     
+   <example xml:id="uk_unicsv_1">
+     <title>CSV input for UK data with XY coordinates</title>
      <screen>
        bng_e,bng_n,name,date
        353729,177210,id_001,2018/02/03
@@ -116,8 +116,8 @@
        357962,181528,id_003,2018/03/03
      </screen>
    </example>
-   <example xml:id="uk_unicsv_2"><info><title>CSV input for UK data with alphanumeric coordinates</title></info>
-     
+   <example xml:id="uk_unicsv_2">
+     <title>CSV input for UK data with alphanumeric coordinates</title>
      <screen>
        bng_z,bng_e,bng_n,name,date
        ST,53729,77210,id_001,2018/02/03

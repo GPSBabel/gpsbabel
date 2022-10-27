@@ -15,8 +15,8 @@
    happens first!)
 </para>
 
-<example xml:id="skytraq-configulog"><info><title>Set the logging parameters for Skytraq device</title></info>
-  
+<example xml:id="skytraq-configulog">
+  <title>Set the logging parameters for Skytraq device</title>
 <para>
 <userinput>
    gpsbabel -i skytraq,configlog=6:3600:0:10000 -f /dev/ttyUSB0

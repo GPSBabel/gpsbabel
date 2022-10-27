@@ -83,8 +83,8 @@ The following tables detail the content format of USR data files.</para>
   <listitem><para><link linkend="usr4_trail">Lowrance USR 4, 5 and 6 Trail Object Format</link></para></listitem>
 </itemizedlist>
 
-<table xml:id="usr_format"><info><title>Lowrance USR Data File Contents</title></info>
-  
+<table xml:id="usr_format">
+  <title>Lowrance USR Data File Contents</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -263,8 +263,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr_waypoint"><info><title>Lowrance USR 2 and 3 Waypoint Object Format</title></info>
-  
+<table xml:id="usr_waypoint">
+  <title>Lowrance USR 2 and 3 Waypoint Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -375,8 +375,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr4_waypoint"><info><title>Lowrance USR 4, 5 and 6 Waypoint Object Format</title></info>
-  
+<table xml:id="usr4_waypoint">
+  <title>Lowrance USR 4, 5 and 6 Waypoint Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -535,8 +535,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr_route"><info><title>Lowrance USR 2 and 3 Route Object Format</title></info>
-  
+<table xml:id="usr_route">
+  <title>Lowrance USR 2 and 3 Route Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -647,8 +647,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr4_route"><info><title>Lowrance USR 4, 5 and 6 Route Object Format</title></info>
-  
+<table xml:id="usr4_route">
+  <title>Lowrance USR 4, 5 and 6 Route Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -748,8 +748,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr4_leg"><info><title>Lowrance USR 4, 5 and 6 Route Leg Object Format</title></info>
-  
+<table xml:id="usr4_leg">
+  <title>Lowrance USR 4, 5 and 6 Route Leg Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -804,8 +804,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr_eventmarker"><info><title>Lowrance USR 2 and 3 Event Marker ICON Object Format</title></info>
-  
+<table xml:id="usr_eventmarker">
+  <title>Lowrance USR 2 and 3 Event Marker ICON Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -856,8 +856,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr_trail"><info><title>Lowrance USR 2 and 3 Trail Object Format</title></info>
-  
+<table xml:id="usr_trail">
+  <title>Lowrance USR 2 and 3 Trail Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -927,8 +927,8 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 
-<table xml:id="usr_trail_pts"><info><title>Lowrance USR 2 and 3 Trail Point Object Format</title></info>
-  
+<table xml:id="usr_trail_pts">
+  <title>Lowrance USR 2 and 3 Trail Point Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -973,8 +973,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr4_trail"><info><title>Lowrance USR 4, 5 and 6 Trail Object Format</title></info>
-  
+<table xml:id="usr4_trail">
+  <title>Lowrance USR 4, 5 and 6 Trail Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -1127,8 +1127,8 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table xml:id="usr4_trail_pts"><info><title>Lowrance USR 4, 5 and 6 Trail Point Object Format </title></info>
-  
+<table xml:id="usr4_trail_pts">
+  <title>Lowrance USR 4, 5 and 6 Trail Point Object Format </title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -1204,8 +1204,8 @@ Lowrance only provides minimal
 support for GPX export data on their HOOK2 series (only data available to the author).  Refer to
 the official <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</link> for the complete schema.
 </para>
-<example xml:id="lowrance-export"><info><title>Lowrance GPX Export Data</title></info>
-  
+<example xml:id="lowrance-export">
+  <title>Lowrance GPX Export Data</title>
   <programlisting>
     &lt;metadata&gt;
       &lt;time&gt;xsd:dateTime&lt;/time&gt;

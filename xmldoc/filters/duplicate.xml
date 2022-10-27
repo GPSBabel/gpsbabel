@@ -6,9 +6,9 @@ options that specify how duplicates will be recognized,
 <option>shortname</option> and <option>location</option>.
 Generally, at least one of these options is required.
 </para>
-<example xml:id="duplicate_to_suppress_points"><info><title>Using the duplicate filter to suppress points with the same
-         name and location</title></info>
-  
+<example xml:id="duplicate_to_suppress_points">
+  <title>Using the duplicate filter to suppress points with the same
+         name and location</title>
   <para>
   This command line removes points that have duplicate short names
   and duplicate locations.  The result would be a

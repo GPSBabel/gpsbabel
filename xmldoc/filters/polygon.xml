@@ -41,8 +41,8 @@ Note that this filter currently will not work properly
 if your polygon contains one or both poles or if it spans the
 line of 180 degrees east or west longitude.
 </para>
-<example xml:id="example_polygon_filter"><info><title>Using the polygon filter</title></info>
-
+<example xml:id="example_polygon_filter">
+<title>Using the polygon filter</title>
 <para>
 Suppose you have a polygon file that defines the border of your county,
 called mycounty.txt.  This command line will give you only the points
@@ -50,9 +50,9 @@ in your county:
 </para>
 <para><userinput>gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt -o mapsend -F 2.wpt</userinput></para>
 </example>
-<example xml:id="example_in_or_close_to"><info><title>Using the polygon and arc filters to find points in or nearly in a
-polygon</title></info>
-
+<example xml:id="example_in_or_close_to">
+<title>Using the polygon and arc filters to find points in or nearly in a
+polygon</title>
 <para>
 Because the polygon and <link linkend="filter_arc">arc</link> filters use
 the same file format, you can use them together to find all points that are

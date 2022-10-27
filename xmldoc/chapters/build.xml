@@ -1,7 +1,7 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Getting_and_Building"><info><title>Getting or Building GPSBabel</title></info>
-  
-  <section xml:id="Download"><info><title>Downloading - the easy way.</title></info>
-    
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Getting_and_Building">
+  <title>Getting or Building GPSBabel</title>
+  <section xml:id="Download">
+    <title>Downloading - the easy way.</title>
     <para>
 GPSBabel is distributed "ready to run" on most common
 operating systems via the
@@ -13,8 +13,8 @@ be sure to visit the
 additional information.
 </para>
   </section>
-  <section xml:id="Source"><info><title>Building from source.</title></info>
-    
+  <section xml:id="Source">
+    <title>Building from source.</title>
     <para>
 For operating systems where no binary is provided, or if
 you want the latest development version, you will have to build it from
@@ -57,8 +57,8 @@ from our automated Docker builds.</para>
         </listitem>
       </varlistentry>
     </variablelist>
-    <section xml:id="Internal_History"><info><title>Brief history of internals</title></info>
-      
+    <section xml:id="Internal_History">
+      <title>Brief history of internals</title>
       <para>
     Parts of GPSBabel have been public since 2002, with some of the original
     design and original code came from 2001. It was originally in C89, not C++
@@ -72,8 +72,8 @@ from our automated Docker builds.</para>
     both of these is a goal for us in 2020.
   </para>
     </section>
-    <section xml:id="Qt"><info><title>Building with Qt Creator</title></info>
-      
+    <section xml:id="Qt">
+      <title>Building with Qt Creator</title>
       <para>
 Qt provides a lovely IDE (Integrated Development Evironment) with an
 editor and debugger. Its use is strongly encouraged for those new to C++.
@@ -89,8 +89,8 @@ from the command line.  If you type <link xmlns:xlink="http://www.w3.org/1999/xl
 directory it will create a buildsystem with the default generator (Unix Makefiles or Visual Studio) which you can use for development.
   </para>
     </section>
-    <section xml:id="cmake"><info><title>Building from the command line</title></info>
-      
+    <section xml:id="cmake">
+      <title>Building from the command line</title>
       <para>
 Those familiar with the command line may be more comfortable using cmake from the command line.
 It is important to set the CMAKE_BUILD_TYPE when generating a build system with single configuration generators such as Unix Makefiles and Ninja.
@@ -366,8 +366,8 @@ installer will be created gui/Setup-x.y.z-Setup.exe.
         </varlistentry>
       </variablelist>
     </section>
-    <section xml:id="Runtime_Dependencies"><info><title>Runtime Dependencies:</title></info>
-      
+    <section xml:id="Runtime_Dependencies">
+      <title>Runtime Dependencies:</title>
       <para>
 On non-macOS unix builds by default we now compile in the gpsbabel generated
 translation files, i.e. gpsbabelfe_*.qm, gpsbabel_*.qm, as well as

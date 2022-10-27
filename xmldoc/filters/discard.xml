@@ -8,8 +8,8 @@ that must have been in view for a fix to be considered, or both.
 HDOP and VDOP are measures of the best possible horizontal or vertical precision for a given configuration of GPS satellites.   Higher numbers indicate a higher dilution of precision and therefore mathematically less useful.
 </para>
 <para>
-<example xml:id="example_discard_filter"><info><title>Using the discard filter for HDOP and VDOP. </title></info>
-
+<example xml:id="example_discard_filter">
+<title>Using the discard filter for HDOP and VDOP. </title>
 <para><userinput> gpsbabel -i gpx -f in.gpx -x discard,hdop=10,vdop=20,hdopandvdop -o gpx -F out.gpx</userinput></para>
 </example>
 </para>
@@ -17,8 +17,8 @@ HDOP and VDOP are measures of the best possible horizontal or vertical precision
 You may specify a minimum number of  satellites.
 </para>
 <para>
-<example xml:id="example_discard_filter_sats"><info><title>Using the discard filter to require at least three satellites. </title></info>
-
+<example xml:id="example_discard_filter_sats">
+<title>Using the discard filter to require at least three satellites. </title>
 <para><userinput> gpsbabel -i gpx -f in.gpx -x discard,sat=3 -o gpx -F out.gpx</userinput></para>
 </example>
 </para>

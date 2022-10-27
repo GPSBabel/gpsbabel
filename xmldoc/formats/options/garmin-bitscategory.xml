@@ -4,8 +4,8 @@
  this options allows you to specify a bitmask to be used for the category.
  Options may be specified in either decimal or hex.
 </para>
-<example xml:id="garmin_bitcategory"><info><title>Example for garmin bitcategory option to put all waypoints in categories 1 and 16.</title></info>
-  
+<example xml:id="garmin_bitcategory">
+  <title>Example for garmin bitcategory option to put all waypoints in categories 1 and 16.</title>
 <para>
   The following two commands are equivalent.  They place a the point in both the first and last of the sixteen available categories.
   <userinput>
