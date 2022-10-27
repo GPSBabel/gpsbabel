@@ -1,10 +1,14 @@
 #!/usr/bin/perl
 
+use warnings;
+
+use File::Basename;
+
 #
 # makedoc.in is used to generate makedoc.   Editing makedoc is a bad idea.
 #
 
-@options;
+my %options;
 
 sub expandrw {
     my $read  = shift;
@@ -50,7 +54,7 @@ sub expandsuboptions {
     $olist = $options{$f};
 
     # If no options, don't clutter things.
-    if ( $olist eq "" ) { return; }
+    if ( not defined($olist) ) { return; }
 
     # Comma separate the human-readable variation.
     $olist =~ s/> </>, </g;
@@ -74,9 +78,9 @@ sub include {
     print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
     print FILE "\&inc_$name2;\n";
     if ( !-e "$dir/$dir2/$name.xml" ) {
-        open TMP, ">$dir/$dir2/$name.xml";
-        print TMP "\n";
-        close TMP;
+        open $tmp, '>', "$dir/$dir2/$name.xml" or die $!;
+        print $tmp "\n";
+        close $tmp;
     }
 }
 
@@ -89,10 +93,12 @@ sub includef {
     print FORMATS "\&inc_$name2;\n";
 }
 
-$dir = $0;
-$dir =~ s:/.*$::;
+$dir = dirname($0);
 
-@agdir = `mkdir -p $dir/autogen`;
+qx(mkdir -p $dir/autogen);
+if ( $? != 0 ) {
+    die "error creating autogen directory: $?";
+}
 open PARTS, ">$dir/autogen/_parts.xml";
 print PARTS qq(<!-- This document is automatically generated. -->\n);
 print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
@@ -101,7 +107,10 @@ print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 open FORMATS, ">$dir/autogen/_formats.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
-@formats = `./gpsbabel -^3`;
+@formats = qx(./gpsbabel -^3);
+if ( $? != 0 ) {
+    die "error running gpsbabel: $?";
+}
 
 $going     = 0;
 $dooptions = 0;
@@ -114,6 +123,7 @@ for (@formats) {
     s/</\&lt;/g;
     s/>/\&gt;/g;
     @line = split "\t";
+    next if ( scalar(@line) < 1 );
 
     if ( ( $line[0] eq 'file' ) || ( $line[0] eq 'serial' ) ) {
         $fmt = $line[2];
@@ -124,7 +134,9 @@ for (@formats) {
         }
         $skipping = 0;
     }
-    if ( $line[0] eq 'internal' || $line[5] eq 'xcsv' ) {
+    if (   ( $line[0] eq 'internal' )
+        || ( defined( $line[5] ) && ( $line[5] eq 'xcsv' ) ) )
+    {
         $skipping = 1;
     }
     if ( $line[0] eq 'option' && $skipping == 0 ) {
@@ -141,6 +153,7 @@ for (@formats) {
     s/</\&lt;/g;
     s/>/\&gt;/g;
     @line = split "\t";
+    next if ( scalar(@line) < 1 );
 
     if ( $line[0] eq 'internal' ) {
         if ($going) {
@@ -215,7 +228,10 @@ if ($going) {
 open FORMATS, ">$dir/autogen/_filters.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
-@filters = `./gpsbabel -%1`;
+@filters = qx(./gpsbabel -%1);
+if ( $? != 0 ) {
+    die "error running gpsbabel: $?";
+}
 
 $going = 0;
 
