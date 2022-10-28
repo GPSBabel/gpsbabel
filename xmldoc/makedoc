@@ -5,12 +5,11 @@ use warnings;
 
 use File::Basename;
 
-#
-# makedoc.in is used to generate makedoc.   Editing makedoc is a bad idea.
-#
-
 my %options;
 my $dir;
+my $parts;
+my $formats;
+my $file;
 
 sub expandrw {
     my $read  = shift;
@@ -77,8 +76,8 @@ sub include {
     my $d2 = $dir2;
     $d2 =~ s:/.*::;
     $name2 = $d2 . '_' . $name2;
-    print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
-    print FILE "\&inc_$name2;\n";
+    print $parts qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+    print $file "\&inc_$name2;\n";
     if ( !-e "$dir/$dir2/$name.xml" ) {
         open my $tmp, '>', "$dir/$dir2/$name.xml" or die $!;
         print $tmp "\n";
@@ -91,8 +90,8 @@ sub includef {
 
     my $name2 = $name;
     $name2 =~ s/-/_/g;
-    print PARTS qq(<!ENTITY inc_$name2 SYSTEM "$name.xml">\n);
-    print FORMATS "\&inc_$name2;\n";
+    print $parts qq(<!ENTITY inc_$name2 SYSTEM "$name.xml">\n);
+    print $formats "\&inc_$name2;\n";
 }
 
 $dir = dirname($0);
@@ -101,13 +100,13 @@ qx(mkdir -p $dir/autogen);
 if ( $? != 0 ) {
     die "error creating autogen directory: $?";
 }
-open PARTS, ">$dir/autogen/_parts.xml";
-print PARTS qq(<!-- This document is automatically generated. -->\n);
-print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
-print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
+open $parts, '>', "$dir/autogen/_parts.xml" or die $!;
+print $parts qq(<!-- This document is automatically generated. -->\n);
+print $parts qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
+print $parts qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open FORMATS, ">$dir/autogen/_formats.xml";
-print FORMATS qq(<!-- This document is automatically generated. -->\n);
+open $formats, '>', "$dir/autogen/_formats.xml" or die $!;
+print $formats qq(<!-- This document is automatically generated. -->\n);
 
 my @formats = qx(./gpsbabel -^3);
 if ( $? != 0 ) {
@@ -165,8 +164,8 @@ for (@formats) {
 
     if ( $line[0] eq 'internal' ) {
         if ($going) {
-            print FILE "</section>\n";
-            close FILE;
+            print $file "</section>\n";
+            close $file;
             $going = 0;
         }
         if ( $line[5] eq 'xcsv' ) {
@@ -176,8 +175,8 @@ for (@formats) {
 
     if ( ( $line[0] eq 'file' ) || ( $line[0] eq 'serial' ) ) {
         if ($going) {
-            print FILE "</section>\n";
-            close FILE;
+            print $file "</section>\n";
+            close $file;
         }
         $id = $line[2];
         if ( $fmts{$id} ) {
@@ -187,19 +186,19 @@ for (@formats) {
             $fmts{$id} = 1;
         }
         includef( 'fmt_' . $id );
-        open FILE, ">$dir/autogen/fmt_$id.xml";
-        print FILE <<END;
+        open $file, '>', "$dir/autogen/fmt_$id.xml" or die $!;
+        print $file <<END;
 <!-- This document is automatically generated. -->
 <section id="fmt_$id">
   <title>$line[4] ($line[2])</title>
 END
-        print FILE expandoptions( $line[1] );
-        print FILE expandsuboptions($id);
+        print $file expandoptions( $line[1] );
+        print $file expandsuboptions($id);
         $going     = 1;
         $dooptions = 1;
 
         if ( defined( $line[5] ) && ( $line[5] ne $line[2] ) ) {
-            print FILE <<END;
+            print $file <<END;
 <para>
 This format is derived from the <link linkend="fmt_$line[5]">$line[5]</link>
 format, so it has all of the same options as that format.
@@ -213,7 +212,7 @@ END
     }
     elsif ( $going && $dooptions && ( $line[0] eq 'option' ) ) {
         my $nid = 'fmt_' . $id . '_o_' . $line[2];
-        print FILE <<END;
+        print $file <<END;
   <section id="$nid">
     <title><option>$line[2]</option> option</title>
     <para>
@@ -221,20 +220,21 @@ END
     </para>
 END
         include( $id . '-' . $line[2], "formats/options" );
-        print FILE <<END;
+        print $file <<END;
   </section>
 END
     }
 }
 
 if ($going) {
-    print FILE "</section>\n";
-    close FILE;
+    print $file "</section>\n";
+    close $file;
     $going = 0;
 }
 
-open FORMATS, ">$dir/autogen/_filters.xml";
-print FORMATS qq(<!-- This document is automatically generated. -->\n);
+close $formats;
+open $formats, '>', "$dir/autogen/_filters.xml" or die $!;
+print $formats qq(<!-- This document is automatically generated. -->\n);
 
 my @filters = qx(./gpsbabel -%1);
 if ( $? != 0 ) {
@@ -251,7 +251,7 @@ for (@filters) {
     my @line = split "\t";
 
     if ( $going && ( $line[0] eq 'option' ) ) {
-        print FILE <<END;
+        print $file <<END;
   <section id="fmt_$line[1]_o_$line[2]">
     <title>$line[2] option</title>
     <para>
@@ -259,18 +259,18 @@ for (@filters) {
     </para>
 END
         include( $line[1] . '-' . $line[2], "filters/options" );
-        print FILE <<END;
+        print $file <<END;
   </section>
 END
     }
     else {
         if ($going) {
-            print FILE "</section>\n";
-            close FILE;
+            print $file "</section>\n";
+            close $file;
         }
         includef( 'filter_' . $line[0] );
-        open FILE, ">$dir/autogen/filter_$line[0].xml";
-        print FILE <<END;
+        open $file, '>', "$dir/autogen/filter_$line[0].xml" or die $!;
+        print $file <<END;
 <!-- This document is automatically generated. -->
 <section id="filter_$line[0]">
   <title>$line[1] ($line[0])</title>
@@ -281,9 +281,9 @@ END
 }
 
 if ($going) {
-    print FILE "</section>\n";
-    close FILE;
+    print $file "</section>\n";
+    close $file;
     $going = 0;
 }
-close FORMATS;
-close PARTS;
+close $formats;
+close $parts;
