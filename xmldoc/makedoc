@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use strict;
 use warnings;
 
 use File::Basename;
@@ -9,6 +10,7 @@ use File::Basename;
 #
 
 my %options;
+my $dir;
 
 sub expandrw {
     my $read  = shift;
@@ -51,7 +53,7 @@ sub expandoptions {
 sub expandsuboptions {
     my $f = shift;
     my $res;
-    $olist = $options{$f};
+    my $olist = $options{$f};
 
     # If no options, don't clutter things.
     if ( not defined($olist) ) { return; }
@@ -70,15 +72,15 @@ sub include {
     my $name = shift;
     my $dir2 = shift;
 
-    $name2 = $name;
+    my $name2 = $name;
     $name2 =~ s/-/_/g;
-    $d2 = $dir2;
+    my $d2 = $dir2;
     $d2 =~ s:/.*::;
     $name2 = $d2 . '_' . $name2;
     print PARTS qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
     print FILE "\&inc_$name2;\n";
     if ( !-e "$dir/$dir2/$name.xml" ) {
-        open $tmp, '>', "$dir/$dir2/$name.xml" or die $!;
+        open my $tmp, '>', "$dir/$dir2/$name.xml" or die $!;
         print $tmp "\n";
         close $tmp;
     }
@@ -87,7 +89,7 @@ sub include {
 sub includef {
     my $name = shift;
 
-    $name2 = $name;
+    my $name2 = $name;
     $name2 =~ s/-/_/g;
     print PARTS qq(<!ENTITY inc_$name2 SYSTEM "$name.xml">\n);
     print FORMATS "\&inc_$name2;\n";
@@ -107,22 +109,25 @@ print PARTS qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 open FORMATS, ">$dir/autogen/_formats.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
-@formats = qx(./gpsbabel -^3);
+my @formats = qx(./gpsbabel -^3);
 if ( $? != 0 ) {
     die "error running gpsbabel: $?";
 }
 
-$going     = 0;
-$dooptions = 0;
+my $going     = 0;
+my $dooptions = 0;
 
 # Prescan the argument list for options.
+
+my $fmt;
+my $skipping;
 
 for (@formats) {
     chomp;
     s/\&/\&amp;/g;
     s/</\&lt;/g;
     s/>/\&gt;/g;
-    @line = split "\t";
+    my @line = split "\t";
     next if ( scalar(@line) < 1 );
 
     if ( ( $line[0] eq 'file' ) || ( $line[0] eq 'serial' ) ) {
@@ -140,19 +145,22 @@ for (@formats) {
         $skipping = 1;
     }
     if ( $line[0] eq 'option' && $skipping == 0 ) {
-        $optname = $line[2];
+        my $optname = $line[2];
 
         $options{$fmt} .=
           "<link linkend=\"fmt_${fmt}_o_${optname}\">$optname</link> ";
     }
 }
 
+my $id;
+my %fmts;
+
 for (@formats) {
     chomp;
     s/\&/\&amp;/g;
     s/</\&lt;/g;
     s/>/\&gt;/g;
-    @line = split "\t";
+    my @line = split "\t";
     next if ( scalar(@line) < 1 );
 
     if ( $line[0] eq 'internal' ) {
@@ -204,7 +212,7 @@ END
         include( $id, "formats" );
     }
     elsif ( $going && $dooptions && ( $line[0] eq 'option' ) ) {
-        $nid = 'fmt_' . $id . '_o_' . $line[2];
+        my $nid = 'fmt_' . $id . '_o_' . $line[2];
         print FILE <<END;
   <section id="$nid">
     <title><option>$line[2]</option> option</title>
@@ -228,7 +236,7 @@ if ($going) {
 open FORMATS, ">$dir/autogen/_filters.xml";
 print FORMATS qq(<!-- This document is automatically generated. -->\n);
 
-@filters = qx(./gpsbabel -%1);
+my @filters = qx(./gpsbabel -%1);
 if ( $? != 0 ) {
     die "error running gpsbabel: $?";
 }
@@ -240,7 +248,7 @@ for (@filters) {
     s/\&/\&amp;/g;
     s/</\&lt;/g;
     s/>/\&gt;/g;
-    @line = split "\t";
+    my @line = split "\t";
 
     if ( $going && ( $line[0] eq 'option' ) ) {
         print FILE <<END;
