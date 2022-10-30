@@ -76,13 +76,21 @@ sub include {
     my $d2 = $dir2;
     $d2 =~ s:/.*::;
     $name2 = $d2 . '_' . $name2;
-    print $parts qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
-    print $file "\&inc_$name2;\n";
+
+    #print $parts qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
+    #print $file "\&inc_$name2;\n";
     if ( !-e "$dir/$dir2/$name.xml" ) {
-        open my $tmp, '>', "$dir/$dir2/$name.xml" or die $!;
+        open my $tmp, '>:encoding(UTF-8)', "$dir/$dir2/$name.xml" or die $!;
         print $tmp "\n";
         close $tmp;
     }
+    open my $tmp2, '<:encoding(UTF-8)', "$dir/$dir2/$name.xml" or die $!;
+    print $file qq(<!-- BEGIN inclusion of $dir/$dir2/$name.xml -->\n);
+    while (<$tmp2>) {
+        print $file $_;
+    }
+    print $file qq(<!-- END inclusion of $dir/$dir2/$name.xml -->\n);
+    close $tmp2;
 }
 
 sub includef {
@@ -100,12 +108,12 @@ qx(mkdir -p $dir/autogen);
 if ( $? != 0 ) {
     die "error creating autogen directory: $?";
 }
-open $parts, '>', "$dir/autogen/_parts.xml" or die $!;
+open $parts, '>:encoding(UTF-8)', "$dir/autogen/_parts.xml" or die $!;
 print $parts qq(<!-- This document is automatically generated. -->\n);
 print $parts qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
 print $parts qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open $formats, '>', "$dir/autogen/_formats.xml" or die $!;
+open $formats, '>:encoding(UTF-8)', "$dir/autogen/_formats.xml" or die $!;
 print $formats qq(<!-- This document is automatically generated. -->\n);
 
 my @formats = qx(./gpsbabel -^3);
@@ -186,10 +194,10 @@ for (@formats) {
             $fmts{$id} = 1;
         }
         includef( 'fmt_' . $id );
-        open $file, '>', "$dir/autogen/fmt_$id.xml" or die $!;
+        open $file, '>:encoding(UTF-8)', "$dir/autogen/fmt_$id.xml" or die $!;
         print $file <<END;
 <!-- This document is automatically generated. -->
-<section id="fmt_$id">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="fmt_$id">
   <title>$line[4] ($line[2])</title>
 END
         print $file expandoptions( $line[1] );
@@ -213,7 +221,7 @@ END
     elsif ( $going && $dooptions && ( $line[0] eq 'option' ) ) {
         my $nid = 'fmt_' . $id . '_o_' . $line[2];
         print $file <<END;
-  <section id="$nid">
+  <section xml:id="$nid">
     <title><option>$line[2]</option> option</title>
     <para>
       $line[3].
@@ -233,7 +241,7 @@ if ($going) {
 }
 
 close $formats;
-open $formats, '>', "$dir/autogen/_filters.xml" or die $!;
+open $formats, '>:encoding(UTF-8)', "$dir/autogen/_filters.xml" or die $!;
 print $formats qq(<!-- This document is automatically generated. -->\n);
 
 my @filters = qx(./gpsbabel -%1);
@@ -252,7 +260,7 @@ for (@filters) {
 
     if ( $going && ( $line[0] eq 'option' ) ) {
         print $file <<END;
-  <section id="fmt_$line[1]_o_$line[2]">
+  <section xml:id="flt_$line[1]_o_$line[2]">
     <title>$line[2] option</title>
     <para>
       $line[3].
@@ -269,10 +277,10 @@ END
             close $file;
         }
         includef( 'filter_' . $line[0] );
-        open $file, '>', "$dir/autogen/filter_$line[0].xml" or die $!;
+        open $file, '>:encoding(UTF-8)', "$dir/autogen/filter_$line[0].xml" or die $!;
         print $file <<END;
 <!-- This document is automatically generated. -->
-<section id="filter_$line[0]">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="filter_$line[0]">
   <title>$line[1] ($line[0])</title>
 END
         include( $line[0], "filters" );

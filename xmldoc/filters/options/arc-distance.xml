@@ -11,4 +11,3 @@ points that are further away are discarded.
 Distances may be specified in miles (3M) or kilometers (5K).  If no units
 are specified, the distance is assumed to be in miles.
 </para>
-

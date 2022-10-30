@@ -46,4 +46,3 @@ gpsbabel -i gpx -f indiana.gpx
          -x stack,pop,append
          -o magellan -F fwaind.wpt
 </userinput></para>
-

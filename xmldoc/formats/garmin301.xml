@@ -3,9 +3,9 @@
 is most useful for exporting data from units that support heart rate
 data such as
 
-  <productname>Garmin Forerunner 301</productname>,
-  <productname>Garmin Forerunner 305</productname>, and
-  <productname>Garmin Edge 305</productname>, and
+  <trademark>Garmin Forerunner 301</trademark>,
+  <trademark>Garmin Forerunner 305</trademark>, and
+  <trademark>Garmin Edge 305</trademark>, and
 to other programs
 for analysis.   It's a simple comma delimited format that includes the
 timestamp, 3D position information and heart rate so you can pull it

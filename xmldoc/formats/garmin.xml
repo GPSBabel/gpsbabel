@@ -11,7 +11,7 @@
 
 <para>
 	Supported Garmin GPS receivers with USB include
-	<simplelist columns="4">
+	<simplelist columns="4" type="vert">
 <member>Astro</member>
 <member>Edge 205</member>
 <member>Edge 305</member>
@@ -33,7 +33,7 @@
 <member>Forerunner 305</member>
 <member>Foretrex 201</member>
 <member>Foretrex 301</member>
-<member>GPS 18<footnote id="posnonly"><para>This model does not support transfer of waypoints, tracks, or routes, but may be used with the <link linkend="tracking">realtime tracking</link> feature.</para></footnote></member>
+<member>GPS 18<footnote xml:id="posnonly"><para>This model does not support transfer of waypoints, tracks, or routes, but may be used with the <link linkend="tracking">realtime tracking</link> feature.</para></footnote></member>
 <member>GPSMAP 195</member>
 <member>GPSMAP 276C</member>
 <member>GPSMAP 295</member>
@@ -76,14 +76,14 @@
 </simplelist>
 </para>
 <para>the following Bluetooth Garmin products:
-<simplelist columns="4">
+<simplelist columns="4" type="vert">
 <member>GPS 10<footnoteref linkend="posnonly"/></member>
 </simplelist>
 </para>
 
 
 <para>and most serial Garmin GPS receivers including:
-<simplelist columns="4">
+<simplelist columns="4" type="vert">
 <member>eMap</member>
 <member>eTrex Camo</member>
 <member>eTrex Legend</member>
@@ -118,7 +118,7 @@ The following Garmin GPS receivers are supported, but they do not
 support Garmin communication protocol and don't work with the
 <option>garmin</option> option.  To use these receivers, read or write
 GPX files from the mass storage device as mounted on your computer.
-<simplelist columns="4">
+<simplelist columns="4" type="vert">
 <member>eTrex 10<footnoteref linkend="gpx"/></member>
 <member>eTrex 20<footnoteref linkend="gpx"/></member>
 <member>eTrex 30<footnoteref linkend="gpx"/></member>
@@ -154,7 +154,7 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 260W<footnoteref linkend="gpx"/></member>
 <member>Nuvi 270<footnoteref linkend="gpx"/></member>
 <member>Nuvi 275T<footnoteref linkend="gpx"/></member>
-<member>Nuvi 300<footnote id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
+<member>Nuvi 300<footnote xml:id="gpx"><para>This unit uses GPX format, not Garmin protocol.  Therefore one should communicate with it by reading and writing GPX files instead of using this format.  Members of this class of products do not support realtime positioning protocol.</para></footnote></member>
 <member>Nuvi 310<footnoteref linkend="gpx"/></member>
 <member>Nuvi 350<footnoteref linkend="gpx"/></member>
 <member>Nuvi 370<footnoteref linkend="gpx"/></member>
@@ -297,7 +297,7 @@ so they are named 'Custom 0' through 'Custom 511'.
 	filename.   For this to work on Windows, you must install
 	the Garmin driver.  For Linux, this will fail if you have the garmin_gps
 	kernel module loaded.
-	See the <ulink url="/osnotes.html">Operating System Notes</ulink> for details.
+	See the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/osnotes.html">Operating System Notes</link> for details.
 </para>
 
 <para>
@@ -312,7 +312,7 @@ communications protocol and are <emphasis>not supported</emphasis>
 by GPSBabel.</para>
 <para>
 Marine plotters:
-<simplelist columns="4">
+<simplelist columns="4" type="vert">
 <member>GPSMap 420</member>
 <member>GPSMap 430</member>
 <member>GPSMap 440</member>
@@ -329,7 +329,7 @@ Marine plotters:
 </para>
 
 <para>The PDA products
-<simplelist>
+<simplelist type="vert">
 <member>iQue 3000</member>
 <member>iQue 3200</member>
 <member>iQue 3600</member>

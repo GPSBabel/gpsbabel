@@ -8,4 +8,3 @@ the lines between points are also kept.
 This option makes the arc filter act like a multi-point version of the
 <link linkend="filter_radius">radius</link> filter.
 </para>
-

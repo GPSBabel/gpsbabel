@@ -8,4 +8,3 @@
     gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,notes -F "My Points.gpi"
   </userinput>
 </para>
-

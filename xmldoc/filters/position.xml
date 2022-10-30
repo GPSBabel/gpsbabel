@@ -4,7 +4,7 @@ For waypoints a point is removed if it is within the specified distance of a pre
 For routes and tracks consecutive points are removed until the distance between the bracketing points is greater than the specified distance.
 </para>
 
-<example id="posn_to_suppress_close_points">
+<example xml:id="posn_to_suppress_close_points">
 <title>Using the position filter to suppress close points</title>
 <para>
 The following command removes multiple points that are within
@@ -12,4 +12,3 @@ one foot of each other, leaving just one.
 </para>
 <para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -x position,distance=1f -o mapsend -F 3.wpt</userinput></para>
 </example>
-

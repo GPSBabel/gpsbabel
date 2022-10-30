@@ -1,10 +1,10 @@
 <para>
 	GPSBabel supports the Navilink protocol used by the
-	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</ulink>
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.locosystech.com/product.php?zln=en&amp;id=5">Locosys GT-11</link>
 	and
-	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=30">GT-31</ulink>
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.locosystech.com/product.php?zln=en&amp;id=30">GT-31</link>
 	GPS receivers. These are sold under a variety of names including:
-<simplelist columns="3">
+<simplelist columns="3" type="vert">
 	<member>NaviGPS</member>
 	<member>NaviGPS-BT</member>
 	<member>GT-11</member>
@@ -33,11 +33,11 @@
 	present itself to the host operating system. You thus need
 	USB drivers for the PL2303, such as those from the 'Download'
 	section of
-	<ulink url="http://www.locosystech.com/product.php?zln=en&amp;id=30#">
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.locosystech.com/product.php?zln=en&amp;id=30#">
 	Locosys USB Genie GT-31/BGT-31 drivers
-	</ulink>.
+	</link>.
 </para>
 <para>
 	Details of the Navilink serial protocol can be found
-	<ulink url="http://notes.splitbrain.org/navilink">here</ulink>.
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://notes.splitbrain.org/navilink">here</link>.
 </para>

@@ -6,7 +6,7 @@ docversion=$2
 
 mkdir -p "${web}/htmldoc-${docversion}"
 perl xmldoc/makedoc
-xmllint --noout --valid xmldoc/readme.xml #valid and well-formed
+jing http://docs.oasis-open.org/docbook/rng/5.0/docbook.rng xmldoc/readme.xml
 xsltproc \
   --stringparam base.dir "${web}/htmldoc-${docversion}/" \
   --stringparam root.filename "index" \

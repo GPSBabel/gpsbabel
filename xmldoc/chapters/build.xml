@@ -1,19 +1,19 @@
-<chapter id="Getting_and_Building">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Getting_and_Building">
   <title>Getting or Building GPSBabel</title>
-  <sect1 id="Download">
+  <section xml:id="Download">
     <title>Downloading - the easy way.</title>
     <para>
 GPSBabel is distributed "ready to run" on most common
 operating systems via the
-<ulink url="https://www.gpsbabel.org/download.html">download page</ulink>.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.gpsbabel.org/download.html">download page</link>.
 </para>
     <para> As GPSBabel runs on a wide variety of operating systems,
 be sure to visit the
-<ulink url="https://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.gpsbabel.org/osnotes.html">OS-Specific notes</link> for
 additional information.
 </para>
-  </sect1>
-  <sect1 id="Source">
+  </section>
+  <section xml:id="Source">
     <title>Building from source.</title>
     <para>
 For operating systems where no binary is provided, or if
@@ -24,18 +24,18 @@ Less frequently, someone will build on FreeBSD, OpenBSD, Solaris,
 etc.  Clang/LLVM, GNU C++, and MSVC are regularly exercised via automation.
 </para>
     <para>
-You can grab a release from the <ulink url="https://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
+You can grab a release from the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.gpsbabel.org/download.html">GPSBabel download page</link>, but if you're going to be doing any development, you'll find that working from the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</link> is easier. Checkouts via Git, HTTPS, SSH, and Subversion are supported.
 </para>
     <para>There are external requirements for bulding.</para>
     <variablelist>
       <varlistentry>
         <term>
-          <ulink url="http://qt-project.org">Qt</ulink>
+          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://qt-project.org">Qt</link>
         </term>
         <listitem>
           <para>
 Qt version 5.12 or newer is required for all builds.  MacOS and Windows users can download
-binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
+binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://qt-project.org/downloads">Qt Downloads</link>
 Fedora or CentOS users may need to 'dnf install qt5-qtbase-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt5-default'. Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in tools/Docker* for inspiration for our automated builds that
@@ -45,7 +45,7 @@ use Docker.
       </varlistentry>
       <varlistentry>
         <term>
-          <ulink url="http://libusb.sourceforge.net">libusb 1.0</ulink>
+          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://libusb.sourceforge.net">libusb 1.0</link>
         </term>
         <listitem>
           <para>
@@ -57,7 +57,7 @@ from our automated Docker builds.</para>
         </listitem>
       </varlistentry>
     </variablelist>
-    <sect2 id="Internal_History">
+    <section xml:id="Internal_History">
       <title>Brief history of internals</title>
       <para>
     Parts of GPSBabel have been public since 2002, with some of the original
@@ -71,25 +71,25 @@ from our automated Docker builds.</para>
     not enforced style rules as strongly across modules as we could have. Fixing
     both of these is a goal for us in 2020.
   </para>
-    </sect2>
-    <sect2 id="Qt">
+    </section>
+    <section xml:id="Qt">
       <title>Building with Qt Creator</title>
       <para>
 Qt provides a lovely IDE (Integrated Development Evironment) with an
 editor and debugger. Its use is strongly encouraged for those new to C++.
 Once you have Qt correctly installed, just opening the <filename>
 CMakeLists.txt</filename> from
-the File->Open menu in an already-running instance of <ulink url="https://www.qt.io/development-tools">Qt Creator</ulink> is the fastest and easiest way for most
+the File-&gt;Open menu in an already-running instance of <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.qt.io/development-tools">Qt Creator</link> is the fastest and easiest way for most
 people to get to development because it handles things like build dependencies
 changing and class and method compilation.
   </para>
   <para>
 A path of low resistance for some users is to use the CMakeLists.txt file
-from the command line.  If you type <ulink url="https://cmake.org/cmake/help/latest/">cmake .</ulink> in our working
+from the command line.  If you type <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://cmake.org/cmake/help/latest/">cmake .</link> in our working
 directory it will create a buildsystem with the default generator (Unix Makefiles or Visual Studio) which you can use for development.
   </para>
-    </sect2>
-    <sect2 id="cmake">
+    </section>
+    <section xml:id="cmake">
       <title>Building from the command line</title>
       <para>
 Those familiar with the command line may be more comfortable using cmake from the command line.
@@ -365,8 +365,8 @@ installer will be created gui/Setup-x.y.z-Setup.exe.
           </listitem>
         </varlistentry>
       </variablelist>
-    </sect2>
-    <sect2 id="Runtime_Dependencies">
+    </section>
+    <section xml:id="Runtime_Dependencies">
       <title>Runtime Dependencies:</title>
       <para>
 On non-macOS unix builds by default we now compile in the gpsbabel generated
@@ -376,6 +376,6 @@ These are used by the GUI.  Additional translation files from Qt will also be
 used if they are found.  They may be in a package such as qttranslations5-l10n
 or qt5-qttranslations.
       </para>
-    </sect2>
-  </sect1>
+    </section>
+  </section>
 </chapter>

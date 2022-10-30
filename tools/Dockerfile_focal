@@ -41,7 +41,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fop \
     xsltproc \
     docbook-xml \
+    docbook5-xml \
     docbook-xsl \
+    docbook-xsl-ns \
+    libavalon-framework-java \
+    jing \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with libraries needed by gpsbabel

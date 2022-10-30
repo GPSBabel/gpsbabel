@@ -13,4 +13,3 @@ need to make sure that the first point and the last point in the
 file are the same, as the polygon filter depends on that.  You can do so
 with any text editor.
 </para>
-
