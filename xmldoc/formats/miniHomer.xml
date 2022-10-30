@@ -23,8 +23,10 @@ Following a list of devices which should be supported by this module
 <tbody>
 <row>
   <entry>
-  	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://navin.com.tw/miniHomer.htm"> Navin </link>
-  	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.znex.de/minihomer-details.html">Z:NEX</link>
+    <simplelist>
+  	<member><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://navin.com.tw/miniHomer.htm">Navin</link></member>
+  	<member><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.znex.de/minihomer-details.html">Z:NEX</link></member>
+    </simplelist>
   </entry>
   <entry>miniHomer</entry>
   <entry>up to 230400</entry>
