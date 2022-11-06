@@ -65,3 +65,13 @@ compare ${REFERENCE}/track/trackfilter_trk2seg~gpx.gpx ${TMPDIR}/trackfilter_trk
 # speed with msec
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/utm_subsecond_track.csv -x track,speed -o unicsv,utc -F ${TMPDIR}/utm_subsecond_track~csv.csv
 compare ${REFERENCE}/track/utm_subsecond_track~csv.csv ${TMPDIR}/utm_subsecond_track~csv.csv
+
+# faketime, with and witout partial second steps
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/simint.csv -x track,faketime=f2022+0.25 -o unicsv,utc -F ${TMPDIR}/simint250m.csv
+compare ${REFERENCE}/track/simint250m.csv ${TMPDIR}/simint250m.csv
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/simint.csv -x track,faketime=f2022+.25 -o unicsv,utc -F ${TMPDIR}/simint250m_2.csv
+compare ${REFERENCE}/track/simint250m.csv ${TMPDIR}/simint250m_2.csv
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/simint.csv -x track,faketime=f2022+1 -o unicsv,utc -F ${TMPDIR}/simint1000m.csv
+compare ${REFERENCE}/track/simint1000m.csv ${TMPDIR}/simint1000m.csv
+
+

@@ -212,7 +212,7 @@ private:
 
   struct faketime_t {
     QDateTime start;
-    int    step{0};
+    long long step{0};
     bool   force{false};
   };
 
