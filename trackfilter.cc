@@ -826,7 +826,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 {
   faketime_t result;
 
-  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
+  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d+(?:\.\d*)?|\.\d+))?$)");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
@@ -843,7 +843,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 
     if (match.capturedLength(3) > 0) {
       bool ok;
-      result.step = match.captured(3).toInt(&ok);
+      result.step = llround(1000.0 * match.captured(3).toDouble(&ok));
       if (!ok) {
         fatal(MYNAME "-faketime-check: Invalid step \"%s\"!\n", qPrintable(match.captured(3)));
       }
@@ -852,7 +852,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     }
 
 #ifdef TRACKF_DBG
-    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step;
+    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
 #endif
   } else {
     fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", timestr);
@@ -871,7 +871,7 @@ void TrackFilter::trackfilter_faketime()
 
       if (!wpt->creation_time.isValid() || faketime.force) {
         wpt->creation_time = faketime.start;
-        faketime.start = faketime.start.addSecs(faketime.step);
+        faketime.start = faketime.start.addMSecs(faketime.step);
       }
     }
   }
