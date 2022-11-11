@@ -574,10 +574,21 @@ void TrackFilter::trackfilter_move()
     return;
   }
 
+  int timeless_points = 0;
+
   for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
-      wpt->creation_time = wpt->creation_time.addSecs(delta);
+      if (wpt->creation_time.isValid()) {
+        wpt->creation_time = wpt->creation_time.addSecs(delta);
+      } else {
+        ++timeless_points;
+      }
     }
+  }
+  if (timeless_points > 0) {
+    warning(MYNAME "-move: %d points out of %d total points didn't have "
+            "time information and could not be moved.\n",
+            timeless_points, track_waypt_count());
   }
 }
 
@@ -961,7 +972,7 @@ void TrackFilter::init()
    */
   need_time = (
                 opt_merge || opt_pack || opt_split || opt_sdistance ||
-                opt_move || opt_fix || opt_speed ||
+                opt_fix || opt_speed ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
   /* in case of a formatted title we also need valid timestamps */
