@@ -42,7 +42,7 @@ struct gbser_handle {
 #define DEV_PREFIX "\\\\.\\\\"
 
 /* Wrapper to safely cast a void * into a gbser_handle */
-static gbser_handle* gbser__get_handle(void* p)
+static gbser_handle* gbser_get_handle(void* p)
 {
   gbser_handle* h = (gbser_handle*) p;
   assert(h->magic == MYMAGIC);
@@ -182,7 +182,7 @@ void* gbser_init(const char* port_name)
   gbser_handle* h = (gbser_handle*) xcalloc(1, sizeof(*h));
   const char* xname = fix_win_serial_name(port_name);
 
-  gbser__db(2, "Translated port name: \"%s\"\n", xname);
+  gbser_db(2, "Translated port name: \"%s\"\n", xname);
 
   h->magic = MYMAGIC;
 
@@ -214,7 +214,7 @@ failed:
  */
 void gbser_deinit(void* handle)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
 
   CloseHandle(h->comport);
 
@@ -223,7 +223,7 @@ void gbser_deinit(void* handle)
 
 int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity, unsigned stop)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   DCB tio;
 
   if (bits < 5 || bits > 8) {
@@ -266,9 +266,9 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   return gbser_OK;
 }
 
-unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
+unsigned gbser_read_buffer(void* handle, void** buf, unsigned* len)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   unsigned count = *len;
   unsigned char* cp = (unsigned char*) *buf;
   if (count > h->inbuf_used) {
@@ -291,10 +291,10 @@ unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
  * be updated to indicate the remaining time on exit.
  * Returns the number of bytes available (>=0) or an error code (<0).
  */
-int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
+int gbser_fill_buffer(void* handle, unsigned want, unsigned* ms)
 {
   int rc;
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
 
   if (want > BUFSIZE) {
     want = BUFSIZE;
@@ -353,7 +353,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
  */
 int gbser_flush(void* handle)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   h->inbuf_used = 0;
   if (!PurgeComm(h->comport, PURGE_RXCLEAR)) {
     return gbser_ERROR;
@@ -365,7 +365,7 @@ int gbser_flush(void* handle)
  */
 int gbser_write(void* handle, const void* buf, unsigned len)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   DWORD nwritten;
   const char* bp = (const char*) buf;
   /* Not sure we need to spin here - but this'll work even if we don't */

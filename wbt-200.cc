@@ -18,11 +18,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <array>                   // for array
+#include <cctype>                  // for isprint
+#include <cstdarg>                 // for va_end, va_list, va_start
+#include <cstdio>                  // for size_t, sprintf, fread, fclose, feof
+#include <cstdint>                 // for uint32_t, int32_t, int16_t, uint16_t
+#include <cstdlib>                 // for strtod, strtoul
+#include <cstring>                 // for strlen, memcmp, memcpy
+#include <ctime>                   // for time_t, tm
+
+#include <QByteArray>              // for QByteArray
+#include <QIntegerForSize>         // for qPrintable
+#include <QString>                 // for QString
+#include <QVector>                 // for QVector
+
 #include "defs.h"
-#include "gbser.h"
-#include "grtcirc.h"
-#include <cstdio>
-#include <cstdlib>
+#include "gbser.h"                 // for gbser_set_port, gbser_deinit, gbse...
+
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"
@@ -499,17 +511,20 @@ static double get_param_float(const char* cmd)
 }
 
 /* Decompose binary date into discreet fields */
-#define _SPLIT_DATE(tim) \
-    int sec    = (((tim) >>  0) & 0x3F); \
-    int min    = (((tim) >>  6) & 0x3F); \
-    int hour   = (((tim) >> 12) & 0x1F); \
-    int mday   = (((tim) >> 17) & 0x1F); \
-    int mon    = (((tim) >> 22) & 0x0F); \
-    int year   = (((tim) >> 26) & 0x3F);
+std::array<int, 6> split_date(uint32_t tim)
+{
+  int sec    = (((tim) >>  0) & 0x3F);
+  int min    = (((tim) >>  6) & 0x3F);
+  int hour   = (((tim) >> 12) & 0x1F);
+  int mday   = (((tim) >> 17) & 0x1F);
+  int mon    = (((tim) >> 22) & 0x0F);
+  int year   = (((tim) >> 26) & 0x3F);
+  return {sec, min, hour, mday, mon, year};
+}
 
 static time_t decode_date(uint32_t tim)
 {
-  _SPLIT_DATE(tim)
+  auto [sec, min, hour, mday, mon, year] = split_date(tim);
   struct tm t;
 
   t.tm_sec    = sec;
@@ -524,7 +539,7 @@ static time_t decode_date(uint32_t tim)
 
 static int check_date(uint32_t tim)
 {
-  _SPLIT_DATE(tim)
+  auto [sec, min, hour, mday, mon, year] = split_date(tim);
 
   /* Sanity check the date. We don't allow years prior to 2004 because zero in
   * those bits will usually indicate that we have an altitude instead of a

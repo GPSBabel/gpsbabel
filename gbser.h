@@ -19,8 +19,8 @@
 
  */
 
-#ifndef __GBSER_H
-#define __GBSER_H
+#ifndef GBSER_H_INCLUDED_
+#define GBSER_H_INCLUDED_
 
 #include <cstddef> // for size_t
 
@@ -136,4 +136,4 @@ int gbser_is_serial(const char* port_name);
 const char* fix_win_serial_name_r(const char* comname, char* obuf, size_t len);
 const char* fix_win_serial_name(const char* comname);
 
-#endif /* GBSER_H */
+#endif /* GBSER_H_INCLUDED_ */
