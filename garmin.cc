@@ -720,10 +720,10 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
   WAYPT_SET(wpt,course,1);
   WAYPT_SET(wpt,speed,1);
 
-  wpt->course = 180 + DEG(atan2(-pvt->east, -pvt->north));
+  wpt->course = 180 + DEG(std::atan2(-pvt->east, -pvt->north));
 
   /* velocity in m/s */
-  WAYPT_SET(wpt,speed, sqrt(pvt->north*pvt->north + pvt->east*pvt->east));
+  WAYPT_SET(wpt,speed, std::sqrt(pvt->north*pvt->north + pvt->east*pvt->east));
   // wpt->vs = pvt->up;
 
   /*
