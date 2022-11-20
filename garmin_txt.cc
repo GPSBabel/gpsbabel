@@ -1039,7 +1039,7 @@ bind_fields(const header_type ht)
 static void
 parse_grid(const QStringList& lineparts)
 {
-  if (lineparts.size() < 1) {
+  if (lineparts.empty()) {
     fatal(MYNAME ": Missing grid headline!\n");
   }
 
@@ -1059,7 +1059,7 @@ parse_grid(const QStringList& lineparts)
 static void
 parse_datum(const QStringList& lineparts)
 {
-  if (lineparts.size() < 1) {
+  if (lineparts.empty()) {
     fatal(MYNAME ": Missing GPS datum headline!\n");
   }
 
@@ -1355,7 +1355,7 @@ garmin_txt_read()
 
     QStringList lineparts = csv_linesplit(buff, "\t", "", 0);
 
-    if (lineparts.size() < 1) {
+    if (lineparts.empty()) {
       continue;
     }
     auto linetype = lineparts.at(0);
