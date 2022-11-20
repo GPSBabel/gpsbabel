@@ -55,5 +55,5 @@ private:
 #endif
 };
 
-} // namespace
+} // namespace gpsbabel
 #endif // SRC_CORE_TEXTSTREAM_INCLUDED_H_
