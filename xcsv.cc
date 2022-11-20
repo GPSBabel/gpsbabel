@@ -44,7 +44,7 @@
 #include <QString>                    // for QString, operator+, operator==
 #include <QStringList>                // for QStringList
 #include <QTextStream>                // for QTextStream
-#include <QtGlobal>                   // for qAsConst, qPrintable
+#include <QtGlobal>                   // for qAsConst, qRound, qPrintable
 
 #include "defs.h"
 #include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
@@ -1211,7 +1211,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
         fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
               wpt->latitude, wpt->longitude);
-      buff = QString::asprintf(fmp.printfc.constData(), map, (int)(east + 0.5), (int)(north + 0.5));
+      buff = QString::asprintf(fmp.printfc.constData(), map, qRound(east), qRound(north));
     }
     break;
     case XcsvStyle::XT_UTM: {

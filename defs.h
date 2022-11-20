@@ -1101,13 +1101,6 @@ gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 QString rot13(const QString& s);
 
 /*
- * PalmOS records like fixed-point numbers, which should be rounded
- * to deal with possible floating-point representation errors.
- */
-
-signed int si_round(double d);
-
-/*
  * Prototypes for Endianness helpers.
  */
 

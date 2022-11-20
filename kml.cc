@@ -40,7 +40,7 @@
 #include <QVector>                      // for QVector
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for ISODate
-#include <QtGlobal>                     // for foreach, qint64, qPrintable
+#include <QtGlobal>                     // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
 #include "kml.h"
@@ -845,7 +845,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
           value = QStringLiteral("%1-none").arg(style);
         } else {
           value = QStringLiteral("%1-%2").arg(style)
-                  .arg((int)(waypointp->course / 22.5 + .5) % 16);
+                  .arg(qRound(waypointp->course / 22.5) % 16);
         }
         writer->writeTextElement(QStringLiteral("styleUrl"), value);
       } else {
