@@ -25,15 +25,25 @@ History:
 */
 /* This module is for the holux (gm-100) .wpo format */
 
-#include "defs.h"
-#include "holux.h"
-//#include <math.h>
-#include <cstdio>
-#include <cstdlib>
+#include <cstring>                 // for strncpy, memset, strcpy, strlen
+#include <cstdio>                  // for sprintf
+#include <ctime>                   // for gmtime, mktime, time_t, tm
 
-static  gbfile* file_in, *file_out;
-static 	unsigned char* HxWFile;
-static  short_handle mkshort_handle;
+#include <QDate>                   // for QDate
+#include <QString>                 // for QString
+#include <QTime>                   // for QTime
+#include <QtGlobal>                // for qRound
+
+#include "defs.h"                  // for Waypoint, le_write16, le_write32
+#include "holux.h"
+#include "gbfile.h"                // for gbfclose, gbfopen_le, gbfile, gbfread
+#include "src/core/datetime.h"     // for DateTime
+
+
+static gbfile* file_in;
+static gbfile* file_out;
+static unsigned char* HxWFile;
+static short_handle mkshort_handle;
 
 #define MYNAME "Holux"
 
@@ -149,7 +159,7 @@ static void data_read()
 
 static const char* mknshort(const char* stIn,unsigned int sLen)
 {
-#define MAX_STRINGLEN 255
+  constexpr int MAX_STRINGLEN = 255;
   static char strOut[MAX_STRINGLEN];
   char strTmp[MAX_STRINGLEN];
 
@@ -163,6 +173,7 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
 
   setshort_length(mkshort_handle, sLen);
   setshort_mustuniq(mkshort_handle, 0);
+  setshort_defname(mkshort_handle, "");
 
   char* shortstr = mkshort(mkshort_handle, stIn, false);
   strcpy(strTmp,shortstr);
@@ -180,15 +191,6 @@ static void holux_disp(const Waypoint* wpt)
 {
   double lon = wpt->longitude * 36000.0;
   double lat = wpt->latitude * -36000.0;
-
-
-  /* round it to increase the accuracy */
-  if (lon != 0) {
-    lon += (double)((int)lon/abs((int)lon)) * .5;
-  }
-  if (lat != 0) {
-    lat += (double)((int)lat/abs((int)lat)) * .5;
-  }
 
   short sIndex = le_read16(&((WPTHDR*)HxWFile)->num);
 
@@ -237,8 +239,8 @@ static void holux_disp(const Waypoint* wpt)
   // yield undefined results for negative values.
   // We intentionally convert to int, then do an implicit
   // conversion to unsigned in the call.
-  le_write32(&pWptHxTmp->pt.iLatitude,(signed int) lat);
-  le_write32(&pWptHxTmp->pt.iLongitude,(signed int) lon);
+  le_write32(&pWptHxTmp->pt.iLatitude, qRound(lat));
+  le_write32(&pWptHxTmp->pt.iLongitude, qRound(lon));
   pWptHxTmp->checked = 01;
   pWptHxTmp->vocidx = (short)0xffff;
   le_write16(&((WPTHDR*)HxWFile)->num, ++sIndex);
