@@ -117,8 +117,7 @@ bool MainWindow::allowBetaUpgrades()
 static QString MakeOptions(const QList<FormatOption>& options)
 {
   QString str;
-  for (int i = 0; i< options.size(); i++) {
-    FormatOption option = options[i];
+  for (const auto& option : options) {
     QVariant default_value = option.getDefaultValue();
     if (option.getSelected()) {
       // For OPTbool, 'selected' is the key, not value.

@@ -40,7 +40,7 @@
 #include <QTextStream>             // for QTextStream
 #include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
-#include <QtGlobal>                // for qPrintable
+#include <QtGlobal>                // for qRound, qPrintable
 
 #include "csv_util.h"              // for csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
@@ -423,7 +423,7 @@ static void
 print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 {
   if ((A != nullptr) && (B != nullptr) && (A != B)) {
-    int course = si_round(waypt_course(A, B));
+    int course = qRound(waypt_course(A, B));
     *fout << QString::asprintf("%d° true", course);
   }
 }
@@ -443,7 +443,7 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
       if (dist < 100.0) {
         *fout << QString::asprintf("%.1f mi", dist);
       } else {
-        *fout << QString::asprintf("%d mi", si_round(dist));
+        *fout << QString::asprintf("%d mi", qRound(dist));
       }
     }
   } else {
@@ -454,7 +454,7 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
       if (dist < 100.0) {
         *fout << QString::asprintf("%.1f km", dist);
       } else {
-        *fout << QString::asprintf("%d km", si_round(dist));
+        *fout << QString::asprintf("%d km", qRound(dist));
       }
     }
   }
@@ -475,11 +475,11 @@ print_speed(const double* distance, const time_t* time)
   } else {
     unit = "kph";
   }
-  int idist = si_round(dist);
+  int idist = qRound(dist);
 
   if ((*time != 0) && (idist > 0)) {
     double speed = MPS_TO_KPH(dist / (double)*time);
-    int ispeed = si_round(speed);
+    int ispeed = qRound(speed);
 
     if (speed < 0.01) {
       *fout << QString::asprintf("0 %s", unit);
@@ -1039,7 +1039,7 @@ bind_fields(const header_type ht)
 static void
 parse_grid(const QStringList& lineparts)
 {
-  if (lineparts.size() < 1) {
+  if (lineparts.empty()) {
     fatal(MYNAME ": Missing grid headline!\n");
   }
 
@@ -1059,7 +1059,7 @@ parse_grid(const QStringList& lineparts)
 static void
 parse_datum(const QStringList& lineparts)
 {
-  if (lineparts.size() < 1) {
+  if (lineparts.empty()) {
     fatal(MYNAME ": Missing GPS datum headline!\n");
   }
 
@@ -1355,7 +1355,7 @@ garmin_txt_read()
 
     QStringList lineparts = csv_linesplit(buff, "\t", "", 0);
 
-    if (lineparts.size() < 1) {
+    if (lineparts.empty()) {
       continue;
     }
     auto linetype = lineparts.at(0);

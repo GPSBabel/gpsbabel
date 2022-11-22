@@ -44,7 +44,7 @@ struct gbser_handle {
 };
 
 /* Wrapper to safely cast a void * into a gbser_handle */
-static gbser_handle* gbser__get_handle(void* p)
+static gbser_handle* gbser_get_handle(void* p)
 {
   auto* h = (gbser_handle*) p;
   assert(h->magic == MYMAGIC);
@@ -133,7 +133,7 @@ void* gbser_init(const char* port_name)
 {
   gbser_handle* h;
 
-  gbser__db(4, "gbser_init(\"%s\")\n", port_name);
+  gbser_db(4, "gbser_init(\"%s\")\n", port_name);
 
   h = (gbser_handle*) xcalloc(sizeof *h, 1);
   h->magic = MYMAGIC;
@@ -173,7 +173,7 @@ failed:
  */
 void gbser_deinit(void* handle)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
 
   tcsetattr(h->fd, TCSAFLUSH, &h->old_tio);
   close(h->fd);
@@ -183,7 +183,7 @@ void gbser_deinit(void* handle)
 
 int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity, unsigned stop)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   speed_t s;
 
   static unsigned bit_flags[] = {
@@ -251,9 +251,9 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   return tcsetattr(h->fd, TCSADRAIN, &h->new_tio) ? gbser_ERROR : gbser_OK;
 }
 
-unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
+unsigned gbser_read_buffer(void* handle, void** buf, unsigned* len)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   unsigned count = *len;
   auto* cp = (unsigned char*) *buf;
   if (count > h->inbuf_used) {
@@ -276,10 +276,10 @@ unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
  * be updated to indicate the remaining time on exit.
  * Returns the number of bytes available (>=0) or an error code (<0).
  */
-int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
+int gbser_fill_buffer(void* handle, unsigned want, unsigned* ms)
 {
   int rc;
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
 
   if (want > BUFSIZE) {
     want = BUFSIZE;
@@ -362,7 +362,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
  */
 int gbser_flush(void* handle)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   h->inbuf_used = 0;
   if (tcflush(h->fd, TCIFLUSH)) {
     return gbser_ERROR;
@@ -375,7 +375,7 @@ int gbser_flush(void* handle)
  */
 int gbser_write(void* handle, const void* buf, unsigned len)
 {
-  gbser_handle* h = gbser__get_handle(handle);
+  gbser_handle* h = gbser_get_handle(handle);
   const char* bp = (const char*) buf;
   int rc;
   while (len > 0) {
@@ -402,7 +402,7 @@ int gbser_is_serial(const char* port_name)
   int is_port = 0;
 
   if (fd = open(port_name, O_RDWR | O_NOCTTY), fd == -1) {
-    gbser__db(1, "Failed to open port (%s) to check its type\n", strerror(errno));
+    gbser_db(1, "Failed to open port (%s) to check its type\n", strerror(errno));
     return 0;
   }
 

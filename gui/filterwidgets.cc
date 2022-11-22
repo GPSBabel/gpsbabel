@@ -22,7 +22,7 @@
 
 #include "filterwidgets.h"
 
-#include <assert.h>      // for assert
+#include <cassert>       // for assert
 #include <limits>        // for numeric_limits
 
 #include <QChar>         // for QChar

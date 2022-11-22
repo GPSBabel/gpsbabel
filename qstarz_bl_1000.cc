@@ -228,8 +228,8 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   waypoint->altitude = altitude;
 
-  waypoint->hdop = round(hdop * 1000) / 1000;
-  waypoint->vdop = round(vdop * 1000) / 1000;
+  waypoint->hdop = std::round(hdop * 1000) / 1000;
+  waypoint->vdop = std::round(vdop * 1000) / 1000;
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 

@@ -5,4 +5,4 @@
 # So we verify that we can read the reference and write it and get an
 # identical reference.
 gpsbabel -i holux -f ${REFERENCE}/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
-# compare ${REFERENCE}/paris.wpo ${TMPDIR}/paris.wpo
+bincompare ${REFERENCE}/paris.wpo ${TMPDIR}/paris.wpo

@@ -27,7 +27,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-void gbser__db(int l, const char* msg, ...)
+void gbser_db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -109,7 +109,7 @@ int gbser_setup(void* handle, const char* spec)
  */
 int gbser_avail(void* handle)
 {
-  return gbser__fill_buffer(handle, 1, nullptr);
+  return gbser_fill_buffer(handle, 1, nullptr);
 }
 
 /* Read as many bytes as are available without blocking. At most |len|
@@ -121,7 +121,7 @@ int gbser_read(void* handle, void* buf, unsigned len)
   int got = 0;
 
   while (len > 0) {
-    int rc = gbser__fill_buffer(handle, len, nullptr);
+    int rc = gbser_fill_buffer(handle, len, nullptr);
     if (rc < 0) {
       /* error */
       return rc;
@@ -129,7 +129,7 @@ int gbser_read(void* handle, void* buf, unsigned len)
       /* nothing available */
       break;
     }
-    got += gbser__read_buffer(handle, &buf, &len);
+    got += gbser_read_buffer(handle, &buf, &len);
   }
 
   return got;
@@ -144,10 +144,10 @@ int gbser_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 
   while (len > 0 && ms != 0) {
     int rc;
-    if (rc = gbser__fill_buffer(handle, len, &ms), rc < 0) {
+    if (rc = gbser_fill_buffer(handle, len, &ms), rc < 0) {
       return rc;
     }
-    got += gbser__read_buffer(handle, &buf, &len);
+    got += gbser_read_buffer(handle, &buf, &len);
   }
 
   return got;
