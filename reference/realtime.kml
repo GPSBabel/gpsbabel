@@ -194,26 +194,26 @@
               <gx:value>142</gx:value>
               <gx:value>118</gx:value>
               <gx:value>64</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>186</gx:value>
               <gx:value>155</gx:value>
               <gx:value>210</gx:value>
-              <gx:value>0</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="depth">
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>162.6</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>170.7</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>421.8</gx:value>
               <gx:value>830.1</gx:value>
               <gx:value>218.1</gx:value>
               <gx:value>292.2</gx:value>
               <gx:value>426.2</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>911.3</gx:value>
               <gx:value>174.5</gx:value>
               <gx:value>804.5</gx:value>
@@ -222,7 +222,7 @@
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="heartrate">
               <gx:value>25</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>41</gx:value>
               <gx:value>244</gx:value>
               <gx:value>250</gx:value>
@@ -230,7 +230,7 @@
               <gx:value>33</gx:value>
               <gx:value>194</gx:value>
               <gx:value>238</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>227</gx:value>
               <gx:value>164</gx:value>
               <gx:value>246</gx:value>
@@ -240,23 +240,23 @@
               <gx:value>96</gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="temperature">
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>17.8</gx:value>
               <gx:value>4.4</gx:value>
               <gx:value>12.7</gx:value>
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>2.2</gx:value>
               <gx:value>7.9</gx:value>
               <gx:value>4.7</gx:value>
               <gx:value>31.9</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>24.3</gx:value>
               <gx:value>23.2</gx:value>
               <gx:value>28.0</gx:value>
               <gx:value>21.8</gx:value>
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
             </gx:SimpleArrayData>
           </SchemaData>
         </ExtendedData>

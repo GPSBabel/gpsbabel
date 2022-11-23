@@ -841,7 +841,8 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     } else {
       if (trackdirection && (pt_type == kmlpt_track)) {
         QString value;
-        if (waypointp->speed < 1) {
+        if (!WAYPT_HAS(waypointp, speed) || !WAYPT_HAS(waypointp, course) ||
+            (waypointp->speed < 1.0f)) {
           value = QStringLiteral("%1-none").arg(style);
         } else {
           value = QStringLiteral("%1-%2").arg(style)
@@ -1476,19 +1477,24 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 
     switch (member) {
     case fld_power:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->power, 'f', 1));
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
+        QString::number(wpt->power, 'f', 1) : QString());
       break;
     case fld_cadence:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->cadence));
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
+       QString::number(wpt->cadence) : QString());
       break;
     case fld_depth:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->depth, 'f', 1));
+      writer->writeTextElement(QStringLiteral("gx:value"), WAYPT_HAS(wpt, depth)?
+        QString::number(wpt->depth, 'f', 1) : QString());
       break;
     case fld_heartrate:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->heartrate));
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
+       QString::number(wpt->heartrate) : QString());
       break;
     case fld_temperature:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->temperature, 'f', 1));
+      writer->writeTextElement(QStringLiteral("gx:value"), WAYPT_HAS(wpt, temperature)?
+        QString::number(wpt->temperature, 'f', 1) : QString());
       break;
     default:
       fatal("Bad member type");

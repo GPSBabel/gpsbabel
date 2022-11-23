@@ -228,8 +228,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
        * with a scaling factor of 100, in km/h.
        * The waypoint struct wants the speed as a
        * floating-point number, in m/s. */
-      wpt->speed = KPH_TO_MPS(be_read32(data + i + 16) / 100.0);
-      wpt->wpt_flags.speed = 1;
+      WAYPT_SET(wpt, speed, KPH_TO_MPS(be_read32(data + i + 16) / 100.0));
     }
 
     if (style >= 2) {

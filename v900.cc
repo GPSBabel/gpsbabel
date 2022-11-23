@@ -316,11 +316,9 @@ v900_read()
       wpt->SetCreationTime(bintime2utc(date, time));
     }
 
-    wpt->speed = KPH_TO_MPS(xstrtoi(line.bas.common.speed, nullptr, 10));
-    wpt->wpt_flags.speed = 1;
+    WAYPT_SET(wpt, speed, KPH_TO_MPS(xstrtoi(line.bas.common.speed, nullptr, 10)));
 
-    wpt->course = xstrtoi(line.bas.common.heading, nullptr, 10);
-    wpt->wpt_flags.course = 1;
+    WAYPT_SET(wpt, course, xstrtoi(line.bas.common.heading, nullptr, 10));
 
     if (is_advanced_mode) {
       wpt->hdop = strtod(line.adv.hdop, nullptr);

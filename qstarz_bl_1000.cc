@@ -31,7 +31,7 @@
 #include <QDebug>              // for QDebug
 #include <QFile>               // for QFile
 #include <QIODevice>           // for QIODevice, QIODevice::ReadOnly
-#include "defs.h"              // for Waypoint, ddmm2degrees, route_head, track_add_head, track_add_wpt, waypt_add, waypt_count, wp_flags, fix_unknown, fix_2d, fix_3d, fix_dgps, fix_none, fix_pps, fix_type, global_options, global_opts
+#include "defs.h"
 #include "src/core/logging.h"  // for Fatal
 
 
@@ -233,11 +233,9 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  waypoint->speed = KPH_TO_MPS(speed);
-  waypoint->wpt_flags.speed = 1;
+  WAYPT_SET(waypoint, speed, KPH_TO_MPS(speed));
 
-  waypoint->course = heading;
-  waypoint->wpt_flags.course = 1;
+  WAYPT_SET(waypoint, course, heading);
   waypoint->SetCreationTime(time, milliseconds);
 
   auto* fsdata = new qstarz_bl_1000_fsdata;
