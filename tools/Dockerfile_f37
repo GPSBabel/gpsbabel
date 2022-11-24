@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM fedora:32
+FROM fedora:37
 
 LABEL maintainer="https://github.com/tsteven4"
 
@@ -10,7 +10,7 @@ WORKDIR /app
 RUN dnf install --assumeyes git make valgrind diffutils findutils langpacks-en ninja-build && \
     dnf clean all
 # libraries used by gpsbabel.  zlib and shapelib may or may not be used depending qmake options.
-RUN dnf install --assumeyes libusbx-devel zlib-devel shapelib-devel && \
+RUN dnf install --assumeyes libusb1-devel zlib-devel shapelib-devel && \
     dnf clean all
 # Qt used by gpsbabel, gpsbabelfe
 RUN dnf install --assumeyes qt5-qtbase-devel qt5-qtserialport-devel qt5-qtwebengine-devel qt5-linguist qt5-qttranslations && \
