@@ -28,7 +28,7 @@
 
 #include <QByteArray>            // for QByteArray
 #include <QDateTime>             // for QDateTime
-#include <QtGlobal>              // for qPrintable
+#include <QtGlobal>              // for qRound, qPrintable
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 #include <cstdarg>               // for va_end, va_list, va_start
@@ -242,7 +242,7 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
   }
   if (tdata.avg_hrt) {
     gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(*tdata.avg_hrt + 0.5));
+    gtc_write_xml(0, "<Value>%d</Value>\n", qRound(*tdata.avg_hrt));
     gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
   }
   if (tdata.max_hrt) {
@@ -252,7 +252,7 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
   }
   gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
   if (tdata.avg_cad) {
-    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", (int)(*tdata.avg_cad + 0.5));
+    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", qRound(*tdata.avg_cad));
   }
 
   if (!gtc_course_flag) { /* activity (history) format */

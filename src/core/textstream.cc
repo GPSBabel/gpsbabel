@@ -138,4 +138,4 @@ void TextStream::close()
 #endif
 }
 
-} // namespace
+} // namespace gpsbabel

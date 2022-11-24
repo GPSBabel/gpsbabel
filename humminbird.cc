@@ -23,12 +23,13 @@
 
 #include <QMap>                 // for QMap
 #include <Qt>                   // for CaseInsensitive
+#include <QtGlobal>             // for qRound
 
 #include <cmath>                // for atan, tan, M_PI, log, sinh
 #include <cstdio>               // for snprintf, SEEK_SET
 #include <cstring>              // for strncpy, memcpy, memset
 
-#include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, si_round, xcalloc, track_add_wpt, xstrndup, mkshort, mkshort_del_handle, mkshort_new_handle, setshort_badchars, setshort_defname, setshort_length, setshort_mustuniq, setshort_...
+#include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, xcalloc, track_add_wpt, xstrndup, mkshort, mkshort_del_handle, mkshort_new_handle, setshort_badchars, setshort_defname, setshort_length, setshort_mustuniq, setshort_...
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -656,17 +657,17 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
     }
   }
 
-  hum.depth = si_round(WAYPT_GET(wpt, depth, 0)*100.0);
+  hum.depth = qRound(WAYPT_GET(wpt, depth, 0)*100.0);
   be_write16(&hum.depth, hum.depth);
 
   be_write32(&hum.time, wpt->GetCreationTime().toTime_t());
 
   double east = wpt->longitude / 180.0 * EAST_SCALE;
-  be_write32(&hum.east, si_round((east)));
+  be_write32(&hum.east, qRound((east)));
 
   double lat = geodetic_to_geocentric_hwr(wpt->latitude);
   double north = inverse_gudermannian_i1924(lat);
-  be_write32(&hum.north, si_round(north));
+  be_write32(&hum.north, qRound(north));
 
   QString name = (global_opts.synthesize_shortnames)
                    ? mkshort_from_wpt(wptname_sh, wpt)
@@ -741,9 +742,9 @@ HumminbirdHTFormat::humminbird_track_cb(const Waypoint* wpt)
 
   int i = trk_head->num_points;
 
-  int32_t east = si_round(wpt->longitude / 180.0 * EAST_SCALE);
+  int32_t east = qRound(wpt->longitude / 180.0 * EAST_SCALE);
   double lat = geodetic_to_geocentric_hwr(wpt->latitude);
-  int32_t north = si_round(inverse_gudermannian_i1924(lat));
+  int32_t north = qRound(inverse_gudermannian_i1924(lat));
 
   if (wpt->creation_time.isValid()) {
     last_time = wpt->GetCreationTime().toTime_t();
@@ -768,7 +769,7 @@ HumminbirdHTFormat::humminbird_track_cb(const Waypoint* wpt)
     int j = i-1;
     trk_points[j].deltaeast = east - last_east;
     trk_points[j].deltanorth = north - last_north;
-    trk_points[j].depth = si_round(WAYPT_GET(wpt, depth, 0)*100.0);
+    trk_points[j].depth = qRound(WAYPT_GET(wpt, depth, 0)*100.0);
 
     /* BE-ify */
     be_write16(&trk_points[j].deltaeast, trk_points[j].deltaeast);

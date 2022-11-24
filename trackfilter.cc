@@ -574,10 +574,21 @@ void TrackFilter::trackfilter_move()
     return;
   }
 
+  int timeless_points = 0;
+
   for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
-      wpt->creation_time = wpt->creation_time.addSecs(delta);
+      if (wpt->creation_time.isValid()) {
+        wpt->creation_time = wpt->creation_time.addSecs(delta);
+      } else {
+        ++timeless_points;
+      }
     }
+  }
+  if (timeless_points > 0) {
+    warning(MYNAME "-move: %d points out of %d total points didn't have "
+            "time information and could not be moved.\n",
+            timeless_points, track_waypt_count());
   }
 }
 
@@ -826,7 +837,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 {
   faketime_t result;
 
-  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
+  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d+(?:\.\d*)?|\.\d+))?$)");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
@@ -843,7 +854,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 
     if (match.capturedLength(3) > 0) {
       bool ok;
-      result.step = match.captured(3).toInt(&ok);
+      result.step = llround(1000.0 * match.captured(3).toDouble(&ok));
       if (!ok) {
         fatal(MYNAME "-faketime-check: Invalid step \"%s\"!\n", qPrintable(match.captured(3)));
       }
@@ -852,7 +863,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     }
 
 #ifdef TRACKF_DBG
-    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step;
+    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
 #endif
   } else {
     fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", timestr);
@@ -871,7 +882,7 @@ void TrackFilter::trackfilter_faketime()
 
       if (!wpt->creation_time.isValid() || faketime.force) {
         wpt->creation_time = faketime.start;
-        faketime.start = faketime.start.addSecs(faketime.step);
+        faketime.start = faketime.start.addMSecs(faketime.step);
       }
     }
   }
@@ -961,7 +972,7 @@ void TrackFilter::init()
    */
   need_time = (
                 opt_merge || opt_pack || opt_split || opt_sdistance ||
-                opt_move || opt_fix || opt_speed ||
+                opt_fix || opt_speed ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
   /* in case of a formatted title we also need valid timestamps */

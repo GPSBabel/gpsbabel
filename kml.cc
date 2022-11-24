@@ -26,7 +26,7 @@
 #include <cstdlib>                      // for strtod
 #include <cstring>                      // for strcmp
 #include <optional>                     // for optional
-#include <tuple>                        // for tuple, make_tuple, tie
+#include <tuple>                        // for tuple, make_tuple
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar
@@ -40,7 +40,7 @@
 #include <QVector>                      // for QVector
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for ISODate
-#include <QtGlobal>                     // for foreach, qint64, qPrintable
+#include <QtGlobal>                     // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
 #include "kml.h"
@@ -280,9 +280,7 @@ void KmlFormat::gx_trk_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs
   while (!gx_trk_times->isEmpty()) {
     auto* trkpt = new Waypoint;
     trkpt->SetCreationTime(gx_trk_times->takeFirst());
-    double lat, lon, alt;
-    int n;
-    std::tie(n, lat, lon, alt) = gx_trk_coords->takeFirst();
+    auto [n, lat, lon, alt] = gx_trk_coords->takeFirst();
     // An empty kml:coord element is permitted to indicate missing position data;
     // the estimated position may be determined using some interpolation method.
     // However if we get one we will throw away the time as we don't have a location.
@@ -847,7 +845,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
           value = QStringLiteral("%1-none").arg(style);
         } else {
           value = QStringLiteral("%1-%2").arg(style)
-                  .arg((int)(waypointp->course / 22.5 + .5) % 16);
+                  .arg(qRound(waypointp->course / 22.5) % 16);
         }
         writer->writeTextElement(QStringLiteral("styleUrl"), value);
       } else {

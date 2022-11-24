@@ -607,16 +607,6 @@ le_write32(void* ptr, const unsigned value)
   p[3] = value >> 24;
 }
 
-signed int
-si_round(double d)
-{
-  if (d < 0) {
-    return (signed int)(d-0.5);
-  } else {
-    return (signed int)(d+0.5);
-  }
-}
-
 /*
 	mkgmtime -- convert tm struct in UTC to time_t
 
