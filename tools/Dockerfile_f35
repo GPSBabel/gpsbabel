@@ -18,16 +18,5 @@ RUN dnf install --assumeyes qt5-qtbase-devel qt5-qtserialport-devel qt5-qtwebeng
 # tools to build the docs
 RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop docbook5-style-xsl && \
     dnf clean all
-
-# no jing on f35...
-RUN dnf install --assumeyes zip  && \
-    dnf clean all && \
-    mkdir /usr/local/opt && \
-    cd /usr/local/opt && \
-    curl -o jing.zip -L https://github.com/relaxng/jing-trang/releases/download/V20220510/jing-20220510.zip && \
-    unzip jing.zip && \
-    echo 'exec java -jar "/usr/local/opt/jing-20220510/bin/jing.jar" "$@"' >/usr/bin/jing && \
-    chmod +x /usr/bin/jing
-     
 # create a link as fedora uses the name qmake-qt5 for Qt5's qmake.
 RUN alternatives --install /usr/bin/qmake qt /usr/lib64/qt5/bin/qmake 100
