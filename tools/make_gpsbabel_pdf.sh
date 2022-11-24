@@ -1,7 +1,8 @@
 #!/bin/sh
 set -ex
 
-perl xmldoc/makedoc
-jing http://docs.oasis-open.org/docbook/rng/5.0/docbook.rng xmldoc/readme.xml
+tooldir=$(cd "$(dirname "$0")" && pwd)
+
+"$tooldir"/make_gpsbabel_doc.sh
 xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml
 HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf

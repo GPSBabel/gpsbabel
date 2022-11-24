@@ -16,7 +16,7 @@ RUN dnf install --assumeyes libusbx-devel zlib-devel shapelib-devel && \
 RUN dnf install --assumeyes qt5-qtbase-devel qt5-qtserialport-devel qt5-qtwebengine-devel qt5-linguist qt5-qttranslations && \
     dnf clean all
 # tools to build the docs
-RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop && \
+RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop docbook5-style-xsl jing && \
     dnf clean all
 # create a link as fedora uses the name qmake-qt5 for Qt5's qmake.
 RUN alternatives --install /usr/bin/qmake qt /usr/lib64/qt5/bin/qmake 100
