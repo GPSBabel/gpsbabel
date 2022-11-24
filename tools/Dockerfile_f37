@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM fedora:35
+FROM fedora:37
 
 LABEL maintainer="https://github.com/tsteven4"
 
