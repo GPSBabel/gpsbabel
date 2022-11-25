@@ -1445,7 +1445,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     /* Tracks and Routes ***********************************************/
     case XcsvStyle::XT_TRACK_NEW:
       if (csv_track) {
-        if (WAYPT_HAS(wpt,new_trkseg)) {
+        if (wpt->wpt_flags.new_trkseg) {
           buff = QString::asprintf(fmp.printfc.constData(), 1);
         } else {
           buff = QString::asprintf(fmp.printfc.constData(), 0);
