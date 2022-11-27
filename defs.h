@@ -666,11 +666,13 @@ struct computed_trkdata {
   std::optional<double> min_spd;	/* Meters/sec */
   std::optional<double> avg_hrt;	/* Avg Heartrate */
   std::optional<double> avg_cad;	/* Avg Cadence */
+  std::optional<double> avg_pwr;	/* Avg Power */
   gpsbabel::DateTime start;		/* Min time */
   gpsbabel::DateTime end;		/* Max time */
   std::optional<int> min_hrt;			/* Min Heartrate */
   std::optional<int> max_hrt;			/* Max Heartrate */
   std::optional<int> max_cad;			/* Max Cadence */
+  std::optional<float> max_pwr;	  /* Max Power */
 };
 
 class route_head

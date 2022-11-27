@@ -603,6 +603,12 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
       }
     }
   }
+  if (td->avg_cad) {
+    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
+  }
+  if (td->max_cad) {
+    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
+  }
   if (td->avg_hrt) {
     kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->avg_hrt, 'f', 1)));
   }
@@ -612,11 +618,11 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
   if (td->max_hrt) {
     kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->max_hrt)));
   }
-  if (td->avg_cad) {
-    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
+  if (td->avg_pwr) {
+    kml_td(hwriter, QStringLiteral("Avg Power"), QStringLiteral(" %1 watts ").arg(QString::number(*td->avg_pwr, 'f', 1)));
   }
-  if (td->max_cad) {
-    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
+  if (td->max_pwr) {
+    kml_td(hwriter, QStringLiteral("Max Power"), QStringLiteral(" %1 watts ").arg(QString::number(*td->max_pwr, 'f', 1)));
   }
   if (td->start.isValid() && td->end.isValid()) {
     kml_td(hwriter, QStringLiteral("Start Time"), td->start.toPrettyString());
@@ -737,12 +743,16 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
     kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
+  if (pt->cadence) {
+    kml_td(hwriter, QStringLiteral("Cadence: %1 ").arg(QString::number(pt->cadence)));
+  }
+
   if (pt->heartrate) {
     kml_td(hwriter, QStringLiteral("Heart rate: %1 ").arg(QString::number(pt->heartrate)));
   }
 
-  if (pt->cadence) {
-    kml_td(hwriter, QStringLiteral("Cadence: %1 ").arg(QString::number(pt->cadence)));
+  if (pt->power) {
+    kml_td(hwriter, QStringLiteral("Power: %1 ").arg(QString::number(pt->power, 'f', 1)));
   }
 
   /* Which unit is this temp in? C? F? K? */
@@ -1525,11 +1535,11 @@ void KmlFormat::write_as_linestring(const route_head* header)
 
 void KmlFormat::kml_mt_hdr(const route_head* header)
 {
-  int has_cadence = 0;
-  int has_depth = 0;
-  int has_heartrate = 0;
-  int has_temperature = 0;
-  int has_power = 0;
+  bool has_cadence = false;
+  bool has_depth = false;
+  bool has_heartrate = false;
+  bool has_temperature = false;
+  bool has_power = false;
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1572,19 +1582,19 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     // Capture interesting traits to see if we need to do an ExtendedData
     // section later.
     if (tpt->cadence) {
-      has_cadence = 1;
+      has_cadence = true;
     }
     if (WAYPT_HAS(tpt, depth)) {
-      has_depth = 1;
+      has_depth = true;
     }
     if (tpt->heartrate) {
-      has_heartrate = 1;
+      has_heartrate = true;
     }
     if (WAYPT_HAS(tpt, temperature)) {
-      has_temperature = 1;
+      has_temperature = true;
     }
     if (tpt->power) {
-      has_power = 1;
+      has_power = true;
     }
   }
 
