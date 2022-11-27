@@ -158,6 +158,9 @@ RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* 
     if RND(3) {
       wpt->heartrate = rand_int(255);
     }
+    if RND(3) {
+      wpt->power = rand_flt(500.0);
+    }
   } else {
     if (doing_rtes && (i > 0)) {
       wpt->latitude = prev->latitude + rand_dbl(0.01);

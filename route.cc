@@ -247,6 +247,8 @@ computed_trkdata track_recompute(const route_head* trk)
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
+  int pts_pwr = 0;
+  double tot_pwr = 0.0;
   computed_trkdata tdata;
 
 //  first.latitude = 0;
@@ -329,6 +331,15 @@ computed_trkdata track_recompute(const route_head* trk)
       tdata.max_cad = thisw->cadence;
     }
 
+    if (thisw->power > 0) {
+      pts_pwr++;
+      tot_pwr += thisw->power;
+    }
+
+    if ((thisw->power > 0) && ((!tdata.max_pwr) || (thisw->power > tdata.max_pwr))) {
+      tdata.max_pwr = thisw->power;
+    }
+
     if (thisw->GetCreationTime().isValid()) {
       if (!tdata.start.isValid() || (thisw->GetCreationTime() < tdata.start)) {
         tdata.start = thisw->GetCreationTime();
@@ -352,6 +363,10 @@ computed_trkdata track_recompute(const route_head* trk)
 
   if (pts_cad > 0) {
     tdata.avg_cad = tot_cad / pts_cad;
+  }
+
+  if (pts_pwr > 0) {
+    tdata.avg_pwr = tot_pwr / pts_pwr;
   }
 
   return tdata;
