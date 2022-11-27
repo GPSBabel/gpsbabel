@@ -74,6 +74,7 @@ if [ -z "${VALGRIND}" ]; then
   if command -v xmllint > /dev/null;
   then
     KMLS=$(find ${REFERENCE} -name \*.kml)
+    mkdir -p ${TMPDIR}/validcheck
     for f in $KMLS
     do
       case $f in 
@@ -81,7 +82,7 @@ if [ -z "${VALGRIND}" ]; then
         # to be legal in Earth GX 2.2.
         ${REFERENCE}/track/segmented_tracks-track.kml) continue;;
       *)
-        tmpf=${TMPDIR}/$(basename $f)
+        tmpf=${TMPDIR}/validcheck/$(basename $f)
         gpsbabel -i kml -f $f -o kml -F $tmpf
         xmllint --schema ${BASEPATH}/tools/kml22-schema/kml22gx.xsd --noout $tmpf
       esac;
