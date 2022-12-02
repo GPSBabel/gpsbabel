@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 # This is a historical record of how we did the merge between our
-# fork of glib 1.2.11 and the vendor update to 1.2.12
+# fork of glib 1.2.12 and the vendor update to 1.2.13
 # It may be of use when we sync up with a future vendor update.
 # It should not be expected to work without being modified!
 rm -fr zlib
@@ -10,8 +10,8 @@ git checkout -- zlib
 
 mv zlib zlib.old
 
-tar -xzvf ../../Downloads/zlib-1.2.12.tar.gz
-mv zlib-1.2.12 zlib
+tar -xzvf ../../Downloads/zlib-1.2.13.tar.gz
+mv zlib-1.2.13 zlib
 cd zlib
 
 mv doc/algorithm.txt .
@@ -55,11 +55,6 @@ rm -fr contrib/README.contrib
 rm -fr contrib/testzlib
 rm -fr contrib/untgz
 rm -fr contrib/vstudio
-# rename .in files to protect them from auto tools.
-mv zconf.h.in  zconf.in.h
-mv -f Makefile.in Makefile.in.zlib
-git mv zconf.in.h zconf.h.in
-git mv Makefile.in.zlib Makefile.in
 
 # copy our unique files
 cp -p ../zlib.old/README.gpsbabel .
@@ -68,14 +63,12 @@ cd ..
 find zlib | sort > zlib.new.list
 find zlib.old | sort > zlib.old.list
 
-# move patches
-mv zlib.old/contrib/minizip/ioapi.c.patch zlib/contrib/minizip
-mv zlib.old/contrib/minizip/ioapi.h.patch zlib/contrib/minizip
+# copy patches
+cp -p zlib.old/contrib/minizip/ioapi.c.patch zlib/contrib/minizip
 
 # apply patches
 cd zlib/contrib/minizip
 patch < ioapi.c.patch
-patch < ioapi.h.patch
 cd ../..
 
 cd ..
