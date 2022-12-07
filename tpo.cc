@@ -673,10 +673,6 @@ static void tpo_process_tracks()
                                  styles[track_style].color[0],
                                  styles[track_style].color[1],
                                  styles[track_style].color[2]);
-    auto bgr = QString::asprintf("%02x%02x%02x",
-                                  styles[track_style].color[2],
-                                  styles[track_style].color[1],
-                                  styles[track_style].color[0]);
     int bbggrr = styles[track_style].color[2] << 16 |
                  styles[track_style].color[1] << 8 |
                  styles[track_style].color[0];
