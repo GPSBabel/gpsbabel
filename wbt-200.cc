@@ -21,7 +21,7 @@
 #include <array>                   // for array
 #include <cctype>                  // for isprint
 #include <cstdarg>                 // for va_end, va_list, va_start
-#include <cstdio>                  // for size_t, sprintf, fread, fclose, feof
+#include <cstdio>                  // for size_t, snprintf, fread, fclose, feof
 #include <cstdint>                 // for uint32_t, int32_t, int16_t, uint16_t
 #include <cstdlib>                 // for strtod, strtoul
 #include <cstring>                 // for strlen, memcmp, memcpy
@@ -551,10 +551,9 @@ static int check_date(uint32_t tim)
 
 static Waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
 {
-  char     wp_name[20];
   auto* wpt = new Waypoint;
 
-  sprintf(wp_name, fmt, index);
+  auto wp_name = QString::asprintf(fmt, index);
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
@@ -777,12 +776,12 @@ static void wbt200_data_read()
     int f;
     db(1, "Erasing data\n");
     for (f = 27; f <= 31; f++) {
-      sprintf(line_buf, "$PFST,REMOVEFILE,%d", f);
+      snprintf(line_buf, sizeof(line_buf), "$PFST,REMOVEFILE,%d", f);
       do_cmd(line_buf, "$PFST,REMOVEFILE", BUFSPEC(line_buf));
     }
     db(1, "Reclaiming free space\n");
     for (f = 0; f <= 3; f++) {
-      sprintf(line_buf, "$PFST,FFSRECLAIM,%d", f);
+      snprintf(line_buf, sizeof(line_buf), "$PFST,FFSRECLAIM,%d", f);
       do_cmd(line_buf, "$PFST,FFSRECLAIM", BUFSPEC(line_buf));
     }
   }
@@ -882,7 +881,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   buf_empty(&st->data);
 
   rd_drain();
-  sprintf(cmd_buf, "@AL,5,3,%u", pos);
+  snprintf(cmd_buf, sizeof(cmd_buf), "@AL,5,3,%u", pos);
   wr_cmdl(cmd_buf);
 
 

@@ -20,7 +20,7 @@
  */
 
 #include <algorithm>            // for stable_sort
-#include <cstdio>               // for sprintf
+#include <cstdio>               // for snprintf
 #include <cstring>              // for memset, strncpy
 
 #include <QDateTime>            // for QDateTime
@@ -142,15 +142,14 @@ void DuplicateFilter::process()
     }
 
     if (lcopt) {
-      /* let sprintf take care of rounding */
-      sprintf(dupe.lat, "%11.4f", waypointp->latitude);
-      sprintf(dupe.lon, "%11.4f", waypointp->longitude);
       /* The degrees2ddmm stuff is a feeble attempt to
        * get everything rounded the same way in a precision
        * that's "close enough" for determining duplicates.
        */
-      sprintf(dupe.lat, "%11.3f", degrees2ddmm(waypointp->latitude));
-      sprintf(dupe.lon, "%11.3f", degrees2ddmm(waypointp->longitude));
+      snprintf(dupe.lat, sizeof(dupe.lat), "%11.3f",
+               degrees2ddmm(waypointp->latitude));
+      snprintf(dupe.lon, sizeof(dupe.lon), "%11.3f",
+               degrees2ddmm(waypointp->longitude));
 
     }
 

@@ -23,7 +23,7 @@
 #include <climits>              // for INT_MAX
 #include <cmath>                // for atan2, floor, sqrt
 #include <csetjmp>              // for setjmp
-#include <cstdio>               // for fprintf, fflush, snprintf, sprintf
+#include <cstdio>               // for fprintf, fflush, snprintf, snprintf
 #include <cstdlib>              // for strtol
 #include <cstring>              // for memcpy, strlen, strncpy, strchr
 #include <ctime>                // for time_t
@@ -666,12 +666,10 @@ lap_read_as_track(void)
       wpt->creation_time = array[i]->start_time;
       wpt->microseconds = 0;
 
-      sprintf(tbuf, "#%d-0", index);
-      wpt->shortname = tbuf;
-      sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
+      wpt->shortname = QString::asprintf("#%d-0", index);;
+      wpt->description = QString::asprintf("D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
               array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
               array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method);
-      wpt->description = tbuf;
       track_add_wpt(trk_head, wpt);
     }
     /*Allow even if no correct location, no skip if invalid */
@@ -689,13 +687,11 @@ lap_read_as_track(void)
     wpt->creation_time = array[i]->start_time + array[i]->total_time/100;
     wpt->microseconds = 10000*(array[i]->total_time % 100);
     /*Add fields with no mapping in the description */
-    sprintf(tbuf, "#%d", index);
-    wpt->shortname = tbuf;
-    sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
+    wpt->shortname = QString::asprintf("#%d", index);
+    wpt->description = QString::asprintf("D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
             array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
             array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method,
             array[i]->begin_lon, array[i]->begin_lat);
-    wpt->description = tbuf;
 
     track_add_wpt(trk_head, wpt);
   }
@@ -1131,7 +1127,7 @@ track_hdr_pr(const route_head* trk_head)
     strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   } else {
-    sprintf((*cur_tx_tracklist_entry)->trk_ident, "TRACK%02d", my_track_count);
+    snprintf((*cur_tx_tracklist_entry)->trk_ident, sizeof((*cur_tx_tracklist_entry)->trk_ident), "TRACK%02d", my_track_count);
   }
   cur_tx_tracklist_entry++;
   my_track_count++;
