@@ -1238,18 +1238,8 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      QString encstr = xml_attribute(logpart->attributes, "encoded");
-      bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
-
-      QString s;
-      if (html_encrypt && encoded) {
-        s = rot13(logpart->cdata);
-      } else {
-        s = logpart->cdata;
-      }
-
       r += "<br />";
-      r += s.toHtmlEscaped();
+      r += logpart->cdata.toHtmlEscaped();
     }
 
     r += "</p>";
