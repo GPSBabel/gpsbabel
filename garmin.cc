@@ -626,7 +626,6 @@ lap_read_as_track(void)
   int trk_num = 0;
   int index;
   int i;
-  char tbuf[128];
 
   ntracks = GPS_Command_Get_Lap(portname, &array, waypt_read_cb);
   if (ntracks <= 0) {
@@ -647,13 +646,13 @@ lap_read_as_track(void)
         /* D10xx - no real separator, use begin/end time to guess */
         (abs(array[i-1]->start_time + array[i]->total_time/100-array[i]->start_time) > 2)
        ) {
-      static struct tm* stmp;
-      stmp = gmtime(&array[i]->start_time);
       trk_head = new route_head;
       /*For D906, we would like to use the track_index in the last packet instead...*/
       trk_head->rte_num = ++trk_num;
-      strftime(tbuf, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
-      trk_head->rte_name = tbuf;
+
+      QDateTime dt = array[i].start_time;
+      trk_head->rte_name = dt.toUTC().toString(u"yyyy-MM-ddThh:mm:ssZ");
+
       track_add_head(trk_head);
 
       wpt = new Waypoint;

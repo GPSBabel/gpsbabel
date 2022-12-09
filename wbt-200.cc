@@ -553,13 +553,11 @@ static Waypoint* make_point(double lat, double lon, double alt, time_t tim, cons
 {
   auto* wpt = new Waypoint;
 
-  auto wp_name = QString::asprintf(fmt, index);
-
   wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
   wpt->SetCreationTime(tim);
-  wpt->shortname      = wp_name;
+  wpt->shortname      = QString::asprintf(fmt, index);
 
   return wpt;
 }

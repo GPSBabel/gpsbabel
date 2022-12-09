@@ -113,10 +113,10 @@ static void data_read()
     WPT* pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
 
     wpt_tmp->altitude = 0;
-    strncpy(name,pWptHxTmp->name,sizeof(pWptHxTmp->name));
+    strncpy(name,pWptHxTmp->name,sizeof(name));
     name[sizeof(pWptHxTmp->name)]=0;
 
-    strncpy(desc,pWptHxTmp->comment,sizeof(pWptHxTmp->comment));
+    strncpy(desc,pWptHxTmp->comment,sizeof(desc));
     desc[sizeof(pWptHxTmp->comment)]=0;
 
     wpt_tmp->shortname = name;

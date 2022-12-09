@@ -980,12 +980,7 @@ static void mtk_csv_deinit()
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
 static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
 {
-  char ts_str[30];
   const char* fix_str = "";
-
-  struct tm* ts_tm = gmtime(&(itm->timestamp));
-  strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);
-
   if (bmask & (1U<<VALID)) {
     switch (itm->valid) {
     case 0x0001:
@@ -1029,7 +1024,12 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
               , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
-    gbfprintf(csvFile, "%s.%.3d,", ts_str, (bmask & (1U<<MILLISECOND))?itm->timestamp_ms:0);
+    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
+    dt = dt.addMSecs(itm->timestamp_ms);
+
+    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");;
+    gbfputs(timestamp, csvFile);
+    gbfputc(',', csvFile);
   }
 
   if (bmask & (1U<<VALID)) {
@@ -1073,8 +1073,7 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   }
 
   if (bmask & (1U<<SID)) {
-    int do_sc = 0;
-    for (int l=0; l<itm->sat_count; l++) {
+    for (int l = 0; l < itm->sat_count; l++) {
       QString s = QString::asprintf("%s%.2d",
                                     itm->sat_data[l].used ? "#" : "",
                                     itm->sat_data[l].id);
@@ -1088,8 +1087,10 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
         s += QString::asprintf("-%.2d", itm->sat_data[l].snr);
       }
 
-      gbfprintf(csvFile, "%s%s", do_sc ? ";" : "", CSTR(s));
-      do_sc = 1;
+      if (l) {
+        gbfputc(';', csvFile);
+      }
+      gbfputs(s, csvFile);
     }
     gbfprintf(csvFile, ",");
   }
