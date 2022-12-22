@@ -61,9 +61,17 @@ jobs:
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
       run: |
-        rm -f /usr/local/bin/2to3
+        # homebrew fails to update python from 3.9 to 3.10 due
+        # to another unlinking failure. See hack at brew upgrade
+        rm -f /usr/local/bin/2to3 /usr/local/bin/idle3 \
+          /usr/local/bin/idle3 /usr/local/bin/pydoc3 \
+          /usr/local/bin/python3 /usr/local/bin/python3-config
         brew update
-        brew upgrade
+        # From https://github.com/actions/runner-images/issues/6817#issuecomment-1363382175
+        # a topic that's flaming right now, though this is a recurring
+        # problem as described in
+        # https://github.com/actions/runner-images/issues/4020
+        brew upgrade || true
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         brew install jing-trang
