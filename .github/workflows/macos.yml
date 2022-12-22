@@ -61,7 +61,9 @@ jobs:
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
       run: |
+	rm -f /usr/local/bin/2to3
         brew update
+        brew upgrade
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         brew install jing-trang
