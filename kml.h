@@ -215,7 +215,6 @@ private:
   int max_position_points{};
   int rotate_colors{};
   int line_width{};
-  int html_encrypt{};
   int precision{};
 
   Waypoint* wpt_tmp{nullptr};
