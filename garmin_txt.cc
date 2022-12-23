@@ -3,6 +3,7 @@
     Support for MapSource Text Export (Tab delimited) files.
 
     Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2004-2022 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,6 +50,7 @@
 #include "inifile.h"               // for inifile_readstr
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
 #include "src/core/datetime.h"     // for DateTime
+#include "src/core/logging.h"      // for Fatal
 #include "src/core/textstream.h"   // for TextStream
 #include "strptime.h"              // for strptime
 
@@ -77,8 +79,8 @@ static const char* datum_str;
 static int current_line;
 static char* date_time_format = nullptr;
 static int precision = 3;
+static QString current_line_text;
 static time_t utc_offs = 0;
-
 static gtxt_flags_t gtxt_flags;
 
 enum header_type {
@@ -147,21 +149,22 @@ QVector<arglist_t> garmin_txt_args = {
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
 };
 
-struct info_t {
-  double length;
-  time_t start;
-  time_t time;
-  double speed;
-  double total;
-  int count;
-  const Waypoint* prev_wpt;
-  const Waypoint* first_wpt;
-  const Waypoint* last_wpt;
+class PathInfo {
+ public:
+  double length {0};
+  time_t start {0};
+  time_t time {0};
+  double speed {0};
+  double total {0};
+  int count {0};
+  const Waypoint* prev_wpt {nullptr};
+  const Waypoint* first_wpt {nullptr};
+  const Waypoint* last_wpt {nullptr};
 };
 
-static info_t* route_info;
+static PathInfo* route_info;
 static int route_idx;
-static info_t* cur_info;
+static PathInfo* cur_info;
 
 static const char* headers[] = {
   "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
@@ -244,9 +247,6 @@ static void
 prework_hdr_cb(const route_head*)
 {
   cur_info = &route_info[route_idx];
-  cur_info->prev_wpt = nullptr;
-  cur_info->length = 0;
-  cur_info->time = 0;
 }
 
 static void
@@ -838,18 +838,19 @@ garmin_txt_write()
     delete[] wpt_a;
 
     route_idx = 0;
-    route_info = (info_t*) xcalloc(route_count(), sizeof(info_t));
+    route_info = new PathInfo[route_count()];
     routepoints = 0;
     route_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
     if (routepoints > 0) {
       route_idx = 0;
       route_disp_all(route_disp_hdr_cb, route_disp_tlr_cb, route_disp_wpt_cb);
     }
-    xfree(route_info);
+    delete[] route_info;
+    route_info = nullptr;
   }
 
   route_idx = 0;
-  route_info = (info_t*) xcalloc(track_count(), sizeof(info_t));
+  route_info = new PathInfo[route_count()];
   routepoints = 0;
   track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
 
@@ -857,7 +858,7 @@ garmin_txt_write()
     route_idx = 0;
     track_disp_all(track_disp_hdr_cb, track_disp_tlr_cb, track_disp_wpt_cb);
   }
-  xfree(route_info);
+  delete[] route_info;
 }
 
 /* READER *****************************************************************/
@@ -878,34 +879,59 @@ free_header(const header_type ht)
   memset(header_fields[ht], 0, sizeof(header_fields[ht]));
 }
 
-/* data parsers */
-
-static bool
-parse_date_and_time(const QString& str, time_t* value)
+// Super simple attempt to convert strftime/strptime spec to Qt spec.
+// This misses a LOT of cases and vagaries, but the reality is that we
+// see very few date formats here.
+static QString
+strftime_to_timespec(const char* s)
 {
-  struct tm tm;
+  QString q;
+  int l = strlen(s);
+  q.reserve(l * 2); // no penalty if our guess is wrong.
 
-  memset(&tm, 0, sizeof(tm));
-  QString tstr = str.trimmed();
-  if (tstr.isEmpty()) {
-    return false;
-  }
-
-  const QByteArray ba = tstr.toUtf8();
-  const char* cin = ba.constData();
-  char* cerr = strptime(cin, date_time_format, &tm);
-  if (cerr == nullptr) {
-    cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    if (cerr == nullptr) {
-      fatal(MYNAME ": Invalid date or/and time \"%s\" at line %d!", qPrintable(tstr), current_line);
+  for (int i = 0; i < l; i++) {
+    switch (s[i]) {
+    case '%':
+      if (i < l-1) {
+        switch (s[++i]) {
+        case 'd': q += "dd"; continue;
+        case 'm': q += "MM"; continue ;
+        case 'y': q += "yy"; continue ;
+        case 'Y': q += "yyyy"; continue ;
+        case 'H': q += "hh"; continue ;
+        case 'M': q += "mm"; continue ;
+        case 'S': q += "ss"; continue ;
+        case 'A': q += "dddd"; continue ;
+        case 'a': q += "ddd"; continue ;
+        case 'B': q += "MMMM"; continue ;
+        case 'C': q += "yy"; continue ;
+        case 'D': q += "MM/dd/yyyy"; continue ;
+        case 'T': q += "hh:mm:ss"; continue ;
+        case 'F': q += "yyyy-MM-dd"; continue ;
+        default: q += s[i+1]; break ;
+        }
+      }
+      break;
+    default:
+      q += s[i];
+      break;
     }
   }
+  return q;
+}
 
-//	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
-//		tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-  *value = mklocaltime(&tm);
-  return true;
+/* data parsers */
+
+// This could return an optional QDateTime instead or a pair.
+static bool
+parse_date_and_time(const QString& str, QDateTime* value)
+{
+  QString timespec = strftime_to_timespec(date_time_format);
+  QDateTime dt;
+  dt = QDateTime::fromString(QString(str).trimmed(), timespec);
+  *value = dt;
+  return dt.isValid();
 }
 
 static uint16_t
@@ -1153,7 +1179,7 @@ parse_waypoint(const QStringList& lineparts)
       garmin_fs_t::set_cc(gmsd, gt_get_icao_cc(str, wpt->shortname));
       break;
     case 16: {
-      time_t ct;
+      QDateTime ct;
       if (parse_date_and_time(str, &ct)) {
         wpt->SetCreationTime(ct);
       }
@@ -1224,6 +1250,7 @@ parse_track_header(const QStringList& lineparts)
   current_trk = trk;
 }
 
+
 static void
 parse_route_waypoint(const QStringList& lineparts)
 {
@@ -1242,7 +1269,7 @@ parse_route_waypoint(const QStringList& lineparts)
       }
       wpt = find_waypt_by_name(str);
       if (wpt == nullptr) {
-        fatal(MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", qPrintable(str), current_line);
+        fatal(FatalMsg() << MYNAME << ": Route waypoint " << str << " not in waypoint list (line " << current_line<< ")!\n");
       }
       wpt = new Waypoint(*wpt);
       break;
@@ -1276,7 +1303,7 @@ parse_track_waypoint(const QStringList& lineparts)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       break;
     case 2: {
-      time_t ct;
+      QDateTime ct;
       if (parse_date_and_time(str, &ct)) {
         wpt->SetCreationTime(ct);
       }
