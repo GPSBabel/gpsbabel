@@ -850,7 +850,7 @@ garmin_txt_write()
   }
 
   route_idx = 0;
-  route_info = new PathInfo[route_count()];
+  route_info = new PathInfo[track_count()];
   routepoints = 0;
   track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
 
