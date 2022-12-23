@@ -1,0 +1,12 @@
+<para>
+   Simple implementation of a
+<ulink url="https://en.wikipedia.org/wiki/Kalman_filter">Kalman filter</ulink>
+  to assist in removing misplaced points from GPS tracks that don't implement
+  one natively.
+</para>
+<para>
+  Running this on data that's already filtered, reduced, or that isn't from
+  points recorded at fixed intervals (e.g. once a second) will sometimes
+  damage the track.
+</para>
+

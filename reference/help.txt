@@ -104,7 +104,7 @@ File Types (-i and -o options):
 	  ver                   Version of gdb file to generate (1..3)
 	  via                   (0/1) Drop route points that do not have an equivalent w
 	  dropwpt               (0/1) Don't create waypoints for non-user points
-	  roadbook              (0/1) Include major turn points (with description) from
+	  roadbook              (0/1) Include major turn points (with description) from 
 	garmin_txt            Garmin MapSource - txt (tab delimited)
 	  date                  Read/Write date format (i.e. yyyy/mm/dd)
 	  datum                 GPS datum (def. WGS 84)
@@ -180,8 +180,8 @@ File Types (-i and -o options):
 	  trackdata             (0/1) Include extended data for trackpoints (default = 1
 	  trackdirection        (0/1) Indicate direction of travel in track icons (defau
 	  units                 Units used when writing comments ('s'tatute, 'm'et
-	  labels                (0/1) Display labels on track and routepoints  (default
-	  max_position_point    Retain at most this number of position points  (0
+	  labels                (0/1) Display labels on track and routepoints  (default 
+	  max_position_point    Retain at most this number of position points  (0 
 	  rotate_colors         Rotate colors for tracks and routes (default autom
 	  prec                  Precision of coordinates, number of decimals
 	land_air_sea          GPS Tracking Key Pro text
@@ -270,7 +270,7 @@ File Types (-i and -o options):
 	  erase                 (0/1) Erase device data after download
 	  first-sector          First sector to be read from the device
 	  initbaud              Baud rate used to init device (0=autodetect)
-	  last-sector           Last sector to be read from the device (-1: smart
+	  last-sector           Last sector to be read from the device (-1: smart 
 	  no-output             (0/1) Disable output (useful with erase)
 	  read-at-once          Number of sectors to read at once (0=use single se
 	  Home                  POI for Home Symbol as lat:lng[:alt]
@@ -342,7 +342,7 @@ File Types (-i and -o options):
 	  initbaud              Baud rate used to init device (0=autodetect)
 	  read-at-once          Number of sectors to read at once (0=use single se
 	  first-sector          First sector to be read from the device
-	  last-sector           Last sector to be read from the device (-1: smart
+	  last-sector           Last sector to be read from the device (-1: smart 
 	  dump-file             Dump raw data to this file
 	  no-output             (0/1) Disable output (useful with erase)
 	  gps-utc-offset        Seconds that GPS time tracks UTC (0: best guess)
@@ -388,120 +388,120 @@ File Types (-i and -o options):
 	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
 
 Supported data filters:
-	arc                   Include Only Points Within Distance of Arc
-	  file                  File containing vertices of arc
-	  rte                   Route(s) are vertices of arc
-	  trk                   Track(s) are vertices of arc
+	arc                   Include Only Points Within Distance of Arc        
+	  file                  File containing vertices of arc 
+	  rte                   Route(s) are vertices of arc 
+	  trk                   Track(s) are vertices of arc 
 	  distance              Maximum distance from arc (required)
-	  exclude               Exclude points close to the arc
-	  points                Use distance from vertices not lines
-	  project               Move waypoints to its projection on lines or verti
-	bend                  Add points before and after bends in routes
-	  distance              Distance to the bend in meters where the new point
-	  minangle              Minimum bend angle in degrees
-	discard               Remove unreliable points with high hdop or vdop
-	  hdop                  Suppress points with higher hdop
-	  vdop                  Suppress points with higher vdop
-	  hdopandvdop           Link hdop and vdop suppression with AND
-	  sat                   Minimum sats to keep points
-	  fixnone               Suppress points without fix
-	  fixunknown            Suppress points with unknown fix
-	  elemin                Suppress points below given elevation in meters
-	  elemax                Suppress points above given elevation in meters
-	  matchname             Suppress points where name matches given name
-	  matchdesc             Suppress points where description matches given na
-	  matchcmt              Suppress points where comment matches given name
-	  matchicon             Suppress points where type matches given name
-	duplicate             Remove Duplicates
-	  shortname             Suppress duplicate waypoints based on name
-	  location              Suppress duplicate waypoint based on coords
-	  all                   Suppress all instances of duplicates
-	  correct               Use coords from duplicate points
-	interpolate           Interpolate between trackpoints
-	  time                  Time interval in seconds
-	  distance              Distance interval in miles or kilometers
-	  route                 Interpolate routes instead
-	nuketypes             Remove all waypoints, tracks, or routes
-	  waypoints             Remove all waypoints from data stream
-	  tracks                Remove all tracks from data stream
-	  routes                Remove all routes from data stream
-	polygon               Include Only Points Inside Polygon
+	  exclude               Exclude points close to the arc 
+	  points                Use distance from vertices not lines 
+	  project               Move waypoints to its projection on lines or verti 
+	bend                  Add points before and after bends in routes       
+	  distance              Distance to the bend in meters where the new point 
+	  minangle              Minimum bend angle in degrees 
+	discard               Remove unreliable points with high hdop or vdop   
+	  hdop                  Suppress points with higher hdop 
+	  vdop                  Suppress points with higher vdop 
+	  hdopandvdop           Link hdop and vdop suppression with AND 
+	  sat                   Minimum sats to keep points 
+	  fixnone               Suppress points without fix 
+	  fixunknown            Suppress points with unknown fix 
+	  elemin                Suppress points below given elevation in meters 
+	  elemax                Suppress points above given elevation in meters 
+	  matchname             Suppress points where name matches given name 
+	  matchdesc             Suppress points where description matches given na 
+	  matchcmt              Suppress points where comment matches given name 
+	  matchicon             Suppress points where type matches given name 
+	duplicate             Remove Duplicates                                 
+	  shortname             Suppress duplicate waypoints based on name 
+	  location              Suppress duplicate waypoint based on coords 
+	  all                   Suppress all instances of duplicates 
+	  correct               Use coords from duplicate points 
+	interpolate           Interpolate between trackpoints                   
+	  time                  Time interval in seconds 
+	  distance              Distance interval in miles or kilometers 
+	  route                 Interpolate routes instead 
+	nuketypes             Remove all waypoints, tracks, or routes           
+	  waypoints             Remove all waypoints from data stream 
+	  tracks                Remove all tracks from data stream 
+	  routes                Remove all routes from data stream 
+	polygon               Include Only Points Inside Polygon                
 	  file                  File containing vertices of polygon (required)
-	  exclude               Exclude points inside the polygon
-	position              Remove Points Within Distance
+	  exclude               Exclude points inside the polygon 
+	position              Remove Points Within Distance                     
 	  distance              Maximum positional distance (required)
-	  all                   Suppress all points close to other points
+	  all                   Suppress all points close to other points 
 	  time                  Maximum time in seconds between two points (required)
-	radius                Include Only Points Within Radius
+	radius                Include Only Points Within Radius                 
 	  lat                   Latitude for center point (D.DDDDD) (required)
 	  lon                   Longitude for center point (D.DDDDD) (required)
 	  distance              Maximum distance from center (required)
-	  exclude               Exclude points close to center
-	  nosort                Inhibit sort by distance to center
-	  maxcount              Output no more than this number of points
-	  asroute               Put resulting waypoints in route of this name
-	resample              Resample Track
-	  decimate              Decimate, decrease sample rate by a factor of n
-	  interpolate           Interpolate, increase sample rate by a factor of n
-	  average               Running average of n points
-	simplify              Simplify routes
-	  count                 Maximum number of points in route
-	  error                 Maximum error
-	  crosstrack            Use cross-track error (default)
-	  length                Use arclength error
-	  relative              Use relative error
+	  exclude               Exclude points close to center 
+	  nosort                Inhibit sort by distance to center 
+	  maxcount              Output no more than this number of points 
+	  asroute               Put resulting waypoints in route of this name 
+	resample              Resample Track                                    
+	  decimate              Decimate, decrease sample rate by a factor of n 
+	  interpolate           Interpolate, increase sample rate by a factor of n 
+	  average               Running average of n points 
+	simplify              Simplify routes                                   
+	  count                 Maximum number of points in route 
+	  error                 Maximum error 
+	  crosstrack            Use cross-track error (default) 
+	  length                Use arclength error 
+	  relative              Use relative error 
 	sort                  Rearrange waypoints, routes and/or tracks by resor
-	  description           Sort waypoints by description
-	  gcid                  Sort waypoints by numeric geocache ID
-	  shortname             Sort waypoints by short name
-	  time                  Sort waypoints by time
-	  rtedesc               Sort routes by description
-	  rtename               Sort routes by name
-	  rtenum                Sort routes by number
-	  trkdesc               Sort tracks by description
-	  trkname               Sort tracks by name
-	  trknum                Sort tracks by number
-	stack                 Save and restore waypoint lists
-	  push                  Push waypoint list onto stack
-	  pop                   Pop waypoint list from stack
-	  swap                  Swap waypoint list with <depth> item on stack
-	  copy                  (push) Copy waypoint list
-	  append                (pop) Append list
-	  discard               (pop) Discard top of stack
-	  replace               (pop) Replace list (default)
-	  depth                 (swap) Item to use (default=1)
-	reverse               Reverse stops within routes
-	track                 Manipulate track lists
-	  move                  Correct trackpoint timestamps by a delta
-	  pack                  Pack all tracks into one
-	  split                 Split by date or time interval (see README)
-	  sdistance             Split by distance
-	  merge                 Merge multiple tracks for the same way
-	  name                  Use only track(s) where title matches given name
-	  start                 Use only track points after this timestamp
-	  stop                  Use only track points before this timestamp
-	  title                 Basic title for new track(s)
-	  fix                   Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)
-	  course                Synthesize course
-	  speed                 Synthesize speed
-	  seg2trk               Split track at segment boundaries into multiple tr
-	  trk2seg               Merge tracks inserting segment separators at bound
-	  segment               segment tracks with abnormally long gaps
-	  faketime              Add specified timestamp to each trackpoint
-	  discard               Discard track points without timestamps during mer
-	  minimum_points        Discard tracks with fewer than these points
+	  description           Sort waypoints by description 
+	  gcid                  Sort waypoints by numeric geocache ID 
+	  shortname             Sort waypoints by short name 
+	  time                  Sort waypoints by time 
+	  rtedesc               Sort routes by description 
+	  rtename               Sort routes by name 
+	  rtenum                Sort routes by number 
+	  trkdesc               Sort tracks by description 
+	  trkname               Sort tracks by name 
+	  trknum                Sort tracks by number 
+	stack                 Save and restore waypoint lists                   
+	  push                  Push waypoint list onto stack 
+	  pop                   Pop waypoint list from stack 
+	  swap                  Swap waypoint list with <depth> item on stack 
+	  copy                  (push) Copy waypoint list 
+	  append                (pop) Append list 
+	  discard               (pop) Discard top of stack 
+	  replace               (pop) Replace list (default) 
+	  depth                 (swap) Item to use (default=1) 
+	reverse               Reverse stops within routes                       
+	track                 Manipulate track lists                            
+	  move                  Correct trackpoint timestamps by a delta 
+	  pack                  Pack all tracks into one 
+	  split                 Split by date or time interval (see README) 
+	  sdistance             Split by distance 
+	  merge                 Merge multiple tracks for the same way 
+	  name                  Use only track(s) where title matches given name 
+	  start                 Use only track points after this timestamp 
+	  stop                  Use only track points before this timestamp 
+	  title                 Basic title for new track(s) 
+	  fix                   Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE) 
+	  course                Synthesize course 
+	  speed                 Synthesize speed 
+	  seg2trk               Split track at segment boundaries into multiple tr 
+	  trk2seg               Merge tracks inserting segment separators at bound 
+	  segment               segment tracks with abnormally long gaps 
+	  faketime              Add specified timestamp to each trackpoint 
+	  discard               Discard track points without timestamps during mer 
+	  minimum_points        Discard tracks with fewer than these points 
 	transform             Transform waypoints into a route, tracks into rout
-	  wpt                   Transform track(s) or route(s) into waypoint(s) [R
-	  rte                   Transform waypoint(s) or track(s) into route(s) [W
-	  trk                   Transform waypoint(s) or route(s) into tracks(s) [
-	  rptdigits             Number of digits in generated names
-	  rptname               Use source name for route point names
-	  del                   Delete source data after transformation
-	  timeless              Create transformed points without times
-	height                Manipulate altitudes
-	  add                   Adds a constant value to every altitude (meter, ap
-	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h
-	swap                  Swap latitude and longitude of all loaded points
-	validate              Validate internal data structures
-	  checkempty            Check for empty input
-	  debug                 Output debug messages instead of possibly issuing
+	  wpt                   Transform track(s) or route(s) into waypoint(s) [R 
+	  rte                   Transform waypoint(s) or track(s) into route(s) [W 
+	  trk                   Transform waypoint(s) or route(s) into tracks(s) [ 
+	  rptdigits             Number of digits in generated names 
+	  rptname               Use source name for route point names 
+	  del                   Delete source data after transformation 
+	  timeless              Create transformed points without times 
+	height                Manipulate altitudes                              
+	  add                   Adds a constant value to every altitude (meter, ap 
+	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h 
+	swap                  Swap latitude and longitude of all loaded points  
+	validate              Validate internal data structures                 
+	  checkempty            Check for empty input 
+	  debug                 Output debug messages instead of possibly issuing  
