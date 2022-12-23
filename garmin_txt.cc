@@ -930,8 +930,11 @@ parse_date_and_time(const QString& str, QDateTime* value)
   QString timespec = strftime_to_timespec(date_time_format);
   QDateTime dt;
   dt = QDateTime::fromString(QString(str).trimmed(), timespec);
-  *value = dt;
-  return dt.isValid();
+  bool dt_is_valid = dt.isValid();
+  if (dt_is_valid) {
+    *value = dt;
+  }
+  return dt_is_valid;
 }
 
 static uint16_t
