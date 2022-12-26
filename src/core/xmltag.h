@@ -27,6 +27,15 @@
 class xml_tag
 {
 public:
+
+  /* Member Functions */
+
+  static xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
+  static xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
+  static QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
+
+  /* Data Members */
+
   QString tagname;
   QString cdata;
   QString parentcdata;
@@ -34,11 +43,13 @@ public:
   xml_tag* parent{nullptr};
   xml_tag* sibling{nullptr};
   xml_tag* child{nullptr};
-};
 
-xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
-QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
+private:
+
+  /* Member Functions */
+
+  static xml_tag* xml_next(xml_tag* root, xml_tag* cur);
+};
 
 struct fs_xml : FormatSpecificData {
   explicit fs_xml(FsType type) : FormatSpecificData(type) {}

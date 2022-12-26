@@ -148,24 +148,24 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
     if (fs_gpx && fs_gpx->tag) {
       xml_tag* root = fs_gpx->tag;
-      xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+      xml_tag* curlog = xml_tag::xml_findfirst(root, "groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
         *file_out << "          <p class=\"gpsbabellog\">\n";
 
-        xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+        xml_tag* logpart = xml_tag::xml_findfirst(curlog, "groundspeak:type");
         if (logpart) {
           *file_out << "<span class=\"gpsbabellogtype\">"
                     << logpart->cdata << "</span> by ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:finder");
+        logpart = xml_tag::xml_findfirst(curlog, "groundspeak:finder");
         if (logpart) {
           *file_out << "<span class=\"gpsbabellogfinder\">"
                     << logpart->cdata.toHtmlEscaped() << "</span> on ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:date");
+        logpart = xml_tag::xml_findfirst(curlog, "groundspeak:date");
         if (logpart) {
           logtime = xml_parse_time(logpart->cdata).toTime_t();
           struct tm* logtm = localtime(&logtime);
@@ -177,17 +177,17 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
           }
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
+        logpart = xml_tag::xml_findfirst(curlog, "groundspeak:log_wpt");
         if (logpart) {
-          double lat = xml_attribute(logpart->attributes, "lat").toDouble();
-          double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+          double lat = xml_tag::xml_attribute(logpart->attributes, "lat").toDouble();
+          double lon = xml_tag::xml_attribute(logpart->attributes, "lon").toDouble();
           *file_out << "<span class=\"gpsbabellogcoords\">"
                     << pretty_deg_format(lat, lon, degformat[2], " ", true) << "</span><br>\n";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:text");
+        logpart = xml_tag::xml_findfirst(curlog, "groundspeak:text");
         if (logpart) {
-          QString encstr = xml_attribute(logpart->attributes, "encoded");
+          QString encstr = xml_tag::xml_attribute(logpart->attributes, "encoded");
           bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
           QString s;
@@ -201,7 +201,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
         }
 
         *file_out << "</p>\n";
-        curlog = xml_findnext(root, curlog, "groundspeak:log");
+        curlog = xml_tag::xml_findnext(root, curlog, "groundspeak:log");
       }
     }
   }
