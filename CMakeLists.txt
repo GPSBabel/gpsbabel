@@ -189,6 +189,7 @@ set(SUPPORT
   src/core/usasciicodec.cc
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
+  src/core/xmltag.cc
   strptime.c
   units.cc
   util.cc
@@ -196,7 +197,6 @@ set(SUPPORT
   vecs.cc
   waypt.cc
   xmlgeneric.cc
-  xmltag.cc
 )
 if(${QT_VERSION_MAJOR} EQUAL "6")
   set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
