@@ -20,10 +20,61 @@
  */
 
 #include <QString>                      // for QString
+#include <QStringView>                  // for QStringView
+#include <Qt>                           // for CaseInsensitive
+#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
 #include "defs.h"
+#include "formspec.h"                   // for FsType
 #include "src/core/xmltag.h"
+
+
+/*
+ * xml_tag utilities
+ */
+
+static xml_tag* xml_next(xml_tag* root, xml_tag* cur)
+{
+  if (cur->child) {
+    cur = cur->child;
+  } else if (cur->sibling) {
+    cur = cur->sibling;
+  } else {
+    cur = cur->parent;
+    if (cur == root) {
+      cur = nullptr;
+    }
+    if (cur) {
+      cur = cur->sibling;
+    }
+  }
+  return cur;
+}
+
+xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
+{
+  xml_tag* result = cur;
+  do {
+    result = xml_next(root, result);
+  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
+  return result;
+}
+
+xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
+{
+  return xml_findnext(root, root, tagname);
+}
+
+QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
+{
+  for (const auto& attribute : attributes) {
+    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
+      return attribute.value().toString();
+    }
+  }
+  return QString();
+}
 
 static void
 free_xml_tag(xml_tag* tag)
