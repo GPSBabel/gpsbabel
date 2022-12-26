@@ -53,9 +53,9 @@ xml_tag* xml_tag::xml_next(const xml_tag* root)
   return cur;
 }
 
-xml_tag* xml_tag::xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
+xml_tag* xml_tag::xml_findnext(const xml_tag* root, const QString& tagname)
 {
-  xml_tag* result = cur;
+  xml_tag* result = this;
   do {
     result = result->xml_next(root);
   } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
@@ -64,7 +64,7 @@ xml_tag* xml_tag::xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagna
 
 xml_tag* xml_tag::xml_findfirst(xml_tag* root, const QString& tagname)
 {
-  return xml_findnext(root, root, tagname);
+  return root->xml_findnext(root, tagname);
 }
 
 QString xml_tag::xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)

@@ -201,7 +201,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
         }
 
         *file_out << "</p>\n";
-        curlog = xml_tag::xml_findnext(root, curlog, "groundspeak:log");
+        curlog = curlog->xml_findnext(root, "groundspeak:log");
       }
     }
   }

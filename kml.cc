@@ -1243,7 +1243,7 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     }
 
     r += "</p>";
-    curlog = xml_tag::xml_findnext(root, curlog, "groundspeak:log");
+    curlog = curlog->xml_findnext(root, "groundspeak:log");
   }
   return r;
 }

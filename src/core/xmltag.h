@@ -30,7 +30,7 @@ public:
 
   /* Member Functions */
 
-  static xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
+  xml_tag* xml_findnext(const xml_tag* root, const QString& tagname);
   static xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
   static QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
 
