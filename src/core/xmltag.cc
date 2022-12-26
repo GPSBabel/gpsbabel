@@ -34,8 +34,9 @@
  * xml_tag utilities
  */
 
-xml_tag* xml_tag::xml_next(xml_tag* root, xml_tag* cur)
+xml_tag* xml_tag::xml_next(const xml_tag* root)
 {
+  xml_tag* cur = this;
   if (cur->child) {
     cur = cur->child;
   } else if (cur->sibling) {
@@ -56,7 +57,7 @@ xml_tag* xml_tag::xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagna
 {
   xml_tag* result = cur;
   do {
-    result = xml_next(root, result);
+    result = result->xml_next(root);
   } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
   return result;
 }

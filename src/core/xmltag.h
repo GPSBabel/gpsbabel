@@ -48,7 +48,7 @@ private:
 
   /* Member Functions */
 
-  static xml_tag* xml_next(xml_tag* root, xml_tag* cur);
+  xml_tag* xml_next(const xml_tag* root);
 };
 
 struct fs_xml : FormatSpecificData {
