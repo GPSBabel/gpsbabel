@@ -25,8 +25,6 @@
 #include <QXmlStreamAttribute>          // for QXmlStreamAttribute
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
-#include "defs.h"
-#include "formspec.h"                   // for FsType
 #include "src/core/xmltag.h"
 
 
@@ -53,7 +51,7 @@ XmlTag* XmlTag::xml_next(const XmlTag* root)
   return cur;
 }
 
-XmlTag* XmlTag::xml_findnext(const XmlTag* root, const QString& name)
+XmlTag* XmlTag::xml_findnext(const XmlTag* root, QStringView name)
 {
   XmlTag* result = this;
   do {
@@ -62,12 +60,12 @@ XmlTag* XmlTag::xml_findnext(const XmlTag* root, const QString& name)
   return result;
 }
 
-XmlTag* XmlTag::xml_findfirst(const QString& name)
+XmlTag* XmlTag::xml_findfirst(QStringView name)
 {
   return xml_findnext(this, name);
 }
 
-QString XmlTag::xml_attribute(const QString& attrname) const
+QString XmlTag::xml_attribute(QStringView attrname) const
 {
   for (const auto& attribute : this->attributes) {
     if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {

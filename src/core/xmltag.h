@@ -19,10 +19,12 @@
 #ifndef SRC_CORE_XMLTAG_H
 #define SRC_CORE_XMLTAG_H
 
-#include <QString>                                 // for QString
-#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
+#include <QString>               // for QString
+#include <QStringView>           // for QStringView
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
-#include "defs.h"
+#include "formspec.h"            // for FormatSpecificData, FsType
+
 
 class XmlTag
 {
@@ -30,9 +32,9 @@ public:
 
   /* Member Functions */
 
-  XmlTag* xml_findnext(const XmlTag* root, const QString& name);
-  XmlTag* xml_findfirst(const QString& name);
-  QString xml_attribute(const QString& attrname) const;
+  XmlTag* xml_findnext(const XmlTag* root, QStringView name);
+  XmlTag* xml_findfirst(QStringView name);
+  QString xml_attribute(QStringView attrname) const;
 
   /* Data Members */
 
