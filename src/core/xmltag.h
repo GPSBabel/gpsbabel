@@ -24,14 +24,14 @@
 
 #include "defs.h"
 
-class xml_tag
+class XmlTag
 {
 public:
 
   /* Member Functions */
 
-  xml_tag* xml_findnext(const xml_tag* root, const QString& name);
-  xml_tag* xml_findfirst(const QString& name);
+  XmlTag* xml_findnext(const XmlTag* root, const QString& name);
+  XmlTag* xml_findfirst(const QString& name);
   QString xml_attribute(const QString& attrname) const;
 
   /* Data Members */
@@ -40,15 +40,15 @@ public:
   QString cdata;
   QString parentcdata;
   QXmlStreamAttributes attributes;
-  xml_tag* parent{nullptr};
-  xml_tag* sibling{nullptr};
-  xml_tag* child{nullptr};
+  XmlTag* parent{nullptr};
+  XmlTag* sibling{nullptr};
+  XmlTag* child{nullptr};
 
 private:
 
   /* Member Functions */
 
-  xml_tag* xml_next(const xml_tag* root);
+  XmlTag* xml_next(const XmlTag* root);
 };
 
 struct fs_xml : FormatSpecificData {
@@ -63,7 +63,7 @@ public:
 
   fs_xml* clone() const override;
 
-  xml_tag* tag{nullptr};
+  XmlTag* tag{nullptr};
 };
 
 fs_xml* fs_xml_alloc(FsType type);

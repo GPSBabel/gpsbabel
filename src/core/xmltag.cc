@@ -34,9 +34,9 @@
  * xml_tag utilities
  */
 
-xml_tag* xml_tag::xml_next(const xml_tag* root)
+XmlTag* XmlTag::xml_next(const XmlTag* root)
 {
-  xml_tag* cur = this;
+  XmlTag* cur = this;
   if (cur->child) {
     cur = cur->child;
   } else if (cur->sibling) {
@@ -53,21 +53,21 @@ xml_tag* xml_tag::xml_next(const xml_tag* root)
   return cur;
 }
 
-xml_tag* xml_tag::xml_findnext(const xml_tag* root, const QString& name)
+XmlTag* XmlTag::xml_findnext(const XmlTag* root, const QString& name)
 {
-  xml_tag* result = this;
+  XmlTag* result = this;
   do {
     result = result->xml_next(root);
   } while (result && result->tagname.compare(name, Qt::CaseInsensitive));
   return result;
 }
 
-xml_tag* xml_tag::xml_findfirst(const QString& name)
+XmlTag* XmlTag::xml_findfirst(const QString& name)
 {
   return xml_findnext(this, name);
 }
 
-QString xml_tag::xml_attribute(const QString& attrname) const
+QString XmlTag::xml_attribute(const QString& attrname) const
 {
   for (const auto& attribute : this->attributes) {
     if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
@@ -78,14 +78,14 @@ QString xml_tag::xml_attribute(const QString& attrname) const
 }
 
 static void
-free_xml_tag(xml_tag* tag)
+free_xml_tag(XmlTag* tag)
 {
   while (tag) {
     if (tag->child) {
       free_xml_tag(tag->child);
     }
 
-    xml_tag* next = tag->sibling;
+    XmlTag* next = tag->sibling;
     delete tag;
     tag = next;
   }
@@ -93,14 +93,14 @@ free_xml_tag(xml_tag* tag)
 
 // FIXME: at some point, this becomes a plain ole copy constructor.
 static void
-copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
+copy_xml_tag(XmlTag** copy, XmlTag* src, XmlTag* parent)
 {
   if (!src) {
     *copy = nullptr;
     return;
   }
 
-  auto* res = new xml_tag;
+  auto* res = new XmlTag;
   *copy = res;
 
   res->tagname = (src->tagname);

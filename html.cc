@@ -147,13 +147,13 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   if (includelogs) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
     if (fs_gpx && fs_gpx->tag) {
-      xml_tag* root = fs_gpx->tag;
-      xml_tag* curlog = root->xml_findfirst("groundspeak:log");
+      XmlTag* root = fs_gpx->tag;
+      XmlTag* curlog = root->xml_findfirst("groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
         *file_out << "          <p class=\"gpsbabellog\">\n";
 
-        xml_tag* logpart = curlog->xml_findfirst("groundspeak:type");
+        XmlTag* logpart = curlog->xml_findfirst("groundspeak:type");
         if (logpart) {
           *file_out << "<span class=\"gpsbabellogtype\">"
                     << logpart->cdata << "</span> by ";

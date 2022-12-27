@@ -1213,12 +1213,12 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     return r;
   }
 
-  xml_tag* root = fs_gpx->tag;
-  xml_tag* curlog = root->xml_findfirst("groundspeak:log");
+  XmlTag* root = fs_gpx->tag;
+  XmlTag* curlog = root->xml_findfirst("groundspeak:log");
   while (curlog) {
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
-    xml_tag* logpart = curlog->xml_findfirst("groundspeak:type");
+    XmlTag* logpart = curlog->xml_findfirst("groundspeak:type");
     if (logpart) {
       r = r + "<p><b>" + logpart->cdata + "</b>";
     }
