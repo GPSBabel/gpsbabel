@@ -62,9 +62,9 @@ xml_tag* xml_tag::xml_findnext(const xml_tag* root, const QString& tagname)
   return result;
 }
 
-xml_tag* xml_tag::xml_findfirst(xml_tag* root, const QString& tagname)
+xml_tag* xml_tag::xml_findfirst(const QString& tagname)
 {
-  return root->xml_findnext(root, tagname);
+  return xml_findnext(this, tagname);
 }
 
 QString xml_tag::xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
