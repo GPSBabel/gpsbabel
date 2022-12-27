@@ -32,7 +32,7 @@ public:
 
   xml_tag* xml_findnext(const xml_tag* root, const QString& tagname);
   xml_tag* xml_findfirst(const QString& tagname);
-  static QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
+  QString xml_attribute(const QString& attrname) const;
 
   /* Data Members */
 

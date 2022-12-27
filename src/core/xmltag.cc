@@ -67,9 +67,9 @@ xml_tag* xml_tag::xml_findfirst(const QString& tagname)
   return xml_findnext(this, tagname);
 }
 
-QString xml_tag::xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
+QString xml_tag::xml_attribute(const QString& attrname) const
 {
-  for (const auto& attribute : attributes) {
+  for (const auto& attribute : this->attributes) {
     if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
       return attribute.value().toString();
     }

@@ -179,15 +179,15 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = curlog->xml_findfirst("groundspeak:log_wpt");
         if (logpart) {
-          double lat = xml_tag::xml_attribute(logpart->attributes, "lat").toDouble();
-          double lon = xml_tag::xml_attribute(logpart->attributes, "lon").toDouble();
+          double lat = logpart->xml_attribute("lat").toDouble();
+          double lon = logpart->xml_attribute("lon").toDouble();
           *file_out << "<span class=\"gpsbabellogcoords\">"
                     << pretty_deg_format(lat, lon, degformat[2], " ", true) << "</span><br>\n";
         }
 
         logpart = curlog->xml_findfirst("groundspeak:text");
         if (logpart) {
-          QString encstr = xml_tag::xml_attribute(logpart->attributes, "encoded");
+          QString encstr = logpart->xml_attribute("encoded");
           bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
           QString s;
