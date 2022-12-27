@@ -65,7 +65,7 @@ XmlTag* XmlTag::xml_findfirst(QStringView name)
   return xml_findnext(this, name);
 }
 
-QString XmlTag::xml_attribute(QStringView attrname) const
+QString XmlTag::xml_attribute(const QString& attrname) const
 {
   for (const auto& attribute : this->attributes) {
     if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {

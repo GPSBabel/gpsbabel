@@ -34,7 +34,7 @@ public:
 
   XmlTag* xml_findnext(const XmlTag* root, QStringView name);
   XmlTag* xml_findfirst(QStringView name);
-  QString xml_attribute(QStringView attrname) const;
+  QString xml_attribute(const QString& attrname) const;
 
   /* Data Members */
 
