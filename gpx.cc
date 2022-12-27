@@ -262,7 +262,7 @@ GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr
       cur_tag->sibling = new_tag;
       new_tag->parent = nullptr;
     } else {
-      fs_xml* new_fs_gpx = fs_xml_alloc(kFsGpx);
+      auto* new_fs_gpx = new fs_xml(kFsGpx);
       new_fs_gpx->tag = new_tag;
       fs_ptr->FsChainAdd(new_fs_gpx);
       new_tag->parent = nullptr;

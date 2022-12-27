@@ -65,7 +65,4 @@ public:
 
   XmlTag* tag{nullptr};
 };
-
-fs_xml* fs_xml_alloc(FsType type);
-
 #endif // SRC_CORE_XMLTAG_H

@@ -123,9 +123,3 @@ fs_xml* fs_xml::clone() const
   copy_xml_tag(&(copy->tag), tag, nullptr);
   return copy;
 }
-
-fs_xml* fs_xml_alloc(FsType type)
-{
-  auto* result = new fs_xml(type);
-  return result;
-}
