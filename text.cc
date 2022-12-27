@@ -130,23 +130,23 @@ TextFormat::text_disp(const Waypoint* wpt)
   if (includelogs) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
     if (fs_gpx && fs_gpx->tag) {
-      xml_tag* root = fs_gpx->tag;
-      xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+      XmlTag* root = fs_gpx->tag;
+      XmlTag* curlog = root->xml_findfirst(u"groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
         *file_out << "\n";
 
-        xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+        XmlTag* logpart = curlog->xml_findfirst(u"groundspeak:type");
         if (logpart) {
           *file_out << logpart->cdata << " by ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:finder");
+        logpart = curlog->xml_findfirst(u"groundspeak:finder");
         if (logpart) {
           *file_out << logpart->cdata << " on ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:date");
+        logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
           logtime = xml_parse_time(logpart->cdata).toTime_t();
           struct tm* logtm = localtime(&logtime);
@@ -158,16 +158,16 @@ TextFormat::text_disp(const Waypoint* wpt)
           }
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
+        logpart = curlog->xml_findfirst(u"groundspeak:log_wpt");
         if (logpart) {
-          double lat = xml_attribute(logpart->attributes, "lat").toDouble();
-          double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+          double lat = logpart->xml_attribute("lat").toDouble();
+          double lon = logpart->xml_attribute("lon").toDouble();
           *file_out << pretty_deg_format(lat, lon, degformat[2], " ", false) << "\n";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:text");
+        logpart = curlog->xml_findfirst(u"groundspeak:text");
         if (logpart) {
-          QString encstr = xml_attribute(logpart->attributes, "encoded");
+          QString encstr = logpart->xml_attribute("encoded");
           bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
           QString s;
@@ -181,7 +181,7 @@ TextFormat::text_disp(const Waypoint* wpt)
         }
 
         *file_out << "\n";
-        curlog = xml_findnext(root, curlog, "groundspeak:log");
+        curlog = curlog->xml_findnext(root, u"groundspeak:log");
       }
     }
   }
