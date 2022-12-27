@@ -30,8 +30,8 @@ public:
 
   /* Member Functions */
 
-  xml_tag* xml_findnext(const xml_tag* root, const QString& tagname);
-  xml_tag* xml_findfirst(const QString& tagname);
+  xml_tag* xml_findnext(const xml_tag* root, const QString& name);
+  xml_tag* xml_findfirst(const QString& name);
   QString xml_attribute(const QString& attrname) const;
 
   /* Data Members */

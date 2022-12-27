@@ -53,18 +53,18 @@ xml_tag* xml_tag::xml_next(const xml_tag* root)
   return cur;
 }
 
-xml_tag* xml_tag::xml_findnext(const xml_tag* root, const QString& tagname)
+xml_tag* xml_tag::xml_findnext(const xml_tag* root, const QString& name)
 {
   xml_tag* result = this;
   do {
     result = result->xml_next(root);
-  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
+  } while (result && result->tagname.compare(name, Qt::CaseInsensitive));
   return result;
 }
 
-xml_tag* xml_tag::xml_findfirst(const QString& tagname)
+xml_tag* xml_tag::xml_findfirst(const QString& name)
 {
-  return xml_findnext(this, tagname);
+  return xml_findnext(this, name);
 }
 
 QString xml_tag::xml_attribute(const QString& attrname) const
