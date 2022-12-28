@@ -826,7 +826,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     if (idatum < 0) {
       fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum);
     }
-    if (idatum != DATUM_WGS84) {
+    if (idatum != kDautmWGS84) {
       GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
                                       &wpt->latitude, &wpt->longitude, &alt, idatum);
     }

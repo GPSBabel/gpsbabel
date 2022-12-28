@@ -215,7 +215,7 @@ ozi_set_time_str(const QString& str, Waypoint* waypointp)
 static void
 ozi_convert_datum(Waypoint* wpt)
 {
-  if (datum != DATUM_WGS84) {
+  if (datum != kDautmWGS84) {
     double lat, lon, alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &lat, &lon, &alt, datum);

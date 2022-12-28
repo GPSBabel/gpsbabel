@@ -515,7 +515,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   /* SPECIAL COORDINATES/GRID */
   case XcsvStyle::XT_MAP_EN_BNG:
-    parse_coordinates(s, DATUM_OSGB36, grid_bng,
+    parse_coordinates(s, kDatumOSGB36, grid_bng,
                       &wpt->latitude, &wpt->longitude, MYNAME);
     break;
   case XcsvStyle::XT_UTM_ZONE:
@@ -891,7 +891,7 @@ XcsvFormat::read()
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
-      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != gps_datum_wgs84)) {
+      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
         double alt;
         GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
                                         &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file->gps_datum_idx);
@@ -902,7 +902,7 @@ XcsvFormat::read()
                                        &wpt_tmp->longitude,
                                        parse_data.utm_easting, parse_data.utm_northing,
                                        parse_data.utm_zone, parse_data.utm_zonec,
-                                       DATUM_WGS84);
+                                       kDautmWGS84);
       }
 
       if (parse_data.link_) {
@@ -1018,7 +1018,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     description = shortname;
   }
 
-  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != gps_datum_wgs84)) {
+  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
     double alt;
     GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
                                     &latitude, &longitude, &alt, xcsv_file->gps_datum_idx);
@@ -1863,7 +1863,6 @@ XcsvFormat::rd_init(const QString& fname)
   if (xcsv_file->gps_datum_idx < 0) {
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
-  assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
 void
@@ -1944,7 +1943,6 @@ XcsvFormat::wr_init(const QString& fname)
   if (xcsv_file->gps_datum_idx < 0) {
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
-  assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
 void

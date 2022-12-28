@@ -596,15 +596,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_bng:
-      parse_coordinates(value, DATUM_OSGB36, grid_bng,
+      parse_coordinates(value, kDatumOSGB36, grid_bng,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_bng_zone:
@@ -621,11 +621,11 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_swiss:
-      parse_coordinates(value, DATUM_WGS84, grid_swiss,
+      parse_coordinates(value, kDautmWGS84, grid_swiss,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_swiss_easting:
@@ -1051,15 +1051,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 bng_zone, bng_easting, bng_northing);
       }
-      src_datum = DATUM_WGS84;	/* don't convert afterwards */
+      src_datum = kDautmWGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
                                  &wpt->latitude, &wpt->longitude);
-      src_datum = DATUM_WGS84;	/* don't convert afterwards */
+      src_datum = kDautmWGS84;	/* don't convert afterwards */
     }
   }
 
-  if ((src_datum != DATUM_WGS84) &&
+  if ((src_datum != kDautmWGS84) &&
       (wpt->latitude != kUnicsvUnknown) && (wpt->longitude != kUnicsvUnknown)) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
@@ -1311,7 +1311,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   QString shortname = wpt->shortname;
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
-  if (unicsv_datum_idx == DATUM_WGS84) {
+  if (unicsv_datum_idx == kDautmWGS84) {
     lat = wpt->latitude;
     lon = wpt->longitude;
     alt = wpt->altitude;
@@ -1712,7 +1712,7 @@ UnicsvFormat::wr_init(const QString& fname)
 
   memset(&unicsv_outp_flags, 0, sizeof(unicsv_outp_flags));
   unicsv_grid_idx = grid_unknown;
-  unicsv_datum_idx = DATUM_WGS84;
+  unicsv_datum_idx = kDautmWGS84;
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
@@ -1733,11 +1733,11 @@ UnicsvFormat::wr_init(const QString& fname)
     /* force datum to "Ord Srvy Grt Britn" / OSGB36 */
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = DATUM_OSGB36;
+    unicsv_datum_idx = kDatumOSGB36;
   } else if (unicsv_grid_idx == grid_swiss)
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = DATUM_WGS84;  /* internal, becomes CH1903 */
+    unicsv_datum_idx = kDautmWGS84;  /* internal, becomes CH1903 */
   } else {
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
