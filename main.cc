@@ -720,8 +720,8 @@ main(int argc, char* argv[])
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
-  assert(GPS_Lookup_Datum_Index("OSGB36") == DATUM_OSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == DATUM_WGS84);
+  assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

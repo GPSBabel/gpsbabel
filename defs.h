@@ -129,8 +129,8 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
-constexpr int DATUM_OSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
-constexpr int DATUM_WGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
+constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 /* Pathname separator character */
 #if __WIN32__

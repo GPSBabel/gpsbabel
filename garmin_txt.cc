@@ -206,7 +206,7 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 {
   double alt;
 
-  if (datum_index == DATUM_WGS84) {
+  if (datum_index == kDautmWGS84) {
     *dest_lat = wpt->latitude;
     *dest_lon = wpt->longitude;
   } else GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
@@ -776,10 +776,10 @@ garmin_txt_wr_init(const QString& fname)
 
   switch (grid_index) {
   case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
-    datum_index = DATUM_OSGB36;
+    datum_index = kDatumOSGB36;
     break;
   case grid_swiss: /* force datum to WGS84 */
-    datum_index = DATUM_WGS84;
+    datum_index = kDautmWGS84;
     break;
   default:
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);

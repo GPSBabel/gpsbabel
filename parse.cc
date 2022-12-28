@@ -207,7 +207,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     break;
 
   case grid_bng:
-    datum = DATUM_WGS84;	/* fix */
+    datum = kDautmWGS84;	/* fix */
     format = "%2s %lf %lf%n";
     ct = sscanf(str, format,
                 map, &lx, &ly,
@@ -238,7 +238,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
   case grid_swiss: {
     double east, north;
 
-    datum = DATUM_WGS84;	/* fix */
+    datum = kDautmWGS84;	/* fix */
     format = "%lf %lf%n";
     ct = sscanf(str, format,
                 &east, &north, &result);
@@ -265,7 +265,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     lon = -lon;
   }
 
-  if (datum != DATUM_WGS84) {
+  if (datum != kDautmWGS84) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(lat, lon, 0.0,
                                     &lat, &lon, &alt, datum);
