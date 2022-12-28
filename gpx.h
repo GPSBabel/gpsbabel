@@ -204,7 +204,7 @@ private:
   void gpx_end(QStringView unused);
   void gpx_cdata(QStringView s);
   void write_attributes(const QXmlStreamAttributes& attributes) const;
-  void fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const;
+  void fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;
   void write_gpx_url(const Waypoint* waypointp) const;
   void write_gpx_url(const route_head* rh) const;
@@ -225,7 +225,7 @@ private:
   void gpx_write_bounds();
 
   QXmlStreamReader* reader{};
-  xml_tag* cur_tag{};
+  XmlTag* cur_tag{};
   QString cdatastr;
   char* opt_logpoint = nullptr;
   char* opt_humminbirdext = nullptr;

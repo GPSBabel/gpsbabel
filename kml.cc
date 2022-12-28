@@ -1213,22 +1213,22 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     return r;
   }
 
-  xml_tag* root = fs_gpx->tag;
-  xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+  XmlTag* root = fs_gpx->tag;
+  XmlTag* curlog = root->xml_findfirst(u"groundspeak:log");
   while (curlog) {
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
-    xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+    XmlTag* logpart = curlog->xml_findfirst(u"groundspeak:type");
     if (logpart) {
       r = r + "<p><b>" + logpart->cdata + "</b>";
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:finder");
+    logpart = curlog->xml_findfirst(u"groundspeak:finder");
     if (logpart) {
       r = r + " by " + logpart->cdata;
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:date");
+    logpart = curlog->xml_findfirst(u"groundspeak:date");
     if (logpart) {
       gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
       if (t.isValid()) {
@@ -1236,14 +1236,14 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
       }
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:text");
+    logpart = curlog->xml_findfirst(u"groundspeak:text");
     if (logpart) {
       r += "<br />";
       r += logpart->cdata.toHtmlEscaped();
     }
 
     r += "</p>";
-    curlog = xml_findnext(root, curlog, "groundspeak:log");
+    curlog = curlog->xml_findnext(root, u"groundspeak:log");
   }
   return r;
 }

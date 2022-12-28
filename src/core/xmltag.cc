@@ -20,20 +20,70 @@
  */
 
 #include <QString>                      // for QString
+#include <QStringView>                  // for QStringView
+#include <Qt>                           // for CaseInsensitive
+#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
 #include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 
-#include "defs.h"
 #include "src/core/xmltag.h"
 
+
+/*
+ * xml_tag utilities
+ */
+
+XmlTag* XmlTag::xml_next(const XmlTag* root)
+{
+  XmlTag* cur = this;
+  if (cur->child) {
+    cur = cur->child;
+  } else if (cur->sibling) {
+    cur = cur->sibling;
+  } else {
+    cur = cur->parent;
+    if (cur == root) {
+      cur = nullptr;
+    }
+    if (cur) {
+      cur = cur->sibling;
+    }
+  }
+  return cur;
+}
+
+XmlTag* XmlTag::xml_findnext(const XmlTag* root, QStringView name)
+{
+  XmlTag* result = this;
+  do {
+    result = result->xml_next(root);
+  } while (result && result->tagname.compare(name, Qt::CaseInsensitive));
+  return result;
+}
+
+XmlTag* XmlTag::xml_findfirst(QStringView name)
+{
+  return xml_findnext(this, name);
+}
+
+QString XmlTag::xml_attribute(const QString& attrname) const
+{
+  for (const auto& attribute : this->attributes) {
+    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
+      return attribute.value().toString();
+    }
+  }
+  return QString();
+}
+
 static void
-free_xml_tag(xml_tag* tag)
+free_xml_tag(XmlTag* tag)
 {
   while (tag) {
     if (tag->child) {
       free_xml_tag(tag->child);
     }
 
-    xml_tag* next = tag->sibling;
+    XmlTag* next = tag->sibling;
     delete tag;
     tag = next;
   }
@@ -41,14 +91,14 @@ free_xml_tag(xml_tag* tag)
 
 // FIXME: at some point, this becomes a plain ole copy constructor.
 static void
-copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
+copy_xml_tag(XmlTag** copy, XmlTag* src, XmlTag* parent)
 {
   if (!src) {
     *copy = nullptr;
     return;
   }
 
-  auto* res = new xml_tag;
+  auto* res = new XmlTag;
   *copy = res;
 
   res->tagname = (src->tagname);
@@ -70,10 +120,4 @@ fs_xml* fs_xml::clone() const
   auto* copy = new fs_xml(*this);
   copy_xml_tag(&(copy->tag), tag, nullptr);
   return copy;
-}
-
-fs_xml* fs_xml_alloc(FsType type)
-{
-  auto* result = new fs_xml(type);
-  return result;
 }
