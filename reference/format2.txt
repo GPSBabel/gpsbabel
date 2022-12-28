@@ -42,9 +42,6 @@ file	r-rwr-	humminbird_ht	ht	Humminbird tracks (.ht)
 file	rwr-rw	humminbird	hwr	Humminbird waypoints and routes (.hwr)
 internal	r-r-r-	random		Internal GPS data generator
 file	rwrwrw	lowranceusr	usr	Lowrance USR
-file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)
-file	rwrwrw	magellan		Magellan SD files (as for Meridian)
-serial	rwrwrw	magellan		Magellan serial protocol
 serial	r-r---	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)
 file	--r---	garmin_xt		Mobile Garmin XT Track files
 file	r-r---	mtk-bin	bin	MTK Logger (iBlue 747,...) Binary File Format

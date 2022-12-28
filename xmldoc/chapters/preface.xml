@@ -12,7 +12,7 @@ standard in XML to contain all the data, but there are too many
 programs that don't understand it yet and too much data in
 alternate formats.</para>
       <para>Perhaps you have an
-         <link linkend="fmt_magellanx">Explorist 600</link>
+         <link linkend="fmt_garmin">GPSMap 60CSx</link>
          and your friend has a
          <link linkend="fmt_garmin">StreetPilot 2720</link>
          .

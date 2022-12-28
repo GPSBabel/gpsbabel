@@ -67,14 +67,12 @@ set(RESOURCES gpsbabel.qrc)
 
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
-  explorist_ini.cc
   garmin.cc
   garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
   kml.cc
-  magproto.cc
   nmea.cc
   wbt-200.cc
 )
@@ -209,7 +207,6 @@ set(HEADERS
   defs.h
   dg-100.h
   exif.h
-  explorist_ini.h
   filter.h
   filter_vecs.h
   format.h
@@ -237,7 +234,6 @@ set(HEADERS
   kml.h
   legacyformat.h
   lowranceusr.h
-  magellan.h
   navilink.h
   nmea.h
   osm.h
@@ -376,7 +372,6 @@ set(TESTS
   arc
   batch
   bend
-  classic-1
   classic-2
   classic-3
   dg100
@@ -408,8 +403,6 @@ set(TESTS
   kml-read
   kml
   lowranceusr
-  magellan_sd
-  magellan
   mtk
   multiurlgpx
   navilink
