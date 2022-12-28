@@ -74,7 +74,6 @@ set(MINIMAL_FMTS
   geo.cc
   gpx.cc
   kml.cc
-  magproto.cc
   nmea.cc
   wbt-200.cc
 )
@@ -237,7 +236,6 @@ set(HEADERS
   kml.h
   legacyformat.h
   lowranceusr.h
-  magellan.h
   navilink.h
   nmea.h
   osm.h
@@ -408,8 +406,6 @@ set(TESTS
   kml-read
   kml
   lowranceusr
-  magellan_sd
-  magellan
   mtk
   multiurlgpx
   navilink

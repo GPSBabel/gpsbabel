@@ -508,30 +508,6 @@ option	lowranceusr	serialnum	(USR output) Device serial number	integer	0			https
 
 option	lowranceusr	description	(USR output) Output file content description	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_description
 
-file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)	magellanx
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html
-option	magellanx	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html#fmt_magellanx_o_deficon
-
-option	magellanx	maxcmts	Max number of comments to write (maxcmts=200)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html#fmt_magellanx_o_maxcmts
-
-file	rwrwrw	magellan		Magellan SD files (as for Meridian)	magellan
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html
-option	magellan	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_deficon
-
-option	magellan	maxcmts	Max number of comments to write (maxcmts=200)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_maxcmts
-
-serial	rwrwrw	magellan		Magellan serial protocol	magellan
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html
-option	magellan	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_deficon
-
-option	magellan	maxcmts	Max number of comments to write (maxcmts=200)	integer	200			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_maxcmts
-
-option	magellan	baud	Numeric value of bitrate (baud=4800)	integer	4800			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_baud
-
-option	magellan	noack	Suppress use of handshaking in name of speed	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_noack
-
-option	magellan	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_nukewpt
-
 serial	r-r---	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)	miniHomer
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_miniHomer.html
 option	miniHomer	baud	Baud rate used for download	integer	115200	0	115200	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_miniHomer.html#fmt_miniHomer_o_baud
