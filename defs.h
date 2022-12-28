@@ -129,6 +129,9 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
+constexpr int DATUM_OSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
+constexpr int DATUM_WGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+
 /* Pathname separator character */
 #if __WIN32__
 #  define GB_PATHSEP '\\'
@@ -1154,9 +1157,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-#define DATUM_OSGB36	86
-#define DATUM_WGS84	118
-
 /* bit manipulation functions (util.c) */
 
 char gb_getbit(const void* buf, uint32_t nr);
@@ -1198,9 +1198,5 @@ int color_to_bbggrr(const char* cname);
  */
 #define unknown_alt 	-99999999.0
 #define unknown_color	-1
-
-// TODO: this is a (probably temporary) shim for the C->QString conversion.
-// It's here instead of gps to avoid C/C++ linkage issues.
-int32_t GPS_Lookup_Datum_Index(const QString& n);
 
 #endif // DEFS_H_INCLUDED_

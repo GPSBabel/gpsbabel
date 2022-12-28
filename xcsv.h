@@ -364,8 +364,6 @@ private:
     return (a / 86400.0) + 25569.0;
   }
 
-  static constexpr int gps_datum_wgs84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
-
   /* Member Functions */
 
   static QDateTime yyyymmdd_to_time(const QString& s);
