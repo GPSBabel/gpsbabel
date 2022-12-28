@@ -374,7 +374,6 @@ set(TESTS
   arc
   batch
   bend
-  classic-1
   classic-2
   classic-3
   dg100
