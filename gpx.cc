@@ -218,7 +218,7 @@ GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr
     return;
   }
 
-  auto* new_tag = new xml_tag;
+  auto* new_tag = new XmlTag;
   new_tag->tagname = el.toString();
 
   const QXmlStreamNamespaceDeclarations ns = reader->namespaceDeclarations();
@@ -262,7 +262,7 @@ GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr
       cur_tag->sibling = new_tag;
       new_tag->parent = nullptr;
     } else {
-      fs_xml* new_fs_gpx = fs_xml_alloc(kFsGpx);
+      auto* new_fs_gpx = new fs_xml(kFsGpx);
       new_fs_gpx->tag = new_tag;
       fs_ptr->FsChainAdd(new_fs_gpx);
       new_tag->parent = nullptr;
@@ -901,7 +901,7 @@ GpxFormat::gpx_cdata(QStringView s)
   }
 
   if (cur_tag->child) {
-    xml_tag* tmp_tag = cur_tag->child;
+    XmlTag* tmp_tag = cur_tag->child;
     while (tmp_tag->sibling) {
       tmp_tag = tmp_tag->sibling;
     }
@@ -1138,7 +1138,7 @@ GpxFormat::write_attributes(const QXmlStreamAttributes& attributes) const
 }
 
 void
-GpxFormat::fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const
+GpxFormat::fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);

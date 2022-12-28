@@ -22,6 +22,7 @@
 #include <algorithm>                    // for sort
 #include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
 #include <cerrno>                       // for errno
+#include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
@@ -32,6 +33,7 @@
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
+#include <QDate>                        // for QDate
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
@@ -40,16 +42,15 @@
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
+#include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
 #include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/logging.h"           // for Warning
-#include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
+
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 # define i_am_little_endian 0
@@ -1342,52 +1343,6 @@ strip_html(const utf_string* in)
   xfree(outstring);
   return rv;
 #endif
-}
-
-/*
- * xml_tag utilities
- */
-
-xml_tag* xml_next(xml_tag* root, xml_tag* cur)
-{
-  if (cur->child) {
-    cur = cur->child;
-  } else if (cur->sibling) {
-    cur = cur->sibling;
-  } else {
-    cur = cur->parent;
-    if (cur == root) {
-      cur = nullptr;
-    }
-    if (cur) {
-      cur = cur->sibling;
-    }
-  }
-  return cur;
-}
-
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
-{
-  xml_tag* result = cur;
-  do {
-    result = xml_next(root, result);
-  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
-  return result;
-}
-
-xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
-{
-  return xml_findnext(root, root, tagname);
-}
-
-QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
-{
-  for (const auto& attribute : attributes) {
-    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
-      return attribute.value().toString();
-    }
-  }
-  return QString();
 }
 
 QString get_filename(const QString& fname)
