@@ -207,8 +207,6 @@ merged data to multiple destinations.
          transparently with waypoints, tracks, and routes.  Some
          formats, like
       <link linkend="fmt_garmin">garmin</link>
-      and
-      <link linkend="fmt_magellan">magellan</link>
       require the
       <parameter>-t</parameter>
       flag to work with tracks and
