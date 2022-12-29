@@ -16,6 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef SRC_CORE_CODECDEVICE_H_
+#define SRC_CORE_CODECDEVICE_H_
 
 #include <QIODevice>        // for QIODevice
 #include <QIODeviceBase>    // for QIODeviceBase::OpenMode
@@ -61,3 +63,4 @@ private:
 };
 
 } // namespace
+#endif // SRC_CORE_CODECDEVICE_H_

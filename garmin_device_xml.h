@@ -19,6 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef GARMIN_DEVICE_XML_H_
+#define GARMIN_DEVICE_XML_H_
 
 /*
  * Describes a file on the unit.
@@ -54,3 +56,4 @@ const gdx_info* gdx_find_file(char** dirlist);
 #include <csetjmp>
 extern jmp_buf gdx_jmp_buf;
 
+#endif // GARMIN_DEVICE_XML_H_

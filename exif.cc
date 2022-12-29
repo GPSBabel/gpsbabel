@@ -254,7 +254,7 @@ ExifFormat::exif_read_timestamp(const ExifTag* tag)
   double min = exif_read_double(tag, 1);
   double sec = exif_read_double(tag, 2);
 
-  return QTime(int(hour), int(min), int(sec));
+  return QTime(0, 0).addMSecs(lround((((hour * 60.0) + min) * 60.0 + sec) * 1000.0));
 }
 
 QDate

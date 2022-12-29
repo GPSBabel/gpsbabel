@@ -367,6 +367,11 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+# In case we ever update the garmin_icons mkicondoc helps 
+# update the related document table.
+add_executable(mkicondoc EXCLUDE_FROM_ALL mkicondoc.cc)
+target_link_libraries(mkicondoc PRIVATE ${QT_LIBRARIES})
+
 set(TESTS
   arc-project
   arc
