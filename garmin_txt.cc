@@ -1391,23 +1391,23 @@ garmin_txt_read()
     auto linetype = lineparts.at(0);
     lineparts.removeFirst();
 
-    if (case_ignore_strcmp(linetype, "Header") == 0) {
+    if (linetype.compare(u"Header", Qt::CaseInsensitive) == 0) {
       parse_header(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Grid") == 0) {
+    } else if (linetype.compare(u"Grid", Qt::CaseInsensitive) == 0) {
       parse_grid(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Datum") == 0) {
+    } else if (linetype.compare(u"Datum", Qt::CaseInsensitive) == 0) {
       parse_datum(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Waypoint") == 0) {
+    } else if (linetype.compare(u"Waypoint", Qt::CaseInsensitive) == 0) {
       parse_waypoint(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Route Waypoint") == 0) {
+    } else if (linetype.compare(u"Route Waypoint", Qt::CaseInsensitive) == 0) {
       parse_route_waypoint(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Trackpoint") == 0) {
+    } else if (linetype.compare(u"Trackpoint", Qt::CaseInsensitive) == 0) {
       parse_track_waypoint(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Route") == 0) {
+    } else if (linetype.compare(u"Route", Qt::CaseInsensitive) == 0) {
       parse_route_header(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Track") == 0) {
+    } else if (linetype.compare(u"Track", Qt::CaseInsensitive) == 0) {
       parse_track_header(lineparts);
-    } else if (case_ignore_strcmp(linetype, "Map") == 0) /* do nothing */ ;
+    } else if (linetype.compare(u"Map", Qt::CaseInsensitive) == 0) /* do nothing */ ;
     else {
       fatal(MYNAME ": Unknown identifier (%s) at line %d!\n", qPrintable(linetype), current_line);
     }

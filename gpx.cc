@@ -656,7 +656,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
    * last date we saw in this log.
    */
   case tt_cache_log_type:
-    if ((cdatastr.compare(QLatin1String("Found it")) == 0) &&
+    if ((cdatastr.compare(u"Found it") == 0) &&
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       wpt_tmp->AllocGCData()->last_found = gc_log_date;
     }
@@ -1154,7 +1154,7 @@ GpxFormat::fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const
         fprint_xml_chain(tag->child, wpt);
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
-          tag->tagname.compare(QLatin1String("groundspeak:cache")) == 0) {
+          tag->tagname.compare(u"groundspeak:cache") == 0) {
         writer->writeTextElement(QStringLiteral("time"),
                                  wpt->gc_data->exported.toPrettyString());
       }

@@ -233,7 +233,7 @@ ozi_openfile(const QString& fname)
    * mytrack.plt, mytrack-1.plt...unless we're writing to stdout.
    */
 
-  if (fname == "-") {
+  if (fname ==  '-') {
     if (stream == nullptr) {
       ozi_open_io(fname, QFile::WriteOnly);
     }
