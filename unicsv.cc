@@ -668,15 +668,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
-      if (case_ignore_strcmp(value, "none") == 0) {
+      if (value.compare(u"none", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_none;
-      } else if (case_ignore_strcmp(value, "2d") == 0) {
+      } else if (value.compare(u"2d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_2d;
-      } else if (case_ignore_strcmp(value, "3d") == 0) {
+      } else if (value.compare(u"3d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_3d;
-      } else if (case_ignore_strcmp(value, "dgps") == 0) {
+      } else if (value.compare(u"dgps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_dgps;
-      } else if (case_ignore_strcmp(value, "pps") == 0) {
+      } else if (value.compare(u"pps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
