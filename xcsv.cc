@@ -676,9 +676,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
+    if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_false;
-    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
+    } else if (value.trimmed().compare(u"True", Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_true;
     } else {
       gc_data->is_available = status_unknown;
@@ -686,9 +686,9 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
+    if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_false;
-    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
+    } else if (value.trimmed().compare(u"True", Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_true;
     } else {
       gc_data->is_archived = status_unknown;
@@ -711,11 +711,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_GPS_FIX:
     wpt->fix = (fix_type)(xstrtoi(s, nullptr, 10)-(fix_type)1);
     if (wpt->fix < fix_2d) {
-      if (!case_ignore_strcmp(value, "none")) {
+      if (!value.compare(u"none", Qt::CaseInsensitive)) {
         wpt->fix = fix_none;
-      } else if (!case_ignore_strcmp(value, "dgps")) {
+      } else if (!value.compare(u"dgps", Qt::CaseInsensitive)) {
         wpt->fix = fix_dgps;
-      } else if (!case_ignore_strcmp(value, "pps")) {
+      } else if (!value.compare(u"pps", Qt::CaseInsensitive)) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;

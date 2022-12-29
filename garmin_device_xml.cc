@@ -42,7 +42,7 @@ jmp_buf gdx_jmp_buf;
 
 static void type_s(xg_string args, const QXmlStreamAttributes*)
 {
-  type = args.compare(QLatin1String("GPSData"));
+  type = args.compare(u"GPSData");
 }
 
 void device_s(xg_string args, const QXmlStreamAttributes*)
