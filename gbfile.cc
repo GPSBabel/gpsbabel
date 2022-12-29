@@ -22,6 +22,7 @@
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar, operator==, operator!=
+#include <QDebug>              // for QDebug
 #include <QString>             // for QString
 #include <QtGlobal>            // for qPrintable
 

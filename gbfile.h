@@ -26,11 +26,14 @@
 #include <QByteArray>           // for QByteArray
 #include <QString>              // for QString
 
-#include <cstdarg>             // for va_list
 #include <cstdint>             // for int32_t, int16_t, uint32_t
 #include <cstdio>              // for FILE
 
-#include "defs.h"
+#if HAVE_LIBZ
+#include <zlib.h>                    // doesn't really belong here, but is missing elsewhere.
+#elif !ZLIB_INHIBITED
+#include "zlib.h"                    // doesn't really belong here, but is missing elsewhere.
+#endif
 
 
 struct gbfile;

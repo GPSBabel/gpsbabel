@@ -22,11 +22,27 @@
 
 
 /* Based on description at http://wiki.splitbrain.org/navilink */
+
+#include <ctime>                   // for gmtime, time_t
+#include <cstring>                 // for memcpy, memset, strncpy
+
+#include <QByteArray>              // for QByteArray
+#include <QDate>                   // for QDate
+#include <QDateTime>               // for QDateTime
+#include <QString>                 // for QString, operator==
+#include <QThread>                 // for QThread
+#include <QTime>                   // for QTime
+#include <QVector>                 // for QVector
+#include <QtCore>                  // for qPrintable, UTC
+
 #include "defs.h"
-#include "gbser.h"
-#include "jeeps/gpsmath.h"
 #include "navilink.h"
-#include <QThread>
+#include "gbfile.h"                // for gbfwrite, gbfclose, gbfopen, gbfread
+#include "gbser.h"                 // for gbser_read_wait, gbser_deinit, gbs...
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
+#include "jeeps/gpsport.h"         // for int32
+#include "src/core/datetime.h"     // for DateTime
+
 
 #define MYNAME "NAVILINK"
 
