@@ -30,9 +30,9 @@
 #include <cstdio>              // for FILE
 
 #if HAVE_LIBZ
-#include <zlib.h>                    // doesn't really belong here, but is missing elsewhere.
+#include <zlib.h>
 #elif !ZLIB_INHIBITED
-#include "zlib.h"                    // doesn't really belong here, but is missing elsewhere.
+#include "zlib.h"
 #endif
 
 
