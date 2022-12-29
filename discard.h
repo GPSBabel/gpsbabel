@@ -66,7 +66,7 @@ private:
   int satpf{};
   int eleminpf{};
   int elemaxpf{};
-  gpsdata_type what;
+  gpsdata_type what{};
   route_head* head{};
 
   QVector<arglist_t> args = {

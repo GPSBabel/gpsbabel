@@ -16,8 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#ifndef gpsbabel_logging_h_included
-#define gpsbabel_logging_h_included
+#ifndef SRC_CORE_LOGGING_H_
+#define SRC_CORE_LOGGING_H_
 
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
@@ -79,4 +79,4 @@ namespace Qt
   inline QTextStream& uppercasedigits(QTextStream &s) { return ::uppercasedigits(s); }
 }
 #endif
-#endif //  gpsbabel_logging_h_included
+#endif //  SRC_CORE_LOGGING_H_
