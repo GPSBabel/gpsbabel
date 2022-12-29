@@ -193,7 +193,7 @@ ShapeFormat::rd_init(const QString& fname)
   const char* codepage = DBFGetCodePage(ihandledb);
   if (codepage) {
     QString qcodepage(codepage);
-    if (qcodepage.compare(QLatin1String("UTF-8"), Qt::CaseInsensitive)) {
+    if (qcodepage.compare(u"UTF-8", Qt::CaseInsensitive)) {
       warning(MYNAME ": dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",qPrintable(ifname),codepage);
     }
   } else {

@@ -324,14 +324,14 @@ UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
 status_type
 UnicsvFormat::unicsv_parse_status(const QString& str)
 {
-  if (str.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0 ||
-      str == "1") {
+  if (str.compare(u"true", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"yes", Qt::CaseInsensitive) == 0 ||
+      str == '1') {
     return status_true;
   }
-  if (str.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("no"), Qt::CaseInsensitive) == 0 ||
-      str == "0") {
+  if (str.compare(u"false", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"no", Qt::CaseInsensitive) == 0 ||
+      str == '0') {
     return status_false;
   }
   return status_unknown;
@@ -668,15 +668,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
-      if (case_ignore_strcmp(value, "none") == 0) {
+      if (value.compare(u"none", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_none;
-      } else if (case_ignore_strcmp(value, "2d") == 0) {
+      } else if (value.compare(u"2d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_2d;
-      } else if (case_ignore_strcmp(value, "3d") == 0) {
+      } else if (value.compare(u"3d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_3d;
-      } else if (case_ignore_strcmp(value, "dgps") == 0) {
+      } else if (value.compare(u"dgps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_dgps;
-      } else if (case_ignore_strcmp(value, "pps") == 0) {
+      } else if (value.compare(u"pps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
