@@ -324,14 +324,14 @@ UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
 status_type
 UnicsvFormat::unicsv_parse_status(const QString& str)
 {
-  if (str.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0 ||
-      str == "1") {
+  if (str.compare(u"true", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"yes", Qt::CaseInsensitive) == 0 ||
+      str == '1') {
     return status_true;
   }
-  if (str.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("no"), Qt::CaseInsensitive) == 0 ||
-      str == "0") {
+  if (str.compare(u"false", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"no", Qt::CaseInsensitive) == 0 ||
+      str == '0') {
     return status_false;
   }
   return status_unknown;
