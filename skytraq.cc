@@ -774,7 +774,7 @@ SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int
   int plen, ilen;
 
   for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
-    ilen = process_data_item(pst, (item_frame*)&buf[plen], len-plen);
+    ilen = process_data_item(pst, reinterpret_cast<const item_frame*>(&buf[plen]), len-plen);
     if (ilen <= 0) {
       fatal(MYNAME ": Error %i while processing data item #%i (starts at %i)\n",
             ilen, pst->tpn, plen);

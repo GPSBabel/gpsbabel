@@ -327,7 +327,7 @@ void SimplifyRouteFilter::init()
     fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
   }
   if (!xteopt && !lenopt && !relopt) {
-    xteopt = (char*) "";
+    xteopt = (char*) ""; // big cheat
   }
 
   if (countopt) {

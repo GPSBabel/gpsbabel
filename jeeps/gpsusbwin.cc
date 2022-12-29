@@ -110,7 +110,7 @@ static int
 gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
 {
   DWORD rsz;
-  unsigned char* obuf = (unsigned char*) &opkt->dbuf;
+  auto* obuf = reinterpret_cast<const unsigned char*>(&opkt->dbuf);
 
   /* The spec warns us about making writes an exact multiple
    * of the packet size, but isn't clear whether we can issue
@@ -236,7 +236,7 @@ gusb_init(const char* pname, gpsdevh** dh)
     }
   }
 
-  hdevinfo = SetupDiGetClassDevs((GUID*) &GARMIN_GUID, NULL, NULL,
+  hdevinfo = SetupDiGetClassDevs(&GARMIN_GUID, NULL, NULL,
                                  DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
   if (hdevinfo == INVALID_HANDLE_VALUE) {
@@ -249,7 +249,7 @@ gusb_init(const char* pname, gpsdevh** dh)
 
   if (req_unit_number >= 0) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID*) &GARMIN_GUID,
+                                     &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
       // If there were zero matches, we may be trying to talk to a "GPX Mode" device.
 
@@ -277,7 +277,7 @@ gusb_init(const char* pname, gpsdevh** dh)
    */
   for (match = 0;; match++) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID*) &GARMIN_GUID, match, &devinterface)) {
+                                     &GARMIN_GUID, match, &devinterface)) {
       if (GetLastError() == ERROR_NO_MORE_ITEMS) {
 
         break;
