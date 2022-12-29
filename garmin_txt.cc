@@ -229,7 +229,7 @@ enum_waypt_cb(const Waypoint* wpt)
     }
     for (int i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
       const Waypoint* tmp = wpt_a[i];
-      if (case_ignore_strcmp(tmp->shortname, wpt->shortname) == 0) {
+      if (tmp->shortname.compare(wpt->shortname, Qt::CaseInsensitive) == 0) {
         wpt_a[i] = wpt;
         waypoints--;
         return;
