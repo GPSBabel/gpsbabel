@@ -16,11 +16,21 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+
+#include <QByteArray>            // for QByteArray
+#include <QIODevice>             // for QIODevice
+#include <QString>               // for QString, operator==, QStringView::to...
+#include <QStringView>           // for QStringView
+#include <QVector>               // for QVector
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamReader>      // for QXmlStreamReader
+#include <QXmlStreamWriter>      // for QXmlStreamWriter, QXmlStreamReader::...
+#include <QtCore>                // for qPrintable, QIODeviceBase::ReadOnly
+
 #include "defs.h"
-#include "src/core/file.h"
-#include <QDebug>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
+#include "gbfile.h"              // for gbfclose, gbfopen, gbfputs, gbfile
+#include "src/core/file.h"       // for File
+
 
 static char* deficon = nullptr;
 static char* nuke_placer;

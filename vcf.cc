@@ -18,11 +18,16 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cmath>     // for fabs
+#include <cstdlib>   // for abs
+
+#include <QString>   // for QString
+#include <QVector>   // for QVector
+#include <Qt>        // for CaseInsensitive
+
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include <cctype>
-#include <cmath>
-#include <cstdlib>
+#include "gbfile.h"  // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
+
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
