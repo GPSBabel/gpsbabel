@@ -1116,10 +1116,10 @@
       </trkpt>
     </trkseg>
     <trkseg>
-      <trkpt lat="48.171050241" lon="11.816495117">
+      <trkpt lat="48.171049906" lon="11.816497967">
         <ele>528.400</ele>
-        <time>2012-04-12T13:29:21Z</time>
-        <speed>0.000000</speed>
+        <time>2012-04-12T13:29:20Z</time>
+        <speed>0.648000</speed>
       </trkpt>
     </trkseg>
     <trkseg>

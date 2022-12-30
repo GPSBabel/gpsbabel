@@ -247,7 +247,11 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   auto compare_xte_lambda = [](const xte& a, const xte& b)->bool {
     return compare_xte(&a, &b) < 0;
   };
-  std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  if (gpsbabel_testmode()) {
+    std::stable_sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  } else {
+    std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  }
 
 
   for (i = 0; i < xte_count; i++) {
