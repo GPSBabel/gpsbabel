@@ -153,7 +153,7 @@ top:
 int
 gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  auto* obuf = reinterpret_cast<const unsigned char*>(&opkt->dbuf);
+  const auto* obuf = opkt->dbuf;
   const char* m2;
 
   unsigned int rv = gusb_llops->llop_send(opkt, sz);

@@ -110,7 +110,7 @@ static int
 gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
 {
   DWORD rsz;
-  auto* obuf = reinterpret_cast<const unsigned char*>(&opkt->dbuf);
+  const auto* obuf = opkt->dbuf;
 
   /* The spec warns us about making writes an exact multiple
    * of the packet size, but isn't clear whether we can issue
