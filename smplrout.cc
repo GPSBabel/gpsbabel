@@ -151,7 +151,7 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
     // error relative to horizontal precision
     xte_rec->distance /= (6 * wpt3->hdop);
     // (hdop->meters following to J. Person at <http://www.developerfusion.co.uk/show/4652/3/>)
-
+    break;
   }
 }
 
@@ -199,7 +199,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
   totalerror = 0;
 
   /* short-circuit if we already have fewer than the max points */
-  if ((limit == limit_t::count) && count >= rte->rte_waypt_ct()) {
+  if ((limit_basis == limit_basis_t::count) && count >= rte->rte_waypt_ct()) {
     return;
   }
 
@@ -264,11 +264,11 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 
   /* while we still have too many records... */
   while ((xte_count) &&
-         (((limit == limit_t::count) && (count < xte_count)) ||
-          ((limit == limit_t::error) && (totalerror < error)))) {
+         (((limit_basis == limit_basis_t::count) && (count < xte_count)) ||
+          ((limit_basis == limit_basis_t::error) && (totalerror < error)))) {
     i = xte_count - 1;
     /* remove the record with the lowest XTE */
-    if (limit == limit_t::error) {
+    if (limit_basis == limit_basis_t::error) {
       switch (metric) {
       case metric_t::crosstrack:
       case metric_t::relative:
@@ -328,9 +328,9 @@ void SimplifyRouteFilter::init()
   count = 0;
 
   if (!countopt && erroropt) {
-    limit = limit_t::error;
+    limit_basis = limit_basis_t::error;
   } else if (countopt && !erroropt) {
-    limit = limit_t::count;
+    limit_basis = limit_basis_t::count;
   } else {
     fatal(MYNAME ": You must specify either count or error, but not both.\n");
   }
@@ -345,11 +345,11 @@ void SimplifyRouteFilter::init()
     fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
   }
 
-  switch (limit) {
-  case limit_t::count:
+  switch (limit_basis) {
+  case limit_basis_t::count:
     count = strtol(countopt, nullptr, 10);
     break;
-  case limit_t::error: {
+  case limit_basis_t::error: {
     int res = parse_distance(erroropt, &error, 1.0, MYNAME);
     if (res == 0) {
       error = 0;

@@ -85,7 +85,7 @@ private:
 
   /* Types */
 
-  enum class limit_t {count, error};
+  enum class limit_basis_t {count, error};
   enum class metric_t {crosstrack, length, relative};
 
   struct xte_intermed;
@@ -129,7 +129,7 @@ private:
   int count = 0;
   double totalerror = 0;
   double error = 0;
-  limit_t limit{limit_t::error};
+  limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
   char* countopt = nullptr;
