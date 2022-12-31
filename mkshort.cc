@@ -30,6 +30,7 @@
 #include <QtGlobal>    // for foreach
 
 #include "defs.h"
+#include "geocache.h"  // for Geocache
 
 
 #define MYNAME	"mkshort"

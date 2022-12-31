@@ -20,39 +20,41 @@
 
  */
 
-#include <cctype>                       // for tolower, toupper
-#include <cmath>                        // for fabs
-#include <cstdio>                       // for sscanf, printf
-#include <cstdlib>                      // for strtod
-#include <cstring>                      // for strcmp
-#include <optional>                     // for optional
-#include <tuple>                        // for tuple, make_tuple
+#include "kml.h"
 
-#include <QByteArray>                   // for QByteArray
-#include <QChar>                        // for QChar
-#include <QDate>                        // for QDate
-#include <QDateTime>                    // for QDateTime
-#include <QFile>                        // for QFile
-#include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QList>                        // for QList
-#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
-#include <QStringList>                  // for QStringList
-#include <QVector>                      // for QVector
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <Qt>                           // for ISODate
-#include <QtGlobal>                     // for foreach, qint64, qRound, qPrintable
+#include <cctype>                      // for tolower, toupper
+#include <cmath>                       // for fabs
+#include <cstdio>                      // for sscanf, printf
+#include <cstdlib>                     // for strtod
+#include <cstring>                     // for strcmp
+#include <optional>                    // for optional
+#include <tuple>                       // for tuple, make_tuple
+
+#include <QByteArray>                  // for QByteArray
+#include <QChar>                       // for QChar
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QFile>                       // for QFile
+#include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                       // for QList
+#include <QString>                     // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                 // for QStringList
+#include <QVector>                     // for QVector
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
+#include <Qt>                          // for ISODate
+#include <QtGlobal>                    // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
-#include "kml.h"
-#include "formspec.h"                   // for FsChainFind, kFsGpx
-#include "grtcirc.h"                    // for RAD, gcdist, radtometers
-#include "src/core/datetime.h"          // for DateTime
-#include "src/core/file.h"              // for File
-#include "src/core/logging.h"           // for Warning, Fatal
-#include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
-#include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
-#include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
-#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+#include "formspec.h"                  // for FsChainFind, kFsGpx
+#include "geocache.h"                  // for Geocache, Geocache::type_t
+#include "grtcirc.h"                   // for RAD, gcdist, radtometers
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/file.h"             // for File
+#include "src/core/logging.h"          // for Warning, Fatal
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "src/core/xmltag.h"           // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
+#include "units.h"                     // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
+#include "xmlgeneric.h"                // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
 //  Icons provided and hosted by Google.  Used with permission.
@@ -1107,43 +1109,43 @@ QString KmlFormat::kml_lookup_gc_icon(const Waypoint* waypointp)
    * initializers...
    */
   switch (waypointp->gc_data->type) {
-  case gt_traditional:
+  case Geocache::type_t::gt_traditional:
     icon = "2.png";
     break;
-  case gt_multi:
+  case Geocache::type_t::gt_multi:
     icon = "3.png";
     break;
-  case gt_virtual:
+  case Geocache::type_t::gt_virtual:
     icon = "4.png";
     break;
-  case gt_letterbox:
+  case Geocache::type_t::gt_letterbox:
     icon = "5.png";
     break;
-  case gt_event:
+  case Geocache::type_t::gt_event:
     icon = "6.png";
     break;
-  case gt_ape:
+  case Geocache::type_t::gt_ape:
     icon = "7.png";
     break;
-  case gt_locationless:
+  case Geocache::type_t::gt_locationless:
     icon = "8.png";
     break; // No unique icon.
-  case gt_surprise:
+  case Geocache::type_t::gt_surprise:
     icon = "8.png";
     break;
-  case gt_webcam:
+  case Geocache::type_t::gt_webcam:
     icon = "11.png";
     break;
-  case gt_cito:
+  case Geocache::type_t::gt_cito:
     icon = "13.png";
     break;
-  case gt_earth:
+  case Geocache::type_t::gt_earth:
     icon = "earthcache.png";
     break;
-  case gt_mega:
+  case Geocache::type_t::gt_mega:
     icon = "453.png";
     break;
-  case gt_wherigo:
+  case Geocache::type_t::gt_wherigo:
     icon = "1858.png";
     break;
   default:
@@ -1159,22 +1161,22 @@ const char* KmlFormat::kml_lookup_gc_container(const Waypoint* waypointp)
   const char* cont;
 
   switch (waypointp->gc_data->container) {
-  case gc_micro:
+  case Geocache::container_t::gc_micro:
     cont="micro";
     break;
-  case gc_regular:
+  case Geocache::container_t::gc_regular:
     cont="regular";
     break;
-  case gc_large:
+  case Geocache::container_t::gc_large:
     cont="large";
     break;
-  case gc_small:
+  case Geocache::container_t::gc_small:
     cont="small";
     break;
-  case gc_virtual:
+  case Geocache::container_t::gc_virtual:
     cont="virtual";
     break;
-  case gc_other:
+  case Geocache::container_t::gc_other:
     cont="other";
     break;
   default:
@@ -1336,9 +1338,9 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
 
   // Highlight any issues with the cache, such as temp unavail
   // or archived.
-  if (waypointp->gc_data->is_archived == status_true) {
+  if (waypointp->gc_data->is_archived == Geocache::status_t::gs_true) {
     issues = "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;&lt;br/&gt;\n";
-  } else if (waypointp->gc_data->is_available == status_false) {
+  } else if (waypointp->gc_data->is_available == Geocache::status_t::gs_false) {
     issues = "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;&lt;br/&gt;\n";
   }
   kml_write_data_element("gc_issues", issues);
@@ -1346,10 +1348,10 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   kml_write_data_element("gc_lat", waypointp->latitude);
   kml_write_data_element("gc_lon", waypointp->longitude);
 
-  kml_write_data_element("gc_type", gs_get_cachetype(waypointp->gc_data->type));
+  kml_write_data_element("gc_type", waypointp->gc_data->get_type());
   kml_write_data_element("gc_icon", is);
-  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring);
-  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring);
+  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utf_string);
+  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utf_string);
   QString logs = kml_geocache_get_logs(waypointp);
   kml_write_cdata_element("gc_logs", logs);
 

@@ -22,7 +22,8 @@
 #ifndef DUPLICATE_H_INCLUDED_
 #define DUPLICATE_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint (ptr only)
 #include "filter.h"  // for Filter

@@ -32,6 +32,7 @@
 
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
+#include "geocache.h"              // for Geocache, Geocache::UtfString
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/textstream.h"   // for TextStream
@@ -114,8 +115,8 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
               .arg((wpt->gc_data->diff%10) ? "&frac12;" : "")
               .arg((int)(wpt->gc_data->terr / 10))
               .arg((wpt->gc_data->terr%10) ? "&frac12;" : "");
-    *file_out << gs_get_cachetype(wpt->gc_data->type) << " / "
-              << gs_get_container(wpt->gc_data->container) << "</p>\n";
+    *file_out << wpt->gc_data->get_type() << " / "
+              << wpt->gc_data->get_container() << "</p>\n";
   }
   *file_out << "        </td>\n";
   *file_out << "      </tr>\n";
@@ -123,13 +124,13 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
   *file_out << "      <tr>\n";
   *file_out << "        <td colspan=\"2\">\n";
-  if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
+  if (!wpt->gc_data->desc_short.utf_string.isEmpty()) {
     *file_out << "          <div><p class=\"gpsbabeldescshort\">"
-              << strip_nastyhtml(wpt->gc_data->desc_short.utfstring) << "</div>\n";
+              << strip_nastyhtml(wpt->gc_data->desc_short.utf_string) << "</div>\n";
   }
-  if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
+  if (!wpt->gc_data->desc_long.utf_string.isEmpty()) {
     *file_out << "          <div><p class=\"gpsbabeldesclong\">"
-              << strip_nastyhtml(wpt->gc_data->desc_long.utfstring) << "</div>\n";
+              << strip_nastyhtml(wpt->gc_data->desc_long.utf_string) << "</div>\n";
   }
   if (!wpt->gc_data->hint.isEmpty()) {
     QString hint;
