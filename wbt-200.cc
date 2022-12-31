@@ -236,7 +236,7 @@ static void buf_extend(struct buf_head* h, size_t amt)
 
 static void buf_update_checksum(struct buf_head* h, const void* data, size_t len)
 {
-  auto* cp = (unsigned char*) data;
+  auto* cp = static_cast<const unsigned char*>(data);
 
   db(4, "Updating checksum with %p, %zu, before: %02x ",
      data, len, h->checksum);

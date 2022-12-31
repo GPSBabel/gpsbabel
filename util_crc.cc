@@ -69,9 +69,9 @@ unsigned long
 get_crc32(const void* data, int datalen)
 {
   unsigned long crc = 0xFFFFFFFF;
-  const unsigned char* cp = (unsigned char*)data;
+  const unsigned char* cp = static_cast<const unsigned char*>(data);
 
-  while (cp < ((unsigned char*)data + datalen)) {
+  while (cp < (static_cast<const unsigned char*>(data) + datalen)) {
     crc = ((crc >> 8) & 0x00FFFFFF) ^ crc32_table[(crc ^ *cp) &0xFF];
     cp++;
   }

@@ -418,7 +418,7 @@ decode_waypoint(const unsigned char* buffer)
   auto* waypt = new Waypoint;
 
   decode_position(buffer + 12, waypt);
-  waypt->shortname = (char*) buffer + 4;
+  waypt->shortname = reinterpret_cast<const char*>(buffer) + 4;
   waypt->icon_descr = icon_table[buffer[28]];
   waypt->SetCreationTime(decode_datetime(buffer + 22));
 
