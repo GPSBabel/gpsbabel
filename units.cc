@@ -22,50 +22,52 @@
 #include "defs.h"
 #include "units.h"
 
-static int units = units_statute;
+static fmt_units units = fmt_units::statute;
 
-int
+void
 fmt_setunits(fmt_units u)
 {
   switch (u) {
-  case units_statute:
-  case units_metric:
-  case units_nautical:
-  case units_aviation:
+  case fmt_units::statute:
+  case fmt_units::metric:
+  case fmt_units::nautical:
+  case fmt_units::aviation:
     units = u;
-    return 0;
+    break;
   default:
-    return 1;
+    fatal("not done yet");
+    break;
   }
 }
 
-double
-fmt_distance(const double distance_meters, const char** tag)
+std::pair<double, QString>
+fmt_distance(const double distance_meters)
 {
   double d;
+  const char* tag;
 
   switch (units) {
-  case units_statute:
+  case fmt_units::statute:
     d = METERS_TO_FEET(distance_meters);
     if (d < 5280) {
-      *tag = "ft";
+      tag = "ft";
     } else  {
       d = METERS_TO_MILES(distance_meters);
-      *tag = "mi";
+      tag = "mi";
     }
     break;
-  case units_nautical:
-  case units_aviation:
+  case fmt_units::nautical:
+  case fmt_units::aviation:
     d = METERS_TO_NMILES(distance_meters);
-    *tag = "NM";
+    tag = "NM";
     break;
-  case units_metric:
+  case fmt_units::metric:
     d = distance_meters;
     if (d < 1000) {
-      *tag = "meters";
+      tag = "meters";
     } else {
       d = d / 1000.0;
-      *tag = "km";
+      tag = "km";
     }
     break;
 
@@ -74,27 +76,28 @@ fmt_distance(const double distance_meters, const char** tag)
     break;
   }
 
-  return d;
+  return {d, tag};
 }
 
-double
-fmt_altitude(const double distance_meters, const char** tag)
+std::pair<double, QString>
+fmt_altitude(const double distance_meters)
 {
   double d;
+  const char* tag;
 
   switch (units) {
-  case units_statute:
-  case units_aviation:
+  case fmt_units::statute:
+  case fmt_units::aviation:
     d = METERS_TO_FEET(distance_meters);
-    *tag = "ft";
+    tag = "ft";
     break;
-  case units_nautical:
+  case fmt_units::nautical:
     d = METERS_TO_NMILES(distance_meters);
-    *tag = "NM";
+    tag = "NM";
     break;
-  case units_metric:
+  case fmt_units::metric:
     d = distance_meters;
-    *tag = "meters";
+    tag = "meters";
     break;
 
   default:
@@ -102,35 +105,36 @@ fmt_altitude(const double distance_meters, const char** tag)
     break;
   }
 
-  return d;
+  return {d, tag};
 }
 
-double
-fmt_speed(const double distance_meters_sec, const char** tag)
+std::pair<double, QString>
+fmt_speed(const double distance_meters_sec)
 {
   double d;
+  const char* tag;
 
   switch (units) {
-  case units_statute:
+  case fmt_units::statute:
     d = METERS_TO_MILES(distance_meters_sec) * SECONDS_PER_HOUR ;
-    *tag = "mph";
+    tag = "mph";
     break;
-  case units_nautical:
-  case units_aviation:
+  case fmt_units::nautical:
+  case fmt_units::aviation:
     d = METERS_TO_NMILES(distance_meters_sec) * SECONDS_PER_HOUR ;
-    *tag = "knts";
+    tag = "knts";
     break;
-  case units_metric:
+  case fmt_units::metric:
     d = distance_meters_sec * SECONDS_PER_HOUR;
-    *tag = "meters/hour";
+    tag = "meters/hour";
     if (d > 1000.0) {
       d /= 1000.0;
-      *tag = "km/hour";
+      tag = "km/hour";
     }
     break;
   default:
     fatal("not done yet");
 
   }
-  return d;
+  return {d, tag};
 }
