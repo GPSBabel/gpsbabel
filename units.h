@@ -28,16 +28,29 @@
 #include <QString>  // for QString
 
 
-enum class fmt_units {
-  statute,
-  metric,
-  nautical,
-  aviation
+class UnitsFormatter
+{
+public:
+
+  /* Types */
+
+  enum class units_t {
+    statute,
+    metric,
+    nautical,
+    aviation
+  };
+
+  /* Member Functions */
+
+  void setunits(units_t u);
+  std::pair<double, QString> fmt_distance(double distance_meters) const;
+  std::pair<double, QString> fmt_altitude(double distance_meters) const;
+  std::pair<double, QString> fmt_speed(double speed_meters_per_sec) const;
+
+  /* Data Members */
+
+  units_t units{units_t::statute};
+
 };
-
-void fmt_setunits(fmt_units);
-std::pair<double, QString> fmt_distance(double);
-std::pair<double, QString> fmt_altitude(double);
-std::pair<double, QString> fmt_speed(double);
-
 #endif //GPSBABEL_UNITS_H

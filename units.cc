@@ -22,16 +22,15 @@
 #include "defs.h"
 #include "units.h"
 
-static fmt_units units = fmt_units::statute;
 
 void
-fmt_setunits(fmt_units u)
+UnitsFormatter::setunits(units_t u)
 {
   switch (u) {
-  case fmt_units::statute:
-  case fmt_units::metric:
-  case fmt_units::nautical:
-  case fmt_units::aviation:
+  case units_t::statute:
+  case units_t::metric:
+  case units_t::nautical:
+  case units_t::aviation:
     units = u;
     break;
   default:
@@ -41,13 +40,13 @@ fmt_setunits(fmt_units u)
 }
 
 std::pair<double, QString>
-fmt_distance(const double distance_meters)
+UnitsFormatter::fmt_distance(const double distance_meters) const
 {
   double d;
   const char* tag;
 
   switch (units) {
-  case fmt_units::statute:
+  case units_t::statute:
     d = METERS_TO_FEET(distance_meters);
     if (d < 5280) {
       tag = "ft";
@@ -56,12 +55,12 @@ fmt_distance(const double distance_meters)
       tag = "mi";
     }
     break;
-  case fmt_units::nautical:
-  case fmt_units::aviation:
+  case units_t::nautical:
+  case units_t::aviation:
     d = METERS_TO_NMILES(distance_meters);
     tag = "NM";
     break;
-  case fmt_units::metric:
+  case units_t::metric:
     d = distance_meters;
     if (d < 1000) {
       tag = "meters";
@@ -80,22 +79,22 @@ fmt_distance(const double distance_meters)
 }
 
 std::pair<double, QString>
-fmt_altitude(const double distance_meters)
+UnitsFormatter::fmt_altitude(const double distance_meters) const
 {
   double d;
   const char* tag;
 
   switch (units) {
-  case fmt_units::statute:
-  case fmt_units::aviation:
+  case units_t::statute:
+  case units_t::aviation:
     d = METERS_TO_FEET(distance_meters);
     tag = "ft";
     break;
-  case fmt_units::nautical:
+  case units_t::nautical:
     d = METERS_TO_NMILES(distance_meters);
     tag = "NM";
     break;
-  case fmt_units::metric:
+  case units_t::metric:
     d = distance_meters;
     tag = "meters";
     break;
@@ -109,23 +108,23 @@ fmt_altitude(const double distance_meters)
 }
 
 std::pair<double, QString>
-fmt_speed(const double distance_meters_sec)
+UnitsFormatter::fmt_speed(const double speed_meters_per_sec) const
 {
   double d;
   const char* tag;
 
   switch (units) {
-  case fmt_units::statute:
-    d = METERS_TO_MILES(distance_meters_sec) * SECONDS_PER_HOUR ;
+  case units_t::statute:
+    d = METERS_TO_MILES(speed_meters_per_sec) * SECONDS_PER_HOUR ;
     tag = "mph";
     break;
-  case fmt_units::nautical:
-  case fmt_units::aviation:
-    d = METERS_TO_NMILES(distance_meters_sec) * SECONDS_PER_HOUR ;
+  case units_t::nautical:
+  case units_t::aviation:
+    d = METERS_TO_NMILES(speed_meters_per_sec) * SECONDS_PER_HOUR ;
     tag = "knts";
     break;
-  case fmt_units::metric:
-    d = distance_meters_sec * SECONDS_PER_HOUR;
+  case units_t::metric:
+    d = speed_meters_per_sec * SECONDS_PER_HOUR;
     tag = "meters/hour";
     if (d > 1000.0) {
       d /= 1000.0;

@@ -52,7 +52,7 @@
 #include "src/core/logging.h"           // for Warning, Fatal
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
-#include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
+#include "units.h"                      // for UnitsFormatter, UnitsFormatter...
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
@@ -356,18 +356,19 @@ void KmlFormat::wr_init(const QString& fname)
     u = tolower(opt_units[0]);
   }
 
+  unitsformatter = new UnitsFormatter();
   switch (u) {
   case 's':
-    fmt_setunits(fmt_units::statute);
+    unitsformatter->setunits(UnitsFormatter::units_t::statute);
     break;
   case 'm':
-    fmt_setunits(fmt_units::metric);
+    unitsformatter->setunits(UnitsFormatter::units_t::metric);
     break;
   case 'n':
-    fmt_setunits(fmt_units::nautical);
+    unitsformatter->setunits(UnitsFormatter::units_t::nautical);
     break;
   case 'a':
-    fmt_setunits(fmt_units::aviation);
+    unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
     fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", opt_units);
@@ -571,28 +572,28 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
   if (!header->rte_desc.isEmpty()) {
     kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1 ").arg(header->rte_desc));
   }
-  auto [distance, distance_units] = fmt_distance(td->distance_meters);
+  auto [distance, distance_units] = unitsformatter->fmt_distance(td->distance_meters);
   kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1), distance_units));
   if (td->min_alt) {
-    auto [min_alt, min_alt_units] = fmt_altitude(*td->min_alt);
+    auto [min_alt, min_alt_units] = unitsformatter->fmt_altitude(*td->min_alt);
     kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3), min_alt_units));
   }
   if (td->max_alt) {
-    auto [max_alt, max_alt_units] = fmt_altitude(*td->max_alt);
+    auto [max_alt, max_alt_units] = unitsformatter->fmt_altitude(*td->max_alt);
     kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3), max_alt_units));
   }
   if (td->min_spd) {
-    auto [spd, spd_units] = fmt_speed(*td->min_spd);
+    auto [spd, spd_units] = unitsformatter->fmt_speed(*td->min_spd);
     kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd) {
-    auto [spd, spd_units] = fmt_speed(*td->max_spd);
+    auto [spd, spd_units] = unitsformatter->fmt_speed(*td->max_spd);
     kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd && td->start.isValid() && td->end.isValid()) {
     double elapsed = td->start.msecsTo(td->end)/1000.0;
     if (elapsed > 0.0) {
-      auto [spd, spd_units] = fmt_speed(td->distance_meters / elapsed);
+      auto [spd, spd_units] = unitsformatter->fmt_speed(td->distance_meters / elapsed);
       if (spd > 1.0)  {
         kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
       }
@@ -731,7 +732,7 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   kml_td(hwriter, QStringLiteral("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
-    auto [alt, alt_units] = fmt_altitude(pt->altitude);
+    auto [alt, alt_units] = unitsformatter->fmt_altitude(pt->altitude);
     kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
@@ -753,12 +754,12 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   }
 
   if WAYPT_HAS(pt, depth) {
-    auto [depth, depth_units] = fmt_distance(pt->depth);
+    auto [depth, depth_units] = unitsformatter->fmt_distance(pt->depth);
     kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
   if WAYPT_HAS(pt, speed) {
-    auto [spd, spd_units] = fmt_speed(pt->speed);
+    auto [spd, spd_units] = unitsformatter->fmt_speed(pt->speed);
     kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
