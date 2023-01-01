@@ -404,6 +404,8 @@ void KmlFormat::wr_deinit()
   oqfile->close();
   delete oqfile;
   oqfile = nullptr;
+  delete unitsformatter;
+  unitsformatter = nullptr;
 
   if (!posnfilenametmp.isEmpty()) {
     // QFile::rename() can't replace an existing file, so do a QFile::remove()
