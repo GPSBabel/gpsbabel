@@ -19,21 +19,13 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <algorithm>                 // for sort, stable_sort
 #include <cmath>                     // for M_PI
-#include <cstdarg>                   // for va_list
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
 #include <optional>                  // for optional
 #include <utility>                   // for move
-
-#if HAVE_LIBZ
-#include <zlib.h>                    // doesn't really belong here, but is missing elsewhere.
-#elif !ZLIB_INHIBITED
-#include "zlib.h"                    // doesn't really belong here, but is missing elsewhere.
-#endif
 
 #include <QDateTime>                 // for QDateTime
 #include <QDebug>                    // for QDebug
@@ -47,9 +39,9 @@
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
+#include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
-#include "gbfile.h"                  // doesn't really belong here, but is missing elsewhere.
 #include "session.h"                 // for session_t
 #include "src/core/datetime.h"       // for DateTime
 
@@ -129,6 +121,9 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 #define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
 
+constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
+constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+
 /* Pathname separator character */
 #if __WIN32__
 #  define GB_PATHSEP '\\'
@@ -202,93 +197,6 @@ enum fix_type {
   fix_3d,
   fix_dgps,
   fix_pps
-};
-
-enum status_type {
-  status_unknown=0,
-  status_true,
-  status_false
-};
-
-/*
- * Extended data if waypoint happens to represent a geocache.  This is
- * totally voluntary data...
- */
-
-enum geocache_type {
-  gt_unknown = 0,
-  gt_traditional,
-  gt_multi,
-  gt_virtual,
-  gt_letterbox,
-  gt_event,
-  gt_surprise,
-  gt_webcam,
-  gt_earth,
-  gt_locationless,
-  gt_benchmark, /* Extension to Groundspeak for GSAK */
-  gt_cito,
-  gt_ape,
-  gt_mega,
-  gt_wherigo
-};
-
-enum geocache_container {
-  gc_unknown = 0,
-  gc_micro,
-  gc_other,
-  gc_regular,
-  gc_large,
-  gc_virtual,
-  gc_small
-};
-
-class utf_string
-{
-public:
-  utf_string() = default;
-  utf_string(bool html, QString str) :
-    is_html{html},
-    utfstring{std::move(str)}
-  {}
-  bool is_html{false};
-  QString utfstring;
-};
-
-class geocache_data
-{
-public:
-  geocache_data() :
-    id(0),
-    type(gt_unknown),
-    container(gc_unknown),
-    diff(0),
-    terr(0),
-    is_archived(status_unknown),
-    is_available(status_unknown),
-    is_memberonly(status_unknown),
-    has_customcoords(status_unknown),
-    placer_id(0),
-    favorite_points(0)
-  {}
-  long long id; /* The decimal cache number */
-  geocache_type type:5;
-  geocache_container container:4;
-  unsigned int diff:6; /* (multiplied by ten internally) */
-  unsigned int terr:6; /* (likewise) */
-  status_type is_archived:2;
-  status_type is_available:2;
-  status_type is_memberonly:2;
-  status_type has_customcoords:2;
-  gpsbabel::DateTime exported;
-  gpsbabel::DateTime last_found;
-  QString placer; /* Placer name */
-  int placer_id; /* Placer id */
-  QString hint; /* all these UTF8, XML entities removed, May be not HTML. */
-  utf_string desc_short;
-  utf_string desc_long;
-  int favorite_points;
-  QString personal_note;
 };
 
 class gb_color
@@ -428,7 +336,7 @@ struct bounds {
 class Waypoint
 {
 private:
-  static geocache_data empty_gc_data;
+  static Geocache empty_gc_data;
 
 public:
 
@@ -507,7 +415,7 @@ public:
   float power; /* watts, as measured by cyclists */
   float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters */
-  geocache_data* gc_data;
+  Geocache* gc_data;
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
@@ -525,7 +433,7 @@ public:
   gpsbabel::DateTime GetCreationTime() const;
   void SetCreationTime(const gpsbabel::DateTime& t);
   void SetCreationTime(qint64 t, qint64 ms = 0);
-  geocache_data* AllocGCData();
+  Geocache* AllocGCData();
   int EmptyGCData() const;
 };
 
@@ -899,9 +807,6 @@ using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
 
-geocache_type gs_mktype(const QString& t);
-geocache_container gs_mkcont(const QString& t);
-
 /*
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
@@ -1078,10 +983,7 @@ time_t mkgmtime(struct tm* t);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
-QString get_cache_icon(const Waypoint* waypointp);
-QString gs_get_cachetype(geocache_type t);
-QString gs_get_container(geocache_container t);
-QString strip_html(const utf_string*);
+QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
 QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
@@ -1154,9 +1056,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-#define DATUM_OSGB36	86
-#define DATUM_WGS84	118
-
 /* bit manipulation functions (util.c) */
 
 char gb_getbit(const void* buf, uint32_t nr);
@@ -1198,9 +1097,5 @@ int color_to_bbggrr(const char* cname);
  */
 #define unknown_alt 	-99999999.0
 #define unknown_color	-1
-
-// TODO: this is a (probably temporary) shim for the C->QString conversion.
-// It's here instead of gps to avoid C/C++ linkage issues.
-int32_t GPS_Lookup_Datum_Index(const QString& n);
 
 #endif // DEFS_H_INCLUDED_

@@ -23,7 +23,16 @@
 
 */
 
-#include "defs.h"
+#include <cstdint>   // for uint8_t, uint32_t, uint16_t, int32_t
+#include <cstdio>    // for SEEK_CUR, SEEK_SET
+#include <cstring>   // for strcmp, strcpy
+
+#include <QString>   // for QString
+#include <QVector>   // for QVector
+
+#include "defs.h"    //
+#include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetu...
+
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536

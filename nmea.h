@@ -94,11 +94,11 @@ private:
     gprmc
   };
 
-  enum {
+  enum read_mode_type {
     rm_unknown = 0,
     rm_serial,
     rm_file
-  } read_mode;
+  };
 
   /* Member Functions */
 
@@ -132,7 +132,8 @@ private:
   gbfile* file_in{}, *file_out{};
   route_head* trk_head{};
   short_handle mkshort_handle{};
-  preferred_posn_type posn_type;
+  preferred_posn_type posn_type{};
+  read_mode_type read_mode{};
   QDateTime prev_datetime;
   Waypoint* curr_waypt{};
   Waypoint* last_waypt{};

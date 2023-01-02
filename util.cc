@@ -22,6 +22,7 @@
 #include <algorithm>                    // for sort
 #include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
 #include <cerrno>                       // for errno
+#include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
@@ -32,6 +33,7 @@
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
+#include <QDate>                        // for QDate
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
@@ -40,16 +42,15 @@
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
+#include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
 #include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/logging.h"           // for Warning
-#include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
+
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 # define i_am_little_endian 0
@@ -708,53 +709,6 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   return epoch.addMSecs(millisecs);
 }
 
-/*
- * Return a pointer to a constant string that is suitable for icon lookup
- * based on geocache attributes.   The strings used are those present in
- * a GPX file from geocaching.com.  Thus we sort of make all the other
- * formats do lookups based on these strings.
- */
-QString
-get_cache_icon(const Waypoint* waypointp)
-{
-  if (!global_opts.smart_icons) {
-    return nullptr;
-  }
-
-  /*
-   * For icons, type overwrites container.  So a multi-micro will
-   * get the icons for "multi".
-   */
-  switch (waypointp->gc_data->type) {
-  case gt_virtual:
-    return "Virtual cache";
-  case gt_multi:
-    return "Multi-Cache";
-  case gt_event:
-    return "Event Cache";
-  case gt_surprise:
-    return "Unknown Cache";
-  case gt_webcam:
-    return "Webcam Cache";
-  default:
-    break;
-  }
-
-  switch (waypointp->gc_data->container) {
-  case gc_micro:
-    return "Micro-Cache";
-    break;
-  default:
-    break;
-  }
-
-  if (waypointp->gc_data->diff > 1) {
-    return "Geocache";
-  }
-
-  return nullptr;
-}
-
 double
 endian_read_double(const void* ptr, int read_le)
 {
@@ -766,7 +720,7 @@ endian_read_double(const void* ptr, int read_le)
     p = ptr;
   } else {
     for (int i = 0; i < 8; i++) {
-      r[i] = ((char*)ptr)[7-i];
+      r[i] = static_cast<const char*>(ptr)[7-i];
     }
     p = r;
   }
@@ -793,7 +747,7 @@ endian_read_float(const void* ptr, int read_le)
     p = ptr;
   } else {
     for (int i = 0; i < 4; i++) {
-      r[i] = ((char*)ptr)[3-i];
+      r[i] = static_cast<const char*>(ptr)[3-i];
     }
     p = r;
   }
@@ -1250,31 +1204,26 @@ strip_nastyhtml(const QString& in)
  *  pleasant for a human reader.   Yes, this falls down in all kinds of
  *  ways such as spaces within the tags, etc.
  */
-QString
-strip_html(const utf_string* in)
+QString strip_html(const QString& utfstring)
 {
 #if 0
   // If we were willing to link core against QtGui (not out of the question)
   // we could just do...and either decide whether to add handling for [IMG]
   // or just say we don't do that any more.
   QTextDocument doc;
-  doc.setHtml(in->utfstring);
+  doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  if (!in->is_html) {
-    return in->utfstring;
-  }
-
   char* out;
   char* instr;
   char tag[8];
   unsigned short int taglen = 0;
 
-  char* incopy = instr = xstrdup(in->utfstring);
+  char* incopy = instr = xstrdup(utfstring);
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-  char* outstring = out = xstrdup(in->utfstring);
+  char* outstring = out = xstrdup(utfstring);
 
   tag[0] = 0;
   while (*instr) {
@@ -1342,52 +1291,6 @@ strip_html(const utf_string* in)
   xfree(outstring);
   return rv;
 #endif
-}
-
-/*
- * xml_tag utilities
- */
-
-xml_tag* xml_next(xml_tag* root, xml_tag* cur)
-{
-  if (cur->child) {
-    cur = cur->child;
-  } else if (cur->sibling) {
-    cur = cur->sibling;
-  } else {
-    cur = cur->parent;
-    if (cur == root) {
-      cur = nullptr;
-    }
-    if (cur) {
-      cur = cur->sibling;
-    }
-  }
-  return cur;
-}
-
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
-{
-  xml_tag* result = cur;
-  do {
-    result = xml_next(root, result);
-  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
-  return result;
-}
-
-xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
-{
-  return xml_findnext(root, root, tagname);
-}
-
-QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
-{
-  for (const auto& attribute : attributes) {
-    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
-      return attribute.value().toString();
-    }
-  }
-  return QString();
 }
 
 QString get_filename(const QString& fname)

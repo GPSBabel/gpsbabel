@@ -69,9 +69,6 @@
 
 
 extern ff_vecs_t geo_vecs;
-extern ff_vecs_t mag_svecs;
-extern ff_vecs_t mag_fvecs;
-extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
@@ -120,9 +117,6 @@ struct Vecs::Impl {
 #endif // CSVFMTS_ENABLED
   LegacyFormat geo_fmt {geo_vecs};
   GpxFormat gpx_fmt;
-  LegacyFormat mag_sfmt {mag_svecs};
-  LegacyFormat mag_ffmt {mag_fvecs};
-  LegacyFormat magX_ffmt {magX_fvecs};
   LegacyFormat garmin_fmt {garmin_vecs};
   GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
@@ -206,27 +200,6 @@ struct Vecs::Impl {
       "gpx",
       "GPX XML",
       "gpx",
-      nullptr,
-    },
-    {
-      &mag_sfmt,
-      "magellan",
-      "Magellan serial protocol",
-      nullptr,
-      nullptr,
-    },
-    {
-      &mag_ffmt,
-      "magellan",
-      "Magellan SD files (as for Meridian)",
-      nullptr,
-      nullptr,
-    },
-    {
-      &magX_ffmt,
-      "magellanx",
-      "Magellan SD files (as for eXplorist)",
-      "upt",
       nullptr,
     },
     {

@@ -22,8 +22,17 @@
 
  */
 
+#include <cctype>           // for isalnum
+#include <cstring>          // for memcmp
+
+#include <QChar>            // for QChar
+#include <QString>          // for QString
+#include <QVector>          // for QVector
+
 #include "defs.h"
-#include "jeeps/gpsmath.h" /* for datum conversions */
+#include "gbfile.h"         // for gbfwrite, gbfgetint16, gbfputint16, gbfclose
+#include "jeeps/gpsmath.h"  // for GPS_Lookup_Datum_Index, GPS_Math_Known_Da...
+
 
 #define MYNAME	"TPG"
 

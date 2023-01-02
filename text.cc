@@ -32,6 +32,7 @@
 
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
+#include "geocache.h"              // for Geocache, Geocache::UtfString
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/textstream.h"   // for TextStream
@@ -102,17 +103,17 @@ TextFormat::text_disp(const Waypoint* wpt)
   }
   if (wpt->gc_data->terr) {
     *file_out << QStringLiteral(" - %1 / %2 - (%3%4 / %5%6)\n")
-              .arg(gs_get_cachetype(wpt->gc_data->type),
-                   gs_get_container(wpt->gc_data->container))
+              .arg(wpt->gc_data->get_type(),
+                   wpt->gc_data->get_container())
               .arg((int)(wpt->gc_data->diff / 10))
               .arg((wpt->gc_data->diff%10) ? ".5" : "")
               .arg((int)(wpt->gc_data->terr / 10))
               .arg((wpt->gc_data->terr%10) ? ".5" : "");
-    if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-      *file_out << "\n" << strip_html(&wpt->gc_data->desc_short) << "\n";
+    if (!wpt->gc_data->desc_short.utf_string.isEmpty()) {
+      *file_out << "\n" << wpt->gc_data->desc_short.strip_html() << "\n";
     }
-    if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-      *file_out << "\n" << strip_html(&wpt->gc_data->desc_long) << "\n";
+    if (!wpt->gc_data->desc_long.utf_string.isEmpty()) {
+      *file_out << "\n" << wpt->gc_data->desc_long.strip_html() << "\n";
     }
     if (!wpt->gc_data->hint.isEmpty()) {
       QString hint;
@@ -130,23 +131,23 @@ TextFormat::text_disp(const Waypoint* wpt)
   if (includelogs) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(wpt->fs.FsChainFind(kFsGpx));
     if (fs_gpx && fs_gpx->tag) {
-      xml_tag* root = fs_gpx->tag;
-      xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+      XmlTag* root = fs_gpx->tag;
+      XmlTag* curlog = root->xml_findfirst(u"groundspeak:log");
       while (curlog) {
         time_t logtime = 0;
         *file_out << "\n";
 
-        xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+        XmlTag* logpart = curlog->xml_findfirst(u"groundspeak:type");
         if (logpart) {
           *file_out << logpart->cdata << " by ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:finder");
+        logpart = curlog->xml_findfirst(u"groundspeak:finder");
         if (logpart) {
           *file_out << logpart->cdata << " on ";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:date");
+        logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
           logtime = xml_parse_time(logpart->cdata).toTime_t();
           struct tm* logtm = localtime(&logtime);
@@ -158,16 +159,16 @@ TextFormat::text_disp(const Waypoint* wpt)
           }
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
+        logpart = curlog->xml_findfirst(u"groundspeak:log_wpt");
         if (logpart) {
-          double lat = xml_attribute(logpart->attributes, "lat").toDouble();
-          double lon = xml_attribute(logpart->attributes, "lon").toDouble();
+          double lat = logpart->xml_attribute("lat").toDouble();
+          double lon = logpart->xml_attribute("lon").toDouble();
           *file_out << pretty_deg_format(lat, lon, degformat[2], " ", false) << "\n";
         }
 
-        logpart = xml_findfirst(curlog, "groundspeak:text");
+        logpart = curlog->xml_findfirst(u"groundspeak:text");
         if (logpart) {
-          QString encstr = xml_attribute(logpart->attributes, "encoded");
+          QString encstr = logpart->xml_attribute("encoded");
           bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
 
           QString s;
@@ -181,7 +182,7 @@ TextFormat::text_disp(const Waypoint* wpt)
         }
 
         *file_out << "\n";
-        curlog = xml_findnext(root, curlog, "groundspeak:log");
+        curlog = curlog->xml_findnext(root, u"groundspeak:log");
       }
     }
   }

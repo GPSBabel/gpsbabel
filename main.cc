@@ -17,6 +17,7 @@
 
  */
 
+#include <cassert>                    // for assert
 #include <clocale>                    // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                    // for signal, SIGINT, SIG_ERR
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
@@ -50,6 +51,7 @@
 #include "format.h"                   // for Format
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
+#include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
@@ -717,6 +719,9 @@ main(int argc, char* argv[])
   if (!gpsbabel_testmode()) {	/* within testo ? */
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
+
+  assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

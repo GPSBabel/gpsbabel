@@ -142,6 +142,7 @@
                                  double lambda0, double E0, double N0);
 
   int32 GPS_Lookup_Datum_Index(const char* n);
+  int32 GPS_Lookup_Datum_Index(const QString& n);
   const char* GPS_Math_Get_Datum_Name(int datum_index);
 
 #endif

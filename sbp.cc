@@ -20,8 +20,15 @@
 
  */
 
+#include <cstddef>     // for size_t
+
+#include <QString>     // for QString
+#include <QVector>     // for QVector
+
 #include "defs.h"
-#include "navilink.h"
+#include "gbfile.h"    // for gbfread, gbfclose, gbfopen, gbfile
+#include "navilink.h"  // for locosys_decode_file_id, navilink_decode_logpoint
+
 
 #define MYNAME "sbp"
 

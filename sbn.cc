@@ -19,8 +19,17 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <ctime>                   // for tm
+#include <cstring>                 // for size_t, memcpy
+
+#include <QString>                 // for QString
+#include <QVector>                 // for QVector
+#include <QtGlobal>                // for Q_UNUSED
+
 #include "defs.h"
-#include "navilink.h"
+#include "gbfile.h"                // for gbfread, gbfclose, gbfeof, gbfopen
+#include "navilink.h"              // for navilink_checksum_packet, locosys_...
+
 
 #define MYNAME "sbn"
 

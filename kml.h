@@ -34,6 +34,7 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
+#include "units.h"                      // for UnitsFormatter
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
@@ -215,7 +216,6 @@ private:
   int max_position_points{};
   int rotate_colors{};
   int line_width{};
-  int html_encrypt{};
   int precision{};
 
   Waypoint* wpt_tmp{nullptr};
@@ -227,6 +227,7 @@ private:
   QList<gpsbabel::DateTime>* gx_trk_times{nullptr};
   QList<std::tuple<int, double, double, double>>* gx_trk_coords{nullptr};
 
+  UnitsFormatter* unitsformatter{nullptr};
   gpsbabel::File* oqfile{nullptr};
   gpsbabel::XmlStreamWriter* writer{nullptr};
 

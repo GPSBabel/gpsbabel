@@ -23,23 +23,24 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <cctype>          // for isprint
+#include <cmath>           // for cos, sin, atan2, pow, sqrt, M_PI
+#include <cstdarg>         // for va_end, va_list, va_start
+#include <cstdio>          // for sscanf, snprintf, vprintf, SEEK_SET
+#include <cstdlib>         // for free
+#include <cstring>         // for memset
+#include <ctime>           // for time, time_t
+
+#include <QByteArray>      // for QByteArray
+#include <QChar>           // for QChar
+#include <QLatin1Char>     // for QLatin1Char
+#include <QThread>         // for QThread
+#include <QtGlobal>        // for qPrintable
+
+#include "defs.h"
 #include "skytraq.h"
-
-#include <QByteArray>       // for QByteArray
-#include <QtGlobal>         // for qPrintable
-#include <QLatin1Char>      // for QLatin1Char
-#include <QThread>          // for QThread
-
-#include <cctype>           // for isprint
-#include <cmath>            // for cos, sin, atan2, pow, sqrt, M_PI
-#include <cstdarg>          // for va_end, va_list, va_start
-#include <cstdio>           // for sscanf, snprintf, vprintf, SEEK_SET
-#include <cstdlib>          // for free
-#include <cstring>          // for memset
-#include <ctime>            // for time, time_t
-
-#include "defs.h"           // for fatal, le_readu32, Waypoint, be_write32, be_read16, be_read_double, be_write16, be_write_double, warning, KPH_TO_MPS, le_readu16, le_write_double, track_add_head, track_add_wpt, waypt_add, xfree, xmalloc, route_head, xasprintf, SECONDS_PER_DAY, WAYPT_SET, globa...
-#include "gbser.h"          // for gbser_set_speed, gbser_OK, gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_writec
+#include "gbfile.h"        // for gbfclose, gbfopen, gbfread, gbfseek, gbfwrite
+#include "gbser.h"         // for gbser_set_speed, gbser_OK, gbser_deinit
 
 
 #define MYNAME "skytraq"
@@ -773,7 +774,7 @@ SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int
   int plen, ilen;
 
   for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
-    ilen = process_data_item(pst, (item_frame*)&buf[plen], len-plen);
+    ilen = process_data_item(pst, reinterpret_cast<const item_frame*>(&buf[plen]), len-plen);
     if (ilen <= 0) {
       fatal(MYNAME ": Error %i while processing data item #%i (starts at %i)\n",
             ilen, pst->tpn, plen);

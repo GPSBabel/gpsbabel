@@ -76,7 +76,6 @@ void SimplifyRouteFilter::free_xte(struct xte* xte_rec)
   delete xte_rec->intermed;
 }
 
-#define HUGEVAL 2000000000
 
 void SimplifyRouteFilter::routesimple_waypt_pr(const Waypoint* wpt)
 {
@@ -101,24 +100,26 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
   double reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
-    xte_rec->distance = HUGEVAL;
+    xte_rec->distance = kHugeValue;
     return;
   }
   const Waypoint* wpt1 = xte_rec->intermed->prev->wpt;
 
   /* if no next, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->next) {
-    xte_rec->distance = HUGEVAL;
+    xte_rec->distance = kHugeValue;
     return;
   }
   const Waypoint* wpt2 = xte_rec->intermed->next->wpt;
 
-  if (xteopt) {
+  switch (metric) {
+  case metric_t::crosstrack:
     xte_rec->distance = radtomiles(linedist(
                                      wpt1->latitude, wpt1->longitude,
                                      wpt2->latitude, wpt2->longitude,
                                      wpt3->latitude, wpt3->longitude));
-  } else if (lenopt) {
+    break;
+  case metric_t::length:
     xte_rec->distance = radtomiles(
                           gcdist(wpt1->latitude, wpt1->longitude,
                                  wpt3->latitude, wpt3->longitude) +
@@ -126,14 +127,15 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
                                  wpt2->latitude, wpt2->longitude) -
                           gcdist(wpt1->latitude, wpt1->longitude,
                                  wpt2->latitude, wpt2->longitude));
-  } else if (relopt) {
+    break;
+  case metric_t::relative:
     if (wpt3->hdop == 0) {
       fatal(MYNAME ": relative needs hdop information.\n");
     }
     // if timestamps exist, distance to interpolated point
     if (wpt1->GetCreationTime() != wpt2->GetCreationTime()) {
       double frac = (double)(wpt3->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t()) /
-        (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
+                    (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
@@ -149,7 +151,7 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
     // error relative to horizontal precision
     xte_rec->distance /= (6 * wpt3->hdop);
     // (hdop->meters following to J. Person at <http://www.developerfusion.co.uk/show/4652/3/>)
-
+    break;
   }
 }
 
@@ -158,14 +160,14 @@ int SimplifyRouteFilter::compare_xte(const void* a, const void* b)
   const auto* xte_a = static_cast<const struct xte*>(a);
   const auto* xte_b = static_cast<const struct xte*>(b);
 
-  if (HUGEVAL == xte_a->distance) {
-    if (HUGEVAL == xte_b->distance) {
+  if (kHugeValue == xte_a->distance) {
+    if (kHugeValue == xte_b->distance) {
       return 0;
     }
     return -1;
   }
 
-  if (HUGEVAL == xte_b->distance) {
+  if (kHugeValue == xte_b->distance) {
     return 1;
   }
 
@@ -197,7 +199,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
   totalerror = 0;
 
   /* short-circuit if we already have fewer than the max points */
-  if (countopt && count >= rte->rte_waypt_ct()) {
+  if ((limit_basis == limit_basis_t::count) && count >= rte->rte_waypt_ct()) {
     return;
   }
 
@@ -245,8 +247,12 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   auto compare_xte_lambda = [](const xte& a, const xte& b)->bool {
     return compare_xte(&a, &b) < 0;
   };
-  std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
-  
+  if (gpsbabel_testmode()) {
+    std::stable_sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  } else {
+    std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
+  }
+
 
   for (i = 0; i < xte_count; i++) {
     xte_recs[i].intermed->xte_rec = xte_recs+i;
@@ -261,19 +267,24 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   }
 
   /* while we still have too many records... */
-  while ((xte_count) && ((countopt && count < xte_count) || (erroropt && totalerror < error))) {
+  while ((xte_count) &&
+         (((limit_basis == limit_basis_t::count) && (count < xte_count)) ||
+          ((limit_basis == limit_basis_t::error) && (totalerror < error)))) {
     i = xte_count - 1;
     /* remove the record with the lowest XTE */
-    if (erroropt) {
-      if (xteopt || relopt) {
+    if (limit_basis == limit_basis_t::error) {
+      switch (metric) {
+      case metric_t::crosstrack:
+      case metric_t::relative:
         if (i > 1) {
           totalerror = xte_recs[i-1].distance;
         } else {
           totalerror = xte_recs[i].distance;
         }
-      }
-      if (lenopt) {
+        break;
+      case metric_t::length:
         totalerror += xte_recs[i].distance;
+        break;
       }
     }
     (*waypt_del_fnp)(const_cast<route_head*>(rte),
@@ -320,26 +331,37 @@ void SimplifyRouteFilter::init()
 {
   count = 0;
 
-  if (!!countopt == !!erroropt) {
+  if (!countopt && erroropt) {
+    limit_basis = limit_basis_t::error;
+  } else if (countopt && !erroropt) {
+    limit_basis = limit_basis_t::count;
+  } else {
     fatal(MYNAME ": You must specify either count or error, but not both.\n");
   }
-  if ((!!xteopt + !!lenopt + !!relopt) > 1) {
+
+  if (!lenopt && !relopt) {
+    metric = metric_t::crosstrack; /* default */
+  } else if (!xteopt && lenopt && !relopt) {
+    metric = metric_t::length;
+  } else if (!xteopt && !lenopt && relopt) {
+    metric = metric_t::relative;
+  } else {
     fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
   }
-  if (!xteopt && !lenopt && !relopt) {
-    xteopt = (char*) "";
-  }
 
-  if (countopt) {
+  switch (limit_basis) {
+  case limit_basis_t::count:
     count = strtol(countopt, nullptr, 10);
-  }
-  if (erroropt) {
+    break;
+  case limit_basis_t::error: {
     int res = parse_distance(erroropt, &error, 1.0, MYNAME);
     if (res == 0) {
       error = 0;
     } else if (res == 2) { /* parameter with unit */
       error = METERS_TO_MILES(error);
     }
+  }
+  break;
   }
 }
 

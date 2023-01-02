@@ -16,11 +16,22 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+
+#include <QByteArray>            // for QByteArray
+#include <QIODevice>             // for QIODevice
+#include <QString>               // for QString, operator==, QStringView::to...
+#include <QStringView>           // for QStringView
+#include <QVector>               // for QVector
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamReader>      // for QXmlStreamReader
+#include <QXmlStreamWriter>      // for QXmlStreamWriter, QXmlStreamReader::...
+#include <QtCore>                // for qPrintable, QIODeviceBase::ReadOnly
+
 #include "defs.h"
-#include "src/core/file.h"
-#include <QDebug>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
+#include "gbfile.h"              // for gbfclose, gbfopen, gbfputs, gbfile
+#include "geocache.h"            // for Geocache, Geocache::container_t, Geo...
+#include "src/core/file.h"       // for File
+
 
 static char* deficon = nullptr;
 static char* nuke_placer;
@@ -40,7 +51,7 @@ QVector<arglist_t> geo_args = {
 static QXmlStreamReader reader;
 static QString geo_read_fname;
 
-static geocache_container wpt_container(const QString&);
+static Geocache::container_t wpt_container(const QString&);
 
 static void GeoReadLoc()
 {
@@ -116,34 +127,34 @@ geo_read()
   }
 }
 
-geocache_container wpt_container(const QString& args)
+Geocache::container_t wpt_container(const QString& args)
 {
-  geocache_container v;
+  Geocache::container_t v;
 
   switch (args.toInt()) {
   case 1:
-    v = gc_unknown;
+    v = Geocache::container_t::gc_unknown;
     break;
   case 2:
-    v = gc_micro;
+    v = Geocache::container_t::gc_micro;
     break;
   case 3:
-    v = gc_regular;
+    v = Geocache::container_t::gc_regular;
     break;
   case 4:
-    v = gc_large;
+    v = Geocache::container_t::gc_large;
     break;
   case 5:
-    v = gc_virtual;
+    v = Geocache::container_t::gc_virtual;
     break;
   case 6:
-    v = gc_other;
+    v = Geocache::container_t::gc_other;
     break;
   case 8:
-    v = gc_small;
+    v = Geocache::container_t::gc_small;
     break;
   default:
-    v = gc_unknown;
+    v = Geocache::container_t::gc_unknown;
     break;
   }
   return v;
@@ -209,25 +220,25 @@ geo_waypt_pr(const Waypoint* waypointp)
 
     int v = 1;
     switch (waypointp->gc_data->container) {
-    case gc_unknown:
+    case Geocache::container_t::gc_unknown:
       v = 1;
       break;
-    case gc_micro:
+    case Geocache::container_t::gc_micro:
       v = 2;
       break;
-    case gc_regular:
+    case Geocache::container_t::gc_regular:
       v = 3;
       break;
-    case gc_large:
+    case Geocache::container_t::gc_large:
       v = 4;
       break;
-    case gc_virtual:
+    case Geocache::container_t::gc_virtual:
       v = 5;
       break;
-    case gc_other:
+    case Geocache::container_t::gc_other:
       v = 6;
       break;
-    case gc_small:
+    case Geocache::container_t::gc_small:
       v = 8;
       break;
     default:

@@ -19,16 +19,17 @@
 
  */
 
-#include <algorithm>            // for stable_sort
-#include <cstdio>               // for sprintf
-#include <cstring>              // for memset, strncpy
+#include "duplicate.h"
 
-#include <QDateTime>            // for QDateTime
-#include <QtGlobal>             // for foreach
+#include <algorithm>             // for stable_sort
+#include <cstdio>                // for snprintf
+#include <cstring>               // for memset, strncpy
+
+#include <QDateTime>             // for QDateTime
 
 #include "defs.h"
-#include "duplicate.h"
-#include "src/core/datetime.h"  // for DateTime
+#include "geocache.h"            // for Geocache
+#include "src/core/datetime.h"   // for DateTime
 
 
 #if FILTERS_ENABLED
@@ -142,15 +143,14 @@ void DuplicateFilter::process()
     }
 
     if (lcopt) {
-      /* let sprintf take care of rounding */
-      sprintf(dupe.lat, "%11.4f", waypointp->latitude);
-      sprintf(dupe.lon, "%11.4f", waypointp->longitude);
       /* The degrees2ddmm stuff is a feeble attempt to
        * get everything rounded the same way in a precision
        * that's "close enough" for determining duplicates.
        */
-      sprintf(dupe.lat, "%11.3f", degrees2ddmm(waypointp->latitude));
-      sprintf(dupe.lon, "%11.3f", degrees2ddmm(waypointp->longitude));
+      snprintf(dupe.lat, sizeof(dupe.lat), "%11.3f",
+               degrees2ddmm(waypointp->latitude));
+      snprintf(dupe.lon, sizeof(dupe.lon), "%11.3f",
+               degrees2ddmm(waypointp->longitude));
 
     }
 

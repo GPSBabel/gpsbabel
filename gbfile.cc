@@ -22,6 +22,7 @@
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar, operator==, operator!=
+#include <QDebug>              // for QDebug
 #include <QString>             // for QString
 #include <QtGlobal>            // for qPrintable
 
@@ -541,7 +542,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
     file->filewrite = memapi_write;
   } else {
     file->name = xstrdup(filename);
-    file->is_pipe = (filename == "-");
+    file->is_pipe = (filename == '-');
 
     /* Do we have a '.gz' extension in the filename ? */
     int len = strlen(file->name);

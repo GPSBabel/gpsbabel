@@ -23,42 +23,43 @@
 
  */
 
-#include <cassert>                    // for assert
-#include <cctype>                     // for isdigit, tolower
-#include <cmath>                      // for fabs, pow
-#include <cstdio>                     // for snprintf, sscanf
-#include <cstdlib>                    // for strtod
-#include <cstring>                    // for strlen, strncmp, strcmp, memset
-#include <ctime>                      // for gmtime, localtime, time_t, mktime, strftime
-#include <optional>                   // for optional
+#include "xcsv.h"
 
-#include <QByteArray>                 // for QByteArray
-#include <QChar>                      // for QChar
-#include <QDate>                      // for QDate
-#include <QDateTime>                  // for QDateTime
-#include <QDebug>                     // for QDebug
-#include <QHash>                      // for QHash
-#include <QIODevice>                  // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QList>                      // for QList
-#include <QRegularExpression>         // for QRegularExpression
-#include <QString>                    // for QString, operator+, operator==
-#include <QStringList>                // for QStringList
-#include <QTextStream>                // for QTextStream
-#include <QtGlobal>                   // for qAsConst, qRound, qPrintable
+#include <cctype>                  // for isdigit, tolower
+#include <cmath>                   // for fabs, pow
+#include <cstdio>                  // for snprintf, sscanf
+#include <cstdlib>                 // for strtod
+#include <cstring>                 // for strlen, strncmp, strcmp, memset
+#include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
+#include <optional>                // for optional
+
+#include <QByteArray>              // for QByteArray
+#include <QChar>                   // for QChar
+#include <QDate>                   // for QDate
+#include <QDateTime>               // for QDateTime
+#include <QDebug>                  // for QDebug
+#include <QHash>                   // for QHash
+#include <QIODevice>               // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                   // for QList
+#include <QRegularExpression>      // for QRegularExpression
+#include <QString>                 // for QString, operator+, operator==
+#include <QStringList>             // for QStringList
+#include <QTextStream>             // for QTextStream
+#include <QtGlobal>                // for qAsConst, qRound, qPrintable
 
 #include "defs.h"
-#include "csv_util.h"                 // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
-#include "formspec.h"                 // for FormatSpecificDataList
-#include "garmin_fs.h"                // for garmin_fs_t, garmin_fs_alloc
-#include "grtcirc.h"                  // for RAD, gcdist, radtometers
-#include "jeeps/gpsmath.h"            // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
-#include "jeeps/gpsport.h"            // for int32
-#include "session.h"                  // for session_t
-#include "src/core/datetime.h"        // for DateTime
-#include "src/core/logging.h"         // for FatalMsg
-#include "src/core/textstream.h"      // for TextStream
-#include "strptime.h"                 // for strptime
-#include "xcsv.h"
+#include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
+#include "formspec.h"              // for FormatSpecificDataList
+#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
+#include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
+#include "grtcirc.h"               // for RAD, gcdist, radtometers
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
+#include "jeeps/gpsport.h"         // for int32
+#include "session.h"               // for session_t
+#include "src/core/datetime.h"     // for DateTime
+#include "src/core/logging.h"      // for FatalMsg
+#include "src/core/textstream.h"   // for TextStream
+#include "strptime.h"              // for strptime
 
 
 #if CSVFMTS_ENABLED
@@ -388,7 +389,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
                            xcsv_parse_data* parse_data, const int line_no)
 {
   QString enclosure = "";
-  geocache_data* gc_data = nullptr;
+  Geocache* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
     fatal(MYNAME ": xcsv style '%s' is missing format specifier", fmp.key.constData());
@@ -515,7 +516,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   /* SPECIAL COORDINATES/GRID */
   case XcsvStyle::XT_MAP_EN_BNG:
-    parse_coordinates(s, DATUM_OSGB36, grid_bng,
+    parse_coordinates(s, kDatumOSGB36, grid_bng,
                       &wpt->latitude, &wpt->longitude, MYNAME);
     break;
   case XcsvStyle::XT_UTM_ZONE:
@@ -663,10 +664,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_TYPE:
     /* Geocache Type */
-    wpt->AllocGCData()->type = gs_mktype(value);
+    wpt->AllocGCData()->set_type(value);
     break;
   case XcsvStyle::XT_GEOCACHE_CONTAINER:
-    wpt->AllocGCData()->container = gs_mkcont(value);
+    wpt->AllocGCData()->set_container(value);
     break;
   case XcsvStyle::XT_GEOCACHE_HINT:
     wpt->AllocGCData()->hint = value.trimmed();
@@ -676,22 +677,22 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
-      gc_data->is_available = status_false;
-    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
-      gc_data->is_available = status_true;
+    if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
+      gc_data->is_available = Geocache::status_t::gs_false;
+    } else if (value.trimmed().compare(u"True", Qt::CaseInsensitive) == 0) {
+      gc_data->is_available = Geocache::status_t::gs_true;
     } else {
-      gc_data->is_available = status_unknown;
+      gc_data->is_available = Geocache::status_t::gs_unknown;
     }
     break;
   case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
     gc_data = wpt->AllocGCData();
-    if (case_ignore_strcmp(value.trimmed(), "False") == 0) {
-      gc_data->is_archived = status_false;
-    } else if (case_ignore_strcmp(value.trimmed(), "True") == 0) {
-      gc_data->is_archived = status_true;
+    if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
+      gc_data->is_archived = Geocache::status_t::gs_false;
+    } else if (value.trimmed().compare(u"True", Qt::CaseInsensitive) == 0) {
+      gc_data->is_archived = Geocache::status_t::gs_true;
     } else {
-      gc_data->is_archived = status_unknown;
+      gc_data->is_archived = Geocache::status_t::gs_unknown;
     }
     break;
 
@@ -711,11 +712,11 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_GPS_FIX:
     wpt->fix = (fix_type)(xstrtoi(s, nullptr, 10)-(fix_type)1);
     if (wpt->fix < fix_2d) {
-      if (!case_ignore_strcmp(value, "none")) {
+      if (!value.compare(u"none", Qt::CaseInsensitive)) {
         wpt->fix = fix_none;
-      } else if (!case_ignore_strcmp(value, "dgps")) {
+      } else if (!value.compare(u"dgps", Qt::CaseInsensitive)) {
         wpt->fix = fix_dgps;
-      } else if (!case_ignore_strcmp(value, "pps")) {
+      } else if (!value.compare(u"pps", Qt::CaseInsensitive)) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
@@ -891,7 +892,7 @@ XcsvFormat::read()
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
-      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != gps_datum_wgs84)) {
+      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
         double alt;
         GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
                                         &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file->gps_datum_idx);
@@ -902,7 +903,7 @@ XcsvFormat::read()
                                        &wpt_tmp->longitude,
                                        parse_data.utm_easting, parse_data.utm_northing,
                                        parse_data.utm_zone, parse_data.utm_zonec,
-                                       DATUM_WGS84);
+                                       kDautmWGS84);
       }
 
       if (parse_data.link_) {
@@ -1018,7 +1019,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     description = shortname;
   }
 
-  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != gps_datum_wgs84)) {
+  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
     double alt;
     GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
                                     &latitude, &longitude, &alt, xcsv_file->gps_datum_idx);
@@ -1408,13 +1409,13 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_GEOCACHE_CONTAINER:
       /* Geocache Container */
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(gs_get_container(wpt->gc_data->container)));
-      field_is_unknown = wpt->gc_data->container == gc_unknown;
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(wpt->gc_data->get_container()));
+      field_is_unknown = wpt->gc_data->container == Geocache::container_t::gc_unknown;
       break;
     case XcsvStyle::XT_GEOCACHE_TYPE:
       /* Geocache Type */
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(gs_get_cachetype(wpt->gc_data->type)));
-      field_is_unknown = wpt->gc_data->type == gt_unknown;
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(wpt->gc_data->get_type()));
+      field_is_unknown = wpt->gc_data->type == Geocache::type_t::gt_unknown;
       break;
     case XcsvStyle::XT_GEOCACHE_HINT:
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(wpt->gc_data->hint));
@@ -1425,18 +1426,18 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       field_is_unknown = !wpt->gc_data->placer.isEmpty();
       break;
     case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
-      if (wpt->gc_data->is_available == status_false) {
+      if (wpt->gc_data->is_available == Geocache::status_t::gs_false) {
         buff = QString::asprintf(fmp.printfc.constData(), "False");
-      } else if (wpt->gc_data->is_available == status_true) {
+      } else if (wpt->gc_data->is_available == Geocache::status_t::gs_true) {
         buff = QString::asprintf(fmp.printfc.constData(), "True");
       } else {
         buff = QString::asprintf(fmp.printfc.constData(), "Unknown");
       }
       break;
     case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
-      if (wpt->gc_data->is_archived == status_false) {
+      if (wpt->gc_data->is_archived == Geocache::status_t::gs_false) {
         buff = QString::asprintf(fmp.printfc.constData(), "False");
-      } else if (wpt->gc_data->is_archived == status_true) {
+      } else if (wpt->gc_data->is_archived == Geocache::status_t::gs_true) {
         buff = QString::asprintf(fmp.printfc.constData(), "True");
       } else {
         buff = QString::asprintf(fmp.printfc.constData(), "Unknown");
@@ -1883,7 +1884,6 @@ XcsvFormat::rd_init(const QString& fname)
   if (xcsv_file->gps_datum_idx < 0) {
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
-  assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
 void
@@ -1964,7 +1964,6 @@ XcsvFormat::wr_init(const QString& fname)
   if (xcsv_file->gps_datum_idx < 0) {
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
-  assert(gps_datum_wgs84 == GPS_Lookup_Datum_Index("WGS 84"));
 }
 
 void

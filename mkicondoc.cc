@@ -1,6 +1,5 @@
 // Display all the Garmin icons that we know about so we can copy/paste
 // into our doc, xmldoc/chapters/garmin_icons.xml.
-// cd mkicondoc && qmake && make
 
 #include <algorithm>             // for sort
 #include <cstdio>                // for printf

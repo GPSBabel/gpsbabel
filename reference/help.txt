@@ -252,18 +252,6 @@ File Types (-i and -o options):
 	  title                 (USR output) Output file title string
 	  serialnum             (USR output) Device serial number
 	  description           (USR output) Output file content description
-	magellanx             Magellan SD files (as for eXplorist)
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	magellan              Magellan SD files (as for Meridian)
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	magellan              Magellan serial protocol
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	  baud                  Numeric value of bitrate (baud=4800)
-	  noack                 (0/1) Suppress use of handshaking in name of speed
-	  nukewpt               (0/1) Delete all waypoints
 	miniHomer             MiniHomer, a skyTraq Venus 6 based logger (downloa
 	  baud                  Baud rate used for download
 	  dump-file             Dump raw data to this file

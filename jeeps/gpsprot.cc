@@ -372,7 +372,7 @@ int32 GPS_Protocol_Table_Set(US id)
   }
 
 
-  (void)sprintf(s,"INIT: No table entry for ID %d\n",id);
+  (void) snprintf(s, sizeof(s), "INIT: No table entry for ID %d\n", id);
   GPS_Error(s);
 
   return GPS_UNSUPPORTED;
@@ -394,7 +394,8 @@ void GPS_Protocol_Error(US tag, US data)
 {
   char s[GPS_ARB_LEN];
 
-  (void) sprintf(s,"PROTOCOL ERROR: Unknown tag/data [%c/%d]\n",tag,data);
+  (void) snprintf(s, sizeof(s),
+                 "PROTOCOL ERROR: Unknown tag/data [%c/%d]\n", tag, data);
   GPS_Error(s);
 
   if (gps_n_tag_unknown < GPS_TAGUNK) {

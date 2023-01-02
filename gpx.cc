@@ -19,39 +19,41 @@
 
  */
 
-#include <cmath>                                   // for lround
-#include <cstdio>                                  // for sscanf
-#include <cstdlib>                                 // for strtod
-#include <cstring>                                 // for strchr, strncpy
+#include "gpx.h"
 
-#include <QDate>                                   // for QDate
-#include <QDateTime>                               // for QDateTime
-#include <QHash>                                   // for QHash
-#include <QIODevice>                               // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
-#include <QLatin1Char>                             // for QLatin1Char
-#include <QLatin1String>                           // for QLatin1String
-#include <QString>                                 // for QString, QStringLiteral, operator+, operator==
-#include <QStringList>                             // for QStringList
-#include <QStringView>                             // for QStringView
-#include <QTime>                                   // for QTime
-#include <QVersionNumber>                          // for QVersionNumber
-#include <QXmlStreamAttribute>                     // for QXmlStreamAttribute
-#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
-#include <QXmlStreamNamespaceDeclaration>          // for QXmlStreamNamespaceDeclaration
-#include <QXmlStreamNamespaceDeclarations>         // for QXmlStreamNamespaceDeclarations
-#include <QXmlStreamReader>                        // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
-#include <Qt>                                      // for CaseInsensitive, UTC
-#include <QtGlobal>                                // for qAsConst, QAddConst<>::Type
+#include <cmath>                            // for lround
+#include <cstdio>                           // for sscanf
+#include <cstring>                          // for strchr, strncpy
+
+#include <QByteArray>                       // for QByteArray
+#include <QDate>                            // for QDate
+#include <QDateTime>                        // for QDateTime
+#include <QHash>                            // for QHash
+#include <QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
+#include <QLatin1Char>                      // for QLatin1Char
+#include <QLatin1String>                    // for QLatin1String
+#include <QString>                          // for QString, QStringLiteral, operator+, operator==
+#include <QStringList>                      // for QStringList
+#include <QStringView>                      // for QStringView
+#include <QTime>                            // for QTime
+#include <QVersionNumber>                   // for QVersionNumber
+#include <QXmlStreamAttribute>              // for QXmlStreamAttribute
+#include <QXmlStreamAttributes>             // for QXmlStreamAttributes
+#include <QXmlStreamNamespaceDeclaration>   // for QXmlStreamNamespaceDeclaration
+#include <QXmlStreamNamespaceDeclarations>  // for QXmlStreamNamespaceDeclarations
+#include <QXmlStreamReader>                 // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
+#include <Qt>                               // for CaseInsensitive, UTC
+#include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "gpx.h"
-#include "garmin_fs.h"                             // for garmin_fs_xml_convert, garmin_fs_xml_fprint, GMSD_FIND
-#include "garmin_tables.h"                         // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
-#include "src/core/datetime.h"                     // for DateTime
-#include "src/core/file.h"                         // for File
-#include "src/core/logging.h"                      // for Warning, Fatal
-#include "src/core/xmlstreamwriter.h"              // for XmlStreamWriter
-#include "src/core/xmltag.h"                       // for xml_tag, fs_xml, fs_xml_alloc, free_gpx_extras
+#include "garmin_fs.h"                      // for garmin_fs_xml_convert, garmin_fs_xml_fprint, GMSD_FIND
+#include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
+#include "geocache.h"                       // for Geocache, Geocache::UtfSt...
+#include "src/core/datetime.h"              // for DateTime
+#include "src/core/file.h"                  // for File
+#include "src/core/logging.h"               // for Warning, Fatal
+#include "src/core/xmlstreamwriter.h"       // for XmlStreamWriter
+#include "src/core/xmltag.h"                // for xml_tag, fs_xml, fs_xml_alloc, free_gpx_extras
 
 
 #define MYNAME "GPX"
@@ -190,23 +192,23 @@ GpxFormat::tag_cache_desc(const QXmlStreamAttributes& attr)
 void
 GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr) const
 {
-  geocache_data* gc_data = wpt_tmp->AllocGCData();
+  Geocache* gc_data = wpt_tmp->AllocGCData();
 
   if (attr.hasAttribute(QLatin1String("id"))) {
     gc_data->id = attr.value(QLatin1String(QLatin1String("id"))).toLongLong();
   }
   if (attr.hasAttribute(QLatin1String("available"))) {
     if (attr.value(QLatin1String("available")).compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
-      gc_data->is_available = status_true;
+      gc_data->is_available = Geocache::status_t::gs_true;
     } else if (attr.value(QLatin1String("available")).compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
-      gc_data->is_available = status_false;
+      gc_data->is_available = Geocache::status_t::gs_false;
     }
   }
   if (attr.hasAttribute(QLatin1String("archived"))) {
     if (attr.value(QLatin1String("archived")).compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
-      gc_data->is_archived = status_true;
+      gc_data->is_archived = Geocache::status_t::gs_true;
     } else if (attr.value(QLatin1String("archived")).compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
-      gc_data->is_archived = status_false;
+      gc_data->is_archived = Geocache::status_t::gs_false;
     }
   }
 }
@@ -218,7 +220,7 @@ GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr
     return;
   }
 
-  auto* new_tag = new xml_tag;
+  auto* new_tag = new XmlTag;
   new_tag->tagname = el.toString();
 
   const QXmlStreamNamespaceDeclarations ns = reader->namespaceDeclarations();
@@ -262,7 +264,7 @@ GpxFormat::start_something_else(QStringView el, const QXmlStreamAttributes& attr
       cur_tag->sibling = new_tag;
       new_tag->parent = nullptr;
     } else {
-      fs_xml* new_fs_gpx = fs_xml_alloc(kFsGpx);
+      auto* new_fs_gpx = new fs_xml(kFsGpx);
       new_fs_gpx->tag = new_tag;
       fs_ptr->FsChainAdd(new_fs_gpx);
       new_tag->parent = nullptr;
@@ -385,100 +387,6 @@ GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
   if (tag.passthrough) {
     start_something_else(el, attr);
   }
-}
-
-struct
-  gs_type_mapping {
-  geocache_type type;
-  const char* name;
-} gs_type_map[] = {
-  { gt_traditional, "Traditional Cache" },
-  { gt_traditional, "Traditional" }, /* opencaching.de */
-  { gt_multi, "Multi-cache" },
-  { gt_multi, "Multi" }, /* opencaching.de */
-  { gt_virtual, "Virtual Cache" },
-  { gt_virtual, "Virtual" }, /* opencaching.de */
-  { gt_event, "Event Cache" },
-  { gt_event, "Event" }, /* opencaching.de */
-  { gt_webcam, "Webcam Cache" },
-  { gt_webcam, "Webcam" }, /* opencaching.de */
-  { gt_surprise, "Unknown Cache" },
-  { gt_earth, "Earthcache" },
-  { gt_earth, "Earth" }, /* opencaching.de */
-  { gt_cito, "Cache In Trash Out Event" },
-  { gt_letterbox, "Letterbox Hybrid" },
-  { gt_locationless, "Locationless (Reverse) Cache" },
-  { gt_ape, "Project APE Cache" },
-  { gt_mega, "Mega-Event Cache" },
-  { gt_wherigo, "Wherigo Cache" },
-
-  { gt_benchmark, "Benchmark" }, /* Not Groundspeak; for GSAK  */
-};
-
-struct
-  gs_container_mapping {
-  geocache_container type;
-  const char* name;
-} gs_container_map[] = {
-  { gc_other, "Unknown" },
-  { gc_other, "Other" }, /* Synonym on read. */
-  { gc_micro, "Micro" },
-  { gc_regular, "Regular" },
-  { gc_large, "Large" },
-  { gc_small, "Small" },
-  { gc_virtual, "Virtual" }
-};
-
-geocache_type
-gs_mktype(const QString& t)
-{
-  int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
-
-  for (int i = 0; i < sz; i++) {
-    if (!t.compare(gs_type_map[i].name,Qt::CaseInsensitive)) {
-      return gs_type_map[i].type;
-    }
-  }
-  return gt_unknown;
-}
-
-QString
-gs_get_cachetype(geocache_type t)
-{
-  int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
-
-  for (int i = 0; i < sz; i++) {
-    if (t == gs_type_map[i].type) {
-      return gs_type_map[i].name;
-    }
-  }
-  return "Unknown";
-}
-
-geocache_container
-gs_mkcont(const QString& t)
-{
-  int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
-
-  for (int i = 0; i < sz; i++) {
-    if (!t.compare(gs_container_map[i].name,Qt::CaseInsensitive)) {
-      return gs_container_map[i].type;
-    }
-  }
-  return gc_unknown;
-}
-
-QString
-gs_get_container(geocache_container t)
-{
-  int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
-
-  for (int i = 0; i < sz; i++) {
-    if (t == gs_container_map[i].type) {
-      return gs_container_map[i].name;
-    }
-  }
-  return "Unknown";
 }
 
 gpsbabel::DateTime
@@ -618,10 +526,10 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     wpt_tmp->notes = cdatastr;
     break;
   case tt_cache_container:
-    wpt_tmp->AllocGCData()->container = gs_mkcont(cdatastr);
+    wpt_tmp->AllocGCData()->set_container(cdatastr);
     break;
   case tt_cache_type:
-    wpt_tmp->AllocGCData()->type = gs_mktype(cdatastr);
+    wpt_tmp->AllocGCData()->set_type(cdatastr);
     break;
   case tt_cache_difficulty:
     wpt_tmp->AllocGCData()->diff = cdatastr.toFloat() * 10;
@@ -630,15 +538,15 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     wpt_tmp->AllocGCData()->hint = cdatastr;
     break;
   case tt_cache_desc_long: {
-    geocache_data* gc_data = wpt_tmp->AllocGCData();
+    Geocache* gc_data = wpt_tmp->AllocGCData();
     gc_data->desc_long.is_html = cache_descr_is_html;
-    gc_data->desc_long.utfstring = cdatastr;
+    gc_data->desc_long.utf_string = cdatastr;
   }
   break;
   case tt_cache_desc_short: {
-    geocache_data* gc_data = wpt_tmp->AllocGCData();
+    Geocache* gc_data = wpt_tmp->AllocGCData();
     gc_data->desc_short.is_html = cache_descr_is_html;
-    gc_data->desc_short.utfstring = cdatastr;
+    gc_data->desc_short.utf_string = cdatastr;
   }
   break;
   case tt_cache_terrain:
@@ -656,7 +564,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
    * last date we saw in this log.
    */
   case tt_cache_log_type:
-    if ((cdatastr.compare(QLatin1String("Found it")) == 0) &&
+    if ((cdatastr.compare(u"Found it") == 0) &&
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       wpt_tmp->AllocGCData()->last_found = gc_log_date;
     }
@@ -901,7 +809,7 @@ GpxFormat::gpx_cdata(QStringView s)
   }
 
   if (cur_tag->child) {
-    xml_tag* tmp_tag = cur_tag->child;
+    XmlTag* tmp_tag = cur_tag->child;
     while (tmp_tag->sibling) {
       tmp_tag = tmp_tag->sibling;
     }
@@ -1138,7 +1046,7 @@ GpxFormat::write_attributes(const QXmlStreamAttributes& attributes) const
 }
 
 void
-GpxFormat::fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const
+GpxFormat::fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);
@@ -1154,7 +1062,7 @@ GpxFormat::fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const
         fprint_xml_chain(tag->child, wpt);
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
-          tag->tagname.compare(QLatin1String("groundspeak:cache")) == 0) {
+          tag->tagname.compare(u"groundspeak:cache") == 0) {
         writer->writeTextElement(QStringLiteral("time"),
                                  wpt->gc_data->exported.toPrettyString());
       }

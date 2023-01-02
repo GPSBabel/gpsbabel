@@ -1235,7 +1235,8 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     if (trk[i]->ishdr) {
       /* Index of new track, must match the track index in associated course */
       memset(ctk[n_ctk]->trk_ident, 0, sizeof(ctk[n_ctk]->trk_ident));
-      sprintf(ctk[n_ctk]->trk_ident, "%u", crs[new_crs]->track_index);
+      snprintf(ctk[n_ctk]->trk_ident, sizeof(ctk[n_ctk]->trk_ident),
+               "%u", crs[new_crs]->track_index);
       new_crs++;
     }
     n_ctk++;

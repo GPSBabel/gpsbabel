@@ -254,7 +254,7 @@ ExifFormat::exif_read_timestamp(const ExifTag* tag)
   double min = exif_read_double(tag, 1);
   double sec = exif_read_double(tag, 2);
 
-  return QTime(int(hour), int(min), int(sec));
+  return QTime(0, 0).addMSecs(lround((((hour * 60.0) + min) * 60.0 + sec) * 1000.0));
 }
 
 QDate
@@ -826,7 +826,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     if (idatum < 0) {
       fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum);
     }
-    if (idatum != DATUM_WGS84) {
+    if (idatum != kDautmWGS84) {
       GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
                                       &wpt->latitude, &wpt->longitude, &alt, idatum);
     }
@@ -1032,7 +1032,7 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
     if (size_increase > 0) {
       qba.append(size_increase, 0);
     }
-    qba.replace(index, count, (char*) data, count);
+    qba.replace(index, count, static_cast<const char*>(data), count);
     tag->data[0] = qba;
   } else {
     // we haven't coded for insertion of multiple values (except for BYTE_TYPE above).
@@ -1041,17 +1041,17 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
     case EXIF_TYPE_SHORT:
     case EXIF_TYPE_SSHORT:
       tag->grow<uint16_t>(index + count);
-      tag->data[index] = *(uint16_t*)data;
+      tag->data[index] = *static_cast<const uint16_t*>(data);
       break;
     case EXIF_TYPE_LONG:
     case EXIF_TYPE_SLONG:
     case EXIF_TYPE_IFD:
       tag->grow<uint32_t>(index + count);
-      tag->data[index] = *(uint32_t*)data;
+      tag->data[index] = *static_cast<const uint32_t*>(data);
       break;
     case EXIF_TYPE_RAT:
     case EXIF_TYPE_SRAT: {
-      double val = *(double*)data;
+      double val = *static_cast<const double*>(data);
 
       if ((val < 0.0) && (type == EXIF_TYPE_RAT)) {
         fatal(MYNAME ": A negative value cannot be stored as type RATIONAL.");
@@ -1065,11 +1065,11 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
     break;
     case EXIF_TYPE_FLOAT:
       tag->grow<float>(index + count);
-      tag->data[index] = *(float*)data;
+      tag->data[index] = *static_cast<const float*>(data);
       break;
     case EXIF_TYPE_DOUBLE:
       tag->grow<double>(index + count);
-      tag->data[index] = *(double*)data;
+      tag->data[index] = *static_cast<const double*>(data);
       break;
     default:
       fatal(MYNAME ": Unknown data type %u!\n", type);

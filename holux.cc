@@ -26,7 +26,7 @@ History:
 /* This module is for the holux (gm-100) .wpo format */
 
 #include <cstring>                 // for strncpy, memset, strcpy, strlen
-#include <cstdio>                  // for sprintf
+#include <cstdio>                  // for snprintf
 #include <ctime>                   // for gmtime, mktime, time_t, tm
 
 #include <QDate>                   // for QDate
@@ -113,10 +113,10 @@ static void data_read()
     WPT* pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
 
     wpt_tmp->altitude = 0;
-    strncpy(name,pWptHxTmp->name,sizeof(pWptHxTmp->name));
+    strncpy(name,pWptHxTmp->name,sizeof(name));
     name[sizeof(pWptHxTmp->name)]=0;
 
-    strncpy(desc,pWptHxTmp->comment,sizeof(pWptHxTmp->comment));
+    strncpy(desc,pWptHxTmp->comment,sizeof(desc));
     desc[sizeof(pWptHxTmp->comment)]=0;
 
     wpt_tmp->shortname = name;
@@ -210,7 +210,7 @@ static void holux_disp(const Waypoint* wpt)
   if (wpt->shortname != nullptr) {
     strncpy(pWptHxTmp->name, mknshort(CSTRc(wpt->shortname),sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
   } else {
-    sprintf(pWptHxTmp->name,"W%d",sIndex);
+    snprintf(pWptHxTmp->name,sizeof(pWptHxTmp->name), "W%d",sIndex);
   }
 
   memset(pWptHxTmp->comment,0x20,sizeof(pWptHxTmp->comment));
