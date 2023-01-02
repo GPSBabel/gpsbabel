@@ -409,8 +409,7 @@ OsmFormat::osm_feature_symbol(const int ikey, const char* value) const
 QString
 OsmFormat::osm_strip_html(const QString& str)
 {
-  utf_string utf(true, str);
-  return strip_html(&utf);	// util.cc
+  return strip_html(str);	// util.cc
 }
 
 void

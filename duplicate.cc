@@ -19,16 +19,17 @@
 
  */
 
-#include <algorithm>            // for stable_sort
-#include <cstdio>               // for snprintf
-#include <cstring>              // for memset, strncpy
+#include "duplicate.h"
 
-#include <QDateTime>            // for QDateTime
-#include <QtGlobal>             // for foreach
+#include <algorithm>             // for stable_sort
+#include <cstdio>                // for snprintf
+#include <cstring>               // for memset, strncpy
+
+#include <QDateTime>             // for QDateTime
 
 #include "defs.h"
-#include "duplicate.h"
-#include "src/core/datetime.h"  // for DateTime
+#include "geocache.h"            // for Geocache
+#include "src/core/datetime.h"   // for DateTime
 
 
 #if FILTERS_ENABLED

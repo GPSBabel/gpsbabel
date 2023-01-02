@@ -709,53 +709,6 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   return epoch.addMSecs(millisecs);
 }
 
-/*
- * Return a pointer to a constant string that is suitable for icon lookup
- * based on geocache attributes.   The strings used are those present in
- * a GPX file from geocaching.com.  Thus we sort of make all the other
- * formats do lookups based on these strings.
- */
-QString
-get_cache_icon(const Waypoint* waypointp)
-{
-  if (!global_opts.smart_icons) {
-    return nullptr;
-  }
-
-  /*
-   * For icons, type overwrites container.  So a multi-micro will
-   * get the icons for "multi".
-   */
-  switch (waypointp->gc_data->type) {
-  case gt_virtual:
-    return "Virtual cache";
-  case gt_multi:
-    return "Multi-Cache";
-  case gt_event:
-    return "Event Cache";
-  case gt_surprise:
-    return "Unknown Cache";
-  case gt_webcam:
-    return "Webcam Cache";
-  default:
-    break;
-  }
-
-  switch (waypointp->gc_data->container) {
-  case gc_micro:
-    return "Micro-Cache";
-    break;
-  default:
-    break;
-  }
-
-  if (waypointp->gc_data->diff > 1) {
-    return "Geocache";
-  }
-
-  return nullptr;
-}
-
 double
 endian_read_double(const void* ptr, int read_le)
 {
@@ -1251,31 +1204,26 @@ strip_nastyhtml(const QString& in)
  *  pleasant for a human reader.   Yes, this falls down in all kinds of
  *  ways such as spaces within the tags, etc.
  */
-QString
-strip_html(const utf_string* in)
+QString strip_html(const QString& utfstring)
 {
 #if 0
   // If we were willing to link core against QtGui (not out of the question)
   // we could just do...and either decide whether to add handling for [IMG]
   // or just say we don't do that any more.
   QTextDocument doc;
-  doc.setHtml(in->utfstring);
+  doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  if (!in->is_html) {
-    return in->utfstring;
-  }
-
   char* out;
   char* instr;
   char tag[8];
   unsigned short int taglen = 0;
 
-  char* incopy = instr = xstrdup(in->utfstring);
+  char* incopy = instr = xstrdup(utfstring);
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-  char* outstring = out = xstrdup(in->utfstring);
+  char* outstring = out = xstrdup(utfstring);
 
   tag[0] = 0;
   while (*instr) {
