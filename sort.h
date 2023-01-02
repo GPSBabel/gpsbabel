@@ -75,9 +75,9 @@ private:
 
   /* Data Members */
 
-  SortModeWpt wpt_sort_mode = SortModeWpt::none;	/* How are we sorting these? */
-  SortModeRteHd rte_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
-  SortModeRteHd trk_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
+  SortModeWpt wpt_sort_mode{SortModeWpt::none};	/* How are we sorting these? */
+  SortModeRteHd rte_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
+  SortModeRteHd trk_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
 
   char* opt_sm_gcid{};
   char* opt_sm_shortname{};
