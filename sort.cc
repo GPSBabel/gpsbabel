@@ -70,93 +70,99 @@ bool SortFilter::sort_comp_rh_by_number(const route_head* a, const route_head* b
 
 void SortFilter::process()
 {
-  if (wpt_sort_mode != SortModeWpt::none) {
-    switch (wpt_sort_mode) {
-    case SortModeWpt::description:
-      waypt_sort(sort_comp_wpt_by_description);
-      break;
-    case SortModeWpt::gcid:
-      waypt_sort(sort_comp_wpt_by_gcid);
-      break;
-    case SortModeWpt::shortname:
-      waypt_sort(sort_comp_wpt_by_shortname);
-      break;
-    case SortModeWpt::time:
-      waypt_sort(sort_comp_wpt_by_time);
-      break;
-    default:
-      fatal(MYNAME ": unknown waypoint sort mode.");
-    }
+  switch (wpt_sort_mode) {
+  case SortModeWpt::none:
+    break;
+  case SortModeWpt::description:
+    waypt_sort(sort_comp_wpt_by_description);
+    break;
+  case SortModeWpt::gcid:
+    waypt_sort(sort_comp_wpt_by_gcid);
+    break;
+  case SortModeWpt::shortname:
+    waypt_sort(sort_comp_wpt_by_shortname);
+    break;
+  case SortModeWpt::time:
+    waypt_sort(sort_comp_wpt_by_time);
+    break;
+  default:
+    fatal(MYNAME ": unknown waypoint sort mode.");
   }
 
-  if (rte_sort_mode != SortModeRteHd::none) {
-    switch (rte_sort_mode)  {
-    case SortModeRteHd::description:
-      route_sort(sort_comp_rh_by_description);
-      break;
-    case SortModeRteHd::name:
-      route_sort(sort_comp_rh_by_name);
-      break;
-    case SortModeRteHd::number:
-      route_sort(sort_comp_rh_by_number);
-      break;
-    default:
-      fatal(MYNAME ": unknown route sort mode.");
-    }
+  switch (rte_sort_mode)  {
+  case SortModeRteHd::none:
+    break;
+  case SortModeRteHd::description:
+    route_sort(sort_comp_rh_by_description);
+    break;
+  case SortModeRteHd::name:
+    route_sort(sort_comp_rh_by_name);
+    break;
+  case SortModeRteHd::number:
+    route_sort(sort_comp_rh_by_number);
+    break;
+  default:
+    fatal(MYNAME ": unknown route sort mode.");
   }
-  if (trk_sort_mode != SortModeRteHd::none) {
-    switch (trk_sort_mode)  {
-    case SortModeRteHd::description:
-      track_sort(sort_comp_rh_by_description);
-      break;
-    case SortModeRteHd::name:
-      track_sort(sort_comp_rh_by_name);
-      break;
-    case SortModeRteHd::number:
-      track_sort(sort_comp_rh_by_number);
-      break;
-    default:
-      fatal(MYNAME ": unknown track sort mode.");
-    }
+
+  switch (trk_sort_mode)  {
+  case SortModeRteHd::none:
+    break;
+  case SortModeRteHd::description:
+    track_sort(sort_comp_rh_by_description);
+    break;
+  case SortModeRteHd::name:
+    track_sort(sort_comp_rh_by_name);
+    break;
+  case SortModeRteHd::number:
+    track_sort(sort_comp_rh_by_number);
+    break;
+  default:
+    fatal(MYNAME ": unknown track sort mode.");
   }
 }
 
 void SortFilter::init()
 {
   // sort waypts by
-  if (opt_sm_description) {
+  if (!opt_sm_description && !opt_sm_gcid && !opt_sm_shortname && !opt_sm_time) {
+    wpt_sort_mode = SortModeWpt::none;
+  } else if (opt_sm_description && !opt_sm_gcid && !opt_sm_shortname && !opt_sm_time) {
     wpt_sort_mode = SortModeWpt::description;
-  }
-  if (opt_sm_gcid) {
+  } else if (!opt_sm_description && opt_sm_gcid && !opt_sm_shortname && !opt_sm_time) {
     wpt_sort_mode = SortModeWpt::gcid;
-  }
-  if (opt_sm_shortname) {
+  } else if (!opt_sm_description && !opt_sm_gcid && opt_sm_shortname && !opt_sm_time) {
     wpt_sort_mode = SortModeWpt::shortname;
-  }
-  if (opt_sm_time) {
+  } else if (!opt_sm_description && !opt_sm_gcid && !opt_sm_shortname && opt_sm_time) {
     wpt_sort_mode = SortModeWpt::time;
+  } else {
+    fatal(MYNAME ": At most one of the options description, gcid, shortname and time may be selected.");
   }
 
   // sort routes by
-  if (opt_sm_rtedesc) {
+  if (!opt_sm_rtedesc && !opt_sm_rtename && !opt_sm_rtenum) {
+    rte_sort_mode = SortModeRteHd::none;
+  } else if (opt_sm_rtedesc && !opt_sm_rtename && !opt_sm_rtenum) {
     rte_sort_mode = SortModeRteHd::description;
-  }
-  if (opt_sm_rtename) {
+  } else if (!opt_sm_rtedesc && opt_sm_rtename && !opt_sm_rtenum) {
     rte_sort_mode = SortModeRteHd::name;
-  }
-  if (opt_sm_rtenum) {
+  } else if (!opt_sm_rtedesc && !opt_sm_rtename && opt_sm_rtenum) {
     rte_sort_mode = SortModeRteHd::number;
+  } else {
+    fatal(MYNAME ": At most one of the options rtedesc, rtename and rtenum may be selected.");
   }
 
   // sort tracks by
-  if (opt_sm_trkdesc) {
+  if (!opt_sm_trkdesc && !opt_sm_trkname && !opt_sm_trknum) {
+    trk_sort_mode = SortModeRteHd::none;
+  } else if (opt_sm_trkdesc && !opt_sm_trkname && !opt_sm_trknum) {
     trk_sort_mode = SortModeRteHd::description;
-  }
-  if (opt_sm_trkname) {
+  } else if (!opt_sm_trkdesc && opt_sm_trkname && !opt_sm_trknum) {
     trk_sort_mode = SortModeRteHd::name;
-  }
-  if (opt_sm_trknum) {
+  } else if (!opt_sm_trkdesc && !opt_sm_trkname && opt_sm_trknum) {
     trk_sort_mode = SortModeRteHd::number;
+  } else {
+    fatal(MYNAME ": At most one of the options trkdesc, trkname and trknum may be selected.");
   }
 }
 
