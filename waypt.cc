@@ -37,6 +37,7 @@
 #include "defs.h"
 #include "formspec.h"           // for FormatSpecificDataList
 #include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t
+#include "geocache.h"           // for Geocache
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
@@ -45,7 +46,7 @@
 
 WaypointList* global_waypoint_list;
 
-geocache_data Waypoint::empty_gc_data;
+Geocache Waypoint::empty_gc_data;
 static global_trait traits;
 
 const global_trait* get_traits()
@@ -449,7 +450,7 @@ Waypoint::Waypoint(const Waypoint& other) :
 {
   // deep copy geocache data unless it is the special static empty_gc_data.
   if (other.gc_data != &Waypoint::empty_gc_data) {
-    gc_data = new geocache_data(*other.gc_data);
+    gc_data = new Geocache(*other.gc_data);
   }
 
   // deep copy fs chain data.
@@ -501,7 +502,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     extra_data = rhs.extra_data;
     // deep copy geocache data unless it is the special static empty_gc_data.
     if (rhs.gc_data != &Waypoint::empty_gc_data) {
-      gc_data = new geocache_data(*rhs.gc_data);
+      gc_data = new Geocache(*rhs.gc_data);
     }
 
     // deep copy fs chain data.
@@ -567,11 +568,11 @@ Waypoint::SetCreationTime(qint64 t, qint64 ms)
   creation_time.setMSecsSinceEpoch((t * 1000) + ms);
 }
 
-geocache_data*
+Geocache*
 Waypoint::AllocGCData()
 {
   if (gc_data == &Waypoint::empty_gc_data) {
-    gc_data = new geocache_data;
+    gc_data = new Geocache;
   }
   return gc_data;
 }

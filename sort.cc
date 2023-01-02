@@ -19,12 +19,15 @@
 
  */
 
+#include "sort.h"
+
 #include <QDateTime>            // for QDateTime
 #include <QString>              // for operator<, QString
 
 #include "defs.h"
+#include "geocache.h"           // for Geocache
 #include "src/core/datetime.h"  // for DateTime
-#include "sort.h"
+
 
 #if FILTERS_ENABLED
 #define MYNAME "sort"
