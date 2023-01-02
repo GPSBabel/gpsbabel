@@ -644,7 +644,7 @@ GlobalsatSportFormat::track_read()
               wpt->longitude = ((int32_t) point.Longitude) / 1000000.0;
               wpt->latitude = ((int32_t) point.Latitude) / 1000000.0;
               wpt->altitude = point.Altitude;
-              wpt->speed = ((double) point.Speed / 100.0) * 1000.0 / 3600.0;
+              WAYPT_SET(wpt, speed, ((double) point.Speed / 100.0) * 1000.0 / 3600.0);
               wpt->heartrate = point.HeartRate;
               wpt->cadence = point.Cadence;	//TODO convert in any way??
               wpt->power = point.Power;	//TODO convert in any way??

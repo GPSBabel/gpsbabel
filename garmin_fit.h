@@ -110,12 +110,12 @@ private:
       : lat(wpt.latitude),
         lon(wpt.longitude),
         altitude(wpt.altitude),
-        speed(WAYPT_HAS((&wpt), speed) ? wpt.speed : -1),
+        speed(WAYPT_GET(&wpt, speed, -1)),
         odometer_distance(wpt.odometer_distance),
         creation_time(wpt.creation_time),
         shortname(wpt.shortname),
         is_course_point(is_course_point),
-        course_point_type(course_point_type) { }
+        course_point_type(course_point_type) {}
     double lat, lon, altitude;
     double speed, odometer_distance;
     gpsbabel::DateTime creation_time;

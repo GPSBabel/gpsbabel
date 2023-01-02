@@ -757,10 +757,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->power = strtod(s, nullptr);
     break;
   case XcsvStyle::XT_TEMPERATURE:
-    wpt->temperature = strtod(s, nullptr);
+    WAYPT_SET(wpt, temperature, strtod(s, nullptr));
     break;
   case XcsvStyle::XT_TEMPERATURE_F:
-    wpt->temperature = (FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
+    WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
     break;
   /* GMSD ****************************************************************/
   case XcsvStyle::XT_COUNTRY: {
