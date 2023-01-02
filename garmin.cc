@@ -19,32 +19,42 @@
 
  */
 
-#include <cctype>               // for isalpha, toupper
-#include <climits>              // for INT_MAX
-#include <cmath>                // for atan2, floor, sqrt
-#include <csetjmp>              // for setjmp
-#include <cstdio>               // for fprintf, fflush, snprintf, snprintf
-#include <cstdlib>              // for strtol
-#include <cstring>              // for memcpy, strlen, strncpy, strchr
-#include <ctime>                // for time_t
+#include <cctype>                // for isalpha, toupper
+#include <climits>               // for INT_MAX
+#include <cmath>                 // for atan2, floor, sqrt
+#include <csetjmp>               // for setjmp
+#include <cstdio>                // for fprintf, fflush, snprintf, snprintf
+#include <cstdlib>               // for strtol
+#include <cstring>               // for memcpy, strlen, strncpy, strchr
+#include <ctime>                 // for time_t
 
-#include <QByteArray>           // for QByteArray
-#include <QChar>                // for QChar
-#include <QString>              // for QString
-#include <Qt>                   // for CaseInsensitive
-#include <QtGlobal>             // for qPrintable, foreach
+#include <QByteArray>            // for QByteArray
+#include <QChar>                 // for QChar
+#include <QString>               // for QString
+#include <QVector>               // for QVector
+#include <Qt>                    // for CaseInsensitive
+#include <QtGlobal>              // for qPrintable, foreach
 
 #include "defs.h"
-#include "cet_util.h"           // for cet_convert_init, cet_cs_vec_utf8
-#include "format.h"             // for Format
-#include "garmin_device_xml.h"  // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
-#include "garmin_fs.h"          // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
-#include "garmin_tables.h"      // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
-#include "grtcirc.h"            // for DEG
-#include "jeeps/gps.h"
-#include "jeeps/gpsserial.h"
-#include "src/core/datetime.h"  // for DateTime
-#include "vecs.h"               // for Vecs
+#include "cet_util.h"            // for cet_convert_init, cet_cs_vec_utf8
+#include "format.h"              // for Format
+#include "garmin_device_xml.h"   // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
+#include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
+#include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
+#include "geocache.h"            // for Geocache, Geocache::type_t, Geocache...
+#include "grtcirc.h"             // for DEG
+#include "jeeps/gpsapp.h"        // for GPS_Set_Baud_Rate, GPS_Init, GPS_Pre...
+#include "jeeps/gpscom.h"        // for GPS_Command_Get_Lap, GPS_Command_Get...
+#include "jeeps/gpsdevice.h"     // for gpsdevh
+#include "jeeps/gpsmem.h"        // for GPS_Track_Del, GPS_Way_Del, GPS_Pvt_Del
+#include "jeeps/gpsport.h"       // for int32
+#include "jeeps/gpsprot.h"       // for gps_waypt_type, gps_category_type
+#include "jeeps/gpssend.h"       // for GPS_SWay, GPS_PWay, GPS_STrack, GPS_...
+#include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
+#include "jeeps/gpsutil.h"       // for GPS_User, GPS_Enable_Diagnose, GPS_E...
+#include "src/core/datetime.h"   // for DateTime
+#include "vecs.h"                // for Vecs
+
 
 #define MYNAME "GARMIN"
 static const char* portname;
@@ -798,25 +808,25 @@ static const char*
 get_gc_info(const Waypoint* wpt)
 {
   if (global_opts.smart_names) {
-    if (wpt->gc_data->type == gt_virtual) {
+    if (wpt->gc_data->type == Geocache::type_t::gt_virtual) {
       return  "V ";
     }
-    if (wpt->gc_data->type == gt_unknown) {
+    if (wpt->gc_data->type == Geocache::type_t::gt_unknown) {
       return  "? ";
     }
-    if (wpt->gc_data->type == gt_multi) {
+    if (wpt->gc_data->type == Geocache::type_t::gt_multi) {
       return  "Mlt ";
     }
-    if (wpt->gc_data->type == gt_earth) {
+    if (wpt->gc_data->type == Geocache::type_t::gt_earth) {
       return  "EC ";
     }
-    if (wpt->gc_data->type == gt_event) {
+    if (wpt->gc_data->type == Geocache::type_t::gt_event) {
       return  "Ev ";
     }
-    if (wpt->gc_data->container == gc_micro) {
+    if (wpt->gc_data->container == Geocache::container_t::gc_micro) {
       return  "M ";
     }
-    if (wpt->gc_data->container == gc_small) {
+    if (wpt->gc_data->container == Geocache::container_t::gc_small) {
       return  "S ";
     }
   }
@@ -895,8 +905,8 @@ waypoint_prepare()
     if (deficon) {
       icon = gt_find_icon_number_from_desc(deficon, PCX);
     } else {
-      if (!get_cache_icon(wpt).isEmpty()) {
-        icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+      if (!wpt->gc_data->get_icon().isEmpty()) {
+        icon = gt_find_icon_number_from_desc(wpt->gc_data->get_icon(), PCX);
       } else {
         icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
       }

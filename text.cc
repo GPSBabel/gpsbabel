@@ -32,6 +32,7 @@
 
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
+#include "geocache.h"              // for Geocache, Geocache::UtfString
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/textstream.h"   // for TextStream
@@ -102,17 +103,17 @@ TextFormat::text_disp(const Waypoint* wpt)
   }
   if (wpt->gc_data->terr) {
     *file_out << QStringLiteral(" - %1 / %2 - (%3%4 / %5%6)\n")
-              .arg(gs_get_cachetype(wpt->gc_data->type),
-                   gs_get_container(wpt->gc_data->container))
+              .arg(wpt->gc_data->get_type(),
+                   wpt->gc_data->get_container())
               .arg((int)(wpt->gc_data->diff / 10))
               .arg((wpt->gc_data->diff%10) ? ".5" : "")
               .arg((int)(wpt->gc_data->terr / 10))
               .arg((wpt->gc_data->terr%10) ? ".5" : "");
-    if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-      *file_out << "\n" << strip_html(&wpt->gc_data->desc_short) << "\n";
+    if (!wpt->gc_data->desc_short.utf_string.isEmpty()) {
+      *file_out << "\n" << wpt->gc_data->desc_short.strip_html() << "\n";
     }
-    if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-      *file_out << "\n" << strip_html(&wpt->gc_data->desc_long) << "\n";
+    if (!wpt->gc_data->desc_long.utf_string.isEmpty()) {
+      *file_out << "\n" << wpt->gc_data->desc_long.strip_html() << "\n";
     }
     if (!wpt->gc_data->hint.isEmpty()) {
       QString hint;

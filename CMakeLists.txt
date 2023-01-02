@@ -87,6 +87,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   garmin_txt.cc
   garmin_xt.cc
   gdb.cc
+  geocache.cc
   geojson.cc
   globalsat_sport.cc
   gpssim.cc
@@ -221,6 +222,7 @@ set(HEADERS
   gbser.h
   gbser_private.h
   gdb.h
+  geocache.h
   geojson.h
   globalsat_sport.h
   gpx.h
