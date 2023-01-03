@@ -1064,6 +1064,7 @@ void gb_setbit(void* buf, uint32_t nr);
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
+QTextCodec* get_codec(const QString& cs_name);
 void list_codecs();
 void list_timezones();
 QString grapheme_truncate(const QString& input, unsigned int count);

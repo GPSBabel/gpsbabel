@@ -38,8 +38,7 @@
 #include <ctime>                   // for time, gmtime, time_t, tm
 #include <memory>                  // for unique_ptr
 
-#include "defs.h"                  // for Waypoint, fatal, STRFROMUNICODE, le_write32, le_write16, wp_flags, warning, bounds, KPH_TO_MPS, MPH_TO_MPS, WAYPT_HAS, gpsbabel_testmode, parse_speed, WAYPT_SET, MILES_TO_METERS, MPS_TO_KPH, MPS_TO_MPH, mkgmtime, mkshort, mkshort_del_handle, mkshort_new_...
-#include "cet_util.h"              // for cet_convert_init
+#include "defs.h"                  // for Waypoint, fatal, le_write32, le_write16, wp_flags, warning, bounds, KPH_TO_MPS, MPH_TO_MPS, WAYPT_HAS, gpsbabel_testmode, parse_speed, WAYPT_SET, MILES_TO_METERS, MPS_TO_KPH, MPS_TO_MPH, mkgmtime, mkshort, mkshort_del_handle, mkshort_new_...
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
@@ -149,7 +148,7 @@ GarminGPIFormat::gpi_read_string(const char* field) const
     }
   }
 
-  QString result = STRTOUNICODE(string).trimmed();
+  QString result = str_to_unicode(string).trimmed();
   if (GPI_DBG) {
     warning("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
   }
@@ -560,15 +559,15 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 *******************************************************************************/
 
 void
-GarminGPIFormat::write_string(const char* str, const char long_format) const
+GarminGPIFormat::write_string(const QByteArray& str, const char long_format) const
 {
-  int len = strlen(str);
+  int len = str.size();
   if (long_format) {
     gbfputint32(len + 4, fout);
     gbfwrite("EN", 1, 2, fout);
   }
   gbfputint16(len, fout);
-  gbfwrite(str, 1, len, fout);
+  gbfwrite(str.constData(), 1, len, fout);
 }
 
 bool
@@ -707,7 +706,7 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
 
     res += 12;    /* tag/sz/sub-sz */
     res += 19;    /* poi fixed size */
-    res += strlen(STRFROMUNICODE(wpt->shortname));
+    res += str_from_unicode(wpt->shortname).size();
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -764,33 +763,33 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
     if (!str.isEmpty()) {
       dt->addr = str;
       dt->mask |= GPI_ADDR_ADDR;
-      dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
+      dt->sz += (8 + str_from_unicode(dt->addr).size());
     }
 
     if ((gmsd = garmin_fs_t::find(wpt))) {
       if ((dt->mask == 0) && !(dt->addr = garmin_fs_t::get_addr(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_ADDR;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
+        dt->sz += (8 + str_from_unicode(dt->addr).size());
       }
       if (!(dt->city = garmin_fs_t::get_city(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_CITY;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->city)));
+        dt->sz += (8 + str_from_unicode(dt->city).size());
       }
       if (!(dt->country = garmin_fs_t::get_country(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_COUNTRY;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->country)));
+        dt->sz += (8 + str_from_unicode(dt->country).size());
       }
       if (!(dt->state = garmin_fs_t::get_state(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_STATE;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->state)));
+        dt->sz += (8 + str_from_unicode(dt->state).size());
       }
       if (!(dt->postal_code = garmin_fs_t::get_postal_code(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_POSTAL_CODE;
-        dt->sz += (2 + strlen(STRFROMUNICODE(dt->postal_code)));  /* short form */
+        dt->sz += (2 + str_from_unicode(dt->postal_code).size());  /* short form */
       }
 
       if (!(dt->phone_nr = garmin_fs_t::get_phone_nr(gmsd, nullptr)).isEmpty()) {
-        res += (12 + 4 +  strlen(STRFROMUNICODE(dt->phone_nr)));
+        res += (12 + 4 +  str_from_unicode(dt->phone_nr).size());
       }
     }
     if (dt->mask) {
@@ -806,7 +805,7 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
     }
 //    if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
     if (!str.isEmpty()) {
-      res += (12 + 4 + strlen(STRFROMUNICODE(str)));
+      res += (12 + 4 + str_from_unicode(str).size());
     }
   }
 
@@ -864,18 +863,18 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
     }
 
     gbfputint32(0x80002, fout);
-    int s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
+    int s0 = s1 = 19 + str_from_unicode(wpt->shortname).size();
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
     if (!str.isEmpty()) {
-      s0 += (12 + 4 + strlen(STRFROMUNICODE(str)));  /* descr */
+      s0 += (12 + 4 + str_from_unicode(str).size());  /* descr */
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
     }
     if (!dt->phone_nr.isEmpty()) {
-      s0 += (12 + 4 + strlen(STRFROMUNICODE(dt->phone_nr)));
+      s0 += (12 + 4 + str_from_unicode(dt->phone_nr).size());
     }
     if (dt->alerts) {
       s0 += 20;  /* tag(3) */
@@ -890,7 +889,7 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
     gbfputint16(1, fout);  /* ? always 1 ? */
     gbfputc(alerts, fout);  /* seems to be 1 when extra options present */
 
-    write_string(STRFROMUNICODE(wpt->shortname), 1);
+    write_string(str_from_unicode(wpt->shortname), 1);
 
     if (dt->alerts) {
       char flag = 0;
@@ -926,8 +925,8 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
 
     if (!str.isEmpty()) {
       gbfputint32(0xa, fout);
-      gbfputint32(strlen(STRFROMUNICODE(str)) + 8, fout);  /* string + string header */
-      write_string(STRFROMUNICODE(str), 1);
+      gbfputint32(str_from_unicode(str).size() + 8, fout);  /* string + string header */
+      write_string(str_from_unicode(str), 1);
     }
 
     if (dt->sz) {          /* gpi address */
@@ -936,28 +935,28 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
       gbfputint32(0x2, fout);      /* ? always 2 ? */
       gbfputint16(dt->mask, fout);
       if (dt->mask & GPI_ADDR_CITY) {
-        write_string(STRFROMUNICODE(dt->city), 1);
+        write_string(str_from_unicode(dt->city), 1);
       }
       if (dt->mask & GPI_ADDR_COUNTRY) {
-        write_string(STRFROMUNICODE(dt->country), 1);
+        write_string(str_from_unicode(dt->country), 1);
       }
       if (dt->mask & GPI_ADDR_STATE) {
-        write_string(STRFROMUNICODE(dt->state), 1);
+        write_string(str_from_unicode(dt->state), 1);
       }
       if (dt->mask & GPI_ADDR_POSTAL_CODE) {
-        write_string(STRFROMUNICODE(dt->postal_code), 0);
+        write_string(str_from_unicode(dt->postal_code), 0);
       }
       if (dt->mask & GPI_ADDR_ADDR) {
-        write_string(STRFROMUNICODE(dt->addr), 1);
+        write_string(str_from_unicode(dt->addr), 1);
       }
     }
 
     if (!dt->phone_nr.isEmpty()) {
       gbfputint32(0x8000c, fout);
-      gbfputint32(strlen(STRFROMUNICODE(dt->phone_nr)) + 2 + 2, fout);
+      gbfputint32(str_from_unicode(dt->phone_nr).size() + 2 + 2, fout);
       gbfputint32(0x2, fout);      /* ? always 2 ? */
       gbfputint16(1, fout);      /* mask */
-      write_string(STRFROMUNICODE(dt->phone_nr), 0);
+      write_string(str_from_unicode(dt->phone_nr), 0);
     }
   }
 
@@ -982,7 +981,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
 {
   int sz = wdata_compute_size(wdata);
   sz += 8;  /* string header */
-  sz += strlen(STRFROMUNICODE(QString::fromUtf8(opt_cat)));
+  sz += str_from_unicode(QString::fromUtf8(opt_cat)).size();
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -991,7 +990,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(STRFROMUNICODE(QString::fromUtf8(opt_cat)), 1);
+  write_string(str_from_unicode(QString::fromUtf8(opt_cat)), 1);
 
   wdata_write(wdata);
 
@@ -1230,9 +1229,9 @@ GarminGPIFormat::rd_init(const QString& fname)
 
   if ((codepage >= 1250) && (codepage <= 1257)) {
     QString qCodecName = QStringLiteral("windows-%1").arg(codepage);
-    cet_convert_init(CSTR(qCodecName), 1);
+    codec = get_codec(qCodecName);
   } else if (codepage == 65001) {
-    cet_convert_init("utf8", 1);
+    codec = get_codec("utf8");
   } else {
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
@@ -1288,7 +1287,7 @@ GarminGPIFormat::wr_init(const QString& fname)
     fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
-  cet_convert_init(opt_writecodec,1);
+  codec = get_codec(opt_writecodec);
 
   units = tolower(opt_units[0]);
   if ((units != 'm') && (units != 's')) {
