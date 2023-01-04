@@ -339,6 +339,14 @@ rw_init(const QString& fname)
 
   setshort_mustupper(mkshort_handle, receiver_must_upper);
 
+  /*
+   * This used to mean something when we used cet, but these days this
+   * format either uses implicit QString conversions (utf8), 
+   * or we have hard coded QString::fromLatin1, CSTRc, or CSTR.  These
+   * are likely bugs.
+   * However, this is still used for garmin_fs_garmin_after_read,
+   * garmin_fs_garmin_before_write.
+   */
   codec = get_codec(receiver_charset);
 }
 
