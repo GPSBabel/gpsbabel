@@ -311,7 +311,7 @@ private:
   void write_header() const;
   void enum_waypt_cb(const Waypoint* ref) const;
   static void load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz);
-  QByteArray str_from_unicode(QStringView qstr) const {return codec->fromUnicode(qstr);}
+  QByteArray str_from_unicode(const QString& qstr) const {return codec->fromUnicode(qstr);}
   QString str_to_unicode(const QByteArray& cstr) const {return codec->toUnicode(cstr);}
 
   /* Data Members */
