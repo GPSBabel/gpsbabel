@@ -236,7 +236,4 @@ unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* wayp
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
 
-void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
-void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
-
 #endif

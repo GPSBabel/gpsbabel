@@ -48,8 +48,6 @@
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
-#define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
-#define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
 /*
  * Amazingly, this constant is not specified in the standard...
