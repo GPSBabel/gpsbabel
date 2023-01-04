@@ -36,7 +36,6 @@
 #include <QtGlobal>              // for qPrintable, foreach
 
 #include "defs.h"
-#include "cet_util.h"            // for cet_convert_init, cet_cs_vec_utf8
 #include "format.h"              // for Format
 #include "garmin_device_xml.h"   // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write

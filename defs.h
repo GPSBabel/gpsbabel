@@ -180,7 +180,6 @@ struct global_options {
   int smart_icons;
   int smart_names;
   inifile_t* inifile;
-  QTextCodec* codec;
 };
 
 extern global_options global_opts;
