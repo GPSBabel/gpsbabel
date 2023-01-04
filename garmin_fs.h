@@ -32,7 +32,6 @@
 
 #include "defs.h"
 #include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
-#include "jeeps/gps.h"
 
 
 /* this order is used by most devices */

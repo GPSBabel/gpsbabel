@@ -20,12 +20,9 @@
 
  */
 
-#include <cassert>                   // for assert
 #include <cstdio>                    // for snprintf, sscanf
 #include <cstdlib>                   // for strtod
-#include <cstring>                   // for strncpy
 
-#include <QByteArray>                // for QByteArray
 #include <QString>                   // for QString, QStringLiteral
 #include <QXmlStreamWriter>          // for QXmlStreamWriter
 #include <Qt>                        // for CaseInsensitive
@@ -34,7 +31,6 @@
 #include "garmin_fs.h"
 #include "garmin_tables.h"           // for gt_switch_display_mode_value, gt_display_mode_symbol, gt_display_mode_symbol_and_comment, gt_display_mode_symbol_and_name
 #include "inifile.h"                 // for inifile_readstr
-#include "jeeps/gps.h"               // for gps_waypt_type
 
 
 #define MYNAME "garmin_fs"

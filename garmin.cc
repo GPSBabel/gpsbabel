@@ -31,12 +31,14 @@
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for QChar
 #include <QString>               // for QString
+#include <QTextCodec>            // for QTextCodec
 #include <QVector>               // for QVector
 #include <Qt>                    // for CaseInsensitive
 #include <QtGlobal>              // for qPrintable, foreach
 
 #include "defs.h"
 #include "format.h"              // for Format
+#include "formspec.h"            // for FormatSpecificDataList
 #include "garmin_device_xml.h"   // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
@@ -132,7 +134,7 @@ static int d103_icon_number_from_symbol(const QString& s);
 static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
 static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
-static QByteArray str_from_unicode(QStringView qstr) {return codec->fromUnicode(qstr);}
+static QByteArray str_from_unicode(const QString& qstr) {return codec->fromUnicode(qstr);}
 static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(cstr);}
 
 static void
