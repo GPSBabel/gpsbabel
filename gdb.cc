@@ -40,7 +40,6 @@
 #include <iterator>                // for next
 
 #include "defs.h"                  // for Waypoint, warning, fatal, route_head, UrlLink, bounds, mkshort, UrlList, unknown_alt, wp_flags, xfree, waypt_add_to_bounds, waypt_init_bounds, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, WAYPT_GET, WAYPT_SET, gb_color
-#include "cet_util.h"              // for cet_convert_init
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
 #include "garmin_tables.h"         // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
@@ -970,10 +969,6 @@ GdbFormat::rd_init(const QString& fname)
   fin = gbfopen_le(fname, "rb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
   read_file_header();
-  /* VERSION DEPENDENT CODE */
-  if (gdb_ver >= GDB_VER_UTF8) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
-  }
 
   wayptq_in.clear();
   wayptq_in_hidden.clear();
@@ -1732,10 +1727,6 @@ GdbFormat::wr_init(const QString& fname)
 
   if (gdb_opt_bitcategory) {
     gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
-  }
-
-  if (gdb_ver >= GDB_VER_UTF8) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
   }
 
   wayptq_out.clear();
