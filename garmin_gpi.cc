@@ -1228,7 +1228,7 @@ GarminGPIFormat::rd_init(const QString& fname)
   read_header();
 
   if ((codepage >= 1250) && (codepage <= 1257)) {
-    QString qCodecName = QStringLiteral("windows-%1").arg(codepage);
+    QByteArray qCodecName = "windows-" + QByteArray::number(codepage);
     codec = get_codec(qCodecName);
   } else if (codepage == 65001) {
     codec = get_codec("utf8");

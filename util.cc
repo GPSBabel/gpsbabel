@@ -1346,9 +1346,9 @@ int gb_ptr2int(const void* p)
   return x.i;
 }
 
-QTextCodec* get_codec(const QString& cs_name)
+QTextCodec* get_codec(const QByteArray& cs_name)
 {
-  QTextCodec* codec = QTextCodec::codecForName(CSTR(cs_name));
+  QTextCodec* codec = QTextCodec::codecForName(cs_name);
   if (codec == nullptr) {
     fatal(FatalMsg().nospace() << "Unsupported character set " << cs_name << ".");
   }
