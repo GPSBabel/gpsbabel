@@ -1263,9 +1263,15 @@ garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int proto
   way->dspl = gt_switch_display_mode_value(
                 garmin_fs_t::get_display(gmsd, way->dspl), gps_waypt_type, 0);
   way->category = garmin_fs_t::get_category(gmsd, way->category);
-  way->dpth = (wpt->depth_value_or(way->dpth));
-  way->dst = (wpt->proximity_value_or(way->dpth));
-  way->temperature = (wpt->temperature_value_or(way->temperature));
+  if (wpt->depth_has_value()) {
+    way->dpth = wpt->depth_value();
+  }
+  if (wpt->proximity_has_value()) {
+    way->dst = wpt->proximity_value();
+  }
+  if (wpt->temperature_has_value()) {
+    way->temperature = wpt->temperature_value();
+  }
 
   /* destination may not be null terminated, but we will fill with nulls if necessary */
   strncpy(way->cc, str_from_unicode(garmin_fs_t::get_cc(gmsd, nullptr)).constData(), sizeof(way->cc));
