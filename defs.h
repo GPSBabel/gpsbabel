@@ -265,7 +265,6 @@ public:
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   unsigned int is_split:1;		/* the waypoint represents a split */
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -332,7 +331,8 @@ private:
     bool depth:1;			/* depth field is set */
     /* !ToDo!
     unsigned int altitude:1;		/+ altitude field is set +/
-    ... and others
+    ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
+    odometer_distance
     */
   };
 
