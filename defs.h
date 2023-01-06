@@ -927,8 +927,6 @@ struct ff_vecs_t {
   ff_write write;
   ff_exit exit;
   QVector<arglist_t>* args;
-  QString encode;
-  int fixed_encode;
   position_ops_t position_ops;
 };
 
@@ -987,14 +985,6 @@ QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */
-
-/*
- * Character encoding transformations.
- */
-
-#define CET_CHARSET_ASCII	"US-ASCII"
-#define CET_CHARSET_UTF8	"UTF-8"
-#define CET_CHARSET_MS_ANSI	"windows-1252"
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);

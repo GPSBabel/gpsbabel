@@ -1073,6 +1073,8 @@ static QVector<arglist_t> wbt_sargs = {
   },
 };
 
+/* master process: don't convert anything */
+
 ff_vecs_t wbt_svecs = {
   ff_type_serial,
   { ff_cap_read, ff_cap_read, ff_cap_none },
@@ -1084,14 +1086,15 @@ ff_vecs_t wbt_svecs = {
   nullptr,
   nullptr,
   &wbt_sargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 
 /* used for wbt-bin /and/ wbt-tk1 */
 
 static QVector<arglist_t> wbt_fargs = {
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t wbt_fvecs = {
   ff_type_file,
@@ -1104,6 +1107,5 @@ ff_vecs_t wbt_fvecs = {
   nullptr,
   nullptr,
   &wbt_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };

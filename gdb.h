@@ -30,7 +30,7 @@
 #include <QString>          // for QString
 #include <QVector>          // for QVector
 
-#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, CET_CHARSET_MS_ANSI, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
+#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
 #include "format.h"         // for Format
 #include "garmin_fs.h"      // for garmin_fs_t
 #include "garmin_tables.h"  // for gt_waypt_classes_e
@@ -53,17 +53,6 @@ public:
   QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_ALL;
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_MS_ANSI;
-  }
-
-  int get_fixed_encode() const override
-  {
-    /* O.K.: changed to NON-FIXED because of utf8 strings since GDB V3 */
-    return 0;
   }
 
   void rd_init(const QString& fname) override;

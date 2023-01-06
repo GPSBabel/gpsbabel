@@ -406,6 +406,9 @@ format_garmin_xt_read()
 
 /**************************************************************************/
 
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
+
 ff_vecs_t format_garmin_xt_vecs = {
   ff_type_file,
   {
@@ -421,8 +424,6 @@ ff_vecs_t format_garmin_xt_vecs = {
   nullptr,
   nullptr,
   &format_garmin_xt_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 /**************************************************************************/

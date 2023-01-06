@@ -745,7 +745,7 @@ garmin_txt_wr_init(const QString& fname)
   memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 
   fout = new gpsbabel::TextStream;
-  fout->open(fname, QIODevice::WriteOnly, MYNAME, "Windows-1252");
+  fout->open(fname, QIODevice::WriteOnly, MYNAME, "windows-1252");
 
   gtxt_flags.metric = (toupper(*get_option_val(opt_dist, "m")) == 'M');
   gtxt_flags.celsius = (toupper(*get_option_val(opt_temp, "c")) == 'C');
@@ -1348,7 +1348,7 @@ garmin_txt_rd_init(const QString& fname)
   memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 
   fin = new gpsbabel::TextStream;
-  fin->open(fname, QIODevice::ReadOnly, MYNAME, "Windows-1252");
+  fin->open(fname, QIODevice::ReadOnly, MYNAME, "windows-1252");
   memset(&header_ct, 0, sizeof(header_ct));
 
   datum_index = -1;
@@ -1415,6 +1415,14 @@ garmin_txt_read()
   }
 }
 
+/*
+ * The file encoding is windows-1252.
+ * Conversion between windows-1252 and utf-16 is handled by the stream.
+ * Conversion between utf-16 and utf-8 is handled by this format.
+ * Let main know char strings have already been converted to utf-8
+ * so it doesn't attempt to re-convert any char strings including gmsd data.
+ */
+
 ff_vecs_t garmin_txt_vecs = {
   ff_type_file,
   FF_CAP_RW_ALL,
@@ -1426,15 +1434,7 @@ ff_vecs_t garmin_txt_vecs = {
   garmin_txt_write,
   nullptr,
   &garmin_txt_args,
-  /*
-   * The file encoding is Windows-1252, a.k.a CET_CHARSET_MS_ANSI.
-   * Conversion between Windows-1252 and utf-16 is handled by the stream.
-   * Conversion between utf-16 and utf-8 is handled by this format.
-   * Let main know char strings have already been converted to utf-8
-   * so it doesn't attempt to re-convert any char strings including gmsd data.
-   */
-  CET_CHARSET_UTF8, 0
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 
 #endif // CSVFMTS_ENABLED

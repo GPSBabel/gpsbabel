@@ -55,7 +55,7 @@
 #include <cstdint>      // for int32_t, int16_t, uint16_t
 #include <ctime>        // for time_t
 
-#include "defs.h"       // for arglist_t, ARG_NOMINMAX, ff_cap, Waypoint, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ARGTYPE_FILE, ARGTYPE_INT, CET_CHARSET_MS_ANSI, bounds, ff_cap_read, ff_cap_write, ff_type, ff_type_file, short_handle
+#include "defs.h"       // for arglist_t, ARG_NOMINMAX, ff_cap, Waypoint, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ARGTYPE_FILE, ARGTYPE_INT, bounds, ff_cap_read, ff_cap_write, ff_type, ff_type_file, short_handle
 #include "format.h"     // for Format
 #include "garmin_fs.h"  // for garmin_fs_t
 #include "gbfile.h"     // for gbfile
@@ -81,16 +81,6 @@ public:
       ff_cap_none 			/* tracks */,
       ff_cap_none 			/* routes */
     };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_MS_ANSI;    /* WIN-CP1252 */
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;

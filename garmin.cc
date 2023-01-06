@@ -141,7 +141,7 @@ static void
 rw_init(const QString& fname)
 {
   receiver_must_upper = 1;
-  const char* receiver_charset = CET_CHARSET_ASCII;
+  const char* receiver_charset = "US-ASCII";
 
   if (!mkshort_handle) {
     mkshort_handle = mkshort_new_handle();
@@ -268,7 +268,7 @@ rw_init(const QString& fname)
       snwhiteopt = xstrdup("1");
       receiver_must_upper = 0;
       /* This might be 8859-1 */
-      receiver_charset = CET_CHARSET_MS_ANSI;
+      receiver_charset = "windows-1252";
       break;
     case 291: /* GPSMAP 60CS, probably others */
     case 1095: /* GPS 72H */
@@ -280,7 +280,7 @@ rw_init(const QString& fname)
     case 463: /* Quest 2 */
       receiver_must_upper = 0;
       receiver_short_length = 30;
-      receiver_charset = CET_CHARSET_MS_ANSI;
+      receiver_charset = "windows-1252";
       break;
     case 577: // Rino 530HCx Version 2.50
       receiver_must_upper = 0;
@@ -288,7 +288,7 @@ rw_init(const QString& fname)
       break;
     case 429: // Streetpilot i3
       receiver_must_upper = 0;
-      receiver_charset = CET_CHARSET_MS_ANSI;
+      receiver_charset = "windows-1252";
       receiver_short_length = 30;
       break;
     case 484: // Forerunner 305
@@ -1167,7 +1167,6 @@ ff_vecs_t garmin_vecs = {
   data_write,
   nullptr,
   &garmin_args,
-  CET_CHARSET_ASCII, 0,
   { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr }
 };
 

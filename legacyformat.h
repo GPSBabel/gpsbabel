@@ -146,15 +146,6 @@ public:
   {
     return vec.cap;
   }
-  QString get_encode() const override
-  {
-    return vec.encode;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return vec.fixed_encode;
-  }
 
 private:
   ff_vecs_t vec;

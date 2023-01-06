@@ -31,7 +31,7 @@
 #include <QVector>               // for QVector
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
-#include "defs.h"                // for arglist_t, ff_cap, route_head, Waypoint, computed_trkdata, ARG_NOMINMAX, ff_cap_read, ARGTYPE_BOOL, ARGTYPE_STRING, CET_CHARSET_ASCII, ff_cap_none, ff_cap_write, ff_type, ff_type_file
+#include "defs.h"                // for arglist_t, ff_cap, route_head, Waypoint, computed_trkdata, ARG_NOMINMAX, ff_cap_read, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ff_cap_write, ff_type, ff_type_file
 #include "format.h"              // for Format
 #include "gbfile.h"              // for gbfile
 #include "src/core/datetime.h"   // for DateTime
@@ -58,16 +58,6 @@ public:
       (ff_cap)(ff_cap_read | ff_cap_write) 	/* tracks */,
       ff_cap_none 			/* routes */
     };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;
