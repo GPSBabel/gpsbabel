@@ -259,30 +259,36 @@ public:
   wp_flags() :
     shortname_is_synthetic(0),
     fmt_use(0),
-    temperature(0),
-    proximity(0),
-    course(0),
-    speed(0),
-    geoidheight(0),
-    depth(0),
     is_split(0),
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int fmt_use:2;			/* lightweight "extra data" */
+  unsigned int is_split:1;		/* the waypoint represents a split */
+  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
+
+};
+
+class op_flags
+{
+public:
+  op_flags() :
+    temperature(false),
+    proximity(false),
+    course(false),
+    speed(false),
+    geoidheight(false),
+    depth(false) {}
   /* "flagged fields" */
-  unsigned int temperature:1;		/* temperature field is set */
-  unsigned int proximity:1;		/* proximity field is set */
-  unsigned int course:1;			/* course field is set */
-  unsigned int speed:1;			/* speed field is set */
-  unsigned int geoidheight:1;	/* geoidheight field is set */
-  unsigned int depth:1;			/* depth field is set */
+  bool temperature:1;		/* temperature field is set */
+  bool proximity:1;		/* proximity field is set */
+  bool course:1;			/* course field is set */
+  bool speed:1;			/* speed field is set */
+  bool geoidheight:1;	/* geoidheight field is set */
+  bool depth:1;			/* depth field is set */
   /* !ToDo!
   unsigned int altitude:1;		/+ altitude field is set +/
   ... and others
   */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -351,6 +357,7 @@ private:
   float course;	/* Optional: degrees true */
   float speed;   	/* Optional: meters per second. */
   float temperature; /* Degrees celsius */
+  op_flags opt_flags;
 
 public:
 
@@ -383,11 +390,11 @@ public:
 
   UrlList urls;
 
-  wp_flags wpt_flags;
   QString icon_descr;
 
   gpsbabel::DateTime creation_time;
 
+  wp_flags wpt_flags;
   /*
    * route priority is for use by the simplify filter.  If we have
    * some reason to believe that the route point is more important,
@@ -442,32 +449,32 @@ public:
 #define GEN_WAYPT_METHODS(field) \
   bool field##_has_value() const \
   { \
-    return wpt_flags.field; \
+    return opt_flags.field; \
   } \
   decltype(field) field##_value() const \
   { \
-    if (!wpt_flags.field) { \
+    if (!opt_flags.field) { \
       throw std::bad_optional_access(); \
     } \
     return field; \
   } \
   bool field##s_equal(const Waypoint& other) const \
   { \
-    return (wpt_flags.field && other.wpt_flags.field && (field == other.field)) || \
-           (!wpt_flags.field && !other.wpt_flags.field); \
+    return (opt_flags.field && other.opt_flags.field && (field == other.field)) || \
+           (!opt_flags.field && !other.opt_flags.field); \
   } \
   decltype(field) field##_value_or(decltype(field) p) const \
   { \
-    return (wpt_flags.field)? field : p; \
+    return (opt_flags.field)? field : p; \
   } \
   void set_##field(decltype(field) p) \
   { \
     field = p; \
-    wpt_flags.field = 1; \
+    opt_flags.field = 1; \
   } \
   void reset_##field() \
   { \
-    wpt_flags.field = 0; \
+    opt_flags.field = 0; \
   }
 
   GEN_WAYPT_METHODS(temperature)
