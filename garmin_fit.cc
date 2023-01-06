@@ -696,7 +696,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     }
     waypt->SetCreationTime(GPS_Math_Gtime_To_Utime(timestamp));
     if (speed != 0xffff) {
-      WAYPT_SET(waypt, speed, speed / 1000.0f);
+      waypt->set_speed(speed / 1000.0f);
     }
     if (heartrate != 0xff) {
       waypt->heartrate = heartrate;
@@ -708,7 +708,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       waypt->power = power;
     }
     if (temperature != 0x7f) {
-      WAYPT_SET(waypt, temperature, temperature);
+      waypt->set_temperature(temperature);
     }
     if (new_trkseg) {
       waypt->wpt_flags.new_trkseg = 1;

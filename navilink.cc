@@ -449,8 +449,8 @@ decode_trackpoint(const unsigned char* buffer)
 
   decode_position(buffer + 12, waypt);
   waypt->SetCreationTime(decode_datetime(buffer + 22));
-  WAYPT_SET(waypt, course, le_read16(buffer + 2));
-  WAYPT_SET(waypt, speed, KPH_TO_MPS(buffer[29] * 2));
+  waypt->set_course(le_read16(buffer + 2));
+  waypt->set_speed(KPH_TO_MPS(buffer[29] * 2));
 
   return waypt;
 }
@@ -466,13 +466,13 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
   GPS_Math_WGS84_To_UTM_EN(waypt->latitude, waypt->longitude, &x, &y, &z, &zc);
 
   le_write16(buffer + 0, serial);
-  le_write16(buffer + 2, WAYPT_GET(waypt, course, 0));
+  le_write16(buffer + 2, (waypt->course_value_or(0)));
   le_write32(buffer + 4, x);
   le_write32(buffer + 8, y);
   encode_position(waypt, buffer + 12);
   encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
   buffer[28] = z;
-  buffer[29] = MPS_TO_KPH(WAYPT_GET(waypt, speed, 0) / 2);
+  buffer[29] = MPS_TO_KPH((waypt->speed_value_or(0)) / 2);
   buffer[30] = 0x5a;
   buffer[31] = 0x7e;
 }
@@ -836,8 +836,8 @@ navilink_decode_logpoint(const unsigned char* buffer)
   waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4),
                          decode_sbp_msec(buffer + 2));
   decode_sbp_position(buffer + 12, waypt);
-  WAYPT_SET(waypt, speed, le_read16(buffer + 24) * 0.01f);
-  WAYPT_SET(waypt, course, le_read16(buffer + 26) * 0.01f);
+  waypt->set_speed(le_read16(buffer + 24) * 0.01f);
+  waypt->set_course(le_read16(buffer + 26) * 0.01f);
 
   return waypt;
 }

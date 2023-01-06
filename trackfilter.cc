@@ -619,11 +619,11 @@ void TrackFilter::trackfilter_synth()
       if (first) {
         if (opt_course) {
           // TODO: the course value 0 isn't valid, wouldn't it be better to UNSET course?
-          WAYPT_SET(wpt, course, 0);
+          wpt->set_course(0);
         }
         if (opt_speed) {
           // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
-          WAYPT_SET(wpt, speed, 0);
+          wpt->set_speed(0);
         }
         first = false;
         last_course_lat = wpt->latitude;
@@ -633,9 +633,9 @@ void TrackFilter::trackfilter_synth()
         last_speed_time = wpt->GetCreationTime();
       } else {
         if (opt_course) {
-          WAYPT_SET(wpt, course, heading_true_degrees(RAD(last_course_lat),
-                    RAD(last_course_lon),RAD(wpt->latitude),
-                    RAD(wpt->longitude)));
+          wpt->set_course(heading_true_degrees(RAD(last_course_lat),
+                                               RAD(last_course_lon),RAD(wpt->latitude),
+                                               RAD(wpt->longitude)));
           last_course_lat = wpt->latitude;
           last_course_lon = wpt->longitude;
         }
@@ -649,17 +649,17 @@ void TrackFilter::trackfilter_synth()
             // Note that points with the same time can occur because the input
             // has truncated times, or because we are truncating times with
             // toTime_t().
-            WAYPT_SET(wpt, speed, radtometers(gcdist(
-                                                RAD(last_speed_lat), RAD(last_speed_lon),
-                                                RAD(wpt->latitude),
-                                                RAD(wpt->longitude))) /
-                      (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
-                     );
+            wpt->set_speed(radtometers(gcdist(
+                                         RAD(last_speed_lat), RAD(last_speed_lon),
+                                         RAD(wpt->latitude),
+                                         RAD(wpt->longitude))) /
+                           (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
+                          );
             last_speed_lat = wpt->latitude;
             last_speed_lon = wpt->longitude;
             last_speed_time = wpt->GetCreationTime();
           } else {
-            WAYPT_UNSET(wpt, speed);
+            wpt->reset_speed();
           }
         }
       }
@@ -903,11 +903,11 @@ bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoi
     std::abs(wpta->latitude - wptb->latitude) < .00001 &&
     std::abs(wpta->longitude - wptb->longitude) < .00001 &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
-    WAYPT_EQUAL(wpta, wptb, course) &&
-    WAYPT_EQUAL(wpta, wptb, speed) &&
+    wpta->courses_equal(*wptb) &&
+    wpta->speeds_equal(*wptb) &&
     (wpta->heartrate == wptb->heartrate) &&
     (wpta->cadence == wptb->cadence) &&
-    WAYPT_EQUAL(wpta, wptb, temperature);
+    wpta->temperatures_equal(*wptb);
 }
 
 void TrackFilter::trackfilter_segment_head(const route_head* rte)

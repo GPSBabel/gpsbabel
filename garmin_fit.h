@@ -100,7 +100,7 @@ private:
       : lat(wpt.latitude),
         lon(wpt.longitude),
         altitude(wpt.altitude),
-        speed(WAYPT_GET(&wpt, speed, -1)),
+        speed(wpt.speed_value_or(-1)),
         odometer_distance(wpt.odometer_distance),
         creation_time(wpt.creation_time),
         shortname(wpt.shortname),

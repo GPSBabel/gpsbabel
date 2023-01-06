@@ -380,11 +380,11 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     speed = (double)gbfgetint16(fin) / 100;  /* speed in meters per second */
 
     if (dist > 0) {
-      WAYPT_SET(wpt, proximity, dist);
+      wpt->set_proximity(dist);
     }
     if (speed > 0) {
       /* speed isn't part of a normal waypoint
-      WAYPT_SET(wpt, speed, speed);
+      wpt->set_speed(speed);
       */
       if ((wpt->shortname.isEmpty()  || ((wpt->shortname).indexOf('@'))==-1)) {
         if (units == 's') {
@@ -725,21 +725,21 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
         double speed = 0;
         parse_speed(wpt->shortname.mid(pidx + 1), &speed, scale, MYNAME);
         if (speed > 0) {
-          WAYPT_SET(wpt, speed, speed);
+          wpt->set_speed(speed);
         }
 #if 0
         wpt->shortname.truncate(pidx);
 #endif
-      } else if ((opt_speed) && (! WAYPT_HAS(wpt, speed))) {
-        WAYPT_SET(wpt, speed, defspeed);
+      } else if ((opt_speed) && (! (wpt->speed_has_value()))) {
+        wpt->set_speed(defspeed);
       }
 
-      if ((opt_proximity) && (! WAYPT_HAS(wpt, proximity))) {
-        WAYPT_SET(wpt, proximity, defproximity);
+      if ((opt_proximity) && (! (wpt->proximity_has_value()))) {
+        wpt->set_proximity(defproximity);
       }
 
-      if ((WAYPT_HAS(wpt, speed) && (wpt->speed > 0)) ||
-          (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0))) {
+      if (((wpt->speed_has_value()) && (wpt->speed_value() > 0)) ||
+          ((wpt->proximity_has_value()) && (wpt->proximity_value() > 0))) {
         data->alert = 1;
         dt->alerts++;
         res += 20;    /* tag(3) */
@@ -897,14 +897,14 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
       gbfputint32(3, fout);  /* tag(3) */
       gbfputint32(12, fout);  /* always 12 */
 
-      if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-        gbfputint16((int) wpt->proximity, fout);
+      if ((wpt->proximity_has_value()) && (wpt->proximity_value() > 0)) {
+        gbfputint16((int) wpt->proximity_value(), fout);
         flag = 4;
       } else {
         gbfputint16(0, fout);
       }
-      if (WAYPT_HAS(wpt, speed) && (wpt->speed > 0)) {
-        gbfputint16((int)(wpt->speed * 100), fout);
+      if ((wpt->speed_has_value()) && (wpt->speed_value() > 0)) {
+        gbfputint16((int)(wpt->speed_value() * 100), fout);
         flag = 5;
       } else {
         gbfputint16(0, fout);

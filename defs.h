@@ -319,14 +319,6 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
-#define WAYPT_SET(wpt,member,val) do { (wpt)->member = (val); (wpt)->wpt_flags.member = 1; } while (0)
-#define WAYPT_GET(wpt,member,def) (((wpt)->wpt_flags.member) ? ((wpt)->member) : (def))
-#define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
-#define WAYPT_HAS(wpt,member) ((wpt)->wpt_flags.member)
-#define WAYPT_EQUAL(wpta,wptb,member) (((wpta)->wpt_flags.member && (wptb)->wpt_flags.member && \
-                                        ((wpta)->member == (wptb)->member)) || \
-                                       (!(wpta)->wpt_flags.member && !(wptb)->wpt_flags.member))
-
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -336,13 +328,11 @@ struct bounds {
 class Waypoint
 {
 private:
+
+  /* Data Members */
+
   static Geocache empty_gc_data;
 
-public:
-
-  double latitude;		/* Degrees */
-  double longitude; 		/* Degrees */
-  double altitude; 		/* Meters. */
   double geoidheight;	/* Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid. */
 
   /*
@@ -358,6 +348,17 @@ public:
    * The units are meters.
    */
   double proximity;
+  float course;	/* Optional: degrees true */
+  float speed;   	/* Optional: meters per second. */
+  float temperature; /* Degrees celsius */
+
+public:
+
+  /* Data Members */
+
+  double latitude;		/* Degrees */
+  double longitude; 		/* Degrees */
+  double altitude; 		/* Meters. */
 
   /* shortname is a waypoint name as stored in receiver.  It should
    * strive to be, well, short, and unique.   Enforcing length and
@@ -405,26 +406,26 @@ public:
   float hdop;
   float vdop;
   float pdop;
-  float course;	/* Optional: degrees true */
-  float speed;   	/* Optional: meters per second. */
   fix_type fix;	/* Optional: 3d, 2d, etc. */
   int  sat;	/* Optional: number of sats used for fix */
 
   unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
   unsigned char cadence;	 /* revolutions per minute */
   float power; /* watts, as measured by cyclists */
-  float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters */
   Geocache* gc_data;
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
-public:
+  /* Special Member Functions */
+
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
   Waypoint& operator=(const Waypoint& other);
+
+  /* Member Functions */
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
@@ -435,6 +436,48 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+
+// mimic std::optional interface, but use our more space
+// efficient wp_flags.
+#define GEN_WAYPT_METHODS(field) \
+  bool field##_has_value() const \
+  { \
+    return wpt_flags.field; \
+  } \
+  decltype(field) field##_value() const \
+  { \
+    if (!wpt_flags.field) { \
+      throw std::bad_optional_access(); \
+    } \
+    return field; \
+  } \
+  bool field##s_equal(const Waypoint& other) const \
+  { \
+    return (wpt_flags.field && other.wpt_flags.field && (field == other.field)) || \
+           (!wpt_flags.field && !other.wpt_flags.field); \
+  } \
+  decltype(field) field##_value_or(decltype(field) p) const \
+  { \
+    return (wpt_flags.field)? field : p; \
+  } \
+  void set_##field(decltype(field) p) \
+  { \
+    field = p; \
+    wpt_flags.field = 1; \
+  } \
+  void reset_##field() \
+  { \
+    wpt_flags.field = 0; \
+  }
+
+  GEN_WAYPT_METHODS(temperature)
+  GEN_WAYPT_METHODS(proximity)
+  GEN_WAYPT_METHODS(course)
+  GEN_WAYPT_METHODS(speed)
+  GEN_WAYPT_METHODS(geoidheight)
+  GEN_WAYPT_METHODS(depth)
+
+#undef GEN_WAYPT_METHODS
 };
 
 using waypt_cb = void (*)(const Waypoint*);

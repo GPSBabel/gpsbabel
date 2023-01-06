@@ -699,7 +699,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_speed:
       if (parse_speed(value, &d, 1.0, MYNAME)) {
-        WAYPT_SET(wpt, speed, d);
+        wpt->set_speed(d);
         if (unicsv_detect) {
           unicsv_data_type = trkdata;
         }
@@ -707,7 +707,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_course:
-      WAYPT_SET(wpt, course, value.toDouble());
+      wpt->set_course(value.toDouble());
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
@@ -716,14 +716,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_temperature:
       d = value.toDouble();
       if (fabs(d) < 999999) {
-        WAYPT_SET(wpt, temperature, d);
+        wpt->set_temperature(d);
       }
       break;
 
     case fld_temperature_f:
       d = value.toDouble();
       if (fabs(d) < 999999) {
-        WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(d));
+        wpt->set_temperature(FAHRENHEIT_TO_CELSIUS(d));
       }
       break;
 
@@ -750,13 +750,13 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_proximity:
       if (parse_distance(value, &d, unicsv_proximityscale, MYNAME)) {
-        WAYPT_SET(wpt, proximity, d);
+        wpt->set_proximity(d);
       }
       break;
 
     case fld_depth:
       if (parse_distance(value, &d, unicsv_depthscale, MYNAME)) {
-        WAYPT_SET(wpt, depth, d);
+        wpt->set_depth(d);
       }
       break;
 
@@ -1210,19 +1210,19 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 
   /* "flagged" waypoint members */
-  if WAYPT_HAS(wpt, course) {
+  if (wpt->course_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_course);
   }
-  if WAYPT_HAS(wpt, depth) {
+  if (wpt->depth_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_depth);
   }
-  if WAYPT_HAS(wpt, speed) {
+  if (wpt->speed_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_speed);
   }
-  if WAYPT_HAS(wpt, proximity) {
+  if (wpt->proximity_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_proximity);
   }
-  if WAYPT_HAS(wpt, temperature) {
+  if (wpt->temperature_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_temperature);
   }
 
@@ -1409,41 +1409,41 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     unicsv_print_str(wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr);
   }
   if FIELD_USED(fld_depth) {
-    if WAYPT_HAS(wpt, depth) {
+    if (wpt->depth_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(3) << wpt->depth;
+            << qSetRealNumberPrecision(3) << wpt->depth_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_proximity) {
-    if WAYPT_HAS(wpt, proximity) {
+    if (wpt->proximity_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(0) << wpt->proximity;
+            << qSetRealNumberPrecision(0) << wpt->proximity_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_temperature) {
-    if WAYPT_HAS(wpt, temperature) {
+    if (wpt->temperature_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(3) << wpt->temperature;
+            << qSetRealNumberPrecision(3) << wpt->temperature_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_speed) {
-    if WAYPT_HAS(wpt, speed) {
+    if (wpt->speed_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(2) << wpt->speed;
+            << qSetRealNumberPrecision(2) << wpt->speed_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_course) {
-    if WAYPT_HAS(wpt, course) {
+    if (wpt->course_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(1) << wpt->course;
+            << qSetRealNumberPrecision(1) << wpt->course_value();
     } else {
       *fout << unicsv_fieldsep;
     }

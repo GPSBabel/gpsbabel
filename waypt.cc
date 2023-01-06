@@ -72,8 +72,8 @@ void update_common_traits(const Waypoint* wpt)
   traits.trait_heartrate |= wpt->heartrate > 0;
   traits.trait_cadence |= wpt->cadence > 0;
   traits.trait_power |= wpt->power > 0;
-  traits.trait_depth |= WAYPT_HAS(wpt, depth);
-  traits.trait_temperature |= WAYPT_HAS(wpt, temperature);
+  traits.trait_depth |= (wpt->depth_has_value());
+  traits.trait_temperature |= (wpt->temperature_has_value());
 }
 
 void
@@ -384,24 +384,24 @@ waypt_course(const Waypoint* A, const Waypoint* B)
 }
 
 Waypoint::Waypoint() :
-  latitude(0),  // These should probably use some invalid data, but
-  longitude(0), // it looks like we have code that relies on them being zero.
-  altitude(unknown_alt),
   geoidheight(0),
   depth(0),
   proximity(0),
+  course(0),
+  speed(0),
+  temperature(0),
+  latitude(0),  // These should probably use some invalid data, but
+  longitude(0), // it looks like we have code that relies on them being zero.
+  altitude(unknown_alt),
   route_priority(0),
   hdop(0),
   vdop(0),
   pdop(0),
-  course(0),
-  speed(0),
   fix(fix_unknown),
   sat(-1),
   heartrate(0),
   cadence(0),
   power(0),
-  temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
   session(curr_session()),
@@ -418,12 +418,15 @@ Waypoint::~Waypoint()
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
-  latitude(other.latitude),
-  longitude(other.longitude),
-  altitude(other.altitude),
   geoidheight(other.geoidheight),
   depth(other.depth),
   proximity(other.proximity),
+  course(other.course),
+  speed(other.speed),
+  temperature(other.temperature),
+  latitude(other.latitude),
+  longitude(other.longitude),
+  altitude(other.altitude),
   shortname(other.shortname),
   description(other.description),
   notes(other.notes),
@@ -435,14 +438,11 @@ Waypoint::Waypoint(const Waypoint& other) :
   hdop(other.hdop),
   vdop(other.vdop),
   pdop(other.pdop),
-  course(other.course),
-  speed(other.speed),
   fix(other.fix),
   sat(other.sat),
   heartrate(other.heartrate),
   cadence(other.cadence),
   power(other.power),
-  temperature(other.temperature),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
   session(other.session),

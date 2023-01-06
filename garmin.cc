@@ -560,10 +560,10 @@ track_read()
     next_is_new_trkseg = 0;
 
     if (array[i]->dpth < 1.0e25f) {
-      WAYPT_SET(wpt, depth, array[i]->dpth);
+      wpt->set_depth(array[i]->dpth);
     }
     if (array[i]->temperature_populated) {
-      WAYPT_SET(wpt, temperature, array[i]->temperature);
+      wpt->set_temperature(array[i]->temperature);
     }
 
     track_add_wpt(trk_head, wpt);
@@ -641,10 +641,10 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
   wpt->latitude = pvt->lat;
   wpt->longitude = pvt->lon;
 
-  WAYPT_SET(wpt, course, 180 + DEG(std::atan2(-pvt->east, -pvt->north)));
+  wpt->set_course(180 + DEG(std::atan2(-pvt->east, -pvt->north)));
 
   /* velocity in m/s */
-  WAYPT_SET(wpt,speed, std::sqrt(pvt->north*pvt->north + pvt->east*pvt->east));
+  wpt->set_speed(std::sqrt(pvt->north*pvt->north + pvt->east*pvt->east));
   // wpt->vs = pvt->up;
 
   /*
@@ -1229,13 +1229,13 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
     garmin_fs_t::set_category(gmsd, way->category);
   }
   if (way->dst < 1.0e25f) {
-    WAYPT_SET(wpt, proximity, way->dst);
+    wpt->set_proximity(way->dst);
   }
   if (way->temperature_populated) {
-    WAYPT_SET(wpt, temperature, way->temperature);
+    wpt->set_temperature(way->temperature);
   }
   if (way->dpth < 1.0e25f) {
-    WAYPT_SET(wpt, depth, way->dpth);
+    wpt->set_depth(way->dpth);
   }
   /* will copy until a null character or the end of the fixed length way field is reached, whichever comes first. */
   garmin_fs_t::set_cc(gmsd, str_to_unicode(QByteArray(way->cc, qstrnlen(way->cc, sizeof(way->cc)))));
@@ -1263,9 +1263,9 @@ garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int proto
   way->dspl = gt_switch_display_mode_value(
                 garmin_fs_t::get_display(gmsd, way->dspl), gps_waypt_type, 0);
   way->category = garmin_fs_t::get_category(gmsd, way->category);
-  way->dpth = WAYPT_GET(wpt, depth, way->dpth);
-  way->dst = WAYPT_GET(wpt, proximity, way->dpth);
-  way->temperature = WAYPT_GET(wpt, temperature, way->temperature);
+  way->dpth = (wpt->depth_value_or(way->dpth));
+  way->dst = (wpt->proximity_value_or(way->dpth));
+  way->temperature = (wpt->temperature_value_or(way->temperature));
 
   /* destination may not be null terminated, but we will fill with nulls if necessary */
   strncpy(way->cc, str_from_unicode(garmin_fs_t::get_cc(gmsd, nullptr)).constData(), sizeof(way->cc));

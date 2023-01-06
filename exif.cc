@@ -790,7 +790,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
       speed_ref = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_SPEED:
-      WAYPT_SET(wpt, speed, exif_read_double(tag, 0));
+      wpt->set_speed(exif_read_double(tag, 0));
       break;
     case GPS_IFD_TAG_DATUM:
       datum = exif_read_str(tag);
@@ -854,25 +854,24 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
   }
 
-  if WAYPT_HAS(wpt, speed) {
+  if (wpt->speed_has_value()) {
     switch (speed_ref) {
     case 'K':
-      wpt->speed = KPH_TO_MPS(wpt->speed);
+      wpt->set_speed(KPH_TO_MPS(wpt->speed_value()));
       break;
     case 'M':
-      wpt->speed = MPH_TO_MPS(wpt->speed);
+      wpt->set_speed(MPH_TO_MPS(wpt->speed_value()));
       break;
     case 'N':
-      wpt->speed = KNOTS_TO_MPS(wpt->speed);
+      wpt->set_speed(KNOTS_TO_MPS(wpt->speed_value()));
       break;
     default:
-      wpt->speed = 0;
-      WAYPT_UNSET(wpt, speed);
+      wpt->reset_speed();
       warning(MYNAME ": Unknown GPSSpeedRef unit %c (0x%02x)!\n", speed_ref, speed_ref);
     }
     if (global_opts.debug_level >= 3) {
-      if WAYPT_HAS(wpt, speed) {
-        printf(MYNAME "-GPSSpeed = %12.2f m/s\n", wpt->speed);
+      if (wpt->speed_has_value()) {
+        printf(MYNAME "-GPSSpeed = %12.2f m/s\n", wpt->speed_value());
       }
     }
   }
@@ -1582,9 +1581,9 @@ ExifFormat::write()
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_DOP);
     }
 
-    if WAYPT_HAS(wpt, speed) {
+    if (wpt->speed_has_value()) {
       exif_put_str(GPS_IFD, GPS_IFD_TAG_SPEEDREF, "K");
-      exif_put_double(GPS_IFD, GPS_IFD_TAG_SPEED, 0, MPS_TO_KPH(wpt->speed));
+      exif_put_double(GPS_IFD, GPS_IFD_TAG_SPEED, 0, MPS_TO_KPH(wpt->speed_value()));
     } else {
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_SPEEDREF);
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_SPEED);

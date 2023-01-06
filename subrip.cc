@@ -90,8 +90,8 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 
       switch (fmt) {
       case 's':
-        if WAYPT_HAS(prevwpp, speed) {
-          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
+        if (prevwpp->speed_has_value()) {
+          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed_value()));
         } else {
           gbfprintf(fout, "--.-");
         }

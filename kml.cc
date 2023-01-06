@@ -753,22 +753,22 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   }
 
   /* Which unit is this temp in? C? F? K? */
-  if WAYPT_HAS(pt, temperature) {
-    kml_td(hwriter, QStringLiteral("Temperature: %1 ").arg(QString::number(pt->temperature, 'f', 1)));
+  if (pt->temperature_has_value()) {
+    kml_td(hwriter, QStringLiteral("Temperature: %1 ").arg(QString::number(pt->temperature_value(), 'f', 1)));
   }
 
-  if WAYPT_HAS(pt, depth) {
-    auto [depth, depth_units] = unitsformatter->fmt_distance(pt->depth);
+  if (pt->depth_has_value()) {
+    auto [depth, depth_units] = unitsformatter->fmt_distance(pt->depth_value());
     kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
-  if WAYPT_HAS(pt, speed) {
-    auto [spd, spd_units] = unitsformatter->fmt_speed(pt->speed);
+  if (pt->speed_has_value()) {
+    auto [spd, spd_units] = unitsformatter->fmt_speed(pt->speed_value());
     kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
-  if WAYPT_HAS(pt, course) {
-    kml_td(hwriter, QStringLiteral("Heading: %1 ").arg(QString::number(pt->course, 'f', 1)));
+  if (pt->course_has_value()) {
+    kml_td(hwriter, QStringLiteral("Heading: %1 ").arg(QString::number(pt->course_value(), 'f', 1)));
   }
 
   /* This really shouldn't be here, but as of this writing,
@@ -846,12 +846,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     } else {
       if (trackdirection && (pt_type == kmlpt_track)) {
         QString value;
-        if (!WAYPT_HAS(waypointp, speed) || !WAYPT_HAS(waypointp, course) ||
-            (waypointp->speed < 1.0f)) {
+        if (!(waypointp->speed_has_value()) || !(waypointp->course_has_value()) ||
+            (waypointp->speed_value() < 1.0f)) {
           value = QStringLiteral("%1-none").arg(style);
         } else {
           value = QStringLiteral("%1-%2").arg(style)
-                  .arg(qRound(waypointp->course / 22.5) % 16);
+                  .arg(qRound(waypointp->course_value() / 22.5) % 16);
         }
         writer->writeTextElement(QStringLiteral("styleUrl"), value);
       } else {
@@ -1480,16 +1480,16 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
        QString::number(wpt->cadence) : QString());
       break;
     case fld_depth:
-      writer->writeTextElement(QStringLiteral("gx:value"), WAYPT_HAS(wpt, depth)?
-        QString::number(wpt->depth, 'f', 1) : QString());
+      writer->writeTextElement(QStringLiteral("gx:value"), (wpt->depth_has_value())?
+        QString::number(wpt->depth_value(), 'f', 1) : QString());
       break;
     case fld_heartrate:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
        QString::number(wpt->heartrate) : QString());
       break;
     case fld_temperature:
-      writer->writeTextElement(QStringLiteral("gx:value"), WAYPT_HAS(wpt, temperature)?
-        QString::number(wpt->temperature, 'f', 1) : QString());
+      writer->writeTextElement(QStringLiteral("gx:value"), (wpt->temperature_has_value())?
+        QString::number(wpt->temperature_value(), 'f', 1) : QString());
       break;
     default:
       fatal("Bad member type");
@@ -1575,13 +1575,13 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     if (tpt->cadence) {
       has_cadence = true;
     }
-    if (WAYPT_HAS(tpt, depth)) {
+    if ((tpt->depth_has_value())) {
       has_depth = true;
     }
     if (tpt->heartrate) {
       has_heartrate = true;
     }
-    if (WAYPT_HAS(tpt, temperature)) {
+    if ((tpt->temperature_has_value())) {
       has_temperature = true;
     }
     if (tpt->power) {

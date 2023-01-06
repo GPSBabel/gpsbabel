@@ -842,10 +842,10 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   }
 
   if (bmask & (1U<<HEADING)) {
-    WAYPT_SET(trk, course, itm->heading);
+    trk->set_course(itm->heading);
   }
   if (bmask & (1U<<SPEED)) {
-    WAYPT_SET(trk, speed, KPH_TO_MPS(itm->speed));
+    trk->set_speed(KPH_TO_MPS(itm->speed));
   }
   if (bmask & (1U<<VALID)) {
     switch (itm->valid) {

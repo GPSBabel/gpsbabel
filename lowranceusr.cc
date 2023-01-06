@@ -501,7 +501,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (reading_version == 3) {
     float depth_feet = gbfgetflt(file_in);
     if (std::abs(depth_feet - 99999.0)  > .1) {
-      WAYPT_SET(wpt_tmp, depth, FEET_TO_METERS(depth_feet));
+      wpt_tmp->set_depth(FEET_TO_METERS(depth_feet));
       if (global_opts.debug_level == 99) {
         printf("   %10.1f", depth_feet);
       }
@@ -576,7 +576,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
 
   /* Alarm radius; XXX: I'm not sure what the units are here,
      assuming meters but may be feet? */
-  WAYPT_SET(wpt_tmp, proximity, gbfgetflt(file_in));
+  wpt_tmp->set_proximity(gbfgetflt(file_in));
 
   /* Creation date/time */
   /* The date is a Julian day number, and the time is a unix timestamp. */
@@ -1365,8 +1365,8 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   gbfputint16(WayptType, file_out);
 
   if (writing_version == 3) {
-    float depth = WAYPT_HAS(wpt, depth) ?
-                  METERS_TO_FEET(wpt->depth) : -99999.0;
+    float depth = (wpt->depth_has_value()) ?
+                  METERS_TO_FEET(wpt->depth_value()) : -99999.0;
     gbfputint32(depth, file_out);
   }
 
@@ -1437,7 +1437,7 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
   lowranceusr4_writestr(wpt->description, file_out, 2);
 
   /* Alarm radius */
-  gbfputflt(WAYPT_GET(wpt, proximity, 0.0), file_out);
+  gbfputflt((wpt->proximity_value_or(0.0)), file_out);
 
   /* Creation date/time */
   auto ts = lowranceusr4_jd_from_timestamp(wpt->GetCreationTime());
