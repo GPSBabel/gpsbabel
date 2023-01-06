@@ -187,31 +187,31 @@
           <SchemaData schemaUrl="#schema">
             <gx:SimpleArrayData name="cadence">
               <gx:value>245</gx:value>
-              <gx:value>0</gx:value>
-              <gx:value>0</gx:value>
-              <gx:value>0</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>146</gx:value>
               <gx:value>204</gx:value>
               <gx:value>108</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>120</gx:value>
               <gx:value>165</gx:value>
               <gx:value>1</gx:value>
               <gx:value>186</gx:value>
               <gx:value>156</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>33</gx:value>
               <gx:value>40</gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="depth">
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>201.2</gx:value>
               <gx:value>76.0</gx:value>
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>249.4</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>978.7</gx:value>
               <gx:value>511.7</gx:value>
               <gx:value>509.5</gx:value>
@@ -219,8 +219,8 @@
               <gx:value>136.0</gx:value>
               <gx:value>275.3</gx:value>
               <gx:value>680.8</gx:value>
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>630.0</gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="heartrate">
@@ -229,9 +229,9 @@
               <gx:value>151</gx:value>
               <gx:value>4</gx:value>
               <gx:value>168</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>145</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
               <gx:value>55</gx:value>
               <gx:value>247</gx:value>
               <gx:value>119</gx:value>
@@ -240,10 +240,10 @@
               <gx:value>77</gx:value>
               <gx:value>2</gx:value>
               <gx:value>96</gx:value>
-              <gx:value>0</gx:value>
+              <gx:value></gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="temperature">
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>8.2</gx:value>
               <gx:value>5.2</gx:value>
               <gx:value>13.7</gx:value>
@@ -251,34 +251,34 @@
               <gx:value>19.8</gx:value>
               <gx:value>24.7</gx:value>
               <gx:value>10.2</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>2.7</gx:value>
               <gx:value>2.7</gx:value>
               <gx:value>24.6</gx:value>
               <gx:value>16.9</gx:value>
               <gx:value>23.9</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>19.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="power">
               <gx:value>88.9</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>81.3</gx:value>
               <gx:value>378.5</gx:value>
               <gx:value>85.3</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>384.3</gx:value>
               <gx:value>61.9</gx:value>
               <gx:value>262.2</gx:value>
-              <gx:value>0.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
+              <gx:value></gx:value>
               <gx:value>493.0</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
               <gx:value>350.7</gx:value>
               <gx:value>114.8</gx:value>
               <gx:value>402.7</gx:value>
-              <gx:value>0.0</gx:value>
+              <gx:value></gx:value>
             </gx:SimpleArrayData>
           </SchemaData>
         </ExtendedData>

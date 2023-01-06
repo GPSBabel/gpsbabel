@@ -319,10 +319,10 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
-#define WAYPT_SET(wpt,member,val) do { (wpt)->member = (val); wpt->wpt_flags.member = 1; } while (0)
-#define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
+#define WAYPT_SET(wpt,member,val) do { (wpt)->member = (val); (wpt)->wpt_flags.member = 1; } while (0)
+#define WAYPT_GET(wpt,member,def) (((wpt)->wpt_flags.member) ? ((wpt)->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
-#define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
+#define WAYPT_HAS(wpt,member) ((wpt)->wpt_flags.member)
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -1083,7 +1083,7 @@ int color_to_bbggrr(const char* cname);
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
-#define unknown_alt 	-99999999.0
-#define unknown_color	-1
+constexpr double unknown_alt = -99999999.0;
+constexpr int unknown_color = -1;
 
 #endif // DEFS_H_INCLUDED_

@@ -757,10 +757,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->power = strtod(s, nullptr);
     break;
   case XcsvStyle::XT_TEMPERATURE:
-    wpt->temperature = strtod(s, nullptr);
+    WAYPT_SET(wpt, temperature, strtod(s, nullptr));
     break;
   case XcsvStyle::XT_TEMPERATURE_F:
-    wpt->temperature = (FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
+    WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
     break;
   /* GMSD ****************************************************************/
   case XcsvStyle::XT_COUNTRY: {
@@ -1306,38 +1306,58 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
     case XcsvStyle::XT_PATH_SPEED:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->speed);
+      if (WAYPT_HAS(wpt, speed)) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->speed);
+      }
       break;
     case XcsvStyle::XT_PATH_SPEED_KPH:
-      buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KPH(wpt->speed));
+      if (WAYPT_HAS(wpt, speed)) {
+        buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KPH(wpt->speed));
+      }
       break;
     case XcsvStyle::XT_PATH_SPEED_MPH:
-      buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_MPH(wpt->speed));
+      if (WAYPT_HAS(wpt, speed)) {
+        buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_MPH(wpt->speed));
+      }
       break;
     case XcsvStyle::XT_PATH_SPEED_KNOTS:
-      buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KNOTS(wpt->speed));
+      if (WAYPT_HAS(wpt, speed)) {
+        buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KNOTS(wpt->speed));
+      }
       break;
     case XcsvStyle::XT_PATH_COURSE:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->course);
+      if (WAYPT_HAS(wpt, course)) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->course);
+      }
       break;
 
     /* HEART RATE CONVERSION***********************************************/
     case XcsvStyle::XT_HEART_RATE:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->heartrate);
+      if (wpt->heartrate) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->heartrate);
+      }
       break;
     /* CADENCE CONVERSION***********************************************/
     case XcsvStyle::XT_CADENCE:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->cadence);
+      if (wpt->cadence) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->cadence);
+      }
       break;
     /* POWER CONVERSION***********************************************/
     case XcsvStyle::XT_POWER:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->power);
+      if (wpt->power) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->power);
+      }
       break;
     case XcsvStyle::XT_TEMPERATURE:
-      buff = QString::asprintf(fmp.printfc.constData(), wpt->temperature);
+      if (WAYPT_HAS(wpt, temperature)) {
+        buff = QString::asprintf(fmp.printfc.constData(), wpt->temperature);
+      }
       break;
     case XcsvStyle::XT_TEMPERATURE_F:
-      buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature));
+      if (WAYPT_HAS(wpt, temperature)) {
+        buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature));
+      }
       break;
     /* TIME CONVERSIONS**************************************************/
     case XcsvStyle::XT_EXCEL_TIME:
@@ -1426,7 +1446,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     /* Tracks and Routes ***********************************************/
     case XcsvStyle::XT_TRACK_NEW:
       if (csv_track) {
-        if (WAYPT_HAS(wpt,new_trkseg)) {
+        if (wpt->wpt_flags.new_trkseg) {
           buff = QString::asprintf(fmp.printfc.constData(), 1);
         } else {
           buff = QString::asprintf(fmp.printfc.constData(), 0);
