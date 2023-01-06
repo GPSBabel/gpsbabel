@@ -31,13 +31,14 @@
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for QChar
 #include <QString>               // for QString
+#include <QTextCodec>            // for QTextCodec
 #include <QVector>               // for QVector
 #include <Qt>                    // for CaseInsensitive
 #include <QtGlobal>              // for qPrintable, foreach
 
 #include "defs.h"
-#include "cet_util.h"            // for cet_convert_init, cet_cs_vec_utf8
 #include "format.h"              // for Format
+#include "formspec.h"            // for FormatSpecificDataList
 #include "garmin_device_xml.h"   // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
@@ -78,6 +79,7 @@ static char* baudopt = nullptr;
 static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
+static QTextCodec* codec{nullptr};
 
 static Format* gpx_vec;
 
@@ -129,13 +131,17 @@ QVector<arglist_t> garmin_args = {
 
 static const char* d103_symbol_from_icon_number(unsigned int n);
 static int d103_icon_number_from_symbol(const QString& s);
+static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
+static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
+static QByteArray str_from_unicode(const QString& qstr) {return codec->fromUnicode(qstr);}
+static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(cstr);}
 
 static void
 rw_init(const QString& fname)
 {
   receiver_must_upper = 1;
-  const char* receiver_charset = nullptr;
+  const char* receiver_charset = CET_CHARSET_ASCII;
 
   if (!mkshort_handle) {
     mkshort_handle = mkshort_new_handle();
@@ -335,15 +341,13 @@ rw_init(const QString& fname)
 
   /*
    * This used to mean something when we used cet, but these days this
-   * format either use implicit QString conversions (utf8) which is
-   * likely a bug, or we have hard coded QString::fromLatin1 or CSTRc.
-   * So all the above detection of receiver_charset is for naught.
-   * But perhaps we will use an appropriate codec based on receiver_charset
-   * someday.
+   * format either uses implicit QString conversions (utf8),
+   * or we have hard coded QString::fromLatin1, CSTRc, or CSTR.  These
+   * are likely bugs.
+   * However, this is still used for garmin_fs_garmin_after_read,
+   * garmin_fs_garmin_before_write.
    */
-  if (receiver_charset) {
-    cet_convert_init(receiver_charset, 1);
-  }
+  codec = get_codec(receiver_charset);
 }
 
 static void
@@ -1209,4 +1213,68 @@ d103_icon_number_from_symbol(const QString& s)
     }
   }
   return 0;
+}
+
+static void
+garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
+{
+  garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
+  wpt->fs.FsChainAdd(gmsd);
+
+  /* nothing happens until gmsd is allocated some lines above */
+
+  /* !!! class needs protocol specific conversion !!! (ToDo)
+  garmin_fs_t::set_wpt_class(gmsd, way[i]->wpt_class);
+  */
+  /* flagged data fields */
+  garmin_fs_t::set_display(gmsd, gt_switch_display_mode_value(way->dspl, gps_waypt_type, 1));
+  if (way->category != 0) {
+    garmin_fs_t::set_category(gmsd, way->category);
+  }
+  if (way->dst < 1.0e25f) {
+    WAYPT_SET(wpt, proximity, way->dst);
+  }
+  if (way->temperature_populated) {
+    WAYPT_SET(wpt, temperature, way->temperature);
+  }
+  if (way->dpth < 1.0e25f) {
+    WAYPT_SET(wpt, depth, way->dpth);
+  }
+  /* will copy until a null character or the end of the fixed length way field is reached, whichever comes first. */
+  garmin_fs_t::set_cc(gmsd, str_to_unicode(QByteArray(way->cc, qstrnlen(way->cc, sizeof(way->cc)))));
+  garmin_fs_t::set_city(gmsd, str_to_unicode(QByteArray(way->city, qstrnlen(way->city, sizeof(way->city)))));
+  garmin_fs_t::set_state(gmsd, str_to_unicode(QByteArray(way->state, qstrnlen(way->state, sizeof(way->state)))));
+  garmin_fs_t::set_facility(gmsd, str_to_unicode(QByteArray(way->facility, qstrnlen(way->facility, sizeof(way->facility)))));
+  garmin_fs_t::set_cross_road(gmsd, str_to_unicode(QByteArray(way->cross_road, qstrnlen(way->cross_road, sizeof(way->cross_road)))));
+  garmin_fs_t::set_addr(gmsd, str_to_unicode(QByteArray(way->addr, qstrnlen(way->addr, sizeof(way->addr)))));
+}
+
+static void
+garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
+{
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+
+  (void)protoid; // unused for now.
+
+  if (gmsd == nullptr) {
+    return;
+  }
+
+  /* ToDo: protocol specific conversion of class
+  way[i]->wpt_class = garmin_fs_t::get_wpt_class(gmsd, way[i]->wpt_class);
+  	*/
+  way->dspl = gt_switch_display_mode_value(
+                garmin_fs_t::get_display(gmsd, way->dspl), gps_waypt_type, 0);
+  way->category = garmin_fs_t::get_category(gmsd, way->category);
+  way->dpth = WAYPT_GET(wpt, depth, way->dpth);
+  way->dst = WAYPT_GET(wpt, proximity, way->dpth);
+  way->temperature = WAYPT_GET(wpt, temperature, way->temperature);
+
+  /* destination may not be null terminated, but we will fill with nulls if necessary */
+  strncpy(way->cc, str_from_unicode(garmin_fs_t::get_cc(gmsd, nullptr)).constData(), sizeof(way->cc));
+  strncpy(way->city, str_from_unicode(garmin_fs_t::get_city(gmsd, nullptr)).constData(), sizeof(way->city));
+  strncpy(way->state, str_from_unicode(garmin_fs_t::get_state(gmsd, nullptr)).constData(), sizeof(way->state));
+  strncpy(way->facility, str_from_unicode(garmin_fs_t::get_facility(gmsd, nullptr)).constData(), sizeof(way->facility));
+  strncpy(way->cross_road, str_from_unicode(garmin_fs_t::get_cross_road(gmsd, nullptr)).constData(), sizeof(way->cross_road));
+  strncpy(way->addr, str_from_unicode(garmin_fs_t::get_addr(gmsd, nullptr)).constData(), sizeof(way->addr));
 }

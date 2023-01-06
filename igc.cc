@@ -37,7 +37,6 @@
 #include <QtGlobal>                  // for foreach, qPrintable
 
 #include "defs.h"
-#include "cet_util.h"                // for cet_convert_init
 #include "gbfile.h"                  // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"       // for DateTime
 
@@ -109,9 +108,6 @@ static igc_rec_type_t get_record(char** rec)
   char* c;
 retry:
   *rec = c = gbfgetstr(file_in);
-  if ((lineno++ == 0) && file_in->unicode) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
-  }
   if (c == nullptr) {
     return rec_none;
   }

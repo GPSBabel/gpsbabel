@@ -44,7 +44,6 @@
 #endif
 
 #include "defs.h"
-#include "cet_util.h"                 // for cet_convert_init, cet_convert_deinit
 #include "csv_util.h"                 // for csv_linesplit
 #include "filter.h"                   // for Filter
 #include "filter_vecs.h"              // for FilterVecs
@@ -343,14 +342,10 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      cet_convert_init(ivecs->get_encode(), ivecs->get_fixed_encode());	/* init by module vec */
-
       start_session(ivecs->get_name(), fname);
       ivecs->rd_init(fname);
       ivecs->read();
       ivecs->rd_deinit();
-
-      cet_convert_deinit();
 
       did_something = true;
       break;
@@ -366,13 +361,10 @@ run(const char* prog_name)
           global_opts.masked_objective |= WPTDATAMASK;
         }
 
-        cet_convert_init(ovecs->get_encode(), ovecs->get_fixed_encode());
-
         ovecs->wr_init(ofname);
         ovecs->write();
         ovecs->wr_deinit();
 
-        cet_convert_deinit();
       }
       break;
     case 's':
@@ -543,33 +535,25 @@ run(const char* prog_name)
     /* reinitialize xcsv in case two formats that use xcsv were given */
     (void) Vecs::Instance().find_vec(ivecs->get_argstring());
 
-    cet_convert_init(ivecs->get_encode(), 1);
-
     start_session(ivecs->get_name(), qargs.at(0));
     ivecs->rd_init(qargs.at(0));
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_deinit();
-
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
       (void) Vecs::Instance().find_vec(ovecs->get_argstring());
-
-      cet_convert_init(ovecs->get_encode(), 1);
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
       ovecs->wr_deinit();
 
-      cet_convert_deinit();
     }
   } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
     return 0;
   }
   if (ovecs == nullptr) {
-    cet_convert_init(CET_CHARSET_ASCII, 1);
     auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
       fbOutput.waypt_disp(wpt);
     };

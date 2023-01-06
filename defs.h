@@ -48,8 +48,6 @@
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
-#define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
-#define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
 /*
  * Amazingly, this constant is not specified in the standard...
@@ -182,7 +180,6 @@ struct global_options {
   int smart_icons;
   int smart_names;
   inifile_t* inifile;
-  QTextCodec* codec;
 };
 
 extern global_options global_opts;
@@ -1064,6 +1061,7 @@ void gb_setbit(void* buf, uint32_t nr);
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
+QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
 QString grapheme_truncate(const QString& input, unsigned int count);

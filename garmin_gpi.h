@@ -49,6 +49,7 @@
 #include <QByteArray>   // for QByteArray
 #include <QList>        // for QList
 #include <QString>      // for QString
+#include <QTextCodec>   // for QTextCodec
 #include <QVector>      // for QVector
 
 #include <cstdint>      // for int32_t, int16_t, uint16_t
@@ -297,7 +298,7 @@ private:
   void read_poi_list(int sz);
   void read_poi_group(int sz, int tag);
   int read_tag(const char* caller, int tag, Waypoint* wpt);
-  void write_string(const char* str, char long_format) const;
+  void write_string(const QByteArray& str, char long_format) const;
   static bool compare_wpt_cb(const Waypoint* a, const Waypoint* b);
   static char compare_strings(const QString& s1, const QString& s2);
   static writer_data_t* wdata_alloc();
@@ -310,6 +311,8 @@ private:
   void write_header() const;
   void enum_waypt_cb(const Waypoint* ref) const;
   static void load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz);
+  QByteArray str_from_unicode(const QString& qstr) const {return codec->fromUnicode(qstr);}
+  QString str_to_unicode(const QByteArray& cstr) const {return codec->toUnicode(cstr);}
 
   /* Data Members */
 
@@ -387,6 +390,7 @@ private:
   short_handle short_h{};
   char units{};
   time_t gpi_timestamp = 0;
+  QTextCodec* codec{nullptr};
 };
 
 #endif // GARMIN_GPI_H_INCLUDED_

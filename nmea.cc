@@ -42,7 +42,6 @@
 
 #include "defs.h"
 #include "nmea.h"
-#include "cet_util.h"              // for cet_convert_init
 #include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
 #include "gbser.h"                 // for gbser_set_speed, gbser_flush, gbser_read_line, gbser_deinit, gbser_init, gbser_write
 #include "jeeps/gpsmath.h"         // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M
@@ -988,10 +987,6 @@ NmeaFormat::read()
 
   while ((ibuf = gbfgetstr(file_in))) {
     line++;
-
-    if ((line == 0) & file_in->unicode) {
-      cet_convert_init(CET_CHARSET_UTF8, 1);
-    }
 
     if ((line == 0) && (case_ignore_strncmp(ibuf, "@SonyGPS/ver", 12) == 0)) {
       /* special hack for Sony GPS-CS1 files:
