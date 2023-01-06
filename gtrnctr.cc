@@ -192,11 +192,11 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   if (wpt->cadence) {
     gtc_write_xml(0, "<Cadence>%d</Cadence>\n", wpt->cadence);
   }
-  if (wpt->speed || wpt->power) {
+  if (WAYPT_HAS(wpt, speed) || wpt->power) {
     gtc_write_xml(1, "<Extensions>\n");
     gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
     /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
-    if (wpt->speed) {
+    if (WAYPT_HAS(wpt, speed)) {
       gtc_write_xml(0, "<Speed>%.3f</Speed>\n", wpt->speed);
     }
     if (wpt->power) {
