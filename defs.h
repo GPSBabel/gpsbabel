@@ -268,29 +268,6 @@ public:
 
 };
 
-class op_flags
-{
-public:
-  op_flags() :
-    temperature(false),
-    proximity(false),
-    course(false),
-    speed(false),
-    geoidheight(false),
-    depth(false) {}
-  /* "flagged fields" */
-  bool temperature:1;		/* temperature field is set */
-  bool proximity:1;		/* proximity field is set */
-  bool course:1;			/* course field is set */
-  bool speed:1;			/* speed field is set */
-  bool geoidheight:1;	/* geoidheight field is set */
-  bool depth:1;			/* depth field is set */
-  /* !ToDo!
-  unsigned int altitude:1;		/+ altitude field is set +/
-  ... and others
-  */
-};
-
 // These are dicey as they're collected on read. Subsequent filters may change
 // things, though it's unlikely to matter in practical terms.  Don't use these
 // if a false positive would be deleterious.
@@ -334,6 +311,30 @@ struct bounds {
 class Waypoint
 {
 private:
+
+  /* Types */
+
+  class op_flags
+  {
+  public:
+    op_flags() :
+      temperature(false),
+      proximity(false),
+      course(false),
+      speed(false),
+      geoidheight(false),
+      depth(false) {}
+    bool temperature:1;		/* temperature field is set */
+    bool proximity:1;		/* proximity field is set */
+    bool course:1;			/* course field is set */
+    bool speed:1;			/* speed field is set */
+    bool geoidheight:1;	/* geoidheight field is set */
+    bool depth:1;			/* depth field is set */
+    /* !ToDo!
+    unsigned int altitude:1;		/+ altitude field is set +/
+    ... and others
+    */
+  };
 
   /* Data Members */
 
