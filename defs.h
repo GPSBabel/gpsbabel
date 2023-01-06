@@ -323,6 +323,9 @@ struct bounds {
 #define WAYPT_GET(wpt,member,def) (((wpt)->wpt_flags.member) ? ((wpt)->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) ((wpt)->wpt_flags.member)
+#define WAYPT_EQUAL(wpta,wptb,member) (((wpta)->wpt_flags.member && (wptb)->wpt_flags.member && \
+                                        ((wpta)->member == (wptb)->member)) || \
+                                       (!(wpta)->wpt_flags.member && !(wptb)->wpt_flags.member))
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not

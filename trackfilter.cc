@@ -903,12 +903,11 @@ bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoi
     std::abs(wpta->latitude - wptb->latitude) < .00001 &&
     std::abs(wpta->longitude - wptb->longitude) < .00001 &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
-    (WAYPT_HAS(wpta,course) == WAYPT_HAS(wptb,course)) &&
-    (wpta->course == wptb->course) &&
-    (wpta->speed == wptb->speed) &&
+    WAYPT_EQUAL(wpta, wptb, course) &&
+    WAYPT_EQUAL(wpta, wptb, speed) &&
     (wpta->heartrate == wptb->heartrate) &&
     (wpta->cadence == wptb->cadence) &&
-    (wpta->temperature == wptb->temperature);
+    WAYPT_EQUAL(wpta, wptb, temperature);
 }
 
 void TrackFilter::trackfilter_segment_head(const route_head* rte)
