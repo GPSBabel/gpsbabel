@@ -1655,6 +1655,9 @@ static void file_read()
 // GPS logger will only handle tracks - neither waypoints or tracks...
 // Actually, some of the Holux devices will read waypoints.
 
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
+
 ff_vecs_t mtk_vecs = {
   ff_type_serial,
   {
@@ -1670,10 +1673,11 @@ ff_vecs_t mtk_vecs = {
   nullptr,
   nullptr,
   &mtk_sargs,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
+
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
 
 ff_vecs_t mtk_m241_vecs = {
   ff_type_serial,
@@ -1690,9 +1694,7 @@ ff_vecs_t mtk_m241_vecs = {
   nullptr,
   nullptr,
   &mtk_sargs,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 
 /* used for mtk-bin */
@@ -1703,6 +1705,8 @@ static QVector<arglist_t> mtk_fargs = {
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t mtk_fvecs = {
   ff_type_file,
@@ -1715,9 +1719,10 @@ ff_vecs_t mtk_fvecs = {
   nullptr,
   nullptr,
   &mtk_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t mtk_m241_fvecs = {
   ff_type_file,
@@ -1730,8 +1735,7 @@ ff_vecs_t mtk_m241_fvecs = {
   nullptr,
   nullptr,
   &mtk_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 /* End file: mtk_logger.c */
 /**************************************************************************/

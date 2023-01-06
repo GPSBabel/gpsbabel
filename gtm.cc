@@ -737,6 +737,5 @@ ff_vecs_t gtm_vecs = {
   gtm_write,
   nullptr,
   &gtm_args,
-  CET_CHARSET_ASCII, 0, /* CET-REVIEW */
   NULL_POS_OPS
 };

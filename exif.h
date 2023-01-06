@@ -46,7 +46,7 @@
 
 #include <cstdint>    // for uint32_t, uint16_t, uint8_t, int16_t, int32_t
 
-#include "defs.h"     // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, CET_CHARSET_UTF8, ff_cap_read, ff_cap_write, ff_type, ff_type_file
+#include "defs.h"     // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile, gbsize_t
 
@@ -71,16 +71,6 @@ public:
       ff_cap_none       /* tracks */,
       ff_cap_none       /* routes */
     };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;

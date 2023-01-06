@@ -117,6 +117,9 @@ sbp_read()
 
 /**************************************************************************/
 
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
+
 ff_vecs_t sbp_vecs = {
   ff_type_file,
   {
@@ -132,8 +135,6 @@ ff_vecs_t sbp_vecs = {
   nullptr,
   nullptr,
   &sbp_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 /**************************************************************************/

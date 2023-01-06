@@ -31,7 +31,7 @@
 #include <cstdint>   // for uint8_t, int32_t, uint32_t, uint16_t, int16_t
 #include <ctime>     // for time_t
 
-#include "defs.h"    // for arglist_t, ARGTYPE_INT, ff_cap, ARG_NOMINMAX, ARGTYPE_STRING, ff_cap_read, ARGTYPE_BOOL, CET_CHARSET_UTF8, ff_cap_none, ff_type, ARGTYPE_OUTFILE, ff_type_serial, Waypoint, ff_type_file, route_head
+#include "defs.h"    // for arglist_t, ARGTYPE_INT, ff_cap, ARG_NOMINMAX, ARGTYPE_STRING, ff_cap_read, ARGTYPE_BOOL, ff_cap_none, ff_type, ARGTYPE_OUTFILE, ff_type_serial, Waypoint, ff_type_file, route_head
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
 
@@ -182,16 +182,6 @@ public:
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
-  }
-
   void rd_init(const QString& fname) override {skytraq_rd_init(fname);}
   void read() override {skytraq_read();}
   void rd_deinit() override {skytraq_rd_deinit();}
@@ -270,16 +260,6 @@ public:
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
@@ -334,16 +314,6 @@ public:
   {
     /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
   }
 
   void rd_init(const QString& fname) override;

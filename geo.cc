@@ -276,6 +276,5 @@ ff_vecs_t geo_vecs = {
   geo_write,
   nullptr,
   &geo_args,
-  CET_CHARSET_UTF8, 0,	/* CET-REVIEW */
   NULL_POS_OPS
 };

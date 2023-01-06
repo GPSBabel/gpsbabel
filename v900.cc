@@ -364,6 +364,8 @@ v900_read()
   }
 }
 
+/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
+
 ff_vecs_t v900_vecs = {
   ff_type_file,
   {ff_cap_read, ff_cap_read, ff_cap_none}, /* Read only format. May only read trackpoints and waypoints. */
@@ -375,6 +377,5 @@ ff_vecs_t v900_vecs = {
   nullptr,          /* write */
   nullptr,
   nullptr,          /* args */
-  CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
   {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr}
 };

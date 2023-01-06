@@ -263,6 +263,8 @@ static void data_read()
 static QVector<arglist_t> brauniger_iq_args = {
 };
 
+/* master process: don't convert anything */
+
 ff_vecs_t brauniger_iq_vecs = {
   ff_type_serial,
   { ff_cap_none, ff_cap_read, ff_cap_none},
@@ -274,6 +276,5 @@ ff_vecs_t brauniger_iq_vecs = {
   nullptr,
   nullptr,
   &brauniger_iq_args,
-  CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
