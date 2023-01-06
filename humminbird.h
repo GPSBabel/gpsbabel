@@ -27,7 +27,7 @@
 
 #include <cstdint>   // for int32_t, uint32_t
 
-#include "defs.h"    // for ff_cap, arglist_t, ff_cap_read, Waypoint, route_head, ff_cap_write, short_handle, CET_CHARSET_ASCII, ff_type, ff_type_file
+#include "defs.h"    // for ff_cap, arglist_t, ff_cap_read, Waypoint, route_head, ff_cap_write, short_handle, ff_type, ff_type_file
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
 
@@ -136,16 +136,6 @@ public:
     };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
-  }
-
   void rd_init(const QString& fname) override {humminbird_rd_init(fname);}
   void read() override {humminbird_read();}
   void rd_deinit() override {humminbird_rd_deinit();}
@@ -188,16 +178,6 @@ public:
       (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
       ff_cap_read			/* routes */
     };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
   }
 
   void rd_init(const QString& fname) override {humminbird_rd_init(fname);}

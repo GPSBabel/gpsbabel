@@ -165,7 +165,6 @@ set(JEEPS
 
 # SUPPORT
 set(SUPPORT
-  cet_util.cc
   csv_util.cc
   fatal.cc
   filter_vecs.cc
@@ -203,7 +202,6 @@ endif()
 
 # HEADERS
 set(HEADERS
-  cet_util.h
   csv_util.h
   defs.h
   dg-100.h

@@ -32,7 +32,6 @@
 
 #include "defs.h"
 #include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
-#include "jeeps/gps.h"
 
 
 /* this order is used by most devices */
@@ -235,8 +234,5 @@ unsigned char garmin_fs_convert_category(const char* category_name, uint16_t* ca
 unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* waypt);
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
-
-void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
-void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
 #endif

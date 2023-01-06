@@ -278,16 +278,6 @@ public:
     return FF_CAP_RW_WPT; /* This is a bit of a lie for now... */
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;

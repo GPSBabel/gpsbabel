@@ -25,7 +25,7 @@
 #include <QString>              // for QString
 #include <QVector>              // for QVector
 
-#include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, CET_CHARSET_ASCII, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
+#include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"             // for Format
 #if SHAPELIB_ENABLED
 #if HAVE_LIBSHAPE
@@ -51,16 +51,6 @@ public:
   QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_ALL;
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;

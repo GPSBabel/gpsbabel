@@ -309,6 +309,10 @@ sbn_read()
 
 /**********************************************************************/
 
+/* Characters are always encoded in ASCII. Even if the unit is set
+ * to Chinese language, only ASCII characters can be entered.
+ */
+
 ff_vecs_t sbn_vecs = {
   ff_type_file,
   {
@@ -324,9 +328,6 @@ ff_vecs_t sbn_vecs = {
   nullptr,
   nullptr,
   &sbn_args,
-  /* Characters are always encoded in ASCII. Even if the unit is set
-   * to Chinese language, only ASCII characters can be entered. */
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
 /**********************************************************************/

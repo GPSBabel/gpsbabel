@@ -970,6 +970,5 @@ ff_vecs_t ozi_vecs = {
   data_write,
   nullptr,
   &ozi_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };

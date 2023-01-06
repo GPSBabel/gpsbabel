@@ -48,8 +48,6 @@
 
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
-#define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
-#define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
 /*
  * Amazingly, this constant is not specified in the standard...
@@ -182,7 +180,6 @@ struct global_options {
   int smart_icons;
   int smart_names;
   inifile_t* inifile;
-  QTextCodec* codec;
 };
 
 extern global_options global_opts;
@@ -930,8 +927,6 @@ struct ff_vecs_t {
   ff_write write;
   ff_exit exit;
   QVector<arglist_t>* args;
-  QString encode;
-  int fixed_encode;
   position_ops_t position_ops;
 };
 
@@ -990,14 +985,6 @@ QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */
-
-/*
- * Character encoding transformations.
- */
-
-#define CET_CHARSET_ASCII	"US-ASCII"
-#define CET_CHARSET_UTF8	"UTF-8"
-#define CET_CHARSET_MS_ANSI	"windows-1252"
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
@@ -1064,6 +1051,7 @@ void gb_setbit(void* buf, uint32_t nr);
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
+QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
 QString grapheme_truncate(const QString& input, unsigned int count);

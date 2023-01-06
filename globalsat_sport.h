@@ -70,16 +70,6 @@ public:
     };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;

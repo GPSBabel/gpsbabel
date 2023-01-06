@@ -197,6 +197,5 @@ ff_vecs_t gpssim_vecs = {
   gpssim_write,
   nullptr,
   &gpssim_args,
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };

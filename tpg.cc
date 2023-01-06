@@ -320,6 +320,5 @@ ff_vecs_t tpg_vecs = {
   tpg_write,
   nullptr,
   &tpg_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS
+  NULL_POS_OPS
 };
