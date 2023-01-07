@@ -362,6 +362,67 @@ private:
 
 public:
 
+  /* Special Member Functions */
+
+  Waypoint();
+  ~Waypoint();
+  Waypoint(const Waypoint& other);
+  Waypoint& operator=(const Waypoint& other);
+
+  /* Member Functions */
+
+  bool HasUrlLink() const;
+  const UrlLink& GetUrlLink() const;
+  void AddUrlLink(const UrlLink& l);
+  QString CreationTimeXML() const;
+  gpsbabel::DateTime GetCreationTime() const;
+  void SetCreationTime(const gpsbabel::DateTime& t);
+  void SetCreationTime(qint64 t, qint64 ms = 0);
+  Geocache* AllocGCData();
+  int EmptyGCData() const;
+
+// mimic std::optional interface, but use our more space
+// efficient wp_flags.
+#define GEN_WAYPT_METHODS(field) \
+  bool field##_has_value() const \
+  { \
+    return opt_flags.field; \
+  } \
+  decltype(field) field##_value() const \
+  { \
+    if (!opt_flags.field) { \
+      throw std::bad_optional_access(); \
+    } \
+    return field; \
+  } \
+  bool field##s_equal(const Waypoint& other) const \
+  { \
+    return (opt_flags.field && other.opt_flags.field && (field == other.field)) || \
+           (!opt_flags.field && !other.opt_flags.field); \
+  } \
+  decltype(field) field##_value_or(decltype(field) p) const \
+  { \
+    return (opt_flags.field)? field : p; \
+  } \
+  void set_##field(decltype(field) p) \
+  { \
+    field = p; \
+    opt_flags.field = 1; \
+  } \
+  void reset_##field() \
+  { \
+    opt_flags.field = 0; \
+  }
+
+  GEN_WAYPT_METHODS(temperature)
+  GEN_WAYPT_METHODS(proximity)
+  GEN_WAYPT_METHODS(course)
+  GEN_WAYPT_METHODS(speed)
+  GEN_WAYPT_METHODS(geoidheight)
+  GEN_WAYPT_METHODS(depth)
+
+#undef GEN_WAYPT_METHODS
+
   /* Data Members */
 
   double latitude;		/* Degrees */
@@ -425,67 +486,6 @@ public:
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
-
-  /* Special Member Functions */
-
-  Waypoint();
-  ~Waypoint();
-  Waypoint(const Waypoint& other);
-  Waypoint& operator=(const Waypoint& other);
-
-  /* Member Functions */
-
-  bool HasUrlLink() const;
-  const UrlLink& GetUrlLink() const;
-  void AddUrlLink(const UrlLink& l);
-  QString CreationTimeXML() const;
-  gpsbabel::DateTime GetCreationTime() const;
-  void SetCreationTime(const gpsbabel::DateTime& t);
-  void SetCreationTime(qint64 t, qint64 ms = 0);
-  Geocache* AllocGCData();
-  int EmptyGCData() const;
-
-// mimic std::optional interface, but use our more space
-// efficient wp_flags.
-#define GEN_WAYPT_METHODS(field) \
-  bool field##_has_value() const \
-  { \
-    return opt_flags.field; \
-  } \
-  decltype(field) field##_value() const \
-  { \
-    if (!opt_flags.field) { \
-      throw std::bad_optional_access(); \
-    } \
-    return field; \
-  } \
-  bool field##s_equal(const Waypoint& other) const \
-  { \
-    return (opt_flags.field && other.opt_flags.field && (field == other.field)) || \
-           (!opt_flags.field && !other.opt_flags.field); \
-  } \
-  decltype(field) field##_value_or(decltype(field) p) const \
-  { \
-    return (opt_flags.field)? field : p; \
-  } \
-  void set_##field(decltype(field) p) \
-  { \
-    field = p; \
-    opt_flags.field = 1; \
-  } \
-  void reset_##field() \
-  { \
-    opt_flags.field = 0; \
-  }
-
-  GEN_WAYPT_METHODS(temperature)
-  GEN_WAYPT_METHODS(proximity)
-  GEN_WAYPT_METHODS(course)
-  GEN_WAYPT_METHODS(speed)
-  GEN_WAYPT_METHODS(geoidheight)
-  GEN_WAYPT_METHODS(depth)
-
-#undef GEN_WAYPT_METHODS
 };
 
 using waypt_cb = void (*)(const Waypoint*);
