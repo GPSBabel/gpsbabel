@@ -107,9 +107,9 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
 
   if (!addr.isEmpty() || !phone.isEmpty() ||
       (gmsd->flags.category && gmsd->category) ||
-      (waypt->depth_has_value()) ||
-      (waypt->proximity_has_value()) ||
-      (waypt->temperature_has_value()) ||
+      waypt->depth_has_value() ||
+      waypt->proximity_has_value() ||
+      waypt->temperature_has_value() ||
       gmsd->flags.display) {
     writer->writeStartElement(QStringLiteral("extensions"));
     writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
