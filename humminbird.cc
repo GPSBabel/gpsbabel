@@ -657,7 +657,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
     }
   }
 
-  hum.depth = qRound((wpt->depth_value_or(0))*100.0);
+  hum.depth = qRound(wpt->depth_value_or(0) * 100.0);
   be_write16(&hum.depth, hum.depth);
 
   be_write32(&hum.time, wpt->GetCreationTime().toTime_t());
@@ -769,7 +769,7 @@ HumminbirdHTFormat::humminbird_track_cb(const Waypoint* wpt)
     int j = i-1;
     trk_points[j].deltaeast = east - last_east;
     trk_points[j].deltanorth = north - last_north;
-    trk_points[j].depth = qRound((wpt->depth_value_or(0))*100.0);
+    trk_points[j].depth = qRound(wpt->depth_value_or(0) * 100.0);
 
     /* BE-ify */
     be_write16(&trk_points[j].deltaeast, trk_points[j].deltaeast);

@@ -1437,7 +1437,7 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
   lowranceusr4_writestr(wpt->description, file_out, 2);
 
   /* Alarm radius */
-  gbfputflt((wpt->proximity_value_or(0.0)), file_out);
+  gbfputflt(wpt->proximity_value_or(0.0), file_out);
 
   /* Creation date/time */
   auto ts = lowranceusr4_jd_from_timestamp(wpt->GetCreationTime());

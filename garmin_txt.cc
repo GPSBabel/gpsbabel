@@ -565,19 +565,19 @@ write_waypt(const Waypoint* wpt)
   }
   *fout << "\t";
 
-  double x = (wpt->depth_value_or(unknown_alt));
+  double x = wpt->depth_value_or(unknown_alt);
   if (x != unknown_alt) {
     print_distance(x, 1, 0, 1);
   }
   *fout << "\t";
 
-  x = (wpt->proximity_value_or(unknown_alt));
+  x = wpt->proximity_value_or(unknown_alt);
   if (x != unknown_alt) {
     print_distance(x, 0, 0, 0);
   }
   *fout << "\t";
 
-  x = (wpt->temperature_value_or(-999));
+  x = wpt->temperature_value_or(-999);
   if (x != -999) {
     print_temperature(x);
   }
@@ -711,7 +711,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   }
 
   *fout << "\t";
-  double depth = (wpt->depth_value_or(unknown_alt));
+  double depth = wpt->depth_value_or(unknown_alt);
   if (depth != unknown_alt) {
     print_distance(depth, 1, 0, 1);
   }
@@ -719,7 +719,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   if (prev != nullptr) {
     *fout << "\t";
     delta = wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t();
-    float temp = (wpt->temperature_value_or(-999));
+    float temp = wpt->temperature_value_or(-999);
     if (temp != -999) {
       print_temperature(temp);
     }

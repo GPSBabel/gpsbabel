@@ -466,13 +466,13 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
   GPS_Math_WGS84_To_UTM_EN(waypt->latitude, waypt->longitude, &x, &y, &z, &zc);
 
   le_write16(buffer + 0, serial);
-  le_write16(buffer + 2, (waypt->course_value_or(0)));
+  le_write16(buffer + 2, waypt->course_value_or(0));
   le_write32(buffer + 4, x);
   le_write32(buffer + 8, y);
   encode_position(waypt, buffer + 12);
   encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
   buffer[28] = z;
-  buffer[29] = MPS_TO_KPH((waypt->speed_value_or(0)) / 2);
+  buffer[29] = MPS_TO_KPH(waypt->speed_value_or(0) / 2);
   buffer[30] = 0x5a;
   buffer[31] = 0x7e;
 }
