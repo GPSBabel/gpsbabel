@@ -254,8 +254,8 @@ decode_sbn_record(unsigned char* buffer)
 
   decode_sbn_datetime(buffer + 10, waypt);
   decode_sbn_position(buffer + 22, waypt);
-  WAYPT_SET(waypt, speed, be_read16(buffer + 39) * 0.01f);
-  WAYPT_SET(waypt, course, be_read16(buffer + 41) * 0.01f);
+  waypt->set_speed(be_read16(buffer + 39) * 0.01f);
+  waypt->set_course(be_read16(buffer + 41) * 0.01f);
   waypt->sat = buffer[87];
   waypt->hdop = buffer[88] * 0.2f;
 

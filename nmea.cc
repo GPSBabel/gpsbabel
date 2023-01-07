@@ -479,7 +479,7 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
 
   waypt->altitude = alt;
 
-  WAYPT_SET(waypt, geoidheight, geoidheight);
+  waypt->set_geoidheight(geoidheight);
 
   waypt->sat = nsats;
 
@@ -547,11 +547,11 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   if (posn_type == gpgga) {
     /* capture useful data update and exit */
     if (curr_waypt) {
-      if (! WAYPT_HAS(curr_waypt, speed)) {
-        WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed));
+      if (!curr_waypt->speed_has_value()) {
+        curr_waypt->set_speed(KNOTS_TO_MPS(speed));
       }
-      if (! WAYPT_HAS(curr_waypt, course)) {
-        WAYPT_SET(curr_waypt, course, course);
+      if (!curr_waypt->course_has_value()) {
+        curr_waypt->set_course(course);
       }
       /* The change of date wasn't recorded when
        * going from 235959 to 000000. */
@@ -567,8 +567,8 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
 
   Waypoint* waypt = nmea_new_wpt();
 
-  WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
-  WAYPT_SET(waypt, course, course);
+  waypt->set_speed(KNOTS_TO_MPS(speed));
+  waypt->set_course(course);
 
   nmea_set_waypoint_time(waypt, &prev_datetime, dmy, hms);
 
@@ -706,11 +706,11 @@ NmeaFormat::gpvtg_parse(const QString& ibuf) const
   if (fields.size() > 7) speed_k = fields[7].toDouble();
 
   if (curr_waypt) {
-    WAYPT_SET(curr_waypt, course, course);
+    curr_waypt->set_course(course);
     if (speed_k > 0) {
-      WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k));
+      curr_waypt->set_speed(KPH_TO_MPS(speed_k));
     } else {
-      WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
+      curr_waypt->set_speed(KNOTS_TO_MPS(speed_n));
     }
   }
 
@@ -1242,8 +1242,8 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
              fix=='0' ? 'V' : 'A',
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
-             WAYPT_HAS(wpt, speed) ? MPS_TO_KNOTS(wpt->speed):(0),
-             WAYPT_HAS(wpt, course) ? (wpt->course):(0),
+             wpt->speed_has_value() ? MPS_TO_KNOTS(wpt->speed_value()):(0),
+             wpt->course_value_or(0),
              dmy.constData());
     cksum = nmea_cksum(obuf);
 
@@ -1264,15 +1264,15 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
              (wpt->sat>0)?(wpt->sat):(0),
              (wpt->hdop>0)?(wpt->hdop):(0.0),
              wpt->altitude == unknown_alt ? 0 : wpt->altitude,
-             WAYPT_HAS(wpt, geoidheight)? (wpt->geoidheight) : (0)); /* TODO: we could look up the geoidheight if needed */
+             wpt->geoidheight_value_or(0)); /* TODO: we could look up the geoidheight if needed */
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
-  if ((opt_gpvtg) && (WAYPT_HAS(wpt, course) || WAYPT_HAS(wpt, speed))) {
+  if ((opt_gpvtg) && (wpt->course_has_value() || wpt->speed_has_value())) {
     snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
-             WAYPT_HAS(wpt, course) ? (wpt->course):(0),
-             WAYPT_HAS(wpt, speed) ? MPS_TO_KNOTS(wpt->speed):(0),
-             WAYPT_HAS(wpt, speed) ? MPS_TO_KPH(wpt->speed):(0));
+             wpt->course_value_or(0),
+             wpt->speed_has_value() ? MPS_TO_KNOTS(wpt->speed_value()):(0),
+             wpt->speed_has_value() ? MPS_TO_KPH(wpt->speed_value()):(0));
 
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);

@@ -560,7 +560,7 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
     break;
   case 13:
     /* proximity distance - meters */
-    WAYPT_SET(wpt_tmp, proximity, str.toDouble() * prox_scale);
+    wpt_tmp->set_proximity(str.toDouble() * prox_scale);
     break;
   case 14:
     /* altitude */
@@ -918,8 +918,8 @@ ozi_waypt_pr(const Waypoint* wpt)
                    << fs->fgcolor << ','
                    << fs->bgcolor << ','
                    << description << ",0,0,";
-  if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-    *stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
+  if (wpt->proximity_has_value() && (wpt->proximity_value() > 0)) {
+    *stream << qSetRealNumberPrecision(1) << wpt->proximity_value() * prox_scale << ',';
   } else if (proximity > 0) {
     *stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
   } else {

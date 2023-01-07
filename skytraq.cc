@@ -673,7 +673,7 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
     alt = m.alt * POW_2_M7;
 
     tpt = make_trackpoint(pst, lat, lon, alt);
-    WAYPT_SET(tpt, speed, spe); /* convert speed to m/s */
+    tpt->set_speed(spe); /* convert speed to m/s */
     track_add_wpt(pst->route_head_, tpt);
 
     res = MULTI_HZ_ITEM_LEN;
@@ -750,7 +750,7 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
     ECEF_to_LLA(pst->x, pst->y, pst->z, &lat, &lon, &alt);
 //		GPS_Math_XYZ_To_WGS84LatLonH(&lat, &lon, &alt, pst->x, pst->y, pst->z);
     tpt = make_trackpoint(pst, lat, lon, alt);
-    WAYPT_SET(tpt, speed, KPH_TO_MPS(ITEM_SPEED(pitem))); /* convert speed to m/s */
+    tpt->set_speed(KPH_TO_MPS(ITEM_SPEED(pitem))); /* convert speed to m/s */
 
     if (poi) {
       waypt_add(new Waypoint(*tpt));

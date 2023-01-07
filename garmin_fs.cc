@@ -107,22 +107,22 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
 
   if (!addr.isEmpty() || !phone.isEmpty() ||
       (gmsd->flags.category && gmsd->category) ||
-      WAYPT_HAS(waypt, depth) ||
-      WAYPT_HAS(waypt, proximity) ||
-      WAYPT_HAS(waypt, temperature) ||
+      waypt->depth_has_value() ||
+      waypt->proximity_has_value() ||
+      waypt->temperature_has_value() ||
       gmsd->flags.display) {
     writer->writeStartElement(QStringLiteral("extensions"));
     writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
     writer->writeNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"),
                            "gpxx");
-    if WAYPT_HAS(waypt, proximity) {
-      writer->writeTextElement(QStringLiteral("gpxx:Proximity"), QString::number(waypt->proximity, 'f', 6));
+    if (waypt->proximity_has_value()) {
+      writer->writeTextElement(QStringLiteral("gpxx:Proximity"), QString::number(waypt->proximity_value(), 'f', 6));
     }
-    if WAYPT_HAS(waypt, temperature) {
-      writer->writeTextElement(QStringLiteral("gpxx:Temperature"),  QString::number(waypt->temperature, 'f', 6));
+    if (waypt->temperature_has_value()) {
+      writer->writeTextElement(QStringLiteral("gpxx:Temperature"),  QString::number(waypt->temperature_value(), 'f', 6));
     }
-    if WAYPT_HAS(waypt, depth) {
-      writer->writeTextElement(QStringLiteral("gpxx:Depth"), QString::number(waypt->depth, 'f', 6));
+    if (waypt->depth_has_value()) {
+      writer->writeTextElement(QStringLiteral("gpxx:Depth"), QString::number(waypt->depth_value(), 'f', 6));
     }
     if (gmsd->flags.display) {
       const char* cx;
@@ -212,17 +212,17 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint
   switch (tag) {
   case 1:
     if (*cdatastr) {
-      WAYPT_SET(waypt, proximity, strtod(cdatastr, nullptr));
+      waypt->set_proximity(strtod(cdatastr, nullptr));
     }
     break;
   case 2:
     if (*cdatastr) {
-      WAYPT_SET(waypt, temperature, strtod(cdatastr, nullptr));
+      waypt->set_temperature(strtod(cdatastr, nullptr));
     }
     break;
   case 3:
     if (*cdatastr) {
-      WAYPT_SET(waypt, depth, strtod(cdatastr, nullptr));
+      waypt->set_depth(strtod(cdatastr, nullptr));
     }
     break;
   case 4:

@@ -492,7 +492,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
          qPrintable(QString(res->notes).replace("\r\n", ", ")));
 #endif
   if (FREAD_C == 1) {
-    WAYPT_SET(res, proximity, FREAD_DBL);
+    res->set_proximity(FREAD_DBL);
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
@@ -528,7 +528,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   FREAD(buf, 1);
 
   if (FREAD_C == 1) {
-    WAYPT_SET(res, depth, FREAD_DBL);
+    res->set_depth(FREAD_DBL);
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
@@ -617,7 +617,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #endif
 
   if (FREAD_C == 1) {
-    WAYPT_SET(res, temperature, FREAD_DBL);
+    res->set_temperature(FREAD_DBL);
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, 1)
     printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
@@ -938,10 +938,10 @@ GdbFormat::read_track()
       wpt->SetCreationTime(FREAD_i32);
     }
     if (FREAD_C == 1) {
-      WAYPT_SET(wpt, depth, FREAD_DBL);
+      wpt->set_depth(FREAD_DBL);
     }
     if (FREAD_C == 1) {
-      WAYPT_SET(wpt, temperature, FREAD_DBL);
+      wpt->set_temperature(FREAD_DBL);
     }
 
     track_add_wpt(res, wpt);
@@ -1277,7 +1277,7 @@ GdbFormat::write_waypoint(
   } else {
     FWRITE_CSTR(wpt->description);
   }
-  FWRITE_DBL(WAYPT_GET(wpt, proximity, unknown_alt), unknown_alt);	/* proximity */
+  FWRITE_DBL(wpt->proximity_value_or(unknown_alt), unknown_alt);	/* proximity */
   FWRITE_i32(display);			/* display */
   FWRITE_i32(0);				/* color */
   FWRITE_i32(icon);			/* icon */
@@ -1285,7 +1285,7 @@ GdbFormat::write_waypoint(
   FWRITE_CSTR(garmin_fs_t::get_state(gmsd, ""));	/* state */
   FWRITE_CSTR(garmin_fs_t::get_facility(gmsd, ""));	/* facility */
   FWRITE_C(0);				/* unknown */
-  FWRITE_DBL(WAYPT_GET(wpt, depth, unknown_alt), unknown_alt);	/* depth */
+  FWRITE_DBL(wpt->depth_value_or(unknown_alt), unknown_alt);	/* depth */
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
@@ -1345,7 +1345,7 @@ GdbFormat::write_waypoint(
   }
 
   FWRITE_i16(garmin_fs_t::get_category(gmsd, gdb_category));
-  FWRITE_DBL(WAYPT_GET(wpt, temperature, 0), 0);
+  FWRITE_DBL(wpt->temperature_value_or(0), 0);
   FWRITE_TIME(wpt->GetCreationTime().toTime_t());
 
   /* VERSION DEPENDENT CODE */
@@ -1530,9 +1530,9 @@ GdbFormat::write_track(const route_head* trk, const QString& trk_name)
     FWRITE_LATLON(wpt->longitude);
     FWRITE_DBL(wpt->altitude, unknown_alt);
     FWRITE_TIME(wpt->GetCreationTime().toTime_t());
-    double d = WAYPT_GET(wpt, depth, unknown_alt);
+    double d = wpt->depth_value_or(unknown_alt);
     FWRITE_DBL(d, unknown_alt);
-    d = WAYPT_GET(wpt, temperature, -99999);
+    d = wpt->temperature_value_or(-99999);
     FWRITE_DBL(d, -99999);
   }
 

@@ -233,9 +233,9 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  WAYPT_SET(waypoint, speed, KPH_TO_MPS(speed));
+  waypoint->set_speed(KPH_TO_MPS(speed));
 
-  WAYPT_SET(waypoint, course, heading);
+  waypoint->set_course(heading);
   waypoint->SetCreationTime(time, milliseconds);
 
   auto* fsdata = new qstarz_bl_1000_fsdata;

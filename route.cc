@@ -264,8 +264,7 @@ computed_trkdata track_recompute(const route_head* trk)
     double tlon = RAD(thisw->longitude);
     double plat = RAD(prev->latitude);
     double plon = RAD(prev->longitude);
-    WAYPT_SET(thisw, course, heading_true_degrees(plat, plon,
-              tlat, tlon));
+    thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
     double dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
     /*
@@ -279,7 +278,7 @@ computed_trkdata track_recompute(const route_head* trk)
      * If we've moved as much as a meter,
      * conditionally recompute speeds.
      */
-    if (!WAYPT_HAS(thisw, speed) && (dist > 1)) {
+    if (!thisw->speed_has_value() && (dist > 1)) {
       // Only recompute speed if the waypoint
       // didn't already have a speed
       if (thisw->GetCreationTime().isValid() &&
@@ -287,15 +286,15 @@ computed_trkdata track_recompute(const route_head* trk)
           thisw->GetCreationTime() > prev->GetCreationTime()) {
         double timed =
           prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
-        WAYPT_SET(thisw, speed, dist / timed);
+        thisw->set_speed(dist / timed);
       }
     }
-    if (WAYPT_HAS(thisw, speed)) {
-      if ((!tdata.min_spd) || (thisw->speed < tdata.min_spd)) {
-        tdata.min_spd = thisw->speed;
+    if (thisw->speed_has_value()) {
+      if ((!tdata.min_spd) || (thisw->speed_value() < tdata.min_spd)) {
+        tdata.min_spd = thisw->speed_value();
       }
-      if ((!tdata.max_spd) || (thisw->speed > tdata.max_spd)) {
-        tdata.max_spd = thisw->speed;
+      if ((!tdata.max_spd) || (thisw->speed_value() > tdata.max_spd)) {
+        tdata.max_spd = thisw->speed_value();
       }
     }
 

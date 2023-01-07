@@ -192,12 +192,12 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   if (wpt->cadence) {
     gtc_write_xml(0, "<Cadence>%d</Cadence>\n", wpt->cadence);
   }
-  if (WAYPT_HAS(wpt, speed) || wpt->power) {
+  if (wpt->speed_has_value() || wpt->power) {
     gtc_write_xml(1, "<Extensions>\n");
     gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
     /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
-    if (WAYPT_HAS(wpt, speed)) {
-      gtc_write_xml(0, "<Speed>%.3f</Speed>\n", wpt->speed);
+    if (wpt->speed_has_value()) {
+      gtc_write_xml(0, "<Speed>%.3f</Speed>\n", wpt->speed_value());
     }
     if (wpt->power) {
       gtc_write_xml(0, "<Watts>%.0f</Watts>\n", wpt->power);
@@ -459,7 +459,7 @@ GtrnctrFormat::gtc_trk_pwr(xg_string args, const QXmlStreamAttributes* /*unused*
 void
 GtrnctrFormat::gtc_trk_spd(xg_string args, const QXmlStreamAttributes* /*unused*/)
 {
-  WAYPT_SET(wpt_tmp, speed, args.toDouble());
+  wpt_tmp->set_speed(args.toDouble());
 }
 
 void

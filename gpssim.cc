@@ -109,8 +109,8 @@ gpssim_write_pt(const Waypoint* wpt)
 {
   char obuf[1024];
 
-  if WAYPT_HAS(wpt, speed) {
-    gpssim_write_spd(MPS_TO_KNOTS(wpt->speed));
+  if (wpt->speed_has_value()) {
+    gpssim_write_spd(MPS_TO_KNOTS(wpt->speed_value()));
   }
 
   double lat = degrees2ddmm(wpt->latitude);
