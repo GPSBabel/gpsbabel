@@ -278,7 +278,7 @@ computed_trkdata track_recompute(const route_head* trk)
      * If we've moved as much as a meter,
      * conditionally recompute speeds.
      */
-    if (!(thisw->speed_has_value()) && (dist > 1)) {
+    if (!thisw->speed_has_value() && (dist > 1)) {
       // Only recompute speed if the waypoint
       // didn't already have a speed
       if (thisw->GetCreationTime().isValid() &&
@@ -289,7 +289,7 @@ computed_trkdata track_recompute(const route_head* trk)
         thisw->set_speed(dist / timed);
       }
     }
-    if ((thisw->speed_has_value())) {
+    if (thisw->speed_has_value()) {
       if ((!tdata.min_spd) || (thisw->speed_value() < tdata.min_spd)) {
         tdata.min_spd = thisw->speed_value();
       }

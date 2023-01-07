@@ -547,10 +547,10 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   if (posn_type == gpgga) {
     /* capture useful data update and exit */
     if (curr_waypt) {
-      if (! (curr_waypt->speed_has_value())) {
+      if (!curr_waypt->speed_has_value()) {
         curr_waypt->set_speed(KNOTS_TO_MPS(speed));
       }
-      if (! (curr_waypt->course_has_value())) {
+      if (!curr_waypt->course_has_value()) {
         curr_waypt->set_course(course);
       }
       /* The change of date wasn't recorded when
@@ -1242,7 +1242,7 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
              fix=='0' ? 'V' : 'A',
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
-             (wpt->speed_has_value()) ? MPS_TO_KNOTS(wpt->speed_value()):(0),
+             wpt->speed_has_value() ? MPS_TO_KNOTS(wpt->speed_value()):(0),
              wpt->course_value_or(0),
              dmy.constData());
     cksum = nmea_cksum(obuf);
@@ -1268,11 +1268,11 @@ NmeaFormat::nmea_trackpt_pr(const Waypoint* wpt)
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
-  if ((opt_gpvtg) && ((wpt->course_has_value()) || (wpt->speed_has_value()))) {
+  if ((opt_gpvtg) && (wpt->course_has_value() || wpt->speed_has_value())) {
     snprintf(obuf,sizeof(obuf),"GPVTG,%.3f,T,0,M,%.3f,N,%.3f,K",
              wpt->course_value_or(0),
-             (wpt->speed_has_value()) ? MPS_TO_KNOTS(wpt->speed_value()):(0),
-             (wpt->speed_has_value()) ? MPS_TO_KPH(wpt->speed_value()):(0));
+             wpt->speed_has_value() ? MPS_TO_KNOTS(wpt->speed_value()):(0),
+             wpt->speed_has_value() ? MPS_TO_KPH(wpt->speed_value()):(0));
 
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);

@@ -1188,7 +1188,7 @@ GpxFormat::gpx_write_common_position(const Waypoint* waypointp, const gpx_point_
     }
   }
   /* TODO:  magvar should go here */
-  if ((waypointp->geoidheight_has_value())) {
+  if (waypointp->geoidheight_has_value()) {
     writer->writeOptionalTextElement(QStringLiteral("geoidheight"),QString::number(waypointp->geoidheight_value(), 'f', 1));
   }
 }
@@ -1199,17 +1199,17 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
   // gpx version we are writing is >= 1.1.
   garmin_fs_t* gmsd = (opt_garminext) ? garmin_fs_t::find(waypointp) : nullptr;  // only needed if garmin extensions selected
 
-  if ((opt_humminbirdext && ((waypointp->depth_has_value()) || (waypointp->temperature_has_value()))) ||
+  if ((opt_humminbirdext && (waypointp->depth_has_value() || waypointp->temperature_has_value())) ||
       (opt_garminext && gpxpt_route==point_type && gmsd != nullptr && gmsd->ilinks != nullptr)  ||
-      (opt_garminext && gpxpt_waypoint==point_type && ((waypointp->proximity_has_value()) || (waypointp->temperature_has_value()) || (waypointp->depth_has_value()))) ||
-      (opt_garminext && gpxpt_track==point_type && ((waypointp->temperature_has_value()) || (waypointp->depth_has_value()) || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
+      (opt_garminext && gpxpt_waypoint==point_type && (waypointp->proximity_has_value() || waypointp->temperature_has_value() || waypointp->depth_has_value())) ||
+      (opt_garminext && gpxpt_track==point_type && (waypointp->temperature_has_value() || waypointp->depth_has_value() || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
     writer->writeStartElement(QStringLiteral("extensions"));
 
     if (opt_humminbirdext) {
-      if ((waypointp->depth_has_value())) {
+      if (waypointp->depth_has_value()) {
         writer->writeTextElement(QStringLiteral("h:depth"), toString(waypointp->depth_value() * 100.0));
       }
-      if ((waypointp->temperature_has_value())) {
+      if (waypointp->temperature_has_value()) {
         writer->writeTextElement(QStringLiteral("h:temperature"), toString(waypointp->temperature_value()));
       }
     }
@@ -1221,15 +1221,15 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
       // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
       switch (point_type) {
       case gpxpt_waypoint:
-        if ((waypointp->proximity_has_value()) || (waypointp->temperature_has_value()) || (waypointp->depth_has_value())) {
+        if (waypointp->proximity_has_value() || waypointp->temperature_has_value() || waypointp->depth_has_value()) {
           writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
-          if ((waypointp->proximity_has_value())) {
+          if (waypointp->proximity_has_value()) {
             writer->writeTextElement(QStringLiteral("gpxx:Proximity"), toString(waypointp->proximity_value()));
           }
-          if ((waypointp->temperature_has_value())) {
+          if (waypointp->temperature_has_value()) {
             writer->writeTextElement(QStringLiteral("gpxx:Temperature"), toString(waypointp->temperature_value()));
           }
-          if ((waypointp->depth_has_value())) {
+          if (waypointp->depth_has_value()) {
             writer->writeTextElement(QStringLiteral("gpxx:Depth"), toString(waypointp->depth_value()));
           }
           writer->writeEndElement(); // "gpxx:WaypointExtension"
@@ -1254,13 +1254,13 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
         }
         break;
       case gpxpt_track:
-        if ((waypointp->temperature_has_value()) || (waypointp->depth_has_value()) || waypointp->heartrate != 0 || waypointp->cadence != 0) {
+        if (waypointp->temperature_has_value() || waypointp->depth_has_value() || waypointp->heartrate != 0 || waypointp->cadence != 0) {
           // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
           writer->writeStartElement(QStringLiteral("gpxtpx:TrackPointExtension"));
-          if ((waypointp->temperature_has_value())) {
+          if (waypointp->temperature_has_value()) {
             writer->writeTextElement(QStringLiteral("gpxtpx:atemp"), toString(waypointp->temperature_value()));
           }
-          if ((waypointp->depth_has_value())) {
+          if (waypointp->depth_has_value()) {
             writer->writeTextElement(QStringLiteral("gpxtpx:depth"), toString(waypointp->depth_value()));
           }
           if (waypointp->heartrate != 0) {

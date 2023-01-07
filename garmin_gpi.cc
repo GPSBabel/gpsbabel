@@ -730,16 +730,16 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
 #if 0
         wpt->shortname.truncate(pidx);
 #endif
-      } else if ((opt_speed) && (! (wpt->speed_has_value()))) {
+      } else if ((opt_speed) && (!wpt->speed_has_value())) {
         wpt->set_speed(defspeed);
       }
 
-      if ((opt_proximity) && (! (wpt->proximity_has_value()))) {
+      if ((opt_proximity) && (!wpt->proximity_has_value())) {
         wpt->set_proximity(defproximity);
       }
 
-      if (((wpt->speed_has_value()) && (wpt->speed_value() > 0)) ||
-          ((wpt->proximity_has_value()) && (wpt->proximity_value() > 0))) {
+      if ((wpt->speed_has_value() && (wpt->speed_value() > 0)) ||
+          (wpt->proximity_has_value() && (wpt->proximity_value() > 0))) {
         data->alert = 1;
         dt->alerts++;
         res += 20;    /* tag(3) */
@@ -897,13 +897,13 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
       gbfputint32(3, fout);  /* tag(3) */
       gbfputint32(12, fout);  /* always 12 */
 
-      if ((wpt->proximity_has_value()) && (wpt->proximity_value() > 0)) {
+      if (wpt->proximity_has_value() && (wpt->proximity_value() > 0)) {
         gbfputint16((int) wpt->proximity_value(), fout);
         flag = 4;
       } else {
         gbfputint16(0, fout);
       }
-      if ((wpt->speed_has_value()) && (wpt->speed_value() > 0)) {
+      if (wpt->speed_has_value() && (wpt->speed_value() > 0)) {
         gbfputint16((int)(wpt->speed_value() * 100), fout);
         flag = 5;
       } else {

@@ -918,7 +918,7 @@ ozi_waypt_pr(const Waypoint* wpt)
                    << fs->fgcolor << ','
                    << fs->bgcolor << ','
                    << description << ",0,0,";
-  if ((wpt->proximity_has_value()) && (wpt->proximity_value() > 0)) {
+  if (wpt->proximity_has_value() && (wpt->proximity_value() > 0)) {
     *stream << qSetRealNumberPrecision(1) << wpt->proximity_value() * prox_scale << ',';
   } else if (proximity > 0) {
     *stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';

@@ -1365,7 +1365,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   gbfputint16(WayptType, file_out);
 
   if (writing_version == 3) {
-    float depth = (wpt->depth_has_value()) ?
+    float depth = wpt->depth_has_value() ?
                   METERS_TO_FEET(wpt->depth_value()) : -99999.0;
     gbfputint32(depth, file_out);
   }

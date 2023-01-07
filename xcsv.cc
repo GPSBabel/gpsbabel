@@ -1306,27 +1306,27 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
     case XcsvStyle::XT_PATH_SPEED:
-      if ((wpt->speed_has_value())) {
+      if (wpt->speed_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->speed_value());
       }
       break;
     case XcsvStyle::XT_PATH_SPEED_KPH:
-      if ((wpt->speed_has_value())) {
+      if (wpt->speed_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KPH(wpt->speed_value()));
       }
       break;
     case XcsvStyle::XT_PATH_SPEED_MPH:
-      if ((wpt->speed_has_value())) {
+      if (wpt->speed_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_MPH(wpt->speed_value()));
       }
       break;
     case XcsvStyle::XT_PATH_SPEED_KNOTS:
-      if ((wpt->speed_has_value())) {
+      if (wpt->speed_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), MPS_TO_KNOTS(wpt->speed_value()));
       }
       break;
     case XcsvStyle::XT_PATH_COURSE:
-      if ((wpt->course_has_value())) {
+      if (wpt->course_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->course_value());
       }
       break;
@@ -1350,12 +1350,12 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
     case XcsvStyle::XT_TEMPERATURE:
-      if ((wpt->temperature_has_value())) {
+      if (wpt->temperature_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), wpt->temperature_value());
       }
       break;
     case XcsvStyle::XT_TEMPERATURE_F:
-      if ((wpt->temperature_has_value())) {
+      if (wpt->temperature_has_value()) {
         buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature_value()));
       }
       break;
