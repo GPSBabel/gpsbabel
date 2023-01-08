@@ -44,67 +44,6 @@ int gbser_set_speed(void* handle, unsigned speed)
   return gbser_set_port(handle, speed, 8, 0, 1);
 }
 
-static int parity_letter(char c)
-{
-  switch (c) {
-  case 'N':
-  case 'n':
-    return 0;
-  case 'O':
-  case 'o':
-    return 1;
-  case 'E':
-  case 'e':
-    return 2;
-  default:
-    return -1;
-  }
-}
-
-/* Set the serial port up by parsing the supplied parameter string.
- * Valid parameter strings look like '4800,8,N,1'. Parsing is case-
- * insensitive, spaces are allowed around the commas and omitted
- * trailing fields will default to '8', 'N' and '1'
- */
-int gbser_setup(void* handle, const char* spec)
-{
-  unsigned arg[] = { 4800, 8, 0, 1 };
-
-  for (unsigned int ap = 0; ap < sizeof(arg) / sizeof(arg[0]); ap++) {
-    unsigned t = 0;
-    int pl;
-    while (isspace(*spec)) {
-      spec++;
-    }
-    /* Allow 'N', 'O' or 'E' as the parity spec */
-    if (ap == 2 && (pl = parity_letter(*spec), pl >= 0)) {
-      t = pl;
-      spec++;
-    } else {
-      if (!isdigit(*spec)) {
-        break;
-      }
-      while (isdigit(*spec)) {
-        t = t * 10 + *spec++ - '0';
-      }
-    }
-    arg[ap] = t;
-    while (isspace(*spec)) {
-      spec++;
-    }
-    if (*spec != ',') {
-      break;
-    }
-    spec++;
-  }
-
-  if (*spec != '\0') {
-    return gbser_ERROR;
-  }
-
-  return gbser_set_port(handle, arg[0], arg[1], arg[2], arg[3]);
-}
-
 /* Return true if there are characters available on the serial port
  */
 int gbser_avail(void* handle)

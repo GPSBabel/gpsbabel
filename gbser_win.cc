@@ -141,7 +141,7 @@ static int set_rx_timeout(gbser_handle* h, DWORD timeout)
  *
  * Worse still, Win98 and ME fail the open if you rename com1 to be \\.\\com1:
  *
- * It returns a pointer to a staticly allocated buffer and is therefore not
+ * It returns a pointer to a statically allocated buffer and is therefore not
  * thread safe.   The buffer pointed to remains valid only until the next
  * call to this function.
  */
