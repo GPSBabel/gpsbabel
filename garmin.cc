@@ -78,7 +78,7 @@ static char* categorybitsopt = nullptr;
 static char* baudopt = nullptr;
 static int baud = 0;
 static int categorybits;
-static int receiver_must_upper = 1;
+static bool receiver_must_upper = true;
 static QTextCodec* codec{nullptr};
 
 static Format* gpx_vec;
@@ -140,7 +140,7 @@ static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(c
 static void
 rw_init(const QString& fname)
 {
-  receiver_must_upper = 1;
+  receiver_must_upper = true;
   const char* receiver_charset = "US-ASCII";
 
   if (!mkshort_handle) {
@@ -256,7 +256,7 @@ rw_init(const QString& fname)
       break;
     case 382: 	/* C320 */
       receiver_short_length = 30;
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       break;
     case 292: /* (60|76)C[S]x series */
     case 421: /* Vista|Legend Cx */
@@ -266,7 +266,7 @@ rw_init(const QString& fname)
     case 957: /* Legend HC */
       receiver_short_length = 14;
       snwhiteopt = xstrdup("1");
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
       break;
@@ -278,16 +278,16 @@ rw_init(const QString& fname)
       break;
     case 231: /* Quest */
     case 463: /* Quest 2 */
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_short_length = 30;
       receiver_charset = "windows-1252";
       break;
     case 577: // Rino 530HCx Version 2.50
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_short_length = 14;
       break;
     case 429: // Streetpilot i3
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_charset = "windows-1252";
       receiver_short_length = 30;
       break;

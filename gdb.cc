@@ -1119,10 +1119,10 @@ GdbFormat::reset_short_handle(const char* defname)
 
   setshort_length(short_h, GDB_NAME_BUFFERLEN);
   setshort_badchars(short_h, "\r\n\t");
-  setshort_mustupper(short_h, 0);
-  setshort_mustuniq(short_h, 1);
-  setshort_whitespace_ok(short_h, 1);
-  setshort_repeating_whitespace_ok(short_h, 1);
+  setshort_mustupper(short_h, false);
+  setshort_mustuniq(short_h, true);
+  setshort_whitespace_ok(short_h, true);
+  setshort_repeating_whitespace_ok(short_h, true);
   setshort_defname(short_h, defname);
 }
 

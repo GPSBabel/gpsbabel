@@ -875,10 +875,10 @@ void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
 void setshort_badchars(short_handle,  const char*);
 void setshort_goodchars(short_handle,  const char*);
-void setshort_mustupper(short_handle,  int n);
-void setshort_mustuniq(short_handle,  int n);
-void setshort_whitespace_ok(short_handle,  int n);
-void setshort_repeating_whitespace_ok(short_handle,  int n);
+void setshort_mustupper(short_handle, bool b);
+void setshort_mustuniq(short_handle, bool b);
+void setshort_whitespace_ok(short_handle, bool b);
+void setshort_repeating_whitespace_ok(short_handle, bool b);
 void setshort_defname(short_handle, const char* s);
 
 #define ARGTYPE_UNKNOWN    0x00000000U

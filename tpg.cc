@@ -292,8 +292,8 @@ tpg_write()
 
   if (global_opts.synthesize_shortnames) {
     setshort_length(mkshort_handle, 32);
-    setshort_whitespace_ok(mkshort_handle, 1);
-    setshort_mustupper(mkshort_handle, 1);
+    setshort_whitespace_ok(mkshort_handle, true);
+    setshort_mustupper(mkshort_handle, true);
   }
 
   if (s > MAXTPGOUTPUTPINS) {

@@ -268,10 +268,10 @@ setshort_length(short_handle h, int l)
  */
 
 void
-setshort_whitespace_ok(short_handle h, int l)
+setshort_whitespace_ok(short_handle h, bool b)
 {
   auto* hdl = (mkshort_handle_imp*) h;
-  hdl->whitespaceok = l;
+  hdl->whitespaceok = b;
 }
 
 /*
@@ -280,10 +280,10 @@ setshort_whitespace_ok(short_handle h, int l)
  */
 
 void
-setshort_repeating_whitespace_ok(short_handle h, int l)
+setshort_repeating_whitespace_ok(short_handle h, bool b)
 {
   auto* hdl = (mkshort_handle_imp*) h;
-  hdl->repeating_whitespaceok = l;
+  hdl->repeating_whitespaceok = b;
 }
 
 /*
@@ -342,10 +342,10 @@ setshort_goodchars(short_handle h, const char* s)
  *  Call with i non-zero if generated names must be uppercase only.
  */
 void
-setshort_mustupper(short_handle h, int i)
+setshort_mustupper(short_handle h, bool b)
 {
   auto* hdl = (mkshort_handle_imp*) h;
-  hdl->mustupper = i;
+  hdl->mustupper = b;
 }
 
 
@@ -354,10 +354,10 @@ setshort_mustupper(short_handle h, int i)
  *  (By default, they are.)
  */
 void
-setshort_mustuniq(short_handle h, int i)
+setshort_mustuniq(short_handle h, bool b)
 {
   auto* hdl = (mkshort_handle_imp*) h;
-  hdl->must_uniq = i;
+  hdl->must_uniq = b;
 }
 
 char*
