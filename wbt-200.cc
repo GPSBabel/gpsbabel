@@ -102,7 +102,6 @@ static struct {
 
 static void* fd;
 static FILE* fl;
-static char* port;
 static char* opt_erase;
 
 enum wintec_gps_types {
@@ -401,11 +400,9 @@ static wintec_gps_types guess_device()
 
 static void rd_init(const QString& fname)
 {
-  port = xstrdup(qPrintable(fname));
-
   db(1, "Opening port...\n");
-  if ((fd = gbser_init(port)) == nullptr) {
-    fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
+  if ((fd = gbser_init(qPrintable(fname))) == nullptr) {
+    fatal(MYNAME ": Can't initialise port \"%s\"\n", qPrintable(fname));
   }
 
   dev_type = guess_device();
@@ -419,7 +416,6 @@ static void rd_deinit()
   db(1, "Closing port...\n");
   gbser_deinit(fd);
   fd = nullptr;
-  xfree(port);
 }
 
 static int rd_buf(void* buf, int len)

@@ -63,7 +63,7 @@
 #include <cstring>              // for memcmp, strlen
 #include <type_traits>          // for add_const<>::type
 
-#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, rtrim, waypt_add, xstrdup, xstrndup, fix_2d
+#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, xstrndup, fix_2d
 #include "garmin_tables.h"      // for gt_lookup_datum_index
 #include "gbfile.h"             // for gbfputuint32, gbfputuint16, gbfgetuint16, gbfgetuint32, gbfseek, gbftell, gbfile, gbfclose, gbfcopyfrom, gbfwrite, gbfopen_be, gbfread, gbfrewind, gbfgetflt, gbfgetint16, gbfopen, gbfputc, gbfputflt, gbsize_t, gbfeof, gbfgetdbl, gbfputdbl, gbfile::(anonymous)
 #include "jeeps/gpsmath.h"      // for GPS_Math_WGS84_To_Known_Datum_M
@@ -203,13 +203,20 @@ ExifFormat::exif_time_str(const QDateTime& time)
   return str;
 }
 
-char*
+QByteArray
 ExifFormat::exif_read_str(ExifTag* tag)
 {
   // Panasonic DMC-TZ10 stores datum with trailing spaces.
   // Kodak stores zero count ASCII tags.
-  char* buf = (tag->count == 0) ? xstrdup("") : xstrndup(tag->data.at(0).toByteArray().constData(), tag->size);
-  rtrim(buf);
+  QByteArray buf = (tag->count == 0) ? QByteArray("") : tag->data.at(0).toByteArray();
+  // If the bytearray contains internal NULL(s), get rid of the first and 
+  // anything after it.
+  if (auto idx = buf.indexOf('\0'); idx >= 0) {
+    buf = buf.left(idx);
+  }
+  while ((buf.size() > 0) && isspace(buf.back())) {
+    buf.chop(1);
+  }
   return buf;
 }
 
@@ -520,9 +527,8 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
         printf(" v=0x%02X%02X%02X%02X", tag->raw[0], tag->raw[1], tag->raw[2], tag->raw[3]);
       }
       if (tag->type == EXIF_TYPE_ASCII) {
-        char* str = exif_read_str(tag);
-        printf(" \"%s\"", str);
-        xfree(str);
+        QByteArray str = exif_read_str(tag);
+        printf(" \"%s\"", str.constData());
       } else {
         for (unsigned idx = 0; idx < std::min(tag->count, 4u); ++idx) {
           if (tag->type == EXIF_TYPE_BYTE) {
@@ -684,13 +690,12 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
   }
 
   if (tag) {
-    char* str = exif_read_str(tag);
+    QByteArray str = exif_read_str(tag);
     // This assumes the Qt::TimeSpec is Qt::LocalTime, i.e. the current system time zone.
     // Note the assumption of local time can be problematic if the data
     // is processed in a different time zone than was used in recording
     // the time in the image.
     res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
-    xfree(str);
 
     // Exif 2.31 added offset tags to record the offset to UTC.
     // If these are present use them, otherwise assume local time.
@@ -708,7 +713,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
     }
 
     if (offset_tag) {
-      char* time_tag = exif_read_str(offset_tag);
+      QByteArray time_tag = exif_read_str(offset_tag);
       // string should be +HH:MM or -HH:MM
       static const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
       assert(re.isValid());
@@ -732,7 +737,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
   char lon_ref = '\0';
   char alt_ref = 0;
   char speed_ref = 'K';
-  char* datum = nullptr;
+  QByteArray datum;
   char mode = '\0';
   double gpsdop = unknown_alt;
   double alt = unknown_alt;
@@ -821,16 +826,15 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     printf(MYNAME "-GPSLatitude =  %12.7f\n", wpt->latitude);
     printf(MYNAME "-GPSLongitude = %12.7f\n", wpt->longitude);
   }
-  if (datum) {
-    int idatum = gt_lookup_datum_index(datum, MYNAME);
+  if (!datum.isEmpty()) {
+    int idatum = gt_lookup_datum_index(datum.constData(), MYNAME);
     if (idatum < 0) {
-      fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum);
+      fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum.constData());
     }
     if (idatum != kDautmWGS84) {
       GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
                                       &wpt->latitude, &wpt->longitude, &alt, idatum);
     }
-    xfree(datum);
   }
 
   if (alt != unknown_alt) {
