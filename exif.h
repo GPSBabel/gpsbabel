@@ -156,7 +156,7 @@ private:
   static void print_buff(const char* buf, int sz, const char* cmt);
   static uint16_t exif_type_size(uint16_t type);
   static QString exif_time_str(const QDateTime& time);
-  static char* exif_read_str(ExifTag* tag);
+  static QByteArray exif_read_str(ExifTag* tag);
   static double exif_read_double(const ExifTag* tag, int index);
   static double exif_read_coord(const ExifTag* tag);
   static QTime exif_read_timestamp(const ExifTag* tag);
