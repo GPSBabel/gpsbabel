@@ -1,9 +1,9 @@
 <para>
 This option specifies the number of digits to be used when
-writing coordinate values.
+writing geographic coordinates, .i.e., latitude and longitude.
 Precision is the number of digits after the decimal point.  The default
 precision is 6.  We limit the number of places we write to improve the
-fidelity when round-tripping elevation, reduce file size, and reduce
+fidelity when round-tripping geographic coordinates, reduce file size, and reduce
 silliness in files caused by repeating decimals in insignificant
 digits.
 </para>
