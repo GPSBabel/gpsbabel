@@ -289,22 +289,23 @@
       <snippet/>
       <description>
 <![CDATA[<table>
-<tr><td><b>Distance</b> 4667.3 ft </td></tr>
-<tr><td><b>Min Alt</b> 5.090 ft </td></tr>
-<tr><td><b>Max Alt</b> 322.998 ft </td></tr>
-<tr><td><b>Min Speed</b> 65.4 mph </td></tr>
-<tr><td><b>Max Speed</b> 175.3 mph </td></tr>
-<tr><td><b>Avg Speed</b> 107.1 mph </td></tr>
-<tr><td><b>Avg Cadence</b> 127.6 rpm </td></tr>
-<tr><td><b>Max Cadence</b> 245 rpm </td></tr>
-<tr><td><b>Avg Heart Rate</b> 113.5 bpm </td></tr>
-<tr><td><b>Min Heart Rate</b> 2 bpm </td></tr>
-<tr><td><b>Max Heart Rate</b> 247 bpm </td></tr>
-<tr><td><b>Avg Power</b> 245.8 watts </td></tr>
-<tr><td><b>Max Power</b> 493.0 watts </td></tr>
-<tr><td><b>Start Time</b>1970-01-01T00:00:01.400Z</td></tr>
-<tr><td><b>End Time</b>1970-01-01T00:00:31.102Z</td></tr>
-</table>]]>
+<tr><td><b>Distance</b> 4667.3 ft</td></tr>
+<tr><td><b>Min Alt</b> 5.090 ft</td></tr>
+<tr><td><b>Max Alt</b> 322.998 ft</td></tr>
+<tr><td><b>Min Speed</b> 65.4 mph</td></tr>
+<tr><td><b>Max Speed</b> 175.3 mph</td></tr>
+<tr><td><b>Avg Speed</b> 107.1 mph</td></tr>
+<tr><td><b>Avg Cadence</b> 127.6 rpm</td></tr>
+<tr><td><b>Max Cadence</b> 245 rpm</td></tr>
+<tr><td><b>Avg Heart Rate</b> 113.5 bpm</td></tr>
+<tr><td><b>Min Heart Rate</b> 2 bpm</td></tr>
+<tr><td><b>Max Heart Rate</b> 247 bpm</td></tr>
+<tr><td><b>Avg Power</b> 245.8 watts</td></tr>
+<tr><td><b>Max Power</b> 493.0 watts</td></tr>
+<tr><td><b>Start Time</b> 1970-01-01T00:00:01.400Z</td></tr>
+<tr><td><b>End Time</b> 1970-01-01T00:00:31.102Z</td></tr>
+</table>
+]]>
 </description>
       <TimeSpan>
         <begin>1970-01-01T00:00:01.400Z</begin>
@@ -317,13 +318,13 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.061312 </td></tr>
-<tr><td>Latitude: 30.470605 </td></tr>
-<tr><td>Altitude: 85.400 ft </td></tr>
-<tr><td>Cadence: 245 </td></tr>
-<tr><td>Heart rate: 25 </td></tr>
-<tr><td>Power: 88.9 </td></tr>
-<tr><td>Heading: 317.9 </td></tr>
+<tr><td>Longitude: -32.061312</td></tr>
+<tr><td>Latitude: 30.470605</td></tr>
+<tr><td>Altitude: 85.400 ft</td></tr>
+<tr><td>Cadence: 245</td></tr>
+<tr><td>Heart rate: 25</td></tr>
+<tr><td>Power: 88.9</td></tr>
+<tr><td>Heading: 317.9</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -341,14 +342,14 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.060342 </td></tr>
-<tr><td>Latitude: 30.470920 </td></tr>
-<tr><td>Heart rate: 90 </td></tr>
-<tr><td>Temperature: 8.2 </td></tr>
-<tr><td>Depth: 660.0 ft </td></tr>
-<tr><td>Speed: 158.9 mph </td></tr>
-<tr><td>Heading: 69.4 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:01.400Z </td></tr>
+<tr><td>Longitude: -32.060342</td></tr>
+<tr><td>Latitude: 30.470920</td></tr>
+<tr><td>Heart rate: 90</td></tr>
+<tr><td>Temperature: 8.2</td></tr>
+<tr><td>Depth: 660.0 ft</td></tr>
+<tr><td>Speed: 158.9 mph</td></tr>
+<tr><td>Heading: 69.4</td></tr>
+<tr><td>Time: 1970-01-01T00:00:01.400Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -369,16 +370,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.059568 </td></tr>
-<tr><td>Latitude: 30.471064 </td></tr>
-<tr><td>Altitude: 5.090 ft </td></tr>
-<tr><td>Heart rate: 151 </td></tr>
-<tr><td>Power: 81.3 </td></tr>
-<tr><td>Temperature: 5.2 </td></tr>
-<tr><td>Depth: 249.3 ft </td></tr>
-<tr><td>Speed: 157.4 mph </td></tr>
-<tr><td>Heading: 77.8 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:02.479Z </td></tr>
+<tr><td>Longitude: -32.059568</td></tr>
+<tr><td>Latitude: 30.471064</td></tr>
+<tr><td>Altitude: 5.090 ft</td></tr>
+<tr><td>Heart rate: 151</td></tr>
+<tr><td>Power: 81.3</td></tr>
+<tr><td>Temperature: 5.2</td></tr>
+<tr><td>Depth: 249.3 ft</td></tr>
+<tr><td>Speed: 157.4 mph</td></tr>
+<tr><td>Heading: 77.8</td></tr>
+<tr><td>Time: 1970-01-01T00:00:02.479Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -399,14 +400,14 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.059063 </td></tr>
-<tr><td>Latitude: 30.471908 </td></tr>
-<tr><td>Heart rate: 4 </td></tr>
-<tr><td>Power: 378.5 </td></tr>
-<tr><td>Temperature: 13.7 </td></tr>
-<tr><td>Speed: 124.4 mph </td></tr>
-<tr><td>Heading: 27.3 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:04.381Z </td></tr>
+<tr><td>Longitude: -32.059063</td></tr>
+<tr><td>Latitude: 30.471908</td></tr>
+<tr><td>Heart rate: 4</td></tr>
+<tr><td>Power: 378.5</td></tr>
+<tr><td>Temperature: 13.7</td></tr>
+<tr><td>Speed: 124.4 mph</td></tr>
+<tr><td>Heading: 27.3</td></tr>
+<tr><td>Time: 1970-01-01T00:00:04.381Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -427,15 +428,15 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.058841 </td></tr>
-<tr><td>Latitude: 30.472469 </td></tr>
-<tr><td>Altitude: 322.998 ft </td></tr>
-<tr><td>Heart rate: 168 </td></tr>
-<tr><td>Power: 85.3 </td></tr>
-<tr><td>Temperature: 12.6 </td></tr>
-<tr><td>Speed: 103.3 mph </td></tr>
-<tr><td>Heading: 18.9 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:05.810Z </td></tr>
+<tr><td>Longitude: -32.058841</td></tr>
+<tr><td>Latitude: 30.472469</td></tr>
+<tr><td>Altitude: 322.998 ft</td></tr>
+<tr><td>Heart rate: 168</td></tr>
+<tr><td>Power: 85.3</td></tr>
+<tr><td>Temperature: 12.6</td></tr>
+<tr><td>Speed: 103.3 mph</td></tr>
+<tr><td>Heading: 18.9</td></tr>
+<tr><td>Time: 1970-01-01T00:00:05.810Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -456,15 +457,15 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.058482 </td></tr>
-<tr><td>Latitude: 30.473114 </td></tr>
-<tr><td>Altitude: 62.765 ft </td></tr>
-<tr><td>Cadence: 146 </td></tr>
-<tr><td>Temperature: 19.8 </td></tr>
-<tr><td>Depth: 818.2 ft </td></tr>
-<tr><td>Speed: 65.4 mph </td></tr>
-<tr><td>Heading: 25.6 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:09.290Z </td></tr>
+<tr><td>Longitude: -32.058482</td></tr>
+<tr><td>Latitude: 30.473114</td></tr>
+<tr><td>Altitude: 62.765 ft</td></tr>
+<tr><td>Cadence: 146</td></tr>
+<tr><td>Temperature: 19.8</td></tr>
+<tr><td>Depth: 818.2 ft</td></tr>
+<tr><td>Speed: 65.4 mph</td></tr>
+<tr><td>Heading: 25.6</td></tr>
+<tr><td>Time: 1970-01-01T00:00:09.290Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -485,15 +486,15 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.057616 </td></tr>
-<tr><td>Latitude: 30.473838 </td></tr>
-<tr><td>Cadence: 204 </td></tr>
-<tr><td>Heart rate: 145 </td></tr>
-<tr><td>Power: 384.3 </td></tr>
-<tr><td>Temperature: 24.7 </td></tr>
-<tr><td>Speed: 175.3 mph </td></tr>
-<tr><td>Heading: 45.9 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:10.767Z </td></tr>
+<tr><td>Longitude: -32.057616</td></tr>
+<tr><td>Latitude: 30.473838</td></tr>
+<tr><td>Cadence: 204</td></tr>
+<tr><td>Heart rate: 145</td></tr>
+<tr><td>Power: 384.3</td></tr>
+<tr><td>Temperature: 24.7</td></tr>
+<tr><td>Speed: 175.3 mph</td></tr>
+<tr><td>Heading: 45.9</td></tr>
+<tr><td>Time: 1970-01-01T00:00:10.767Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -514,16 +515,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.056698 </td></tr>
-<tr><td>Latitude: 30.474180 </td></tr>
-<tr><td>Altitude: 228.720 ft </td></tr>
-<tr><td>Cadence: 108 </td></tr>
-<tr><td>Power: 61.9 </td></tr>
-<tr><td>Temperature: 10.2 </td></tr>
-<tr><td>Depth: 3210.9 ft </td></tr>
-<tr><td>Speed: 128.3 mph </td></tr>
-<tr><td>Heading: 66.6 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:12.440Z </td></tr>
+<tr><td>Longitude: -32.056698</td></tr>
+<tr><td>Latitude: 30.474180</td></tr>
+<tr><td>Altitude: 228.720 ft</td></tr>
+<tr><td>Cadence: 108</td></tr>
+<tr><td>Power: 61.9</td></tr>
+<tr><td>Temperature: 10.2</td></tr>
+<tr><td>Depth: 3210.9 ft</td></tr>
+<tr><td>Speed: 128.3 mph</td></tr>
+<tr><td>Heading: 66.6</td></tr>
+<tr><td>Time: 1970-01-01T00:00:12.440Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -544,15 +545,15 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.056143 </td></tr>
-<tr><td>Latitude: 30.474314 </td></tr>
-<tr><td>Altitude: 135.637 ft </td></tr>
-<tr><td>Heart rate: 55 </td></tr>
-<tr><td>Power: 262.2 </td></tr>
-<tr><td>Depth: 1679.0 ft </td></tr>
-<tr><td>Speed: 118.0 mph </td></tr>
-<tr><td>Heading: 74.3 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:13.488Z </td></tr>
+<tr><td>Longitude: -32.056143</td></tr>
+<tr><td>Latitude: 30.474314</td></tr>
+<tr><td>Altitude: 135.637 ft</td></tr>
+<tr><td>Heart rate: 55</td></tr>
+<tr><td>Power: 262.2</td></tr>
+<tr><td>Depth: 1679.0 ft</td></tr>
+<tr><td>Speed: 118.0 mph</td></tr>
+<tr><td>Heading: 74.3</td></tr>
+<tr><td>Time: 1970-01-01T00:00:13.488Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -573,16 +574,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.055584 </td></tr>
-<tr><td>Latitude: 30.475019 </td></tr>
-<tr><td>Altitude: 131.558 ft </td></tr>
-<tr><td>Cadence: 120 </td></tr>
-<tr><td>Heart rate: 247 </td></tr>
-<tr><td>Temperature: 2.7 </td></tr>
-<tr><td>Depth: 1671.5 ft </td></tr>
-<tr><td>Speed: 111.9 mph </td></tr>
-<tr><td>Heading: 34.4 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:15.388Z </td></tr>
+<tr><td>Longitude: -32.055584</td></tr>
+<tr><td>Latitude: 30.475019</td></tr>
+<tr><td>Altitude: 131.558 ft</td></tr>
+<tr><td>Cadence: 120</td></tr>
+<tr><td>Heart rate: 247</td></tr>
+<tr><td>Temperature: 2.7</td></tr>
+<tr><td>Depth: 1671.5 ft</td></tr>
+<tr><td>Speed: 111.9 mph</td></tr>
+<tr><td>Heading: 34.4</td></tr>
+<tr><td>Time: 1970-01-01T00:00:15.388Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -603,16 +604,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.055159 </td></tr>
-<tr><td>Latitude: 30.475586 </td></tr>
-<tr><td>Altitude: 184.239 ft </td></tr>
-<tr><td>Cadence: 165 </td></tr>
-<tr><td>Heart rate: 119 </td></tr>
-<tr><td>Temperature: 2.7 </td></tr>
-<tr><td>Depth: 1336.9 ft </td></tr>
-<tr><td>Speed: 94.4 mph </td></tr>
-<tr><td>Heading: 32.9 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:17.171Z </td></tr>
+<tr><td>Longitude: -32.055159</td></tr>
+<tr><td>Latitude: 30.475586</td></tr>
+<tr><td>Altitude: 184.239 ft</td></tr>
+<tr><td>Cadence: 165</td></tr>
+<tr><td>Heart rate: 119</td></tr>
+<tr><td>Temperature: 2.7</td></tr>
+<tr><td>Depth: 1336.9 ft</td></tr>
+<tr><td>Speed: 94.4 mph</td></tr>
+<tr><td>Heading: 32.9</td></tr>
+<tr><td>Time: 1970-01-01T00:00:17.171Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -633,17 +634,17 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.054485 </td></tr>
-<tr><td>Latitude: 30.475607 </td></tr>
-<tr><td>Altitude: 132.775 ft </td></tr>
-<tr><td>Cadence: 1 </td></tr>
-<tr><td>Heart rate: 164 </td></tr>
-<tr><td>Power: 493.0 </td></tr>
-<tr><td>Temperature: 24.6 </td></tr>
-<tr><td>Depth: 446.1 ft </td></tr>
-<tr><td>Speed: 73.3 mph </td></tr>
-<tr><td>Heading: 88.0 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:19.146Z </td></tr>
+<tr><td>Longitude: -32.054485</td></tr>
+<tr><td>Latitude: 30.475607</td></tr>
+<tr><td>Altitude: 132.775 ft</td></tr>
+<tr><td>Cadence: 1</td></tr>
+<tr><td>Heart rate: 164</td></tr>
+<tr><td>Power: 493.0</td></tr>
+<tr><td>Temperature: 24.6</td></tr>
+<tr><td>Depth: 446.1 ft</td></tr>
+<tr><td>Speed: 73.3 mph</td></tr>
+<tr><td>Heading: 88.0</td></tr>
+<tr><td>Time: 1970-01-01T00:00:19.146Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -664,16 +665,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.053788 </td></tr>
-<tr><td>Latitude: 30.475796 </td></tr>
-<tr><td>Altitude: 237.855 ft </td></tr>
-<tr><td>Cadence: 186 </td></tr>
-<tr><td>Heart rate: 246 </td></tr>
-<tr><td>Temperature: 16.9 </td></tr>
-<tr><td>Depth: 903.2 ft </td></tr>
-<tr><td>Speed: 83.6 mph </td></tr>
-<tr><td>Heading: 72.5 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:21.021Z </td></tr>
+<tr><td>Longitude: -32.053788</td></tr>
+<tr><td>Latitude: 30.475796</td></tr>
+<tr><td>Altitude: 237.855 ft</td></tr>
+<tr><td>Cadence: 186</td></tr>
+<tr><td>Heart rate: 246</td></tr>
+<tr><td>Temperature: 16.9</td></tr>
+<tr><td>Depth: 903.2 ft</td></tr>
+<tr><td>Speed: 83.6 mph</td></tr>
+<tr><td>Heading: 72.5</td></tr>
+<tr><td>Time: 1970-01-01T00:00:21.021Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -694,17 +695,17 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.052873 </td></tr>
-<tr><td>Latitude: 30.476442 </td></tr>
-<tr><td>Altitude: 45.522 ft </td></tr>
-<tr><td>Cadence: 156 </td></tr>
-<tr><td>Heart rate: 77 </td></tr>
-<tr><td>Power: 350.7 </td></tr>
-<tr><td>Temperature: 23.9 </td></tr>
-<tr><td>Depth: 2233.7 ft </td></tr>
-<tr><td>Speed: 125.4 mph </td></tr>
-<tr><td>Heading: 50.7 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:24.084Z </td></tr>
+<tr><td>Longitude: -32.052873</td></tr>
+<tr><td>Latitude: 30.476442</td></tr>
+<tr><td>Altitude: 45.522 ft</td></tr>
+<tr><td>Cadence: 156</td></tr>
+<tr><td>Heart rate: 77</td></tr>
+<tr><td>Power: 350.7</td></tr>
+<tr><td>Temperature: 23.9</td></tr>
+<tr><td>Depth: 2233.7 ft</td></tr>
+<tr><td>Speed: 125.4 mph</td></tr>
+<tr><td>Heading: 50.7</td></tr>
+<tr><td>Time: 1970-01-01T00:00:24.084Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -725,14 +726,14 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.052820 </td></tr>
-<tr><td>Latitude: 30.477075 </td></tr>
-<tr><td>Altitude: 54.810 ft </td></tr>
-<tr><td>Heart rate: 2 </td></tr>
-<tr><td>Power: 114.8 </td></tr>
-<tr><td>Speed: 110.4 mph </td></tr>
-<tr><td>Heading: 4.1 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:25.515Z </td></tr>
+<tr><td>Longitude: -32.052820</td></tr>
+<tr><td>Latitude: 30.477075</td></tr>
+<tr><td>Altitude: 54.810 ft</td></tr>
+<tr><td>Heart rate: 2</td></tr>
+<tr><td>Power: 114.8</td></tr>
+<tr><td>Speed: 110.4 mph</td></tr>
+<tr><td>Heading: 4.1</td></tr>
+<tr><td>Time: 1970-01-01T00:00:25.515Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -753,16 +754,16 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.052052 </td></tr>
-<tr><td>Latitude: 30.477389 </td></tr>
-<tr><td>Altitude: 241.967 ft </td></tr>
-<tr><td>Cadence: 33 </td></tr>
-<tr><td>Heart rate: 96 </td></tr>
-<tr><td>Power: 402.7 </td></tr>
-<tr><td>Temperature: 19.0 </td></tr>
-<tr><td>Speed: 91.6 mph </td></tr>
-<tr><td>Heading: 64.6 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:27.508Z </td></tr>
+<tr><td>Longitude: -32.052052</td></tr>
+<tr><td>Latitude: 30.477389</td></tr>
+<tr><td>Altitude: 241.967 ft</td></tr>
+<tr><td>Cadence: 33</td></tr>
+<tr><td>Heart rate: 96</td></tr>
+<tr><td>Power: 402.7</td></tr>
+<tr><td>Temperature: 19.0</td></tr>
+<tr><td>Speed: 91.6 mph</td></tr>
+<tr><td>Heading: 64.6</td></tr>
+<tr><td>Time: 1970-01-01T00:00:27.508Z</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -783,14 +784,14 @@
           <snippet/>
           <description><![CDATA[
 <table>
-<tr><td>Longitude: -32.051036 </td></tr>
-<tr><td>Latitude: 30.478508 </td></tr>
-<tr><td>Altitude: 121.888 ft </td></tr>
-<tr><td>Cadence: 40 </td></tr>
-<tr><td>Depth: 2066.8 ft </td></tr>
-<tr><td>Speed: 160.6 mph </td></tr>
-<tr><td>Heading: 38.0 </td></tr>
-<tr><td>Time: 1970-01-01T00:00:31.102Z </td></tr>
+<tr><td>Longitude: -32.051036</td></tr>
+<tr><td>Latitude: 30.478508</td></tr>
+<tr><td>Altitude: 121.888 ft</td></tr>
+<tr><td>Cadence: 40</td></tr>
+<tr><td>Depth: 2066.8 ft</td></tr>
+<tr><td>Speed: 160.6 mph</td></tr>
+<tr><td>Heading: 38.0</td></tr>
+<tr><td>Time: 1970-01-01T00:00:31.102Z</td></tr>
 </table>
 ]]></description>
           <LookAt>

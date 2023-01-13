@@ -631,7 +631,7 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
 
   hwriter.writeCharacters(QStringLiteral("\n"));
   hwriter.writeEndElement(); // Close table tag
-  //hwriter.writeEndDocument(); // FIXME: it seems like we should end the doc but it causes a reference mismatch by adding a final \n
+  hwriter.writeEndDocument();
   writer->writeCharacters(QStringLiteral("\n"));
   writer->writeCDATA(hstring);
   writer->writeCharacters(QStringLiteral("\n"));
