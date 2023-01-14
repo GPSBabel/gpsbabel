@@ -574,64 +574,64 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
 
   hwriter.writeStartElement(QStringLiteral("table"));
   if (!header->rte_desc.isEmpty()) {
-    kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1 ").arg(header->rte_desc));
+    kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1").arg(header->rte_desc));
   }
   auto [distance, distance_units] = unitsformatter->fmt_distance(td->distance_meters);
-  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1), distance_units));
+  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2").arg(QString::number(distance, 'f', 1), distance_units));
   if (td->min_alt) {
     auto [min_alt, min_alt_units] = unitsformatter->fmt_altitude(*td->min_alt);
-    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3), min_alt_units));
+    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2").arg(QString::number(min_alt, 'f', 3), min_alt_units));
   }
   if (td->max_alt) {
     auto [max_alt, max_alt_units] = unitsformatter->fmt_altitude(*td->max_alt);
-    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3), max_alt_units));
+    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2").arg(QString::number(max_alt, 'f', 3), max_alt_units));
   }
   if (td->min_spd) {
     auto [spd, spd_units] = unitsformatter->fmt_speed(*td->min_spd);
-    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd) {
     auto [spd, spd_units] = unitsformatter->fmt_speed(*td->max_spd);
-    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd && td->start.isValid() && td->end.isValid()) {
     double elapsed = td->start.msecsTo(td->end)/1000.0;
     if (elapsed > 0.0) {
       auto [spd, spd_units] = unitsformatter->fmt_speed(td->distance_meters / elapsed);
       if (spd > 1.0)  {
-        kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+        kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
       }
     }
   }
   if (td->avg_cad) {
-    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm").arg(QString::number(*td->avg_cad, 'f', 1)));
   }
   if (td->max_cad) {
-    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
+    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm").arg(QString::number(*td->max_cad)));
   }
   if (td->avg_hrt) {
-    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->avg_hrt, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->avg_hrt, 'f', 1)));
   }
   if (td->min_hrt) {
-    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->min_hrt)));
+    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->min_hrt)));
   }
   if (td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->max_hrt)));
+    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->max_hrt)));
   }
   if (td->avg_pwr) {
-    kml_td(hwriter, QStringLiteral("Avg Power"), QStringLiteral(" %1 watts ").arg(QString::number(*td->avg_pwr, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Power"), QStringLiteral(" %1 watts").arg(QString::number(*td->avg_pwr, 'f', 1)));
   }
   if (td->max_pwr) {
-    kml_td(hwriter, QStringLiteral("Max Power"), QStringLiteral(" %1 watts ").arg(QString::number(*td->max_pwr, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Max Power"), QStringLiteral(" %1 watts").arg(QString::number(*td->max_pwr, 'f', 1)));
   }
   if (td->start.isValid() && td->end.isValid()) {
-    kml_td(hwriter, QStringLiteral("Start Time"), td->start.toPrettyString());
-    kml_td(hwriter, QStringLiteral("End Time"), td->end.toPrettyString());
+    kml_td(hwriter, QStringLiteral("Start Time"), QStringLiteral(" %1").arg(td->start.toPrettyString()));
+    kml_td(hwriter, QStringLiteral("End Time"), QStringLiteral(" %1").arg(td->end.toPrettyString()));
   }
 
   hwriter.writeCharacters(QStringLiteral("\n"));
   hwriter.writeEndElement(); // Close table tag
-  //hwriter.writeEndDocument(); // FIXME: it seems like we should end the doc but it causes a reference mismatch by adding a final \n
+  hwriter.writeEndDocument();
   writer->writeCharacters(QStringLiteral("\n"));
   writer->writeCDATA(hstring);
   writer->writeCharacters(QStringLiteral("\n"));
@@ -732,43 +732,43 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   hwriter.writeCharacters(QStringLiteral("\n"));
   hwriter.writeStartElement(QStringLiteral("table"));
 
-  kml_td(hwriter, QStringLiteral("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', precision)));
-  kml_td(hwriter, QStringLiteral("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
+  kml_td(hwriter, QStringLiteral("Longitude: %1").arg(QString::number(pt->longitude, 'f', precision)));
+  kml_td(hwriter, QStringLiteral("Latitude: %1").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
     auto [alt, alt_units] = unitsformatter->fmt_altitude(pt->altitude);
-    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
+    kml_td(hwriter, QStringLiteral("Altitude: %1 %2").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
   if (pt->cadence) {
-    kml_td(hwriter, QStringLiteral("Cadence: %1 ").arg(QString::number(pt->cadence)));
+    kml_td(hwriter, QStringLiteral("Cadence: %1").arg(QString::number(pt->cadence)));
   }
 
   if (pt->heartrate) {
-    kml_td(hwriter, QStringLiteral("Heart rate: %1 ").arg(QString::number(pt->heartrate)));
+    kml_td(hwriter, QStringLiteral("Heart rate: %1").arg(QString::number(pt->heartrate)));
   }
 
   if (pt->power) {
-    kml_td(hwriter, QStringLiteral("Power: %1 ").arg(QString::number(pt->power, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Power: %1").arg(QString::number(pt->power, 'f', 1)));
   }
 
   /* Which unit is this temp in? C? F? K? */
   if (pt->temperature_has_value()) {
-    kml_td(hwriter, QStringLiteral("Temperature: %1 ").arg(QString::number(pt->temperature_value(), 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Temperature: %1").arg(QString::number(pt->temperature_value(), 'f', 1)));
   }
 
   if (pt->depth_has_value()) {
     auto [depth, depth_units] = unitsformatter->fmt_distance(pt->depth_value());
-    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
+    kml_td(hwriter, QStringLiteral("Depth: %1 %2").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
   if (pt->speed_has_value()) {
     auto [spd, spd_units] = unitsformatter->fmt_speed(pt->speed_value());
-    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    kml_td(hwriter, QStringLiteral("Speed: %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
   if (pt->course_has_value()) {
-    kml_td(hwriter, QStringLiteral("Heading: %1 ").arg(QString::number(pt->course_value(), 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Heading: %1").arg(QString::number(pt->course_value(), 'f', 1)));
   }
 
   /* This really shouldn't be here, but as of this writing,
@@ -777,7 +777,7 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   if (pt->GetCreationTime().isValid()) {
     QString time_string = pt->CreationTimeXML();
     if (!time_string.isEmpty()) {
-      kml_td(hwriter, QStringLiteral("Time: %1 ").arg(time_string));
+      kml_td(hwriter, QStringLiteral("Time: %1").arg(time_string));
     }
   }
 
