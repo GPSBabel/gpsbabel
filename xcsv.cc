@@ -261,7 +261,7 @@ XcsvFormat::yyyymmdd_to_time(const QString& s)
  * sscanftime - Parse a date buffer using strftime format
  */
 time_t
-XcsvFormat::sscanftime(const char* s, const char* format, const int gmt)
+XcsvFormat::sscanftime(const char* s, const char* format, bool gmt)
 {
   struct tm stm;
   memset(&stm, 0, sizeof(stm));
@@ -336,7 +336,7 @@ XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
 }
 
 QString
-XcsvFormat::writehms(const char* format, time_t t, int gmt)
+XcsvFormat::writehms(const char* format, time_t t, bool gmt)
 {
   static struct tm no_time = tm();
   static struct tm* stmp = &no_time;
@@ -357,7 +357,7 @@ XcsvFormat::writehms(const char* format, time_t t, int gmt)
 }
 
 QString
-XcsvFormat::writehms(const char* format, const gpsbabel::DateTime& t, int gmt)
+XcsvFormat::writehms(const char* format, const gpsbabel::DateTime& t, bool gmt)
 {
   return writehms(format, t.toTime_t(), gmt);
 }
@@ -621,14 +621,14 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(yyyymmdd_to_time(value));
     break;
   case XcsvStyle::XT_GMT_TIME:
-    wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), 1));
+    wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
     break;
   case XcsvStyle::XT_LOCAL_TIME:
     if (!gpsbabel_testmode()) {
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 0));
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
     } else {
       /* Force constant time zone for test */
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), 1));
+      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), true));
     }
     break;
   /* Useful when time and date are in separate fields
@@ -1382,10 +1382,10 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = writetime(fmp.printfc.constData(), wpt->GetCreationTime(), false);
       break;
     case XcsvStyle::XT_HMSG_TIME:
-      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), 1);
+      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), true);
       break;
     case XcsvStyle::XT_HMSL_TIME:
-      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), 0);
+      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), false);
       break;
     case XcsvStyle::XT_ISO_TIME:
       buff = writetime("%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), true);

@@ -394,7 +394,7 @@ void KmlFormat::wr_position_init(const QString& fname)
 {
   posnfilename = fname;
   posnfilenametmp = QStringLiteral("%1-").arg(fname);
-  realtime_positioning = 1;
+  realtime_positioning = true;
   max_position_points = xstrtoi(opt_max_position_points, nullptr, 10);
 }
 
@@ -437,7 +437,7 @@ void KmlFormat::kml_output_linestyle(char* /*color*/, int width) const
 
 
 void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bitmap,
-                                        int highlighted, int force_heading) const
+                                        bool highlighted, bool force_heading) const
 {
   int is_track = style.startsWith("track");
   int is_multitrack = style.startsWith("multiTrack");
@@ -485,7 +485,7 @@ void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bit
 void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap,
                                        const QString& customstyle) const
 {
-  int force_heading = 0;
+  bool force_heading = false;
   QString style;
   switch (pt_type) {
   case kmlpt_track:
@@ -502,15 +502,15 @@ void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bi
     break;
   case kmlpt_other:
     style = customstyle;
-    force_heading = 1;
+    force_heading = true;
     break;
   default:
     fatal("kml_output_point: unknown point type");
     break;
   }
 
-  kml_write_bitmap_style_(style, bitmap, 0, force_heading);
-  kml_write_bitmap_style_(style, bitmap, 1, force_heading);
+  kml_write_bitmap_style_(style, bitmap, false, force_heading);
+  kml_write_bitmap_style_(style, bitmap, true, force_heading);
 
   writer->writeStartElement(QStringLiteral("StyleMap"));
   writer->writeAttribute(QStringLiteral("id"), style);
@@ -660,17 +660,17 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   }
 }
 
-int KmlFormat::kml_altitude_known(const Waypoint* waypoint)
+bool KmlFormat::kml_altitude_known(const Waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
-    return 0;
+    return false;
   }
   // We see way more data that's sourced at 'zero' than is actually
   // precisely at 0 MSL.
   if (fabs(waypoint->altitude) < 0.01) {
-    return 0;
+    return false;
   }
-  return 1;
+  return true;
 }
 
 void KmlFormat::kml_write_coordinates(const Waypoint* waypointp) const
@@ -877,12 +877,12 @@ void KmlFormat::kml_output_tailer(const route_head* header)
 
   // Add a linestring for this track?
   if (export_lines && header->rte_waypt_ct() > 0) {
-    int needs_multigeometry = 0;
+    bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
       int first_in_trk = tpt == header->waypoint_list.front();
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
-        needs_multigeometry = 1;
+        needs_multigeometry = true;
         break;
       }
     }
@@ -1499,18 +1499,18 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 }
 
 // True if at least two points in the track have timestamps.
-int KmlFormat::track_has_time(const route_head* header)
+bool KmlFormat::track_has_time(const route_head* header)
 {
   int points_with_time = 0;
   foreach (const Waypoint* tpt, header->waypoint_list) {
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
       if (points_with_time >= 2) {
-        return 1;
+        return true;
       }
     }
   }
-  return 0;
+  return false;
 }
 
 // Simulate a track_disp_all callback sequence for a single track.
