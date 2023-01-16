@@ -58,23 +58,25 @@ jobs:
       run: |
         ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
 
+    - name: Fixup brew
+      if: matrix.GENERATOR == 'Ninja'
+      run: |
+        # Unlink and re-link to prevent errors when github mac runner images
+        # install python outside of brew, for example:
+        # https://github.com/orgs/Homebrew/discussions/3895
+        # https://github.com/actions/setup-python/issues/577
+        # https://github.com/actions/runner-images/issues/6459
+        # https://github.com/actions/runner-images/issues/6507
+        # https://github.com/actions/runner-images/issues/2322
+        brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
+
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
       run: |
-        # homebrew fails to update python from 3.9 to 3.10 due
-        # to another unlinking failure. See hack at brew upgrade
-        rm -f /usr/local/bin/2to3 /usr/local/bin/idle3 \
-          /usr/local/bin/idle3 /usr/local/bin/pydoc3 \
-          /usr/local/bin/python3 /usr/local/bin/python3-config
         brew update
-        # From https://github.com/actions/runner-images/issues/6817#issuecomment-1363382175
-        # a topic that's flaming right now, though this is a recurring
-        # problem as described in
-        # https://github.com/actions/runner-images/issues/4020
-        brew upgrade || true
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
-        brew install jing-trang
+        # brew install jing-trang # slow to install due to dependencies
 
     - name: Script
       env:
