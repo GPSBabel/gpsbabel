@@ -58,22 +58,16 @@ jobs:
       run: |
         ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
 
-    - name: Fixup brew
-      if: false && (matrix.GENERATOR == 'Ninja')
+    - name: Brew install
+      if: matrix.GENERATOR == 'Ninja'
       run: |
-        # Unlink and re-link to prevent errors when github mac runner images
-        # install python outside of brew, for example:
+        # update/upgrade is causing issues
         # https://github.com/orgs/Homebrew/discussions/3895
         # https://github.com/actions/setup-python/issues/577
         # https://github.com/actions/runner-images/issues/6459
         # https://github.com/actions/runner-images/issues/6507
         # https://github.com/actions/runner-images/issues/2322
-        brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
-
-    - name: Brew install
-      if: matrix.GENERATOR == 'Ninja'
-      run: |
-        # brew update # update causes massive slow upgrades
+        # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         brew install jing-trang
