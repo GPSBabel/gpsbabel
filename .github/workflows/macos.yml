@@ -59,7 +59,7 @@ jobs:
         ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
 
     - name: Fixup brew
-      if: matrix.GENERATOR == 'Ninja'
+      if: false && (matrix.GENERATOR == 'Ninja')
       run: |
         # Unlink and re-link to prevent errors when github mac runner images
         # install python outside of brew, for example:
@@ -73,10 +73,10 @@ jobs:
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
       run: |
-        # brew update
+        # brew update # update causes massive slow upgrades
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
-        brew install jing-trang # slow to install due to dependencies
+        brew install jing-trang
 
     - name: Script
       env:
