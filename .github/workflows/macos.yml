@@ -73,7 +73,7 @@ jobs:
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
       run: |
-        brew update
+        # brew update
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install jing-trang # slow to install due to dependencies
