@@ -160,6 +160,40 @@ GpxFormat::tag_gpx(const QXmlStreamAttributes& attr)
       }
     }
   }
+
+  /* Rewrite the hash table if our guesses for namespace prefixes were wrong.
+   * Note the same namespaceUri may be declared with multiple prefixes,
+   * e.g., in basecamp.gpx.
+   * For this reason we leave the assumed declarations in the hash table, and
+   * just add new entries with the same value (tag mapping).
+   */
+  QList<std::pair<QString, QString>> additions;
+  const QList<std::pair<QString, QString>> assumed_ns_decls = {
+    {"gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3"},
+    {"gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1"}
+  };
+
+  /* gather new prefixes that we must create in the hash table */
+  for (const auto& n : ns) {
+    for (const auto& [prefix, uri] : assumed_ns_decls) {
+      if ((n.namespaceUri() == uri) &&
+          (n.prefix() != prefix)) {
+        additions.append({prefix + ':', n.prefix().toString() + ':'});
+      }
+    }
+  }
+
+  /* add any new prefixes to the hash table, keeping all assumed prefixes. */
+  for (const auto& [orig, repl] : additions) {
+    decltype(hash) new_hash;
+    for (auto it = hash.cbegin(); it != hash.cend(); it++) {
+      new_hash.insert(it.key(), it.value());
+      if (it.key().contains(orig)) {
+        new_hash.insert(QString(it.key()).replace(orig, repl), it.value());
+      }
+    }
+    hash = new_hash;
+  }
 }
 
 void
