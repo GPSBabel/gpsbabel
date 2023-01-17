@@ -116,7 +116,7 @@ private:
     },
     {
       TRACKFILTER_START_OPTION, &opt_start,
-      "Use only track points at or after this timestamp", nullptr, ARGTYPE_STRING,
+      "Use only track points after or at this timestamp", nullptr, ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },
     {
