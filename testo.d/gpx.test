@@ -13,7 +13,7 @@ rm -f ${TMPDIR}/tpx-sample.gpx
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx -o gpx,garminextensions -F ${TMPDIR}/tpx-sample.gpx
 compare ${REFERENCE}/track/gpx_garmin_extensions.gpx ${TMPDIR}/tpx-sample.gpx
 
-rm -f ${TMPDIR}/basecampe~gpx.gpx
+rm -f ${TMPDIR}/basecamp~gpx.gpx
 gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F ${TMPDIR}/basecamp~gpx.gpx
 compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx.gpx
 
@@ -57,3 +57,7 @@ compare ${REFERENCE}/metadata~gpx.gpx ${TMPDIR}/metadata.gpx
 # output ilinks if gpx garamextensions specified
 gpsbabel -i gdb,dropwpt -f ${REFERENCE}/gdb-sample-v3-ilinks.gdb -o gpx,garminextensions -F ${TMPDIR}/gdb-sample-v3-ilinks.gpx
 compare ${REFERENCE}/gdb-sample-v3-ilinks.gpx ${TMPDIR}/gdb-sample-v3-ilinks.gpx
+
+# use declared namespace prefixes in gpx reader
+gpsbabel -t -i gpx -f ${REFERENCE}/track/garminconnect.gpx -o unicsv,utc=0 -F ${TMPDIR}/garminconnect.csv
+compare ${REFERENCE}/track/garminconnect.csv ${TMPDIR}/garminconnect.csv

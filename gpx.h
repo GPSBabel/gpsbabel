@@ -194,6 +194,7 @@ private:
   void gpx_start(QStringView el, const QXmlStreamAttributes& attr);
   void gpx_end(QStringView unused);
   void gpx_cdata(QStringView s);
+  QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
   void fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;
