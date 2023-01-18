@@ -27,4 +27,8 @@ trackpoints are more than 2 miles apart:
 </para>
 
 <para><userinput>gpsbabel -i gpx -f track.gpx -x interpolate,distance=2m -o gpx -F newtrack.gpx</userinput></para>
+  
+<para>(Note if we chose KML output instead of GPX, several items get stripped in the process, and need certain
+flags to retain, in order for that KML to still be valid input for any subsequent second runs.</para>
+
 </example>
