@@ -985,7 +985,9 @@ GpxFormat::qualifiedName() const
    */
   static const QHash<QString, QString> tag_ns_prefixes = { 
     {"http://www.garmin.com/xmlschemas/GpxExtensions/v3", "gpxx"},
-    {"http://www.garmin.com/xmlschemas/TrackPointExtension/v1", "gpxtpx"}
+    {"http://www.garmin.com/xmlschemas/TrackPointExtension/v1", "gpxtpx"},
+    {"http://www.groundspeak.com/cache/1/0", "groundspeak"},
+    {"http://humminbird.com", "h"}
   };
 
   if (auto uri = reader->namespaceUri().toString(); tag_ns_prefixes.contains(uri)) {

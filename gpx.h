@@ -310,7 +310,6 @@ private:
 #define GARMIN_TRK_EXT "/gpx/trk/extensions/gpxx:TrackExtension"
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
-#define GARMIN_RTEPT_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
 
 // Maintain a fast mapping from full tag names to the struct above.
   const QHash<QString, tag_mapping> hash = {
