@@ -194,6 +194,7 @@ private:
   void gpx_start(QStringView el, const QXmlStreamAttributes& attr);
   void gpx_end(QStringView unused);
   void gpx_cdata(QStringView s);
+  QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
   void fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;
@@ -309,7 +310,6 @@ private:
 #define GARMIN_TRK_EXT "/gpx/trk/extensions/gpxx:TrackExtension"
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
-#define GARMIN_RTEPT_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
 
 // Maintain a fast mapping from full tag names to the struct above.
   const QHash<QString, tag_mapping> hash = {

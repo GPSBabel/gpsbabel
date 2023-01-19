@@ -976,6 +976,27 @@ GpxFormat::wr_deinit()
   mkshort_del_handle(&mkshort_handle);
 }
 
+QString
+GpxFormat::qualifiedName() const
+{
+  /* The prefixes used in our hash table may not match those used in the input
+   * file.  So we map from the namespaceUris to the prefixes used in our
+   * hash table.
+   */
+  static const QHash<QString, QString> tag_ns_prefixes = { 
+    {"http://www.garmin.com/xmlschemas/GpxExtensions/v3", "gpxx"},
+    {"http://www.garmin.com/xmlschemas/TrackPointExtension/v1", "gpxtpx"},
+    {"http://www.groundspeak.com/cache/1/0", "groundspeak"},
+    {"http://humminbird.com", "h"}
+  };
+
+  if (auto uri = reader->namespaceUri().toString(); tag_ns_prefixes.contains(uri)) {
+    return QStringLiteral("%1:%2").arg(tag_ns_prefixes.value(uri)).arg(reader->name());
+  } else {
+    return reader->qualifiedName().toString();
+  }
+}
+
 void
 GpxFormat::read()
 {
@@ -985,13 +1006,13 @@ GpxFormat::read()
     switch (reader->tokenType()) {
     case QXmlStreamReader::StartElement:
       current_tag.append(QLatin1Char('/'));
-      current_tag.append(reader->qualifiedName());
+      current_tag.append(qualifiedName());
       gpx_start(reader->qualifiedName(), reader->attributes());
       break;
 
     case QXmlStreamReader::EndElement:
       gpx_end(reader->qualifiedName());
-      current_tag.chop(reader->qualifiedName().length() + 1);
+      current_tag.chop(qualifiedName().length() + 1);
       cdatastr.clear();
       break;
 
