@@ -21,14 +21,12 @@
 
 #include "text.h"
 
-#include <QChar>                   // for QChar
 #include <QIODevice>               // for QIODevice, QIODevice::WriteOnly
 #include <QString>                 // for QString, operator!=
 #include <QTextStream>             // for QTextStream
 #include <Qt>                      // for CaseInsensitive
 
 #include <cstdint>                 // for int32_t
-#include <ctime>                   // for localtime, time_t
 
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
@@ -134,7 +132,6 @@ TextFormat::text_disp(const Waypoint* wpt)
       XmlTag* root = fs_gpx->tag;
       XmlTag* curlog = root->xml_findfirst(u"groundspeak:log");
       while (curlog) {
-        time_t logtime = 0;
         *file_out << "\n";
 
         XmlTag* logpart = curlog->xml_findfirst(u"groundspeak:type");
@@ -149,14 +146,8 @@ TextFormat::text_disp(const Waypoint* wpt)
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          logtime = xml_parse_time(logpart->cdata).toTime_t();
-          struct tm* logtm = localtime(&logtime);
-          if (logtm) {
-            *file_out << QStringLiteral("%1-%2-%3\n")
-                      .arg(logtm->tm_year+1900, 4, 10, QChar('0'))
-                      .arg(logtm->tm_mon+1, 2, 10, QChar('0'))
-                      .arg(logtm->tm_mday, 2, 10, QChar('0'));
-          }
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          *file_out << logtime.toString(u"yyyy-MM-dd") << "\n";
         }
 
         logpart = curlog->xml_findfirst(u"groundspeak:log_wpt");

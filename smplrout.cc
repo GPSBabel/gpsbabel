@@ -133,9 +133,12 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
       fatal(MYNAME ": relative needs hdop information.\n");
     }
     // if timestamps exist, distance to interpolated point
-    if (wpt1->GetCreationTime() != wpt2->GetCreationTime()) {
-      double frac = (double)(wpt3->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t()) /
-                    (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
+    if (wpt1->GetCreationTime().isValid() && 
+        wpt2->GetCreationTime().isValid() &&
+        wpt3->GetCreationTime().isValid() &&
+        (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
+      double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
+                    static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);

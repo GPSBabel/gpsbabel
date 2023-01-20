@@ -1953,7 +1953,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
     last_valid_fix = wpt->GetCreationTime();
   }
 
-  wpt->icon_descr = kml_get_posn_icon(wpt->GetCreationTime().toTime_t() - last_valid_fix.toTime_t());
+  wpt->icon_descr = kml_get_posn_icon(last_valid_fix.secsTo(wpt->GetCreationTime()));
 
 
   /* In order to avoid clutter while we're sitting still, don't add

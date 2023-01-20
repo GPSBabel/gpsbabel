@@ -565,7 +565,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
    */
   case tt_cache_log_type:
     if ((cdatastr.compare(u"Found it") == 0) &&
-        (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
+        (!wpt_tmp->gc_data->last_found.isValid())) {
       wpt_tmp->AllocGCData()->last_found = gc_log_date;
     }
     gc_log_date = QDateTime();
