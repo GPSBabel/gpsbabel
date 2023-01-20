@@ -224,8 +224,8 @@ public:
     if (wpt->GetCreationTime().isValid()) {
       printf("%s ", qPrintable(wpt->creation_time.toString()));
     }
-    printposn(wpt->latitude,1);
-    printposn(wpt->longitude,0);
+    printposn(wpt->latitude, true);
+    printposn(wpt->longitude, false);
     if (!wpt->description.isEmpty()) {
       printf("%s/%s",
              global_opts.synthesize_shortnames ?

@@ -480,7 +480,7 @@ str_match(const char* str, const char* match)
 }
 
 void
-printposn(const double c, int is_lat)
+printposn(const double c, bool is_lat)
 {
   char d;
   if (is_lat) {

@@ -988,7 +988,7 @@ struct ff_vecs_t {
 [[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 
-void printposn(double c, int is_lat);
+void printposn(double c, bool is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);

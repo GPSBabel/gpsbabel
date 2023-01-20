@@ -133,14 +133,14 @@ private:
   void gx_trk_when(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_coord(const QString& args, const QXmlStreamAttributes* attrs);
   void kml_output_linestyle(char* color, int width) const;
-  void kml_write_bitmap_style_(const QString& style, const QString& bitmap, int highlighted, int force_heading) const;
+  void kml_write_bitmap_style_(const QString& style, const QString& bitmap, bool highlighted, bool force_heading) const;
   void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap, const QString& customstyle) const;
   void kml_output_timestamp(const Waypoint* waypointp) const;
   static void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& boldData, const QString& data);
   static void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data);
   void kml_output_trkdescription(const route_head* header, const computed_trkdata* td) const;
   void kml_output_header(const route_head* header, const computed_trkdata* td) const;
-  static int kml_altitude_known(const Waypoint* waypoint);
+  static bool kml_altitude_known(const Waypoint* waypoint);
   void kml_write_coordinates(const Waypoint* waypointp) const;
   void kml_output_lookat(const Waypoint* waypointp) const;
   void kml_output_positioning(bool tessellate) const;
@@ -166,7 +166,7 @@ private:
   void kml_track_disp(const Waypoint* waypointp) const;
   void kml_track_tlr(const route_head* header);
   void kml_mt_simple_array(const route_head* header, const char* name, wp_field member) const;
-  static int track_has_time(const route_head* header);
+  static bool track_has_time(const route_head* header);
   void write_as_linestring(const route_head* header);
   void kml_mt_hdr(const route_head* header);
   void kml_mt_tlr(const route_head* header) const;
@@ -196,15 +196,15 @@ private:
   char* opt_rotate_colors{nullptr};
   char* opt_precision{nullptr};
 
-  int export_lines{};
-  int export_points{};
-  int export_track{};
-  int floating{};
-  int extrude{};
-  int trackdata{};
-  int trackdirection{};
+  bool export_lines{};
+  bool export_points{};
+  bool export_track{};
+  bool floating{};
+  bool extrude{};
+  bool trackdata{};
+  bool trackdirection{};
   int max_position_points{};
-  int rotate_colors{};
+  bool rotate_colors{};
   int line_width{};
   int precision{};
 
@@ -221,7 +221,7 @@ private:
   gpsbabel::File* oqfile{nullptr};
   gpsbabel::XmlStreamWriter* writer{nullptr};
 
-  int realtime_positioning{};
+  bool realtime_positioning{};
   bounds kml_bounds{};
   gpsbabel::DateTime kml_time_max;
   gpsbabel::DateTime kml_time_min;
