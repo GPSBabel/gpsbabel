@@ -39,7 +39,7 @@
 #include <ctime>                   // for time, time_t
 #include <memory>                  // for unique_ptr
 
-#include "defs.h"                  // for Waypoint, fatal, le_write32, le_write16, wp_flags, warning, bounds, KPH_TO_MPS, MPH_TO_MPS, WAYPT_HAS, gpsbabel_testmode, parse_speed, WAYPT_SET, MILES_TO_METERS, MPS_TO_KPH, MPS_TO_MPH, mkgmtime, mkshort, mkshort_del_handle, mkshort_new_...
+#include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
