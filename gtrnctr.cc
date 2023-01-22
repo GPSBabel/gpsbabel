@@ -216,13 +216,13 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
   /* note that the elements must appear in the order required by the schema. */
   /* also note some of the elements are required. */
 
-  long secs = 0;
+  long long secs = 0;
   if (gtc_least_time.isValid() && gtc_most_time.isValid()) {
-    secs = gtc_most_time.toTime_t() - gtc_least_time.toTime_t();
+    secs = gtc_least_time.secsTo(gtc_most_time);
   }
 
   /* write these in either case, course or activity format */
-  gtc_write_xml(0, "<TotalTimeSeconds>%ld</TotalTimeSeconds>\n", secs);
+  gtc_write_xml(0, "<TotalTimeSeconds>%lld</TotalTimeSeconds>\n", secs);
   gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata.distance_meters);
   if (gtc_course_flag) { /* course format */
     gtc_write_xml(1, "<BeginPosition>\n");

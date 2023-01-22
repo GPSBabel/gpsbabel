@@ -24,6 +24,7 @@
 #include "garmin_gpi.h"
 
 #include <QByteArray>              // for QByteArray, operator==
+#include <QDateTime>               // for QDateTime
 #include <QList>                   // for QList
 #include <QString>                 // for QString, operator+, operator<
 #include <QThread>                 // for QThread
@@ -35,10 +36,10 @@
 #include <cstdint>                 // for uint32_t, int32_t
 #include <cstdio>                  // for SEEK_CUR, SEEK_SET
 #include <cstring>                 // for strlen, strncmp
-#include <ctime>                   // for time, gmtime, time_t, tm
+#include <ctime>                   // for time, time_t
 #include <memory>                  // for unique_ptr
 
-#include "defs.h"                  // for Waypoint, fatal, le_write32, le_write16, wp_flags, warning, bounds, KPH_TO_MPS, MPH_TO_MPS, WAYPT_HAS, gpsbabel_testmode, parse_speed, WAYPT_SET, MILES_TO_METERS, MPS_TO_KPH, MPS_TO_MPH, mkgmtime, mkshort, mkshort_del_handle, mkshort_new_...
+#include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
@@ -174,12 +175,9 @@ GarminGPIFormat::read_header()
   PP;
   rdata->crdate = gbfgetint32(fin);
   if (GPI_DBG) {
-    char stime[32];
-    struct tm tm = *localtime(&rdata->crdate);
-    tm.tm_year += 20; /* !!! */
-    tm.tm_mday -= 1;  /* !!! */
-    strftime(stime, sizeof(stime), "%Y/%m/%d %H:%M:%S", &tm);
-    warning("crdate = %lu (%s)\n", rdata->crdate, stime);
+    time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
+    warning("crdate = %lu (%s)\n", rdata->crdate,
+            CSTR(QDateTime::fromSecsSinceEpoch(crdate, Qt::UTC).toString(Qt::ISODate)));
   }
 
   (void) gbfgetint16(fin);  /* 0 */
@@ -1007,11 +1005,7 @@ GarminGPIFormat::write_header() const
   time_t time = gpi_timestamp;
 
   if (time != 0) {
-    struct tm tm;
-    tm = *gmtime(&time);
-    tm.tm_year -= 20;
-    time = mkgmtime(&tm);
-    time += SECONDS_PER_DAY;
+    time = GPS_Math_Utime_To_Gtime(gpi_timestamp);
   }
 
   gbfputint32(0, fout);
