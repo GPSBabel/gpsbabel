@@ -23,22 +23,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <cmath>                     // for fabs, lround
-#include <cstdio>                    // for sscanf, snprintf, fputs, printf, stdout, putchar, size_t
-#include <cstdlib>                   // for labs, ldiv, ldiv_t, abs
-#include <cstring>                   // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
-#include <ctime>                     // for gmtime, ctime
-#include <iterator>                  // for reverse_iterator, operator==, prev, next
-#include <optional>                  // for optional
+#include <cassert>              // for assert
+#include <cmath>                // for fabs, lround
+#include <cstdio>               // for sscanf, snprintf, fputs, printf, stdout, putchar, size_t
+#include <cstdlib>              // for labs, ldiv, ldiv_t, abs
+#include <cstring>              // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
+#include <iterator>             // for reverse_iterator, operator==, prev, next
+#include <optional>             // for optional
 
-#include <QByteArray>                // for QByteArray
-#include <QList>                     // for QList<>::const_iterator
-#include <QString>                   // for QString, operator+, QStringLiteral
-#include <QtGlobal>                  // for foreach, qPrintable
+#include <QByteArray>           // for QByteArray
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList<>::const_iterator
+#include <QString>              // for QString, operator+, QStringLiteral
+#include <QStringList>          // for QStringList
+#include <QTime>                // for operator<, operator==, QTime
+#include <QVector>              // for QVector
+#include <Qt>                   // for UTC, SkipEmptyParts
+#include <QtGlobal>             // for foreach, qPrintable
 
 #include "defs.h"
-#include "gbfile.h"                  // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
-#include "src/core/datetime.h"       // for DateTime
+#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include "grtcirc.h"            // for RAD, gcdist, radtometers
+#include "src/core/datetime.h"  // for DateTime
 
 
 static gbfile* file_in, *file_out;
@@ -168,7 +175,7 @@ static void igc_task_rec(const char* rec)
 {
   static unsigned int num_tp, tp_ct;
   static route_head* rte_head;
-  static time_t creation;
+  static QDateTime creation;
 
   char task_num[5];
   unsigned int lat_deg, lat_min, lat_frac;
@@ -176,7 +183,6 @@ static void igc_task_rec(const char* rec)
   char lat_hemi[2], lon_hemi[2];
   char short_name[8];
   char tmp_str[MAXRECLEN];
-  struct tm tm;
   static state_t state = id;
 
   // First task record identifies the task to follow
@@ -184,19 +190,28 @@ static void igc_task_rec(const char* rec)
     static char flight_date[7];
     char task_desc[MAXRECLEN];
     task_desc[0] = '\0';
-    if (sscanf(rec, "C%2u%2u%2u%2u%2u%2u%6[0-9]%4c%2u%78[^\r]\r\n",
-               &tm.tm_mday, &tm.tm_mon, &tm.tm_year,
-               &tm.tm_hour, &tm.tm_min, &tm.tm_sec,
+    int day;
+    int month;
+    int year;
+    int hour;
+    int minute;
+    int second;
+    if (sscanf(rec, "C%2d%2d%2d%2d%2d%2d%6[0-9]%4c%2u%78[^\r]\r\n",
+               &day, &month, &year,
+               &hour, &minute, &second,
                flight_date, task_num, &num_tp, task_desc) < 9) {
       fatal(MYNAME ": task id (C) record parse error\n'%s'", rec);
     }
     task_num[4] = '\0';
-    tm.tm_mon -= 1;
-    if (tm.tm_year < 70) {
-      tm.tm_year += 100;
+    if (year < 70) {
+      year += 2000;
+    } else {
+      year += 1900;
     }
-    tm.tm_isdst = 0;
-    creation = mkgmtime(&tm);
+    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), Qt::UTC);
+    if (!creation.isValid()) {
+      fatal(MYNAME ": bad date time\n%s\n", rec);
+    }
 
     // Create a route to store the task data in.
     rte_head = new route_head;
@@ -271,7 +286,7 @@ static void igc_task_rec(const char* rec)
 static void data_read()
 {
   char* ibuf;
-  unsigned int hours, mins, secs;
+  int hours, mins, secs;
   unsigned int lat_deg, lat_min, lat_frac;
   unsigned int lon_deg, lon_min, lon_frac;
   char lat_hemi[2], lon_hemi[2];
@@ -283,10 +298,9 @@ static void data_read()
   char gnss_valid = 0;
   Waypoint* pres_wpt = nullptr;
   Waypoint* gnss_wpt = nullptr;
-  time_t date = 0;
-  time_t prev_tod = 0;
-  time_t tod;
-  struct tm tm;
+  QDate date;
+  QTime prev_tod;
+  QTime tod;
   char tmp_str[20];
   char* hdr_data;
   size_t remain;
@@ -317,16 +331,21 @@ static void data_read()
 
       // Date sub type
       if (strcmp(tmp_str, "DTE") == 0) {
-        if (sscanf(hdr_data, "%2u%2u%2u", &tm.tm_mday, &tm.tm_mon, &tm.tm_year) != 3) {
+        int day;
+        int month;
+        int year;
+        if (sscanf(hdr_data, "%2d%2d%2d", &day, &month, &year) != 3) {
           fatal(MYNAME ": date (H) record parse error\n'%s'\n", ibuf);
         }
-        tm.tm_sec = tm.tm_min = tm.tm_hour = 0;
-        tm.tm_mon -= 1;
-        if (tm.tm_year < 70) {
-          tm.tm_year += 100;
+        if (year < 70) {
+          year += 2000;
+        } else {
+          year += 1900;
         }
-        tm.tm_isdst = 0;
-        date = mkgmtime(&tm);
+        date = QDate(year, month, day);
+        if (!date.isValid()) {
+          fatal(MYNAME ": bad date\n%s\n", ibuf);
+        }
       } else {
         // Store other header data in the track descriptions
         if (strlen(trk_desc) < MAXDESCLEN) {
@@ -340,8 +359,8 @@ static void data_read()
 
     case rec_fix:
       // Date must appear in file before the first fix record
-      if (date < 1000000L) {
-        fatal(MYNAME ": bad date %d\n", (int)date);
+      if (!date.isValid()) {
+        fatal(MYNAME ": bad date\n");
       }
       // Create a track for pressure altitude waypoints
       if (!pres_head) {
@@ -359,7 +378,7 @@ static void data_read()
       }
       // Create a waypoint from the fix record data
       if (sscanf(ibuf,
-                 "B%2u%2u%2u%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%c%5d%5d",
+                 "B%2d%2d%2d%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%c%5d%5d",
                  &hours, &mins, &secs, &lat_deg, &lat_min, &lat_frac,
                  lat_hemi, &lon_deg, &lon_min, &lon_frac, lon_hemi,
                  &validity, &pres_alt, &gnss_alt) != 14) {
@@ -373,13 +392,18 @@ static void data_read()
       pres_wpt->longitude = ('E' == lon_hemi[0] ? 1 : -1) *
                             (lon_deg + (lon_min * 1000 + lon_frac) / 1000.0 / 60);
 
+      tod = QTime(hours, mins, secs);
+      if (!tod.isValid()) {
+        fatal(MYNAME ": bad time\n%s\n", ibuf);
+      }
+
       // Increment date if we pass midnight UTC
-      tod = (hours * 60 + mins) * 60 + secs;
-      if (tod < prev_tod) {
-        date += 24 * 60 * 60;
+      if (prev_tod.isValid() && (tod < prev_tod)) {
+        date = date.addDays(1);
       }
       prev_tod = tod;
-      pres_wpt->SetCreationTime(date + tod);
+
+      pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
 
       // Add the waypoint to the pressure altitude track
       if (pres_alt) {
@@ -564,22 +588,20 @@ static char* latlon2str(const Waypoint* wpt)
   return str;
 }
 
-static char* date2str(struct tm* dt)
+static QByteArray date2str(const gpsbabel::DateTime& dt)
 {
-  static char str[7] = "";
-
-  if (snprintf(str, 7, "%02u%02u%02u", dt->tm_mday, dt->tm_mon + 1, dt->tm_year % 100) != 6) {
-    fatal(MYNAME ": Bad date format '%s'\n", str);
+  QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
+  if (str.size() != 6) {
+    fatal(MYNAME ": Bad date format '%s'\n", str.constData());
   }
   return str;
 }
 
-static char* tod2str(struct tm* tod)
+static QByteArray tod2str(const gpsbabel::DateTime& tod)
 {
-  static char str[7] = "";
-
-  if (snprintf(str, 7, "%02u%02u%02u", tod->tm_hour, tod->tm_min, tod->tm_sec) != 6) {
-    fatal(MYNAME ": Bad time of day format '%s'\n", str);
+  QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
+  if (str.size() != 6) {
+    fatal(MYNAME ": Bad time of day format '%s'\n", str.constData());
   }
   return str;
 }
@@ -591,21 +613,29 @@ static void wr_header()
 {
   const route_head* pres_track;
   const route_head* track;
-  struct tm* tm;
-  time_t date;
 
   get_tracks(&pres_track, &track);
   if (!track && pres_track) {
     track = pres_track;
   }
-  // Date in header record is that of the first fix record
-  date = !track ? current_time().toTime_t() :
-         track->waypoint_list.front()->GetCreationTime().toTime_t();
 
-  if (nullptr == (tm = gmtime(&date))) {
-    fatal(MYNAME ": Bad track timestamp\n");
+  gpsbabel::DateTime date;
+  if (track != nullptr) {
+    // Date in header record is that of the first fix record
+    date = track->waypoint_list.front()->GetCreationTime();
+    if (!date.isValid()) {
+      fatal(MYNAME ": Bad track timestamp\n");
+    }
+  } else {
+    // This is a bit silly, there aren't any tracks!
+    assert(track_count() == 0);
+    // During test, creation_time is 0 seconds since epoch
+    // which gpsbabel::DateTime considers invalid but QDateTime considers valid.
+    date = current_time();
+    assert(date.isValid() || gpsbabel_testmode());
   }
-  gbfprintf(file_out, "HFDTE%s\r\n", date2str(tm));
+  
+  gbfprintf(file_out, "HFDTE%s\r\n", date2str(date).constData());
 
   // Other header data may have been stored in track description
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
@@ -649,8 +679,6 @@ static void wr_task_hdr(const route_head* rte)
   char flight_date[7] = "000000";
   char task_desc[MAXRECLEN] = "";
   int num_tps = rte->rte_waypt_ct() - 2;
-  struct tm* tm;
-  time_t rte_time;
   static unsigned int task_num = 1;
 
   if (num_tps < 0) {
@@ -673,18 +701,18 @@ static void wr_task_hdr(const route_head* rte)
     fatal(MYNAME ": Too much waypoints (more than 99) in task route.\n");
   }
   // Gather data to write to the task identification (first) record
-  rte_time = wpt->GetCreationTime().isValid() ? wpt->GetCreationTime().toTime_t() : current_time().toTime_t();
-  if (nullptr == (tm = gmtime(&rte_time))) {
-    fatal(MYNAME ": Bad task route timestamp\n");
-  }
+  gpsbabel::DateTime rte_time = wpt->GetCreationTime().isValid() ? wpt->GetCreationTime() : current_time();
+  // Either rte_time is valid, or during test, it is 0 seconds since epoch
+  // which gpsbabel::DateTime considers invalid but QDateTime considers valid.
+  assert(rte_time.isValid() || gpsbabel_testmode());
 
   if (!rte->rte_desc.isEmpty()) {
     // desc will be something like "IGCDATE160701: 500KTri"
     sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
   }
 
-  gbfprintf(file_out, "C%s%s%s%04u%02u%s\r\n", date2str(tm),
-            tod2str(tm), flight_date, task_num++, num_tps, task_desc);
+  gbfprintf(file_out, "C%s%s%s%04u%02u%s\r\n", date2str(rte_time).constData(),
+            tod2str(rte_time).constData(), flight_date, task_num++, num_tps, task_desc);
 
   if (!have_takeoff) {
     // Generate the takeoff waypoint
@@ -718,11 +746,9 @@ static void wr_tasks()
  */
 static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
 {
-  const time_t tt = wpt->GetCreationTime().toTime_t();
-  struct tm* tm = gmtime(&tt);
-
-  if (nullptr == tm) {
-    fatal(MYNAME ": bad track timestamp\n");
+  gpsbabel::DateTime tt = wpt->GetCreationTime();
+  if (!tt.isValid()) {
+    fatal(MYNAME ": Bad track timestamp\n");
   }
 
   if (unknown_alt == pres_alt) {
@@ -731,8 +757,8 @@ static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
   if (unknown_alt == gnss_alt) {
     gnss_alt = 0;
   }
-  gbfprintf(file_out, "B%02u%02u%02u%sA%05d%05d\r\n", tm->tm_hour,
-            tm->tm_min, tm->tm_sec, latlon2str(wpt), pres_alt, gnss_alt);
+  gbfprintf(file_out, "B%s%sA%05d%05d\r\n", tod2str(tt).constData(),
+            latlon2str(wpt), pres_alt, gnss_alt);
 }
 
 /**
@@ -747,9 +773,6 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
 {
   double alt_diff;
   double speed;
-  time_t pres_time;
-  time_t gnss_time;
-  int time_diff;
 
   // Deduce the landing time from the pressure altitude track based on
   // when we last descended to within 10m of the final track altitude.
@@ -767,9 +790,9 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
   } while (alt_diff > -10.0);
-  pres_time = (*std::prev(wpt_rit))->GetCreationTime().toTime_t();
+  gpsbabel::DateTime pres_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME ": pressure landing time %s", ctime(&pres_time));
+    printf(MYNAME ": pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
   }
 
   // Deduce the landing time from the GNSS altitude track based on
@@ -783,20 +806,22 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
     // Get a crude indication of groundspeed from the change in lat/lon
-    time_diff = wpt->GetCreationTime().toTime_t() - (*wpt_rit)->GetCreationTime().toTime_t();
-    speed = !time_diff ? 0 :
-            (fabs(wpt->latitude - (*wpt_rit)->latitude) +
-             fabs(wpt->longitude - (*wpt_rit)->longitude)) / time_diff;
+    int deltat_msec = (*wpt_rit)->GetCreationTime().msecsTo(wpt->GetCreationTime());
+    speed = (deltat_msec == 0) ? 0:
+            radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
+                               RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
+                        (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
-      printf(MYNAME ": speed=%f\n", speed);
+      printf(MYNAME ": speed=%.2fm/s\n", speed);
     }
-  } while (speed < 0.00003);
-  gnss_time = (*std::prev(wpt_rit))->GetCreationTime().toTime_t();
+  } while (speed < 2.5);
+  gpsbabel::DateTime gnss_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME ": gnss landing time %s", ctime(&gnss_time));
+    printf(MYNAME ": gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
   }
   // Time adjustment is difference between the two estimated landing times
-  if (15 * 60 < abs(time_diff = pres_time - gnss_time)) {
+  int time_diff = gnss_time.secsTo(pres_time);
+  if (15 * 60 < abs(time_diff)) {
     warning(MYNAME ": excessive time adjustment %ds\n", time_diff);
   }
   return time_diff;
@@ -808,7 +833,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
  * @param  time   The time that we are interested in.
  * @return  The altitude interpolated from the track.
  */
-static double interpolate_alt(const route_head* track, time_t time)
+static double interpolate_alt(const route_head* track, const gpsbabel::DateTime& time)
 {
   static std::optional<WaypointList::const_iterator> prev_wpt;
   static std::optional<WaypointList::const_iterator> curr_wpt;
@@ -821,7 +846,7 @@ static double interpolate_alt(const route_head* track, time_t time)
   }
   // Find the track points either side of the requested time
   while ((track->waypoint_list.cend() != *curr_wpt) &&
-         ((**curr_wpt)->GetCreationTime().toTime_t() < time)) {
+         ((**curr_wpt)->GetCreationTime() < time)) {
     prev_wpt = *curr_wpt;
     curr_wpt = std::next(*prev_wpt);
   }
@@ -831,7 +856,7 @@ static double interpolate_alt(const route_head* track, time_t time)
   }
 
   if (track->waypoint_list.cbegin() == *curr_wpt) {
-    if ((**curr_wpt)->GetCreationTime().toTime_t() == time) {
+    if ((**curr_wpt)->GetCreationTime() == time) {
       // First point's creation time is an exact match so use it's altitude
       return (**curr_wpt)->altitude;
     } else {
@@ -840,12 +865,12 @@ static double interpolate_alt(const route_head* track, time_t time)
     }
   }
   // Interpolate
-  if (0 == (time_diff = (**curr_wpt)->GetCreationTime().toTime_t() - (**prev_wpt)->GetCreationTime().toTime_t())) {
+  if (0 == (time_diff = (**prev_wpt)->GetCreationTime().secsTo((**curr_wpt)->GetCreationTime()))) {
     // Avoid divide by zero
     return (**curr_wpt)->altitude;
   }
   double alt_diff = (**curr_wpt)->altitude - (**prev_wpt)->altitude;
-  return (**prev_wpt)->altitude + (alt_diff / time_diff) * (time - (**prev_wpt)->GetCreationTime().toTime_t());
+  return (**prev_wpt)->altitude + (alt_diff / time_diff) * ((**prev_wpt)->GetCreationTime().secsTo(time));
 }
 
 /*
@@ -877,7 +902,7 @@ static void wr_track()
     }
     // Iterate through waypoints in both tracks simultaneously
     foreach (const Waypoint* wpt, gnss_track->waypoint_list) {
-      double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
+      double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().addSecs(time_adj));
       wr_fix_record(wpt, pres_alt, wpt->altitude);
     }
   } else {
