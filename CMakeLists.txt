@@ -233,6 +233,7 @@ set(HEADERS
   inifile.h
   kml.h
   legacyformat.h
+  igc.h
   lowranceusr.h
   navilink.h
   nmea.h

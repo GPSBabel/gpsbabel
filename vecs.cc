@@ -51,6 +51,7 @@
 #include "gtrnctr.h"           // for GtrnctrFormat
 #include "html.h"              // for HtmlFormat
 #include "humminbird.h"        // for HumminbirdFormat, HumminbirdHTFormat
+#include "igc.h"               // for IgcFormat
 #include "inifile.h"           // for inifile_readstr
 #include "kml.h"               // for KmlFormat
 #include "legacyformat.h"      // for LegacyFormat
@@ -77,7 +78,6 @@ extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t igc_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
@@ -133,7 +133,7 @@ struct Vecs::Impl {
 #endif
   TextFormat text_fmt;
   HtmlFormat html_fmt;
-  LegacyFormat igc_fmt {igc_vecs};
+  IgcFormat igc_fmt;
   LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
   LegacyFormat mtk_ffmt {mtk_fvecs};
