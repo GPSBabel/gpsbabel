@@ -17,43 +17,23 @@
 
  */
 
+#include "geo.h"
+
 #include <QByteArray>            // for QByteArray
 #include <QIODevice>             // for QIODevice
 #include <QString>               // for QString, operator==, QStringView::to...
 #include <QStringView>           // for QStringView
-#include <QVector>               // for QVector
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QXmlStreamReader>      // for QXmlStreamReader
-#include <QXmlStreamWriter>      // for QXmlStreamWriter, QXmlStreamReader::...
 #include <QtCore>                // for qPrintable, QIODeviceBase::ReadOnly
 
 #include "defs.h"
-#include "gbfile.h"              // for gbfclose, gbfopen, gbfputs, gbfile
 #include "geocache.h"            // for Geocache, Geocache::container_t, Geo...
 #include "src/core/file.h"       // for File
 
 
-static char* deficon = nullptr;
-static char* nuke_placer;
-static gbfile* ofd;
-static QString ostring;
-static QXmlStreamWriter writer(&ostring);
-
-static
-QVector<arglist_t> geo_args = {
-  {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"nuke_placer", &nuke_placer, "Omit Placer name", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-};
-
 #define MYNAME "geo"
 
-// This really should be class-local...
-static QXmlStreamReader reader;
-static QString geo_read_fname;
-
-static Geocache::container_t wpt_container(const QString&);
-
-static void GeoReadLoc()
+void GeoFormat::GeoReadLoc(QXmlStreamReader& reader) const
 {
   Waypoint* wpt = nullptr;
   QString current_tag;
@@ -104,30 +84,33 @@ static void GeoReadLoc()
   }
 }
 
-static void
-geo_rd_init(const QString& fname)
+void GeoFormat::rd_init(const QString& fname)
 {
-  geo_read_fname = fname;
+  geo_fname = fname;
 }
 
-static void
-geo_read()
+void GeoFormat::rd_deinit()
 {
-  gpsbabel::File file(geo_read_fname);
-  file.open(QIODevice::ReadOnly);
-  reader.setDevice(&file);
+  geo_fname.clear();
+}
 
-  GeoReadLoc();
+void GeoFormat::read()
+{
+  gpsbabel::File ifile = gpsbabel::File(geo_fname);
+  ifile.open(QIODevice::ReadOnly);
+  QXmlStreamReader reader = QXmlStreamReader(&ifile);
+
+  GeoReadLoc(reader);
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
           qPrintable(reader.errorString()),
-          qPrintable(file.fileName()),
+          qPrintable(ifile.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }
 }
 
-Geocache::container_t wpt_container(const QString& args)
+Geocache::container_t GeoFormat::wpt_container(const QString& args)
 {
   Geocache::container_t v;
 
@@ -160,33 +143,17 @@ Geocache::container_t wpt_container(const QString& args)
   return v;
 }
 
-static void
-geo_rd_deinit()
+void GeoFormat::wr_init(const QString& fname)
 {
+  geo_fname = fname;
 }
 
-static void
-geo_wr_init(const QString& fname)
+void GeoFormat::wr_deinit()
 {
-  ofd = gbfopen(fname, "w", MYNAME);
-
-  //writer.setAutoFormatting(true);
-  writer.setAutoFormattingIndent(0);
-  writer.writeStartDocument();
-
+  geo_fname.clear();
 }
 
-static void
-geo_wr_deinit()
-{
-  writer.writeEndDocument();
-  gbfputs(ostring,ofd);
-  gbfclose(ofd);
-  ofd = nullptr;
-}
-
-static void
-geo_waypt_pr(const Waypoint* waypointp)
+void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer)
 {
   writer.writeStartElement(QStringLiteral("waypoint"));
 
@@ -252,29 +219,22 @@ geo_waypt_pr(const Waypoint* waypointp)
   writer.writeEndElement();
 }
 
-static void
-geo_write()
+void GeoFormat::write()
 {
+  gpsbabel::File ofile = gpsbabel::File(geo_fname);
+  ofile.open(QIODevice::WriteOnly | QIODevice::Text);
+  QXmlStreamWriter writer = QXmlStreamWriter(&ofile);
+
+  writer.setAutoFormatting(true);
+  writer.setAutoFormattingIndent(0);
+  writer.writeStartDocument();
   writer.writeStartElement(QStringLiteral("loc"));
   writer.writeAttribute(QStringLiteral("version"), QStringLiteral("1.0"));
-  // TODO: This could be moved to wr_init, but the pre GPX version put the two
-  // lines above this, so mimic that behaviour exactly.
-  writer.setAutoFormatting(true);
   writer.writeAttribute(QStringLiteral("src"), QStringLiteral("EasyGPS"));
-  waypt_disp_all(geo_waypt_pr);
-  writer.writeEndElement();
+  auto geo_waypt_pr_lambda = [this, &writer](const Waypoint* waypointp)->void {
+    geo_waypt_pr(waypointp, writer);
+  };
+  waypt_disp_all(geo_waypt_pr_lambda);
+  writer.writeEndElement(); // loc
+  writer.writeEndDocument();
 }
-
-ff_vecs_t geo_vecs = {
-  ff_type_file,
-  { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none },
-  geo_rd_init,
-  geo_wr_init,
-  geo_rd_deinit,
-  geo_wr_deinit,
-  geo_read,
-  geo_write,
-  nullptr,
-  &geo_args,
-  NULL_POS_OPS
-};
