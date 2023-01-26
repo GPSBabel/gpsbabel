@@ -876,8 +876,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
   /*
    * Not found.
    */
-  fmtinfo_t fmtinfo;
-  return  fmtinfo;
+  return {};
 }
 
 /*
