@@ -35,6 +35,25 @@ class Vecs
 {
 // Meyers Singleton
 public:
+
+  /* Types */
+
+  class fmtinfo_t {
+  public:
+
+    explicit operator bool() const {
+      return fmt != nullptr;
+    }
+    Format* operator->() const {
+      return fmt;
+    }
+
+    Format* fmt{};
+    QString fmtname;
+    QString style_filename;
+    QStringList options;
+  };
+
   /* Special Member Functions */
 
   static Vecs& Instance();
@@ -51,7 +70,8 @@ public:
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
-  Format* find_vec(const QString& fmtargstring);
+  void prepare_format(const fmtinfo_t& data) const;
+  fmtinfo_t find_vec(const QString& fmtargstring);
   void disp_vecs() const;
   void disp_vec(const QString& vecname) const;
   static const char* name_option(uint32_t type);
@@ -116,7 +136,6 @@ private:
   static bool is_integer(const QString& val);
   static bool is_float(const QString& val);
   static bool is_bool(const QString& val);
-  void prepare_format(Format* fmt, const QString& fmtname, const QString& stylefilename, const QStringList& options, const QString& fmtargstring) const;
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;
   static void disp_v1(ff_type t);

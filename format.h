@@ -169,29 +169,6 @@ public:
   virtual ff_type get_type() const = 0;
   virtual QVector<ff_cap> get_cap() const = 0;
 
-  QString get_name() const
-  {
-    return name;
-  }
-
-  void set_name(const QString& nm)
-  {
-    name = nm;
-  }
-
-  QString get_argstring() const
-  {
-    return argstring;
-  }
-
-  void set_argstring(const QString& string)
-  {
-    argstring = string;
-  }
-private:
-  QString name;
-  QString argstring;
-
 protected:
   template <class MyFormat>
   class RteHdFunctor

@@ -248,8 +248,8 @@ static int
 run(const char* prog_name)
 {
   int argn;
-  Format* ivecs = nullptr;
-  Format* ovecs = nullptr;
+  Vecs::fmtinfo_t ivecs;
+  Vecs::fmtinfo_t ovecs;
   Filter* filter = nullptr;
   QString fname;
   QString ofname;
@@ -310,17 +310,17 @@ run(const char* prog_name)
     case 'i':
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         fatal("Input type '%s' not recognized\n", qPrintable(argument));
       }
       break;
     case 'o':
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
-      if (ovecs == nullptr) {
+      if (!ovecs) {
         fatal("Output type '%s' not recognized\n", qPrintable(argument));
       }
       break;
@@ -330,7 +330,7 @@ run(const char* prog_name)
       if (fname.isEmpty()) {
         fatal("No file or device name specified.\n");
       }
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         fatal("No valid input type specified\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
@@ -342,7 +342,7 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      start_session(ivecs->get_name(), fname);
+      start_session(ivecs.fmtname, fname);
       ivecs->rd_init(fname);
       ivecs->read();
       ivecs->rd_deinit();
@@ -533,16 +533,16 @@ run(const char* prog_name)
     }
 
     /* reinitialize xcsv in case two formats that use xcsv were given */
-    (void) Vecs::Instance().find_vec(ivecs->get_argstring());
+    Vecs::Instance().prepare_format(ivecs);
 
-    start_session(ivecs->get_name(), qargs.at(0));
+    start_session(ivecs.fmtname, qargs.at(0));
     ivecs->rd_init(qargs.at(0));
     ivecs->read();
     ivecs->rd_deinit();
 
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
-      (void) Vecs::Instance().find_vec(ovecs->get_argstring());
+      Vecs::Instance().prepare_format(ovecs);
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
@@ -553,7 +553,7 @@ run(const char* prog_name)
     usage(prog_name,0);
     return 0;
   }
-  if (ovecs == nullptr) {
+  if (!ovecs) {
     auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
       fbOutput.waypt_disp(wpt);
     };
@@ -576,7 +576,7 @@ run(const char* prog_name)
     if (fname.isEmpty()) {
       fatal("An input file (-f) must be specified.\n");
     }
-    start_session(ivecs->get_name(), fname);
+    start_session(ivecs.fmtname, fname);
     ivecs->rd_position_init(fname);
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
