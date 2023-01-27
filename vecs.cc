@@ -122,7 +122,6 @@ struct Vecs::Impl {
 #if CSVFMTS_ENABLED
   XcsvFormat xcsv_fmt;
 #endif // CSVFMTS_ENABLED
-  GeoFormat geo_fmt;
   GpxFormat gpx_fmt;
   LegacyFormat garmin_fmt {garmin_vecs};
   GdbFormat gdb_fmt;
