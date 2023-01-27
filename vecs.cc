@@ -47,6 +47,7 @@
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
+#include "geo.h"               // for GeoFormat
 #include "gpx.h"               // for GpxFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
 #include "html.h"              // for HtmlFormat
@@ -115,7 +116,7 @@ struct Vecs::Impl {
 #if CSVFMTS_ENABLED
   XcsvFormat xcsv_fmt;
 #endif // CSVFMTS_ENABLED
-  LegacyFormat geo_fmt {geo_vecs};
+  GeoFormat geo_fmt;
   GpxFormat gpx_fmt;
   LegacyFormat garmin_fmt {garmin_vecs};
   GdbFormat gdb_fmt;
