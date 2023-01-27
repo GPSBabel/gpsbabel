@@ -355,6 +355,7 @@ rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
     const gdx_info* gi = gdx_get_info();
+    // FIXME: dynamic not implemented.
     gpx_vec = Vecs::Instance().find_vec("gpx").fmt;
     gpx_vec->rd_init(gi->from_device.canon);
   } else {

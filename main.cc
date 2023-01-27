@@ -343,9 +343,24 @@ run(const char* prog_name)
       }
 
       start_session(ivecs.fmtname, fname);
-      ivecs->rd_init(fname);
-      ivecs->read();
-      ivecs->rd_deinit();
+
+      if (ivecs.isDynamic()) {
+        ivecs.fmt = ivecs.factory(fname);
+        Vecs::init_vec(ivecs.fmt);
+        Vecs::Instance().prepare_format(ivecs);
+
+        //ivecs->rd_init(fname);
+        ivecs->read();
+        //ivecs->rd_deinit();
+
+        Vecs::exit_vec(ivecs.fmt);
+        delete ivecs.fmt;
+        ivecs.fmt = nullptr;
+      } else {
+        ivecs->rd_init(fname);
+        ivecs->read();
+        ivecs->rd_deinit();
+      }
 
       did_something = true;
       break;
@@ -361,10 +376,23 @@ run(const char* prog_name)
           global_opts.masked_objective |= WPTDATAMASK;
         }
 
-        ovecs->wr_init(ofname);
-        ovecs->write();
-        ovecs->wr_deinit();
+        if (ovecs.isDynamic()) {
+          ovecs.fmt = ovecs.factory(ofname);
+          Vecs::init_vec(ovecs.fmt);
+          Vecs::Instance().prepare_format(ovecs);
 
+          //ovecs->wr_init(ofname);
+          ovecs->write();
+          //ovecs->wr_deinit();
+
+          Vecs::exit_vec(ovecs.fmt);
+          delete ovecs.fmt;
+          ovecs.fmt = nullptr;
+        } else {
+          ovecs->wr_init(ofname);
+          ovecs->write();
+          ovecs->wr_deinit();
+        }
       }
       break;
     case 's':
@@ -532,21 +560,49 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
-    /* reinitialize xcsv in case two formats that use xcsv were given */
-    Vecs::Instance().prepare_format(ivecs);
-
     start_session(ivecs.fmtname, qargs.at(0));
-    ivecs->rd_init(qargs.at(0));
-    ivecs->read();
-    ivecs->rd_deinit();
+    if (ivecs.isDynamic()) {
+      ivecs.fmt = ivecs.factory(qargs.at(0));
+      Vecs::init_vec(ivecs.fmt);
+      Vecs::Instance().prepare_format(ivecs);
+
+      //ivecs->rd_init(fname);
+      ivecs->read();
+      //ivecs->rd_deinit();
+
+      Vecs::exit_vec(ivecs.fmt);
+      delete ivecs.fmt;
+      ivecs.fmt = nullptr;
+    } else {
+      /* reinitialize xcsv in case two formats that use xcsv were given */
+      Vecs::Instance().prepare_format(ivecs);
+
+      ivecs->rd_init(qargs.at(0));
+      ivecs->read();
+      ivecs->rd_deinit();
+    }
 
     if (qargs.size() == 2 && ovecs) {
-      /* reinitialize xcsv in case two formats that use xcsv were given */
-      Vecs::Instance().prepare_format(ovecs);
+      if (ovecs.isDynamic()) {
+        ovecs.fmt = ovecs.factory(qargs.at(1));
+        Vecs::init_vec(ovecs.fmt);
+        Vecs::Instance().prepare_format(ovecs);
 
-      ovecs->wr_init(qargs.at(1));
-      ovecs->write();
-      ovecs->wr_deinit();
+        //ovecs->wr_init(ofname);
+        ovecs->write();
+        //ovecs->wr_deinit();
+
+        Vecs::exit_vec(ovecs.fmt);
+        delete ovecs.fmt;
+        ovecs.fmt = nullptr;
+      } else {
+        /* reinitialize xcsv in case two formats that use xcsv were given */
+        Vecs::Instance().prepare_format(ovecs);
+
+        ovecs->wr_init(qargs.at(1));
+        ovecs->write();
+        ovecs->wr_deinit();
+      }
 
     }
   } else if (!qargs.isEmpty()) {
@@ -576,6 +632,18 @@ run(const char* prog_name)
     if (fname.isEmpty()) {
       fatal("An input file (-f) must be specified.\n");
     }
+
+    if (ivecs.isDynamic()) {
+      ivecs.fmt = ivecs.factory(fname);
+      Vecs::init_vec(ivecs.fmt);
+      Vecs::Instance().prepare_format(ivecs);
+    }
+    if (ovecs && ovecs.isDynamic()) {
+      ovecs.fmt = ovecs.factory(fname);
+      Vecs::init_vec(ovecs.fmt);
+      Vecs::Instance().prepare_format(ovecs);
+    }
+
     start_session(ivecs.fmtname, fname);
     ivecs->rd_position_init(fname);
 
@@ -614,6 +682,17 @@ run(const char* prog_name)
     ivecs->rd_position_deinit();
     if (ovecs) {
       ovecs->wr_position_deinit();
+    }
+
+    if (ovecs && ovecs.isDynamic()) {
+      Vecs::exit_vec(ovecs.fmt);
+      delete ovecs.fmt;
+      ovecs.fmt = nullptr;
+    }
+    if (ivecs.isDynamic()) {
+      Vecs::exit_vec(ivecs.fmt);
+      delete ivecs.fmt;
+      ivecs.fmt = nullptr;
     }
     return 0;
   }
