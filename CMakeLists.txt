@@ -223,6 +223,7 @@ set(HEADERS
   geocache.h
   geojson.h
   globalsat_sport.h
+  geo.h
   gpx.h
   grtcirc.h
   gtrnctr.h
