@@ -17,12 +17,12 @@
 
  */
 
+#include <cassert>     // for assert
 #include <cstring>     // for memcpy
 #include <algorithm>   // for min
 
 #include <QByteArray>  // for QByteArray
 #include <QChar>       // for QChar
-#include <QFile>       // for QFile
 #include <QFlags>      // for QFlags
 
 #include "defs.h"      // for list_codecs, warning

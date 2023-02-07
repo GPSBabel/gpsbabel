@@ -69,11 +69,12 @@ compare ${REFERENCE}/track/Placemark-Track-1~kml.gpx ${TMPDIR}/Placemark-Track-1
 gpsbabel -T -i random,points=20,seed=33,nodelay -f dummy -o kml,track -F  ${TMPDIR}/realtime.kml
 compare ${REFERENCE}/realtime.kml ${TMPDIR}/realtime.kml
 
-if [ "${RUNNINGVALGRIND}" != "0" ]; then
+if [ -z "${VALGRIND}" ]; then
   set -e
   if command -v xmllint > /dev/null;
   then
     KMLS=$(find ${REFERENCE} -name \*.kml)
+    mkdir -p ${TMPDIR}/validcheck
     for f in $KMLS
     do
       case $f in 
@@ -81,7 +82,7 @@ if [ "${RUNNINGVALGRIND}" != "0" ]; then
         # to be legal in Earth GX 2.2.
         ${REFERENCE}/track/segmented_tracks-track.kml) continue;;
       *)
-        tmpf=${TMPDIR}/$(basename $f)
+        tmpf=${TMPDIR}/validcheck/$(basename $f)
         gpsbabel -i kml -f $f -o kml -F $tmpf
         xmllint --schema ${BASEPATH}/tools/kml22-schema/kml22gx.xsd --noout $tmpf
       esac;

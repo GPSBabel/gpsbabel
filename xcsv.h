@@ -278,16 +278,6 @@ public:
     return FF_CAP_RW_WPT; /* This is a bit of a lie for now... */
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
@@ -364,17 +354,15 @@ private:
     return (a / 86400.0) + 25569.0;
   }
 
-  static constexpr int gps_datum_wgs84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
-
   /* Member Functions */
 
   static QDateTime yyyymmdd_to_time(const QString& s);
-  static time_t sscanftime(const char* s, const char* format, int gmt);
+  static time_t sscanftime(const char* s, const char* format, bool gmt);
   static time_t addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
-  static QString writehms(const char* format, time_t t, int gmt);
-  static QString writehms(const char* format, const gpsbabel::DateTime& t, int gmt);
+  static QString writehms(const char* format, time_t t, bool gmt);
+  static QString writehms(const char* format, const gpsbabel::DateTime& t, bool gmt);
   static long int time_to_yyyymmdd(const QDateTime& t);
   static garmin_fs_t* gmsd_init(Waypoint* wpt);
   static void xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp, xcsv_parse_data* parse_data, int line_no);

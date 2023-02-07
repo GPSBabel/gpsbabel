@@ -10,14 +10,14 @@ leading '+' or '-' sign.  Positive integers shift the tracks later, while negati
 the tracks earlier.  If no sign is provided the integer is assumed to be nonnegative.
 Possible units are w for weeks, d for days, h for hours, m for minutes and s for seconds.
 </para>
-<example id="ex_track_move">
+<example xml:id="ex_track_move">
 <title>Time-shifting a track with the track filter</title>
 <para>
 The following command line will shift all tracks to be one hour later.
 </para>
 <para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1h -o gpx -F out.gpx</userinput></para>
 </example>
-<example id="ex_track_move_wnro">
+<example xml:id="ex_track_move_wnro">
 <title>Time-shifting a track with the track filter to correct WNRO</title>
 <para>
 The following command line will shift all tracks to be 1024 weeks later.  Because the GPS Week Number
@@ -26,7 +26,7 @@ a multiple of 1024 weeks.
 </para>
 <para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=+1024w -o gpx -F out.gpx</userinput></para>
 </example>
-<example id="ex_track_move_combo">
+<example xml:id="ex_track_move_combo">
 <title>Time-shifting a track with the track filter with combined units</title>
 <para>
 The following command lines will each shift all tracks to be 1 hour and 1 minute earlier, i.e. 61 minutes earlier.
@@ -34,4 +34,3 @@ The following command lines will each shift all tracks to be 1 hour and 1 minute
 <para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=-1h-1m -o gpx -F out.gpx</userinput></para>
 <para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,move=-61m -o gpx -F out.gpx</userinput></para>
 </example>
-

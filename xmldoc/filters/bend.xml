@@ -29,4 +29,3 @@ larger than 5 degrees.</para>
 <para><userinput>gpsbabel -i gpx -f route.gpx -x
 bend,distance=25,interpolate,minangle=5 -o gpx -F newroute.gpx
 </userinput></para>
-

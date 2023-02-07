@@ -27,7 +27,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-void gbser__db(int l, const char* msg, ...)
+void gbser_db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -44,72 +44,11 @@ int gbser_set_speed(void* handle, unsigned speed)
   return gbser_set_port(handle, speed, 8, 0, 1);
 }
 
-static int parity_letter(char c)
-{
-  switch (c) {
-  case 'N':
-  case 'n':
-    return 0;
-  case 'O':
-  case 'o':
-    return 1;
-  case 'E':
-  case 'e':
-    return 2;
-  default:
-    return -1;
-  }
-}
-
-/* Set the serial port up by parsing the supplied parameter string.
- * Valid parameter strings look like '4800,8,N,1'. Parsing is case-
- * insensitive, spaces are allowed around the commas and omitted
- * trailing fields will default to '8', 'N' and '1'
- */
-int gbser_setup(void* handle, const char* spec)
-{
-  unsigned arg[] = { 4800, 8, 0, 1 };
-
-  for (unsigned int ap = 0; ap < sizeof(arg) / sizeof(arg[0]); ap++) {
-    unsigned t = 0;
-    int pl;
-    while (isspace(*spec)) {
-      spec++;
-    }
-    /* Allow 'N', 'O' or 'E' as the parity spec */
-    if (ap == 2 && (pl = parity_letter(*spec), pl >= 0)) {
-      t = pl;
-      spec++;
-    } else {
-      if (!isdigit(*spec)) {
-        break;
-      }
-      while (isdigit(*spec)) {
-        t = t * 10 + *spec++ - '0';
-      }
-    }
-    arg[ap] = t;
-    while (isspace(*spec)) {
-      spec++;
-    }
-    if (*spec != ',') {
-      break;
-    }
-    spec++;
-  }
-
-  if (*spec != '\0') {
-    return gbser_ERROR;
-  }
-
-  return gbser_set_port(handle, arg[0], arg[1], arg[2], arg[3]);
-}
-
 /* Return true if there are characters available on the serial port
  */
 int gbser_avail(void* handle)
 {
-  return gbser__fill_buffer(handle, 1, nullptr);
+  return gbser_fill_buffer(handle, 1, nullptr);
 }
 
 /* Read as many bytes as are available without blocking. At most |len|
@@ -121,7 +60,7 @@ int gbser_read(void* handle, void* buf, unsigned len)
   int got = 0;
 
   while (len > 0) {
-    int rc = gbser__fill_buffer(handle, len, nullptr);
+    int rc = gbser_fill_buffer(handle, len, nullptr);
     if (rc < 0) {
       /* error */
       return rc;
@@ -129,7 +68,7 @@ int gbser_read(void* handle, void* buf, unsigned len)
       /* nothing available */
       break;
     }
-    got += gbser__read_buffer(handle, &buf, &len);
+    got += gbser_read_buffer(handle, &buf, &len);
   }
 
   return got;
@@ -144,10 +83,10 @@ int gbser_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 
   while (len > 0 && ms != 0) {
     int rc;
-    if (rc = gbser__fill_buffer(handle, len, &ms), rc < 0) {
+    if (rc = gbser_fill_buffer(handle, len, &ms), rc < 0) {
       return rc;
     }
-    got += gbser__read_buffer(handle, &buf, &len);
+    got += gbser_read_buffer(handle, &buf, &len);
   }
 
   return got;

@@ -1,5 +1,5 @@
 <para>
-This module supports a subset of the <ulink url="http://geojson.org/">GeoJSON</ulink> format.
+This module supports a subset of the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://geojson.org/">GeoJSON</link> format.
 </para>
 <para>
 GeoJSON is a poor fit for GPSBabel's internal data structures as GPSBabel
@@ -22,9 +22,9 @@ The potentially nested/recursive nature of GeoJSON in general would be
 an awkward implementation.
 </para>
 <para>
-Initial development was free-handed by looking at the <ulink url="https://tools.ietf.org/html/rfc7946 ">GeoJSON RFC</ulink>. Corner cases were handled by
-using <ulink url="http://www.gdal.org/ogr2ogr.html">GDAL's ogr2ogr</ulink>
+Initial development was free-handed by looking at the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://tools.ietf.org/html/rfc7946 ">GeoJSON RFC</link>. Corner cases were handled by
+using <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gdal.org/ogr2ogr.html">GDAL's ogr2ogr</link>
 to convert GPX to JSON and compare the output. The results were then
- <ulink url="http://geojsonlint.com/">JSON validated</ulink> and viewed on
- <ulink url="http://geojson.io/">JSON web viewer</ulink>.
+ <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://geojsonlint.com/">JSON validated</link> and viewed on
+ <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://geojson.io/">JSON web viewer</link>.
 </para>

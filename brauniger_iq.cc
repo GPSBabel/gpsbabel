@@ -48,18 +48,8 @@ namespace { // fix ODR violation with igc
     num_states
   };
 }
-static state_t state;
-inline state_t& operator++(state_t& s) // prefix
-{
-  return s = static_cast<state_t>(s + 1);
-}
-inline state_t operator++(state_t& s, int) // postfix
-{
-  state_t ret(s);
-  ++s;
-  return ret;
-}
 
+static state_t state;
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
 
 static void rd_init(const QString& fname)
@@ -227,7 +217,12 @@ static int process_data(const unsigned char* data)
   default:
     fatal(MYNAME ": Bad internal state\n");
   }
-  ++state;
+
+  // Iterating an enum isn't great and it's less greatr that reqd_byte[] is
+  // implicitly coupled to our state_t, but here we are with C code forged
+  // into C++.
+  state = static_cast<state_t> (state + 1);
+
   return remaining;
 }
 
@@ -268,6 +263,8 @@ static void data_read()
 static QVector<arglist_t> brauniger_iq_args = {
 };
 
+/* master process: don't convert anything */
+
 ff_vecs_t brauniger_iq_vecs = {
   ff_type_serial,
   { ff_cap_none, ff_cap_read, ff_cap_none},
@@ -279,7 +276,5 @@ ff_vecs_t brauniger_iq_vecs = {
   nullptr,
   nullptr,
   &brauniger_iq_args,
-  CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

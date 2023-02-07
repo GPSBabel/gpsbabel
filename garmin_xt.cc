@@ -23,8 +23,16 @@
 
 */
 
-#include "defs.h"
-#include <cstdlib>
+#include <cstdint>   // for uint8_t, uint32_t, uint16_t, int32_t
+#include <cstdio>    // for SEEK_CUR, SEEK_SET
+#include <cstring>   // for strcmp, strcpy
+
+#include <QString>   // for QString
+#include <QVector>   // for QVector
+
+#include "defs.h"    //
+#include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetu...
+
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
@@ -94,7 +102,7 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = atoi(opt_trk_header);
+    method = xstrtoi(opt_trk_header, nullptr, 10);
     // if method is out of range set to default
     if ((method < 0) || (method > 1)) {
       method = 0;
@@ -331,7 +339,7 @@ format_garmin_xt_proc_atrk()
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = atoi(opt_trk_header);
+    method = xstrtoi(opt_trk_header, nullptr, 10);
   }
 
   if (! track) {
@@ -398,6 +406,9 @@ format_garmin_xt_read()
 
 /**************************************************************************/
 
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
+
 ff_vecs_t format_garmin_xt_vecs = {
   ff_type_file,
   {
@@ -413,9 +424,6 @@ ff_vecs_t format_garmin_xt_vecs = {
   nullptr,
   nullptr,
   &format_garmin_xt_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 /**************************************************************************/

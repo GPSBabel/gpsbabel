@@ -9,4 +9,3 @@ This value is always specified in units of seconds.
 <para>
 Either this option or the <option>distance</option> must be specified.
 </para>
-

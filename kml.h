@@ -34,6 +34,7 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/file.h"              // for File
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
+#include "units.h"                      // for UnitsFormatter
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
@@ -53,16 +54,6 @@ public:
   QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_ALL;
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 1;
   }
 
   void rd_init(const QString& fname) override;
@@ -101,6 +92,21 @@ private:
   static constexpr const char* default_precision = "6";
   static constexpr int kml_color_limit = 204;	/* allowed range [0,255] */
 
+  static constexpr const char* kml_tags_to_ignore[] = {
+    "kml",
+    "Document",
+    "Folder",
+    nullptr
+  };
+
+  static constexpr const char* kml_tags_to_skip[] = {
+    "Camera",
+    "LookAt",
+    "styleUrl",
+    "snippet",
+    nullptr
+  };
+
   // Multitrack ids to correlate Schema to SchemaData
   static constexpr const char* kmt_heartrate = "heartrate";
   static constexpr const char* kmt_cadence = "cadence";
@@ -127,14 +133,14 @@ private:
   void gx_trk_when(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_coord(const QString& args, const QXmlStreamAttributes* attrs);
   void kml_output_linestyle(char* color, int width) const;
-  void kml_write_bitmap_style_(const QString& style, const QString& bitmap, int highlighted, int force_heading) const;
+  void kml_write_bitmap_style_(const QString& style, const QString& bitmap, bool highlighted, bool force_heading) const;
   void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap, const QString& customstyle) const;
   void kml_output_timestamp(const Waypoint* waypointp) const;
   static void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& boldData, const QString& data);
   static void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data);
   void kml_output_trkdescription(const route_head* header, const computed_trkdata* td) const;
   void kml_output_header(const route_head* header, const computed_trkdata* td) const;
-  static int kml_altitude_known(const Waypoint* waypoint);
+  static bool kml_altitude_known(const Waypoint* waypoint);
   void kml_write_coordinates(const Waypoint* waypointp) const;
   void kml_output_lookat(const Waypoint* waypointp) const;
   void kml_output_positioning(bool tessellate) const;
@@ -160,7 +166,7 @@ private:
   void kml_track_disp(const Waypoint* waypointp) const;
   void kml_track_tlr(const route_head* header);
   void kml_mt_simple_array(const route_head* header, const char* name, wp_field member) const;
-  static int track_has_time(const route_head* header);
+  static bool track_has_time(const route_head* header);
   void write_as_linestring(const route_head* header);
   void kml_mt_hdr(const route_head* header);
   void kml_mt_tlr(const route_head* header) const;
@@ -190,17 +196,16 @@ private:
   char* opt_rotate_colors{nullptr};
   char* opt_precision{nullptr};
 
-  int export_lines{};
-  int export_points{};
-  int export_track{};
-  int floating{};
-  int extrude{};
-  int trackdata{};
-  int trackdirection{};
+  bool export_lines{};
+  bool export_points{};
+  bool export_track{};
+  bool floating{};
+  bool extrude{};
+  bool trackdata{};
+  bool trackdirection{};
   int max_position_points{};
-  int rotate_colors{};
+  bool rotate_colors{};
   int line_width{};
-  int html_encrypt{};
   int precision{};
 
   Waypoint* wpt_tmp{nullptr};
@@ -212,10 +217,11 @@ private:
   QList<gpsbabel::DateTime>* gx_trk_times{nullptr};
   QList<std::tuple<int, double, double, double>>* gx_trk_coords{nullptr};
 
+  UnitsFormatter* unitsformatter{nullptr};
   gpsbabel::File* oqfile{nullptr};
   gpsbabel::XmlStreamWriter* writer{nullptr};
 
-  int realtime_positioning{};
+  bool realtime_positioning{};
   bounds kml_bounds{};
   gpsbabel::DateTime kml_time_max;
   gpsbabel::DateTime kml_time_min;
@@ -311,6 +317,7 @@ private:
     // Alias for above used in KML 2.0
     {&KmlFormat::wpt_time, cb_cdata, "/Placemark/TimeInstant/timePosition"},
     {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/Point/coordinates"},
+    {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/MultiGeometry/Point/coordinates"},
     {&KmlFormat::wpt_icon, cb_cdata, "/Placemark/Style/Icon/href"},
     {&KmlFormat::trk_coord, cb_cdata, "/Placemark/MultiGeometry/LineString/coordinates"},
     {&KmlFormat::trk_coord, cb_cdata, "/Placemark/GeometryCollection/LineString/coordinates"},
@@ -329,9 +336,6 @@ private:
     {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/MultiTrack/Track/when"}, // KML 2.3
     {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/MultiTrack/Track/coord"} // KML 2.3
   };
-
-  static const char* kml_tags_to_ignore[];
-  static const char* kml_tags_to_skip[];
 
   // The TimeSpan/begin and TimeSpan/end DateTimes:
   gpsbabel::DateTime wpt_timespan_begin, wpt_timespan_end;

@@ -781,15 +781,16 @@
         <snippet/>
         <description>
 <![CDATA[<table>
-<tr><td><b>Distance</b> 7.7 km </td></tr>
-<tr><td><b>Min Alt</b> 0.000 meters </td></tr>
-<tr><td><b>Max Alt</b> 7.000 meters </td></tr>
-<tr><td><b>Min Speed</b> 361.3 meters/hour </td></tr>
-<tr><td><b>Max Speed</b> 41.1 km/hour </td></tr>
-<tr><td><b>Avg Speed</b> 3.8 km/hour </td></tr>
-<tr><td><b>Start Time</b>2002-05-25T17:06:21.250Z</td></tr>
-<tr><td><b>End Time</b>2002-05-25T19:05:57.980Z</td></tr>
-</table>]]>
+<tr><td><b>Distance</b> 7.7 km</td></tr>
+<tr><td><b>Min Alt</b> 0.000 meters</td></tr>
+<tr><td><b>Max Alt</b> 7.000 meters</td></tr>
+<tr><td><b>Min Speed</b> 361.3 meters/hour</td></tr>
+<tr><td><b>Max Speed</b> 41.1 km/hour</td></tr>
+<tr><td><b>Avg Speed</b> 3.8 km/hour</td></tr>
+<tr><td><b>Start Time</b> 2002-05-25T17:06:21.250Z</td></tr>
+<tr><td><b>End Time</b> 2002-05-25T19:05:57.980Z</td></tr>
+</table>
+]]>
 </description>
         <TimeSpan>
           <begin>2002-05-25T17:06:21.250Z</begin>
@@ -802,11 +803,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.610350 </td></tr>
-<tr><td>Latitude: 30.062183 </td></tr>
-<tr><td>Altitude: 1.000 meters </td></tr>
-<tr><td>Heading: 300.1 </td></tr>
-<tr><td>Time: 2002-05-25T17:06:21.250Z </td></tr>
+<tr><td>Longitude: -91.610350</td></tr>
+<tr><td>Latitude: 30.062183</td></tr>
+<tr><td>Altitude: 1.000 meters</td></tr>
+<tr><td>Heading: 300.1</td></tr>
+<tr><td>Time: 2002-05-25T17:06:21.250Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -827,11 +828,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.610567 </td></tr>
-<tr><td>Latitude: 30.062783 </td></tr>
-<tr><td>Speed: 1.2 km/hour </td></tr>
-<tr><td>Heading: 342.6 </td></tr>
-<tr><td>Time: 2002-05-25T17:09:55.190Z </td></tr>
+<tr><td>Longitude: -91.610567</td></tr>
+<tr><td>Latitude: 30.062783</td></tr>
+<tr><td>Speed: 1.2 km/hour</td></tr>
+<tr><td>Heading: 342.6</td></tr>
+<tr><td>Time: 2002-05-25T17:09:55.190Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -852,11 +853,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.608267 </td></tr>
-<tr><td>Latitude: 30.062700 </td></tr>
-<tr><td>Speed: 6.4 km/hour </td></tr>
-<tr><td>Heading: 92.4 </td></tr>
-<tr><td>Time: 2002-05-25T17:12:00.200Z </td></tr>
+<tr><td>Longitude: -91.608267</td></tr>
+<tr><td>Latitude: 30.062700</td></tr>
+<tr><td>Speed: 6.4 km/hour</td></tr>
+<tr><td>Heading: 92.4</td></tr>
+<tr><td>Time: 2002-05-25T17:12:00.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -877,11 +878,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.607383 </td></tr>
-<tr><td>Latitude: 30.062333 </td></tr>
-<tr><td>Speed: 7.0 km/hour </td></tr>
-<tr><td>Heading: 115.6 </td></tr>
-<tr><td>Time: 2002-05-25T17:12:48.750Z </td></tr>
+<tr><td>Longitude: -91.607383</td></tr>
+<tr><td>Latitude: 30.062333</td></tr>
+<tr><td>Speed: 7.0 km/hour</td></tr>
+<tr><td>Heading: 115.6</td></tr>
+<tr><td>Time: 2002-05-25T17:12:48.750Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -902,11 +903,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.605283 </td></tr>
-<tr><td>Latitude: 30.061533 </td></tr>
-<tr><td>Speed: 7.1 km/hour </td></tr>
-<tr><td>Heading: 113.8 </td></tr>
-<tr><td>Time: 2002-05-25T17:14:41.200Z </td></tr>
+<tr><td>Longitude: -91.605283</td></tr>
+<tr><td>Latitude: 30.061533</td></tr>
+<tr><td>Speed: 7.1 km/hour</td></tr>
+<tr><td>Heading: 113.8</td></tr>
+<tr><td>Time: 2002-05-25T17:14:41.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -927,11 +928,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.599400 </td></tr>
-<tr><td>Latitude: 30.059783 </td></tr>
-<tr><td>Speed: 13.9 km/hour </td></tr>
-<tr><td>Heading: 109.0 </td></tr>
-<tr><td>Time: 2002-05-25T17:17:16.200Z </td></tr>
+<tr><td>Longitude: -91.599400</td></tr>
+<tr><td>Latitude: 30.059783</td></tr>
+<tr><td>Speed: 13.9 km/hour</td></tr>
+<tr><td>Heading: 109.0</td></tr>
+<tr><td>Time: 2002-05-25T17:17:16.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -952,11 +953,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596683 </td></tr>
-<tr><td>Latitude: 30.057800 </td></tr>
-<tr><td>Speed: 41.1 km/hour </td></tr>
-<tr><td>Heading: 130.1 </td></tr>
-<tr><td>Time: 2002-05-25T17:17:46.200Z </td></tr>
+<tr><td>Longitude: -91.596683</td></tr>
+<tr><td>Latitude: 30.057800</td></tr>
+<tr><td>Speed: 41.1 km/hour</td></tr>
+<tr><td>Heading: 130.1</td></tr>
+<tr><td>Time: 2002-05-25T17:17:46.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -977,11 +978,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594900 </td></tr>
-<tr><td>Latitude: 30.055383 </td></tr>
-<tr><td>Speed: 33.2 km/hour </td></tr>
-<tr><td>Heading: 147.4 </td></tr>
-<tr><td>Time: 2002-05-25T17:18:20.810Z </td></tr>
+<tr><td>Longitude: -91.594900</td></tr>
+<tr><td>Latitude: 30.055383</td></tr>
+<tr><td>Speed: 33.2 km/hour</td></tr>
+<tr><td>Heading: 147.4</td></tr>
+<tr><td>Time: 2002-05-25T17:18:20.810Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1002,11 +1003,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.592617 </td></tr>
-<tr><td>Latitude: 30.053883 </td></tr>
-<tr><td>Speed: 24.6 km/hour </td></tr>
-<tr><td>Heading: 127.2 </td></tr>
-<tr><td>Time: 2002-05-25T17:19:01.200Z </td></tr>
+<tr><td>Longitude: -91.592617</td></tr>
+<tr><td>Latitude: 30.053883</td></tr>
+<tr><td>Speed: 24.6 km/hour</td></tr>
+<tr><td>Heading: 127.2</td></tr>
+<tr><td>Time: 2002-05-25T17:19:01.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1027,11 +1028,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.589750 </td></tr>
-<tr><td>Latitude: 30.049733 </td></tr>
-<tr><td>Speed: 18.4 km/hour </td></tr>
-<tr><td>Heading: 149.1 </td></tr>
-<tr><td>Time: 2002-05-25T17:20:46.250Z </td></tr>
+<tr><td>Longitude: -91.589750</td></tr>
+<tr><td>Latitude: 30.049733</td></tr>
+<tr><td>Speed: 18.4 km/hour</td></tr>
+<tr><td>Heading: 149.1</td></tr>
+<tr><td>Time: 2002-05-25T17:20:46.250Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1052,11 +1053,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.589883 </td></tr>
-<tr><td>Latitude: 30.049017 </td></tr>
-<tr><td>Speed: 12.1 km/hour </td></tr>
-<tr><td>Heading: 189.1 </td></tr>
-<tr><td>Time: 2002-05-25T17:21:10.250Z </td></tr>
+<tr><td>Longitude: -91.589883</td></tr>
+<tr><td>Latitude: 30.049017</td></tr>
+<tr><td>Speed: 12.1 km/hour</td></tr>
+<tr><td>Heading: 189.1</td></tr>
+<tr><td>Time: 2002-05-25T17:21:10.250Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1077,11 +1078,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.592933 </td></tr>
-<tr><td>Latitude: 30.048800 </td></tr>
-<tr><td>Speed: 25.8 km/hour </td></tr>
-<tr><td>Heading: 265.3 </td></tr>
-<tr><td>Time: 2002-05-25T17:21:51.370Z </td></tr>
+<tr><td>Longitude: -91.592933</td></tr>
+<tr><td>Latitude: 30.048800</td></tr>
+<tr><td>Speed: 25.8 km/hour</td></tr>
+<tr><td>Heading: 265.3</td></tr>
+<tr><td>Time: 2002-05-25T17:21:51.370Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1102,11 +1103,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596450 </td></tr>
-<tr><td>Latitude: 30.046233 </td></tr>
-<tr><td>Speed: 36.4 km/hour </td></tr>
-<tr><td>Heading: 229.9 </td></tr>
-<tr><td>Time: 2002-05-25T17:22:35.200Z </td></tr>
+<tr><td>Longitude: -91.596450</td></tr>
+<tr><td>Latitude: 30.046233</td></tr>
+<tr><td>Speed: 36.4 km/hour</td></tr>
+<tr><td>Heading: 229.9</td></tr>
+<tr><td>Time: 2002-05-25T17:22:35.200Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1127,11 +1128,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.598717 </td></tr>
-<tr><td>Latitude: 30.045517 </td></tr>
-<tr><td>Speed: 25.1 km/hour </td></tr>
-<tr><td>Heading: 249.9 </td></tr>
-<tr><td>Time: 2002-05-25T17:23:08.560Z </td></tr>
+<tr><td>Longitude: -91.598717</td></tr>
+<tr><td>Latitude: 30.045517</td></tr>
+<tr><td>Speed: 25.1 km/hour</td></tr>
+<tr><td>Heading: 249.9</td></tr>
+<tr><td>Time: 2002-05-25T17:23:08.560Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1152,11 +1153,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.600267 </td></tr>
-<tr><td>Latitude: 30.047300 </td></tr>
-<tr><td>Speed: 361.3 meters/hour </td></tr>
-<tr><td>Heading: 323.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:04:23.930Z </td></tr>
+<tr><td>Longitude: -91.600267</td></tr>
+<tr><td>Latitude: 30.047300</td></tr>
+<tr><td>Speed: 361.3 meters/hour</td></tr>
+<tr><td>Heading: 323.0</td></tr>
+<tr><td>Time: 2002-05-25T18:04:23.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1177,12 +1178,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.599633 </td></tr>
-<tr><td>Latitude: 30.047000 </td></tr>
-<tr><td>Altitude: 2.000 meters </td></tr>
-<tr><td>Speed: 2.5 km/hour </td></tr>
-<tr><td>Heading: 118.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:06:04.920Z </td></tr>
+<tr><td>Longitude: -91.599633</td></tr>
+<tr><td>Latitude: 30.047000</td></tr>
+<tr><td>Altitude: 2.000 meters</td></tr>
+<tr><td>Speed: 2.5 km/hour</td></tr>
+<tr><td>Heading: 118.7</td></tr>
+<tr><td>Time: 2002-05-25T18:06:04.920Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1203,11 +1204,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.599467 </td></tr>
-<tr><td>Latitude: 30.046433 </td></tr>
-<tr><td>Speed: 3.8 km/hour </td></tr>
-<tr><td>Heading: 165.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:07:06.920Z </td></tr>
+<tr><td>Longitude: -91.599467</td></tr>
+<tr><td>Latitude: 30.046433</td></tr>
+<tr><td>Speed: 3.8 km/hour</td></tr>
+<tr><td>Heading: 165.7</td></tr>
+<tr><td>Time: 2002-05-25T18:07:06.920Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1228,12 +1229,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.598950 </td></tr>
-<tr><td>Latitude: 30.046200 </td></tr>
-<tr><td>Altitude: 1.000 meters </td></tr>
-<tr><td>Speed: 2.8 km/hour </td></tr>
-<tr><td>Heading: 117.6 </td></tr>
-<tr><td>Time: 2002-05-25T18:08:18.920Z </td></tr>
+<tr><td>Longitude: -91.598950</td></tr>
+<tr><td>Latitude: 30.046200</td></tr>
+<tr><td>Altitude: 1.000 meters</td></tr>
+<tr><td>Speed: 2.8 km/hour</td></tr>
+<tr><td>Heading: 117.6</td></tr>
+<tr><td>Time: 2002-05-25T18:08:18.920Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1254,11 +1255,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597733 </td></tr>
-<tr><td>Latitude: 30.046367 </td></tr>
-<tr><td>Speed: 3.5 km/hour </td></tr>
-<tr><td>Heading: 81.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:10:20.920Z </td></tr>
+<tr><td>Longitude: -91.597733</td></tr>
+<tr><td>Latitude: 30.046367</td></tr>
+<tr><td>Speed: 3.5 km/hour</td></tr>
+<tr><td>Heading: 81.0</td></tr>
+<tr><td>Time: 2002-05-25T18:10:20.920Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1279,11 +1280,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597167 </td></tr>
-<tr><td>Latitude: 30.046350 </td></tr>
-<tr><td>Speed: 4.0 km/hour </td></tr>
-<tr><td>Heading: 91.9 </td></tr>
-<tr><td>Time: 2002-05-25T18:11:09.930Z </td></tr>
+<tr><td>Longitude: -91.597167</td></tr>
+<tr><td>Latitude: 30.046350</td></tr>
+<tr><td>Speed: 4.0 km/hour</td></tr>
+<tr><td>Heading: 91.9</td></tr>
+<tr><td>Time: 2002-05-25T18:11:09.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1304,11 +1305,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596333 </td></tr>
-<tr><td>Latitude: 30.046783 </td></tr>
-<tr><td>Speed: 4.9 km/hour </td></tr>
-<tr><td>Heading: 59.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:12:18.920Z </td></tr>
+<tr><td>Longitude: -91.596333</td></tr>
+<tr><td>Latitude: 30.046783</td></tr>
+<tr><td>Speed: 4.9 km/hour</td></tr>
+<tr><td>Heading: 59.0</td></tr>
+<tr><td>Time: 2002-05-25T18:12:18.920Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1329,11 +1330,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595200 </td></tr>
-<tr><td>Latitude: 30.047450 </td></tr>
-<tr><td>Speed: 3.8 km/hour </td></tr>
-<tr><td>Heading: 55.8 </td></tr>
-<tr><td>Time: 2002-05-25T18:14:22.930Z </td></tr>
+<tr><td>Longitude: -91.595200</td></tr>
+<tr><td>Latitude: 30.047450</td></tr>
+<tr><td>Speed: 3.8 km/hour</td></tr>
+<tr><td>Heading: 55.8</td></tr>
+<tr><td>Time: 2002-05-25T18:14:22.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1354,12 +1355,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594767 </td></tr>
-<tr><td>Latitude: 30.047800 </td></tr>
-<tr><td>Altitude: 2.000 meters </td></tr>
-<tr><td>Speed: 4.9 km/hour </td></tr>
-<tr><td>Heading: 47.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:15:04.930Z </td></tr>
+<tr><td>Longitude: -91.594767</td></tr>
+<tr><td>Latitude: 30.047800</td></tr>
+<tr><td>Altitude: 2.000 meters</td></tr>
+<tr><td>Speed: 4.9 km/hour</td></tr>
+<tr><td>Heading: 47.0</td></tr>
+<tr><td>Time: 2002-05-25T18:15:04.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1380,12 +1381,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594083 </td></tr>
-<tr><td>Latitude: 30.048250 </td></tr>
-<tr><td>Altitude: 1.000 meters </td></tr>
-<tr><td>Speed: 4.3 km/hour </td></tr>
-<tr><td>Heading: 52.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:16:14.930Z </td></tr>
+<tr><td>Longitude: -91.594083</td></tr>
+<tr><td>Latitude: 30.048250</td></tr>
+<tr><td>Altitude: 1.000 meters</td></tr>
+<tr><td>Speed: 4.3 km/hour</td></tr>
+<tr><td>Heading: 52.7</td></tr>
+<tr><td>Time: 2002-05-25T18:16:14.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1406,12 +1407,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.593800 </td></tr>
-<tr><td>Latitude: 30.048683 </td></tr>
-<tr><td>Altitude: 1.000 meters </td></tr>
-<tr><td>Speed: 4.2 km/hour </td></tr>
-<tr><td>Heading: 29.5 </td></tr>
-<tr><td>Time: 2002-05-25T18:17:01.930Z </td></tr>
+<tr><td>Longitude: -91.593800</td></tr>
+<tr><td>Latitude: 30.048683</td></tr>
+<tr><td>Altitude: 1.000 meters</td></tr>
+<tr><td>Speed: 4.2 km/hour</td></tr>
+<tr><td>Heading: 29.5</td></tr>
+<tr><td>Time: 2002-05-25T18:17:01.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1432,11 +1433,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.593850 </td></tr>
-<tr><td>Latitude: 30.049350 </td></tr>
-<tr><td>Speed: 4.1 km/hour </td></tr>
-<tr><td>Heading: 356.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:18:07.940Z </td></tr>
+<tr><td>Longitude: -91.593850</td></tr>
+<tr><td>Latitude: 30.049350</td></tr>
+<tr><td>Speed: 4.1 km/hour</td></tr>
+<tr><td>Heading: 356.3</td></tr>
+<tr><td>Time: 2002-05-25T18:18:07.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1457,12 +1458,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.593983 </td></tr>
-<tr><td>Latitude: 30.050317 </td></tr>
-<tr><td>Altitude: 2.000 meters </td></tr>
-<tr><td>Speed: 3.8 km/hour </td></tr>
-<tr><td>Heading: 353.2 </td></tr>
-<tr><td>Time: 2002-05-25T18:19:51.940Z </td></tr>
+<tr><td>Longitude: -91.593983</td></tr>
+<tr><td>Latitude: 30.050317</td></tr>
+<tr><td>Altitude: 2.000 meters</td></tr>
+<tr><td>Speed: 3.8 km/hour</td></tr>
+<tr><td>Heading: 353.2</td></tr>
+<tr><td>Time: 2002-05-25T18:19:51.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1483,11 +1484,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594117 </td></tr>
-<tr><td>Latitude: 30.050783 </td></tr>
-<tr><td>Speed: 4.0 km/hour </td></tr>
-<tr><td>Heading: 346.1 </td></tr>
-<tr><td>Time: 2002-05-25T18:20:39.940Z </td></tr>
+<tr><td>Longitude: -91.594117</td></tr>
+<tr><td>Latitude: 30.050783</td></tr>
+<tr><td>Speed: 4.0 km/hour</td></tr>
+<tr><td>Heading: 346.1</td></tr>
+<tr><td>Time: 2002-05-25T18:20:39.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1508,11 +1509,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594367 </td></tr>
-<tr><td>Latitude: 30.051233 </td></tr>
-<tr><td>Speed: 4.4 km/hour </td></tr>
-<tr><td>Heading: 334.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:21:24.930Z </td></tr>
+<tr><td>Longitude: -91.594367</td></tr>
+<tr><td>Latitude: 30.051233</td></tr>
+<tr><td>Speed: 4.4 km/hour</td></tr>
+<tr><td>Heading: 334.3</td></tr>
+<tr><td>Time: 2002-05-25T18:21:24.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1533,11 +1534,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594367 </td></tr>
-<tr><td>Latitude: 30.051800 </td></tr>
-<tr><td>Speed: 4.3 km/hour </td></tr>
-<tr><td>Heading: 0.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:22:17.940Z </td></tr>
+<tr><td>Longitude: -91.594367</td></tr>
+<tr><td>Latitude: 30.051800</td></tr>
+<tr><td>Speed: 4.3 km/hour</td></tr>
+<tr><td>Heading: 0.0</td></tr>
+<tr><td>Time: 2002-05-25T18:22:17.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1558,11 +1559,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594667 </td></tr>
-<tr><td>Latitude: 30.052217 </td></tr>
-<tr><td>Speed: 3.2 km/hour </td></tr>
-<tr><td>Heading: 328.1 </td></tr>
-<tr><td>Time: 2002-05-25T18:23:18.930Z </td></tr>
+<tr><td>Longitude: -91.594667</td></tr>
+<tr><td>Latitude: 30.052217</td></tr>
+<tr><td>Speed: 3.2 km/hour</td></tr>
+<tr><td>Heading: 328.1</td></tr>
+<tr><td>Time: 2002-05-25T18:23:18.930Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1583,11 +1584,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594683 </td></tr>
-<tr><td>Latitude: 30.053017 </td></tr>
-<tr><td>Speed: 4.1 km/hour </td></tr>
-<tr><td>Heading: 359.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:24:37.940Z </td></tr>
+<tr><td>Longitude: -91.594683</td></tr>
+<tr><td>Latitude: 30.053017</td></tr>
+<tr><td>Speed: 4.1 km/hour</td></tr>
+<tr><td>Heading: 359.0</td></tr>
+<tr><td>Time: 2002-05-25T18:24:37.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1608,12 +1609,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595200 </td></tr>
-<tr><td>Latitude: 30.054867 </td></tr>
-<tr><td>Altitude: 6.000 meters </td></tr>
-<tr><td>Speed: 3.5 km/hour </td></tr>
-<tr><td>Heading: 346.4 </td></tr>
-<tr><td>Time: 2002-05-25T18:28:13.950Z </td></tr>
+<tr><td>Longitude: -91.595200</td></tr>
+<tr><td>Latitude: 30.054867</td></tr>
+<tr><td>Altitude: 6.000 meters</td></tr>
+<tr><td>Speed: 3.5 km/hour</td></tr>
+<tr><td>Heading: 346.4</td></tr>
+<tr><td>Time: 2002-05-25T18:28:13.950Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1634,12 +1635,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594933 </td></tr>
-<tr><td>Latitude: 30.053733 </td></tr>
-<tr><td>Altitude: 2.000 meters </td></tr>
-<tr><td>Speed: 2.3 km/hour </td></tr>
-<tr><td>Heading: 168.5 </td></tr>
-<tr><td>Time: 2002-05-25T18:31:36.940Z </td></tr>
+<tr><td>Longitude: -91.594933</td></tr>
+<tr><td>Latitude: 30.053733</td></tr>
+<tr><td>Altitude: 2.000 meters</td></tr>
+<tr><td>Speed: 2.3 km/hour</td></tr>
+<tr><td>Heading: 168.5</td></tr>
+<tr><td>Time: 2002-05-25T18:31:36.940Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1660,11 +1661,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594783 </td></tr>
-<tr><td>Latitude: 30.053183 </td></tr>
-<tr><td>Speed: 2.8 km/hour </td></tr>
-<tr><td>Heading: 166.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:32:56.950Z </td></tr>
+<tr><td>Longitude: -91.594783</td></tr>
+<tr><td>Latitude: 30.053183</td></tr>
+<tr><td>Speed: 2.8 km/hour</td></tr>
+<tr><td>Heading: 166.7</td></tr>
+<tr><td>Time: 2002-05-25T18:32:56.950Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1685,11 +1686,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594833 </td></tr>
-<tr><td>Latitude: 30.052633 </td></tr>
-<tr><td>Speed: 3.3 km/hour </td></tr>
-<tr><td>Heading: 184.5 </td></tr>
-<tr><td>Time: 2002-05-25T18:34:02.950Z </td></tr>
+<tr><td>Longitude: -91.594833</td></tr>
+<tr><td>Latitude: 30.052633</td></tr>
+<tr><td>Speed: 3.3 km/hour</td></tr>
+<tr><td>Heading: 184.5</td></tr>
+<tr><td>Time: 2002-05-25T18:34:02.950Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1710,11 +1711,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595433 </td></tr>
-<tr><td>Latitude: 30.052450 </td></tr>
-<tr><td>Speed: 1.8 km/hour </td></tr>
-<tr><td>Heading: 250.6 </td></tr>
-<tr><td>Time: 2002-05-25T18:36:03.950Z </td></tr>
+<tr><td>Longitude: -91.595433</td></tr>
+<tr><td>Latitude: 30.052450</td></tr>
+<tr><td>Speed: 1.8 km/hour</td></tr>
+<tr><td>Heading: 250.6</td></tr>
+<tr><td>Time: 2002-05-25T18:36:03.950Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1735,11 +1736,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595967 </td></tr>
-<tr><td>Latitude: 30.052483 </td></tr>
-<tr><td>Speed: 4.1 km/hour </td></tr>
-<tr><td>Heading: 274.1 </td></tr>
-<tr><td>Time: 2002-05-25T18:36:48.960Z </td></tr>
+<tr><td>Longitude: -91.595967</td></tr>
+<tr><td>Latitude: 30.052483</td></tr>
+<tr><td>Speed: 4.1 km/hour</td></tr>
+<tr><td>Heading: 274.1</td></tr>
+<tr><td>Time: 2002-05-25T18:36:48.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1760,12 +1761,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596783 </td></tr>
-<tr><td>Latitude: 30.052650 </td></tr>
-<tr><td>Altitude: 1.000 meters </td></tr>
-<tr><td>Speed: 4.5 km/hour </td></tr>
-<tr><td>Heading: 283.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:37:52.960Z </td></tr>
+<tr><td>Longitude: -91.596783</td></tr>
+<tr><td>Latitude: 30.052650</td></tr>
+<tr><td>Altitude: 1.000 meters</td></tr>
+<tr><td>Speed: 4.5 km/hour</td></tr>
+<tr><td>Heading: 283.3</td></tr>
+<tr><td>Time: 2002-05-25T18:37:52.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1786,11 +1787,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597850 </td></tr>
-<tr><td>Latitude: 30.053133 </td></tr>
-<tr><td>Speed: 4.9 km/hour </td></tr>
-<tr><td>Heading: 297.6 </td></tr>
-<tr><td>Time: 2002-05-25T18:39:18.950Z </td></tr>
+<tr><td>Longitude: -91.597850</td></tr>
+<tr><td>Latitude: 30.053133</td></tr>
+<tr><td>Speed: 4.9 km/hour</td></tr>
+<tr><td>Heading: 297.6</td></tr>
+<tr><td>Time: 2002-05-25T18:39:18.950Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1811,11 +1812,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597967 </td></tr>
-<tr><td>Latitude: 30.053617 </td></tr>
-<tr><td>Speed: 3.5 km/hour </td></tr>
-<tr><td>Heading: 348.2 </td></tr>
-<tr><td>Time: 2002-05-25T18:40:15.960Z </td></tr>
+<tr><td>Longitude: -91.597967</td></tr>
+<tr><td>Latitude: 30.053617</td></tr>
+<tr><td>Speed: 3.5 km/hour</td></tr>
+<tr><td>Heading: 348.2</td></tr>
+<tr><td>Time: 2002-05-25T18:40:15.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1836,12 +1837,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597767 </td></tr>
-<tr><td>Latitude: 30.053967 </td></tr>
-<tr><td>Altitude: 6.000 meters </td></tr>
-<tr><td>Speed: 2.2 km/hour </td></tr>
-<tr><td>Heading: 26.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:41:25.960Z </td></tr>
+<tr><td>Longitude: -91.597767</td></tr>
+<tr><td>Latitude: 30.053967</td></tr>
+<tr><td>Altitude: 6.000 meters</td></tr>
+<tr><td>Speed: 2.2 km/hour</td></tr>
+<tr><td>Heading: 26.3</td></tr>
+<tr><td>Time: 2002-05-25T18:41:25.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1862,11 +1863,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.598083 </td></tr>
-<tr><td>Latitude: 30.053617 </td></tr>
-<tr><td>Speed: 2.5 km/hour </td></tr>
-<tr><td>Heading: 218.1 </td></tr>
-<tr><td>Time: 2002-05-25T18:42:37.960Z </td></tr>
+<tr><td>Longitude: -91.598083</td></tr>
+<tr><td>Latitude: 30.053617</td></tr>
+<tr><td>Speed: 2.5 km/hour</td></tr>
+<tr><td>Heading: 218.1</td></tr>
+<tr><td>Time: 2002-05-25T18:42:37.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1887,11 +1888,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597917 </td></tr>
-<tr><td>Latitude: 30.053200 </td></tr>
-<tr><td>Speed: 2.1 km/hour </td></tr>
-<tr><td>Heading: 160.9 </td></tr>
-<tr><td>Time: 2002-05-25T18:44:01.960Z </td></tr>
+<tr><td>Longitude: -91.597917</td></tr>
+<tr><td>Latitude: 30.053200</td></tr>
+<tr><td>Speed: 2.1 km/hour</td></tr>
+<tr><td>Heading: 160.9</td></tr>
+<tr><td>Time: 2002-05-25T18:44:01.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1912,11 +1913,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597517 </td></tr>
-<tr><td>Latitude: 30.052817 </td></tr>
-<tr><td>Speed: 1.8 km/hour </td></tr>
-<tr><td>Heading: 137.9 </td></tr>
-<tr><td>Time: 2002-05-25T18:45:53.960Z </td></tr>
+<tr><td>Longitude: -91.597517</td></tr>
+<tr><td>Latitude: 30.052817</td></tr>
+<tr><td>Speed: 1.8 km/hour</td></tr>
+<tr><td>Heading: 137.9</td></tr>
+<tr><td>Time: 2002-05-25T18:45:53.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1937,11 +1938,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596933 </td></tr>
-<tr><td>Latitude: 30.052567 </td></tr>
-<tr><td>Speed: 3.7 km/hour </td></tr>
-<tr><td>Heading: 116.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:46:54.960Z </td></tr>
+<tr><td>Longitude: -91.596933</td></tr>
+<tr><td>Latitude: 30.052567</td></tr>
+<tr><td>Speed: 3.7 km/hour</td></tr>
+<tr><td>Heading: 116.3</td></tr>
+<tr><td>Time: 2002-05-25T18:46:54.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1962,11 +1963,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596433 </td></tr>
-<tr><td>Latitude: 30.052333 </td></tr>
-<tr><td>Speed: 4.1 km/hour </td></tr>
-<tr><td>Heading: 118.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:47:42.970Z </td></tr>
+<tr><td>Longitude: -91.596433</td></tr>
+<tr><td>Latitude: 30.052333</td></tr>
+<tr><td>Speed: 4.1 km/hour</td></tr>
+<tr><td>Heading: 118.3</td></tr>
+<tr><td>Time: 2002-05-25T18:47:42.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1987,11 +1988,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595683 </td></tr>
-<tr><td>Latitude: 30.052250 </td></tr>
-<tr><td>Speed: 4.4 km/hour </td></tr>
-<tr><td>Heading: 97.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:48:41.960Z </td></tr>
+<tr><td>Longitude: -91.595683</td></tr>
+<tr><td>Latitude: 30.052250</td></tr>
+<tr><td>Speed: 4.4 km/hour</td></tr>
+<tr><td>Heading: 97.3</td></tr>
+<tr><td>Time: 2002-05-25T18:48:41.960Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2012,11 +2013,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595017 </td></tr>
-<tr><td>Latitude: 30.052217 </td></tr>
-<tr><td>Speed: 3.3 km/hour </td></tr>
-<tr><td>Heading: 93.3 </td></tr>
-<tr><td>Time: 2002-05-25T18:49:52.970Z </td></tr>
+<tr><td>Longitude: -91.595017</td></tr>
+<tr><td>Latitude: 30.052217</td></tr>
+<tr><td>Speed: 3.3 km/hour</td></tr>
+<tr><td>Heading: 93.3</td></tr>
+<tr><td>Time: 2002-05-25T18:49:52.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2037,11 +2038,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594700 </td></tr>
-<tr><td>Latitude: 30.051883 </td></tr>
-<tr><td>Speed: 3.0 km/hour </td></tr>
-<tr><td>Heading: 140.6 </td></tr>
-<tr><td>Time: 2002-05-25T18:50:49.970Z </td></tr>
+<tr><td>Longitude: -91.594700</td></tr>
+<tr><td>Latitude: 30.051883</td></tr>
+<tr><td>Speed: 3.0 km/hour</td></tr>
+<tr><td>Heading: 140.6</td></tr>
+<tr><td>Time: 2002-05-25T18:50:49.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2062,11 +2063,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594400 </td></tr>
-<tr><td>Latitude: 30.051050 </td></tr>
-<tr><td>Speed: 4.1 km/hour </td></tr>
-<tr><td>Heading: 162.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:52:14.970Z </td></tr>
+<tr><td>Longitude: -91.594400</td></tr>
+<tr><td>Latitude: 30.051050</td></tr>
+<tr><td>Speed: 4.1 km/hour</td></tr>
+<tr><td>Heading: 162.7</td></tr>
+<tr><td>Time: 2002-05-25T18:52:14.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2087,11 +2088,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594233 </td></tr>
-<tr><td>Latitude: 30.050567 </td></tr>
-<tr><td>Speed: 4.8 km/hour </td></tr>
-<tr><td>Heading: 163.4 </td></tr>
-<tr><td>Time: 2002-05-25T18:52:56.980Z </td></tr>
+<tr><td>Longitude: -91.594233</td></tr>
+<tr><td>Latitude: 30.050567</td></tr>
+<tr><td>Speed: 4.8 km/hour</td></tr>
+<tr><td>Heading: 163.4</td></tr>
+<tr><td>Time: 2002-05-25T18:52:56.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2112,11 +2113,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594100 </td></tr>
-<tr><td>Latitude: 30.050183 </td></tr>
-<tr><td>Speed: 3.8 km/hour </td></tr>
-<tr><td>Heading: 163.2 </td></tr>
-<tr><td>Time: 2002-05-25T18:53:38.980Z </td></tr>
+<tr><td>Longitude: -91.594100</td></tr>
+<tr><td>Latitude: 30.050183</td></tr>
+<tr><td>Speed: 3.8 km/hour</td></tr>
+<tr><td>Heading: 163.2</td></tr>
+<tr><td>Time: 2002-05-25T18:53:38.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2137,11 +2138,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.593717 </td></tr>
-<tr><td>Latitude: 30.049100 </td></tr>
-<tr><td>Speed: 4.9 km/hour </td></tr>
-<tr><td>Heading: 163.0 </td></tr>
-<tr><td>Time: 2002-05-25T18:55:11.970Z </td></tr>
+<tr><td>Longitude: -91.593717</td></tr>
+<tr><td>Latitude: 30.049100</td></tr>
+<tr><td>Speed: 4.9 km/hour</td></tr>
+<tr><td>Heading: 163.0</td></tr>
+<tr><td>Time: 2002-05-25T18:55:11.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2162,11 +2163,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594250 </td></tr>
-<tr><td>Latitude: 30.048450 </td></tr>
-<tr><td>Speed: 3.9 km/hour </td></tr>
-<tr><td>Heading: 215.4 </td></tr>
-<tr><td>Time: 2002-05-25T18:56:32.980Z </td></tr>
+<tr><td>Longitude: -91.594250</td></tr>
+<tr><td>Latitude: 30.048450</td></tr>
+<tr><td>Speed: 3.9 km/hour</td></tr>
+<tr><td>Heading: 215.4</td></tr>
+<tr><td>Time: 2002-05-25T18:56:32.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2187,11 +2188,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.594750 </td></tr>
-<tr><td>Latitude: 30.048083 </td></tr>
-<tr><td>Speed: 4.4 km/hour </td></tr>
-<tr><td>Heading: 229.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:57:24.970Z </td></tr>
+<tr><td>Longitude: -91.594750</td></tr>
+<tr><td>Latitude: 30.048083</td></tr>
+<tr><td>Speed: 4.4 km/hour</td></tr>
+<tr><td>Heading: 229.7</td></tr>
+<tr><td>Time: 2002-05-25T18:57:24.970Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2212,12 +2213,12 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.595450 </td></tr>
-<tr><td>Latitude: 30.047500 </td></tr>
-<tr><td>Altitude: 7.000 meters </td></tr>
-<tr><td>Speed: 4.4 km/hour </td></tr>
-<tr><td>Heading: 226.1 </td></tr>
-<tr><td>Time: 2002-05-25T18:58:40.980Z </td></tr>
+<tr><td>Longitude: -91.595450</td></tr>
+<tr><td>Latitude: 30.047500</td></tr>
+<tr><td>Altitude: 7.000 meters</td></tr>
+<tr><td>Speed: 4.4 km/hour</td></tr>
+<tr><td>Heading: 226.1</td></tr>
+<tr><td>Time: 2002-05-25T18:58:40.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2238,11 +2239,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596000 </td></tr>
-<tr><td>Latitude: 30.047067 </td></tr>
-<tr><td>Speed: 5.4 km/hour </td></tr>
-<tr><td>Heading: 227.7 </td></tr>
-<tr><td>Time: 2002-05-25T18:59:28.980Z </td></tr>
+<tr><td>Longitude: -91.596000</td></tr>
+<tr><td>Latitude: 30.047067</td></tr>
+<tr><td>Speed: 5.4 km/hour</td></tr>
+<tr><td>Heading: 227.7</td></tr>
+<tr><td>Time: 2002-05-25T18:59:28.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2263,11 +2264,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.596600 </td></tr>
-<tr><td>Latitude: 30.046633 </td></tr>
-<tr><td>Speed: 5.0 km/hour </td></tr>
-<tr><td>Heading: 230.2 </td></tr>
-<tr><td>Time: 2002-05-25T19:00:22.980Z </td></tr>
+<tr><td>Longitude: -91.596600</td></tr>
+<tr><td>Latitude: 30.046633</td></tr>
+<tr><td>Speed: 5.0 km/hour</td></tr>
+<tr><td>Heading: 230.2</td></tr>
+<tr><td>Time: 2002-05-25T19:00:22.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2288,11 +2289,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.597650 </td></tr>
-<tr><td>Latitude: 30.046400 </td></tr>
-<tr><td>Speed: 4.8 km/hour </td></tr>
-<tr><td>Heading: 255.6 </td></tr>
-<tr><td>Time: 2002-05-25T19:01:41.980Z </td></tr>
+<tr><td>Longitude: -91.597650</td></tr>
+<tr><td>Latitude: 30.046400</td></tr>
+<tr><td>Speed: 4.8 km/hour</td></tr>
+<tr><td>Heading: 255.6</td></tr>
+<tr><td>Time: 2002-05-25T19:01:41.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2313,11 +2314,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.598467 </td></tr>
-<tr><td>Latitude: 30.046233 </td></tr>
-<tr><td>Speed: 4.3 km/hour </td></tr>
-<tr><td>Heading: 256.7 </td></tr>
-<tr><td>Time: 2002-05-25T19:02:48.990Z </td></tr>
+<tr><td>Longitude: -91.598467</td></tr>
+<tr><td>Latitude: 30.046233</td></tr>
+<tr><td>Speed: 4.3 km/hour</td></tr>
+<tr><td>Heading: 256.7</td></tr>
+<tr><td>Time: 2002-05-25T19:02:48.990Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2338,11 +2339,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.598967 </td></tr>
-<tr><td>Latitude: 30.046317 </td></tr>
-<tr><td>Speed: 3.2 km/hour </td></tr>
-<tr><td>Heading: 280.9 </td></tr>
-<tr><td>Time: 2002-05-25T19:03:43.980Z </td></tr>
+<tr><td>Longitude: -91.598967</td></tr>
+<tr><td>Latitude: 30.046317</td></tr>
+<tr><td>Speed: 3.2 km/hour</td></tr>
+<tr><td>Heading: 280.9</td></tr>
+<tr><td>Time: 2002-05-25T19:03:43.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2363,11 +2364,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.599283 </td></tr>
-<tr><td>Latitude: 30.046783 </td></tr>
-<tr><td>Speed: 3.3 km/hour </td></tr>
-<tr><td>Heading: 329.6 </td></tr>
-<tr><td>Time: 2002-05-25T19:04:49.990Z </td></tr>
+<tr><td>Longitude: -91.599283</td></tr>
+<tr><td>Latitude: 30.046783</td></tr>
+<tr><td>Speed: 3.3 km/hour</td></tr>
+<tr><td>Heading: 329.6</td></tr>
+<tr><td>Time: 2002-05-25T19:04:49.990Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -2388,11 +2389,11 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -91.599667 </td></tr>
-<tr><td>Latitude: 30.047133 </td></tr>
-<tr><td>Speed: 2.8 km/hour </td></tr>
-<tr><td>Heading: 316.5 </td></tr>
-<tr><td>Time: 2002-05-25T19:05:57.980Z </td></tr>
+<tr><td>Longitude: -91.599667</td></tr>
+<tr><td>Latitude: 30.047133</td></tr>
+<tr><td>Speed: 2.8 km/hour</td></tr>
+<tr><td>Heading: 316.5</td></tr>
+<tr><td>Time: 2002-05-25T19:05:57.980Z</td></tr>
 </table>
 ]]></description>
             <LookAt>

@@ -34,10 +34,9 @@
 #include <QDateTime>           // for QDateTime
 #include <QFileInfo>           // for QFileInfo
 #include <QLatin1Char>         // for QLatin1Char
-#include <QMetaType>           // for QMetaType, QMetaType::UInt
 #include <QString>             // for QString
 #include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qint64
+#include <QtGlobal>            // for uint, qint64
 
 #include "defs.h"
 #include "garmin_fit.h"
@@ -240,7 +239,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   // second byte is endianness
   def.endian = fit_getuint8();
   if (def.endian > 1) {
-    throw ReaderException(QString("Bad endian field 0x%1 at file position 0x%2.").arg(def.endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
+    throw ReaderException(QStringLiteral("Bad endian field 0x%1 at file position 0x%2.").arg(def.endian, 0, 16).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
   fit_data.endian = def.endian;
 
@@ -422,7 +421,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     const fit_field_t& f = def.fields.at(i);
     QVariant field = fit_read_field(f);
     uint32_t val = -1;
-    if (field.canConvert(QMetaType::UInt)) {
+    if (field.canConvert<uint>()) {
       val = field.toUInt();
     }
     if (f.id == kFieldTimestamp) {
@@ -676,7 +675,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     auto* lappt = new Waypoint;
     lappt->latitude = GPS_Math_Semi_To_Deg(endlat);
     lappt->longitude = GPS_Math_Semi_To_Deg(endlon);
-    lappt->shortname = QString("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
+    lappt->shortname = QStringLiteral("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
     waypt_add(lappt);
   }
   break;
@@ -697,7 +696,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     }
     waypt->SetCreationTime(GPS_Math_Gtime_To_Utime(timestamp));
     if (speed != 0xffff) {
-      WAYPT_SET(waypt, speed, speed / 1000.0f);
+      waypt->set_speed(speed / 1000.0f);
     }
     if (heartrate != 0xff) {
       waypt->heartrate = heartrate;
@@ -709,7 +708,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       waypt->power = power;
     }
     if (temperature != 0x7f) {
-      WAYPT_SET(waypt, temperature, temperature);
+      waypt->set_temperature(temperature);
     }
     if (new_trkseg) {
       waypt->wpt_flags.new_trkseg = 1;

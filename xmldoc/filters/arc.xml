@@ -13,7 +13,7 @@ included by preceding them with a '#' character.  An arc file looks
 something like this sample:
 </para>
 
-<screen format="linespecific">
+<screen>
 # Lima Road/SR3 north of Fort Wayne, Indiana
 41.150064468    -85.166207433
 41.150064468    -85.165371895
@@ -30,14 +30,13 @@ such a gap by inserting a line containing "#break" either on a line by
 itself or after the coordinates of the starting point of the new arc segment.
 </para>
 
-<example id="example_arc_filter">
+<example xml:id="example_arc_filter">
 <title>Using the arc filter</title>
 <para>
 Assuming the arc above is in a file called
-<filename moreinfo="none">lima_rd.txt</filename>, the following command line
+<filename>lima_rd.txt</filename>, the following command line
 would include only points within one mile of the section of Lima Road
 covered by the arc.
 </para>
 <para><userinput>gpsbabel -i geo -f 1.loc -x arc,file=lima_rd.txt,distance=1 -o mapsend -F 2.wpt</userinput></para>
 </example>
-

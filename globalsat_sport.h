@@ -70,16 +70,6 @@ public:
     };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
@@ -255,4 +245,4 @@ private:
     {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   };
 };
-#endif // GPX_H_INCLUDED_
+#endif // GLOBALSATSPORT_H_INCLUDED_

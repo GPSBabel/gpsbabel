@@ -24,9 +24,18 @@
  * https://www.trackmaker.com/download/GTM211_format.pdf
  */
 
-#include "defs.h"
-#include "jeeps/gpsmath.h"
-#include <QList>
+#include <cstdio>               // for SEEK_CUR
+#include <cstring>              // for strlen, memset
+
+#include <QList>                // for QList
+#include <QString>              // for QString
+#include <QVector>              // for QVector
+
+#include "defs.h" 
+#include "gbfile.h"             // for gbfseek, gbfputc, gbfputint32, gbfputflt
+#include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
+#include "src/core/datetime.h"  // for DateTime
+
 
 static gbfile* file_in, *file_out;
 static int indatum;
@@ -728,7 +737,5 @@ ff_vecs_t gtm_vecs = {
   gtm_write,
   nullptr,
   &gtm_args,
-  CET_CHARSET_ASCII, 0, /* CET-REVIEW */
-  NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

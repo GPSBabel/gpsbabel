@@ -25,9 +25,6 @@
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for operator==, QChar
 #include <QCoreApplication>                // for QCoreApplication
-#ifdef GENERATE_CORE_STRINGS
-#include <QDebug>                          // for QDebug, operator<<
-#endif
 #include <QObject>                         // for QObject
 #include <QProcess>                        // for QProcess
 #include <QRegularExpression>              // for QRegularExpression
@@ -37,14 +34,25 @@
 #include <QVariant>                        // for QVariant
 #include <QApplication>                    // for QApplication
 #include <QMessageBox>                     // for QMessageBox
+#ifdef GENERATE_CORE_STRINGS
+#include <QtGlobal>                        // for QT_VERSION, QT_VERSION_CHECK
+#endif
 #include "appname.h"                       // for appName
 
+
+#ifdef GENERATE_CORE_STRINGS
+extern QTextStream* generate_output_stream;
+#endif
 
 //------------------------------------------------------------------------
 static QString xlt(const QString& f)
 {
 #ifdef GENERATE_CORE_STRINGS
-  qInfo().nospace() << "QT_TRANSLATE_NOOP(\"core\"," << f << ")";
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+  *generate_output_stream << "QT_TRANSLATE_NOOP(\"core\",\"" << f << "\")" << endl;
+#else
+  *generate_output_stream << "QT_TRANSLATE_NOOP(\"core\",\"" << f << "\")" << Qt::endl;
+#endif
 #endif
   return QCoreApplication::translate("core", f.toUtf8().constData());
 }
@@ -52,7 +60,7 @@ static QString xlt(const QString& f)
 //------------------------------------------------------------------------
 bool FormatLoad::skipToValidLine()
 {
-  QRegularExpression regex("^file|serial");
+  static const QRegularExpression regex("^file|serial");
   while ((currentLine_ < lines_.size()) && !regex.match(lines_[currentLine_]).hasMatch()) {
     currentLine_++;
   }
@@ -127,7 +135,8 @@ bool FormatLoad::processFormat(Format& format)
 #ifndef GENERATE_CORE_STRINGS
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
     QString base = htmlPage;
-    base.replace(QRegularExpression("/[^/]+$"), "/");
+    static const QRegularExpression re("/[^/]+$");
+    base.replace(re, "/");
     Format::setHtmlBase(base);
   }
 #endif

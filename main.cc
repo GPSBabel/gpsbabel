@@ -17,6 +17,7 @@
 
  */
 
+#include <cassert>                    // for assert
 #include <clocale>                    // for setlocale, LC_NUMERIC, LC_TIME
 #include <csignal>                    // for signal, SIGINT, SIG_ERR
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
@@ -43,13 +44,13 @@
 #endif
 
 #include "defs.h"
-#include "cet_util.h"                 // for cet_convert_init, cet_convert_deinit
 #include "csv_util.h"                 // for csv_linesplit
 #include "filter.h"                   // for Filter
 #include "filter_vecs.h"              // for FilterVecs
 #include "format.h"                   // for Format
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
+#include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
@@ -139,7 +140,7 @@ usage(const char* pname, int shorter)
     "    -T               Process realtime tracking information\n"
     "    -w               Process waypoint information [default]\n"
     "    -b               Process command file (batch mode)\n"
-    "    -x filtername    Invoke filter (placed between inputs and output) \n"
+    "    -x filtername    Invoke filter (placed between inputs and output)\n"
     "    -D level         Set debug level [%d]\n"
     "    -h, -?           Print detailed help and exit\n"
     "    -V               Print GPSBabel version and exit\n"
@@ -223,8 +224,8 @@ public:
     if (wpt->GetCreationTime().isValid()) {
       printf("%s ", qPrintable(wpt->creation_time.toString()));
     }
-    printposn(wpt->latitude,1);
-    printposn(wpt->longitude,0);
+    printposn(wpt->latitude, true);
+    printposn(wpt->longitude, false);
     if (!wpt->description.isEmpty()) {
       printf("%s/%s",
              global_opts.synthesize_shortnames ?
@@ -341,14 +342,10 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      cet_convert_init(ivecs->get_encode(), ivecs->get_fixed_encode());	/* init by module vec */
-
       start_session(ivecs->get_name(), fname);
       ivecs->rd_init(fname);
       ivecs->read();
       ivecs->rd_deinit();
-
-      cet_convert_deinit();
 
       did_something = true;
       break;
@@ -364,13 +361,10 @@ run(const char* prog_name)
           global_opts.masked_objective |= WPTDATAMASK;
         }
 
-        cet_convert_init(ovecs->get_encode(), ovecs->get_fixed_encode());
-
         ovecs->wr_init(ofname);
         ovecs->write();
         ovecs->wr_deinit();
 
-        cet_convert_deinit();
       }
       break;
     case 's':
@@ -541,33 +535,25 @@ run(const char* prog_name)
     /* reinitialize xcsv in case two formats that use xcsv were given */
     (void) Vecs::Instance().find_vec(ivecs->get_argstring());
 
-    cet_convert_init(ivecs->get_encode(), 1);
-
     start_session(ivecs->get_name(), qargs.at(0));
     ivecs->rd_init(qargs.at(0));
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_deinit();
-
     if (qargs.size() == 2 && ovecs) {
       /* reinitialize xcsv in case two formats that use xcsv were given */
       (void) Vecs::Instance().find_vec(ovecs->get_argstring());
-
-      cet_convert_init(ovecs->get_encode(), 1);
 
       ovecs->wr_init(qargs.at(1));
       ovecs->write();
       ovecs->wr_deinit();
 
-      cet_convert_deinit();
     }
   } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
     return 0;
   }
   if (ovecs == nullptr) {
-    cet_convert_init(CET_CHARSET_ASCII, 1);
     auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
       fbOutput.waypt_disp(wpt);
     };
@@ -717,6 +703,9 @@ main(int argc, char* argv[])
   if (!gpsbabel_testmode()) {	/* within testo ? */
     global_opts.inifile = inifile_init(QString(), MYNAME);
   }
+
+  assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

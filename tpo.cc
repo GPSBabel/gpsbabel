@@ -71,7 +71,7 @@
 
 #include <cassert>                     // for assert
 #include <cmath>                       // for cos, sqrt
-#include <cstdio>                      // for printf, sprintf, SEEK_CUR, SEEK_SET
+#include <cstdio>                      // for printf, SEEK_CUR, SEEK_SET
 #include <cstdint>
 #include <cstring>                     // for strncmp, strlen, memset
 #include <vector>                      // for vector
@@ -279,7 +279,7 @@ static void tpo_read_2_x()
     track_add_head(track_temp);
 
     /* generate a generic track name */
-    track_temp->rte_name = QString("Track %1").arg(i+1);
+    track_temp->rte_name = QStringLiteral("Track %1").arg(i+1);
 
     /* zoom level 1-5 visibility flags */
     gbfread(&buff[0], 1, 10, tpo_file_in);
@@ -566,7 +566,7 @@ static void tpo_process_tracks()
     if (tmp) {
       styles[ii].name = gbfreadbuf(tmp, tpo_file_in);
     } else { // Assign a generic style name
-      styles[ii].name = QString("STYLE %1").arg(ii);
+      styles[ii].name = QStringLiteral("STYLE %1").arg(ii);
     }
 #ifdef Tracks2012
     //TBD: Should this be TRACKNAMELENGTH?
@@ -636,7 +636,6 @@ static void tpo_process_tracks()
     }
     int lat = 0;
     int lon = 0;
-    char rgb[7],bgr[7];
 
     // Allocate the track struct
     auto* track_temp = new route_head;
@@ -670,9 +669,13 @@ static void tpo_process_tracks()
     track_temp->rte_name = track_name;
 
     // RGB line_color expressed for html=rrggbb and kml=bbggrr - not assigned before 2012
-    sprintf(rgb,"%02x%02x%02x",styles[track_style].color[0],styles[track_style].color[1],styles[track_style].color[2]);
-    sprintf(bgr,"%02x%02x%02x",styles[track_style].color[2],styles[track_style].color[1],styles[track_style].color[0]);
-    int bbggrr = styles[track_style].color[2] << 16 | styles[track_style].color[1] << 8 | styles[track_style].color[0];
+    auto rgb = QString::asprintf("%02x%02x%02x",
+                                 styles[track_style].color[0],
+                                 styles[track_style].color[1],
+                                 styles[track_style].color[2]);
+    int bbggrr = styles[track_style].color[2] << 16 |
+                 styles[track_style].color[1] << 8 |
+                 styles[track_style].color[0];
     track_temp->line_color.bbggrr = bbggrr;
 
     // track texture (dashed=1, solid=0) mapped into opacity - not assigned before 2012
@@ -687,7 +690,10 @@ static void tpo_process_tracks()
 
     if constexpr(debug) {
       printf("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-             qPrintable(track_name), line_type, qPrintable(styles[track_style].name), styles[track_style].wide, styles[track_style].dash,rgb);
+             qPrintable(track_name), line_type,
+             qPrintable(styles[track_style].name),
+             styles[track_style].wide, styles[track_style].dash,
+             qPrintable(rgb));
     }
 
     // Track description
@@ -1219,7 +1225,7 @@ static void tpo_process_map_notes()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("NOTE %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("NOTE %1").arg(ii + 1);
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
@@ -1320,7 +1326,7 @@ static void tpo_process_symbols()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("SYM %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("SYM %1").arg(ii + 1);
 
     // Add the waypoint to the chain of waypoints
     waypt_add(waypoint_temp);
@@ -1363,7 +1369,7 @@ static void tpo_process_text_labels()
     Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString("TXT %1").arg(ii + 1);
+    waypoint_temp->shortname = QStringLiteral("TXT %1").arg(ii + 1);
 
     for (int jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH
@@ -2108,9 +2114,7 @@ ff_vecs_t tpo2_vecs = {
 #endif
   nullptr,
   &tpo2_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 
 /* TPO 3.x format can read waypoints/tracks/routes */
@@ -2125,7 +2129,5 @@ ff_vecs_t tpo3_vecs = {
   nullptr,
   nullptr,
   &tpo3_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

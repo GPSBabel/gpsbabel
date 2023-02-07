@@ -18,7 +18,7 @@
  */
 
 
-#include <QtCore>            // for qint64, QT_VERSION, QT_VERSION_CHECK
+#include <QtGlobal>          // for qint64, QT_VERSION, QT_VERSION_CHECK
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #include <QByteArrayView>    // for QByteArrayView
@@ -138,4 +138,4 @@ void TextStream::close()
 #endif
 }
 
-} // namespace
+} // namespace gpsbabel

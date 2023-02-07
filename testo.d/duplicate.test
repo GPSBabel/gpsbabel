@@ -7,3 +7,8 @@ gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o csv -F ${TMPDIR}/filterdupe.cs
 gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -f ${REFERENCE}/geocaching.loc -x duplicate,shortname \
 		-o csv -F ${TMPDIR}/filterdupe.csv2
 sort_and_compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
+
+gpsbabel -i unicsv,utc -f ${REFERENCE}/duplicate_exported_1.csv -x duplicate,location -o unicsv,utc -F ${TMPDIR}/duplicate_exported_1~csv.csv
+compare ${REFERENCE}/duplicate_exported_1~csv.csv ${TMPDIR}/duplicate_exported_1~csv.csv
+gpsbabel -i unicsv,utc -f ${REFERENCE}/duplicate_exported_2.csv -x duplicate,location -o unicsv,utc -F ${TMPDIR}/duplicate_exported_2~csv.csv
+compare ${REFERENCE}/duplicate_exported_2~csv.csv ${TMPDIR}/duplicate_exported_2~csv.csv

@@ -21,21 +21,22 @@
 #ifndef GPX_H_INCLUDED_
 #define GPX_H_INCLUDED_
 
-#include <QHash>                        // for QHash
-#include <QString>                      // for QString
-#include <QStringList>                  // for QStringList
-#include <QStringView>                  // for QStringView
-#include <QVector>                      // for QVector
-#include <QVersionNumber>               // for QVersionNumber
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <QXmlStreamReader>             // for QXmlStreamReader
+#include <QHash>                       // for QHash
+#include <QList>                       // for QList
+#include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
+#include <QStringView>                 // for QStringView
+#include <QVector>                     // for QVector
+#include <QVersionNumber>              // for QVersionNumber
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
+#include <QXmlStreamReader>            // for QXmlStreamReader
 
 #include "defs.h"
-#include "format.h"                     // for Format
-#include "formspec.h"                   // for FormatSpecificData
-#include "src/core/file.h"              // for File
-#include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
-#include "src/core/xmltag.h"            // for xml_tag
+#include "format.h"                    // for Format
+#include "formspec.h"                  // for FormatSpecificData
+#include "src/core/file.h"             // for File
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "src/core/xmltag.h"           // for xml_tag
 
 
 class GpxFormat : public Format
@@ -54,16 +55,6 @@ public:
   QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_ALL;
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;
@@ -203,8 +194,9 @@ private:
   void gpx_start(QStringView el, const QXmlStreamAttributes& attr);
   void gpx_end(QStringView unused);
   void gpx_cdata(QStringView s);
+  QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
-  void fprint_xml_chain(xml_tag* tag, const Waypoint* wpt) const;
+  void fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const;
   void write_gpx_url(const UrlList& urls) const;
   void write_gpx_url(const Waypoint* waypointp) const;
   void write_gpx_url(const route_head* rh) const;
@@ -225,7 +217,7 @@ private:
   void gpx_write_bounds();
 
   QXmlStreamReader* reader{};
-  xml_tag* cur_tag{};
+  XmlTag* cur_tag{};
   QString cdatastr;
   char* opt_logpoint = nullptr;
   char* opt_humminbirdext = nullptr;
@@ -318,7 +310,6 @@ private:
 #define GARMIN_TRK_EXT "/gpx/trk/extensions/gpxx:TrackExtension"
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
-#define GARMIN_RTEPT_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
 
 // Maintain a fast mapping from full tag names to the struct above.
   const QHash<QString, tag_mapping> hash = {

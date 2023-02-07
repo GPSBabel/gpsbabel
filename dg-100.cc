@@ -201,9 +201,9 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
       int bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       int bindate = be_read32(data + i + 12);
       QDateTime creation_time = bintime2utc(bindate, bintime);
-      QString datetime = creation_time.toString("yyyy/MM/dd hh:mm:ss");
+      QString datetime = creation_time.toString(u"yyyy/MM/dd hh:mm:ss");
       *track = new route_head;
-      (*track)->rte_name = QString("%1 tracklog (%2)").arg(model->name, datetime);
+      (*track)->rte_name = QStringLiteral("%1 tracklog (%2)").arg(model->name, datetime);
       (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }
@@ -228,8 +228,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
        * with a scaling factor of 100, in km/h.
        * The waypoint struct wants the speed as a
        * floating-point number, in m/s. */
-      wpt->speed = KPH_TO_MPS(be_read32(data + i + 16) / 100.0);
-      wpt->wpt_flags.speed = 1;
+      wpt->set_speed(KPH_TO_MPS(be_read32(data + i + 16) / 100.0));
     }
 
     if (style >= 2) {

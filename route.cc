@@ -19,16 +19,17 @@
 
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
-#include <algorithm>            // for sort
-#include <iterator>
 #include <optional>             // for optional, operator>, operator<
 
-#include <QDateTime>            // for QDateTime
-#include <QList>                // for QList<>::iterator
+#include <QDateTime>            // for operator>, QDateTime, operator<
+#include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString
-#include <QtGlobal>             // for foreach
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QStringView>          // for QStringView
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach
 
 #include "defs.h"
+#include "formspec.h"           // for FormatSpecificDataList
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t (ptr only)
 #include "src/core/datetime.h"  // for DateTime
@@ -103,7 +104,7 @@ track_insert_head(route_head* rte, route_head* predecessor)
 }
 
 void
-route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -116,7 +117,7 @@ route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int numbe
 }
 
 void
-track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -246,6 +247,8 @@ computed_trkdata track_recompute(const route_head* trk)
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
+  int pts_pwr = 0;
+  double tot_pwr = 0.0;
   computed_trkdata tdata;
 
 //  first.latitude = 0;
@@ -261,8 +264,7 @@ computed_trkdata track_recompute(const route_head* trk)
     double tlon = RAD(thisw->longitude);
     double plat = RAD(prev->latitude);
     double plon = RAD(prev->longitude);
-    WAYPT_SET(thisw, course, heading_true_degrees(plat, plon,
-              tlat, tlon));
+    thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
     double dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
     /*
@@ -276,7 +278,7 @@ computed_trkdata track_recompute(const route_head* trk)
      * If we've moved as much as a meter,
      * conditionally recompute speeds.
      */
-    if (!WAYPT_HAS(thisw, speed) && (dist > 1)) {
+    if (!thisw->speed_has_value() && (dist > 1)) {
       // Only recompute speed if the waypoint
       // didn't already have a speed
       if (thisw->GetCreationTime().isValid() &&
@@ -284,15 +286,15 @@ computed_trkdata track_recompute(const route_head* trk)
           thisw->GetCreationTime() > prev->GetCreationTime()) {
         double timed =
           prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
-        WAYPT_SET(thisw, speed, dist / timed);
+        thisw->set_speed(dist / timed);
       }
     }
-    if (WAYPT_HAS(thisw, speed)) {
-      if ((!tdata.min_spd) || (thisw->speed < tdata.min_spd)) {
-        tdata.min_spd = thisw->speed;
+    if (thisw->speed_has_value()) {
+      if ((!tdata.min_spd) || (thisw->speed_value() < tdata.min_spd)) {
+        tdata.min_spd = thisw->speed_value();
       }
-      if ((!tdata.max_spd) || (thisw->speed > tdata.max_spd)) {
-        tdata.max_spd = thisw->speed;
+      if ((!tdata.max_spd) || (thisw->speed_value() > tdata.max_spd)) {
+        tdata.max_spd = thisw->speed_value();
       }
     }
 
@@ -328,6 +330,15 @@ computed_trkdata track_recompute(const route_head* trk)
       tdata.max_cad = thisw->cadence;
     }
 
+    if (thisw->power > 0) {
+      pts_pwr++;
+      tot_pwr += thisw->power;
+    }
+
+    if ((thisw->power > 0) && ((!tdata.max_pwr) || (thisw->power > tdata.max_pwr))) {
+      tdata.max_pwr = thisw->power;
+    }
+
     if (thisw->GetCreationTime().isValid()) {
       if (!tdata.start.isValid() || (thisw->GetCreationTime() < tdata.start)) {
         tdata.start = thisw->GetCreationTime();
@@ -339,7 +350,7 @@ computed_trkdata track_recompute(const route_head* trk)
     }
 
     if (thisw->shortname.isEmpty()) {
-      thisw->shortname = QString("%1-%2").arg(trk->rte_name).arg(tkpt);
+      thisw->shortname = QStringLiteral("%1-%2").arg(trk->rte_name).arg(tkpt);
     }
     tkpt++;
     prev = thisw;
@@ -351,6 +362,10 @@ computed_trkdata track_recompute(const route_head* trk)
 
   if (pts_cad > 0) {
     tdata.avg_cad = tot_cad / pts_cad;
+  }
+
+  if (pts_pwr > 0) {
+    tdata.avg_pwr = tot_pwr / pts_pwr;
   }
 
   return tdata;
@@ -408,7 +423,7 @@ RouteList::insert_head(route_head* rte, route_head* predecessor)
 // in the RouteList AND any routes that have had waypoints added but haven't been
 // added themselves yet.
 void
-RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
+RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
@@ -456,7 +471,6 @@ RouteList::copy(RouteList** dst) const
     *dst = new RouteList;
   }
 
-  const char RPT[] = "RPT";
   for (const auto& rte_old : *this) {
     auto* rte_new = new route_head;
     // waypoint_list created below with add_wpt.
@@ -471,7 +485,7 @@ RouteList::copy(RouteList** dst) const
     (*dst)->add_head(rte_new);
     const auto& old_list = rte_old->waypoint_list;
     for (const auto& old_wpt : old_list) {
-      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
+      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, u"RPT", 3);
     }
   }
 }

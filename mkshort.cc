@@ -20,7 +20,7 @@
  */
 
 #include <cctype>      // for isspace, toupper, isdigit
-#include <cstdio>      // for sprintf, size_t
+#include <cstdio>      // for snprintf, size_t
 #include <cstring>     // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
 #include <QByteArray>  // for QByteArray
@@ -30,6 +30,7 @@
 #include <QtGlobal>    // for foreach
 
 #include "defs.h"
+#include "geocache.h"  // for Geocache
 
 
 #define MYNAME	"mkshort"
@@ -143,7 +144,7 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
 
     s->conflictctr++;
 
-    int dl = sprintf(tbuf, ".%d", s->conflictctr);
+    int dl = snprintf(tbuf, sizeof(tbuf), ".%d", s->conflictctr);
 
     if (l + dl < h->target_len) {
       name = (char*) xrealloc(name, l + dl + 1);

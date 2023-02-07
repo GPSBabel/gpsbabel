@@ -85,31 +85,33 @@
 
 */
 
-#include <cmath>                  // for M_PI, round, atan, exp, log, tan
-#include <cstdio>                 // for printf, sprintf, SEEK_CUR
-#include <cstdlib>                // for atoi, abs
-#include <cstring>                // for strcmp, strlen
-#include <ctime>                  // for time_t
+#include "lowranceusr.h"
 
-#include <QByteArray>             // for QByteArray
-#include <QDate>                  // for QDate
-#include <QDateTime>              // for QDateTime
-#include <QLatin1String>          // for QLatin1String
-#include <QList>                  // for QList
-#include <QScopedPointer>         // for QScopedPointer
-#include <QString>                // for QString, operator+, operator==, operator!=
-#include <QTextCodec>             // for QTextCodec, QTextCodec::IgnoreHeader
-#include <QTextEncoder>           // for QTextEncoder
-#include <QTime>                  // for QTime
-#include <Qt>                     // for CaseInsensitive, UTC
-#include <QtGlobal>               // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <cinttypes>            // for PRId64
+#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cstdio>               // for printf, sprintf, SEEK_CUR
+#include <cstdint>              // for int64_t
+#include <cstdlib>              // for abs
+#include <cstring>              // for strcmp, strlen
+
+#include <QByteArray>           // for QByteArray
+#include <QDate>                // for QDate
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList
+#include <QScopedPointer>       // for QScopedPointer
+#include <QString>              // for QString, operator+, operator==, operator!=
+#include <QTextCodec>           // for QTextCodec, QTextCodec::IgnoreHeader
+#include <QTextEncoder>         // for QTextEncoder
+#include <QTime>                // for QTime
+#include <Qt>                   // for CaseInsensitive, UTC
+#include <QtGlobal>             // for qPrintable, uint, qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "lowranceusr.h"
-#include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
-#include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
-#include "src/core/datetime.h"    // for DateTime
-#include "src/core/logging.h"     // for Warning
+#include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
+#include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "geocache.h"           // for Geocache, Geocache::status_t, Geocach...
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"   // for Warning
 
 
 /* from waypt.c, we need to iterate over waypoints when extracting routes */
@@ -139,8 +141,8 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt) const
   }
 
   if (global_opts.debug_level >= 2) {
-    printf(MYNAME " adding waypt %s (%s) to table at index %d\n",
-           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table->size());
+    printf(MYNAME " adding waypt %s (%s) to table at index %s\n",
+           qPrintable(wpt->shortname), qPrintable(wpt->description), QByteArray::number(waypt_table->size()).constData());
   }
 
   waypt_table->append(wpt);
@@ -342,7 +344,7 @@ LowranceusrFormat::wr_init(const QString& fname)
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();
   waypt_out_count = 0;
-  writing_version = atoi(opt_wversion);
+  writing_version = xstrtoi(opt_wversion, nullptr, 10);
   if ((writing_version < 2) || (writing_version > 4)) {
     fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
   }
@@ -459,7 +461,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   }
 
   /* Input is the number of seconds since Jan. 1, 2000 */
-  time_t waypt_time = gbfgetint32(file_in);
+  int64_t waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
     /* Waypoint needs the number of seconds since UNIX Epoch (Jan 1, 1970) */
     wpt_tmp->SetCreationTime(waypt_time += base_time_secs);
@@ -467,10 +469,10 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
 
   if (global_opts.debug_level > 2) {
     if (global_opts.debug_level == 99) {
-      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
+      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
     } else {
-      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %ld\n",
-             qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")), waypt_time);
+      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
+             qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
 
@@ -499,7 +501,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (reading_version == 3) {
     float depth_feet = gbfgetflt(file_in);
     if (std::abs(depth_feet - 99999.0)  > .1) {
-      WAYPT_SET(wpt_tmp, depth, FEET_TO_METERS(depth_feet));
+      wpt_tmp->set_depth(FEET_TO_METERS(depth_feet));
       if (global_opts.debug_level == 99) {
         printf("   %10.1f", depth_feet);
       }
@@ -574,7 +576,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
 
   /* Alarm radius; XXX: I'm not sure what the units are here,
      assuming meters but may be feet? */
-  WAYPT_SET(wpt_tmp, proximity, gbfgetflt(file_in));
+  wpt_tmp->set_proximity(gbfgetflt(file_in));
 
   /* Creation date/time */
   /* The date is a Julian day number, and the time is a unix timestamp. */
@@ -606,9 +608,9 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
         printf("%08x %08x %08x %08x ",
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
       }
-      printf(" %10u %8d %8d %8d %6d",
+      printf(" %10u %8d %8d %8d %6s",
              fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
-             waypoint_version, name.length());
+             waypoint_version, QByteArray::number(name.length()).constData());
       if (name.length() > 16) {
         printf(" %13.13s...", qPrintable(name));
       } else {
@@ -621,11 +623,11 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
       printf(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
              (fsdata->color_desc == nullptr ? "unk" : qPrintable(fsdata->color_desc)));
       if (desc.length() > 16) {
-        printf(" %6d %.13s...", desc.length(), qPrintable(desc));
+        printf(" %6s %.13s...", QByteArray::number(desc.length()).constData(), qPrintable(desc));
       } else {
-        printf(" %6d %16s", desc.length(), qPrintable(desc));
+        printf(" %6s %16s", QByteArray::number(desc.length()).constData(), qPrintable(desc));
       }
-      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
+      printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       printf(" %08x %8.3f %08x %08x %08x\n",
              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
@@ -1063,7 +1065,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   int create_time = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
     QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-    printf(MYNAME " parse_trails: creation date/time = %s\n", qPrintable(qdt.toString("yyyy-MM-dd hh:mm:ss AP")));
+    printf(MYNAME " parse_trails: creation date/time = %s\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
   }
 
   /* Some flag bytes */
@@ -1128,7 +1130,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
     if (global_opts.debug_level >= 2) {
       if (global_opts.debug_level == 99) {
         printf(MYNAME " parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
-        printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString("yyyy/MM/dd hh:mm:ss")));
+        printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       } else {
         printf(MYNAME " parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
                wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
@@ -1223,7 +1225,7 @@ LowranceusrFormat::read()
     int create_time = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
       QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-      printf(MYNAME " creation date/time : '%s'\n", qPrintable(qdt.toString("yyyy-MM-dd hh:mm:ss AP")));
+      printf(MYNAME " creation date/time : '%s'\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
     }
 
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
@@ -1256,7 +1258,7 @@ LowranceusrFormat::read()
 void
 LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
 {
-  int Time, SymbolId, alt;
+  int SymbolId, alt;
 
   int Lat = lat_deg_to_mm(wpt->latitude);
   int Lon = lon_deg_to_mm(wpt->longitude);
@@ -1327,30 +1329,32 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   }
 
   /* Waypoint creation time stored as seconds since UNIX Epoch (Jan 1, 1970) */
-  if ((Time = wpt->creation_time.toTime_t()) > base_time_secs) {
+  int64_t waypt_time;
+  if ((waypt_time = wpt->creation_time.toSecsSinceEpoch()) > base_time_secs) {
     /* This should always be true */
     /* Lowrance needs it as seconds since Jan 1, 2000 */
-    Time -= base_time_secs;
+    waypt_time -= base_time_secs;
     if (global_opts.debug_level >= 2) {
-      printf("creation_time %d, '%s'", Time, qPrintable(wpt->GetCreationTime().toString("yyyy-MM-dd hh:mm:ss")));
+      printf("creation_time %" PRId64 ", '%s'", waypt_time, qPrintable(wpt->GetCreationTime().toString(u"yyyy-MM-dd hh:mm:ss")));
     }
   } else {
     /* If false, make sure it is an unknown time value */
-    Time = 0;
+    waypt_time = 0;
     if (global_opts.debug_level >= 2) {
       printf("creation_time UNKNOWN");
     }
   }
 
-  gbfputint32(Time, file_out);
+  gbfputint32(waypt_time, file_out);
 
-  if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
-    SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
+  if (!wpt->gc_data->get_icon().isEmpty() && wpt->icon_descr.compare(u"Geocache Found") == 0) {
+    SymbolId = lowranceusr_find_icon_number_from_desc(wpt->gc_data->get_icon());
   } else {
     SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
   }
   /* If the waypoint is archived or disabled, use a "disabled" icon instead. */
-  if ((wpt->gc_data->is_archived==status_true) || (wpt->gc_data->is_available==status_false)) {
+  if ((wpt->gc_data->is_archived == Geocache::status_t::gs_true) ||
+      (wpt->gc_data->is_available == Geocache::status_t::gs_false)) {
     SymbolId = lowranceusr_find_icon_number_from_desc(DISABLED_CACHE_TXT);
   }
 
@@ -1361,8 +1365,8 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   gbfputint16(WayptType, file_out);
 
   if (writing_version == 3) {
-    float depth = WAYPT_HAS(wpt, depth) ?
-                  METERS_TO_FEET(wpt->depth) : -99999.0;
+    float depth = wpt->depth_has_value() ?
+                  METERS_TO_FEET(wpt->depth_value()) : -99999.0;
     gbfputint32(depth, file_out);
   }
 
@@ -1405,11 +1409,11 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
   gbfputint32(2, file_out);
 
   int SymbolId, ColorId;
-  if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
+  if (!wpt->gc_data->get_icon().isEmpty() && wpt->icon_descr.compare(u"Geocache Found") == 0) {
     if (writing_version == 4) {
       SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
     } else {
-      SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
+      SymbolId = lowranceusr_find_icon_number_from_desc(wpt->gc_data->get_icon());
     }
     ColorId = 0; // default
   } else {
@@ -1421,7 +1425,8 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
     }
   }
   /* If the waypoint is archived or disabled, use a "disabled" icon instead. */
-  if ((wpt->gc_data->is_archived==status_true) || (wpt->gc_data->is_available==status_false)) {
+  if ((wpt->gc_data->is_archived == Geocache::status_t::gs_true) ||
+      (wpt->gc_data->is_available == Geocache::status_t::gs_false)) {
     SymbolId = lowranceusr_find_icon_number_from_desc(DISABLED_CACHE_TXT);
     ColorId = 0; // default
   }
@@ -1432,7 +1437,7 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
   lowranceusr4_writestr(wpt->description, file_out, 2);
 
   /* Alarm radius */
-  gbfputflt(WAYPT_GET(wpt, proximity, 0.0), file_out);
+  gbfputflt(wpt->proximity_value_or(0.0), file_out);
 
   /* Creation date/time */
   auto ts = lowranceusr4_jd_from_timestamp(wpt->GetCreationTime());
@@ -1483,7 +1488,7 @@ LowranceusrFormat::lowranceusr4_write_waypoints()
   route_disp_all(nullptr, nullptr, register_waypt_lambda);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %d waypoints\n", waypt_table->size());
+    printf(MYNAME " writing %s waypoints\n", QByteArray::number(waypt_table->size()).constData());
   }
 
   gbfputint32(waypt_table->size(), file_out);
@@ -1547,7 +1552,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
   } else if (!trk->rte_desc.isEmpty()) {
     name = trk->rte_desc;
   } else {
-    name = name + QString("Babel %1").arg(trail_count);
+    name = name + QStringLiteral("Babel %1").arg(trail_count);
   }
 
   int text_len = name.length();
@@ -1878,7 +1883,7 @@ LowranceusrFormat::write()
 
     /* date string */
     gpsbabel::DateTime now = current_time().toUTC();
-    lowranceusr4_writestr(now.toString("MM/dd/yyyy"), file_out, 1);
+    lowranceusr4_writestr(now.toString(u"MM/dd/yyyy"), file_out, 1);
 
     /* creation date/time */
     auto ts = lowranceusr4_jd_from_timestamp(now);
@@ -1889,7 +1894,7 @@ LowranceusrFormat::write()
     gbfputc(0, file_out);
 
     /* device serial number */
-    opt_serialnum_i = atoi(opt_serialnum);
+    opt_serialnum_i = xstrtoi(opt_serialnum, nullptr, 10);
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */

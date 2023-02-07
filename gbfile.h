@@ -26,11 +26,14 @@
 #include <QByteArray>           // for QByteArray
 #include <QString>              // for QString
 
-#include <cstdarg>             // for va_list
 #include <cstdint>             // for int32_t, int16_t, uint32_t
 #include <cstdio>              // for FILE
 
-#include "defs.h"
+#if HAVE_LIBZ
+#include <zlib.h>
+#elif !ZLIB_INHIBITED
+#include "zlib.h"
+#endif
 
 
 struct gbfile;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
+    <width>675</width>
     <height>270</height>
    </rect>
   </property>
@@ -217,19 +217,6 @@ This option is used along with the stop to discard trackpoints that were recorde
       <widget class="QDateTimeEdit" name="startEdit">
        <property name="toolTip">
         <string>Use track pts. after this time. </string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3" rowspan="2">
-      <widget class="QCheckBox" name="TZCheck">
-       <property name="toolTip">
-        <string>If checked, time specified here is based on this computer's current time zone. </string>
-       </property>
-       <property name="whatsThis">
-        <string>If checked, the times specified here are based on the local computer's time zone.  Otherwise it is UTC.</string>
-       </property>
-       <property name="text">
-        <string>Local Time</string>
        </property>
       </widget>
      </item>
@@ -480,6 +467,38 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
        </property>
       </widget>
      </item>
+     <item row="3" column="3" rowspan="2">
+      <widget class="QRadioButton" name="localTime">
+       <property name="toolTip">
+        <string>If checked, times specified here are based on this computer's current time zone.</string>
+       </property>
+       <property name="whatsThis">
+        <string>If checked, times specified here are based on this computer's current time zone.</string>
+       </property>
+       <property name="text">
+        <string>Local Time</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="3" column="4" rowspan="2">
+      <widget class="QRadioButton" name="utc">
+       <property name="toolTip">
+        <string>If checked, times specified here are UTC.</string>
+       </property>
+       <property name="whatsThis">
+        <string>If checked, times specified here are UTC.</string>
+       </property>
+       <property name="text">
+        <string>UTC</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroup</string>
+       </attribute>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="0" column="1">
@@ -510,6 +529,38 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>titleCheck</tabstop>
+  <tabstop>titleText</tabstop>
+  <tabstop>moveCheck</tabstop>
+  <tabstop>weeksSpin</tabstop>
+  <tabstop>daysSpin</tabstop>
+  <tabstop>hoursSpin</tabstop>
+  <tabstop>minsSpin</tabstop>
+  <tabstop>secsSpin</tabstop>
+  <tabstop>startCheck</tabstop>
+  <tabstop>startEdit</tabstop>
+  <tabstop>localTime</tabstop>
+  <tabstop>utc</tabstop>
+  <tabstop>stopCheck</tabstop>
+  <tabstop>stopEdit</tabstop>
+  <tabstop>packCheck</tabstop>
+  <tabstop>mergeCheck</tabstop>
+  <tabstop>splitDateCheck</tabstop>
+  <tabstop>splitTimeCheck</tabstop>
+  <tabstop>splitTimeSpin</tabstop>
+  <tabstop>splitTimeCombo</tabstop>
+  <tabstop>splitDistanceCheck</tabstop>
+  <tabstop>splitDistSpin</tabstop>
+  <tabstop>splitDistCombo</tabstop>
+  <tabstop>GPSFixesCheck</tabstop>
+  <tabstop>GPSFixesCombo</tabstop>
+  <tabstop>speedCheck</tabstop>
+  <tabstop>courseCheck</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

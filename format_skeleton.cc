@@ -148,10 +148,7 @@ ff_vecs_t format_skeleton_vecs = {
   format_skeleton_write,
   format_skeleton_exit,
   &format_skeleton_args,
-  CET_CHARSET_ASCII, 0,			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  NULL_POS_OPS, // Unless you do realtime positioning
-  nullptr // name. Not used by modules.
+  NULL_POS_OPS // Unless you do realtime positioning
 
 };
 /**************************************************************************/

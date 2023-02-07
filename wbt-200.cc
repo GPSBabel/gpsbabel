@@ -18,11 +18,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <array>                   // for array
+#include <cctype>                  // for isprint
+#include <cstdarg>                 // for va_end, va_list, va_start
+#include <cstdio>                  // for size_t, snprintf, fread, fclose, feof
+#include <cstdint>                 // for uint32_t, int32_t, int16_t, uint16_t
+#include <cstdlib>                 // for strtod, strtoul
+#include <cstring>                 // for strlen, memcmp, memcpy
+#include <ctime>                   // for time_t, tm
+
+#include <QByteArray>              // for QByteArray
+#include <QIntegerForSize>         // for qPrintable
+#include <QString>                 // for QString
+#include <QVector>                 // for QVector
+
 #include "defs.h"
-#include "gbser.h"
-#include "grtcirc.h"
-#include <cstdio>
-#include <cstdlib>
+#include "gbser.h"                 // for gbser_set_port, gbser_deinit, gbse...
+
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"
@@ -90,7 +102,6 @@ static struct {
 
 static void* fd;
 static FILE* fl;
-static char* port;
 static char* opt_erase;
 
 enum wintec_gps_types {
@@ -124,14 +135,12 @@ struct buf_head {
   unsigned            checksum;
 };
 
-namespace { // fix ODR violation with skytraq
-  struct read_state {
-    route_head*          route_head_;
-    unsigned            wpn, tpn;
-  
-    struct buf_head     data;
-  };
-}
+struct read_state {
+  route_head*          route_head_;
+  unsigned            wpn, tpn;
+
+  struct buf_head     data;
+};
 
 static void db(int l, const char* msg, ...)
 {
@@ -226,7 +235,7 @@ static void buf_extend(struct buf_head* h, size_t amt)
 
 static void buf_update_checksum(struct buf_head* h, const void* data, size_t len)
 {
-  auto* cp = (unsigned char*) data;
+  auto* cp = static_cast<const unsigned char*>(data);
 
   db(4, "Updating checksum with %p, %zu, before: %02x ",
      data, len, h->checksum);
@@ -391,11 +400,9 @@ static wintec_gps_types guess_device()
 
 static void rd_init(const QString& fname)
 {
-  port = xstrdup(qPrintable(fname));
-
   db(1, "Opening port...\n");
-  if ((fd = gbser_init(port)) == nullptr) {
-    fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
+  if ((fd = gbser_init(qPrintable(fname))) == nullptr) {
+    fatal(MYNAME ": Can't initialise port \"%s\"\n", qPrintable(fname));
   }
 
   dev_type = guess_device();
@@ -409,7 +416,6 @@ static void rd_deinit()
   db(1, "Closing port...\n");
   gbser_deinit(fd);
   fd = nullptr;
-  xfree(port);
 }
 
 static int rd_buf(void* buf, int len)
@@ -491,27 +497,30 @@ static char* get_param(const char* cmd, char* buf, int len)
 static int get_param_int(const char* cmd)
 {
   char buf[80];
-  return atoi(get_param(cmd, buf, sizeof(buf)));
+  return xstrtoi(get_param(cmd, buf, sizeof(buf)), nullptr, 10);
 }
 
 static double get_param_float(const char* cmd)
 {
   char buf[80];
-  return atof(get_param(cmd, buf, sizeof(buf)));
+  return strtod(get_param(cmd, buf, sizeof(buf)), nullptr);
 }
 
 /* Decompose binary date into discreet fields */
-#define _SPLIT_DATE(tim) \
-    int sec    = (((tim) >>  0) & 0x3F); \
-    int min    = (((tim) >>  6) & 0x3F); \
-    int hour   = (((tim) >> 12) & 0x1F); \
-    int mday   = (((tim) >> 17) & 0x1F); \
-    int mon    = (((tim) >> 22) & 0x0F); \
-    int year   = (((tim) >> 26) & 0x3F);
+std::array<int, 6> split_date(uint32_t tim)
+{
+  int sec    = (((tim) >>  0) & 0x3F);
+  int min    = (((tim) >>  6) & 0x3F);
+  int hour   = (((tim) >> 12) & 0x1F);
+  int mday   = (((tim) >> 17) & 0x1F);
+  int mon    = (((tim) >> 22) & 0x0F);
+  int year   = (((tim) >> 26) & 0x3F);
+  return {sec, min, hour, mday, mon, year};
+}
 
 static time_t decode_date(uint32_t tim)
 {
-  _SPLIT_DATE(tim)
+  auto [sec, min, hour, mday, mon, year] = split_date(tim);
   struct tm t;
 
   t.tm_sec    = sec;
@@ -526,7 +535,7 @@ static time_t decode_date(uint32_t tim)
 
 static int check_date(uint32_t tim)
 {
-  _SPLIT_DATE(tim)
+  auto [sec, min, hour, mday, mon, year] = split_date(tim);
 
   /* Sanity check the date. We don't allow years prior to 2004 because zero in
   * those bits will usually indicate that we have an altitude instead of a
@@ -538,16 +547,13 @@ static int check_date(uint32_t tim)
 
 static Waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
 {
-  char     wp_name[20];
   auto* wpt = new Waypoint;
-
-  sprintf(wp_name, fmt, index);
 
   wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
   wpt->SetCreationTime(tim);
-  wpt->shortname      = wp_name;
+  wpt->shortname      = QString::asprintf(fmt, index);
 
   return wpt;
 }
@@ -764,12 +770,12 @@ static void wbt200_data_read()
     int f;
     db(1, "Erasing data\n");
     for (f = 27; f <= 31; f++) {
-      sprintf(line_buf, "$PFST,REMOVEFILE,%d", f);
+      snprintf(line_buf, sizeof(line_buf), "$PFST,REMOVEFILE,%d", f);
       do_cmd(line_buf, "$PFST,REMOVEFILE", BUFSPEC(line_buf));
     }
     db(1, "Reclaiming free space\n");
     for (f = 0; f <= 3; f++) {
-      sprintf(line_buf, "$PFST,FFSRECLAIM,%d", f);
+      snprintf(line_buf, sizeof(line_buf), "$PFST,FFSRECLAIM,%d", f);
       do_cmd(line_buf, "$PFST,FFSRECLAIM", BUFSPEC(line_buf));
     }
   }
@@ -869,7 +875,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   buf_empty(&st->data);
 
   rd_drain();
-  sprintf(cmd_buf, "@AL,5,3,%u", pos);
+  snprintf(cmd_buf, sizeof(cmd_buf), "@AL,5,3,%u", pos);
   wr_cmdl(cmd_buf);
 
 
@@ -1063,6 +1069,8 @@ static QVector<arglist_t> wbt_sargs = {
   },
 };
 
+/* master process: don't convert anything */
+
 ff_vecs_t wbt_svecs = {
   ff_type_serial,
   { ff_cap_read, ff_cap_read, ff_cap_none },
@@ -1074,15 +1082,15 @@ ff_vecs_t wbt_svecs = {
   nullptr,
   nullptr,
   &wbt_sargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 
 /* used for wbt-bin /and/ wbt-tk1 */
 
 static QVector<arglist_t> wbt_fargs = {
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t wbt_fvecs = {
   ff_type_file,
@@ -1095,7 +1103,5 @@ ff_vecs_t wbt_fvecs = {
   nullptr,
   nullptr,
   &wbt_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

@@ -34,8 +34,8 @@ option	track	split	Split by date or time interval (see README)	string				https:/
 option	track	sdistance	Split by distance	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_sdistance
 option	track	merge	Merge multiple tracks for the same way	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_merge
 option	track	name	Use only track(s) where title matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_name
-option	track	start	Use only track points after this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
-option	track	stop	Use only track points before this timestamp	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
+option	track	start	Use only track points after or at this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
+option	track	stop	Use only track points before or at this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
 option	track	title	Basic title for new track(s)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_title
 option	track	fix	Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_fix
 option	track	course	Synthesize course	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_course
@@ -111,6 +111,7 @@ option	transform	trk	Transform waypoint(s) or route(s) into tracks(s) [W/R]	stri
 option	transform	rptdigits	Number of digits in generated names	integer		2		https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_rptdigits
 option	transform	rptname	Use source name for route point names	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_rptname
 option	transform	del	Delete source data after transformation	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_del
+option	transform	timeless	Create transformed points without times	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/filter_transform.html#fmt_transform_o_timeless
 validate	Validate internal data structures	https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html
 option	validate	checkempty	Check for empty input	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html#fmt_validate_o_checkempty
 option	validate	debug	Output debug messages instead of possibly issuing a fatal error	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_validate.html#fmt_validate_o_debug

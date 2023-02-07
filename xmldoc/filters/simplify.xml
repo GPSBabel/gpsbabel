@@ -18,4 +18,3 @@ wish to use with a Magellan GPS receiver that only supports up to 50 points
 in a route:
 </para>
 <para><userinput>gpsbabel -r -i saroute -f RoadTrip.anr -x simplify,count=50 -o magellan  -F grocery.rte</userinput></para>
-

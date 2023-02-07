@@ -10,7 +10,7 @@
 </para>
 <para>
    The list of keywords include:
-   <screen format="linespecific">
+   <screen>
       alt =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
       arch =     <link linkend="style_def_isarchived">Geocache archived flag</link>
       avail =    <link linkend="style_def_isavailable">Geocache available flag</link>
@@ -78,9 +78,9 @@
    <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>,
    <link linkend="fmt_garmin_gpi">garmin_gpi</link> and partly
    <link linkend="fmt_garmin_txt">garmin_txt</link>. These entities are currently
-   not visible in <productname>MapSource</productname> (6.12.4), but are NOT dropped
+   not visible in <trademark>MapSource</trademark> (6.12.4), but are NOT dropped
    when working with GDB (version 3) or GPX files.
-   <screen></screen>
+   <screen/>
    Please note, that these do NOT provide a geocoding service; don't expect
 	to "convert" a street address to a latitude and longitude.
    <screen>
@@ -97,28 +97,28 @@
 </para>
 <para>
    A typical file may be:
-   <screen format="linespecific">
+   <screen>
      Name, Latitude, Longitude, Description
      GCEBB,35.972033,-87.134700,Mountain Bike Heaven by susy1313
      GC1A37,36.090683,-86.679550,The Troll by a182pilot &amp; Family
    </screen>
 </para>
 <para>
-   If processing data from the UK, GPSBabel can process coordinates using X,Y values (often referred to as Eastings/Northings) as shown in <xref linkend="uk_unicsv_1" /> or the full 12 figure alpha numeric, as shown in <xref linkend="uk_unicsv_2" />.
-   Note in <xref linkend="uk_unicsv_2" /> you need to split your original X,Y values into the 100Km 2 character code,
+   If processing data from the UK, GPSBabel can process coordinates using X,Y values (often referred to as Eastings/Northings) as shown in <xref linkend="uk_unicsv_1"/> or the full 12 figure alpha numeric, as shown in <xref linkend="uk_unicsv_2"/>.
+   Note in <xref linkend="uk_unicsv_2"/> you need to split your original X,Y values into the 100Km 2 character code,
    eastings and northing values.
-   <example id="uk_unicsv_1">
+   <example xml:id="uk_unicsv_1">
      <title>CSV input for UK data with XY coordinates</title>
-     <screen format="linespecific">
+     <screen>
        bng_e,bng_n,name,date
        353729,177210,id_001,2018/02/03
        356025,181221,id_002,2018/02/03
        357962,181528,id_003,2018/03/03
      </screen>
    </example>
-   <example id="uk_unicsv_2">
+   <example xml:id="uk_unicsv_2">
      <title>CSV input for UK data with alphanumeric coordinates</title>
-     <screen format="linespecific">
+     <screen>
        bng_z,bng_e,bng_n,name,date
        ST,53729,77210,id_001,2018/02/03
        ST,56025,81221,id_002,2018/02/03
@@ -132,7 +132,7 @@
 </para>
 <para>
    With at least ONE valid timestamp in data a unicsv output may look like that:
-   <screen format="linespecific">
+   <screen>
      No,Name,Latitude,Longitude,Description,Date,Time
      1,"GCEBB",35.972033,-87.134700,"Mountain Bike Heaven by susy1313",2003/06/29,09:00:00
      2,"GC1A37",36.090683,-86.679550,"The Troll by a182pilot &amp; Family",,

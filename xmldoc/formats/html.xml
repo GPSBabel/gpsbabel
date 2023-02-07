@@ -18,4 +18,3 @@
 <para>
   <userinput>gpsbabel -i gpx -f 12345.gpx -o html,stylesheet=green.css,encrypt -F 12345.html</userinput>
 </para>
-

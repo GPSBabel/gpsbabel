@@ -21,230 +21,55 @@
 
  */
 
-/*
-	History:
-
-	* 2007/05/18: initial release (only a reader)
-	* 2007/05/20: added writer code with embedded bitmap
-	* 2007/05/22: add support for multiple bounding boxes
-	              (useful / required!) for large waypoints lists
-	* 2007/05/23: add optional user bitmap
-	* 2007/06/02: new method to compute center (mean) of bounds
-	              avoid endless loop in group splitting
-	* 2007/07/10: put address fields (i.e. city) into GMSD
-	* 2007/07/12: add write support for new address fields
-	* 2007/10/20: add option unique
-	* 2007/12/02: support speed and proximity distance (+ alerts)
-	* 2008/01/14: fix structure error after adding speed/proximity
-	* 2008/03/22: add options "speed" and "proximity" (default values) and "sleep"
-
-	ToDo:
-
-	* Display mode ("Symbol & Name") ??? not in gpi ???
-	* support category from GMSD "Garmin Special Data"
-*/
-
-#include <algorithm>               // for stable_sort
-#include <cctype>                  // for tolower
-#include <cstdint>                 // for int32_t, int16_t, uint16_t
-#include <cstdio>                  // for SEEK_CUR, SEEK_SET
-#include <cstdlib>                 // for atoi
-#include <cstring>                 // for strlen, strncmp
-#include <ctime>                   // for time, time_t, gmtime
+#include "garmin_gpi.h"
 
 #include <QByteArray>              // for QByteArray, operator==
-#include <QList>                   // for QList<>::iterator, QList
+#include <QDateTime>               // for QDateTime
+#include <QList>                   // for QList
 #include <QString>                 // for QString, operator+, operator<
 #include <QThread>                 // for QThread
-#include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
 #include <QtGlobal>                // for foreach, Q_UNUSED
 
+#include <algorithm>               // for stable_sort
+#include <cctype>                  // for tolower
+#include <cstdint>                 // for uint32_t, int32_t
+#include <cstdio>                  // for SEEK_CUR, SEEK_SET
+#include <cstring>                 // for strlen, strncmp
+#include <ctime>                   // for time, time_t
+#include <memory>                  // for unique_ptr
+
 #include "defs.h"
-#include "garmin_gpi.h"
-#include "cet_util.h"              // for cet_convert_init
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
-#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbfile, gbsize_t
+#include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 
 
 #define MYNAME "garmin_gpi"
 
-#define GPI_DBG 1
-#undef GPI_DBG
-
-#define DEFAULT_ICON	"Waypoint"
-#define WAYPOINTS_PER_BLOCK	128
+#define DEFAULT_ICON  "Waypoint"
+#define WAYPOINTS_PER_BLOCK  128
 
 /* flags used in the gpi address mask */
-#define GPI_ADDR_CITY		1
-#define GPI_ADDR_COUNTRY	2
-#define GPI_ADDR_STATE		4
-#define GPI_ADDR_POSTAL_CODE	8
-#define GPI_ADDR_ADDR		16
+#define GPI_ADDR_CITY       1
+#define GPI_ADDR_COUNTRY     2
+#define GPI_ADDR_STATE       4
+#define GPI_ADDR_POSTAL_CODE 8
+#define GPI_ADDR_ADDR      16
 
-static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
-static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
-static char* opt_lang;
-static char* opt_writecodec;
-static double defspeed, defproximity;
-static int alerts;
+#define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
-static QVector<arglist_t> garmin_gpi_args = {
-  {
-    "alerts", &opt_alerts, "Enable alerts on speed or proximity distance",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "bitmap", &opt_bitmap, "Use specified bitmap on output",
-    nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
-  },
-  {
-    "category", &opt_cat, "Default category on output",
-    "My points", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "hide", &opt_hide_bitmap, "Don't show gpi bitmap on device",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "descr", &opt_descr, "Write description to address field",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "notes", &opt_notes, "Write notes to address field",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "position", &opt_pos, "Write position to address field",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "proximity", &opt_proximity, "Default proximity",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "sleep", &opt_sleep, "After output job done sleep n second(s)",
-    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "speed", &opt_speed, "Default speed",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "unique", &opt_unique, "Create unique waypoint names (default = yes)",
-    "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "units", &opt_units, "Units used for names with @speed ('s'tatute or 'm'etric)",
-    "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "writecodec", &opt_writecodec, "codec to use for writing strings",
-    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "languagecode", &opt_lang, "language code to use for reading dual language files",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-struct reader_data_t {
-public:
-  int D2;
-  char S3[9];		/* "GRMRECnn" */
-  time_t crdate;	/* creation date and time */
-  char POI[4];		/* "POI" */
-  char S8[3];
-  QString group;
-  QString category;
-};
-
-struct writer_data_t {
-  QList<Waypoint*> waypt_list;
-  int sz{0};
-  int alert{0};
-  bounds bds;
-  writer_data_t* top_left{nullptr};
-  writer_data_t* top_right{nullptr};
-  writer_data_t* bottom_left{nullptr};
-  writer_data_t* bottom_right{nullptr};
-};
-
-struct gpi_waypt_data_t {
-  int sz;
-  char* addr;
-  char* postal_code;
-};
-
-struct bmp_header_t {
-  int32_t size;
-  int16_t res1;
-  int16_t res2;
-  int32_t image_offset;
-  int32_t header_size;
-  int32_t width;
-  int32_t height;
-  int16_t planes;
-  int16_t bpp;
-  int32_t compression_type;
-  int32_t image_data_size;
-  int32_t resolution_h;
-  int32_t resolution_v;
-  int32_t used_colors;
-  int32_t important_colors;
-};
-
-struct gpi_bitmap_header_t {
-  int16_t index;
-  int16_t height;
-  int16_t width;
-  int16_t line_sz;
-  int16_t bpp;
-  int16_t fixed_0;
-  int32_t image_size;
-  int32_t fixed_2c;
-  int32_t palette_size;
-  int32_t tr_color;
-  int32_t flag2;
-  int32_t size_2c;
-};
-
-struct gpi_waypt_t {
-  int sz{0};
-  int alerts{0};
-  short mask{0};
-  QString addr;
-  QString city;
-  QString country;
-  QString phone_nr;
-  QString postal_code;
-  QString state;
-};
-
-static gbfile* fin, *fout;
-static uint16_t codepage;	/* code-page, e.g. 1252, 65001 */
-static reader_data_t* rdata;
-static writer_data_t* wdata;
-static short_handle short_h;
-static char units;
-static time_t gpi_timestamp = 0;
-
-#ifdef GPI_DBG
-# define PP warning("@%1$6x (%1$8d): ", gbftell(fin))
-# define dbginfo warning
-#else
-# define PP
-#endif
+#define GPI_DBG global_opts.debug_level >= 3
+#define PP if (GPI_DBG) warning("@%1$6x (%1$8d): ", gbftell(fin))
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
 *******************************************************************************/
 
 /* look for or initialize GMSD */
-static garmin_fs_t*
-gpi_gmsd_init(Waypoint* wpt)
+garmin_fs_t*
+GarminGPIFormat::gpi_gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (wpt == nullptr) {
@@ -257,14 +82,8 @@ gpi_gmsd_init(Waypoint* wpt)
   return gmsd;
 }
 
-struct lc_string {
-  QByteArray lc;
-  QByteArray str;
-  int strlen{0};
-};
-
-static lc_string
-gpi_read_lc_string()
+GarminGPIFormat::lc_string
+GarminGPIFormat::gpi_read_lc_string() const
 {
   lc_string result;
 
@@ -287,8 +106,8 @@ gpi_read_lc_string()
 }
 
 /* read a standard string with or without 'EN' (or whatever) header */
-static QString
-gpi_read_string(const char* field)
+QString
+GarminGPIFormat::gpi_read_string(const char* field) const
 {
   QByteArray string;
 
@@ -330,21 +149,17 @@ gpi_read_string(const char* field)
     }
   }
 
-  QString result = STRTOUNICODE(string).trimmed();
-#ifdef GPI_DBG
-  dbginfo("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
-#endif
+  QString result = str_to_unicode(string).trimmed();
+  if (GPI_DBG) {
+    warning("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
+  }
   return result;
 }
 
-static void
-read_header()
+void
+GarminGPIFormat::read_header()
 {
   int len, i;
-#ifdef GPI_DBG
-  struct tm tm;
-  char stime[32];
-#endif
 
   i = gbfgetint32(fin);
   if (i != 0) {
@@ -352,28 +167,26 @@ read_header()
   }
   rdata->D2 = gbfgetint32(fin);
 
-  gbfread(&rdata->S3, 1, sizeof(rdata->S3) - 1, fin);	/* GRMRECnn */
+  gbfread(&rdata->S3, 1, sizeof(rdata->S3) - 1, fin);  /* GRMRECnn */
   if (strncmp(rdata->S3, "GRMREC", 6) != 0) {
     fatal(MYNAME ": No GPI file!\n");
   }
 
   PP;
   rdata->crdate = gbfgetint32(fin);
-#ifdef GPI_DBG
-  tm = *localtime(&rdata->crdate);
-  tm.tm_year += 20;	/* !!! */
-  tm.tm_mday -= 1;	/* !!! */
-  strftime(stime, sizeof(stime), "%Y/%m/%d %H:%M:%S", &tm);
-  dbginfo("crdate = %lu (%s)\n", rdata->crdate, stime);
-#endif
+  if (GPI_DBG) {
+    time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
+    warning("crdate = %lu (%s)\n", rdata->crdate,
+            CSTR(QDateTime::fromSecsSinceEpoch(crdate, Qt::UTC).toString(Qt::ISODate)));
+  }
 
-  (void) gbfgetint16(fin);	/* 0 */
+  (void) gbfgetint16(fin);  /* 0 */
 
   len = gbfgetint16(fin);
-  gbfseek(fin, len, SEEK_CUR);	/* "my.gpi" */
+  gbfseek(fin, len, SEEK_CUR);  /* "my.gpi" */
 
-  i =  gbfgetint32(fin);	/* 1 */
-  (void) gbfgetint32(fin);	/* 12 */
+  i =  gbfgetint32(fin);  /* 1 */
+  (void) gbfgetint32(fin);  /* 12 */
   /* There are two dwords next.  On most typical files, they're
   * "1" and "12".  On files from garminoneline.de/extras/poi, the
   * next two words are "15" and "5" and there's 17 additional bytes
@@ -395,39 +208,35 @@ read_header()
   gbfread(&rdata->S8, 1, sizeof(rdata->S8) - 1, fin);
 
   codepage = gbfgetuint16(fin);
-#ifdef GPI_DBG
-  PP;
-  dbginfo("Code Page: %d\n",codepage);
-#endif
-  (void) gbfgetint16(fin);   	/* typically 0, but  0x11 in
-  					Garminonline.de files.  */
+  if (GPI_DBG) {
+    PP;
+    warning("Code Page: %d\n",codepage);
+  }
+  (void) gbfgetint16(fin);     /* typically 0, but  0x11 in
+            Garminonline.de files.  */
 
-#ifdef GPI_DBG
-  PP;
-  dbginfo("< leaving header\n");
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("< leaving header\n");
+  }
 }
 
-/* gpi tag handler */
-static int read_tag(const char* caller, int tag, Waypoint* wpt);
-
-
 /* read a single poi with all options */
-static void
-read_poi(const int sz, const int tag)
+void
+GarminGPIFormat::read_poi(const int sz, const int tag)
 {
-#ifdef GPI_DBG
-  PP;
-  dbginfo("> reading poi (size %d)\n", sz);
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("> reading poi (size %d)\n", sz);
+  }
   PP;
   int len = 0;
   if (tag == 0x80002) {
-    len = gbfgetint32(fin);	/* sub-header size */
+    len = gbfgetint32(fin);  /* sub-header size */
   }
-#ifdef GPI_DBG
-  dbginfo("poi sublen = %1$d (0x%1$x)\n", len);
-#endif
+  if (GPI_DBG) {
+  warning("poi sublen = %1$d (0x%1$x)\n", len);
+  }
   (void) len;
   int pos = gbftell(fin);
 
@@ -437,8 +246,8 @@ read_poi(const int sz, const int tag)
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
   wpt->longitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
 
-  (void) gbfgetint16(fin);	/* ? always 1 ? */
-  (void) gbfgetc(fin);		/* seems to 1 when extra options present */
+  (void) gbfgetint16(fin);  /* ? always 1 ? */
+  (void) gbfgetc(fin);    /* seems to 1 when extra options present */
   wpt->shortname = gpi_read_string("Shortname");
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
@@ -457,40 +266,38 @@ read_poi(const int sz, const int tag)
 
   waypt_add(wpt);
 
-#ifdef GPI_DBG
-  PP;
-  dbginfo("< leaving poi\n");
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("< leaving poi\n");
+  }
 }
 
 /* read poi's following a group header */
-static void
-read_poi_list(const int sz)
+void
+GarminGPIFormat::read_poi_list(const int sz)
 {
-  int i;
-
   int pos = gbftell(fin);
-#ifdef GPI_DBG
+  if (GPI_DBG) {
+    PP;
+    warning("> reading poi list (-> %1$x / %1$d )\n", pos + sz);
+  }
   PP;
-  dbginfo("> reading poi list (-> %1$x / %1$d )\n", pos + sz);
-#endif
-  PP;
-  i = gbfgetint32(fin);	/* mostly 23 (0x17) */
-#ifdef GPI_DBG
-  dbginfo("list sublen = %1$d (0x%1$x)\n", i);
-#else
+  int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
+  if (GPI_DBG) {
+    warning("list sublen = %1$d (0x%1$x)\n", i);
+  }
   (void) i;
-#endif
-  (void) gbfgetint32(fin);	/* max-lat */
-  (void) gbfgetint32(fin);	/* max-lon */
-  (void) gbfgetint32(fin);	/* min-lat */
-  (void) gbfgetint32(fin);	/* min-lon */
 
-  (void) gbfgetc(fin);		/* three unknown bytes */
-  (void) gbfgetc(fin);		/* ? should be zero ? */
+  (void) gbfgetint32(fin);  /* max-lat */
+  (void) gbfgetint32(fin);  /* max-lon */
+  (void) gbfgetint32(fin);  /* min-lat */
+  (void) gbfgetint32(fin);  /* min-lon */
+
+  (void) gbfgetc(fin);    /* three unknown bytes */
+  (void) gbfgetc(fin);    /* ? should be zero ? */
   (void) gbfgetc(fin);
 
-  (void) gbfgetint32(fin);	/* ? const 0x1000100 ? */
+  (void) gbfgetint32(fin);  /* ? const 0x1000100 ? */
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
     int tag = gbfgetint32(fin);
@@ -498,29 +305,27 @@ read_poi_list(const int sz)
       return;
     }
   }
-#ifdef GPI_DBG
-  PP;
-  dbginfo("< leaving poi list\n");
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("< leaving poi list\n");
+  }
 }
 
-
-static void
-read_poi_group(const int sz, const int tag)
+void
+GarminGPIFormat::read_poi_group(const int sz, const int tag)
 {
   int pos = gbftell(fin);
-#ifdef GPI_DBG
-  PP;
-  dbginfo("> reading poi group (-> %1$x / %1$d)\n", pos + sz);
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("> reading poi group (-> %1$x / %1$d)\n", pos + sz);
+  }
   if (tag == 0x80009) {
     PP;
-    int subsz = gbfgetint32(fin);	/* ? offset to category data ? */
-#ifdef GPI_DBG
-    dbginfo("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
-#else
+    int subsz = gbfgetint32(fin);  /* ? offset to category data ? */
+    if (GPI_DBG) {
+      warning("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
+    }
     (void)subsz;
-#endif
   }
   rdata->group = gpi_read_string("Group");
 
@@ -531,10 +336,10 @@ read_poi_group(const int sz, const int tag)
     }
   }
 
-#ifdef GPI_DBG
-  PP;
-  dbginfo("< leaving poi group\n");
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("< leaving poi group\n");
+  }
 }
 
 // TODO: 'tag' is probably not a 32 bit value.
@@ -544,8 +349,8 @@ read_poi_group(const int sz, const int tag)
 // of bytes for all record fields and all nested records, starting after the
 // length field)
 /* gpi tag handler */
-static int
-read_tag(const char* caller, const int tag, Waypoint* wpt)
+int
+GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
   Q_UNUSED(caller);
   int dist;
@@ -557,27 +362,27 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
   int sz = gbfgetint32(fin);
   int pos = gbftell(fin);
 
-#ifdef GPI_DBG
-  PP;
-  dbginfo("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
-#endif
+  if (GPI_DBG) {
+    PP;
+    warning("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
+  }
   if ((tag >= 0x80000) && (tag <= 0x800ff)) {
     sz += 4;
   }
 
   switch (tag) {
-  case 0x3:	/* size = 12 */
-  case 0x80003:	/* size = 12 */
+  case 0x3:  /* size = 12 */
+  case 0x80003:  /* size = 12 */
 
-    dist = gbfgetint16(fin);		/* proximity distance in meters */
-    speed = (double)gbfgetint16(fin) / 100;	/* speed in meters per second */
+    dist = gbfgetint16(fin);    /* proximity distance in meters */
+    speed = (double)gbfgetint16(fin) / 100;  /* speed in meters per second */
 
     if (dist > 0) {
-      WAYPT_SET(wpt, proximity, dist);
+      wpt->set_proximity(dist);
     }
     if (speed > 0) {
       /* speed isn't part of a normal waypoint
-      WAYPT_SET(wpt, speed, speed);
+      wpt->set_speed(speed);
       */
       if ((wpt->shortname.isEmpty()  || ((wpt->shortname).indexOf('@'))==-1)) {
         if (units == 's') {
@@ -586,7 +391,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
           speed = MPS_TO_KPH(speed);
         }
         QString base = wpt->shortname.isEmpty() ? "WPT" : wpt->shortname;
-        wpt->shortname = base + QString("@%1").arg(speed,0,'f',0);
+        wpt->shortname = base + QStringLiteral("@%1").arg(speed,0,'f',0);
       }
     }
 
@@ -594,15 +399,15 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
     (void) gbfgetint32(fin);
     break;
 
-  case 0x4:	/* size = 2  ? */
-  case 0x6:	/* size = 2  ? */
+  case 0x4:  /* size = 2  ? */
+  case 0x6:  /* size = 2  ? */
     break;
 
-  case 0x5:	/* group bitmap */
+  case 0x5:  /* group bitmap */
     break;
 
   case 0x7:
-    (void) gbfgetint16(fin);	/* category number */
+    (void) gbfgetint16(fin);  /* category number */
     rdata->category = gpi_read_string("Category");
     break;
 
@@ -610,7 +415,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
     wpt->description = gpi_read_string("Description");
     break;
 
-  case 0xe:	/* ? notes or description / or both ? */
+  case 0xe:  /* ? notes or description / or both ? */
     mask = gbfgetc(fin);
     // Olaf's code called this a mask, but the bits below have nothing
     // in common.  I'm wondering if that first byte is something else and
@@ -640,20 +445,20 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
     read_poi_list(sz);
     break;
 
-  case 0x9:	/* ? older versions / no category data ? */
-  case 0x80009:	/* current POI loader */
+  case 0x9:  /* ? older versions / no category data ? */
+  case 0x80009:  /* current POI loader */
     read_poi_group(sz, tag);
     break;
 
-  case 0x8000b:	/* address (street/city...) */
+  case 0x8000b:  /* address (street/city...) */
     (void) gbfgetint32(fin);
   // FALLTHROUGH
-  case 0xb:	/* as seen in German POI files. */
+  case 0xb:  /* as seen in German POI files. */
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
-#ifdef GPI_DBG
-    dbginfo("GPI Address field mask: %d (0x%02x)\n", mask, mask);
-#endif
+    if (GPI_DBG) {
+      warning("GPI Address field mask: %d (0x%02x)\n", mask, mask);
+    }
     if ((mask & GPI_ADDR_CITY) && !(str = gpi_read_string("City")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
       garmin_fs_t::set_city(gmsd, str);
@@ -699,21 +504,21 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
     }
     break;
 
-  case 0x8000c:	/* phone-number */
+  case 0x8000c:  /* phone-number */
     (void) gbfgetint32(fin);
     PP;
 
     mask = gbfgetint16(fin); /* phone fields mask */
-#ifdef GPI_DBG
-    dbginfo("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
-#endif
+    if (GPI_DBG) {
+      warning("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
+    }
     if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
       garmin_fs_t::set_phone_nr(gmsd, str);
     }
     break;
 
-  case 0x80012:	/* ? sounds / images ? */
+  case 0x80012:  /* ? sounds / images ? */
     break;
 
   /* Images? Seen in http://geepeeex.com/Stonepages.gpi */
@@ -723,23 +528,21 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
   case 0x11:
   case 0x80007:
     /* Looks like some kind of calendar information. */
-#ifdef GPI_DBG
-  {
-    int x;
-    unsigned char* b = (unsigned char*) xmalloc(sz);
-    fprintf(stderr, "Tag: %x\n", tag);
-    gbfread(b, 1, sz, fin);
-    fprintf(stderr, "\n");
-    for (x = 0; x < sz; x++) {
-      fprintf(stderr, "%02x ", b[x]);
+    if (GPI_DBG) {
+      int x;
+      std::unique_ptr<unsigned char[]> b(new unsigned char[sz]);
+      fprintf(stderr, "Tag: %x\n", tag);
+      gbfread(b.get(), 1, sz, fin);
+      fprintf(stderr, "\n");
+      for (x = 0; x < sz; x++) {
+        fprintf(stderr, "%02x ", b[x]);
+      }
+      fprintf(stderr, "\n");
+      for (x = 0; x < sz; x++) {
+        fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
+      }
+      fprintf(stderr, "\n");
     }
-    fprintf(stderr, "\n");
-    for (x = 0; x < sz; x++) {
-      fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
-    }
-    fprintf(stderr, "\n");
-  }
-#endif // GPI_DBG
   break;
   default:
     warning(MYNAME ": Unknown tag (0x%x). Please report!\n", tag);
@@ -753,32 +556,32 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 * %%%                             gpi writer                               %%% *
 *******************************************************************************/
 
-static void
-write_string(const char* str, const char long_format)
+void
+GarminGPIFormat::write_string(const QByteArray& str, const char long_format) const
 {
-  int len = strlen(str);
+  int len = str.size();
   if (long_format) {
     gbfputint32(len + 4, fout);
     gbfwrite("EN", 1, 2, fout);
   }
   gbfputint16(len, fout);
-  gbfwrite(str, 1, len, fout);
+  gbfwrite(str.constData(), 1, len, fout);
 }
 
-static bool
-compare_wpt_cb(const Waypoint* a, const Waypoint* b)
+bool
+GarminGPIFormat::compare_wpt_cb(const Waypoint* a, const Waypoint* b)
 {
   return a->shortname < b->shortname;
 }
 
-static char
-compare_strings(const QString& s1, const QString& s2)
+char
+GarminGPIFormat::compare_strings(const QString& s1, const QString& s2)
 {
   return s1.compare(s2);
 }
 
-static writer_data_t*
-wdata_alloc()
+GarminGPIFormat::writer_data_t*
+GarminGPIFormat::wdata_alloc()
 {
   auto* res = new writer_data_t;
   waypt_init_bounds(&res->bds);
@@ -786,9 +589,8 @@ wdata_alloc()
   return res;
 }
 
-
-static void
-wdata_free(writer_data_t* data)
+void
+GarminGPIFormat::wdata_free(writer_data_t* data)
 {
   foreach (Waypoint* wpt, data->waypt_list) {
 
@@ -815,17 +617,15 @@ wdata_free(writer_data_t* data)
   delete data;
 }
 
-
-static void
-wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
+void
+GarminGPIFormat::wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
 {
   data->waypt_list.append(wpt);
   waypt_add_to_bounds(&data->bds, wpt);
 }
 
-
-static void
-wdata_check(writer_data_t* data)
+void
+GarminGPIFormat::wdata_check(writer_data_t* data) const
 {
   double center_lon;
 
@@ -888,9 +688,8 @@ wdata_check(writer_data_t* data)
   }
 }
 
-
-static int
-wdata_compute_size(writer_data_t* data)
+int
+GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
 {
   int res = 0;
 
@@ -898,14 +697,14 @@ wdata_compute_size(writer_data_t* data)
     goto skip_empty_block;  /* do not issue an empty block */
   }
 
-  res = 23;	/* bounds, ... of tag 0x80008 */
+  res = 23;  /* bounds, ... of tag 0x80008 */
 
   foreach (Waypoint* wpt, data->waypt_list) {
     garmin_fs_t* gmsd;
 
-    res += 12;		/* tag/sz/sub-sz */
-    res += 19;		/* poi fixed size */
-    res += strlen(STRFROMUNICODE(wpt->shortname));
+    res += 12;    /* tag/sz/sub-sz */
+    res += 19;    /* poi fixed size */
+    res += str_from_unicode(wpt->shortname).size();
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -924,24 +723,24 @@ wdata_compute_size(writer_data_t* data)
         double speed = 0;
         parse_speed(wpt->shortname.mid(pidx + 1), &speed, scale, MYNAME);
         if (speed > 0) {
-          WAYPT_SET(wpt, speed, speed);
+          wpt->set_speed(speed);
         }
 #if 0
         wpt->shortname.truncate(pidx);
 #endif
-      } else if ((opt_speed) && (! WAYPT_HAS(wpt, speed))) {
-        WAYPT_SET(wpt, speed, defspeed);
+      } else if ((opt_speed) && (!wpt->speed_has_value())) {
+        wpt->set_speed(defspeed);
       }
 
-      if ((opt_proximity) && (! WAYPT_HAS(wpt, proximity))) {
-        WAYPT_SET(wpt, proximity, defproximity);
+      if ((opt_proximity) && (!wpt->proximity_has_value())) {
+        wpt->set_proximity(defproximity);
       }
 
-      if ((WAYPT_HAS(wpt, speed) && (wpt->speed > 0)) ||
-          (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0))) {
+      if ((wpt->speed_has_value() && (wpt->speed_value() > 0)) ||
+          (wpt->proximity_has_value() && (wpt->proximity_value() > 0))) {
         data->alert = 1;
         dt->alerts++;
-        res += 20;		/* tag(3) */
+        res += 20;    /* tag(3) */
       }
     }
 
@@ -955,40 +754,40 @@ wdata_compute_size(writer_data_t* data)
         str = wpt->notes;
       }
     } else if (opt_pos) {
-      str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", 0);
+      str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", false);
     }
 
 
     if (!str.isEmpty()) {
       dt->addr = str;
       dt->mask |= GPI_ADDR_ADDR;
-      dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
+      dt->sz += (8 + str_from_unicode(dt->addr).size());
     }
 
     if ((gmsd = garmin_fs_t::find(wpt))) {
       if ((dt->mask == 0) && !(dt->addr = garmin_fs_t::get_addr(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_ADDR;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->addr)));
+        dt->sz += (8 + str_from_unicode(dt->addr).size());
       }
       if (!(dt->city = garmin_fs_t::get_city(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_CITY;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->city)));
+        dt->sz += (8 + str_from_unicode(dt->city).size());
       }
       if (!(dt->country = garmin_fs_t::get_country(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_COUNTRY;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->country)));
+        dt->sz += (8 + str_from_unicode(dt->country).size());
       }
       if (!(dt->state = garmin_fs_t::get_state(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_STATE;
-        dt->sz += (8 + strlen(STRFROMUNICODE(dt->state)));
+        dt->sz += (8 + str_from_unicode(dt->state).size());
       }
       if (!(dt->postal_code = garmin_fs_t::get_postal_code(gmsd, nullptr)).isEmpty()) {
         dt->mask |= GPI_ADDR_POSTAL_CODE;
-        dt->sz += (2 + strlen(STRFROMUNICODE(dt->postal_code)));	/* short form */
+        dt->sz += (2 + str_from_unicode(dt->postal_code).size());  /* short form */
       }
 
       if (!(dt->phone_nr = garmin_fs_t::get_phone_nr(gmsd, nullptr)).isEmpty()) {
-        res += (12 + 4 +  strlen(STRFROMUNICODE(dt->phone_nr)));
+        res += (12 + 4 +  str_from_unicode(dt->phone_nr).size());
       }
     }
     if (dt->mask) {
@@ -1002,9 +801,9 @@ wdata_compute_size(writer_data_t* data)
     if (str.isEmpty()) {
       str = wpt->notes;
     }
-//		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
+//    if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
     if (!str.isEmpty()) {
-      res += (12 + 4 + strlen(STRFROMUNICODE(str)));
+      res += (12 + 4 + str_from_unicode(str).size());
     }
   }
 
@@ -1029,12 +828,11 @@ skip_empty_block:
     return res;
   }
 
-  return res + 12;	/* + 12 = caller needs info about tag header size */
+  return res + 12;  /* + 12 = caller needs info about tag header size */
 }
 
-
-static void
-wdata_write(const writer_data_t* data)
+void
+GarminGPIFormat::wdata_write(const writer_data_t* data) const
 {
   if (data->waypt_list.isEmpty()) {
     goto skip_empty_block;  /* do not issue an empty block */
@@ -1042,7 +840,7 @@ wdata_write(const writer_data_t* data)
 
   gbfputint32(0x80008, fout);
   gbfputint32(data->sz, fout);
-  gbfputint32(23, fout);	/* bounds + three bytes */
+  gbfputint32(23, fout);  /* bounds + three bytes */
 
   gbfputint32(GPS_Math_Deg_To_Semi(data->bds.max_lat), fout);
   gbfputint32(GPS_Math_Deg_To_Semi(data->bds.max_lon), fout);
@@ -1063,100 +861,100 @@ wdata_write(const writer_data_t* data)
     }
 
     gbfputint32(0x80002, fout);
-    int s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
+    int s0 = s1 = 19 + str_from_unicode(wpt->shortname).size();
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
     if (!str.isEmpty()) {
-      s0 += (12 + 4 + strlen(STRFROMUNICODE(str)));  /* descr */
+      s0 += (12 + 4 + str_from_unicode(str).size());  /* descr */
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
     }
     if (!dt->phone_nr.isEmpty()) {
-      s0 += (12 + 4 + strlen(STRFROMUNICODE(dt->phone_nr)));
+      s0 += (12 + 4 + str_from_unicode(dt->phone_nr).size());
     }
     if (dt->alerts) {
       s0 += 20;  /* tag(3) */
     }
 
-    gbfputint32(s0, fout);	/* size of following data (tag) */
-    gbfputint32(s1, fout);	/* basic size (without options) */
+    gbfputint32(s0, fout);  /* size of following data (tag) */
+    gbfputint32(s1, fout);  /* basic size (without options) */
 
     gbfputint32(GPS_Math_Deg_To_Semi(wpt->latitude), fout);
     gbfputint32(GPS_Math_Deg_To_Semi(wpt->longitude), fout);
 
-    gbfputint16(1, fout);	/* ? always 1 ? */
-    gbfputc(alerts, fout);	/* seems to be 1 when extra options present */
+    gbfputint16(1, fout);  /* ? always 1 ? */
+    gbfputc(alerts, fout);  /* seems to be 1 when extra options present */
 
-    write_string(STRFROMUNICODE(wpt->shortname), 1);
+    write_string(str_from_unicode(wpt->shortname), 1);
 
     if (dt->alerts) {
       char flag = 0;
 
-      gbfputint32(3, fout);	/* tag(3) */
-      gbfputint32(12, fout);	/* always 12 */
+      gbfputint32(3, fout);  /* tag(3) */
+      gbfputint32(12, fout);  /* always 12 */
 
-      if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-        gbfputint16((int) wpt->proximity, fout);
+      if (wpt->proximity_has_value() && (wpt->proximity_value() > 0)) {
+        gbfputint16((int) wpt->proximity_value(), fout);
         flag = 4;
       } else {
         gbfputint16(0, fout);
       }
-      if (WAYPT_HAS(wpt, speed) && (wpt->speed > 0)) {
-        gbfputint16((int)(wpt->speed * 100), fout);
+      if (wpt->speed_has_value() && (wpt->speed_value() > 0)) {
+        gbfputint16((int)(wpt->speed_value() * 100), fout);
         flag = 5;
       } else {
         gbfputint16(0, fout);
       }
 
-      gbfputint32(0x100100, fout);	/* ??? */
-      gbfputc(1, fout);		/* ??? */
-      gbfputc(1, fout);		/* ??? */
+      gbfputint32(0x100100, fout);  /* ??? */
+      gbfputc(1, fout);    /* ??? */
+      gbfputc(1, fout);    /* ??? */
       gbfputc(flag, fout);
-      gbfputc(0x10, fout);		/* ??? */
+      gbfputc(0x10, fout);    /* ??? */
     }
 
     if (! opt_hide_bitmap) {
-      gbfputint32(4, fout);	/* tag(4) */
-      gbfputint32(2, fout);	/* ? always 2 == version ??? */
+      gbfputint32(4, fout);  /* tag(4) */
+      gbfputint32(2, fout);  /* ? always 2 == version ??? */
       gbfputint16(0, fout);
     }
 
     if (!str.isEmpty()) {
       gbfputint32(0xa, fout);
-      gbfputint32(strlen(STRFROMUNICODE(str)) + 8, fout);	/* string + string header */
-      write_string(STRFROMUNICODE(str), 1);
+      gbfputint32(str_from_unicode(str).size() + 8, fout);  /* string + string header */
+      write_string(str_from_unicode(str), 1);
     }
 
-    if (dt->sz) {					/* gpi address */
+    if (dt->sz) {          /* gpi address */
       gbfputint32(0x8000b, fout);
       gbfputint32(dt->sz, fout);
-      gbfputint32(0x2, fout);			/* ? always 2 ? */
+      gbfputint32(0x2, fout);      /* ? always 2 ? */
       gbfputint16(dt->mask, fout);
       if (dt->mask & GPI_ADDR_CITY) {
-        write_string(STRFROMUNICODE(dt->city), 1);
+        write_string(str_from_unicode(dt->city), 1);
       }
       if (dt->mask & GPI_ADDR_COUNTRY) {
-        write_string(STRFROMUNICODE(dt->country), 1);
+        write_string(str_from_unicode(dt->country), 1);
       }
       if (dt->mask & GPI_ADDR_STATE) {
-        write_string(STRFROMUNICODE(dt->state), 1);
+        write_string(str_from_unicode(dt->state), 1);
       }
       if (dt->mask & GPI_ADDR_POSTAL_CODE) {
-        write_string(STRFROMUNICODE(dt->postal_code), 0);
+        write_string(str_from_unicode(dt->postal_code), 0);
       }
       if (dt->mask & GPI_ADDR_ADDR) {
-        write_string(STRFROMUNICODE(dt->addr), 1);
+        write_string(str_from_unicode(dt->addr), 1);
       }
     }
 
     if (!dt->phone_nr.isEmpty()) {
       gbfputint32(0x8000c, fout);
-      gbfputint32(strlen(STRFROMUNICODE(dt->phone_nr)) + 2 + 2, fout);
-      gbfputint32(0x2, fout);			/* ? always 2 ? */
-      gbfputint16(1, fout);			/* mask */
-      write_string(STRFROMUNICODE(dt->phone_nr), 0);
+      gbfputint32(str_from_unicode(dt->phone_nr).size() + 2 + 2, fout);
+      gbfputint32(0x2, fout);      /* ? always 2 ? */
+      gbfputint16(1, fout);      /* mask */
+      write_string(str_from_unicode(dt->phone_nr), 0);
     }
   }
 
@@ -1176,13 +974,12 @@ skip_empty_block:
   }
 }
 
-
-static void
-write_category(const char*, const unsigned char* image, const int image_sz)
+void
+GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* image, const int image_sz) const
 {
   int sz = wdata_compute_size(wdata);
-  sz += 8;	/* string header */
-  sz += strlen(STRFROMUNICODE(QString::fromUtf8(opt_cat)));
+  sz += 8;  /* string header */
+  sz += str_from_unicode(QString::fromUtf8(opt_cat)).size();
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -1191,7 +988,7 @@ write_category(const char*, const unsigned char* image, const int image_sz)
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(STRFROMUNICODE(QString::fromUtf8(opt_cat)), 1);
+  write_string(str_from_unicode(QString::fromUtf8(opt_cat)), 1);
 
   wdata_write(wdata);
 
@@ -1202,18 +999,13 @@ write_category(const char*, const unsigned char* image, const int image_sz)
   }
 }
 
-
-static void
-write_header()
+void
+GarminGPIFormat::write_header() const
 {
   time_t time = gpi_timestamp;
 
   if (time != 0) {
-    struct tm tm;
-    tm = *gmtime(&time);
-    tm.tm_year -= 20;
-    time = mkgmtime(&tm);
-    time += SECONDS_PER_DAY;
+    time = GPS_Math_Utime_To_Gtime(gpi_timestamp);
   }
 
   gbfputint32(0, fout);
@@ -1234,9 +1026,8 @@ write_header()
   gbfputint16(0, fout);
 }
 
-
-static void
-enum_waypt_cb(const Waypoint* ref)
+void
+GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 {
   foreach (const Waypoint* cmp, wdata->waypt_list) {
 
@@ -1259,15 +1050,13 @@ enum_waypt_cb(const Waypoint* ref)
   wdata_add_wpt(wdata, wpt);
 }
 
-
-static void
-load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
+void
+GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz)
 {
   int i, sz;
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  uint32_t* color_table = nullptr;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
@@ -1298,21 +1087,21 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
     src_h.used_colors = (src_h.image_offset - gbftell(f)) / 4;
   }
 
-#ifdef GPI_DBG
-  printf("data size:             0x%1$x (%1$d)\n", src_h.size);
-  printf("image data offset:     0x%1$x (%1$d)\n", src_h.image_offset);
-  printf("header size:           0x%1$x (%1$d)\n", src_h.header_size);
-  printf("image width:           0x%1$x (%1$d)\n", src_h.width);
-  printf("image height:          0x%1$x (%1$d)\n", src_h.height);
-  printf("number of planes:      0x%1$x (%1$d)\n", src_h.planes);
-  printf("bits per pixel:        0x%1$x (%1$d)\n", src_h.bpp);
-  printf("compression type:      0x%1$x (%1$d)\n", src_h.compression_type);
-  printf("image size:            0x%1$x (%1$d)\n", src_h.image_data_size);
-  printf("horizontal resolution: 0x%1$x (%1$d)\n", src_h.resolution_h);
-  printf("vertical resolution:   0x%1$x (%1$d)\n", src_h.resolution_v);
-  printf("number of colors:      0x%1$x (%1$d)\n", src_h.used_colors);
-  printf("important colors:      0x%1$x (%1$d)\n", src_h.important_colors);
-#endif
+  if (GPI_DBG) {
+    printf("data size:             0x%x (%d)\n", src_h.size, src_h.size);
+    printf("image data offset:     0x%x (%d)\n", src_h.image_offset, src_h.image_offset);
+    printf("header size:           0x%x (%d)\n", src_h.header_size, src_h.header_size);
+    printf("image width:           0x%x (%d)\n", src_h.width, src_h.width);
+    printf("image height:          0x%x (%d)\n", src_h.height, src_h.height);
+    printf("number of planes:      0x%x (%d)\n", src_h.planes, src_h.planes);
+    printf("bits per pixel:        0x%x (%d)\n", src_h.bpp, src_h.bpp);
+    printf("compression type:      0x%x (%d)\n", src_h.compression_type, src_h.compression_type);
+    printf("image size:            0x%x (%d)\n", src_h.image_data_size, src_h.image_data_size);
+    printf("horizontal resolution: 0x%x (%d)\n", src_h.resolution_h, src_h.resolution_h);
+    printf("vertical resolution:   0x%x (%d)\n", src_h.resolution_v, src_h.resolution_v);
+    printf("number of colors:      0x%x (%d)\n", src_h.used_colors, src_h.used_colors);
+    printf("important colors:      0x%x (%d)\n", src_h.important_colors, src_h.important_colors);
+  }
 
   /* sort out unsupported files */
   if (!((src_h.width <= 24) && (src_h.height <= 24) &&
@@ -1326,9 +1115,10 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
     fatal(MYNAME ": Sorry, we don't support compressed bitmaps.\n");
   }
 
+  std::unique_ptr<uint32_t[]> color_table;
   if (src_h.used_colors > 0) {
-    color_table = new uint32_t[src_h.used_colors];
-    gbfread(color_table, 1, 4 * src_h.used_colors, f);
+    color_table.reset(new uint32_t[src_h.used_colors]);
+    gbfread(color_table.get(), 1, 4 * src_h.used_colors, f);
     for (i = 0; i < src_h.used_colors; i++) {
       uint32_t color = color_table[i];
       /* swap blue and red value */
@@ -1365,12 +1155,12 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   le_write16(&dest_h->width, src_h.width);
   le_write16(&dest_h->line_sz, dest_line_sz);
   le_write16(&dest_h->bpp, dest_bpp);
-  le_write16(&dest_h->fixed_0, 0);		/* seems to be fixed */
+  le_write16(&dest_h->fixed_0, 0);    /* seems to be fixed */
   le_write32(&dest_h->image_size, dest_line_sz * src_h.height);
-  le_write32(&dest_h->fixed_2c, 0x2c);		/* seems to be fixed */
+  le_write32(&dest_h->fixed_2c, 0x2c);    /* seems to be fixed */
   le_write32(&dest_h->palette_size, src_h.used_colors);
-  le_write32(&dest_h->tr_color, 0xff00ff);	/* magenta = transparent color */
-  le_write32(&dest_h->flag2, 0x1);		/* ? enable transparent mode ? */
+  le_write32(&dest_h->tr_color, 0xff00ff);  /* magenta = transparent color */
+  le_write32(&dest_h->flag2, 0x1);    /* ? enable transparent mode ? */
   le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
 
   /* copy and revert order of BMP lines */
@@ -1416,7 +1206,6 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   if (bytesout != *data_sz) {
     warning(MYNAME ": Code error in load_bitmap_from_file, expected output size %d, actual output %td.", *data_sz, bytesout);
   }
-  delete[] color_table;
   gbfclose(f);
 }
 
@@ -1424,8 +1213,8 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-garmin_gpi_rd_init(const QString& fname)
+void
+GarminGPIFormat::rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   rdata = new reader_data_t;
@@ -1433,10 +1222,10 @@ garmin_gpi_rd_init(const QString& fname)
   read_header();
 
   if ((codepage >= 1250) && (codepage <= 1257)) {
-    QString qCodecName = QString("windows-%1").arg(codepage);
-    cet_convert_init(CSTR(qCodecName), 1);
+    QByteArray qCodecName = "windows-" + QByteArray::number(codepage);
+    codec = get_codec(qCodecName);
   } else if (codepage == 65001) {
-    cet_convert_init("utf8", 1);
+    codec = get_codec("utf8");
   } else {
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
@@ -1447,11 +1236,10 @@ garmin_gpi_rd_init(const QString& fname)
   }
 }
 
-
-static void
-garmin_gpi_wr_init(const QString& fname)
+void
+GarminGPIFormat::wr_init(const QString& fname)
 {
-  if ((gpi_timestamp != 0) && !gpsbabel_testmode()) {			/* not the first gpi output session */
+  if ((gpi_timestamp != 0) && !gpsbabel_testmode()) {      /* not the first gpi output session */
     time_t t = time(nullptr);
     if (t <= gpi_timestamp) {
       gpi_timestamp++;  /* don't create files with same timestamp */
@@ -1477,7 +1265,7 @@ garmin_gpi_wr_init(const QString& fname)
   codepage = 0;
 
   for (int i = 1250; i <= 1257; i++) {
-    if (QString("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+    if (QStringLiteral("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
       codepage = i;
       break;
     }
@@ -1493,7 +1281,7 @@ garmin_gpi_wr_init(const QString& fname)
     fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
-  cet_convert_init(opt_writecodec,1);
+  codec = get_codec(opt_writecodec);
 
   units = tolower(opt_units[0]);
   if ((units != 'm') && (units != 's')) {
@@ -1504,7 +1292,7 @@ garmin_gpi_wr_init(const QString& fname)
 
   if (opt_speed) {
     double scale;
-    alerts = 1;					/* Force alerts to be enabled */
+    alerts = 1;          /* Force alerts to be enabled */
     if (units == 's') {
       scale = MPH_TO_MPS(1);  /* We need speed in meters per second */
     } else {
@@ -1515,7 +1303,7 @@ garmin_gpi_wr_init(const QString& fname)
 
   if (opt_proximity) {
     double scale;
-    alerts = 1; 					/* Force alerts to be enabled */
+    alerts = 1;           /* Force alerts to be enabled */
     if (units == 's') {
       scale = MILES_TO_METERS(1);  /* We need proximity in meters */
     } else {
@@ -1526,24 +1314,22 @@ garmin_gpi_wr_init(const QString& fname)
   wdata = wdata_alloc();
 }
 
-
-static void
-garmin_gpi_rd_deinit()
+void
+GarminGPIFormat::rd_deinit()
 {
   delete rdata;
   gbfclose(fin);
 }
 
-
-static void
-garmin_gpi_wr_deinit()
+void
+GarminGPIFormat::wr_deinit()
 {
   wdata_free(wdata);
   mkshort_del_handle(&short_h);
   gbfclose(fout);
 
-  if ((opt_sleep) && !gpsbabel_testmode()) {	/* don't sleep during 'testo' */
-    int sleep = atoi(opt_sleep);
+  if ((opt_sleep) && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */
+    int sleep = xstrtoi(opt_sleep, nullptr, 10);
     if (sleep < 1) {
       sleep = 1;
     }
@@ -1554,9 +1340,8 @@ garmin_gpi_wr_deinit()
   }
 }
 
-
-static void
-garmin_gpi_read()
+void
+GarminGPIFormat::read()
 {
   while (true) {
     int tag = gbfgetint32(fin);
@@ -1569,11 +1354,10 @@ garmin_gpi_read()
   }
 }
 
-
-static void
-garmin_gpi_write()
+void
+GarminGPIFormat::write()
 {
-  unsigned char* image;
+  const unsigned char* image;
   int image_sz;
 
   if (strlen(opt_cat) == 0) {
@@ -1586,43 +1370,22 @@ garmin_gpi_write()
   } else if (opt_bitmap && *opt_bitmap) {
     load_bitmap_from_file(opt_bitmap, &image, &image_sz);
   } else {
-    image = gpi_bitmap;	/* embedded GPSBabel icon in gpi format */
+    image = gpi_bitmap;  /* embedded GPSBabel icon in gpi format */
     image_sz = GPI_BITMAP_SIZE;
   }
-  waypt_disp_all(enum_waypt_cb);
+  auto enum_waypt_cb_lambda = [this](const Waypoint* waypointp)->void {
+    enum_waypt_cb(waypointp);
+  };
+  waypt_disp_all(enum_waypt_cb_lambda);
 
   wdata_check(wdata);
   write_header();
   write_category(opt_cat, image, image_sz);
 
-  gbfputint32(0xffff, fout);	/* final tag */
-  gbfputint32(0, fout);		/* ? dummy size ? */
+  gbfputint32(0xffff, fout);  /* final tag */
+  gbfputint32(0, fout);    /* ? dummy size ? */
 
   if (image != gpi_bitmap) {
     xfree(image);
   }
 }
-
-/**************************************************************************/
-
-ff_vecs_t garmin_gpi_vecs = {
-  ff_type_file,
-  {
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
-    ff_cap_none 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  garmin_gpi_rd_init,
-  garmin_gpi_wr_init,
-  garmin_gpi_rd_deinit,
-  garmin_gpi_wr_deinit,
-  garmin_gpi_read,
-  garmin_gpi_write,
-  nullptr,
-  &garmin_gpi_args,
-  CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
-  , NULL_POS_OPS,
-  nullptr
-};
-
-/**************************************************************************/

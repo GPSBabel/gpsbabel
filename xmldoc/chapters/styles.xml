@@ -1,8 +1,8 @@
-<appendix id="Styles">
+<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Styles">
    <title>GPSBabel XCSV Style Files</title>
-   <section id="styles_intro">
+   <section xml:id="styles_intro">
       <title>Introduction to GPSBabel Styles</title>
-      <para>Often it is desirable to add a new file format for &quot;one-off&quot; work (perhaps
+      <para>Often it is desirable to add a new file format for "one-off" work (perhaps
 you want to export something to a spreadsheet or graphing program) or to read
 a format that GPSBabel does not yet support.   For suitably simple formats,
 this can be done by a user with no programming experience by providing a
@@ -21,8 +21,8 @@ are not good fits for this scheme.  It should have:
       <para>Once you have created a style file that describes the file format you have
 or want, you must tell GPSBabel to use the xcsv format and have the xcsv
 format use that file.  If you created a new style file called
-&quot;mystyle.style&quot; and you want to write the  waypoints from
-a GPX file named &quot;mine.gpx&quot; to it, you would issue a command like:
+"mystyle.style" and you want to write the  waypoints from
+a GPX file named "mine.gpx" to it, you would issue a command like:
 </para>
       <para>
          <userinput>gpsbabel -i gpx -f mine.gpx -o xcsv,style=mystyle.style -F mine.new</userinput>
@@ -48,12 +48,12 @@ then share
 Send it along with a coherent description to the GPSBabel-Misc mailing
 list for consideration to be included in a future version.</para>
    </section>
-   <section id="style_intro2">
+   <section xml:id="style_intro2">
       <title>Style file overview</title>
       <para>The first and foremost important step is understanding how the style
 file is laid out itself.  The format is:
 </para>
-      <screen format="linespecific">DIRECTIVE&lt;whitespace&gt;VALUE</screen>
+      <screen>DIRECTIVE&lt;whitespace&gt;VALUE</screen>
       <para>Where &lt;whitespace&gt; is one or more spaces or tabs.  There should
 be no spaces or tabs at the beginning of the line; all directives start
 at the left edge in column zero.
@@ -79,7 +79,7 @@ EXTENSION               txt
 #
 FIELD_DELIMITER      TAB
 RECORD_DELIMITER  NEWLINE
-BADCHARS    ,&quot;
+BADCHARS    ,"
 
 PROLOGUE Name  Latitude Longitude   Description URL   Type  Container   Diff  Terr
 
@@ -89,20 +89,20 @@ PROLOGUE Name  Latitude Longitude   Description URL   Type  Container   Diff  Te
 #       EXPORT THIS ANYWHERE SO WE CAN HAVE OUR
 #       WAY WITH THE FORMATTING.
 #
-IFIELD   SHORTNAME, &quot;&quot;, &quot;%s&quot;      # Name
-IFIELD   LAT_DECIMAL, &quot;&quot;, &quot;%f&quot;    # Latitude
-IFIELD   LON_DECIMAL, &quot;&quot;, &quot;%f&quot;    # Longitude
-IFIELD   DESCRIPTION, &quot;&quot;, &quot;%s&quot;    # Name 2 (Big Description)
-IFIELD   URL, &quot;&quot;, &quot;%s&quot;         # URL
-IFIELD   GEOCACHE_TYPE, &quot;&quot;, &quot;%s&quot;     # Geocache Type
-IFIELD   GEOCACHE_CONTAINER, &quot;&quot;, &quot;%s&quot;   # Geocache Type
-IFIELD   GEOCACHE_DIFF, &quot;&quot;, &quot;%3.1f&quot;  # Geocache Type
-IFIELD   GEOCACHE_TERR, &quot;&quot;, &quot;%3.1f&quot;  # Geocache Type
+IFIELD   SHORTNAME, "", "%s"      # Name
+IFIELD   LAT_DECIMAL, "", "%f"    # Latitude
+IFIELD   LON_DECIMAL, "", "%f"    # Longitude
+IFIELD   DESCRIPTION, "", "%s"    # Name 2 (Big Description)
+IFIELD   URL, "", "%s"         # URL
+IFIELD   GEOCACHE_TYPE, "", "%s"     # Geocache Type
+IFIELD   GEOCACHE_CONTAINER, "", "%s"   # Geocache Type
+IFIELD   GEOCACHE_DIFF, "", "%3.1f"  # Geocache Type
+IFIELD   GEOCACHE_TERR, "", "%3.1f"  # Geocache Type
 </literallayout>
          Each of these lines will be explained in the following sections.</para>
    </section>
    <!-- intro -->
-   <section id="styles_internal_const">
+   <section xml:id="styles_internal_const">
       <title>Internal Constants</title>
       <para>A few internal constants are defined in the XCSV parser to make the style
 file simpler.  They may or may not be used and are optional in most cases.
@@ -127,7 +127,7 @@ Note that only certain style file directives map these constants.
             </seglistitem>
             <seglistitem>
                <seg>DOUBLEQUOTE</seg>
-               <seg>&quot;</seg>
+               <seg>"</seg>
             </seglistitem>
             <seglistitem>
                <seg>COLON</seg>
@@ -171,7 +171,7 @@ Note that only certain style file directives map these constants.
             </seglistitem>
          </segmentedlist>
       </para>
-      <section id="style_const_whitespace">
+      <section xml:id="style_const_whitespace">
          <title>WHITESPACE</title>
          <para>The WHITESPACE constant has special properties.  When reading data,
 WHITESPACE refers to sequential runs of SPACES and/or TABS.  When
@@ -179,50 +179,50 @@ writing data, WHITESPACE is always a single SPACE.
 </para>
          <para>For example, the following line:
 </para>
-         <screen format="linespecific">SOME_NAME       30.1208 -91.1365    SOME OTHER NAME
+         <screen>SOME_NAME       30.1208 -91.1365    SOME OTHER NAME
 </screen>
          <para>Parses into the following data fields:
 </para>
-         <screen format="linespecific">SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
+         <screen>SOME_NAME,30.1208,-91.1365,SOME,OTHER,NAME
 </screen>
       </section>
-      <section id="style_const_comments">
+      <section xml:id="style_const_comments">
          <title>COMMENTS</title>
          <para>Anything after a hash (#) on a line is not parsed.  For example:
 </para>
-         <screen format="linespecific">#THIS ENTIRE LINE IS A COMMENT.
-#FIELD   LAT_DECIMAL, &quot;&quot;, &quot;%f&quot;   THIS ENTIRE LINE IS A COMMENT
-FIELD LAT_DECIMAL, &quot;&quot;, &quot;%f&quot;  # ONLY THIS SENTENCE IS A COMMENT.
+         <screen>#THIS ENTIRE LINE IS A COMMENT.
+#FIELD   LAT_DECIMAL, "", "%f"   THIS ENTIRE LINE IS A COMMENT
+FIELD LAT_DECIMAL, "", "%f"  # ONLY THIS SENTENCE IS A COMMENT.
 </screen>
       </section>
    </section>
    <!-- internal constants -->
-   <section id="style_global">
+   <section xml:id="style_global">
       <title>Global Properties of the File</title>
       <para>There are a few available directives to describe general traits of the
 file being described and not specific data within the file itself.
 </para>
-      <section id="style_global_description">
+      <section xml:id="style_global_description">
          <title>DESCRIPTION</title>
          <para>This is the description of the file format being described. This text
 appears in the help screens and in menus used by the various GUI wrappers.
 </para>
       </section>
-      <section id="style_global_extension">
+      <section xml:id="style_global_extension">
          <title>EXTENSION</title>
          <para>This directive gives the filename extension generally associated with
 this file.
 </para>
       </section>
-      <section id="style_global_encoding">
+      <section xml:id="style_global_encoding">
          <title>ENCODING</title>
          <para>Describes the character set used by this format.  The value given
 must be one listed by 'gpsbabel -l'.    example:
 </para>
-         <screen format="linespecific">ENCODING          UTF-8 # Use UTF-8 for input and output.
+         <screen>ENCODING          UTF-8 # Use UTF-8 for input and output.
 </screen>
       </section>
-      <section id="style_global_datum">
+      <section xml:id="style_global_datum">
          <title>DATUM</title>
          <para>This value specifies the GPS datum to be used on read or write. Valid values for this
 option are listed in
@@ -234,70 +234,70 @@ option are listed in
 
             <xref linkend="Datums"/>
             .</para>
-         <screen format="linespecific">DATUM             European 1950
+         <screen>DATUM             European 1950
 </screen>
       </section>
-      <section id="style_global_datatype">
+      <section xml:id="style_global_datatype">
          <title>DATATYPE</title>
          <para>Specifies the kind of data we have to read or write.
 </para>
          <para>By default all data are seen as waypoint data. With DATATYPE you are now able to bind
 a specific type to this format. Possible values are WAYPOINT, ROUTE or TRACK.
 </para>
-         <screen format="linespecific">DATATYPE          ROUTE # route-only format
+         <screen>DATATYPE          ROUTE # route-only format
 </screen>
       </section>
    </section>
    <!-- global -->
-   <section id="style_behavior">
+   <section xml:id="style_behavior">
       <title>GPSBabel Behavior Directives</title>
       <para>There are a few available directives to control some of the internal
 processing functions of GPSBabel.
 </para>
-      <section id="style_behave_shortlen">
+      <section xml:id="style_behave_shortlen">
          <title>SHORTLEN</title>
          <para>This sets the maximum allowed shortname length when using the internal
    shortname synthesizer.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">SHORTLEN 16 # shortnames will be at most 16 characters long.
+         <screen>SHORTLEN 16 # shortnames will be at most 16 characters long.
 </screen>
       </section>
-      <section id="style_behave_shortwhite">
+      <section xml:id="style_behave_shortwhite">
          <title>SHORTWHITE</title>
          <para>This tells the shortname synthesizer whether or not to allow whitespace
    in the synthesized shortnames.  Allowed values are zero and one.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">SHORTWHITE  0  # Do not allow whitespace in shortname.
+         <screen>SHORTWHITE  0  # Do not allow whitespace in shortname.
    SHORTWHITE   1 # Allow whitespace in shortname.
 </screen>
       </section>
    </section>
    <!-- behavior -->
-   <section id="style_layout">
+   <section xml:id="style_layout">
       <title>Defining the Layout of the File</title>
       <para>The first few directives define the layout the physical file itself:
 </para>
-      <section id="style_layout_field">
+      <section xml:id="style_layout_field">
          <title>FIELD_DELIMITER</title>
          <para>The field delimiter defines the character(s) that separate the fields in
    the rows of data inside the XCSV file.  Common field delimiters are commas
-   and tabs. (referred to as &quot;comma separated values&quot; and &quot;tab separated
-   values&quot;)
+   and tabs. (referred to as "comma separated values" and "tab separated
+   values")
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">FIELD_DELIMITER    COMMA
+         <screen>FIELD_DELIMITER    COMMA
    FIELD_DELIMITER    ~
 </screen>
          <para>The directive FIELD_DELIMITER is parsed for STYLE CONSTANTS as defined in
    the table above.
 </para>
       </section>
-      <section id="style_layout_field_enclose">
+      <section xml:id="style_layout_field_enclose">
          <title>FIELD_ENCLOSER</title>
          <para>The field encloser defines the character(s) that surround the field values.
    Common field enclosers are single and double quote marks. Many styles will
@@ -305,14 +305,14 @@ processing functions of GPSBabel.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">FIELD_ENCLOSER    DOUBLEQUOTE
+         <screen>FIELD_ENCLOSER    DOUBLEQUOTE
    FIELD_ENCLOSER    SINGLEQUOTE
 </screen>
          <para>The directive FIELD_ENCLOSER is parsed for STYLE CONSTANTS as defined in
    the table above.
 </para>
       </section>
-      <section id="style_layout_rec">
+      <section xml:id="style_layout_rec">
          <title>RECORD_DELIMITER</title>
          <para>The record delimiter defines that character(s) that separate ROWS of
    data (FIELDS) in the XCSV file.  The most common record delimiters
@@ -320,14 +320,14 @@ processing functions of GPSBabel.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">RECORD_DELIMITER    NEWLINE
+         <screen>RECORD_DELIMITER    NEWLINE
    RECORD_DELIMITER    |
 </screen>
          <para>The directive RECORD_DELIMITER is parsed for STYLE CONSTANTS as defined
    in the table above.
 </para>
       </section>
-      <section id="style_layout_badchars">
+      <section xml:id="style_layout_badchars">
          <title>BADCHARS</title>
          <para>Bad characters are things that should *never* be written into the XCSV
    file as data on output.  GPSBabel automatically includes any non-blank
@@ -336,28 +336,28 @@ processing functions of GPSBabel.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">BADCHARS    COMMA
+         <screen>BADCHARS    COMMA
   BADCHARS    ~|
 </screen>
          <para>The directive BADCHARS is parsed for STYLE CONSTANTS as defined in the
    table above.
 </para>
       </section>
-      <section id="style_layout_prologue">
+      <section xml:id="style_layout_prologue">
          <title>PROLOGUE</title>
          <para>A prologue is basically constant data that is written to the output
    file BEFORE any waypoints are processed.  PROLOGUE can be defined
-   multiple times in the style file, once for each &quot;line&quot; before the data
-   begins.  This is commonly used in XCSV files as a &quot;header&quot; row.
+   multiple times in the style file, once for each "line" before the data
+   begins.  This is commonly used in XCSV files as a "header" row.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">PROLOGUE OziExplorer Waypoint File Version 1.1
+         <screen>PROLOGUE OziExplorer Waypoint File Version 1.1
   PROLOGUE  WGS 84
   PROLOGUE  Symbol,Name,Latitude,Longitude
 </screen>
       </section>
-      <section id="style_layout_epilogue">
+      <section xml:id="style_layout_epilogue">
          <title>EPILOGUE</title>
          <para>An Epilogue is the same as a prologue, except this data is written at
    the END of the file.  See the examples for PROLOGUE above.
@@ -365,35 +365,35 @@ processing functions of GPSBabel.
       </section>
    </section>
    <!-- layout -->
-   <section id="style_define">
+   <section xml:id="style_define">
       <title>Defining Fields Within the File</title>
       <para>A field defines data.  There are two different classifications of FIELDS,
 IFIELD (file input) and OFIELD (file output).  In the absence of any OFIELDS,
 IFIELDS are use as both input and output.  The existence of OFIELDS is
 primarily to allow more flexible mapping of GPSBabel data to output data
-(say, for instance, to map the internal GPSBabel &quot;description&quot; variable to
+(say, for instance, to map the internal GPSBabel "description" variable to
 two or more fields on output).  For all practical purposes, IFIELDS and
 OFIELDS are defined the same way in the style file.</para>
       <para>The following per-field options are defined:
 </para>
       <itemizedlist>
          <listitem>
-            <para>&quot;no_delim_before&quot; is supported on in OFIELD tags to specify that this
+            <para>"no_delim_before" is supported on in OFIELD tags to specify that this
    field should be written without a field delimiter before it.  It's
    useful for limited field concatenation.
 </para>
          </listitem>
          <listitem>
-            <para>&quot;absolute&quot; is supported on OFIELD tags for lat and lon to indicate
+            <para>"absolute" is supported on OFIELD tags for lat and lon to indicate
    that only absolute values (never negative) are to be printed.
 </para>
          </listitem>
          <listitem>
-            <para>&quot;optional&quot; is supported only OFIELD tags and indicates that the
+            <para>"optional" is supported only OFIELD tags and indicates that the
    field may or may not be available in the source data.  If the
    field is absent, no trailing field separator is written.
 </para>
-            <para>This attribute is most useful when paired with &quot;no_delim_before&quot; as
+            <para>This attribute is most useful when paired with "no_delim_before" as
    it allows you to concatenate fields without concern for whether those
    fields are actually populated or not.
 </para>
@@ -411,7 +411,7 @@ parsed from input and written to output.
 </para>
       <para>The fields used by the XCSV parser are as follows:
 </para>
-      <section id="style_def_ignore">
+      <section xml:id="style_def_ignore">
          <title>IGNORE</title>
          <para>IGNORE fields are, guess what, ignored on input.   Internally, IGNORE
    fields are treated as CHARACTER data, and as such, require a printf
@@ -419,11 +419,11 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD IGNORE,&quot;&quot;,&quot;%14.14s&quot;   # (writes a 14 character blank field)
-   IFIELD IGNORE,&quot;&quot;,&quot;%s&quot;        # (writes a blank field on output)
+         <screen>IFIELD IGNORE,"","%14.14s"   # (writes a 14 character blank field)
+   IFIELD IGNORE,"","%s"        # (writes a blank field on output)
 </screen>
       </section>
-      <section id="style_def_constant">
+      <section xml:id="style_def_constant">
          <title>CONSTANT</title>
          <para>CONSTANT fields are, of course, constant.  They are ignored on input,
    however they write CONSTANT data on output.  As such, they require a
@@ -431,11 +431,11 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD CONSTANT,&quot;FFFFFF&quot;,&quot;%s&quot;   # (writes &quot;FFFFFF&quot; in the field)
-   IFIELD CONSTANT,&quot;01/01/70&quot;,&quot;%s&quot; # (a constant date field)
+         <screen>IFIELD CONSTANT,"FFFFFF","%s"   # (writes "FFFFFF" in the field)
+   IFIELD CONSTANT,"01/01/70","%s" # (a constant date field)
 </screen>
       </section>
-      <section id="style_def_index">
+      <section xml:id="style_def_index">
          <title>INDEX</title>
          <para>An INDEX field is used ONLY on output.  The INDEX constant defines a field
    that, at output, contains the sequence number of the waypoint being
@@ -446,12 +446,12 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD INDEX,&quot;0&quot;,&quot;%04d&quot;     # (Starts counting at zero)
-   IFIELD INDEX,&quot;&quot;,&quot;%04d&quot;      # (Starts counting at zero)
-   IFIELD INDEX,&quot;1&quot;,&quot;%04d&quot;     # (Starts counting at one)
+         <screen>IFIELD INDEX,"0","%04d"     # (Starts counting at zero)
+   IFIELD INDEX,"","%04d"      # (Starts counting at zero)
+   IFIELD INDEX,"1","%04d"     # (Starts counting at one)
 </screen>
       </section>
-      <section id="style_def_shortname">
+      <section xml:id="style_def_shortname">
          <title>SHORTNAME</title>
          <para>A SHORTNAME is generally the waypoint name of the data being processed.
    SHORTNAME maps directly to the GPSBabel variable -&gt;shortname.  A SHORTNAME
@@ -459,10 +459,10 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD SHORTNAME,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD SHORTNAME,"","%s"
 </screen>
       </section>
-      <section id="style_def_description">
+      <section xml:id="style_def_description">
          <title>DESCRIPTION</title>
          <para>A DESCRIPTION is generally a long description of the waypoint.  A
    DESCRIPTION maps to the GPSBabel variable -&gt;description and is otherwise
@@ -470,27 +470,27 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD DESCRIPTION,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD DESCRIPTION,"","%s"
 </screen>
       </section>
-      <section id="style_def_notes">
+      <section xml:id="style_def_notes">
          <title>NOTES</title>
          <para>NOTES are generally everything else about a waypoints. NOTES map to the
    GPSBabel variable -&gt;notes and is otherwise handled exactly like a
    SHORTNAME.
 </para>
       </section>
-      <section id="style_def_url">
+      <section xml:id="style_def_url">
          <title>URL</title>
          <para>URL is a URL for the waypoint.  URL maps to the GPSBabel variable
    -&gt;url and is otherwise handled exactly like a SHORTNAME.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD URL,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD URL,"","%s"
 </screen>
       </section>
-      <section id="style_def_urllinktext">
+      <section xml:id="style_def_urllinktext">
          <title>URL_LINK_TEXT</title>
          <para>URL_LINK_TEXT is a textual description of where a URL points.
    URL_LINK_TEXT maps to the GPSBabel variable -&gt;url_link_text and
@@ -498,10 +498,10 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD URL_LINK_TEXT,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD URL_LINK_TEXT,"","%s"
 </screen>
       </section>
-      <section id="style_def_icondescr">
+      <section xml:id="style_def_icondescr">
          <title>ICON_DESCR</title>
          <para>ICON_DESCR is a textual description of an icon type for a waypoint.
    ICON_DESCR maps to the GPSBabel variable -&gt;icon_desc and is otherwise
@@ -509,10 +509,10 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD ICON_DESCR,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD ICON_DESCR,"","%s"
 </screen>
       </section>
-      <section id="style_def_latdec">
+      <section xml:id="style_def_latdec">
          <title>LAT_DECIMAL</title>
          <para>LAT_DECIMAL defines LATITUDE in DECIMAL format.  Note that this is a PURE
    signed decimal format (i.e. -91.0000).  This data is handled internally as
@@ -520,15 +520,15 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD LAT_DECIMAL,&quot;&quot;,&quot;%f&quot;
+         <screen>IFIELD LAT_DECIMAL,"","%f"
 </screen>
       </section>
-      <section id="style_def_londec">
+      <section xml:id="style_def_londec">
          <title>LON_DECIMAL</title>
          <para>See LAT_DECIMAL, except LON_DECIMAL defines LONGITUDE.
 </para>
       </section>
-      <section id="style_def_latint32">
+      <section xml:id="style_def_latint32">
          <title>LAT_INT32DEG</title>
          <para>LAT_INT32DEG defines LATITUDE in what I call INT32DEGREES.  This value is
    a signed LONG INTEGER and requires a LONG INTEGER printf conversion.
@@ -536,15 +536,15 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD LAT_INT32DEG,&quot;&quot;,&quot;%ld&quot;
+         <screen>IFIELD LAT_INT32DEG,"","%ld"
 </screen>
       </section>
-      <section id="style_def_lonint32">
+      <section xml:id="style_def_lonint32">
          <title>LON_INT32DEG</title>
          <para>See LON_INT32DEG except LON_INT32DEG defines LONGITUDE.
 </para>
       </section>
-      <section id="style_def_latdirdec">
+      <section xml:id="style_def_latdirdec">
          <title>LAT_DECIMALDIR / LAT_DIRDECIMAL</title>
          <para>LAT_DECIMALDIR and LAT_DIRDECIMAL  define LATITUDE in DECIMAL format
    with the added bonus of a 'N/S' or 'E/W' direction character.  This data
@@ -556,23 +556,23 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD LAT_DECIMALDIR,&quot;&quot;,&quot;%f %c&quot;     #  (writes 31.333 N)
-   IFIELD LAT_DIRDECIMAL,&quot;&quot;,&quot;%c %f&quot;     #  (writes N 31.333)
+         <screen>IFIELD LAT_DECIMALDIR,"","%f %c"     #  (writes 31.333 N)
+   IFIELD LAT_DIRDECIMAL,"","%c %f"     #  (writes N 31.333)
 </screen>
       </section>
-      <section id="style_def_londirdec">
+      <section xml:id="style_def_londirdec">
          <title>LON_DECIMALDIR / LON_DIRDECIMAL</title>
          <para>Same as LAT_DECIMALDIR / LAT_DIRDECIMAL except LON_ defines LONGITUDE.
 </para>
       </section>
-      <section id="style_def_latlondir">
+      <section xml:id="style_def_latlondir">
          <title>LAT_DIR / LON_DIR</title>
          <para>LAT_DIR returns the single character 'N' or 'S' depending on the
    hemisphere of the latitude.  LON_DIR returns 'E' or 'W' depending on
    the hemisphere of the longitude.
 </para>
       </section>
-      <section id="style_def_lathuman">
+      <section xml:id="style_def_lathuman">
          <title>LAT_HUMAN_READABLE</title>
          <para>LAT_HUMAN_READABLE defines LATITUDE in a human-readable format.  This
    format is probably the most expressive format.  It is similar to
@@ -583,17 +583,17 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">#  (writes N 31 40.000)
-   IFIELD LAT_HUMAN_READABLE,&quot;&quot;,&quot;%c %d %f&quot;
-   #  (writes &quot;31 deg 40.000 min N&quot;)
-   IFIELD LAT_HUMAN_READABLE,&quot;&quot;,&quot;%d deg %f min %c&quot;
+         <screen>#  (writes N 31 40.000)
+   IFIELD LAT_HUMAN_READABLE,"","%c %d %f"
+   #  (writes "31 deg 40.000 min N")
+   IFIELD LAT_HUMAN_READABLE,"","%d deg %f min %c"
    #  Note that this string will confuse the reading routine due
-   #  to the letter &quot;n&quot; in &quot;min&quot; and the letter &quot;e&quot; in &quot;deg.&quot;
+   #  to the letter "n" in "min" and the letter "e" in "deg."
    # (writes 31 40 00.000N)
-   IFIELD LAT_HUMAN_READABLE,&quot;&quot;,&quot;%d %d %f%c&quot;
+   IFIELD LAT_HUMAN_READABLE,"","%d %d %f%c"
 </screen>
       </section>
-      <section id="style_def_map_en_bng">
+      <section xml:id="style_def_map_en_bng">
          <title>MAP_EN_BNG</title>
          <para>MAP_EN_BNG converts coordinates from/to British National Grid (BNG).
 </para>
@@ -602,16 +602,16 @@ parsed from input and written to output.
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD MAP_EN_BNG,&quot;&quot;,&quot;%s%5d %5d&quot;   #  (writes i.e. &quot;SJ00001 00001&quot;)
-   IFIELD MAP_EN_BNG,&quot;&quot;,&quot;%s %d %d&quot;    #  (writes i.e. &quot;TQ 888 999&quot;)
+         <screen>IFIELD MAP_EN_BNG,"","%s%5d %5d"   #  (writes i.e. "SJ00001 00001")
+   IFIELD MAP_EN_BNG,"","%s %d %d"    #  (writes i.e. "TQ 888 999")
 </screen>
       </section>
-      <section id="style_def_lonhuman">
+      <section xml:id="style_def_lonhuman">
          <title>LON_HUMAN_READABLE</title>
          <para>See LAT_HUMAN_READABLE except LON_HUMAN_READABLE defines LONGITUDE.
 </para>
       </section>
-      <section id="style_def_latlonhuman">
+      <section xml:id="style_def_latlonhuman">
          <title>LATLON_HUMAN_READABLE</title>
          <para>LATLON_HUMAN_READABLE is like LAT_HUMAN_READABLE and LON_HUMAN_READABLE
    except that it reads and writes both latitude and longitude as a single
@@ -621,53 +621,53 @@ parsed from input and written to output.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD LATLON_HUMAN_READABLE,&quot;&quot;,&quot;%c %d %f&quot;
-           # (writes &quot;N 31 40.126 W 85 09.62&quot; as a single field)
+         <screen>IFIELD LATLON_HUMAN_READABLE,"","%c %d %f"
+           # (writes "N 31 40.126 W 85 09.62" as a single field)
 </screen>
       </section>
-      <section id="style_def_latnmea">
+      <section xml:id="style_def_latnmea">
          <title>LAT_NMEA</title>
          <para>Defines the latitude in the format used by the NMEA standard which is
    degrees multiplied by 100 plus decimal minutes.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD  LAT_NMEA, &quot;%f&quot;, &quot;%08.3f&quot;     # (writes  3558.322)
+         <screen>IFIELD  LAT_NMEA, "%f", "%08.3f"     # (writes  3558.322)
 </screen>
       </section>
-      <section id="style_def_latddmmdir">
+      <section xml:id="style_def_latddmmdir">
          <title>LAT_DDMMDIR</title>
          <para>Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal
 minutes, but using an additional specifier to position the  'N' or 'S' instead of a leading minus sign (or
 absence thereof) to give direction from zero.
 </para>
          <para>
-            <screen format="linespecific">IFIELD LAT_DDMMDIR, &quot;%f&quot;, &quot;%08.3f%c&quot; # (writes &quot;5334.192S&quot; giving -53.56987 degrees latitude)
+            <screen>IFIELD LAT_DDMMDIR, "%f", "%08.3f%c" # (writes "5334.192S" giving -53.56987 degrees latitude)
 </screen>
          </para>
       </section>
-      <section id="style_def_lonnmea">
+      <section xml:id="style_def_lonnmea">
          <title>LON_NMEA</title>
          <para>Defines the longitude in the format used by the NMEA standard which is
    degrees multiplied by 100 plus decimal minutes.
 </para>
          <para>Example:
 </para>
-         <screen format="linespecific">IFIELD  LON_NMEA, &quot;%f&quot;, &quot;%010.3f&quot;  # (writes -08708.082)
+         <screen>IFIELD  LON_NMEA, "%f", "%010.3f"  # (writes -08708.082)
 </screen>
       </section>
-      <section id="style_def_londdmmdir">
+      <section xml:id="style_def_londdmmdir">
          <title>LON_DDMMDIR</title>
          <para>Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using an additional character format character to position the
 'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from zero.
 </para>
          <para>Example:
 </para>
-         <screen format="linespecific">IFIELD LON_DDMMDIR, &quot;%f&quot;, &quot;%010.3f%c&quot; # (writes &quot;01232.745W&quot; giving -12.54575 degrees
+         <screen>IFIELD LON_DDMMDIR, "%f", "%010.3f%c" # (writes "01232.745W" giving -12.54575 degrees
 longitude)
 </screen>
       </section>
-      <section id="style_def_latlon_10ex">
+      <section xml:id="style_def_latlon_10ex">
          <title>LAT_10EX / LON_10EX</title>
          <para>Defines the latitude or longitude in the format used i.e. by TomTom Navigator
    itinerary files. It is degrees multiplied by 10 power X. X have to be replaced with
@@ -676,59 +676,59 @@ longitude)
 </para>
          <para>examples:
 </para>
-         <screen format="linespecific">IFIELD  LAT_10E5, &quot;%f&quot;, &quot;%.f&quot;       # (writes  3558322)
+         <screen>IFIELD  LAT_10E5, "%f", "%.f"       # (writes  3558322)
 </screen>
-         <screen format="linespecific">IFIELD  LON_10E5, &quot;%f&quot;, &quot;%.f&quot;       # (writes -8708082)
+         <screen>IFIELD  LON_10E5, "%f", "%.f"       # (writes -8708082)
 </screen>
       </section>
-      <section id="style_def_utm">
+      <section xml:id="style_def_utm">
          <title>UTM</title>
          <para>A location in UTM has several components: a zone, a northing, and an easting.   The UTM format specifier is the most common representation of these.
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM, &quot;&quot;, &quot;%s&quot; # writes 6S 519045 3984035  -the easting is first by convention.</screen>
+         <screen>IFIELD UTM, "", "%s" # writes 6S 519045 3984035  -the easting is first by convention.</screen>
       </section>
-      <section id="style_def_utm_easting">
+      <section xml:id="style_def_utm_easting">
          <title>UTM_EASTING</title>
          <para>This is the decimal component representing the easting
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM_EASTING, &quot;&quot;, &quot;%.0f&quot;  # outputs 519045
+         <screen>IFIELD UTM_EASTING, "", "%.0f"  # outputs 519045
 </screen>
       </section>
-      <section id="style_def_utm_northing">
+      <section xml:id="style_def_utm_northing">
          <title>UTM_NORTHING</title>
          <para>This is the decimal component representing the northing
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM_NORTHING &quot;&quot;, &quot;%.0f&quot;  # outputs 3984035
+         <screen>IFIELD UTM_NORTHING "", "%.0f"  # outputs 3984035
 </screen>
       </section>
-      <section id="style_def_utm_zone">
+      <section xml:id="style_def_utm_zone">
          <title>UTM_ZONE</title>
          <para>The UTM zone.
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM_ZONE &quot;&quot;, &quot;%d&quot;  # outputs 6
+         <screen>IFIELD UTM_ZONE "", "%d"  # outputs 6
 </screen>
       </section>
-      <section id="style_def_utm_zonec">
+      <section xml:id="style_def_utm_zonec">
          <title>UTM_ZONEC</title>
          <para>The UTM Zone character.
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM_ZONEC &quot;&quot;, &quot;%c&quot;  # outputs S
+         <screen>IFIELD UTM_ZONEC "", "%c"  # outputs S
 </screen>
       </section>
-      <section id="style_def_utm_zonef">
+      <section xml:id="style_def_utm_zonef">
          <title/>
          <para>The full UTM zone and latitude band.
 </para>
          <para>example: </para>
-         <screen format="linespecific">IFIELD UTM_ZONEF &quot;&quot;, &quot;%d%c&quot;  # outputs 6S
+         <screen>IFIELD UTM_ZONEF "", "%d%c"  # outputs 6S
 </screen>
       </section>
-      <section id="style_def_altfeet">
+      <section xml:id="style_def_altfeet">
          <title>ALT_FEET</title>
          <para>ALT_FEET is the position's ALTITUDE in FEET.  This value is treated as
    a SIGNED DOUBLE PRECISION FLOAT and requires a FLOATING POINT printf
@@ -736,64 +736,64 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD ALT_FEET,&quot;&quot;,&quot;%.0f&quot;
+         <screen>IFIELD ALT_FEET,"","%.0f"
 </screen>
       </section>
-      <section id="style_def_altmeters">
+      <section xml:id="style_def_altmeters">
          <title>ALT_METERS</title>
          <para>ALT_METERS is identical to ALT_FEET with the exception that the altitude
    is in METERS.
 </para>
       </section>
-      <section id="style_def_heartrate">
+      <section xml:id="style_def_heartrate">
          <title>HEART_RATE</title>
          <para>Heart rate, measured in beats per minute.  Only valid for units with
    heart rate monitor features (i.e. Garmin Forerunner 301).
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD HEART_RATE,&quot;&quot;,&quot;%d&quot;
+         <screen>IFIELD HEART_RATE,"","%d"
 </screen>
       </section>
-      <section id="style_def_cadence">
+      <section xml:id="style_def_cadence">
          <title>CADENCE</title>
          <para>Cadence in revolutions per minute.  Only valid for units with
    heart rate monitor features (i.e. Garmin Edge 305).
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD CADENCE,&quot;&quot;,&quot;%d&quot;
+         <screen>IFIELD CADENCE,"","%d"
 </screen>
       </section>
-      <section id="style_def_power">
+      <section xml:id="style_def_power">
          <title>POWER</title>
          <para>Cycling power in Watts.  Only valid for units with power meter
    features (i.e. Garmin Edge 305).
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD POWER,&quot;&quot;,&quot;%.1f&quot;
+         <screen>IFIELD POWER,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_temperature">
+      <section xml:id="style_def_temperature">
          <title>TEMPERATURE</title>
          <para>Temperature in degrees Celsius.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TEMPERATURE,&quot;&quot;,&quot;%.1f&quot;
+         <screen>IFIELD TEMPERATURE,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_temperaturef">
+      <section xml:id="style_def_temperaturef">
          <title>TEMPERATURE_F</title>
          <para>Temperature in degrees Fahrenheit.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TEMPERATURE_F,&quot;&quot;,&quot;%.1f&quot;
+         <screen>IFIELD TEMPERATURE_F,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_exceltime">
+      <section xml:id="style_def_exceltime">
          <title>EXCEL_TIME</title>
          <para>EXCEL_TIME is the waypoint's creation time, if any.  This is actually
    the decimal days since 1/1/1900 and is handled internally as a DOUBLE
@@ -801,10 +801,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD EXCEL_TIME,&quot;&quot;,&quot;%11.5f&quot;
+         <screen>IFIELD EXCEL_TIME,"","%11.5f"
 </screen>
       </section>
-      <section id="style_def_timettime">
+      <section xml:id="style_def_timettime">
          <title>TIMET_TIME</title>
          <para>TIMET_TIME is the waypoint's creation time, if any.  This is actually
    the integer seconds since 1970-01-01T00:00:00 UTC. It
@@ -813,10 +813,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TIMET_TIME,&quot;&quot;,&quot;%lld&quot;
+         <screen>IFIELD TIMET_TIME,"","%lld"
 </screen>
       </section>
-      <section id="style_def_timettimems">
+      <section xml:id="style_def_timettimems">
          <title>TIMET_TIME_MS</title>
          <para>TIMET_TIME_MS is the same as TIMET_TIME, but expressed in milliseconds.
    It too is handled internally as a 64 bit integer and requires a LONG LONG INTEGER
@@ -824,10 +824,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD TIMET_TIME_MS,&quot;&quot;,&quot;%lld&quot;
+         <screen>IFIELD TIMET_TIME_MS,"","%lld"
 </screen>
       </section>
-      <section id="style_def_yyyymmdd">
+      <section xml:id="style_def_yyyymmdd">
          <title>YYYYMMDD_TIME</title>
          <para>YYYYMMDD_TIME is the waypoint's creation time, if any.  It's a single
    decimal field containing four digits of year, two digits of month,
@@ -836,17 +836,17 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD YYYYMMDD_TIME,&quot;&quot;,&quot;%ld&quot;
+         <screen>IFIELD YYYYMMDD_TIME,"","%ld"
 </screen>
       </section>
-      <section id="style_def_gmttime">
+      <section xml:id="style_def_gmttime">
          <title>GMT_TIME</title>
          <para>GMT_TIME is the waypoint's creation time, in UTC time zone.  It uses the
    strptime conversion format tags.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD GMT_TIME,&quot;&quot;,&quot;%m/%d/%Y %I:%M:%D %p&quot;
+         <screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
 </screen>
          <para>Search the web for 'strptime man page' for details strptime, but one
    such page can be found at
@@ -857,9 +857,9 @@ longitude)
 
 
 
-            <ulink url="http://www.die.net/doc/linux/man/man3/strptime.3.html">http://www.die.net/doc/linux/man/man3/strptime.3.html</ulink></para>
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.die.net/doc/linux/man/man3/strptime.3.html">http://www.die.net/doc/linux/man/man3/strptime.3.html</link></para>
       </section>
-      <section id="style_def_localtime">
+      <section xml:id="style_def_localtime">
          <title>LOCAL_TIME</title>
          <para>LOCAL_TIME is the waypoint's creation time, in the local
  time zone.  It uses strptime conversion format tags.  See GMT_TIME for a
@@ -867,10 +867,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD LOCAL_TIME,&quot;&quot;,&quot;%y-%m-%d&quot;
+         <screen>IFIELD LOCAL_TIME,"","%y-%m-%d"
 </screen>
       </section>
-      <section id="style_def_hmsgtime">
+      <section xml:id="style_def_hmsgtime">
          <title>HMSG_TIME</title>
          <para>HMSG_TIME parses up to three time parts and am/pm string to add
    this value to the previously parsed *_TIME field that contains
@@ -878,10 +878,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD HMSG_TIME,&quot;&quot;,&quot;%d:%d:%d %s&quot;
+         <screen>IFIELD HMSG_TIME,"","%d:%d:%d %s"
 </screen>
       </section>
-      <section id="style_def_hmsltime">
+      <section xml:id="style_def_hmsltime">
          <title>HMSL_TIME</title>
          <para>HMSG_TIME parses up to three time parts and am/pm string to add
    this value to the previously parsed *_TIME field that contains
@@ -889,10 +889,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD HMSL_TIME,&quot;&quot;,&quot;%dh%dm&quot;
+         <screen>IFIELD HMSL_TIME,"","%dh%dm"
 </screen>
       </section>
-      <section id="style_def_isotime">
+      <section xml:id="style_def_isotime">
          <title>ISO_TIME</title>
          <para>ISO_TIME is the waypoint's creation time, in ISO 8601 format,
    which include time zone information.
@@ -903,10 +903,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD ISO_TIME,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD ISO_TIME,"","%s"
 </screen>
       </section>
-      <section id="style_def_isotimems">
+      <section xml:id="style_def_isotimems">
          <title>ISO_TIME_MS</title>
          <para>ISO_TIME_MS is much like ISO_TIME, but expresses milliseconds at the
    end of the timestamp.
@@ -917,10 +917,10 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD ISO_TIME_MS,&quot;&quot;,&quot;%s&quot;
+         <screen>IFIELD ISO_TIME_MS,"","%s"
 </screen>
       </section>
-      <section id="style_def_nettime">
+      <section xml:id="style_def_nettime">
          <title>NET_TIME</title>
          <para>Microsoft dot net represents times in 100 nanosecond intervals since midnight
   Jan 1/0001 GMT, giving absurdly large numbers like 633943150010000000 for
@@ -928,104 +928,104 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD NET_TIME,&quot;&quot;,&quot;%lld&quot;
+         <screen>IFIELD NET_TIME,"","%lld"
 </screen>
       </section>
-      <section id="style_def_geodiff">
+      <section xml:id="style_def_geodiff">
          <title>GEOCACHE_DIFF</title>
          <para>GEOCACHE_DIFF is valid only for geocaches and represents a DOUBLE
-   PRECISION FLOAT.  This is the geocache &quot;difficulty&quot; rating as defined by
-   Groundspeak.  A &quot;three and a half star&quot; cache would therefore be &quot;3.5&quot;
+   PRECISION FLOAT.  This is the geocache "difficulty" rating as defined by
+   Groundspeak.  A "three and a half star" cache would therefore be "3.5"
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD GEOCACHE_DIFF,&quot;&quot;,&quot;%3.1f&quot;
+         <screen>IFIELD GEOCACHE_DIFF,"","%3.1f"
 </screen>
       </section>
-      <section id="style_def_geoterr">
+      <section xml:id="style_def_geoterr">
          <title>GEOCACHE_TERR</title>
          <para>GEOCACHE_TERR is valid only for geocaches and represents a DOUBLE
-   PRECISION FLOAT.  This is the geocache &quot;terrain&quot; rating as defined
-   by Groundspeak.  A &quot;three and a half star&quot; cache would therefore be &quot;3.5&quot;
+   PRECISION FLOAT.  This is the geocache "terrain" rating as defined
+   by Groundspeak.  A "three and a half star" cache would therefore be "3.5"
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">IFIELD GEOCACHE_TERR,&quot;&quot;,&quot;%3.1f&quot;
+         <screen>IFIELD GEOCACHE_TERR,"","%3.1f"
 </screen>
       </section>
-      <section id="style_def_geocontainer">
+      <section xml:id="style_def_geocontainer">
          <title>GEOCACHE_CONTAINER</title>
          <para>GEOCACHE_CONTAINER is valid only for geocaches and is heavily influenced
-   by the Groundspeak container types.   Examples would include &quot;Micro&quot;
-   and &quot;Virtual&quot;.
+   by the Groundspeak container types.   Examples would include "Micro"
+   and "Virtual".
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_CONTAINER,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_CONTAINER,"","%s"
 </screen>
       </section>
-      <section id="style_def_geotype">
+      <section xml:id="style_def_geotype">
          <title>GEOCACHE_TYPE</title>
          <para>GEOCACHE_TYPE is valid only for geocaches and is heavily influenced
-   by the Groundspeak cache types.   Examples would include &quot;Event cache&quot;
-   and &quot;Multi-Cache&quot;.
+   by the Groundspeak cache types.   Examples would include "Event cache"
+   and "Multi-Cache".
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_TYPE,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_TYPE,"","%s"
 </screen>
       </section>
-      <section id="style_def_geoplacer">
+      <section xml:id="style_def_geoplacer">
          <title>GEOCACHE_PLACER</title>
          <para>GEOCACHE_PLACER is a string containing the name of the placer of a
    geocache.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_PLACER,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_PLACER,"","%s"
 </screen>
       </section>
-      <section id="style_def_isavailable">
+      <section xml:id="style_def_isavailable">
          <title>GEOCACHE_ISAVAILABLE</title>
-         <para>GEOCACHE_ISAVAILABLE is a string containing &quot;True&quot; or &quot;False&quot;
+         <para>GEOCACHE_ISAVAILABLE is a string containing "True" or "False"
    indicating whether a geocache is currently available or not.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_ISAVAILABLE,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_ISAVAILABLE,"","%s"
 </screen>
       </section>
-      <section id="style_def_isarchived">
+      <section xml:id="style_def_isarchived">
          <title>GEOCACHE_ISARCHIVED</title>
-         <para>GEOCACHE_ISARCHIVED is a string containing &quot;True&quot; or &quot;False&quot;
+         <para>GEOCACHE_ISARCHIVED is a string containing "True" or "False"
    indicating whether a geocache has been archived.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_ISARCHIVED,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_ISARCHIVED,"","%s"
 </screen>
       </section>
-      <section id="style_def_geofound">
+      <section xml:id="style_def_geofound">
          <title>GEOCACHE_LAST_FOUND</title>
          <para>A long integer in format YYYYMMDD containing the last time this geocache
    was found.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_LAST_FOUND,&quot;&quot;,&quot;%ld&quot;
+         <screen>GEOCACHE_LAST_FOUND,"","%ld"
 </screen>
       </section>
-      <section id="style_def_geohint">
+      <section xml:id="style_def_geohint">
          <title>GEOCACHE_HINT</title>
          <para>The hint for this geocache.   No additional transformation (such as rot13)
    will be performed on this string.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GEOCACHE_HINT,&quot;&quot;,&quot;%s&quot;
+         <screen>GEOCACHE_HINT,"","%s"
 </screen>
       </section>
-      <section id="style_def_pathdistmi">
+      <section xml:id="style_def_pathdistmi">
          <title>PATH_DISTANCE_MILES</title>
          <para>PATH_DISTANCE_MILES outputs the total length of the route or track from
    the start point to the current point, in miles.  This and the altitude
@@ -1039,28 +1039,28 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_DISTANCE_MILES,&quot;&quot;,&quot;%f&quot;
+         <screen>PATH_DISTANCE_MILES,"","%f"
 </screen>
       </section>
-      <section id="style_def_pathdistnm">
+      <section xml:id="style_def_pathdistnm">
          <title>PATH_DISTANCE_NAUTICAL_MILES</title>
          <para>PATH_DISTANCE_NAUTICAL_MILES is like PATH_DISTANCE_MILES except it outputs the
    length in nautical miles.
 </para>
       </section>
-      <section id="style_def_pathdistkm">
+      <section xml:id="style_def_pathdistkm">
          <title>PATH_DISTANCE_KM</title>
          <para>PATH_DISTANCE_KM is like PATH_DISTANCE_MILES except it outputs the
    length in kilometers.
 </para>
       </section>
-      <section id="style_def_pathdistm">
+      <section xml:id="style_def_pathdistm">
          <title>PATH_DISTANCE_METERS</title>
          <para>PATH_DISTANCE_METERS is like PATH_DISTANCE_MILES except it outputs the
    length in meters.
 </para>
       </section>
-      <section id="style_def_pathspeed">
+      <section xml:id="style_def_pathspeed">
          <title>PATH_SPEED</title>
          <para>Speed in meters per second. GPSBabel does NOT calculate this data by
    default; it is read from the input file if present.  (If not present,
@@ -1075,37 +1075,37 @@ longitude)
             filter.)</para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_SPEED,&quot;&quot;,&quot;%f&quot;
+         <screen>PATH_SPEED,"","%f"
 </screen>
       </section>
-      <section id="style_def_pathspeed_kph">
+      <section xml:id="style_def_pathspeed_kph">
          <title>PATH_SPEED_KPH</title>
          <para>Like PATH_SPEED but means kilometers per hour.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_SPEED_KPH,&quot;&quot;,&quot;%.1f&quot;
+         <screen>PATH_SPEED_KPH,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_pathspeed_mph">
+      <section xml:id="style_def_pathspeed_mph">
          <title>PATH_SPEED_MPH</title>
          <para>Like PATH_SPEED but means miles per hour.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_SPEED_MPH,&quot;&quot;,&quot;%.1f&quot;
+         <screen>PATH_SPEED_MPH,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_pathspeed_knots">
+      <section xml:id="style_def_pathspeed_knots">
          <title>PATH_SPEED_KNOTS</title>
          <para>Like PATH_SPEED but means knots (nautical).
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_SPEED_KNOTS,&quot;&quot;,&quot;%.1f&quot;
+         <screen>PATH_SPEED_KNOTS,"","%.1f"
 </screen>
       </section>
-      <section id="style_def_pathcourse">
+      <section xml:id="style_def_pathcourse">
          <title>PATH_COURSE</title>
          <para>Course in degrees.  GPSBabel does not calculate this data by default;
    it is read from the input file if present.  (If not present, it may be
@@ -1120,30 +1120,30 @@ longitude)
             filter.)</para>
          <para>example:
 </para>
-         <screen format="linespecific">PATH_COURSE,&quot;&quot;,&quot;%f&quot;
+         <screen>PATH_COURSE,"","%f"
 </screen>
       </section>
-      <section id="style_def_dop">
+      <section xml:id="style_def_dop">
          <title>GPS_HDOP / GPS_VDOP / GPS_PDOP</title>
          <para>GPS horizontal / vertical / positional dilution of precision
    parameters. Needs float conversion.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GPS_HDOP,&quot;&quot;,&quot;%f&quot;
+         <screen>GPS_HDOP,"","%f"
 </screen>
       </section>
-      <section id="style_def_gpssat">
+      <section xml:id="style_def_gpssat">
          <title>GPS_SAT</title>
          <para>Number of satellites used for determination of the position. Needs
    integer conversion.
 </para>
          <para>example:
 </para>
-         <screen format="linespecific">GPS_SAT,&quot;&quot;,&quot;%d&quot;
+         <screen>GPS_SAT,"","%d"
 </screen>
       </section>
-      <section id="style_def_gpsfix">
+      <section xml:id="style_def_gpsfix">
          <title>GPS_FIX</title>
          <para>Type of fix (see GPX spec or
 
@@ -1156,10 +1156,10 @@ longitude)
             filter). Needs string conversion.</para>
          <para>example:
 </para>
-         <screen format="linespecific">GPS_FIX,&quot;&quot;,&quot;%s&quot;
+         <screen>GPS_FIX,"","%s"
 </screen>
       </section>
-      <section id="style_track_new">
+      <section xml:id="style_track_new">
          <title>TRACK_NEW</title>
          <para>If '1', it indicates that this trackpoint is the first point of a new track.  Needs integer conversion.</para>
          <para>example:
@@ -1169,9 +1169,9 @@ longitude)
 
 
 
-            <screen format="linespecific">IFIELD TRACK_NEW,&quot;&quot;,&quot;%d&quot;</screen></para>
+            <screen>IFIELD TRACK_NEW,"","%d"</screen></para>
       </section>
-      <section id="style_track_name">
+      <section xml:id="style_track_name">
          <title>TRACK_NAME</title>
          <para>The name of the track currently being operated on.  Needs string conversion.</para>
          <para>example:
@@ -1181,28 +1181,28 @@ longitude)
 
 
 
-            <screen format="linespecific">TRACK_NAME, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>TRACK_NAME, "", "%s"</screen></para>
       </section>
-      <section id="style_route_name">
+      <section xml:id="style_route_name">
          <title>ROUTE_NAME</title>
          <para>The name of the route currently being operated on.  Needs string conversion.</para>
          <para>example:
-            <screen format="linespecific">ROUTE_NAME, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>ROUTE_NAME, "", "%s"</screen></para>
       </section>
-      <section id="style_street_addr">
+      <section xml:id="style_street_addr">
          <title>STREET_ADDR</title>
          <para>Street address including house number.  Notice that this is not used for any geocoding, it's merely textual description associated with a position.</para>
          <para>example:
 
-            <screen format="linespecific">STREET_ADDR, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>STREET_ADDR, "", "%s"</screen></para>
       </section>
-      <section id="style_city">
+      <section xml:id="style_city">
          <title>CITY</title>
-         <para>The name of a city. Sometimes part of &quot;Points of Interest&quot;.   This is simple textual data associated with a position, no geocoding will be done..</para>
+         <para>The name of a city. Sometimes part of "Points of Interest".   This is simple textual data associated with a position, no geocoding will be done..</para>
          <para>example:
-            <screen format="linespecific">CITY, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>CITY, "", "%s"</screen></para>
       </section>
-      <section id="style_country">
+      <section xml:id="style_country">
          <title>COUNTRY</title>
          <para>The name of a country associated with a position.</para>
          <para>example:
@@ -1212,9 +1212,9 @@ longitude)
 
 
 
-            <screen format="linespecific">COUNTRY, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>COUNTRY, "", "%s"</screen></para>
       </section>
-      <section id="style_email">
+      <section xml:id="style_email">
          <title>EMAIL</title>
          <para>An email address associated with a position.</para>
          <para>example:
@@ -1224,9 +1224,9 @@ longitude)
 
 
 
-            <screen format="linespecific">EMAIL, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>EMAIL, "", "%s"</screen></para>
       </section>
-      <section id="style_facility">
+      <section xml:id="style_facility">
          <title>FACILITY</title>
          <para>The name of a facility to associate with a position.</para>
          <para>example:
@@ -1236,9 +1236,9 @@ longitude)
 
 
 
-            <screen format="linespecific">FACILITY, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>FACILITY, "", "%s"</screen></para>
       </section>
-      <section id="style_phone_nr">
+      <section xml:id="style_phone_nr">
          <title>PHONE_NR</title>
          <para>A phone number associated with a position.  This is just textual data attached for convenience.</para>
          <para>example:
@@ -1248,9 +1248,9 @@ longitude)
 
 
 
-            <screen format="linespecific">PHONE_NR, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>PHONE_NR, "", "%s"</screen></para>
       </section>
-      <section id="style_postal_code">
+      <section xml:id="style_postal_code">
          <title>POSTAL_CODE</title>
          <para>A postal code to associate with a position.  It is freeform text and is not used by GPSBabel for any geocoding or such.</para>
          <para>example:
@@ -1260,9 +1260,9 @@ longitude)
 
 
 
-            <screen format="linespecific">POSTAL_CODE, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>POSTAL_CODE, "", "%s"</screen></para>
       </section>
-      <section id="style_filename">
+      <section xml:id="style_filename">
          <title>FILENAME</title>
          <para>The name of the input file from where the points were loaded. This field is available only on output.</para>
          <para>example:
@@ -1272,9 +1272,9 @@ longitude)
 
 
 
-            <screen format="linespecific">OFIELD FILENAME, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>OFIELD FILENAME, "", "%s"</screen></para>
       </section>
-      <section id="style_format">
+      <section xml:id="style_format">
          <title>FORMAT</title>
          <para>The name of the input format from where format the points came. This field is available only on output.</para>
          <para>example:
@@ -1284,11 +1284,11 @@ longitude)
 
 
 
-            <screen format="linespecific">OFIELD FORMAT, &quot;&quot;, &quot;%s&quot;</screen></para>
+            <screen>OFIELD FORMAT, "", "%s"</screen></para>
       </section>
    </section>
    <!-- definitions -->
-   <section id="style_examples">
+   <section xml:id="style_examples">
       <title>Examples</title>
       <para>Here is one example style file from the GPSBabel source.
 
@@ -1318,19 +1318,19 @@ SHORTLEN 24
 #
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
 #
-IFIELD LON_HUMAN_READABLE, &quot;&quot;, &quot;%08.5f&quot;
-IFIELD LAT_HUMAN_READABLE, &quot;&quot;, &quot;%08.5f&quot;
-IFIELD SHORTNAME, &quot;&quot;, &quot;%s&quot;
-IFIELD DESCRIPTION, &quot;&quot;, &quot;%s&quot;
+IFIELD LON_HUMAN_READABLE, "", "%08.5f"
+IFIELD LAT_HUMAN_READABLE, "", "%08.5f"
+IFIELD SHORTNAME, "", "%s"
+IFIELD DESCRIPTION, "", "%s"
 
-OFIELD LON_DECIMAL, &quot;&quot;, &quot;%08.5f&quot;
-OFIELD LAT_DECIMAL, &quot;&quot;, &quot;%08.5f&quot;
-OFIELD SHORTNAME, &quot;&quot;, &quot;%-.24s&quot;
-OFIELD GEOCACHE_TYPE, &quot;&quot;, &quot; %-.4s&quot;, &quot;no_delim_before,optional&quot;
-OFIELD GEOCACHE_CONTAINER, &quot;&quot;, &quot;/%-.4s &quot;, &quot;no_delim_before,optional&quot;
-OFIELD GEOCACHE_DIFF, &quot;&quot;, &quot;(%3.1f&quot;, &quot;no_delim_before,optional&quot;
-OFIELD GEOCACHE_TERR, &quot;&quot;, &quot;/%3.1f)&quot;, &quot;no_delim_before,optional&quot;
-OFIELD DESCRIPTION, &quot;&quot;, &quot;%-.50s&quot;
+OFIELD LON_DECIMAL, "", "%08.5f"
+OFIELD LAT_DECIMAL, "", "%08.5f"
+OFIELD SHORTNAME, "", "%-.24s"
+OFIELD GEOCACHE_TYPE, "", " %-.4s", "no_delim_before,optional"
+OFIELD GEOCACHE_CONTAINER, "", "/%-.4s ", "no_delim_before,optional"
+OFIELD GEOCACHE_DIFF, "", "(%3.1f", "no_delim_before,optional"
+OFIELD GEOCACHE_TERR, "", "/%3.1f)", "no_delim_before,optional"
+OFIELD DESCRIPTION, "", "%-.50s"
 </literallayout>
          When used on a Groundspeak Pocket Query, it will output lines that
 look like:
@@ -1352,13 +1352,13 @@ look like:
          subdirectory of the GPSBabel source tree or at the
 
 
-         <ulink url="https://github.com/gpsbabel/gpsbabel/tree/master/style">online source.</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/gpsbabel/gpsbabel/tree/master/style">online source.</link>
          .</para>
    </section>
    <!-- examples -->
-   <section id="style_notes">
+   <section xml:id="style_notes">
       <title>Miscellaneous Notes</title>
-      <section id="style_notes_default">
+      <section xml:id="style_notes_default">
          <title>Default Values</title>
          <para>Default values are supported for any output fields that contain pure
    character data output such as URL and NOTES.  Default values are only
@@ -1370,4 +1370,3 @@ look like:
    </section>
    <!-- notes -->
 </appendix>
-<!-- style -->

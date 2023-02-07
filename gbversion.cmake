@@ -24,6 +24,7 @@ list(GET VERSION_COMPONENTS 2 GB.MICRO)
 set(GB.BUILD 32 CACHE STRING "Fourth component of Windows VERSIONINFO resource FILEVERSION and PRODUCTVERSION parameters.")
 set(GB.PACKAGE_RELEASE "" CACHE STRING "String to append to VERSION tuple.") # .e.g. "-beta20190413"
 set(GB.SHA $ENV{GITHUB_SHA})
+string(TIMESTAMP GB.COPYRIGHT_YEAR "%Y" UTC)
 
 # may be overridden on cmake command line
 set(DOCVERSION ${GB.VERSION} CACHE STRING "String appended to documentation location for www.gpsbabel.org.")

@@ -8,66 +8,73 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
+  workflow_dispatch: ~
 
 jobs:
 
   windows:
     name: windows Build
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017_64'
             METHOD: 'aqt'
-            FLOW: 'nmake'
-            RELEASE: true
+            GENERATOR: 'Visual Studio 16 2019'
+            RELEASE: false
+            os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'amd64'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017_64'
+            TOOLSET: 'v141,version=14.16.27023'
             METHOD: 'aqt'
-            FLOW: 'msbuild'
+            GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
-          - QT_VERSION: '5.12.12'
-            ARCH: 'amd64'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017_64'
-            METHOD: 'aqt'
-            FLOW: 'cmake'
-            RELEASE: false
-          - QT_VERSION: '5.12.12'
-            ARCH: 'amd64'
-            HOST_ARCH: 'x86'
-            COMPILER: 'msvc2017_64'
-            VCVERSION: '14.16'
-            METHOD: 'aqt'
-            FLOW: 'nmake'
-            RELEASE: false
+            os: windows-2019
           - QT_VERSION: '5.12.12'
             ARCH: 'x86'
-            HOST_ARCH: 'x86'
+            HOST_ARCH: 'amd64'
             COMPILER: 'msvc2017'
             METHOD: 'aqt'
+            GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
-            FLOW: 'nmake'
-          - QT_VERSION: '6.2.2'
+            os: windows-2019
+          - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
+            GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
-            FLOW: 'nmake'
+            os: windows-2019
+          - QT_VERSION: '6.2.4'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2019_64'
+            METHOD: 'aqt'
+            GENERATOR: 'Visual Studio 17 2022'
+            RELEASE: false
+            os: windows-latest
+          - QT_VERSION: '6.2.4'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2019_64'
+            METHOD: 'aqt'
+            RELEASE: true
+            GENERATOR: 'Ninja'
+            os: windows-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Cache Qt
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: cache
       with:
         path: ~/Cache
@@ -75,7 +82,7 @@ jobs:
 
     - name: Install Qt setup(aqt)
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -85,27 +92,27 @@ jobs:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        ./tools/ci_install_windows.sh ${{ matrix.QT_VERSION }} ${{ matrix.COMPILER }} ${{ matrix.METHOD }}
+        ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
 
     - name: Build
       shell: powershell
       run: |
-        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch ${{ matrix.ARCH }} -host_arch ${{ matrix.HOST_ARCH }} -vcversion "${{ matrix.VCVERSION }}"
-        .\tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" -buildinstaller true -flow ${{ matrix.FLOW }} -arch ${{ matrix.ARCH }}
+        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
+        .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
 
     - name: Rename
       shell: bash
       run: |
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
-        mv gui/release/GPSBabel-*-Setup.exe gui/release/GPSBabel-${VERSION_ID}-Setup.exe
-        mv gui/release/GPSBabel-*-Manifest.txt gui/release/GPSBabel-${VERSION_ID}-Manifest.txt
+        mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
+        mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
 
     - name: Test
       shell: bash
       run: |
-        PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
-        PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+        # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
+        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
@@ -116,13 +123,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        ./tools/uploadtool/upload_github.sh gui/release/GPSBabel-*-Setup.exe
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |
-          ./gui/release/GPSBabel-*-Setup.exe
-          ./gui/release/GPSBabel-*-Manifest.txt
+          ./bld/gui/GPSBabel-*-Setup.exe
+          ./bld/gui/GPSBabel-*-Manifest.txt
         retention-days: 7

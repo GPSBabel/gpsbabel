@@ -19,8 +19,17 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <ctime>                   // for tm
+#include <cstring>                 // for size_t, memcpy
+
+#include <QString>                 // for QString
+#include <QVector>                 // for QVector
+#include <QtGlobal>                // for Q_UNUSED
+
 #include "defs.h"
-#include "navilink.h"
+#include "gbfile.h"                // for gbfread, gbfclose, gbfeof, gbfopen
+#include "navilink.h"              // for navilink_checksum_packet, locosys_...
+
 
 #define MYNAME "sbn"
 
@@ -245,8 +254,8 @@ decode_sbn_record(unsigned char* buffer)
 
   decode_sbn_datetime(buffer + 10, waypt);
   decode_sbn_position(buffer + 22, waypt);
-  WAYPT_SET(waypt, speed, be_read16(buffer + 39) * 0.01f);
-  WAYPT_SET(waypt, course, be_read16(buffer + 41) * 0.01f);
+  waypt->set_speed(be_read16(buffer + 39) * 0.01f);
+  waypt->set_course(be_read16(buffer + 41) * 0.01f);
   waypt->sat = buffer[87];
   waypt->hdop = buffer[88] * 0.2f;
 
@@ -300,6 +309,10 @@ sbn_read()
 
 /**********************************************************************/
 
+/* Characters are always encoded in ASCII. Even if the unit is set
+ * to Chinese language, only ASCII characters can be entered.
+ */
+
 ff_vecs_t sbn_vecs = {
   ff_type_file,
   {
@@ -315,10 +328,6 @@ ff_vecs_t sbn_vecs = {
   nullptr,
   nullptr,
   &sbn_args,
-  /* Characters are always encoded in ASCII. Even if the unit is set
-   * to Chinese language, only ASCII characters can be entered. */
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 /**********************************************************************/

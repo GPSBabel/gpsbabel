@@ -43,13 +43,13 @@ enum class CsvQuoteMethod {historic, rfc4180};
 
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic);
+              const QString& enclosed_in, int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic);
 
 int
-dec_to_intdeg(const double d);
+dec_to_intdeg(double d);
 
 double
-intdeg_to_dec(const int ideg);
+intdeg_to_dec(int ideg);
 
 double
 decdir_to_dec(const char* decdir);
@@ -58,11 +58,7 @@ double
 ddmmdir_to_degrees(const char* ddmmdir);
 
 void
-human_to_dec(const char* instr, double* outlat, double* outlon, int which);
-inline void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which) {
-  human_to_dec(CSTR(instr), outlat, outlon, which);
-}
+human_to_dec(const QString& instr, double* outlat, double* outlon, int which);
 
 QString
 dec_to_human(const char* format, const char* dirs, double val);

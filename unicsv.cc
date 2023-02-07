@@ -19,10 +19,10 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include "unicsv.h"
+
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
-#include <cstdint>
-#include <cstdlib>                 // for atoi
 #include <cstring>                 // for memset, strchr, strncpy
 #include <ctime>                   // for gmtime
 
@@ -31,7 +31,6 @@
 #include <QDateTime>               // for QDateTime
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
 #include <QLatin1Char>             // for QLatin1Char
-#include <QLatin1String>           // for QLatin1String
 #include <QString>                 // for QString, operator!=, operator==
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream, operator<<, qSetRealNumberPrecision, qSetFieldWidth, QTextStream::FixedNotation
@@ -41,11 +40,11 @@
 #include <QtGlobal>                // for qPrintable
 
 #include "defs.h"
-#include "unicsv.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
+#include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
 #include "session.h"               // for session_t
 #include "src/core/datetime.h"     // for DateTime
@@ -322,20 +321,20 @@ UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
   return unicsv_parse_time(CSTR(str), msec, date);
 }
 
-status_type
+Geocache::status_t
 UnicsvFormat::unicsv_parse_status(const QString& str)
 {
-  if (str.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0 ||
-      str == "1") {
-    return status_true;
+  if (str.compare(u"true", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"yes", Qt::CaseInsensitive) == 0 ||
+      str == '1') {
+    return Geocache::status_t::gs_true;
   }
-  if (str.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QLatin1String("no"), Qt::CaseInsensitive) == 0 ||
-      str == "0") {
-    return status_false;
+  if (str.compare(u"false", Qt::CaseInsensitive) == 0 ||
+      str.compare(u"no", Qt::CaseInsensitive) == 0 ||
+      str == '0') {
+    return Geocache::status_t::gs_false;
   }
-  return status_unknown;
+  return Geocache::status_t::gs_unknown;
 }
 
 QDateTime
@@ -346,7 +345,7 @@ UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
     res += *date;
   }
   if (opt_utc) {
-    res += atoi(opt_utc) * SECONDS_PER_HOUR;
+    res += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
   } else {
     struct tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
@@ -506,7 +505,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
-  geocache_data* gc_data = nullptr;
+  Geocache* gc_data = nullptr;
   auto* wpt = new Waypoint;
   wpt->latitude = kUnicsvUnknown;
   wpt->longitude = kUnicsvUnknown;
@@ -597,15 +596,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_bng:
-      parse_coordinates(value, DATUM_OSGB36, grid_bng,
+      parse_coordinates(value, kDatumOSGB36, grid_bng,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_bng_zone:
@@ -622,11 +621,11 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_swiss:
-      parse_coordinates(value, DATUM_WGS84, grid_swiss,
+      parse_coordinates(value, kDautmWGS84, grid_swiss,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = DATUM_WGS84;
+      src_datum = kDautmWGS84;
       break;
 
     case fld_swiss_easting:
@@ -669,15 +668,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
-      if (case_ignore_strcmp(value, "none") == 0) {
+      if (value.compare(u"none", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_none;
-      } else if (case_ignore_strcmp(value, "2d") == 0) {
+      } else if (value.compare(u"2d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_2d;
-      } else if (case_ignore_strcmp(value, "3d") == 0) {
+      } else if (value.compare(u"3d", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_3d;
-      } else if (case_ignore_strcmp(value, "dgps") == 0) {
+      } else if (value.compare(u"dgps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_dgps;
-      } else if (case_ignore_strcmp(value, "pps") == 0) {
+      } else if (value.compare(u"pps", Qt::CaseInsensitive) == 0) {
         wpt->fix = fix_pps;
       } else {
         wpt->fix = fix_unknown;
@@ -700,7 +699,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_speed:
       if (parse_speed(value, &d, 1.0, MYNAME)) {
-        WAYPT_SET(wpt, speed, d);
+        wpt->set_speed(d);
         if (unicsv_detect) {
           unicsv_data_type = trkdata;
         }
@@ -708,7 +707,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_course:
-      WAYPT_SET(wpt, course, value.toDouble());
+      wpt->set_course(value.toDouble());
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
@@ -717,14 +716,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_temperature:
       d = value.toDouble();
       if (fabs(d) < 999999) {
-        WAYPT_SET(wpt, temperature, d);
+        wpt->set_temperature(d);
       }
       break;
 
     case fld_temperature_f:
       d = value.toDouble();
       if (fabs(d) < 999999) {
-        WAYPT_SET(wpt, temperature, FAHRENHEIT_TO_CELSIUS(d));
+        wpt->set_temperature(FAHRENHEIT_TO_CELSIUS(d));
       }
       break;
 
@@ -751,13 +750,13 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_proximity:
       if (parse_distance(value, &d, unicsv_proximityscale, MYNAME)) {
-        WAYPT_SET(wpt, proximity, d);
+        wpt->set_proximity(d);
       }
       break;
 
     case fld_depth:
       if (parse_distance(value, &d, unicsv_depthscale, MYNAME)) {
-        WAYPT_SET(wpt, depth, d);
+        wpt->set_depth(d);
       }
       break;
 
@@ -903,10 +902,10 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         }
         break;
       case fld_gc_type:
-        gc_data->type = gs_mktype(value);
+        gc_data->set_type(value);
         break;
       case fld_gc_container:
-        gc_data->container = gs_mkcont(value);
+        gc_data->set_container(value);
         break;
       case fld_gc_terr:
         gc_data->terr = value.toDouble() * 10;
@@ -1018,7 +1017,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     }
 
     if (opt_utc) {
-      wpt->creation_time = wpt->creation_time.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+      wpt->creation_time = wpt->creation_time.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
     }
   }
 
@@ -1052,15 +1051,15 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 bng_zone, bng_easting, bng_northing);
       }
-      src_datum = DATUM_WGS84;	/* don't convert afterwards */
+      src_datum = kDautmWGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
                                  &wpt->latitude, &wpt->longitude);
-      src_datum = DATUM_WGS84;	/* don't convert afterwards */
+      src_datum = kDautmWGS84;	/* don't convert afterwards */
     }
   }
 
-  if ((src_datum != DATUM_WGS84) &&
+  if ((src_datum != kDautmWGS84) &&
       (wpt->latitude != kUnicsvUnknown) && (wpt->longitude != kUnicsvUnknown)) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
@@ -1113,7 +1112,7 @@ UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
+        qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
 
@@ -1142,12 +1141,12 @@ UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
   }
   QDateTime dt = idt;
   if (opt_utc) {
-    //time += atoi(opt_utc) * SECONDS_PER_HOUR;
-    dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+    //time += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
+    dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
     dt = dt.toUTC();
   }
 
-  unicsv_print_str(dt.toString("yyyy/MM/dd hh:mm:ss"));
+  unicsv_print_str(dt.toString(u"yyyy/MM/dd hh:mm:ss"));
 }
 
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
@@ -1211,19 +1210,19 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 
   /* "flagged" waypoint members */
-  if WAYPT_HAS(wpt, course) {
+  if (wpt->course_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_course);
   }
-  if WAYPT_HAS(wpt, depth) {
+  if (wpt->depth_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_depth);
   }
-  if WAYPT_HAS(wpt, speed) {
+  if (wpt->speed_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_speed);
   }
-  if WAYPT_HAS(wpt, proximity) {
+  if (wpt->proximity_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_proximity);
   }
-  if WAYPT_HAS(wpt, temperature) {
+  if (wpt->temperature_has_value()) {
     gb_setbit(&unicsv_outp_flags, fld_temperature);
   }
 
@@ -1261,15 +1260,15 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
 
   if (! wpt->EmptyGCData()) {
-    const geocache_data* gc_data = wpt->gc_data;
+    const Geocache* gc_data = wpt->gc_data;
 
     if (gc_data->id) {
       gb_setbit(&unicsv_outp_flags, fld_gc_id);
     }
-    if (gc_data->type) {
+    if (gc_data->type != Geocache::type_t::gt_unknown) {
       gb_setbit(&unicsv_outp_flags, fld_gc_type);
     }
-    if (gc_data->container) {
+    if (gc_data->container != Geocache::container_t::gc_unknown) {
       gb_setbit(&unicsv_outp_flags, fld_gc_container);
     }
     if (gc_data->terr) {
@@ -1278,10 +1277,10 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     if (gc_data->diff) {
       gb_setbit(&unicsv_outp_flags, fld_gc_diff);
     }
-    if (gc_data->is_archived) {
+    if (gc_data->is_archived != Geocache::status_t::gs_unknown) {
       gb_setbit(&unicsv_outp_flags, fld_gc_is_archived);
     }
-    if (gc_data->is_available) {
+    if (gc_data->is_available != Geocache::status_t::gs_unknown) {
       gb_setbit(&unicsv_outp_flags, fld_gc_is_available);
     }
     if (gc_data->exported.isValid()) {
@@ -1306,14 +1305,13 @@ void
 UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
-  char* cout = nullptr;
-  const geocache_data* gc_data = nullptr;
+  const Geocache* gc_data = nullptr;
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
-  if (unicsv_datum_idx == DATUM_WGS84) {
+  if (unicsv_datum_idx == kDautmWGS84) {
     lat = wpt->latitude;
     lon = wpt->longitude;
     alt = wpt->altitude;
@@ -1327,22 +1325,19 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   switch (unicsv_grid_idx) {
 
   case grid_lat_lon_ddd:
-    cout = pretty_deg_format(lat, lon, 'd', unicsv_fieldsep, 0);
-    *fout << cout;
+    *fout << pretty_deg_format(lat, lon, 'd', unicsv_fieldsep, false);
     break;
 
   case grid_lat_lon_dmm:
-    cout = pretty_deg_format(lat, lon, 'm', unicsv_fieldsep, 0);
-    *fout << cout;
+    *fout << pretty_deg_format(lat, lon, 'm', unicsv_fieldsep, false);
     break;
 
   case grid_lat_lon_dms: {
-    cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-    char* sep = strchr(cout, ',');
-    *sep = '\0';
-    QString tmp = csv_enquote(cout, kUnicsvQuoteChar);
+    QString position = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, false);
+    auto sep = position.indexOf(unicsv_fieldsep);
+    QString tmp = csv_enquote(position.left(sep), kUnicsvQuoteChar);
     *fout << tmp << unicsv_fieldsep;
-    tmp = csv_enquote(sep+1, kUnicsvQuoteChar);
+    tmp = csv_enquote(position.mid(sep+1), kUnicsvQuoteChar);
     *fout << tmp;
   }
   break;
@@ -1370,7 +1365,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
                                          &east, &north, &zone, &zonec, unicsv_datum_idx)) {
       unicsv_fatal_outside(wpt);
     }
-    *fout << QString("%1").arg(zone, 2, 10, QLatin1Char('0')) << unicsv_fieldsep
+    *fout << QStringLiteral("%1").arg(zone, 2, 10, QLatin1Char('0')) << unicsv_fieldsep
           << zonec  << unicsv_fieldsep
           << qSetRealNumberPrecision(0) << east << unicsv_fieldsep
           << north;
@@ -1391,10 +1386,6 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     *fout << qSetRealNumberPrecision(llprec) << lat << unicsv_fieldsep
           << lon;
     break;
-  }
-
-  if (cout) {
-    xfree(cout);
   }
 
   if FIELD_USED(fld_shortname) {
@@ -1418,41 +1409,41 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     unicsv_print_str(wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr);
   }
   if FIELD_USED(fld_depth) {
-    if WAYPT_HAS(wpt, depth) {
+    if (wpt->depth_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(3) << wpt->depth;
+            << qSetRealNumberPrecision(3) << wpt->depth_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_proximity) {
-    if WAYPT_HAS(wpt, proximity) {
+    if (wpt->proximity_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(0) << wpt->proximity;
+            << qSetRealNumberPrecision(0) << wpt->proximity_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_temperature) {
-    if WAYPT_HAS(wpt, temperature) {
+    if (wpt->temperature_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(3) << wpt->temperature;
+            << qSetRealNumberPrecision(3) << wpt->temperature_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_speed) {
-    if WAYPT_HAS(wpt, speed) {
+    if (wpt->speed_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(2) << wpt->speed;
+            << qSetRealNumberPrecision(2) << wpt->speed_value();
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_course) {
-    if WAYPT_HAS(wpt, course) {
+    if (wpt->course_has_value()) {
       *fout << unicsv_fieldsep
-            << qSetRealNumberPrecision(1) << wpt->course;
+            << qSetRealNumberPrecision(1) << wpt->course_value();
     } else {
       *fout << unicsv_fieldsep;
     }
@@ -1543,11 +1534,11 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       if (opt_utc) {
         dt = wpt->GetCreationTime().toUTC();
         // We might wrap to a different day by overriding the TZ offset.
-        dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+        dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
       }
-      QString date = dt.toString("yyyy/MM/dd");
+      QString date = dt.toString(u"yyyy/MM/dd");
       *fout << unicsv_fieldsep << date;
     } else {
       *fout << unicsv_fieldsep;
@@ -1558,15 +1549,15 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       QTime t;
       if (opt_utc) {
         t = wpt->GetCreationTime().toUTC().time();
-        t = t.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+        t = t.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
       } else {
         t = wpt->GetCreationTime().toLocalTime().time();
       }
       QString out;
       if (t.msec() > 0) {
-        out = t.toString("hh:mm:ss.zzz");
+        out = t.toString(u"hh:mm:ss.zzz");
       } else {
-        out = t.toString("hh:mm:ss");
+        out = t.toString(u"hh:mm:ss");
       }
       *fout << unicsv_fieldsep << out;
     } else {
@@ -1627,14 +1618,14 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
   if FIELD_USED(fld_gc_type) {
     if (gc_data) {
-      unicsv_print_str(gs_get_cachetype(gc_data->type));
+      unicsv_print_str(gc_data->get_type());
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_gc_container) {
     if (gc_data) {
-      unicsv_print_str(gs_get_container(gc_data->container));
+      unicsv_print_str(gc_data->get_container());
     } else {
       *fout << unicsv_fieldsep;
     }
@@ -1652,15 +1643,15 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     }
   }
   if FIELD_USED(fld_gc_is_archived) {
-    if (gc_data && gc_data->is_archived) {
-      unicsv_print_str((gc_data->is_archived == status_true) ? "True" : "False");
+    if (gc_data && (gc_data->is_archived != Geocache::status_t::gs_unknown)) {
+      unicsv_print_str((gc_data->is_archived == Geocache::status_t::gs_true) ? "True" : "False");
     } else {
       *fout << unicsv_fieldsep;
     }
   }
   if FIELD_USED(fld_gc_is_available) {
-    if (gc_data && gc_data->is_available) {
-      unicsv_print_str((gc_data->is_available == status_true) ? "True" : "False");
+    if (gc_data && (gc_data->is_available != Geocache::status_t::gs_unknown)) {
+      unicsv_print_str((gc_data->is_available == Geocache::status_t::gs_true) ? "True" : "False");
     } else {
       *fout << unicsv_fieldsep;
     }
@@ -1721,7 +1712,7 @@ UnicsvFormat::wr_init(const QString& fname)
 
   memset(&unicsv_outp_flags, 0, sizeof(unicsv_outp_flags));
   unicsv_grid_idx = grid_unknown;
-  unicsv_datum_idx = DATUM_WGS84;
+  unicsv_datum_idx = kDautmWGS84;
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
@@ -1742,16 +1733,16 @@ UnicsvFormat::wr_init(const QString& fname)
     /* force datum to "Ord Srvy Grt Britn" / OSGB36 */
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = DATUM_OSGB36;
+    unicsv_datum_idx = kDatumOSGB36;
   } else if (unicsv_grid_idx == grid_swiss)
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = DATUM_WGS84;  /* internal, becomes CH1903 */
+    unicsv_datum_idx = kDautmWGS84;  /* internal, becomes CH1903 */
   } else {
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
-  llprec = atoi(opt_prec);
+  llprec = xstrtoi(opt_prec, nullptr, 10);
 }
 
 void

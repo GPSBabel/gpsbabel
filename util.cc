@@ -22,16 +22,18 @@
 #include <algorithm>                    // for sort
 #include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
 #include <cerrno>                       // for errno
+#include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdint>                      // for uint32_t
-#include <cstdlib>                      // for abs, getenv, calloc, free, malloc, realloc
+#include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
 #include <ctime>                        // for mktime, localtime
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
+#include <QDate>                        // for QDate
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
@@ -40,16 +42,15 @@
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
-#include <QXmlStreamAttribute>          // for QXmlStreamAttribute
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
 #include <Qt>                           // for CaseInsensitive
+#include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/logging.h"           // for Warning
-#include "src/core/xmltag.h"            // for xml_tag, xml_attribute, xml_findfirst, xml_findnext
+
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 # define i_am_little_endian 0
@@ -140,26 +141,6 @@ xrealloc(void* p, size_t s)
 }
 
 /*
-* For an allocated string, realloc it and append 's'
-*/
-char*
-xstrappend(char* src, const char* newd)
-{
-  if (!src) {
-    return xstrdup(newd);
-  }
-  if (!newd) {
-    return xstrdup(src);
-  }
-
-  size_t newsz = strlen(src) + strlen(newd) + 1;
-  src = (char*) xrealloc(src, newsz);
-  strcat(src, newd);
-
-  return src;
-}
-
-/*
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
 FILE*
@@ -203,21 +184,6 @@ ufopen(const QString& fname, const char* mode)
 #else
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
-#endif
-}
-
-/*
- * OS-abstracting wrapper for getting Unicode environment variables.
- */
-QString ugetenv(const char* env_var)
-{
-#ifdef __WIN32__
-  // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
-  return QString::fromWCharArray(
-           _wgetenv((const wchar_t*) QString(env_var).utf16()));
-#else
-  // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
-  return QString::fromLocal8Bit(std::getenv(env_var));
 #endif
 }
 
@@ -514,7 +480,7 @@ str_match(const char* str, const char* match)
 }
 
 void
-printposn(const double c, int is_lat)
+printposn(const double c, bool is_lat)
 {
   char d;
   if (is_lat) {
@@ -642,23 +608,11 @@ le_write32(void* ptr, const unsigned value)
   p[3] = value >> 24;
 }
 
-signed int
-si_round(double d)
-{
-  if (d < 0) {
-    return (signed int)(d-0.5);
-  } else {
-    return (signed int)(d+0.5);
-  }
-}
-
 /*
 	mkgmtime -- convert tm struct in UTC to time_t
 
 	works just like mktime but without all the mucking
 	around with timezones and daylight savings
-
-	obsoletes get_tz_offset()
 
 	Borrowed from lynx GPL source code
 	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
@@ -721,7 +675,7 @@ mklocaltime(struct tm* t)
 bool
 gpsbabel_testmode()
 {
-  static bool testmode = getenv("GPSBABEL_FREEZE_TIME") != nullptr;
+  static bool testmode = qEnvironmentVariableIsSet("GPSBABEL_FREEZE_TIME");
   return testmode;
 }
 
@@ -755,53 +709,6 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   return epoch.addMSecs(millisecs);
 }
 
-/*
- * Return a pointer to a constant string that is suitable for icon lookup
- * based on geocache attributes.   The strings used are those present in
- * a GPX file from geocaching.com.  Thus we sort of make all the other
- * formats do lookups based on these strings.
- */
-const char*
-get_cache_icon(const Waypoint* waypointp)
-{
-  if (!global_opts.smart_icons) {
-    return nullptr;
-  }
-
-  /*
-   * For icons, type overwrites container.  So a multi-micro will
-   * get the icons for "multi".
-   */
-  switch (waypointp->gc_data->type) {
-  case gt_virtual:
-    return "Virtual cache";
-  case gt_multi:
-    return "Multi-Cache";
-  case gt_event:
-    return "Event Cache";
-  case gt_surprise:
-    return "Unknown Cache";
-  case gt_webcam:
-    return "Webcam Cache";
-  default:
-    break;
-  }
-
-  switch (waypointp->gc_data->container) {
-  case gc_micro:
-    return "Micro-Cache";
-    break;
-  default:
-    break;
-  }
-
-  if (waypointp->gc_data->diff > 1) {
-    return "Geocache";
-  }
-
-  return nullptr;
-}
-
 double
 endian_read_double(const void* ptr, int read_le)
 {
@@ -813,7 +720,7 @@ endian_read_double(const void* ptr, int read_le)
     p = ptr;
   } else {
     for (int i = 0; i < 8; i++) {
-      r[i] = ((char*)ptr)[7-i];
+      r[i] = static_cast<const char*>(ptr)[7-i];
     }
     p = r;
   }
@@ -840,7 +747,7 @@ endian_read_float(const void* ptr, int read_le)
     p = ptr;
   } else {
     for (int i = 0; i < 4; i++) {
-      r[i] = ((char*)ptr)[3-i];
+      r[i] = static_cast<const char*>(ptr)[3-i];
     }
     p = r;
   }
@@ -951,72 +858,6 @@ double degrees2ddmm(double deg_val)
 }
 
 /*
- * replace a single occurrence of "search" in  "s" with "replace".
- * Returns an allocated copy if substitution was made, otherwise returns NULL.
- * Doesn't try to make an optimally sized dest buffer.
- */
-char*
-strsub(const char* s, const char* search, const char* replace)
-{
-  int len = strlen(s);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  const char* p = strstr(s, search);
-  if (!slen || !p) {
-    return nullptr;
-  }
-
-  char* d = (char*) xmalloc(len + rlen + 1);
-
-  /* Copy first part */
-  len = p - s;
-  memcpy(d, s, len);
-  d[len] = 0;
-
-  /* Copy replacement */
-  strcat(d, replace);
-
-  /* Copy last part */
-  strcat(d, p + slen);
-  return d;
-}
-
-/*
- *  As strsub, but do it globally.
- */
-char*
-gstrsub(const char* s, const char* search, const char* replace)
-{
-  int ooffs = 0;
-  const char* c;
-  const char* src = s;
-  int olen = strlen(src);
-  int slen = strlen(search);
-  int rlen = strlen(replace);
-
-  char* o = (char*) xmalloc(olen + 1);
-
-  while ((c = strstr(src, search))) {
-    olen += (rlen - slen);
-    o = (char*) xrealloc(o, olen + 1);
-    memcpy(o + ooffs, src, c - src);
-    ooffs += (c - src);
-    src = c + slen;
-    if (rlen) {
-      memcpy(o + ooffs, replace, rlen);
-      ooffs += rlen;
-    }
-  }
-
-  if (ooffs < olen) {
-    memcpy(o + ooffs, src, olen - ooffs);
-  }
-  o[olen] = '\0';
-  return o;
-}
-
-/*
  *
  */
 char*
@@ -1065,7 +906,7 @@ rot13(const QString& s)
  * a format usable for strftime and others
  */
 
-char*
+QString
 convert_human_date_format(const char* human_datef)
 {
   char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
@@ -1123,7 +964,9 @@ convert_human_date_format(const char* human_datef)
       fatal("Invalid character \"%c\" in date format!", *cin);
     }
   }
-  return result;
+  QString rv(result);
+  xfree(result);
+  return rv;
 }
 
 /*
@@ -1131,7 +974,7 @@ convert_human_date_format(const char* human_datef)
  * a format usable for strftime and others
  */
 
-char*
+QString
 convert_human_time_format(const char* human_timef)
 {
   char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
@@ -1215,7 +1058,9 @@ convert_human_time_format(const char* human_timef)
       fatal("Invalid character \"%c\" in time format!", *cin);
     }
   }
-  return result;
+  QString rv(result);
+  xfree(result);
+  return rv;
 }
 
 
@@ -1226,10 +1071,10 @@ convert_human_time_format(const char* human_timef)
  * sep = string between lat and lon (separator)
  * html = 1 for html output otherwise text
  */
-char*
-pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
+QString
+pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 {
-  char*	result;
+  QString	result;
   char latsig = lat < 0 ? 'S':'N';
   char lonsig = lon < 0 ? 'W':'E';
   int latint = abs((int) lat);
@@ -1242,17 +1087,17 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
     sep = " ";  /* default " " */
   }
   if (fmt == 'd') { /* ddd */
-    xasprintf(&result, "%c%6.5f%s%s%c%6.5f%s",
-              latsig, fabs(lat), html?"&deg;":"", sep,
-              lonsig, fabs(lon), html?"&deg;":"");
+    result = QStringLiteral("%1%2%3%4%5%6%7")
+             .arg(latsig).arg(fabs(lat), 6, 'f', 5).arg(html ? "&deg;" : "", sep)
+             .arg(lonsig).arg(fabs(lon), 6, 'f', 5).arg(html ? "&deg;" : "");
   } else if (fmt == 's') { /* dms */
-    xasprintf(&result, "%c%d%s%02d'%04.1f\"%s%c%d%s%02d'%04.1f\"",
-              latsig, latint, html?"&deg;":" ", (int)latmin, latsec, sep,
-              lonsig, lonint, html?"&deg;":" ", (int)lonmin, lonsec);
+    result = QStringLiteral("%1%2%3%4'%5\"%6%7%8%9%10'%11\"")
+             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg((int)latmin, 2, 10, QChar('0')).arg(latsec, 4, 'f', 1, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg((int)lonmin, 2, 10, QChar('0')).arg(lonsec, 4, 'f', 1, QChar('0'));
   } else { /* default dmm */
-    xasprintf(&result,  "%c%d%s%06.3f%s%c%d%s%06.3f",
-              latsig, latint, html?"&deg;":" ", latmin, sep,
-              lonsig, lonint, html?"&deg;":" ", lonmin);
+    result = QStringLiteral("%1%2%3%4%5%6%7%8%9")
+             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg(latmin, 6, 'f', 3, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg(lonmin, 6, 'f', 3, QChar('0'));
   }
   return result;
 }
@@ -1266,7 +1111,7 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
-char*
+QString
 strip_nastyhtml(const QString& in)
 {
   char* returnstr;
@@ -1348,7 +1193,9 @@ strip_nastyhtml(const QString& in)
     *lcp = '*';
   }
   xfree(lcstr);
-  return (returnstr);
+  QString rv(returnstr);
+  xfree(returnstr);
+  return rv;
 }
 
 /*
@@ -1357,30 +1204,26 @@ strip_nastyhtml(const QString& in)
  *  pleasant for a human reader.   Yes, this falls down in all kinds of
  *  ways such as spaces within the tags, etc.
  */
-char*
-strip_html(const utf_string* in)
+QString strip_html(const QString& utfstring)
 {
 #if 0
   // If we were willing to link core against QtGui (not out of the question)
   // we could just do...and either decide whether to add handling for [IMG]
   // or just say we don't do that any more.
   QTextDocument doc;
-  doc.setHtml(in->utfstring);
-  return xstrdup(CSTR(doc.toPlainText().simplified()));
+  doc.setHtml(utfstring);
+  return doc.toPlainText().simplified();
 #else
   char* out;
   char* instr;
   char tag[8];
   unsigned short int taglen = 0;
 
-  char* incopy = instr = xstrdup(in->utfstring);
-  if (!in->is_html) {
-    return instr;
-  }
+  char* incopy = instr = xstrdup(utfstring);
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-  char* outstring = out = xstrdup(in->utfstring);
+  char* outstring = out = xstrdup(utfstring);
 
   tag[0] = 0;
   while (*instr) {
@@ -1443,173 +1286,11 @@ strip_html(const utf_string* in)
     instr++;
   }
   *out++ = 0;
-  if (incopy) {
-    xfree(incopy);
-  }
-  return (outstring);
+  xfree(incopy);
+  QString rv(outstring);
+  xfree(outstring);
+  return rv;
 #endif
-}
-
-struct entity_types {
-  const char* text;
-  const char* entity;
-  int  not_html;
-};
-
-static
-entity_types stdentities[] =  {
-  { "&",	"&amp;", 0 },
-  { "'",	"&apos;", 1 },
-  { "<",	"&lt;", 0 },
-  { ">",	"&gt;", 0 },
-  { "\"",	"&quot;", 0 },
-  { "\x01",	" ", 1 }, // illegal xml 1.0 character
-  { "\x02",	" ", 1 }, // illegal xml 1.0 character
-  { "\x03",	" ", 1 }, // illegal xml 1.0 character
-  { "\x04",	" ", 1 }, // illegal xml 1.0 character
-  { "\x05",	" ", 1 }, // illegal xml 1.0 character
-  { "\x06",	" ", 1 }, // illegal xml 1.0 character
-  { "\x07",	" ", 1 }, // illegal xml 1.0 character
-  { "\x08",	" ", 1 }, // illegal xml 1.0 character
-  // { "\x09",	" ", 1 },  legal xml 1.0 character
-  // { "\x0a",	" ", 1 },  legal xml 1.0 character
-  { "\x0b",	" ", 1 }, // illegal xml 1.0 character
-  { "\x0c",	" ", 1 }, // illegal xml 1.0 character
-  // { "\x0d",	" ", 1 },  legal xml 1.0 character
-  { "\x0e",	" ", 1 }, // illegal xml 1.0 character
-  { "\x0f",	" ", 1 }, // illegal xml 1.0 character
-  { "\x10",	" ", 1 }, // illegal xml 1.0 character
-  { "\x11",	" ", 1 }, // illegal xml 1.0 character
-  { "\x12",	" ", 1 }, // illegal xml 1.0 character
-  { "\x13",	" ", 1 }, // illegal xml 1.0 character
-  { "\x14",	" ", 1 }, // illegal xml 1.0 character
-  { "\x15",	" ", 1 }, // illegal xml 1.0 character
-  { "\x16",	" ", 1 }, // illegal xml 1.0 character
-  { "\x17",	" ", 1 }, // illegal xml 1.0 character
-  { "\x18",	" ", 1 }, // illegal xml 1.0 character
-  { "\x19",	" ", 1 }, // illegal xml 1.0 character
-  { "\x1a",	" ", 1 }, // illegal xml 1.0 character
-  { "\x1b",	" ", 1 }, // illegal xml 1.0 character
-  { "\x1c",	" ", 1 }, // illegal xml 1.0 character
-  { "\x1d",	" ", 1 }, //illegal xml 1.0 character
-  { "\x1e",	" ", 1 }, //illegal xml 1.0 character
-  { "\x1f",	" ", 1 }, //illegal xml 1.0 character
-  { nullptr,	nullptr, 0 }
-};
-
-static
-char*
-entitize(const char* str, bool is_html)
-{
-  char* p;
-  char* tmp;
-  char* xstr;
-
-  entity_types* ep = stdentities;
-  int elen = 0;
-  int ecount = 0;
-
-  /* figure # of entity replacements and additional size. */
-  while (ep->text) {
-    const char* cp = str;
-    while ((cp = strstr(cp, ep->text)) != nullptr) {
-      elen += strlen(ep->entity) - strlen(ep->text);
-      ecount++;
-      cp += strlen(ep->text);
-    }
-    ep++;
-  }
-
-  /* enough space for the whole string plus entity replacements, if any */
-  tmp = (char*) xcalloc((strlen(str) + elen + 1), 1);
-  strcpy(tmp, str);
-
-  if (ecount != 0) {
-    for (ep = stdentities; ep->text; ep++) {
-      p = tmp;
-      if (is_html && ep->not_html)  {
-        continue;
-      }
-      while ((p = strstr(p, ep->text)) != nullptr) {
-        elen = strlen(ep->entity);
-
-        xstr = xstrdup(p + strlen(ep->text));
-
-        strcpy(p, ep->entity);
-        strcpy(p + elen, xstr);
-
-        xfree(xstr);
-
-        p += elen;
-      }
-    }
-  }
-
-  return (tmp);
-}
-
-/*
- * Public callers for the above to hide the absence of &apos from HTML
- */
-
-char* xml_entitize(const char* str)
-{
-  return entitize(str, false);
-}
-
-char* html_entitize(const char* str)
-{
-  return entitize(str, true);
-}
-char* html_entitize(const QString& str)
-{
-  return entitize(CSTR(str), true);
-}
-
-/*
- * xml_tag utilities
- */
-
-xml_tag* xml_next(xml_tag* root, xml_tag* cur)
-{
-  if (cur->child) {
-    cur = cur->child;
-  } else if (cur->sibling) {
-    cur = cur->sibling;
-  } else {
-    cur = cur->parent;
-    if (cur == root) {
-      cur = nullptr;
-    }
-    if (cur) {
-      cur = cur->sibling;
-    }
-  }
-  return cur;
-}
-
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname)
-{
-  xml_tag* result = cur;
-  do {
-    result = xml_next(root, result);
-  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
-  return result;
-}
-
-xml_tag* xml_findfirst(xml_tag* root, const QString& tagname)
-{
-  return xml_findnext(root, root, tagname);
-}
-
-QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname)
-{
-  for (const auto& attribute : attributes) {
-    if (attribute.qualifiedName().compare(attrname, Qt::CaseInsensitive) == 0) {
-      return attribute.value().toString();
-    }
-  }
-  return QString();
 }
 
 QString get_filename(const QString& fname)
@@ -1663,6 +1344,15 @@ int gb_ptr2int(const void* p)
   } x = { p };
 
   return x.i;
+}
+
+QTextCodec* get_codec(const QByteArray& cs_name)
+{
+  QTextCodec* codec = QTextCodec::codecForName(cs_name);
+  if (codec == nullptr) {
+    fatal(FatalMsg().nospace() << "Unsupported character set " << cs_name << ".");
+  }
+  return codec;
 }
 
 void
@@ -1730,4 +1420,19 @@ QString grapheme_truncate(const QString& input, unsigned int count)
              ", output QChars:" << output.size();
   }
   return output;
+}
+
+int xstrtoi(const char* str, char** str_end, int base)
+{
+  
+  long value = strtol(str, str_end, base);
+  if (value > INT_MAX) {
+    errno = ERANGE;
+    return INT_MAX;
+  }
+  if (value < INT_MIN) {
+    errno = ERANGE;
+    return INT_MIN;
+  }
+  return value;
 }

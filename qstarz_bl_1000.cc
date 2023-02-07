@@ -31,7 +31,7 @@
 #include <QDebug>              // for QDebug
 #include <QFile>               // for QFile
 #include <QIODevice>           // for QIODevice, QIODevice::ReadOnly
-#include "defs.h"              // for Waypoint, ddmm2degrees, route_head, track_add_head, track_add_wpt, waypt_add, waypt_count, wp_flags, fix_unknown, fix_2d, fix_3d, fix_dgps, fix_none, fix_pps, fix_type, global_options, global_opts
+#include "defs.h"
 #include "src/core/logging.h"  // for Fatal
 
 
@@ -228,16 +228,14 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   waypoint->altitude = altitude;
 
-  waypoint->hdop = round(hdop * 1000) / 1000;
-  waypoint->vdop = round(vdop * 1000) / 1000;
+  waypoint->hdop = std::round(hdop * 1000) / 1000;
+  waypoint->vdop = std::round(vdop * 1000) / 1000;
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  waypoint->speed = KPH_TO_MPS(speed);
-  waypoint->wpt_flags.speed = 1;
+  waypoint->set_speed(KPH_TO_MPS(speed));
 
-  waypoint->course = heading;
-  waypoint->wpt_flags.course = 1;
+  waypoint->set_course(heading);
   waypoint->SetCreationTime(time, milliseconds);
 
   auto* fsdata = new qstarz_bl_1000_fsdata;
@@ -254,12 +252,12 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   if (qstarz_bl_1000_is_waypoint_type(type)) {
     if (global_opts.synthesize_shortnames) {
-      waypoint->shortname = QString("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
+      waypoint->shortname = QStringLiteral("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
       waypoint->wpt_flags.shortname_is_synthetic = 1;
     }
     waypt_add(waypoint);
   } else if (qstarz_bl_1000_is_trackpoint_type(type)) {
-    track_add_wpt(track_route, waypoint, "TP", 3);
+    track_add_wpt(track_route, waypoint, u"TP", 3);
   } else {
     delete waypoint;
   }

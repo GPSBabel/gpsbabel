@@ -497,7 +497,7 @@ static int mtk_erase()
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &lstatus, 2);
   if (lstatus) {
-    log_status = atoi(lstatus);
+    log_status = xstrtoi(lstatus, nullptr, 10);
     dbg(3, "LOG Status '%s'\n", lstatus);
     xfree(lstatus);
     lstatus = nullptr;
@@ -565,7 +565,7 @@ static void mtk_read()
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
   if (fusage) {
-    log_enabled = (atoi(fusage) & 2)?1:0;
+    log_enabled = (xstrtoi(fusage, nullptr, 10) & 2)?1:0;
     dbg(3, "LOG Status '%s' -- log %s \n", fusage, log_enabled?"enabled":"disabled");
     xfree(fusage);
     fusage = nullptr;
@@ -801,16 +801,17 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   auto* trk = new Waypoint;
 
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == nullptr || (mtk_info.track_event & MTK_EVT_START))) {
-    char spds[50];
     trk_head = new route_head;
-    trk_head->rte_name = QString("track-%1").arg(1 + track_count());
+    trk_head->rte_name = QStringLiteral("track-%1").arg(1 + track_count());
 
-    spds[0] = '\0';
+    QString spds;
     if (mtk_info.speed > 0) {
-      sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
+      spds = QString::asprintf(" when moving above %.0f km/h", mtk_info.speed/10.);
     }
-    trk_head->rte_desc = QString::asprintf("Log every %.0f sec, %.0f m%s"
-                                           , mtk_info.period/10., mtk_info.distance/10., spds);
+    trk_head->rte_desc = QString::asprintf("Log every %.0f sec, %.0f m",
+                                           mtk_info.period/10.,
+                                           mtk_info.distance/10.);
+    trk_head->rte_desc += spds;
     track_add_head(trk_head);
   }
 
@@ -841,10 +842,10 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   }
 
   if (bmask & (1U<<HEADING)) {
-    WAYPT_SET(trk, course, itm->heading);
+    trk->set_course(itm->heading);
   }
   if (bmask & (1U<<SPEED)) {
-    WAYPT_SET(trk, speed, KPH_TO_MPS(itm->speed));
+    trk->set_speed(KPH_TO_MPS(itm->speed));
   }
   if (bmask & (1U<<VALID)) {
     switch (itm->valid) {
@@ -896,7 +897,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     auto* w = new Waypoint(*trk);
 
-    w->shortname = QString("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
+    w->shortname = QStringLiteral("WP%1").arg(waypt_count() + 1, 6, 10, QLatin1Char('0'));
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of
@@ -979,12 +980,7 @@ static void mtk_csv_deinit()
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
 static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
 {
-  char ts_str[30];
   const char* fix_str = "";
-
-  struct tm* ts_tm = gmtime(&(itm->timestamp));
-  strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);
-
   if (bmask & (1U<<VALID)) {
     switch (itm->valid) {
     case 0x0001:
@@ -1028,7 +1024,12 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
               , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
-    gbfprintf(csvFile, "%s.%.3d,", ts_str, (bmask & (1U<<MILLISECOND))?itm->timestamp_ms:0);
+    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
+    dt = dt.addMSecs(itm->timestamp_ms);
+
+    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");;
+    gbfputs(timestamp, csvFile);
+    gbfputc(',', csvFile);
   }
 
   if (bmask & (1U<<VALID)) {
@@ -1072,25 +1073,24 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   }
 
   if (bmask & (1U<<SID)) {
-    int do_sc = 0;
-    char sstr[40];
-    for (int l=0; l<itm->sat_count; l++) {
-      int slen = 0;
-      slen += sprintf(&sstr[slen], "%s%.2d"
-                      , itm->sat_data[l].used?"#":""
-                      , itm->sat_data[l].id);
+    for (int l = 0; l < itm->sat_count; l++) {
+      QString s = QString::asprintf("%s%.2d",
+                                    itm->sat_data[l].used ? "#" : "",
+                                    itm->sat_data[l].id);
       if (bmask & (1U<<ELEVATION)) {
-        slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].elevation);
+        s += QString::asprintf("-%.2d", itm->sat_data[l].elevation);
       }
       if (bmask & (1U<<AZIMUTH)) {
-        slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].azimut);
+        s += QString::asprintf("-%.2d", itm->sat_data[l].azimut);
       }
       if (bmask & (1U<<SNR)) {
-        slen += sprintf(&sstr[slen], "-%.2d", itm->sat_data[l].snr);
+        s += QString::asprintf("-%.2d", itm->sat_data[l].snr);
       }
 
-      gbfprintf(csvFile, "%s%s", do_sc?";":"", sstr);
-      do_sc = 1;
+      if (l) {
+        gbfputc(';', csvFile);
+      }
+      gbfputs(s, csvFile);
     }
     gbfprintf(csvFile, ",");
   }
@@ -1655,6 +1655,9 @@ static void file_read()
 // GPS logger will only handle tracks - neither waypoints or tracks...
 // Actually, some of the Holux devices will read waypoints.
 
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
+
 ff_vecs_t mtk_vecs = {
   ff_type_serial,
   {
@@ -1670,11 +1673,11 @@ ff_vecs_t mtk_vecs = {
   nullptr,
   nullptr,
   &mtk_sargs,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
+
+/* ascii is the expected character set */
+/* not fixed, can be changed through command line parameter */
 
 ff_vecs_t mtk_m241_vecs = {
   ff_type_serial,
@@ -1691,10 +1694,7 @@ ff_vecs_t mtk_m241_vecs = {
   nullptr,
   nullptr,
   &mtk_sargs,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-  /* not fixed, can be changed through command line parameter */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 
 /* used for mtk-bin */
@@ -1705,6 +1705,8 @@ static QVector<arglist_t> mtk_fargs = {
     nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t mtk_fvecs = {
   ff_type_file,
@@ -1717,10 +1719,10 @@ ff_vecs_t mtk_fvecs = {
   nullptr,
   nullptr,
   &mtk_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
+
+/* master process: don't convert anything */
 
 ff_vecs_t mtk_m241_fvecs = {
   ff_type_file,
@@ -1733,9 +1735,7 @@ ff_vecs_t mtk_m241_fvecs = {
   nullptr,
   nullptr,
   &mtk_fargs,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };
 /* End file: mtk_logger.c */
 /**************************************************************************/

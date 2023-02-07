@@ -5,4 +5,3 @@ only UPPERCASE characters.  This option overrides the style file.
 <para>
 Valid values for this option are 0 (off) and 1 (on).
 </para>
-

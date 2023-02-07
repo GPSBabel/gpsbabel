@@ -6,7 +6,7 @@ erased again by the user.</para>
 that on erase, only the first two sectors are actually cleared. The following example shows how to read the remaining data:
 </para>
 
-<example id="skytraq-restore-erased">
+<example xml:id="skytraq-restore-erased">
   <title>Command showing how to read data from an erased device</title>
   <para><userinput>gpsbabel -i skytraq,first-sector=2 -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
 </example>

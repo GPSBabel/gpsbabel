@@ -10,7 +10,7 @@
 	Not all data logged in this format is converted by GPSBabel,
 	but the following are:
 
-<simplelist columns="3">
+<simplelist columns="3" type="vert">
 	<member>Position</member>
 	<member>Elevation</member>
 	<member>Time</member>
@@ -24,7 +24,7 @@
 
 <para>
 	The specification of this format can be found in
-	the <ulink url="http://www.navmanwirelessoem.com/oem/customer-support/oem-news/product-briefs-and-data-sheets/jupiter-32-xlp-new2/sirf-binary-protocol-reference-manual">
-	SiRF Binary Protocol Reference Manual</ulink>, in the section
+	the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.navmanwirelessoem.com/oem/customer-support/oem-news/product-briefs-and-data-sheets/jupiter-32-xlp-new2/sirf-binary-protocol-reference-manual">
+	SiRF Binary Protocol Reference Manual</link>, in the section
 	called Geodetic Navigation Data - Message ID 41.
 </para>

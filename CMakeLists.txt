@@ -39,95 +39,83 @@ if(${QT_VERSION_MAJOR} EQUAL "6")
   list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
+option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
+if (GPSBABEL_ENABLE_PCH)
+  target_precompile_headers(gpsbabel PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
+  )
+endif()
+
 # RESOURCES
 set(RESOURCES gpsbabel.qrc)
 
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
-  explorist_ini.cc
   garmin.cc
   garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
   kml.cc
-  magproto.cc
   nmea.cc
   wbt-200.cc
 )
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  bcr.cc
   brauniger_iq.cc
-  delgpl.cc
-  destinator.cc
   dg-100.cc
-  dmtlog.cc
-  easygps.cc
-  energympro.cc
-  enigma.cc
   exif.cc
-  f90g_track.cc
   garmin_fit.cc
   garmin_gpi.cc
   garmin_txt.cc
   garmin_xt.cc
   gdb.cc
+  geocache.cc
   geojson.cc
-  ggv_bin.cc
-  ggv_log.cc
-  ggv_ovl.cc
   globalsat_sport.cc
-  glogbook.cc
-  gnav_trl.cc
-  googledir.cc
   gpssim.cc
   gtm.cc
   gtrnctr.cc
-  hiketech.cc
   holux.cc
   html.cc
   humminbird.cc
   igc.cc
-  ignrando.cc
-  igo8.cc
-  ik3d.cc
-  itracku.cc
-  lmx.cc
   lowranceusr.cc
-  mapasia.cc
-  mapbar_track.cc
-  mapfactor.cc
-  mmo.cc
-  mtk_locus.cc
   mtk_logger.cc
-  mynav.cc
   navilink.cc
-  navitel.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  raymarine.cc
-  saroute.cc
   sbn.cc
   sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
-  tef_xml.cc
-  teletype.cc
   text.cc
-  tomtom.cc
   tpg.cc
   tpo.cc
   unicsv.cc
   v900.cc
   vcf.cc
-  wintec_tes.cc
   xcsv.cc
-  xol.cc
 )
 
 # ALL_FMTS = $$MINIMAL_FMTS
@@ -177,7 +165,6 @@ set(JEEPS
 
 # SUPPORT
 set(SUPPORT
-  cet_util.cc
   csv_util.cc
   fatal.cc
   filter_vecs.cc
@@ -200,6 +187,7 @@ set(SUPPORT
   src/core/usasciicodec.cc
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
+  src/core/xmltag.cc
   strptime.c
   units.cc
   util.cc
@@ -207,7 +195,6 @@ set(SUPPORT
   vecs.cc
   waypt.cc
   xmlgeneric.cc
-  xmltag.cc
 )
 if(${QT_VERSION_MAJOR} EQUAL "6")
   set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
@@ -215,12 +202,10 @@ endif()
 
 # HEADERS
 set(HEADERS
-  cet_util.h
   csv_util.h
   defs.h
   dg-100.h
-  energympro.h
-  explorist_ini.h
+  exif.h
   filter.h
   filter_vecs.h
   format.h
@@ -234,27 +219,34 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  gdb.h
+  geocache.h
   geojson.h
-  ggv_bin.h
   globalsat_sport.h
+  geo.h
   gpx.h
   grtcirc.h
+  gtrnctr.h
   heightgrid.h
   holux.h
+  humminbird.h
+  html.h
   inifile.h
   kml.h
   legacyformat.h
+  igc.h
   lowranceusr.h
-  magellan.h
-  mynav.h
   navilink.h
   nmea.h
   osm.h
+  qstarz_bl_1000.h
   random.h
   session.h
   shape.h
+  skytraq.h
   strptime.h
   subrip.h
+  text.h
   unicsv.h
   units.h
   vecs.h
@@ -299,6 +291,8 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
+  # disable warning from strptime.c, which we don't want to own or modify
+  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -317,7 +311,8 @@ if(WIN32)
 endif()
 
 if(MSVC)
-  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_DEPRECATE)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
+  target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
   target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
 endif()
 
@@ -333,6 +328,20 @@ set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
 set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")
 target_include_directories(gpsbabel PRIVATE ${GPSBABEL_EXTRA_INCLUDE_DIRECTORIES})
+set(GPSBABEL_EXTRA_COMPILE_OPTIONS "" CACHE STRING "extra compile options.")
+# Qt sanitize.conf used:
+#   -fsanitize=address -fno-omit-frame-pointer
+#   -fsanitize=undefined -fsanitize=float-divide-by-zero -fno-omit-frame-pointer
+# For coverage use --coverage
+separate_arguments(GPSBABEL_EXTRA_COMPILE_OPTIONS)
+target_compile_options(gpsbabel PRIVATE ${GPSBABEL_EXTRA_COMPILE_OPTIONS})
+set(GPSBABEL_EXTRA_LINK_OPTIONS "" CACHE STRING "extra link options.")
+# Qt sanitize.conf used:
+#   -fsanitize=address
+#   -fsanitize=undefined -fsanitize=float-divide-by-zero
+# For coverage use --coverage
+separate_arguments(GPSBABEL_EXTRA_LINK_OPTIONS)
+target_link_options(gpsbabel PRIVATE ${GPSBABEL_EXTRA_LINK_OPTIONS})
 
 set(SOURCES
   ${SOURCES} ${ALL_FMTS} ${FILTERS} ${SUPPORT} ${SHAPE} ${ZLIB} ${JEEPS} ${RESOURCES}
@@ -360,28 +369,22 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
+# In case we ever update the garmin_icons mkicondoc helps 
+# update the related document table.
+add_executable(mkicondoc EXCLUDE_FROM_ALL mkicondoc.cc)
+target_link_libraries(mkicondoc PRIVATE ${QT_LIBRARIES})
+
 set(TESTS
   arc-project
   arc
   batch
-  bcr
   bend
-  classic-1
   classic-2
   classic-3
-  delgpl
-  destinator
   dg100
-  dmtlog
-  dna
   dop_filter
   duplicate
-  easygps
-  energympro
-  enigma
   exif
-  f90g
-  fugawi
   garmin_fit
   garmin_g1000
   garmin_gpi
@@ -391,13 +394,7 @@ set(TESTS
   gdb
   geojson
   geo
-  ggv_bin
-  ggv_log
-  ggv_ovl
   globalsat_sport
-  glogbook
-  gnav_trl
-  googledir
   gpsdrive
   gpssim
   gpx
@@ -405,36 +402,17 @@ set(TESTS
   gtm
   gtrnctr
   height
-  hiketech
   holux
   humminbird
   iblue747
   igc
-  ignrando
-  igo2008_poi
-  igo8
-  igoprimo_poi
-  ik3d
   interpolate
-  itracku
   kml-read
   kml
-  lmx
   lowranceusr
-  magellan_sd
-  magellan
-  mainnav
-  mapasia
-  mapbar
-  mapfactor
-  mmo
-  motoactv
   mtk
   multiurlgpx
-  mxf
-  mynav
   navilink
-  navitel
   nmea
   osm
   ozi
@@ -442,11 +420,9 @@ set(TESTS
   position
   qstarz_bl_1000
   radius
-  raymarine
   realtime
   resample
   route_reverse
-  saroute
   sbn
   sbp
   serialization
@@ -458,12 +434,7 @@ set(TESTS
   stackfilter
   subrip
   swap
-  tef
-  teletype
   text
-  tomtom_asc
-  tomtom_itn
-  tomtom
   tpg
   tpo
   track-discard
@@ -476,9 +447,7 @@ set(TESTS
   validate_formats
   validate
   vcard
-  wintec_tes
   xcsv
-  xol
 )
 
 list(SORT TESTS)
@@ -502,7 +471,8 @@ if(UNIX)
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 endif()
 if(UNIX AND NOT APPLE)
   # This test only works if the pwd is top level source dir due to the
@@ -515,25 +485,27 @@ if(UNIX AND NOT APPLE)
                     -l -j ${CMAKE_BINARY_DIR}/testo.d/TESTNAME.vglog -p $<TARGET_FILE:gpsbabel> TESTNAME
                     DEPENDS gpsbabel
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  set(WEB "../babelweb" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
+  set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
   add_custom_target(gpsbabel.org
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
                     DEPENDS gpsbabel gpsbabel.pdf
                     VERBATIM)
-endif()
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   add_custom_target(gpsbabel.html
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel)
-endif()
+                    DEPENDS gpsbabel
+                    VERBATIM)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   add_custom_target(gpsbabel.pdf
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel)
+                    DEPENDS gpsbabel
+                    VERBATIM)
+else()
+  message(WARNING "Document generation is only supported for in-source builds with single configuration generators.")
 endif()

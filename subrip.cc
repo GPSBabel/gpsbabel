@@ -90,8 +90,8 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 
       switch (fmt) {
       case 's':
-        if WAYPT_HAS(prevwpp, speed) {
-          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
+        if (prevwpp->speed_has_value()) {
+          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed_value()));
         } else {
           gbfprintf(fout, "--.-");
         }
@@ -180,7 +180,7 @@ SubripFormat::subrip_trkpt_pr(const Waypoint* waypointp)
       qDebug().noquote() << "GPS track start is           "
                          << waypointp->GetCreationTime().toUTC().toString(Qt::ISODateWithMs);
       qDebug().noquote() << "Synchronizing"
-                         << video_time(gps_datetime).toString("HH:mm:ss,zzz")
+                         << video_time(gps_datetime).toString(u"HH:mm:ss,zzz")
                          << "to" << gps_datetime.toString(Qt::ISODateWithMs);
       qDebug().noquote() << "Video start   00:00:00,000 is"
                          << video_datetime.toString(Qt::ISODateWithMs);

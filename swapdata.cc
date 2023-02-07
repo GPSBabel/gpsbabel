@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "swapdata.h"
+#include <utility>     // for swap
 
 #define MYNAME "swapdata"
 
@@ -30,10 +31,7 @@
 void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 {
   auto* wpt = const_cast<Waypoint*>(ref);
-
-  double x = wpt->latitude;
-  wpt->latitude = wpt->longitude;
-  wpt->longitude = x;
+  std::swap(wpt->latitude, wpt->longitude);
 }
 
 /*******************************************************************************
@@ -42,11 +40,9 @@ void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 
 void SwapDataFilter::process()	/* this procedure must be present in vecs */
 {
-  WayptFunctor<SwapDataFilter> swapdata_cb_f(this, &SwapDataFilter::swapdata_cb);
-
-  waypt_disp_all(swapdata_cb_f);
-  route_disp_all(nullptr, nullptr, swapdata_cb_f);
-  track_disp_all(nullptr, nullptr, swapdata_cb_f);
+  waypt_disp_all(swapdata_cb);
+  route_disp_all(nullptr, nullptr, swapdata_cb);
+  track_disp_all(nullptr, nullptr, swapdata_cb);
 }
 
 #endif // FILTERS_ENABLED

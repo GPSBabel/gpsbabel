@@ -50,16 +50,6 @@ public:
     return { ff_cap_none, ff_cap_write, ff_cap_none }; // waypoints, track, route; for now, we just do tracks
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void wr_init(const QString& fname) override;
   void write() override;
   void wr_deinit() override;

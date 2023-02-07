@@ -59,16 +59,6 @@ public:
     };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
@@ -82,7 +72,7 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
-  static int nmea_cksum(const char* const buf);
+  static int nmea_cksum(const char* buf);
 
 private:
   /* Types */
@@ -94,11 +84,11 @@ private:
     gprmc
   };
 
-  enum {
+  enum read_mode_type {
     rm_unknown = 0,
     rm_serial,
     rm_file
-  } read_mode;
+  };
 
   /* Member Functions */
 
@@ -132,7 +122,8 @@ private:
   gbfile* file_in{}, *file_out{};
   route_head* trk_head{};
   short_handle mkshort_handle{};
-  preferred_posn_type posn_type;
+  preferred_posn_type posn_type{};
+  read_mode_type read_mode{};
   QDateTime prev_datetime;
   Waypoint* curr_waypt{};
   Waypoint* last_waypt{};

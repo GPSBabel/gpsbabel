@@ -4,7 +4,7 @@
 	configuration, it can store ~100000 trackpoints with very limited
 	 data; to configure extended logging you can use the BT747 open
 	source software
-         <ulink url="http://bt747.wiki.sourceforge.net">bt747</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://bt747.wiki.sourceforge.net">bt747</link>
 	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
 </para>
 <para>
@@ -12,7 +12,7 @@
   internally used the Silicon Labs CP210X chipset to transform the internal and
   inaccessible serial port to the USB port that was familiar on the side. The
   drivers for that port can be found with
-  <ulink url="https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx">SiLabs CP210x serial port drivers</ulink>. The red and white one existed
+  <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx">SiLabs CP210x serial port drivers</link>. The red and white one existed
   very briefly before Holux went out of business. GPSBabel does not work with
   the red and white one.
 

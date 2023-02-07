@@ -1,18 +1,17 @@
 #!/bin/sh
 set -ex
 
-web=$1
-docversion=$2
+web=${1:-gpsbabel.org}
+docversion=${2:-x.y.z}
+tooldir=$(cd "$(dirname "$0")" && pwd)
 
 mkdir -p "${web}/htmldoc-${docversion}"
-perl xmldoc/makedoc
-xmlwf xmldoc/readme.xml #check for well-formedness
-xmllint --noout --valid xmldoc/readme.xml #validate
+"$tooldir"/make_gpsbabel_doc.sh
 xsltproc \
   --stringparam base.dir "${web}/htmldoc-${docversion}/" \
   --stringparam root.filename "index" \
   xmldoc/babelmain.xsl \
   xmldoc/readme.xml
-tools/fixdoc "${web}/htmldoc-${docversion}" "GPSBabel ${docversion}:"
-tools/mkcapabilities "${web}" "${web}/htmldoc-${docversion}"
+"${tooldir}"/fixdoc "${web}/htmldoc-${docversion}" "GPSBabel ${docversion}:"
+"${tooldir}"/mkcapabilities "${web}" "${web}/htmldoc-${docversion}"
 cp gpsbabel.pdf "${web}/htmldoc-${docversion}/gpsbabel-${docversion}.pdf"

@@ -9,7 +9,7 @@ Following a list of devices which should be supported by this module
 (Note that not all of them have actually been tested, so if you can confirm that additional models work, please mail the gpsbabel-misc group with your success, tips, and any pertinent links for your model.)
 </para>
 
-<table id="miniHomer_devices">
+<table xml:id="miniHomer_devices">
 <title>Devices supported by miniHomer module</title>
 <tgroup cols="4">
 <thead>
@@ -23,8 +23,10 @@ Following a list of devices which should be supported by this module
 <tbody>
 <row>
   <entry>
-  	<ulink url="http://navin.com.tw/miniHomer.htm"> Navin </ulink>
-  	<ulink url="http://www.znex.de/minihomer-details.html">Z:NEX</ulink>
+    <simplelist>
+  	<member><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://navin.com.tw/miniHomer.htm">Navin</link></member>
+  	<member><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.znex.de/minihomer-details.html">Z:NEX</link></member>
+    </simplelist>
   </entry>
   <entry>miniHomer</entry>
   <entry>up to 230400</entry>
@@ -34,12 +36,12 @@ Following a list of devices which should be supported by this module
 </tgroup>
 </table>
 
-<example id="miniHomer-on-linux">
+<example xml:id="miniHomer-on-linux">
   <title>Command showing miniHomer download of tracks and erasing the logger on Linux</title>
   <para><userinput>gpsbabel -i miniHomer,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
 </example>
 
-<example id="miniHomer-erase">
+<example xml:id="miniHomer-erase">
   <title>Command showing miniHomer erasing the logger without download on Linux</title>
   <para><userinput>gpsbabel -i miniHomer,erase,no-output -f /dev/ttyUSB0</userinput></para>
 </example>
@@ -49,7 +51,7 @@ Following a list of devices which should be supported by this module
 <emphasis>&lt;name&gt;=&lt;lat&gt;:&lt;lng&gt;[:&lt;alt&gt;]</emphasis>
 Once the according POI symbol is selected on miniHomer, the display shows you the direction and distance to the POI.
 </para>
-<example id="miniHomer-on-linux-poi">
+<example xml:id="miniHomer-on-linux-poi">
   <title>Command showing miniHomer setting Car and Home POI</title>
   <para>
   	<userinput>

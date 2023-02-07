@@ -6,11 +6,20 @@
 # as of 6/18/2018 you must use java 8, see issue #76, #83 at https://github.com/codacy/codacy-coverage-reporter/issues
 # as of 3/16/2019 with coverage reporter 4.0.3 java 8 is not required.
 
-qmake
-make -j 3 coverage
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )/.." && pwd)"
+BUILD_DIR="$(pwd)/bld-coverage"
+
+rm -rf "${BUILD_DIR}"
+mkdir "${BUILD_DIR}"
+cd "${BUILD_DIR}"
+
+cmake -DCMAKE_BUILD_TYPE=Release -DGPSBABEL_EXTRA_COMPILE_OPTIONS="--coverage" -DGPSBABEL_EXTRA_LINK_OPTIONS="--coverage" -G Ninja "${SOURCE_DIR}"
+cmake --build . --target check
+lcov --capture --directory "${BUILD_DIR}" --base-directory "${SOURCE_DIR}" --no-external --output-file lcov.info
+genhtml lcov.info --demangle-cpp --output-directory coverage_report
 
 # debug tokens
-"$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
+"${SOURCE_DIR}"/tools/ci_tokens
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # don't leak unhashed tokens!
@@ -20,7 +29,7 @@ set +x
 # by substituting x for the token if the token is set and not null.
 if [ -n "${CODACY_PROJECT_TOKEN:+x}" ] ; then
   # upload coverate report to codacy.
-  bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CPP -r gpsbabel_coverage.xml
+  bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CPP -r lcov.info
 else
   echo "Skipping codacy coverage upload as CODACY_PROJECT_TOKEN is not set."
 fi

@@ -18,10 +18,13 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef GBSER_PRIVATE_H_
+#define GBSER_PRIVATE_H_
 
 #define MYMAGIC 0x91827364
 #define BUFSIZE 512
 
-void gbser__db(int l, const char* msg, ...);
-int gbser__fill_buffer(void* h, unsigned want, unsigned* ms);
-unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len);
+void gbser_db(int l, const char* msg, ...);
+int gbser_fill_buffer(void* handle, unsigned want, unsigned* ms);
+unsigned gbser_read_buffer(void* handle, void** buf, unsigned* len);
+#endif // GBSER_PRIVATE_H_

@@ -18,11 +18,17 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <cmath>       // for fabs
+#include <cstdlib>     // for abs
+
+#include <QString>     // for QString
+#include <QVector>     // for QVector
+#include <Qt>          // for CaseInsensitive
+
 #include "defs.h"
-#include "jeeps/gpsmath.h"
-#include <cctype>
-#include <cmath>
-#include <cstdlib>
+#include "gbfile.h"    // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
+#include "geocache.h"  // for Geocache, Geocache::UtfString
+
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -58,15 +64,13 @@ wr_deinit()
  * newlines as we go.
  */
 static void
-vcf_print_utf(const utf_string* s)
+vcf_print_utf(const Geocache::UtfString* s)
 {
-  if (!s) {
+  if (nullptr == s) {
     return;
   }
 
-  char *string = strip_html(s);
-  QString stripped_html = string;
-  xfree(string);
+  QString stripped_html = s->strip_html();
 
   stripped_html.replace("\n", "\\n", Qt::CaseInsensitive);
   stripped_html.replace("<p>", "\\n", Qt::CaseInsensitive);
@@ -144,7 +148,5 @@ ff_vecs_t vcf_vecs = {
   data_write,
   nullptr,
   &vcf_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

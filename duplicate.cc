@@ -19,16 +19,17 @@
 
  */
 
-#include <cstdio>               // for sprintf
-#include <cstdlib>              // for qsort
-#include <cstring>              // for memset, strncpy
+#include "duplicate.h"
 
-#include <QDateTime>            // for QDateTime
-#include <QtGlobal>             // for foreach
+#include <algorithm>             // for stable_sort
+#include <cstdio>                // for snprintf
+#include <cstring>               // for memset, strncpy
+
+#include <QDateTime>             // for QDateTime
 
 #include "defs.h"
-#include "duplicate.h"
-#include "src/core/datetime.h"  // for DateTime
+#include "geocache.h"            // for Geocache
+#include "src/core/datetime.h"   // for DateTime
 
 
 #if FILTERS_ENABLED
@@ -114,30 +115,6 @@ be zero so the sort will end up being an expensive no-op (expensive
 because, sadly, quicksort can be O(n^2) on presorted elements.)
 */
 
-
-int DuplicateFilter::compare(const void* a, const void* b)
-{
-  const wpt_ptr* wa = (wpt_ptr*)a;
-  const wpt_ptr* wb = (wpt_ptr*)b;
-
-  if (wa->wpt->gc_data->exported < wb->wpt->gc_data->exported) {
-    return 1;
-  } else if (wa->wpt->gc_data->exported > wb->wpt->gc_data->exported) {
-    return -1;
-  }
-
-  /* If the exported dates are the same, sort by index. */
-  if (wa->index < wb->index) {
-    return -1;
-  } else if (wa->index > wb->index) {
-    return 1;
-  }
-
-  /* If index and date are the same, it's the same element. */
-  return 0;
-
-}
-
 void DuplicateFilter::process()
 {
   btree_node* btmp = nullptr;
@@ -150,22 +127,14 @@ void DuplicateFilter::process()
   } dupe;
   Waypoint* delwpt = nullptr;
 
-  int ct = waypt_count();
+  auto htable = *global_waypoint_list;
 
-  auto* htable = (wpt_ptr*) xmalloc(ct * sizeof(wpt_ptr));
-  wpt_ptr* bh = htable;
+  auto compare_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
+    return wa->gc_data->exported > wb->gc_data->exported;
+  };
+  std::stable_sort(htable.begin(), htable.end(), compare_lambda);
 
-  int i = 0;
-  foreach (Waypoint* waypointp, *global_waypoint_list) {
-    bh->wpt = waypointp;
-    bh->index = i;
-    i ++;
-    bh ++;
-  }
-  qsort(htable, ct, sizeof(*htable), compare);
-
-  for (i=0; i<ct; i++) {
-    auto* waypointp = htable[i].wpt;
+  for (Waypoint* waypointp : htable) {
 
     memset(&dupe, '\0', sizeof(dupe));
 
@@ -174,15 +143,14 @@ void DuplicateFilter::process()
     }
 
     if (lcopt) {
-      /* let sprintf take care of rounding */
-      sprintf(dupe.lat, "%11.4f", waypointp->latitude);
-      sprintf(dupe.lon, "%11.4f", waypointp->longitude);
       /* The degrees2ddmm stuff is a feeble attempt to
        * get everything rounded the same way in a precision
        * that's "close enough" for determining duplicates.
        */
-      sprintf(dupe.lat, "%11.3f", degrees2ddmm(waypointp->latitude));
-      sprintf(dupe.lon, "%11.3f", degrees2ddmm(waypointp->longitude));
+      snprintf(dupe.lat, sizeof(dupe.lat), "%11.3f",
+               degrees2ddmm(waypointp->latitude));
+      snprintf(dupe.lon, sizeof(dupe.lon), "%11.3f",
+               degrees2ddmm(waypointp->longitude));
 
     }
 
@@ -218,7 +186,6 @@ void DuplicateFilter::process()
 
   delete delwpt;
 
-  xfree(htable);
   if (sup_tree) {
     free_tree(sup_tree);
   }

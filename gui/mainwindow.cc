@@ -117,8 +117,7 @@ bool MainWindow::allowBetaUpgrades()
 static QString MakeOptions(const QList<FormatOption>& options)
 {
   QString str;
-  for (int i = 0; i< options.size(); i++) {
-    FormatOption option = options[i];
+  for (const auto& option : options) {
     QVariant default_value = option.getDefaultValue();
     if (option.getSelected()) {
       // For OPTbool, 'selected' is the key, not value.
@@ -271,7 +270,11 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   const QStringList directories = {
     QApplication::applicationDirPath() + "/translations",
     ":/translations",
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+#else
+    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+#endif
   };
 
   // Load the new translator.

@@ -32,5 +32,3 @@ gpsbabel -t
      -x track,pack,sdistance=0.3k,split=5m
      -o gpx -F out.gpx
 </userinput></para>
-
-

@@ -23,15 +23,26 @@
 #ifndef FILTERWIDGETS_H
 #define FILTERWIDGETS_H
 
+#include <QAbstractButton>   // for QAbstractButton
+#include <QComboBox>         // for QComboBox
+#include <QDateTime>         // for QDateTime
+#include <QDateTimeEdit>     // for QDateTimeEdit
+#include <QDoubleValidator>  // for QDoubleValidator
+#include <QFunctionPointer>  // for qMax, qMin
+#include <QLineEdit>         // for QLineEdit
+#include <QList>             // for QList
+#include <QObject>           // for QObject, Q_OBJECT, slots
+#include <QSpinBox>          // for QSpinBox
+#include <QString>           // for QString
+#include <QWidget>           // for QWidget
 
-#include "ui_trackui.h"
-#include "ui_wayptsui.h"
-#include "ui_rttrkui.h"
-#include "ui_miscfltui.h"
-#include "filterdata.h"
+#include "filterdata.h"      // for MiscFltFilterData, RtTrkFilterData, TrackFilterData, WayPtsFilterData
+#include "ui_miscfltui.h"    // for Ui_MiscFltWidget
+#include "ui_rttrkui.h"      // for Ui_RtTrkWidget
+#include "ui_trackui.h"      // for Ui_TrackWidget
+#include "ui_wayptsui.h"     // for Ui_WayPtsWidget
 
-class CheckEnabler;
-class FilterOption;
+
 //------------------------------------------------------------------------
 class CheckEnabler: public QObject
 {
@@ -307,6 +318,7 @@ private slots:
   void splitDateX();
   void splitTimeX();
   void splitDistanceX();
+  void TZX();
   void packCheckX();
 };
 

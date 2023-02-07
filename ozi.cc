@@ -38,7 +38,6 @@
 
 #include <cctype>                 // for tolower
 #include <cmath>                  // for lround
-#include <cstdlib>                // for atoi
 
 #include <QByteArray>             // for QByteArray
 #include <QChar>                  // for operator==, QChar
@@ -197,7 +196,7 @@ ozi_get_time_str(const Waypoint* waypointp)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
-    return QString("%1").arg(time, 0, 'f', 7);
+    return QStringLiteral("%1").arg(time, 0, 'f', 7);
   }
   return QString("");
 }
@@ -216,7 +215,7 @@ ozi_set_time_str(const QString& str, Waypoint* waypointp)
 static void
 ozi_convert_datum(Waypoint* wpt)
 {
-  if (datum != DATUM_WGS84) {
+  if (datum != kDautmWGS84) {
     double lat, lon, alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &lat, &lon, &alt, datum);
@@ -234,7 +233,7 @@ ozi_openfile(const QString& fname)
    * mytrack.plt, mytrack-1.plt...unless we're writing to stdout.
    */
 
-  if (fname == "-") {
+  if (fname ==  '-') {
     if (stream == nullptr) {
       ozi_open_io(fname, QFile::WriteOnly);
     }
@@ -243,7 +242,7 @@ ozi_openfile(const QString& fname)
 
   QString buff;
   if ((track_out_count) && (ozi_objective == trkdata)) {
-    buff = QString("-%1").arg(track_out_count);
+    buff = QStringLiteral("-%1").arg(track_out_count);
   } else {
     buff = QString("");
   }
@@ -256,7 +255,7 @@ ozi_openfile(const QString& fname)
     sname.chop(suffix_len + 1);
   }
 
-  QString tmpname = QString("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
+  QString tmpname = QStringLiteral("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
   if (stream != nullptr) {
@@ -466,18 +465,18 @@ wr_init(const QString& fname)
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    setshort_length(mkshort_handle, atoi(snlenopt));
+    setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
 
     if (snwhiteopt) {
-      setshort_whitespace_ok(mkshort_handle, atoi(snwhiteopt));
+      setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      setshort_mustupper(mkshort_handle, atoi(snupperopt));
+      setshort_mustupper(mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      setshort_mustuniq(mkshort_handle, atoi(snuniqueopt));
+      setshort_mustuniq(mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
     }
 
     setshort_badchars(mkshort_handle, "\",");
@@ -561,7 +560,7 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
     break;
   case 13:
     /* proximity distance - meters */
-    WAYPT_SET(wpt_tmp, proximity, str.toDouble() * prox_scale);
+    wpt_tmp->set_proximity(str.toDouble() * prox_scale);
     break;
   case 14:
     /* altitude */
@@ -919,8 +918,8 @@ ozi_waypt_pr(const Waypoint* wpt)
                    << fs->fgcolor << ','
                    << fs->bgcolor << ','
                    << description << ",0,0,";
-  if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
-    *stream << qSetRealNumberPrecision(1) << wpt->proximity * prox_scale << ',';
+  if (wpt->proximity_has_value() && (wpt->proximity_value() > 0)) {
+    *stream << qSetRealNumberPrecision(1) << wpt->proximity_value() * prox_scale << ',';
   } else if (proximity > 0) {
     *stream << qSetRealNumberPrecision(1) << proximity * prox_scale << ',';
   } else {
@@ -971,7 +970,5 @@ ff_vecs_t ozi_vecs = {
   data_write,
   nullptr,
   &ozi_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

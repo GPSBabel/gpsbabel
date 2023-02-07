@@ -7,3 +7,19 @@ gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
          -o arc -F ${TMPDIR}/simplify.txt
 compare ${REFERENCE}/simplify_output.txt ${TMPDIR}/simplify.txt
 
+gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
+         -x simplify,error=2m,crosstrack \
+         -o gpx -F ${TMPDIR}/simplify_error_crosstrack.gpx
+compare ${REFERENCE}/simplify_error_crosstrack.gpx ${TMPDIR}/simplify_error_crosstrack.gpx
+
+# verify the default matches crosstrack
+gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
+         -x simplify,error=2m \
+         -o gpx -F ${TMPDIR}/simplify_error.gpx
+compare ${REFERENCE}/simplify_error_crosstrack.gpx ${TMPDIR}/simplify_error.gpx
+
+gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
+         -x simplify,error=1000m,length \
+         -o gpx -F ${TMPDIR}/simplify_error_length.gpx
+compare ${REFERENCE}/simplify_error_length.gpx ${TMPDIR}/simplify_error_length.gpx
+

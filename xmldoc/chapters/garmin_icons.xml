@@ -1,4 +1,4 @@
-<appendix id="GarminIcons">
+<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GarminIcons">
   <title>Garmin Icons</title>
   <para>Following is a list of the valid values for the
 
@@ -6,13 +6,9 @@
     <option>deficon</option>
     option.
 These values are also used internally by the
-
     <link linkend="fmt_gdb">GDB</link>
-    , and
+    format.</para>
 
-    <link linkend="fmt_bcr">BCR</link>
-
-    formats.</para>
   <simplelist columns="5">
     <member>ATV</member>
     <member>Airport</member>

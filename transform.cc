@@ -21,7 +21,6 @@
  */
 
 #include <cctype>           // for toupper
-#include <cstdlib>          // for atoi
 
 #include <QtGlobal>         // for foreach
 
@@ -31,7 +30,6 @@
 
 #if FILTERS_ENABLED
 
-#include <cctype>
 
 #define MYNAME "transform"
 
@@ -49,6 +47,9 @@ void TransformFilter::transform_waypoints()
   foreach (Waypoint* wpt, *global_waypoint_list) {
 
     wpt = new Waypoint(*wpt);
+    if (timeless) {
+      wpt->SetCreationTime(gpsbabel::DateTime());
+    }
     switch (current_target) {
     case 'R':
       route_add_wpt(rte, wpt, RPT, name_digits);
@@ -70,7 +71,7 @@ void TransformFilter::transform_rte_disp_hdr_cb(const route_head* rte)
     current_trk = new route_head;
     track_add_head(current_trk);
     if (!rte->rte_name.isEmpty()) {
-      current_trk->rte_desc = QString("Generated from route %1").arg(rte->rte_name);
+      current_trk->rte_desc = QStringLiteral("Generated from route %1").arg(rte->rte_name);
       current_trk->rte_name = rte->rte_name; /* name the new trk */
     }
   }
@@ -96,6 +97,9 @@ void TransformFilter::transform_trk_disp_hdr_cb(const route_head* trk)
 void TransformFilter::transform_any_disp_wpt_cb(const Waypoint* wpt)
 {
   auto* temp = new Waypoint(*wpt);
+  if (timeless) {
+    temp->SetCreationTime(gpsbabel::DateTime());
+  }
   if (current_target == 'R') {
     route_add_wpt(current_rte, temp, current_namepart, name_digits);
   } else if (current_target == 'T') {
@@ -127,13 +131,15 @@ void TransformFilter::transform_tracks()
 
 void TransformFilter::process()
 {
-  int delete_after = (opt_delete && (*opt_delete == '1')) ? 1 : 0;
+  timeless = opt_timeless && (*opt_timeless == '1');
 
-  use_src_name = (opt_rpt_name && (*opt_rpt_name == '1')) ? 1 : 0;
+  bool delete_after = opt_delete && (*opt_delete == '1');
+
+  use_src_name = opt_rpt_name && (*opt_rpt_name == '1');
 
   name_digits = 3;
   if (rpt_name_digits && *rpt_name_digits) {
-    name_digits = atoi(rpt_name_digits);
+    name_digits = xstrtoi(rpt_name_digits, nullptr, 10);
   }
 
   if (opt_waypts != nullptr) {

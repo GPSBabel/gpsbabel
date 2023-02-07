@@ -8,28 +8,46 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
+  workflow_dispatch: ~
 
 jobs:
-  macos_release:
-    name: macos release Build
-    runs-on: macos-latest
-    env:
-      QT_VERSION: '5.12.12'
+  macos:
+    name: macOS Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - QT_VERSION: '5.15.2'
+            XCODE_VERSION: '12.5.1'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-11
+          - QT_VERSION: '6.2.4'
+            XCODE_VERSION: '13.4.1'
+            GENERATOR: 'Xcode'
+            RELEASE: false
+            os: macos-12
+          - QT_VERSION: '6.2.4'
+            XCODE_VERSION: '13.4.1'
+            GENERATOR: 'Ninja'
+            RELEASE: true
+            os: macos-12
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Cache Qt
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
@@ -38,108 +56,44 @@ jobs:
       env:
         TRAVIS_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${QT_VERSION} aqt
+        ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
+
+    - name: Brew install
+      if: matrix.GENERATOR == 'Ninja'
+      run: |
+        # update/upgrade is causing issues
+        # https://github.com/orgs/Homebrew/discussions/3895
+        # https://github.com/actions/setup-python/issues/577
+        # https://github.com/actions/runner-images/issues/6459
+        # https://github.com/actions/runner-images/issues/6507
+        # https://github.com/actions/runner-images/issues/2322
+        # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
+        brew install ninja
+        brew install docbook docbook-xsl fop gnu-sed
+        brew install jing-trang
 
     - name: Script
+      env:
+        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
       run: |
-        source ${HOME}/Cache/qt-${QT_VERSION}.env
-        sudo xcode-select --switch /Applications/Xcode_11.7.app
-        ./tools/travis_script_osx
-        echo GITHUB_REF: $GITHUB_REF
+        source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
+        sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
+        ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
       # the 'Upload Artifacts' step.
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
+        echo GITHUB_REF: $GITHUB_REF
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: MacOS_Installer
-        path: gui/GPSBabel-*.dmg
-        retention-days: 7
-
-  macos_edge:
-    name: macos edge Build
-    runs-on: macos-latest
-    env:
-      QT_VERSION: '5.15.2'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Cache Qt
-      uses: actions/cache@v2
-      with:
-        path: ~/Cache
-        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
-
-    - name: Qt install
-      env:
-        ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
-        ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
-        ARTIFACTORY_BASE_URL: ${{ secrets.ARTIFACTORY_BASE_URL }}
-      run: |
-        ./tools/travis_install_osx ${QT_VERSION} artifactory
-
-    - name: Script
-      run: |
-        source ${HOME}/Cache/qt-${QT_VERSION}.env
-        sudo xcode-select --switch /Applications/Xcode_12.4.app
-        ./tools/travis_script_osx
-
-    - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v2
-      with:
-        name: MacOS_Installer_Edge
-        path: gui/GPSBabel-*.dmg
-        retention-days: 7
-
-  macos_qt6:
-    name: macos Qt6 Build
-    runs-on: macos-11
-    env:
-      QT_VERSION: '6.2.2'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Cache Qt
-      uses: actions/cache@v2
-      id: cache
-      with:
-        path: ~/Cache
-        key: ${{ runner.os }}-${{ env.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
-
-    - name: Qt install setup
-      if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-
-    - name: Qt install
-      if: steps.cache.outputs.cache-hit != 'true'
-      env:
-        TRAVIS_BUILD_DIR: ${{ github.workspace }}
-      run: |
-        ./tools/travis_install_osx ${QT_VERSION} aqt
-
-    - name: Script
-      run: |
-        source ${HOME}/Cache/qt-${QT_VERSION}.env
-        sudo xcode-select --switch /Applications/Xcode_12.5.1.app
-        ./tools/travis_script_osx
-
-    - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v2
-      with:
-        name: MacOS_Installer_Qt6
+        name: MacOS_Installer ${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg
         retention-days: 7

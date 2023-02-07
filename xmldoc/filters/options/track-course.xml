@@ -7,4 +7,3 @@ filter.  The heading at each trackpoint is simply the course from the
 previous trackpoint in the track.  The first trackpoint in each track
 is arbitrarily assigned a heading of 0 degrees.
 </para>
-

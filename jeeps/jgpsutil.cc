@@ -104,9 +104,7 @@ US GPS_Util_Get_Short(const UC* s)
 
 void GPS_Util_Put_Short(UC* s, const US v)
 {
-  UC* p;
-
-  p = (UC*)&v;
+  const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little) {
     *s++ = *(p+1);
@@ -163,10 +161,9 @@ double GPS_Util_Get_Double(const UC* s)
 
 void GPS_Util_Put_Double(UC* s, const double v)
 {
-  UC* p;
   int32 i;
 
-  p = (UC*)&v;
+  const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
@@ -225,10 +222,9 @@ int32 GPS_Util_Get_Int(const UC* s)
 
 void GPS_Util_Put_Int(UC* s, const int32 v)
 {
-  UC* p;
   int32 i;
 
-  p = (UC*)&v;
+  const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
     for (i=sizeof(int32)-1; i>-1; --i) {
@@ -286,10 +282,9 @@ uint32 GPS_Util_Get_Uint(const UC* s)
 
 void GPS_Util_Put_Uint(UC* s, const uint32 v)
 {
-  UC*    p;
   int32 i;
 
-  p = (UC*)&v;
+  const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
     for (i=sizeof(uint32)-1; i>-1; --i) {
@@ -347,10 +342,9 @@ float GPS_Util_Get_Float(const UC* s)
 
 void GPS_Util_Put_Float(UC* s, const float v)
 {
-  UC* p;
   int32 i;
 
-  p = (UC*)&v;
+  const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {

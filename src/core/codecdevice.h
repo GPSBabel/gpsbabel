@@ -16,13 +16,16 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef SRC_CORE_CODECDEVICE_H_
+#define SRC_CORE_CODECDEVICE_H_
 
 #include <QIODevice>        // for QIODevice
+#include <QIODeviceBase>    // for QIODeviceBase::OpenMode
 #include <QString>          // for QString
 #include <QTextCodec>       // for QTextCodec
 #include <QTextDecoder>     // for QTextDecoder
 #include <QTextEncoder>     // for QTextEncoder
-#include <QtCore>           // for qint64, QIODeviceBase::OpenMode
+#include <QtGlobal>         // for qint64
 
 #include "src/core/file.h"  // for File
 
@@ -60,3 +63,4 @@ private:
 };
 
 } // namespace
+#endif // SRC_CORE_CODECDEVICE_H_

@@ -21,7 +21,7 @@
 
 #include <climits>              // for INT_MAX
 #include <cmath>                // for abs, ceil, isfinite, round
-#include <cstdlib>              // for abs, atoi, strtod
+#include <cstdlib>              // for abs, strtod
 #include <optional>             // for optional
 
 #include <QString>              // for QString

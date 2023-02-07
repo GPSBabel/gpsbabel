@@ -26,7 +26,7 @@ Options:
     -T               Process realtime tracking information
     -w               Process waypoint information [default]
     -b               Process command file (batch mode)
-    -x filtername    Invoke filter (placed between inputs and output) 
+    -x filtername    Invoke filter (placed between inputs and output)
     -D level         Set debug level [0]
     -h, -?           Print detailed help and exit
     -V               Print GPSBabel version and exit

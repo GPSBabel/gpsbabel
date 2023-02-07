@@ -5,7 +5,7 @@ to use GPSBabel will print an error message containing the language codes used i
 Subsequently you may use one of these codes with the languagecode
 option to specify which language to use.
 </para>
-<example id="gpi_languagecode_notspecified">
+<example xml:id="gpi_languagecode_notspecified">
   <title>Example with unspecified language and a garmin points of interest dual language file.</title>
   <para>
     <userinput>
@@ -17,7 +17,7 @@ option to specify which language to use.
     </simplelist>
   </para>
 </example>
-<example id="gpi_languagecode_specified">
+<example xml:id="gpi_languagecode_specified">
   <title>Example for specifying language with a garmin points of interest dual language file.</title>
   <para>
     <userinput>

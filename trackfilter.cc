@@ -75,7 +75,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   qint64 result = 0;
 
-  QRegularExpression re("^([+-]?\\d+)([wdhms])(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?(?:([+-]?\\d+)([wdhms]))?$", QRegularExpression::CaseInsensitiveOption);
+  static const QRegularExpression re(R"(^([+-]?\d+)([wdhms])(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?$)", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
@@ -238,9 +238,9 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
   QString datetimestring;
 
   if (opt_interval != 0) {
-    datetimestring = dt.toUTC().toString("yyyyMMddhhmmss");
+    datetimestring = dt.toUTC().toString(u"yyyyMMddhhmmss");
   } else {
-    datetimestring = dt.toUTC().toString("yyyyMMdd");
+    datetimestring = dt.toUTC().toString(u"yyyyMMdd");
   }
 
   if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {
@@ -253,10 +253,10 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
     } else {
-      track->rte_name = QString("%1-%2").arg(opt_title, datetimestring);
+      track->rte_name = QStringLiteral("%1-%2").arg(opt_title, datetimestring);
     }
   } else if (!track->rte_name.isEmpty()) {
-    track->rte_name = QString("%1-%2").arg(track->rte_name, datetimestring);
+    track->rte_name = QStringLiteral("%1-%2").arg(track->rte_name, datetimestring);
   } else {
     track->rte_name = datetimestring;
   }
@@ -426,7 +426,7 @@ void TrackFilter::trackfilter_split()
 
     opt_interval = (opt_split && (strlen(opt_split) > 0) && (0 != strcmp(opt_split, TRACKFILTER_SPLIT_OPTION)));
     if (opt_interval != 0) {
-      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
+      static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_split);
       if (match.hasMatch()) {
@@ -462,7 +462,7 @@ void TrackFilter::trackfilter_split()
 
     opt_distance = (opt_sdistance && (strlen(opt_sdistance) > 0) && (0 != strcmp(opt_sdistance, TRACKFILTER_SDIST_OPTION)));
     if (opt_distance != 0) {
-      QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
+      static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_sdistance);
       if (match.hasMatch()) {
@@ -574,10 +574,21 @@ void TrackFilter::trackfilter_move()
     return;
   }
 
+  int timeless_points = 0;
+
   for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
-      wpt->creation_time = wpt->creation_time.addSecs(delta);
+      if (wpt->creation_time.isValid()) {
+        wpt->creation_time = wpt->creation_time.addSecs(delta);
+      } else {
+        ++timeless_points;
+      }
     }
+  }
+  if (timeless_points > 0) {
+    warning(MYNAME "-move: %d points out of %d total points didn't have "
+            "time information and could not be moved.\n",
+            timeless_points, track_waypt_count());
   }
 }
 
@@ -608,11 +619,11 @@ void TrackFilter::trackfilter_synth()
       if (first) {
         if (opt_course) {
           // TODO: the course value 0 isn't valid, wouldn't it be better to UNSET course?
-          WAYPT_SET(wpt, course, 0);
+          wpt->set_course(0);
         }
         if (opt_speed) {
           // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
-          WAYPT_SET(wpt, speed, 0);
+          wpt->set_speed(0);
         }
         first = false;
         last_course_lat = wpt->latitude;
@@ -622,9 +633,9 @@ void TrackFilter::trackfilter_synth()
         last_speed_time = wpt->GetCreationTime();
       } else {
         if (opt_course) {
-          WAYPT_SET(wpt, course, heading_true_degrees(RAD(last_course_lat),
-                    RAD(last_course_lon),RAD(wpt->latitude),
-                    RAD(wpt->longitude)));
+          wpt->set_course(heading_true_degrees(RAD(last_course_lat),
+                                               RAD(last_course_lon),RAD(wpt->latitude),
+                                               RAD(wpt->longitude)));
           last_course_lat = wpt->latitude;
           last_course_lon = wpt->longitude;
         }
@@ -638,17 +649,17 @@ void TrackFilter::trackfilter_synth()
             // Note that points with the same time can occur because the input
             // has truncated times, or because we are truncating times with
             // toTime_t().
-            WAYPT_SET(wpt, speed, radtometers(gcdist(
-                                                RAD(last_speed_lat), RAD(last_speed_lon),
-                                                RAD(wpt->latitude),
-                                                RAD(wpt->longitude))) /
-                      (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
-                     );
+            wpt->set_speed(radtometers(gcdist(
+                                         RAD(last_speed_lat), RAD(last_speed_lon),
+                                         RAD(wpt->latitude),
+                                         RAD(wpt->longitude))) /
+                           (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
+                          );
             last_speed_lat = wpt->latitude;
             last_speed_lon = wpt->longitude;
             last_speed_time = wpt->GetCreationTime();
           } else {
-            WAYPT_UNSET(wpt, speed);
+            wpt->reset_speed();
           }
         }
       }
@@ -665,7 +676,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  QRegularExpression re("^(\\d{0,14})$");
+  static const QRegularExpression re("^(\\d{0,14})$");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
@@ -759,7 +770,7 @@ void TrackFilter::trackfilter_seg2trk()
           dest->rte_num = src->rte_num;
           /* name in the form TRACKNAME #n */
           if (!src->rte_name.isEmpty()) {
-            dest->rte_name = QString("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
+            dest->rte_name = QStringLiteral("%1 #%2").arg(src->rte_name).arg(++trk_seg_num);
           }
 
           /* Insert after original track or after last newly
@@ -826,7 +837,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 {
   faketime_t result;
 
-  QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d{1,10}))?$)");
+  static const QRegularExpression re(R"(^(f?)(\d{0,14})(?:\+(\d+(?:\.\d*)?|\.\d+))?$)");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
@@ -843,7 +854,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 
     if (match.capturedLength(3) > 0) {
       bool ok;
-      result.step = match.captured(3).toInt(&ok);
+      result.step = llround(1000.0 * match.captured(3).toDouble(&ok));
       if (!ok) {
         fatal(MYNAME "-faketime-check: Invalid step \"%s\"!\n", qPrintable(match.captured(3)));
       }
@@ -852,7 +863,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     }
 
 #ifdef TRACKF_DBG
-    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step;
+    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
 #endif
   } else {
     fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", timestr);
@@ -871,7 +882,7 @@ void TrackFilter::trackfilter_faketime()
 
       if (!wpt->creation_time.isValid() || faketime.force) {
         wpt->creation_time = faketime.start;
-        faketime.start = faketime.start.addSecs(faketime.step);
+        faketime.start = faketime.start.addMSecs(faketime.step);
       }
     }
   }
@@ -892,12 +903,11 @@ bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoi
     std::abs(wpta->latitude - wptb->latitude) < .00001 &&
     std::abs(wpta->longitude - wptb->longitude) < .00001 &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
-    (WAYPT_HAS(wpta,course) == WAYPT_HAS(wptb,course)) &&
-    (wpta->course == wptb->course) &&
-    (wpta->speed == wptb->speed) &&
+    wpta->courses_equal(*wptb) &&
+    wpta->speeds_equal(*wptb) &&
     (wpta->heartrate == wptb->heartrate) &&
     (wpta->cadence == wptb->cadence) &&
-    (wpta->temperature == wptb->temperature);
+    wpta->temperatures_equal(*wptb);
 }
 
 void TrackFilter::trackfilter_segment_head(const route_head* rte)
@@ -950,7 +960,6 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
 void TrackFilter::init()
 {
-  RteHdFunctor<TrackFilter> trackfilter_segment_head_f(this, &TrackFilter::trackfilter_segment_head);
   RteHdFunctor<TrackFilter> trackfilter_fill_track_list_cb_f(this, &TrackFilter::trackfilter_fill_track_list_cb);
 
   /*
@@ -962,7 +971,7 @@ void TrackFilter::init()
    */
   need_time = (
                 opt_merge || opt_pack || opt_split || opt_sdistance ||
-                opt_move || opt_fix || opt_speed ||
+                opt_fix || opt_speed ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
   /* in case of a formatted title we also need valid timestamps */
@@ -972,7 +981,7 @@ void TrackFilter::init()
 
   // Perform segmenting first.
   if (opt_segment) {
-    track_disp_all(trackfilter_segment_head_f, nullptr, nullptr);
+    track_disp_all(trackfilter_segment_head, nullptr, nullptr);
   }
 
   track_list.clear();

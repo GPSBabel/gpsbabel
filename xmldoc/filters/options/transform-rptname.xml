@@ -6,7 +6,7 @@ GPSBabel creates route points during the transformation process named "RPTnnn" w
 <para>
 Using this option GPSBabel can be configured to replace the "RPT" part of the generated names by the name of the source track during the transformation process. This is especially usefull if several differently named tracks are contained in the source file which should each be transformed into routes.
 </para>
-<example id="transform_rptname">
+<example xml:id="transform_rptname">
 <title>Convert a GPX track to a GPX route, deleting the original track, naming the generated points like the original track name.</title>
 <para><userinput>gpsbabel -i gpx -f track.gpx -x transform,wpt=trk,del,rptname=y -o gpx -F route.gpx</userinput></para>
 </example>

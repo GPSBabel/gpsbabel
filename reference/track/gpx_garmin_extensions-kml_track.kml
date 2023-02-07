@@ -160,8 +160,8 @@
                 <gx:value>153</gx:value>
                 <gx:value>153</gx:value>
                 <gx:value>153</gx:value>
-                <gx:value>0</gx:value>
-                <gx:value>0</gx:value>
+                <gx:value></gx:value>
+                <gx:value></gx:value>
                 <gx:value>76</gx:value>
                 <gx:value>124</gx:value>
               </gx:SimpleArrayData>
@@ -184,20 +184,21 @@
         <snippet/>
         <description>
 <![CDATA[<table>
-<tr><td><b>Distance</b> 85.9 ft </td></tr>
-<tr><td><b>Min Alt</b> -51.588 ft </td></tr>
-<tr><td><b>Max Alt</b> 0.449 ft </td></tr>
-<tr><td><b>Min Speed</b> 2.7 mph </td></tr>
-<tr><td><b>Max Speed</b> 11.3 mph </td></tr>
-<tr><td><b>Avg Speed</b> 8.4 mph </td></tr>
-<tr><td><b>Avg Heart Rate</b> 113.9 bpm </td></tr>
-<tr><td><b>Min Heart Rate</b> 111 bpm </td></tr>
-<tr><td><b>Max Heart Rate</b> 117 bpm </td></tr>
-<tr><td><b>Avg Cadence</b> 135.0 rpm </td></tr>
-<tr><td><b>Max Cadence</b> 153 rpm </td></tr>
-<tr><td><b>Start Time</b>2008-08-20T07:04:48Z</td></tr>
-<tr><td><b>End Time</b>2008-08-20T07:04:55Z</td></tr>
-</table>]]>
+<tr><td><b>Distance</b> 85.9 ft</td></tr>
+<tr><td><b>Min Alt</b> -51.588 ft</td></tr>
+<tr><td><b>Max Alt</b> 0.449 ft</td></tr>
+<tr><td><b>Min Speed</b> 2.7 mph</td></tr>
+<tr><td><b>Max Speed</b> 11.3 mph</td></tr>
+<tr><td><b>Avg Speed</b> 8.4 mph</td></tr>
+<tr><td><b>Avg Cadence</b> 135.0 rpm</td></tr>
+<tr><td><b>Max Cadence</b> 153 rpm</td></tr>
+<tr><td><b>Avg Heart Rate</b> 113.9 bpm</td></tr>
+<tr><td><b>Min Heart Rate</b> 111 bpm</td></tr>
+<tr><td><b>Max Heart Rate</b> 117 bpm</td></tr>
+<tr><td><b>Start Time</b> 2008-08-20T07:04:48Z</td></tr>
+<tr><td><b>End Time</b> 2008-08-20T07:04:55Z</td></tr>
+</table>
+]]>
 </description>
         <TimeSpan>
           <begin>2008-08-20T07:04:48Z</begin>
@@ -210,13 +211,13 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035187 </td></tr>
-<tr><td>Latitude: 51.506172 </td></tr>
-<tr><td>Altitude: 0.449 ft </td></tr>
-<tr><td>Heart rate: 111 </td></tr>
-<tr><td>Cadence: 151 </td></tr>
-<tr><td>Heading: 360.0 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:48Z </td></tr>
+<tr><td>Longitude: -0.035187</td></tr>
+<tr><td>Latitude: 51.506172</td></tr>
+<tr><td>Altitude: 0.449 ft</td></tr>
+<tr><td>Cadence: 151</td></tr>
+<tr><td>Heart rate: 111</td></tr>
+<tr><td>Heading: 360.0</td></tr>
+<tr><td>Time: 2008-08-20T07:04:48Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -237,14 +238,14 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035242 </td></tr>
-<tr><td>Latitude: 51.506196 </td></tr>
-<tr><td>Altitude: -2.703 ft </td></tr>
-<tr><td>Heart rate: 112 </td></tr>
-<tr><td>Cadence: 153 </td></tr>
-<tr><td>Speed: 10.4 mph </td></tr>
-<tr><td>Heading: 305.0 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:49Z </td></tr>
+<tr><td>Longitude: -0.035242</td></tr>
+<tr><td>Latitude: 51.506196</td></tr>
+<tr><td>Altitude: -2.703 ft</td></tr>
+<tr><td>Cadence: 153</td></tr>
+<tr><td>Heart rate: 112</td></tr>
+<tr><td>Speed: 10.4 mph</td></tr>
+<tr><td>Heading: 305.0</td></tr>
+<tr><td>Time: 2008-08-20T07:04:49Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -265,14 +266,14 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035303 </td></tr>
-<tr><td>Latitude: 51.506221 </td></tr>
-<tr><td>Altitude: -51.588 ft </td></tr>
-<tr><td>Heart rate: 113 </td></tr>
-<tr><td>Cadence: 153 </td></tr>
-<tr><td>Speed: 11.3 mph </td></tr>
-<tr><td>Heading: 303.4 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:50Z </td></tr>
+<tr><td>Longitude: -0.035303</td></tr>
+<tr><td>Latitude: 51.506221</td></tr>
+<tr><td>Altitude: -51.588 ft</td></tr>
+<tr><td>Cadence: 153</td></tr>
+<tr><td>Heart rate: 113</td></tr>
+<tr><td>Speed: 11.3 mph</td></tr>
+<tr><td>Heading: 303.4</td></tr>
+<tr><td>Time: 2008-08-20T07:04:50Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -293,14 +294,14 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035354 </td></tr>
-<tr><td>Latitude: 51.506246 </td></tr>
-<tr><td>Altitude: -51.588 ft </td></tr>
-<tr><td>Heart rate: 114 </td></tr>
-<tr><td>Cadence: 153 </td></tr>
-<tr><td>Speed: 10.1 mph </td></tr>
-<tr><td>Heading: 308.2 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:51Z </td></tr>
+<tr><td>Longitude: -0.035354</td></tr>
+<tr><td>Latitude: 51.506246</td></tr>
+<tr><td>Altitude: -51.588 ft</td></tr>
+<tr><td>Cadence: 153</td></tr>
+<tr><td>Heart rate: 114</td></tr>
+<tr><td>Speed: 10.1 mph</td></tr>
+<tr><td>Heading: 308.2</td></tr>
+<tr><td>Time: 2008-08-20T07:04:51Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -321,13 +322,13 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035400 </td></tr>
-<tr><td>Latitude: 51.506271 </td></tr>
-<tr><td>Altitude: -50.013 ft </td></tr>
-<tr><td>Heart rate: 114 </td></tr>
-<tr><td>Speed: 9.5 mph </td></tr>
-<tr><td>Heading: 311.1 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:52Z </td></tr>
+<tr><td>Longitude: -0.035400</td></tr>
+<tr><td>Latitude: 51.506271</td></tr>
+<tr><td>Altitude: -50.013 ft</td></tr>
+<tr><td>Heart rate: 114</td></tr>
+<tr><td>Speed: 9.5 mph</td></tr>
+<tr><td>Heading: 311.1</td></tr>
+<tr><td>Time: 2008-08-20T07:04:52Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -348,13 +349,13 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035438 </td></tr>
-<tr><td>Latitude: 51.506297 </td></tr>
-<tr><td>Altitude: -50.013 ft </td></tr>
-<tr><td>Heart rate: 114 </td></tr>
-<tr><td>Speed: 8.8 mph </td></tr>
-<tr><td>Heading: 317.7 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:53Z </td></tr>
+<tr><td>Longitude: -0.035438</td></tr>
+<tr><td>Latitude: 51.506297</td></tr>
+<tr><td>Altitude: -50.013 ft</td></tr>
+<tr><td>Heart rate: 114</td></tr>
+<tr><td>Speed: 8.8 mph</td></tr>
+<tr><td>Heading: 317.7</td></tr>
+<tr><td>Time: 2008-08-20T07:04:53Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -375,14 +376,14 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035462 </td></tr>
-<tr><td>Latitude: 51.506315 </td></tr>
-<tr><td>Altitude: -50.013 ft </td></tr>
-<tr><td>Heart rate: 116 </td></tr>
-<tr><td>Cadence: 76 </td></tr>
-<tr><td>Speed: 5.8 mph </td></tr>
-<tr><td>Heading: 320.3 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:54Z </td></tr>
+<tr><td>Longitude: -0.035462</td></tr>
+<tr><td>Latitude: 51.506315</td></tr>
+<tr><td>Altitude: -50.013 ft</td></tr>
+<tr><td>Cadence: 76</td></tr>
+<tr><td>Heart rate: 116</td></tr>
+<tr><td>Speed: 5.8 mph</td></tr>
+<tr><td>Heading: 320.3</td></tr>
+<tr><td>Time: 2008-08-20T07:04:54Z</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -403,14 +404,14 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: -0.035472 </td></tr>
-<tr><td>Latitude: 51.506324 </td></tr>
-<tr><td>Altitude: -50.013 ft </td></tr>
-<tr><td>Heart rate: 117 </td></tr>
-<tr><td>Cadence: 124 </td></tr>
-<tr><td>Speed: 2.7 mph </td></tr>
-<tr><td>Heading: 325.3 </td></tr>
-<tr><td>Time: 2008-08-20T07:04:55Z </td></tr>
+<tr><td>Longitude: -0.035472</td></tr>
+<tr><td>Latitude: 51.506324</td></tr>
+<tr><td>Altitude: -50.013 ft</td></tr>
+<tr><td>Cadence: 124</td></tr>
+<tr><td>Heart rate: 117</td></tr>
+<tr><td>Speed: 2.7 mph</td></tr>
+<tr><td>Heading: 325.3</td></tr>
+<tr><td>Time: 2008-08-20T07:04:55Z</td></tr>
 </table>
 ]]></description>
             <LookAt>

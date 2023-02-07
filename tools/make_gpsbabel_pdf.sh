@@ -1,8 +1,8 @@
 #!/bin/sh
 set -ex
 
-perl xmldoc/makedoc
-xmlwf xmldoc/readme.xml #check for well-formedness
-xmllint --noout --valid xmldoc/readme.xml #validate
+tooldir=$(cd "$(dirname "$0")" && pwd)
+
+"$tooldir"/make_gpsbabel_doc.sh
 xsltproc -o gpsbabel.fo xmldoc/babelpdf.xsl xmldoc/readme.xml
 HOME=. fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf

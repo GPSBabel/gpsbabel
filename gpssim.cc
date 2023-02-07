@@ -60,7 +60,7 @@ gpssim_wr_init(const QString& fname)
 {
   fnamestr =  fname;
   trk_count = 0;
-  splitfiles = splitfiles_opt ? atoi(splitfiles_opt) : 0;
+  splitfiles = splitfiles_opt ? xstrtoi(splitfiles_opt, nullptr, 10) : 0;
 
   /* If writing to stdout, never split files */
   if (0 == strcmp("-",splitfiles_opt)) {
@@ -109,8 +109,8 @@ gpssim_write_pt(const Waypoint* wpt)
 {
   char obuf[1024];
 
-  if WAYPT_HAS(wpt, speed) {
-    gpssim_write_spd(MPS_TO_KNOTS(wpt->speed));
+  if (wpt->speed_has_value()) {
+    gpssim_write_spd(MPS_TO_KNOTS(wpt->speed_value()));
   }
 
   double lat = degrees2ddmm(wpt->latitude);
@@ -125,8 +125,8 @@ gpssim_write_pt(const Waypoint* wpt)
   if (wpt->creation_time.isValid()) {
     char tbuf[20];
 
-    QByteArray dmy = wpt->GetCreationTime().toUTC().toString("ddMMyy").toUtf8();
-    QByteArray hms = wpt->GetCreationTime().toUTC().toString("hhmmss").toUtf8();
+    QByteArray dmy = wpt->GetCreationTime().toUTC().toString(u"ddMMyy").toUtf8();
+    QByteArray hms = wpt->GetCreationTime().toUTC().toString(u"hhmmss").toUtf8();
 
     snprintf(tbuf, sizeof(tbuf), ",%s,%s",dmy.constData(), hms.constData());
     strcat(obuf, tbuf);
@@ -144,7 +144,7 @@ gpssim_trk_hdr(const route_head* rh)
       fatal(MYNAME ": output file already open.\n");
     }
 
-    QString ofname = QString("%1%2%3.gpssim").arg(fnamestr, doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
+    QString ofname = QStringLiteral("%1%2%3.gpssim").arg(fnamestr, doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
     fout = gbfopen(ofname, "wb", MYNAME);
   }
   (void) track_recompute(rh);
@@ -168,7 +168,7 @@ gpssim_write()
       fout = gbfopen(ofname, "wb", MYNAME);
     }
     if (wayptspd && wayptspd[0]) {
-      gpssim_write_spd(atof(wayptspd));
+      gpssim_write_spd(strtod(wayptspd, nullptr));
     }
     waypt_disp_all(gpssim_write_pt);
     if (splitfiles) {
@@ -197,7 +197,5 @@ ff_vecs_t gpssim_vecs = {
   gpssim_write,
   nullptr,
   &gpssim_args,
-  CET_CHARSET_ASCII, 0
-  , NULL_POS_OPS,
-  nullptr
+  NULL_POS_OPS
 };

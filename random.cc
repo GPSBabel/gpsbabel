@@ -18,7 +18,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <cstdlib>              // for atoi
 #include <random>               // for mt19937
 
 #include <QByteArray>           // for QByteArray
@@ -81,7 +80,7 @@ RandomFormat::random_set_generator()
 {
   generator = new std::mt19937;
   if (opt_seed) {
-    generator->seed(atoi(opt_seed));
+    generator->seed(xstrtoi(opt_seed, nullptr, 10));
   } else {
     generator->seed(gpsbabel_time);
   }
@@ -121,13 +120,13 @@ RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* 
     wpt->altitude = rand_dbl(100.0);
   }
   if RND(3) {
-    WAYPT_SET(wpt, temperature, rand_flt(32.0f));
+    wpt->set_temperature(rand_flt(32.0f));
   }
   if RND(3) {
-    WAYPT_SET(wpt, proximity, rand_dbl(1000.0));
+    wpt->set_proximity(rand_dbl(1000.0));
   }
   if RND(3) {
-    WAYPT_SET(wpt, depth, rand_dbl(1000.0));
+    wpt->set_depth(rand_dbl(1000.0));
   }
   if RND(3) {
     wpt->AddUrlLink(rand_str(8, "http://link1.example.com/%s"));
@@ -145,8 +144,8 @@ RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* 
     if (i > 0) {
       wpt->latitude = prev->latitude + rand_dbl(0.001);
       wpt->longitude = prev->longitude + rand_dbl(0.001);
-      WAYPT_SET(wpt, course, waypt_course(prev, wpt));
-      WAYPT_SET(wpt, speed, waypt_speed(prev, wpt));
+      wpt->set_course(waypt_course(prev, wpt));
+      wpt->set_speed(waypt_speed(prev, wpt));
     }
     wpt->sat = rand_int(12 + 1);
     wpt->hdop = rand_flt(50.0f);
@@ -158,6 +157,9 @@ RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* 
     }
     if RND(3) {
       wpt->heartrate = rand_int(255);
+    }
+    if RND(3) {
+      wpt->power = rand_flt(500.0);
     }
   } else {
     if (doing_rtes && (i > 0)) {
@@ -203,7 +205,7 @@ RandomFormat::read()
   Waypoint* prev = nullptr;
   QDateTime time = current_time().toUTC();
 
-  int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
+  int points = (opt_points) ? xstrtoi(opt_points, nullptr, 10) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
     head = new route_head;
     if (doing_trks) {
@@ -242,7 +244,7 @@ RandomFormat::rd_position_init(const QString&)
   random_set_generator();
   realtime = new realtime_data;
   if (opt_points) {
-    realtime->points = atoi(opt_points);
+    realtime->points = xstrtoi(opt_points, nullptr, 10);
   }
   realtime->time = current_time().toUTC();
 }

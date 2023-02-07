@@ -116,12 +116,12 @@ private:
     },
     {
       TRACKFILTER_START_OPTION, &opt_start,
-      "Use only track points after this timestamp", nullptr, ARGTYPE_INT,
+      "Use only track points after or at this timestamp", nullptr, ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },
     {
       TRACKFILTER_STOP_OPTION, &opt_stop,
-      "Use only track points before this timestamp", nullptr, ARGTYPE_INT,
+      "Use only track points before or at this timestamp", nullptr, ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },
     {
@@ -212,7 +212,7 @@ private:
 
   struct faketime_t {
     QDateTime start;
-    int    step{0};
+    long long step{0};
     bool   force{false};
   };
 
@@ -220,7 +220,7 @@ private:
   void trackfilter_faketime();             /* returns number of track points left after filtering */
   static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
 
-  void trackfilter_segment_head(const route_head* rte);
+  static void trackfilter_segment_head(const route_head* rte);
 
 };
 

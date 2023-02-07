@@ -1,13 +1,13 @@
 <para>
 KML, the Keyhole Markup Language format, was used by Keyhole and is used by
-<ulink url="http://earth.google.com">Google Earth</ulink>.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://earth.google.com">Google Earth</link>.
 </para>
 <para>There are concepts in KML that GPSBabel can't support very well on
 read because they don't map well into other programs.  For example, KML has
 ideas of camera views and names and descriptions can have arbitrarily
 complicated HTML in them.   KML files may have tiered "Styles" which
 can identify sizing info and URLs of associated icons.   Reading such
-files with GPSBabel - even if your goal it to write it back out as KML - can often
+files with GPSBabel - even if your goal is to write it back out as KML - can often
 have surprising results.  Simple files with waypoints and paths (which
 GPSBabel represents internally as tracks) work fine.
 </para>
@@ -29,5 +29,5 @@ In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple
   you can widen the time slider to show the range of data of interest.
 </para>
 <para>
-  See <ulink url="http://earth.google.com/userguide/v4/ug_gps.html#timeline">Google Earth's documentation on timelines</ulink> for more info.
+  See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://earth.google.com/userguide/v4/ug_gps.html#timeline">Google Earth's documentation on timelines</link> for more info.
 </para>

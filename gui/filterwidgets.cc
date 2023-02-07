@@ -21,7 +21,16 @@
 //
 
 #include "filterwidgets.h"
-#include <limits>
+
+#include <cassert>       // for assert
+#include <limits>        // for numeric_limits
+
+#include <QChar>         // for QChar
+#include <QCheckBox>     // for QCheckBox
+#include <QEvent>        // for QEvent, QEvent::LocaleChange
+#include <QLabel>        // for QLabel
+#include <QRadioButton>  // for QRadioButton
+#include <Qt>            // for LocalTime, UTC
 
 
 //------------------------------------------------------------------------
@@ -60,13 +69,30 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   connect(ui.splitTimeCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitTimeX);
   connect(ui.splitDistanceCheck,   &QAbstractButton::clicked, this, &TrackWidget::splitDistanceX);
 
+  connect(ui.localTime, &QAbstractButton::clicked, this, &TrackWidget::TZX);
+  connect(ui.utc, &QAbstractButton::clicked, this, &TrackWidget::TZX);
+
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
+
+  assert(tfd.startTime.timeSpec() == tfd.stopTime.timeSpec());
+  assert((tfd.startTime.timeSpec() == Qt::UTC) || (tfd.startTime.timeSpec() == Qt::LocalTime));
+  // Qt5 QDateTimeEdit::setDateTime ignored the passed QDateTime::timeSpec.
+  // Qt6 QDateTimeEdit::setDateTime will convert the passed QDateTime if the passed
+  // QDateTime::timeSpec doesn't match QDateTimeEdit::timeSpec.
+  // If the two timeSpecs match Qt5 and Qt6 behave the same.
+  ui.startEdit->setTimeSpec(tfd.startTime.timeSpec());
+  ui.stopEdit->setTimeSpec(tfd.stopTime.timeSpec());
+  // Make sure the initial state of the localTime and utc radio buttons
+  // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
+  tfd.localTime = tfd.startTime.timeSpec() == Qt::LocalTime;
+  tfd.utc = !tfd.localTime;
 
   // Collect the data fields.
   fopts << new BoolFilterOption(tfd.title,  ui.titleCheck);
   fopts << new BoolFilterOption(tfd.move,   ui.moveCheck);
-  fopts << new BoolFilterOption(tfd.TZ,     ui.TZCheck);
+  fopts << new BoolFilterOption(tfd.localTime,     ui.localTime);
+  fopts << new BoolFilterOption(tfd.utc,     ui.utc);
   fopts << new BoolFilterOption(tfd.start,  ui.startCheck);
   fopts << new BoolFilterOption(tfd.stop,   ui.stopCheck);
   fopts << new BoolFilterOption(tfd.pack,   ui.packCheck);
@@ -100,7 +126,8 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
 //------------------------------------------------------------------------
 void TrackWidget::otherCheckX()
 {
-  ui.TZCheck->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
+  ui.localTime->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
+  ui.utc->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
 
   ui.splitTimeSpin->setEnabled(ui.splitTimeCheck->isChecked());
   ui.splitTimeCombo->setEnabled(ui.splitTimeCheck->isChecked());
@@ -156,6 +183,22 @@ void TrackWidget::splitDistanceX()
     ui.splitTimeCheck->setChecked(false);
   }
   otherCheckX();
+}
+//------------------------------------------------------------------------
+void TrackWidget::TZX()
+{
+  if (ui.localTime->isChecked()) {
+    ui.startEdit->setTimeSpec(Qt::LocalTime);
+    ui.stopEdit->setTimeSpec(Qt::LocalTime);
+  } else {
+    ui.startEdit->setTimeSpec(Qt::UTC);
+    ui.stopEdit->setTimeSpec(Qt::UTC);
+  }
+  // Force update of Edit displays, so the displayed
+  // datetimes are in sync with the specified time spec.
+  auto ev = QEvent(QEvent::LocaleChange);
+  ui.startEdit->event(&ev);
+  ui.stopEdit->event(&ev);
 }
 
 
