@@ -991,7 +991,8 @@ parse_header(const QStringList& lineparts)
 
   for (const auto& str : lineparts) {
     column++;
-    header_lines[unknown_header][column] = strupper(xstrdup(str));
+    header_lines[unknown_header][column] = str;
+    header_lines[unknown_header][column] = header_lines[unknown_header][column].toUpper();
     header_ct[unknown_header]++;
     if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
       break;
