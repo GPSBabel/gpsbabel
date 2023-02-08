@@ -339,39 +339,6 @@ rtrim(char* s)
 }
 
 /*
- * Like trim, but trims whitespace from both beginning and end.
- */
-char*
-lrtrim(char* buff)
-{
-  if (buff[0] == '\0') {
-    return buff;
-  }
-
-  char* c = buff + strlen(buff);
-  while ((c >= buff) && ((unsigned char)*c <= ' ')) {
-    *c-- = '\0';
-  }
-
-  c = buff;
-  while ((*c != '\0') && ((unsigned char)*c <= ' ')) {
-    c++;
-  }
-
-  if (c != buff) {
-    char* src = c;
-    char* dst = buff;
-
-    while (*src) {
-      *dst++ = *src++;
-    }
-    *dst = '\0';
-  }
-
-  return buff;
-}
-
-/*
  * compare str with match
  * match may contain wildcards "*" and "?"
  *

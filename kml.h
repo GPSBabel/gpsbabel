@@ -317,6 +317,7 @@ private:
     // Alias for above used in KML 2.0
     {&KmlFormat::wpt_time, cb_cdata, "/Placemark/TimeInstant/timePosition"},
     {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/Point/coordinates"},
+    {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/MultiGeometry/Point/coordinates"},
     {&KmlFormat::wpt_icon, cb_cdata, "/Placemark/Style/Icon/href"},
     {&KmlFormat::trk_coord, cb_cdata, "/Placemark/MultiGeometry/LineString/coordinates"},
     {&KmlFormat::trk_coord, cb_cdata, "/Placemark/GeometryCollection/LineString/coordinates"},
