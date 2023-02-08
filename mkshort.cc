@@ -548,7 +548,7 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
    * If, after all that, we have an empty string, punt and
    * let the must_uniq code handle it.
    */
-  if (ostring[0] == '\0') {
+  if (ostring && ostring[0] == '\0') {
     xfree(ostring);
     ostring = xstrdup(hdl->defname);
   }
