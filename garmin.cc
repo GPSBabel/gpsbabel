@@ -355,7 +355,7 @@ rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
     const gdx_info* gi = gdx_get_info();
-    gpx_vec = Vecs::Instance().find_vec("gpx");
+    gpx_vec = Vecs::Instance().find_vec("gpx").fmt;
     gpx_vec->rd_init(gi->from_device.canon);
   } else {
     gpx_vec = nullptr;
