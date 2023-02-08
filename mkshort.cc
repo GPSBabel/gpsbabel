@@ -535,7 +535,12 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     }
     memmove(dp, np, nlen);
     dp[nlen] = 0;
-    rtrim(ostring);
+    // Essentially ostring.rtrim()
+    char *end = ostring + strlen(ostring) - 1;
+    while (end > ostring && isspace(*end)) {
+      *end = 0;
+    }
+
   }
 
   /*

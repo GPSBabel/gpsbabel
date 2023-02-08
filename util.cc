@@ -318,26 +318,6 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
   return outsize;
 }
 
-void
-rtrim(char* s)
-{
-  char* t = s;
-
-  if (!s || !*s) {
-    return;
-  }
-
-  while (*s) {
-    s++;
-  }
-
-  s--;
-  while ((s >= t) && isspace(*s)) {
-    *s = 0;
-    s--;
-  }
-}
-
 /*
  * compare str with match
  * match may contain wildcards "*" and "?"
