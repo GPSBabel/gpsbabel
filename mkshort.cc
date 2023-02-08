@@ -536,14 +536,12 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     memmove(dp, np, nlen);
     dp[nlen] = 0;
     // Essentially ostring.rtrim() from here down.
-    if (ostring[0] == 0) { // Empty output string? Bail.
-      return;
+    if (istring && ostring[0] == 0) { // Empty output string? Bail.
+      char *end = ostring + strlen(ostring) - 1;
+      while (end > ostring && isspace(*end)) {
+        *end = 0;
+      }
     }
-    char *end = ostring + strlen(ostring) - 1;
-    while (end > ostring && isspace(*end)) {
-      *end = 0;
-    }
-
   }
 
   /*
