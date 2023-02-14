@@ -349,9 +349,9 @@ run(const char* prog_name)
         Vecs::init_vec(ivecs.fmt);
         Vecs::Instance().prepare_format(ivecs);
 
-        //ivecs->rd_init(fname);
+        ivecs->rd_init(fname);
         ivecs->read();
-        //ivecs->rd_deinit();
+        ivecs->rd_deinit();
 
         Vecs::exit_vec(ivecs.fmt);
         delete ivecs.fmt;
@@ -381,9 +381,9 @@ run(const char* prog_name)
           Vecs::init_vec(ovecs.fmt);
           Vecs::Instance().prepare_format(ovecs);
 
-          //ovecs->wr_init(ofname);
+          ovecs->wr_init(ofname);
           ovecs->write();
-          //ovecs->wr_deinit();
+          ovecs->wr_deinit();
 
           Vecs::exit_vec(ovecs.fmt);
           delete ovecs.fmt;
@@ -566,9 +566,9 @@ run(const char* prog_name)
       Vecs::init_vec(ivecs.fmt);
       Vecs::Instance().prepare_format(ivecs);
 
-      //ivecs->rd_init(fname);
+      ivecs->rd_init(fname);
       ivecs->read();
-      //ivecs->rd_deinit();
+      ivecs->rd_deinit();
 
       Vecs::exit_vec(ivecs.fmt);
       delete ivecs.fmt;
@@ -588,9 +588,9 @@ run(const char* prog_name)
         Vecs::init_vec(ovecs.fmt);
         Vecs::Instance().prepare_format(ovecs);
 
-        //ovecs->wr_init(ofname);
+        ovecs->wr_init(ofname);
         ovecs->write();
-        //ovecs->wr_deinit();
+        ovecs->wr_deinit();
 
         Vecs::exit_vec(ovecs.fmt);
         delete ovecs.fmt;
@@ -639,7 +639,7 @@ run(const char* prog_name)
       Vecs::Instance().prepare_format(ivecs);
     }
     if (ovecs && ovecs.isDynamic()) {
-      ovecs.fmt = ovecs.factory(fname);
+      ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt);
       Vecs::Instance().prepare_format(ovecs);
     }

@@ -49,7 +49,11 @@ public:
     return { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none };
   }
 
+  void rd_init(const QString& fname) override
+  {}
   void read() override;
+  void wr_init(const QString& fname) override
+  {}
   void write() override;
 
 private:

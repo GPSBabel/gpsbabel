@@ -105,6 +105,12 @@ extern ff_vecs_t format_garmin_xt_vecs;
 
 #define MYNAME "vecs"
 
+#if CSVFMTS_ENABLED
+static Format* xcsvfactory(const QString& filename)
+{
+  return new XcsvFormat(filename);
+}
+#endif
 static Format* geofactory(const QString& filename)
 {
   return new GeoFormat(filename);
@@ -119,9 +125,6 @@ struct Vecs::Impl {
    * instance is guaranteed to have already constructed when an instance
    * of this class is constructed.
    */
-#if CSVFMTS_ENABLED
-  XcsvFormat xcsv_fmt;
-#endif // CSVFMTS_ENABLED
   GpxFormat gpx_fmt;
   LegacyFormat garmin_fmt {garmin_vecs};
   GdbFormat gdb_fmt;
@@ -187,11 +190,12 @@ struct Vecs::Impl {
 #if CSVFMTS_ENABLED
     /* XCSV must be the first entry in this table. */
     {
-      &xcsv_fmt,
+      nullptr,
       "xcsv",
       "? Character Separated Values",
       nullptr,
       nullptr,
+      &xcsvfactory
     },
 #endif
     {
@@ -858,7 +862,10 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata) const
    * that we are processing xcsv,style= and it was preceeded by an xcsv
    * format that utilized an internal style file.
    */
-  d_ptr_->xcsv_fmt.xcsv_setup_internal_style(fmtdata.style_filename);
+  auto* xcsvfmt = dynamic_cast<XcsvFormat*>(fmtdata.fmt);
+  if (xcsvfmt != nullptr) {
+    xcsvfmt->xcsv_setup_internal_style(fmtdata.style_filename);
+  }
 #endif // CSVFMTS_ENABLED
 }
 
@@ -891,9 +898,10 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
       continue;
     }
 
-    /* FIXME: dynamic not implemented */
-    fmtinfo_t fmtinfo{d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options};
-    prepare_format(fmtinfo);
+    fmtinfo_t fmtinfo{d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options, d_ptr_->vec_list.at(0).factory};
+    if (!fmtinfo.isDynamic()) {
+      prepare_format(fmtinfo);
+    }
     return fmtinfo;
   }
 
@@ -1000,11 +1008,13 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * Make sure we know which entry in the vector list that is.
    */
   assert(d_ptr_->vec_list.at(0).name.compare("xcsv", Qt::CaseInsensitive) == 0);
+
+  Format* xcsvfmt = (d_ptr_->vec_list.at(0).factory != nullptr)? d_ptr_->vec_list.at(0).factory("") : d_ptr_->vec_list.at(0).vec;
   /* The style formats use a modified xcsv argument list that doesn't include
    * the option to set the style file.  Make sure we know which entry in
    * the argument list that is.
    */
-  assert(case_ignore_strcmp(d_ptr_->vec_list.at(0).vec->get_args()->at(0).helpstring,
+  assert(case_ignore_strcmp(xcsvfmt->get_args()->at(0).helpstring,
                             "Full path to XCSV style file") == 0);
 
   /* Gather the relevant info for the style based formats. */
@@ -1036,7 +1046,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
      * 'Full path to XCSV style file' argument to any
      * GUIs for an internal format.
      */
-    const QVector<arglist_t>* args = d_ptr_->vec_list.at(0).vec->get_args();
+    const QVector<arglist_t>* args = xcsvfmt->get_args();
     if (args != nullptr) {
       bool first = true;
       for (const auto& arg : *args) {
@@ -1047,6 +1057,9 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
       }
     }
     svp.append(info);
+  }
+  if (d_ptr_->vec_list.at(0).factory != nullptr) {
+    delete xcsvfmt;
   }
 #endif // CSVFMTS_ENABLED
 
