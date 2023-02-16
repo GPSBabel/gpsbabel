@@ -21,11 +21,12 @@
 #ifndef VECS_H_INCLUDED_
 #define VECS_H_INCLUDED_
 
-#include <cstdint>              // for uint32_t
+#include <cstdint>      // for uint32_t
 
-#include <QString>              // for QString
-#include <QStringList>          // for QStringList
-#include <QVector>              // for QVector<>::iterator, QVector
+#include <QList>        // for QList
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVector>      // for QVector<>::iterator, QVector
 
 #include "defs.h"
 #include "format.h"
