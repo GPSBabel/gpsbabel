@@ -105,17 +105,12 @@ extern ff_vecs_t format_garmin_xt_vecs;
 
 #define MYNAME "vecs"
 
-#if CSVFMTS_ENABLED
-static Format* xcsvfactory(const QString& filename)
+template <typename T>
+Format* fmtfactory(const QString& filename)
 {
-  return new XcsvFormat(filename);
+  static_assert(std::is_base_of<Format, T>::value, "T must be derived from Format");
+  return new T(filename);
 }
-#endif
-static Format* geofactory(const QString& filename)
-{
-  return new GeoFormat(filename);
-}
-
 
 struct Vecs::Impl {
   /*
@@ -195,7 +190,7 @@ struct Vecs::Impl {
       "? Character Separated Values",
       nullptr,
       nullptr,
-      &xcsvfactory
+      &fmtfactory<XcsvFormat>
     },
 #endif
     {
@@ -204,7 +199,7 @@ struct Vecs::Impl {
       "Geocaching.com .loc",
       "loc",
       nullptr,
-      &geofactory
+      &fmtfactory<GeoFormat>
     },
     {
       &gpx_fmt,
