@@ -347,7 +347,7 @@ run(const char* prog_name)
       if (ivecs.isDynamic()) {
         ivecs.fmt = ivecs.factory(fname);
         Vecs::init_vec(ivecs.fmt);
-        Vecs::Instance().prepare_format(ivecs);
+        Vecs::prepare_format(ivecs);
 
         ivecs->rd_init(fname);
         ivecs->read();
@@ -379,7 +379,7 @@ run(const char* prog_name)
         if (ovecs.isDynamic()) {
           ovecs.fmt = ovecs.factory(ofname);
           Vecs::init_vec(ovecs.fmt);
-          Vecs::Instance().prepare_format(ovecs);
+          Vecs::prepare_format(ovecs);
 
           ovecs->wr_init(ofname);
           ovecs->write();
@@ -564,7 +564,7 @@ run(const char* prog_name)
     if (ivecs.isDynamic()) {
       ivecs.fmt = ivecs.factory(qargs.at(0));
       Vecs::init_vec(ivecs.fmt);
-      Vecs::Instance().prepare_format(ivecs);
+      Vecs::prepare_format(ivecs);
 
       ivecs->rd_init(qargs.at(0));
       ivecs->read();
@@ -575,7 +575,7 @@ run(const char* prog_name)
       ivecs.fmt = nullptr;
     } else {
       /* reinitialize xcsv in case two formats that use xcsv were given */
-      Vecs::Instance().prepare_format(ivecs);
+      Vecs::prepare_format(ivecs);
 
       ivecs->rd_init(qargs.at(0));
       ivecs->read();
@@ -586,7 +586,7 @@ run(const char* prog_name)
       if (ovecs.isDynamic()) {
         ovecs.fmt = ovecs.factory(qargs.at(1));
         Vecs::init_vec(ovecs.fmt);
-        Vecs::Instance().prepare_format(ovecs);
+        Vecs::prepare_format(ovecs);
 
         ovecs->wr_init(qargs.at(1));
         ovecs->write();
@@ -597,7 +597,7 @@ run(const char* prog_name)
         ovecs.fmt = nullptr;
       } else {
         /* reinitialize xcsv in case two formats that use xcsv were given */
-        Vecs::Instance().prepare_format(ovecs);
+        Vecs::prepare_format(ovecs);
 
         ovecs->wr_init(qargs.at(1));
         ovecs->write();
@@ -636,12 +636,12 @@ run(const char* prog_name)
     if (ivecs.isDynamic()) {
       ivecs.fmt = ivecs.factory(fname);
       Vecs::init_vec(ivecs.fmt);
-      Vecs::Instance().prepare_format(ivecs);
+      Vecs::prepare_format(ivecs);
     }
     if (ovecs && ovecs.isDynamic()) {
       ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt);
-      Vecs::Instance().prepare_format(ovecs);
+      Vecs::prepare_format(ovecs);
     }
 
     start_session(ivecs.fmtname, fname);
