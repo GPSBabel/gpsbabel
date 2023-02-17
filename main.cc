@@ -566,7 +566,7 @@ run(const char* prog_name)
       Vecs::init_vec(ivecs.fmt);
       Vecs::Instance().prepare_format(ivecs);
 
-      ivecs->rd_init(fname);
+      ivecs->rd_init(qargs.at(0));
       ivecs->read();
       ivecs->rd_deinit();
 
@@ -588,7 +588,7 @@ run(const char* prog_name)
         Vecs::init_vec(ovecs.fmt);
         Vecs::Instance().prepare_format(ovecs);
 
-        ovecs->wr_init(ofname);
+        ovecs->wr_init(qargs.at(1));
         ovecs->write();
         ovecs->wr_deinit();
 
