@@ -1018,7 +1018,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 
 int str_match(const char* str, const char* match);
 
-void rtrim(char* s);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...) PRINTFLIKE(2, 3);

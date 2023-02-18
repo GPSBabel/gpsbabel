@@ -32,7 +32,7 @@
                                         double* N);
   int32  GPS_Math_EN_To_UKOSNG_Map(double E, double N, double* mE,
                                    double* mN, char* map);
-  int32  GPS_Math_UKOSNG_Map_To_EN(char* map, double mapE, double mapN,
+  int32  GPS_Math_UKOSNG_Map_To_EN(const char* map, double mapE, double mapN,
                                    double* E, double* N);
 
   void GPS_Math_LatLonH_To_XYZ(double phi, double lambda, double H,
@@ -92,11 +92,11 @@
 
   int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
                                     double* mN, char* map);
-  int32 GPS_Math_UKOSMap_To_WGS84_M(char* map, double mE, double mN,
+  int32 GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
                                     double* lat, double* lon);
   int32 GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double* mE,
                                     double* mN, char* map);
-  int32 GPS_Math_UKOSMap_To_WGS84_C(char* map, double mE, double mN,
+  int32 GPS_Math_UKOSMap_To_WGS84_C(const char* map, double mE, double mN,
                                     double* lat, double* lon);
 
 
