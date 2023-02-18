@@ -31,7 +31,7 @@
 #include <QHash>                            // for QHash
 #include <QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1Char>                      // for QLatin1Char
-#include <QLatin1String>                    // for QLatin1String
+#include <QLatin1StringView>                // for QLatin1StringView
 #include <QString>                          // for QString, QStringLiteral, operator+, operator==
 #include <QStringList>                      // for QStringList
 #include <QStringView>                      // for QStringView
@@ -116,8 +116,8 @@ GpxFormat::gpx_write_gdata(const QStringList& ge, const QString& tag) const
     for (const auto& str : ge) {
       writer->writeCharacters(str);
       /* Some tags we just output once. */
-      if ((tag == QLatin1String("url")) ||
-          (tag == QLatin1String("email"))) {
+      if ((tag == QLatin1StringView("url")) ||
+          (tag == QLatin1StringView("email"))) {
         break;
       }
     }
@@ -135,11 +135,11 @@ GpxFormat::get_tag(const QString& t) const
 void
 GpxFormat::tag_gpx(const QXmlStreamAttributes& attr)
 {
-  if (attr.hasAttribute(QLatin1String("version"))) {
+  if (attr.hasAttribute(QLatin1StringView("version"))) {
     /* Set the default output version to the highest input
      * version.
      */
-    QVersionNumber thisVersion = QVersionNumber::fromString(attr.value(QLatin1String("version")).toString()).normalized();
+    QVersionNumber thisVersion = QVersionNumber::fromString(attr.value(QLatin1StringView("version")).toString()).normalized();
     if (gpx_highest_version_read.isNull()) {
       gpx_highest_version_read = thisVersion;
     } else if (!thisVersion.isNull() && (gpx_highest_version_read < thisVersion)) {
@@ -169,11 +169,11 @@ GpxFormat::tag_wpt(const QXmlStreamAttributes& attr)
   link_ = new UrlLink;
 
   cur_tag = nullptr;
-  if (attr.hasAttribute(QLatin1String("lat"))) {
-    wpt_tmp->latitude = attr.value(QLatin1String("lat")).toDouble();
+  if (attr.hasAttribute(QLatin1StringView("lat"))) {
+    wpt_tmp->latitude = attr.value(QLatin1StringView("lat")).toDouble();
   }
-  if (attr.hasAttribute(QLatin1String("lon"))) {
-    wpt_tmp->longitude = attr.value(QLatin1String("lon")).toDouble();
+  if (attr.hasAttribute(QLatin1StringView("lon"))) {
+    wpt_tmp->longitude = attr.value(QLatin1StringView("lon")).toDouble();
   }
   fs_ptr = &wpt_tmp->fs;
 }
@@ -182,8 +182,8 @@ void
 GpxFormat::tag_cache_desc(const QXmlStreamAttributes& attr)
 {
   cache_descr_is_html = false;
-  if (attr.hasAttribute(QLatin1String("html"))) {
-    if (attr.value(QLatin1String("html")).compare(QLatin1String("True")) == 0) {
+  if (attr.hasAttribute(QLatin1StringView("html"))) {
+    if (attr.value(QLatin1StringView("html")).compare(QLatin1StringView("True")) == 0) {
       cache_descr_is_html = true;
     }
   }
@@ -194,20 +194,20 @@ GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr) const
 {
   Geocache* gc_data = wpt_tmp->AllocGCData();
 
-  if (attr.hasAttribute(QLatin1String("id"))) {
-    gc_data->id = attr.value(QLatin1String(QLatin1String("id"))).toLongLong();
+  if (attr.hasAttribute(QLatin1StringView("id"))) {
+    gc_data->id = attr.value(QLatin1StringView(QLatin1StringView("id"))).toLongLong();
   }
-  if (attr.hasAttribute(QLatin1String("available"))) {
-    if (attr.value(QLatin1String("available")).compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
+  if (attr.hasAttribute(QLatin1StringView("available"))) {
+    if (attr.value(QLatin1StringView("available")).compare(QLatin1StringView("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = Geocache::status_t::gs_true;
-    } else if (attr.value(QLatin1String("available")).compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value(QLatin1StringView("available")).compare(QLatin1StringView("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = Geocache::status_t::gs_false;
     }
   }
-  if (attr.hasAttribute(QLatin1String("archived"))) {
-    if (attr.value(QLatin1String("archived")).compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
+  if (attr.hasAttribute(QLatin1StringView("archived"))) {
+    if (attr.value(QLatin1StringView("archived")).compare(QLatin1StringView("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = Geocache::status_t::gs_true;
-    } else if (attr.value(QLatin1String("archived")).compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value(QLatin1StringView("archived")).compare(QLatin1StringView("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = Geocache::status_t::gs_false;
     }
   }
@@ -288,11 +288,11 @@ GpxFormat::tag_log_wpt(const QXmlStreamAttributes& attr) const
   auto* lwp_tmp = new Waypoint;
 
   /* extract the lat/lon attributes */
-  if (attr.hasAttribute(QLatin1String("lat"))) {
-    lwp_tmp->latitude = attr.value(QLatin1String("lat")).toDouble();
+  if (attr.hasAttribute(QLatin1StringView("lat"))) {
+    lwp_tmp->latitude = attr.value(QLatin1StringView("lat")).toDouble();
   }
-  if (attr.hasAttribute(QLatin1String("lon"))) {
-    lwp_tmp->longitude = attr.value(QLatin1String("lon")).toDouble();
+  if (attr.hasAttribute(QLatin1StringView("lon"))) {
+    lwp_tmp->longitude = attr.value(QLatin1StringView("lon")).toDouble();
   }
   /* Make a new shortname.  Since this is a groundspeak extension,
     we assume that GCBLAH is the current shortname format and that
@@ -322,16 +322,16 @@ GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
     tag_gpx(attr);
     break;
   case tt_link:
-    if (attr.hasAttribute(QLatin1String("href"))) {
-      link_url = attr.value(QLatin1String("href")).toString();
+    if (attr.hasAttribute(QLatin1StringView("href"))) {
+      link_url = attr.value(QLatin1StringView("href")).toString();
     }
     break;
   case tt_wpt:
     tag_wpt(attr);
     break;
   case tt_wpttype_link:
-    if (attr.hasAttribute(QLatin1String("href"))) {
-      link_url = attr.value(QLatin1String("href")).toString();
+    if (attr.hasAttribute(QLatin1StringView("href"))) {
+      link_url = attr.value(QLatin1StringView("href")).toString();
     }
     break;
   case tt_rte:
@@ -358,8 +358,8 @@ GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
     break;
   case tt_rte_link:
   case tt_trk_link:
-    if (attr.hasAttribute(QLatin1String("href"))) {
-      link_url = attr.value(QLatin1String("href")).toString();
+    if (attr.hasAttribute(QLatin1StringView("href"))) {
+      link_url = attr.value(QLatin1StringView("href")).toString();
     }
     break;
   case tt_unknown:
@@ -378,8 +378,8 @@ GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
     tag_cache_desc(attr);
     break;
   case tt_cache_placer:
-    if (attr.hasAttribute(QLatin1String("id"))) {
-      wpt_tmp->AllocGCData()->placer_id = attr.value(QLatin1String("id")).toInt();
+    if (attr.hasAttribute(QLatin1StringView("id"))) {
+      wpt_tmp->AllocGCData()->placer_id = attr.value(QLatin1StringView("id")).toInt();
     }
   default:
     break;
@@ -752,15 +752,15 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     wpt_tmp->sat = cdatastr.toInt();
     break;
   case tt_wpttype_fix:
-    if (cdatastr == QLatin1String("none")) {
+    if (cdatastr == QLatin1StringView("none")) {
       wpt_tmp->fix = fix_none;
-    } else if (cdatastr == QLatin1String("2d")) {
+    } else if (cdatastr == QLatin1StringView("2d")) {
       wpt_tmp->fix = fix_2d;
-    } else if (cdatastr == QLatin1String("3d")) {
+    } else if (cdatastr == QLatin1StringView("3d")) {
       wpt_tmp->fix = fix_3d;
-    } else if (cdatastr == QLatin1String("dgps")) {
+    } else if (cdatastr == QLatin1StringView("dgps")) {
       wpt_tmp->fix = fix_dgps;
-    } else if (cdatastr == QLatin1String("pps")) {
+    } else if (cdatastr == QLatin1StringView("pps")) {
       wpt_tmp->fix = fix_pps;
     } else {
       wpt_tmp->fix = fix_unknown;
