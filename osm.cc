@@ -24,7 +24,7 @@
 
 #include <QByteArray>                  // for QByteArray
 #include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QLatin1String>               // for QLatin1String
+#include <QLatin1StringView>           // for QLatin1String
 #include <QPair>                       // for QPair, operator==
 #include <QString>                     // for QString, operator==, operator+
 #include <QXmlStreamAttributes>        // for QXmlStreamAttributes
@@ -471,39 +471,39 @@ OsmFormat::osm_node_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 
   QString str = osm_strip_html(value);
 
-  if (key == QLatin1String("name")) {
+  if (key == QLatin1StringView("name")) {
     if (wpt->shortname.isEmpty()) {
       wpt->shortname = str;
     }
-  } else if (key == QLatin1String("name:en")) {
+  } else if (key == QLatin1StringView("name:en")) {
     wpt->shortname = str;
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
     wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
-  } else if (key == QLatin1String("note")) {
+  } else if (key == QLatin1StringView("note")) {
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
     } else {
       wpt->notes += "; ";
       wpt->notes += str;
     }
-  } else if (key == QLatin1String("gps:hdop")) {
+  } else if (key == QLatin1StringView("gps:hdop")) {
     wpt->hdop = str.toDouble();
-  } else if (key == QLatin1String("gps:vdop")) {
+  } else if (key == QLatin1StringView("gps:vdop")) {
     wpt->vdop = str.toDouble();
-  } else if (key == QLatin1String("gps:pdop")) {
+  } else if (key == QLatin1StringView("gps:pdop")) {
     wpt->pdop = str.toDouble();
-  } else if (key == QLatin1String("gps:sat")) {
+  } else if (key == QLatin1StringView("gps:sat")) {
     wpt->sat = str.toDouble();
-  } else if (key == QLatin1String("gps:fix")) {
-    if (str == QLatin1String("2d")) {
+  } else if (key == QLatin1StringView("gps:fix")) {
+    if (str == QLatin1StringView("2d")) {
       wpt->fix = fix_2d;
-    } else if (str == QLatin1String("3d")) {
+    } else if (str == QLatin1StringView("3d")) {
       wpt->fix = fix_3d;
-    } else if (str == QLatin1String("dgps")) {
+    } else if (str == QLatin1StringView("dgps")) {
       wpt->fix = fix_dgps;
-    } else if (str == QLatin1String("pps")) {
+    } else if (str == QLatin1StringView("pps")) {
       wpt->fix = fix_pps;
-    } else if (str == QLatin1String("none")) {
+    } else if (str == QLatin1StringView("none")) {
       wpt->fix = fix_none;
     }
   }
@@ -551,12 +551,12 @@ OsmFormat::osm_way_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 
   QString str = osm_strip_html(value);
 
-  if (key == QLatin1String("name")) {
+  if (key == QLatin1StringView("name")) {
     if (rte->rte_name.isEmpty()) {
       rte->rte_name = str;
       wpt->shortname = str;
     }
-  } else if (key == QLatin1String("name:en")) {
+  } else if (key == QLatin1StringView("name:en")) {
     rte->rte_name = str;
 
     wpt->shortname = str;

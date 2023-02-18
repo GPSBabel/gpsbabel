@@ -23,7 +23,7 @@
 #include <cassert>               // for assert
 
 #include <QByteArray>            // for QByteArray
-#include <QLatin1String>         // for QLatin1String
+#include <QLatin1StringView>     // for QLatin1StringView
 #include <QString>               // for QString, Qt::SkipEmptyParts
 #include <QStringList>           // for QStringList
 #include <QVector>               // for QVector
@@ -288,7 +288,7 @@ ShapeFormat::read()
         QString namecomponent = DBFReadStringAttribute(
                                   ihandledb, iShape, nameindice);
         if (!name.isEmpty() && !namecomponent.isEmpty()) {
-          name.append(QLatin1String(" / "));
+          name.append(QLatin1StringView(" / "));
         }
         name.append(namecomponent);
       }
