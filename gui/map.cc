@@ -27,7 +27,7 @@
 #include <QCursor>                // for QCursor
 #include <QFile>                  // for QFile
 #include <QIODevice>              // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Truncate, QIODevice::WriteOnly
-#include <QLatin1String>          // for QLatin1String
+#include <QLatin1StringView>      // for QLatin1StringView
 #include <QMessageBox>            // for QMessageBox
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
 #include <QStringLiteral>         // for QStringLiteral
@@ -210,9 +210,9 @@ static QString makePath(const vector <LatLng>& pts)
       if (someoutput) {
         path.append(QChar(','));
       }
-      path.append(QLatin1String("\n            "));
+      path.append(QLatin1StringView("\n            "));
     } else if (lncount == 1) {
-      path.append(QLatin1String(", "));
+      path.append(QLatin1StringView(", "));
     }
     path.append(fmtLatLng(ll));
     someoutput = true;
