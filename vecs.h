@@ -35,6 +35,25 @@ class Vecs
 {
 // Meyers Singleton
 public:
+
+  /* Types */
+
+  class fmtinfo_t {
+  public:
+
+    explicit operator bool() const {
+      return fmt != nullptr;
+    }
+    Format* operator->() const {
+      return fmt;
+    }
+
+    Format* fmt{};
+    QString fmtname;
+    QString style_filename;
+    QStringList options;
+  };
+
   /* Special Member Functions */
 
   static Vecs& Instance();
@@ -51,7 +70,8 @@ public:
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
-  Format* find_vec(const QString& vecname);
+  void prepare_format(const fmtinfo_t& data) const;
+  fmtinfo_t find_vec(const QString& fmtargstring);
   void disp_vecs() const;
   void disp_vec(const QString& vecname) const;
   static const char* name_option(uint32_t type);

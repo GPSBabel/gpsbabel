@@ -799,61 +799,65 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-Format* Vecs::find_vec(const QString& vecname)
+void Vecs::prepare_format(const fmtinfo_t& fmtdata) const
 {
-  QStringList options = vecname.split(',');
+  QVector<arglist_t>* args = fmtdata->get_args();
+
+  validate_options(fmtdata.options, args, fmtdata.fmtname);
+
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      if (!fmtdata.options.isEmpty()) {
+        const QString opt = get_option(fmtdata.options, arg.argstring);
+        if (!opt.isNull()) {
+          assign_option(fmtdata.fmtname, &arg, opt);
+          continue;
+        }
+      }
+      QString qopt = inifile_readstr(global_opts.inifile, fmtdata.fmtname, arg.argstring);
+      if (qopt.isNull()) {
+        qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
+      }
+      if (qopt.isNull()) {
+        assign_option(fmtdata.fmtname, &arg, arg.defaultvalue);
+      } else {
+        assign_option(fmtdata.fmtname, &arg, qopt);
+      }
+    }
+  }
+
+  if (global_opts.debug_level >= 1) {
+    disp_vec_options(fmtdata.fmtname, args);
+  }
+
+#if CSVFMTS_ENABLED
+  /*
+   * For style based formats let xcsv know the style file.  Otherwise
+   * make sure xcsv knows no style file is in use. This covers the case
+   * that we are processing xcsv,style= and it was preceeded by an xcsv
+   * format that utilized an internal style file.
+   */
+  d_ptr_->xcsv_fmt.xcsv_setup_internal_style(fmtdata.style_filename);
+#endif // CSVFMTS_ENABLED
+}
+
+Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
+{
+  QStringList options = fmtargstring.split(',');
   if (options.isEmpty()) {
     fatal("A format name is required.\n");
   }
-  const QString svecname = options.takeFirst();
+  const QString fmtname = options.takeFirst();
 
   for (const auto& vec : d_ptr_->vec_list) {
-    if (svecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
+    if (fmtname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
 
-    QVector<arglist_t>* args = vec.vec->get_args();
-
-    validate_options(options, args, vec.name);
-
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        if (!options.isEmpty()) {
-          const QString opt = get_option(options, arg.argstring);
-          if (!opt.isNull()) {
-            assign_option(vec.name, &arg, opt);
-            continue;
-          }
-        }
-        QString qopt = inifile_readstr(global_opts.inifile, vec.name, arg.argstring);
-        if (qopt.isNull()) {
-          qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
-        }
-        if (qopt.isNull()) {
-          assign_option(vec.name, &arg, arg.defaultvalue);
-        } else {
-          assign_option(vec.name, &arg, qopt);
-        }
-      }
-    }
-
-    if (global_opts.debug_level >= 1) {
-      disp_vec_options(vec.name, args);
-    }
-
-#if CSVFMTS_ENABLED
-    /*
-     * If this happens to be xcsv,style= and it was preceeded by an xcsv
-     * format that utilized an internal style file, then we need to let
-     * xcsv know the internal style file is no longer in play.
-     */
-    d_ptr_->xcsv_fmt.xcsv_setup_internal_style(nullptr);
-#endif // CSVFMTS_ENABLED
-    vec.vec->set_name(vec.name);	/* needed for session information */
-    vec.vec->set_argstring(vecname);  /* needed for positional parameters */
-    return vec.vec;
-
+    fmtinfo_t fmtinfo{vec.vec, vec.name, nullptr, options};
+    prepare_format(fmtinfo);
+    return fmtinfo;
   }
 
   /*
@@ -861,52 +865,19 @@ Format* Vecs::find_vec(const QString& vecname)
    * is to search the list of xcsv styles.
    */
   for (const auto& svec : qAsConst(style_list)) {
-    if (svecname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
+    if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
 
-    QVector<arglist_t>* xcsv_args = d_ptr_->vec_list.at(0).vec->get_args();
-
-    validate_options(options, xcsv_args, svec.name);
-
-    if (xcsv_args && !xcsv_args->isEmpty()) {
-      assert(xcsv_args->isDetached());
-      for (auto& arg : *xcsv_args) {
-        if (!options.isEmpty()) {
-          const QString opt = get_option(options, arg.argstring);
-          if (!opt.isNull()) {
-            assign_option(svec.name, &arg, opt);
-            continue;
-          }
-        }
-        QString qopt = inifile_readstr(global_opts.inifile, svec.name, arg.argstring);
-        if (qopt.isNull()) {
-          qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
-        }
-        if (qopt.isNull()) {
-          assign_option(svec.name, &arg, arg.defaultvalue);
-        } else {
-          assign_option(svec.name, &arg, qopt);
-        }
-      }
-    }
-
-    if (global_opts.debug_level >= 1) {
-      disp_vec_options(svec.name, xcsv_args);
-    }
-#if CSVFMTS_ENABLED
-    d_ptr_->xcsv_fmt.xcsv_setup_internal_style(svec.style_filename);
-#endif // CSVFMTS_ENABLED
-
-    d_ptr_->vec_list[0].vec->set_name(svec.name);	/* needed for session information */
-    d_ptr_->vec_list[0].vec->set_argstring(vecname);  /* needed for positional parameters */
-    return d_ptr_->vec_list[0].vec;
+    fmtinfo_t fmtinfo{d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options};
+    prepare_format(fmtinfo);
+    return fmtinfo;
   }
 
   /*
    * Not found.
    */
-  return nullptr;
+  return {};
 }
 
 /*
