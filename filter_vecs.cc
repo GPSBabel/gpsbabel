@@ -75,7 +75,6 @@ struct FilterVecs::Impl {
   PolygonFilter polygon;
   PositionFilter position;
   RadiusFilter radius;
-  ResampleFilter resample;
   ReverseRouteFilter reverse_route;
   SimplifyRouteFilter routesimple;
   SortFilter sort;
