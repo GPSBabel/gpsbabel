@@ -84,19 +84,9 @@ void GeoFormat::GeoReadLoc(QXmlStreamReader& reader) const
   }
 }
 
-void GeoFormat::rd_init(const QString& fname)
-{
-  geo_fname = fname;
-}
-
-void GeoFormat::rd_deinit()
-{
-  geo_fname.clear();
-}
-
 void GeoFormat::read()
 {
-  gpsbabel::File ifile = gpsbabel::File(geo_fname);
+  gpsbabel::File ifile = gpsbabel::File(fname);
   ifile.open(QIODevice::ReadOnly);
   QXmlStreamReader reader = QXmlStreamReader(&ifile);
 
@@ -141,16 +131,6 @@ Geocache::container_t GeoFormat::wpt_container(const QString& args)
     break;
   }
   return v;
-}
-
-void GeoFormat::wr_init(const QString& fname)
-{
-  geo_fname = fname;
-}
-
-void GeoFormat::wr_deinit()
-{
-  geo_fname.clear();
 }
 
 void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer)
@@ -221,7 +201,7 @@ void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer
 
 void GeoFormat::write()
 {
-  gpsbabel::File ofile = gpsbabel::File(geo_fname);
+  gpsbabel::File ofile = gpsbabel::File(fname);
   ofile.open(QIODevice::WriteOnly | QIODevice::Text);
   QXmlStreamWriter writer = QXmlStreamWriter(&ofile);
 

@@ -21,11 +21,12 @@
 #ifndef VECS_H_INCLUDED_
 #define VECS_H_INCLUDED_
 
-#include <cstdint>              // for uint32_t
+#include <cstdint>      // for uint32_t
 
-#include <QString>              // for QString
-#include <QStringList>          // for QStringList
-#include <QVector>              // for QVector<>::iterator, QVector
+#include <QList>        // for QList
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVector>      // for QVector<>::iterator, QVector
 
 #include "defs.h"
 #include "format.h"
@@ -38,20 +39,26 @@ public:
 
   /* Types */
 
+  using FormatFactory = Format* (*)(const QString&);
+
   class fmtinfo_t {
   public:
 
+    bool isDynamic() {
+      return factory != nullptr;
+    }
     explicit operator bool() const {
-      return fmt != nullptr;
+      return ((fmt != nullptr) || (factory != nullptr));
     }
     Format* operator->() const {
       return fmt;
     }
 
-    Format* fmt{};
+    Format* fmt{nullptr};
     QString fmtname;
     QString style_filename;
     QStringList options;
+    FormatFactory factory{nullptr};
   };
 
   /* Special Member Functions */
@@ -64,13 +71,15 @@ public:
 
   /* Member Functions */
 
+  static void init_vec(Format* fmt);
   void init_vecs();
+  static void exit_vec(Format* fmt);
   void exit_vecs();
   static void assign_option(const QString& module, arglist_t* arg, const QString& val);
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
-  void prepare_format(const fmtinfo_t& data) const;
+  static void prepare_format(const fmtinfo_t& data) ;
   fmtinfo_t find_vec(const QString& fmtargstring);
   void disp_vecs() const;
   void disp_vec(const QString& vecname) const;
@@ -90,6 +99,7 @@ private:
     QString desc;
     QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
     QString parent;
+    FormatFactory factory{nullptr};
   };
 
   struct arginfo_t {

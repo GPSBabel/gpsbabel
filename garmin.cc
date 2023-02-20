@@ -81,7 +81,7 @@ static int categorybits;
 static int receiver_must_upper = 1;
 static QTextCodec* codec{nullptr};
 
-static Format* gpx_vec;
+static Vecs::fmtinfo_t gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -355,10 +355,12 @@ rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
     const gdx_info* gi = gdx_get_info();
-    gpx_vec = Vecs::Instance().find_vec("gpx").fmt;
+    // FIXME: dynamic not implemented.
+    gpx_vec = Vecs::Instance().find_vec("gpx");
+    Vecs::prepare_format(gpx_vec);
     gpx_vec->rd_init(gi->from_device.canon);
   } else {
-    gpx_vec = nullptr;
+    gpx_vec = Vecs::fmtinfo_t();
     rw_init(fname);
   }
 }
