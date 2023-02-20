@@ -54,7 +54,7 @@ public:
       return fmt;
     }
 
-    Format* fmt{};
+    Format* fmt{nullptr};
     QString fmtname;
     QString style_filename;
     QStringList options;

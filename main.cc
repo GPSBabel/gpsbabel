@@ -244,6 +244,57 @@ private:
   short_handle mkshort_handle;
 };
 
+static void
+run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
+{
+  start_session(ivecs.fmtname, fname);
+  if (ivecs.isDynamic()) {
+    ivecs.fmt = ivecs.factory(fname);
+    Vecs::init_vec(ivecs.fmt);
+    Vecs::prepare_format(ivecs);
+
+    ivecs->rd_init(fname);
+    ivecs->read();
+    ivecs->rd_deinit();
+
+    Vecs::exit_vec(ivecs.fmt);
+    delete ivecs.fmt;
+    ivecs.fmt = nullptr;
+  } else {
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    Vecs::prepare_format(ivecs);
+
+    ivecs->rd_init(fname);
+    ivecs->read();
+    ivecs->rd_deinit();
+  }
+}
+
+static void
+run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
+{
+  if (ovecs.isDynamic()) {
+    ovecs.fmt = ovecs.factory(ofname);
+    Vecs::init_vec(ovecs.fmt);
+    Vecs::prepare_format(ovecs);
+
+    ovecs->wr_init(ofname);
+    ovecs->write();
+    ovecs->wr_deinit();
+
+    Vecs::exit_vec(ovecs.fmt);
+    delete ovecs.fmt;
+    ovecs.fmt = nullptr;
+  } else {
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    Vecs::prepare_format(ovecs);
+
+    ovecs->wr_init(ofname);
+    ovecs->write();
+    ovecs->wr_deinit();
+  }
+}
+
 static int
 run(const char* prog_name)
 {
@@ -342,25 +393,7 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      start_session(ivecs.fmtname, fname);
-
-      if (ivecs.isDynamic()) {
-        ivecs.fmt = ivecs.factory(fname);
-        Vecs::init_vec(ivecs.fmt);
-        Vecs::prepare_format(ivecs);
-
-        ivecs->rd_init(fname);
-        ivecs->read();
-        ivecs->rd_deinit();
-
-        Vecs::exit_vec(ivecs.fmt);
-        delete ivecs.fmt;
-        ivecs.fmt = nullptr;
-      } else {
-        ivecs->rd_init(fname);
-        ivecs->read();
-        ivecs->rd_deinit();
-      }
+      run_reader(ivecs, fname);
 
       did_something = true;
       break;
@@ -376,23 +409,8 @@ run(const char* prog_name)
           global_opts.masked_objective |= WPTDATAMASK;
         }
 
-        if (ovecs.isDynamic()) {
-          ovecs.fmt = ovecs.factory(ofname);
-          Vecs::init_vec(ovecs.fmt);
-          Vecs::prepare_format(ovecs);
+        run_writer(ovecs, ofname);
 
-          ovecs->wr_init(ofname);
-          ovecs->write();
-          ovecs->wr_deinit();
-
-          Vecs::exit_vec(ovecs.fmt);
-          delete ovecs.fmt;
-          ovecs.fmt = nullptr;
-        } else {
-          ovecs->wr_init(ofname);
-          ovecs->write();
-          ovecs->wr_deinit();
-        }
       }
       break;
     case 's':
@@ -560,49 +578,11 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
-    start_session(ivecs.fmtname, qargs.at(0));
-    if (ivecs.isDynamic()) {
-      ivecs.fmt = ivecs.factory(qargs.at(0));
-      Vecs::init_vec(ivecs.fmt);
-      Vecs::prepare_format(ivecs);
-
-      ivecs->rd_init(qargs.at(0));
-      ivecs->read();
-      ivecs->rd_deinit();
-
-      Vecs::exit_vec(ivecs.fmt);
-      delete ivecs.fmt;
-      ivecs.fmt = nullptr;
-    } else {
-      /* reinitialize xcsv in case two formats that use xcsv were given */
-      Vecs::prepare_format(ivecs);
-
-      ivecs->rd_init(qargs.at(0));
-      ivecs->read();
-      ivecs->rd_deinit();
-    }
+    run_reader(ivecs, qargs.at(0));
 
     if (qargs.size() == 2 && ovecs) {
-      if (ovecs.isDynamic()) {
-        ovecs.fmt = ovecs.factory(qargs.at(1));
-        Vecs::init_vec(ovecs.fmt);
-        Vecs::prepare_format(ovecs);
 
-        ovecs->wr_init(qargs.at(1));
-        ovecs->write();
-        ovecs->wr_deinit();
-
-        Vecs::exit_vec(ovecs.fmt);
-        delete ovecs.fmt;
-        ovecs.fmt = nullptr;
-      } else {
-        /* reinitialize xcsv in case two formats that use xcsv were given */
-        Vecs::prepare_format(ovecs);
-
-        ovecs->wr_init(qargs.at(1));
-        ovecs->write();
-        ovecs->wr_deinit();
-      }
+      run_writer(ovecs, qargs.at(1));
 
     }
   } else if (!qargs.isEmpty()) {
@@ -636,15 +616,14 @@ run(const char* prog_name)
     if (ivecs.isDynamic()) {
       ivecs.fmt = ivecs.factory(fname);
       Vecs::init_vec(ivecs.fmt);
-      Vecs::prepare_format(ivecs);
     }
     if (ovecs && ovecs.isDynamic()) {
       ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt);
-      Vecs::prepare_format(ovecs);
     }
 
     start_session(ivecs.fmtname, fname);
+    Vecs::prepare_format(ivecs);
     ivecs->rd_position_init(fname);
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
@@ -656,6 +635,7 @@ run(const char* prog_name)
     }
 
     if (ovecs) {
+      Vecs::prepare_format(ovecs);
       ovecs->wr_position_init(ofname);
     }
 
@@ -679,8 +659,10 @@ run(const char* prog_name)
         delete wpt;
       }
     }
+    Vecs::prepare_format(ivecs);
     ivecs->rd_position_deinit();
     if (ovecs) {
+      Vecs::prepare_format(ovecs);
       ovecs->wr_position_deinit();
     }
 

@@ -878,11 +878,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
       continue;
     }
 
-    fmtinfo_t fmtinfo{vec.vec, vec.name, nullptr, options, vec.factory};
-    if (!fmtinfo.isDynamic()) {
-      prepare_format(fmtinfo);
-    }
-    return fmtinfo;
+    return {vec.vec, vec.name, nullptr, options, vec.factory};
   }
 
   /*
@@ -894,11 +890,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
       continue;
     }
 
-    fmtinfo_t fmtinfo{d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options, d_ptr_->vec_list.at(0).factory};
-    if (!fmtinfo.isDynamic()) {
-      prepare_format(fmtinfo);
-    }
-    return fmtinfo;
+    return {d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options, d_ptr_->vec_list.at(0).factory};
   }
 
   /*
