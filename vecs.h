@@ -79,7 +79,7 @@ public:
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
-  static void prepare_format(const fmtinfo_t& data) ;
+  static void prepare_format(const fmtinfo_t& data);
   fmtinfo_t find_vec(const QString& fmtargstring);
   void disp_vecs() const;
   void disp_vec(const QString& vecname) const;

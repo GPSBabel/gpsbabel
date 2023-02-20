@@ -57,6 +57,12 @@
 #include "validate.h"       // for ValidateFilter
 #include "vecs.h"           // for Vecs
 
+template <typename T>
+Filter* fltfactory()
+{
+  static_assert(std::is_base_of<Filter, T>::value, "T must be derived from Filter");
+  return new T();
+}
 
 struct FilterVecs::Impl {
   ArcDistanceFilter arcdist;
@@ -77,7 +83,6 @@ struct FilterVecs::Impl {
   SwapDataFilter swapdata;
   TrackFilter trackfilter;
   TransformFilter transform;
-  ValidateFilter validate;
 
   const QVector<fl_vecs_t> filter_vec_list = {
 #if FILTERS_ENABLED
@@ -127,9 +132,10 @@ struct FilterVecs::Impl {
       "Include Only Points Within Radius",
     },
     {
-      &resample,
+      nullptr,
       "resample",
       "Resample Track",
+      &fltfactory<ResampleFilter>
     },
     {
       &routesimple,
@@ -172,9 +178,10 @@ struct FilterVecs::Impl {
       "Swap latitude and longitude of all loaded points"
     },
     {
-      &validate,
+      nullptr,
       "validate",
-      "Validate internal data structures"
+      "Validate internal data structures",
+      &fltfactory<ValidateFilter>
     }
 #elif defined (MINIMAL_FILTERS)
     {
@@ -193,7 +200,48 @@ FilterVecs& FilterVecs::Instance()
   return instance;
 }
 
-Filter* FilterVecs::find_filter_vec(const QString& vecname)
+void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
+{
+  QVector<arglist_t>* args = fltdata->get_args();
+
+  Vecs::validate_options(fltdata.options, args, fltdata.fltname);
+
+  /* step 1: initialize by inifile or default values */
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      QString qtemp = inifile_readstr(global_opts.inifile, fltdata.fltname, arg.argstring);
+      if (qtemp.isNull()) {
+        qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
+      }
+      if (qtemp.isNull()) {
+        Vecs::assign_option(fltdata.fltname, &arg, arg.defaultvalue);
+      } else {
+        Vecs::assign_option(fltdata.fltname, &arg, qtemp);
+      }
+    }
+  }
+
+  /* step 2: override settings with command-line values */
+  if (!fltdata.options.isEmpty()) {
+    if (args && !args->isEmpty()) {
+      assert(args->isDetached());
+      for (auto& arg : *args) {
+        const QString opt = Vecs::get_option(fltdata.options, arg.argstring);
+        if (!opt.isNull()) {
+          Vecs::assign_option(fltdata.fltname, &arg, opt);
+        }
+      }
+    }
+  }
+
+  if (global_opts.debug_level >= 1) {
+    Vecs::disp_vec_options(fltdata.fltname, args);
+  }
+
+}
+
+FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& vecname)
 {
   QStringList options = vecname.split(',');
   if (options.isEmpty()) {
@@ -206,50 +254,13 @@ Filter* FilterVecs::find_filter_vec(const QString& vecname)
       continue;
     }
 
-    QVector<arglist_t>* args = vec.vec->get_args();
-
-    Vecs::validate_options(options, args, vec.name);
-
-    /* step 1: initialize by inifile or default values */
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        QString qtemp = inifile_readstr(global_opts.inifile, vec.name, arg.argstring);
-        if (qtemp.isNull()) {
-          qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
-        }
-        if (qtemp.isNull()) {
-          Vecs::assign_option(vec.name, &arg, arg.defaultvalue);
-        } else {
-          Vecs::assign_option(vec.name, &arg, qtemp);
-        }
-      }
-    }
-
-    /* step 2: override settings with command-line values */
-    if (!options.isEmpty()) {
-      if (args && !args->isEmpty()) {
-        assert(args->isDetached());
-        for (auto& arg : *args) {
-          const QString opt = Vecs::get_option(options, arg.argstring);
-          if (!opt.isNull()) {
-            Vecs::assign_option(vec.name, &arg, opt);
-          }
-        }
-      }
-    }
-
-    if (global_opts.debug_level >= 1) {
-      Vecs::disp_vec_options(vec.name, args);
-    }
-
-    return vec.vec;
+    return {vec.vec, vec.name, options, vec.factory};
 
   }
-  return nullptr;
+  return {};
 }
 
-void FilterVecs::free_filter_vec(Filter* filter)
+void FilterVecs::free_filter_vec(fltinfo_t& filter)
 {
   QVector<arglist_t>* args = filter->get_args();
 
@@ -264,24 +275,30 @@ void FilterVecs::free_filter_vec(Filter* filter)
   }
 }
 
-void FilterVecs::init_filter_vecs()
+void FilterVecs::init_filter_vec(Filter* flt)
 {
-  for (const auto& vec : d_ptr_->filter_vec_list) {
-    QVector<arglist_t>* args = vec.vec->get_args();
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        arg.argvalptr = nullptr;
-      }
+  QVector<arglist_t>* args = flt->get_args();
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      arg.argvalptr = nullptr;
     }
   }
 }
 
-void FilterVecs::exit_filter_vecs()
+void FilterVecs::init_filter_vecs()
 {
   for (const auto& vec : d_ptr_->filter_vec_list) {
-    (vec.vec->exit)();
-    QVector<arglist_t>* args = vec.vec->get_args();
+    if (vec.vec != nullptr) {
+      init_filter_vec(vec.vec);
+    }
+  }
+}
+
+void FilterVecs::exit_filter_vec(Filter* flt)
+{
+    (flt->exit)();
+    QVector<arglist_t>* args = flt->get_args();
     if (args && !args->isEmpty()) {
       assert(args->isDetached());
       for (auto& arg : *args) {
@@ -290,6 +307,14 @@ void FilterVecs::exit_filter_vecs()
           *arg.argval = arg.argvalptr = nullptr;
         }
       }
+    }
+}
+
+void FilterVecs::exit_filter_vecs()
+{
+  for (const auto& vec : d_ptr_->filter_vec_list) {
+    if (vec.vec != nullptr) {
+      exit_filter_vec(vec.vec);
     }
   }
 }
@@ -301,9 +326,10 @@ void FilterVecs::exit_filter_vecs()
 void FilterVecs::disp_filter_vecs() const
 {
   for (const auto& vec : d_ptr_->filter_vec_list) {
+    Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;
     printf("	%-20.20s  %-50.50s\n",
            qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arglist_t>* args = vec.vec->get_args();
+    const QVector<arglist_t>* args = flt->get_args();
     if (args) {
       for (const auto& arg : *args) {
         if (!(arg.argtype & ARGTYPE_HIDDEN)) {
@@ -312,6 +338,9 @@ void FilterVecs::disp_filter_vecs() const
                  (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
         }
       }
+    }
+    if (vec.factory != nullptr) {
+      delete flt;
     }
   }
 }
@@ -322,9 +351,10 @@ void FilterVecs::disp_filter_vec(const QString& vecname) const
     if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
+    Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;
     printf("	%-20.20s  %-50.50s\n",
            qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arglist_t>* args = vec.vec->get_args();
+    const QVector<arglist_t>* args = flt->get_args();
     if (args) {
       for (const auto& arg : *args) {
         if (!(arg.argtype & ARGTYPE_HIDDEN)) {
@@ -333,6 +363,9 @@ void FilterVecs::disp_filter_vec(const QString& vecname) const
                  (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
         }
       }
+    }
+    if (vec.factory != nullptr) {
+      delete flt;
     }
   }
 }
@@ -347,9 +380,10 @@ void FilterVecs::disp_help_url(const fl_vecs_t& vec, const arglist_t* arg)
 
 void FilterVecs::disp_v1(const fl_vecs_t& vec)
 {
+  Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;
   disp_help_url(vec, nullptr);
   printf("\n");
-  const QVector<arglist_t>* args = vec.vec->get_args();
+  const QVector<arglist_t>* args = flt->get_args();
   if (args) {
     for (const auto& arg : *args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {
@@ -365,6 +399,9 @@ void FilterVecs::disp_v1(const fl_vecs_t& vec)
         printf("\n");
       }
     }
+  }
+  if (vec.factory != nullptr) {
+    delete flt;
   }
 }
 
@@ -402,7 +439,11 @@ void FilterVecs::disp_filters(int version) const
 
 bool FilterVecs::validate_filter_vec(const fl_vecs_t& vec)
 {
-  bool ok = Vecs::validate_args(vec.name, vec.vec->get_args());
+  Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;
+  bool ok = Vecs::validate_args(vec.name, flt->get_args());
+  if (vec.factory != nullptr) {
+    delete flt;
+  }
 
   return ok;
 }

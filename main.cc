@@ -301,7 +301,7 @@ run(const char* prog_name)
   int argn;
   Vecs::fmtinfo_t ivecs;
   Vecs::fmtinfo_t ovecs;
-  Filter* filter = nullptr;
+  FilterVecs::fltinfo_t filter;
   QString fname;
   QString ofname;
   int opt_version = 0;
@@ -451,10 +451,26 @@ run(const char* prog_name)
       filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
-        filter->init();
-        filter->process();
-        filter->deinit();
-        FilterVecs::free_filter_vec(filter);
+        if (filter.isDynamic()) {
+          filter.flt = filter.factory();
+          FilterVecs::init_filter_vec(filter.flt);
+          FilterVecs::prepare_filter(filter);
+
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter);
+
+          FilterVecs::exit_filter_vec(filter.flt);
+          delete filter.flt;
+          filter.flt = nullptr;
+        } else {
+          FilterVecs::prepare_filter(filter);
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter);
+        }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
       }
