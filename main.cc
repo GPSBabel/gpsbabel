@@ -23,8 +23,6 @@
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
-#include <QByteArray>                 // for QByteArray
-#include <QChar>                      // for QChar
 #include <QCoreApplication>           // for QCoreApplication
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
@@ -56,6 +54,8 @@
 #include "src/core/file.h"            // for File
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
+
+static const int DEBUG_LOCALE = 0;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
@@ -646,9 +646,9 @@ main(int argc, char* argv[])
 #error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
-#ifdef DEBUG_LOCALE
-  printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if (DEBUG_LOCALE) {
+    printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+  }
 
   // Create a QCoreApplication object to handle application initialization.
   // In addition to being useful for argument decoding, the creation of a
@@ -663,33 +663,32 @@ main(int argc, char* argv[])
   // may result in LC_ALL being set to the native environment
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
-#ifdef DEBUG_LOCALE
-  printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if (DEBUG_LOCALE) {
+    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+  }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
   // actually sets LC_ALL.
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_NUMERIC\n");
-#endif
+    if (DEBUG_LOCALE) {
+      printf("Resetting LC_NUMERIC\n");
+    }
     setlocale(LC_NUMERIC,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_TIME\n");
-#endif
+    if (DEBUG_LOCALE) {
+      printf("Resetting LC_TIME\n");
+    }
     setlocale(LC_TIME,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
-
   qInstallMessageHandler(MessageHandler);
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
