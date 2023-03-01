@@ -32,6 +32,8 @@
 class GeoFormat : public Format
 {
 public:
+  using Format::Format;
+
   QVector<arglist_t>* get_args() override
   {
     return &geo_args;
@@ -47,12 +49,12 @@ public:
     return { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none };
   }
 
-  void rd_init(const QString& fname) override;
+  void rd_init(const QString& fname) override
+  {}
   void read() override;
-  void rd_deinit() override;
-  void wr_init(const QString& fname) override;
+  void wr_init(const QString& fname) override
+  {}
   void write() override;
-  void wr_deinit() override;
 
 private:
 
@@ -66,7 +68,6 @@ private:
 
   char* deficon = nullptr;
   char* nuke_placer{};
-  QString geo_fname;
 
   QVector<arglist_t> geo_args = {
     {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },

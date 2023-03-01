@@ -45,6 +45,7 @@ class Format
 {
 public:
   Format() = default;
+  Format(const QString& filename) : fname{filename} {}
   // Provide virtual public destructor to avoid undefined behavior when
   // an object of derived class type is deleted through a pointer to
   // its base class type.
@@ -168,6 +169,8 @@ public:
 
   virtual ff_type get_type() const = 0;
   virtual QVector<ff_cap> get_cap() const = 0;
+
+  QString fname;
 
 protected:
   template <class MyFormat>
