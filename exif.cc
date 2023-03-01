@@ -129,6 +129,9 @@
 #define GPS_IFD_TAG_DATUM     0x0012
 #define GPS_IFD_TAG_DATESTAMP 0x001D
 
+// Internal flag for debugging.
+const bool validate_tags = false;
+
 // for debug only
 void
 ExifFormat::print_buff(const char* buf, int sz, const char* cmt)
@@ -337,10 +340,11 @@ ExifFormat::exif_load_apps()
   return exif_app_;
 }
 
-#ifndef NDEBUG
 void
 ExifFormat::exif_validate_tag_structure(const ExifTag* tag)
 {
+  if (!validate_tags) return;
+
   // The count times the element size should match the saved size.
   assert((tag->count * exif_type_size(tag->type)) == tag->size);
 
@@ -363,7 +367,6 @@ ExifFormat::exif_validate_tag_structure(const ExifTag* tag)
          ((tag->data.size() == 0) && (tag->count == 0)) ||
          ((tag->data.size() == 1) && (tag->data.at(0).toByteArray().endsWith('\0'))));
 }
-#endif
 
 ExifFormat::ExifIfd*
 ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
@@ -563,9 +566,9 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
       }
       printf("\n");
     }
-#ifndef NDEBUG
-    exif_validate_tag_structure(tag);
-#endif
+    if (validate_tags) {
+      exif_validate_tag_structure(tag);
+    }
   }
 
   if (global_opts.debug_level >= 3) {
@@ -1214,9 +1217,9 @@ ExifFormat::exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
   for (auto& tag_instance : ifd->tags) {
     ExifTag* tag = &tag_instance;
 
-#ifndef NDEBUG
-    exif_validate_tag_structure(tag);
-#endif
+    if (validate_tags) {
+      exif_validate_tag_structure(tag);
+    }
 
     gbfputuint16(tag->id, fout);
     gbfputuint16(tag->type, fout);
