@@ -164,9 +164,7 @@ private:
   void exif_release_apps();
   static uint32_t exif_ifd_size(ExifIfd* ifd);
   ExifApp* exif_load_apps();
-#ifndef NDEBUG
   static void exif_validate_tag_structure(const ExifTag* tag);
-#endif
   static ExifIfd* exif_read_ifd(ExifApp* app, uint16_t ifd_nr, gbsize_t offs, uint32_t* exif_ifd_ofs, uint32_t* gps_ifd_ofs, uint32_t* inter_ifd_ofs);
   static void exif_read_app(ExifApp* app);
   static void exif_examine_app(ExifApp* app);
@@ -188,6 +186,7 @@ private:
   static bool exif_sort_ifds_cb(const ExifIfd& A, const ExifIfd& B);
   static void exif_write_value(ExifTag* tag, gbfile* fout);
   static void exif_write_ifd(ExifIfd* ifd, char next, gbfile* fout);
+
   void exif_write_apps() const;
 
   /* Data Members */
