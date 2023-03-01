@@ -20,7 +20,7 @@
 
  */
 
-#undef TRACKF_DBG
+static const bool TRACKF_DBG = false;
 
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
@@ -109,9 +109,9 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
       result += partial;
 
     }
-#ifdef TRACKF_DBG
-    qDebug() << MYNAME "-time option: shift =" << result << "seconds";
-#endif
+    if (TRACKF_DBG) {
+      qDebug() << MYNAME "-time option: shift =" << result << "seconds";
+    }
   } else {
     fatal(MYNAME "-time: invalid value in move option \"%s\"!\n", arg);
   }
@@ -452,9 +452,9 @@ void TrackFilter::trackfilter_split()
           fatal(MYNAME ": invalid time interval unit specified.\n");
         }
 
-#ifdef TRACKF_DBG
-        printf(MYNAME ": interval %f seconds\n", interval);
-#endif
+        if (TRACKF_DBG) {
+          printf(MYNAME ": interval %f seconds\n", interval);
+        }
       } else {
         fatal(MYNAME ": invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", opt_split);
       }
@@ -483,9 +483,9 @@ void TrackFilter::trackfilter_split()
           fatal(MYNAME ": invalid distance unit specified.\n");
         }
 
-#ifdef TRACKF_DBG
-        printf(MYNAME ": distance %f meters\n", distance);
-#endif
+        if (TRACKF_DBG) {
+          printf(MYNAME ": distance %f meters\n", distance);
+        }
       } else {
         fatal(MYNAME ": invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", opt_sdistance);
       }
@@ -508,11 +508,11 @@ void TrackFilter::trackfilter_split()
 // FIXME: This whole function needs to be reconsidered for arbitrary time.
         new_track_flag = buff.at(i)->GetCreationTime().toLocalTime().date() !=
                          buff.at(j)->GetCreationTime().toLocalTime().date();
-#ifdef TRACKF_DBG
+      if (TRACKF_DBG) {
         if (new_track_flag) {
           printf(MYNAME ": new day %s\n", qPrintable(buff.at(j)->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
         }
-#endif
+      }
       } else {
         new_track_flag = true;
 
@@ -526,11 +526,11 @@ void TrackFilter::trackfilter_split()
           if (curdist <= distance) {
             new_track_flag = false;
           }
-#ifdef TRACKF_DBG
           else {
-            printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
+            if (TRACKF_DBG) {
+              printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
+            }
           }
-#endif
         }
 
         if (interval > 0) {
@@ -538,18 +538,18 @@ void TrackFilter::trackfilter_split()
           if (tr_interval <= interval) {
             new_track_flag = false;
           }
-#ifdef TRACKF_DBG
           else {
-            printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
+            if (TRACKF_DBG) {
+              printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
+            }
           }
-#endif
         }
 
       }
       if (new_track_flag) {
-#ifdef TRACKF_DBG
-        printf(MYNAME ": splitting new track\n");
-#endif
+        if (TRACKF_DBG) {
+          printf(MYNAME ": splitting new track\n");
+        }
         curr = new route_head;
         trackfilter_split_init_rte_name(curr, buff.at(j)->GetCreationTime());
         track_add_head(curr);
@@ -689,9 +689,9 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
       fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
     }
 
-#ifdef TRACKF_DBG
-    qDebug() << MYNAME "-range-check: " << result;
-#endif
+    if (TRACKF_DBG) {
+      qDebug() << MYNAME "-range-check: " << result;
+    }
   } else {
     fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n", timestr);
   }
@@ -862,9 +862,9 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
       result.step = 0;
     }
 
-#ifdef TRACKF_DBG
-    qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
-#endif
+    if (TRACKF_DBG){
+      qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
+    }
   } else {
     fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", timestr);
   }
