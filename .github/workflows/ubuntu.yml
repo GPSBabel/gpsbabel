@@ -72,10 +72,10 @@ jobs:
       with:
         name: Documents
         path: |
-          ${{ github.workspace }}/gpsbabel.org/
-          ${{ github.workspace }}/gpsbabel.pdf
-          ${{ github.workspace }}/gpsbabel.html
-          ${{ github.workspace }}/docbook.css
+          gpsbabel.org/
+          gpsbabel.pdf
+          gpsbabel.html
+          docbook.css
         retention-days: 7
 
   coverage:
