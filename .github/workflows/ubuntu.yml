@@ -20,19 +20,24 @@ jobs:
         include:
           - IMAGE: 'focal'
             SCRIPT: './tools/build_and_test_cmake.sh'
+            RELEASE: false
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
             SCRIPT: './tools/build_and_test_cmake.sh'
+            RELEASE: false
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
+            RELEASE: true
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
+            RELEASE: false
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
             SCRIPT: './tools/build_extra_tests.sh'
+            RELEASE: false
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
       env:
@@ -60,6 +65,18 @@ jobs:
           export CXX
         fi
         "${JOB_SCRIPT}"
+
+    - name: 'Upload Artifacts'
+      if: matrix.RELEASE
+      uses: actions/upload-artifact@v3
+      with:
+        name: Documents ${{ join(matrix.*) }}
+        path: |
+          ${{ github.workspace }}/gpsbabel.org/
+          ${{ github.workspace }}/gpsbabel.pdf
+          ${{ github.workspace }}/gpsbabel.html
+          ${{ github.workspace }}/docbook.css
+        retention-days: 7
 
   coverage:
     name: coverage Build
