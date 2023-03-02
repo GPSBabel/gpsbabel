@@ -70,7 +70,7 @@ jobs:
       if: matrix.RELEASE
       uses: actions/upload-artifact@v3
       with:
-        name: Documents ${{ join(matrix.*) }}
+        name: Documents
         path: |
           ${{ github.workspace }}/gpsbabel.org/
           ${{ github.workspace }}/gpsbabel.pdf
