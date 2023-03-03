@@ -45,9 +45,9 @@ void linepart(double lat1, double lon1,
               double* reslat, double* reslon);
 
 /* Degrees to radians */
-#define DEG(x) ((x)*180.0/M_PI)
+constexpr double DEG(double x) { return (x) * 180.0 / M_PI; }
 
 /* Radians to degrees */
-#define RAD(x) ((x)*M_PI/180.0)
+constexpr double RAD(double x) { return (x) * M_PI / 180.0; }
 
 #endif
