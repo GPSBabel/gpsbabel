@@ -4,3 +4,6 @@
 gpsbabel -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
 compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
 
+gpsbabel -i iblue747 -o csv -f ${REFERENCE}/track/iblue747.csv -F ${TMPDIR}/iblue747~csv.csv
+compare ${REFERENCE}/track/iblue747~csv.csv ${TMPDIR}/iblue747~csv.csv
+
