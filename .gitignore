@@ -21,6 +21,7 @@
 /*.gcno
 /*.gcov
 *.o
+*.a
 .ninja_deps
 .ninja_log
 build.ninja
