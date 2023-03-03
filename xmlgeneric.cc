@@ -34,11 +34,6 @@
 #include "xmlgeneric.h"
 #include "src/core/file.h"              // for File
 
-#define DEBUG_TAG 0
-#if DEBUG_TAG
-#include <QDebug>
-#endif
-
 enum xg_shortcut {
   xg_shortcut_none = 0,
   xg_shortcut_skip,
