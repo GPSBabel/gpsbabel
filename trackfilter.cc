@@ -676,24 +676,46 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  static const QRegularExpression re("^(\\d{0,14})$");
+  static const QRegularExpression re(R"(^(?:(\d{0,14})$|(\d{14})\.(\d{0,3}))$)");
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(timestr);
   if (match.hasMatch()) {
-    QString start = match.captured(1);
-    QString fmtstart("00000101000000");
-    fmtstart.replace(0, start.size(), start);
-    result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
-    result.setTimeSpec(Qt::UTC);
+    if (!match.captured(1).isNull()) {
+      QString start = match.captured(1);
+      QString fmtstart("00000101000000");
+      fmtstart.replace(0, start.size(), start);
+      result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+      result.setTimeSpec(Qt::UTC);
+    } else if (!match.captured(2).isNull()) {
+      result = QDateTime::fromString(match.captured(2), "yyyyMMddHHmmss");
+      result.setTimeSpec(Qt::UTC);
+      if (!match.captured(3).isNull()) {
+        // QTime::fromString z expects 1 to 3 digit fractional part of seconds.
+        // It specifically does not accept 0 digits or > 3 digits.
+        // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
+  
+        // prepend "0.".  prepending "." won't work if there are no trailing digits.
+        bool ok;
+        long msec = lround(1000.0 * QStringLiteral("0.%1").arg(match.captured(3)).toDouble(&ok));
+        if (ok) {
+          result = result.addMSecs(msec);
+        } else {
+          fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(timestr));
+        }
+      }
+    }
     if (!result.isValid()) {
-      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
+      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(timestr));
     }
 
 #ifdef TRACKF_DBG
     qDebug() << MYNAME "-range-check: " << result;
 #endif
   } else {
-    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n", timestr);
+    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n" 
+                 "  value must be a string of 0-14 digits, or, for subsecond resolution,\n"
+                 "  a string of 14 digits followed by a period and a string of 0-3 digits.\n",
+                 timestr);
   }
 
   return result;
