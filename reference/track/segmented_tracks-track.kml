@@ -132,7 +132,6 @@
 <table>
 <tr><td>Longitude: -86.844140</td></tr>
 <tr><td>Latitude: 35.826146</td></tr>
-<tr><td>Heading: 305.9</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -713,7 +712,6 @@
 <table>
 <tr><td>Longitude: -86.844140</td></tr>
 <tr><td>Latitude: 35.826146</td></tr>
-<tr><td>Heading: 305.9</td></tr>
 </table>
 ]]></description>
             <LookAt>
@@ -1248,7 +1246,6 @@
 <table>
 <tr><td>Longitude: -86.844140</td></tr>
 <tr><td>Latitude: 35.836146</td></tr>
-<tr><td>Heading: 305.9</td></tr>
 <tr><td>Time: 2007-07-27T05:24:05Z</td></tr>
 </table>
 ]]></description>
