@@ -26,7 +26,10 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    container: tsteven4/gpsbabel_build_environment_focal
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      env:
+        CMAKE_GENERATOR: Ninja
 
     strategy:
       fail-fast: false
