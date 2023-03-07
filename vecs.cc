@@ -92,7 +92,6 @@ extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
-extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
@@ -152,7 +151,6 @@ struct Vecs::Impl {
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
-  LegacyFormat gpssim_fmt {gpssim_vecs};
 #if CSVFMTS_ENABLED
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
 #endif // CSVFMTS_ENABLED
@@ -387,13 +385,6 @@ struct Vecs::Impl {
       "gtm",
       "GPS TrackMaker",
       "gtm",
-      nullptr,
-    },
-    {
-      &gpssim_fmt,
-      "gpssim",
-      "Franson GPSGate Simulation",
-      "gpssim",
       nullptr,
     },
 #if CSVFMTS_ENABLED

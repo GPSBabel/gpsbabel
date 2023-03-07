@@ -79,9 +79,6 @@ File Types (-i and -o options):
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
-	gpssim                Franson GPSGate Simulation
-	  wayptspd              Default speed for waypoints (knots/hr)
-	  split                 (0/1) Split input into separate files
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
