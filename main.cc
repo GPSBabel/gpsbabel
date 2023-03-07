@@ -55,7 +55,7 @@
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
-static const int DEBUG_LOCALE = 0;
+static constexpr int DEBUG_LOCALE = 0;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
@@ -707,7 +707,7 @@ main(int argc, char* argv[])
 #error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
-  if (DEBUG_LOCALE) {
+  if constexpr (DEBUG_LOCALE) {
     printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
   }
 
@@ -724,7 +724,7 @@ main(int argc, char* argv[])
   // may result in LC_ALL being set to the native environment
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
-  if (DEBUG_LOCALE) {
+  if constexpr (DEBUG_LOCALE) {
     printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
   }
   // As recommended in QCoreApplication reset the locale to the default.
@@ -732,21 +732,21 @@ main(int argc, char* argv[])
   // actually sets LC_ALL.
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
-    if (DEBUG_LOCALE) {
+    if constexpr (DEBUG_LOCALE) {
       printf("Resetting LC_NUMERIC\n");
     }
     setlocale(LC_NUMERIC,"C");
-    if (DEBUG_LOCALE) {
+    if constexpr (DEBUG_LOCALE) {
       printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
     }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
-    if (DEBUG_LOCALE) {
+    if constexpr (DEBUG_LOCALE) {
       printf("Resetting LC_TIME\n");
     }
     setlocale(LC_TIME,"C");
-    if (DEBUG_LOCALE) {
+    if constexpr (DEBUG_LOCALE) {
       printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
     }
   }
