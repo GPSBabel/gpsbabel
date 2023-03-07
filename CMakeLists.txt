@@ -90,7 +90,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
-  gpssim.cc
   gtm.cc
   gtrnctr.cc
   holux.cc
@@ -396,7 +395,6 @@ set(TESTS
   geo
   globalsat_sport
   gpsdrive
-  gpssim
   gpx
   grapheme
   gtm
