@@ -618,12 +618,10 @@ void TrackFilter::trackfilter_synth()
       }
       if (first) {
         if (opt_course) {
-          // TODO: the course value 0 isn't valid, wouldn't it be better to UNSET course?
-          wpt->set_course(0);
+          wpt->reset_course();
         }
         if (opt_speed) {
-          // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
-          wpt->set_speed(0);
+          wpt->reset_speed();
         }
         first = false;
         last_course_lat = wpt->latitude;
