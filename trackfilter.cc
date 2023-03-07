@@ -676,46 +676,26 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  static const QRegularExpression re(R"(^(?:(\d{0,14})$|(\d{14})\.(\d{0,3}))$)");
+  QString start(timestr);
+  QString fmtstart("00000101000000.000");
+  fmtstart.replace(0, start.size(), start);
+
+  static const QRegularExpression re(R"(^\d{14}\.\d{3}$)");
   assert(re.isValid());
-  QRegularExpressionMatch match = re.match(timestr);
+  QRegularExpressionMatch match = re.match(fmtstart);
   if (match.hasMatch()) {
-    if (!match.captured(1).isNull()) {
-      QString start = match.captured(1);
-      QString fmtstart("00000101000000");
-      fmtstart.replace(0, start.size(), start);
-      result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
-      result.setTimeSpec(Qt::UTC);
-    } else if (!match.captured(2).isNull()) {
-      result = QDateTime::fromString(match.captured(2), "yyyyMMddHHmmss");
-      result.setTimeSpec(Qt::UTC);
-      if (!match.captured(3).isNull()) {
-        // QTime::fromString z expects 1 to 3 digit fractional part of seconds.
-        // It specifically does not accept 0 digits or > 3 digits.
-        // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
-  
-        // prepend "0.".  prepending "." won't work if there are no trailing digits.
-        bool ok;
-        long msec = lround(1000.0 * QStringLiteral("0.%1").arg(match.captured(3)).toDouble(&ok));
-        if (ok) {
-          result = result.addMSecs(msec);
-        } else {
-          fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(timestr));
-        }
-      }
-    }
+    // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
+    result = QDateTime::fromString(match.captured(0), "yyyyMMddHHmmss.zzz");
+    result.setTimeSpec(Qt::UTC);
     if (!result.isValid()) {
-      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(timestr));
+      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
     }
 
 #ifdef TRACKF_DBG
     qDebug() << MYNAME "-range-check: " << result;
 #endif
   } else {
-    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n" 
-                 "  value must be a string of 0-14 digits, or, for subsecond resolution,\n"
-                 "  a string of 14 digits followed by a period and a string of 0-3 digits.\n",
-                 timestr);
+    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n", timestr);
   }
 
   return result;
