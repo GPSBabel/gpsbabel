@@ -674,17 +674,19 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  static const QRegularExpression re("^(\\d{0,14})$");
+  QString start(timestr);
+  QString fmtstart("00000101000000.000");
+  fmtstart.replace(0, start.size(), start);
+
+  static const QRegularExpression re(R"(^\d{14}\.\d{3}$)");
   assert(re.isValid());
-  QRegularExpressionMatch match = re.match(timestr);
+  QRegularExpressionMatch match = re.match(fmtstart);
   if (match.hasMatch()) {
-    QString start = match.captured(1);
-    QString fmtstart("00000101000000");
-    fmtstart.replace(0, start.size(), start);
-    result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
+    result = QDateTime::fromString(match.captured(0), "yyyyMMddHHmmss.zzz");
     result.setTimeSpec(Qt::UTC);
     if (!result.isValid()) {
-      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
+      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
     }
 
 #ifdef TRACKF_DBG

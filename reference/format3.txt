@@ -142,12 +142,6 @@ option	garmin_fit	allpoints	Read all points even if latitude or longitude is mis
 
 option	garmin_fit	recoverymode	Attempt to recovery data from corrupt file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_recoverymode
 
-file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation	gpssim
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html
-option	gpssim	wayptspd	Default speed for waypoints (knots/hr)	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_wayptspd
-
-option	gpssim	split	Split input into separate files	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_split
-
 file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html
 option	garmin301	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snlen
