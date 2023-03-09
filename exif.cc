@@ -677,7 +677,7 @@ ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t ta
 }
 
 QDateTime
-ExifFormat::exif_get_exif_time(ExifApp* app)
+ExifFormat::exif_get_exif_time(ExifApp* app) const
 {
   QDateTime res;
 
@@ -700,20 +700,24 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
     // Exif 2.31 added offset tags to record the offset to UTC.
     // If these are present use them, otherwise assume local time.
     ExifTag* offset_tag = nullptr;
+    ExifTag* subsec_tag = nullptr;
     switch (tag->id) {
     case 0x9003:
       offset_tag = exif_find_tag(app, EXIF_IFD, 0x9011);  /* OffsetTimeOriginal from EXIF */
+      subsec_tag = exif_find_tag(app, EXIF_IFD, 0x9291);  /* SubSecTimeOriginal from EXIF */
       break;
     case 0x0132:
       offset_tag = exif_find_tag(app, EXIF_IFD, 0x9010);  /* OffsetTime from EXIF */
+      subsec_tag = exif_find_tag(app, EXIF_IFD, 0x9290);  /* SubSecTime from EXIF */
       break;
     case 0x9004:
       offset_tag = exif_find_tag(app, EXIF_IFD, 0x9012);  /* OffsetTimeDigitized from EXIF */
+      subsec_tag = exif_find_tag(app, EXIF_IFD, 0x9292);  /* SubSecTimeDigitized from EXIF */
       break;
     }
 
-    if (offset_tag) {
-      QByteArray time_tag = exif_read_str(offset_tag);
+    if (offset_tag || opt_offsettime) {
+      QByteArray time_tag = opt_offsettime? QByteArray(opt_offsettime) : exif_read_str(offset_tag);
       // string should be +HH:MM or -HH:MM
       static const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
       assert(re.isValid());
@@ -723,10 +727,22 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
         int offset_hours = match.captured(1).append(match.captured(2)).toInt();
         int offset_mins = match.captured(1).append(match.captured(3)).toInt();
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
+      } else {
+        warning(MYNAME ": OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", time_tag.constData());
       }
     }
+
+    if (subsec_tag) {
+      QByteArray subsec = exif_read_str(subsec_tag);
+      bool ok;
+      double ss = subsec.prepend("0.").toDouble(&ok);
+      if (ok) {
+        res = res.addMSecs(lround(1000.0 * ss));
+      }
+    }
+
   }
-  return res;
+  return res.toUTC();
 }
 
 Waypoint*
@@ -895,7 +911,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
   gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
-      printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODate)));
+      printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
     }
     wpt->SetCreationTime(gps_datetime);
   } else {
@@ -1555,7 +1571,9 @@ ExifFormat::write()
 
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 0, dt.time().hour());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, dt.time().minute());
-      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2, dt.time().second());
+      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2,
+                      static_cast<double>(dt.time().second()) + 
+                      static_cast<double>(dt.time().msec())/1000.0);
 
       exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString(u"yyyy:MM:dd")));
     } else {

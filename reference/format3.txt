@@ -126,6 +126,8 @@ option	exif	name	Locate waypoint for tagging by this name	string				https://www.
 
 option	exif	overwrite	!OVERWRITE! the original file. Default=N	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_overwrite
 
+option	exif	offset	Image Offset Time (+HH:MM or -HH:MM)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_offset
+
 file	rwrwrw	shape	shp	ESRI shapefile	shape
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html
 option	shape	name	Source for name field in .dbf	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html#fmt_shape_o_name
