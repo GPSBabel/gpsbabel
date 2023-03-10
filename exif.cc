@@ -727,7 +727,9 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
         int offset_hours = match.captured(1).append(match.captured(2)).toInt();
         int offset_mins = match.captured(1).append(match.captured(3)).toInt();
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
-      } else {
+      } else if (opt_offsettime) {
+        // Only warn for user supplied offsets.
+        // Offset tags may indicate the offset was unknown, e.g. "   :  ".
         warning(MYNAME ": OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", time_tag.constData());
       }
     }
