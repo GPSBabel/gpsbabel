@@ -71,17 +71,14 @@ struct FilterVecs::Impl {
   DuplicateFilter duplicate;
   HeightFilter height;
   InterpolateFilter interpolate;
-  NukeDataFilter nukedata;
   PolygonFilter polygon;
   PositionFilter position;
   RadiusFilter radius;
   ReverseRouteFilter reverse_route;
   SimplifyRouteFilter routesimple;
-  SortFilter sort;
   StackFilter stackfilt;
   SwapDataFilter swapdata;
   TrackFilter trackfilter;
-  TransformFilter transform;
 
   const QVector<fl_vecs_t> filter_vec_list = {
 #if FILTERS_ENABLED
@@ -111,9 +108,10 @@ struct FilterVecs::Impl {
       "Interpolate between trackpoints"
     },
     {
-      &nukedata,
+      nullptr,
       "nuketypes",
-      "Remove all waypoints, tracks, or routes"
+      "Remove all waypoints, tracks, or routes",
+      &fltfactory<NukeDataFilter>
     },
     {
       &polygon,
@@ -142,9 +140,10 @@ struct FilterVecs::Impl {
       "Simplify routes",
     },
     {
-      &sort,
+      nullptr,
       "sort",
       "Rearrange waypoints, routes and/or tracks by resorting",
+      &fltfactory<SortFilter>
     },
     {
       &stackfilt,
@@ -162,9 +161,10 @@ struct FilterVecs::Impl {
       "Manipulate track lists"
     },
     {
-      &transform,
+      nullptr,
       "transform",
-      "Transform waypoints into a route, tracks into routes, ..."
+      "Transform waypoints into a route, tracks into routes, ...",
+      &fltfactory<TransformFilter>
     },
     {
       &height,
