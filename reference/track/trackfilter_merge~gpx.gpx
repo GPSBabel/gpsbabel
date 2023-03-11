@@ -6,7 +6,6 @@
     <trkseg>
       <trkpt lat="0.000000000" lon="2.999550663">
         <time>2010-01-01T00:00:00Z</time>
-        <speed>0.000000</speed>
       </trkpt>
       <trkpt lat="0.000000000" lon="2.999649517">
         <time>2010-01-01T00:00:00.200Z</time>
