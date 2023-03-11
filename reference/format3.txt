@@ -126,6 +126,8 @@ option	exif	name	Locate waypoint for tagging by this name	string				https://www.
 
 option	exif	overwrite	!OVERWRITE! the original file. Default=N	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_overwrite
 
+option	exif	offset	Image Offset Time (+HH:MM or -HH:MM)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_offset
+
 file	rwrwrw	shape	shp	ESRI shapefile	shape
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html
 option	shape	name	Source for name field in .dbf	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html#fmt_shape_o_name
@@ -141,12 +143,6 @@ file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activi
 option	garmin_fit	allpoints	Read all points even if latitude or longitude is missing	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_allpoints
 
 option	garmin_fit	recoverymode	Attempt to recovery data from corrupt file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_recoverymode
-
-file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation	gpssim
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html
-option	gpssim	wayptspd	Default speed for waypoints (knots/hr)	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_wayptspd
-
-option	gpssim	split	Split input into separate files	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_split
 
 file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html

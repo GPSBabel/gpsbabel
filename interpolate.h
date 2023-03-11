@@ -52,7 +52,7 @@ private:
   QVector<arglist_t> args = {
     {
       "time", &opt_time, "Time interval in seconds", nullptr,
-      ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
+      ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT,
       "0", nullptr, nullptr
     },
     {
