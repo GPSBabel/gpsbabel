@@ -493,17 +493,20 @@ if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
   add_custom_target(gpsbabel.org
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
                     DEPENDS gpsbabel gpsbabel.pdf
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 
   add_custom_target(gpsbabel.html
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
                     DEPENDS gpsbabel
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 
   add_custom_target(gpsbabel.pdf
                     ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
                     DEPENDS gpsbabel
-                    VERBATIM)
+                    VERBATIM
+                    USES_TERMINAL)
 else()
   message(WARNING "Document generation is only supported for in-source builds with single configuration generators.")
 endif()
