@@ -75,7 +75,7 @@ from our automated Docker builds.</para>
     <section xml:id="Qt">
       <title>Building with Qt Creator</title>
       <para>
-Qt provides a lovely IDE (Integrated Development Evironment) with an
+Qt provides a lovely IDE (Integrated Development Environment) with an
 editor and debugger. Its use is strongly encouraged for those new to C++.
 Once you have Qt correctly installed, just opening the <filename>
 CMakeLists.txt</filename> from
