@@ -71,6 +71,7 @@ File Types (-i and -o options):
 	  frame                 Time-frame (in seconds)
 	  name                  Locate waypoint for tagging by this name
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N
+	  offset                Image Offset Time (+HH:MM or -HH:MM)
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf
 	  url                   Source for URL field in .dbf

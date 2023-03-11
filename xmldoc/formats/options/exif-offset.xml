@@ -1,0 +1,10 @@
+<para>
+   Uses the given value instead of the value from the tag OffsetTime, OffsetTimeOriginal or OffsetTimeDigitized.
+   This is useful when the image doesn't contain an OffsetTime* tag and the offset is different from the local time, or when the image contains a tag that is incorrect.
+   The format of this option should match that of the tag OffsetTime*, specifcally it must be "+HH:MM" or "-HH:MM".
+</para>
+<para>
+    If the camera was using China Standard Time, e.g. in the winter in Taiwan, then you should supply
+    an offset of "+8:00".
+<userinput>gpsbabel -i gpx -f holiday.gpx -o exif,offset=+08:00 -F IMG0784.JPG</userinput>
+</para>

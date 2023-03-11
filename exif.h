@@ -172,7 +172,7 @@ private:
   static void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
   static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
-  static QDateTime exif_get_exif_time(ExifApp* app);
+  QDateTime exif_get_exif_time(ExifApp* app) const;
   Waypoint* exif_waypt_from_exif_app(ExifApp* app) const;
   static Rational<int> exif_dec2frac(double val, double tolerance);
   ExifTag* exif_put_value(int ifd_nr, uint16_t tag_id, uint16_t type, int count, int index, const void* data) const;
@@ -205,12 +205,14 @@ private:
   char* opt_overwrite{};
   char* opt_frame{};
   char* opt_name{};
+  char* opt_offsettime{};
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
     { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", nullptr, nullptr },
     { "name", &opt_name, "Locate waypoint for tagging by this name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
     { "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+    { "offset", &opt_offsettime, "Image Offset Time (+HH:MM or -HH:MM)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   };
 };
 #endif // EXIF_H_INCLUDED_
