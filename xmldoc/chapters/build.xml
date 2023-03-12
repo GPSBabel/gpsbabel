@@ -118,7 +118,7 @@ customize your build of GPSBabel.
       </para>
       <variablelist>
         <varlistentry>
-          <term>GPSBABEL_WITH_LIBUSB=no|pkgconfig|system*|included*|custom</term>
+          <term>GPSBABEL_WITH_LIBUSB = no|pkgconfig|system*|included*|custom</term>
           <listitem>
             <para>note that libusb is NOT used on windows.</para>
             <variablelist>
@@ -162,7 +162,7 @@ be set with GPSBABEL_EXTRA_LINK_LIBRARIES and GPSBABEL_EXTRA_INCLUDE_DIRECTORIES
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>GPSBABEL_WITH_SHAPELIB=no|pkgconfig|included*|custom</term>
+          <term>GPSBABEL_WITH_SHAPELIB = no|pkgconfig|included*|custom</term>
           <listitem>
             <variablelist>
               <varlistentry>
@@ -196,7 +196,7 @@ GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>GPSBABEL_WITH_ZLIB=no|pkgconfig|included*|custom</term>
+          <term>GPSBABEL_WITH_ZLIB = no|pkgconfig|included*|custom</term>
           <listitem>
             <variablelist>
               <varlistentry>
