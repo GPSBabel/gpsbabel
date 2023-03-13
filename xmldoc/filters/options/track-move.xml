@@ -8,7 +8,7 @@ It can also be useful to correct tracks for week number roll over problems.
 The value of this option is a series of integer and unit pairs.  Each integer may include a
 leading '+' or '-' sign.  Positive integers shift the tracks later, while negative integers shift
 the tracks earlier.  If no sign is provided the integer is assumed to be nonnegative.
-Possible units are w for weeks, d for days, h for hours, m for minutes and s for seconds.
+Possible units are w for weeks, d for days, h for hours, m for minutes, s for seconds and z for milliseconds.
 </para>
 <example xml:id="ex_track_move">
 <title>Time-shifting a track with the track filter</title>
