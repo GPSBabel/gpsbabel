@@ -10,9 +10,9 @@ gpsbabel -t -w -i garmin,baud=115200 -f /dev/ttyUSB0 -o gpx -F garmin-serial.gpx
 </para>
 
 <para>
-At the end of the transfer, baud rate is switched to back to the default
-of 9600. If connection breaks, the unit stucks at high baud rate, a power
-cycle reverts to original state.
+At the end of the transfer the baud rate is switched to back to the default
+of 9600. If the connection breaks and the unit is stuck at a high baud rate power
+cycling should restore the original baud rate.
 </para>
 
 <para>

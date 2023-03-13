@@ -8,7 +8,7 @@ change in heading big enough.</para>
 intersections. That means that, while navigating that route using a
 GPS unit, the course pointer would aim to the inside of that curve or
 intersection, and only when you have passed that point will the GPS
-aim to the next waypoint in the route. This behaviour is useful in
+aim to the next waypoint in the route. This behavior is useful in
 marine navigation but when biking, for instance, it may be a bit late
 to decide where to turn to in an intersection.</para>
 
