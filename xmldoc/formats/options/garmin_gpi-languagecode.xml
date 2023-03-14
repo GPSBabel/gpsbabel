@@ -1,6 +1,6 @@
 <para>
 Garmin points of interest files may contain data in two languages.
-If you attempt to read a dual language Garmin points of interest file without specifiying which language
+If you attempt to read a dual language Garmin points of interest file without specifying which language
 to use GPSBabel will print an error message containing the language codes used in the file.
 Subsequently you may use one of these codes with the languagecode
 option to specify which language to use.
