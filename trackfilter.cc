@@ -75,7 +75,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   qint64 result = 0;
 
-  static const QRegularExpression re(R"(^([+-]?\d+)([wdhmsz])(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?$)", QRegularExpression::CaseInsensitiveOption);
+  static const QRegularExpression re(R"(^([+-]?\d+)([wdhmsz])(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?$)", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
