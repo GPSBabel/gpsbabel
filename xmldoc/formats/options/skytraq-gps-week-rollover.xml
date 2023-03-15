@@ -31,7 +31,7 @@ which roll over to 0 every 1024 weeks (close to 20 years).
 </table>
 
 <para>
-The default behaviour when gps-week-rollover isn't given (or is a negative number)
+The default behavior when gps-week-rollover isn't given (or is a negative number)
 is to assume the input data has been logged within the preceding 1024 weeks from the
 time gpsbabel is run, which should be perfectly fine in almost all cases.
 </para>
