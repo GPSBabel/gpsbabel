@@ -85,7 +85,14 @@ private:
     fld_depth,
     fld_heartrate,
     fld_temperature,
-    fld_power
+    fld_power,
+    fld_igc_enl,  // Engine Noise Level
+    fld_igc_tas,  // True Airspeed
+    fld_igc_vat,  // Compensated variometer (total energy)
+    fld_igc_oat,  // Outside Air Temperature
+    fld_igc_trt,  // True Track
+    fld_igc_gsp,  // Ground Speed
+    fld_igc_fxa   // Fix Accuracy
   };
 
   /* Constants */
@@ -113,6 +120,12 @@ private:
   static constexpr const char* kmt_temperature = "temperature";
   static constexpr const char* kmt_depth = "depth";
   static constexpr const char* kmt_power = "power";
+  static constexpr const char* kmt_igc_enl = "Engine Noise";
+  static constexpr const char* kmt_igc_vat = "Variometer";
+  static constexpr const char* kmc_igc_oat = "Outside Air Temperature";
+  static constexpr const char* kmc_igc_trt = "True Track";
+  static constexpr const char* kmc_igc_gsp = "Ground Speed";
+  static constexpr const char* kmc_igc_fxa = "Fix Accuracy";
 
   /* Member Functions */
 

@@ -46,7 +46,8 @@
 #include <QtGlobal>                    // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
-#include "formspec.h"                  // for FsChainFind, kFsGpx
+#include "igc.h"                       // For igc_fsdata
+#include "formspec.h"                  // for FsChainFind, kFsGpxm kFsIGC
 #include "geocache.h"                  // for Geocache, Geocache::type_t
 #include "grtcirc.h"                   // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"         // for DateTime
@@ -1467,8 +1468,10 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
-
+  
   foreach (const Waypoint* wpt, header->waypoint_list) {
+
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
 
     switch (member) {
     case fld_power:
@@ -1490,6 +1493,9 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
     case fld_temperature:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
         QString::number(wpt->temperature_value(), 'f', 1) : QString());
+      break;
+    case fld_igc_enl:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->enl));
       break;
     default:
       fatal("Bad member type");
@@ -1531,6 +1537,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_heartrate = false;
   bool has_temperature = false;
   bool has_power = false;
+  bool has_igc_exts = false;
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1546,6 +1553,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement(QStringLiteral("when"), time_string);
@@ -1557,6 +1565,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   foreach (const Waypoint* tpt, header->waypoint_list) {
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
                                QString::number(tpt->longitude, 'f', precision) + QString(" ") +
@@ -1587,10 +1596,14 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     if (tpt->power) {
       has_power = true;
     }
+    if (fs_igc) {
+      has_igc_exts = true;
+    }
+
   }
 
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
-      has_power) {
+      has_power || has_igc_exts) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
@@ -1613,6 +1626,10 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
     if (has_power) {
       kml_mt_simple_array(header, kmt_power, fld_power);
+    }
+
+    if (has_igc_exts) {
+      kml_mt_simple_array(header, kmt_igc_enl, fld_igc_enl);
     }
 
     writer->writeEndElement(); // Close SchemaData tag
@@ -1833,7 +1850,7 @@ void KmlFormat::write()
       writer->writeEndElement(); // Close Folder tag
     }
   }
-
+  
   // Output trackpoints
   if (track_waypt_count()) {
     if (!realtime_positioning) {

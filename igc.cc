@@ -44,11 +44,14 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
+#include <QStringRef>           // for substring
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "grtcirc.h"            // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
+#include "formspec.h"           // for FormatSpecificData, kFsIGC
+
 
 
 #define MYNAME "IGC"
@@ -69,6 +72,14 @@ unsigned char IgcFormat::coords_match(double lat1, double lon1, double lat2, dou
 {
   return (fabs(lat1 - lat2) < 0.0001 && fabs(lon1 - lon2) < 0.0001) ? 1 : 0;
 }
+
+// https://gist.github.com/david7482/70924ba3cc2cbbbfb88e
+// https://stackoverflow.com/questions/98153/whats-the-best-hashing-algorithm-to-use-on-a-stl-string-when-using-hash-map/107657#107657
+constexpr unsigned long long int hash2stringint(const char *str, unsigned long long int hash = 0)
+{
+    return (*str == 0) ? hash : 101 * hash2stringint(str + 1) + *str;
+}
+
 
 /*************************************************************************************************
  * Input file processing
@@ -249,7 +260,14 @@ void IgcFormat::read()
   char tmp_str[20];
   char* hdr_data;
   char trk_desc[kMaxDescLen + 1];
+  std::string s;
+  std::string s2;
   TaskRecordReader task_record_reader;
+  int begin = 0;
+  int end = 0;
+  char ext_record_type[4];
+  igc_fs_flags_t igc_fs_flags;
+  QStringRef ext_data;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -348,6 +366,25 @@ void IgcFormat::read()
       }
       prev_tod = tod;
 
+      /*
+       * Parse any extension data present. If no extensions are used (unlikely,
+       * but possible in the case of homebrew flight recorders), then skip the
+       * whole thing.
+      */
+      if (igc_fs_flags.has_exts) {
+        auto* fsdata = new igc_fsdata;
+        QString ibuf_q = QString::fromLocal8Bit(ibuf);
+        if (igc_fs_flags.enl){
+          bool int_ok;
+          int len = igc_fs_flags.enl_end - igc_fs_flags.enl_start+1;  // The difference results in a fencepost error
+          // Off by one, but I don't understand why... are QStrings zero or one initialized?
+          ext_data = QStringRef(&ibuf_q, igc_fs_flags.enl_start-1, len);
+          fsdata->enl = ext_data.toInt(&int_ok);
+        }
+
+      pres_wpt->fs.FsChainAdd(fsdata);
+      }
+
       pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
 
       // Add the waypoint to the pressure altitude track
@@ -400,12 +437,74 @@ void IgcFormat::read()
       }
       break;
 
+    case rec_fix_defn:
+      /*
+         The first three characters define the number of extensions present.
+         We don't particularly care about that. After that, every group of seven
+         bytes is 4 digits followed by three letters, specifying start end end
+         bytes of each extension, and the kind of extension (always three chars)
+      */
+    
+        // QString ibuf_q = QString::fromLocal8Bit(ibuf);
+        // QStringList ext_data = ibuf_q.split(QRegularExpression ("[A-Z]+"));
+
+      for (unsigned i = 3; i< strlen(ibuf); i+=7){
+        s = ibuf;
+        s2 = s.substr(i, 7);
+        sscanf(s2.c_str(), "%2i%2i%3s", &begin, &end, ext_record_type);
+        switch (hash2stringint(ext_record_type)) {
+          case hash2stringint("ENL"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.enl = true;
+            igc_fs_flags.enl_start = begin;
+            igc_fs_flags.enl_end = end;
+            break;
+          case hash2stringint("TAS"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.tas = true;
+            igc_fs_flags.tas_start = begin;
+            igc_fs_flags.tas_end = end;
+            break;
+          case hash2stringint("VAT"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.vat = true;
+            igc_fs_flags.vat_start = begin;
+            igc_fs_flags.vat_end = end;
+            break;
+          case hash2stringint("OAT"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.oat = true;
+            igc_fs_flags.oat_start = begin;
+            igc_fs_flags.oat_end = end;
+            break;
+          case hash2stringint("TRT"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.trt = true;
+            igc_fs_flags.trt_start = begin;
+            igc_fs_flags.trt_end = end;
+            break;
+          case hash2stringint("GSP"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.gsp = true;
+            igc_fs_flags.gsp_start = begin;
+            igc_fs_flags.gsp_end = end;
+            break;
+          case hash2stringint("FXA"):
+            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
+            igc_fs_flags.fxa = true;
+            igc_fs_flags.fxa_start = begin;
+            igc_fs_flags.fxa_end = end;
+            break;
+          default:
+            break;
+        }
+      }
+
       // These record types are discarded
     case rec_diff_gps:
     case rec_event:
     case rec_constel:
     case rec_security:
-    case rec_fix_defn:
     case rec_extn_defn:
     case rec_extn_data:
       break;

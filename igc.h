@@ -38,7 +38,6 @@
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
 
-
 class IgcFormat : public Format
 {
 public:
@@ -161,4 +160,81 @@ private:
     }
   };
 };
+  /*
+   * Extra data
+   *
+   * This includes any data recorded as part of an extension,
+   * which will be defined in the IGC file's I record,
+   * and present in individual B records.
+  */
+struct igc_fs_flags_t {
+  igc_fs_flags_t() :
+  has_exts(0),
+  enl(0),
+  tas(0),
+  vat(0),
+  oat(0),
+  trt(0),
+  gsp(0),
+  fxa(0),
+  enl_start(0),
+  enl_end(0),
+  tas_start(0),
+  tas_end(0),
+  vat_start(0),
+  vat_end(0),
+  oat_start(0),
+  oat_end(0),
+  trt_start(0),
+  trt_end(0),
+  gsp_start(0),
+  gsp_end(0),
+  fxa_start(0),
+  fxa_end(0)
+
+  {}
+
+  bool has_exts;
+  bool enl;
+  bool tas;
+  bool vat;
+  bool oat;
+  bool trt;
+  bool gsp;
+  bool fxa;
+  short enl_start;
+  short enl_end;
+  short tas_start;
+  short tas_end;
+  short vat_start;
+  short vat_end;
+  short oat_start;
+  short oat_end;
+  short trt_start;
+  short trt_end;
+  short gsp_start;
+  short gsp_end;
+  short fxa_start;
+  short fxa_end;
+};
+
+struct igc_fsdata : public FormatSpecificData {
+  igc_fsdata() : FormatSpecificData(kFsIGC) {}
+
+  igc_fsdata* clone() const override
+  {
+    return new igc_fsdata(*this);
+  }
+
+  int enl{0}; // Engine Noise Level
+  int tas{0}; // True Airspeed
+  int vat{0}; // Compensated variometer (total energy)
+  int oat{0}; // Outside Air Temperature
+  int trt{0}; // True Track
+  int gsp{0}; // Ground Speed
+  int fxa{0}; // Fix Accuracy
+  igc_fs_flags_t igc_fs_flags;
+
+};
+
 #endif // IGC_H_INCLUDED_
