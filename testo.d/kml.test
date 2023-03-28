@@ -92,3 +92,11 @@ if [ -z "${VALGRIND}" ]; then
   fi
   set +e
 fi
+
+# Testing of extension data extraction from IGC files
+# Points are not tested.
+# IGC files provided with permission of pilot. IGC files are cryptographically signed, do not alter.
+gpsbabel -i igc -f ${REFERENCE}/track/92GV66G1.igc -f -o kml,floating=1,track=1,points=0 -F ${TMPDIR}/92GV66G1.igc.kml
+compare  ${REFERENCE}/92GV66G1.igc.kml ${TMPDIR}/92GV66G1.igc.kml
+gpsbabel -i igc -f ${REFERENCE}/track/92HV66G1.igc -f -o kml,floating=1,track=1,points=0 -F ${TMPDIR}/92HV66G1.igc.kml
+compare  ${REFERENCE}/92HV66G1.igc.kml ${TMPDIR}/92HV66G1.igc.kml
