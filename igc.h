@@ -91,6 +91,16 @@ private:
     rec_bad = 1,		// Bad record
   };
 
+  enum igc_ext_type_t {
+    ext_rec_enl = 1,
+    ext_rec_tas = 2,
+    ext_rec_vat = 3,
+    ext_rec_oat = 4,
+    ext_rec_trt = 5,
+    ext_rec_gsp = 6,
+    ext_rec_fxa = 7,
+  };
+
   class TaskRecordReader
   {
   public:

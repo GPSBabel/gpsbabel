@@ -45,6 +45,9 @@
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
 #include <QStringRef>           // for substring
+#include <QStringView>          // for QStringView
+#include <QDebug>               // DELETEME for debugging
+#include <QRegularExpression>   // for QRegularExpression
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
@@ -265,14 +268,16 @@ void IgcFormat::read()
   TaskRecordReader task_record_reader;
   int begin = 0;
   int end = 0;
-  char ext_record_type[4];
   igc_fs_flags_t igc_fs_flags;
-  QStringRef ext_data;
+  QStringView ext_data;
+  int current_line = 1; // line numbering is off by one for some reason
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
     igc_rec_type_t rec_type = get_record(&ibuf);
+    current_line++;
+    QString ibuf_q = QString::fromUtf8(ibuf);
     switch (rec_type) {
     case rec_manuf_id:
       // Manufacturer/ID record already found in rd_init().
@@ -373,13 +378,17 @@ void IgcFormat::read()
       */
       if (igc_fs_flags.has_exts) {
         auto* fsdata = new igc_fsdata;
-        QString ibuf_q = QString::fromLocal8Bit(ibuf);
         if (igc_fs_flags.enl){
           bool int_ok;
           int len = igc_fs_flags.enl_end - igc_fs_flags.enl_start+1;  // The difference results in a fencepost error
-          // Off by one, but I don't understand why... are QStrings zero or one initialized?
-          ext_data = QStringRef(&ibuf_q, igc_fs_flags.enl_start-1, len);
+          ext_data = QStringView(ibuf_q).mid(igc_fs_flags.enl_start, len);
           fsdata->enl = ext_data.toInt(&int_ok);
+          if (!int_ok) {
+            printf(MYNAME ": Fatal parsing error at line %i, character %i. Problem line:\n",current_line, igc_fs_flags.enl_start);
+            printf(MYNAME ": %s\n",ibuf_q.toUtf8().constData());
+            printf(MYNAME ": Cannot convert engine noise data %s to integer value.\n", ext_data.toUtf8().constData());
+            fatal(MYNAME ": Fatal error processing IGC file.\n");
+          }
         }
 
       pres_wpt->fs.FsChainAdd(fsdata);
@@ -438,58 +447,89 @@ void IgcFormat::read()
       break;
 
     case rec_fix_defn:
+    { // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
+      // Not sure exactly what that means... something something scoping and initialization
       /*
          The first three characters define the number of extensions present.
          We don't particularly care about that. After that, every group of seven
          bytes is 4 digits followed by three letters, specifying start end end
          bytes of each extension, and the kind of extension (always three chars)
       */
-    
-        // QString ibuf_q = QString::fromLocal8Bit(ibuf);
-        // QStringList ext_data = ibuf_q.split(QRegularExpression ("[A-Z]+"));
 
-      for (unsigned i = 3; i< strlen(ibuf); i+=7){
-        s = ibuf;
-        s2 = s.substr(i, 7);
-        sscanf(s2.c_str(), "%2i%2i%3s", &begin, &end, ext_record_type);
-        switch (hash2stringint(ext_record_type)) {
-          case hash2stringint("ENL"):
+      /*
+       * First, construct a hash of all available extensions.
+       * It may be better to construct the map and parse the record at the same time.
+       * However, for now we are contructing the hash map first, then iterating through it.
+       * The values in this hash contain all the necessary information on various extensions.
+      */
+      // TODO: Return this hash map for later use
+      QHash<QString, short> ext_types_hash;
+      QHash<QString, short>::const_iterator i;
+      for (unsigned i=3; i < ibuf_q.length(); i+=7) {
+        QString ext_type = ibuf_q.mid(i+4, 3);
+        if (ext_type == "ENL") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_enl);
+        } else if (ext_type == "TAS") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_tas);
+        } else if (ext_type == "VAT") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_vat);
+        } else if (ext_type == "OAT") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_oat);
+        } else if (ext_type == "TRT") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_trt);
+        } else if (ext_type == "GSP") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_gsp);
+        } else if (ext_type == "FXA") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_fxa);
+        }
+      }
+      /*
+       * Now we have a hash list. The values of that list contain the extension
+       * type and begin and end bytes of each extension definition. Iterate through
+       * the hash and parse individual hash values.
+      */
+      for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
+        begin = QStringView(i.key().mid(0,2)).toInt();
+        end = QStringView(i.key().mid(2,2)).toInt();
+        QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
+        switch (ext_types_hash.value(i.key())) {
+          case ext_rec_enl:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.enl = true;
             igc_fs_flags.enl_start = begin;
             igc_fs_flags.enl_end = end;
             break;
-          case hash2stringint("TAS"):
+          case ext_rec_tas:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.tas = true;
             igc_fs_flags.tas_start = begin;
             igc_fs_flags.tas_end = end;
             break;
-          case hash2stringint("VAT"):
+          case ext_rec_vat:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.vat = true;
             igc_fs_flags.vat_start = begin;
             igc_fs_flags.vat_end = end;
             break;
-          case hash2stringint("OAT"):
+          case ext_rec_oat:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.oat = true;
             igc_fs_flags.oat_start = begin;
             igc_fs_flags.oat_end = end;
             break;
-          case hash2stringint("TRT"):
+          case ext_rec_trt:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.trt = true;
             igc_fs_flags.trt_start = begin;
             igc_fs_flags.trt_end = end;
             break;
-          case hash2stringint("GSP"):
+          case ext_rec_gsp:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.gsp = true;
             igc_fs_flags.gsp_start = begin;
             igc_fs_flags.gsp_end = end;
             break;
-          case hash2stringint("FXA"):
+          case ext_rec_fxa:
             igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
             igc_fs_flags.fxa = true;
             igc_fs_flags.fxa_start = begin;
@@ -497,9 +537,10 @@ void IgcFormat::read()
             break;
           default:
             break;
+
         }
       }
-
+    }
       // These record types are discarded
     case rec_diff_gps:
     case rec_event:
