@@ -1468,7 +1468,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
-  
+
   foreach (const Waypoint* wpt, header->waypoint_list) {
 
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
@@ -1850,7 +1850,7 @@ void KmlFormat::write()
       writer->writeEndElement(); // Close Folder tag
     }
   }
-  
+
   // Output trackpoints
   if (track_waypt_count()) {
     if (!realtime_positioning) {

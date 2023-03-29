@@ -179,14 +179,113 @@ private:
   */
 struct igc_fs_flags_t {
   igc_fs_flags_t() :
-  has_exts(0),
+  has_igc_exts(0),
   enl(0),
   tas(0),
   vat(0),
   oat(0),
   trt(0),
   gsp(0),
-  fxa(0),
+  fxa(0)
+
+  {}
+
+  bool has_igc_exts;
+  bool enl;
+  bool tas;
+  bool vat;
+  bool oat;
+  bool trt;
+  bool gsp;
+  bool fxa;
+};
+
+class ExtensionDefinition {
+public:
+  bool exists;  // Superfluous flag?
+  QString name; // Name of extension (ENL,FXA,TAS, etc)
+  short start;  // Start character of this data in B records
+  short end;    // End character of this data in B records
+  ExtensionDefinition (const QString name = "", short start=0, short end=0) :
+    exists(!name.isEmpty()),
+    name(name),
+    start(start),
+    end(end)
+  {}
+};
+
+class IgcMetaData {
+private:
+  QMap<QString, ExtensionDefinition*> extensions;
+public:
+  igc_fs_flags_t flags;
+  IgcMetaData() {
+    flags.has_igc_exts = false;
+    flags.enl = false;
+    flags.tas = false;
+    flags.vat = false;
+    flags.oat = false;
+    flags.trt = false;
+    flags.gsp = false;
+    flags.fxa = false;
+  }
+
+  ExtensionDefinition* extension(const QString& name) {
+    auto it = extensions.find(name);
+    if (it != extensions.end()) {
+      // Extension already exists, return it
+      return *it;
+    } else {
+      // Extension does not exist, create a new one and put it in the map
+      ExtensionDefinition* extension = new ExtensionDefinition();
+      extension->name = name;
+      extensions.insert(name, extension);
+      setHasIgcExtsFlag(); // Update flags
+      return extension;
+    }
+  }
+
+  void setHasIgcExtsFlag() {
+    for (auto& pair : extensions) {
+      if (pair->exists) {
+        flags.has_igc_exts = true;
+        break;
+      }
+    }
+  }
+
+  void dump() const {
+    printf("Flags:\n");
+    printf("  has_igc_exts = %d\n", flags.has_igc_exts);
+    printf("  enl = %d\n", flags.enl);
+    printf("  tas = %d\n", flags.tas);
+    printf("  vat = %d\n", flags.vat);
+    printf("  oat = %d\n", flags.oat);
+    printf("  trt = %d\n", flags.trt);
+    printf("  gsp = %d\n", flags.gsp);
+    printf("  fxa = %d\n", flags.fxa);
+
+    printf("Extensions:\n");
+    for (auto it = extensions.begin(); it != extensions.end(); ++it) {
+      const ExtensionDefinition* extension = it.value();
+      printf("  Extension %s:\n", extension->name.toStdString().c_str());
+      printf("    exists = %d\n", extension->exists);
+      printf("    start = %d\n", extension->start);
+      printf("    end = %d\n", extension->end);
+    }
+  }
+
+  ~IgcMetaData() {
+    // Deallocate all ExtensionDefinition objects
+    for (auto& pair : extensions) {
+      delete pair;
+    }
+  }
+};
+
+struct igc_fsmetadata_t {
+
+  igc_fsmetadata_t() :
   enl_start(0),
   enl_end(0),
   tas_start(0),
@@ -204,14 +303,6 @@ struct igc_fs_flags_t {
 
   {}
 
-  bool has_exts;
-  bool enl;
-  bool tas;
-  bool vat;
-  bool oat;
-  bool trt;
-  bool gsp;
-  bool fxa;
   short enl_start;
   short enl_end;
   short tas_start;

@@ -44,7 +44,6 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
-#include <QStringRef>           // for substring
 #include <QStringView>          // for QStringView
 #include <QDebug>               // DELETEME for debugging
 #include <QRegularExpression>   // for QRegularExpression
@@ -75,14 +74,6 @@ unsigned char IgcFormat::coords_match(double lat1, double lon1, double lat2, dou
 {
   return (fabs(lat1 - lat2) < 0.0001 && fabs(lon1 - lon2) < 0.0001) ? 1 : 0;
 }
-
-// https://gist.github.com/david7482/70924ba3cc2cbbbfb88e
-// https://stackoverflow.com/questions/98153/whats-the-best-hashing-algorithm-to-use-on-a-stl-string-when-using-hash-map/107657#107657
-constexpr unsigned long long int hash2stringint(const char *str, unsigned long long int hash = 0)
-{
-    return (*str == 0) ? hash : 101 * hash2stringint(str + 1) + *str;
-}
-
 
 /*************************************************************************************************
  * Input file processing
@@ -160,7 +151,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
                &day, &month, &year,
                &hour, &minute, &second,
                flight_date, task_num, &num_tp, task_desc) < 9) {
-      fatal(MYNAME ": task id (C) record parse error\n'%s'", rec);
+      fatal(MYNAME ": task id (C) record parse error A. \n'%s'", rec);
     }
     task_num[4] = '\0';
     if (year < 70) {
@@ -230,7 +221,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     break;
 
   default:
-    fatal(MYNAME ": task id (C) record internal error\n%s", rec);
+    fatal(MYNAME ": task id (C) record internal error B\n%s", rec);
     break;
   }
 
@@ -263,14 +254,11 @@ void IgcFormat::read()
   char tmp_str[20];
   char* hdr_data;
   char trk_desc[kMaxDescLen + 1];
-  std::string s;
-  std::string s2;
   TaskRecordReader task_record_reader;
-  int begin = 0;
-  int end = 0;
-  igc_fs_flags_t igc_fs_flags;
   QStringView ext_data;
-  int current_line = 1; // line numbering is off by one for some reason
+  int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
+  IgcMetaData igc_metadata;
+  ExtensionDefinition* extension;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -326,6 +314,7 @@ void IgcFormat::read()
       break;
 
     case rec_fix:
+    {
       // Date must appear in file before the first fix record
       if (!date.isValid()) {
         fatal(MYNAME ": bad date\n");
@@ -376,22 +365,24 @@ void IgcFormat::read()
        * but possible in the case of homebrew flight recorders), then skip the
        * whole thing.
       */
-      if (igc_fs_flags.has_exts) {
+
+      // TODO: Iterate over the ext_types_hash hash map and check all extension data
+      if (igc_metadata.flags.has_igc_exts) {
         auto* fsdata = new igc_fsdata;
-        if (igc_fs_flags.enl){
+        if (igc_metadata.flags.enl){
           bool int_ok;
-          int len = igc_fs_flags.enl_end - igc_fs_flags.enl_start+1;  // The difference results in a fencepost error
-          ext_data = QStringView(ibuf_q).mid(igc_fs_flags.enl_start, len);
+          int len = igc_metadata.extension("ENL")->end - igc_metadata.extension("ENL")->start+1;  // The difference results in a fencepost error
+          ext_data = QStringView(ibuf_q).mid(igc_metadata.extension("ENL")->start, len);
           fsdata->enl = ext_data.toInt(&int_ok);
           if (!int_ok) {
-            printf(MYNAME ": Fatal parsing error at line %i, character %i. Problem line:\n",current_line, igc_fs_flags.enl_start);
+            printf(MYNAME ": Fatal parsing error at line %i, character %i. Problem line:\n",current_line,  igc_metadata.extension("ENL")->start);
             printf(MYNAME ": %s\n",ibuf_q.toUtf8().constData());
             printf(MYNAME ": Cannot convert engine noise data %s to integer value.\n", ext_data.toUtf8().constData());
             fatal(MYNAME ": Fatal error processing IGC file.\n");
+          } else {
+            pres_wpt->fs.FsChainAdd(fsdata);
           }
         }
-
-      pres_wpt->fs.FsChainAdd(fsdata);
       }
 
       pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
@@ -417,7 +408,7 @@ void IgcFormat::read()
       }
       track_add_wpt(gnss_head, gnss_wpt);
       break;
-
+    }
     case rec_task:
       // Create a route for each pre-flight declaration
       task_record_reader.igc_task_rec(ibuf);
@@ -489,59 +480,19 @@ void IgcFormat::read()
        * the hash and parse individual hash values.
       */
       for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
-        begin = QStringView(i.key().mid(0,2)).toInt();
-        end = QStringView(i.key().mid(2,2)).toInt();
+        short begin = QStringView(i.key().mid(0,2)).toInt();
+        short end = QStringView(i.key().mid(2,2)).toInt();
         QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
-        switch (ext_types_hash.value(i.key())) {
-          case ext_rec_enl:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.enl = true;
-            igc_fs_flags.enl_start = begin;
-            igc_fs_flags.enl_end = end;
-            break;
-          case ext_rec_tas:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.tas = true;
-            igc_fs_flags.tas_start = begin;
-            igc_fs_flags.tas_end = end;
-            break;
-          case ext_rec_vat:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.vat = true;
-            igc_fs_flags.vat_start = begin;
-            igc_fs_flags.vat_end = end;
-            break;
-          case ext_rec_oat:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.oat = true;
-            igc_fs_flags.oat_start = begin;
-            igc_fs_flags.oat_end = end;
-            break;
-          case ext_rec_trt:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.trt = true;
-            igc_fs_flags.trt_start = begin;
-            igc_fs_flags.trt_end = end;
-            break;
-          case ext_rec_gsp:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.gsp = true;
-            igc_fs_flags.gsp_start = begin;
-            igc_fs_flags.gsp_end = end;
-            break;
-          case ext_rec_fxa:
-            igc_fs_flags.has_exts = igc_fs_flags.has_exts || true;
-            igc_fs_flags.fxa = true;
-            igc_fs_flags.fxa_start = begin;
-            igc_fs_flags.fxa_end = end;
-            break;
-          default:
-            break;
 
-        }
+        extension = igc_metadata.extension(ext_record_type.toString());
+        extension->start = begin;
+        extension->end = end;
+        extension->name = ext_record_type.toString();
+        extension->exists = true;
       }
     }
-      // These record types are discarded
+
+    // These record types are discarded
     case rec_diff_gps:
     case rec_event:
     case rec_constel:
