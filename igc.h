@@ -92,13 +92,17 @@ private:
   };
 
   enum igc_ext_type_t {
-    ext_rec_enl = 1,
-    ext_rec_tas = 2,
-    ext_rec_vat = 3,
-    ext_rec_oat = 4,
-    ext_rec_trt = 5,
-    ext_rec_gsp = 6,
-    ext_rec_fxa = 7,
+    ext_rec_enl = 1,  // Engine Noise Level
+    ext_rec_tas = 2,  // True Airspeed
+    ext_rec_vat = 3,  // Total Energy Variometer
+    ext_rec_oat = 4,  // Outside Air Temperature
+    ext_rec_trt = 5,  // True Track
+    ext_rec_gsp = 6,  // Ground Speed
+    ext_rec_fxa = 7,  // Fix Accuracy
+    ext_rec_gfo = 8,  // G Force? (Found in LX Eos recorders present in LS-4)
+    ext_rec_siu = 9,  // Satllites In Use
+    ext_rec_acz = 10  // Z Acceleration
+
   };
 
   class TaskRecordReader
@@ -177,6 +181,7 @@ private:
    * which will be defined in the IGC file's I record,
    * and present in individual B records.
   */
+
 struct igc_fs_flags_t {
   igc_fs_flags_t() :
   has_igc_exts(0),
@@ -186,7 +191,10 @@ struct igc_fs_flags_t {
   oat(0),
   trt(0),
   gsp(0),
-  fxa(0)
+  fxa(0),
+  gfo(0),
+  siu(0),
+  acz(0)
 
   {}
 
@@ -198,6 +206,9 @@ struct igc_fs_flags_t {
   bool trt;
   bool gsp;
   bool fxa;
+  bool gfo;
+  bool siu;
+  bool acz;
 };
 
 class ExtensionDefinition {
@@ -212,6 +223,12 @@ public:
     start(start),
     end(end)
   {}
+  void dump() {
+    printf("Extension data (%s):\n", this->name.toUtf8().constData());
+    printf("  Name: %s\n", this->name.toUtf8().constData());
+    printf("  Start: %i\n", this->start);
+    printf("  End: %i\n", this->end);
+  }
 };
 
 class IgcMetaData {
@@ -228,6 +245,8 @@ public:
     flags.trt = false;
     flags.gsp = false;
     flags.fxa = false;
+    flags.gfo = false;
+    flags.acz = false;
   }
 
   ExtensionDefinition* extension(const QString& name) {
@@ -264,6 +283,9 @@ public:
     printf("  trt = %d\n", flags.trt);
     printf("  gsp = %d\n", flags.gsp);
     printf("  fxa = %d\n", flags.fxa);
+    printf("  fxa = %d\n", flags.gfo);
+    printf("  fxa = %d\n", flags.siu);
+    printf("  acz = %d\n", flags.acz);
 
     printf("Extensions:\n");
     for (auto it = extensions.begin(); it != extensions.end(); ++it) {
@@ -299,7 +321,13 @@ struct igc_fsmetadata_t {
   gsp_start(0),
   gsp_end(0),
   fxa_start(0),
-  fxa_end(0)
+  fxa_end(0),
+  gfo_start(0),
+  gfo_end(0),
+  siu_start(0),
+  siu_end(0),
+  acz_start(0),
+  acz_end(0)
 
   {}
 
@@ -317,6 +345,12 @@ struct igc_fsmetadata_t {
   short gsp_end;
   short fxa_start;
   short fxa_end;
+  short gfo_start;
+  short gfo_end;
+  short siu_start;
+  short siu_end;
+  short acz_start;
+  short acz_end;
 };
 
 struct igc_fsdata : public FormatSpecificData {
@@ -334,6 +368,9 @@ struct igc_fsdata : public FormatSpecificData {
   int trt{0}; // True Track
   int gsp{0}; // Ground Speed
   int fxa{0}; // Fix Accuracy
+  int gfo{0}; // G Force?
+  int siu{0}; // Satellites In Use
+  int acz{0}; // Z Acceleration
   igc_fs_flags_t igc_fs_flags;
 
 };

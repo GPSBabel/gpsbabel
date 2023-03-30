@@ -92,7 +92,10 @@ private:
     fld_igc_oat,  // Outside Air Temperature
     fld_igc_trt,  // True Track
     fld_igc_gsp,  // Ground Speed
-    fld_igc_fxa   // Fix Accuracy
+    fld_igc_fxa,  // Fix Accuracy
+    fld_igc_gfo,  // G Force
+    fld_igc_siu,  // Satellites In Use
+    fld_igc_acz   // Z Acceleration
   };
 
   /* Constants */
@@ -120,12 +123,17 @@ private:
   static constexpr const char* kmt_temperature = "temperature";
   static constexpr const char* kmt_depth = "depth";
   static constexpr const char* kmt_power = "power";
+  // Constants pertaining to IGC files would be better defined in either igc.h or formspec.h
   static constexpr const char* kmt_igc_enl = "Engine Noise";
-  static constexpr const char* kmt_igc_vat = "Variometer";
-  static constexpr const char* kmc_igc_oat = "Outside Air Temperature";
-  static constexpr const char* kmc_igc_trt = "True Track";
-  static constexpr const char* kmc_igc_gsp = "Ground Speed";
-  static constexpr const char* kmc_igc_fxa = "Fix Accuracy";
+  static constexpr const char* kmt_igc_vat = "Ttl Enrg Vario";
+  static constexpr const char* kmt_igc_tas = "True Airspd";
+  static constexpr const char* kmt_igc_oat = "Otsd Air Temp";
+  static constexpr const char* kmt_igc_trt = "True Track";
+  static constexpr const char* kmt_igc_gsp = "Ground Speed";
+  static constexpr const char* kmt_igc_fxa = "Fix Accuracy";
+  static constexpr const char* kmt_igc_gfo = "G Force?";
+  static constexpr const char* kmt_igc_siu = "# Of Sats";
+  static constexpr const char* kmt_igc_acz = "Z Accel";
 
   /* Member Functions */
 

@@ -69,6 +69,8 @@
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
+// #define INCLUDE_IGC_TRT // Generally not very useful to graph on Google Earth
+// #define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
 
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
@@ -1468,11 +1470,8 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
-
   foreach (const Waypoint* wpt, header->waypoint_list) {
-
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
-
     switch (member) {
     case fld_power:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
@@ -1496,6 +1495,33 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       break;
     case fld_igc_enl:
       writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->enl));
+      break;
+    case fld_igc_tas:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->tas));
+      break;
+    case fld_igc_fxa:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->fxa));
+      break;
+    case fld_igc_vat:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->vat));
+      break;
+    case fld_igc_trt:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->trt));
+      break;
+    case fld_igc_oat:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->oat));
+      break;
+    case fld_igc_gsp:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->gsp));
+      break;
+    case fld_igc_gfo:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->gfo));
+      break;
+    case fld_igc_siu:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->siu));
+      break;
+    case fld_igc_acz:
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->acz));
       break;
     default:
       fatal("Bad member type");
@@ -1538,6 +1564,20 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_temperature = false;
   bool has_power = false;
   bool has_igc_exts = false;
+  bool has_igc_enl = false;
+  bool has_igc_tas = false;
+  bool has_igc_oat = false;
+  bool has_igc_vat = false;
+  bool has_igc_gsp = false;
+  bool has_igc_fxa = false;
+  bool has_igc_gfo = false;
+  bool has_igc_acz = false;
+  #ifdef INCLUDE_IGC_SIU
+  bool has_igc_siu = false; // Not very useful to graph
+  #endif
+  #ifdef INCLUDE_IGC_TRT // Not very useful to graph
+  bool has_igc_trt = false;
+  #endif
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1565,6 +1605,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
@@ -1598,8 +1639,32 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     }
     if (fs_igc) {
       has_igc_exts = true;
+      if (fs_igc->igc_fs_flags.enl) {
+        has_igc_enl = true;
+      } if (fs_igc->igc_fs_flags.tas) {
+        has_igc_tas = true;
+      } if (fs_igc->igc_fs_flags.oat) {
+        has_igc_oat = true;
+      } if (fs_igc->igc_fs_flags.vat) {
+        has_igc_vat = true;
+      } if (fs_igc->igc_fs_flags.gsp) {
+        has_igc_gsp = true;
+      } if (fs_igc->igc_fs_flags.fxa) {
+        has_igc_fxa = true;
+      } if (fs_igc->igc_fs_flags.gfo) {
+        has_igc_gfo = true;
+      } if (fs_igc->igc_fs_flags.acz) {
+        has_igc_acz = true;
+      #ifdef INCLUDE_IGC_SIU
+      } if (fs_igc->igc_fs_flags.siu) {
+        has_igc_siu = true;
+      #endif
+      #ifdef INCLUDE_IGC_TRT
+      } if (fs_igc->igc_fs_flags.trt) {
+        has_igc_trt = true;
+      #endif
+      }
     }
-
   }
 
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
@@ -1629,13 +1694,47 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     }
 
     if (has_igc_exts) {
-      kml_mt_simple_array(header, kmt_igc_enl, fld_igc_enl);
+      if (has_igc_enl) {
+        kml_mt_simple_array(header, kmt_igc_enl, fld_igc_enl);
+      }
+      if (has_igc_tas) {
+        kml_mt_simple_array(header, kmt_igc_tas, fld_igc_tas);
+      }
+      if (has_igc_oat) {
+        kml_mt_simple_array(header, kmt_igc_oat, fld_igc_oat);
+      }
+      if (has_igc_vat) {
+        kml_mt_simple_array(header, kmt_igc_vat, fld_igc_vat);
+      }
+      if (has_igc_gsp) {
+        kml_mt_simple_array(header, kmt_igc_gsp, fld_igc_gsp);
+      }
+      if (has_igc_fxa) {
+        kml_mt_simple_array(header, kmt_igc_fxa, fld_igc_fxa);
+      }
+      if (has_igc_gfo) {
+        kml_mt_simple_array(header, kmt_igc_gfo, fld_igc_gfo);
+      }
+      if (has_igc_acz) {
+        kml_mt_simple_array(header, kmt_igc_acz, fld_igc_acz);
+      }
+      #ifdef INCLUDE_IGC_SIU
+      if (has_igc_siu) {
+        kml_mt_simple_array(header, kmt_igc_siu, fld_igc_siu);
+      }
+      #endif
+      #ifdef INCLUDE_IGC_TRT
+      if (has_igc_trt) {
+        kml_mt_simple_array(header, kmt_igc_trt, fld_igc_trt);
+      }
+      #endif
     }
 
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag
   }
 }
+
 
 void KmlFormat::kml_mt_tlr(const route_head* header) const
 {
@@ -1727,6 +1826,7 @@ void KmlFormat::kml_write_AbstractView()
 
   writer->writeEndElement(); // Close LookAt tag
 }
+
 
 void KmlFormat::kml_mt_array_schema(const char* field_name, const char* display_name,
                                     const char* type) const

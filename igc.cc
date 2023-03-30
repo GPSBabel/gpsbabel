@@ -259,6 +259,7 @@ void IgcFormat::read()
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
   IgcMetaData igc_metadata;
   ExtensionDefinition* extension;
+  QHash<QString, short> ext_types_hash;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -366,23 +367,52 @@ void IgcFormat::read()
        * whole thing.
       */
 
-      // TODO: Iterate over the ext_types_hash hash map and check all extension data
-      if (igc_metadata.flags.has_igc_exts) {
+      // TODO: A switch would be better than an if ladder...
+      if (igc_metadata.flags.has_igc_exts){
         auto* fsdata = new igc_fsdata;
-        if (igc_metadata.flags.enl){
-          bool int_ok;
-          int len = igc_metadata.extension("ENL")->end - igc_metadata.extension("ENL")->start+1;  // The difference results in a fencepost error
-          ext_data = QStringView(ibuf_q).mid(igc_metadata.extension("ENL")->start, len);
-          fsdata->enl = ext_data.toInt(&int_ok);
-          if (!int_ok) {
-            printf(MYNAME ": Fatal parsing error at line %i, character %i. Problem line:\n",current_line,  igc_metadata.extension("ENL")->start);
-            printf(MYNAME ": %s\n",ibuf_q.toUtf8().constData());
-            printf(MYNAME ": Cannot convert engine noise data %s to integer value.\n", ext_data.toUtf8().constData());
-            fatal(MYNAME ": Fatal error processing IGC file.\n");
+        QHash<QString, short>::const_iterator i;
+        for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
+          QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
+          short start = igc_metadata.extension(ext_record_type.toString())->start;
+          short end = igc_metadata.extension(ext_record_type.toString())->end;
+          int len = end - start + 1;  // The difference results in a fencepost error
+          extension = igc_metadata.extension(ext_record_type.toString());
+          ext_data = QStringView(ibuf_q).mid(igc_metadata.extension(ext_record_type.toString())->start, len);
+          if (ext_record_type.toString() == "ENL") {
+            fsdata->enl = ext_data.toInt();
+            fsdata->igc_fs_flags.enl = fsdata->igc_fs_flags.enl || true;
+          } else if (ext_record_type.toString() == "TAS") {
+            fsdata->tas = ext_data.toInt();
+            fsdata->igc_fs_flags.tas = fsdata->igc_fs_flags.tas || true;
+          } else if (ext_record_type.toString() == "VAT") {
+            fsdata->vat = ext_data.toInt();
+            fsdata->igc_fs_flags.vat = fsdata->igc_fs_flags.vat || true;
+          } else if (ext_record_type.toString() == "OAT") {
+            fsdata->oat = ext_data.toInt();
+            fsdata->igc_fs_flags.oat = fsdata->igc_fs_flags.oat || true;
+          } else if (ext_record_type.toString() == "TRT") {
+            fsdata->trt = ext_data.toInt();
+            fsdata->igc_fs_flags.trt = fsdata->igc_fs_flags.trt || true;
+          } else if (ext_record_type.toString() == "GSP") {
+            fsdata->gsp = ext_data.toInt();
+            fsdata->igc_fs_flags.gsp = fsdata->igc_fs_flags.gsp || true;
+          } else if (ext_record_type.toString() == "FXA") {
+            fsdata->fxa = ext_data.toInt();
+            fsdata->igc_fs_flags.fxa = fsdata->igc_fs_flags.fxa || true;
+          } else if (ext_record_type.toString() == "GFO") {
+            fsdata->gfo = ext_data.toInt();
+            fsdata->igc_fs_flags.gfo = fsdata->igc_fs_flags.gfo || true;
+          } else if (ext_record_type.toString() == "SIU") {
+            fsdata->siu = ext_data.toInt();
+            fsdata->igc_fs_flags.siu = fsdata->igc_fs_flags.siu || true;
+          } else if (ext_record_type.toString() == "ACZ") {
+            fsdata->acz = ext_data.toInt();
+            fsdata->igc_fs_flags.acz = fsdata->igc_fs_flags.acz || true;
           } else {
-            pres_wpt->fs.FsChainAdd(fsdata);
+            fatal("Could not parse IGC record %s at line %i\n", ext_record_type.toUtf8().constData(), current_line);
           }
         }
+        pres_wpt->fs.FsChainAdd(fsdata);
       }
 
       pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
@@ -395,7 +425,6 @@ void IgcFormat::read()
         pres_wpt->altitude = unknown_alt;
       }
       track_add_wpt(pres_head, pres_wpt);
-
       // Add the same waypoint with GNSS altitude to the second
       // track
       gnss_wpt = new Waypoint(*pres_wpt);
@@ -409,6 +438,7 @@ void IgcFormat::read()
       track_add_wpt(gnss_head, gnss_wpt);
       break;
     }
+
     case rec_task:
       // Create a route for each pre-flight declaration
       task_record_reader.igc_task_rec(ibuf);
@@ -441,23 +471,22 @@ void IgcFormat::read()
     { // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
       // Not sure exactly what that means... something something scoping and initialization
       /*
-         The first three characters define the number of extensions present.
-         We don't particularly care about that. After that, every group of seven
-         bytes is 4 digits followed by three letters, specifying start end end
-         bytes of each extension, and the kind of extension (always three chars)
-      */
-
-      /*
+       * The first three characters define the number of extensions present.
+       * We don't particularly care about that. After that, every group of seven
+       * bytes is 4 digits followed by three letters, specifying start end end
+       * bytes of each extension, and the kind of extension (always three chars)
+       *
        * First, construct a hash of all available extensions.
        * It may be better to construct the map and parse the record at the same time.
        * However, for now we are contructing the hash map first, then iterating through it.
        * The values in this hash contain all the necessary information on various extensions.
       */
       // TODO: Return this hash map for later use
-      QHash<QString, short> ext_types_hash;
       QHash<QString, short>::const_iterator i;
+      printf("Extension types:"); //DELETEME development
       for (unsigned i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
+        printf(" %s;",ext_type.toUtf8().constData());  // DELETEME development
         if (ext_type == "ENL") {
           ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_enl);
         } else if (ext_type == "TAS") {
@@ -472,16 +501,24 @@ void IgcFormat::read()
           ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_gsp);
         } else if (ext_type == "FXA") {
           ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_fxa);
+        } else if (ext_type == "GFO") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_gfo);
+        } else if (ext_type == "SIU") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_siu);
+        } else if (ext_type == "ACZ") {
+          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_acz);
         }
       }
+      printf("\n"); // DELETEME development
       /*
        * Now we have a hash list. The values of that list contain the extension
        * type and begin and end bytes of each extension definition. Iterate through
        * the hash and parse individual hash values.
       */
       for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
-        short begin = QStringView(i.key().mid(0,2)).toInt();
-        short end = QStringView(i.key().mid(2,2)).toInt();
+        // Still off by one... I don't understand why,
+        short begin = QStringView(i.key().mid(0,2)).toInt() - 1;
+        short end = QStringView(i.key().mid(2,2)).toInt() - 1;
         QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
 
         extension = igc_metadata.extension(ext_record_type.toString());
@@ -491,7 +528,6 @@ void IgcFormat::read()
         extension->exists = true;
       }
     }
-
     // These record types are discarded
     case rec_diff_gps:
     case rec_event:
@@ -515,6 +551,8 @@ void IgcFormat::read()
       if (gnss_head && !gnss_valid && pres_head) {
         track_del_head(gnss_head);
       }
+      // Dammit I hate early returns. I also hate while(true)
+      // TODO: Fix this. (KV)
       return;		// All done so bail
 
     default:
