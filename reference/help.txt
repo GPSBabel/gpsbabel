@@ -138,7 +138,7 @@ File Types (-i and -o options):
 	garmin                Garmin serial/USB protocol
 	  snlen                 Length of generated shortnames
 	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  deficon               Default icon name
+	  deficon               Default icon URL
 	  get_posn              (0/1) Return current position as a waypoint
 	  power_off             (0/1) Command unit to power itself down
 	  erase_t               (0/1) Erase existing courses when writing new ones
@@ -150,7 +150,7 @@ File Types (-i and -o options):
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, MultiSport, Other
 	geo                   Geocaching.com .loc
-	  deficon               Default icon name
+	  deficon               Default icon URL
 	  nuke_placer           (0/1) Omit Placer name
 	geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off.
@@ -167,7 +167,7 @@ File Types (-i and -o options):
 	  input-is-dump-file    (0/1) Dump raw data to this file
 	  timezone              Time zone ID
 	kml                   Google Earth (Keyhole) Markup Language
-	  deficon               Default icon name
+	  deficon               Default icon URL
 	  lines                 (0/1) Export linestrings for tracks and routes
 	  points                (0/1) Export placemarks for tracks and routes
 	  line_width            Width of lines, in pixels
