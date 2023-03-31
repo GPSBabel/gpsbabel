@@ -15,8 +15,8 @@ RUN dnf install --assumeyes libusb1-devel zlib-devel shapelib-devel && \
 # Qt used by gpsbabel, gpsbabelfe
 RUN dnf install --assumeyes qt5-qtbase-devel qt5-qtserialport-devel qt5-qtwebengine-devel qt5-linguist qt5-qttranslations && \
     dnf clean all
+RUN dnf install --assumeyes qt6-qtbase-devel qt6-qtserialport-devel qt6-qtwebengine-devel qt6-linguist qt6-qttranslations qt6-qt5compat-devel qt6-qttools-devel && \
+    dnf clean all
 # tools to build the docs
 RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop docbook5-style-xsl docbook5-schemas && \
     dnf clean all
-# create a link as fedora uses the name qmake-qt5 for Qt5's qmake.
-RUN alternatives --install /usr/bin/qmake qt /usr/lib64/qt5/bin/qmake 100
