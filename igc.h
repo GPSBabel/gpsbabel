@@ -37,10 +37,40 @@
 #include "format.h"
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
+#include "kml.h"                 // for wp_field
 
 class IgcFormat : public Format
 {
 public:
+  enum igc_ext_type_t {
+    ext_rec_enl = 1,  // Engine Noise Level
+    ext_rec_tas = 2,  // True Airspeed
+    ext_rec_vat = 3,  // Total Energy Variometer
+    ext_rec_oat = 4,  // Outside Air Temperature
+    ext_rec_trt = 5,  // True Track
+    ext_rec_gsp = 6,  // Ground Speed
+    ext_rec_fxa = 7,  // Fix Accuracy
+    ext_rec_gfo = 8,  // G Force? (Found in LX Eos recorders present in LS-4)
+    ext_rec_siu = 9,  // Satllites In Use
+    ext_rec_acz = 10  // Z Acceleration
+
+  };
+
+  IgcFormat::igc_ext_type_t get_ext_type(QString type) {
+    IgcFormat::igc_ext_type_t def_type;
+    if (type == "ENL") { def_type = IgcFormat::igc_ext_type_t::ext_rec_enl; }
+    else if (type == "TAS") { def_type = IgcFormat::igc_ext_type_t::ext_rec_tas; }
+    else if (type == "VAT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_vat; }
+    else if (type == "OAT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_oat; }
+    else if (type == "TRT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_trt; }
+    else if (type == "GSP") { def_type = IgcFormat::igc_ext_type_t::ext_rec_gsp; }
+    else if (type == "FXA") { def_type = IgcFormat::igc_ext_type_t::ext_rec_fxa; }
+    else if (type == "SIU") { def_type = IgcFormat::igc_ext_type_t::ext_rec_siu; }
+    else if (type == "ACZ") { def_type = IgcFormat::igc_ext_type_t::ext_rec_acz; }
+    else if (type == "GFO") { def_type = IgcFormat::igc_ext_type_t::ext_rec_gfo; }
+    return def_type;
+  }
+
   QVector<arglist_t>* get_args() override
   {
     return &igc_args;
@@ -89,20 +119,6 @@ private:
 
     rec_none = 0,		// No record
     rec_bad = 1,		// Bad record
-  };
-
-  enum igc_ext_type_t {
-    ext_rec_enl = 1,  // Engine Noise Level
-    ext_rec_tas = 2,  // True Airspeed
-    ext_rec_vat = 3,  // Total Energy Variometer
-    ext_rec_oat = 4,  // Outside Air Temperature
-    ext_rec_trt = 5,  // True Track
-    ext_rec_gsp = 6,  // Ground Speed
-    ext_rec_fxa = 7,  // Fix Accuracy
-    ext_rec_gfo = 8,  // G Force? (Found in LX Eos recorders present in LS-4)
-    ext_rec_siu = 9,  // Satllites In Use
-    ext_rec_acz = 10  // Z Acceleration
-
   };
 
   class TaskRecordReader
@@ -182,175 +198,96 @@ private:
    * and present in individual B records.
   */
 
-struct igc_fs_flags_t {
-  igc_fs_flags_t() :
-  has_igc_exts(0),
-  enl(0),
-  tas(0),
-  vat(0),
-  oat(0),
-  trt(0),
-  gsp(0),
-  fxa(0),
-  gfo(0),
-  siu(0),
-  acz(0)
-
-  {}
-
-  bool has_igc_exts;
-  bool enl;
-  bool tas;
-  bool vat;
-  bool oat;
-  bool trt;
-  bool gsp;
-  bool fxa;
-  bool gfo;
-  bool siu;
-  bool acz;
+struct igc_defn_t {
+  QString name;
+  short start;
+  short end;
 };
 
-class ExtensionDefinition {
-public:
-  bool exists;  // Superfluous flag?
-  QString name; // Name of extension (ENL,FXA,TAS, etc)
-  short start;  // Start character of this data in B records
-  short end;    // End character of this data in B records
-  ExtensionDefinition (const QString name = "", short start=0, short end=0) :
-    exists(!name.isEmpty()),
-    name(name),
-    start(start),
-    end(end)
-  {}
-  void dump() {
-    printf("Extension data (%s):\n", this->name.toUtf8().constData());
-    printf("  Name: %s\n", this->name.toUtf8().constData());
-    printf("  Start: %i\n", this->start);
-    printf("  End: %i\n", this->end);
-  }
-};
+struct igc_metadata {
+  std::optional<igc_defn_t> enl;
+  std::optional<igc_defn_t> tas;
+  std::optional<igc_defn_t> vat;
+  std::optional<igc_defn_t> oat;
+  std::optional<igc_defn_t> trt;
+  std::optional<igc_defn_t> gsp;
+  std::optional<igc_defn_t> fxa;
+  std::optional<igc_defn_t> siu;
+  std::optional<igc_defn_t> acz;
+  std::optional<igc_defn_t> gfo;
 
-class IgcMetaData {
-private:
-  QMap<QString, ExtensionDefinition*> extensions;
-public:
-  igc_fs_flags_t flags;
-  IgcMetaData() {
-    flags.has_igc_exts = false;
-    flags.enl = false;
-    flags.tas = false;
-    flags.vat = false;
-    flags.oat = false;
-    flags.trt = false;
-    flags.gsp = false;
-    flags.fxa = false;
-    flags.gfo = false;
-    flags.acz = false;
-  }
-
-  ExtensionDefinition* extension(const QString& name) {
-    auto it = extensions.find(name);
-    if (it != extensions.end()) {
-      // Extension already exists, return it
-      return *it;
-    } else {
-      // Extension does not exist, create a new one and put it in the map
-      ExtensionDefinition* extension = new ExtensionDefinition();
-      extension->name = name;
-      extensions.insert(name, extension);
-      setHasIgcExtsFlag(); // Update flags
-      return extension;
-    }
-  }
-
-  void setHasIgcExtsFlag() {
-    for (auto& pair : extensions) {
-      if (pair->exists) {
-        flags.has_igc_exts = true;
-        break;
+  bool has_data() const {
+    for (const auto& member : {enl, tas, vat, oat, trt, gsp, fxa, siu, acz, gfo}) {
+      if (member.has_value()) {
+        return true;
       }
     }
+    return false;
   }
 
-  void dump() const {
-    printf("Flags:\n");
-    printf("  has_igc_exts = %d\n", flags.has_igc_exts);
-    printf("  enl = %d\n", flags.enl);
-    printf("  tas = %d\n", flags.tas);
-    printf("  vat = %d\n", flags.vat);
-    printf("  oat = %d\n", flags.oat);
-    printf("  trt = %d\n", flags.trt);
-    printf("  gsp = %d\n", flags.gsp);
-    printf("  fxa = %d\n", flags.fxa);
-    printf("  fxa = %d\n", flags.gfo);
-    printf("  fxa = %d\n", flags.siu);
-    printf("  acz = %d\n", flags.acz);
-
-    printf("Extensions:\n");
-    for (auto it = extensions.begin(); it != extensions.end(); ++it) {
-      const ExtensionDefinition* extension = it.value();
-      printf("  Extension %s:\n", extension->name.toStdString().c_str());
-      printf("    exists = %d\n", extension->exists);
-      printf("    start = %d\n", extension->start);
-      printf("    end = %d\n", extension->end);
+  igc_defn_t set_defn(IgcFormat::igc_ext_type_t type, const QString& name, short start, short end) {
+    switch (type) {
+      case IgcFormat::igc_ext_type_t::ext_rec_enl:
+        enl = igc_defn_t{name, start, end};
+        return *enl;
+      case IgcFormat::igc_ext_type_t::ext_rec_tas:
+        tas = igc_defn_t{name, start, end};
+        return *tas;
+      case IgcFormat::igc_ext_type_t::ext_rec_vat:
+        vat = igc_defn_t{name, start, end};
+        return *vat;
+      case IgcFormat::igc_ext_type_t::ext_rec_oat:
+        oat = igc_defn_t{name, start, end};
+        return *oat;
+      case IgcFormat::igc_ext_type_t::ext_rec_trt:
+        trt = igc_defn_t{name, start, end};
+        return *trt;
+      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+        gsp = igc_defn_t{name, start, end};
+        return *gsp;
+      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+        fxa = igc_defn_t{name, start, end};
+        return *fxa;
+      case IgcFormat::igc_ext_type_t::ext_rec_siu:
+        siu = igc_defn_t{name, start, end};
+        return *siu;
+      case IgcFormat::igc_ext_type_t::ext_rec_acz:
+        acz = igc_defn_t{name, start, end};
+        return *acz;
+      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+        gfo = igc_defn_t{name, start, end};
+        return *gfo;
+      default:
+        throw std::runtime_error("Invalid igc_defn_t type");
     }
   }
 
-  ~IgcMetaData() {
-    // Deallocate all ExtensionDefinition objects
-    for (auto& pair : extensions) {
-      delete pair;
+  igc_defn_t get_defn(IgcFormat::igc_ext_type_t defn_type) const {
+    switch (defn_type) {
+      case IgcFormat::igc_ext_type_t::ext_rec_enl:
+        return *enl;
+      case IgcFormat::igc_ext_type_t::ext_rec_tas:
+        return *tas;
+      case IgcFormat::igc_ext_type_t::ext_rec_vat:
+        return *vat;
+      case IgcFormat::igc_ext_type_t::ext_rec_oat:
+        return *oat;
+      case IgcFormat::igc_ext_type_t::ext_rec_trt:
+        return *trt;
+      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+        return *gsp;
+      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+        return *fxa;
+      case IgcFormat::igc_ext_type_t::ext_rec_siu:
+        return *siu;
+      case IgcFormat::igc_ext_type_t::ext_rec_acz:
+        return *acz;
+      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+        return *gfo;
+      default:
+        throw std::runtime_error("Invalid igc_defn_t type");
     }
   }
-};
-
-struct igc_fsmetadata_t {
-
-  igc_fsmetadata_t() :
-  enl_start(0),
-  enl_end(0),
-  tas_start(0),
-  tas_end(0),
-  vat_start(0),
-  vat_end(0),
-  oat_start(0),
-  oat_end(0),
-  trt_start(0),
-  trt_end(0),
-  gsp_start(0),
-  gsp_end(0),
-  fxa_start(0),
-  fxa_end(0),
-  gfo_start(0),
-  gfo_end(0),
-  siu_start(0),
-  siu_end(0),
-  acz_start(0),
-  acz_end(0)
-
-  {}
-
-  short enl_start;
-  short enl_end;
-  short tas_start;
-  short tas_end;
-  short vat_start;
-  short vat_end;
-  short oat_start;
-  short oat_end;
-  short trt_start;
-  short trt_end;
-  short gsp_start;
-  short gsp_end;
-  short fxa_start;
-  short fxa_end;
-  short gfo_start;
-  short gfo_end;
-  short siu_start;
-  short siu_end;
-  short acz_start;
-  short acz_end;
 };
 
 struct igc_fsdata : public FormatSpecificData {
@@ -361,18 +298,115 @@ struct igc_fsdata : public FormatSpecificData {
     return new igc_fsdata(*this);
   }
 
-  int enl{0}; // Engine Noise Level
-  int tas{0}; // True Airspeed
-  int vat{0}; // Compensated variometer (total energy)
-  int oat{0}; // Outside Air Temperature
-  int trt{0}; // True Track
-  int gsp{0}; // Ground Speed
-  int fxa{0}; // Fix Accuracy
-  int gfo{0}; // G Force?
-  int siu{0}; // Satellites In Use
-  int acz{0}; // Z Acceleration
-  igc_fs_flags_t igc_fs_flags;
+  std::optional<short> enl; // Engine Noise Level
+  std::optional<short> tas; // True Airspeed
+  std::optional<short> vat; // Compensated variometer (total energy)
+  std::optional<short> oat; // Outside Air Temperature
+  std::optional<short> trt; // True Track
+  std::optional<short> gsp; // Ground Speed
+  std::optional<short> fxa; // Fix Accuracy
+  std::optional<short> siu; // Satellites In Use
+  std::optional<short> acz; // Z Acceleration
+  std::optional<short> gfo; // G Force?
 
+  // Template function to get or set any optional member
+  template <typename T>
+  void setValue(std::optional<T> igc_fsdata::*member, T value) {
+    this->*member = value;
+  }
+
+  template <typename T>
+  T getValue(std::optional<T> igc_fsdata::*member, T defaultValue = T()) const {
+    return this->*member.value_or(defaultValue);
+  }
+
+  bool set_value(IgcFormat::igc_ext_type_t type, short value) {
+    bool success = true;
+    switch (type) {
+      case IgcFormat::igc_ext_type_t::ext_rec_enl:
+        enl = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_tas:
+        tas = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_vat:
+        vat = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_oat:
+        oat = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_trt:
+        trt = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+        gsp = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+        fxa = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_siu:
+        siu = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_acz:
+        acz = value; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+        gfo = value; break;
+      default:
+        success = false;
+    }
+    return success;
+  }
+
+  std::optional<short> get_value(IgcFormat::igc_ext_type_t defn_type) const {
+    std::optional<short> ret;
+    switch (defn_type) {
+      case IgcFormat::igc_ext_type_t::ext_rec_enl:
+        ret = enl;
+      case IgcFormat::igc_ext_type_t::ext_rec_tas:
+        ret = tas;
+      case IgcFormat::igc_ext_type_t::ext_rec_vat:
+        ret = vat;
+      case IgcFormat::igc_ext_type_t::ext_rec_oat:
+        ret = oat;
+      case IgcFormat::igc_ext_type_t::ext_rec_trt:
+        ret = trt;
+      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+        ret = gsp;
+      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+        ret = fxa;
+      case IgcFormat::igc_ext_type_t::ext_rec_siu:
+        ret = siu;
+      case IgcFormat::igc_ext_type_t::ext_rec_acz:
+        ret = acz;
+      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+        ret = gfo;
+      default:
+        throw std::runtime_error("Invalid igc_ext_type");
+        break;
+    }
+    return ret;
+  }
+  std::optional<short> get_value(KmlFormat::wp_field defn_type) const {
+    std::optional<short> ret;
+    switch (defn_type) {
+      case KmlFormat::wp_field::fld_igc_enl:
+        ret = enl; break;
+      case KmlFormat::wp_field::fld_igc_tas:
+        ret = tas; break;
+      case KmlFormat::wp_field::fld_igc_vat:
+        ret = vat; break;
+      case KmlFormat::wp_field::fld_igc_oat:
+        ret = oat; break;
+      case KmlFormat::wp_field::fld_igc_trt:
+        ret = trt; break;
+      case KmlFormat::wp_field::fld_igc_gsp:
+        ret = gsp; break;
+      case KmlFormat::wp_field::fld_igc_fxa:
+        ret = fxa; break;
+      case KmlFormat::wp_field::fld_igc_siu:
+        ret = siu; break;
+      case KmlFormat::wp_field::fld_igc_acz:
+        ret = acz; break;
+      case KmlFormat::wp_field::fld_igc_gfo:
+        ret = gfo; break;
+      default:
+        throw std::runtime_error("Invalid igc_ext_type");
+        break;
+    }
+    return ret;
+  }
 };
 
 #endif // IGC_H_INCLUDED_

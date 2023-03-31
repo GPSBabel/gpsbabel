@@ -255,11 +255,9 @@ void IgcFormat::read()
   char* hdr_data;
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
-  QStringView ext_data;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  IgcMetaData igc_metadata;
-  ExtensionDefinition* extension;
   QHash<QString, short> ext_types_hash;
+  igc_metadata fs_metadata;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -366,51 +364,36 @@ void IgcFormat::read()
        * but possible in the case of homebrew flight recorders), then skip the
        * whole thing.
       */
-
       // TODO: A switch would be better than an if ladder...
-      if (igc_metadata.flags.has_igc_exts){
+      if (fs_metadata.has_data()) {
         auto* fsdata = new igc_fsdata;
+        if (global_opts.debug_level >= 7) {
+          printf(MYNAME ": Record: %s\n",ibuf_q.toUtf8().constData());
+        }
+        if (global_opts.debug_level >= 6) {
+          printf(MYNAME ": Adding extension data:");
+        }
         QHash<QString, short>::const_iterator i;
         for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
           QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
-          short start = igc_metadata.extension(ext_record_type.toString())->start;
-          short end = igc_metadata.extension(ext_record_type.toString())->end;
-          int len = end - start + 1;  // The difference results in a fencepost error
-          extension = igc_metadata.extension(ext_record_type.toString());
-          ext_data = QStringView(ibuf_q).mid(igc_metadata.extension(ext_record_type.toString())->start, len);
-          if (ext_record_type.toString() == "ENL") {
-            fsdata->enl = ext_data.toInt();
-            fsdata->igc_fs_flags.enl = fsdata->igc_fs_flags.enl || true;
-          } else if (ext_record_type.toString() == "TAS") {
-            fsdata->tas = ext_data.toInt();
-            fsdata->igc_fs_flags.tas = fsdata->igc_fs_flags.tas || true;
-          } else if (ext_record_type.toString() == "VAT") {
-            fsdata->vat = ext_data.toInt();
-            fsdata->igc_fs_flags.vat = fsdata->igc_fs_flags.vat || true;
-          } else if (ext_record_type.toString() == "OAT") {
-            fsdata->oat = ext_data.toInt();
-            fsdata->igc_fs_flags.oat = fsdata->igc_fs_flags.oat || true;
-          } else if (ext_record_type.toString() == "TRT") {
-            fsdata->trt = ext_data.toInt();
-            fsdata->igc_fs_flags.trt = fsdata->igc_fs_flags.trt || true;
-          } else if (ext_record_type.toString() == "GSP") {
-            fsdata->gsp = ext_data.toInt();
-            fsdata->igc_fs_flags.gsp = fsdata->igc_fs_flags.gsp || true;
-          } else if (ext_record_type.toString() == "FXA") {
-            fsdata->fxa = ext_data.toInt();
-            fsdata->igc_fs_flags.fxa = fsdata->igc_fs_flags.fxa || true;
-          } else if (ext_record_type.toString() == "GFO") {
-            fsdata->gfo = ext_data.toInt();
-            fsdata->igc_fs_flags.gfo = fsdata->igc_fs_flags.gfo || true;
-          } else if (ext_record_type.toString() == "SIU") {
-            fsdata->siu = ext_data.toInt();
-            fsdata->igc_fs_flags.siu = fsdata->igc_fs_flags.siu || true;
-          } else if (ext_record_type.toString() == "ACZ") {
-            fsdata->acz = ext_data.toInt();
-            fsdata->igc_fs_flags.acz = fsdata->igc_fs_flags.acz || true;
-          } else {
-            fatal("Could not parse IGC record %s at line %i\n", ext_record_type.toUtf8().constData(), current_line);
+
+          igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type.toString());
+          igc_defn_t ext_defn = fs_metadata.get_defn(def_type);
+
+          short start = ext_defn.start;
+          short end = ext_defn.end;
+          short len = end - start + 1;
+          short ext_data;
+          ext_data = QStringView(ibuf_q).mid(start, len).toInt();
+
+          fsdata->set_value(def_type, ext_data);
+          if (global_opts.debug_level >= 6) {
+            printf(" %s:%i", ext_record_type.toUtf8().constData(), ext_data);
           }
+
+        }
+        if (global_opts.debug_level >= 6) {
+          printf("\n");
         }
         pres_wpt->fs.FsChainAdd(fsdata);
       }
@@ -483,10 +466,14 @@ void IgcFormat::read()
       */
       // TODO: Return this hash map for later use
       QHash<QString, short>::const_iterator i;
-      printf("Extension types:"); //DELETEME development
+      if (global_opts.debug_level >= 1) {
+        printf(MYNAME ": I record: %s\n", ibuf_q.toUtf8().constData());
+      }
       for (unsigned i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
-        printf(" %s;",ext_type.toUtf8().constData());  // DELETEME development
+        if (global_opts.debug_level >= 1) {
+          printf(" %s;",ext_type.toUtf8().constData());
+        }
         if (ext_type == "ENL") {
           ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_enl);
         } else if (ext_type == "TAS") {
@@ -509,25 +496,34 @@ void IgcFormat::read()
           ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_acz);
         }
       }
-      printf("\n"); // DELETEME development
+      if (global_opts.debug_level >= 1) {
+        printf("\n");
+      }
       /*
        * Now we have a hash list. The values of that list contain the extension
        * type and begin and end bytes of each extension definition. Iterate through
        * the hash and parse individual hash values.
       */
+      if (global_opts.debug_level >= 2) {
+        printf(MYNAME ": Extnensions defined in I record:\n");
+        printf(MYNAME ": Extensions present:\n(Note: IGC I records "
+                      "are one-initialized. Strings are zero-initialized.)\n");
+      }
       for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
-        // Still off by one... I don't understand why,
         short begin = QStringView(i.key().mid(0,2)).toInt() - 1;
         short end = QStringView(i.key().mid(2,2)).toInt() - 1;
-        QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
 
-        extension = igc_metadata.extension(ext_record_type.toString());
-        extension->start = begin;
-        extension->end = end;
-        extension->name = ext_record_type.toString();
-        extension->exists = true;
+        QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
+        igc_defn_t extension{ext_record_type.toUtf8().constData(), begin, end};
+        igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type.toString());
+        igc_defn_t ext_defn = fs_metadata.set_defn(def_type, ext_record_type.toString(), begin, end);
+
+        if (global_opts.debug_level >= 2) {
+          printf("    %s:Begin:%i End:%i\n",ext_defn.name.toUtf8().constData(), ext_defn.start, ext_defn.end);
+        }
       }
     }
+
     // These record types are discarded
     case rec_diff_gps:
     case rec_event:

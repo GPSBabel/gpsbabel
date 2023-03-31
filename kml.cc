@@ -1472,59 +1472,39 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   writer->writeAttribute(QStringLiteral("name"), name);
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
-    switch (member) {
-    case fld_power:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
-        QString::number(wpt->power, 'f', 1) : QString());
-      break;
-    case fld_cadence:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
-       QString::number(wpt->cadence) : QString());
-      break;
-    case fld_depth:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
-        QString::number(wpt->depth_value(), 'f', 1) : QString());
-      break;
-    case fld_heartrate:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
-       QString::number(wpt->heartrate) : QString());
-      break;
-    case fld_temperature:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
-        QString::number(wpt->temperature_value(), 'f', 1) : QString());
-      break;
-    case fld_igc_enl:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->enl));
-      break;
-    case fld_igc_tas:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->tas));
-      break;
-    case fld_igc_fxa:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->fxa));
-      break;
-    case fld_igc_vat:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->vat));
-      break;
-    case fld_igc_trt:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->trt));
-      break;
-    case fld_igc_oat:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->oat));
-      break;
-    case fld_igc_gsp:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->gsp));
-      break;
-    case fld_igc_gfo:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->gfo));
-      break;
-    case fld_igc_siu:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->siu));
-      break;
-    case fld_igc_acz:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(fs_igc->acz));
-      break;
-    default:
-      fatal("Bad member type");
+    /*
+     * First check if the SimpleArray we are writing is for
+     * IGC specific extensions. If not, then do all the other stuff.
+    */
+    if (member > fld_igc_begin && member < fld_igc_end) {
+      short value;
+      value = fs_igc->get_value(member).value();
+      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
+    } else {
+      switch (member) {
+      case fld_power:
+        writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
+          QString::number(wpt->power, 'f', 1) : QString());
+        break;
+      case fld_cadence:
+        writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
+        QString::number(wpt->cadence) : QString());
+        break;
+      case fld_depth:
+        writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
+          QString::number(wpt->depth_value(), 'f', 1) : QString());
+        break;
+      case fld_heartrate:
+        writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
+        QString::number(wpt->heartrate) : QString());
+        break;
+      case fld_temperature:
+        writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
+          QString::number(wpt->temperature_value(), 'f', 1) : QString());
+        break;
+      default:
+        fatal("Bad member type");
+      }
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag
@@ -1639,34 +1619,36 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     }
     if (fs_igc) {
       has_igc_exts = true;
-      if (fs_igc->igc_fs_flags.enl) {
+      if (fs_igc->enl.has_value()) {
         has_igc_enl = true;
-      } if (fs_igc->igc_fs_flags.tas) {
+      } if (fs_igc->tas.has_value()) {
         has_igc_tas = true;
-      } if (fs_igc->igc_fs_flags.oat) {
+      } if (fs_igc->oat.has_value()) {
         has_igc_oat = true;
-      } if (fs_igc->igc_fs_flags.vat) {
+      } if (fs_igc->vat.has_value()) {
         has_igc_vat = true;
-      } if (fs_igc->igc_fs_flags.gsp) {
+      } if (fs_igc->gsp.has_value()) {
         has_igc_gsp = true;
-      } if (fs_igc->igc_fs_flags.fxa) {
+      } if (fs_igc->fxa.has_value()) {
         has_igc_fxa = true;
-      } if (fs_igc->igc_fs_flags.gfo) {
+      } if (fs_igc->gfo.has_value()) {
         has_igc_gfo = true;
-      } if (fs_igc->igc_fs_flags.acz) {
+      } if (fs_igc->acz.has_value()) {
         has_igc_acz = true;
       #ifdef INCLUDE_IGC_SIU
-      } if (fs_igc->igc_fs_flags.siu) {
+      } if (fs_igc->siu.has_value()) {
         has_igc_siu = true;
       #endif
       #ifdef INCLUDE_IGC_TRT
-      } if (fs_igc->igc_fs_flags.trt) {
+      } if (fs_igc->trt.has_value()) {
         has_igc_trt = true;
       #endif
       }
     }
   }
 
+  // This gets unwieldly if we check each individual igc extension,
+  // hence the has_igc_exts flag.
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
       has_power || has_igc_exts) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
@@ -1693,6 +1675,8 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       kml_mt_simple_array(header, kmt_power, fld_power);
     }
 
+    // Perhaps not the /best/ way to do this, but this if ladder
+    // should only be evaluated once.
     if (has_igc_exts) {
       if (has_igc_enl) {
         kml_mt_simple_array(header, kmt_igc_enl, fld_igc_enl);

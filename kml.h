@@ -66,6 +66,28 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
+// Helper to write gx:SimpleList, iterating over a route queue and writing out.
+
+  enum wp_field {
+    fld_cadence,
+    fld_depth,
+    fld_heartrate,
+    fld_temperature,
+    fld_power,
+    fld_igc_begin,
+    fld_igc_enl,  // Engine Noise Level
+    fld_igc_tas,  // True Airspeed
+    fld_igc_vat,  // Compensated variometer (total energy)
+    fld_igc_oat,  // Outside Air Temperature
+    fld_igc_trt,  // True Track
+    fld_igc_gsp,  // Ground Speed
+    fld_igc_fxa,  // Fix Accuracy
+    fld_igc_gfo,  // G Force
+    fld_igc_siu,  // Satellites In Use
+    fld_igc_acz,   // Z Acceleration
+    fld_igc_end
+  };
+
 private:
   /* Types */
 
@@ -76,26 +98,6 @@ private:
     kmlpt_route,
     kmlpt_multitrack,
     kmlpt_other
-  };
-
-// Helper to write gx:SimpleList, iterating over a route queue and writing out.
-
-  enum wp_field {
-    fld_cadence,
-    fld_depth,
-    fld_heartrate,
-    fld_temperature,
-    fld_power,
-    fld_igc_enl,  // Engine Noise Level
-    fld_igc_tas,  // True Airspeed
-    fld_igc_vat,  // Compensated variometer (total energy)
-    fld_igc_oat,  // Outside Air Temperature
-    fld_igc_trt,  // True Track
-    fld_igc_gsp,  // Ground Speed
-    fld_igc_fxa,  // Fix Accuracy
-    fld_igc_gfo,  // G Force
-    fld_igc_siu,  // Satellites In Use
-    fld_igc_acz   // Z Acceleration
   };
 
   /* Constants */
