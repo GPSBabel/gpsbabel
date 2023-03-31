@@ -309,17 +309,6 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<short> acz; // Z Acceleration
   std::optional<short> gfo; // G Force?
 
-  // Template function to get or set any optional member
-  template <typename T>
-  void setValue(std::optional<T> igc_fsdata::*member, T value) {
-    this->*member = value;
-  }
-
-  template <typename T>
-  T getValue(std::optional<T> igc_fsdata::*member, T defaultValue = T()) const {
-    return this->*member.value_or(defaultValue);
-  }
-
   bool set_value(IgcFormat::igc_ext_type_t type, short value) {
     bool success = true;
     switch (type) {
