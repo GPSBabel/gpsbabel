@@ -373,7 +373,6 @@ void IgcFormat::read()
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Adding extension data:");
         }
-        QHash<QString, short>::const_iterator i;
         for (const auto& pair : ext_types_list) {
           QString ext_record_type = pair.first.mid(4,3);
           igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type);
@@ -457,7 +456,6 @@ void IgcFormat::read()
        * bytes is 4 digits followed by three letters, specifying start end end
        * bytes of each extension, and the kind of extension (always three chars)
        */
-      QHash<QString, short>::const_iterator i;
       if (global_opts.debug_level >= 1) {
         printf(MYNAME ": I record: %s\n", ibuf_q.toUtf8().constData());
       }
