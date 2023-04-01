@@ -256,7 +256,8 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QHash<QString, short> ext_types_hash;
+  QList<std::pair<QString, short>> ext_types_list;
+  //QHash<QString, short> ext_types_hash;
   igc_metadata fs_metadata;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
@@ -364,7 +365,6 @@ void IgcFormat::read()
        * but possible in the case of homebrew flight recorders), then skip the
        * whole thing.
       */
-      // TODO: A switch would be better than an if ladder...
       if (fs_metadata.has_data()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
@@ -374,10 +374,9 @@ void IgcFormat::read()
           printf(MYNAME ": Adding extension data:");
         }
         QHash<QString, short>::const_iterator i;
-        for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
-          QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
-
-          igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type.toString());
+        for (const auto& pair : ext_types_list) {
+          QString ext_record_type = pair.first.mid(4,3);
+          igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type);
           igc_defn_t ext_defn = fs_metadata.get_defn(def_type);
 
           short start = ext_defn.start;
@@ -390,7 +389,6 @@ void IgcFormat::read()
           if (global_opts.debug_level >= 6) {
             printf(" %s:%i", ext_record_type.toUtf8().constData(), ext_data);
           }
-
         }
         if (global_opts.debug_level >= 6) {
           printf("\n");
@@ -458,43 +456,21 @@ void IgcFormat::read()
        * We don't particularly care about that. After that, every group of seven
        * bytes is 4 digits followed by three letters, specifying start end end
        * bytes of each extension, and the kind of extension (always three chars)
-       *
-       * First, construct a hash of all available extensions.
-       * It may be better to construct the map and parse the record at the same time.
-       * However, for now we are contructing the hash map first, then iterating through it.
-       * The values in this hash contain all the necessary information on various extensions.
-      */
-      // TODO: Return this hash map for later use
+       */
       QHash<QString, short>::const_iterator i;
       if (global_opts.debug_level >= 1) {
         printf(MYNAME ": I record: %s\n", ibuf_q.toUtf8().constData());
       }
       for (unsigned i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
+        QString extension_definition = ibuf_q.mid(i,7);
         if (global_opts.debug_level >= 1) {
           printf(" %s;",ext_type.toUtf8().constData());
         }
-        if (ext_type == "ENL") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_enl);
-        } else if (ext_type == "TAS") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_tas);
-        } else if (ext_type == "VAT") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_vat);
-        } else if (ext_type == "OAT") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_oat);
-        } else if (ext_type == "TRT") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_trt);
-        } else if (ext_type == "GSP") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_gsp);
-        } else if (ext_type == "FXA") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_fxa);
-        } else if (ext_type == "GFO") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_gfo);
-        } else if (ext_type == "SIU") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_siu);
-        } else if (ext_type == "ACZ") {
-          ext_types_hash.insert(ibuf_q.mid(i, 7), ext_rec_acz);
-        }
+
+        igc_ext_type_t ext = get_ext_type(ext_type);
+        std::pair<QString, short> new_ext(extension_definition, ext);
+        ext_types_list.append(new_ext);
       }
       if (global_opts.debug_level >= 1) {
         printf("\n");
@@ -509,14 +485,13 @@ void IgcFormat::read()
         printf(MYNAME ": Extensions present:\n(Note: IGC I records "
                       "are one-initialized. Strings are zero-initialized.)\n");
       }
-      for (i = ext_types_hash.constBegin(); i != ext_types_hash.constEnd(); ++i) {
-        short begin = QStringView(i.key().mid(0,2)).toInt() - 1;
-        short end = QStringView(i.key().mid(2,2)).toInt() - 1;
+      for (const auto& pair : ext_types_list) {
+        short begin = pair.first.mid(0,2).toInt();
+        short end = pair.first.mid(2,2).toInt();
+        QString ext_record_type = pair.first.mid(4,3);
 
-        QStringView ext_record_type = QStringView(i.key().mid(4,3)).toString();
-        igc_defn_t extension{ext_record_type.toUtf8().constData(), begin, end};
-        igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type.toString());
-        igc_defn_t ext_defn = fs_metadata.set_defn(def_type, ext_record_type.toString(), begin, end);
+        igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type);
+        igc_defn_t ext_defn = fs_metadata.set_defn(def_type, ext_record_type, begin, end);
 
         if (global_opts.debug_level >= 2) {
           printf("    %s:Begin:%i End:%i\n",ext_defn.name.toUtf8().constData(), ext_defn.start, ext_defn.end);
