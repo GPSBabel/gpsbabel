@@ -32,6 +32,7 @@
 #include <cstring>              // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
 #include <iterator>             // for reverse_iterator, operator==, prev, next
 #include <optional>             // for optional
+#include <tuple>                // for std::make_tuple
 
 #include <QByteArray>           // for QByteArray
 #include <QChar>                // for QChar
@@ -44,7 +45,6 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
-#include <QStringView>          // for QStringView
 #include <QDebug>               // DELETEME for debugging
 #include <QRegularExpression>   // for QRegularExpression
 
@@ -256,9 +256,7 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QList<std::pair<QString, short>> ext_types_list;
-  //QHash<QString, short> ext_types_hash;
-  igc_metadata fs_metadata;
+  QList<std::tuple<QString, igc_ext_type_t, short, short, short>> ext_types_list; 
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -365,29 +363,20 @@ void IgcFormat::read()
        * but possible in the case of homebrew flight recorders), then skip the
        * whole thing.
       */
-      if (fs_metadata.has_data()) {
+      if (!ext_types_list.isEmpty()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
-          printf(MYNAME ": Record: %s\n",ibuf_q.toUtf8().constData());
+          printf(MYNAME ": Record: %s\n",qPrintable(ibuf_q));
         }
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Adding extension data:");
         }
-        QHash<QString, short>::const_iterator i;
-        for (const auto& pair : ext_types_list) {
-          QString ext_record_type = pair.first.mid(4,3);
-          igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type);
-          igc_defn_t ext_defn = fs_metadata.get_defn(def_type);
+        for (const auto& [name, ext, start, len, factor] : ext_types_list) {
+          short ext_data = QString(ibuf_q).mid(start, len).toShort() / factor;
 
-          short start = ext_defn.start;
-          short end = ext_defn.end;
-          short len = end - start + 1;
-          short ext_data;
-          ext_data = QStringView(ibuf_q).mid(start, len).toInt();
-
-          fsdata->set_value(def_type, ext_data);
+          fsdata->set_value(ext, ext_data);
           if (global_opts.debug_level >= 6) {
-            printf(" %s:%i", ext_record_type.toUtf8().constData(), ext_data);
+            printf(" %s:%i", qPrintable(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
@@ -450,51 +439,52 @@ void IgcFormat::read()
 
     case rec_fix_defn:
     { // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
-      // Not sure exactly what that means... something something scoping and initialization
+      // Not sure exactly what that means... something something scoping and initialization.
       /*
        * The first three characters define the number of extensions present.
        * We don't particularly care about that. After that, every group of seven
        * bytes is 4 digits followed by three letters, specifying start end end
        * bytes of each extension, and the kind of extension (always three chars)
        */
-      QHash<QString, short>::const_iterator i;
       if (global_opts.debug_level >= 1) {
-        printf(MYNAME ": I record: %s\n", ibuf_q.toUtf8().constData());
+        printf(MYNAME ": I record: %s\n" MYNAME ": ", qPrintable(ibuf_q));
       }
       for (unsigned i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
         QString extension_definition = ibuf_q.mid(i,7);
         if (global_opts.debug_level >= 1) {
-          printf(" %s;",ext_type.toUtf8().constData());
+          printf(" %s;",qPrintable(ext_type));
         }
+        // -1 because IGC records are one-initialized and QStrings are zero-initialized
+        short begin = extension_definition.mid(0,2).toShort() - 1;
+        short end = extension_definition.mid(2,2).toShort() - 1;
+        short len = end - begin + 1;
+        QString name = extension_definition.mid(4,3);
 
         igc_ext_type_t ext = get_ext_type(ext_type);
-        std::pair<QString, short> new_ext(extension_definition, ext);
-        ext_types_list.append(new_ext);
+        short factor = get_ext_factor(ext);
+
+        ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
       }
       if (global_opts.debug_level >= 1) {
         printf("\n");
       }
-      /*
-       * Now we have a hash list. The values of that list contain the extension
-       * type and begin and end bytes of each extension definition. Iterate through
-       * the hash and parse individual hash values.
-      */
       if (global_opts.debug_level >= 2) {
-        printf(MYNAME ": Extnensions defined in I record:\n");
-        printf(MYNAME ": Extensions present:\n(Note: IGC I records "
-                      "are one-initialized. Strings are zero-initialized.)\n");
-      }
-      for (const auto& pair : ext_types_list) {
-        short begin = pair.first.mid(0,2).toInt();
-        short end = pair.first.mid(2,2).toInt();
-        QString ext_record_type = pair.first.mid(4,3);
-
-        igc_ext_type_t def_type = IgcFormat::get_ext_type(ext_record_type);
-        igc_defn_t ext_defn = fs_metadata.set_defn(def_type, ext_record_type, begin, end);
-
-        if (global_opts.debug_level >= 2) {
-          printf("    %s:Begin:%i End:%i\n",ext_defn.name.toUtf8().constData(), ext_defn.start, ext_defn.end);
+        printf(MYNAME ": Extensions defined in I record:\n");
+        printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
+        QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
+        for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
+          if (igc_ext_type_t::first > ext or ext > igc_ext_type_t::last ) {
+            unsupported_extensions.append(name);
+          }
+          printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+        }
+        if (global_opts.debug_level >= 3) {
+          printf("\nUnsupported extensions:");
+          foreach(QString ext, unsupported_extensions) {
+            printf(" %s", qPrintable(ext));
+          }
+          printf("\n");
         }
       }
     }

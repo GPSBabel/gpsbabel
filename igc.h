@@ -6,6 +6,9 @@
  * specification of the IGC data format.  This translation code was
  * written when the latest amendment list for the specification was AL6.
  *
+ * Later updates, mostly IGC extensions, by Kenneth Voort, based on AL8.
+ * (https://www.fai.org/sites/default/files/igc_fr_specification_with_al8_2023-2-1_0.pdf)
+ *
  * Copyright (C) 2004 Chris Jones
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,12 +29,12 @@
 #define IGC_H_INCLUDED_
 
 #include <optional>              // for optional
-
 #include <QByteArray>            // for QByteArray
 #include <QDateTime>             // for QDateTime
 #include <QList>                 // for QList<>::const_iterator
 #include <QString>               // for QString, operator+, QStringLiteral
 #include <QVector>               // for QVector
+#include <QHash>                 // for QHash
 
 #include "defs.h"
 #include "format.h"
@@ -39,10 +42,31 @@
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
 
+/*
+ * Notes on IGC extensions:
+ *
+ * The IGC spec does not explicitly specify many scaling factors or units.
+ * Most of these are assumed based on IGC files available to the author.
+ *
+ * - (OAT) Temperature is assumed to be three digits with one implied decimal,
+ *   leading with zero for positive values and a "-" for negative vaules
+ * - (TAS) True airspeed is assumed to be in km/h, with two decimals
+ *   As per spec, this is supposed to be specified per IGC file, but never is
+ * - (VAT) Total Enery Vario, in metres persecond with one decimal and leading zero
+ * - (TRT) True Track is in degrees; it's useful to record this, but not very useful to graph it
+ * - (GSP) Ground speed units are not specified in spec. Km/h is assumed, with two decimals
+ * - (FXA) Fix accuracy is Estimated Position Error in metres, to a 2-Sigma (95.45%) probability
+ * - (GFO) is *not* in the spec, however has been seen in LX Eos recorders commonly found
+ *   in LS-4 gliders, a popular high performance single seat glider. Pending verification
+ *   from the vendor, it is currently assumed to be G Force/Load
+ * - (SIU) Satellites in use is self explanatory
+ * - (ACZ) Z Acceleration is assumed to be (G factor * 10), based on available evidence
+ *   "So called 'G'" is specified, but not the number of decimals
+ */
 class IgcFormat : public Format
 {
 public:
-  enum igc_ext_type_t {
+  enum class igc_ext_type_t {
     ext_rec_enl = 1,  // Engine Noise Level
     ext_rec_tas = 2,  // True Airspeed
     ext_rec_vat = 3,  // Total Energy Variometer
@@ -50,26 +74,14 @@ public:
     ext_rec_trt = 5,  // True Track
     ext_rec_gsp = 6,  // Ground Speed
     ext_rec_fxa = 7,  // Fix Accuracy
-    ext_rec_gfo = 8,  // G Force? (Found in LX Eos recorders present in LS-4)
-    ext_rec_siu = 9,  // Satllites In Use
-    ext_rec_acz = 10  // Z Acceleration
+    ext_rec_gfo = 8,  // G Force?
+    ext_rec_siu = 9,  // Satellites In Use
+    ext_rec_acz = 10,  // Z Acceleration
+
+    first = ext_rec_enl,
+    last = ext_rec_acz,
 
   };
-
-  IgcFormat::igc_ext_type_t get_ext_type(QString type) {
-    IgcFormat::igc_ext_type_t def_type;
-    if (type == "ENL") { def_type = IgcFormat::igc_ext_type_t::ext_rec_enl; }
-    else if (type == "TAS") { def_type = IgcFormat::igc_ext_type_t::ext_rec_tas; }
-    else if (type == "VAT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_vat; }
-    else if (type == "OAT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_oat; }
-    else if (type == "TRT") { def_type = IgcFormat::igc_ext_type_t::ext_rec_trt; }
-    else if (type == "GSP") { def_type = IgcFormat::igc_ext_type_t::ext_rec_gsp; }
-    else if (type == "FXA") { def_type = IgcFormat::igc_ext_type_t::ext_rec_fxa; }
-    else if (type == "SIU") { def_type = IgcFormat::igc_ext_type_t::ext_rec_siu; }
-    else if (type == "ACZ") { def_type = IgcFormat::igc_ext_type_t::ext_rec_acz; }
-    else if (type == "GFO") { def_type = IgcFormat::igc_ext_type_t::ext_rec_gfo; }
-    return def_type;
-  }
 
   QVector<arglist_t>* get_args() override
   {
@@ -120,6 +132,39 @@ private:
     rec_none = 0,		// No record
     rec_bad = 1,		// Bad record
   };
+
+  const QHash<QString, IgcFormat::igc_ext_type_t> igc_extension_map{
+    {"ENL", IgcFormat::igc_ext_type_t::ext_rec_enl},
+    {"TAS", IgcFormat::igc_ext_type_t::ext_rec_tas},
+    {"VAT", IgcFormat::igc_ext_type_t::ext_rec_vat},
+    {"OAT", IgcFormat::igc_ext_type_t::ext_rec_oat},
+    {"TRT", IgcFormat::igc_ext_type_t::ext_rec_trt},
+    {"GSP", IgcFormat::igc_ext_type_t::ext_rec_gsp},
+    {"FXA", IgcFormat::igc_ext_type_t::ext_rec_fxa},
+    {"SIU", IgcFormat::igc_ext_type_t::ext_rec_siu},
+    {"ACZ", IgcFormat::igc_ext_type_t::ext_rec_acz},
+    {"GFO", IgcFormat::igc_ext_type_t::ext_rec_gfo},
+  };
+
+  const QHash<IgcFormat::igc_ext_type_t, short> igc_extension_factor{
+    {IgcFormat::igc_ext_type_t::ext_rec_enl, 1},
+    {IgcFormat::igc_ext_type_t::ext_rec_tas, 100},
+    {IgcFormat::igc_ext_type_t::ext_rec_vat, 1},
+    {IgcFormat::igc_ext_type_t::ext_rec_oat, 10},
+    {IgcFormat::igc_ext_type_t::ext_rec_trt, 1},
+    {IgcFormat::igc_ext_type_t::ext_rec_gsp, 100},
+    {IgcFormat::igc_ext_type_t::ext_rec_fxa, 1},
+    {IgcFormat::igc_ext_type_t::ext_rec_siu, 1},
+    {IgcFormat::igc_ext_type_t::ext_rec_acz, 10},
+    {IgcFormat::igc_ext_type_t::ext_rec_gfo, 1},
+  };
+
+  igc_ext_type_t get_ext_type(const QString type) const {
+    return igc_extension_map.value(type);
+  }
+  short get_ext_factor(IgcFormat::igc_ext_type_t type) const {
+    return igc_extension_factor.value(type);
+  }
 
   class TaskRecordReader
   {
@@ -198,98 +243,6 @@ private:
    * and present in individual B records.
   */
 
-struct igc_defn_t {
-  QString name;
-  short start;
-  short end;
-};
-
-struct igc_metadata {
-  std::optional<igc_defn_t> enl;
-  std::optional<igc_defn_t> tas;
-  std::optional<igc_defn_t> vat;
-  std::optional<igc_defn_t> oat;
-  std::optional<igc_defn_t> trt;
-  std::optional<igc_defn_t> gsp;
-  std::optional<igc_defn_t> fxa;
-  std::optional<igc_defn_t> siu;
-  std::optional<igc_defn_t> acz;
-  std::optional<igc_defn_t> gfo;
-
-  bool has_data() const {
-    for (const auto& member : {enl, tas, vat, oat, trt, gsp, fxa, siu, acz, gfo}) {
-      if (member.has_value()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  igc_defn_t set_defn(IgcFormat::igc_ext_type_t type, const QString& name, short start, short end) {
-    switch (type) {
-      case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        enl = igc_defn_t{name, start, end};
-        return *enl;
-      case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        tas = igc_defn_t{name, start, end};
-        return *tas;
-      case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        vat = igc_defn_t{name, start, end};
-        return *vat;
-      case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        oat = igc_defn_t{name, start, end};
-        return *oat;
-      case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        trt = igc_defn_t{name, start, end};
-        return *trt;
-      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        gsp = igc_defn_t{name, start, end};
-        return *gsp;
-      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        fxa = igc_defn_t{name, start, end};
-        return *fxa;
-      case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        siu = igc_defn_t{name, start, end};
-        return *siu;
-      case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        acz = igc_defn_t{name, start, end};
-        return *acz;
-      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        gfo = igc_defn_t{name, start, end};
-        return *gfo;
-      default:
-        throw std::runtime_error("Invalid igc_defn_t type");
-    }
-  }
-
-  igc_defn_t get_defn(IgcFormat::igc_ext_type_t defn_type) const {
-    switch (defn_type) {
-      case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        return *enl;
-      case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        return *tas;
-      case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        return *vat;
-      case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        return *oat;
-      case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        return *trt;
-      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        return *gsp;
-      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        return *fxa;
-      case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        return *siu;
-      case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        return *acz;
-      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        return *gfo;
-      default:
-        throw std::runtime_error("Invalid igc_defn_t type");
-    }
-  }
-};
-
 struct igc_fsdata : public FormatSpecificData {
   igc_fsdata() : FormatSpecificData(kFsIGC) {}
 
@@ -338,31 +291,32 @@ struct igc_fsdata : public FormatSpecificData {
     return success;
   }
 
+  // Not currently used, but already written and left for future use.
   std::optional<short> get_value(IgcFormat::igc_ext_type_t defn_type) const {
     std::optional<short> ret;
     switch (defn_type) {
       case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        ret = enl;
+        ret = enl; break;
       case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        ret = tas;
+        ret = tas; break;
       case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        ret = vat;
+        ret = vat; break;
       case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        ret = oat;
+        ret = oat; break;
       case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        ret = trt;
+        ret = trt; break;
       case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        ret = gsp;
+        ret = gsp; break;
       case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        ret = fxa;
+        ret = fxa; break;
       case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        ret = siu;
+        ret = siu; break;
       case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        ret = acz;
+        ret = acz; break;
       case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        ret = gfo;
+        ret = gfo; break;
       default:
-        throw std::runtime_error("Invalid igc_ext_type");
+        fatal("Invalid igc_ext_type\n");
         break;
     }
     return ret;
@@ -391,7 +345,7 @@ struct igc_fsdata : public FormatSpecificData {
       case KmlFormat::wp_field::fld_igc_gfo:
         ret = gfo; break;
       default:
-        throw std::runtime_error("Invalid igc_ext_type");
+        fatal("Invalid igc_ext_type\n");
         break;
     }
     return ret;
