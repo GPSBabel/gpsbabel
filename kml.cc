@@ -1619,33 +1619,22 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     }
     if (fs_igc) {
       has_igc_exts = true;
-      if (fs_igc->enl.has_value()) {
-        has_igc_enl = true;
-      } if (fs_igc->tas.has_value()) {
-        has_igc_tas = true;
-      } if (fs_igc->oat.has_value()) {
-        has_igc_oat = true;
-      } if (fs_igc->vat.has_value()) {
-        has_igc_vat = true;
-      } if (fs_igc->gsp.has_value()) {
-        has_igc_gsp = true;
-      } if (fs_igc->fxa.has_value()) {
-        has_igc_fxa = true;
-      } if (fs_igc->gfo.has_value()) {
-        has_igc_gfo = true;
-      } if (fs_igc->acz.has_value()) {
-        has_igc_acz = true;
+      if (fs_igc->enl.has_value()) { has_igc_enl = true; }
+      if (fs_igc->tas.has_value()) { has_igc_tas = true; }
+      if (fs_igc->oat.has_value()) { has_igc_oat = true; }
+      if (fs_igc->vat.has_value()) { has_igc_vat = true; }
+      if (fs_igc->gsp.has_value()) { has_igc_gsp = true; }
+      if (fs_igc->fxa.has_value()) { has_igc_fxa = true; }
+      if (fs_igc->gfo.has_value()) { has_igc_gfo = true; }
+      if (fs_igc->acz.has_value()) { has_igc_acz = true; }
       #ifdef INCLUDE_IGC_SIU
-      } if (fs_igc->siu.has_value()) {
-        has_igc_siu = true;
+      if (fs_igc->siu.has_value()) { has_igc_siu = true; }
       #endif
       #ifdef INCLUDE_IGC_TRT
-      } if (fs_igc->trt.has_value()) {
-        has_igc_trt = true;
+      if (fs_igc->trt.has_value()) { has_igc_trt = true; }
       #endif
       }
     }
-  }
 
   // This gets unwieldly if we check each individual igc extension,
   // hence the has_igc_exts flag.
