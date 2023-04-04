@@ -85,7 +85,8 @@ public:
     fld_igc_gfo,  // G Force
     fld_igc_siu,  // Satellites In Use
     fld_igc_acz,   // Z Acceleration
-    fld_igc_end
+    fld_igc_first = fld_igc_enl,
+    fld_igc_last = fld_igc_acz
   };
 
 private:

@@ -84,7 +84,7 @@ unsigned char IgcFormat::coords_match(double lat1, double lon1, double lat2, dou
  * @param  rec  Caller allocated storage for the record.  At least kMaxRecLen chars must be allocated.
  * @return the record type.  rec_none on EOF, rec_bad on fgets() or parse error.
  */
-IgcFormat::igc_rec_type_t IgcFormat::get_record(char** rec)
+IgcFormat::igc_rec_type_t IgcFormat::get_record(char** rec) const
 {
   char* c;
 retry:
@@ -256,7 +256,7 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QList<std::tuple<QString, igc_ext_type_t, short, short, short>> ext_types_list; 
+  QList<std::tuple<QString, igc_ext_type_t, int, int, int>> ext_types_list; 
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -364,7 +364,7 @@ void IgcFormat::read()
        * whole thing.
       */
       if (!ext_types_list.isEmpty()) {
-        auto* fsdata = new igc_fsdata;
+        auto* fsdata = new igc_fsdata<double>;
         if (global_opts.debug_level >= 7) {
           printf(MYNAME ": Record: %s\n",qPrintable(ibuf_q));
         }
@@ -372,7 +372,7 @@ void IgcFormat::read()
           printf(MYNAME ": Adding extension data:");
         }
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
-          short ext_data = QString(ibuf_q).mid(start, len).toShort() / factor;
+          int ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
           fsdata->set_value(ext, ext_data);
           if (global_opts.debug_level >= 6) {
@@ -445,26 +445,34 @@ void IgcFormat::read()
        * We don't particularly care about that. After that, every group of seven
        * bytes is 4 digits followed by three letters, specifying start end end
        * bytes of each extension, and the kind of extension (always three chars)
+       * Building the list of (un)supported extensions isn't necessary if we aren't
+       * producing debug output, but this case: is only done once per file.
        */
+
+      QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
+      QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
       if (global_opts.debug_level >= 1) {
         printf(MYNAME ": I record: %s\n" MYNAME ": ", qPrintable(ibuf_q));
       }
-      for (unsigned i=3; i < ibuf_q.length(); i+=7) {
+      for (int i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
         QString extension_definition = ibuf_q.mid(i,7);
         if (global_opts.debug_level >= 1) {
           printf(" %s;",qPrintable(ext_type));
         }
         // -1 because IGC records are one-initialized and QStrings are zero-initialized
-        short begin = extension_definition.mid(0,2).toShort() - 1;
-        short end = extension_definition.mid(2,2).toShort() - 1;
-        short len = end - begin + 1;
+        int begin = extension_definition.mid(0,2).toInt() - 1;
+        int end = extension_definition.mid(2,2).toInt() - 1;
+        int len = end - begin + 1;
         QString name = extension_definition.mid(4,3);
-
         igc_ext_type_t ext = get_ext_type(ext_type);
-        short factor = get_ext_factor(ext);
-
-        ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
+        if (ext != IgcFormat::igc_ext_type_t::ext_rec_unknown) {
+          int factor = get_ext_factor(ext);
+          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
+          supported_extensions.append(name);
+        } else {
+          unsupported_extensions.append(name);
+        }
       }
       if (global_opts.debug_level >= 1) {
         printf("\n");
@@ -472,14 +480,14 @@ void IgcFormat::read()
       if (global_opts.debug_level >= 2) {
         printf(MYNAME ": Extensions defined in I record:\n");
         printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
-        QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          if (igc_ext_type_t::first > ext or ext > igc_ext_type_t::last ) {
-            unsupported_extensions.append(name);
-          }
           printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
+          printf("\n" MYNAME "Supported extensions:");
+          foreach(QString ext, supported_extensions) {
+            printf(" %s", qPrintable(ext));
+          }
           printf("\nUnsupported extensions:");
           foreach(QString ext, unsupported_extensions) {
             printf(" %s", qPrintable(ext));

@@ -28,7 +28,6 @@
 #ifndef IGC_H_INCLUDED_
 #define IGC_H_INCLUDED_
 
-#include <optional>              // for optional
 #include <QByteArray>            // for QByteArray
 #include <QDateTime>             // for QDateTime
 #include <QList>                 // for QList<>::const_iterator
@@ -39,6 +38,7 @@
 #include "defs.h"
 #include "format.h"
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include <optional>              // for optional
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
 
@@ -67,6 +67,7 @@ class IgcFormat : public Format
 {
 public:
   enum class igc_ext_type_t {
+    ext_rec_unknown = 0,  // Intended for defaults
     ext_rec_enl = 1,  // Engine Noise Level
     ext_rec_tas = 2,  // True Airspeed
     ext_rec_vat = 3,  // Total Energy Variometer
@@ -77,7 +78,6 @@ public:
     ext_rec_gfo = 8,  // G Force?
     ext_rec_siu = 9,  // Satellites In Use
     ext_rec_acz = 10,  // Z Acceleration
-
     first = ext_rec_enl,
     last = ext_rec_acz,
 
@@ -146,24 +146,51 @@ private:
     {"GFO", IgcFormat::igc_ext_type_t::ext_rec_gfo},
   };
 
-  const QHash<IgcFormat::igc_ext_type_t, short> igc_extension_factor{
-    {IgcFormat::igc_ext_type_t::ext_rec_enl, 1},
-    {IgcFormat::igc_ext_type_t::ext_rec_tas, 100},
-    {IgcFormat::igc_ext_type_t::ext_rec_vat, 1},
-    {IgcFormat::igc_ext_type_t::ext_rec_oat, 10},
-    {IgcFormat::igc_ext_type_t::ext_rec_trt, 1},
-    {IgcFormat::igc_ext_type_t::ext_rec_gsp, 100},
-    {IgcFormat::igc_ext_type_t::ext_rec_fxa, 1},
-    {IgcFormat::igc_ext_type_t::ext_rec_siu, 1},
-    {IgcFormat::igc_ext_type_t::ext_rec_acz, 10},
-    {IgcFormat::igc_ext_type_t::ext_rec_gfo, 1},
-  };
-
-  igc_ext_type_t get_ext_type(const QString type) const {
-    return igc_extension_map.value(type);
+  // Will return zero if no match
+  igc_ext_type_t get_ext_type(const QString& type) const {
+    IgcFormat::igc_ext_type_t ret;
+    if (igc_extension_map.contains(type)) {
+      ret = IgcFormat::igc_ext_type_t::ext_rec_unknown;
+    } else {
+      ret = igc_extension_map.value(type);
+    }
+    return ret;
   }
-  short get_ext_factor(IgcFormat::igc_ext_type_t type) const {
-    return igc_extension_factor.value(type);
+
+  /*
+   * Returns zero when an extension is not found. Given that this function
+   * returns a factor, this could lead to division by zero exceptions.
+   * A factor can never be zero, so this looks good to me.
+   * Be careful.
+   */
+  int get_ext_factor(IgcFormat::igc_ext_type_t type) const {
+    int ret = 0;
+    switch (type) {
+      case IgcFormat::igc_ext_type_t::ext_rec_enl:
+        ret = 1; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_tas:
+        ret = 100; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_vat:
+        ret = 1; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_oat:
+        ret = 10; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_trt:
+        ret = 1; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+        ret = 100; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+        ret = 1; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_siu:
+        ret = 1; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_acz:
+        ret = 10; break;
+      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+        ret = 1; break;
+      default:
+        warning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
+        break;
+    }
+    return ret;
   }
 
   class TaskRecordReader
@@ -201,7 +228,7 @@ private:
   /* Member Functions */
 
   static unsigned char coords_match(double, double, double, double);
-  igc_rec_type_t get_record(char**);
+  igc_rec_type_t get_record(char**) const;
   void detect_pres_track(const route_head*);
   void detect_gnss_track(const route_head*);
   void detect_other_track(const route_head*, int& max_waypt_ct);
@@ -243,6 +270,9 @@ private:
    * and present in individual B records.
   */
 
+template <typename T,
+          typename = typename std::enable_if<std::is_floating_point<T>::value ||
+                                             std::is_same<T, int>::value>::type>
 struct igc_fsdata : public FormatSpecificData {
   igc_fsdata() : FormatSpecificData(kFsIGC) {}
 
@@ -251,18 +281,18 @@ struct igc_fsdata : public FormatSpecificData {
     return new igc_fsdata(*this);
   }
 
-  std::optional<short> enl; // Engine Noise Level
-  std::optional<short> tas; // True Airspeed
-  std::optional<short> vat; // Compensated variometer (total energy)
-  std::optional<short> oat; // Outside Air Temperature
-  std::optional<short> trt; // True Track
-  std::optional<short> gsp; // Ground Speed
-  std::optional<short> fxa; // Fix Accuracy
-  std::optional<short> siu; // Satellites In Use
-  std::optional<short> acz; // Z Acceleration
-  std::optional<short> gfo; // G Force?
+  std::optional<T> enl; // Engine Noise Level
+  std::optional<T> tas; // True Airspeed
+  std::optional<T> vat; // Compensated variometer (total energy)
+  std::optional<T> oat; // Outside Air Temperature
+  std::optional<T> trt; // True Track
+  std::optional<T> gsp; // Ground Speed
+  std::optional<T> fxa; // Fix Accuracy
+  std::optional<T> siu; // Satellites In Use
+  std::optional<T> acz; // Z Acceleration
+  std::optional<T> gfo; // G Force?
 
-  bool set_value(IgcFormat::igc_ext_type_t type, short value) {
+  bool set_value(IgcFormat::igc_ext_type_t type, int value) {
     bool success = true;
     switch (type) {
       case IgcFormat::igc_ext_type_t::ext_rec_enl:
@@ -292,8 +322,8 @@ struct igc_fsdata : public FormatSpecificData {
   }
 
   // Not currently used, but already written and left for future use.
-  std::optional<short> get_value(IgcFormat::igc_ext_type_t defn_type) const {
-    std::optional<short> ret;
+  std::optional<int> get_value(IgcFormat::igc_ext_type_t defn_type) const {
+    std::optional<int> ret;
     switch (defn_type) {
       case IgcFormat::igc_ext_type_t::ext_rec_enl:
         ret = enl; break;
@@ -321,8 +351,8 @@ struct igc_fsdata : public FormatSpecificData {
     }
     return ret;
   }
-  std::optional<short> get_value(KmlFormat::wp_field defn_type) const {
-    std::optional<short> ret;
+  std::optional<int> get_value(KmlFormat::wp_field defn_type) const {
+    std::optional<int> ret;
     switch (defn_type) {
       case KmlFormat::wp_field::fld_igc_enl:
         ret = enl; break;
