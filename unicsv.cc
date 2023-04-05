@@ -1705,6 +1705,10 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 void
 UnicsvFormat::wr_init(const QString& fname)
 {
+  if (opt_fields) {
+    fatal(FatalMsg() << MYNAME <<
+          ": option 'fields' is not supported on output");
+  }
   fout = new gpsbabel::TextStream;
   fout->open(fname, QIODevice::WriteOnly, MYNAME, opt_codec);
   fout->setRealNumberNotation(QTextStream::FixedNotation);
