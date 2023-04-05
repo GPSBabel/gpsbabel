@@ -46,7 +46,6 @@
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
 #include <QDebug>               // DELETEME for debugging
-#include <QRegularExpression>   // for QRegularExpression
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
