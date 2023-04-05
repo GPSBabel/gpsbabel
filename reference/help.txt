@@ -71,6 +71,7 @@ File Types (-i and -o options):
 	  frame                 Time-frame (in seconds)
 	  name                  Locate waypoint for tagging by this name
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N
+	  offset                Image Offset Time (+HH:MM or -HH:MM)
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf
 	  url                   Source for URL field in .dbf
@@ -79,9 +80,6 @@ File Types (-i and -o options):
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
-	gpssim                Franson GPSGate Simulation
-	  wayptspd              Default speed for waypoints (knots/hr)
-	  split                 (0/1) Split input into separate files
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames

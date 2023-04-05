@@ -410,14 +410,14 @@ UnicsvFormat::unicsv_fondle_header(QString header)
     const field_t* f = &fields_def[0];
 
     unicsv_fields_tab.append(fld_terminator);
-    while (f->name) {
+    while (!f->name.isEmpty()) {
       if (unicsv_compare_fields(value, f)) {
         unicsv_fields_tab.last() = f->type;
         break;
       }
       f++;
     }
-    if ((! f->name) && global_opts.debug_level) {
+    if ((f->name.isEmpty()) && global_opts.debug_level) {
       warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
     }
 
@@ -488,8 +488,8 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   double utm_easting = 0;
   double utm_northing = 0;
   char utm_zc = 'N';
-  // Zones are always two bytes.  Spare one for null termination..
-  char bng_zone[3] = "";
+  // Zones are always two bytes.
+  QString bng_zone;
   double bng_easting = kUnicsvUnknown;
   double bng_northing = kUnicsvUnknown;
   double swiss_easting = kUnicsvUnknown;
@@ -608,8 +608,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_bng_zone:
-      strncpy(bng_zone, CSTR(value), sizeof(bng_zone) - 1);
-      strupper(bng_zone);
+      bng_zone = value.toUpper();
       break;
 
     case fld_bng_northing:
@@ -1028,7 +1027,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       GPS_Math_UTM_EN_To_Known_Datum(&wpt->latitude, &wpt->longitude,
                                      utm_easting, utm_northing, utm_zone, utm_zc, unicsv_datum_idx);
     } else if ((bng_easting != kUnicsvUnknown) && (bng_northing != kUnicsvUnknown)) {
-      if (bng_zone[0] == '\0') { // OS easting northing
+      if (bng_zone.isEmpty()) { // OS easting northing
         // Grid references may also be quoted as a pair of numbers: eastings then northings in metres, measured from the southwest corner of the SV square.
         double bnge;
         double bngn;
@@ -1046,10 +1045,10 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                 bngz, bnge, bngn);
       } else { // traditional zone easting northing
         if (! GPS_Math_UKOSMap_To_WGS84_M(
-              bng_zone, bng_easting, bng_northing,
+              CSTR(bng_zone), bng_easting, bng_northing,
               &wpt->latitude, &wpt->longitude))
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
-                bng_zone, bng_easting, bng_northing);
+                CSTR(bng_zone), bng_easting, bng_northing);
       }
       src_datum = kDautmWGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {

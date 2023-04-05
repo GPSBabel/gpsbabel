@@ -75,7 +75,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   qint64 result = 0;
 
-  static const QRegularExpression re(R"(^([+-]?\d+)([wdhms])(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?(?:([+-]?\d+)([wdhms]))?$)", QRegularExpression::CaseInsensitiveOption);
+  static const QRegularExpression re(R"(^([+-]?\d+)([wdhmsz])(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?(?:([+-]?\d+)([wdhmsz]))?$)", QRegularExpression::CaseInsensitiveOption);
   assert(re.isValid());
   QRegularExpressionMatch match = re.match(arg);
   if (match.hasMatch()) {
@@ -89,18 +89,21 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 
       switch (match.captured(idx+1).at(0).toLower().toLatin1()) {
       case 'w':
-        partial *= SECONDS_PER_DAY * 7;
+        partial *= SECONDS_PER_DAY * 1000 * 7;
         break;
       case 'd':
-        partial *= SECONDS_PER_DAY;
+        partial *= SECONDS_PER_DAY * 1000;
         break;
       case 'h':
-        partial *= SECONDS_PER_HOUR;
+        partial *= SECONDS_PER_HOUR * 1000;
         break;
       case 'm':
-        partial *= 60;
+        partial *= 60 * 1000;
         break;
       case 's':
+        partial *= 1000;
+        break;
+      case 'z':
         break;
       default:
         fatal(MYNAME "-time: invalid unit in move option \"%s\"!\n", qPrintable(match.captured(idx+1)));
@@ -110,7 +113,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 
     }
 #ifdef TRACKF_DBG
-    qDebug() << MYNAME "-time option: shift =" << result << "seconds";
+    qDebug() << MYNAME "-time option: shift =" << result / 1000.0 << "seconds";
 #endif
   } else {
     fatal(MYNAME "-time: invalid value in move option \"%s\"!\n", arg);
@@ -579,7 +582,7 @@ void TrackFilter::trackfilter_move()
   for (auto* track : qAsConst(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
       if (wpt->creation_time.isValid()) {
-        wpt->creation_time = wpt->creation_time.addSecs(delta);
+        wpt->creation_time = wpt->creation_time.addMSecs(delta);
       } else {
         ++timeless_points;
       }
@@ -618,12 +621,10 @@ void TrackFilter::trackfilter_synth()
       }
       if (first) {
         if (opt_course) {
-          // TODO: the course value 0 isn't valid, wouldn't it be better to UNSET course?
-          wpt->set_course(0);
+          wpt->reset_course();
         }
         if (opt_speed) {
-          // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
-          wpt->set_speed(0);
+          wpt->reset_speed();
         }
         first = false;
         last_course_lat = wpt->latitude;
@@ -676,17 +677,19 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 {
   QDateTime result;
 
-  static const QRegularExpression re("^(\\d{0,14})$");
+  QString start(timestr);
+  QString fmtstart("00000101000000.000");
+  fmtstart.replace(0, start.size(), start);
+
+  static const QRegularExpression re(R"(^\d{14}\.\d{3}$)");
   assert(re.isValid());
-  QRegularExpressionMatch match = re.match(timestr);
+  QRegularExpressionMatch match = re.match(fmtstart);
   if (match.hasMatch()) {
-    QString start = match.captured(1);
-    QString fmtstart("00000101000000");
-    fmtstart.replace(0, start.size(), start);
-    result = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
+    result = QDateTime::fromString(match.captured(0), "yyyyMMddHHmmss.zzz");
     result.setTimeSpec(Qt::UTC);
     if (!result.isValid()) {
-      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
+      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
     }
 
 #ifdef TRACKF_DBG

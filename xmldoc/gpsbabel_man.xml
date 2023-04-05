@@ -82,7 +82,7 @@ or as the backend for other tools. </para>
         <listitem>
           <para>Use
             <replaceable>format</replaceable>
-            as the type of file to read.</para>
+            as the type of file to write.</para>
         </listitem>
       </varlistentry>
       <varlistentry>

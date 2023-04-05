@@ -116,7 +116,7 @@ inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
 
 #define MAX_HEADER_FIELDS 36
 
-static char* header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
+static QString header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
 static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
 static int header_ct[unknown_header + 1];
 
@@ -869,11 +869,7 @@ static void
 free_header(const header_type ht)
 {
   for (int i = 0; i < MAX_HEADER_FIELDS; i++) {
-    char* c = header_lines[ht][i];
-    if (c != nullptr) {
-      xfree(c);
-      header_lines[ht][i] = nullptr;
-    }
+    header_lines[ht][i].clear();
   }
   header_ct[ht] = 0;
   memset(header_fields[ht], 0, sizeof(header_fields[ht]));
@@ -995,7 +991,8 @@ parse_header(const QStringList& lineparts)
 
   for (const auto& str : lineparts) {
     column++;
-    header_lines[unknown_header][column] = strupper(xstrdup(str));
+    header_lines[unknown_header][column] = str;
+    header_lines[unknown_header][column] = header_lines[unknown_header][column].toUpper();
     header_ct[unknown_header]++;
     if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
       break;
@@ -1044,13 +1041,13 @@ bind_fields(const header_type ht)
   }
 
   for (i = 0; i < header_ct[unknown_header]; i++) {
-    char* name = header_lines[ht][i] = header_lines[unknown_header][i];
-    header_lines[unknown_header][i] = nullptr;
+    auto name = header_lines[ht][i] = header_lines[unknown_header][i];
+    header_lines[unknown_header][i].clear();
 
     c = fields;
     int field_no = 1;
     while (*c) {
-      if (strcmp(c, name) == 0) {
+      if (name.compare(c) == 0) {
         header_fields[ht][i] = field_no;
 #if 0
         printf("Binding field \"%s\" to internal number %d (%d,%d)\n", name, field_no, ht, i);

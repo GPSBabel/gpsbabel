@@ -1380,7 +1380,7 @@ int32 GPS_Math_EN_To_UKOSNG_Map(double E, double N, double* mE,
 ** Convert Ordnance Survey map eastings and northings plus
 ** two letter code to Airy 1830 eastings and northings
 **
-** @param [w] map [char *] map code
+** @param [w] map [const char *] map code
 ** @param [r] mapE [double] easting (metres)
 ** @param [r] mapN [double] northing (metres)
 ** @param [w] E [double *] full Airy easting (metres)
@@ -1389,8 +1389,8 @@ int32 GPS_Math_EN_To_UKOSNG_Map(double E, double N, double* mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSNG_Map_To_EN(char* map, double mapE, double mapN, double* E,
-                                double* N)
+int32 GPS_Math_UKOSNG_Map_To_EN(const char* map, double mapE, double mapN,
+                                double* E, double* N)
 {
   int32  t;
   int32  idx;
@@ -1883,7 +1883,7 @@ int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
 ** Transform UK Ordnance survey map position to WGS84 lat/lon
 ** Uses Molodensky transformation
 **
-** @param [r] map  [char *] map two letter code
+** @param [r] map  [const char *] map two letter code
 ** @param [r] mE   [double] map easting (metres)
 ** @param [r] mN   [double] map northing (metres)
 ** @param [w] lat  [double *] WGS84 latitude (deg)
@@ -1891,7 +1891,7 @@ int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSMap_To_WGS84_M(char* map, double mE, double mN,
+int32 GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
                                   double* lat, double* lon)
 {
   double E;
@@ -1962,7 +1962,7 @@ int32 GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double* mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSMap_To_WGS84_C(char* map, double mE, double mN,
+int32 GPS_Math_UKOSMap_To_WGS84_C(const char* map, double mE, double mN,
                                   double* lat, double* lon)
 {
   double E;

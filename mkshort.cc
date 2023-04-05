@@ -473,6 +473,15 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     }
   }
 
+  /* Eliminate trailing whitespace in all cases. This is done late because
+     earlier operations may have vacated characters after the space. */
+
+  char *end = ostring + strlen(ostring) - 1;
+  while (end > ostring && isspace(*end)) {
+    *end-- = 0;
+  }
+
+
   /*
    * Toss vowels to approach target length, but don't toss them
    * if we don't have to.  We always keep the leading two letters
@@ -535,14 +544,20 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     }
     memmove(dp, np, nlen);
     dp[nlen] = 0;
-    rtrim(ostring);
+    // Essentially ostring.rtrim() from here down.
+    if (ostring && ostring[0] != 0) { // Empty output string? Bail.
+      char *end = ostring + strlen(ostring) - 1;
+      while (end > ostring && isspace(*end)) {
+        *end-- = 0;
+      }
+    }
   }
 
   /*
    * If, after all that, we have an empty string, punt and
    * let the must_uniq code handle it.
    */
-  if (ostring[0] == '\0') {
+  if (ostring && ostring[0] == '\0') {
     xfree(ostring);
     ostring = xstrdup(hdl->defname);
   }
@@ -595,8 +610,8 @@ mkshort_from_wpt(short_handle h, const Waypoint* wpt)
 }
 
 
-#if 0
-char* foo[] =  {
+#if TEST_MKSHORT
+const char* foo[] =  {
   "VwthPst# 3700.706N 08627.588W 0000000m View the Past #2              ",
   "PilotRoc 3655.270N 08717.173W 0000000m Pilot Rock by CacheAdvance    ",
   "MrCycsNg 3652.407N 08728.890W 0000000m Mr. Cayces Neighborhood by Ca",
@@ -738,36 +753,47 @@ char* foo[] =  {
   "GimmShlt 3430.087N 08536.834W 0000000m Gimme Shelter by Big Rock & Po",
   "GnomeTrs 3433.081N 08535.849W 0000000m Gnome Treasure by Big Rock    ",
   "FlyingTr 3608.594N 08648.179W 0000000m  Flying Torso  by Campaholics ",
-  "CultivtC 3608.582N 08648.064W 0000000m  Cultivate a Cure  by Campahol"
+  "CultivtC 3608.582N 08648.064W 0000000m  Cultivate a Cure  by Campahol",
+  __nullptr
 }
 ;
 
-main()
+int main()
 {
-  char** foop = foo;
   int r;
 
-  printf("%s\n", mkshort("The Troll"));
-  printf("%s\n", mkshort("EFI"));
-  printf("%s\n", mkshort("the Troll"));
-  printf("%s\n", mkshort("the Trolley"));
-  printf("%s\n", mkshort("The Troll Lives Under The Bridge"));
-  printf("%s\n", mkshort("The \"Troll\" Lives Under $$ The Bridge!"));
-  printf("%s\n", mkshort("The Trolley Goes Round"));
-  printf("%s\n", mkshort("Cache In / Trash Out #1"));
-  printf("%s\n", mkshort("Cache In / Trash Out #2"));
-  printf("%s\n", mkshort("Cache In / Trash Out #137"));
+  auto h = mkshort_new_handle();
+//  setshort_whitespace_ok(h, false);
 
-  while (0 && *foop) {
-    printf("%s %s\n", mkshort(*foop+39), *foop+39);
+  printf("%s\n", mkshort(h, "The Troll", false));
+  printf("%s\n", mkshort(h, "EFI", false));
+  printf("%s\n", mkshort(h, "the Troll", false));
+  printf("%s\n", mkshort(h, "the Trolley", false));
+  printf("%s\n", mkshort(h, "The Troll Lives Under The Bridge", false));
+  printf("%s\n", mkshort(h, "The \"Troll\" Lives Under $$ The Bridge!", false));
+  printf("%s\n", mkshort(h, "The Trolley Goes Round", false));
+  printf("%s\n", mkshort(h, "Cache In / Trash Out #1", false));
+  printf("%s\n", mkshort(h, "Cache In / Trash Out #2", false));
+  printf("%s\n", mkshort(h, "Cache In / Trash Out #137", false));
+  printf("|%s|\n", mkshort(h, "Cache .", false));
+  printf("|%s|\n", mkshort(h, "Cache    .", false));
+  printf("|%s|\n", mkshort(h, "Cache         .", false));
+  printf("|%s|\n", mkshort(h, "   Cache   .", false));
+
+#if 0
+  const char** foop = foo;
+  while (*foop) {
+    printf("%s | %s\n", mkshort(h, *foop+39, false), *foop+39);
     foop++;
   }
+#endif
 
-  printf("%s\n", delete_last_vowel(0, "the quick brown foo", &r));
-  printf("%s\n", delete_last_vowel(0, "the quick brown fox", &r));
-  printf("%s\n", delete_last_vowel(0, "xxx", &r));
-  printf("%s\n", delete_last_vowel(0, "ixxx", &r));
-  printf("%s\n", delete_last_vowel(0, "aexxx", &r));
+  printf("%s\n", delete_last_vowel(0, xstrdup("the quick brown foo"), &r));
+  printf("%s\n", delete_last_vowel(0, xstrdup("the quick brown fox"), &r));
+  printf("%s\n", delete_last_vowel(0, xstrdup("xxx"), &r));
+  printf("%s\n", delete_last_vowel(0, xstrdup("ixxx"), &r));
+  printf("%s\n", delete_last_vowel(0, xstrdup("aexxx"), &r));
 
+  return 0;
 }
 #endif

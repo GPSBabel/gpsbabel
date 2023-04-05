@@ -140,7 +140,7 @@ private:
   };
 
   struct field_t {
-    const char* name;
+    const QString name;
     field_e type;
     uint32_t options;
   };

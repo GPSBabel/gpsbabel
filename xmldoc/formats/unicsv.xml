@@ -11,7 +11,7 @@
 <para>
    The list of keywords include:
    <screen>
-      alt =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
+      alt =      Elevation (in meters).  For feet use "alt ft", "altft", "alt feet", or "altfeet".
       arch =     <link linkend="style_def_isarchived">Geocache archived flag</link>
       avail =    <link linkend="style_def_isavailable">Geocache available flag</link>
       bng_e =    British National Grid's easting
@@ -24,10 +24,10 @@
       cont =     <link linkend="style_def_geocontainer">Geocache container</link>
       cour =     Heading / Course true
       date =     Date (yyyy/mm/dd)
-      depth =    Depth (in meters).  Add "ft" or "feet" for feet.
+      depth =    Depth (in meters).  For feet use "depth ft", "depthft", "depth feet", or "depthfeet".
       desc =     Description
       diff =     <link linkend="style_def_geodiff">Geocache difficulty</link>
-      ele =      Elevation (in meters) of the point. Add "ft" or "feet" for feet.
+      ele =      Elevation (in meters).  For feet use "ele ft", "eleft", "ele feet", or "elefeet".
       e/w =      'e' for eastern hemisphere, 'w' for western
       exported = Geocache export date
       found =    <link linkend="style_def_geofound">Geocache last found date</link>
@@ -37,7 +37,7 @@
       hdop =     Horizontal dilution of precision
       head =     Heading / Course true
       heart =    Heartrate
-      height =   Elevation (in meters) of the point
+      height =   Elevation (in meters).  For feet use "height ft", "heightft", "height feet", or "heightfeet".
       hint =     <link linkend="style_def_geohint">Geocache cache hint</link>
       icon =     Symbol (icon) name
       lat =      Latitude
@@ -49,7 +49,7 @@
       placer =   <link linkend="style_def_geoplacer">Geocache placer</link>
       placer_id =Geocache placer id
       power =    Cycling power (in Watts)
-      prox =     Proximity (in meters).  Add "ft" or "feet" for feet.
+      prox =     Proximity (in meters).  For feet use "prox ft", "proxft", "prox feet", or "proxfeet".
       sat =      Number of sats used for fix
       speed =    Speed, in meters per second. (See below)
       symb =     Symbol (icon) name
@@ -72,7 +72,7 @@
       x_pos =    Longitude
       y =        Latitude
       y_pos =    Latitude
-      z =        Altitude (elevation).  See "elevation".
+      z =        Elevation (in meters)
    </screen>
    We support some enhanced Garmin attributes. They are also available in
    <link linkend="fmt_gpx">gpx</link>, <link linkend="fmt_gdb">gdb</link>,

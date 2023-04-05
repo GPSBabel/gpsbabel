@@ -21,7 +21,7 @@ option	radius	nosort	Inhibit sort by distance to center	boolean				https://www.g
 option	radius	maxcount	Output no more than this number of points	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_maxcount
 option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_asroute
 interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html
-option	interpolate	time	Time interval in seconds	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
+option	interpolate	time	Time interval in seconds	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
 option	interpolate	distance	Distance interval in miles or kilometers	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html

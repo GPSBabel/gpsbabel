@@ -244,12 +244,63 @@ private:
   short_handle mkshort_handle;
 };
 
+static void
+run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
+{
+  start_session(ivecs.fmtname, fname);
+  if (ivecs.isDynamic()) {
+    ivecs.fmt = ivecs.factory(fname);
+    Vecs::init_vec(ivecs.fmt);
+    Vecs::prepare_format(ivecs);
+
+    ivecs->rd_init(fname);
+    ivecs->read();
+    ivecs->rd_deinit();
+
+    Vecs::exit_vec(ivecs.fmt);
+    delete ivecs.fmt;
+    ivecs.fmt = nullptr;
+  } else {
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    Vecs::prepare_format(ivecs);
+
+    ivecs->rd_init(fname);
+    ivecs->read();
+    ivecs->rd_deinit();
+  }
+}
+
+static void
+run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
+{
+  if (ovecs.isDynamic()) {
+    ovecs.fmt = ovecs.factory(ofname);
+    Vecs::init_vec(ovecs.fmt);
+    Vecs::prepare_format(ovecs);
+
+    ovecs->wr_init(ofname);
+    ovecs->write();
+    ovecs->wr_deinit();
+
+    Vecs::exit_vec(ovecs.fmt);
+    delete ovecs.fmt;
+    ovecs.fmt = nullptr;
+  } else {
+    /* reinitialize xcsv in case two formats that use xcsv were given */
+    Vecs::prepare_format(ovecs);
+
+    ovecs->wr_init(ofname);
+    ovecs->write();
+    ovecs->wr_deinit();
+  }
+}
+
 static int
 run(const char* prog_name)
 {
   int argn;
-  Format* ivecs = nullptr;
-  Format* ovecs = nullptr;
+  Vecs::fmtinfo_t ivecs;
+  Vecs::fmtinfo_t ovecs;
   Filter* filter = nullptr;
   QString fname;
   QString ofname;
@@ -310,17 +361,17 @@ run(const char* prog_name)
     case 'i':
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         fatal("Input type '%s' not recognized\n", qPrintable(argument));
       }
       break;
     case 'o':
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
-      if (ovecs == nullptr) {
+      if (!ovecs) {
         fatal("Output type '%s' not recognized\n", qPrintable(argument));
       }
       break;
@@ -330,7 +381,7 @@ run(const char* prog_name)
       if (fname.isEmpty()) {
         fatal("No file or device name specified.\n");
       }
-      if (ivecs == nullptr) {
+      if (!ivecs) {
         fatal("No valid input type specified\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
@@ -342,10 +393,7 @@ run(const char* prog_name)
         global_opts.masked_objective |= WPTDATAMASK;
       }
 
-      start_session(ivecs->get_name(), fname);
-      ivecs->rd_init(fname);
-      ivecs->read();
-      ivecs->rd_deinit();
+      run_reader(ivecs, fname);
 
       did_something = true;
       break;
@@ -361,9 +409,7 @@ run(const char* prog_name)
           global_opts.masked_objective |= WPTDATAMASK;
         }
 
-        ovecs->wr_init(ofname);
-        ovecs->write();
-        ovecs->wr_deinit();
+        run_writer(ovecs, ofname);
 
       }
       break;
@@ -532,28 +578,18 @@ run(const char* prog_name)
       global_opts.masked_objective |= WPTDATAMASK;
     }
 
-    /* reinitialize xcsv in case two formats that use xcsv were given */
-    (void) Vecs::Instance().find_vec(ivecs->get_argstring());
-
-    start_session(ivecs->get_name(), qargs.at(0));
-    ivecs->rd_init(qargs.at(0));
-    ivecs->read();
-    ivecs->rd_deinit();
+    run_reader(ivecs, qargs.at(0));
 
     if (qargs.size() == 2 && ovecs) {
-      /* reinitialize xcsv in case two formats that use xcsv were given */
-      (void) Vecs::Instance().find_vec(ovecs->get_argstring());
 
-      ovecs->wr_init(qargs.at(1));
-      ovecs->write();
-      ovecs->wr_deinit();
+      run_writer(ovecs, qargs.at(1));
 
     }
   } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
     return 0;
   }
-  if (ovecs == nullptr) {
+  if (!ovecs) {
     auto waypt_disp_lambda = [&fbOutput](const Waypoint* wpt)->void {
       fbOutput.waypt_disp(wpt);
     };
@@ -576,7 +612,18 @@ run(const char* prog_name)
     if (fname.isEmpty()) {
       fatal("An input file (-f) must be specified.\n");
     }
-    start_session(ivecs->get_name(), fname);
+
+    if (ivecs.isDynamic()) {
+      ivecs.fmt = ivecs.factory(fname);
+      Vecs::init_vec(ivecs.fmt);
+    }
+    if (ovecs && ovecs.isDynamic()) {
+      ovecs.fmt = ovecs.factory(ofname);
+      Vecs::init_vec(ovecs.fmt);
+    }
+
+    start_session(ivecs.fmtname, fname);
+    Vecs::prepare_format(ivecs);
     ivecs->rd_position_init(fname);
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
@@ -588,6 +635,7 @@ run(const char* prog_name)
     }
 
     if (ovecs) {
+      Vecs::prepare_format(ovecs);
       ovecs->wr_position_init(ofname);
     }
 
@@ -611,9 +659,22 @@ run(const char* prog_name)
         delete wpt;
       }
     }
+    Vecs::prepare_format(ivecs);
     ivecs->rd_position_deinit();
     if (ovecs) {
+      Vecs::prepare_format(ovecs);
       ovecs->wr_position_deinit();
+    }
+
+    if (ovecs && ovecs.isDynamic()) {
+      Vecs::exit_vec(ovecs.fmt);
+      delete ovecs.fmt;
+      ovecs.fmt = nullptr;
+    }
+    if (ivecs.isDynamic()) {
+      Vecs::exit_vec(ivecs.fmt);
+      delete ivecs.fmt;
+      ivecs.fmt = nullptr;
     }
     return 0;
   }
