@@ -145,11 +145,13 @@ private:
   };
 
   // Will return zero if no match
-  igc_ext_type_t get_ext_type(const QString& type) const {
+  igc_ext_type_t get_ext_type(const QString& type) const
+  {
     return igc_extension_map.value(type, igc_ext_type_t::ext_rec_unknown);
   }
   // Overload to specify default value as second argument
-  igc_ext_type_t get_ext_type(const QString& type, const igc_ext_type_t &default_value) const {
+  igc_ext_type_t get_ext_type(const QString& type, const igc_ext_type_t& default_value) const
+  {
     return igc_extension_map.value(type, default_value);
   }
 
@@ -159,32 +161,43 @@ private:
    * A factor can never be zero, so this looks good to me.
    * Be careful.
    */
-  int get_ext_factor(IgcFormat::igc_ext_type_t type) const {
+  int get_ext_factor(IgcFormat::igc_ext_type_t type) const
+  {
     int ret = 0;
     switch (type) {
-      case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        ret = 1; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        ret = 100; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        ret = 10; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        ret = 10; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        ret = 1; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        ret = 100; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        ret = 1; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        ret = 1; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        ret = 10; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        ret = 1; break;
-      default:
-        warning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
-        break;
+    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+      ret = 1;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+      ret = 100;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+      ret = 10;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      ret = 10;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+      ret = 1;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+      ret = 100;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+      ret = 1;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      ret = 1;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+      ret = 10;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+      ret = 1;
+      break;
+    default:
+      warning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
+      break;
     }
     return ret;
   }
@@ -258,13 +271,13 @@ private:
     }
   };
 };
-  /*
-   * Extra data
-   *
-   * This includes any data recorded as part of an extension,
-   * which will be defined in the IGC file's I record,
-   * and present in individual B records.
-  */
+/*
+ * Extra data
+ *
+ * This includes any data recorded as part of an extension,
+ * which will be defined in the IGC file's I record,
+ * and present in individual B records.
+*/
 
 struct igc_fsdata : public FormatSpecificData {
   igc_fsdata() : FormatSpecificData(kFsIGC) {}
@@ -285,91 +298,124 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
-  bool set_value(IgcFormat::igc_ext_type_t type, double value) {
+  bool set_value(IgcFormat::igc_ext_type_t type, double value)
+  {
     bool success = true;
     switch (type) {
-      case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        enl = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        tas = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        vat = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        oat = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        trt = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        gsp = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        fxa = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        siu = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        acz = value; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        gfo = value; break;
-      default:
-        success = false;
+    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+      enl = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+      tas = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+      vat = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      oat = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+      trt = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+      gsp = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+      fxa = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      siu = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+      acz = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+      gfo = value;
+      break;
+    default:
+      success = false;
     }
     return success;
   }
 
   // Not currently used, but already written and left for future use.
-  std::optional<double> get_value(IgcFormat::igc_ext_type_t defn_type) const {
+  std::optional<double> get_value(IgcFormat::igc_ext_type_t defn_type) const
+  {
     std::optional<double> ret;
     switch (defn_type) {
-      case IgcFormat::igc_ext_type_t::ext_rec_enl:
-        ret = enl; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_tas:
-        ret = tas; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        ret = vat; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_oat:
-        ret = oat; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_trt:
-        ret = trt; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gsp:
-        ret = gsp; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_fxa:
-        ret = fxa; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_siu:
-        ret = siu; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_acz:
-        ret = acz; break;
-      case IgcFormat::igc_ext_type_t::ext_rec_gfo:
-        ret = gfo; break;
-      default:
-        fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
-        break;
+    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+      ret = enl;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+      ret = tas;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+      ret = vat;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      ret = oat;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+      ret = trt;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+      ret = gsp;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+      ret = fxa;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      ret = siu;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+      ret = acz;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+      ret = gfo;
+      break;
+    default:
+      fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
+      break;
     }
     return ret;
   }
-  std::optional<double> get_value(KmlFormat::wp_field defn_type) const {
+  std::optional<double> get_value(KmlFormat::wp_field defn_type) const
+  {
     std::optional<double> ret;
     switch (defn_type) {
-      case KmlFormat::wp_field::fld_igc_enl:
-        ret = enl; break;
-      case KmlFormat::wp_field::fld_igc_tas:
-        ret = tas; break;
-      case KmlFormat::wp_field::fld_igc_vat:
-        ret = vat; break;
-      case KmlFormat::wp_field::fld_igc_oat:
-        ret = oat; break;
-      case KmlFormat::wp_field::fld_igc_trt:
-        ret = trt; break;
-      case KmlFormat::wp_field::fld_igc_gsp:
-        ret = gsp; break;
-      case KmlFormat::wp_field::fld_igc_fxa:
-        ret = fxa; break;
-      case KmlFormat::wp_field::fld_igc_siu:
-        ret = siu; break;
-      case KmlFormat::wp_field::fld_igc_acz:
-        ret = acz; break;
-      case KmlFormat::wp_field::fld_igc_gfo:
-        ret = gfo; break;
-      default:
-        fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
-        break;
+    case KmlFormat::wp_field::fld_igc_enl:
+      ret = enl;
+      break;
+    case KmlFormat::wp_field::fld_igc_tas:
+      ret = tas;
+      break;
+    case KmlFormat::wp_field::fld_igc_vat:
+      ret = vat;
+      break;
+    case KmlFormat::wp_field::fld_igc_oat:
+      ret = oat;
+      break;
+    case KmlFormat::wp_field::fld_igc_trt:
+      ret = trt;
+      break;
+    case KmlFormat::wp_field::fld_igc_gsp:
+      ret = gsp;
+      break;
+    case KmlFormat::wp_field::fld_igc_fxa:
+      ret = fxa;
+      break;
+    case KmlFormat::wp_field::fld_igc_siu:
+      ret = siu;
+      break;
+    case KmlFormat::wp_field::fld_igc_acz:
+      ret = acz;
+      break;
+    case KmlFormat::wp_field::fld_igc_gfo:
+      ret = gfo;
+      break;
+    default:
+      fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
+      break;
     }
     return ret;
   }

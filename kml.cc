@@ -1489,23 +1489,23 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       switch (member) {
       case fld_power:
         writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
-          QString::number(wpt->power, 'f', 1) : QString());
+                                 QString::number(wpt->power, 'f', 1) : QString());
         break;
       case fld_cadence:
         writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
-        QString::number(wpt->cadence) : QString());
+                                 QString::number(wpt->cadence) : QString());
         break;
       case fld_depth:
         writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
-          QString::number(wpt->depth_value(), 'f', 1) : QString());
+                                 QString::number(wpt->depth_value(), 'f', 1) : QString());
         break;
       case fld_heartrate:
         writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
-        QString::number(wpt->heartrate) : QString());
+                                 QString::number(wpt->heartrate) : QString());
         break;
       case fld_temperature:
         writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
-          QString::number(wpt->temperature_value(), 'f', 1) : QString());
+                                 QString::number(wpt->temperature_value(), 'f', 1) : QString());
         break;
       default:
         fatal("Bad member type");
@@ -1557,12 +1557,12 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_igc_fxa = false;
   bool has_igc_gfo = false;
   bool has_igc_acz = false;
-  #ifdef INCLUDE_IGC_SIU
+#ifdef INCLUDE_IGC_SIU
   bool has_igc_siu = false; // Not very useful to graph
-  #endif
-  #ifdef INCLUDE_IGC_TRT // Not very useful to graph
+#endif
+#ifdef INCLUDE_IGC_TRT // Not very useful to graph
   bool has_igc_trt = false;
-  #endif
+#endif
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1624,22 +1624,42 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     }
     if (fs_igc) {
       has_igc_exts = true;
-      if (fs_igc->enl.has_value()) { has_igc_enl = true; }
-      if (fs_igc->tas.has_value()) { has_igc_tas = true; }
-      if (fs_igc->oat.has_value()) { has_igc_oat = true; }
-      if (fs_igc->vat.has_value()) { has_igc_vat = true; }
-      if (fs_igc->gsp.has_value()) { has_igc_gsp = true; }
-      if (fs_igc->fxa.has_value()) { has_igc_fxa = true; }
-      if (fs_igc->gfo.has_value()) { has_igc_gfo = true; }
-      if (fs_igc->acz.has_value()) { has_igc_acz = true; }
-      #ifdef INCLUDE_IGC_SIU
-      if (fs_igc->siu.has_value()) { has_igc_siu = true; }
-      #endif
-      #ifdef INCLUDE_IGC_TRT
-      if (fs_igc->trt.has_value()) { has_igc_trt = true; }
-      #endif
+      if (fs_igc->enl.has_value()) {
+        has_igc_enl = true;
       }
+      if (fs_igc->tas.has_value()) {
+        has_igc_tas = true;
+      }
+      if (fs_igc->oat.has_value()) {
+        has_igc_oat = true;
+      }
+      if (fs_igc->vat.has_value()) {
+        has_igc_vat = true;
+      }
+      if (fs_igc->gsp.has_value()) {
+        has_igc_gsp = true;
+      }
+      if (fs_igc->fxa.has_value()) {
+        has_igc_fxa = true;
+      }
+      if (fs_igc->gfo.has_value()) {
+        has_igc_gfo = true;
+      }
+      if (fs_igc->acz.has_value()) {
+        has_igc_acz = true;
+      }
+#ifdef INCLUDE_IGC_SIU
+      if (fs_igc->siu.has_value()) {
+        has_igc_siu = true;
+      }
+#endif
+#ifdef INCLUDE_IGC_TRT
+      if (fs_igc->trt.has_value()) {
+        has_igc_trt = true;
+      }
+#endif
     }
+  }
 
   // This gets unwieldly if we check each individual igc extension,
   // hence the has_igc_exts flag.
@@ -1696,16 +1716,16 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if (has_igc_acz) {
         kml_mt_simple_array(header, kmt_igc_acz, fld_igc_acz);
       }
-      #ifdef INCLUDE_IGC_SIU
+#ifdef INCLUDE_IGC_SIU
       if (has_igc_siu) {
         kml_mt_simple_array(header, kmt_igc_siu, fld_igc_siu);
       }
-      #endif
-      #ifdef INCLUDE_IGC_TRT
+#endif
+#ifdef INCLUDE_IGC_TRT
       if (has_igc_trt) {
         kml_mt_simple_array(header, kmt_igc_trt, fld_igc_trt);
       }
-      #endif
+#endif
     }
 
     writer->writeEndElement(); // Close SchemaData tag

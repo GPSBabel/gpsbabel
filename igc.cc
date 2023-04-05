@@ -311,8 +311,7 @@ void IgcFormat::read()
       }
       break;
 
-    case rec_fix:
-    {
+    case rec_fix: {
       // Date must appear in file before the first fix record
       if (!date.isValid()) {
         fatal(MYNAME ": bad date\n");
@@ -437,8 +436,8 @@ void IgcFormat::read()
       }
       break;
 
-    case rec_fix_defn:
-    { // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
+    case rec_fix_defn: {
+      // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
       // Not sure exactly what that means... something something scoping and initialization.
       /*
        * The first three characters define the number of extensions present.
@@ -485,11 +484,11 @@ void IgcFormat::read()
         }
         if (global_opts.debug_level >= 3) {
           printf("\n" MYNAME "Supported extensions:");
-          foreach(QString ext, supported_extensions) {
+          foreach (QString ext, supported_extensions) {
             printf(" %s", qPrintable(ext));
           }
           printf("\nUnsupported extensions:");
-          foreach(QString ext, unsupported_extensions) {
+          foreach (QString ext, unsupported_extensions) {
             printf(" %s", qPrintable(ext));
           }
           printf("\n");
@@ -506,7 +505,7 @@ void IgcFormat::read()
     case rec_extn_data:
       break;
 
-      // No more records
+    // No more records
     case rec_none:
 
       // Include pressure altitude track only if it has useful
@@ -563,7 +562,7 @@ void IgcFormat::detect_other_track(const route_head* rh, int& max_waypt_ct)
   if (rh->rte_waypt_ct() > max_waypt_ct &&
       (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(kPresTrkName) &&
-       !rh->rte_name.startsWith(kGNSSTrkName)))) {
+        !rh->rte_name.startsWith(kGNSSTrkName)))) {
     head = rh;
     max_waypt_ct = rh->rte_waypt_ct();
   }
@@ -681,7 +680,7 @@ void IgcFormat::wr_header()
     date = current_time();
     assert(date.isValid() || gpsbabel_testmode());
   }
-  
+
   gbfprintf(file_out, "HFDTE%s\r\n", date2str(date).constData());
 
   // Other header data may have been stored in track description
@@ -866,7 +865,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
     speed = (deltat_msec == 0) ? 0:
             radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                                RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
-                        (0.001 * deltat_msec);
+            (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%.2fm/s\n", speed);
     }
