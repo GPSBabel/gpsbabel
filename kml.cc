@@ -1470,15 +1470,20 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME ": New KML SimpleArray: %s\n", name);
+  }
   foreach (const Waypoint* wpt, header->waypoint_list) {
-    const auto* fs_igc = reinterpret_cast<igc_fsdata<float>*>(wpt->fs.FsChainFind(kFsIGC));
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
     /*
      * First check if the SimpleArray we are writing is for
      * IGC specific extensions. If not, then do all the other stuff.
     */
     if (fld_igc_first <= member && member <= fld_igc_last) {
-      short value;
-      value = fs_igc->get_value(member).value();
+      double value = fs_igc->get_value(member).value();
+      if (global_opts.debug_level >= 6) {
+        printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+      }
       writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
     } else {
       switch (member) {
@@ -1586,7 +1591,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   // TODO: How to handle clamped, floating, extruded, etc.?
   foreach (const Waypoint* tpt, header->waypoint_list) {
 
-    const auto* fs_igc = reinterpret_cast<igc_fsdata<float>*>(tpt->fs.FsChainFind(kFsIGC));
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
                                QString::number(tpt->longitude, 'f', precision) + QString(" ") +

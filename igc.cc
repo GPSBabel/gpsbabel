@@ -256,7 +256,7 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QList<std::tuple<QString, igc_ext_type_t, int, int, int>> ext_types_list; 
+  QList<std::tuple<QString, igc_ext_type_t, int, int, double>> ext_types_list;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -364,7 +364,7 @@ void IgcFormat::read()
        * whole thing.
       */
       if (!ext_types_list.isEmpty()) {
-        auto* fsdata = new igc_fsdata<double>;
+        auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
           printf(MYNAME ": Record: %s\n",qPrintable(ibuf_q));
         }
@@ -372,11 +372,11 @@ void IgcFormat::read()
           printf(MYNAME ": Adding extension data:");
         }
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
-          int ext_data = ibuf_q.mid(start,len).toInt() / factor;
+          double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
           fsdata->set_value(ext, ext_data);
           if (global_opts.debug_level >= 6) {
-            printf(" %s:%i", qPrintable(name), ext_data);
+            printf(" %s:%f", qPrintable(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
@@ -424,7 +424,7 @@ void IgcFormat::read()
         // Create a route for each post-flight declaration
         task_record_reader.igc_task_rec(ibuf + 4);
         break;
-      } else if (global_opts.debug_level) {
+      } else if (global_opts.debug_level >= 4) {
         if (strcmp(tmp_str, "OOI") == 0) {
           printf(MYNAME ": Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {

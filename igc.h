@@ -28,6 +28,7 @@
 #ifndef IGC_H_INCLUDED_
 #define IGC_H_INCLUDED_
 
+#include <optional>              // for optional
 #include <QByteArray>            // for QByteArray
 #include <QDateTime>             // for QDateTime
 #include <QList>                 // for QList<>::const_iterator
@@ -38,7 +39,6 @@
 #include "defs.h"
 #include "format.h"
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
-#include <optional>              // for optional
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
 
@@ -52,7 +52,7 @@
  *   leading with zero for positive values and a "-" for negative vaules
  * - (TAS) True airspeed is assumed to be in km/h, with two decimals
  *   As per spec, this is supposed to be specified per IGC file, but never is
- * - (VAT) Total Enery Vario, in metres persecond with one decimal and leading zero
+ * - (VAT) Total Enery Vario, in metres per second with one decimal and leading zero
  * - (TRT) True Track is in degrees; it's useful to record this, but not very useful to graph it
  * - (GSP) Ground speed units are not specified in spec. Km/h is assumed, with two decimals
  * - (FXA) Fix accuracy is Estimated Position Error in metres, to a 2-Sigma (95.45%) probability
@@ -78,8 +78,6 @@ public:
     ext_rec_gfo = 8,  // G Force?
     ext_rec_siu = 9,  // Satellites In Use
     ext_rec_acz = 10,  // Z Acceleration
-    first = ext_rec_enl,
-    last = ext_rec_acz,
 
   };
 
@@ -148,13 +146,11 @@ private:
 
   // Will return zero if no match
   igc_ext_type_t get_ext_type(const QString& type) const {
-    IgcFormat::igc_ext_type_t ret;
-    if (igc_extension_map.contains(type)) {
-      ret = IgcFormat::igc_ext_type_t::ext_rec_unknown;
-    } else {
-      ret = igc_extension_map.value(type);
-    }
-    return ret;
+    return igc_extension_map.value(type, igc_ext_type_t::ext_rec_unknown);
+  }
+  // Overload to specify default value as second argument
+  igc_ext_type_t get_ext_type(const QString& type, const igc_ext_type_t &default_value) const {
+    return igc_extension_map.value(type, default_value);
   }
 
   /*
@@ -171,7 +167,7 @@ private:
       case IgcFormat::igc_ext_type_t::ext_rec_tas:
         ret = 100; break;
       case IgcFormat::igc_ext_type_t::ext_rec_vat:
-        ret = 1; break;
+        ret = 10; break;
       case IgcFormat::igc_ext_type_t::ext_rec_oat:
         ret = 10; break;
       case IgcFormat::igc_ext_type_t::ext_rec_trt:
@@ -270,9 +266,6 @@ private:
    * and present in individual B records.
   */
 
-template <typename T,
-          typename = typename std::enable_if<std::is_floating_point<T>::value ||
-                                             std::is_same<T, int>::value>::type>
 struct igc_fsdata : public FormatSpecificData {
   igc_fsdata() : FormatSpecificData(kFsIGC) {}
 
@@ -281,18 +274,18 @@ struct igc_fsdata : public FormatSpecificData {
     return new igc_fsdata(*this);
   }
 
-  std::optional<T> enl; // Engine Noise Level
-  std::optional<T> tas; // True Airspeed
-  std::optional<T> vat; // Compensated variometer (total energy)
-  std::optional<T> oat; // Outside Air Temperature
-  std::optional<T> trt; // True Track
-  std::optional<T> gsp; // Ground Speed
-  std::optional<T> fxa; // Fix Accuracy
-  std::optional<T> siu; // Satellites In Use
-  std::optional<T> acz; // Z Acceleration
-  std::optional<T> gfo; // G Force?
+  std::optional<double> enl; // Engine Noise Level
+  std::optional<double> tas; // True Airspeed
+  std::optional<double> vat; // Compensated variometer (total energy)
+  std::optional<double> oat; // Outside Air Temperature
+  std::optional<double> trt; // True Track
+  std::optional<double> gsp; // Ground Speed
+  std::optional<double> fxa; // Fix Accuracy
+  std::optional<double> siu; // Satellites In Use
+  std::optional<double> acz; // Z Acceleration
+  std::optional<double> gfo; // G Force?
 
-  bool set_value(IgcFormat::igc_ext_type_t type, int value) {
+  bool set_value(IgcFormat::igc_ext_type_t type, double value) {
     bool success = true;
     switch (type) {
       case IgcFormat::igc_ext_type_t::ext_rec_enl:
@@ -322,8 +315,8 @@ struct igc_fsdata : public FormatSpecificData {
   }
 
   // Not currently used, but already written and left for future use.
-  std::optional<int> get_value(IgcFormat::igc_ext_type_t defn_type) const {
-    std::optional<int> ret;
+  std::optional<double> get_value(IgcFormat::igc_ext_type_t defn_type) const {
+    std::optional<double> ret;
     switch (defn_type) {
       case IgcFormat::igc_ext_type_t::ext_rec_enl:
         ret = enl; break;
@@ -346,13 +339,13 @@ struct igc_fsdata : public FormatSpecificData {
       case IgcFormat::igc_ext_type_t::ext_rec_gfo:
         ret = gfo; break;
       default:
-        fatal("Invalid igc_ext_type\n");
+        fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
         break;
     }
     return ret;
   }
-  std::optional<int> get_value(KmlFormat::wp_field defn_type) const {
-    std::optional<int> ret;
+  std::optional<double> get_value(KmlFormat::wp_field defn_type) const {
+    std::optional<double> ret;
     switch (defn_type) {
       case KmlFormat::wp_field::fld_igc_enl:
         ret = enl; break;
@@ -375,7 +368,7 @@ struct igc_fsdata : public FormatSpecificData {
       case KmlFormat::wp_field::fld_igc_gfo:
         ret = gfo; break;
       default:
-        fatal("Invalid igc_ext_type\n");
+        fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
         break;
     }
     return ret;
