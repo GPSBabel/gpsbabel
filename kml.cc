@@ -1475,41 +1475,46 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   }
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
-    /*
-     * First check if the SimpleArray we are writing is for
-     * IGC specific extensions. If not, then do all the other stuff.
-    */
-    if (fld_igc_first <= member && member <= fld_igc_last) {
+    switch (member) {
+    case wp_field::power:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
+                               QString::number(wpt->power, 'f', 1) : QString());
+      break;
+    case wp_field::cadence:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
+                               QString::number(wpt->cadence) : QString());
+      break;
+    case wp_field::depth:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
+                               QString::number(wpt->depth_value(), 'f', 1) : QString());
+      break;
+    case wp_field::heartrate:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
+                               QString::number(wpt->heartrate) : QString());
+      break;
+    case wp_field::temperature:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
+                               QString::number(wpt->temperature_value(), 'f', 1) : QString());
+      break;
+    case wp_field::igc_enl:
+    case wp_field::igc_tas:
+    case wp_field::igc_vat:
+    case wp_field::igc_oat:
+    case wp_field::igc_trt:
+    case wp_field::igc_gsp:
+    case wp_field::igc_fxa:
+    case wp_field::igc_gfo:
+    case wp_field::igc_siu:
+    case wp_field::igc_acz: {
       double value = fs_igc->get_value(member).value();
       if (global_opts.debug_level >= 6) {
         printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
       }
       writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
-    } else {
-      switch (member) {
-      case fld_power:
-        writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
-                                 QString::number(wpt->power, 'f', 1) : QString());
-        break;
-      case fld_cadence:
-        writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
-                                 QString::number(wpt->cadence) : QString());
-        break;
-      case fld_depth:
-        writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
-                                 QString::number(wpt->depth_value(), 'f', 1) : QString());
-        break;
-      case fld_heartrate:
-        writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
-                                 QString::number(wpt->heartrate) : QString());
-        break;
-      case fld_temperature:
-        writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
-                                 QString::number(wpt->temperature_value(), 'f', 1) : QString());
-        break;
-      default:
-        fatal("Bad member type");
-      }
+      break;
+    }
+    default:
+      fatal("Bad member type");
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag
@@ -1670,60 +1675,60 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
 
     if (has_cadence) {
-      kml_mt_simple_array(header, kmt_cadence, fld_cadence);
+      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
     }
 
     if (has_depth) {
-      kml_mt_simple_array(header, kmt_depth, fld_depth);
+      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
     }
 
     if (has_heartrate) {
-      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate);
+      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
     }
 
     if (has_temperature) {
-      kml_mt_simple_array(header, kmt_temperature, fld_temperature);
+      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
     }
 
     if (has_power) {
-      kml_mt_simple_array(header, kmt_power, fld_power);
+      kml_mt_simple_array(header, kmt_power, wp_field::power);
     }
 
     // Perhaps not the /best/ way to do this, but this if ladder
     // should only be evaluated once.
     if (has_igc_exts) {
       if (has_igc_enl) {
-        kml_mt_simple_array(header, kmt_igc_enl, fld_igc_enl);
+        kml_mt_simple_array(header, kmt_igc_enl, wp_field::igc_enl);
       }
       if (has_igc_tas) {
-        kml_mt_simple_array(header, kmt_igc_tas, fld_igc_tas);
+        kml_mt_simple_array(header, kmt_igc_tas, wp_field::igc_tas);
       }
       if (has_igc_oat) {
-        kml_mt_simple_array(header, kmt_igc_oat, fld_igc_oat);
+        kml_mt_simple_array(header, kmt_igc_oat, wp_field::igc_oat);
       }
       if (has_igc_vat) {
-        kml_mt_simple_array(header, kmt_igc_vat, fld_igc_vat);
+        kml_mt_simple_array(header, kmt_igc_vat, wp_field::igc_vat);
       }
       if (has_igc_gsp) {
-        kml_mt_simple_array(header, kmt_igc_gsp, fld_igc_gsp);
+        kml_mt_simple_array(header, kmt_igc_gsp, wp_field::igc_gsp);
       }
       if (has_igc_fxa) {
-        kml_mt_simple_array(header, kmt_igc_fxa, fld_igc_fxa);
+        kml_mt_simple_array(header, kmt_igc_fxa, wp_field::igc_fxa);
       }
       if (has_igc_gfo) {
-        kml_mt_simple_array(header, kmt_igc_gfo, fld_igc_gfo);
+        kml_mt_simple_array(header, kmt_igc_gfo, wp_field::igc_gfo);
       }
       if (has_igc_acz) {
-        kml_mt_simple_array(header, kmt_igc_acz, fld_igc_acz);
+        kml_mt_simple_array(header, kmt_igc_acz, wp_field::igc_acz);
       }
 #ifdef INCLUDE_IGC_SIU
       if (has_igc_siu) {
-        kml_mt_simple_array(header, kmt_igc_siu, fld_igc_siu);
+        kml_mt_simple_array(header, kmt_igc_siu, igc_siu);
       }
 #endif
 #ifdef INCLUDE_IGC_TRT
       if (has_igc_trt) {
-        kml_mt_simple_array(header, kmt_igc_trt, fld_igc_trt);
+        kml_mt_simple_array(header, kmt_igc_trt, igc_trt);
       }
 #endif
     }
