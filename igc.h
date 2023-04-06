@@ -383,34 +383,34 @@ struct igc_fsdata : public FormatSpecificData {
   {
     std::optional<double> ret;
     switch (defn_type) {
-    case KmlFormat::wp_field::fld_igc_enl:
+    case KmlFormat::wp_field::igc_enl:
       ret = enl;
       break;
-    case KmlFormat::wp_field::fld_igc_tas:
+    case KmlFormat::wp_field::igc_tas:
       ret = tas;
       break;
-    case KmlFormat::wp_field::fld_igc_vat:
+    case KmlFormat::wp_field::igc_vat:
       ret = vat;
       break;
-    case KmlFormat::wp_field::fld_igc_oat:
+    case KmlFormat::wp_field::igc_oat:
       ret = oat;
       break;
-    case KmlFormat::wp_field::fld_igc_trt:
+    case KmlFormat::wp_field::igc_trt:
       ret = trt;
       break;
-    case KmlFormat::wp_field::fld_igc_gsp:
+    case KmlFormat::wp_field::igc_gsp:
       ret = gsp;
       break;
-    case KmlFormat::wp_field::fld_igc_fxa:
+    case KmlFormat::wp_field::igc_fxa:
       ret = fxa;
       break;
-    case KmlFormat::wp_field::fld_igc_siu:
+    case KmlFormat::wp_field::igc_siu:
       ret = siu;
       break;
-    case KmlFormat::wp_field::fld_igc_acz:
+    case KmlFormat::wp_field::igc_acz:
       ret = acz;
       break;
-    case KmlFormat::wp_field::fld_igc_gfo:
+    case KmlFormat::wp_field::igc_gfo:
       ret = gfo;
       break;
     default:
