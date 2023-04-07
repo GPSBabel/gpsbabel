@@ -70,7 +70,7 @@
 
 #define MYNAME "kml"
 // #define INCLUDE_IGC_TRT // Generally not very useful to graph on Google Earth
-// #define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
+#define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
 
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
@@ -1496,6 +1496,10 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
                                QString::number(wpt->temperature_value(), 'f', 1) : QString());
       break;
+    case wp_field::sat:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat?
+                                QString::number(wpt->sat, 'f', 1) : QString());
+      break;
     case wp_field::igc_enl:
     case wp_field::igc_tas:
     case wp_field::igc_vat:
@@ -1553,6 +1557,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_heartrate = false;
   bool has_temperature = false;
   bool has_power = false;
+  bool has_sat = false;
   bool has_igc_exts = false;
   bool has_igc_enl = false;
   bool has_igc_tas = false;
@@ -1627,6 +1632,10 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     if (tpt->power) {
       has_power = true;
     }
+    // # of satellites can legitimately be zero, so -1 means no data in this case
+    if (tpt->sat >= 0) {
+      has_sat = true;
+    }
     if (fs_igc) {
       has_igc_exts = true;
       if (fs_igc->enl.has_value()) {
@@ -1669,7 +1678,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   // This gets unwieldly if we check each individual igc extension,
   // hence the has_igc_exts flag.
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
-      has_power || has_igc_exts) {
+      has_power || has_sat || has_igc_exts) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
@@ -1692,6 +1701,10 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
     if (has_power) {
       kml_mt_simple_array(header, kmt_power, wp_field::power);
+    }
+
+    if (has_sat) {
+      kml_mt_simple_array(header, kmt_sat, wp_field::sat);
     }
 
     // Perhaps not the /best/ way to do this, but this if ladder
@@ -1723,7 +1736,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       }
 #ifdef INCLUDE_IGC_SIU
       if (has_igc_siu) {
-        kml_mt_simple_array(header, kmt_igc_siu, igc_siu);
+        kml_mt_simple_array(header, kmt_igc_siu, wp_field::igc_siu);
       }
 #endif
 #ifdef INCLUDE_IGC_TRT
@@ -1732,7 +1745,6 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       }
 #endif
     }
-
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag
   }
@@ -1916,7 +1928,8 @@ void KmlFormat::write()
       traits->trait_cadence ||
       traits->trait_power ||
       traits->trait_temperature ||
-      traits->trait_depth) {
+      traits->trait_depth ||
+      traits->trait_sat) {
     writer->writeStartElement(QStringLiteral("Schema"));
     writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
 
@@ -1934,6 +1947,9 @@ void KmlFormat::write()
     }
     if (traits->trait_depth) {
       kml_mt_array_schema(kmt_depth, "Depth", "float");
+    }
+    if (traits->trait_sat) {
+      kml_mt_array_schema(kmt_sat, "Satellites", "float");
     }
     writer->writeEndElement(); // Close Schema tag
   }

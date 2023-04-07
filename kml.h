@@ -74,6 +74,7 @@ public:
     heartrate,
     temperature,
     power,
+    sat,
     igc_enl,  // Engine Noise Level
     igc_tas,  // True Airspeed
     igc_vat,  // Compensated variometer (total energy)
@@ -123,6 +124,7 @@ private:
   static constexpr const char* kmt_temperature = "temperature";
   static constexpr const char* kmt_depth = "depth";
   static constexpr const char* kmt_power = "power";
+  static constexpr const char* kmt_sat = "satellites";
   // Constants pertaining to IGC files would be better defined in either igc.h or formspec.h
   static constexpr const char* kmt_igc_enl = "Engine Noise";
   static constexpr const char* kmt_igc_vat = "Ttl Enrg Vario";

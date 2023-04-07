@@ -372,7 +372,7 @@ void IgcFormat::read()
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
-          fsdata->set_value(ext, ext_data);
+          fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
             printf(" %s:%f", qPrintable(name), ext_data);
           }

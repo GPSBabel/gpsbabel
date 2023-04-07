@@ -298,6 +298,7 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
+  // Stores all data as igc_fsdata
   bool set_value(IgcFormat::igc_ext_type_t type, double value)
   {
     bool success = true;
@@ -325,6 +326,47 @@ struct igc_fsdata : public FormatSpecificData {
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_siu:
       siu = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+      acz = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+      gfo = value;
+      break;
+    default:
+      success = false;
+    }
+    return success;
+  }
+  // Overload, used to optionally match IGC data with Waypoint data
+  // Stores _some_ data as Waypoint members, where appropriate
+  bool set_value(IgcFormat::igc_ext_type_t type, double value, Waypoint* wp)
+  {
+    bool success = true;
+    switch (type) {
+    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+      enl = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+      tas = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+      vat = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      wp->set_temperature(value);
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+      trt = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+      gsp = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+      fxa = value;
+      break;
+    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      wp->sat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_acz:
       acz = value;
