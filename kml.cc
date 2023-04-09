@@ -1498,7 +1498,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       break;
     case wp_field::sat:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat?
-                                QString::number(wpt->sat, 'f', 1) : QString());
+                                QString::number(wpt->sat) : QString());
       break;
     case wp_field::igc_enl:
     case wp_field::igc_tas:
@@ -1949,7 +1949,7 @@ void KmlFormat::write()
       kml_mt_array_schema(kmt_depth, "Depth", "float");
     }
     if (traits->trait_sat) {
-      kml_mt_array_schema(kmt_sat, "Satellites", "float");
+      kml_mt_array_schema(kmt_sat, "Satellites", "int");
     }
     writer->writeEndElement(); // Close Schema tag
   }

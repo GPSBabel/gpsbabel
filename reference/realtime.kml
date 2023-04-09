@@ -126,7 +126,7 @@
       <gx:SimpleArrayField name="depth" type="float">
         <displayName>Depth</displayName>
       </gx:SimpleArrayField>
-      <gx:SimpleArrayField name="satellites" type="float">
+      <gx:SimpleArrayField name="satellites" type="int">
         <displayName>Satellites</displayName>
       </gx:SimpleArrayField>
     </Schema>
@@ -284,23 +284,23 @@
               <gx:value></gx:value>
             </gx:SimpleArrayData>
             <gx:SimpleArrayData name="satellites">
-              <gx:value>6.0</gx:value>
-              <gx:value>8.0</gx:value>
-              <gx:value>6.0</gx:value>
-              <gx:value>3.0</gx:value>
-              <gx:value>12.0</gx:value>
-              <gx:value>11.0</gx:value>
-              <gx:value>3.0</gx:value>
-              <gx:value>4.0</gx:value>
-              <gx:value>10.0</gx:value>
-              <gx:value>4.0</gx:value>
-              <gx:value>10.0</gx:value>
-              <gx:value>9.0</gx:value>
-              <gx:value>8.0</gx:value>
-              <gx:value>9.0</gx:value>
-              <gx:value>2.0</gx:value>
-              <gx:value>3.0</gx:value>
-              <gx:value>5.0</gx:value>
+              <gx:value>6</gx:value>
+              <gx:value>8</gx:value>
+              <gx:value>6</gx:value>
+              <gx:value>3</gx:value>
+              <gx:value>12</gx:value>
+              <gx:value>11</gx:value>
+              <gx:value>3</gx:value>
+              <gx:value>4</gx:value>
+              <gx:value>10</gx:value>
+              <gx:value>4</gx:value>
+              <gx:value>10</gx:value>
+              <gx:value>9</gx:value>
+              <gx:value>8</gx:value>
+              <gx:value>9</gx:value>
+              <gx:value>2</gx:value>
+              <gx:value>3</gx:value>
+              <gx:value>5</gx:value>
             </gx:SimpleArrayData>
           </SchemaData>
         </ExtendedData>
