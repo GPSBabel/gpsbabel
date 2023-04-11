@@ -553,7 +553,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_latitude:
       human_to_dec(CSTR(value), &wpt->latitude, nullptr, 1);
-qDebug() << value << wpt->latitude;
       wpt->latitude = wpt->latitude * ns;
       break;
 
@@ -1079,7 +1078,6 @@ qDebug() << value << wpt->latitude;
 
   // For these reasons, we don't use the data we've harvested from theis line.
   if ((wpt->latitude == 0) || (wpt->longitude == 0)) {
-	  qDebug() << "XXX";
     n_points_discarded++;
     return;
   }
