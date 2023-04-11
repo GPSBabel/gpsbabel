@@ -1512,7 +1512,6 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
           printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
-        writer->writeTextElement(QStringLiteral("gx:value"), QString());
       // No igc_fsdata present, but we still need to write out the SimpleArray
       } else {
         if (global_opts.debug_level >= 7) {
