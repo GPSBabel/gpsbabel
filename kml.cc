@@ -1506,9 +1506,8 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
     case wp_field::igc_gfo:
     case wp_field::igc_siu:
     case wp_field::igc_acz: {
-      double value;
       if (fs_igc->has_value(member)) {
-        value = fs_igc->get_value(member).value();
+        double value = fs_igc->get_value(member).value();
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
         }
