@@ -298,45 +298,6 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
-  bool has_value(KmlFormat::wp_field type) const {
-    bool ret = false;
-    switch (type) {
-      case KmlFormat::wp_field::igc_enl:
-        ret = enl.has_value();
-        break;
-      case KmlFormat::wp_field::igc_tas:
-        ret = tas.has_value();
-        break;
-      case KmlFormat::wp_field::igc_vat:
-        ret = vat.has_value();
-        break;
-      case KmlFormat::wp_field::igc_oat:
-        ret = oat.has_value();
-        break;
-      case KmlFormat::wp_field::igc_trt:
-        ret = trt.has_value();
-        break;
-      case KmlFormat::wp_field::igc_gsp:
-        ret = gsp.has_value();
-        break;
-      case KmlFormat::wp_field::igc_fxa:
-        ret = fxa.has_value();
-        break;
-      case KmlFormat::wp_field::igc_siu:
-        ret = siu.has_value();
-        break;
-      case KmlFormat::wp_field::igc_acz:
-        ret = acz.has_value();
-        break;
-      case KmlFormat::wp_field::igc_gfo:
-        ret = gfo.has_value();
-        break;
-      default:
-        ret = false;
-    }
-  return ret;  
-  }
-
   bool set_value(IgcFormat::igc_ext_type_t type, double value)
   {
     bool success = true;
