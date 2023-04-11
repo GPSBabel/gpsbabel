@@ -1077,7 +1077,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   }
 
   // For these reasons, we don't use the data we've harvested from theis line.
-  if ((wpt->latitude == 0) || (wpt->longitude == 0)) {
+  if ((wpt->latitude == 0) && (wpt->longitude == 0)) {
     n_points_discarded++;
     return;
   }
