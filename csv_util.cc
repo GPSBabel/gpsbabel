@@ -452,7 +452,7 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
   if (outlat) {
     if (lat[0] != 999) {
       *outlat = lat[0];
-    }
+    } else *outlat = 0;
     if (lat[1] != 999) {
       *outlat += lat[1]/60.0;
     }
@@ -469,7 +469,7 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
   if (outlon) {
     if (lon[0] != 999) {
       *outlon = lon[0];
-    }
+    } else *outlon = 0;
     if (lon[1] != 999) {
       *outlon += lon[1]/60.0;
     }
