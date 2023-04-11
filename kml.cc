@@ -1506,18 +1506,28 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
     case wp_field::igc_gfo:
     case wp_field::igc_siu:
     case wp_field::igc_acz: {
-      if (fs_igc->has_value(member)) {
-        double value = fs_igc->get_value(member).value();
-        if (global_opts.debug_level >= 6) {
-          printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+      if (fs_igc) {
+        if (fs_igc->has_value(member)) {
+          double value = fs_igc->get_value(member).value();
+          if (global_opts.debug_level >= 6) {
+            printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+          }
+          writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
+        } else {
+          if (global_opts.debug_level >= 7) {
+            printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", name);
+          }
+          writer->writeTextElement(QStringLiteral("gx:value"), QString());
         }
-        writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
-      } else if (global_opts.debug_level >= 7) {
-        printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", name);
+      // No igc_fsdata present, but we still need to write out the SimpleArray
+      } else {
+        if (global_opts.debug_level >= 7) {
+          printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", name);
+        }
         writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }
       break;
-    }
+      }
     default:
       fatal("Bad member type");
     }
