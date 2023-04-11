@@ -1506,11 +1506,17 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
     case wp_field::igc_gfo:
     case wp_field::igc_siu:
     case wp_field::igc_acz: {
-      double value = fs_igc->get_value(member).value();
-      if (global_opts.debug_level >= 6) {
-        printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+      double value;
+      if (fs_igc->has_value(member)) {
+        value = fs_igc->get_value(member).value();
+        if (global_opts.debug_level >= 6) {
+          printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+        }
+        writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
+      } else if (global_opts.debug_level >= 7) {
+        printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", name);
+        writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
       break;
     }
     default:
