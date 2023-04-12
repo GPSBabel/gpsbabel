@@ -11,7 +11,6 @@ file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)
 file	rwrwrw	shape	shp	ESRI shapefile
 file	--rwrw	igc		FAI/IGC Flight Recorder Data Format
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file
-file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation
 file	rw----	garmin301		Garmin 301 Custom position and heartrate
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb

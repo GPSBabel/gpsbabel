@@ -46,7 +46,8 @@
 #include <QtGlobal>                    // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
-#include "formspec.h"                  // for FsChainFind, kFsGpx
+#include "igc.h"                       // For igc_fsdata
+#include "formspec.h"                  // for FsChainFind, kFsGpxm kFsIGC
 #include "geocache.h"                  // for Geocache, Geocache::type_t
 #include "grtcirc.h"                   // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"         // for DateTime
@@ -68,6 +69,8 @@
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
+// #define INCLUDE_IGC_TRT // Generally not very useful to graph on Google Earth
+// #define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
 
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
@@ -1467,29 +1470,56 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
-
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME ": New KML SimpleArray: %s\n", name);
+  }
   foreach (const Waypoint* wpt, header->waypoint_list) {
-
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
     switch (member) {
-    case fld_power:
+    case wp_field::power:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
-        QString::number(wpt->power, 'f', 1) : QString());
+                               QString::number(wpt->power, 'f', 1) : QString());
       break;
-    case fld_cadence:
+    case wp_field::cadence:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
-       QString::number(wpt->cadence) : QString());
+                               QString::number(wpt->cadence) : QString());
       break;
-    case fld_depth:
+    case wp_field::depth:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
-        QString::number(wpt->depth_value(), 'f', 1) : QString());
+                               QString::number(wpt->depth_value(), 'f', 1) : QString());
       break;
-    case fld_heartrate:
+    case wp_field::heartrate:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
-       QString::number(wpt->heartrate) : QString());
+                               QString::number(wpt->heartrate) : QString());
       break;
-    case fld_temperature:
+    case wp_field::temperature:
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
-        QString::number(wpt->temperature_value(), 'f', 1) : QString());
+                               QString::number(wpt->temperature_value(), 'f', 1) : QString());
+      break;
+    case wp_field::igc_enl:
+    case wp_field::igc_tas:
+    case wp_field::igc_vat:
+    case wp_field::igc_oat:
+    case wp_field::igc_trt:
+    case wp_field::igc_gsp:
+    case wp_field::igc_fxa:
+    case wp_field::igc_gfo:
+    case wp_field::igc_siu:
+    case wp_field::igc_acz:
+      if (fs_igc && fs_igc->get_value(member).has_value()) {
+        double value = fs_igc->get_value(member).value();
+        if (global_opts.debug_level >= 6) {
+          printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", name, value);
+        }
+        writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
+      // No igc_fsdata present, but we still need to write out the SimpleArray.
+      // This can happen when merging tracks with different sets of IGC extensions.
+      } else {
+        if (global_opts.debug_level >= 7) {
+          printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", name);
+        }
+        writer->writeTextElement(QStringLiteral("gx:value"), QString());
+      }
       break;
     default:
       fatal("Bad member type");
@@ -1531,6 +1561,21 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_heartrate = false;
   bool has_temperature = false;
   bool has_power = false;
+  bool has_igc_exts = false;
+  bool has_igc_enl = false;
+  bool has_igc_tas = false;
+  bool has_igc_oat = false;
+  bool has_igc_vat = false;
+  bool has_igc_gsp = false;
+  bool has_igc_fxa = false;
+  bool has_igc_gfo = false;
+  bool has_igc_acz = false;
+#ifdef INCLUDE_IGC_SIU
+  bool has_igc_siu = false; // Not very useful to graph
+#endif
+#ifdef INCLUDE_IGC_TRT // Not very useful to graph
+  bool has_igc_trt = false;
+#endif
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1546,6 +1591,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement(QStringLiteral("when"), time_string);
@@ -1557,6 +1603,8 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
                                QString::number(tpt->longitude, 'f', precision) + QString(" ") +
@@ -1587,38 +1635,117 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     if (tpt->power) {
       has_power = true;
     }
+    if (fs_igc) {
+      has_igc_exts = true;
+      if (fs_igc->enl.has_value()) {
+        has_igc_enl = true;
+      }
+      if (fs_igc->tas.has_value()) {
+        has_igc_tas = true;
+      }
+      if (fs_igc->oat.has_value()) {
+        has_igc_oat = true;
+      }
+      if (fs_igc->vat.has_value()) {
+        has_igc_vat = true;
+      }
+      if (fs_igc->gsp.has_value()) {
+        has_igc_gsp = true;
+      }
+      if (fs_igc->fxa.has_value()) {
+        has_igc_fxa = true;
+      }
+      if (fs_igc->gfo.has_value()) {
+        has_igc_gfo = true;
+      }
+      if (fs_igc->acz.has_value()) {
+        has_igc_acz = true;
+      }
+#ifdef INCLUDE_IGC_SIU
+      if (fs_igc->siu.has_value()) {
+        has_igc_siu = true;
+      }
+#endif
+#ifdef INCLUDE_IGC_TRT
+      if (fs_igc->trt.has_value()) {
+        has_igc_trt = true;
+      }
+#endif
+    }
   }
 
+  // This gets unwieldly if we check each individual igc extension,
+  // hence the has_igc_exts flag.
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
-      has_power) {
+      has_power || has_igc_exts) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
 
     if (has_cadence) {
-      kml_mt_simple_array(header, kmt_cadence, fld_cadence);
+      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
     }
 
     if (has_depth) {
-      kml_mt_simple_array(header, kmt_depth, fld_depth);
+      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
     }
 
     if (has_heartrate) {
-      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate);
+      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
     }
 
     if (has_temperature) {
-      kml_mt_simple_array(header, kmt_temperature, fld_temperature);
+      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
     }
 
     if (has_power) {
-      kml_mt_simple_array(header, kmt_power, fld_power);
+      kml_mt_simple_array(header, kmt_power, wp_field::power);
+    }
+
+    // Perhaps not the /best/ way to do this, but this if ladder
+    // should only be evaluated once.
+    if (has_igc_exts) {
+      if (has_igc_enl) {
+        kml_mt_simple_array(header, kmt_igc_enl, wp_field::igc_enl);
+      }
+      if (has_igc_tas) {
+        kml_mt_simple_array(header, kmt_igc_tas, wp_field::igc_tas);
+      }
+      if (has_igc_oat) {
+        kml_mt_simple_array(header, kmt_igc_oat, wp_field::igc_oat);
+      }
+      if (has_igc_vat) {
+        kml_mt_simple_array(header, kmt_igc_vat, wp_field::igc_vat);
+      }
+      if (has_igc_gsp) {
+        kml_mt_simple_array(header, kmt_igc_gsp, wp_field::igc_gsp);
+      }
+      if (has_igc_fxa) {
+        kml_mt_simple_array(header, kmt_igc_fxa, wp_field::igc_fxa);
+      }
+      if (has_igc_gfo) {
+        kml_mt_simple_array(header, kmt_igc_gfo, wp_field::igc_gfo);
+      }
+      if (has_igc_acz) {
+        kml_mt_simple_array(header, kmt_igc_acz, wp_field::igc_acz);
+      }
+#ifdef INCLUDE_IGC_SIU
+      if (has_igc_siu) {
+        kml_mt_simple_array(header, kmt_igc_siu, igc_siu);
+      }
+#endif
+#ifdef INCLUDE_IGC_TRT
+      if (has_igc_trt) {
+        kml_mt_simple_array(header, kmt_igc_trt, igc_trt);
+      }
+#endif
     }
 
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag
   }
 }
+
 
 void KmlFormat::kml_mt_tlr(const route_head* header) const
 {
@@ -1710,6 +1837,7 @@ void KmlFormat::kml_write_AbstractView()
 
   writer->writeEndElement(); // Close LookAt tag
 }
+
 
 void KmlFormat::kml_mt_array_schema(const char* field_name, const char* display_name,
                                     const char* type) const
