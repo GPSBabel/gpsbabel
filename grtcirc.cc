@@ -22,19 +22,21 @@
 #include "defs.h"
 #include "grtcirc.h"
 
+#include <algorithm>
 #include <cerrno>
 #include <cmath>
 #include <cstdio>
+#include <tuple>
 
-static const double EARTH_RAD = 6378137.0;
+static constexpr double EARTH_RAD = 6378137.0;
 
-static void crossproduct(double x1, double y1, double z1,
-                         double x2, double y2, double z2,
-                         double* xa, double* ya, double* za)
+std::tuple<double, double, double>
+crossproduct(double x1, double y1, double z1, double x2, double y2, double z2)
 {
-  *xa = y1 * z2 - y2 * z1;
-  *ya = z1 * x2 - z2 * x1;
-  *za = x1 * y2 - y1 * x2;
+  double x = y1 * z2 - y2 * z1;
+  double y = z1 * x2 - z2 * x1;
+  double z = x1 * y2 - y1 * x2;
+  return std::make_tuple(x, y, z);
 }
 
 static double dotproduct(double x1, double y1, double z1,
@@ -118,6 +120,9 @@ double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
   return h;
 }
 
+// Note: This is probably not going to vectorize as it uses statics internally,
+// so it's hard for the optimizer to prove it's a pure function with no side
+// effects, right?
 double linedistprj(double lat1, double lon1,
                    double lat2, double lon2,
                    double lat3, double lon3,
@@ -132,9 +137,6 @@ double linedistprj(double lat1, double lon1,
   static double x1, y1, z1;
   static double x2, y2, z2;
   static double xa, ya, za, la;
-
-  double xa1, ya1, za1;
-  double xa2, ya2, za2;
 
   double dot;
 
@@ -177,7 +179,10 @@ double linedistprj(double lat1, double lon1,
     /* 'a' is the axis; the line that passes through the center of the earth
      * and is perpendicular to the great circle through point 1 and point 2
      * It is computed by taking the cross product of the '1' and '2' vectors.*/
-    crossproduct(x1, y1, z1, x2, y2, z2, &xa, &ya, &za);
+    auto [xt, yt, zt] = crossproduct(x1, y1, z1, x2, y2, z2);
+    xa = xt;
+    ya = yt;
+    za = zt;
     la = sqrt(xa * xa + ya * ya + za * za);
 
     if (la) {
@@ -205,10 +210,10 @@ double linedistprj(double lat1, double lon1,
       yp /= lp;
       zp /= lp;
 
-      crossproduct(x1, y1, z1, xp, yp, zp, &xa1, &ya1, &za1);
+      auto [xa1, ya1, za1] = crossproduct(x1, y1, z1, xp, yp, zp);
       double d1 = dotproduct(xa1, ya1, za1, xa, ya, za);
 
-      crossproduct(xp, yp, zp, x2, y2, z2, &xa2, &ya2, &za2);
+      auto [xa2, ya2, za2] = crossproduct(xp, yp, zp, x2, y2, z2);
       double d2 = dotproduct(xa2, ya2, za2, xa, ya, za);
 
       if (d1 >= 0 && d2 >= 0) {
@@ -297,8 +302,6 @@ void linepart(double lat1, double lon1,
               double frac,
               double* reslat, double* reslon)
 {
-  double xa, ya, za;
-
   /* result must be in degrees */
   *reslat = lat1;
   *reslon = lon1;
@@ -320,7 +323,7 @@ void linepart(double lat1, double lon1,
   /* 'a' is the axis; the line that passes through the center of the earth
    * and is perpendicular to the great circle through point 1 and point 2
    * It is computed by taking the cross product of the '1' and '2' vectors.*/
-  crossproduct(x1, y1, z1, x2, y2, z2, &xa, &ya, &za);
+  auto [xa, ya, za] = crossproduct(x1, y1, z1, x2, y2, z2);
   double la = sqrt(xa * xa + ya * ya + za * za);
 
   if (la) {
@@ -331,11 +334,10 @@ void linepart(double lat1, double lon1,
   /* if la is zero, the points are either equal or directly opposite
    * each other.  Either way, there's no single geodesic, so we punt. */
   if (la) {
-    double xx, yx, zx;
-    crossproduct(x1, y1, z1, xa, ya, za, &xx, &yx, &zx);
+    auto [xx, yx, zx] = crossproduct(x1, y1, z1, xa, ya, za);
 
-    double theta = atan2(dotproduct(xx,yx,zx,x2,y2,z2),
-                         dotproduct(x1,y1,z1,x2,y2,z2));
+    double theta = atan2(dotproduct(xx, yx, zx, x2, y2, z2),
+                         dotproduct(x1, y1, z1, x2, y2, z2));
 
     double phi = frac * theta;
     double cosphi = cos(phi);
@@ -347,24 +349,9 @@ void linepart(double lat1, double lon1,
     double yr = y1*cosphi + yx * sinphi;
     double zr = z1*cosphi + zx * sinphi;
 
-    if (xr > 1) {
-      xr = 1;
-    }
-    if (xr < -1) {
-      xr = -1;
-    }
-    if (yr > 1) {
-      yr = 1;
-    }
-    if (yr < -1) {
-      yr = -1;
-    }
-    if (zr > 1) {
-      zr = 1;
-    }
-    if (zr < -1) {
-      zr = -1;
-    }
+    xr = std::clamp(xr, -1.0, 1.0);
+    yr = std::clamp(yr, -1.0, 1.0);
+    zr = std::clamp(zr, -1.0, 1.0);
 
     *reslat = DEG(asin(yr));
     if (xr == 0 && zr == 0) {

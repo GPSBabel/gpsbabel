@@ -21,13 +21,14 @@
     <xsl:call-template name="inline.boldmonoseq"/>
   </fo:block>
 </xsl:template>
-<!-- Sometimes we use userinput and sometimes screen. Format both. -->
-<xsl:template match="db:screen">
-  <fo:block background-color="#e5E9EB" padding="4pt"
-		break-after="auto" border="1pt dashed #000000">
-    <xsl:call-template name="inline.boldmonoseq"/>
-  </fo:block>
-</xsl:template>
+
+<!-- Wrap any long lines in verbatim elements, which presumably use monospace.
+     This is preferrable to truncating the lines, but manually breaking the line
+     allows for the appropriate level of indent and control over where the break
+     is. -->
+<xsl:attribute-set name="monospace.verbatim.properties">
+    <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- This template is used to get rid of a lot of warnings we were getting
      from fop due to the fact that it doesn't support table-layout="auto".

@@ -9,7 +9,7 @@ this can be done by a user with no programming experience by providing a
 GPSBabel style file.
 </para>
       <para>For a format to be described by a style file, it must be predictable and
-generally readable by humant.  Formats with binary or unreadable content
+generally readable by a human.  Formats with binary or unreadable content
 are not good fits for this scheme.  It should have:
         <simplelist>
             <member>A fixed header at the beginning, if it has any at all. This is called a 'prologue'.</member>
@@ -403,7 +403,7 @@ OFIELDS are defined the same way in the style file.</para>
 consists of three pieces of information: the FIELD TYPE, a DEFAULT VALUE, and
 a PRINTF CONVERSION (for output).  In many cases, not all pieces are used,
 but all 3 pieces are required.   Additionally, an fourth field is supported
-that modifies the behaviour of the field being described.
+that modifies the behavior of the field being described.
 </para>
       <para>FIELDS should be defined in the style file in the logical order that they
 appear in the data, from left to right.  This is the order in which they are
@@ -878,7 +878,7 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen>IFIELD HMSG_TIME,"","%d:%d:%d %s"
+         <screen>IFIELD HMSG_TIME,"","%02d:%02d:%02d %s"
 </screen>
       </section>
       <section xml:id="style_def_hmsltime">
