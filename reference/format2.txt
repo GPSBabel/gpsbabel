@@ -1,6 +1,5 @@
 internal	rw----	xcsv		? Character Separated Values
 internal	rw----	tabsep		All database fields on one tab-separated line
-file	rw----	cambridge	dat	Cambridge/Winpilot glider software
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)
 file	rw----	csv		Comma separated values
 internal	rw----	custom		Custom "Everything" Style
