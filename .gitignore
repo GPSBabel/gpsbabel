@@ -1,5 +1,7 @@
 /autom4te.cache/
 /babelweb/
+/bld/
+/build/
 /compile_commands.json
 /config.h
 /config.log
@@ -43,3 +45,4 @@ CMakeFiles/
 /empty
 /gbversion.h
 /qrc_gpsbabel.cpp
+/.vscode/
