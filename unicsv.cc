@@ -552,12 +552,12 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     switch (unicsv_fields_tab[column]) {
 
     case fld_latitude:
-      human_to_dec(CSTR(value), &wpt->latitude, nullptr, 1);
+      human_to_dec(value, &wpt->latitude, nullptr, HumanToDec::FindLatitude);
       wpt->latitude = wpt->latitude * ns;
       break;
 
     case fld_longitude:
-      human_to_dec(CSTR(value), nullptr, &wpt->longitude, 2);
+      human_to_dec(value, nullptr, &wpt->longitude, HumanToDec::FindLongitude);
       wpt->longitude = wpt->longitude * ew;
       break;
 

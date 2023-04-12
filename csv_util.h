@@ -57,8 +57,14 @@ decdir_to_dec(const char* decdir);
 double
 ddmmdir_to_degrees(const char* ddmmdir);
 
+enum class HumanToDec {
+  FindLatitudeAndLongitude,
+  FindLatitude,
+  FindLongitude,
+};
+
 void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which);
+human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec which);
 
 QString
 dec_to_human(const char* format, const char* dirs, double val);
