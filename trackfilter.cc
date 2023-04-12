@@ -20,7 +20,7 @@
 
  */
 
-static const bool TRACKF_DBG = false;
+static constexpr bool TRACKF_DBG = false;
 
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
@@ -113,7 +113,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const char* arg)
 
     }
 
-    if (TRACKF_DBG) {
+    if constexpr(TRACKF_DBG) {
       qDebug() << MYNAME "-time option: shift =" << result / 1000.0 << "seconds";
     }
   } else {
@@ -456,7 +456,7 @@ void TrackFilter::trackfilter_split()
           fatal(MYNAME ": invalid time interval unit specified.\n");
         }
 
-        if (TRACKF_DBG) {
+        if constexpr(TRACKF_DBG) {
           printf(MYNAME ": interval %f seconds\n", interval);
         }
       } else {
@@ -487,7 +487,7 @@ void TrackFilter::trackfilter_split()
           fatal(MYNAME ": invalid distance unit specified.\n");
         }
 
-        if (TRACKF_DBG) {
+        if constexpr(TRACKF_DBG) {
           printf(MYNAME ": distance %f meters\n", distance);
         }
       } else {
@@ -512,11 +512,11 @@ void TrackFilter::trackfilter_split()
 // FIXME: This whole function needs to be reconsidered for arbitrary time.
         new_track_flag = buff.at(i)->GetCreationTime().toLocalTime().date() !=
                          buff.at(j)->GetCreationTime().toLocalTime().date();
-      if (TRACKF_DBG) {
-        if (new_track_flag) {
-          printf(MYNAME ": new day %s\n", qPrintable(buff.at(j)->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+        if constexpr(TRACKF_DBG) {
+          if (new_track_flag) {
+            printf(MYNAME ": new day %s\n", qPrintable(buff.at(j)->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+          }
         }
-      }
       } else {
         new_track_flag = true;
 
@@ -529,11 +529,8 @@ void TrackFilter::trackfilter_split()
           curdist = radtometers(curdist);
           if (curdist <= distance) {
             new_track_flag = false;
-          }
-          else {
-            if (TRACKF_DBG) {
-              printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
-            }
+          } else if constexpr(TRACKF_DBG) {
+            printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
           }
         }
 
@@ -541,17 +538,14 @@ void TrackFilter::trackfilter_split()
           double tr_interval = 0.001 * buff.at(i)->GetCreationTime().msecsTo(buff.at(j)->GetCreationTime());
           if (tr_interval <= interval) {
             new_track_flag = false;
-          }
-          else {
-            if (TRACKF_DBG) {
-              printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
-            }
+          } else if constexpr(TRACKF_DBG) {
+            printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
           }
         }
 
       }
       if (new_track_flag) {
-        if (TRACKF_DBG) {
+        if constexpr(TRACKF_DBG) {
           printf(MYNAME ": splitting new track\n");
         }
         curr = new route_head;
@@ -693,7 +687,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
       fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
     }
 
-    if (TRACKF_DBG) {
+    if constexpr(TRACKF_DBG) {
       qDebug() << MYNAME "-range-check: " << result;
     }
   } else {
@@ -866,7 +860,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
       result.step = 0;
     }
 
-    if (TRACKF_DBG){
+    if constexpr(TRACKF_DBG) {
       qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
     }
   } else {
