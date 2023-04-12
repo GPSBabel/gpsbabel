@@ -32,8 +32,6 @@ option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
 
-serial	--r---	baroiq		Brauniger IQ Series Barograph Download	baroiq
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_baroiq.html
 file	rw----	cambridge	dat	Cambridge/Winpilot glider software	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html
 option	cambridge	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snlen

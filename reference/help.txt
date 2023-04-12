@@ -32,7 +32,6 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	baroiq                Brauniger IQ Series Barograph Download
 	cambridge             Cambridge/Winpilot glider software
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames

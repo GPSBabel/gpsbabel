@@ -1,4 +1,3 @@
-baroiq		Brauniger IQ Series Barograph Download
 cambridge	dat	Cambridge/Winpilot glider software
 v900		Columbus/Visiontac V900 files (.csv)
 csv		Comma separated values

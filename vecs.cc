@@ -309,13 +309,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &brauniger_iq_fmt,
-      "baroiq",
-      "Brauniger IQ Series Barograph Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &mtk_fmt,
       "mtk",
       "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
