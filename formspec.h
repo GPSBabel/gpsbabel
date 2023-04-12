@@ -29,7 +29,8 @@ enum FsType {
   kFsOzi = 0x6f7a6900L,
   kFsGmsd = 0x474d5344L,	/* GMSD = Garmin specific data */
   kFsQstarzBl1000 = 0x5173747aL,
-  kFsLowranceusr4 = 0x615f234cL
+  kFsLowranceusr4 = 0x615f234cL,
+  kFsIGC = 69676308L,     /* IGC format, amendment 8 (2023-02-08) */
 };
 
 struct FormatSpecificData {

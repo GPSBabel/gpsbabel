@@ -32,6 +32,7 @@
 #include <cstring>              // for strcmp, strlen, strtok, strcat, strchr, strcpy, strncat
 #include <iterator>             // for reverse_iterator, operator==, prev, next
 #include <optional>             // for optional
+#include <tuple>                // for std::make_tuple
 
 #include <QByteArray>           // for QByteArray
 #include <QChar>                // for QChar
@@ -44,11 +45,14 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
+#include <QDebug>               // DELETEME for debugging
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "grtcirc.h"            // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
+#include "formspec.h"           // for FormatSpecificData, kFsIGC
+
 
 
 #define MYNAME "IGC"
@@ -79,7 +83,7 @@ unsigned char IgcFormat::coords_match(double lat1, double lon1, double lat2, dou
  * @param  rec  Caller allocated storage for the record.  At least kMaxRecLen chars must be allocated.
  * @return the record type.  rec_none on EOF, rec_bad on fgets() or parse error.
  */
-IgcFormat::igc_rec_type_t IgcFormat::get_record(char** rec)
+IgcFormat::igc_rec_type_t IgcFormat::get_record(char** rec) const
 {
   char* c;
 retry:
@@ -146,7 +150,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
                &day, &month, &year,
                &hour, &minute, &second,
                flight_date, task_num, &num_tp, task_desc) < 9) {
-      fatal(MYNAME ": task id (C) record parse error\n'%s'", rec);
+      fatal(MYNAME ": task id (C) record parse error A. \n'%s'", rec);
     }
     task_num[4] = '\0';
     if (year < 70) {
@@ -216,7 +220,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     break;
 
   default:
-    fatal(MYNAME ": task id (C) record internal error\n%s", rec);
+    fatal(MYNAME ": task id (C) record internal error B\n%s", rec);
     break;
   }
 
@@ -250,11 +254,15 @@ void IgcFormat::read()
   char* hdr_data;
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
+  int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
+  QList<std::tuple<QString, igc_ext_type_t, int, int, double>> ext_types_list;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
     igc_rec_type_t rec_type = get_record(&ibuf);
+    current_line++;
+    QString ibuf_q = QString::fromUtf8(ibuf);
     switch (rec_type) {
     case rec_manuf_id:
       // Manufacturer/ID record already found in rd_init().
@@ -302,7 +310,7 @@ void IgcFormat::read()
       }
       break;
 
-    case rec_fix:
+    case rec_fix: {
       // Date must appear in file before the first fix record
       if (!date.isValid()) {
         fatal(MYNAME ": bad date\n");
@@ -348,6 +356,33 @@ void IgcFormat::read()
       }
       prev_tod = tod;
 
+      /*
+       * Parse any extension data present. If no extensions are used (unlikely,
+       * but possible in the case of homebrew flight recorders), then skip the
+       * whole thing.
+      */
+      if (!ext_types_list.isEmpty()) {
+        auto* fsdata = new igc_fsdata;
+        if (global_opts.debug_level >= 7) {
+          printf(MYNAME ": Record: %s\n",qPrintable(ibuf_q));
+        }
+        if (global_opts.debug_level >= 6) {
+          printf(MYNAME ": Adding extension data:");
+        }
+        for (const auto& [name, ext, start, len, factor] : ext_types_list) {
+          double ext_data = ibuf_q.mid(start,len).toInt() / factor;
+
+          fsdata->set_value(ext, ext_data);
+          if (global_opts.debug_level >= 6) {
+            printf(" %s:%f", qPrintable(name), ext_data);
+          }
+        }
+        if (global_opts.debug_level >= 6) {
+          printf("\n");
+        }
+        pres_wpt->fs.FsChainAdd(fsdata);
+      }
+
       pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
 
       // Add the waypoint to the pressure altitude track
@@ -358,7 +393,6 @@ void IgcFormat::read()
         pres_wpt->altitude = unknown_alt;
       }
       track_add_wpt(pres_head, pres_wpt);
-
       // Add the same waypoint with GNSS altitude to the second
       // track
       gnss_wpt = new Waypoint(*pres_wpt);
@@ -371,6 +405,7 @@ void IgcFormat::read()
       }
       track_add_wpt(gnss_head, gnss_wpt);
       break;
+    }
 
     case rec_task:
       // Create a route for each pre-flight declaration
@@ -387,7 +422,7 @@ void IgcFormat::read()
         // Create a route for each post-flight declaration
         task_record_reader.igc_task_rec(ibuf + 4);
         break;
-      } else if (global_opts.debug_level) {
+      } else if (global_opts.debug_level >= 4) {
         if (strcmp(tmp_str, "OOI") == 0) {
           printf(MYNAME ": Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {
@@ -400,17 +435,76 @@ void IgcFormat::read()
       }
       break;
 
-      // These record types are discarded
+    case rec_fix_defn: {
+      // We need to scope this, or the compiler complains "transfer of control bypasses initialization of:"
+      // Not sure exactly what that means... something something scoping and initialization.
+      /*
+       * The first three characters define the number of extensions present.
+       * We don't particularly care about that. After that, every group of seven
+       * bytes is 4 digits followed by three letters, specifying start end end
+       * bytes of each extension, and the kind of extension (always three chars)
+       * Building the list of (un)supported extensions isn't necessary if we aren't
+       * producing debug output, but this case: is only done once per file.
+       */
+
+      QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
+      QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
+      if (global_opts.debug_level >= 1) {
+        printf(MYNAME ": I record: %s\n" MYNAME ": ", qPrintable(ibuf_q));
+      }
+      for (int i=3; i < ibuf_q.length(); i+=7) {
+        QString ext_type = ibuf_q.mid(i+4, 3);
+        QString extension_definition = ibuf_q.mid(i,7);
+        if (global_opts.debug_level >= 1) {
+          printf(" %s;",qPrintable(ext_type));
+        }
+        // -1 because IGC records are one-initialized and QStrings are zero-initialized
+        int begin = extension_definition.mid(0,2).toInt() - 1;
+        int end = extension_definition.mid(2,2).toInt() - 1;
+        int len = end - begin + 1;
+        QString name = extension_definition.mid(4,3);
+        igc_ext_type_t ext = get_ext_type(ext_type);
+        if (ext != IgcFormat::igc_ext_type_t::ext_rec_unknown) {
+          int factor = get_ext_factor(ext);
+          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
+          supported_extensions.append(name);
+        } else {
+          unsupported_extensions.append(name);
+        }
+      }
+      if (global_opts.debug_level >= 1) {
+        printf("\n");
+      }
+      if (global_opts.debug_level >= 2) {
+        printf(MYNAME ": Extensions defined in I record:\n");
+        printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
+        for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
+          printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+        }
+        if (global_opts.debug_level >= 3) {
+          printf("\n" MYNAME "Supported extensions:");
+          foreach (QString ext, supported_extensions) {
+            printf(" %s", qPrintable(ext));
+          }
+          printf("\nUnsupported extensions:");
+          foreach (QString ext, unsupported_extensions) {
+            printf(" %s", qPrintable(ext));
+          }
+          printf("\n");
+        }
+      }
+    }
+
+    // These record types are discarded
     case rec_diff_gps:
     case rec_event:
     case rec_constel:
     case rec_security:
-    case rec_fix_defn:
     case rec_extn_defn:
     case rec_extn_data:
       break;
 
-      // No more records
+    // No more records
     case rec_none:
 
       // Include pressure altitude track only if it has useful
@@ -424,6 +518,8 @@ void IgcFormat::read()
       if (gnss_head && !gnss_valid && pres_head) {
         track_del_head(gnss_head);
       }
+      // Dammit I hate early returns. I also hate while(true)
+      // TODO: Fix this. (KV)
       return;		// All done so bail
 
     default:
@@ -465,7 +561,7 @@ void IgcFormat::detect_other_track(const route_head* rh, int& max_waypt_ct)
   if (rh->rte_waypt_ct() > max_waypt_ct &&
       (rh->rte_name.isEmpty() ||
        (!rh->rte_name.startsWith(kPresTrkName) &&
-       !rh->rte_name.startsWith(kGNSSTrkName)))) {
+        !rh->rte_name.startsWith(kGNSSTrkName)))) {
     head = rh;
     max_waypt_ct = rh->rte_waypt_ct();
   }
@@ -583,7 +679,7 @@ void IgcFormat::wr_header()
     date = current_time();
     assert(date.isValid() || gpsbabel_testmode());
   }
-  
+
   gbfprintf(file_out, "HFDTE%s\r\n", date2str(date).constData());
 
   // Other header data may have been stored in track description
@@ -768,7 +864,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
     speed = (deltat_msec == 0) ? 0:
             radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                                RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
-                        (0.001 * deltat_msec);
+            (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%.2fm/s\n", speed);
     }
