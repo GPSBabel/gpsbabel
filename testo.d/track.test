@@ -54,6 +54,9 @@ compare ${REFERENCE}/track/trackfilter-move-d.gpx ${TMPDIR}/trackfilter-move-d.g
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=-5m,name=LOG-20020527,start=20020527185742,stop=20020527185950,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-m.gpx
 compare ${REFERENCE}/track/trackfilter-move-m.gpx ${TMPDIR}/trackfilter-move-m.gpx
 
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,move=5z,name=LOG-20020527,start=20020527190141.5,stop=20020527190449.5,minimum_points=2 -o gpx -F ${TMPDIR}/trackfilter-move-z.gpx
+compare ${REFERENCE}/track/trackfilter-move-z.gpx ${TMPDIR}/trackfilter-move-z.gpx
+
 # actually test a merge
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_merge.gpx -x track,merge -x track,speed -o gpx -F ${TMPDIR}/trackfilter_merge~gpx.gpx
 compare ${REFERENCE}/track/trackfilter_merge~gpx.gpx ${TMPDIR}/trackfilter_merge~gpx.gpx

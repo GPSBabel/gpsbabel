@@ -1,6 +1,6 @@
 <para>
 This filter removes points based on their proximity to each other.
-For waypoints a point is removed if it is within the specified distance of a preceeding point.
+For waypoints a point is removed if it is within the specified distance of a preceding point.
 For routes and tracks consecutive points are removed until the distance between the bracketing points is greater than the specified distance.
 </para>
 

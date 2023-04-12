@@ -66,6 +66,26 @@ public:
   void wr_position(Waypoint* wpt) override;
   void wr_position_deinit() override;
 
+// Helper to write gx:SimpleList, iterating over a route queue and writing out.
+
+  enum class wp_field {
+    cadence,
+    depth,
+    heartrate,
+    temperature,
+    power,
+    igc_enl,  // Engine Noise Level
+    igc_tas,  // True Airspeed
+    igc_vat,  // Compensated variometer (total energy)
+    igc_oat,  // Outside Air Temperature
+    igc_trt,  // True Track
+    igc_gsp,  // Ground Speed
+    igc_fxa,  // Fix Accuracy
+    igc_gfo,  // G Force
+    igc_siu,  // Satellites In Use
+    igc_acz   // Z Acceleration
+  };
+
 private:
   /* Types */
 
@@ -76,16 +96,6 @@ private:
     kmlpt_route,
     kmlpt_multitrack,
     kmlpt_other
-  };
-
-// Helper to write gx:SimpleList, iterating over a route queue and writing out.
-
-  enum wp_field {
-    fld_cadence,
-    fld_depth,
-    fld_heartrate,
-    fld_temperature,
-    fld_power
   };
 
   /* Constants */
@@ -113,6 +123,17 @@ private:
   static constexpr const char* kmt_temperature = "temperature";
   static constexpr const char* kmt_depth = "depth";
   static constexpr const char* kmt_power = "power";
+  // Constants pertaining to IGC files would be better defined in either igc.h or formspec.h
+  static constexpr const char* kmt_igc_enl = "Engine Noise";
+  static constexpr const char* kmt_igc_vat = "Ttl Enrg Vario";
+  static constexpr const char* kmt_igc_tas = "True Airspd";
+  static constexpr const char* kmt_igc_oat = "Otsd Air Temp";
+  static constexpr const char* kmt_igc_trt = "True Track";
+  static constexpr const char* kmt_igc_gsp = "Ground Speed";
+  static constexpr const char* kmt_igc_fxa = "Fix Accuracy";
+  static constexpr const char* kmt_igc_gfo = "G Force?";
+  static constexpr const char* kmt_igc_siu = "# Of Sats";
+  static constexpr const char* kmt_igc_acz = "Z Accel";
 
   /* Member Functions */
 

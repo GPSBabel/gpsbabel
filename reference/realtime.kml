@@ -324,7 +324,6 @@
 <tr><td>Cadence: 245</td></tr>
 <tr><td>Heart rate: 25</td></tr>
 <tr><td>Power: 88.9</td></tr>
-<tr><td>Heading: 317.9</td></tr>
 </table>
 ]]></description>
           <LookAt>
@@ -464,7 +463,7 @@
 <tr><td>Temperature: 19.8</td></tr>
 <tr><td>Depth: 818.2 ft</td></tr>
 <tr><td>Speed: 65.4 mph</td></tr>
-<tr><td>Heading: 25.6</td></tr>
+<tr><td>Heading: 34.9</td></tr>
 <tr><td>Time: 1970-01-01T00:00:09.290Z</td></tr>
 </table>
 ]]></description>
@@ -704,7 +703,7 @@
 <tr><td>Temperature: 23.9</td></tr>
 <tr><td>Depth: 2233.7 ft</td></tr>
 <tr><td>Speed: 125.4 mph</td></tr>
-<tr><td>Heading: 50.7</td></tr>
+<tr><td>Heading: 52.9</td></tr>
 <tr><td>Time: 1970-01-01T00:00:24.084Z</td></tr>
 </table>
 ]]></description>
@@ -790,7 +789,7 @@
 <tr><td>Cadence: 40</td></tr>
 <tr><td>Depth: 2066.8 ft</td></tr>
 <tr><td>Speed: 160.6 mph</td></tr>
-<tr><td>Heading: 38.0</td></tr>
+<tr><td>Heading: 45.1</td></tr>
 <tr><td>Time: 1970-01-01T00:00:31.102Z</td></tr>
 </table>
 ]]></description>

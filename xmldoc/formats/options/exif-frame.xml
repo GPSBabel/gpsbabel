@@ -7,10 +7,6 @@
   <userinput>gpsbabel -i gpx -f holiday.gpx -o exif,frame=60 -F IMG0784.JPG</userinput>
 </para>
 <para>
-   If the camera time wasn't adjusted, you should move the track(s) by the this difference.
-   I.e. if the camera time is five minutes behind your time, the track(s) should be shifted
-   five minutes back.
-</para>
-<para>
-  <userinput>gpsbabel -i gpx -f holiday.gpx -x track,move=-5m -o exif,frame=60 -F IMG0784.JPG</userinput>
+   If the camera time wasn't adjusted, you should use the offset option.  You may also need to use the frame option, or 
+   the interpolate filter.
 </para>

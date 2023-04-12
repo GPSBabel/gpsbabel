@@ -9,7 +9,7 @@ dawn of time or January 1, 1970, whichever was later.  The time for this
 option is expressed in UTC.
 </para>
 <para>
-The value of this option must be in the form of YYYYMMDDHHMMSS, but it is
+The value of this option must be in the form of YYYYMMDDHHMMSS.SSS, but it is
 not necessary to specify the smaller time units if they are not needed.
 That is, if you only care about points logged between 10 AM and 6 PM on a
 given date, you need not specify the minutes or seconds.

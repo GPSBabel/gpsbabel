@@ -213,7 +213,7 @@ public:
   UrlLink(QString url) :
     url_(std::move(url))
   { }
-  UrlLink(const char* url) :
+  explicit UrlLink(const char* url) :
     url_(url)
   { }
   UrlLink(QString url, QString url_link_text) :
