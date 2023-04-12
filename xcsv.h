@@ -262,6 +262,7 @@ private:
 class XcsvFormat : public Format
 {
 public:
+  using Format::Format;
   /* Member Functions */
   QVector<arglist_t>* get_args() override
   {

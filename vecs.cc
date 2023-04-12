@@ -36,6 +36,7 @@
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
+#include <type_traits>         // for add_const<>::type, is_base_of
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
@@ -91,7 +92,6 @@ extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
-extern ff_vecs_t gpssim_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
@@ -105,6 +105,13 @@ extern ff_vecs_t format_garmin_xt_vecs;
 
 #define MYNAME "vecs"
 
+template <typename T>
+Format* fmtfactory(const QString& filename)
+{
+  static_assert(std::is_base_of<Format, T>::value, "T must be derived from Format");
+  return new T(filename);
+}
+
 struct Vecs::Impl {
   /*
    * Having these LegacyFormat instances be non-static data members
@@ -113,10 +120,6 @@ struct Vecs::Impl {
    * instance is guaranteed to have already constructed when an instance
    * of this class is constructed.
    */
-#if CSVFMTS_ENABLED
-  XcsvFormat xcsv_fmt;
-#endif // CSVFMTS_ENABLED
-  GeoFormat geo_fmt;
   GpxFormat gpx_fmt;
   LegacyFormat garmin_fmt {garmin_vecs};
   GdbFormat gdb_fmt;
@@ -148,7 +151,6 @@ struct Vecs::Impl {
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
-  LegacyFormat gpssim_fmt {gpssim_vecs};
 #if CSVFMTS_ENABLED
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
 #endif // CSVFMTS_ENABLED
@@ -182,19 +184,21 @@ struct Vecs::Impl {
 #if CSVFMTS_ENABLED
     /* XCSV must be the first entry in this table. */
     {
-      &xcsv_fmt,
+      nullptr,
       "xcsv",
       "? Character Separated Values",
       nullptr,
       nullptr,
+      &fmtfactory<XcsvFormat>
     },
 #endif
     {
-      &geo_fmt,
+      nullptr,
       "geo",
       "Geocaching.com .loc",
       "loc",
       nullptr,
+      &fmtfactory<GeoFormat>
     },
     {
       &gpx_fmt,
@@ -381,13 +385,6 @@ struct Vecs::Impl {
       "gtm",
       "GPS TrackMaker",
       "gtm",
-      nullptr,
-    },
-    {
-      &gpssim_fmt,
-      "gpssim",
-      "Franson GPSGate Simulation",
-      "gpssim",
       nullptr,
     },
 #if CSVFMTS_ENABLED
@@ -595,18 +592,25 @@ Vecs& Vecs::Instance()
  * the default the default constructor would be implicitly deleted.
  */
 
+void Vecs::init_vec(Format* fmt)
+{
+  QVector<arglist_t>* args = fmt->get_args();
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      arg.argvalptr = nullptr;
+      if (arg.argval) {
+        *arg.argval = nullptr;
+      }
+    }
+  }
+}
+
 void Vecs::init_vecs()
 {
   for (const auto& vec : d_ptr_->vec_list) {
-    QVector<arglist_t>* args = vec.vec->get_args();
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        arg.argvalptr = nullptr;
-        if (arg.argval) {
-          *arg.argval = nullptr;
-        }
-      }
+    if (vec.vec != nullptr) {
+      init_vec(vec.vec);
     }
   }
   style_list = create_style_vec();
@@ -672,19 +676,26 @@ bool Vecs::is_bool(const QString& val)
          (!val.isEmpty() && val.at(0).isDigit());
 }
 
+void Vecs::exit_vec(Format* fmt)
+{
+  (fmt->exit)();
+  QVector<arglist_t>* args = fmt->get_args();
+  if (args && !args->isEmpty()) {
+    assert(args->isDetached());
+    for (auto& arg : *args) {
+      if (arg.argvalptr) {
+        xfree(arg.argvalptr);
+        *arg.argval = arg.argvalptr = nullptr;
+      }
+    }
+  }
+}
+
 void Vecs::exit_vecs()
 {
   for (const auto& vec : d_ptr_->vec_list) {
-    (vec.vec->exit)();
-    QVector<arglist_t>* args = vec.vec->get_args();
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        if (arg.argvalptr) {
-          xfree(arg.argvalptr);
-          *arg.argval = arg.argvalptr = nullptr;
-        }
-      }
+    if (vec.vec != nullptr) {
+      exit_vec(vec.vec);
     }
   }
   style_list.clear();
@@ -799,7 +810,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-void Vecs::prepare_format(const fmtinfo_t& fmtdata) const
+void Vecs::prepare_format(const fmtinfo_t& fmtdata) 
 {
   QVector<arglist_t>* args = fmtdata->get_args();
 
@@ -838,7 +849,10 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata) const
    * that we are processing xcsv,style= and it was preceeded by an xcsv
    * format that utilized an internal style file.
    */
-  d_ptr_->xcsv_fmt.xcsv_setup_internal_style(fmtdata.style_filename);
+  auto* xcsvfmt = dynamic_cast<XcsvFormat*>(fmtdata.fmt);
+  if (xcsvfmt != nullptr) {
+    xcsvfmt->xcsv_setup_internal_style(fmtdata.style_filename);
+  }
 #endif // CSVFMTS_ENABLED
 }
 
@@ -855,9 +869,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
       continue;
     }
 
-    fmtinfo_t fmtinfo{vec.vec, vec.name, nullptr, options};
-    prepare_format(fmtinfo);
-    return fmtinfo;
+    return {vec.vec, vec.name, nullptr, options, vec.factory};
   }
 
   /*
@@ -869,9 +881,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
       continue;
     }
 
-    fmtinfo_t fmtinfo{d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options};
-    prepare_format(fmtinfo);
-    return fmtinfo;
+    return {d_ptr_->vec_list.at(0).vec, svec.name, svec.style_filename, options, d_ptr_->vec_list.at(0).factory};
   }
 
   /*
@@ -948,6 +958,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
 
   /* Gather relevant information for normal formats. */
   for (const auto& vec : d_ptr_->vec_list) {
+    Format* fmt = (vec.factory != nullptr)? vec.factory("") : vec.vec;
     vecinfo_t info;
     info.name = vec.name;
     info.desc = vec.desc;
@@ -957,15 +968,18 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
     } else {
       info.parent = vec.parent;
     }
-    info.type = vec.vec->get_type();
-    info.cap = vec.vec->get_cap();
-    const QVector<arglist_t>* args = vec.vec->get_args();
+    info.type = fmt->get_type();
+    info.cap = fmt->get_cap();
+    const QVector<arglist_t>* args = fmt->get_args();
     if (args != nullptr) {
       for (const auto& arg : *args) {
         info.arginfo.append(arginfo_t(arg));
       }
     }
     svp.append(info);
+    if (vec.factory != nullptr) {
+      delete fmt;
+    }
   }
 
 #if CSVFMTS_ENABLED
@@ -973,11 +987,13 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * Make sure we know which entry in the vector list that is.
    */
   assert(d_ptr_->vec_list.at(0).name.compare("xcsv", Qt::CaseInsensitive) == 0);
+
+  Format* xcsvfmt = (d_ptr_->vec_list.at(0).factory != nullptr)? d_ptr_->vec_list.at(0).factory("") : d_ptr_->vec_list.at(0).vec;
   /* The style formats use a modified xcsv argument list that doesn't include
    * the option to set the style file.  Make sure we know which entry in
    * the argument list that is.
    */
-  assert(case_ignore_strcmp(d_ptr_->vec_list.at(0).vec->get_args()->at(0).helpstring,
+  assert(case_ignore_strcmp(xcsvfmt->get_args()->at(0).helpstring,
                             "Full path to XCSV style file") == 0);
 
   /* Gather the relevant info for the style based formats. */
@@ -1009,7 +1025,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
      * 'Full path to XCSV style file' argument to any
      * GUIs for an internal format.
      */
-    const QVector<arglist_t>* args = d_ptr_->vec_list.at(0).vec->get_args();
+    const QVector<arglist_t>* args = xcsvfmt->get_args();
     if (args != nullptr) {
       bool first = true;
       for (const auto& arg : *args) {
@@ -1020,6 +1036,9 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
       }
     }
     svp.append(info);
+  }
+  if (d_ptr_->vec_list.at(0).factory != nullptr) {
+    delete xcsvfmt;
   }
 #endif // CSVFMTS_ENABLED
 
@@ -1276,7 +1295,11 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
 
 bool Vecs::validate_vec(const vecs_t& vec)
 {
-  bool ok = validate_args(vec.name, vec.vec->get_args());
+  Format* fmt = (vec.factory != nullptr)? vec.factory("") : vec.vec;
+  bool ok = validate_args(vec.name, fmt->get_args());
+  if (vec.factory != nullptr) {
+    delete fmt;
+  }
 
   return ok;
 }

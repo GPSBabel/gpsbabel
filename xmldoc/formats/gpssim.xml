@@ -1,9 +1,0 @@
-  <para>
-        This is a write-only format used to feed waypoints, tracks, and routes
-        into <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://franson.com/">Franson Technolgies'</link>
-        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://franson.com/gpsgate/">GpsGate simulator</link>.
-  </para>
-  <para>
-        To use these files in GpsGate, select 'Simulator' and then
-        "File-&gt;Open".
-  </para>

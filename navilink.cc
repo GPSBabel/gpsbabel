@@ -234,10 +234,8 @@ navilink_checksum_packet(const unsigned char* packet, unsigned length)
   return checksum & 0x7fff;
 }
 
-#ifdef NAVILINK_DEBUG
-
 static void
-dump_packet(char* prefix, unsigned char* packet, unsigned length)
+dump_packet(const char* prefix, unsigned char* packet, unsigned length)
 {
   unsigned i;
 
@@ -253,8 +251,6 @@ dump_packet(char* prefix, unsigned char* packet, unsigned length)
 
   fprintf(stderr, "\n");
 }
-
-#endif
 
 static void
 write_packet(unsigned type, const void* payload, unsigned length)
@@ -272,9 +268,9 @@ write_packet(unsigned type, const void* payload, unsigned length)
   packet[length + 7] = 0xb0;
   packet[length + 8] = 0xb3;
 
-#ifdef NAVILINK_DEBUG
-  dump_packet(">>>", packet + 4, length + 1);
-#endif
+  if (global_opts.debug_level >= 2) {
+    dump_packet(">>>", packet + 4, length + 1);
+  }
 
   if (gbser_write(serial_handle, packet, length + 9) != gbser_OK) {
     fatal(MYNAME ": Write error\n");
@@ -326,9 +322,9 @@ read_packet(unsigned type, void* payload,
     fatal(MYNAME ": Read error reading %d byte payload\n", size);
   }
 
-#ifdef NAVILINK_DEBUG
-  dump_packet("<<<", data, size);
-#endif
+  if (global_opts.debug_level >= 2) {
+    dump_packet("<<<", data, size);
+  }
 
   if (data[0] != type) {
     if (handle_nak && data[0] == PID_NAK) {

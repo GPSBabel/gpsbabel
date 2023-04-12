@@ -235,13 +235,11 @@ track_swap(RouteList& other)
  * Run over all the trackpoints, computing heading (course), speed, and
  * and so on.
  *
- * If trkdatap is non-null upon entry, a pointer to an allocated collection
- * (hopefully interesting) statistics about the track will be placed there.
+ * return a collection of (hopefully interesting) statistics about the track.
  */
 computed_trkdata track_recompute(const route_head* trk)
 {
-  Waypoint first;
-  const Waypoint* prev = &first;
+  const Waypoint* prev = nullptr;
   int tkpt = 0;
   int pts_hrt = 0;
   double tot_hrt = 0.0;
@@ -251,44 +249,41 @@ computed_trkdata track_recompute(const route_head* trk)
   double tot_pwr = 0.0;
   computed_trkdata tdata;
 
-//  first.latitude = 0;
-//  first.longitude = 0;
-//  first.creation_time = 0;
-
   foreach (Waypoint* thisw, trk->waypoint_list) {
 
-    /*
-     * gcdist and heading want radians, not degrees.
-     */
-    double tlat = RAD(thisw->latitude);
-    double tlon = RAD(thisw->longitude);
-    double plat = RAD(prev->latitude);
-    double plon = RAD(prev->longitude);
-    thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
-    double dist = radtometers(gcdist(plat, plon, tlat, tlon));
-
-    /*
-     * Avoid that 6300 mile jump as we move from 0,0.
-     */
-    if (plat && plon) {
+    if (prev != nullptr) {
+      /*
+       * gcdist and heading want radians, not degrees.
+       */
+      double tlat = RAD(thisw->latitude);
+      double tlon = RAD(thisw->longitude);
+      double plat = RAD(prev->latitude);
+      double plon = RAD(prev->longitude);
+      if (!thisw->course_has_value()) {
+        // Only recompute course if the waypoint
+        // didn't already have a course.
+        thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
+      }
+      double dist = radtometers(gcdist(plat, plon, tlat, tlon));
       tdata.distance_meters += dist;
-    }
 
-    /*
-     * If we've moved as much as a meter,
-     * conditionally recompute speeds.
-     */
-    if (!thisw->speed_has_value() && (dist > 1)) {
-      // Only recompute speed if the waypoint
-      // didn't already have a speed
-      if (thisw->GetCreationTime().isValid() &&
-          prev->GetCreationTime().isValid() &&
-          thisw->GetCreationTime() > prev->GetCreationTime()) {
-        double timed =
-          prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
-        thisw->set_speed(dist / timed);
+      /*
+       * If we've moved as much as a meter,
+       * conditionally recompute speeds.
+       */
+      if (!thisw->speed_has_value() && (dist > 1)) {
+        // Only recompute speed if the waypoint
+        // didn't already have a speed
+        if (thisw->GetCreationTime().isValid() &&
+            prev->GetCreationTime().isValid() &&
+            thisw->GetCreationTime() > prev->GetCreationTime()) {
+          double timed =
+            prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
+          thisw->set_speed(dist / timed);
+        }
       }
     }
+
     if (thisw->speed_has_value()) {
       if ((!tdata.min_spd) || (thisw->speed_value() < tdata.min_spd)) {
         tdata.min_spd = thisw->speed_value();
