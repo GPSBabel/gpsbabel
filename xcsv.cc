@@ -1936,17 +1936,11 @@ XcsvFormat::wr_init(const QString& fname)
       setshort_length(xcsv_file->mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
     }
 
-    if (snwhiteopt) {
-      setshort_whitespace_ok(xcsv_file->mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
-    }
+    setshort_whitespace_ok(xcsv_file->mkshort_handle, snwhiteopt != nullptr);
 
-    if (snupperopt) {
-      setshort_mustupper(xcsv_file->mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
-    }
+    setshort_mustupper(xcsv_file->mkshort_handle, snupperopt != nullptr);
 
-    if (snuniqueopt) {
-      setshort_mustuniq(xcsv_file->mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
-    }
+    setshort_mustuniq(xcsv_file->mkshort_handle, snuniqueopt != nullptr);
 
     setshort_badchars(xcsv_file->mkshort_handle, CSTR(xcsv_style->badchars));
 

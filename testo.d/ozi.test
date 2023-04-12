@@ -25,3 +25,13 @@ compare ${REFERENCE}/track/ozitracks~gpx-2.plt ${TMPDIR}/ozitracks~gpx-2.plt
 
 # test ozi with no output making sure we don't throw an error or segmentation fault.
 gpsbabel -i gpx -f ${REFERENCE}/track/ozitracks.gpx -x nuketypes,waypoints,tracks,routes -o ozi -F ${TMPDIR}/empty.plt
+
+# test sn options
+gpsbabel -s -i xcsv,style=${REFERENCE}/mkshort.style -f reference/mkshort.csv -o ozi,snunique=0,snupper=0,snwhite=0 -F ${TMPDIR}/ozi000.wpt
+compare ${REFERENCE}/ozi000.wpt ${TMPDIR}/ozi000.wpt
+gpsbabel -s -i xcsv,style=${REFERENCE}/mkshort.style -f reference/mkshort.csv -o ozi,snunique=1,snupper=0,snwhite=0 -F ${TMPDIR}/ozi100.wpt
+compare ${REFERENCE}/ozi100.wpt ${TMPDIR}/ozi100.wpt
+gpsbabel -s -i xcsv,style=${REFERENCE}/mkshort.style -f reference/mkshort.csv -o ozi,snunique=0,snupper=1,snwhite=0 -F ${TMPDIR}/ozi010.wpt
+compare ${REFERENCE}/ozi010.wpt ${TMPDIR}/ozi010.wpt
+gpsbabel -s -i xcsv,style=${REFERENCE}/mkshort.style -f reference/mkshort.csv -o ozi,snunique=0,snupper=0,snwhite=1 -F ${TMPDIR}/ozi001.wpt
+compare ${REFERENCE}/ozi001.wpt ${TMPDIR}/ozi001.wpt

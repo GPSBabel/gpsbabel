@@ -97,7 +97,7 @@ GpxFormat::gpx_reset_short_handle()
   mkshort_handle = mkshort_new_handle();
 
   if (suppresswhite) {
-    setshort_whitespace_ok(mkshort_handle, 0);
+    setshort_whitespace_ok(mkshort_handle, false);
   }
 
   setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));

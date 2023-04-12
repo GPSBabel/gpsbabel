@@ -467,17 +467,11 @@ wr_init(const QString& fname)
 
     setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
 
-    if (snwhiteopt) {
-      setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
-    }
+    setshort_whitespace_ok(mkshort_handle, snwhiteopt != nullptr);
 
-    if (snupperopt) {
-      setshort_mustupper(mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
-    }
+    setshort_mustupper(mkshort_handle, snupperopt != nullptr);
 
-    if (snuniqueopt) {
-      setshort_mustuniq(mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
-    }
+    setshort_mustuniq(mkshort_handle, snuniqueopt != nullptr);
 
     setshort_badchars(mkshort_handle, "\",");
   }

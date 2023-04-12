@@ -172,7 +172,7 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
   }
 
   setshort_length(mkshort_handle, sLen);
-  setshort_mustuniq(mkshort_handle, 0);
+  setshort_mustuniq(mkshort_handle, false);
   setshort_defname(mkshort_handle, "");
 
   char* shortstr = mkshort(mkshort_handle, stIn, false);
