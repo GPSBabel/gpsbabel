@@ -240,22 +240,25 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
 
 }
 
-FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& vecname)
+FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
 {
-  QStringList options = vecname.split(',');
+  QStringList options = fltargstring.split(',');
   if (options.isEmpty()) {
     fatal("A filter name is required.\n");
   }
-  const QString svecname = options.takeFirst();
+  const QString fltname = options.takeFirst();
 
   for (const auto& vec : d_ptr_->filter_vec_list) {
-    if (svecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
+    if (fltname.compare(vec.name, Qt::CaseInsensitive) != 0) {
       continue;
     }
 
     return {vec.vec, vec.name, options, vec.factory};
-
   }
+
+  /*
+   * Not found.
+   */
   return {};
 }
 
