@@ -32,15 +32,6 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	baroiq                Brauniger IQ Series Barograph Download
-	cambridge             Cambridge/Winpilot glider software
-	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
-	  urlbase               Basename prepended to URL on output
-	  prefer_shortnames     (0/1) Use shortname instead of description
-	  datum                 GPS datum (def. WGS 84)
 	v900                  Columbus/Visiontac V900 files (.csv)
 	csv                   Comma separated values
 	  snlen                 Max synthesized shortname length
@@ -224,7 +215,6 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension
 	  garminextensions      (0/1) Add info (depth) as Garmin extension
 	  elevprec              Precision of elevations, number of decimals
-	holux                 Holux (gm-100) .wpo Format
 	m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file
 	m241                  Holux M-241 (MTK based) download

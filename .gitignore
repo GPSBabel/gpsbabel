@@ -1,5 +1,7 @@
 /autom4te.cache/
 /babelweb/
+/bld/
+/build/
 /compile_commands.json
 /config.h
 /config.log
@@ -21,6 +23,7 @@
 /*.gcno
 /*.gcov
 *.o
+*.a
 .ninja_deps
 .ninja_log
 build.ninja
@@ -43,3 +46,4 @@ CMakeFiles/
 /empty
 /gbversion.h
 /qrc_gpsbabel.cpp
+/.vscode/

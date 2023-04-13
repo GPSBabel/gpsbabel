@@ -92,7 +92,6 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   globalsat_sport.cc
   gtm.cc
   gtrnctr.cc
-  holux.cc
   html.cc
   humminbird.cc
   igc.cc
@@ -227,7 +226,6 @@ set(HEADERS
   grtcirc.h
   gtrnctr.h
   heightgrid.h
-  holux.h
   humminbird.h
   html.h
   inifile.h
@@ -400,7 +398,6 @@ set(TESTS
   gtm
   gtrnctr
   height
-  holux
   humminbird
   iblue747
   igc
