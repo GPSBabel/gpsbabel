@@ -794,7 +794,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-void Vecs::prepare_format(const fmtinfo_t& fmtdata) 
+void Vecs::prepare_format(const fmtinfo_t& fmtdata)
 {
   QVector<arglist_t>* args = fmtdata->get_args();
 
