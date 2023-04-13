@@ -75,7 +75,6 @@ extern ff_vecs_t geo_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
@@ -128,7 +127,6 @@ struct Vecs::Impl {
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
@@ -251,13 +249,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &holux_fmt,
-      "holux",
-      "Holux (gm-100) .wpo Format",
-      "wpo",
-      nullptr,
-    },
-    {
       &tpg_fmt,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
@@ -305,13 +296,6 @@ struct Vecs::Impl {
       &igc_fmt,
       "igc",
       "FAI/IGC Flight Recorder Data Format",
-      nullptr,
-      nullptr,
-    },
-    {
-      &brauniger_iq_fmt,
-      "baroiq",
-      "Brauniger IQ Series Barograph Download",
       nullptr,
       nullptr,
     },
