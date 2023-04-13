@@ -31,7 +31,6 @@ file	arc	txt	GPSBabel arc filter file
 file	gpsdrive		GpsDrive Format
 file	gpsdrivetrack		GpsDrive Format for Tracks
 file	gpx	gpx	GPX XML
-file	holux	wpo	Holux (gm-100) .wpo Format
 file	m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 serial	m241		Holux M-241 (MTK based) download
 file	html	html	HTML Output

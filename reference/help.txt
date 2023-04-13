@@ -215,7 +215,6 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension
 	  garminextensions      (0/1) Add info (depth) as Garmin extension
 	  elevprec              Precision of elevations, number of decimals
-	holux                 Holux (gm-100) .wpo Format
 	m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file
 	m241                  Holux M-241 (MTK based) download
