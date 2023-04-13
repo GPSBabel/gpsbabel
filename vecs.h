@@ -81,8 +81,7 @@ public:
   static QString get_option(const QStringList& options, const QString& argname);
   static void prepare_format(const fmtinfo_t& data);
   fmtinfo_t find_vec(const QString& fmtargstring);
-  void disp_vecs() const;
-  void disp_vec(const QString& vecname) const;
+  void disp_vec(const QString& vecname = QString()) const;
   static const char* name_option(uint32_t type);
   void disp_formats(int version) const;
   static bool validate_args(const QString& name, const QVector<arglist_t>* args);

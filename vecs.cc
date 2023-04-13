@@ -1040,39 +1040,20 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   return svp;
 }
 
-#define VEC_FMT "	%-20.20s  %-.50s\n"
-
-void Vecs::disp_vecs() const
-{
-  const auto svp = sort_and_unify_vecs();
-  for (const auto& vec : svp) {
-    if (vec.type == ff_type_internal)  {
-      continue;
-    }
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arginfo_t> args = vec.arginfo;
-    for (const auto& arg : args) {
-      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s%s\n",
-               qPrintable(arg.argstring),
-               (arg.argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
-      }
-    }
-  }
-}
-
 void Vecs::disp_vec(const QString& vecname) const
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)  {
+    /*
+     * Display info for all non-internal formats is vecname is empty,
+     * otherwise just display info for the matching format.
+     */
+    if (vecname.isEmpty()? (vec.type == ff_type_internal) :
+        (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)) {
       continue;
     }
 
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
+    printf(" %-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {

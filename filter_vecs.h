@@ -72,8 +72,7 @@ public:
   void init_filter_vecs();
   static void exit_filter_vec(Filter* flt);
   void exit_filter_vecs();
-  void disp_filter_vecs() const;
-  void disp_filter_vec(const QString& vecname) const;
+  void disp_filter_vec(const QString& vecname = QString()) const;
   void disp_filters(int version) const;
   bool validate_filters() const;
 
