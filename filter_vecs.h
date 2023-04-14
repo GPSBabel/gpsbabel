@@ -67,7 +67,7 @@ public:
 
   static void prepare_filter(const fltinfo_t& fltdata);
   fltinfo_t find_filter_vec(const QString& fltargstring);
-  static void free_filter_vec(fltinfo_t& filter);
+  static void free_filter_vec(Filter* flt);
   static void init_filter_vec(Filter* flt);
   void init_filter_vecs();
   static void exit_filter_vec(Filter* flt);

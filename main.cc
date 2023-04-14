@@ -459,7 +459,7 @@ run(const char* prog_name)
           filter->init();
           filter->process();
           filter->deinit();
-          FilterVecs::free_filter_vec(filter);
+          FilterVecs::free_filter_vec(filter.flt);
 
           FilterVecs::exit_filter_vec(filter.flt);
           delete filter.flt;
@@ -469,7 +469,7 @@ run(const char* prog_name)
           filter->init();
           filter->process();
           filter->deinit();
-          FilterVecs::free_filter_vec(filter);
+          FilterVecs::free_filter_vec(filter.flt);
         }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));

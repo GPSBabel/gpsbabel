@@ -262,19 +262,9 @@ FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
   return {};
 }
 
-void FilterVecs::free_filter_vec(fltinfo_t& filter)
+void FilterVecs::free_filter_vec(Filter* flt)
 {
-  QVector<arglist_t>* args = filter->get_args();
-
-  if (args && !args->isEmpty()) {
-    assert(args->isDetached());
-    for (auto& arg : *args) {
-      if (arg.argvalptr) {
-        xfree(arg.argvalptr);
-        arg.argvalptr = *arg.argval = nullptr;
-      }
-    }
-  }
+  Vecs::free_options(flt->get_args());
 }
 
 void FilterVecs::init_filter_vec(Filter* flt)
@@ -300,16 +290,7 @@ void FilterVecs::init_filter_vecs()
 void FilterVecs::exit_filter_vec(Filter* flt)
 {
     (flt->exit)();
-    QVector<arglist_t>* args = flt->get_args();
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        if (arg.argvalptr) {
-          xfree(arg.argvalptr);
-          *arg.argval = arg.argvalptr = nullptr;
-        }
-      }
-    }
+    Vecs::free_options(flt->get_args());
 }
 
 void FilterVecs::exit_filter_vecs()

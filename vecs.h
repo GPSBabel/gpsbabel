@@ -73,6 +73,7 @@ public:
 
   static void init_vec(Format* fmt);
   void init_vecs();
+  static void free_options(QVector<arglist_t>* args);
   static void exit_vec(Format* fmt);
   void exit_vecs();
   static void assign_option(const QString& module, arglist_t* arg, const QString& val);

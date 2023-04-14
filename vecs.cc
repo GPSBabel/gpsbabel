@@ -660,10 +660,8 @@ bool Vecs::is_bool(const QString& val)
          (!val.isEmpty() && val.at(0).isDigit());
 }
 
-void Vecs::exit_vec(Format* fmt)
+void Vecs::free_options(QVector<arglist_t>* args)
 {
-  (fmt->exit)();
-  QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
@@ -673,6 +671,12 @@ void Vecs::exit_vec(Format* fmt)
       }
     }
   }
+}
+
+void Vecs::exit_vec(Format* fmt)
+{
+  (fmt->exit)();
+  free_options(fmt->get_args());
 }
 
 void Vecs::exit_vecs()
