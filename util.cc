@@ -1061,14 +1061,11 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 QString
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr;
-  char* lcstr;
+  char* returnstr = xstrdup(in);
+  char* lcstr = strlower(xstrdup(in));
 
-  char* sp = returnstr = xstrdup(in);
-  char* lcp = lcstr = strlower(xstrdup(in));
-
-  while (lcp = strstr(lcstr, "<body>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
+  while (char* lcp = strstr(lcstr, "<body>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
     sp++;
     *sp++ = '!';
     *sp++ = ' ';
@@ -1076,8 +1073,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<body"), lcp != nullptr) {   /* becomes <!--        --> */
-    sp = returnstr + (lcp - lcstr) ;
+  while (char* lcp = strstr(lcstr, "<body")) {   /* becomes <!--        --> */
+    char* sp = returnstr + (lcp - lcstr) ;
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1089,8 +1086,8 @@ strip_nastyhtml(const QString& in)
     *--sp = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</body>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
+  while (char* lcp = strstr(lcstr, "</body>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1099,8 +1096,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</html>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
+  while (char* lcp = strstr(lcstr, "</html>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1109,8 +1106,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<style"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
+  while (char* lcp = strstr(lcstr, "<style")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1120,8 +1117,8 @@ strip_nastyhtml(const QString& in)
     *sp = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</style>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
+  while (char* lcp = strstr(lcstr, "</style>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
     *sp++ = ' ';
     *sp++ = ' ';
     *sp++ = ' ';
@@ -1131,8 +1128,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<image"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <img */
+  while (char* lcp = strstr(lcstr, "<image")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <img */
     sp+=3;
     *sp++ = 'g';
     *sp++ = ' ';
