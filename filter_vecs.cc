@@ -262,19 +262,9 @@ FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
   return {};
 }
 
-void FilterVecs::free_filter_vec(fltinfo_t& filter)
+void FilterVecs::free_filter_vec(Filter* flt)
 {
-  QVector<arglist_t>* args = filter->get_args();
-
-  if (args && !args->isEmpty()) {
-    assert(args->isDetached());
-    for (auto& arg : *args) {
-      if (arg.argvalptr) {
-        xfree(arg.argvalptr);
-        arg.argvalptr = *arg.argval = nullptr;
-      }
-    }
-  }
+  Vecs::free_options(flt->get_args());
 }
 
 void FilterVecs::init_filter_vec(Filter* flt)
@@ -300,16 +290,7 @@ void FilterVecs::init_filter_vecs()
 void FilterVecs::exit_filter_vec(Filter* flt)
 {
     (flt->exit)();
-    QVector<arglist_t>* args = flt->get_args();
-    if (args && !args->isEmpty()) {
-      assert(args->isDetached());
-      for (auto& arg : *args) {
-        if (arg.argvalptr) {
-          xfree(arg.argvalptr);
-          *arg.argval = arg.argvalptr = nullptr;
-        }
-      }
-    }
+    Vecs::free_options(flt->get_args());
 }
 
 void FilterVecs::exit_filter_vecs()
@@ -325,32 +306,14 @@ void FilterVecs::exit_filter_vecs()
  *  Display the available formats in a format that's easy for humans to
  *  parse for help on available command line options.
  */
-void FilterVecs::disp_filter_vecs() const
-{
-  for (const auto& vec : d_ptr_->filter_vec_list) {
-    Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;
-    printf("	%-20.20s  %-50.50s\n",
-           qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arglist_t>* args = flt->get_args();
-    if (args) {
-      for (const auto& arg : *args) {
-        if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-          printf("	  %-18.18s    %-.50s %s\n",
-                 qPrintable(arg.argstring), qPrintable(arg.helpstring),
-                 (arg.argtype & ARGTYPE_REQUIRED) ? "(required)" : "");
-        }
-      }
-    }
-    if (vec.factory != nullptr) {
-      delete flt;
-    }
-  }
-}
-
 void FilterVecs::disp_filter_vec(const QString& vecname) const
 {
   for (const auto& vec : d_ptr_->filter_vec_list) {
-    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0) {
+    /*
+     * Display info for all filter is vecname is empty,
+     * otherwise just display info for the matching filter.
+     */
+    if (!vecname.isEmpty() && (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)) {
       continue;
     }
     Filter* flt = (vec.factory != nullptr)? vec.factory() : vec.vec;

@@ -109,7 +109,7 @@ load_args(const QString& filename, const QString& arg0)
 }
 
 static void
-usage(const char* pname, int shorter)
+usage(const char* pname, bool verbose)
 {
   printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
          gpsbabel_version);
@@ -149,14 +149,14 @@ usage(const char* pname, int shorter)
     , pname
     , global_opts.debug_level
   );
-  if (shorter) {
+  if (!verbose) {
     printf("\n\n[Press enter]");
     fgetc(stdin);
   } else {
     printf("File Types (-i and -o options):\n");
-    Vecs::Instance().disp_vecs();
+    Vecs::Instance().disp_vec();
     printf("\nSupported data filters:\n");
-    FilterVecs::Instance().disp_filter_vecs();
+    FilterVecs::Instance().disp_filter_vec();
   }
 }
 
@@ -314,7 +314,7 @@ run(const char* prog_name)
   QStringList qargs = QCoreApplication::arguments();
 
   if (qargs.size() < 2) {
-    usage(prog_name,1);
+    usage(prog_name, false);
     return 0;
   }
 
@@ -346,7 +346,7 @@ run(const char* prog_name)
       if (argn < qargs.size()-1) {
         spec_usage(qargs.at(argn+1));
       } else {
-        usage(prog_name,0);
+        usage(prog_name, true);
       }
       return 0;
     }
@@ -459,7 +459,7 @@ run(const char* prog_name)
           filter->init();
           filter->process();
           filter->deinit();
-          FilterVecs::free_filter_vec(filter);
+          FilterVecs::free_filter_vec(filter.flt);
 
           FilterVecs::exit_filter_vec(filter.flt);
           delete filter.flt;
@@ -469,7 +469,7 @@ run(const char* prog_name)
           filter->init();
           filter->process();
           filter->deinit();
-          FilterVecs::free_filter_vec(filter);
+          FilterVecs::free_filter_vec(filter.flt);
         }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
@@ -541,7 +541,7 @@ run(const char* prog_name)
       return 0;
     case 'h':
     case '?':
-      usage(prog_name,0);
+      usage(prog_name, true);
       return 0;
     case 'p':
       argument = FETCH_OPTARG;
@@ -602,7 +602,7 @@ run(const char* prog_name)
 
     }
   } else if (!qargs.isEmpty()) {
-    usage(prog_name,0);
+    usage(prog_name, true);
     return 0;
   }
   if (!ovecs) {
