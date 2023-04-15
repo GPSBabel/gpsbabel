@@ -161,9 +161,13 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
 void
 mkshort_del_handle(short_handle* h)
 {
+  if (!h) {
+    return;
+  }
+
   auto* hdr = (mkshort_handle_imp*) *h;
 
-  if (!h || !hdr) {
+  if (!hdr) {
     return;
   }
 
