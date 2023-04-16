@@ -129,15 +129,6 @@ constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 #  define GB_PATHSEP '/'
 #endif
 
-/*
- *  Toss in some GNU C-specific voodoo for checking.
- */
-#if __GNUC__
-#  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
-#else
-#  define PRINTFLIKE(x,y)
-#endif
-
 
 /*
  * Common definitions.   There should be no protocol or file-specific
@@ -984,8 +975,16 @@ struct ff_vecs_t {
 };
 
 [[noreturn]] void fatal(QDebug& msginstance);
-[[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void warning(const char*, ...) PRINTFLIKE(1, 2);
+// cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
+// the noreturn attribute is listed before the gnu::format attribute.
+// A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
+// but cppcheck works if the noreturn attribute follows the gnu::format
+// attribute.
+// This can have a large effect on codacy issues from cppcheck
+// nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
+// negativeIndex, arrayIndexOutOfBoundsCond.
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char*, ...);
+[[gnu::format(printf, 1, 2)]] void warning(const char*, ...);
 
 void printposn(double c, bool is_lat);
 
@@ -1018,9 +1017,9 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 
 int str_match(const char* str, const char* match);
 
-int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...) PRINTFLIKE(2, 3);
+[[gnu::format(printf, 2, 3)]] int xasprintf(char** strp, const char* fmt, ...);
+[[gnu::format(printf, 2, 3)]] int xasprintf(QString* strp, const char* fmt, ...);
+[[gnu::format(printf, 2, 3)]] int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
