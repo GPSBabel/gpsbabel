@@ -975,7 +975,15 @@ struct ff_vecs_t {
 };
 
 [[noreturn]] void fatal(QDebug& msginstance);
-[[noreturn]] [[gnu::format(printf, 1, 2)]] void fatal(const char*, ...);
+// cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
+// the noreturn attribute is listed before the gnu::format attribute.
+// A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
+// but cppcheck works if the noreturn attribute follows the gnu::format
+// attribute.
+// This can have a large effect on codacy issues from cppcheck
+// nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
+// negativeIndex, arrayIndexOutOfBoundsCond.
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char*, ...);
 [[gnu::format(printf, 1, 2)]] void warning(const char*, ...);
 
 void printposn(double c, bool is_lat);
