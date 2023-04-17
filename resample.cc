@@ -88,7 +88,7 @@ void ResampleFilter::average_waypoint(Waypoint* wpt, bool zero_stuffed)
     }
     counter = 0;
     if (global_opts.debug_level >= 5) {
-      for (const auto& [pos, avc, alt] : history) {
+      for (const auto& [pos, avc, alt] : qAsConst(history)) {
         qDebug() << "initial conditions" << pos << avc << alt;
       }
       qDebug() << "initial accumulator" << accumulated_position << accumulated_altitude_valid_count << accumulated_altitude;
