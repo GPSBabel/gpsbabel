@@ -35,7 +35,7 @@ chmod +x codacy-clang-tidy
 # don't leak secrets
 set +x
 curl -XPOST -L -H "project-token: $CODACY_PROJECT_TOKEN" \
-    -H "Content-type: application/json" -d tidy.report \
+    -H "Content-type: application/json" -d @tidy.report \
     "$CODACY_URL/2.0/commit/$COMMIT/issuesRemoteResults"
 
 curl -XPOST -L -H "project-token: $CODACY_PROJECT_TOKEN" \
