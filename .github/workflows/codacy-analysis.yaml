@@ -1,0 +1,27 @@
+name: Codacy Analysis CLI
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  workflow_dispatch: ~
+
+jobs:
+  codacy-analysis-cli:
+    name: Codacy Analysis CLI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@master
+        with:
+          tool: Clang-Tidy
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          # or
+          # api-token: ${{ secrets.CODACY_API_TOKEN }}
+          upload: true
+          max-allowed-issues: 2147483647
