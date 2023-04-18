@@ -4,7 +4,7 @@ CODACY_URL="https://api.codacy.com"
 COMMIT=$(git log -1 --format='%H')
 CODACY_CLANG_TIDY=$(curl -s https://api.github.com/repos/codacy/codacy-clang-tidy/releases/latest | jq '.assets[] | select(.name|startswith("codacy-clang-tidy-linux-")) | .browser_download_url' | tr -d \")
 
-CHECKS="clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type,bugprone-*,google-*,misc-*,performance-*,readability-*"
+CHECKS="clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,bugprone-*,google-*,misc-*,performance-*,readability-*,-cppcoreguidelines-pro-type-vararg,-modernize-use-trailing-return-type"
 HEADERFILTER=".*"
 
 mkdir bld
