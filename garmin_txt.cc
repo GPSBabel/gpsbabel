@@ -363,7 +363,7 @@ print_position(const Waypoint* wpt)
 }
 
 static void
-print_date_and_time(const time_t time, const int time_only)
+print_date_and_time(const time_t time, const bool time_only)
 {
   struct tm tm;
   char tbuf[32];
@@ -429,7 +429,7 @@ print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 }
 
 static void
-print_distance(const double distance, const int no_scale, const int with_tab, const int decis)
+print_distance(const double distance, const bool no_scale, const bool with_tab, const int decis)
 {
   double dist = distance;
 
@@ -561,19 +561,19 @@ write_waypt(const Waypoint* wpt)
   print_position(wpt);
 
   if IS_VALID_ALT(wpt->altitude) {
-    print_distance(wpt->altitude, 1, 0, 0);
+    print_distance(wpt->altitude, true, false, 0);
   }
   *fout << "\t";
 
   double x = wpt->depth_value_or(unknown_alt);
   if (x != unknown_alt) {
-    print_distance(x, 1, 0, 1);
+    print_distance(x, true, false, 1);
   }
   *fout << "\t";
 
   x = wpt->proximity_value_or(unknown_alt);
   if (x != unknown_alt) {
-    print_distance(x, 0, 0, 0);
+    print_distance(x, false, false, 0);
   }
   *fout << "\t";
 
@@ -596,7 +596,7 @@ write_waypt(const Waypoint* wpt)
   print_string("%s\t", garmin_fs_t::get_state(gmsd, ""));
   const char* country = gt_get_icao_country(garmin_fs_t::get_cc(gmsd, ""));
   print_string("%s\t", (country != nullptr) ? country : "");
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
+  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
     UrlLink l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
@@ -623,7 +623,7 @@ route_disp_hdr_cb(const route_head* rte)
     *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[route_header]);
   }
   print_string("\r\nRoute\t%s\t", rte->rte_name);
-  print_distance(cur_info->length, 0, 1, 0);
+  print_distance(cur_info->length, false, true, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   *fout << QString::asprintf("\t%d waypoints\t", cur_info->count);
   if (rte->rte_urls.HasUrlLink()) {
@@ -650,11 +650,11 @@ route_disp_wpt_cb(const Waypoint* wpt)
   if (prev != nullptr) {
     double dist = waypt_distance_ex(prev, wpt);
     cur_info->total += dist;
-    print_distance(cur_info->total, 0, 1, 0);
-    print_distance(dist, 0, 1, 0);
+    print_distance(cur_info->total, false, true, 0);
+    print_distance(dist, false, true, 0);
     print_course(prev, wpt);
   } else {
-    print_distance(0, 1, 0, 0);
+    print_distance(0, true, false, 0);
   }
 
   *fout << "\r\n";
@@ -677,9 +677,9 @@ track_disp_hdr_cb(const route_head* track)
     *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[track_header]);
   }
   print_string("\r\nTrack\t%s\t", track->rte_name);
-  print_date_and_time(cur_info->start, 0);
-  print_date_and_time(cur_info->time, 1);
-  print_distance(cur_info->length, 0, 1, 0);
+  print_date_and_time(cur_info->start, false);
+  print_date_and_time(cur_info->time, true);
+  print_distance(cur_info->length, false, true, 0);
   print_speed(&cur_info->length, &cur_info->time);
   if (track->rte_urls.HasUrlLink()) {
     print_string("%s", track->rte_urls.GetUrlLink().url_);
@@ -705,15 +705,15 @@ track_disp_wpt_cb(const Waypoint* wpt)
   *fout << "Trackpoint\t";
 
   print_position(wpt);
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
+  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if IS_VALID_ALT(wpt->altitude) {
-    print_distance(wpt->altitude, 1, 0, 0);
+    print_distance(wpt->altitude, true, false, 0);
   }
 
   *fout << "\t";
   double depth = wpt->depth_value_or(unknown_alt);
   if (depth != unknown_alt) {
-    print_distance(depth, 1, 0, 1);
+    print_distance(depth, true, false, 1);
   }
 
   if (prev != nullptr) {
@@ -725,8 +725,8 @@ track_disp_wpt_cb(const Waypoint* wpt)
     }
     *fout << "\t";
     dist = waypt_distance_ex(prev, wpt);
-    print_distance(dist, 0, 1, 0);
-    print_date_and_time(delta, 1);
+    print_distance(dist, false, true, 0);
+    print_date_and_time(delta, true);
     print_speed(&dist, &delta);
     print_course(prev, wpt);
   }

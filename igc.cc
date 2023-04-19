@@ -69,9 +69,9 @@
  * @retval  1  The coordinates are approximately equal
  * @retval  0  The coordinates are significantly different
  */
-unsigned char IgcFormat::coords_match(double lat1, double lon1, double lat2, double lon2)
+bool IgcFormat::coords_match(double lat1, double lon1, double lat2, double lon2)
 {
-  return (fabs(lat1 - lat2) < 0.0001 && fabs(lon1 - lon2) < 0.0001) ? 1 : 0;
+  return (fabs(lat1 - lat2) < 0.0001 && fabs(lon1 - lon2) < 0.0001);
 }
 
 /*************************************************************************************************

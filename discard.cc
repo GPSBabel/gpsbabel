@@ -37,17 +37,17 @@
  */
 void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
 {
-  int del = 0;
-  int delh = 0;
-  int delv = 0;
+  bool del = false;
+  bool delh = false;
+  bool delv = false;
 
   auto* waypointp = const_cast<Waypoint*>(wpt);
 
   if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
-    delh = 1;
+    delh = true;
   }
   if ((vdopf >= 0.0) && (waypointp->vdop > vdopf)) {
-    delv = 1;
+    delv = true;
   }
 
   if (andopt) {
@@ -57,36 +57,36 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
   }
 
   if ((satpf >= 0) && (waypointp->sat < satpf)) {
-    del = 1;
+    del = true;
   }
 
   if ((fixnoneopt) && (waypointp->fix == fix_none)) {
-    del = 1;
+    del = true;
   }
 
   if ((fixunknownopt) && (waypointp->fix == fix_unknown)) {
-    del = 1;
+    del = true;
   }
 
   if ((eleminopt) && (waypointp->altitude < eleminpf)) {
-    del = 1;
+    del = true;
   }
 
   if ((elemaxopt) && (waypointp->altitude > elemaxpf)) {
-    del = 1;
+    del = true;
   }
 
   if (nameopt && name_regex.match(waypointp->shortname).hasMatch()) {
-    del = 1;
+    del = true;
   }
   if (descopt && desc_regex.match(waypointp->description).hasMatch()) {
-    del = 1;
+    del = true;
   }
   if (cmtopt && cmt_regex.match(waypointp->notes).hasMatch()) {
-    del = 1;
+    del = true;
   }
   if (iconopt && icon_regex.match(waypointp->icon_descr).hasMatch()) {
-    del = 1;
+    del = true;
   }
 
   if (del) {
