@@ -1497,7 +1497,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
                                QString::number(wpt->temperature_value(), 'f', 1) : QString());
       break;
     case wp_field::sat:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat?
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat >= 0?
                                 QString::number(wpt->sat) : QString());
       break;
     case wp_field::igc_enl:
