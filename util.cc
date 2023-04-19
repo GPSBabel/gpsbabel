@@ -570,7 +570,7 @@ le_write32(void* ptr, const unsigned value)
 time_t
 mkgmtime(struct tm* t)
 {
-  static int      m_to_d[12] =
+  static const int      m_to_d[12] =
   {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
   short month = t->tm_mon;
