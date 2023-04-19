@@ -31,6 +31,30 @@ class FilterVecs
 {
 // Meyers Singleton
 public:
+
+  /* Types */
+
+  using FilterFactory = Filter* (*)();
+
+  class fltinfo_t {
+  public:
+
+    bool isDynamic() {
+      return factory != nullptr;
+    }
+    explicit operator bool() const {
+      return ((flt != nullptr) || (factory != nullptr));
+    }
+    Filter* operator->() const {
+      return flt;
+    }
+
+    Filter* flt{nullptr};
+    QString fltname;
+    QStringList options;
+    FilterFactory factory{nullptr};
+  };
+
   /* Special Member Functions */
 
   static FilterVecs& Instance();
@@ -41,12 +65,14 @@ public:
 
   /* Member Functions */
 
-  Filter* find_filter_vec(const QString& vecname);
-  static void free_filter_vec(Filter* filter);
+  static void prepare_filter(const fltinfo_t& fltdata);
+  fltinfo_t find_filter_vec(const QString& fltargstring);
+  static void free_filter_vec(Filter* flt);
+  static void init_filter_vec(Filter* flt);
   void init_filter_vecs();
+  static void exit_filter_vec(Filter* flt);
   void exit_filter_vecs();
-  void disp_filter_vecs() const;
-  void disp_filter_vec(const QString& vecname) const;
+  void disp_filter_vec(const QString& vecname = QString()) const;
   void disp_filters(int version) const;
   bool validate_filters() const;
 
@@ -56,9 +82,10 @@ private:
   struct Impl;                   // Not defined here
 
   struct fl_vecs_t {
-    Filter* vec;
+    Filter* vec{nullptr};
     QString name;
     QString desc;
+    FilterFactory factory{nullptr};
   };
 
   /* Special Member Functions */

@@ -878,7 +878,7 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen>IFIELD HMSG_TIME,"","%d:%d:%d %s"
+         <screen>IFIELD HMSG_TIME,"","%02d:%02d:%02d %s"
 </screen>
       </section>
       <section xml:id="style_def_hmsltime">

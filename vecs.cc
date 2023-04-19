@@ -75,7 +75,6 @@ extern ff_vecs_t geo_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
@@ -128,7 +127,6 @@ struct Vecs::Impl {
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
@@ -251,13 +249,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &holux_fmt,
-      "holux",
-      "Holux (gm-100) .wpo Format",
-      "wpo",
-      nullptr,
-    },
-    {
       &tpg_fmt,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
@@ -305,13 +296,6 @@ struct Vecs::Impl {
       &igc_fmt,
       "igc",
       "FAI/IGC Flight Recorder Data Format",
-      nullptr,
-      nullptr,
-    },
-    {
-      &brauniger_iq_fmt,
-      "baroiq",
-      "Brauniger IQ Series Barograph Download",
       nullptr,
       nullptr,
     },
@@ -676,10 +660,8 @@ bool Vecs::is_bool(const QString& val)
          (!val.isEmpty() && val.at(0).isDigit());
 }
 
-void Vecs::exit_vec(Format* fmt)
+void Vecs::free_options(QVector<arglist_t>* args)
 {
-  (fmt->exit)();
-  QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
@@ -689,6 +671,12 @@ void Vecs::exit_vec(Format* fmt)
       }
     }
   }
+}
+
+void Vecs::exit_vec(Format* fmt)
+{
+  (fmt->exit)();
+  free_options(fmt->get_args());
 }
 
 void Vecs::exit_vecs()
@@ -810,7 +798,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-void Vecs::prepare_format(const fmtinfo_t& fmtdata) 
+void Vecs::prepare_format(const fmtinfo_t& fmtdata)
 {
   QVector<arglist_t>* args = fmtdata->get_args();
 
@@ -1056,39 +1044,20 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   return svp;
 }
 
-#define VEC_FMT "	%-20.20s  %-.50s\n"
-
-void Vecs::disp_vecs() const
-{
-  const auto svp = sort_and_unify_vecs();
-  for (const auto& vec : svp) {
-    if (vec.type == ff_type_internal)  {
-      continue;
-    }
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arginfo_t> args = vec.arginfo;
-    for (const auto& arg : args) {
-      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s%s\n",
-               qPrintable(arg.argstring),
-               (arg.argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
-      }
-    }
-  }
-}
-
 void Vecs::disp_vec(const QString& vecname) const
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)  {
+    /*
+     * Display info for all non-internal formats is vecname is empty,
+     * otherwise just display info for the matching format.
+     */
+    if (vecname.isEmpty()? (vec.type == ff_type_internal) :
+        (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)) {
       continue;
     }
 
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
+    printf(" %-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {

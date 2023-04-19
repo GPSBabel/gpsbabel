@@ -23,8 +23,6 @@
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
-#include <QByteArray>                 // for QByteArray
-#include <QChar>                      // for QChar
 #include <QCoreApplication>           // for QCoreApplication
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
@@ -56,6 +54,8 @@
 #include "src/core/file.h"            // for File
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
+
+static constexpr int DEBUG_LOCALE = 0;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
@@ -109,7 +109,7 @@ load_args(const QString& filename, const QString& arg0)
 }
 
 static void
-usage(const char* pname, int shorter)
+usage(const char* pname, bool verbose)
 {
   printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
          gpsbabel_version);
@@ -149,14 +149,14 @@ usage(const char* pname, int shorter)
     , pname
     , global_opts.debug_level
   );
-  if (shorter) {
+  if (!verbose) {
     printf("\n\n[Press enter]");
     fgetc(stdin);
   } else {
     printf("File Types (-i and -o options):\n");
-    Vecs::Instance().disp_vecs();
+    Vecs::Instance().disp_vec();
     printf("\nSupported data filters:\n");
-    FilterVecs::Instance().disp_filter_vecs();
+    FilterVecs::Instance().disp_filter_vec();
   }
 }
 
@@ -301,7 +301,7 @@ run(const char* prog_name)
   int argn;
   Vecs::fmtinfo_t ivecs;
   Vecs::fmtinfo_t ovecs;
-  Filter* filter = nullptr;
+  FilterVecs::fltinfo_t filter;
   QString fname;
   QString ofname;
   int opt_version = 0;
@@ -314,7 +314,7 @@ run(const char* prog_name)
   QStringList qargs = QCoreApplication::arguments();
 
   if (qargs.size() < 2) {
-    usage(prog_name,1);
+    usage(prog_name, false);
     return 0;
   }
 
@@ -346,7 +346,7 @@ run(const char* prog_name)
       if (argn < qargs.size()-1) {
         spec_usage(qargs.at(argn+1));
       } else {
-        usage(prog_name,0);
+        usage(prog_name, true);
       }
       return 0;
     }
@@ -451,10 +451,26 @@ run(const char* prog_name)
       filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
-        filter->init();
-        filter->process();
-        filter->deinit();
-        FilterVecs::free_filter_vec(filter);
+        if (filter.isDynamic()) {
+          filter.flt = filter.factory();
+          FilterVecs::init_filter_vec(filter.flt);
+          FilterVecs::prepare_filter(filter);
+
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter.flt);
+
+          FilterVecs::exit_filter_vec(filter.flt);
+          delete filter.flt;
+          filter.flt = nullptr;
+        } else {
+          FilterVecs::prepare_filter(filter);
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter.flt);
+        }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
       }
@@ -525,7 +541,7 @@ run(const char* prog_name)
       return 0;
     case 'h':
     case '?':
-      usage(prog_name,0);
+      usage(prog_name, true);
       return 0;
     case 'p':
       argument = FETCH_OPTARG;
@@ -586,7 +602,7 @@ run(const char* prog_name)
 
     }
   } else if (!qargs.isEmpty()) {
-    usage(prog_name,0);
+    usage(prog_name, true);
     return 0;
   }
   if (!ovecs) {
@@ -707,9 +723,9 @@ main(int argc, char* argv[])
 #error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
-#ifdef DEBUG_LOCALE
-  printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if constexpr (DEBUG_LOCALE) {
+    printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+  }
 
   // Create a QCoreApplication object to handle application initialization.
   // In addition to being useful for argument decoding, the creation of a
@@ -724,33 +740,32 @@ main(int argc, char* argv[])
   // may result in LC_ALL being set to the native environment
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
-#ifdef DEBUG_LOCALE
-  printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if constexpr (DEBUG_LOCALE) {
+    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+  }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
   // actually sets LC_ALL.
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_NUMERIC\n");
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("Resetting LC_NUMERIC\n");
+    }
     setlocale(LC_NUMERIC,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_TIME\n");
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("Resetting LC_TIME\n");
+    }
     setlocale(LC_TIME,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
-
   qInstallMessageHandler(MessageHandler);
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */

@@ -1,7 +1,5 @@
 internal	xcsv		? Character Separated Values
 internal	tabsep		All database fields on one tab-separated line
-serial	baroiq		Brauniger IQ Series Barograph Download
-file	cambridge	dat	Cambridge/Winpilot glider software
 file	v900		Columbus/Visiontac V900 files (.csv)
 file	csv		Comma separated values
 internal	custom		Custom "Everything" Style
@@ -33,7 +31,6 @@ file	arc	txt	GPSBabel arc filter file
 file	gpsdrive		GpsDrive Format
 file	gpsdrivetrack		GpsDrive Format for Tracks
 file	gpx	gpx	GPX XML
-file	holux	wpo	Holux (gm-100) .wpo Format
 file	m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 serial	m241		Holux M-241 (MTK based) download
 file	html	html	HTML Output

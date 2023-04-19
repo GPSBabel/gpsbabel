@@ -71,10 +71,10 @@
 garmin_fs_t*
 GarminGPIFormat::gpi_gmsd_init(Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (wpt == nullptr) {
     fatal(MYNAME ": Error in file structure.\n");
   }
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     wpt->fs.FsChainAdd(gmsd);

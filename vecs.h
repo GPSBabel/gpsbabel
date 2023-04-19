@@ -73,16 +73,16 @@ public:
 
   static void init_vec(Format* fmt);
   void init_vecs();
+  static void free_options(QVector<arglist_t>* args);
   static void exit_vec(Format* fmt);
   void exit_vecs();
   static void assign_option(const QString& module, arglist_t* arg, const QString& val);
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
-  static void prepare_format(const fmtinfo_t& data) ;
+  static void prepare_format(const fmtinfo_t& data);
   fmtinfo_t find_vec(const QString& fmtargstring);
-  void disp_vecs() const;
-  void disp_vec(const QString& vecname) const;
+  void disp_vec(const QString& vecname = QString()) const;
   static const char* name_option(uint32_t type);
   void disp_formats(int version) const;
   static bool validate_args(const QString& name, const QVector<arglist_t>* args);
