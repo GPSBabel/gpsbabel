@@ -55,7 +55,7 @@
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
-static constexpr int DEBUG_LOCALE = 0;
+static constexpr bool DEBUG_LOCALE = false;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
