@@ -647,6 +647,7 @@ public:
   ~route_head();
 
   int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);

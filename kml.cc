@@ -242,7 +242,7 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   if (wpt_timespan_begin.isValid() && wpt_timespan_end.isValid()) {
 
     // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-    if (trk_head->rte_waypt_ct() > 0) {
+    if (!trk_head->rte_waypt_empty()) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       if (trk_head->rte_waypt_ct() < 2) {
         fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
@@ -656,7 +656,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     // Put the points in a subfolder
     writer->writeStartElement(QStringLiteral("Folder"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Points"));
@@ -874,12 +874,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 void KmlFormat::kml_output_tailer(const route_head* header)
 {
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     writer->writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
-  if (export_lines && header->rte_waypt_ct() > 0) {
+  if (export_lines && !header->rte_waypt_empty()) {
     bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
@@ -1441,7 +1441,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
 void KmlFormat::kml_track_hdr(const route_head* header) const
 {
   computed_trkdata td = track_recompute(header);
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_header(header, &td);
   }
 }
@@ -1453,7 +1453,7 @@ void KmlFormat::kml_track_disp(const Waypoint* waypointp) const
 
 void KmlFormat::kml_track_tlr(const route_head* header)
 {
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_tailer(header);
   }
 }

@@ -425,7 +425,7 @@ gtm_rd_deinit()
 
 static void count_track_styles(const route_head* rte)
 {
-  if (rte->rte_waypt_ct() > 0) {
+  if (!rte->rte_waypt_empty()) {
     ts_count++;
   }
 }
@@ -679,7 +679,7 @@ static void write_trk_waypt(const Waypoint* wpt)
 
 static void write_trk_style(const route_head* trk)
 {
-  if (trk->rte_waypt_ct() > 0) {
+  if (!trk->rte_waypt_empty()) {
     fwrite_string(file_out, trk->rte_name);
     fwrite_byte(file_out, 1);
     fwrite_long(file_out, 0);
