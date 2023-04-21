@@ -88,12 +88,9 @@ GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
   while (!Q->isEmpty()) {
     const Waypoint* wpt = Q->takeFirst();
     if (wpt->extra_data) {
-      // FIXME
       // wpt->extra_data may be holding a pointer to a QString, courtesy
-      // the grossness at the end of write_waypt_cb().  If that leaks,
-      // (and I think it will) find some way to do the approximate equivalent
-      // of:
-      // delete static_cast<QString*>(wpt->extra_data);
+      // the grossness at the end of write_waypoint_cb().
+      delete static_cast<QString*>(wpt->extra_data);
     }
     delete wpt;
   }
@@ -256,12 +253,10 @@ GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_cla
                                 RAD(tmp->latitude), RAD(tmp->longitude)));
 
     if (fabs(dist) > 100) {
-      warning(MYNAME ": Route point mismatch!\n");
-      warning(MYNAME ": \"%s\" from waypoints differs to \"%s\"\n",
-              qPrintable(tmp->shortname), qPrintable(ref->shortname));
-      fatal(MYNAME ": from route table by more than %0.1f meters!\n",
-            dist);
-
+      fatal(MYNAME ": Route point mismatch!\n" \
+                   "  \"%s\" from waypoints differs to \"%s\"\n" \
+                   "  from route table by more than %0.1f meters!\n", \
+            qPrintable(tmp->shortname), qPrintable(ref->shortname), dist);
     }
   }
   Waypoint* res = nullptr;
@@ -1436,7 +1431,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
     garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
-    FWRITE_CSTR((wpt->extra_data) ? (char*)wpt->extra_data : wpt->shortname);
+    FWRITE_CSTR((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
 
     int wpt_class = wpt->wpt_flags.fmt_use;			/* trick */
 
@@ -1655,6 +1650,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     }
 
     name = mkshort(short_h, name);
+    wpt->extra_data = new QString(name);
     write_waypoint(wpt, name, gmsd, icon, display);
 
     finalize_item(fsave, 'W');
