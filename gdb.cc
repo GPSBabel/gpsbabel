@@ -149,7 +149,7 @@ QString GdbFormat::fread_cstr() const
 {
   QString rv;
   char* s = gdb_fread_cstr(fin);
-  if (gdb_ver >= GDB_VER_UTF8) {
+  if (gdb_ver >= kGDBVerUTF8) {
     rv = QString::fromUtf8(s);
   } else {
     rv = QString::fromLatin1(s);
@@ -293,7 +293,7 @@ void GdbFormat::gdb_write_cstr(QStringView a) const
     gbfputc(0, fout);
     return;
   }
-  if (gdb_ver >= GDB_VER_UTF8) {
+  if (gdb_ver >= kGDBVerUTF8) {
     gbfputcstr(a.toUtf8().constData(), fout);
   } else {
     gbfputcstr(a.toLatin1().constData(), fout);
@@ -373,7 +373,7 @@ GdbFormat::read_file_header()
   }
 
   gdb_ver = drec.at(1) - 'k' + 1;
-  if ((gdb_ver < GDB_VER_MIN) || (gdb_ver > GDB_VER_MAX)) {
+  if ((gdb_ver < kGDBVerMin) || (gdb_ver > kGDBVerMax)) {
     fatal(MYNAME ": Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
   }
 
@@ -512,7 +512,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   /* VERSION DEPENDENT CODE */
 
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
 
     FREAD(buf, 2);				/* ?????????????????????????????????? */
     waypt_flag = FREAD_C;
@@ -539,7 +539,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if (wpt_class != 0) {
       res->description = l.url_;
     }
-  } else { // if (gdb_ver >= GDB_VER_3)
+  } else { // if (gdb_ver >= kGDBVer3)
 
     waypt_flag = 0;
 
@@ -600,7 +600,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
     if (waypt_flag != 0) {
       FREAD(buf, 1);
     }
@@ -610,7 +610,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver >= GDB_VER_3) {
+  if (gdb_ver >= kGDBVer3) {
     if (FREAD_i32 == 1) {
       garmin_fs_t::set_phone_nr(gmsd, fread_cstr());
       (void) FREAD_STR();		/* ?? fax / mobile ?? */
@@ -622,7 +622,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   res->icon_descr = gt_find_desc_from_icon_number(icon, GDB);
 
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)
+  DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
   printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
          qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
 #endif
@@ -694,7 +694,7 @@ GdbFormat::read_route()
     if (FREAD_C != 0) {
       FREAD(buf, 8);		/* aviation data (?); only seen with class "1" (Airport) */
       /* VERSION DEPENDENT CODE */
-      if (gdb_ver >= GDB_VER_3) {
+      if (gdb_ver >= kGDBVer3) {
         FREAD(buf, 8);  /* a second block since V3 */
       }
     }
@@ -792,9 +792,9 @@ GdbFormat::read_route()
     }
 
     /* VERSION DEPENDENT CODE */
-    if (gdb_ver >= GDB_VER_2) {
+    if (gdb_ver >= kGDBVer2) {
       FREAD(buf, 8);
-      if (gdb_ver >= GDB_VER_3) {
+      if (gdb_ver >= kGDBVer3) {
         FREAD(buf, 2);
       }
     }
@@ -825,7 +825,7 @@ GdbFormat::read_route()
   } /* ENDFOR: for (i = 0; i < points; i++) */
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
     rte->rte_urls.AddUrlLink(UrlLink(fread_cstr()));
   } else {
     rte->rte_urls.AddUrlLink(UrlLink(gdb_fread_strlist()));
@@ -922,9 +922,9 @@ GdbFormat::read_track()
   }
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver >= GDB_VER_3) {
+  if (gdb_ver >= kGDBVer3) {
     res->rte_urls.AddUrlLink(UrlLink(gdb_fread_strlist()));
-  } else { /* if (gdb_ver <= GDB_VER_2) */
+  } else { /* if (gdb_ver <= kGDBVer2) */
     res->rte_urls.AddUrlLink(UrlLink(FREAD_CSTR_AS_QSTR));
   }
 #if GDB_DEBUG
@@ -1091,7 +1091,7 @@ GdbFormat::reset_short_handle(const char* defname)
 
   short_h = mkshort_new_handle();
 
-  setshort_length(short_h, GDB_NAME_BUFFERLEN);
+  setshort_length(short_h, kGDBNameBufferLen);
   setshort_badchars(short_h, "\r\n\t");
   setshort_mustupper(short_h, 0);
   setshort_mustuniq(short_h, 1);
@@ -1262,7 +1262,7 @@ GdbFormat::write_waypoint(
   FWRITE_DBL(wpt->depth_value_or(unknown_alt), unknown_alt);	/* depth */
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
     FWRITE(zbuf, 3);
     FWRITE(zbuf, 4);
     QString ld;
@@ -1277,7 +1277,7 @@ GdbFormat::write_waypoint(
       descr.clear();
     }
     gdb_write_cstr(descr);
-  } else { /* if (gdb_ver > GDB_VER_3) */
+  } else { /* if (gdb_ver > kGDBVer3) */
 //    url_link* url_next;
 //    const char* str;
     QString str;
@@ -1323,7 +1323,7 @@ GdbFormat::write_waypoint(
   FWRITE_TIME(wpt->GetCreationTime().toTime_t());
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver >= GDB_VER_3) {
+  if (gdb_ver >= kGDBVer3) {
     QString str = garmin_fs_t::get_phone_nr(gmsd, "");
     if (!str.isEmpty()) {
       FWRITE_i32(1);
@@ -1456,22 +1456,22 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
     }
 
     /* VERSION DEPENDENT CODE */
-    if (gdb_ver >= GDB_VER_2) {
+    if (gdb_ver >= kGDBVer2) {
       FWRITE(ffbuf, 8);
-      if (gdb_ver >= GDB_VER_3) {
+      if (gdb_ver >= kGDBVer3) {
         FWRITE(zbuf, 2);
       }
     }
   }
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
     if (rte->rte_urls.HasUrlLink()) {
       gdb_write_cstr(rte->rte_urls.GetUrlLink().url_);
     } else {
       gdb_write_cstr();
     }
-  } else { /* if (gdb_ver >= GDB_VER_3) */
+  } else { /* if (gdb_ver >= kGDBVer3) */
     if (rte->rte_urls.HasUrlLink()) {
       gdb_write_cstr_list(rte->rte_urls.GetUrlLink().url_);
     } else {
@@ -1513,13 +1513,13 @@ GdbFormat::write_track(const route_head* trk, const QString& trk_name)
   /* finalize track */
 
   /* VERSION DEPENDENT CODE */
-  if (gdb_ver <= GDB_VER_2) {
+  if (gdb_ver <= kGDBVer2) {
     if (trk->rte_urls.HasUrlLink()) {
       gdb_write_cstr(trk->rte_urls.GetUrlLink().url_);
     } else {
       gdb_write_cstr();
     }
-  } else { /* if (gdb_ver >= GDB_VER_3 */
+  } else { /* if (gdb_ver >= kGDBVer3 */
     if (trk->rte_urls.HasUrlLink()) {
       gdb_write_cstr_list(trk->rte_urls.GetUrlLink().url_);
     } else {
@@ -1592,7 +1592,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     int icon = garmin_fs_t::get_icon(gmsd, -1);
     if (icon < 0) {
       if (wpt->icon_descr.isNull()) {
-        icon = GDB_DEF_ICON;
+        icon = kGDBDefIcon;
       } else {
         icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
       }
