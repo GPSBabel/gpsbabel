@@ -79,7 +79,6 @@
 
 #define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
 
-#define ELEMENTS(a) a->rte_waypt_ct()
 #define NOT_EMPTY(a) (a && *a)
 
 void
@@ -1404,7 +1403,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
   route_compute_bounds(rte, &bounds);
   route_write_bounds(&bounds);
 
-  int points = ELEMENTS(rte);
+  int points = rte->rte_waypt_ct();
   FWRITE_i32(points);
 
   int index = 0;
@@ -1513,7 +1512,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
 void
 GdbFormat::write_track(const route_head* trk, const QString& trk_name)
 {
-  int points = ELEMENTS(trk);
+  int points = trk->rte_waypt_ct();
 
   FWRITE_CSTR(trk_name);
   FWRITE_C(0);
@@ -1665,7 +1664,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
 void
 GdbFormat::write_route_cb(const route_head* rte)
 {
-  if (ELEMENTS(rte) <= 0) {
+  if (rte->rte_waypt_empty()) {
     return;
   }
 
@@ -1687,7 +1686,7 @@ GdbFormat::write_route_cb(const route_head* rte)
 void
 GdbFormat::write_track_cb(const route_head* trk)
 {
-  if (ELEMENTS(trk) <= 0) {
+  if (trk->rte_waypt_empty()) {
     return;
   }
 

@@ -780,7 +780,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
 void
 OsmFormat::osm_rte_disp_head(const route_head* route)
 {
-  skip_rte = route->rte_waypt_ct() <= 0;
+  skip_rte = route->rte_waypt_empty();
 
   if (skip_rte) {
     return;
