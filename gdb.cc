@@ -51,19 +51,8 @@
 
 #define MYNAME "gdb"
 
-#define GDB_VER_1		1
-#define GDB_VER_2		2
-#define GDB_VER_3		3
-
-#define GDB_VER_UTF8		GDB_VER_3
-#define GDB_VER_MIN		GDB_VER_1
-#define GDB_VER_MAX		GDB_VER_3
-
 #define GDB_DEF_CLASS		gt_waypt_class_user_waypoint
 #define GDB_DEF_HIDDEN_CLASS	gt_waypt_class_map_point
-#define GDB_DEF_ICON		18
-
-#define GDB_NAME_BUFFERLEN	1024
 
 #define GDB_DBG_WPT		1
 #define GDB_DBG_RTE		2
@@ -313,7 +302,7 @@ void GdbFormat::gdb_write_cstr(QStringView a) const
 
 #define FWRITE_i16(a) gbfputint16((a), fout)
 #define FWRITE_i32(a) gbfputint32((a), fout)
-#define FWRITE(a, b) gbfwrite(a, 1, (b), fout)
+#define FWRITE(a, b) gbfwrite(a, (b), 1, fout)
 #define FWRITE_C(a) gbfputc((a), fout)
 #define FWRITE_DBL(a, b) gdb_write_dbl((a), (b))
 #define FWRITE_TIME(a) gdb_write_time((a))

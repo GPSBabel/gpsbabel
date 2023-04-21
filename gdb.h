@@ -66,6 +66,18 @@ public:
 private:
   /* Constants */
 
+  static constexpr int GDB_VER_1 = 1;
+  static constexpr int GDB_VER_2 = 2;
+  static constexpr int GDB_VER_3 = 3;
+
+  static constexpr int GDB_VER_UTF8 = GDB_VER_3;
+  static constexpr int GDB_VER_MIN = GDB_VER_1;
+  static constexpr int GDB_VER_MAX = GDB_VER_3;
+
+  static constexpr int GDB_DEF_ICON = 18;
+
+  static constexpr int GDB_NAME_BUFFERLEN = 1024;
+
   /* static constexpr char gdb_release[] = "$Revision: 1.74 $"; */
   static constexpr char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
 
