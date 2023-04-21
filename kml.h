@@ -138,6 +138,10 @@ private:
   /* Member Functions */
 
   void kml_init_color_sequencer(unsigned int steps_per_rev);
+  static constexpr int kml_bgr_to_color(int blue, int green, int red)
+  {
+    return (blue)<<16 | (green)<<8 | (red);
+  }
   void kml_step_color();
   void wpt_s(const QString& args, const QXmlStreamAttributes* attrs);
   void wpt_e(const QString& args, const QXmlStreamAttributes* attrs);
