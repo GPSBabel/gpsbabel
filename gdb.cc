@@ -77,9 +77,7 @@
 #undef GDB_DEBUG
 // #define GDB_DEBUG 0xff
 
-#define DBG(a,b)		if ((GDB_DEBUG & (a)) && (b))
-
-#define NOT_EMPTY(a) (a && *a)
+#define DBG(a, b)		if ((GDB_DEBUG & (a)) && (b))
 
 void
 GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
@@ -139,7 +137,7 @@ GdbFormat::disp_summary(const gbfile* /* f */) const
 /*-----------------------------------------------------------------------------*/
 
 #define FREAD_C gbfgetc(fin)
-#define FREAD(a,b) gbfread(a,(b),1,fin)
+#define FREAD(a, b) gbfread(a, (b), 1, fin)
 #define FREAD_i32 gbfgetint32(fin)
 #define FREAD_i16 gbfgetint16(fin)
 #define FREAD_DBL gbfgetdbl(fin)
@@ -254,8 +252,8 @@ GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_cla
 
     if (fabs(dist) > 100) {
       fatal(MYNAME ": Route point mismatch!\n" \
-                   "  \"%s\" from waypoints differs to \"%s\"\n" \
-                   "  from route table by more than %0.1f meters!\n", \
+            "  \"%s\" from waypoints differs to \"%s\"\n" \
+            "  from route table by more than %0.1f meters!\n", \
             qPrintable(tmp->shortname), qPrintable(ref->shortname), dist);
     }
   }
@@ -300,7 +298,7 @@ QString GdbFormat::gdb_to_ISO8601_duration(unsigned int seconds)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-void GdbFormat::FWRITE_CSTR(const QString& a) const
+void GdbFormat::gdb_write_cstr(QStringView a) const
 {
   if (a.isEmpty()) {
     gbfputc(0, fout);
@@ -313,30 +311,23 @@ void GdbFormat::FWRITE_CSTR(const QString& a) const
   }
 }
 
-#define FWRITE_i16(a) gbfputint16((a),fout)
-#define FWRITE_i32(a) gbfputint32((a),fout)
-#define FWRITE(a, b) gbfwrite(a,(b),1,fout)
-#define FWRITE_C(a) gbfputc((a),fout)
-#define FWRITE_DBL(a,b) gdb_write_dbl((a),(b))
+#define FWRITE_i16(a) gbfputint16((a), fout)
+#define FWRITE_i32(a) gbfputint32((a), fout)
+#define FWRITE(a, b) gbfwrite(a, 1, (b), fout)
+#define FWRITE_C(a) gbfputc((a), fout)
+#define FWRITE_DBL(a, b) gdb_write_dbl((a), (b))
 #define FWRITE_TIME(a) gdb_write_time((a))
-#define FWRITE_CSTR_LIST(a) gdb_write_cstr_list((a))
-#define FWRITE_LATLON(a) gbfputint32(GPS_Math_Deg_To_Semi((a)),fout)
+#define FWRITE_LATLON(a) gbfputint32(GPS_Math_Deg_To_Semi((a)), fout)
 
 void
-GdbFormat::gdb_write_cstr_list(const char* str) const
+GdbFormat::gdb_write_cstr_list(QStringView str) const
 {
-  if NOT_EMPTY(str) {
+  if (!str.isEmpty()) {
     gbfputint32(1, fout);
-    gbfputcstr(str, fout);
+    gdb_write_cstr(str);
   } else {
     gbfputint32(0, fout);
   }
-}
-
-void
-GdbFormat::gdb_write_cstr_list(const QString& str) const
-{
-  gdb_write_cstr_list(CSTRc(str));
 }
 
 void
@@ -1130,12 +1121,12 @@ GdbFormat::write_header() const
   int len, n = 0;
   struct tm tm;
 
-  FWRITE_CSTR("MsRcf");
-  FWRITE_i32(2);
+  FWRITE("MsRc", 4); // Signature
+  FWRITE_i16(0x66);  // Primary File Format
 
-  strncpy(buff, "Dx", sizeof(buff));
-  buff[1] = 'k' - 1 + gdb_ver;
-  FWRITE_CSTR(buff);
+  FWRITE_i32(2);     // Record Length in Bytes
+  FWRITE_C('D');     // Record Type
+  FWRITE_i16(gdb_ver + 0x6a); // File Format
 
 #if 0
   /* Take this if anything is wrong with our self generated watermark */
@@ -1191,7 +1182,7 @@ GdbFormat::write_header() const
 
   FWRITE_i32(len);
   FWRITE(buff, len + 1);
-  FWRITE_CSTR("MapSource");		/* MapSource magic */
+  gdb_write_cstr(u"MapSource");		/* MapSource magic */
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1243,9 +1234,9 @@ GdbFormat::write_waypoint(
 
   int wpt_class = wpt->wpt_flags.fmt_use;		/* trick */
 
-  FWRITE_CSTR(shortname);			/* unique (!!!) shortname */
+  gdb_write_cstr(shortname);			/* unique (!!!) shortname */
   FWRITE_i32(wpt_class);			/* waypoint class */
-  FWRITE_CSTR(garmin_fs_t::get_cc(gmsd, ""));		/* country code */
+  gdb_write_cstr(garmin_fs_t::get_cc(gmsd, ""));		/* country code */
 
   if (wpt_class != 0) {
     waypth_ct++;
@@ -1267,17 +1258,17 @@ GdbFormat::write_waypoint(
   FWRITE_LATLON(wpt->longitude);		/* longitude */
   FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
   if (!wpt->notes.isEmpty()) {
-    FWRITE_CSTR(wpt->notes);
+    gdb_write_cstr(wpt->notes);
   } else {
-    FWRITE_CSTR(wpt->description);
+    gdb_write_cstr(wpt->description);
   }
   FWRITE_DBL(wpt->proximity_value_or(unknown_alt), unknown_alt);	/* proximity */
   FWRITE_i32(display);			/* display */
   FWRITE_i32(0);				/* color */
   FWRITE_i32(icon);			/* icon */
-  FWRITE_CSTR(garmin_fs_t::get_city(gmsd, ""));	/* city */
-  FWRITE_CSTR(garmin_fs_t::get_state(gmsd, ""));	/* state */
-  FWRITE_CSTR(garmin_fs_t::get_facility(gmsd, ""));	/* facility */
+  gdb_write_cstr(garmin_fs_t::get_city(gmsd, ""));	/* city */
+  gdb_write_cstr(garmin_fs_t::get_state(gmsd, ""));	/* state */
+  gdb_write_cstr(garmin_fs_t::get_facility(gmsd, ""));	/* facility */
   FWRITE_C(0);				/* unknown */
   FWRITE_DBL(wpt->depth_value_or(unknown_alt), unknown_alt);	/* depth */
 
@@ -1296,7 +1287,7 @@ GdbFormat::write_waypoint(
         descr == CSTRc(wpt->shortname)) {
       descr.clear();
     }
-    FWRITE_CSTR(descr);
+    gdb_write_cstr(descr);
   } else { /* if (gdb_ver > GDB_VER_3) */
 //    url_link* url_next;
 //    const char* str;
@@ -1307,7 +1298,7 @@ GdbFormat::write_waypoint(
     } else {
       str = "";
     }
-    FWRITE_CSTR(str);
+    gdb_write_cstr(str);
     FWRITE(zbuf, 5);				/* instruction dependent */
 
     /* GBD doesn't have a native description field */
@@ -1320,7 +1311,7 @@ GdbFormat::write_waypoint(
     if (str == wpt->notes) {
       d.clear();
     }
-    FWRITE_CSTR(d);				/* instruction */
+    gdb_write_cstr(d);				/* instruction */
 #else
     str = wpt->description;
     if (str && (strcmp(str, wpt->shortname) == 0)) {
@@ -1329,12 +1320,12 @@ GdbFormat::write_waypoint(
     if (str && wpt->notes && (strcmp(str, wpt->notes) == 0)) {
       str = NULL;
     }
-    FWRITE_CSTR(str);				/* instruction */
+    gdb_write_cstr(str);				/* instruction */
 #endif
 
     FWRITE_i32(wpt->urls.size());
     foreach (UrlLink l, wpt->urls) {
-      FWRITE_CSTR(l.url_);
+      gdb_write_cstr(l.url_);
     }
   }
 
@@ -1347,13 +1338,13 @@ GdbFormat::write_waypoint(
     QString str = garmin_fs_t::get_phone_nr(gmsd, "");
     if (!str.isEmpty()) {
       FWRITE_i32(1);
-      FWRITE_CSTR(str);
-      FWRITE_CSTR("");
+      gdb_write_cstr(str);
+      gdb_write_cstr();
     } else {
       FWRITE_i32(0);
     }
-    FWRITE_CSTR(garmin_fs_t::get_country(gmsd, ""));
-    FWRITE_CSTR(garmin_fs_t::get_postal_code(gmsd, ""));
+    gdb_write_cstr(garmin_fs_t::get_country(gmsd, ""));
+    gdb_write_cstr(garmin_fs_t::get_postal_code(gmsd, ""));
   }
 }
 
@@ -1392,7 +1383,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xFF, sizeof(ffbuf));
 
-  FWRITE_CSTR(rte_name);
+  gdb_write_cstr(rte_name);
   FWRITE_C(0);				/* display/autoname - 1 byte */
 
   route_compute_bounds(rte, &bounds);
@@ -1431,12 +1422,12 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
     garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
-    FWRITE_CSTR((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
+    gdb_write_cstr((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
 
     int wpt_class = wpt->wpt_flags.fmt_use;			/* trick */
 
     FWRITE_i32(wpt_class);				/* waypoint class */
-    FWRITE_CSTR(garmin_fs_t::get_cc(gmsd, ""));			/* country */
+    gdb_write_cstr(garmin_fs_t::get_cc(gmsd, ""));			/* country */
 #ifdef GMSD_EXPERIMENTAL
     if (gmsd && gmsd->flags.subclass && (wpt_class >= gt_waypt_class_map_point)) {
       FWRITE(gmsd->subclass, sizeof(gmsd->subclass));
@@ -1487,20 +1478,20 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
     if (rte->rte_urls.HasUrlLink()) {
-      FWRITE_CSTR(rte->rte_urls.GetUrlLink().url_);
+      gdb_write_cstr(rte->rte_urls.GetUrlLink().url_);
     } else {
-      FWRITE_CSTR("");
+      gdb_write_cstr();
     }
   } else { /* if (gdb_ver >= GDB_VER_3) */
     if (rte->rte_urls.HasUrlLink()) {
-      FWRITE_CSTR_LIST(rte->rte_urls.GetUrlLink().url_);
+      gdb_write_cstr_list(rte->rte_urls.GetUrlLink().url_);
     } else {
-      FWRITE_CSTR_LIST("");
+      gdb_write_cstr_list();
     }
     /* "Magenta" (14) is MapSource default */
     FWRITE_i32((rte->line_color.bbggrr < 0) ? 14 : gt_color_index_by_rgb(rte->line_color.bbggrr));
     FWRITE_C(0);
-    FWRITE_CSTR(rte->rte_desc);
+    gdb_write_cstr(rte->rte_desc);
   }
 }
 
@@ -1509,7 +1500,7 @@ GdbFormat::write_track(const route_head* trk, const QString& trk_name)
 {
   int points = trk->rte_waypt_ct();
 
-  FWRITE_CSTR(trk_name);
+  gdb_write_cstr(trk_name);
   FWRITE_C(0);
   /* "Unknown" (0) is MapSource default */
   FWRITE_i32(gt_color_index_by_rgb(trk->line_color.bbggrr));
@@ -1535,15 +1526,15 @@ GdbFormat::write_track(const route_head* trk, const QString& trk_name)
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
     if (trk->rte_urls.HasUrlLink()) {
-      FWRITE_CSTR(trk->rte_urls.GetUrlLink().url_);
+      gdb_write_cstr(trk->rte_urls.GetUrlLink().url_);
     } else {
-      FWRITE_CSTR("");
+      gdb_write_cstr();
     }
   } else { /* if (gdb_ver >= GDB_VER_3 */
     if (trk->rte_urls.HasUrlLink()) {
-      FWRITE_CSTR_LIST(trk->rte_urls.GetUrlLink().url_);
+      gdb_write_cstr_list(trk->rte_urls.GetUrlLink().url_);
     } else {
-      FWRITE_CSTR_LIST("");
+      gdb_write_cstr_list();
     }
   }
 }
@@ -1775,6 +1766,6 @@ GdbFormat::write()
   track_disp_all(write_track_cb_lambda, nullptr, nullptr);
 
   FWRITE_i32(2);			/* finalize gdb with empty map segment */
-  FWRITE_CSTR("V");
+  gdb_write_cstr(u"V");
   FWRITE_C(1);
 }
