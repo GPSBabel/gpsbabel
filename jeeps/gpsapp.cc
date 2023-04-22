@@ -5872,7 +5872,7 @@ int32 GPS_A600_Send(const char* port, time_t Time)
 time_t GPS_D600_Get(GPS_PPacket& packet)
 {
   UC* p;
-  static std::tm ts;
+  std::tm ts{};
 
   p = packet.data;
 
