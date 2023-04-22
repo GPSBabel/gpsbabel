@@ -366,9 +366,7 @@ decode_datetime(const unsigned char* buffer)
 static void
 encode_datetime(time_t datetime, unsigned char* buffer)
 {
-  std::tm* tm;
-
-  if ((tm = gmtime(&datetime)) != nullptr) {
+  if (std::tm* tm = gmtime(&datetime); tm != nullptr) {
     buffer[0] = tm->tm_year - 100;
     buffer[1] = tm->tm_mon + 1;
     buffer[2] = tm->tm_mday;
