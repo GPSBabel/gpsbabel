@@ -75,7 +75,7 @@ static void rd_deinit()
 static int process_data(const unsigned char* data)
 {
   static int remaining = 100;
-  static struct tm tm;
+  static std::tm tm;
   static time_t start, creation;
   static route_head* track;
   static unsigned char interval;

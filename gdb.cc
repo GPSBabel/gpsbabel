@@ -1108,7 +1108,6 @@ GdbFormat::write_header() const
   char buff[128], tbuff[32];
   char* c;
   int len, n = 0;
-  struct tm tm;
 
   FWRITE("MsRc", 4); // Signature
   FWRITE_i16(0x66);  // Primary File Format
@@ -1142,8 +1141,7 @@ GdbFormat::write_header() const
 
   */
 
-  memset(&tm, 0, sizeof(tm));
-
+  std::tm tm{};
   n = sscanf(gdb_release_date+7, "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
   if (n != 6) {
     // The $Date string in gdb_release_date[] above is bad.
@@ -1155,7 +1153,7 @@ GdbFormat::write_header() const
 
   n = strftime(tbuff, sizeof(tbuff), "%b %d %Y*%H:%M:%S", &tm);
   if (n == 0) {
-    // The build of the struct tm was bad.
+    // The build of the std::tm was bad.
     fatal(MYNAME ": internal date generation error for %s\n", gdb_release_date + 7);
   }
 

@@ -252,7 +252,7 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
       // Uggh.  strftime format exposed to user.
 
       time_t time = dt.toTime_t();
-      struct tm tm = *gmtime(&time);
+      std::tm tm = *gmtime(&time);
       char buff[128];
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
@@ -279,7 +279,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
-    struct tm tm = *gmtime(&t);
+    std::tm tm = *gmtime(&t);
     char buff[128];
     strftime(buff, sizeof(buff), opt_title, &tm);
     track->rte_name = buff;
