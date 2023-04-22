@@ -1094,11 +1094,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-/* bit manipulation functions (util.c) */
-
-char gb_getbit(const void* buf, uint32_t nr);
-void gb_setbit(void* buf, uint32_t nr);
-
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 

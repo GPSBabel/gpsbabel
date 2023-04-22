@@ -1242,27 +1242,6 @@ QString get_filename(const QString& fname)
   return QFileInfo(fname).fileName();
 }
 
-/* bit manipulation functions */
-
-/*
- * setbit: Set bit number [nr] of buffer [buf]
- */
-void gb_setbit(void* buf, const uint32_t nr)
-{
-  auto* bytes = (unsigned char*) buf;
-  bytes[nr / 8] |= (1 << (nr % 8));
-}
-
-/*
- * setbit: Get state of bit number [nr] of buffer [buf]
- */
-char gb_getbit(const void* buf, const uint32_t nr)
-{
-  const auto* bytes = (const unsigned char*) buf;
-  return (bytes[nr / 8] & (1 << (nr % 8)));
-
-}
-
 /*
  * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
  */
