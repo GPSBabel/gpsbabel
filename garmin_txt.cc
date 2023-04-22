@@ -69,7 +69,8 @@ struct gtxt_flags_t {
 
 static gpsbabel::TextStream* fin = nullptr;
 static gpsbabel::TextStream* fout = nullptr;
-static route_head* current_trk, *current_rte;
+static route_head* current_trk;
+static route_head* current_rte;
 static int waypoints;
 static int routepoints;
 static const Waypoint** wpt_a;
@@ -115,19 +116,19 @@ inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
   return ret;
 }
 
-#define MAX_HEADER_FIELDS 36
+static constexpr int kMaxHeaderFields = 36;
 
-static QString header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
-static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
+static QString header_lines[unknown_header + 1][kMaxHeaderFields];
+static int header_fields[unknown_header + 1][kMaxHeaderFields];
 static int header_ct[unknown_header + 1];
 
-#define GARMIN_UNKNOWN_ALT 1.0e25f
-#define DEFAULT_DATE_FORMAT "dd/mm/yyyy"
-#define DEFAULT_TIME_FORMAT "HH:mm:ss"
+static constexpr double kGarminUnknownAlt = 1.0e25;
+static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
+static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
-/* macros */
-
-#define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
+static inline bool is_valid_alt(double alt) {
+  return (alt != unknown_alt) && (alt < kGarminUnknownAlt);
+}
 
 static char* opt_datum = nullptr;
 static char* opt_dist = nullptr;
@@ -192,10 +193,10 @@ init_date_and_time_format()
   // This is old, and weird, code.. date_time_format is a global that's
   // explicitly malloced and freed elsewhere. This isn't very C++ at all,
   // but this format is on its deathbead for deprecation.
-  const char* d = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
+  const char* d = get_option_val(opt_date_format, kDefaultDateFormat);
   QString d1 = convert_human_date_format(d);
 
-  const char* t = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
+  const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
   QString t1 = convert_human_time_format(t);
 
   xasprintf(&date_time_format, "%s %s", CSTR(d1), CSTR(t1));
@@ -560,7 +561,7 @@ write_waypt(const Waypoint* wpt)
 
   print_position(wpt);
 
-  if IS_VALID_ALT(wpt->altitude) {
+  if (is_valid_alt(wpt->altitude)) {
     print_distance(wpt->altitude, 1, 0, 0);
   }
   *fout << "\t";
@@ -706,7 +707,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
 
   print_position(wpt);
   print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
-  if IS_VALID_ALT(wpt->altitude) {
+  if (is_valid_alt(wpt->altitude)) {
     print_distance(wpt->altitude, 1, 0, 0);
   }
 
@@ -868,7 +869,7 @@ garmin_txt_write()
 static void
 free_header(const header_type ht)
 {
-  for (int i = 0; i < MAX_HEADER_FIELDS; i++) {
+  for (int i = 0; i < kMaxHeaderFields; i++) {
     header_lines[ht][i].clear();
   }
   header_ct[ht] = 0;
@@ -994,7 +995,7 @@ parse_header(const QStringList& lineparts)
     header_lines[unknown_header][column] = str;
     header_lines[unknown_header][column] = header_lines[unknown_header][column].toUpper();
     header_ct[unknown_header]++;
-    if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
+    if (header_ct[unknown_header] >= kMaxHeaderFields) {
       break;
     }
   }
