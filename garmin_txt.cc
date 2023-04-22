@@ -35,7 +35,9 @@
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
+#include <QDateTime>               // for QDateTime
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QList>                   // for QList, QList<>::const_iterator
 #include <QString>                 // for QString, operator!=
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream
@@ -52,7 +54,6 @@
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Fatal
 #include "src/core/textstream.h"   // for TextStream
-#include "strptime.h"              // for strptime
 
 
 #define MYNAME "garmin_txt"
@@ -166,15 +167,14 @@ static PathInfo* route_info;
 static int route_idx;
 static PathInfo* cur_info;
 
-static const char* headers[] = {
+static const QVector<QString> headers = {
   "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
   "Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
   "Date Modified\tLink\tCategories",
   "Waypoint Name\tDistance\tLeg Length\tCourse",
   "Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
   "Name\tLength\tCourse\tWaypoints\tLink",
-  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink",
-  nullptr
+  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink"
 };
 
 /* helpers */
@@ -620,7 +620,7 @@ route_disp_hdr_cb(const route_head* rte)
 
   if (!gtxt_flags.route_header_written) {
     gtxt_flags.route_header_written = 1;
-    *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[route_header]);
+    *fout << "\r\n\r\nHeader\t" << headers[route_header] << "\r\n";
   }
   print_string("\r\nRoute\t%s\t", rte->rte_name);
   print_distance(cur_info->length, 0, 1, 0);
@@ -631,7 +631,7 @@ route_disp_hdr_cb(const route_head* rte)
   } else {
     print_string("%s\r\n", "");
   }
-  *fout << QString::asprintf("\r\nHeader\t%s\r\n\r\n", headers[rtept_header]);
+  *fout << "\r\nHeader\t" << headers[rtept_header] << "\r\n\r\n";
 }
 
 static void
@@ -674,7 +674,7 @@ track_disp_hdr_cb(const route_head* track)
 
   if (!gtxt_flags.track_header_written) {
     gtxt_flags.track_header_written = 1;
-    *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[track_header]);
+    *fout << "\r\n\r\nHeader\t" << headers[track_header] << "\r\n";
   }
   print_string("\r\nTrack\t%s\t", track->rte_name);
   print_date_and_time(cur_info->start, 0);
@@ -686,7 +686,7 @@ track_disp_hdr_cb(const route_head* track)
   } else {
     print_string("%s", "");
   }
-  *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
+  *fout << "\r\n\r\nHeader\t" << headers[trkpt_header] << "\r\n\r\n";
 }
 
 static void
@@ -831,7 +831,7 @@ garmin_txt_write()
     };
     std::sort(wpt_a, wpt_a + waypoints, sort_waypt_lambda);
 
-    *fout << QString::asprintf("Header\t%s\r\n\r\n", headers[waypt_header]);
+    *fout << "Header\t" << headers[waypt_header] << "\r\n\r\n";
     for (int i = 0; i < waypoints; i++) {
       write_waypt(wpt_a[i]);
     }
@@ -1029,37 +1029,23 @@ bind_fields(const header_type ht)
   }
   free_header(ht);
 
-  /* make a copy of headers[ht], uppercase, replace "\t" with "\0" */
+  /* make a copy of headers[ht], uppercase, split on "\t" */
+  const QStringList altheader = headers.at(ht).toUpper().split('\t');
 
-  int i = strlen(headers[ht]);
-  char* fields = (char*) xmalloc(i + 2);
-  strcpy(fields, headers[ht]);
-  strcat(fields, "\t");
-  char* c = strupper(fields);
-  while ((c = strchr(c, '\t'))) {
-    *c++ = '\0';
-  }
-
-  for (i = 0; i < header_ct[unknown_header]; i++) {
+  for (int i = 0; i < header_ct[unknown_header]; i++) {
     auto name = header_lines[ht][i] = header_lines[unknown_header][i];
     header_lines[unknown_header][i].clear();
 
-    c = fields;
-    int field_no = 1;
-    while (*c) {
-      if (name.compare(c) == 0) {
+    int field_idx = altheader.indexOf(name);
+    if (field_idx >= 0) {
+        int field_no = field_idx + 1;
         header_fields[ht][i] = field_no;
 #if 0
-        printf("Binding field \"%s\" to internal number %d (%d,%d)\n", name, field_no, ht, i);
+        printf("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
 #endif
-        break;
-      }
-      field_no++;
-      c = c + strlen(c) + 1;
     }
   }
   header_ct[unknown_header] = 0;
-  xfree(fields);
 }
 
 static void
