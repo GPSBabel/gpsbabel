@@ -124,6 +124,7 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "power",	fld_power, kStrAny },
   { "prox",	fld_proximity, kStrAny },
   { "depth",	fld_depth, kStrAny },
+  { "datetime",	fld_datetime, kStrAny },
   { "date",	fld_date, kStrAny },
   { "time",	fld_time, kStrAny },
   { "zeit",	fld_time, kStrAny },
@@ -230,10 +231,8 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
   int p1, p2, p3;
   char sep[2];
-  struct tm tm;
   int lconsumed = 0;
 
-  memset(&tm, 0, sizeof(tm));
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
   if (consumed && lconsumed) {
     *consumed = lconsumed;
@@ -246,6 +245,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
     fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
   }
 
+  struct tm tm{0};
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
     tm.tm_year = p1;
     tm.tm_mon = p2;
@@ -404,6 +404,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
   }
   header = header.toLower();
 
+  int column_count= 0;
   const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     value = value.trimmed();
@@ -414,12 +415,16 @@ UnicsvFormat::unicsv_fondle_header(QString header)
     while (!f->name.isEmpty()) {
       if (unicsv_compare_fields(value, f)) {
         unicsv_fields_tab.last() = f->type;
+	if (global_opts.debug_level > 2) {
+          Debug() << MYNAME ": found column " << column_count
+                  << ": '" << value << "'";
+	}
         break;
       }
       f++;
     }
     if ((f->name.isEmpty()) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+      Debug() << MYNAME ": unhandled column " << column_count << ": '" << value << "'";
     }
 
     /* handle some special items */
@@ -443,6 +448,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
         unicsv_fields_tab.last() = fld_iso_time;
       }
     }
+    column_count++;
   }
 }
 
@@ -476,6 +482,11 @@ UnicsvFormat::rd_init(const QString& fname)
 void
 UnicsvFormat::rd_deinit()
 {
+  if (n_points_discarded) {
+    Warning() << MYNAME":" << n_points_discarded <<
+      "points were found during read without location and were ignored.";
+  }
+
   fin->close();
   delete fin;
   fin = nullptr;
@@ -542,12 +553,12 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     switch (unicsv_fields_tab[column]) {
 
     case fld_latitude:
-      human_to_dec(CSTR(value), &wpt->latitude, nullptr, 1);
+      human_to_dec(value, &wpt->latitude, nullptr, HumanToDec::FindLatitude);
       wpt->latitude = wpt->latitude * ns;
       break;
 
     case fld_longitude:
-      human_to_dec(CSTR(value), nullptr, &wpt->longitude, 2);
+      human_to_dec(value, nullptr, &wpt->longitude, HumanToDec::FindLongitude);
       wpt->longitude = wpt->longitude * ew;
       break;
 
@@ -1064,6 +1075,12 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &wpt->latitude, &wpt->longitude, &alt, src_datum);
+  }
+
+  // For these reasons, we don't use the data we've harvested from theis line.
+  if ((wpt->latitude == 0) && (wpt->longitude == 0)) {
+    n_points_discarded++;
+    return;
   }
 
   switch (unicsv_data_type) {
@@ -1745,6 +1762,7 @@ UnicsvFormat::wr_init(const QString& fname)
   }
 
   llprec = xstrtoi(opt_prec, nullptr, 10);
+  n_points_discarded = 0;
 }
 
 void

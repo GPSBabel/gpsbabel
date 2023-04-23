@@ -334,7 +334,7 @@ ddmmdir_to_degrees(const char* ddmmdir)
  *****************************************************************************/
 
 void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
+human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec which)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -433,12 +433,12 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
   }
 
   if (lat[0] == 999 && lon[0] == 999) {
-    if (which == 1) {
+    if (which == HumanToDec::FindLatitude) {
       lat[0] = unk[0];
       lat[1] = unk[1];
       lat[2] = unk[2];
       latsign = unksign;
-    } else if (which == 2) {
+    } else if (which == HumanToDec::FindLongitude) {
       lon[0] = unk[0];
       lon[1] = unk[1];
       lon[2] = unk[2];
@@ -449,7 +449,7 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
   if (outlat) {
     if (lat[0] != 999) {
       *outlat = lat[0];
-    }
+    } else *outlat = 0;
     if (lat[1] != 999) {
       *outlat += lat[1]/60.0;
     }
@@ -466,7 +466,7 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
   if (outlon) {
     if (lon[0] != 999) {
       *outlon = lon[0];
-    }
+    } else *outlon = 0;
     if (lon[1] != 999) {
       *outlon += lon[1]/60.0;
     }
