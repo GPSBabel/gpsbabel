@@ -31,7 +31,7 @@
 #include <cstdio>                  // for NULL, snprintf, sscanf
 #include <cstdint>
 #include <cstdlib>                 // for abs
-#include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
+#include <cstring>                 // for strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
 #include <ctime>                   // for gmtime, localtime, strftime
 #include <utility>                 // for pair, make_pair
 
@@ -744,7 +744,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
 static void
 garmin_txt_wr_init(const QString& fname)
 {
-  memset(&gtxt_flags, 0, sizeof(gtxt_flags));
+  gtxt_flags = {};
 
   fout = new gpsbabel::TextStream;
   fout->open(fname, QIODevice::WriteOnly, MYNAME, "windows-1252");
@@ -1063,6 +1063,8 @@ bind_fields(const header_type ht)
       if (global_opts.debug_level >= 2) {
         fprintf(stderr, MYNAME ": Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
       }
+    } else {
+      warning(MYNAME ": Field %s not recognized!\n", qPrintable(name));
     }
   }
   header_column_names.clear();
@@ -1364,7 +1366,7 @@ parse_track_waypoint(const QStringList& lineparts)
 static void
 garmin_txt_rd_init(const QString& fname)
 {
-  memset(&gtxt_flags, 0, sizeof(gtxt_flags));
+  gtxt_flags = {};
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, "windows-1252");
