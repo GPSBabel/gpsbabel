@@ -122,7 +122,7 @@ extern WaypointList* global_waypoint_list;
 /* below couple of functions mostly borrowed from raymarine.c */
 
 /* make waypoint shortnames unique */
-char
+bool
 LowranceusrFormat::same_points(const Waypoint* A, const Waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */

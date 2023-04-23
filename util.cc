@@ -146,7 +146,7 @@ xrealloc(void* p, size_t s)
 FILE*
 xfopen(const char* fname, const char* type, const char* errtxt)
 {
-  int am_writing = strchr(type, 'w') != nullptr;
+  bool am_writing = strchr(type, 'w') != nullptr;
 
   if (fname == nullptr) {
     fatal("%s must have a filename specified for %s.\n",

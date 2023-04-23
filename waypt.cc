@@ -113,7 +113,7 @@ waypt_init_bounds(bounds* bounds)
   bounds->min_alt = -unknown_alt;
 }
 
-int
+bool
 waypt_bounds_valid(bounds* bounds)
 {
   /* Returns true if bb has any 'real' data in it */
