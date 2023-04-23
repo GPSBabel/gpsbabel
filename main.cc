@@ -55,7 +55,7 @@
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
-static constexpr int DEBUG_LOCALE = 0;
+static constexpr bool DEBUG_LOCALE = false;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
@@ -414,7 +414,7 @@ run(const char* prog_name)
       }
       break;
     case 's':
-      global_opts.synthesize_shortnames = 1;
+      global_opts.synthesize_shortnames = true;
       break;
     case 't':
       global_opts.objective = trkdata;
@@ -435,14 +435,14 @@ run(const char* prog_name)
     case 'S':
       switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
       case 'i':
-        global_opts.smart_icons = 1;
+        global_opts.smart_icons = true;
         break;
       case 'n':
-        global_opts.smart_names = 1;
+        global_opts.smart_names = true;
         break;
       default:
-        global_opts.smart_icons = 1;
-        global_opts.smart_names = 1;
+        global_opts.smart_icons = true;
+        global_opts.smart_names = true;
         break;
       }
       break;

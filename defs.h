@@ -163,14 +163,14 @@ enum gpsdata_type {
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 struct global_options {
-  int synthesize_shortnames;
   int debug_level;
   gpsdata_type objective;
   unsigned int	masked_objective;
   int verbose_status;	/* set by GUI wrappers for status */
-  int smart_icons;
-  int smart_names;
   inifile_t* inifile;
+  bool synthesize_shortnames;
+  bool smart_icons;
+  bool smart_names;
 };
 
 extern global_options global_opts;
@@ -535,7 +535,7 @@ void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
 void waypt_init_bounds(bounds* bounds);
-int waypt_bounds_valid(bounds* bounds);
+bool waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
