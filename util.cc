@@ -568,13 +568,13 @@ le_write32(void* ptr, const unsigned value)
 */
 
 time_t
-mkgmtime(struct tm* t)
+mkgmtime(std::tm* time)
 {
   static const int      m_to_d[12] =
   {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-  short month = t->tm_mon;
-  short year = t->tm_year + month / 12 + 1900;
+  short month = time->tm_mon;
+  short year = time->tm_year + month / 12 + 1900;
   month %= 12;
   if (month < 0) {
     year -= 1;
@@ -587,14 +587,14 @@ mkgmtime(struct tm* t)
   result += (year - 1968) / 4;
   result -= (year - 1900) / 100;
   result += (year - 1600) / 400;
-  result += t->tm_mday;
+  result += time->tm_mday;
   result -= 1;
   result *= 24;
-  result += t->tm_hour;
+  result += time->tm_hour;
   result *= 60;
-  result += t->tm_min;
+  result += time->tm_min;
   result *= 60;
-  result += t->tm_sec;
+  result += time->tm_sec;
   return (result);
 }
 
@@ -603,16 +603,16 @@ mkgmtime(struct tm* t)
  *              which is evaluated by mktime
  */
 time_t
-mklocaltime(struct tm* t)
+mklocaltime(std::tm* time)
 {
   time_t result;
-  struct tm check = *t;
+  std::tm check = *time;
 
   check.tm_isdst = 0;
   result = mktime(&check);
   check = *localtime(&result);
   if (check.tm_isdst == 1) {	/* DST is in effect */
-    check = *t;
+    check = *time;
     check.tm_isdst = 1;
     result = mktime(&check);
   }

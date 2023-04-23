@@ -521,7 +521,7 @@ std::array<int, 6> split_date(uint32_t tim)
 static time_t decode_date(uint32_t tim)
 {
   auto [sec, min, hour, mday, mon, year] = split_date(tim);
-  struct tm t;
+  std::tm t{};
 
   t.tm_sec    = sec;
   t.tm_min    = min;

@@ -23,7 +23,7 @@
 
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
-#include <cstring>                 // for memset, strchr, strncpy
+#include <cstring>                 // for strchr, strncpy
 #include <ctime>                   // for gmtime
 
 #include <QByteArray>              // for QByteArray
@@ -230,10 +230,9 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
   int p1, p2, p3;
   char sep[2];
-  struct tm tm;
+  std::tm tm{};
   int lconsumed = 0;
 
-  memset(&tm, 0, sizeof(tm));
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
   if (consumed && lconsumed) {
     *consumed = lconsumed;
@@ -348,7 +347,7 @@ UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
   if (opt_utc) {
     res += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
   } else {
-    struct tm tm = *gmtime(&res);
+    std::tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
   }
   return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
@@ -502,7 +501,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   char is_localtime = 0;
   garmin_fs_t* gmsd;
   double d;
-  struct tm ymd;
+  std::tm ymd{};
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
@@ -510,7 +509,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   auto* wpt = new Waypoint;
   wpt->latitude = kUnicsvUnknown;
   wpt->longitude = kUnicsvUnknown;
-  memset(&ymd, 0, sizeof(ymd));
 
   int column = -1;
   const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
@@ -967,8 +965,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       time_t t = date + time;
 
       if (is_localtime) {
-        struct tm tm;
-        tm = *gmtime(&t);
+        std::tm tm = *gmtime(&t);
         if (opt_utc) {
           wpt->SetCreationTime(mkgmtime(&tm));
         } else {

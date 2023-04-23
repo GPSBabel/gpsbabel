@@ -366,7 +366,7 @@ print_position(const Waypoint* wpt)
 static void
 print_date_and_time(const time_t time, const bool time_only)
 {
-  struct tm tm;
+  std::tm tm{};
   char tbuf[32];
 
   if (time < 0) {

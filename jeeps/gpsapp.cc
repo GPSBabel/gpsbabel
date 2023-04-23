@@ -5872,7 +5872,7 @@ int32 GPS_A600_Send(const char* port, time_t Time)
 time_t GPS_D600_Get(GPS_PPacket& packet)
 {
   UC* p;
-  static struct tm ts;
+  std::tm ts{};
 
   p = packet.data;
 
@@ -5901,12 +5901,10 @@ time_t GPS_D600_Get(GPS_PPacket& packet)
 void GPS_D600_Send(GPS_PPacket& packet, time_t Time)
 {
   UC data[10];
-  UC* p;
-  struct tm* ts;
 
-  p = data;
+  UC* p = data;
 
-  ts = localtime(&Time);
+  std::tm* ts = localtime(&Time);
   *p++ = ts->tm_mon+1;
   *p++ = ts->tm_mday;
 

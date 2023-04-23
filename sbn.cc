@@ -220,7 +220,7 @@ decode_sbn_mode(const unsigned char* mode)
 static void
 decode_sbn_datetime(const unsigned char* buffer, Waypoint* waypt)
 {
-  struct tm tm;
+  std::tm tm{};
   int ms = be_readu16(buffer + 6);
 
   tm.tm_sec = ms / 1000;

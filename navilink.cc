@@ -366,9 +366,7 @@ decode_datetime(const unsigned char* buffer)
 static void
 encode_datetime(time_t datetime, unsigned char* buffer)
 {
-  struct tm* tm;
-
-  if ((tm = gmtime(&datetime)) != nullptr) {
+  if (std::tm* tm = gmtime(&datetime); tm != nullptr) {
     buffer[0] = tm->tm_year - 100;
     buffer[1] = tm->tm_mon + 1;
     buffer[2] = tm->tm_mday;
@@ -799,9 +797,7 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
    * SSSSSSMM MMMMHHHH Hdddddmm mmmmmmmm
    */
 
-  struct tm tm;
-
-  memset(&tm, 0, sizeof(tm));
+  std::tm tm{};
 
   tm.tm_sec = buffer[0] & 0x3F;
   tm.tm_min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
