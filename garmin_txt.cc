@@ -365,7 +365,7 @@ print_position(const Waypoint* wpt)
 static void
 print_date_and_time(const time_t time, const bool time_only)
 {
-  struct tm tm;
+  std::tm tm{};
   char tbuf[32];
 
   if (time < 0) {
@@ -614,7 +614,7 @@ route_disp_hdr_cb(const route_head* rte)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  if (rte->rte_waypt_ct() <= 0) {
+  if (rte->rte_waypt_empty()) {
     return;
   }
 
@@ -668,7 +668,7 @@ track_disp_hdr_cb(const route_head* track)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  if (track->rte_waypt_ct() <= 0) {
+  if (track->rte_waypt_empty()) {
     return;
   }
 

@@ -608,7 +608,7 @@ ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name
     break;
   case 2:
     /* new track flag */
-    if ((str.toInt() == 1) && (trk_head->rte_waypt_ct() > 0)) {
+    if ((str.toInt() == 1) && !trk_head->rte_waypt_empty()) {
       trk_head = new route_head;
       track_add_head(trk_head);
       if (trk_name) {

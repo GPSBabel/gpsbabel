@@ -78,12 +78,12 @@ void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
     float color_step = strtod(opt_rotate_colors, nullptr);
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
-      kml_color_sequencer.step = ((float)kml_color_limit) * 6.0f * color_step / 360.0f;
+      kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f * color_step / 360.0f;
     } else {
       // one cycle around circle for all the tracks(routes)
-      kml_color_sequencer.step = ((float)kml_color_limit) * 6.0f / ((float)steps_per_rev);
+      kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f / static_cast<float>(steps_per_rev);
     }
-    kml_color_sequencer.color.opacity=255;
+    kml_color_sequencer.color.opacity = 255;
     kml_color_sequencer.seq = 0.0f;
   }
 }
@@ -92,28 +92,28 @@ void KmlFormat::kml_step_color()
 {
   // Map kml_color_sequencer.seq to an integer in the range [0, kml_color_limit*6).
   // Note that color_seq may be outside this range if the cast from float to int fails.
-  int color_seq = ((int) kml_color_sequencer.seq) % (kml_color_limit * 6);
+  int color_seq = static_cast<int>(kml_color_sequencer.seq) % (kml_color_limit * 6);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+    printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
   if ((color_seq >= (0*kml_color_limit)) && (color_seq < (1*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (0)<<16 | (color_seq)<<8 | (kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, color_seq, kml_color_limit);
   } else if ((color_seq >= (1*kml_color_limit)) && (color_seq < (2*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (0)<<16 | (kml_color_limit)<<8 | (2*kml_color_limit-color_seq);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, kml_color_limit, 2*kml_color_limit-color_seq);
   } else if ((color_seq >= (2*kml_color_limit)) && (color_seq < (3*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (color_seq-2*kml_color_limit)<<16 | (kml_color_limit)<<8 | (0);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(color_seq-2*kml_color_limit, kml_color_limit, 0);
   } else if ((color_seq >= (3*kml_color_limit)) && (color_seq < (4*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (kml_color_limit)<<16 | (4*kml_color_limit-color_seq)<<8 | (0);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(kml_color_limit, 4*kml_color_limit-color_seq ,0);
   } else if ((color_seq >= (4*kml_color_limit)) && (color_seq < (5*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (kml_color_limit)<<16 | (0)<<8 | (color_seq-4*kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(kml_color_limit, 0, color_seq-4*kml_color_limit);
   } else if ((color_seq >= (5*kml_color_limit)) && (color_seq < (6*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (6*kml_color_limit-color_seq)<<16 | (0)<<8 | (kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(6*kml_color_limit-color_seq, 0, kml_color_limit);
   } else { // should not occur, but to be safe generate a legal color.
     warning(MYNAME ": Error in color conversion - using default color.\n");
-    kml_color_sequencer.color.bbggrr = (102)<<16 | (102)<<8 | (102);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(102, 102, 102);
   }
   // compute next color.
-  kml_color_sequencer.seq = kml_color_sequencer.seq + kml_color_sequencer.step;
+  kml_color_sequencer.seq += kml_color_sequencer.step;
 }
 
 void KmlFormat::wpt_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
@@ -242,7 +242,7 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   if (wpt_timespan_begin.isValid() && wpt_timespan_end.isValid()) {
 
     // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-    if (trk_head->rte_waypt_ct() > 0) {
+    if (!trk_head->rte_waypt_empty()) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       if (trk_head->rte_waypt_ct() < 2) {
         fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
@@ -656,7 +656,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     // Put the points in a subfolder
     writer->writeStartElement(QStringLiteral("Folder"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Points"));
@@ -874,12 +874,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 void KmlFormat::kml_output_tailer(const route_head* header)
 {
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     writer->writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
-  if (export_lines && header->rte_waypt_ct() > 0) {
+  if (export_lines && !header->rte_waypt_empty()) {
     bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
@@ -1441,7 +1441,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
 void KmlFormat::kml_track_hdr(const route_head* header) const
 {
   computed_trkdata td = track_recompute(header);
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_header(header, &td);
   }
 }
@@ -1453,7 +1453,7 @@ void KmlFormat::kml_track_disp(const Waypoint* waypointp) const
 
 void KmlFormat::kml_track_tlr(const route_head* header)
 {
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_tailer(header);
   }
 }

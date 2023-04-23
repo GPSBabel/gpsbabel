@@ -1248,7 +1248,7 @@ GarminFitFormat::fit_collect_track_tlr(const route_head* rte)
   fit_write_msg_event(track_date_time, kEventTimer, kEventTypeStart, 0);
 
   // Write track/course points for the whole track
-  for (auto& crpt: course) {
+  for (const auto& crpt: course) {
     if (crpt.is_course_point) {
       fit_write_msg_course_point(crpt.creation_time,
                                  crpt.lat,

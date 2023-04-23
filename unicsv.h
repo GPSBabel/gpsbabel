@@ -21,11 +21,12 @@
 #ifndef UNICSV_H_INCLUDED_
 #define UNICSV_H_INCLUDED_
 
-#include <cstdint>
+#include <bitset>                 // for bitset
+#include <cstdint>                // for uint32_t
 #include <ctime>                  // for gmtime
 
 #include <QDateTime>              // for QDateTime
-#include <QString>                // for QString, operator!=, operator==
+#include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
@@ -193,7 +194,7 @@ private:
   gpsdata_type unicsv_data_type{unknown_gpsdata};
   route_head* unicsv_track{nullptr};
   route_head* unicsv_route{nullptr};
-  char unicsv_outp_flags[(fld_terminator + 8) / 8] {};
+  std::bitset<fld_terminator> unicsv_outp_flags;
   grid_type unicsv_grid_idx{grid_unknown};
   int unicsv_datum_idx{};
   char* opt_datum{nullptr};

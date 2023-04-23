@@ -647,6 +647,7 @@ public:
   ~route_head();
 
   int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -1023,8 +1024,8 @@ int str_match(const char* str, const char* match);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-time_t mklocaltime(struct tm* t);
-time_t mkgmtime(struct tm* t);
+time_t mklocaltime(std::tm* time);
+time_t mkgmtime(std::tm* time);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
@@ -1092,11 +1093,6 @@ enum grid_type {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
-
-/* bit manipulation functions (util.c) */
-
-char gb_getbit(const void* buf, uint32_t nr);
-void gb_setbit(void* buf, uint32_t nr);
 
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
