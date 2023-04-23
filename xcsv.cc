@@ -29,7 +29,7 @@
 #include <cmath>                   // for fabs, pow
 #include <cstdio>                  // for snprintf, sscanf
 #include <cstdlib>                 // for strtod
-#include <cstring>                 // for strlen, strncmp, strcmp, memset
+#include <cstring>                 // for strlen, strncmp, strcmp
 #include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                // for optional
 
@@ -263,8 +263,7 @@ XcsvFormat::yyyymmdd_to_time(const QString& s)
 time_t
 XcsvFormat::sscanftime(const char* s, const char* format, bool gmt)
 {
-  struct tm stm;
-  memset(&stm, 0, sizeof(stm));
+  std::tm stm{};
 
   if (strptime(s, format, &stm)) {
     if ((stm.tm_mday == 0) && (stm.tm_mon == 0) && (stm.tm_year == 0)) {
@@ -312,7 +311,7 @@ XcsvFormat::addhms(const char* s, const char* format)
 QString
 XcsvFormat::writetime(const char* format, time_t t, bool gmt)
 {
-  static struct tm* stmp;
+  static const std::tm* stmp;
 
   if (gmt) {
     stmp = gmtime(&t);
@@ -338,8 +337,8 @@ XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
 QString
 XcsvFormat::writehms(const char* format, time_t t, bool gmt)
 {
-  static struct tm no_time = tm();
-  static struct tm* stmp = &no_time;
+  static const std::tm no_time{};
+  static const std::tm* stmp = &no_time;
 
   if (gmt) {
     stmp = gmtime(&t);
