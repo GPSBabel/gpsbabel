@@ -24,7 +24,8 @@
 #include "defs.h"
 
 #if CSVFMTS_ENABLED
-#include <algorithm>               // for sort
+#include <algorithm>               // for for_each, sort
+#include <array>                   // for array
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
 #include <cstdio>                  // for NULL, snprintf, sscanf
@@ -32,6 +33,7 @@
 #include <cstdlib>                 // for abs
 #include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
 #include <ctime>                   // for gmtime, localtime, strftime
+#include <utility>                 // for pair, make_pair
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
@@ -116,11 +118,8 @@ inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
   return ret;
 }
 
-static constexpr int kMaxHeaderFields = 36;
-
-static QString header_lines[unknown_header + 1][kMaxHeaderFields];
-static int header_fields[unknown_header + 1][kMaxHeaderFields];
-static int header_ct[unknown_header + 1];
+static std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
+static QStringList header_column_names;
 
 static constexpr double kGarminUnknownAlt = 1.0e25;
 static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
@@ -623,7 +622,7 @@ route_disp_hdr_cb(const route_head* rte)
 
   if (!gtxt_flags.route_header_written) {
     gtxt_flags.route_header_written = 1;
-    *fout << "\r\n\r\nHeader\t" << headers[route_header] << "\r\n";
+    *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n").arg(headers[route_header]);
   }
   print_string("\r\nRoute\t%s\t", rte->rte_name);
   print_distance(cur_info->length, 0, 1, 0);
@@ -634,7 +633,7 @@ route_disp_hdr_cb(const route_head* rte)
   } else {
     print_string("%s\r\n", "");
   }
-  *fout << "\r\nHeader\t" << headers[rtept_header] << "\r\n\r\n";
+  *fout << QStringLiteral("\r\nHeader\t%1\r\n\r\n").arg(headers[rtept_header]);
 }
 
 static void
@@ -677,7 +676,7 @@ track_disp_hdr_cb(const route_head* track)
 
   if (!gtxt_flags.track_header_written) {
     gtxt_flags.track_header_written = 1;
-    *fout << "\r\n\r\nHeader\t" << headers[track_header] << "\r\n";
+    *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n").arg(headers[track_header]);
   }
   print_string("\r\nTrack\t%s\t", track->rte_name);
   print_date_and_time(cur_info->start, 0);
@@ -689,7 +688,7 @@ track_disp_hdr_cb(const route_head* track)
   } else {
     print_string("%s", "");
   }
-  *fout << "\r\n\r\nHeader\t" << headers[trkpt_header] << "\r\n\r\n";
+  *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n\r\n").arg(headers[trkpt_header]);
 }
 
 static void
@@ -834,7 +833,7 @@ garmin_txt_write()
     };
     std::sort(wpt_a, wpt_a + waypoints, sort_waypt_lambda);
 
-    *fout << "Header\t" << headers[waypt_header] << "\r\n\r\n";
+    *fout << QStringLiteral("Header\t%1\r\n\r\n").arg(headers[waypt_header]);
     for (int i = 0; i < waypoints; i++) {
       write_waypt(wpt_a[i]);
     }
@@ -869,13 +868,10 @@ garmin_txt_write()
 /* helpers */
 
 static void
-free_header(const header_type ht)
+free_headers()
 {
-  for (int i = 0; i < kMaxHeaderFields; i++) {
-    header_lines[ht][i].clear();
-  }
-  header_ct[ht] = 0;
-  memset(header_fields[ht], 0, sizeof(header_fields[ht]));
+  std::for_each(header_mapping_info.begin(), header_mapping_info.end(),
+                [](auto& list)->void { list.clear(); });
 }
 
 // Super simple attempt to convert strftime/strptime spec to Qt spec.
@@ -1018,17 +1014,9 @@ parse_temperature(const QString& str, double* temperature)
 static void
 parse_header(const QStringList& lineparts)
 {
-  int column = -1;
-
-  free_header(unknown_header);
-
-  for (const auto& str : lineparts) {
-    column++;
-    header_lines[unknown_header][column] = str.toUpper();
-    header_ct[unknown_header]++;
-    if (header_ct[unknown_header] >= kMaxHeaderFields) {
-      break;
-    }
+  header_column_names.clear();
+  for (const auto& name : lineparts) {
+    header_column_names.append(name.toUpper());
   }
 }
 
@@ -1056,28 +1044,28 @@ bind_fields(const header_type ht)
     fatal(MYNAME ": Incomplete or invalid file header!");
   }
 
-  if (header_ct[unknown_header] <= 0) {
+  if (header_column_names.isEmpty()) {
     return;
   }
-  free_header(ht);
+  header_mapping_info[ht].clear();
 
   /* make a copy of headers[ht], uppercase, split on "\t" */
   const QStringList altheader = headers.at(ht).toUpper().split('\t');
 
-  for (int i = 0; i < header_ct[unknown_header]; i++) {
-    auto name = header_lines[ht][i] = header_lines[unknown_header][i];
-    header_lines[unknown_header][i].clear();
+  int i = -1;
+  for (const auto& name : qAsConst(header_column_names)) {
+    i++;
 
     int field_idx = altheader.indexOf(name);
     if (field_idx >= 0) {
       int field_no = field_idx + 1;
-      header_fields[ht][i] = field_no;
-#if 0
-      printf("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
-#endif
+      header_mapping_info[ht].append(std::make_pair(name, field_no));
+      if (global_opts.debug_level >= 2) {
+        fprintf(stderr, MYNAME ": Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
+      }
     }
   }
-  header_ct[unknown_header] = 0;
+  header_column_names.clear();
 }
 
 static void
@@ -1123,10 +1111,13 @@ parse_waypoint(const QStringList& lineparts)
   wpt->fs.FsChainAdd(gmsd);
 
   for (const auto& str : lineparts) {
-    column++;
+    if (++column >= header_mapping_info[waypt_header].size()) {
+      warning(MYNAME ": too many fields in Waypoint record!\n");
+      break;
+    }
     int i;
     double d;
-    int field_no = header_fields[waypt_header][column];
+    const auto& [name, field_no] = header_mapping_info[waypt_header].at(column);
 
     switch (field_no) {
     case  1:
@@ -1226,8 +1217,11 @@ parse_route_header(const QStringList& lineparts)
 
   bind_fields(route_header);
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[route_header][column];
+    if (++column >= header_mapping_info[route_header].size()) {
+      warning(MYNAME ": too many fields in Route record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[route_header].at(column);
     switch (field_no) {
     case 1:
       if (!str.isEmpty()) {
@@ -1251,8 +1245,11 @@ parse_track_header(const QStringList& lineparts)
   bind_fields(track_header);
   auto* trk = new route_head;
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[track_header][column];
+    if (++column >= header_mapping_info[track_header].size()) {
+      warning(MYNAME ": too many fields in Track record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[track_header].at(column);
     switch (field_no) {
     case 1:
       if (!str.isEmpty()) {
@@ -1278,8 +1275,11 @@ parse_route_waypoint(const QStringList& lineparts)
   bind_fields(rtept_header);
 
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[rtept_header][column];
+    if (++column >= header_mapping_info[rtept_header].size()) {
+      warning(MYNAME ": too many fields in Route Waypoint record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[rtept_header].at(column);
     switch (field_no) {
     case 1:
       if (str.isEmpty()) {
@@ -1307,14 +1307,18 @@ parse_track_waypoint(const QStringList& lineparts)
   auto* wpt = new Waypoint;
 
   for (const auto& str : lineparts) {
-    column++;
+    if (++column >= header_mapping_info[trkpt_header].size()) {
+      warning(MYNAME ": too many fields in Trackpoint record!\n");
+      break;
+    }
     double x;
 
     if (str.isEmpty()) {
       continue;
     }
 
-    int field_no = header_fields[trkpt_header][column];
+    const auto& [name, field_no] = header_mapping_info[trkpt_header].at(column);
+
     switch (field_no) {
     case 1:
       parse_coordinates(str, datum_index, grid_index,
@@ -1364,7 +1368,9 @@ garmin_txt_rd_init(const QString& fname)
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, "windows-1252");
-  memset(&header_ct, 0, sizeof(header_ct));
+
+  free_headers();
+  header_column_names.clear();
 
   datum_index = -1;
   grid_index = (grid_type) -1;
@@ -1375,9 +1381,8 @@ garmin_txt_rd_init(const QString& fname)
 static void
 garmin_txt_rd_deinit()
 {
-  for (header_type h = waypt_header; h <= unknown_header; ++h) {
-    free_header(h);
-  }
+  free_headers();
+  header_column_names.clear();
   fin->close();
   delete fin;
   fin = nullptr;
