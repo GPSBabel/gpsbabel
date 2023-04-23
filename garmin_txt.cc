@@ -126,7 +126,8 @@ static constexpr double kGarminUnknownAlt = 1.0e25;
 static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
 static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
-static inline bool is_valid_alt(double alt) {
+static inline bool is_valid_alt(double alt)
+{
   return (alt != unknown_alt) && (alt < kGarminUnknownAlt);
 }
 
@@ -151,8 +152,9 @@ QVector<arglist_t> garmin_txt_args = {
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
 };
 
-class PathInfo {
- public:
+class PathInfo
+{
+public:
   double length {0};
   time_t start {0};
   time_t time {0};
@@ -824,7 +826,7 @@ garmin_txt_write()
 
   if (waypoints > 0) {
     wpt_a_ct = 0;
-    wpt_a = new const Waypoint*[waypoints]{};
+    wpt_a = new const Waypoint*[waypoints] {};
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(nullptr, nullptr, enum_waypt_cb);
     auto sort_waypt_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
@@ -891,21 +893,51 @@ strftime_to_timespec(const char* s)
     case '%':
       if (i < l-1) {
         switch (s[++i]) {
-        case 'd': q += "dd"; continue;
-        case 'm': q += "MM"; continue ;
-        case 'y': q += "yy"; continue ;
-        case 'Y': q += "yyyy"; continue ;
-        case 'H': q += "hh"; continue ;
-        case 'M': q += "mm"; continue ;
-        case 'S': q += "ss"; continue ;
-        case 'A': q += "dddd"; continue ;
-        case 'a': q += "ddd"; continue ;
-        case 'B': q += "MMMM"; continue ;
-        case 'C': q += "yy"; continue ;
-        case 'D': q += "MM/dd/yyyy"; continue ;
-        case 'T': q += "hh:mm:ss"; continue ;
-        case 'F': q += "yyyy-MM-dd"; continue ;
-        default: q += s[i+1]; break ;
+        case 'd':
+          q += "dd";
+          continue;
+        case 'm':
+          q += "MM";
+          continue;
+        case 'y':
+          q += "yy";
+          continue;
+        case 'Y':
+          q += "yyyy";
+          continue;
+        case 'H':
+          q += "hh";
+          continue;
+        case 'M':
+          q += "mm";
+          continue;
+        case 'S':
+          q += "ss";
+          continue;
+        case 'A':
+          q += "dddd";
+          continue;
+        case 'a':
+          q += "ddd";
+          continue;
+        case 'B':
+          q += "MMMM";
+          continue;
+        case 'C':
+          q += "yy";
+          continue;
+        case 'D':
+          q += "MM/dd/yyyy";
+          continue;
+        case 'T':
+          q += "hh:mm:ss";
+          continue;
+        case 'F':
+          q += "yyyy-MM-dd";
+          continue;
+        default:
+          q += s[i+1];
+          break;
         }
       }
       break;
@@ -1038,10 +1070,10 @@ bind_fields(const header_type ht)
 
     int field_idx = altheader.indexOf(name);
     if (field_idx >= 0) {
-        int field_no = field_idx + 1;
-        header_fields[ht][i] = field_no;
+      int field_no = field_idx + 1;
+      header_fields[ht][i] = field_no;
 #if 0
-        printf("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
+      printf("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
 #endif
     }
   }
