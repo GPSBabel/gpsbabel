@@ -51,8 +51,8 @@ public:
 
 /* internal procedures */
 
-constexpr char GPSBABEL_INIFILE[] = "gpsbabel.ini";
-constexpr char GPSBABEL_SUBDIR[] = ".gpsbabel";
+static constexpr char GPSBABEL_INIFILE[] = "gpsbabel.ini";
+static constexpr char GPSBABEL_SUBDIR[] = ".gpsbabel";
 
 
 static QString
