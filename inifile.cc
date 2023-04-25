@@ -34,6 +34,11 @@
 
 #define MYNAME "inifile"
 
+struct inifile_t {
+  QHash<QString, InifileSection> sections;
+  QString source;
+};
+
 class InifileSection
 {
 public:
@@ -46,8 +51,8 @@ public:
 
 /* internal procedures */
 
-#define GPSBABEL_INIFILE "gpsbabel.ini"
-#define GPSBABEL_SUBDIR ".gpsbabel"
+static constexpr char GPSBABEL_INIFILE[] = "gpsbabel.ini";
+static constexpr char GPSBABEL_SUBDIR[] = ".gpsbabel";
 
 
 static QString
