@@ -33,25 +33,6 @@
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
 
-#define TRACKFILTER_PACK_OPTION		"pack"
-#define TRACKFILTER_SPLIT_OPTION	"split"
-#define TRACKFILTER_SDIST_OPTION	"sdistance"
-#define TRACKFILTER_TITLE_OPTION	"title"
-#define TRACKFILTER_MERGE_OPTION	"merge"
-#define TRACKFILTER_NAME_OPTION		"name"
-#define TRACKFILTER_STOP_OPTION		"stop"
-#define TRACKFILTER_START_OPTION	"start"
-#define TRACKFILTER_MOVE_OPTION		"move"
-#define TRACKFILTER_FIX_OPTION          "fix"
-#define TRACKFILTER_COURSE_OPTION       "course"
-#define TRACKFILTER_SPEED_OPTION        "speed"
-#define TRACKFILTER_SEG2TRK_OPTION      "seg2trk"
-#define TRACKFILTER_TRK2SEG_OPTION      "trk2seg"
-#define TRACKFILTER_SEGMENT_OPTION      "segment"
-#define TRACKFILTER_FAKETIME_OPTION     "faketime"
-#define TRACKFILTER_DISCARD_OPTION      "discard"
-#define TRACKFILTER_MINPOINTS_OPTION    "minimum_points"
-
 class TrackFilter:public Filter
 {
 public:
@@ -64,6 +45,66 @@ public:
   void deinit() override;
 
 private:
+
+  /* Types */
+
+  struct faketime_t {
+    QDateTime start;
+    long long step{0};
+    bool force{false};
+  };
+
+  /* Constants */
+
+  static constexpr char TRACKFILTER_PACK_OPTION[] = "pack";
+  static constexpr char TRACKFILTER_SPLIT_OPTION[] = "split";
+  static constexpr char TRACKFILTER_SDIST_OPTION[] = "sdistance";
+  static constexpr char TRACKFILTER_TITLE_OPTION[] = "title";
+  static constexpr char TRACKFILTER_MERGE_OPTION[] = "merge";
+  static constexpr char TRACKFILTER_NAME_OPTION[] = "name";
+  static constexpr char TRACKFILTER_STOP_OPTION[] = "stop";
+  static constexpr char TRACKFILTER_START_OPTION[] = "start";
+  static constexpr char TRACKFILTER_MOVE_OPTION[] = "move";
+  static constexpr char TRACKFILTER_FIX_OPTION[] = "fix";
+  static constexpr char TRACKFILTER_COURSE_OPTION[] = "course";
+  static constexpr char TRACKFILTER_SPEED_OPTION[] = "speed";
+  static constexpr char TRACKFILTER_SEG2TRK_OPTION[] = "seg2trk";
+  static constexpr char TRACKFILTER_TRK2SEG_OPTION[] = "trk2seg";
+  static constexpr char TRACKFILTER_SEGMENT_OPTION[] = "segment";
+  static constexpr char TRACKFILTER_FAKETIME_OPTION[] = "faketime";
+  static constexpr char TRACKFILTER_DISCARD_OPTION[] = "discard";
+  static constexpr char TRACKFILTER_MINPOINTS_OPTION[] = "minimum_points";
+
+  /* Member Functions */
+
+  int trackfilter_opt_count();
+  static qint64 trackfilter_parse_time_opt(const char* arg);
+  static bool trackfilter_init_sort_cb(const route_head* ha, const route_head* hb);
+  static bool trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb);
+  fix_type trackfilter_parse_fix(int* nsats);
+  static QDateTime trackfilter_get_first_time(const route_head* track);
+  static QDateTime trackfilter_get_last_time(const route_head* track);
+  void trackfilter_fill_track_list_cb(const route_head* track);
+  void trackfilter_minpoint_list_cb(const route_head* track);
+  void trackfilter_split_init_rte_name(route_head* track, const gpsbabel::DateTime& dt);
+  void trackfilter_pack_init_rte_name(route_head* track, const gpsbabel::DateTime& default_time);
+  void trackfilter_title();
+  void trackfilter_pack();
+  void trackfilter_merge();
+  void trackfilter_split();
+  void trackfilter_move();
+  void trackfilter_synth();
+  static QDateTime trackfilter_range_check(const char* timestr);
+  void trackfilter_range();
+  void trackfilter_seg2trk();
+  void trackfilter_trk2seg();
+  static faketime_t trackfilter_faketime_check(const char* timestr);
+  void trackfilter_faketime();
+  static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
+  static void trackfilter_segment_head(const route_head* rte);
+
+  /* Data Members */
+
   char* opt_merge = nullptr;
   char* opt_pack = nullptr;
   char* opt_split = nullptr;
@@ -91,7 +132,7 @@ private:
       ARG_NOMINMAX, nullptr
     },
     {
-      TRACKFILTER_PACK_OPTION,  &opt_pack,
+      TRACKFILTER_PACK_OPTION, &opt_pack,
       "Pack all tracks into one", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
@@ -162,7 +203,7 @@ private:
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      TRACKFILTER_DISCARD_OPTION,  &opt_discard,
+      TRACKFILTER_DISCARD_OPTION, &opt_discard,
       "Discard track points without timestamps during merge",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
@@ -177,50 +218,6 @@ private:
   int opt_interval = 0;
   int opt_distance = 0;
   bool need_time{};		/* initialized within trackfilter_init */
-
-  int trackfilter_opt_count();
-  static qint64 trackfilter_parse_time_opt(const char* arg);
-  static bool trackfilter_init_sort_cb(const route_head* ha, const route_head* hb);
-  static bool trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb);
-  fix_type trackfilter_parse_fix(int* nsats);
-  static QDateTime trackfilter_get_first_time(const route_head* track);
-  static QDateTime trackfilter_get_last_time(const route_head* track);
-  void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
-  void trackfilter_minpoint_list_cb(const route_head* track);
-
-  void trackfilter_split_init_rte_name(route_head* track, const gpsbabel::DateTime& dt);
-  void trackfilter_pack_init_rte_name(route_head* track, const gpsbabel::DateTime& default_time);
-
-  void trackfilter_title();
-
-  void trackfilter_pack();
-
-  void trackfilter_merge();
-
-  void trackfilter_split();
-
-  void trackfilter_move();
-
-  void trackfilter_synth();
-
-  static QDateTime trackfilter_range_check(const char* timestr);
-  void trackfilter_range();
-
-  void trackfilter_seg2trk();
-
-  void trackfilter_trk2seg();
-
-  struct faketime_t {
-    QDateTime start;
-    long long step{0};
-    bool   force{false};
-  };
-
-  static faketime_t trackfilter_faketime_check(const char* timestr);
-  void trackfilter_faketime();             /* returns number of track points left after filtering */
-  static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
-
-  static void trackfilter_segment_head(const route_head* rte);
 
 };
 

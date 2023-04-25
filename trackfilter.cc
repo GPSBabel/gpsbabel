@@ -165,7 +165,7 @@ fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
 QDateTime TrackFilter::trackfilter_get_first_time(const route_head* track)
 {
   if (track->waypoint_list.empty()) {
-    return QDateTime();
+    return {};
   } else {
     return track->waypoint_list.front()->GetCreationTime();
   }
@@ -174,7 +174,7 @@ QDateTime TrackFilter::trackfilter_get_first_time(const route_head* track)
 QDateTime TrackFilter::trackfilter_get_last_time(const route_head* track)
 {
   if (track->waypoint_list.empty()) {
-    return QDateTime();
+    return {};
   } else {
     return track->waypoint_list.back()->GetCreationTime();
   }
