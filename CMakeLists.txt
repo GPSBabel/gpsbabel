@@ -310,7 +310,7 @@ endif()
 if(MSVC)
   target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
   target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
-  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267 -wd5030)
 endif()
 
 if(APPLE)
