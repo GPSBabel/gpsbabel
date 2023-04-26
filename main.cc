@@ -492,6 +492,12 @@ run(const char* prog_name)
         if(sizeof(kVersionSHA) > 1) {
           warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
         }
+        if(sizeof(kVersionDate) > 1) {
+          QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+          if (date.isValid()) {
+            warning(MYNAME ": Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+          }
+        }
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
