@@ -1021,7 +1021,7 @@ int str_match(const char* str, const char* match);
 [[gnu::format(printf, 2, 3)]] int xasprintf(char** strp, const char* fmt, ...);
 [[gnu::format(printf, 2, 3)]] int xasprintf(QString* strp, const char* fmt, ...);
 [[gnu::format(printf, 2, 3)]] int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...);
-int xvasprintf(char** strp, const char* fmt, va_list ap);
+[[gnu::format(printf, 2, 0)]] int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
 time_t mklocaltime(std::tm* time);
