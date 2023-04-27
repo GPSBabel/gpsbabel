@@ -1107,10 +1107,6 @@ GdbFormat::reset_short_handle(const char* defname)
 void
 GdbFormat::write_header()
 {
-   /* This is our "Watermark" to show this file was created by GPSbabel */
-   /* This used to be from CVS, and may be from git in the future */
-  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
-
   FWRITE("MsRc", 4); // Signature
   FWRITE_i16(0x66);  // Primary File Format
 
@@ -1121,9 +1117,16 @@ GdbFormat::write_header()
   gbfile* fsave = fout;
   fout = ftmp;
   FWRITE_i16(605); // program version 6.5 -> 6*100 + 5
+
+   /*
+    * This is our "Watermark" to show this file was created by GPSbabel.
+    * The date/time used to be from CVS, and may be from git in the future.
+    */
+  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
   gdb_write_cstr(gdb_release_dt.toString("MMM dd yyyy"));
   gdb_write_cstr(gdb_release_dt.toString("HH:mm:ss"));
+
   finalize_item(fsave, 'A');
 
   gdb_write_cstr(u"MapSource");		/* MapSource magic */
