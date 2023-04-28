@@ -23,8 +23,9 @@
 
 /* Based on description at http://wiki.splitbrain.org/navilink */
 
-#include <ctime>                   // for gmtime, time_t
+#include <cstdio>                  // for fprintf, stderr
 #include <cstring>                 // for memcpy, memset, strncpy
+#include <ctime>                   // for gmtime, time_t
 
 #include <QByteArray>              // for QByteArray
 #include <QDate>                   // for QDate
@@ -33,7 +34,7 @@
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
 #include <QVector>                 // for QVector
-#include <QtCore>                  // for qPrintable, UTC
+#include <QtCore>                  // for qRound, qPrintable, UTC
 
 #include "defs.h"
 #include "navilink.h"
@@ -389,9 +390,9 @@ decode_position(const unsigned char* buffer, Waypoint* waypt)
 static void
 encode_position(const Waypoint* waypt, unsigned char* buffer)
 {
-  le_write32(buffer + 0, (int)(waypt->latitude * 10000000));
-  le_write32(buffer + 4, (int)(waypt->longitude * 10000000));
-  le_write16(buffer + 8, METERS_TO_FEET(waypt->altitude));
+  le_write32(buffer + 0, qRound(waypt->latitude * 10000000));
+  le_write32(buffer + 4, qRound(waypt->longitude * 10000000));
+  le_write16(buffer + 8, qRound(METERS_TO_FEET(waypt->altitude)));
 }
 
 static unsigned
@@ -460,13 +461,13 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
   GPS_Math_WGS84_To_UTM_EN(waypt->latitude, waypt->longitude, &x, &y, &z, &zc);
 
   le_write16(buffer + 0, serial);
-  le_write16(buffer + 2, waypt->course_value_or(0));
-  le_write32(buffer + 4, x);
-  le_write32(buffer + 8, y);
+  le_write16(buffer + 2, qRound(waypt->course_value_or(0)));
+  le_write32(buffer + 4, qRound(x));
+  le_write32(buffer + 8, qRound(y));
   encode_position(waypt, buffer + 12);
   encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
   buffer[28] = z;
-  buffer[29] = MPS_TO_KPH(waypt->speed_value_or(0) / 2);
+  buffer[29] = qRound(MPS_TO_KPH(waypt->speed_value_or(0) / 2));
   buffer[30] = 0x5a;
   buffer[31] = 0x7e;
 }
