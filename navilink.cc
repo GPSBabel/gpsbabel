@@ -365,15 +365,18 @@ decode_datetime(const unsigned char* buffer)
 }
 
 static void
-encode_datetime(time_t datetime, unsigned char* buffer)
+encode_datetime(const QDateTime& datetime, unsigned char* buffer)
 {
-  if (std::tm* tm = gmtime(&datetime); tm != nullptr) {
-    buffer[0] = tm->tm_year - 100;
-    buffer[1] = tm->tm_mon + 1;
-    buffer[2] = tm->tm_mday;
-    buffer[3] = tm->tm_hour;
-    buffer[4] = tm->tm_min;
-    buffer[5] = tm->tm_sec;
+  if (datetime.isValid()) {
+    QDateTime dt = datetime.toUTC();
+    QDate date = dt.date();
+    QTime time = dt.time();
+    buffer[0] = date.year() - 2000;
+    buffer[1] = date.month();
+    buffer[2] = date.day();
+    buffer[3] = time.hour();
+    buffer[4] = time.minute();
+    buffer[5] = time.second();
   } else {
     memset(buffer, 0, 6);
   }
@@ -430,7 +433,7 @@ encode_waypoint(const Waypoint* waypt, unsigned char* buffer)
   buffer[10] = 0;
   buffer[11] = 0;
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = find_icon_from_descr(waypt->icon_descr);
   buffer[29] = 0;
   buffer[30] = 0x00;
@@ -465,7 +468,7 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
   le_write32(buffer + 4, qRound(x));
   le_write32(buffer + 8, qRound(y));
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = z;
   buffer[29] = qRound(MPS_TO_KPH(waypt->speed_value_or(0) / 2));
   buffer[30] = 0x5a;
