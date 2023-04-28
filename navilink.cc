@@ -1089,7 +1089,7 @@ navilink_common_init(const QString& name)
     write_route_point = serial_write_route_point;
     write_route_end = serial_write_route_end;
   } else {
-    const char* mode = operation == READING ? "r" : "w+";
+    const char* mode = operation == READING ? "r" : "wb";
     file_handle = gbfopen(name, mode, MYNAME);
 
     write_waypoint = file_write_waypoint;
