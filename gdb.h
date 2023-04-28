@@ -78,9 +78,6 @@ private:
 
   static constexpr int kGDBNameBufferLen = 1024;
 
-  /* static constexpr char gdb_release[] = "$Revision: 1.74 $"; */
-  static constexpr char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
-
   /* Member Functions */
 
   static void gdb_flush_waypt_queue(QList<Waypoint*>* Q);
@@ -101,7 +98,7 @@ private:
   route_head* read_route();
   route_head* read_track();
   void reset_short_handle(const char* defname);
-  void write_header() const;
+  void write_header();
   static void gdb_check_waypt(Waypoint* wpt);
   void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);
