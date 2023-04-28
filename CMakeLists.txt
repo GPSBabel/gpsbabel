@@ -74,7 +74,6 @@ set(MINIMAL_FMTS
   gpx.cc
   kml.cc
   nmea.cc
-  wbt-200.cc
 )
 
 # ALL_FMTS

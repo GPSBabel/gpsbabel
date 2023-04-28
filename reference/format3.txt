@@ -722,11 +722,3 @@ file	-w----	vcard	vcf	Vcard Output (for iPod)	vcard
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html
 option	vcard	encrypt	Encrypt hints using ROT13	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html#fmt_vcard_o_encrypt
 
-file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format	wbt-bin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-bin.html
-serial	r-r---	wbt		Wintec WBT-100/200 GPS Download	wbt
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html
-option	wbt	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html#fmt_wbt_o_erase
-
-file	--r---	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format	wbt-tk1
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-tk1.html
