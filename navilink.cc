@@ -25,7 +25,6 @@
 
 #include <cstdio>                  // for fprintf, stderr
 #include <cstring>                 // for memcpy, memset, strncpy
-#include <ctime>                   // for gmtime, time_t
 
 #include <QByteArray>              // for QByteArray
 #include <QDate>                   // for QDate
@@ -784,7 +783,7 @@ decode_sbp_msec(const unsigned char* buffer)
   return (msec % 1000);
 }
 
-static time_t
+static QDateTime
 decode_sbp_datetime_packed(const unsigned char* buffer)
 {
   /*
@@ -801,17 +800,15 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
    * SSSSSSMM MMMMHHHH Hdddddmm mmmmmmmm
    */
 
-  std::tm tm{};
-
-  tm.tm_sec = buffer[0] & 0x3F;
-  tm.tm_min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
-  tm.tm_hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
-  tm.tm_mday = (buffer[2] & 0x3E) >> 1;
+  int sec = buffer[0] & 0x3F;
+  int min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
+  int hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
+  int mday = (buffer[2] & 0x3E) >> 1;
   int months = ((buffer[2] & 0xC0) >> 6) | buffer[3] << 2;
-  tm.tm_mon = months % 12 - 1;
-  tm.tm_year = 100 + months / 12;
+  int mon = months % 12;
+  int year = 2000 + months / 12;
 
-  return mkgmtime(&tm);
+  return {QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC};
 }
 
 static void
@@ -829,8 +826,8 @@ navilink_decode_logpoint(const unsigned char* buffer)
 
   waypt->hdop = (buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
-  waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4),
-                         decode_sbp_msec(buffer + 2));
+  waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4)
+                         .addMSecs(decode_sbp_msec(buffer + 2)));
   decode_sbp_position(buffer + 12, waypt);
   waypt->set_speed(le_read16(buffer + 24) * 0.01f);
   waypt->set_course(le_read16(buffer + 26) * 0.01f);
@@ -888,8 +885,8 @@ read_datalog_records(route_head* track,
   /* The protocol only supports reading 256 logpoints at once, so
    * read small chunks until none left. */
   while (len > 0) {
-  unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
-  unsigned int   logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
+    unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
+    unsigned int   logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
 
     le_write32(payload, start_addr);
     le_write16(payload + 4, logpoints_len);
