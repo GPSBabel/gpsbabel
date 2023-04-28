@@ -26,27 +26,29 @@
 
 #include "gdb.h"
 
-#include <QByteArray>              // for QByteArray, operator==
-#include <QList>                   // for QList<>::const_iterator, QList
-#include <QString>                 // for QString, operator!=, operator==
-#include <Qt>                      // for CaseInsensitive
-#include <QtGlobal>                // for Q_UNUSED, qPrintable, foreach
+#include <QByteArray>               // for QByteArray, operator==
+#include <QDate>                    // for QDate
+#include <QDateTime>                // for QDateTime
+#include <QList>                    // for QList<>::const_iterator, QList
+#include <QString>                  // for QString, operator!=, operator==
+#include <QTime>                    // for QTime
+#include <Qt>                       // for CaseInsensitive
+#include <QtGlobal>                 // for Q_UNUSED, qPrintable, foreach
 
-#include <cmath>                   // for fabs
-#include <cstdio>                  // for printf, snprintf, sscanf, SEEK_SET
-#include <cstdlib>                 // for strtol
-#include <cstring>                 // for memset, strstr, strchr, strcmp, strlen, strncpy
-#include <ctime>                   // for strftime, tm
-#include <iterator>                // for next
+#include <cmath>                    // for fabs
+#include <cstdio>                   // for printf, SEEK_SET
+#include <cstdlib>                  // for strtol
+#include <cstring>                  // for memset, strstr, strcmp
+#include <iterator>                 // for next
 
-#include "defs.h"                  // for Waypoint, warning, fatal, route_head, UrlLink, bounds, mkshort, UrlList, unknown_alt, wp_flags, xfree, waypt_add_to_bounds, waypt_init_bounds, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, WAYPT_GET, WAYPT_SET, gb_color
-#include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
-#include "garmin_tables.h"         // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
-#include "gbfile.h"                // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfile, gbfputcstr, gbfcopyfrom, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl, gbfputint16
-#include "grtcirc.h"               // for RAD, gcdist, radtometers
-#include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
-#include "src/core/datetime.h"     // for DateTime
+#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, mkshort, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
+#include "formspec.h"               // for FormatSpecificDataList
+#include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
+#include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
+#include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfputint16, gbfile, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl
+#include "grtcirc.h"                // for RAD, gcdist, radtometers
+#include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "src/core/datetime.h"      // for DateTime
 
 
 #define MYNAME "gdb"
@@ -1103,12 +1105,8 @@ GdbFormat::reset_short_handle(const char* defname)
 /* ----------------------------------------------------------------------------*/
 
 void
-GdbFormat::write_header() const
+GdbFormat::write_header()
 {
-  char buff[128], tbuff[32];
-  char* c;
-  int len, n = 0;
-
   FWRITE("MsRc", 4); // Signature
   FWRITE_i16(0x66);  // Primary File Format
 
@@ -1116,59 +1114,21 @@ GdbFormat::write_header() const
   FWRITE_C('D');     // Record Type
   FWRITE_i16(gdb_ver + 0x6a); // File Format
 
-#if 0
-  /* Take this if anything is wrong with our self generated watermark */
-  strncpy(buff, "A].SQA*Dec 27 2004*17:40:51", sizeof(buff));	/* MapSource V6.5 */
-#else
-  /* This is our "Watermark" to show this file was created by GPSbabel */
+  gbfile* fsave = fout;
+  fout = ftmp;
+  FWRITE_i16(605); // program version 6.5 -> 6*100 + 5
 
-  /* history:
+   /*
+    * This is our "Watermark" to show this file was created by GPSbabel.
+    * The date/time used to be from CVS, and may be from git in the future.
+    */
+  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
+  gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
+  gdb_write_cstr(gdb_release_dt.toString("MMM dd yyyy"));
+  gdb_write_cstr(gdb_release_dt.toString("HH:mm:ss"));
 
-  "A].GPSBabel_1.2.7-beta*Sep 13 2005*20:10:00" - gpsbabel V1.2.7 BETA
-  "A].GPSBabel_1.2.8-beta*Jan 18 2006*20:11:00" - gpsbabel 1.2.8-beta01182006_clyde
-  "A].GPSBabel_1.2.8-beta*Apr 18 2006*20:12:00" - gpsbabel 1.2.8-beta20060405
-  "A].GPSBabel-1.3*Jul 02 2006*20:13:00" -        gpsbabel 1.3.0
-  "A].GPSBabel-1.3.1*Sep 03 2006*20:14:00" -      gpsbabel 1.3.1
-  "A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2
+  finalize_item(fsave, 'A');
 
-  New since 11/01/2006:
-  version:   version and release of gpsbabel (defined in configure.ac)
-  timestamp: date and time of gdb.c (handled by CVS)
-
-  "A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2
-  "A].GPSBabel-beta20061125*Feb 06 2007*23:24:14" gpsbabel beta20061125
-  "A].GPSBabel-1.3.3*Feb 20 2007*20:51:15" -      gpsbabel 1.3.3
-
-  */
-
-  std::tm tm{};
-  n = sscanf(gdb_release_date+7, "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
-  if (n != 6) {
-    // The $Date string in gdb_release_date[] above is bad.
-    fatal(MYNAME ": internal date format error on %s\n", gdb_release_date + 7);
-  }
-
-  tm.tm_year -= 1900;
-  tm.tm_mon -= 1;
-
-  n = strftime(tbuff, sizeof(tbuff), "%b %d %Y*%H:%M:%S", &tm);
-  if (n == 0) {
-    // The build of the std::tm was bad.
-    fatal(MYNAME ": internal date generation error for %s\n", gdb_release_date + 7);
-  }
-
-  snprintf(buff, sizeof(buff), "A].GPSBabel-%s*%s", gpsbabel_version, tbuff);
-#endif
-  len = strlen(buff);
-  buff[2] = 2;
-
-  c = buff;
-  while ((c = strchr(c, '*'))) {
-    *c++ = '\0';
-  }
-
-  FWRITE_i32(len);
-  FWRITE(buff, len + 1);
   gdb_write_cstr(u"MapSource");		/* MapSource magic */
 }
 
