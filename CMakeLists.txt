@@ -79,7 +79,6 @@ set(MINIMAL_FMTS
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  brauniger_iq.cc
   dg-100.cc
   exif.cc
   garmin_fit.cc

@@ -79,7 +79,6 @@ extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
@@ -136,7 +135,6 @@ struct Vecs::Impl {
   TextFormat text_fmt;
   HtmlFormat html_fmt;
   IgcFormat igc_fmt;
-  LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
   LegacyFormat mtk_ffmt {mtk_fvecs};
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
