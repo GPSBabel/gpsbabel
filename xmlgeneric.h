@@ -22,8 +22,14 @@
 #ifndef XMLGENERIC_H_INCLUDED_
 #define XMLGENERIC_H_INCLUDED_
 
-#include <QString>                      // for QString
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <cassert>               // for assert
+
+#include <QList>                 // for QList
+#include <QRegularExpression>    // for QRegularExpression
+#include <QString>               // for QString
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtGlobal>              // for qAsConst
+
 
 // Maybe the XmlGeneric string callback really shouldn't have a type
 // of its own; this was a crutch during the move from char* to QString.
@@ -87,7 +93,7 @@ private:
 struct xg_tag_map_entry {
   XgCallbackBase* tag_cb;
   xg_cb_type cb_type;
-  const char* tag_name;
+  QRegularExpression tag_re;
 };
 
 // Table generation from an array containing function pointers.
@@ -98,7 +104,7 @@ using xg_callback = void (xg_string, const QXmlStreamAttributes*);
 struct xg_tag_mapping {
   xg_callback* tag_cb;
   xg_cb_type cb_type;
-  const char* tag_name;
+  const char* tag_pattern;
 };
 
 // Table generation from a list containing member function pointers.
@@ -108,7 +114,7 @@ struct xg_functor_map_entry {
   using XgCb = void (MyFormat::*)(xg_string, const QXmlStreamAttributes*);
   XgCb tag_cb;
   xg_cb_type cb_type;
-  const char* tag_name;
+  const char* tag_pattern;
 };
 
 template<class MyFormat, typename my_functor_map_entry>
@@ -117,7 +123,9 @@ QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<my_fun
   auto* tag_tbl = new QList<xg_tag_map_entry>;
   for (const auto& entry : qAsConst(map)) {
     auto* tag_cb = new XgFunctor<MyFormat>(instance, entry.tag_cb);
-    tag_tbl->append({tag_cb, entry.cb_type, entry.tag_name});
+    QRegularExpression re(QRegularExpression::anchoredPattern(entry.tag_pattern));
+    assert(re.isValid());
+    tag_tbl->append({tag_cb, entry.cb_type, re});
   }
   return tag_tbl;
 }
@@ -135,7 +143,7 @@ QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<my_fun
  *    attempt to free the table resources when xml_deinit is called.
  *
  * 2. Have xml_init build and own a table of XgFunctionPtrCallback entries
- *    from an array of function pointers, i.e. a xg_tag_mapping array.
+ *    from an list of function pointers, i.e. a QList of xg_tag_mapping elements.
  *    This only works when all callbacks are function pointers.
  *    xml_init(fname, tbl, encoding, ignorelist, skiplist);
  *    Generated table entries will automatically be freed.
@@ -151,7 +159,7 @@ QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<my_fun
 void xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
               const char* const* ignorelist = nullptr,
               const char* const* skiplist = nullptr, bool dynamic_tbl = false);
-void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding,
+void xml_init(const QString& fname, const QList<xg_tag_mapping>& tbl,const char* encoding,
               const char* const* ignorelist = nullptr,
               const char* const* skiplist = nullptr);
 void xml_read();

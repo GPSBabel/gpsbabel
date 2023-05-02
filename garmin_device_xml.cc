@@ -113,7 +113,7 @@ void dir_s(xg_string args, const QXmlStreamAttributes*)
   path = nullptr;
 }
 
-static xg_tag_mapping gdx_map[] = {
+static QList<xg_tag_mapping> gdx_map = {
   { device_s, cb_cdata, "/Device/Model/Description" },
   { id_s, cb_cdata, "/Device/Id" },
   { path_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/Path" },
@@ -121,7 +121,6 @@ static xg_tag_mapping gdx_map[] = {
   { ext_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/FileExtension" },
   { base_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/BaseName" },
   { dir_s, cb_cdata, "/Device/MassStorageMode/DataType/File/TransferDirection" },
-  { nullptr, (xg_cb_type) 0, nullptr }
 };
 
 const gdx_info*
