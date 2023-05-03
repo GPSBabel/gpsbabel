@@ -349,14 +349,10 @@ private:
     {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/(.+/)?gx:Track"},
     {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/(.+/)?gx:Track/when"},
     {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/(.+/)?gx:Track/gx:coord"},
-    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/Track/when"}, // KML 2.3
-    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/Track/coord"}, // KML 2.3
-    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/MultiTrack/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/MultiTrack/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/MultiTrack/Track/when"}, // KML 2.3
-    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/MultiTrack/Track/coord"} // KML 2.3
+    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/(.+/)?Track"}, // KML 2.3
+    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/(.+/)?Track"}, // KML 2.3
+    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/(.+/)?Track/when"}, // KML 2.3
+    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/(.+/)?Track/coord"}, // KML 2.3
   };
 
   // The TimeSpan/begin and TimeSpan/end DateTimes:
