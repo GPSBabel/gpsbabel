@@ -41,7 +41,7 @@ enum xg_shortcut {
   xg_shortcut_ignore
 };
 
-static QList<xg_tag_map_entry>* xg_tag_tbl;
+static const QList<xg_tag_map_entry>* xg_tag_tbl;
 static bool dynamic_tag_tbl;
 static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
 
@@ -66,7 +66,7 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
 static XgCallbackBase*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
-  for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+  for (const auto& tm : *xg_tag_tbl) {
     if (cb_type == tm.cb_type) {
       QRegularExpressionMatch match = tm.tag_re.match(tag);
       if (match.hasMatch()) {
@@ -105,7 +105,7 @@ xml_common_init(const QString& fname, const char* encoding,
 }
 
 void
-xml_init(const QString& fname, QList<xg_tag_map_entry>* tbl, const char* encoding,
+xml_init(const QString& fname, const QList<xg_tag_map_entry>* tbl, const char* encoding,
          const char* const* ignorelist, const char* const* skiplist, bool dynamic_tbl)
 {
   xg_tag_tbl = tbl;
@@ -118,14 +118,15 @@ void
 xml_init(const QString& fname, const QList<xg_tag_mapping>& tbl, const char* encoding,
          const char* const* ignorelist, const char* const* skiplist)
 {
-  xg_tag_tbl = new QList<xg_tag_map_entry>;
+  auto* tag_tbl = new QList<xg_tag_map_entry>;
   dynamic_tag_tbl = true;
   for (const auto& tm : tbl) {
     auto* cb = new XgFunctionPtrCallback(tm.tag_cb);
     QRegularExpression re(QRegularExpression::anchoredPattern(tm.tag_pattern));
     assert(re.isValid());
-    xg_tag_tbl->append({cb, tm.cb_type, re});
+    tag_tbl->append({cb, tm.cb_type, re});
   }
+  xg_tag_tbl = tag_tbl;
 
   xml_common_init(fname, encoding, ignorelist, skiplist);
 }
@@ -134,7 +135,7 @@ void
 xml_deinit()
 {
   if (dynamic_tag_tbl) {
-    for (const auto& tm : qAsConst(*xg_tag_tbl)) {
+    for (const auto& tm : *xg_tag_tbl) {
       delete tm.tag_cb;
     }
     delete xg_tag_tbl;
