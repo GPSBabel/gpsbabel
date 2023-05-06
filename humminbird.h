@@ -23,6 +23,7 @@
 
 #include <QMap>      // for QMap
 #include <QString>   // for QString
+#include <QStringList>   // for QString
 #include <QVector>   // for QVector
 
 #include <cstdint>   // for int32_t, uint32_t
@@ -48,7 +49,7 @@ protected:
 
   /* Constants */
 
-  static constexpr const char* humminbird_icons[] = {
+  QStringList humminbird_icons = {
     "Normal",       /*  0 */
     "House",        /*  1 */
     "Red cross",    /*  2 */
