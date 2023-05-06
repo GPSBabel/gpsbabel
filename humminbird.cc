@@ -632,7 +632,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   QString icon = wpt->icon_descr;
   if (!icon.isEmpty()) {
     int i = 0;
-    for (const auto& hi : humminbird_icons) {
+    for (const auto& hi : qAsConst(humminbird_icons)) {
       if (!icon.compare(hi, Qt::CaseInsensitive)) {
         hum.icon = i;
         break;
@@ -643,7 +643,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
     if (hum.icon == 255) { /* no success, now try to find the item in a more complex name */
       hum.icon = 0;	/* i.e. "Diamond" as part of "Diamond, Green" or "Green Diamond" */
       i = 0;
-      for (const auto& hi : humminbird_icons) {
+      for (const auto& hi : qAsConst(humminbird_icons)) {
         if (icon.contains(hi, Qt::CaseInsensitive)) {
           hum.icon = i;
           break;
