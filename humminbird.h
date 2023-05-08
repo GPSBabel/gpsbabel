@@ -49,7 +49,7 @@ protected:
 
   /* Constants */
 
-  QStringList humminbird_icons = {
+  const QStringList humminbird_icons = {
     "Normal",       /*  0 */
     "House",        /*  1 */
     "Red cross",    /*  2 */

@@ -247,9 +247,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 
   auto* wpt = new Waypoint;
 
-  QByteArray ba = QByteArray(w.name, sizeof(w.name));
-  wpt->shortname = QString(ba).remove(QChar::Null);
-
+  wpt->shortname = QByteArray(w.name, qstrnlen(w.name, sizeof(w.name)));
   wpt->SetCreationTime(w.time);
 
   double guder = gudermannian_i1924(w.north);
@@ -317,8 +315,8 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
         if (rte == nullptr) {
           rte = new route_head;
           route_add_head(rte);
-          QByteArray n(hrte.name, sizeof(hrte.name));
-          rte->rte_name = QString(n).remove(QChar::Null);
+            rte->rte_name = QByteArray(hrte.name,
+                                       qstrnlen(hrte.name, sizeof(hrte.name)));
           /* rte->rte_num = hrte.num + 1; only internal number */
         }
         route_add_wpt(rte, new Waypoint(*wpt));
@@ -375,9 +373,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
 
   auto* trk = new route_head;
   track_add_head(trk);
-
-  QByteArray ba = QByteArray(th.name, sizeof(th.name));
-  trk->rte_name = QString(ba).remove(QChar::Null);
+  trk->rte_name = QByteArray(th.name, qstrnlen(th.name, sizeof(th.name)));
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
@@ -632,7 +628,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   QString icon = wpt->icon_descr;
   if (!icon.isEmpty()) {
     int i = 0;
-    for (const auto& hi : qAsConst(humminbird_icons)) {
+    for (const auto& hi : humminbird_icons) {
       if (!icon.compare(hi, Qt::CaseInsensitive)) {
         hum.icon = i;
         break;
@@ -643,7 +639,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
     if (hum.icon == 255) { /* no success, now try to find the item in a more complex name */
       hum.icon = 0;	/* i.e. "Diamond" as part of "Diamond, Green" or "Green Diamond" */
       i = 0;
-      for (const auto& hi : qAsConst(humminbird_icons)) {
+      for (const auto& hi : humminbird_icons) {
         if (icon.contains(hi, Qt::CaseInsensitive)) {
           hum.icon = i;
           break;
