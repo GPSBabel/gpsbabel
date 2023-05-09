@@ -32,8 +32,8 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	v900                  Columbus/Visiontac V900 files (.csv)
-	csv                   Comma separated values
+ v900                  Columbus/Visiontac V900 files (.csv)
+ csv                   Comma separated values
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -41,7 +41,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	iblue747              Data Logger iBlue747 csv
+	  utc                   Write timestamps with offset x to UTC time
+ iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -49,7 +50,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	iblue757              Data Logger iBlue757 csv
+	  utc                   Write timestamps with offset x to UTC time
+ iblue757              Data Logger iBlue757 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -57,21 +59,22 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	exif                  Embedded Exif-GPS data (.jpg)
+	  utc                   Write timestamps with offset x to UTC time
+ exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename
 	  frame                 Time-frame (in seconds)
 	  name                  Locate waypoint for tagging by this name
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N
 	  offset                Image Offset Time (+HH:MM or -HH:MM)
-	shape                 ESRI shapefile
+ shape                 ESRI shapefile
 	  name                  Source for name field in .dbf
 	  url                   Source for URL field in .dbf
-	igc                   FAI/IGC Flight Recorder Data Format
+ igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff
-	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
+ garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
-	garmin301             Garmin 301 Custom position and heartrate
+ garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -79,7 +82,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	garmin_g1000          Garmin G1000 datalog input filter file
+	  utc                   Write timestamps with offset x to UTC time
+ garmin_g1000          Garmin G1000 datalog input filter file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -87,14 +91,15 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	gdb                   Garmin MapSource - gdb
+	  utc                   Write timestamps with offset x to UTC time
+ gdb                   Garmin MapSource - gdb
 	  cat                   Default category on output (1..16)
 	  bitscategory          Bitmap of categories
 	  ver                   Version of gdb file to generate (1..3)
 	  via                   (0/1) Drop route points that do not have an equivalent w
 	  dropwpt               (0/1) Don't create waypoints for non-user points
 	  roadbook              (0/1) Include major turn points (with description) from 
-	garmin_txt            Garmin MapSource - txt (tab delimited)
+ garmin_txt            Garmin MapSource - txt (tab delimited)
 	  date                  Read/Write date format (i.e. yyyy/mm/dd)
 	  datum                 GPS datum (def. WGS 84)
 	  dist                  Distance unit [m=metric, s=statute]
@@ -103,7 +108,7 @@ File Types (-i and -o options):
 	  temp                  Temperature unit [c=Celsius, f=Fahrenheit]
 	  time                  Read/Write time format (i.e. HH:mm:ss xx)
 	  utc                   Write timestamps with offset x to UTC time
-	garmin_poi            Garmin POI database
+ garmin_poi            Garmin POI database
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -111,7 +116,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	garmin_gpi            Garmin Points of Interest (.gpi)
+	  utc                   Write timestamps with offset x to UTC time
+ garmin_gpi            Garmin Points of Interest (.gpi)
 	  alerts                (0/1) Enable alerts on speed or proximity distance
 	  bitmap                Use specified bitmap on output
 	  category              Default category on output
@@ -126,7 +132,7 @@ File Types (-i and -o options):
 	  units                 Units used for names with @speed ('s'tatute or 'm'
 	  writecodec            codec to use for writing strings
 	  languagecode          language code to use for reading dual language fil
-	garmin                Garmin serial/USB protocol
+ garmin                Garmin serial/USB protocol
 	  snlen                 Length of generated shortnames
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  deficon               Default icon name
@@ -137,27 +143,27 @@ File Types (-i and -o options):
 	  category              Category number to use for written waypoints
 	  bitscategory          Bitmap of categories
 	  baud                  Speed in bits per second of serial port (baud=9600
-	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
+ gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, MultiSport, Other
-	geo                   Geocaching.com .loc
+ geo                   Geocaching.com .loc
 	  deficon               Default icon name
 	  nuke_placer           (0/1) Omit Placer name
-	geojson               GeoJson
+ geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off.
-	dg-100                GlobalSat DG-100/BT-335 Download
+ dg-100                GlobalSat DG-100/BT-335 Download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
-	dg-200                GlobalSat DG-200 Download
+ dg-200                GlobalSat DG-200 Download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
-	globalsat             GlobalSat GH625XT GPS training watch
+ globalsat             GlobalSat GH625XT GPS training watch
 	  showlist              (0/1) list tracks
 	  track                 get track
 	  dump-file             Dump raw data to this file
 	  input-is-dump-file    (0/1) Dump raw data to this file
 	  timezone              Time zone ID
-	kml                   Google Earth (Keyhole) Markup Language
+ kml                   Google Earth (Keyhole) Markup Language
 	  deficon               Default icon name
 	  lines                 (0/1) Export linestrings for tracks and routes
 	  points                (0/1) Export placemarks for tracks and routes
@@ -173,7 +179,7 @@ File Types (-i and -o options):
 	  max_position_point    Retain at most this number of position points  (0 
 	  rotate_colors         Rotate colors for tracks and routes (default autom
 	  prec                  Precision of coordinates, number of decimals
-	land_air_sea          GPS Tracking Key Pro text
+ land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -181,8 +187,9 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	gtm                   GPS TrackMaker
-	arc                   GPSBabel arc filter file
+	  utc                   Write timestamps with offset x to UTC time
+ gtm                   GPS TrackMaker
+ arc                   GPSBabel arc filter file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -190,7 +197,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	gpsdrive              GpsDrive Format
+	  utc                   Write timestamps with offset x to UTC time
+ gpsdrive              GpsDrive Format
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -198,7 +206,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	gpsdrivetrack         GpsDrive Format for Tracks
+	  utc                   Write timestamps with offset x to UTC time
+ gpsdrivetrack         GpsDrive Format for Tracks
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -206,7 +215,8 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	gpx                   GPX XML
+	  utc                   Write timestamps with offset x to UTC time
+ gpx                   GPX XML
 	  snlen                 Length of generated shortnames
 	  suppresswhite         (0/1) No whitespace in generated shortnames
 	  logpoint              (0/1) Create waypoints from geocache log entries
@@ -215,23 +225,23 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension
 	  garminextensions      (0/1) Add info (depth) as Garmin extension
 	  elevprec              Precision of elevations, number of decimals
-	m241-bin              Holux M-241 (MTK based) Binary File Format
+ m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file
-	m241                  Holux M-241 (MTK based) download
+ m241                  Holux M-241 (MTK based) download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
 	  log_enable            (0/1) Enable logging after download
 	  csv                   MTK compatible CSV output file
 	  block_size_kb         Size of blocks in KB to request from device
-	html                  HTML Output
+ html                  HTML Output
 	  stylesheet            Path to HTML style sheet
 	  encrypt               (0/1) Encrypt hints using ROT13
 	  logs                  (0/1) Include groundspeak logs if present
 	  degformat             Degrees output as 'ddd', 'dmm'(default) or 'dms'
 	  altunits              Units for altitude (f)eet or (m)etres
-	humminbird_ht         Humminbird tracks (.ht)
-	humminbird            Humminbird waypoints and routes (.hwr)
-	lowranceusr           Lowrance USR
+ humminbird_ht         Humminbird tracks (.ht)
+ humminbird            Humminbird waypoints and routes (.hwr)
+ lowranceusr           Lowrance USR
 	  ignoreicons           (0/1) (USR input) Ignore event marker icons on read
 	  writeasicons          (0/1) (USR output) Treat waypoints as icons on write
 	  merge                 (0/1) (USR output) Merge into one segmented trail
@@ -240,7 +250,7 @@ File Types (-i and -o options):
 	  title                 (USR output) Output file title string
 	  serialnum             (USR output) Device serial number
 	  description           (USR output) Output file content description
-	miniHomer             MiniHomer, a skyTraq Venus 6 based logger (downloa
+ miniHomer             MiniHomer, a skyTraq Venus 6 based logger (downloa
 	  baud                  Baud rate used for download
 	  dump-file             Dump raw data to this file
 	  erase                 (0/1) Erase device data after download
@@ -256,31 +266,31 @@ File Types (-i and -o options):
 	  Bar                   POI for Bar Symbol as lat:lng[:alt]
 	  gps-utc-offset        Seconds that GPS time tracks UTC (0: best guess)
 	  gps-week-rollover     GPS week rollover period we're in (-1: best guess)
-	garmin_xt             Mobile Garmin XT Track files
+ garmin_xt             Mobile Garmin XT Track files
 	  ftype                 Garmin Mobile XT ([ATRK]/STRK) (required)
 	  trk_header            Track name processing option ([0]-nrm/1-ign)
-	mtk-bin               MTK Logger (iBlue 747,...) Binary File Format
+ mtk-bin               MTK Logger (iBlue 747,...) Binary File Format
 	  csv                   MTK compatible CSV output file
-	mtk                   MTK Logger (iBlue 747,Qstarz BT-1000,...) download
+ mtk                   MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
 	  log_enable            (0/1) Enable logging after download
 	  csv                   MTK compatible CSV output file
 	  block_size_kb         Size of blocks in KB to request from device
-	tpg                   National Geographic Topo .tpg (waypoints)
+ tpg                   National Geographic Topo .tpg (waypoints)
 	  datum                 Datum (default=NAD27)
-	tpo2                  National Geographic Topo 2.x .tpo
-	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navilink              NaviGPS GT-11/BGT-11 Download
+ tpo2                  National Geographic Topo 2.x .tpo
+ tpo3                  National Geographic Topo 3.x/4.x .tpo
+ navilink              NaviGPS GT-11/BGT-11 Download
 	  nuketrk               (0/1) Delete all track points
 	  nukerte               (0/1) Delete all routes
 	  nukewpt               (0/1) Delete all waypoints
 	  nukedlg               (0/1) Clear the datalog
 	  datalog               (0/1) Read from datalogger buffer
 	  power_off             (0/1) Command unit to power itself down
-	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
-	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
-	nmea                  NMEA 0183 sentences
+ sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
+ sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
+ nmea                  NMEA 0183 sentences
 	  snlen                 Max length of waypoint name to write
 	  gprmc                 (0/1) Read/write GPRMC sentences
 	  gpgga                 (0/1) Read/write GPGGA sentences
@@ -293,11 +303,11 @@ File Types (-i and -o options):
 	  baud                  Speed in bits per second of serial port (baud=4800
 	  gisteq                (0/1) Write tracks for Gisteq Phototracker
 	  ignore_fix            (0/1) Accept position fixes in gpgga marked invalid
-	osm                   OpenStreetMap data files
+ osm                   OpenStreetMap data files
 	  tag                   Write additional way tag key/value pairs
 	  tagnd                 Write additional node tag key/value pairs
 	  created_by            Use this value as custom created_by value
-	ozi                   OziExplorer
+ ozi                   OziExplorer
 	  pack                  (0/1) Write all tracks into one file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -309,8 +319,8 @@ File Types (-i and -o options):
 	  altunit               Unit used in altitude values
 	  proxunit              Unit used in proximity values
 	  codec                 codec to use for reading and writing strings (defa
-	qstarz_bl-1000        Qstarz BL-1000
-	skytraq               SkyTraq Venus based loggers (download)
+ qstarz_bl-1000        Qstarz BL-1000
+ skytraq               SkyTraq Venus based loggers (download)
 	  erase                 (0/1) Erase device data after download
 	  targetlocation        Set location finder target location as lat,lng
 	  configlog             Configure logging parameter as tmin:tmax:dmin:dmax
@@ -323,17 +333,17 @@ File Types (-i and -o options):
 	  no-output             (0/1) Disable output (useful with erase)
 	  gps-utc-offset        Seconds that GPS time tracks UTC (0: best guess)
 	  gps-week-rollover     GPS week rollover period we're in (-1: best guess)
-	skytraq-bin           SkyTraq Venus based loggers Binary File Format
+ skytraq-bin           SkyTraq Venus based loggers Binary File Format
 	  first-sector          First sector to be read from the file
 	  last-sector           Last sector to be read from the file (-1: read til
 	  gps-utc-offset        Seconds that GPS time tracks UTC (0: best guess)
 	  gps-week-rollover     GPS week rollover period we're in (-1: best guess)
-	subrip                SubRip subtitles for video mapping (.srt)
+ subrip                SubRip subtitles for video mapping (.srt)
 	  video_time            Video position for which exact GPS time is known (
 	  gps_time              GPS time at position video_time (hhmmss[.sss], def
 	  gps_date              GPS date at position video_time (yyyymmdd, default
 	  format                Format for subtitles
-	openoffice            Tab delimited fields useful for OpenOffice
+ openoffice            Tab delimited fields useful for OpenOffice
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
 	  snupper               (0/1) UPPERCASE synth. shortnames
@@ -341,14 +351,15 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
-	text                  Textual Output
+	  utc                   Write timestamps with offset x to UTC time
+ text                  Textual Output
 	  nosep                 (0/1) Suppress separator lines between waypoints
 	  encrypt               (0/1) Encrypt hints using ROT13
 	  logs                  (0/1) Include groundspeak logs if present
 	  degformat             Degrees output as 'ddd', 'dmm'(default) or 'dms'
 	  altunits              Units for altitude (f)eet or (m)etres
 	  splitoutput           (0/1) Write each waypoint in a separate file
-	unicsv                Universal csv with field structure in first line
+ unicsv                Universal csv with field structure in first line
 	  datum                 GPS datum (def. WGS 84)
 	  grid                  Write position using this grid.
 	  utc                   Write timestamps with offset x to UTC time
@@ -356,12 +367,12 @@ File Types (-i and -o options):
 	  filename              (0/1) Write filename(s) from input session(s)
 	  fields                Name and order of input fields, separated by '+'
 	  codec                 codec to use for reading and writing strings (defa
-	vcard                 Vcard Output (for iPod)
+ vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13
-	wbt-bin               Wintec WBT-100/200 Binary File Format
-	wbt                   Wintec WBT-100/200 GPS Download
+ wbt-bin               Wintec WBT-100/200 Binary File Format
+ wbt                   Wintec WBT-100/200 GPS Download
 	  erase                 (0/1) Erase device data after download
-	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
+ wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
 
 Supported data filters:
 	arc                   Include Only Points Within Distance of Arc        

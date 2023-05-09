@@ -346,44 +346,7 @@ UnicsvFormat::unicsv_parse_status(const QString& str)
 QDateTime
 UnicsvFormat::unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
 {
-  QDateTime result;
-  Qt::TimeSpec timespec;
-  int offset = 0;
-
-  if (is_localtime) {
-    if (opt_utc != nullptr) { // override with passed option value
-      if (utc_offset == 0) {
-        // Qt 6.5.0 QDate::startOfDay(Qt::OffsetFromUTC, 0) returns an invalid QDateTime.
-        timespec = Qt::UTC;
-      } else {
-        timespec = Qt::OffsetFromUTC;
-        // Avoid Qt 6.5.0 warnings with non-zero offsets when not using Qt::OffsetFromUTC.
-        offset = utc_offset;
-      }
-    } else {
-      timespec = Qt::LocalTime;
-    }
-  } else {
-    timespec = Qt::UTC;
-  }
-
-  if (date.isValid() && time.isValid()) {
-    result = QDateTime(date, time, timespec, offset);
-  } else if (time.isValid()) {
-    // TODO: Wouldn't it be better to return an invalid QDateTime
-    // that contained an invalid QDate, a valid QTime and a valid
-    // Qt::TimeSpec?
-    result = QDateTime(QDate(1970, 1, 1), time, timespec, offset);
-  } else if (date.isValid()) {
-    //  no time, use start of day in the given Qt::TimeSpec.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    result = QDateTime(date, QTime(0,0), timespec, offset);
-#else
-    result = date.startOfDay(timespec, offset);
-#endif
-  }
- 
-  return result;
+  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
 }
 
 bool

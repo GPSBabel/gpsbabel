@@ -245,51 +245,65 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
   style->ofields.append(fmp);
 }
 
-QDateTime
+QDate
 XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
-  QDate d = QDate::fromString(s, "yyyyMMdd");
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  return QDateTime(d);
-#else
-  return d.startOfDay();
-#endif
+  return QDate::fromString(s, "yyyyMMdd");
 }
 
+QDateTime
+XcsvFormat::xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
+{
+  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
+}
 
 /*
  * sscanftime - Parse a date buffer using strftime format
  */
-time_t
-XcsvFormat::sscanftime(const char* s, const char* format, bool gmt)
+void
+XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* time)
 {
   std::tm stm{};
+  stm.tm_sec = -1;
+  stm.tm_min = -1;
+  stm.tm_hour = -1;
+  stm.tm_mday = -1;
+  stm.tm_mon = -1;
+  stm.tm_year = -1;
+  stm.tm_wday = -1;
+  stm.tm_yday = -1;
+  stm.tm_isdst = -1;
 
   if (strptime(s, format, &stm)) {
-    if ((stm.tm_mday == 0) && (stm.tm_mon == 0) && (stm.tm_year == 0)) {
-      stm.tm_mday = 1;
-      stm.tm_mon = 0;
-      stm.tm_year = 70;
-    }
-    stm.tm_isdst = -1;
-    if (gmt) {
-      return mkgmtime(&stm);
-    } else {
-      return mktime(&stm);
-    }
-  }
-  // Don't fuss for empty strings.
-  if (*s) {
-    warning("date parse of string '%s' with format '%s' failed.\n",
+    if (stm.tm_hour >= 0 && stm.tm_min >= 0 && stm.tm_sec >= 0) {
+      if (time != nullptr) {
+        *time = QTime(stm.tm_hour, stm.tm_min, stm.tm_sec);
+      }
+    } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+      fatal(MYNAME ": couldn't parse time from string '%s' with format '%s'.\n",
             s, format);
+    }
+    if (stm.tm_year >= 0 && stm.tm_mon >= 0 && stm.tm_mday >= 0) {
+      if (date != nullptr) {
+        *date = QDate(stm.tm_year + 1900, stm.tm_mon + 1, stm.tm_mday);
+      }
+    } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+      fatal(MYNAME ": couldn't parse date from string '%s' with format '%s'.\n",
+            s, format);
+    }
+  } else {
+    // Don't fuss for empty strings.
+    if (*s) {
+      warning("date parse of string '%s' with format '%s' failed.\n",
+              s, format);
+    }
   }
-  return 0;
 }
 
-time_t
+QTime
 XcsvFormat::addhms(const char* s, const char* format)
 {
-  time_t tt = 0;
+  QTime tt;
   int hour = 0;
   int min = 0;
   int sec = 0;
@@ -301,7 +315,7 @@ XcsvFormat::addhms(const char* s, const char* format)
     ampm[0] = 0;
   }
   if (ac) {
-    tt = ((tolower(ampm[0])=='p') ? 43200 : 0) + 3600 * hour + 60 * min + sec;
+    tt = QTime((ampm[0]=='p')? hour + 12 : hour, min, sec);
   }
   xfree(ampm);
 
@@ -597,11 +611,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_EXCEL_TIME:
     /* Time as Excel Time  */
     wpt->SetCreationTime(excel_to_timet(strtod(s, nullptr)));
+    parse_data->need_datetime = false;
     break;
   case XcsvStyle::XT_TIMET_TIME: {
     /* Time as time_t */
     bool ok;
     wpt->SetCreationTime(value.toLongLong(&ok));
+    parse_data->need_datetime = false;
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME failed.\n", s, line_no);
     }
@@ -611,46 +627,53 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* Time as time_t in milliseconds */
     bool ok;
     wpt->SetCreationTime(0, value.toLongLong(&ok));
+    parse_data->need_datetime = false;
     if (!ok) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
   }
   break;
   case XcsvStyle::XT_YYYYMMDD_TIME:
-    wpt->SetCreationTime(yyyymmdd_to_time(value));
+    parse_data->local_date = yyyymmdd_to_time(value);
     break;
   case XcsvStyle::XT_GMT_TIME:
-    wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
+    sscanftime(s, fmp.printfc.constData(), &parse_data->utc_date, &parse_data->utc_time);
     break;
   case XcsvStyle::XT_LOCAL_TIME:
-    if (!gpsbabel_testmode()) {
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
-    } else {
-      /* Force constant time zone for test */
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), true));
-    }
+    sscanftime(s, fmp.printfc.constData(), &parse_data->local_date, &parse_data->local_time);
     break;
-  /* Useful when time and date are in separate fields
-  	GMT / Local offset is handled by the two cases above */
+  /* May beseful when time and date are in separate fields,
+     or just use the above twice with different format strings */
   case XcsvStyle::XT_HMSG_TIME:
+    parse_data->utc_time = addhms(s, fmp.printfc.constData());
+    break;
   case XcsvStyle::XT_HMSL_TIME:
-    wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
+    parse_data->local_time = addhms(s, fmp.printfc.constData());
     break;
   case XcsvStyle::XT_ISO_TIME:
   case XcsvStyle::XT_ISO_TIME_MS:
     wpt->SetCreationTime(xml_parse_time(value));
+    parse_data->need_datetime = false;
     break;
   case XcsvStyle::XT_NET_TIME: {
     bool ok;
     wpt->SetCreationTime(dotnet_time_to_qdatetime(value.toLongLong(&ok)));
+    parse_data->need_datetime = false;
     if (!ok) {
       warning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
     }
   }
   break;
-  case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
-    wpt->AllocGCData()->last_found = yyyymmdd_to_time(value);
+  case XcsvStyle::XT_GEOCACHE_LAST_FOUND: {
+    QDate date;
+    date = yyyymmdd_to_time(value);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+    wpt->AllocGCData()->last_found = QDateTime(date);
+#else
+    wpt->AllocGCData()->last_found = date.startOfDay();
+#endif
     break;
+  }
 
   /* GEOCACHING STUFF ***************************************************/
   case XcsvStyle::XT_GEOCACHE_DIFF:
@@ -879,6 +902,23 @@ XcsvFormat::read()
         if (ifield_idx >= xcsv_style->ifields.size()) {
           /* no more fields, stop parsing! */
           break;
+        }
+      }
+
+
+      if (parse_data.need_datetime) {
+        if (parse_data.utc_date.isValid() && parse_data.utc_time.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.utc_date, parse_data.utc_time, false));
+        } else if (parse_data.local_date.isValid() && parse_data.local_time.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.local_date, parse_data.local_time, true));
+        } else if (parse_data.utc_date.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.utc_date, parse_data.utc_time, false));
+        } else if (parse_data.local_date.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.local_date, parse_data.local_time, true));
+        } else if (parse_data.utc_time.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.utc_date, parse_data.utc_time, false));
+        } else if (parse_data.local_time.isValid()) {
+          wpt_tmp->SetCreationTime(xcsv_adjust_time(parse_data.local_date, parse_data.local_time, true));
         }
       }
 
@@ -1883,6 +1923,8 @@ XcsvFormat::rd_init(const QString& fname)
   if (xcsv_file->gps_datum_idx < 0) {
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
+
+  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 
 void
