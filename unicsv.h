@@ -222,7 +222,7 @@ private:
     },
     {
       "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-      nullptr, ARGTYPE_INT, "-23", "+23", nullptr
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
     },
     {
       "format", &opt_format,   "Write name(s) of format(s) from input session(s)",
