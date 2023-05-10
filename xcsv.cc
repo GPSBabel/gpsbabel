@@ -291,7 +291,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
       fatal(MYNAME ": couldn't parse time from string '%s' with format '%s'.\n",
             s, format);
     }
-    if (time != nullptr) {
+    if ((time_result.has_value()) && (time != nullptr)) {
       *time = *time_result;
     }
 
@@ -311,7 +311,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
       fatal(MYNAME ": couldn't parse date from string '%s' with format '%s'.\n",
             s, format);
     }
-    if (date != nullptr) {
+    if ((date_result.has_value()) && (date != nullptr)) {
       *date = *date_result;
     }
   } else {
