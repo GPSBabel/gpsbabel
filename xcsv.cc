@@ -304,7 +304,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
       date_result = QDate(year_result, stm.tm_mon + 1, 1);
     } else if (stm.tm_year >= 0) {
       date_result = QDate(year_result, 1, 1);
-    } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+    } else if (!(stm.tm_year == -1 && stm.tm_mon == -1 && stm.tm_mday == -1)) {
       bad_date_parse = true;
     }
     if ((date_result.has_value() && !date_result->isValid()) || bad_date_parse) {

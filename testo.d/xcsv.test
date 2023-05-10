@@ -34,7 +34,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/testo2.style -f ${REFERENCE}/grid-utm.csv -o gp
 compare ${REFERENCE}/grid-utm~xscv.gpx ${TMPDIR}/grid-utm~xscv.gpx
 
 # test TRACK_NAME, TRACK_NEW
-echo 'DESCRIPTION track style test 1' >>${TMPDIR}/track1.style
+echo 'DESCRIPTION track style test 1' >${TMPDIR}/track1.style
 echo 'EXTENSION csv' >>${TMPDIR}/track1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track1.style
@@ -47,7 +47,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/track1.style -f ${REFERENCE}/track/track1.csv -
 compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track1~csv.gpx
 
 # flip TRACK_NAME, TRACK_NEW order
-echo 'DESCRIPTION track style test 2' >>${TMPDIR}/track2.style
+echo 'DESCRIPTION track style test 2' >${TMPDIR}/track2.style
 echo 'EXTENSION csv' >>${TMPDIR}/track2.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track2.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track2.style
@@ -60,7 +60,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/track2.style -f ${REFERENCE}/track/track2.csv -
 compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track2~csv.gpx
 
 # ROUTE_NAME
-echo 'DESCRIPTION route style test 1' >>${TMPDIR}/route1.style
+echo 'DESCRIPTION route style test 1' >${TMPDIR}/route1.style
 echo 'EXTENSION csv' >>${TMPDIR}/route1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/route1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/route1.style
@@ -72,7 +72,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/route1.style -f ${REFERENCE}/route/route1.csv -
 compare ${REFERENCE}/route/route1~csv.gpx ${TMPDIR}/route1~csv.gpx
 
 # gmsd fields
-echo 'DESCRIPTION gmsd test' >> ${TMPDIR}/gmsd.style
+echo 'DESCRIPTION gmsd test' > ${TMPDIR}/gmsd.style
 echo 'EXTENSION csv' >> ${TMPDIR}/gmsd.style
 echo 'FIELD_DELIMITER TAB' >> ${TMPDIR}/gmsd.style
 echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/gmsd.style
@@ -92,3 +92,54 @@ gpsbabel -i unicsv -f ${REFERENCE}/gmsd.unicsv -o xcsv,style=${TMPDIR}/gmsd.styl
 compare ${REFERENCE}/gmsd.xcsv ${TMPDIR}/gmsd.xcsv
 gpsbabel -i xcsv,style=${TMPDIR}/gmsd.style -f ${REFERENCE}/gmsd.xcsv -o unicsv -F ${TMPDIR}/gmsd.unicsv
 compare ${REFERENCE}/gmsd.unicsv ${TMPDIR}/gmsd.unicsv
+
+# local date, time
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/localtime.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LOCAL_TIME,"","%Y-%m-%d"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LOCAL_TIME,"","%H:%M:%S"' >> ${TMPDIR}/localtime.style
+gpsbabel -i xcsv,style=${TMPDIR}/localtime.style,utc=-7 -f ${REFERENCE}/localgmttime.xcsv -o unicsv,utc=-7 -F ${TMPDIR}/localtime~xcsv.csv
+compare ${REFERENCE}/localgmttime.csv ${TMPDIR}/localtime~xcsv.csv
+
+# local date, hmsl time
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/localtime.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD LOCAL_TIME,"","%Y-%m-%d"' >> ${TMPDIR}/localtime.style
+echo 'IFIELD HMSL_TIME,"","%d:%d:%d"' >> ${TMPDIR}/localtime.style
+gpsbabel -i xcsv,style=${TMPDIR}/localtime.style,utc=-7 -f ${REFERENCE}/localgmttime.xcsv -o unicsv,utc=-7 -F ${TMPDIR}/hmsl~xcsv.csv
+compare ${REFERENCE}/localgmttime.csv ${TMPDIR}/hmsl~xcsv.csv
+
+# gmt date, time
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/gmttime.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD GMT_TIME,"","%Y-%m-%d"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD GMT_TIME,"","%H:%M:%S"' >> ${TMPDIR}/gmttime.style
+gpsbabel -i xcsv,style=${TMPDIR}/gmttime.style -f ${REFERENCE}/localgmttime.xcsv -o unicsv,utc -F ${TMPDIR}/gmttime~xcsv.csv
+compare ${REFERENCE}/localgmttime.csv ${TMPDIR}/gmttime~xcsv.csv
+
+# gmt date, hmsg time
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/gmttime.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD GMT_TIME,"","%Y-%m-%d"' >> ${TMPDIR}/gmttime.style
+echo 'IFIELD HMSG_TIME,"","%d:%d:%d"' >> ${TMPDIR}/gmttime.style
+gpsbabel -i xcsv,style=${TMPDIR}/gmttime.style -f ${REFERENCE}/localgmttime.xcsv -o unicsv,utc -F ${TMPDIR}/hmsg~xcsv.csv
+compare ${REFERENCE}/localgmttime.csv ${TMPDIR}/hmsg~xcsv.csv
+
+# iso time
+echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/isotime.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/isotime.style
+echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/isotime.style
+echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/isotime.style
+echo 'IFIELD IGNORE,"",""' >> ${TMPDIR}/isotime.style
+echo 'IFIELD IGNORE,"",""' >> ${TMPDIR}/isotime.style
+echo 'IFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/isotime.style
+gpsbabel -i xcsv,style=${TMPDIR}/isotime.style -f ${REFERENCE}/localgmttime.xcsv -o unicsv,utc=-7 -F ${TMPDIR}/iso~xcsv.csv
+compare ${REFERENCE}/localgmttime.csv ${TMPDIR}/iso~xcsv.csv
