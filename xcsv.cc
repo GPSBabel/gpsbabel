@@ -275,21 +275,44 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
   stm.tm_isdst = -1;
 
   if (strptime(s, format, &stm)) {
+
+    std::optional<QTime> time_result;
+    bool bad_time_parse = false;
     if (stm.tm_hour >= 0 && stm.tm_min >= 0 && stm.tm_sec >= 0) {
-      if (time != nullptr) {
-        *time = QTime(stm.tm_hour, stm.tm_min, stm.tm_sec);
-      }
+      time_result = QTime(stm.tm_hour, stm.tm_min, stm.tm_sec);
+    } else if (stm.tm_hour >= 0 && stm.tm_min >= 0) {
+      time_result = QTime(stm.tm_hour, stm.tm_min, 0);
+    } else if (stm.tm_hour >= 0) {
+      time_result = QTime(stm.tm_hour, 0, 0);
     } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+      bad_time_parse = true;
+    }
+    if ((time_result.has_value() && !time_result->isValid()) || bad_time_parse) {
       fatal(MYNAME ": couldn't parse time from string '%s' with format '%s'.\n",
             s, format);
     }
+    if (time != nullptr) {
+      *time = *time_result;
+    }
+
+    std::optional<QDate> date_result;
+    bool bad_date_parse = false;
+    int year_result = (stm.tm_year >= 70)? stm.tm_year + 1900 : stm.tm_year + 2000;
     if (stm.tm_year >= 0 && stm.tm_mon >= 0 && stm.tm_mday >= 0) {
-      if (date != nullptr) {
-        *date = QDate(stm.tm_year + 1900, stm.tm_mon + 1, stm.tm_mday);
-      }
+      date_result = QDate(year_result, stm.tm_mon + 1, stm.tm_mday);
+    } else if (stm.tm_year >= 0 && stm.tm_mon >= 0) {
+      date_result = QDate(year_result, stm.tm_mon + 1, 1);
+    } else if (stm.tm_year >= 0) {
+      date_result = QDate(year_result, 1, 1);
     } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+      bad_date_parse = true;
+    }
+    if ((date_result.has_value() && !date_result->isValid()) || bad_date_parse) {
       fatal(MYNAME ": couldn't parse date from string '%s' with format '%s'.\n",
             s, format);
+    }
+    if (date != nullptr) {
+      *date = *date_result;
     }
   } else {
     // Don't fuss for empty strings.

@@ -26,11 +26,13 @@
 #include <utility>                // for move
 
 #include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
 #include <QHash>                  // for QHash
 #include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QStringList>            // for QStringList
+#include <QTime>                  // for QTime
 #include <QVector>                // for QVector
 
 #include "defs.h"
