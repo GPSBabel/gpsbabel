@@ -607,8 +607,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_TIMET_TIME: {
     /* Time as time_t */
     bool ok;
-    wpt->SetCreationTime(value.toLongLong(&ok));
-    if (!ok) {
+    long long tt = value.toLongLong(&ok);
+    if (ok) {
+      wpt->SetCreationTime(tt);
+    } else if (!value.isEmpty()) {
       warning("parse of string '%s' on line number %d as TIMET_TIME failed.\n", s, line_no);
     }
   }
@@ -616,8 +618,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
-    wpt->SetCreationTime(0, value.toLongLong(&ok));
-    if (!ok) {
+    long long tt = value.toLongLong(&ok);
+    if (ok) {
+      wpt->SetCreationTime(0, tt);
+    } else if (!value.isEmpty()) {
       warning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
     }
   }
@@ -648,8 +652,10 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_NET_TIME: {
     bool ok;
-    wpt->SetCreationTime(dotnet_time_to_qdatetime(value.toLongLong(&ok)));
-    if (!ok) {
+    long long dnt = value.toLongLong(&ok);
+    if (ok) {
+      wpt->SetCreationTime(dotnet_time_to_qdatetime(dnt));
+    } else if (!value.isEmpty()) {
       warning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
     }
   }
