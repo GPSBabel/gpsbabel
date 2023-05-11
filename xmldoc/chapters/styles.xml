@@ -846,7 +846,7 @@ longitude)
 </para>
          <para>example:
 </para>
-         <screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
+         <screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%S %p"
 </screen>
          <para>Search the web for 'strptime man page' for details strptime, but one
    such page can be found at

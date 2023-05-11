@@ -548,6 +548,13 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   return epoch.addMSecs(millisecs);
 }
 
+long long qdatetime_to_dotnet_time(const QDateTime& dt)
+{
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  qint64 millisecs = epoch.msecsTo(dt);
+  return millisecs * 10000;
+}
+
 double
 endian_read_double(const void* ptr, int read_le)
 {
