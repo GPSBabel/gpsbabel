@@ -761,7 +761,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_iso_time:
       need_datetime = false;	/* fix result */
-      wpt->SetCreationTime(xml_parse_time(value));
+      wpt->SetCreationTime(QDateTime::fromString(value, Qt::ISODateWithMs));
       break;
 
     case fld_time:

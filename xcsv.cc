@@ -261,7 +261,7 @@ XcsvFormat::xcsv_adjust_time(const QDate date, const QTime time, bool is_localti
  * sscanftime - Parse a date buffer using strftime format
  */
 void
-XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* time)
+XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& time)
 {
   std::tm stm{};
   stm.tm_sec = -1;
@@ -291,8 +291,8 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
       fatal(MYNAME ": couldn't parse time from string '%s' with format '%s'.\n",
             s, format);
     }
-    if ((time_result.has_value()) && (time != nullptr)) {
-      *time = *time_result;
+    if (time_result.has_value()) {
+      time = *time_result;
     }
 
     std::optional<QDate> date_result;
@@ -311,8 +311,8 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate* date, QTime* ti
       fatal(MYNAME ": couldn't parse date from string '%s' with format '%s'.\n",
             s, format);
     }
-    if ((date_result.has_value()) && (date != nullptr)) {
-      *date = *date_result;
+    if (date_result.has_value()) {
+      date = *date_result;
     }
   } else {
     // Don't fuss for empty strings.
@@ -337,7 +337,7 @@ XcsvFormat::addhms(const char* s, const char* format)
   if (ac < 4) {
     ampm[0] = 0;
   }
-  if (ac) {
+  if (ac >= 1) {
     tt = QTime((ampm[0]=='p')? hour + 12 : hour, min, sec);
   }
   xfree(ampm);
@@ -660,12 +660,12 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     parse_data->local_date = yyyymmdd_to_time(value);
     break;
   case XcsvStyle::XT_GMT_TIME:
-    sscanftime(s, fmp.printfc.constData(), &parse_data->utc_date, &parse_data->utc_time);
+    sscanftime(s, fmp.printfc.constData(), parse_data->utc_date, parse_data->utc_time);
     break;
   case XcsvStyle::XT_LOCAL_TIME:
-    sscanftime(s, fmp.printfc.constData(), &parse_data->local_date, &parse_data->local_time);
+    sscanftime(s, fmp.printfc.constData(), parse_data->local_date, parse_data->local_time);
     break;
-  /* May beseful when time and date are in separate fields,
+  /* May be useful when time and date are in separate fields,
      or just use the above twice with different format strings */
   case XcsvStyle::XT_HMSG_TIME:
     parse_data->utc_time = addhms(s, fmp.printfc.constData());
@@ -675,7 +675,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_ISO_TIME:
   case XcsvStyle::XT_ISO_TIME_MS:
-    wpt->SetCreationTime(xml_parse_time(value));
+    wpt->SetCreationTime(QDateTime::fromString(value, Qt::ISODateWithMs));
     parse_data->need_datetime = false;
     break;
   case XcsvStyle::XT_NET_TIME: {
