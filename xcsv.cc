@@ -600,10 +600,17 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
 
   /* TIME CONVERSIONS ***************************************************/
-  case XcsvStyle::XT_EXCEL_TIME:
+  case XcsvStyle::XT_EXCEL_TIME: {
     /* Time as Excel Time  */
-    wpt->SetCreationTime(excel_to_timet(strtod(s, nullptr)));
-    break;
+    bool ok;
+    double et = value.toDouble(&ok);
+    if (ok) {
+      wpt->SetCreationTime(excel_to_timet(et));
+    } else if (!value.isEmpty()) {
+      warning("parse of string '%s' on line number %d as EXCEL_TIME failed.\n", s, line_no);
+    }
+  }
+  break;
   case XcsvStyle::XT_TIMET_TIME: {
     /* Time as time_t */
     bool ok;
