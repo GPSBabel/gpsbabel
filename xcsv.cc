@@ -297,11 +297,17 @@ XcsvFormat::addhms(const char* s, const char* format)
   char* ampm = (char*) xmalloc(strlen(s) + 1);
   int ac = sscanf(s, format, &hour, &min, &sec, ampm);
   /* If no time format in arg string, assume AM */
-  if (ac < 4) {
-    ampm[0] = 0;
+  if (ac >= 4) {
+    // convert 12 hour clock to 24 hour clock
+    if (hour == 12) {
+      hour = 0;
+    }
+    if (tolower(ampm[0]) == 'p') {
+      hour += 12;
+    }
   }
-  if (ac) {
-    tt = ((tolower(ampm[0])=='p') ? 43200 : 0) + 3600 * hour + 60 * min + sec;
+  if (ac > 0) {
+    tt = ((hour * 60) + min) * 60 + sec;
   }
   xfree(ampm);
 
@@ -605,7 +611,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     bool ok;
     double et = value.toDouble(&ok);
     if (ok) {
-      wpt->SetCreationTime(excel_to_timet(et));
+      wpt->SetCreationTime(0, excel_to_timetms(et));
     } else if (!value.isEmpty()) {
       warning("parse of string '%s' on line number %d as EXCEL_TIME failed.\n", s, line_no);
     }
@@ -640,12 +646,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
     break;
   case XcsvStyle::XT_LOCAL_TIME:
-    if (!gpsbabel_testmode()) {
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
-    } else {
-      /* Force constant time zone for test */
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), true));
-    }
+    wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
     break;
   /* Useful when time and date are in separate fields
   	GMT / Local offset is handled by the two cases above */
@@ -1381,7 +1382,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
       if (wpt->GetCreationTime().isValid()) {
-        buff = QString::asprintf(fmp.printfc.constData(), timet_to_excel(wpt->GetCreationTime().toTime_t()));
+        buff = QString::asprintf(fmp.printfc.constData(), timetms_to_excel(wpt->GetCreationTime().toMSecsSinceEpoch()));
       }
       break;
     case XcsvStyle::XT_TIMET_TIME:
@@ -1414,10 +1415,14 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), false);
       break;
     case XcsvStyle::XT_ISO_TIME:
-      buff = wpt->GetCreationTime().toUTC().toString(Qt::ISODate);
+      if (wpt->GetCreationTime().isValid()) {
+        buff = wpt->GetCreationTime().toUTC().toString(Qt::ISODate);
+      }
       break;
     case XcsvStyle::XT_ISO_TIME_MS:
-      buff = wpt->GetCreationTime().toPrettyString();
+      if (wpt->GetCreationTime().isValid()) {
+        buff = wpt->GetCreationTime().toPrettyString();
+      }
       break;
     case XcsvStyle::XT_NET_TIME:
       if (wpt->GetCreationTime().isValid()) {

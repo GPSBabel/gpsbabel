@@ -346,13 +346,13 @@ private:
   }
 
   /* convert excel time (days since 1900) to time_t and back again */
-  static constexpr double excel_to_timet(double a)
+  static constexpr qint64 excel_to_timetms(double a)
   {
-    return (a - 25569.0) * 86400.0;
+    return qRound64((a - 25569.0) * 86400000.0);
   }
-  static constexpr double timet_to_excel(double a)
+  static constexpr double timetms_to_excel(qint64 a)
   {
-    return (a / 86400.0) + 25569.0;
+    return (a / 86400000.0) + 25569.0;
   }
 
   /* Member Functions */
