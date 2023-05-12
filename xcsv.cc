@@ -643,7 +643,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->SetCreationTime(yyyymmdd_to_time(value));
     break;
   case XcsvStyle::XT_GMT_TIME:
-    wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
+    wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), true));
     break;
   case XcsvStyle::XT_LOCAL_TIME:
     wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
