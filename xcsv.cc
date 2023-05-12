@@ -250,9 +250,9 @@ XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
   QDate d = QDate::fromString(s, "yyyyMMdd");
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  return QDateTime(d);
+  return QDateTime(d, QTime(0, 0), Qt::UTC);
 #else
-  return d.startOfDay();
+  return d.startOfDay(Qt::UTC);
 #endif
 }
 
@@ -376,7 +376,7 @@ XcsvFormat::writehms(const char* format, const gpsbabel::DateTime& t, bool gmt)
 long
 XcsvFormat::time_to_yyyymmdd(const QDateTime& t)
 {
-  QDate d = t.date();
+  QDate d = t.toUTC().date();
   return d.year() * 10000 + d.month() * 100 + d.day();
 }
 

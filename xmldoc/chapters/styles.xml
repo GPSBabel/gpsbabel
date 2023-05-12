@@ -829,7 +829,7 @@ longitude)
       </section>
       <section xml:id="style_def_yyyymmdd">
          <title>YYYYMMDD_TIME</title>
-         <para>YYYYMMDD_TIME is the waypoint's creation time, if any.  It's a single
+         <para>YYYYMMDD_TIME is the waypoint's creation time in UTC, if any.  It's a single
    decimal field containing four digits of year, two digits of month,
    and two digits of date.   Internally it is a LONG INTEGER and thus
    requires a LONG INTEGER printf conversion.
