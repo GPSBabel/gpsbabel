@@ -872,9 +872,10 @@ longitude)
       </section>
       <section xml:id="style_def_hmsgtime">
          <title>HMSG_TIME</title>
-         <para>HMSG_TIME parses up to three time parts and am/pm string to add
+         <para>HMSG_TIME parses up to three time parts and an optional am/pm string to add
    this value to the previously parsed *_TIME field that contains
-   only a date.  On output, will print the time in UTC.
+   only a date.  If the optional am/pm string is present then a 12 hour clock is assumed,
+   otherwise a 24 hour clock is assumed.  On output, will print the time in UTC using a 12 hour clock.
 </para>
          <para>example:
 </para>
@@ -883,9 +884,10 @@ longitude)
       </section>
       <section xml:id="style_def_hmsltime">
          <title>HMSL_TIME</title>
-         <para>HMSG_TIME parses up to three time parts and am/pm string to add
+         <para>HMSG_TIME parses up to three time parts and an optional am/pm string to add
    this value to the previously parsed *_TIME field that contains
-   only a date.  On output, will print the time in local time.
+   only a date.  If the optional am/pm string is present then a 12 hour clock is assumed,
+   otherwise a 24 hour clock is assumed.  On output, will print the time in local time using a 12 hour clock.
 </para>
          <para>example:
 </para>
