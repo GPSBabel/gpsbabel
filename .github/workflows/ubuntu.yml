@@ -95,7 +95,7 @@ jobs:
     # Make sure the snap is installable
     - name: Test
       run: |
-        sudo snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
+        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
         /snap/bin/gpsbabel -D3 || true
