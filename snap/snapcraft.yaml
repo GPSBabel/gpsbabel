@@ -29,10 +29,16 @@ parts:
     cmake-generator: Ninja
     source: https://github.com/GPSBabel/gpsbabel.git
     override-pull: |
-      snapcraftctl pull
+      craftctl default
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
 
+    override-build: |
+      GITHUB_SHA=$(git rev-parse --short=7 HEAD)
+      export GITHUB_SHA
+      craftctl default
+
     build-packages:
+      - git
       - vim
       - g++
       - ninja-build
