@@ -33,7 +33,7 @@ parts:
       craftctl default
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
       # ensure version has at most 32 characters
-      craftctl set version=$(git show -s --format=continuous-%h-%as)
+      craftctl set version=$(git show -s --format=continuous-%as-%h)
 
     build-packages:
       - git
