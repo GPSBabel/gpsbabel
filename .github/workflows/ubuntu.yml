@@ -92,3 +92,8 @@ jobs:
     # Make sure the snap is installable
     - run: |
         sudo snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: continuous-linux
+        path: ${{ steps.build-snap.outputs.snap }}
+        retention-days: 7
