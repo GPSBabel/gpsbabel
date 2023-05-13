@@ -18,6 +18,7 @@ apps:
   gpsbabel:
     command: /usr/bin/gpsbabel
 
+adopt-info: gpsbabel
 parts:
   gpsbabel:
     # See 'snapcraft plugins'
@@ -31,11 +32,7 @@ parts:
     override-pull: |
       craftctl default
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
-
-    override-build: |
-      GITHUB_SHA=$(git -C ${CRAFT_PART_SRC} rev-parse --short=7 HEAD)
-      export GITHUB_SHA
-      craftctl default
+      craftctl set version=$(git show -s --format=continuous-%h-%aI)
 
     build-packages:
       - git
