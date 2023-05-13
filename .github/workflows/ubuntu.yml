@@ -98,7 +98,7 @@ jobs:
         sudo snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
-        /snap/bin/gpsbabel -D3
+        /snap/bin/gpsbabel -D3 || true
         ./testo -p /snap/bin/gpsbabel 
 
     - name: Deploy
