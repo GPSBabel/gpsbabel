@@ -33,7 +33,7 @@ parts:
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
 
     override-build: |
-      GITHUB_SHA=$(git rev-parse --short=7 HEAD)
+      GITHUB_SHA=$(git -C ${CRAFT_PART_SRC} rev-parse --short=7 HEAD)
       export GITHUB_SHA
       craftctl default
 
