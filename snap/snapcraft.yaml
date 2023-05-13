@@ -41,7 +41,7 @@ parts:
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
-      craftctl set version=$(git log -1 --format='LinuxInstaller-%h-%ad' --date=format:%Y%m%d)
+      craftctl set version=$(git log -1 --format='LinuxInstaller-%ad-%h' --date=format:%Y%m%d)
 
     build-packages:
       - git
