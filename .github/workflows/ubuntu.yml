@@ -85,15 +85,34 @@ jobs:
     outputs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
-    - uses: actions/checkout@v3
-    - uses: snapcore/action-build@v1
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build
+      uses: snapcore/action-build@v1
       id: build-snap
 
     # Make sure the snap is installable
-    - run: |
-        sudo snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
-    - uses: actions/upload-artifact@v3
+    - name: Test
+      run: |
+        snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
+        export GBTEMP=$(pwd)/gbtemp
+        mkdir -p "$GBTEMP"
+        ./testo -p /snap/bin/gpsbabel 
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-Linux
+      run: |
+        ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
       with:
-        name: continuous-linux
+        name: ${{ steps.build-snap.outputs.snap }}
         path: ${{ steps.build-snap.outputs.snap }}
         retention-days: 7
