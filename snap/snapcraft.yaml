@@ -27,7 +27,7 @@ parts:
       - -DGPSBABEL_WITH_ZLIB=pkgconfig
       - -DGPSBABEL_WITH_SHAPELIB=pkgconfig
     cmake-generator: Ninja
-    source: https://github.com/GPSBabel/gpsbabel.git
+    source: .
     override-pull: |
       craftctl default
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
