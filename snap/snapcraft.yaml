@@ -31,9 +31,13 @@ parts:
     source: .
     override-pull: |
       craftctl default
+      # add install command to CMakeLists.txt
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
+      # jam repo sha into GITHUB_SHA
+      sed -i -e"s/set(GB.SHA \$ENV{GITHUB_SHA})/set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")/" gbversion.cmake
+      # set snap version
       # ensure version has at most 32 characters
-      craftctl set version=$(git show -s --format=continuous-%as-%h)
+      craftctl set version=$(git log -1 --format='LinuxInstaller-%h-%ad' --date=format:%Y%m%d)
 
     build-packages:
       - git
