@@ -78,3 +78,17 @@ jobs:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
       run: |
         ./tools/travis_script_linux_coverage
+
+  snap:
+    name: snap Build
+    runs-on: ubuntu-latest
+    outputs:
+      snap-file: ${{ steps.build-snap.outputs.snap }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: snapcore/action-build@v1
+      id: build-snap
+
+    # Make sure the snap is installable
+    - run: |
+        sudo snap install --devmode --dangerous ${{ steps.build-snap.outputs.snap }}
