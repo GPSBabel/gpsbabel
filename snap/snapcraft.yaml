@@ -32,7 +32,8 @@ parts:
     override-pull: |
       craftctl default
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
-      craftctl set version=$(git show -s --format=continuous-%h-%aI)
+      # ensure version has at most 32 characters
+      craftctl set version=$(git show -s --format=continuous-%h-%as)
 
     build-packages:
       - git
