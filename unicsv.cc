@@ -1,7 +1,7 @@
 /*
     Universal CSV - support for csv files, divining field order from the header.
 
-    Copyright (C) 2006-2013 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2006-2023 Robert Lipe, robertlipe+source@gpsbabel.org
     copyright (C) 2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -194,15 +194,16 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   //
   int base;
   const QString kBase31 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
-  if (s.size() >= 1 && s.size() <= 3) {
+  int len = s.size();
+  if (len >= 1 && len <= 3) {
     base = 16;
-  } else if (s.size() == 4) {
+  } else if (len == 4) {
     if (kBase31.indexOf(s[0]) < 16) {
       base = 16;
     } else {
       base = 31;
     }
-  } else if (s.size() >= 5 && s.size() <= 12) {
+  } else if (len >= 5 && len <= 12) {
     base = 31;
   } else {
     return 0;
@@ -231,7 +232,6 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   int p1, p2, p3;
   char sep[2];
   int lconsumed = 0;
-
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
   if (consumed && lconsumed) {
     *consumed = lconsumed;
@@ -551,15 +551,23 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     switch (unicsv_fields_tab[column]) {
 
-    case fld_latitude:
-      human_to_dec(value, &wpt->latitude, nullptr, HumanToDec::FindLatitude);
-      wpt->latitude = wpt->latitude * ns;
-      break;
+    case fld_latitude: {
+      auto ll = human_to_dec(value, HumanToDec::FindLatitude);
+      if (ll.first.has_value()) {
+        wpt->latitude = ll.first.value();
+        wpt->latitude = wpt->latitude * ns;
+      }
+    }
+    break;
 
-    case fld_longitude:
-      human_to_dec(value, nullptr, &wpt->longitude, HumanToDec::FindLongitude);
-      wpt->longitude = wpt->longitude * ew;
-      break;
+    case fld_longitude: {
+      auto ll = human_to_dec(value, HumanToDec::FindLongitude);
+      if (ll.second.has_value()) {
+        wpt->longitude = ll.second.value();
+        wpt->longitude = wpt->longitude * ew;
+      }
+    }
+    break;
 
     case fld_shortname:
       wpt->shortname = value;

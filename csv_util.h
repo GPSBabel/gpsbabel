@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2002 Alex Mottram (geo_alexm at cox-internet.com)
-    Copyright (C) 2002-2014 Robert Lipe
+    Copyright (C) 2002-2023 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,8 +63,8 @@ enum class HumanToDec {
   FindLongitude,
 };
 
-void
-human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec which);
+std::pair<std::optional<double>, std::optional<double>>
+human_to_dec(const QString& instr, HumanToDec which);
 
 QString
 dec_to_human(const char* format, const char* dirs, double val);

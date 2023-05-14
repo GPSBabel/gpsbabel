@@ -2,7 +2,7 @@
     Utilities for parsing Character Separated Value files (CSV)
 
     Copyright (C) 2002 Alex Mottram (geo_alexm at cox-internet.com)
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -154,7 +154,8 @@ csv_dequote(const QString& string, const QString& enclosure)
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
+              const QString& enclosed_in, const int line_no,
+              CsvQuoteMethod method)
 {
   QStringList retval;
 
@@ -319,13 +320,13 @@ decdir_to_dec(const char* decdir)
 double
 ddmmdir_to_degrees(const char* ddmmdir)
 {
-  // if not N or E, prepend a '-' to ddmm2degrees input
+  // if not N or E, invert sign.
   // see XT_LAT_NMEA which handles ddmm directly
+  int degrees = strtod(ddmmdir, nullptr);
   if (strchr(ddmmdir, 'W') || strchr(ddmmdir, 'S')) {
-    return ddmm2degrees(- strtod(ddmmdir, nullptr));
+    degrees = -degrees;
   }
-  return ddmm2degrees(strtod(ddmmdir, nullptr));
-
+  return ddmm2degrees(degrees);
 }
 
 /*****************************************************************************
@@ -336,8 +337,8 @@ ddmmdir_to_degrees(const char* ddmmdir)
  *        which: 0-no preference    1-prefer lat    2-prefer lon
  *****************************************************************************/
 
-void
-human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec which)
+std::pair<std::optional<double>, std::optional<double>>
+human_to_dec(const QString& instr, HumanToDec which)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -345,6 +346,8 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec wh
   int    latsign = 0;
   int    lonsign = 0;
   int    unksign = 1;
+  std::optional<double> outlat;
+  std::optional<double> outlon;
 
   double* numres = unk;
   int numind = 0;
@@ -449,40 +452,39 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, HumanToDec wh
     }
   }
 
-  if (outlat) {
-    if (lat[0] != 999) {
-      *outlat = lat[0];
-    } else *outlat = 0;
-    if (lat[1] != 999) {
-      *outlat += lat[1]/60.0;
-    }
-    if (lat[2] != 999) {
-      *outlat += lat[2]/3600.0;
-    }
-    if (*outlat > 360) {
-      *outlat = ddmm2degrees(*outlat);  /* NMEA style */
-    }
-    if (latsign) {
-      *outlat *= latsign;
-    }
+  if (lat[0] != 999) {
+    outlat = lat[0];
+  } else outlat = 0;
+  if (lat[1] != 999) {
+    outlat = outlat.value() + lat[1] / 60.0;
   }
-  if (outlon) {
-    if (lon[0] != 999) {
-      *outlon = lon[0];
-    } else *outlon = 0;
-    if (lon[1] != 999) {
-      *outlon += lon[1]/60.0;
-    }
-    if (lon[2] != 999) {
-      *outlon += lon[2]/3600.0;
-    }
-    if (*outlon > 360) {
-      *outlon = ddmm2degrees(*outlon);  /* NMEA style */
-    }
-    if (lonsign) {
-      *outlon *= lonsign;
-    }
+  if (lat[2] != 999) {
+    outlat = outlat.value() + lat[2] / 3600.0;
   }
+  if (outlat > 360) {
+    outlat = ddmm2degrees(outlat.value());  /* NMEA style */
+  }
+  if (latsign) {
+    outlat = outlat.value() * latsign;
+  }
+
+  if (lon[0] != 999) {
+    outlon = lon[0];
+  } else outlon = 0;
+  if (lon[1] != 999) {
+    outlon = outlon.value() + lon[1] / 60.0;
+  }
+  if (lon[2] != 999) {
+    outlon = outlon.value() + lon[2] / 3600.0;
+  }
+  if (outlon > 360) {
+    outlon = ddmm2degrees(outlon.value());  /* NMEA style */
+  }
+  if (lonsign) {
+    outlon = outlon.value() * lonsign;
+  }
+
+  return std::tuple(outlat, outlon);
 }
 
 /*
