@@ -484,7 +484,7 @@ human_to_dec(const QString& instr, HumanToDec which)
     outlon = outlon.value() * lonsign;
   }
 
-  return std::tuple(outlat, outlon);
+  return std::pair(outlat, outlon);
 }
 
 /*
