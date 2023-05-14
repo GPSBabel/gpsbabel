@@ -78,3 +78,42 @@ jobs:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
       run: |
         ./tools/travis_script_linux_coverage
+
+  snap:
+    name: snap Build
+    runs-on: ubuntu-latest
+    outputs:
+      snap-file: ${{ steps.build-snap.outputs.snap }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build
+      uses: snapcore/action-build@v1
+      id: build-snap
+
+    # Make sure the snap is installable
+    - name: Test
+      run: |
+        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
+        export GBTEMP=$(pwd)/gbtemp
+        mkdir -p "$GBTEMP"
+        /snap/bin/gpsbabel -D3 || true
+        ./testo -p /snap/bin/gpsbabel 
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-Linux
+      run: |
+        ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ steps.build-snap.outputs.snap }}
+        path: ${{ steps.build-snap.outputs.snap }}
+        retention-days: 7
