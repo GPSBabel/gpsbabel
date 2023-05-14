@@ -12,11 +12,25 @@ source-code: https://github.com/GPSBabel/gpsbabel.git
 website: https://www.gpsbabel.org
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
   gpsbabel:
-    command: /usr/bin/gpsbabel
+    plugs:
+      - home
+      - raw-usb
+      - removable-media
+      - serial-port
+    command: usr/bin/gpsbabel
+
+# remap the ubuntu qt6 install directories to the snap.
+layout:
+  /usr/share/qt6:
+    symlink: $SNAP/usr/share/qt6
+  /usr/lib/qt6:
+    symlink: $SNAP/usr/lib/qt6
+  /usr/lib/x86_64-linux-gnu/qt6:
+    symlink: $SNAP/usr/lib/x86_64-linux-gnu/qt6
 
 adopt-info: gpsbabel
 parts:
@@ -33,11 +47,13 @@ parts:
       craftctl default
       # add install command to CMakeLists.txt
       echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
+      # no gui
+      sed -i -e's/add_subdirectory(gui)/#add_subdirectory(gui)/' CMakeLists.txt
       # jam repo sha into GITHUB_SHA
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
-      craftctl set version=$(git log -1 --format='LinuxInstaller-%h-%ad' --date=format:%Y%m%d)
+      craftctl set version=$(git log -1 --format='LinuxInstaller-%ad-%h' --date=format:%Y%m%d)
 
     build-packages:
       - git
@@ -51,21 +67,6 @@ parts:
       - libudev-dev
       - qt6-base-dev
       - libqt6core5compat6-dev
-      - libqt6opengl6-dev
-      - libqt6serialport6-dev
-      - libqt6webenginecore6-bin
-      - libgl-dev
-      - libopengl-dev
-      - libvulkan-dev
-      - libx11-xcb-dev
-      - libxkbcommon-dev
-      - qt6-l10n-tools
-      - qt6-tools-dev
-      - qt6-tools-dev-tools
-      - qt6-translations-l10n
-      - qt6-webengine-dev
-      - qt6-webengine-dev-tools
-      - qt6-wayland
     stage-packages:
       - zlib1g
       - libshp2
