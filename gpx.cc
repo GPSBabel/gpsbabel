@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002-2015 Robert Lipe, gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 #include <cmath>                            // for lround
 #include <cstdio>                           // for sscanf
-#include <cstring>                          // for strchr, strncpy
+#include <cstring>                          // for strchr
 
 #include <QByteArray>                       // for QByteArray
 #include <QDate>                            // for QDate
@@ -32,6 +32,8 @@
 #include <QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1Char>                      // for QLatin1Char
 #include <QLatin1String>                    // for QLatin1String
+#include <QRegularExpression>               // for QRegularExpression
+#include <QRegularExpressionMatch>          // for QRegularExpressionMatch
 #include <QString>                          // for QString, QStringLiteral, operator+, operator==
 #include <QStringList>                      // for QStringList
 #include <QStringView>                      // for QStringView
@@ -404,6 +406,7 @@ xml_parse_time(const QString& dateTimeString)
     /* zulu time; offsets stay at defaults */
     *offsetstr = '\0';
   } else {
+#if 0
     offsetstr = strchr(timestr, '+');
     if (offsetstr) {
       /* positive offset; parse it */
@@ -421,34 +424,44 @@ xml_parse_time(const QString& dateTimeString)
         }
       }
     }
-  }
-
-  double fsec = 0;
-  char* pointstr = strchr(timestr, '.');
-  if (pointstr) {
-    sscanf(pointstr, "%le", &fsec);
-#if 0
-    /* Round to avoid FP jitter */
-    if (microsecs) {
-      *microsecs = .5 + (fsec * 1000000.0) ;
+#else
+    // static const QRegularExpression re(R"([+-])(\d+):(\d+)");
+    static const QRegularExpression re("([+-])\(\\d+):(\\d+)");
+    QRegularExpressionMatch match = re.match(dateTimeString);
+    assert(re.isValid());
+    if (match.hasMatch()) {
+      off_sign = match.captured(1) == '-' ? -1 : 1;
+      off_hr = match.captured(2).toInt();
+      off_min = match.captured(3).toInt();
     }
 #endif
-    *pointstr = '\0';
   }
-
-  int year = 0, mon = 0, mday = 0, hour = 0, min = 0, sec = 0;
+if (off_hr) qDebug() << dateTimeString << off_hr << off_min;
   gpsbabel::DateTime dt;
-  int res = sscanf(timestr, "%d-%d-%dT%d:%d:%d", &year, &mon, &mday, &hour,
+#if 0
+  int year = 0, mon = 0, mday = 0, hour = 0, min = 0;
+  double sec;
+  int res = sscanf(timestr, "%d-%d-%dT%d:%d:%lf", &year, &mon, &mday, &hour,
                    &min, &sec);
   if (res > 0) {
+#else
+  static const QRegularExpression
+    re("(\\d+)-(\\d+)-(\\d+)T(\\d+):(\\d+):([0-9.]+)");
+  QRegularExpressionMatch match = re.match(dateTimeString);
+  assert(re.isValid());
+  if (match.hasMatch()) {
+    int year = match.captured(1).toInt();
+    int mon = match.captured(2).toInt();
+    int mday = match.captured(3).toInt();
+    int hour = match.captured(4).toInt();
+    int min = match.captured(5).toInt();
+    double sec = match.captured(6).toDouble();
+#endif
     QDate date(year, mon, mday);
-    QTime time(hour, min, sec);
-    dt = QDateTime(date, time, Qt::UTC);
+    // The ctor for time accepts int secs, so we have to break out the msecs.
+    QTime time(hour, min, sec, ((sec - (int)sec + .0005) * 1000));
 
-    // Fractional part of time.
-    if (fsec) {
-      dt = dt.addMSecs(lround(fsec * 1000));
-    }
+    dt = QDateTime(date, time, Qt::UTC);
 
     // Any offsets that were stuck at the end.
     dt = dt.addSecs(-off_sign * off_hr * 3600 - off_sign * off_min * 60);
