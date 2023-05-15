@@ -23,10 +23,11 @@
 
 #include <bitset>                 // for bitset
 #include <cstdint>                // for uint32_t
-#include <ctime>                  // for gmtime
 
+#include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
 #include <QString>                // for QString
+#include <QTime>                  // for QTime
 #include <QVector>                // for QVector
 
 #include "defs.h"
@@ -165,17 +166,17 @@ private:
   /* Member Functions */
 
   static long long int unicsv_parse_gc_code(const QString& str);
-  static time_t unicsv_parse_date(const char* str, int* consumed);
-  static time_t unicsv_parse_time(const char* str, int* usec, time_t* date);
-  static time_t unicsv_parse_time(const QString& str, int* msec, time_t* date);
+  static QDate unicsv_parse_date(const char* str, int* consumed);
+  static QTime unicsv_parse_time(const char* str, QDate* date);
+  static QTime unicsv_parse_time(const QString& str, QDate* date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
-  QDateTime unicsv_adjust_time(time_t time, const time_t* date) const;
+  QDateTime unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
   static bool unicsv_compare_fields(const QString& s, const field_t* f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
   void unicsv_fatal_outside(const Waypoint* wpt) const;
   void unicsv_print_str(const QString& s) const;
-  void unicsv_print_data_time(const QDateTime& idt) const;
+  void unicsv_print_date_time(const QDateTime& idt) const;
   void unicsv_waypt_enum_cb(const Waypoint* wpt);
   void unicsv_waypt_disp_cb(const Waypoint* wpt);
   static void unicsv_check_modes(bool test);
@@ -208,6 +209,7 @@ private:
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};
+  int utc_offset{};
 
   QVector<arglist_t> unicsv_args = {
     {
@@ -220,7 +222,7 @@ private:
     },
     {
       "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-      nullptr, ARGTYPE_INT, "-23", "+23", nullptr
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
     },
     {
       "format", &opt_format,   "Write name(s) of format(s) from input session(s)",
