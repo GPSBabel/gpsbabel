@@ -167,8 +167,8 @@ private:
 
   static long long int unicsv_parse_gc_code(const QString& str);
   static QDate unicsv_parse_date(const char* str, int* consumed);
-  static QTime unicsv_parse_time(const char* str, QDate* date);
-  static QTime unicsv_parse_time(const QString& str, QDate* date);
+  static QTime unicsv_parse_time(const char* str, QDate& date);
+  static QTime unicsv_parse_time(const QString& str, QDate& date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
   QDateTime unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
   static bool unicsv_compare_fields(const QString& s, const field_t* f);

@@ -281,7 +281,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 }
 
 QTime
-UnicsvFormat::unicsv_parse_time(const char* str, QDate* date)
+UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
 {
   int hour;
   int min;
@@ -296,20 +296,16 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate* date)
   QDate ldate = unicsv_parse_date(str, &consumed);
   if (consumed && ldate.isValid()) {
     str += consumed;
-    if (date) {
-      *date = ldate;
-    }
+    date = ldate;
   }
   int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d%lf", &hour, &min, &sec, &frac_sec);
   if (ct < 3) {
     fatal(FatalMsg() << MYNAME << ": Could not parse time string (" << str << ").");
   }
-  if (ct == 4) {
-    msec = qRound(frac_sec * 1000);
-    if (msec > 999) {
-      msec = 0;
-      sec++;
-    }
+  if (ct >= 4) {
+    // Don't round up and ripple through seconds, minutes, hours.
+    // 23:59:59.9999999 -> 24:00:00.000 which is an invalid QTime.
+    msec = frac_sec * 1000.0;
   } else {
     msec = 0;
   }
@@ -322,7 +318,7 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate* date)
 }
 
 QTime
-UnicsvFormat::unicsv_parse_time(const QString& str, QDate* date)
+UnicsvFormat::unicsv_parse_time(const QString& str, QDate& date)
 {
   return unicsv_parse_time(CSTR(str), date);
 }
@@ -688,7 +684,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_utc_time:
       if (need_datetime && !utc_time.isValid()) {
-        utc_time = unicsv_parse_time(value, &utc_date);
+        utc_time = unicsv_parse_time(value, utc_date);
       }
       break;
 
@@ -766,7 +762,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_time:
       if (need_datetime && !local_time.isValid()) {
-        local_time = unicsv_parse_time(value, &local_date);
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
@@ -802,7 +798,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     case fld_datetime:
       if (need_datetime && !local_date.isValid() && !local_time.isValid()) {
-        local_time = unicsv_parse_time(value, &local_date);
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
@@ -914,7 +910,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_exported: {
         QTime etime;
         QDate edate;
-        etime = unicsv_parse_time(value, &edate);
+        etime = unicsv_parse_time(value, edate);
         if (edate.isValid() || etime.isValid()) {
           gc_data->exported = unicsv_adjust_time(edate, etime, true);
         }
@@ -923,7 +919,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_last_found: {
         QTime ftime;
         QDate fdate;
-        ftime = unicsv_parse_time(value, &fdate);
+        ftime = unicsv_parse_time(value, fdate);
         if (fdate.isValid() || ftime.isValid()) {
           gc_data->last_found = unicsv_adjust_time(fdate, ftime, true);
         }
