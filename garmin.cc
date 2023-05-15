@@ -386,7 +386,7 @@ rw_init(const QString& fname)
   assert(!QString(valid_waypt_chars).contains('-'));
   assert(!QString(valid_waypt_chars).contains('['));
   assert(!QString(valid_waypt_chars).contains(']'));
-  invalid_char_re = QRegularExpression(QLatin1String("[^%1]").arg(valid_waypt_chars));
+  invalid_char_re = QRegularExpression(QStringLiteral("[^%1]").arg(valid_waypt_chars));
   assert(!invalid_char_re.isValid());
 }
 
