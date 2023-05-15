@@ -348,6 +348,9 @@ rw_init(const QString& fname)
    * garmin_fs_garmin_before_write.
    */
   codec = get_codec(receiver_charset);
+  if (global_opts.verbose_status) {
+    fprintf(stdout, "reciever charset detected as %s.\r\n", receiver_charset);
+  }
 }
 
 static void
@@ -418,8 +421,8 @@ waypt_read()
   for (int i = 0; i < n; i++) {
     auto* wpt_tmp = new Waypoint;
 
-    wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
-    wpt_tmp->description = QString::fromLatin1(way[i]->cmnt);
+    wpt_tmp->shortname = str_to_unicode(way[i]->ident);
+    wpt_tmp->description = str_to_unicode(way[i]->cmnt);
     wpt_tmp->shortname = wpt_tmp->shortname.simplified();
     wpt_tmp->description = wpt_tmp->description.simplified();
     wpt_tmp->longitude = way[i]->lon;
@@ -532,7 +535,7 @@ track_read()
     if (trk_head == nullptr || array[i]->ishdr) {
       trk_head = new route_head;
       trk_head->rte_num = trk_num;
-      trk_head->rte_name = QString::fromLatin1(trk_name);
+      trk_head->rte_name = str_to_unicode(trk_name);
       trk_num++;
       track_add_head(trk_head);
     }
@@ -554,7 +557,7 @@ track_read()
     wpt->altitude = array[i]->alt;
     wpt->heartrate = array[i]->heartrate;
     wpt->cadence = array[i]->cadence;
-    wpt->shortname = array[i]->trk_ident;
+    wpt->shortname = str_to_unicode(array[i]->trk_ident);
     wpt->SetCreationTime(array[i]->Time);
     wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                               nlaps);
@@ -611,7 +614,7 @@ route_read()
       rte_head = new route_head;
       route_add_head(rte_head);
       if (csrc) {
-        rte_head->rte_name = QString::fromLatin1(csrc);
+        rte_head->rte_name = str_to_unicode(csrc);
       }
     } else {
       if (array[i]->islink)  {
@@ -620,7 +623,7 @@ route_read()
         auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
-        wpt_tmp->shortname = array[i]->ident;
+        wpt_tmp->shortname = str_to_unicode(array[i]->ident);
         route_add_wpt(rte_head, wpt_tmp);
       }
     }
