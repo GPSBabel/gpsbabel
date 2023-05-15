@@ -258,6 +258,8 @@ option	garmin	bitscategory	Bitmap of categories	integer		1	65535	https://www.gps
 
 option	garmin	baud	Speed in bits per second of serial port (baud=9600)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_baud
 
+option	garmin	codec	override codec to use for device	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_codec
+
 file	r-rw--	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)	gtrnctr
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html
 option	gtrnctr	course	Write course rather than history, default yes	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_course
