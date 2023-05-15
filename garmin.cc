@@ -76,6 +76,7 @@ static char* deficon = nullptr;
 static char* category = nullptr;
 static char* categorybitsopt = nullptr;
 static char* baudopt = nullptr;
+static char* opt_codec = nullptr;
 static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
@@ -127,6 +128,10 @@ QVector<arglist_t> garmin_args = {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
     nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
+    {
+      "codec", &opt_codec, "override codec to use for device",
+      nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
 
 };
 
@@ -362,6 +367,10 @@ rw_init(const QString& fname)
    * However, this is still used for garmin_fs_garmin_after_read,
    * garmin_fs_garmin_before_write.
    */
+  if (opt_codec != nullptr) {
+    // override expected codec with user supplied choice.
+    receiver_charset = opt_codec;
+  }
   codec = get_codec(receiver_charset);
   if (global_opts.verbose_status) {
     fprintf(stdout, "reciever charset detected as %s.\r\n", receiver_charset);
