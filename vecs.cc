@@ -1055,7 +1055,7 @@ void Vecs::disp_vec(const QString& vecname) const
       continue;
     }
 
-    printf(" %-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
+    printf("	%-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {
