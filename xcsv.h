@@ -34,6 +34,7 @@
 #include <QStringList>            // for QStringList
 #include <QTime>                  // for QTime
 #include <QVector>                // for QVector
+#include <QtGlobal>               // for qRound64
 
 #include "defs.h"
 #include "format.h"
@@ -88,8 +89,6 @@ public:
     XT_GPS_SAT,
     XT_GPS_VDOP,
     XT_HEART_RATE,
-    XT_HMSG_TIME,
-    XT_HMSL_TIME,
     XT_ICON_DESCR,
     XT_IGNORE,
     XT_INDEX,

@@ -28,6 +28,7 @@
 #include <cctype>                  // for isdigit, tolower
 #include <cmath>                   // for fabs, pow
 #include <cstdio>                  // for snprintf, sscanf
+#include <cstdint>                 // for uint32_t
 #include <cstdlib>                 // for strtod
 #include <cstring>                 // for strlen, strncmp, strcmp
 #include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
@@ -96,8 +97,6 @@ const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
   { "GPS_SAT", XT_GPS_SAT },
   { "GPS_VDOP", XT_GPS_VDOP },
   { "HEART_RATE", XT_HEART_RATE },
-  { "HMSG_TIME", XT_HMSG_TIME },
-  { "HMSL_TIME", XT_HMSL_TIME },
   { "ICON_DESCR", XT_ICON_DESCR },
   { "IGNORE", XT_IGNORE },
   { "INDEX", XT_INDEX },
@@ -323,34 +322,6 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
   }
 }
 
-QTime
-XcsvFormat::addhms(const char* s, const char* format)
-{
-  QTime tt;
-  int hour = 0;
-  int min = 0;
-  int sec = 0;
-
-  char* ampm = (char*) xmalloc(strlen(s) + 1);
-  int ac = sscanf(s, format, &hour, &min, &sec, ampm);
-  /* If no time format in arg string, assume AM */
-  if (ac >= 4) {
-    // convert 12 hour clock to 24 hour clock
-    if (hour == 12) {
-      hour = 0;
-    }
-    if (tolower(ampm[0]) == 'p') {
-      hour += 12;
-    }
-  }
-  if (ac > 0) {
-    tt = QTime(hour, min, sec);
-  }
-  xfree(ampm);
-
-  return tt;
-}
-
 QString
 XcsvFormat::writetime(const char* format, time_t t, bool gmt)
 {
@@ -376,38 +347,6 @@ XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
 {
   uint32_t tt = t.toTime_t();
   return (tt == 0xffffffffU)? QString() : writetime(format, tt, gmt);
-}
-
-QString
-XcsvFormat::writehms(const char* format, time_t t, bool gmt)
-{
-  static const std::tm no_time{};
-  static const std::tm* stmp = &no_time;
-
-  if (gmt) {
-    stmp = gmtime(&t);
-  } else {
-    stmp = localtime(&t);
-  }
-
-  if (stmp == nullptr) {
-    stmp = &no_time;
-  }
-
-  int hour = stmp->tm_hour % 12;
-  if (hour == 0) {
-    hour = 12;
-  }
-  return QString::asprintf(format,
-                           hour, stmp->tm_min, stmp->tm_sec,
-                           (stmp->tm_hour >= 12 ? "PM" : "AM"));
-}
-
-QString
-XcsvFormat::writehms(const char* format, const gpsbabel::DateTime& t, bool gmt)
-{
-  uint32_t tt = t.toTime_t();
-  return (tt == 0xffffffffU)? QString() : writehms(format, tt, gmt);
 }
 
 long
@@ -687,14 +626,6 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   case XcsvStyle::XT_LOCAL_TIME:
     sscanftime(s, fmp.printfc.constData(), parse_data->local_date, parse_data->local_time);
-    break;
-  /* May be useful when time and date are in separate fields,
-     or just use the above twice with different format strings */
-  case XcsvStyle::XT_HMSG_TIME:
-    parse_data->utc_time = addhms(s, fmp.printfc.constData());
-    break;
-  case XcsvStyle::XT_HMSL_TIME:
-    parse_data->local_time = addhms(s, fmp.printfc.constData());
     break;
   case XcsvStyle::XT_ISO_TIME:
   case XcsvStyle::XT_ISO_TIME_MS:
@@ -1475,12 +1406,6 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_LOCAL_TIME:
       buff = writetime(fmp.printfc.constData(), wpt->GetCreationTime(), false);
-      break;
-    case XcsvStyle::XT_HMSG_TIME:
-      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), true);
-      break;
-    case XcsvStyle::XT_HMSL_TIME:
-      buff = writehms(fmp.printfc.constData(), wpt->GetCreationTime(), false);
       break;
     case XcsvStyle::XT_ISO_TIME:
       if (wpt->GetCreationTime().isValid()) {
