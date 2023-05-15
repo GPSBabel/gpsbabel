@@ -19,7 +19,7 @@
 
  */
 
-#include <cctype>                // for isalpha, toupper
+#include <cassert>               // for assert
 #include <climits>               // for INT_MAX
 #include <cmath>                 // for atan2, floor, sqrt
 #include <csetjmp>               // for setjmp
@@ -30,6 +30,7 @@
 
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for QChar
+#include <QRegularExpression>    // for QRegularExpression
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <QVector>               // for QVector
@@ -88,6 +89,7 @@ static Vecs::fmtinfo_t gpx_vec;
 
 /* Technically, even this is a little loose as spaces arent allowed */
 static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
+static QRegularExpression invalid_char_re;
 
 static
 QVector<arglist_t> garmin_args = {
@@ -264,8 +266,7 @@ rw_init(const QString& fname)
     case 696: 	/* eTrex HC */
     case 574: 	/* Geko 201 */
       receiver_short_length = 6;
-      valid_waypt_chars =
-        MILITANT_VALID_WAYPT_CHARS " +-";
+      valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
       setshort_badchars(mkshort_handle, "\"$.,'!");
       break;
 
@@ -375,6 +376,18 @@ rw_init(const QString& fname)
   if (global_opts.verbose_status) {
     fprintf(stdout, "reciever charset detected as %s.\r\n", receiver_charset);
   }
+
+  /*
+   * Beware, valid_waypt_chars shouldn't contain any character class metacharacters,
+   * i.e. '\', '^', '-', '[', or ']'
+   */
+  assert(!QString(valid_waypt_chars).contains('\\'));
+  assert(!QString(valid_waypt_chars).contains('^'));
+  assert(!QString(valid_waypt_chars).contains('-'));
+  assert(!QString(valid_waypt_chars).contains('['));
+  assert(!QString(valid_waypt_chars).contains(']'));
+  invalid_char_re = QRegularExpression(QLatin1String("[^%1]").arg(valid_waypt_chars));
+  assert(!invalid_char_re.isValid());
 }
 
 static void
@@ -1042,18 +1055,15 @@ route_waypt_pr(const Waypoint* wpt)
     rte->alt = 0;
   }
 
-  char* d = rte->ident;
-  for (auto idx : wpt->shortname) {
-    int c = idx.toLatin1();
-    if (receiver_must_upper && isalpha(c)) {
-      c = toupper(c);
-    }
-    if (strchr(valid_waypt_chars, c)) {
-      *d++ = c;
-    }
+  QString cleanname = wpt->shortname;
+  if (receiver_must_upper) {
+    cleanname = cleanname.toUpper();
   }
+  cleanname = cleanname.remove(invalid_char_re);
+  write_char_string(rte->ident,
+                    str_from_unicode(cleanname).constData(),
+                    sizeof(rte->ident));
 
-  rte->ident[sizeof(rte->ident)-1] = 0;
   if (wpt->description.isEmpty()) {
     rte->cmnt[0] = 0;
   } else {
