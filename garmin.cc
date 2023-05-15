@@ -125,7 +125,8 @@ QVector<arglist_t> garmin_args = {
   },
   {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
-    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
 
 };
 
@@ -134,8 +135,22 @@ static int d103_icon_number_from_symbol(const QString& s);
 static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
 static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
-static QByteArray str_from_unicode(const QString& qstr) {return codec->fromUnicode(qstr);}
-static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(cstr);}
+static QByteArray str_from_unicode(const QString& qstr)
+{
+  return codec->fromUnicode(qstr);
+}
+static QString str_to_unicode(const QByteArray& cstr)
+{
+  return codec->toUnicode(cstr);
+}
+
+static void
+write_char_string(char* dest, const char* source, size_t destsize)
+{
+  // we zero fill and always terminate within the dest buffer.
+  strncpy(dest, source, destsize - 1);
+  dest[destsize-1] = 0;
+}
 
 static void
 rw_init(const QString& fname)
@@ -168,14 +183,14 @@ rw_init(const QString& fname)
   if (baudopt) {
     baud = strtol(baudopt, nullptr, 0);
     switch (baud) {
-      case 9600:
-      case 19200:
-      case 38400:
-      case 57600:
-      case 115200:
-        break;
-      default:
-        fatal("Baud rate %d is not supported\n", baud);
+    case 9600:
+    case 19200:
+    case 38400:
+    case 57600:
+    case 115200:
+      break;
+    default:
+      fatal("Baud rate %d is not supported\n", baud);
     }
   }
 
@@ -386,7 +401,7 @@ rw_deinit()
 }
 
 static int
-waypt_read_cb(int total_ct, GPS_PWay* )
+waypt_read_cb(int total_ct, GPS_PWay*)
 {
   if (global_opts.verbose_status) {
     static int i;
@@ -660,8 +675,8 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    *    reference clocks.
    */
   double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-    pvt->tow
-    - pvt->leap_scnds;
+                  pvt->tow
+                  - pvt->leap_scnds;
   double wptimes = floor(wptime);
   wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
 
@@ -873,34 +888,40 @@ waypoint_prepare()
      * cleaning
      */
     char* ident = mkshort(mkshort_handle,
-                           global_opts.synthesize_shortnames ? CSTRc(src) :
-                             CSTRc(wpt->shortname), false);
+                          global_opts.synthesize_shortnames ?
+                          str_from_unicode(src).constData() :
+                          str_from_unicode(wpt->shortname).constData(),
+                          false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
      */
-    memcpy(tx_waylist[i]->ident, ident, strlen(ident));
+    write_char_string(tx_waylist[i]->ident, ident, sizeof(tx_waylist[i]->ident));
 
     if (global_opts.synthesize_shortnames) {
       xfree(ident);
     }
-    tx_waylist[i]->ident[sizeof(tx_waylist[i]->ident)-1] = 0;
 
     // If we were explicitly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
     if (!wpt->description.isEmpty() &&
         global_opts.smart_names && !wpt->gc_data->diff) {
-      memcpy(tx_waylist[i]->cmnt, CSTRc(wpt->description), strlen(CSTRc(wpt->description)));
+      write_char_string(tx_waylist[i]->cmnt,
+                        str_from_unicode(wpt->description).constData(),
+                        sizeof(tx_waylist[i]->cmnt));
     } else {
       if (global_opts.smart_names &&
           wpt->gc_data->diff && wpt->gc_data->terr) {
+        assert(sizeof(obuf) >= sizeof(tx_waylist[i]->cmnt));
         snprintf(obuf, sizeof(obuf), "%s%u/%u %s",
                  get_gc_info(wpt),
                  wpt->gc_data->diff, wpt->gc_data->terr,
-                 CSTRc(src));
-        memcpy(tx_waylist[i]->cmnt, obuf, strlen(obuf));
+                 str_from_unicode(src).constData());
+        write_char_string(tx_waylist[i]->cmnt, obuf, sizeof(tx_waylist[i]->cmnt));
       } else  {
-        memcpy(tx_waylist[i]->cmnt, CSTRc(src), strlen(CSTRc(src)));
+        write_char_string(tx_waylist[i]->cmnt,
+                          str_from_unicode(src).constData(),
+                          sizeof(tx_waylist[i]->cmnt));
       }
     }
 
@@ -975,9 +996,9 @@ route_hdr_pr(const route_head* rte)
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
-    strncpy((*cur_tx_routelist_entry)->rte_ident, CSTRc(rte->rte_name),
-            sizeof((*cur_tx_routelist_entry)->rte_ident) - 1);
-    (*cur_tx_routelist_entry)->rte_ident[sizeof((*cur_tx_routelist_entry)->rte_ident) - 1] = 0;
+    write_char_string((*cur_tx_routelist_entry)->rte_ident,
+                      str_from_unicode(rte->rte_name).constData(),
+                      sizeof((*cur_tx_routelist_entry)->rte_ident));
   }
 }
 
@@ -1027,8 +1048,9 @@ route_waypt_pr(const Waypoint* wpt)
   if (wpt->description.isEmpty()) {
     rte->cmnt[0] = 0;
   } else {
-    strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt) - 1);
-    rte->cmnt[sizeof(rte->cmnt)-1] = 0;
+    write_char_string(rte->cmnt,
+                      str_from_unicode(wpt->description).constData(),
+                      sizeof(rte->cmnt));
   }
   cur_tx_routelist_entry++;
 }
@@ -1054,8 +1076,9 @@ track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = true;
   if (!trk_head->rte_name.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
-    (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+    write_char_string((*cur_tx_tracklist_entry)->trk_ident,
+                      str_from_unicode(trk_head->rte_name).constData(),
+                      sizeof((*cur_tx_tracklist_entry)->trk_ident));
   } else {
     snprintf((*cur_tx_tracklist_entry)->trk_ident, sizeof((*cur_tx_tracklist_entry)->trk_ident), "TRACK%02d", my_track_count);
   }
@@ -1071,8 +1094,9 @@ track_waypt_pr(const Waypoint* wpt)
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
   (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();
   if (!wpt->shortname.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
-    (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+    write_char_string((*cur_tx_tracklist_entry)->trk_ident,
+                      str_from_unicode(wpt->shortname).constData(),
+                      sizeof((*cur_tx_tracklist_entry)->trk_ident));
   }
   (*cur_tx_tracklist_entry)->tnew = wpt->wpt_flags.new_trkseg;
   cur_tx_tracklist_entry++;
