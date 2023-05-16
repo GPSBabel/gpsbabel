@@ -934,7 +934,7 @@ waypoint_prepare()
     } else {
       if (global_opts.smart_names &&
           wpt->gc_data->diff && wpt->gc_data->terr) {
-        assert(sizeof(obuf) >= sizeof(tx_waylist[i]->cmnt));
+        static_assert(sizeof(obuf) >= sizeof(tx_waylist[i]->cmnt));
         snprintf(obuf, sizeof(obuf), "%s%u/%u %s",
                  get_gc_info(wpt),
                  wpt->gc_data->diff, wpt->gc_data->terr,
