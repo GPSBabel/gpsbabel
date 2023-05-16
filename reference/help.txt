@@ -41,6 +41,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -49,6 +50,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue757              Data Logger iBlue757 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -57,6 +59,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename
 	  frame                 Time-frame (in seconds)
@@ -79,6 +82,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_g1000          Garmin G1000 datalog input filter file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -87,6 +91,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gdb                   Garmin MapSource - gdb
 	  cat                   Default category on output (1..16)
 	  bitscategory          Bitmap of categories
@@ -111,6 +116,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_gpi            Garmin Points of Interest (.gpi)
 	  alerts                (0/1) Enable alerts on speed or proximity distance
 	  bitmap                Use specified bitmap on output
@@ -181,6 +187,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gtm                   GPS TrackMaker
 	arc                   GPSBabel arc filter file
 	  snlen                 Max synthesized shortname length
@@ -190,6 +197,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrive              GpsDrive Format
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -198,6 +206,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrivetrack         GpsDrive Format for Tracks
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -206,6 +215,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpx                   GPX XML
 	  snlen                 Length of generated shortnames
 	  suppresswhite         (0/1) No whitespace in generated shortnames
@@ -341,6 +351,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	text                  Textual Output
 	  nosep                 (0/1) Suppress separator lines between waypoints
 	  encrypt               (0/1) Encrypt hints using ROT13
