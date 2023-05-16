@@ -567,24 +567,24 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   break;
 
   /* PATH CONVERSIONS ************************************************/
-  case XT_PATH_SPEED:
+  case XcsvStyle::XT_PATH_SPEED:
     wpt->set_speed(strtod(s, nullptr));
     break;
-  case XT_PATH_SPEED_KPH:
+  case XcsvStyle::XT_PATH_SPEED_KPH:
     wpt->set_speed(KPH_TO_MPS(strtod(s, nullptr)));
     break;
-  case XT_PATH_SPEED_MPH:
+  case XcsvStyle::XT_PATH_SPEED_MPH:
     wpt->set_speed(MPH_TO_MPS(strtod(s, nullptr)));
     break;
-  case XT_PATH_SPEED_KNOTS:
+  case XcsvStyle::XT_PATH_SPEED_KNOTS:
     wpt->set_speed(KNOTS_TO_MPS(strtod(s, nullptr)));
     break;
-  case XT_PATH_COURSE:
+  case XcsvStyle::XT_PATH_COURSE:
     wpt->set_course(strtod(s, nullptr));
     break;
 
   /* TIME CONVERSIONS ***************************************************/
-  case XT_EXCEL_TIME:
+  case XcsvStyle::XT_EXCEL_TIME:
     /* Time as Excel Time  */
     bool ok;
     double et = value.toDouble(&ok);
@@ -597,7 +597,6 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_TIMET_TIME: 
-  >>>>>>> master
     /* Time as time_t */
     bool ok;
     long long tt = value.toLongLong(&ok);
@@ -609,7 +608,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
   }
   break;
-  case XT_TIMET_TIME_MS: {
+  case XcsvStyle::XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     bool ok;
     long long tt = value.toLongLong(&ok);
@@ -621,13 +620,13 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
   }
   break;
-  case XT_YYYYMMDD_TIME:
+  case XcsvStyle::XT_YYYYMMDD_TIME:
     wpt->SetCreationTime(yyyymmdd_to_time(value));
     break;
-  case XT_GMT_TIME:
+  case XcsvStyle::XT_GMT_TIME:
     wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
     break;
-  case XT_LOCAL_TIME:
+  case XcsvStyle::XT_LOCAL_TIME:
     if (!gpsbabel_testmode()) {
       wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
     } else {
@@ -637,15 +636,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   /* Useful when time and date are in separate fields
   	GMT / Local offset is handled by the two cases above */
-  case XT_HMSG_TIME:
-  case XT_HMSL_TIME:
+  case XcsvStyle::XT_HMSG_TIME:
+  case XcsvStyle::XT_HMSL_TIME:
     wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
     break;
-  case XT_ISO_TIME:
-  case XT_ISO_TIME_MS:
+  case XcsvStyle::XT_ISO_TIME:
+  case XcsvStyle::XT_ISO_TIME_MS:
     wpt->SetCreationTime(xml_parse_time(value));
     break;
-  case XT_NET_TIME: {
+  case XcsvStyle::XT_NET_TIME: {
     bool ok;
     long long dnt = value.toLongLong(&ok);
     if (ok) {
@@ -656,34 +655,34 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
   }
   break;
-  case XT_GEOCACHE_LAST_FOUND:
+  case XcsvStyle::XT_GEOCACHE_LAST_FOUND:
     wpt->AllocGCData()->last_found = yyyymmdd_to_time(value);
     break;
   }
 
   /* GEOCACHING STUFF ***************************************************/
-  case XT_GEOCACHE_DIFF:
+  case XcsvStyle::XT_GEOCACHE_DIFF:
     /* Geocache Difficulty as an int */
     wpt->AllocGCData()->diff = strtod(s, nullptr) * 10;
     break;
-  case XT_GEOCACHE_TERR:
+  case XcsvStyle::XT_GEOCACHE_TERR:
     /* Geocache Terrain as an int */
     wpt->AllocGCData()->terr = strtod(s, nullptr) * 10;
     break;
-  case XT_GEOCACHE_TYPE:
+  case XcsvStyle::XT_GEOCACHE_TYPE:
     /* Geocache Type */
     wpt->AllocGCData()->set_type(value);
     break;
-  case XT_GEOCACHE_CONTAINER:
+  case XcsvStyle::XT_GEOCACHE_CONTAINER:
     wpt->AllocGCData()->set_container(value);
     break;
-  case XT_GEOCACHE_HINT:
+  case XcsvStyle::XT_GEOCACHE_HINT:
     wpt->AllocGCData()->hint = value.trimmed();
     break;
-  case XT_GEOCACHE_PLACER:
+  case XcsvStyle::XT_GEOCACHE_PLACER:
     wpt->AllocGCData()->placer = value.trimmed();
     break;
-  case XT_GEOCACHE_ISAVAILABLE:
+  case XcsvStyle::XT_GEOCACHE_ISAVAILABLE:
     gc_data = wpt->AllocGCData();
     if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
       gc_data->is_available = Geocache::status_t::gs_false;
@@ -693,7 +692,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       gc_data->is_available = Geocache::status_t::gs_unknown;
     }
     break;
-  case XT_GEOCACHE_ISARCHIVED:
+  case XcsvStyle::XT_GEOCACHE_ISARCHIVED:
     gc_data = wpt->AllocGCData();
     if (value.trimmed().compare(u"False", Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = Geocache::status_t::gs_false;
@@ -705,16 +704,16 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
 
   /* GPS STUFF *******************************************************/
-  case XT_GPS_HDOP:
+  case XcsvStyle::XT_GPS_HDOP:
     wpt->hdop = strtod(s, nullptr);
     break;
-  case XT_GPS_VDOP:
+  case XcsvStyle::XT_GPS_VDOP:
     wpt->vdop = strtod(s, nullptr);
     break;
-  case XT_GPS_PDOP:
+  case XcsvStyle::XT_GPS_PDOP:
     wpt->pdop = strtod(s, nullptr);
     break;
-  case XT_GPS_SAT:
+  case XcsvStyle::XT_GPS_SAT:
     wpt->sat = xstrtoi(s, nullptr, 10);
     break;
   case XT_GPS_FIX:
@@ -732,86 +731,86 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
     break;
   /* Tracks and routes *********************************************/
-  case XT_ROUTE_NAME:
+  case XcsvStyle::XT_ROUTE_NAME:
     parse_data->rte_name = csv_stringtrim(value, enclosure, 0);
     break;
-  case XT_TRACK_NEW:
+  case XcsvStyle::XT_TRACK_NEW:
     parse_data->new_track = xstrtoi(s, nullptr, 10);
     break;
-  case XT_TRACK_NAME:
+  case XcsvStyle::XT_TRACK_NAME:
     parse_data->trk_name = csv_stringtrim(value, enclosure, 0);
     break;
 
   /* OTHER STUFF ***************************************************/
-  case XT_PATH_DISTANCE_METERS:
+  case XcsvStyle::XT_PATH_DISTANCE_METERS:
     wpt->odometer_distance = strtod(s, nullptr);
     break;
-  case XT_PATH_DISTANCE_KM:
+  case XcsvStyle::XT_PATH_DISTANCE_KM:
     wpt->odometer_distance = strtod(s, nullptr) * 1000.0;
     break;
-  case XT_PATH_DISTANCE_MILES:
+  case XcsvStyle::XT_PATH_DISTANCE_MILES:
     wpt->odometer_distance = MILES_TO_METERS(strtod(s, nullptr));
     break;
-  case XT_PATH_DISTANCE_NAUTICAL_MILES:
+  case XcsvStyle::XT_PATH_DISTANCE_NAUTICAL_MILES:
     wpt->odometer_distance = NMILES_TO_METERS(strtod(s, nullptr));
     break;
-  case XT_HEART_RATE:
+  case XcsvStyle::XT_HEART_RATE:
     wpt->heartrate = xstrtoi(s, nullptr, 10);
     break;
-  case XT_CADENCE:
+  case XcsvStyle::XT_CADENCE:
     wpt->cadence = xstrtoi(s, nullptr, 10);
     break;
-  case XT_POWER:
+  case XcsvStyle::XT_POWER:
     wpt->power = strtod(s, nullptr);
     break;
-  case XT_TEMPERATURE:
+  case XcsvStyle::XT_TEMPERATURE:
     wpt->set_temperature(strtod(s, nullptr));
     break;
-  case XT_TEMPERATURE_F:
+  case XcsvStyle::XT_TEMPERATURE_F:
     wpt->set_temperature(FahrenheitToCelsius(strtod(s, nullptr)));
     break;
   /* GMSD ****************************************************************/
-  case XT_COUNTRY: {
+  case XcsvStyle::XT_COUNTRY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_country(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_STATE: {
+  case XcsvStyle::XT_STATE: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_state(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_CITY: {
+  case XcsvStyle::XT_CITY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_city(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_STREET_ADDR: {
+  case XcsvStyle::XT_STREET_ADDR: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_addr(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_POSTAL_CODE: {
+  case XcsvStyle::XT_POSTAL_CODE: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_postal_code(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_PHONE_NR: {
+  case XcsvStyle::XT_PHONE_NR: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_phone_nr(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_FACILITY: {
+  case XcsvStyle::XT_FACILITY: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_facility(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_EMAIL: {
+  case XcsvStyle::XT_EMAIL: {
     garmin_fs_t* gmsd = gmsd_init(wpt);
     garmin_fs_t::set_email(gmsd, csv_stringtrim(value, enclosure, 0));
   }
   break;
-  case XT_unused:
+  case XcsvStyle::XT_unused:
     if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
       wpt->longitude = strtod(s, nullptr) / pow(10.0, strtod(fmp.key.constData()+7, nullptr));
     } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
