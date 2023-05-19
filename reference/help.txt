@@ -146,6 +146,7 @@ File Types (-i and -o options):
 	  category              Category number to use for written waypoints
 	  bitscategory          Bitmap of categories
 	  baud                  Speed in bits per second of serial port (baud=9600
+	  codec                 override codec to use for device
 	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, MultiSport, Other

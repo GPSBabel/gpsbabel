@@ -19,7 +19,7 @@
 
  */
 
-#include <cctype>                // for isalpha, toupper
+#include <cassert>               // for assert
 #include <climits>               // for INT_MAX
 #include <cmath>                 // for atan2, floor, sqrt
 #include <csetjmp>               // for setjmp
@@ -30,6 +30,7 @@
 
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for QChar
+#include <QRegularExpression>    // for QRegularExpression
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <QVector>               // for QVector
@@ -76,6 +77,7 @@ static char* deficon = nullptr;
 static char* category = nullptr;
 static char* categorybitsopt = nullptr;
 static char* baudopt = nullptr;
+static char* opt_codec = nullptr;
 static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
@@ -85,8 +87,9 @@ static Vecs::fmtinfo_t gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-/* Technically, even this is a little loose as spaces arent allowed */
+/* Technically, even this is a little loose as spaces aren't allowed */
 static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
+static QRegularExpression invalid_char_re;
 
 static
 QVector<arglist_t> garmin_args = {
@@ -125,7 +128,12 @@ QVector<arglist_t> garmin_args = {
   },
   {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
-    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
+  },
+    {
+      "codec", &opt_codec, "override codec to use for device",
+      nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
 
 };
 
@@ -134,8 +142,22 @@ static int d103_icon_number_from_symbol(const QString& s);
 static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
 static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
-static QByteArray str_from_unicode(const QString& qstr) {return codec->fromUnicode(qstr);}
-static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(cstr);}
+static QByteArray str_from_unicode(const QString& qstr)
+{
+  return codec->fromUnicode(qstr);
+}
+static QString str_to_unicode(const QByteArray& cstr)
+{
+  return codec->toUnicode(cstr);
+}
+
+static void
+write_char_string(char* dest, const char* source, size_t destsize)
+{
+  // we zero fill and always terminate within the dest buffer.
+  strncpy(dest, source, destsize - 1);
+  dest[destsize-1] = 0;
+}
 
 static void
 rw_init(const QString& fname)
@@ -168,14 +190,14 @@ rw_init(const QString& fname)
   if (baudopt) {
     baud = strtol(baudopt, nullptr, 0);
     switch (baud) {
-      case 9600:
-      case 19200:
-      case 38400:
-      case 57600:
-      case 115200:
-        break;
-      default:
-        fatal("Baud rate %d is not supported\n", baud);
+    case 9600:
+    case 19200:
+    case 38400:
+    case 57600:
+    case 115200:
+      break;
+    default:
+      fatal("Baud rate %d is not supported\n", baud);
     }
   }
 
@@ -184,7 +206,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * THis is Gross. The B&W Vista sometimes sets its time decades into
+   * This is Gross. The B&W Vista sometimes sets its time decades into
    * the future with no way to reset it.  This apparently can "cure"
    * an affected unit.
    */
@@ -244,8 +266,7 @@ rw_init(const QString& fname)
     case 696: 	/* eTrex HC */
     case 574: 	/* Geko 201 */
       receiver_short_length = 6;
-      valid_waypt_chars =
-        MILITANT_VALID_WAYPT_CHARS " +-";
+      valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
       setshort_badchars(mkshort_handle, "\"$.,'!");
       break;
 
@@ -328,7 +349,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * Until Garmins documents how to determine valid character space
+   * Until Garmin documents how to determine valid character space
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
@@ -347,7 +368,26 @@ rw_init(const QString& fname)
    * However, this is still used for garmin_fs_garmin_after_read,
    * garmin_fs_garmin_before_write.
    */
+  if (opt_codec != nullptr) {
+    // override expected codec with user supplied choice.
+    receiver_charset = opt_codec;
+  }
   codec = get_codec(receiver_charset);
+  if (global_opts.verbose_status) {
+    fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
+  }
+
+  /*
+   * Beware, valid_waypt_chars shouldn't contain any character class metacharacters,
+   * i.e. '\', '^', '-', '[', or ']'
+   */
+  assert(!QString(valid_waypt_chars).contains('\\'));
+  assert(!QString(valid_waypt_chars).contains('^'));
+  assert(!QString(valid_waypt_chars).contains('-'));
+  assert(!QString(valid_waypt_chars).contains('['));
+  assert(!QString(valid_waypt_chars).contains(']'));
+  invalid_char_re = QRegularExpression(QStringLiteral("[^%1]").arg(valid_waypt_chars));
+  assert(invalid_char_re.isValid());
 }
 
 static void
@@ -383,7 +423,7 @@ rw_deinit()
 }
 
 static int
-waypt_read_cb(int total_ct, GPS_PWay* )
+waypt_read_cb(int total_ct, GPS_PWay*)
 {
   if (global_opts.verbose_status) {
     static int i;
@@ -418,8 +458,8 @@ waypt_read()
   for (int i = 0; i < n; i++) {
     auto* wpt_tmp = new Waypoint;
 
-    wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
-    wpt_tmp->description = QString::fromLatin1(way[i]->cmnt);
+    wpt_tmp->shortname = str_to_unicode(way[i]->ident);
+    wpt_tmp->description = str_to_unicode(way[i]->cmnt);
     wpt_tmp->shortname = wpt_tmp->shortname.simplified();
     wpt_tmp->description = wpt_tmp->description.simplified();
     wpt_tmp->longitude = way[i]->lon;
@@ -433,8 +473,8 @@ waypt_read()
     }
     /*
      * If a unit doesn't store altitude info (i.e. a D103)
-     * gpsmem will default the alt to INT_MAX.   Other units
-     * (I can't recall if it was the V (D109) hor the Vista (D108)
+     * gpsmem will default the alt to INT_MAX.  Other units
+     * (I can't recall if it was the V (D109) or the Vista (D108)
      * return INT_MAX+1, contrary to the Garmin protocol doc which
      * says they should report 1.0e25.   So we'll try to trap
      * all the cases here.     Yes, libjeeps should probably
@@ -532,7 +572,7 @@ track_read()
     if (trk_head == nullptr || array[i]->ishdr) {
       trk_head = new route_head;
       trk_head->rte_num = trk_num;
-      trk_head->rte_name = QString::fromLatin1(trk_name);
+      trk_head->rte_name = str_to_unicode(trk_name);
       trk_num++;
       track_add_head(trk_head);
     }
@@ -554,7 +594,7 @@ track_read()
     wpt->altitude = array[i]->alt;
     wpt->heartrate = array[i]->heartrate;
     wpt->cadence = array[i]->cadence;
-    wpt->shortname = array[i]->trk_ident;
+    wpt->shortname = str_to_unicode(array[i]->trk_ident);
     wpt->SetCreationTime(array[i]->Time);
     wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                               nlaps);
@@ -611,7 +651,7 @@ route_read()
       rte_head = new route_head;
       route_add_head(rte_head);
       if (csrc) {
-        rte_head->rte_name = QString::fromLatin1(csrc);
+        rte_head->rte_name = str_to_unicode(csrc);
       }
     } else {
       if (array[i]->islink)  {
@@ -620,7 +660,7 @@ route_read()
         auto* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
-        wpt_tmp->shortname = array[i]->ident;
+        wpt_tmp->shortname = str_to_unicode(array[i]->ident);
         route_add_wpt(rte_head, wpt_tmp);
       }
     }
@@ -657,8 +697,8 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    *    reference clocks.
    */
   double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-    pvt->tow
-    - pvt->leap_scnds;
+                  pvt->tow
+                  - pvt->leap_scnds;
   double wptimes = floor(wptime);
   wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
 
@@ -870,34 +910,40 @@ waypoint_prepare()
      * cleaning
      */
     char* ident = mkshort(mkshort_handle,
-                           global_opts.synthesize_shortnames ? CSTRc(src) :
-                             CSTRc(wpt->shortname), false);
+                          global_opts.synthesize_shortnames ?
+                          str_from_unicode(src).constData() :
+                          str_from_unicode(wpt->shortname).constData(),
+                          false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
      */
-    memcpy(tx_waylist[i]->ident, ident, strlen(ident));
+    write_char_string(tx_waylist[i]->ident, ident, sizeof(tx_waylist[i]->ident));
 
     if (global_opts.synthesize_shortnames) {
       xfree(ident);
     }
-    tx_waylist[i]->ident[sizeof(tx_waylist[i]->ident)-1] = 0;
 
     // If we were explicitly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
     if (!wpt->description.isEmpty() &&
         global_opts.smart_names && !wpt->gc_data->diff) {
-      memcpy(tx_waylist[i]->cmnt, CSTRc(wpt->description), strlen(CSTRc(wpt->description)));
+      write_char_string(tx_waylist[i]->cmnt,
+                        str_from_unicode(wpt->description).constData(),
+                        sizeof(tx_waylist[i]->cmnt));
     } else {
       if (global_opts.smart_names &&
           wpt->gc_data->diff && wpt->gc_data->terr) {
+        static_assert(sizeof(obuf) >= sizeof(tx_waylist[i]->cmnt));
         snprintf(obuf, sizeof(obuf), "%s%u/%u %s",
                  get_gc_info(wpt),
                  wpt->gc_data->diff, wpt->gc_data->terr,
-                 CSTRc(src));
-        memcpy(tx_waylist[i]->cmnt, obuf, strlen(obuf));
+                 str_from_unicode(src).constData());
+        write_char_string(tx_waylist[i]->cmnt, obuf, sizeof(tx_waylist[i]->cmnt));
       } else  {
-        memcpy(tx_waylist[i]->cmnt, CSTRc(src), strlen(CSTRc(src)));
+        write_char_string(tx_waylist[i]->cmnt,
+                          str_from_unicode(src).constData(),
+                          sizeof(tx_waylist[i]->cmnt));
       }
     }
 
@@ -972,9 +1018,9 @@ route_hdr_pr(const route_head* rte)
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
-    strncpy((*cur_tx_routelist_entry)->rte_ident, CSTRc(rte->rte_name),
-            sizeof((*cur_tx_routelist_entry)->rte_ident) - 1);
-    (*cur_tx_routelist_entry)->rte_ident[sizeof((*cur_tx_routelist_entry)->rte_ident) - 1] = 0;
+    write_char_string((*cur_tx_routelist_entry)->rte_ident,
+                      str_from_unicode(rte->rte_name).constData(),
+                      sizeof((*cur_tx_routelist_entry)->rte_ident));
   }
 }
 
@@ -1009,23 +1055,24 @@ route_waypt_pr(const Waypoint* wpt)
     rte->alt = 0;
   }
 
-  char* d = rte->ident;
-  for (auto idx : wpt->shortname) {
-    int c = idx.toLatin1();
-    if (receiver_must_upper && isalpha(c)) {
-      c = toupper(c);
-    }
-    if (strchr(valid_waypt_chars, c)) {
-      *d++ = c;
-    }
+  QString cleanname = wpt->shortname;
+  /*
+   * Until Garmin documents how to determine valid character space
+   * for the new models, we just release this safety check manually.
+   */
+  if (receiver_must_upper) {
+    cleanname = cleanname.toUpper().remove(invalid_char_re);
   }
+  write_char_string(rte->ident,
+                    str_from_unicode(cleanname).constData(),
+                    sizeof(rte->ident));
 
-  rte->ident[sizeof(rte->ident)-1] = 0;
   if (wpt->description.isEmpty()) {
     rte->cmnt[0] = 0;
   } else {
-    strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt) - 1);
-    rte->cmnt[sizeof(rte->cmnt)-1] = 0;
+    write_char_string(rte->cmnt,
+                      str_from_unicode(wpt->description).constData(),
+                      sizeof(rte->cmnt));
   }
   cur_tx_routelist_entry++;
 }
@@ -1051,8 +1098,9 @@ track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = true;
   if (!trk_head->rte_name.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
-    (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+    write_char_string((*cur_tx_tracklist_entry)->trk_ident,
+                      str_from_unicode(trk_head->rte_name).constData(),
+                      sizeof((*cur_tx_tracklist_entry)->trk_ident));
   } else {
     snprintf((*cur_tx_tracklist_entry)->trk_ident, sizeof((*cur_tx_tracklist_entry)->trk_ident), "TRACK%02d", my_track_count);
   }
@@ -1068,8 +1116,9 @@ track_waypt_pr(const Waypoint* wpt)
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
   (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();
   if (!wpt->shortname.isEmpty()) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident) - 1);
-    (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
+    write_char_string((*cur_tx_tracklist_entry)->trk_ident,
+                      str_from_unicode(wpt->shortname).constData(),
+                      sizeof((*cur_tx_tracklist_entry)->trk_ident));
   }
   (*cur_tx_tracklist_entry)->tnew = wpt->wpt_flags.new_trkseg;
   cur_tx_tracklist_entry++;
