@@ -87,7 +87,7 @@ static Vecs::fmtinfo_t gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-/* Technically, even this is a little loose as spaces arent allowed */
+/* Technically, even this is a little loose as spaces aren't allowed */
 static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 static QRegularExpression invalid_char_re;
 
@@ -206,7 +206,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * THis is Gross. The B&W Vista sometimes sets its time decades into
+   * This is Gross. The B&W Vista sometimes sets its time decades into
    * the future with no way to reset it.  This apparently can "cure"
    * an affected unit.
    */
@@ -349,7 +349,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * Until Garmins documents how to determine valid character space
+   * Until Garmin documents how to determine valid character space
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
@@ -374,7 +374,7 @@ rw_init(const QString& fname)
   }
   codec = get_codec(receiver_charset);
   if (global_opts.verbose_status) {
-    fprintf(stdout, "reciever charset detected as %s.\r\n", receiver_charset);
+    fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
   }
 
   /*
@@ -473,8 +473,8 @@ waypt_read()
     }
     /*
      * If a unit doesn't store altitude info (i.e. a D103)
-     * gpsmem will default the alt to INT_MAX.   Other units
-     * (I can't recall if it was the V (D109) hor the Vista (D108)
+     * gpsmem will default the alt to INT_MAX.  Other units
+     * (I can't recall if it was the V (D109) or the Vista (D108)
      * return INT_MAX+1, contrary to the Garmin protocol doc which
      * says they should report 1.0e25.   So we'll try to trap
      * all the cases here.     Yes, libjeeps should probably
@@ -1056,10 +1056,13 @@ route_waypt_pr(const Waypoint* wpt)
   }
 
   QString cleanname = wpt->shortname;
+  /*
+   * Until Garmin documents how to determine valid character space
+   * for the new models, we just release this safety check manually.
+   */
   if (receiver_must_upper) {
-    cleanname = cleanname.toUpper();
+    cleanname = cleanname.toUpper().remove(invalid_char_re);
   }
-  cleanname = cleanname.remove(invalid_char_re);
   write_char_string(rte->ident,
                     str_from_unicode(cleanname).constData(),
                     sizeof(rte->ident));
