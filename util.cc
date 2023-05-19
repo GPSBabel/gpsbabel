@@ -26,10 +26,8 @@
 #include <cmath>                        // for fabs, floor
 #include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
-#include <cstdint>                      // for uint32_t
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <ctime>                        // for mktime, localtime
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -447,67 +445,46 @@ le_write32(void* ptr, const unsigned value)
   p[3] = value >> 24;
 }
 
-/*
-	mkgmtime -- convert tm struct in UTC to time_t
-
-	works just like mktime but without all the mucking
-	around with timezones and daylight savings
-
-	Borrowed from lynx GPL source code
-	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
-
-	Written by Philippe De Muyter <phdm@macqel.be>.
-*/
-
-time_t
-mkgmtime(std::tm* time)
+QDateTime
+make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset)
 {
-  static const int      m_to_d[12] =
-  {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+  QDateTime result;
+  Qt::TimeSpec timespec;
+  int offset = 0;
 
-  short month = time->tm_mon;
-  short year = time->tm_year + month / 12 + 1900;
-  month %= 12;
-  if (month < 0) {
-    year -= 1;
-    month += 12;
+  if (is_localtime) {
+    if (force_utc) { // override with passed option value
+      if (utc_offset == 0) {
+        // Qt 6.5.0 QDate::startOfDay(Qt::OffsetFromUTC, 0) returns an invalid QDateTime.
+        timespec = Qt::UTC;
+      } else {
+        timespec = Qt::OffsetFromUTC;
+        // Avoid Qt 6.5.0 warnings with non-zero offsets when not using Qt::OffsetFromUTC.
+        offset = utc_offset;
+      }
+    } else {
+      timespec = Qt::LocalTime;
+    }
+  } else {
+    timespec = Qt::UTC;
   }
-  time_t result = (year - 1970) * 365 + m_to_d[month];
-  if (month <= 1) {
-    year -= 1;
-  }
-  result += (year - 1968) / 4;
-  result -= (year - 1900) / 100;
-  result += (year - 1600) / 400;
-  result += time->tm_mday;
-  result -= 1;
-  result *= 24;
-  result += time->tm_hour;
-  result *= 60;
-  result += time->tm_min;
-  result *= 60;
-  result += time->tm_sec;
-  return (result);
-}
 
-/*
- * mklocaltime: same as mktime, but try to recover the "Summer time flag",
- *              which is evaluated by mktime
- */
-time_t
-mklocaltime(std::tm* time)
-{
-  time_t result;
-  std::tm check = *time;
-
-  check.tm_isdst = 0;
-  result = mktime(&check);
-  check = *localtime(&result);
-  if (check.tm_isdst == 1) {	/* DST is in effect */
-    check = *time;
-    check.tm_isdst = 1;
-    result = mktime(&check);
+  if (date.isValid() && time.isValid()) {
+    result = QDateTime(date, time, timespec, offset);
+  } else if (time.isValid()) {
+    // TODO: Wouldn't it be better to return an invalid QDateTime
+    // that contained an invalid QDate, a valid QTime and a valid
+    // Qt::TimeSpec?
+    result = QDateTime(QDate(1970, 1, 1), time, timespec, offset);
+  } else if (date.isValid()) {
+    //  no time, use start of day in the given Qt::TimeSpec.
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+    result = QDateTime(date, QTime(0,0), timespec, offset);
+#else
+    result = date.startOfDay(timespec, offset);
+#endif
   }
+ 
   return result;
 }
 
@@ -546,6 +523,13 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
   qint64 millisecs = (dotnet + 5000)/ 10000;
   return epoch.addMSecs(millisecs);
+}
+
+long long qdatetime_to_dotnet_time(const QDateTime& dt)
+{
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  qint64 millisecs = epoch.msecsTo(dt);
+  return millisecs * 10000;
 }
 
 double

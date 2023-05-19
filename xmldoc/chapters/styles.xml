@@ -829,7 +829,7 @@ longitude)
       </section>
       <section xml:id="style_def_yyyymmdd">
          <title>YYYYMMDD_TIME</title>
-         <para>YYYYMMDD_TIME is the waypoint's creation time, if any.  It's a single
+         <para>YYYYMMDD_TIME is the waypoint's creation time in UTC, if any.  It's a single
    decimal field containing four digits of year, two digits of month,
    and two digits of date.   Internally it is a LONG INTEGER and thus
    requires a LONG INTEGER printf conversion.
@@ -843,54 +843,30 @@ longitude)
          <title>GMT_TIME</title>
          <para>GMT_TIME is the waypoint's creation time, in UTC time zone.  It uses the
    strptime conversion format tags.
+   It can be used to parse/print a date and time in one column,
+   or a date in one column and a time in another column.  If used to parse a date and a
+   time in separate columns the date and time can be in either order.
 </para>
-         <para>example:
-</para>
-         <screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%D %p"
+<para>example with a a date followed by a time using a 12 hour clock and an AM/PM indication:</para>
+<screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%S %p"
 </screen>
-         <para>Search the web for 'strptime man page' for details strptime, but one
+<para>example with a a date followed by a time using a 24 hour clock:</para>
+<screen>IFIELD GMT_TIME,"","%Y/%m/%d"
+IFIELD GMT_TIME,"","%H:%M:%S"
+</screen>
+<para>Search the web for 'strptime man page' for details strptime, but one
    such page can be found at
-
-
-
-
-
-
-
-            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.die.net/doc/linux/man/man3/strptime.3.html">http://www.die.net/doc/linux/man/man3/strptime.3.html</link></para>
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.die.net/doc/linux/man/man3/strptime.3.html">http://www.die.net/doc/linux/man/man3/strptime.3.html</link></para>
       </section>
       <section xml:id="style_def_localtime">
          <title>LOCAL_TIME</title>
          <para>LOCAL_TIME is the waypoint's creation time, in the local
- time zone.  It uses strptime conversion format tags.  See GMT_TIME for a
- reference.
+   time zone.  It uses strptime conversion format tags.
+   It can be used to parse/print a date and time in one column,
+   or a date in one column and a time in another column.  If used to parse a date and a
+   time in separate columns the date and time can be in either order.
+   See GMT_TIME for examples and a reference.
 </para>
-         <para>example:
-</para>
-         <screen>IFIELD LOCAL_TIME,"","%y-%m-%d"
-</screen>
-      </section>
-      <section xml:id="style_def_hmsgtime">
-         <title>HMSG_TIME</title>
-         <para>HMSG_TIME parses up to three time parts and am/pm string to add
-   this value to the previously parsed *_TIME field that contains
-   only a date.  On output, will print the time in UTC.
-</para>
-         <para>example:
-</para>
-         <screen>IFIELD HMSG_TIME,"","%02d:%02d:%02d %s"
-</screen>
-      </section>
-      <section xml:id="style_def_hmsltime">
-         <title>HMSL_TIME</title>
-         <para>HMSG_TIME parses up to three time parts and am/pm string to add
-   this value to the previously parsed *_TIME field that contains
-   only a date.  On output, will print the time in local time.
-</para>
-         <para>example:
-</para>
-         <screen>IFIELD HMSL_TIME,"","%dh%dm"
-</screen>
       </section>
       <section xml:id="style_def_isotime">
          <title>ISO_TIME</title>

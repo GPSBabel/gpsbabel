@@ -26,12 +26,15 @@
 #include <utility>                // for move
 
 #include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
 #include <QHash>                  // for QHash
 #include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QStringList>            // for QStringList
+#include <QTime>                  // for QTime
 #include <QVector>                // for QVector
+#include <QtGlobal>               // for qRound64
 
 #include "defs.h"
 #include "format.h"
@@ -86,8 +89,6 @@ public:
     XT_GPS_SAT,
     XT_GPS_VDOP,
     XT_HEART_RATE,
-    XT_HMSG_TIME,
-    XT_HMSL_TIME,
     XT_ICON_DESCR,
     XT_IGNORE,
     XT_INDEX,
@@ -332,6 +333,11 @@ private:
     UrlLink* link_{nullptr};
     std::optional<bool> lat_dir_positive;
     std::optional<bool> lon_dir_positive;
+    QDate local_date;
+    QTime local_time;
+    QDate utc_date;
+    QTime utc_time;
+    bool need_datetime{true};
   };
 
   /* Constants */
@@ -346,20 +352,21 @@ private:
   }
 
   /* convert excel time (days since 1900) to time_t and back again */
-  static constexpr double excel_to_timet(double a)
+  static constexpr qint64 excel_to_timetms(double a)
   {
-    return (a - 25569.0) * 86400.0;
+    return qRound64((a - 25569.0) * 86400000.0);
   }
-  static constexpr double timet_to_excel(double a)
+  static constexpr double timetms_to_excel(qint64 a)
   {
-    return (a / 86400.0) + 25569.0;
+    return (a / 86400000.0) + 25569.0;
   }
 
   /* Member Functions */
 
-  static QDateTime yyyymmdd_to_time(const QString& s);
-  static time_t sscanftime(const char* s, const char* format, bool gmt);
-  static time_t addhms(const char* s, const char* format);
+  static QDate yyyymmdd_to_time(const QString& s);
+  QDateTime xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
+  static void sscanftime(const char* s, const char* format, QDate& date, QTime& time);
+  static QTime addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
   static QString writehms(const char* format, time_t t, bool gmt);
@@ -391,6 +398,8 @@ private:
   char* prefer_shortnames = nullptr;
   char* xcsv_urlbase = nullptr;
   char* opt_datum = nullptr;
+  char* opt_utc = nullptr;
+  int utc_offset{};
 
   QString intstylefile;
 
@@ -427,6 +436,10 @@ private:
     {
       "datum", &opt_datum, "GPS datum (def. WGS 84)",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
     },
   };
 
