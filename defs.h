@@ -52,9 +52,6 @@
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
 #ifndef M_PI
 #  define M_PI 3.14159265358979323846
 #endif
@@ -79,7 +76,7 @@ constexpr double kNMilesPerMeter = 1.0 / kMetersPerNMile;
 constexpr double FEET_TO_METERS(double feetsies) { return feetsies * kMetersPerFoot;}
 constexpr double METERS_TO_FEET(double meetsies) { return meetsies * kFeetPerMeter;}
 
-constexpr double NMILES_TO_METERS(double a) { return a * kMetersPerNMile;}	/* nautical miles */
+constexpr double NMILES_TO_METERS(double a) { return a * kMetersPerNMile;} // nautical miles .
 constexpr double METERS_TO_NMILES(double a) { return a * kNMilesPerMeter;}
 
 constexpr double MILES_TO_METERS(double a) { return a * kMetersPerMile;}
@@ -152,24 +149,24 @@ enum gpsdata_type {
   posndata
 };
 
-#define NOTHINGMASK		0U
-#define WPTDATAMASK		1U
-#define TRKDATAMASK		2U
-#define	RTEDATAMASK		4U
-#define	POSNDATAMASK		8U
+#define NOTHINGMASK    0U
+#define WPTDATAMASK    1U
+#define TRKDATAMASK    2U
+#define RTEDATAMASK    4U
+#define POSNDATAMASK   8U
 
-/* mask objective testing */
-#define	doing_nothing (global_opts.masked_objective == NOTHINGMASK)
-#define	doing_wpts ((global_opts.masked_objective & WPTDATAMASK) == WPTDATAMASK)
-#define	doing_trks ((global_opts.masked_objective & TRKDATAMASK) == TRKDATAMASK)
-#define	doing_rtes ((global_opts.masked_objective & RTEDATAMASK) == RTEDATAMASK)
-#define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
+// Mask objective testing.
+#define doing_nothing (global_opts.masked_objective == NOTHINGMASK)
+#define doing_wpts ((global_opts.masked_objective & WPTDATAMASK) == WPTDATAMASK)
+#define doing_trks ((global_opts.masked_objective & TRKDATAMASK) == TRKDATAMASK)
+#define doing_rtes ((global_opts.masked_objective & RTEDATAMASK) == RTEDATAMASK)
+#define doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 struct global_options {
   int debug_level;
   gpsdata_type objective;
   unsigned int	masked_objective;
-  int verbose_status;	/* set by GUI wrappers for status */
+  int verbose_status;  // Set by GUI wrappers for status.
   inifile_t* inifile;
   bool synthesize_shortnames;
   bool smart_icons;
@@ -178,7 +175,9 @@ struct global_options {
 
 extern global_options global_opts;
 extern const char gpsbabel_version[];
-extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
+// gpsbabel startup-time; initialized in main.c with current_time(),
+// ! ZERO within testo ! */
+extern time_t gpsbabel_time;
 
 enum fix_type {
   fix_unknown=-1,
@@ -255,15 +254,15 @@ public:
     is_split(0),
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
+  unsigned int fmt_use:2;    // lightweight "extra data"
+  unsigned int is_split:1;   // the waypoint represents a split
+  unsigned int new_trkseg:1; // True if first in new trkseg.
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
 // things, though it's unlikely to matter in practical terms.  Don't use these
 // if a false positive would be deleterious.
-#
+
 class global_trait
 {
 public:
@@ -288,10 +287,10 @@ public:
 struct bounds {
   double max_lat;
   double max_lon;
-  double max_alt;	/*  unknown_alt => invalid */
+  double max_alt;  //  unknown_alt => invalid.
   double min_lat;
   double min_lon;
-  double min_alt;	/* -unknown_alt => invalid */
+  double min_alt;  // -unknown_alt => invalid.
 };
 
 /*
@@ -316,14 +315,14 @@ private:
       speed(false),
       geoidheight(false),
       depth(false) {}
-    bool temperature:1;		/* temperature field is set */
-    bool proximity:1;		/* proximity field is set */
-    bool course:1;			/* course field is set */
-    bool speed:1;			/* speed field is set */
-    bool geoidheight:1;	/* geoidheight field is set */
-    bool depth:1;			/* depth field is set */
+    bool temperature:1;   //  temperature field is set.
+    bool proximity:1;     //  proximity field is set.
+    bool course:1;        //  course field is set.
+    bool speed:1;         //  speed field is set.
+    bool geoidheight:1;   //  geoidheight field is set.
+    bool depth:1;         //  depth field is set.
     /* !ToDo!
-    unsigned int altitude:1;		/+ altitude field is set +/
+    unsigned int altitude:1;  // altitude field is set.
     ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
     odometer_distance
     */
@@ -333,12 +332,13 @@ private:
 
   static Geocache empty_gc_data;
 
-  double geoidheight;	/* Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid. */
+  double geoidheight;  // Height (in meters) of geoid (mean sea level)
+                       // above WGS84 earth ellipsoid.
 
   /*
    * The "thickness" of a waypoint; adds an element of 3D.  Can be
    * used to construct rudimentary polygons for, say, airspace
-   * definitions.   The units are meters.
+   * definitions.  The units are meters.
    */
   double depth;
 
@@ -348,9 +348,9 @@ private:
    * The units are meters.
    */
   double proximity;
-  float course;	/* Optional: degrees true */
-  float speed;   	/* Optional: meters per second. */
-  float temperature; /* Degrees celsius */
+  float course;      // Optional: degrees true.
+  float speed;       // Optional: meters per second.
+  float temperature; // Degrees celsius.
   op_flags opt_flags;
 
 public:
@@ -418,9 +418,9 @@ public:
 
   /* Data Members */
 
-  double latitude;		/* Degrees */
-  double longitude; 		/* Degrees */
-  double altitude; 		/* Meters. */
+  double latitude;   // Degrees
+  double longitude;  // Degrees
+  double altitude;   // Meters.
 
   /* shortname is a waypoint name as stored in receiver.  It should
    * strive to be, well, short, and unique.   Enforcing length and
@@ -431,13 +431,13 @@ public:
   QString shortname;
   /*
    * description is typically a human readable description of the
-   * waypoint.   It may be used as a comment field in some receivers.
+   * waypoint.  It may be used as a comment field in some receivers.
    * These are probably under 40 bytes, but that's only a guideline.
    */
   QString description;
   /*
    * notes are relatively long - over 100 characters - prose associated
-   * with the above.   Unlike shortname and description, these are never
+   * with the above.  Unlike shortname and description, these are never
    * used to compute anything else and are strictly "passed through".
    * Few formats support this.
    */
@@ -462,23 +462,23 @@ public:
    */
   int route_priority;
 
-  /* Optional dilution of precision:  positional, horizontal, vertical.
+  /* Optional Dilution Of Precision (DOP):  positional, horizontal, vertical.
    * 1 <= dop <= 50
    */
   float hdop;
   float vdop;
   float pdop;
-  fix_type fix;	/* Optional: 3d, 2d, etc. */
-  int  sat;	/* Optional: number of sats used for fix */
+  fix_type fix;  // Optional: 3d, 2d, etc.
+  int  sat;      // Optional: number of sats used for fix.
 
-  unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
-  unsigned char cadence;	 /* revolutions per minute */
-  float power; /* watts, as measured by cyclists */
-  float odometer_distance; /* Meters */
+  unsigned char heartrate;   // Beats/min. likely to get moved to fs.
+  unsigned char cadence;     // revolutions per minute.
+  float power;               // watts, as measured by cyclists.
+  float odometer_distance;   // Meters.
   Geocache* gc_data;
   FormatSpecificDataList fs;
-  const session_t* session;	/* pointer to a session struct */
-  void* extra_data;	/* Extra data added by, say, a filter. */
+  const session_t* session;  // pointer to a session struct.
+  void* extra_data;          // Extra data added by, say, a filter.
 };
 
 using waypt_cb = void (*)(const Waypoint*);
@@ -612,44 +612,45 @@ waypt_disp_all(T cb)
  */
 struct computed_trkdata {
   double distance_meters{0.0};
-  std::optional<double> max_alt;	/* Meters */
-  std::optional<double> min_alt;	/* Meters */
-  std::optional<double> max_spd;	/* Meters/sec */
-  std::optional<double> min_spd;	/* Meters/sec */
-  std::optional<double> avg_hrt;	/* Avg Heartrate */
-  std::optional<double> avg_cad;	/* Avg Cadence */
-  std::optional<double> avg_pwr;	/* Avg Power */
-  gpsbabel::DateTime start;		/* Min time */
-  gpsbabel::DateTime end;		/* Max time */
-  std::optional<int> min_hrt;			/* Min Heartrate */
-  std::optional<int> max_hrt;			/* Max Heartrate */
-  std::optional<int> max_cad;			/* Max Cadence */
-  std::optional<float> max_pwr;	  /* Max Power */
+  std::optional<double> max_alt;  // Meters
+  std::optional<double> min_alt;  // Meters
+  std::optional<double> max_spd;  // Meters/sec
+  std::optional<double> min_spd;  // Meters/sec
+  std::optional<double> avg_hrt;  // Avg Heartrate
+  std::optional<double> avg_cad;  // Avg Cadence
+  std::optional<double> avg_pwr;  // Avg Power
+  gpsbabel::DateTime start;       // Min time
+  gpsbabel::DateTime end;         // Max time
+  std::optional<int> min_hrt;     // Min Heartrate
+  std::optional<int> max_hrt;     // Max Heartrate
+  std::optional<int> max_cad;     // Max Cadence
+  std::optional<float> max_pwr;   // Max Power
 };
 
 class route_head
 {
 public:
-  WaypointList waypoint_list;	/* List of child waypoints */
+  WaypointList waypoint_list;  // List of child waypoints
   QString rte_name;
   QString rte_desc;
   UrlList rte_urls;
   int rte_num;
   FormatSpecificDataList fs;
-  gb_color line_color;         /* Optional line color for rendering */
-  int line_width;         /* in pixels (sigh).  < 0 is unknown. */
-  const session_t* session;	/* pointer to a session struct */
+  gb_color line_color;         // Optional line color for rendering.
+  int line_width;              // in pixels (sigh).  < 0 is unknown.
+  const session_t* session;    // pointer to a session struct
 
 public:
   route_head();
-  // the default copy constructor and assignment operator are not appropriate as we do deep copy of some members,
+  // the default copy constructor and assignment operator are
+  // not appropriate as we do deep copy of some members,
   // and we haven't bothered to write an appropriate one.
   // Catch attempts to use the default copy constructor and assignment operator.
   route_head(const route_head& other) = delete;
   route_head& operator=(const route_head& rhs) = delete;
   ~route_head();
 
-  int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  int rte_waypt_ct() const {return waypoint_list.count();}  // # waypoints in waypoint list */
   bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
@@ -923,9 +924,10 @@ struct arglist_t {
 };
 
 enum ff_type {
-  ff_type_file = 1,	/* normal format: useful to a GUI. */
-  ff_type_internal,	/* fmt not useful with default options */
-  ff_type_serial		/* format describes a serial protocol (GUI can display port names) */
+  ff_type_file = 1,  // normal format: useful to a GUI.
+  ff_type_internal,  // fmt not useful with default options.
+  ff_type_serial     // format describes a serial protocol
+                     // (perhaps a GUI can display port names)
 };
 
 enum ff_cap_array {
@@ -940,11 +942,13 @@ enum ff_cap {
   ff_cap_write = 2
 };
 
-#define FF_CAP_RW_ALL \
-	{ (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write) }
+#define FF_CAP_RW_ALL {\
+  (ff_cap) (ff_cap_read | ff_cap_write), \
+  (ff_cap) (ff_cap_read | ff_cap_write), \
+  (ff_cap) (ff_cap_read | ff_cap_write) }
 
 #define FF_CAP_RW_WPT \
-	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
+{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none }
 
 /*
  * Format capabilities for realtime positioning.
@@ -1032,13 +1036,11 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
-QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
-QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+QString convert_human_date_format(const char* human_datef);  // "MM,YYYY,DD" -> "%m,%Y,%d"
+QString convert_human_time_format(const char* human_timef);  // "HH+mm+ss"   -> "%H+%M+%S
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
-QString get_filename(const QString& fname);			/* extract the filename portion */
-
-/* this lives in gpx.c */
+/* This lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 
 QString rot13(const QString& s);
@@ -1092,8 +1094,8 @@ enum grid_type {
   grid_swiss = 5
 };
 
-#define GRID_INDEX_MIN	grid_lat_lon_ddd
-#define GRID_INDEX_MAX	grid_swiss
+#define GRID_INDEX_MIN grid_lat_lon_ddd
+#define GRID_INDEX_MAX grid_swiss
 
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);

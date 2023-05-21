@@ -1113,11 +1113,6 @@ QString strip_html(const QString& utfstring)
 #endif
 }
 
-QString get_filename(const QString& fname)
-{
-  return QFileInfo(fname).fileName();
-}
-
 /*
  * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
  */
