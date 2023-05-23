@@ -12,7 +12,7 @@ source-code: https://github.com/GPSBabel/gpsbabel.git
 website: https://www.gpsbabel.org
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: strict # use 'strict' once you have the right plugs and slots
+confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   gpsbabel:
@@ -21,7 +21,28 @@ apps:
       - raw-usb
       - removable-media
       - serial-port
+    command-chain:
+      - bin/graphics-core22-wrapper
     command: usr/bin/gpsbabel
+  gpsbabelfe:
+    plugs:
+      - home
+      - removable-media
+      - network
+      - opengl
+      - wayland
+      - x11
+    command-chain:
+      - bin/graphics-core22-wrapper
+    command: usr/bin/gpsbabelfe
+    environment:
+#      QT_DEBUG_PLUGINS: 1
+
+plugs:
+  graphics-core22:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core22
 
 # remap the ubuntu qt6 install directories to the snap.
 layout:
@@ -29,8 +50,20 @@ layout:
     symlink: $SNAP/usr/share/qt6
   /usr/lib/qt6:
     symlink: $SNAP/usr/lib/qt6
-  /usr/lib/x86_64-linux-gnu/qt6:
-    symlink: $SNAP/usr/lib/x86_64-linux-gnu/qt6
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6
+  /usr/share/libdrm:
+    bind: $SNAP/graphics/usr/share/libdrm
+  /usr/share/drirc.d:
+    symlink: $SNAP/graphics/usr/share/drirc.d
+  /usr/share/X11/XErrorDB:
+    symlink: $SNAP/graphics/usr/share/X11/XErrorDB
+  /usr/share/X11/locale:
+    symlink: $SNAP/graphics/usr/share/X11/locale
+# XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
+# to overcome this symlink /usr/share/X11/xkb
+  /usr/share/X11/xkb:
+    symlink: $SNAP/usr/share/X11/xkb
 
 adopt-info: gpsbabel
 parts:
@@ -41,35 +74,70 @@ parts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DGPSBABEL_WITH_ZLIB=pkgconfig
       - -DGPSBABEL_WITH_SHAPELIB=pkgconfig
+#      - -DGPSBABEL_MAPPREVIEW=OFF
     cmake-generator: Ninja
     source: .
     override-pull: |
       craftctl default
       # add install command to CMakeLists.txt
-      echo "install(TARGETS gpsbabel CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
-      # no gui
-      sed -i -e's/add_subdirectory(gui)/#add_subdirectory(gui)/' CMakeLists.txt
+      echo "install(TARGETS gpsbabel gpsbabelfe CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
       # jam repo sha into GITHUB_SHA
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
       craftctl set version=$(git log -1 --format='LinuxInstaller-%ad-%h' --date=format:%Y%m%d)
-
     build-packages:
       - git
       - vim
       - g++
       - ninja-build
-      - zlib1g-dev
+      - zlib1g-dev # in kde-neon, but pc broken there.
       - libshp-dev
       - libusb-1.0-0-dev
       - pkg-config
       - libudev-dev
       - qt6-base-dev
       - libqt6core5compat6-dev
+      - libqt6opengl6-dev
+      - libqt6serialport6-dev
+      - libqt6webenginecore6-bin
+      - libgl-dev
+      - libopengl-dev
+      - libvulkan-dev
+      - libx11-xcb-dev
+      - libxkbcommon-dev
+      - qt6-l10n-tools
+      - qt6-tools-dev
+      - qt6-tools-dev-tools
+      - qt6-translations-l10n
+      - qt6-webengine-dev
+      - qt6-webengine-dev-tools
+      - qt6-wayland
     stage-packages:
       - zlib1g
       - libshp2
       - libusb-1.0-0
       - libqt6core6
       - libqt6core5compat6
+      - libqt6gui6
+      - libqt6network6
+      - libqt6serialport6
+      - libqt6widgets6
+      - libqt6xml6
+      - libqt6webenginewidgets6
+      - libqt6webchannel6
+      - libqt6webengine6-data
+      - libqt6webenginecore6-bin
+      - qt6-translations-l10n
+      - qt6-qpa-plugins
+      - qt6-wayland
+
+  graphics-core22:
+    after: [gpsbabel]
+    source: https://github.com/MirServer/graphics-core22.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22 nvidia-core22
+    prime:
+      - bin/graphics-core22-wrapper
