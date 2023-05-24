@@ -54,13 +54,13 @@ layout:
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6
   /usr/share/libdrm:
-    bind: $SNAP/graphics/usr/share/libdrm
+    bind: $SNAP/graphics/share/libdrm
   /usr/share/drirc.d:
-    symlink: $SNAP/graphics/usr/share/drirc.d
+    symlink: $SNAP/graphics/share/drirc.d
   /usr/share/X11/XErrorDB:
-    symlink: $SNAP/graphics/usr/share/X11/XErrorDB
+    symlink: $SNAP/graphics/share/X11/XErrorDB
   /usr/share/X11/locale:
-    symlink: $SNAP/graphics/usr/share/X11/locale
+    symlink: $SNAP/graphics/share/X11/locale
 # XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
 # to overcome this symlink /usr/share/X11/xkb
 # see https://bugreports.qt.io/browse/QTBUG-105124
