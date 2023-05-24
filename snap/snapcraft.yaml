@@ -12,7 +12,7 @@ source-code: https://github.com/GPSBabel/gpsbabel.git
 website: https://www.gpsbabel.org
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
   gpsbabel:
@@ -33,6 +33,7 @@ apps:
       - wayland
       - x11
     command-chain:
+      - usr/bin/gpsbabelfe.sh
       - bin/graphics-core22-wrapper
     command: usr/bin/gpsbabelfe
     environment:
@@ -62,6 +63,7 @@ layout:
     symlink: $SNAP/graphics/usr/share/X11/locale
 # XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
 # to overcome this symlink /usr/share/X11/xkb
+# see https://bugreports.qt.io/browse/QTBUG-105124
   /usr/share/X11/xkb:
     symlink: $SNAP/usr/share/X11/xkb
 
@@ -74,13 +76,13 @@ parts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DGPSBABEL_WITH_ZLIB=pkgconfig
       - -DGPSBABEL_WITH_SHAPELIB=pkgconfig
-#      - -DGPSBABEL_MAPPREVIEW=OFF
     cmake-generator: Ninja
     source: .
     override-pull: |
       craftctl default
       # add install command to CMakeLists.txt
       echo "install(TARGETS gpsbabel gpsbabelfe CONFIGURATIONS Release RUNTIME DESTINATION /usr/bin)" >> CMakeLists.txt
+      echo "install(PROGRAMS snap/local/gpsbabelfe.sh DESTINATION /usr/bin)" >> CMakeLists.txt
       # jam repo sha into GITHUB_SHA
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
@@ -91,7 +93,7 @@ parts:
       - vim
       - g++
       - ninja-build
-      - zlib1g-dev # in kde-neon, but pc broken there.
+      - zlib1g-dev
       - libshp-dev
       - libusb-1.0-0-dev
       - pkg-config
