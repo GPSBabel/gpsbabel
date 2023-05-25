@@ -22,6 +22,7 @@
 #include <csignal>                    // for signal, SIGINT, SIG_ERR
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
+#include <format>                     // for format
 
 #include <QCoreApplication>           // for QCoreApplication
 #include <QElapsedTimer>              // for QElapsedTimer
@@ -171,8 +172,9 @@ usage(const char* pname, bool verbose)
   QString b = QString("more ") + QString("bonkers ") + QString("     blah    ") ;
   const char buf[] = "buff ";
   const char *cbuf = "cbuf ";
-  s = std::format("One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
+  s = std::format("One {} b {} buf{} cbuf{} 4-Two {}", CSTR(b.trimmed()), buf, cbuf, 1234, 42);
   puts(s.c_str());
+
 #if 0
   std::print("Printing: One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
   std::println("Printing: One {} two three", "blah" );

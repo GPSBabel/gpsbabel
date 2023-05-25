@@ -817,7 +817,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : qAsConst(style_list)) {
+  for (const auto& svec : std::as_const(style_list)) {
     if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }

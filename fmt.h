@@ -15,34 +15,9 @@
 #if __has_include(<fmt/format.h>)
 
 #include <iostream>
-#include <fmt/format.h>
-#define _USING_LIBFMT 1
+#include <format.h>
+#define _USING_LIBFMT 0
 
-namespace std
-{
-  using fmt::detail::type_is_unformattable_for;
-  using fmt::detail::compile_parse_context;
-
-  using fmt::format;
-  using fmt::format_to;
-  using fmt::format_to_n;
-  using fmt::formatted_size;
-  using fmt::formatter;
-  using fmt::formatter;
-  using fmt::format_error;
-
-  using fmt::basic_format_arg;
-  using fmt::basic_format_args;
-  using fmt::basic_format_context;
-  using fmt::make_format_args;
-  using fmt::format_args;
-
-  using fmt::print;
-  using fmt::println;
-
-  using fmt::vformat;
-  using fmt::vformat_to;
-} ;
 
 // Fallback to the system version.
 #elif __has_include(<format>)
@@ -51,7 +26,7 @@ namespace std
 # warning "There is no <format.h>"
 #endif
 
-#if  _USING_LIBFMT
+#if 0
 // This allows you to send QStrings to a fmt::format. Ha!
 template <>
 struct fmt::formatter<QString> : public fmt::formatter<std::string> {
@@ -65,4 +40,4 @@ struct fmt::formatter<QString> : public fmt::formatter<std::string> {
     return fmt::formatter<std::string>::format(val.toStdString(), ctx);
   };
 };
-#endif //  _USING_LIBFMT
+#endif

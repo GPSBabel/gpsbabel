@@ -59,7 +59,7 @@ public:
    * To add new keywords, just add an entry here, add it to xcsv_tokens, and
    * handle it in the switch statements in xcsv.cc.
    */
-  enum class xcsv_token {
+  enum xcsv_token {
     XT_unused = 0,
     XT_ALT_FEET,
     XT_ALT_METERS,
@@ -158,7 +158,7 @@ public:
     QByteArray key;
     QByteArray val;
     QByteArray printfc;
-    xcsv_token hashed_key{xcsv_token::XT_unused};
+    xcsv_token hashed_key{XT_unused};
     unsigned options{0};
 
     field_map() = default;
