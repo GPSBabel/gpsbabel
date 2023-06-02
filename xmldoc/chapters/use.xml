@@ -74,8 +74,8 @@ done.   The reason for this strict ordering becomes more apparent once you
 learn about mixing formats and filters.</para>
     <para>The
       <parameter class="command">filename</parameter>
-      parameters specify the
-name of a file to be read or written.</para>
+      parameters specify the name of a file to be read or written. The format to used must be
+specified earlier on the command line.</para>
     <para>To use
          GPSBabel in its simplest form, just tell it what you're reading, where to read
          it from, what you're writing, and what to write it to.  For
