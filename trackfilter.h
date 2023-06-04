@@ -137,7 +137,7 @@ private:
     },
     {
       TRACKFILTER_SPLIT_OPTION, &opt_split,
-      "Split by date or time interval (see README)", nullptr,
+      "Split by date or time interval", nullptr,
       ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {

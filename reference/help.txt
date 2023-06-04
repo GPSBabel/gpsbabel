@@ -462,7 +462,7 @@ Supported data filters:
 	track                 Manipulate track lists                            
 	  move                  Correct trackpoint timestamps by a delta 
 	  pack                  Pack all tracks into one 
-	  split                 Split by date or time interval (see README) 
+	  split                 Split by date or time interval 
 	  sdistance             Split by distance 
 	  merge                 Merge multiple tracks for the same way 
 	  name                  Use only track(s) where title matches given name 
