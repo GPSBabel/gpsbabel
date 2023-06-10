@@ -24,7 +24,6 @@
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
-#include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
@@ -35,7 +34,6 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
-#include <QScopedPointer>               // for QScopedPointer
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -183,137 +181,6 @@ ufopen(const QString& fname, const char* mode)
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
 #endif
-}
-
-/*
- * Allocate a string using a format list with optional arguments
- * Returns -1 on error.
- * If return value is anything else, *strp will be populated with an
- * allocated string containing the formatted buffer.
- *
- * Freeing that is the responsibility of the caller.
- */
-
-int
-xasprintf(char** strp, const char* fmt, ...)
-{
-  va_list args;
-
-  va_start(args, fmt);
-  int res = xvasprintf(strp, fmt, args);
-  va_end(args);
-
-  return res;
-}
-
-int
-xasprintf(QString* strp, const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-  char* cstrp;
-  int res = xvasprintf(&cstrp, fmt, args);
-  *strp = cstrp;
-  xfree(cstrp);
-  va_end(args);
-
-  return res;
-}
-
-int
-xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...)
-{
-  va_list args;
-
-  va_start(args, fmt);
-  char* cstrp;
-  int res = xvasprintf(&cstrp, fmt, args);
-  strp.reset(cstrp);
-  va_end(args);
-
-  return res;
-}
-
-int
-xvasprintf(char** strp, const char* fmt, va_list ap)
-{
-  /* From http://perfec.to/vsnprintf/pasprintf.c */
-  /* size of first buffer malloc; start small to exercise grow routines */
-# define	FIRSTSIZE	1
-  char* buf = nullptr;
-  char* newbuf;
-  size_t nextsize = 0;
-  int outsize;
-  va_list args;
-
-  int bufsize = 0;
-  for (;;) {
-    if (bufsize == 0) {
-      if ((buf = (char*) xmalloc(FIRSTSIZE)) == nullptr) {
-        *strp = nullptr;
-        return -1;
-      }
-      bufsize = FIRSTSIZE;
-    } else if ((newbuf = (char*) xrealloc(buf, nextsize)) != nullptr) {
-      buf = newbuf;
-      bufsize = nextsize;
-    } else {
-      xfree(buf);
-      *strp = nullptr;
-      return -1;
-    }
-
-    va_copy(args, ap);
-    outsize = vsnprintf(buf, bufsize, fmt, args);
-    va_end(args);
-
-    if (outsize == -1) {
-      /* Clear indication that output was truncated, but no
-       * clear indication of how big buffer needs to be, so
-       * simply double existing buffer size for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else if (outsize == bufsize) {
-      /* Output was truncated (since at least the \0 could
-       * not fit), but no indication of how big the buffer
-       * needs to be, so just double existing buffer size
-       * for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else if (outsize > bufsize) {
-      /* Output was truncated, but we were told exactly how
-       * big the buffer needs to be next time. Add two chars
-       * to the returned size. One for the \0, and one to
-       * prevent ambiguity in the next case below.
-       */
-      nextsize = outsize + 2;
-
-    } else if (outsize == bufsize - 1) {
-      /* This is ambiguous. May mean that the output string
-       * exactly fits, but on some systems the output string
-       * may have been truncated. We can't tell.
-       * Just double the buffer size for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else {
-      /* Output was not truncated */
-      break;
-    }
-  }
-  /* Prevent us from allocating millions of unused bytes. */
-  /* O.K.: I think this is not the final solution. */
-  if (bufsize > outsize + 1) {
-    const unsigned ptrsz = sizeof(buf);
-    if (((bufsize + ptrsz + 1) / ptrsz) > ((outsize + ptrsz + 1) / ptrsz)) {
-      buf = (char*) xrealloc(buf, outsize + 1);
-    }
-
-  }
-  *strp = buf;
-  return outsize;
 }
 
 void

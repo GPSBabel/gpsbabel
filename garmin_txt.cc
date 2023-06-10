@@ -81,7 +81,7 @@ static grid_type grid_index;
 static int datum_index;
 static const char* datum_str;
 static int current_line;
-static char* date_time_format = nullptr;
+static QString date_time_format;
 static int precision = 3;
 static time_t utc_offs = 0;
 static gtxt_flags_t gtxt_flags;
@@ -199,7 +199,7 @@ init_date_and_time_format()
   const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
   QString t1 = convert_human_time_format(t);
 
-  xasprintf(&date_time_format, "%s %s", CSTR(d1), CSTR(t1));
+  date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
 }
 
 static void
@@ -384,7 +384,7 @@ print_date_and_time(const time_t time, const bool time_only)
     } else {
       tm = *localtime(&time);
     }
-    strftime(tbuf, sizeof(tbuf), date_time_format, &tm);
+    strftime(tbuf, sizeof(tbuf), CSTR(date_time_format), &tm);
     *fout << QString::asprintf("%s ", tbuf);
   }
   *fout << "\t";
@@ -803,7 +803,8 @@ garmin_txt_wr_deinit()
   fout->close();
   delete fout;
   fout = nullptr;
-  xfree(date_time_format);
+  date_time_format.clear();
+  date_time_format.squeeze();
 }
 
 static void
@@ -950,7 +951,7 @@ strftime_to_timespec(const char* s)
 static QDateTime
 parse_date_and_time(const QString& str)
 {
-  QString timespec = strftime_to_timespec(date_time_format);
+  QString timespec = strftime_to_timespec(CSTR(date_time_format));
   return QDateTime::fromString(QString(str).trimmed(), timespec);
 }
 
@@ -1376,7 +1377,8 @@ garmin_txt_rd_deinit()
   fin->close();
   delete fin;
   fin = nullptr;
-  xfree(date_time_format);
+  date_time_format.clear();
+  date_time_format.squeeze();
 }
 
 static void

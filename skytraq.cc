@@ -479,7 +479,6 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
 
   // unsigned char log_bool, fifo_mode;
-  char* mystatus;
   unsigned int tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
   unsigned int tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
   unsigned int dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
@@ -488,9 +487,7 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
-  xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
-  db(1, mystatus);
-  xfree(mystatus);
+  db(1, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
 
   return res_OK;
 }
