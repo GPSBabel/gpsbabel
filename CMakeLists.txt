@@ -68,7 +68,6 @@ set(RESOURCES gpsbabel.qrc)
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
   garmin.cc
-  garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
@@ -207,7 +206,6 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
-  garmin_device_xml.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
