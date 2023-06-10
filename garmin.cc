@@ -22,14 +22,12 @@
 #include <cassert>               // for assert
 #include <climits>               // for INT_MAX
 #include <cmath>                 // for atan2, floor, sqrt
-#include <csetjmp>               // for setjmp
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
 
 #include <QByteArray>            // for QByteArray
-#include <QChar>                 // for QChar
 #include <QRegularExpression>    // for QRegularExpression
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
@@ -38,9 +36,7 @@
 #include <QtGlobal>              // for qPrintable, foreach
 
 #include "defs.h"
-#include "format.h"              // for Format
 #include "formspec.h"            // for FormatSpecificDataList
-#include "garmin_device_xml.h"   // for gdx_get_info, gdx_info, gdx_file, gdx_jmp_buf
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
 #include "geocache.h"            // for Geocache, Geocache::type_t, Geocache...
@@ -55,7 +51,6 @@
 #include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
 #include "jeeps/gpsutil.h"       // for GPS_User, GPS_Enable_Diagnose, GPS_E...
 #include "src/core/datetime.h"   // for DateTime
-#include "vecs.h"                // for Vecs
 
 
 #define MYNAME "GARMIN"
@@ -82,8 +77,6 @@ static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
 static QTextCodec* codec{nullptr};
-
-static Vecs::fmtinfo_t gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -393,16 +386,7 @@ rw_init(const QString& fname)
 static void
 rd_init(const QString& fname)
 {
-  if (setjmp(gdx_jmp_buf)) {
-    const gdx_info* gi = gdx_get_info();
-    // FIXME: dynamic not implemented.
-    gpx_vec = Vecs::Instance().find_vec("gpx");
-    Vecs::prepare_format(gpx_vec);
-    gpx_vec->rd_init(gi->from_device.canon);
-  } else {
-    gpx_vec = Vecs::fmtinfo_t();
-    rw_init(fname);
-  }
+  rw_init(fname);
 }
 
 static void
@@ -781,11 +765,6 @@ pvt_read(posn_status* posn_status)
 static void
 data_read()
 {
-  if (gpx_vec) {
-    gpx_vec->read();
-    return;
-  }
-
   if (poweroff) {
     return;
   }
