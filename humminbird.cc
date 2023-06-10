@@ -666,8 +666,8 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   be_write32(&hum.north, qRound(north));
 
   QString name = (global_opts.synthesize_shortnames)
-                   ? mkshort_from_wpt(wptname_sh, wpt)
-                   : mkshort(wptname_sh, wpt->shortname);
+                 ? mkshort_from_wpt(wptname_sh, wpt)
+                 : mkshort(wptname_sh, wpt->shortname);
   memset(&hum.name, 0, sizeof(hum.name));
   memcpy(&hum.name, CSTR(name), name.length());
 
@@ -869,10 +869,10 @@ HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
 void
 HumminbirdFormat::humminbird_write_waypoint_wrapper(const Waypoint* wpt)
 {
-  char* key;
   Waypoint* tmpwpt;
 
-  xasprintf(&key, "%s\01%.9f\01%.9f", CSTRc(wpt->shortname), wpt->latitude, wpt->longitude);
+  QString key = QStringLiteral("%1\01%2\01%3").arg(wpt->shortname)
+                .arg(wpt->latitude, 0, 'f', 9).arg(wpt->longitude, 0, 'f', 9);
   if (!(tmpwpt = map[key])) {
     tmpwpt = const_cast<Waypoint*>(wpt);
     map[key] = const_cast<Waypoint*>(wpt);
@@ -883,8 +883,6 @@ HumminbirdFormat::humminbird_write_waypoint_wrapper(const Waypoint* wpt)
     tmpwpt = const_cast<Waypoint*>(wpt);
     tmpwpt->extra_data = p;
   }
-
-  xfree(key);
 }
 
 void
