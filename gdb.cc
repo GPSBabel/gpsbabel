@@ -470,9 +470,9 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_proximity(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->proximity_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->proximity / 1000);
+           qPrintable(res->shortname), wpt_class, res->proximity_value() / 1000);
 #endif
   }
   int display = FREAD_i32;
@@ -506,9 +506,9 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_depth(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->depth_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->depth);
+           qPrintable(res->shortname), wpt_class, res->depth_value());
 #endif
   }
 
@@ -595,9 +595,9 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_temperature(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->temperature_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->temperature);
+           qPrintable(res->shortname), wpt_class, res->temperature_value());
 #endif
   }
 
