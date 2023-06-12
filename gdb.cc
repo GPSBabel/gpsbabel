@@ -447,14 +447,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if (alt < 1.0e24) {
       res->altitude = alt;
 #if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, 1)
+      DBG(GDB_DBG_WPTe, true)
       printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
              qPrintable(res->shortname), wpt_class, alt);
 #endif
     }
   }
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPT, 1)
+  DBG(GDB_DBG_WPT, true)
   printf(MYNAME "-wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
          qPrintable(res->shortname),
          res->latitude < 0 ? 'S' : 'N', res->latitude,
@@ -477,7 +477,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
   int display = FREAD_i32;
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, 1)
+  DBG(GDB_DBG_WPTe, true)
   printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
          qPrintable(res->shortname), wpt_class, display);
 #endif
@@ -555,7 +555,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       garmin_fs_t::set_duration(gmsd, duration);
       res->notes = QStringLiteral("[%1]").arg(gdb_to_ISO8601_duration(duration));
 #if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, 1)
+      DBG(GDB_DBG_WPTe, true)
       printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
              qPrintable(res->shortname), wpt_class, duration);
 #endif
@@ -566,7 +566,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       if (!str.isEmpty()) {
         waypt_add_url(res, str, nullptr);
 #if GDB_DEBUG
-        DBG(GDB_DBG_WPTe, 1)
+        DBG(GDB_DBG_WPTe, true)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
                qPrintable(res->shortname), wpt_class, url_ct - i, qPrintable(str));
 #endif
@@ -677,7 +677,7 @@ GdbFormat::read_route()
   int points = FREAD_i32;
 
 #if GDB_DEBUG
-  DBG(GDB_DBG_RTE, 1)
+  DBG(GDB_DBG_RTE, true)
   printf(MYNAME "-rte \"%s\": loading route with %d point(s)...\n",
          qPrintable(rte->rte_name), points);
 #endif
@@ -752,7 +752,7 @@ GdbFormat::read_route()
       il_anchor = il_step;
 
 #if GDB_DEBUG
-      DBG(GDB_DBG_RTEe, 1) {
+      DBG(GDB_DBG_RTEe, true) {
         printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
                qPrintable(wpt->shortname), j + 1, links,
                il_step->lat < 0 ? 'S' : 'N', il_step->lat,
@@ -801,7 +801,7 @@ GdbFormat::read_route()
       }
     }
 #if GDB_DEBUG
-    DBG(GDB_DBG_RTE, 1)
+    DBG(GDB_DBG_RTE, true)
     printf(MYNAME "-rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
            qPrintable(wpt->shortname),
            wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
@@ -849,7 +849,7 @@ GdbFormat::read_route()
       driving_speed[4] = FREAD_DBL;
       FREAD(tbuf, 8); /* unknown bytes */
 #if GDB_DEBUG
-      DBG(GDB_DBG_RTE, 1)
+      DBG(GDB_DBG_RTE, true)
       printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
              "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
              route_style, calc_type, vehicle_type, road_selection,
