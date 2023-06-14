@@ -145,7 +145,7 @@ struct read_state {
   struct buf_head     data;
 };
 
-static void db(int l, const char* msg, ...)
+[[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -893,7 +893,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   }
 
   if (cs != st->data.checksum) {
-    db(2, "Checksums don't match. Got %02lx, expected %02\n", cs, st->data.checksum);
+    db(2, "Checksums don't match. Got %02lx, expected %02x\n", cs, st->data.checksum);
     return 0;
   }
 
