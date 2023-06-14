@@ -110,7 +110,7 @@ protected:
 
   /* Member Functions */
 
-  static void db(int l, const char* msg, ...);
+  [[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...);
   void rd_drain() const;
   int rd_char(int* errors) const;
   int rd_buf(uint8_t* buf, int len) const;

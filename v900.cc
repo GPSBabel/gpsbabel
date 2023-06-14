@@ -140,7 +140,7 @@ struct one_line_basic_mode {
 static FILE* fin = nullptr;
 
 /* copied from dg-100.cpp */
-static void
+[[gnu::format(printf, 1, 2)]] static void
 v900_log(const char* fmt, ...)
 {
   va_list ap;

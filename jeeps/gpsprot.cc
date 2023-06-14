@@ -348,7 +348,6 @@ int32 GPS_Protocol_Table_Set(US id)
 {
   int32 i;
   US  v;
-  char s[GPS_ARB_LEN];
 
   i=0;
   while ((v=GPS_MP[i].id)) {
@@ -372,8 +371,7 @@ int32 GPS_Protocol_Table_Set(US id)
   }
 
 
-  (void) snprintf(s, sizeof(s), "INIT: No table entry for ID %d\n", id);
-  GPS_Error(s);
+  GPS_Error("INIT: No table entry for ID %d\n", id);
 
   return GPS_UNSUPPORTED;
 }
@@ -392,11 +390,7 @@ int32 GPS_Protocol_Table_Set(US id)
 
 void GPS_Protocol_Error(US tag, US data)
 {
-  char s[GPS_ARB_LEN];
-
-  (void) snprintf(s, sizeof(s),
-                 "PROTOCOL ERROR: Unknown tag/data [%c/%d]\n", tag, data);
-  GPS_Error(s);
+  GPS_Error("PROTOCOL ERROR: Unknown tag/data [%c/%d]\n", tag, data);
 
   if (gps_n_tag_unknown < GPS_TAGUNK) {
     gps_tag_unknown[gps_n_tag_unknown] = tag;
