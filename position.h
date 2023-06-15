@@ -22,7 +22,9 @@
 #ifndef POSITION_H_INCLUDED_
 #define POSITION_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QString>   // for QString
+#include <QVector>   // for QVector
+#include <QtGlobal>  // for qint64
 
 #include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT
 #include "filter.h"  // for Filter
@@ -43,7 +45,7 @@ private:
   route_head* cur_rte = nullptr;
 
   double pos_dist{};
-  double max_diff_time{};
+  qint64 max_diff_time{};
   char* distopt = nullptr;
   char* timeopt = nullptr;
   char* purge_duplicates = nullptr;

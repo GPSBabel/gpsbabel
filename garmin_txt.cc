@@ -24,18 +24,22 @@
 #include "defs.h"
 
 #if CSVFMTS_ENABLED
-#include <algorithm>               // for sort
+#include <algorithm>               // for for_each, sort
+#include <array>                   // for array
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
-#include <cstdio>                  // for NULL, snprintf, sscanf
-#include <cstdint>
+#include <cstdint>                 // for uint16_t
+#include <cstdio>                  // for sscanf, fprintf, snprintf, stderr
 #include <cstdlib>                 // for abs
-#include <cstring>                 // for memset, strstr, strcat, strchr, strlen, strcmp, strcpy, strncpy
-#include <ctime>                   // for gmtime, localtime, strftime
+#include <cstring>                 // for strstr, strlen
+#include <ctime>                   // for time_t, gmtime, localtime, strftime
+#include <utility>                 // for pair, make_pair
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
+#include <QDateTime>               // for QDateTime
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QList>                   // for QList, QList<>::const_iterator
 #include <QString>                 // for QString, operator!=
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream
@@ -52,7 +56,6 @@
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Fatal
 #include "src/core/textstream.h"   // for TextStream
-#include "strptime.h"              // for strptime
 
 
 #define MYNAME "garmin_txt"
@@ -68,7 +71,8 @@ struct gtxt_flags_t {
 
 static gpsbabel::TextStream* fin = nullptr;
 static gpsbabel::TextStream* fout = nullptr;
-static route_head* current_trk, *current_rte;
+static route_head* current_trk;
+static route_head* current_rte;
 static int waypoints;
 static int routepoints;
 static const Waypoint** wpt_a;
@@ -77,9 +81,8 @@ static grid_type grid_index;
 static int datum_index;
 static const char* datum_str;
 static int current_line;
-static char* date_time_format = nullptr;
+static QString date_time_format;
 static int precision = 3;
-static QString current_line_text;
 static time_t utc_offs = 0;
 static gtxt_flags_t gtxt_flags;
 
@@ -114,19 +117,17 @@ inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
   return ret;
 }
 
-#define MAX_HEADER_FIELDS 36
+static std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
+static QStringList header_column_names;
 
-static QString header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
-static int header_fields[unknown_header + 1][MAX_HEADER_FIELDS];
-static int header_ct[unknown_header + 1];
+static constexpr double kGarminUnknownAlt = 1.0e25;
+static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
+static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
-#define GARMIN_UNKNOWN_ALT 1.0e25f
-#define DEFAULT_DATE_FORMAT "dd/mm/yyyy"
-#define DEFAULT_TIME_FORMAT "HH:mm:ss"
-
-/* macros */
-
-#define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
+static inline bool is_valid_alt(double alt)
+{
+  return (alt != unknown_alt) && (alt < kGarminUnknownAlt);
+}
 
 static char* opt_datum = nullptr;
 static char* opt_dist = nullptr;
@@ -149,8 +150,9 @@ QVector<arglist_t> garmin_txt_args = {
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
 };
 
-class PathInfo {
- public:
+class PathInfo
+{
+public:
   double length {0};
   time_t start {0};
   time_t time {0};
@@ -166,15 +168,14 @@ static PathInfo* route_info;
 static int route_idx;
 static PathInfo* cur_info;
 
-static const char* headers[] = {
+static const QVector<QString> headers = {
   "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
   "Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
   "Date Modified\tLink\tCategories",
   "Waypoint Name\tDistance\tLeg Length\tCourse",
   "Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
   "Name\tLength\tCourse\tWaypoints\tLink",
-  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink",
-  nullptr
+  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink"
 };
 
 /* helpers */
@@ -192,13 +193,13 @@ init_date_and_time_format()
   // This is old, and weird, code.. date_time_format is a global that's
   // explicitly malloced and freed elsewhere. This isn't very C++ at all,
   // but this format is on its deathbead for deprecation.
-  const char* d = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
+  const char* d = get_option_val(opt_date_format, kDefaultDateFormat);
   QString d1 = convert_human_date_format(d);
 
-  const char* t = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
+  const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
   QString t1 = convert_human_time_format(t);
 
-  xasprintf(&date_time_format, "%s %s", CSTR(d1), CSTR(t1));
+  date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
 }
 
 static void
@@ -363,9 +364,9 @@ print_position(const Waypoint* wpt)
 }
 
 static void
-print_date_and_time(const time_t time, const int time_only)
+print_date_and_time(const time_t time, const bool time_only)
 {
-  struct tm tm;
+  std::tm tm{};
   char tbuf[32];
 
   if (time < 0) {
@@ -383,7 +384,7 @@ print_date_and_time(const time_t time, const int time_only)
     } else {
       tm = *localtime(&time);
     }
-    strftime(tbuf, sizeof(tbuf), date_time_format, &tm);
+    strftime(tbuf, sizeof(tbuf), CSTR(date_time_format), &tm);
     *fout << QString::asprintf("%s ", tbuf);
   }
   *fout << "\t";
@@ -429,7 +430,7 @@ print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 }
 
 static void
-print_distance(const double distance, const int no_scale, const int with_tab, const int decis)
+print_distance(const double distance, const bool no_scale, const bool with_tab, const int decis)
 {
   double dist = distance;
 
@@ -464,9 +465,9 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
 }
 
 static void
-print_speed(const double* distance, const time_t* time)
+print_speed(const double distance, const time_t time)
 {
-  double dist = *distance;
+  double dist = distance;
   const char* unit;
 
   if (!gtxt_flags.metric) {
@@ -477,8 +478,8 @@ print_speed(const double* distance, const time_t* time)
   }
   int idist = qRound(dist);
 
-  if ((*time != 0) && (idist > 0)) {
-    double speed = MPS_TO_KPH(dist / (double)*time);
+  if ((time != 0) && (idist > 0)) {
+    double speed = MPS_TO_KPH(dist / (double)time);
     int ispeed = qRound(speed);
 
     if (speed < 0.01) {
@@ -535,7 +536,7 @@ write_waypt(const Waypoint* wpt)
   }
   const char* dspl_mode = gt_display_mode_names[i];
 
-  unsigned char wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
+  int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class <= gt_waypt_class_map_line) {
     wpt_type = gt_waypt_class_names[wpt_class];
   } else {
@@ -560,20 +561,20 @@ write_waypt(const Waypoint* wpt)
 
   print_position(wpt);
 
-  if IS_VALID_ALT(wpt->altitude) {
-    print_distance(wpt->altitude, 1, 0, 0);
+  if (is_valid_alt(wpt->altitude)) {
+    print_distance(wpt->altitude, true, false, 0);
   }
   *fout << "\t";
 
   double x = wpt->depth_value_or(unknown_alt);
   if (x != unknown_alt) {
-    print_distance(x, 1, 0, 1);
+    print_distance(x, true, false, 1);
   }
   *fout << "\t";
 
   x = wpt->proximity_value_or(unknown_alt);
   if (x != unknown_alt) {
-    print_distance(x, 0, 0, 0);
+    print_distance(x, false, false, 0);
   }
   *fout << "\t";
 
@@ -596,7 +597,7 @@ write_waypt(const Waypoint* wpt)
   print_string("%s\t", garmin_fs_t::get_state(gmsd, ""));
   const char* country = gt_get_icao_country(garmin_fs_t::get_cc(gmsd, ""));
   print_string("%s\t", (country != nullptr) ? country : "");
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
+  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
     UrlLink l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
@@ -614,16 +615,16 @@ route_disp_hdr_cb(const route_head* rte)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  if (rte->rte_waypt_ct() <= 0) {
+  if (rte->rte_waypt_empty()) {
     return;
   }
 
   if (!gtxt_flags.route_header_written) {
     gtxt_flags.route_header_written = 1;
-    *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[route_header]);
+    *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n").arg(headers[route_header]);
   }
   print_string("\r\nRoute\t%s\t", rte->rte_name);
-  print_distance(cur_info->length, 0, 1, 0);
+  print_distance(cur_info->length, false, true, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   *fout << QString::asprintf("\t%d waypoints\t", cur_info->count);
   if (rte->rte_urls.HasUrlLink()) {
@@ -631,7 +632,7 @@ route_disp_hdr_cb(const route_head* rte)
   } else {
     print_string("%s\r\n", "");
   }
-  *fout << QString::asprintf("\r\nHeader\t%s\r\n\r\n", headers[rtept_header]);
+  *fout << QStringLiteral("\r\nHeader\t%1\r\n\r\n").arg(headers[rtept_header]);
 }
 
 static void
@@ -650,11 +651,11 @@ route_disp_wpt_cb(const Waypoint* wpt)
   if (prev != nullptr) {
     double dist = waypt_distance_ex(prev, wpt);
     cur_info->total += dist;
-    print_distance(cur_info->total, 0, 1, 0);
-    print_distance(dist, 0, 1, 0);
+    print_distance(cur_info->total, false, true, 0);
+    print_distance(dist, false, true, 0);
     print_course(prev, wpt);
   } else {
-    print_distance(0, 1, 0, 0);
+    print_distance(0, true, false, 0);
   }
 
   *fout << "\r\n";
@@ -668,25 +669,25 @@ track_disp_hdr_cb(const route_head* track)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  if (track->rte_waypt_ct() <= 0) {
+  if (track->rte_waypt_empty()) {
     return;
   }
 
   if (!gtxt_flags.track_header_written) {
     gtxt_flags.track_header_written = 1;
-    *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n", headers[track_header]);
+    *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n").arg(headers[track_header]);
   }
   print_string("\r\nTrack\t%s\t", track->rte_name);
-  print_date_and_time(cur_info->start, 0);
-  print_date_and_time(cur_info->time, 1);
-  print_distance(cur_info->length, 0, 1, 0);
-  print_speed(&cur_info->length, &cur_info->time);
+  print_date_and_time(cur_info->start, false);
+  print_date_and_time(cur_info->time, true);
+  print_distance(cur_info->length, false, true, 0);
+  print_speed(cur_info->length, cur_info->time);
   if (track->rte_urls.HasUrlLink()) {
     print_string("%s", track->rte_urls.GetUrlLink().url_);
   } else {
     print_string("%s", "");
   }
-  *fout << QString::asprintf("\r\n\r\nHeader\t%s\r\n\r\n", headers[trkpt_header]);
+  *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n\r\n").arg(headers[trkpt_header]);
 }
 
 static void
@@ -705,15 +706,15 @@ track_disp_wpt_cb(const Waypoint* wpt)
   *fout << "Trackpoint\t";
 
   print_position(wpt);
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
-  if IS_VALID_ALT(wpt->altitude) {
-    print_distance(wpt->altitude, 1, 0, 0);
+  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
+  if (is_valid_alt(wpt->altitude)) {
+    print_distance(wpt->altitude, true, false, 0);
   }
 
   *fout << "\t";
   double depth = wpt->depth_value_or(unknown_alt);
   if (depth != unknown_alt) {
-    print_distance(depth, 1, 0, 1);
+    print_distance(depth, true, false, 1);
   }
 
   if (prev != nullptr) {
@@ -725,9 +726,9 @@ track_disp_wpt_cb(const Waypoint* wpt)
     }
     *fout << "\t";
     dist = waypt_distance_ex(prev, wpt);
-    print_distance(dist, 0, 1, 0);
-    print_date_and_time(delta, 1);
-    print_speed(&dist, &delta);
+    print_distance(dist, false, true, 0);
+    print_date_and_time(delta, true);
+    print_speed(dist, delta);
     print_course(prev, wpt);
   }
   *fout << "\r\n";
@@ -742,7 +743,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
 static void
 garmin_txt_wr_init(const QString& fname)
 {
-  memset(&gtxt_flags, 0, sizeof(gtxt_flags));
+  gtxt_flags = {};
 
   fout = new gpsbabel::TextStream;
   fout->open(fname, QIODevice::WriteOnly, MYNAME, "windows-1252");
@@ -802,7 +803,8 @@ garmin_txt_wr_deinit()
   fout->close();
   delete fout;
   fout = nullptr;
-  xfree(date_time_format);
+  date_time_format.clear();
+  date_time_format.squeeze();
 }
 
 static void
@@ -823,7 +825,7 @@ garmin_txt_write()
 
   if (waypoints > 0) {
     wpt_a_ct = 0;
-    wpt_a = new const Waypoint*[waypoints]{};
+    wpt_a = new const Waypoint*[waypoints] {};
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(nullptr, nullptr, enum_waypt_cb);
     auto sort_waypt_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
@@ -831,7 +833,7 @@ garmin_txt_write()
     };
     std::sort(wpt_a, wpt_a + waypoints, sort_waypt_lambda);
 
-    *fout << QString::asprintf("Header\t%s\r\n\r\n", headers[waypt_header]);
+    *fout << QStringLiteral("Header\t%1\r\n\r\n").arg(headers[waypt_header]);
     for (int i = 0; i < waypoints; i++) {
       write_waypt(wpt_a[i]);
     }
@@ -866,13 +868,10 @@ garmin_txt_write()
 /* helpers */
 
 static void
-free_header(const header_type ht)
+free_headers()
 {
-  for (int i = 0; i < MAX_HEADER_FIELDS; i++) {
-    header_lines[ht][i].clear();
-  }
-  header_ct[ht] = 0;
-  memset(header_fields[ht], 0, sizeof(header_fields[ht]));
+  std::for_each(header_mapping_info.begin(), header_mapping_info.end(),
+                [](auto& list)->void { list.clear(); });
 }
 
 // Super simple attempt to convert strftime/strptime spec to Qt spec.
@@ -890,21 +889,51 @@ strftime_to_timespec(const char* s)
     case '%':
       if (i < l-1) {
         switch (s[++i]) {
-        case 'd': q += "dd"; continue;
-        case 'm': q += "MM"; continue ;
-        case 'y': q += "yy"; continue ;
-        case 'Y': q += "yyyy"; continue ;
-        case 'H': q += "hh"; continue ;
-        case 'M': q += "mm"; continue ;
-        case 'S': q += "ss"; continue ;
-        case 'A': q += "dddd"; continue ;
-        case 'a': q += "ddd"; continue ;
-        case 'B': q += "MMMM"; continue ;
-        case 'C': q += "yy"; continue ;
-        case 'D': q += "MM/dd/yyyy"; continue ;
-        case 'T': q += "hh:mm:ss"; continue ;
-        case 'F': q += "yyyy-MM-dd"; continue ;
-        default: q += s[i+1]; break ;
+        case 'd':
+          q += "dd";
+          continue;
+        case 'm':
+          q += "MM";
+          continue;
+        case 'y':
+          q += "yy";
+          continue;
+        case 'Y':
+          q += "yyyy";
+          continue;
+        case 'H':
+          q += "hh";
+          continue;
+        case 'M':
+          q += "mm";
+          continue;
+        case 'S':
+          q += "ss";
+          continue;
+        case 'A':
+          q += "dddd";
+          continue;
+        case 'a':
+          q += "ddd";
+          continue;
+        case 'B':
+          q += "MMMM";
+          continue;
+        case 'C':
+          q += "yy";
+          continue;
+        case 'D':
+          q += "MM/dd/yyyy";
+          continue;
+        case 'T':
+          q += "hh:mm:ss";
+          continue;
+        case 'F':
+          q += "yyyy-MM-dd";
+          continue;
+        default:
+          q += s[i+1];
+          break;
         }
       }
       break;
@@ -919,18 +948,11 @@ strftime_to_timespec(const char* s)
 
 /* data parsers */
 
-// This could return an optional QDateTime instead or a pair.
-static bool
-parse_date_and_time(const QString& str, QDateTime* value)
+static QDateTime
+parse_date_and_time(const QString& str)
 {
-  QString timespec = strftime_to_timespec(date_time_format);
-  QDateTime dt;
-  dt = QDateTime::fromString(QString(str).trimmed(), timespec);
-  bool dt_is_valid = dt.isValid();
-  if (dt_is_valid) {
-    *value = dt;
-  }
-  return dt_is_valid;
+  QString timespec = strftime_to_timespec(CSTR(date_time_format));
+  return QDateTime::fromString(QString(str).trimmed(), timespec);
 }
 
 static uint16_t
@@ -985,18 +1007,9 @@ parse_temperature(const QString& str, double* temperature)
 static void
 parse_header(const QStringList& lineparts)
 {
-  int column = -1;
-
-  free_header(unknown_header);
-
-  for (const auto& str : lineparts) {
-    column++;
-    header_lines[unknown_header][column] = str;
-    header_lines[unknown_header][column] = header_lines[unknown_header][column].toUpper();
-    header_ct[unknown_header]++;
-    if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
-      break;
-    }
+  header_column_names.clear();
+  for (const auto& name : lineparts) {
+    header_column_names.append(name.toUpper());
   }
 }
 
@@ -1024,42 +1037,30 @@ bind_fields(const header_type ht)
     fatal(MYNAME ": Incomplete or invalid file header!");
   }
 
-  if (header_ct[unknown_header] <= 0) {
+  if (header_column_names.isEmpty()) {
     return;
   }
-  free_header(ht);
+  header_mapping_info[ht].clear();
 
-  /* make a copy of headers[ht], uppercase, replace "\t" with "\0" */
+  /* make a copy of headers[ht], uppercase, split on "\t" */
+  const QStringList altheader = headers.at(ht).toUpper().split('\t');
 
-  int i = strlen(headers[ht]);
-  char* fields = (char*) xmalloc(i + 2);
-  strcpy(fields, headers[ht]);
-  strcat(fields, "\t");
-  char* c = strupper(fields);
-  while ((c = strchr(c, '\t'))) {
-    *c++ = '\0';
-  }
+  int i = -1;
+  for (const auto& name : qAsConst(header_column_names)) {
+    i++;
 
-  for (i = 0; i < header_ct[unknown_header]; i++) {
-    auto name = header_lines[ht][i] = header_lines[unknown_header][i];
-    header_lines[unknown_header][i].clear();
-
-    c = fields;
-    int field_no = 1;
-    while (*c) {
-      if (name.compare(c) == 0) {
-        header_fields[ht][i] = field_no;
-#if 0
-        printf("Binding field \"%s\" to internal number %d (%d,%d)\n", name, field_no, ht, i);
-#endif
-        break;
+    int field_idx = altheader.indexOf(name);
+    if (field_idx >= 0) {
+      int field_no = field_idx + 1;
+      header_mapping_info[ht].append(std::make_pair(name, field_no));
+      if (global_opts.debug_level >= 2) {
+        fprintf(stderr, MYNAME ": Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
       }
-      field_no++;
-      c = c + strlen(c) + 1;
+    } else {
+      warning(MYNAME ": Field %s not recognized!\n", qPrintable(name));
     }
   }
-  header_ct[unknown_header] = 0;
-  xfree(fields);
+  header_column_names.clear();
 }
 
 static void
@@ -1105,10 +1106,13 @@ parse_waypoint(const QStringList& lineparts)
   wpt->fs.FsChainAdd(gmsd);
 
   for (const auto& str : lineparts) {
-    column++;
+    if (++column >= header_mapping_info[waypt_header].size()) {
+      warning(MYNAME ": too many fields in Waypoint record!\n");
+      break;
+    }
     int i;
     double d;
-    int field_no = header_fields[waypt_header][column];
+    const auto& [name, field_no] = header_mapping_info[waypt_header].at(column);
 
     switch (field_no) {
     case  1:
@@ -1178,12 +1182,10 @@ parse_waypoint(const QStringList& lineparts)
       garmin_fs_t::set_country(gmsd, str);
       garmin_fs_t::set_cc(gmsd, gt_get_icao_cc(str, wpt->shortname));
       break;
-    case 16: {
-      QDateTime ct;
-      if (parse_date_and_time(str, &ct)) {
-        wpt->SetCreationTime(ct);
+    case 16:
+      if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        wpt->SetCreationTime(dt);
       }
-    }
     break;
     case 17: {
       wpt->AddUrlLink(str);
@@ -1208,8 +1210,11 @@ parse_route_header(const QStringList& lineparts)
 
   bind_fields(route_header);
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[route_header][column];
+    if (++column >= header_mapping_info[route_header].size()) {
+      warning(MYNAME ": too many fields in Route record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[route_header].at(column);
     switch (field_no) {
     case 1:
       if (!str.isEmpty()) {
@@ -1233,8 +1238,11 @@ parse_track_header(const QStringList& lineparts)
   bind_fields(track_header);
   auto* trk = new route_head;
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[track_header][column];
+    if (++column >= header_mapping_info[track_header].size()) {
+      warning(MYNAME ": too many fields in Track record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[track_header].at(column);
     switch (field_no) {
     case 1:
       if (!str.isEmpty()) {
@@ -1260,8 +1268,11 @@ parse_route_waypoint(const QStringList& lineparts)
   bind_fields(rtept_header);
 
   for (const auto& str : lineparts) {
-    column++;
-    int field_no = header_fields[rtept_header][column];
+    if (++column >= header_mapping_info[rtept_header].size()) {
+      warning(MYNAME ": too many fields in Route Waypoint record!\n");
+      break;
+    }
+    const auto& [name, field_no] = header_mapping_info[rtept_header].at(column);
     switch (field_no) {
     case 1:
       if (str.isEmpty()) {
@@ -1289,25 +1300,27 @@ parse_track_waypoint(const QStringList& lineparts)
   auto* wpt = new Waypoint;
 
   for (const auto& str : lineparts) {
-    column++;
+    if (++column >= header_mapping_info[trkpt_header].size()) {
+      warning(MYNAME ": too many fields in Trackpoint record!\n");
+      break;
+    }
     double x;
 
     if (str.isEmpty()) {
       continue;
     }
 
-    int field_no = header_fields[trkpt_header][column];
+    const auto& [name, field_no] = header_mapping_info[trkpt_header].at(column);
+
     switch (field_no) {
     case 1:
       parse_coordinates(str, datum_index, grid_index,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       break;
-    case 2: {
-      QDateTime ct;
-      if (parse_date_and_time(str, &ct)) {
-        wpt->SetCreationTime(ct);
+    case 2:
+      if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        wpt->SetCreationTime(dt);
       }
-    }
     break;
     case 3:
       if (parse_distance(str, &x, 1, MYNAME)) {
@@ -1342,11 +1355,13 @@ parse_track_waypoint(const QStringList& lineparts)
 static void
 garmin_txt_rd_init(const QString& fname)
 {
-  memset(&gtxt_flags, 0, sizeof(gtxt_flags));
+  gtxt_flags = {};
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, "windows-1252");
-  memset(&header_ct, 0, sizeof(header_ct));
+
+  free_headers();
+  header_column_names.clear();
 
   datum_index = -1;
   grid_index = (grid_type) -1;
@@ -1357,13 +1372,13 @@ garmin_txt_rd_init(const QString& fname)
 static void
 garmin_txt_rd_deinit()
 {
-  for (header_type h = waypt_header; h <= unknown_header; ++h) {
-    free_header(h);
-  }
+  free_headers();
+  header_column_names.clear();
   fin->close();
   delete fin;
   fin = nullptr;
-  xfree(date_time_format);
+  date_time_format.clear();
+  date_time_format.squeeze();
 }
 
 static void

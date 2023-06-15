@@ -24,6 +24,14 @@ list(GET VERSION_COMPONENTS 2 GB.MICRO)
 set(GB.BUILD 32 CACHE STRING "Fourth component of Windows VERSIONINFO resource FILEVERSION and PRODUCTVERSION parameters.")
 set(GB.PACKAGE_RELEASE "" CACHE STRING "String to append to VERSION tuple.") # .e.g. "-beta20190413"
 set(GB.SHA $ENV{GITHUB_SHA})
+if(DEFINED ENV{GITHUB_SHA})
+  find_program(GIT_EXECUTABLE NAMES git)
+  if(NOT GIT_EXECUTABLE STREQUAL "GIT-NOTFOUND")
+    execute_process(COMMAND ${GIT_EXECUTABLE} show -s --format=%aI
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE GB.DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+endif()
 string(TIMESTAMP GB.COPYRIGHT_YEAR "%Y" UTC)
 
 # may be overridden on cmake command line

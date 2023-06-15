@@ -27,11 +27,12 @@
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
+#include <QByteArray>                // for QByteArray
+#include <QDate>                     // for QDate
+#include <QTime>                     // for QTime
 #include <QDateTime>                 // for QDateTime
 #include <QDebug>                    // for QDebug
 #include <QList>                     // for QList, QList<>::const_iterator, QList<>::const_reverse_iterator, QList<>::count, QList<>::reverse_iterator
-#include <QScopedPointer>            // for QScopedPointer
-#include <QScopedPointerPodDeleter>  // for QScopedPointerPodDeleter
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
@@ -163,14 +164,14 @@ enum gpsdata_type {
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 struct global_options {
-  int synthesize_shortnames;
   int debug_level;
   gpsdata_type objective;
   unsigned int	masked_objective;
   int verbose_status;	/* set by GUI wrappers for status */
-  int smart_icons;
-  int smart_names;
   inifile_t* inifile;
+  bool synthesize_shortnames;
+  bool smart_icons;
+  bool smart_names;
 };
 
 extern global_options global_opts;
@@ -537,7 +538,7 @@ void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
 void waypt_init_bounds(bounds* bounds);
-int waypt_bounds_valid(bounds* bounds);
+bool waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
@@ -649,6 +650,7 @@ public:
   ~route_head();
 
   int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -1017,19 +1019,13 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
-int str_match(const char* str, const char* match);
-
-[[gnu::format(printf, 2, 3)]] int xasprintf(char** strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QString* strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...);
-int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-time_t mklocaltime(struct tm* t);
-time_t mkgmtime(struct tm* t);
+QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
+long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
@@ -1094,11 +1090,6 @@ enum grid_type {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
-
-/* bit manipulation functions (util.c) */
-
-char gb_getbit(const void* buf, uint32_t nr);
-void gb_setbit(void* buf, uint32_t nr);
 
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);

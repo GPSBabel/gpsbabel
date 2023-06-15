@@ -19,16 +19,19 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <ctime>                   // for tm
-#include <cstring>                 // for size_t, memcpy
+#include <cstring>     // for size_t, memcpy
 
-#include <QString>                 // for QString
-#include <QVector>                 // for QVector
-#include <QtGlobal>                // for Q_UNUSED
+#include <QDate>       // for QDate
+#include <QDateTime>   // for QDateTime
+#include <QTime>       // for QTime
+#include <QString>     // for QString
+#include <QVector>     // for QVector
+#include <QtGlobal>    // for Q_UNUSED
+#include <Qt>          // for UTC
 
 #include "defs.h"
-#include "gbfile.h"                // for gbfread, gbfclose, gbfeof, gbfopen
-#include "navilink.h"              // for navilink_checksum_packet, locosys_...
+#include "gbfile.h"    // for gbfread, gbfclose, gbfeof, gbfopen
+#include "navilink.h"  // for navilink_checksum_packet, locosys_...
 
 
 #define MYNAME "sbn"
@@ -220,17 +223,17 @@ decode_sbn_mode(const unsigned char* mode)
 static void
 decode_sbn_datetime(const unsigned char* buffer, Waypoint* waypt)
 {
-  struct tm tm;
-  int ms = be_readu16(buffer + 6);
+  int scaled_seconds = be_readu16(buffer + 6);
 
-  tm.tm_sec = ms / 1000;
-  tm.tm_min = buffer[5];
-  tm.tm_hour = buffer[4];
-  tm.tm_mday = buffer[3];
-  tm.tm_mon = buffer[2] - 1;
-  tm.tm_year = be_readu16(buffer) - 1900;
+  int ms = scaled_seconds % 1000;
+  int sec = scaled_seconds / 1000;
+  int min = buffer[5];
+  int hour = buffer[4];
+  int mday = buffer[3];
+  int mon = buffer[2];
+  int year = be_readu16(buffer);
 
-  waypt->SetCreationTime(mkgmtime(&tm), (ms % 1000));
+  waypt->SetCreationTime(QDateTime(QDate(year, mon, mday), QTime(hour, min, sec, ms), Qt::UTC));
 }
 
 static void

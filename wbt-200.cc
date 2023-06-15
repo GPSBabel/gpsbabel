@@ -18,22 +18,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <array>                   // for array
-#include <cctype>                  // for isprint
-#include <cstdarg>                 // for va_end, va_list, va_start
-#include <cstdio>                  // for size_t, snprintf, fread, fclose, feof
-#include <cstdint>                 // for uint32_t, int32_t, int16_t, uint16_t
-#include <cstdlib>                 // for strtod, strtoul
-#include <cstring>                 // for strlen, memcmp, memcpy
-#include <ctime>                   // for time_t, tm
+#include <array>            // for array
+#include <cctype>           // for isprint
+#include <cstdarg>          // for va_end, va_list, va_start
+#include <cstdint>          // for uint32_t, int32_t, int16_t, uint16_t
+#include <cstdio>           // for size_t, snprintf, fread, fclose, feof, vprintf, FILE
+#include <cstdlib>          // for strtod, strtoul
+#include <cstring>          // for strlen, memcmp, memcpy
 
-#include <QByteArray>              // for QByteArray
-#include <QIntegerForSize>         // for qPrintable
-#include <QString>                 // for QString
-#include <QVector>                 // for QVector
+#include <QByteArray>       // for QByteArray
+#include <QDate>            // for QDate
+#include <QDateTime>        // for QDateTime
+#include <QString>          // for QString
+#include <QTime>            // for QTime
+#include <QVector>          // for QVector
+#include <Qt>               // for UTC
+#include <QtGlobal>         // for qPrintable
 
-#include "defs.h"
-#include "gbser.h"                 // for gbser_set_port, gbser_deinit, gbse...
+#include "defs.h" 
+#include "gbser.h"          // for gbser_set_port, gbser_deinit, gbser_flush, gbser_init, gbser_print, gbser_read_line, gbser_read_wait, gbser_readc_wait, gbser_OK
 
 
 #define MYNAME      "WBT-100/200"
@@ -142,7 +145,7 @@ struct read_state {
   struct buf_head     data;
 };
 
-static void db(int l, const char* msg, ...)
+[[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -518,22 +521,13 @@ std::array<int, 6> split_date(uint32_t tim)
   return {sec, min, hour, mday, mon, year};
 }
 
-static time_t decode_date(uint32_t tim)
+static QDateTime decode_date(uint32_t tim)
 {
   auto [sec, min, hour, mday, mon, year] = split_date(tim);
-  struct tm t;
-
-  t.tm_sec    = sec;
-  t.tm_min    = min;
-  t.tm_hour   = hour;
-  t.tm_mday   = mday;
-  t.tm_mon    = mon  -   1;
-  t.tm_year   = year + 100;
-
-  return mkgmtime(&t);
+  return {QDate(year + 2000, mon, mday), QTime(hour, min, sec), Qt::UTC};
 }
 
-static int check_date(uint32_t tim)
+static bool check_date(uint32_t tim)
 {
   auto [sec, min, hour, mday, mon, year] = split_date(tim);
 
@@ -545,7 +539,7 @@ static int check_date(uint32_t tim)
          mday > 0 && mday <= 31 && mon > 0 && mon <= 12 && year >= 4;
 }
 
-static Waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
+static Waypoint* make_point(double lat, double lon, double alt, const QDateTime& tim, const char* fmt, int index)
 {
   auto* wpt = new Waypoint;
 
@@ -558,12 +552,12 @@ static Waypoint* make_point(double lat, double lon, double alt, time_t tim, cons
   return wpt;
 }
 
-static Waypoint* make_waypoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
+static Waypoint* make_waypoint(struct read_state* st, double lat, double lon, double alt, const QDateTime& tim)
 {
   return make_point(lat, lon, alt, tim, "WP%04d", ++st->wpn);
 }
 
-static Waypoint* make_trackpoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
+static Waypoint* make_trackpoint(struct read_state* st, double lat, double lon, double alt, const QDateTime& tim)
 {
   return make_point(lat, lon, alt, tim, "TP%04d", ++st->tpn);
 }
@@ -586,7 +580,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
     alt = unknown_alt;
   }
 
-  time_t rtim = decode_date(tim);
+  QDateTime rtim = decode_date(tim);
 
   if (lat >= 100) {
     /* Start new track in the northern hemisphere */
@@ -613,7 +607,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
 }
 
 /* Return true iff the data appears valid with the specified record length */
-static int is_valid(struct buf_head* h, int fmt)
+static bool is_valid(struct buf_head* h, int fmt)
 {
   char buf[RECLEN_MAX];
   size_t reclen = fmt_version[fmt].reclen;
@@ -633,20 +627,20 @@ static int is_valid(struct buf_head* h, int fmt)
 
     uint32_t tim = le_read32(buf + 0);
     if (!check_date(tim)) {
-      return 0;
+      return false;
     }
 
     if (reclen > 12) {
 #ifdef MAXALT
       uint32_t alt = le_read32(buf + 12);
       if (alt > MAXALT * 10) {
-        return 0;
+        return false;
       }
 #endif
     }
   }
 
-  return 1;
+  return true;
 }
 
 static void wbt200_process_data(struct read_state* pst, int fmt)
@@ -819,7 +813,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
   double lon = (double)((int32_t) le_read32(bp + 10)) / 10000000;
   auto alt = (double)((int16_t) le_read16(bp + 14));
 
-  time_t rtim = decode_date(tim);
+  QDateTime rtim = decode_date(tim);
 
   if ((flags & WBT201_WAYPOINT) && (global_opts.masked_objective & WPTDATAMASK)) {
     Waypoint* wpt = make_waypoint(st, lat, lon, alt, rtim);
@@ -899,7 +893,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   }
 
   if (cs != st->data.checksum) {
-    db(2, "Checksums don't match. Got %02lx, expected %02\n", cs, st->data.checksum);
+    db(2, "Checksums don't match. Got %02lx, expected %02x\n", cs, st->data.checksum);
     return 0;
   }
 

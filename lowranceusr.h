@@ -384,7 +384,7 @@ private:
 
   /* Member Functions */
 
-  static char same_points(const Waypoint*, const Waypoint*);
+  static bool same_points(const Waypoint*, const Waypoint*);
   void register_waypt(const Waypoint*) const;
   static const Waypoint* lowranceusr4_find_waypt(uint, int, int);
   static const Waypoint* lowranceusr4_find_global_waypt(uint, uint, uint, uint);

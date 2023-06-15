@@ -236,7 +236,7 @@ private:
 
   /* Member Functions */
 
-  static unsigned char coords_match(double, double, double, double);
+  static bool coords_match(double, double, double, double);
   igc_rec_type_t get_record(char**) const;
   void detect_pres_track(const route_head*);
   void detect_gnss_track(const route_head*);

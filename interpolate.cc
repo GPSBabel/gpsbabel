@@ -19,16 +19,18 @@
 
  */
 
+#include "interpolate.h"
+
 #include <climits>              // for INT_MAX
 #include <cmath>                // for abs, ceil, isfinite, round
 #include <cstdlib>              // for abs, strtod
 #include <optional>             // for optional
 
 #include <QString>              // for QString
-#include <QtGlobal>             // for qAsConst, QAddConst<>::Type
+#include <QtGlobal>             // for qint64, qAsConst, qRound64
 
 #include "defs.h"
-#include "interpolate.h"
+#include "formspec.h"           // for FormatSpecificDataList
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
@@ -81,8 +83,7 @@ void InterpolateFilter::process()
       } else {
         std::optional<qint64> timespan;
         if (wpt->creation_time.isValid() && time1.isValid()) {
-          timespan = wpt->creation_time.toMSecsSinceEpoch() -
-                     time1.toMSecsSinceEpoch();
+          timespan = time1.msecsTo(wpt->creation_time);
         }
         std::optional<double> altspan;
         if (altitude1 != unknown_alt && wpt->altitude != unknown_alt) {
@@ -121,8 +122,7 @@ void InterpolateFilter::process()
           wpt_new->shortname = QString();
           wpt_new->description = QString();
           if (timespan.has_value()) {
-            wpt_new->SetCreationTime(0, time1.toMSecsSinceEpoch() +
-                                     round(frac * *timespan));
+            wpt_new->SetCreationTime(time1.addMSecs(qRound64(frac * *timespan)));
           } else {
             wpt_new->creation_time = gpsbabel::DateTime();
           }
@@ -152,7 +152,7 @@ void InterpolateFilter::process()
       lat1 = wpt->latitude;
       lon1 = wpt->longitude;
       altitude1 = wpt->altitude;
-      time1 = wpt->creation_time;
+      time1 = wpt->creation_time.toUTC();  // use utc to avoid tz conversions.
     }
   }
   backuproute.flush();

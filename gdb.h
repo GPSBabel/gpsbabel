@@ -28,6 +28,7 @@
 
 #include <QList>            // for QList
 #include <QString>          // for QString
+#include <QStringView>      // for QStringView
 #include <QVector>          // for QVector
 
 #include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
@@ -65,8 +66,17 @@ public:
 private:
   /* Constants */
 
-  /* static constexpr char gdb_release[] = "$Revision: 1.74 $"; */
-  static constexpr char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
+  static constexpr int kGDBVer1 = 1;
+  static constexpr int kGDBVer2 = 2;
+  static constexpr int kGDBVer3 = 3;
+
+  static constexpr int kGDBVerUTF8 = kGDBVer3;
+  static constexpr int kGDBVerMin = kGDBVer1;
+  static constexpr int kGDBVerMax = kGDBVer3;
+
+  static constexpr int kGDBDefIcon = 18;
+
+  static constexpr int kGDBNameBufferLen = 1024;
 
   /* Member Functions */
 
@@ -79,9 +89,8 @@ private:
   Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, char exact) const;
   Waypoint* gdb_add_route_waypt(route_head* rte, Waypoint* ref, int wpt_class) const;
   static QString gdb_to_ISO8601_duration(unsigned int seconds);
-  void FWRITE_CSTR(const QString& a) const;
-  void gdb_write_cstr_list(const char* str) const;
-  void gdb_write_cstr_list(const QString& str) const;
+  void gdb_write_cstr(QStringView a = QStringView()) const;
+  void gdb_write_cstr_list(QStringView str = QStringView()) const;
   void gdb_write_dbl(double value, double def) const;
   void gdb_write_time(int time) const;
   void read_file_header();
@@ -89,7 +98,7 @@ private:
   route_head* read_route();
   route_head* read_track();
   void reset_short_handle(const char* defname);
-  void write_header() const;
+  void write_header();
   static void gdb_check_waypt(Waypoint* wpt);
   void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);

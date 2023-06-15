@@ -23,7 +23,7 @@
 
 /* Based on description at http://wiki.splitbrain.org/navilink */
 
-#include <ctime>                   // for gmtime, time_t
+#include <cstdio>                  // for fprintf, stderr
 #include <cstring>                 // for memcpy, memset, strncpy
 
 #include <QByteArray>              // for QByteArray
@@ -33,7 +33,7 @@
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
 #include <QVector>                 // for QVector
-#include <QtCore>                  // for qPrintable, UTC
+#include <QtCore>                  // for qRound, qPrintable, UTC
 
 #include "defs.h"
 #include "navilink.h"
@@ -364,17 +364,18 @@ decode_datetime(const unsigned char* buffer)
 }
 
 static void
-encode_datetime(time_t datetime, unsigned char* buffer)
+encode_datetime(const QDateTime& datetime, unsigned char* buffer)
 {
-  struct tm* tm;
-
-  if ((tm = gmtime(&datetime)) != nullptr) {
-    buffer[0] = tm->tm_year - 100;
-    buffer[1] = tm->tm_mon + 1;
-    buffer[2] = tm->tm_mday;
-    buffer[3] = tm->tm_hour;
-    buffer[4] = tm->tm_min;
-    buffer[5] = tm->tm_sec;
+  if (datetime.isValid()) {
+    QDateTime dt = datetime.toUTC();
+    QDate date = dt.date();
+    QTime time = dt.time();
+    buffer[0] = date.year() - 2000;
+    buffer[1] = date.month();
+    buffer[2] = date.day();
+    buffer[3] = time.hour();
+    buffer[4] = time.minute();
+    buffer[5] = time.second();
   } else {
     memset(buffer, 0, 6);
   }
@@ -391,9 +392,9 @@ decode_position(const unsigned char* buffer, Waypoint* waypt)
 static void
 encode_position(const Waypoint* waypt, unsigned char* buffer)
 {
-  le_write32(buffer + 0, (int)(waypt->latitude * 10000000));
-  le_write32(buffer + 4, (int)(waypt->longitude * 10000000));
-  le_write16(buffer + 8, METERS_TO_FEET(waypt->altitude));
+  le_write32(buffer + 0, qRound(waypt->latitude * 10000000));
+  le_write32(buffer + 4, qRound(waypt->longitude * 10000000));
+  le_write16(buffer + 8, qRound(METERS_TO_FEET(waypt->altitude)));
 }
 
 static unsigned
@@ -431,7 +432,7 @@ encode_waypoint(const Waypoint* waypt, unsigned char* buffer)
   buffer[10] = 0;
   buffer[11] = 0;
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = find_icon_from_descr(waypt->icon_descr);
   buffer[29] = 0;
   buffer[30] = 0x00;
@@ -462,13 +463,13 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
   GPS_Math_WGS84_To_UTM_EN(waypt->latitude, waypt->longitude, &x, &y, &z, &zc);
 
   le_write16(buffer + 0, serial);
-  le_write16(buffer + 2, waypt->course_value_or(0));
-  le_write32(buffer + 4, x);
-  le_write32(buffer + 8, y);
+  le_write16(buffer + 2, qRound(waypt->course_value_or(0)));
+  le_write32(buffer + 4, qRound(x));
+  le_write32(buffer + 8, qRound(y));
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->GetCreationTime().toTime_t(), buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = z;
-  buffer[29] = MPS_TO_KPH(waypt->speed_value_or(0) / 2);
+  buffer[29] = qRound(MPS_TO_KPH(waypt->speed_value_or(0) / 2));
   buffer[30] = 0x5a;
   buffer[31] = 0x7e;
 }
@@ -782,7 +783,7 @@ decode_sbp_msec(const unsigned char* buffer)
   return (msec % 1000);
 }
 
-static time_t
+static QDateTime
 decode_sbp_datetime_packed(const unsigned char* buffer)
 {
   /*
@@ -799,19 +800,15 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
    * SSSSSSMM MMMMHHHH Hdddddmm mmmmmmmm
    */
 
-  struct tm tm;
-
-  memset(&tm, 0, sizeof(tm));
-
-  tm.tm_sec = buffer[0] & 0x3F;
-  tm.tm_min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
-  tm.tm_hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
-  tm.tm_mday = (buffer[2] & 0x3E) >> 1;
+  int sec = buffer[0] & 0x3F;
+  int min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
+  int hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
+  int mday = (buffer[2] & 0x3E) >> 1;
   int months = ((buffer[2] & 0xC0) >> 6) | buffer[3] << 2;
-  tm.tm_mon = months % 12 - 1;
-  tm.tm_year = 100 + months / 12;
+  int mon = months % 12;
+  int year = 2000 + months / 12;
 
-  return mkgmtime(&tm);
+  return {QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC};
 }
 
 static void
@@ -829,8 +826,8 @@ navilink_decode_logpoint(const unsigned char* buffer)
 
   waypt->hdop = (buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
-  waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4),
-                         decode_sbp_msec(buffer + 2));
+  waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4)
+                         .addMSecs(decode_sbp_msec(buffer + 2)));
   decode_sbp_position(buffer + 12, waypt);
   waypt->set_speed(le_read16(buffer + 24) * 0.01f);
   waypt->set_course(le_read16(buffer + 26) * 0.01f);
@@ -888,8 +885,8 @@ read_datalog_records(route_head* track,
   /* The protocol only supports reading 256 logpoints at once, so
    * read small chunks until none left. */
   while (len > 0) {
-  unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
-  unsigned int   logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
+    unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
+    unsigned int   logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
 
     le_write32(payload, start_addr);
     le_write16(payload + 4, logpoints_len);
@@ -1089,7 +1086,7 @@ navilink_common_init(const QString& name)
     write_route_point = serial_write_route_point;
     write_route_end = serial_write_route_end;
   } else {
-    const char* mode = operation == READING ? "r" : "w+";
+    const char* mode = operation == READING ? "r" : "wb";
     file_handle = gbfopen(name, mode, MYNAME);
 
     write_waypoint = file_write_waypoint;

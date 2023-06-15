@@ -68,7 +68,6 @@ set(RESOURCES gpsbabel.qrc)
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
   garmin.cc
-  garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
@@ -79,7 +78,6 @@ set(MINIMAL_FMTS
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  brauniger_iq.cc
   dg-100.cc
   exif.cc
   garmin_fit.cc
@@ -208,7 +206,6 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
-  garmin_device_xml.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
@@ -310,7 +307,7 @@ endif()
 if(MSVC)
   target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
   target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
-  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267 -wd5030)
 endif()
 
 if(APPLE)

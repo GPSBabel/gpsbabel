@@ -20,18 +20,18 @@
   uint32 GPS_Util_Get_Uint(const UC* s);
 
   void   GPS_Warning(const char* s);
-  void   GPS_Error(const char* fmt, ...);
-  void   GPS_Serial_Error(const char* hdr, ...);
+  [[gnu::format(printf, 1, 2)]] void   GPS_Error(const char* fmt, ...);
+  [[gnu::format(printf, 1, 2)]] void   GPS_Serial_Error(const char* fmt, ...);
   void   GPS_Fatal(const char* s);
   void   GPS_Enable_Error();
   void   GPS_Enable_Warning();
   void   GPS_Disable_Error();
   void   GPS_Disable_Warning();
-  void   GPS_User(const char* fmt, ...);
+  [[gnu::format(printf, 1, 2)]] void   GPS_User(const char* fmt, ...);
   void   GPS_Disable_User();
   void   GPS_Enable_User();
   void   GPS_Diagnose(int32 c);
-  void   GPS_Diag(const char* fmt, ...);
+  [[gnu::format(printf, 1, 2)]] void   GPS_Diag(const char* fmt, ...);
 
   void   GPS_Enable_Diagnose();
   void   GPS_Disable_Diagnose();

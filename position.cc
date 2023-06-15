@@ -19,15 +19,17 @@
 
  */
 
-#include <cmath>            // for fabs
-#include <cstdlib>          // for strtod
+#include "position.h"
 
-#include <QList>            // for QList
-#include <QtGlobal>         // for qAsConst, QAddConst<>::Type
+#include <cmath>                // for abs
+#include <cstdlib>              // for strtod
+
+#include <QList>                // for QList
+#include <QtGlobal>             // for qAsConst, qRound64, qint64
 
 #include "defs.h"
-#include "grtcirc.h"        // for RAD, gcdist, radtometers
-#include "position.h"
+#include "grtcirc.h"            // for RAD, gcdist, radtometers
+#include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
 
@@ -64,7 +66,7 @@ void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
 
           if (dist <= pos_dist) {
             if (check_time) {
-              double diff_time = fabs(waypt_time(qlist.at(i).wpt) - waypt_time(qlist.at(j).wpt));
+              qint64 diff_time = std::abs(qlist.at(j).wpt->creation_time.msecsTo(qlist.at(i).wpt->creation_time));
               if (diff_time >= max_diff_time) {
                 continue;
               }
@@ -124,7 +126,7 @@ void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
 
 void PositionFilter::position_process_any_route(const route_head* rh, int type)
 {
-  if (rh->rte_waypt_ct() != 0) {
+  if (!rh->rte_waypt_empty()) {
     cur_rte = const_cast<route_head*>(rh);
     position_runqueue(&cur_rte->waypoint_list, type);
     cur_rte = nullptr;
@@ -156,13 +158,13 @@ void PositionFilter::process()
 
 void PositionFilter::init()
 {
-  char* fm;
 
   pos_dist = 0.0;
-  max_diff_time = 0.0;
+  max_diff_time = 0;
   check_time = false;
 
   if (distopt != nullptr) {
+    char* fm;
     pos_dist = strtod(distopt, &fm);
 
     if (!((*fm == 'm') || (*fm == 'M'))) {
@@ -173,7 +175,7 @@ void PositionFilter::init()
 
   if (timeopt != nullptr) {
     check_time = true;
-    max_diff_time = strtod(timeopt, &fm);
+    max_diff_time = qRound64(strtod(timeopt, nullptr) * 1000.0);
   }
 }
 

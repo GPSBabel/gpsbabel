@@ -140,6 +140,10 @@ private:
   /* Member Functions */
 
   void kml_init_color_sequencer(unsigned int steps_per_rev);
+  static constexpr int kml_bgr_to_color(int blue, int green, int red)
+  {
+    return (blue)<<16 | (green)<<8 | (red);
+  }
   void kml_step_color();
   void wpt_s(const QString& args, const QXmlStreamAttributes* attrs);
   void wpt_e(const QString& args, const QXmlStreamAttributes* attrs);
@@ -339,25 +343,18 @@ private:
     {&KmlFormat::wpt_time, cb_cdata, "/Placemark/TimeStamp/when"},
     // Alias for above used in KML 2.0
     {&KmlFormat::wpt_time, cb_cdata, "/Placemark/TimeInstant/timePosition"},
-    {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/Point/coordinates"},
-    {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/MultiGeometry/Point/coordinates"},
+    {&KmlFormat::wpt_coord, cb_cdata, "/Placemark/(.+/)?Point/coordinates"},
     {&KmlFormat::wpt_icon, cb_cdata, "/Placemark/Style/Icon/href"},
-    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/MultiGeometry/LineString/coordinates"},
-    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/GeometryCollection/LineString/coordinates"},
-    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates"},
-    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/LineString/coordinates"},
-    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/*gx:Track"},
-    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/*gx:Track"},
-    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/*gx:Track/when"},
-    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/*gx:Track/gx:coord"},
-    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/Track/when"}, // KML 2.3
-    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/Track/coord"}, // KML 2.3
-    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/MultiTrack/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/MultiTrack/Track"}, // KML 2.3
-    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/MultiTrack/Track/when"}, // KML 2.3
-    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/MultiTrack/Track/coord"} // KML 2.3
+    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/(.+/)?LineString/coordinates"},
+    {&KmlFormat::trk_coord, cb_cdata, "/Placemark/(.+)/?LinearRing/coordinates"},
+    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/(.+/)?gx:Track"},
+    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/(.+/)?gx:Track"},
+    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/(.+/)?gx:Track/when"},
+    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/(.+/)?gx:Track/gx:coord"},
+    {&KmlFormat::gx_trk_s,  cb_start, "/Placemark/(.+/)?Track"}, // KML 2.3
+    {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/(.+/)?Track"}, // KML 2.3
+    {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/(.+/)?Track/when"}, // KML 2.3
+    {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/(.+/)?Track/coord"}, // KML 2.3
   };
 
   // The TimeSpan/begin and TimeSpan/end DateTimes:

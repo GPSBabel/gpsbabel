@@ -70,22 +70,23 @@ typedef struct {
 /*
  * Display an error from the serial subsystem.
  */
-void GPS_Serial_Error(const char* mb, ...)
+void GPS_Serial_Error(const char* fmt, ...)
 {
   va_list ap;
   char msg[200];
   char* s;
   int b;
 
-  va_start(ap, mb);
-  b = vsnprintf(msg, sizeof(msg), mb, ap);
+  va_start(ap, fmt);
+  b = vsnprintf(msg, sizeof(msg), fmt, ap);
   s = msg + b;
   *s++ = ':';
   *s++ = ' ';
 
-  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0,
-                GetLastError(), 0, s, sizeof(msg) - b - 2, 0);
-  GPS_Error(msg);
+  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+                GetLastError(), 0, s, sizeof(msg) - b - 2, nullptr);
+
+  GPS_Error("%s", msg); // valid clang -Wformat-security warning
 
   va_end(ap);
 }
@@ -379,24 +380,17 @@ int32 GPS_Serial_Open(gpsdevh* dh, const char* port)
 /*
  * Display an error from the serial subsystem.
  */
-void GPS_Serial_Error(const char* mb, ...)
+void GPS_Serial_Error(const char* fmt, ...)
 {
   va_list ap;
   char msg[200];
-  char* s;
-  int b;
 
-  va_start(ap, mb);
-  b = vsnprintf(msg, sizeof(msg), mb, ap);
-  s = msg + b;
-  *s++ = ':';
-  *s++ = ' ';
-  *s++ = '\0';
+  va_start(ap, fmt);
+  vsnprintf(msg, sizeof(msg), fmt, ap);
 
 //	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0,
 //			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
-  strcat(msg, strerror(errno));
-  GPS_Error(msg);
+  GPS_Error("%s: %s", msg, strerror(errno));
   va_end(ap);
 }
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <Placemark>
+      <name>gYear (YYYY)</name>
+      <TimeStamp>
+        <when>1997</when>
+      </TimeStamp>
+      <Point>
+        <coordinates>-116.865460,36.460850,-55.60</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>gYearMonth (YYYY-MM)</name>
+      <TimeStamp>
+        <when>1997-07</when>
+      </TimeStamp>
+      <Point>
+        <coordinates>-116.865460,36.460850,-55.60</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>date (YYYY-MM-DD)</name>
+      <TimeStamp>
+        <when>1997-07-16</when>
+      </TimeStamp>
+      <Point>
+        <coordinates>-116.865460,36.460850,-55.60</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>dateTime (YYYY-MM-DDThh:mm:ssZ)</name>
+      <TimeStamp>
+        <when>1997-07-16T07:30:15Z</when>
+      </TimeStamp>
+      <Point>
+        <coordinates>-116.865460,36.460850,-55.60</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>dateTime (YYYY-MM-DDThh:mm:sszzzzzz)</name>
+      <TimeStamp>
+        <when>1997-07-16T10:30:15+03:00</when>
+      </TimeStamp>
+      <Point>
+        <coordinates>-116.865460,36.460850,-55.60</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

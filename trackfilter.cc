@@ -165,7 +165,7 @@ fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
 QDateTime TrackFilter::trackfilter_get_first_time(const route_head* track)
 {
   if (track->waypoint_list.empty()) {
-    return QDateTime();
+    return {};
   } else {
     return track->waypoint_list.front()->GetCreationTime();
   }
@@ -174,7 +174,7 @@ QDateTime TrackFilter::trackfilter_get_first_time(const route_head* track)
 QDateTime TrackFilter::trackfilter_get_last_time(const route_head* track)
 {
   if (track->waypoint_list.empty()) {
-    return QDateTime();
+    return {};
   } else {
     return track->waypoint_list.back()->GetCreationTime();
   }
@@ -183,7 +183,7 @@ QDateTime TrackFilter::trackfilter_get_last_time(const route_head* track)
 
 void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_disp_all */
 {
-  if (track->rte_waypt_ct() == 0) {
+  if (track->rte_waypt_empty()) {
     track_del_head(const_cast<route_head*>(track));
     return;
   }
@@ -252,7 +252,7 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
       // Uggh.  strftime format exposed to user.
 
       time_t time = dt.toTime_t();
-      struct tm tm = *gmtime(&time);
+      std::tm tm = *gmtime(&time);
       char buff[128];
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
@@ -272,14 +272,14 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
     // Uggh.  strftime format exposed to user.
 
     gpsbabel::DateTime dt;
-    if (track->rte_waypt_ct() == 0) {
+    if (track->rte_waypt_empty()) {
       dt = default_time;
     } else {
       auto* wpt = track->waypoint_list.front();
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
-    struct tm tm = *gmtime(&t);
+    std::tm tm = *gmtime(&t);
     char buff[128];
     strftime(buff, sizeof(buff), opt_title, &tm);
     track->rte_name = buff;
@@ -392,7 +392,7 @@ void TrackFilter::trackfilter_merge()
       }
     }
 
-    if (master->rte_waypt_ct() == 0) {
+    if (master->rte_waypt_empty()) {
       track_del_head(master);
       track_list.clear();
     }
@@ -733,7 +733,7 @@ void TrackFilter::trackfilter_range()
       }
     }
 
-    if (track->rte_waypt_ct() == 0) {
+    if (track->rte_waypt_empty()) {
       track_del_head(track);
       it = track_list.erase(it);
     } else {
