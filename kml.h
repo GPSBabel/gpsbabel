@@ -137,6 +137,10 @@ private:
   static constexpr const char* kmt_igc_siu = "# Of Sats";
   static constexpr const char* kmt_igc_acz = "Z Accel";
 
+  // IGC option compile-time flags
+  static constexpr bool kIncludeIGCSIU = true;
+  static constexpr bool kIncludeIGCTRT = false;
+
   /* Member Functions */
 
   void kml_init_color_sequencer(unsigned int steps_per_rev);

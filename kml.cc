@@ -1575,12 +1575,8 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_igc_fxa = false;
   bool has_igc_gfo = false;
   bool has_igc_acz = false;
-#ifdef INCLUDE_IGC_SIU
   bool has_igc_siu = false; // Not very useful to graph
-#endif
-#ifdef INCLUDE_IGC_TRT // Not very useful to graph
-  bool has_igc_trt = false;
-#endif
+  bool has_igc_trt = false; // Not very useful to graph
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1670,16 +1666,16 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if (fs_igc->acz.has_value()) {
         has_igc_acz = true;
       }
-#ifdef INCLUDE_IGC_SIU
-      if (fs_igc->siu.has_value()) {
-        has_igc_siu = true;
+      if constexpr(kIncludeIGCSIU) {
+        if (fs_igc->siu.has_value()) {
+          has_igc_siu = true;
+        }
       }
-#endif
-#ifdef INCLUDE_IGC_TRT
-      if (fs_igc->trt.has_value()) {
-        has_igc_trt = true;
+      if constexpr(kIncludeIGCSIU) {
+        if (fs_igc->trt.has_value()) {
+          has_igc_trt = true;
+        }
       }
-#endif
     }
   }
 
@@ -1742,16 +1738,16 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if (has_igc_acz) {
         kml_mt_simple_array(header, kmt_igc_acz, wp_field::igc_acz);
       }
-#ifdef INCLUDE_IGC_SIU
-      if (has_igc_siu) {
-        kml_mt_simple_array(header, kmt_igc_siu, wp_field::igc_siu);
+      if constexpr(kIncludeIGCSIU) {
+        if (has_igc_siu) {
+          kml_mt_simple_array(header, kmt_igc_siu, wp_field::igc_siu);
+        }
       }
-#endif
-#ifdef INCLUDE_IGC_TRT
-      if (has_igc_trt) {
-        kml_mt_simple_array(header, kmt_igc_trt, igc_trt);
+      if constexpr(kIncludeIGCTRT) {
+        if (has_igc_trt) {
+          kml_mt_simple_array(header, kmt_igc_trt, wp_field::igc_trt);
+        }
       }
-#endif
     }
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag

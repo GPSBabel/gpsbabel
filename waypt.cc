@@ -74,7 +74,7 @@ void update_common_traits(const Waypoint* wpt)
   traits.trait_power |= wpt->power > 0;
   traits.trait_depth |= wpt->depth_has_value();
   traits.trait_temperature |= wpt->temperature_has_value();
-  traits.trait_sat |= wpt->sat > 0;
+  traits.trait_sat |= wpt->sat >= 0;
 }
 
 void
