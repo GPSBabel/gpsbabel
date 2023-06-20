@@ -285,8 +285,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
-  # disable warning from strptime.c, which we don't want to own or modify
-  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -312,6 +310,13 @@ endif()
 
 if(APPLE)
   target_compile_options(gpsbabel PRIVATE -Wall -Wsign-compare)
+endif()
+
+# disable warning from strptime.c, which we don't want to own or modify
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS "-Wno-unused-but-set-variable")
+elseif(CMAKE_C_COMPILER_ID MATCHES "^(Clang)|(AppleClang)$")
+  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS "-Wno-unused-but-set-variable;-Wno-deprecated-non-prototype")
 endif()
 
 include(shapelib.cmake)
