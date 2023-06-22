@@ -176,7 +176,7 @@ GarminGPIFormat::read_header()
   rdata->crdate = gbfgetint32(fin);
   if (GPI_DBG) {
     time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
-    warning("crdate = %lu (%s)\n", rdata->crdate,
+    warning("crdate = %lld (%s)\n", (long long) rdata->crdate,
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, Qt::UTC).toString(Qt::ISODate)));
   }
 
