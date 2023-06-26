@@ -1,5 +1,5 @@
 --- ../../glibc/time/strptime_l.c	2023-06-25 08:08:49.327979261 -0600
-+++ strptime_l.c	2023-06-25 09:20:10.503668377 -0600
++++ strptime_l.c	2023-06-26 07:17:51.065902536 -0600
 @@ -21,7 +21,7 @@
  
  #include <assert.h>
@@ -9,7 +9,7 @@
  #include <limits.h>
  #include <string.h>
  #include <time.h>
-@@ -59,13 +59,28 @@
+@@ -59,13 +59,18 @@
  #if defined __GNUC__ && __GNUC__ >= 2
  # define match_string(cs1, s2) \
    ({ size_t len = strlen (cs1);						      \
@@ -19,28 +19,19 @@
       result; })
  #else
  /* Oh come on.  Get a reasonable compiler.  */
- # define match_string(cs1, s2) \
+-# define match_string(cs1, s2) \
 -  (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
-+  (case_ignore_strncmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
-+/* now now, don't need to be rude .... */
-+static
-+int
-+case_ignore_strncmp(const char *s1, const char *s2, int n)
-+{
-+  int rv = 0;
-+
-+  while (n && ((rv = toupper(*s1) - toupper(*s2)) == 0)
-+         && *s1) {
-+    s1++;
-+    s2++;
-+    n--;
-+  }
-+  return rv;
-+}
++# ifdef _WIN32
++#  define match_string(cs1, s2) \
++   (_strnicmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
++# else
++#  define match_string(cs1, s2) \
++   (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
++# endif
  #endif
  /* We intentionally do not use isdigit() for testing because this will
     lead to problems with the wide character version.  */
-@@ -788,7 +803,7 @@
+@@ -788,7 +793,7 @@
  	    if (*rp == 'Z')
  	      {
  		++rp;
@@ -49,7 +40,7 @@
  		break;
  	      }
  	    if (*rp != '+' && *rp != '-')
-@@ -810,9 +825,9 @@
+@@ -810,9 +815,9 @@
  	    else if (val % 100 >= 60)
  	      /* Minutes valid range is 0 through 59.  */
  	      return NULL;
@@ -62,7 +53,7 @@
  	  }
  	  break;
  	case 'E':
-@@ -1162,6 +1177,7 @@
+@@ -1162,6 +1167,7 @@
  	tm->tm_year = (s.century - 19) * 100;
      }
  
@@ -70,7 +61,7 @@
    if (s.era_cnt != -1)
      {
        era = _nl_select_era_entry (s.era_cnt HELPER_LOCALE_ARG);
-@@ -1176,6 +1192,7 @@
+@@ -1176,6 +1182,7 @@
  	tm->tm_year = era->start_date[0];
      }
    else

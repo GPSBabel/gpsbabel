@@ -64,23 +64,13 @@ localtime_r (const time_t *t, struct tm *tp)
      result; })
 #else
 /* Oh come on.  Get a reasonable compiler.  */
-# define match_string(cs1, s2) \
-  (case_ignore_strncmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
-/* now now, don't need to be rude .... */
-static
-int
-case_ignore_strncmp(const char *s1, const char *s2, int n)
-{
-  int rv = 0;
-
-  while (n && ((rv = toupper(*s1) - toupper(*s2)) == 0)
-         && *s1) {
-    s1++;
-    s2++;
-    n--;
-  }
-  return rv;
-}
+# ifdef _WIN32
+#  define match_string(cs1, s2) \
+   (_strnicmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
+# else
+#  define match_string(cs1, s2) \
+   (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
+# endif
 #endif
 /* We intentionally do not use isdigit() for testing because this will
    lead to problems with the wide character version.  */
