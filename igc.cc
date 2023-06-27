@@ -260,6 +260,9 @@ void IgcFormat::read()
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
+    if (global_opts.debug_level >= 8) {
+      printf(MYNAME ": Processing IGC file line %i\n", current_line);
+    }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
     QString ibuf_q = QString::fromUtf8(ibuf);
