@@ -1671,7 +1671,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
           has_igc_siu = true;
         }
       }
-      if constexpr(kIncludeIGCSIU) {
+      if constexpr(kIncludeIGCTRT) {
         if (fs_igc->trt.has_value()) {
           has_igc_trt = true;
         }
@@ -1683,33 +1683,11 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   // hence the has_igc_exts flag.
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
       has_power || has_sat || has_igc_exts) {
+    bool include_kmt_sats = true;
+    bool include_kmt_temperature = true;
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
-
-    if (has_cadence) {
-      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
-    }
-
-    if (has_depth) {
-      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
-    }
-
-    if (has_heartrate) {
-      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
-    }
-
-    if (has_temperature) {
-      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
-    }
-
-    if (has_power) {
-      kml_mt_simple_array(header, kmt_power, wp_field::power);
-    }
-
-    if (has_sat) {
-      kml_mt_simple_array(header, kmt_sat, wp_field::sat);
-    }
 
     // Perhaps not the /best/ way to do this, but this if ladder
     // should only be evaluated once.
@@ -1722,6 +1700,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       }
       if (has_igc_oat) {
         kml_mt_simple_array(header, kmt_igc_oat, wp_field::igc_oat);
+        include_kmt_temperature = false;
       }
       if (has_igc_vat) {
         kml_mt_simple_array(header, kmt_igc_vat, wp_field::igc_vat);
@@ -1741,6 +1720,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if constexpr(kIncludeIGCSIU) {
         if (has_igc_siu) {
           kml_mt_simple_array(header, kmt_igc_siu, wp_field::igc_siu);
+          include_kmt_sats = false;
         }
       }
       if constexpr(kIncludeIGCTRT) {
@@ -1749,6 +1729,31 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
         }
       }
     }
+
+    if (has_cadence) {
+      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
+    }
+
+    if (has_depth) {
+      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
+    }
+
+    if (has_heartrate) {
+      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
+    }
+
+    if (has_temperature && include_kmt_temperature) {
+      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
+    }
+
+    if (has_power) {
+      kml_mt_simple_array(header, kmt_power, wp_field::power);
+    }
+
+    if (has_sat && include_kmt_sats) {
+      kml_mt_simple_array(header, kmt_sat, wp_field::sat);
+    }
+
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag
   }

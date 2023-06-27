@@ -316,9 +316,7 @@ struct igc_fsdata : public FormatSpecificData {
       if (wp){
         wp->set_temperature(value);
       }
-      else {
-        oat = value;        
-      }
+      oat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_trt:
       trt = value;
@@ -333,9 +331,7 @@ struct igc_fsdata : public FormatSpecificData {
       if (wp) {
         wp->sat = value;
       }
-      else {
-        siu = value;
-      }
+      siu = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_acz:
       acz = value;
