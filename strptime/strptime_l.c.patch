@@ -1,5 +1,5 @@
 --- ../../glibc/time/strptime_l.c	2023-06-25 08:08:49.327979261 -0600
-+++ strptime_l.c	2023-06-26 07:17:51.065902536 -0600
++++ strptime_l.c	2023-06-30 06:45:48.529139134 -0600
 @@ -21,7 +21,7 @@
  
  #include <assert.h>
@@ -31,6 +31,15 @@
  #endif
  /* We intentionally do not use isdigit() for testing because this will
     lead to problems with the wide character version.  */
+@@ -268,7 +273,7 @@
+     unsigned int want_century : 1;
+     unsigned int want_era : 1;
+     unsigned int want_xday : 1;
+-    enum ptime_locale_status decided : 2;
++    enum ptime_locale_status decided : 3;
+     signed char week_no;
+     signed char century;
+     int era_cnt;
 @@ -788,7 +793,7 @@
  	    if (*rp == 'Z')
  	      {

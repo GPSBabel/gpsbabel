@@ -273,7 +273,7 @@ __strptime_internal (const char *rp, const char *fmt, struct tm *tmp,
     unsigned int want_century : 1;
     unsigned int want_era : 1;
     unsigned int want_xday : 1;
-    enum ptime_locale_status decided : 2;
+    enum ptime_locale_status decided : 3;
     signed char week_no;
     signed char century;
     int era_cnt;
