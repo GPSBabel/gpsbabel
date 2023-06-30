@@ -184,7 +184,6 @@ set(SUPPORT
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
   src/core/xmltag.cc
-  strptime.c
   units.cc
   util.cc
   util_crc.cc
@@ -238,7 +237,6 @@ set(HEADERS
   session.h
   shape.h
   skytraq.h
-  strptime.h
   subrip.h
   text.h
   unicsv.h
@@ -285,8 +283,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
-  # disable warning from strptime.c, which we don't want to own or modify
-  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -317,6 +313,7 @@ endif()
 include(shapelib.cmake)
 include(zlib.cmake)
 include(libusb.cmake)
+include(strptime.cmake)
 
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
