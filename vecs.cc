@@ -84,10 +84,7 @@ extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
-extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t wbt_fvecs;
-//extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
@@ -140,10 +137,7 @@ struct Vecs::Impl {
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
 #endif // MAXIMAL_ENABLED
-  LegacyFormat wbt_sfmt {wbt_svecs};
 #if MAXIMAL_ENABLED
-  LegacyFormat wbt_ffmt {wbt_fvecs};
-//LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
@@ -326,28 +320,7 @@ struct Vecs::Impl {
       nullptr,
     },
 #endif // MAXIMAL_ENABLED
-    {
-      &wbt_sfmt,
-      "wbt",
-      "Wintec WBT-100/200 GPS Download",
-      nullptr,
-      nullptr,
-    },
 #if MAXIMAL_ENABLED
-    {
-      &wbt_ffmt,
-      "wbt-bin",
-      "Wintec WBT-100/200 Binary File Format",
-      "bin",
-      nullptr,
-    },
-    {
-      &wbt_ffmt,
-      "wbt-tk1",
-      "Wintec WBT-201/G-Rays 2 Binary File Format",
-      "tk1",
-      nullptr,
-    },
     {
       &vcf_fmt,
       "vcard",

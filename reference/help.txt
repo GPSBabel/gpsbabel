@@ -370,10 +370,6 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13
-	wbt-bin               Wintec WBT-100/200 Binary File Format
-	wbt                   Wintec WBT-100/200 GPS Download
-	  erase                 (0/1) Erase device data after download
-	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
 
 Supported data filters:
 	arc                   Include Only Points Within Distance of Arc        

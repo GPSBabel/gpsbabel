@@ -53,6 +53,3 @@ openoffice		Tab delimited fields useful for OpenOffice
 text	txt	Textual Output
 unicsv		Universal csv with field structure in first line
 vcard	vcf	Vcard Output (for iPod)
-wbt-bin	bin	Wintec WBT-100/200 Binary File Format
-wbt		Wintec WBT-100/200 GPS Download
-wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format
