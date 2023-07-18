@@ -94,13 +94,10 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   igc.cc
   lowranceusr.cc
   mtk_logger.cc
-  navilink.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  sbn.cc
-  sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -228,7 +225,6 @@ set(HEADERS
   legacyformat.h
   igc.h
   lowranceusr.h
-  navilink.h
   nmea.h
   osm.h
   qstarz_bl_1000.h
@@ -400,7 +396,6 @@ set(TESTS
   lowranceusr
   mtk
   multiurlgpx
-  navilink
   nmea
   osm
   ozi
@@ -411,8 +406,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  sbn
-  sbp
   serialization
   shape
   simplify-relative
@@ -428,6 +421,7 @@ set(TESTS
   track-discard
   track
   transform
+  unicsv_local
   unicsv_grids
   unicsv
   unitconversion
