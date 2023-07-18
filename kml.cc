@@ -354,8 +354,8 @@ void KmlFormat::wr_init(const QString& fname)
 {
   char u = 's';
   waypt_init_bounds(&kml_bounds);
-  kml_time_min = QDateTime();
-  kml_time_max = QDateTime();
+  kml_time_min = gpsbabel::DateTime();
+  kml_time_max = gpsbabel::DateTime();
 
   if (opt_units) {
     u = tolower(opt_units[0]);

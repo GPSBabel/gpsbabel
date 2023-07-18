@@ -13,7 +13,7 @@
          <para><userinput>
 gpsbabel -t
      -i gpx -f in.gpx
-     -x track,pack,sdistance=0.1k"
+     -x track,pack,sdistance=0.1k
      -o gpx -F out.gpx
 </userinput></para>
         <para> The sdistance option can be combined with the split option.

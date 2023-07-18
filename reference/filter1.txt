@@ -30,7 +30,7 @@ option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height
 track	Manipulate track lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html
 option	track	move	Correct trackpoint timestamps by a delta	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_move
 option	track	pack	Pack all tracks into one	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_pack
-option	track	split	Split by date or time interval (see README)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_split
+option	track	split	Split by date or time interval	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_split
 option	track	sdistance	Split by distance	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_sdistance
 option	track	merge	Merge multiple tracks for the same way	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_merge
 option	track	name	Use only track(s) where title matches given name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_name

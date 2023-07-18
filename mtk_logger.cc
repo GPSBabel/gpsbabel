@@ -281,7 +281,7 @@ static QVector<arglist_t> mtk_sargs = {
   },
 };
 
-static void dbg(int l, const char* msg, ...)
+[[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);

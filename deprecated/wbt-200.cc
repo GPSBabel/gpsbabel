@@ -145,7 +145,7 @@ struct read_state {
   struct buf_head     data;
 };
 
-static void db(int l, const char* msg, ...)
+[[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -614,7 +614,7 @@ static bool is_valid(struct buf_head* h, int fmt)
 
   buf_rewind(h);
 
-  db(2, "Checking %lu bytes of data against format %d\n", h->used, fmt);
+  db(2, "Checking %zu bytes of data against format %d\n", h->used, fmt);
 
   for (;;) {
     size_t got = buf_read(h, buf, reclen);
@@ -650,7 +650,7 @@ static void wbt200_process_data(struct read_state* pst, int fmt)
 
   buf_rewind(&pst->data);
 
-  db(2, "Processing %lu bytes of data using format %d\n", pst->data.used, fmt);
+  db(2, "Processing %zu bytes of data using format %d\n", pst->data.used, fmt);
 
   for (;;) {
     size_t got = buf_read(&pst->data, buf, reclen);
@@ -843,7 +843,7 @@ static void wbt201_process_chunk(struct read_state* st)
 {
   char buf[RECLEN_WBT201];
 
-  db(2, "Processing %lu bytes of data\n", st->data.used);
+  db(2, "Processing %zu bytes of data\n", st->data.used);
 
   while (buf_read(&st->data, buf, sizeof(buf)) == sizeof(buf)
          && wbt201_data_chunk(st, buf)) {
@@ -893,7 +893,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   }
 
   if (cs != st->data.checksum) {
-    db(2, "Checksums don't match. Got %02lx, expected %02\n", cs, st->data.checksum);
+    db(2, "Checksums don't match. Got %02lx, expected %02x\n", cs, st->data.checksum);
     return 0;
   }
 

@@ -27,11 +27,12 @@
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
+#include <QByteArray>                // for QByteArray
+#include <QDate>                     // for QDate
+#include <QTime>                     // for QTime
 #include <QDateTime>                 // for QDateTime
 #include <QDebug>                    // for QDebug
 #include <QList>                     // for QList, QList<>::const_iterator, QList<>::const_reverse_iterator, QList<>::count, QList<>::reverse_iterator
-#include <QScopedPointer>            // for QScopedPointer
-#include <QScopedPointerPodDeleter>  // for QScopedPointerPodDeleter
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
@@ -1016,19 +1017,13 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
-int str_match(const char* str, const char* match);
-
-[[gnu::format(printf, 2, 3)]] int xasprintf(char** strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QString* strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 0)]] int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-time_t mklocaltime(std::tm* time);
-time_t mkgmtime(std::tm* time);
+QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
+long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */

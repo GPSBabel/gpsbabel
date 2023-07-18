@@ -29,7 +29,6 @@
 #include <cstdio>          // for sscanf, snprintf, vprintf, SEEK_SET
 #include <cstdlib>         // for free
 #include <cstring>         // for memset
-#include <ctime>           // for time, time_t
 
 #include <QByteArray>      // for QByteArray
 #include <QChar>           // for QChar
@@ -480,7 +479,6 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
 
   // unsigned char log_bool, fifo_mode;
-  char* mystatus;
   unsigned int tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
   unsigned int tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
   unsigned int dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
@@ -489,9 +487,7 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
-  xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
-  db(1, mystatus);
-  xfree(mystatus);
+  db(1, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
 
   return res_OK;
 }
@@ -502,8 +498,8 @@ unsigned int SkytraqBase::me_read32(const unsigned char* p)
   return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
-time_t
-SkytraqBase::gpstime_to_timet(int week, int sec) const
+QDateTime
+SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
 {
   /* Notes:
    *   * week rollover period can be specified using option
@@ -519,11 +515,12 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
    *   * overflow of sec into next week is allowed
    *     (i.e. sec >= 7*24*3600 = 604800 is allowed)
    */
-  time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
+  qint64 gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
 
   int week_rollover = xstrtoi(opt_gps_week_rollover, nullptr, 10);
   if (week_rollover < 0) {
-    int current_week = (time(nullptr)-gps_timet)/(7*SECONDS_PER_DAY);
+    int current_week = (QDateTime::currentSecsSinceEpoch() - gps_timet)/
+                       (7*SECONDS_PER_DAY);
     week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
@@ -531,7 +528,7 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
   int override = xstrtoi(opt_gps_utc_offset, nullptr, 10);
   if (override) {
     gps_timet -= override;
-    return gps_timet;
+    return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
   }
 
   /* leap second compensation: */
@@ -554,7 +551,7 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
   // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
   // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec
 
-  return gps_timet;     /* returns UTC time */
+  return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
 }
 
 void
@@ -612,7 +609,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
   wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
-  wpt->SetCreationTime(gpstime_to_timet(st->gps_week, st->gps_sec));
+  wpt->SetCreationTime(gpstime_to_qdatetime(st->gps_week, st->gps_sec));
 
   return wpt;
 }
