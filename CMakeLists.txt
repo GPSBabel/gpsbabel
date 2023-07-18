@@ -421,8 +421,8 @@ set(TESTS
   track-discard
   track
   transform
-  unicsv_local
   unicsv_grids
+  unicsv_local
   unicsv
   unitconversion
   v900
