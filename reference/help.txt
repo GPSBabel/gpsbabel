@@ -282,15 +282,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27)
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navilink              NaviGPS GT-11/BGT-11 Download
-	  nuketrk               (0/1) Delete all track points
-	  nukerte               (0/1) Delete all routes
-	  nukewpt               (0/1) Delete all waypoints
-	  nukedlg               (0/1) Clear the datalog
-	  datalog               (0/1) Read from datalogger buffer
-	  power_off             (0/1) Command unit to power itself down
-	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
-	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 	nmea                  NMEA 0183 sentences
 	  snlen                 Max length of waypoint name to write
 	  gprmc                 (0/1) Read/write GPRMC sentences
