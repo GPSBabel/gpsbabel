@@ -574,24 +574,6 @@ file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo	tpo2
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo2.html
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo	tpo3
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo3.html
-serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download	navilink
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html
-option	navilink	nuketrk	Delete all track points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nuketrk
-
-option	navilink	nukerte	Delete all routes	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukerte
-
-option	navilink	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukewpt
-
-option	navilink	nukedlg	Clear the datalog	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukedlg
-
-option	navilink	datalog	Read from datalogger buffer	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_datalog
-
-option	navilink	power_off	Command unit to power itself down	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_power_off
-
-file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)	sbp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbp.html
-file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)	sbn
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbn.html
 file	rwrw--	nmea		NMEA 0183 sentences	nmea
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html
 option	nmea	snlen	Max length of waypoint name to write	integer	6	1	64	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html#fmt_nmea_o_snlen

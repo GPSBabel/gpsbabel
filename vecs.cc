@@ -91,9 +91,6 @@ extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t sbp_vecs;
-extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
@@ -151,13 +148,10 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
-  LegacyFormat navilink_fmt {navilink_vecs};
   OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat sbp_fmt {sbp_vecs};
-  LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
@@ -401,13 +395,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &navilink_fmt,
-      "navilink",
-      "NaviGPS GT-11/BGT-11 Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &osm_fmt,
       "osm",
       "OpenStreetMap data files",
@@ -433,20 +420,6 @@ struct Vecs::Impl {
       "humminbird_ht",
       "Humminbird tracks (.ht)",
       "ht",
-      nullptr,
-    },
-    {
-      &sbp_fmt,
-      "sbp",
-      "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
-      "sbp",
-      nullptr,
-    },
-    {
-      &sbn_fmt,
-      "sbn",
-      "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
-      "sbn",
       nullptr,
     },
     {
