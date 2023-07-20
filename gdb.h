@@ -26,7 +26,7 @@
 #ifndef GDB_H_INCLUDED_
 #define GDB_H_INCLUDED_
 
-#include <QList>            // for QList
+#include <QHash>            // for QHash<>::const_iterator, QHash<>::key_iterator, qHash, qHashMulti, QHash
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
 #include <QVector>          // for QVector
@@ -63,6 +63,40 @@ public:
   void write() override;
   void wr_deinit() override;
 
+  /* Types */
+
+  class WptNamePosnKey;
+  using WptNamePosnHash = QHash<WptNamePosnKey, Waypoint*>;
+  class WptNamePosnKey {
+  public:
+    WptNamePosnKey(const QString& name, double lt, double ln) : shortname(name), lat(lt), lon(ln) {}
+
+    using wptkey_size_type = WptNamePosnHash::size_type;
+    friend wptkey_size_type qHash(const WptNamePosnKey &c, wptkey_size_type seed) noexcept
+    {
+      return qHashMulti(seed, c.shortname.toUpper(), c.lat, c.lon);
+    }
+
+    QString shortname;
+    double lat{};
+    double lon{};
+  };
+
+  class WptNameKey;
+  using WptNameHash = QHash<WptNameKey, Waypoint*>;
+  class WptNameKey {
+  public:
+    WptNameKey(const QString& name) : shortname(name) {} /* converting constructor */
+
+    using wptkey_size_type = WptNameHash::size_type;
+    friend wptkey_size_type qHash(const WptNameKey &c, wptkey_size_type seed) noexcept
+    {
+      return qHash(c.shortname.toUpper(), seed);
+    }
+
+    QString shortname;
+  };
+
 private:
   /* Constants */
 
@@ -80,13 +114,14 @@ private:
 
   /* Member Functions */
 
-  static void gdb_flush_waypt_queue(QList<Waypoint*>* Q);
+  static void gdb_flush_waypt_queue(WptNamePosnHash& Q);
   void disp_summary(const gbfile* f) const;
   QString fread_cstr() const;
   static char* gdb_fread_cstr(gbfile* file_in);
   QString gdb_fread_strlist() const;
-  static Waypoint* gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, char exact);
-  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, char exact) const;
+  static Waypoint* gdb_find_wayptq(const WptNameHash& Q, const Waypoint* wpt);
+  static Waypoint* gdb_find_wayptq(const WptNamePosnHash& Q, const Waypoint* wpt);
+  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, bool exact) const;
   Waypoint* gdb_add_route_waypt(route_head* rte, Waypoint* ref, int wpt_class) const;
   static QString gdb_to_ISO8601_duration(unsigned int seconds);
   void gdb_write_cstr(QStringView a = QStringView()) const;
@@ -118,7 +153,11 @@ private:
   bool gdb_hide_wpt{};
   bool gdb_hide_rpt{};
 
-  QList<Waypoint*> wayptq_in, wayptq_out, wayptq_in_hidden;
+  WptNamePosnHash waypt_nameposn_in_hash;
+  WptNameHash waypt_name_in_hash;
+  WptNamePosnHash waypt_nameposn_in_hidden_hash;
+  WptNameHash waypt_name_in_hidden_hash;
+  WptNamePosnHash waypt_nameposn_out_hash;
   short_handle short_h{};
 
   char* gdb_opt_category{};
