@@ -86,6 +86,7 @@ public:
        */
       QtPrivate::QHashCombine hash;
 
+      
       seed = hash(seed, c.shortname.toUpper());
       seed = hash(seed, c.lat);
       seed = hash(seed, c.lon);
@@ -173,7 +174,7 @@ private:
   WptNamePosnHash waypt_nameposn_in_hidden_hash;
   WptNameHash waypt_name_in_hidden_hash;
   WptNamePosnHash waypt_nameposn_out_hash;
-  MakeShort* short_h{};
+  short_handle short_h{};
 
   char* gdb_opt_category{};
   char* gdb_opt_ver{};
