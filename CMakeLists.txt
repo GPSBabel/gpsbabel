@@ -422,6 +422,7 @@ set(TESTS
   track
   transform
   unicsv_grids
+  unicsv_local
   unicsv
   unitconversion
   v900
