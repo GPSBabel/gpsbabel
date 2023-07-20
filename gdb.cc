@@ -29,7 +29,6 @@
 #include <QByteArray>               // for QByteArray, operator==
 #include <QDate>                    // for QDate
 #include <QDateTime>                // for QDateTime
-#include <QList>                    // for QList<>::const_iterator, QList
 #include <QString>                  // for QString, operator!=, operator==
 #include <QTime>                    // for QTime
 #include <Qt>                       // for CaseInsensitive
@@ -70,12 +69,26 @@
 
 #define DBG(a, b)		if ((GDB_DEBUG & (a)) && (b))
 
+
+inline bool operator==(const GdbFormat::WptNameKey& lhs, const GdbFormat::WptNameKey &rhs) noexcept
+{
+  return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
+}
+
+inline bool operator==(const GdbFormat::WptNamePosnKey& lhs, const GdbFormat::WptNamePosnKey &rhs) noexcept
+{
+  return
+    (lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0) &&
+    lhs.lat == rhs.lat &&
+    lhs.lon == rhs.lon;
+}
+
 void
-GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
+GdbFormat::gdb_flush_waypt_queue(WptNamePosnHash& Q)
 {
 
-  while (!Q->isEmpty()) {
-    const Waypoint* wpt = Q->takeFirst();
+  for (auto it = Q.cbegin(), end = Q.cend(); it != end; ++it) {
+    const Waypoint* wpt = it.value();
     if (wpt->extra_data) {
       // wpt->extra_data may be holding a pointer to a QString, courtesy
       // the grossness at the end of write_waypoint_cb().
@@ -83,6 +96,7 @@ GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
     }
     delete wpt;
   }
+  Q = WptNamePosnHash();
 }
 
 #if GDB_DEBUG
@@ -194,31 +208,37 @@ GdbFormat::gdb_fread_strlist() const
   return qres;
 }
 
-Waypoint*
-GdbFormat::gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const char exact)
+Waypoint* GdbFormat::gdb_find_wayptq(const WptNameHash& Q, const Waypoint* wpt)
 {
-  QString name = wpt->shortname;
-  foreach (Waypoint* tmp, *Q) {
-    if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
-      if (! exact) {
-        return tmp;
-      }
+  if (Q.contains(wpt->shortname)) {
+    return Q.value(wpt->shortname);
+  }
+  return nullptr;
+}
 
-      if ((tmp->latitude == wpt->latitude) &&
-          (tmp->longitude == wpt->longitude)) {
-        return tmp;
-      }
-    }
+Waypoint* GdbFormat::gdb_find_wayptq(const WptNamePosnHash& Q, const Waypoint* wpt)
+{
+  auto key = WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude);
+  if (Q.contains(key)) {
+    return Q.value(key);
   }
   return nullptr;
 }
 
 Waypoint*
-GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
+GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, bool exact) const
 {
-  Waypoint* res = gdb_find_wayptq(&wayptq_in, wpt, exact);
-  if (res == nullptr) {
-    res = gdb_find_wayptq(&wayptq_in_hidden, wpt, exact);
+  Waypoint* res;
+  if (exact) {
+    res = gdb_find_wayptq(waypt_nameposn_in_hash, wpt);
+    if (res == nullptr) {
+      res = gdb_find_wayptq(waypt_nameposn_in_hidden_hash, wpt);
+    }
+  } else {
+    res = gdb_find_wayptq(waypt_name_in_hash, wpt);
+    if (res == nullptr) {
+      res = gdb_find_wayptq(waypt_name_in_hidden_hash, wpt);
+    }
   }
   return res;
 }
@@ -226,7 +246,7 @@ GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
 Waypoint*
 GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class) const
 {
-  Waypoint* tmp = gdb_reader_find_waypt(ref, 1);
+  Waypoint* tmp = gdb_reader_find_waypt(ref, true);
   if (tmp == nullptr) {
     tmp = find_waypt_by_name(ref->shortname);
     if (tmp == nullptr) {
@@ -779,7 +799,7 @@ GdbFormat::read_route()
 
     if (links == 0) {
       /* Without links we need all information from wpt */
-      Waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
+      Waypoint* tmp = gdb_reader_find_waypt(wpt, false);
       if (tmp != nullptr) {
         delete wpt;
         wpt = new Waypoint(*tmp);
@@ -946,8 +966,10 @@ GdbFormat::rd_init(const QString& fname)
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
   read_file_header();
 
-  wayptq_in.clear();
-  wayptq_in_hidden.clear();
+  waypt_nameposn_in_hash.clear();
+  waypt_name_in_hash.clear();
+  waypt_nameposn_in_hidden_hash.clear();
+  waypt_name_in_hidden_hash.clear();
 
   bool via = gdb_opt_via;
   bool drop_wpt = gdb_opt_drop_hidden_wpt;
@@ -967,8 +989,10 @@ void
 GdbFormat::rd_deinit()
 {
   disp_summary(fin);
-  gdb_flush_waypt_queue(&wayptq_in);
-  gdb_flush_waypt_queue(&wayptq_in_hidden);
+  gdb_flush_waypt_queue(waypt_nameposn_in_hash);
+  waypt_name_in_hash = WptNameHash(); /* values already flushed */
+  gdb_flush_waypt_queue(waypt_nameposn_in_hidden_hash);
+  waypt_name_in_hidden_hash = WptNameHash(); /* values already flushed */
   gbfclose(ftmp);
   gbfclose(fin);
 }
@@ -1009,9 +1033,11 @@ GdbFormat::read()
       if (!gdb_hide_wpt || (wpt_class == 0)) {
         waypt_add(wpt);
         auto* dupe = new Waypoint(*wpt);
-        wayptq_in.append(dupe);
+        waypt_nameposn_in_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), dupe);
+        waypt_name_in_hash.insert(wpt->shortname, dupe);
       } else {
-        wayptq_in_hidden.append(wpt);
+        waypt_nameposn_in_hidden_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), wpt);
+        waypt_name_in_hidden_hash.insert(wpt->shortname, wpt);
       }
       break;
     case 'R':
@@ -1359,7 +1385,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
       gdb_check_waypt(next);
     }
 
-    Waypoint* test = gdb_find_wayptq(&wayptq_out, wpt, 1);
+    Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, wpt);
     if (test != nullptr) {
       wpt = test;
     } else {
@@ -1512,7 +1538,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
   /* do this when backup always happens in main */
 // but, but, casting away the const here is wrong...
   (const_cast<Waypoint*>(refpt))->shortname = refpt->shortname.trimmed();
-  Waypoint* test = gdb_find_wayptq(&wayptq_out, refpt, 1);
+  Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, refpt);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
     UrlLink orig_link = refpt->GetUrlLink();
@@ -1533,7 +1559,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     auto* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
-    wayptq_out.append(wpt);
+    waypt_nameposn_out_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), wpt);
 
     gbfile* fsave = fout;
     fout = ftmp;
@@ -1662,7 +1688,7 @@ GdbFormat::wr_init(const QString& fname)
     gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
   }
 
-  wayptq_out.clear();
+  waypt_nameposn_out_hash.clear();
   short_h = nullptr;
 
   waypt_ct = 0;
@@ -1677,7 +1703,7 @@ void
 GdbFormat::wr_deinit()
 {
   disp_summary(fout);
-  gdb_flush_waypt_queue(&wayptq_out);
+  gdb_flush_waypt_queue(waypt_nameposn_out_hash);
   mkshort_del_handle(&short_h);
   gbfclose(fout);
   gbfclose(ftmp);
