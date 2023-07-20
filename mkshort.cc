@@ -25,8 +25,9 @@
 
 #include <QByteArray>  // for QByteArray
 #include <QChar>       // for QChar, QChar::ReplacementCharacter
-#include <QList>       // for QList
+#include <QHash>       // for QHash, QHash<>::iterator, qHash, QHash<>::size_type
 #include <QString>     // for QString
+#include <Qt>          // for CaseInsensitive
 #include <QtGlobal>    // for foreach
 
 #include "defs.h"
@@ -40,25 +41,36 @@ static const char vowels[] = "aeiouAEIOU";
 static constexpr unsigned int default_target_len = 8U;
 static const char* DEFAULT_BADCHARS = "\"$.,'!-";
 
-/*
- * Hash table tunings.   The reality is that our hash doesn't have to be
- * terribly complex; our strings are short (typically 8-20 bytes) and the
- * string hash mixes things up enough that strcmp can generally bail on the
- * first byte or two for a mismatch.
- */
-static constexpr unsigned int prime = 37U;
-
 struct uniq_shortname {
-  char* orig_shortname{nullptr};
   int conflictctr{0};
 };
+
+class ShortNameKey;
+using ShortNameHash = QHash<ShortNameKey, uniq_shortname*>;
+class ShortNameKey {
+public:
+  ShortNameKey(char* name) : shortname(name) {} /* converting constructor */
+
+  friend qhash_result_t qHash(const ShortNameKey &key, qhash_result_t seed = 0) noexcept
+  {
+    // We hash all strings as upper case.
+    return qHash(key.shortname.toUpper(), seed);
+  }
+
+  QByteArray shortname;
+};
+
+inline bool operator==(const ShortNameKey& lhs, const ShortNameKey &rhs) noexcept
+{
+  return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
+}
 
 struct  mkshort_handle_imp {
   unsigned int target_len{default_target_len};
   char* badchars{nullptr};
   char* goodchars{nullptr};
   char* defname{nullptr};
-  QList<uniq_shortname*> namelist[prime];
+  ShortNameHash namelist;
 
   /* Various internal flags */
   bool mustupper{false};
@@ -84,19 +96,6 @@ static struct replacements {
   {nullptr, 		nullptr}
 };
 
-/*
- * We hash all strings as upper case.
- */
-unsigned int hash_string(const char* key)
-{
-  unsigned int hash = 0;
-  while (*key) {
-    hash = ((hash<<5) ^ (hash>>27)) ^ toupper(*key++);
-  }
-  hash = hash % prime;
-  return hash;
-}
-
 short_handle
 mkshort_new_handle()
 {
@@ -112,12 +111,8 @@ static
 uniq_shortname*
 is_unique(mkshort_handle_imp* h, char* name)
 {
-
-  int hash = hash_string(name);
-  foreach (uniq_shortname* z, h->namelist[hash]) {
-    if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
-      return z;
-    }
+  if (h->namelist.contains(name)) {
+    return h->namelist.value(name);
   }
   return (uniq_shortname*) nullptr;
 }
@@ -126,11 +121,7 @@ static
 void
 add_to_hashlist(mkshort_handle_imp* h, char* name)
 {
-  int hash = hash_string(name);
-  auto* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
-
-  s->orig_shortname = xstrdup(name);
-  h->namelist[hash].append(s);
+  h->namelist.insert(name, new uniq_shortname);
 }
 
 char*
@@ -171,19 +162,17 @@ mkshort_del_handle(short_handle* h)
     return;
   }
 
-  for (auto& i : hdr->namelist) {
-    while (!i.isEmpty()) {
+  for (auto it = hdr->namelist.cbegin(), end = hdr->namelist.cend(); it != end; ++it) {
 #if 0
-      if (global_opts.verbose_status >= 2 && s->conflictctr) {
-        fprintf(stderr, "%d Output name conflicts: '%s'\n",
-                s->conflictctr, s->orig_shortname);
-      }
-#endif
-      auto* s = i.takeFirst();
-      xfree(s->orig_shortname);
-      xfree(s);
+    if (global_opts.verbose_status >= 2 && it.value()->conflictctr) {
+      fprintf(stderr, "%d Output name conflicts: '%s'\n",
+              it.value()->conflictctr, it.key().shortname.constData());
     }
+#endif
+    delete it.value();
   }
+  hdr->namelist.clear();
+  hdr->namelist.squeeze();
   /* setshort_badchars(*h, NULL); ! currently setshort_badchars() always allocates something ! */
   if (hdr->badchars != nullptr) {
     xfree(hdr->badchars);
