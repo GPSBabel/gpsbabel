@@ -51,8 +51,7 @@ class ShortNameKey {
 public:
   ShortNameKey(char* name) : shortname(name) {} /* converting constructor */
 
-  using namehash_size_type = ShortNameHash::size_type;
-  friend namehash_size_type qHash(const ShortNameKey &key, namehash_size_type seed = 0) noexcept
+  friend qhash_result_t qHash(const ShortNameKey &key, qhash_result_t seed = 0) noexcept
   {
     // We hash all strings as upper case.
     return qHash(key.shortname.toUpper(), seed);
