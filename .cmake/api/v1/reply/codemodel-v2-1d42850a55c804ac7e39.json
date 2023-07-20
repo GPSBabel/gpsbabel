@@ -1,0 +1,260 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						5,
+						6,
+						7,
+						13,
+						15,
+						16,
+						17,
+						18
+					]
+				},
+				{
+					"build" : "gui",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-gui-Debug-748b39b5a140a70fe5f8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "gui",
+					"targetIndexes" : 
+					[
+						8,
+						9,
+						10,
+						11,
+						12,
+						14
+					]
+				},
+				{
+					"build" : "gui/coretool",
+					"jsonFile" : "directory-gui.coretool-Debug-87963545341ba97be176.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "gui/coretool",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "gpsbabel",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "check::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-check-Debug-7eb4eef9c322f68b4627.json",
+					"name" : "check",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "coretool::@59ad487847001a1eac72",
+					"jsonFile" : "target-coretool-Debug-c79a7cdd3cd2a20eafa3.json",
+					"name" : "coretool",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "coretool_lrelease::@59ad487847001a1eac72",
+					"jsonFile" : "target-coretool_lrelease-Debug-71d6c78e389ca52f783a.json",
+					"name" : "coretool_lrelease",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "coretool_lupdate::@59ad487847001a1eac72",
+					"jsonFile" : "target-coretool_lupdate-Debug-68c815f83c50331f6566.json",
+					"name" : "coretool_lupdate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gpsbabel::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gpsbabel-Debug-c396b56ee97d8990c97a.json",
+					"name" : "gpsbabel",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gpsbabel.html::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gpsbabel.html-Debug-8f2c291bd45b7fa33ec8.json",
+					"name" : "gpsbabel.html",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gpsbabel.org::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gpsbabel.org-Debug-e959298c6edfe79a8d58.json",
+					"name" : "gpsbabel.org",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gpsbabel.pdf::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gpsbabel.pdf-Debug-d156a2160fae18175c5a.json",
+					"name" : "gpsbabel.pdf",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gpsbabelfe::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-gpsbabelfe-Debug-68af7794091c308b2e15.json",
+					"name" : "gpsbabelfe",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gpsbabelfe_autogen::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-gpsbabelfe_autogen-Debug-f7875ab99cea46dc8681.json",
+					"name" : "gpsbabelfe_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gpsbabelfe_autogen_timestamp_deps::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-gpsbabelfe_autogen_timestamp_deps-Debug-b312ab01a4e1eee4b178.json",
+					"name" : "gpsbabelfe_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gpsbabelfe_lrelease::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-gpsbabelfe_lrelease-Debug-873580379c2b9266e520.json",
+					"name" : "gpsbabelfe_lrelease",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gpsbabelfe_lupdate::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-gpsbabelfe_lupdate-Debug-7b36a4643573de4d52d2.json",
+					"name" : "gpsbabelfe_lupdate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mkicondoc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mkicondoc-Debug-d620e273fbdf813220b4.json",
+					"name" : "mkicondoc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "package_app::@35f413a6cfe5475b20aa",
+					"jsonFile" : "target-package_app-Debug-cd50a91ebf55fbad934a.json",
+					"name" : "package_app",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "shp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-shp-Debug-2b9df8a12f258f54f492.json",
+					"name" : "shp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "strptime::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-strptime-Debug-4abeb7d686755fc3ad6d.json",
+					"name" : "strptime",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "usb-1.0::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-usb-1.0-Debug-e4dabe53f3468b5d764d.json",
+					"name" : "usb-1.0",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "z::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-z-Debug-95715b2b46c1a758f192.json",
+					"name" : "z",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/robertlipe/src/gpsbabel",
+		"source" : "/Users/robertlipe/src/gpsbabel"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
