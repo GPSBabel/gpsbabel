@@ -49,6 +49,8 @@ class ShortNameKey;
 using ShortNameHash = QHash<ShortNameKey, uniq_shortname*>;
 class ShortNameKey {
 public:
+  ShortNameKey(char* name) : shortname(name) {} /* converting constructor */
+
   using namehash_size_type = ShortNameHash::size_type;
   friend namehash_size_type qHash(const ShortNameKey &key, namehash_size_type seed = 0) noexcept
   {
@@ -110,10 +112,8 @@ static
 uniq_shortname*
 is_unique(mkshort_handle_imp* h, char* name)
 {
-  ShortNameKey key;
-  key.shortname = name;
-  if (h->namelist.contains(key)) {
-    return h->namelist.value(key);
+  if (h->namelist.contains(name)) {
+    return h->namelist.value(name);
   }
   return (uniq_shortname*) nullptr;
 }
@@ -122,9 +122,7 @@ static
 void
 add_to_hashlist(mkshort_handle_imp* h, char* name)
 {
-  ShortNameKey key;
-  key.shortname = name;
-  h->namelist.insert(key, new uniq_shortname);
+  h->namelist.insert(name, new uniq_shortname);
 }
 
 char*
