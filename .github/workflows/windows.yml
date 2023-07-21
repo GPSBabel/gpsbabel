@@ -60,7 +60,7 @@ jobs:
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
             os: windows-latest
-          - QT_VERSION: '6.5.3'
+          - QT_VERSION: '6.5.2'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
@@ -72,6 +72,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Cache Qt
       uses: actions/cache@v3
