@@ -60,7 +60,7 @@ jobs:
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
             os: windows-latest
-          - QT_VERSION: '6.5.1'
+          - QT_VERSION: '6.5.2'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
