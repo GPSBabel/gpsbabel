@@ -132,11 +132,10 @@ void DuplicateFilter::process()
   waypt_swap(oldlist);
   
   for (Waypoint* wpt : qAsConst(oldlist)) {
-    if (wpt->extra_data != nullptr) {
-      delete wpt;
-    } else {
-      wpt->extra_data = nullptr;
+    if (wpt->extra_data == nullptr) {
       waypt_add(wpt);
+    } else {
+      delete wpt;
     }
   }
 }
