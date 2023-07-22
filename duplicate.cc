@@ -127,17 +127,16 @@ void DuplicateFilter::process()
     }
   }
 
-  // Do all the deletes with iterators to avoid repeated
-  // searches in waypt_del(Waypoint*).
-  auto it = global_waypoint_list->begin();
-  while (it != global_waypoint_list->end()) {
-    auto wpt = *it;
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  waypt_swap(oldlist);
+  
+  for (Waypoint* wpt : qAsConst(oldlist)) {
     if (wpt->extra_data != nullptr) {
-      it = global_waypoint_list->waypt_del(it);
       delete wpt;
     } else {
       wpt->extra_data = nullptr;
-      ++it;
+      waypt_add(wpt);
     }
   }
 }
