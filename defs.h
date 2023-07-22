@@ -1112,11 +1112,6 @@ int parse_speed(const char* str, double* val, double scale, const char* module);
 int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*
- *  From util_crc.c
- */
-unsigned long get_crc32(const void* data, int datalen);
-
-/*
  * Color helpers.
  */
 int color_to_bbggrr(const char* cname);
