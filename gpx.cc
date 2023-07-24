@@ -1080,11 +1080,6 @@ GpxFormat::fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const
       if (tag->child) {
         fprint_xml_chain(tag->child, wpt);
       }
-      if (wpt && wpt->gc_data->exported.isValid() &&
-          tag->tagname.compare(u"groundspeak:cache") == 0) {
-        writer->writeTextElement(QStringLiteral("time"),
-                                 wpt->gc_data->exported.toPrettyString());
-      }
       writer->writeEndElement();
     }
     if (!tag->parentcdata.isEmpty()) {

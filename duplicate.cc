@@ -81,11 +81,6 @@ void DuplicateFilter::process()
 
   auto wptlist = *global_waypoint_list;
 
-  auto compare_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
-    return wa->gc_data->exported > wb->gc_data->exported;
-  };
-  std::stable_sort(wptlist.begin(), wptlist.end(), compare_lambda);
-
   QMultiHash<QString, Waypoint*> wpthash;
   for (Waypoint* waypointp : wptlist) {
     waypointp->extra_data = nullptr;
