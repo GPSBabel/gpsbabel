@@ -182,7 +182,6 @@ set(SUPPORT
   src/core/xmltag.cc
   units.cc
   util.cc
-  util_crc.cc
   vecs.cc
   waypt.cc
   xmlgeneric.cc

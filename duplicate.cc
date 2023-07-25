@@ -1,7 +1,7 @@
 /*
     exact duplicate point filter utility.
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #include "duplicate.h"
 
 #include <algorithm>             // for stable_sort
-#include <cstdio>                // for snprintf
-#include <cstring>               // for memset, strncpy
 
 #include <QDateTime>             // for QDateTime
+#include <QList>                 // for QList, QList<>::iterator, QList<>::const_iterator
+#include <QMultiHash>            // for QMultiHash
 
 #include "defs.h"
 #include "geocache.h"            // for Geocache
@@ -34,54 +34,7 @@
 
 #if FILTERS_ENABLED
 
-DuplicateFilter::btree_node* DuplicateFilter::addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
-{
-  btree_node* last = nullptr;
-
-  if (*oldnode) {
-    *oldnode = nullptr;
-  }
-
-  if (!tree) {
-    return (newnode);
-  }
-
-  btree_node* tmp = tree;
-
-  while (tmp) {
-    last = tmp;
-    if (newnode->data < tmp->data) {
-      tmp = tmp->right;
-    } else if (newnode->data > tmp->data) {
-      tmp = tmp->left;
-    } else {
-      if (oldnode) {
-        *oldnode = tmp;
-      }
-      return (nullptr);
-    }
-  }
-
-  if (newnode->data < last->data) {
-    last->right = newnode;
-  } else {
-    last->left = newnode;
-  }
-
-  return (tree);
-}
-
-void DuplicateFilter::free_tree(btree_node* tree)
-{
-  if (tree->left) {
-    free_tree(tree->left);
-  }
-  if (tree->right) {
-    free_tree(tree->right);
-  }
-  xfree(tree);
-}
-
+#define MYNAME "duplicate"
 /*
 
 It looks odd that we have different comparisons for date and index.
@@ -111,83 +64,79 @@ one with the smaller index (i.e. the first of those two points that we
 came across while importing waypoints.)
 
 In the (common) case that we have no exported dates, the dates will all
-be zero so the sort will end up being an expensive no-op (expensive
-because, sadly, quicksort can be O(n^2) on presorted elements.)
+be zero so the sort will end up being an expensive no-op.  However, the
+complexity of this filter is dominated by other concerns.
 */
+
+void DuplicateFilter::init()
+{
+  if (!lcopt && !snopt) {
+    fatal(MYNAME ": one or both of the shortname and location options are required.\n");
+  }
+}
 
 void DuplicateFilter::process()
 {
-  btree_node* btmp = nullptr;
-  btree_node* sup_tree = nullptr;
-  btree_node* oldnode = nullptr;
-  struct {
-    char shortname[32];
-    char lat[13];
-    char lon[13];
-  } dupe;
-  Waypoint* delwpt = nullptr;
+  int delete_flag; // &delete_flag != nullptr
 
-  auto htable = *global_waypoint_list;
+  auto wptlist = *global_waypoint_list;
 
   auto compare_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
     return wa->gc_data->exported > wb->gc_data->exported;
   };
-  std::stable_sort(htable.begin(), htable.end(), compare_lambda);
+  std::stable_sort(wptlist.begin(), wptlist.end(), compare_lambda);
 
-  for (Waypoint* waypointp : htable) {
+  QMultiHash<QString, Waypoint*> wpthash;
+  for (Waypoint* waypointp : wptlist) {
+    waypointp->extra_data = nullptr;
 
-    memset(&dupe, '\0', sizeof(dupe));
-
-    if (snopt) {
-      strncpy(dupe.shortname, CSTRc(waypointp->shortname), sizeof(dupe.shortname) - 1);
-    }
-
+    QString key;
     if (lcopt) {
       /* The degrees2ddmm stuff is a feeble attempt to
        * get everything rounded the same way in a precision
        * that's "close enough" for determining duplicates.
        */
-      snprintf(dupe.lat, sizeof(dupe.lat), "%11.3f",
-               degrees2ddmm(waypointp->latitude));
-      snprintf(dupe.lon, sizeof(dupe.lon), "%11.3f",
-               degrees2ddmm(waypointp->longitude));
-
+      key = QStringLiteral("%1%2")
+        .arg(degrees2ddmm(waypointp->latitude), 11, 'f', 3)
+        .arg(degrees2ddmm(waypointp->longitude), 11, 'f', 3);
+    }
+  
+    if (snopt) {
+      key.append(waypointp->shortname);
     }
 
-    unsigned long crc = get_crc32(&dupe, sizeof(dupe));
+    wpthash.insert(key, waypointp);
+  }
 
-    auto* newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
-    newnode->data = crc;
-    newnode->wpt = waypointp;
-
-    btmp = addnode(sup_tree, newnode, &oldnode);
-
-    if (btmp == nullptr) {
-      delete delwpt;
-      if (correct_coords && oldnode && oldnode->wpt) {
-        oldnode->wpt->latitude = waypointp->latitude;
-        oldnode->wpt->longitude = waypointp->longitude;
+  const QList<QString> keys = wpthash.uniqueKeys();
+  for (const auto& key : keys) {
+    const QList<Waypoint*> values = wpthash.values(key);
+    if (values.size() > 1) {
+      Waypoint* wptfirst = values.last(); // first inserted
+      if (correct_coords) {
+        Waypoint* wptlast = values.front(); // last inserted
+        wptfirst->latitude = wptlast->latitude;
+        wptfirst->longitude = wptlast->longitude;
       }
-      delwpt = waypointp;
-      waypt_del(waypointp); /* collision */
-      xfree(newnode);
-      if (purge_duplicates && oldnode) {
-        if (oldnode->wpt) {
-          waypt_del(oldnode->wpt);
-          delete oldnode->wpt;
-          oldnode->wpt = nullptr;
+      for (auto it = values.cbegin(); it != values.cend(); ++it) {
+        Waypoint* wpt = *it;
+        if (purge_duplicates || (wpt != wptfirst)) {
+          wpt->extra_data = &delete_flag;
         }
       }
-
-    } else {
-      sup_tree = btmp;
     }
   }
 
-  delete delwpt;
-
-  if (sup_tree) {
-    free_tree(sup_tree);
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  waypt_swap(oldlist);
+  
+  for (Waypoint* wpt : qAsConst(oldlist)) {
+    if (wpt->extra_data == nullptr) {
+      waypt_add(wpt);
+    } else {
+      delete wpt;
+    }
   }
 }
 
