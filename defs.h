@@ -455,6 +455,7 @@ public:
   void del_marked_wpts();
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
+  iterator waypt_del(iterator it) {return erase(it);}
   void del_rte_waypt(Waypoint* wpt);
   void waypt_compute_bounds(bounds* bounds) const;
   Waypoint* find_waypt_by_name(const QString& name) const;
