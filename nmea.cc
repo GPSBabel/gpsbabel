@@ -534,7 +534,8 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   QDate dmy;
   if (fields.size() > 9) {
     QString datestr(fields[9]);
-    datestr.insert(4, "20");
+    if (datestr.length() < 7)
+      datestr.insert(4, "20");
     dmy = QDate::fromString(datestr, "ddMMyyyy");
   }
   if (fix != 'A') {
