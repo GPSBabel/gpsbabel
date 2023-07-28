@@ -144,6 +144,18 @@ track_del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
+}
+
+void
 route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 {
 // wc == nullptr
@@ -503,4 +515,11 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
+}
+
+void RouteList::swap_wpts(route_head* rte, WaypointList& other)
+{
+  this->waypt_ct -= rte->rte_waypt_ct();
+  this->waypt_ct += other.count();
+  rte->waypoint_list.swap(other);
 }

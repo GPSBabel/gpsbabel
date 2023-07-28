@@ -492,7 +492,6 @@ public:
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
-  iterator waypt_del(iterator it) {return erase(it);}
   void del_rte_waypt(Waypoint* wpt);
   void waypt_compute_bounds(bounds* bounds) const;
   Waypoint* find_waypt_by_name(const QString& name) const;
@@ -525,6 +524,7 @@ public:
   using QList<Waypoint*>::front; // a.k.a. first()
   using QList<Waypoint*>::rbegin;
   using QList<Waypoint*>::rend;
+  using QList<Waypoint*>::size_type;
 };
 
 const global_trait* get_traits();
@@ -674,6 +674,7 @@ public:
   void copy(RouteList** dst) const;
   void restore(RouteList* src);
   void swap(RouteList& other);
+  void swap_wpts(route_head* rte, WaypointList& other);
   template <typename Compare>
   void sort(Compare cmp) {std::sort(begin(), end(), cmp);}
   template <typename T1, typename T2, typename T3>
@@ -728,6 +729,8 @@ void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT"
 void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
+void route_swap_wpts(route_head* rte, WaypointList& other);
+void track_swap_wpts(route_head* rte, WaypointList& other);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
 void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
 //void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
