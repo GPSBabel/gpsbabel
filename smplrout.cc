@@ -256,17 +256,17 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   (*route_swap_wpts_fnp)(const_cast<route_head*>(rte), oldlist);
 
   // mimic trkseg handling from WaypointList::del_rte_waypt
-  bool inhereit_new_trkseg = false;
+  bool inherit_new_trkseg = false;
   for (Waypoint* wpt : qAsConst(oldlist)) {
     if (wpt->extra_data == nullptr) {
-      if (inhereit_new_trkseg) {
+      if (inherit_new_trkseg) {
         wpt->wpt_flags.new_trkseg = 1;
-        inhereit_new_trkseg = false;
+        inherit_new_trkseg = false;
       }
       (*route_add_wpt_fnp)(const_cast<route_head*>(rte), wpt, u"RPT", 3);
     } else {
       if (wpt->wpt_flags.new_trkseg) {
-        inhereit_new_trkseg = true;
+        inherit_new_trkseg = true;
       }
       delete wpt;
     }
