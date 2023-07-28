@@ -393,7 +393,6 @@ Waypoint::Waypoint() :
   latitude(0),  // These should probably use some invalid data, but
   longitude(0), // it looks like we have code that relies on them being zero.
   altitude(unknown_alt),
-  route_priority(0),
   hdop(0),
   vdop(0),
   pdop(0),
@@ -435,7 +434,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   icon_descr(other.icon_descr),
   creation_time(other.creation_time),
   wpt_flags(other.wpt_flags),
-  route_priority(other.route_priority),
   hdop(other.hdop),
   vdop(other.vdop),
   pdop(other.pdop),
@@ -485,7 +483,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     wpt_flags = rhs.wpt_flags;
     icon_descr = rhs.icon_descr;
     creation_time = rhs.creation_time;
-    route_priority = rhs.route_priority;
     hdop = rhs.hdop;
     vdop = rhs.vdop;
     pdop = rhs.pdop;

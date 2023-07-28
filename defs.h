@@ -448,17 +448,6 @@ public:
   gpsbabel::DateTime creation_time;
 
   wp_flags wpt_flags;
-  /*
-   * route priority is for use by the simplify filter.  If we have
-   * some reason to believe that the route point is more important,
-   * we can give it a higher (numerically; 0 is the lowest) priority.
-   * This causes it to be removed last.
-   * This is currently used by the saroute input filter to give named
-   * waypoints (representing turns) a higher priority.
-   * This is also used by the google input filter because they were
-   * nice enough to use exactly the same priority scheme.
-   */
-  int route_priority;
 
   /* Optional dilution of precision:  positional, horizontal, vertical.
    * 1 <= dop <= 50

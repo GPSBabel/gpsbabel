@@ -173,7 +173,6 @@ void ArcDistanceFilter::process()
       } else if (projectopt) {
         wp->longitude = ed->prjlongitude;
         wp->latitude = ed->prjlatitude;
-        wp->route_priority = 1;
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
