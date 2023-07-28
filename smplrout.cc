@@ -92,16 +92,16 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   const Waypoint* wpt2 = nb.next;
 
   const Waypoint* wpt3 = nb.wpt;
-  double error;
+  double track_error;
   switch (metric) {
   case metric_t::crosstrack:
-    error = radtomiles(linedist(
+    track_error = radtomiles(linedist(
                          wpt1->latitude, wpt1->longitude,
                          wpt2->latitude, wpt2->longitude,
                          wpt3->latitude, wpt3->longitude));
     break;
   case metric_t::length:
-    error = radtomiles(
+    track_error = radtomiles(
               gcdist(wpt1->latitude, wpt1->longitude,
                      wpt3->latitude, wpt3->longitude) +
               gcdist(wpt3->latitude, wpt3->longitude,
@@ -122,21 +122,21 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
-      error = radtometers(gcdist(
+      track_error = radtometers(gcdist(
                             wpt3->latitude, wpt3->longitude,
                             reslat, reslon));
     } else { // else distance to connecting line
-      error = radtometers(linedist(
+      track_error = radtometers(linedist(
                             wpt1->latitude, wpt1->longitude,
                             wpt2->latitude, wpt2->longitude,
                             wpt3->latitude, wpt3->longitude));
     }
     // error relative to horizontal precision
-    error /= (6 * wpt3->hdop);
+    track_error /= (6 * wpt3->hdop);
     // (hdop->meters following to J. Person at <http://www.developerfusion.co.uk/show/4652/3/>)
     break;
   }
-  return error;
+  return track_error;
 }
 
 void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
@@ -156,7 +156,7 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   Waypoint* pwpt = nullptr;
   Waypoint* ppwpt = nullptr;
   WaypointList::size_type pos = 0;
-  neighborhood nbh;
+  neighborhood nb;
   trackerror te;
   QMap<trackerror, neighborhood> errormap;
   QHash<Waypoint*, trackerror> wpthash;
@@ -171,14 +171,14 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     }
 
     if (pwpt != nullptr) {
-      nbh.wpt = pwpt;
-      nbh.prev = ppwpt;
-      nbh.next = wpt;
+      nb.wpt = pwpt;
+      nb.prev = ppwpt;
+      nb.next = wpt;
 
-      te.dist = compute_track_error(nbh);
+      te.dist = compute_track_error(nb);
       te.wptpos = pos;
 
-      errormap.insert(te, nbh);
+      errormap.insert(te, nb);
       wpthash.insert(pwpt, te);
     }
 
@@ -186,14 +186,14 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     pwpt = wpt;
     ++pos;
   }
-  nbh.wpt = pwpt;
-  nbh.prev = ppwpt;
-  nbh.next = nullptr;
+  nb.wpt = pwpt;
+  nb.prev = ppwpt;
+  nb.next = nullptr;
 
-  te.dist = compute_track_error(nbh);
+  te.dist = compute_track_error(nb);
   te.wptpos = pos;
 
-  errormap.insert(te, nbh);
+  errormap.insert(te, nb);
   wpthash.insert(pwpt, te);
 
   assert(!errormap.isEmpty());
@@ -214,25 +214,25 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     /* recompute neighbors of point marked for deletion. */
     if (goner.prev != nullptr) {
       assert(wpthash.contains(goner.prev));
-      trackerror te = wpthash.value(goner.prev);
-      assert(errormap.contains(te));
-      neighborhood nb = errormap.value(te);
-      nb.next = goner.next;
-      errormap.remove(te);
-      te.dist = compute_track_error(nb);
-      errormap.insert(te, nb);
-      wpthash.insert(goner.prev, te);
+      trackerror terr = wpthash.value(goner.prev);
+      assert(errormap.contains(terr));
+      neighborhood nbh = errormap.value(terr);
+      nbh.next = goner.next;
+      errormap.remove(terr);
+      terr.dist = compute_track_error(nbh);
+      errormap.insert(terr, nbh);
+      wpthash.insert(goner.prev, terr);
     }
     if (goner.next != nullptr) {
       assert(wpthash.contains(goner.next));
-      trackerror te = wpthash.value(goner.next);
-      assert(errormap.contains(te));
-      neighborhood nb = errormap.value(te);
-      nb.prev = goner.prev;
-      errormap.remove(te);
-      te.dist = compute_track_error(nb);
-      errormap.insert(te, nb);
-      wpthash.insert(goner.next, te);
+      trackerror terr = wpthash.value(goner.next);
+      assert(errormap.contains(terr));
+      neighborhood nbh = errormap.value(terr);
+      nbh.prev = goner.prev;
+      errormap.remove(terr);
+      terr.dist = compute_track_error(nbh);
+      errormap.insert(terr, nbh);
+      wpthash.insert(goner.next, terr);
     }
 
     /* compute impact of deleting next point */
