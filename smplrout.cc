@@ -77,7 +77,7 @@ inline bool operator<(const SimplifyRouteFilter::trackerror& lhs, const Simplify
   return ((lhs.dist > rhs.dist) || ((lhs.dist == rhs.dist) && (lhs.wptpos < rhs.wptpos)));
 }
 
-double SimplifyRouteFilter::compute_track_error(const neighborhood& nb)
+double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
 {
   /* if no previous, this is an endpoint and must be preserved. */
   if (nb.prev == nullptr) {

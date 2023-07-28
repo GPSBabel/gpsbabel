@@ -108,13 +108,7 @@ private:
 
   /* Member Functions */
 
-  static void free_xte(struct xte* xte_rec);
-  void routesimple_waypt_pr(const Waypoint* wpt);
-  double compute_track_error(const neighborhood& nb);
-  void compute_xte(struct xte* xte_rec);
-  static int compare_xte(const void* a, const void* b);
-  void routesimple_head(const route_head* rte);
-  void shuffle_xte(struct xte* xte_rec);
+  double compute_track_error(const neighborhood& nb) const;
   void routesimple_tail(const route_head* rte);
 
   /* Data Members */
@@ -123,6 +117,7 @@ private:
   double error = 0;
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
+  int delete_flag{}; // &delete_flag != nullptr
 
   char* countopt = nullptr;
   char* erroropt = nullptr;
@@ -155,7 +150,6 @@ private:
     },
   };
 
-  int delete_flag; // &delete_flag != nullptr
 };
 
 #endif // FILTERS_ENABLED
