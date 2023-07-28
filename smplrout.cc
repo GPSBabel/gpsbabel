@@ -1,7 +1,7 @@
 /*
     Route / track simplification filter
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@
 
 #include <cassert>
 #include <cstdlib>              // for strtol
-#include <utility>              // for swap
 
 #include <QDateTime>            // for QDateTime
 #include <QHash>                // for QHash
@@ -208,7 +207,8 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     /* remove the record with the lowest XTE */
     neighborhood goner = errormap.last();
     goner.wpt->extra_data = &delete_flag; // mark for deletion
-    errormap.remove(errormap.lastKey()); // efficiency?
+    errormap.remove(errormap.lastKey());
+    // wpthash.remove(goner.wpt);  removal not necessary
 
     /* recompute neighbors of point marked for deletion. */
     if (goner.prev != nullptr) {
@@ -250,38 +250,36 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   } /* end of too many records loop */
 
   /* delete marked points */
-#if 0 // O(n^2)
-  const auto oldlist = rte->waypoint_list;
-  for (auto* wpt : oldlist) {
-    if (wpt->extra_data != nullptr) {
-      (*waypt_del_fnp)(const_cast<route_head*>(rte),
-                       wpt);
-    }
-  }
-#else
+  // For lineary complexity build a new list from the points we keep.
   WaypointList oldlist;
   (*route_swap_wpts_fnp)(const_cast<route_head*>(rte), oldlist);
 
+  // mimic trkseg handling from WaypointList::del_rte_waypt
+  bool inhereit_new_trkseg = false;
   for (Waypoint* wpt : qAsConst(oldlist)) {
     if (wpt->extra_data == nullptr) {
+      if (inhereit_new_trkseg) {
+        wpt->wpt_flags.new_trkseg = 1;
+        inhereit_new_trkseg = false;
+      }
       (*route_add_wpt_fnp)(const_cast<route_head*>(rte), wpt, u"RPT", 3);
     } else {
+      if (wpt->wpt_flags.new_trkseg) {
+        inhereit_new_trkseg = true;
+      }
       delete wpt;
     }
   }
-#endif
 }
 
 void SimplifyRouteFilter::process()
 {
   RteHdFunctor<SimplifyRouteFilter> routesimple_tail_f(this, &SimplifyRouteFilter::routesimple_tail);
 
-  waypt_del_fnp = route_del_wpt;
   route_add_wpt_fnp = route_add_wpt;
   route_swap_wpts_fnp = route_swap_wpts;
   route_disp_all(nullptr, routesimple_tail_f, nullptr);
 
-  waypt_del_fnp = track_del_wpt;
   route_add_wpt_fnp = track_add_wpt;
   route_swap_wpts_fnp = track_swap_wpts;
   track_disp_all(nullptr, routesimple_tail_f, nullptr);

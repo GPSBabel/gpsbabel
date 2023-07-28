@@ -1,7 +1,7 @@
 /*
     Route / track simplification filter
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,11 +59,12 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
+#include <QString>               // for QString
+#include <QStringView>           // for QStringView
+#include <QVector>               // for QVector
 
-#include "defs.h"    // for route_head (ptr only), Waypoint (ptr only), ARGT...
-#include "filter.h"  // for Filter
+#include "defs.h"
+#include "filter.h"              // for Filter
 
 
 #if FILTERS_ENABLED
@@ -128,7 +129,6 @@ private:
   char* xteopt = nullptr;
   char* lenopt = nullptr;
   char* relopt = nullptr;
-  void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt) {};
   void (*route_add_wpt_fnp)(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits) {};
   void (*route_swap_wpts_fnp)(route_head* rte, WaypointList& other) {};
 
