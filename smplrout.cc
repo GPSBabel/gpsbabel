@@ -235,13 +235,12 @@ void SimplifyRouteFilter::shuffle_xte(struct xte* xte_rec)
 
 void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 {
-  int i;
   if (!cur_rte) {
     return;
   }
 
   /* compute all distances */
-  for (i = 0; i < xte_count ; i++) {
+  for (int i = 0; i < xte_count ; i++) {
     compute_xte(xte_recs+i);
   }
 
@@ -257,7 +256,7 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   }
 
 
-  for (i = 0; i < xte_count; i++) {
+  for (int i = 0; i < xte_count; i++) {
     xte_recs[i].intermed->xte_rec = xte_recs+i;
   }
   // Ensure totalerror starts with the distance between first and second points
@@ -273,23 +272,8 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
   while ((xte_count) &&
          (((limit_basis == limit_basis_t::count) && (count < xte_count)) ||
           ((limit_basis == limit_basis_t::error) && (totalerror < error)))) {
-    i = xte_count - 1;
+    int i = xte_count - 1;
     /* remove the record with the lowest XTE */
-    if (limit_basis == limit_basis_t::error) {
-      switch (metric) {
-      case metric_t::crosstrack:
-      case metric_t::relative:
-        if (i > 1) {
-          totalerror = xte_recs[i-1].distance;
-        } else {
-          totalerror = xte_recs[i].distance;
-        }
-        break;
-      case metric_t::length:
-        totalerror += xte_recs[i].distance;
-        break;
-      }
-    }
     (*waypt_del_fnp)(const_cast<route_head*>(rte),
                      const_cast<Waypoint*>(xte_recs[i].intermed->wpt));
     delete xte_recs[i].intermed->wpt;
@@ -306,8 +290,23 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     }
     xte_count--;
     free_xte(xte_recs+xte_count);
-    /* end of loop */
-  }
+
+    /* compute impact of deleting next point */
+    if (xte_count) {
+      if (limit_basis == limit_basis_t::error) {
+        i = xte_count - 1;
+        switch (metric) {
+        case metric_t::crosstrack:
+        case metric_t::relative:
+          totalerror = xte_recs[i].distance;
+          break;
+        case metric_t::length:
+          totalerror += xte_recs[i].distance;
+          break;
+        }
+      }
+    }
+  } /* end of loop */
   if (xte_count) {
     do {
       xte_count--;
