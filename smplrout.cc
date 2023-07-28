@@ -207,8 +207,9 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     /* remove the record with the lowest XTE */
     neighborhood goner = errormap.last();
     goner.wpt->extra_data = &delete_flag; // mark for deletion
-    errormap.remove(errormap.lastKey());
-    // wpthash.remove(goner.wpt);  removal not necessary
+    // errormap.remove(lastKey());  // with Qt 5.12.12, 5.15.2 results in asan heap-use-after-free errors in build_extra_tests.sh
+    errormap.erase(--errormap.end()); // in Qt6 can use cend().
+    // wpthash.remove(goner.wpt); // removal not necessary
 
     /* recompute neighbors of point marked for deletion. */
     if (goner.prev != nullptr) {
