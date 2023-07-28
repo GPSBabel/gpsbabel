@@ -96,18 +96,18 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   switch (metric) {
   case metric_t::crosstrack:
     track_error = radtomiles(linedist(
-                         wpt1->latitude, wpt1->longitude,
-                         wpt2->latitude, wpt2->longitude,
-                         wpt3->latitude, wpt3->longitude));
+                               wpt1->latitude, wpt1->longitude,
+                               wpt2->latitude, wpt2->longitude,
+                               wpt3->latitude, wpt3->longitude));
     break;
   case metric_t::length:
     track_error = radtomiles(
-              gcdist(wpt1->latitude, wpt1->longitude,
-                     wpt3->latitude, wpt3->longitude) +
-              gcdist(wpt3->latitude, wpt3->longitude,
-                     wpt2->latitude, wpt2->longitude) -
-              gcdist(wpt1->latitude, wpt1->longitude,
-                     wpt2->latitude, wpt2->longitude));
+                    gcdist(wpt1->latitude, wpt1->longitude,
+                           wpt3->latitude, wpt3->longitude) +
+                    gcdist(wpt3->latitude, wpt3->longitude,
+                           wpt2->latitude, wpt2->longitude) -
+                    gcdist(wpt1->latitude, wpt1->longitude,
+                           wpt2->latitude, wpt2->longitude));
     break;
   case metric_t::relative:
   default: // eliminate false positive warning with g++ 11.3.0: ‘error’ may be used uninitialized in this function [-Wmaybe-uninitialized]
@@ -123,13 +123,13 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
       track_error = radtometers(gcdist(
-                            wpt3->latitude, wpt3->longitude,
-                            reslat, reslon));
+                                  wpt3->latitude, wpt3->longitude,
+                                  reslat, reslon));
     } else { // else distance to connecting line
       track_error = radtometers(linedist(
-                            wpt1->latitude, wpt1->longitude,
-                            wpt2->latitude, wpt2->longitude,
-                            wpt3->latitude, wpt3->longitude));
+                                  wpt1->latitude, wpt1->longitude,
+                                  wpt2->latitude, wpt2->longitude,
+                                  wpt3->latitude, wpt3->longitude));
     }
     // error relative to horizontal precision
     track_error /= (6 * wpt3->hdop);
