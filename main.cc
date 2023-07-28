@@ -470,7 +470,6 @@ run(const char* prog_name)
       if (filter) {
         if (global_opts.debug_level > 0)  {
           timer.start();
-qDebug() << timer.elapsed();
         }
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
