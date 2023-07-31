@@ -84,13 +84,8 @@ constexpr double MILES_TO_METERS(double a) { return a * kMetersPerMile;}
 constexpr double METERS_TO_MILES(double a) { return a * kMilesPerMeter;}
 constexpr double FATHOMS_TO_METERS(double a) { return a * 1.8288;}
 
-template <typename T>
-requires std::integral<T> || std::floating_point<T>
-T CelsiusToFahrenheit(T celsius) { return (celsius * 1.8) + 32; }
-
-template <typename T>
-requires std::integral<T> || std::floating_point<T>
-T FahrenheitToCelsius(T a) { return (a - 32.0) / 1.8;}
+constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (a * 1.8) + 32.0;}
+constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (a - 32.0) / 1.8;}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;
@@ -120,8 +115,20 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
+#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
+#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
+#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
+#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
+
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+
+/* Pathname separator character */
+#if __WIN32__
+#  define GB_PATHSEP '\\'
+#else
+#  define GB_PATHSEP '/'
+#endif
 
 
 /*
@@ -244,13 +251,33 @@ public:
     shortname_is_synthetic(0),
     fmt_use(0),
     is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
+    new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   unsigned int is_split:1;		/* the waypoint represents a split */
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+};
+
+// These are dicey as they're collected on read. Subsequent filters may change
+// things, though it's unlikely to matter in practical terms.  Don't use these
+// if a false positive would be deleterious.
+#
+class global_trait
+{
+public:
+  global_trait() :
+    trait_geocaches(0),
+    trait_heartrate(0),
+    trait_cadence(0),
+    trait_power(0),
+    trait_depth(0),
+    trait_temperature(0) {}
+  unsigned int trait_geocaches:1;
+  unsigned int trait_heartrate:1;
+  unsigned int trait_cadence:1;
+  unsigned int trait_power:1;
+  unsigned int trait_depth:1;
+  unsigned int trait_temperature:1;
 };
 
 /*
@@ -452,10 +479,8 @@ public:
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
-  void del_marked_wpts();
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
-  iterator waypt_del(iterator it) {return erase(it);}
   void del_rte_waypt(Waypoint* wpt);
   void waypt_compute_bounds(bounds* bounds) const;
   Waypoint* find_waypt_by_name(const QString& name) const;
@@ -491,11 +516,11 @@ public:
   using QList<Waypoint*>::size_type;
 };
 
+const global_trait* get_traits();
 void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
-void del_marked_wpts();
 unsigned int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
@@ -633,7 +658,6 @@ public:
   void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
-  void del_marked_wpts(route_head* rte);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
   void copy(RouteList** dst) const;
@@ -694,8 +718,6 @@ void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT"
 void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
-void route_del_marked_wpts(route_head* rte);
-void track_del_marked_wpts(route_head* rte);
 void route_swap_wpts(route_head* rte, WaypointList& other);
 void track_swap_wpts(route_head* rte, WaypointList& other);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
@@ -820,6 +842,29 @@ using ff_write = void (*)();
 using ff_exit = void (*)();
 using ff_writeposn = void (*)(Waypoint*);
 using ff_readposn = Waypoint* (*)(posn_status*);
+
+/*
+ * All shortname functions take a shortname handle as the first arg.
+ * This is an opaque pointer.  Callers must not fondle the contents of it.
+ */
+// This is a crutch until the new C++ shorthandle goes in.
+
+struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
+using short_handle = mkshort_handle_imp*;
+
+char* mkshort(short_handle,  const char*, bool);
+QString mkshort(short_handle,  const QString&);
+short_handle mkshort_new_handle();
+QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
+void mkshort_del_handle(short_handle* h);
+void setshort_length(short_handle, int n);
+void setshort_badchars(short_handle,  const char*);
+void setshort_goodchars(short_handle,  const char*);
+void setshort_mustupper(short_handle,  int n);
+void setshort_mustuniq(short_handle,  int n);
+void setshort_whitespace_ok(short_handle,  int n);
+void setshort_repeating_whitespace_ok(short_handle,  int n);
+void setshort_defname(short_handle, const char* s);
 
 #define ARGTYPE_UNKNOWN    0x00000000U
 #define ARGTYPE_INT        0x00000001U
@@ -965,6 +1010,8 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
+char* strupper(char* src);
+char* strlower(char* src);
 QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();

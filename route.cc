@@ -38,6 +38,8 @@
 RouteList* global_route_list;
 RouteList* global_track_list;
 
+extern void update_common_traits(const Waypoint* wpt);
+
 void
 route_init()
 {
@@ -139,18 +141,6 @@ void
 track_del_wpt(route_head* rte, Waypoint* wpt)
 {
   global_track_list->del_wpt(rte, wpt);
-}
-
-void
-route_del_marked_wpts(route_head* rte)
-{
-  global_route_list->del_marked_wpts(rte);
-}
-
-void
-track_del_marked_wpts(route_head* rte)
-{
-  global_track_list->del_marked_wpts(rte);
 }
 
 void
@@ -444,6 +434,9 @@ RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namep
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
+  if ((this == global_route_list) || (this == global_track_list)) {
+    update_common_traits(wpt);
+  }
 }
 
 void
@@ -451,31 +444,6 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 {
   rte->waypoint_list.del_rte_waypt(wpt);
   --waypt_ct;
-}
-
-void
-RouteList::del_marked_wpts(route_head* rte)
-{
-  // For lineary complexity build a new list from the points we keep.
-  WaypointList oldlist;
-  swap_wpts(rte, oldlist);
-
-  // mimic trkseg handling from WaypointList::del_rte_waypt
-  bool inherit_new_trkseg = false;
-  for (Waypoint* wpt : qAsConst(oldlist)) {
-    if (wpt->wpt_flags.marked_for_deletion) {
-      if (wpt->wpt_flags.new_trkseg) {
-        inherit_new_trkseg = true;
-      }
-      delete wpt;
-    } else {
-      if (inherit_new_trkseg) {
-        wpt->wpt_flags.new_trkseg = 1;
-        inherit_new_trkseg = false;
-      }
-      add_wpt(rte, wpt, false, u"RPT", 3);
-    }
-  }
 }
 
 void
