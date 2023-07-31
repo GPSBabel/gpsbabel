@@ -1,7 +1,7 @@
 /*
     Route / track simplification filter
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,11 +59,12 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
+#include <QString>               // for QString
+#include <QStringView>           // for QStringView
+#include <QVector>               // for QVector
 
-#include "defs.h"    // for route_head (ptr only), Waypoint (ptr only), ARGT...
-#include "filter.h"  // for Filter
+#include "defs.h"
+#include "filter.h"              // for Filter
 
 
 #if FILTERS_ENABLED
@@ -71,6 +72,13 @@
 class SimplifyRouteFilter:public Filter
 {
 public:
+
+  /* Types */
+
+  struct trackerror {
+    double dist;
+    WaypointList::size_type wptpos;
+  };
 
   /* Member Functions */
 
@@ -88,26 +96,10 @@ private:
   enum class limit_basis_t {count, error};
   enum class metric_t {crosstrack, length, relative};
 
-  struct xte_intermed;
-
-  struct xte {
-    double distance{0.0};
-    struct xte_intermed* intermed {
-      nullptr
-    };
-  };
-
-  struct xte_intermed {
-    struct xte* xte_rec {
-      nullptr
-    };
-    struct xte_intermed* next {
-      nullptr
-    };
-    struct xte_intermed* prev {
-      nullptr
-    };
-    const Waypoint* wpt{nullptr};
+  struct neighborhood {
+    Waypoint* wpt;
+    Waypoint* prev;
+    Waypoint* next;
   };
 
   /* Constants */
@@ -116,28 +108,24 @@ private:
 
   /* Member Functions */
 
-  static void free_xte(struct xte* xte_rec);
-  void routesimple_waypt_pr(const Waypoint* wpt);
-  void compute_xte(struct xte* xte_rec);
-  static int compare_xte(const void* a, const void* b);
-  void routesimple_head(const route_head* rte);
-  void shuffle_xte(struct xte* xte_rec);
+  double compute_track_error(const neighborhood& nb) const;
   void routesimple_tail(const route_head* rte);
 
   /* Data Members */
 
   int count = 0;
-  double totalerror = 0;
   double error = 0;
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
+  int delete_flag{}; // &delete_flag != nullptr
 
   char* countopt = nullptr;
   char* erroropt = nullptr;
   char* xteopt = nullptr;
   char* lenopt = nullptr;
   char* relopt = nullptr;
-  void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt) {};
+  void (*route_add_wpt_fnp)(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits) {};
+  void (*route_swap_wpts_fnp)(route_head* rte, WaypointList& other) {};
 
   QVector<arglist_t> args = {
     {
@@ -162,10 +150,6 @@ private:
     },
   };
 
-  struct xte_intermed* tmpprev = nullptr;
-  int xte_count = 0;
-  const route_head* cur_rte = nullptr;
-  struct xte* xte_recs = nullptr;
 };
 
 #endif // FILTERS_ENABLED
