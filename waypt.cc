@@ -88,6 +88,12 @@ waypt_del(Waypoint* wpt)
   global_waypoint_list->waypt_del(wpt);
 }
 
+void
+del_wpts(wpt_evaluator_t ev)
+{
+  global_waypoint_list->del_wpts(ev);
+}
+
 unsigned int
 waypt_count()
 {
@@ -658,6 +664,23 @@ WaypointList::waypt_del(Waypoint* wpt)
   const int idx = this->indexOf(wpt);
   assert(idx >= 0);
   removeAt(idx);
+}
+
+void
+WaypointList::del_wpts(wpt_evaluator_t evaluator)
+{
+  /* delete marked points */
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap(oldlist);
+
+  for (Waypoint* wpt : qAsConst(oldlist)) {
+    if (!evaluator(wpt)) {
+      waypt_add(wpt);
+    } else {
+      delete wpt;
+    }
+  }
 }
 
 void

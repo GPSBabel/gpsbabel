@@ -139,7 +139,7 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   return track_error;
 }
 
-void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
+void SimplifyRouteFilter::routesimple_head(const route_head* rte)
 {
   /* short-circuit if we already have fewer than the max points */
   if ((limit_basis == limit_basis_t::count) && count >= rte->rte_waypt_ct()) {
@@ -249,41 +249,23 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
     }
 
   } /* end of too many records loop */
-
-  /* delete marked points */
-  // For lineary complexity build a new list from the points we keep.
-  WaypointList oldlist;
-  (*route_swap_wpts_fnp)(const_cast<route_head*>(rte), oldlist);
-
-  // mimic trkseg handling from WaypointList::del_rte_waypt
-  bool inherit_new_trkseg = false;
-  for (Waypoint* wpt : qAsConst(oldlist)) {
-    if (wpt->extra_data == nullptr) {
-      if (inherit_new_trkseg) {
-        wpt->wpt_flags.new_trkseg = 1;
-        inherit_new_trkseg = false;
-      }
-      (*route_add_wpt_fnp)(const_cast<route_head*>(rte), wpt, u"RPT", 3);
-    } else {
-      if (wpt->wpt_flags.new_trkseg) {
-        inherit_new_trkseg = true;
-      }
-      delete wpt;
-    }
-  }
 }
 
 void SimplifyRouteFilter::process()
 {
-  RteHdFunctor<SimplifyRouteFilter> routesimple_tail_f(this, &SimplifyRouteFilter::routesimple_tail);
+  auto common_head_lambda = [this](const route_head* rte)->void {
+    routesimple_head(rte);
+  };
 
-  route_add_wpt_fnp = route_add_wpt;
-  route_swap_wpts_fnp = route_swap_wpts;
-  route_disp_all(nullptr, routesimple_tail_f, nullptr);
+  auto route_tail_lambda = [](const route_head* rte)->void {
+    route_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+  };
+  route_disp_all(common_head_lambda, route_tail_lambda, nullptr);
 
-  route_add_wpt_fnp = track_add_wpt;
-  route_swap_wpts_fnp = track_swap_wpts;
-  track_disp_all(nullptr, routesimple_tail_f, nullptr);
+  auto track_tail_lambda = [](const route_head* rte)->void {
+    track_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+  };
+  track_disp_all(common_head_lambda, track_tail_lambda, nullptr);
 }
 
 void SimplifyRouteFilter::init()

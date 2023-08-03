@@ -19,6 +19,8 @@
 
  */
 
+#include "arcdist.h"
+
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
 #include <cstdlib>                // for strtod
@@ -28,7 +30,6 @@
 #include <QtGlobal>               // for foreach, qPrintable, qint64
 
 #include "defs.h"
-#include "arcdist.h"
 #include "grtcirc.h"              // for RAD, gcdist, linedistprj, radtomi
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/logging.h"     // for Fatal
@@ -163,12 +164,11 @@ void ArcDistanceFilter::process()
 
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
-    auto* ed = (extra_data*) wp->extra_data;
-    wp->extra_data = nullptr;
-    if (ed) {
+    if (wp->extra_data) {
+      auto* ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
-        waypt_del(wp);
-        delete wp;
+        wp->extra_data = &delete_flag; // mark for deletion
         removed++;
       } else if (projectopt) {
         wp->longitude = ed->prjlongitude;
@@ -208,6 +208,7 @@ void ArcDistanceFilter::process()
       delete ed;
     }
   }
+  del_wpts(wpt_extra_data_evaluator); // delete marked wpts
   if (global_opts.verbose_status > 0) {
     printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
   }

@@ -22,10 +22,12 @@
 #ifndef RADIUS_H_INCLUDED_
 #define RADIUS_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
-#include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED
-#include "filter.h"  // for Filter
+#include "defs.h"     // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_STRING, Waypoint
+#include "filter.h"   // for Filter
+#include "grtcirc.h"  // for RAD, gcdist, radtomiles
 
 #if FILTERS_ENABLED
 
@@ -41,6 +43,23 @@ public:
   void deinit() override;
 
 private:
+  /* Types */
+
+  struct extra_data {
+    double distance;
+  };
+
+  /* Member Functions */
+
+  static bool wpt_deletion_evaluator(const Waypoint* wpt) {return wpt->extra_data == &delete_flag;}
+  static double gc_distance(double lat1, double lon1, double lat2, double lon2)
+  {
+    return radtomiles(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+  }
+
+  /* Data Members */
+
+  static int delete_flag;
   double pos_dist{};
   char* distopt = nullptr;
   char* latopt = nullptr;
@@ -52,10 +71,6 @@ private:
   int maxct{};
 
   Waypoint* home_pos{};
-
-  struct extra_data {
-    double distance;
-  };
 
   QVector<arglist_t> args = {
     {
@@ -87,8 +102,6 @@ private:
       nullptr, ARGTYPE_STRING, nullptr, nullptr, nullptr
     },
   };
-
-  static double gc_distance(double lat1, double lon1, double lat2, double lon2);
 
 };
 #endif // FILTERS_ENABLED

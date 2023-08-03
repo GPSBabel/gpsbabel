@@ -109,7 +109,7 @@ private:
   /* Member Functions */
 
   double compute_track_error(const neighborhood& nb) const;
-  void routesimple_tail(const route_head* rte);
+  void routesimple_head(const route_head* rte);
 
   /* Data Members */
 
@@ -124,8 +124,6 @@ private:
   char* xteopt = nullptr;
   char* lenopt = nullptr;
   char* relopt = nullptr;
-  void (*route_add_wpt_fnp)(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits) {};
-  void (*route_swap_wpts_fnp)(route_head* rte, WaypointList& other) {};
 
   QVector<arglist_t> args = {
     {

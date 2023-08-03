@@ -469,6 +469,9 @@ public:
 };
 
 using waypt_cb = void (*)(const Waypoint*);
+using wpt_evaluator_t = bool (*)(const Waypoint*);
+inline bool wpt_extra_data_evaluator(const Waypoint* wpt) {return wpt->extra_data != nullptr;}
+
 
 // TODO: Consider using composition instead of private inheritance.
 class WaypointList : private QList<Waypoint*>
@@ -479,6 +482,7 @@ public:
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
+  void del_wpts(wpt_evaluator_t ev);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_rte_waypt(Waypoint* wpt);
@@ -521,6 +525,7 @@ void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
+void del_wpts(wpt_evaluator_t ev);
 unsigned int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
@@ -658,6 +663,7 @@ public:
   void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
+  void del_wpts(route_head* rte, wpt_evaluator_t ev);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
   void copy(RouteList** dst) const;
@@ -718,8 +724,8 @@ void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT"
 void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
-void route_swap_wpts(route_head* rte, WaypointList& other);
-void track_swap_wpts(route_head* rte, WaypointList& other);
+void route_del_wpts(route_head* rte, wpt_evaluator_t ev);
+void track_del_wpts(route_head* rte, wpt_evaluator_t ev);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
 void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
 //void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
