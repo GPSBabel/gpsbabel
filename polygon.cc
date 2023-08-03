@@ -301,13 +301,12 @@ void PolygonFilter::process()
   foreach (Waypoint* wp, *global_waypoint_list) {
     if (wp->extra_data) {
       ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if (ed->override) {
         ed->state = INSIDE;
       }
       if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
         wp->extra_data = &delete_flag; // mark for deletion
-      } else {
-        wp->extra_data = nullptr;
       }
       delete ed;
     }

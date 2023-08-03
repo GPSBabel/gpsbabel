@@ -36,8 +36,6 @@
 void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype)
 {
   if (!waypt_list.empty()) {
-    // We really don't need to copy the waypt_list, but the nested for loops
-    // are O(n^2) and the copy is O(n) so the impact on performance is minimal.
     QList<WptRecord> qlist;
   
     for (auto* const waypointp : waypt_list) {
