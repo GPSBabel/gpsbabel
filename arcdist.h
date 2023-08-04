@@ -58,7 +58,6 @@ private:
 
   /* Data Members */
 
-  int delete_flag{}; // &delete_flag != nullptr
   double pos_dist{};
   char* distopt = nullptr;
   char* arcfileopt = nullptr;

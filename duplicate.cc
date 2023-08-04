@@ -126,18 +126,7 @@ void DuplicateFilter::process()
       }
     }
   }
-
-  // For lineary complexity build a new list from the points we keep.
-  WaypointList oldlist;
-  waypt_swap(oldlist);
-  
-  for (Waypoint* wpt : qAsConst(oldlist)) {
-    if (wpt->extra_data == nullptr) {
-      waypt_add(wpt);
-    } else {
-      delete wpt;
-    }
-  }
+  del_wpts(wpt_extra_data_evaluator);
 }
 
 #endif

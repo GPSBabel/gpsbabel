@@ -55,7 +55,6 @@ private:
 
   /* Data Members */
 
-  int delete_flag{}; // &delete_flag != nullptr
   char* polyfileopt = nullptr;
   char* exclopt = nullptr;
 

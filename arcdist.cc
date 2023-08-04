@@ -162,6 +162,7 @@ void ArcDistanceFilter::process()
     track_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   }
 
+  int delete_flag; // &delete_flag != nullptr
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
     if (wp->extra_data) {

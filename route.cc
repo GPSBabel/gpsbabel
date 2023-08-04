@@ -156,6 +156,18 @@ track_del_wpts(route_head* rte, wpt_evaluator_t ev)
 }
 
 void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
+}
+
+void
 route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 {
 // wc == nullptr

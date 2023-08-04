@@ -298,6 +298,7 @@ void PolygonFilter::process()
   }
   stream.close();
 
+  int delete_flag{}; // &delete_flag != nullptr
   foreach (Waypoint* wp, *global_waypoint_list) {
     if (wp->extra_data) {
       ed = (extra_data*) wp->extra_data;
