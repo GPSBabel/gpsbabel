@@ -1,0 +1,43 @@
+<para>
+  Google gives you two options to download your location history:
+  In Google Maps, you can go into your Timeline and download your location
+  history a day at a time as KML files. Or, in Google Takeout, you can
+  download all of your location history all at once as a ZIP of JSON files,
+  one for each month.
+</para>
+
+<para>
+  The "googletimeline" GPSBabel format will process the location history
+  JSON files. It can operate on individual JSON files, the folders in the
+  ZIP that contain a year's worth of data, or the entire location history
+  at once.
+</para>
+
+<para>
+  To obtain your Google Takeout History:
+  <itemizedlist>
+    <listitem>Go to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://takeout.google.com/">takeout.google.com</link></listitem>
+    <listitem>Click on "Deselect all"</listitem>
+    <listitem>Scroll down to "Location History" and check the box</listitem>
+    <listitem>Scroll to the bottom of the page and click on "Next step"</listitem>
+    <listitem>Click on "Create export"</listitem>
+  </itemizedlist>
+  In a little while, you will receive an email to download your location
+  history, which will be one or more zipfiles. Unzip everything into the same
+  folder. Your history will be in the folder "Takeout/Location History/Semantic Location History" within this folder.
+</para>
+
+<example xml:id="googletimeline-all">
+  <title>Convert entire location history to a single GPX file</title>
+  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History" -o gpx -F all.gpx</userinput></para>
+</example>
+
+<example xml:id="googletimeline-year">
+  <title>Convert a single years' location history to GPX</title>
+  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History/2022" -o gpx -F 2022.gpx</userinput></para>
+</example>
+
+<example xml:id="googletimeline-month">
+  <title>Convert a single months' location history to GPX</title>
+  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History/2023/2023_MARCH.json"</userinput></para>
+</example>

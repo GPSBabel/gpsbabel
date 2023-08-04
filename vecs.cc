@@ -69,6 +69,7 @@
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
+#include "googletimeline.h"    // for GoogleTimelineFormat
 
 
 extern ff_vecs_t geo_vecs;
@@ -162,6 +163,7 @@ struct Vecs::Impl {
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
+  GoogleTimelineFormat google_timeline_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -490,6 +492,13 @@ struct Vecs::Impl {
       "qstarz_bl-1000",
       "Qstarz BL-1000",
       nullptr,
+      nullptr,
+    },
+    {
+      &google_timeline_fmt,
+      "googletimeline",
+      "Google Takeout Timeline Location History (JSON)",
+      "json",
       nullptr,
     }
 #endif // MAXIMAL_ENABLED

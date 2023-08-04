@@ -10,11 +10,12 @@
 /debug/
 /gpsbabel
 /gpsbabel-debug
-/gpsbabel_coverage.xml
 /gpsbabel.exe
 /gpsbabel.fo
 /gpsbabel.html
 /gpsbabel.pdf
+/gpsbabel_autogen/
+/gpsbabel_coverage.xml
 /Makefile
 .qmake.cache
 .qmake.stash
@@ -26,11 +27,13 @@
 *.a
 .ninja_deps
 .ninja_log
+.qt
 build.ninja
 rules.ninja
 cmake_install.cmake
 CMakeCache.txt
 CMakeFiles/
+CTestTestfile.cmake
 /GPSBabel[0-9]*.[0-9]*.[0-9]*/
 /GPSBabel[0-9]*.[0-9]*.[0-9]*.tar.bz2
 /makelinuxdist.sh
@@ -47,3 +50,4 @@ CMakeFiles/
 /gbversion.h
 /qrc_gpsbabel.cpp
 /.vscode/
+Testing

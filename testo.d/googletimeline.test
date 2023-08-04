@@ -1,0 +1,11 @@
+if ! echo '["foo"]' | jq -r '.[0]' > /dev/null; then
+  echo "jq not installed, skipping googletimeline tests"
+	return 0
+fi
+
+rm -f ${TMPDIR}/googletimeline.geojson
+gpsbabel \
+  -i googletimeline \
+  -f ${REFERENCE}/googletimeline \
+  -o geojson \
+  -F ${TMPDIR}/googletimeline.geojson

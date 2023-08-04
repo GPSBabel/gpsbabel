@@ -1,0 +1,417 @@
+#include <QDir>
+#include <QIODevice>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+
+#include "src/core/file.h"
+
+#include "googletimeline.h"
+
+#define MYNAME "Google Timeline Location"
+#define TIMELINE_OBJECTS "timelineObjects"
+#define PLACE_VISIT "placeVisit"
+#define ACTIVITY_SEGMENT "activitySegment"
+#define ACTIVITY_TYPE "activityType"
+#define LOCATION "location"
+#define LOCATION_LATE7 "latitudeE7"
+#define LOCATION_LONE7 "longitudeE7"
+#define NAME "name"
+#define ADDRESS "address"
+#define DURATION "duration"
+#define START_TIMESTAMP "startTimestamp"
+#define START_LOCATION "startLocation"
+#define END_TIMESTAMP "endTimestamp"
+#define END_LOCATION "endLocation"
+#define TIMESTAMP "timestamp"
+#define SIMPLE_PATH "simplifiedRawPath"
+#define POINTS "points"
+#define WAYPOINT_PATH "waypointPath"
+#define WAYPOINTS  "waypoints"
+// for some reason that probably only a former Google engineer knows,
+// we use "latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".
+// +10 points for brevity, but -100 points for inconsistency.
+#define LATE7 "latE7"
+#define LONE7 "lngE7"
+
+const QList<QString> month_names{
+  "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
+  "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+};
+
+static void _fatal(const QString& message) {
+  fatal(FatalMsg().nospace() << MYNAME << ": " << message);
+}
+
+static void _warning(const QString& message) {
+  Warning().nospace() << MYNAME << ": " << message;
+}
+
+static void title_case(QString& title)
+{
+  bool new_word = true;
+  for (int i = 0; i < title.size(); ++ i) {
+    if (title[i] == '_' || title[i] == ' ') {
+      new_word = true;
+      if (title[i] == '_') {
+        title[i] = ' ';
+      }
+    } else if (new_word) {
+      new_word = false;
+      title[i] = title[i].toUpper();
+    } else {
+      title[i] = title[i].toLower();
+    }
+  }
+}
+
+void 
+GoogleTimelineFormat::rd_init(const QString& fname) {
+  Debug(1) << "rd_init(" << fname << ")";
+  inputStream = GoogleTimelineInputStream(fname);
+}
+
+void
+GoogleTimelineFormat::read()
+{
+  int items = 0;
+  int points = 0;
+  int place_visits = 0;
+  int activity_segments = 0;
+  QJsonValue iterator = inputStream.next();
+
+  for (; !iterator.isNull(); iterator = inputStream.next()) {
+    ++ items;
+    /*
+     * A timelineObject is stored in a single-element dictionary.
+     * The key will be either a "placeVisit" (waypoint) or
+     * "activitySegment" (movement), and the value is another dictionary
+     * containing the timelineObject's details.
+     *
+     */
+    const QJsonObject timelineObjectContainer = iterator.toObject();
+    int len = timelineObjectContainer.size();
+    if (len != 1) {
+      _fatal(
+        QString("expected a single key dict, got ") + QString::number(len) +
+        " keys"
+      );
+    }
+    const QJsonObject::const_iterator timelineObjectIterator =
+      timelineObjectContainer.constBegin();
+    const QString& timelineObjectType = timelineObjectIterator.key();
+    const QJsonObject& timelineObjectDetail =
+      timelineObjectIterator.value().toObject();
+    if (timelineObjectType == PLACE_VISIT) {
+      add_place_visit(timelineObjectDetail);
+      ++ place_visits;
+      ++ points;
+    } else if (timelineObjectType == ACTIVITY_SEGMENT) {
+      points += add_activity_segment(timelineObjectDetail);
+      ++ activity_segments;
+    } else {
+      _fatal(
+        QString("unknown timeline object type \"") + timelineObjectType +
+        "\""
+      );
+    }
+  }
+  Debug(1) << MYNAME << ": Processed " << items << " items: " <<
+    place_visits << " " PLACE_VISIT << ", " << activity_segments <<
+    " " ACTIVITY_SEGMENT << " (" << points << " points total)";
+}
+
+/* create a waypoint from late7/lone7 and optional metadata */
+Waypoint*
+GoogleTimelineFormat::_waypoint(
+  int lat_e7,
+  int lon_e7,
+  const QString* shortname,
+  const QString* description,
+  const QString* start_str
+)
+{
+  Waypoint* waypoint = new Waypoint();
+  waypoint->latitude = (double)(lat_e7 / 1e7);
+  waypoint->longitude = (double)(lon_e7 / 1e7);
+  if (shortname && (*shortname).length() > 0) {
+    waypoint->shortname = *shortname;
+  }
+  if (description && (*description).length() > 0) {
+    waypoint->description = *description;
+  }
+  if (start_str && (*start_str).length() > 0) {
+    gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
+    waypoint->SetCreationTime(start);
+  }
+  return waypoint;
+}
+
+void
+GoogleTimelineFormat::add_place_visit(const QJsonObject& placeVisit)
+{
+  /*
+   * placeVisits:
+   *   one lat/long, will always contain "location.address", may also
+   *   contain "location.name"
+   *   "duration" contains start and end times
+   *
+   *  TODO: capture end time/duration
+   */
+  const QJsonObject& loc = placeVisit[LOCATION].toObject();
+  const QString address = loc[ADDRESS].toString();
+  const QString timestamp = placeVisit[DURATION][START_TIMESTAMP].toString();
+  Waypoint* waypoint;
+
+  if (loc.contains(NAME) && loc[NAME].toString().length() > 0) {
+    QString name = loc[NAME].toString();
+    waypoint = _waypoint(
+      loc[LOCATION_LATE7].toInt(),
+      loc[LOCATION_LONE7].toInt(),
+      name.length() > 0 ? &name : nullptr,
+      &address,
+      &timestamp
+    );
+  } else {
+    waypoint = _waypoint(
+      loc[LOCATION_LATE7].toInt(),
+      loc[LOCATION_LONE7].toInt(),
+      nullptr,
+      &address,
+      &timestamp
+    );
+  }
+
+  waypt_add(waypoint);
+}
+
+static void track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
+  if (waypoint->latitude == 0 and waypoint->longitude == 0) {
+    _warning(
+      QString("Track ") + route->rte_name + "@" +
+      waypoint->creation_time.toPrettyString() +
+      ": Dropping point with no lat/long");
+    return;
+  }
+  track_add_wpt(route, waypoint);
+}
+
+/* add an "activitySegment" (track)
+ * an activitySegment has at least two points (a start and an end) and
+ * may have waypoints in-between.
+ *
+ * returns the total number of points added
+ */
+int
+GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
+{
+  /*
+   * activitySegment:
+   *   one startLocation and one endLocation. there are also waypoints
+   *   in the waypointPath array. the "distance" field appears to be in
+   *   metres. There is a "duration" section with "startTimestamp" and
+   *   "endTimestamp" with "distance" and "duration", "speed" can be
+   *   inferred.
+   *   "activityType" is stuff like "IN_PASSENGER_VEHICLE", "WALKING", etc
+   *
+   *   some activitySegments also include a "parkingEvent".
+   *   TODO: add parkingEvent as its own waypoint
+   */
+  int n_points = 2;
+  Waypoint* waypoint = nullptr;
+  auto* route = new route_head;
+  const QJsonObject startLoc = activitySegment[START_LOCATION].toObject();
+  const QJsonObject endLoc = activitySegment[END_LOCATION].toObject();
+  QString activityType = activitySegment[ACTIVITY_TYPE].toString();
+  title_case(activityType);
+  route->rte_name = activityType;
+  track_add_head(route);
+  QString timestamp;
+  timestamp = activitySegment[DURATION][START_TIMESTAMP].toString();
+  waypoint = _waypoint(
+    startLoc[LOCATION_LATE7].toInt(),
+    startLoc[LOCATION_LONE7].toInt(),
+    nullptr, nullptr,
+    &timestamp
+  );
+  track_maybe_add_wpt(route, waypoint);
+  /* activitySegments give us three sets of waypoints.
+   * 1. "waypoints" dict
+   *    This is available on all tracks, but only includes the
+   *    lat/lon - no timestamp.
+   * 2. "simplifiedRawPath" dict 
+   *    these all have timestamps which provides richer metadata.
+   *    This is not available on all tracks.
+   * 3. An incredibly detailed "roadSegment" list that includes a
+   *    bunch of google placeId's and durations, but no lat/long.
+   *    To get the lat/lon you need to query the Google Places API
+   *    https://maps.googleapis.com/maps/api/place/details/json with:
+   *      placeid=placeId
+   *      key=apiKey
+   *    and then extract "lat" and "lng" from result.geometry.location
+   *    This also costs $17USD per 1,000 location requests
+   *    TODO: add an option to query places API, and an option to count
+   *    how many Google Places requests it would take to process a file
+   *
+   *  For now, we try to use (2), and if (2) is not available, we fall
+   *  back on (1).
+   */
+  if (false && activitySegment.contains(SIMPLE_PATH)) {
+    const QJsonArray points =
+      activitySegment[SIMPLE_PATH][POINTS].toArray();
+    for (const QJsonValueRef pointRef : points) {
+      ++ n_points;
+      const QJsonObject point = pointRef.toObject();
+      timestamp = point[TIMESTAMP].toString();
+      waypoint = _waypoint(
+        point[LATE7].toInt(),
+        point[LONE7].toInt(),
+        nullptr,
+        nullptr,
+        &timestamp
+      );
+      track_maybe_add_wpt(route, waypoint);
+    }
+  } else {
+    const QJsonArray points =
+      activitySegment[WAYPOINT_PATH][WAYPOINTS].toArray();
+    for (const QJsonValueRef pointRef: points) {
+      ++ n_points;
+      const QJsonObject point = pointRef.toObject();
+      /* as waypointPath does not include timestamps, set every
+       * point along the path to the start of the activity
+       */
+      waypoint = _waypoint(
+        point[LATE7].toInt(),
+        point[LONE7].toInt(),
+        nullptr,
+        nullptr,
+        &timestamp
+      );
+      track_maybe_add_wpt(route, waypoint);
+    }
+  }
+  timestamp = activitySegment[DURATION][END_TIMESTAMP].toString();
+  waypoint = _waypoint(
+    endLoc[LOCATION_LATE7].toInt(),
+    endLoc[LOCATION_LONE7].toInt(),
+    nullptr, nullptr,
+    &timestamp
+  );
+  track_maybe_add_wpt(route, waypoint);
+  return n_points;
+}
+
+GoogleTimelineInputStream::GoogleTimelineInputStream() {}
+
+GoogleTimelineInputStream::GoogleTimelineInputStream(const QString& source) {
+  this->sources = { source };
+}
+
+QList<QJsonObject> GoogleTimelineInputStream::readJson(const QString& source) {
+  Debug(1) << "Reading from JSON " << source;
+  auto* ifd = new gpsbabel::File(source);
+  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
+  const QString content = ifd->readAll();
+  QJsonParseError error{};
+  const QJsonDocument doc = QJsonDocument::fromJson(content.toUtf8(), &error);
+  if (error.error != QJsonParseError::NoError) {
+    _fatal(
+      QString("JSON parse error in ") + ifd->fileName() + ": " +
+      error.errorString()
+    );
+  }
+
+  const QJsonObject root = doc.object();
+  const QJsonValue timelineObjects = root.value(TIMELINE_OBJECTS);
+  if (timelineObjects.isNull()) {
+    _fatal(
+      QString(ifd->fileName()) + " is missing required \"" +
+      TIMELINE_OBJECTS + "\" section"
+    );
+  }
+
+  const QJsonArray timelineJson = timelineObjects.toArray();
+  QList<QJsonObject> timeline;
+  for (QJsonValue val : timelineJson) {
+    if (val.isObject()) {
+      timeline.append(val.toObject());
+    } else {
+      _fatal(QString(ifd->fileName()) + " has non-object in timelineObjects");
+    }
+  }
+  ifd->close();
+  delete ifd;
+  if (timeline.isEmpty()) {
+    _warning(QString(source) + " does not contain any timelineObjects");
+  }
+  Debug(1) << "Saw " << timeline.size() << " timelineObjects in " << source;
+  return timeline;
+}
+
+QList<QString> GoogleTimelineInputStream::readDir(const QString& source) {
+  Debug(1) << "Reading from folder " << source;
+  const QDir dir{source};
+  const QFileInfo sourceInfo{source};
+  const QString baseName = sourceInfo.fileName();
+  QList<QString> paths;
+  /* If a directory's name is a 4-digit number, this is a "year" folder
+   * and we will look for YYYY_MONTH.json files.
+   * Otherwise, this is the all-time folder that _contains_ the month
+   * folders
+   */
+  if (baseName.length() == 4 && baseName.toInt() > 0) {
+    for (auto&& month : month_names) {
+      const QString path = source + "/" + baseName + "_" + month + ".json";
+      const QFileInfo info{path};
+      if (info.exists()) {
+        Debug(1) << "Adding file " << path;
+        paths.append(path);
+      } else {
+        Debug(2) << "Did not find " << path;
+      }
+    }
+  } else {
+    for (auto&& entry : dir.entryList()) {
+      const QString path = dir.filePath(entry);
+      if (entry.length() == 4 && entry.toInt() > 0) {
+        Debug(1) << "Adding directory " << path;
+        paths.append(path);
+      } else {
+        _warning(QString("Malformed folder name ") + path);
+      }
+    }
+  }
+  Debug(1) << "Saw " << paths.size() << " paths in " << source;
+  return paths;
+}
+
+void GoogleTimelineInputStream::loadSource(const QString& source) {
+  const QFileInfo info{source};
+  if (info.isDir()) {
+    sources += readDir(source);
+  } else if (info.exists()) {
+    timelineObjects.append(readJson(source));
+  } else {
+    _fatal(source + ": No such file or directory");
+  }
+}
+
+QJsonValue GoogleTimelineInputStream::next() {
+  if (!timelineObjects.isEmpty()) {
+    QJsonValue nextObject = timelineObjects.first();
+    timelineObjects.removeFirst();
+    return nextObject;
+  }
+
+  if (!sources.isEmpty()) {
+    const QString filename = sources.first();
+    sources.removeFirst();
+    loadSource(filename);
+    return next();
+  }
+
+  return QJsonValue();
+}
+
+

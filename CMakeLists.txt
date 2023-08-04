@@ -87,6 +87,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
+  googletimeline.cc
   gtm.cc
   gtrnctr.cc
   html.cc
@@ -380,6 +381,7 @@ set(TESTS
   geojson
   geo
   globalsat_sport
+  googletimeline
   gpsdrive
   gpx
   grapheme
