@@ -251,11 +251,13 @@ public:
     shortname_is_synthetic(0),
     fmt_use(0),
     is_split(0),
-    new_trkseg(0) {}
+    new_trkseg(0),
+    marked_for_deletion(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   unsigned int is_split:1;		/* the waypoint represents a split */
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -479,6 +481,7 @@ public:
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
+  void del_marked_wpts();
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_rte_waypt(Waypoint* wpt);
@@ -521,6 +524,7 @@ void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
+void del_marked_wpts();
 unsigned int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
@@ -658,6 +662,7 @@ public:
   void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
+  void del_marked_wpts(route_head* rte);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
   void copy(RouteList** dst) const;
@@ -718,6 +723,8 @@ void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT"
 void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
+void route_del_marked_wpts(route_head* rte);
+void track_del_marked_wpts(route_head* rte);
 void route_swap_wpts(route_head* rte, WaypointList& other);
 void track_swap_wpts(route_head* rte, WaypointList& other);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
