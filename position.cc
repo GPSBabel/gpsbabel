@@ -64,7 +64,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
               }
   
               qlist[j].deleted = true;
-              qlist.at(j).wpt->extra_data = &delete_flag;
+              qlist.at(j).wpt->wpt_flags.marked_for_deletion = 1;
               something_deleted = true;
             } else {
               // Unlike waypoints, routes and tracks are ordered paths.
@@ -78,7 +78,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
         }
   
         if (something_deleted && (purge_duplicates != nullptr)) {
-          qlist.at(i).wpt->extra_data = &delete_flag;
+          qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }
       }
     }
@@ -88,13 +88,13 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
 void PositionFilter::process()
 {
   position_runqueue(*global_waypoint_list, wptdata);
-  del_wpts(wpt_extra_data_evaluator);
+  del_marked_wpts();
 
   auto position_process_rte_lambda = [this](const route_head* rte) ->void {
     position_runqueue(rte->waypoint_list, rtedata);
   };
   auto rte_trl_lambda = [](const route_head* rte) -> void {
-    route_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    route_del_marked_wpts(const_cast<route_head*>(rte));
   };
   route_disp_all(position_process_rte_lambda, rte_trl_lambda, nullptr);
 
@@ -102,7 +102,7 @@ void PositionFilter::process()
     position_runqueue(rte->waypoint_list, trkdata);
   };
   auto trk_trl_lambda = [](const route_head* rte) -> void {
-    track_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    track_del_marked_wpts(const_cast<route_head*>(rte));
   };
   track_disp_all(position_process_trk_lambda, trk_trl_lambda, nullptr);
 }

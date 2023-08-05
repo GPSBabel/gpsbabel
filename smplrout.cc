@@ -206,7 +206,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
 
     /* remove the record with the lowest XTE */
     neighborhood goner = errormap.last();
-    goner.wpt->extra_data = &delete_flag; // mark for deletion
+    goner.wpt->wpt_flags.marked_for_deletion = 1;
     // errormap.remove(lastKey());  // with Qt 5.12.12, 5.15.2 results in asan heap-use-after-free errors in build_extra_tests.sh
     errormap.erase(--errormap.end()); // in Qt6 can use cend().
     // wpthash.remove(goner.wpt); // removal not necessary
@@ -258,12 +258,12 @@ void SimplifyRouteFilter::process()
   };
 
   auto route_tail_lambda = [](const route_head* rte)->void {
-    route_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    route_del_marked_wpts(const_cast<route_head*>(rte));
   };
   route_disp_all(common_head_lambda, route_tail_lambda, nullptr);
 
   auto track_tail_lambda = [](const route_head* rte)->void {
-    track_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    track_del_marked_wpts(const_cast<route_head*>(rte));
   };
   track_disp_all(common_head_lambda, track_tail_lambda, nullptr);
 }

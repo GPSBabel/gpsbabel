@@ -298,7 +298,6 @@ void PolygonFilter::process()
   }
   stream.close();
 
-  int delete_flag{}; // &delete_flag != nullptr
   foreach (Waypoint* wp, *global_waypoint_list) {
     if (wp->extra_data) {
       ed = (extra_data*) wp->extra_data;
@@ -307,12 +306,12 @@ void PolygonFilter::process()
         ed->state = INSIDE;
       }
       if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
-        wp->extra_data = &delete_flag; // mark for deletion
+        wp->wpt_flags.marked_for_deletion = 1;
       }
       delete ed;
     }
   }
-  del_wpts(wpt_extra_data_evaluator); // delete marked wpts
+  del_marked_wpts();
 }
 
 #endif // FILTERS_ENABLED

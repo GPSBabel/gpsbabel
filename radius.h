@@ -51,7 +51,6 @@ private:
 
   /* Member Functions */
 
-  static bool wpt_deletion_evaluator(const Waypoint* wpt) {return wpt->extra_data == &delete_flag;}
   static double gc_distance(double lat1, double lon1, double lat2, double lon2)
   {
     return radtomiles(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
@@ -59,7 +58,6 @@ private:
 
   /* Data Members */
 
-  static int delete_flag;
   double pos_dist{};
   char* distopt = nullptr;
   char* latopt = nullptr;

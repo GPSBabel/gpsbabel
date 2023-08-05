@@ -26,12 +26,10 @@
 #include <QString>          // for QString
 #include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
 
-#include "defs.h"           // for Waypoint, del_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
+#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
 
 
 #if FILTERS_ENABLED
-
-int RadiusFilter::delete_flag{}; // ODR-use
 
 void RadiusFilter::process()
 {
@@ -40,14 +38,14 @@ void RadiusFilter::process()
                               home_pos->latitude, home_pos->longitude);
 
     if ((dist >= pos_dist) == (exclopt == nullptr)) {
-      waypointp->extra_data = &delete_flag; // mark for deletion
+      waypointp->wpt_flags.marked_for_deletion = 1;
     } else {
       auto* ed = new extra_data;
       ed->distance = dist;
       waypointp->extra_data = ed;
     }
   }
-  del_wpts(wpt_deletion_evaluator); // delete marked wpts
+  del_marked_wpts();
 
   if (nosort == nullptr) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {

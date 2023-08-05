@@ -65,7 +65,6 @@ private:
 
   /* Data Members */
 
-  int delete_flag{}; // &delete_flag != nullptr
   double pos_dist{};
   qint64 max_diff_time{};
   char* distopt = nullptr;

@@ -162,14 +162,13 @@ void ArcDistanceFilter::process()
     track_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   }
 
-  int delete_flag; // &delete_flag != nullptr
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
     if (wp->extra_data) {
       auto* ed = (extra_data*) wp->extra_data;
       wp->extra_data = nullptr;
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
-        wp->extra_data = &delete_flag; // mark for deletion
+        wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
         wp->longitude = ed->prjlongitude;
@@ -209,7 +208,7 @@ void ArcDistanceFilter::process()
       delete ed;
     }
   }
-  del_wpts(wpt_extra_data_evaluator); // delete marked wpts
+  del_marked_wpts();
   if (global_opts.verbose_status > 0) {
     printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
   }

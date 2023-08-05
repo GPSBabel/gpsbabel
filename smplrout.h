@@ -117,7 +117,6 @@ private:
   double error = 0;
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
-  int delete_flag{}; // &delete_flag != nullptr
 
   char* countopt = nullptr;
   char* erroropt = nullptr;

@@ -26,7 +26,7 @@
 
 #include <cstdlib>             // for strtod
 
-#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), xstrtoi, wpt_extra_data_evaluator, del_wpts, route_del_wpts, route_disp_all, track_del_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
+#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), xstrtoi, del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
 
 
@@ -87,7 +87,9 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
     del = true;
   }
 
-  const_cast<Waypoint*>(wpt)->extra_data = del? &delete_flag : nullptr;
+  if (del) {
+    const_cast<Waypoint*>(wpt)->wpt_flags.marked_for_deletion = 1;
+  }
 }
 
 void DiscardFilter::process()
@@ -98,17 +100,17 @@ void DiscardFilter::process()
 
   // Filter waypoints.
   waypt_disp_all(waypoint_cb_lambda);
-  del_wpts(wpt_extra_data_evaluator);
+  del_marked_wpts();
 
   // Filter tracks
   auto track_tlr_lambda = [](const route_head* rte)->void {
-    track_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    track_del_marked_wpts(const_cast<route_head*>(rte));
   };
   track_disp_all(nullptr, track_tlr_lambda, waypoint_cb_lambda);
 
   // And routes
   auto route_tlr_lambda = [](const route_head* rte)->void {
-    route_del_wpts(const_cast<route_head*>(rte), wpt_extra_data_evaluator);
+    route_del_marked_wpts(const_cast<route_head*>(rte));
   };
   route_disp_all(nullptr, route_tlr_lambda, waypoint_cb_lambda);
 }

@@ -48,7 +48,6 @@ private:
 
   /* Data Members */
 
-  int delete_flag{}; // delete_flag != nullptr
   char* hdopopt = nullptr;
   char* vdopopt = nullptr;
   char* andopt = nullptr;
