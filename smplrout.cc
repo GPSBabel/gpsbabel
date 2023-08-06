@@ -58,6 +58,7 @@
 
 #include <cassert>
 #include <cstdlib>              // for strtol
+#include <iterator>             // for prev
 
 #include <QDateTime>            // for QDateTime
 #include <QHash>                // for QHash
@@ -208,7 +209,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
     neighborhood goner = errormap.last();
     goner.wpt->wpt_flags.marked_for_deletion = 1;
     // errormap.remove(lastKey());  // with Qt 5.12.12, 5.15.2 results in asan heap-use-after-free errors in build_extra_tests.sh
-    errormap.erase(--errormap.end()); // in Qt6 can use cend().
+    errormap.erase(std::prev(errormap.end())); // in Qt6 can use cend().
     // wpthash.remove(goner.wpt); // removal not necessary
 
     /* recompute neighbors of point marked for deletion. */
