@@ -917,7 +917,8 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   // (Empirically determined; It's a few dozen feet.)
   const double ktoo_close = 0.000005;
 
-  for (auto it = rte->waypoint_list.cbegin(); it != rte->waypoint_list.cend(); ++it) {
+  const auto wptlist = rte->waypoint_list; // track_del_wpt will modify rte->waypoint_list
+  for (auto it = wptlist.cbegin(); it != wptlist.cend(); ++it) {
     auto* wpt = *it;
     if (index > 0) {
       double cur_dist = gcdist(RAD(prev_wpt->latitude),
@@ -930,7 +931,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
       }
 
       if (cur_dist < ktoo_close) {
-        if (wpt != rte->waypoint_list.back()) {
+        if (wpt != wptlist.back()) {
           auto* next_wpt = *std::next(it);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
