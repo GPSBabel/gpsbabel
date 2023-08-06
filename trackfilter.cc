@@ -22,14 +22,15 @@
 
 static constexpr bool TRACKF_DBG = false;
 
-#include <algorithm>                       // for_each, sort, stable_sort
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
 #include <cstdio>                          // for printf
 #include <cstdlib>                         // for abs
 #include <cstring>                         // for strlen, strchr, strcmp
-#include <ctime>                           // for gmtime, strftime, time_t, tm
+#include <ctime>                           // for gmtime, strftime
 #include <iterator>                        // for next
+
+#include <algorithm>                       // for sort, stable_sort
 
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for QChar
@@ -194,6 +195,10 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
       fatal(FatalMsg() << "track: name option is an invalid expression.");
     }
     if (!regex.match(track->rte_name).hasMatch()) {
+      foreach (Waypoint* wpt, track->waypoint_list) {
+        track_del_wpt(const_cast<route_head*>(track), wpt);
+        delete wpt;
+      }
       track_del_head(const_cast<route_head*>(track));
       return;
     }
@@ -270,7 +275,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
     if (track->rte_waypt_empty()) {
       dt = default_time;
     } else {
-      const auto* wpt = track->waypoint_list.front();
+      auto* wpt = track->waypoint_list.front();
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
@@ -324,20 +329,11 @@ void TrackFilter::trackfilter_pack()
 
     route_head* master = track_list.first();
 
-    if (!master->waypoint_list.empty()) {
-      std::for_each(std::next(master->waypoint_list.cbegin()), master->waypoint_list.cend(),
-                    [](Waypoint* wpt)->void {wpt->wpt_flags.new_trkseg = 0;});
-    }
-
     while (track_list.size() > 1) {
       route_head* curr = track_list.takeAt(1);
 
-      // Steal all the waypoints
-      WaypointList curr_wpts;
-      track_swap_wpts(curr, curr_wpts);
-      // And add them to the master
-      foreach (Waypoint* wpt, curr_wpts) {
-        wpt->wpt_flags.new_trkseg = 0;
+      foreach (Waypoint* wpt, curr->waypoint_list) {
+        track_del_wpt(curr, wpt);
         track_add_wpt(master, wpt);
       }
       track_del_head(curr);
@@ -361,16 +357,15 @@ void TrackFilter::trackfilter_merge()
     auto it = track_list.begin();
     while (it != track_list.end()) { /* put all points into temp buffer */
       route_head* track = *it;
-      // steal all the wpts
-      WaypointList wpts;
-      track_swap_wpts(track, wpts);
-      // add them to the buff or delete them
-      foreach (Waypoint* wpt, wpts) {
+      foreach (Waypoint* wpt, track->waypoint_list) {
+        track_del_wpt(track, wpt); /* copies any new_trkseg flag forward, and clears new_trkseg flag. */
         if (wpt->creation_time.isValid()) {
           // we will put the merged points in one track segment,
           // as it isn't clear how track segments in the original tracks
           // should relate to the merged track.
-          wpt->wpt_flags.new_trkseg = 0;
+          // track_del_wpt cleared new_trkseg flag for wpt.
+          // track_add_wpt will set new_trkseg for the first point
+          // added to a track.
           buff.append(wpt);
         } else {
           delete wpt;
@@ -386,7 +381,7 @@ void TrackFilter::trackfilter_merge()
 
     std::stable_sort(buff.begin(), buff.end(), trackfilter_merge_sort_cb);
 
-    const Waypoint* prev = nullptr;
+    Waypoint* prev = nullptr;
 
     for (auto* wpt : buff) {
       if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
@@ -421,12 +416,15 @@ void TrackFilter::trackfilter_split()
     fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
   } else if (!track_list.isEmpty()) {
     route_head* master = track_list.first();
-    if (master->rte_waypt_ct() <= 1) {
-      return;
-    }
+    int count = master->rte_waypt_ct();
 
+    int i, j;
     double interval = -1; /* seconds */
     double distance = -1; /* meters */
+
+    if (count <= 1) {
+      return;
+    }
 
     /* check additional options */
 
@@ -497,40 +495,38 @@ void TrackFilter::trackfilter_split()
       }
     }
 
-    // steal all the waypoints
-    WaypointList buff;
-    track_swap_wpts(master, buff);
-    assert(!buff.empty()); // enforced above
+    QList<Waypoint*> buff;
 
-    trackfilter_split_init_rte_name(master, buff.front()->GetCreationTime());
+    foreach (Waypoint* wpt, master->waypoint_list) {
+      buff.append(wpt);
+    }
 
-    route_head* curr = master;	/* will be reset by first new track */
+    trackfilter_split_init_rte_name(master, buff.at(0)->GetCreationTime());
 
-    // add the first waypoint to the first track
-    track_add_wpt(curr, buff.front());
-    // and add subsequent waypoints to the first track or a new track
-    for (auto prev_it = buff.cbegin(), it = std::next(buff.cbegin()); it != buff.cend(); ++prev_it, ++it) {
-      const Waypoint* prev_wpt = *prev_it;
-      Waypoint* wpt = *it;
+    route_head* curr = nullptr;	/* will be set by first new track */
 
+    for (i=0, j=1; j<count; i++, j++) {
       bool new_track_flag;
 
       if ((opt_interval == 0) && (opt_distance == 0)) {
-//      FIXME: This whole function needs to be reconsidered for arbitrary time.
-        new_track_flag = prev_wpt->GetCreationTime().toLocalTime().date() !=
-                         wpt->GetCreationTime().toLocalTime().date();
+// FIXME: This whole function needs to be reconsidered for arbitrary time.
+        new_track_flag = buff.at(i)->GetCreationTime().toLocalTime().date() !=
+                         buff.at(j)->GetCreationTime().toLocalTime().date();
         if constexpr(TRACKF_DBG) {
           if (new_track_flag) {
-            printf(MYNAME ": new day %s\n", qPrintable(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+            printf(MYNAME ": new day %s\n", qPrintable(buff.at(j)->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
           }
         }
       } else {
         new_track_flag = true;
 
         if (distance > 0) {
-          double curdist = radtometers(
-                             gcdist(RAD(prev_wpt->latitude), RAD(prev_wpt->longitude),
-                                    RAD(wpt->latitude), RAD(wpt->longitude)));
+          double rt1 = RAD(buff.at(i)->latitude);
+          double rn1 = RAD(buff.at(i)->longitude);
+          double rt2 = RAD(buff.at(j)->latitude);
+          double rn2 = RAD(buff.at(j)->longitude);
+          double curdist = gcdist(rt1, rn1, rt2, rn2);
+          curdist = radtometers(curdist);
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
@@ -539,7 +535,7 @@ void TrackFilter::trackfilter_split()
         }
 
         if (interval > 0) {
-          double tr_interval = 0.001 * prev_wpt->GetCreationTime().msecsTo(wpt->GetCreationTime());
+          double tr_interval = 0.001 * buff.at(i)->GetCreationTime().msecsTo(buff.at(j)->GetCreationTime());
           if (tr_interval <= interval) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
@@ -553,12 +549,14 @@ void TrackFilter::trackfilter_split()
           printf(MYNAME ": splitting new track\n");
         }
         curr = new route_head;
-        trackfilter_split_init_rte_name(curr, wpt->GetCreationTime());
+        trackfilter_split_init_rte_name(curr, buff.at(j)->GetCreationTime());
         track_add_head(curr);
         track_list.append(curr);
       }
-      wpt->wpt_flags.new_trkseg = 0;
-      track_add_wpt(curr, wpt);
+      if (curr != nullptr) {
+        track_del_wpt(master, buff.at(j));
+        track_add_wpt(curr, buff.at(j));
+      }
     }
   }
 }
@@ -730,11 +728,10 @@ void TrackFilter::trackfilter_range()
       }
 
       if (!inside) {
-        wpt->wpt_flags.marked_for_deletion = 1;
+        track_del_wpt(track, wpt);
+        delete wpt;
       }
     }
-    // delete marked wpts
-    track_del_marked_wpts(track);
 
     if (track->rte_waypt_empty()) {
       track_del_head(track);
@@ -759,17 +756,12 @@ void TrackFilter::trackfilter_seg2trk()
     QList<route_head*> new_track_list;
     for (auto* src : qAsConst(track_list)) {
       new_track_list.append(src);
-      route_head* dest = src;
+      route_head* dest = nullptr;
       route_head* insert_point = src;
       int trk_seg_num = 1;
       bool first = true;
 
-      // steal all the waypoints from the src
-      WaypointList src_wpts;
-      track_swap_wpts(src, src_wpts);
-
-      // and add them back to the original or a new route_head.
-      foreach (Waypoint* wpt, src_wpts) {
+      foreach (Waypoint* wpt, src->waypoint_list) {
         if (wpt->wpt_flags.new_trkseg && !first) {
 
           dest = new route_head;
@@ -786,7 +778,18 @@ void TrackFilter::trackfilter_seg2trk()
           new_track_list.append(dest);
         }
 
-        track_add_wpt(dest, wpt);
+        /* If we found a track separator, transfer from original to
+         * new track. We have to reset new_trkseg temporarily to
+         * prevent track_del_wpt() from copying it to the next track
+         * point.
+         */
+        if (dest) {
+          unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+          wpt->wpt_flags.new_trkseg = 0;
+          track_del_wpt(src, wpt);
+          wpt->wpt_flags.new_trkseg = orig_new_trkseg;
+          track_add_wpt(dest, wpt);
+        }
         first = false;
       }
     }
@@ -806,12 +809,13 @@ void TrackFilter::trackfilter_trk2seg()
     while (track_list.size() > 1) {
       route_head* curr = track_list.takeAt(1);
 
-      // steal all the wpts
-      WaypointList curr_wpts;
-      track_swap_wpts(curr, curr_wpts);
-      // and add them to the master
       bool first = true;
-      foreach (Waypoint* wpt, curr_wpts) {
+      foreach (Waypoint* wpt, curr->waypoint_list) {
+
+        unsigned orig_new_trkseg = wpt->wpt_flags.new_trkseg;
+        wpt->wpt_flags.new_trkseg = 0;
+        track_del_wpt(curr, wpt);
+        wpt->wpt_flags.new_trkseg = orig_new_trkseg;
         track_add_wpt(master, wpt);
         if (first) {
           wpt->wpt_flags.new_trkseg = 1;
@@ -884,11 +888,18 @@ void TrackFilter::trackfilter_faketime()
 
 bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
 {
+  // We use a simpler (non great circle) test for lat/lon here as this
+  // is used for keeping the 'bookends' of non-moving points.
+  //
+  // Latitude spacing is about 27 feet per .00001 degree.
+  // Longitude spacing varies, but the reality is that anything closer
+  // than 27 feet does little but clutter the output.
+  // As this is about the limit of consumer grade GPS, it seems a
+  // reasonable tradeoff.
+
   return
-    radtometers(gcdist(RAD(wpta->latitude),
-                       RAD(wpta->longitude),
-                       RAD(wptb->latitude),
-                       RAD(wptb->longitude))) < kDistanceLimit &&
+    std::abs(wpta->latitude - wptb->latitude) < .00001 &&
+    std::abs(wpta->longitude - wptb->longitude) < .00001 &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
     wpta->courses_equal(*wptb) &&
     wpta->speeds_equal(*wptb) &&
@@ -900,45 +911,46 @@ bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoi
 void TrackFilter::trackfilter_segment_head(const route_head* rte)
 {
   double avg_dist = 0;
-  const Waypoint* prev_wpt = nullptr;
+  int index = 0;
+  Waypoint* prev_wpt = nullptr;
+  // Consider tossing trackpoints closer than this in radians.
+  // (Empirically determined; It's a few dozen feet.)
+  const double ktoo_close = 0.000005;
 
-  const auto wptlist = rte->waypoint_list;
+  const auto wptlist = rte->waypoint_list; // track_del_wpt will modify rte->waypoint_list
   for (auto it = wptlist.cbegin(); it != wptlist.cend(); ++it) {
     auto* wpt = *it;
-    if (it != wptlist.cbegin()) {
-      double cur_dist = radtometers(gcdist(RAD(prev_wpt->latitude),
-                                           RAD(prev_wpt->longitude),
-                                           RAD(wpt->latitude),
-                                           RAD(wpt->longitude)));
-
-      // Denoise points that are on top of each other,
-      // keeping the first and last of the group.
-      if (cur_dist < kDistanceLimit) {
-        if (auto next_it = std::next(it); next_it != wptlist.cend()) {
-          const auto* next_wpt = *next_it;
-          if (trackfilter_points_are_same(prev_wpt, wpt) &&
-              trackfilter_points_are_same(wpt, next_wpt)) {
-            wpt->wpt_flags.marked_for_deletion = 1;
-            continue; // without updating prev_wpt, the first in the group.
-          }
-        }
-      }
-
+    if (index > 0) {
+      double cur_dist = gcdist(RAD(prev_wpt->latitude),
+                               RAD(prev_wpt->longitude),
+                               RAD(wpt->latitude),
+                               RAD(wpt->longitude));
+      // Denoise points that are on top of each other.
       if (avg_dist == 0) {
         avg_dist = cur_dist;
       }
 
-      if (cur_dist > 6378.14 && cur_dist > 1.2 * avg_dist) {
-        avg_dist = 0;
-        wpt->wpt_flags.new_trkseg = 1;
-      } else {
-        // Update weighted moving average;
-        avg_dist = (cur_dist + 4.0 * avg_dist) / 5.0;
+      if (cur_dist < ktoo_close) {
+        if (wpt != wptlist.back()) {
+          auto* next_wpt = *std::next(it);
+          if (trackfilter_points_are_same(prev_wpt, wpt) &&
+              trackfilter_points_are_same(wpt, next_wpt)) {
+            track_del_wpt(const_cast<route_head*>(rte), wpt);
+            delete wpt;
+            continue;
+          }
+        }
       }
+      if (cur_dist > .001 && cur_dist > 1.2* avg_dist) {
+        avg_dist = cur_dist = 0;
+        wpt->wpt_flags.new_trkseg = 1;
+      }
+      // Update weighted moving average;
+      avg_dist = (cur_dist + 4.0 * avg_dist) / 5.0;
     }
     prev_wpt = wpt;
+    index++;
   }
-  track_del_marked_wpts(const_cast<route_head*>(rte));
 }
 
 /*******************************************************************************
