@@ -22,16 +22,14 @@
 
 static constexpr bool TRACKF_DBG = false;
 
-#include <algorithm>                       // for for_each
+#include <algorithm>                       // for_each, sort, stable_sort
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
 #include <cstdio>                          // for printf
 #include <cstdlib>                         // for abs
 #include <cstring>                         // for strlen, strchr, strcmp
-#include <ctime>                           // for gmtime, strftime
+#include <ctime>                           // for gmtime, strftime, time_t, tm
 #include <iterator>                        // for next
-
-#include <algorithm>                       // for sort, stable_sort
 
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for QChar
@@ -272,7 +270,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
     if (track->rte_waypt_empty()) {
       dt = default_time;
     } else {
-      auto* wpt = track->waypoint_list.front();
+      const auto* wpt = track->waypoint_list.front();
       dt = wpt->GetCreationTime();
     }
     time_t t = dt.toTime_t();
@@ -388,7 +386,7 @@ void TrackFilter::trackfilter_merge()
 
     std::stable_sort(buff.begin(), buff.end(), trackfilter_merge_sort_cb);
 
-    Waypoint* prev = nullptr;
+    const Waypoint* prev = nullptr;
 
     for (auto* wpt : buff) {
       if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
@@ -512,7 +510,7 @@ void TrackFilter::trackfilter_split()
     track_add_wpt(curr, buff.front());
     // and add subsequent waypoints to the first track or a new track
     for (auto prev_it = buff.cbegin(), it = std::next(buff.cbegin()); it != buff.cend(); ++prev_it, ++it) {
-      Waypoint* prev_wpt = *prev_it;
+      const Waypoint* prev_wpt = *prev_it;
       Waypoint* wpt = *it;
 
       bool new_track_flag;
@@ -530,12 +528,9 @@ void TrackFilter::trackfilter_split()
         new_track_flag = true;
 
         if (distance > 0) {
-          double rt1 = RAD(prev_wpt->latitude);
-          double rn1 = RAD(prev_wpt->longitude);
-          double rt2 = RAD(wpt->latitude);
-          double rn2 = RAD(wpt->longitude);
-          double curdist = gcdist(rt1, rn1, rt2, rn2);
-          curdist = radtometers(curdist);
+          double curdist = radtometers(
+                             gcdist(RAD(prev_wpt->latitude), RAD(prev_wpt->longitude),
+                                    RAD(wpt->latitude), RAD(wpt->longitude)));
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
@@ -905,7 +900,7 @@ bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoi
 void TrackFilter::trackfilter_segment_head(const route_head* rte)
 {
   double avg_dist = 0;
-  Waypoint* prev_wpt = nullptr;
+  const Waypoint* prev_wpt = nullptr;
 
   const auto wptlist = rte->waypoint_list;
   for (auto it = wptlist.cbegin(); it != wptlist.cend(); ++it) {
@@ -920,7 +915,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
       // keeping the first and last of the group.
       if (cur_dist < kDistanceLimit) {
         if (auto next_it = std::next(it); next_it != wptlist.cend()) {
-          auto* next_wpt = *next_it;
+          const auto* next_wpt = *next_it;
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
             wpt->wpt_flags.marked_for_deletion = 1;

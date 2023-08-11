@@ -24,6 +24,7 @@
 
 #include <QDateTime>            // for QDateTime
 #include <QList>                // for QList
+#include <QString>              // for QString
 #include <QVector>              // for QVector
 #include <QtGlobal>             // for qint64
 
