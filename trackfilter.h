@@ -56,6 +56,7 @@ private:
 
   /* Constants */
 
+  static constexpr double kDistanceLimit = 1.11319; // for points to be considered the same, meters.
   static constexpr char TRACKFILTER_PACK_OPTION[] = "pack";
   static constexpr char TRACKFILTER_SPLIT_OPTION[] = "split";
   static constexpr char TRACKFILTER_SDIST_OPTION[] = "sdistance";
