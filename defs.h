@@ -115,11 +115,6 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
-#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
-
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
