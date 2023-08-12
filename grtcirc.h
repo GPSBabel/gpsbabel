@@ -46,10 +46,10 @@ void linepart(double lat1, double lon1,
 
 /* Degrees to radians */
 constexpr double kDegreesPerRadian = 180.0 / M_PI;
-constexpr double DEG(double x) { return (x) * kDegreesPerRadian; }
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
 
 /* Radians to degrees */
 constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
-constexpr double RAD(double x) { return (x) * kRadiansPerDegree; }
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
 
 #endif
