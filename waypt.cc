@@ -225,12 +225,7 @@ double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
-  double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-  if (res < 0.1) {
-    res = 0;  /* calc. diffs on 32- and 64-bit hosts */
-  }
-
-  return res;
+ return radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
 }
 
 /*
