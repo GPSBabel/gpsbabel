@@ -19,150 +19,101 @@
 
  */
 
-#include <cmath>            // for fabs
-#include <cstdlib>          // for strtod
+#include "position.h"
 
-#include <QList>            // for QList
-#include <QtGlobal>         // for qAsConst, QAddConst<>::Type
+#include <cmath>                // for abs
+#include <cstdlib>              // for strtod
+
+#include <QList>                // for QList
+#include <QtGlobal>             // for qAsConst, qRound64, qint64
 
 #include "defs.h"
-#include "grtcirc.h"        // for RAD, gcdist, radtometers
-#include "position.h"
+#include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
 
-double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
-{
-  return radtometers(gcdist(
-                       RAD(lat1),
-                       RAD(lon1),
-                       RAD(lat2),
-                       RAD(lon2)
-                     ));
-}
-
 /* tear through a waypoint queue, processing points by distance */
-void PositionFilter::position_runqueue(WaypointList* waypt_list, int qtype)
+void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype)
 {
-  QList<WptRecord> qlist;
-
-  for (auto* const waypointp : qAsConst(*waypt_list)) {
-    qlist.append(WptRecord(waypointp));
-  }
-  int nelems = qlist.size();
-
-  for (int i = 0 ; i < nelems ; ++i) {
-    if (!qlist.at(i).deleted) {
-      bool something_deleted = false;
-
-      for (int j = i + 1 ; j < nelems ; ++j) {
-        if (!qlist.at(j).deleted) {
-          double dist = gc_distance(qlist.at(j).wpt->latitude,
-                                    qlist.at(j).wpt->longitude,
-                                    qlist.at(i).wpt->latitude,
-                                    qlist.at(i).wpt->longitude);
-
-          if (dist <= pos_dist) {
-            if (check_time) {
-              double diff_time = fabs(waypt_time(qlist.at(i).wpt) - waypt_time(qlist.at(j).wpt));
-              if (diff_time >= max_diff_time) {
-                continue;
+  if (!waypt_list.empty()) {
+    QList<WptRecord> qlist;
+  
+    for (auto* const waypointp : waypt_list) {
+      qlist.append(WptRecord(waypointp));
+    }
+    int nelems = qlist.size();
+  
+    for (int i = 0 ; i < nelems ; ++i) {
+      if (!qlist.at(i).deleted) {
+        bool something_deleted = false;
+  
+        for (int j = i + 1 ; j < nelems ; ++j) {
+          if (!qlist.at(j).deleted) {
+            double dist = gc_distance(qlist.at(j).wpt->latitude,
+                                      qlist.at(j).wpt->longitude,
+                                      qlist.at(i).wpt->latitude,
+                                      qlist.at(i).wpt->longitude);
+  
+            if (dist <= pos_dist) {
+              if (check_time) {
+                qint64 diff_time = std::abs(qlist.at(j).wpt->creation_time.msecsTo(qlist.at(i).wpt->creation_time));
+                if (diff_time >= max_diff_time) {
+                  continue;
+                }
               }
-            }
-
-            qlist[j].deleted = true;
-            switch (qtype) {
-            case wptdata:
-              waypt_del(qlist.at(j).wpt);
-              delete qlist.at(j).wpt;
-              break;
-            case trkdata:
-              track_del_wpt(cur_rte, qlist.at(j).wpt);
-              delete qlist.at(j).wpt;
-              break;
-            case rtedata:
-              route_del_wpt(cur_rte, qlist.at(j).wpt);
-              delete qlist.at(j).wpt;
-              break;
-            default:
-              break;
-            }
-            something_deleted = true;
-          } else {
-            // Unlike waypoints, routes and tracks are ordered paths.
-            // Don't eliminate points from the return path when the
-            // route or track loops back on itself.
-            if ((qtype == trkdata) || (qtype == rtedata)) {
-              break;
+  
+              qlist[j].deleted = true;
+              qlist.at(j).wpt->wpt_flags.marked_for_deletion = 1;
+              something_deleted = true;
+            } else {
+              // Unlike waypoints, routes and tracks are ordered paths.
+              // Don't eliminate points from the return path when the
+              // route or track loops back on itself.
+              if ((qtype == trkdata) || (qtype == rtedata)) {
+                break;
+              }
             }
           }
         }
-      }
-
-      if (something_deleted && (purge_duplicates != nullptr)) {
-        switch (qtype) {
-        case wptdata:
-          waypt_del(qlist.at(i).wpt);
-          delete qlist.at(i).wpt;
-          break;
-        case trkdata:
-          track_del_wpt(cur_rte, qlist.at(i).wpt);
-          delete qlist.at(i).wpt;
-          break;
-        case rtedata:
-          route_del_wpt(cur_rte, qlist.at(i).wpt);
-          delete qlist.at(i).wpt;
-          break;
-        default:
-          break;
+  
+        if (something_deleted && (purge_duplicates != nullptr)) {
+          qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }
       }
     }
   }
-
-}
-
-void PositionFilter::position_process_any_route(const route_head* rh, int type)
-{
-  if (rh->rte_waypt_ct() != 0) {
-    cur_rte = const_cast<route_head*>(rh);
-    position_runqueue(&cur_rte->waypoint_list, type);
-    cur_rte = nullptr;
-  }
-}
-
-void PositionFilter::position_process_rte(const route_head* rh)
-{
-  position_process_any_route(rh, rtedata);
-}
-
-void PositionFilter::position_process_trk(const route_head* rh)
-{
-  position_process_any_route(rh, trkdata);
 }
 
 void PositionFilter::process()
 {
-  RteHdFunctor<PositionFilter> position_process_rte_f(this, &PositionFilter::position_process_rte);
-  RteHdFunctor<PositionFilter> position_process_trk_f(this, &PositionFilter::position_process_trk);
+  position_runqueue(*global_waypoint_list, wptdata);
+  del_marked_wpts();
 
-  if (waypt_count() != 0) {
-    position_runqueue(global_waypoint_list, wptdata);
-  }
+  auto position_process_rte_lambda = [this](const route_head* rte) ->void {
+    position_runqueue(rte->waypoint_list, rtedata);
+  };
+  auto rte_trl_lambda = [](const route_head* rte) -> void {
+    route_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  route_disp_all(position_process_rte_lambda, rte_trl_lambda, nullptr);
 
-  route_disp_all(position_process_rte_f, nullptr, nullptr);
-  track_disp_all(position_process_trk_f, nullptr, nullptr);
+  auto position_process_trk_lambda = [this](const route_head* rte) ->void {
+    position_runqueue(rte->waypoint_list, trkdata);
+  };
+  auto trk_trl_lambda = [](const route_head* rte) -> void {
+    track_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  track_disp_all(position_process_trk_lambda, trk_trl_lambda, nullptr);
 }
 
 void PositionFilter::init()
 {
-  char* fm;
-
   pos_dist = 0.0;
-  max_diff_time = 0.0;
+  max_diff_time = 0;
   check_time = false;
 
   if (distopt != nullptr) {
+    char* fm;
     pos_dist = strtod(distopt, &fm);
 
     if (!((*fm == 'm') || (*fm == 'M'))) {
@@ -173,7 +124,7 @@ void PositionFilter::init()
 
   if (timeopt != nullptr) {
     check_time = true;
-    max_diff_time = strtod(timeopt, &fm);
+    max_diff_time = qRound64(strtod(timeopt, nullptr) * 1000.0);
   }
 }
 

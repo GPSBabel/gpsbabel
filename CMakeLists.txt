@@ -68,18 +68,15 @@ set(RESOURCES gpsbabel.qrc)
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
   garmin.cc
-  garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
   kml.cc
   nmea.cc
-  wbt-200.cc
 )
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  brauniger_iq.cc
   dg-100.cc
   exif.cc
   garmin_fit.cc
@@ -97,13 +94,10 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   igc.cc
   lowranceusr.cc
   mtk_logger.cc
-  navilink.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  sbn.cc
-  sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -186,10 +180,8 @@ set(SUPPORT
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
   src/core/xmltag.cc
-  strptime.c
   units.cc
   util.cc
-  util_crc.cc
   vecs.cc
   waypt.cc
   xmlgeneric.cc
@@ -208,7 +200,6 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
-  garmin_device_xml.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
@@ -233,7 +224,6 @@ set(HEADERS
   legacyformat.h
   igc.h
   lowranceusr.h
-  navilink.h
   nmea.h
   osm.h
   qstarz_bl_1000.h
@@ -241,7 +231,6 @@ set(HEADERS
   session.h
   shape.h
   skytraq.h
-  strptime.h
   subrip.h
   text.h
   unicsv.h
@@ -288,8 +277,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
-  # disable warning from strptime.c, which we don't want to own or modify
-  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -310,7 +297,7 @@ endif()
 if(MSVC)
   target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
   target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
-  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267 -wd5030)
 endif()
 
 if(APPLE)
@@ -320,6 +307,7 @@ endif()
 include(shapelib.cmake)
 include(zlib.cmake)
 include(libusb.cmake)
+include(strptime.cmake)
 
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
@@ -407,7 +395,6 @@ set(TESTS
   lowranceusr
   mtk
   multiurlgpx
-  navilink
   nmea
   osm
   ozi
@@ -418,8 +405,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  sbn
-  sbp
   serialization
   shape
   simplify-relative
@@ -436,6 +421,7 @@ set(TESTS
   track
   transform
   unicsv_grids
+  unicsv_local
   unicsv
   unitconversion
   v900

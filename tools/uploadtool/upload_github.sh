@@ -132,9 +132,11 @@ echo "Upload binaries to the release..."
 for FILE in "$@" ; do
   FULLNAME="${FILE}"
   BASENAME="$(basename "${FILE}")"
+  # use -http1.1 to avoid https://github.com/actions/runner-images/issues/7329
   curl -H "Authorization: token ${GITHUB_TOKEN}" \
        -H "Accept: application/vnd.github.manifold-preview" \
        -H "Content-Type: application/octet-stream" \
+       --http1.1 \
        --data-binary @$FULLNAME \
        "$upload_url?name=$BASENAME"
   echo ""

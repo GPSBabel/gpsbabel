@@ -25,10 +25,7 @@
 #include <QString>         // for QString
 
 class InifileSection;
-struct inifile_t {
-  QHash<QString, InifileSection> sections;
-  QString source;
-};
+struct inifile_t; // forward declare, opaque to users.
 
 /*
 	inifile_init:

@@ -24,6 +24,7 @@
 #include <cstring>                    // for strcmp
 
 #include <QCoreApplication>           // for QCoreApplication
+#include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
 #include <QLocale>                    // for QLocale
@@ -55,11 +56,13 @@
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
-static constexpr int DEBUG_LOCALE = 0;
+static constexpr bool DEBUG_LOCALE = false;
 
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
+
+static QElapsedTimer timer;
 
 class QargStackElement
 {
@@ -247,6 +250,9 @@ private:
 static void
 run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   start_session(ivecs.fmtname, fname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
@@ -268,11 +274,18 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
+                        .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+  }
 }
 
 static void
 run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt);
@@ -292,6 +305,10 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->wr_init(ofname);
     ovecs->write();
     ovecs->wr_deinit();
+  }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
+                        .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -414,7 +431,7 @@ run(const char* prog_name)
       }
       break;
     case 's':
-      global_opts.synthesize_shortnames = 1;
+      global_opts.synthesize_shortnames = true;
       break;
     case 't':
       global_opts.objective = trkdata;
@@ -435,14 +452,14 @@ run(const char* prog_name)
     case 'S':
       switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
       case 'i':
-        global_opts.smart_icons = 1;
+        global_opts.smart_icons = true;
         break;
       case 'n':
-        global_opts.smart_names = 1;
+        global_opts.smart_names = true;
         break;
       default:
-        global_opts.smart_icons = 1;
-        global_opts.smart_names = 1;
+        global_opts.smart_icons = true;
+        global_opts.smart_names = true;
         break;
       }
       break;
@@ -451,6 +468,9 @@ run(const char* prog_name)
       filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
+        if (global_opts.debug_level > 0)  {
+          timer.start();
+        }
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
           FilterVecs::init_filter_vec(filter.flt);
@@ -470,6 +490,10 @@ run(const char* prog_name)
           filter->process();
           filter->deinit();
           FilterVecs::free_filter_vec(filter.flt);
+        }
+        if (global_opts.debug_level > 0)  {
+          Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
+                              .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
@@ -491,6 +515,12 @@ run(const char* prog_name)
         warning("GPSBabel Version: %s\n", gpsbabel_version);
         if(sizeof(kVersionSHA) > 1) {
           warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
+        }
+        if(sizeof(kVersionDate) > 1) {
+          QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+          if (date.isValid()) {
+            warning(MYNAME ": Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+          }
         }
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,

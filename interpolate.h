@@ -22,10 +22,8 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <optional>             // for optional
-
+#include <QString>              // for QString
 #include <QVector>              // for QVector
-#include <QtGlobal>             // for qint64
 
 #include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
 #include "filter.h"             // for Filter

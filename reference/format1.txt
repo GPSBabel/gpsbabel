@@ -45,9 +45,6 @@ serial	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 file	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-serial	navilink		NaviGPS GT-11/BGT-11 Download
-file	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
-file	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 file	nmea		NMEA 0183 sentences
 file	osm	osm	OpenStreetMap data files
 file	ozi		OziExplorer
@@ -59,6 +56,3 @@ file	openoffice		Tab delimited fields useful for OpenOffice
 file	text	txt	Textual Output
 file	unicsv		Universal csv with field structure in first line
 file	vcard	vcf	Vcard Output (for iPod)
-file	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
-serial	wbt		Wintec WBT-100/200 GPS Download
-file	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format

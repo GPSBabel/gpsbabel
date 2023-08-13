@@ -79,25 +79,18 @@ extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
-extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t wbt_fvecs;
-//extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t sbp_vecs;
-extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
@@ -136,16 +129,12 @@ struct Vecs::Impl {
   TextFormat text_fmt;
   HtmlFormat html_fmt;
   IgcFormat igc_fmt;
-  LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
   LegacyFormat mtk_ffmt {mtk_fvecs};
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
 #endif // MAXIMAL_ENABLED
-  LegacyFormat wbt_sfmt {wbt_svecs};
 #if MAXIMAL_ENABLED
-  LegacyFormat wbt_ffmt {wbt_fvecs};
-//LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
@@ -159,13 +148,10 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
-  LegacyFormat navilink_fmt {navilink_vecs};
   OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat sbp_fmt {sbp_vecs};
-  LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
@@ -328,28 +314,7 @@ struct Vecs::Impl {
       nullptr,
     },
 #endif // MAXIMAL_ENABLED
-    {
-      &wbt_sfmt,
-      "wbt",
-      "Wintec WBT-100/200 GPS Download",
-      nullptr,
-      nullptr,
-    },
 #if MAXIMAL_ENABLED
-    {
-      &wbt_ffmt,
-      "wbt-bin",
-      "Wintec WBT-100/200 Binary File Format",
-      "bin",
-      nullptr,
-    },
-    {
-      &wbt_ffmt,
-      "wbt-tk1",
-      "Wintec WBT-201/G-Rays 2 Binary File Format",
-      "tk1",
-      nullptr,
-    },
     {
       &vcf_fmt,
       "vcard",
@@ -430,13 +395,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &navilink_fmt,
-      "navilink",
-      "NaviGPS GT-11/BGT-11 Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &osm_fmt,
       "osm",
       "OpenStreetMap data files",
@@ -462,20 +420,6 @@ struct Vecs::Impl {
       "humminbird_ht",
       "Humminbird tracks (.ht)",
       "ht",
-      nullptr,
-    },
-    {
-      &sbp_fmt,
-      "sbp",
-      "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
-      "sbp",
-      nullptr,
-    },
-    {
-      &sbn_fmt,
-      "sbn",
-      "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
-      "sbn",
       nullptr,
     },
     {
@@ -1057,7 +1001,7 @@ void Vecs::disp_vec(const QString& vecname) const
       continue;
     }
 
-    printf(" %-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
+    printf("	%-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {

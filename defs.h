@@ -27,11 +27,12 @@
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
+#include <QByteArray>                // for QByteArray
+#include <QDate>                     // for QDate
+#include <QTime>                     // for QTime
 #include <QDateTime>                 // for QDateTime
 #include <QDebug>                    // for QDebug
 #include <QList>                     // for QList, QList<>::const_iterator, QList<>::const_reverse_iterator, QList<>::count, QList<>::reverse_iterator
-#include <QScopedPointer>            // for QScopedPointer
-#include <QScopedPointerPodDeleter>  // for QScopedPointerPodDeleter
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
@@ -114,11 +115,6 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
-#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
-
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
@@ -163,14 +159,14 @@ enum gpsdata_type {
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 struct global_options {
-  int synthesize_shortnames;
   int debug_level;
   gpsdata_type objective;
   unsigned int	masked_objective;
   int verbose_status;	/* set by GUI wrappers for status */
-  int smart_icons;
-  int smart_names;
   inifile_t* inifile;
+  bool synthesize_shortnames;
+  bool smart_icons;
+  bool smart_names;
 };
 
 extern global_options global_opts;
@@ -250,11 +246,13 @@ public:
     shortname_is_synthetic(0),
     fmt_use(0),
     is_split(0),
-    new_trkseg(0) {}
+    new_trkseg(0),
+    marked_for_deletion(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int fmt_use:2;			/* lightweight "extra data" */
   unsigned int is_split:1;		/* the waypoint represents a split */
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -447,17 +445,6 @@ public:
   gpsbabel::DateTime creation_time;
 
   wp_flags wpt_flags;
-  /*
-   * route priority is for use by the simplify filter.  If we have
-   * some reason to believe that the route point is more important,
-   * we can give it a higher (numerically; 0 is the lowest) priority.
-   * This causes it to be removed last.
-   * This is currently used by the saroute input filter to give named
-   * waypoints (representing turns) a higher priority.
-   * This is also used by the google input filter because they were
-   * nice enough to use exactly the same priority scheme.
-   */
-  int route_priority;
 
   /* Optional dilution of precision:  positional, horizontal, vertical.
    * 1 <= dop <= 50
@@ -489,6 +476,7 @@ public:
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
+  void del_marked_wpts();
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_rte_waypt(Waypoint* wpt);
@@ -523,6 +511,7 @@ public:
   using QList<Waypoint*>::front; // a.k.a. first()
   using QList<Waypoint*>::rbegin;
   using QList<Waypoint*>::rend;
+  using QList<Waypoint*>::size_type;
 };
 
 const global_trait* get_traits();
@@ -530,12 +519,13 @@ void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
+void del_marked_wpts();
 unsigned int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
 void waypt_init_bounds(bounds* bounds);
-int waypt_bounds_valid(bounds* bounds);
+bool waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
@@ -647,6 +637,7 @@ public:
   ~route_head();
 
   int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -666,11 +657,13 @@ public:
   void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
+  void del_marked_wpts(route_head* rte);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
   void copy(RouteList** dst) const;
   void restore(RouteList* src);
   void swap(RouteList& other);
+  void swap_wpts(route_head* rte, WaypointList& other);
   template <typename Compare>
   void sort(Compare cmp) {std::sort(begin(), end(), cmp);}
   template <typename T1, typename T2, typename T3>
@@ -725,6 +718,10 @@ void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT"
 void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
+void route_del_marked_wpts(route_head* rte);
+void track_del_marked_wpts(route_head* rte);
+void route_swap_wpts(route_head* rte, WaypointList& other);
+void track_swap_wpts(route_head* rte, WaypointList& other);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
 void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
 //void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
@@ -1015,19 +1012,13 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
-int str_match(const char* str, const char* match);
-
-[[gnu::format(printf, 2, 3)]] int xasprintf(char** strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QString* strp, const char* fmt, ...);
-[[gnu::format(printf, 2, 3)]] int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...);
-int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
-time_t mklocaltime(struct tm* t);
-time_t mkgmtime(struct tm* t);
+QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
+long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
 QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
@@ -1093,11 +1084,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-/* bit manipulation functions (util.c) */
-
-char gb_getbit(const void* buf, uint32_t nr);
-void gb_setbit(void* buf, uint32_t nr);
-
 void* gb_int2ptr(int i);
 int gb_ptr2int(const void* p);
 
@@ -1120,11 +1106,6 @@ int parse_speed(const char* str, double* val, double scale, const char* module);
 int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*
- *  From util_crc.c
- */
-unsigned long get_crc32(const void* data, int datalen);
-
-/*
  * Color helpers.
  */
 int color_to_bbggrr(const char* cname);
@@ -1135,5 +1116,11 @@ int color_to_bbggrr(const char* cname);
  */
 constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+using qhash_result_t = uint;
+#else
+using qhash_result_t = size_t;
+#endif
 
 #endif // DEFS_H_INCLUDED_
