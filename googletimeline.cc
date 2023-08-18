@@ -65,7 +65,7 @@ static void title_case(QString& title)
   }
 }
 
-void 
+void
 GoogleTimelineFormat::rd_init(const QString& fname) {
   Debug(1) << "rd_init(" << fname << ")";
   inputStream = GoogleTimelineInputStream(fname);
@@ -239,7 +239,7 @@ GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
    * 1. "waypoints" dict
    *    This is available on all tracks, but only includes the
    *    lat/lon - no timestamp.
-   * 2. "simplifiedRawPath" dict 
+   * 2. "simplifiedRawPath" dict
    *    these all have timestamps which provides richer metadata.
    *    This is not available on all tracks.
    * 3. An incredibly detailed "roadSegment" list that includes a
@@ -323,15 +323,15 @@ QList<QJsonObject> GoogleTimelineInputStream::readJson(const QString& source) {
   }
 
   const QJsonObject root = doc.object();
-  const QJsonValue timelineObjects = root.value(TIMELINE_OBJECTS);
-  if (timelineObjects.isNull()) {
+  const QJsonValue timelineObjectsIn = root.value(TIMELINE_OBJECTS);
+  if (timelineObjectsIn.isNull()) {
     _fatal(
       QString(ifd->fileName()) + " is missing required \"" +
       TIMELINE_OBJECTS + "\" section"
     );
   }
 
-  const QJsonArray timelineJson = timelineObjects.toArray();
+  const QJsonArray timelineJson = timelineObjectsIn.toArray();
   QList<QJsonObject> timeline;
   for (QJsonValue val : timelineJson) {
     if (val.isObject()) {
@@ -413,5 +413,3 @@ QJsonValue GoogleTimelineInputStream::next() {
 
   return QJsonValue();
 }
-
-
