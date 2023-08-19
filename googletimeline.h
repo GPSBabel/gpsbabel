@@ -30,7 +30,6 @@
  * Reads Location History JSON files and return each timelineObject
  * that should be processed.
  *
- * TODO: Handle folders
  * TODO: Allow date ranges
  */
 class GoogleTimelineInputStream
