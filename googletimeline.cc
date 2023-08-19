@@ -186,7 +186,7 @@ GoogleTimelineFormat::add_place_visit(const QJsonObject& placeVisit)
 }
 
 static void track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
-  if (waypoint->latitude == 0 and waypoint->longitude == 0) {
+  if (waypoint->latitude == 0 && waypoint->longitude == 0) {
     _warning(
       QString("Track ") + route->rte_name + "@" +
       waypoint->creation_time.toPrettyString() +
