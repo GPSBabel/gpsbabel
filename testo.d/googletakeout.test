@@ -1,0 +1,11 @@
+if ! echo '["foo"]' | jq -r '.[0]' > /dev/null; then
+  echo "jq not installed, skipping googletakeout tests"
+	return 0
+fi
+
+rm -f ${TMPDIR}/googletakeout.geojson
+gpsbabel \
+  -i googletakeout \
+  -f ${REFERENCE}/googletakeout \
+  -o geojson \
+  -F ${TMPDIR}/googletakeout.geojson

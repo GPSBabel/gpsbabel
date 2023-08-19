@@ -6,7 +6,7 @@
 
 #include "src/core/file.h"
 
-#include "googletimeline.h"
+#include "googletakeout.h"
 
 #define MYNAME "Google Timeline Location"
 #define TIMELINE_OBJECTS "timelineObjects"
@@ -66,13 +66,13 @@ static void title_case(QString& title)
 }
 
 void
-GoogleTimelineFormat::rd_init(const QString& fname) {
+GoogleTakeoutFormat::rd_init(const QString& fname) {
   Debug(1) << "rd_init(" << fname << ")";
-  inputStream = GoogleTimelineInputStream(fname);
+  inputStream = GoogleTakeoutInputStream(fname);
 }
 
 void
-GoogleTimelineFormat::read()
+GoogleTakeoutFormat::read()
 {
   int items = 0;
   int points = 0;
@@ -123,7 +123,7 @@ GoogleTimelineFormat::read()
 
 /* create a waypoint from late7/lone7 and optional metadata */
 Waypoint*
-GoogleTimelineFormat::_waypoint(
+GoogleTakeoutFormat::_waypoint(
   int lat_e7,
   int lon_e7,
   const QString* shortname,
@@ -148,7 +148,7 @@ GoogleTimelineFormat::_waypoint(
 }
 
 void
-GoogleTimelineFormat::add_place_visit(const QJsonObject& placeVisit)
+GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
 {
   /*
    * placeVisits:
@@ -204,7 +204,7 @@ static void track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
  * returns the total number of points added
  */
 int
-GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
+GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
 {
   /*
    * activitySegment:
@@ -303,13 +303,13 @@ GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
   return n_points;
 }
 
-GoogleTimelineInputStream::GoogleTimelineInputStream() {}
+GoogleTakeoutInputStream::GoogleTakeoutInputStream() {}
 
-GoogleTimelineInputStream::GoogleTimelineInputStream(const QString& source) {
+GoogleTakeoutInputStream::GoogleTakeoutInputStream(const QString& source) {
   this->sources = { source };
 }
 
-QList<QJsonObject> GoogleTimelineInputStream::readJson(const QString& source) {
+QList<QJsonObject> GoogleTakeoutInputStream::readJson(const QString& source) {
   Debug(1) << "Reading from JSON " << source;
   auto* ifd = new gpsbabel::File(source);
   ifd->open(QIODevice::ReadOnly | QIODevice::Text);
@@ -350,7 +350,7 @@ QList<QJsonObject> GoogleTimelineInputStream::readJson(const QString& source) {
   return timeline;
 }
 
-QList<QString> GoogleTimelineInputStream::readDir(const QString& source) {
+QList<QString> GoogleTakeoutInputStream::readDir(const QString& source) {
   Debug(1) << "Reading from folder " << source;
   const QDir dir{source};
   const QFileInfo sourceInfo{source};
@@ -387,7 +387,7 @@ QList<QString> GoogleTimelineInputStream::readDir(const QString& source) {
   return paths;
 }
 
-void GoogleTimelineInputStream::loadSource(const QString& source) {
+void GoogleTakeoutInputStream::loadSource(const QString& source) {
   const QFileInfo info{source};
   if (info.isDir()) {
     sources += readDir(source);
@@ -398,7 +398,7 @@ void GoogleTimelineInputStream::loadSource(const QString& source) {
   }
 }
 
-QJsonValue GoogleTimelineInputStream::next() {
+QJsonValue GoogleTakeoutInputStream::next() {
   if (!timelineObjects.isEmpty()) {
     QJsonValue nextObject = timelineObjects.first();
     timelineObjects.removeFirst();

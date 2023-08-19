@@ -18,8 +18,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
   USA.
 */
-#ifndef _GOOGLETIMELINE_H
-#define _GOOGLETIMELINE_H
+#ifndef _GOOGLETAKEOUT_H
+#define _GOOGLETAKEOUT_H
 
 #include <QVector>
 
@@ -32,11 +32,11 @@
  *
  * TODO: Allow date ranges
  */
-class GoogleTimelineInputStream
+class GoogleTakeoutInputStream
 {
 public:
-  GoogleTimelineInputStream();
-  GoogleTimelineInputStream(const QString& source);
+  GoogleTakeoutInputStream();
+  GoogleTakeoutInputStream(const QString& source);
   // Returns the next timelineObject, or a null QJsonValue if we're at the end
   QJsonValue next();
 private:
@@ -48,13 +48,13 @@ private:
 };
 
 /* Read-only Google Timeline Location History gpsbabel Format */
-class GoogleTimelineFormat : public Format
+class GoogleTakeoutFormat : public Format
 {
 public:
   /* Member functions */
   QVector<arglist_t>* get_args() override
   {
-    return &googletimeline_args;
+    return &googletakeout_args;
   }
 
   ff_type get_type() const override
@@ -71,8 +71,8 @@ public:
   void read() override;
  
 private:
-  GoogleTimelineInputStream inputStream;
-  QVector<arglist_t> googletimeline_args = {};
+  GoogleTakeoutInputStream inputStream;
+  QVector<arglist_t> googletakeout_args = {};
 
   void add_place_visit(const QJsonObject& placeVisit);
   int add_activity_segment(const QJsonObject& activitySegment);
@@ -87,4 +87,4 @@ private:
 };
 
 
-#endif /* _GOOGLETIMELINE_H */
+#endif /* _GOOGLETAKEOUT_H */

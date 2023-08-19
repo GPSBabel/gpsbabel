@@ -7,7 +7,7 @@
 </para>
 
 <para>
-  The "googletimeline" GPSBabel format will process the location history
+  The "googletakeout" GPSBabel format will process the location history
   JSON files. It can operate on individual JSON files, the folders in the
   ZIP that contain a year's worth of data, or the entire location history
   at once.
@@ -27,17 +27,17 @@
   folder. Your history will be in the folder "Takeout/Location History/Semantic Location History" within this folder.
 </para>
 
-<example xml:id="googletimeline-all">
+<example xml:id="googletakeout-all">
   <title>Convert entire location history to a single GPX file</title>
-  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History" -o gpx -F all.gpx</userinput></para>
+  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History" -o gpx -F all.gpx</userinput></para>
 </example>
 
-<example xml:id="googletimeline-year">
+<example xml:id="googletakeout-year">
   <title>Convert a single years' location history to GPX</title>
-  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History/2022" -o gpx -F 2022.gpx</userinput></para>
+  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2022" -o gpx -F 2022.gpx</userinput></para>
 </example>
 
-<example xml:id="googletimeline-month">
+<example xml:id="googletakeout-month">
   <title>Convert a single months' location history to GPX</title>
-  <para><userinput>gpsbabel -i googletimeline -f "Semantic Location History/2023/2023_MARCH.json"</userinput></para>
+  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2023/2023_MARCH.json"</userinput></para>
 </example>

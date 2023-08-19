@@ -180,7 +180,7 @@ File Types (-i and -o options):
 	  max_position_point    Retain at most this number of position points  (0 
 	  rotate_colors         Rotate colors for tracks and routes (default autom
 	  prec                  Precision of coordinates, number of decimals
-	googletimeline        Google Takeout Timeline Location History (JSON)
+	googletakeout         Google Takeout Timeline Location History (JSON)
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
