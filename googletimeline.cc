@@ -191,6 +191,7 @@ static void track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
       QString("Track ") + route->rte_name + "@" +
       waypoint->creation_time.toPrettyString() +
       ": Dropping point with no lat/long");
+    delete waypoint; // as we're dropping it, gpsbabel won't clean it up later
     return;
   }
   track_add_wpt(route, waypoint);
