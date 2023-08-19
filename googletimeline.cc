@@ -334,7 +334,7 @@ QList<QJsonObject> GoogleTimelineInputStream::readJson(const QString& source) {
 
   const QJsonArray timelineJson = timelineObjectsIn.toArray();
   QList<QJsonObject> timeline;
-  for (QJsonValue val : timelineJson) {
+  for (QJsonValue&& val : timelineJson) {
     if (val.isObject()) {
       timeline.append(val.toObject());
     } else {
