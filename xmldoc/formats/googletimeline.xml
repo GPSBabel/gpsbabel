@@ -15,12 +15,12 @@
 
 <para>
   To obtain your Google Takeout History:
-  <itemizedlist>
-    <listitem>Go to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://takeout.google.com/">takeout.google.com</link></listitem>
-    <listitem>Click on "Deselect all"</listitem>
-    <listitem>Scroll down to "Location History" and check the box</listitem>
-    <listitem>Scroll to the bottom of the page and click on "Next step"</listitem>
-    <listitem>Click on "Create export"</listitem>
+  <itemizedlist mark="bullet">
+    <listitem><para>Go to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://takeout.google.com/">takeout.google.com</link></para></listitem>
+    <listitem><para>Click on "Deselect all"</para></listitem>
+    <listitem><para>Scroll down to "Location History" and check the box</para></listitem>
+    <listitem><para>Scroll to the bottom of the page and click on "Next step"</para></listitem>
+    <listitem><para>Click on "Create export"</para></listitem>
   </itemizedlist>
   In a little while, you will receive an email to download your location
   history, which will be one or more zipfiles. Unzip everything into the same

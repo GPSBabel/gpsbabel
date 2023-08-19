@@ -259,7 +259,7 @@ GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
   if (false && activitySegment.contains(SIMPLE_PATH)) {
     const QJsonArray points =
       activitySegment[SIMPLE_PATH][POINTS].toArray();
-    for (const QJsonValueRef pointRef : points) {
+    for (const auto&& pointRef : points) {
       ++ n_points;
       const QJsonObject point = pointRef.toObject();
       timestamp = point[TIMESTAMP].toString();
@@ -275,7 +275,7 @@ GoogleTimelineFormat::add_activity_segment(const QJsonObject& activitySegment)
   } else {
     const QJsonArray points =
       activitySegment[WAYPOINT_PATH][WAYPOINTS].toArray();
-    for (const QJsonValueRef pointRef: points) {
+    for (const auto&& pointRef: points) {
       ++ n_points;
       const QJsonObject point = pointRef.toObject();
       /* as waypointPath does not include timestamps, set every
