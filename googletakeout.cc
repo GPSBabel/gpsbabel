@@ -8,7 +8,7 @@
 
 #include "googletakeout.h"
 
-#define MYNAME "Google Timeline Location"
+#define MYNAME "Google Takeout"
 #define TIMELINE_OBJECTS "timelineObjects"
 #define PLACE_VISIT "placeVisit"
 #define ACTIVITY_SEGMENT "activitySegment"
@@ -40,11 +40,11 @@ const QList<QString> month_names{
 };
 
 static void _fatal(const QString& message) {
-  fatal(FatalMsg().nospace() << MYNAME << ": " << message);
+  fatal(FatalMsg() << MYNAME << ": " << message);
 }
 
 static void _warning(const QString& message) {
-  Warning().nospace() << MYNAME << ": " << message;
+  Warning() << MYNAME << ": " << message;
 }
 
 static void title_case(QString& title)

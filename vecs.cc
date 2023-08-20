@@ -497,7 +497,7 @@ struct Vecs::Impl {
     {
       &google_timeline_fmt,
       "googletakeout",
-      "Google Takeout Timeline Location History (JSON)",
+      "Google Takeout Location History",
       "json",
       nullptr,
     }

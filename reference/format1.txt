@@ -25,7 +25,7 @@ internal	dg-200-bin		GlobalSat DG-200 Binary File
 serial	dg-200		GlobalSat DG-200 Download
 serial	globalsat		GlobalSat GH625XT GPS training watch
 file	kml	kml	Google Earth (Keyhole) Markup Language
-file	googletakeout	json	Google Takeout Timeline Location History (JSON)
+file	googletakeout	json	Google Takeout Location History
 file	land_air_sea	txt	GPS Tracking Key Pro text
 file	gtm	gtm	GPS TrackMaker
 file	arc	txt	GPSBabel arc filter file

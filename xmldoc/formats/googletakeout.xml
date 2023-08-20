@@ -39,5 +39,5 @@
 
 <example xml:id="googletakeout-month">
   <title>Convert a single months' location history to GPX</title>
-  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2023/2023_MARCH.json"</userinput></para>
+  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2023/2023_MARCH.json" -o gpx -F 2023-03.gpx</userinput></para>
 </example>
