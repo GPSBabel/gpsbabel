@@ -10,64 +10,161 @@
 
 #define MYNAME "Google Takeout"
 #define TIMELINE_OBJECTS "timelineObjects"
-#define PLACE_VISIT "placeVisit"
-#define ACTIVITY_SEGMENT "activitySegment"
-#define ACTIVITY_TYPE "activityType"
-#define LOCATION "location"
-#define LOCATION_LATE7 "latitudeE7"
-#define LOCATION_LONE7 "longitudeE7"
-#define NAME "name"
-#define ADDRESS "address"
-#define DURATION "duration"
-#define START_TIMESTAMP "startTimestamp"
-#define START_LOCATION "startLocation"
-#define END_TIMESTAMP "endTimestamp"
-#define END_LOCATION "endLocation"
-#define TIMESTAMP "timestamp"
-#define SIMPLE_PATH "simplifiedRawPath"
-#define POINTS "points"
-#define WAYPOINT_PATH "waypointPath"
-#define WAYPOINTS  "waypoints"
-// for some reason that probably only a former Google engineer knows,
-// we use "latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".
-// +10 points for brevity, but -100 points for inconsistency.
-#define LATE7 "latE7"
-#define LONE7 "lngE7"
 
-const QList<QString> month_names{
+static const QList<QString> takeout_month_names{
   "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
   "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
 };
 
-static void _fatal(const QString& message) {
+static inline void takeout_fatal(const QString& message) {
   fatal(FatalMsg() << MYNAME << ": " << message);
 }
 
-static void _warning(const QString& message) {
+static inline void takeout_warning(const QString& message) {
   Warning() << MYNAME << ": " << message;
 }
 
-static void title_case(QString& title)
+/* create a waypoint from late7/lone7 and optional metadata */
+static Waypoint* takeout_waypoint(
+  int lat_e7,
+  int lon_e7,
+  const QString* shortname,
+  const QString* description,
+  const QString* start_str
+)
+{
+  Waypoint* waypoint = new Waypoint();
+  waypoint->latitude = lat_e7 / 1e7;
+  waypoint->longitude = lon_e7 / 1e7;
+  if (shortname && (*shortname).length() > 0) {
+    waypoint->shortname = *shortname;
+  }
+  if (description && (*description).length() > 0) {
+    waypoint->description = *description;
+  }
+  if (start_str && (*start_str).length() > 0) {
+    gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
+    waypoint->SetCreationTime(start);
+  }
+  return waypoint;
+}
+
+static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
+  if (waypoint->latitude == 0 && waypoint->longitude == 0) {
+    Debug(2) << "Track " << route->rte_name << "@" <<
+      waypoint->creation_time.toPrettyString() <<
+      ": Dropping point with no lat/long";
+    delete waypoint; // as we're dropping it, gpsbabel won't clean it up later
+    return false;
+  }
+  track_add_wpt(route, waypoint);
+  return true;
+}
+
+static QList<QJsonObject> readJson(
+    const QString& source)
+{
+  Debug(2) << "Reading from JSON " << source;
+  auto* ifd = new gpsbabel::File(source);
+  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
+  const QString content = ifd->readAll();
+  QJsonParseError error{};
+  const QJsonDocument doc = QJsonDocument::fromJson(content.toUtf8(), &error);
+  if (error.error != QJsonParseError::NoError) {
+    takeout_fatal(
+      QString("JSON parse error in ") + ifd->fileName() + ": " +
+      error.errorString()
+    );
+  }
+
+  const QJsonObject root = doc.object();
+  const QJsonValue timelineObjectsIn = root.value(TIMELINE_OBJECTS);
+  if (timelineObjectsIn.isNull()) {
+    takeout_fatal(
+      ifd->fileName() + " is missing required \"" +
+      TIMELINE_OBJECTS + "\" section"
+    );
+  }
+
+  const QJsonArray timelineJson = timelineObjectsIn.toArray();
+  QList<QJsonObject> timeline;
+  for (QJsonValue&& val : timelineJson) {
+    if (val.isObject()) {
+      timeline.append(val.toObject());
+    } else {
+      takeout_fatal(ifd->fileName() + " has non-object in timelineObjects");
+    }
+  }
+  ifd->close();
+  delete ifd;
+  if (timeline.isEmpty()) {
+    takeout_warning(QString(source) + " does not contain any timelineObjects");
+  }
+  Debug(2) << "Saw " << timeline.size() << " timelineObjects in " << source;
+  return timeline;
+}
+
+static QList<QString> readDir(
+    const QString& source)
+{
+  Debug(2) << "Reading from folder " << source;
+  const QDir dir{source};
+  const QFileInfo sourceInfo{source};
+  const QString baseName = sourceInfo.fileName();
+  QList<QString> paths;
+  /* If a directory's name is a 4-digit number, this is a "year" folder
+   * and we will look for YYYY_MONTH.json files.
+   * Otherwise, this is the all-time folder that _contains_ the month
+   * folders
+   */
+  if (baseName.length() == 4 && baseName.toInt() > 0) {
+    for (auto&& month : takeout_month_names) {
+      const QString path = source + "/" + baseName + "_" + month + ".json";
+      const QFileInfo info{path};
+      if (info.exists()) {
+        Debug(3) << "Adding file " << path;
+        paths.append(path);
+      } else {
+        Debug(4) << "Did not find " << path;
+      }
+    }
+  } else {
+    for (auto&& entry : dir.entryList()) {
+      const QString path = dir.filePath(entry);
+      if (entry.length() == 4 && entry.toInt() > 0) {
+        Debug(3) << "Adding directory " << path;
+        paths.append(path);
+      } else {
+        takeout_warning(QString("Malformed folder name ") + path);
+      }
+    }
+  }
+  Debug(2) << "Saw " << paths.size() << " paths in " << source;
+  return paths;
+}
+
+void
+GoogleTakeoutFormat::title_case(QString& title)
 {
   bool new_word = true;
-  for (int i = 0; i < title.size(); ++ i) {
-    if (title[i] == '_' || title[i] == ' ') {
+  for (auto& chr : title) {
+    if (chr == '_' || chr == ' ') {
       new_word = true;
-      if (title[i] == '_') {
-        title[i] = ' ';
+      if (chr == '_') {
+        chr = ' ';
       }
     } else if (new_word) {
       new_word = false;
-      title[i] = title[i].toUpper();
+      chr = chr.toUpper();
     } else {
-      title[i] = title[i].toLower();
+      chr = chr.toLower();
     }
   }
 }
 
 void
 GoogleTakeoutFormat::rd_init(const QString& fname) {
-  Debug(1) << "rd_init(" << fname << ")";
+  Debug(4) << "rd_init(" << fname << ")";
   inputStream = GoogleTakeoutInputStream(fname);
 }
 
@@ -92,7 +189,7 @@ GoogleTakeoutFormat::read()
     const QJsonObject timelineObjectContainer = iterator.toObject();
     int len = timelineObjectContainer.size();
     if (len != 1) {
-      _fatal(
+      takeout_fatal(
         QString("expected a single key dict, got ") + QString::number(len) +
         " keys"
       );
@@ -110,41 +207,15 @@ GoogleTakeoutFormat::read()
       points += add_activity_segment(timelineObjectDetail);
       ++ activity_segments;
     } else {
-      _fatal(
+      takeout_fatal(
         QString("unknown timeline object type \"") + timelineObjectType +
         "\""
       );
     }
   }
   Debug(1) << MYNAME << ": Processed " << items << " items: " <<
-    place_visits << " " PLACE_VISIT << ", " << activity_segments <<
-    " " ACTIVITY_SEGMENT << " (" << points << " points total)";
-}
-
-/* create a waypoint from late7/lone7 and optional metadata */
-Waypoint*
-GoogleTakeoutFormat::_waypoint(
-  int lat_e7,
-  int lon_e7,
-  const QString* shortname,
-  const QString* description,
-  const QString* start_str
-)
-{
-  Waypoint* waypoint = new Waypoint();
-  waypoint->latitude = (double)(lat_e7 / 1e7);
-  waypoint->longitude = (double)(lon_e7 / 1e7);
-  if (shortname && (*shortname).length() > 0) {
-    waypoint->shortname = *shortname;
-  }
-  if (description && (*description).length() > 0) {
-    waypoint->description = *description;
-  }
-  if (start_str && (*start_str).length() > 0) {
-    gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
-    waypoint->SetCreationTime(start);
-  }
-  return waypoint;
+    place_visits << " " << PLACE_VISIT << ", " << activity_segments <<
+    " " << ACTIVITY_SEGMENT << " (" << points << " points total)";
 }
 
 void
@@ -157,6 +228,8 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
    *   "duration" contains start and end times
    *
    *  TODO: capture end time/duration
+   *  some placeVisits have a simplifiedRawPath.
+   *  TODO: do something with simplifiedRawPath
    */
   const QJsonObject& loc = placeVisit[LOCATION].toObject();
   const QString address = loc[ADDRESS].toString();
@@ -165,7 +238,7 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
 
   if (loc.contains(NAME) && loc[NAME].toString().length() > 0) {
     QString name = loc[NAME].toString();
-    waypoint = _waypoint(
+    waypoint = takeout_waypoint(
       loc[LOCATION_LATE7].toInt(),
       loc[LOCATION_LONE7].toInt(),
       name.length() > 0 ? &name : nullptr,
@@ -173,7 +246,7 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
       &timestamp
     );
   } else {
-    waypoint = _waypoint(
+    waypoint = takeout_waypoint(
       loc[LOCATION_LATE7].toInt(),
       loc[LOCATION_LONE7].toInt(),
       nullptr,
@@ -183,18 +256,6 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
   }
 
   waypt_add(waypoint);
-}
-
-static void track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
-  if (waypoint->latitude == 0 && waypoint->longitude == 0) {
-    _warning(
-      QString("Track ") + route->rte_name + "@" +
-      waypoint->creation_time.toPrettyString() +
-      ": Dropping point with no lat/long");
-    delete waypoint; // as we're dropping it, gpsbabel won't clean it up later
-    return;
-  }
-  track_add_wpt(route, waypoint);
 }
 
 /* add an "activitySegment" (track)
@@ -217,8 +278,10 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
    *
    *   some activitySegments also include a "parkingEvent".
    *   TODO: add parkingEvent as its own waypoint
+   *   some activitySegments also have a simplifiedRawPath
+   *   TODO: do something with simplifiedRawPath
    */
-  int n_points = 2;
+  int n_points = 0;
   Waypoint* waypoint = nullptr;
   auto* route = new route_head;
   const QJsonObject startLoc = activitySegment[START_LOCATION].toObject();
@@ -229,13 +292,13 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
   track_add_head(route);
   QString timestamp;
   timestamp = activitySegment[DURATION][START_TIMESTAMP].toString();
-  waypoint = _waypoint(
+  waypoint = takeout_waypoint(
     startLoc[LOCATION_LATE7].toInt(),
     startLoc[LOCATION_LONE7].toInt(),
     nullptr, nullptr,
     &timestamp
   );
-  track_maybe_add_wpt(route, waypoint);
+  n_points += track_maybe_add_wpt(route, waypoint);
   /* activitySegments give us three sets of waypoints.
    * 1. "waypoints" dict
    *    This is available on all tracks, but only includes the
@@ -254,137 +317,41 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
    *    TODO: add an option to query places API, and an option to count
    *    how many Google Places requests it would take to process a file
    *
-   *  For now, we try to use (2), and if (2) is not available, we fall
-   *  back on (1).
+   *  For now, we use (1)
    */
-  if (false && activitySegment.contains(SIMPLE_PATH)) {
-    const QJsonArray points =
-      activitySegment[SIMPLE_PATH][POINTS].toArray();
-    for (const auto&& pointRef : points) {
-      ++ n_points;
-      const QJsonObject point = pointRef.toObject();
-      timestamp = point[TIMESTAMP].toString();
-      waypoint = _waypoint(
-        point[LATE7].toInt(),
-        point[LONE7].toInt(),
-        nullptr,
-        nullptr,
-        &timestamp
-      );
-      track_maybe_add_wpt(route, waypoint);
-    }
-  } else {
-    const QJsonArray points =
-      activitySegment[WAYPOINT_PATH][WAYPOINTS].toArray();
-    for (const auto&& pointRef: points) {
-      ++ n_points;
-      const QJsonObject point = pointRef.toObject();
-      /* as waypointPath does not include timestamps, set every
-       * point along the path to the start of the activity
-       */
-      waypoint = _waypoint(
-        point[LATE7].toInt(),
-        point[LONE7].toInt(),
-        nullptr,
-        nullptr,
-        &timestamp
-      );
-      track_maybe_add_wpt(route, waypoint);
-    }
+  const QJsonArray points =
+    activitySegment[WAYPOINT_PATH][WAYPOINTS].toArray();
+  for (const auto&& pointRef: points) {
+    const QJsonObject point = pointRef.toObject();
+    /* as waypointPath does not include timestamps, set every
+     * point along the path to the start of the activity
+     */
+    waypoint = takeout_waypoint(
+      point[LATE7].toInt(),
+      point[LONE7].toInt(),
+      nullptr,
+      nullptr,
+      nullptr
+    );
+    n_points += track_maybe_add_wpt(route, waypoint);
   }
   timestamp = activitySegment[DURATION][END_TIMESTAMP].toString();
-  waypoint = _waypoint(
+  waypoint = takeout_waypoint(
     endLoc[LOCATION_LATE7].toInt(),
     endLoc[LOCATION_LONE7].toInt(),
-    nullptr, nullptr,
-    &timestamp
+    nullptr, nullptr, nullptr
   );
-  track_maybe_add_wpt(route, waypoint);
+  n_points += track_maybe_add_wpt(route, waypoint);
+  if (!n_points) {
+    Debug(2) << "Track " << route->rte_name <<
+      ": Dropping track with no waypoints";
+    track_del_head(route);
+  }
   return n_points;
 }
 
-GoogleTakeoutInputStream::GoogleTakeoutInputStream() {}
-
 GoogleTakeoutInputStream::GoogleTakeoutInputStream(const QString& source) {
   this->sources = { source };
-}
-
-QList<QJsonObject> GoogleTakeoutInputStream::readJson(const QString& source) {
-  Debug(1) << "Reading from JSON " << source;
-  auto* ifd = new gpsbabel::File(source);
-  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
-  const QString content = ifd->readAll();
-  QJsonParseError error{};
-  const QJsonDocument doc = QJsonDocument::fromJson(content.toUtf8(), &error);
-  if (error.error != QJsonParseError::NoError) {
-    _fatal(
-      QString("JSON parse error in ") + ifd->fileName() + ": " +
-      error.errorString()
-    );
-  }
-
-  const QJsonObject root = doc.object();
-  const QJsonValue timelineObjectsIn = root.value(TIMELINE_OBJECTS);
-  if (timelineObjectsIn.isNull()) {
-    _fatal(
-      QString(ifd->fileName()) + " is missing required \"" +
-      TIMELINE_OBJECTS + "\" section"
-    );
-  }
-
-  const QJsonArray timelineJson = timelineObjectsIn.toArray();
-  QList<QJsonObject> timeline;
-  for (QJsonValue&& val : timelineJson) {
-    if (val.isObject()) {
-      timeline.append(val.toObject());
-    } else {
-      _fatal(QString(ifd->fileName()) + " has non-object in timelineObjects");
-    }
-  }
-  ifd->close();
-  delete ifd;
-  if (timeline.isEmpty()) {
-    _warning(QString(source) + " does not contain any timelineObjects");
-  }
-  Debug(1) << "Saw " << timeline.size() << " timelineObjects in " << source;
-  return timeline;
-}
-
-QList<QString> GoogleTakeoutInputStream::readDir(const QString& source) {
-  Debug(1) << "Reading from folder " << source;
-  const QDir dir{source};
-  const QFileInfo sourceInfo{source};
-  const QString baseName = sourceInfo.fileName();
-  QList<QString> paths;
-  /* If a directory's name is a 4-digit number, this is a "year" folder
-   * and we will look for YYYY_MONTH.json files.
-   * Otherwise, this is the all-time folder that _contains_ the month
-   * folders
-   */
-  if (baseName.length() == 4 && baseName.toInt() > 0) {
-    for (auto&& month : month_names) {
-      const QString path = source + "/" + baseName + "_" + month + ".json";
-      const QFileInfo info{path};
-      if (info.exists()) {
-        Debug(1) << "Adding file " << path;
-        paths.append(path);
-      } else {
-        Debug(2) << "Did not find " << path;
-      }
-    }
-  } else {
-    for (auto&& entry : dir.entryList()) {
-      const QString path = dir.filePath(entry);
-      if (entry.length() == 4 && entry.toInt() > 0) {
-        Debug(1) << "Adding directory " << path;
-        paths.append(path);
-      } else {
-        _warning(QString("Malformed folder name ") + path);
-      }
-    }
-  }
-  Debug(1) << "Saw " << paths.size() << " paths in " << source;
-  return paths;
 }
 
 void GoogleTakeoutInputStream::loadSource(const QString& source) {
@@ -394,7 +361,7 @@ void GoogleTakeoutInputStream::loadSource(const QString& source) {
   } else if (info.exists()) {
     timelineObjects.append(readJson(source));
   } else {
-    _fatal(source + ": No such file or directory");
+    takeout_fatal(source + ": No such file or directory");
   }
 }
 

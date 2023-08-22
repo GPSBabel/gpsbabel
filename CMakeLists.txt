@@ -214,6 +214,7 @@ set(HEADERS
   geojson.h
   globalsat_sport.h
   geo.h
+  googletakeout.h
   gpx.h
   grtcirc.h
   gtrnctr.h

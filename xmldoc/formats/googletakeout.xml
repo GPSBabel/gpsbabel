@@ -14,30 +14,56 @@
 </para>
 
 <para>
+  There is no official documentation from Google for this format, however,
+  a volunteer is maintaining a schema at
+  <link xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="https://locationhistoryformat.com/">
+    locationhistoryformat.com
+  </link>.
+</para>
+
+<para>
   To obtain your Google Takeout History:
   <itemizedlist mark="bullet">
-    <listitem><para>Go to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://takeout.google.com/">takeout.google.com</link></para></listitem>
+    <listitem><para>
+      Go to
+      <link xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:href="https://takeout.google.com/">
+          takeout.google.com
+      </link>
+    </para></listitem>
     <listitem><para>Click on "Deselect all"</para></listitem>
-    <listitem><para>Scroll down to "Location History" and check the box</para></listitem>
-    <listitem><para>Scroll to the bottom of the page and click on "Next step"</para></listitem>
+    <listitem><para>
+      Scroll down to "Location History" and check the box
+    </para></listitem>
+    <listitem><para>
+      Scroll to the bottom of the page and click on "Next step"
+    </para></listitem>
     <listitem><para>Click on "Create export"</para></listitem>
   </itemizedlist>
   In a little while, you will receive an email to download your location
   history, which will be one or more zipfiles. Unzip everything into the same
-  folder. Your history will be in the folder "Takeout/Location History/Semantic Location History" within this folder.
+  folder. Your history will be in the folder
+  "Takeout/Location History/Semantic Location History" within this folder.
 </para>
 
 <example xml:id="googletakeout-all">
   <title>Convert entire location history to a single GPX file</title>
-  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History" -o gpx -F all.gpx</userinput></para>
+  <para><userinput>
+    gpsbabel -i googletakeout -f "Semantic Location History" -o gpx -F all.gpx
+  </userinput></para>
 </example>
 
 <example xml:id="googletakeout-year">
   <title>Convert a single years' location history to GPX</title>
-  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2022" -o gpx -F 2022.gpx</userinput></para>
+  <para><userinput>
+    gpsbabel -i googletakeout -f "Semantic Location History/2022" -o gpx -F 2022.gpx
+  </userinput></para>
 </example>
 
 <example xml:id="googletakeout-month">
   <title>Convert a single months' location history to GPX</title>
-  <para><userinput>gpsbabel -i googletakeout -f "Semantic Location History/2023/2023_MARCH.json" -o gpx -F 2023-03.gpx</userinput></para>
+  <para><userinput>
+    gpsbabel -i googletakeout -f "Semantic Location History/2023/2023_MARCH.json" -o gpx -F 2023-03.gpx
+  </userinput></para>
 </example>
