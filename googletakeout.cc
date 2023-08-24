@@ -71,9 +71,11 @@ static Waypoint* takeout_waypoint(
 
 static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
   if (waypoint->latitude == 0 && waypoint->longitude == 0) {
-    Debug(2) << "Track " << route->rte_name << "@" <<
-      waypoint->creation_time.toPrettyString() <<
-      ": Dropping point with no lat/long";
+    if (global_opts.debug_level >= 2) {
+      Debug(2) << "Track " << route->rte_name << "@" <<
+        waypoint->creation_time.toPrettyString() <<
+        ": Dropping point with no lat/long";
+    }
     delete waypoint; // as we're dropping it, gpsbabel won't clean it up later
     return false;
   }
@@ -84,7 +86,9 @@ static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
 static QList<QJsonObject> readJson(
     const QString& source)
 {
-  Debug(2) << "Reading from JSON " << source;
+  if (global_opts.debug_level >= 2) {
+    Debug(2) << "Reading from JSON " << source;
+  }
   auto* ifd = new gpsbabel::File(source);
   ifd->open(QIODevice::ReadOnly | QIODevice::Text);
   const QString content = ifd->readAll();
@@ -120,14 +124,18 @@ static QList<QJsonObject> readJson(
   if (timeline.isEmpty()) {
     takeout_warning(QString(source) + " does not contain any timelineObjects");
   }
-  Debug(2) << "Saw " << timeline.size() << " timelineObjects in " << source;
+  if (global_opts.debug_level >= 2) {
+    Debug(2) << "Saw " << timeline.size() << " timelineObjects in " << source;
+  }
   return timeline;
 }
 
 static QList<QString> readDir(
     const QString& source)
 {
-  Debug(2) << "Reading from folder " << source;
+  if (global_opts.debug_level >= 2) {
+    Debug(2) << "Reading from folder " << source;
+  }
   const QDir dir{source};
   const QFileInfo sourceInfo{source};
   const QString baseName = sourceInfo.fileName();
@@ -142,24 +150,35 @@ static QList<QString> readDir(
       const QString path = source + "/" + baseName + "_" + month + ".json";
       const QFileInfo info{path};
       if (info.exists()) {
-        Debug(3) << "Adding file " << path;
+        if (global_opts.debug_level >= 3) {
+          Debug(3) << "Adding file " << path;
+        }
         paths.append(path);
       } else {
-        Debug(4) << "Did not find " << path;
+        if (global_opts.debug_level >= 4) {
+          Debug(4) << "Did not find " << path;
+        }
       }
     }
   } else {
     for (auto&& entry : dir.entryList()) {
       const QString path = dir.filePath(entry);
+      if (entry == "." || entry == "..") {
+        continue;
+      }
       if (entry.length() == 4 && entry.toInt() > 0) {
-        Debug(3) << "Adding directory " << path;
+        if (global_opts.debug_level >= 3) {
+          Debug(3) << "Adding directory " << path;
+        }
         paths.append(path);
       } else {
         takeout_warning(QString("Malformed folder name ") + path);
       }
     }
   }
-  Debug(2) << "Saw " << paths.size() << " paths in " << source;
+  if (global_opts.debug_level >= 2) {
+    Debug(2) << "Saw " << paths.size() << " paths in " << source;
+  }
   return paths;
 }
 
@@ -184,7 +203,9 @@ GoogleTakeoutFormat::title_case(QString& title)
 
 void
 GoogleTakeoutFormat::rd_init(const QString& fname) {
-  Debug(4) << "rd_init(" << fname << ")";
+  if (global_opts.debug_level >= 4) {
+    Debug(4) << "rd_init(" << fname << ")";
+  }
   inputStream = GoogleTakeoutInputStream(fname);
 }
 
@@ -233,9 +254,11 @@ GoogleTakeoutFormat::read()
       );
     }
   }
-  Debug(1) << MYNAME << ": Processed " << items << " items: " <<
-    place_visits << " " << PLACE_VISIT << ", " << activity_segments <<
-    " " << ACTIVITY_SEGMENT << " (" << points << " points total)";
+  if (global_opts.debug_level >= 1) {
+    Debug(1) << MYNAME << ": Processed " << items << " items: " <<
+      place_visits << " " << PLACE_VISIT << ", " << activity_segments <<
+      " " << ACTIVITY_SEGMENT << " (" << points << " points total)";
+  }
 }
 
 void
@@ -360,8 +383,10 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
   );
   n_points += track_maybe_add_wpt(route, waypoint);
   if (!n_points) {
-    Debug(2) << "Track " << route->rte_name <<
-      ": Dropping track with no waypoints";
+    if (global_opts.debug_level >= 2) {
+      Debug(2) << "Track " << route->rte_name <<
+        ": Dropping track with no waypoints";
+    }
     track_del_head(route);
   }
   return n_points;
