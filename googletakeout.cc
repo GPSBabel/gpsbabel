@@ -162,18 +162,21 @@ static QList<QString> readDir(
       }
     }
   } else {
-    for (auto&& entry : dir.entryList()) {
-      const QString path = dir.filePath(entry);
-      if (entry == "." || entry == "..") {
+    for (auto&& entry : dir.entryInfoList()) {
+      const QString path = dir.filePath(entry.fileName());
+      const QString name = entry.fileName();
+      if (name == "." || name == "..") {
         continue;
       }
-      if (entry.length() == 4 && entry.toInt() > 0) {
+      if (name.length() == 4 && name.toInt() > 0) {
         if (global_opts.debug_level >= 3) {
           Debug(3) << "Adding directory " << path;
         }
         paths.append(path);
       } else {
-        takeout_warning(QString("Malformed folder name ") + path);
+        if (entry.isDir()) {
+          takeout_warning(QString("Malformed folder name ") + path);
+        }
       }
     }
   }
