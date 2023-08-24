@@ -323,9 +323,6 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
     activitySegment[WAYPOINT_PATH][WAYPOINTS].toArray();
   for (const auto&& pointRef: points) {
     const QJsonObject point = pointRef.toObject();
-    /* as waypointPath does not include timestamps, set every
-     * point along the path to the start of the activity
-     */
     waypoint = takeout_waypoint(
       point[LATE7].toInt(),
       point[LONE7].toInt(),
@@ -339,7 +336,7 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
   waypoint = takeout_waypoint(
     endLoc[LOCATION_LATE7].toInt(),
     endLoc[LOCATION_LONE7].toInt(),
-    nullptr, nullptr, nullptr
+    nullptr, nullptr, &timestamp
   );
   n_points += track_maybe_add_wpt(route, waypoint);
   if (!n_points) {
@@ -348,10 +345,6 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
     track_del_head(route);
   }
   return n_points;
-}
-
-GoogleTakeoutInputStream::GoogleTakeoutInputStream(const QString& source) {
-  this->sources = { source };
 }
 
 void GoogleTakeoutInputStream::loadSource(const QString& source) {

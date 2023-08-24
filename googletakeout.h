@@ -37,7 +37,7 @@ class GoogleTakeoutInputStream
 {
 public:
   GoogleTakeoutInputStream() = default;
-  GoogleTakeoutInputStream(const QString& source);
+  GoogleTakeoutInputStream(const QString& source) : sources(source) {}
   // Returns the next timelineObject, or a null QJsonValue if we're at the end
   QJsonValue next();
 private:
@@ -71,7 +71,7 @@ public:
  
 private:
   GoogleTakeoutInputStream inputStream;
-  QVector<arglist_t> googletakeout_args = {};
+  QVector<arglist_t> googletakeout_args;
 
   void add_place_visit(const QJsonObject& placeVisit);
   int add_activity_segment(const QJsonObject& activitySegment);
