@@ -2,6 +2,7 @@
   Support reading Google Takeout Timeline Location History JSON format.
 
   Copyright (C) 2023 Tyler MacDonald, tyler@macdonald.name
+  Copyright (C) 2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
