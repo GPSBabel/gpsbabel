@@ -1,0 +1,47 @@
+name: Codacy clang-tidy
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  workflow_dispatch: ~
+
+jobs:
+  ubuntu:
+    name: ubuntu Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            SCRIPT: './tools/ci_run_tidy.sh'
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
+      env:
+        LC_ALL: 'C.UTF-8'
+        JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_SCRIPT: ${{ matrix.SCRIPT }}
+        JOB_CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: build_and_test
+      run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+        if [ -n "${JOB_CMAKE_PREFIX_PATH}" ]; then
+          CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
+          export CMAKE_PREFIX_PATH
+        fi
+        if [ -n "${JOB_CODACY_PROJECT_TOKEN}" ]; then
+          CODACY_PROJECT_TOKEN="${JOB_CODACY_PROJECT_TOKEN}"
+          export CODACY_PROJECT_TOKEN
+        fi
+        "${JOB_SCRIPT}"
+
