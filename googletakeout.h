@@ -38,7 +38,7 @@ class GoogleTakeoutInputStream
 {
 public:
   GoogleTakeoutInputStream() = default;
-  GoogleTakeoutInputStream(const QString& source);
+  GoogleTakeoutInputStream(const QString& source) : sources({source}) {};
   // Returns the next timelineObject, or a null QJsonValue if we're at the end
   QJsonValue next();
 private:

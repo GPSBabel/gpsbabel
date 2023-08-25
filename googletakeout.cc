@@ -407,10 +407,6 @@ void GoogleTakeoutInputStream::loadSource(const QString& source) {
   }
 }
 
-GoogleTakeoutInputStream::GoogleTakeoutInputStream(const QString& source) {
-  this->sources = { source };
-}
-
 QJsonValue GoogleTakeoutInputStream::next() {
   if (!timelineObjects.isEmpty()) {
     QJsonValue nextObject = timelineObjects.first();
