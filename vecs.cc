@@ -163,6 +163,7 @@ struct Vecs::Impl {
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
+  GoogleTakeoutFormat google_timeline_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -494,12 +495,11 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      nullptr,
+      &google_timeline_fmt,
       "googletakeout",
       "Google Takeout Location History",
       "json",
       nullptr,
-      &fmtfactory<GoogleTakeoutFormat>
     }
 #endif // MAXIMAL_ENABLED
   };
@@ -817,7 +817,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : std::as_const(style_list)) {
+  for (const auto& svec : qAsConst(style_list)) {
     if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
