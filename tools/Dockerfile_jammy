@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     ninja-build \
     clazy \
+    clang-tidy \
+    jq \
+    curl \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
