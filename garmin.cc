@@ -888,20 +888,16 @@ waypoint_prepare()
      * mkshort will do collision detection and namespace
      * cleaning
      */
-    char* ident = mkshort(mkshort_handle,
-                          global_opts.synthesize_shortnames ?
-                          str_from_unicode(src).constData() :
-                          str_from_unicode(wpt->shortname).constData(),
-                          false);
+    QByteArray ident = mkshort(mkshort_handle,
+                               global_opts.synthesize_shortnames ?
+                               str_from_unicode(src).constData() :
+                               str_from_unicode(wpt->shortname).constData(),
+                               false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
      */
-    write_char_string(tx_waylist[i]->ident, ident, sizeof(tx_waylist[i]->ident));
-
-    if (global_opts.synthesize_shortnames) {
-      xfree(ident);
-    }
+    write_char_string(tx_waylist[i]->ident, ident.constData(), sizeof(tx_waylist[i]->ident));
 
     // If we were explicitly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
