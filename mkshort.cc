@@ -353,7 +353,7 @@ setshort_mustuniq(short_handle h, int i)
   hdl->must_uniq = i;
 }
 
-char*
+QByteArray
 mkshort(short_handle h, const char* istring, bool is_utf8)
 {
   char* ostring;
@@ -556,18 +556,17 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
   }
 
   if (hdl->must_uniq) {
-    return mkshort_add_to_list(hdl, ostring);
+    ostring = mkshort_add_to_list(hdl, ostring);
   }
-  return ostring;
+  QByteArray rval(ostring);
+  xfree(ostring);
+  return rval;
 }
 
 QString
 mkshort(short_handle h, const QString& istring)
 {
-  char* t =  mkshort(h, CSTR(istring), true);
-  QString r(t);
-  xfree(t);
-  return r;
+  return mkshort(h, CSTR(istring), true);
 }
 
 /*
