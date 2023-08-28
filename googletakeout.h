@@ -22,11 +22,15 @@
 #ifndef _GOOGLETAKEOUT_H
 #define _GOOGLETAKEOUT_H
 
-#include <QString>
-#include <QVector>
+#include <QJsonObject>     // for QJsonObject
+#include <QJsonValue>      // for QJsonValue
+#include <QList>           // for QList
+#include <QString>         // for QString
+#include <QStringLiteral>  // for qMakeStringPrivate, QStringLiteral
+#include <QVector>         // for QVector
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"        // for Format
 
 /*
  * Reads Location History JSON files and return each timelineObject
@@ -37,14 +41,24 @@
 class GoogleTakeoutInputStream
 {
 public:
+  /* Special Member Functions */
   GoogleTakeoutInputStream() = default;
   GoogleTakeoutInputStream(const QString& source) : sources({source}) {};
+
+  /* Member Functions */
+
   // Returns the next timelineObject, or a null QJsonValue if we're at the end
   QJsonValue next();
+
 private:
+  /* Member Functions */
+
+  void loadSource(const QString& source);
+
+  /* Data Members */
+
   QList<QString> sources;
   QList<QJsonObject> timelineObjects;
-  void loadSource(const QString& source);
 };
 
 /* Read-only Google Timeline Location History gpsbabel Format */
@@ -71,12 +85,7 @@ public:
   void read() override;
  
 private:
-  GoogleTakeoutInputStream inputStream;
-  QVector<arglist_t> googletakeout_args;
-
-  void add_place_visit(const QJsonObject& placeVisit);
-  int add_activity_segment(const QJsonObject& activitySegment);
-  void title_case(QString& title);
+  /* Constants */
 
   const QString PLACE_VISIT = QStringLiteral("placeVisit");
   const QString ACTIVITY_SEGMENT = QStringLiteral("activitySegment");
@@ -101,7 +110,17 @@ private:
   // +10 points for brevity, but -100 points for inconsistency.);
   const QString LATE7 = QStringLiteral("latE7");
   const QString LONE7 = QStringLiteral("lngE7");
-};
 
+  /* Member Functions */
+
+  void add_place_visit(const QJsonObject& placeVisit);
+  int add_activity_segment(const QJsonObject& activitySegment);
+  static void title_case(QString& title);
+
+  /* Data Members */
+
+  GoogleTakeoutInputStream inputStream;
+  QVector<arglist_t> googletakeout_args;
+};
 
 #endif /* _GOOGLETAKEOUT_H */

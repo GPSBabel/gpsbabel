@@ -19,15 +19,26 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
   USA.
 */
-#include <QDir>
-#include <QIODevice>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonParseError>
-
-#include "src/core/file.h"
 
 #include "googletakeout.h"
+
+#include <QChar>                // for operator==, QChar
+#include <QDateTime>            // for QDateTime
+#include <QDebug>               // for QDebug
+#include <QDir>                 // for QDir
+#include <QFileInfo>            // for QFileInfo
+#include <QFileInfoList>        // for QFileInfoList
+#include <QIODevice>            // for operator|, QIODevice
+#include <QJsonArray>           // for QJsonArray, QJsonArray::const_iterator
+#include <QJsonDocument>        // for QJsonDocument
+#include <QJsonObject>          // for QJsonObject, QJsonObject::const_iterator
+#include <QJsonParseError>      // for QJsonParseError, QJsonParseError::NoError
+#include <QJsonValueRef>        // for QJsonValueRef
+#include <QtCore>               // for ISODate, QIODeviceBase::ReadOnly, QIODeviceBase::Text
+
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/file.h"      // for File
+#include "src/core/logging.h"   // for Debug, FatalMsg, Warning
 
 #define MYNAME "Google Takeout"
 #define TIMELINE_OBJECTS "timelineObjects"
