@@ -362,6 +362,8 @@ option	kml	rotate_colors	Rotate colors for tracks and routes (default automatic)
 
 option	kml	prec	Precision of coordinates, number of decimals	integer	6			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_prec
 
+file	r-r---	googletakeout	json	Google Takeout Location History	googletakeout
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googletakeout.html
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
