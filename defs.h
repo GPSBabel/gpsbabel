@@ -1012,8 +1012,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
-char* strupper(char* src);
-char* strlower(char* src);
 QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
