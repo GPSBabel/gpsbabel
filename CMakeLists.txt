@@ -87,6 +87,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
+  googletakeout.cc
   gtm.cc
   gtrnctr.cc
   html.cc
@@ -213,6 +214,7 @@ set(HEADERS
   geojson.h
   globalsat_sport.h
   geo.h
+  googletakeout.h
   gpx.h
   grtcirc.h
   gtrnctr.h
@@ -380,6 +382,7 @@ set(TESTS
   geojson
   geo
   globalsat_sport
+  googletakeout
   gpsdrive
   gpx
   grapheme
