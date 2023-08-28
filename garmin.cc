@@ -51,12 +51,11 @@
 #include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
 #include "jeeps/gpsutil.h"       // for GPS_User, GPS_Enable_Diagnose, GPS_E...
 #include "src/core/datetime.h"   // for DateTime
-#include "mkshort.h"             // for MakeShort
 
 
 #define MYNAME "GARMIN"
 static const char* portname;
-static MakeShort* mkshort_handle;
+static short_handle mkshort_handle;
 static GPS_PWay* tx_waylist;
 static GPS_PWay* tx_routelist;
 static GPS_PWay* cur_tx_routelist_entry;
@@ -76,7 +75,7 @@ static char* baudopt = nullptr;
 static char* opt_codec = nullptr;
 static int baud = 0;
 static int categorybits;
-static bool receiver_must_upper = true;
+static int receiver_must_upper = 1;
 static QTextCodec* codec{nullptr};
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -156,11 +155,11 @@ write_char_string(char* dest, const char* source, size_t destsize)
 static void
 rw_init(const QString& fname)
 {
-  receiver_must_upper = true;
+  receiver_must_upper = 1;
   const char* receiver_charset = "US-ASCII";
 
   if (!mkshort_handle) {
-    mkshort_handle = new MakeShort;
+    mkshort_handle = mkshort_new_handle();
   }
 
   if (global_opts.debug_level > 0)  {
@@ -219,7 +218,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * Grope the unit we're talking to to set set_length to
+   * Grope the unit we're talking to to set setshort_length to
    * 	20 for  the V,
    * 	10 for Street Pilot, (old) Rhino, 76
    * 	6 for the III, 12, emap, and etrex
@@ -261,7 +260,7 @@ rw_init(const QString& fname)
     case 574: 	/* Geko 201 */
       receiver_short_length = 6;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      mkshort_handle->set_badchars("\"$.,'!");
+      setshort_badchars(mkshort_handle, "\"$.,'!");
       break;
 
     case 155:	/* Garmin V */
@@ -271,7 +270,7 @@ rw_init(const QString& fname)
       break;
     case 382: 	/* C320 */
       receiver_short_length = 30;
-      receiver_must_upper = false;
+      receiver_must_upper = 0;
       break;
     case 292: /* (60|76)C[S]x series */
     case 421: /* Vista|Legend Cx */
@@ -281,7 +280,7 @@ rw_init(const QString& fname)
     case 957: /* Legend HC */
       receiver_short_length = 14;
       snwhiteopt = xstrdup("1");
-      receiver_must_upper = false;
+      receiver_must_upper = 0;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
       break;
@@ -289,20 +288,20 @@ rw_init(const QString& fname)
     case 1095: /* GPS 72H */
       receiver_short_length = 10;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      mkshort_handle->set_badchars("\"$.,'!");
+      setshort_badchars(mkshort_handle, "\"$.,'!");
       break;
     case 231: /* Quest */
     case 463: /* Quest 2 */
-      receiver_must_upper = false;
+      receiver_must_upper = 0;
       receiver_short_length = 30;
       receiver_charset = "windows-1252";
       break;
     case 577: // Rino 530HCx Version 2.50
-      receiver_must_upper = false;
+      receiver_must_upper = 0;
       receiver_short_length = 14;
       break;
     case 429: // Streetpilot i3
-      receiver_must_upper = false;
+      receiver_must_upper = 0;
       receiver_charset = "windows-1252";
       receiver_short_length = 30;
       break;
@@ -333,13 +332,13 @@ rw_init(const QString& fname)
    * If the user provided a short_length, override the calculated value.
    */
   if (snlen) {
-    mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
+    setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));
   } else {
-    mkshort_handle->set_length(receiver_short_length);
+    setshort_length(mkshort_handle, receiver_short_length);
   }
 
   if (snwhiteopt) {
-    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
   }
 
   /*
@@ -347,12 +346,12 @@ rw_init(const QString& fname)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    mkshort_handle->set_goodchars(valid_waypt_chars);
+    setshort_goodchars(mkshort_handle, valid_waypt_chars);
   } else {
-    mkshort_handle->set_badchars("");
+    setshort_badchars(mkshort_handle, "");
   }
 
-  mkshort_handle->set_mustupper(receiver_must_upper);
+  setshort_mustupper(mkshort_handle, receiver_must_upper);
 
   /*
    * This used to mean something when we used cet, but these days this
@@ -399,8 +398,9 @@ rw_deinit()
     }
   }
 
-  delete mkshort_handle;
-  mkshort_handle = nullptr;
+  if (mkshort_handle) {
+    mkshort_del_handle(&mkshort_handle);
+  }
 
   xfree(portname);
   portname = nullptr;
@@ -484,7 +484,7 @@ waypt_read()
   }
 }
 
-static int lap_read_nop_cb(int, GPS_SWay**)
+static int lap_read_nop_cb(int, struct GPS_SWay**)
 {
   return 0;
 }
@@ -864,7 +864,7 @@ waypoint_prepare()
   extern WaypointList* global_waypoint_list;
   int icon;
 
-  tx_waylist = (GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
+  tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
 
   for (i = 0; i < n; i++) {
     tx_waylist[i] = sane_GPS_Way_New();
@@ -888,10 +888,10 @@ waypoint_prepare()
      * mkshort will do collision detection and namespace
      * cleaning
      */
-    QByteArray ident = mkshort_handle->mkshort(
+    QByteArray ident = mkshort(mkshort_handle,
                                global_opts.synthesize_shortnames ?
-                               str_from_unicode(src) :
-                               str_from_unicode(wpt->shortname),
+                               str_from_unicode(src).constData() :
+                               str_from_unicode(wpt->shortname).constData(),
                                false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
@@ -1057,7 +1057,7 @@ route_write()
 {
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
-  tx_routelist = (GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
+  tx_routelist = (struct GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
 
   for (int i = 0; i < n; i++) {
@@ -1104,7 +1104,7 @@ track_prepare()
 {
   int32 n = track_waypt_count() + track_count();
 
-  tx_tracklist = (GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
+  tx_tracklist = (struct GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
   for (int i = 0; i < n; i++) {
     tx_tracklist[i] = GPS_Track_New();
@@ -1241,7 +1241,7 @@ d103_icon_number_from_symbol(const QString& s)
 static void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
-  auto* gmsd = new garmin_fs_t(protoid);
+  garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
   wpt->fs.FsChainAdd(gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */
@@ -1275,7 +1275,7 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
 static void
 garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
 {
-  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   (void)protoid; // unused for now.
 

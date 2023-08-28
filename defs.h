@@ -854,8 +854,8 @@ using ff_readposn = Waypoint* (*)(posn_status*);
 struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
 using short_handle = mkshort_handle_imp*;
 
-char* mkshort(short_handle,  const char*, bool);
-QString mkshort(short_handle,  const QString&);
+QByteArray mkshort(short_handle, const char*, bool);
+QString mkshort(short_handle, const QString&);
 short_handle mkshort_new_handle();
 QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
