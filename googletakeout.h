@@ -65,6 +65,8 @@ private:
 class GoogleTakeoutFormat : public Format
 {
 public:
+  using Format::Format;
+
   /* Member functions */
   QVector<arglist_t>* get_args() override
   {
@@ -81,7 +83,8 @@ public:
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
 
-  void rd_init(const QString& fname) override;
+  void rd_init(const QString& fname) override
+  {}
   void read() override;
  
 private:
@@ -119,7 +122,6 @@ private:
 
   /* Data Members */
 
-  GoogleTakeoutInputStream inputStream;
   QVector<arglist_t> googletakeout_args;
 };
 

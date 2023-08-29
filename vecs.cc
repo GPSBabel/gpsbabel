@@ -163,7 +163,6 @@ struct Vecs::Impl {
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
-  GoogleTakeoutFormat google_timeline_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -495,11 +494,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &google_timeline_fmt,
+      nullptr,
       "googletakeout",
       "Google Takeout Location History",
       "json",
       nullptr,
+      &fmtfactory<GoogleTakeoutFormat>
     }
 #endif // MAXIMAL_ENABLED
   };

@@ -217,16 +217,13 @@ GoogleTakeoutFormat::title_case(QString& title)
 }
 
 void
-GoogleTakeoutFormat::rd_init(const QString& fname) {
+GoogleTakeoutFormat::read()
+{
   if (global_opts.debug_level >= 4) {
     Debug(4) << "rd_init(" << fname << ")";
   }
-  inputStream = GoogleTakeoutInputStream(fname);
-}
+  GoogleTakeoutInputStream inputStream(fname);
 
-void
-GoogleTakeoutFormat::read()
-{
   int items = 0;
   int points = 0;
   int place_visits = 0;
