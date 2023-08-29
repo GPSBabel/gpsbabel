@@ -118,13 +118,6 @@ constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
-/* Pathname separator character */
-#if __WIN32__
-#  define GB_PATHSEP '\\'
-#else
-#  define GB_PATHSEP '/'
-#endif
-
 
 /*
  * Common definitions.   There should be no protocol or file-specific
