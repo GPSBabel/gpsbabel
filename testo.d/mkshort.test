@@ -4,7 +4,7 @@ compare ${REFERENCE}/mkshort6.csv ${TMPDIR}/mkshort6.csv
 gpsbabel -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=5 -F ${TMPDIR}/mkshort5.csv
 compare ${REFERENCE}/mkshort5.csv ${TMPDIR}/mkshort5.csv
 gpsbabel -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=4 -F ${TMPDIR}/mkshort4.csv
-compare ${REFERENCE}/mkshort5.csv ${TMPDIR}/mkshort5.csv
+compare ${REFERENCE}/mkshort4.csv ${TMPDIR}/mkshort4.csv
 # expected failure: "mkshort failure, the specified short length is insufficient."
 # expecting this to fail so call directly rather than via gpsbabel function
 ${VALGRIND} "${PNAME}" -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=3 -F ${TMPDIR}/mkshort3.csv > /dev/null 2> ${TMPDIR}/mkshort3.log && {
