@@ -19,8 +19,9 @@
 
  */
 
+#include <cassert>     // for assert
 #include <cctype>      // for isspace, toupper, isdigit
-#include <cstdio>      // for snprintf, size_t
+#include <climits>     // for INT_MAX
 #include <cstring>     // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
 
 #include <QByteArray>  // for QByteArray
@@ -49,7 +50,7 @@ class ShortNameKey;
 using ShortNameHash = QHash<ShortNameKey, uniq_shortname*>;
 class ShortNameKey {
 public:
-  ShortNameKey(char* name) : shortname(name) {} /* converting constructor */
+  ShortNameKey(const QByteArray& name) : shortname(name) {} /* converting constructor */
 
   friend qhash_result_t qHash(const ShortNameKey &key, qhash_result_t seed = 0) noexcept
   {
@@ -109,7 +110,7 @@ mkshort_new_handle()
 
 static
 uniq_shortname*
-is_unique(mkshort_handle_imp* h, char* name)
+is_unique(mkshort_handle_imp* h, const QByteArray& name)
 {
   if (h->namelist.contains(name)) {
     return h->namelist.value(name);
@@ -119,34 +120,35 @@ is_unique(mkshort_handle_imp* h, char* name)
 
 static
 void
-add_to_hashlist(mkshort_handle_imp* h, char* name)
+add_to_hashlist(mkshort_handle_imp* h, const QByteArray& name)
 {
   h->namelist.insert(name, new uniq_shortname);
 }
 
-char*
-mkshort_add_to_list(mkshort_handle_imp* h, char* name)
+static
+void
+mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name)
 {
+  assert(h->target_len <= INT_MAX);
+  int target_len = h->target_len;
+
   uniq_shortname* s;
-
   while ((s = is_unique(h, name))) {
-    char tbuf[13];
-    size_t l = strlen(name);
 
-    s->conflictctr++;
+    QByteArray suffix(".");
+    suffix.append(QByteArray::number(++s->conflictctr));
 
-    int dl = snprintf(tbuf, sizeof(tbuf), ".%d", s->conflictctr);
-
-    if (l + dl < h->target_len) {
-      name = (char*) xrealloc(name, l + dl + 1);
-      strcat(name, tbuf);
+    if (name.size() + suffix.size() <= target_len) {
+      name.append(suffix);
+    } else if (suffix.size() <= target_len) {
+      name.truncate(target_len - suffix.size());
+      name.append(suffix);
     } else {
-      strcpy(&name[l-dl], tbuf);
+      fatal("mkshort failure, the specified short length is insufficient.\n");
     }
   }
 
   add_to_hashlist(h, name);
-  return name;
 }
 
 void
@@ -249,7 +251,9 @@ void
 setshort_length(short_handle h, int l)
 {
   auto* hdl = (mkshort_handle_imp*) h;
-  if (l == 0) {
+  if (l < 0) {
+    fatal("mkshort: short length must be non-negative.\n");
+  } else if (l == 0) {
     hdl->target_len = default_target_len;
   } else {
     hdl->target_len = l;
@@ -555,11 +559,11 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     ostring = xstrdup(hdl->defname);
   }
 
-  if (hdl->must_uniq) {
-    ostring = mkshort_add_to_list(hdl, ostring);
-  }
   QByteArray rval(ostring);
   xfree(ostring);
+  if (hdl->must_uniq) {
+    mkshort_add_to_list(hdl, rval);
+  }
   return rval;
 }
 
