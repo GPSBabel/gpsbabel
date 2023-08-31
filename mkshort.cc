@@ -129,6 +129,8 @@ static
 void
 mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name)
 {
+  static_assert(!std::is_signed<decltype(h->target_len)>::value,
+                "simplify the following logic if target length is signed.");
   assert(h->target_len <= INT_MAX);
   int target_len = h->target_len;
 
@@ -141,6 +143,7 @@ mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name)
     if (name.size() + suffix.size() <= target_len) {
       name.append(suffix);
     } else if (suffix.size() <= target_len) {
+      // FIXME: utf8 => grapheme truncate
       name.truncate(target_len - suffix.size());
       name.append(suffix);
     } else {
