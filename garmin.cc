@@ -890,8 +890,8 @@ waypoint_prepare()
      */
     QByteArray ident = mkshort(mkshort_handle,
                                global_opts.synthesize_shortnames ?
-                               str_from_unicode(src).constData() :
-                               str_from_unicode(wpt->shortname).constData(),
+                               str_from_unicode(src) :
+                               str_from_unicode(wpt->shortname),
                                false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
