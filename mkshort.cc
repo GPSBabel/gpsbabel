@@ -361,7 +361,7 @@ setshort_mustuniq(short_handle h, int i)
 }
 
 QByteArray
-mkshort(short_handle h, const char* istring, bool is_utf8)
+mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
 {
   char* ostring;
   char* tstring;
@@ -377,7 +377,7 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
     result.remove(QChar::ReplacementCharacter);
     ostring = xstrdup(result.toUtf8().constData());
   } else {
-    ostring = xstrdup(istring);
+    ostring = xstrdup(istring.constData());
   }
 
   /*
@@ -573,7 +573,7 @@ mkshort(short_handle h, const char* istring, bool is_utf8)
 QString
 mkshort(short_handle h, const QString& istring)
 {
-  return mkshort(h, CSTR(istring), true);
+  return mkshort(h, istring.toUtf8(), true);
 }
 
 /*
