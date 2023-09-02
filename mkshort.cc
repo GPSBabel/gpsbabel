@@ -304,7 +304,7 @@ setshort_mustuniq(short_handle h, int i)
 QByteArray
 mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
 {
-  QByteArray rval;
+  QByteArray ostring;
   auto* hdl = (mkshort_handle_imp*) h;
 
   if (is_utf8) {
@@ -313,9 +313,9 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     // QString::fromUtf8() doesn't quite promise to use QChar::ReplacementCharacter,
     // but if it did toss them.
     result.remove(QChar::ReplacementCharacter);
-    rval = result.toUtf8();
+    ostring = result.toUtf8();
   } else {
-    rval = istring;
+    ostring = istring;
   }
 
   /*
@@ -325,60 +325,62 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * the new seven digit geocache numbers and special case whacking
    * the 'G' off the front.
    */
-  if ((hdl->target_len == 6) && (rval.size() == 7) &&
-      rval.startsWith("GC")) {
-    rval.remove(0, 1);
+  if ((hdl->target_len == 6) && (ostring.size() == 7) &&
+      ostring.startsWith("GC")) {
+    ostring.remove(0, 1);
   }
 
   /*
    * Whack leading "[Tt]he "
    */
-  if ((rval.size() > (hdl->target_len + 4)) &&
-      (rval.startsWith("The ") || rval.startsWith("the "))) {
-    rval.remove(0, 4);
+  if ((ostring.size() > (hdl->target_len + 4)) &&
+      (ostring.startsWith("The ") || ostring.startsWith("the "))) {
+    ostring.remove(0, 4);
   }
 
   /* Eliminate leading whitespace in all cases */
-  while (isspace(rval.front())) {
-    rval.remove(0, 1);
+  while (isspace(ostring.front())) {
+    ostring.remove(0, 1);
   }
 
   if (!hdl->whitespaceok) {
     /*
      * Eliminate Whitespace
      */
-    QByteArray tval;
-    rval.swap(tval);
-    for (auto ch : tval) {
+    QByteArray tstring;
+    ostring.swap(tstring);
+    for (const auto ch : qAsConst(tstring)) {
       if (!isspace(ch)) {
-        rval.append(ch);
+        ostring.append(ch);
       }
     }
   }
 
   if (hdl->mustupper) {
-    rval = rval.toUpper();
+    ostring = ostring.toUpper();
   }
 
   /* Before we do any of the vowel or character removal, look for
    * constants to replace.
    */
 
-  replace_constants(rval);
+  replace_constants(ostring);
 
   /*
    * Eliminate chars on the blacklist.
    */
-  QByteArray tval;
-  rval.swap(tval);
-  for (auto ch : tval) {
-    if (hdl->badchars.contains(ch)) {
-      continue;
+  {
+    QByteArray tstring;
+    ostring.swap(tstring);
+    for (const auto ch : qAsConst(tstring)) {
+      if (hdl->badchars.contains(ch)) {
+        continue;
+      }
+      if (!hdl->goodchars.isEmpty() && (!hdl->goodchars.contains(ch))) {
+        continue;
+      }
+      ostring.append(ch);
     }
-    if (!hdl->goodchars.isEmpty() && (!hdl->goodchars.contains(ch))) {
-      continue;
-    }
-    rval.append(ch);
   }
 
   /*
@@ -387,17 +389,16 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    */
   if (!hdl->repeating_whitespaceok) {
     // simplified also removes any leading and trailing whitespace, which is fine.
-    rval = rval.simplified();
+    ostring = ostring.simplified();
   } 
 
   /*
    * Eliminate trailing whitespace in all cases. This is done late because
    * earlier operations may have vacated characters after the space.
    */
-  while (isspace(rval.back())) {
-    rval.chop(1);
+  while (isspace(ostring.back())) {
+    ostring.chop(1);
   }
-
 
   /*
    * Toss vowels to approach target length, but don't toss them
@@ -418,8 +419,8 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    */
   bool replaced = hdl->target_len < 15;
 
-  while (replaced && (rval.size() > hdl->target_len)) {
-    replaced = delete_last_vowel(2, rval);
+  while (replaced && (ostring.size() > hdl->target_len)) {
+    replaced = delete_last_vowel(2, ostring);
   }
 
   /*
@@ -435,9 +436,9 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * If the numeric component alone is longer than our target string
    * length, use the trailing part of the the numeric component.
    */
-  if (int delcnt = rval.size() - hdl->target_len; delcnt > 0) {
+  if (int delcnt = ostring.size() - hdl->target_len; delcnt > 0) {
     int suffixcnt = 0;
-    for (auto it = rval.crbegin(); it != rval.crend(); ++it) {
+    for (auto it = ostring.crbegin(); it != ostring.crend(); ++it) {
       if (isdigit(*it)) {
         ++suffixcnt;
       }
@@ -450,13 +451,13 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     assert(keepcnt >= 0);
 
     if (true && is_utf8) {
-      QString result = grapheme_truncate(QString::fromUtf8(rval), keepcnt);
-      rval = result.toUtf8().append(rval.right(suffixcnt));
+      QString result = grapheme_truncate(QString::fromUtf8(ostring), keepcnt);
+      ostring = result.toUtf8().append(ostring.right(suffixcnt));
     } else {
-      rval.remove(keepcnt, delcnt);
+      ostring.remove(keepcnt, delcnt);
     }
-    while (isspace(rval.back())) {
-      rval.chop(1);
+    while (isspace(ostring.back())) {
+      ostring.chop(1);
     }
   }
 
@@ -464,14 +465,14 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * If, after all that, we have an empty string, punt and
    * let the must_uniq code handle it.
    */
-  if (rval.isEmpty()) {
-    rval = hdl->defname;
+  if (ostring.isEmpty()) {
+    ostring = hdl->defname;
   }
 
   if (hdl->must_uniq) {
-    mkshort_add_to_list(hdl, rval);
+    mkshort_add_to_list(hdl, ostring);
   }
-  return rval;
+  return ostring;
 }
 
 QString
