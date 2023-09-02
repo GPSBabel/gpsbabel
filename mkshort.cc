@@ -28,6 +28,7 @@
 #include <QString>     // for QString
 #include <QVector>     // for QVector
 #include <Qt>          // for CaseInsensitive
+#include <QtGlobal>    // for qAsConst
 
 #include "defs.h"
 #include "geocache.h"  // for Geocache
@@ -338,10 +339,8 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     ostring.remove(0, 4);
   }
 
-  /* Eliminate leading whitespace in all cases */
-  while (isspace(ostring.front())) {
-    ostring.remove(0, 1);
-  }
+  /* In all cases eliminate leading and trailing whitespace */
+  ostring = ostring.trimmed();
 
   if (!hdl->whitespaceok) {
     /*
@@ -384,21 +383,13 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
   }
 
   /*
-   * Eliminate repeated whitespace.  This can only shorten the string
-   * so we do it in place.
+   * Eliminate whitespace.
+   * In all cases remove leading and trailing whitespace.
+   * Leading and/or trailing whitespace may have been created by earlier
+   * operations that removed character(s) before and/or after whitespace.
+   * Conditionally simplify embedded whitespace.
    */
-  if (!hdl->repeating_whitespaceok) {
-    // simplified also removes any leading and trailing whitespace, which is fine.
-    ostring = ostring.simplified();
-  } 
-
-  /*
-   * Eliminate trailing whitespace in all cases. This is done late because
-   * earlier operations may have vacated characters after the space.
-   */
-  while (isspace(ostring.back())) {
-    ostring.chop(1);
-  }
+  ostring = hdl->repeating_whitespaceok? ostring.trimmed() : ostring.simplified();
 
   /*
    * Toss vowels to approach target length, but don't toss them
