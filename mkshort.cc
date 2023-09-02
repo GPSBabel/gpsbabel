@@ -99,20 +99,25 @@ mkshort_new_handle()
 
 static
 void
-mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name)
+mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name, bool is_utf8)
 {
   while (h->namelist.contains(name)) {
     auto& conflictctr = h->namelist[name];
 
     QByteArray suffix(".");
     suffix.append(QByteArray::number(++conflictctr));
+    int suffixcnt = suffix.size();
 
-    if (name.size() + suffix.size() <= h->target_len) {
+    if (name.size() + suffixcnt <= h->target_len) {
       name.append(suffix);
-    } else if (suffix.size() <= h->target_len) {
-      // FIXME: utf8 => grapheme truncate
-      name.truncate(h->target_len - suffix.size());
-      name.append(suffix);
+    } else if (int keepcnt = h->target_len - suffixcnt; keepcnt >= 0) {
+      if (is_utf8) {
+        QString result = grapheme_truncate(QString::fromUtf8(name), keepcnt);
+        name = result.toUtf8().append(suffix);
+      } else {
+        name.truncate(keepcnt);
+        name.append(suffix);
+      }
     } else {
       fatal("mkshort failure, the specified short length is insufficient.\n");
     }
@@ -441,7 +446,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     int keepcnt = hdl->target_len - suffixcnt;
     assert(keepcnt >= 0);
 
-    if (true && is_utf8) {
+    if (is_utf8) {
       QString result = grapheme_truncate(QString::fromUtf8(ostring), keepcnt);
       ostring = result.toUtf8().append(ostring.right(suffixcnt));
     } else {
@@ -461,7 +466,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
   }
 
   if (hdl->must_uniq) {
-    mkshort_add_to_list(hdl, ostring);
+    mkshort_add_to_list(hdl, ostring, is_utf8);
   }
   return ostring;
 }
