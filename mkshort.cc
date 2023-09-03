@@ -42,11 +42,12 @@ static constexpr const char default_badchars[] = "\"$.,'!-";
 
 class ShortNameKey;
 using ShortNameHash = QHash<ShortNameKey, int>;
-class ShortNameKey {
+class ShortNameKey
+{
 public:
   ShortNameKey(const QByteArray& name) : shortname(name) {} /* converting constructor */
 
-  friend qhash_result_t qHash(const ShortNameKey &key, qhash_result_t seed = 0) noexcept
+  friend qhash_result_t qHash(const ShortNameKey& key, qhash_result_t seed = 0) noexcept
   {
     // We hash all strings as upper case.
     return qHash(key.shortname.toUpper(), seed);
@@ -55,7 +56,7 @@ public:
   QByteArray shortname;
 };
 
-inline bool operator==(const ShortNameKey& lhs, const ShortNameKey &rhs) noexcept
+inline bool operator==(const ShortNameKey& lhs, const ShortNameKey& rhs) noexcept
 {
   return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
 }
