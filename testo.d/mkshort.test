@@ -34,5 +34,8 @@ echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv
 echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=4 -F - >>${TMPDIR}/mkshort4.log
 echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=3 -F - >>${TMPDIR}/mkshort4.log
 echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=2 -F - >>${TMPDIR}/mkshort4.log
+#replacements
+echo '0,0,"abcd one"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=8 -F - >>${TMPDIR}/mkshort4.log
+
 compare ${REFERENCE}/mkshort4.log ${TMPDIR}/mkshort4.log
   
