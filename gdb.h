@@ -32,11 +32,12 @@
 #include <QVector>          // for QVector
 #include <QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
 
-#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
+#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"         // for Format
 #include "garmin_fs.h"      // for garmin_fs_t
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
+#include "mkshort.h"        // for MakeShort
 
 
 class GdbFormat : public Format
@@ -172,7 +173,7 @@ private:
   WptNamePosnHash waypt_nameposn_in_hidden_hash;
   WptNameHash waypt_name_in_hidden_hash;
   WptNamePosnHash waypt_nameposn_out_hash;
-  short_handle short_h{};
+  MakeShort* short_h{};
 
   char* gdb_opt_category{};
   char* gdb_opt_ver{};

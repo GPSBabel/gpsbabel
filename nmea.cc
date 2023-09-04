@@ -45,6 +45,7 @@
 #include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
 #include "gbser.h"                 // for gbser_set_speed, gbser_flush, gbser_read_line, gbser_deinit, gbser_init, gbser_write
 #include "jeeps/gpsmath.h"         // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M
+#include "mkshort.h"               // for MakeShort
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning
 
@@ -299,8 +300,8 @@ NmeaFormat::wr_init(const QString& fname)
     }
   }
 
-  mkshort_handle = mkshort_new_handle();
-  setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
+  mkshort_handle = new MakeShort;
+  mkshort_handle->setshort_length(xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
     opt_gpgga = nullptr;
@@ -313,7 +314,8 @@ void
 NmeaFormat::wr_deinit()
 {
   gbfclose(file_out);
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 }
 
 void
@@ -1164,9 +1166,9 @@ NmeaFormat::nmea_wayptpr(const Waypoint* wpt) const
   double lat = degrees2ddmm(wpt->latitude);
   double lon = degrees2ddmm(wpt->longitude);
   if (global_opts.synthesize_shortnames) {
-    s = mkshort_from_wpt(mkshort_handle, wpt);
+    s = mkshort_handle->mkshort_from_wpt(wpt);
   } else {
-    s = mkshort(mkshort_handle, wpt->shortname);
+    s = mkshort_handle->mkshort(wpt->shortname);
   }
 
   snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s",

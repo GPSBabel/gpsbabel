@@ -55,10 +55,11 @@
 #include <cstdint>      // for int32_t, int16_t, uint16_t
 #include <ctime>        // for time_t
 
-#include "defs.h"       // for arglist_t, ARG_NOMINMAX, ff_cap, Waypoint, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ARGTYPE_FILE, ARGTYPE_INT, bounds, ff_cap_read, ff_cap_write, ff_type, ff_type_file, short_handle
+#include "defs.h"       // for arglist_t, ARG_NOMINMAX, ff_cap, Waypoint, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ARGTYPE_FILE, ARGTYPE_INT, bounds, ff_cap_read, ff_cap_write, ff_type, ff_type_file
 #include "format.h"     // for Format
 #include "garmin_fs.h"  // for garmin_fs_t
 #include "gbfile.h"     // for gbfile
+#include "mkshort.h"    // for MakeShort
 
 
 class GarminGPIFormat : public Format
@@ -377,7 +378,7 @@ private:
   uint16_t codepage{};	/* code-page, e.g. 1252, 65001 */
   reader_data_t* rdata{};
   writer_data_t* wdata{};
-  short_handle short_h{};
+  MakeShort* short_h{};
   char units{};
   time_t gpi_timestamp = 0;
   QTextCodec* codec{nullptr};

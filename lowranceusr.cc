@@ -342,7 +342,7 @@ void
 LowranceusrFormat::wr_init(const QString& fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
   waypt_out_count = 0;
   writing_version = xstrtoi(opt_wversion, nullptr, 10);
   if ((writing_version < 2) || (writing_version > 4)) {
@@ -356,7 +356,8 @@ void
 LowranceusrFormat::wr_deinit()
 {
   gbfclose(file_out);
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
   utf16le_codec = nullptr;
   delete waypt_table;
   waypt_table = nullptr;
@@ -1284,7 +1285,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   QString name;
   if ((wpt->shortname.isEmpty()) || global_opts.synthesize_shortnames) {
     if (!wpt->description.isEmpty() && global_opts.synthesize_shortnames) {
-      name = mkshort_from_wpt(mkshort_handle, wpt);
+      name = mkshort_handle->mkshort_from_wpt(wpt);
     } else if (!wpt->shortname.isEmpty()) {
       name = wpt->shortname;
     } else if (!wpt->description.isEmpty()) {
@@ -1835,7 +1836,7 @@ LowranceusrFormat::write()
 {
   QString buf;
 
-  setshort_length(mkshort_handle, 15);
+  mkshort_handle->setshort_length(15);
 
   gbfputint32(writing_version, file_out);
 

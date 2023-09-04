@@ -226,6 +226,7 @@ set(HEADERS
   legacyformat.h
   igc.h
   lowranceusr.h
+  mkshort.h
   nmea.h
   osm.h
   qstarz_bl_1000.h

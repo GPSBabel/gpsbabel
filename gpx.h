@@ -34,6 +34,7 @@
 #include "defs.h"
 #include "format.h"                    // for Format
 #include "formspec.h"                  // for FormatSpecificData
+#include "mkshort.h"                   // for MakeShort
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "src/core/xmltag.h"           // for xml_tag
@@ -243,7 +244,7 @@ private:
   gpsbabel::File* iqfile{};
   gpsbabel::File* oqfile{};
   gpsbabel::XmlStreamWriter* writer{};
-  short_handle mkshort_handle{};
+  MakeShort* mkshort_handle{};
   QString link_url;
   QString link_text;
   QString link_type;

@@ -49,6 +49,7 @@
 #include "garmin_fs.h"                      // for garmin_fs_xml_convert, garmin_fs_xml_fprint, GMSD_FIND
 #include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
 #include "geocache.h"                       // for Geocache, Geocache::UtfSt...
+#include "mkshort.h"                        // for MakeShort
 #include "src/core/datetime.h"              // for DateTime
 #include "src/core/file.h"                  // for File
 #include "src/core/logging.h"               // for Warning, Fatal
@@ -90,17 +91,15 @@ inline QString GpxFormat::toString(float f)
 void
 GpxFormat::gpx_reset_short_handle()
 {
-  if (mkshort_handle != nullptr) {
-    mkshort_del_handle(&mkshort_handle);
-  }
+  delete mkshort_handle;
 
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
 
   if (suppresswhite) {
-    setshort_whitespace_ok(mkshort_handle, 0);
+    mkshort_handle->setshort_whitespace_ok(0);
   }
 
-  setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));
+  mkshort_handle->setshort_length(xstrtoi(snlen, nullptr, 10));
 }
 
 void
@@ -971,7 +970,8 @@ GpxFormat::wr_deinit()
   delete oqfile;
   oqfile = nullptr;
 
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 }
 
 QString
@@ -1323,7 +1323,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
   QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_from_wpt(mkshort_handle, waypointp) :
+                  mkshort_handle->mkshort_from_wpt(waypointp) :
                   waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_waypoint);
   gpx_write_common_description(waypointp, oname);
@@ -1402,7 +1402,7 @@ GpxFormat::gpx_track_disp(const Waypoint* waypointp) const
   gpx_write_common_position(waypointp, gpxpt_track);
 
   QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_from_wpt(mkshort_handle, waypointp) :
+                  mkshort_handle->mkshort_from_wpt(waypointp) :
                   waypointp->shortname;
   gpx_write_common_description(waypointp,
                                waypointp->wpt_flags.shortname_is_synthetic ?
@@ -1491,7 +1491,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp) const
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
   QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_from_wpt(mkshort_handle, waypointp) :
+                  mkshort_handle->mkshort_from_wpt(waypointp) :
                   waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_route);
   gpx_write_common_description(waypointp, oname);
