@@ -292,9 +292,9 @@ tpg_write()
   int s = waypt_count();
 
   if (global_opts.synthesize_shortnames) {
-    mkshort_handle->setshort_length(32);
-    mkshort_handle->setshort_whitespace_ok(1);
-    mkshort_handle->setshort_mustupper(1);
+    mkshort_handle->set_length(32);
+    mkshort_handle->set_whitespace_ok(1);
+    mkshort_handle->set_mustupper(1);
   }
 
   if (s > MAXTPGOUTPUTPINS) {

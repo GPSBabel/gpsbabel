@@ -1836,7 +1836,7 @@ LowranceusrFormat::write()
 {
   QString buf;
 
-  mkshort_handle->setshort_length(15);
+  mkshort_handle->set_length(15);
 
   gbfputint32(writing_version, file_out);
 

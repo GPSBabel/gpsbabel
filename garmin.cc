@@ -219,7 +219,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * Grope the unit we're talking to to set setshort_length to
+   * Grope the unit we're talking to to set set_length to
    * 	20 for  the V,
    * 	10 for Street Pilot, (old) Rhino, 76
    * 	6 for the III, 12, emap, and etrex
@@ -261,7 +261,7 @@ rw_init(const QString& fname)
     case 574: 	/* Geko 201 */
       receiver_short_length = 6;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      mkshort_handle->setshort_badchars("\"$.,'!");
+      mkshort_handle->set_badchars("\"$.,'!");
       break;
 
     case 155:	/* Garmin V */
@@ -289,7 +289,7 @@ rw_init(const QString& fname)
     case 1095: /* GPS 72H */
       receiver_short_length = 10;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      mkshort_handle->setshort_badchars("\"$.,'!");
+      mkshort_handle->set_badchars("\"$.,'!");
       break;
     case 231: /* Quest */
     case 463: /* Quest 2 */
@@ -333,13 +333,13 @@ rw_init(const QString& fname)
    * If the user provided a short_length, override the calculated value.
    */
   if (snlen) {
-    mkshort_handle->setshort_length(xstrtoi(snlen, nullptr, 10));
+    mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
   } else {
-    mkshort_handle->setshort_length(receiver_short_length);
+    mkshort_handle->set_length(receiver_short_length);
   }
 
   if (snwhiteopt) {
-    mkshort_handle->setshort_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
   }
 
   /*
@@ -347,12 +347,12 @@ rw_init(const QString& fname)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    mkshort_handle->setshort_goodchars(valid_waypt_chars);
+    mkshort_handle->set_goodchars(valid_waypt_chars);
   } else {
-    mkshort_handle->setshort_badchars("");
+    mkshort_handle->set_badchars("");
   }
 
-  mkshort_handle->setshort_mustupper(receiver_must_upper);
+  mkshort_handle->set_mustupper(receiver_must_upper);
 
   /*
    * This used to mean something when we used cet, but these days this

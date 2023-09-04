@@ -1118,13 +1118,13 @@ GdbFormat::reset_short_handle(const char* defname)
 
   short_h = new MakeShort;
 
-  short_h->setshort_length(kGDBNameBufferLen);
-  short_h->setshort_badchars("\r\n\t");
-  short_h->setshort_mustupper(0);
-  short_h->setshort_mustuniq(1);
-  short_h->setshort_whitespace_ok(1);
-  short_h->setshort_repeating_whitespace_ok(1);
-  short_h->setshort_defname(defname);
+  short_h->set_length(kGDBNameBufferLen);
+  short_h->set_badchars("\r\n\t");
+  short_h->set_mustupper(0);
+  short_h->set_mustuniq(1);
+  short_h->set_whitespace_ok(1);
+  short_h->set_repeating_whitespace_ok(1);
+  short_h->set_defname(defname);
 }
 
 /* ----------------------------------------------------------------------------*/

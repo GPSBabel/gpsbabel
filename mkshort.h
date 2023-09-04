@@ -37,14 +37,14 @@ public:
 
   /* Member Functions */
 
-  void setshort_length(int l);
-  void setshort_whitespace_ok(bool ok);
-  void setshort_repeating_whitespace_ok(bool ok);
-  void setshort_defname(const char* s);
-  void setshort_badchars(const char* s);
-  void setshort_goodchars(const char* s);
-  void setshort_mustupper(bool must);
-  void setshort_mustuniq(bool must);
+  void set_length(int l);
+  void set_whitespace_ok(bool ok);
+  void set_repeating_whitespace_ok(bool ok);
+  void set_defname(const char* s);
+  void set_badchars(const char* s);
+  void set_goodchars(const char* s);
+  void set_mustupper(bool must);
+  void set_mustuniq(bool must);
   QByteArray mkshort(const QByteArray& istring, bool is_utf8);
   QString mkshort(const QString& istring);
   QString mkshort_from_wpt(const Waypoint* wpt);

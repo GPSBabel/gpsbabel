@@ -1954,32 +1954,32 @@ XcsvFormat::wr_init(const QString& fname)
   xcsv_file->fname = fname;
 
   if (xcsv_style->shortlen) {
-    xcsv_file->mkshort_handle.setshort_length(*xcsv_style->shortlen);
+    xcsv_file->mkshort_handle.set_length(*xcsv_style->shortlen);
   }
   if (xcsv_style->whitespace_ok) {
-    xcsv_file->mkshort_handle.setshort_whitespace_ok(*xcsv_style->whitespace_ok);
+    xcsv_file->mkshort_handle.set_whitespace_ok(*xcsv_style->whitespace_ok);
   }
 
   /* set mkshort options from the command line */
   if (global_opts.synthesize_shortnames) {
 
     if (snlenopt) {
-      xcsv_file->mkshort_handle.setshort_length(xstrtoi(snlenopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_length(xstrtoi(snlenopt, nullptr, 10));
     }
 
     if (snwhiteopt) {
-      xcsv_file->mkshort_handle.setshort_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      xcsv_file->mkshort_handle.setshort_mustupper(xstrtoi(snupperopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_mustupper(xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      xcsv_file->mkshort_handle.setshort_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
     }
 
-    xcsv_file->mkshort_handle.setshort_badchars(CSTR(xcsv_style->badchars));
+    xcsv_file->mkshort_handle.set_badchars(CSTR(xcsv_style->badchars));
 
   }
 

@@ -463,21 +463,21 @@ wr_init(const QString& fname)
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    mkshort_handle->setshort_length(xstrtoi(snlenopt, nullptr, 10));
+    mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
     if (snwhiteopt) {
-      mkshort_handle->setshort_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+      mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      mkshort_handle->setshort_mustupper(xstrtoi(snupperopt, nullptr, 10));
+      mkshort_handle->set_mustupper(xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      mkshort_handle->setshort_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+      mkshort_handle->set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
     }
 
-    mkshort_handle->setshort_badchars("\",");
+    mkshort_handle->set_badchars("\",");
   }
 
   ozi_init_units(1);

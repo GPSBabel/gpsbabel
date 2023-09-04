@@ -127,7 +127,7 @@ void MakeShort::replace_constants(QByteArray& s)
  * Externally callable function to set the max length of the
  * strings returned by mkshort().  0 resets to default.
  */
-void MakeShort::setshort_length(int l)
+void MakeShort::set_length(int l)
 {
   if (l < 0) {
     fatal("mkshort: short length must be non-negative.\n");
@@ -142,7 +142,7 @@ void MakeShort::setshort_length(int l)
  * Call with ok = true if whitespace in the generated shortname is wanted.
  */
 
-void MakeShort::setshort_whitespace_ok(bool ok)
+void MakeShort::set_whitespace_ok(bool ok)
 {
   whitespaceok_ = ok;
 }
@@ -152,7 +152,7 @@ void MakeShort::setshort_whitespace_ok(bool ok)
  * generated shortname is wanted.
  */
 
-void MakeShort::setshort_repeating_whitespace_ok(bool ok)
+void MakeShort::set_repeating_whitespace_ok(bool ok)
 {
   repeating_whitespaceok_ = ok;
 }
@@ -161,10 +161,10 @@ void MakeShort::setshort_repeating_whitespace_ok(bool ok)
  * Set default name given to a waypoint if no valid is possible
  * because it was filtered by charsets or null or whatever.
  */
-void MakeShort::setshort_defname(const char* s)
+void MakeShort::set_defname(const char* s)
 {
   if (s == nullptr) {
-    fatal("setshort_defname called without a valid name.");
+    fatal("set_defname called without a valid name.");
   }
   defname_ = s;
 }
@@ -174,7 +174,7 @@ void MakeShort::setshort_defname(const char* s)
  * that must never appear in a string returned by mkshort.  NULL
  * resets to default.
  */
-void MakeShort::setshort_badchars(const char* s)
+void MakeShort::set_badchars(const char* s)
 {
   badchars_ = (s  == nullptr)? default_badchars : s;
 }
@@ -183,7 +183,7 @@ void MakeShort::setshort_badchars(const char* s)
  * Only characters that appear in *s are "whitelisted" to appear
  * in generated names.
  */
-void MakeShort::setshort_goodchars(const char* s)
+void MakeShort::set_goodchars(const char* s)
 {
   if (s == nullptr) {
     goodchars_.clear();
@@ -195,7 +195,7 @@ void MakeShort::setshort_goodchars(const char* s)
 /*
  *  Call with must = true if generated names must be uppercase only.
  */
-void MakeShort::setshort_mustupper(bool must)
+void MakeShort::set_mustupper(bool must)
 {
   mustupper_ = must;
 }
@@ -205,7 +205,7 @@ void MakeShort::setshort_mustupper(bool must)
  *  Call with must = false if the generated names don't have to be unique.
  *  (By default, they are.)
  */
-void MakeShort::setshort_mustuniq(bool must)
+void MakeShort::set_mustuniq(bool must)
 {
   must_uniq_ = must;
 }

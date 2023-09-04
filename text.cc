@@ -197,7 +197,7 @@ TextFormat::write()
   if (!suppresssep && !split_output) {
     *file_out << "-----------------------------------------------------------------------------\n";
   }
-  mkshort_handle->setshort_length(6);
+  mkshort_handle->set_length(6);
   auto text_disp_lambda = [this](const Waypoint* waypointp)->void {
     text_disp(waypointp);
   };

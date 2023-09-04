@@ -218,7 +218,7 @@ HtmlFormat::html_index(const Waypoint* wpt) const
 void
 HtmlFormat::write()
 {
-  mkshort_handle->setshort_length(6);
+  mkshort_handle->set_length(6);
 
   *file_out << "<!DOCTYPE html>\n";
   *file_out << "<html>\n";

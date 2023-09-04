@@ -301,7 +301,7 @@ NmeaFormat::wr_init(const QString& fname)
   }
 
   mkshort_handle = new MakeShort;
-  mkshort_handle->setshort_length(xstrtoi(snlenopt, nullptr, 10));
+  mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
     opt_gpgga = nullptr;

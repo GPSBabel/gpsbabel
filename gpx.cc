@@ -96,10 +96,10 @@ GpxFormat::gpx_reset_short_handle()
   mkshort_handle = new MakeShort;
 
   if (suppresswhite) {
-    mkshort_handle->setshort_whitespace_ok(0);
+    mkshort_handle->set_whitespace_ok(0);
   }
 
-  mkshort_handle->setshort_length(xstrtoi(snlen, nullptr, 10));
+  mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
 }
 
 void
