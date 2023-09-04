@@ -396,6 +396,7 @@ set(TESTS
   kml-read
   kml
   lowranceusr
+  mkshort
   mtk
   multiurlgpx
   nmea
