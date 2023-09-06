@@ -19,12 +19,13 @@
 
  */
 
+#include "mkshort.h"
+
 #include <cassert>     // for assert
 #include <cctype>      // for isspace, isdigit
 
 #include <QByteArray>  // for QByteArray
 #include <QChar>       // for QChar, QChar::ReplacementCharacter
-#include <QHash>       // for QHash, QHash<>::iterator, qHash, QHash<>::size_type
 #include <QString>     // for QString
 #include <QVector>     // for QVector
 #include <Qt>          // for CaseInsensitive
@@ -34,52 +35,9 @@
 #include "geocache.h"  // for Geocache
 
 
-#define MYNAME	"mkshort"
+const QByteArray MakeShort::vowels = "aeiouAEIOU";
 
-static const QByteArray vowels("aeiouAEIOU");
-static constexpr int default_target_len = 8;
-static constexpr const char default_badchars[] = "\"$.,'!-";
-
-class ShortNameKey;
-using ShortNameHash = QHash<ShortNameKey, int>;
-class ShortNameKey
-{
-public:
-  ShortNameKey(const QByteArray& name) : shortname(name) {} /* converting constructor */
-
-  friend qhash_result_t qHash(const ShortNameKey& key, qhash_result_t seed = 0) noexcept
-  {
-    // We hash all strings as upper case.
-    return qHash(key.shortname.toUpper(), seed);
-  }
-
-  QByteArray shortname;
-};
-
-inline bool operator==(const ShortNameKey& lhs, const ShortNameKey& rhs) noexcept
-{
-  return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
-}
-
-struct  mkshort_handle_imp {
-  int target_len{default_target_len};
-  QByteArray badchars{default_badchars};
-  QByteArray goodchars;
-  QByteArray defname{"WPT"};
-  ShortNameHash namelist;
-
-  /* Various internal flags */
-  bool mustupper{false};
-  bool whitespaceok{true};
-  bool repeating_whitespaceok{false};
-  bool must_uniq{true};
-};
-
-struct replacement_t {
-  QByteArray orig;
-  QByteArray replacement;
-};
-static const QVector<replacement_t> replacements = {
+const QVector<MakeShort::replacement_t> MakeShort::replacements = {
   {"zero", "0"},
   {"one", "1"},
   {"two", "2"},
@@ -92,26 +50,18 @@ static const QVector<replacement_t> replacements = {
   {"nine", "9"}
 };
 
-short_handle
-mkshort_new_handle()
+void MakeShort::mkshort_add_to_list(QByteArray& name, bool is_utf8)
 {
-  return new mkshort_handle_imp;
-}
-
-static
-void
-mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name, bool is_utf8)
-{
-  while (h->namelist.contains(name)) {
-    auto& conflictctr = h->namelist[name];
+  while (namelist_.contains(name)) {
+    auto& conflictctr = namelist_[name];
 
     QByteArray suffix(".");
     suffix.append(QByteArray::number(++conflictctr));
     int suffixcnt = suffix.size();
 
-    if (name.size() + suffixcnt <= h->target_len) {
+    if (name.size() + suffixcnt <= target_len_) {
       name.append(suffix);
-    } else if (int keepcnt = h->target_len - suffixcnt; keepcnt >= 0) {
+    } else if (int keepcnt = target_len_ - suffixcnt; keepcnt >= 0) {
       if (is_utf8) {
         QString result = grapheme_truncate(QString::fromUtf8(name), keepcnt);
         name = result.toUtf8().append(suffix);
@@ -124,42 +74,14 @@ mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name, bool is_utf8)
     }
   }
 
-  h->namelist.insert(name, 0);
-}
-
-void
-mkshort_del_handle(short_handle* h)
-{
-  if (!h) {
-    return;
-  }
-
-  auto* hdr = (mkshort_handle_imp*) *h;
-
-  if (!hdr) {
-    return;
-  }
-
-#if 0
-  for (auto it = hdr->namelist.cbegin(), end = hdr->namelist.cend(); it != end; ++it) {
-    if (global_opts.verbose_status >= 2 && it.value()->conflictctr) {
-      fprintf(stderr, "%d Output name conflicts: '%s'\n",
-              it.value()->conflictctr, it.key().shortname.constData());
-    }
-  }
-#endif
-
-  delete hdr;
-  *h = nullptr;
+  namelist_.insert(name, 0);
 }
 
 /*
  * This is the stuff that makes me ashamed to be a C programmer...
  */
 
-static
-bool
-delete_last_vowel(int start, QByteArray& iostring)
+bool MakeShort::delete_last_vowel(int start, QByteArray& iostring)
 {
   /*
    * Basically implement strrchr.
@@ -184,8 +106,7 @@ delete_last_vowel(int start, QByteArray& iostring)
  * Open the slippery slope of literal replacement.   Right now, replacements
  * are made only at the end of the string.
  */
-void
-replace_constants(QByteArray& s)
+void MakeShort::replace_constants(QByteArray& s)
 {
   for (const auto& r : replacements) {
     /*
@@ -202,59 +123,50 @@ replace_constants(QByteArray& s)
   }
 }
 
-
 /*
  * Externally callable function to set the max length of the
  * strings returned by mkshort().  0 resets to default.
  */
-void
-setshort_length(short_handle h, int l)
+void MakeShort::set_length(int l)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
   if (l < 0) {
     fatal("mkshort: short length must be non-negative.\n");
   } else if (l == 0) {
-    hdl->target_len = default_target_len;
+    target_len_ = default_target_len;
   } else {
-    hdl->target_len = l;
+    target_len_ = l;
   }
 }
 
 /*
- * Call with L nonzero if whitespace in the generated shortname is wanted.
+ * Call with ok = true if whitespace in the generated shortname is wanted.
  */
 
-void
-setshort_whitespace_ok(short_handle h, int l)
+void MakeShort::set_whitespace_ok(bool ok)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->whitespaceok = l;
+  whitespaceok_ = ok;
 }
 
 /*
- * Call with L nonzero if multiple consecutive whitespace in the
+ * Call with ok = true if multiple consecutive whitespace in the
  * generated shortname is wanted.
  */
 
-void
-setshort_repeating_whitespace_ok(short_handle h, int l)
+void MakeShort::set_repeating_whitespace_ok(bool ok)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->repeating_whitespaceok = l;
+  repeating_whitespaceok_ = ok;
 }
 
 /*
  * Set default name given to a waypoint if no valid is possible
  * because it was filtered by charsets or null or whatever.
  */
-void
-setshort_defname(short_handle h, const char* s)
+void MakeShort::set_defname(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
   if (s == nullptr) {
-    fatal("setshort_defname called without a valid name.");
+    fatal("set_defname called without a valid name.");
   }
-  hdl->defname = s;
+  defname_ = s;
 }
 
 /*
@@ -262,57 +174,45 @@ setshort_defname(short_handle h, const char* s)
  * that must never appear in a string returned by mkshort.  NULL
  * resets to default.
  */
-void
-setshort_badchars(short_handle h, const char* s)
+void MakeShort::set_badchars(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-
-  hdl->badchars = s ? s : default_badchars;
+  badchars_ = (s  == nullptr)? default_badchars : s;
 }
 
 /*
  * Only characters that appear in *s are "whitelisted" to appear
  * in generated names.
  */
-void
-setshort_goodchars(short_handle h, const char* s)
+void MakeShort::set_goodchars(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-
-  if (s != nullptr) {
-    hdl->goodchars = s;
+  if (s == nullptr) {
+    goodchars_.clear();
   } else {
-    hdl->goodchars.clear();
+    goodchars_ = s;
   }
 }
 
 /*
- *  Call with i non-zero if generated names must be uppercase only.
+ *  Call with must = true if generated names must be uppercase only.
  */
-void
-setshort_mustupper(short_handle h, int i)
+void MakeShort::set_mustupper(bool must)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->mustupper = i;
+  mustupper_ = must;
 }
 
 
 /*
- *  Call with i zero if the generated names don't have to be unique.
+ *  Call with must = false if the generated names don't have to be unique.
  *  (By default, they are.)
  */
-void
-setshort_mustuniq(short_handle h, int i)
+void MakeShort::set_mustuniq(bool must)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->must_uniq = i;
+  must_uniq_ = must;
 }
 
-QByteArray
-mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
+QByteArray MakeShort::mkshort(const QByteArray& istring, bool is_utf8)
 {
   QByteArray ostring;
-  auto* hdl = (mkshort_handle_imp*) h;
 
   if (is_utf8) {
     /* clean UTF-8 string */
@@ -332,7 +232,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * the new seven digit geocache numbers and special case whacking
    * the 'G' off the front.
    */
-  if ((hdl->target_len == 6) && (ostring.size() == 7) &&
+  if ((target_len_ == 6) && (ostring.size() == 7) &&
       ostring.startsWith("GC")) {
     ostring.remove(0, 1);
   }
@@ -340,7 +240,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
   /*
    * Whack leading "[Tt]he "
    */
-  if ((ostring.size() > (hdl->target_len + 4)) &&
+  if ((ostring.size() > (target_len_ + 4)) &&
       (ostring.startsWith("The ") || ostring.startsWith("the "))) {
     ostring.remove(0, 4);
   }
@@ -348,7 +248,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
   /* In all cases eliminate leading and trailing whitespace */
   ostring = ostring.trimmed();
 
-  if (!hdl->whitespaceok) {
+  if (!whitespaceok_) {
     /*
      * Eliminate Whitespace
      */
@@ -361,7 +261,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     }
   }
 
-  if (hdl->mustupper) {
+  if (mustupper_) {
     ostring = ostring.toUpper();
   }
 
@@ -378,10 +278,10 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     QByteArray tstring;
     ostring.swap(tstring);
     for (const auto ch : qAsConst(tstring)) {
-      if (hdl->badchars.contains(ch)) {
+      if (badchars_.contains(ch)) {
         continue;
       }
-      if (!hdl->goodchars.isEmpty() && (!hdl->goodchars.contains(ch))) {
+      if (!goodchars_.isEmpty() && (!goodchars_.contains(ch))) {
         continue;
       }
       ostring.append(ch);
@@ -395,7 +295,7 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * operations that removed character(s) before and/or after whitespace.
    * Conditionally simplify embedded whitespace.
    */
-  ostring = hdl->repeating_whitespaceok? ostring.trimmed() : ostring.simplified();
+  ostring = repeating_whitespaceok_? ostring.trimmed() : ostring.simplified();
 
   /*
    * Toss vowels to approach target length, but don't toss them
@@ -414,9 +314,9 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    *
    * It also helps units with speech synthesis.
    */
-  bool replaced = hdl->target_len < 15;
+  bool replaced = target_len_ < 15;
 
-  while (replaced && (ostring.size() > hdl->target_len)) {
+  while (replaced && (ostring.size() > target_len_)) {
     replaced = delete_last_vowel(2, ostring);
   }
 
@@ -433,18 +333,18 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * If the numeric component alone is longer than our target string
    * length, use the trailing part of the the numeric component.
    */
-  if (int delcnt = ostring.size() - hdl->target_len; delcnt > 0) {
+  if (int delcnt = ostring.size() - target_len_; delcnt > 0) {
     int suffixcnt = 0;
     for (auto it = ostring.crbegin(); it != ostring.crend(); ++it) {
       if (isdigit(*it)) {
         ++suffixcnt;
       }
-      if (suffixcnt == hdl->target_len) {
+      if (suffixcnt == target_len_) {
         break;
       }
     }
 
-    int keepcnt = hdl->target_len - suffixcnt;
+    int keepcnt = target_len_ - suffixcnt;
     assert(keepcnt >= 0);
 
     if (is_utf8) {
@@ -463,27 +363,25 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * let the must_uniq code handle it.
    */
   if (ostring.isEmpty()) {
-    ostring = hdl->defname;
+    ostring = defname_;
   }
 
-  if (hdl->must_uniq) {
-    mkshort_add_to_list(hdl, ostring, is_utf8);
+  if (must_uniq_) {
+    mkshort_add_to_list(ostring, is_utf8);
   }
   return ostring;
 }
 
-QString
-mkshort(short_handle h, const QString& istring)
+QString MakeShort::mkshort(const QString& istring)
 {
-  return mkshort(h, istring.toUtf8(), true);
+  return mkshort(istring.toUtf8(), true);
 }
 
 /*
  * As above, but arg list is a waypoint so we can centralize
  * the code that considers the alternate sources.
  */
-QString
-mkshort_from_wpt(short_handle h, const Waypoint* wpt)
+QString MakeShort::mkshort_from_wpt(const Waypoint* wpt)
 {
   /* This probably came from a Groundspeak Pocket Query
    * so use the 'cache name' instead of the description field
@@ -492,20 +390,20 @@ mkshort_from_wpt(short_handle h, const Waypoint* wpt)
    */
   if (wpt->gc_data->diff && wpt->gc_data->terr &&
       !wpt->notes.isEmpty()) {
-    return mkshort(h, wpt->notes);
+    return mkshort(wpt->notes);
   }
 
   if (!wpt->description.isEmpty()) {
-    return mkshort(h, wpt->description);
+    return mkshort(wpt->description);
   }
 
   if (!wpt->notes.isEmpty()) {
-    return mkshort(h, wpt->notes);
+    return mkshort(wpt->notes);
   }
 
   /* Should probably never actually happen... */
   /* O.K.: But this can happen (waypoints transformed from trackpoints )! */
   /*       Now we return every time a valid entity." */
 
-  return mkshort(h, wpt->shortname);
+  return mkshort(wpt->shortname);
 }

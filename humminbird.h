@@ -30,6 +30,7 @@
 #include "defs.h"    // for ff_cap, arglist_t, ff_cap_read, Waypoint, route_head, ff_cap_write, short_handle, ff_type, ff_type_file
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
+#include "mkshort.h" // for MakeShort
 
 
 class HumminbirdBase
@@ -102,7 +103,9 @@ protected:
   gbfile* fin_{};
   gbfile* fout_{};
   int waypoint_num{};
-  short_handle wptname_sh{}, rtename_sh{}, trkname_sh{};
+  MakeShort* wptname_sh{};
+  MakeShort* rtename_sh{};
+  MakeShort* trkname_sh{};
   humminbird_rte_t* humrte{};
   int rte_num_{};
   QMap<QString, Waypoint*> map;

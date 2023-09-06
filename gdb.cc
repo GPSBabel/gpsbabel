@@ -40,13 +40,14 @@
 #include <cstring>                  // for memset, strstr, strcmp
 #include <iterator>                 // for next
 
-#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, mkshort, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
+#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
 #include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfputint16, gbfile, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl
 #include "grtcirc.h"                // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "mkshort.h"                // for MakeShort
 #include "src/core/datetime.h"      // for DateTime
 
 
@@ -1113,19 +1114,17 @@ GdbFormat::read()
 void
 GdbFormat::reset_short_handle(const char* defname)
 {
-  if (short_h != nullptr) {
-    mkshort_del_handle(&short_h);
-  }
+  delete short_h;
 
-  short_h = mkshort_new_handle();
+  short_h = new MakeShort;
 
-  setshort_length(short_h, kGDBNameBufferLen);
-  setshort_badchars(short_h, "\r\n\t");
-  setshort_mustupper(short_h, 0);
-  setshort_mustuniq(short_h, 1);
-  setshort_whitespace_ok(short_h, 1);
-  setshort_repeating_whitespace_ok(short_h, 1);
-  setshort_defname(short_h, defname);
+  short_h->set_length(kGDBNameBufferLen);
+  short_h->set_badchars("\r\n\t");
+  short_h->set_mustupper(false);
+  short_h->set_mustuniq(true);
+  short_h->set_whitespace_ok(true);
+  short_h->set_repeating_whitespace_ok(true);
+  short_h->set_defname(defname);
 }
 
 /* ----------------------------------------------------------------------------*/
@@ -1613,7 +1612,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
       }
     }
 
-    name = mkshort(short_h, name);
+    name = short_h->mkshort(name);
     wpt->extra_data = new QString(name);
     write_waypoint(wpt, name, gmsd, icon, display);
 
@@ -1630,9 +1629,9 @@ GdbFormat::write_route_cb(const route_head* rte)
 
   QString name;
   if (rte->rte_name.isNull()) {
-    name = mkshort(short_h, QString::asprintf("Route%04d", rte->rte_num));
+    name = short_h->mkshort(QString::asprintf("Route%04d", rte->rte_num));
   } else {
-    name = mkshort(short_h, rte->rte_name);
+    name = short_h->mkshort(rte->rte_name);
   }
 
   rte_ct++;	/* increase informational number of written routes */
@@ -1652,9 +1651,9 @@ GdbFormat::write_track_cb(const route_head* trk)
 
   QString name;
   if (trk->rte_name.isNull()) {
-    name = mkshort(short_h, QString::asprintf("Track%04d", trk->rte_num));
+    name = short_h->mkshort(QString::asprintf("Track%04d", trk->rte_num));
   } else {
-    name = mkshort(short_h, trk->rte_name);
+    name = short_h->mkshort(trk->rte_name);
   }
 
   trk_ct++;	/* increase informational number of written tracks */
@@ -1704,7 +1703,8 @@ GdbFormat::wr_deinit()
 {
   disp_summary(fout);
   gdb_flush_waypt_queue(waypt_nameposn_out_hash);
-  mkshort_del_handle(&short_h);
+  delete short_h;
+  short_h = nullptr;
   gbfclose(fout);
   gbfclose(ftmp);
 }
