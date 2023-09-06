@@ -587,28 +587,28 @@ HumminbirdBase::humminbird_wr_init(const QString& fname)
 
   wptname_sh->set_length(WPT_NAME_LEN - 1);
   wptname_sh->set_badchars(BAD_CHARS);
-  wptname_sh->set_mustupper(0);
-  wptname_sh->set_mustuniq(0);
-  wptname_sh->set_whitespace_ok(1);
-  wptname_sh->set_repeating_whitespace_ok(1);
+  wptname_sh->set_mustupper(false);
+  wptname_sh->set_mustuniq(false);
+  wptname_sh->set_whitespace_ok(true);
+  wptname_sh->set_repeating_whitespace_ok(true);
   wptname_sh->set_defname("WPT");
 
   rtename_sh = new MakeShort;
   rtename_sh->set_length(RTE_NAME_LEN - 1);
   rtename_sh->set_badchars(BAD_CHARS);
-  rtename_sh->set_mustupper(0);
-  rtename_sh->set_mustuniq(0);
-  rtename_sh->set_whitespace_ok(1);
-  rtename_sh->set_repeating_whitespace_ok(1);
+  rtename_sh->set_mustupper(false);
+  rtename_sh->set_mustuniq(false);
+  rtename_sh->set_whitespace_ok(true);
+  rtename_sh->set_repeating_whitespace_ok(true);
   rtename_sh->set_defname("Route");
 
   trkname_sh = new MakeShort;
   trkname_sh->set_length(RTE_NAME_LEN - 1);
   trkname_sh->set_badchars(BAD_CHARS);
-  trkname_sh->set_mustupper(0);
-  trkname_sh->set_mustuniq(0);
-  trkname_sh->set_whitespace_ok(1);
-  trkname_sh->set_repeating_whitespace_ok(1);
+  trkname_sh->set_mustupper(false);
+  trkname_sh->set_mustuniq(false);
+  trkname_sh->set_whitespace_ok(true);
+  trkname_sh->set_repeating_whitespace_ok(true);
   trkname_sh->set_defname("Track");
 
   waypoint_num = 0;

@@ -240,7 +240,7 @@ public:
   std::optional<int> shortlen;
 
   /* SHORTWHITE from style file */
-  std::optional<int> whitespace_ok;
+  std::optional<bool> whitespace_ok;
 
 private:
   /* Types */

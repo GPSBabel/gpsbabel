@@ -1256,10 +1256,10 @@ GarminGPIFormat::wr_init(const QString& fname)
 
   short_h->set_length(1024);
   short_h->set_badchars("\r\n");
-  short_h->set_mustupper(0);
-  short_h->set_mustuniq(1);
-  short_h->set_whitespace_ok(1);
-  short_h->set_repeating_whitespace_ok(0);
+  short_h->set_mustupper(false);
+  short_h->set_mustuniq(true);
+  short_h->set_whitespace_ok(true);
+  short_h->set_repeating_whitespace_ok(false);
   short_h->set_defname("POI");
 
   codepage = 0;
