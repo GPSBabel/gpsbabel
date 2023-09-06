@@ -33,6 +33,7 @@
 #include "defs.h"
 #include "format.h"           // for Format
 #include "gbfile.h"           // for gbfile
+#include "mkshort.h"          // for MakeShort
 
 
 class NmeaFormat : public Format
@@ -121,7 +122,7 @@ private:
 
   gbfile* file_in{}, *file_out{};
   route_head* trk_head{};
-  short_handle mkshort_handle{};
+  MakeShort* mkshort_handle{};
   preferred_posn_type posn_type{};
   read_mode_type read_mode{};
   QDateTime prev_datetime;

@@ -50,6 +50,7 @@
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
 #include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index
+#include "mkshort.h"                  // for MakeShort
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
@@ -213,14 +214,6 @@ signal_handler(int sig)
 class FallbackOutput
 {
 public:
-  FallbackOutput() : mkshort_handle(mkshort_new_handle()) {}
-  // delete copy and move constructors and assignment operators.
-  // The defaults are not appropriate, and we haven't implemented proper ones.
-  FallbackOutput(const FallbackOutput&) = delete;
-  FallbackOutput& operator=(const FallbackOutput&) = delete;
-  FallbackOutput(FallbackOutput&&) = delete;
-  FallbackOutput& operator=(FallbackOutput&&) = delete;
-  ~FallbackOutput() {mkshort_del_handle(&mkshort_handle);}
 
   void waypt_disp(const Waypoint* wpt)
   {
@@ -232,7 +225,7 @@ public:
     if (!wpt->description.isEmpty()) {
       printf("%s/%s",
              global_opts.synthesize_shortnames ?
-             qPrintable(mkshort(mkshort_handle, wpt->description)) :
+             qPrintable(mkshort_handle.mkshort(wpt->description)) :
              qPrintable(wpt->shortname),
              qPrintable(wpt->description));
     }
@@ -244,7 +237,7 @@ public:
   }
 
 private:
-  short_handle mkshort_handle;
+  MakeShort mkshort_handle;
 };
 
 static void
