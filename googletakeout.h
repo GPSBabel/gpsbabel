@@ -19,8 +19,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
   USA.
 */
-#ifndef _GOOGLETAKEOUT_H
-#define _GOOGLETAKEOUT_H
+#ifndef GOOGLETAKEOUT_H_INCLUDED_
+#define GOOGLETAKEOUT_H_INCLUDED_
 
 #include <QJsonObject>     // for QJsonObject
 #include <QJsonValue>      // for QJsonValue
@@ -125,4 +125,4 @@ private:
   QVector<arglist_t> googletakeout_args;
 };
 
-#endif /* _GOOGLETAKEOUT_H */
+#endif /* GOOGLETAKEOUT_H_INCLUDED_ */
