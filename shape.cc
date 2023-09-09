@@ -144,7 +144,7 @@ ShapeFormat::DBFCreateGpsbabel(const QString& pszFilename)
 }
 #endif
 
-void ShapeFormat::dump_fields() const
+[[noreturn]] void ShapeFormat::dump_fields() const
 {
   char name[12];
   warning(MYNAME ": Database fields:\n");
