@@ -43,7 +43,7 @@ class GoogleTakeoutInputStream
 public:
   /* Special Member Functions */
   GoogleTakeoutInputStream() = default;
-  GoogleTakeoutInputStream(const QString& source) : sources({source}) {};
+  GoogleTakeoutInputStream(const QString& source) : sources({source}) {}
 
   /* Member Functions */
 

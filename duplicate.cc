@@ -118,7 +118,7 @@ void DuplicateFilter::process()
       for (auto it = values.cbegin(); it != values.cend(); ++it) {
         Waypoint* wpt = *it;
         if (purge_duplicates || (wpt != wptfirst)) {
-          wpt->wpt_flags.marked_for_deletion = 1;;
+          wpt->wpt_flags.marked_for_deletion = 1;
         }
       }
     }
