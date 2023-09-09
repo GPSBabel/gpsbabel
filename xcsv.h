@@ -352,11 +352,8 @@ private:
   static QDate yyyymmdd_to_time(const QString& s);
   QDateTime xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
   static void sscanftime(const char* s, const char* format, QDate& date, QTime& time);
-  static QTime addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
-  static QString writehms(const char* format, time_t t, bool gmt);
-  static QString writehms(const char* format, const gpsbabel::DateTime& t, bool gmt);
   static long int time_to_yyyymmdd(const QDateTime& t);
   static garmin_fs_t* gmsd_init(Waypoint* wpt);
   static void xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp, xcsv_parse_data* parse_data, int line_no);
