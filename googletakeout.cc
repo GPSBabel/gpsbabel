@@ -68,13 +68,13 @@ static Waypoint* takeout_waypoint(
   Waypoint* waypoint = new Waypoint();
   waypoint->latitude = lat_e7 / 1e7;
   waypoint->longitude = lon_e7 / 1e7;
-  if (shortname && (*shortname).length() > 0) {
+  if (shortname && shortname->length() > 0) {
     waypoint->shortname = *shortname;
   }
-  if (description && (*description).length() > 0) {
+  if (description && description->length() > 0) {
     waypoint->description = *description;
   }
-  if (start_str && (*start_str).length() > 0) {
+  if (start_str && start_str->length() > 0) {
     gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
     waypoint->SetCreationTime(start);
   }

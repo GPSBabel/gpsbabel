@@ -22,7 +22,7 @@
   void   GPS_Warning(const char* s);
   [[gnu::format(printf, 1, 2)]] void   GPS_Error(const char* fmt, ...);
   [[gnu::format(printf, 1, 2)]] void   GPS_Serial_Error(const char* fmt, ...);
-  void   GPS_Fatal(const char* s);
+  [[noreturn]] void   GPS_Fatal(const char* s);
   void   GPS_Enable_Error();
   void   GPS_Enable_Warning();
   void   GPS_Disable_Error();

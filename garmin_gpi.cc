@@ -235,7 +235,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
     len = gbfgetint32(fin);  /* sub-header size */
   }
   if (GPI_DBG) {
-  warning("poi sublen = %1$d (0x%1$x)\n", len);
+  warning("poi sublen = %d (0x%x)\n", len, len);
   }
   (void) len;
   int pos = gbftell(fin);
@@ -279,12 +279,12 @@ GarminGPIFormat::read_poi_list(const int sz)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi list (-> %1$x / %1$d )\n", pos + sz);
+    warning("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
   }
   PP;
   int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
   if (GPI_DBG) {
-    warning("list sublen = %1$d (0x%1$x)\n", i);
+    warning("list sublen = %d (0x%x)\n", i, i);
   }
   (void) i;
 
@@ -317,7 +317,7 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi group (-> %1$x / %1$d)\n", pos + sz);
+    warning("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
   }
   if (tag == 0x80009) {
     PP;
