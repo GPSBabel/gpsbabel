@@ -7571,7 +7571,7 @@ void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n)
             trkpt->distance_populated = 0;
             trkpt->heartrate = 0;
             trkpt->cadence = 0xff;
-            *trk = (struct GPS_STrack**) xrealloc(*trk, (*n+1) * sizeof(GPS_PTrack));
+            *trk = (GPS_STrack**) xrealloc(*trk, (*n+1) * sizeof(GPS_PTrack));
             memmove(&(*trk)[i+1], &(*trk)[i], (*n-i) * sizeof(GPS_PTrack));
             (*trk)[i] = trkpt;
             i++;
