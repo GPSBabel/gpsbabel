@@ -48,11 +48,11 @@ static const QList<QString> takeout_month_names{
   "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
 };
 
-static inline void takeout_fatal(const QString& message) {
+static void takeout_fatal(const QString& message) {
   fatal(FatalMsg() << MYNAME << ": " << message);
 }
 
-static inline void takeout_warning(const QString& message) {
+static void takeout_warning(const QString& message) {
   Warning() << MYNAME << ": " << message;
 }
 

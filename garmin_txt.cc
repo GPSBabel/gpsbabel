@@ -124,7 +124,7 @@ static constexpr double kGarminUnknownAlt = 1.0e25;
 static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
 static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
-static inline bool is_valid_alt(double alt)
+static bool is_valid_alt(double alt)
 {
   return (alt != unknown_alt) && (alt < kGarminUnknownAlt);
 }
