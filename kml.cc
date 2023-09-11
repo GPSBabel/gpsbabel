@@ -69,8 +69,6 @@
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
-// #define INCLUDE_IGC_TRT // Generally not very useful to graph on Google Earth
-#define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
 
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
