@@ -480,7 +480,6 @@ void GPS_Warning(const char* s)
 
   fprintf(stderr,"[FATAL] %s\n",s);
   exit(0);
-  return;
 }
 
 

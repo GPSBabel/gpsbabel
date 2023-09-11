@@ -1077,8 +1077,7 @@ UnicsvFormat::read()
 
 /* =========================================================================== */
 
-void
-[[notreturn]] UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
+[[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
