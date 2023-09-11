@@ -1,7 +1,7 @@
 /*
     Interpolate filter
 
-    Copyright (C) 2002 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002,2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,12 @@ public:
   void process() override;
 
 private:
+  /* Member Functions */
+
+  void process_rte(route_head* rte);
+
+  /* Data Members */
+
   char* opt_time{nullptr};
   double max_time_step{0};
   char* opt_dist{nullptr};

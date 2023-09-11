@@ -101,6 +101,7 @@
 #include "format.h"
 #include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
 #include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "mkshort.h"              // for MakeShort
 #include "src/core/datetime.h"    // for DateTime
 
 
@@ -433,7 +434,7 @@ private:
 
   gbfile*        file_in{};
   gbfile*        file_out{};
-  short_handle   mkshort_handle{};
+  MakeShort*     mkshort_handle{};
 
   route_head*    trk_head{};
   route_head*    rte_head{};

@@ -219,7 +219,6 @@ public:
 garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(void** dest, const void* src);
-char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
 void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);

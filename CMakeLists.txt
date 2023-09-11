@@ -73,7 +73,6 @@ set(MINIMAL_FMTS
   gpx.cc
   kml.cc
   nmea.cc
-  wbt-200.cc
 )
 
 # ALL_FMTS
@@ -88,6 +87,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
+  googletakeout.cc
   gtm.cc
   gtrnctr.cc
   html.cc
@@ -95,13 +95,10 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   igc.cc
   lowranceusr.cc
   mtk_logger.cc
-  navilink.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  sbn.cc
-  sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -184,10 +181,8 @@ set(SUPPORT
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
   src/core/xmltag.cc
-  strptime.c
   units.cc
   util.cc
-  util_crc.cc
   vecs.cc
   waypt.cc
   xmlgeneric.cc
@@ -219,6 +214,7 @@ set(HEADERS
   geojson.h
   globalsat_sport.h
   geo.h
+  googletakeout.h
   gpx.h
   grtcirc.h
   gtrnctr.h
@@ -230,7 +226,7 @@ set(HEADERS
   legacyformat.h
   igc.h
   lowranceusr.h
-  navilink.h
+  mkshort.h
   nmea.h
   osm.h
   qstarz_bl_1000.h
@@ -238,7 +234,6 @@ set(HEADERS
   session.h
   shape.h
   skytraq.h
-  strptime.h
   subrip.h
   text.h
   unicsv.h
@@ -285,8 +280,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
-  # disable warning from strptime.c, which we don't want to own or modify
-  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -317,6 +310,7 @@ endif()
 include(shapelib.cmake)
 include(zlib.cmake)
 include(libusb.cmake)
+include(strptime.cmake)
 
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
@@ -389,6 +383,7 @@ set(TESTS
   geojson
   geo
   globalsat_sport
+  googletakeout
   gpsdrive
   gpx
   grapheme
@@ -402,9 +397,9 @@ set(TESTS
   kml-read
   kml
   lowranceusr
+  mkshort
   mtk
   multiurlgpx
-  navilink
   nmea
   osm
   ozi
@@ -415,8 +410,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  sbn
-  sbp
   serialization
   shape
   simplify-relative
@@ -433,6 +426,7 @@ set(TESTS
   track
   transform
   unicsv_grids
+  unicsv_local
   unicsv
   unitconversion
   v900

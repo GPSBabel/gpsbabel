@@ -117,7 +117,7 @@ gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
   WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
   if (rsz != sz) {
-    fatal("Error sending %d bytes.   Successfully sent %ld\n", sz, rsz);
+    fatal("Error sending %zu bytes.  Successfully sent %ld\n", sz, rsz);
   }
 
   return rsz;

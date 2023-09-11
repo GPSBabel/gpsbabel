@@ -144,6 +144,30 @@ track_del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
+route_del_marked_wpts(route_head* rte)
+{
+  global_route_list->del_marked_wpts(rte);
+}
+
+void
+track_del_marked_wpts(route_head* rte)
+{
+  global_track_list->del_marked_wpts(rte);
+}
+
+void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
+}
+
+void
 route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 {
 // wc == nullptr
@@ -435,6 +459,31 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
+RouteList::del_marked_wpts(route_head* rte)
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap_wpts(rte, oldlist);
+
+  // mimic trkseg handling from WaypointList::del_rte_waypt
+  bool inherit_new_trkseg = false;
+  for (Waypoint* wpt : qAsConst(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      if (wpt->wpt_flags.new_trkseg) {
+        inherit_new_trkseg = true;
+      }
+      delete wpt;
+    } else {
+      if (inherit_new_trkseg) {
+        wpt->wpt_flags.new_trkseg = 1;
+        inherit_new_trkseg = false;
+      }
+      add_wpt(rte, wpt, false, u"RPT", 3);
+    }
+  }
+}
+
+void
 RouteList::common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
   foreach (const route_head* rhp, *this) {
@@ -503,4 +552,11 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
+}
+
+void RouteList::swap_wpts(route_head* rte, WaypointList& other)
+{
+  this->waypt_ct -= rte->rte_waypt_ct();
+  this->waypt_ct += other.count();
+  rte->waypoint_list.swap(other);
 }
