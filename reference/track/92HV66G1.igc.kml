@@ -110,6 +110,11 @@
         <width>6</width>
       </LineStyle>
     </Style>
+    <Schema id="schema">
+      <gx:SimpleArrayField name="temperature" type="float">
+        <displayName>Temperature</displayName>
+      </gx:SimpleArrayField>
+    </Schema>
     <Folder>
       <name>Tracks</name>
       <Placemark>

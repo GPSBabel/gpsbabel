@@ -261,13 +261,15 @@ public:
     trait_cadence(0),
     trait_power(0),
     trait_depth(0),
-    trait_temperature(0) {}
+    trait_temperature(0),
+    trait_sat(0) {}
   unsigned int trait_geocaches:1;
   unsigned int trait_heartrate:1;
   unsigned int trait_cadence:1;
   unsigned int trait_power:1;
   unsigned int trait_depth:1;
   unsigned int trait_temperature:1;
+  unsigned int trait_sat:1;
 };
 
 /*

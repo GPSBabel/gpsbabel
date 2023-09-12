@@ -298,7 +298,8 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
-  bool set_value(IgcFormat::igc_ext_type_t type, double value)
+  // Stores all data as igc_fsdata
+  bool set_value(IgcFormat::igc_ext_type_t type, double value, Waypoint *wp = nullptr)
   {
     bool success = true;
     switch (type) {
@@ -312,6 +313,9 @@ struct igc_fsdata : public FormatSpecificData {
       vat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      if (wp){
+        wp->set_temperature(value);
+      }
       oat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_trt:
@@ -324,6 +328,9 @@ struct igc_fsdata : public FormatSpecificData {
       fxa = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      if (wp) {
+        wp->sat = value;
+      }
       siu = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_acz:

@@ -69,8 +69,6 @@
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 #define MYNAME "kml"
-// #define INCLUDE_IGC_TRT // Generally not very useful to graph on Google Earth
-// #define INCLUDE_IGC_SIU // Satellites in use, not entirely useful to graph
 
 void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
 {
@@ -1496,6 +1494,10 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
                                QString::number(wpt->temperature_value(), 'f', 1) : QString());
       break;
+    case wp_field::sat:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat >= 0?
+                                QString::number(wpt->sat) : QString());
+      break;
     case wp_field::igc_enl:
     case wp_field::igc_tas:
     case wp_field::igc_vat:
@@ -1561,6 +1563,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_heartrate = false;
   bool has_temperature = false;
   bool has_power = false;
+  bool has_sat = false;
   bool has_igc_exts = false;
   bool has_igc_enl = false;
   bool has_igc_tas = false;
@@ -1570,12 +1573,8 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   bool has_igc_fxa = false;
   bool has_igc_gfo = false;
   bool has_igc_acz = false;
-#ifdef INCLUDE_IGC_SIU
   bool has_igc_siu = false; // Not very useful to graph
-#endif
-#ifdef INCLUDE_IGC_TRT // Not very useful to graph
-  bool has_igc_trt = false;
-#endif
+  bool has_igc_trt = false; // Not very useful to graph
 
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
@@ -1635,6 +1634,10 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     if (tpt->power) {
       has_power = true;
     }
+    // # of satellites can legitimately be zero, so -1 means no data in this case
+    if (tpt->sat >= 0) {
+      has_sat = true;
+    }
     if (fs_igc) {
       has_igc_exts = true;
       if (fs_igc->enl.has_value()) {
@@ -1661,46 +1664,28 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if (fs_igc->acz.has_value()) {
         has_igc_acz = true;
       }
-#ifdef INCLUDE_IGC_SIU
-      if (fs_igc->siu.has_value()) {
-        has_igc_siu = true;
+      if constexpr(kIncludeIGCSIU) {
+        if (fs_igc->siu.has_value()) {
+          has_igc_siu = true;
+        }
       }
-#endif
-#ifdef INCLUDE_IGC_TRT
-      if (fs_igc->trt.has_value()) {
-        has_igc_trt = true;
+      if constexpr(kIncludeIGCTRT) {
+        if (fs_igc->trt.has_value()) {
+          has_igc_trt = true;
+        }
       }
-#endif
     }
   }
 
   // This gets unwieldly if we check each individual igc extension,
   // hence the has_igc_exts flag.
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
-      has_power || has_igc_exts) {
+      has_power || has_sat || has_igc_exts) {
+    bool include_kmt_sats = true;
+    bool include_kmt_temperature = true;
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
-
-    if (has_cadence) {
-      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
-    }
-
-    if (has_depth) {
-      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
-    }
-
-    if (has_heartrate) {
-      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
-    }
-
-    if (has_temperature) {
-      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
-    }
-
-    if (has_power) {
-      kml_mt_simple_array(header, kmt_power, wp_field::power);
-    }
 
     // Perhaps not the /best/ way to do this, but this if ladder
     // should only be evaluated once.
@@ -1713,6 +1698,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       }
       if (has_igc_oat) {
         kml_mt_simple_array(header, kmt_igc_oat, wp_field::igc_oat);
+        include_kmt_temperature = false;
       }
       if (has_igc_vat) {
         kml_mt_simple_array(header, kmt_igc_vat, wp_field::igc_vat);
@@ -1729,16 +1715,41 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
       if (has_igc_acz) {
         kml_mt_simple_array(header, kmt_igc_acz, wp_field::igc_acz);
       }
-#ifdef INCLUDE_IGC_SIU
-      if (has_igc_siu) {
-        kml_mt_simple_array(header, kmt_igc_siu, igc_siu);
+      if constexpr(kIncludeIGCSIU) {
+        if (has_igc_siu) {
+          kml_mt_simple_array(header, kmt_igc_siu, wp_field::igc_siu);
+          include_kmt_sats = false;
+        }
       }
-#endif
-#ifdef INCLUDE_IGC_TRT
-      if (has_igc_trt) {
-        kml_mt_simple_array(header, kmt_igc_trt, igc_trt);
+      if constexpr(kIncludeIGCTRT) {
+        if (has_igc_trt) {
+          kml_mt_simple_array(header, kmt_igc_trt, wp_field::igc_trt);
+        }
       }
-#endif
+    }
+
+    if (has_cadence) {
+      kml_mt_simple_array(header, kmt_cadence, wp_field::cadence);
+    }
+
+    if (has_depth) {
+      kml_mt_simple_array(header, kmt_depth, wp_field::depth);
+    }
+
+    if (has_heartrate) {
+      kml_mt_simple_array(header, kmt_heartrate, wp_field::heartrate);
+    }
+
+    if (has_temperature && include_kmt_temperature) {
+      kml_mt_simple_array(header, kmt_temperature, wp_field::temperature);
+    }
+
+    if (has_power) {
+      kml_mt_simple_array(header, kmt_power, wp_field::power);
+    }
+
+    if (has_sat && include_kmt_sats) {
+      kml_mt_simple_array(header, kmt_sat, wp_field::sat);
     }
 
     writer->writeEndElement(); // Close SchemaData tag
@@ -1924,7 +1935,8 @@ void KmlFormat::write()
       traits->trait_cadence ||
       traits->trait_power ||
       traits->trait_temperature ||
-      traits->trait_depth) {
+      traits->trait_depth ||
+      traits->trait_sat) {
     writer->writeStartElement(QStringLiteral("Schema"));
     writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
 
@@ -1942,6 +1954,9 @@ void KmlFormat::write()
     }
     if (traits->trait_depth) {
       kml_mt_array_schema(kmt_depth, "Depth", "float");
+    }
+    if (traits->trait_sat) {
+      kml_mt_array_schema(kmt_sat, "Satellites", "int");
     }
     writer->writeEndElement(); // Close Schema tag
   }

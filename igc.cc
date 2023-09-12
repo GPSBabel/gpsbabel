@@ -260,6 +260,9 @@ void IgcFormat::read()
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
+    if (global_opts.debug_level >= 8) {
+      printf(MYNAME ": Processing IGC file line %i\n", current_line);
+    }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
     QString ibuf_q = QString::fromUtf8(ibuf);
@@ -372,7 +375,7 @@ void IgcFormat::read()
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
-          fsdata->set_value(ext, ext_data);
+          fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
             printf(" %s:%f", qPrintable(name), ext_data);
           }
