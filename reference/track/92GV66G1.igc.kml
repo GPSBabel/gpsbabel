@@ -111,6 +111,27 @@
       </LineStyle>
     </Style>
     <Schema id="schema">
+      <gx:SimpleArrayField name="igc_enl" type="double">
+        <displayName>Engine Noise</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_tas" type="double">
+        <displayName>True Airspd</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_oat" type="double">
+        <displayName>Otsd Air Temp</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_vat" type="double">
+        <displayName>Ttl Enrg Vario</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_gsp" type="double">
+        <displayName>Ground Speed</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_fxa" type="double">
+        <displayName>Fix Accuracy</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="igc_acz" type="double">
+        <displayName>Z Accel</displayName>
+      </gx:SimpleArrayField>
       <gx:SimpleArrayField name="temperature" type="float">
         <displayName>Temperature</displayName>
       </gx:SimpleArrayField>
@@ -1572,7 +1593,7 @@
           <gx:coord>-81.838083 28.408050 51.00</gx:coord>
           <ExtendedData>
             <SchemaData schemaUrl="#schema">
-              <gx:SimpleArrayData name="Engine Noise">
+              <gx:SimpleArrayData name="igc_enl">
                 <gx:value>31</gx:value>
                 <gx:value>1</gx:value>
                 <gx:value>4</gx:value>
@@ -2298,7 +2319,7 @@
                 <gx:value>15</gx:value>
                 <gx:value>4</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="True Airspd">
+              <gx:SimpleArrayData name="igc_tas">
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
@@ -3024,7 +3045,7 @@
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Otsd Air Temp">
+              <gx:SimpleArrayData name="igc_oat">
                 <gx:value>26.1</gx:value>
                 <gx:value>26.1</gx:value>
                 <gx:value>26.1</gx:value>
@@ -3750,7 +3771,7 @@
                 <gx:value>22.6</gx:value>
                 <gx:value>22.6</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Ttl Enrg Vario">
+              <gx:SimpleArrayData name="igc_vat">
                 <gx:value>1.1</gx:value>
                 <gx:value>0.7</gx:value>
                 <gx:value>0.3</gx:value>
@@ -4476,7 +4497,7 @@
                 <gx:value>0</gx:value>
                 <gx:value>-0.1</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Ground Speed">
+              <gx:SimpleArrayData name="igc_gsp">
                 <gx:value>0.31</gx:value>
                 <gx:value>0.08</gx:value>
                 <gx:value>0.05</gx:value>
@@ -5202,7 +5223,7 @@
                 <gx:value>0.02</gx:value>
                 <gx:value>0.01</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Fix Accuracy">
+              <gx:SimpleArrayData name="igc_fxa">
                 <gx:value>7</gx:value>
                 <gx:value>6</gx:value>
                 <gx:value>7</gx:value>
@@ -5928,7 +5949,7 @@
                 <gx:value>7</gx:value>
                 <gx:value>7</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Z Accel">
+              <gx:SimpleArrayData name="igc_acz">
                 <gx:value>9</gx:value>
                 <gx:value>9</gx:value>
                 <gx:value>9</gx:value>
@@ -8113,7 +8134,7 @@
           <gx:coord>-81.838083 28.408050 28.00</gx:coord>
           <ExtendedData>
             <SchemaData schemaUrl="#schema">
-              <gx:SimpleArrayData name="Engine Noise">
+              <gx:SimpleArrayData name="igc_enl">
                 <gx:value>31</gx:value>
                 <gx:value>1</gx:value>
                 <gx:value>4</gx:value>
@@ -8839,7 +8860,7 @@
                 <gx:value>15</gx:value>
                 <gx:value>4</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="True Airspd">
+              <gx:SimpleArrayData name="igc_tas">
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
@@ -9565,7 +9586,7 @@
                 <gx:value>0</gx:value>
                 <gx:value>0</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Otsd Air Temp">
+              <gx:SimpleArrayData name="igc_oat">
                 <gx:value>26.1</gx:value>
                 <gx:value>26.1</gx:value>
                 <gx:value>26.1</gx:value>
@@ -10291,7 +10312,7 @@
                 <gx:value>22.6</gx:value>
                 <gx:value>22.6</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Ttl Enrg Vario">
+              <gx:SimpleArrayData name="igc_vat">
                 <gx:value>1.1</gx:value>
                 <gx:value>0.7</gx:value>
                 <gx:value>0.3</gx:value>
@@ -11017,7 +11038,7 @@
                 <gx:value>0</gx:value>
                 <gx:value>-0.1</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Ground Speed">
+              <gx:SimpleArrayData name="igc_gsp">
                 <gx:value>0.31</gx:value>
                 <gx:value>0.08</gx:value>
                 <gx:value>0.05</gx:value>
@@ -11743,7 +11764,7 @@
                 <gx:value>0.02</gx:value>
                 <gx:value>0.01</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Fix Accuracy">
+              <gx:SimpleArrayData name="igc_fxa">
                 <gx:value>7</gx:value>
                 <gx:value>6</gx:value>
                 <gx:value>7</gx:value>
@@ -12469,7 +12490,7 @@
                 <gx:value>7</gx:value>
                 <gx:value>7</gx:value>
               </gx:SimpleArrayData>
-              <gx:SimpleArrayData name="Z Accel">
+              <gx:SimpleArrayData name="igc_acz">
                 <gx:value>9</gx:value>
                 <gx:value>9</gx:value>
                 <gx:value>9</gx:value>
