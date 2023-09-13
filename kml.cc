@@ -1584,8 +1584,7 @@ void KmlFormat::write_as_linestring(const route_head* header)
 
 void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
 {
-  // when doing real time positioning we may already have been here.
-  auto track_traits = kml_track_traits_hash.value(rte);
+  track_trait_t track_traits;
 
   foreach (const Waypoint* tpt, rte->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
@@ -1648,6 +1647,9 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
       }
     }
   }
+  // When doing real time positioning we may already have been here.
+  // If so, replace the previous value corresponding to the key.
+  // If not, insert a new key value pair.
   kml_track_traits_hash.insert(rte, track_traits);
   kml_track_traits |= track_traits;
 }
