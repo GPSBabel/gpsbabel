@@ -248,30 +248,6 @@ public:
   unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
 };
 
-// These are dicey as they're collected on read. Subsequent filters may change
-// things, though it's unlikely to matter in practical terms.  Don't use these
-// if a false positive would be deleterious.
-#
-class global_trait
-{
-public:
-  global_trait() :
-    trait_geocaches(0),
-    trait_heartrate(0),
-    trait_cadence(0),
-    trait_power(0),
-    trait_depth(0),
-    trait_temperature(0),
-    trait_sat(0) {}
-  unsigned int trait_geocaches:1;
-  unsigned int trait_heartrate:1;
-  unsigned int trait_cadence:1;
-  unsigned int trait_power:1;
-  unsigned int trait_depth:1;
-  unsigned int trait_temperature:1;
-  unsigned int trait_sat:1;
-};
-
 /*
  *  Bounding box information.
  */
@@ -509,7 +485,6 @@ public:
   using QList<Waypoint*>::size_type;
 };
 
-const global_trait* get_traits();
 void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);

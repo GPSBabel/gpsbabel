@@ -1850,8 +1850,6 @@ void KmlFormat::kml_mt_array_schema(const QString& field_name, const QString& di
 
 void KmlFormat::write()
 {
-  const global_trait* traits = get_traits();
-
   // Parse options
   export_lines = (0 == strcmp("1", opt_export_lines));
   export_points = (0 == strcmp("1", opt_export_points));
@@ -1915,45 +1913,51 @@ void KmlFormat::write()
     writer->writeEndElement(); // Close Style tag
   }
 
-  if (export_track) {
-    kml_traits.reset();
-    auto kml_accumulate_traits_lamda = [this](const route_head* rte)->void {
-      kml_accumulate_traits(rte);
-    };
-    track_disp_all(kml_accumulate_traits_lamda, nullptr, nullptr);
-  }
+  bool has_geocaches = false;
+  auto kml_accumulate_wpt_traits_lambda = [&has_geocaches](const Waypoint* wpt)->void {
+    has_geocaches |= (wpt->gc_data->diff && wpt->gc_data->terr);
+  };
+  waypt_disp_all(kml_accumulate_wpt_traits_lambda);
 
-  if (traits->trait_geocaches) {
+  if (has_geocaches) {
     kml_gc_make_balloonstyle();
   }
 
-  if (kml_traits.any()) {
-    writer->writeStartElement(QStringLiteral("Schema"));
-    writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
+  if (export_track) {
+    kml_traits.reset();
+    auto kml_accumulate_traits_lambda = [this](const route_head* rte)->void {
+      kml_accumulate_traits(rte);
+    };
+    track_disp_all(kml_accumulate_traits_lambda, nullptr, nullptr);
 
-    for (const auto& flddef : mt_fields_def) {
-      switch (flddef.id) {
-      case wp_field::igc_trt:
-        if constexpr(kIncludeIGCTRT) {
+    if (kml_traits.any()) {
+      writer->writeStartElement(QStringLiteral("Schema"));
+      writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
+
+      for (const auto& flddef : mt_fields_def) {
+        switch (flddef.id) {
+        case wp_field::igc_trt:
+          if constexpr(kIncludeIGCTRT) {
+            if (kml_traits[static_cast<int>(flddef.id)]) {
+              kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
+            }
+          }
+          break;
+        case wp_field::igc_siu:
+          if constexpr(kIncludeIGCSIU) {
+            if (kml_traits[static_cast<int>(flddef.id)]) {
+              kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
+            }
+          }
+          break;
+        default:
           if (kml_traits[static_cast<int>(flddef.id)]) {
             kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
           }
-        }
-        break;
-      case wp_field::igc_siu:
-        if constexpr(kIncludeIGCSIU) {
-          if (kml_traits[static_cast<int>(flddef.id)]) {
-            kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
-          }
-        }
-        break;
-      default:
-        if (kml_traits[static_cast<int>(flddef.id)]) {
-          kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
         }
       }
+      writer->writeEndElement(); // Close Schema tag
     }
-    writer->writeEndElement(); // Close Schema tag
   }
 
   if (waypt_count()) {
