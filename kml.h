@@ -25,6 +25,7 @@
 #include <bitset>                       // for bitset
 #include <tuple>                        // for tuple, make_tuple, tie
 
+#include <QHash>                        // for QHash
 #include <QList>                        // for QList
 #include <QString>                      // for QString, QStringLiteral, operator+, operator!=
 #include <QVector>                      // for QVector
@@ -108,16 +109,7 @@ private:
     const QString type;
   };
 
-  struct kml_fsdata : FormatSpecificData {
-    kml_fsdata() : FormatSpecificData(kFsKML) {}
-
-    kml_fsdata* clone() const override
-    {
-      return new kml_fsdata(*this);
-    }
-
-    std::bitset<number_wp_fields> traits;
-  };
+  using track_trait_t = std::bitset<number_wp_fields>;
 
   /* Constants */
   static constexpr const char* default_precision = "6";
@@ -200,7 +192,7 @@ private:
   void kml_mt_simple_array(const route_head* header, const QString& name, wp_field member) const;
   static bool track_has_time(const route_head* header);
   void write_as_linestring(const route_head* header);
-  void kml_accumulate_traits(const route_head* rte);
+  void kml_accumulate_track_traits(const route_head* rte);
   void kml_mt_hdr(const route_head* header);
   void kml_mt_tlr(const route_head* header) const;
   void kml_route_hdr(const route_head* header) const;
@@ -213,7 +205,8 @@ private:
   /* Data Members */
 
   static const QVector<mt_field_t> mt_fields_def;
-  std::bitset<number_wp_fields> kml_traits;
+  track_trait_t kml_track_traits;
+  QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
   char* opt_deficon{nullptr};

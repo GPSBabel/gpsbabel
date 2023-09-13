@@ -31,7 +31,6 @@ enum FsType {
   kFsQstarzBl1000 = 0x5173747aL,
   kFsLowranceusr4 = 0x615f234cL,
   kFsIGC = 69676308L,     /* IGC format, amendment 8 (2023-02-08) */
-  kFsKML = 0x4B4D4C00L
 };
 
 struct FormatSpecificData {
