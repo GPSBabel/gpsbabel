@@ -1647,6 +1647,15 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
       }
     }
   }
+
+  // For dual source fields give priority to igc.
+  if (track_traits[static_cast<int>(wp_field::igc_oat)]) {
+    track_traits[static_cast<int>(wp_field::temperature)] = false;
+  }
+  if (track_traits[static_cast<int>(wp_field::igc_siu)]) {
+    track_traits[static_cast<int>(wp_field::sat)] = false;
+  }
+
   // When doing real time positioning we may already have been here.
   // If so, replace the previous value corresponding to the key.
   // If not, insert a new key value pair.
@@ -1700,49 +1709,13 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
   auto track_traits = kml_track_traits_hash.value(header);
   if (track_traits.any()) {
-    bool include_kmt_sats = true;
-    bool include_kmt_temperature = true;
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
 
     for (const auto& flddef : mt_fields_def) {
-      switch (flddef.id) {
-      case wp_field::igc_oat:
-        if (track_traits[static_cast<int>(flddef.id)]) {
-          kml_mt_simple_array(header, flddef.name, flddef.id);
-          include_kmt_temperature = false;
-        }
-        break;
-      case wp_field::igc_siu:
-        if constexpr(kIncludeIGCSIU) {
-          if (track_traits[static_cast<int>(flddef.id)]) {
-            kml_mt_simple_array(header, flddef.name, flddef.id);
-            include_kmt_sats = false;
-          }
-        }
-        break;
-      case wp_field::igc_trt:
-        if constexpr(kIncludeIGCTRT) {
-          if (track_traits[static_cast<int>(flddef.id)]) {
-            kml_mt_simple_array(header, flddef.name, flddef.id);
-          }
-        }
-        break;
-      case wp_field::temperature:
-        if (track_traits[static_cast<int>(flddef.id)] && include_kmt_temperature) {
-          kml_mt_simple_array(header, flddef.name, flddef.id);
-        }
-        break;
-      case wp_field::sat:
-        if (track_traits[static_cast<int>(flddef.id)] && include_kmt_sats) {
-          kml_mt_simple_array(header, flddef.name, flddef.id);
-        }
-        break;
-      default:
-        if (track_traits[static_cast<int>(flddef.id)]) {
-          kml_mt_simple_array(header, flddef.name, flddef.id);
-        }
+      if (track_traits[static_cast<int>(flddef.id)]) {
+        kml_mt_simple_array(header, flddef.name, flddef.id);
       }
     }
 
@@ -1750,7 +1723,6 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     writer->writeEndElement(); // Close ExtendedData tag
   }
 }
-
 
 void KmlFormat::kml_mt_tlr(const route_head* header) const
 {

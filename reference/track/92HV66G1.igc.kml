@@ -132,9 +132,6 @@
       <gx:SimpleArrayField name="igc_acz" type="double">
         <displayName>Z Accel</displayName>
       </gx:SimpleArrayField>
-      <gx:SimpleArrayField name="temperature" type="float">
-        <displayName>Temperature</displayName>
-      </gx:SimpleArrayField>
     </Schema>
     <Folder>
       <name>Tracks</name>
