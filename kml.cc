@@ -1709,14 +1709,14 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
     for (const auto& flddef : mt_fields_def) {
       switch (flddef.id) {
       case wp_field::igc_oat:
-        if (kml_track_traits[static_cast<int>(flddef.id)]) {
+        if (track_traits[static_cast<int>(flddef.id)]) {
           kml_mt_simple_array(header, flddef.name, flddef.id);
           include_kmt_temperature = false;
         }
         break;
       case wp_field::igc_siu:
         if constexpr(kIncludeIGCSIU) {
-          if (kml_track_traits[static_cast<int>(flddef.id)]) {
+          if (track_traits[static_cast<int>(flddef.id)]) {
             kml_mt_simple_array(header, flddef.name, flddef.id);
             include_kmt_sats = false;
           }
@@ -1724,23 +1724,23 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
         break;
       case wp_field::igc_trt:
         if constexpr(kIncludeIGCTRT) {
-          if (kml_track_traits[static_cast<int>(flddef.id)]) {
+          if (track_traits[static_cast<int>(flddef.id)]) {
             kml_mt_simple_array(header, flddef.name, flddef.id);
           }
         }
         break;
       case wp_field::temperature:
-        if (kml_track_traits[static_cast<int>(flddef.id)] && include_kmt_temperature) {
+        if (track_traits[static_cast<int>(flddef.id)] && include_kmt_temperature) {
           kml_mt_simple_array(header, flddef.name, flddef.id);
         }
         break;
       case wp_field::sat:
-        if (kml_track_traits[static_cast<int>(flddef.id)] && include_kmt_sats) {
+        if (track_traits[static_cast<int>(flddef.id)] && include_kmt_sats) {
           kml_mt_simple_array(header, flddef.name, flddef.id);
         }
         break;
       default:
-        if (kml_track_traits[static_cast<int>(flddef.id)]) {
+        if (track_traits[static_cast<int>(flddef.id)]) {
           kml_mt_simple_array(header, flddef.name, flddef.id);
         }
       }
