@@ -1914,25 +1914,8 @@ void KmlFormat::write()
       writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
 
       for (const auto& flddef : mt_fields_def) {
-        switch (flddef.id) {
-        case wp_field::igc_trt:
-          if constexpr(kIncludeIGCTRT) {
-            if (kml_track_traits[static_cast<int>(flddef.id)]) {
-              kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
-            }
-          }
-          break;
-        case wp_field::igc_siu:
-          if constexpr(kIncludeIGCSIU) {
-            if (kml_track_traits[static_cast<int>(flddef.id)]) {
-              kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
-            }
-          }
-          break;
-        default:
-          if (kml_track_traits[static_cast<int>(flddef.id)]) {
-            kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
-          }
+        if (kml_track_traits[static_cast<int>(flddef.id)]) {
+          kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
         }
       }
       writer->writeEndElement(); // Close Schema tag
