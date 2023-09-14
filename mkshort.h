@@ -83,7 +83,7 @@ private:
 
   static const QByteArray vowels;
   static constexpr int default_target_len = 8;
-  static constexpr const char default_badchars[] = "\"$.,'!-";
+  static constexpr char default_badchars[] = "\"$.,'!-";
   static const QVector<replacement_t> replacements;
 
   /* Member Functions */
