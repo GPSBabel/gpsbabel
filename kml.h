@@ -22,8 +22,10 @@
 #ifndef KML_H_INCLUDED_
 #define KML_H_INCLUDED_
 
+#include <bitset>                       // for bitset
 #include <tuple>                        // for tuple, make_tuple, tie
 
+#include <QHash>                        // for QHash
 #include <QList>                        // for QList
 #include <QString>                      // for QString, QStringLiteral, operator+, operator!=
 #include <QVector>                      // for QVector
@@ -69,7 +71,7 @@ public:
 // Helper to write gx:SimpleList, iterating over a route queue and writing out.
 
   enum class wp_field {
-    cadence,
+    cadence = 0,
     depth,
     heartrate,
     temperature,
@@ -86,6 +88,7 @@ public:
     igc_siu,  // Satellites In Use
     igc_acz   // Z Acceleration
   };
+  static constexpr int number_wp_fields = static_cast<int>(wp_field::igc_acz) + 1;
 
 private:
   /* Types */
@@ -98,6 +101,15 @@ private:
     kmlpt_multitrack,
     kmlpt_other
   };
+
+  struct mt_field_t {
+    wp_field id;
+    const QString name;
+    const QString displayName;
+    const QString type;
+  };
+
+  using track_trait_t = std::bitset<number_wp_fields>;
 
   /* Constants */
   static constexpr const char* default_precision = "6";
@@ -117,25 +129,6 @@ private:
     "snippet",
     nullptr
   };
-
-  // Multitrack ids to correlate Schema to SchemaData
-  static constexpr const char* kmt_heartrate = "heartrate";
-  static constexpr const char* kmt_cadence = "cadence";
-  static constexpr const char* kmt_temperature = "temperature";
-  static constexpr const char* kmt_depth = "depth";
-  static constexpr const char* kmt_power = "power";
-  static constexpr const char* kmt_sat = "satellites";
-  // Constants pertaining to IGC files would be better defined in either igc.h or formspec.h
-  static constexpr const char* kmt_igc_enl = "Engine Noise";
-  static constexpr const char* kmt_igc_vat = "Ttl Enrg Vario";
-  static constexpr const char* kmt_igc_tas = "True Airspd";
-  static constexpr const char* kmt_igc_oat = "Otsd Air Temp";
-  static constexpr const char* kmt_igc_trt = "True Track";
-  static constexpr const char* kmt_igc_gsp = "Ground Speed";
-  static constexpr const char* kmt_igc_fxa = "Fix Accuracy";
-  static constexpr const char* kmt_igc_gfo = "G Force?";
-  static constexpr const char* kmt_igc_siu = "# Of Sats";
-  static constexpr const char* kmt_igc_acz = "Z Accel";
 
   // IGC option compile-time flags
   static constexpr bool kIncludeIGCSIU = true;
@@ -196,19 +189,24 @@ private:
   void kml_track_hdr(const route_head* header) const;
   void kml_track_disp(const Waypoint* waypointp) const;
   void kml_track_tlr(const route_head* header);
-  void kml_mt_simple_array(const route_head* header, const char* name, wp_field member) const;
+  void kml_mt_simple_array(const route_head* header, const QString& name, wp_field member) const;
   static bool track_has_time(const route_head* header);
   void write_as_linestring(const route_head* header);
+  void kml_accumulate_track_traits(const route_head* rte);
   void kml_mt_hdr(const route_head* header);
   void kml_mt_tlr(const route_head* header) const;
   void kml_route_hdr(const route_head* header) const;
   void kml_route_disp(const Waypoint* waypointp) const;
   void kml_route_tlr(const route_head* header);
   void kml_write_AbstractView();
-  void kml_mt_array_schema(const char* field_name, const char* display_name, const char* type) const;
+  void kml_mt_array_schema(const QString& field_name, const QString& display_name, const QString& type) const;
   static QString kml_get_posn_icon(int freshness);
 
   /* Data Members */
+
+  static const QVector<mt_field_t> mt_fields_def;
+  track_trait_t kml_track_traits;
+  QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
   char* opt_deficon{nullptr};
