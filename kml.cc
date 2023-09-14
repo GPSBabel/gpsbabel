@@ -904,7 +904,6 @@ void KmlFormat::kml_output_tailer(const route_head* header)
 
   // Add a linestring for this track?
   if (export_lines && !header->rte_waypt_empty()) {
-    QString coordinates;
     bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
