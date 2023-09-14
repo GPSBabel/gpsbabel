@@ -467,7 +467,7 @@ void IgcFormat::read()
         int len = end - begin + 1;
         QString name = extension_definition.mid(4,3);
         igc_ext_type_t ext = get_ext_type(ext_type);
-        if (ext != IgcFormat::igc_ext_type_t::ext_rec_unknown) {
+        if (ext != igc_ext_type_t::ext_rec_unknown) {
           int factor = get_ext_factor(ext);
           ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
           supported_extensions.append(name);

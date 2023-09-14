@@ -581,7 +581,7 @@ SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, d
 }
 
 void
-SkytraqBase::state_init(struct read_state* pst)
+SkytraqBase::state_init(read_state* pst)
 {
   auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
@@ -600,7 +600,7 @@ SkytraqBase::state_init(struct read_state* pst)
 }
 
 Waypoint*
-SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt) const
+SkytraqBase::make_trackpoint(read_state* st, double lat, double lon, double alt) const
 {
   auto* wpt = new Waypoint;
 
@@ -623,7 +623,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
 
 int
-SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len) const
+SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len) const
 {
   int res = 0;
   double lat;
@@ -766,7 +766,7 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
 }
 
 int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len) const
+SkytraqBase::process_data_sector(read_state* pst, const uint8_t* buf, int len) const
 {
   int plen, ilen;
 
@@ -924,7 +924,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
 void
 SkytraqBase::skytraq_read_tracks() const
 {
-  struct read_state st;
+  read_state st;
   uint32_t log_wr_ptr;
   uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
   int t, rc, got_sectors, total_sectors_read = 0;
@@ -1240,7 +1240,7 @@ SkytraqfileFormat::rd_deinit()
 void
 SkytraqfileFormat::read()
 {
-  struct read_state st;
+  read_state st;
   int got_bytes;
   int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
   int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);

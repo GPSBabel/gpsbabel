@@ -484,7 +484,7 @@ waypt_read()
   }
 }
 
-static int lap_read_nop_cb(int, struct GPS_SWay**)
+static int lap_read_nop_cb(int, GPS_SWay**)
 {
   return 0;
 }
@@ -864,7 +864,7 @@ waypoint_prepare()
   extern WaypointList* global_waypoint_list;
   int icon;
 
-  tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
+  tx_waylist = (GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
 
   for (i = 0; i < n; i++) {
     tx_waylist[i] = sane_GPS_Way_New();
@@ -1057,7 +1057,7 @@ route_write()
 {
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
-  tx_routelist = (struct GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
+  tx_routelist = (GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
 
   for (int i = 0; i < n; i++) {
@@ -1104,7 +1104,7 @@ track_prepare()
 {
   int32 n = track_waypt_count() + track_count();
 
-  tx_tracklist = (struct GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
+  tx_tracklist = (GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
   for (int i = 0; i < n; i++) {
     tx_tracklist[i] = GPS_Track_New();
