@@ -293,11 +293,11 @@ private:
   static bool compare_wpt_cb(const Waypoint* a, const Waypoint* b);
   static char compare_strings(const QString& s1, const QString& s2);
   static writer_data_t* wdata_alloc();
-  static void wdata_free(GarminGPIFormat::writer_data_t* data);
-  static void wdata_add_wpt(GarminGPIFormat::writer_data_t* data, Waypoint* wpt);
-  void wdata_check(GarminGPIFormat::writer_data_t* data) const;
-  int wdata_compute_size(GarminGPIFormat::writer_data_t* data) const;
-  void wdata_write(const GarminGPIFormat::writer_data_t* data) const;
+  static void wdata_free(writer_data_t* data);
+  static void wdata_add_wpt(writer_data_t* data, Waypoint* wpt);
+  void wdata_check(writer_data_t* data) const;
+  int wdata_compute_size(writer_data_t* data) const;
+  void wdata_write(const writer_data_t* data) const;
   void write_category(const char* unused, const unsigned char* image, int image_sz) const;
   void write_header() const;
   void enum_waypt_cb(const Waypoint* ref) const;
