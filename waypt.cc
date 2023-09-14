@@ -47,33 +47,11 @@
 WaypointList* global_waypoint_list;
 
 Geocache Waypoint::empty_gc_data;
-static global_trait traits;
-
-const global_trait* get_traits()
-{
-  return &traits;
-}
 
 void
 waypt_init()
 {
   global_waypoint_list = new WaypointList;
-}
-
-void update_common_traits(const Waypoint* wpt)
-{
-  /* This is a bit tacky, but it allows a hint whether we've seen
-   * this data or not in the life cycle of this run.   Of course,
-   * the caches could have been filtered out of existence and not
-   * all waypoints may have this and a few other pitfalls, but it's
-   * an easy and fast test here.
-   */
-  traits.trait_geocaches |= (wpt->gc_data->diff && wpt->gc_data->terr);
-  traits.trait_heartrate |= wpt->heartrate > 0;
-  traits.trait_cadence |= wpt->cadence > 0;
-  traits.trait_power |= wpt->power > 0;
-  traits.trait_depth |= wpt->depth_has_value();
-  traits.trait_temperature |= wpt->temperature_has_value();
 }
 
 void
@@ -634,10 +612,6 @@ WaypointList::waypt_add(Waypoint* wpt)
         wpt->description = wpt->shortname;
       }
     }
-  }
-
-  if (this == global_waypoint_list) {
-    update_common_traits(wpt);
   }
 
 }
