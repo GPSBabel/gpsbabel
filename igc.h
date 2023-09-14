@@ -35,6 +35,7 @@
 #include <QString>               // for QString, operator+, QStringLiteral
 #include <QVector>               // for QVector
 #include <QHash>                 // for QHash
+#include <QDebug>                // for QDebug
 
 #include "defs.h"
 #include "format.h"
@@ -131,6 +132,45 @@ private:
     rec_bad = 1,		// Bad record
   };
 
+  char* opt_enl{nullptr};
+  char* opt_tas{nullptr};
+  char* opt_vat{nullptr};
+  char* opt_oat{nullptr};
+  char* opt_trt{nullptr};
+  char* opt_gsp{nullptr};
+  char* opt_fxa{nullptr};
+  char* opt_siu{nullptr};
+  char* opt_acz{nullptr};
+  char* opt_gfo{nullptr};
+  char* opt_every{nullptr};
+  char* opt_none{nullptr};
+  
+  QMap<IgcFormat::igc_ext_type_t, QString> ext_description_map = {
+    {IgcFormat::igc_ext_type_t::ext_rec_enl, QString("Engine Noise (ENL)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_tas, QString("True Airspeed (TAS)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_vat, QString("Total Energy Vario (VAT)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_oat, QString("Outside Air Temperature (OAT)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_trt, QString("True Track (TRT)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_gsp, QString("Ground Speed (GSP)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_fxa, QString("Fix Accuracy (FXA)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_gfo, QString("G Force? (GFO)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_siu, QString("# Of Sats (SIU)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_acz, QString("Z Acceleration (ACZ)")},
+  };
+
+  QMap<IgcFormat::igc_ext_type_t, char**> ext_option_map = {
+    {IgcFormat::igc_ext_type_t::ext_rec_enl, &opt_enl},
+    {IgcFormat::igc_ext_type_t::ext_rec_tas, &opt_tas},
+    {IgcFormat::igc_ext_type_t::ext_rec_vat, &opt_vat},
+    {IgcFormat::igc_ext_type_t::ext_rec_oat, &opt_oat},
+    {IgcFormat::igc_ext_type_t::ext_rec_trt, &opt_trt},
+    {IgcFormat::igc_ext_type_t::ext_rec_gsp, &opt_gsp},
+    {IgcFormat::igc_ext_type_t::ext_rec_fxa, &opt_fxa},
+    {IgcFormat::igc_ext_type_t::ext_rec_gfo, &opt_gfo},
+    {IgcFormat::igc_ext_type_t::ext_rec_siu, &opt_siu},
+    {IgcFormat::igc_ext_type_t::ext_rec_acz, &opt_acz},
+  };
+  
   const QHash<QString, igc_ext_type_t> igc_extension_map{
     {"ENL", igc_ext_type_t::ext_rec_enl},
     {"TAS", igc_ext_type_t::ext_rec_tas},
@@ -268,6 +308,54 @@ private:
       "timeadj", &timeadj,
       "(integer sec or 'auto') Barograph to GPS time diff",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      "ENL", &opt_enl, ext_description_map.value(igc_ext_type_t::ext_rec_enl),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TAS", &opt_tas, ext_description_map.value(igc_ext_type_t::ext_rec_tas),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "VAT", &opt_vat, ext_description_map.value(igc_ext_type_t::ext_rec_vat),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "OAT", &opt_oat, ext_description_map.value(igc_ext_type_t::ext_rec_oat),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TRT", &opt_trt, ext_description_map.value(igc_ext_type_t::ext_rec_trt),
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GSP", &opt_gsp, ext_description_map.value(igc_ext_type_t::ext_rec_gsp),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "FXA", &opt_fxa, ext_description_map.value(igc_ext_type_t::ext_rec_fxa),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "SIU", &opt_siu, ext_description_map.value(igc_ext_type_t::ext_rec_siu),
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "ACZ", &opt_acz, ext_description_map.value(igc_ext_type_t::ext_rec_acz),
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GFO", &opt_gfo, ext_description_map.value(igc_ext_type_t::ext_rec_gfo),
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "EVERY", &opt_every, "Include all extensions",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "NONE", &opt_none, "Exclude all extensions",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     }
   };
 };

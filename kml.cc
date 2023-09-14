@@ -904,6 +904,7 @@ void KmlFormat::kml_output_tailer(const route_head* header)
 
   // Add a linestring for this track?
   if (export_lines && !header->rte_waypt_empty()) {
+    QString coordinates;
     bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
@@ -1635,15 +1636,11 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
       if (fs_igc->acz.has_value()) {
         track_traits[static_cast<int>(wp_field::igc_acz)] = true;
       }
-      if constexpr(kIncludeIGCSIU) {
-        if (fs_igc->siu.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_siu)] = true;
-        }
+      if (fs_igc->siu.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_siu)] = true;
       }
-      if constexpr(kIncludeIGCTRT) {
-        if (fs_igc->trt.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_trt)] = true;
-        }
+      if (fs_igc->trt.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_trt)] = true;
       }
     }
   }
