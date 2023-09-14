@@ -21,52 +21,16 @@
 
 #include "duplicate.h"
 
-#include <algorithm>             // for stable_sort
-
-#include <QDateTime>             // for QDateTime
 #include <QList>                 // for QList, QList<>::iterator, QList<>::const_iterator
 #include <QMultiHash>            // for QMultiHash
+#include <QtCore>                // for qAsConst
 
 #include "defs.h"
-#include "geocache.h"            // for Geocache
-#include "src/core/datetime.h"   // for DateTime
 
 
 #if FILTERS_ENABLED
 
 #define MYNAME "duplicate"
-/*
-
-It looks odd that we have different comparisons for date and index.
-	If exported if a < b return 1
-	if index    if a < b return -1
-
-The reason is that we want to sort in reverse order by date, but forward
-order by index.  So if we have four records:
-
-    date      index
-    June 24    0
-    June 25    1
-    June 25    2
-    June 24    3
-
-we want to sort them like this:
-
-    date      index
-    June 25    1
-    June 25    2
-    June 24    0
-    June 24    3
-
-Thus, the first point we come across is the latest point, but if we
-have two points with the same export date/time, we will first see the
-one with the smaller index (i.e. the first of those two points that we
-came across while importing waypoints.)
-
-In the (common) case that we have no exported dates, the dates will all
-be zero so the sort will end up being an expensive no-op.  However, the
-complexity of this filter is dominated by other concerns.
-*/
 
 void DuplicateFilter::init()
 {
@@ -77,10 +41,8 @@ void DuplicateFilter::init()
 
 void DuplicateFilter::process()
 {
-  auto wptlist = *global_waypoint_list;
-
   QMultiHash<QString, Waypoint*> wpthash;
-  for (Waypoint* waypointp : wptlist) {
+  for (Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
 
     QString key;
     if (lcopt) {
