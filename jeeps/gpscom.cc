@@ -126,7 +126,7 @@ int32 GPS_Command_Get_Waypoint(const char* port, GPS_PWay** way, pcb_fn cb)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Waypoint(const char* port, GPS_PWay* way, int32 n, int (*cb)(struct GPS_SWay**))
+int32 GPS_Command_Send_Waypoint(const char* port, GPS_PWay* way, int32 n, int (*cb)(GPS_SWay**))
 {
   int32 ret=0;
 
@@ -1189,7 +1189,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     }
 
     /* Create & append course */
-    crs = (struct GPS_SCourse**)xrealloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
+    crs = (GPS_SCourse**)xrealloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
     crs[n_crs] = GPS_Course_New();
     if (!crs[n_crs]) {
       if (clp) xfree(clp);
@@ -1203,7 +1203,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     crs[n_crs]->track_index = Unique_Track_Index(crs, n_crs);
 
     /* Create & append new lap */
-    clp = (struct GPS_SCourse_Lap**) xrealloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
+    clp = (GPS_SCourse_Lap**) xrealloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
     clp[n_clp] = GPS_Course_Lap_New();
     if (!clp[n_clp]) {
       if (clp) xfree(clp);
@@ -1218,7 +1218,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
   }
 
   /* Append new track points */
-  ctk = (struct GPS_STrack**) xrealloc(ctk, (n_ctk+n_trk) * sizeof(GPS_PTrack));
+  ctk = (GPS_STrack**) xrealloc(ctk, (n_ctk+n_trk) * sizeof(GPS_PTrack));
   first_new_ctk = n_ctk;
   for (i=0; i<n_trk; i++) {
     if (trk[i]->ishdr && (i>=n_trk || trk[i+1]->ishdr)) {
@@ -1245,7 +1245,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
   /* Convert waypoints to course points by searching closest track point &
    * append
    */
-  cpt = (struct GPS_SCourse_Point**) xrealloc(cpt, (n_cpt+n_wpt) * sizeof(GPS_PCourse_Point));
+  cpt = (GPS_SCourse_Point**) xrealloc(cpt, (n_cpt+n_wpt) * sizeof(GPS_PCourse_Point));
   for (i=0; i<n_wpt; i++) {
     double dist, min_dist = DBL_MAX;
     uint32 min_dist_idx = 0, trk_idx = 0, min_dist_trk_idx = 0;
@@ -1314,22 +1314,22 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
 }
 
 /*Stubs for unimplemented stuff*/
-int32  GPS_Command_Get_Workout(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Workout(const char* /* port */, void** /* lap */, int (* /* cb */)(int, GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Fitness_User_Profile(const char* /* port */, void**  /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Fitness_User_Profile(const char* /* port */, void**  /* lap */, int (* /* cb */)(int, GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Workout_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Workout_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Course_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Course_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, GPS_SWay**))
 {
   return 0;
 }

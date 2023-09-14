@@ -109,7 +109,7 @@ struct one_line_common_start {
 1717**,T,090204,062634,31.765528N,035.207730E,772**,0***,0**,2D,SPS ,2.1**,1.9**,1.0**,*********
 */
 struct one_line_advanced_mode {
-  struct one_line_common_start common;
+  one_line_common_start common;
   char fixmode[2]; /* "2D" or "3D" */
   char comma10;    /* ',' */
   char valid[4];   /* "SPS " or "DGPS" */
@@ -130,7 +130,7 @@ struct one_line_advanced_mode {
 1*****,T,090404,063401,31.765931N,035.206969E,821**,0***,0**,*********
 */
 struct one_line_basic_mode {
-  struct one_line_common_start common;
+  one_line_common_start common;
   char vox[9];    /* voicetag recorded */
   char cr;        /* '\r' */
   char lf;        /* '\n' */
@@ -203,8 +203,8 @@ v900_read()
 {
   /* use line buffer large enough to hold either basic or advanced mode lines. */
   union {
-    struct one_line_basic_mode    bas;
-    struct one_line_advanced_mode adv;
+    one_line_basic_mode    bas;
+    one_line_advanced_mode adv;
     char text[200]; /* used to read the header line, which is normal text */
   } line;
   int lc = 0;

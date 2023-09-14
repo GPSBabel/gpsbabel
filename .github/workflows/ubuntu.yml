@@ -43,7 +43,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: build_and_test
       run: |
@@ -71,7 +71,7 @@ jobs:
         sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default  qtwebengine5-dev libqt5serialport5-dev ninja-build
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: script
       env:
@@ -86,7 +86,7 @@ jobs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build
       uses: snapcore/action-build@v1

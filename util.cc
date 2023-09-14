@@ -547,30 +547,6 @@ double degrees2ddmm(double deg_val)
   return (deg * 100.0) + ((deg_val - deg) * 60.0);
 }
 
-/*
- *
- */
-char*
-strupper(char* src)
-{
-  for (char* c = src; *c; c++) {
-    *c = toupper(*c);
-  }
-  return src;
-}
-
-/*
- *
- */
-char*
-strlower(char* src)
-{
-  for (char* c = src; *c; c++) {
-    *c = tolower(*c);
-  }
-  return src;
-}
-
 QString
 rot13(const QString& s)
 {
@@ -805,7 +781,7 @@ QString
 strip_nastyhtml(const QString& in)
 {
   char* returnstr = xstrdup(in);
-  char* lcstr = strlower(xstrdup(in));
+  char* lcstr = xstrdup(in.toLower());
 
   while (char* lcp = strstr(lcstr, "<body>")) {
     char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */

@@ -87,6 +87,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
+  googletakeout.cc
   gtm.cc
   gtrnctr.cc
   html.cc
@@ -213,6 +214,7 @@ set(HEADERS
   geojson.h
   globalsat_sport.h
   geo.h
+  googletakeout.h
   gpx.h
   grtcirc.h
   gtrnctr.h
@@ -224,6 +226,7 @@ set(HEADERS
   legacyformat.h
   igc.h
   lowranceusr.h
+  mkshort.h
   nmea.h
   osm.h
   qstarz_bl_1000.h
@@ -380,6 +383,7 @@ set(TESTS
   geojson
   geo
   globalsat_sport
+  googletakeout
   gpsdrive
   gpx
   grapheme
@@ -393,6 +397,7 @@ set(TESTS
   kml-read
   kml
   lowranceusr
+  mkshort
   mtk
   multiurlgpx
   nmea

@@ -1,7 +1,7 @@
 /*
     Route / track simplification filter
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,11 +56,13 @@
 	2008/08/20: added "relative" option, (Carsten Allefeld, carsten.allefeld@googlemail.com)
 */
 
-#include <algorithm>            // for sort
+#include <cassert>
 #include <cstdlib>              // for strtol
-#include <utility>              // for swap
+#include <iterator>             // for prev
 
 #include <QDateTime>            // for QDateTime
+#include <QHash>                // for QHash
+#include <QMap>                 // for QMap
 
 #include "defs.h"
 #include "smplrout.h"
@@ -71,136 +73,75 @@
 #if FILTERS_ENABLED
 #define MYNAME "simplify"
 
-void SimplifyRouteFilter::free_xte(struct xte* xte_rec)
+inline bool operator<(const SimplifyRouteFilter::trackerror& lhs, const SimplifyRouteFilter::trackerror& rhs)
 {
-  delete xte_rec->intermed;
+  return ((lhs.dist > rhs.dist) || ((lhs.dist == rhs.dist) && (lhs.wptpos < rhs.wptpos)));
 }
 
-
-void SimplifyRouteFilter::routesimple_waypt_pr(const Waypoint* wpt)
+double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
 {
-  if (!cur_rte) {
-    return;
-  }
-  xte_recs[xte_count].intermed = new struct xte_intermed;
-  xte_recs[xte_count].intermed->wpt = wpt;
-  xte_recs[xte_count].intermed->xte_rec = xte_recs+xte_count;
-  xte_recs[xte_count].intermed->next = nullptr;
-  xte_recs[xte_count].intermed->prev = tmpprev;
-  if (tmpprev) {
-    tmpprev->next = xte_recs[xte_count].intermed;
-  }
-  tmpprev = xte_recs[xte_count].intermed;
-  xte_count++;
-}
-
-void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
-{
-  const Waypoint* wpt3 = xte_rec->intermed->wpt;
-  double reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
-  if (!xte_rec->intermed->prev) {
-    xte_rec->distance = kHugeValue;
-    return;
+  if (nb.prev == nullptr) {
+    return kHugeValue;
   }
-  const Waypoint* wpt1 = xte_rec->intermed->prev->wpt;
+  const Waypoint* wpt1 = nb.prev;
 
   /* if no next, this is an endpoint and must be preserved. */
-  if (!xte_rec->intermed->next) {
-    xte_rec->distance = kHugeValue;
-    return;
+  if (nb.next == nullptr) {
+    return kHugeValue;
   }
-  const Waypoint* wpt2 = xte_rec->intermed->next->wpt;
+  const Waypoint* wpt2 = nb.next;
 
+  const Waypoint* wpt3 = nb.wpt;
+  double track_error;
   switch (metric) {
   case metric_t::crosstrack:
-    xte_rec->distance = radtomiles(linedist(
-                                     wpt1->latitude, wpt1->longitude,
-                                     wpt2->latitude, wpt2->longitude,
-                                     wpt3->latitude, wpt3->longitude));
+    track_error = radtomiles(linedist(
+                               wpt1->latitude, wpt1->longitude,
+                               wpt2->latitude, wpt2->longitude,
+                               wpt3->latitude, wpt3->longitude));
     break;
   case metric_t::length:
-    xte_rec->distance = radtomiles(
-                          gcdist(wpt1->latitude, wpt1->longitude,
-                                 wpt3->latitude, wpt3->longitude) +
-                          gcdist(wpt3->latitude, wpt3->longitude,
-                                 wpt2->latitude, wpt2->longitude) -
-                          gcdist(wpt1->latitude, wpt1->longitude,
-                                 wpt2->latitude, wpt2->longitude));
+    track_error = radtomiles(
+                    gcdist(wpt1->latitude, wpt1->longitude,
+                           wpt3->latitude, wpt3->longitude) +
+                    gcdist(wpt3->latitude, wpt3->longitude,
+                           wpt2->latitude, wpt2->longitude) -
+                    gcdist(wpt1->latitude, wpt1->longitude,
+                           wpt2->latitude, wpt2->longitude));
     break;
   case metric_t::relative:
-    if (wpt3->hdop == 0) {
-      fatal(MYNAME ": relative needs hdop information.\n");
-    }
+  default: // eliminate false positive warning with g++ 11.3.0: ‘error’ may be used uninitialized in this function [-Wmaybe-uninitialized]
     // if timestamps exist, distance to interpolated point
-    if (wpt1->GetCreationTime().isValid() && 
+    if (wpt1->GetCreationTime().isValid() &&
         wpt2->GetCreationTime().isValid() &&
         wpt3->GetCreationTime().isValid() &&
         (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
       double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
                     static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
+      double reslat, reslon;
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
-      xte_rec->distance = radtometers(gcdist(
-                                        wpt3->latitude, wpt3->longitude,
-                                        reslat, reslon));
+      track_error = radtometers(gcdist(
+                                  wpt3->latitude, wpt3->longitude,
+                                  reslat, reslon));
     } else { // else distance to connecting line
-      xte_rec->distance = radtometers(linedist(
-                                        wpt1->latitude, wpt1->longitude,
-                                        wpt2->latitude, wpt2->longitude,
-                                        wpt3->latitude, wpt3->longitude));
+      track_error = radtometers(linedist(
+                                  wpt1->latitude, wpt1->longitude,
+                                  wpt2->latitude, wpt2->longitude,
+                                  wpt3->latitude, wpt3->longitude));
     }
     // error relative to horizontal precision
-    xte_rec->distance /= (6 * wpt3->hdop);
+    track_error /= (6 * wpt3->hdop);
     // (hdop->meters following to J. Person at <http://www.developerfusion.co.uk/show/4652/3/>)
     break;
   }
-}
-
-int SimplifyRouteFilter::compare_xte(const void* a, const void* b)
-{
-  const auto* xte_a = static_cast<const struct xte*>(a);
-  const auto* xte_b = static_cast<const struct xte*>(b);
-
-  if (kHugeValue == xte_a->distance) {
-    if (kHugeValue == xte_b->distance) {
-      return 0;
-    }
-    return -1;
-  }
-
-  if (kHugeValue == xte_b->distance) {
-    return 1;
-  }
-
-  int priodiff = xte_a->intermed->wpt->route_priority -
-                 xte_b->intermed->wpt->route_priority;
-  if (priodiff < 0) {
-    return 1;
-  }
-  if (priodiff > 0) {
-    return -1;
-  }
-
-  double distdiff = xte_a->distance - xte_b->distance;
-  if (distdiff < 0) {
-    return 1;
-  }
-  if (distdiff > 0) {
-    return -1;
-  }
-  return 0;
+  return track_error;
 }
 
 void SimplifyRouteFilter::routesimple_head(const route_head* rte)
 {
-  cur_rte = nullptr;
-  /* build array of XTE/wpt xref records */
-  xte_count = 0;
-  tmpprev = nullptr;
-  totalerror = 0;
-
   /* short-circuit if we already have fewer than the max points */
   if ((limit_basis == limit_basis_t::count) && count >= rte->rte_waypt_ct()) {
     return;
@@ -211,123 +152,121 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
     return;
   }
 
-  xte_recs = new struct xte[rte->rte_waypt_ct()];
-  cur_rte = rte;
-
-}
-
-void SimplifyRouteFilter::shuffle_xte(struct xte* xte_rec)
-{
-  while (xte_rec > xte_recs && compare_xte(xte_rec, xte_rec-1) < 0) {
-    std::swap(xte_rec[0], xte_rec[-1]);
-    xte_rec[0].intermed->xte_rec = &xte_rec[0];
-    xte_rec[-1].intermed->xte_rec = &xte_rec[-1];
-    xte_rec--;
-  }
-  while (xte_rec - xte_recs < xte_count-2 &&
-         compare_xte(xte_rec, xte_rec+1) > 0) {
-    std::swap(xte_rec[0], xte_rec[1]);
-    xte_rec[0].intermed->xte_rec = &xte_rec[0];
-    xte_rec[1].intermed->xte_rec = &xte_rec[1];
-    xte_rec++;
-  }
-}
-
-void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
-{
-  int i;
-  if (!cur_rte) {
-    return;
-  }
-
   /* compute all distances */
-  for (i = 0; i < xte_count ; i++) {
-    compute_xte(xte_recs+i);
-  }
-
-
   /* sort XTE array, lowest XTE last */
-  auto compare_xte_lambda = [](const xte& a, const xte& b)->bool {
-    return compare_xte(&a, &b) < 0;
-  };
-  if (gpsbabel_testmode()) {
-    std::stable_sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
-  } else {
-    std::sort(xte_recs, xte_recs + xte_count, compare_xte_lambda);
-  }
+  Waypoint* pwpt = nullptr;
+  Waypoint* ppwpt = nullptr;
+  WaypointList::size_type pos = 0;
+  neighborhood nb;
+  trackerror te;
+  QMap<trackerror, neighborhood> errormap;
+  QHash<Waypoint*, trackerror> wpthash;
+  for (auto* wpt : rte->waypoint_list) {
+    wpt->extra_data = nullptr;
 
+    if (metric == metric_t::relative) {
+      // check hdop is available for compute_track_error
+      if (wpt->hdop == 0) {
+        fatal(MYNAME ": relative needs hdop information.\n");
+      }
+    }
 
-  for (i = 0; i < xte_count; i++) {
-    xte_recs[i].intermed->xte_rec = xte_recs+i;
+    if (pwpt != nullptr) {
+      nb.wpt = pwpt;
+      nb.prev = ppwpt;
+      nb.next = wpt;
+
+      te.dist = compute_track_error(nb);
+      te.wptpos = pos;
+
+      errormap.insert(te, nb);
+      wpthash.insert(pwpt, te);
+    }
+
+    ppwpt = pwpt;
+    pwpt = wpt;
+    ++pos;
   }
-  // Ensure totalerror starts with the distance between first and second points
-  // and not the zero-init.  From a June 25, 2014  thread titled "Simplify
-  // Filter: GPSBabel removes one trackpoint..."  I never could repro it it
-  // with the sample data, so there is no automated test case, but Steve's
-  // fix is "obviously" right here.
-  if (xte_count >= 1) {
-    totalerror = xte_recs[xte_count-1].distance;
-  }
+  nb.wpt = pwpt;
+  nb.prev = ppwpt;
+  nb.next = nullptr;
+
+  te.dist = compute_track_error(nb);
+  te.wptpos = pos;
+
+  errormap.insert(te, nb);
+  wpthash.insert(pwpt, te);
+
+  assert(!errormap.isEmpty());
+  double totalerror = errormap.lastKey().dist;
 
   /* while we still have too many records... */
-  while ((xte_count) &&
-         (((limit_basis == limit_basis_t::count) && (count < xte_count)) ||
+  while ((!errormap.isEmpty()) &&
+         (((limit_basis == limit_basis_t::count) && (count < errormap.size())) ||
           ((limit_basis == limit_basis_t::error) && (totalerror < error)))) {
-    i = xte_count - 1;
+
     /* remove the record with the lowest XTE */
+    neighborhood goner = errormap.last();
+    goner.wpt->wpt_flags.marked_for_deletion = 1;
+    // errormap.remove(lastKey());  // with Qt 5.12.12, 5.15.2 results in asan heap-use-after-free errors in build_extra_tests.sh
+    errormap.erase(std::prev(errormap.end())); // in Qt6 can use cend().
+    // wpthash.remove(goner.wpt); // removal not necessary
+
+    /* recompute neighbors of point marked for deletion. */
+    if (goner.prev != nullptr) {
+      assert(wpthash.contains(goner.prev));
+      trackerror terr = wpthash.value(goner.prev);
+      assert(errormap.contains(terr));
+      neighborhood nbh = errormap.value(terr);
+      nbh.next = goner.next;
+      errormap.remove(terr);
+      terr.dist = compute_track_error(nbh);
+      errormap.insert(terr, nbh);
+      wpthash.insert(goner.prev, terr);
+    }
+    if (goner.next != nullptr) {
+      assert(wpthash.contains(goner.next));
+      trackerror terr = wpthash.value(goner.next);
+      assert(errormap.contains(terr));
+      neighborhood nbh = errormap.value(terr);
+      nbh.prev = goner.prev;
+      errormap.remove(terr);
+      terr.dist = compute_track_error(nbh);
+      errormap.insert(terr, nbh);
+      wpthash.insert(goner.next, terr);
+    }
+
+    /* compute impact of deleting next point */
     if (limit_basis == limit_basis_t::error) {
       switch (metric) {
       case metric_t::crosstrack:
       case metric_t::relative:
-        if (i > 1) {
-          totalerror = xte_recs[i-1].distance;
-        } else {
-          totalerror = xte_recs[i].distance;
-        }
+        totalerror = errormap.lastKey().dist;
         break;
       case metric_t::length:
-        totalerror += xte_recs[i].distance;
+        totalerror += errormap.lastKey().dist;
         break;
       }
     }
-    (*waypt_del_fnp)(const_cast<route_head*>(rte),
-                     const_cast<Waypoint*>(xte_recs[i].intermed->wpt));
-    delete xte_recs[i].intermed->wpt;
 
-    if (xte_recs[i].intermed->prev) {
-      xte_recs[i].intermed->prev->next = xte_recs[i].intermed->next;
-      compute_xte(xte_recs[i].intermed->prev->xte_rec);
-      shuffle_xte(xte_recs[i].intermed->prev->xte_rec);
-    }
-    if (xte_recs[i].intermed->next) {
-      xte_recs[i].intermed->next->prev = xte_recs[i].intermed->prev;
-      compute_xte(xte_recs[i].intermed->next->xte_rec);
-      shuffle_xte(xte_recs[i].intermed->next->xte_rec);
-    }
-    xte_count--;
-    free_xte(xte_recs+xte_count);
-    /* end of loop */
-  }
-  if (xte_count) {
-    do {
-      xte_count--;
-      free_xte(xte_recs+xte_count);
-    } while (xte_count);
-  }
-  delete[] xte_recs;
+  } /* end of too many records loop */
 }
 
 void SimplifyRouteFilter::process()
 {
-  WayptFunctor<SimplifyRouteFilter> routesimple_waypt_pr_f(this, &SimplifyRouteFilter::routesimple_waypt_pr);
-  RteHdFunctor<SimplifyRouteFilter> routesimple_head_f(this, &SimplifyRouteFilter::routesimple_head);
-  RteHdFunctor<SimplifyRouteFilter> routesimple_tail_f(this, &SimplifyRouteFilter::routesimple_tail);
+  auto common_head_lambda = [this](const route_head* rte)->void {
+    routesimple_head(rte);
+  };
 
-  waypt_del_fnp = route_del_wpt;
-  route_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
+  auto route_tail_lambda = [](const route_head* rte)->void {
+    route_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  route_disp_all(common_head_lambda, route_tail_lambda, nullptr);
 
-  waypt_del_fnp = track_del_wpt;
-  track_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
+  auto track_tail_lambda = [](const route_head* rte)->void {
+    track_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  track_disp_all(common_head_lambda, track_tail_lambda, nullptr);
 }
 
 void SimplifyRouteFilter::init()

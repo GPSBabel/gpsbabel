@@ -77,13 +77,10 @@ void DuplicateFilter::init()
 
 void DuplicateFilter::process()
 {
-  int delete_flag; // &delete_flag != nullptr
-
   auto wptlist = *global_waypoint_list;
 
   QMultiHash<QString, Waypoint*> wpthash;
   for (Waypoint* waypointp : wptlist) {
-    waypointp->extra_data = nullptr;
 
     QString key;
     if (lcopt) {
@@ -116,23 +113,12 @@ void DuplicateFilter::process()
       for (auto it = values.cbegin(); it != values.cend(); ++it) {
         Waypoint* wpt = *it;
         if (purge_duplicates || (wpt != wptfirst)) {
-          wpt->extra_data = &delete_flag;
+          wpt->wpt_flags.marked_for_deletion = 1;
         }
       }
     }
   }
-
-  // For lineary complexity build a new list from the points we keep.
-  WaypointList oldlist;
-  waypt_swap(oldlist);
-  
-  for (Waypoint* wpt : qAsConst(oldlist)) {
-    if (wpt->extra_data == nullptr) {
-      waypt_add(wpt);
-    } else {
-      delete wpt;
-    }
-  }
+  del_marked_wpts();
 }
 
 #endif

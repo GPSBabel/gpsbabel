@@ -235,7 +235,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
     len = gbfgetint32(fin);  /* sub-header size */
   }
   if (GPI_DBG) {
-  warning("poi sublen = %1$d (0x%1$x)\n", len);
+  warning("poi sublen = %d (0x%x)\n", len, len);
   }
   (void) len;
   int pos = gbftell(fin);
@@ -279,12 +279,12 @@ GarminGPIFormat::read_poi_list(const int sz)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi list (-> %1$x / %1$d )\n", pos + sz);
+    warning("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
   }
   PP;
   int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
   if (GPI_DBG) {
-    warning("list sublen = %1$d (0x%1$x)\n", i);
+    warning("list sublen = %d (0x%x)\n", i, i);
   }
   (void) i;
 
@@ -317,7 +317,7 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi group (-> %1$x / %1$d)\n", pos + sz);
+    warning("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
   }
   if (tag == 0x80009) {
     PP;
@@ -1044,7 +1044,7 @@ GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
   auto* wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
-    wpt->shortname = mkshort(short_h, wpt->shortname);
+    wpt->shortname = short_h->mkshort(wpt->shortname);
   }
 
   wdata_add_wpt(wdata, wpt);
@@ -1252,15 +1252,15 @@ GarminGPIFormat::wr_init(const QString& fname)
 
   fout = gbfopen_le(fname, "wb", MYNAME);
 
-  short_h = mkshort_new_handle();
+  short_h = new MakeShort;
 
-  setshort_length(short_h, 1024);
-  setshort_badchars(short_h, "\r\n");
-  setshort_mustupper(short_h, 0);
-  setshort_mustuniq(short_h, 1);
-  setshort_whitespace_ok(short_h, 1);
-  setshort_repeating_whitespace_ok(short_h, 0);
-  setshort_defname(short_h, "POI");
+  short_h->set_length(1024);
+  short_h->set_badchars("\r\n");
+  short_h->set_mustupper(false);
+  short_h->set_mustuniq(true);
+  short_h->set_whitespace_ok(true);
+  short_h->set_repeating_whitespace_ok(false);
+  short_h->set_defname("POI");
 
   codepage = 0;
 
@@ -1325,7 +1325,8 @@ void
 GarminGPIFormat::wr_deinit()
 {
   wdata_free(wdata);
-  mkshort_del_handle(&short_h);
+  delete short_h;
+  short_h = nullptr;
   gbfclose(fout);
 
   if ((opt_sleep) && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */

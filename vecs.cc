@@ -69,6 +69,7 @@
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
+#include "googletakeout.h"    // for GoogleTakeoutFormat
 
 
 extern ff_vecs_t geo_vecs;
@@ -491,6 +492,14 @@ struct Vecs::Impl {
       "Qstarz BL-1000",
       nullptr,
       nullptr,
+    },
+    {
+      nullptr,
+      "googletakeout",
+      "Google Takeout Location History",
+      "json",
+      nullptr,
+      &fmtfactory<GoogleTakeoutFormat>
     }
 #endif // MAXIMAL_ENABLED
   };
