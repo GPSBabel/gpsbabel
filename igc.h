@@ -144,7 +144,7 @@ private:
   char* opt_gfo{nullptr};
   char* opt_every{nullptr};
   char* opt_none{nullptr};
-  
+
   QMap<IgcFormat::igc_ext_type_t, QString> ext_description_map = {
     {IgcFormat::igc_ext_type_t::ext_rec_enl, QString("Engine Noise (ENL)")},
     {IgcFormat::igc_ext_type_t::ext_rec_tas, QString("True Airspeed (TAS)")},
@@ -170,7 +170,7 @@ private:
     {IgcFormat::igc_ext_type_t::ext_rec_siu, &opt_siu},
     {IgcFormat::igc_ext_type_t::ext_rec_acz, &opt_acz},
   };
-  
+
   const QHash<QString, igc_ext_type_t> igc_extension_map{
     {"ENL", igc_ext_type_t::ext_rec_enl},
     {"TAS", igc_ext_type_t::ext_rec_tas},

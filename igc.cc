@@ -262,10 +262,7 @@ void IgcFormat::read()
   QList<QString> present_extensions;      // List of all extensions present in IGC file
   QList<QString> included_extensions;     // List of extensions present in IGC file which will be ingested
 
-  QStringList ext_include;
-
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
-  //ext_include = get_extension_ingestion_2();
 
   while (true) {
     if (global_opts.debug_level >= 8) {
