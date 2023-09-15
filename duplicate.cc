@@ -97,7 +97,7 @@ void DuplicateFilter::process()
         .arg(degrees2ddmm(waypointp->latitude), 11, 'f', 3)
         .arg(degrees2ddmm(waypointp->longitude), 11, 'f', 3);
     }
-  
+
     if (snopt) {
       key.append(waypointp->shortname);
     }
