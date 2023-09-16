@@ -351,7 +351,7 @@ make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc
     result = date.startOfDay(timespec, offset);
 #endif
   }
- 
+
   return result;
 }
 
@@ -1066,7 +1066,7 @@ QString grapheme_truncate(const QString& input, unsigned int count)
 
 int xstrtoi(const char* str, char** str_end, int base)
 {
-  
+
   long value = strtol(str, str_end, base);
   if (value > INT_MAX) {
     errno = ERANGE;

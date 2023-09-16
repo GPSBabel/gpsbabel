@@ -1226,7 +1226,7 @@ QString KmlFormat::kml_gc_mkstar(int rating)
 
 }
 
-QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
+QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 

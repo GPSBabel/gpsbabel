@@ -175,7 +175,7 @@ private:
   static QString kml_lookup_gc_icon(const Waypoint* waypointp);
   static const char* kml_lookup_gc_container(const Waypoint* waypointp);
   static QString kml_gc_mkstar(int rating);
-  QString kml_geocache_get_logs(const Waypoint* wpt) const;
+  static QString kml_geocache_get_logs(const Waypoint* wpt);
   void kml_write_data_element(const QString& name, const QString& value) const;
   void kml_write_data_element(const QString& name, int value) const;
   void kml_write_data_element(const QString& name, double value) const;
