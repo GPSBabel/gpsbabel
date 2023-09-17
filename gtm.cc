@@ -31,7 +31,7 @@
 #include <QString>              // for QString
 #include <QVector>              // for QVector
 
-#include "defs.h" 
+#include "defs.h"
 #include "gbfile.h"             // for gbfseek, gbfputc, gbfputint32, gbfputflt
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"  // for DateTime

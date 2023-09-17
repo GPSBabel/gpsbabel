@@ -707,7 +707,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
   return str;
 }
 
-QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt) const
+QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
   QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
   if (str.size() != 6) {
@@ -716,7 +716,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt) const
   return str;
 }
 
-QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod) const
+QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
   QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
   if (str.size() != 6) {
@@ -897,7 +897,7 @@ void IgcFormat::wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
  * @return The number of seconds to add to the GNSS track in order to align
  *         it with the pressure track.
  */
-int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* gnss_track) const
+int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* gnss_track)
 {
   double alt_diff;
   double speed;

@@ -201,7 +201,7 @@ private:
    * A factor can never be zero, so this looks good to me.
    * Be careful.
    */
-  int get_ext_factor(igc_ext_type_t type) const
+  static int get_ext_factor(igc_ext_type_t type)
   {
     int ret = 0;
     switch (type) {
@@ -282,9 +282,9 @@ private:
   void detect_gnss_track(const route_head*);
   void detect_other_track(const route_head*, int& max_waypt_ct);
   void get_tracks(const route_head**, const route_head**);
-  QByteArray latlon2str(const Waypoint*);
-  QByteArray date2str(const gpsbabel::DateTime&) const;
-  QByteArray tod2str(const gpsbabel::DateTime&) const;
+  static QByteArray latlon2str(const Waypoint*);
+  static QByteArray date2str(const gpsbabel::DateTime&);
+  static QByteArray tod2str(const gpsbabel::DateTime&);
   void wr_header();
   void wr_task_wpt_name(const Waypoint*, const char*);
   void wr_task_hdr(const route_head*, unsigned int task_num);
@@ -292,7 +292,7 @@ private:
   void wr_task_tlr(const route_head*);
   void wr_tasks();
   void wr_fix_record(const Waypoint*, int, int);
-  int correlate_tracks(const route_head*, const route_head*) const;
+  static int correlate_tracks(const route_head*, const route_head*);
   void wr_track();
 
   /* Data Members */
