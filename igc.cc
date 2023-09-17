@@ -255,7 +255,7 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QList<std::tuple<QString, igc_ext_type_t, int, int, double>> ext_types_list;
+  QList<std::tuple<QString, igc_ext_type_t, int, int, double, char**>> ext_types_list;
   QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
   QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
   QList<QString> excluded_extensions;     // Extensions that would be included but were specifically excluded
@@ -377,8 +377,9 @@ void IgcFormat::read()
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Adding extension data:");
         }
-        for (const auto& [name, ext, start, len, factor] : ext_types_list) {
-          if (included_extensions.contains(name)) {
+        for (const auto& [name, ext, start, len, factor, opt] : ext_types_list) {
+          bool ext_enabled = (0 == strcmp("1", *opt));
+          if (ext_enabled) {
             double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
             fsdata->set_value(ext, ext_data, pres_wpt);
@@ -459,33 +460,6 @@ void IgcFormat::read()
 
       // If the EVERY or NONE options were used, set the corresponding flags.
       // I still need a way to override NONE or EVERY if options are explicitly set.
-      bool every_extension = (0 == strcmp("1", opt_every));
-      bool no_extension = (0 == strcmp("1", opt_none));
-
-      if (no_extension) {
-        QVectorIterator<arglist_t> igc_args_iter(igc_args);
-        while (igc_args_iter.hasNext()) {
-          arglist_t arg = igc_args_iter.next();
-          if (arg.argtype == ARGTYPE_BOOL && arg.argstring != "EVERY" && arg.argstring != "NONE" && arg.argstring != "timeadj") {
-            if (global_opts.debug_level >= 2) {
-              printf(MYNAME ": Option NONE: Setting argument %s to 0\n", qPrintable(arg.argstring));
-            }
-            *arg.argval = (char*)"0";
-          }
-        }
-      }
-      if (every_extension) {
-        QVectorIterator<arglist_t> igc_args_iter(igc_args);
-        while (igc_args_iter.hasNext()) {
-          arglist_t arg = igc_args_iter.next();
-          if (arg.argtype == ARGTYPE_BOOL && arg.argstring != "EVERY" && arg.argstring != "NONE" && arg.argstring != "timeadj") {
-            if (global_opts.debug_level >= 2) {
-              printf(MYNAME ": Option EVERY: Setting argument %s to 1\n", qPrintable(arg.argstring));
-            }
-            *arg.argval = (char*)"1";
-          }
-        }
-      }
 
       for (int i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
@@ -503,7 +477,7 @@ void IgcFormat::read()
             printf(MYNAME ": Adding %s to list of supported extensions\n", qPrintable(name));
           }
           int factor = get_ext_factor(ext);
-          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
+          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor, ext_option_map[ext]));
           for (auto& arg : igc_args) {
             bool opt = (*arg.argval != nullptr && **arg.argval == '1');
             if (global_opts.debug_level >= 4) {
@@ -541,7 +515,7 @@ void IgcFormat::read()
       if (global_opts.debug_level >= 2) {
         printf(MYNAME ": Non-excluded extensions defined in I record:\n");
         printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
-        for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
+        for (const auto& [name, ext, begin, len, factor, opt] : ext_types_list) {
           printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {

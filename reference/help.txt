@@ -71,18 +71,16 @@ File Types (-i and -o options):
 	  url                   Source for URL field in .dbf
 	igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff
-	  ENL                   (0/1) Engine Noise (ENL)
-	  TAS                   (0/1) True Airspeed (TAS)
-	  VAT                   (0/1) Total Energy Vario (VAT)
-	  OAT                   (0/1) Outside Air Temperature (OAT)
-	  TRT                   (0/1) True Track (TRT)
-	  GSP                   (0/1) Ground Speed (GSP)
-	  FXA                   (0/1) Fix Accuracy (FXA)
-	  SIU                   (0/1) # Of Sats (SIU)
-	  ACZ                   (0/1) Z Acceleration (ACZ)
-	  GFO                   (0/1) G Force? (GFO)
-	  EVERY                 (0/1) Include all extensions
-	  NONE                  (0/1) Exclude all extensions
+	  ENL                   (0/1) Engine Noise (ENL; default=1)
+	  TAS                   (0/1) True Airspeed (TAS; default=1)
+	  VAT                   (0/1) Total Energy Vario (VAT; default=1)
+	  OAT                   (0/1) Outside Air Temperature (OAT; default=1)
+	  TRT                   (0/1) True Track (TRT; default=0)
+	  GSP                   (0/1) Ground Speed (GSP; default=1)
+	  FXA                   (0/1) Fix Accuracy (FXA; default=1)
+	  SIU                   (0/1) # Of Sats (SIU; default=0)
+	  ACZ                   (0/1) Z Acceleration (ACZ; default=1)
+	  GFO                   (0/1) G Force? (GFO; default=0)
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file

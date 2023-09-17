@@ -132,29 +132,25 @@ file	--rwrw	igc		FAI/IGC Flight Recorder Data Format	igc
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html
 option	igc	timeadj	(integer sec or 'auto') Barograph to GPS time diff	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_timeadj
 
-option	igc	ENL	Engine Noise (ENL)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ENL
+option	igc	ENL	Engine Noise (ENL; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ENL
 
-option	igc	TAS	True Airspeed (TAS)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TAS
+option	igc	TAS	True Airspeed (TAS; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TAS
 
-option	igc	VAT	Total Energy Vario (VAT)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_VAT
+option	igc	VAT	Total Energy Vario (VAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_VAT
 
-option	igc	OAT	Outside Air Temperature (OAT)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_OAT
+option	igc	OAT	Outside Air Temperature (OAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_OAT
 
-option	igc	TRT	True Track (TRT)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TRT
+option	igc	TRT	True Track (TRT; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TRT
 
-option	igc	GSP	Ground Speed (GSP)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GSP
+option	igc	GSP	Ground Speed (GSP; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GSP
 
-option	igc	FXA	Fix Accuracy (FXA)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_FXA
+option	igc	FXA	Fix Accuracy (FXA; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_FXA
 
-option	igc	SIU	# Of Sats (SIU)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_SIU
+option	igc	SIU	# Of Sats (SIU; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_SIU
 
-option	igc	ACZ	Z Acceleration (ACZ)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ACZ
+option	igc	ACZ	Z Acceleration (ACZ; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ACZ
 
-option	igc	GFO	G Force? (GFO)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GFO
-
-option	igc	EVERY	Include all extensions	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_EVERY
-
-option	igc	NONE	Exclude all extensions	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_NONE
+option	igc	GFO	G Force? (GFO; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GFO
 
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file	garmin_fit
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html

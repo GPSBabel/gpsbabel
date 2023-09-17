@@ -79,7 +79,6 @@ public:
     ext_rec_gfo = 8,  // G Force?
     ext_rec_siu = 9,  // Satellites In Use
     ext_rec_acz = 10,  // Z Acceleration
-
   };
 
   QVector<arglist_t>* get_args() override
@@ -142,20 +141,18 @@ private:
   char* opt_siu{nullptr};
   char* opt_acz{nullptr};
   char* opt_gfo{nullptr};
-  char* opt_every{nullptr};
-  char* opt_none{nullptr};
 
   QMap<IgcFormat::igc_ext_type_t, QString> ext_description_map = {
-    {IgcFormat::igc_ext_type_t::ext_rec_enl, QString("Engine Noise (ENL)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_tas, QString("True Airspeed (TAS)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_vat, QString("Total Energy Vario (VAT)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_oat, QString("Outside Air Temperature (OAT)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_trt, QString("True Track (TRT)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_gsp, QString("Ground Speed (GSP)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_fxa, QString("Fix Accuracy (FXA)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_gfo, QString("G Force? (GFO)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_siu, QString("# Of Sats (SIU)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_acz, QString("Z Acceleration (ACZ)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_enl, QString("Engine Noise (ENL; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_tas, QString("True Airspeed (TAS; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_vat, QString("Total Energy Vario (VAT; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_oat, QString("Outside Air Temperature (OAT; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_trt, QString("True Track (TRT; default=0)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_gsp, QString("Ground Speed (GSP; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_fxa, QString("Fix Accuracy (FXA; default=1)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_gfo, QString("G Force? (GFO; default=0)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_siu, QString("# Of Sats (SIU; default=0)")},
+    {IgcFormat::igc_ext_type_t::ext_rec_acz, QString("Z Acceleration (ACZ; default=1)")},
   };
 
   QMap<IgcFormat::igc_ext_type_t, char**> ext_option_map = {
@@ -349,14 +346,6 @@ private:
       "GFO", &opt_gfo, ext_description_map.value(igc_ext_type_t::ext_rec_gfo),
       "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
-    {
-      "EVERY", &opt_every, "Include all extensions",
-      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-    },
-    {
-      "NONE", &opt_none, "Exclude all extensions",
-      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-    }
   };
 };
 /*
