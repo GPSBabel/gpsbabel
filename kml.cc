@@ -72,16 +72,6 @@
 #define MYNAME "kml"
 
 const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
-  { wp_field::igc_enl, "igc_enl", "Engine Noise", "double" },
-  { wp_field::igc_tas, "igc_tas", "True Airspd", "double" },
-  { wp_field::igc_oat, "igc_oat", "Otsd Air Temp", "double" },
-  { wp_field::igc_vat, "igc_vat", "Ttl Enrg Vario", "double" },
-  { wp_field::igc_gsp, "igc_gsp", "Ground Speed", "double" },
-  { wp_field::igc_fxa, "igc_fxa", "Fix Accuracy", "double" },
-  { wp_field::igc_gfo, "igc_gfo", "G Force?", "double" },
-  { wp_field::igc_acz, "igc_acz", "Z Accel", "double" },
-  { wp_field::igc_siu, "igc_siu", "# Of Sats", "double" },
-  { wp_field::igc_trt, "igc_trt", "True Track", "double" },
   { wp_field::cadence, "cadence", "Cadence", "int" },
   { wp_field::depth, "depth", "Depth", "float" },
   { wp_field::heartrate, "heartrate", "Heart Rate", "int" },
@@ -1487,11 +1477,13 @@ void KmlFormat::kml_track_tlr(const route_head* header)
  * Unlike every other format, we do the bulk of the work in the header
  * callback as we have to make multiple passes over the track queues.
  */
-
+template<typename T>
 void KmlFormat::kml_mt_simple_array(const route_head* header,
                                     const QString& name,
-                                    wp_field member) const
+                                    T fld_supertype) const
 {
+  using wp_fld_type = typename std::underlying_type<T>::type;
+
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
   if (global_opts.debug_level >= 3) {
@@ -1499,43 +1491,40 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   }
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
-    switch (member) {
-    case wp_field::power:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
-                               QString::number(wpt->power, 'f', 1) : QString());
-      break;
-    case wp_field::cadence:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
-                               QString::number(wpt->cadence) : QString());
-      break;
-    case wp_field::depth:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
-                               QString::number(wpt->depth_value(), 'f', 1) : QString());
-      break;
-    case wp_field::heartrate:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
-                               QString::number(wpt->heartrate) : QString());
-      break;
-    case wp_field::temperature:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
-                               QString::number(wpt->temperature_value(), 'f', 1) : QString());
-      break;
-    case wp_field::sat:
-      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat >= 0?
-                               QString::number(wpt->sat) : QString());
-      break;
-    case wp_field::igc_enl:
-    case wp_field::igc_tas:
-    case wp_field::igc_vat:
-    case wp_field::igc_oat:
-    case wp_field::igc_trt:
-    case wp_field::igc_gsp:
-    case wp_field::igc_fxa:
-    case wp_field::igc_gfo:
-    case wp_field::igc_siu:
-    case wp_field::igc_acz:
-      if (fs_igc && fs_igc->get_value(member).has_value()) {
-        double value = fs_igc->get_value(member).value();
+    wp_fld_type fld_type = static_cast<wp_fld_type>(fld_supertype);
+
+    if constexpr (std::is_same_v<T, wp_field>) {
+      switch (fld_type) {
+        case static_cast<wp_fld_type>(wp_field::power):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
+                                  QString::number(wpt->power, 'f', 1) : QString());
+          break;
+        case static_cast<wp_fld_type>(wp_field::cadence):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
+                                  QString::number(wpt->cadence) : QString());
+          break;
+        case static_cast<wp_fld_type>(wp_field::depth):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
+                                  QString::number(wpt->depth_value(), 'f', 1) : QString());
+          break;
+        case static_cast<wp_fld_type>(wp_field::heartrate):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
+                                  QString::number(wpt->heartrate) : QString());
+          break;
+        case static_cast<wp_fld_type>(wp_field::temperature):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
+                                  QString::number(wpt->temperature_value(), 'f', 1) : QString());
+          break;
+        case static_cast<wp_fld_type>(wp_field::sat):
+          writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat >= 0?
+                                  QString::number(wpt->sat) : QString());
+          break;
+        default:
+          fatal(MYNAME ": Bad wp_field type (%i) in kml_mt_simple_array()\n", fld_type);
+      }
+    } else if constexpr (std::is_same_v<T, IgcFormat::igc_wp_field>) {
+      if (fs_igc && fs_igc->get_value(static_cast<IgcFormat::igc_wp_field>(fld_supertype)).has_value()) {
+        double value = fs_igc->get_value(static_cast<IgcFormat::igc_wp_field>(fld_supertype)).value();
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", qPrintable(name), value);
         }
@@ -1548,9 +1537,8 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }
-      break;
-    default:
-      fatal("Bad member type");
+    } else {
+      fatal(MYNAME ": Unknown wp_field type (%i) in kml_mt_simple_array\n", fld_type);
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag
@@ -1585,6 +1573,7 @@ void KmlFormat::write_as_linestring(const route_head* header)
 void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
 {
   track_trait_t track_traits;
+  igc_track_trait_t igc_track_traits;
 
   foreach (const Waypoint* tpt, rte->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
@@ -1611,48 +1600,19 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
       track_traits[static_cast<int>(wp_field::sat)] = true;
     }
     if (fs_igc) {
-      if (fs_igc->enl.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_enl)] = true;
-      }
-      if (fs_igc->tas.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_tas)] = true;
-      }
-      if (fs_igc->oat.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_oat)] = true;
-      }
-      if (fs_igc->vat.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_vat)] = true;
-      }
-      if (fs_igc->gsp.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_gsp)] = true;
-      }
-      if (fs_igc->fxa.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_fxa)] = true;
-      }
-      if (fs_igc->gfo.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_gfo)] = true;
-      }
-      if (fs_igc->acz.has_value()) {
-        track_traits[static_cast<int>(wp_field::igc_acz)] = true;
-      }
-      if constexpr(kIncludeIGCSIU) {
-        if (fs_igc->siu.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_siu)] = true;
-        }
-      }
-      if constexpr(kIncludeIGCTRT) {
-        if (fs_igc->trt.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_trt)] = true;
+      for (const auto& [ptr, wp_field]: fs_igc->ext_list) {
+        if (ptr->has_value()) {
+          igc_track_traits[static_cast<int>(wp_field)] = true;
         }
       }
     }
   }
 
   // For dual source fields give priority to igc.
-  if (track_traits[static_cast<int>(wp_field::igc_oat)]) {
+  if (igc_track_traits[static_cast<int>(IgcFormat::igc_wp_field::igc_oat)]) {
     track_traits[static_cast<int>(wp_field::temperature)] = false;
   }
-  if (track_traits[static_cast<int>(wp_field::igc_siu)]) {
+  if (igc_track_traits[static_cast<int>(IgcFormat::igc_wp_field::igc_siu)]) {
     track_traits[static_cast<int>(wp_field::sat)] = false;
   }
 
@@ -1661,6 +1621,8 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
   // If not, insert a new key value pair.
   kml_track_traits_hash.insert(rte, track_traits);
   kml_track_traits |= track_traits;
+  igc_kml_track_traits_hash.insert(rte, igc_track_traits);
+  igc_kml_track_traits |= igc_track_traits;
 }
 
 void KmlFormat::kml_mt_hdr(const route_head* header)
@@ -1708,10 +1670,17 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
 
   auto track_traits = kml_track_traits_hash.value(header);
-  if (track_traits.any()) {
+  auto igc_track_traits = igc_kml_track_traits_hash.value(header);
+  if (track_traits.any() || igc_track_traits.any()) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
+
+    for (const auto& flddef : igc_mt_fields_def) {
+      if (igc_track_traits[static_cast<int>(flddef.id)]) {
+        kml_mt_simple_array<IgcFormat::igc_wp_field>(header, flddef.name, flddef.id);
+      }
+    }
 
     for (const auto& flddef : mt_fields_def) {
       if (track_traits[static_cast<int>(flddef.id)]) {
@@ -1904,17 +1873,26 @@ void KmlFormat::write()
   if (export_track) {
     kml_track_traits.reset();
     kml_track_traits_hash.clear();
+    igc_kml_track_traits.reset();
+    igc_kml_track_traits_hash.clear();
     auto kml_accumulate_track_traits_lambda = [this](const route_head* rte)->void {
       kml_accumulate_track_traits(rte);
     };
     track_disp_all(kml_accumulate_track_traits_lambda, nullptr, nullptr);
 
-    if (kml_track_traits.any()) {
+    if (kml_track_traits.any() || igc_kml_track_traits.any()) {
       writer->writeStartElement(QStringLiteral("Schema"));
       writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
 
+      // Write schema headers for generic waypoint data
       for (const auto& flddef : mt_fields_def) {
         if (kml_track_traits[static_cast<int>(flddef.id)]) {
+          kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
+        }
+      }
+      // Write schema headers for IGC specific data
+      for (const auto& flddef : igc_mt_fields_def) {
+        if (igc_kml_track_traits[static_cast<int>(flddef.id)]) {
           kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
         }
       }

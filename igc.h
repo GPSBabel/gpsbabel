@@ -40,7 +40,6 @@
 #include "format.h"
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
-#include "kml.h"                 // for wp_field
 
 /*
  * Notes on IGC extensions:
@@ -102,6 +101,20 @@ public:
   void wr_init(const QString& fname) override;
   void write() override;
   void wr_deinit() override;
+
+  enum class igc_wp_field {
+    igc_enl = 0,  // Engine Noise Level
+    igc_tas,      // True Airspeed
+    igc_vat,      // Compensated variometer (total energy)
+    igc_oat,      // Outside Air Temperature
+    igc_trt,      // True Track
+    igc_gsp,      // Ground Speed
+    igc_fxa,      // Fix Accuracy
+    igc_gfo,      // G Force
+    igc_siu,      // Satellites In Use
+    igc_acz,      // Z Acceleration
+  };
+  static constexpr int number_igc_wp_fields = static_cast<int>(igc_wp_field::igc_acz) + 1;
 
 private:
 
@@ -298,6 +311,8 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
+  QList<std::tuple<std::optional<double>*, IgcFormat::igc_wp_field>> ext_list;
+
   // Stores all data as igc_fsdata
   bool set_value(IgcFormat::igc_ext_type_t type, double value, Waypoint *wp = nullptr)
   {
@@ -305,39 +320,49 @@ struct igc_fsdata : public FormatSpecificData {
     switch (type) {
     case IgcFormat::igc_ext_type_t::ext_rec_enl:
       enl = value;
+      ext_list.append(std::make_tuple(&enl, IgcFormat::igc_wp_field::igc_enl));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_tas:
       tas = value;
+      ext_list.append(std::make_tuple(&tas, IgcFormat::igc_wp_field::igc_tas));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_vat:
       vat = value;
+      ext_list.append(std::make_tuple(&vat, IgcFormat::igc_wp_field::igc_vat));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_oat:
       if (wp){
         wp->set_temperature(value);
       }
+      ext_list.append(std::make_tuple(&oat, IgcFormat::igc_wp_field::igc_oat));
       oat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_trt:
       trt = value;
+      ext_list.append(std::make_tuple(&trt, IgcFormat::igc_wp_field::igc_trt));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_gsp:
       gsp = value;
+      ext_list.append(std::make_tuple(&gsp, IgcFormat::igc_wp_field::igc_gsp));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_fxa:
       fxa = value;
+      ext_list.append(std::make_tuple(&fxa, IgcFormat::igc_wp_field::igc_fxa));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_siu:
       if (wp) {
         wp->sat = value;
       }
       siu = value;
+      ext_list.append(std::make_tuple(&siu, IgcFormat::igc_wp_field::igc_siu));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_acz:
       acz = value;
+      ext_list.append(std::make_tuple(&acz, IgcFormat::igc_wp_field::igc_acz));
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_gfo:
       gfo = value;
+      ext_list.append(std::make_tuple(&gfo, IgcFormat::igc_wp_field::igc_gfo));
       break;
     default:
       success = false;
@@ -345,83 +370,42 @@ struct igc_fsdata : public FormatSpecificData {
     return success;
   }
 
-  // Not currently used, but already written and left for future use.
-  std::optional<double> get_value(IgcFormat::igc_ext_type_t defn_type) const
+  std::optional<double> get_value(IgcFormat::igc_wp_field defn_type) const
   {
     std::optional<double> ret;
     switch (defn_type) {
-    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+    case IgcFormat::igc_wp_field::igc_enl:
       ret = enl;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+    case IgcFormat::igc_wp_field::igc_tas:
       ret = tas;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+    case IgcFormat::igc_wp_field::igc_vat:
       ret = vat;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+    case IgcFormat::igc_wp_field::igc_oat:
       ret = oat;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+    case IgcFormat::igc_wp_field::igc_trt:
       ret = trt;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+    case IgcFormat::igc_wp_field::igc_gsp:
       ret = gsp;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+    case IgcFormat::igc_wp_field::igc_fxa:
       ret = fxa;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+    case IgcFormat::igc_wp_field::igc_siu:
       ret = siu;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+    case IgcFormat::igc_wp_field::igc_acz:
       ret = acz;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+    case IgcFormat::igc_wp_field::igc_gfo:
       ret = gfo;
       break;
     default:
       fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
-      break;
-    }
-    return ret;
-  }
-  std::optional<double> get_value(KmlFormat::wp_field defn_type) const
-  {
-    std::optional<double> ret;
-    switch (defn_type) {
-    case KmlFormat::wp_field::igc_enl:
-      ret = enl;
-      break;
-    case KmlFormat::wp_field::igc_tas:
-      ret = tas;
-      break;
-    case KmlFormat::wp_field::igc_vat:
-      ret = vat;
-      break;
-    case KmlFormat::wp_field::igc_oat:
-      ret = oat;
-      break;
-    case KmlFormat::wp_field::igc_trt:
-      ret = trt;
-      break;
-    case KmlFormat::wp_field::igc_gsp:
-      ret = gsp;
-      break;
-    case KmlFormat::wp_field::igc_fxa:
-      ret = fxa;
-      break;
-    case KmlFormat::wp_field::igc_siu:
-      ret = siu;
-      break;
-    case KmlFormat::wp_field::igc_acz:
-      ret = acz;
-      break;
-    case KmlFormat::wp_field::igc_gfo:
-      ret = gfo;
-      break;
-    default:
-      fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
       break;
     }
     return ret;
