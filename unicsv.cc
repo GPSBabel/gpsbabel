@@ -156,7 +156,6 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "diff",	fld_gc_diff, kStrAny },
   { "arch",	fld_gc_is_archived, kStrAny },
   { "avail",	fld_gc_is_available, kStrAny },
-  { "exported",	fld_gc_exported, kStrAny },
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
@@ -869,7 +868,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_gc_diff:
     case fld_gc_is_archived:
     case fld_gc_is_available:
-    case fld_gc_exported:
     case fld_gc_last_found:
     case fld_gc_placer:
     case fld_gc_placer_id:
@@ -907,14 +905,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      case fld_gc_exported: {
-        QTime etime;
-        QDate edate;
-        etime = unicsv_parse_time(value, edate);
-        if (edate.isValid() || etime.isValid()) {
-          gc_data->exported = unicsv_adjust_time(edate, etime, true);
-        }
-      }
       break;
       case fld_gc_last_found: {
         QTime ftime;
@@ -1250,9 +1240,6 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     }
     if (gc_data->is_available != Geocache::status_t::gs_unknown) {
       unicsv_outp_flags[fld_gc_is_available] = true;
-    }
-    if (gc_data->exported.isValid()) {
-      unicsv_outp_flags[fld_gc_exported] = true;
     }
     if (gc_data->last_found.isValid()) {
       unicsv_outp_flags[fld_gc_last_found] = true;
@@ -1621,13 +1608,6 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    if (gc_data) {
-      unicsv_print_date_time(gc_data->exported);
-    } else {
-      *fout << unicsv_fieldsep;
-    }
-  }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     if (gc_data) {
       unicsv_print_date_time(gc_data->last_found);
@@ -1899,9 +1879,6 @@ UnicsvFormat::write()
   }
   if (unicsv_outp_flags[fld_gc_is_available]) {
     *fout << unicsv_fieldsep << "Available";
-  }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    *fout << unicsv_fieldsep << "Exported";
   }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     *fout << unicsv_fieldsep << "Last Found";
