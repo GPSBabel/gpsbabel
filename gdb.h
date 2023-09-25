@@ -85,7 +85,7 @@ public:
        * it’s in <qhashfunctions.h>, a public header.
        */
       QtPrivate::QHashCombine hash;
-      
+
       seed = hash(seed, c.shortname.toUpper());
       seed = hash(seed, c.lat);
       seed = hash(seed, c.lon);

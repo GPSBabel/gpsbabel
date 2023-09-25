@@ -981,7 +981,7 @@ GpxFormat::qualifiedName() const
    * file.  So we map from the namespaceUris to the prefixes used in our
    * hash table.
    */
-  static const QHash<QString, QString> tag_ns_prefixes = { 
+  static const QHash<QString, QString> tag_ns_prefixes = {
     {"http://www.garmin.com/xmlschemas/GpxExtensions/v3", "gpxx"},
     {"http://www.garmin.com/xmlschemas/TrackPointExtension/v1", "gpxtpx"},
     {"http://www.groundspeak.com/cache/1/0", "groundspeak"},

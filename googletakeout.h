@@ -75,7 +75,7 @@ public:
 
   ff_type get_type() const override
   {
-   return ff_type_file; 
+   return ff_type_file;
   }
 
   QVector<ff_cap> get_cap() const override
@@ -86,7 +86,7 @@ public:
   void rd_init(const QString& fname) override
   {}
   void read() override;
- 
+
 private:
   /* Constants */
 
