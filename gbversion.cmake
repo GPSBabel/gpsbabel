@@ -14,14 +14,14 @@
 # By defining the version here we minimize the number of locations
 # containing the definition to gbversion.pri and gbversion.cmake.
 
-set(GB.VERSION 1.8.0) # also change in gbversion.pri
+set(GB.VERSION 1.9.0)
 string(REPLACE "." ";" VERSION_COMPONENTS ${GB.VERSION})
 list(GET VERSION_COMPONENTS 0 GB.MAJOR)
 list(GET VERSION_COMPONENTS 1 GB.MINOR)
 list(GET VERSION_COMPONENTS 2 GB.MICRO)
 # Increase GB.BUILD for a new release (why? Where is this ever used?)
 # A: it's used by win32/gpsbabel.rc which includes gbversion.h
-set(GB.BUILD 32 CACHE STRING "Fourth component of Windows VERSIONINFO resource FILEVERSION and PRODUCTVERSION parameters.")
+set(GB.BUILD 33 CACHE STRING "Fourth component of Windows VERSIONINFO resource FILEVERSION and PRODUCTVERSION parameters.")
 set(GB.PACKAGE_RELEASE "" CACHE STRING "String to append to VERSION tuple.") # .e.g. "-beta20190413"
 set(GB.SHA $ENV{GITHUB_SHA})
 if(DEFINED ENV{GITHUB_SHA})
