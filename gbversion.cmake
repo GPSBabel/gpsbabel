@@ -35,4 +35,4 @@ endif()
 string(TIMESTAMP GB.COPYRIGHT_YEAR "%Y" UTC)
 
 # may be overridden on cmake command line
-set(DOCVERSION ${GB.VERSION} CACHE STRING "String appended to documentation location for www.gpsbabel.org.")
+set(GPSBABEL_DOCVERSION ${GB.VERSION} CACHE STRING "String appended to documentation location for www.gpsbabel.org.")

@@ -16,5 +16,5 @@
 #define VERSION "@GB.MAJOR@.@GB.MINOR@.@GB.MICRO@@GB.PACKAGE_RELEASE@"
 constexpr char kVersionSHA[] = "@GB.SHA@";
 constexpr char kVersionDate[] = "@GB.DATE@";
-#define WEB_DOC_DIR "https://www.gpsbabel.org/htmldoc-@DOCVERSION@"
+#define WEB_DOC_DIR "https://www.gpsbabel.org/htmldoc-@GPSBABEL_DOCVERSION@"
 #endif
