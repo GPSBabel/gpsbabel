@@ -71,16 +71,16 @@ GPSBABEL_EXTRA_LINK_LIBRARIES:STRING
 GPSBABEL_EXTRA_LINK_OPTIONS:STRING
   Extra link options when building the target gpsbabel.
 
-DOCVERSION:STRING=...
+GPSBABEL_DOCVERSION:STRING=...
   string appended to documentation location for www.gpsbabel.org.  The default
   value is the version string, e.g. "1.7.0".  This is used by the gpsbabel.org
   target, you are unlikely to need it unless you are maintaining
   www.gpsbabel.org.
 
-WEB:STRING=DIR
+GPSBABEL_WEB:STRING=DIR
   Path where the documentation will be stored for www.gpsbabel.org.  This is
   used by the gpsbabel.org target, you are unlikely to need it unless you are
-  maintaining www.gpsbabel.org.  The default location is "../babelweb"
+  maintaining www.gpsbabel.org.  The default location is "gpsbabel.org".
 
 Targets:
 
