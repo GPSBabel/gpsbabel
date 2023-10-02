@@ -38,7 +38,7 @@
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "units.h"                      // for UnitsFormatter
 #include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
-
+#include "igc.h"
 
 class KmlFormat : public Format
 {
@@ -77,18 +77,22 @@ public:
     temperature,
     power,
     sat,
-    igc_enl,  // Engine Noise Level
-    igc_tas,  // True Airspeed
-    igc_vat,  // Compensated variometer (total energy)
-    igc_oat,  // Outside Air Temperature
-    igc_trt,  // True Track
-    igc_gsp,  // Ground Speed
-    igc_fxa,  // Fix Accuracy
-    igc_gfo,  // G Force
-    igc_siu,  // Satellites In Use
-    igc_acz   // Z Acceleration
   };
-  static constexpr int number_wp_fields = static_cast<int>(wp_field::igc_acz) + 1;
+  static constexpr int number_wp_fields = static_cast<int>(wp_field::sat) + 1;
+
+  struct igc_mt_field_t {
+    IgcFormat::igc_wp_field id;
+    const QString name;
+    const QString displayName;
+    const QString type;
+  };
+
+  struct mt_field_t {
+    wp_field id;
+    const QString name;
+    const QString displayName;
+    const QString type;
+  };
 
 private:
   /* Types */
@@ -102,14 +106,8 @@ private:
     kmlpt_other
   };
 
-  struct mt_field_t {
-    wp_field id;
-    const QString name;
-    const QString displayName;
-    const QString type;
-  };
-
   using track_trait_t = std::bitset<number_wp_fields>;
+  using igc_track_trait_t = std::bitset<IgcFormat::number_igc_wp_fields>;
 
   /* Constants */
   static constexpr const char* default_precision = "6";
@@ -129,10 +127,6 @@ private:
     "snippet",
     nullptr
   };
-
-  // IGC option compile-time flags
-  static constexpr bool kIncludeIGCSIU = true;
-  static constexpr bool kIncludeIGCTRT = false;
 
   /* Member Functions */
 
@@ -189,7 +183,9 @@ private:
   void kml_track_hdr(const route_head* header) const;
   void kml_track_disp(const Waypoint* waypointp) const;
   void kml_track_tlr(const route_head* header);
-  void kml_mt_simple_array(const route_head* header, const QString& name, wp_field member) const;
+
+  template <typename T>
+  void kml_mt_simple_array(const route_head* header, const QString& name, T member) const;
   static bool track_has_time(const route_head* header);
   void write_as_linestring(const route_head* header);
   void kml_accumulate_track_traits(const route_head* rte);
@@ -205,8 +201,11 @@ private:
   /* Data Members */
 
   static const QVector<mt_field_t> mt_fields_def;
+  static const QVector<igc_mt_field_t> igc_mt_fields_def;
   track_trait_t kml_track_traits;
+  igc_track_trait_t igc_kml_track_traits;
   QHash<const route_head*, track_trait_t> kml_track_traits_hash;
+  QHash<const route_head*, igc_track_trait_t> igc_kml_track_traits_hash;
 
   // options
   char* opt_deficon{nullptr};

@@ -52,6 +52,7 @@
 #include "grtcirc.h"            // for RAD, gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
 #include "formspec.h"           // for FormatSpecificData, kFsIGC
+#include "kml.h"                // for KmlFormat::igc_mt_fields_def
 
 
 
@@ -59,6 +60,19 @@
 #define HDRMAGIC "IGCHDRS"
 #define HDRDELIM "~"
 #define DATEMAGIC "IGCDATE"
+
+const QVector<KmlFormat::igc_mt_field_t> KmlFormat::igc_mt_fields_def = {
+  { IgcFormat::igc_wp_field::igc_enl, "igc_enl", "Engine Noise", "double" },
+  { IgcFormat::igc_wp_field::igc_tas, "igc_tas", "True Airspd", "double" },
+  { IgcFormat::igc_wp_field::igc_oat, "igc_oat", "Otsd Air Temp", "double" },
+  { IgcFormat::igc_wp_field::igc_vat, "igc_vat", "Ttl Enrg Vario", "double" },
+  { IgcFormat::igc_wp_field::igc_gsp, "igc_gsp", "Ground Speed", "double" },
+  { IgcFormat::igc_wp_field::igc_fxa, "igc_fxa", "Fix Accuracy", "double" },
+  { IgcFormat::igc_wp_field::igc_gfo, "igc_gfo", "G Force?", "double" },
+  { IgcFormat::igc_wp_field::igc_acz, "igc_acz", "Z Accel", "double" },
+  { IgcFormat::igc_wp_field::igc_siu, "igc_siu", "# Of Sats", "double" },
+  { IgcFormat::igc_wp_field::igc_trt, "igc_trt", "True Track", "double" },
+};
 
 /*
  * See if two lat/lon pairs are approximately equal.
