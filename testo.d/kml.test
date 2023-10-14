@@ -100,6 +100,9 @@ gpsbabel -i igc -f ${REFERENCE}/track/92GV66G1.igc -o kml,floating=1,track=1,poi
 compare  ${REFERENCE}/track/92GV66G1.igc.kml ${TMPDIR}/92GV66G1.igc.kml
 gpsbabel -i igc -f ${REFERENCE}/track/92HV66G1.igc -o kml,floating=1,track=1,points=0 -F ${TMPDIR}/92HV66G1.igc.kml
 compare  ${REFERENCE}/track/92HV66G1.igc.kml ${TMPDIR}/92HV66G1.igc.kml
+# Test the inclusion and exclusion of (non)default extensions
+gpsbabel -i igc,SIU=1,GFO=1,FXA=0,ENL=0 -f ${REFERENCE}/track/27GLQKF3.igc -o kml,floating=1,track=1,points=0 -F ${TMPDIR}/27GLQKF3.igc.kml
+compare  ${REFERENCE}/track/27GLQKF3.igc.kml ${TMPDIR}/27GLQKF3.igc.kml
 
 # verify kml:dateTimeType parsing
 gpsbabel -i kml -f ${REFERENCE}/xsddatetime.kml -o unicsv,utc -F ${TMPDIR}/xsddatetime~kml.csv

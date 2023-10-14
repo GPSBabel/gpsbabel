@@ -45,7 +45,6 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
-#include <QDebug>               // DELETEME for debugging
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
@@ -255,12 +254,7 @@ void IgcFormat::read()
   char trk_desc[kMaxDescLen + 1];
   TaskRecordReader task_record_reader;
   int current_line = 1; // For error reporting. Line numbering is off by one for some reason.
-  QList<std::tuple<QString, igc_ext_type_t, int, int, double, char**>> ext_types_list;
-  QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
-  QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
-  QList<QString> excluded_extensions;     // Extensions that would be included but were specifically excluded
-  QList<QString> present_extensions;      // List of all extensions present in IGC file
-  QList<QString> included_extensions;     // List of extensions present in IGC file which will be ingested
+  QList<std::tuple<QString, igc_ext_type_t, int, int, double>> ext_types_list;
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
@@ -377,15 +371,12 @@ void IgcFormat::read()
         if (global_opts.debug_level >= 6) {
           printf(MYNAME ": Adding extension data:");
         }
-        for (const auto& [name, ext, start, len, factor, opt] : ext_types_list) {
-          bool ext_enabled = (0 == strcmp("1", *opt));
-          if (ext_enabled) {
-            double ext_data = ibuf_q.mid(start,len).toInt() / factor;
+        for (const auto& [name, ext, start, len, factor] : ext_types_list) {
+          double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
-            fsdata->set_value(ext, ext_data, pres_wpt);
-            if (global_opts.debug_level >= 6) {
-              printf(" %s:%f", qPrintable(name), ext_data);
-            }
+          fsdata->set_value(ext, ext_data, pres_wpt);
+          if (global_opts.debug_level >= 6) {
+            printf(" %s:%f", qPrintable(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
@@ -458,8 +449,9 @@ void IgcFormat::read()
        * producing debug output, but this case: is only done once per file.
        */
 
-      // If the EVERY or NONE options were used, set the corresponding flags.
-      // I still need a way to override NONE or EVERY if options are explicitly set.
+      QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
+      QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
+      QList<QString> present_extensions;      // List of all extensions present in IGC file
 
       for (int i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
@@ -471,78 +463,36 @@ void IgcFormat::read()
         int len = end - begin + 1;
         QString name = extension_definition.mid(4,3);
         igc_ext_type_t ext = get_ext_type(ext_type);
-        if (ext != IgcFormat::igc_ext_type_t::ext_rec_unknown) {
+        if (ext != igc_ext_type_t::ext_rec_unknown) {
           supported_extensions.append(name);
-          if (global_opts.debug_level >= 4) {
-            printf(MYNAME ": Adding %s to list of supported extensions\n", qPrintable(name));
-          }
-          int factor = get_ext_factor(ext);
-          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor, ext_option_map[ext]));
-          for (auto& arg : igc_args) {
-            bool opt = (*arg.argval != nullptr && **arg.argval == '1');
-            if (global_opts.debug_level >= 4) {
-              printf(MYNAME ": Evaluating option %s against extension %s\n", qPrintable(arg.argstring), qPrintable(name));
-            }
-            if (arg.argstring == name) {
-              if (opt) {
-                included_extensions.append(name);
-                if (global_opts.debug_level >= 4) {
-                  printf(MYNAME ": Adding %s to list of included extensions\n", qPrintable(name));
-                }
-                break;
-              } else {
-                excluded_extensions.append(name);
-                if (global_opts.debug_level >= 4) {
-                  printf(MYNAME ": Adding %s to list of excluded extensions\n", qPrintable(name));
-                }
-              }
-            }
+          bool enabled = **ext_option_map.value(ext) == '1';
+          if (enabled) {
+            int factor = get_ext_factor(ext);
+            ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
           }
         } else {
           unsupported_extensions.append(name);
-          if (global_opts.debug_level >= 4) {
-            printf(MYNAME ": Adding %s to list of unsupported extensions\n", qPrintable(name));
-          }
         }
       }
       if (global_opts.debug_level >= 1) {
-        printf(MYNAME ": I record: %s\n" MYNAME ": Extensions present: ", qPrintable(ibuf_q));
-        foreach(QString ext, present_extensions) {
-          printf("%s ", qPrintable(ext));
-        }
-        printf("\n");
+        printf(MYNAME ": I record: %s\n" MYNAME ": Extensions present: %s\n", qPrintable(ibuf_q),
+               qPrintable(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
         printf(MYNAME ": Non-excluded extensions defined in I record:\n");
         printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
-        for (const auto& [name, ext, begin, len, factor, opt] : ext_types_list) {
+        for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
           printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
-          printf("\n" MYNAME ": Present extensions (These extensions are defined in the IGC file I record):\t");
-          foreach (QString ext, present_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n" MYNAME ": Unsupported extensions (I will not ingest these, they are unsupported):\t");
-          foreach (QString ext, unsupported_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n" MYNAME ": Supported extensions (These are present in the I record and supported):\t");
-          foreach (QString ext, supported_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n" MYNAME ": Excluded etensions (You told me not to ingest these, or they are excluded by default):\t");
-          foreach (QString ext, excluded_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n" MYNAME ": Included extensions (I will ingest these):\t");
-          foreach (QString ext, included_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n");
+          printf(MYNAME ": Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
+                 qPrintable(unsupported_extensions.join(' ')));
+          printf(MYNAME ": Supported extensions (These are present in the I record and supported):\t%s\n",
+                 qPrintable(supported_extensions.join(' ')));
         }
       }
     }
+
     // These record types are discarded
     case rec_diff_gps:
     case rec_event:

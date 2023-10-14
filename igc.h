@@ -35,10 +35,10 @@
 #include <QString>               // for QString, operator+, QStringLiteral
 #include <QVector>               // for QVector
 #include <QHash>                 // for QHash
-#include <QDebug>                // for QDebug
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"              // for Format
+#include "formspec.h"            // for FormatSpecificData, kFsIGC
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
@@ -142,30 +142,17 @@ private:
   char* opt_acz{nullptr};
   char* opt_gfo{nullptr};
 
-  QMap<IgcFormat::igc_ext_type_t, QString> ext_description_map = {
-    {IgcFormat::igc_ext_type_t::ext_rec_enl, QString("Engine Noise (ENL; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_tas, QString("True Airspeed (TAS; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_vat, QString("Total Energy Vario (VAT; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_oat, QString("Outside Air Temperature (OAT; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_trt, QString("True Track (TRT; default=0)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_gsp, QString("Ground Speed (GSP; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_fxa, QString("Fix Accuracy (FXA; default=1)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_gfo, QString("G Force? (GFO; default=0)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_siu, QString("# Of Sats (SIU; default=0)")},
-    {IgcFormat::igc_ext_type_t::ext_rec_acz, QString("Z Acceleration (ACZ; default=1)")},
-  };
-
-  QMap<IgcFormat::igc_ext_type_t, char**> ext_option_map = {
-    {IgcFormat::igc_ext_type_t::ext_rec_enl, &opt_enl},
-    {IgcFormat::igc_ext_type_t::ext_rec_tas, &opt_tas},
-    {IgcFormat::igc_ext_type_t::ext_rec_vat, &opt_vat},
-    {IgcFormat::igc_ext_type_t::ext_rec_oat, &opt_oat},
-    {IgcFormat::igc_ext_type_t::ext_rec_trt, &opt_trt},
-    {IgcFormat::igc_ext_type_t::ext_rec_gsp, &opt_gsp},
-    {IgcFormat::igc_ext_type_t::ext_rec_fxa, &opt_fxa},
-    {IgcFormat::igc_ext_type_t::ext_rec_gfo, &opt_gfo},
-    {IgcFormat::igc_ext_type_t::ext_rec_siu, &opt_siu},
-    {IgcFormat::igc_ext_type_t::ext_rec_acz, &opt_acz},
+  const QHash<igc_ext_type_t, char**> ext_option_map = {
+    {igc_ext_type_t::ext_rec_enl, &opt_enl},
+    {igc_ext_type_t::ext_rec_tas, &opt_tas},
+    {igc_ext_type_t::ext_rec_vat, &opt_vat},
+    {igc_ext_type_t::ext_rec_oat, &opt_oat},
+    {igc_ext_type_t::ext_rec_trt, &opt_trt},
+    {igc_ext_type_t::ext_rec_gsp, &opt_gsp},
+    {igc_ext_type_t::ext_rec_fxa, &opt_fxa},
+    {igc_ext_type_t::ext_rec_gfo, &opt_gfo},
+    {igc_ext_type_t::ext_rec_siu, &opt_siu},
+    {igc_ext_type_t::ext_rec_acz, &opt_acz},
   };
 
   const QHash<QString, igc_ext_type_t> igc_extension_map{
@@ -307,43 +294,43 @@ private:
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      "ENL", &opt_enl, ext_description_map.value(igc_ext_type_t::ext_rec_enl),
+      "ENL", &opt_enl, "Engine Noise (ENL; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "TAS", &opt_tas, ext_description_map.value(igc_ext_type_t::ext_rec_tas),
+      "TAS", &opt_tas, "True Airspeed (TAS; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "VAT", &opt_vat, ext_description_map.value(igc_ext_type_t::ext_rec_vat),
+      "VAT", &opt_vat, "Total Energy Vario (VAT; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "OAT", &opt_oat, ext_description_map.value(igc_ext_type_t::ext_rec_oat),
+      "OAT", &opt_oat, "Outside Air Temperature (OAT; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "TRT", &opt_trt, ext_description_map.value(igc_ext_type_t::ext_rec_trt),
+      "TRT", &opt_trt, "True Track (TRT; default=0)",
       "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "GSP", &opt_gsp, ext_description_map.value(igc_ext_type_t::ext_rec_gsp),
+      "GSP", &opt_gsp, "Ground Speed (GSP; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "FXA", &opt_fxa, ext_description_map.value(igc_ext_type_t::ext_rec_fxa),
+      "FXA", &opt_fxa, "Fix Accuracy (FXA; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "SIU", &opt_siu, ext_description_map.value(igc_ext_type_t::ext_rec_siu),
+      "SIU", &opt_siu, "# Of Sats (SIU; default=0)",
       "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "ACZ", &opt_acz, ext_description_map.value(igc_ext_type_t::ext_rec_acz),
+      "ACZ", &opt_acz, "Z Acceleration (ACZ; default=1)",
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "GFO", &opt_gfo, ext_description_map.value(igc_ext_type_t::ext_rec_gfo),
+      "GFO", &opt_gfo, "G Force? (GFO; default=0)",
       "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
