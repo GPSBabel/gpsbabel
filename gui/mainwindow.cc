@@ -989,7 +989,6 @@ void MainWindow::applyActionX()
     if (babelData_.previewGmap_) {
       this->hide();
       GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-      dlg.show();
       dlg.exec();
       QFile(tempName).remove();
       this->show();
