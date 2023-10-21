@@ -516,8 +516,8 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     }
     if (wpt_fsdata != nullptr) {
       wpt_tmp->fs.FsChainAdd(wpt_fsdata);
+      wpt_fsdata = nullptr;
     }
-    wpt_fsdata = nullptr;
     waypt_add(wpt_tmp);
     logpoint_ct = 0;
     cur_tag = nullptr;
@@ -627,8 +627,8 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     }
     if (wpt_fsdata != nullptr) {
       wpt_tmp->fs.FsChainAdd(wpt_fsdata);
+      wpt_fsdata = nullptr;
     }
-    wpt_fsdata = nullptr;
     route_add_wpt(rte_head, wpt_tmp);
     wpt_tmp = nullptr;
     break;
@@ -675,8 +675,8 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     }
     if (wpt_fsdata != nullptr) {
       wpt_tmp->fs.FsChainAdd(wpt_fsdata);
+      wpt_fsdata = nullptr;
     }
-    wpt_fsdata = nullptr;
     track_add_wpt(trk_head, wpt_tmp);
     wpt_tmp = nullptr;
     break;
@@ -1360,6 +1360,24 @@ GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString
   }
 }
 
+void GpxFormat::gpx_write_common_core(const Waypoint* waypointp,
+                                      const gpx_point_type point_type) const
+{
+  const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
+    
+  QString oname;
+  if ((point_type == gpxpt_track) && waypointp->wpt_flags.shortname_is_synthetic) {
+    oname = nullptr;
+  } else if (global_opts.synthesize_shortnames) {
+    oname = mkshort_handle->mkshort_from_wpt(waypointp);
+  } else {
+    oname = waypointp->shortname;
+  }
+  gpx_write_common_position(waypointp, point_type, fs_gpxwpt);
+  gpx_write_common_description(waypointp, oname, fs_gpxwpt);
+  gpx_write_common_acc(waypointp, fs_gpxwpt);
+}
+
 void
 GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
 {
@@ -1367,13 +1385,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
-  QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_handle->mkshort_from_wpt(waypointp) :
-                  waypointp->shortname;
-  const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
-  gpx_write_common_position(waypointp, gpxpt_waypoint, fs_gpxwpt);
-  gpx_write_common_description(waypointp, oname, fs_gpxwpt);
-  gpx_write_common_acc(waypointp, fs_gpxwpt);
+  gpx_write_common_core(waypointp, gpxpt_waypoint);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(waypointp->fs.FsChainFind(kFsGpx));
@@ -1445,16 +1457,7 @@ GpxFormat::gpx_track_disp(const Waypoint* waypointp) const
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
-  const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
-  gpx_write_common_position(waypointp, gpxpt_track, fs_gpxwpt);
-
-  QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_handle->mkshort_from_wpt(waypointp) :
-                  waypointp->shortname;
-  gpx_write_common_description(waypointp,
-                               waypointp->wpt_flags.shortname_is_synthetic ?
-                               nullptr : oname, fs_gpxwpt);
-  gpx_write_common_acc(waypointp, fs_gpxwpt);
+  gpx_write_common_core(waypointp, gpxpt_track);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(waypointp->fs.FsChainFind(kFsGpx));
@@ -1537,13 +1540,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp) const
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
-  QString oname = global_opts.synthesize_shortnames ?
-                  mkshort_handle->mkshort_from_wpt(waypointp) :
-                  waypointp->shortname;
-  const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
-  gpx_write_common_position(waypointp, gpxpt_route, fs_gpxwpt);
-  gpx_write_common_description(waypointp, oname, fs_gpxwpt);
-  gpx_write_common_acc(waypointp, fs_gpxwpt);
+  gpx_write_common_core(waypointp, gpxpt_route);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(waypointp->fs.FsChainFind(kFsGpx));
