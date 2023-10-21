@@ -62,6 +62,10 @@ compare ${REFERENCE}/gdb-sample-v3-ilinks.gpx ${TMPDIR}/gdb-sample-v3-ilinks.gpx
 gpsbabel -t -i gpx -f ${REFERENCE}/track/garminconnect.gpx -o unicsv,utc=0 -F ${TMPDIR}/garminconnect.csv
 compare ${REFERENCE}/track/garminconnect.csv ${TMPDIR}/garminconnect.csv
 
+# order of wpt type elements
+gpsbabel -i gpx -f ${REFERENCE}/wptsequence.gpx -o gpx -F ${TMPDIR}/wptsequence.gpx
+compare ${REFERENCE}/wptsequence.gpx ${TMPDIR}/wptsequence.gpx
+
 if [ -z "${VALGRIND}" ]; then
   set -e
   if command -v xmllint > /dev/null;
@@ -71,10 +75,6 @@ if [ -z "${VALGRIND}" ]; then
     for f in $GPXS
     do
       case $f in 
-        # this is a schema violation
-        ${REFERENCE}/track/gpx_subsecond-sample.gpx)
-          ;;
-
         # this isn't a gpx file
         ${REFERENCE}/track/trackfilter_discard_err.gpx)
           ;;
