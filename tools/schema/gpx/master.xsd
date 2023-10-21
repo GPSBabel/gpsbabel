@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+<xsd:import namespace="http://www.topografix.com/GPX/1/0" schemaLocation="topografix/gpx10.xsd"/>
+<xsd:import namespace="http://www.topografix.com/GPX/1/1" schemaLocation="topografix/gpx11.xsd"/>
+<xsd:import namespace="http://www.garmin.com/xmlschemas/GpxExtensions/v3" schemaLocation="garmin/GpxExtensionsv3.xsd"/>
+<xsd:import namespace="http://www.garmin.com/xmlschemas/TripExtensions/v1" schemaLocation="garmin/TripExtensionsv1.xsd"/>
+<xsd:import namespace="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" schemaLocation="garmin/TrackPointExtensionv1.xsd"/>
+<xsd:import namespace="http://www.garmin.com/xmlschemas/TrackPointExtension/v2" schemaLocation="garmin/TrackPointExtensionv2.xsd"/>
+<xsd:import namespace="http://www.groundspeak.com/cache/1/0" schemaLocation="groundspeak/cache10.xsd"/>
+<xsd:import namespace="http://www.groundspeak.com/cache/1/0/1" schemaLocation="groundspeak/cache101.xsd"/>
+<xsd:import namespace="http://www.groundspeak.com/cache/1/1" schemaLocation="groundspeak/cache11.xsd"/>
+<xsd:import namespace="http://www.groundspeak.com/cache/1/2" schemaLocation="groundspeak/cache12.xsd"/>
+
+</xsd:schema>
