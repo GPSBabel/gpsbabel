@@ -1340,8 +1340,13 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
 }
 
 void
-GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const QString& oname, const gpx_wpt_fsdata* fs_gpxwpt) const
+GpxFormat::gpx_write_common_description(const Waypoint* waypointp, const gpx_point_type point_type, const gpx_wpt_fsdata* fs_gpxwpt) const
 {
+  QString oname;
+  if (!((point_type == gpxpt_track) && waypointp->wpt_flags.shortname_is_synthetic)) {
+    oname = global_opts.synthesize_shortnames ?
+            mkshort_handle->mkshort_from_wpt(waypointp) : waypointp->shortname;
+  }
   writer->writeOptionalTextElement(QStringLiteral("name"), oname);
 
   writer->writeOptionalTextElement(QStringLiteral("cmt"), waypointp->description);
@@ -1365,13 +1370,8 @@ void GpxFormat::gpx_write_common_core(const Waypoint* waypointp,
 {
   const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
     
-  QString oname;
-  if (!((point_type == gpxpt_track) && waypointp->wpt_flags.shortname_is_synthetic)) {
-    oname = global_opts.synthesize_shortnames ?
-            mkshort_handle->mkshort_from_wpt(waypointp) : waypointp->shortname;
-  }
   gpx_write_common_position(waypointp, point_type, fs_gpxwpt);
-  gpx_write_common_description(waypointp, oname, fs_gpxwpt);
+  gpx_write_common_description(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_acc(waypointp, fs_gpxwpt);
 }
 
