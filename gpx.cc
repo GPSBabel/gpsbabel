@@ -1366,12 +1366,9 @@ void GpxFormat::gpx_write_common_core(const Waypoint* waypointp,
   const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
     
   QString oname;
-  if ((point_type == gpxpt_track) && waypointp->wpt_flags.shortname_is_synthetic) {
-    oname = nullptr;
-  } else if (global_opts.synthesize_shortnames) {
-    oname = mkshort_handle->mkshort_from_wpt(waypointp);
-  } else {
-    oname = waypointp->shortname;
+  if (!((point_type == gpxpt_track) && waypointp->wpt_flags.shortname_is_synthetic)) {
+    oname = global_opts.synthesize_shortnames ?
+            mkshort_handle->mkshort_from_wpt(waypointp) : waypointp->shortname;
   }
   gpx_write_common_position(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_description(waypointp, oname, fs_gpxwpt);
