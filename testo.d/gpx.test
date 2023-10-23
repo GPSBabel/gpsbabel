@@ -61,3 +61,45 @@ compare ${REFERENCE}/gdb-sample-v3-ilinks.gpx ${TMPDIR}/gdb-sample-v3-ilinks.gpx
 # use declared namespace prefixes in gpx reader
 gpsbabel -t -i gpx -f ${REFERENCE}/track/garminconnect.gpx -o unicsv,utc=0 -F ${TMPDIR}/garminconnect.csv
 compare ${REFERENCE}/track/garminconnect.csv ${TMPDIR}/garminconnect.csv
+
+# order of wpt type elements
+gpsbabel -i gpx -f ${REFERENCE}/wptsequence.gpx -o gpx -F ${TMPDIR}/wptsequence.gpx
+compare ${REFERENCE}/wptsequence.gpx ${TMPDIR}/wptsequence.gpx
+
+if [ -z "${VALGRIND}" ]; then
+  set -e
+  if command -v xmllint > /dev/null;
+  then
+    GPXS=$(find ${REFERENCE} -name \*.gpx)
+    mkdir -p ${TMPDIR}/validcheck
+    for f in $GPXS
+    do
+      case $f in 
+        # this isn't a gpx file
+        ${REFERENCE}/track/trackfilter_discard_err.gpx)
+          ;;
+
+        *)
+          tmpf=${TMPDIR}/validcheck/$(basename $f)
+          gpsbabel -i gpx -f $f -o gpx -F $tmpf
+          xmllint --schema ${BASEPATH}/tools/schema/gpx/master.xsd --noout $tmpf
+          ;;
+      esac;
+
+      case $f in 
+        # this isn't a gpx file
+        ${REFERENCE}/track/trackfilter_discard_err.gpx)
+          ;;
+
+        *)
+          tmpf=${TMPDIR}/validcheck/$(basename $f)
+          gpsbabel -i gpx -f $f -o gpx,garminextensions -F $tmpf
+          xmllint --schema ${BASEPATH}/tools/schema/gpx/master.xsd --noout $tmpf
+          ;;
+      esac;
+    done
+  else
+    echo "Skipping GPX validation phase."
+  fi
+  set +e
+fi
