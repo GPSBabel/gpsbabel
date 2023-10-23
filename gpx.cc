@@ -21,6 +21,7 @@
 
 #include "gpx.h"
 
+#include <cassert>                          // for assert
 #include <cmath>                            // for lround
 #include <cstdio>                           // for sscanf
 #include <cstring>                          // for strchr, strncpy
@@ -572,10 +573,10 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     gc_log_date = gpsbabel::DateTime();
     break;
   case tt_cache_favorite_points:
-    wpt_tmp->AllocGCData()->favorite_points  = cdatastr.toInt();
+    wpt_tmp->AllocGCData()->favorite_points = cdatastr.toInt();
     break;
   case tt_cache_personal_note:
-    wpt_tmp->AllocGCData()->personal_note  = cdatastr;
+    wpt_tmp->AllocGCData()->personal_note = cdatastr;
     break;
 
   /*
@@ -920,7 +921,7 @@ GpxFormat::wr_init(const QString& fname)
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
     fatal(FatalMsg() << MYNAME ": gpx version number"
-            << gpx_write_version << "not valid.");
+          << gpx_write_version << "not valid.");
   }
 
   writer->setAutoFormatting(true);
@@ -1040,7 +1041,7 @@ GpxFormat::qualifiedName() const
 void
 GpxFormat::read()
 {
-  for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
+  for (bool atEnd = false; !reader->atEnd() && !atEnd;) {
     reader->readNext();
     // do processing
     switch (reader->tokenType()) {
@@ -1090,11 +1091,11 @@ GpxFormat::read()
     }
   }
 
-  if (reader->hasError())  {
+  if (reader->hasError()) {
     fatal(FatalMsg() << MYNAME << "Read error:" << reader->errorString()
-            << "File:" << iqfile->fileName()
-            << "Line:" << reader->lineNumber()
-            << "Column:" << reader->columnNumber());
+          << "File:" << iqfile->fileName()
+          << "Line:" << reader->lineNumber()
+          << "Column:" << reader->columnNumber());
   }
 }
 
@@ -1256,87 +1257,80 @@ GpxFormat::gpx_write_common_position(const Waypoint* waypointp, const gpx_point_
 void
 GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_point_type point_type) const
 {
-  // gpx version we are writing is >= 1.1.
-  garmin_fs_t* gmsd = (opt_garminext) ? garmin_fs_t::find(waypointp) : nullptr;  // only needed if garmin extensions selected
+  assert(gpx_write_version >= gpx_1_1);
 
-  if ((opt_humminbirdext && (waypointp->depth_has_value() || waypointp->temperature_has_value())) ||
-      (opt_garminext && gpxpt_route==point_type && gmsd != nullptr && gmsd->ilinks != nullptr)  ||
-      (opt_garminext && gpxpt_waypoint==point_type && (waypointp->proximity_has_value() || waypointp->temperature_has_value() || waypointp->depth_has_value())) ||
-      (opt_garminext && gpxpt_track==point_type && (waypointp->temperature_has_value() || waypointp->depth_has_value() || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
-    writer->writeStartElement(QStringLiteral("extensions"));
 
-    if (opt_humminbirdext) {
-      if (waypointp->depth_has_value()) {
-        writer->writeTextElement(QStringLiteral("h:depth"), toString(waypointp->depth_value() * 100.0));
+  writer->stackOptionalStartElement(QStringLiteral("extensions"));
+
+  if (opt_humminbirdext) {
+    if (waypointp->depth_has_value()) {
+      writer->stackTextElement(QStringLiteral("h:depth"), toString(waypointp->depth_value() * 100.0));
+    }
+    if (waypointp->temperature_has_value()) {
+      writer->stackTextElement(QStringLiteral("h:temperature"), toString(waypointp->temperature_value()));
+    }
+  }
+
+  if (opt_garminext) {
+    // Although not required by the schema we assume that gpxx:WaypointExtension must be a child of gpx:wpt.
+    // Although not required by the schema we assume that gpxx:RoutePointExtension must be a child of gpx:rtept.
+    // Although not required by the schema we assume that gpxx:TrackPointExtension must be a child of gpx:trkpt.
+    // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
+    switch (point_type) {
+    case gpxpt_waypoint:
+      writer->stackOptionalStartElement(QStringLiteral("gpxx:WaypointExtension"));
+      if (waypointp->proximity_has_value()) {
+        writer->stackTextElement(QStringLiteral("gpxx:Proximity"), toString(waypointp->proximity_value()));
       }
       if (waypointp->temperature_has_value()) {
-        writer->writeTextElement(QStringLiteral("h:temperature"), toString(waypointp->temperature_value()));
+        writer->stackTextElement(QStringLiteral("gpxx:Temperature"), toString(waypointp->temperature_value()));
+      }
+      if (waypointp->depth_has_value()) {
+        writer->stackTextElement(QStringLiteral("gpxx:Depth"), toString(waypointp->depth_value()));
+      }
+      writer->stackEndElement(); // gpxx:WaypointExtension
+      break;
+    case gpxpt_route: {
+      garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
+      if (gmsd != nullptr && gmsd->ilinks != nullptr) {
+        writer->stackOptionalStartElement(QStringLiteral("gpxx:RoutePointExtension"));
+        garmin_ilink_t* link = gmsd->ilinks;
+        garmin_ilink_t* prior = nullptr; // GDB files sometime contain repeated point; omit them
+        while (link != nullptr) {
+          if (prior == nullptr || prior->lat != link->lat || prior->lon != link->lon) {
+            writer->stackStartElement(QStringLiteral("gpxx:rpt"));
+            writer->stackAttribute(QStringLiteral("lat"), toString(link->lat));
+            writer->stackAttribute(QStringLiteral("lon"), toString(link->lon));
+            writer->stackEndElement(); // "gpxx:rpt"
+          }
+          prior = link;
+          link = link->next;
+        }
+        writer->stackEndElement(); // gpxx:RoutePointExtension
       }
     }
-
-    if (opt_garminext) {
-      // Although not required by the schema we assume that gpxx:WaypointExtension must be a child of gpx:wpt.
-      // Although not required by the schema we assume that gpxx:RoutePointExtension must be a child of gpx:rtept.
-      // Although not required by the schema we assume that gpxx:TrackPointExtension  must be a child of gpx:trkpt.
-      // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
-      switch (point_type) {
-      case gpxpt_waypoint:
-        if (waypointp->proximity_has_value() || waypointp->temperature_has_value() || waypointp->depth_has_value()) {
-          writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
-          if (waypointp->proximity_has_value()) {
-            writer->writeTextElement(QStringLiteral("gpxx:Proximity"), toString(waypointp->proximity_value()));
-          }
-          if (waypointp->temperature_has_value()) {
-            writer->writeTextElement(QStringLiteral("gpxx:Temperature"), toString(waypointp->temperature_value()));
-          }
-          if (waypointp->depth_has_value()) {
-            writer->writeTextElement(QStringLiteral("gpxx:Depth"), toString(waypointp->depth_value()));
-          }
-          writer->writeEndElement(); // "gpxx:WaypointExtension"
-        }
-        break;
-      case gpxpt_route:
-        if (gmsd != nullptr && gpxpt_route==point_type && gmsd->ilinks != nullptr) {
-          writer->writeStartElement(QStringLiteral("gpxx:RoutePointExtension"));
-          garmin_ilink_t* link = gmsd->ilinks;
-          garmin_ilink_t* prior = nullptr;  // GDB files sometime contain repeated point; omit them
-          while (link != nullptr) {
-            if (prior == nullptr || prior->lat != link->lat || prior->lon != link->lon) {
-              writer->writeStartElement(QStringLiteral("gpxx:rpt"));
-              writer->writeAttribute(QStringLiteral("lat"), toString(link->lat));
-              writer->writeAttribute(QStringLiteral("lon"), toString(link->lon));
-              writer->writeEndElement(); // "gpxx:rpt"
-            }
-            prior = link;
-            link = link->next;
-          }
-          writer->writeEndElement(); // "gpxx:RoutePointExtension"
-        }
-        break;
-      case gpxpt_track:
-        if (waypointp->temperature_has_value() || waypointp->depth_has_value() || waypointp->heartrate != 0 || waypointp->cadence != 0) {
-          // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
-          writer->writeStartElement(QStringLiteral("gpxtpx:TrackPointExtension"));
-          if (waypointp->temperature_has_value()) {
-            writer->writeTextElement(QStringLiteral("gpxtpx:atemp"), toString(waypointp->temperature_value()));
-          }
-          if (waypointp->depth_has_value()) {
-            writer->writeTextElement(QStringLiteral("gpxtpx:depth"), toString(waypointp->depth_value()));
-          }
-          if (waypointp->heartrate != 0) {
-            writer->writeTextElement(QStringLiteral("gpxtpx:hr"), QString::number(waypointp->heartrate));
-          }
-          if (waypointp->cadence != 0) {
-            writer->writeTextElement(QStringLiteral("gpxtpx:cad"), QString::number(waypointp->cadence));
-          }
-          writer->writeEndElement(); // "gpxtpx:TrackPointExtension"
-        }
-        break;
+    break;
+    case gpxpt_track:
+      // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
+      writer->stackOptionalStartElement(QStringLiteral("gpxtpx:TrackPointExtension"));
+      if (waypointp->temperature_has_value()) {
+        writer->stackTextElement(QStringLiteral("gpxtpx:atemp"), toString(waypointp->temperature_value()));
       }
+      if (waypointp->depth_has_value()) {
+        writer->stackTextElement(QStringLiteral("gpxtpx:depth"), toString(waypointp->depth_value()));
+      }
+      if (waypointp->heartrate != 0) {
+        writer->stackTextElement(QStringLiteral("gpxtpx:hr"), QString::number(waypointp->heartrate));
+      }
+      if (waypointp->cadence != 0) {
+        writer->stackTextElement(QStringLiteral("gpxtpx:cad"), QString::number(waypointp->cadence));
+      }
+      writer->stackEndElement(); // gpxtpx:TrackPointExtension
+      break;
     }
-
-    writer->writeEndElement(); // "extensions"
   }
+
+  writer->stackEndElement(); // "extensions"
 }
 
 void
@@ -1369,7 +1363,7 @@ void GpxFormat::gpx_write_common_core(const Waypoint* waypointp,
                                       const gpx_point_type point_type) const
 {
   const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
-    
+
   gpx_write_common_position(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_description(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_acc(waypointp, fs_gpxwpt);
