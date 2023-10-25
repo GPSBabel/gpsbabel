@@ -260,6 +260,9 @@ void IgcFormat::read()
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
+    if (global_opts.debug_level >= 8) {
+      printf(MYNAME ": Processing IGC file line %i\n", current_line);
+    }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
     QString ibuf_q = QString::fromUtf8(ibuf);
@@ -372,7 +375,7 @@ void IgcFormat::read()
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
-          fsdata->set_value(ext, ext_data);
+          fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
             printf(" %s:%f", qPrintable(name), ext_data);
           }
@@ -464,7 +467,7 @@ void IgcFormat::read()
         int len = end - begin + 1;
         QString name = extension_definition.mid(4,3);
         igc_ext_type_t ext = get_ext_type(ext_type);
-        if (ext != IgcFormat::igc_ext_type_t::ext_rec_unknown) {
+        if (ext != igc_ext_type_t::ext_rec_unknown) {
           int factor = get_ext_factor(ext);
           ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
           supported_extensions.append(name);
@@ -633,7 +636,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
   return str;
 }
 
-QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt) const
+QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
   QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
   if (str.size() != 6) {
@@ -642,7 +645,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt) const
   return str;
 }
 
-QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod) const
+QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
   QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
   if (str.size() != 6) {
@@ -823,7 +826,7 @@ void IgcFormat::wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
  * @return The number of seconds to add to the GNSS track in order to align
  *         it with the pressure track.
  */
-int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* gnss_track) const
+int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* gnss_track)
 {
   double alt_diff;
   double speed;

@@ -77,4 +77,7 @@ compare ${REFERENCE}/track/simint250m.csv ${TMPDIR}/simint250m_2.csv
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/simint.csv -x track,faketime=f2022+1 -o unicsv,utc -F ${TMPDIR}/simint1000m.csv
 compare ${REFERENCE}/track/simint1000m.csv ${TMPDIR}/simint1000m.csv
 
+# segment
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/trackfilter_segment.csv -x track,segment -o gpx -F ${TMPDIR}/trackfilter_segment~csv.gpx
+compare ${REFERENCE}/track/trackfilter_segment~csv.gpx ${TMPDIR}/trackfilter_segment~csv.gpx
 

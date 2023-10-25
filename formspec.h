@@ -26,6 +26,7 @@
 enum FsType {
   kFsUnknown = 0L,
   kFsGpx = 0x67707800L,
+  kFsGpxWpt = 0x67707877L,
   kFsOzi = 0x6f7a6900L,
   kFsGmsd = 0x474d5344L,	/* GMSD = Garmin specific data */
   kFsQstarzBl1000 = 0x5173747aL,

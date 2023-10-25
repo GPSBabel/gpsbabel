@@ -24,6 +24,7 @@
 
 #include <QDateTime>            // for QDateTime
 #include <QList>                // for QList
+#include <QString>              // for QString
 #include <QVector>              // for QVector
 #include <QtGlobal>             // for qint64
 
@@ -56,6 +57,7 @@ private:
 
   /* Constants */
 
+  static constexpr double kDistanceLimit = 1.11319; // for points to be considered the same, meters.
   static constexpr char TRACKFILTER_PACK_OPTION[] = "pack";
   static constexpr char TRACKFILTER_SPLIT_OPTION[] = "split";
   static constexpr char TRACKFILTER_SDIST_OPTION[] = "sdistance";
@@ -137,7 +139,7 @@ private:
     },
     {
       TRACKFILTER_SPLIT_OPTION, &opt_split,
-      "Split by date or time interval (see README)", nullptr,
+      "Split by date or time interval", nullptr,
       ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {

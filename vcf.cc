@@ -31,7 +31,6 @@
 
 
 static gbfile* file_out;
-static short_handle mkshort_handle;
 
 static char* vcf_encrypt = nullptr;
 
@@ -49,14 +48,12 @@ static void
 wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
-  mkshort_handle = mkshort_new_handle();
 }
 
 static void
 wr_deinit()
 {
   gbfclose(file_out);
-  mkshort_del_handle(&mkshort_handle);
 }
 
 /*
@@ -132,7 +129,6 @@ vcf_disp(const Waypoint* wpt)
 static void
 data_write()
 {
-  setshort_length(mkshort_handle, 6);
   waypt_disp_all(vcf_disp);
 }
 

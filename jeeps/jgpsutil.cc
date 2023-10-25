@@ -475,12 +475,11 @@ void GPS_Warning(const char* s)
 ** @@
 ****************************************************************************/
 
-void GPS_Fatal(const char* s)
+[[noreturn]] void GPS_Fatal(const char* s)
 {
 
   fprintf(stderr,"[FATAL] %s\n",s);
   exit(0);
-  return;
 }
 
 

@@ -131,17 +131,17 @@ private:
     rec_bad = 1,		// Bad record
   };
 
-  const QHash<QString, IgcFormat::igc_ext_type_t> igc_extension_map{
-    {"ENL", IgcFormat::igc_ext_type_t::ext_rec_enl},
-    {"TAS", IgcFormat::igc_ext_type_t::ext_rec_tas},
-    {"VAT", IgcFormat::igc_ext_type_t::ext_rec_vat},
-    {"OAT", IgcFormat::igc_ext_type_t::ext_rec_oat},
-    {"TRT", IgcFormat::igc_ext_type_t::ext_rec_trt},
-    {"GSP", IgcFormat::igc_ext_type_t::ext_rec_gsp},
-    {"FXA", IgcFormat::igc_ext_type_t::ext_rec_fxa},
-    {"SIU", IgcFormat::igc_ext_type_t::ext_rec_siu},
-    {"ACZ", IgcFormat::igc_ext_type_t::ext_rec_acz},
-    {"GFO", IgcFormat::igc_ext_type_t::ext_rec_gfo},
+  const QHash<QString, igc_ext_type_t> igc_extension_map{
+    {"ENL", igc_ext_type_t::ext_rec_enl},
+    {"TAS", igc_ext_type_t::ext_rec_tas},
+    {"VAT", igc_ext_type_t::ext_rec_vat},
+    {"OAT", igc_ext_type_t::ext_rec_oat},
+    {"TRT", igc_ext_type_t::ext_rec_trt},
+    {"GSP", igc_ext_type_t::ext_rec_gsp},
+    {"FXA", igc_ext_type_t::ext_rec_fxa},
+    {"SIU", igc_ext_type_t::ext_rec_siu},
+    {"ACZ", igc_ext_type_t::ext_rec_acz},
+    {"GFO", igc_ext_type_t::ext_rec_gfo},
   };
 
   // Will return zero if no match
@@ -161,38 +161,38 @@ private:
    * A factor can never be zero, so this looks good to me.
    * Be careful.
    */
-  int get_ext_factor(IgcFormat::igc_ext_type_t type) const
+  static int get_ext_factor(igc_ext_type_t type)
   {
     int ret = 0;
     switch (type) {
-    case IgcFormat::igc_ext_type_t::ext_rec_enl:
+    case igc_ext_type_t::ext_rec_enl:
       ret = 1;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_tas:
+    case igc_ext_type_t::ext_rec_tas:
       ret = 100;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_vat:
+    case igc_ext_type_t::ext_rec_vat:
       ret = 10;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_oat:
+    case igc_ext_type_t::ext_rec_oat:
       ret = 10;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_trt:
+    case igc_ext_type_t::ext_rec_trt:
       ret = 1;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_gsp:
+    case igc_ext_type_t::ext_rec_gsp:
       ret = 100;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_fxa:
+    case igc_ext_type_t::ext_rec_fxa:
       ret = 1;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_siu:
+    case igc_ext_type_t::ext_rec_siu:
       ret = 1;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_acz:
+    case igc_ext_type_t::ext_rec_acz:
       ret = 10;
       break;
-    case IgcFormat::igc_ext_type_t::ext_rec_gfo:
+    case igc_ext_type_t::ext_rec_gfo:
       ret = 1;
       break;
     default:
@@ -242,9 +242,9 @@ private:
   void detect_gnss_track(const route_head*);
   void detect_other_track(const route_head*, int& max_waypt_ct);
   void get_tracks(const route_head**, const route_head**);
-  QByteArray latlon2str(const Waypoint*);
-  QByteArray date2str(const gpsbabel::DateTime&) const;
-  QByteArray tod2str(const gpsbabel::DateTime&) const;
+  static QByteArray latlon2str(const Waypoint*);
+  static QByteArray date2str(const gpsbabel::DateTime&);
+  static QByteArray tod2str(const gpsbabel::DateTime&);
   void wr_header();
   void wr_task_wpt_name(const Waypoint*, const char*);
   void wr_task_hdr(const route_head*, unsigned int task_num);
@@ -252,7 +252,7 @@ private:
   void wr_task_tlr(const route_head*);
   void wr_tasks();
   void wr_fix_record(const Waypoint*, int, int);
-  int correlate_tracks(const route_head*, const route_head*) const;
+  static int correlate_tracks(const route_head*, const route_head*);
   void wr_track();
 
   /* Data Members */
@@ -298,7 +298,8 @@ struct igc_fsdata : public FormatSpecificData {
   std::optional<double> acz; // Z Acceleration
   std::optional<double> gfo; // G Force?
 
-  bool set_value(IgcFormat::igc_ext_type_t type, double value)
+  // Stores all data as igc_fsdata
+  bool set_value(IgcFormat::igc_ext_type_t type, double value, Waypoint *wp = nullptr)
   {
     bool success = true;
     switch (type) {
@@ -312,6 +313,9 @@ struct igc_fsdata : public FormatSpecificData {
       vat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_oat:
+      if (wp){
+        wp->set_temperature(value);
+      }
       oat = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_trt:
@@ -324,6 +328,9 @@ struct igc_fsdata : public FormatSpecificData {
       fxa = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_siu:
+      if (wp) {
+        wp->sat = value;
+      }
       siu = value;
       break;
     case IgcFormat::igc_ext_type_t::ext_rec_acz:

@@ -52,7 +52,9 @@ public:
 /* internal procedures */
 
 static constexpr char GPSBABEL_INIFILE[] = "gpsbabel.ini";
+#ifndef __WIN32__
 static constexpr char GPSBABEL_SUBDIR[] = ".gpsbabel";
+#endif
 
 
 static QString

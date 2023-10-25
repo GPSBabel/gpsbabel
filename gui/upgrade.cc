@@ -20,27 +20,29 @@
  */
 
 #include "upgrade.h"
-#include <qglobal.h>                        // for qDebug
-#include <QByteArray>                       // for QByteArray
-#include <QDebug>                           // for QDebug
-#include <QLocale>                          // for QLocale
-#include <QSysInfo>                         // for QSysInfo
-#include <QUrl>                             // for QUrl
-#include <QVariant>                         // for QVariant
-#include <QVersionNumber>                   // for QVersionNumber, operator<, operator==
-#include <Qt>                               // for ISODate, RichText
-#include <QDesktopServices>                 // for QDesktopServices
-#include <QNetworkAccessManager>            // for QNetworkAccessManager
-#include <QNetworkReply>                    // for QNetworkReply, QNetworkReply::NoError
-#include <QNetworkRequest>                  // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::Redi...
-#include <QMessageBox>                      // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
-#include <QtXml/QDomDocument>               // for QDomDocument
-#include <QtXml/QDomElement>                // for QDomElement
-#include <QtXml/QDomNode>                   // for QDomNode
-#include <QtXml/QDomNodeList>               // for QDomNodeList
-#include "gbversion.h"                      // for VERSION
-#include "babeldata.h"                      // for BabelData
-#include "format.h"                         // for Format
+
+#include <QByteArray>             // for QByteArray
+#include <QDebug>                 // for QDebug
+#include <QDesktopServices>       // for QDesktopServices
+#include <QDomDocument>           // for QDomDocument
+#include <QDomElement>            // for QDomElement
+#include <QDomNode>               // for QDomNode
+#include <QDomNodeList>           // for QDomNodeList
+#include <QLocale>                // for QLocale
+#include <QMessageBox>            // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QNetworkReply>          // for QNetworkReply, QNetworkReply::NoError
+#include <QNetworkRequest>        // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::RedirectionTar...
+#include <QSysInfo>               // for QSysInfo
+#include <QUrl>                   // for QUrl
+#include <QVariant>               // for QVariant, operator!=
+#include <QVersionNumber>         // for QVersionNumber, operator<, operator==
+#include <Qt>                     // for ISODate, RichText
+#include <QtGlobal>               // for qDebug, qsizetype, QT_VERSION, QT_VERSION_CHECK
+
+#include "babeldata.h"            // for BabelData
+#include "format.h"               // for Format
+#include "gbversion.h"            // for VERSION
 
 
 #if 0
@@ -170,8 +172,13 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
 // this function to sort that out. (See what I did there? Bwaaaahah!)
 bool UpgradeCheck::suggestUpgrade(const QString& from, const QString& to)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 4, 0))
   int fromIndex = 0;
   int toIndex = 0;
+#else
+  qsizetype fromIndex = 0;
+  qsizetype toIndex = 0;
+#endif
   QVersionNumber fromVersion  = QVersionNumber::fromString(from, &fromIndex);
   QVersionNumber toVersion  = QVersionNumber::fromString(to, &toIndex);
 

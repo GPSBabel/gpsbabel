@@ -44,7 +44,7 @@ public:
   class fmtinfo_t {
   public:
 
-    bool isDynamic() {
+    bool isDynamic() const {
       return factory != nullptr;
     }
     explicit operator bool() const {

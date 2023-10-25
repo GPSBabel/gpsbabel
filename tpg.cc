@@ -32,6 +32,7 @@
 #include "defs.h"
 #include "gbfile.h"         // for gbfwrite, gbfgetint16, gbfputint16, gbfclose
 #include "jeeps/gpsmath.h"  // for GPS_Lookup_Datum_Index, GPS_Math_Known_Da...
+#include "mkshort.h"        // for MakeShort
 
 
 #define MYNAME	"TPG"
@@ -41,7 +42,7 @@
 
 static gbfile* tpg_file_in;
 static gbfile* tpg_file_out;
-static short_handle mkshort_handle;
+static MakeShort* mkshort_handle;
 static char* tpg_datum_opt;
 static int tpg_datum_idx;
 
@@ -94,14 +95,14 @@ tpg_wr_init(const QString& fname)
 {
   tpg_common_init();
   tpg_file_out = gbfopen_le(fname, "wb", MYNAME);
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
   waypt_out_count = 0;
 }
 
 static void
 tpg_wr_deinit()
 {
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
   gbfclose(tpg_file_out);
 }
 
@@ -188,7 +189,7 @@ tpg_waypt_pr(const Waypoint* wpt)
   if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
     if (!wpt->description.isEmpty()) {
       if (global_opts.synthesize_shortnames) {
-        shortname = mkshort_from_wpt(mkshort_handle, wpt);
+        shortname = mkshort_handle->mkshort_from_wpt(wpt);
       } else {
         shortname = wpt->description;
       }
@@ -291,9 +292,9 @@ tpg_write()
   int s = waypt_count();
 
   if (global_opts.synthesize_shortnames) {
-    setshort_length(mkshort_handle, 32);
-    setshort_whitespace_ok(mkshort_handle, 1);
-    setshort_mustupper(mkshort_handle, 1);
+    mkshort_handle->set_length(32);
+    mkshort_handle->set_whitespace_ok(true);
+    mkshort_handle->set_mustupper(true);
   }
 
   if (s > MAXTPGOUTPUTPINS) {

@@ -47,33 +47,11 @@
 WaypointList* global_waypoint_list;
 
 Geocache Waypoint::empty_gc_data;
-static global_trait traits;
-
-const global_trait* get_traits()
-{
-  return &traits;
-}
 
 void
 waypt_init()
 {
   global_waypoint_list = new WaypointList;
-}
-
-void update_common_traits(const Waypoint* wpt)
-{
-  /* This is a bit tacky, but it allows a hint whether we've seen
-   * this data or not in the life cycle of this run.   Of course,
-   * the caches could have been filtered out of existence and not
-   * all waypoints may have this and a few other pitfalls, but it's
-   * an easy and fast test here.
-   */
-  traits.trait_geocaches |= (wpt->gc_data->diff && wpt->gc_data->terr);
-  traits.trait_heartrate |= wpt->heartrate > 0;
-  traits.trait_cadence |= wpt->cadence > 0;
-  traits.trait_power |= wpt->power > 0;
-  traits.trait_depth |= wpt->depth_has_value();
-  traits.trait_temperature |= wpt->temperature_has_value();
 }
 
 void
@@ -86,6 +64,12 @@ void
 waypt_del(Waypoint* wpt)
 {
   global_waypoint_list->waypt_del(wpt);
+}
+
+void
+del_marked_wpts()
+{
+  global_waypoint_list->del_marked_wpts();
 }
 
 unsigned int
@@ -219,12 +203,7 @@ double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
-  double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-  if (res < 0.1) {
-    res = 0;  /* calc. diffs on 32- and 64-bit hosts */
-  }
-
-  return res;
+ return radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
 }
 
 /*
@@ -393,7 +372,6 @@ Waypoint::Waypoint() :
   latitude(0),  // These should probably use some invalid data, but
   longitude(0), // it looks like we have code that relies on them being zero.
   altitude(unknown_alt),
-  route_priority(0),
   hdop(0),
   vdop(0),
   pdop(0),
@@ -435,7 +413,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   icon_descr(other.icon_descr),
   creation_time(other.creation_time),
   wpt_flags(other.wpt_flags),
-  route_priority(other.route_priority),
   hdop(other.hdop),
   vdop(other.vdop),
   pdop(other.pdop),
@@ -485,7 +462,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     wpt_flags = rhs.wpt_flags;
     icon_descr = rhs.icon_descr;
     creation_time = rhs.creation_time;
-    route_priority = rhs.route_priority;
     hdop = rhs.hdop;
     vdop = rhs.vdop;
     pdop = rhs.pdop;
@@ -638,10 +614,6 @@ WaypointList::waypt_add(Waypoint* wpt)
     }
   }
 
-  if (this == global_waypoint_list) {
-    update_common_traits(wpt);
-  }
-
 }
 
 void
@@ -661,6 +633,22 @@ WaypointList::waypt_del(Waypoint* wpt)
   const int idx = this->indexOf(wpt);
   assert(idx >= 0);
   removeAt(idx);
+}
+
+void
+WaypointList::del_marked_wpts()
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap(oldlist);
+
+  for (Waypoint* wpt : qAsConst(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      delete wpt;
+    } else {
+      waypt_add(wpt);
+    }
+  }
 }
 
 void

@@ -865,7 +865,7 @@ GarminFitFormat::read()
   } catch (ReaderException& e) {
     if (opt_recoverymode) {
       warning(MYNAME ": %s\n",e.what());
-      warning(MYNAME ": Aborting read and continuning processing.\n");
+      warning(MYNAME ": Aborting read and continuing processing.\n");
     } else {
       fatal(MYNAME ": %s  Use recoverymode option at your risk.\n",e.what());
     }
