@@ -11,5 +11,6 @@
 <xsd:import namespace="http://www.groundspeak.com/cache/1/0/1" schemaLocation="groundspeak/cache101.xsd"/>
 <xsd:import namespace="http://www.groundspeak.com/cache/1/1" schemaLocation="groundspeak/cache11.xsd"/>
 <xsd:import namespace="http://www.groundspeak.com/cache/1/2" schemaLocation="groundspeak/cache12.xsd"/>
+<xsd:import namespace="http://www.gpsbabel.org/testonlyschema" schemaLocation="testonlyschema.xsd"/>
 
 </xsd:schema>

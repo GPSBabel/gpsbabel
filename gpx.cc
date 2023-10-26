@@ -522,6 +522,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     logpoint_ct = 0;
     cur_tag = nullptr;
     wpt_tmp = nullptr;
+    fs_ptr = nullptr;
     break;
   case tt_cache_name:
     wpt_tmp->notes = cdatastr;
@@ -616,6 +617,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
       delete rh_link_;
       rh_link_ = nullptr;
     }
+    fs_ptr = nullptr;
     break;
   case tt_rte_rtept:
     if (link_) {
@@ -631,6 +633,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     }
     route_add_wpt(rte_head, wpt_tmp);
     wpt_tmp = nullptr;
+    fs_ptr = nullptr;
     break;
   case tt_rte_desc:
     rte_head->rte_desc = cdatastr;
@@ -661,9 +664,11 @@ GpxFormat::gpx_end(QStringView /*unused*/)
       delete rh_link_;
       rh_link_ = nullptr;
     }
+    fs_ptr = nullptr;
     break;
   case tt_trk_trkseg:
     next_trkpt_is_new_seg = 1;
+    fs_ptr = nullptr;
     break;
   case tt_trk_trkseg_trkpt:
     if (link_) {
@@ -679,6 +684,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
     }
     track_add_wpt(trk_head, wpt_tmp);
     wpt_tmp = nullptr;
+    fs_ptr = nullptr;
     break;
   case tt_trk_desc:
     trk_head->rte_desc = cdatastr;
@@ -920,7 +926,7 @@ GpxFormat::wr_init(const QString& fname)
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
     fatal(FatalMsg() << MYNAME ": gpx version number"
-            << gpx_write_version << "not valid.");
+          << gpx_write_version << "not valid.");
   }
 
   writer->setAutoFormatting(true);
@@ -1092,9 +1098,9 @@ GpxFormat::read()
 
   if (reader->hasError())  {
     fatal(FatalMsg() << MYNAME << "Read error:" << reader->errorString()
-            << "File:" << iqfile->fileName()
-            << "Line:" << reader->lineNumber()
-            << "Column:" << reader->columnNumber());
+          << "File:" << iqfile->fileName()
+          << "Line:" << reader->lineNumber()
+          << "Column:" << reader->columnNumber());
   }
 }
 
@@ -1369,7 +1375,7 @@ void GpxFormat::gpx_write_common_core(const Waypoint* waypointp,
                                       const gpx_point_type point_type) const
 {
   const auto* fs_gpxwpt = reinterpret_cast<gpx_wpt_fsdata*>(waypointp->fs.FsChainFind(kFsGpxWpt));
-    
+
   gpx_write_common_position(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_description(waypointp, point_type, fs_gpxwpt);
   gpx_write_common_acc(waypointp, fs_gpxwpt);
@@ -1389,7 +1395,15 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
     auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
     if (fs_gpx) {
       if (! gmsd) {
-        fprint_xml_chain(fs_gpx->tag);
+        if (fs_gpx->tag) {
+          if (gpx_write_version > gpx_1_0) {
+            writer->writeStartElement("extensions");
+          }
+          fprint_xml_chain(fs_gpx->tag);
+          if (gpx_write_version > gpx_1_0) {
+            writer->writeEndElement();
+          }
+        }
       }
     }
     if (gmsd && (gpx_write_version > gpx_1_0)) {
@@ -1416,23 +1430,21 @@ GpxFormat::gpx_track_hdr(const route_head* rte)
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));
   }
 
-  if (gpx_write_version > gpx_1_0) {
-    if (!(opt_humminbirdext || opt_garminext)) {
-      const auto* fs_gpx = reinterpret_cast<fs_xml*>(rte->fs.FsChainFind(kFsGpx));
-      if (fs_gpx) {
-        fprint_xml_chain(fs_gpx->tag);
-      }
-    } else if (opt_garminext) {
-      if (rte->line_color.bbggrr > unknown_color) {
-        int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
-        if (ci > 0) {
-          writer->writeStartElement(QStringLiteral("extensions"));
-          writer->writeStartElement(QStringLiteral("gpxx:TrackExtension"));
-          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
-                                   .arg(gt_color_name(ci)));
-          writer->writeEndElement(); // Close gpxx:TrackExtension tag
-          writer->writeEndElement(); // Close extensions tag
-        }
+  if (!(opt_humminbirdext || opt_garminext)) {
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(rte->fs.FsChainFind(kFsGpx));
+    if (fs_gpx) {
+      fprint_xml_chain(fs_gpx->tag);
+    }
+  } else if (opt_garminext && (gpx_write_version > gpx_1_0)) {
+    if (rte->line_color.bbggrr > unknown_color) {
+      int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
+      if (ci > 0) {
+        writer->writeStartElement(QStringLiteral("extensions"));
+        writer->writeStartElement(QStringLiteral("gpxx:TrackExtension"));
+        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
+                                 .arg(gt_color_name(ci)));
+        writer->writeEndElement(); // Close gpxx:TrackExtension tag
+        writer->writeEndElement(); // Close extensions tag
       }
     }
   }
@@ -1506,25 +1518,23 @@ GpxFormat::gpx_route_hdr(const route_head* rte) const
     writer->writeTextElement(QStringLiteral("number"), QString::number(rte->rte_num));
   }
 
-  if (gpx_write_version > gpx_1_0) {
-    if (!(opt_humminbirdext || opt_garminext)) {
-      const auto* fs_gpx = reinterpret_cast<fs_xml*>(rte->fs.FsChainFind(kFsGpx));
-      if (fs_gpx) {
-        fprint_xml_chain(fs_gpx->tag);
-      }
-    } else if (opt_garminext) {
-      if (rte->line_color.bbggrr > unknown_color) {
-        int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
-        if (ci > 0) {
-          writer->writeStartElement(QStringLiteral("extensions"));
-          writer->writeStartElement(QStringLiteral("gpxx:RouteExtension"));
-          // FIXME: the value to use for IsAutoNamed is questionable.
-          writer->writeTextElement(QStringLiteral("gpxx:IsAutoNamed"), rte->rte_name.isEmpty()? QStringLiteral("true") : QStringLiteral("false")); // Required element
-          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
-                                   .arg(gt_color_name(ci)));
-          writer->writeEndElement(); // Close gpxx:RouteExtension tag
-          writer->writeEndElement(); // Close extensions tag
-        }
+  if (!(opt_humminbirdext || opt_garminext)) {
+    const auto* fs_gpx = reinterpret_cast<fs_xml*>(rte->fs.FsChainFind(kFsGpx));
+    if (fs_gpx) {
+      fprint_xml_chain(fs_gpx->tag);
+    }
+  } else if (opt_garminext && (gpx_write_version > gpx_1_0)) {
+    if (rte->line_color.bbggrr > unknown_color) {
+      int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
+      if (ci > 0) {
+        writer->writeStartElement(QStringLiteral("extensions"));
+        writer->writeStartElement(QStringLiteral("gpxx:RouteExtension"));
+        // FIXME: the value to use for IsAutoNamed is questionable.
+        writer->writeTextElement(QStringLiteral("gpxx:IsAutoNamed"), rte->rte_name.isEmpty()? QStringLiteral("true") : QStringLiteral("false")); // Required element
+        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
+                                 .arg(gt_color_name(ci)));
+        writer->writeEndElement(); // Close gpxx:RouteExtension tag
+        writer->writeEndElement(); // Close extensions tag
       }
     }
   }
