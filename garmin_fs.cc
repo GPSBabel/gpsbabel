@@ -20,17 +20,17 @@
 
  */
 
-#include <cstdio>                    // for snprintf, sscanf
-#include <cstdlib>                   // for strtod
+#include <cstdio>                      // for snprintf, sscanf
+#include <cstdlib>                     // for strtod
 
-#include <QString>                   // for QString, QStringLiteral
-#include <QXmlStreamWriter>          // for QXmlStreamWriter
-#include <Qt>                        // for CaseInsensitive
+#include <QString>                     // for QString, QStringLiteral
+#include <Qt>                          // for CaseInsensitive
 
 #include "defs.h"
 #include "garmin_fs.h"
-#include "garmin_tables.h"           // for gt_switch_display_mode_value, gt_display_mode_symbol, gt_display_mode_symbol_and_comment, gt_display_mode_symbol_and_name
-#include "inifile.h"                 // for inifile_readstr
+#include "garmin_tables.h"             // for gt_switch_display_mode_value, gt_display_mode_symbol, gt_display_mode_symbol_and_comment, gt_display_mode_symbol_and_name
+#include "inifile.h"                   // for inifile_readstr
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 
 
 #define MYNAME "garmin_fs"
@@ -80,113 +80,75 @@ garmin_fs_t::~garmin_fs_t()
 
 void
 garmin_fs_xml_fprint(const Waypoint* waypt,
-                     QXmlStreamWriter* writer)
+                     gpsbabel::XmlStreamWriter* writer)
 {
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
 
-  if (gmsd == nullptr) {
-    return;
+  writer->stackOptionalStartElement(QStringLiteral("extensions"));
+  writer->stackOptionalStartElement(QStringLiteral("gpxx:WaypointExtension"));
+  writer->stackNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"),
+                         "gpxx");
+
+  if (waypt->proximity_has_value()) {
+    writer->stackTextElement(QStringLiteral("gpxx:Proximity"), QString::number(waypt->proximity_value(), 'f', 6));
   }
 
-  /* Find out if there is at least one field set */
-  QString addr = garmin_fs_t::get_addr(gmsd, "");
-  if (addr.isEmpty()) {
-    addr = garmin_fs_t::get_city(gmsd, "");
-  }
-  if (addr.isEmpty()) {
-    addr = garmin_fs_t::get_country(gmsd, "");
-  }
-  if (addr.isEmpty()) {
-    addr = garmin_fs_t::get_postal_code(gmsd, "");
-  }
-  if (addr.isEmpty()) {
-    addr = garmin_fs_t::get_state(gmsd, "");
+  if (waypt->temperature_has_value()) {
+    writer->stackTextElement(QStringLiteral("gpxx:Temperature"), QString::number(waypt->temperature_value(), 'f', 6));
   }
 
-  QString phone = garmin_fs_t::get_phone_nr(gmsd, "");
-
-  if (!addr.isEmpty() || !phone.isEmpty() ||
-      (gmsd->flags.category && gmsd->category) ||
-      waypt->depth_has_value() ||
-      waypt->proximity_has_value() ||
-      waypt->temperature_has_value() ||
-      gmsd->flags.display) {
-    writer->writeStartElement(QStringLiteral("extensions"));
-    writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
-    writer->writeNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"),
-                           "gpxx");
-    if (waypt->proximity_has_value()) {
-      writer->writeTextElement(QStringLiteral("gpxx:Proximity"), QString::number(waypt->proximity_value(), 'f', 6));
-    }
-    if (waypt->temperature_has_value()) {
-      writer->writeTextElement(QStringLiteral("gpxx:Temperature"),  QString::number(waypt->temperature_value(), 'f', 6));
-    }
-    if (waypt->depth_has_value()) {
-      writer->writeTextElement(QStringLiteral("gpxx:Depth"), QString::number(waypt->depth_value(), 'f', 6));
-    }
-    if (gmsd->flags.display) {
-      const char* cx;
-      switch (gmsd->display) {
-      case gt_display_mode_symbol:
-        cx = "SymbolOnly";
-        break;
-      case gt_display_mode_symbol_and_comment:
-        cx = "SymbolAndDescription";
-        break;
-      default:
-        cx = "SymbolAndName";
-        break;
-      }
-      writer->writeTextElement(QStringLiteral("gpxx:DisplayMode"), cx);
-    }
-    if (gmsd->flags.category && gmsd->category) {
-      uint16_t cx = gmsd->category;
-      writer->writeStartElement(QStringLiteral("gpxx:Categories"));
-      for (int i = 0; i < 16; i++) {
-        if (cx & 1) {
-          writer->writeTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
-        }
-        cx = cx >> 1;
-      }
-      writer->writeEndElement(); // gpxx:Categories
-    }
-    if (!addr.isEmpty()) {
-      QString str;
-      writer->writeStartElement(QStringLiteral("gpxx:Address"));
-
-      if (!(str = garmin_fs_t::get_addr(gmsd, nullptr)).isEmpty()) {
-        writer->writeTextElement(QStringLiteral("gpxx:StreetAddress"), str);
-      }
-      if (!(str = garmin_fs_t::get_city(gmsd, nullptr)).isEmpty()) {
-        writer->writeTextElement(QStringLiteral("gpxx:City"), str);
-      }
-      if (!(str = garmin_fs_t::get_state(gmsd, nullptr)).isEmpty()) {
-        writer->writeTextElement(QStringLiteral("gpxx:State"), str);
-      }
-      if (!(str = garmin_fs_t::get_country(gmsd, nullptr)).isEmpty()) {
-        writer->writeTextElement(QStringLiteral("gpxx:Country"), str);
-      }
-      if (!(str = garmin_fs_t::get_postal_code(gmsd, nullptr)).isEmpty()) {
-        writer->writeTextElement(QStringLiteral("gpxx:PostalCode"), str);
-      }
-      writer->writeEndElement(); // /gpxx::Address
-    }
-
-    if (!phone.isEmpty()) {
-      writer->writeTextElement(QStringLiteral("gpxx:PhoneNumber"), phone);
-    }
-
-    writer->writeEndElement(); // /gpxx::WaypointExtension
-    writer->writeEndElement(); // /extensions.
+  if (waypt->depth_has_value()) {
+    writer->stackTextElement(QStringLiteral("gpxx:Depth"), QString::number(waypt->depth_value(), 'f', 6));
   }
 
+  if (garmin_fs_t::has_display(gmsd)) {
+    const char* cx;
+    switch (gmsd->display) {
+    case gt_display_mode_symbol:
+      cx = "SymbolOnly";
+      break;
+    case gt_display_mode_symbol_and_comment:
+      cx = "SymbolAndDescription";
+      break;
+    default:
+      cx = "SymbolAndName";
+      break;
+    }
+    writer->stackTextElement(QStringLiteral("gpxx:DisplayMode"), cx);
+  }
+
+  if (garmin_fs_t::has_category(gmsd)) {
+    uint16_t cx = gmsd->category;
+    writer->stackStartElement(QStringLiteral("gpxx:Categories"));
+    for (int i = 0; i < 16; i++) {
+      if (cx & 1) {
+        writer->stackTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
+      }
+      cx = cx >> 1;
+    }
+    writer->stackEndElement(); // gpxx:Categories
+  }
+
+  writer->stackOptionalStartElement(QStringLiteral("gpxx:Address"));
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:StreetAddress"), garmin_fs_t::get_addr(gmsd, nullptr));
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:City"), garmin_fs_t::get_city(gmsd, nullptr));
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:State"), garmin_fs_t::get_state(gmsd, nullptr));
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:Country"), garmin_fs_t::get_country(gmsd, nullptr));
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:PostalCode"), garmin_fs_t::get_postal_code(gmsd, nullptr));
+  writer->stackEndElement(); // gpxx:Address
+
+  writer->stackOptionalTextElement(QStringLiteral("gpxx:PhoneNumber"), garmin_fs_t::get_phone_nr(gmsd, nullptr));
+
+
+  writer->stackEndElement(); // gpxx:WaypointExtension
+  writer->stackEndElement(); // extensions
 }
 
 void
 garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint* waypt)
 {
   // FIXME: eliminate C string copy/use here:
-  const char *cdatastr = xstrdup(qstr);
+  const char* cdatastr = xstrdup(qstr);
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
