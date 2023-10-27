@@ -287,7 +287,6 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
   int sec;
   int msec;
   int consumed = 0;
-  double frac_sec;
 
   /* If we have something we're pretty sure is a date, parse that
    * first, skip over it, and pass that back to the caller)
@@ -297,14 +296,17 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
     str += consumed;
     date = ldate;
   }
-  int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d%lf", &hour, &min, &sec, &frac_sec);
+  char msecstr[4];
+  int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d.%3[0123456789]", &hour, &min, &sec, msecstr);
   if (ct < 3) {
     fatal(FatalMsg() << MYNAME << ": Could not parse time string (" << str << ").");
   }
   if (ct >= 4) {
     // Don't round up and ripple through seconds, minutes, hours.
     // 23:59:59.9999999 -> 24:00:00.000 which is an invalid QTime.
-    msec = frac_sec * 1000.0;
+    QByteArray msecba = msecstr;
+    msecba.append(3 - msecba.size(), '0'); // right pad to 3 digits.
+    msec = msecba.toInt();
   } else {
     msec = 0;
   }

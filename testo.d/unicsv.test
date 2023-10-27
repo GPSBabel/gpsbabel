@@ -28,7 +28,7 @@ compare ${TMPDIR}/unicsv_encoding.csv ${REFERENCE}/unicsv_encoding.csv
 
 # verify fractional second read and writes.
 gpsbabel -i unicsv -f ${REFERENCE}/unicsv_subsec.csv -o unicsv -F ${TMPDIR}/unicsv_subsec.csv
-compare ${REFERENCE}/unicsv_subsec.csv ${TMPDIR}/unicsv_subsec.csv
+compare ${REFERENCE}/unicsv_subsec~csv.csv ${TMPDIR}/unicsv_subsec.csv
 
 # Verify 'fields' option
 gpsbabel -i unicsv,fields=lat+lon+description -f ${REFERENCE}/radius.csv -o csv -F ${TMPDIR}/unicsv_fields.out
