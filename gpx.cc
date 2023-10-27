@@ -1033,6 +1033,7 @@ GpxFormat::qualifiedName() const
     {"http://www.garmin.com/xmlschemas/GpxExtensions/v3", "gpxx"},
     {"http://www.garmin.com/xmlschemas/TrackPointExtension/v1", "gpxtpx"},
     {"http://www.groundspeak.com/cache/1/0", "groundspeak"},
+    {"http://www.groundspeak.com/cache/1/0/1", "groundspeak"},
     {"http://humminbird.com", "h"}
   };
 
