@@ -18,8 +18,8 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.12.10}
-COMPILER=${2:-msvc2017_64}
+QT_VERSION=${1:-5.15.2}
+COMPILER=${2:-msvc2019_64}
 METHOD=${3:-default}
 
 if [ "${COMPILER}" = "msvc2017_64" ]; then
