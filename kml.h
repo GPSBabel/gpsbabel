@@ -86,7 +86,7 @@ public:
     igc_fxa,  // Fix Accuracy
     igc_gfo,  // G Force
     igc_siu,  // Satellites In Use
-    igc_acz   // Z Acceleration
+    igc_acz,  // Z Acceleration
   };
   static constexpr int number_wp_fields = static_cast<int>(wp_field::igc_acz) + 1;
 
@@ -129,10 +129,6 @@ private:
     "snippet",
     nullptr
   };
-
-  // IGC option compile-time flags
-  static constexpr bool kIncludeIGCSIU = true;
-  static constexpr bool kIncludeIGCTRT = false;
 
   /* Member Functions */
 
