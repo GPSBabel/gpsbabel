@@ -67,6 +67,28 @@ public:
   void exit() override;
 
 private:
+  /*
+   * This structure holds the element contents of elements in the
+   * the gpx namespace that are only passed from the gpx reader to
+   * the gpx writer.
+   * We explcitly write these instead of passing them through so they
+   * are written in the correct sequence.
+   */
+  struct gpx_wpt_fsdata : FormatSpecificData {
+    gpx_wpt_fsdata() : FormatSpecificData(kFsGpxWpt) {}
+  
+    gpx_wpt_fsdata* clone() const override
+    {
+      return new gpx_wpt_fsdata(*this);
+    }
+  
+    QString magvar;
+    QString src;
+    QString type;
+    QString ageofdgpsdata;
+    QString dgpsid;
+  };
+
   enum gpx_point_type {
     gpxpt_waypoint,
     gpxpt_track,
@@ -91,10 +113,12 @@ private:
     tt_wpt,
     tt_wpttype_ele,
     tt_wpttype_time,
+    tt_wpttype_magvar,
     tt_wpttype_geoidheight,
     tt_wpttype_name,
     tt_wpttype_cmt,
     tt_wpttype_desc,
+    tt_wpttype_src,
     tt_wpttype_url,		/* Not in GPX 1.1 */
     tt_wpttype_urlname,	/* Not in GPX 1.1 */
     tt_wpttype_link,		/* New in GPX 1.1 */
@@ -107,6 +131,8 @@ private:
     tt_wpttype_hdop,		/* HDOPS are common for all three */
     tt_wpttype_vdop,		/* VDOPS are common for all three */
     tt_wpttype_pdop,		/* PDOPS are common for all three */
+    tt_wpttype_ageofdgpsdata,
+    tt_wpttype_dgpsid,
     tt_cache,
     tt_cache_name,
     tt_cache_container,
@@ -197,15 +223,16 @@ private:
   void gpx_cdata(QStringView s);
   QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
-  void fprint_xml_chain(XmlTag* tag, const Waypoint* wpt) const;
+  void fprint_xml_chain(XmlTag* tag) const;
   void write_gpx_url(const UrlList& urls) const;
   void write_gpx_url(const Waypoint* waypointp) const;
   void write_gpx_url(const route_head* rh) const;
-  void gpx_write_common_acc(const Waypoint* waypointp) const;
-  void gpx_write_common_position(const Waypoint* waypointp, gpx_point_type point_type) const;
+  void gpx_write_common_acc(const Waypoint* waypointp, const gpx_wpt_fsdata* fs_gpxwpt) const;
+  void gpx_write_common_position(const Waypoint* waypointp, gpx_point_type point_type, const gpx_wpt_fsdata* fs_gpxwpt) const;
   void gpx_write_common_extensions(const Waypoint* waypointp, gpx_point_type point_type) const;
-  void gpx_write_common_description(const Waypoint* waypointp, const QString& oname) const;
+  void gpx_write_common_description(const Waypoint* waypointp, gpx_point_type point_type, const gpx_wpt_fsdata* fs_gpxwpt) const;
   void gpx_waypt_pr(const Waypoint* waypointp) const;
+  void gpx_write_common_core(const Waypoint* waypointp, gpx_point_type point_type) const;
   void gpx_track_hdr(const route_head* rte);
   void gpx_track_disp(const Waypoint* waypointp) const;
   void gpx_track_tlr(const route_head* unused);
@@ -261,6 +288,7 @@ private:
   int next_trkpt_is_new_seg{};
 
   FormatSpecificDataList* fs_ptr{};
+  gpx_wpt_fsdata* wpt_fsdata{nullptr};
 
   /*
    * The file-level information.
@@ -298,9 +326,7 @@ private:
   {"/gpx/metadata/" name, {type, false}}
 
 #define GEOTAG(type,name) \
-  {"/gpx/wpt/groundspeak:cache/groundspeak:" name, {type, true}}, \
-  {"/gpx/wpt/extensions/cache/" name, {type, true}}, \
-  {"/gpx/wpt/geocache/" name, {type, true}}	/* opencaching.de */
+  {"/gpx/wpt/groundspeak:cache/groundspeak:" name, {type, true}}
 
 #define GPXWPTTYPETAG(name,type,passthrough) \
   {"/gpx/wpt/" name, {type, passthrough}}, \
@@ -338,18 +364,14 @@ private:
     GEOTAG(tt_cache_difficulty, "difficulty"),
     GEOTAG(tt_cache_terrain, "terrain"),
     GEOTAG(tt_cache_hint, "encoded_hints"),
-    GEOTAG(tt_cache_hint, "hints"),	/* opencaching.de */
     GEOTAG(tt_cache_desc_short, "short_description"),
     GEOTAG(tt_cache_desc_long, "long_description"),
     GEOTAG(tt_cache_placer, "owner"),
     GEOTAG(tt_cache_favorite_points, "favorite_points"),
     GEOTAG(tt_cache_personal_note, "personal_note"),
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt", {tt_cache_log_wpt, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/log_wpt", {tt_cache_log_wpt, true}},
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", {tt_cache_log_type, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/type", {tt_cache_log_type, true}},
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", {tt_cache_log_date, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/date", {tt_cache_log_date, true}},
 
     {"/gpx/wpt/extensions", {tt_wpt_extensions, false}},
 
@@ -409,22 +431,26 @@ private:
     /* Common to tracks, routes, and waypts */
     GPXWPTTYPETAG("ele", tt_wpttype_ele, false),
     GPXWPTTYPETAG("time", tt_wpttype_time, false),
+    GPXWPTTYPETAG("magvar", tt_wpttype_magvar, false),
     GPXWPTTYPETAG("geoidheight", tt_wpttype_geoidheight, false),
     GPXWPTTYPETAG("name", tt_wpttype_name, false),
     GPXWPTTYPETAG("cmt", tt_wpttype_cmt, false),
     GPXWPTTYPETAG("desc", tt_wpttype_desc, false),
+    GPXWPTTYPETAG("src", tt_wpttype_src, false),
     GPXWPTTYPETAG("url", tt_wpttype_url, false),							/* GPX 1.0 */
     GPXWPTTYPETAG("urlname", tt_wpttype_urlname, false),			/* GPX 1.0 */
     GPXWPTTYPETAG("link", tt_wpttype_link, false),						/* GPX 1.1 */
     GPXWPTTYPETAG("link/text", tt_wpttype_link_text, false),	/* GPX 1.1 */
     GPXWPTTYPETAG("link/type", tt_wpttype_link_type, false),	/* GPX 1.1 */
     GPXWPTTYPETAG("sym", tt_wpttype_sym, false),
-    GPXWPTTYPETAG("type", tt_wpttype_type, true),
+    GPXWPTTYPETAG("type", tt_wpttype_type, false),
     GPXWPTTYPETAG("fix", tt_wpttype_fix, false),
     GPXWPTTYPETAG("sat", tt_wpttype_sat, false),
     GPXWPTTYPETAG("hdop", tt_wpttype_hdop, false),
     GPXWPTTYPETAG("vdop", tt_wpttype_vdop, false),
     GPXWPTTYPETAG("pdop", tt_wpttype_pdop, false),
+    GPXWPTTYPETAG("ageofdgpsdata", tt_wpttype_ageofdgpsdata, false),
+    GPXWPTTYPETAG("dgpsid", tt_wpttype_dgpsid, false),
   };
 
   QVector<arglist_t> gpx_args = {

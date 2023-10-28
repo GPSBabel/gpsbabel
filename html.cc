@@ -168,7 +168,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toUTC();
           *file_out << "<span class=\"gpsbabellogdate\">"
                     << logtime.toString(u"yyyy-MM-dd") << "</span><br>\n";
         }

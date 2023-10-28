@@ -13,6 +13,7 @@
     <cmt>Hwy 119</cmt>
     <desc>Hwy 119</desc>
     <sym>Flag, Blue</sym>
+    <type>user</type>
     <extensions>
       <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
         <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
@@ -25,6 +26,7 @@
     <cmt>Hwy 72</cmt>
     <desc>Hwy 72</desc>
     <sym>Flag, Blue</sym>
+    <type>user</type>
     <extensions>
       <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
         <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>

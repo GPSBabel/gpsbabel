@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
+  elementFormDefault="qualified"
+  xmlns="http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:annotation><xsd:documentation>
+  This schema defines Garmin extensions to be used with the GPX 1.1 schema.
+  The root element defined by this schema is intended to be used as a child
+  element of the "extensions" elements in the trkpt element in the GPX 1.1 schema. 
+  The GPX 1.1 schema is available at http://www.topografix.com/GPX/1/1/gpx.xsd.
+  This is a replacement for TrackPointExtension in 
+  http://www.garmin.com/xmlschemas/GpxExtensions/v3
+  </xsd:documentation></xsd:annotation>
+
+  <xsd:element name="TrackPointExtension" type="TrackPointExtension_t" />
+
+  <xsd:complexType name="TrackPointExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields that cannot
+    be represented in track points in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="atemp" type="DegreesCelsius_t" minOccurs="0" />
+      <xsd:element name="wtemp" type="DegreesCelsius_t" minOccurs="0" />
+      <xsd:element name="depth" type="Meters_t" minOccurs="0" />
+      <xsd:element name="hr" type="BeatsPerMinute_t" minOccurs="0"/>
+      <xsd:element name="cad" type="RevolutionsPerMinute_t" minOccurs="0"/>
+      <xsd:element name="speed" type="MetersPerSecond_t" minOccurs="0"/>
+      <xsd:element name="course" type="DegreesTrue_t" minOccurs="0"/>
+      <xsd:element name="bearing" type="DegreesTrue_t" minOccurs="0"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="DegreesCelsius_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a temperature value measured in degrees Celsius.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:double"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Meters_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a distance value measured in meters.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:double"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="BeatsPerMinute_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a heart rate measured in beats per minute.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:unsignedByte">
+      <xsd:minInclusive value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="RevolutionsPerMinute_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a cadence measured in revolutions per minute.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:unsignedByte">
+	<xsd:maxInclusive value="254"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="MetersPerSecond_t">
+    <xsd:annotation><xsd:documentation>
+      This type contains a speed measured in meters per second.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:double"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="DegreesTrue_t">
+    <xsd:annotation><xsd:documentation>
+      This type contains an angle measured in degrees in a clockwise direction from the true north line.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="0"/>
+      <xsd:maxInclusive value="360"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  
+  <xsd:complexType name="Extensions_t">
+    <xsd:annotation>
+    <xsd:documentation>This type provides the ability to extend any data type that includes it.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+    <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

@@ -646,11 +646,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND: {
     QDate date;
     date = yyyymmdd_to_time(value);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    wpt->AllocGCData()->last_found = QDateTime(date);
-#else
     wpt->AllocGCData()->last_found = date.startOfDay();
-#endif
     break;
   }
 

@@ -5,7 +5,7 @@
 versuffix=_qtio
 tag=$(date -u +%Y%m%dT%H%M%SZ)
 
-QT_VERSION=5.12.10
+QT_VERSION=5.15.2
 QT_VERSION_SHORT=${QT_VERSION//./}
 QT_CI_PACKAGES="qt.qt5.${QT_VERSION_SHORT}.gcc_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine"
 DOWNLOAD_URL=$(./qtci/find_qt_installer ${QT_VERSION})
