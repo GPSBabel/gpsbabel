@@ -24,14 +24,13 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
-#include <cstddef>                  // for size_t
-#include <cstdint>                  // for int32_t, int16_t, uint16_t
+#include <cstdint>                     // for int32_t, int16_t, uint16_t
 
-#include <QString>                  // for QString
-#include <QXmlStreamWriter>         // for QXmlStreamWriter
+#include <QString>                     // for QString
 
 #include "defs.h"
-#include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
+#include "formspec.h"                  // for FsChainFind, kFsGmsd, FormatSpecificData
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 
 
 /* this order is used by most devices */
@@ -222,7 +221,7 @@ void garmin_fs_copy(void** dest, const void* src);
 
 /* for GPX */
 void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
-void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
+void garmin_fs_xml_fprint(const Waypoint* waypt, gpsbabel::XmlStreamWriter*);
 
 /* common garmin_fs utilities */
 

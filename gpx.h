@@ -326,9 +326,7 @@ private:
   {"/gpx/metadata/" name, {type, false}}
 
 #define GEOTAG(type,name) \
-  {"/gpx/wpt/groundspeak:cache/groundspeak:" name, {type, true}}, \
-  {"/gpx/wpt/extensions/cache/" name, {type, true}}, \
-  {"/gpx/wpt/geocache/" name, {type, true}}	/* opencaching.de */
+  {"/gpx/wpt/groundspeak:cache/groundspeak:" name, {type, true}}
 
 #define GPXWPTTYPETAG(name,type,passthrough) \
   {"/gpx/wpt/" name, {type, passthrough}}, \
@@ -366,18 +364,14 @@ private:
     GEOTAG(tt_cache_difficulty, "difficulty"),
     GEOTAG(tt_cache_terrain, "terrain"),
     GEOTAG(tt_cache_hint, "encoded_hints"),
-    GEOTAG(tt_cache_hint, "hints"),	/* opencaching.de */
     GEOTAG(tt_cache_desc_short, "short_description"),
     GEOTAG(tt_cache_desc_long, "long_description"),
     GEOTAG(tt_cache_placer, "owner"),
     GEOTAG(tt_cache_favorite_points, "favorite_points"),
     GEOTAG(tt_cache_personal_note, "personal_note"),
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt", {tt_cache_log_wpt, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/log_wpt", {tt_cache_log_wpt, true}},
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", {tt_cache_log_type, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/type", {tt_cache_log_type, true}},
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", {tt_cache_log_date, true}},
-    {"/gpx/wpt/extensions/cache/logs/log/date", {tt_cache_log_date, true}},
 
     {"/gpx/wpt/extensions", {tt_wpt_extensions, false}},
 
