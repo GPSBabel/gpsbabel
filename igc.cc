@@ -688,11 +688,7 @@ void IgcFormat::wr_header()
   // Other header data may have been stored in track description
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
     QString desc = track->rte_desc.mid(QString(HDRMAGIC).size());
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-    const QStringList fields = desc.split(HDRDELIM, QString::SkipEmptyParts);
-#else
     const QStringList fields = desc.split(HDRDELIM, Qt::SkipEmptyParts);
-#endif
     for (const auto& field : fields) {
       gbfprintf(file_out, "%s\r\n", CSTR(field));
     }
