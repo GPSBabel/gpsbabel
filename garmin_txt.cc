@@ -965,7 +965,7 @@ parse_categories(const QString& str)
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
       uint16_t val;
-      if (!garmin_fs_convert_category(CSTR(cin), &val)) {
+      if (!garmin_fs_convert_category(cin, &val)) {
         warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", qPrintable(cin), current_line);
       } else {
         res = res | val;

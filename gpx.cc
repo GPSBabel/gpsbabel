@@ -47,7 +47,7 @@
 #include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "garmin_fs.h"                      // for garmin_fs_xml_convert, garmin_fs_xml_fprint, GMSD_FIND
+#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc, garmin_fs_merge_category, garmin_fs_xml_fprint
 #include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
 #include "geocache.h"                       // for Geocache, Geocache::UtfSt...
 #include "mkshort.h"                        // for MakeShort
@@ -210,6 +210,69 @@ GpxFormat::tag_gs_cache(const QXmlStreamAttributes& attr) const
     } else if (attr.value(QLatin1String("archived")).compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = Geocache::status_t::gs_false;
     }
+  }
+}
+
+void
+GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
+{
+  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
+  if (gmsd == nullptr) {
+    gmsd = garmin_fs_alloc(-1);
+    waypt->fs.FsChainAdd(gmsd);
+  }
+
+  switch (tag) {
+  case tt_garmin_wpt_proximity:
+    waypt->set_proximity(text.toDouble());
+    break;
+  case tt_garmin_wpt_temperature:
+    waypt->set_temperature(text.toFloat());
+    break;
+  case tt_garmin_wpt_depth:
+    waypt->set_depth(text.toDouble());
+    break;
+  case tt_garmin_wpt_display_mode:
+    // element DispalyMode value is case sensitive.
+    if (text == u"SymbolOnly") {
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol);
+    } else if (text == u"SymbolAndDescription") {
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_comment);
+    } else {
+      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_name);
+    }
+    break;
+  case tt_garmin_wpt_category:
+    if (!garmin_fs_merge_category(text, waypt)) {
+      // There's nothing a user can really do about this (well, they could
+      // create a gpsbabel.ini that mapped them to garmin category numbers
+      // but that feature is so obscure and used in so few outputs that
+      // there's no reason to alarm the user.  Just silently disregard
+      // category names that don't map cleanly.
+      // warning(MYNAME ": Unable to convert category \"%s\"!\n", CSTR(text));
+    }
+    break;
+  case tt_garmin_wpt_addr:
+    garmin_fs_t::set_addr(gmsd, text);
+    break;
+  case tt_garmin_wpt_city:
+    garmin_fs_t::set_city(gmsd, text);
+    break;
+  case tt_garmin_wpt_state:
+    garmin_fs_t::set_state(gmsd, text);
+    break;
+  case tt_garmin_wpt_country:
+    garmin_fs_t::set_country(gmsd, text);
+    break;
+  case tt_garmin_wpt_postal_code:
+    garmin_fs_t::set_postal_code(gmsd, text);
+    break;
+  case tt_garmin_wpt_phone_nr:
+    garmin_fs_t::set_phone_nr(gmsd, text);
+    break;
+  default:
+    // do nothing
+    break;
   }
 }
 
@@ -381,6 +444,7 @@ GpxFormat::gpx_start(QStringView el, const QXmlStreamAttributes& attr)
     if (attr.hasAttribute(QLatin1String("id"))) {
       wpt_tmp->AllocGCData()->placer_id = attr.value(QLatin1String("id")).toInt();
     }
+    break;
   default:
     break;
   }
@@ -594,7 +658,7 @@ GpxFormat::gpx_end(QStringView /*unused*/)
   case tt_garmin_wpt_country:
   case tt_garmin_wpt_postal_code:
   case tt_garmin_wpt_phone_nr:
-    garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag.type, cdatastr, wpt_tmp);
+    tag_garmin_fs(tag.type, cdatastr, wpt_tmp);
     break;
 
   /*

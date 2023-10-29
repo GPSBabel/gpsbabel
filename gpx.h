@@ -151,7 +151,7 @@ private:
 
     tt_wpt_extensions,
 
-    tt_garmin_wpt_extensions,	/* don't change this order */
+    tt_garmin_wpt_extensions,
     tt_garmin_wpt_proximity,
     tt_garmin_wpt_temperature,
     tt_garmin_wpt_depth,
@@ -163,7 +163,7 @@ private:
     tt_garmin_wpt_state,
     tt_garmin_wpt_country,
     tt_garmin_wpt_postal_code,
-    tt_garmin_wpt_phone_nr,		/* don't change this order */
+    tt_garmin_wpt_phone_nr,
 
     tt_rte,
     tt_rte_name,
@@ -215,6 +215,7 @@ private:
   void tag_wpt(const QXmlStreamAttributes& attr);
   void tag_cache_desc(const QXmlStreamAttributes& attr);
   void tag_gs_cache(const QXmlStreamAttributes& attr) const;
+  void tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt);
   void start_something_else(QStringView el, const QXmlStreamAttributes& attr);
   void end_something_else();
   void tag_log_wpt(const QXmlStreamAttributes& attr) const;

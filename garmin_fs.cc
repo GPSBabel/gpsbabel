@@ -20,10 +20,7 @@
 
  */
 
-#include <cstdio>                      // for snprintf, sscanf
-#include <cstdlib>                     // for strtod
-
-#include <QString>                     // for QString, QStringLiteral
+#include <QString>                     // for QString, operator==
 #include <Qt>                          // for CaseInsensitive
 
 #include "defs.h"
@@ -144,128 +141,40 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
   writer->stackEndElement(); // extensions
 }
 
-void
-garmin_fs_xml_convert(const int base_tag, int tag, const QString& qstr, Waypoint* waypt)
+bool
+garmin_fs_convert_category(const QString& category_name, uint16_t* category)
 {
-  // FIXME: eliminate C string copy/use here:
-  const char* cdatastr = xstrdup(qstr);
-  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
-  if (gmsd == nullptr) {
-    gmsd = garmin_fs_alloc(-1);
-    waypt->fs.FsChainAdd(gmsd);
-  }
-
-  tag -= base_tag;
-  /*
-  	tt_garmin_waypt_extension, -> 0
-  	tt_garmin_proximity, -> 1
-  	tt_garmin_temperature,-> 2
-  	tt_garmin_depth, -> 3
-  	tt_garmin_display_mode, -> 4
-  	tt_garmin_categories, -> 5
-  	tt_garmin_category, -> 6
-  	tt_garmin_addr, -> 7
-  	tt_garmin_city, -> 8
-  	tt_garmin_state, -> 9
-  	tt_garmin_country, -> 10
-  	tt_garmin_postal_code, -> 11
-  	tt_garmin_phone_nr, -> 12
-  */
-  switch (tag) {
-  case 1:
-    if (*cdatastr) {
-      waypt->set_proximity(strtod(cdatastr, nullptr));
-    }
-    break;
-  case 2:
-    if (*cdatastr) {
-      waypt->set_temperature(strtod(cdatastr, nullptr));
-    }
-    break;
-  case 3:
-    if (*cdatastr) {
-      waypt->set_depth(strtod(cdatastr, nullptr));
-    }
-    break;
-  case 4:
-    if (case_ignore_strcmp(cdatastr, "SymbolOnly") == 0) {
-      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol);
-    } else if (case_ignore_strcmp(cdatastr, "SymbolAndDescription") == 0) {
-      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_comment);
-    } else {
-      garmin_fs_t::set_display(gmsd, gt_display_mode_symbol_and_name);
-    }
-    break;
-  case 6:
-    if (! garmin_fs_merge_category(cdatastr, waypt)) {
-      // There's nothing a user can really do about this (well, they could
-      // create a gpsbabel.ini that mapped them to garmin category numbers
-      // but that feature is so obscure and used in so few outputs that
-      // there's no reason to alarm the user.  Just silently disregard
-      // category names that don't map cleanly.
-      // warning(MYNAME ": Unable to convert category \"%s\"!\n", cdatastr);
-    }
-    break;
-  case 7:
-    garmin_fs_t::set_addr(gmsd, cdatastr);
-    break;
-  case 8:
-    garmin_fs_t::set_city(gmsd, cdatastr);
-    break;
-  case 9:
-    garmin_fs_t::set_state(gmsd, cdatastr);
-    break;
-  case 10:
-    garmin_fs_t::set_country(gmsd, cdatastr);
-    break;
-  case 11:
-    garmin_fs_t::set_postal_code(gmsd, cdatastr);
-    break;
-  case 12:
-    garmin_fs_t::set_phone_nr(gmsd, cdatastr);
-    break;
-  }
-  xfree(cdatastr);
-}
-
-unsigned char
-garmin_fs_convert_category(const char* category_name, uint16_t* category)
-{
-  int i;
-  int cat = 0;
-
   // Is the name  "Category" followed by a number? Use that number.
-  if ((case_ignore_strncmp(category_name, "Category ", 9) == 0) &&
-      (1 == sscanf(category_name + 9, "%d", &i)) &&
-      (i >= 1) && (i <= 16)) {
-    cat = (1 << --i);
-  } else if (global_opts.inifile != nullptr) {
+  if (category_name.startsWith(u"Category ", Qt::CaseInsensitive)) {
+    bool ok;
+    int i = category_name.mid(9).toInt(&ok);
+    if (ok && (i >= 1) && (i <= 16)) {
+      *category = (1 << --i);
+      return true;
+    }
+  }
+  if (global_opts.inifile != nullptr) {
     // Do we have a gpsbabel.ini that maps category names to category #'s?
-    for (i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++) {
       QString key = QString::number(i + 1);
       QString c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       if (c.compare(category_name, Qt::CaseInsensitive) == 0) {
-        cat = (1 << i);
-        break;
+        *category = (1 << i);
+        return true;
       }
     }
   }
-  if (cat == 0) {
-    return 0;
-  } else {
-    *category = cat;
-    return 1;
-  }
+  return false;
 }
 
-unsigned char
-garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
+bool
+garmin_fs_merge_category(const QString& category_name, Waypoint* waypt)
 {
   uint16_t cat;
 
   // Attempt to get a textual category name to a category number.
   if (!garmin_fs_convert_category(category_name, &cat)) {
-    return 0;
+    return false;
   }
 
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
@@ -276,5 +185,5 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
     waypt->fs.FsChainAdd(gmsd);
   }
   garmin_fs_t::set_category(gmsd, cat);
-  return 1;
+  return true;
 }
