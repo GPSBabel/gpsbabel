@@ -24,13 +24,12 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
-#include <cstdint>                     // for int32_t, int16_t, uint16_t
+#include <cstdint>     // for int32_t, int16_t, uint16_t
 
-#include <QString>                     // for QString
+#include <QString>     // for QString
 
 #include "defs.h"
-#include "formspec.h"                  // for FsChainFind, kFsGmsd, FormatSpecificData
-#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "formspec.h"  // for FormatSpecificData, kFsGmsd, FormatSpecificDataList
 
 
 /* this order is used by most devices */
@@ -219,16 +218,11 @@ garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(void** dest, const void* src);
 
-/* for GPX */
-void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
+/* ..convert_category: returns true=OK; false=Unable to convert category */
+bool garmin_fs_convert_category(const QString& category_name, uint16_t* category);
 
-/* common garmin_fs utilities */
-
-/* ..convert_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_convert_category(const char* category_name, uint16_t* category);
-
-/* ..merge_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* waypt);
+/* ..merge_category: returns true=OK; false=Unable to convert category */
+bool garmin_fs_merge_category(const QString& category_name, Waypoint* waypt);
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
 
