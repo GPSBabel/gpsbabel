@@ -221,7 +221,7 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class < 0x80) {
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
@@ -528,7 +528,7 @@ write_waypt(const Waypoint* wpt)
 {
   const char* wpt_type;
 
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   int i = garmin_fs_t::get_display(gmsd, 0);
   if (i > GT_DISPLAY_MODE_MAX) {

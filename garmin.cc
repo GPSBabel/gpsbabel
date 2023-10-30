@@ -1275,7 +1275,7 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
 static void
 garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   (void)protoid; // unused for now.
 

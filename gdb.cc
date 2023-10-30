@@ -1179,7 +1179,7 @@ GdbFormat::gdb_check_waypt(Waypoint* wpt)
 
 void
 GdbFormat::write_waypoint(
-  const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
+  const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd,
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1376,7 +1376,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
     }
 
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
     gdb_write_cstr((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
@@ -1549,7 +1549,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     fout = ftmp;
 
     /* prepare the waypoint */
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     int wpt_class = garmin_fs_t::get_wpt_class(gmsd, -1);
     if (wpt_class == -1) {

@@ -1113,7 +1113,7 @@ void
 UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     unicsv_outp_flags[fld_shortname] = true;
@@ -1264,7 +1264,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (unicsv_datum_idx == kDautmWGS84) {
     lat = wpt->latitude;

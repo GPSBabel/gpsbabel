@@ -700,7 +700,7 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
   res = 23;  /* bounds, ... of tag 0x80008 */
 
   foreach (Waypoint* wpt, data->waypt_list) {
-    garmin_fs_t* gmsd;
+    const garmin_fs_t* gmsd;
 
     res += 12;    /* tag/sz/sub-sz */
     res += 19;    /* poi fixed size */
