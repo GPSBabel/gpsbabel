@@ -345,11 +345,7 @@ make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc
     result = QDateTime(QDate(1970, 1, 1), time, timespec, offset);
   } else if (date.isValid()) {
     //  no time, use start of day in the given Qt::TimeSpec.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    result = QDateTime(date, QTime(0,0), timespec, offset);
-#else
     result = date.startOfDay(timespec, offset);
-#endif
   }
 
   return result;

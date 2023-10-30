@@ -1635,15 +1635,11 @@ void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
       if (fs_igc->acz.has_value()) {
         track_traits[static_cast<int>(wp_field::igc_acz)] = true;
       }
-      if constexpr(kIncludeIGCSIU) {
-        if (fs_igc->siu.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_siu)] = true;
-        }
+      if (fs_igc->siu.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_siu)] = true;
       }
-      if constexpr(kIncludeIGCTRT) {
-        if (fs_igc->trt.has_value()) {
-          track_traits[static_cast<int>(wp_field::igc_trt)] = true;
-        }
+      if (fs_igc->trt.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_trt)] = true;
       }
     }
   }

@@ -37,7 +37,8 @@
 #include <QHash>                 // for QHash
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"              // for Format
+#include "formspec.h"            // for FormatSpecificData, kFsIGC
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
@@ -78,8 +79,14 @@ public:
     ext_rec_gfo = 8,  // G Force?
     ext_rec_siu = 9,  // Satellites In Use
     ext_rec_acz = 10,  // Z Acceleration
-
   };
+
+  // Qt5 doesn't have a qHash function for scoped enumerations.
+  // Qt6 falls back to std::hash, but it may not use the seed.
+  friend qhash_result_t qHash(const igc_ext_type_t& key, qhash_result_t seed = 0) noexcept
+  {
+    return qHash(static_cast<std::underlying_type<igc_ext_type_t>::type>(key), seed);
+  }
 
   QVector<arglist_t>* get_args() override
   {
@@ -129,6 +136,30 @@ private:
 
     rec_none = 0,		// No record
     rec_bad = 1,		// Bad record
+  };
+
+  char* opt_enl{nullptr};
+  char* opt_tas{nullptr};
+  char* opt_vat{nullptr};
+  char* opt_oat{nullptr};
+  char* opt_trt{nullptr};
+  char* opt_gsp{nullptr};
+  char* opt_fxa{nullptr};
+  char* opt_siu{nullptr};
+  char* opt_acz{nullptr};
+  char* opt_gfo{nullptr};
+
+  const QHash<igc_ext_type_t, char**> ext_option_map = {
+    {igc_ext_type_t::ext_rec_enl, &opt_enl},
+    {igc_ext_type_t::ext_rec_tas, &opt_tas},
+    {igc_ext_type_t::ext_rec_vat, &opt_vat},
+    {igc_ext_type_t::ext_rec_oat, &opt_oat},
+    {igc_ext_type_t::ext_rec_trt, &opt_trt},
+    {igc_ext_type_t::ext_rec_gsp, &opt_gsp},
+    {igc_ext_type_t::ext_rec_fxa, &opt_fxa},
+    {igc_ext_type_t::ext_rec_gfo, &opt_gfo},
+    {igc_ext_type_t::ext_rec_siu, &opt_siu},
+    {igc_ext_type_t::ext_rec_acz, &opt_acz},
   };
 
   const QHash<QString, igc_ext_type_t> igc_extension_map{
@@ -268,7 +299,47 @@ private:
       "timeadj", &timeadj,
       "(integer sec or 'auto') Barograph to GPS time diff",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-    }
+    },
+    {
+      "ENL", &opt_enl, "Engine Noise (ENL; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TAS", &opt_tas, "True Airspeed (TAS; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "VAT", &opt_vat, "Total Energy Vario (VAT; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "OAT", &opt_oat, "Outside Air Temperature (OAT; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TRT", &opt_trt, "True Track (TRT; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GSP", &opt_gsp, "Ground Speed (GSP; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "FXA", &opt_fxa, "Fix Accuracy (FXA; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "SIU", &opt_siu, "# Of Sats (SIU; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "ACZ", &opt_acz, "Z Acceleration (ACZ; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GFO", &opt_gfo, "G Force? (GFO; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
   };
 };
 /*
