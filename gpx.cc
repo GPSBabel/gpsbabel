@@ -47,7 +47,7 @@
 #include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc, garmin_fs_merge_category, garmin_fs_xml_fprint
+#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc, garmin_fs_merge_category
 #include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
 #include "geocache.h"                       // for Geocache, Geocache::UtfSt...
 #include "mkshort.h"                        // for MakeShort
@@ -1330,7 +1330,6 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
 {
   assert(gpx_write_version >= gpx_1_1);
 
-
   writer->stackOptionalStartElement(QStringLiteral("extensions"));
 
   if (opt_humminbirdext) {
@@ -1347,6 +1346,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
     // Although not required by the schema we assume that gpxx:RoutePointExtension must be a child of gpx:rtept.
     // Although not required by the schema we assume that gpxx:TrackPointExtension must be a child of gpx:trkpt.
     // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
+    garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
     switch (point_type) {
     case gpxpt_waypoint:
       writer->stackOptionalStartElement(QStringLiteral("gpxx:WaypointExtension"));
@@ -1359,10 +1359,48 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
       if (waypointp->depth_has_value()) {
         writer->stackTextElement(QStringLiteral("gpxx:Depth"), toString(waypointp->depth_value()));
       }
+
+      if (garmin_fs_t::has_display(gmsd)) {
+        const char* cx;
+        switch (gmsd->display) {
+        case gt_display_mode_symbol:
+          cx = "SymbolOnly";
+          break;
+        case gt_display_mode_symbol_and_comment:
+          cx = "SymbolAndDescription";
+          break;
+        default:
+          cx = "SymbolAndName";
+          break;
+        }
+        writer->stackTextElement(QStringLiteral("gpxx:DisplayMode"), cx);
+      }
+
+      if (garmin_fs_t::has_category(gmsd)) {
+        uint16_t cx = gmsd->category;
+        writer->stackStartElement(QStringLiteral("gpxx:Categories"));
+        for (int i = 0; i < 16; i++) {
+          if (cx & 1) {
+            writer->stackTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
+          }
+          cx = cx >> 1;
+        }
+        writer->stackEndElement(); // gpxx:Categories
+      }
+
+      writer->stackOptionalStartElement(QStringLiteral("gpxx:Address"));
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:StreetAddress"), garmin_fs_t::get_addr(gmsd, nullptr));
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:City"), garmin_fs_t::get_city(gmsd, nullptr));
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:State"), garmin_fs_t::get_state(gmsd, nullptr));
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:Country"), garmin_fs_t::get_country(gmsd, nullptr));
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:PostalCode"), garmin_fs_t::get_postal_code(gmsd, nullptr));
+      writer->stackEndElement(); // gpxx:Address
+
+      writer->stackOptionalTextElement(QStringLiteral("gpxx:PhoneNumber"), garmin_fs_t::get_phone_nr(gmsd, nullptr));
+
       writer->stackEndElement(); // gpxx:WaypointExtension
       break;
-    case gpxpt_route: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
+    case gpxpt_route:
       if (gmsd != nullptr && gmsd->ilinks != nullptr) {
         writer->stackOptionalStartElement(QStringLiteral("gpxx:RoutePointExtension"));
         garmin_ilink_t* link = gmsd->ilinks;
@@ -1379,8 +1417,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
         }
         writer->stackEndElement(); // gpxx:RoutePointExtension
       }
-    }
-    break;
+      break;
     case gpxpt_track:
       // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
       writer->stackOptionalStartElement(QStringLiteral("gpxtpx:TrackPointExtension"));
@@ -1451,23 +1488,8 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
 
   if (!(opt_humminbirdext || opt_garminext)) {
     const auto* fs_gpx = reinterpret_cast<fs_xml*>(waypointp->fs.FsChainFind(kFsGpx));
-    auto* gmsd = garmin_fs_t::find(waypointp); /* gARmIN sPECIAL dATA */
-    if (fs_gpx) {
-      if (! gmsd) {
-        if (fs_gpx->tag) {
-          if (gpx_write_version > gpx_1_0) {
-            writer->writeStartElement("extensions");
-          }
-          fprint_xml_chain(fs_gpx->tag);
-          if (gpx_write_version > gpx_1_0) {
-            writer->writeEndElement();
-          }
-        }
-      }
-    }
-    if (gmsd && (gpx_write_version > gpx_1_0)) {
-      /* MapSource doesn't accepts extensions from 1.0 */
-      garmin_fs_xml_fprint(waypointp, writer);
+    if (fs_gpx && fs_gpx->tag) {
+      fprint_xml_chain(fs_gpx->tag);
     }
   } else {
     gpx_write_common_extensions(waypointp, gpxpt_waypoint);
@@ -1494,7 +1516,7 @@ GpxFormat::gpx_track_hdr(const route_head* rte)
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag);
     }
-  } else if (opt_garminext && (gpx_write_version > gpx_1_0)) {
+  } else if (opt_garminext) {
     if (rte->line_color.bbggrr > unknown_color) {
       int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
       if (ci > 0) {
@@ -1582,7 +1604,7 @@ GpxFormat::gpx_route_hdr(const route_head* rte) const
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag);
     }
-  } else if (opt_garminext && (gpx_write_version > gpx_1_0)) {
+  } else if (opt_garminext) {
     if (rte->line_color.bbggrr > unknown_color) {
       int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
       if (ci > 0) {

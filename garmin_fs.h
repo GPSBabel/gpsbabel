@@ -219,11 +219,6 @@ garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(void** dest, const void* src);
 
-/* for GPX */
-void garmin_fs_xml_fprint(const Waypoint* waypt, gpsbabel::XmlStreamWriter*);
-
-/* common garmin_fs utilities */
-
 /* ..convert_category: returns 1=OK; 0=Unable to convert category */
 bool garmin_fs_convert_category(const QString& category_name, uint16_t* category);
 

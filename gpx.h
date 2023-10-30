@@ -76,12 +76,12 @@ private:
    */
   struct gpx_wpt_fsdata : FormatSpecificData {
     gpx_wpt_fsdata() : FormatSpecificData(kFsGpxWpt) {}
-  
+
     gpx_wpt_fsdata* clone() const override
     {
       return new gpx_wpt_fsdata(*this);
     }
-  
+
     QString magvar;
     QString src;
     QString type;
@@ -200,8 +200,14 @@ private:
   };
 
   struct tag_mapping {
-    tag_type type{tt_unknown};		/* enum from above for this tag */
-    bool passthrough{true};		/* true if we don't generate this */
+    tag_type type{tt_unknown}; /* enum from above for this tag */
+    /*
+     * passthrough should be true for
+     * 1) The gpx 1.1 extensions element and any descendents.
+     * 2) Any element from a foreign (non gpx) namespace and any descendents.
+     *    This rule is necessary for gpx 1.0.
+     */
+    bool passthrough{true};
   };
 
 
@@ -374,29 +380,29 @@ private:
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", {tt_cache_log_type, true}},
     {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", {tt_cache_log_date, true}},
 
-    {"/gpx/wpt/extensions", {tt_wpt_extensions, false}},
+    {"/gpx/wpt/extensions", {tt_wpt_extensions, true}},
 
-    {GARMIN_WPT_EXT, {tt_garmin_wpt_extensions, false}},
-    {GARMIN_WPT_EXT "/gpxx:Proximity", {tt_garmin_wpt_proximity, false}},
-    {GARMIN_WPT_EXT "/gpxx:Temperature", {tt_garmin_wpt_temperature, false}},
+    {GARMIN_WPT_EXT, {tt_garmin_wpt_extensions, true}},
+    {GARMIN_WPT_EXT "/gpxx:Proximity", {tt_garmin_wpt_proximity, true}},
+    {GARMIN_WPT_EXT "/gpxx:Temperature", {tt_garmin_wpt_temperature, true}},
     {GARMIN_TRKPT_EXT "/gpxtpx:atemp", {tt_garmin_wpt_temperature, true}},
-    {GARMIN_WPT_EXT "/gpxx:Depth", {tt_garmin_wpt_depth, false}},
-    {GARMIN_WPT_EXT "/gpxx:DisplayMode", {tt_garmin_wpt_display_mode, false}},
-    {GARMIN_WPT_EXT "/gpxx:Categories", {tt_garmin_wpt_categories, false}},
-    {GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", {tt_garmin_wpt_category, false}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", {tt_garmin_wpt_addr, false}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", {tt_garmin_wpt_city, false}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", {tt_garmin_wpt_state, false}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", {tt_garmin_wpt_country, false}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", {tt_garmin_wpt_postal_code, false}},
-    {GARMIN_WPT_EXT "/gpxx:PhoneNumber", {tt_garmin_wpt_phone_nr, false}},
+    {GARMIN_WPT_EXT "/gpxx:Depth", {tt_garmin_wpt_depth, true}},
+    {GARMIN_WPT_EXT "/gpxx:DisplayMode", {tt_garmin_wpt_display_mode, true}},
+    {GARMIN_WPT_EXT "/gpxx:Categories", {tt_garmin_wpt_categories, true}},
+    {GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", {tt_garmin_wpt_category, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", {tt_garmin_wpt_addr, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", {tt_garmin_wpt_city, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", {tt_garmin_wpt_state, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", {tt_garmin_wpt_country, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", {tt_garmin_wpt_postal_code, true}},
+    {GARMIN_WPT_EXT "/gpxx:PhoneNumber", {tt_garmin_wpt_phone_nr, true}},
 
     // In Garmin space, but in core of waypoint.
     {GARMIN_TRKPT_EXT "/gpxtpx:hr", {tt_trk_trkseg_trkpt_heartrate, true}},
     {GARMIN_TRKPT_EXT "/gpxtpx:cad", {tt_trk_trkseg_trkpt_cadence, true}},
 
-    {"/gpx/wpt/extensions/h:depth", {tt_humminbird_wpt_depth, false}},	// in centimeters.
-    {"/gpx/wpt/extensions/h:status", {tt_humminbird_wpt_status, false}},
+    {"/gpx/wpt/extensions/h:depth", {tt_humminbird_wpt_depth, true}},	// in centimeters.
+    {"/gpx/wpt/extensions/h:status", {tt_humminbird_wpt_status, true}},
 
     {"/gpx/rte", {tt_rte, false}},
     {"/gpx/rte/name", {tt_rte_name, false}},
@@ -427,7 +433,7 @@ private:
     {"/gpx/trk/trkseg/trkpt/course", {tt_trk_trkseg_trkpt_course, false}},
     {"/gpx/trk/trkseg/trkpt/speed", {tt_trk_trkseg_trkpt_speed, false}},
 
-    {"/gpx/trk/trkseg/trkpt/extensions/h:depth", {tt_humminbird_trk_trkseg_trkpt_depth, false}},	// in centimeters.
+    {"/gpx/trk/trkseg/trkpt/extensions/h:depth", {tt_humminbird_trk_trkseg_trkpt_depth, true}},	// in centimeters.
 
     /* Common to tracks, routes, and waypts */
     GPXWPTTYPETAG("ele", tt_wpttype_ele, false),
