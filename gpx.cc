@@ -47,7 +47,7 @@
 #include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_merge_category
+#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
 #include "geocache.h"                       // for Geocache, Geocache::UtfSt...
 #include "mkshort.h"                        // for MakeShort
@@ -243,7 +243,10 @@ GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
     }
     break;
   case tag_type::garmin_wpt_category:
-    if (!garmin_fs_merge_category(text, waypt)) {
+    if (auto cat = garmin_fs_t::convert_category(text); cat.has_value()) {
+      cat = *cat | (garmin_fs_t::get_category(gmsd, 0));
+      garmin_fs_t::set_category(gmsd, *cat);
+    } else {
       // There's nothing a user can really do about this (well, they could
       // create a gpsbabel.ini that mapped them to garmin category numbers
       // but that feature is so obscure and used in so few outputs that
@@ -1379,11 +1382,9 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
       if (garmin_fs_t::has_category(gmsd)) {
         uint16_t cx = gmsd->category;
         writer->stackStartElement(QStringLiteral("gpxx:Categories"));
-        for (int i = 0; i < 16; i++) {
-          if (cx & 1) {
-            writer->stackTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
-          }
-          cx = cx >> 1;
+        const QStringList categoryList = garmin_fs_t::print_categories(cx);
+        for (const auto& text : categoryList) {
+            writer->stackTextElement(QStringLiteral("gpxx:Category"), text);
         }
         writer->stackEndElement(); // gpxx:Categories
       }

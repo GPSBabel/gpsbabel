@@ -25,6 +25,7 @@
 #define GARMIN_FS_H
 
 #include <cstdint>     // for int32_t, int16_t, uint16_t
+#include <optional>    // for optional
 
 #include <QList>       // for QList
 #include <QString>     // for QString
@@ -96,7 +97,7 @@ public:
 
 class garmin_fs_t : public FormatSpecificData {
 public:
-  static constexpr char GMSD_SECTION_CATEGORIES[] = "Garmin Categories";
+  /* Data Members */
 
   garmin_fs_flags_t flags;
 
@@ -125,10 +126,12 @@ public:
   char subclass[22]{};
 #endif
 
-public:
+  /* Special Member Functions */
+
   garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
   explicit garmin_fs_t(int p) : garmin_fs_t() {protocol = p;}
 
+  /* Member Functions */
 
   garmin_fs_t* clone() const override
   {
@@ -138,6 +141,9 @@ public:
   static garmin_fs_t* find(const Waypoint* wpt) {
     return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }
+
+  static std::optional<uint16_t> convert_category(const QString& category_name);
+  static QStringList print_categories(uint16_t categories);
 
 #define GEN_GMSD_METHODS(field) \
   static bool has_##field(const garmin_fs_t* gmsd) \
@@ -215,12 +221,9 @@ public:
 
 #undef GEN_GMSD_STR_METHODS
 
-/* ..convert_category: returns true=OK; false=Unable to convert category */
-static bool convert_category(const QString& category_name, uint16_t* category);
+private:
+  /* Constants */
 
+  static constexpr char kGmsdSectionCategories[] = "Garmin Categories";
 };
-
-/* ..merge_category: returns true=OK; false=Unable to convert category */
-bool garmin_fs_merge_category(const QString& category_name, Waypoint* waypt);
-
 #endif

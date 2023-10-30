@@ -79,6 +79,13 @@ compare ${REFERENCE}/gpxpassthrough10~gpx.gpx ${TMPDIR}/gpxpassthrough10~gpx.gpx
 gpsbabel -i gpx -f ${REFERENCE}/gpxpassthrough11.gpx -o gpx -F ${TMPDIR}/gpxpassthrough11~gpx.gpx
 compare ${REFERENCE}/gpxpassthrough11~gpx.gpx ${TMPDIR}/gpxpassthrough11~gpx.gpx
 
+# garmin specific categories
+gpsbabel -p gpsbabel-sample.ini -i gpx -f ${REFERENCE}/garmincategories.gpx  -o garmin_txt -F ${TMPDIR}/garmincategories~gpx.txt
+compare ${REFERENCE}/garmincategories.txt ${TMPDIR}/garmincategories~gpx.txt
+
+gpsbabel -p gpsbabel-sample.ini -i garmin_txt -f ${REFERENCE}/garmincategories.txt -o gpx,garminextensions -F ${TMPDIR}/garmincategories~txt.gpx
+compare ${REFERENCE}/garmincategories.gpx ${TMPDIR}/garmincategories~txt.gpx
+
 if [ -z "${VALGRIND}" ]; then
   set -e
   if command -v xmllint > /dev/null;

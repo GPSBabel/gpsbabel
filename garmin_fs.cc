@@ -29,52 +29,61 @@
 #include "inifile.h"  // for inifile_readstr
 
 
-#define MYNAME "garmin_fs"
-
-
-bool
-garmin_fs_t::convert_category(const QString& category_name, uint16_t* category)
+std::optional<uint16_t>
+garmin_fs_t::convert_category(const QString& category_name)
 {
+  std::optional<uint16_t> category;
+
   // Is the name  "Category" followed by a number? Use that number.
   if (category_name.startsWith(u"Category ", Qt::CaseInsensitive)) {
     bool ok;
     int i = category_name.mid(9).toInt(&ok);
     if (ok && (i >= 1) && (i <= 16)) {
-      *category = (1 << --i);
-      return true;
+      category = (1 << --i);
+      return category;
     }
   }
   if (global_opts.inifile != nullptr) {
     // Do we have a gpsbabel.ini that maps category names to category #'s?
     for (int i = 0; i < 16; i++) {
       QString key = QString::number(i + 1);
-      QString c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
+      QString c = inifile_readstr(global_opts.inifile, kGmsdSectionCategories, key);
       if (c.compare(category_name, Qt::CaseInsensitive) == 0) {
-        *category = (1 << i);
-        return true;
+        category = (1 << i);
+        return category;
       }
     }
   }
-  return false;
+  return category;
 }
 
-bool
-garmin_fs_merge_category(const QString& category_name, Waypoint* waypt)
+QStringList
+garmin_fs_t::print_categories(uint16_t categories)
 {
-  uint16_t cat;
+  QStringList categoryList;
 
-  // Attempt to get a textual category name to a category number.
-  if (!garmin_fs_t::convert_category(category_name, &cat)) {
-    return false;
+  if (categories == 0) {
+    return categoryList;
   }
 
-  garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
-  cat = cat | (garmin_fs_t::get_category(gmsd, 0));
+  for (int i = 0; i < 16; i++) {
+    if ((categories & 1) != 0) {
+      QString c;
+      if (global_opts.inifile != nullptr) {
+        QString key = QString::number(i + 1);
+        c = inifile_readstr(global_opts.inifile, kGmsdSectionCategories, key);
+      }
 
-  if (gmsd == nullptr) {
-    gmsd = new garmin_fs_t(-1);
-    waypt->fs.FsChainAdd(gmsd);
+      if (c.isNull()) {
+        categoryList << QString::asprintf("Category %d", i+1);
+      }
+//				*fout << QString::asprintf("%s", gps_categories[i]);
+      else {
+        categoryList << c;
+      }
+
+    }
+    categories = categories >> 1;
   }
-  garmin_fs_t::set_category(gmsd, cat);
-  return true;
+  return categoryList;
 }

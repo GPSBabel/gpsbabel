@@ -623,7 +623,7 @@ convert_human_date_format(const char* human_datef)
     }
 
     if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format!", *cin);
+      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
     }
   }
   QString rv(result);
@@ -717,7 +717,7 @@ convert_human_time_format(const char* human_timef)
     }
 
     if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format!", *cin);
+      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
     }
   }
   QString rv(result);
