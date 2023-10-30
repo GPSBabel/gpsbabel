@@ -96,6 +96,8 @@ public:
 
 class garmin_fs_t : public FormatSpecificData {
 public:
+  static constexpr char GMSD_SECTION_CATEGORIES[] = "Garmin Categories";
+
   garmin_fs_flags_t flags;
 
   int protocol{0};		/* ... used by device (-1 is MapSource) */
@@ -212,14 +214,13 @@ public:
   GEN_GMSD_STR_METHODS(email)
 
 #undef GEN_GMSD_STR_METHODS
-};
 
 /* ..convert_category: returns true=OK; false=Unable to convert category */
-bool garmin_fs_convert_category(const QString& category_name, uint16_t* category);
+static bool convert_category(const QString& category_name, uint16_t* category);
+
+};
 
 /* ..merge_category: returns true=OK; false=Unable to convert category */
 bool garmin_fs_merge_category(const QString& category_name, Waypoint* waypt);
-
-#define GMSD_SECTION_CATEGORIES "Garmin Categories"
 
 #endif

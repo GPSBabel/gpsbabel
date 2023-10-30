@@ -33,7 +33,7 @@
 
 
 bool
-garmin_fs_convert_category(const QString& category_name, uint16_t* category)
+garmin_fs_t::convert_category(const QString& category_name, uint16_t* category)
 {
   // Is the name  "Category" followed by a number? Use that number.
   if (category_name.startsWith(u"Category ", Qt::CaseInsensitive)) {
@@ -64,7 +64,7 @@ garmin_fs_merge_category(const QString& category_name, Waypoint* waypt)
   uint16_t cat;
 
   // Attempt to get a textual category name to a category number.
-  if (!garmin_fs_convert_category(category_name, &cat)) {
+  if (!garmin_fs_t::convert_category(category_name, &cat)) {
     return false;
   }
 
