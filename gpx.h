@@ -95,112 +95,112 @@ private:
     gpxpt_route
   };
 
-  enum tag_type {
-    tt_unknown = 0,
-    tt_gpx,
+  enum class tag_type {
+    unknown = 0,
+    gpx,
 
-    tt_name,		/* Optional file-level info */
-    tt_desc,
-    tt_author,
-    tt_email,
-    tt_url,
-    tt_urlname,
-    tt_keywords,
-    tt_link,
-    tt_link_text,
-    tt_link_type,
+    name,		/* Optional file-level info */
+    desc,
+    author,
+    email,
+    url,
+    urlname,
+    keywords,
+    link,
+    link_text,
+    link_type,
 
-    tt_wpt,
-    tt_wpttype_ele,
-    tt_wpttype_time,
-    tt_wpttype_magvar,
-    tt_wpttype_geoidheight,
-    tt_wpttype_name,
-    tt_wpttype_cmt,
-    tt_wpttype_desc,
-    tt_wpttype_src,
-    tt_wpttype_url,		/* Not in GPX 1.1 */
-    tt_wpttype_urlname,	/* Not in GPX 1.1 */
-    tt_wpttype_link,		/* New in GPX 1.1 */
-    tt_wpttype_link_text,	/* New in GPX 1.1 */
-    tt_wpttype_link_type,	/* New in GPX 1.1 */
-    tt_wpttype_sym,
-    tt_wpttype_type,
-    tt_wpttype_fix,
-    tt_wpttype_sat,
-    tt_wpttype_hdop,		/* HDOPS are common for all three */
-    tt_wpttype_vdop,		/* VDOPS are common for all three */
-    tt_wpttype_pdop,		/* PDOPS are common for all three */
-    tt_wpttype_ageofdgpsdata,
-    tt_wpttype_dgpsid,
-    tt_cache,
-    tt_cache_name,
-    tt_cache_container,
-    tt_cache_type,
-    tt_cache_difficulty,
-    tt_cache_terrain,
-    tt_cache_hint,
-    tt_cache_desc_short,
-    tt_cache_desc_long,
-    tt_cache_log_wpt,
-    tt_cache_log_type,
-    tt_cache_log_date,
-    tt_cache_placer,
-    tt_cache_favorite_points,
-    tt_cache_personal_note,
+    wpt,
+    wpttype_ele,
+    wpttype_time,
+    wpttype_magvar,
+    wpttype_geoidheight,
+    wpttype_name,
+    wpttype_cmt,
+    wpttype_desc,
+    wpttype_src,
+    wpttype_url,		/* Not in GPX 1.1 */
+    wpttype_urlname,	/* Not in GPX 1.1 */
+    wpttype_link,		/* New in GPX 1.1 */
+    wpttype_link_text,	/* New in GPX 1.1 */
+    wpttype_link_type,	/* New in GPX 1.1 */
+    wpttype_sym,
+    wpttype_type,
+    wpttype_fix,
+    wpttype_sat,
+    wpttype_hdop,		/* HDOPS are common for all three */
+    wpttype_vdop,		/* VDOPS are common for all three */
+    wpttype_pdop,		/* PDOPS are common for all three */
+    wpttype_ageofdgpsdata,
+    wpttype_dgpsid,
+    cache,
+    cache_name,
+    cache_container,
+    cache_type,
+    cache_difficulty,
+    cache_terrain,
+    cache_hint,
+    cache_desc_short,
+    cache_desc_long,
+    cache_log_wpt,
+    cache_log_type,
+    cache_log_date,
+    cache_placer,
+    cache_favorite_points,
+    cache_personal_note,
 
-    tt_wpt_extensions,
+    wpt_extensions,
 
-    tt_garmin_wpt_extensions,
-    tt_garmin_wpt_proximity,
-    tt_garmin_wpt_temperature,
-    tt_garmin_wpt_depth,
-    tt_garmin_wpt_display_mode,
-    tt_garmin_wpt_categories,
-    tt_garmin_wpt_category,
-    tt_garmin_wpt_addr,
-    tt_garmin_wpt_city,
-    tt_garmin_wpt_state,
-    tt_garmin_wpt_country,
-    tt_garmin_wpt_postal_code,
-    tt_garmin_wpt_phone_nr,
+    garmin_wpt_extensions,
+    garmin_wpt_proximity,
+    garmin_wpt_temperature,
+    garmin_wpt_depth,
+    garmin_wpt_display_mode,
+    garmin_wpt_categories,
+    garmin_wpt_category,
+    garmin_wpt_addr,
+    garmin_wpt_city,
+    garmin_wpt_state,
+    garmin_wpt_country,
+    garmin_wpt_postal_code,
+    garmin_wpt_phone_nr,
 
-    tt_rte,
-    tt_rte_name,
-    tt_rte_desc,
-    tt_rte_cmt,
-    tt_rte_url,		/* Not in GPX 1.1 */
-    tt_rte_urlname,	/* Not in GPX 1.1 */
-    tt_rte_link,		/* New in GPX 1.1 */
-    tt_rte_link_text,	/* New in GPX 1.1 */
-    tt_rte_link_type,	/* New in GPX 1.1 */
-    tt_rte_number,
-    tt_garmin_rte_display_color,
-    tt_rte_rtept,
-    tt_trk,
-    tt_trk_desc,
-    tt_trk_name,
-    tt_trk_trkseg,
-    tt_trk_url,		/* Not in GPX 1.1 */
-    tt_trk_urlname,	/* Not in GPX 1.1 */
-    tt_trk_link,		/* New in GPX 1.1 */
-    tt_trk_link_text,	/* New in GPX 1.1 */
-    tt_trk_link_type,	/* New in GPX 1.1 */
-    tt_trk_number,
-    tt_garmin_trk_display_color,
-    tt_trk_trkseg_trkpt,
-    tt_trk_trkseg_trkpt_course,	/* Not in GPX 1.1 */
-    tt_trk_trkseg_trkpt_speed,	/* Not in GPX 1.1 */
-    tt_trk_trkseg_trkpt_heartrate,
-    tt_trk_trkseg_trkpt_cadence,
+    rte,
+    rte_name,
+    rte_desc,
+    rte_cmt,
+    rte_url,		/* Not in GPX 1.1 */
+    rte_urlname,	/* Not in GPX 1.1 */
+    rte_link,		/* New in GPX 1.1 */
+    rte_link_text,	/* New in GPX 1.1 */
+    rte_link_type,	/* New in GPX 1.1 */
+    rte_number,
+    garmin_rte_display_color,
+    rte_rtept,
+    trk,
+    trk_desc,
+    trk_name,
+    trk_trkseg,
+    trk_url,		/* Not in GPX 1.1 */
+    trk_urlname,	/* Not in GPX 1.1 */
+    trk_link,		/* New in GPX 1.1 */
+    trk_link_text,	/* New in GPX 1.1 */
+    trk_link_type,	/* New in GPX 1.1 */
+    trk_number,
+    garmin_trk_display_color,
+    trk_trkseg_trkpt,
+    trk_trkseg_trkpt_course,	/* Not in GPX 1.1 */
+    trk_trkseg_trkpt_speed,	/* Not in GPX 1.1 */
+    trk_trkseg_trkpt_heartrate,
+    trk_trkseg_trkpt_cadence,
 
-    tt_humminbird_wpt_depth,
-    tt_humminbird_wpt_status,
-    tt_humminbird_trk_trkseg_trkpt_depth,
+    humminbird_wpt_depth,
+    humminbird_wpt_status,
+    humminbird_trk_trkseg_trkpt_depth,
   };
 
   struct tag_mapping {
-    tag_type type{tt_unknown}; /* enum from above for this tag */
+    tag_type type{tag_type::unknown}; /* enum from above for this tag */
     /*
      * passthrough should be true for
      * 1) The gpx 1.1 extensions element and any descendents.
@@ -347,117 +347,117 @@ private:
 
 // Maintain a fast mapping from full tag names to the struct above.
   const QHash<QString, tag_mapping> hash = {
-    {"/gpx", {tt_gpx, false}},
-    METATAG(tt_name, "name"),
-    METATAG(tt_desc, "desc"),
-    {"/gpx/author", {tt_author, false}},
-    {"/gpx/email", {tt_email, false}},
-    {"/gpx/url", {tt_url, false}},
-    {"/gpx/urlname", {tt_urlname, false}},
-    METATAG(tt_keywords, "keywords"),
-    {"/gpx/metadata/link", {tt_link, false}},
-    {"/gpx/metadata/link/text", {tt_link_text, false}},
-    {"/gpx/metadata/link/type", {tt_link_type, false}},
+    {"/gpx", {tag_type::gpx, false}},
+    METATAG(tag_type::name, "name"),
+    METATAG(tag_type::desc, "desc"),
+    {"/gpx/author", {tag_type::author, false}},
+    {"/gpx/email", {tag_type::email, false}},
+    {"/gpx/url", {tag_type::url, false}},
+    {"/gpx/urlname", {tag_type::urlname, false}},
+    METATAG(tag_type::keywords, "keywords"),
+    {"/gpx/metadata/link", {tag_type::link, false}},
+    {"/gpx/metadata/link/text", {tag_type::link_text, false}},
+    {"/gpx/metadata/link/type", {tag_type::link_type, false}},
 
-    {"/gpx/wpt", {tt_wpt, false}},
+    {"/gpx/wpt", {tag_type::wpt, false}},
 
     /* Double up the GPX 1.0 and GPX 1.1 styles */
 //	GEOTAG(tt_cache, "cache"),
-    {"/gpx/wpt/groundspeak:cache", {tt_cache, true}},
+    {"/gpx/wpt/groundspeak:cache", {tag_type::cache, true}},
 
-    GEOTAG(tt_cache_name, "name"),
-    GEOTAG(tt_cache_container, "container"),
-    GEOTAG(tt_cache_type, "type"),
-    GEOTAG(tt_cache_difficulty, "difficulty"),
-    GEOTAG(tt_cache_terrain, "terrain"),
-    GEOTAG(tt_cache_hint, "encoded_hints"),
-    GEOTAG(tt_cache_desc_short, "short_description"),
-    GEOTAG(tt_cache_desc_long, "long_description"),
-    GEOTAG(tt_cache_placer, "owner"),
-    GEOTAG(tt_cache_favorite_points, "favorite_points"),
-    GEOTAG(tt_cache_personal_note, "personal_note"),
-    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt", {tt_cache_log_wpt, true}},
-    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", {tt_cache_log_type, true}},
-    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", {tt_cache_log_date, true}},
+    GEOTAG(tag_type::cache_name, "name"),
+    GEOTAG(tag_type::cache_container, "container"),
+    GEOTAG(tag_type::cache_type, "type"),
+    GEOTAG(tag_type::cache_difficulty, "difficulty"),
+    GEOTAG(tag_type::cache_terrain, "terrain"),
+    GEOTAG(tag_type::cache_hint, "encoded_hints"),
+    GEOTAG(tag_type::cache_desc_short, "short_description"),
+    GEOTAG(tag_type::cache_desc_long, "long_description"),
+    GEOTAG(tag_type::cache_placer, "owner"),
+    GEOTAG(tag_type::cache_favorite_points, "favorite_points"),
+    GEOTAG(tag_type::cache_personal_note, "personal_note"),
+    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt", {tag_type::cache_log_wpt, true}},
+    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", {tag_type::cache_log_type, true}},
+    {"/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", {tag_type::cache_log_date, true}},
 
-    {"/gpx/wpt/extensions", {tt_wpt_extensions, true}},
+    {"/gpx/wpt/extensions", {tag_type::wpt_extensions, true}},
 
-    {GARMIN_WPT_EXT, {tt_garmin_wpt_extensions, true}},
-    {GARMIN_WPT_EXT "/gpxx:Proximity", {tt_garmin_wpt_proximity, true}},
-    {GARMIN_WPT_EXT "/gpxx:Temperature", {tt_garmin_wpt_temperature, true}},
-    {GARMIN_TRKPT_EXT "/gpxtpx:atemp", {tt_garmin_wpt_temperature, true}},
-    {GARMIN_WPT_EXT "/gpxx:Depth", {tt_garmin_wpt_depth, true}},
-    {GARMIN_WPT_EXT "/gpxx:DisplayMode", {tt_garmin_wpt_display_mode, true}},
-    {GARMIN_WPT_EXT "/gpxx:Categories", {tt_garmin_wpt_categories, true}},
-    {GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", {tt_garmin_wpt_category, true}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", {tt_garmin_wpt_addr, true}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", {tt_garmin_wpt_city, true}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", {tt_garmin_wpt_state, true}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", {tt_garmin_wpt_country, true}},
-    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", {tt_garmin_wpt_postal_code, true}},
-    {GARMIN_WPT_EXT "/gpxx:PhoneNumber", {tt_garmin_wpt_phone_nr, true}},
+    {GARMIN_WPT_EXT, {tag_type::garmin_wpt_extensions, true}},
+    {GARMIN_WPT_EXT "/gpxx:Proximity", {tag_type::garmin_wpt_proximity, true}},
+    {GARMIN_WPT_EXT "/gpxx:Temperature", {tag_type::garmin_wpt_temperature, true}},
+    {GARMIN_TRKPT_EXT "/gpxtpx:atemp", {tag_type::garmin_wpt_temperature, true}},
+    {GARMIN_WPT_EXT "/gpxx:Depth", {tag_type::garmin_wpt_depth, true}},
+    {GARMIN_WPT_EXT "/gpxx:DisplayMode", {tag_type::garmin_wpt_display_mode, true}},
+    {GARMIN_WPT_EXT "/gpxx:Categories", {tag_type::garmin_wpt_categories, true}},
+    {GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", {tag_type::garmin_wpt_category, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", {tag_type::garmin_wpt_addr, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", {tag_type::garmin_wpt_city, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", {tag_type::garmin_wpt_state, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", {tag_type::garmin_wpt_country, true}},
+    {GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", {tag_type::garmin_wpt_postal_code, true}},
+    {GARMIN_WPT_EXT "/gpxx:PhoneNumber", {tag_type::garmin_wpt_phone_nr, true}},
 
     // In Garmin space, but in core of waypoint.
-    {GARMIN_TRKPT_EXT "/gpxtpx:hr", {tt_trk_trkseg_trkpt_heartrate, true}},
-    {GARMIN_TRKPT_EXT "/gpxtpx:cad", {tt_trk_trkseg_trkpt_cadence, true}},
+    {GARMIN_TRKPT_EXT "/gpxtpx:hr", {tag_type::trk_trkseg_trkpt_heartrate, true}},
+    {GARMIN_TRKPT_EXT "/gpxtpx:cad", {tag_type::trk_trkseg_trkpt_cadence, true}},
 
-    {"/gpx/wpt/extensions/h:depth", {tt_humminbird_wpt_depth, true}},	// in centimeters.
-    {"/gpx/wpt/extensions/h:status", {tt_humminbird_wpt_status, true}},
+    {"/gpx/wpt/extensions/h:depth", {tag_type::humminbird_wpt_depth, true}},	// in centimeters.
+    {"/gpx/wpt/extensions/h:status", {tag_type::humminbird_wpt_status, true}},
 
-    {"/gpx/rte", {tt_rte, false}},
-    {"/gpx/rte/name", {tt_rte_name, false}},
-    {"/gpx/rte/desc", {tt_rte_desc, false}},
-    {"/gpx/rte/url", {tt_rte_url, false}},							/* GPX 1.0 */
-    {"/gpx/rte/urlname", {tt_rte_urlname, false}},			/* GPX 1.0 */
-    {"/gpx/rte/link", {tt_rte_link, false}},						/* GPX 1.1 */
-    {"/gpx/rte/link/text", {tt_rte_link_text, false}},	/* GPX 1.1 */
-    {"/gpx/rte/link/type", {tt_rte_link_type, false}},	/* GPX 1.1 */
-    {"/gpx/rte/number", {tt_rte_number, false}},
-    {GARMIN_RTE_EXT "/gpxx:DisplayColor", {tt_garmin_rte_display_color, true}},
+    {"/gpx/rte", {tag_type::rte, false}},
+    {"/gpx/rte/name", {tag_type::rte_name, false}},
+    {"/gpx/rte/desc", {tag_type::rte_desc, false}},
+    {"/gpx/rte/url", {tag_type::rte_url, false}},							/* GPX 1.0 */
+    {"/gpx/rte/urlname", {tag_type::rte_urlname, false}},			/* GPX 1.0 */
+    {"/gpx/rte/link", {tag_type::rte_link, false}},						/* GPX 1.1 */
+    {"/gpx/rte/link/text", {tag_type::rte_link_text, false}},	/* GPX 1.1 */
+    {"/gpx/rte/link/type", {tag_type::rte_link_type, false}},	/* GPX 1.1 */
+    {"/gpx/rte/number", {tag_type::rte_number, false}},
+    {GARMIN_RTE_EXT "/gpxx:DisplayColor", {tag_type::garmin_rte_display_color, true}},
 
-    {"/gpx/rte/rtept", {tt_rte_rtept, false}},
+    {"/gpx/rte/rtept", {tag_type::rte_rtept, false}},
 
-    {"/gpx/trk", {tt_trk, false}},
-    {"/gpx/trk/name", {tt_trk_name, false}},
-    {"/gpx/trk/desc", {tt_trk_desc, false}},
-    {"/gpx/trk/trkseg", {tt_trk_trkseg, false}},
-    {"/gpx/trk/url", {tt_trk_url, false}},							/* GPX 1.0 */
-    {"/gpx/trk/urlname", {tt_trk_urlname, false}},			/* GPX 1.0 */
-    {"/gpx/trk/link", {tt_trk_link, false}},						/* GPX 1.1 */
-    {"/gpx/trk/link/text", {tt_trk_link_text, false}},	/* GPX 1.1 */
-    {"/gpx/trk/link/type", {tt_trk_link_type, false}},	/* GPX 1.1 */
-    {"/gpx/trk/number", {tt_trk_number, false}},
-    {GARMIN_TRK_EXT "/gpxx:DisplayColor", {tt_garmin_trk_display_color, true}},
+    {"/gpx/trk", {tag_type::trk, false}},
+    {"/gpx/trk/name", {tag_type::trk_name, false}},
+    {"/gpx/trk/desc", {tag_type::trk_desc, false}},
+    {"/gpx/trk/trkseg", {tag_type::trk_trkseg, false}},
+    {"/gpx/trk/url", {tag_type::trk_url, false}},							/* GPX 1.0 */
+    {"/gpx/trk/urlname", {tag_type::trk_urlname, false}},			/* GPX 1.0 */
+    {"/gpx/trk/link", {tag_type::trk_link, false}},						/* GPX 1.1 */
+    {"/gpx/trk/link/text", {tag_type::trk_link_text, false}},	/* GPX 1.1 */
+    {"/gpx/trk/link/type", {tag_type::trk_link_type, false}},	/* GPX 1.1 */
+    {"/gpx/trk/number", {tag_type::trk_number, false}},
+    {GARMIN_TRK_EXT "/gpxx:DisplayColor", {tag_type::garmin_trk_display_color, true}},
 
-    {"/gpx/trk/trkseg/trkpt", {tt_trk_trkseg_trkpt, false}},
-    {"/gpx/trk/trkseg/trkpt/course", {tt_trk_trkseg_trkpt_course, false}},
-    {"/gpx/trk/trkseg/trkpt/speed", {tt_trk_trkseg_trkpt_speed, false}},
+    {"/gpx/trk/trkseg/trkpt", {tag_type::trk_trkseg_trkpt, false}},
+    {"/gpx/trk/trkseg/trkpt/course", {tag_type::trk_trkseg_trkpt_course, false}},
+    {"/gpx/trk/trkseg/trkpt/speed", {tag_type::trk_trkseg_trkpt_speed, false}},
 
-    {"/gpx/trk/trkseg/trkpt/extensions/h:depth", {tt_humminbird_trk_trkseg_trkpt_depth, true}},	// in centimeters.
+    {"/gpx/trk/trkseg/trkpt/extensions/h:depth", {tag_type::humminbird_trk_trkseg_trkpt_depth, true}},	// in centimeters.
 
     /* Common to tracks, routes, and waypts */
-    GPXWPTTYPETAG("ele", tt_wpttype_ele, false),
-    GPXWPTTYPETAG("time", tt_wpttype_time, false),
-    GPXWPTTYPETAG("magvar", tt_wpttype_magvar, false),
-    GPXWPTTYPETAG("geoidheight", tt_wpttype_geoidheight, false),
-    GPXWPTTYPETAG("name", tt_wpttype_name, false),
-    GPXWPTTYPETAG("cmt", tt_wpttype_cmt, false),
-    GPXWPTTYPETAG("desc", tt_wpttype_desc, false),
-    GPXWPTTYPETAG("src", tt_wpttype_src, false),
-    GPXWPTTYPETAG("url", tt_wpttype_url, false),							/* GPX 1.0 */
-    GPXWPTTYPETAG("urlname", tt_wpttype_urlname, false),			/* GPX 1.0 */
-    GPXWPTTYPETAG("link", tt_wpttype_link, false),						/* GPX 1.1 */
-    GPXWPTTYPETAG("link/text", tt_wpttype_link_text, false),	/* GPX 1.1 */
-    GPXWPTTYPETAG("link/type", tt_wpttype_link_type, false),	/* GPX 1.1 */
-    GPXWPTTYPETAG("sym", tt_wpttype_sym, false),
-    GPXWPTTYPETAG("type", tt_wpttype_type, false),
-    GPXWPTTYPETAG("fix", tt_wpttype_fix, false),
-    GPXWPTTYPETAG("sat", tt_wpttype_sat, false),
-    GPXWPTTYPETAG("hdop", tt_wpttype_hdop, false),
-    GPXWPTTYPETAG("vdop", tt_wpttype_vdop, false),
-    GPXWPTTYPETAG("pdop", tt_wpttype_pdop, false),
-    GPXWPTTYPETAG("ageofdgpsdata", tt_wpttype_ageofdgpsdata, false),
-    GPXWPTTYPETAG("dgpsid", tt_wpttype_dgpsid, false),
+    GPXWPTTYPETAG("ele", tag_type::wpttype_ele, false),
+    GPXWPTTYPETAG("time", tag_type::wpttype_time, false),
+    GPXWPTTYPETAG("magvar", tag_type::wpttype_magvar, false),
+    GPXWPTTYPETAG("geoidheight", tag_type::wpttype_geoidheight, false),
+    GPXWPTTYPETAG("name", tag_type::wpttype_name, false),
+    GPXWPTTYPETAG("cmt", tag_type::wpttype_cmt, false),
+    GPXWPTTYPETAG("desc", tag_type::wpttype_desc, false),
+    GPXWPTTYPETAG("src", tag_type::wpttype_src, false),
+    GPXWPTTYPETAG("url", tag_type::wpttype_url, false),							/* GPX 1.0 */
+    GPXWPTTYPETAG("urlname", tag_type::wpttype_urlname, false),			/* GPX 1.0 */
+    GPXWPTTYPETAG("link", tag_type::wpttype_link, false),						/* GPX 1.1 */
+    GPXWPTTYPETAG("link/text", tag_type::wpttype_link_text, false),	/* GPX 1.1 */
+    GPXWPTTYPETAG("link/type", tag_type::wpttype_link_type, false),	/* GPX 1.1 */
+    GPXWPTTYPETAG("sym", tag_type::wpttype_sym, false),
+    GPXWPTTYPETAG("type", tag_type::wpttype_type, false),
+    GPXWPTTYPETAG("fix", tag_type::wpttype_fix, false),
+    GPXWPTTYPETAG("sat", tag_type::wpttype_sat, false),
+    GPXWPTTYPETAG("hdop", tag_type::wpttype_hdop, false),
+    GPXWPTTYPETAG("vdop", tag_type::wpttype_vdop, false),
+    GPXWPTTYPETAG("pdop", tag_type::wpttype_pdop, false),
+    GPXWPTTYPETAG("ageofdgpsdata", tag_type::wpttype_ageofdgpsdata, false),
+    GPXWPTTYPETAG("dgpsid", tag_type::wpttype_dgpsid, false),
   };
 
   QVector<arglist_t> gpx_args = {
