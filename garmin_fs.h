@@ -24,13 +24,12 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
-#include <cstdint>                     // for int32_t, int16_t, uint16_t
+#include <cstdint>     // for int32_t, int16_t, uint16_t
 
-#include <QString>                     // for QString
+#include <QString>     // for QString
 
 #include "defs.h"
-#include "formspec.h"                  // for FsChainFind, kFsGmsd, FormatSpecificData
-#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "formspec.h"  // for FormatSpecificData, kFsGmsd, FormatSpecificDataList
 
 
 /* this order is used by most devices */
