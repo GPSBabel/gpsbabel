@@ -26,6 +26,7 @@
 
 #include <cstdint>     // for int32_t, int16_t, uint16_t
 
+#include <QList>       // for QList
 #include <QString>     // for QString
 
 #include "defs.h"
@@ -41,9 +42,9 @@
 */
 
 struct garmin_ilink_t {
-  int ref_count;
-  double lat, lon, alt;
-  garmin_ilink_t* next;
+  double lat;
+  double lon;
+  double alt;
 };
 
 struct garmin_fs_flags_t {
@@ -117,22 +118,21 @@ public:
   QString email;				/* email address */
   unsigned int duration; /* expected travel time to next route point, in seconds, only when auto-routed */
 
-  garmin_ilink_t* ilinks{nullptr};
+  QList<garmin_ilink_t> ilinks;
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22]{};
 #endif
 
 public:
   garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
-private:
-  garmin_fs_t(const garmin_fs_t& other) = default;
-public:
-  garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
-  garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
-  garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
-  ~garmin_fs_t() override;
+  explicit garmin_fs_t(int p) : garmin_fs_t() {protocol = p;}
 
-  garmin_fs_t* clone() const override;
+
+  garmin_fs_t* clone() const override
+  {
+    return new garmin_fs_t(*this);
+  }
+
   static garmin_fs_t* find(const Waypoint* wpt) {
     return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }
@@ -213,10 +213,6 @@ public:
 
 #undef GEN_GMSD_STR_METHODS
 };
-
-garmin_fs_t* garmin_fs_alloc(int protocol);
-void garmin_fs_destroy(void* fs);
-void garmin_fs_copy(void** dest, const void* src);
 
 /* ..convert_category: returns true=OK; false=Unable to convert category */
 bool garmin_fs_convert_category(const QString& category_name, uint16_t* category);

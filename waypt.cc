@@ -230,22 +230,20 @@ double
 waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 {
   double res = 0;
-  garmin_fs_t* gmsd;
 
   if ((A == nullptr) || (B == nullptr)) {
     return 0;
   }
 
-  if ((gmsd = garmin_fs_t::find(A)) && (gmsd->ilinks != nullptr)) {
-    garmin_ilink_t* link = gmsd->ilinks;
-
-    res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
-    while (link->next != nullptr) {
-      garmin_ilink_t* prev = link;
-      link = link->next;
-      res += gcgeodist(prev->lat, prev->lon, link->lat, link->lon);
+  if (const garmin_fs_t* gmsd = garmin_fs_t::find(A); (gmsd != nullptr) && (!gmsd->ilinks.isEmpty())) {
+    auto prev_lat = A->latitude;
+    auto prev_lon = A->longitude;
+    for (const auto& link : gmsd->ilinks) {
+      res += gcgeodist(prev_lat, prev_lon, link.lat, link.lon);
+      prev_lat = link.lat;
+      prev_lon = link.lon;
     }
-    res += gcgeodist(link->lat, link->lon, B->latitude, B->longitude);
+    res += gcgeodist(gmsd->ilinks.last().lat, gmsd->ilinks.last().lon, B->latitude, B->longitude);
   } else {
     res = gcgeodist(A->latitude, A->longitude, B->latitude, B->longitude);
   }

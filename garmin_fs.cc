@@ -31,46 +31,6 @@
 
 #define MYNAME "garmin_fs"
 
-garmin_fs_t*
-garmin_fs_alloc(const int protocol)
-{
-  auto* result = new garmin_fs_t;
-
-  result->protocol = protocol;
-
-  return result;
-}
-
-garmin_fs_t* garmin_fs_t::clone() const
-{
-  auto* copy = new garmin_fs_t(*this);
-
-  /* do not deep copy interlinks, only increment the reference counter */
-  if (ilinks != nullptr) {
-    ilinks->ref_count++;
-  }
-
-#ifdef GMSD_EXPERIMENTAL
-  memcopy(subclass, other.subclass, sizeof(subclass));
-#endif
-
-  return copy;
-}
-
-garmin_fs_t::~garmin_fs_t()
-{
-  garmin_ilink_t* links;
-  if ((links = ilinks) != nullptr) {
-    links->ref_count--;
-    if (links->ref_count <= 0) {
-      while (links != nullptr) {
-        garmin_ilink_t* tmp = links;
-        links = links->next;
-        xfree(tmp);
-      }
-    }
-  }
-}
 
 bool
 garmin_fs_convert_category(const QString& category_name, uint16_t* category)
@@ -112,7 +72,7 @@ garmin_fs_merge_category(const QString& category_name, Waypoint* waypt)
   cat = cat | (garmin_fs_t::get_category(gmsd, 0));
 
   if (gmsd == nullptr) {
-    gmsd = garmin_fs_alloc(-1);
+    gmsd = new garmin_fs_t(-1);
     waypt->fs.FsChainAdd(gmsd);
   }
   garmin_fs_t::set_category(gmsd, cat);

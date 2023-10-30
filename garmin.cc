@@ -1241,7 +1241,7 @@ d103_icon_number_from_symbol(const QString& s)
 static void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
-  garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
+  auto* gmsd = new garmin_fs_t(protoid);
   wpt->fs.FsChainAdd(gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */

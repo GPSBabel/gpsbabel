@@ -47,7 +47,7 @@
 #include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
-#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc, garmin_fs_merge_category
+#include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t, garmin_fs_merge_category
 #include "garmin_tables.h"                  // for gt_color_index_by_rgb, gt_color_name, gt_color_value_by_name
 #include "geocache.h"                       // for Geocache, Geocache::UtfSt...
 #include "mkshort.h"                        // for MakeShort
@@ -218,7 +218,7 @@ GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
 {
   garmin_fs_t* gmsd = garmin_fs_t::find(waypt);
   if (gmsd == nullptr) {
-    gmsd = garmin_fs_alloc(-1);
+    gmsd = new garmin_fs_t(-1);
     waypt->fs.FsChainAdd(gmsd);
   }
 
@@ -1346,7 +1346,7 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
     // Although not required by the schema we assume that gpxx:RoutePointExtension must be a child of gpx:rtept.
     // Although not required by the schema we assume that gpxx:TrackPointExtension must be a child of gpx:trkpt.
     // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
-    garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(waypointp);
     switch (point_type) {
     case gpxpt_waypoint:
       writer->stackOptionalStartElement(QStringLiteral("gpxx:WaypointExtension"));
@@ -1401,19 +1401,21 @@ GpxFormat::gpx_write_common_extensions(const Waypoint* waypointp, const gpx_poin
       writer->stackEndElement(); // gpxx:WaypointExtension
       break;
     case gpxpt_route:
-      if (gmsd != nullptr && gmsd->ilinks != nullptr) {
+      if (gmsd != nullptr && !gmsd->ilinks.isEmpty()) {
         writer->stackOptionalStartElement(QStringLiteral("gpxx:RoutePointExtension"));
-        garmin_ilink_t* link = gmsd->ilinks;
-        garmin_ilink_t* prior = nullptr; // GDB files sometime contain repeated point; omit them
-        while (link != nullptr) {
-          if (prior == nullptr || prior->lat != link->lat || prior->lon != link->lon) {
+        double prior_lat; // GDB files sometime contain repeated point; omit them
+        double prior_lon;
+        bool first = true;
+        for (const auto& link : gmsd->ilinks) {
+          if (first || (prior_lat != link.lat) || (prior_lon != link.lon)) {
             writer->stackStartElement(QStringLiteral("gpxx:rpt"));
-            writer->stackAttribute(QStringLiteral("lat"), toString(link->lat));
-            writer->stackAttribute(QStringLiteral("lon"), toString(link->lon));
+            writer->stackAttribute(QStringLiteral("lat"), toString(link.lat));
+            writer->stackAttribute(QStringLiteral("lon"), toString(link.lon));
             writer->stackEndElement(); // "gpxx:rpt"
+            prior_lat = link.lat;
+            prior_lon = link.lon;
+            first = false;
           }
-          prior = link;
-          link = link->next;
         }
         writer->stackEndElement(); // gpxx:RoutePointExtension
       }
