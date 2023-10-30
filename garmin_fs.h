@@ -219,10 +219,10 @@ garmin_fs_t* garmin_fs_alloc(int protocol);
 void garmin_fs_destroy(void* fs);
 void garmin_fs_copy(void** dest, const void* src);
 
-/* ..convert_category: returns 1=OK; 0=Unable to convert category */
+/* ..convert_category: returns true=OK; false=Unable to convert category */
 bool garmin_fs_convert_category(const QString& category_name, uint16_t* category);
 
-/* ..merge_category: returns 1=OK; 0=Unable to convert category */
+/* ..merge_category: returns true=OK; false=Unable to convert category */
 bool garmin_fs_merge_category(const QString& category_name, Waypoint* waypt);
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
