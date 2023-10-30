@@ -15,8 +15,11 @@
     <sym>Flag, Blue</sym>
     <type>user</type>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+        <gpxx:Categories>
+          <gpxx:Category>Unlisted Data</gpxx:Category>
+        </gpxx:Categories>
       </gpxx:WaypointExtension>
     </extensions>
   </wpt>
@@ -28,8 +31,11 @@
     <sym>Flag, Blue</sym>
     <type>user</type>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+        <gpxx:Categories>
+          <gpxx:Category>Unlisted Data</gpxx:Category>
+        </gpxx:Categories>
       </gpxx:WaypointExtension>
     </extensions>
   </wpt>
