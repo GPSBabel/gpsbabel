@@ -83,7 +83,7 @@ compare ${REFERENCE}/gpxpassthrough11~gpx.gpx ${TMPDIR}/gpxpassthrough11~gpx.gpx
 gpsbabel -p gpsbabel-sample.ini -i gpx -f ${REFERENCE}/garmincategories.gpx  -o garmin_txt,utc=-7 -F ${TMPDIR}/garmincategories~gpx.txt
 compare ${REFERENCE}/garmincategories.txt ${TMPDIR}/garmincategories~gpx.txt
 
-gpsbabel -p gpsbabel-sample.ini -i garmin_txt -f ${REFERENCE}/garmincategories.txt -o gpx,garminextensions -F ${TMPDIR}/garmincategories~txt.gpx
+gpsbabel -p gpsbabel-sample.ini -i garmin_txt,utc=-7 -f ${REFERENCE}/garmincategories.txt -o gpx,garminextensions -F ${TMPDIR}/garmincategories~txt.gpx
 compare ${REFERENCE}/garmincategories.gpx ${TMPDIR}/garmincategories~txt.gpx
 
 if [ -z "${VALGRIND}" ]; then

@@ -721,6 +721,28 @@ track_disp_wpt_cb(const Waypoint* wpt)
 *******************************************************************************/
 
 static void
+garmin_txt_utc_option()
+{
+  if (opt_utc != nullptr) {
+    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
+      utc_offs = 0;
+    } else {
+      utc_offs = xstrtoi(opt_utc, nullptr, 10);
+    }
+    utc_offs *= (60 * 60);
+    gtxt_flags.utc = 1;
+  }
+}
+
+static void
+garmin_txt_adjust_time(QDateTime& dt)
+{
+  if (gtxt_flags.utc) {
+    dt = dt.toUTC().addSecs(utc_offs - dt.offsetFromUtc());
+  }
+}
+
+static void
 garmin_txt_wr_init(const QString& fname)
 {
   gtxt_flags = {};
@@ -766,15 +788,7 @@ garmin_txt_wr_init(const QString& fname)
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);
   }
 
-  if (opt_utc != nullptr) {
-    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
-      utc_offs = 0;
-    } else {
-      utc_offs = xstrtoi(opt_utc, nullptr, 10);
-    }
-    utc_offs *= (60 * 60);
-    gtxt_flags.utc = 1;
-  }
+  garmin_txt_utc_option();
 }
 
 static void
@@ -1166,6 +1180,7 @@ parse_waypoint(const QStringList& lineparts)
       break;
     case 16:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1301,6 +1316,7 @@ parse_track_waypoint(const QStringList& lineparts)
       break;
     case 2:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1349,6 +1365,7 @@ garmin_txt_rd_init(const QString& fname)
   grid_index = (grid_type) -1;
 
   init_date_and_time_format();
+  garmin_txt_utc_option();
 }
 
 static void
