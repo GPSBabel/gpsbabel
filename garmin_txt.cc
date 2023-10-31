@@ -738,7 +738,7 @@ static void
 garmin_txt_adjust_time(QDateTime& dt)
 {
   if (gtxt_flags.utc) {
-    dt = dt.toUTC().addSecs(utc_offs - dt.offsetFromUtc());
+    dt = dt.toUTC().addSecs(dt.offsetFromUtc() - utc_offs);
   }
 }
 
