@@ -235,17 +235,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
