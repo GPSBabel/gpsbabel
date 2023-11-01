@@ -382,7 +382,7 @@ print_date_and_time(const QDateTime& dt)
     return;
   }
   if (gtxt_flags.utc) {
-    *fout << dt.toUTC().addSecs(utc_offs).toString(date_time_format);
+    *fout << dt.toOffsetFromUtc(utc_offs).toString(date_time_format);
   } else {
     *fout << dt.toLocalTime().toString(date_time_format);
   }
@@ -736,7 +736,7 @@ static void
 garmin_txt_adjust_time(QDateTime& dt)
 {
   if (gtxt_flags.utc) {
-    dt = dt.toUTC().addSecs(dt.offsetFromUtc() - utc_offs);
+    dt.setOffsetFromUtc(utc_offs);
   }
 }
 
