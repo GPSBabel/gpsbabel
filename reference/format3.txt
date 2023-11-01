@@ -210,7 +210,7 @@ option	gdb	roadbook	Include major turn points (with description) from calculated
 
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)	garmin_txt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html
-option	garmin_txt	date	Read/Write date format (i.e. yyyy/mm/dd)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_date
+option	garmin_txt	date	Read/Write date format (e.g. yyyy/MM/dd)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_date
 
 option	garmin_txt	datum	GPS datum (def. WGS 84)	string	WGS 84			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_datum
 
@@ -222,7 +222,7 @@ option	garmin_txt	prec	Precision of coordinates	integer	3			https://www.gpsbabel
 
 option	garmin_txt	temp	Temperature unit [c=Celsius, f=Fahrenheit]	string	c			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_temp
 
-option	garmin_txt	time	Read/Write time format (i.e. HH:mm:ss xx)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_time
+option	garmin_txt	time	Read/Write time format (e.g. HH:mm:ss)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_time
 
 option	garmin_txt	utc	Write timestamps with offset x to UTC time	integer		-23	+23	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_utc
 

@@ -20,13 +20,13 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
-#include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <cstring>                      // for strcmp, strstr, memcpy, strdup, strchr, strerror, strlen
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -562,169 +562,6 @@ rot13(const QString& s)
   }
   return r;
 }
-
-/*
- * Convert a human readable date format (i.e. "YYYY/MM/DD") into
- * a format usable for strftime and others
- */
-
-QString
-convert_human_date_format(const char* human_datef)
-{
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
-  int ylen = 0;
-
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
-
-    if (toupper(*cin) != 'Y') {
-      ylen = 0;
-    }
-    if (isalpha(*cin)) {
-      switch (*cin) {
-      case 'y':
-      case 'Y':
-        if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
-          prev = 'Y';
-        }
-        ylen++;
-        if (ylen > 2) {
-          *(cout-1) = 'Y';
-        }
-        break;
-      case 'm':
-      case 'M':
-        if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
-          prev = 'M';
-        }
-        break;
-      case 'd':
-      case 'D':
-        if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
-          prev = 'D';
-        }
-        break;
-      default:
-        okay = 0;
-      }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
-    } else {
-      okay = 0;
-    }
-
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
-    }
-  }
-  QString rv(result);
-  xfree(result);
-  return rv;
-}
-
-/*
- * Convert a human readable time format (i.e. "HH:mm:ss") into
- * a format usable for strftime and others
- */
-
-QString
-convert_human_time_format(const char* human_timef)
-{
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
-
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
-
-    if (isalpha(*cin)) {
-      switch (*cin) {
-      case 'S':
-      case 's':
-        if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
-          prev = 'S';
-        }
-        break;
-
-      case 'M':
-      case 'm':
-        if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
-          prev = 'M';
-        }
-        break;
-
-      case 'h':				/* 12-hour-clock */
-        if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
-          prev = 'H';
-        } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
-        }
-        break;
-
-      case 'H':				/* 24-hour-clock */
-        if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
-          prev = 'H';
-        } else {
-          *(cout-1) = 'H';
-        }
-        break;
-
-      case 'x':
-        if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
-          prev = 'X';
-        } else {
-          *(cout-1) = 'P';
-        }
-        break;
-
-      case 'X':
-        if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
-          prev = 'X';
-        } else {
-          *(cout-1) = 'p';
-        }
-        break;
-
-      default:
-        okay = 0;
-      }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
-    } else {
-      okay = 0;
-    }
-
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
-    }
-  }
-  QString rv(result);
-  xfree(result);
-  return rv;
-}
-
 
 /*
  * Return a decimal degree pair as
