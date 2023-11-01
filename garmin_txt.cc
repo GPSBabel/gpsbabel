@@ -33,6 +33,7 @@
 #include <cstdlib>                 // for abs
 #include <cstring>                 // for strstr, strlen
 #include <ctime>                   // for time_t, gmtime, localtime, strftime
+#include <optional>                // for optional
 #include <utility>                 // for pair, make_pair
 
 #include <QByteArray>              // for QByteArray
@@ -49,9 +50,8 @@
 
 #include "csv_util.h"              // for csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, GMSD_SECTION_CATEGORIES
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
-#include "inifile.h"               // for inifile_readstr
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Fatal
@@ -221,7 +221,7 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class < 0x80) {
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
@@ -393,30 +393,9 @@ print_date_and_time(const time_t time, const bool time_only)
 static void
 print_categories(uint16_t categories)
 {
-  if (categories == 0) {
-    return;
-  }
-
-  int count = 0;
-  for (int i = 0; i < 16; i++) {
-    if ((categories & 1) != 0) {
-      QString c;
-      if (global_opts.inifile != nullptr) {
-        QString key = QString::number(i + 1);
-        c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      }
-
-      *fout << QString::asprintf("%s", (count++ > 0) ? "," : "");
-      if (c.isNull()) {
-        *fout << QString::asprintf("Category %d", i+1);
-      }
-//				*fout << QString::asprintf("%s", gps_categories[i]);
-      else {
-        *fout << c;
-      }
-
-    }
-    categories = categories >> 1;
+  const QStringList categoryList = garmin_fs_t::print_categories(categories);
+  if (!categoryList.isEmpty()) {
+    *fout << categoryList.join(',');
   }
 }
 
@@ -528,7 +507,7 @@ write_waypt(const Waypoint* wpt)
 {
   const char* wpt_type;
 
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   int i = garmin_fs_t::get_display(gmsd, 0);
   if (i > GT_DISPLAY_MODE_MAX) {
@@ -741,6 +720,28 @@ track_disp_wpt_cb(const Waypoint* wpt)
 *******************************************************************************/
 
 static void
+garmin_txt_utc_option()
+{
+  if (opt_utc != nullptr) {
+    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
+      utc_offs = 0;
+    } else {
+      utc_offs = xstrtoi(opt_utc, nullptr, 10);
+    }
+    utc_offs *= (60 * 60);
+    gtxt_flags.utc = 1;
+  }
+}
+
+static void
+garmin_txt_adjust_time(QDateTime& dt)
+{
+  if (gtxt_flags.utc) {
+    dt = dt.toUTC().addSecs(dt.offsetFromUtc() - utc_offs);
+  }
+}
+
+static void
 garmin_txt_wr_init(const QString& fname)
 {
   gtxt_flags = {};
@@ -786,15 +787,7 @@ garmin_txt_wr_init(const QString& fname)
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);
   }
 
-  if (opt_utc != nullptr) {
-    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
-      utc_offs = 0;
-    } else {
-      utc_offs = xstrtoi(opt_utc, nullptr, 10);
-    }
-    utc_offs *= (60 * 60);
-    gtxt_flags.utc = 1;
-  }
+  garmin_txt_utc_option();
 }
 
 static void
@@ -902,7 +895,7 @@ strftime_to_timespec(const char* s)
           q += "yyyy";
           continue;
         case 'H':
-          q += "hh";
+          q += "HH";
           continue;
         case 'M':
           q += "mm";
@@ -931,8 +924,11 @@ strftime_to_timespec(const char* s)
         case 'F':
           q += "yyyy-MM-dd";
           continue;
+        case 'p':
+          q += "AP";
+          continue;
         default:
-          q += s[i+1];
+          warning(MYNAME ": omitting unknown strptime conversion \"%%%c\" in \"%s\"\n", s[i], s);
           break;
         }
       }
@@ -964,11 +960,10 @@ parse_categories(const QString& str)
   for (const auto& catstring : catstrings) {
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
-      uint16_t val;
-      if (!garmin_fs_convert_category(cin, &val)) {
+      if (std::optional<uint16_t> cat = garmin_fs_t::convert_category(cin); !cat.has_value()) {
         warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", qPrintable(cin), current_line);
       } else {
-        res = res | val;
+        res = res | *cat;
       }
     }
   }
@@ -1102,7 +1097,7 @@ parse_waypoint(const QStringList& lineparts)
   bind_fields(waypt_header);
 
   auto* wpt = new Waypoint;
-  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  auto* gmsd = new garmin_fs_t(-1);
   wpt->fs.FsChainAdd(gmsd);
 
   for (const auto& str : lineparts) {
@@ -1184,6 +1179,7 @@ parse_waypoint(const QStringList& lineparts)
       break;
     case 16:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1319,6 +1315,7 @@ parse_track_waypoint(const QStringList& lineparts)
       break;
     case 2:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1367,6 +1364,7 @@ garmin_txt_rd_init(const QString& fname)
   grid_index = (grid_type) -1;
 
   init_date_and_time_format();
+  garmin_txt_utc_option();
 }
 
 static void

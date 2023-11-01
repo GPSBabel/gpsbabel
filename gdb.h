@@ -150,7 +150,7 @@ private:
   void reset_short_handle(const char* defname);
   void write_header();
   static void gdb_check_waypt(Waypoint* wpt);
-  void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
+  void write_waypoint(const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);
   void route_write_bounds(bounds* bounds) const;
   void write_route(const route_head* rte, const QString& rte_name);

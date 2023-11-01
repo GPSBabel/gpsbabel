@@ -42,7 +42,7 @@
 
 #include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
-#include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
+#include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
 #include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfputint16, gbfile, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl
 #include "grtcirc.h"                // for RAD, gcdist, radtometers
@@ -440,7 +440,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   waypt_ct++;
   res = new Waypoint;
 
-  gmsd = garmin_fs_alloc(-1);
+  gmsd = new garmin_fs_t(-1);
   res->fs.FsChainAdd(gmsd);
   res->shortname = fread_cstr();
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
@@ -738,46 +738,37 @@ GdbFormat::read_route()
     }
 
     int links = FREAD_i32;
-    garmin_ilink_t* il_anchor = nullptr;
-    garmin_ilink_t* il_root = nullptr;
+    QList<garmin_ilink_t> il_list;
 #if GDB_DEBUG
     DBG(GDB_DBG_RTE, links)
     printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
            qPrintable(wpt->shortname), wpt_class, links);
 #endif
     for (int j = 0; j < links; j++) {
-      auto* il_step = (garmin_ilink_t*) xmalloc(sizeof(garmin_ilink_t));
+      garmin_ilink_t il_step;
 
-      il_step->ref_count = 1;
-
-      il_step->lat = FREAD_LATLON;
-      il_step->lon = FREAD_LATLON;
+      il_step.lat = FREAD_LATLON;
+      il_step.lon = FREAD_LATLON;
       if (FREAD_C == 1) {
-        il_step->alt = FREAD_DBL;
+        il_step.alt = FREAD_DBL;
       } else {
-        il_step->alt = unknown_alt;
+        il_step.alt = unknown_alt;
       }
 
       if (j == 0) {
-        wpt->latitude = il_step->lat;
-        wpt->longitude = il_step->lon;
-        wpt->altitude = il_step->alt;
+        wpt->latitude = il_step.lat;
+        wpt->longitude = il_step.lon;
+        wpt->altitude = il_step.alt;
       }
 
-      il_step->next = nullptr;
-      if (il_anchor == nullptr) {
-        il_root = il_step;
-      } else {
-        il_anchor->next = il_step;
-      }
-      il_anchor = il_step;
+      il_list.append(il_step);
 
 #if GDB_DEBUG
       DBG(GDB_DBG_RTEe, true) {
         printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
                qPrintable(wpt->shortname), j + 1, links,
-               il_step->lat < 0 ? 'S' : 'N', il_step->lat,
-               il_step->lon < 0 ? 'W' : 'E', il_step->lon);
+               il_step.lat < 0 ? 'S' : 'N', il_step.lat,
+               il_step.lon < 0 ? 'W' : 'E', il_step.lon);
       }
 #endif
     }
@@ -832,19 +823,13 @@ GdbFormat::read_route()
     if (wpt != nullptr) {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       if (gmsd == nullptr) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       garmin_fs_t::set_wpt_class(gmsd, wpt_class);
-      gmsd->ilinks = il_root;
-      il_root = nullptr;
+      gmsd->ilinks = il_list;
     }
 
-    while (il_root) {
-      garmin_ilink_t* il = il_root;
-      il_root = il_root->next;
-      xfree(il);
-    }
   } /* ENDFOR: for (i = 0; i < points; i++) */
 
   /* VERSION DEPENDENT CODE */
@@ -1194,7 +1179,7 @@ GdbFormat::gdb_check_waypt(Waypoint* wpt)
 
 void
 GdbFormat::write_waypoint(
-  const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
+  const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd,
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1391,7 +1376,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
     }
 
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
     gdb_write_cstr((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
@@ -1564,7 +1549,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     fout = ftmp;
 
     /* prepare the waypoint */
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     int wpt_class = garmin_fs_t::get_wpt_class(gmsd, -1);
     if (wpt_class == -1) {
