@@ -1578,6 +1578,43 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     break;
     case XT_EMAIL: {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    case XcsvStyle::XT_COUNTRY: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_country(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_STATE: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_state(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_CITY: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_city(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_POSTAL_CODE: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_postal_code(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_STREET_ADDR: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_addr(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_PHONE_NR: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_phone_nr(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_FACILITY: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_facility(gmsd, "")));
+    }
+    break;
+    case XcsvStyle::XT_EMAIL: {
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_email(gmsd, "")));
     }
     break;
