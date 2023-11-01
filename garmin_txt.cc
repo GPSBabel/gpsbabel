@@ -29,10 +29,9 @@
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
 #include <cstdint>                 // for uint16_t
-#include <cstdio>                  // for sscanf, fprintf, snprintf, stderr
-#include <cstdlib>                 // for abs
-#include <cstring>                 // for strstr, strlen
-#include <ctime>                   // for time_t, gmtime, localtime, strftime
+#include <cstdio>                  // for sscanf, fprintf, stderr
+#include <cstdlib>                 // for abs, div
+#include <cstring>                 // for strstr
 #include <optional>                // for optional
 #include <utility>                 // for pair, make_pair
 
@@ -83,7 +82,7 @@ static const char* datum_str;
 static int current_line;
 static QString date_time_format;
 static int precision = 3;
-static time_t utc_offs = 0;
+static int utc_offs = 0;
 static gtxt_flags_t gtxt_flags;
 
 enum header_type {
@@ -121,7 +120,7 @@ static std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping
 static QStringList header_column_names;
 
 static constexpr double kGarminUnknownAlt = 1.0e25;
-static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
+static constexpr char kDefaultDateFormat[] = "dd/MM/yyyy";
 static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
 static bool is_valid_alt(double alt)
@@ -140,13 +139,13 @@ static char* opt_grid = nullptr;
 
 static
 QVector<arglist_t> garmin_txt_args = {
-  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"date",  &opt_date_format, "Read/Write date format (e.g. yyyy/MM/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"grid",  &opt_grid,        "Write position using this grid.", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"time",  &opt_time_format, "Read/Write time format (e.g. HH:mm:ss)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
 };
 
@@ -154,8 +153,8 @@ class PathInfo
 {
 public:
   double length {0};
-  time_t start {0};
-  time_t time {0};
+  QDateTime start;
+  int time {0};
   double speed {0};
   double total {0};
   int count {0};
@@ -190,16 +189,9 @@ get_option_val(const char* option, const char* def)
 static void
 init_date_and_time_format()
 {
-  // This is old, and weird, code.. date_time_format is a global that's
-  // explicitly malloced and freed elsewhere. This isn't very C++ at all,
-  // but this format is on its deathbead for deprecation.
   const char* d = get_option_val(opt_date_format, kDefaultDateFormat);
-  QString d1 = convert_human_date_format(d);
-
   const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
-  QString t1 = convert_human_time_format(t);
-
-  date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
+  date_time_format = QStringLiteral("%1 %2").arg(d, t);
 }
 
 static void
@@ -263,11 +255,11 @@ prework_wpt_cb(const Waypoint* wpt)
   const Waypoint* prev = cur_info->prev_wpt;
 
   if (prev != nullptr) {
-    cur_info->time += (wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t());
+    cur_info->time += prev->GetCreationTime().secsTo(wpt->GetCreationTime());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
     cur_info->first_wpt = wpt;
-    cur_info->start = wpt->GetCreationTime().toTime_t();
+    cur_info->start = wpt->GetCreationTime();
   }
   cur_info->prev_wpt = wpt;
   cur_info->count++;
@@ -364,30 +356,37 @@ print_position(const Waypoint* wpt)
 }
 
 static void
-print_date_and_time(const time_t time, const bool time_only)
+print_duration(int time)
 {
-  std::tm tm{};
-  char tbuf[32];
-
   if (time < 0) {
     *fout << "\t";
     return;
   }
-  if (time_only) {
-    tm = *gmtime(&time);
-    snprintf(tbuf, sizeof(tbuf), "%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
-    *fout << QString::asprintf("%s", tbuf);
-  } else if (time != 0) {
-    if (gtxt_flags.utc) {
-      time_t t = time + utc_offs;
-      tm = *gmtime(&t);
-    } else {
-      tm = *localtime(&time);
-    }
-    strftime(tbuf, sizeof(tbuf), CSTR(date_time_format), &tm);
-    *fout << QString::asprintf("%s ", tbuf);
+#if 1
+  // perhaps durations can be longer than the max QTime of 23:59:59
+  auto res = std::div(time, 60);
+  auto sec = res.rem;
+  res = std::div(res.quot, 60);
+  *fout << QString::asprintf("%d:%02d:%02d\t", res.quot, res.rem, sec);
+#else
+  QTime qt = QTime(0, 0).addSecs(time);
+  *fout << qt.toString("H:mm:ss\t");
+#endif
+}
+
+static void
+print_date_and_time(const QDateTime& dt)
+{
+  if (!dt.isValid()) {
+    *fout << "\t";
+    return;
   }
-  *fout << "\t";
+  if (gtxt_flags.utc) {
+    *fout << dt.toOffsetFromUtc(utc_offs).toString(date_time_format);
+  } else {
+    *fout << dt.toLocalTime().toString(date_time_format);
+  }
+  *fout << " \t";
 }
 
 static void
@@ -444,7 +443,7 @@ print_distance(const double distance, const bool no_scale, const bool with_tab, 
 }
 
 static void
-print_speed(const double distance, const time_t time)
+print_speed(const double distance, int time)
 {
   double dist = distance;
   const char* unit;
@@ -576,7 +575,7 @@ write_waypt(const Waypoint* wpt)
   print_string("%s\t", garmin_fs_t::get_state(gmsd, ""));
   const char* country = gt_get_icao_country(garmin_fs_t::get_cc(gmsd, ""));
   print_string("%s\t", (country != nullptr) ? country : "");
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
+  print_date_and_time(wpt->GetCreationTime());
   if (wpt->HasUrlLink()) {
     UrlLink l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
@@ -657,8 +656,8 @@ track_disp_hdr_cb(const route_head* track)
     *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n").arg(headers[track_header]);
   }
   print_string("\r\nTrack\t%s\t", track->rte_name);
-  print_date_and_time(cur_info->start, false);
-  print_date_and_time(cur_info->time, true);
+  print_date_and_time(cur_info->start);
+  print_duration(cur_info->time);
   print_distance(cur_info->length, false, true, 0);
   print_speed(cur_info->length, cur_info->time);
   if (track->rte_urls.HasUrlLink()) {
@@ -679,13 +678,11 @@ static void
 track_disp_wpt_cb(const Waypoint* wpt)
 {
   const Waypoint* prev = cur_info->prev_wpt;
-  time_t delta;
-  double dist;
 
   *fout << "Trackpoint\t";
 
   print_position(wpt);
-  print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
+  print_date_and_time(wpt->GetCreationTime());
   if (is_valid_alt(wpt->altitude)) {
     print_distance(wpt->altitude, true, false, 0);
   }
@@ -698,15 +695,15 @@ track_disp_wpt_cb(const Waypoint* wpt)
 
   if (prev != nullptr) {
     *fout << "\t";
-    delta = wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t();
+    int delta = prev->GetCreationTime().secsTo(wpt->GetCreationTime());
     float temp = wpt->temperature_value_or(-999);
     if (temp != -999) {
       print_temperature(temp);
     }
     *fout << "\t";
-    dist = waypt_distance_ex(prev, wpt);
+    double dist = waypt_distance_ex(prev, wpt);
     print_distance(dist, false, true, 0);
-    print_date_and_time(delta, true);
+    print_duration(delta);
     print_speed(dist, delta);
     print_course(prev, wpt);
   }
@@ -737,7 +734,7 @@ static void
 garmin_txt_adjust_time(QDateTime& dt)
 {
   if (gtxt_flags.utc) {
-    dt = dt.toUTC().addSecs(dt.offsetFromUtc() - utc_offs);
+    dt.setOffsetFromUtc(utc_offs);
   }
 }
 
@@ -867,88 +864,12 @@ free_headers()
                 [](auto& list)->void { list.clear(); });
 }
 
-// Super simple attempt to convert strftime/strptime spec to Qt spec.
-// This misses a LOT of cases and vagaries, but the reality is that we
-// see very few date formats here.
-static QString
-strftime_to_timespec(const char* s)
-{
-  QString q;
-  int l = strlen(s);
-  q.reserve(l * 2); // no penalty if our guess is wrong.
-
-  for (int i = 0; i < l; i++) {
-    switch (s[i]) {
-    case '%':
-      if (i < l-1) {
-        switch (s[++i]) {
-        case 'd':
-          q += "dd";
-          continue;
-        case 'm':
-          q += "MM";
-          continue;
-        case 'y':
-          q += "yy";
-          continue;
-        case 'Y':
-          q += "yyyy";
-          continue;
-        case 'H':
-          q += "HH";
-          continue;
-        case 'M':
-          q += "mm";
-          continue;
-        case 'S':
-          q += "ss";
-          continue;
-        case 'A':
-          q += "dddd";
-          continue;
-        case 'a':
-          q += "ddd";
-          continue;
-        case 'B':
-          q += "MMMM";
-          continue;
-        case 'C':
-          q += "yy";
-          continue;
-        case 'D':
-          q += "MM/dd/yyyy";
-          continue;
-        case 'T':
-          q += "hh:mm:ss";
-          continue;
-        case 'F':
-          q += "yyyy-MM-dd";
-          continue;
-        case 'p':
-          q += "AP";
-          continue;
-        default:
-          warning(MYNAME ": omitting unknown strptime conversion \"%%%c\" in \"%s\"\n", s[i], s);
-          break;
-        }
-      }
-      break;
-    default:
-      q += s[i];
-      break;
-    }
-  }
-  return q;
-}
-
-
 /* data parsers */
 
 static QDateTime
 parse_date_and_time(const QString& str)
 {
-  QString timespec = strftime_to_timespec(CSTR(date_time_format));
-  return QDateTime::fromString(QString(str).trimmed(), timespec);
+  return QDateTime::fromString(QString(str).trimmed(), date_time_format);
 }
 
 static uint16_t

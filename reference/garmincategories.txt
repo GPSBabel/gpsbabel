@@ -3,5 +3,5 @@ Datum	WGS 84
 
 Header	Name	Description	Type	Position	Altitude	Depth	Proximity	Temperature	Display Mode	Color	Symbol	Facility	City	State	Country	Date Modified	Link	Categories
 
-Waypoint	Hwy 119	The Diagonal	User Waypoint	N39 58.432183 W105 27.951022					Symbol & Name	Unknown	Flag, Blue					09.03.2013 13:45:12 PM 		Slow food,Category 11
-Waypoint	Hwy 72	The Peak to Peak	User Waypoint	N40 00.238037 W105 29.937744					Symbol & Name	Unknown	Flag, Blue					09.03.2013 13:45:02 PM 		
+Waypoint	Hwy 119	The Diagonal	User Waypoint	N39 58.432183 W105 27.951022					Symbol & Name	Unknown	Flag, Blue					09.03.2013 13:45:12 		Slow food,Category 11
+Waypoint	Hwy 72	The Peak to Peak	User Waypoint	N40 00.238037 W105 29.937744					Symbol & Name	Unknown	Flag, Blue					09.03.2013 13:45:02 		

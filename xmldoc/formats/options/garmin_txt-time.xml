@@ -1,4 +1,10 @@
 <para>
-This option specifies the input and output format for the time.  The format
-is written similarly to those in Windows.  An example format is "hh:mm:ss xx".
+This option specifies the input and output format for the time.
+Examples are:
+<simplelist type="vert">
+<member>"h:mm:ss AP" - hour without leading zero and range 1-12, AM/PM display.</member>
+<member>"hh:mm:ss AP" - hour with leading zero and range 1-12, AM/PM display.</member>
+<member>"H:mm:ss" - hour without leading zero and range 0-23.</member>
+<member>"HH:mm:ss" - hour with leading zero and range 0-23.</member>
+</simplelist>
 </para>

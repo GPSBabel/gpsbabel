@@ -1,4 +1,8 @@
 <para>
-This option specifies the input and output format for the date.  The format
-is written similarly to those in Windows.  An example format is "YYYY/MM/DD".
+This option specifies the input and output format for the date.
+Examples are
+<simplelist type="vert">
+<member>"yyyy/MM/dd" - four digit year, month with leading zero, day with leading zero.</member>
+<member>"M/d/yy" - month without leading zero, day without leading zero, two digit year.</member>
+</simplelist>
 </para>

@@ -110,13 +110,13 @@ File Types (-i and -o options):
 	  dropwpt               (0/1) Don't create waypoints for non-user points
 	  roadbook              (0/1) Include major turn points (with description) from 
 	garmin_txt            Garmin MapSource - txt (tab delimited)
-	  date                  Read/Write date format (i.e. yyyy/mm/dd)
+	  date                  Read/Write date format (e.g. yyyy/MM/dd)
 	  datum                 GPS datum (def. WGS 84)
 	  dist                  Distance unit [m=metric, s=statute]
 	  grid                  Write position using this grid.
 	  prec                  Precision of coordinates
 	  temp                  Temperature unit [c=Celsius, f=Fahrenheit]
-	  time                  Read/Write time format (i.e. HH:mm:ss xx)
+	  time                  Read/Write time format (e.g. HH:mm:ss)
 	  utc                   Write timestamps with offset x to UTC time
 	garmin_poi            Garmin POI database
 	  snlen                 Max synthesized shortname length
