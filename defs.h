@@ -269,21 +269,14 @@ private:
   class op_flags
   {
   public:
-    op_flags() :
-      temperature(false),
-      proximity(false),
-      course(false),
-      speed(false),
-      geoidheight(false),
-      depth(false) {}
-    bool temperature:1;		/* temperature field is set */
-    bool proximity:1;		/* proximity field is set */
-    bool course:1;			/* course field is set */
-    bool speed:1;			/* speed field is set */
-    bool geoidheight:1;	/* geoidheight field is set */
-    bool depth:1;			/* depth field is set */
+    bool temperature:1{false}; /* temperature field is set */
+    bool proximity:1{false};   /* proximity field is set */
+    bool course:1{false};      /* course field is set */
+    bool speed:1{false};       /* speed field is set */
+    bool geoidheight:1{false}; /* geoidheight field is set */
+    bool depth:1{false};       /* depth field is set */
     /* !ToDo!
-    unsigned int altitude:1;		/+ altitude field is set +/
+    unsigned int altitude:1{false}; /+ altitude field is set +/
     ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
     odometer_distance
     */
