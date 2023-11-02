@@ -13,8 +13,10 @@
 //  trivial to mimic on Linux if we have to.
 
 #if __has_include(<fmt/format.h>)
+
 #include <iostream>
 #include <fmt/format.h>
+#define _USING_LIBFMT 1
 
 namespace std
 {
@@ -49,6 +51,7 @@ namespace std
 # warning "There is no <format.h>"
 #endif
 
+#if  _USING_LIBFMT
 // This allows you to send QStrings to a fmt::format. Ha!
 template <>
 struct fmt::formatter<QString> : public fmt::formatter<std::string> {
@@ -62,3 +65,4 @@ struct fmt::formatter<QString> : public fmt::formatter<std::string> {
     return fmt::formatter<std::string>::format(val.toStdString(), ctx);
   };
 };
+#endif //  _USING_LIBFMT
