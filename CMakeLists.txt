@@ -25,6 +25,9 @@ set(CMAKE_AUTORCC ON)
 
 add_executable(gpsbabel)
 
+find_package(fmt)
+list(APPEND GPSBABEL_EXTRA_LINK_LIBRARIES fmt::fmt)
+
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)

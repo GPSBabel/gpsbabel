@@ -47,6 +47,7 @@
 #include "csv_util.h"                 // for csv_linesplit
 #include "filter.h"                   // for Filter
 #include "filter_vecs.h"              // for FilterVecs
+#include "fmt.h"                      // for std::format for now
 #include "format.h"                   // for Format
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
@@ -158,6 +159,18 @@ usage(const char* pname, int shorter)
     printf("\nSupported data filters:\n");
     FilterVecs::Instance().disp_filter_vecs();
   }
+  std::string message = std::format("The answer is {}.", 42);
+  printf("%s\n", message.c_str());
+  std::string s = std::format("Locale after initial setup: {} \n",setlocale(LC_ALL, NULL));
+  puts(s.c_str());
+
+  QString b = QString("more ") + QString("bonkers ") + QString("     blah    ") ;
+  const char buf[] = "buff ";
+  const char *cbuf = "cbuf ";
+  s = std::format("One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
+  puts(s.c_str());
+  std::print("Printing: One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
+  std::println("Printing: One {} two three", "blah" );
 }
 
 static void
