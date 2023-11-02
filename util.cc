@@ -619,7 +619,7 @@ convert_human_date_format(const char* human_datef, bool read)
         if (read) {
           // fromString methods use a single quoted backslashed single quote.
           // good luck finding this in the Qt documentation!
-          out.append(R"('\'')"); 
+          out.append(R"('\'')");
         } else { // write
           // toString methods used a double single quote.
           out.append(R"('')");
@@ -717,7 +717,7 @@ convert_human_time_format(const char* human_timef, bool read)
         if (read) {
           // fromString methods use a single quoted backslashed single quote.
           // good luck finding this in the Qt documentation!
-          out.append(R"('\'')"); 
+          out.append(R"('\'')");
         } else { // write
           // toString methods used a double single quote.
           out.append(R"('')");

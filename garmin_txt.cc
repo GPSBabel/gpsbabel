@@ -388,9 +388,9 @@ print_date_and_time(const QDateTime& dt)
     *fout << "\t";
     return;
   }
-    if (gtxt_flags.utc) {
+  if (gtxt_flags.utc) {
     *fout << dt.toOffsetFromUtc(utc_offs).toString(date_time_format);
-    } else {
+  } else {
     *fout << dt.toLocalTime().toString(date_time_format);
   }
   *fout << "\t";
@@ -1110,7 +1110,7 @@ parse_waypoint(const QStringList& lineparts)
         garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
-    break;
+      break;
     case 17: {
       wpt->AddUrlLink(str);
     }
@@ -1246,7 +1246,7 @@ parse_track_waypoint(const QStringList& lineparts)
         garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
-    break;
+      break;
     case 3:
       if (parse_distance(str, &x, 1, MYNAME)) {
         wpt->altitude = x;
