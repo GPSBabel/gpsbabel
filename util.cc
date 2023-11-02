@@ -569,15 +569,17 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const char* human_datef, bool read)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  constexpr char quote = '\'';
+  constexpr char zero = '\0';
+  char prev = zero;
+
   int ylen = 0;
 
+  QStringList out;
   for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+    bool okay = true;
 
     if (toupper(*cin) != 'Y') {
       ylen = 0;
@@ -587,48 +589,54 @@ convert_human_date_format(const char* human_datef)
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          out.append("yy");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          out.last() = "yyyy";
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          out.append("MM");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          out.append("dd");
           prev = 'D';
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
     } else if (ispunct(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
+      if (*cin == quote) {
+        if (read) {
+          // fromString methods use a single quoted backslashed single quote.
+          // good luck finding this in the Qt documentation!
+          out.append(R"('\'')"); 
+        } else { // write
+          // toString methods used a double single quote.
+          out.append(R"('')");
+        }
+      } else {
+        out.append(QChar(*cin));
+      }
+      prev = zero;
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
+    if (!okay) {
       fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return out.join("");
 }
 
 /*
@@ -637,22 +645,22 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const char* human_timef, bool read)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  constexpr char quote = '\'';
+  constexpr char zero = '\0';
+  char prev = zero;
 
+  QStringList out;
   for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+    bool okay = true;
 
     if (isalpha(*cin)) {
       switch (*cin) {
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          out.append("ss");
           prev = 'S';
         }
         break;
@@ -660,69 +668,73 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          out.append("mm");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          out.append("h");
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          out.last() = "hh";
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          out.append("H");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          out.last() = "HH";
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          out.append("ap");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          out.last() = "ap";
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          out.append("AP");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          out.last() = "AP";
         }
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
     } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
+      if (*cin == quote) {
+        if (read) {
+          // fromString methods use a single quoted backslashed single quote.
+          // good luck finding this in the Qt documentation!
+          out.append(R"('\'')"); 
+        } else { // write
+          // toString methods used a double single quote.
+          out.append(R"('')");
+        }
+      } else {
+        out.append(QChar(*cin));
+      }
+      prev = zero;
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
+    if (!okay) {
       fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return out.join("");
 }
 
 
