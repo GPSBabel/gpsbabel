@@ -169,8 +169,10 @@ usage(const char* pname, int shorter)
   const char *cbuf = "cbuf ";
   s = std::format("One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
   puts(s.c_str());
+#if 0
   std::print("Printing: One {} b {} buf{} cbuf{} 4-Two {}", b.trimmed(), buf, cbuf, 1234, 42);
   std::println("Printing: One {} two three", "blah" );
+#endif
 }
 
 static void
