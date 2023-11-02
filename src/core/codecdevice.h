@@ -62,5 +62,5 @@ private:
   qint64 charbuffer_bytes_free_{charbuffer_size_};
 };
 
-} // namespace
+} // namespace gpsbabel
 #endif // SRC_CORE_CODECDEVICE_H_

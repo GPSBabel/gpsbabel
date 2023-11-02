@@ -289,7 +289,7 @@ distributed. The Qt provided translations still need to be distributed.
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>DOCVERSION</term>
+          <term>GPSBABEL_DOCVERSION</term>
           <listitem>
             <para>
 string appended to documentation location for www.gpsbabel.org.  The default
@@ -300,12 +300,12 @@ www.gpsbabel.org.
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>WEB</term>
+          <term>GPSBABEL_WEB</term>
           <listitem>
             <para>
 Path where the documentation will be stored for www.gpsbabel.org.  This is
 used by the gpsbabel.org target, you are unlikely to need it unless you are
-maintaining www.gpsbabel.org.  The default location is "../babelweb"
+maintaining www.gpsbabel.org.  The default location is "gpsbabel.org".
 </para>
           </listitem>
         </varlistentry>

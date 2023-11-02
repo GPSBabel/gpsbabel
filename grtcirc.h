@@ -45,9 +45,11 @@ void linepart(double lat1, double lon1,
               double* reslat, double* reslon);
 
 /* Degrees to radians */
-constexpr double DEG(double x) { return (x) * 180.0 / M_PI; }
+constexpr double kDegreesPerRadian = 180.0 / M_PI;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
 
 /* Radians to degrees */
-constexpr double RAD(double x) { return (x) * M_PI / 180.0; }
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
 
 #endif

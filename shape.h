@@ -65,7 +65,7 @@ private:
   static SHPHandle SHPAPI_CALL SHPCreateGpsbabel(const QString& pszLayer, int nShapeType);
   static DBFHandle SHPAPI_CALL DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess);
   static DBFHandle SHPAPI_CALL DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage);
-  void dump_fields() const;
+  [[noreturn]] void dump_fields() const;
   void check_field_index(int fieldIdx) const;
   int get_field_index(const QString& fieldName) const;
   void write_wpt(const Waypoint* wpt) const;

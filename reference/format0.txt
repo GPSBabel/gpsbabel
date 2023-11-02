@@ -1,5 +1,3 @@
-baroiq		Brauniger IQ Series Barograph Download
-cambridge	dat	Cambridge/Winpilot glider software
 v900		Columbus/Visiontac V900 files (.csv)
 csv		Comma separated values
 iblue747	csv	Data Logger iBlue747 csv
@@ -22,13 +20,13 @@ dg-100		GlobalSat DG-100/BT-335 Download
 dg-200		GlobalSat DG-200 Download
 globalsat		GlobalSat GH625XT GPS training watch
 kml	kml	Google Earth (Keyhole) Markup Language
+googletakeout	json	Google Takeout Location History
 land_air_sea	txt	GPS Tracking Key Pro text
 gtm	gtm	GPS TrackMaker
 arc	txt	GPSBabel arc filter file
 gpsdrive		GpsDrive Format
 gpsdrivetrack		GpsDrive Format for Tracks
 gpx	gpx	GPX XML
-holux	wpo	Holux (gm-100) .wpo Format
 m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 m241		Holux M-241 (MTK based) download
 html	html	HTML Output
@@ -42,9 +40,6 @@ mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 tpg	tpg	National Geographic Topo .tpg (waypoints)
 tpo2	tpo	National Geographic Topo 2.x .tpo
 tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-navilink		NaviGPS GT-11/BGT-11 Download
-sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
-sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 nmea		NMEA 0183 sentences
 osm	osm	OpenStreetMap data files
 ozi		OziExplorer
@@ -56,6 +51,3 @@ openoffice		Tab delimited fields useful for OpenOffice
 text	txt	Textual Output
 unicsv		Universal csv with field structure in first line
 vcard	vcf	Vcard Output (for iPod)
-wbt-bin	bin	Wintec WBT-100/200 Binary File Format
-wbt		Wintec WBT-100/200 GPS Download
-wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format

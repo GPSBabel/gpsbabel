@@ -33,10 +33,15 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-12
+          - QT_VERSION: '6.5.3'
+            XCODE_VERSION: '14.2'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-12
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Cache Qt
       uses: actions/cache@v3

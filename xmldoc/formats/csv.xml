@@ -11,7 +11,7 @@ their commercial mapping program, or GDM6 (their free waypoint
 manager) for iFinder which is available at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com/Software/GDM6/Default.asp">lowrance.com</link>
          </para>
     <para>
-	On write, this format writes simple "latitude, longitude" pairs, but
+	On write, this format writes simple "latitude, longitude, name" lines, but
 on read it  will read anything supported by our <link linkend="style_def_lathuman">human readable</link> definition.
     </para>
     <para>

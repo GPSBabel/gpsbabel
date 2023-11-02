@@ -69,36 +69,29 @@
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
+#include "googletakeout.h"    // for GoogleTakeoutFormat
 
 
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
 extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
-extern ff_vecs_t wbt_svecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t wbt_fvecs;
-//extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t sbp_vecs;
-extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
@@ -128,7 +121,6 @@ struct Vecs::Impl {
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
   LegacyFormat tpo2_fmt {tpo2_vecs};
   LegacyFormat tpo3_fmt {tpo3_vecs};
@@ -138,16 +130,12 @@ struct Vecs::Impl {
   TextFormat text_fmt;
   HtmlFormat html_fmt;
   IgcFormat igc_fmt;
-  LegacyFormat brauniger_iq_fmt {brauniger_iq_vecs};
   LegacyFormat mtk_fmt {mtk_vecs};
   LegacyFormat mtk_ffmt {mtk_fvecs};
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
 #endif // MAXIMAL_ENABLED
-  LegacyFormat wbt_sfmt {wbt_svecs};
 #if MAXIMAL_ENABLED
-  LegacyFormat wbt_ffmt {wbt_fvecs};
-//LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
@@ -161,13 +149,10 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
-  LegacyFormat navilink_fmt {navilink_vecs};
   OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat sbp_fmt {sbp_vecs};
-  LegacyFormat sbn_fmt {sbn_vecs};
   LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
@@ -251,13 +236,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &holux_fmt,
-      "holux",
-      "Holux (gm-100) .wpo Format",
-      "wpo",
-      nullptr,
-    },
-    {
       &tpg_fmt,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
@@ -309,13 +287,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &brauniger_iq_fmt,
-      "baroiq",
-      "Brauniger IQ Series Barograph Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &mtk_fmt,
       "mtk",
       "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
@@ -344,28 +315,7 @@ struct Vecs::Impl {
       nullptr,
     },
 #endif // MAXIMAL_ENABLED
-    {
-      &wbt_sfmt,
-      "wbt",
-      "Wintec WBT-100/200 GPS Download",
-      nullptr,
-      nullptr,
-    },
 #if MAXIMAL_ENABLED
-    {
-      &wbt_ffmt,
-      "wbt-bin",
-      "Wintec WBT-100/200 Binary File Format",
-      "bin",
-      nullptr,
-    },
-    {
-      &wbt_ffmt,
-      "wbt-tk1",
-      "Wintec WBT-201/G-Rays 2 Binary File Format",
-      "tk1",
-      nullptr,
-    },
     {
       &vcf_fmt,
       "vcard",
@@ -446,13 +396,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &navilink_fmt,
-      "navilink",
-      "NaviGPS GT-11/BGT-11 Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &osm_fmt,
       "osm",
       "OpenStreetMap data files",
@@ -478,20 +421,6 @@ struct Vecs::Impl {
       "humminbird_ht",
       "Humminbird tracks (.ht)",
       "ht",
-      nullptr,
-    },
-    {
-      &sbp_fmt,
-      "sbp",
-      "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
-      "sbp",
-      nullptr,
-    },
-    {
-      &sbn_fmt,
-      "sbn",
-      "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
-      "sbn",
       nullptr,
     },
     {
@@ -563,6 +492,14 @@ struct Vecs::Impl {
       "Qstarz BL-1000",
       nullptr,
       nullptr,
+    },
+    {
+      nullptr,
+      "googletakeout",
+      "Google Takeout Location History",
+      "json",
+      nullptr,
+      &fmtfactory<GoogleTakeoutFormat>
     }
 #endif // MAXIMAL_ENABLED
   };
@@ -676,10 +613,8 @@ bool Vecs::is_bool(const QString& val)
          (!val.isEmpty() && val.at(0).isDigit());
 }
 
-void Vecs::exit_vec(Format* fmt)
+void Vecs::free_options(QVector<arglist_t>* args)
 {
-  (fmt->exit)();
-  QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
@@ -689,6 +624,12 @@ void Vecs::exit_vec(Format* fmt)
       }
     }
   }
+}
+
+void Vecs::exit_vec(Format* fmt)
+{
+  (fmt->exit)();
+  free_options(fmt->get_args());
 }
 
 void Vecs::exit_vecs()
@@ -810,7 +751,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-void Vecs::prepare_format(const fmtinfo_t& fmtdata) 
+void Vecs::prepare_format(const fmtinfo_t& fmtdata)
 {
   QVector<arglist_t>* args = fmtdata->get_args();
 
@@ -1056,39 +997,20 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   return svp;
 }
 
-#define VEC_FMT "	%-20.20s  %-.50s\n"
-
-void Vecs::disp_vecs() const
-{
-  const auto svp = sort_and_unify_vecs();
-  for (const auto& vec : svp) {
-    if (vec.type == ff_type_internal)  {
-      continue;
-    }
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arginfo_t> args = vec.arginfo;
-    for (const auto& arg : args) {
-      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s%s\n",
-               qPrintable(arg.argstring),
-               (arg.argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
-      }
-    }
-  }
-}
-
 void Vecs::disp_vec(const QString& vecname) const
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)  {
+    /*
+     * Display info for all non-internal formats is vecname is empty,
+     * otherwise just display info for the matching format.
+     */
+    if (vecname.isEmpty()? (vec.type == ff_type_internal) :
+        (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)) {
       continue;
     }
 
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
+    printf("	%-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {

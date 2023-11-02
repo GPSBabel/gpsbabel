@@ -247,7 +247,7 @@ typedef struct GPS_SCourse_Limits {
 } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
 
-typedef int (*pcb_fn)(int, struct GPS_SWay**);
+typedef int (*pcb_fn)(int, GPS_SWay**);
 
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpssend.h"
@@ -270,9 +270,9 @@ extern char   gps_save_string[GPS_ARB_LEN];
 extern int gps_is_usb;
 extern int gps_baud_rate;
 
-extern struct COMMANDDATA COMMAND_ID[2];
-extern struct LINKDATA LINK_ID[3];
-extern struct GPS_MODEL_PROTOCOL GPS_MP[];
+extern COMMANDDATA COMMAND_ID[2];
+extern LINKDATA LINK_ID[3];
+extern GPS_MODEL_PROTOCOL GPS_MP[];
 
 extern const char* gps_marine_sym[];
 extern const char* gps_land_sym[];

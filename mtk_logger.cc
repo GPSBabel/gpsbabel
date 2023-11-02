@@ -202,7 +202,7 @@ struct data_item {
   short rcr;
   unsigned short timestamp_ms;
   double distance;
-  struct sat_info sat_data[32];
+  sat_info sat_data[32];
 };
 
 struct mtk_loginfo {
@@ -235,9 +235,9 @@ static char* OPT_erase_only;  /* erase_only ? command option */
 static char* OPT_log_enable;  /* enable ? command option */
 static char* csv_file; /* csv ? command option */
 static char* OPT_block_size_kb; /* block_size_kb ? command option */
-static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
+static MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
-static struct mtk_loginfo mtk_info;
+static mtk_loginfo mtk_info;
 
 const char LIVE_CHAR[4] = {'-', '\\','|','/'};
 
@@ -281,7 +281,7 @@ static QVector<arglist_t> mtk_sargs = {
   },
 };
 
-static void dbg(int l, const char* msg, ...)
+[[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -796,7 +796,7 @@ mtk_retry:
 
 
 static route_head*  trk_head = nullptr;
-static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
+static int add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 {
   auto* trk = new Waypoint;
 
@@ -978,7 +978,7 @@ static void mtk_csv_deinit()
 }
 
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
-static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
+static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_item* itm)
 {
   const char* fix_str = "";
   if (bmask & (1U<<VALID)) {
@@ -1027,7 +1027,7 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
     QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
     dt = dt.addMSecs(itm->timestamp_ms);
 
-    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");;
+    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");
     gbfputs(timestamp, csvFile);
     gbfputc(',', csvFile);
   }
@@ -1111,7 +1111,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   int sat_id;
   int hspd;
   unsigned char hbuf[4];
-  struct data_item itm;
+  data_item itm;
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {

@@ -101,6 +101,7 @@
 #include "format.h"
 #include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
 #include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "mkshort.h"              // for MakeShort
 #include "src/core/datetime.h"    // for DateTime
 
 
@@ -384,7 +385,7 @@ private:
 
   /* Member Functions */
 
-  static char same_points(const Waypoint*, const Waypoint*);
+  static bool same_points(const Waypoint*, const Waypoint*);
   void register_waypt(const Waypoint*) const;
   static const Waypoint* lowranceusr4_find_waypt(uint, int, int);
   static const Waypoint* lowranceusr4_find_global_waypt(uint, uint, uint, uint);
@@ -433,7 +434,7 @@ private:
 
   gbfile*        file_in{};
   gbfile*        file_out{};
-  short_handle   mkshort_handle{};
+  MakeShort*     mkshort_handle{};
 
   route_head*    trk_head{};
   route_head*    rte_head{};

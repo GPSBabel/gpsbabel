@@ -40,14 +40,7 @@ public:
   void process() override;
 
 private:
-  double pos_dist{};
-  char* distopt = nullptr;
-  char* arcfileopt = nullptr;
-  char* rteopt = nullptr;
-  char* trkopt = nullptr;
-  char* exclopt = nullptr;
-  char* ptsopt = nullptr;
-  char* projectopt = nullptr;
+  /* Types */
 
   struct extra_data {
     double distance;
@@ -57,6 +50,22 @@ private:
     const Waypoint* arcpt1;
     const Waypoint* arcpt2;
   };
+
+  /* Member Functions */
+
+  void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
+  void arcdist_arc_disp_hdr_cb(const route_head*);
+
+  /* Data Members */
+
+  double pos_dist{};
+  char* distopt = nullptr;
+  char* arcfileopt = nullptr;
+  char* rteopt = nullptr;
+  char* trkopt = nullptr;
+  char* exclopt = nullptr;
+  char* ptsopt = nullptr;
+  char* projectopt = nullptr;
 
   QVector<arglist_t> args = {
     {
@@ -88,9 +97,6 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
-
-  void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
-  void arcdist_arc_disp_hdr_cb(const route_head*);
 
 };
 #endif // FILTERS_ENABLED

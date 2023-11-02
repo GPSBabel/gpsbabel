@@ -34,8 +34,7 @@ static int32 gps_tag_data_unknown[GPS_TAGUNK];
 static int32 gps_n_tag_unknown = 0;
 
 
-
-struct COMMANDDATA COMMAND_ID[2]= {
+COMMANDDATA COMMAND_ID[2]= {
   /* Device Command Protocol 1 (A010) */
   {
     0,1,2,3,4,5,6,7,8,49,50,92,117,121,450,451,452,453,454,561,562,563,564,565
@@ -47,7 +46,7 @@ struct COMMANDDATA COMMAND_ID[2]= {
   }
 };
 
-struct LINKDATA LINK_ID[3]= {
+LINKDATA LINK_ID[3]= {
   /* Basic Link Protocol (L000) */
   {
     253,254,255,248,
@@ -73,7 +72,7 @@ struct LINKDATA LINK_ID[3]= {
   }
 };
 
-struct GPS_MODEL_PROTOCOL GPS_MP[]= {
+GPS_MODEL_PROTOCOL GPS_MP[]= {
   {
     7,pL001,pA010,pA100,pD100,pA200,pD200,-1,-1,-1,-1,-1,
     pA500,pD500
@@ -348,7 +347,6 @@ int32 GPS_Protocol_Table_Set(US id)
 {
   int32 i;
   US  v;
-  char s[GPS_ARB_LEN];
 
   i=0;
   while ((v=GPS_MP[i].id)) {
@@ -372,8 +370,7 @@ int32 GPS_Protocol_Table_Set(US id)
   }
 
 
-  (void) snprintf(s, sizeof(s), "INIT: No table entry for ID %d\n", id);
-  GPS_Error(s);
+  GPS_Error("INIT: No table entry for ID %d\n", id);
 
   return GPS_UNSUPPORTED;
 }
@@ -392,11 +389,7 @@ int32 GPS_Protocol_Table_Set(US id)
 
 void GPS_Protocol_Error(US tag, US data)
 {
-  char s[GPS_ARB_LEN];
-
-  (void) snprintf(s, sizeof(s),
-                 "PROTOCOL ERROR: Unknown tag/data [%c/%d]\n", tag, data);
-  GPS_Error(s);
+  GPS_Error("PROTOCOL ERROR: Unknown tag/data [%c/%d]\n", tag, data);
 
   if (gps_n_tag_unknown < GPS_TAGUNK) {
     gps_tag_unknown[gps_n_tag_unknown] = tag;

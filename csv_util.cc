@@ -38,9 +38,6 @@
 
 #define MYNAME "CSV_UTIL"
 
-#define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
-
-
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
 /*                     returns copy of string.                       */
