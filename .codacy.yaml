@@ -3,9 +3,9 @@ exclude_paths:
   - 'mac/libusb/**'
   - 'reference/**'
   - 'shapelib/**'
+  - 'strptime/**'
   - 'zlib/**'
   - coverity_model.cc
-  - strptime.[ch]
   - jeeps/gpsproj.cc
   - jeeps/gpsproj.h
   - tools/qtci/README.md

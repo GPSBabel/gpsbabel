@@ -66,17 +66,4 @@ public:
   explicit Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
 };
 
-/*
- * Kludge any used QTextStream modifiers into Qt namespace as they are in newer
- * versions of Qt.  This makes source compatiblity easier.
- */
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-namespace Qt
-{
-  inline QTextStream& dec(QTextStream &s) { return ::dec(s); }
-  inline QTextStream& hex(QTextStream &s) { return ::hex(s); }
-  inline QTextStream& endl(QTextStream &s) { return ::endl(s); }
-  inline QTextStream& uppercasedigits(QTextStream &s) { return ::uppercasedigits(s); }
-}
-#endif
 #endif //  SRC_CORE_LOGGING_H_

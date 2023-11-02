@@ -23,14 +23,14 @@
 
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
-#include <cstring>                 // for memset, strchr, strncpy
-#include <ctime>                   // for gmtime
+#include <ctime>                   // for tm
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
 #include <QDateTime>               // for QDateTime
 #include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
 #include <QLatin1Char>             // for QLatin1Char
+#include <QList>                   // for QList, QList<>::const_iterator
 #include <QString>                 // for QString, operator!=, operator==
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream, operator<<, qSetRealNumberPrecision, qSetFieldWidth, QTextStream::FixedNotation
@@ -42,7 +42,7 @@
 #include "defs.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
@@ -156,7 +156,6 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "diff",	fld_gc_diff, kStrAny },
   { "arch",	fld_gc_is_archived, kStrAny },
   { "avail",	fld_gc_is_available, kStrAny },
-  { "exported",	fld_gc_exported, kStrAny },
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
@@ -224,15 +223,14 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   return res;
 }
 
-time_t
+QDate
 UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
   int p1, p2, p3;
   char sep[2];
-  struct tm tm;
+  std::tm tm{};
   int lconsumed = 0;
 
-  memset(&tm, 0, sizeof(tm));
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
   if (consumed && lconsumed) {
     *consumed = lconsumed;
@@ -240,9 +238,9 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   if (ct != 5) {
     if (consumed) {		/* don't stop here; it's only sniffing */
       *consumed = 0;	/* for a possible date */
-      return 0;
+      return {};
     }
-    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -269,56 +267,59 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   if ((tm.tm_mon > 12) || (tm.tm_mon < 1) || (tm.tm_mday > 31) || (tm.tm_mday < 1)) {
     if (consumed) {
       *consumed = 0;
-      return 0;	/* don't stop here */
+      return {};	/* don't stop here */
     }
-    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
-  tm.tm_year -= 1900;
-  tm.tm_mon -= 1;
-
-  return mkgmtime(&tm);
+  QDate result{tm.tm_year, tm.tm_mon, tm.tm_mday};
+  if (!result.isValid()) {
+    fatal(FatalMsg() << MYNAME << ": Invalid date parsed from string (" << str << ").");
+  }
+  return result;
 }
 
-time_t
-UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
+QTime
+UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
 {
-  int hour, min, sec;
+  int hour;
+  int min;
+  int sec;
+  int msec;
   int consumed = 0;
-  double us;
-  char sep[2];
+  double frac_sec;
 
   /* If we have something we're pretty sure is a date, parse that
    * first, skip over it, and pass that back to the caller)
    */
-  time_t ldate = unicsv_parse_date(str, &consumed);
-  if (consumed && ldate) {
+  QDate ldate = unicsv_parse_date(str, &consumed);
+  if (consumed && ldate.isValid()) {
     str += consumed;
-    if (date) {
-      *date = ldate;
-    }
+    date = ldate;
   }
-  int ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
-  if (ct < 5) {
-    fatal(MYNAME ": Could not parse time string (%s).\n", str);
+  int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d%lf", &hour, &min, &sec, &frac_sec);
+  if (ct < 3) {
+    fatal(FatalMsg() << MYNAME << ": Could not parse time string (" << str << ").");
   }
-  if (ct == 6) {
-    *usec = lround((us * 1000000));
-    if (*usec > 999999) {
-      *usec = 0;
-      sec++;
-    }
+  if (ct >= 4) {
+    // Don't round up and ripple through seconds, minutes, hours.
+    // 23:59:59.9999999 -> 24:00:00.000 which is an invalid QTime.
+    msec = frac_sec * 1000.0;
   } else {
-    *usec = 0;
+    msec = 0;
   }
 
-  return ((hour * SECONDS_PER_HOUR) + (min * 60) + sec);
+  QTime result{hour, min, sec, msec};
+  if (!result.isValid()) {
+    fatal(FatalMsg() << MYNAME << ": Invalid time parsed from string (" << str << ").");
+  }
+  return result;
 }
 
-time_t
-UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
+QTime
+UnicsvFormat::unicsv_parse_time(const QString& str, QDate& date)
 {
-  return unicsv_parse_time(CSTR(str), msec, date);
+  return unicsv_parse_time(CSTR(str), date);
 }
 
 Geocache::status_t
@@ -338,19 +339,9 @@ UnicsvFormat::unicsv_parse_status(const QString& str)
 }
 
 QDateTime
-UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
+UnicsvFormat::unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
 {
-  time_t res = time;
-  if (date) {
-    res += *date;
-  }
-  if (opt_utc) {
-    res += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
-  } else {
-    struct tm tm = *gmtime(&res);
-    res = mklocaltime(&tm);
-  }
-  return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
+  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
 }
 
 bool
@@ -470,6 +461,8 @@ UnicsvFormat::rd_init(const QString& fname)
   } else {
     unicsv_fieldsep = nullptr;
   }
+
+  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 
 void
@@ -495,13 +488,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   double swiss_easting = kUnicsvUnknown;
   double swiss_northing = kUnicsvUnknown;
   int checked = 0;
-  time_t date = -1;
-  time_t time = -1;
-  int usec = -1;
-  char is_localtime = 0;
+  QDate local_date;
+  QTime local_time;
+  QDate utc_date;
+  QTime utc_time;
+  bool need_datetime = true;
   garmin_fs_t* gmsd;
   double d;
-  struct tm ymd;
+  std::tm ymd{};
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
@@ -509,7 +503,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   auto* wpt = new Waypoint;
   wpt->latitude = kUnicsvUnknown;
   wpt->longitude = kUnicsvUnknown;
-  memset(&ymd, 0, sizeof(ymd));
 
   int column = -1;
   const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
@@ -683,16 +676,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_utc_date:
-      if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(value), nullptr);
-        is_localtime = 0;
+      if (need_datetime && !utc_date.isValid()) {
+        utc_date = unicsv_parse_date(CSTR(value), nullptr);
       }
       break;
 
     case fld_utc_time:
-      if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 0;
+      if (need_datetime && !utc_time.isValid()) {
+        utc_time = unicsv_parse_time(value, utc_date);
       }
       break;
 
@@ -764,21 +755,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_iso_time:
-      is_localtime = 2;	/* fix result */
-      wpt->SetCreationTime(xml_parse_time(value));
+      need_datetime = false;	/* fix result */
+      wpt->SetCreationTime(QDateTime::fromString(value, Qt::ISODateWithMs));
       break;
 
     case fld_time:
-      if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 1;
+      if (need_datetime && !local_time.isValid()) {
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
     case fld_date:
-      if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(value), nullptr);
-        is_localtime = 1;
+      if (need_datetime && !local_date.isValid()) {
+        local_date = unicsv_parse_date(CSTR(value), nullptr);
       }
       break;
 
@@ -807,9 +796,8 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_datetime:
-      if ((is_localtime < 2) && (date < 0) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 1;
+      if (need_datetime && !local_date.isValid() && !local_time.isValid()) {
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
@@ -835,7 +823,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_facility:
       gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
@@ -880,7 +868,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_gc_diff:
     case fld_gc_is_archived:
     case fld_gc_is_available:
-    case fld_gc_exported:
     case fld_gc_last_found:
     case fld_gc_placer:
     case fld_gc_placer_id:
@@ -918,21 +905,13 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      case fld_gc_exported: {
-        time_t etime, edate;
-        int eusec;
-        etime = unicsv_parse_time(value, &eusec, &edate);
-        if (edate || etime) {
-          gc_data->exported = unicsv_adjust_time(etime, &edate);
-        }
-      }
       break;
       case fld_gc_last_found: {
-        time_t ftime, fdate;
-        int fusec;
-        ftime = unicsv_parse_time(value, &fusec, &fdate);
-        if (fdate || ftime) {
-          gc_data->last_found = unicsv_adjust_time(ftime, &fdate);
+        QTime ftime;
+        QDate fdate;
+        ftime = unicsv_parse_time(value, fdate);
+        if (fdate.isValid() || ftime.isValid()) {
+          gc_data->last_found = unicsv_adjust_time(fdate, ftime, true);
         }
       }
       break;
@@ -961,25 +940,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     return;
   }
 
-  if (is_localtime < 2) {	/* not fixed */
-    if ((time >= 0) && (date >= 0)) {
-      time_t t = date + time;
-
-      if (is_localtime) {
-        struct tm tm;
-        tm = *gmtime(&t);
-        if (opt_utc) {
-          wpt->SetCreationTime(mkgmtime(&tm));
-        } else {
-          wpt->SetCreationTime(mklocaltime(&tm));
-        }
-      } else {
-        wpt->SetCreationTime(t);
-      }
-    } else if (time >= 0) {
-      wpt->SetCreationTime(time);
-    } else if (date >= 0) {
-      wpt->SetCreationTime(date);
+  if (need_datetime) {	/* not fixed */
+    if (utc_date.isValid() && utc_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_date.isValid() && local_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
+    } else if (utc_date.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_date.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
+    } else if (utc_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
     } else if (ymd.tm_year || ymd.tm_mon || ymd.tm_mday) {
       if (ymd.tm_year < 100) {
         if (ymd.tm_year <= 70) {
@@ -988,7 +961,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           ymd.tm_year += 1900;
         }
       }
-      ymd.tm_year -= 1900;
 
       if (ymd.tm_mon == 0) {
         ymd.tm_mon = 1;
@@ -997,27 +969,17 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         ymd.tm_mday = 1;
       }
 
-      ymd.tm_mon--;
-      if (opt_utc) {
-        wpt->SetCreationTime(mkgmtime(&ymd));
-      } else {
-        wpt->SetCreationTime(mklocaltime(&ymd));
-      }
+      wpt->SetCreationTime(unicsv_adjust_time(
+                           QDate(ymd.tm_year, ymd.tm_mon, ymd.tm_mday),
+                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                           true));
     } else if (ymd.tm_hour || ymd.tm_min || ymd.tm_sec) {
-      if (opt_utc) {
-        wpt->SetCreationTime(mkgmtime(&ymd));
-      } else {
-        wpt->SetCreationTime(mklocaltime(&ymd));
-      }
+      wpt->SetCreationTime(unicsv_adjust_time(
+                           QDate(),
+                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                           true));
     }
 
-    if (usec >= 0) {
-      wpt->creation_time = wpt->creation_time.addMSecs(MICRO_TO_MILLI(usec));
-    }
-
-    if (opt_utc) {
-      wpt->creation_time = wpt->creation_time.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
-    }
   }
 
   /* utm/bng/swiss can be optional */
@@ -1105,8 +1067,7 @@ UnicsvFormat::read()
 
 /* =========================================================================== */
 
-void
-UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
+[[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
@@ -1133,128 +1094,126 @@ UnicsvFormat::unicsv_print_str(const QString& s) const
 }
 
 void
-UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
+UnicsvFormat::unicsv_print_date_time(const QDateTime& idt) const
 {
   if (!idt.isValid()) {
     return;
   }
-  QDateTime dt = idt;
-  if (opt_utc) {
-    //time += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
-    dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
-    dt = dt.toUTC();
+  QDateTime dt;
+  if (opt_utc != nullptr) {
+    dt = idt.toOffsetFromUtc(utc_offset);
+  } else {
+    dt = idt.toLocalTime();
   }
 
   unicsv_print_str(dt.toString(u"yyyy/MM/dd hh:mm:ss"));
 }
 
-#define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
-
 void
 UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
-    gb_setbit(&unicsv_outp_flags, fld_shortname);
+    unicsv_outp_flags[fld_shortname] = true;
   }
   if (wpt->altitude != unknown_alt) {
-    gb_setbit(&unicsv_outp_flags, fld_altitude);
+    unicsv_outp_flags[fld_altitude] = true;
   }
   if (!wpt->icon_descr.isNull()) {
-    gb_setbit(&unicsv_outp_flags, fld_symbol);
+    unicsv_outp_flags[fld_symbol] = true;
   }
   if (!wpt->description.isEmpty() && shortname != wpt->description) {
-    gb_setbit(&unicsv_outp_flags, fld_description);
+    unicsv_outp_flags[fld_description] = true;
   }
   if (!wpt->notes.isEmpty() && shortname != wpt->notes) {
     if ((wpt->description.isEmpty()) || (wpt->description != wpt->notes)) {
-      gb_setbit(&unicsv_outp_flags, fld_notes);
+      unicsv_outp_flags[fld_notes] = true;
     }
   }
   if (wpt->HasUrlLink()) {
-    gb_setbit(&unicsv_outp_flags, fld_url);
+    unicsv_outp_flags[fld_url] = true;
   }
   if (wpt->creation_time.isValid()) {
-    gb_setbit(&unicsv_outp_flags, fld_time);
-    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
-      gb_setbit(&unicsv_outp_flags, fld_date);
+    unicsv_outp_flags[fld_time] = true;
+    if (wpt->creation_time.toTime_t() >= 2 * SECONDS_PER_DAY) {
+      unicsv_outp_flags[fld_date] = true;
     }
   }
 
   if (wpt->fix != fix_unknown) {
-    gb_setbit(&unicsv_outp_flags, fld_fix);
+    unicsv_outp_flags[fld_fix] = true;
   }
   if (wpt->vdop > 0) {
-    gb_setbit(&unicsv_outp_flags, fld_vdop);
+    unicsv_outp_flags[fld_vdop] = true;
   }
   if (wpt->hdop > 0) {
-    gb_setbit(&unicsv_outp_flags, fld_hdop);
+    unicsv_outp_flags[fld_hdop] = true;
   }
   if (wpt->pdop > 0) {
-    gb_setbit(&unicsv_outp_flags, fld_pdop);
+    unicsv_outp_flags[fld_pdop] = true;
   }
   if (wpt->sat > 0) {
-    gb_setbit(&unicsv_outp_flags, fld_sat);
+    unicsv_outp_flags[fld_sat] = true;
   }
   if (wpt->heartrate != 0) {
-    gb_setbit(&unicsv_outp_flags, fld_heartrate);
+    unicsv_outp_flags[fld_heartrate] = true;
   }
   if (wpt->cadence != 0) {
-    gb_setbit(&unicsv_outp_flags, fld_cadence);
+    unicsv_outp_flags[fld_cadence] = true;
   }
   if (wpt->power > 0) {
-    gb_setbit(&unicsv_outp_flags, fld_power);
+    unicsv_outp_flags[fld_power] = true;
   }
 
   /* "flagged" waypoint members */
   if (wpt->course_has_value()) {
-    gb_setbit(&unicsv_outp_flags, fld_course);
+    unicsv_outp_flags[fld_course] = true;
   }
   if (wpt->depth_has_value()) {
-    gb_setbit(&unicsv_outp_flags, fld_depth);
+    unicsv_outp_flags[fld_depth] = true;
   }
   if (wpt->speed_has_value()) {
-    gb_setbit(&unicsv_outp_flags, fld_speed);
+    unicsv_outp_flags[fld_speed] = true;
   }
   if (wpt->proximity_has_value()) {
-    gb_setbit(&unicsv_outp_flags, fld_proximity);
+    unicsv_outp_flags[fld_proximity] = true;
   }
   if (wpt->temperature_has_value()) {
-    gb_setbit(&unicsv_outp_flags, fld_temperature);
+    unicsv_outp_flags[fld_temperature] = true;
   }
 
   if (gmsd) {
     if (garmin_fs_t::has_addr(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_addr);
+      unicsv_outp_flags[fld_garmin_addr] = true;
     }
     if (garmin_fs_t::has_city(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_city);
+      unicsv_outp_flags[fld_garmin_city] = true;
     }
     if (garmin_fs_t::has_country(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_country);
+      unicsv_outp_flags[fld_garmin_country] = true;
     }
     if (garmin_fs_t::has_phone_nr(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr);
+      unicsv_outp_flags[fld_garmin_phone_nr] = true;
     }
     if (garmin_fs_t::has_phone_nr2(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_phone_nr2);
+      unicsv_outp_flags[fld_garmin_phone_nr2] = true;
     }
     if (garmin_fs_t::has_fax_nr(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_fax_nr);
+      unicsv_outp_flags[fld_garmin_fax_nr] = true;
     }
     if (garmin_fs_t::has_email(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_email);
+      unicsv_outp_flags[fld_garmin_email] = true;
     }
     if (garmin_fs_t::has_postal_code(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_postal_code);
+      unicsv_outp_flags[fld_garmin_postal_code] = true;
     }
     if (garmin_fs_t::has_state(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_state);
+      unicsv_outp_flags[fld_garmin_state] = true;
     }
     if (garmin_fs_t::has_facility(gmsd)) {
-      gb_setbit(&unicsv_outp_flags, fld_garmin_facility);
+      unicsv_outp_flags[fld_garmin_facility] = true;
     }
   }
 
@@ -1262,40 +1221,37 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     const Geocache* gc_data = wpt->gc_data;
 
     if (gc_data->id) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_id);
+      unicsv_outp_flags[fld_gc_id] = true;
     }
     if (gc_data->type != Geocache::type_t::gt_unknown) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_type);
+      unicsv_outp_flags[fld_gc_type] = true;
     }
     if (gc_data->container != Geocache::container_t::gc_unknown) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_container);
+      unicsv_outp_flags[fld_gc_container] = true;
     }
     if (gc_data->terr) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_terr);
+      unicsv_outp_flags[fld_gc_terr] = true;
     }
     if (gc_data->diff) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_diff);
+      unicsv_outp_flags[fld_gc_diff] = true;
     }
     if (gc_data->is_archived != Geocache::status_t::gs_unknown) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_is_archived);
+      unicsv_outp_flags[fld_gc_is_archived] = true;
     }
     if (gc_data->is_available != Geocache::status_t::gs_unknown) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_is_available);
-    }
-    if (gc_data->exported.isValid()) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_exported);
+      unicsv_outp_flags[fld_gc_is_available] = true;
     }
     if (gc_data->last_found.isValid()) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_last_found);
+      unicsv_outp_flags[fld_gc_last_found] = true;
     }
     if (!gc_data->placer.isEmpty()) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_placer);
+      unicsv_outp_flags[fld_gc_placer] = true;
     }
     if (gc_data->placer_id) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_placer_id);
+      unicsv_outp_flags[fld_gc_placer_id] = true;
     }
     if (!gc_data->hint.isEmpty()) {
-      gb_setbit(&unicsv_outp_flags, fld_gc_hint);
+      unicsv_outp_flags[fld_gc_hint] = true;
     }
   }
 }
@@ -1308,7 +1264,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (unicsv_datum_idx == kDautmWGS84) {
     lat = wpt->latitude;
@@ -1387,10 +1343,10 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     break;
   }
 
-  if FIELD_USED(fld_shortname) {
+  if (unicsv_outp_flags[fld_shortname]) {
     unicsv_print_str(shortname);
   }
-  if FIELD_USED(fld_altitude) {
+  if (unicsv_outp_flags[fld_altitude]) {
     if (wpt->altitude != unknown_alt) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(1) <<  wpt->altitude;
@@ -1398,16 +1354,16 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_description) {
+  if (unicsv_outp_flags[fld_description]) {
     unicsv_print_str(wpt->description);
   }
-  if FIELD_USED(fld_notes) {
+  if (unicsv_outp_flags[fld_notes]) {
     unicsv_print_str(wpt->notes);
   }
-  if FIELD_USED(fld_symbol) {
+  if (unicsv_outp_flags[fld_symbol]) {
     unicsv_print_str(wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr);
   }
-  if FIELD_USED(fld_depth) {
+  if (unicsv_outp_flags[fld_depth]) {
     if (wpt->depth_has_value()) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(3) << wpt->depth_value();
@@ -1415,7 +1371,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_proximity) {
+  if (unicsv_outp_flags[fld_proximity]) {
     if (wpt->proximity_has_value()) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(0) << wpt->proximity_value();
@@ -1423,7 +1379,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_temperature) {
+  if (unicsv_outp_flags[fld_temperature]) {
     if (wpt->temperature_has_value()) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(3) << wpt->temperature_value();
@@ -1431,7 +1387,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_speed) {
+  if (unicsv_outp_flags[fld_speed]) {
     if (wpt->speed_has_value()) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(2) << wpt->speed_value();
@@ -1439,7 +1395,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_course) {
+  if (unicsv_outp_flags[fld_course]) {
     if (wpt->course_has_value()) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(1) << wpt->course_value();
@@ -1447,7 +1403,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_fix) {
+  if (unicsv_outp_flags[fld_fix]) {
     const char* fix;
     switch (wpt->fix) {
     case fix_none:
@@ -1474,7 +1430,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_hdop) {
+  if (unicsv_outp_flags[fld_hdop]) {
     if (wpt->hdop > 0) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(2) << wpt->hdop;
@@ -1482,7 +1438,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_vdop) {
+  if (unicsv_outp_flags[fld_vdop]) {
     if (wpt->vdop > 0) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(2) << wpt->vdop;
@@ -1490,7 +1446,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_pdop) {
+  if (unicsv_outp_flags[fld_pdop]) {
     if (wpt->pdop > 0) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(2) << wpt->pdop;
@@ -1498,28 +1454,28 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_sat) {
+  if (unicsv_outp_flags[fld_sat]) {
     if (wpt->sat > 0) {
       *fout << unicsv_fieldsep << wpt->sat;
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_heartrate) {
+  if (unicsv_outp_flags[fld_heartrate]) {
     if (wpt->heartrate != 0) {
       *fout << unicsv_fieldsep << wpt->heartrate;
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_cadence) {
+  if (unicsv_outp_flags[fld_cadence]) {
     if (wpt->cadence != 0) {
       *fout << unicsv_fieldsep << wpt->cadence;
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_power) {
+  if (unicsv_outp_flags[fld_power]) {
     if (wpt->power > 0) {
       *fout << unicsv_fieldsep
             << qSetRealNumberPrecision(1) << wpt->power;
@@ -1527,13 +1483,11 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_date) {
-    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
+  if (unicsv_outp_flags[fld_date]) {
+    if (wpt->creation_time.toTime_t() >= 2 * SECONDS_PER_DAY) {
       QDateTime dt;
-      if (opt_utc) {
-        dt = wpt->GetCreationTime().toUTC();
-        // We might wrap to a different day by overriding the TZ offset.
-        dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
+      if (opt_utc != nullptr) {
+        dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
       }
@@ -1543,27 +1497,26 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_time) {
+  if (unicsv_outp_flags[fld_time]) {
     if (wpt->creation_time.isValid()) {
-      QTime t;
-      if (opt_utc) {
-        t = wpt->GetCreationTime().toUTC().time();
-        t = t.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
+      QDateTime dt;
+      if (opt_utc != nullptr) {
+        dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
-        t = wpt->GetCreationTime().toLocalTime().time();
+        dt = wpt->GetCreationTime().toLocalTime();
       }
       QString out;
-      if (t.msec() > 0) {
-        out = t.toString(u"hh:mm:ss.zzz");
+      if (dt.time().msec() > 0) {
+        out = dt.toString(u"hh:mm:ss.zzz");
       } else {
-        out = t.toString(u"hh:mm:ss");
+        out = dt.toString(u"hh:mm:ss");
       }
       *fout << unicsv_fieldsep << out;
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if (FIELD_USED(fld_url)) {
+  if (unicsv_outp_flags[fld_url]) {
     if (!wpt->HasUrlLink()) {
       unicsv_print_str("");
     } else {
@@ -1572,34 +1525,34 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     }
   }
 
-  if FIELD_USED(fld_garmin_facility) {
+  if (unicsv_outp_flags[fld_garmin_facility]) {
     unicsv_print_str(garmin_fs_t::get_facility(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_addr) {
+  if (unicsv_outp_flags[fld_garmin_addr]) {
     unicsv_print_str(garmin_fs_t::get_addr(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_city) {
+  if (unicsv_outp_flags[fld_garmin_city]) {
     unicsv_print_str(garmin_fs_t::get_city(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_postal_code) {
+  if (unicsv_outp_flags[fld_garmin_postal_code]) {
     unicsv_print_str(garmin_fs_t::get_postal_code(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_state) {
+  if (unicsv_outp_flags[fld_garmin_state]) {
     unicsv_print_str(garmin_fs_t::get_state(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_country) {
+  if (unicsv_outp_flags[fld_garmin_country]) {
     unicsv_print_str(garmin_fs_t::get_country(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_phone_nr) {
+  if (unicsv_outp_flags[fld_garmin_phone_nr]) {
     unicsv_print_str(garmin_fs_t::get_phone_nr(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_phone_nr2) {
+  if (unicsv_outp_flags[fld_garmin_phone_nr2]) {
     unicsv_print_str(garmin_fs_t::get_phone_nr2(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_fax_nr) {
+  if (unicsv_outp_flags[fld_garmin_fax_nr]) {
     unicsv_print_str(garmin_fs_t::get_fax_nr(gmsd, nullptr));
   }
-  if FIELD_USED(fld_garmin_email) {
+  if (unicsv_outp_flags[fld_garmin_email]) {
     unicsv_print_str(garmin_fs_t::get_email(gmsd, nullptr));
   }
 
@@ -1609,80 +1562,73 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     gc_data = wpt->gc_data;
   }
 
-  if FIELD_USED(fld_gc_id) {
+  if (unicsv_outp_flags[fld_gc_id]) {
     *fout << unicsv_fieldsep;
     if (gc_data && gc_data->id) {
       *fout << gc_data->id;
     }
   }
-  if FIELD_USED(fld_gc_type) {
+  if (unicsv_outp_flags[fld_gc_type]) {
     if (gc_data) {
       unicsv_print_str(gc_data->get_type());
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_container) {
+  if (unicsv_outp_flags[fld_gc_container]) {
     if (gc_data) {
       unicsv_print_str(gc_data->get_container());
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_terr) {
+  if (unicsv_outp_flags[fld_gc_terr]) {
     *fout << unicsv_fieldsep;
     if (gc_data && gc_data->terr) {
       *fout << qSetRealNumberPrecision(1) << ((double)gc_data->terr / 10);
     }
   }
-  if FIELD_USED(fld_gc_diff) {
+  if (unicsv_outp_flags[fld_gc_diff]) {
     *fout << unicsv_fieldsep;
     if (gc_data && gc_data->diff) {
       *fout << qSetRealNumberPrecision(1) << ((double)gc_data->diff / 10);
     }
   }
-  if FIELD_USED(fld_gc_is_archived) {
+  if (unicsv_outp_flags[fld_gc_is_archived]) {
     if (gc_data && (gc_data->is_archived != Geocache::status_t::gs_unknown)) {
       unicsv_print_str((gc_data->is_archived == Geocache::status_t::gs_true) ? "True" : "False");
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_is_available) {
+  if (unicsv_outp_flags[fld_gc_is_available]) {
     if (gc_data && (gc_data->is_available != Geocache::status_t::gs_unknown)) {
       unicsv_print_str((gc_data->is_available == Geocache::status_t::gs_true) ? "True" : "False");
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_exported) {
+  if (unicsv_outp_flags[fld_gc_last_found]) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->exported);
+      unicsv_print_date_time(gc_data->last_found);
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_last_found) {
-    if (gc_data) {
-      unicsv_print_data_time(gc_data->last_found);
-    } else {
-      *fout << unicsv_fieldsep;
-    }
-  }
-  if FIELD_USED(fld_gc_placer) {
+  if (unicsv_outp_flags[fld_gc_placer]) {
     if (gc_data) {
       unicsv_print_str(gc_data->placer);
     } else {
       *fout << unicsv_fieldsep;
     }
   }
-  if FIELD_USED(fld_gc_placer_id) {
+  if (unicsv_outp_flags[fld_gc_placer_id]) {
     *fout << unicsv_fieldsep;
     if (gc_data && gc_data->placer_id) {
       *fout << gc_data->placer_id;
     }
   }
-  if FIELD_USED(fld_gc_hint) {
+  if (unicsv_outp_flags[fld_gc_hint]) {
     if (gc_data) {
       unicsv_print_str(gc_data->hint);
     } else {
@@ -1713,7 +1659,7 @@ UnicsvFormat::wr_init(const QString& fname)
   fout->open(fname, QIODevice::WriteOnly, MYNAME, opt_codec);
   fout->setRealNumberNotation(QTextStream::FixedNotation);
 
-  memset(&unicsv_outp_flags, 0, sizeof(unicsv_outp_flags));
+  unicsv_outp_flags.reset();
   unicsv_grid_idx = grid_unknown;
   unicsv_datum_idx = kDautmWGS84;
   unicsv_fieldsep = kUnicsvFieldSep;
@@ -1746,6 +1692,7 @@ UnicsvFormat::wr_init(const QString& fname)
   }
 
   llprec = xstrtoi(opt_prec, nullptr, 10);
+  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 
 void
@@ -1817,135 +1764,132 @@ UnicsvFormat::write()
           << "Longitude";
   }
 
-  if FIELD_USED(fld_shortname) {
+  if (unicsv_outp_flags[fld_shortname]) {
     *fout << unicsv_fieldsep << "Name";
   }
-  if FIELD_USED(fld_altitude) {
+  if (unicsv_outp_flags[fld_altitude]) {
     *fout << unicsv_fieldsep << "Altitude";
   }
-  if FIELD_USED(fld_description) {
+  if (unicsv_outp_flags[fld_description]) {
     *fout << unicsv_fieldsep << "Description";
   }
-  if FIELD_USED(fld_notes) {
+  if (unicsv_outp_flags[fld_notes]) {
     *fout << unicsv_fieldsep << "Notes";
   }
-  if FIELD_USED(fld_symbol) {
+  if (unicsv_outp_flags[fld_symbol]) {
     *fout << unicsv_fieldsep << "Symbol";
   }
-  if FIELD_USED(fld_depth) {
+  if (unicsv_outp_flags[fld_depth]) {
     *fout << unicsv_fieldsep << "Depth";
   }
-  if FIELD_USED(fld_proximity) {
+  if (unicsv_outp_flags[fld_proximity]) {
     *fout << unicsv_fieldsep << "Proximity";
   }
-  if FIELD_USED(fld_temperature) {
+  if (unicsv_outp_flags[fld_temperature]) {
     *fout << unicsv_fieldsep << "Temperature";
   }
-  if FIELD_USED(fld_speed) {
+  if (unicsv_outp_flags[fld_speed]) {
     *fout << unicsv_fieldsep << "Speed";
   }
-  if FIELD_USED(fld_course) {
+  if (unicsv_outp_flags[fld_course]) {
     *fout << unicsv_fieldsep << "Course";
   }
-  if FIELD_USED(fld_fix) {
+  if (unicsv_outp_flags[fld_fix]) {
     *fout << unicsv_fieldsep << "FIX";
   }
-  if FIELD_USED(fld_hdop) {
+  if (unicsv_outp_flags[fld_hdop]) {
     *fout << unicsv_fieldsep << "HDOP";
   }
-  if FIELD_USED(fld_vdop) {
+  if (unicsv_outp_flags[fld_vdop]) {
     *fout << unicsv_fieldsep << "VDOP";
   }
-  if FIELD_USED(fld_pdop) {
+  if (unicsv_outp_flags[fld_pdop]) {
     *fout << unicsv_fieldsep << "PDOP";
   }
-  if FIELD_USED(fld_sat) {
+  if (unicsv_outp_flags[fld_sat]) {
     *fout << unicsv_fieldsep << "Satellites";
   }
-  if FIELD_USED(fld_heartrate) {
+  if (unicsv_outp_flags[fld_heartrate]) {
     *fout << unicsv_fieldsep << "Heartrate";
   }
-  if FIELD_USED(fld_cadence) {
+  if (unicsv_outp_flags[fld_cadence]) {
     *fout << unicsv_fieldsep << "Cadence";
   }
-  if FIELD_USED(fld_power) {
+  if (unicsv_outp_flags[fld_power]) {
     *fout << unicsv_fieldsep << "Power";
   }
-  if FIELD_USED(fld_date) {
+  if (unicsv_outp_flags[fld_date]) {
     *fout << unicsv_fieldsep << "Date";
   }
-  if FIELD_USED(fld_time) {
+  if (unicsv_outp_flags[fld_time]) {
     *fout << unicsv_fieldsep << "Time";
   }
-  if FIELD_USED(fld_url) {
+  if (unicsv_outp_flags[fld_url]) {
     *fout << unicsv_fieldsep << "URL";
   }
 
-  if FIELD_USED(fld_garmin_facility) {
+  if (unicsv_outp_flags[fld_garmin_facility]) {
     *fout << unicsv_fieldsep << "Facility";
   }
-  if FIELD_USED(fld_garmin_addr) {
+  if (unicsv_outp_flags[fld_garmin_addr]) {
     *fout << unicsv_fieldsep << "Address";
   }
-  if FIELD_USED(fld_garmin_city) {
+  if (unicsv_outp_flags[fld_garmin_city]) {
     *fout << unicsv_fieldsep << "City";
   }
-  if FIELD_USED(fld_garmin_postal_code) {
+  if (unicsv_outp_flags[fld_garmin_postal_code]) {
     *fout << unicsv_fieldsep << "PostalCode";
   }
-  if FIELD_USED(fld_garmin_state) {
+  if (unicsv_outp_flags[fld_garmin_state]) {
     *fout << unicsv_fieldsep << "State";
   }
-  if FIELD_USED(fld_garmin_country) {
+  if (unicsv_outp_flags[fld_garmin_country]) {
     *fout << unicsv_fieldsep << "Country";
   }
-  if FIELD_USED(fld_garmin_phone_nr) {
+  if (unicsv_outp_flags[fld_garmin_phone_nr]) {
     *fout << unicsv_fieldsep << "Phone";
   }
-  if FIELD_USED(fld_garmin_phone_nr2) {
+  if (unicsv_outp_flags[fld_garmin_phone_nr2]) {
     *fout << unicsv_fieldsep << "Phone2";
   }
-  if FIELD_USED(fld_garmin_fax_nr) {
+  if (unicsv_outp_flags[fld_garmin_fax_nr]) {
     *fout << unicsv_fieldsep << "Fax";
   }
-  if FIELD_USED(fld_garmin_email) {
+  if (unicsv_outp_flags[fld_garmin_email]) {
     *fout << unicsv_fieldsep << "Email";
   }
 
-  if FIELD_USED(fld_gc_id) {
+  if (unicsv_outp_flags[fld_gc_id]) {
     *fout << unicsv_fieldsep << "GCID";
   }
-  if FIELD_USED(fld_gc_type) {
+  if (unicsv_outp_flags[fld_gc_type]) {
     *fout << unicsv_fieldsep << "Type";
   }
-  if FIELD_USED(fld_gc_container) {
+  if (unicsv_outp_flags[fld_gc_container]) {
     *fout << unicsv_fieldsep << "Container";
   }
-  if FIELD_USED(fld_gc_terr) {
+  if (unicsv_outp_flags[fld_gc_terr]) {
     *fout << unicsv_fieldsep << "Terrain";
   }
-  if FIELD_USED(fld_gc_diff) {
+  if (unicsv_outp_flags[fld_gc_diff]) {
     *fout << unicsv_fieldsep << "Difficulty";
   }
-  if FIELD_USED(fld_gc_is_archived) {
+  if (unicsv_outp_flags[fld_gc_is_archived]) {
     *fout << unicsv_fieldsep << "Archived";
   }
-  if FIELD_USED(fld_gc_is_available) {
+  if (unicsv_outp_flags[fld_gc_is_available]) {
     *fout << unicsv_fieldsep << "Available";
   }
-  if FIELD_USED(fld_gc_exported) {
-    *fout << unicsv_fieldsep << "Exported";
-  }
-  if FIELD_USED(fld_gc_last_found) {
+  if (unicsv_outp_flags[fld_gc_last_found]) {
     *fout << unicsv_fieldsep << "Last Found";
   }
-  if FIELD_USED(fld_gc_placer) {
+  if (unicsv_outp_flags[fld_gc_placer]) {
     *fout << unicsv_fieldsep << "Placer";
   }
-  if FIELD_USED(fld_gc_placer_id) {
+  if (unicsv_outp_flags[fld_gc_placer_id]) {
     *fout << unicsv_fieldsep << "Placer ID";
   }
-  if FIELD_USED(fld_gc_hint) {
+  if (unicsv_outp_flags[fld_gc_hint]) {
     *fout << unicsv_fieldsep << "Hint";
   }
   if (opt_format) {

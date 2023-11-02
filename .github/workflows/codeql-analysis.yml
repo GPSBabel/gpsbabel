@@ -27,7 +27,7 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
       env:
         CMAKE_GENERATOR: Ninja
 
@@ -42,7 +42,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

@@ -59,7 +59,7 @@
 #include <cmath>                // for fabs, modf, copysign, round, fmax
 #include <cstdint>              // for uint32_t, int32_t, uint16_t, int16_t, uint8_t, INT32_MAX
 #include <cstdio>               // for printf, SEEK_SET, snprintf, SEEK_CUR
-#include <cstdlib>              // for labs
+#include <cstdlib>              // for abs
 #include <cstring>              // for memcmp, strlen
 #include <type_traits>          // for add_const<>::type
 
@@ -209,7 +209,7 @@ ExifFormat::exif_read_str(ExifTag* tag)
   // Panasonic DMC-TZ10 stores datum with trailing spaces.
   // Kodak stores zero count ASCII tags.
   QByteArray buf = (tag->count == 0) ? QByteArray("") : tag->data.at(0).toByteArray();
-  // If the bytearray contains internal NULL(s), get rid of the first and 
+  // If the bytearray contains internal NULL(s), get rid of the first and
   // anything after it.
   if (auto idx = buf.indexOf('\0'); idx >= 0) {
     buf = buf.left(idx);
@@ -1159,7 +1159,7 @@ ExifFormat::exif_find_wpt_by_time(const Waypoint* wpt)
 
   if (exif_wpt_ref == nullptr) {
     exif_wpt_ref = wpt;
-  } else if (labs(exif_time_ref.msecsTo(wpt->creation_time)) < labs(exif_time_ref.msecsTo(exif_wpt_ref->creation_time))) {
+  } else if (std::abs(exif_time_ref.msecsTo(wpt->creation_time)) < std::abs(exif_time_ref.msecsTo(exif_wpt_ref->creation_time))) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1535,13 +1535,13 @@ ExifFormat::write()
 
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
-    } else if (labs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)) > frame) {
+    } else if (std::abs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)) > frame) {
       QString time_str = exif_time_str(exif_time_ref);
       warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(time_str));
       if (exif_wpt_ref != nullptr) {
         QString str = exif_time_str(exif_wpt_ref->creation_time);
-        warning(MYNAME ": Best is from %s, %ld second(s) away.\n",
-                qPrintable(str), labs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)));
+        warning(MYNAME ": Best is from %s, %lld second(s) away.\n",
+                qPrintable(str), std::abs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)));
       }
       exif_wpt_ref = nullptr;
     }
@@ -1574,7 +1574,7 @@ ExifFormat::write()
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 0, dt.time().hour());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, dt.time().minute());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2,
-                      static_cast<double>(dt.time().second()) + 
+                      static_cast<double>(dt.time().second()) +
                       static_cast<double>(dt.time().msec())/1000.0);
 
       exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString(u"yyyy:MM:dd")));

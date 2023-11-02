@@ -110,7 +110,7 @@ protected:
   const dg100_command* dg100_findcmd(int id) const;
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
-  static void dg100_log(const char* fmt, ...);
+  [[gnu::format(printf, 1, 2)]] static void dg100_log(const char* fmt, ...);
   static float bin2deg(int val);
   void process_gpsfile(uint8_t* data, route_head** track) const;
   static uint16_t dg100_checksum(const uint8_t* buf, int count);

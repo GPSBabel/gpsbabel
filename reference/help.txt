@@ -1,4 +1,4 @@
-GPSBabel Version 1.8.0.  https://www.gpsbabel.org
+GPSBabel Version 1.9.0.  https://www.gpsbabel.org
 
 Usage:
     ./gpsbabel [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE
@@ -32,15 +32,6 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	baroiq                Brauniger IQ Series Barograph Download
-	cambridge             Cambridge/Winpilot glider software
-	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
-	  urlbase               Basename prepended to URL on output
-	  prefer_shortnames     (0/1) Use shortname instead of description
-	  datum                 GPS datum (def. WGS 84)
 	v900                  Columbus/Visiontac V900 files (.csv)
 	csv                   Comma separated values
 	  snlen                 Max synthesized shortname length
@@ -50,6 +41,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -58,6 +50,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue757              Data Logger iBlue757 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -66,6 +59,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename
 	  frame                 Time-frame (in seconds)
@@ -77,6 +71,16 @@ File Types (-i and -o options):
 	  url                   Source for URL field in .dbf
 	igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff
+	  ENL                   (0/1) Engine Noise (ENL; default=1)
+	  TAS                   (0/1) True Airspeed (TAS; default=1)
+	  VAT                   (0/1) Total Energy Vario (VAT; default=1)
+	  OAT                   (0/1) Outside Air Temperature (OAT; default=1)
+	  TRT                   (0/1) True Track (TRT; default=0)
+	  GSP                   (0/1) Ground Speed (GSP; default=1)
+	  FXA                   (0/1) Fix Accuracy (FXA; default=1)
+	  SIU                   (0/1) # Of Sats (SIU; default=0)
+	  ACZ                   (0/1) Z Acceleration (ACZ; default=1)
+	  GFO                   (0/1) G Force? (GFO; default=0)
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
@@ -88,6 +92,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_g1000          Garmin G1000 datalog input filter file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -96,6 +101,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gdb                   Garmin MapSource - gdb
 	  cat                   Default category on output (1..16)
 	  bitscategory          Bitmap of categories
@@ -120,6 +126,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_gpi            Garmin Points of Interest (.gpi)
 	  alerts                (0/1) Enable alerts on speed or proximity distance
 	  bitmap                Use specified bitmap on output
@@ -146,6 +153,7 @@ File Types (-i and -o options):
 	  category              Category number to use for written waypoints
 	  bitscategory          Bitmap of categories
 	  baud                  Speed in bits per second of serial port (baud=9600
+	  codec                 override codec to use for device
 	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, MultiSport, Other
@@ -182,6 +190,7 @@ File Types (-i and -o options):
 	  max_position_point    Retain at most this number of position points  (0 
 	  rotate_colors         Rotate colors for tracks and routes (default autom
 	  prec                  Precision of coordinates, number of decimals
+	googletakeout         Google Takeout Location History
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -190,6 +199,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gtm                   GPS TrackMaker
 	arc                   GPSBabel arc filter file
 	  snlen                 Max synthesized shortname length
@@ -199,6 +209,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrive              GpsDrive Format
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -207,6 +218,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrivetrack         GpsDrive Format for Tracks
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -215,6 +227,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpx                   GPX XML
 	  snlen                 Length of generated shortnames
 	  suppresswhite         (0/1) No whitespace in generated shortnames
@@ -224,7 +237,6 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension
 	  garminextensions      (0/1) Add info (depth) as Garmin extension
 	  elevprec              Precision of elevations, number of decimals
-	holux                 Holux (gm-100) .wpo Format
 	m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file
 	m241                  Holux M-241 (MTK based) download
@@ -281,15 +293,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27)
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navilink              NaviGPS GT-11/BGT-11 Download
-	  nuketrk               (0/1) Delete all track points
-	  nukerte               (0/1) Delete all routes
-	  nukewpt               (0/1) Delete all waypoints
-	  nukedlg               (0/1) Clear the datalog
-	  datalog               (0/1) Read from datalogger buffer
-	  power_off             (0/1) Command unit to power itself down
-	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
-	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 	nmea                  NMEA 0183 sentences
 	  snlen                 Max length of waypoint name to write
 	  gprmc                 (0/1) Read/write GPRMC sentences
@@ -351,6 +354,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	text                  Textual Output
 	  nosep                 (0/1) Suppress separator lines between waypoints
 	  encrypt               (0/1) Encrypt hints using ROT13
@@ -368,10 +372,6 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13
-	wbt-bin               Wintec WBT-100/200 Binary File Format
-	wbt                   Wintec WBT-100/200 GPS Download
-	  erase                 (0/1) Erase device data after download
-	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
 
 Supported data filters:
 	arc                   Include Only Points Within Distance of Arc        
@@ -460,7 +460,7 @@ Supported data filters:
 	track                 Manipulate track lists                            
 	  move                  Correct trackpoint timestamps by a delta 
 	  pack                  Pack all tracks into one 
-	  split                 Split by date or time interval (see README) 
+	  split                 Split by date or time interval 
 	  sdistance             Split by distance 
 	  merge                 Merge multiple tracks for the same way 
 	  name                  Use only track(s) where title matches given name 

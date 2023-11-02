@@ -27,7 +27,6 @@
 #include <setupapi.h>
 #include <winioctl.h>
 
-#include "garmin_device_xml.h"
 #include "jeeps/garminusb.h"
 #include "jeeps/gps.h"
 #include "jeeps/gpsapp.h"
@@ -55,7 +54,6 @@ typedef struct {
 
 static HANDLE usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
-static const gdx_info* gdx;
 
 static int
 gusb_win_close(gpsdevh* /* handle */, bool /* exit_lib */)
@@ -119,7 +117,7 @@ gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
   WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
   if (rsz != sz) {
-    fatal("Error sending %d bytes.   Successfully sent %ld\n", sz, rsz);
+    fatal("Error sending %zu bytes.  Successfully sent %ld\n", sz, rsz);
   }
 
   return rsz;
@@ -185,30 +183,6 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
   return usb_handle;
 }
 
-
-static char** get_garmin_mountpoints(void)
-{
-#define BUFSIZE 512
-  char szTemp[MAX_PATH];
-  char* p = szTemp;
-  char** dlist = (char **) xmalloc(sizeof(*dlist));
-
-  dlist[0] = NULL;
-
-  if (GetLogicalDriveStringsA(BUFSIZE-1, szTemp)) {
-    int i = 0;
-    while (*p) {
-      dlist = (char **) xrealloc(dlist, sizeof(*dlist) * (++i + 1));
-      //            fprintf(stderr, "Found: %d, %s\n", i, p);
-      dlist[i-1] = xstrdup(p);
-      dlist[i] = NULL;
-      while (*p++);
-    }
-  }
-
-  return dlist;
-}
-
 /*
  * Main entry point from the upper layer.   Walk the device tree, find our
  * device, and light it up.
@@ -251,17 +225,6 @@ gusb_init(const char* pname, gpsdevh** dh)
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
                                      &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
-      // If there were zero matches, we may be trying to talk to a "GPX Mode" device.
-
-
-      char** dlist = get_garmin_mountpoints();
-      gdx = gdx_find_file(dlist);
-      if (gdx) {
-        return 1;
-      }
-
-
-      // Plan C.
       GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
       warning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
       return 0;

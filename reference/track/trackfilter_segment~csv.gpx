@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="39.749837151" minlon="-105.000000000" maxlat="39.749907519" maxlon="-104.872184544"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.749907519" lon="-105.000000000">
+        <time>2023-01-01T00:00:00Z</time>
+        <name>Point01</name>
+      </trkpt>
+      <trkpt lat="39.749907517" lon="-104.999416367">
+        <time>2023-01-01T00:00:10Z</time>
+        <name>Point02</name>
+      </trkpt>
+      <trkpt lat="39.749907513" lon="-104.998832734">
+        <time>2023-01-01T00:00:20Z</time>
+        <name>Point03</name>
+      </trkpt>
+      <trkpt lat="39.749907506" lon="-104.998249101">
+        <time>2023-01-01T00:00:30Z</time>
+        <name>Point04</name>
+      </trkpt>
+      <trkpt lat="39.749907495" lon="-104.997665468">
+        <time>2023-01-01T00:00:40Z</time>
+        <name>Point05</name>
+      </trkpt>
+      <trkpt lat="39.749907482" lon="-104.997081835">
+        <time>2023-01-01T00:00:50Z</time>
+        <name>Point06</name>
+      </trkpt>
+      <trkpt lat="39.749907466" lon="-104.996498203">
+        <time>2023-01-01T00:01:00Z</time>
+        <name>Point07</name>
+      </trkpt>
+      <trkpt lat="39.749907447" lon="-104.995914570">
+        <time>2023-01-01T00:01:10Z</time>
+        <name>Point08</name>
+      </trkpt>
+      <trkpt lat="39.749907425" lon="-104.995330937">
+        <time>2023-01-01T00:01:20Z</time>
+        <name>Point09</name>
+      </trkpt>
+      <trkpt lat="39.749907400" lon="-104.994747304">
+        <time>2023-01-01T00:01:30Z</time>
+        <name>Point10</name>
+      </trkpt>
+      <trkpt lat="39.749907400" lon="-104.994740300">
+        <time>2023-01-01T00:02:00Z</time>
+        <name>Point13</name>
+      </trkpt>
+      <trkpt lat="39.749907372" lon="-104.994163671">
+        <time>2023-01-01T00:02:10Z</time>
+        <name>Point14</name>
+      </trkpt>
+      <trkpt lat="39.749907341" lon="-104.993580038">
+        <time>2023-01-01T00:02:20Z</time>
+        <name>Point15</name>
+      </trkpt>
+      <trkpt lat="39.749907308" lon="-104.992996405">
+        <time>2023-01-01T00:02:30Z</time>
+        <name>Point16</name>
+      </trkpt>
+      <trkpt lat="39.749907271" lon="-104.992412772">
+        <time>2023-01-01T00:02:40Z</time>
+        <name>Point17</name>
+      </trkpt>
+      <trkpt lat="39.749907231" lon="-104.991829139">
+        <time>2023-01-01T00:02:50Z</time>
+        <name>Point18</name>
+      </trkpt>
+      <trkpt lat="39.749907189" lon="-104.991245507">
+        <time>2023-01-01T00:03:00Z</time>
+        <name>Point19</name>
+      </trkpt>
+      <trkpt lat="39.749907143" lon="-104.990661874">
+        <time>2023-01-01T00:03:10Z</time>
+        <name>Point20</name>
+      </trkpt>
+      <trkpt lat="39.749907095" lon="-104.990078241">
+        <time>2023-01-01T00:03:20Z</time>
+        <name>Point21</name>
+      </trkpt>
+      <trkpt lat="39.749907044" lon="-104.989494608">
+        <time>2023-01-01T00:03:30Z</time>
+        <name>Point22</name>
+      </trkpt>
+      <trkpt lat="39.749906989" lon="-104.988910975">
+        <time>2023-01-01T00:03:40Z</time>
+        <name>Point23</name>
+      </trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="39.749848831" lon="-104.883273534">
+        <time>2023-01-01T01:00:00Z</time>
+        <name>Point24</name>
+      </trkpt>
+      <trkpt lat="39.749848243" lon="-104.882689902">
+        <time>2023-01-01T01:00:10Z</time>
+        <name>Point25</name>
+      </trkpt>
+      <trkpt lat="39.749847651" lon="-104.882106271">
+        <time>2023-01-01T01:00:20Z</time>
+        <name>Point26</name>
+      </trkpt>
+      <trkpt lat="39.749847057" lon="-104.881522640">
+        <time>2023-01-01T01:00:30Z</time>
+        <name>Point27</name>
+      </trkpt>
+      <trkpt lat="39.749846460" lon="-104.880939009">
+        <time>2023-01-01T01:00:40Z</time>
+        <name>Point28</name>
+      </trkpt>
+      <trkpt lat="39.749845860" lon="-104.880355378">
+        <time>2023-01-01T01:00:50Z</time>
+        <name>Point29</name>
+      </trkpt>
+      <trkpt lat="39.749845257" lon="-104.879771747">
+        <time>2023-01-01T01:01:00Z</time>
+        <name>Point30</name>
+      </trkpt>
+      <trkpt lat="39.749844651" lon="-104.879188116">
+        <time>2023-01-01T01:01:10Z</time>
+        <name>Point31</name>
+      </trkpt>
+      <trkpt lat="39.749844042" lon="-104.878604485">
+        <time>2023-01-01T01:01:20Z</time>
+        <name>Point32</name>
+      </trkpt>
+      <trkpt lat="39.749843430" lon="-104.878020854">
+        <time>2023-01-01T01:01:30Z</time>
+        <name>Point33</name>
+      </trkpt>
+      <trkpt lat="39.749842815" lon="-104.877437223">
+        <time>2023-01-01T01:01:40Z</time>
+        <name>Point34</name>
+      </trkpt>
+      <trkpt lat="39.749842198" lon="-104.876853592">
+        <time>2023-01-01T01:01:50Z</time>
+        <name>Point35</name>
+      </trkpt>
+      <trkpt lat="39.749841577" lon="-104.876269961">
+        <time>2023-01-01T01:02:00Z</time>
+        <name>Point36</name>
+      </trkpt>
+      <trkpt lat="39.749840954" lon="-104.875686330">
+        <time>2023-01-01T01:02:10Z</time>
+        <name>Point37</name>
+      </trkpt>
+      <trkpt lat="39.749840327" lon="-104.875102699">
+        <time>2023-01-01T01:02:20Z</time>
+        <name>Point38</name>
+      </trkpt>
+      <trkpt lat="39.749839698" lon="-104.874519068">
+        <time>2023-01-01T01:02:30Z</time>
+        <name>Point39</name>
+      </trkpt>
+      <trkpt lat="39.749839065" lon="-104.873935437">
+        <time>2023-01-01T01:02:40Z</time>
+        <name>Point40</name>
+      </trkpt>
+      <trkpt lat="39.749838430" lon="-104.873351806">
+        <time>2023-01-01T01:02:50Z</time>
+        <name>Point41</name>
+      </trkpt>
+      <trkpt lat="39.749837792" lon="-104.872768175">
+        <time>2023-01-01T01:03:00Z</time>
+        <name>Point42</name>
+      </trkpt>
+      <trkpt lat="39.749837151" lon="-104.872184544">
+        <time>2023-01-01T01:03:10Z</time>
+        <name>Point43</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

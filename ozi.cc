@@ -55,6 +55,7 @@
 #include "csv_util.h"             // for csv_stringclean
 #include "formspec.h"             // for FsChainAdd, FsChainFind, kFsOzi, FormatSpecificData
 #include "jeeps/gpsmath.h"        // for GPS_Math_Known_Datum_To_WGS84_M
+#include "mkshort.h"              // for MakeShort
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 
@@ -77,7 +78,7 @@ struct ozi_fsdata : FormatSpecificData {
 
 static gpsbabel::TextStream* stream = nullptr;
 
-static short_handle mkshort_handle;
+static MakeShort* mkshort_handle;
 static route_head* trk_head;
 static route_head* rte_head;
 
@@ -437,7 +438,6 @@ rd_init(const QString& fname)
 {
   ozi_open_io(fname, QFile::ReadOnly);
 
-  mkshort_handle = mkshort_new_handle();
   ozi_init_units(0);
 }
 
@@ -445,8 +445,6 @@ static void
 rd_deinit()
 {
   ozi_close_io();
-
-  mkshort_del_handle(&mkshort_handle);
 }
 
 static void
@@ -460,26 +458,26 @@ wr_init(const QString& fname)
 
   ozi_ofname = fname;
 
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
 
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
+    mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
     if (snwhiteopt) {
-      setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
+      mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      setshort_mustupper(mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
+      mkshort_handle->set_mustupper(xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      setshort_mustuniq(mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
+      mkshort_handle->set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
     }
 
-    setshort_badchars(mkshort_handle, "\",");
+    mkshort_handle->set_badchars("\",");
   }
 
   ozi_init_units(1);
@@ -492,7 +490,8 @@ wr_deinit()
   ozi_close_io();
   ozi_ofname.clear();
 
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 }
 
 static void
@@ -608,7 +607,7 @@ ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name
     break;
   case 2:
     /* new track flag */
-    if ((str.toInt() == 1) && (trk_head->rte_waypt_ct() > 0)) {
+    if ((str.toInt() == 1) && !trk_head->rte_waypt_empty()) {
       trk_head = new route_head;
       track_add_head(trk_head);
       if (trk_name) {
@@ -881,7 +880,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
     if (!wpt->description.isEmpty()) {
       if (global_opts.synthesize_shortnames) {
-        shortname = mkshort_from_wpt(mkshort_handle, wpt);
+        shortname = mkshort_handle->mkshort_from_wpt(wpt);
       } else {
         shortname = csv_stringclean(wpt->description, BADCHARS);
       }

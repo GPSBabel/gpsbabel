@@ -79,7 +79,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
   const char* m1;
   const char* m2;
   bool isDLE = false;
-  p = (*packet).data;
+  p = packet->data;
 
   start = GPS_Time_Now();
   GPS_Diag("Rx Data:");
@@ -105,7 +105,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
       }
 
       if (len == 1) {
-        (*packet).type = u;
+        packet->type = u;
         ++len;
         continue;
       }
@@ -119,14 +119,14 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
       }
 
       if (len == 2) {
-        (*packet).n = u;
+        packet->n = u;
         len = -1;
         continue;
       }
 
       if (u == ETX)
         if (isDLE) {
-          if (p - (*packet).data - 2 != (*packet).n) {
+          if (p - packet->data - 2 != packet->n) {
             GPS_Error("GPS_Packet_Read: Bad count");
             gps_errno = FRAMING_ERROR;
             return 0;
@@ -134,7 +134,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
           chk_read = *(p - 2);
 
           unsigned int i;
-          for (i = 0, p = (*packet).data; i < (*packet).n; ++i) {
+          for (i = 0, p = packet->data; i < packet->n; ++i) {
             chk -= *p++;
           }
           chk -= packet->type;
@@ -145,17 +145,17 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
             return 0;
           }
 
-          m1 = Get_Pkt_Type((*packet).type, (*packet).data[0], &m2);
+          m1 = Get_Pkt_Type(packet->type, packet->data[0], &m2);
           if (gps_show_bytes) {
             GPS_Diag(" ");
             for (unsigned j = 0; j < packet->n; j++) {
-              char c = (*packet).data[j];
+              char c = packet->data[j];
               GPS_Diag("%c", isascii(c) && isalnum(c) ? c : '.');
             }
             GPS_Diag(" ");
           }
           GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
-          return (*packet).n;
+          return packet->n;
         }
 
       if (p - packet->data >= MAX_GPS_PACKET_SIZE) {
@@ -193,12 +193,12 @@ bool GPS_Serial_Get_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec)
     return false;
   }
 
-  if (LINK_ID[0].Pid_Ack_Byte != (*rec).type) {
+  if (LINK_ID[0].Pid_Ack_Byte != rec->type) {
     gps_error = FRAMING_ERROR;
     /* rjl	return 0; */
   }
 
-  if (*(*rec).data != (*tra).type) {
+  if (*rec->data != tra->type) {
     gps_error = FRAMING_ERROR;
     return false;
   }

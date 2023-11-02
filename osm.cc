@@ -718,7 +718,8 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   fout->writeAttribute(QStringLiteral("lat"), QString::number(waypoint->latitude, 'f', 7));
   fout->writeAttribute(QStringLiteral("lon"), QString::number(waypoint->longitude, 'f', 7));
   if (waypoint->creation_time.isValid()) {
-    fout->writeAttribute(QStringLiteral("timestamp"), waypoint->CreationTimeXML());
+    // osm readers don't uniformally support fractional seconds, and may only accept time zone designation Z.
+    fout->writeAttribute(QStringLiteral("timestamp"), waypoint->creation_time.toUTC().toString(Qt::ISODate));
   }
 
   if (waypoint->hdop) {
@@ -780,7 +781,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
 void
 OsmFormat::osm_rte_disp_head(const route_head* route)
 {
-  skip_rte = route->rte_waypt_ct() <= 0;
+  skip_rte = route->rte_waypt_empty();
 
   if (skip_rte) {
     return;
