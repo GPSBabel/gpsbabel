@@ -83,8 +83,10 @@ constexpr double MILES_TO_METERS(double a) { return a * kMetersPerMile;}
 constexpr double METERS_TO_MILES(double a) { return a * kMilesPerMeter;}
 constexpr double FATHOMS_TO_METERS(double a) { return a * 1.8288;}
 
-constexpr double CELSIUS_TO_FAHRENHEIT(double a) { return (a * 1.8) + 32.0;}
-constexpr double FAHRENHEIT_TO_CELSIUS(double a) { return (a - 32.0) / 1.8;}
+template <typename T>
+T CelsiusToFahrenheit(T celsius) { return (celsius * 1.8) + 32; }
+template <typename T>
+T FahrenheitToCelsius(T a) { return (a - 32.0) / 1.8;}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
 constexpr long SECONDS_PER_DAY = 24L * 60 * 60;

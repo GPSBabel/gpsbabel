@@ -760,7 +760,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->set_temperature(strtod(s, nullptr));
     break;
   case XcsvStyle::XT_TEMPERATURE_F:
-    wpt->set_temperature(FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
+    wpt->set_temperature(FahrenheitToCelsius(strtod(s, nullptr)));
     break;
   /* GMSD ****************************************************************/
   case XcsvStyle::XT_COUNTRY: {
@@ -1356,7 +1356,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_TEMPERATURE_F:
       if (wpt->temperature_has_value()) {
-        buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature_value()));
+        buff = QString::asprintf(fmp.printfc.constData(), CelsiusToFahrenheit(wpt->temperature_value()));
       }
       break;
     /* TIME CONVERSIONS**************************************************/
