@@ -84,8 +84,11 @@ constexpr double METERS_TO_MILES(double a) { return a * kMilesPerMeter;}
 constexpr double FATHOMS_TO_METERS(double a) { return a * 1.8288;}
 
 template <typename T>
+requires std::integral<T> || std::floating_point<T>
 T CelsiusToFahrenheit(T celsius) { return (celsius * 1.8) + 32; }
+
 template <typename T>
+requires std::integral<T> || std::floating_point<T>
 T FahrenheitToCelsius(T a) { return (a - 32.0) / 1.8;}
 
 constexpr long SECONDS_PER_HOUR = 60L * 60;
