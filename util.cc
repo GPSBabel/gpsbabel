@@ -51,6 +51,9 @@
 #include "src/core/datetime.h"          // for DateTime
 #include "src/core/logging.h"           // for Warning
 
+#if __has_include(<bit>)
+constexpr bool i_am_little_endian = std::endian::native == std::endian::little;
+#else
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 # define i_am_little_endian 0
@@ -59,6 +62,7 @@
 #else
 # error Unhandled Endianness
 #endif
+#endif //  has <bit>
 
 void*
 xmalloc(size_t size)
