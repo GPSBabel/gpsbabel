@@ -44,8 +44,8 @@ namespace std
   using fmt::vformat_to;
 } ;
 
-// It's present everywhere else, right?
-#elif __has_include(<format.h>)
+// Fallback to the system version.
+#elif __has_include(<format>)
 # include <format.h>
 #else
 # warning "There is no <format.h>"
