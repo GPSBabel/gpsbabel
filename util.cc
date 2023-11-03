@@ -27,6 +27,7 @@
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <utility>                      // for pair
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -564,9 +565,142 @@ rot13(const QString& s)
 }
 
 /*
- * Convert a human readable date format (i.e. "YYYY/MM/DD") into
- * a format usable for strftime and others
+ * Convert a human readable date time format (i.e. "yyyy/MM/dd HH:mm:ss") into
+ * a format usable for QDateTime and others.
  */
+
+std::pair<QString, datetimefield_t>
+convert_human_datetime_format(const char* human_datetimef, bool read)
+{
+  constexpr char quote = '\'';
+  constexpr char zero = '\0';
+  char prev = zero;
+
+  datetimefield_t fields;
+
+  int ylen = 0;
+
+  QStringList out;
+  for (const char* cin = human_datetimef; *cin; cin++) {
+    bool okay = true;
+
+    if (*cin != 'y') {
+      ylen = 0;
+    }
+    if (isalpha(*cin)) {
+      switch (*cin) {
+
+      case 'y': /* year */
+        if (prev != 'y') {
+          out.append("yy");
+          fields.year = true;
+          prev = 'y';
+        }
+        ylen++;
+        if (ylen > 2) {
+          out.last() = "yyyy";
+        }
+        break;
+
+      case 'M': /* month */
+        if (prev != 'M') {
+          out.append("MM");
+          fields.month = true;
+          prev = 'M';
+        }
+        break;
+
+      case 'd': /* day */
+        if (prev != 'd') {
+          out.append("dd");
+          fields.day = true;
+          prev = 'd';
+        }
+        break;
+
+      case 'h':				/* 12-hour-clock */
+        if (prev != 'H') {
+          out.append("h");
+          fields.hour = true;
+          prev = 'H';
+        } else {
+          out.last() = "hh";
+        }
+        break;
+
+      case 'H':				/* 24-hour-clock */
+        if (prev != 'H') {
+          out.append("H");
+          fields.hour = true;
+          prev = 'H';
+        } else {
+          out.last() = "HH";
+        }
+        break;
+
+      case 'm': /* minutes */
+        if (prev != 'm') {
+          out.append("mm");
+          fields.minute = true;
+          prev = 'm';
+        }
+        break;
+
+      case 's': /* second */
+        if (prev != 's') {
+          out.append("ss");
+          fields.second = true;
+          prev = 's';
+        }
+        break;
+
+      case 'x': /* am/pm */
+        if (prev != 'X') {
+          out.append("ap");
+          fields.ampm = true;
+          prev = 'X';
+        } else {
+          out.last() = "ap";
+        }
+        break;
+
+      case 'X': /* AM/PM */
+        if (prev != 'X') {
+          out.append("AP");
+          fields.ampm = true;
+          prev = 'X';
+        } else {
+          out.last() = "AP";
+        }
+        break;
+
+      default:
+        okay = false;
+      }
+    } else if (ispunct(*cin) || isspace(*cin)) {
+      if (*cin == quote) {
+        if (read) {
+          // fromString methods use a single quoted backslashed single quote.
+          // good luck finding this in the Qt documentation!
+          out.append(R"('\'')");
+        } else { // write
+          // toString methods used a double single quote.
+          out.append(R"('')");
+        }
+      } else {
+        out.append(QChar(*cin));
+      }
+      prev = zero;
+    } else {
+      okay = false;
+    }
+
+    if (!okay) {
+      fatal("Invalid character \"%c\" in datetime format \"%s\"!\n", *cin, human_datetimef);
+    }
+  }
+  return {out.join(""), fields};
+}
 
 QString
 convert_human_date_format(const char* human_datef, bool read)

@@ -966,6 +966,18 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
+
+struct datetimefield_t {
+  bool year{false};
+  bool month{false};
+  bool day{false};
+  bool hour{false};
+  bool minute{false};
+  bool second{false};
+  bool ampm{false};
+};
+
+std::pair<QString, datetimefield_t> convert_human_datetime_format(const char* human_datetimef, bool read);
 QString convert_human_date_format(const char* human_datef, bool read);	/* "MM,YYYY,DD" -> "MM,yyyy,dd" */
 QString convert_human_time_format(const char* human_timef, bool read);	/* "HH+mm+ss"   -> "HH+mm+ss" */
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
