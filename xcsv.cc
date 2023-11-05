@@ -28,10 +28,8 @@
 #include <cctype>                  // for isdigit, tolower
 #include <cmath>                   // for fabs, pow
 #include <cstdio>                  // for snprintf, sscanf
-#include <cstdint>                 // for uint32_t
 #include <cstdlib>                 // for strtod
 #include <cstring>                 // for strlen, strncmp, strcmp
-#include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                // for optional
 
 #include <QByteArray>              // for QByteArray
@@ -60,7 +58,6 @@
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for FatalMsg
 #include "src/core/textstream.h"   // for TextStream
-#include "strptime.h"              // for strptime
 
 
 #if CSVFMTS_ENABLED
@@ -262,28 +259,25 @@ XcsvFormat::xcsv_adjust_time(const QDate date, const QTime time, bool is_localti
 void
 XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& time)
 {
-  std::tm stm{};
-  stm.tm_sec = -1;
-  stm.tm_min = -1;
-  stm.tm_hour = -1;
-  stm.tm_mday = -1;
-  stm.tm_mon = -1;
-  stm.tm_year = -1;
-  stm.tm_wday = -1;
-  stm.tm_yday = -1;
-  stm.tm_isdst = -1;
+  
+  auto [fmt, fields] = convert_human_datetime_format(format, true);
+  // force to UTC to avoid issues with invalid datetimes,e.g. in the skipped hour
+  // at the start of daylight savings time.
+  fmt.append('t');
+  QDateTime dt = QDateTime::fromString(QString(s).trimmed().append('Z'), fmt);
+  QDate d = dt.date();
+  QTime t = dt.time();
 
-  if (strptime(s, format, &stm)) {
-
+  if (*s) {
     std::optional<QTime> time_result;
     bool bad_time_parse = false;
-    if (stm.tm_hour >= 0 && stm.tm_min >= 0 && stm.tm_sec >= 0) {
-      time_result = QTime(stm.tm_hour, stm.tm_min, stm.tm_sec);
-    } else if (stm.tm_hour >= 0 && stm.tm_min >= 0) {
-      time_result = QTime(stm.tm_hour, stm.tm_min, 0);
-    } else if (stm.tm_hour >= 0) {
-      time_result = QTime(stm.tm_hour, 0, 0);
-    } else if (!(stm.tm_hour == -1 && stm.tm_min == -1 && stm.tm_sec == -1)) {
+    if (fields.hour && fields.minute && fields.second) {
+      time_result = t;
+    } else if (fields.hour && fields.minute) {
+      time_result = t;
+    } else if (fields.hour) {
+      time_result = t;
+    } else if (!(!fields.hour && !fields.minute && !fields.second)) {
       bad_time_parse = true;
     }
     if ((time_result.has_value() && !time_result->isValid()) || bad_time_parse) {
@@ -296,14 +290,13 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
 
     std::optional<QDate> date_result;
     bool bad_date_parse = false;
-    int year_result = (stm.tm_year >= 70)? stm.tm_year + 1900 : stm.tm_year + 2000;
-    if (stm.tm_year >= 0 && stm.tm_mon >= 0 && stm.tm_mday >= 0) {
-      date_result = QDate(year_result, stm.tm_mon + 1, stm.tm_mday);
-    } else if (stm.tm_year >= 0 && stm.tm_mon >= 0) {
-      date_result = QDate(year_result, stm.tm_mon + 1, 1);
-    } else if (stm.tm_year >= 0) {
-      date_result = QDate(year_result, 1, 1);
-    } else if (!(stm.tm_year == -1 && stm.tm_mon == -1 && stm.tm_mday == -1)) {
+    if (fields.year && fields.month && fields.day) {
+      date_result = d;
+    } else if (fields.year && fields.month) {
+      date_result = d;
+    } else if (fields.year) {
+      date_result = d;
+    } else if (!(!fields.year && !fields.month && !fields.day)) {
       bad_date_parse = true;
     }
     if ((date_result.has_value() && !date_result->isValid()) || bad_date_parse) {
@@ -323,30 +316,14 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
 }
 
 QString
-XcsvFormat::writetime(const char* format, time_t t, bool gmt)
+XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& dt, bool gmt)
 {
-  static const std::tm* stmp;
-
+  auto [fmt, fields] = convert_human_datetime_format(format, false);
   if (gmt) {
-    stmp = gmtime(&t);
+    return dt.toUTC().toString(fmt);
   } else {
-    stmp = localtime(&t);
+    return dt.toLocalTime().toString(fmt);
   }
-
-  // It's unfortunate that we publish the definition of "strftime specifiers"
-  // in the style definitions.  For this reason, we have to bust everything
-  // down to a time_t and then let strftime handle them.
-
-  char tbuff[1024];
-  strftime(tbuff, sizeof tbuff, format, stmp);
-  return QString(tbuff);
-}
-
-QString
-XcsvFormat::writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
-{
-  uint32_t tt = t.toTime_t();
-  return (tt == 0xffffffffU)? QString() : writetime(format, tt, gmt);
 }
 
 long

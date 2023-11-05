@@ -27,6 +27,7 @@
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <utility>                      // for pair
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -35,6 +36,7 @@
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
 #include <QString>                      // for QString
+#include <QStringView>                  // for QStringView
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
@@ -564,167 +566,193 @@ rot13(const QString& s)
 }
 
 /*
- * Convert a human readable date format (i.e. "YYYY/MM/DD") into
- * a format usable for strftime and others
+ * Convert a human readable date time format (i.e. "yyyy/MM/dd HH:mm:ss") into
+ * a format usable for QDateTime and others.
  */
 
-QString
-convert_human_date_format(const char* human_datef)
+std::pair<QString, datetimefield_t>
+convert_human_datetime_format(QStringView human_datetimef, bool read)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
-  int ylen = 0;
+  const QChar quote(u'\'');
+  const QChar zero(u'\0');
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  QString out;
+  datetimefield_t fields;
 
-    if (toupper(*cin) != 'Y') {
-      ylen = 0;
-    }
-    if (isalpha(*cin)) {
-      switch (*cin) {
-      case 'y':
-      case 'Y':
-        if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
-          prev = 'Y';
-        }
-        ylen++;
-        if (ylen > 2) {
-          *(cout-1) = 'Y';
-        }
-        break;
-      case 'm':
-      case 'M':
-        if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
-          prev = 'M';
-        }
-        break;
-      case 'd':
-      case 'D':
-        if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
-          prev = 'D';
+  bool inquotes = false;
+  for (int i = 0; i < human_datetimef.size(); ++i) {
+    auto cur = human_datetimef.at(i);
+    auto next = ((i + 1) < human_datetimef.size())? human_datetimef.at(i + 1) : zero;
+    bool okay = true;
+
+    if (!inquotes) {
+      if (cur.isLetter()) {
+        switch (cur.unicode()) {
+
+        case 'y': { /* year */
+          if (next == u'y') {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            auto remainder = human_datetimef.mid(i);
+#else
+            auto remainder = human_datetimef.sliced(i);
+#endif
+            if (remainder.startsWith(u"yyyy")) {
+              out.append(u"yyyy");
+              i += 3;
+            } else {
+              out.append(u"yy");
+              i += 1;
+            }
+            fields.year = true;
+          } else {
+            okay = false;
+          }
         }
         break;
-      default:
-        okay = 0;
+
+        case 'M': /* month */
+          if (next != u'M') {
+            out.append(u"M");
+          } else {
+            out.append(u"MM");
+            ++i;
+          }
+          fields.month = true;
+          break;
+
+        case 'd': /* day */
+          if (next != u'd') {
+            out.append(u"d");
+          } else {
+            out.append(u"dd");
+            ++i;
+          }
+          fields.day = true;
+          break;
+
+        case 'h':				/* 12-hour-clock */
+          if (next != u'h') {
+            out.append(u"h");
+          } else {
+            out.append(u"hh");
+            ++i;
+          }
+          fields.hour = true;
+          break;
+
+        case 'H':				/* 24-hour-clock */
+          if (next != u'H') {
+            out.append(u"H");
+          } else {
+            out.append(u"HH");
+            ++i;
+          }
+          fields.hour = true;
+          break;
+
+        case 'm': /* minutes */
+          if (next != u'm') {
+            out.append(u"m");
+          } else {
+            out.append(u"mm");
+            ++i;
+          }
+          fields.minute = true;
+          break;
+
+        case 's': /* second */
+          if (next != u's') {
+            out.append(u"s");
+          } else {
+            out.append(u"ss");
+            ++i;
+          }
+          fields.second = true;
+          break;
+
+        case 'x': /* am/pm */
+          if (next == u'x') {
+            out.append(u"ap");
+            fields.ampm = true;
+            ++i;
+          } else {
+            okay = false;
+          }
+          break;
+
+        case 'X': /* AM/PM */
+          if (next == u'X') {
+            out.append(u"AP");
+            fields.ampm = true;
+            ++i;
+          } else {
+            okay = false;
+          }
+          break;
+
+        default:
+          okay = false;
+        }
+      } else if ((cur.isPunct() && (cur != quote)) || cur.isSpace()) {
+        out.append(cur);
+      } else if (cur == quote) {
+        if (next != quote) {
+          inquotes = true;
+          out.append(cur); // opening quote
+        } else {
+          // Outside a single quoted string we recognise a
+          // single quote single quote sequence as an escaped single quote.
+          if (read) {
+            // fromString methods only can represent single quotes inside
+            // a single quoted string as a backslash single quote sequence.
+            // Good luck finding this in the Qt documentation!
+            out.append(uR"('\'')");
+          } else { // write
+            // Outside a single quoted string toString methods recognise a
+            // single quote single quote sequence as an escaped single quote.
+            out.append(uR"('')");
+          }
+          ++i;
+        }
+      } else {
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
-    } else {
-      okay = 0;
+    } else { // in quotes
+      if (cur == quote) {
+        if (next == quote) { // escaped quote in a quoted string
+          // Inside a single quoted string we recognise a
+          // single quote single quote sequence as an escaped single quote.
+          if (read) {
+            // In a single quoted string fromString methods recognise a
+            // backslash single quote sequence as an escaped single quote.
+            // Good luck finding this in the Qt documentation!
+            out.append(uR"(\')");
+          } else { // write
+            // In a single quoted string toString methods recognise a
+            // single quote single quote sequence as an escaped single quote.
+            out.append(uR"('')");
+          }
+          ++i;
+        } else {
+          inquotes = false;
+          out.append(cur); // closing quote
+        }
+      } else {
+        out.append(cur);
+      }
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Error parsing datetime format " << human_datetimef << " at " << human_datetimef.mid(i) << ".");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
-}
 
-/*
- * Convert a human readable time format (i.e. "HH:mm:ss") into
- * a format usable for strftime and others
- */
-
-QString
-convert_human_time_format(const char* human_timef)
-{
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
-
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
-
-    if (isalpha(*cin)) {
-      switch (*cin) {
-      case 'S':
-      case 's':
-        if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
-          prev = 'S';
-        }
-        break;
-
-      case 'M':
-      case 'm':
-        if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
-          prev = 'M';
-        }
-        break;
-
-      case 'h':				/* 12-hour-clock */
-        if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
-          prev = 'H';
-        } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
-        }
-        break;
-
-      case 'H':				/* 24-hour-clock */
-        if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
-          prev = 'H';
-        } else {
-          *(cout-1) = 'H';
-        }
-        break;
-
-      case 'x':
-        if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
-          prev = 'X';
-        } else {
-          *(cout-1) = 'P';
-        }
-        break;
-
-      case 'X':
-        if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
-          prev = 'X';
-        } else {
-          *(cout-1) = 'p';
-        }
-        break;
-
-      default:
-        okay = 0;
-      }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
-      prev = '\0';
-    } else {
-      okay = 0;
-    }
-
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
-    }
+  if (inquotes) {
+    fatal(FatalMsg().nospace() << "Error parsing datetime format " << human_datetimef << ", quotes not closed.");
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+//qDebug() << QString(human_datetimef) << out;
+  return {out, fields};
 }
-
 
 /*
  * Return a decimal degree pair as

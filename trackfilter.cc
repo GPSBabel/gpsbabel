@@ -27,8 +27,7 @@ static constexpr bool TRACKF_DBG = false;
 #include <cmath>                           // for nan
 #include <cstdio>                          // for printf
 #include <cstdlib>                         // for abs
-#include <cstring>                         // for strlen, strchr, strcmp
-#include <ctime>                           // for gmtime, strftime, time_t, tm
+#include <cstring>                         // for strlen, strcmp
 #include <iterator>                        // for next
 
 #include <QByteArray>                      // for QByteArray
@@ -242,14 +241,11 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
     datetimestring = dt.toUTC().toString(u"yyyyMMdd");
   }
 
-  if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {
-    if (strchr(opt_title, '%') != nullptr) {
-      // Uggh.  strftime format exposed to user.
-
-      time_t time = dt.toTime_t();
-      std::tm tm = *gmtime(&time);
-      char buff[128];
-      strftime(buff, sizeof(buff), opt_title, &tm);
+  if (((opt_dtitle != nullptr) && (strlen(opt_dtitle) > 0)) ||
+      ((opt_title != nullptr) && (strlen(opt_title) > 0))) {
+    if (opt_dtitle != nullptr) {
+      auto fmt = convert_human_datetime_format(opt_dtitle, false).first;
+      QString buff = dt.toUTC().toString(fmt);
       track->rte_name = buff;
     } else {
       track->rte_name = QStringLiteral("%1-%2").arg(opt_title, datetimestring);
@@ -263,9 +259,8 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
 
 void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbabel::DateTime& default_time)
 {
-  if (strchr(opt_title, '%') != nullptr) {
-    // Uggh.  strftime format exposed to user.
-
+  if (opt_dtitle != nullptr) {
+    auto fmt = convert_human_datetime_format(opt_dtitle, false).first;
     gpsbabel::DateTime dt;
     if (track->rte_waypt_empty()) {
       dt = default_time;
@@ -273,10 +268,7 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
       const auto* wpt = track->waypoint_list.front();
       dt = wpt->GetCreationTime();
     }
-    time_t t = dt.toTime_t();
-    std::tm tm = *gmtime(&t);
-    char buff[128];
-    strftime(buff, sizeof(buff), opt_title, &tm);
+    QString buff = dt.toUTC().toString(fmt);
     track->rte_name = buff;
   } else {
     track->rte_name = opt_title;
@@ -289,11 +281,8 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const gpsbab
 
 void TrackFilter::trackfilter_title()
 {
-  if (opt_title == nullptr) {
-    return;
-  }
-
-  if (strlen(opt_title) == 0) {
+  if ((opt_title != nullptr && strlen(opt_title) == 0) ||
+      (opt_dtitle != nullptr && strlen(opt_dtitle) == 0)) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
   for (auto* track : qAsConst(track_list)) {
@@ -958,13 +947,9 @@ void TrackFilter::init()
    */
   need_time = (
                 opt_merge || opt_pack || opt_split || opt_sdistance ||
-                opt_fix || opt_speed ||
+                opt_fix || opt_speed || opt_dtitle ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
-  /* in case of a formatted title we also need valid timestamps */
-  if ((opt_title != nullptr) && (strchr(opt_title, '%') != nullptr)) {
-    need_time = true;
-  }
 
   // Perform segmenting first.
   if (opt_segment) {
@@ -1094,7 +1079,7 @@ void TrackFilter::process()
     }
   }
 
-  if (opt_title != nullptr) {
+  if (opt_title != nullptr || opt_dtitle != nullptr) {
     if (--opts == 0) {
       trackfilter_title();
       return;
@@ -1112,7 +1097,7 @@ void TrackFilter::process()
   }
 
   if (something_done && (--opts <= 0)) {
-    if (opt_title != nullptr) {
+    if (opt_title != nullptr || opt_dtitle != nullptr) {
       trackfilter_title();
     }
     return;

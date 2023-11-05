@@ -62,6 +62,7 @@ private:
   static constexpr char TRACKFILTER_SPLIT_OPTION[] = "split";
   static constexpr char TRACKFILTER_SDIST_OPTION[] = "sdistance";
   static constexpr char TRACKFILTER_TITLE_OPTION[] = "title";
+  static constexpr char TRACKFILTER_DYNAMIC_TITLE_OPTION[] = "dtitle";
   static constexpr char TRACKFILTER_MERGE_OPTION[] = "merge";
   static constexpr char TRACKFILTER_NAME_OPTION[] = "name";
   static constexpr char TRACKFILTER_STOP_OPTION[] = "stop";
@@ -113,6 +114,7 @@ private:
   char* opt_sdistance = nullptr;
   char* opt_move = nullptr;
   char* opt_title = nullptr;
+  char* opt_dtitle = nullptr;
   char* opt_start = nullptr;
   char* opt_stop = nullptr;
   char* opt_fix = nullptr;
@@ -170,6 +172,10 @@ private:
     {
       TRACKFILTER_TITLE_OPTION, &opt_title,
       "Basic title for new track(s)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      TRACKFILTER_DYNAMIC_TITLE_OPTION, &opt_dtitle,
+      "Dynamic title for new track(s)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       TRACKFILTER_FIX_OPTION, &opt_fix,

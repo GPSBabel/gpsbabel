@@ -37,6 +37,7 @@ option	track	name	Use only track(s) where title matches given name	string				htt
 option	track	start	Use only track points after or at this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_start
 option	track	stop	Use only track points before or at this timestamp	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_stop
 option	track	title	Basic title for new track(s)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_title
+option	track	dtitle	Dynamic title for new track(s)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_dtitle
 option	track	fix	Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_fix
 option	track	course	Synthesize course	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_course
 option	track	speed	Synthesize speed	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_speed
