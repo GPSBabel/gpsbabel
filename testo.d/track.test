@@ -5,7 +5,7 @@
 rm -f ${TMPDIR}/trackfilter*
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,dtitle="'το ''ημερολόγιο'-yyyy''MM''dd" -o gpx -F ${TMPDIR}/trackfilter.gpx
-compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter.gpx
+compare ${REFERENCE}/track/trackfilterutf8.gpx ${TMPDIR}/trackfilter.gpx
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG" -o gpx -F ${TMPDIR}/trackfilter1.gpx
 compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter1.gpx
