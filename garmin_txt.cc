@@ -120,7 +120,7 @@ static std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping
 static QStringList header_column_names;
 
 static constexpr double kGarminUnknownAlt = 1.0e25;
-static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
+static constexpr char kDefaultDateFormat[] = "dd/MM/yyyy";
 static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
 static bool is_valid_alt(double alt)
@@ -186,19 +186,13 @@ get_option_val(const char* option, const char* def)
   return c;
 }
 
-static void
+static QString
 init_date_and_time_format(bool read)
 {
-  // This is old, and weird, code.. date_time_format is a global that's
-  // explicitly malloced and freed elsewhere. This isn't very C++ at all,
-  // but this format is on its deathbead for deprecation.
   const char* d = get_option_val(opt_date_format, kDefaultDateFormat);
-  QString d1 = convert_human_date_format(d, read);
-
   const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
-  QString t1 = convert_human_time_format(t, read);
 
-  date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
+  return convert_human_datetime_format(QStringLiteral("%1 %2").arg(d, t), read).first;
 }
 
 static void
@@ -755,7 +749,7 @@ garmin_txt_wr_init(const QString& fname)
 
   gtxt_flags.metric = (toupper(*get_option_val(opt_dist, "m")) == 'M');
   gtxt_flags.celsius = (toupper(*get_option_val(opt_temp, "c")) == 'C');
-  init_date_and_time_format(false);
+  date_time_format = init_date_and_time_format(false);
   if (opt_precision) {
     precision = xstrtoi(opt_precision, nullptr, 10);
     if (precision < 0) {
@@ -1291,7 +1285,7 @@ garmin_txt_rd_init(const QString& fname)
   datum_index = -1;
   grid_index = (grid_type) -1;
 
-  init_date_and_time_format(true);
+  date_time_format = init_date_and_time_format(true);
   garmin_txt_utc_option();
 }
 

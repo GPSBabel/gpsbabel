@@ -977,9 +977,7 @@ struct datetimefield_t {
   bool ampm{false};
 };
 
-std::pair<QString, datetimefield_t> convert_human_datetime_format(const char* human_datetimef, bool read);
-QString convert_human_date_format(const char* human_datef, bool read);	/* "MM,YYYY,DD" -> "MM,yyyy,dd" */
-QString convert_human_time_format(const char* human_timef, bool read);	/* "HH+mm+ss"   -> "HH+mm+ss" */
+std::pair<QString, datetimefield_t> convert_human_datetime_format(const QString& human_datetimef, bool read);
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */

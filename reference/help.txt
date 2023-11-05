@@ -467,6 +467,7 @@ Supported data filters:
 	  start                 Use only track points after or at this timestamp 
 	  stop                  Use only track points before or at this timestamp 
 	  title                 Basic title for new track(s) 
+	  dtitle                Dynamic title for new track(s) 
 	  fix                   Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE) 
 	  course                Synthesize course 
 	  speed                 Synthesize speed 

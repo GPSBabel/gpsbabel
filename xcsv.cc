@@ -261,12 +261,12 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
 {
   
   auto [fmt, fields] = convert_human_datetime_format(format, true);
-  QDateTime dt = QDateTime::fromString(QString(s).trimmed(), fmt);
+  // force to UTC to avoid issues with invalid datetimes,e.g. in the skipped hour
+  // at the start of daylight savings time.
+  fmt.append('t');
+  QDateTime dt = QDateTime::fromString(QString(s).trimmed().append('Z'), fmt);
   QDate d = dt.date();
   QTime t = dt.time();
-//qDebug() << "";
-//qDebug() << format << fmt;
-//qDebug() << QString(s) << dt;
 
   if (*s) {
     std::optional<QTime> time_result;
