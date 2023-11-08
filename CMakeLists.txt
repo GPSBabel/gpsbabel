@@ -238,6 +238,7 @@ set(HEADERS
   text.h
   unicsv.h
   units.h
+  vcf.h
   vecs.h
   xcsv.h
   xmlgeneric.h
