@@ -201,6 +201,7 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
+  garmin.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h

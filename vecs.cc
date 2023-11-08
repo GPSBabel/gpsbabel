@@ -42,6 +42,7 @@
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
+#include "garmin.h"            // for GarminFormat
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
@@ -73,7 +74,6 @@
 
 
 extern ff_vecs_t geo_vecs;
-extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t tpg_vecs;
@@ -114,7 +114,7 @@ struct Vecs::Impl {
    * of this class is constructed.
    */
   GpxFormat gpx_fmt;
-  LegacyFormat garmin_fmt {garmin_vecs};
+  GarminFormat garmin_fmt;
   GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
