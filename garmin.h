@@ -131,7 +131,7 @@ private:
   char* baudopt = nullptr;
   char* opt_codec = nullptr;
   int baud = 0;
-  int categorybits;
+  int categorybits{};
   bool receiver_must_upper = true;
   QTextCodec* codec{nullptr};
 
