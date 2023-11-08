@@ -104,8 +104,8 @@ private:
   int track_prepare();
   void track_write();
   void course_write();
-  const char* d103_symbol_from_icon_number(unsigned int n);
-  int d103_icon_number_from_symbol(const QString& s);
+  static const char* d103_symbol_from_icon_number(unsigned int n);
+  static int d103_icon_number_from_symbol(const QString& s);
   void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
   void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
 
