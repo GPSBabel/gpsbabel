@@ -24,6 +24,7 @@
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <ctime>                   // for tm
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -207,7 +208,7 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   }
 
   long long res = 0;
-  for (auto c : qAsConst(s)) {
+  for (auto c : std::as_const(s)) {
     int val = kBase31.indexOf(c);
     if (val < 0 || (base == 16 && val > 15)) {
       return 0;

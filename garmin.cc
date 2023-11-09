@@ -26,6 +26,7 @@
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
+#include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
 #include <QRegularExpression>    // for QRegularExpression
@@ -873,7 +874,7 @@ waypoint_prepare()
   i = 0;
 
   // Iterate with waypt_disp_all?
-  for (const Waypoint* wpt : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* wpt : std::as_const(*global_waypoint_list)) {
     char obuf[256];
 
     QString src;

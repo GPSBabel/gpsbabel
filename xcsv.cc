@@ -33,6 +33,7 @@
 #include <cstring>                 // for strlen, strncmp, strcmp
 #include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                // for optional
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -46,7 +47,8 @@
 #include <QString>                 // for QString, operator+, operator==
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream
-#include <QtGlobal>                // for qAsConst, qRound, qPrintable
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qRound, qPrintable
 
 #include "defs.h"
 #include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
@@ -850,7 +852,7 @@ XcsvFormat::read()
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-    for (const auto& ogp : qAsConst(xcsv_style->epilogue)) {
+    for (const auto& ogp : std::as_const(xcsv_style->epilogue)) {
       if (ogp.startsWith(buff)) {
         buff.clear();
         break;
@@ -1040,7 +1042,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   }
 
   int i = 0;
-  for (const auto& fmp : qAsConst(xcsv_style->ofields)) {
+  for (const auto& fmp : std::as_const(xcsv_style->ofields)) {
     double lat = latitude;
     double lon = longitude;
     /*
@@ -1659,7 +1661,7 @@ XcsvFormat::write()
   waypt_out_count = 0;
 
   /* output prologue lines, if any. */
-  for (const auto& line : qAsConst(xcsv_style->prologue)) {
+  for (const auto& line : std::as_const(xcsv_style->prologue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     xcsv_file->stream << line_to_write <<  xcsv_style->record_delimiter;
   }
@@ -1682,7 +1684,7 @@ XcsvFormat::write()
   }
 
   /* output epilogue lines, if any. */
-  for (const auto& line : qAsConst(xcsv_style->epilogue)) {
+  for (const auto& line : std::as_const(xcsv_style->epilogue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     xcsv_file->stream << line_to_write << xcsv_style->record_delimiter;
   }

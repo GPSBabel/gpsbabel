@@ -23,13 +23,13 @@
 
 #include <cassert>     // for assert
 #include <cctype>      // for isspace, isdigit
+#include <utility>     // for as_const
 
 #include <QByteArray>  // for QByteArray
 #include <QChar>       // for QChar, QChar::ReplacementCharacter
 #include <QString>     // for QString
 #include <QVector>     // for QVector
 #include <Qt>          // for CaseInsensitive
-#include <QtGlobal>    // for qAsConst
 
 #include "defs.h"
 #include "geocache.h"  // for Geocache
@@ -254,7 +254,7 @@ QByteArray MakeShort::mkshort(const QByteArray& istring, bool is_utf8)
      */
     QByteArray tstring;
     ostring.swap(tstring);
-    for (const auto ch : qAsConst(tstring)) {
+    for (const auto ch : std::as_const(tstring)) {
       if (!isspace(ch)) {
         ostring.append(ch);
       }
@@ -277,7 +277,7 @@ QByteArray MakeShort::mkshort(const QByteArray& istring, bool is_utf8)
   {
     QByteArray tstring;
     ostring.swap(tstring);
-    for (const auto ch : qAsConst(tstring)) {
+    for (const auto ch : std::as_const(tstring)) {
       if (badchars_.contains(ch)) {
         continue;
       }
