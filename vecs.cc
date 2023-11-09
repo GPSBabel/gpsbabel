@@ -69,8 +69,9 @@
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
+#include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
-#include "googletakeout.h"    // for GoogleTakeoutFormat
+#include "googletakeout.h"     // for GoogleTakeoutFormat
 
 
 extern ff_vecs_t geo_vecs;
@@ -87,7 +88,6 @@ extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
-extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
@@ -137,7 +137,6 @@ struct Vecs::Impl {
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
-  LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
 #if CSVFMTS_ENABLED
@@ -318,11 +317,12 @@ struct Vecs::Impl {
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
     {
-      &vcf_fmt,
+      nullptr,
       "vcard",
       "Vcard Output (for iPod)",
       "vcf",
       nullptr,
+      &fmtfactory<VcfFormat>
     },
     {
       &unicsv_fmt,
