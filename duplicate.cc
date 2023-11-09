@@ -21,9 +21,10 @@
 
 #include "duplicate.h"
 
+#include <utility>               // for as_const
+
 #include <QList>                 // for QList, QList<>::iterator, QList<>::const_iterator
 #include <QMultiHash>            // for QMultiHash
-#include <QtCore>                // for qAsConst
 
 #include "defs.h"
 
@@ -42,7 +43,7 @@ void DuplicateFilter::init()
 void DuplicateFilter::process()
 {
   QMultiHash<QString, Waypoint*> wpthash;
-  for (Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  for (Waypoint* waypointp : std::as_const(*global_waypoint_list)) {
 
     QString key;
     if (lcopt) {

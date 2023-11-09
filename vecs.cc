@@ -31,12 +31,13 @@
 #include <QStringList>         // for QStringList
 #include <QVector>             // for QVector
 #include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qPrintable, qAsConst
+#include <QtGlobal>            // for qPrintable
 
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
-#include <type_traits>         // for add_const<>::type, is_base_of
+#include <type_traits>         // for is_base_of
+#include <utility>             // for as_const
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
@@ -817,7 +818,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : qAsConst(style_list)) {
+  for (const auto& svec : std::as_const(style_list)) {
     if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }

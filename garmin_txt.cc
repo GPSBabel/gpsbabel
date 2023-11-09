@@ -34,7 +34,7 @@
 #include <cstring>                 // for strstr, strlen
 #include <ctime>                   // for time_t, gmtime, localtime, strftime
 #include <optional>                // for optional
-#include <utility>                 // for pair, make_pair
+#include <utility>                 // for as_const, pair, make_pair
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
@@ -1041,7 +1041,7 @@ bind_fields(const header_type ht)
   const QStringList altheader = headers.at(ht).toUpper().split('\t');
 
   int i = -1;
-  for (const auto& name : qAsConst(header_column_names)) {
+  for (const auto& name : std::as_const(header_column_names)) {
     i++;
 
     int field_idx = altheader.indexOf(name);

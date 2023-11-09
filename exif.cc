@@ -50,7 +50,7 @@
 #include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 #include <Qt>                   // for UTC, ISODate
-#include <QtGlobal>             // for qAsConst, qPrintable, qint64
+#include <QtGlobal>             // for qPrintable, qint64
 
 #include <algorithm>            // for sort, min
 #include <cassert>              // for assert
@@ -61,7 +61,7 @@
 #include <cstdio>               // for printf, SEEK_SET, snprintf, SEEK_CUR
 #include <cstdlib>              // for abs
 #include <cstring>              // for memcmp, strlen
-#include <type_traits>          // for add_const<>::type
+#include <utility>              // for as_const
 
 #include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, xstrndup, fix_2d
 #include "garmin_tables.h"      // for gt_lookup_datum_index
@@ -273,7 +273,7 @@ ExifFormat::exif_read_datestamp(const ExifTag* tag)
 void
 ExifFormat::exif_release_apps()
 {
-  for (auto* app : qAsConst(*exif_apps)) {
+  for (auto* app : std::as_const(*exif_apps)) {
     if (app->fcache) {
       gbfclose(app->fcache);
     }
@@ -1304,7 +1304,7 @@ ExifFormat::exif_write_apps() const
 {
   gbfputuint16(0xFFD8, fout_);
 
-  for (auto* app : qAsConst(*exif_apps)) {
+  for (auto* app : std::as_const(*exif_apps)) {
 
     gbfputuint16(app->marker, fout_);
 
