@@ -162,7 +162,6 @@ struct Vecs::Impl {
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
-  QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -488,11 +487,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &qstarz_bl_1000_fmt,
+      nullptr,
       "qstarz_bl-1000",
       "Qstarz BL-1000",
       nullptr,
       nullptr,
+      &fmtfactory<QstarzBL1000Format>
     },
     {
       nullptr,
