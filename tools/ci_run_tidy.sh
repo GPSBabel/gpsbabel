@@ -7,16 +7,16 @@ CODACY_CLANG_TIDY=$(curl -s https://api.github.com/repos/codacy/codacy-clang-tid
 CHECKS="clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,bugprone-*,google-*,misc-*,performance-*,readability-*,-cppcoreguidelines-pro-type-vararg,-modernize-use-trailing-return-type,-readability-identifier-length"
 HEADERFILTER=".*"
 
-mkdir bld
-cd bld
+mkdir bld-tidy
+cd bld-tidy
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSBABEL_ENABLE_PCH=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 # generate included ui files
 cmake --build .
 cd ..
 
 # exclude third party library source
-jq '[.[]|select(.file|contains("zlib")|not)] | [.[]|select(.file|contains("shapelib")|not)] | [.[]|select(.file|contains("bld")|not)]' \
-bld/compile_commands.json \
+jq '[.[]|select(.file|contains("zlib")|not)] | [.[]|select(.file|contains("shapelib")|not)] | [.[]|select(.file|contains("bld-tidy")|not)]' \
+bld-tidy/compile_commands.json \
 > compile_commands.json
 
 # run-clang-tidy may still be forcing injection of escape sequences for colors.
