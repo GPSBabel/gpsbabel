@@ -1678,7 +1678,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt) const
 }
 
 void
-LowranceusrFormat::lowranceusr4_route_trl(const route_head*) const
+LowranceusrFormat::lowranceusr4_route_trl(const route_head* /*unused*/) const
 {
   /* Mystery byte */
   gbfputc(0x01, file_out);	// end of Route info ??
@@ -1731,7 +1731,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
 }
 
 void
-LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
 {
   if (trail_count == (int)track_count()) {  /* last trail */
     short num_trail_points = trail_point_count;
@@ -1753,7 +1753,7 @@ LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
   }
 }
 void
-LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head* /*unused*/)
 {
   continuous = 0;
 }
