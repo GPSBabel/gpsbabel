@@ -326,7 +326,7 @@ public:
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
-  Waypoint& operator=(const Waypoint& other);
+  Waypoint& operator=(const Waypoint& rhs);
 
   /* Member Functions */
 
