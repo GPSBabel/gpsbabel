@@ -5,8 +5,9 @@ COMMIT=$(git log -1 --format='%H')
 CODACY_CLANG_TIDY=$(curl -s https://api.github.com/repos/codacy/codacy-clang-tidy/releases/latest | jq '.assets[] | select(.name|startswith("codacy-clang-tidy-linux-")) | .browser_download_url' | tr -d \")
 
 CHECKS="clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,bugprone-*,google-*,misc-*,performance-*,readability-*,-cppcoreguidelines-pro-type-vararg,-modernize-use-trailing-return-type,-readability-identifier-length"
-HEADERFILTER=".*"
+HEADERFILTER="$(pwd)/[^/]*\.h|$(pwd)/jeeps/[^/]*\.h|$(pwd)/src/core/[^/]*\.h|$(pwd)/gui/[^/]*\.h|gbversion\.h"
 
+rm -fr bld-tidy
 mkdir bld-tidy
 cd bld-tidy
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSBABEL_ENABLE_PCH=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
@@ -15,7 +16,7 @@ cmake --build .
 cd ..
 
 # exclude third party library source
-jq '[.[]|select(.file|contains("zlib")|not)] | [.[]|select(.file|contains("shapelib")|not)] | [.[]|select(.file|contains("bld-tidy")|not)]' \
+jq '[.[]|select(.file|contains("zlib")|not)] | [.[]|select(.file|contains("shapelib")|not)] | [.[]|select(.file|contains("strptime")|not)] | [.[]|select(.file|contains("bld-tidy")|not)]' \
 bld-tidy/compile_commands.json \
 > compile_commands.json
 
@@ -25,6 +26,8 @@ sed "s/, '--use-color'//" "$(which run-clang-tidy)" > run-clang-tidy-nocolor
 chmod +x run-clang-tidy-nocolor
 ./run-clang-tidy-nocolor -p "$(pwd)" -header-filter "${HEADERFILTER}" -checks "${CHECKS}" | \
 tee tidy.out
+
+grep warning: tidy.out | sed 's/.*\[/[/' | sort | uniq -c | sort | tee tidy.summary
 
 curl -L "${CODACY_CLANG_TIDY}" --output codacy-clang-tidy
 chmod +x codacy-clang-tidy
