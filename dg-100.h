@@ -126,8 +126,8 @@ protected:
   void dg100_getfiles() const;
   int dg100_erase() const;
   void common_rd_init(const QString& fname);
-  void dg100_rd_init(const QString& fname, bool isfile);
-  void dg200_rd_init(const QString& fname, bool isfile);
+  void dg100_rd_init(const QString& fname, bool is_file);
+  void dg200_rd_init(const QString& fname, bool is_file);
 
   /* Data Members */
 

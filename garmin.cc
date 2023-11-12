@@ -408,7 +408,7 @@ rw_deinit()
 }
 
 static int
-waypt_read_cb(int total_ct, GPS_PWay*)
+waypt_read_cb(int total_ct, GPS_PWay* /*unused*/)
 {
   if (global_opts.verbose_status) {
     static int i;
@@ -485,7 +485,7 @@ waypt_read()
   }
 }
 
-static int lap_read_nop_cb(int, GPS_SWay**)
+static int lap_read_nop_cb(int /*unused*/, GPS_SWay** /*unused*/)
 {
   return 0;
 }
@@ -812,7 +812,7 @@ sane_GPS_Way_New()
 }
 
 static int
-waypt_write_cb(GPS_PWay*)
+waypt_write_cb(GPS_PWay* /*unused*/)
 {
   int n = waypt_count();
 

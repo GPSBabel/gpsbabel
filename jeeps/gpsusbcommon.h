@@ -37,7 +37,7 @@ typedef struct gusb_llops {
 
 /* Provided by the common code. */
 void gusb_syncup();
-void gusb_register_ll(gusb_llops*);
+void gusb_register_ll(gusb_llops* p);
 void gusb_list_units();
 
 /* Provided by the OS layers */

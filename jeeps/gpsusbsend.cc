@@ -26,7 +26,7 @@
 #include <cstdio>
 
 int32
-GPS_Write_Packet_usb(gpsdevh*, GPS_PPacket& packet)
+GPS_Write_Packet_usb(gpsdevh* /*unused*/, GPS_PPacket& packet)
 {
   garmin_usb_packet gp;
   memset(&gp, 0, sizeof(gp));

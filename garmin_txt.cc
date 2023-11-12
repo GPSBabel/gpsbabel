@@ -245,13 +245,13 @@ enum_waypt_cb(const Waypoint* wpt)
 /* common route and track pre-work */
 
 static void
-prework_hdr_cb(const route_head*)
+prework_hdr_cb(const route_head* /*unused*/)
 {
   cur_info = &route_info[route_idx];
 }
 
 static void
-prework_tlr_cb(const route_head*)
+prework_tlr_cb(const route_head* /*unused*/)
 {
   cur_info->last_wpt = cur_info->prev_wpt;
   route_idx++;
@@ -615,7 +615,7 @@ route_disp_hdr_cb(const route_head* rte)
 }
 
 static void
-route_disp_tlr_cb(const route_head*)
+route_disp_tlr_cb(const route_head* /*unused*/)
 {
   route_idx++;
 }
@@ -670,7 +670,7 @@ track_disp_hdr_cb(const route_head* track)
 }
 
 static void
-track_disp_tlr_cb(const route_head*)
+track_disp_tlr_cb(const route_head* /*unused*/)
 {
   route_idx++;
 }
