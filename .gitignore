@@ -19,7 +19,12 @@
 /autom4te.cache/
 /babelweb/
 /bld/
+/bld-clazy/
+/bld-sanitizeaddress/
+/bld-sanitizeundefined/
+/bld-tidy/
 /build/
+/codacy-clang-tidy
 /compile_commands.json
 /config.h
 /config.log
@@ -45,6 +50,7 @@
 /out/
 /qrc_gpsbabel.cpp
 /release/
+/run-clang-tidy-nocolor
 /tmp/
 CMakeCache.txt
 CMakeFiles/
