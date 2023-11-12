@@ -247,7 +247,7 @@ typedef struct GPS_SCourse_Limits {
 } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
 
-typedef int (*pcb_fn)(int, GPS_SWay**);
+using pcb_fn = int (*)(int, GPS_SWay**);
 
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpssend.h"
