@@ -42,7 +42,7 @@ static int32 gdu_off(gpsdevh* dh)
   return gusb_close(dh);
 }
 
-static int32  gdu_read(gpsdevh* fd, GPS_PPacket* packet)
+static int32  gdu_read(gpsdevh* fd, GPS_Packet* packet)
 {
   /* Default is to eat bulk request packets. */
   return GPS_Packet_Read_usb(fd, packet, 1);

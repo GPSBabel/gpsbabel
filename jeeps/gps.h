@@ -28,21 +28,14 @@ extern int32 gps_show_bytes;
 extern char gps_categories[16][17];
 
 
-typedef struct GPS_SPacket {
-  US type;
-  uint32 n;
-  UC* data;
-} GPS_OPacket;
-
-class GPS_PPacket {
-public:
+struct GPS_Packet {
   US type{0};
   uint32 n{0};
   UC data[MAX_GPS_PACKET_SIZE]{};
 };
 
 
-typedef struct GPS_Serial_SPacket {
+struct GPS_Serial_Packet {
   UC dle;
   UC type;
   UC n;
@@ -50,15 +43,7 @@ typedef struct GPS_Serial_SPacket {
   UC chk;
   UC edle;
   UC etx;
-} GPS_Serial_OPacket, *GPS_Serial_PPacket;
-
-typedef struct GPS_SProduct_Data_Type {
-  int16 id;
-  int16 version;
-  char  desc[MAX_GPS_PACKET_SIZE];
-} GPS_OProduct_Data_Type, *GPS_PProduct_Data_Type;
-
-
+};
 
 
 typedef struct GPS_SPvt_Data_Type {
@@ -247,7 +232,7 @@ typedef struct GPS_SCourse_Limits {
 } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
 
-typedef int (*pcb_fn)(int, GPS_SWay**);
+using pcb_fn = int (*)(int, GPS_SWay**);
 
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpssend.h"

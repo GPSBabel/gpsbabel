@@ -234,8 +234,8 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
 {
   static UC data[4];
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
   win_serial_data* wsd = (win_serial_data*)fd;
 
   DWORD speed = mkspeed(br);
@@ -614,8 +614,8 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
 
   struct termios tty;
   static UC data[4];
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
 
   speed_t speed = mkspeed(br);
 

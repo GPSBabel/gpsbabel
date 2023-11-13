@@ -34,15 +34,15 @@
 **
 ** Forms a complete packet to send on serial port
 *
-** @param [r] in [GPS_PPacket *] packet string with portable packet data
-** @param [w] out [GPS_Serial_PPacket *] packet string suitable for serial port
+** @param [r] in [GPS_Packet *] packet string with portable packet data
+** @param [w] out [GPS_Serial_Packet *] packet string suitable for serial port
 **
 ** @return [US] number of data bytes to send
 ************************************************************************/
 static US
-Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
+Build_Serial_Packet(const GPS_Packet& in, GPS_Serial_Packet* out)
 {
-  UC* p;
+  const UC* p;
   UC* q;
   UC  chk = 0;
   US  bytes = 0;
@@ -111,16 +111,16 @@ DiagS(void* buf, size_t sz)
 ** Forms a complete packet to send
 **
 ** @param [w] fd [int32] file descriptor
-** @param [r] packet [GPS_PPacket] packet
+** @param [r] packet [GPS_Packet] packet
 **
 ** @return [int32] number of bytes in the packet
 ************************************************************************/
 
-int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
+int32 GPS_Serial_Write_Packet(gpsdevh* fd, const GPS_Packet& packet)
 {
   int32 ret;
   const char* m1, *m2;
-  GPS_Serial_OPacket ser_pkt;
+  GPS_Serial_Packet ser_pkt;
   UC ser_pkt_data[MAX_GPS_PACKET_SIZE * sizeof(UC)];
   US bytes;
 
@@ -183,13 +183,13 @@ int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
 ** Send an acknowledge packet
 **
 ** @param [w] fd [int32] file descriptor
-** @param [r] tra [GPS_PPacket *] packet to transmit
-** @param [r] rec [GPS_PPacket *] last packet received
+** @param [r] tra [GPS_Packet *] packet to transmit
+** @param [r] rec [GPS_Packet *] last packet received
 **
 ** @return [bool] success
 ************************************************************************/
 
-bool GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Serial_Send_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec)
 {
   UC data[2];
 

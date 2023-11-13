@@ -41,8 +41,8 @@ int32 GPS_Command_Off(const char* port)
 {
   static UC data[2];
   gpsdevh* fd;
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
 
   GPS_Util_Little();
 

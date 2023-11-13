@@ -69,8 +69,8 @@ int32 GPS_Rqst_Send_Time(gpsdevh* fd, time_t Time)
 ************************************************************************/
 static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
 {
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
 
   switch (gps_date_time_type) {
   case pD600:
@@ -134,8 +134,8 @@ int32 GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon)
 ************************************************************************/
 static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
 {
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
 
   switch (gps_position_type) {
   case pD700:
