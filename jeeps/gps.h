@@ -28,7 +28,7 @@ extern int32 gps_show_bytes;
 extern char gps_categories[16][17];
 
 
-structure GPS_Packet {
+struct GPS_Packet {
   US type{0};
   uint32 n{0};
   UC data[MAX_GPS_PACKET_SIZE]{};
