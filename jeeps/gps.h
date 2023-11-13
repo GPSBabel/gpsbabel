@@ -28,12 +28,6 @@ extern int32 gps_show_bytes;
 extern char gps_categories[16][17];
 
 
-typedef struct GPS_SPacket {
-  US type;
-  uint32 n;
-  UC* data;
-} GPS_OPacket;
-
 class GPS_PPacket {
 public:
   US type{0};

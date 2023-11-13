@@ -47,7 +47,7 @@ double gps_save_lon;
 #define XMIN(a,b) (a < b? a : b)
 
 static int32    GPS_A000(const char* port);
-static void   GPS_A001(GPS_PPacket& packet);
+static void   GPS_A001(const GPS_PPacket& packet);
 
 
 static void   GPS_A500_Translate(UC* s, GPS_PAlmanac* alm);
@@ -383,12 +383,12 @@ carry_on:
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_A001(GPS_PPacket& packet)
+static void GPS_A001(const GPS_PPacket& packet)
 {
   US lasta=0;
 
   int32 entries = packet.n / 3;
-  UC* p = packet.data;
+  const UC* p = packet.data;
 
   for (int32 i=0; i<entries; ++i,p+=3) {
     US tag = *p;
@@ -5869,9 +5869,9 @@ int32 GPS_A600_Send(const char* port, time_t Time)
 **
 ** @return [time_t] gps time as unix system time
 ************************************************************************/
-time_t GPS_D600_Get(GPS_PPacket& packet)
+time_t GPS_D600_Get(const GPS_PPacket& packet)
 {
-  UC* p;
+  const UC* p;
   std::tm ts{};
 
   p = packet.data;
@@ -6038,9 +6038,9 @@ int32 GPS_A700_Send(const char* port, double lat, double lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D700_Get(GPS_PPacket& packet, double* lat, double* lon)
+void GPS_D700_Get(const GPS_PPacket& packet, double* lat, double* lon)
 {
-  UC* p;
+  const UC* p;
   double t;
 
   p = packet.data;
@@ -6208,9 +6208,9 @@ int32 GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D800_Get(GPS_PPacket& packet, GPS_PPvt_Data* pvt)
+void GPS_D800_Get(const GPS_PPacket& packet, GPS_PPvt_Data* pvt)
 {
-  UC* p;
+  const UC* p;
 
   p = packet.data;
 

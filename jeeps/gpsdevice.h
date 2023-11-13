@@ -37,7 +37,7 @@
   int32  GPS_Device_Read(int32 ignored, void* ibuf, int size);
   int32  GPS_Device_Write(int32 ignored, const void* obuf, int size);
   void   GPS_Device_Error(char* hdr, ...);
-  int32  GPS_Write_Packet(gpsdevh* fd, GPS_PPacket& packet);
+  int32  GPS_Write_Packet(gpsdevh* fd, const GPS_PPacket& packet);
   bool   GPS_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec);
   int32  GPS_Packet_Read(gpsdevh* fd, GPS_PPacket* packet);
   bool   GPS_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec);
@@ -45,7 +45,7 @@
   using gps_device_op = int32 (*)(gpsdevh*);
   using gps_device_op5 = int32 (*)(const char*, gpsdevh** fd);
   using gps_device_op10 = bool (*)(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec);
-  using gps_device_op12 = int32 (*)(gpsdevh* fd, GPS_PPacket& packet);
+  using gps_device_op12 = int32 (*)(gpsdevh* fd, const GPS_PPacket& packet);
   using gps_device_op13 = int32 (*)(gpsdevh* fd, GPS_PPacket* packet);
 
   typedef struct {

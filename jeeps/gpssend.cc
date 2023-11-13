@@ -40,9 +40,9 @@
 ** @return [US] number of data bytes to send
 ************************************************************************/
 static US
-Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
+Build_Serial_Packet(const GPS_PPacket& in, GPS_Serial_PPacket out)
 {
-  UC* p;
+  const UC* p;
   UC* q;
   UC  chk = 0;
   US  bytes = 0;
@@ -116,7 +116,7 @@ DiagS(void* buf, size_t sz)
 ** @return [int32] number of bytes in the packet
 ************************************************************************/
 
-int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
+int32 GPS_Serial_Write_Packet(gpsdevh* fd, const GPS_PPacket& packet)
 {
   int32 ret;
   const char* m1, *m2;
