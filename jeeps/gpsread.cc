@@ -64,12 +64,12 @@ time_t GPS_Time_Now()
 ** Read a packet
 **
 ** @param [r] fd [int32] file descriptor
-** @param [w] packet [GPS_PPacket *] packet string
+** @param [w] packet [GPS_Packet *] packet string
 **
 ** @return [int32] number of bytes read
 **********************************************************************/
 
-int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
+int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_Packet* packet)
 {
   time_t start;
   int32 len = 0;
@@ -181,13 +181,13 @@ int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 ** Check that returned packet is an ack for the packet sent
 **
 ** @param [r] fd [int32] file descriptor
-** @param [r] tra [GPS_PPacket *] packet just transmitted
-** @param [r] rec [GPS_PPacket *] packet to receive
+** @param [r] tra [GPS_Packet *] packet just transmitted
+** @param [r] rec [GPS_Packet *] packet to receive
 **
 ** @return [bool] true if ACK
 **********************************************************************/
 
-bool GPS_Serial_Get_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec)
+bool GPS_Serial_Get_Ack(gpsdevh *fd, GPS_Packet *tra, GPS_Packet *rec)
 {
   if (!GPS_Serial_Packet_Read(fd, rec)) {
     return false;

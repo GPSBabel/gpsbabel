@@ -60,27 +60,27 @@ int32  GPS_Device_Flush(gpsdevh* fd)
   return (ops->Device_Flush)(fd);
 }
 
-int32  GPS_Write_Packet(gpsdevh* fd, const GPS_PPacket& packet)
+int32  GPS_Write_Packet(gpsdevh* fd, const GPS_Packet& packet)
 {
   return (ops->Write_Packet)(fd, packet);
 }
 
-int32 GPS_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
+int32 GPS_Packet_Read(gpsdevh* fd, GPS_Packet* packet)
 {
   return (ops->Read_Packet)(fd, packet);
 }
 
-bool GPS_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Send_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec)
 {
   return (ops->Send_Ack)(fd, tra, rec);
 }
 
-bool GPS_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
+bool GPS_Get_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec)
 {
   return (ops->Get_Ack)(fd, tra, rec);
 }
 
-void GPS_Make_Packet(GPS_PPacket* packet, US type, UC* data, uint32 n)
+void GPS_Make_Packet(GPS_Packet* packet, US type, UC* data, uint32 n)
 {
   packet->type = type;
   if (n > 0) {
