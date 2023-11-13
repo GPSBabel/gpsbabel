@@ -35,12 +35,12 @@
 ** Forms a complete packet to send on serial port
 *
 ** @param [r] in [GPS_Packet *] packet string with portable packet data
-** @param [w] out [GPS_Serial_PPacket *] packet string suitable for serial port
+** @param [w] out [GPS_Serial_Packet *] packet string suitable for serial port
 **
 ** @return [US] number of data bytes to send
 ************************************************************************/
 static US
-Build_Serial_Packet(const GPS_Packet& in, GPS_Serial_PPacket out)
+Build_Serial_Packet(const GPS_Packet& in, GPS_Serial_Packet* out)
 {
   const UC* p;
   UC* q;
@@ -120,7 +120,7 @@ int32 GPS_Serial_Write_Packet(gpsdevh* fd, const GPS_Packet& packet)
 {
   int32 ret;
   const char* m1, *m2;
-  GPS_Serial_OPacket ser_pkt;
+  GPS_Serial_Packet ser_pkt;
   UC ser_pkt_data[MAX_GPS_PACKET_SIZE * sizeof(UC)];
   US bytes;
 
