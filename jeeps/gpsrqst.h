@@ -1,5 +1,5 @@
-#ifndef gpsrqst_h
-#define gpsrqst_h
+#ifndef JEEPS_GPSRQST_H_INCLUDED_
+#define JEEPS_GPSRQST_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -8,4 +8,4 @@
   int32 GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon);
 
 
-#endif
+#endif // JEEPS_GPSRQST_H_INCLUDED_

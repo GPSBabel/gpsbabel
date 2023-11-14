@@ -1,5 +1,5 @@
-#ifndef gpsprotocols_h
-#define gpsprotocols_h
+#ifndef JEEPS_GPSPROT_H_INCLUDED_
+#define JEEPS_GPSPROT_H_INCLUDED_
 
 #ifndef COMMON
 #define COMMON extern
@@ -90,8 +90,7 @@
     US Cmnd_Transfer_Course_Points;
     US Cmnd_Transfer_Course_Tracks;
     US Cmnd_Transfer_Course_Limits;
-  }
-  ;
+  };
 
 
 
@@ -365,8 +364,7 @@
     int32 prxd;
     int32 alma;
     int32 almd;
-  }
-  ;
+  };
 
   US     GPS_Protocol_Version_Change(US id, US version);
   COMMON int32  GPS_Protocol_Table_Set(US id);
@@ -374,4 +372,4 @@
   void   GPS_Unknown_Protocol_Print();
 
 
-#endif
+#endif // JEEPS_GPSPROT_H_INCLUDED_

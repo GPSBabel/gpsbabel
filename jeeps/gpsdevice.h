@@ -19,8 +19,8 @@
 
  */
 
-#ifndef gpsdevice_h
-#define gpsdevice_h
+#ifndef JEEPS_GPSDEVICE_H_INCLUDED_
+#define JEEPS_GPSDEVICE_H_INCLUDED_
 
   typedef struct gpsdevh gpsdevh;
 
@@ -60,4 +60,4 @@
     gps_device_op12 Write_Packet;
   } gps_device_ops;
 
-#endif /* gpsdevice_h */
+#endif /* JEEPS_GPSDEVICE_H_INCLUDED_ */

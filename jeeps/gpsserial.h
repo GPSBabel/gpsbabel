@@ -1,5 +1,5 @@
-#ifndef gpsserial_h
-#define gpsserial_h
+#ifndef JEEPS_GPSSERIAL_H_INCLUDED_
+#define JEEPS_GPSSERIAL_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -24,4 +24,4 @@
 
 int32  GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br);
 
-#endif
+#endif // JEEPS_GPSSERIAL_H_INCLUDED_

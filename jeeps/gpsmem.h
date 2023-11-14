@@ -1,5 +1,5 @@
-#ifndef gpsmem_h
-#define gpsmem_h
+#ifndef JEEPS_GPSMEM_H_INCLUDED_
+#define JEEPS_GPSMEM_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -20,4 +20,4 @@
   GPS_PCourse_Point GPS_Course_Point_New();
   void              GPS_Course_Point_Del(GPS_PCourse_Point* thys);
 
-#endif
+#endif // JEEPS_GPSMEM_H_INCLUDED_

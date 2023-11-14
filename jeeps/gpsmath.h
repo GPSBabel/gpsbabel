@@ -1,5 +1,5 @@
-#ifndef gpsmath_h
-#define gpsmath_h
+#ifndef JEEPS_GPSMATH_H_INCLUDED_
+#define JEEPS_GPSMATH_H_INCLUDED_
 
 #include "jeeps/gpsport.h"
 
@@ -145,4 +145,4 @@
   int32 GPS_Lookup_Datum_Index(const QString& n);
   const char* GPS_Math_Get_Datum_Name(int datum_index);
 
-#endif
+#endif // JEEPS_GPSMATH_H_INCLUDED_

@@ -1,5 +1,5 @@
-#ifndef gpsapp_h
-#define gpsapp_h
+#ifndef JEEPS_GPSAPP_H_INCLUDED_
+#define JEEPS_GPSAPP_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -112,4 +112,4 @@
   void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n);
   int32 GPS_Set_Baud_Rate(const char* port, int br);
 
-#endif
+#endif // JEEPS_GPSAPP_H_INCLUDED_

@@ -1,5 +1,5 @@
-#ifndef gpsproj_h
-#define gpsproj_h
+#ifndef JEEPS_GPSPROJ_H_INCLUDED_
+#define JEEPS_GPSPROJ_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -145,4 +145,4 @@
                                    double* lambda, double phi0, double lambda0,
                                    double E0, double N0, double a, double b);
 
-#endif
+#endif // JEEPS_GPSPROJ_H_INCLUDED_

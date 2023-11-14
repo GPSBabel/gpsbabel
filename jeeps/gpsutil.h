@@ -1,5 +1,5 @@
-#ifndef gpsutil_h
-#define gpsutil_h
+#ifndef JEEPS_GPSUTIL_H_INCLUDED_
+#define JEEPS_GPSUTIL_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -37,4 +37,4 @@
   void   GPS_Disable_Diagnose();
 
 
-#endif
+#endif // JEEPS_GPSUTIL_H_INCLUDED_
