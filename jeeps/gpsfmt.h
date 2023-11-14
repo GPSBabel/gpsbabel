@@ -1,5 +1,5 @@
-#ifndef gpsfmt_h
-#define gpsfmt_h
+#ifndef JEEPS_GPSFMT_H_INCLUDED_
+#define JEEPS_GPSFMT_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -15,4 +15,4 @@
   int32  GPS_Fmt_Print_Proximity(GPS_PWay* way, int32 n, FILE* outf);
   int32  GPS_Fmt_Print_Route(GPS_PWay* way, int32 n, FILE* outf);
 
-#endif
+#endif // JEEPS_GPSFMT_H_INCLUDED_

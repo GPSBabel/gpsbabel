@@ -1,5 +1,5 @@
-#ifndef gps_h
-#define gps_h
+#ifndef JEEPS_GPS_H_INCLUDED_
+#define JEEPS_GPS_H_INCLUDED_
 
 #include "defs.h"
 #include "jeeps/gpsport.h"
@@ -265,4 +265,4 @@ extern const char* gps_aviation_sym[];
 extern const char* gps_16_sym[];
 
 
-#endif
+#endif // JEEPS_GPS_H_INCLUDED_

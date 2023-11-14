@@ -19,6 +19,9 @@
 
  */
 
+#ifndef JEEPS_GPSUSBCOMMON_H_INCLUDED_
+#define JEEPS_GPSUSBCOMMON_H_INCLUDED_
+
 /*
  * The 'low level ops' are registered by the OS layer (win32, libusb, etc.)
  * to provide gruntwork features for the common USB layer.
@@ -43,3 +46,4 @@ void gusb_list_units();
 /* Provided by the OS layers */
 // int gusb_init(const char *portname, gpsdev **dh);
 
+#endif // JEEPS_GPSUSBCOMMON_H_INCLUDED_

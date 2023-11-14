@@ -1,5 +1,5 @@
-#ifndef gpsdatum_h
-#define gpsdatum_h
+#ifndef JEEPS_GPSDATUM_H_INCLUDED_
+#define JEEPS_GPSDATUM_H_INCLUDED_
 
 
 
@@ -234,4 +234,4 @@
 
 
 
-#endif
+#endif // JEEPS_GPSDATUM_H_INCLUDED_

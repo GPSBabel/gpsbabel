@@ -1,5 +1,5 @@
-#ifndef gpscom_h
-#define gpscom_h
+#ifndef JEEPS_GPSCOM_H_INCLUDED_
+#define JEEPS_GPSCOM_H_INCLUDED_
 
 
 #include "jeeps/gps.h"
@@ -44,4 +44,4 @@
   int32  GPS_Command_Get_Fitness_User_Profile(const char* port, void** lap, int (*cb)(int, GPS_SWay**));
   int32  GPS_Command_Get_Workout_Limits(const char* port, void** lap, int (*cb)(int, GPS_SWay**));
   int32  GPS_Command_Get_Course_Limits(const char* port, void** lap, int (*cb)(int, GPS_SWay**));
-#endif
+#endif // JEEPS_GPSCOM_H_INCLUDED_

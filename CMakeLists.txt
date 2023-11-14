@@ -153,7 +153,7 @@ set(JEEPS
   jeeps/gpsusbcommon.cc
   jeeps/gpsusbread.cc
   jeeps/gpsusbsend.cc
-  jeeps/jgpsutil.cc
+  jeeps/gpsutil.cc
 )
 
 # SUPPORT

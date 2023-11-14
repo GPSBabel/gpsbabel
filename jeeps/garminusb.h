@@ -18,6 +18,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef JEEPS_GARMINUSB_H_INCLUDED_
+#define JEEPS_GARMINUSB_H_INCLUDED_
+
 #include <cstdio>
 #include "jeeps/gpsdevice.h"
 
@@ -68,3 +71,5 @@ int gusb_close(gpsdevh* dh, bool exit_lib = true);
 #define GUSB_SESSION_START 5	/* We request units attention */
 #define GUSB_SESSION_ACK   6	/* Unit responds that we have its attention */
 #define GUSB_REQUEST_BULK  2	/* Unit requests we read from bulk pipe */
+
+#endif // JEEPS_GARMINUSB_H_INCLUDED_
