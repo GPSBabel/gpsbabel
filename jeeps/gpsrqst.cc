@@ -25,8 +25,8 @@
 #include "jeeps/gps.h"
 
 
-static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time);
-static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon);
+static int32_t GPS_A600_Rqst(gpsdevh* fd, time_t Time);
+static int32_t GPS_A700_Rqst(gpsdevh* fd, double lat, double lon);
 
 
 
@@ -40,7 +40,7 @@ static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon);
 ** @return [int32] true if OK
 ************************************************************************/
 
-int32 GPS_Rqst_Send_Time(gpsdevh* fd, time_t Time)
+int32_t GPS_Rqst_Send_Time(gpsdevh* fd, time_t Time)
 {
   time_t ret=0;
 
@@ -67,7 +67,7 @@ int32 GPS_Rqst_Send_Time(gpsdevh* fd, time_t Time)
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
+static int32_t GPS_A600_Rqst(gpsdevh* fd, time_t Time)
 {
   GPS_Packet tra;
   GPS_Packet rec;
@@ -104,9 +104,9 @@ static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon)
+int32_t GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon)
 {
-  int32 ret=0;
+	int32_t ret = 0;
 
   switch (gps_position_transfer) {
   case pA700:
@@ -132,7 +132,7 @@ int32 GPS_Rqst_Send_Position(gpsdevh* fd, double lat, double lon)
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
+static int32_t GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
 {
   GPS_Packet tra;
   GPS_Packet rec;

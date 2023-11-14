@@ -91,7 +91,7 @@ void GPS_Serial_Error(const char* fmt, ...)
   va_end(ap);
 }
 
-int32 GPS_Serial_On(const char* port, gpsdevh** dh)
+int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
   DCB tio;
   COMMTIMEOUTS timeout;
@@ -161,7 +161,7 @@ int32 GPS_Serial_On(const char* port, gpsdevh** dh)
   return 1;
 }
 
-int32 GPS_Serial_Off(gpsdevh* dh)
+int32_t GPS_Serial_Off(gpsdevh* dh)
 {
   win_serial_data* wsd = (win_serial_data*)dh;
   CloseHandle(wsd->comport);
@@ -170,7 +170,7 @@ int32 GPS_Serial_Off(gpsdevh* dh)
   return 1;
 }
 
-int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
+int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
 {
   COMSTAT lpStat;
   DWORD lpErrors;
@@ -180,7 +180,7 @@ int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
   return (lpStat.cbInQue > 0);
 }
 
-int32 GPS_Serial_Wait(gpsdevh* fd)
+int32_t GPS_Serial_Wait(gpsdevh* fd)
 {
   /* Wait a short time before testing if data is ready.
    * The GPS II, in particular, has a noticable time responding
@@ -193,12 +193,12 @@ int32 GPS_Serial_Wait(gpsdevh* fd)
   return GPS_Serial_Chars_Ready(fd);
 }
 
-int32 GPS_Serial_Flush(gpsdevh* /* fd */)
+int32_t GPS_Serial_Flush(gpsdevh* /* fd */)
 {
   return 1;
 }
 
-int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
+int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 {
   win_serial_data* wsd = (win_serial_data*)dh;
   DWORD len;
@@ -220,7 +220,7 @@ int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
   return len;
 }
 
-int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
+int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 {
   DWORD cnt  = 0;
   win_serial_data* wsd = (win_serial_data*)dh;
@@ -231,7 +231,7 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 
 // Based on information by Kolesár András from
 // http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
-int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
+int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
 {
   static UC data[4];
   GPS_Packet tra;

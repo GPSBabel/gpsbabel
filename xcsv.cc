@@ -988,7 +988,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
   double latitude, longitude;
-  int32 utmz;
+  int32_t utmz;
   double utme, utmn;
   char utmzc;
 

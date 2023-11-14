@@ -69,10 +69,10 @@ time_t GPS_Time_Now()
 ** @return [int32] number of bytes read
 **********************************************************************/
 
-int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_Packet* packet)
+int32_t GPS_Serial_Packet_Read(gpsdevh* fd, GPS_Packet* packet)
 {
   time_t start;
-  int32 len = 0;
+  int32_t len = 0;
   UC u;
   UC* p;
   UC chk = 0, chk_read;

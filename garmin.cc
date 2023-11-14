@@ -535,7 +535,7 @@ track_read()
   }
 
 
-  int32 ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
+  int32_t ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
   if (ntracks <= 0) {
     return;
@@ -613,7 +613,7 @@ route_read()
    */
   route_head* rte_head = nullptr;
 
-  int32 nroutepts = GPS_Command_Get_Route(portname, &array);
+  int32_t nroutepts = GPS_Command_Get_Route(portname, &array);
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
@@ -974,7 +974,7 @@ waypoint_write()
 {
   int n = waypoint_prepare();
 
-  if (int32 ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
+  if (int32_t ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
     fatal(MYNAME ":communication error sending waypoints..\n");
   }
 
@@ -1103,7 +1103,7 @@ track_waypt_pr(const Waypoint* wpt)
 static int
 track_prepare()
 {
-  int32 n = track_waypt_count() + track_count();
+	int32_t n = track_waypt_count() + track_count();
 
   tx_tracklist = (GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
