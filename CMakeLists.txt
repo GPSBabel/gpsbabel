@@ -6,7 +6,7 @@ include(CheckIncludeFile)
 include(gbversion.cmake)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Do this after we set up common variables but before creating other
@@ -24,6 +24,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTORCC ON)
 
 add_executable(gpsbabel)
+
+find_package(fmt)
+list(APPEND GPSBABEL_EXTRA_LINK_LIBRARIES fmt::fmt)
 
 # Find the QtCore library
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)

@@ -27,10 +27,11 @@ void
 UnitsFormatter::setunits(units_t u)
 {
   switch (u) {
-  case units_t::statute:
-  case units_t::metric:
-  case units_t::nautical:
-  case units_t::aviation:
+  using enum units_t;
+  case statute:
+  case metric:
+  case nautical:
+  case aviation:
     units = u;
     break;
   default:
@@ -46,7 +47,8 @@ UnitsFormatter::fmt_distance(const double distance_meters) const
   const char* tag;
 
   switch (units) {
-  case units_t::statute:
+  using enum units_t;
+  case statute:
     d = METERS_TO_FEET(distance_meters);
     if (d < 5280) {
       tag = "ft";
@@ -55,12 +57,12 @@ UnitsFormatter::fmt_distance(const double distance_meters) const
       tag = "mi";
     }
     break;
-  case units_t::nautical:
-  case units_t::aviation:
+  case nautical:
+  case aviation:
     d = METERS_TO_NMILES(distance_meters);
     tag = "NM";
     break;
-  case units_t::metric:
+  case metric:
     d = distance_meters;
     if (d < 1000) {
       tag = "meters";
@@ -85,16 +87,17 @@ UnitsFormatter::fmt_altitude(const double distance_meters) const
   const char* tag;
 
   switch (units) {
-  case units_t::statute:
-  case units_t::aviation:
+  using enum units_t;
+  case statute:
+  case aviation:
     d = METERS_TO_FEET(distance_meters);
     tag = "ft";
     break;
-  case units_t::nautical:
+  case nautical:
     d = METERS_TO_NMILES(distance_meters);
     tag = "NM";
     break;
-  case units_t::metric:
+  case metric:
     d = distance_meters;
     tag = "meters";
     break;
@@ -114,16 +117,17 @@ UnitsFormatter::fmt_speed(const double speed_meters_per_sec) const
   const char* tag;
 
   switch (units) {
-  case units_t::statute:
+  using enum units_t;
+  case statute:
     d = METERS_TO_MILES(speed_meters_per_sec) * SECONDS_PER_HOUR ;
     tag = "mph";
     break;
-  case units_t::nautical:
-  case units_t::aviation:
+  case nautical:
+  case aviation:
     d = METERS_TO_NMILES(speed_meters_per_sec) * SECONDS_PER_HOUR ;
     tag = "knts";
     break;
-  case units_t::metric:
+  case metric:
     d = speed_meters_per_sec * SECONDS_PER_HOUR;
     tag = "meters/hour";
     if (d > 1000.0) {
