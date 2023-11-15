@@ -22,17 +22,17 @@ int32_t GPS_A301_Send(const char* port, GPS_PTrack* trk, int32_t n, int protoid,
                       gpsdevh* fd);
 
 int32_t GPS_D300_Get(GPS_PTrack* trk, int32_t entries, gpsdevh* h);
-  void   GPS_D300b_Get(GPS_PTrack* trk, UC* data);
-  void   GPS_D301b_Get(GPS_PTrack* trk, UC* data);
-  void   GPS_D302b_Get(GPS_PTrack* trk, UC* data);
-  void   GPS_D303b_Get(GPS_PTrack* trk, UC* data); /*D304*/
-  void   GPS_D310_Get(GPS_PTrack* trk, UC* s);
-  void   GPS_D311_Get(GPS_PTrack* trk, UC* s);
-  void   GPS_D300_Send(UC* data, GPS_PTrack trk, int32_t* len);
-  void   GPS_D301_Send(UC* data, GPS_PTrack trk, int32_t* len, int type);
-  void   GPS_D303_Send(UC* data, GPS_PTrack trk, int32_t* len, int protoid);
-  void   GPS_D310_Send(UC* data, GPS_PTrack trk, int32_t* len);
-  void   GPS_D311_Send(UC* data, GPS_PTrack trk, int32_t* len);
+void   GPS_D300b_Get(GPS_PTrack* trk, UC* data);
+void   GPS_D301b_Get(GPS_PTrack* trk, UC* data);
+void   GPS_D302b_Get(GPS_PTrack* trk, UC* data);
+void   GPS_D303b_Get(GPS_PTrack* trk, UC* data); /*D304*/
+void   GPS_D310_Get(GPS_PTrack* trk, UC* s);
+void   GPS_D311_Get(GPS_PTrack* trk, UC* s);
+void   GPS_D300_Send(UC* data, GPS_PTrack trk, int32_t* len);
+void   GPS_D301_Send(UC* data, GPS_PTrack trk, int32_t* len, int type);
+void   GPS_D303_Send(UC* data, GPS_PTrack trk, int32_t* len, int protoid);
+void   GPS_D310_Send(UC* data, GPS_PTrack trk, int32_t* len);
+void   GPS_D311_Send(UC* data, GPS_PTrack trk, int32_t* len);
 
 int32_t GPS_A400_Get(const char* port, GPS_PWay** way);
 int32_t GPS_A400_Send(const char* port, GPS_PWay* way, int32_t n);
@@ -40,76 +40,76 @@ int32_t GPS_A400_Send(const char* port, GPS_PWay* way, int32_t n);
 int32_t GPS_A500_Get(const char* port, GPS_PAlmanac** alm);
 int32_t GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32_t n);
 
-  time_t GPS_A600_Get(const char* port);
-  time_t GPS_D600_Get(const GPS_Packet& packet);
+time_t GPS_A600_Get(const char* port);
+time_t GPS_D600_Get(const GPS_Packet& packet);
 int32_t GPS_A600_Send(const char* port, time_t Time);
-  void   GPS_D600_Send(GPS_Packet& packet, time_t Time);
+void   GPS_D600_Send(GPS_Packet& packet, time_t Time);
 
 int32_t GPS_A700_Get(const char* port, double* lat, double* lon);
 int32_t GPS_A700_Send(const char* port, double lat, double lon);
-  void   GPS_D700_Get(const GPS_Packet& packet, double* lat, double* lon);
-  void   GPS_D700_Send(GPS_Packet& packet, double lat, double lon);
+void   GPS_D700_Get(const GPS_Packet& packet, double* lat, double* lon);
+void   GPS_D700_Send(GPS_Packet& packet, double lat, double lon);
 
 int32_t GPS_A800_On(const char* port, gpsdevh** fd);
 int32_t GPS_A800_Off(const char* port, gpsdevh** fd);
 int32_t GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet);
-  void   GPS_D800_Get(const GPS_Packet& packet, GPS_PPvt_Data* pvt);
+void   GPS_D800_Get(const GPS_Packet& packet, GPS_PPvt_Data* pvt);
 
 int32_t GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb);
-  void   GPS_D1011b_Get(GPS_PLap* Lap,UC* data); /*D906 D1001 D1015*/
+void   GPS_D1011b_Get(GPS_PLap* Lap,UC* data); /*D906 D1001 D1015*/
 
 int32_t GPS_A1006_Get(const char* port, GPS_PCourse** crs, pcb_fn cb);
 int32_t GPS_A1006_Send(const char* port, GPS_PCourse* crs, int32_t n_crs,
                        gpsdevh* fd);
-  void   GPS_D1006_Get(GPS_PCourse* crs, UC* p);
-  void   GPS_D1006_Send(UC* data, GPS_PCourse crs, int32_t* len);
+void   GPS_D1006_Get(GPS_PCourse* crs, UC* p);
+void   GPS_D1006_Send(UC* data, GPS_PCourse crs, int32_t* len);
 
 int32_t GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb);
 int32_t GPS_A1007_Send(const char* port, GPS_PCourse_Lap* clp, int32_t n_clp,
                        gpsdevh* fd);
-  void   GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p);
-  void   GPS_D1007_Send(UC* data, GPS_PCourse_Lap clp, int32_t* len);
+void   GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p);
+void   GPS_D1007_Send(UC* data, GPS_PCourse_Lap clp, int32_t* len);
 
 int32_t GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb);
 int32_t GPS_A1008_Send(const char* port, GPS_PCourse_Point* cpt, int32_t n_cpt,
                        gpsdevh* fd);
-  void   GPS_D1012_Get(GPS_PCourse_Point* cpt, UC* p);
-  void   GPS_D1012_Send(UC* data, GPS_PCourse_Point cpt, int32_t* len);
+void   GPS_D1012_Get(GPS_PCourse_Point* cpt, UC* p);
+void   GPS_D1012_Send(UC* data, GPS_PCourse_Point cpt, int32_t* len);
 
 int32_t GPS_A1009_Get(const char* port, GPS_PCourse_Limits limits);
-  void   GPS_D1013_Get(GPS_PCourse_Limits limits, UC* p);
+void   GPS_D1013_Get(GPS_PCourse_Limits limits, UC* p);
 
-  /* Unhandled documented protocols, as of:
-    Garmin Device Interface Specification, May 19, 2006, Drawing Number: 001-00063-00 Rev. C
-  A650  FlightBook Transfer Protocol
-  A1000  Run Transfer Protocol
-  	Capability A1000: D1009
-  		D1000 D1010
-  A1002  Workout Transfer Protocol
-  	Capability A1002: D1008
-  		D1002
-  	Capability A1003: D1003
-  A1004  Fitness User Profile Transfer Protocol
-  	Capability A1004: D1004
-  A1005  Workout Limits Transfer Protocol
-  	Capability A1005: D1005
-  */
-  /* Unimplemented and Undocumented, as listed from the following device/sw:
-  	GF305 3.70
+/* Unhandled documented protocols, as of:
+  Garmin Device Interface Specification, May 19, 2006, Drawing Number: 001-00063-00 Rev. C
+A650  FlightBook Transfer Protocol
+A1000  Run Transfer Protocol
+	Capability A1000: D1009
+		D1000 D1010
+A1002  Workout Transfer Protocol
+	Capability A1002: D1008
+		D1002
+	Capability A1003: D1003
+A1004  Fitness User Profile Transfer Protocol
+	Capability A1004: D1004
+A1005  Workout Limits Transfer Protocol
+	Capability A1005: D1005
+*/
+/* Unimplemented and Undocumented, as listed from the following device/sw:
+	GF305 3.70
 
-  Capability A601: D601
-  Capability A801: D801
+Capability A601: D601
+Capability A801: D801
 
-  Capability A902:
-  Capability A903:
-  Capability A907: D907 D908 D909 D910
-  Capability A918: D918
-  Capability A1013: D1014
-  */
+Capability A902:
+Capability A903:
+Capability A907: D907 D908 D909 D910
+Capability A918: D918
+Capability A1013: D1014
+*/
 
-  const char* Get_Pkt_Type(US p, US d0, const char** xinfo);
+const char* Get_Pkt_Type(US p, US d0, const char** xinfo);
 
-  void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32_t* n);
+void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32_t* n);
 int32_t GPS_Set_Baud_Rate(const char* port, int br);
 
 #endif // JEEPS_GPSAPP_H_INCLUDED_

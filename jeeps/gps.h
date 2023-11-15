@@ -31,7 +31,7 @@ extern char gps_categories[16][17];
 struct GPS_Packet {
   US type{0};
   uint32_t n{0};
-  UC data[MAX_GPS_PACKET_SIZE]{};
+  UC data[MAX_GPS_PACKET_SIZE] {};
 };
 
 
@@ -154,16 +154,16 @@ typedef struct GPS_SWay {
  * Forerunner/Edge Lap data.
  */
 typedef struct GPS_SLap {
-	uint32_t index; /* unique index in device or -1 */
+  uint32_t index; /* unique index in device or -1 */
   time_t	start_time;
-	uint32_t total_time;	/* Hundredths of a second */
+  uint32_t total_time;	/* Hundredths of a second */
   float	total_distance;	/* In meters */
   double	begin_lat;
   double	begin_lon;
   double	end_lat;
   double	end_lon;
-	int16_t calories;
-	uint32_t track_index; /* ref to track or -1 */
+  int16_t calories;
+  uint32_t track_index; /* ref to track or -1 */
   float max_speed; /* In meters per second */
   unsigned char avg_heart_rate; /* In beats-per-minute, 0 if invalid */
   unsigned char max_heart_rate; /* In beats-per-minute, 0 if invalid */
@@ -179,17 +179,17 @@ typedef struct GPS_SLap {
 
 
 typedef struct GPS_SCourse {
-	uint32_t index;                    /* Unique among courses on device */
+  uint32_t index;                    /* Unique among courses on device */
   char      course_name[16];          /* Null-terminated unique course name */
-	uint32_t track_index;              /* Index of the associated track
+  uint32_t track_index;              /* Index of the associated track
                                          * Must be 0xFFFFFFFF if there is none*/
 } GPS_OCourse, *GPS_PCourse;
 
 
 typedef struct GPS_SCourse_Lap {
-	uint32_t course_index;         /* Index of associated course */
-	uint32_t lap_index;            /* This lap's index in the course */
-	uint32_t total_time;           /* In hundredths of a second */
+  uint32_t course_index;         /* Index of associated course */
+  uint32_t lap_index;            /* This lap's index in the course */
+  uint32_t total_time;           /* In hundredths of a second */
   float         total_dist;           /* [m] */
   double        begin_lat;            /* Starting position of the lap */
   double        begin_lon;            /* Invalid if lat,lon are 0x7FFFFFFF.*/
@@ -225,9 +225,9 @@ typedef struct GPS_SCourse_Point {
 } GPS_OCourse_Point, *GPS_PCourse_Point;
 
 typedef struct GPS_SCourse_Limits {
-	int32_t max_courses;
-	int32_t max_course_laps;
-	int32_t max_course_pnt;
+  int32_t max_courses;
+  int32_t max_course_laps;
+  int32_t max_course_pnt;
   int32_t max_course_trk_pnt;
 } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
