@@ -7,7 +7,7 @@
 
 int32_t GPS_Command_Off(const char* port);
 
-  time_t GPS_Command_Get_Time(const char* port);
+time_t GPS_Command_Get_Time(const char* port);
 int32_t GPS_Command_Send_Time(const char* port, time_t Time);
 
 int32_t GPS_Command_Get_Position(const char* port, double* lat, double* lon);
@@ -38,7 +38,7 @@ int32_t GPS_Command_Send_Course(const char* port, GPS_PCourse* crs, GPS_PCourse_
                                 GPS_PTrack* trk, GPS_PCourse_Point* cpt,
                                 int32_t n_crs, int32_t n_clp, int32_t n_trk, int32_t n_cpt);
 int32_t GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32_t n_trk,
-                                         GPS_PWay* wpt, int32_t n_wpt, int eraset);
+    GPS_PWay* wpt, int32_t n_wpt, int eraset);
 
 int32_t GPS_Command_Get_Workout(const char* port, void** lap, int (*cb)(int, GPS_SWay**));
 int32_t GPS_Command_Get_Fitness_User_Profile(const char* port, void** lap, int (*cb)(int, GPS_SWay**));
