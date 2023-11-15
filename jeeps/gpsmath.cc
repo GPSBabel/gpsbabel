@@ -21,11 +21,19 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "jeeps/gps.h"
-#include "jeeps/gpsdatum.h"
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
+#include "jeeps/gpsmath.h"
+
+#include <cassert>           // for assert
+#include <cmath>             // for sin, tan, cos, pow, log, sqrt, asin, atan, exp, fabs, round
+#include <cstdint>           // for int32_t
+#include <cstdlib>           // for abs
+#include <cstring>           // for strcmp, strcpy
+#include <ctime>             // for time_t
+
+#include <QString>           // for QString
+
+#include "defs.h"            // for case_ignore_strcmp, fatal, CSTR
+#include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
 
 
 static int32_t GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32_t* zone,
@@ -705,8 +713,9 @@ int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
     return 0;
   }
 
-  a = GPS_Ellipse[4].a;
-  b = a - (a / GPS_Ellipse[4].invf);
+  assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
+  a = GPS_Ellipses[4].a;
+  b = a - (a / GPS_Ellipses[4].invf);
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, 123);
   GPS_Math_Swiss_LatLon_To_EN(phi, lambda, E, N, phi0, lambda0, E0, N0, a, b);
@@ -735,8 +744,9 @@ void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon)
   const double N0 = 200000.0;
   double phi, lambda, alt, a, b;
 
-  a = GPS_Ellipse[4].a;
-  b = a - (a / GPS_Ellipse[4].invf);
+  assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
+  a = GPS_Ellipses[4].a;
+  b = a - (a / GPS_Ellipses[4].invf);
 
   GPS_Math_Swiss_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0, E0, N0, a, b);
   GPS_Math_Known_Datum_To_WGS84_M(phi, lambda, 0, lat, lon, &alt, 123);
@@ -1099,10 +1109,10 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
   if (datum < 0) {
     fatal("Unable to find Palestine 1923 in internal tables");
   }
-  int32_t ellipse = GPS_Datum[datum].ellipse;
+  int32_t ellipse = GPS_Datums[datum].ellipse;
 
-  a = GPS_Ellipse[ellipse].a;
-  b = a - (a / GPS_Ellipse[ellipse].invf);
+  a = GPS_Ellipses[ellipse].a;
+  b = a - (a / GPS_Ellipses[ellipse].invf);
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, datum);
   GPS_Math_Cassini_LatLon_To_EN(phi, lambda, E, N,
@@ -1135,10 +1145,10 @@ void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
   if (datum < 0) {
     fatal("Unable to find Palestine 1923 in internal tables");
   }
-  int32_t ellipse = GPS_Datum[datum].ellipse;
+  int32_t ellipse = GPS_Datums[datum].ellipse;
 
-  a = GPS_Ellipse[ellipse].a;
-  b = a - (a / GPS_Ellipse[ellipse].invf);
+  a = GPS_Ellipses[ellipse].a;
+  b = a - (a / GPS_Ellipses[ellipse].invf);
 
   GPS_Math_Cassini_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0,
                                 E0, N0, a, b);
@@ -1519,7 +1529,7 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1539,12 +1549,12 @@ void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
   Da  = 6378137.0;
   Dif = 298.257223563;
 
-  idx  = GPS_Datum[n].ellipse;
-  Sa   = GPS_Ellipse[idx].a;
-  Sif  = GPS_Ellipse[idx].invf;
-  x    = GPS_Datum[n].dx;
-  y    = GPS_Datum[n].dy;
-  z    = GPS_Datum[n].dz;
+  idx  = GPS_Datums[n].ellipse;
+  Sa   = GPS_Ellipses[idx].a;
+  Sif  = GPS_Ellipses[idx].invf;
+  x    = GPS_Datums[n].dx;
+  y    = GPS_Datums[n].dy;
+  z    = GPS_Datums[n].dz;
 
   GPS_Math_Molodensky(Sphi,Slam,SH,Sa,Sif,Dphi,Dlam,DH,Da,Dif,x,y,z);
 
@@ -1563,7 +1573,7 @@ void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1583,12 +1593,12 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
   Sa  = 6378137.0;
   Sif = 298.257223563;
 
-  idx  = GPS_Datum[n].ellipse;
-  Da   = GPS_Ellipse[idx].a;
-  Dif  = GPS_Ellipse[idx].invf;
-  x    = -GPS_Datum[n].dx;
-  y    = -GPS_Datum[n].dy;
-  z    = -GPS_Datum[n].dz;
+  idx  = GPS_Datums[n].ellipse;
+  Da   = GPS_Ellipses[idx].a;
+  Dif  = GPS_Ellipses[idx].invf;
+  x    = -GPS_Datums[n].dx;
+  y    = -GPS_Datums[n].dy;
+  z    = -GPS_Datums[n].dz;
 
   GPS_Math_Molodensky(Sphi,Slam,SH,Sa,Sif,Dphi,Dlam,DH,Da,Dif,x,y,z);
 
@@ -1607,7 +1617,7 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1633,14 +1643,14 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
   Dif = 298.257223563;
   Db  = Da - (Da / Dif);
 
-  idx  = GPS_Datum[n].ellipse;
-  Sa   = GPS_Ellipse[idx].a;
-  Sif  = GPS_Ellipse[idx].invf;
+  idx  = GPS_Datums[n].ellipse;
+  Sa   = GPS_Ellipses[idx].a;
+  Sif  = GPS_Ellipses[idx].invf;
   Sb   = Sa - (Sa / Sif);
 
-  x    = GPS_Datum[n].dx;
-  y    = GPS_Datum[n].dy;
-  z    = GPS_Datum[n].dz;
+  x    = GPS_Datums[n].dx;
+  y    = GPS_Datums[n].dy;
+  z    = GPS_Datums[n].dz;
 
   GPS_Math_LatLonH_To_XYZ(Sphi,Slam,SH,&sx,&sy,&sz,Sa,Sb);
   sx += x;
@@ -1664,7 +1674,7 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1690,14 +1700,14 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
   Sif = 298.257223563;
   Sb   = Sa - (Sa / Sif);
 
-  idx  = GPS_Datum[n].ellipse;
-  Da   = GPS_Ellipse[idx].a;
-  Dif  = GPS_Ellipse[idx].invf;
+  idx  = GPS_Datums[n].ellipse;
+  Da   = GPS_Ellipses[idx].a;
+  Dif  = GPS_Ellipses[idx].invf;
   Db  = Da - (Da / Dif);
 
-  x    = -GPS_Datum[n].dx;
-  y    = -GPS_Datum[n].dy;
-  z    = -GPS_Datum[n].dz;
+  x    = -GPS_Datums[n].dx;
+  y    = -GPS_Datums[n].dy;
+  z    = -GPS_Datums[n].dz;
 
   GPS_Math_LatLonH_To_XYZ(Sphi,Slam,SH,&dx,&dy,&dz,Sa,Sb);
   dx += x;
@@ -1721,8 +1731,8 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n1   [int32] source datum number from GPS_Datum structure
-** @param [r] n2   [int32] dest   datum number from GPS_Datum structure
+** @param [r] n1   [int32] source datum number from GPS_Datums structure
+** @param [r] n2   [int32] dest   datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1748,19 +1758,19 @@ void GPS_Math_Known_Datum_To_Known_Datum_M(double Sphi, double Slam, double SH,
   int32_t idx2;
 
 
-  idx1 = GPS_Datum[n1].ellipse;
-  Sa   = GPS_Ellipse[idx1].a;
-  Sif  = GPS_Ellipse[idx1].invf;
-  x1   = GPS_Datum[n1].dx;
-  y1   = GPS_Datum[n1].dy;
-  z1   = GPS_Datum[n1].dz;
+  idx1 = GPS_Datums[n1].ellipse;
+  Sa   = GPS_Ellipses[idx1].a;
+  Sif  = GPS_Ellipses[idx1].invf;
+  x1   = GPS_Datums[n1].dx;
+  y1   = GPS_Datums[n1].dy;
+  z1   = GPS_Datums[n1].dz;
 
-  idx2 = GPS_Datum[n2].ellipse;
-  Da   = GPS_Ellipse[idx2].a;
-  Dif  = GPS_Ellipse[idx2].invf;
-  x2   = GPS_Datum[n2].dx;
-  y2   = GPS_Datum[n2].dy;
-  z2   = GPS_Datum[n2].dz;
+  idx2 = GPS_Datums[n2].ellipse;
+  Da   = GPS_Ellipses[idx2].a;
+  Dif  = GPS_Ellipses[idx2].invf;
+  x2   = GPS_Datums[n2].dx;
+  y2   = GPS_Datums[n2].dy;
+  z2   = GPS_Datums[n2].dz;
 
   x = -(x2-x1);
   y = -(y2-y1);
@@ -1783,8 +1793,8 @@ void GPS_Math_Known_Datum_To_Known_Datum_M(double Sphi, double Slam, double SH,
 ** @param [w] Dphi [double *] dest latitude (deg)
 ** @param [w] Dlam [double *] dest longitude (deg)
 ** @param [w] DH   [double *] dest height  (metres)
-** @param [r] n1   [int32] source datum number from GPS_Datum structure
-** @param [r] n2   [int32] dest   datum number from GPS_Datum structure
+** @param [r] n1   [int32] source datum number from GPS_Datums structure
+** @param [r] n2   [int32] dest   datum number from GPS_Datums structure
 **
 ** @return [void]
 ************************************************************************/
@@ -1812,23 +1822,23 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
   double dy;
   double dz;
 
-  idx1  = GPS_Datum[n1].ellipse;
-  Sa    = GPS_Ellipse[idx1].a;
-  Sif   = GPS_Ellipse[idx1].invf;
+  idx1  = GPS_Datums[n1].ellipse;
+  Sa    = GPS_Ellipses[idx1].a;
+  Sif   = GPS_Ellipses[idx1].invf;
   Sb    = Sa - (Sa / Sif);
 
-  x1    = GPS_Datum[n1].dx;
-  y1    = GPS_Datum[n1].dy;
-  z1    = GPS_Datum[n1].dz;
+  x1    = GPS_Datums[n1].dx;
+  y1    = GPS_Datums[n1].dy;
+  z1    = GPS_Datums[n1].dz;
 
-  idx2  = GPS_Datum[n2].ellipse;
-  Da    = GPS_Ellipse[idx2].a;
-  Dif   = GPS_Ellipse[idx2].invf;
+  idx2  = GPS_Datums[n2].ellipse;
+  Da    = GPS_Ellipses[idx2].a;
+  Dif   = GPS_Ellipses[idx2].invf;
   Db    = Da - (Da / Dif);
 
-  x2    = GPS_Datum[n2].dx;
-  y2    = GPS_Datum[n2].dy;
-  z2    = GPS_Datum[n2].dz;
+  x2    = GPS_Datums[n2].dx;
+  y2    = GPS_Datums[n2].dy;
+  z2    = GPS_Datums[n2].dz;
 
   GPS_Math_LatLonH_To_XYZ(Sphi,Slam,SH,&dx,&dy,&dz,Sa,Sb);
   dx += -(x2-x1);
@@ -2116,8 +2126,9 @@ int32_t GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double* E,
 
   phi0 = 0.0;
 
-  a = GPS_Ellipse[21].a;
-  b = a - (a/GPS_Ellipse[21].invf);
+  assert(strcmp(GPS_Ellipses[21].name, "GRS80") == 0);
+  a = GPS_Ellipses[21].a;
+  b = a - (a / GPS_Ellipses[21].invf);
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -2243,7 +2254,7 @@ int32_t GPS_Math_UTM_EN_To_WGS84(double* lat, double* lon, double E,
     return 0;
   }
 
-  GPS_Math_UTM_EN_to_LatLon(GPS_Datum[118].ellipse, N, E, lat, lon, lambda0, E0, N0);
+  GPS_Math_UTM_EN_to_LatLon(GPS_Datums[118].ellipse, N, E, lat, lon, lambda0, E0, N0);
   return 1;
 }
 
@@ -2258,7 +2269,7 @@ int32_t GPS_Math_UTM_EN_To_WGS84(double* lat, double* lon, double E,
 ** @param [w] N    [double *] northing (metres)
 ** @param [w] zone [int32 *]  zone number
 ** @param [w] zc   [char *] zone character
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [int32] success
 ************************************************************************/
@@ -2281,9 +2292,9 @@ int32_t GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
 
   phi0 = 0.0;
 
-  idx  = GPS_Datum[n].ellipse;
-  a = GPS_Ellipse[idx].a;
-  b = a - (a/GPS_Ellipse[idx].invf);
+  idx  = GPS_Datums[n].ellipse;
+  a = GPS_Ellipses[idx].a;
+  b = a - (a / GPS_Ellipses[idx].invf);
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -2300,7 +2311,7 @@ int32_t GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
 ** @param [w] N    [double]   northing (metres)
 ** @param [w] zone [int32]      zone number
 ** @param [w] zc   [char]     zone character
-** @param [r] n    [int32] datum number from GPS_Datum structure
+** @param [r] n    [int32] datum number from GPS_Datums structure
 **
 ** @return [int32] success
 ************************************************************************/
@@ -2316,7 +2327,7 @@ int32_t GPS_Math_UTM_EN_To_Known_Datum(double* lat, double* lon, double E,
     return 0;
   }
 
-  GPS_Math_UTM_EN_to_LatLon(GPS_Datum[n].ellipse, N, E, lat, lon, lambda0, E0, N0);
+  GPS_Math_UTM_EN_to_LatLon(GPS_Datums[n].ellipse, N, E, lat, lon, lambda0, E0, N0);
   return 1;
 }
 
@@ -2514,8 +2525,8 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
   double mu, phi1Rad;
   double x, y;
 
-  a = GPS_Ellipse[ReferenceEllipsoid].a;
-  b = 1 / GPS_Ellipse[ReferenceEllipsoid].invf;
+  a = GPS_Ellipses[ReferenceEllipsoid].a;
+  b = 1 / GPS_Ellipses[ReferenceEllipsoid].invf;
   eccSquared = b * (2.0 - b);
   e1 = (1-sqrt(1-eccSquared))/(1+sqrt(1-eccSquared));
 
@@ -2549,18 +2560,18 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
 
 int32_t GPS_Lookup_Datum_Index(const char* n)
 {
-  GPS_PDatum dp;
-  GPS_PDatum_Alias al;
+  const GPS_Datum* dp;
+  const GPS_Datum_Alias* al;
 
-  for (al = GPS_DatumAlias; al->alias; al++) {
+  for (al = GPS_DatumAliases; al->alias; al++) {
     if (case_ignore_strcmp(al->alias, n) == 0) {
       return al->datum;
     }
   }
 
-  for (dp = GPS_Datum; dp->name; dp++) {
+  for (dp = GPS_Datums; dp->name; dp++) {
     if (0 == case_ignore_strcmp(dp->name, n)) {
-      return dp - GPS_Datum;
+      return dp - GPS_Datums;
     }
   }
 
@@ -2575,7 +2586,7 @@ int32_t GPS_Lookup_Datum_Index(const QString& n)
 const char*
 GPS_Math_Get_Datum_Name(const int datum_index)
 {
-  return GPS_Datum[datum_index].name;
+  return GPS_Datums[datum_index].name;
 }
 
 

@@ -1,6 +1,8 @@
 #ifndef JEEPS_GPSMEM_H_INCLUDED_
 #define JEEPS_GPSMEM_H_INCLUDED_
 
+constexpr double GPS_FLTMIN = 1.75494351E-38;
+constexpr double GPS_FLTMAX = 3.402823466E+38;
 
 #include "jeeps/gps.h"
   GPS_PPvt_Data     GPS_Pvt_New();
