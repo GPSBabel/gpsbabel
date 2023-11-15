@@ -29,24 +29,24 @@
 #define usecDELAY 180000	/* Microseconds before GPS sends A001 */
 
 
-  int32  GPS_Device_Chars_Ready(gpsdevh* fd);
-  int32  GPS_Device_On(const char* port, gpsdevh** fd);
-  int32  GPS_Device_Off(gpsdevh* fd);
-  int32  GPS_Device_Wait(gpsdevh* fd);
-  int32  GPS_Device_Flush(gpsdevh* fd);
-  int32  GPS_Device_Read(int32 ignored, void* ibuf, int size);
-  int32  GPS_Device_Write(int32 ignored, const void* obuf, int size);
+int32_t GPS_Device_Chars_Ready(gpsdevh* fd);
+int32_t GPS_Device_On(const char* port, gpsdevh** fd);
+int32_t GPS_Device_Off(gpsdevh* fd);
+int32_t GPS_Device_Wait(gpsdevh* fd);
+int32_t GPS_Device_Flush(gpsdevh* fd);
+int32_t GPS_Device_Read(int32_t ignored, void* ibuf, int size);
+int32_t GPS_Device_Write(int32_t ignored, const void* obuf, int size);
   void   GPS_Device_Error(char* hdr, ...);
-  int32  GPS_Write_Packet(gpsdevh* fd, const GPS_Packet& packet);
+int32_t GPS_Write_Packet(gpsdevh* fd, const GPS_Packet& packet);
   bool   GPS_Send_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec);
-  int32  GPS_Packet_Read(gpsdevh* fd, GPS_Packet* packet);
+int32_t GPS_Packet_Read(gpsdevh* fd, GPS_Packet* packet);
   bool   GPS_Get_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec);
 
-  using gps_device_op = int32 (*)(gpsdevh*);
-  using gps_device_op5 = int32 (*)(const char*, gpsdevh** fd);
+  using gps_device_op = int32_t (*)(gpsdevh*);
+  using gps_device_op5 = int32_t (*)(const char*, gpsdevh** fd);
   using gps_device_op10 = bool (*)(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec);
-  using gps_device_op12 = int32 (*)(gpsdevh* fd, const GPS_Packet& packet);
-  using gps_device_op13 = int32 (*)(gpsdevh* fd, GPS_Packet* packet);
+  using gps_device_op12 = int32_t (*)(gpsdevh* fd, const GPS_Packet& packet);
+  using gps_device_op13 = int32_t (*)(gpsdevh* fd, GPS_Packet* packet);
 
   typedef struct {
     gps_device_op5 Device_On;

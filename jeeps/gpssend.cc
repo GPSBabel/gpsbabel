@@ -65,7 +65,7 @@ Build_Serial_Packet(const GPS_Packet& in, GPS_Serial_Packet* out)
 
   chk -= in.n;
 
-  for (uint32 i = 0; i < in.n; ++i) {
+  for (uint32_t i = 0; i < in.n; ++i) {
     if (*p == DLE) {
       ++bytes;
       *q++ = DLE;
@@ -116,9 +116,9 @@ DiagS(void* buf, size_t sz)
 ** @return [int32] number of bytes in the packet
 ************************************************************************/
 
-int32 GPS_Serial_Write_Packet(gpsdevh* fd, const GPS_Packet& packet)
+int32_t GPS_Serial_Write_Packet(gpsdevh* fd, const GPS_Packet& packet)
 {
-  int32 ret;
+	int32_t ret;
   const char* m1, *m2;
   GPS_Serial_Packet ser_pkt;
   UC ser_pkt_data[MAX_GPS_PACKET_SIZE * sizeof(UC)];

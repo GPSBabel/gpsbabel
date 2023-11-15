@@ -26,14 +26,14 @@
 #include <cstdlib>
 #include <fcntl.h>
 
-static int32 gps_endian_called=0;
-static int32 GPS_Little=0;
+static int32_t gps_endian_called = 0;
+static int32_t GPS_Little = 0;
 
-int32 gps_warning = 0;
-int32 gps_error   = 0;
-int32 gps_user    = 0;
-int32 gps_show_bytes = 0;
-int32 gps_errno = 0;
+int32_t gps_warning = 0;
+int32_t gps_error = 0;
+int32_t gps_user = 0;
+int32_t gps_show_bytes = 0;
+int32_t gps_errno = 0;
 
 /* @func GPS_Util_Little ***********************************************
 **
@@ -42,11 +42,11 @@ int32 gps_errno = 0;
 ** @return [int32] true if little-endian
 ************************************************************************/
 
-int32 GPS_Util_Little()
+int32_t GPS_Util_Little()
 {
   static union lb {
-    char chars[sizeof(int32)];
-    int32 i;
+    char chars[sizeof(int32_t)];
+    int32_t i;
   }
   data;
 
@@ -130,7 +130,7 @@ double GPS_Util_Get_Double(const UC* s)
 {
   double ret;
   UC* p;
-  int32 i;
+  int32_t i;
 
   p = (UC*)&ret;
 
@@ -140,7 +140,7 @@ double GPS_Util_Get_Double(const UC* s)
       *p++ = s[i];
     }
   else
-    for (i=0; i<(int32)sizeof(double); ++i) {
+    for (i=0; i<(int32_t)sizeof(double); ++i) {
       *p++ = s[i];
     }
 
@@ -161,7 +161,7 @@ double GPS_Util_Get_Double(const UC* s)
 
 void GPS_Util_Put_Double(UC* s, const double v)
 {
-  int32 i;
+	int32_t i;
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
@@ -170,7 +170,7 @@ void GPS_Util_Put_Double(UC* s, const double v)
       s[i] = *p++;
     }
   else
-    for (i=0; i<(int32)sizeof(double); ++i) {
+    for (i=0; i<(int32_t)sizeof(double); ++i) {
       s[i] = *p++;
     }
 
@@ -187,21 +187,21 @@ void GPS_Util_Put_Double(UC* s, const double v)
 ** @return [int32] value
 ************************************************************************/
 
-int32 GPS_Util_Get_Int(const UC* s)
+int32_t GPS_Util_Get_Int(const UC* s)
 {
-  int32 ret;
+	int32_t ret;
   UC* p;
-  int32 i;
+  int32_t i;
 
   p = (UC*)&ret;
 
 
   if (!GPS_Little)
-    for (i=sizeof(int32)-1; i>-1; --i) {
+    for (i=sizeof(int32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
   else
-    for (i=0; i<(int32)sizeof(int32); ++i) {
+    for (i=0; i<(int32_t)sizeof(int32_t); ++i) {
       *p++ = s[i];
     }
 
@@ -220,18 +220,18 @@ int32 GPS_Util_Get_Int(const UC* s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Int(UC* s, const int32 v)
+void GPS_Util_Put_Int(UC* s, const int32_t v)
 {
-  int32 i;
+	int32_t i;
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
-    for (i=sizeof(int32)-1; i>-1; --i) {
+    for (i=sizeof(int32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
   else
-    for (i=0; i<(int32)sizeof(int32); ++i) {
+    for (i=0; i<(int32_t)sizeof(int32_t); ++i) {
       s[i] = *p++;
     }
 
@@ -247,21 +247,21 @@ void GPS_Util_Put_Int(UC* s, const int32 v)
 ** @return [uint32] value
 ************************************************************************/
 
-uint32 GPS_Util_Get_Uint(const UC* s)
+uint32_t GPS_Util_Get_Uint(const UC* s)
 {
-  uint32 ret;
+	uint32_t ret;
   UC*     p;
-  int32  i;
+  int32_t i;
 
   p = (UC*)&ret;
 
 
   if (!GPS_Little)
-    for (i=sizeof(uint32)-1; i>-1; --i) {
+    for (i=sizeof(uint32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
   else
-    for (i=0; i<(int32)sizeof(uint32); ++i) {
+    for (i=0; i<(int32_t)sizeof(uint32_t); ++i) {
       *p++ = s[i];
     }
 
@@ -280,18 +280,18 @@ uint32 GPS_Util_Get_Uint(const UC* s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Uint(UC* s, const uint32 v)
+void GPS_Util_Put_Uint(UC* s, const uint32_t v)
 {
-  int32 i;
+	int32_t i;
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
   if (!GPS_Little)
-    for (i=sizeof(uint32)-1; i>-1; --i) {
+    for (i=sizeof(uint32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
   else
-    for (i=0; i<(int32)sizeof(uint32); ++i) {
+    for (i=0; i<(int32_t)sizeof(uint32_t); ++i) {
       s[i] = *p++;
     }
 
@@ -311,7 +311,7 @@ float GPS_Util_Get_Float(const UC* s)
 {
   float ret;
   UC* p;
-  int32 i;
+  int32_t i;
 
   p = (UC*)&ret;
 
@@ -321,7 +321,7 @@ float GPS_Util_Get_Float(const UC* s)
       *p++ = s[i];
     }
   else
-    for (i=0; i<(int32)sizeof(float); ++i) {
+    for (i=0; i<(int32_t)sizeof(float); ++i) {
       *p++ = s[i];
     }
 
@@ -342,7 +342,7 @@ float GPS_Util_Get_Float(const UC* s)
 
 void GPS_Util_Put_Float(UC* s, const float v)
 {
-  int32 i;
+	int32_t i;
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
@@ -351,7 +351,7 @@ void GPS_Util_Put_Float(UC* s, const float v)
       s[i] = *p++;
     }
   else
-    for (i=0; i<(int32)sizeof(float); ++i) {
+    for (i=0; i<(int32_t)sizeof(float); ++i) {
       s[i] = *p++;
     }
 
@@ -637,7 +637,7 @@ void GPS_Enable_User()
 ** @@
 ****************************************************************************/
 
-void GPS_Diagnose(int32 c)
+void GPS_Diagnose(int32_t c)
 {
   if (!gps_show_bytes) {
     return;
