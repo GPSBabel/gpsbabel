@@ -604,6 +604,7 @@ int32_t GPS_Serial_Off(gpsdevh* dh)
     gps_errno = HARDWARE_ERROR;
     return 0;
   }
+  xfree(dh);
   return 1;
 }
 
