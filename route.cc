@@ -20,6 +20,7 @@
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
 #include <optional>             // for optional, operator>, operator<
+#include <utility>              // for as_const
 
 #include <QDateTime>            // for operator>, QDateTime, operator<
 #include <QList>                // for QList<>::const_iterator
@@ -462,7 +463,7 @@ RouteList::del_marked_wpts(route_head* rte)
 
   // mimic trkseg handling from WaypointList::del_rte_waypt
   bool inherit_new_trkseg = false;
-  for (Waypoint* wpt : qAsConst(oldlist)) {
+  for (Waypoint* wpt : std::as_const(oldlist)) {
     if (wpt->wpt_flags.marked_for_deletion) {
       if (wpt->wpt_flags.new_trkseg) {
         inherit_new_trkseg = true;

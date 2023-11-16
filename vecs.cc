@@ -31,12 +31,13 @@
 #include <QStringList>         // for QStringList
 #include <QVector>             // for QVector
 #include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qPrintable, qAsConst
+#include <QtGlobal>            // for qPrintable
 
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
-#include <type_traits>         // for add_const<>::type, is_base_of
+#include <type_traits>         // for is_base_of
+#include <utility>             // for as_const
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
@@ -69,8 +70,9 @@
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
 #include "unicsv.h"            // for UnicsvFormat
+#include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
-#include "googletakeout.h"    // for GoogleTakeoutFormat
+#include "googletakeout.h"     // for GoogleTakeoutFormat
 
 
 extern ff_vecs_t geo_vecs;
@@ -86,7 +88,6 @@ extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
-extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
@@ -136,7 +137,6 @@ struct Vecs::Impl {
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
-  LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
 #if CSVFMTS_ENABLED
@@ -162,7 +162,6 @@ struct Vecs::Impl {
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
-  QstarzBL1000Format qstarz_bl_1000_fmt;
 #endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
@@ -317,11 +316,12 @@ struct Vecs::Impl {
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
     {
-      &vcf_fmt,
+      nullptr,
       "vcard",
       "Vcard Output (for iPod)",
       "vcf",
       nullptr,
+      &fmtfactory<VcfFormat>
     },
     {
       &unicsv_fmt,
@@ -487,11 +487,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &qstarz_bl_1000_fmt,
+      nullptr,
       "qstarz_bl-1000",
       "Qstarz BL-1000",
       nullptr,
       nullptr,
+      &fmtfactory<QstarzBL1000Format>
     },
     {
       nullptr,
@@ -817,7 +818,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : qAsConst(style_list)) {
+  for (const auto& svec : std::as_const(style_list)) {
     if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }

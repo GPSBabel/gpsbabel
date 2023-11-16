@@ -22,9 +22,10 @@
 #include "radius.h"
 
 #include <cstdlib>          // for strtod
+#include <utility>          // for as_const
 
 #include <QString>          // for QString
-#include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
+#include <QtGlobal>         // QAddConst<>::Type, foreach
 
 #include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
 
@@ -73,7 +74,7 @@ void RadiusFilter::process()
   waypt_swap(comp);
 
   int i = 0;
-  for (Waypoint* wp : qAsConst(comp)) {
+  for (Waypoint* wp : std::as_const(comp)) {
     delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 

@@ -326,7 +326,7 @@ public:
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
-  Waypoint& operator=(const Waypoint& other);
+  Waypoint& operator=(const Waypoint& rhs);
 
   /* Member Functions */
 
@@ -927,8 +927,8 @@ struct ff_vecs_t {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char*, ...);
-[[gnu::format(printf, 1, 2)]] void warning(const char*, ...);
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
 
 void printposn(double c, bool is_lat);
 

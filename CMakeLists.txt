@@ -153,7 +153,7 @@ set(JEEPS
   jeeps/gpsusbcommon.cc
   jeeps/gpsusbread.cc
   jeeps/gpsusbsend.cc
-  jeeps/jgpsutil.cc
+  jeeps/gpsutil.cc
 )
 
 # SUPPORT
@@ -239,6 +239,7 @@ set(HEADERS
   text.h
   unicsv.h
   units.h
+  vcf.h
   vecs.h
   xcsv.h
   xmlgeneric.h

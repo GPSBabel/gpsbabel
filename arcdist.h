@@ -54,7 +54,7 @@ private:
   /* Member Functions */
 
   void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
-  void arcdist_arc_disp_hdr_cb(const route_head*);
+  void arcdist_arc_disp_hdr_cb(const route_head* /*unused*/);
 
   /* Data Members */
 

@@ -22,12 +22,12 @@
 #include "interpolate.h"
 
 #include <climits>              // for INT_MAX
-#include <cmath>                // for abs, ceil, isfinite, round
+#include <cmath>                // for ceil, isfinite
 #include <cstdlib>              // for abs, strtod
 #include <optional>             // for optional
 
 #include <QString>              // for QString
-#include <QtGlobal>             // for qint64, qAsConst, qRound64
+#include <QtGlobal>             // for qint64, qRound64
 
 #include "defs.h"
 #include "grtcirc.h"            // for linepart, RAD, gcdist, radtomiles

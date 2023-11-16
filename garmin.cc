@@ -28,6 +28,7 @@
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
+#include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
 #include <QRegularExpression>    // for QRegularExpression
@@ -458,7 +459,7 @@ GarminFormat::track_read()
   }
 
 
-  int32 ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
+  int32_t ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
   if (ntracks <= 0) {
     return;
@@ -535,7 +536,7 @@ GarminFormat::route_read()
    */
   route_head* rte_head = nullptr;
 
-  int32 nroutepts = GPS_Command_Get_Route(portname, &array);
+  int32_t nroutepts = GPS_Command_Get_Route(portname, &array);
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
@@ -794,7 +795,7 @@ GarminFormat::waypoint_prepare()
   i = 0;
 
   // Iterate with waypt_disp_all?
-  for (const Waypoint* wpt : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* wpt : std::as_const(*global_waypoint_list)) {
     char obuf[256];
 
     QString src;
@@ -810,10 +811,10 @@ GarminFormat::waypoint_prepare()
      * cleaning
      */
     QByteArray ident = mkshort_handle->mkshort(
-                               global_opts.synthesize_shortnames ?
-                               str_from_unicode(src) :
-                               str_from_unicode(wpt->shortname),
-                               false);
+                         global_opts.synthesize_shortnames ?
+                         str_from_unicode(src) :
+                         str_from_unicode(wpt->shortname),
+                         false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
@@ -894,7 +895,7 @@ GarminFormat::waypoint_write()
 {
   int n = waypoint_prepare();
 
-  if (int32 ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
+  if (int32_t ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
     fatal(MYNAME ":communication error sending waypoints..\n");
   }
 
@@ -1029,7 +1030,7 @@ GarminFormat::track_waypt_pr(const Waypoint* wpt)
 int
 GarminFormat::track_prepare()
 {
-  int32 n = track_waypt_count() + track_count();
+  int32_t n = track_waypt_count() + track_count();
 
   tx_tracklist = (GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;

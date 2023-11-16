@@ -93,6 +93,7 @@
 #include <cstdint>              // for int64_t
 #include <cstdlib>              // for abs
 #include <cstring>              // for strcmp, strlen
+#include <utility>              // for as_const
 
 #include <QByteArray>           // for QByteArray
 #include <QDate>                // for QDate
@@ -104,7 +105,7 @@
 #include <QTextEncoder>         // for QTextEncoder
 #include <QTime>                // for QTime
 #include <Qt>                   // for CaseInsensitive, UTC
-#include <QtGlobal>             // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QtGlobal>             // for qPrintable, uint, QAddConst<>::Type
 
 #include "defs.h"
 #include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
@@ -134,7 +135,7 @@ LowranceusrFormat::same_points(const Waypoint* A, const Waypoint* B)
 void
 LowranceusrFormat::register_waypt(const Waypoint* wpt) const
 {
-  for (const Waypoint* cmp : qAsConst(*waypt_table)) {
+  for (const Waypoint* cmp : std::as_const(*waypt_table)) {
     if (same_points(wpt, cmp)) {
       return;
     }
@@ -154,7 +155,7 @@ const Waypoint*
 LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   // Iterate with waypt_disp_all?
-  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* waypointp : std::as_const(*global_waypoint_list)) {
     const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->uid_unit == uid_unit &&
@@ -175,7 +176,7 @@ const Waypoint*
 LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   // Iterate with waypt_disp_all?
-  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* waypointp : std::as_const(*global_waypoint_list)) {
     const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->UUID1 == id1 &&
@@ -1677,7 +1678,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt) const
 }
 
 void
-LowranceusrFormat::lowranceusr4_route_trl(const route_head*) const
+LowranceusrFormat::lowranceusr4_route_trl(const route_head* /*unused*/) const
 {
   /* Mystery byte */
   gbfputc(0x01, file_out);	// end of Route info ??
@@ -1730,7 +1731,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
 }
 
 void
-LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
 {
   if (trail_count == (int)track_count()) {  /* last trail */
     short num_trail_points = trail_point_count;
@@ -1752,7 +1753,7 @@ LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
   }
 }
 void
-LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head* /*unused*/)
 {
   continuous = 0;
 }
