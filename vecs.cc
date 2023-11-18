@@ -71,6 +71,7 @@
 #include "text.h"              // for TextFormat
 #include "tpo.h"               // for Tpo2Format, Tpo3Format
 #include "unicsv.h"            // for UnicsvFormat
+#include "v900.h"              // for V900Format
 #include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
 #include "googletakeout.h"     // for GoogleTakeoutFormat
@@ -92,7 +93,6 @@ extern ff_vecs_t gtm_vecs;
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t v900_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
 
@@ -152,7 +152,6 @@ struct Vecs::Impl {
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
@@ -423,11 +422,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &v900_fmt,
+      nullptr,
       "v900",
       "Columbus/Visiontac V900 files (.csv)",
       nullptr,
       nullptr,
+      &fmtfactory<V900Format>
     },
     {
       &skytraq_fmt,
