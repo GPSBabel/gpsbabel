@@ -86,6 +86,8 @@ protected:
 
   static constexpr int TRACKNAMELENGTH = 255;
 
+  /* Types */
+
   class StyleInfo
   {
   public:
@@ -120,8 +122,13 @@ protected:
   char* dumpheader = nullptr;
   gbfile* tpo_file_in{};
 
+  // Define a global here that we can query from multiple places.
   float tpo_version = 0.0;
 
+  // Global index to waypoints, needed for routes, filled in by
+  // tpo_process_waypoints.
+  //
+  // For version 3.x files.
   Waypoint** tpo_wp_index{};
   unsigned int tpo_index_ptr{};
 };
