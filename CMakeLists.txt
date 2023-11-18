@@ -237,6 +237,7 @@ set(HEADERS
   skytraq.h
   subrip.h
   text.h
+  tpo.h
   unicsv.h
   units.h
   vcf.h

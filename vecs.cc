@@ -69,6 +69,7 @@
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
+#include "tpo.h"               // for Tpo2Format, Tpo3Format
 #include "unicsv.h"            // for UnicsvFormat
 #include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
@@ -79,8 +80,6 @@ extern ff_vecs_t geo_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t tpg_vecs;
-extern ff_vecs_t tpo2_vecs;
-extern ff_vecs_t tpo3_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
@@ -123,8 +122,8 @@ struct Vecs::Impl {
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
   LegacyFormat tpg_fmt {tpg_vecs};
-  LegacyFormat tpo2_fmt {tpo2_vecs};
-  LegacyFormat tpo3_fmt {tpo3_vecs};
+  Tpo2Format tpo2_fmt;
+  Tpo3Format tpo3_fmt;
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
