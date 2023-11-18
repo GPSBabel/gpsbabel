@@ -70,6 +70,7 @@
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
+#include "tpg.h"               // for TpgFormat
 #include "tpo.h"               // for Tpo2Format, Tpo3Format
 #include "unicsv.h"            // for UnicsvFormat
 #include "v900.h"              // for V900Format
@@ -81,7 +82,6 @@
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
@@ -121,7 +121,6 @@ struct Vecs::Impl {
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat tpg_fmt {tpg_vecs};
   Tpo2Format tpo2_fmt;
   Tpo3Format tpo3_fmt;
 #if SHAPELIB_ENABLED
@@ -233,11 +232,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &tpg_fmt,
+      nullptr,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
       "tpg",
       nullptr,
+      &fmtfactory<TpgFormat>
     },
     {
       &tpo2_fmt,

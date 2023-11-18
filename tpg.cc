@@ -22,16 +22,17 @@
 
  */
 
+#include "tpg.h"
+
 #include <cctype>           // for isalnum
 #include <cstring>          // for memcmp
 
 #include <QChar>            // for QChar
 #include <QString>          // for QString
-#include <QVector>          // for QVector
 
 #include "defs.h"
-#include "gbfile.h"         // for gbfwrite, gbfgetint16, gbfputint16, gbfclose
-#include "jeeps/gpsmath.h"  // for GPS_Lookup_Datum_Index, GPS_Math_Known_Da...
+#include "gbfile.h"         // for gbfwrite, gbfgetint16, gbfputint16, gbfclose, gbfgetdbl, gbfgetpstr, gbfopen_le, gbfputdbl, gbfgetint32, gbfputc, gbfputpstr, gbfread
+#include "jeeps/gpsmath.h"  // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_WGS84_To_Known_Datum_M
 #include "mkshort.h"        // for MakeShort
 
 
@@ -40,21 +41,8 @@
 #define MAXTPGSTRINGSIZE	256
 #define MAXTPGOUTPUTPINS	65535
 
-static gbfile* tpg_file_in;
-static gbfile* tpg_file_out;
-static MakeShort* mkshort_handle;
-static char* tpg_datum_opt;
-static int tpg_datum_idx;
-
-static unsigned int waypt_out_count;
-
-static
-QVector<arglist_t> tpg_args = {
-  {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
-};
-
-static int
-valid_tpg_header(char* header, int len)
+int
+TpgFormat::valid_tpg_header(char* header, int len)
 {
   unsigned char header_bytes[] = { 0xFF, 0xFF, 0x01, 0x00, 0x0D,
                                    0x00, 0x43, 0x54, 0x6F, 0x70,
@@ -68,8 +56,8 @@ valid_tpg_header(char* header, int len)
   return memcmp(header_bytes, header, len);
 }
 
-static void
-tpg_common_init()
+void
+TpgFormat::tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
@@ -77,21 +65,21 @@ tpg_common_init()
   }
 }
 
-static void
-tpg_rd_init(const QString& fname)
+void
+TpgFormat::rd_init(const QString& fname)
 {
   tpg_common_init();
   tpg_file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
-static void
-tpg_rd_deinit()
+void
+TpgFormat::rd_deinit()
 {
   gbfclose(tpg_file_in);
 }
 
-static void
-tpg_wr_init(const QString& fname)
+void
+TpgFormat::wr_init(const QString& fname)
 {
   tpg_common_init();
   tpg_file_out = gbfopen_le(fname, "wb", MYNAME);
@@ -99,15 +87,15 @@ tpg_wr_init(const QString& fname)
   waypt_out_count = 0;
 }
 
-static void
-tpg_wr_deinit()
+void
+TpgFormat::wr_deinit()
 {
   delete mkshort_handle;
   gbfclose(tpg_file_out);
 }
 
-static void
-tpg_read()
+void
+TpgFormat::read()
 {
   char buff[MAXTPGSTRINGSIZE + 1];
   double amt;
@@ -169,8 +157,8 @@ tpg_read()
   }
 }
 
-static void
-tpg_waypt_pr(const Waypoint* wpt)
+void
+TpgFormat::tpg_waypt_pr(const Waypoint* wpt)
 {
   double lon, lat;
   double amt;
@@ -280,8 +268,8 @@ tpg_waypt_pr(const Waypoint* wpt)
   }
 }
 
-static void
-tpg_write()
+void
+TpgFormat::write()
 {
   unsigned char header_bytes[] = { 0xFF, 0xFF, 0x01, 0x00, 0x0D,
                                    0x00, 0x43, 0x54, 0x6F, 0x70,
@@ -307,19 +295,8 @@ tpg_write()
   /* write the rest of the header */
   gbfwrite(header_bytes, 1, 19, tpg_file_out);
 
-  waypt_disp_all(tpg_waypt_pr);
+  auto tpg_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    tpg_waypt_pr(waypointp);
+  };
+  waypt_disp_all(tpg_waypt_pr_lambda);
 }
-
-ff_vecs_t tpg_vecs = {
-  ff_type_file,
-  FF_CAP_RW_WPT,
-  tpg_rd_init,
-  tpg_wr_init,
-  tpg_rd_deinit,
-  tpg_wr_deinit,
-  tpg_read,
-  tpg_write,
-  nullptr,
-  &tpg_args,
-  NULL_POS_OPS
-};
