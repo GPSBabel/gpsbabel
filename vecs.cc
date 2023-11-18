@@ -52,6 +52,7 @@
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
 #include "geo.h"               // for GeoFormat
 #include "gpx.h"               // for GpxFormat
+#include "gtm.h"               // for GtmFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
 #include "html.h"              // for HtmlFormat
 #include "humminbird.h"        // for HumminbirdFormat, HumminbirdHTFormat
@@ -88,7 +89,6 @@ extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
-extern ff_vecs_t gtm_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
@@ -137,7 +137,7 @@ struct Vecs::Impl {
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
   UnicsvFormat unicsv_fmt;
-  LegacyFormat gtm_fmt {gtm_vecs};
+  GtmFormat gtm_fmt;
 #if CSVFMTS_ENABLED
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
 #endif // CSVFMTS_ENABLED
