@@ -238,6 +238,7 @@ set(HEADERS
   skytraq.h
   subrip.h
   text.h
+  tpg.h
   tpo.h
   unicsv.h
   units.h
