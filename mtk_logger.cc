@@ -52,74 +52,37 @@
 
  */
 
+#include "mtk_logger.h"
 
-
-#include "defs.h"
-#include "gbfile.h" /* used for csv output */
-#include "gbser.h"
-#include <QDir>
-#include <QFile>
-#include <QThread>
-#include <cerrno>
-#include <cmath>
-#include <cstdlib>
+#include <cctype>               // for isdigit
+#include <cstdarg>              // for va_end, va_start
+#include <cstring>              // for memcmp, memset, strncmp, strlen, memmove, strchr, strcpy, strerror, strstr
 #if __WIN32__
-#include <io.h>
+#include <io.h>                 // for _chsize
 #else
-#include <unistd.h>
+#include <unistd.h>             // for ftruncate
 #endif
 
+#include <QByteArray>           // for QByteArray
+#include <QChar>                // for QChar
+#include <QDateTime>            // for QDateTime
+#include <QDir>                 // for QDir
+#include <QFile>                // for QFile
+#include <QLatin1Char>          // for QLatin1Char
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QThread>              // for QThread
+#include <QtCore>               // for qPrintable, UTC
+#include <cerrno>               // for errno, ERANGE
+#include <cmath>                // for fabs
+#include <cstdlib>              // for strtoul, strtol
+
+#include "defs.h"
+#include "gbfile.h"             // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
+#include "gbser.h"              // for gbser_read_line, gbser_set_port, gbser_OK, gbser_deinit, gbser_init, gbser_print, gbser_TIMEOUT
+#include "src/core/datetime.h"  // for DateTime
+
+
 #define MYNAME "mtk_logger"
-
-/* MTK packet id's -- currently unused... */
-enum MTK_NMEA_PACKET {
-  PMTK_TEST = 0,
-  PMTK_ACK  = 1,
-  PMTK_SYS_MSG = 10,
-  PMTK_CMD_HOT_START  = 101,
-  PMTK_CMD_WARM_START = 102,
-  PMTK_CMD_COLD_START = 103,
-  PMTK_CMD_FULL_COLD_START  = 104,
-  PMTK_CMD_LOG                = 182, /* Data log commands */
-  PMTK_SET_NMEA_BAUDRATE      = 251,
-  PMTK_API_SET_DGPS_MODE    = 301,
-  PMTK_API_SET_SBAS_ENABLED = 313,
-  PMTK_API_SET_NMEA_OUTPUT  = 314,
-  PMTK_API_SET_PWR_SAV_MODE = 320,
-  PMTK_API_SET_DATUM          = 330,
-  PMTK_API_SET_DATUM_ADVANCE  = 331,
-  PMTK_API_SET_USER_OPTION    = 390,
-  PMTK_API_Q_FIX_CTL          = 400,
-  PMTK_API_Q_DGPS_MODE    = 401,
-  PMTK_API_Q_SBAS_ENABLED = 413,
-  PMTK_API_Q_NMEA_OUTPUT  = 414,
-  PMTK_API_Q_PWR_SAV_MODE = 420,
-  PMTK_API_Q_DATUM            = 430,
-  PMTK_API_Q_DATUM_ADVANCE    = 431,
-  PMTK_API_GET_USER_OPTION    = 490,
-  PMTK_DT_FIX_CTL             = 500,
-  PMTK_DT_DGPS_MODE    = 501,
-  PMTK_DT_SBAS_ENABLED = 513,
-  PMTK_DT_NMEA_OUTPUT  = 514,
-  PMTK_DT_PWR_SAV_MODE = 520,
-  PMTK_DT_DATUM               = 530,
-  PMTK_DT_FLASH_USER_OPTION   = 590,
-  PMTK_Q_VERSION       = 604,
-  PMTK_Q_RELEASE              = 605,
-  PMTK_DT_VERSION      = 704,
-  PMTK_DT_RELEASE             = 705
-};
-
-static const unsigned char LOG_RST[16] = {
-  0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, /* start marker */
-  0x00, 0x00, 0x00, 0x00, 0x00,       /* data */
-  0xbb, 0xbb, 0xbb, 0xbb
-};          /* end marker */
-
-static const char* MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
-  "Invalid packet", "Unsupported packet type",
-  "Valid packet but action failed", "Valid packet, action success"
-};
 
 #define MTK_EVT_BITMASK  (1<<0x02)
 #define MTK_EVT_PERIOD   (1<<0x03)
@@ -128,160 +91,14 @@ static const char* MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
 #define MTK_EVT_START    (1<<0x07)
 #define MTK_EVT_WAYPT    (1<<0x10)  /* Holux waypoint follows... */
 
-/* *************************************** */
-
-/* Data id, type, sizes used by MTK chipset - don't touch.... */
-enum {
-  UTC = 0,
-  VALID,
-  LATITUDE,
-  LONGITUDE,
-  HEIGHT,
-  SPEED,
-  HEADING,
-  DSTA,
-  DAGE,
-  PDOP,
-  HDOP,
-  VDOP,
-  NSAT,
-  SID,
-  ELEVATION,
-  AZIMUTH,
-  SNR,
-  RCR,
-  MILLISECOND,
-  DISTANCE,
-} /* DATA_TYPES */;
-
-static struct log_type {
-  int id;
-  int size;
-  const char* name;
-} log_type[32] =  {
-  { 0, 4, "UTC" },
-  { 1, 2, "VALID" },
-  { 2, 8, "LATITUDE,N/S"},
-  { 3, 8, "LONGITUDE,E/W"},
-  { 4, 4, "HEIGHT" },
-  { 5, 4, "SPEED" },
-  { 6, 4, "HEADING" },
-  { 7, 2, "DSTA" },
-  { 8, 4, "DAGE" },
-  { 9, 2, "PDOP" },
-  { 10, 2, "HDOP"},
-  { 11, 2, "VDOP"},
-  { 12, 2, "NSAT (USED/VIEW)"},
-  { 13, 4, "SID",},
-  { 14, 2, "ELEVATION" },
-  { 15, 2, "AZIMUTH" },
-  { 16, 2, "SNR"},
-  { 17, 2, "RCR"},
-  { 18, 2, "MILLISECOND"},
-  { 19, 8, "DISTANCE" },
-  { 20, 0, nullptr},
-};
-
-struct sat_info {
-  char id, used;
-  short elevation, azimut, snr;
-};
-
-struct data_item {
-  time_t timestamp;
-  short valid;
-  double lat;
-  double lon;
-  float height;
-  float speed;
-  float heading;
-  short dsta; // differential station id
-  float dage;  // differential data age
-  float pdop, hdop, vdop;
-  char sat_used, sat_view, sat_count;
-  short rcr;
-  unsigned short timestamp_ms;
-  double distance;
-  sat_info sat_data[32];
-};
-
-struct mtk_loginfo {
-  unsigned int bitmask;
-  int logLen;
-  int period, distance, speed; /* in 10:ths of sec, m, km/h */
-  int track_event;
-};
-
-/* *************************************** */
-
-/* MTK chip based devices with different baudrate, tweaks, ... */
-enum MTK_DEVICE_TYPE {
-  MTK_LOGGER,
-  HOLUX_M241,
-  HOLUX_GR245
-};
-
 #define TIMEOUT        1500
 #define MTK_BAUDRATE 115200
 #define MTK_BAUDRATE_M241 38400
 
 #define HOLUX245_MASK (1 << 27)
 
-static void* fd;  /* serial fd */
-static FILE* fl;  /* bin.file fd */
-static char* port; /* serial port name */
-static char* OPT_erase;  /* erase ? command option */
-static char* OPT_erase_only;  /* erase_only ? command option */
-static char* OPT_log_enable;  /* enable ? command option */
-static char* csv_file; /* csv ? command option */
-static char* OPT_block_size_kb; /* block_size_kb ? command option */
-static MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
-static mtk_loginfo mtk_info;
-
-const char LIVE_CHAR[4] = {'-', '\\','|','/'};
-
-const char CMD_LOG_DISABLE[]= "$PMTK182,5*20\r\n";
-const char CMD_LOG_ENABLE[] = "$PMTK182,4*21\r\n";
-const char CMD_LOG_FORMAT[] = "$PMTK182,2,2*39\r\n";
-const char CMD_LOG_ERASE[]  = "$PMTK182,6,1*3E\r\n";
-const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
-
-static int  mtk_log_len(unsigned int bitmask);
-static void mtk_rd_init(const QString& fname);
-static void file_init(const QString& fname);
-static void file_deinit() ;
-static void holux245_init();
-static void file_read();
-static int mtk_parse_info(const unsigned char* data, int dataLen);
-
-
-// Arguments for log fetch 'mtk' command..
-
-static QVector<arglist_t> mtk_sargs = {
-  {
-    "erase", &OPT_erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "erase_only", &OPT_erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "log_enable", &OPT_log_enable, "Enable logging after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "csv",   &csv_file, "MTK compatible CSV output file",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
-    "1", ARGTYPE_INT, "1", "64", nullptr
-  },
-};
-
-[[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...)
+void MtkLoggerBase::dbg(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -298,7 +115,7 @@ static QVector<arglist_t> mtk_sargs = {
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static QString GetTempName(bool backup)
+QString MtkLoggerBase::GetTempName(bool backup)
 {
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";
@@ -307,7 +124,7 @@ static QString GetTempName(bool backup)
 #define TEMP_DATA_BIN GetTempName(false)
 #define TEMP_DATA_BIN_OLD GetTempName(true)
 
-static int do_send_cmd(const char* cmd, int cmdLen)
+int MtkLoggerBase::do_send_cmd(const char* cmd, int cmdLen)
 {
   dbg(6, "Send %s ", cmd);
   int rc = gbser_print(fd, cmd);
@@ -319,7 +136,7 @@ static int do_send_cmd(const char* cmd, int cmdLen)
 }
 
 
-static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
+int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
 {
   char line[256];
   int len;
@@ -418,13 +235,13 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
-static void mtk_rd_init_m241(const QString& fname)
+void MtkLoggerBase::mtk_rd_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   mtk_rd_init(fname);
 }
 
-static void mtk_rd_init(const QString& fname)
+void MtkLoggerBase::mtk_rd_init(const QString& fname)
 {
   int rc;
   char* model;
@@ -474,7 +291,7 @@ static void mtk_rd_init(const QString& fname)
   xfree(model);
 }
 
-static void mtk_rd_deinit()
+void MtkLoggerBase::mtk_rd_deinit()
 {
   if (mtk_device == HOLUX_GR245) {
     int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", nullptr, 10);
@@ -489,7 +306,7 @@ static void mtk_rd_deinit()
   xfree(port);
 }
 
-static int mtk_erase()
+int MtkLoggerBase::mtk_erase()
 {
   char* lstatus = nullptr;
 
@@ -526,7 +343,7 @@ static int mtk_erase()
   return 0;
 }
 
-static void mtk_read()
+void MtkLoggerBase::mtk_read()
 {
   char cmd[256];
   char* line = nullptr;
@@ -795,8 +612,7 @@ mtk_retry:
 }
 
 
-static route_head*  trk_head = nullptr;
-static int add_trackpoint(int idx, unsigned long bmask, data_item* itm)
+int MtkLoggerBase::add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 {
   auto* trk = new Waypoint;
 
@@ -917,8 +733,7 @@ static int add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 
 
 /********************** MTK Logger -- CSV output *************************/
-static gbfile* cd;
-static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
+void MtkLoggerBase::mtk_csv_init(char* csv_fname, unsigned long bitmask)
 {
   FILE* cf;
 
@@ -969,7 +784,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   gbfprintf(cd, "\n");
 }
 
-static void mtk_csv_deinit()
+void MtkLoggerBase::mtk_csv_deinit()
 {
   if (cd != nullptr) {
     gbfclose(cd);
@@ -978,7 +793,7 @@ static void mtk_csv_deinit()
 }
 
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
-static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_item* itm)
+int MtkLoggerBase::csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_item* itm)
 {
   const char* fix_str = "";
   if (bmask & (1U<<VALID)) {
@@ -1105,7 +920,7 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_item* it
 
 
 /********************* MTK Logger -- Parse functions *********************/
-static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
+int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
   int sat_id;
@@ -1329,7 +1144,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   Description: Parse an info block
   Globals: mtk_info - bitmask/period/speed/... may be affected if updated.
  */
-static int mtk_parse_info(const unsigned char* data, int dataLen)
+int MtkLoggerBase::mtk_parse_info(const unsigned char* data, int dataLen)
 {
   unsigned int bm;
 
@@ -1413,7 +1228,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
   return 16;
 }
 
-static int mtk_log_len(unsigned int bitmask)
+int MtkLoggerBase::mtk_log_len(unsigned int bitmask)
 {
   int len;
 
@@ -1446,13 +1261,13 @@ static int mtk_log_len(unsigned int bitmask)
 
 /********************** File-in interface ********************************/
 
-static void file_init_m241(const QString& fname)
+void MtkLoggerBase::file_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   file_init(fname);
 }
 
-static void file_init(const QString& fname)
+void MtkLoggerBase::file_init(const QString& fname)
 {
   dbg(4, "Opening file %s...\n", qPrintable(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
@@ -1469,13 +1284,13 @@ static void file_init(const QString& fname)
   }
 }
 
-static void file_deinit()
+void MtkLoggerBase::file_deinit()
 {
   dbg(4, "Closing file...\n");
   fclose(fl);
 }
 
-static void holux245_init()
+void MtkLoggerBase::holux245_init()
 {
   mtk_device = HOLUX_GR245;
 
@@ -1487,7 +1302,7 @@ static void holux245_init()
   log_type[SPEED].size  = 3; // height size..
 }
 
-static int is_holux_string(const unsigned char* data, int dataLen)
+int MtkLoggerBase::is_holux_string(const unsigned char* data, int dataLen)
 {
   if (mtk_device != MTK_LOGGER &&
       dataLen >= 5 &&
@@ -1501,7 +1316,7 @@ static int is_holux_string(const unsigned char* data, int dataLen)
   return 0;
 }
 
-static void file_read()
+void MtkLoggerBase::file_read()
 {
   //  int i, j, k, bLen;
   unsigned char buf[512];
@@ -1651,91 +1466,5 @@ static void file_read()
 }
 
 
-/**************************************************************************/
-// GPS logger will only handle tracks - neither waypoints or tracks...
-// Actually, some of the Holux devices will read waypoints.
-
-/* ascii is the expected character set */
-/* not fixed, can be changed through command line parameter */
-
-ff_vecs_t mtk_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read 	/* waypoints */,
-    ff_cap_read 	/* tracks */,
-    ff_cap_none 	/* routes */
-  },
-  mtk_rd_init,
-  nullptr,
-  mtk_rd_deinit,
-  nullptr,
-  mtk_read,
-  nullptr,
-  nullptr,
-  &mtk_sargs,
-  NULL_POS_OPS
-};
-
-/* ascii is the expected character set */
-/* not fixed, can be changed through command line parameter */
-
-ff_vecs_t mtk_m241_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_none 	/* waypoints */,
-    ff_cap_read 	/* tracks */,
-    ff_cap_none 	/* routes */
-  },
-  mtk_rd_init_m241,
-  nullptr,
-  mtk_rd_deinit,
-  nullptr,
-  mtk_read,
-  nullptr,
-  nullptr,
-  &mtk_sargs,
-  NULL_POS_OPS
-};
-
-/* used for mtk-bin */
-
-static QVector<arglist_t> mtk_fargs = {
-  {
-    "csv",   &csv_file, "MTK compatible CSV output file",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-/* master process: don't convert anything */
-
-ff_vecs_t mtk_fvecs = {
-  ff_type_file,
-  { ff_cap_read, ff_cap_read, ff_cap_none },
-  file_init,
-  nullptr,
-  file_deinit,
-  nullptr,
-  file_read,
-  nullptr,
-  nullptr,
-  &mtk_fargs,
-  NULL_POS_OPS
-};
-
-/* master process: don't convert anything */
-
-ff_vecs_t mtk_m241_fvecs = {
-  ff_type_file,
-  { ff_cap_read, ff_cap_read, ff_cap_none },
-  file_init_m241,
-  nullptr,
-  file_deinit,
-  nullptr,
-  file_read,
-  nullptr,
-  nullptr,
-  &mtk_fargs,
-  NULL_POS_OPS
-};
 /* End file: mtk_logger.c */
 /**************************************************************************/
