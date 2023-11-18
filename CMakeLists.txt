@@ -218,6 +218,7 @@ set(HEADERS
   googletakeout.h
   gpx.h
   grtcirc.h
+  gtm.h
   gtrnctr.h
   heightgrid.h
   humminbird.h
