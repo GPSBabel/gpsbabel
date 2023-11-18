@@ -210,6 +210,7 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  garmin_xt.h
   gdb.h
   geocache.h
   geojson.h

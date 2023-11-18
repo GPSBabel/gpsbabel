@@ -46,6 +46,7 @@
 #include "garmin.h"            // for GarminFormat
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
+#include "garmin_xt.h"         // for GarminXTFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
@@ -93,7 +94,6 @@ extern ff_vecs_t mtk_m241_fvecs;
 extern ff_vecs_t garmin_txt_vecs;
 #endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t format_garmin_xt_vecs;
 #endif // MAXIMAL_ENABLED
 
 #define MYNAME "vecs"
@@ -155,7 +155,7 @@ struct Vecs::Impl {
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
   SubripFormat subrip_fmt;
-  LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
+  GarminXTFormat format_garmin_xt_fmt;
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
