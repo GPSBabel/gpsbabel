@@ -231,6 +231,7 @@ set(HEADERS
   igc.h
   lowranceusr.h
   mkshort.h
+  mtk_logger.h
   nmea.h
   osm.h
   ozi.h

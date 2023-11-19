@@ -63,6 +63,7 @@
 #include "kml.h"               // for KmlFormat
 #include "legacyformat.h"      // for LegacyFormat
 #include "lowranceusr.h"       // for LowranceusrFormat
+#include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
 #include "osm.h"               // for OsmFormat
 #include "ozi.h"               // for OziFormat
@@ -81,14 +82,6 @@
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
 #include "googletakeout.h"     // for GoogleTakeoutFormat
 
-
-extern ff_vecs_t geo_vecs;
-#if MAXIMAL_ENABLED
-extern ff_vecs_t mtk_vecs;
-extern ff_vecs_t mtk_fvecs;
-extern ff_vecs_t mtk_m241_vecs;
-extern ff_vecs_t mtk_m241_fvecs;
-#endif // MAXIMAL_ENABLED
 
 #define MYNAME "vecs"
 
@@ -123,10 +116,10 @@ struct Vecs::Impl {
   TextFormat text_fmt;
   HtmlFormat html_fmt;
   IgcFormat igc_fmt;
-  LegacyFormat mtk_fmt {mtk_vecs};
-  LegacyFormat mtk_ffmt {mtk_fvecs};
-  LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
-  LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
+  MtkFormat mtk_fmt;
+  MtkFileFormat mtk_ffmt;
+  MtkM241Format mtk_m241_fmt;
+  MtkM241FileFormat mtk_m241_ffmt;
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
   UnicsvFormat unicsv_fmt;
