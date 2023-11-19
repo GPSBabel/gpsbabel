@@ -61,7 +61,6 @@
 #include "igc.h"               // for IgcFormat
 #include "inifile.h"           // for inifile_readstr
 #include "kml.h"               // for KmlFormat
-#include "legacyformat.h"      // for LegacyFormat
 #include "lowranceusr.h"       // for LowranceusrFormat
 #include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat

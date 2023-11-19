@@ -227,7 +227,6 @@ set(HEADERS
   html.h
   inifile.h
   kml.h
-  legacyformat.h
   igc.h
   lowranceusr.h
   mkshort.h
