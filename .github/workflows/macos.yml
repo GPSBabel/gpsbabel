@@ -75,7 +75,10 @@ jobs:
         # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
-        brew install jing-trang
+        # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
+        if [ "${{ matrix.os }}" != "macos-11" ]; then
+          brew install jing-trang
+        fi
 
     - name: Script
       env:
