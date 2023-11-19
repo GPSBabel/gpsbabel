@@ -38,7 +38,7 @@
 #ifndef OZI_H_INCLUDED_
 #define OZI_H_INCLUDED_
 
-#include <QIODeviceBase>          // for QIODeviceBase, QIODeviceBase::OpenModeFlag
+#include <QIODevice>              // for QIODeviceBase, QIODeviceBase::OpenModeFlag
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
@@ -91,7 +91,7 @@ private:
 
   /* Member Functions */
 
-  void ozi_open_io(const QString& fname, QIODeviceBase::OpenModeFlag mode);
+  void ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode);
   void ozi_close_io();
   ozi_fsdata* ozi_alloc_fsdata();
   static QString ozi_get_time_str(const Waypoint* waypointp);
