@@ -452,7 +452,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   case 0x8000b:  /* address (street/city...) */
     (void) gbfgetint32(fin);
-  // FALLTHROUGH
+    [[fallthrough]];
   case 0xb:  /* as seen in German POI files. */
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
