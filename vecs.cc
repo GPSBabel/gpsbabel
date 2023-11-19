@@ -46,6 +46,7 @@
 #include "garmin.h"            // for GarminFormat
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
+#include "garmin_txt.h"        // for GarminTxtFormat
 #include "garmin_xt.h"         // for GarminXTFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
@@ -83,17 +84,10 @@
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
-extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
-#if CSVFMTS_ENABLED
-extern ff_vecs_t garmin_txt_vecs;
-#endif // CSVFMTS_ENABLED
-extern ff_vecs_t ggv_log_vecs;
 #endif // MAXIMAL_ENABLED
 
 #define MYNAME "vecs"
@@ -138,7 +132,7 @@ struct Vecs::Impl {
   UnicsvFormat unicsv_fmt;
   GtmFormat gtm_fmt;
 #if CSVFMTS_ENABLED
-  LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
+  GarminTxtFormat garmin_txt_fmt;
 #endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
   GarminGPIFormat garmin_gpi_fmt;
