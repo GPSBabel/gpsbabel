@@ -706,7 +706,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
 {
   if (args) {
     for (const auto& arg : *args) {
-      if (*arg.argval && arg.argval) {
+      if (arg.argval && *arg.argval) {
         printf("options: module/option=value: %s/%s=\"%s\"",
                qPrintable(vecname), qPrintable(arg.argstring), *arg.argval);
         if (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0) {

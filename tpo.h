@@ -138,7 +138,7 @@ class Tpo2Format : public Format, private TpoFormatBase
 public:
   QVector<arglist_t>* get_args() override
   {
-    return &tpo2_args;
+    return nullptr;
   }
 
   ff_type get_type() const override
@@ -165,11 +165,6 @@ public:
   {
     tpo_rd_deinit();
   }
-
-private:
-  /* Data Members */
-
-  QVector<arglist_t> tpo2_args = {};
 };
 
 class Tpo3Format : public Format, private TpoFormatBase
@@ -177,7 +172,7 @@ class Tpo3Format : public Format, private TpoFormatBase
 public:
   QVector<arglist_t>* get_args() override
   {
-    return &tpo3_args;
+    return nullptr;
   }
 
   ff_type get_type() const override
@@ -204,10 +199,5 @@ public:
   {
     tpo_rd_deinit();
   }
-
-private:
-  /* Data Members */
-
-  QVector<arglist_t> tpo3_args = {};
 };
 #endif // TPO_H_INCLUDED_
