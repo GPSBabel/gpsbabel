@@ -221,7 +221,7 @@ private:
   void tag_wpt(const QXmlStreamAttributes& attr);
   void tag_cache_desc(const QXmlStreamAttributes& attr);
   void tag_gs_cache(const QXmlStreamAttributes& attr) const;
-  void tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt);
+  static void tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt);
   void start_something_else(QStringView el, const QXmlStreamAttributes& attr);
   void end_something_else();
   void tag_log_wpt(const QXmlStreamAttributes& attr) const;
