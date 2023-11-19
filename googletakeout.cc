@@ -65,7 +65,7 @@ static Waypoint* takeout_waypoint(
   const QString* start_str
 )
 {
-  Waypoint* waypoint = new Waypoint();
+  auto* waypoint = new Waypoint();
   waypoint->latitude = lat_e7 / 1e7;
   waypoint->longitude = lon_e7 / 1e7;
   if (shortname && shortname->length() > 0) {
