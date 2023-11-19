@@ -41,8 +41,7 @@
 #include <QChar>                   // for QChar, QChar::Other_Control
 #include <QDateTime>               // for QDateTime
 #include <QDebug>                  // for QDebug
-#include <QIODevice>               // for QIODevice
-#include <QIODeviceBase>           // for QIODeviceBase::ReadOnly, QIODeviceBase::WriteOnly
+#include <QIODevice>               // for QIODevice, QIODeviceBase::ReadOnly, QIODeviceBase::WriteOnly
 #include <QList>                   // for QList, QList<>::const_iterator
 #include <QString>                 // for QString, operator!=
 #include <QStringList>             // for QStringList
