@@ -233,6 +233,7 @@ set(HEADERS
   mkshort.h
   nmea.h
   osm.h
+  ozi.h
   qstarz_bl_1000.h
   random.h
   session.h

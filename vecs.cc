@@ -65,6 +65,7 @@
 #include "lowranceusr.h"       // for LowranceusrFormat
 #include "nmea.h"              // for NmeaFormat
 #include "osm.h"               // for OsmFormat
+#include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
 #include "random.h"            // for RandomFormat
 #include "shape.h"             // for ShapeFormat
@@ -82,7 +83,6 @@
 
 
 extern ff_vecs_t geo_vecs;
-extern ff_vecs_t ozi_vecs;
 #if MAXIMAL_ENABLED
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
@@ -111,7 +111,7 @@ struct Vecs::Impl {
   GarminFormat garmin_fmt;
   GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
-  LegacyFormat ozi_fmt {ozi_vecs};
+  OziFormat ozi_fmt;
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
