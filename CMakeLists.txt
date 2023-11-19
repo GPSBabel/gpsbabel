@@ -210,6 +210,8 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  garmin_txt.h
+  garmin_xt.h
   gdb.h
   geocache.h
   geojson.h
@@ -218,6 +220,7 @@ set(HEADERS
   googletakeout.h
   gpx.h
   grtcirc.h
+  gtm.h
   gtrnctr.h
   heightgrid.h
   humminbird.h
@@ -231,6 +234,7 @@ set(HEADERS
   mtk_logger.h
   nmea.h
   osm.h
+  ozi.h
   qstarz_bl_1000.h
   random.h
   session.h
@@ -238,9 +242,11 @@ set(HEADERS
   skytraq.h
   subrip.h
   text.h
+  tpg.h
   tpo.h
   unicsv.h
   units.h
+  v900.h
   vcf.h
   vecs.h
   xcsv.h

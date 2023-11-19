@@ -46,12 +46,15 @@
 #include "garmin.h"            // for GarminFormat
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
+#include "garmin_txt.h"        // for GarminTxtFormat
+#include "garmin_xt.h"         // for GarminXTFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
 #include "geo.h"               // for GeoFormat
 #include "gpx.h"               // for GpxFormat
+#include "gtm.h"               // for GtmFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
 #include "html.h"              // for HtmlFormat
 #include "humminbird.h"        // for HumminbirdFormat, HumminbirdHTFormat
@@ -63,6 +66,7 @@
 #include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
 #include "osm.h"               // for OsmFormat
+#include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
 #include "random.h"            // for RandomFormat
 #include "shape.h"             // for ShapeFormat
@@ -70,28 +74,14 @@
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
+#include "tpg.h"               // for TpgFormat
 #include "tpo.h"               // for Tpo2Format, Tpo3Format
 #include "unicsv.h"            // for UnicsvFormat
+#include "v900.h"              // for V900Format
 #include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
 #include "googletakeout.h"     // for GoogleTakeoutFormat
 
-
-extern ff_vecs_t geo_vecs;
-extern ff_vecs_t ozi_vecs;
-#if MAXIMAL_ENABLED
-extern ff_vecs_t tpg_vecs;
-extern ff_vecs_t gpl_vecs;
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
-extern ff_vecs_t gtm_vecs;
-#if CSVFMTS_ENABLED
-extern ff_vecs_t garmin_txt_vecs;
-#endif // CSVFMTS_ENABLED
-extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t v900_vecs;
-extern ff_vecs_t format_garmin_xt_vecs;
-#endif // MAXIMAL_ENABLED
 
 #define MYNAME "vecs"
 
@@ -114,11 +104,10 @@ struct Vecs::Impl {
   GarminFormat garmin_fmt;
   GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
-  LegacyFormat ozi_fmt {ozi_vecs};
+  OziFormat ozi_fmt;
   KmlFormat kml_fmt;
 #if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat tpg_fmt {tpg_vecs};
   Tpo2Format tpo2_fmt;
   Tpo3Format tpo3_fmt;
 #if SHAPELIB_ENABLED
@@ -134,9 +123,9 @@ struct Vecs::Impl {
 #endif // MAXIMAL_ENABLED
 #if MAXIMAL_ENABLED
   UnicsvFormat unicsv_fmt;
-  LegacyFormat gtm_fmt {gtm_vecs};
+  GtmFormat gtm_fmt;
 #if CSVFMTS_ENABLED
-  LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
+  GarminTxtFormat garmin_txt_fmt;
 #endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
   GarminGPIFormat garmin_gpi_fmt;
@@ -149,12 +138,11 @@ struct Vecs::Impl {
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
   SubripFormat subrip_fmt;
-  LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
+  GarminXTFormat format_garmin_xt_fmt;
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
@@ -231,11 +219,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &tpg_fmt,
+      nullptr,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
       "tpg",
       nullptr,
+      &fmtfactory<TpgFormat>
     },
     {
       &tpo2_fmt,
@@ -420,11 +409,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &v900_fmt,
+      nullptr,
       "v900",
       "Columbus/Visiontac V900 files (.csv)",
       nullptr,
       nullptr,
+      &fmtfactory<V900Format>
     },
     {
       &skytraq_fmt,

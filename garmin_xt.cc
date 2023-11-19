@@ -23,53 +23,22 @@
 
 */
 
+#include "garmin_xt.h"
+
 #include <cstdint>   // for uint8_t, uint32_t, uint16_t, int32_t
 #include <cstdio>    // for SEEK_CUR, SEEK_SET
 #include <cstring>   // for strcmp, strcpy
 
 #include <QString>   // for QString
-#include <QVector>   // for QVector
 
-#include "defs.h"    //
-#include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetu...
+#include "defs.h"
+#include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetuint32, gbfclose, gbfeof, gbfopen
 
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
 #define DATABLOCKSIZE 1
 #define STRK_BLOCK_SIZE 97
-
-static int colors[] = {
-  0x000000, // Black
-  0x00008b, // DarkRed
-  0x006400, // DarkGreen
-  0x00d7ff, // Gold
-  0x8b0000, // DarkBlue
-  0x8b008b, // DarkMagenta
-  0x8b8b00, // DarkCyan
-  0xd3d3d3, // LightGray
-  0xa9a9a9, // DarkGray
-  0x0000ff, // Red
-  0x00ff00, // Green
-  0x00ffff, // Yellow
-  0xff0000, // Blue
-  0xff00ff, // Magenta
-  0xffff00, // Cyan
-  0xffffff // White
-};
-
-static	gbfile* fin;
-static	route_head* track;
-static char*	opt_xt_ftype = nullptr;
-static char*	opt_trk_header = nullptr;
-
-static
-QVector<arglist_t> format_garmin_xt_args = {
-  {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},
-  // TODO: SHIFT - can't test behaviour, do not have appropriate files
-  //{"trk_header_opt", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign/2-sht)", "0", ARGTYPE_INT, ARG_NOMINMAX},
-  {"trk_header", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign)", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
-};
 
 /*******************************************************************************
  * %%%        global callbacks called by gpsbabel main process              %%% *
@@ -78,20 +47,20 @@ QVector<arglist_t> format_garmin_xt_args = {
 /*******************************************************************************
  * %%%        Reader callbacks                                              %%% *
  *******************************************************************************/
-static void
-format_garmin_xt_rd_init(const QString& fname)
+void
+GarminXTFormat::rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
 
-static void
-format_garmin_xt_rd_deinit()
+void
+GarminXTFormat::rd_deinit()
 {
   gbfclose(fin);
 }
 
-static uint16_t
-format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
+uint16_t
+GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 {
   int		method = 0;
   uint8_t	spam = 0;
@@ -156,8 +125,8 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 /*
  * Function to decrypt track block in saved read from saved tracks file
  */
-static void
-format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
+void
+GarminXTFormat::format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 {
   int j = 12;
   while (j<(Count-1)) {
@@ -174,8 +143,8 @@ format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 /*
  * Function to Decompose track block of STRK_BLOCK_SIZE bytes
  */
-static void
-format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
+void
+GarminXTFormat::format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
 {
   //printf("%d %d %d %d %d %d\n", TrackBlock[0], TrackBlock[1], TrackBlock[2], TrackBlock[3], TrackBlock[4], TrackBlock[5]);
   uint16_t PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
@@ -218,8 +187,8 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* 
 /*
  * Decompose Last Waypoint Elevation
  */
-static void
-format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t TrackBlock[])
+void
+GarminXTFormat::format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t TrackBlock[])
 {
   uint16_t PrevEleW = TrackBlock[ii - 1];
   PrevEleW = PrevEleW << 8;
@@ -230,8 +199,8 @@ format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t Trac
 /*
  * Main Function to process Saved tracks file
  */
-static void
-format_garmin_xt_proc_strk()
+void
+GarminXTFormat::format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
   int TracksCompleted = 0; // Number of processed tracks
@@ -331,8 +300,8 @@ format_garmin_xt_proc_strk()
   }
 }
 
-static void
-format_garmin_xt_proc_atrk()
+void
+GarminXTFormat::format_garmin_xt_proc_atrk()
 {
   int		method = 0;
   unsigned char 	buf[3];
@@ -393,8 +362,8 @@ format_garmin_xt_proc_atrk()
   }
 }
 
-static void
-format_garmin_xt_read()
+void
+GarminXTFormat::read()
 {
   // Saved Tracks file
   if (strcmp(opt_xt_ftype, "STRK") == 0) {
@@ -403,27 +372,3 @@ format_garmin_xt_read()
     format_garmin_xt_proc_atrk();
   }
 }
-
-/**************************************************************************/
-
-/* ascii is the expected character set */
-/* not fixed, can be changed through command line parameter */
-
-ff_vecs_t format_garmin_xt_vecs = {
-  ff_type_file,
-  {
-    ff_cap_none				/* waypoints */,
-    ff_cap_read				/* tracks */,
-    ff_cap_none				/* routes */
-  },
-  format_garmin_xt_rd_init,
-  nullptr,
-  format_garmin_xt_rd_deinit,
-  nullptr,
-  format_garmin_xt_read,
-  nullptr,
-  nullptr,
-  &format_garmin_xt_args,
-  NULL_POS_OPS
-};
-/**************************************************************************/
