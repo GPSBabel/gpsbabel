@@ -807,14 +807,6 @@ struct posn_status {
 
 extern posn_status tracking_status;
 
-using ff_init = void (*)(const QString&);
-using ff_deinit = void (*)();
-using ff_read = void (*)();
-using ff_write = void (*)();
-using ff_exit = void (*)();
-using ff_writeposn = void (*)(Waypoint*);
-using ff_readposn = Waypoint* (*)(posn_status*);
-
 #define ARGTYPE_UNKNOWN    0x00000000U
 #define ARGTYPE_INT        0x00000001U
 #define ARGTYPE_FLOAT      0x00000002U
@@ -885,38 +877,6 @@ enum ff_cap {
 
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
-
-/*
- * Format capabilities for realtime positioning.
- */
-struct position_ops_t {
-  ff_init rd_init;
-  ff_readposn rd_position;
-  ff_deinit rd_deinit;
-
-  ff_init wr_init;
-  ff_writeposn wr_position;
-  ff_deinit wr_deinit;
-};
-
-#define NULL_POS_OPS { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, }
-
-/*
- *  Describe the file format to the caller.
- */
-struct ff_vecs_t {
-  ff_type type;
-  QVector<ff_cap> cap;
-  ff_init rd_init;
-  ff_init wr_init;
-  ff_deinit rd_deinit;
-  ff_deinit wr_deinit;
-  ff_read read;
-  ff_write write;
-  ff_exit exit;
-  QVector<arglist_t>* args;
-  position_ops_t position_ops;
-};
 
 [[noreturn]] void fatal(QDebug& msginstance);
 // cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
