@@ -39,8 +39,6 @@
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 
-#if CSVFMTS_ENABLED
-
 /*
  * Class describing an xcsv format.
  */
@@ -432,5 +430,4 @@ private:
 
 };
 
-#endif // CSVFMTS_ENABLED
 #endif // XCSV_H_INCLUDED_

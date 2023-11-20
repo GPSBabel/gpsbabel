@@ -23,7 +23,6 @@
 
 #include "defs.h"
 
-#if CSVFMTS_ENABLED
 #include <algorithm>               // for sort
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
@@ -1433,5 +1432,3 @@ ff_vecs_t garmin_txt_vecs = {
   &garmin_txt_args,
   NULL_POS_OPS
 };
-
-#endif // CSVFMTS_ENABLED

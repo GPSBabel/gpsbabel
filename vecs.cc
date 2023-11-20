@@ -74,7 +74,6 @@
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t ozi_vecs;
-#if MAXIMAL_ENABLED
 extern ff_vecs_t holux_vecs;
 extern ff_vecs_t tpg_vecs;
 extern ff_vecs_t tpo2_vecs;
@@ -85,23 +84,18 @@ extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
-#endif // MAXIMAL_ENABLED
 extern ff_vecs_t wbt_svecs;
-#if MAXIMAL_ENABLED
 extern ff_vecs_t wbt_fvecs;
 //extern ff_vecs_t wbt_fvecs;
 extern ff_vecs_t vcf_vecs;
 extern ff_vecs_t gtm_vecs;
-#if CSVFMTS_ENABLED
 extern ff_vecs_t garmin_txt_vecs;
-#endif // CSVFMTS_ENABLED
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t navilink_vecs;
 extern ff_vecs_t sbp_vecs;
 extern ff_vecs_t sbn_vecs;
 extern ff_vecs_t v900_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
-#endif // MAXIMAL_ENABLED
 
 #define MYNAME "vecs"
 
@@ -126,7 +120,6 @@ struct Vecs::Impl {
   NmeaFormat nmea_fmt;
   LegacyFormat ozi_fmt {ozi_vecs};
   KmlFormat kml_fmt;
-#if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
   LegacyFormat holux_fmt {holux_vecs};
   LegacyFormat tpg_fmt {tpg_vecs};
@@ -143,17 +136,13 @@ struct Vecs::Impl {
   LegacyFormat mtk_ffmt {mtk_fvecs};
   LegacyFormat mtk_m241_fmt {mtk_m241_vecs};
   LegacyFormat mtk_m241_ffmt {mtk_m241_fvecs};
-#endif // MAXIMAL_ENABLED
   LegacyFormat wbt_sfmt {wbt_svecs};
-#if MAXIMAL_ENABLED
   LegacyFormat wbt_ffmt {wbt_fvecs};
 //LegacyFormat wbt_ffmt {wbt_fvecs};
   LegacyFormat vcf_fmt {vcf_vecs};
   UnicsvFormat unicsv_fmt;
   LegacyFormat gtm_fmt {gtm_vecs};
-#if CSVFMTS_ENABLED
   LegacyFormat garmin_txt_fmt {garmin_txt_vecs};
-#endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
   GarminGPIFormat garmin_gpi_fmt;
   RandomFormat random_fmt;
@@ -178,10 +167,8 @@ struct Vecs::Impl {
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
   QstarzBL1000Format qstarz_bl_1000_fmt;
-#endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
-#if CSVFMTS_ENABLED
     /* XCSV must be the first entry in this table. */
     {
       nullptr,
@@ -191,7 +178,6 @@ struct Vecs::Impl {
       nullptr,
       &fmtfactory<XcsvFormat>
     },
-#endif
     {
       nullptr,
       "geo",
@@ -242,7 +228,6 @@ struct Vecs::Impl {
       "kml",
       nullptr,
     },
-#if MAXIMAL_ENABLED
     {
       &lowranceusr_fmt,
       "lowranceusr",
@@ -343,7 +328,6 @@ struct Vecs::Impl {
       "bin",
       nullptr,
     },
-#endif // MAXIMAL_ENABLED
     {
       &wbt_sfmt,
       "wbt",
@@ -351,7 +335,6 @@ struct Vecs::Impl {
       nullptr,
       nullptr,
     },
-#if MAXIMAL_ENABLED
     {
       &wbt_ffmt,
       "wbt-bin",
@@ -387,7 +370,6 @@ struct Vecs::Impl {
       "gtm",
       nullptr,
     },
-#if CSVFMTS_ENABLED
     {
       &garmin_txt_fmt,
       "garmin_txt",
@@ -395,7 +377,6 @@ struct Vecs::Impl {
       "txt",
       nullptr,
     },
-#endif // CSVFMTS_ENABLED
     {
       &gtc_fmt,
       "gtrnctr",
@@ -564,7 +545,6 @@ struct Vecs::Impl {
       nullptr,
       nullptr,
     }
-#endif // MAXIMAL_ENABLED
   };
 };
 
@@ -842,7 +822,6 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
     disp_vec_options(fmtdata.fmtname, args);
   }
 
-#if CSVFMTS_ENABLED
   /*
    * For style based formats let xcsv know the style file.  Otherwise
    * make sure xcsv knows no style file is in use. This covers the case
@@ -853,7 +832,6 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
   if (xcsvfmt != nullptr) {
     xcsvfmt->xcsv_setup_internal_style(fmtdata.style_filename);
   }
-#endif // CSVFMTS_ENABLED
 }
 
 Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
@@ -982,7 +960,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
     }
   }
 
-#if CSVFMTS_ENABLED
   /* The style formats are based on the xcsv format,
    * Make sure we know which entry in the vector list that is.
    */
@@ -1040,7 +1017,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   if (d_ptr_->vec_list.at(0).factory != nullptr) {
     delete xcsvfmt;
   }
-#endif // CSVFMTS_ENABLED
 
   /*
    *  Display the available formats in a format that's easy for humans to

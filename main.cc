@@ -178,14 +178,6 @@ print_extended_info()
     "ZLIB_ENABLED "
 #endif
 
-#if FILTERS_ENABLED
-    "FILTERS_ENABLED "
-#endif
-
-#if CSVFMTS_ENABLED
-    "CSVFMTS_ENABLED "
-#endif
-
 #if SHAPELIB_ENABLED
     "SHAPELIB_ENABLED "
 #endif
