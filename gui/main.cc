@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 #error this version of Qt is not supported.
 #endif
 

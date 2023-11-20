@@ -31,35 +31,41 @@
 #include <QStringList>         // for QStringList
 #include <QVector>             // for QVector
 #include <Qt>                  // for CaseInsensitive
-#include <QtGlobal>            // for qPrintable, qAsConst
+#include <QtGlobal>            // for qPrintable
 
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
-#include <type_traits>         // for add_const<>::type, is_base_of
+#include <type_traits>         // for is_base_of
+#include <utility>             // for as_const
 
 #include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
+#include "garmin.h"            // for GarminFormat
 #include "garmin_fit.h"        // for GarminFitFormat
 #include "garmin_gpi.h"        // for GarminGPIFormat
+#include "garmin_txt.h"        // for GarminTxtFormat
+#include "garmin_xt.h"         // for GarminXTFormat
 #include "gbversion.h"         // for WEB_DOC_DIR
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
 #include "geo.h"               // for GeoFormat
 #include "gpx.h"               // for GpxFormat
+#include "gtm.h"               // for GtmFormat
 #include "gtrnctr.h"           // for GtrnctrFormat
 #include "html.h"              // for HtmlFormat
 #include "humminbird.h"        // for HumminbirdFormat, HumminbirdHTFormat
 #include "igc.h"               // for IgcFormat
 #include "inifile.h"           // for inifile_readstr
 #include "kml.h"               // for KmlFormat
-#include "legacyformat.h"      // for LegacyFormat
 #include "lowranceusr.h"       // for LowranceusrFormat
+#include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
 #include "osm.h"               // for OsmFormat
+#include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
 #include "random.h"            // for RandomFormat
 #include "shape.h"             // for ShapeFormat
@@ -67,35 +73,14 @@
 #include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
+#include "tpg.h"               // for TpgFormat
+#include "tpo.h"               // for Tpo2Format, Tpo3Format
 #include "unicsv.h"            // for UnicsvFormat
+#include "v900.h"              // for V900Format
+#include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
+#include "googletakeout.h"     // for GoogleTakeoutFormat
 
-
-extern ff_vecs_t geo_vecs;
-extern ff_vecs_t garmin_vecs;
-extern ff_vecs_t ozi_vecs;
-extern ff_vecs_t holux_vecs;
-extern ff_vecs_t tpg_vecs;
-extern ff_vecs_t tpo2_vecs;
-extern ff_vecs_t tpo3_vecs;
-extern ff_vecs_t gpl_vecs;
-extern ff_vecs_t brauniger_iq_vecs;
-extern ff_vecs_t mtk_vecs;
-extern ff_vecs_t mtk_fvecs;
-extern ff_vecs_t mtk_m241_vecs;
-extern ff_vecs_t mtk_m241_fvecs;
-extern ff_vecs_t wbt_svecs;
-extern ff_vecs_t wbt_fvecs;
-//extern ff_vecs_t wbt_fvecs;
-extern ff_vecs_t vcf_vecs;
-extern ff_vecs_t gtm_vecs;
-extern ff_vecs_t garmin_txt_vecs;
-extern ff_vecs_t ggv_log_vecs;
-extern ff_vecs_t navilink_vecs;
-extern ff_vecs_t sbp_vecs;
-extern ff_vecs_t sbn_vecs;
-extern ff_vecs_t v900_vecs;
-extern ff_vecs_t format_garmin_xt_vecs;
 
 #define MYNAME "vecs"
 
@@ -115,16 +100,14 @@ struct Vecs::Impl {
    * of this class is constructed.
    */
   GpxFormat gpx_fmt;
-  LegacyFormat garmin_fmt {garmin_vecs};
+  GarminFormat garmin_fmt;
   GdbFormat gdb_fmt;
   NmeaFormat nmea_fmt;
-  LegacyFormat ozi_fmt {ozi_vecs};
+  OziFormat ozi_fmt;
   KmlFormat kml_fmt;
   LowranceusrFormat lowranceusr_fmt;
-  LegacyFormat holux_fmt {holux_vecs};
-  LegacyFormat tpg_fmt {tpg_vecs};
-  LegacyFormat tpo2_fmt {tpo2_vecs};
-  LegacyFormat tpo3_fmt {tpo3_vecs};
+  Tpo2Format tpo2_fmt;
+  Tpo3Format tpo3_fmt;
 #if SHAPELIB_ENABLED
   ShapeFormat shape_fmt;
 #endif
@@ -150,19 +133,15 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
-  LegacyFormat navilink_fmt {navilink_vecs};
   OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
-  LegacyFormat sbp_fmt {sbp_vecs};
-  LegacyFormat sbn_fmt {sbn_vecs};
-  LegacyFormat v900_fmt {v900_vecs};
   SkytraqFormat skytraq_fmt;
   SkytraqfileFormat skytraq_ffmt;
   MinihomerFormat miniHomer_fmt;
   SubripFormat subrip_fmt;
-  LegacyFormat format_garmin_xt_fmt {format_garmin_xt_vecs};
+  GarminXTFormat format_garmin_xt_fmt;
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
@@ -236,18 +215,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &holux_fmt,
-      "holux",
-      "Holux (gm-100) .wpo Format",
-      "wpo",
       nullptr,
-    },
-    {
-      &tpg_fmt,
       "tpg",
       "National Geographic Topo .tpg (waypoints)",
       "tpg",
       nullptr,
+      &fmtfactory<TpgFormat>
     },
     {
       &tpo2_fmt,
@@ -294,13 +267,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &brauniger_iq_fmt,
-      "baroiq",
-      "Brauniger IQ Series Barograph Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &mtk_fmt,
       "mtk",
       "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
@@ -329,32 +295,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &wbt_sfmt,
-      "wbt",
-      "Wintec WBT-100/200 GPS Download",
       nullptr,
-      nullptr,
-    },
-    {
-      &wbt_ffmt,
-      "wbt-bin",
-      "Wintec WBT-100/200 Binary File Format",
-      "bin",
-      nullptr,
-    },
-    {
-      &wbt_ffmt,
-      "wbt-tk1",
-      "Wintec WBT-201/G-Rays 2 Binary File Format",
-      "tk1",
-      nullptr,
-    },
-    {
-      &vcf_fmt,
       "vcard",
       "Vcard Output (for iPod)",
       "vcf",
       nullptr,
+      &fmtfactory<VcfFormat>
     },
     {
       &unicsv_fmt,
@@ -427,13 +373,6 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &navilink_fmt,
-      "navilink",
-      "NaviGPS GT-11/BGT-11 Download",
-      nullptr,
-      nullptr,
-    },
-    {
       &osm_fmt,
       "osm",
       "OpenStreetMap data files",
@@ -462,25 +401,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &sbp_fmt,
-      "sbp",
-      "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
-      "sbp",
       nullptr,
-    },
-    {
-      &sbn_fmt,
-      "sbn",
-      "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
-      "sbn",
-      nullptr,
-    },
-    {
-      &v900_fmt,
       "v900",
       "Columbus/Visiontac V900 files (.csv)",
       nullptr,
       nullptr,
+      &fmtfactory<V900Format>
     },
     {
       &skytraq_fmt,
@@ -539,11 +465,20 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &qstarz_bl_1000_fmt,
+      nullptr,
       "qstarz_bl-1000",
       "Qstarz BL-1000",
       nullptr,
       nullptr,
+      &fmtfactory<QstarzBL1000Format>
+    },
+    {
+      nullptr,
+      "googletakeout",
+      "Google Takeout Location History",
+      "json",
+      nullptr,
+      &fmtfactory<GoogleTakeoutFormat>
     }
   };
 };
@@ -656,10 +591,8 @@ bool Vecs::is_bool(const QString& val)
          (!val.isEmpty() && val.at(0).isDigit());
 }
 
-void Vecs::exit_vec(Format* fmt)
+void Vecs::free_options(QVector<arglist_t>* args)
 {
-  (fmt->exit)();
-  QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
@@ -669,6 +602,12 @@ void Vecs::exit_vec(Format* fmt)
       }
     }
   }
+}
+
+void Vecs::exit_vec(Format* fmt)
+{
+  (fmt->exit)();
+  free_options(fmt->get_args());
 }
 
 void Vecs::exit_vecs()
@@ -759,7 +698,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
 {
   if (args) {
     for (const auto& arg : *args) {
-      if (*arg.argval && arg.argval) {
+      if (arg.argval && *arg.argval) {
         printf("options: module/option=value: %s/%s=\"%s\"",
                qPrintable(vecname), qPrintable(arg.argstring), *arg.argval);
         if (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0) {
@@ -790,7 +729,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
   }
 }
 
-void Vecs::prepare_format(const fmtinfo_t& fmtdata) 
+void Vecs::prepare_format(const fmtinfo_t& fmtdata)
 {
   QVector<arglist_t>* args = fmtdata->get_args();
 
@@ -854,7 +793,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
    * Didn't find it in the table of "real" file types, so plan B
    * is to search the list of xcsv styles.
    */
-  for (const auto& svec : qAsConst(style_list)) {
+  for (const auto& svec : std::as_const(style_list)) {
     if (fmtname.compare(svec.name,  Qt::CaseInsensitive) != 0) {
       continue;
     }
@@ -1032,39 +971,20 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   return svp;
 }
 
-#define VEC_FMT "	%-20.20s  %-.50s\n"
-
-void Vecs::disp_vecs() const
-{
-  const auto svp = sort_and_unify_vecs();
-  for (const auto& vec : svp) {
-    if (vec.type == ff_type_internal)  {
-      continue;
-    }
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
-    const QVector<arginfo_t> args = vec.arginfo;
-    for (const auto& arg : args) {
-      if (!(arg.argtype & ARGTYPE_HIDDEN)) {
-        printf("	  %-18.18s    %s%-.50s%s\n",
-               qPrintable(arg.argstring),
-               (arg.argtype & ARGTYPE_TYPEMASK) ==
-               ARGTYPE_BOOL ? "(0/1) " : "",
-               qPrintable(arg.helpstring),
-               (arg.argtype & ARGTYPE_REQUIRED) ? " (required)" : "");
-      }
-    }
-  }
-}
-
 void Vecs::disp_vec(const QString& vecname) const
 {
   const auto svp = sort_and_unify_vecs();
   for (const auto& vec : svp) {
-    if (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)  {
+    /*
+     * Display info for all non-internal formats is vecname is empty,
+     * otherwise just display info for the matching format.
+     */
+    if (vecname.isEmpty()? (vec.type == ff_type_internal) :
+        (vecname.compare(vec.name, Qt::CaseInsensitive) != 0)) {
       continue;
     }
 
-    printf(VEC_FMT, qPrintable(vec.name), qPrintable(vec.desc));
+    printf("	%-20.20s  %-.50s\n", qPrintable(vec.name), qPrintable(vec.desc));
     const QVector<arginfo_t> args = vec.arginfo;
     for (const auto& arg : args) {
       if (!(arg.argtype & ARGTYPE_HIDDEN)) {

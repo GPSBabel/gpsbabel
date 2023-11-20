@@ -114,7 +114,6 @@ public:
   status_t is_available:2;
   status_t is_memberonly:2;
   status_t has_customcoords:2;
-  gpsbabel::DateTime exported;
   gpsbabel::DateTime last_found;
   QString placer; /* Placer name */
   int placer_id; /* Placer id */

@@ -27,7 +27,7 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.12.2}
+QT_VERSION=${1:-5.15.2}
 QT_VERSION_SHORT=${QT_VERSION//./}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.

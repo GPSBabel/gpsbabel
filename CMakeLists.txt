@@ -29,8 +29,8 @@ add_executable(gpsbabel)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
-if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
+if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.15)
+  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.15 or newer is required.")
 else()
   message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
 endif()
@@ -68,18 +68,15 @@ set(RESOURCES gpsbabel.qrc)
 # MINIMAL_FMTS
 set(MINIMAL_FMTS
   garmin.cc
-  garmin_device_xml.cc
   garmin_tables.cc
   geo.cc
   gpx.cc
   kml.cc
   nmea.cc
-  wbt-200.cc
 )
 
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
-  brauniger_iq.cc
   dg-100.cc
   exif.cc
   garmin_fit.cc
@@ -90,21 +87,18 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geocache.cc
   geojson.cc
   globalsat_sport.cc
+  googletakeout.cc
   gtm.cc
   gtrnctr.cc
-  holux.cc
   html.cc
   humminbird.cc
   igc.cc
   lowranceusr.cc
   mtk_logger.cc
-  navilink.cc
   osm.cc
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
-  sbn.cc
-  sbp.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -159,7 +153,7 @@ set(JEEPS
   jeeps/gpsusbcommon.cc
   jeeps/gpsusbread.cc
   jeeps/gpsusbsend.cc
-  jeeps/jgpsutil.cc
+  jeeps/gpsutil.cc
 )
 
 # SUPPORT
@@ -187,10 +181,8 @@ set(SUPPORT
   src/core/vector3d.cc
   src/core/xmlstreamwriter.cc
   src/core/xmltag.cc
-  strptime.c
   units.cc
   util.cc
-  util_crc.cc
   vecs.cc
   waypt.cc
   xmlgeneric.cc
@@ -209,7 +201,7 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
-  garmin_device_xml.h
+  garmin.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
@@ -218,36 +210,43 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  garmin_txt.h
+  garmin_xt.h
   gdb.h
   geocache.h
   geojson.h
   globalsat_sport.h
   geo.h
+  googletakeout.h
   gpx.h
   grtcirc.h
+  gtm.h
   gtrnctr.h
   heightgrid.h
-  holux.h
   humminbird.h
   html.h
   inifile.h
   kml.h
-  legacyformat.h
   igc.h
   lowranceusr.h
-  navilink.h
+  mkshort.h
+  mtk_logger.h
   nmea.h
   osm.h
+  ozi.h
   qstarz_bl_1000.h
   random.h
   session.h
   shape.h
   skytraq.h
-  strptime.h
   subrip.h
   text.h
+  tpg.h
+  tpo.h
   unicsv.h
   units.h
+  v900.h
+  vcf.h
   vecs.h
   xcsv.h
   xmlgeneric.h
@@ -257,7 +256,6 @@ set(HEADERS
   jeeps/gpscom.h
   jeeps/gpsdatum.h
   jeeps/gpsdevice.h
-  jeeps/gpsfmt.h
   jeeps/gpsmath.h
   jeeps/gpsmem.h
   jeeps/gpsport.h
@@ -290,8 +288,6 @@ if(UNIX)
   set(SOURCES ${SOURCES} gbser_posix.cc)
   set(HEADERS ${HEADERS} gbser_posix.h)
   target_compile_options(gpsbabel PRIVATE -Wall)
-  # disable warning from strptime.c, which we don't want to own or modify
-  set_source_files_properties(strptime.c PROPERTIES COMPILE_OPTIONS -Wno-unused-but-set-variable)
 endif()
 
 if(WIN32)
@@ -312,7 +308,7 @@ endif()
 if(MSVC)
   target_compile_definitions(gpsbabel PRIVATE _CRT_SECURE_NO_WARNINGS)
   target_compile_definitions(gpsbabel PRIVATE _CRT_NONSTDC_NO_WARNINGS)
-  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267)
+  target_compile_options(gpsbabel PRIVATE /MP -wd4100 -wd4267 -wd5030)
 endif()
 
 if(APPLE)
@@ -322,6 +318,7 @@ endif()
 include(shapelib.cmake)
 include(zlib.cmake)
 include(libusb.cmake)
+include(strptime.cmake)
 
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
@@ -392,13 +389,13 @@ set(TESTS
   geojson
   geo
   globalsat_sport
+  googletakeout
   gpsdrive
   gpx
   grapheme
   gtm
   gtrnctr
   height
-  holux
   humminbird
   iblue747
   igc
@@ -406,9 +403,9 @@ set(TESTS
   kml-read
   kml
   lowranceusr
+  mkshort
   mtk
   multiurlgpx
-  navilink
   nmea
   osm
   ozi
@@ -419,8 +416,6 @@ set(TESTS
   realtime
   resample
   route_reverse
-  sbn
-  sbp
   serialization
   shape
   simplify-relative
@@ -437,6 +432,7 @@ set(TESTS
   track
   transform
   unicsv_grids
+  unicsv_local
   unicsv
   unitconversion
   v900
@@ -487,9 +483,9 @@ endif()
 
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
-  set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+  set(GPSBABEL_WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
   add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${GPSBABEL_WEB} ${GPSBABEL_DOCVERSION}
                     DEPENDS gpsbabel gpsbabel.pdf
                     VERBATIM
                     USES_TERMINAL)

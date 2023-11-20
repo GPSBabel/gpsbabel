@@ -27,7 +27,7 @@
 #if FILTERS_ENABLED
 #define MYNAME "validate"
 
-void ValidateFilter::validate_head(const route_head*)
+void ValidateFilter::validate_head(const route_head* /*unused*/)
 {
   head_ct += 1;
   segment_ct_start = point_ct;
@@ -44,7 +44,7 @@ void ValidateFilter::validate_head_trl(const route_head* header)
   }
 }
 
-void ValidateFilter::validate_point(const Waypoint*)
+void ValidateFilter::validate_point(const Waypoint* /*unused*/)
 {
   point_ct += 1;
 }

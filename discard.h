@@ -41,9 +41,13 @@ public:
   void process() override;
 
 private:
+  /* Member Functions */
+
+  void fix_process_wpt(const Waypoint* wpt);
   static QRegularExpression generateRegExp(const QString& glob_pattern);
 
-private:
+  /* Data Members */
+
   char* hdopopt = nullptr;
   char* vdopopt = nullptr;
   char* andopt = nullptr;
@@ -66,8 +70,6 @@ private:
   int satpf{};
   int eleminpf{};
   int elemaxpf{};
-  gpsdata_type what{};
-  route_head* head{};
 
   QVector<arglist_t> args = {
     {
@@ -123,9 +125,6 @@ private:
       ARG_NOMINMAX, nullptr
     },
   };
-
-  void fix_process_wpt(const Waypoint* wpt);
-  void fix_process_head(const route_head* trk);
 
 };
 

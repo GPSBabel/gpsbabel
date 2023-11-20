@@ -55,6 +55,8 @@ struct qstarz_bl_1000_fsdata : FormatSpecificData {
 class QstarzBL1000Format : public Format
 {
 public:
+  using Format::Format;
+
   ff_type get_type() const override
   {
     return ff_type_file;
@@ -69,15 +71,9 @@ public:
     };
   }
 
-  void rd_init(const QString& fname) override;
+  void rd_init(const QString& fname) override {}
   void read() override;
-  void rd_deinit() override;
   void qstarz_bl_1000_read(QDataStream& stream);
   void qstarz_bl_1000_read_record(QDataStream& stream, route_head* track_route);
-
-private:
-  QString read_fname;
 };
-
-
 #endif

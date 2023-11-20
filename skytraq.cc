@@ -29,7 +29,6 @@
 #include <cstdio>          // for sscanf, snprintf, vprintf, SEEK_SET
 #include <cstdlib>         // for free
 #include <cstring>         // for memset
-#include <ctime>           // for time, time_t
 
 #include <QByteArray>      // for QByteArray
 #include <QChar>           // for QChar
@@ -480,7 +479,6 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
 
   // unsigned char log_bool, fifo_mode;
-  char* mystatus;
   unsigned int tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
   unsigned int tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
   unsigned int dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
@@ -489,9 +487,7 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
-  xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
-  db(1, mystatus);
-  xfree(mystatus);
+  db(1, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
 
   return res_OK;
 }
@@ -502,8 +498,8 @@ unsigned int SkytraqBase::me_read32(const unsigned char* p)
   return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
-time_t
-SkytraqBase::gpstime_to_timet(int week, int sec) const
+QDateTime
+SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
 {
   /* Notes:
    *   * week rollover period can be specified using option
@@ -519,11 +515,12 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
    *   * overflow of sec into next week is allowed
    *     (i.e. sec >= 7*24*3600 = 604800 is allowed)
    */
-  time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
+  qint64 gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
 
   int week_rollover = xstrtoi(opt_gps_week_rollover, nullptr, 10);
   if (week_rollover < 0) {
-    int current_week = (time(nullptr)-gps_timet)/(7*SECONDS_PER_DAY);
+    int current_week = (QDateTime::currentSecsSinceEpoch() - gps_timet)/
+                       (7*SECONDS_PER_DAY);
     week_rollover = current_week/1024 - (week > current_week%1024 ? 1 : 0);
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
@@ -531,7 +528,7 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
   int override = xstrtoi(opt_gps_utc_offset, nullptr, 10);
   if (override) {
     gps_timet -= override;
-    return gps_timet;
+    return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
   }
 
   /* leap second compensation: */
@@ -554,7 +551,7 @@ SkytraqBase::gpstime_to_timet(int week, int sec) const
   // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
   // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec
 
-  return gps_timet;     /* returns UTC time */
+  return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
 }
 
 void
@@ -584,7 +581,7 @@ SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, d
 }
 
 void
-SkytraqBase::state_init(struct read_state* pst)
+SkytraqBase::state_init(read_state* pst)
 {
   auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
@@ -603,7 +600,7 @@ SkytraqBase::state_init(struct read_state* pst)
 }
 
 Waypoint*
-SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt) const
+SkytraqBase::make_trackpoint(read_state* st, double lat, double lon, double alt) const
 {
   auto* wpt = new Waypoint;
 
@@ -612,7 +609,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
   wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
-  wpt->SetCreationTime(gpstime_to_timet(st->gps_week, st->gps_sec));
+  wpt->SetCreationTime(gpstime_to_qdatetime(st->gps_week, st->gps_sec));
 
   return wpt;
 }
@@ -626,7 +623,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
 
 int
-SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len) const
+SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len) const
 {
   int res = 0;
   double lat;
@@ -769,7 +766,7 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
 }
 
 int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len) const
+SkytraqBase::process_data_sector(read_state* pst, const uint8_t* buf, int len) const
 {
   int plen, ilen;
 
@@ -927,7 +924,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
 void
 SkytraqBase::skytraq_read_tracks() const
 {
-  struct read_state st;
+  read_state st;
   uint32_t log_wr_ptr;
   uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
   int t, rc, got_sectors, total_sectors_read = 0;
@@ -1243,7 +1240,7 @@ SkytraqfileFormat::rd_deinit()
 void
 SkytraqfileFormat::read()
 {
-  struct read_state st;
+  read_state st;
   int got_bytes;
   int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
   int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);

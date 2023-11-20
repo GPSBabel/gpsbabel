@@ -16,12 +16,13 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2022 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2023 Robert Lipe&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$date$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -31,6 +32,28 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2022 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$date$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,31 +571,31 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="526"/>
+        <location filename="mainwindow.cc" line="529"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="554"/>
+        <location filename="mainwindow.cc" line="557"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="618"/>
+        <location filename="mainwindow.cc" line="621"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="629"/>
+        <location filename="mainwindow.cc" line="632"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="650"/>
+        <location filename="mainwindow.cc" line="653"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
@@ -581,68 +604,68 @@ This program cannot continue.</source>
         <translation type="vanished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="653"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="680"/>
+        <location filename="mainwindow.cc" line="683"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="681"/>
+        <location filename="mainwindow.cc" line="684"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="682"/>
+        <location filename="mainwindow.cc" line="685"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="777"/>
+        <location filename="mainwindow.cc" line="780"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="786"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="796"/>
+        <location filename="mainwindow.cc" line="799"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="816"/>
+        <location filename="mainwindow.cc" line="819"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="835"/>
+        <location filename="mainwindow.cc" line="838"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="844"/>
+        <location filename="mainwindow.cc" line="847"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="849"/>
+        <location filename="mainwindow.cc" line="852"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
@@ -655,33 +678,33 @@ This program cannot continue.</source>
         <translation type="vanished">El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="984"/>
+        <location filename="mainwindow.cc" line="987"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1002"/>
+        <location filename="mainwindow.cc" line="1005"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1125"/>
+        <location filename="mainwindow.cc" line="1128"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1149"/>
+        <location filename="mainwindow.cc" line="1157"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1192"/>
+        <location filename="mainwindow.cc" line="1200"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1194"/>
+        <location filename="mainwindow.cc" line="1202"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -922,17 +945,17 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="115"/>
+        <location filename="map.cc" line="127"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map.cc" line="119"/>
+        <location filename="map.cc" line="131"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>No se encuentra el fichero &quot;&quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cc" line="174"/>
+        <location filename="map.cc" line="186"/>
         <source>Failed to load Google maps base page</source>
         <translation>Fallo al buscar la página básica de los mapas de Googe</translation>
     </message>
@@ -941,28 +964,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="227"/>
-        <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="231"/>
-        <location filename="filterwidgets.cc" line="232"/>
+        <location filename="filterwidgets.cc" line="270"/>
+        <location filename="filterwidgets.cc" line="271"/>
+        <location filename="filterwidgets.cc" line="274"/>
+        <location filename="filterwidgets.cc" line="275"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="227"/>
-        <location filename="filterwidgets.cc" line="229"/>
-        <location filename="filterwidgets.cc" line="230"/>
-        <location filename="filterwidgets.cc" line="232"/>
+        <location filename="filterwidgets.cc" line="270"/>
+        <location filename="filterwidgets.cc" line="272"/>
+        <location filename="filterwidgets.cc" line="273"/>
+        <location filename="filterwidgets.cc" line="275"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="228"/>
-        <location filename="filterwidgets.cc" line="229"/>
-        <location filename="filterwidgets.cc" line="230"/>
-        <location filename="filterwidgets.cc" line="231"/>
+        <location filename="filterwidgets.cc" line="271"/>
+        <location filename="filterwidgets.cc" line="272"/>
+        <location filename="filterwidgets.cc" line="273"/>
+        <location filename="filterwidgets.cc" line="274"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
@@ -1189,7 +1212,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="173"/>
+        <location filename="formatload.cc" line="182"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation>Error al procesar los formatos seleccionados en el proceso &quot;gpsbabel -^3&quot; en la línea %1</translation>
     </message>
@@ -1398,7 +1421,7 @@ This option changes the time of all trackpoints. This might be useful if your tr
     </message>
     <message>
         <location filename="trackui.ui" line="117"/>
-        <location filename="trackui.ui" line="339"/>
+        <location filename="trackui.ui" line="326"/>
         <source>days</source>
         <translation>días</translation>
     </message>
@@ -1409,7 +1432,7 @@ This option changes the time of all trackpoints. This might be useful if your tr
     </message>
     <message>
         <location filename="trackui.ui" line="165"/>
-        <location filename="trackui.ui" line="329"/>
+        <location filename="trackui.ui" line="316"/>
         <source>mins</source>
         <translation>minutos</translation>
     </message>
@@ -1439,45 +1462,60 @@ Esta opción se utiliza junto con la de parar (stop) para descartar puntos que f
         <translation>Comenzar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="226"/>
+        <location filename="trackui.ui" line="473"/>
+        <location filename="trackui.ui" line="476"/>
+        <source>If checked, times specified here are based on this computer&apos;s current time zone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="489"/>
+        <location filename="trackui.ui" line="492"/>
+        <source>If checked, times specified here are UTC.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="trackui.ui" line="495"/>
+        <source>UTC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If checked, time specified here is based on this computer&apos;s current time zone. </source>
-        <translation>Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. </translation>
+        <translation type="vanished">Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="229"/>
         <source>If checked, the times specified here are based on the local computer&apos;s time zone.  Otherwise it is UTC.</source>
-        <translation>Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. En caso contrario, es UTC.</translation>
+        <translation type="vanished">Si seleccionado, los datos especificados se basan en la zona horaria de tu ordenador. En caso contrario, es UTC.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="232"/>
+        <location filename="trackui.ui" line="479"/>
         <source>Local Time</source>
         <translation>Hora local</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="245"/>
-        <location filename="trackui.ui" line="260"/>
+        <location filename="trackui.ui" line="232"/>
+        <location filename="trackui.ui" line="247"/>
         <source>Use track pts before this time. </source>
         <translation>Usa los puntos del trazado tomados antes de esta hora. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="248"/>
+        <location filename="trackui.ui" line="235"/>
         <source> Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
         <translation>Usa los puntos del trazado tomados antes de esta marca de tiempo. Esta opción se usa junto con la opción comenzar para descartar todos los puntos no tomados en determinado período temporal. Esta opción define el final del período. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="253"/>
+        <location filename="trackui.ui" line="240"/>
         <source>Stop</source>
         <translation>Parar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="267"/>
+        <location filename="trackui.ui" line="254"/>
         <source>Pack all tracks into one. </source>
         <translation>Junta todos los trazados en uno. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="270"/>
+        <location filename="trackui.ui" line="257"/>
         <source>Pack all tracks into one.
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
@@ -1490,17 +1528,17 @@ Esta opción hace que todos los trazados se añadan uno tras otros hasta formar 
 Esta opción es muy útil para juntar trazados que se interrumpieron por un error en el equipo o por una parada para descansar. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="277"/>
+        <location filename="trackui.ui" line="264"/>
         <source>Pack</source>
         <translation>Juntar</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="284"/>
+        <location filename="trackui.ui" line="271"/>
         <source>Merge multiple tracks for the same way.</source>
         <translation>Unir diversos trazados repetitivos.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="287"/>
+        <location filename="trackui.ui" line="274"/>
         <source> Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
@@ -1509,12 +1547,12 @@ This option puts all track points from all tracks into a single track and sorts 
 Esta opción pone todos los puntos de todos los trazados en un único trazado y los ordena por la marca de tiempo. Los puntos con idénticas marcas de tiempo son borrados.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="292"/>
+        <location filename="trackui.ui" line="279"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="299"/>
+        <location filename="trackui.ui" line="286"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
         <translation>Dividir trazados por fecha</translation>
@@ -1537,42 +1575,42 @@ Si la entrada tiene múltiples trazados, júntalos antes de dividirlos por día.
         <translation type="obsolete">Dividir</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="318"/>
+        <location filename="trackui.ui" line="305"/>
         <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido si el tiempo entre dos puntos es mayor que el parámetro.   Si &quot;zero&quot;, el trazado será dividido por día.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="334"/>
+        <location filename="trackui.ui" line="321"/>
         <source>hrs</source>
         <translation>hrs</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="349"/>
+        <location filename="trackui.ui" line="336"/>
         <source>Split by Dist.</source>
         <translation>Dividir trazados por distancia.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="361"/>
+        <location filename="trackui.ui" line="348"/>
         <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido en varios trazados si la distancia entre dos puntos es mayor que el parámetro dado.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="372"/>
+        <location filename="trackui.ui" line="359"/>
         <source>ft</source>
         <translation>ft</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="377"/>
+        <location filename="trackui.ui" line="364"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="382"/>
+        <location filename="trackui.ui" line="369"/>
         <source>km</source>
         <translation>Km</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="387"/>
+        <location filename="trackui.ui" line="374"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
@@ -1594,42 +1632,42 @@ Esta opción fija el estatus de las correcciones GPS de todos los puntos del tra
 Esta opción es muy útil cuando se trata de convertir de un formato que no contiene ninguna corrección GPS a uno que la requiere.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="405"/>
+        <location filename="trackui.ui" line="392"/>
         <source>GPS Fixes</source>
         <translation>Correcciones GPS</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="413"/>
+        <location filename="trackui.ui" line="400"/>
         <source>none</source>
         <translation>ninguno</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="418"/>
+        <location filename="trackui.ui" line="405"/>
         <source>pps</source>
         <translation>pps</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="423"/>
+        <location filename="trackui.ui" line="410"/>
         <source>dgps</source>
         <translation>dgps</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="428"/>
+        <location filename="trackui.ui" line="415"/>
         <source>3d</source>
         <translation>3d</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="433"/>
+        <location filename="trackui.ui" line="420"/>
         <source>2d</source>
         <translation>2d</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="471"/>
+        <location filename="trackui.ui" line="458"/>
         <source>Synthesize course.</source>
         <translation>Sintetizar el rumbo.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="474"/>
+        <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
 This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
@@ -1638,22 +1676,22 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
 Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre el rumbo o para puntos de trazado calculados con el filtro interpolar. El rumbo de cada punto es simplemente la dirección desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de 0 grados.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="479"/>
+        <location filename="trackui.ui" line="466"/>
         <source>Course</source>
         <translation>Dirección</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="456"/>
+        <location filename="trackui.ui" line="443"/>
         <source>Synthesize speed. </source>
         <translation>Calcular velocidad. </translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="306"/>
+        <location filename="trackui.ui" line="293"/>
         <source>Split by Time</source>
         <translation>Dividir trazados en función del tiempo</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="459"/>
+        <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
 This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
@@ -1662,7 +1700,7 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
 Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre la velocidad o para puntos de trazado calculados con el filtro interpolar. La velocidad de cada punto es simplemente la media (distancia partido por tiempo) desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de &quot;desconocido&quot;.</translation>
     </message>
     <message>
-        <location filename="trackui.ui" line="464"/>
+        <location filename="trackui.ui" line="451"/>
         <source>Speed</source>
         <translation>Velocidad</translation>
     </message>
@@ -1678,44 +1716,44 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="207"/>
-        <location filename="upgrade.cc" line="211"/>
-        <location filename="upgrade.cc" line="245"/>
+        <location filename="upgrade.cc" line="214"/>
+        <location filename="upgrade.cc" line="218"/>
+        <location filename="upgrade.cc" line="252"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="208"/>
+        <location filename="upgrade.cc" line="215"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="212"/>
+        <location filename="upgrade.cc" line="219"/>
         <source>Download failed: %1.</source>
         <translation>La descarga falló: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="246"/>
+        <location filename="upgrade.cc" line="253"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="262"/>
+        <location filename="upgrade.cc" line="269"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="263"/>
+        <location filename="upgrade.cc" line="270"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Ha devuelto datos no válidos en la línea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="305"/>
+        <location filename="upgrade.cc" line="312"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Una nueva versióon de GPSBabel ha salido ya. &lt;br /&gt;Tu versión es la %1 &lt;br /&gt;La última versióon sería %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="322"/>
+        <location filename="upgrade.cc" line="329"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>¿Quieres bajarte una actualización?</translation>
     </message>
@@ -1724,7 +1762,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
         <translation type="obsolete">&lt;center&gt;&lt;b&gt;Una nueva versión de GPSBabel está disponible &lt;/b&gt;&lt;br&gt;La versión actual es %1 &lt;br&gt; La versión más reciente es %2&lt;/center&gt;</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="315"/>
+        <location filename="upgrade.cc" line="322"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>

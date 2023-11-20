@@ -20,6 +20,7 @@
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
 #include <optional>             // for optional, operator>, operator<
+#include <utility>              // for as_const
 
 #include <QDateTime>            // for operator>, QDateTime, operator<
 #include <QList>                // for QList<>::const_iterator
@@ -37,8 +38,6 @@
 
 RouteList* global_route_list;
 RouteList* global_track_list;
-
-extern void update_common_traits(const Waypoint* wpt);
 
 void
 route_init()
@@ -141,6 +140,30 @@ void
 track_del_wpt(route_head* rte, Waypoint* wpt)
 {
   global_track_list->del_wpt(rte, wpt);
+}
+
+void
+route_del_marked_wpts(route_head* rte)
+{
+  global_route_list->del_marked_wpts(rte);
+}
+
+void
+track_del_marked_wpts(route_head* rte)
+{
+  global_track_list->del_marked_wpts(rte);
+}
+
+void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
 }
 
 void
@@ -422,9 +445,6 @@ RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namep
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
-  if ((this == global_route_list) || (this == global_track_list)) {
-    update_common_traits(wpt);
-  }
 }
 
 void
@@ -432,6 +452,31 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 {
   rte->waypoint_list.del_rte_waypt(wpt);
   --waypt_ct;
+}
+
+void
+RouteList::del_marked_wpts(route_head* rte)
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap_wpts(rte, oldlist);
+
+  // mimic trkseg handling from WaypointList::del_rte_waypt
+  bool inherit_new_trkseg = false;
+  for (Waypoint* wpt : std::as_const(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      if (wpt->wpt_flags.new_trkseg) {
+        inherit_new_trkseg = true;
+      }
+      delete wpt;
+    } else {
+      if (inherit_new_trkseg) {
+        wpt->wpt_flags.new_trkseg = 1;
+        inherit_new_trkseg = false;
+      }
+      add_wpt(rte, wpt, false, u"RPT", 3);
+    }
+  }
 }
 
 void
@@ -503,4 +548,11 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
+}
+
+void RouteList::swap_wpts(route_head* rte, WaypointList& other)
+{
+  this->waypt_ct -= rte->rte_waypt_ct();
+  this->waypt_ct += other.count();
+  rte->waypoint_list.swap(other);
 }

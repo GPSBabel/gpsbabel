@@ -23,9 +23,8 @@
 #include <cstdio>                     // for printf, fflush, fgetc, fprintf, stderr, stdin, stdout
 #include <cstring>                    // for strcmp
 
-#include <QByteArray>                 // for QByteArray
-#include <QChar>                      // for QChar
 #include <QCoreApplication>           // for QCoreApplication
+#include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
 #include <QLocale>                    // for QLocale
@@ -51,15 +50,20 @@
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
 #include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index
+#include "mkshort.h"                  // for MakeShort
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
+static constexpr bool DEBUG_LOCALE = false;
+
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
+
+static QElapsedTimer timer;
 
 class QargStackElement
 {
@@ -109,7 +113,7 @@ load_args(const QString& filename, const QString& arg0)
 }
 
 static void
-usage(const char* pname, int shorter)
+usage(const char* pname, bool verbose)
 {
   printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
          gpsbabel_version);
@@ -149,14 +153,14 @@ usage(const char* pname, int shorter)
     , pname
     , global_opts.debug_level
   );
-  if (shorter) {
+  if (!verbose) {
     printf("\n\n[Press enter]");
     fgetc(stdin);
   } else {
     printf("File Types (-i and -o options):\n");
-    Vecs::Instance().disp_vecs();
+    Vecs::Instance().disp_vec();
     printf("\nSupported data filters:\n");
-    FilterVecs::Instance().disp_filter_vecs();
+    FilterVecs::Instance().disp_filter_vec();
   }
 }
 
@@ -206,14 +210,6 @@ signal_handler(int sig)
 class FallbackOutput
 {
 public:
-  FallbackOutput() : mkshort_handle(mkshort_new_handle()) {}
-  // delete copy and move constructors and assignment operators.
-  // The defaults are not appropriate, and we haven't implemented proper ones.
-  FallbackOutput(const FallbackOutput&) = delete;
-  FallbackOutput& operator=(const FallbackOutput&) = delete;
-  FallbackOutput(FallbackOutput&&) = delete;
-  FallbackOutput& operator=(FallbackOutput&&) = delete;
-  ~FallbackOutput() {mkshort_del_handle(&mkshort_handle);}
 
   void waypt_disp(const Waypoint* wpt)
   {
@@ -225,7 +221,7 @@ public:
     if (!wpt->description.isEmpty()) {
       printf("%s/%s",
              global_opts.synthesize_shortnames ?
-             qPrintable(mkshort(mkshort_handle, wpt->description)) :
+             qPrintable(mkshort_handle.mkshort(wpt->description)) :
              qPrintable(wpt->shortname),
              qPrintable(wpt->description));
     }
@@ -237,12 +233,15 @@ public:
   }
 
 private:
-  short_handle mkshort_handle;
+  MakeShort mkshort_handle;
 };
 
 static void
 run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   start_session(ivecs.fmtname, fname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
@@ -264,11 +263,18 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
+                        .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+  }
 }
 
 static void
 run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt);
@@ -289,6 +295,10 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->write();
     ovecs->wr_deinit();
   }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
+                        .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+  }
 }
 
 static int
@@ -297,7 +307,7 @@ run(const char* prog_name)
   int argn;
   Vecs::fmtinfo_t ivecs;
   Vecs::fmtinfo_t ovecs;
-  Filter* filter = nullptr;
+  FilterVecs::fltinfo_t filter;
   QString fname;
   QString ofname;
   int opt_version = 0;
@@ -310,7 +320,7 @@ run(const char* prog_name)
   QStringList qargs = QCoreApplication::arguments();
 
   if (qargs.size() < 2) {
-    usage(prog_name,1);
+    usage(prog_name, false);
     return 0;
   }
 
@@ -342,7 +352,7 @@ run(const char* prog_name)
       if (argn < qargs.size()-1) {
         spec_usage(qargs.at(argn+1));
       } else {
-        usage(prog_name,0);
+        usage(prog_name, true);
       }
       return 0;
     }
@@ -410,7 +420,7 @@ run(const char* prog_name)
       }
       break;
     case 's':
-      global_opts.synthesize_shortnames = 1;
+      global_opts.synthesize_shortnames = true;
       break;
     case 't':
       global_opts.objective = trkdata;
@@ -431,14 +441,14 @@ run(const char* prog_name)
     case 'S':
       switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
       case 'i':
-        global_opts.smart_icons = 1;
+        global_opts.smart_icons = true;
         break;
       case 'n':
-        global_opts.smart_names = 1;
+        global_opts.smart_names = true;
         break;
       default:
-        global_opts.smart_icons = 1;
-        global_opts.smart_names = 1;
+        global_opts.smart_icons = true;
+        global_opts.smart_names = true;
         break;
       }
       break;
@@ -447,10 +457,33 @@ run(const char* prog_name)
       filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
-        filter->init();
-        filter->process();
-        filter->deinit();
-        FilterVecs::free_filter_vec(filter);
+        if (global_opts.debug_level > 0)  {
+          timer.start();
+        }
+        if (filter.isDynamic()) {
+          filter.flt = filter.factory();
+          FilterVecs::init_filter_vec(filter.flt);
+          FilterVecs::prepare_filter(filter);
+
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter.flt);
+
+          FilterVecs::exit_filter_vec(filter.flt);
+          delete filter.flt;
+          filter.flt = nullptr;
+        } else {
+          FilterVecs::prepare_filter(filter);
+          filter->init();
+          filter->process();
+          filter->deinit();
+          FilterVecs::free_filter_vec(filter.flt);
+        }
+        if (global_opts.debug_level > 0)  {
+          Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
+                              .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+        }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
       }
@@ -471,6 +504,12 @@ run(const char* prog_name)
         warning("GPSBabel Version: %s\n", gpsbabel_version);
         if(sizeof(kVersionSHA) > 1) {
           warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
+        }
+        if(sizeof(kVersionDate) > 1) {
+          QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+          if (date.isValid()) {
+            warning(MYNAME ": Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+          }
         }
         warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
@@ -521,7 +560,7 @@ run(const char* prog_name)
       return 0;
     case 'h':
     case '?':
-      usage(prog_name,0);
+      usage(prog_name, true);
       return 0;
     case 'p':
       argument = FETCH_OPTARG;
@@ -582,7 +621,7 @@ run(const char* prog_name)
 
     }
   } else if (!qargs.isEmpty()) {
-    usage(prog_name,0);
+    usage(prog_name, true);
     return 0;
   }
   if (!ovecs) {
@@ -695,7 +734,7 @@ main(int argc, char* argv[])
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 #error This version of Qt is not supported.
 #endif
 
@@ -703,9 +742,9 @@ main(int argc, char* argv[])
 #error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
 #endif
 
-#ifdef DEBUG_LOCALE
-  printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if constexpr (DEBUG_LOCALE) {
+    printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+  }
 
   // Create a QCoreApplication object to handle application initialization.
   // In addition to being useful for argument decoding, the creation of a
@@ -720,33 +759,32 @@ main(int argc, char* argv[])
   // may result in LC_ALL being set to the native environment
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
-#ifdef DEBUG_LOCALE
-  printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
-#endif
+  if constexpr (DEBUG_LOCALE) {
+    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+  }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
   // actually sets LC_ALL.
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_NUMERIC\n");
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("Resetting LC_NUMERIC\n");
+    }
     setlocale(LC_NUMERIC,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
-#ifdef DEBUG_LOCALE
-    printf("Resetting LC_TIME\n");
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("Resetting LC_TIME\n");
+    }
     setlocale(LC_TIME,"C");
-#ifdef DEBUG_LOCALE
-    printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
-#endif
+    if constexpr (DEBUG_LOCALE) {
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+    }
   }
-
   qInstallMessageHandler(MessageHandler);
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */

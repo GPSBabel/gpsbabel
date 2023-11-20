@@ -22,12 +22,14 @@
 
 #include <cmath>            // macos wants abs from here!
 #include <cstdlib>          // for strtod, abs
+#include <utility>          // for as_const
 
 #include <QString>          // for QString
-#include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
+#include <QtGlobal>         // for QForeachContainer, qMakeForeachContainer, foreach
 
 #include "defs.h"
 #include "bend.h"
+#include "formspec.h"       // for FormatSpecificDataList
 #include "grtcirc.h"        // for RAD, heading_true_degrees, gcdist, linepart, radtometers, DEG
 
 
@@ -159,7 +161,7 @@ void BendFilter::process_route_orig(const route_head* route_orig)
 
 void BendFilter::process()
 {
-  for (const auto* route_orig : qAsConst(*routes_orig)) {
+  for (const auto* route_orig : std::as_const(*routes_orig)) {
     process_route_orig(route_orig);
   }
 }

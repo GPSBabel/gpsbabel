@@ -85,7 +85,7 @@ private:
 
   /* Member Functions */
 
-  void gtc_write_xml(int indent, const char* fmt, ...);
+  [[gnu::format(printf, 3, 4)]] void gtc_write_xml(int indent, const char* fmt, ...);
   void gtc_write_xml(int indent, const QString& s);
   void gtc_lap_start(const route_head*  /* unused */);
   static computed_trkdata gtc_new_study_lap(const route_head* rte);
