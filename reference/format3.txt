@@ -4,12 +4,6 @@ option	xcsv	style	Full path to XCSV style file	file				https://www.gpsbabel.org/
 
 option	xcsv	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_snlen
 
-option	xcsv	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_snwhite
-
-option	xcsv	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_snupper
-
-option	xcsv	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_snunique
-
 option	xcsv	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_urlbase
 
 option	xcsv	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_prefer_shortnames
@@ -19,12 +13,6 @@ option	xcsv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB
 internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
 option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
-
-option	tabsep	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snwhite
-
-option	tabsep	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snupper
-
-option	tabsep	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snunique
 
 option	tabsep	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_urlbase
 
@@ -38,12 +26,6 @@ file	rw----	cambridge	dat	Cambridge/Winpilot glider software	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html
 option	cambridge	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snlen
 
-option	cambridge	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snwhite
-
-option	cambridge	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snupper
-
-option	cambridge	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snunique
-
 option	cambridge	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_urlbase
 
 option	cambridge	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_prefer_shortnames
@@ -56,12 +38,6 @@ file	rw----	csv		Comma separated values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html
 option	csv	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_snlen
 
-option	csv	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_snwhite
-
-option	csv	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_snupper
-
-option	csv	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_snunique
-
 option	csv	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_urlbase
 
 option	csv	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_prefer_shortnames
@@ -71,12 +47,6 @@ option	csv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_
 internal	rw----	custom		Custom "Everything" Style	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html
 option	custom	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_snlen
-
-option	custom	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_snwhite
-
-option	custom	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_snupper
-
-option	custom	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_snunique
 
 option	custom	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_urlbase
 
@@ -88,12 +58,6 @@ file	--rw--	iblue747	csv	Data Logger iBlue747 csv	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html
 option	iblue747	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_snlen
 
-option	iblue747	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_snwhite
-
-option	iblue747	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_snupper
-
-option	iblue747	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_snunique
-
 option	iblue747	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_urlbase
 
 option	iblue747	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_prefer_shortnames
@@ -103,12 +67,6 @@ option	iblue747	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html
 option	iblue757	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_snlen
-
-option	iblue757	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_snwhite
-
-option	iblue757	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_snupper
-
-option	iblue757	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_snunique
 
 option	iblue757	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_urlbase
 
@@ -148,12 +106,6 @@ file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html
 option	garmin301	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snlen
 
-option	garmin301	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snwhite
-
-option	garmin301	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snupper
-
-option	garmin301	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_snunique
-
 option	garmin301	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_urlbase
 
 option	garmin301	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_prefer_shortnames
@@ -163,12 +115,6 @@ option	garmin301	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.or
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html
 option	garmin_g1000	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_snlen
-
-option	garmin_g1000	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_snwhite
-
-option	garmin_g1000	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_snupper
-
-option	garmin_g1000	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_snunique
 
 option	garmin_g1000	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_urlbase
 
@@ -212,12 +158,6 @@ file	rw----	garmin_poi		Garmin POI database	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html
 option	garmin_poi	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_snlen
 
-option	garmin_poi	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_snwhite
-
-option	garmin_poi	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_snupper
-
-option	garmin_poi	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_snunique
-
 option	garmin_poi	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_urlbase
 
 option	garmin_poi	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_prefer_shortnames
@@ -257,8 +197,6 @@ option	garmin_gpi	languagecode	language code to use for reading dual language fi
 serial	rwrwrw	garmin		Garmin serial/USB protocol	garmin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html
 option	garmin	snlen	Length of generated shortnames	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_snlen
-
-option	garmin	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_snwhite
 
 option	garmin	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_deficon
 
@@ -364,12 +302,6 @@ file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
 
-option	land_air_sea	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snwhite
-
-option	land_air_sea	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snupper
-
-option	land_air_sea	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snunique
-
 option	land_air_sea	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_urlbase
 
 option	land_air_sea	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_prefer_shortnames
@@ -382,12 +314,6 @@ file	rw----	arc	txt	GPSBabel arc filter file	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html
 option	arc	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_snlen
 
-option	arc	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_snwhite
-
-option	arc	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_snupper
-
-option	arc	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_snunique
-
 option	arc	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_urlbase
 
 option	arc	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_prefer_shortnames
@@ -398,12 +324,6 @@ file	rw----	gpsdrive		GpsDrive Format	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html
 option	gpsdrive	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_snlen
 
-option	gpsdrive	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_snwhite
-
-option	gpsdrive	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_snupper
-
-option	gpsdrive	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_snunique
-
 option	gpsdrive	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_urlbase
 
 option	gpsdrive	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_prefer_shortnames
@@ -413,12 +333,6 @@ option	gpsdrive	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org
 file	rw----	gpsdrivetrack		GpsDrive Format for Tracks	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html
 option	gpsdrivetrack	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_snlen
-
-option	gpsdrivetrack	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_snwhite
-
-option	gpsdrivetrack	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_snupper
-
-option	gpsdrivetrack	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_snunique
 
 option	gpsdrivetrack	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_urlbase
 
@@ -624,12 +538,6 @@ option	ozi	pack	Write all tracks into one file	boolean				https://www.gpsbabel.o
 
 option	ozi	snlen	Max synthesized shortname length	integer	32	1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_snlen
 
-option	ozi	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_snwhite
-
-option	ozi	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_snupper
-
-option	ozi	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_snunique
-
 option	ozi	wptfgcolor	Waypoint foreground color	string	black			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_wptfgcolor
 
 option	ozi	wptbgcolor	Waypoint background color	string	yellow			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_wptbgcolor
@@ -693,12 +601,6 @@ option	subrip	format	Format for subtitles	string	%s km/h %e m\n%t %l			https://w
 file	rw----	openoffice		Tab delimited fields useful for OpenOffice	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html
 option	openoffice	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_snlen
-
-option	openoffice	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_snwhite
-
-option	openoffice	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_snupper
-
-option	openoffice	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_snunique
 
 option	openoffice	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_urlbase
 

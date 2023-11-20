@@ -87,9 +87,6 @@ static int route_wpt_count;
 static int new_track;
 
 static char* snlenopt = nullptr;
-static char* snwhiteopt = nullptr;
-static char* snupperopt = nullptr;
-static char* snuniqueopt = nullptr;
 static char* wptfgcolor = nullptr;
 static char* wptbgcolor = nullptr;
 static char* pack_opt = nullptr;
@@ -113,18 +110,6 @@ QVector<arglist_t> ozi_args = {
   {
     "snlen", &snlenopt, "Max synthesized shortname length",
     "32", ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "wptfgcolor", &wptfgcolor, "Waypoint foreground color",
@@ -466,18 +451,6 @@ wr_init(const QString& fname)
   if (global_opts.synthesize_shortnames) {
 
     setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
-
-    if (snwhiteopt) {
-      setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
-    }
-
-    if (snupperopt) {
-      setshort_mustupper(mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
-    }
-
-    if (snuniqueopt) {
-      setshort_mustuniq(mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
-    }
 
     setshort_badchars(mkshort_handle, "\",");
   }

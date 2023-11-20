@@ -71,7 +71,6 @@ static char* poweroff = nullptr;
 static char* eraset = nullptr;
 static char* resettime = nullptr;
 static char* snlen = nullptr;
-static char* snwhiteopt = nullptr;
 static char* deficon = nullptr;
 static char* category = nullptr;
 static char* categorybitsopt = nullptr;
@@ -93,10 +92,6 @@ QVector<arglist_t> garmin_args = {
   {
     "snlen", &snlen, "Length of generated shortnames", nullptr,
     ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   { "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
@@ -265,7 +260,6 @@ rw_init(const QString& fname)
     case 786: /* HC model */
     case 957: /* Legend HC */
       receiver_short_length = 14;
-      snwhiteopt = xstrdup("1");
       receiver_must_upper = 0;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
@@ -321,10 +315,6 @@ rw_init(const QString& fname)
     setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));
   } else {
     setshort_length(mkshort_handle, receiver_short_length);
-  }
-
-  if (snwhiteopt) {
-    setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
   }
 
   /*

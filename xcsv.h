@@ -385,9 +385,6 @@ private:
 
   char* styleopt = nullptr;
   char* snlenopt = nullptr;
-  char* snwhiteopt = nullptr;
-  char* snupperopt = nullptr;
-  char* snuniqueopt = nullptr;
   char* prefer_shortnames = nullptr;
   char* xcsv_urlbase = nullptr;
   char* opt_datum = nullptr;
@@ -402,18 +399,6 @@ private:
     {
       "snlen", &snlenopt, "Max synthesized shortname length", nullptr,
       ARGTYPE_INT, "1", nullptr, nullptr
-    },
-    {
-      "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-    },
-    {
-      "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-    },
-    {
-      "snunique", &snuniqueopt, "Make synth. shortnames unique",
-      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
       "urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
