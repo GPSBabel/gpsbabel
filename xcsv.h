@@ -26,16 +26,20 @@
 #include <utility>                // for move
 
 #include <QByteArray>             // for QByteArray
+#include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
 #include <QHash>                  // for QHash
 #include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QStringList>            // for QStringList
+#include <QTime>                  // for QTime
 #include <QVector>                // for QVector
+#include <QtGlobal>               // for qRound64
 
 #include "defs.h"
-#include "format.h"
-#include "garmin_fs.h"
+#include "format.h"               // for Format
+#include "garmin_fs.h"            // for garmin_fs_t
+#include "mkshort.h"              // for MakeShort
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 
@@ -86,8 +90,6 @@ public:
     XT_GPS_SAT,
     XT_GPS_VDOP,
     XT_HEART_RATE,
-    XT_HMSG_TIME,
-    XT_HMSL_TIME,
     XT_ICON_DESCR,
     XT_IGNORE,
     XT_INDEX,
@@ -238,7 +240,7 @@ public:
   std::optional<int> shortlen;
 
   /* SHORTWHITE from style file */
-  std::optional<int> whitespace_ok;
+  std::optional<bool> whitespace_ok;
 
 private:
   /* Types */
@@ -297,28 +299,13 @@ private:
   class XcsvFile
   {
   public:
-    /* Special Member Functions */
-
-    XcsvFile() : mkshort_handle(mkshort_new_handle()) {}
-    // delete copy and move constructors and assignment operators.
-    // The defaults are not appropriate, and we haven't implemented proper ones.
-    XcsvFile(const XcsvFile&) = delete;
-    XcsvFile& operator=(const XcsvFile&) = delete;
-    XcsvFile(XcsvFile&&) = delete;
-    XcsvFile& operator=(XcsvFile&&) = delete;
-    ~XcsvFile()
-    {
-      if (mkshort_handle != nullptr) {
-        mkshort_del_handle(&mkshort_handle);
-      }
-    }
 
     /* Data Members */
 
     gpsbabel::TextStream stream;
     QString fname;
     int gps_datum_idx{-1};		/* result of GPS_Lookup_Datum_Index */
-    short_handle mkshort_handle{nullptr};
+    MakeShort mkshort_handle;
   };
 
   struct xcsv_parse_data {
@@ -332,6 +319,11 @@ private:
     UrlLink* link_{nullptr};
     std::optional<bool> lat_dir_positive;
     std::optional<bool> lon_dir_positive;
+    QDate local_date;
+    QTime local_time;
+    QDate utc_date;
+    QTime utc_time;
+    bool need_datetime{true};
   };
 
   /* Constants */
@@ -346,24 +338,22 @@ private:
   }
 
   /* convert excel time (days since 1900) to time_t and back again */
-  static constexpr double excel_to_timet(double a)
+  static constexpr qint64 excel_to_timetms(double a)
   {
-    return (a - 25569.0) * 86400.0;
+    return qRound64((a - 25569.0) * 86400000.0);
   }
-  static constexpr double timet_to_excel(double a)
+  static constexpr double timetms_to_excel(qint64 a)
   {
-    return (a / 86400.0) + 25569.0;
+    return (a / 86400000.0) + 25569.0;
   }
 
   /* Member Functions */
 
-  static QDateTime yyyymmdd_to_time(const QString& s);
-  static time_t sscanftime(const char* s, const char* format, bool gmt);
-  static time_t addhms(const char* s, const char* format);
+  static QDate yyyymmdd_to_time(const QString& s);
+  QDateTime xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
+  static void sscanftime(const char* s, const char* format, QDate& date, QTime& time);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
-  static QString writehms(const char* format, time_t t, bool gmt);
-  static QString writehms(const char* format, const gpsbabel::DateTime& t, bool gmt);
   static long int time_to_yyyymmdd(const QDateTime& t);
   static garmin_fs_t* gmsd_init(Waypoint* wpt);
   static void xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp, xcsv_parse_data* parse_data, int line_no);
@@ -388,6 +378,8 @@ private:
   char* prefer_shortnames = nullptr;
   char* xcsv_urlbase = nullptr;
   char* opt_datum = nullptr;
+  char* opt_utc = nullptr;
+  int utc_offset{};
 
   QString intstylefile;
 
@@ -412,6 +404,10 @@ private:
     {
       "datum", &opt_datum, "GPS datum (def. WGS 84)",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
     },
   };
 

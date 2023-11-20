@@ -186,7 +186,7 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   gbser_handle* h = gbser_get_handle(handle);
   speed_t s;
 
-  static unsigned bit_flags[] = {
+  static const unsigned bit_flags[] = {
     0, 0, 0, 0, 0, CS5, CS6, CS7, CS8
   };
 

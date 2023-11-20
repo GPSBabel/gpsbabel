@@ -19,13 +19,14 @@
 
  */
 
+#include "polygon.h"
+
 #include <cstdio>                 // for sscanf
 
 #include <QString>                // for QString
 #include <QtGlobal>               // for foreach
 
 #include "defs.h"
-#include "polygon.h"
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -257,7 +258,7 @@ void PolygonFilter::process()
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
         } else {
-          ed = (extra_data*) xcalloc(1, sizeof(*ed));
+          ed = new extra_data;
           ed->state = OUTSIDE;
           ed->override = 0;
           waypointp->extra_data = ed;
@@ -298,19 +299,19 @@ void PolygonFilter::process()
   stream.close();
 
   foreach (Waypoint* wp, *global_waypoint_list) {
-    ed = (extra_data*) wp->extra_data;
-    wp->extra_data = nullptr;
-    if (ed) {
+    if (wp->extra_data) {
+      ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if (ed->override) {
         ed->state = INSIDE;
       }
       if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
-        waypt_del(wp);
-        delete wp;
+        wp->wpt_flags.marked_for_deletion = 1;
       }
-      xfree(ed);
+      delete ed;
     }
   }
+  del_marked_wpts();
 }
 
 #endif // FILTERS_ENABLED

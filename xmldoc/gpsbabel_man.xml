@@ -24,7 +24,7 @@
     <cmdsynopsis>
       <command>gpsbabel</command>
       <arg choice="opt">
-        <option>iofFxsh</option>
+        <option>-iofFxsh</option>
       </arg>
       <arg choice="opt" rep="repeat">file</arg>
     </cmdsynopsis>

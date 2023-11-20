@@ -1,7 +1,0 @@
-for i in testo.d/*.test
-do
-  t=${i%.test}
-  t=${t##testo.d/}
-  fmts="$fmts \"./vtesto $t\""
-done 
-eval parallel -j 8 -- "$fmts"

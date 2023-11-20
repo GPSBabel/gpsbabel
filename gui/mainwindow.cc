@@ -1148,7 +1148,12 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, babelData_.installationUuid_);
+  QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+  QString utcdate;
+  if (date.isValid()) {
+    utcdate = date.toUTC().toString(Qt::ISODate);
+  }
+  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, utcdate, babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }

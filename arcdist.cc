@@ -19,6 +19,8 @@
 
  */
 
+#include "arcdist.h"
+
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
 #include <cstdlib>                // for strtod
@@ -28,7 +30,6 @@
 #include <QtGlobal>               // for foreach, qPrintable, qint64
 
 #include "defs.h"
-#include "arcdist.h"
 #include "grtcirc.h"              // for RAD, gcdist, linedistprj, radtomi
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/logging.h"     // for Fatal
@@ -105,7 +106,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   arcpt1 = arcpt2;
 }
 
-void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
+void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head* /*unused*/)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(nullptr);
@@ -163,17 +164,15 @@ void ArcDistanceFilter::process()
 
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
-    auto* ed = (extra_data*) wp->extra_data;
-    wp->extra_data = nullptr;
-    if (ed) {
+    if (wp->extra_data) {
+      auto* ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
-        waypt_del(wp);
-        delete wp;
+        wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
         wp->longitude = ed->prjlongitude;
         wp->latitude = ed->prjlatitude;
-        wp->route_priority = 1;
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
@@ -209,6 +208,7 @@ void ArcDistanceFilter::process()
       delete ed;
     }
   }
+  del_marked_wpts();
   if (global_opts.verbose_status > 0) {
     printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
   }

@@ -25,15 +25,15 @@
 #ifndef SKYTRAQ_H_INCLUDED_
 #define SKYTRAQ_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
+#include <QDateTime>  // for QDateTime
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
-#include <cstdint>   // for uint8_t, int32_t, uint32_t, uint16_t, int16_t
-#include <ctime>     // for time_t
+#include <cstdint>    // for uint8_t, int32_t, uint32_t, uint16_t, int16_t
 
-#include "defs.h"    // for arglist_t, ARGTYPE_INT, ff_cap, ARG_NOMINMAX, ARGTYPE_STRING, ff_cap_read, ARGTYPE_BOOL, ff_cap_none, ff_type, ARGTYPE_OUTFILE, ff_type_serial, Waypoint, ff_type_file, route_head
-#include "format.h"  // for Format
-#include "gbfile.h"  // for gbfile
+#include "defs.h"
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfile
 
 
 class SkytraqBase
@@ -110,7 +110,7 @@ protected:
 
   /* Member Functions */
 
-  static void db(int l, const char* msg, ...);
+  [[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...);
   void rd_drain() const;
   int rd_char(int* errors) const;
   int rd_buf(uint8_t* buf, int len) const;
@@ -128,7 +128,7 @@ protected:
   int skytraq_configure_logging() const;
   int skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total) const;
   static unsigned int me_read32(const unsigned char* p);
-  time_t gpstime_to_timet(int week, int sec) const;
+  QDateTime gpstime_to_qdatetime(int week, int sec) const;
   static void ECEF_to_LLA(double x, double y, long int z, double* lat, double* lon, double* alt);
   static void state_init(read_state* pst);
   Waypoint* make_trackpoint(read_state* st, double lat, double lon, double alt) const;

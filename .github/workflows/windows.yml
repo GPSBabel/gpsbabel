@@ -19,27 +19,27 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '5.12.12'
+          - QT_VERSION: '5.15.2'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2017_64'
+            COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
             os: windows-2019
-          - QT_VERSION: '5.12.12'
+          - QT_VERSION: '5.15.2'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2017_64'
+            COMPILER: 'msvc2019_64'
             TOOLSET: 'v141,version=14.16.27023'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
             os: windows-2019
-          - QT_VERSION: '5.12.12'
+          - QT_VERSION: '5.15.2'
             ARCH: 'x86'
             HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2017'
+            COMPILER: 'msvc2019'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
@@ -60,7 +60,7 @@ jobs:
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
             os: windows-latest
-          - QT_VERSION: '6.2.4'
+          - QT_VERSION: '6.5.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
@@ -71,7 +71,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Cache Qt
       uses: actions/cache@v3
