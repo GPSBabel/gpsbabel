@@ -23,8 +23,6 @@
 #ifndef GARMIN_TXT_H_INCLUDED_
 #define GARMIN_TXT_H_INCLUDED_
 
-#if CSVFMTS_ENABLED
-
 #include <array>                  // for array
 #include <cstdint>                // for uint16_t
 #include <ctime>                  // for time_t
@@ -199,5 +197,4 @@ private:
   PathInfo* cur_info{};
 };
 
-#endif // CSVFMTS_ENABLED
 #endif // GARMIN_TXT_H_INCLUDED_
