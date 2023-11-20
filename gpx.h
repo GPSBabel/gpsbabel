@@ -230,7 +230,7 @@ private:
   void gpx_cdata(QStringView s);
   QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
-  void fprint_xml_chain(XmlTag* tag) const;
+  void fprint_xml_chain(const XmlTag* tag) const;
   void write_gpx_url(const UrlList& urls) const;
   void write_gpx_url(const Waypoint* waypointp) const;
   void write_gpx_url(const route_head* rh) const;
