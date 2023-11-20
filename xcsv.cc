@@ -62,8 +62,6 @@
 #include "strptime.h"              // for strptime
 
 
-#if CSVFMTS_ENABLED
-
 #define MYNAME	"XCSV"
 
 const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
@@ -2007,4 +2005,3 @@ XcsvFormat::wr_position(Waypoint* wpt)
 
   xcsv_file->stream.flush();
 }
-#endif //CSVFMTS_ENABLED
