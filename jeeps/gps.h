@@ -241,7 +241,6 @@ using pcb_fn = int (*)(int, GPS_SWay**);
 #include "jeeps/gpsapp.h"
 #include "jeeps/gpsprot.h"
 #include "jeeps/gpscom.h"
-#include "jeeps/gpsfmt.h"
 #include "jeeps/gpsmath.h"
 #include "jeeps/gpsmem.h"
 #include "jeeps/gpsrqst.h"

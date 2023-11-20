@@ -1184,7 +1184,7 @@ GpxFormat::write_attributes(const QXmlStreamAttributes& attributes) const
 }
 
 void
-GpxFormat::fprint_xml_chain(XmlTag* tag) const
+GpxFormat::fprint_xml_chain(const XmlTag* tag) const
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);
