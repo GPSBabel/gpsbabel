@@ -701,8 +701,8 @@ void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_c
 void route_flush_all_routes();
 void route_flush_all_tracks();
 void route_deinit();
-void route_append(RouteList* src);
-void track_append(RouteList* src);
+void route_append(const RouteList* src);
+void track_append(const RouteList* src);
 void route_backup(RouteList** head_bak);
 void route_restore(RouteList* head_bak);
 void route_swap(RouteList& other);

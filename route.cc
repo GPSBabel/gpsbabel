@@ -206,13 +206,13 @@ route_deinit()
 }
 
 void
-route_append(RouteList* src)
+route_append(const RouteList* src)
 {
   src->copy(&global_route_list);
 }
 
 void
-track_append(RouteList* src)
+track_append(const RouteList* src)
 {
   src->copy(&global_track_list);
 }
