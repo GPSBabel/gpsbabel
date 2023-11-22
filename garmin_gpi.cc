@@ -1145,7 +1145,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   }
 
   ptr = (unsigned char*) xmalloc(sz);
-  const unsigned char* const startptr = ptr;
   dest_h = (gpi_bitmap_header_t*)ptr;
   *data = ptr;
   *data_sz = sz;
@@ -1176,8 +1175,8 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
       unsigned char* p = ptr;
 
       for (j = 0; j < src_h.width; j++) {
-        int color = (int32_t)gbfgetint16(f) | (gbfgetc(f) << 16);
-        le_write32(p, color);
+        gbfread(p, 1, 3, f);
+        p[3] = 0x00;
         p += 4;
       }
       for (j = (src_h.width * src_h.bpp) / 8; j < src_line_sz; j++) {
@@ -1202,10 +1201,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
     }
   }
 
-  auto bytesout = ptr - startptr;
-  if (bytesout != *data_sz) {
-    warning(MYNAME ": Code error in load_bitmap_from_file, expected output size %d, actual output %td.", *data_sz, bytesout);
-  }
   gbfclose(f);
 }
 
