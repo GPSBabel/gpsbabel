@@ -35,12 +35,6 @@
 #include <QXmlStreamReader>      // for QXmlStreamReader
 
 
-// Maybe the XmlGeneric string callback really shouldn't have a type
-// of its own; this was a crutch during the move from char* to QString.
-// It's "just" a search and replace to make it go away, but it might
-// be convenient to overload some day.
-using xg_string = const QString&;
-
 enum xg_cb_type {
   cb_unknown = 0,
   cb_start,
@@ -61,6 +55,7 @@ enum xg_cb_type {
  *  The this pointer from the Format instance must be passed if any
  *  of the callbacks are member functions, otherwise nullptr can be passed
  *  as this.
+ *
  *  xml_init(fname, this, some_map, encoding, ignorelist, skiplist);
  *
  */
@@ -68,6 +63,12 @@ class XmlGenericReader
 {
 public:
   /* Types */
+
+// Maybe the XmlGeneric string callback really shouldn't have a type
+// of its own; this was a crutch during the move from char* to QString.
+// It's "just" a search and replace to make it go away, but it might
+// be convenient to overload some day.
+  using xg_string = const QString&;
 
   // formats pass a list containing member function pointers and/or function pointers.
   template<class MyFormat>
