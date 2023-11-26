@@ -79,12 +79,12 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
   xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
   if (ignorelist != nullptr) {
     for (; ignorelist && *ignorelist; ++ignorelist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut_ignore);
+      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut::ignore);
     }
   }
   if (skiplist != nullptr) {
     for (; skiplist && *skiplist; ++skiplist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut_skip);
+      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut::skip);
     }
   }
 }
@@ -124,7 +124,7 @@ XmlGenericReader::xml_shortcut(QStringView name)
   if (xg_shortcut_taglist->contains(key)) {
     return xg_shortcut_taglist->value(key);
   }
-  return xg_shortcut_none;
+  return xg_shortcut::none;
 }
 
 void
@@ -149,10 +149,10 @@ XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
 
     case QXmlStreamReader::StartElement:
       switch (xml_shortcut(reader.name())) {
-      case xg_shortcut_skip:
+      case xg_shortcut::skip:
         reader.skipCurrentElement();
         goto readnext;
-      case xg_shortcut_ignore:
+      case xg_shortcut::ignore:
         goto readnext;
       default:
         break;
@@ -180,7 +180,7 @@ XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
       break;
 
     case QXmlStreamReader::EndElement:
-      if (xml_shortcut(reader.name()) == xg_shortcut_skip) {
+      if (xml_shortcut(reader.name()) == xg_shortcut::skip) {
         goto readnext;
       }
 

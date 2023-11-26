@@ -168,10 +168,10 @@ private:
     QRegularExpression tag_re;
   };
 
-  enum xg_shortcut {
-    xg_shortcut_none = 0,
-    xg_shortcut_skip,
-    xg_shortcut_ignore
+  enum class xg_shortcut {
+    none = 0,
+    skip,
+    ignore
   };
 
   /* Member Functions */
