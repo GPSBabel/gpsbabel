@@ -332,7 +332,7 @@ private:
     gb_color color;
   } kml_color_sequencer;
 
-  QList<xg_fmt_map_entry<KmlFormat>> kml_map = {
+  QList<XmlGenericReader::xg_fmt_map_entry<KmlFormat>> kml_map = {
     {&KmlFormat::wpt_s, cb_start, "/Placemark"},
     {&KmlFormat::wpt_e, cb_end, "/Placemark"},
     {&KmlFormat::wpt_name, cb_cdata, "/Placemark/name"},
@@ -354,7 +354,7 @@ private:
     {&KmlFormat::gx_trk_e,  cb_end, "/Placemark/(.+/)?Track"}, // KML 2.3
     {&KmlFormat::gx_trk_when,  cb_cdata, "/Placemark/(.+/)?Track/when"}, // KML 2.3
     {&KmlFormat::gx_trk_coord, cb_cdata, "/Placemark/(.+/)?Track/coord"}, // KML 2.3
-    {&KmlFormat::staticfn, cb_cdata, "/Plakdfjkj/coord"},
+    {staticfn, cb_cdata, "/Plakdfjkj/coord"},
   };
   XmlGenericReader* xml_reader{nullptr};
 

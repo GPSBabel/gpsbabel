@@ -616,7 +616,7 @@ OsmFormat::rd_init(const QString& fname)
   }
 
   xml_reader = new XmlGenericReader;
-  xml_reader->xml_init(fname, build_xg_tag_map(this, osm_map));
+  xml_reader->xml_init(fname, this, osm_map);
 }
 
 void

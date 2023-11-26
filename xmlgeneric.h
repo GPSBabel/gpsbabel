@@ -48,106 +48,47 @@ enum xg_cb_type {
   cb_end,
 };
 
-class XgCallbackBase
-{
-public:
-  XgCallbackBase() = default;
-  virtual ~XgCallbackBase() = default;
-  XgCallbackBase(const XgCallbackBase&) = delete;
-  XgCallbackBase& operator=(const XgCallbackBase&) = delete;
-  XgCallbackBase(XgCallbackBase&&) = delete;
-  XgCallbackBase& operator=(XgCallbackBase&&) = delete;
-
-  virtual void operator()(xg_string string, const QXmlStreamAttributes* attrs) const = 0;
-};
-
-template<class XgFormat>
-class XgFunctor : public XgCallbackBase
-{
-public:
-  using XgCb = void (XgFormat::*)(xg_string, const QXmlStreamAttributes*);
-  XgFunctor(XgFormat* obj, XgCb cb) : that_(obj), cb_(cb) {}
-  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
-  {
-    (that_->*cb_)(string, attrs);
-  }
-
-private:
-  XgFormat* that_;
-  XgCb cb_;
-};
-
-class XgFunctionPtrCallback : public XgCallbackBase
-{
-public:
-  using XgCb = void (xg_string, const QXmlStreamAttributes*);
-  explicit XgFunctionPtrCallback(XgCb cb) : cb_(cb) {}
-  void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
-  {
-    (*cb_)(string, attrs);
-  }
-
-private:
-  XgCb* cb_;
-};
-
-// xml processing uses a list of xg_tag_map_entries.
-struct xg_tag_map_entry {
-  XgCallbackBase* tag_cb{nullptr};
-  xg_cb_type cb_type{cb_unknown};
-  QRegularExpression tag_re;
-};
-
-// formats have a list containing member function pointers
-// and/or function pointers.
-template<class MyFormat>
-struct xg_fmt_map_entry {
-  // Constructor from a Member Function Pointer
-  using XgMfpCb = void (MyFormat::*)(xg_string, const QXmlStreamAttributes*);
-  xg_fmt_map_entry(XgMfpCb mfp, xg_cb_type ty, const char* tp) : tag_mfp_cb(mfp), cb_type(ty), tag_pattern(tp) {}
-  // Constructor from a Function Pointer.
-  using XgFpCb = void (xg_string, const QXmlStreamAttributes*);
-  xg_fmt_map_entry(XgFpCb fp, xg_cb_type ty, const char* tp) : tag_fp_cb(fp), cb_type(ty), tag_pattern(tp) {}
-
-  /* Data Members */
-
-  XgMfpCb tag_mfp_cb{nullptr};
-  XgFpCb* tag_fp_cb{nullptr};
-  xg_cb_type cb_type{cb_unknown};
-  const char* tag_pattern{nullptr};
-};
-
-// translate xg_fmt_map_entries to xg_tag_map_entries.
-template<class MyFormat>
-QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& map)
-{
-  auto* tag_tbl = new QList<xg_tag_map_entry>;
-  for (const auto& entry : map) {
-    xg_tag_map_entry tme;
-    if (entry.tag_mfp_cb != nullptr) {
-      tme.tag_cb = new XgFunctor<MyFormat>(instance, entry.tag_mfp_cb);
-    } else {
-      tme.tag_cb = new XgFunctionPtrCallback(entry.tag_fp_cb);
-    }
-    QRegularExpression re(QRegularExpression::anchoredPattern(entry.tag_pattern));
-    assert(re.isValid());
-    tme.cb_type = entry.cb_type;
-    tme.tag_re = re;
-    tag_tbl->append(tme);
-  }
-  return tag_tbl;
-}
-
 /*
- *  Have xml_init build and own a table of XgFunctor and/or
+ *  xml_init will build and own a table of XgFunctor and/or
  *  XgFunctionPtrCallback entries from a list
  *  of non-static member functions and/or function pointers.
- *  xml_init(fname, build_xg_tag_map(instance, map), encoding, ignorelist, skiplist);
+ *
+ *  QList<XmlGenericReader::xg_fmt_map_entry<SomeFormat>> some_map = {
+ *    {&SomeFormat::memberfn, cb_start, "/Placemark"},
+ *    {staticfn, cb_cdata, "/Placemark/coord"},
+ *  };
+ *
+ *  The this pointer from the Format instance must be passed if any
+ *  of the callbacks are member functions, otherwise nullptr can be passed
+ *  as this.
+ *  xml_init(fname, this, some_map, encoding, ignorelist, skiplist);
  *
  */
 class XmlGenericReader
 {
 public:
+  /* Types */
+
+  // formats pass a list containing member function pointers and/or function pointers.
+  template<class MyFormat>
+  struct xg_fmt_map_entry {
+    // Constructor from a Member Function Pointer
+    using XgMfpCb = void (MyFormat::*)(xg_string, const QXmlStreamAttributes*);
+    xg_fmt_map_entry(XgMfpCb mfp, xg_cb_type ty, const char* tp) : tag_mfp_cb(mfp), cb_type(ty), tag_pattern(tp) {}
+    // Constructor from a Function Pointer.
+    using XgFpCb = void (xg_string, const QXmlStreamAttributes*);
+    xg_fmt_map_entry(XgFpCb fp, xg_cb_type ty, const char* tp) : tag_fp_cb(fp), cb_type(ty), tag_pattern(tp) {}
+
+    /* Data Members */
+
+    XgMfpCb tag_mfp_cb{nullptr};
+    XgFpCb* tag_fp_cb{nullptr};
+    xg_cb_type cb_type{cb_unknown};
+    const char* tag_pattern{nullptr};
+  };
+
+  /* Special Member Functions */
+
   XmlGenericReader() = default;
   XmlGenericReader(const XmlGenericReader&) = delete;
   XmlGenericReader& operator=(const XmlGenericReader&) = delete;
@@ -157,10 +98,17 @@ public:
 
   /* Member Functions */
 
-  void xml_init(const QString& fname, const QList<xg_tag_map_entry>* tbl,
+  template<class MyFormat>
+  void xml_init(const QString& fname, MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& tbl,
                 const char* encoding = nullptr,
                 const char* const* ignorelist = nullptr,
-                const char* const* skiplist = nullptr);
+                const char* const* skiplist = nullptr)
+  {
+    xg_tag_tbl = build_xg_tag_map(instance, tbl);
+
+    xml_common_init(fname, encoding, ignorelist, skiplist);
+  }
+
   void xml_deinit();
   void xml_read();
   void xml_readstring(const char* str);
@@ -169,6 +117,56 @@ public:
 
 private:
   /* Types */
+
+  class XgCallbackBase
+  {
+  public:
+    XgCallbackBase() = default;
+    virtual ~XgCallbackBase() = default;
+    XgCallbackBase(const XgCallbackBase&) = delete;
+    XgCallbackBase& operator=(const XgCallbackBase&) = delete;
+    XgCallbackBase(XgCallbackBase&&) = delete;
+    XgCallbackBase& operator=(XgCallbackBase&&) = delete;
+
+    virtual void operator()(xg_string string, const QXmlStreamAttributes* attrs) const = 0;
+  };
+
+  template<class XgFormat>
+  class XgFunctor : public XgCallbackBase
+  {
+  public:
+    using XgCb = void (XgFormat::*)(xg_string, const QXmlStreamAttributes*);
+    XgFunctor(XgFormat* obj, XgCb cb) : that_(obj), cb_(cb) {}
+    void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
+    {
+      (that_->*cb_)(string, attrs);
+    }
+
+  private:
+    XgFormat* that_;
+    XgCb cb_;
+  };
+
+  class XgFunctionPtrCallback : public XgCallbackBase
+  {
+  public:
+    using XgCb = void (xg_string, const QXmlStreamAttributes*);
+    explicit XgFunctionPtrCallback(XgCb cb) : cb_(cb) {}
+    void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
+    {
+      (*cb_)(string, attrs);
+    }
+
+  private:
+    XgCb* cb_;
+  };
+
+  // xml processing uses a list of xg_tag_map_entries.
+  struct xg_tag_map_entry {
+    XgCallbackBase* tag_cb{nullptr};
+    xg_cb_type cb_type{cb_unknown};
+    QRegularExpression tag_re;
+  };
 
   enum xg_shortcut {
     xg_shortcut_none = 0,
@@ -179,8 +177,31 @@ private:
   /* Member Functions */
 
   XgCallbackBase* xml_tbl_lookup(const QString& tag, xg_cb_type cb_type);
+  void xml_common_init(const QString& fname, const char* encoding,
+                       const char* const* ignorelist, const char* const* skiplist);
   xg_shortcut xml_shortcut(QStringView name);
   void xml_run_parser(QXmlStreamReader& reader);
+
+  // translate xg_fmt_map_entries to xg_tag_map_entries.
+  template<class MyFormat>
+  static QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& map)
+  {
+    auto* tag_tbl = new QList<xg_tag_map_entry>;
+    for (const auto& entry : map) {
+      xg_tag_map_entry tme;
+      if (entry.tag_mfp_cb != nullptr) {
+        tme.tag_cb = new XgFunctor<MyFormat>(instance, entry.tag_mfp_cb);
+      } else {
+        tme.tag_cb = new XgFunctionPtrCallback(entry.tag_fp_cb);
+      }
+      QRegularExpression re(QRegularExpression::anchoredPattern(entry.tag_pattern));
+      assert(re.isValid());
+      tme.cb_type = entry.cb_type;
+      tme.tag_re = re;
+      tag_tbl->append(tme);
+    }
+    return tag_tbl;
+  }
 
   /* Data Members */
 

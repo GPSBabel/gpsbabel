@@ -133,7 +133,7 @@ private:
   route_head* rte{};
   Waypoint* wpt{};
 
-  QList<xg_fmt_map_entry<OsmFormat>> osm_map = {
+  QList<XmlGenericReader::xg_fmt_map_entry<OsmFormat>> osm_map  {
     {&OsmFormat::osm_node,	cb_start,	"/osm/node"},
     {&OsmFormat::osm_node_tag,	cb_start,	"/osm/node/tag"},
     {&OsmFormat::osm_node_end,	cb_end,		"/osm/node"},

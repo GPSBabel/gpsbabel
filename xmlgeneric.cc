@@ -35,7 +35,6 @@
 #include "defs.h"                // for fatal
 #include "src/core/file.h"       // for File
 
-
 #define MYNAME "XML Reader"
 
 /***********************************************************************
@@ -48,7 +47,7 @@
  * xml strains and insulates us from a lot of the grubbiness of expat.
  */
 
-XgCallbackBase*
+XmlGenericReader::XgCallbackBase*
 XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   for (const auto& tm : *xg_tag_tbl) {
@@ -63,17 +62,15 @@ XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 }
 
 void
-XmlGenericReader::xml_init(const QString& fname, const QList<xg_tag_map_entry>* tbl, const char* encoding,
+XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
          const char* const* ignorelist, const char* const* skiplist)
 {
-  xg_tag_tbl = tbl;
-
   rd_fname = fname;
 
   if (encoding != nullptr) {
     codec = QTextCodec::codecForName(encoding);
     if (codec == nullptr) {
-      fatal(MYNAME ": codec \"%s\" is not available.\n", encoding);
+      fatal(MYNAME " : codec \"%s\" is not available.\n", encoding);
     }
   } else {
     codec = QTextCodec::codecForName("UTF-8");
@@ -220,7 +217,7 @@ void XmlGenericReader::xml_read()
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
+    fatal(MYNAME " :Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           qPrintable(file.fileName()),
           reader.lineNumber(),
@@ -245,7 +242,7 @@ void XmlGenericReader::xml_readstring(const char* str)
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %lld, col %lld)\n",
+    fatal(MYNAME " :Read error: %s (%s, line %lld, col %lld)\n",
           qPrintable(reader.errorString()),
           "unknown",
           reader.lineNumber(),

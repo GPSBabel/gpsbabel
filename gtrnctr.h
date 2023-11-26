@@ -154,7 +154,7 @@ private:
     },
   };
 
-  QList<xg_fmt_map_entry<GtrnctrFormat>> gtc_map = {
+  QList<XmlGenericReader::xg_fmt_map_entry<GtrnctrFormat>> gtc_map = {
     /* courses tcx v1 & v2 */
     { &GtrnctrFormat::gtc_trk_s,    cb_start, "/Courses/Course" },
     { &GtrnctrFormat::gtc_trk_ident,cb_cdata, "/Courses/Course/Name"},
