@@ -134,14 +134,14 @@ private:
   Waypoint* wpt{};
 
   QList<XmlGenericReader::xg_fmt_map_entry<OsmFormat>> osm_map  {
-    {&OsmFormat::osm_node,	cb_start,	"/osm/node"},
-    {&OsmFormat::osm_node_tag,	cb_start,	"/osm/node/tag"},
-    {&OsmFormat::osm_node_end,	cb_end,		"/osm/node"},
-    {&OsmFormat::osm_way,	cb_start,	"/osm/way"},
-    {&OsmFormat::osm_way_nd,	cb_start,	"/osm/way/nd"},
-    {&OsmFormat::osm_way_tag,	cb_start,	"/osm/way/tag"},
-    {&OsmFormat::osm_way_center,	cb_start,	"/osm/way/center"},
-    {&OsmFormat::osm_way_end,	cb_end,		"/osm/way"}
+    {&OsmFormat::osm_node, xg_cb_type::cb_start,	"/osm/node"},
+    {&OsmFormat::osm_node_tag, xg_cb_type::cb_start,	"/osm/node/tag"},
+    {&OsmFormat::osm_node_end, xg_cb_type::cb_end,		"/osm/node"},
+    {&OsmFormat::osm_way, xg_cb_type::cb_start,	"/osm/way"},
+    {&OsmFormat::osm_way_nd, xg_cb_type::cb_start,	"/osm/way/nd"},
+    {&OsmFormat::osm_way_tag, xg_cb_type::cb_start,	"/osm/way/tag"},
+    {&OsmFormat::osm_way_center, xg_cb_type::cb_start,	"/osm/way/center"},
+    {&OsmFormat::osm_way_end, xg_cb_type::cb_end,		"/osm/way"}
   };
   XmlGenericReader* xml_reader{nullptr};
 };

@@ -79,12 +79,12 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
   xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
   if (ignorelist != nullptr) {
     for (; ignorelist && *ignorelist; ++ignorelist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut::ignore);
+      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut::sc_ignore);
     }
   }
   if (skiplist != nullptr) {
     for (; skiplist && *skiplist; ++skiplist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut::skip);
+      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut::sc_skip);
     }
   }
 }
@@ -124,7 +124,7 @@ XmlGenericReader::xml_shortcut(QStringView name)
   if (xg_shortcut_taglist->contains(key)) {
     return xg_shortcut_taglist->value(key);
   }
-  return xg_shortcut::none;
+  return xg_shortcut::sc_none;
 }
 
 void
@@ -149,10 +149,10 @@ XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
 
     case QXmlStreamReader::StartElement:
       switch (xml_shortcut(reader.name())) {
-      case xg_shortcut::skip:
+      case xg_shortcut::sc_skip:
         reader.skipCurrentElement();
         goto readnext;
-      case xg_shortcut::ignore:
+      case xg_shortcut::sc_ignore:
         goto readnext;
       default:
         break;
@@ -161,13 +161,13 @@ XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
       current_tag.append(QLatin1Char('/'));
       current_tag.append(reader.qualifiedName());
 
-      cb = xml_tbl_lookup(current_tag, cb_start);
+      cb = xml_tbl_lookup(current_tag, xg_cb_type::cb_start);
       if (cb) {
         const QXmlStreamAttributes attrs = reader.attributes();
         (*cb)(nullptr, &attrs);
       }
 
-      cb = xml_tbl_lookup(current_tag, cb_cdata);
+      cb = xml_tbl_lookup(current_tag, xg_cb_type::cb_cdata);
       if (cb) {
         QString c = reader.readElementText(QXmlStreamReader::IncludeChildElements);
         // readElementText advances the tokenType to QXmlStreamReader::EndElement,
@@ -180,11 +180,11 @@ XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
       break;
 
     case QXmlStreamReader::EndElement:
-      if (xml_shortcut(reader.name()) == xg_shortcut::skip) {
+      if (xml_shortcut(reader.name()) == xg_shortcut::sc_skip) {
         goto readnext;
       }
 
-      cb = xml_tbl_lookup(current_tag, cb_end);
+      cb = xml_tbl_lookup(current_tag, xg_cb_type::cb_end);
       if (cb) {
         (*cb)(reader.name().toString(), nullptr);
       }

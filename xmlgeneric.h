@@ -35,7 +35,7 @@
 #include <QXmlStreamReader>      // for QXmlStreamReader
 
 
-enum xg_cb_type {
+enum class xg_cb_type {
   cb_unknown = 0,
   cb_start,
   cb_cdata,
@@ -78,7 +78,7 @@ public:
 
     XgMfpCb tag_mfp_cb{nullptr};
     XgFpCb* tag_fp_cb{nullptr};
-    xg_cb_type cb_type{cb_unknown};
+    xg_cb_type cb_type{xg_cb_type::cb_unknown};
     const char* tag_pattern{nullptr};
   };
 
@@ -159,14 +159,14 @@ private:
   // xml processing uses a list of xg_tag_map_entries.
   struct xg_tag_map_entry {
     XgCallbackBase* tag_cb{nullptr};
-    xg_cb_type cb_type{cb_unknown};
+    xg_cb_type cb_type{xg_cb_type::cb_unknown};
     QRegularExpression tag_re;
   };
 
   enum class xg_shortcut {
-    none = 0,
-    skip,
-    ignore
+    sc_none = 0,
+    sc_skip,
+    sc_ignore
   };
 
   /* Member Functions */
