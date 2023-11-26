@@ -64,20 +64,14 @@ class XmlGenericReader
 public:
   /* Types */
 
-// Maybe the XmlGeneric string callback really shouldn't have a type
-// of its own; this was a crutch during the move from char* to QString.
-// It's "just" a search and replace to make it go away, but it might
-// be convenient to overload some day.
-  using xg_string = const QString&;
-
   // formats pass a list containing member function pointers and/or function pointers.
   template<class MyFormat>
   struct xg_fmt_map_entry {
     // Constructor from a Member Function Pointer
-    using XgMfpCb = void (MyFormat::*)(xg_string, const QXmlStreamAttributes*);
+    using XgMfpCb = void (MyFormat::*)(const QString&, const QXmlStreamAttributes*);
     xg_fmt_map_entry(XgMfpCb mfp, xg_cb_type ty, const char* tp) : tag_mfp_cb(mfp), cb_type(ty), tag_pattern(tp) {}
     // Constructor from a Function Pointer.
-    using XgFpCb = void (xg_string, const QXmlStreamAttributes*);
+    using XgFpCb = void (const QString&, const QXmlStreamAttributes*);
     xg_fmt_map_entry(XgFpCb fp, xg_cb_type ty, const char* tp) : tag_fp_cb(fp), cb_type(ty), tag_pattern(tp) {}
 
     /* Data Members */
@@ -129,16 +123,16 @@ private:
     XgCallbackBase(XgCallbackBase&&) = delete;
     XgCallbackBase& operator=(XgCallbackBase&&) = delete;
 
-    virtual void operator()(xg_string string, const QXmlStreamAttributes* attrs) const = 0;
+    virtual void operator()(const QString& string, const QXmlStreamAttributes* attrs) const = 0;
   };
 
   template<class XgFormat>
   class XgFunctor : public XgCallbackBase
   {
   public:
-    using XgCb = void (XgFormat::*)(xg_string, const QXmlStreamAttributes*);
+    using XgCb = void (XgFormat::*)(const QString&, const QXmlStreamAttributes*);
     XgFunctor(XgFormat* obj, XgCb cb) : that_(obj), cb_(cb) {}
-    void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
+    void operator()(const QString& string, const QXmlStreamAttributes* attrs) const override
     {
       (that_->*cb_)(string, attrs);
     }
@@ -151,9 +145,9 @@ private:
   class XgFunctionPtrCallback : public XgCallbackBase
   {
   public:
-    using XgCb = void (xg_string, const QXmlStreamAttributes*);
+    using XgCb = void (const QString&, const QXmlStreamAttributes*);
     explicit XgFunctionPtrCallback(XgCb cb) : cb_(cb) {}
-    void operator()(xg_string string, const QXmlStreamAttributes* attrs) const override
+    void operator()(const QString& string, const QXmlStreamAttributes* attrs) const override
     {
       (*cb_)(string, attrs);
     }

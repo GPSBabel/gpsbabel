@@ -35,7 +35,7 @@
 #include "format.h"              // for Format
 #include "gbfile.h"              // for gbfile
 #include "src/core/datetime.h"   // for DateTime
-#include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, xg_string, cb_start, cb_end
+#include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, cb_start, cb_end
 
 
 class GtrnctrFormat : public Format
@@ -97,25 +97,25 @@ private:
   void gtc_crs_hdr(const route_head* rte);
   void gtc_crs_ftr(const route_head*  /* unused */);
 
-  void gtc_trk_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_ident(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lap_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lap_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pnt_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pnt_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_utc(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lat(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_long(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_alt(xg_string args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_ident(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lap_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lap_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pnt_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pnt_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_utc(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lat(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_long(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_alt(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_dist(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_hr(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_cad(const QString& args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pwr(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_spd(xg_string args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pwr(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_spd(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_crs_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_crs_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_pnt_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_pnt_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_crs_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_pnt_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_pnt_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_ident(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_lat(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_long(const QString& args, const QXmlStreamAttributes*  /* unused */);

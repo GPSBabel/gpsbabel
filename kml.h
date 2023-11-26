@@ -37,7 +37,7 @@
 #include "src/core/file.h"              // for File
 #include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
 #include "units.h"                      // for UnitsFormatter
-#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
 class KmlFormat : public Format
