@@ -19,37 +19,22 @@
 
  */
 
-#include <QByteArray>                   // for QByteArray
-#include <QHash>                        // for QHash
-#include <QIODevice>                    // for QIODevice, QIODevice::ReadOnly
-#include <QLatin1Char>                  // for QLatin1Char
-#include <QList>
-#include <QStringView>                  // for QStringView
-#include <QTextCodec>                   // for QTextCodec
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <QXmlStreamReader>             // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
-#include <QtGlobal>                     // for qPrintable
-
-#include "defs.h"
 #include "xmlgeneric.h"
-#include "src/core/file.h"              // for File
 
+#include <QByteArray>            // for QByteArray
+#include <QHash>                 // for QHash
+#include <QIODevice>             // for QIODevice
+#include <QLatin1Char>           // for QLatin1Char
+#include <QStringView>           // for QStringView
+#include <QTextCodec>            // for QTextCodec
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes, QXmlStreamReader::Characters, QXmlStreamReader::EndElement, QXmlStreamReader::IncludeChildElements, QXmlStreamReader::StartDocument, QXmlStreamReader::StartElement
+#include <QXmlStreamReader>      // for QXmlStreamReader
+//#include <QtCore>                // for QHash, QIODeviceBase::ReadOnly
+#include <QtGlobal>              // for qPrintable
 
-enum xg_shortcut {
-  xg_shortcut_none = 0,
-  xg_shortcut_skip,
-  xg_shortcut_ignore
-};
+#include "defs.h"                // for fatal
+#include "src/core/file.h"       // for File
 
-static const QList<xg_tag_map_entry>* xg_tag_tbl;
-static bool dynamic_tag_tbl;
-static QHash<QString, xg_shortcut>* xg_shortcut_taglist;
-
-static QString rd_fname;
-static QByteArray reader_data;
-static const char* xg_encoding;
-static QTextCodec* utf8_codec = QTextCodec::codecForName("UTF-8");
-static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
 
 #define MYNAME "XML Reader"
 
@@ -63,8 +48,8 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
  * xml strains and insulates us from a lot of the grubbiness of expat.
  */
 
-static XgCallbackBase*
-xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
+XgCallbackBase*
+XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   for (const auto& tm : *xg_tag_tbl) {
     if (cb_type == tm.cb_type) {
@@ -77,18 +62,21 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
   return nullptr;
 }
 
-static void
-xml_common_init(const QString& fname, const char* encoding,
-                const char* const* ignorelist, const char* const* skiplist)
+void
+XmlGenericReader::xml_init(const QString& fname, const QList<xg_tag_map_entry>* tbl, const char* encoding,
+         const char* const* ignorelist, const char* const* skiplist)
 {
+  xg_tag_tbl = tbl;
+
   rd_fname = fname;
 
-  xg_encoding = encoding;
-  if (encoding) {
-    QTextCodec* tcodec = QTextCodec::codecForName(encoding);
-    if (tcodec) {
-      codec = tcodec;
+  if (encoding != nullptr) {
+    codec = QTextCodec::codecForName(encoding);
+    if (codec == nullptr) {
+      fatal(MYNAME ": codec \"%s\" is not available.\n", encoding);
     }
+  } else {
+    codec = QTextCodec::codecForName("UTF-8");
   }
 
   xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
@@ -105,55 +93,35 @@ xml_common_init(const QString& fname, const char* encoding,
 }
 
 void
-xml_init(const QString& fname, const QList<xg_tag_map_entry>* tbl, const char* encoding,
-         const char* const* ignorelist, const char* const* skiplist, bool dynamic_tbl)
+XmlGenericReader::xml_deinit()
 {
-  xg_tag_tbl = tbl;
-  dynamic_tag_tbl = dynamic_tbl;
-
-  xml_common_init(fname, encoding, ignorelist, skiplist);
-}
-
-void
-xml_init(const QString& fname, const QList<xg_tag_mapping>& tbl, const char* encoding,
-         const char* const* ignorelist, const char* const* skiplist)
-{
-  auto* tag_tbl = new QList<xg_tag_map_entry>;
-  dynamic_tag_tbl = true;
-  for (const auto& tm : tbl) {
-    auto* cb = new XgFunctionPtrCallback(tm.tag_cb);
-    QRegularExpression re(QRegularExpression::anchoredPattern(tm.tag_pattern));
-    assert(re.isValid());
-    tag_tbl->append({cb, tm.cb_type, re});
+  for (const auto& tm : *xg_tag_tbl) {
+    delete tm.tag_cb;
   }
-  xg_tag_tbl = tag_tbl;
-
-  xml_common_init(fname, encoding, ignorelist, skiplist);
-}
-
-void
-xml_deinit()
-{
-  if (dynamic_tag_tbl) {
-    for (const auto& tm : *xg_tag_tbl) {
-      delete tm.tag_cb;
-    }
-    delete xg_tag_tbl;
-  }
+  delete xg_tag_tbl;
   xg_tag_tbl = nullptr;
 
   reader_data.clear();
   rd_fname.clear();
 
-  xg_encoding = nullptr;
-  codec = utf8_codec;
+  codec = nullptr;
 
   delete xg_shortcut_taglist;
   xg_shortcut_taglist = nullptr;
 }
 
-static xg_shortcut
-xml_shortcut(QStringView name)
+XmlGenericReader::~XmlGenericReader()
+{
+  for (const auto& tm : *xg_tag_tbl) {
+    delete tm.tag_cb;
+  }
+  delete xg_tag_tbl;
+
+  delete xg_shortcut_taglist;
+}
+
+XmlGenericReader::xg_shortcut
+XmlGenericReader::xml_shortcut(QStringView name)
 {
   QString key = name.toString();
   if (xg_shortcut_taglist->contains(key)) {
@@ -162,8 +130,8 @@ xml_shortcut(QStringView name)
   return xg_shortcut_none;
 }
 
-static void
-xml_run_parser(QXmlStreamReader& reader)
+void
+XmlGenericReader::xml_run_parser(QXmlStreamReader& reader)
 {
   XgCallbackBase* cb;
   QString current_tag;
@@ -242,7 +210,7 @@ readnext:
   }
 }
 
-void xml_read()
+void XmlGenericReader::xml_read()
 {
   gpsbabel::File file(rd_fname);
 
@@ -262,14 +230,14 @@ void xml_read()
 
 // Chucks some bytes into the global QByteArray buffer and waits for
 // xml_readstring() to parse.
-void xml_readprefixstring(const char* str)
+void XmlGenericReader::xml_readprefixstring(const char* str)
 {
   reader_data.append(str);
 }
 
 // Parses a bytestream as if it were a file. Looks for an <?xml encoding= to
 // determine file encoding, falls back to UTF-8 if unspecified.
-void xml_readstring(const char* str)
+void XmlGenericReader::xml_readstring(const char* str)
 {
   reader_data.append(str);
 
@@ -287,7 +255,7 @@ void xml_readstring(const char* str)
 
 // This is quite different from xml_readstring(). It doesn't have to interpret
 // encoding because the source is already Qt's internal UTF-16.
-void xml_readunicode(const QString& str)
+void XmlGenericReader::xml_readunicode(const QString& str)
 {
   QXmlStreamReader reader(str);
 

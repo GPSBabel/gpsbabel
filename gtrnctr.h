@@ -154,7 +154,7 @@ private:
     },
   };
 
-  QList<xg_functor_map_entry<GtrnctrFormat>> gtc_map = {
+  QList<xg_fmt_map_entry<GtrnctrFormat>> gtc_map = {
     /* courses tcx v1 & v2 */
     { &GtrnctrFormat::gtc_trk_s,    cb_start, "/Courses/Course" },
     { &GtrnctrFormat::gtc_trk_ident,cb_cdata, "/Courses/Course/Name"},
@@ -219,6 +219,7 @@ private:
     { &GtrnctrFormat::gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
     { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" }
   };
+  XmlGenericReader* xml_reader{nullptr};
 
   int gtc_indent_level{};
 };

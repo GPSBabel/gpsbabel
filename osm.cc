@@ -615,19 +615,22 @@ OsmFormat::rd_init(const QString& fname)
     osm_features_init();
   }
 
-  xml_init(fname, build_xg_tag_map(this, osm_map), nullptr, nullptr, nullptr, true);
+  xml_reader = new XmlGenericReader;
+  xml_reader->xml_init(fname, build_xg_tag_map(this, osm_map));
 }
 
 void
 OsmFormat::read()
 {
-  xml_read();
+  xml_reader->xml_read();
 }
 
 void
 OsmFormat::rd_deinit()
 {
-  xml_deinit();
+  delete xml_reader;
+  xml_reader = nullptr;
+
   waypoints.clear();
 }
 

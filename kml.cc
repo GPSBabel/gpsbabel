@@ -355,17 +355,19 @@ void KmlFormat::gx_trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs
 
 void KmlFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, build_xg_tag_map(this, kml_map), nullptr, kml_tags_to_ignore, kml_tags_to_skip, true);
+  xml_reader = new XmlGenericReader;
+  xml_reader->xml_init(fname, build_xg_tag_map(this, kml_map), nullptr, kml_tags_to_ignore, kml_tags_to_skip);
 }
 
 void KmlFormat::read()
 {
-  xml_read();
+  xml_reader->xml_read();
 }
 
 void KmlFormat::rd_deinit()
 {
-  xml_deinit();
+  delete xml_reader;
+  xml_reader = nullptr;
 }
 
 void KmlFormat::wr_init(const QString& fname)

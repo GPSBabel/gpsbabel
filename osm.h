@@ -133,7 +133,7 @@ private:
   route_head* rte{};
   Waypoint* wpt{};
 
-  QList<xg_functor_map_entry<OsmFormat>> osm_map = {
+  QList<xg_fmt_map_entry<OsmFormat>> osm_map = {
     {&OsmFormat::osm_node,	cb_start,	"/osm/node"},
     {&OsmFormat::osm_node_tag,	cb_start,	"/osm/node/tag"},
     {&OsmFormat::osm_node_end,	cb_end,		"/osm/node"},
@@ -143,5 +143,6 @@ private:
     {&OsmFormat::osm_way_center,	cb_start,	"/osm/way/center"},
     {&OsmFormat::osm_way_end,	cb_end,		"/osm/way"}
   };
+  XmlGenericReader* xml_reader{nullptr};
 };
 #endif // OSM_H_INCLUDED_
