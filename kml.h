@@ -197,7 +197,6 @@ private:
   void kml_write_AbstractView();
   void kml_mt_array_schema(const QString& field_name, const QString& display_name, const QString& type) const;
   static QString kml_get_posn_icon(int freshness);
-  static void staticfn(const QString& args, const QXmlStreamAttributes* attrs) {qDebug() << "test only: delete all references to staticfn";}
 
   /* Data Members */
 
@@ -354,7 +353,6 @@ private:
     {&KmlFormat::gx_trk_e, xg_cb_type::cb_end, "/Placemark/(.+/)?Track"}, // KML 2.3
     {&KmlFormat::gx_trk_when, xg_cb_type::cb_cdata, "/Placemark/(.+/)?Track/when"}, // KML 2.3
     {&KmlFormat::gx_trk_coord, xg_cb_type::cb_cdata, "/Placemark/(.+/)?Track/coord"}, // KML 2.3
-    {staticfn, xg_cb_type::cb_start, "/Placemark/TimeStamp"},
   };
   XmlGenericReader* xml_reader{nullptr};
 

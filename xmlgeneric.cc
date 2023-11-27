@@ -21,6 +21,8 @@
 
 #include "xmlgeneric.h"
 
+#include <utility>               // for as_const
+
 #include <QByteArray>            // for QByteArray
 #include <QHash>                 // for QHash
 #include <QIODevice>             // for QIODevice
@@ -34,6 +36,7 @@
 
 #include "defs.h"                // for fatal
 #include "src/core/file.h"       // for File
+
 
 #define MYNAME "XML Reader"
 
