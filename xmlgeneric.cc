@@ -50,11 +50,11 @@
 XmlGenericReader::XgCallbackBase*
 XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
-  for (const auto& tm : *xg_tag_tbl) {
+  for (const auto& tm : std::as_const(xg_tag_tbl)) {
     if (cb_type == tm.cb_type) {
       QRegularExpressionMatch match = tm.tag_re.match(tag);
       if (match.hasMatch()) {
-        return tm.tag_cb;
+        return tm.tag_cb.get();
       }
     }
   }
@@ -76,53 +76,25 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
     codec = QTextCodec::codecForName("UTF-8");
   }
 
-  xg_shortcut_taglist = new QHash<QString, xg_shortcut>;
+  xg_shortcut_taglist.clear();
   if (ignorelist != nullptr) {
     for (; ignorelist && *ignorelist; ++ignorelist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*ignorelist), xg_shortcut::sc_ignore);
+      xg_shortcut_taglist.insert(QString::fromUtf8(*ignorelist), xg_shortcut::sc_ignore);
     }
   }
   if (skiplist != nullptr) {
     for (; skiplist && *skiplist; ++skiplist) {
-      xg_shortcut_taglist->insert(QString::fromUtf8(*skiplist), xg_shortcut::sc_skip);
+      xg_shortcut_taglist.insert(QString::fromUtf8(*skiplist), xg_shortcut::sc_skip);
     }
   }
-}
-
-void
-XmlGenericReader::xml_deinit()
-{
-  for (const auto& tm : *xg_tag_tbl) {
-    delete tm.tag_cb;
-  }
-  delete xg_tag_tbl;
-  xg_tag_tbl = nullptr;
-
-  reader_data.clear();
-  rd_fname.clear();
-
-  codec = nullptr;
-
-  delete xg_shortcut_taglist;
-  xg_shortcut_taglist = nullptr;
-}
-
-XmlGenericReader::~XmlGenericReader()
-{
-  for (const auto& tm : *xg_tag_tbl) {
-    delete tm.tag_cb;
-  }
-  delete xg_tag_tbl;
-
-  delete xg_shortcut_taglist;
 }
 
 XmlGenericReader::xg_shortcut
 XmlGenericReader::xml_shortcut(QStringView name)
 {
   QString key = name.toString();
-  if (xg_shortcut_taglist->contains(key)) {
-    return xg_shortcut_taglist->value(key);
+  if (xg_shortcut_taglist.contains(key)) {
+    return xg_shortcut_taglist.value(key);
   }
   return xg_shortcut::sc_none;
 }

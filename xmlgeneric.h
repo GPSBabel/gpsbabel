@@ -23,6 +23,7 @@
 #define XMLGENERIC_H_INCLUDED_
 
 #include <cassert>               // for assert
+#include <memory>                // for make_shared, shared_ptr
 
 #include <QByteArray>            // for QByteArray
 #include <QHash>                 // for QHash
@@ -82,15 +83,6 @@ public:
     const char* tag_pattern{nullptr};
   };
 
-  /* Special Member Functions */
-
-  XmlGenericReader() = default;
-  XmlGenericReader(const XmlGenericReader&) = delete;
-  XmlGenericReader& operator=(const XmlGenericReader&) = delete;
-  XmlGenericReader(XmlGenericReader&&) = delete;
-  XmlGenericReader& operator=(XmlGenericReader&&) = delete;
-  ~XmlGenericReader();
-
   /* Member Functions */
 
   template<class MyFormat>
@@ -99,12 +91,11 @@ public:
                 const char* const* ignorelist = nullptr,
                 const char* const* skiplist = nullptr)
   {
-    xg_tag_tbl = build_xg_tag_map(instance, tbl);
+    build_xg_tag_map(instance, tbl);
 
     xml_common_init(fname, encoding, ignorelist, skiplist);
   }
 
-  void xml_deinit();
   void xml_read();
   void xml_readstring(const char* str);
   void xml_readprefixstring(const char* str);
@@ -158,7 +149,7 @@ private:
 
   // xml processing uses a list of xg_tag_map_entries.
   struct xg_tag_map_entry {
-    XgCallbackBase* tag_cb{nullptr};
+    std::shared_ptr<XgCallbackBase> tag_cb{nullptr};
     xg_cb_type cb_type{xg_cb_type::cb_unknown};
     QRegularExpression tag_re;
   };
@@ -179,29 +170,28 @@ private:
 
   // translate xg_fmt_map_entries to xg_tag_map_entries.
   template<class MyFormat>
-  static QList<xg_tag_map_entry>* build_xg_tag_map(MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& map)
+  void build_xg_tag_map(MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& map)
   {
-    auto* tag_tbl = new QList<xg_tag_map_entry>;
+    xg_tag_tbl.clear();
     for (const auto& entry : map) {
       xg_tag_map_entry tme;
       if (entry.tag_mfp_cb != nullptr) {
-        tme.tag_cb = new XgFunctor<MyFormat>(instance, entry.tag_mfp_cb);
+        tme.tag_cb = std::make_shared<XgFunctor<MyFormat>>(instance, entry.tag_mfp_cb);
       } else {
-        tme.tag_cb = new XgFunctionPtrCallback(entry.tag_fp_cb);
+        tme.tag_cb = std::make_shared<XgFunctionPtrCallback>(entry.tag_fp_cb);
       }
       QRegularExpression re(QRegularExpression::anchoredPattern(entry.tag_pattern));
       assert(re.isValid());
       tme.cb_type = entry.cb_type;
       tme.tag_re = re;
-      tag_tbl->append(tme);
+      xg_tag_tbl.append(tme);
     }
-    return tag_tbl;
   }
 
   /* Data Members */
 
-  const QList<xg_tag_map_entry>* xg_tag_tbl{nullptr};
-  QHash<QString, xg_shortcut>* xg_shortcut_taglist{nullptr};
+  QList<xg_tag_map_entry> xg_tag_tbl;
+  QHash<QString, xg_shortcut> xg_shortcut_taglist;
 
   QString rd_fname;
   QByteArray reader_data;
