@@ -82,7 +82,7 @@ jobs:
 
     - name: Install Qt setup(aqt)
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
 
