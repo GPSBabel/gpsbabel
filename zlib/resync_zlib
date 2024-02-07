@@ -32,10 +32,12 @@ rm -f configure
 rm -f CMakeLists.txt
 rm -f INDEX
 rm -f Makefile
+rm -f Makefile.in
 rm -f make_vms.com
 rm -f treebuild.xml
 rm -f zlib2ansi
 rm -f zconf.h.cmakein
+rm -f zconf.h.in
 rm -f zlib.3.pdf
 rm -f zlib.map
 rm -f zlib.pc.cmakein
