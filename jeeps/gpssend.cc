@@ -193,7 +193,7 @@ bool GPS_Serial_Send_Ack(gpsdevh* fd, GPS_Packet* tra, GPS_Packet* rec)
 {
   UC data[2];
 
-  GPS_Util_Put_Short(data,(US)rec->type);
+  GPS_Util_Put_Short(data,rec->type);
   GPS_Make_Packet(tra,LINK_ID[0].Pid_Ack_Byte,data,2);
   if (!GPS_Write_Packet(fd,*tra)) {
     GPS_Error("Error acknowledging packet");
