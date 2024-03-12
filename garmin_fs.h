@@ -50,48 +50,26 @@ struct garmin_ilink_t {
 
 struct garmin_fs_flags_t {
 public:
-  garmin_fs_flags_t() :
-  icon(0),
-  wpt_class(0),
-  display(0),
-  category(0),
-  city(0),
-  state(0),
-  facility(0),
-  cc(0),
-  cross_road(0),
-  addr(0),
-  country(0),
-  phone_nr(0),
-  phone_nr2(0),
-  fax_nr(0),
-  postal_code(0),
-  email(0),
-  duration(0)
-#ifdef GMSD_EXPERIMENTAL
-  , subclass(0)
-#endif
-  {}
 
-  unsigned int icon:1;
-  unsigned int wpt_class:1;
-  unsigned int display:1;
-  unsigned int category:1;
-  unsigned int city:1;
-  unsigned int state:1;
-  unsigned int facility:1;
-  unsigned int cc:1;
-  unsigned int cross_road:1;
-  unsigned int addr:1;
-  unsigned int country:1;
-  unsigned int phone_nr:1;
-  unsigned int phone_nr2:1;
-  unsigned int fax_nr:1;
-  unsigned int postal_code:1;
-  unsigned int email:1;
-  unsigned int duration:1;
+  unsigned int icon:1{0};
+  unsigned int wpt_class:1{0};
+  unsigned int display:1{0};
+  unsigned int category:1{0};
+  unsigned int city:1{0};
+  unsigned int state:1{0};
+  unsigned int facility:1{0};
+  unsigned int cc:1{0};
+  unsigned int cross_road:1{0};
+  unsigned int addr:1{0};
+  unsigned int country:1{0};
+  unsigned int phone_nr:1{0};
+  unsigned int phone_nr2:1{0};
+  unsigned int fax_nr:1{0};
+  unsigned int postal_code:1{0};
+  unsigned int email:1{0};
+  unsigned int duration:1{0};
 #ifdef GMSD_EXPERIMENTAL
-  unsigned int subclass:1;
+  unsigned int subclass:1{0};
 #endif
 };
 
