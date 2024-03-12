@@ -28,6 +28,31 @@
 #ifdef HAVE_TIMERFD
 #include <sys/timerfd.h>
 #endif
+
+#ifdef __EMSCRIPTEN__
+/* On Emscripten `pipe` does not conform to the spec and does not block
+ * until events are available, which makes it unusable for event system
+ * and often results in deadlocks when `pipe` is in a loop like it is
+ * in libusb.
+ *
+ * Therefore use a custom event system based on browser event emitters. */
+#include <emscripten.h>
+#include <emscripten/atomic.h>
+#include <emscripten/threading.h>
+
+EM_ASYNC_JS(void, em_libusb_wait_async, (const _Atomic int* ptr, int expected_value, int timeout), {
+	await Atomics.waitAsync(HEAP32, ptr >> 2, expected_value, timeout).value;
+});
+
+static void em_libusb_wait(const _Atomic int *ptr, int expected_value, int timeout)
+{
+	if (emscripten_is_main_runtime_thread()) {
+		em_libusb_wait_async(ptr, expected_value, timeout);
+	} else {
+		emscripten_atomic_wait_u32((int*)ptr, expected_value, 1000000LL * timeout);
+	}
+}
+#endif
 #include <unistd.h>
 
 #ifdef HAVE_EVENTFD
@@ -131,6 +156,10 @@ void usbi_signal_event(usbi_event_t *event)
 	r = write(EVENT_WRITE_FD(event), &dummy, sizeof(dummy));
 	if (r != sizeof(dummy))
 		usbi_warn(NULL, "event write failed");
+#ifdef __EMSCRIPTEN__
+	event->has_event = 1;
+	emscripten_atomic_notify(&event->has_event, EMSCRIPTEN_NOTIFY_ALL_WAITERS);
+#endif
 }
 
 void usbi_clear_event(usbi_event_t *event)
@@ -141,6 +170,9 @@ void usbi_clear_event(usbi_event_t *event)
 	r = read(EVENT_READ_FD(event), &dummy, sizeof(dummy));
 	if (r != sizeof(dummy))
 		usbi_warn(NULL, "event read failed");
+#ifdef __EMSCRIPTEN__
+	event->has_event = 0;
+#endif
 }
 
 #ifdef HAVE_TIMERFD
@@ -223,6 +255,14 @@ int usbi_wait_for_events(struct libusb_context *ctx,
 	int internal_fds, num_ready;
 
 	usbi_dbg(ctx, "poll() %u fds with timeout in %dms", (unsigned int)nfds, timeout_ms);
+#ifdef __EMSCRIPTEN__
+	// Emscripten's poll doesn't actually block, so we need to use an out-of-band
+	// waiting signal.
+	em_libusb_wait(&ctx->event.has_event, 0, timeout_ms);
+	// Emscripten ignores timeout_ms, but set it to 0 for future-proofing in case
+	// they ever implement real poll.
+	timeout_ms = 0;
+#endif
 	num_ready = poll(fds, nfds, timeout_ms);
 	usbi_dbg(ctx, "poll() returned %d", num_ready);
 	if (num_ready == 0) {

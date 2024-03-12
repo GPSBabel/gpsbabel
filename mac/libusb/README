@@ -1,4 +1,4 @@
-This is libusb-1.0.26 from https://libusb.info/.
+This is libusb-1.0.27 from https://libusb.info/.
 Since we have such problems with people
 getting libusb successfully built - between the Universal Build issues
 and the fact that we have to work hard to go find where it's installed
