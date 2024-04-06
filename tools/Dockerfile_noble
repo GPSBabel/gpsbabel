@@ -71,21 +71,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-base-dev \
-    libqt6core5compat6-dev \
-    libqt6opengl6-dev \
-    libqt6serialport6-dev \
-    libqt6webenginecore6-bin \
-    libgl-dev \
-    libopengl-dev \
-    libvulkan-dev \
+    qt6-5compat-dev \
+    qt6-serialport-dev \
     libx11-xcb-dev \
     libxkbcommon-dev \
-    qt6-l10n-tools \
     qt6-tools-dev \
-    qt6-tools-dev-tools \
     qt6-translations-l10n \
     qt6-webengine-dev \
-    qt6-webengine-dev-tools \
     qt6-wayland \
  && rm -rf /var/lib/apt/lists/*
 
