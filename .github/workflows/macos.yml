@@ -82,7 +82,7 @@ jobs:
 
     - name: Script
       env:
-        XML_CATALOG_FILES: ${{ matrix.os == 'macos-14' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
+        XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
