@@ -19,25 +19,25 @@ jobs:
       matrix:
         include:
           - QT_VERSION: '5.15.2'
-            XCODE_VERSION: '12.5.1'
+            XCODE_VERSION: '13.2.1'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-11
+            os: macos-12
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '13.4.1'
             GENERATOR: 'Xcode'
             RELEASE: false
-            os: macos-12
+            os: macos-13
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '13.4.1'
             GENERATOR: 'Ninja'
             RELEASE: true
-            os: macos-12
+            os: macos-13
           - QT_VERSION: '6.5.3'
             XCODE_VERSION: '14.2'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-12
+            os: macos-13
 
     steps:
     - name: Checkout repository
