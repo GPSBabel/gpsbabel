@@ -62,7 +62,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qtbase5-dev \
     qttools5-dev \
-    qttools5-dev-tools \
     qttranslations5-l10n \
     qtwebengine5-dev \
     libqt5serialport5-dev \
