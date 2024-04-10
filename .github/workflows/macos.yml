@@ -54,7 +54,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
