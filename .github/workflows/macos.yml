@@ -24,20 +24,20 @@ jobs:
             RELEASE: false
             os: macos-12
           - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            XCODE_VERSION: '14.2'
             GENERATOR: 'Xcode'
             RELEASE: false
             os: macos-13
           - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            XCODE_VERSION: '14.2'
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-13
           - QT_VERSION: '6.5.3'
-            XCODE_VERSION: '14.2'
+            XCODE_VERSION: '15.2'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-13
+            os: macos-14
 
     steps:
     - name: Checkout repository
