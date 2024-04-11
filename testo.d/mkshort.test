@@ -1,0 +1,41 @@
+
+gpsbabel -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=6 -F ${TMPDIR}/mkshort6.csv
+compare ${REFERENCE}/mkshort6.csv ${TMPDIR}/mkshort6.csv
+gpsbabel -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=5 -F ${TMPDIR}/mkshort5.csv
+compare ${REFERENCE}/mkshort5.csv ${TMPDIR}/mkshort5.csv
+gpsbabel -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=4 -F ${TMPDIR}/mkshort4.csv
+compare ${REFERENCE}/mkshort4.csv ${TMPDIR}/mkshort4.csv
+# expected failure: "mkshort failure, the specified short length is insufficient."
+# expecting this to fail so call directly rather than via gpsbabel function
+${VALGRIND} "${PNAME}" -s -i unicsv -f ${REFERENCE}/mkshort.csv -o xcsv,style=${REFERENCE}/mkshort.style,snlen=3 -F ${TMPDIR}/mkshort3.csv > /dev/null 2> ${TMPDIR}/mkshort3.log && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/mkshort3.log ${TMPDIR}/mkshort3.log
+
+rm -f ${TMPDIR}/mkshort4.log
+# whitespace
+echo '0,0," a   e "' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=8,snwhite=1 -F  - >> ${TMPDIR}/mkshort4.log
+# trailing numbers
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=7 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=6 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=5 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=4 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=3 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=2 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd0123"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=1 -F - >>${TMPDIR}/mkshort4.log
+# vowels
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=9 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=8 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=7 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=6 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=5 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"xxaeiouzz"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=4 -F - >>${TMPDIR}/mkshort4.log
+#truncation
+echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=4 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=3 -F - >>${TMPDIR}/mkshort4.log
+echo '0,0,"abcd"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=2 -F - >>${TMPDIR}/mkshort4.log
+#replacements
+echo '0,0,"abcd one"' | gpsbabel -s -i unicsv,fields=lat+long+name -f - -o xcsv,style=reference/mkshort.style,snlen=8 -F - >>${TMPDIR}/mkshort4.log
+
+compare ${REFERENCE}/mkshort4.log ${TMPDIR}/mkshort4.log
+  

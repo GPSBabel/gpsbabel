@@ -29,7 +29,6 @@
       diff =     <link linkend="style_def_geodiff">Geocache difficulty</link>
       ele =      Elevation (in meters).  For feet use "ele ft", "eleft", "ele feet", or "elefeet".
       e/w =      'e' for eastern hemisphere, 'w' for western
-      exported = Geocache export date
       found =    <link linkend="style_def_geofound">Geocache last found date</link>
       fix =      3d, 2d, etc.
       gcid =     Geocache cache id. This accepts GC-ID ("575006") and GC-Code ("GC1234G").

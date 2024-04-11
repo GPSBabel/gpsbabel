@@ -28,13 +28,13 @@ echo "IFIELD SHORTNAME, , %s" >> ${TMPDIR}/testo2.style
 echo "IFIELD ALT_METERS, -99999999.0, %.0f" >> ${TMPDIR}/testo2.style
 echo "IFIELD IGNORE, , %s"  >> ${TMPDIR}/testo2.style
 echo "IFIELD GMT_TIME, , %Y/%m/%d" >> ${TMPDIR}/testo2.style
-echo "IFIELD HMSG_TIME,  , %d:%d:%d" >> ${TMPDIR}/testo2.style
+echo "IFIELD GMT_TIME,  , %H:%M:%S" >> ${TMPDIR}/testo2.style
 rm -f ${TMPDIR}/grid-utm~xscv.gpx
 gpsbabel -i xcsv,style=${TMPDIR}/testo2.style -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~xscv.gpx
 compare ${REFERENCE}/grid-utm~xscv.gpx ${TMPDIR}/grid-utm~xscv.gpx
 
 # test TRACK_NAME, TRACK_NEW
-echo 'DESCRIPTION track style test 1' >>${TMPDIR}/track1.style
+echo 'DESCRIPTION track style test 1' >${TMPDIR}/track1.style
 echo 'EXTENSION csv' >>${TMPDIR}/track1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track1.style
@@ -47,7 +47,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/track1.style -f ${REFERENCE}/track/track1.csv -
 compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track1~csv.gpx
 
 # flip TRACK_NAME, TRACK_NEW order
-echo 'DESCRIPTION track style test 2' >>${TMPDIR}/track2.style
+echo 'DESCRIPTION track style test 2' >${TMPDIR}/track2.style
 echo 'EXTENSION csv' >>${TMPDIR}/track2.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/track2.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/track2.style
@@ -60,7 +60,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/track2.style -f ${REFERENCE}/track/track2.csv -
 compare ${REFERENCE}/track/track1-2~csv.gpx ${TMPDIR}/track2~csv.gpx
 
 # ROUTE_NAME
-echo 'DESCRIPTION route style test 1' >>${TMPDIR}/route1.style
+echo 'DESCRIPTION route style test 1' >${TMPDIR}/route1.style
 echo 'EXTENSION csv' >>${TMPDIR}/route1.style
 echo 'FIELD_DELIMITER COMMA' >>${TMPDIR}/route1.style
 echo 'RECORD_DELIMITER NEWLINE' >>${TMPDIR}/route1.style
@@ -72,7 +72,7 @@ gpsbabel -i xcsv,style=${TMPDIR}/route1.style -f ${REFERENCE}/route/route1.csv -
 compare ${REFERENCE}/route/route1~csv.gpx ${TMPDIR}/route1~csv.gpx
 
 # gmsd fields
-echo 'DESCRIPTION gmsd test' >> ${TMPDIR}/gmsd.style
+echo 'DESCRIPTION gmsd test' > ${TMPDIR}/gmsd.style
 echo 'EXTENSION csv' >> ${TMPDIR}/gmsd.style
 echo 'FIELD_DELIMITER TAB' >> ${TMPDIR}/gmsd.style
 echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/gmsd.style
@@ -92,3 +92,337 @@ gpsbabel -i unicsv -f ${REFERENCE}/gmsd.unicsv -o xcsv,style=${TMPDIR}/gmsd.styl
 compare ${REFERENCE}/gmsd.xcsv ${TMPDIR}/gmsd.xcsv
 gpsbabel -i xcsv,style=${TMPDIR}/gmsd.style -f ${REFERENCE}/gmsd.xcsv -o unicsv -F ${TMPDIR}/gmsd.unicsv
 compare ${REFERENCE}/gmsd.unicsv ${TMPDIR}/gmsd.unicsv
+
+if command -v tzselect >/dev/null 2>&1 ; then
+  export TZ='America/Denver'
+  echo "  including xcsv timezone conversion test"
+
+# xcsv writer time handling
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime.style
+  echo 'IFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD EXCEL_TIME, "", "%.12e"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD GMT_TIME, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD GMT_TIME, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD GMT_TIME, "", "%H:%M:%S"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD LOCAL_TIME, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD LOCAL_TIME, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD LOCAL_TIME, "", "%H:%M:%S"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD ISO_TIME_MS, "", "%s"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD NET_TIME, "", "%lld"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD TIMET_TIME, "", "%lld"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD TIMET_TIME_MS, "", "%lld"' >> ${TMPDIR}/datetime.style
+  echo 'OFIELD YYYYMMDD_TIME, "", "%ld"' >> ${TMPDIR}/datetime.style
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime.style -f ${REFERENCE}/datetime.xcsv -o xcsv,style=${TMPDIR}/datetime.style -F ${TMPDIR}/datetime~xcsv.xcsv
+  compare ${REFERENCE}/datetime~xcsv.xcsv ${TMPDIR}/datetime~xcsv.xcsv
+
+# xcsv reader time handling
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_excel.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_excel.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_excel.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_excel.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_excel.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD EXCEL_TIME, "", "%.12e"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_excel.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_excel.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_excel.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_excel.style -F ${TMPDIR}/datetime_excel.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_excel.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_gmt.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_gmt.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_gmt.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD GMT_TIME, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_gmt.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_gmt.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_gmt.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_gmt.style -F ${TMPDIR}/datetime_gmt.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_gmt.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_iso.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_iso.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_iso.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_iso.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_iso.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_iso.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_iso.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_iso.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_iso.style -F ${TMPDIR}/datetime_iso.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_iso.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_isoms.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_isoms.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_isoms.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD ISO_TIME_MS, "", "%s"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_isoms.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_isoms.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_isoms.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_isoms.style -F ${TMPDIR}/datetime_isoms.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_isoms.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_local.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_local.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_local.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_local.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_local.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD LOCAL_TIME, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_local.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_local.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_local.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_local.style -F ${TMPDIR}/datetime_local.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_local.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_net.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_net.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_net.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_net.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_net.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD NET_TIME, "", "%lld"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_net.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_net.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_net.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_net.style -F ${TMPDIR}/datetime_net.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_net.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_timet.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_timet.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_timet.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timet.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timet.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD TIMET_TIME, "", "%lld"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_timet.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_timet.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_timet.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_timet.style -F ${TMPDIR}/datetime_timet.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_timet.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_timetms.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_timetms.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_timetms.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD TIMET_TIME_MS, "", "%lld"' >> ${TMPDIR}/datetime_timetms.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_timetms.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_timetms.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_timetms.style -F ${TMPDIR}/datetime_timetms.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_timetms.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_hmsg.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD GMT_TIME, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD GMT_TIME, "", "%Y-%m-%d"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_hmsg.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_hmsg.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_hmsg.style -F ${TMPDIR}/datetime_hmsg.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_hmsg.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_hmsg2.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD GMT_TIME, "", "%Y-%m-%d"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD GMT_TIME, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsg2.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_hmsg2.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_hmsg2.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_hmsg2.style -F ${TMPDIR}/datetime_hmsg2.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_hmsg2.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_hmsl.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD LOCAL_TIME, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD LOCAL_TIME, "", "%Y-%m-%d"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_hmsl.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_hmsl.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_hmsl.style -F ${TMPDIR}/datetime_hmsl.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_hmsl.xcsv
+
+  echo 'FIELD_DELIMITER COMMA' > ${TMPDIR}/datetime_hmsl2.style
+  echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'PROLOGUE LAT_DECIMAL,LON_DECIMAL,EXCEL_TIME,GMT_TIME-12HR,GMT_TIME-DATE-24HR,GMT_TIME-24HR,LOCAL_TIME-12HR,LOCAL_TIME-DATE-24HR,LOCAL_TIME-24HR,ISO_TIME,ISO_TIME_MS,NET_TIME,TIMET_TIME,TIMET_TIME_MS,YYYYMMDD_TIME' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'OFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'OFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'OFIELD ISO_TIME, "", "%s"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD LAT_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD LON_DECIMAL,"","%.6f"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%.12e"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%Y-%m-%d %H:%M:%S"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%I:%M:%S %p"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD LOCAL_TIME, "", "%Y-%m-%d"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD LOCAL_TIME, "", "%H:%M:%S"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%s"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%lld"' >> ${TMPDIR}/datetime_hmsl2.style
+  echo 'IFIELD IGNORE, "", "%ld"' >> ${TMPDIR}/datetime_hmsl2.style
+
+  gpsbabel -i xcsv,style=${TMPDIR}/datetime_hmsl2.style -f ${REFERENCE}/datetime~xcsv.xcsv -o xcsv,style=${TMPDIR}/datetime_hmsl2.style -F ${TMPDIR}/datetime_hmsl2.xcsv
+  compare ${REFERENCE}/datetime_read.xcsv ${TMPDIR}/datetime_hmsl2.xcsv
+
+  unset -v TZ
+fi

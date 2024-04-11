@@ -35,7 +35,7 @@
 #include "format.h"              // for Format
 #include "gbfile.h"              // for gbfile
 #include "src/core/datetime.h"   // for DateTime
-#include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, xg_string, cb_start, cb_end
+#include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, cb_start, cb_end
 
 
 class GtrnctrFormat : public Format
@@ -85,7 +85,7 @@ private:
 
   /* Member Functions */
 
-  void gtc_write_xml(int indent, const char* fmt, ...);
+  [[gnu::format(printf, 3, 4)]] void gtc_write_xml(int indent, const char* fmt, ...);
   void gtc_write_xml(int indent, const QString& s);
   void gtc_lap_start(const route_head*  /* unused */);
   static computed_trkdata gtc_new_study_lap(const route_head* rte);
@@ -97,25 +97,25 @@ private:
   void gtc_crs_hdr(const route_head* rte);
   void gtc_crs_ftr(const route_head*  /* unused */);
 
-  void gtc_trk_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_ident(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lap_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lap_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pnt_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pnt_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_utc(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_lat(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_long(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_alt(xg_string args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_ident(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lap_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lap_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pnt_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pnt_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_utc(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_lat(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_long(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_alt(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_dist(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_hr(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_trk_cad(const QString& args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_pwr(xg_string args, const QXmlStreamAttributes*  /* unused */);
-  void gtc_trk_spd(xg_string args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_pwr(const QString& args, const QXmlStreamAttributes*  /* unused */);
+  void gtc_trk_spd(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_crs_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_crs_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_pnt_s(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
-  void gtc_wpt_pnt_e(xg_string  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_crs_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_pnt_s(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
+  void gtc_wpt_pnt_e(const QString&  /* unused */, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_ident(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_lat(const QString& args, const QXmlStreamAttributes*  /* unused */);
   void gtc_wpt_long(const QString& args, const QXmlStreamAttributes*  /* unused */);
@@ -154,71 +154,72 @@ private:
     },
   };
 
-  QList<xg_functor_map_entry<GtrnctrFormat>> gtc_map = {
+  QList<XmlGenericReader::xg_fmt_map_entry<GtrnctrFormat>> gtc_map = {
     /* courses tcx v1 & v2 */
-    { &GtrnctrFormat::gtc_trk_s,    cb_start, "/Courses/Course" },
-    { &GtrnctrFormat::gtc_trk_ident,cb_cdata, "/Courses/Course/Name"},
-    { &GtrnctrFormat::gtc_trk_pnt_s,cb_start, "/Courses/Course/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_pnt_e,cb_end,   "/Courses/Course/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_utc,  cb_cdata, "/Courses/Course/Track/Trackpoint/Time" },
-    { &GtrnctrFormat::gtc_trk_lat,  cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LatitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_long, cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LongitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Courses/Course/Track/Trackpoint/AltitudeMeters" },
-    { &GtrnctrFormat::gtc_trk_hr,   cb_cdata, "/Courses/Course/Track/Trackpoint/HeartRateBpm" },
-    { &GtrnctrFormat::gtc_trk_cad,  cb_cdata, "/Courses/Course/Track/Trackpoint/Cadence" },
-    { &GtrnctrFormat::gtc_wpt_crs_s,cb_start, "/Courses/Course/CoursePoint" },
-    { &GtrnctrFormat::gtc_wpt_crs_e,cb_end,   "/Courses/Course/CoursePoint" },
-    { &GtrnctrFormat::gtc_wpt_ident,cb_cdata, "/Courses/Course/CoursePoint/Name"},
-    { &GtrnctrFormat::gtc_trk_utc,  cb_cdata, "/Courses/Course/CoursePoint/Time"},
-    { &GtrnctrFormat::gtc_wpt_lat,  cb_cdata, "/Courses/Course/CoursePoint/Position/LatitudeDegrees"},
-    { &GtrnctrFormat::gtc_wpt_long, cb_cdata, "/Courses/Course/CoursePoint/Position/LongitudeDegrees"},
-    { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Courses/Course/CoursePoint/AltitudeMeters" },
-    { &GtrnctrFormat::gtc_wpt_icon, cb_cdata, "/Courses/Course/CoursePoint/PointType" },
-    { &GtrnctrFormat::gtc_wpt_notes,cb_cdata, "/Courses/Course/CoursePoint/Notes" },
+    { &GtrnctrFormat::gtc_trk_s, xg_cb_type::cb_start, "/Courses/Course" },
+    { &GtrnctrFormat::gtc_trk_ident, xg_cb_type::cb_cdata, "/Courses/Course/Name"},
+    { &GtrnctrFormat::gtc_trk_pnt_s, xg_cb_type::cb_start, "/Courses/Course/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_pnt_e, xg_cb_type::cb_end,   "/Courses/Course/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_utc, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/Time" },
+    { &GtrnctrFormat::gtc_trk_lat, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LatitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_long, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LongitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_alt, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/AltitudeMeters" },
+    { &GtrnctrFormat::gtc_trk_hr, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/HeartRateBpm" },
+    { &GtrnctrFormat::gtc_trk_cad, xg_cb_type::cb_cdata, "/Courses/Course/Track/Trackpoint/Cadence" },
+    { &GtrnctrFormat::gtc_wpt_crs_s, xg_cb_type::cb_start, "/Courses/Course/CoursePoint" },
+    { &GtrnctrFormat::gtc_wpt_crs_e, xg_cb_type::cb_end,   "/Courses/Course/CoursePoint" },
+    { &GtrnctrFormat::gtc_wpt_ident, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/Name"},
+    { &GtrnctrFormat::gtc_trk_utc, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/Time"},
+    { &GtrnctrFormat::gtc_wpt_lat, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/Position/LatitudeDegrees"},
+    { &GtrnctrFormat::gtc_wpt_long, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/Position/LongitudeDegrees"},
+    { &GtrnctrFormat::gtc_trk_alt, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/AltitudeMeters" },
+    { &GtrnctrFormat::gtc_wpt_icon, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/PointType" },
+    { &GtrnctrFormat::gtc_wpt_notes, xg_cb_type::cb_cdata, "/Courses/Course/CoursePoint/Notes" },
 
     /* history tcx v2 (activities) */
-    { &GtrnctrFormat::gtc_trk_s,    cb_start, "/Activities/Activity" },
-    { &GtrnctrFormat::gtc_trk_ident,cb_cdata, "/Activities/Activity/Id" },
-    { &GtrnctrFormat::gtc_trk_lap_s,cb_start, "/Activities/Activity/Lap" },
-    { &GtrnctrFormat::gtc_trk_lap_e,cb_end,   "/Activities/Activity/Lap" },
-    { &GtrnctrFormat::gtc_trk_pnt_s,cb_start, "/Activities/Activity/Lap/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_pnt_e,cb_end,   "/Activities/Activity/Lap/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_utc,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Time" },
-    { &GtrnctrFormat::gtc_trk_lat,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_long, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
-    { &GtrnctrFormat::gtc_trk_dist, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/DistanceMeters" },
-    { &GtrnctrFormat::gtc_trk_hr,   cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
-    { &GtrnctrFormat::gtc_trk_cad,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
-    { &GtrnctrFormat::gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
+    { &GtrnctrFormat::gtc_trk_s, xg_cb_type::cb_start, "/Activities/Activity" },
+    { &GtrnctrFormat::gtc_trk_ident, xg_cb_type::cb_cdata, "/Activities/Activity/Id" },
+    { &GtrnctrFormat::gtc_trk_lap_s, xg_cb_type::cb_start, "/Activities/Activity/Lap" },
+    { &GtrnctrFormat::gtc_trk_lap_e, xg_cb_type::cb_end,   "/Activities/Activity/Lap" },
+    { &GtrnctrFormat::gtc_trk_pnt_s, xg_cb_type::cb_start, "/Activities/Activity/Lap/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_pnt_e, xg_cb_type::cb_end,   "/Activities/Activity/Lap/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_utc, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Time" },
+    { &GtrnctrFormat::gtc_trk_lat, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_long, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_alt, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
+    { &GtrnctrFormat::gtc_trk_dist, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/DistanceMeters" },
+    { &GtrnctrFormat::gtc_trk_hr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
+    { &GtrnctrFormat::gtc_trk_cad, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
+    { &GtrnctrFormat::gtc_trk_pwr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
     // Sample from Marcelo Kittlein 5/2014 declares a default namespace with the start tag of the TPX element,
     // and thus doesn't use prefixes.
-    { &GtrnctrFormat::gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Watts" },
+    { &GtrnctrFormat::gtc_trk_pwr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Watts" },
     // It looks like Speed and Watts should be siblings, but Garmin can't get
     // their namespace act very consistent.  This works for a sample provided
     // by Laurent Desmons in 5/2013.
-    { &GtrnctrFormat::gtc_trk_spd,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Speed" },
+    { &GtrnctrFormat::gtc_trk_spd, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Speed" },
 
     /* history tcx v1 */
-    { &GtrnctrFormat::gtc_trk_s,    cb_start, "/History/Run" },
-    { &GtrnctrFormat::gtc_trk_ident,cb_cdata, "/History/Run/Id" },
-    { &GtrnctrFormat::gtc_trk_lap_s,cb_start, "/History/Run/Lap" },
-    { &GtrnctrFormat::gtc_trk_lap_e,cb_end,   "/History/Run/Lap" },
-    { &GtrnctrFormat::gtc_trk_pnt_s,cb_start, "/History/Run/Lap/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_pnt_e,cb_end,   "/History/Run/Lap/Track/Trackpoint" },
-    { &GtrnctrFormat::gtc_trk_utc,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Time" },
-    { &GtrnctrFormat::gtc_trk_lat,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_long, cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/AltitudeMeters" },
-    { &GtrnctrFormat::gtc_trk_hr,   cb_cdata, "/History/Run/Lap/Track/Trackpoint/HeartRateBpm" },
-    { &GtrnctrFormat::gtc_trk_cad,  cb_cdata, "/History/Run/Lap/Track/Trackpoint/Cadence" },
+    { &GtrnctrFormat::gtc_trk_s, xg_cb_type::cb_start, "/History/Run" },
+    { &GtrnctrFormat::gtc_trk_ident, xg_cb_type::cb_cdata, "/History/Run/Id" },
+    { &GtrnctrFormat::gtc_trk_lap_s, xg_cb_type::cb_start, "/History/Run/Lap" },
+    { &GtrnctrFormat::gtc_trk_lap_e, xg_cb_type::cb_end,   "/History/Run/Lap" },
+    { &GtrnctrFormat::gtc_trk_pnt_s, xg_cb_type::cb_start, "/History/Run/Lap/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_pnt_e, xg_cb_type::cb_end,   "/History/Run/Lap/Track/Trackpoint" },
+    { &GtrnctrFormat::gtc_trk_utc, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/Time" },
+    { &GtrnctrFormat::gtc_trk_lat, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_long, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_alt, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/AltitudeMeters" },
+    { &GtrnctrFormat::gtc_trk_hr, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/HeartRateBpm" },
+    { &GtrnctrFormat::gtc_trk_cad, xg_cb_type::cb_cdata, "/History/Run/Lap/Track/Trackpoint/Cadence" },
 
-    { &GtrnctrFormat::gtc_wpt_pnt_s,cb_start, "/Courses/Course/Lap/BeginPosition" },
-    { &GtrnctrFormat::gtc_wpt_pnt_e,cb_end, "/Courses/Course/Lap/BeginPosition" },
-    { &GtrnctrFormat::gtc_wpt_lat,  cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
-    { &GtrnctrFormat::gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
-    { &GtrnctrFormat::gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" }
+    { &GtrnctrFormat::gtc_wpt_pnt_s, xg_cb_type::cb_start, "/Courses/Course/Lap/BeginPosition" },
+    { &GtrnctrFormat::gtc_wpt_pnt_e, xg_cb_type::cb_end, "/Courses/Course/Lap/BeginPosition" },
+    { &GtrnctrFormat::gtc_wpt_lat, xg_cb_type::cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
+    { &GtrnctrFormat::gtc_wpt_long, xg_cb_type::cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
+    { &GtrnctrFormat::gtc_trk_alt, xg_cb_type::cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" }
   };
+  XmlGenericReader* xml_reader{nullptr};
 
   int gtc_indent_level{};
 };

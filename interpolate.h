@@ -1,7 +1,7 @@
 /*
     Interpolate filter
 
-    Copyright (C) 2002 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002,2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +22,8 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <optional>             // for optional
-
+#include <QString>              // for QString
 #include <QVector>              // for QVector
-#include <QtGlobal>             // for qint64
 
 #include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
 #include "filter.h"             // for Filter
@@ -43,6 +41,12 @@ public:
   void process() override;
 
 private:
+  /* Member Functions */
+
+  void process_rte(route_head* rte);
+
+  /* Data Members */
+
   char* opt_time{nullptr};
   double max_time_step{0};
   char* opt_dist{nullptr};

@@ -70,27 +70,28 @@ typedef struct {
 /*
  * Display an error from the serial subsystem.
  */
-void GPS_Serial_Error(const char* mb, ...)
+void GPS_Serial_Error(const char* fmt, ...)
 {
   va_list ap;
   char msg[200];
   char* s;
   int b;
 
-  va_start(ap, mb);
-  b = vsnprintf(msg, sizeof(msg), mb, ap);
+  va_start(ap, fmt);
+  b = vsnprintf(msg, sizeof(msg), fmt, ap);
   s = msg + b;
   *s++ = ':';
   *s++ = ' ';
 
-  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0,
-                GetLastError(), 0, s, sizeof(msg) - b - 2, 0);
-  GPS_Error(msg);
+  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+                GetLastError(), 0, s, sizeof(msg) - b - 2, nullptr);
+
+  GPS_Error("%s", msg); // valid clang -Wformat-security warning
 
   va_end(ap);
 }
 
-int32 GPS_Serial_On(const char* port, gpsdevh** dh)
+int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
   DCB tio;
   COMMTIMEOUTS timeout;
@@ -160,7 +161,7 @@ int32 GPS_Serial_On(const char* port, gpsdevh** dh)
   return 1;
 }
 
-int32 GPS_Serial_Off(gpsdevh* dh)
+int32_t GPS_Serial_Off(gpsdevh* dh)
 {
   win_serial_data* wsd = (win_serial_data*)dh;
   CloseHandle(wsd->comport);
@@ -169,7 +170,7 @@ int32 GPS_Serial_Off(gpsdevh* dh)
   return 1;
 }
 
-int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
+int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
 {
   COMSTAT lpStat;
   DWORD lpErrors;
@@ -179,7 +180,7 @@ int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
   return (lpStat.cbInQue > 0);
 }
 
-int32 GPS_Serial_Wait(gpsdevh* fd)
+int32_t GPS_Serial_Wait(gpsdevh* fd)
 {
   /* Wait a short time before testing if data is ready.
    * The GPS II, in particular, has a noticable time responding
@@ -192,12 +193,12 @@ int32 GPS_Serial_Wait(gpsdevh* fd)
   return GPS_Serial_Chars_Ready(fd);
 }
 
-int32 GPS_Serial_Flush(gpsdevh* /* fd */)
+int32_t GPS_Serial_Flush(gpsdevh* /* fd */)
 {
   return 1;
 }
 
-int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
+int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 {
   win_serial_data* wsd = (win_serial_data*)dh;
   DWORD len;
@@ -219,7 +220,7 @@ int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
   return len;
 }
 
-int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
+int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 {
   DWORD cnt  = 0;
   win_serial_data* wsd = (win_serial_data*)dh;
@@ -230,11 +231,11 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 
 // Based on information by Kolesár András from
 // http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
-int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
+int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
 {
   static UC data[4];
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
   win_serial_data* wsd = (win_serial_data*)fd;
 
   DWORD speed = mkspeed(br);
@@ -325,13 +326,13 @@ typedef struct {
 **
 ** Open a serial port 8bits 1 stop bit 9600 baud
 **
-** @param [w] fd [int32 *] file descriptor
+** @param [w] fd [int32_t *] file descriptor
 ** @param [r] port [const char *] port e.g. ttyS1
 **
-** @return [int32] false upon error
+** @return [int32_t] false upon error
 ************************************************************************/
 
-int32 GPS_Serial_Open(gpsdevh* dh, const char* port)
+int32_t GPS_Serial_Open(gpsdevh* dh, const char* port)
 {
   struct termios tty;
   if (global_opts.debug_level >= 2) fprintf(stderr, "GPS Serial Open at %d\n", gps_baud_rate);
@@ -379,28 +380,21 @@ int32 GPS_Serial_Open(gpsdevh* dh, const char* port)
 /*
  * Display an error from the serial subsystem.
  */
-void GPS_Serial_Error(const char* mb, ...)
+void GPS_Serial_Error(const char* fmt, ...)
 {
   va_list ap;
   char msg[200];
-  char* s;
-  int b;
 
-  va_start(ap, mb);
-  b = vsnprintf(msg, sizeof(msg), mb, ap);
-  s = msg + b;
-  *s++ = ':';
-  *s++ = ' ';
-  *s++ = '\0';
+  va_start(ap, fmt);
+  vsnprintf(msg, sizeof(msg), fmt, ap);
 
 //	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0,
 //			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
-  strcat(msg, strerror(errno));
-  GPS_Error(msg);
+  GPS_Error("%s: %s", msg, strerror(errno));
   va_end(ap);
 }
 
-int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
+int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 {
   auto* psd = (posix_serial_data*)dh;
 #if GARMULATOR
@@ -432,7 +426,7 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 #endif
 }
 
-int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
+int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 {
   auto* psd = (posix_serial_data*)dh;
   return write(psd->fd, obuf, size);
@@ -443,11 +437,11 @@ int32 GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 **
 ** Flush the serial lines
 **
-** @param [w] fd [int32] file descriptor
+** @param [w] fd [int32_t] file descriptor
 **
-** @return [int32] false upon error
+** @return [int32_t] false upon error
 ************************************************************************/
-int32 GPS_Serial_Flush(gpsdevh* fd)
+int32_t GPS_Serial_Flush(gpsdevh* fd)
 {
   auto* psd = (posix_serial_data*)fd;
 
@@ -466,13 +460,13 @@ int32 GPS_Serial_Flush(gpsdevh* fd)
 **
 ** Close serial port
 **
-** @param [r] fd [int32 ] file descriptor
+** @param [r] fd [int32_t ] file descriptor
 ** @param [r] port [const char *] port e.g. ttyS1
 **
-** @return [int32] false upon error
+** @return [int32_t] false upon error
 ************************************************************************/
 
-int32 GPS_Serial_Close(gpsdevh* fd)
+int32_t GPS_Serial_Close(gpsdevh* fd)
 {
   auto* psd = (posix_serial_data*)fd;
 
@@ -496,17 +490,17 @@ int32 GPS_Serial_Close(gpsdevh* fd)
 **
 ** Query port to see if characters are waiting to be read
 **
-** @param [r] fd [int32 ] file descriptor
+** @param [r] fd [int32_t ] file descriptor
 **
-** @return [int32] true if chars waiting
+** @return [int32_t] true if chars waiting
 ************************************************************************/
 
-int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
+int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
 {
   fd_set rec;
   struct timeval t;
   auto* psd = (posix_serial_data*)dh;
-  int32 fd = psd->fd;
+  int32_t fd = psd->fd;
 
 #if GARMULATOR
   static foo;
@@ -539,12 +533,12 @@ int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
 ** appears to be around 40-50 milliseconds. Doubling the value is to
 ** allow some leeway.
 **
-** @param [r] fd [int32 ] file descriptor
+** @param [r] fd [int32_t ] file descriptor
 **
-** @return [int32] true if serial chars waiting
+** @return [int32_t] true if serial chars waiting
 ************************************************************************/
 
-int32 GPS_Serial_Wait(gpsdevh* dh)
+int32_t GPS_Serial_Wait(gpsdevh* dh)
 {
   fd_set rec;
   struct timeval t;
@@ -571,12 +565,12 @@ int32 GPS_Serial_Wait(gpsdevh* dh)
 ** Set up port
 **
 ** @param [r] port [const char *] port
-** @param [w] fd [int32 *] file descriptor
+** @param [w] fd [int32_t *] file descriptor
 **
-** @return [int32] success
+** @return [int32_t] success
 ************************************************************************/
 
-int32 GPS_Serial_On(const char* port, gpsdevh** dh)
+int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
   auto* psd = (posix_serial_data*) xcalloc(sizeof(posix_serial_data), 1);
   *dh = (gpsdevh*) psd;
@@ -597,12 +591,12 @@ int32 GPS_Serial_On(const char* port, gpsdevh** dh)
 ** Done with port
 **
 ** @param [r] port [const char *] port
-** @param [r] fd [int32 ] file descriptor
+** @param [r] fd [int32_t ] file descriptor
 **
-** @return [int32] success
+** @return [int32_t] success
 ************************************************************************/
 
-int32 GPS_Serial_Off(gpsdevh* dh)
+int32_t GPS_Serial_Off(gpsdevh* dh)
 {
 
   if (!GPS_Serial_Close(dh)) {
@@ -610,18 +604,19 @@ int32 GPS_Serial_Off(gpsdevh* dh)
     gps_errno = HARDWARE_ERROR;
     return 0;
   }
+  xfree(dh);
   return 1;
 }
 
 // Based on information by Kolesár András from
 // http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
-int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
+int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
 {
 
   struct termios tty;
   static UC data[4];
-  GPS_PPacket tra;
-  GPS_PPacket rec;
+  GPS_Packet tra;
+  GPS_Packet rec;
 
   speed_t speed = mkspeed(br);
 
