@@ -6,7 +6,7 @@ gpsbabel -i ozi -f ${TMPDIR}/oz.wpt -o ozi -F ${TMPDIR}/ozi.wpt
 compare ${TMPDIR}/ozi.wpt ${REFERENCE}
 
 # Same, but with colors set
-gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o ozi,wptfgcolor=222,wptbgcolor=red -F ${TMPDIR}/ozi-color.wpt
+gpsbabel -i geo -f ${REFERENCE}/geocaching.loc  -o ozi,wptfgcolor=#de0000,wptbgcolor=red -F ${TMPDIR}/ozi-color.wpt
 compare ${TMPDIR}/ozi-color.wpt ${REFERENCE}
 
 # Test Ozi routes.
