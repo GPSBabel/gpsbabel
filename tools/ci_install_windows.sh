@@ -18,8 +18,8 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.12.10}
-COMPILER=${2:-msvc2017_64}
+QT_VERSION=${1:-5.15.2}
+COMPILER=${2:-msvc2019_64}
 METHOD=${3:-default}
 
 if [ "${COMPILER}" = "msvc2017_64" ]; then
@@ -28,6 +28,8 @@ elif [ "${COMPILER}" = "msvc2017" ]; then
   PACKAGE_SUFFIX=win32_msvc2017
 elif [ "${COMPILER}" = "msvc2019_64" ]; then
   PACKAGE_SUFFIX=win64_msvc2019_64
+elif [ "${COMPILER}" = "msvc2019" ]; then
+  PACKAGE_SUFFIX=win32_msvc2019
 else
   echo "ERROR: unrecognized Qt compiler ${COMPILER}." >&2
   exit 1

@@ -4,7 +4,7 @@ track.  If two points in the track are further apart than this value, new
 points will be inserted between them.
 </para>
 <para>
-This value may be specified in units of miles (3M) or kilometers (5K).  If
+This value may be specified in units of miles (3M, 3.5M) or kilometers (5K, 5.7K).  If
 no units are specified, the units are assumed to be miles.
 </para>
 <para>

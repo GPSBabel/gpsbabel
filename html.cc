@@ -33,6 +33,7 @@
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
 #include "geocache.h"              // for Geocache, Geocache::UtfString
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
+#include "mkshort.h"               // for MakeShort
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/textstream.h"   // for TextStream
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
@@ -45,7 +46,7 @@ HtmlFormat::wr_init(const QString& fname)
 {
   file_out = new gpsbabel::TextStream;
   file_out->open(fname, QIODevice::WriteOnly, MYNAME);
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
 }
 
 void
@@ -54,7 +55,8 @@ HtmlFormat::wr_deinit()
   file_out->close();
   delete file_out;
   file_out = nullptr;
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 }
 
 QString HtmlFormat::create_id(int sequence_number)
@@ -78,7 +80,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
   *file_out << "  <div id=\"" << create_id(waypoint_number) << "\"><hr>\n";
   *file_out << "    <table style=\"width:100%\">\n";
-  QString sn = global_opts.synthesize_shortnames ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname;
+  QString sn = global_opts.synthesize_shortnames ? mkshort_handle->mkshort_from_wpt(wpt) : wpt->shortname;
   *file_out << "      <tr>\n";
   *file_out << "        <td>\n";
   *file_out << "          <p class=\"gpsbabelwaypoint\">" << sn << " - ";
@@ -166,7 +168,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toUTC();
           *file_out << "<span class=\"gpsbabellogdate\">"
                     << logtime.toString(u"yyyy-MM-dd") << "</span><br>\n";
         }
@@ -216,7 +218,7 @@ HtmlFormat::html_index(const Waypoint* wpt) const
 void
 HtmlFormat::write()
 {
-  setshort_length(mkshort_handle, 6);
+  mkshort_handle->set_length(6);
 
   *file_out << "<!DOCTYPE html>\n";
   *file_out << "<html>\n";

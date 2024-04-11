@@ -4,7 +4,7 @@ short name (traditionally a waypoint's name on the GPS receiver), and/or
 their location (to a  precision of 6 decimals).  This filter supports two
 options that specify how duplicates will be recognized,
 <option>shortname</option> and <option>location</option>.
-Generally, at least one of these options is required.
+At least one of these options is required.
 </para>
 <example xml:id="duplicate_to_suppress_points">
   <title>Using the duplicate filter to suppress points with the same

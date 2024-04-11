@@ -1,7 +1,7 @@
 /*
     exact duplicate point filter utility.
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ public:
   {
     return &args;
   }
+  void init() override;
   void process() override;
 
 private:
@@ -63,16 +64,6 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
-
-  struct btree_node {
-    btree_node* left;
-    btree_node* right;
-    unsigned long data;
-    Waypoint* wpt;
-  };
-
-  static btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
-  void free_tree(btree_node* tree);
 
 };
 #endif
