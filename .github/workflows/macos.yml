@@ -74,11 +74,11 @@ jobs:
         # https://github.com/actions/runner-images/issues/2322
         # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
         brew list -1 | grep python
-        ls -l /usr/local/bin | grep python
+        ls -l /usr/local/bin | grep -i python
         # workaround for https://github.com/actions/setup-python/issues/577
         brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
         brew list -1 | grep python
-        ls -l /usr/local/bin | grep python
+        ls -l /usr/local/bin | grep -i python
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
