@@ -19,25 +19,25 @@ jobs:
       matrix:
         include:
           - QT_VERSION: '5.15.2'
-            XCODE_VERSION: '12.5.1'
+            XCODE_VERSION: '13.4.1'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-11
+            os: macos-12
           - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            XCODE_VERSION: '14.3.1'
             GENERATOR: 'Xcode'
             RELEASE: false
-            os: macos-12
+            os: macos-13
           - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            XCODE_VERSION: '14.3.1'
             GENERATOR: 'Ninja'
             RELEASE: true
-            os: macos-12
+            os: macos-13
           - QT_VERSION: '6.5.3'
-            XCODE_VERSION: '14.2'
+            XCODE_VERSION: '15.3'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-12
+            os: macos-14
 
     steps:
     - name: Checkout repository
@@ -54,7 +54,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
@@ -73,6 +73,12 @@ jobs:
         # https://github.com/actions/runner-images/issues/6507
         # https://github.com/actions/runner-images/issues/2322
         # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
+        # workaround for https://github.com/actions/setup-python/issues/577
+        brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
@@ -82,7 +88,7 @@ jobs:
 
     - name: Script
       env:
-        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+        XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
