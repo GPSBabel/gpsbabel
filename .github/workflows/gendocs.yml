@@ -1,0 +1,59 @@
+name: "gendocs"
+
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+  workflow_dispatch:
+    inputs:
+      docversion:
+        required: false
+        type: string
+        default: 'development'
+
+jobs:
+  ubuntu:
+    name: ubuntu Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            RELEASE: true
+    container:
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
+      env:
+        LC_ALL: 'C.UTF-8'
+        JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_SCRIPT: ${{ matrix.SCRIPT }}
+        JOB_DOCVERSION: ${{ inputs.docversion }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: build_and_test
+      run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+        if [ -n "${JOB_CMAKE_PREFIX_PATH}" ]; then
+          CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
+          export CMAKE_PREFIX_PATH
+        fi
+        "${JOB_SCRIPT}" "${JOB_DOCVERSION:-development}"
+
+    - name: 'Upload Artifacts'
+      if: matrix.RELEASE
+      uses: actions/upload-artifact@v4
+      with:
+        name: Documents
+        path: |
+          gpsbabel.org/
+          gpsbabel.pdf
+          gpsbabel.html
+          docbook.css
+        retention-days: 7

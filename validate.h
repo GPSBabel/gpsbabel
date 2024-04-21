@@ -59,9 +59,9 @@ private:
     },
   };
 
-  void validate_head(const route_head*);
+  void validate_head(const route_head* /*unused*/);
   void validate_head_trl(const route_head* header);
-  void validate_point(const Waypoint*);
+  void validate_point(const Waypoint* /*unused*/);
 
 };
 

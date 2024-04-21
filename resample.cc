@@ -1,7 +1,7 @@
 /*
     Track resampling filter
 
-    Copyright (C) 2021 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2021,2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,15 +23,16 @@
 
 #include <cmath>                // for round
 #include <optional>             // for optional
+#include <tuple>                // for tuple, tuple_element<>::type
+#include <utility>              // for as_const
 
 #include <QDebug>               // for QDebug
 #include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString
 #include <QTextStream>          // for qSetRealNumberPrecision
-#include <QtGlobal>             // for qDebug, qAsConst, qint64
+#include <QtGlobal>             // for qDebug, qint64
 
 #include "defs.h"               // for Waypoint, route_head, fatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
-#include "formspec.h"           // for FormatSpecificDataList
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for FatalMsg
 #include "src/core/nvector.h"   // for NVector
@@ -88,7 +89,7 @@ void ResampleFilter::average_waypoint(Waypoint* wpt, bool zero_stuffed)
     }
     counter = 0;
     if (global_opts.debug_level >= 5) {
-      for (const auto& [pos, avc, alt] : qAsConst(history)) {
+      for (const auto& [pos, avc, alt] : std::as_const(history)) {
         qDebug() << "initial conditions" << pos << avc << alt;
       }
       qDebug() << "initial accumulator" << accumulated_position << accumulated_altitude_valid_count << accumulated_altitude;
@@ -126,85 +127,80 @@ void ResampleFilter::average_waypoint(Waypoint* wpt, bool zero_stuffed)
   counter = (counter + 1) % average_count;
 }
 
+void ResampleFilter::interpolate_rte(route_head* rte)
+{
+  // Steal all the wpts
+  WaypointList wptlist;
+  track_swap_wpts(rte, wptlist);
+
+  // And add them back, with zero stuffed points interspersed.
+  bool first = true;
+  const Waypoint* prevwpt;
+  foreach (Waypoint* wpt, wptlist) {
+    if (first) {
+      first = false;
+    } else {
+      std::optional<qint64> timespan;
+      if (prevwpt->creation_time.isValid() && wpt->creation_time.isValid()) {
+        timespan = wpt->creation_time.toMSecsSinceEpoch() -
+                   prevwpt->creation_time.toMSecsSinceEpoch();
+      }
+
+      // Insert the required points
+      for (int n = 0; n < interpolate_count - 1; ++n) {
+        double frac = static_cast<double>(n + 1) /
+                      static_cast<double>(interpolate_count);
+        // We create the inserted point from the Waypoint at the
+        // beginning of the span.  We clear some fields but use a
+        // copy of the rest or the interpolated value.
+        auto* wpt_new = new Waypoint(*prevwpt);
+        wpt_new->wpt_flags.new_trkseg = 0;
+        wpt_new->shortname = QString();
+        wpt_new->description = QString();
+        if (timespan.has_value()) {
+          wpt_new->SetCreationTime(0, prevwpt->creation_time.toMSecsSinceEpoch() +
+                                   round(frac * *timespan));
+        } else {
+          wpt_new->creation_time = gpsbabel::DateTime();
+        }
+        // zero stuff
+        wpt_new->latitude = 0.0;
+        wpt_new->longitude = 0.0;
+        wpt_new->altitude = 0.0;
+        wpt_new->extra_data = &wpt_zero_stuffed;
+        track_add_wpt(rte, wpt_new);
+      }
+    }
+    wpt->extra_data = nullptr;
+    track_add_wpt(rte, wpt);
+
+    prevwpt = wpt;
+  }
+}
+
+void ResampleFilter::decimate_rte(const route_head* rte)
+{
+  int index = 0;
+  foreach (Waypoint* wpt, rte->waypoint_list) {
+    if (index % decimate_count != 0) {
+      wpt->wpt_flags.marked_for_deletion = 1;
+    }
+    ++index;
+  }
+  track_del_marked_wpts(const_cast<route_head*>(rte));
+}
+
 void ResampleFilter::process()
 {
   if (interpolateopt) {
-    RouteList backuptrack;
-    track_swap(backuptrack);
-
-    if (backuptrack.empty()) {
+    if (track_count() == 0) {
       fatal(FatalMsg() << MYNAME ": Found no tracks to operate on.");
     }
 
-    for (const auto* rte_old : qAsConst(backuptrack)) {
-      // FIXME: Allocating a new route_head and copying the members one at a
-      // time is not maintainable.  When new members are added it is likely
-      // they will not be copied here!
-      // We want a deep copy of everything but with an empty WaypointList.
-      auto* rte_new = new route_head;
-      rte_new->rte_name = rte_old->rte_name;
-      rte_new->rte_desc = rte_old->rte_desc;
-      rte_new->rte_urls = rte_old->rte_urls;
-      rte_new->rte_num = rte_old->rte_num;
-      rte_new->fs = rte_old->fs.FsChainCopy();
-      rte_new->line_color = rte_old->line_color;
-      rte_new->line_width = rte_old->line_width;
-      rte_new->session = rte_old->session;
-      track_add_head(rte_new);
-
-      bool first = true;
-      const Waypoint* prevwpt;
-      for (const auto* wpt : rte_old->waypoint_list) {
-        if (first) {
-          first = false;
-        } else {
-          std::optional<qint64> timespan;
-          if (prevwpt->creation_time.isValid() && wpt->creation_time.isValid()) {
-            timespan = wpt->creation_time.toMSecsSinceEpoch() -
-                       prevwpt->creation_time.toMSecsSinceEpoch();
-          }
-
-          {
-            auto* newwpt = new Waypoint(*const_cast<Waypoint*>(prevwpt));
-            newwpt->extra_data = nullptr;
-            track_add_wpt(rte_new, newwpt);
-          }
-          // Insert the required points
-          for (int n = 0; n < interpolate_count - 1; ++n) {
-            double frac = static_cast<double>(n + 1) /
-                          static_cast<double>(interpolate_count);
-            // We create the inserted point from the Waypoint at the
-            // beginning of the span.  We clear some fields but use a
-            // copy of the rest or the interpolated value.
-            auto* wpt_new = new Waypoint(*prevwpt);
-            wpt_new->wpt_flags.new_trkseg = 0;
-            wpt_new->shortname = QString();
-            wpt_new->description = QString();
-            if (timespan.has_value()) {
-              wpt_new->SetCreationTime(0, prevwpt->creation_time.toMSecsSinceEpoch() +
-                                       round(frac * *timespan));
-            } else {
-              wpt_new->creation_time = gpsbabel::DateTime();
-            }
-            // zero stuff
-            wpt_new->latitude = 0.0;
-            wpt_new->longitude = 0.0;
-            wpt_new->altitude = 0.0;
-            wpt_new->extra_data = &wpt_zero_stuffed;
-            track_add_wpt(rte_new, wpt_new);
-          }
-
-          if (wpt == rte_old->waypoint_list.back()) {
-            auto* newwpt = new Waypoint(*const_cast<Waypoint*>(wpt));
-            newwpt->extra_data = nullptr;
-            track_add_wpt(rte_new, newwpt);
-          }
-        }
-
-        prevwpt = wpt;
-      }
-    }
-    backuptrack.flush();
+    auto interpolate_rte_lambda = [this](const route_head* rte)->void {
+      interpolate_rte(const_cast<route_head*>(rte));
+    };
+    track_disp_all(interpolate_rte_lambda, nullptr, nullptr);
   }
 
   if (averageopt) {
@@ -232,50 +228,14 @@ void ResampleFilter::process()
   }
 
   if (decimateopt) {
-    // This is ~20x faster than deleting the points in the existing route one at a time.
-    RouteList backuptrack;
-    track_swap(backuptrack);
-
-    if (backuptrack.empty()) {
+    if (track_count() == 0) {
       fatal(FatalMsg() << MYNAME ": Found no tracks to operate on.");
     }
 
-    for (const auto* rte_old : qAsConst(backuptrack)) {
-      // FIXME: Allocating a new route_head and copying the members one at a
-      // time is not maintainable.  When new members are added it is likely
-      // they will not be copied here!
-      // We want a deep copy of everything but with an empty WaypointList.
-      auto* rte_new = new route_head;
-      rte_new->rte_name = rte_old->rte_name;
-      rte_new->rte_desc = rte_old->rte_desc;
-      rte_new->rte_urls = rte_old->rte_urls;
-      rte_new->rte_num = rte_old->rte_num;
-      rte_new->fs = rte_old->fs.FsChainCopy();
-      rte_new->line_color = rte_old->line_color;
-      rte_new->line_width = rte_old->line_width;
-      rte_new->session = rte_old->session;
-      track_add_head(rte_new);
-
-      bool newseg = false;
-      int index = 0;
-      for (const auto* wpt : rte_old->waypoint_list) {
-        if (index % decimate_count == 0) {
-          auto* newwpt = new Waypoint(*const_cast<Waypoint*>(wpt));
-          if (newseg) {
-            newwpt->wpt_flags.new_trkseg = 1;
-          }
-          track_add_wpt(rte_new, newwpt);
-          newseg = false;
-        } else {
-          // carry any new track segment marker forward.
-          if (wpt->wpt_flags.new_trkseg) {
-            newseg = true;
-          }
-        }
-        ++index;
-      }
-    }
-    backuptrack.flush();
+    auto decimate_rte_lambda = [this](const route_head* rte)->void {
+      decimate_rte(rte);
+    };
+    track_disp_all(decimate_rte_lambda, nullptr, nullptr);
   }
 }
 

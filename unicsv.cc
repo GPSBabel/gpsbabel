@@ -24,6 +24,7 @@
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <ctime>                   // for tm
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -42,7 +43,7 @@
 #include "defs.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
@@ -156,7 +157,6 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "diff",	fld_gc_diff, kStrAny },
   { "arch",	fld_gc_is_archived, kStrAny },
   { "avail",	fld_gc_is_available, kStrAny },
-  { "exported",	fld_gc_exported, kStrAny },
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
@@ -208,7 +208,7 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   }
 
   long long res = 0;
-  for (auto c : qAsConst(s)) {
+  for (auto c : std::as_const(s)) {
     int val = kBase31.indexOf(c);
     if (val < 0 || (base == 16 && val > 15)) {
       return 0;
@@ -824,7 +824,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_facility:
       gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
@@ -869,7 +869,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_gc_diff:
     case fld_gc_is_archived:
     case fld_gc_is_available:
-    case fld_gc_exported:
     case fld_gc_last_found:
     case fld_gc_placer:
     case fld_gc_placer_id:
@@ -907,14 +906,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      case fld_gc_exported: {
-        QTime etime;
-        QDate edate;
-        etime = unicsv_parse_time(value, edate);
-        if (edate.isValid() || etime.isValid()) {
-          gc_data->exported = unicsv_adjust_time(edate, etime, true);
-        }
-      }
       break;
       case fld_gc_last_found: {
         QTime ftime;
@@ -1077,8 +1068,7 @@ UnicsvFormat::read()
 
 /* =========================================================================== */
 
-void
-UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
+[[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
@@ -1124,7 +1114,7 @@ void
 UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     unicsv_outp_flags[fld_shortname] = true;
@@ -1252,9 +1242,6 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     if (gc_data->is_available != Geocache::status_t::gs_unknown) {
       unicsv_outp_flags[fld_gc_is_available] = true;
     }
-    if (gc_data->exported.isValid()) {
-      unicsv_outp_flags[fld_gc_exported] = true;
-    }
     if (gc_data->last_found.isValid()) {
       unicsv_outp_flags[fld_gc_last_found] = true;
     }
@@ -1278,7 +1265,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (unicsv_datum_idx == kDautmWGS84) {
     lat = wpt->latitude;
@@ -1622,13 +1609,6 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    if (gc_data) {
-      unicsv_print_date_time(gc_data->exported);
-    } else {
-      *fout << unicsv_fieldsep;
-    }
-  }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     if (gc_data) {
       unicsv_print_date_time(gc_data->last_found);
@@ -1900,9 +1880,6 @@ UnicsvFormat::write()
   }
   if (unicsv_outp_flags[fld_gc_is_available]) {
     *fout << unicsv_fieldsep << "Available";
-  }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    *fout << unicsv_fieldsep << "Exported";
   }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     *fout << unicsv_fieldsep << "Last Found";

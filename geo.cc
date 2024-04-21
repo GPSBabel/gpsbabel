@@ -33,7 +33,7 @@
 
 #define MYNAME "geo"
 
-void GeoFormat::GeoReadLoc(QXmlStreamReader& reader) const
+void GeoFormat::GeoReadLoc(QXmlStreamReader& reader)
 {
   Waypoint* wpt = nullptr;
   QString current_tag;

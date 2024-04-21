@@ -133,7 +133,6 @@ private:
     fld_gc_diff,
     fld_gc_is_archived,
     fld_gc_is_available,
-    fld_gc_exported,
     fld_gc_last_found,
     fld_gc_placer,
     fld_gc_placer_id,
@@ -174,7 +173,7 @@ private:
   static bool unicsv_compare_fields(const QString& s, const field_t* f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
-  void unicsv_fatal_outside(const Waypoint* wpt) const;
+  [[noreturn]] void unicsv_fatal_outside(const Waypoint* wpt) const;
   void unicsv_print_str(const QString& s) const;
   void unicsv_print_date_time(const QDateTime& idt) const;
   void unicsv_waypt_enum_cb(const Waypoint* wpt);

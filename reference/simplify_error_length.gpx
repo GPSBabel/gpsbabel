@@ -516,6 +516,11 @@
         <time>2012-04-12T13:09:52Z</time>
         <speed>5.373000</speed>
       </trkpt>
+      <trkpt lat="48.190376647" lon="11.822674759">
+        <ele>541.600</ele>
+        <time>2012-04-12T13:09:59Z</time>
+        <speed>6.961000</speed>
+      </trkpt>
       <trkpt lat="48.190509081" lon="11.824321132">
         <ele>537.200</ele>
         <time>2012-04-12T13:10:15Z</time>

@@ -29,7 +29,6 @@
 #include <QByteArray>               // for QByteArray, operator==
 #include <QDate>                    // for QDate
 #include <QDateTime>                // for QDateTime
-#include <QList>                    // for QList<>::const_iterator, QList
 #include <QString>                  // for QString, operator!=, operator==
 #include <QTime>                    // for QTime
 #include <Qt>                       // for CaseInsensitive
@@ -41,13 +40,14 @@
 #include <cstring>                  // for memset, strstr, strcmp
 #include <iterator>                 // for next
 
-#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, mkshort, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, mkshort_del_handle, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
+#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
-#include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t, garmin_fs_alloc
+#include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
 #include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfputint16, gbfile, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl
 #include "grtcirc.h"                // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "mkshort.h"                // for MakeShort
 #include "src/core/datetime.h"      // for DateTime
 
 
@@ -70,12 +70,26 @@
 
 #define DBG(a, b)		if ((GDB_DEBUG & (a)) && (b))
 
+
+inline bool operator==(const GdbFormat::WptNameKey& lhs, const GdbFormat::WptNameKey &rhs) noexcept
+{
+  return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
+}
+
+inline bool operator==(const GdbFormat::WptNamePosnKey& lhs, const GdbFormat::WptNamePosnKey &rhs) noexcept
+{
+  return
+    (lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0) &&
+    lhs.lat == rhs.lat &&
+    lhs.lon == rhs.lon;
+}
+
 void
-GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
+GdbFormat::gdb_flush_waypt_queue(WptNamePosnHash& Q)
 {
 
-  while (!Q->isEmpty()) {
-    const Waypoint* wpt = Q->takeFirst();
+  for (auto it = Q.cbegin(), end = Q.cend(); it != end; ++it) {
+    const Waypoint* wpt = it.value();
     if (wpt->extra_data) {
       // wpt->extra_data may be holding a pointer to a QString, courtesy
       // the grossness at the end of write_waypoint_cb().
@@ -83,6 +97,7 @@ GdbFormat::gdb_flush_waypt_queue(QList<Waypoint*>* Q)
     }
     delete wpt;
   }
+  Q = WptNamePosnHash();
 }
 
 #if GDB_DEBUG
@@ -194,31 +209,37 @@ GdbFormat::gdb_fread_strlist() const
   return qres;
 }
 
-Waypoint*
-GdbFormat::gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, const char exact)
+Waypoint* GdbFormat::gdb_find_wayptq(const WptNameHash& Q, const Waypoint* wpt)
 {
-  QString name = wpt->shortname;
-  foreach (Waypoint* tmp, *Q) {
-    if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
-      if (! exact) {
-        return tmp;
-      }
+  if (Q.contains(wpt->shortname)) {
+    return Q.value(wpt->shortname);
+  }
+  return nullptr;
+}
 
-      if ((tmp->latitude == wpt->latitude) &&
-          (tmp->longitude == wpt->longitude)) {
-        return tmp;
-      }
-    }
+Waypoint* GdbFormat::gdb_find_wayptq(const WptNamePosnHash& Q, const Waypoint* wpt)
+{
+  auto key = WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude);
+  if (Q.contains(key)) {
+    return Q.value(key);
   }
   return nullptr;
 }
 
 Waypoint*
-GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
+GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, bool exact) const
 {
-  Waypoint* res = gdb_find_wayptq(&wayptq_in, wpt, exact);
-  if (res == nullptr) {
-    res = gdb_find_wayptq(&wayptq_in_hidden, wpt, exact);
+  Waypoint* res;
+  if (exact) {
+    res = gdb_find_wayptq(waypt_nameposn_in_hash, wpt);
+    if (res == nullptr) {
+      res = gdb_find_wayptq(waypt_nameposn_in_hidden_hash, wpt);
+    }
+  } else {
+    res = gdb_find_wayptq(waypt_name_in_hash, wpt);
+    if (res == nullptr) {
+      res = gdb_find_wayptq(waypt_name_in_hidden_hash, wpt);
+    }
   }
   return res;
 }
@@ -226,7 +247,7 @@ GdbFormat::gdb_reader_find_waypt(const Waypoint* wpt, const char exact) const
 Waypoint*
 GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class) const
 {
-  Waypoint* tmp = gdb_reader_find_waypt(ref, 1);
+  Waypoint* tmp = gdb_reader_find_waypt(ref, true);
   if (tmp == nullptr) {
     tmp = find_waypt_by_name(ref->shortname);
     if (tmp == nullptr) {
@@ -419,7 +440,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   waypt_ct++;
   res = new Waypoint;
 
-  gmsd = garmin_fs_alloc(-1);
+  gmsd = new garmin_fs_t(-1);
   res->fs.FsChainAdd(gmsd);
   res->shortname = fread_cstr();
   wpt_class = (gt_waypt_classes_e) FREAD_i32;
@@ -447,14 +468,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if (alt < 1.0e24) {
       res->altitude = alt;
 #if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, 1)
+      DBG(GDB_DBG_WPTe, true)
       printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
              qPrintable(res->shortname), wpt_class, alt);
 #endif
     }
   }
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPT, 1)
+  DBG(GDB_DBG_WPT, true)
   printf(MYNAME "-wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
          qPrintable(res->shortname),
          res->latitude < 0 ? 'S' : 'N', res->latitude,
@@ -470,14 +491,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_proximity(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->proximity_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->proximity / 1000);
+           qPrintable(res->shortname), wpt_class, res->proximity_value() / 1000);
 #endif
   }
   int display = FREAD_i32;
 #if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, 1)
+  DBG(GDB_DBG_WPTe, true)
   printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
          qPrintable(res->shortname), wpt_class, display);
 #endif
@@ -506,9 +527,9 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_depth(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->depth_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->depth);
+           qPrintable(res->shortname), wpt_class, res->depth_value());
 #endif
   }
 
@@ -555,7 +576,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       garmin_fs_t::set_duration(gmsd, duration);
       res->notes = QStringLiteral("[%1]").arg(gdb_to_ISO8601_duration(duration));
 #if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, 1)
+      DBG(GDB_DBG_WPTe, true)
       printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
              qPrintable(res->shortname), wpt_class, duration);
 #endif
@@ -566,7 +587,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       if (!str.isEmpty()) {
         waypt_add_url(res, str, nullptr);
 #if GDB_DEBUG
-        DBG(GDB_DBG_WPTe, 1)
+        DBG(GDB_DBG_WPTe, true)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
                qPrintable(res->shortname), wpt_class, url_ct - i, qPrintable(str));
 #endif
@@ -595,9 +616,9 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if (FREAD_C == 1) {
     res->set_temperature(FREAD_DBL);
 #if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, 1)
+    DBG(GDB_DBG_WPTe, res->temperature_has_value())
     printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->temperature);
+           qPrintable(res->shortname), wpt_class, res->temperature_value());
 #endif
   }
 
@@ -677,7 +698,7 @@ GdbFormat::read_route()
   int points = FREAD_i32;
 
 #if GDB_DEBUG
-  DBG(GDB_DBG_RTE, 1)
+  DBG(GDB_DBG_RTE, true)
   printf(MYNAME "-rte \"%s\": loading route with %d point(s)...\n",
          qPrintable(rte->rte_name), points);
 #endif
@@ -717,46 +738,37 @@ GdbFormat::read_route()
     }
 
     int links = FREAD_i32;
-    garmin_ilink_t* il_anchor = nullptr;
-    garmin_ilink_t* il_root = nullptr;
+    QList<garmin_ilink_t> il_list;
 #if GDB_DEBUG
     DBG(GDB_DBG_RTE, links)
     printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
            qPrintable(wpt->shortname), wpt_class, links);
 #endif
     for (int j = 0; j < links; j++) {
-      auto* il_step = (garmin_ilink_t*) xmalloc(sizeof(garmin_ilink_t));
+      garmin_ilink_t il_step;
 
-      il_step->ref_count = 1;
-
-      il_step->lat = FREAD_LATLON;
-      il_step->lon = FREAD_LATLON;
+      il_step.lat = FREAD_LATLON;
+      il_step.lon = FREAD_LATLON;
       if (FREAD_C == 1) {
-        il_step->alt = FREAD_DBL;
+        il_step.alt = FREAD_DBL;
       } else {
-        il_step->alt = unknown_alt;
+        il_step.alt = unknown_alt;
       }
 
       if (j == 0) {
-        wpt->latitude = il_step->lat;
-        wpt->longitude = il_step->lon;
-        wpt->altitude = il_step->alt;
+        wpt->latitude = il_step.lat;
+        wpt->longitude = il_step.lon;
+        wpt->altitude = il_step.alt;
       }
 
-      il_step->next = nullptr;
-      if (il_anchor == nullptr) {
-        il_root = il_step;
-      } else {
-        il_anchor->next = il_step;
-      }
-      il_anchor = il_step;
+      il_list.append(il_step);
 
 #if GDB_DEBUG
-      DBG(GDB_DBG_RTEe, 1) {
+      DBG(GDB_DBG_RTEe, true) {
         printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
                qPrintable(wpt->shortname), j + 1, links,
-               il_step->lat < 0 ? 'S' : 'N', il_step->lat,
-               il_step->lon < 0 ? 'W' : 'E', il_step->lon);
+               il_step.lat < 0 ? 'S' : 'N', il_step.lat,
+               il_step.lon < 0 ? 'W' : 'E', il_step.lon);
       }
 #endif
     }
@@ -779,7 +791,7 @@ GdbFormat::read_route()
 
     if (links == 0) {
       /* Without links we need all information from wpt */
-      Waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
+      Waypoint* tmp = gdb_reader_find_waypt(wpt, false);
       if (tmp != nullptr) {
         delete wpt;
         wpt = new Waypoint(*tmp);
@@ -801,7 +813,7 @@ GdbFormat::read_route()
       }
     }
 #if GDB_DEBUG
-    DBG(GDB_DBG_RTE, 1)
+    DBG(GDB_DBG_RTE, true)
     printf(MYNAME "-rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
            qPrintable(wpt->shortname),
            wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
@@ -811,19 +823,13 @@ GdbFormat::read_route()
     if (wpt != nullptr) {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       if (gmsd == nullptr) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       garmin_fs_t::set_wpt_class(gmsd, wpt_class);
-      gmsd->ilinks = il_root;
-      il_root = nullptr;
+      gmsd->ilinks = il_list;
     }
 
-    while (il_root) {
-      garmin_ilink_t* il = il_root;
-      il_root = il_root->next;
-      xfree(il);
-    }
   } /* ENDFOR: for (i = 0; i < points; i++) */
 
   /* VERSION DEPENDENT CODE */
@@ -849,7 +855,7 @@ GdbFormat::read_route()
       driving_speed[4] = FREAD_DBL;
       FREAD(tbuf, 8); /* unknown bytes */
 #if GDB_DEBUG
-      DBG(GDB_DBG_RTE, 1)
+      DBG(GDB_DBG_RTE, true)
       printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
              "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
              route_style, calc_type, vehicle_type, road_selection,
@@ -946,8 +952,10 @@ GdbFormat::rd_init(const QString& fname)
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
   read_file_header();
 
-  wayptq_in.clear();
-  wayptq_in_hidden.clear();
+  waypt_nameposn_in_hash.clear();
+  waypt_name_in_hash.clear();
+  waypt_nameposn_in_hidden_hash.clear();
+  waypt_name_in_hidden_hash.clear();
 
   bool via = gdb_opt_via;
   bool drop_wpt = gdb_opt_drop_hidden_wpt;
@@ -967,8 +975,10 @@ void
 GdbFormat::rd_deinit()
 {
   disp_summary(fin);
-  gdb_flush_waypt_queue(&wayptq_in);
-  gdb_flush_waypt_queue(&wayptq_in_hidden);
+  gdb_flush_waypt_queue(waypt_nameposn_in_hash);
+  waypt_name_in_hash = WptNameHash(); /* values already flushed */
+  gdb_flush_waypt_queue(waypt_nameposn_in_hidden_hash);
+  waypt_name_in_hidden_hash = WptNameHash(); /* values already flushed */
   gbfclose(ftmp);
   gbfclose(fin);
 }
@@ -1009,9 +1019,11 @@ GdbFormat::read()
       if (!gdb_hide_wpt || (wpt_class == 0)) {
         waypt_add(wpt);
         auto* dupe = new Waypoint(*wpt);
-        wayptq_in.append(dupe);
+        waypt_nameposn_in_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), dupe);
+        waypt_name_in_hash.insert(wpt->shortname, dupe);
       } else {
-        wayptq_in_hidden.append(wpt);
+        waypt_nameposn_in_hidden_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), wpt);
+        waypt_name_in_hidden_hash.insert(wpt->shortname, wpt);
       }
       break;
     case 'R':
@@ -1087,19 +1099,17 @@ GdbFormat::read()
 void
 GdbFormat::reset_short_handle(const char* defname)
 {
-  if (short_h != nullptr) {
-    mkshort_del_handle(&short_h);
-  }
+  delete short_h;
 
-  short_h = mkshort_new_handle();
+  short_h = new MakeShort;
 
-  setshort_length(short_h, kGDBNameBufferLen);
-  setshort_badchars(short_h, "\r\n\t");
-  setshort_mustupper(short_h, 0);
-  setshort_mustuniq(short_h, 1);
-  setshort_whitespace_ok(short_h, 1);
-  setshort_repeating_whitespace_ok(short_h, 1);
-  setshort_defname(short_h, defname);
+  short_h->set_length(kGDBNameBufferLen);
+  short_h->set_badchars("\r\n\t");
+  short_h->set_mustupper(false);
+  short_h->set_mustuniq(true);
+  short_h->set_whitespace_ok(true);
+  short_h->set_repeating_whitespace_ok(true);
+  short_h->set_defname(defname);
 }
 
 /* ----------------------------------------------------------------------------*/
@@ -1169,7 +1179,7 @@ GdbFormat::gdb_check_waypt(Waypoint* wpt)
 
 void
 GdbFormat::write_waypoint(
-  const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
+  const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd,
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1359,14 +1369,14 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
       gdb_check_waypt(next);
     }
 
-    Waypoint* test = gdb_find_wayptq(&wayptq_out, wpt, 1);
+    Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, wpt);
     if (test != nullptr) {
       wpt = test;
     } else {
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
     }
 
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     /* extra_data may contain a modified shortname */
     gdb_write_cstr((wpt->extra_data) ? *static_cast<QString*>(wpt->extra_data) : wpt->shortname);
@@ -1512,7 +1522,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
   /* do this when backup always happens in main */
 // but, but, casting away the const here is wrong...
   (const_cast<Waypoint*>(refpt))->shortname = refpt->shortname.trimmed();
-  Waypoint* test = gdb_find_wayptq(&wayptq_out, refpt, 1);
+  Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, refpt);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
     UrlLink orig_link = refpt->GetUrlLink();
@@ -1533,13 +1543,13 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
     auto* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
-    wayptq_out.append(wpt);
+    waypt_nameposn_out_hash.insert(WptNamePosnKey(wpt->shortname, wpt->latitude, wpt->longitude), wpt);
 
     gbfile* fsave = fout;
     fout = ftmp;
 
     /* prepare the waypoint */
-    garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+    const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
     int wpt_class = garmin_fs_t::get_wpt_class(gmsd, -1);
     if (wpt_class == -1) {
@@ -1587,7 +1597,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
       }
     }
 
-    name = mkshort(short_h, name);
+    name = short_h->mkshort(name);
     wpt->extra_data = new QString(name);
     write_waypoint(wpt, name, gmsd, icon, display);
 
@@ -1604,9 +1614,9 @@ GdbFormat::write_route_cb(const route_head* rte)
 
   QString name;
   if (rte->rte_name.isNull()) {
-    name = mkshort(short_h, QString::asprintf("Route%04d", rte->rte_num));
+    name = short_h->mkshort(QString::asprintf("Route%04d", rte->rte_num));
   } else {
-    name = mkshort(short_h, rte->rte_name);
+    name = short_h->mkshort(rte->rte_name);
   }
 
   rte_ct++;	/* increase informational number of written routes */
@@ -1626,9 +1636,9 @@ GdbFormat::write_track_cb(const route_head* trk)
 
   QString name;
   if (trk->rte_name.isNull()) {
-    name = mkshort(short_h, QString::asprintf("Track%04d", trk->rte_num));
+    name = short_h->mkshort(QString::asprintf("Track%04d", trk->rte_num));
   } else {
-    name = mkshort(short_h, trk->rte_name);
+    name = short_h->mkshort(trk->rte_name);
   }
 
   trk_ct++;	/* increase informational number of written tracks */
@@ -1662,7 +1672,7 @@ GdbFormat::wr_init(const QString& fname)
     gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
   }
 
-  wayptq_out.clear();
+  waypt_nameposn_out_hash.clear();
   short_h = nullptr;
 
   waypt_ct = 0;
@@ -1677,8 +1687,9 @@ void
 GdbFormat::wr_deinit()
 {
   disp_summary(fout);
-  gdb_flush_waypt_queue(&wayptq_out);
-  mkshort_del_handle(&short_h);
+  gdb_flush_waypt_queue(waypt_nameposn_out_hash);
+  delete short_h;
+  short_h = nullptr;
   gbfclose(fout);
   gbfclose(ftmp);
 }

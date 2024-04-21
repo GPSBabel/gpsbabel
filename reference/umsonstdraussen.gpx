@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
   <metadata>
     <time>1970-01-01T00:00:00Z</time>
     <bounds minlat="47.545639984" minlon="4.290249981" maxlat="54.402619991" maxlon="16.385979988"/>
@@ -13,7 +13,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Luitpoldstrasse</gpxx:StreetAddress>
           <gpxx:City>Freising</gpxx:City>
@@ -32,7 +32,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Zeughausstrasse</gpxx:StreetAddress>
           <gpxx:City>Darmstadt</gpxx:City>
@@ -51,7 +51,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Bretten / Grillplatz / B 35</gpxx:StreetAddress>
           <gpxx:City>Bretten</gpxx:City>
@@ -69,7 +69,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Alter Elbtunnel / St. Pauli Landungsbrücken</gpxx:StreetAddress>
           <gpxx:City>Hamburg</gpxx:City>
@@ -88,7 +88,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Heubergpark / Alte Roßmühlstraße</gpxx:StreetAddress>
           <gpxx:City>Wesel</gpxx:City>
@@ -106,7 +106,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Prinzipalmarkt</gpxx:StreetAddress>
           <gpxx:City>Münster</gpxx:City>
@@ -125,7 +125,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Frönsberg</gpxx:StreetAddress>
           <gpxx:City>Hemer</gpxx:City>
@@ -136,14 +136,14 @@
   </wpt>
   <wpt lat="49.799310034" lon="9.919969998">
     <name>Umsonst + Draußen Würzburg</name>
-    <cmt>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</cmt>
-    <desc>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</desc>
+    <cmt>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mamas Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mamas Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</desc>
     <link href="www.umsonst-und-draussen.de">
       <text>www.umsonst-und-draussen.de</text>
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Talavera</gpxx:StreetAddress>
           <gpxx:City>Würzburg</gpxx:City>
@@ -162,7 +162,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Kasernenstrasse</gpxx:StreetAddress>
           <gpxx:City>Bad Kissingen</gpxx:City>
@@ -180,7 +180,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Solebadstrasse</gpxx:StreetAddress>
           <gpxx:City>Bad Salzdetfurth</gpxx:City>
@@ -198,7 +198,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Zwischen Potsdamer und Berliner Ufer</gpxx:StreetAddress>
           <gpxx:City>Hamburg</gpxx:City>
@@ -216,7 +216,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Parkanlage Stuttgart-Rohr</gpxx:StreetAddress>
           <gpxx:City>Stuttgart</gpxx:City>
@@ -235,7 +235,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Himmelreichgelände bei den Hessenhöfen</gpxx:StreetAddress>
           <gpxx:City>Blaubeuren</gpxx:City>
@@ -253,7 +253,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Ossenbergweg</gpxx:StreetAddress>
           <gpxx:City>Hünxe</gpxx:City>
@@ -271,7 +271,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Rappenberghalde</gpxx:StreetAddress>
           <gpxx:City>Tübingen</gpxx:City>
@@ -290,7 +290,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Ginsterweg</gpxx:StreetAddress>
           <gpxx:City>Bad Wildbad</gpxx:City>
@@ -308,7 +308,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Zuiderpark</gpxx:StreetAddress>
           <gpxx:City>Den Haag</gpxx:City>
@@ -326,7 +326,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Im Löwental</gpxx:StreetAddress>
           <gpxx:City>Essen</gpxx:City>
@@ -345,7 +345,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Neu-Isenburg</gpxx:StreetAddress>
           <gpxx:City>Neu-Isenburg</gpxx:City>
@@ -363,7 +363,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:City>Straubenhardt</gpxx:City>
           <gpxx:PostalCode>75334</gpxx:PostalCode>
@@ -380,7 +380,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Hafenstraße</gpxx:StreetAddress>
           <gpxx:City>Hamm</gpxx:City>
@@ -399,7 +399,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Heidjerstraße</gpxx:StreetAddress>
           <gpxx:City>Weener</gpxx:City>
@@ -418,7 +418,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Altstadt</gpxx:StreetAddress>
           <gpxx:City>Iserlohn</gpxx:City>
@@ -436,7 +436,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Günther-Klutz-Anlage</gpxx:StreetAddress>
           <gpxx:City>Karlsruhe</gpxx:City>
@@ -455,7 +455,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Donauinsel</gpxx:StreetAddress>
           <gpxx:City>Wien</gpxx:City>
@@ -474,7 +474,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Obstmarkt</gpxx:StreetAddress>
           <gpxx:City>Backnang</gpxx:City>
@@ -493,7 +493,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Kohschultenhof</gpxx:StreetAddress>
           <gpxx:City>Lingen</gpxx:City>
@@ -511,7 +511,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Falkenstein</gpxx:StreetAddress>
           <gpxx:City>Donnersdorf-Falkenstein</gpxx:City>
@@ -530,7 +530,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Schloßberg</gpxx:StreetAddress>
           <gpxx:City>Pegnitz</gpxx:City>
@@ -548,7 +548,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
           <gpxx:City>Mössingen</gpxx:City>
@@ -566,7 +566,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
           <gpxx:City>Vlotho</gpxx:City>
@@ -584,7 +584,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Hintere Insel</gpxx:StreetAddress>
           <gpxx:City>Lindau</gpxx:City>
@@ -602,7 +602,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Saupurzl</gpxx:StreetAddress>
           <gpxx:City>Karlstadt</gpxx:City>
@@ -620,7 +620,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:City>Heubach</gpxx:City>
           <gpxx:PostalCode>73540</gpxx:PostalCode>
@@ -637,7 +637,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
           <gpxx:City>Erding</gpxx:City>
@@ -656,7 +656,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:City>Südwinsen</gpxx:City>
           <gpxx:PostalCode>29308</gpxx:PostalCode>
@@ -673,7 +673,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Andlauer Weg</gpxx:StreetAddress>
           <gpxx:City>Berlin</gpxx:City>
@@ -691,7 +691,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Freizeitpark Rheinaue</gpxx:StreetAddress>
           <gpxx:City>Bonn</gpxx:City>
@@ -710,7 +710,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Stadionweg</gpxx:StreetAddress>
           <gpxx:City>Garching</gpxx:City>
@@ -728,7 +728,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>im Lerchenfeld</gpxx:StreetAddress>
           <gpxx:City>Dornstadt bei Ulm</gpxx:City>
@@ -746,7 +746,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Riedweg</gpxx:StreetAddress>
           <gpxx:City>Hausen am Andelsbach</gpxx:City>
@@ -765,7 +765,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Karlsstraße</gpxx:StreetAddress>
           <gpxx:City>Reutlingen</gpxx:City>
@@ -783,7 +783,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Noch nicht bekannt</gpxx:StreetAddress>
           <gpxx:City>Mönchengladbach</gpxx:City>
@@ -801,7 +801,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Werratalsee</gpxx:StreetAddress>
           <gpxx:City>Schwebda</gpxx:City>
@@ -820,7 +820,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Liebigstraße</gpxx:StreetAddress>
           <gpxx:City>Flörsheim</gpxx:City>
@@ -839,7 +839,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Rathausplatz</gpxx:StreetAddress>
           <gpxx:City>Meldorf</gpxx:City>
@@ -857,7 +857,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Innenstadt Nürnberg</gpxx:StreetAddress>
           <gpxx:City>Nürnberg</gpxx:City>
@@ -876,7 +876,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Innenstadt Regensburg</gpxx:StreetAddress>
           <gpxx:City>Regensburg</gpxx:City>
@@ -894,7 +894,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Innenstadt Bochum</gpxx:StreetAddress>
           <gpxx:City>Bochum</gpxx:City>
@@ -913,7 +913,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Schießmauer</gpxx:StreetAddress>
           <gpxx:City>Herrenberg</gpxx:City>
@@ -931,7 +931,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
           <gpxx:City>Mössingen</gpxx:City>
@@ -949,7 +949,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
           <gpxx:City>Vlotho</gpxx:City>
@@ -967,7 +967,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
           <gpxx:City>Erding</gpxx:City>
@@ -986,7 +986,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Moorfleeter Deich</gpxx:StreetAddress>
           <gpxx:City>Hamburg</gpxx:City>
@@ -1004,7 +1004,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Geinsheimer Straße</gpxx:StreetAddress>
           <gpxx:City>Riedstadt-Leeheim</gpxx:City>
@@ -1023,7 +1023,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>An den St Pauli Landungsbrücken</gpxx:StreetAddress>
           <gpxx:City>Hamburg</gpxx:City>
@@ -1041,7 +1041,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Pfaffenwaldring</gpxx:StreetAddress>
           <gpxx:City>Stuttgart</gpxx:City>
@@ -1059,7 +1059,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Koppelbergstrasse</gpxx:StreetAddress>
           <gpxx:City>Teterow</gpxx:City>
@@ -1077,7 +1077,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Ilweder Strasse</gpxx:StreetAddress>
           <gpxx:City>Stemwede-Haldem</gpxx:City>
@@ -1095,7 +1095,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Festivalgelände</gpxx:StreetAddress>
           <gpxx:City>Bakum (Büschel)</gpxx:City>
@@ -1113,7 +1113,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Schlossstraße</gpxx:StreetAddress>
           <gpxx:City>Hofheim</gpxx:City>
@@ -1131,7 +1131,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Oberransbach</gpxx:StreetAddress>
           <gpxx:City>Feuchtwangen</gpxx:City>
@@ -1149,7 +1149,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Rheinufer/In der Reduit</gpxx:StreetAddress>
           <gpxx:City>Mainz-Kastel</gpxx:City>
@@ -1167,7 +1167,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Römersee</gpxx:StreetAddress>
           <gpxx:City>Bad Rappenau-Zimmerhof</gpxx:City>
@@ -1185,7 +1185,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Vestische Straße</gpxx:StreetAddress>
           <gpxx:City>Oberhausen</gpxx:City>
@@ -1203,7 +1203,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Thomasstrasse</gpxx:StreetAddress>
           <gpxx:City>Halver</gpxx:City>
@@ -1221,7 +1221,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Werdensteinstrasse</gpxx:StreetAddress>
           <gpxx:City>Dellmensingen bei Ulm</gpxx:City>
@@ -1239,7 +1239,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Holter Straße</gpxx:StreetAddress>
           <gpxx:City>Schloß Holte-Stukenbrock</gpxx:City>
@@ -1257,7 +1257,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Gogenkrog</gpxx:StreetAddress>
           <gpxx:City>Neustadt in Holstein</gpxx:City>
@@ -1276,7 +1276,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Höllchenstrasse</gpxx:StreetAddress>
           <gpxx:City>Dörnberg</gpxx:City>
@@ -1295,7 +1295,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>An der alten Kirche</gpxx:StreetAddress>
           <gpxx:City>Krefeld</gpxx:City>
@@ -1314,7 +1314,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Kennedyplatz</gpxx:StreetAddress>
           <gpxx:City>Essen</gpxx:City>
@@ -1333,7 +1333,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Peschmannstrasse</gpxx:StreetAddress>
           <gpxx:City>Duisburg</gpxx:City>
@@ -1351,7 +1351,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Am Steinchen</gpxx:StreetAddress>
           <gpxx:City>Neu-Anspach</gpxx:City>
@@ -1369,7 +1369,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Grindelhof/Siemersallee/Allendeplatz</gpxx:StreetAddress>
           <gpxx:City>Hamburg</gpxx:City>
@@ -1387,7 +1387,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Flögger Strand</gpxx:StreetAddress>
           <gpxx:City>Fehmarn</gpxx:City>
@@ -1406,7 +1406,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>Treuchtlingen Ri. Möhren, links Ri. Haag</gpxx:StreetAddress>
           <gpxx:City>Treuchtlingen</gpxx:City>
@@ -1425,7 +1425,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+      <gpxx:WaypointExtension>
         <gpxx:Address>
           <gpxx:StreetAddress>An den Klärteichen</gpxx:StreetAddress>
           <gpxx:City>Emsdetten</gpxx:City>

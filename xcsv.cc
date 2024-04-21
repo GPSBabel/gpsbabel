@@ -33,6 +33,7 @@
 #include <cstring>                 // for strlen, strncmp, strcmp
 #include <ctime>                   // for gmtime, localtime, time_t, mktime, strftime
 #include <optional>                // for optional
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -46,12 +47,13 @@
 #include <QString>                 // for QString, operator+, operator==
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for QTextStream
-#include <QtGlobal>                // for qAsConst, qRound, qPrintable
+#include <Qt>                      // for CaseInsensitive
+#include <QtGlobal>                // for qRound, qPrintable
 
 #include "defs.h"
 #include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "grtcirc.h"               // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
@@ -361,7 +363,7 @@ XcsvFormat::gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
-    gmsd = garmin_fs_alloc(-1);
+    gmsd = new garmin_fs_t(-1);
     wpt->fs.FsChainAdd(gmsd);
   }
   return gmsd;
@@ -644,13 +646,8 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND: {
-    QDate date;
-    date = yyyymmdd_to_time(value);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    wpt->AllocGCData()->last_found = QDateTime(date);
-#else
+    QDate date = yyyymmdd_to_time(value);
     wpt->AllocGCData()->last_found = date.startOfDay();
-#endif
     break;
   }
 
@@ -854,7 +851,7 @@ XcsvFormat::read()
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-    for (const auto& ogp : qAsConst(xcsv_style->epilogue)) {
+    for (const auto& ogp : std::as_const(xcsv_style->epilogue)) {
       if (ogp.startsWith(buff)) {
         buff.clear();
         break;
@@ -990,7 +987,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
   double latitude, longitude;
-  int32 utmz;
+  int32_t utmz;
   double utme, utmn;
   char utmzc;
 
@@ -1013,7 +1010,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   if (wpt->shortname.isEmpty() || global_opts.synthesize_shortnames) {
     if (!wpt->description.isEmpty()) {
       if (global_opts.synthesize_shortnames) {
-        shortname = mkshort_from_wpt(xcsv_file->mkshort_handle, wpt);
+        shortname = xcsv_file->mkshort_handle.mkshort_from_wpt(wpt);
       } else {
         shortname = csv_stringclean(wpt->description, xcsv_style->badchars);
       }
@@ -1044,7 +1041,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   }
 
   int i = 0;
-  for (const auto& fmp : qAsConst(xcsv_style->ofields)) {
+  for (const auto& fmp : std::as_const(xcsv_style->ofields)) {
     double lat = latitude;
     double lon = longitude;
     /*
@@ -1091,10 +1088,10 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     case XcsvStyle::XT_ANYNAME: {
       QString anyname = wpt->shortname;
       if (anyname.isEmpty()) {
-        anyname = mkshort(xcsv_file->mkshort_handle, wpt->description);
+        anyname = xcsv_file->mkshort_handle.mkshort(wpt->description);
       }
       if (anyname.isEmpty()) {
-        anyname = mkshort(xcsv_file->mkshort_handle, wpt->description);
+        anyname = xcsv_file->mkshort_handle.mkshort(wpt->description);
       }
       if (anyname.isEmpty()) {
         anyname = wpt->notes;
@@ -1538,42 +1535,42 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     break;
     /* GMSD ************************************************************/
     case XcsvStyle::XT_COUNTRY: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_country(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_STATE: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_state(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_CITY: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_city(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_POSTAL_CODE: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_postal_code(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_STREET_ADDR: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_addr(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_PHONE_NR: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_phone_nr(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_FACILITY: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_facility(gmsd, "")));
     }
     break;
     case XcsvStyle::XT_EMAIL: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_email(gmsd, "")));
     }
     break;
@@ -1663,7 +1660,7 @@ XcsvFormat::write()
   waypt_out_count = 0;
 
   /* output prologue lines, if any. */
-  for (const auto& line : qAsConst(xcsv_style->prologue)) {
+  for (const auto& line : std::as_const(xcsv_style->prologue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     xcsv_file->stream << line_to_write <<  xcsv_style->record_delimiter;
   }
@@ -1686,7 +1683,7 @@ XcsvFormat::write()
   }
 
   /* output epilogue lines, if any. */
-  for (const auto& line : qAsConst(xcsv_style->epilogue)) {
+  for (const auto& line : std::as_const(xcsv_style->epilogue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     xcsv_file->stream << line_to_write << xcsv_style->record_delimiter;
   }
@@ -1954,32 +1951,32 @@ XcsvFormat::wr_init(const QString& fname)
   xcsv_file->fname = fname;
 
   if (xcsv_style->shortlen) {
-    setshort_length(xcsv_file->mkshort_handle, *xcsv_style->shortlen);
+    xcsv_file->mkshort_handle.set_length(*xcsv_style->shortlen);
   }
   if (xcsv_style->whitespace_ok) {
-    setshort_whitespace_ok(xcsv_file->mkshort_handle, *xcsv_style->whitespace_ok);
+    xcsv_file->mkshort_handle.set_whitespace_ok(*xcsv_style->whitespace_ok);
   }
 
   /* set mkshort options from the command line */
   if (global_opts.synthesize_shortnames) {
 
     if (snlenopt) {
-      setshort_length(xcsv_file->mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_length(xstrtoi(snlenopt, nullptr, 10));
     }
 
     if (snwhiteopt) {
-      setshort_whitespace_ok(xcsv_file->mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
     }
 
     if (snupperopt) {
-      setshort_mustupper(xcsv_file->mkshort_handle, xstrtoi(snupperopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_mustupper(xstrtoi(snupperopt, nullptr, 10));
     }
 
     if (snuniqueopt) {
-      setshort_mustuniq(xcsv_file->mkshort_handle, xstrtoi(snuniqueopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
     }
 
-    setshort_badchars(xcsv_file->mkshort_handle, CSTR(xcsv_style->badchars));
+    xcsv_file->mkshort_handle.set_badchars(CSTR(xcsv_style->badchars));
 
   }
 

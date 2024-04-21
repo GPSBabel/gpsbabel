@@ -132,6 +132,26 @@ file	--rwrw	igc		FAI/IGC Flight Recorder Data Format	igc
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html
 option	igc	timeadj	(integer sec or 'auto') Barograph to GPS time diff	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_timeadj
 
+option	igc	ENL	Engine Noise (ENL; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ENL
+
+option	igc	TAS	True Airspeed (TAS; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TAS
+
+option	igc	VAT	Total Energy Vario (VAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_VAT
+
+option	igc	OAT	Outside Air Temperature (OAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_OAT
+
+option	igc	TRT	True Track (TRT; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TRT
+
+option	igc	GSP	Ground Speed (GSP; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GSP
+
+option	igc	FXA	Fix Accuracy (FXA; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_FXA
+
+option	igc	SIU	# Of Sats (SIU; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_SIU
+
+option	igc	ACZ	Z Acceleration (ACZ; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ACZ
+
+option	igc	GFO	G Force? (GFO; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GFO
+
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file	garmin_fit
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html
 option	garmin_fit	allpoints	Read all points even if latitude or longitude is missing	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_allpoints
@@ -362,6 +382,8 @@ option	kml	rotate_colors	Rotate colors for tracks and routes (default automatic)
 
 option	kml	prec	Precision of coordinates, number of decimals	integer	6			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_prec
 
+file	r-r---	googletakeout	json	Google Takeout Location History	googletakeout
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googletakeout.html
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
@@ -574,24 +596,6 @@ file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo	tpo2
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo2.html
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo	tpo3
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo3.html
-serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download	navilink
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html
-option	navilink	nuketrk	Delete all track points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nuketrk
-
-option	navilink	nukerte	Delete all routes	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukerte
-
-option	navilink	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukewpt
-
-option	navilink	nukedlg	Clear the datalog	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukedlg
-
-option	navilink	datalog	Read from datalogger buffer	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_datalog
-
-option	navilink	power_off	Command unit to power itself down	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_power_off
-
-file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)	sbp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbp.html
-file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)	sbn
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbn.html
 file	rwrw--	nmea		NMEA 0183 sentences	nmea
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html
 option	nmea	snlen	Max length of waypoint name to write	integer	6	1	64	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html#fmt_nmea_o_snlen
@@ -752,11 +756,3 @@ file	-w----	vcard	vcf	Vcard Output (for iPod)	vcard
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html
 option	vcard	encrypt	Encrypt hints using ROT13	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html#fmt_vcard_o_encrypt
 
-file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format	wbt-bin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-bin.html
-serial	r-r---	wbt		Wintec WBT-100/200 GPS Download	wbt
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html
-option	wbt	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html#fmt_wbt_o_erase
-
-file	--r---	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format	wbt-tk1
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-tk1.html

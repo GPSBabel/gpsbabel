@@ -7,15 +7,9 @@ LABEL maintainer="https://github.com/tsteven4"
 WORKDIR /app
 
 # update environment.
-# software-properties-common, gpg-agent, ppa:tsteven4/qt6-backports
-# are needed because of a build error in qt6-base 6.2.4+dfsg-2ubuntu1
-# https://bugs.launchpad.net/ubuntu/+source/qt6-base/+bug/1970057
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
-    software-properties-common \
-    gpg-agent \
- && add-apt-repository ppa:tsteven4/qt6-backports \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -35,6 +29,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     ninja-build \
     clazy \
+    clang-tidy \
+    jq \
+    curl \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
