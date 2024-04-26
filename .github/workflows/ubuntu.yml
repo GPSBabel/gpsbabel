@@ -22,9 +22,6 @@ jobs:
           #- IMAGE: 'focal'
           #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-          - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
@@ -32,7 +29,7 @@ jobs:
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
           - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}

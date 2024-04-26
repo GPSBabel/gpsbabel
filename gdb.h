@@ -30,7 +30,6 @@
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
 #include <QVector>          // for QVector
-#include <QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
 
 #include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"         // for Format
@@ -76,21 +75,7 @@ public:
 
     friend qhash_result_t qHash(const WptNamePosnKey &c, qhash_result_t seed = 0) noexcept
     {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       return qHashMulti(seed, c.shortname.toUpper(), c.lat, c.lon);
-#else
-      /*
-       * As noted in above refeference
-       * QtPrivate::QHashCombine is private API, but does not require any special buildsystem magic;
-       * it’s in <qhashfunctions.h>, a public header.
-       */
-      QtPrivate::QHashCombine hash;
-
-      seed = hash(seed, c.shortname.toUpper());
-      seed = hash(seed, c.lat);
-      seed = hash(seed, c.lon);
-      return seed;
-#endif
     }
 
     QString shortname;

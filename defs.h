@@ -1022,10 +1022,6 @@ int color_to_bbggrr(const char* cname);
 constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-using qhash_result_t = uint;
-#else
 using qhash_result_t = size_t;
-#endif
 
 #endif // DEFS_H_INCLUDED_
