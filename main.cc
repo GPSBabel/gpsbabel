@@ -742,8 +742,8 @@ main(int argc, char* argv[])
 #error This version of Qt is not supported.
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-#error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
+#if defined(_MSC_VER) && (_MSC_VER < 1920) /* MSVC 2017 or earlier */
+#error MSVC 2017 and earlier are not supported. Please use MSVC 2019 or MSVC 2022.
 #endif
 
   if constexpr (DEBUG_LOCALE) {

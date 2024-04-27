@@ -359,8 +359,8 @@ void TrackFilter::trackfilter_merge()
 
     QList<Waypoint*> buff;
 
-    auto it = track_list.begin();
-    while (it != track_list.end()) { /* put all points into temp buffer */
+    auto it = track_list.cbegin();
+    while (it != track_list.cend()) { /* put all points into temp buffer */
       route_head* track = *it;
       // steal all the wpts
       WaypointList wpts;
@@ -377,9 +377,9 @@ void TrackFilter::trackfilter_merge()
           delete wpt;
         }
       }
-      if (it != track_list.begin()) {
+      if (it != track_list.cbegin()) {
         track_del_head(track);
-        it = track_list.erase(it);
+        it = static_cast<RouteList::const_iterator>(track_list.erase(it));
       } else {
         ++it;
       }
@@ -714,8 +714,8 @@ void TrackFilter::trackfilter_range()
 
   int original_waypt_count = track_waypt_count();
 
-  auto it = track_list.begin();
-  while (it != track_list.end()) {
+  auto it = track_list.cbegin();
+  while (it != track_list.cend()) {
     route_head* track = *it;
 
     foreach (Waypoint* wpt, track->waypoint_list) {
@@ -739,7 +739,7 @@ void TrackFilter::trackfilter_range()
 
     if (track->rte_waypt_empty()) {
       track_del_head(track);
-      it = track_list.erase(it);
+      it = static_cast<RouteList::const_iterator>(track_list.erase(it));
     } else {
       ++it;
     }
