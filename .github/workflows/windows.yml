@@ -33,14 +33,6 @@ jobs:
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            GENERATOR: 'Visual Studio 16 2019'
-            RELEASE: false
-            os: windows-2019
-          - QT_VERSION: '6.2.4'
-            ARCH: 'amd64'
-            HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2019_64'
-            METHOD: 'aqt'
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
             os: windows-latest
