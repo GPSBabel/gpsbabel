@@ -455,128 +455,128 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cc" line="525"/>
+        <location filename="mainwindow.cc" line="529"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="553"/>
+        <location filename="mainwindow.cc" line="557"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="617"/>
+        <location filename="mainwindow.cc" line="621"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="628"/>
+        <location filename="mainwindow.cc" line="632"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="649"/>
+        <location filename="mainwindow.cc" line="653"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="652"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="655"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="658"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="679"/>
+        <location filename="mainwindow.cc" line="683"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="680"/>
+        <location filename="mainwindow.cc" line="684"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="681"/>
+        <location filename="mainwindow.cc" line="685"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="776"/>
+        <location filename="mainwindow.cc" line="780"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="782"/>
-        <location filename="mainwindow.cc" line="801"/>
+        <location filename="mainwindow.cc" line="786"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>Options for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="795"/>
+        <location filename="mainwindow.cc" line="799"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="815"/>
+        <location filename="mainwindow.cc" line="819"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="834"/>
+        <location filename="mainwindow.cc" line="838"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="843"/>
+        <location filename="mainwindow.cc" line="847"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="848"/>
+        <location filename="mainwindow.cc" line="852"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="983"/>
+        <location filename="mainwindow.cc" line="987"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1001"/>
+        <location filename="mainwindow.cc" line="1005"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1124"/>
+        <location filename="mainwindow.cc" line="1128"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1153"/>
+        <location filename="mainwindow.cc" line="1157"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1196"/>
+        <location filename="mainwindow.cc" line="1200"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1198"/>
+        <location filename="mainwindow.cc" line="1202"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -800,17 +800,17 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="127"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map.cc" line="130"/>
+        <location filename="map.cc" line="131"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map.cc" line="185"/>
+        <location filename="map.cc" line="186"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1032,7 +1032,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="175"/>
+        <location filename="formatload.cc" line="182"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation type="unfinished"></translation>
     </message>
