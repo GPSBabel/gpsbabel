@@ -23,7 +23,7 @@ jobs:
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
-            TOOLSET: 'v141,version=14.16.27023'
+            TOOLSET: 'v142,version=14.29.30133'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
