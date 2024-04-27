@@ -26,16 +26,13 @@ set(CMAKE_AUTORCC ON)
 add_executable(gpsbabel)
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
-find_package(Qt6 COMPONENTS Core REQUIRED)
-list(APPEND QT_LIBRARIES Qt6::Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Core5Compat)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Core5Compat)
 if(${Qt6Core_VERSION} VERSION_LESS 6.2)
   message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
   message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
-find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
-list(APPEND QT_LIBRARIES Qt6::Core5Compat)
 
 option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
 if (GPSBABEL_ENABLE_PCH)

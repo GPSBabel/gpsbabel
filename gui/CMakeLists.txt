@@ -22,8 +22,7 @@ if(NOT UNIX OR APPLE)
 endif()
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
-find_package(Qt6 COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network SerialPort Widgets Xml)
 list(APPEND QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Network Qt6::SerialPort Qt6::Widgets Qt6::Xml)
 if(${Qt6Core_VERSION} VERSION_LESS 6.2)
   message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
@@ -33,7 +32,7 @@ endif()
 
 option(GPSBABEL_MAPPREVIEW "enable map preview." ON)
 if (GPSBABEL_MAPPREVIEW)
-  find_package(Qt6 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+  find_package(Qt6 REQUIRED COMPONENTS WebEngineWidgets WebChannel)
   list(APPEND QT_LIBRARIES Qt6::WebEngineWidgets Qt6::WebChannel)
 else()
   target_compile_definitions(gpsbabelfe PRIVATE DISABLE_MAPPREVIEW)
