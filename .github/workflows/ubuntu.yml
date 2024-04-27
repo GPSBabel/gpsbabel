@@ -66,7 +66,7 @@ jobs:
     - name: install
       run: |
         sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev qtbase5-dev qtwebengine5-dev libqt5serialport5-dev ninja-build
+        sudo apt-get install gcovr lcov libusb-1.0-0-dev qtbase6-dev qt6-webengine-dev libqt6serialport6-dev ninja-build
 
     - name: Checkout repository
       uses: actions/checkout@v4
