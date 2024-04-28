@@ -7,7 +7,7 @@
 # and https://github.com/microsoft/vswhere/wiki/Start-Developer-Command-Prompt
 
 Param(
-    [string] $qtdir = "C:\Qt\Qt5.15.2\5.15.2\msvc2019_64",
+    [string] $qtdir = "C:\Qt\6.5.3\msvc2019_64",
     [ValidateSet("x86", "amd64")][string] $arch = "amd64",
     [ValidateSet("x86", "amd64")][string] $host_arch = "amd64",
     [string] $vcversion
