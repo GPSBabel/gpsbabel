@@ -60,15 +60,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qtbase5-dev \
-    qttools5-dev \
-    qttranslations5-l10n \
-    qtwebengine5-dev \
-    libqt5serialport5-dev \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs with qt used by gpsbabel
-RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-base-dev \
     qt6-5compat-dev \
     qt6-serialport-dev \
