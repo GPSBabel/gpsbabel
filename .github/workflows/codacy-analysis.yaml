@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - IMAGE: 'jammy'
+          - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/ci_run_tidy.sh'
     container:
