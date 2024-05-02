@@ -73,7 +73,7 @@ public:
   public:
     WptNamePosnKey(const QString& name, double lt, double ln) : shortname(name), lat(lt), lon(ln) {}
 
-    friend qhash_result_t qHash(const WptNamePosnKey &c, qhash_result_t seed = 0) noexcept
+    friend size_t qHash(const WptNamePosnKey &c, size_t seed = 0) noexcept
     {
       return qHashMulti(seed, c.shortname.toUpper(), c.lat, c.lon);
     }
@@ -89,7 +89,7 @@ public:
   public:
     WptNameKey(const QString& name) : shortname(name) {} /* converting constructor */
 
-    friend qhash_result_t qHash(const WptNameKey &c, qhash_result_t seed = 0) noexcept
+    friend size_t qHash(const WptNameKey &c, size_t seed = 0) noexcept
     {
       return qHash(c.shortname.toUpper(), seed);
     }

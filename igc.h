@@ -83,7 +83,7 @@ public:
 
   // Qt5 doesn't have a qHash function for scoped enumerations.
   // Qt6 falls back to std::hash, but it may not use the seed.
-  friend qhash_result_t qHash(const igc_ext_type_t& key, qhash_result_t seed = 0) noexcept
+  friend size_t qHash(const igc_ext_type_t& key, size_t seed = 0) noexcept
   {
     return qHash(static_cast<std::underlying_type<igc_ext_type_t>::type>(key), seed);
   }
