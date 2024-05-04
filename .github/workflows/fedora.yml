@@ -14,22 +14,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - IMAGE: '35'
-            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt5'
-          - IMAGE: '37'
-            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt5'
           - IMAGE: '37'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
           - IMAGE: '38'
-            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt5'
-          - IMAGE: '38'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
           - IMAGE: '39'
-            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt5'
-          - IMAGE: '39'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
-          - IMAGE: '40'
-            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt5'
           - IMAGE: '40'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
     container:

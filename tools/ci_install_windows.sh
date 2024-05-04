@@ -18,7 +18,7 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.15.2}
+QT_VERSION=${1:-6.5.3}
 COMPILER=${2:-msvc2019_64}
 METHOD=${3:-default}
 
