@@ -119,7 +119,8 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
         (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
       double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
                     static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
-      double reslat, reslon;
+      double reslat;
+      double reslon;
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);

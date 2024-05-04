@@ -193,9 +193,13 @@ void
 GarminTxtFormat::print_position(const Waypoint* wpt)
 {
   int valid = 1;
-  double lat, lon, north, east;
+  double lat;
+  double lon;
+  double north;
+  double east;
   int zone;
-  char map[3], zonec;
+  char map[3];
+  char zonec;
 
   convert_datum(wpt, &lat, &lon);
 
