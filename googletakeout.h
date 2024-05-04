@@ -123,7 +123,7 @@ private:
  
   static void takeout_fatal(const QString& message);
   static void takeout_warning(const QString& message);
-  Waypoint* takeout_waypoint(int lat_e7, int lon_e7, const QString* shortname, const QString* description, const QString* start_str);
+  static Waypoint* takeout_waypoint(int lat_e7, int lon_e7, const QString* shortname, const QString* description, const QString* start_str);
   static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint);
   static void title_case(QString& title);
   void add_place_visit(const QJsonObject& placeVisit);
