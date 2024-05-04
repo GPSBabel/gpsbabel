@@ -64,7 +64,10 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
 {
   int		method = 0;
   uint8_t	spam = 0;
-  int32_t		TrackMaxLat = 0, TrackMaxLon = 0, TrackMinLat = 0, TrackMinLon = 0;
+  int32_t		 TrackMaxLat = 0;
+  int32_t		 TrackMaxLon = 0;
+  int32_t		 TrackMinLat = 0;
+  int32_t		 TrackMinLon = 0;
   char		trk_name[30]="";
   // TODO: SHIFT - can't test behaviour, do not have appropriate files
   //int		ii;
@@ -205,9 +208,13 @@ GarminXTFormat::format_garmin_xt_proc_strk()
   int 		Count = 0; // Used to obtain number of read bytes
   int TracksCompleted = 0; // Number of processed tracks
   uint8_t	TrackBlock[STRK_BLOCK_SIZE]; // File Block
-  double		Lat = 0, Lon = 0; // wpt data
-  double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
-  uint32_t	Time = 0, PrevTime = 0; // wpt data
+  double		 Lat = 0;
+  double		 Lon = 0; // wpt data
+  double		 PrevLat = 0;
+  double		 PrevLon = 0;
+  double		 PrevEle = 0; // wpt data
+  uint32_t	 Time = 0;
+  uint32_t	 PrevTime = 0; // wpt data
   uint8_t	trk_color = 0xff;
 
   // Skip 12 bytes from the BOF

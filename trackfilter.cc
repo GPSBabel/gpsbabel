@@ -309,7 +309,8 @@ void TrackFilter::trackfilter_title()
 void TrackFilter::trackfilter_pack()
 {
   if (!track_list.isEmpty()) {
-    int i, j;
+    int i;
+    int j;
 
     for (i = 1, j = 0; i < track_list.size(); i++, j++) {
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
@@ -702,7 +703,8 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 
 void TrackFilter::trackfilter_range()
 {
-  QDateTime start, stop; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime start; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime stop;  // constructed such that isValid() is false, unlike gpsbabel::DateTime!
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
