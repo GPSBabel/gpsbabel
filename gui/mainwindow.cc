@@ -178,13 +178,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
-// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
-// that required using qOverload.
-  connect(ui_.inputFormatCombo,  qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
           this,                 &MainWindow::inputFormatChanged);
-// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
-// that required using qOverload.
-  connect(ui_.outputFormatCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(ui_.outputFormatCombo, &QComboBox::currentIndexChanged,
           this,                 &MainWindow::outputFormatChanged);
   connect(ui_.inputOptionsBtn,   &QAbstractButton::clicked,
           this,                 &MainWindow::inputOptionButtonClicked);
