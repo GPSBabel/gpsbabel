@@ -358,7 +358,7 @@ QTime NmeaFormat::nmea_parse_hms(const QString& str)
   QTime retval; /* invalid time */
   const QStringList parts = str.trimmed().split('.');
   if ((parts.size() == 1) || (parts.size() == 2)) {
-    retval = QTime::fromString(parts.at(0), "hhmmss");
+    retval = QTime::fromString(parts.at(0), u"hhmmss");
     if (retval.isValid() && parts.size() == 2) {
       bool ok;
       // prepend "0.".  prepending "." won't work if there are no trailing digits.
@@ -539,7 +539,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   if (fields.size() > 9) {
     QString datestr(fields[9]);
     datestr.insert(4, "20");
-    dmy = QDate::fromString(datestr, "ddMMyyyy");
+    dmy = QDate::fromString(datestr, u"ddMMyyyy");
   }
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
@@ -635,7 +635,7 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
   if (fields.size() > 4) {
     QTime time = nmea_parse_hms(fields[1]);
     QString datestr = QStringLiteral("%1%2%3").arg(fields[2], fields[3], fields[4]);
-    QDate date = QDate::fromString(datestr, "ddMMyyyy");
+    QDate date = QDate::fromString(datestr, u"ddMMyyyy");
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
@@ -995,7 +995,7 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate, "yyyyMMdd");
+    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     }
