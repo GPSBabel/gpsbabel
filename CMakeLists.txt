@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
@@ -26,17 +26,12 @@ set(CMAKE_AUTORCC ON)
 add_executable(gpsbabel)
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
-if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.15)
-  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.15 or newer is required.")
+find_package(Qt6 REQUIRED COMPONENTS Core Core5Compat)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Core5Compat)
+if(${Qt6Core_VERSION} VERSION_LESS 6.2)
+  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
-  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
-endif()
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
-  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
+  message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
 
 option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
@@ -174,6 +169,7 @@ set(SUPPORT
   rgbcolors.cc
   route.cc
   session.cc
+  src/core/codecdevice.cc
   src/core/logging.cc
   src/core/nvector.cc
   src/core/textstream.cc
@@ -187,9 +183,6 @@ set(SUPPORT
   waypt.cc
   xmlgeneric.cc
 )
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
-endif()
 
 # HEADERS
 set(HEADERS
@@ -267,6 +260,7 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
+  src/core/codecdevice.h
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
@@ -277,9 +271,6 @@ set(HEADERS
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  set(HEADERS ${HEADERS} src/core/codecdevice.h)
-endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
@@ -292,9 +283,7 @@ endif()
 
 if(WIN32)
   target_compile_definitions(gpsbabel PRIVATE __WIN32__)
-  if(${QT_VERSION_MAJOR} EQUAL "6")
-    qt_disable_unicode_defines(gpsbabel)
-  endif()
+  qt_disable_unicode_defines(gpsbabel)
   if(CMAKE_BUILD_TYPE STREQUAL Debug)
     target_compile_definitions(gpsbabel PRIVATE _DEBUG)
   endif()
@@ -351,7 +340,6 @@ target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
 # We don't care about stripping things out of the build.  Full monty, baby.
 target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
-target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
 target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})

@@ -505,7 +505,12 @@ xml_parse_time(const QString& dateTimeString)
     *pointstr = '\0';
   }
 
-  int year = 0, mon = 1, mday = 1, hour = 0, min = 0, sec = 0;
+  int year = 0;
+  int mon = 1;
+  int mday = 1;
+  int hour = 0;
+  int min = 0;
+  int sec = 0;
   gpsbabel::DateTime dt;
   int res = sscanf(timestr, "%d-%d-%dT%d:%d:%d", &year, &mon, &mday, &hour,
                    &min, &sec);

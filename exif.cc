@@ -579,7 +579,9 @@ void
 ExifFormat::exif_read_app(ExifApp* app)
 {
   gbsize_t offs;
-  uint32_t exif_ifd_ofs, gps_ifd_ofs, inter_ifd_ofs;
+  uint32_t exif_ifd_ofs;
+  uint32_t gps_ifd_ofs;
+  uint32_t inter_ifd_ofs;
   ExifIfd* ifd;
   gbfile* fin = app->fexif;
 

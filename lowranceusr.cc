@@ -1260,7 +1260,8 @@ LowranceusrFormat::read()
 void
 LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
 {
-  int SymbolId, alt;
+  int SymbolId;
+  int alt;
 
   int Lat = lat_deg_to_mm(wpt->latitude);
   int Lon = lon_deg_to_mm(wpt->longitude);
@@ -1410,7 +1411,8 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
      it means */
   gbfputint32(2, file_out);
 
-  int SymbolId, ColorId;
+  int SymbolId;
+  int ColorId;
   if (!wpt->gc_data->get_icon().isEmpty() && wpt->icon_descr.compare(u"Geocache Found") == 0) {
     if (writing_version == 4) {
       SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);

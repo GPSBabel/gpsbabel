@@ -19,13 +19,12 @@
 
 #include "runmachine.h"
 
-#include <QDebug>                    // for qDebug
-#include <QEventLoop>                // for QEventLoop
-#include <QNonConstOverload>         // for QNonConstOverload
-#include <QtGlobal>                  // for QOverload, qOverload
-#include <QDialog>                   // for QDialog
+#include <QDebug>       // for operator<<, QDebug
+#include <QEventLoop>   // for QEventLoop
+#include <Qt>           // for QueuedConnection
+#include <QtGlobal>     // for qDebug
 
-#include "appname.h"                 // for appName
+#include "appname.h"    // for appName
 
 
 QString RunMachine::decodeProcessError(QProcess::ProcessError err)
@@ -64,8 +63,7 @@ RunMachine::RunMachine(QWidget* parent,
             std::nullopt,
             std::nullopt);
   }, Qt::QueuedConnection);
-  // TODO: Qt6 combined the obsolete overloaded signal QProcess::finished(int exitCode)
-  connect(process_, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+  connect(process_, &QProcess::finished,
   this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
     execute(processFinished,
             std::nullopt,
