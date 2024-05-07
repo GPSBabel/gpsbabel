@@ -646,7 +646,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
 
 QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
-  QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
+  QByteArray str = dt.toUTC().toString(u"ddMMyy").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad date format '%s'\n", str.constData());
   }
@@ -655,7 +655,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 
 QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
-  QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
+  QByteArray str = tod.toUTC().toString(u"hhmmss").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad time of day format '%s'\n", str.constData());
   }
