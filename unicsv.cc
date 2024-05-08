@@ -457,7 +457,7 @@ UnicsvFormat::rd_init(const QString& fname)
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
   if (opt_fields) {
-    QString fields = QString(opt_fields).replace("+", ",");
+    QString fields = QString(opt_fields).replace('+', ',');
     unicsv_fondle_header(fields);
   } else if (buff = fin->readLine(), !buff.isNull()) {
     unicsv_fondle_header(buff);
@@ -1090,8 +1090,8 @@ UnicsvFormat::unicsv_print_str(const QString& s) const
     // slavish re-implementation of (what I think) the original C code
     // was doing.
     t.replace("\r\n", ",");
-    t.replace("\r", ",");
-    t.replace("\n", ",");
+    t.replace('\r', ',');
+    t.replace('\n', ',');
   }
   *fout << t.trimmed();
 }

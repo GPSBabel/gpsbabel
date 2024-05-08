@@ -210,13 +210,13 @@ SubripFormat::wr_init(const QString& fname)
   }
   gps_datetime = QDateTime();
   if ((opt_gpstime != nullptr) && (opt_gpsdate != nullptr)) {
-    QDate gps_date = QDate::fromString(opt_gpsdate, "yyyyMMdd");
+    QDate gps_date = QDate::fromString(opt_gpsdate, u"yyyyMMdd");
     if (!gps_date.isValid()) {
       fatal(FatalMsg().nospace() << MYNAME ": option gps_date value (" << opt_gpsdate << ") is invalid.  Expected yyyymmdd.");
     }
-    QTime gps_time = QTime::fromString(opt_gpstime, "HHmmss");
+    QTime gps_time = QTime::fromString(opt_gpstime, u"HHmmss");
     if (!gps_time.isValid()) {
-      gps_time = QTime::fromString(opt_gpstime, "HHmmss.z");
+      gps_time = QTime::fromString(opt_gpstime, u"HHmmss.z");
       if (!gps_time.isValid()) {
         fatal(FatalMsg().nospace() << MYNAME ": option gps_time value (" << opt_gpstime << ") is invalid.  Expected hhmmss[.sss]");
       }
@@ -226,9 +226,9 @@ SubripFormat::wr_init(const QString& fname)
 
   video_offset_ms = 0;
   if (opt_videotime != nullptr) {
-    QTime video_time = QTime::fromString(opt_videotime, "HHmmss");
+    QTime video_time = QTime::fromString(opt_videotime, u"HHmmss");
     if (!video_time.isValid()) {
-      video_time = QTime::fromString(opt_videotime, "HHmmss.z");
+      video_time = QTime::fromString(opt_videotime, u"HHmmss.z");
       if (!video_time.isValid()) {
         fatal(FatalMsg().nospace() << MYNAME ": option video_time value (" << opt_videotime << ") is invalid.  Expected hhmmss[.sss].");
       }
