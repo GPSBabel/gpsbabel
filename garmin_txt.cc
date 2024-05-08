@@ -751,7 +751,7 @@ GarminTxtFormat::write()
   };
 
   QString grid_str = gt_get_mps_grid_longname(grid_index, MYNAME);
-  grid_str = grid_str.replace('*', "°");
+  grid_str = grid_str.replace('*', u'°');
   *fout << "Grid\t" << grid_str << "\r\n";
 
   datum_str = gt_get_mps_datum_name(datum_index);
