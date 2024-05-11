@@ -26,8 +26,8 @@ set(CMAKE_AUTORCC ON)
 add_executable(gpsbabel)
 
 # Find the QtCore library
-find_package(Qt6 REQUIRED COMPONENTS Core Core5Compat)
-list(APPEND QT_LIBRARIES Qt6::Core Qt6::Core5Compat)
+find_package(Qt6 REQUIRED COMPONENTS Core Core5Compat SerialPort)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Core5Compat Qt6::SerialPort)
 if(${Qt6Core_VERSION} VERSION_LESS 6.2)
   message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
