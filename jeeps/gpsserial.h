@@ -4,7 +4,7 @@
 
 #include "jeeps/gps.h"
 
-#define usecDELAY 180000	/* Microseconds before GPS sends A001 */
+#define msecDELAY 180	/* Milliseconds before GPS sends A001 */
 #define DEFAULT_BAUD 9600
 
 int32_t GPS_Serial_Chars_Ready(gpsdevh* fd);

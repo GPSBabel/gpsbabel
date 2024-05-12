@@ -42,8 +42,6 @@
 
 int gps_baud_rate = DEFAULT_BAUD;
 
-//#include "gbser_win.h"
-
 struct serial_data_handle {
   QSerialPort sp{nullptr};
 };
@@ -135,7 +133,7 @@ int32_t GPS_Serial_Off(gpsdevh* dh)
   return 1;
 }
 
-int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
+int32_t GPS_Serial_Chars_Ready_After(gpsdevh * dh, int msec_timeout)
 {
   serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
   /* If no bytes are available call waitForRead()
@@ -145,12 +143,17 @@ int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
    * impacts performance.
    */
   if (h->sp.bytesAvailable() <= 0) {
-    bool ok = h->sp.waitForReadyRead(1);
+    bool ok = h->sp.waitForReadyRead(msec_timeout);
     if (!ok) {
       h->sp.clearError();
     }
   }
   return h->sp.bytesAvailable() > 0;
+}
+
+int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
+{
+  return GPS_Serial_Chars_Ready_After(dh, 1);
 }
 
 int32_t GPS_Serial_Wait(gpsdevh* dh)
@@ -162,8 +165,7 @@ int32_t GPS_Serial_Wait(gpsdevh* dh)
    * blow our state machines when it starts streaming the capabiilties
    * response packet.
    */
-  QThread::usleep(usecDELAY);
-  return GPS_Serial_Chars_Ready(dh);
+  return GPS_Serial_Chars_Ready_After(dh, msecDELAY);
 }
 
 int32_t GPS_Serial_Flush(gpsdevh* dh)
