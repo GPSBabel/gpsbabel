@@ -101,7 +101,7 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 
 int32_t GPS_Serial_Off(gpsdevh* dh)
 {
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
   h->sp.close();
   delete h;
   return 1;
@@ -109,7 +109,7 @@ int32_t GPS_Serial_Off(gpsdevh* dh)
 
 int32_t GPS_Serial_Chars_Ready_After(gpsdevh * dh, int msec_timeout)
 {
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
   /* If no bytes are available call waitForRead()
    * in order to process IO in blocking mode.
    * This may result in bytes becoming available.
@@ -144,7 +144,7 @@ int32_t GPS_Serial_Wait(gpsdevh* dh)
 
 int32_t GPS_Serial_Flush(gpsdevh* dh)
 {
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
   bool ok = h->sp.clear(QSerialPort::AllDirections);
   if (!ok) {
     GPS_Serial_Error(h, "SERIAL: flush error");
@@ -156,7 +156,7 @@ int32_t GPS_Serial_Flush(gpsdevh* dh)
 
 int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 {
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
 
   /*
    * Unbelievably, the Keyspan PDA serial driver 3.2, a "Windows
@@ -186,7 +186,7 @@ int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
 
 int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 {
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
 
   /* Process IO */
   (void) GPS_Serial_Chars_Ready(dh);
@@ -202,7 +202,7 @@ int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* dh, int br)
   static UC data[4];
   GPS_Packet tra;
   GPS_Packet rec;
-  serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
+  auto* h = reinterpret_cast<serial_data_handle*>(dh);
 
   // Turn off all requests by transmitting packet
   GPS_Util_Put_Short(data, 0);
