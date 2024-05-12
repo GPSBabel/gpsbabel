@@ -27,12 +27,11 @@
 #include <cstdarg>          // for va_end, va_list, va_start
 #include <cstdio>           // for fprintf, vsnprintf, stderr, va_list
 #include <cstring>          // for strerror
-#if defined (__WIN32__) || defined (__CYGWIN__)
-#include <windows.h>
-#endif
 
+#include <QByteArray>       // for QByteArray
 #include <QIODeviceBase>    // for QIODeviceBase, QIODeviceBase::ReadWrite
 #include <QSerialPort>      // for QSerialPort, QSerialPort::AllDirections
+#include <QString>          // for QString
 #include <QThread>          // for QThread
 #include <QtGlobal>         // for qint64
 
@@ -48,63 +47,40 @@ struct serial_data_handle {
 /*
  * Display an error from the serial subsystem.
  */
-#if defined (__WIN32__) || defined (__CYGWIN__)
-void GPS_Serial_Error(const char* fmt, ...)
+[[gnu::format(printf, 2, 3)]] void GPS_Serial_Error(serial_data_handle* h, const char* fmt, ...)
 {
   va_list ap;
-  char msg[200];
-  char* s;
-  int b;
-
   va_start(ap, fmt);
-  b = vsnprintf(msg, sizeof(msg), fmt, ap);
-  s = msg + b;
-  *s++ = ':';
-  *s++ = ' ';
 
-  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
-                GetLastError(), 0, s, sizeof(msg) - b - 2, nullptr);
+  QString msg = QString::vasprintf(fmt, ap);
+  msg.append(": ");
+  msg.append(h->sp.errorString());
 
-  GPS_Error("%s", msg); // valid clang -Wformat-security warning
+  GPS_Error("%s", qPrintable(msg));
 
   va_end(ap);
 }
-#else
-void GPS_Serial_Error(const char* fmt, ...)
-{
-  va_list ap;
-  char msg[200];
-
-  va_start(ap, fmt);
-  vsnprintf(msg, sizeof(msg), fmt, ap);
-
-//	FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM, 0,
-//			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
-  GPS_Error("%s: %s", msg, strerror(errno));
-  va_end(ap);
-}
-#endif
 
 int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
   auto* h = new serial_data_handle {};
-  *dh = (gpsdevh*) h;
+  *dh = reinterpret_cast<gpsdevh*>(h);
   GPS_Diag("Opening %s\n", port);
   h->sp.setPortName(port);
   bool ok = h->sp.open(QIODeviceBase::ReadWrite);
   if (!ok) {
-    GPS_Serial_Error("Cannot open serial port '%s'", port);
+    GPS_Serial_Error(h, "Cannot open serial port '%s'", port);
     gps_errno = SERIAL_ERROR;
     delete h;
     return 0;
   }
   ok = h->sp.setDataTerminalReady(true);
   if (!ok) {
-    GPS_Serial_Error("Couldn't set DTR");
+    GPS_Serial_Error(h, "Couldn't set DTR");
   }
   ok = h->sp.setRequestToSend(true);
   if (!ok) {
-    GPS_Serial_Error("Couldn't set RTS");
+    GPS_Serial_Error(h, "Couldn't set RTS");
   }
 #if 0
   GPS_Diag("baudRate %d\n", h->sp.baudRate());
@@ -125,7 +101,6 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 
 int32_t GPS_Serial_Off(gpsdevh* dh)
 {
-  GPS_Diag("Turnning off serial port.\n");
   serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
   h->sp.close();
   delete h;
@@ -172,7 +147,7 @@ int32_t GPS_Serial_Flush(gpsdevh* dh)
   serial_data_handle* h = reinterpret_cast<serial_data_handle*>(dh);
   bool ok = h->sp.clear(QSerialPort::AllDirections);
   if (!ok) {
-    GPS_Serial_Error("SERIAL: flush error");
+    GPS_Serial_Error(h, "SERIAL: flush error");
     gps_errno = SERIAL_ERROR;
   }
   
@@ -224,7 +199,6 @@ int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 // http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
 int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* dh, int br)
 {
-  GPS_Diag("Setting baud rate to %d\n",br);
   static UC data[4];
   GPS_Packet tra;
   GPS_Packet rec;
@@ -268,7 +242,7 @@ int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* dh, int br)
   // Change port speed
   bool ok = h->sp.setBaudRate(br);
   if (!ok) {
-    GPS_Serial_Error("setBaudRate failed.");
+    GPS_Serial_Error(h, "setBaudRate failed");
     h->sp.close();
     return 0;
   }
