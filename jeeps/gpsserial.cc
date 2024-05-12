@@ -31,7 +31,6 @@
 #include <windows.h>
 #endif
 
-#include <QDateTime>
 #include <QIODeviceBase>    // for QIODeviceBase, QIODeviceBase::ReadWrite
 #include <QSerialPort>      // for QSerialPort, QSerialPort::AllDirections
 #include <QThread>          // for QThread
@@ -225,7 +224,7 @@ int32_t GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 // http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
 int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* dh, int br)
 {
-  GPS_Diag("Setting baud rate to %s\n",br);
+  GPS_Diag("Setting baud rate to %d\n",br);
   static UC data[4];
   GPS_Packet tra;
   GPS_Packet rec;
