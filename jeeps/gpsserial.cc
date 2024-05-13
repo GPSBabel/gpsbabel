@@ -23,10 +23,8 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include <cerrno>           // for errno
 #include <cstdarg>          // for va_end, va_list, va_start
 #include <cstdio>           // for fprintf, vsnprintf, stderr, va_list
-#include <cstring>          // for strerror
 
 #include <QByteArray>       // for QByteArray
 #include <QIODeviceBase>    // for QIODeviceBase, QIODeviceBase::ReadWrite
@@ -47,7 +45,7 @@ struct serial_data_handle {
 /*
  * Display an error from the serial subsystem.
  */
-[[gnu::format(printf, 2, 3)]] static void GPS_Serial_Error(serial_data_handle* h, const char* fmt, ...)
+[[gnu::format(printf, 2, 3)]] static void GPS_Serial_Error(const serial_data_handle* h, const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -92,7 +90,7 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
   GPS_Diag("read buffer %d\n", h->sp.readBufferSize());
   GPS_Diag("dtr %d\n", h->sp.isDataTerminalReady());
   GPS_Diag("rts %d\n", h->sp.isRequestToSend());
- 
+
   GPS_Diag("GPS_Serial_On error", h->sp.error());
 #endif
 
@@ -107,7 +105,7 @@ int32_t GPS_Serial_Off(gpsdevh* dh)
   return 1;
 }
 
-static int32_t GPS_Serial_Chars_Ready_After(gpsdevh * dh, int msec_timeout)
+static int32_t GPS_Serial_Chars_Ready_After(gpsdevh* dh, int msec_timeout)
 {
   auto* h = reinterpret_cast<serial_data_handle*>(dh);
   /* If no bytes are available call waitForRead()
@@ -150,7 +148,7 @@ int32_t GPS_Serial_Flush(gpsdevh* dh)
     GPS_Serial_Error(h, "SERIAL: flush error");
     gps_errno = SERIAL_ERROR;
   }
-  
+
   return ok;
 }
 
@@ -170,9 +168,9 @@ int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
   }
 
   qint64 len = h->sp.write(static_cast<const char*>(obuf), size);
-  
+
   if (len != size) {
-    fatal("Write error.   Wrote %d of %d bytes.\n", (int)len, size);
+    fatal("Write error.  Wrote %d of %d bytes.\n", static_cast<int>(len), size);
   }
 
   /* Call waitForBytesWritten to process IO in blocking mode.
@@ -265,7 +263,9 @@ int32_t GPS_Serial_Set_Baud_Rate(gpsdevh* dh, int br)
     return gps_errno;
   }
 
-  if (global_opts.debug_level >= 1) fprintf(stderr, "Serial port speed set to %d\n", br);
+  if (global_opts.debug_level >= 1) {
+    fprintf(stderr, "Serial port speed set to %d\n", br);
+  }
   return 0;
 
 }
