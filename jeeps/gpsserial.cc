@@ -47,7 +47,7 @@ struct serial_data_handle {
 /*
  * Display an error from the serial subsystem.
  */
-[[gnu::format(printf, 2, 3)]] void GPS_Serial_Error(serial_data_handle* h, const char* fmt, ...)
+[[gnu::format(printf, 2, 3)]] static void GPS_Serial_Error(serial_data_handle* h, const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -107,7 +107,7 @@ int32_t GPS_Serial_Off(gpsdevh* dh)
   return 1;
 }
 
-int32_t GPS_Serial_Chars_Ready_After(gpsdevh * dh, int msec_timeout)
+static int32_t GPS_Serial_Chars_Ready_After(gpsdevh * dh, int msec_timeout)
 {
   auto* h = reinterpret_cast<serial_data_handle*>(dh);
   /* If no bytes are available call waitForRead()

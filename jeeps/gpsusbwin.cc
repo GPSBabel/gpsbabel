@@ -55,7 +55,7 @@ typedef struct {
 static HANDLE usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
 
-[[gnu::format(printf, 1, 2)]] void GPS_Serial_Error(const char* fmt, ...)
+[[gnu::format(printf, 1, 2)]] static void GPS_Serial_Error(const char* fmt, ...)
 {
   va_list ap;
   char msg[200];
