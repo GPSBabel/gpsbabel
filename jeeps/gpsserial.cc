@@ -61,8 +61,7 @@ struct serial_data_handle {
 
 int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
-  auto* h = new serial_data_handle {};
-  *dh = reinterpret_cast<gpsdevh*>(h);
+  auto* h = new serial_data_handle;
   GPS_Diag("Opening %s\n", port);
   h->sp.setPortName(port);
   bool ok = h->sp.open(QIODeviceBase::ReadWrite);
@@ -75,10 +74,16 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
   ok = h->sp.setDataTerminalReady(true);
   if (!ok) {
     GPS_Serial_Error(h, "Couldn't set DTR");
+    gps_errno = SERIAL_ERROR;
+    delete h;
+    return 0;
   }
   ok = h->sp.setRequestToSend(true);
   if (!ok) {
     GPS_Serial_Error(h, "Couldn't set RTS");
+    gps_errno = SERIAL_ERROR;
+    delete h;
+    return 0;
   }
 #if 0
   GPS_Diag("baudRate %d\n", h->sp.baudRate());
@@ -94,6 +99,7 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
   GPS_Diag("GPS_Serial_On error", h->sp.error());
 #endif
 
+  *dh = reinterpret_cast<gpsdevh*>(h);
   return 1;
 }
 
