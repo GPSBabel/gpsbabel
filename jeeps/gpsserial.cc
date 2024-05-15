@@ -39,7 +39,7 @@
 int gps_baud_rate = DEFAULT_BAUD;
 
 struct serial_data_handle {
-  QSerialPort sp{nullptr};
+  QSerialPort sp;
 };
 
 /*
