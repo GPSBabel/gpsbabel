@@ -67,9 +67,11 @@ parts:
       - libudev-dev
       - qt6-base-dev
       - libqt6core5compat6-dev
+      - libqt6serialport6-dev
     stage-packages:
       - zlib1g
       - libshp2
       - libusb-1.0-0
       - libqt6core6
       - libqt6core5compat6
+      - libqt6serialport6
