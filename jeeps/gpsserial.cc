@@ -59,6 +59,15 @@ struct serial_data_handle {
   va_end(ap);
 }
 
+/* @func GPS_Serial_On *************************************************
+**
+** Open a serial port 8 data bits, 1 stop bit, 9600 baud
+**
+** @param [r] port [const char *] port e.g. COM4
+** @param [w] dh [gpsdev** ] file descriptor
+**
+** @return [int32_t] false upon error
+************************************************************************/
 int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
 {
   auto* h = new serial_data_handle;
@@ -103,6 +112,14 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
   return 1;
 }
 
+/* @func GPS_Serial_Off *************************************************
+**
+** Close serial port
+**
+** @param [r] dh [gpsdev* ] file descriptor
+**
+** @return [int32_t] false upon error
+************************************************************************/
 int32_t GPS_Serial_Off(gpsdevh* dh)
 {
   auto* h = reinterpret_cast<serial_data_handle*>(dh);
@@ -129,11 +146,29 @@ static int32_t GPS_Serial_Chars_Ready_After(gpsdevh* dh, int msec_timeout)
   return h->sp.bytesAvailable() > 0;
 }
 
+/* @func GPS_Serial_Chars_Ready *****************************************
+**
+** Query port to see if characters are waiting to be read
+**
+** @param [r] dh [gpsdev* ] file descriptor
+**
+** @return [int32_t] true if chars waiting
+************************************************************************/
 int32_t GPS_Serial_Chars_Ready(gpsdevh* dh)
 {
   return GPS_Serial_Chars_Ready_After(dh, 1);
 }
 
+/* @func GPS_Serial_Wait ***********************************************
+**
+** Wait 80 milliseconds before testing for input. The GPS delay
+** appears to be around 40-50 milliseconds. Doubling the value is to
+** allow some leeway.
+**
+** @param [r] dh [gpsdev* ] file descriptor
+**
+** @return [int32_t] true if serial chars waiting
+************************************************************************/
 int32_t GPS_Serial_Wait(gpsdevh* dh)
 {
   /* Wait a short time before testing if data is ready.
@@ -146,6 +181,14 @@ int32_t GPS_Serial_Wait(gpsdevh* dh)
   return GPS_Serial_Chars_Ready_After(dh, msecDELAY);
 }
 
+/* @func GPS_Serial_Flush ***********************************************
+**
+** Flush the serial lines
+**
+** @param [r] dh [gpsdev* ] file descriptor
+**
+** @return [int32_t] false upon error
+************************************************************************/
 int32_t GPS_Serial_Flush(gpsdevh* dh)
 {
   auto* h = reinterpret_cast<serial_data_handle*>(dh);
