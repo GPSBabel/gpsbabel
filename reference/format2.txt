@@ -50,6 +50,7 @@ file	rwrw--	nmea		NMEA 0183 sentences
 file	rw-wrw	osm	osm	OpenStreetMap data files
 file	rwrwrw	ozi		OziExplorer
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000
+file	rw----	cup	cup	See You flight analysis data
 serial	r-r---	skytraq		SkyTraq Venus based loggers (download)
 file	r-r---	skytraq-bin	bin	SkyTraq Venus based loggers Binary File Format
 file	---w--	subrip	srt	SubRip subtitles for video mapping (.srt)
