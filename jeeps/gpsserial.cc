@@ -23,15 +23,17 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include <cstdarg>          // for va_end, va_list, va_start
-#include <cstdio>           // for fprintf, vsnprintf, stderr, va_list
+#include <cstdarg>              // for va_end, va_list, va_start
+#include <cstdio>               // for fprintf, stderr
 
-#include <QByteArray>       // for QByteArray
-#include <QIODeviceBase>    // for QIODeviceBase, QIODeviceBase::ReadWrite
-#include <QSerialPort>      // for QSerialPort, QSerialPort::AllDirections
-#include <QString>          // for QString
-#include <QThread>          // for QThread
-#include <QtGlobal>         // for qint64
+#include <QByteArray>           // for QByteArray
+#include <QDebug>               // for QDebug, operator<<
+#include <QIODeviceBase>        // for QIODeviceBase, QIODeviceBase::ReadWrite
+#include <QSerialPort>          // for QSerialPort, QSerialPort::AllDirections
+#include <QString>              // for QString
+#include <QTextStreamFunction>  // for endl
+#include <QThread>              // for QThread
+#include <QtGlobal>             // for qPrintable, qint64
 
 #include "jeeps/gps.h"
 #include "jeeps/gpsserial.h"
@@ -94,19 +96,21 @@ int32_t GPS_Serial_On(const char* port, gpsdevh** dh)
     delete h;
     return 0;
   }
-#if 0
-  GPS_Diag("baudRate %d\n", h->sp.baudRate());
-  GPS_Diag("parity %d\n", h->sp.parity());
-  GPS_Diag("stopBits %d\n", h->sp.stopBits());
-  GPS_Diag("flow control %d\n", h->sp.flowControl());
-  GPS_Diag("break enabled %d\n", h->sp.isBreakEnabled());
-  GPS_Diag("pinout signals 0x%0x\n", h->sp.pinoutSignals());
-  GPS_Diag("read buffer %d\n", h->sp.readBufferSize());
-  GPS_Diag("dtr %d\n", h->sp.isDataTerminalReady());
-  GPS_Diag("rts %d\n", h->sp.isRequestToSend());
-
-  GPS_Diag("GPS_Serial_On error", h->sp.error());
-#endif
+  if (global_opts.debug_level > 2) {
+    QString debugstr;
+    QDebug debug(&debugstr);
+    debug << "  baudRate:" << h->sp.baudRate() << Qt::endl;
+    debug << "  parity:" << h->sp.parity() << Qt::endl;
+    debug << "  stopBits:" << h->sp.stopBits() << Qt::endl;
+    debug << "  flow control:" << h->sp.flowControl() << Qt::endl;
+    debug << "  break enabled:" << h->sp.isBreakEnabled() << Qt::endl;
+    debug << "  pinout signals:" << h->sp.pinoutSignals() << Qt::endl;
+    debug << "  read buffer size:" << h->sp.readBufferSize() << Qt::endl;
+    debug << "  DTR:" << h->sp.isDataTerminalReady() << Qt::endl;
+    debug << "  RTS:" << h->sp.isRequestToSend() << Qt::endl;
+    debug << "  error status:" << h->sp.error() << Qt::endl;
+    GPS_Diag("%s", qPrintable(debugstr));
+  }
 
   *dh = reinterpret_cast<gpsdevh*>(h);
   return 1;
