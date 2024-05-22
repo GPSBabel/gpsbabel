@@ -657,7 +657,7 @@ GarminFormat::rd_position(posn_status* posn_status)
   auto* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
-  if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
+  if (GPS_Command_Pvt_Get(pvt_fd, &pvt)) {
     pvt2wpt(pvt, wpt);
     GPS_Pvt_Del(&pvt);
 
