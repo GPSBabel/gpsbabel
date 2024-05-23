@@ -51,8 +51,8 @@ void   GPS_D700_Get(const GPS_Packet& packet, double* lat, double* lon);
 void   GPS_D700_Send(GPS_Packet& packet, double lat, double lon);
 
 int32_t GPS_A800_On(const char* port, gpsdevh** fd);
-int32_t GPS_A800_Off(const char* port, gpsdevh** fd);
-int32_t GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet);
+int32_t GPS_A800_Off(gpsdevh* fd);
+int32_t GPS_A800_Get(gpsdevh* fd, GPS_PPvt_Data* packet);
 void   GPS_D800_Get(const GPS_Packet& packet, GPS_PPvt_Data* pvt);
 
 int32_t GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb);
