@@ -167,7 +167,7 @@ const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COLON",		":"	},
   { "SEMICOLON",		";"	},
   { "NEWLINE",		"\n"	},
-  { "CR",			"\n"	},
+  { "CR",			"\r"	},
   { "CRNEWLINE",  	"\r\n"	},
   { "TAB",  		"\t"	},
   { "SPACE",  		" "	},

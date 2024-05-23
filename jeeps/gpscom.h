@@ -14,8 +14,8 @@ int32_t GPS_Command_Get_Position(const char* port, double* lat, double* lon);
 int32_t GPS_Command_Send_Position(const char* port, double lat, double lon);
 
 int32_t GPS_Command_Pvt_On(const char* port, gpsdevh** fd);
-int32_t GPS_Command_Pvt_Off(const char* port, gpsdevh** fd);
-int32_t GPS_Command_Pvt_Get(gpsdevh** fd, GPS_PPvt_Data* pvt);
+int32_t GPS_Command_Pvt_Off(gpsdevh* fd);
+int32_t GPS_Command_Pvt_Get(gpsdevh* fd, GPS_PPvt_Data* pvt);
 
 int32_t GPS_Command_Get_Almanac(const char* port, GPS_PAlmanac** alm);
 int32_t GPS_Command_Send_Almanac(const char* port, GPS_PAlmanac* alm, int32_t n);
