@@ -24,7 +24,6 @@
 #include "jeeps/gps.h"
 #include <cstdarg>
 #include <cstdlib>
-#include <fcntl.h>
 
 static int32_t gps_endian_called = 0;
 static int32_t GPS_Little = 0;
@@ -357,88 +356,6 @@ void GPS_Util_Put_Float(UC* s, const float v)
 
   return;
 }
-
-#if 0
-/* @func GPS_Util_Canon  ****************************************************
-**
-** Sets or unsets canonical mode
-** NB: Must have called this with True before calling with False
-** NB: Remember to trun it off (false) eventually
-**
-** @param [r] state [int32] state=true->raw state=false->normal
-** @return [void]
-** @@
-****************************************************************************/
-
-void GPS_Util_Canon(int32 state)
-{
-  static struct termios tty;
-  static struct termios sv;
-
-
-  if (state) {
-    tcgetattr(1,&sv);
-    tcgetattr(1, &tty);
-    tty.c_cc[VMIN]='\1';
-    tty.c_cc[VTIME]='\0';
-    tcsetattr(1,TCSANOW,&tty);
-    tty.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(1, TCSANOW, &tty);
-  } else {
-    tcsetattr(1, TCSANOW, &sv);
-  }
-
-  return;
-}
-#endif
-
-#if 0
-/* @func GPS_Util_Block  ****************************************************
-**
-** Sets or unsets blocking
-** @modified 13-01-2000 to return an int
-**
-** @param [r] fd [int32] file descriptor
-** @param [r] state [int32] state=true->block state=false->non-block
-**
-** @return [int32] success
-** @@
-****************************************************************************/
-
-int32 GPS_Util_Block(int32 fd, int32 state)
-{
-  static int32 notcalled=1;
-  static int32 block;
-  static int32 noblock;
-  int32    f;
-
-  gps_errno = HARDWARE_ERROR;
-
-  if (notcalled) {
-    notcalled = 0;
-    if ((f=fcntl(fd,F_GETFL,0))==-1) {
-      GPS_Error("Util_Block: FCNTL error");
-      return 0;
-    }
-    block = f & ~O_NDELAY;
-    noblock = f |  O_NDELAY;
-  }
-
-  if (state) {
-    if (fcntl(fd,F_SETFL,block)==-1) {
-      GPS_Error("Util_Block: Error blocking");
-      return 0;
-    }
-  } else {
-    if (fcntl(fd,F_SETFL,noblock)==-1) {
-      GPS_Error("Util_Block: Error unblocking");
-      return 0;
-    }
-  }
-
-  return 1;
-}
-#endif
 
 
 /* @func GPS_Warning ********************************************************
