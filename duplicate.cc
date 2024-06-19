@@ -73,8 +73,7 @@ void DuplicateFilter::process()
         wptfirst->latitude = wptlast->latitude;
         wptfirst->longitude = wptlast->longitude;
       }
-      for (auto it = values.cbegin(); it != values.cend(); ++it) {
-        Waypoint* wpt = *it;
+      for (Waypoint* wpt : values) {
         if (purge_duplicates || (wpt != wptfirst)) {
           wpt->wpt_flags.marked_for_deletion = 1;
         }

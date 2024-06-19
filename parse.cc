@@ -160,16 +160,23 @@ int
 parse_coordinates(const char* str, int datum, const grid_type grid,
                   double* latitude, double* longitude, const char* module)
 {
-  double lat, lon;
-  unsigned char lathemi=0, lonhemi=0;
-  int deg_lat, deg_lon, min_lat, min_lon;
+  double lat;
+  double lon;
+  unsigned char lathemi=0;
+  unsigned char lonhemi=0;
+  int deg_lat;
+  int deg_lon;
+  int min_lat;
+  int min_lon;
   char map[3];
   int utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmc;
   int result;
   int ct;
-  double lx, ly;
+  double lx;
+  double ly;
   const char* format;
 
   int valid = 1;
@@ -236,7 +243,8 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     break;
 
   case grid_swiss: {
-    double east, north;
+    double east;
+    double north;
 
     datum = kDautmWGS84;	/* fix */
     format = "%lf %lf%n";

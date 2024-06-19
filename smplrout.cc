@@ -119,7 +119,8 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
         (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
       double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
                     static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
-      double reslat, reslon;
+      double reslat;
+      double reslon;
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
@@ -209,7 +210,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
     neighborhood goner = errormap.last();
     goner.wpt->wpt_flags.marked_for_deletion = 1;
     // errormap.remove(lastKey());  // with Qt 5.12.12, 5.15.2 results in asan heap-use-after-free errors in build_extra_tests.sh
-    errormap.erase(std::prev(errormap.end())); // in Qt6 can use cend().
+    errormap.erase(std::prev(errormap.cend())); // in Qt6 can use cend().
     // wpthash.remove(goner.wpt); // removal not necessary
 
     /* recompute neighbors of point marked for deletion. */

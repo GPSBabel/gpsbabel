@@ -167,7 +167,7 @@ const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COLON",		":"	},
   { "SEMICOLON",		";"	},
   { "NEWLINE",		"\n"	},
-  { "CR",			"\n"	},
+  { "CR",			"\r"	},
   { "CRNEWLINE",  	"\r\n"	},
   { "TAB",  		"\t"	},
   { "SPACE",  		" "	},
@@ -986,9 +986,11 @@ void
 XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
-  double latitude, longitude;
+  double latitude;
+  double longitude;
   int32_t utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmzc;
 
   if (oldlon < 900) {
@@ -1223,7 +1225,8 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     /* SPECIAL COORDINATES */
     case XcsvStyle::XT_MAP_EN_BNG: {
       char map[3];
-      double north, east;
+      double north;
+      double east;
       if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
         fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
               wpt->latitude, wpt->longitude);

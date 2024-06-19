@@ -580,13 +580,12 @@ int32_t GPS_Command_Pvt_On(const char* port, gpsdevh** fd)
 **
 ** Instruct GPS to stop sending Pvt data every second
 **
-** @param [r] port [const char *] serial port
-** @param [w] fd [int32 *] file descriptor
+** @param [r] fd [int32] file descriptor
 **
 ** @return [int32] success
 ************************************************************************/
 
-int32_t GPS_Command_Pvt_Off(const char* port, gpsdevh** fd)
+int32_t GPS_Command_Pvt_Off(gpsdevh* fd)
 {
 	int32_t ret = 0;
 
@@ -597,7 +596,7 @@ int32_t GPS_Command_Pvt_Off(const char* port, gpsdevh** fd)
 
   switch (gps_pvt_transfer) {
   case pA800:
-    ret = GPS_A800_Off(port,fd);
+    ret = GPS_A800_Off(fd);
     break;
   default:
     GPS_Error("Pvt_Off: Unknown position protocol");
@@ -613,13 +612,13 @@ int32_t GPS_Command_Pvt_Off(const char* port, gpsdevh** fd)
 **
 ** Get a single PVT info entry
 **
-** @param [w] fd [int32 *] file descriptor
+** @param [r] fd [int32] file descriptor
 ** @param [w] pvt [GPS_PPvt_Data *] pvt data structure to fill
 **
 ** @return [int32] success
 ************************************************************************/
 
-int32_t GPS_Command_Pvt_Get(gpsdevh** fd, GPS_PPvt_Data* pvt)
+int32_t GPS_Command_Pvt_Get(gpsdevh* fd, GPS_PPvt_Data* pvt)
 {
 	int32_t ret = 0;
 

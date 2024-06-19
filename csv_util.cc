@@ -20,7 +20,6 @@
 
  */
 
-#include <cassert>             // for assert
 #include <cmath>               // for fabs
 #include <cstdlib>             // for strtod
 #include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
@@ -28,7 +27,7 @@
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
 #include <QDebug>              // for QDebug
-#include <QRegularExpression>  // for QRegularExpression
+#include <QList>               // for QList
 #include <QString>             // for QString, operator+
 
 #include "defs.h"
@@ -49,12 +48,10 @@ csv_stringclean(const QString& source, const QString& to_nuke)
 {
   QString r = source;
   if (!to_nuke.isEmpty()) {
-    // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
-    // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
-    // or one can imagine [^a] when we meant the characters '^' and 'a'.
-    QRegularExpression regex = QRegularExpression(QStringLiteral("[%1]").arg(QRegularExpression::escape(to_nuke)));
-    assert(regex.isValid());
-    r.remove(regex);
+    auto isNukeable = [&to_nuke](const QChar &ch)->bool {
+        return to_nuke.contains(ch);
+    };
+    r.removeIf(isNukeable);
   }
   return r;
 }

@@ -22,17 +22,21 @@ jobs:
           #- IMAGE: 'focal'
           #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-          - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
           - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
@@ -69,7 +73,7 @@ jobs:
     - name: install
       run: |
         sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev qtbase5-dev qtwebengine5-dev libqt5serialport5-dev ninja-build
+        sudo apt-get install gcovr lcov libusb-1.0-0-dev libgl-dev qt6-base-dev libqt6core5compat6-dev libqt6serialport6-dev qt6-webengine-dev qt6-webengine-dev-tools ninja-build
 
     - name: Checkout repository
       uses: actions/checkout@v4

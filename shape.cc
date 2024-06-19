@@ -220,15 +220,15 @@ ShapeFormat::read()
       nameidx = -2;
       const QStringList opt_name_fields = qopt_name.split('+', Qt::SkipEmptyParts);
       nameindices.reserve(opt_name_fields.size());
-      for (int oidx=0; oidx<opt_name_fields.size(); oidx++) {
+      for (const auto & opt_name_field : opt_name_fields) {
         bool ok;
-        int fieldIdx = opt_name_fields.at(oidx).toInt(&ok);
+        int fieldIdx = opt_name_field.toInt(&ok);
         if (ok) {
           // retrieve name component from given field number
           check_field_index(fieldIdx);
         } else {
           // retrieve name component from given field name.
-          fieldIdx = get_field_index(opt_name_fields.at(oidx));
+          fieldIdx = get_field_index(opt_name_field);
         }
         nameindices.append(fieldIdx);
       }

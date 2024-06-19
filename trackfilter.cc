@@ -309,7 +309,8 @@ void TrackFilter::trackfilter_title()
 void TrackFilter::trackfilter_pack()
 {
   if (!track_list.isEmpty()) {
-    int i, j;
+    int i;
+    int j;
 
     for (i = 1, j = 0; i < track_list.size(); i++, j++) {
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
@@ -359,8 +360,8 @@ void TrackFilter::trackfilter_merge()
 
     QList<Waypoint*> buff;
 
-    auto it = track_list.begin();
-    while (it != track_list.end()) { /* put all points into temp buffer */
+    auto it = track_list.cbegin();
+    while (it != track_list.cend()) { /* put all points into temp buffer */
       route_head* track = *it;
       // steal all the wpts
       WaypointList wpts;
@@ -377,9 +378,9 @@ void TrackFilter::trackfilter_merge()
           delete wpt;
         }
       }
-      if (it != track_list.begin()) {
+      if (it != track_list.cbegin()) {
         track_del_head(track);
-        it = track_list.erase(it);
+        it = static_cast<RouteList::const_iterator>(track_list.erase(it));
       } else {
         ++it;
       }
@@ -702,7 +703,8 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 
 void TrackFilter::trackfilter_range()
 {
-  QDateTime start, stop; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime start; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime stop;  // constructed such that isValid() is false, unlike gpsbabel::DateTime!
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
@@ -714,8 +716,8 @@ void TrackFilter::trackfilter_range()
 
   int original_waypt_count = track_waypt_count();
 
-  auto it = track_list.begin();
-  while (it != track_list.end()) {
+  auto it = track_list.cbegin();
+  while (it != track_list.cend()) {
     route_head* track = *it;
 
     foreach (Waypoint* wpt, track->waypoint_list) {
@@ -739,7 +741,7 @@ void TrackFilter::trackfilter_range()
 
     if (track->rte_waypt_empty()) {
       track_del_head(track);
-      it = track_list.erase(it);
+      it = static_cast<RouteList::const_iterator>(track_list.erase(it));
     } else {
       ++it;
     }

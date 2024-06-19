@@ -199,7 +199,9 @@ void KmlFormat::wpt_ts_end(const QString& args, const QXmlStreamAttributes* /*at
 
 void KmlFormat::wpt_coord(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   if (! wpt_tmp) {
     return;
   }
@@ -345,7 +347,9 @@ void KmlFormat::gx_trk_coord(const QString& args, const QXmlStreamAttributes* /*
     fatal(MYNAME ": gx_trk_coord: invalid kml file\n");
   }
 
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   if (EOF != n && 2 != n && 3 != n) {
     fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));

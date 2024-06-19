@@ -192,7 +192,9 @@ NmeaFormat::nmea_add_wpt(Waypoint* wpt, route_head* trk) const
   // transferred to either the global_waypoint_list or global_track_list.
   wpt->extra_data = nullptr;
   if (datum != kDautmWGS84) {
-    double lat, lon, alt;
+    double lat;
+    double lon;
+    double alt;
     GPS_Math_Known_Datum_To_WGS84_M(
       wpt->latitude, wpt->longitude, 0,
       &lat, &lon, &alt, datum);
@@ -669,7 +671,9 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
     if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
   }
 
-  float pdop = 0, hdop = 0, vdop = 0;
+  float pdop = 0;
+  float hdop = 0;
+  float vdop = 0;
   if (nfields > 15) pdop = fields[15].toFloat();
   if (nfields > 16) hdop = fields[16].toFloat();
   if (nfields > 17) vdop = fields[17].toFloat();
@@ -732,12 +736,24 @@ double NmeaFormat::pcmpt_deg(int d)
 void
 NmeaFormat::pcmpt_parse(const char* ibuf)
 {
-  int i, j1, j2, j3, j4, j5, j6;
-  int lat, lon;
-  char altflag, u1, u2;
-  float alt, f1, f2;
+  int i;
+  int j1;
+  int j2;
+  int j3;
+  int j4;
+  int j5;
+  int j6;
+  int lat;
+  int lon;
+  char altflag;
+  char u1;
+  char u2;
+  float alt;
+  float f1;
+  float f2;
   char coords[20] = {0};
-  int dmy, hms;
+  int dmy;
+  int hms;
 
   dmy = hms = 0;
 

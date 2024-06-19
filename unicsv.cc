@@ -227,7 +227,9 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
 QDate
 UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
-  int p1, p2, p3;
+  int p1;
+  int p2;
+  int p3;
   char sep[2];
   std::tm tm{};
   int lconsumed = 0;
@@ -1260,7 +1262,9 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 void
 UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   const Geocache* gc_data = nullptr;
   unicsv_waypt_ct++;
 
@@ -1300,7 +1304,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 
   case grid_bng: {
     char map[3];
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map)) {
       unicsv_fatal_outside(wpt);
@@ -1315,7 +1320,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   case grid_utm: {
     int zone;
     char zonec;
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
                                          &east, &north, &zone, &zonec, unicsv_datum_idx)) {
@@ -1328,7 +1334,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     break;
   }
   case grid_swiss: {
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north)) {
       unicsv_fatal_outside(wpt);
