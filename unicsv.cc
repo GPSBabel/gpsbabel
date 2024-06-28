@@ -419,8 +419,12 @@ UnicsvFormat::unicsv_fondle_header(QString header)
       }
       f++;
     }
-    if ((f->name.isEmpty()) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+    if (global_opts.debug_level) {
+      if ((f->name.isEmpty()) && global_opts.debug_level) {
+        warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+      } else {
+        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
+      }
     }
 
     /* handle some special items */
