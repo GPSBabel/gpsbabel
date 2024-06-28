@@ -398,7 +398,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
   unicsv_fieldsep = delimiters.last();
   QStringList values;
   bool delimiter_detected;
-  for (auto delimiter : delimiters) {
+  for (const auto* delimiter : delimiters) {
     values = csv_linesplit(header, delimiter, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180, &delimiter_detected);
     if (delimiter_detected) {
       unicsv_fieldsep = delimiter;
