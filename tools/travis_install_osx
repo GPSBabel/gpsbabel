@@ -88,10 +88,8 @@ else
     "${TRAVIS_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
-    # install-qt creates the install at $PWD/Qt.
-    QT_VERSION_SHORT=${QT_VERSION//./}
-    QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt "${QT_VERSION}"
-    rm "${CACHEDIR}"/qt-opensource*.dmg
+    echo "ERROR: unknown installation method ${METHOD}." >&2
+    exit 1
   fi
   popd
   validate
