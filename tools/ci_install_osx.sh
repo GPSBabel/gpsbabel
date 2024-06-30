@@ -75,7 +75,7 @@ else
      )
   elif [ "$METHOD" = "aqt" ]; then
     pip3 install aqtinstall>=2.0.0
-    "${TRAVIS_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
+    "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
