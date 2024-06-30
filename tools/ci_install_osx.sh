@@ -9,8 +9,6 @@ function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1
 function debug() {
   cat "${CACHEDIR}/qt-${QT_VERSION}.env"
   find "${CACHEDIR}" -maxdepth 3 -ls
-  cat "${CACHEDIR}/Qt/InstallationLog.txt"
-  cat "${CACHEDIR}/Qt/components.xml"
   echo "$1" >&2
   exit 1
 }
