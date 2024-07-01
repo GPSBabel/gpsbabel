@@ -9,6 +9,5 @@ exclude_paths:
   - "reference/**"
   - "shapelib/**"
   - "strptime/**"
-  - "tools/qtci/README.md"
   - "tools/uploadtool/README.md"
   - "zlib/**"
