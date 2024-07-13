@@ -3152,9 +3152,6 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
   gpsdevh* fd;
   GPS_Packet tra;
   GPS_Packet rec;
-  int32_t i;
-  int32_t len;
-  US  method;
 
   if (!GPS_Device_On(port,&fd)) {
     return gps_errno;
@@ -3172,7 +3169,10 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
   }
 
 
-  for (i=0; i<n; ++i) {
+  for (int32_t i=0; i<n; ++i) {
+    US  method;
+    int32_t len;
+
     if (way[i]->isrte) {
       method = LINK_ID[gps_link_type].Pid_Rte_Hdr;
 
@@ -3190,6 +3190,8 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
         GPS_Error("A200_Send: Unknown route protocol");
         return PROTOCOL_ERROR;
       }
+    } else if (way[i]->islink) {
+      continue; // links not supported.  can cause "Route Waypoint was Deleted" and "Received an Invalid WPT" on device.
     } else {
       method = LINK_ID[gps_link_type].Pid_Rte_Wpt_Data;
 
