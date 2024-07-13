@@ -267,7 +267,7 @@ ExifFormat::exif_read_timestamp(const ExifTag* tag)
 QDate
 ExifFormat::exif_read_datestamp(const ExifTag* tag)
 {
-  return QDate::fromString(tag->data.at(0).toByteArray().constData(), "yyyy:MM:dd");
+  return QDate::fromString(tag->data.at(0).toByteArray().constData(), u"yyyy:MM:dd");
 }
 
 void
@@ -697,7 +697,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
     // Note the assumption of local time can be problematic if the data
     // is processed in a different time zone than was used in recording
     // the time in the image.
-    res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
+    res = QDateTime::fromString(str, u"yyyy:MM:dd hh:mm:ss");
 
     // Exif 2.31 added offset tags to record the offset to UTC.
     // If these are present use them, otherwise assume local time.

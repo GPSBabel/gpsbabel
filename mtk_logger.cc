@@ -842,7 +842,7 @@ int MtkLoggerBase::csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_
     QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
     dt = dt.addMSecs(itm->timestamp_ms);
 
-    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");
+    QString timestamp = dt.toUTC().toString(u"yyyy/MM/dd,hh:mm:ss.zzz");
     gbfputs(timestamp, csvFile);
     gbfputc(',', csvFile);
   }

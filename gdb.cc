@@ -1135,8 +1135,8 @@ GdbFormat::write_header()
     */
   static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
-  gdb_write_cstr(gdb_release_dt.toString("MMM dd yyyy"));
-  gdb_write_cstr(gdb_release_dt.toString("HH:mm:ss"));
+  gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
+  gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));
 
   finalize_item(fsave, 'A');
 

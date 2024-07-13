@@ -249,7 +249,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
 QDate
 XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
-  return QDate::fromString(s, "yyyyMMdd");
+  return QDate::fromString(s, u"yyyyMMdd");
 }
 
 QDateTime
