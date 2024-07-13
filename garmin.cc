@@ -21,17 +21,18 @@
 
 #include "garmin.h"
 
-#include <cassert>               // for assert
 #include <climits>               // for INT_MAX
 #include <cmath>                 // for atan2, floor, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
+#include <cstdint>               // for int32_t
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
 #include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
-#include <QRegularExpression>    // for QRegularExpression
+#include <QChar>                 // for QChar
+#include <QList>                 // for QList<>::const_iterator
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <Qt>                    // for CaseInsensitive
@@ -46,7 +47,6 @@
 #include "jeeps/gpsapp.h"        // for GPS_Set_Baud_Rate, GPS_Init, GPS_Pre...
 #include "jeeps/gpscom.h"        // for GPS_Command_Get_Lap, GPS_Command_Get...
 #include "jeeps/gpsmem.h"        // for GPS_Track_Del, GPS_Way_Del, GPS_Pvt_Del
-#include "jeeps/gpsport.h"       // for int32
 #include "jeeps/gpsprot.h"       // for gps_waypt_type, gps_category_type
 #include "jeeps/gpssend.h"       // for GPS_SWay, GPS_PWay, GPS_STrack, GPS_...
 #include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
@@ -297,17 +297,7 @@ GarminFormat::rw_init(const QString& fname)
     fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
   }
 
-  /*
-   * Beware, valid_waypt_chars shouldn't contain any character class metacharacters,
-   * i.e. '\', '^', '-', '[', or ']'
-   */
-  assert(!QString(valid_waypt_chars).contains('\\'));
-  assert(!QString(valid_waypt_chars).contains('^'));
-  assert(!QString(valid_waypt_chars).contains('-'));
-  assert(!QString(valid_waypt_chars).contains('['));
-  assert(!QString(valid_waypt_chars).contains(']'));
-  invalid_char_re = QRegularExpression(QStringLiteral("[^%1]").arg(valid_waypt_chars));
-  assert(invalid_char_re.isValid());
+  valid_chars = valid_waypt_chars;
 }
 
 void
@@ -330,6 +320,8 @@ GarminFormat::rw_deinit()
 
   xfree(portname);
   portname = nullptr;
+
+  valid_chars = QString();
 }
 
 int
@@ -958,7 +950,10 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    cleanname = cleanname.toUpper().remove(invalid_char_re);
+    auto isInvalidChar = [this](const QChar &ch)->bool {
+      return !valid_chars.contains(ch);
+    };
+    cleanname = cleanname.toUpper().removeIf(isInvalidChar);
   }
   write_char_string(rte->ident,
                     str_from_unicode(cleanname).constData(),
