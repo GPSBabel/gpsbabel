@@ -59,9 +59,9 @@ jobs:
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
       env:
-        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+        CI_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
+        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
 
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'

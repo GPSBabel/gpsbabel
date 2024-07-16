@@ -385,19 +385,27 @@ void
 UnicsvFormat::unicsv_fondle_header(QString header)
 {
   /* Convert the entire header to lower case for convenience.
-   * If we see a tab in that header, we decree it to be tabsep.
    */
-  unicsv_fieldsep = ",";
-  if (header.contains('\t')) {
-    unicsv_fieldsep = "\t";
-  } else if (header.contains(';')) {
-    unicsv_fieldsep = ";";
-  } else if (header.contains('|')) {
-    unicsv_fieldsep = "|";
-  }
   header = header.toLower();
 
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  /* Find the separator and split the line into fields.
+   * If we see an unenclosd tab that is the separator.
+   * Otherwise, if we see an unenclosed semicolon that is the separator.
+   * Otherwise, if we see an unenclosed vertical bar that is the separator.
+   * Otherwise the separator is a comma.
+   */
+  const QList<const char*> delimiters = {"\t", ";", "|", ","};
+  unicsv_fieldsep = delimiters.last();
+  QStringList values;
+  bool delimiter_detected;
+  for (const auto* delimiter : delimiters) {
+    values = csv_linesplit(header, delimiter, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180, &delimiter_detected);
+    if (delimiter_detected) {
+      unicsv_fieldsep = delimiter;
+      break;
+    }
+  }
+
   for (auto value : values) {
     value = value.trimmed();
 
@@ -411,8 +419,12 @@ UnicsvFormat::unicsv_fondle_header(QString header)
       }
       f++;
     }
-    if ((f->name.isEmpty()) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+    if (global_opts.debug_level) {
+      if ((f->name.isEmpty()) && global_opts.debug_level) {
+        warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+      } else {
+        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
+      }
     }
 
     /* handle some special items */
@@ -456,10 +468,12 @@ UnicsvFormat::rd_init(const QString& fname)
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
+  unicsv_lineno = 0;
   if (opt_fields) {
     QString fields = QString(opt_fields).replace("+", ",");
     unicsv_fondle_header(fields);
-  } else if (buff = fin->readLine(), !buff.isNull()) {
+  } else if (buff = fin->readLine(); !buff.isNull()) {
+    ++unicsv_lineno;
     unicsv_fondle_header(buff);
   } else {
     unicsv_fieldsep = nullptr;
@@ -508,7 +522,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   wpt->longitude = kUnicsvUnknown;
 
   int column = -1;
-  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
@@ -1060,6 +1074,7 @@ UnicsvFormat::read()
   }
 
   while ((buff = fin->readLine(), !buff.isNull())) {
+    ++unicsv_lineno;
     buff = buff.trimmed();
     if (buff.isEmpty() || buff.startsWith('#')) {
       continue;

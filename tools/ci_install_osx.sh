@@ -9,8 +9,6 @@ function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1
 function debug() {
   cat "${CACHEDIR}/qt-${QT_VERSION}.env"
   find "${CACHEDIR}" -maxdepth 3 -ls
-  cat "${CACHEDIR}/Qt/InstallationLog.txt"
-  cat "${CACHEDIR}/Qt/components.xml"
   echo "$1" >&2
   exit 1
 }
@@ -47,16 +45,6 @@ fi
 
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
-  echo "If you need to clear the cache see"
-  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
-  if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
-    # the cache is being used.  modify it to reset expiration date.
-    date > "${CACHEDIR}/timestamp"
-  fi
-  if [ -f "${CACHEDIR}/timestamp" ]; then
-    echo -n "Cache timestamp: "
-    cat "${CACHEDIR}/timestamp"
-  fi
 else
   rm -fr "${CACHEDIR}"
   mkdir -p "${CACHEDIR}"
@@ -85,13 +73,11 @@ else
      )
   elif [ "$METHOD" = "aqt" ]; then
     pip3 install aqtinstall>=2.0.0
-    "${TRAVIS_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
+    "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
-    # install-qt creates the install at $PWD/Qt.
-    QT_VERSION_SHORT=${QT_VERSION//./}
-    QT_CI_PACKAGES=qt.qt5.${QT_VERSION_SHORT}.clang_64,qt.qt5.${QT_VERSION_SHORT}.qtwebengine QT_CI_DOWNLOADER="wget -nv -c" PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt "${QT_VERSION}"
-    rm "${CACHEDIR}"/qt-opensource*.dmg
+    echo "ERROR: unknown installation method ${METHOD}." >&2
+    exit 1
   fi
   popd
   validate
