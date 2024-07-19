@@ -981,7 +981,7 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
 void
 GarminFormat::route_write()
 {
-  int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
+  const int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
   tx_routelist = (GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
@@ -998,6 +998,12 @@ GarminFormat::route_write()
   };
   route_disp_all(route_hdr_pr_lambda, nullptr, route_waypt_pr_lambda);
   GPS_Command_Send_Route(portname, tx_routelist, n);
+
+  for (int i = 0; i < n; i++) {
+    GPS_Way_Del(&tx_routelist[i]);
+  }
+  
+  xfree(tx_routelist);
 }
 
 void
