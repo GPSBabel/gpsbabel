@@ -937,7 +937,11 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
 
   rte->lon = wpt->longitude;
   rte->lat = wpt->latitude;
-  rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  if (gps_rte_type == 103) {
+    rte->smbl = d103_icon_number_from_symbol(wpt->icon_descr);
+  } else {
+    rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  }
 
   // map class so unit doesn't duplicate routepoints as a waypoint.
   rte->wpt_class = 0x80;
