@@ -907,6 +907,11 @@ GarminFormat::route_hdr_pr(const route_head* rte)
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
+    /* for devices that use D201_Rte_Hdr_Type */
+    write_char_string((*cur_tx_routelist_entry)->rte_cmnt,
+                      str_from_unicode(rte->rte_name).constData(),
+                      sizeof((*cur_tx_routelist_entry)->rte_cmnt));
+    /* for devices that use D202_Rte_Hdr_Type */
     write_char_string((*cur_tx_routelist_entry)->rte_ident,
                       str_from_unicode(rte->rte_name).constData(),
                       sizeof((*cur_tx_routelist_entry)->rte_ident));
