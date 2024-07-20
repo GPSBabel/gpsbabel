@@ -125,25 +125,24 @@ char	gps_save_string[GPS_ARB_LEN];
  * we uppercase the string because some models (III's and 12's) react
  * violently to lower case data.
  */
-typedef enum { UpperNo = 0, UpperYes = 1 } copycase;
+enum copycase { UpperNo, UpperYes };
 
 static
-void copy_char_array(UC** dst, char* src, int count, copycase mustupper)
+void copy_char_array(UC** dst, const char* src, int count, copycase mustupper)
 {
   UC* d = *dst;
   int copied = 0;
   // Copy up to count characters from the source to the desitnation.
-  for (int i = 0; i < count; ++i) { 
+  for (int i = 0; i < count; ++i) {
     UC sc = *src++;
     if (sc == 0) {
       break;
     }
     if (!isalnum(sc)) {
       continue;
-    } else {
-      *d++ = mustupper == UpperYes ? toupper(sc) : sc;
-      copied++; 
     }
+    *d++ = mustupper == UpperYes ? toupper(sc) : sc;
+    copied++;
   };
   // If necessary pad with space characters so that the total count
   // of characters written to the destination is count.
