@@ -143,7 +143,7 @@ void copy_char_array(UC** dst, const char* src, int count, copycase mustupper)
     }
     *d++ = mustupper == UpperYes ? toupper(sc) : sc;
     copied++;
-  };
+  }
   // If necessary pad with space characters so that the total count
   // of characters written to the destination is count.
   for (int i = copied; i < count; ++i) {
