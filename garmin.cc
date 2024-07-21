@@ -22,7 +22,7 @@
 #include "garmin.h"
 
 #include <climits>               // for INT_MAX
-#include <cmath>                 // for atan2, floor, sqrt
+#include <cmath>                 // for atan2, modf, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
 #include <cstdint>               // for int32_t
 #include <cstdlib>               // for strtol
@@ -599,8 +599,9 @@ GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
   double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
                   pvt->tow
                   - pvt->leap_scnds;
-  double wptimes = floor(wptime);
-  wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
+  double wptime_integral_part;
+  double wptime_fractional_part = modf(wptime, &wptime_integral_part);
+  wpt->SetCreationTime(wptime_integral_part, 1000.0 * wptime_fractional_part);
 
   /*
    * The Garmin spec fifteen different models that use a different
