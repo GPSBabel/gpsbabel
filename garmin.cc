@@ -22,7 +22,7 @@
 #include "garmin.h"
 
 #include <climits>               // for INT_MAX
-#include <cmath>                 // for atan2, floor, sqrt
+#include <cmath>                 // for atan2, modf, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
 #include <cstdint>               // for int32_t
 #include <cstdlib>               // for strtol
@@ -36,7 +36,7 @@
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <Qt>                    // for CaseInsensitive
-#include <QtGlobal>              // for qPrintable, foreach
+#include <QtGlobal>              // for qPrintable, qRound64, Q_INT64_C, qint64
 
 #include "defs.h"
 #include "formspec.h"            // for FormatSpecificDataList
@@ -596,11 +596,13 @@ GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    * 3) The number of leap seconds that offset the current UTC and GPS
    *    reference clocks.
    */
-  double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-                  pvt->tow
-                  - pvt->leap_scnds;
-  double wptimes = floor(wptime);
-  wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
+  double tow_integral_part;
+  double tow_fractional_part = modf(pvt->tow, &tow_integral_part);
+  qint64 seconds = Q_INT64_C(631065600) + pvt->wn_days * Q_INT64_C(86400)  +
+                   qRound64(tow_integral_part)
+                   - pvt->leap_scnds;
+  qint64 milliseconds = qRound64(1000.0 * tow_fractional_part);
+  wpt->SetCreationTime(seconds, milliseconds);
 
   /*
    * The Garmin spec fifteen different models that use a different
