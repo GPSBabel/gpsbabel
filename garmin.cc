@@ -579,7 +579,13 @@ GarminFormat::route_read()
 void
 GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 {
-  wpt->altitude = pvt->alt;
+  // pvt->alt is height (in meters) above the WGS84 elipsoid.
+  // pvt->msl_hght is height (in meters) of WGS84 elipsoid above MSL.
+  // wpt->altitude is height (in meters) above geoid (mean sea level).
+  // wpt->geoidheight is "Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid."
+  wpt->set_geoidheight(-pvt->msl_hght);
+  wpt->altitude = pvt->alt + pvt->msl_hght;
+
   wpt->latitude = pvt->lat;
   wpt->longitude = pvt->lon;
 
