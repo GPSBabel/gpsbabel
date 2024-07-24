@@ -407,7 +407,7 @@
     <message>
         <location filename="core_strings.h" line="33"/>
         <source>Image Offset Time (+HH:MM or -HH:MM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Время смещения расположения (+ЧЧ:ММ или -ЧЧ:ММ)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="76"/>
@@ -528,7 +528,7 @@
     <message>
         <location filename="core_strings.h" line="111"/>
         <source>override codec to use for device</source>
-        <translation type="unfinished"></translation>
+        <translation>переопределить кодек для этого устройства</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="112"/>
@@ -733,7 +733,7 @@
     <message>
         <location filename="core_strings.h" line="149"/>
         <source>Google Takeout Location History</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал местоположений Google Takeout</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="159"/>
