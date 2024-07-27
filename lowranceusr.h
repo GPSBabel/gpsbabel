@@ -457,7 +457,7 @@ private:
   unsigned short waypt_out_count{};
   int            trail_count{}, lowrance_route_count{};
   int            trail_point_count{};
-  char           continuous = 1;
+  bool           merge_new_track{false};
   short          num_section_points{};
   char*          merge{};
   int            reading_version{};
