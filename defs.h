@@ -490,7 +490,7 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 void del_marked_wpts();
-unsigned int waypt_count();
+int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
@@ -674,10 +674,10 @@ private:
 };
 
 void route_init();
-unsigned int route_waypt_count();
-unsigned int route_count();
-unsigned int track_waypt_count();
-unsigned int track_count();
+int route_waypt_count();
+int route_count();
+int track_waypt_count();
+int track_count();
 route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
