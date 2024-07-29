@@ -90,7 +90,7 @@ const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
   { wp_field::sat, "satellites", "Satellites", "int" },
 };
 
-void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
+void KmlFormat::kml_init_color_sequencer(int steps_per_rev)
 {
   if (rotate_colors) {
     float color_step = strtod(opt_rotate_colors, nullptr);
