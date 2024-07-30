@@ -44,9 +44,9 @@ private:
   bool debug{};
   char* opt_checkempty{};
   bool checkempty{};
-  unsigned int point_ct{};
-  unsigned int head_ct{};
-  unsigned int segment_ct_start{};
+  int point_ct{};
+  int head_ct{};
+  int segment_ct_start{};
   const char* segment_type{};
   QVector<arglist_t> args = {
     {
