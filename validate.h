@@ -45,8 +45,10 @@ private:
   char* opt_checkempty{};
   bool checkempty{};
   int point_ct{};
+  int total_point_ct{};
+  int segment_ct{};
+  int total_segment_ct{};
   int head_ct{};
-  int segment_ct_start{};
   const char* segment_type{};
   QVector<arglist_t> args = {
     {

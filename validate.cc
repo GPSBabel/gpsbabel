@@ -30,23 +30,28 @@
 void ValidateFilter::validate_head(const route_head* /*unused*/)
 {
   head_ct += 1;
-  segment_ct_start = point_ct;
+  point_ct = 0;
+  segment_ct = 0;
 }
 
 void ValidateFilter::validate_head_trl(const route_head* header)
 {
-  int segment_waypt_ct = point_ct - segment_ct_start;
+  total_point_ct += point_ct;
+  total_segment_ct += segment_ct;
   if (debug) {
-    fprintf(stderr, "%s %d ct: %d, waypt_count: %d\n", segment_type, header->rte_num,  segment_waypt_ct, header->rte_waypt_ct());
+    fprintf(stderr, "%s %d ct: %d, waypt_count: %d, segments %d\n", segment_type, header->rte_num,  point_ct, header->rte_waypt_ct(), segment_ct);
   }
-  if (!debug && (segment_waypt_ct != header->rte_waypt_ct())) {
-    fatal(MYNAME ":%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), segment_waypt_ct);
+  if (!debug && (point_ct != header->rte_waypt_ct())) {
+    fatal(MYNAME ":%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), point_ct);
   }
 }
 
-void ValidateFilter::validate_point(const Waypoint* /*unused*/)
+void ValidateFilter::validate_point(const Waypoint* wpt)
 {
   point_ct += 1;
+  if (wpt->wpt_flags.new_trkseg) {
+    segment_ct += 1;
+  }
 }
 
 void ValidateFilter::process()
@@ -71,39 +76,41 @@ void ValidateFilter::process()
   }
 
   head_ct = 0;
-  point_ct = 0;
+  total_point_ct = 0;
+  total_segment_ct = 0;
   segment_type = "route";
   if (debug) {
     fprintf(stderr, "\nProcessing routes\n");
   }
   route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
-    fprintf(stderr, "route head ct: %d, route_count: %d\n", head_ct, route_count());
-    fprintf(stderr, "total route point ct: %d, route_waypt_count: %d\n", point_ct, route_waypt_count());
+    fprintf(stderr, "route head ct: %d, route_count: %d, total segment count: %d\n", head_ct, route_count(), total_segment_ct);
+    fprintf(stderr, "total route point ct: %d, route_waypt_count: %d\n", total_point_ct, route_waypt_count());
   }
   if (!debug && (head_ct != route_count())) {
     fatal(MYNAME ":Route count mismatch, expected %d, actual %d\n", route_count(), head_ct);
   }
-  if (!debug && (point_ct != route_waypt_count())) {
-    fatal(MYNAME ":Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), point_ct);
+  if (!debug && (total_point_ct != route_waypt_count())) {
+    fatal(MYNAME ":Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), total_point_ct);
   }
 
   head_ct = 0;
-  point_ct = 0;
+  total_point_ct = 0;
+  total_segment_ct = 0;
   segment_type = "track";
   if (debug) {
     fprintf(stderr, "\nProcessing tracks\n");
   }
   track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
-    fprintf(stderr, "track head ct: %d, track_count: %d\n", head_ct, track_count());
-    fprintf(stderr, "total track point ct: %d, track_waypt_count: %d\n", point_ct, track_waypt_count());
+    fprintf(stderr, "track head ct: %d, track_count: %d, total segment count: %d\n", head_ct, track_count(), total_segment_ct);
+    fprintf(stderr, "total track point ct: %d, track_waypt_count: %d\n", total_point_ct, track_waypt_count());
   }
   if (!debug && (head_ct != track_count())) {
     fatal(MYNAME ":Track count mismatch, expected %d, actual %d\n", track_count(), head_ct);
   }
-  if (!debug && (point_ct != track_waypt_count())) {
-    fatal(MYNAME ":Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), point_ct);
+  if (!debug && (total_point_ct != track_waypt_count())) {
+    fatal(MYNAME ":Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), total_point_ct);
   }
 
   if (checkempty) {
