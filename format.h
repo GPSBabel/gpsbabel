@@ -162,13 +162,13 @@ public:
   * %%%                          Accessors                                   %%% *
   *******************************************************************************/
 
-  virtual QVector<arglist_t>* get_args()
+  [[nodiscard]] virtual QVector<arglist_t>* get_args()
   {
     return nullptr;
   }
 
-  virtual ff_type get_type() const = 0;
-  virtual QVector<ff_cap> get_cap() const = 0;
+  [[nodiscard]] virtual ff_type get_type() const = 0;
+  [[nodiscard]] virtual QVector<ff_cap> get_cap() const = 0;
 
   QString fname;
 

@@ -33,17 +33,17 @@
 class TextFormat : public Format
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &text_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /*          waypoints,      tracks,      routes */
     return { ff_cap_write, ff_cap_none, ff_cap_none};

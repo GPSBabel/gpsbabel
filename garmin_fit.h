@@ -45,17 +45,17 @@
 class GarminFitFormat : public Format
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &fit_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return {
       ff_cap_write,				/* waypoints */

@@ -48,12 +48,12 @@ class Dg100Format : public Format
 public:
   /* Member Functions */
 
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &dg100_args;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return {
       ff_cap_read			/* waypoints */,
@@ -160,8 +160,7 @@ protected:
 class Dg100SerialFormat : public Dg100Format
 {
 public:
-
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
@@ -175,8 +174,7 @@ public:
 class Dg100FileFormat : public Dg100Format
 {
 public:
-
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_internal;
   }
@@ -190,8 +188,7 @@ public:
 class Dg200SerialFormat : public Dg100Format
 {
 public:
-
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
@@ -205,8 +202,7 @@ public:
 class Dg200FileFormat : public Dg100Format
 {
 public:
-
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_internal;
   }

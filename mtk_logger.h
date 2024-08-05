@@ -296,17 +296,17 @@ protected:
 class MtkFormat : public Format, private MtkLoggerBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &mtk_sargs;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
@@ -330,17 +330,17 @@ public:
 class MtkM241Format : public Format, private MtkLoggerBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &mtk_sargs;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return { ff_cap_none, ff_cap_read, ff_cap_none };
   }
@@ -364,17 +364,17 @@ public:
 class MtkFileFormat : public Format, private MtkLoggerBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &mtk_fargs;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }
@@ -398,17 +398,17 @@ public:
 class MtkM241FileFormat : public Format, private MtkLoggerBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &mtk_fargs;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return { ff_cap_read, ff_cap_read, ff_cap_none };
   }

@@ -266,17 +266,17 @@ class XcsvFormat : public Format
 public:
   using Format::Format;
   /* Member Functions */
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &xcsv_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_internal;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_WPT; /* This is a bit of a lie for now... */
   }

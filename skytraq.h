@@ -166,17 +166,17 @@ protected:
 class SkytraqFormat : public Format, private SkytraqBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &skytraq_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
@@ -244,17 +244,17 @@ private:
 class SkytraqfileFormat : public Format, private SkytraqBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &skytraq_fargs;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };
@@ -300,17 +300,17 @@ private:
 class MinihomerFormat : public Format, private SkytraqBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &miniHomer_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_serial;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /*         waypoints,      tracks,      routes */
     return { ff_cap_read, ff_cap_read, ff_cap_none };

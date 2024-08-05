@@ -39,17 +39,17 @@ class V900Format : public Format
 public:
   using Format::Format;
 
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return nullptr;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /* Read only format. May only read trackpoints and waypoints. */
     return {ff_cap_read, ff_cap_read, ff_cap_none};

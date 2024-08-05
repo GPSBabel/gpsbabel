@@ -32,7 +32,7 @@
 class ArcDistanceFilter:public Filter
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &args;
   }

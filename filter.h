@@ -43,7 +43,7 @@ public:
   Filter(Filter&&) = delete;
   Filter& operator=(Filter&&) = delete;
 
-  virtual QVector<arglist_t>* get_args() = 0;
+  [[nodiscard]] virtual QVector<arglist_t>* get_args() = 0;
 
   virtual void init()
   {

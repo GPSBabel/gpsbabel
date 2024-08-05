@@ -110,17 +110,17 @@ class LowranceusrFormat : public Format
 public:
   /* Member Functions */
 
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return &lowranceusr_args;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return FF_CAP_RW_ALL;
   }

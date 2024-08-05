@@ -136,17 +136,17 @@ protected:
 class Tpo2Format : public Format, private TpoFormatBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return nullptr;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /* TPO 2.x format can read tracks only */
     /*         waypoints,      tracks,      routes */
@@ -170,17 +170,17 @@ public:
 class Tpo3Format : public Format, private TpoFormatBase
 {
 public:
-  QVector<arglist_t>* get_args() override
+  [[nodiscard]] QVector<arglist_t>* get_args() override
   {
     return nullptr;
   }
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     /* TPO 3.x format can read waypoints/tracks/routes */
     /*         waypoints,      tracks,      routes */

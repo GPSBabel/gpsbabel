@@ -57,12 +57,12 @@ class QstarzBL1000Format : public Format
 public:
   using Format::Format;
 
-  ff_type get_type() const override
+  [[nodiscard]] ff_type get_type() const override
   {
     return ff_type_file;
   }
 
-  QVector<ff_cap> get_cap() const override
+  [[nodiscard]] QVector<ff_cap> get_cap() const override
   {
     return {
       ff_cap_read,  // waypoints
