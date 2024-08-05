@@ -218,12 +218,12 @@ public:
     push_back(l);
   }
 
-  bool HasUrlLink() const
+  [[nodiscard]] bool HasUrlLink() const
   {
     return !isEmpty();
   }
 
-  const UrlLink& GetUrlLink() const
+  [[nodiscard]] const UrlLink& GetUrlLink() const
   {
     return first();
   }
@@ -330,15 +330,15 @@ public:
 
   /* Member Functions */
 
-  bool HasUrlLink() const;
-  const UrlLink& GetUrlLink() const;
+  [[nodiscard]] bool HasUrlLink() const;
+  [[nodiscard]] const UrlLink& GetUrlLink() const;
   void AddUrlLink(const UrlLink& l);
-  QString CreationTimeXML() const;
-  gpsbabel::DateTime GetCreationTime() const;
+  [[nodiscard]] QString CreationTimeXML() const;
+  [[nodiscard]] gpsbabel::DateTime GetCreationTime() const;
   void SetCreationTime(const gpsbabel::DateTime& t);
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
-  int EmptyGCData() const;
+  [[nodiscard]] int EmptyGCData() const;
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
