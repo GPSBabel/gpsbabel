@@ -452,7 +452,7 @@ public:
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_rte_waypt(Waypoint* wpt);
   void waypt_compute_bounds(bounds* bounds) const;
-  Waypoint* find_waypt_by_name(const QString& name) const;
+  [[nodiscard]] Waypoint* find_waypt_by_name(const QString& name) const;
   void flush(); // a.k.a. clear()
   void copy(WaypointList** dst) const;
   void restore(WaypointList* src);
@@ -606,8 +606,8 @@ public:
   route_head& operator=(const route_head& rhs) = delete;
   ~route_head();
 
-  int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
-  bool rte_waypt_empty() const {return waypoint_list.empty();}
+  [[nodiscard]] int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  [[nodiscard]] bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -617,7 +617,7 @@ using route_trl = void (*)(const route_head*);
 class RouteList : private QList<route_head*>
 {
 public:
-  int waypt_count() const;
+  [[nodiscard]] int waypt_count() const;
   void add_head(route_head* rte); // a.k.a. append(), push_back()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
