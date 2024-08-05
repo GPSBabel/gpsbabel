@@ -72,8 +72,7 @@ public:
   class UtfString
   {
   public:
-
-    QString strip_html() const;
+    [[nodiscard]] QString strip_html() const;
 
     bool is_html{false};
     QString utf_string;
@@ -98,10 +97,10 @@ public:
   /* Member Functions */
 
   void set_type(const QString& type_name);
-  QString get_type() const;
+  [[nodiscard]] QString get_type() const;
   void set_container(const QString& container_name);
-  QString get_container() const;
-  QString get_icon() const;
+  [[nodiscard]] QString get_container() const;
+  [[nodiscard]] QString get_icon() const;
 
   /* Data Members */
 
