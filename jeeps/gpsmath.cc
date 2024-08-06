@@ -457,7 +457,7 @@ void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
                                   double* x, double* y, double* z)
 {
   double a = 6378137.000;
-  double b = 6356752.3141;
+  double b = 6356752.314245;
 
   GPS_Math_LatLonH_To_XYZ(phi,lambda,H,x,y,z,a,b);
 
@@ -510,7 +510,7 @@ void GPS_Math_XYZ_To_WGS84LatLonH(double* phi, double* lambda, double* H,
                                   double x, double y, double z)
 {
   double a = 6378137.000;
-  double b = 66356752.3141;
+  double b = 6356752.314245;
 
   GPS_Math_XYZ_To_LatLonH(phi,lambda,H,x,y,z,a,b);
 
