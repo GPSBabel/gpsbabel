@@ -656,6 +656,24 @@ option	ozi	codec	codec to use for reading and writing strings (default windows-1
 
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000	qstarz_bl-1000
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_qstarz_bl-1000.html
+file	rw----	cup	cup	See You flight analysis data	xcsv
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html
+option	cup	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snlen
+
+option	cup	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snwhite
+
+option	cup	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snupper
+
+option	cup	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snunique
+
+option	cup	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_urlbase
+
+option	cup	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_prefer_shortnames
+
+option	cup	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_datum
+
+option	cup	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_utc
+
 serial	r-r---	skytraq		SkyTraq Venus based loggers (download)	skytraq
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html
 option	skytraq	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html#fmt_skytraq_o_erase
