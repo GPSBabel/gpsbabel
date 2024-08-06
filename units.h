@@ -44,9 +44,9 @@ public:
   /* Member Functions */
 
   void setunits(units_t u);
-  std::pair<double, QString> fmt_distance(double distance_meters) const;
-  std::pair<double, QString> fmt_altitude(double distance_meters) const;
-  std::pair<double, QString> fmt_speed(double speed_meters_per_sec) const;
+  [[nodiscard]] std::pair<double, QString> fmt_distance(double distance_meters) const;
+  [[nodiscard]] std::pair<double, QString> fmt_altitude(double distance_meters) const;
+  [[nodiscard]] std::pair<double, QString> fmt_speed(double speed_meters_per_sec) const;
 
   /* Data Members */
 
