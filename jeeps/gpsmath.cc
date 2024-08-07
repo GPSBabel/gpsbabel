@@ -429,8 +429,8 @@ void GPS_Math_XYZ_To_LatLonH(double* phi, double* lambda, double* H,
 void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
                                      double* x, double* y, double* z)
 {
-  double a = 6377563.396;
-  double b = 6356256.910;
+  double a = Airy1830_a;
+  double b = Airy1830_b;
 
   GPS_Math_LatLonH_To_XYZ(phi,lambda,H,x,y,z,a,b);
 
@@ -456,8 +456,8 @@ void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
 void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
                                   double* x, double* y, double* z)
 {
-  double a = 6378137.000;
-  double b = 6356752.314245;
+  double a = WGS84_a;
+  double b = WGS84_b;
 
   GPS_Math_LatLonH_To_XYZ(phi,lambda,H,x,y,z,a,b);
 
@@ -483,8 +483,8 @@ void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
 void GPS_Math_XYZ_To_Airy1830LatLonH(double* phi, double* lambda, double* H,
                                      double x, double y, double z)
 {
-  double a = 6377563.396;
-  double b = 6356256.910;
+  double a = Airy1830_a;
+  double b = Airy1830_b;
 
   GPS_Math_XYZ_To_LatLonH(phi,lambda,H,x,y,z,a,b);
 
@@ -509,8 +509,8 @@ void GPS_Math_XYZ_To_Airy1830LatLonH(double* phi, double* lambda, double* H,
 void GPS_Math_XYZ_To_WGS84LatLonH(double* phi, double* lambda, double* H,
                                   double x, double y, double z)
 {
-  double a = 6378137.000;
-  double b = 6356752.314245;
+  double a = WGS84_a;
+  double b = WGS84_b;
 
   GPS_Math_XYZ_To_LatLonH(phi,lambda,H,x,y,z,a,b);
 
@@ -643,8 +643,8 @@ void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
   double F0      = 1.000035;
   double phi0    = 53.5;
   double lambda0 = -8.;
-  double a       = 6377340.189;
-  double b       = 6356034.447;
+  double a       = Airy1830Modified_a;
+  double b       = Airy1830Modified_b;
 
   GPS_Math_LatLon_To_EN(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -674,8 +674,8 @@ void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
   double F0      = 0.9996012717;
   double phi0    = 49.;
   double lambda0 = -2.;
-  double a       = 6377563.396;
-  double b       = 6356256.910;
+  double a       = Airy1830_a;
+  double b       = Airy1830_b;
 
   GPS_Math_LatLon_To_EN(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -1307,8 +1307,8 @@ void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
   double F0      = 0.9996012717;
   double phi0    = 49.;
   double lambda0 = -2.;
-  double a       = 6377563.396;
-  double b       = 6356256.910;
+  double a       = Airy1830_a;
+  double b       = Airy1830_b;
 
   GPS_Math_EN_To_LatLon(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -1337,8 +1337,8 @@ void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double* phi,
   double F0      = 1.000035;
   double phi0    = 53.5;
   double lambda0 = -8.;
-  double a       = 6377340.189;
-  double b       = 6356034.447;
+  double a       = Airy1830Modified_a;
+  double b       = Airy1830Modified_b;
 
   GPS_Math_EN_To_LatLon(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -1546,8 +1546,8 @@ void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
   double z;
   int32_t idx;
 
-  Da  = 6378137.0;
-  Dif = 298.257223563;
+  Da  = WGS84_a;
+  Dif = WGS84_invf;
 
   idx  = GPS_Datums[n].ellipse;
   Sa   = GPS_Ellipses[idx].a;
@@ -1590,8 +1590,8 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
   double z;
   int32_t idx;
 
-  Sa  = 6378137.0;
-  Sif = 298.257223563;
+  Sa  = WGS84_a;
+  Sif = WGS84_invf;
 
   idx  = GPS_Datums[n].ellipse;
   Da   = GPS_Ellipses[idx].a;
@@ -1629,7 +1629,6 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
   double Sif;
   double Sb;
   double Da;
-  double Dif;
   double Db;
   double x;
   double y;
@@ -1639,9 +1638,8 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
   double sy;
   double sz;
 
-  Da  = 6378137.0;
-  Dif = 298.257223563;
-  Db  = Da - (Da / Dif);
+  Da  = WGS84_a;
+  Db  = WGS84_b;
 
   idx  = GPS_Datums[n].ellipse;
   Sa   = GPS_Ellipses[idx].a;
@@ -1683,7 +1681,6 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
                                      int32_t n)
 {
   double Sa;
-  double Sif;
   double Da;
   double Dif;
   double x;
@@ -1696,9 +1693,8 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
   double dy;
   double dz;
 
-  Sa  = 6378137.0;
-  Sif = 298.257223563;
-  Sb   = Sa - (Sa / Sif);
+  Sa  = WGS84_a;
+  Sb  = WGS84_b;
 
   idx  = GPS_Datums[n].ellipse;
   Da   = GPS_Ellipses[idx].a;
