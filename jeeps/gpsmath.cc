@@ -1518,6 +1518,98 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
 }
 
 
+/* @func GPS_Math_Helmert *******************************************
+**
+** Transform one datum to another
+**
+** @param [r] Sx [double] source X
+** @param [r] Sy [double] source Y
+** @param [r] Sz [double] source Z
+** @param [w] Dx [double*] converted X
+** @param [w] Dy [double*] converted Y
+** @param [w] Dz [double*] converted Z
+** @param [r] tX   [double] translation along x axis (meters)
+** @param [r] tY   [double] translation along y axis (meters)
+** @param [r] tZ   [double] translation along z axis (meters)
+** @param [r] sppm [double] scale factor - 1 (ppm)
+** @param [r] rXs  [double] rotation about x axis (seconds)
+** @param [r] rYs  [double] rotation about y axis (seconds)
+** @param [r] rZs  [double] rotation about z axis (seconds)
+**
+** @return [void]
+************************************************************************/
+void GPS_Math_Helmert(double Sx, double Sy, double Sz,
+                      double* Dx, double* Dy, double* Dz,
+                      double tX, double tY, double tZ,
+                      double sppm,
+                      double rXs, double rYs, double rZs)
+{
+  double s = sppm/1000000.0;
+  double rX = (rXs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double rY = (rYs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double rZ = (rZs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+
+  // rotation/scaling matrix = [1+s -rz ry;rz 1+s -rx;-ry rx 1+s];
+  *Dx = tX + (1 + s)*Sx + -rZ*Sy + rY*Sz;
+  *Dy = tY + rZ*Sx + (1 + s)*Sy + -rX*Sz;
+  *Dz = tZ + -rY*Sx + rX*Sy + (1 + s)*Sz;
+
+  return;
+}
+
+/* @func GPS_Math_Inverse_Helmert ***********************************
+**
+** Transform from source to coverted datum.
+** translation, scale and rotation parameters are the Helmert parameters
+** to traslate from the converted to source datum!
+**
+** @param [r] Sx [double] source X
+** @param [r] Sy [double] source Y
+** @param [r] Sz [double] source Z
+** @param [w] Dx [double*] converted X
+** @param [w] Dy [double*] converted Y
+** @param [w] Dz [double*] converted Z
+** @param [r] tX   [double] translation along x axis (meters)
+** @param [r] tY   [double] translation along y axis (meters)
+** @param [r] tZ   [double] translation along z axis (meters)
+** @param [r] sppm [double] scale factor - 1 (ppm)
+** @param [r] rXs  [double] rotation about x axis (seconds)
+** @param [r] rYs  [double] rotation about y axis (seconds)
+** @param [r] rZs  [double] rotation about z axis (seconds)
+**
+** @return [void]
+************************************************************************/
+void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
+                              double* Dx, double* Dy, double* Dz,
+                              double tX, double tY, double tZ,
+                              double sppm,
+                              double rXs, double rYs, double rZs)
+{
+  double s = sppm/1000000.0;
+  double rX = (rXs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double rY = (rYs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double rZ = (rZs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+
+  // forward rotation/scaling matrix is [1+s -rz ry;rz 1+s -rx;-ry rx 1+s]
+  // compute inverse of forward Helmert rotation/scaling matrix
+  // https://www.wolframalpha.com/input?i2d=true&i=Power%5B%7B%7B1%2Bs%2C-Subscript%5Br%2Cz%5D%2CSubscript%5Br%2Cy%5D%7D%2C%7BSubscript%5Br%2Cz%5D%2C1%2Bs%2C-Subscript%5Br%2Cx%5D%7D%2C%7B-Subscript%5Br%2Cy%5D%2CSubscript%5Br%2Cx%5D%2C1%2Bs%7D%7D%2C-1%5D
+  double gain = 1/((s + 1) * (rX*rX + rY*rY + rZ*rZ + s*s + 2*s + 1));
+  double r11 = rX*rX + s*s + 2*s + 1;
+  double r12 = s*rZ + rX*rY + rZ;
+  double r13 = -s*rY + rX*rZ - rY;
+  double r21 = -s*rZ + rX*rY - rZ;
+  double r22 = rY*rY + s*s + 2*s + 1;
+  double r23 = s*rX + rX + rY*rZ;
+  double r31 = s*rY + rX*rZ + rY;
+  double r32 = -s*rX - rX + rY*rZ;
+  double r33 = rZ*rZ + s*s + 2*s + 1;
+
+  *Dx = gain * ((r11 * (Sx-tX)) + (r12 * (Sy-tY)) + (r13 * (Sz-tZ)));
+  *Dy = gain * ((r21 * (Sx-tX)) + (r22 * (Sy-tY)) + (r23 * (Sz-tZ)));
+  *Dz = gain * ((r31 * (Sx-tX)) + (r32 * (Sy-tY)) + (r33 * (Sz-tZ)));
+
+  return;
+}
 
 /* @func GPS_Math_Known_Datum_To_WGS84_M **********************************
 **
@@ -1921,6 +2013,150 @@ int32_t GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
   return 1;
 }
 
+
+/* @func GPS_Math_WGS84_To_UKOSMap_H ***********************************
+**
+** Convert WGS84 lat/lon to Ordnance survey map code and easting and
+** northing. Uses Helmert.
+**
+** @param [r] lat  [double] WGS84 latitude (deg)
+** @param [r] lon  [double] WGS84 longitude (deg)
+** @param [w] mE   [double *] map easting (metres)
+** @param [w] mN   [double *] map northing (metres)
+** @param [w] map  [char *] map two letter code
+**
+** @return [int32] success
+************************************************************************/
+int32_t GPS_Math_WGS84_To_UKOSMap_H(double lat, double lon, double* mE,
+                                    double* mN, char* map)
+{
+  double x;
+  double y;
+  double z;
+  double ax;
+  double ay;
+  double az;
+  double alat;
+  double alon;
+  double ah;
+  double aE;
+  double aN;
+
+
+  GPS_Math_WGS84LatLonH_To_XYZ(lat, lon, 0,
+                               &x, &y, &z);
+
+  /* Helmert transformation
+   * https://www.ordnancesurvey.co.uk/documents/resources/guide-coordinate-systems-great-britain.pdf
+   * 6.2 Helmert datum transformations
+   * 6.6 Approximate WGS84 to OSGB36/ODN transformation
+   */
+  // WGS84 -> OSGB36
+  constexpr double tX = -446.448; /* meters */
+  constexpr double tY = +125.157; /* meters */
+  constexpr double tZ = -542.060; /* meters */
+  constexpr double s = +20.4894; /* ppm */
+  constexpr double rX = -0.1502; /* seconds */
+  constexpr double rY = -0.2470; /* seconds */
+  constexpr double rZ = -0.8421; /* seconds */
+
+  GPS_Math_Helmert(x, y, z,
+                   &ax, &ay, &az,
+                   tX, tY, tZ,
+                   s,
+                   rX, rY, rZ);
+
+  GPS_Math_XYZ_To_Airy1830LatLonH(&alat, &alon, &ah,
+                                  ax, ay, az);
+  GPS_Math_Airy1830LatLonToNGEN(alat, alon,
+                                &aE, &aN);
+  if (!GPS_Math_EN_To_UKOSNG_Map(aE,aN,mE,mN,map)) {
+    return 0;
+  }
+
+  return 1;
+}
+
+
+/* @func GPS_Math_UKOSMap_To_WGS84_H ***********************************
+**
+** Transform UK Ordnance survey map position to WGS84 lat/lon
+** Uses Helmert transformation
+**
+** @param [r] map  [const char *] map two letter code
+** @param [r] mE   [double] map easting (metres)
+** @param [r] mN   [double] map northing (metres)
+** @param [w] lat  [double *] WGS84 latitude (deg)
+** @param [w] lon  [double *] WGS84 longitude (deg)
+**
+** @return [int32] success
+************************************************************************/
+int32_t GPS_Math_UKOSMap_To_WGS84_H(const char* map, double mE, double mN,
+                                    double* lat, double* lon)
+{
+  double E;
+  double N;
+  double alat;
+  double alon;
+  double ht;
+  double ax;
+  double ay;
+  double az;
+  double x;
+  double y;
+  double z;
+
+  if (!GPS_Math_UKOSNG_Map_To_EN(map,mE,mN,&E,&N)) {
+    return 0;
+  }
+
+  GPS_Math_NGENToAiry1830LatLon(E,N,&alat,&alon);
+  GPS_Math_Airy1830LatLonH_To_XYZ(alat, alon, 0.0, &ax, &ay, &az);
+
+  /* Helmert transformation
+   * https://www.ordnancesurvey.co.uk/documents/resources/guide-coordinate-systems-great-britain.pdf
+   * 6.2 Helmert datum transformations
+   * 6.6 Approximate WGS84 to OSGB36/ODN transformation
+   */
+  #if 0
+  // Actually invert the Helmert transform from WGS84 to OSGB36.
+  // WGS84 -> OSGB36
+  constexpr double tX = -446.448; /* meters */
+  constexpr double tY = +125.157; /* meters */
+  constexpr double tZ = -542.060; /* meters */
+  constexpr double s = +20.4894; /* ppm */
+  constexpr double rX = -0.1502; /* seconds */
+  constexpr double rY = -0.2470; /* seconds */
+  constexpr double rZ = -0.8421; /* seconds */
+
+  GPS_Math_Inverse_Helmert(ax, ay, az,
+                           &x, &y, &z,
+                           tX, tY, tZ,
+                           s,
+                           rX, rY, rZ);
+  #else
+  // Approximate the transform from OSGB36 to WGS84 by using the standard
+  // helmert transform with parameters that all have the opposite signs of
+  // those used to transform from WGS84 to OSGB36.
+  constexpr double tX = +446.448; /* meters */
+  constexpr double tY = -125.157; /* meters */
+  constexpr double tZ = +542.060; /* meters */
+  constexpr double s = -20.4894; /* ppm */
+  constexpr double rX = +0.1502; /* seconds */
+  constexpr double rY = +0.2470; /* seconds */
+  constexpr double rZ = +0.8421; /* seconds */
+
+  GPS_Math_Helmert(ax, ay, az,
+                   &x, &y, &z,
+                   tX, tY, tZ,
+                   s,
+                   rX, rY, rZ);
+  #endif
+
+  GPS_Math_XYZ_To_WGS84LatLonH(lat, lon, &ht, x, y, z);
+
+  return 1;
+}
 
 
 /* @func GPS_Math_WGS84_To_UKOSMap_C ***********************************

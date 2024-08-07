@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="50.816527458" minlon="-2.122918364" maxlat="50.827399509" maxlon="-2.050323375"/>
+  <wpt lat="50.827399509" lon="-2.050323375">
+    <time>2024-08-05T00:00:00Z</time>
+    <name>Badbury Rings Trig Point</name>
+    <cmt>Test Point 1</cmt>
+    <desc>Test Point 1</desc>
+  </wpt>
+  <wpt lat="50.816527458" lon="-2.122918364">
+    <time>2024-08-05T00:00:00Z</time>
+    <name>Spettisbury Rings Trig Point</name>
+    <cmt>Test Point 2</cmt>
+    <desc>Test Point 2</desc>
+  </wpt>
+</gpx>
