@@ -8,20 +8,24 @@ struct GPS_Ellipse {
   double invf;
 };
 
+constexpr double semi_minor_axis(double semi_major_axis, double inverse_flattening) {
+  return semi_major_axis - semi_major_axis/inverse_flattening;
+}
+
 // EPSG:7001
 constexpr double Airy1830_a = 6377563.396;
 constexpr double Airy1830_invf = 299.3249646;
-constexpr double Airy1830_b = Airy1830_a - Airy1830_a/Airy1830_invf;
+constexpr double Airy1830_b = semi_minor_axis(Airy1830_a, Airy1830_invf);
 
 // EPSG:7002
 constexpr double Airy1830Modified_a = 6377340.189;
 constexpr double Airy1830Modified_invf = 299.3249646;
-constexpr double Airy1830Modified_b = Airy1830Modified_a - Airy1830Modified_a/Airy1830Modified_invf;
+constexpr double Airy1830Modified_b = semi_minor_axis(Airy1830Modified_a, Airy1830Modified_invf);
 
 // EPSG:4326
 constexpr double WGS84_a = 6378137.000;
 constexpr double WGS84_invf = 298.257223563;
-constexpr double WGS84_b = WGS84_a - WGS84_a/WGS84_invf;
+constexpr double WGS84_b = semi_minor_axis(WGS84_a, WGS84_invf);
 
 const GPS_Ellipse GPS_Ellipses[]= {
   { "Airy 1830",               Airy1830_a, Airy1830_invf },
