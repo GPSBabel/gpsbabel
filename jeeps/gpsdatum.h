@@ -6,36 +6,33 @@ struct GPS_Ellipse {
   const char*   name;
   double a;
   double invf;
+
+  constexpr double b() const {
+    return a - a/invf;
+  }
 };
 
-constexpr double semi_minor_axis(const GPS_Ellipse& ellipse) {
-  return ellipse.a - ellipse.a/ellipse.invf;
-}
-
 // EPSG:7001
-constexpr double Airy1830_a = 6377563.396;
-constexpr double Airy1830_invf = 299.3249646;
-constexpr GPS_Ellipse Airy1830_Ellipse = { "Airy 1830", Airy1830_a, Airy1830_invf };
-constexpr double Airy1830_b = semi_minor_axis(Airy1830_Ellipse);
+constexpr GPS_Ellipse Airy1830_Ellipse = { "Airy 1830", 6377563.396, 299.3249646 };
 
 // EPSG:7002
-constexpr double Airy1830Modified_a = 6377340.189;
-constexpr double Airy1830Modified_invf = 299.3249646;
-constexpr GPS_Ellipse Airy1830Modified_Ellipse = { "Airy 1830 Modified", Airy1830Modified_a, Airy1830Modified_invf};
-constexpr double Airy1830Modified_b = semi_minor_axis(Airy1830Modified_Ellipse);
+constexpr GPS_Ellipse Airy1830Modified_Ellipse = { "Airy 1830 Modified", 6377340.189, 299.3249646 };
+
+// EPSG:7004
+constexpr GPS_Ellipse Bessel1841_Ellipse = { "Bessel 1841", 6377397.155, 299.1528128 };
+
+// EPSG:7019
+constexpr GPS_Ellipse GRS80_Ellipse = { "GRS80", 6378137.000, 298.257222101 };
 
 // EPSG:4326
-constexpr double WGS84_a = 6378137.000;
-constexpr double WGS84_invf = 298.257223563;
-constexpr GPS_Ellipse WGS84_Ellipse = { "WGS84", WGS84_a, WGS84_invf };
-constexpr double WGS84_b = semi_minor_axis(WGS84_Ellipse);
+constexpr GPS_Ellipse WGS84_Ellipse = { "WGS84", 6378137.000, 298.257223563 };
 
 const GPS_Ellipse GPS_Ellipses[]= {
   Airy1830_Ellipse,
   Airy1830Modified_Ellipse,
   { "Australian National",     6378160.000, 298.25 },
   { "Bessel 1841 (Namibia)",   6377483.865, 299.1528128 },
-  { "Bessel 1841",             6377397.155, 299.1528128 },
+  Bessel1841_Ellipse,
   { "Clarke 1866",             6378206.400, 294.9786982 },
   { "Clarke 1880",             6378249.145, 293.465 },
   { "Everest (India 1830)",    6377276.345, 300.8017 },
@@ -52,7 +49,7 @@ const GPS_Ellipse GPS_Ellipses[]= {
   { "Krassovsky 1940",         6378245.000, 298.3 },
   { "GRS67",                   6378160.000, 6356774.516 },
   { "GRS75",                   6378140.000, 6356755.288 },
-  { "GRS80",                   6378137.000, 298.257222101 },
+  GRS80_Ellipse,
   { "S. American 1969",        6378160.000, 298.25 },
   { "WGS60",                   6378165.000, 298.3 },
   { "WGS66",                   6378145.000, 298.25 },
