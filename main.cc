@@ -804,7 +804,7 @@ main(int argc, char* argv[])
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDatumWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();
