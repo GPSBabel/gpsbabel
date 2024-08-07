@@ -715,7 +715,7 @@ int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
 
   assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
   a = GPS_Ellipses[4].a;
-  b = semi_minor_axis(GPS_Ellipses[4].a, GPS_Ellipses[4].invf);
+  b = semi_minor_axis(GPS_Ellipses[4]);
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, 123);
   GPS_Math_Swiss_LatLon_To_EN(phi, lambda, E, N, phi0, lambda0, E0, N0, a, b);
@@ -746,7 +746,7 @@ void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon)
 
   assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
   a = GPS_Ellipses[4].a;
-  b = semi_minor_axis(GPS_Ellipses[4].a, GPS_Ellipses[4].invf);
+  b = semi_minor_axis(GPS_Ellipses[4]);
 
   GPS_Math_Swiss_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0, E0, N0, a, b);
   GPS_Math_Known_Datum_To_WGS84_M(phi, lambda, 0, lat, lon, &alt, 123);
@@ -1112,7 +1112,7 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
   a = GPS_Ellipses[ellipse].a;
-  b = semi_minor_axis(GPS_Ellipses[ellipse].a, GPS_Ellipses[ellipse].invf);
+  b = semi_minor_axis(GPS_Ellipses[ellipse]);
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, datum);
   GPS_Math_Cassini_LatLon_To_EN(phi, lambda, E, N,
@@ -1148,7 +1148,7 @@ void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
   a = GPS_Ellipses[ellipse].a;
-  b = semi_minor_axis(GPS_Ellipses[ellipse].a, GPS_Ellipses[ellipse].invf);
+  b = semi_minor_axis(GPS_Ellipses[ellipse]);
 
   GPS_Math_Cassini_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0,
                                 E0, N0, a, b);
@@ -1818,7 +1818,7 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 
   idx1  = GPS_Datums[n1].ellipse;
   Sa    = GPS_Ellipses[idx1].a;
-  Sb    = semi_minor_axis(GPS_Ellipses[idx1].a, GPS_Ellipses[idx1].invf);
+  Sb    = semi_minor_axis(GPS_Ellipses[idx1]);
 
   x1    = GPS_Datums[n1].dx;
   y1    = GPS_Datums[n1].dy;
@@ -1826,7 +1826,7 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 
   idx2  = GPS_Datums[n2].ellipse;
   Da    = GPS_Ellipses[idx2].a;
-  Db    = semi_minor_axis(GPS_Ellipses[idx2].a, GPS_Ellipses[idx2].invf);
+  Db    = semi_minor_axis(GPS_Ellipses[idx2]);
 
   x2    = GPS_Datums[n2].dx;
   y2    = GPS_Datums[n2].dy;
@@ -2120,7 +2120,7 @@ int32_t GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double* E,
 
   assert(strcmp(GPS_Ellipses[21].name, "GRS80") == 0);
   a = GPS_Ellipses[21].a;
-  b = semi_minor_axis(GPS_Ellipses[21].a, GPS_Ellipses[21].invf);
+  b = semi_minor_axis(GPS_Ellipses[21]);
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -2286,7 +2286,7 @@ int32_t GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
 
   idx  = GPS_Datums[n].ellipse;
   a = GPS_Ellipses[idx].a;
-  b = semi_minor_axis(GPS_Ellipses[idx].a, GPS_Ellipses[idx].invf);
+  b = semi_minor_axis(GPS_Ellipses[idx]);
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 

@@ -8,28 +8,31 @@ struct GPS_Ellipse {
   double invf;
 };
 
-constexpr double semi_minor_axis(double semi_major_axis, double inverse_flattening) {
-  return semi_major_axis - semi_major_axis/inverse_flattening;
+constexpr double semi_minor_axis(const GPS_Ellipse& ellipse) {
+  return ellipse.a - ellipse.a/ellipse.invf;
 }
 
 // EPSG:7001
 constexpr double Airy1830_a = 6377563.396;
 constexpr double Airy1830_invf = 299.3249646;
-constexpr double Airy1830_b = semi_minor_axis(Airy1830_a, Airy1830_invf);
+constexpr GPS_Ellipse Airy1830_Ellipse = { "Airy 1830", Airy1830_a, Airy1830_invf };
+constexpr double Airy1830_b = semi_minor_axis(Airy1830_Ellipse);
 
 // EPSG:7002
 constexpr double Airy1830Modified_a = 6377340.189;
 constexpr double Airy1830Modified_invf = 299.3249646;
-constexpr double Airy1830Modified_b = semi_minor_axis(Airy1830Modified_a, Airy1830Modified_invf);
+constexpr GPS_Ellipse Airy1830Modified_Ellipse = { "Airy 1830 Modified", Airy1830Modified_a, Airy1830Modified_invf};
+constexpr double Airy1830Modified_b = semi_minor_axis(Airy1830Modified_Ellipse);
 
 // EPSG:4326
 constexpr double WGS84_a = 6378137.000;
 constexpr double WGS84_invf = 298.257223563;
-constexpr double WGS84_b = semi_minor_axis(WGS84_a, WGS84_invf);
+constexpr GPS_Ellipse WGS84_Ellipse = { "WGS84", WGS84_a, WGS84_invf };
+constexpr double WGS84_b = semi_minor_axis(WGS84_Ellipse);
 
 const GPS_Ellipse GPS_Ellipses[]= {
-  { "Airy 1830",               Airy1830_a, Airy1830_invf },
-  { "Airy 1830 Modified",      Airy1830Modified_a, Airy1830Modified_invf },
+  Airy1830_Ellipse,
+  Airy1830Modified_Ellipse,
   { "Australian National",     6378160.000, 298.25 },
   { "Bessel 1841 (Namibia)",   6377483.865, 299.1528128 },
   { "Bessel 1841",             6377397.155, 299.1528128 },
@@ -54,7 +57,7 @@ const GPS_Ellipse GPS_Ellipses[]= {
   { "WGS60",                   6378165.000, 298.3 },
   { "WGS66",                   6378145.000, 298.25 },
   { "WGS72",                   6378135.000, 298.26 },
-  { "WGS84",                   WGS84_a, WGS84_invf },
+  WGS84_Ellipse,
   { "Clarke 1880 (Benoit)",    6378300.789, 293.466 },
 };
 
