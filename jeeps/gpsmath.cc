@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified Copyright (C) 2024 Robert Lipe
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
