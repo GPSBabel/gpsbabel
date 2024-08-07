@@ -119,7 +119,7 @@ GarminTxtFormat::convert_datum(const Waypoint* wpt, double* dest_lat, double* de
 {
   double alt;
 
-  if (datum_index == kDautmWGS84) {
+  if (datum_index == kDatumWGS84) {
     *dest_lat = wpt->latitude;
     *dest_lon = wpt->longitude;
   } else GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
@@ -697,7 +697,7 @@ GarminTxtFormat::wr_init(const QString& fname)
     datum_index = kDatumOSGB36;
     break;
   case grid_swiss: /* force datum to WGS84 */
-    datum_index = kDautmWGS84;
+    datum_index = kDatumWGS84;
     break;
   default:
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);

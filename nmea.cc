@@ -191,7 +191,7 @@ NmeaFormat::nmea_add_wpt(Waypoint* wpt, route_head* trk) const
   // This also indicates to nmea_release_wpt that ownership has been
   // transferred to either the global_waypoint_list or global_track_list.
   wpt->extra_data = nullptr;
-  if (datum != kDautmWGS84) {
+  if (datum != kDatumWGS84) {
     double lat;
     double lon;
     double alt;
@@ -223,7 +223,7 @@ NmeaFormat::rd_init(const QString& fname)
 {
   curr_waypt = nullptr;
   last_waypt = nullptr;
-  datum = kDautmWGS84;
+  datum = kDatumWGS84;
   had_checksum = false;
 
   CHECK_BOOL(opt_gprmc);
