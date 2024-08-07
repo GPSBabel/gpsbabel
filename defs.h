@@ -116,7 +116,7 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
-constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 
 /*
