@@ -1543,17 +1543,16 @@ void GPS_Math_Helmert(double Sx, double Sy, double Sz,
                       double sppm,
                       double rXs, double rYs, double rZs)
 {
-  double s = sppm/1000000.0;
-  double rX = (rXs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
-  double rY = (rYs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
-  double rZ = (rZs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double s = sppm * 1e-6;
+  constexpr double radians_per_second = (1.0/(60.0*60.0)) * GPS_PI/180.0;
+  double rX = rXs * radians_per_second; /* radians */
+  double rY = rYs * radians_per_second; /* radians */
+  double rZ = rZs * radians_per_second; /* radians */
 
   // rotation/scaling matrix = [1+s -rz ry;rz 1+s -rx;-ry rx 1+s];
   *Dx = tX + (1 + s)*Sx + -rZ*Sy + rY*Sz;
   *Dy = tY + rZ*Sx + (1 + s)*Sy + -rX*Sz;
   *Dz = tZ + -rY*Sx + rX*Sy + (1 + s)*Sz;
-
-  return;
 }
 
 /* @func GPS_Math_Inverse_Helmert ***********************************
@@ -1584,10 +1583,11 @@ void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
                               double sppm,
                               double rXs, double rYs, double rZs)
 {
-  double s = sppm/1000000.0;
-  double rX = (rXs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
-  double rY = (rYs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
-  double rZ = (rZs/(60.0*60.0))*GPS_PI/(180.0); /* radians */
+  double s = sppm * 1e-6;
+  constexpr double radians_per_second = (1.0/(60.0*60.0)) * GPS_PI/180.0;
+  double rX = rXs * radians_per_second; /* radians */
+  double rY = rYs * radians_per_second; /* radians */
+  double rZ = rZs * radians_per_second; /* radians */
 
   // forward rotation/scaling matrix is [1+s -rz ry;rz 1+s -rx;-ry rx 1+s]
   // compute inverse of forward Helmert rotation/scaling matrix
@@ -1606,8 +1606,6 @@ void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
   *Dx = gain * ((r11 * (Sx-tX)) + (r12 * (Sy-tY)) + (r13 * (Sz-tZ)));
   *Dy = gain * ((r21 * (Sx-tX)) + (r22 * (Sy-tY)) + (r23 * (Sz-tZ)));
   *Dz = gain * ((r31 * (Sx-tX)) + (r32 * (Sy-tY)) + (r33 * (Sz-tZ)));
-
-  return;
 }
 
 /* @func GPS_Math_Known_Datum_To_WGS84_M **********************************
