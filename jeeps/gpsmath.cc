@@ -639,11 +639,11 @@ void GPS_Math_LatLon_To_EN(double* E, double* N, double phi,
 void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
                                       double* N)
 {
-  double N0      =  250000;
-  double E0      =  200000;
-  double F0      = 1.000035;
-  double phi0    = 53.5;
-  double lambda0 = -8.;
+  constexpr double N0      =  250000;
+  constexpr double E0      =  200000;
+  constexpr double F0      = 1.000035;
+  constexpr double phi0    = 53.5;
+  constexpr double lambda0 = -8.;
   constexpr double a       = Airy1830Modified_Ellipse.a;
   constexpr double b       = Airy1830Modified_Ellipse.b();
 
@@ -670,11 +670,11 @@ void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
 void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
                                    double* N)
 {
-  double N0      = -100000;
-  double E0      =  400000;
-  double F0      = 0.9996012717;
-  double phi0    = 49.;
-  double lambda0 = -2.;
+  constexpr double N0      = -100000;
+  constexpr double E0      =  400000;
+  constexpr double F0      = 0.9996012717;
+  constexpr double phi0    = 49.;
+  constexpr double lambda0 = -2.;
   constexpr double a       = Airy1830_Ellipse.a;
   constexpr double b       = Airy1830_Ellipse.b();
 
@@ -701,10 +701,10 @@ void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
 int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
                                    double* N)
 {
-  const double phi0 = 46.95240556;
-  const double lambda0 = 7.43958333;
-  const double E0 = 600000.0;
-  const double N0 = 200000.0;
+  constexpr double phi0 = 46.95240556;
+  constexpr double lambda0 = 7.43958333;
+  constexpr double E0 = 600000.0;
+  constexpr double N0 = 200000.0;
   double phi, lambda, alt;
 
   if (lat < 44.89022757) {
@@ -738,10 +738,10 @@ int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
 ************************************************************************/
 void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
-  const double phi0 = 46.95240556;
-  const double lambda0 = 7.43958333;
-  const double E0 = 600000.0;
-  const double N0 = 200000.0;
+  constexpr double phi0 = 46.95240556;
+  constexpr double lambda0 = 7.43958333;
+  constexpr double E0 = 600000.0;
+  constexpr double N0 = 200000.0;
   double phi, lambda, alt;
 
   constexpr double a = Bessel1841_Ellipse.a;
@@ -1098,10 +1098,10 @@ void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double* phi,
 int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
                                  double* N)
 {
-  double const phi0    = 31.73409694444; // 31 44 2.749
-  double const lambda0 = 35.21208055556; // 35 12 43.49
-  double const E0      = 170251.555;
-  double const N0      = 1126867.909;
+  constexpr double phi0    = 31.73409694444; // 31 44 2.749
+  constexpr double lambda0 = 35.21208055556; // 35 12 43.49
+  constexpr double E0      = 170251.555;
+  constexpr double N0      = 1126867.909;
   double phi, lambda, alt, a, b;
 
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
@@ -1135,10 +1135,10 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
 ************************************************************************/
 void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
-  double const phi0    = 31.73409694444; // 31 44 2.749
-  double const lambda0 = 35.21208055556; // 35 12 43.49
-  double const E0      = 170251.555;
-  double const N0      = 1126867.909;
+  constexpr double phi0    = 31.73409694444; // 31 44 2.749
+  constexpr double lambda0 = 35.21208055556; // 35 12 43.49
+  constexpr double E0      = 170251.555;
+  constexpr double N0      = 1126867.909;
   double phi, lambda, alt, a, b;
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
@@ -1301,11 +1301,11 @@ void GPS_Math_EN_To_LatLon(double E, double N, double* phi,
 void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
                                    double* lambda)
 {
-  double N0      = -100000;
-  double E0      =  400000;
-  double F0      = 0.9996012717;
-  double phi0    = 49.;
-  double lambda0 = -2.;
+  constexpr double N0      = -100000;
+  constexpr double E0      =  400000;
+  constexpr double F0      = 0.9996012717;
+  constexpr double phi0    = 49.;
+  constexpr double lambda0 = -2.;
   constexpr double a = Airy1830_Ellipse.a;
   constexpr double b = Airy1830_Ellipse.b();
 
@@ -1331,11 +1331,11 @@ void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
 void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double* phi,
                                      double* lambda)
 {
-  double N0      =  250000;
-  double E0      =  200000;
-  double F0      = 1.000035;
-  double phi0    = 53.5;
-  double lambda0 = -8.;
+  constexpr double N0      =  250000;
+  constexpr double E0      =  200000;
+  constexpr double F0      = 1.000035;
+  constexpr double phi0    = 53.5;
+  constexpr double lambda0 = -8.;
   constexpr double a = Airy1830Modified_Ellipse.a;
   constexpr double b = Airy1830Modified_Ellipse.b();
 
@@ -2730,7 +2730,7 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
 //based on code written by Chuck Gantz- chuck.gantz@globalstar.com
 //found at http://www.gpsy.com/gpsinfo/geotoutm/index.html
 
-  double k0 = 0.9996;
+  constexpr double k0 = 0.9996;
   double a, f;
   double eccSquared;
   double eccPrimeSquared;
