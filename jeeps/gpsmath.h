@@ -149,7 +149,7 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
                                  double* N);
 void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon);
 
-int32_t GPS_Math_WGS84_To_Swiss_EN(double phi, double lambda, double* E, double* N);
+int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E, double* N);
 void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon);
 
 void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
