@@ -24,7 +24,6 @@
 ********************************************************************/
 #include "jeeps/gpsmath.h"
 
-#include <cassert>           // for assert
 #include <cmath>             // for sin, tan, cos, pow, log, sqrt, asin, atan, exp, fabs, round
 #include <cstdint>           // for int32_t
 #include <cstdlib>           // for abs
@@ -36,6 +35,7 @@
 #include "defs.h"            // for case_ignore_strcmp, fatal, CSTR
 #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
 
+static constexpr bool use_exact_helmert_inverse = false;
 
 static int32_t GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32_t* zone,
                                             char* zc, double* Mc, double* E0,
@@ -2101,40 +2101,40 @@ int32_t GPS_Math_UKOSMap_To_WGS84_H(const char* map, double mE, double mN,
    * 6.2 Helmert datum transformations
    * 6.6 Approximate WGS84 to OSGB36/ODN transformation
    */
-  #if 0
-  // Actually invert the Helmert transform from WGS84 to OSGB36.
-  // WGS84 -> OSGB36
-  constexpr double tX = -446.448; /* meters */
-  constexpr double tY = +125.157; /* meters */
-  constexpr double tZ = -542.060; /* meters */
-  constexpr double s = +20.4894; /* ppm */
-  constexpr double rX = -0.1502; /* seconds */
-  constexpr double rY = -0.2470; /* seconds */
-  constexpr double rZ = -0.8421; /* seconds */
+  if constexpr(use_exact_helmert_inverse) {
+    // Actually invert the Helmert transform from WGS84 to OSGB36.
+    // WGS84 -> OSGB36
+    constexpr double tX = -446.448; /* meters */
+    constexpr double tY = +125.157; /* meters */
+    constexpr double tZ = -542.060; /* meters */
+    constexpr double s = +20.4894; /* ppm */
+    constexpr double rX = -0.1502; /* seconds */
+    constexpr double rY = -0.2470; /* seconds */
+    constexpr double rZ = -0.8421; /* seconds */
 
-  GPS_Math_Inverse_Helmert(ax, ay, az,
-                           &x, &y, &z,
-                           tX, tY, tZ,
-                           s,
-                           rX, rY, rZ);
-  #else
-  // Approximate the transform from OSGB36 to WGS84 by using the standard
-  // helmert transform with parameters that all have the opposite signs of
-  // those used to transform from WGS84 to OSGB36.
-  constexpr double tX = +446.448; /* meters */
-  constexpr double tY = -125.157; /* meters */
-  constexpr double tZ = +542.060; /* meters */
-  constexpr double s = -20.4894; /* ppm */
-  constexpr double rX = +0.1502; /* seconds */
-  constexpr double rY = +0.2470; /* seconds */
-  constexpr double rZ = +0.8421; /* seconds */
+    GPS_Math_Inverse_Helmert(ax, ay, az,
+                             &x, &y, &z,
+                             tX, tY, tZ,
+                             s,
+                             rX, rY, rZ);
+  } else {
+    // Approximate the transform from OSGB36 to WGS84 by using the standard
+    // helmert transform with parameters that all have the opposite signs of
+    // those used to transform from WGS84 to OSGB36.
+    constexpr double tX = +446.448; /* meters */
+    constexpr double tY = -125.157; /* meters */
+    constexpr double tZ = +542.060; /* meters */
+    constexpr double s = -20.4894; /* ppm */
+    constexpr double rX = +0.1502; /* seconds */
+    constexpr double rY = +0.2470; /* seconds */
+    constexpr double rZ = +0.8421; /* seconds */
 
-  GPS_Math_Helmert(ax, ay, az,
-                   &x, &y, &z,
-                   tX, tY, tZ,
-                   s,
-                   rX, rY, rZ);
-  #endif
+    GPS_Math_Helmert(ax, ay, az,
+                     &x, &y, &z,
+                     tX, tY, tZ,
+                     s,
+                     rX, rY, rZ);
+  }
 
   GPS_Math_XYZ_To_WGS84LatLonH(lat, lon, &ht, x, y, z);
 
