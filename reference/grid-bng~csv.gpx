@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="50.207517638" minlon="-7.489235772" maxlat="60.150151215" maxlon="1.296391371"/>
-  <wpt lat="58.007809302" lon="-6.751777637">
+  <bounds minlat="50.207587993" minlon="-7.489131626" maxlat="60.150023344" maxlon="1.296336192"/>
+  <wpt lat="58.007715410" lon="-6.751692411">
     <time>2008-08-23T20:56:12Z</time>
     <name>AlineLodge</name>
     <cmt>Aline Lodge</cmt>
     <desc>Aline Lodge</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="53.140870076" lon="-4.273683778">
+  <wpt lat="53.140881274" lon="-4.273629535">
     <time>2008-08-23T20:55:54Z</time>
     <name>Caernarfon</name>
     <cmt>Caernarfon</cmt>
     <desc>Caernarfon</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="50.207517638" lon="-5.295409027">
+  <wpt lat="50.207587993" lon="-5.295322139">
     <time>2008-08-23T20:55:39Z</time>
     <name>Camborne</name>
     <cmt>Camborne</cmt>
     <desc>Camborne</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="50.712891291" lon="-3.537602671">
+  <wpt lat="50.712954134" lon="-3.537551739">
     <time>2008-08-23T20:55:35Z</time>
     <name>Exeter</name>
     <cmt>Exeter</cmt>
     <desc>Exeter</desc>
     <sym>City (Medium)</sym>
   </wpt>
-  <wpt lat="56.634525358" lon="-2.889408436">
+  <wpt lat="56.634466564" lon="-2.889403757">
     <time>2008-08-23T20:55:22Z</time>
     <name>Forfar</name>
     <cmt>Forfar</cmt>
     <desc>Forfar</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="55.426025761" lon="-2.790531785">
+  <wpt lat="55.425992284" lon="-2.790521406">
     <time>2008-08-23T20:55:25Z</time>
     <name>Hawick</name>
     <cmt>Hawick</cmt>
     <desc>Hawick</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="57.621914847" lon="-7.489235772">
+  <wpt lat="57.621828064" lon="-7.489131626">
     <time>2008-08-23T20:56:17Z</time>
     <name>Hosta</name>
     <cmt>Hosta</cmt>
     <desc>Hosta</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="57.007373614" lon="-6.271139683">
+  <wpt lat="57.007301216" lon="-6.271060826">
     <time>2008-08-23T20:56:24Z</time>
     <name>IsleofRhum</name>
     <cmt>Isle of Rhum</cmt>
     <desc>Isle of Rhum</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="60.150151215" lon="-1.142586363">
+  <wpt lat="60.150023344" lon="-1.142651285">
     <time>2008-08-23T20:59:39Z</time>
     <name>Lerwick</name>
     <cmt>Lerwick</cmt>
     <desc>Lerwick</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="58.684841865" lon="-3.116680165">
+  <wpt lat="58.684739998" lon="-3.116684802">
     <time>2008-08-23T20:57:48Z</time>
     <name>Nethertown</name>
     <cmt>Nethertown</cmt>
     <desc>Nethertown</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="52.635495464" lon="1.296391371">
+  <wpt lat="52.635529551" lon="1.296336192">
     <time>2008-08-23T20:55:44Z</time>
     <name>Norwich</name>
     <cmt>Norwich</cmt>
     <desc>Norwich</desc>
     <sym>City (Medium)</sym>
   </wpt>
-  <wpt lat="50.741731984" lon="-0.782771513">
+  <wpt lat="50.741799936" lon="-0.782773783">
     <time>2008-08-23T20:57:02Z</time>
     <name>Selsey</name>
     <cmt>Selsey</cmt>
     <desc>Selsey</desc>
     <sym>City (Small)</sym>
   </wpt>
-  <wpt lat="53.393555571" lon="-1.494139002">
+  <wpt lat="53.393567055" lon="-1.494143092">
     <time>2008-08-23T20:55:01Z</time>
     <name>Sheffield</name>
     <cmt>Sheffield</cmt>

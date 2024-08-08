@@ -72,6 +72,16 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
                          double Sif, double* Dphi, double* Dlam,
                          double* DH, double Da, double Dif, double dx,
                          double dy, double dz);
+void GPS_Math_Helmert(double Sx, double Sy, double Sz,
+                      double* Dx, double* Dy, double* Dz,
+                      double tX, double tY, double tZ,
+                      double sppm,
+                      double rXs, double rYs, double rZs);
+void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
+                              double* Dx, double* Dy, double* Dz,
+                              double tX, double tY, double tZ,
+                              double sppm,
+                              double rXs, double rYs, double rZs);
 void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
                                      double* Dphi, double* Dlam, double* DH,
                                      int32_t n);
@@ -95,6 +105,10 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 int32_t GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
                                     double* mN, char* map);
 int32_t GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
+                                    double* lat, double* lon);
+int32_t GPS_Math_WGS84_To_UKOSMap_H(double lat, double lon, double* mE,
+                                    double* mN, char* map);
+int32_t GPS_Math_UKOSMap_To_WGS84_H(const char* map, double mE, double mN,
                                     double* lat, double* lon);
 int32_t GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double* mE,
                                     double* mN, char* map);

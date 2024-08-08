@@ -221,7 +221,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
                 &result);
     valid = (ct == 3);
     if (valid) {
-      if (! GPS_Math_UKOSMap_To_WGS84_M(map, lx, ly, &lat, &lon))
+      if (! GPS_Math_UKOSMap_To_WGS84_H(map, lx, ly, &lat, &lon))
         fatal("%s: Unable to convert BNG coordinates (%s)!\n",
               module, str);
     }
