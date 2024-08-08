@@ -7,7 +7,7 @@
 #include <QString>   // for QString
 
 
-constexpr double GPS_PI = 3.141592653589;
+constexpr double GPS_PI = 3.14159265358979323846;
 
 
 double GPS_Math_Deg_To_Rad(double v);
