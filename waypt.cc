@@ -22,6 +22,7 @@
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
 #include <cstdio>               // for fflush, fprintf, stdout
+#include <utility>              // for as_const
 
 #include <QChar>                // for QChar
 #include <QDateTime>            // for QDateTime
@@ -72,7 +73,7 @@ del_marked_wpts()
   global_waypoint_list->del_marked_wpts();
 }
 
-unsigned int
+int
 waypt_count()
 {
   return global_waypoint_list->count();
@@ -640,7 +641,7 @@ WaypointList::del_marked_wpts()
   WaypointList oldlist;
   swap(oldlist);
 
-  for (Waypoint* wpt : qAsConst(oldlist)) {
+  for (Waypoint* wpt : std::as_const(oldlist)) {
     if (wpt->wpt_flags.marked_for_deletion) {
       delete wpt;
     } else {

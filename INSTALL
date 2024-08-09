@@ -104,6 +104,5 @@ On non-macOS unix builds by default we now compile in the gpsbabel generated
 translation files, i.e. gpsbabelfe_*.qm, gpsbabel_*.qm, as well as
 gmapbase.html.  When compiled in these files do not need to be distributed.
 These are used by the GUI.  Additional translation files from Qt will also be
-used if they are found.  They may be in a package such as qttranslations5-l10n
-or qt5-qttranslations.
+used if they are found.  They may be in a package such as qt6-translations-l10n.
 

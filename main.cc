@@ -738,7 +738,7 @@ main(int argc, char* argv[])
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
 #error This version of Qt is not supported.
 #endif
 
@@ -804,7 +804,7 @@ main(int argc, char* argv[])
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDatumWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

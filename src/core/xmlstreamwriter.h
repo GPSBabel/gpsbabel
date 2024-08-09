@@ -60,7 +60,7 @@ private:
     explicit xml_command(xml_wrt_cmd_t t,
                          QString n = QString(),
                          QString v = QString())
-      : type(t), name(std::move(n)), value(std::move(v)) {};
+      : type(t), name(std::move(n)), value(std::move(v)) {}
 
     xml_wrt_cmd_t type;
     QString name;
@@ -74,7 +74,7 @@ private:
     {
       stack.append(other.stack);
       element_count += other.element_count;
-    };
+    }
 
     void append(const xml_command& cmd)
     {
@@ -94,7 +94,7 @@ private:
       case xml_wrt_cmd_t::name_space:
         break;
       }
-    };
+    }
 
     xml_stack_t stack;
     int element_count{0};

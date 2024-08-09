@@ -20,6 +20,7 @@
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
 #include <optional>             // for optional, operator>, operator<
+#include <utility>              // for as_const
 
 #include <QDateTime>            // for operator>, QDateTime, operator<
 #include <QList>                // for QList<>::const_iterator
@@ -45,27 +46,27 @@ route_init()
   global_track_list = new RouteList;
 }
 
-unsigned int
+int
 route_waypt_count()
 {
   /* total waypoint count -- all routes */
   return global_route_list->waypt_count();
 }
 
-unsigned int
+int
 route_count()
 {
   return global_route_list->count();	/* total # of routes */
 }
 
-unsigned int
+int
 track_waypt_count()
 {
   /* total waypoint count -- all tracks */
   return global_track_list->waypt_count();
 }
 
-unsigned int
+int
 track_count()
 {
   return global_track_list->count();	/* total # of tracks */
@@ -205,13 +206,13 @@ route_deinit()
 }
 
 void
-route_append(RouteList* src)
+route_append(const RouteList* src)
 {
   src->copy(&global_route_list);
 }
 
 void
-track_append(RouteList* src)
+track_append(const RouteList* src)
 {
   src->copy(&global_track_list);
 }
@@ -462,7 +463,7 @@ RouteList::del_marked_wpts(route_head* rte)
 
   // mimic trkseg handling from WaypointList::del_rte_waypt
   bool inherit_new_trkseg = false;
-  for (Waypoint* wpt : qAsConst(oldlist)) {
+  for (Waypoint* wpt : std::as_const(oldlist)) {
     if (wpt->wpt_flags.marked_for_deletion) {
       if (wpt->wpt_flags.new_trkseg) {
         inherit_new_trkseg = true;

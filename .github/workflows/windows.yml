@@ -19,35 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '5.15.2'
-            ARCH: 'amd64'
-            HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2019_64'
-            METHOD: 'aqt'
-            GENERATOR: 'Visual Studio 16 2019'
-            RELEASE: false
-            os: windows-2019
-          #- QT_VERSION: '5.15.2'
-          #  ARCH: 'amd64'
-          #  HOST_ARCH: 'amd64'
-          #  COMPILER: 'msvc2019_64'
-          #  TOOLSET: 'v142,version=14.29.30133'
-          #  METHOD: 'aqt'
-          #  GENERATOR: 'Visual Studio 16 2019'
-          #  RELEASE: false
-          #  os: windows-2019
-          - QT_VERSION: '5.15.2'
-            ARCH: 'x86'
-            HOST_ARCH: 'amd64'
-            COMPILER: 'msvc2019'
-            METHOD: 'aqt'
-            GENERATOR: 'Visual Studio 16 2019'
-            RELEASE: false
-            os: windows-2019
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
+            TOOLSET: 'v142,version=14.29.30133'
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 16 2019'
             RELEASE: false
@@ -74,7 +50,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache Qt
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: ~/Cache
@@ -82,7 +58,7 @@ jobs:
 
     - name: Install Qt setup(aqt)
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
 
@@ -126,7 +102,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |

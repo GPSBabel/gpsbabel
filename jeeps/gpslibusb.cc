@@ -66,7 +66,7 @@ static unsigned char gusb_bulk_in_ep;
 
 static bool libusb_successfully_initialized{false};
 static libusb_device_handle* udev{nullptr};
-static int garmin_usb_scan(libusb_unit_data*, int);
+static int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number);
 
 static int gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz);
 static int gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz);

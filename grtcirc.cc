@@ -134,9 +134,16 @@ double linedistprj(double lat1, double lon1,
   static double _lon1 = -9999;
   static double _lon2 = -9999;
 
-  static double x1, y1, z1;
-  static double x2, y2, z2;
-  static double xa, ya, za, la;
+  static double x1;
+  static double y1;
+  static double z1;
+  static double x2;
+  static double y2;
+  static double z2;
+  static double xa;
+  static double ya;
+  static double za;
+  static double la;
 
   double dot;
 

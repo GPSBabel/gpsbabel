@@ -1,5 +1,3 @@
-modified subset of zlib-1.2.13 from zlib.net.
+modified subset of zlib-1.3.1 from zlib.net.
 note that zlib 1.2.8 has a seek bug that will bite us.
 other changes after zlib 1.2.8 may be required as well.
-1. contrib/minizip/ioapi.c modifies a conditional adding __CYGWIN__
-See the corresponding .patch files.

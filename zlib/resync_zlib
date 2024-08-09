@@ -10,8 +10,8 @@ git checkout -- zlib
 
 mv zlib zlib.old
 
-tar -xzvf ../../Downloads/zlib-1.2.13.tar.gz
-mv zlib-1.2.13 zlib
+tar -xzvf ../../Downloads/zlib-1.3.1.tar.gz
+mv zlib-1.3.1 zlib
 cd zlib
 
 mv doc/algorithm.txt .
@@ -32,10 +32,12 @@ rm -f configure
 rm -f CMakeLists.txt
 rm -f INDEX
 rm -f Makefile
+rm -f Makefile.in
 rm -f make_vms.com
 rm -f treebuild.xml
 rm -f zlib2ansi
 rm -f zconf.h.cmakein
+rm -f zconf.h.in
 rm -f zlib.3.pdf
 rm -f zlib.map
 rm -f zlib.pc.cmakein
@@ -49,6 +51,7 @@ rm -fr contrib/infback9
 rm -fr contrib/iostream
 rm -fr contrib/iostream2
 rm -fr contrib/iostream3
+rm -fr contrib/nuget
 rm -fr contrib/pascal
 rm -fr contrib/puff
 rm -fr contrib/README.contrib
@@ -63,15 +66,6 @@ cd ..
 find zlib | sort > zlib.new.list
 find zlib.old | sort > zlib.old.list
 
-# copy patches
-cp -p zlib.old/contrib/minizip/ioapi.c.patch zlib/contrib/minizip
-
-# apply patches
-cd zlib/contrib/minizip
-patch < ioapi.c.patch
-cd ../..
-
-cd ..
 cp resync_zlib zlib
 
 echo "you must manually edit README.gpsbabel"

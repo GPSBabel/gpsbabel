@@ -83,7 +83,7 @@ public:
 
   // Qt5 doesn't have a qHash function for scoped enumerations.
   // Qt6 falls back to std::hash, but it may not use the seed.
-  friend qhash_result_t qHash(const igc_ext_type_t& key, qhash_result_t seed = 0) noexcept
+  friend size_t qHash(const igc_ext_type_t& key, size_t seed = 0) noexcept
   {
     return qHash(static_cast<std::underlying_type<igc_ext_type_t>::type>(key), seed);
   }
@@ -236,7 +236,7 @@ private:
   class TaskRecordReader
   {
   public:
-    void igc_task_rec(const char*);
+    void igc_task_rec(const char* rec);
 
   private:
     enum class state_t { id, takeoff, start, turnpoint, finish, landing };
@@ -251,7 +251,7 @@ private:
   class Interpolater
   {
   public:
-    double interpolate_alt(const route_head*, const gpsbabel::DateTime&);
+    double interpolate_alt(const route_head* track, const gpsbabel::DateTime& time);
 
   private:
     std::optional<WaypointList::const_iterator> prev_wpt;
@@ -267,23 +267,23 @@ private:
 
   /* Member Functions */
 
-  static bool coords_match(double, double, double, double);
-  igc_rec_type_t get_record(char**) const;
-  void detect_pres_track(const route_head*);
-  void detect_gnss_track(const route_head*);
-  void detect_other_track(const route_head*, int& max_waypt_ct);
-  void get_tracks(const route_head**, const route_head**);
-  static QByteArray latlon2str(const Waypoint*);
-  static QByteArray date2str(const gpsbabel::DateTime&);
-  static QByteArray tod2str(const gpsbabel::DateTime&);
+  static bool coords_match(double lat1, double lon1, double lat2, double lon2);
+  igc_rec_type_t get_record(char** rec) const;
+  void detect_pres_track(const route_head* rh);
+  void detect_gnss_track(const route_head* rh);
+  void detect_other_track(const route_head* rh, int& max_waypt_ct);
+  void get_tracks(const route_head** pres_track, const route_head** gnss_track);
+  static QByteArray latlon2str(const Waypoint* wpt);
+  static QByteArray date2str(const gpsbabel::DateTime& dt);
+  static QByteArray tod2str(const gpsbabel::DateTime& tod);
   void wr_header();
-  void wr_task_wpt_name(const Waypoint*, const char*);
-  void wr_task_hdr(const route_head*, unsigned int task_num);
-  void wr_task_wpt(const Waypoint*);
-  void wr_task_tlr(const route_head*);
+  void wr_task_wpt_name(const Waypoint* wpt, const char* alt_name);
+  void wr_task_hdr(const route_head* rte, unsigned int task_num);
+  void wr_task_wpt(const Waypoint* wpt);
+  void wr_task_tlr(const route_head* rte);
   void wr_tasks();
-  void wr_fix_record(const Waypoint*, int, int);
-  static int correlate_tracks(const route_head*, const route_head*);
+  void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt);
+  static int correlate_tracks(const route_head* pres_track, const route_head* gnss_track);
   void wr_track();
 
   /* Data Members */
