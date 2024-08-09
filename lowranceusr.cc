@@ -88,11 +88,12 @@
 #include "lowranceusr.h"
 
 #include <cinttypes>            // for PRId64
-#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cmath>                // for round, atan, exp, log, tan
 #include <cstdio>               // for printf, sprintf, SEEK_CUR
 #include <cstdint>              // for int64_t
 #include <cstdlib>              // for abs
 #include <cstring>              // for strcmp, strlen
+#include <numbers>              // for pi
 #include <utility>              // for as_const
 
 #include <QByteArray>           // for QByteArray
@@ -377,7 +378,7 @@ LowranceusrFormat::lon_mm_to_deg(double x)
 double
 LowranceusrFormat::lat_mm_to_deg(double x)
 {
-  return (2.0 * atan(exp(x / SEMIMINOR)) - M_PI / 2.0) / DEGREESTORADIANS;
+  return (2.0 * atan(exp(x / SEMIMINOR)) - std::numbers::pi / 2.0) / DEGREESTORADIANS;
 }
 
 long
@@ -389,7 +390,7 @@ LowranceusrFormat::lon_deg_to_mm(double x)
 long
 LowranceusrFormat::lat_deg_to_mm(double x)
 {
-  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
+  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + std::numbers::pi / 2.0) / 2.0)));
 }
 
 void

@@ -3,11 +3,12 @@
 
 #include <cstdint>   // for int32_t
 #include <ctime>     // for time_t
+#include <numbers>   // for pi
 
 #include <QString>   // for QString
 
 
-constexpr double GPS_PI = 3.14159265358979323846;
+constexpr double GPS_PI = std::numbers::pi;
 
 
 double GPS_Math_Deg_To_Rad(double v);

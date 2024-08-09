@@ -25,9 +25,10 @@
 #include <Qt>                   // for CaseInsensitive
 #include <QtGlobal>             // for qRound
 
-#include <cmath>                // for atan, tan, M_PI, log, sinh
+#include <cmath>                // for atan, tan, log, sinh
 #include <cstdio>               // for snprintf, SEEK_SET
 #include <cstring>              // for strncpy, memcpy, memset
+#include <numbers>              // for inv_pi, pi
 
 #include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, xcalloc, track_add_wpt, xstrndup
 #include "mkshort.h"            // for MakeShort
@@ -61,7 +62,7 @@ Still, they're useful in the code as a plain signature.
 #define WPT_MAGIC2		0x02030024L // New for 2013.  No visible diff?!
 #define RTE_MAGIC		0x03030088L
 
-#define EAST_SCALE		20038297.0 /* this is i1924_equ_axis*M_PI */
+#define EAST_SCALE		20038297.0 /* this is i1924_equ_axis*pi */
 #define i1924_equ_axis		6378388.0
 #define i1924_polar_axis	6356911.946
 
@@ -173,9 +174,9 @@ HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 {
   constexpr double cos_ae = 0.9966349016452;
   constexpr double cos2_ae = cos_ae * cos_ae;
-  const double gdr = gd_lat *M_PI / 180.0;
+  const double gdr = gd_lat * std::numbers::pi / 180.0;
 
-  return atan(cos2_ae * tan(gdr)) * 180.0/M_PI;
+  return atan(cos2_ae * tan(gdr)) * 180.0 * std::numbers::inv_pi;
 }
 
 /* Takes a latitude in degrees,
@@ -185,9 +186,9 @@ HumminbirdBase::geocentric_to_geodetic_hwr(const double gc_lat)
 {
   constexpr double cos_ae = 0.9966349016452;
   constexpr double cos2_ae = cos_ae * cos_ae;
-  const double gcr = gc_lat *M_PI / 180.0;
+  const double gcr = gc_lat *  std::numbers::pi / 180.0;
 
-  return atan(tan(gcr)/cos2_ae) * 180.0/M_PI;
+  return atan(tan(gcr)/cos2_ae) * 180.0 * std::numbers::inv_pi;
 }
 
 /* Takes a projected "north" value, returns latitude in degrees. */
@@ -196,15 +197,15 @@ HumminbirdBase::gudermannian_i1924(const double x)
 {
   const double norm_x = x/i1924_equ_axis;
 
-  return atan(sinh(norm_x)) * 180.0/M_PI;
+  return atan(sinh(norm_x)) * 180.0 * std::numbers::inv_pi;
 }
 
 /* Takes latitude in degrees, returns projected "north" value. */
 double
 HumminbirdBase::inverse_gudermannian_i1924(const double x)
 {
-  const double x_r = x/180.0 * M_PI;
-  const double guder = log(tan(M_PI/4.0 + x_r/2.0));
+  const double x_r = x/180.0 * std::numbers::pi;
+  const double guder = log(tan(std::numbers::pi/4.0 + x_r/2.0));
 
   return guder * i1924_equ_axis;
 }

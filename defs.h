@@ -50,12 +50,6 @@
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
