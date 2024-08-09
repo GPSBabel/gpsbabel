@@ -19,7 +19,6 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cmath>                     // for M_PI
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
@@ -36,7 +35,6 @@
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
-#include <QVector>                   // for QVector
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
@@ -50,12 +48,6 @@
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
@@ -235,17 +227,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
@@ -275,21 +261,14 @@ private:
   class op_flags
   {
   public:
-    op_flags() :
-      temperature(false),
-      proximity(false),
-      course(false),
-      speed(false),
-      geoidheight(false),
-      depth(false) {}
-    bool temperature:1;		/* temperature field is set */
-    bool proximity:1;		/* proximity field is set */
-    bool course:1;			/* course field is set */
-    bool speed:1;			/* speed field is set */
-    bool geoidheight:1;	/* geoidheight field is set */
-    bool depth:1;			/* depth field is set */
+    bool temperature:1{false}; /* temperature field is set */
+    bool proximity:1{false};   /* proximity field is set */
+    bool course:1{false};      /* course field is set */
+    bool speed:1{false};       /* speed field is set */
+    bool geoidheight:1{false}; /* geoidheight field is set */
+    bool depth:1{false};       /* depth field is set */
     /* !ToDo!
-    unsigned int altitude:1;		/+ altitude field is set +/
+    unsigned int altitude:1{false}; /+ altitude field is set +/
     ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
     odometer_distance
     */
