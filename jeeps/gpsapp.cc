@@ -168,8 +168,6 @@ int32_t GPS_Init(const char* port)
 {
 	int32_t ret;
 
-  (void) GPS_Util_Little();
-
   ret = GPS_A000(port);
   if (ret<0) {
     return ret;

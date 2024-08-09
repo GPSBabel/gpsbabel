@@ -44,8 +44,6 @@ int32_t GPS_Command_Off(const char* port)
   GPS_Packet tra;
   GPS_Packet rec;
 
-  GPS_Util_Little();
-
   if (!GPS_Device_On(port, &fd)) {
     return gps_errno;
   }
