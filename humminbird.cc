@@ -186,7 +186,7 @@ HumminbirdBase::geocentric_to_geodetic_hwr(const double gc_lat)
 {
   constexpr double cos_ae = 0.9966349016452;
   constexpr double cos2_ae = cos_ae * cos_ae;
-  const double gcr = gc_lat *  std::numbers::pi / 180.0;
+  const double gcr = gc_lat * std::numbers::pi / 180.0;
 
   return atan(tan(gcr)/cos2_ae) * 180.0 * std::numbers::inv_pi;
 }

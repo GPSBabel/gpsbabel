@@ -1010,7 +1010,7 @@ GarminFormat::route_write()
   for (int i = 0; i < n; i++) {
     GPS_Way_Del(&tx_routelist[i]);
   }
-  
+
   xfree(tx_routelist);
 }
 
