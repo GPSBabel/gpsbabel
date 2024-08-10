@@ -26,6 +26,9 @@
 #include <cstdarg>
 #include <cstdlib>
 
+static_assert((std::endian::native == std::endian::little) !=
+              (std::endian::native == std::endian::big),
+              "Only big or little endian platforms are supported.");
 static constexpr bool GPS_Little = std::endian::native == std::endian::little;
 
 int32_t gps_warning = 0;
