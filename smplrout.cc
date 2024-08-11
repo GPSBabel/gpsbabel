@@ -103,12 +103,13 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
     break;
   case metric_t::length:
     track_error = radtomiles(
-                    gcdist(wpt1->latitude, wpt1->longitude,
-                           wpt3->latitude, wpt3->longitude) +
-                    gcdist(wpt3->latitude, wpt3->longitude,
-                           wpt2->latitude, wpt2->longitude) -
-                    gcdist(wpt1->latitude, wpt1->longitude,
-                           wpt2->latitude, wpt2->longitude));
+                    gcdist(RAD(wpt1->latitude), RAD(wpt1->longitude),
+                           RAD(wpt3->latitude), RAD(wpt3->longitude)) +
+                    gcdist(RAD(wpt3->latitude), RAD(wpt3->longitude),
+                           RAD(wpt2->latitude), RAD(wpt2->longitude)) -
+                    gcdist(RAD(wpt1->latitude), RAD(wpt1->longitude),
+                           RAD(wpt2->latitude), RAD(wpt2->longitude)));
+//qDebug() << track_error;
     break;
   case metric_t::relative:
   default: // eliminate false positive warning with g++ 11.3.0: ‘error’ may be used uninitialized in this function [-Wmaybe-uninitialized]
