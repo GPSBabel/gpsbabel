@@ -109,7 +109,6 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
                            RAD(wpt2->latitude), RAD(wpt2->longitude)) -
                     gcdist(RAD(wpt1->latitude), RAD(wpt1->longitude),
                            RAD(wpt2->latitude), RAD(wpt2->longitude)));
-//qDebug() << track_error;
     break;
   case metric_t::relative:
   default: // eliminate false positive warning with g++ 11.3.0: ‘error’ may be used uninitialized in this function [-Wmaybe-uninitialized]
