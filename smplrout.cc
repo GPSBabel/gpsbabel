@@ -126,8 +126,8 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);
       track_error = radtometers(gcdist(
-                                  wpt3->latitude, wpt3->longitude,
-                                  reslat, reslon));
+                                  RAD(wpt3->latitude), RAD(wpt3->longitude),
+                                  RAD(reslat), RAD(reslon)));
     } else { // else distance to connecting line
       track_error = radtometers(linedist(
                                   wpt1->latitude, wpt1->longitude,
