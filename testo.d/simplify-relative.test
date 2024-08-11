@@ -4,3 +4,6 @@
 gpsbabel -i gpx -f ${REFERENCE}/track/simplify-relative.gpx -x simplify,relative,count=33 -o gpx -F ${TMPDIR}/simplify-relative2.gpx
 compare ${REFERENCE}/track/simplify-relative2.gpx ${TMPDIR}/simplify-relative2.gpx
 
+gpsbabel -i gpx -f ${REFERENCE}/track/simplify-relative.gpx -x simplify,relative,error=34.3 -o gpx -F ${TMPDIR}/simplify-relative3.gpx
+compare ${REFERENCE}/track/simplify-relative2.gpx ${TMPDIR}/simplify-relative3.gpx
+
