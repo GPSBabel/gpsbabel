@@ -348,6 +348,11 @@ public:
   Geocache* AllocGCData();
   int EmptyGCData() const;
   PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.lat;
+    longitude = pos.lon;
+  };
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.

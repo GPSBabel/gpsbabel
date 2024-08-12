@@ -55,8 +55,8 @@ void BendFilter::init()
 
 Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* wpt_orig_adj) const
 {
-  double distance = radtometers(gcdist(RAD(wpt_orig->latitude), RAD(wpt_orig->longitude),
-                                       RAD(wpt_orig_adj->latitude), RAD(wpt_orig_adj->longitude)));
+  double distance = radtometers(gcdist(wpt_orig->position(),
+                                       wpt_orig_adj->position()));
   if (distance <= maxDist) {
     return nullptr;
   }
@@ -64,10 +64,7 @@ Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* 
   double frac = maxDist / distance;
 
   auto* wpt_dest = new Waypoint(*wpt_orig);
-  linepart(wpt_orig->latitude, wpt_orig->longitude,
-           wpt_orig_adj->latitude, wpt_orig_adj->longitude,
-           frac,
-           &wpt_dest->latitude, &wpt_dest->longitude);
+  wpt_dest->SetPosition(linepart(wpt_orig->position(), wpt_orig_adj->position(), frac));
 
   return wpt_dest;
 }
@@ -76,19 +73,10 @@ int BendFilter::is_small_angle(const Waypoint* wpt_orig,
                                const Waypoint* wpt_orig_prev,
                                const Waypoint* wpt_orig_next) const
 {
-  double lat_orig = RAD(wpt_orig->latitude);
-  double long_orig = RAD(wpt_orig->longitude);
-
-  double lat_orig_prev = RAD(wpt_orig_prev->latitude);
-  double long_orig_prev = RAD(wpt_orig_prev->longitude);
-
-  double lat_orig_next = RAD(wpt_orig_next->latitude);
-  double long_orig_next = RAD(wpt_orig_next->longitude);
-
-  double heading_prev = heading_true_degrees(lat_orig, long_orig,
-                        lat_orig_prev, long_orig_prev);
-  double heading_next = heading_true_degrees(lat_orig, long_orig,
-                        lat_orig_next, long_orig_next);
+  double heading_prev = heading_true_degrees(wpt_orig->position(),
+                        wpt_orig_prev->position());
+  double heading_next = heading_true_degrees(wpt_orig->position(),
+                        wpt_orig_next->position());
 
   double heading_diff = heading_next - heading_prev;
 

@@ -44,8 +44,7 @@
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   static const Waypoint* arcpt1 = nullptr;
-  double prjlat;
-  double prjlon;
+  PositionDeg prjpos;
   double frac;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
@@ -62,12 +61,8 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
       if (ed->distance == BADVAL || projectopt || ed->distance >= pos_dist) {
         double dist;
         if (ptsopt) {
-          dist = gcdist(RAD(arcpt2->latitude),
-                        RAD(arcpt2->longitude),
-                        RAD(waypointp->latitude),
-                        RAD(waypointp->longitude));
-          prjlat = arcpt2->latitude;
-          prjlon = arcpt2->longitude;
+          dist = gcdist(arcpt2->position(), waypointp->position());
+          prjpos = arcpt2->position();
           frac = 1.0;
         } else {
           if (waypointp == nullptr) {
@@ -77,13 +72,9 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
             fatal(FatalMsg() << "Internal error: Attempt to project waypoint without predecessor");
           }
 
-          dist = linedistprj(arcpt1->latitude,
-                             arcpt1->longitude,
-                             arcpt2->latitude,
-                             arcpt2->longitude,
-                             waypointp->latitude,
-                             waypointp->longitude,
-                             &prjlat, &prjlon, &frac);
+          std::tie(dist, prjpos, frac) = linedistprj(arcpt1->position(),
+                                                     arcpt2->position(),
+                                                     waypointp->position());
         }
 
         /* convert radians to float point statute miles */
@@ -92,8 +83,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
         if (ed->distance > dist) {
           ed->distance = dist;
           if (projectopt) {
-            ed->prjlatitude = prjlat;
-            ed->prjlongitude = prjlon;
+            ed->prjpos = prjpos;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
             ed->arcpt2 = arcpt2;
@@ -171,8 +161,8 @@ void ArcDistanceFilter::process()
         wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
-        wp->longitude = ed->prjlongitude;
-        wp->latitude = ed->prjlatitude;
+        wp->longitude = ed->prjpos.lon;
+        wp->latitude = ed->prjpos.lat;
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {

@@ -97,9 +97,9 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   switch (metric) {
   case metric_t::crosstrack:
     track_error = radtomiles(linedist(
-                               wpt1->latitude, wpt1->longitude,
-                               wpt2->latitude, wpt2->longitude,
-                               wpt3->latitude, wpt3->longitude));
+                               wpt1->position(),
+                               wpt2->position(),
+                               wpt3->position()));
     break;
   case metric_t::length:
     track_error = radtomiles(
@@ -116,15 +116,15 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
         (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
       double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
                     static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
-      auto respos = linepartnew(wpt1->position(),
-                                wpt2->position(),
-                                frac);
+      auto respos = linepart(wpt1->position(),
+                             wpt2->position(),
+                             frac);
       track_error = radtometers(gcdist(wpt3->position(), respos));
     } else { // else distance to connecting line
       track_error = radtometers(linedist(
-                                  wpt1->latitude, wpt1->longitude,
-                                  wpt2->latitude, wpt2->longitude,
-                                  wpt3->latitude, wpt3->longitude));
+                                  wpt1->position(),
+                                  wpt2->position(),
+                                  wpt3->position()));
     }
     // error relative to horizontal precision
     track_error /= (6 * wpt3->hdop);

@@ -963,8 +963,7 @@ void
 XcsvFormat::xcsv_resetpathlen(const route_head* head)
 {
   pathdist = 0;
-  oldlat = 999;
-  oldlon = 999;
+  old_position.reset();
   csv_route = csv_track = nullptr;
   switch (xcsv_style->datatype) {
   case trkdata:
@@ -993,12 +992,13 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   double utmn;
   char utmzc;
 
-  if (oldlon < 900) {
-    pathdist += radtometers(gcdist(RAD(oldlat),RAD(oldlon),
-                                   RAD(wpt->latitude),RAD(wpt->longitude)));
+  if (old_position) {
+    pathdist += radtometers(gcdist(old_position.value(),
+                                   wpt->position()));
   }
-  longitude = oldlon = wpt->longitude;
-  latitude = oldlat = wpt->latitude;
+  old_position = wpt->position();
+  latitude = wpt->position().lat;
+  longitude = wpt->position().lon;
 
   QString write_delimiter;
   if (xcsv_style->field_delimiter == u"\\w") {
