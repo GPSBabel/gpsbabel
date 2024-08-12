@@ -24,7 +24,10 @@
 
 #include <numbers>  // for inv_pi
 
+#include "defs.h"
+
 double gcdist(double lat1, double lon1, double lat2, double lon2);
+double gcdist(PositionRad pos1, PositionRad pos2);
 double heading_true_degrees(double lat1, double lon1, double lat2, double lon2);
 
 double linedistprj(double lat1, double lon1,
@@ -44,13 +47,5 @@ void linepart(double lat1, double lon1,
               double lat2, double lon2,
               double frac,
               double* reslat, double* reslon);
-
-/* Degrees to radians */
-constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
-constexpr double DEG(double x) { return x * kDegreesPerRadian; }
-
-/* Radians to degrees */
-constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
-constexpr double RAD(double x) { return x * kRadiansPerDegree; }
 
 #endif

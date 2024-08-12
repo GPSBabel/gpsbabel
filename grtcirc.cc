@@ -89,6 +89,11 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
   return 2.0 * res;
 }
 
+double gcdist(PositionRad pos1, PositionRad pos2)
+{
+  return gcdist(pos1.lat, pos1.lon, pos2.lat, pos2.lon);
+}
+
 /* This value is the heading you'd leave point 1 at to arrive at point 2.
  * Inputs and outputs are in radians.
  */

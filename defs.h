@@ -107,6 +107,14 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
+
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
+
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
@@ -246,6 +254,27 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  PositionDeg(const PositionRad& posr);
+  PositionDeg(double latd, double lond) : lat(latd), lon(lond) {}
+
+  double lat;
+  double lon;
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  PositionRad(const PositionDeg& posd);
+  PositionRad(double latr, double lonr) : lat(latr), lon(lonr) {}
+
+  double lat;
+  double lon;
+};
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -318,6 +347,7 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
