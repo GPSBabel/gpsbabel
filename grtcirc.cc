@@ -370,3 +370,19 @@ void linepart(double lat1, double lon1,
     }
   }
 }
+
+// TODO: this becomes linepart when all legacy callers converted.
+//       and it incorporates all the above linepart code.
+PositionDeg linepartnew (PositionDeg pos1,
+                         PositionDeg pos2,
+                         double frac)
+{
+double reslat;
+double reslon;
+  linepart(pos1.lat, pos1.lon ,  // pos1 must be in degrees.
+           pos2.lat, pos2.lon,   // pos2 must be in degrees.
+           frac,
+           &reslat, &reslon);
+  return {reslat, reslon}; // reslat, reslon must be in degrees.
+}
+

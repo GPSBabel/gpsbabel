@@ -48,4 +48,8 @@ void linepart(double lat1, double lon1,
               double frac,
               double* reslat, double* reslon);
 
+PositionDeg linepartnew(PositionDeg pos1,
+                        PositionDeg pos2,
+                        double frac);
+
 #endif
