@@ -685,6 +685,9 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_fit.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -715,7 +718,13 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_txt.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_txt.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_xt.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_xt.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gbfile.cc">
@@ -800,6 +809,9 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gtm.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/gtm.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gtrnctr.cc">
@@ -1048,9 +1060,6 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsdevice_usb.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsfmt.h">
-			<Option target="gpsbabel"/>
-		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpslibusb.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -1114,19 +1123,16 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsusbsend.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsutil.h">
+		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsutil.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/jgpsutil.cc">
+		<Unit filename="/Users/robertlipe/src/gpsbabel/jeeps/gpsutil.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/kml.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/kml.h">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/legacyformat.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/lowranceusr.cc">
@@ -1201,6 +1207,9 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/mtk_logger.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/mtk_logger.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/nmea.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -1220,6 +1229,9 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/ozi.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/ozi.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/parse.cc">
@@ -1402,7 +1414,13 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/tpg.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/tpg.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/tpo.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/tpo.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/trackfilter.cc">
@@ -1435,6 +1453,9 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/v900.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/v900.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/validate.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -1442,6 +1463,9 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/vcf.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/vcf.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/vecs.cc">

@@ -671,8 +671,8 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   be_write32(&hum.north, qRound(north));
 
   QString name = (global_opts.synthesize_shortnames)
-                 ? mkshort_from_wpt(wptname_sh, wpt)
-                 : mkshort(wptname_sh, wpt->shortname);
+                 ? wptname_sh->mkshort_from_wpt(wpt)
+                 : wptname_sh->mkshort(wpt->shortname);
   memset(&hum.name, 0, sizeof(hum.name));
   memcpy(&hum.name, CSTR(name), name.length());
 

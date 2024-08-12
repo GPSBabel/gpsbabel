@@ -1691,7 +1691,8 @@ GdbFormat::wr_deinit()
 {
   disp_summary(fout);
   gdb_flush_waypt_queue(waypt_nameposn_out_hash);
-  mkshort_del_handle(&short_h);
+  delete short_h;
+  short_h = nullptr;
   gbfclose(fout);
   gbfclose(ftmp);
 }

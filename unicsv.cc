@@ -646,21 +646,21 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_hdop:
-      wpt->hdop = value.toFloat();
+      wpt->hdop = value.toDouble();
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
       break;
 
     case fld_pdop:
-      wpt->pdop = value.toFloat();
+      wpt->pdop = value.toDouble();
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
       break;
 
     case fld_vdop:
-      wpt->vdop = value.toFloat();
+      wpt->vdop = value.toDouble();
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }
@@ -730,7 +730,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_temperature_f:
       d = value.toDouble();
       if (fabs(d) < 999999) {
-        wpt->set_temperature(FahrenheitToCelsius(d));
+        wpt->set_temperature(FAHRENHEIT_TO_CELSIUS(d));
       }
       break;
 
@@ -749,7 +749,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_power:
-      wpt->power = value.toFloat();
+      wpt->power = value.toDouble();
       if (unicsv_detect) {
         unicsv_data_type = trkdata;
       }

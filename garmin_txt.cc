@@ -935,7 +935,7 @@ GarminTxtFormat::parse_temperature(const QString& str, double* temperature) cons
       *temperature = value;
       break;
     case 'F':
-      *temperature = FahrenheitToCelsius(value);
+      *temperature = FAHRENHEIT_TO_CELSIUS(value);
       break;
     default:
       fatal(MYNAME ": Unknown temperature unit \"%c\" at line %d!\n", unit, current_line);
