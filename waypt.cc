@@ -728,11 +728,3 @@ void WaypointList::swap(WaypointList& other)
   *this = other;
   other = tmp_list;
 }
-
-PositionDeg::PositionDeg(const PositionRad& posr) :
-  lat(posr.lat * kDegreesPerRadian),
-  lon(posr.lon * kDegreesPerRadian) {}
-
-PositionRad::PositionRad(const PositionDeg& posd) :
-  lat(posd.lat * kRadiansPerDegree),
-  lon(posd.lon * kRadiansPerDegree) {}

@@ -259,7 +259,7 @@ struct PositionRad; // forward declare
 struct PositionDeg
 {
   PositionDeg() = default;
-  explicit(false) PositionDeg(const PositionRad& posr); /* converting ctor */
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
   PositionDeg(double latd, double lond) : lat(latd), lon(lond) {}
 
   double lat;
@@ -269,12 +269,20 @@ struct PositionDeg
 struct PositionRad
 {
   PositionRad() = default;
-  explicit(false) PositionRad(const PositionDeg& posd); /* converting ctor */
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
   PositionRad(double latr, double lonr) : lat(latr), lon(lonr) {}
 
   double lat;
   double lon;
 };
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  lat(posr.lat * kDegreesPerRadian),
+  lon(posr.lon * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  lat(posd.lat * kRadiansPerDegree),
+  lon(posd.lon * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -353,7 +361,7 @@ public:
   {
     latitude = pos.lat;
     longitude = pos.lon;
-  };
+  }
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
