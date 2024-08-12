@@ -584,7 +584,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
 
   /* TIME CONVERSIONS ***************************************************/
-  case XcsvStyle::XT_EXCEL_TIME:
+  case XcsvStyle::XT_EXCEL_TIME: {
     /* Time as Excel Time  */
     bool ok;
     double et = value.toDouble(&ok);
@@ -596,7 +596,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     }
   }
   break;
-  case XcsvStyle::XT_TIMET_TIME: 
+  case XcsvStyle::XT_TIMET_TIME: {
     /* Time as time_t */
     bool ok;
     long long tt = value.toLongLong(&ok);
@@ -621,28 +621,18 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_YYYYMMDD_TIME:
-    wpt->SetCreationTime(yyyymmdd_to_time(value));
+    parse_data->utc_date = yyyymmdd_to_time(value);
     break;
   case XcsvStyle::XT_GMT_TIME:
-    wpt->SetCreationTime(sscanftime(s, fmp.printfc.constData(), true));
+    sscanftime(s, fmp.printfc.constData(), parse_data->utc_date, parse_data->utc_time);
     break;
   case XcsvStyle::XT_LOCAL_TIME:
-    if (!gpsbabel_testmode()) {
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), false));
-    } else {
-      /* Force constant time zone for test */
-      wpt->creation_time = wpt->creation_time.addSecs(sscanftime(s, fmp.printfc.constData(), true));
-    }
-    break;
-  /* Useful when time and date are in separate fields
-  	GMT / Local offset is handled by the two cases above */
-  case XcsvStyle::XT_HMSG_TIME:
-  case XcsvStyle::XT_HMSL_TIME:
-    wpt->creation_time = wpt->creation_time.addSecs(addhms(s, fmp.printfc.constData()));
+    sscanftime(s, fmp.printfc.constData(), parse_data->local_date, parse_data->local_time);
     break;
   case XcsvStyle::XT_ISO_TIME:
   case XcsvStyle::XT_ISO_TIME_MS:
-    wpt->SetCreationTime(xml_parse_time(value));
+    wpt->SetCreationTime(QDateTime::fromString(value, Qt::ISODateWithMs));
+    parse_data->need_datetime = false;
     break;
   case XcsvStyle::XT_NET_TIME: {
     bool ok;
@@ -656,8 +646,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   }
   break;
   case XcsvStyle::XT_GEOCACHE_LAST_FOUND: {
-    QDate date;
-    date = yyyymmdd_to_time(value);
+    QDate date = yyyymmdd_to_time(value);
     wpt->AllocGCData()->last_found = date.startOfDay();
     break;
   }
@@ -769,7 +758,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->set_temperature(strtod(s, nullptr));
     break;
   case XcsvStyle::XT_TEMPERATURE_F:
-    wpt->set_temperature(FahrenheitToCelsius(strtod(s, nullptr)));
+    wpt->set_temperature(FAHRENHEIT_TO_CELSIUS(strtod(s, nullptr)));
     break;
   /* GMSD ****************************************************************/
   case XcsvStyle::XT_COUNTRY: {
@@ -918,7 +907,7 @@ XcsvFormat::read()
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
-      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
+      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDatumWGS84)) {
         double alt;
         GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
                                         &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file->gps_datum_idx);
@@ -929,7 +918,7 @@ XcsvFormat::read()
                                        &wpt_tmp->longitude,
                                        parse_data.utm_easting, parse_data.utm_northing,
                                        parse_data.utm_zone, parse_data.utm_zonec,
-                                       kDautmWGS84);
+                                       kDatumWGS84);
       }
 
       if (parse_data.link_) {
@@ -1047,7 +1036,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     description = shortname;
   }
 
-  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
+  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDatumWGS84)) {
     double alt;
     GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
                                     &latitude, &longitude, &alt, xcsv_file->gps_datum_idx);
@@ -1385,7 +1374,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case XcsvStyle::XT_TEMPERATURE_F:
       if (wpt->temperature_has_value()) {
-        buff = QString::asprintf(fmp.printfc.constData(), CelsiusToFahrenheit(wpt->temperature_value()));
+        buff = QString::asprintf(fmp.printfc.constData(), CELSIUS_TO_FAHRENHEIT(wpt->temperature_value()));
       }
       break;
     /* TIME CONVERSIONS**************************************************/
@@ -1548,43 +1537,6 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     }
     break;
     /* GMSD ************************************************************/
-    case XcsvStyle::XT_COUNTRY: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_country(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_STATE: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_state(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_CITY: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_city(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_POSTAL_CODE: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_postal_code(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_STREET_ADDR: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_addr(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_PHONE_NR: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_phone_nr(gmsd, "")));
-    }
-    break;
-    case XcsvStyle::XT_FACILITY: {
-      const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
-      buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_facility(gmsd, "")));
-    }
-    break;
-    case XT_EMAIL: {
-      garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
     case XcsvStyle::XT_COUNTRY: {
       const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
       buff = QString::asprintf(fmp.printfc.constData(), CSTR(garmin_fs_t::get_country(gmsd, "")));
