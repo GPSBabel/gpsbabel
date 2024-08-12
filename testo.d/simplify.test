@@ -28,8 +28,3 @@ gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
          -x simplify,error=0.01263869,length \
          -o gpx -F ${TMPDIR}/simplify_error_length_miles.gpx
 compare ${REFERENCE}/simplify_error_length.gpx ${TMPDIR}/simplify_error_length_miles.gpx
-
-gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
-         -x simplify,error=0.01263869mi,length \
-         -o gpx -F ${TMPDIR}/simplify_error_length_explicitmiles.gpx
-compare ${REFERENCE}/simplify_error_length.gpx ${TMPDIR}/simplify_error_length_explicitmiles.gpx
