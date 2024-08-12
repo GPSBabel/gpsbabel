@@ -19,15 +19,15 @@
 
  */
 
-#include "defs.h"
 #include "grtcirc.h"
 
-#include <algorithm>
-#include <cerrno>
-#include <cmath>
-#include <cstdio>
-#include <numbers>
-#include <tuple>
+#include <algorithm>  // for clamp
+#include <cerrno>     // for errno, EDOM
+#include <cmath>      // for cos, sin, fabs, atan2, sqrt, asin, atan, isnan
+#include <numbers>    // for pi
+#include <tuple>      // for make_tuple, tuple
+
+#include "defs.h"     // for METERS_TO_MILES
 
 static constexpr double EARTH_RAD = 6378137.0;
 
@@ -59,7 +59,7 @@ static double dotproduct(double x1, double y1, double z1,
 
 double radtomiles(double rads)
 {
-  const double radmiles = METERS_TO_MILES(EARTH_RAD);
+  constexpr double radmiles = METERS_TO_MILES(EARTH_RAD);
   return (rads * radmiles);
 }
 
@@ -77,11 +77,7 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
 
   double res = sqrt(sdlat * sdlat + cos(lat1) * cos(lat2) * sdlon * sdlon);
 
-  if (res > 1.0) {
-    res = 1.0;
-  } else if (res < -1.0) {
-    res = -1.0;
-  }
+  res = std::clamp(res, -1.0, 1.0);
 
   res = asin(res);
 
@@ -96,10 +92,10 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
 /* This value is the heading you'd leave point 1 at to arrive at point 2.
  * Inputs and outputs are in radians.
  */
-double heading(double lat1, double lon1, double lat2, double lon2)
+static double heading(double lat1, double lon1, double lat2, double lon2)
 {
-  double v1 = sin(lon1 - lon2) * cos(lat2);
-  double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
+  double v1 = sin(lon2 - lon1) * cos(lat2);
+  double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon2 - lon1);
   /* rounding error protection */
   if (fabs(v1) < 1e-15) {
     v1 = 0.0;
@@ -113,9 +109,9 @@ double heading(double lat1, double lon1, double lat2, double lon2)
 /* As above, but outputs is in degrees from 0 - 359.  Inputs are still radians. */
 double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
 {
-  double h = 360.0 - DEG(heading(lat1, lon1, lat2, lon2));
+  double h = 360.0 + DEG(heading(lat1, lon1, lat2, lon2));
   if (h >= 360.0) {
-    h -= 360.0;
+     h -= 360.0;
   }
 
   return h;
@@ -160,9 +156,9 @@ double linedistprj(double lat1, double lon1,
   lat3 = RAD(lat3);
   lon3 = RAD(lon3);
 
-  int newpoints = 1;
+  bool newpoints = true;
   if (lat1 == _lat1 && lat2 == _lat2 && lon1 == _lon1 && lon2 == _lon2) {
-    newpoints = 0;
+    newpoints = false;
   } else {
     _lat1 = lat1;
     _lat2 = lat2;
