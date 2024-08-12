@@ -61,11 +61,10 @@ private:
     },
   };
 
-  Waypoint* create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
-                            double long_orig, double lat_orig_adj, double long_orig_adj) const;
-  int is_small_angle(double lat_orig, double long_orig, double lat_orig_prev,
-                     double long_orig_prev, double lat_orig_next,
-                     double long_orig_next) const;
+  Waypoint* create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* wpt_adj) const;
+  int is_small_angle(const Waypoint* wpt_orig,
+                     const Waypoint* wpt_orig_prev,
+                     const Waypoint* wpt_orig_next) const;
   void process_route(const route_head* route_orig, route_head* route_dest);
   void process_route_orig(const route_head* route_orig);
 

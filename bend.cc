@@ -53,34 +53,38 @@ void BendFilter::init()
   route_flush_all_routes();
 }
 
-Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
-                                      double long_orig, double lat_orig_adj, double long_orig_adj) const
+Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* wpt_orig_adj) const
 {
-  double distance = gcdist(lat_orig, long_orig,
-                           lat_orig_adj, long_orig_adj);
-  double lat_dest;
-  double long_dest;
-  distance = radtometers(distance);
+  double distance = radtometers(gcdist(RAD(wpt_orig->latitude), RAD(wpt_orig->longitude),
+                                       RAD(wpt_orig_adj->latitude), RAD(wpt_orig_adj->longitude)));
   if (distance <= maxDist) {
     return nullptr;
   }
 
   double frac = maxDist / distance;
 
-  linepart(lat_orig, long_orig, lat_orig_adj, long_orig_adj, frac,
-           &lat_dest, &long_dest);
-
   auto* wpt_dest = new Waypoint(*wpt_orig);
-  wpt_dest->latitude = DEG(lat_dest);
-  wpt_dest->longitude = DEG(long_dest);
+  linepart(wpt_orig->latitude, wpt_orig->longitude,
+           wpt_orig_adj->latitude, wpt_orig_adj->longitude,
+           frac,
+           &wpt_dest->latitude, &wpt_dest->longitude);
 
   return wpt_dest;
 }
 
-int BendFilter::is_small_angle(double lat_orig, double long_orig, double lat_orig_prev,
-                               double long_orig_prev, double lat_orig_next,
-                               double long_orig_next) const
+int BendFilter::is_small_angle(const Waypoint* wpt_orig,
+                               const Waypoint* wpt_orig_prev,
+                               const Waypoint* wpt_orig_next) const
 {
+  double lat_orig = RAD(wpt_orig->latitude);
+  double long_orig = RAD(wpt_orig->longitude);
+
+  double lat_orig_prev = RAD(wpt_orig_prev->latitude);
+  double long_orig_prev = RAD(wpt_orig_prev->longitude);
+
+  double lat_orig_next = RAD(wpt_orig_next->latitude);
+  double long_orig_next = RAD(wpt_orig_next->longitude);
+
   double heading_prev = heading_true_degrees(lat_orig, long_orig,
                         lat_orig_prev, long_orig_prev);
   double heading_next = heading_true_degrees(lat_orig, long_orig,
@@ -106,28 +110,17 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
         route_add_wpt(route_dest, waypoint_dest);
       }
     } else {
-      double lat_orig = RAD(wpt_orig->latitude);
-      double long_orig = RAD(wpt_orig->longitude);
 
-      double lat_orig_prev = RAD(wpt_orig_prev->latitude);
-      double long_orig_prev = RAD(wpt_orig_prev->longitude);
-
-      double lat_orig_next = RAD(wpt_orig_next->latitude);
-      double long_orig_next = RAD(wpt_orig_next->longitude);
-
-      if (is_small_angle(lat_orig, long_orig, lat_orig_prev,
-                         long_orig_prev, lat_orig_next, long_orig_next)) {
+      if (is_small_angle(wpt_orig, wpt_orig_prev, wpt_orig_next)) {
         auto* waypoint_dest = new Waypoint(*wpt_orig);
         route_add_wpt(route_dest, waypoint_dest);
       } else {
-        Waypoint* wpt_dest_prev = create_wpt_dest(wpt_orig,
-                                  lat_orig, long_orig, lat_orig_prev, long_orig_prev);
+        Waypoint* wpt_dest_prev = create_wpt_dest(wpt_orig, wpt_orig_prev);
         if (wpt_dest_prev != nullptr) {
           route_add_wpt(route_dest, wpt_dest_prev);
         }
 
-        Waypoint* wpt_dest_next = create_wpt_dest(wpt_orig,
-                                                   lat_orig, long_orig, lat_orig_next, long_orig_next);
+        Waypoint* wpt_dest_next = create_wpt_dest(wpt_orig, wpt_orig_next);
         if (wpt_dest_next != nullptr) {
           route_add_wpt(route_dest, wpt_dest_next);
 
