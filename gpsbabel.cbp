@@ -5,7 +5,7 @@
 		<Option title="gpsbabel"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\opt\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Core\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6CoreTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Core5Compat\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Gui\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6GuiTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6DBus\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6DBusTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Network\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6SerialPort\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Widgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WidgetsTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Xml\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineWidgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineCore\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineCoreTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlIntegration\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlModels\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6OpenGL\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebChannel\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Positioning\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickWidgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6PrintSupport\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6LinguistTools\;CMake Files\..\..\..\..\opt\homebrew\Cellar\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\macos\;CMake Files\gui\;CMake Files\gui\coretool\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\fmt\;CMake Files\..\..\..\..\opt\homebrew\opt\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Core\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6CoreTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Core5Compat\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Gui\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6GuiTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6DBus\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6DBusTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Network\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6SerialPort\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Widgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WidgetsTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Xml\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineWidgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineCore\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebEngineCoreTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlIntegration\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlModels\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6OpenGL\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6WebChannel\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Positioning\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickWidgets\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6PrintSupport\;CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6LinguistTools\;CMake Files\..\..\..\..\opt\homebrew\Cellar\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\;CMake Files\gui\;CMake Files\gui\coretool\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/robertlipe/src/gpsbabel"/>
@@ -32,16 +32,19 @@
 					<Add option="-DCSVFMTS_ENABLED"/>
 					<Add option="-DQT_CORE_LIB"/>
 					<Add option="-DQT_CORE5COMPAT_LIB"/>
+					<Add option="-DFMT_SHARED"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/shape"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/zlib"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/mac/libusb"/>
+					<Add directory="/Users/robertlipe/src/gpsbabel/strptime"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/share/qt/mkspecs/macx-clang"/>
 					<Add directory="/opt/homebrew/opt/qt/include"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore5Compat.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore5Compat.framework"/>
+					<Add directory="/opt/homebrew/include"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 gpsbabel"/>
@@ -65,16 +68,19 @@
 					<Add option="-DCSVFMTS_ENABLED"/>
 					<Add option="-DQT_CORE_LIB"/>
 					<Add option="-DQT_CORE5COMPAT_LIB"/>
+					<Add option="-DFMT_SHARED"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/shape"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/zlib"/>
 					<Add directory="/Users/robertlipe/src/gpsbabel/mac/libusb"/>
+					<Add directory="/Users/robertlipe/src/gpsbabel/strptime"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/share/qt/mkspecs/macx-clang"/>
 					<Add directory="/opt/homebrew/opt/qt/include"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore5Compat.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtCore5Compat.framework"/>
+					<Add directory="/opt/homebrew/include"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 gpsbabel/fast"/>
@@ -186,6 +192,38 @@
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 usb-1.0/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="strptime">
+				<Option output="/Users/robertlipe/src/gpsbabel/libstrptime.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/robertlipe/src/gpsbabel"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/robertlipe/src/gpsbabel"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 strptime"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="strptime/fast">
+				<Option output="/Users/robertlipe/src/gpsbabel/libstrptime.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/robertlipe/src/gpsbabel"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/robertlipe/src/gpsbabel"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 strptime/fast"/>
 					<CompileFile command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/Makefile&quot;  VERBOSE=1 clean"/>
@@ -327,6 +365,7 @@
 					<Add option="-DQT_QUICK_LIB"/>
 					<Add option="-DQT_QML_LIB"/>
 					<Add option="-DQT_QMLINTEGRATION_LIB"/>
+					<Add option="-DQT_QMLBUILTINS_LIB"/>
 					<Add option="-DQT_QMLMODELS_LIB"/>
 					<Add option="-DQT_OPENGL_LIB"/>
 					<Add option="-DQT_WEBCHANNEL_LIB"/>
@@ -357,6 +396,7 @@
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQml.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQml.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/include/QtQmlIntegration"/>
+					<Add directory="/opt/homebrew/opt/qt/include/QtQmlBuiltins"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQmlModels.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQmlModels.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtOpenGL.framework/Headers"/>
@@ -393,6 +433,7 @@
 					<Add option="-DQT_QUICK_LIB"/>
 					<Add option="-DQT_QML_LIB"/>
 					<Add option="-DQT_QMLINTEGRATION_LIB"/>
+					<Add option="-DQT_QMLBUILTINS_LIB"/>
 					<Add option="-DQT_QMLMODELS_LIB"/>
 					<Add option="-DQT_OPENGL_LIB"/>
 					<Add option="-DQT_WEBCHANNEL_LIB"/>
@@ -423,6 +464,7 @@
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQml.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQml.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/include/QtQmlIntegration"/>
+					<Add directory="/opt/homebrew/opt/qt/include/QtQmlBuiltins"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQmlModels.framework/Headers"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtQmlModels.framework"/>
 					<Add directory="/opt/homebrew/opt/qt/lib/QtOpenGL.framework/Headers"/>
@@ -466,6 +508,16 @@
 				<Option type="4"/>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 package_app"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gpsbabelfe_autogen_timestamp_deps">
+				<Option working_dir="/Users/robertlipe/src/gpsbabel/gui"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 gpsbabelfe_autogen_timestamp_deps"/>
 					<CompileFile command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -f &quot;/Users/robertlipe/src/gpsbabel/gui/Makefile&quot;  VERBOSE=1 clean"/>
@@ -576,9 +628,6 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/bend.h">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/brauniger_iq.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/csv_util.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -634,12 +683,6 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_device_xml.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_device_xml.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/garmin_fit.cc">
@@ -727,6 +770,12 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/globalsat_sport.h">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/googletakeout.cc">
+			<Option target="gpsbabel"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/googletakeout.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gpsbabel.qrc">
@@ -843,6 +892,12 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gui/gpsbabelfe_autogen/mocs_compilation.cpp">
 			<Option target="gpsbabelfe"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/gui/gpsbabelfe_autogen/timestamp">
+			<Option target="gpsbabelfe"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/gui/gpsbabelfe_autogen/timestamp.rule">
+			<Option target="gpsbabelfe"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gui/gpx.cc">
 			<Option target="gpsbabelfe"/>
 		</Unit>
@@ -928,12 +983,6 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/heightgrid.h">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/holux.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/holux.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/html.cc">
@@ -1146,13 +1195,10 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/mkshort.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/mkshort.h">
+			<Option target="gpsbabel"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/mtk_logger.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/navilink.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/navilink.h">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/nmea.cc">
@@ -1225,12 +1271,6 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/route.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/sbn.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/sbp.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/session.cc">
@@ -1335,11 +1375,11 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/stackfilter.h">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/strptime.c">
-			<Option target="gpsbabel"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/strptime/strptime.h">
+			<Option target="strptime"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/strptime.h">
-			<Option target="gpsbabel"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/strptime/strptime_l.c">
+			<Option target="strptime"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/subrip.cc">
 			<Option target="gpsbabel"/>
@@ -1392,9 +1432,6 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/util.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/util_crc.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/v900.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
@@ -1414,9 +1451,6 @@
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/waypt.cc">
-			<Option target="gpsbabel"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/wbt-200.cc">
 			<Option target="gpsbabel"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/xcsv.cc">
@@ -1527,8 +1561,23 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/shapelib.cmake">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/strptime.cmake">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/zlib.cmake">
 			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/lib/cmake/fmt/fmt-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/lib/cmake/fmt/fmt-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/lib/cmake/fmt/fmt-targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\fmt\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/lib/cmake/fmt/fmt-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\fmt\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/Qt6Config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
@@ -1551,40 +1600,7 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/Qt6VersionlessTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtFeature.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicAppleHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicCMakeHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicFindPackageHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicPluginHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicTargetHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicTestHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicToolHelpers.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake">
@@ -2382,6 +2398,9 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickDependencies.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickPlugins.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickTargets-release.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\"/>
 		</Unit>
@@ -2390,6 +2409,54 @@
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickVersionlessTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Quick\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsConfigVersionImpl.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsDependencies.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QuickTools/Qt6QuickToolsVersionlessTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QuickTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfigVersionImpl.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsDependencies.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsVersionlessTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/Qt6QDebugMessageServiceFactoryPluginAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\"/>
@@ -2595,6 +2662,18 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6DeclarativeOpcuapluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6GraphspluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6GraphspluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6GraphspluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6GraphspluginTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6PdfQuickpluginAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
@@ -2617,6 +2696,18 @@
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlMetaTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlNetworkpluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlNetworkpluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlNetworkpluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlNetworkpluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickControlsTestUtilsPrivatepluginAdditionalTargetInfo.cmake">
@@ -2667,6 +2758,18 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6TextToSpeechQmlTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6WebChannelQuickpluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6WebChannelQuickpluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6WebChannelQuickpluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6WebChannelQuickpluginTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6declarative_locationAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
@@ -2713,6 +2816,18 @@
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6effectspluginTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6grpcquickpluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6grpcquickpluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6grpcquickpluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6grpcquickpluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6labsanimationpluginAdditionalTargetInfo.cmake">
@@ -3195,6 +3310,18 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2iosstylepluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2macosstyleimplpluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2macosstyleimplpluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2macosstyleimplpluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2macosstyleimplpluginTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2macosstylepluginAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
@@ -3337,6 +3464,18 @@
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktemplates2pluginTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktimelineblendtreespluginAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktimelineblendtreespluginConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktimelineblendtreespluginTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktimelineblendtreespluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktimelinepluginAdditionalTargetInfo.cmake">
@@ -3675,18 +3814,6 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6sharedimagepluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6webchannelAdditionalTargetInfo.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6webchannelConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6webchannelTargets-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6webchannelTargets.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
-		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6workerscriptpluginAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
 		</Unit>
@@ -3698,30 +3825,6 @@
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6Qml/QmlPlugins/Qt6workerscriptpluginTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6Qml\QmlPlugins\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsAdditionalTargetInfo.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfigVersion.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfigVersionImpl.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsDependencies.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
-		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlTools/Qt6QmlToolsVersionlessTargets.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlTools\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlIntegration/Qt6QmlIntegrationAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlIntegration\"/>
@@ -3740,6 +3843,27 @@
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlIntegration/Qt6QmlIntegrationVersionlessTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlIntegration\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsAdditionalTargetInfo.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsConfigVersionImpl.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlBuiltins/Qt6QmlBuiltinsVersionlessTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlBuiltins\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6QmlModels/Qt6QmlModelsAdditionalTargetInfo.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6QmlModels\"/>
@@ -3915,6 +4039,9 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportDependencies.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6PrintSupport\"/>
 		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportPlugins.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6PrintSupport\"/>
+		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets-release.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6PrintSupport\"/>
 		</Unit>
@@ -3951,20 +4078,56 @@
 		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/opt/qt/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsVersionlessTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\opt\qt\lib\cmake\Qt6LinguistTools\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.5.2/lib/cmake/Qt6/FindWrapAtomic.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/FindWrapAtomic.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.5.2/lib/cmake/Qt6/FindWrapOpenGL.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/FindWrapOpenGL.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.5.2/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.5.2/lib/cmake/Qt6/QtFeatureCommon.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtFeature.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
 		</Unit>
-		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.5.2/lib/cmake/Qt6/macos/MacOSXBundleInfo.plist.in">
-			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.5.2\lib\cmake\Qt6\macos\"/>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtFeatureCommon.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicAppleHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicCMakeHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicFindPackageHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicPluginHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicTargetHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicTestHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicToolHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
+		</Unit>
+		<Unit filename="/Users/robertlipe/src/gpsbabel/../../../../opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\Cellar\qt\6.7.0_1\lib\cmake\Qt6\"/>
 		</Unit>
 		<Unit filename="/Users/robertlipe/src/gpsbabel/gui/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\gui\"/>
