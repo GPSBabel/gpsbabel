@@ -5,4 +5,5 @@ gpsbabel -i gpx -f ${REFERENCE}/route/bend-input.gpx -x bend,distance=25,minangl
 compare ${REFERENCE}/route/bend-expected.gpx ${TMPDIR}/bend.gpx
 
 # Although not a real useful use case, test with extremly long segments to check great circle usage.
-gpsbabel -i kml -f lr.kml -x transform,rte=trk,del -x bend,distance=1000000,minangle=5 -o kml,line_color=9900ff00 -F lrdut.kml
+gpsbabel -i kml -f ${REFERENCE}/route/bendgc-input.kml -x transform,rte=trk,del -x bend,distance=1000000,minangle=5 -o kml,line_color=9900ff00 -F ${TMPDIR}/bendgc-expected.kml 
+compare ${REFERENCE}/route/bendgc-expected.kml ${TMPDIR}/bendgc-expected.kml
