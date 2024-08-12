@@ -23,6 +23,7 @@
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
@@ -258,7 +259,7 @@ struct PositionRad; // forward declare
 struct PositionDeg
 {
   PositionDeg() = default;
-  PositionDeg(const PositionRad& posr);
+  explicit(false) PositionDeg(const PositionRad& posr); /* converting ctor */
   PositionDeg(double latd, double lond) : lat(latd), lon(lond) {}
 
   double lat;
@@ -268,7 +269,7 @@ struct PositionDeg
 struct PositionRad
 {
   PositionRad() = default;
-  PositionRad(const PositionDeg& posd);
+  explicit(false) PositionRad(const PositionDeg& posd); /* converting ctor */
   PositionRad(double latr, double lonr) : lat(latr), lon(lonr) {}
 
   double lat;
