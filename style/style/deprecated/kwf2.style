@@ -1,0 +1,38 @@
+# gpsbabel XCSV style file
+#
+# Format: Kartex KWF 2.0 Degrees with decimals
+# Author: Harald Nordius
+#   Date: 12/08 2004
+#
+# 
+DESCRIPTION	Kartex 5 Waypoint File
+EXTENSION	kwf
+SHORTLEN	10
+SHORTWHITE	1
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	CRNEWLINE
+ENCODING		CP1252
+#
+#
+# FILE HEADER
+#
+PROLOGUE //Kartex Waypoint File created by GPSBabel
+PROLOGUE &KWF 2.0,sweref 99 lat long,0
+#
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	CONSTANT, \#, "%s"
+IFIELD	INDEX,"","%d"
+IFIELD	SHORTNAME,"","%s"
+IFIELD	LATLON_HUMAN_READABLE,"","%c%f°"
+IFIELD	ALT_METERS,"","%.2f"
+IFIELD	IGNORE, "","%s" #Empty field
+IFIELD	IGNORE, "","%s" #Empty field
+IFIELD	CONSTANT, "0","%s" #Waypoint symbol code
+IFIELD	DESCRIPTION, "", "%s"
+IFIELD	CONSTANT, "$", "%s"

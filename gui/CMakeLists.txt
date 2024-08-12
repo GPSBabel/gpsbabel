@@ -22,19 +22,18 @@ if(NOT UNIX OR APPLE)
 endif()
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
-if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.15)
-  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.15 or newer is required.")
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network SerialPort Widgets Xml)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Network Qt6::SerialPort Qt6::Widgets Qt6::Xml)
+if(${Qt6Core_VERSION} VERSION_LESS 6.2)
+  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
-  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
+  message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
 
 option(GPSBABEL_MAPPREVIEW "enable map preview." ON)
 if (GPSBABEL_MAPPREVIEW)
-  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
-  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
+  find_package(Qt6 REQUIRED COMPONENTS WebEngineWidgets WebChannel)
+  list(APPEND QT_LIBRARIES Qt6::WebEngineWidgets Qt6::WebChannel)
 else()
   target_compile_definitions(gpsbabelfe PRIVATE DISABLE_MAPPREVIEW)
 endif()
@@ -173,9 +172,9 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabelfe INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
-find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
-if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
-  message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
+find_package(Qt6 QUIET COMPONENTS LinguistTools)
+if (NOT Qt6LinguistTools_FOUND)
+  message(WARNING "Qt6LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
 else()
 # FIXME: translations updated and released in source directory (and under version control).
   list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
@@ -186,19 +185,19 @@ else()
   list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
 
   add_custom_target(gpsbabelfe_lupdate
-                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
+                    COMMAND Qt6::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
   add_custom_target(gpsbabelfe_lrelease
-                    COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
+                    COMMAND Qt6::lrelease ${TRANSLATIONS}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS gpsbabelfe_lupdate
                     VERBATIM
                     USES_TERMINAL)
 
   if(APPLE)
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
@@ -206,7 +205,7 @@ else()
                       VERBATIM
                       USES_TERMINAL)
   elseif(UNIX)
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
@@ -220,7 +219,7 @@ else()
     endif()
 
     # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
     find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
     if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")

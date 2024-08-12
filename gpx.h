@@ -221,7 +221,7 @@ private:
   void tag_wpt(const QXmlStreamAttributes& attr);
   void tag_cache_desc(const QXmlStreamAttributes& attr);
   void tag_gs_cache(const QXmlStreamAttributes& attr) const;
-  void tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt);
+  static void tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt);
   void start_something_else(QStringView el, const QXmlStreamAttributes& attr);
   void end_something_else();
   void tag_log_wpt(const QXmlStreamAttributes& attr) const;
@@ -230,7 +230,7 @@ private:
   void gpx_cdata(QStringView s);
   QString qualifiedName() const;
   void write_attributes(const QXmlStreamAttributes& attributes) const;
-  void fprint_xml_chain(XmlTag* tag) const;
+  void fprint_xml_chain(const XmlTag* tag) const;
   void write_gpx_url(const UrlList& urls) const;
   void write_gpx_url(const Waypoint* waypointp) const;
   void write_gpx_url(const route_head* rh) const;

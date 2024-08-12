@@ -1,0 +1,37 @@
+# gpsbabel XCSV style file
+#
+# Format: DeLorme Xmap/Street Atlas Handheld 2006 Conduit
+# Author: Pasha Phares
+#   Date: 5/5/2006
+#
+# Amazingly, 2006 won't read the "COMMASPACE" that we used in
+# in Xmap prior to this and versions before 2006 won't read files
+# separated by only a comma.
+#
+
+DESCRIPTION			DeLorme XMap/SAHH 2006 Native .TXT
+EXTENSION			txt
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+BADCHARS			COMMA
+
+PROLOGUE	BEGIN SYMBOL
+EPILOGUE	END
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD				LAT_HUMAN_READABLE, "", "%.12g"
+IFIELD				LON_HUMAN_READABLE, "", "%.12g"
+IFIELD				SHORTNAME, "", "%s"
+
+OFIELD				LAT_DECIMAL, "", "%.12g"
+OFIELD				LON_DECIMAL, "", "%.12g"
+OFIELD				SHORTNAME, "", "%s"
+
+
+
+

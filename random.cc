@@ -87,7 +87,7 @@ RandomFormat::random_set_generator()
 }
 
 void
-RandomFormat::rd_init(const QString&)
+RandomFormat::rd_init(const QString& /*unused*/)
 {
   random_set_generator();
 }
@@ -239,7 +239,7 @@ RandomFormat::read()
 }
 
 void
-RandomFormat::rd_position_init(const QString&)
+RandomFormat::rd_position_init(const QString& /*unused*/)
 {
   random_set_generator();
   realtime = new realtime_data;

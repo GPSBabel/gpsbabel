@@ -26,6 +26,7 @@
 #include <cerrno>
 #include <cmath>
 #include <cstdio>
+#include <numbers>
 #include <tuple>
 
 static constexpr double EARTH_RAD = 6378137.0;
@@ -134,9 +135,16 @@ double linedistprj(double lat1, double lon1,
   static double _lon1 = -9999;
   static double _lon2 = -9999;
 
-  static double x1, y1, z1;
-  static double x2, y2, z2;
-  static double xa, ya, za, la;
+  static double x1;
+  static double y1;
+  static double z1;
+  static double x2;
+  static double y2;
+  static double z2;
+  static double xa;
+  static double ya;
+  static double za;
+  static double la;
 
   double dot;
 
@@ -269,7 +277,7 @@ double linedistprj(double lat1, double lon1,
       }
     } else {
       /* lp is 0 when 3 is 90 degrees from the great circle */
-      return M_PI / 2;
+      return std::numbers::pi / 2;
     }
   } else {
     /* la is 0 when 1 and 2 are either the same point or 180 degrees apart */

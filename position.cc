@@ -22,10 +22,10 @@
 #include "position.h"
 
 #include <cmath>                // for abs
-#include <cstdlib>              // for strtod
+#include <cstdlib>              // for strtod, abs
 
 #include <QList>                // for QList
-#include <QtGlobal>             // for qAsConst, qRound64, qint64
+#include <QtGlobal>             // for qRound64, qint64
 
 #include "defs.h"
 #include "src/core/datetime.h"  // for DateTime

@@ -755,12 +755,12 @@ main(int argc, char* argv[])
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
 #error This version of Qt is not supported.
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-#error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
+#if defined(_MSC_VER) && (_MSC_VER < 1920) /* Visual Studio 2017 or earlier */
+#error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
   if constexpr (DEBUG_LOCALE) {
@@ -821,7 +821,7 @@ main(int argc, char* argv[])
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDatumWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

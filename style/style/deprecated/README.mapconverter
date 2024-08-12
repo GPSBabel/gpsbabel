@@ -1,0 +1,35 @@
+Mapconverter is an application used to create userland maps and map data for 
+Mapopolis.com's Mapopolis program.  The mapconverter format is essentially
+waypoint data prepared in a format that the mapconverter application will
+accept.
+
+The steps for using GPSBabel and Mapconverter go something like this:
+
+Step 1: Create a mapconverter file using gpsbabel.
+	./gpsbabel -i geo -f geocaching.loc -o mapconverter -F foo.txt
+	
+Step 2: Launch mapconverter.exe and choose foo.txt as your input file.
+	Click the begin button to have mapconverter process foo.txt.
+
+If all goes successfully, you should have a file called "foo.pdb" ready
+for syncing with your PDA.  Put it wherever Mapopolis thinks it should be
+on your PDA.
+
+NOTES:
+
+o GPSBabel will write the name of its own output file in the output file
+  it creates as the input for Mapconverter.   Mapconverter will replace 
+  the extension of this filename with ".pdb".
+
+o The PocketPC version of Mapopolis doesn't notice files with the ".pdb"
+  extension.  To make this work, change the extension to ".mlp" when
+  copying the mapconverter output to your PocketPC PDA.
+
+o Mapconverter only works with Mapopolis version 3.x.  Mapopolis version
+  4 will refuse to load mapconverter maps.  There is no known work-around
+  for this at the time of this writing.
+
+o Mapconverter is no longer available from the Mapopolis website.  If you
+  need a copy of mapconverter, ask on your local GPS Software discussion
+  forum and I'm sure someone will have it.  As far as I know, It was never 
+  actually acknowledged/supported by Mapopolis to begin with.

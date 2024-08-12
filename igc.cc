@@ -128,9 +128,14 @@ void IgcFormat::rd_deinit()
  */
 void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 {
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char tmp_str[kMaxRecLen];
 
   // First task record identifies the task to follow
@@ -234,14 +239,22 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 void IgcFormat::read()
 {
   char* ibuf;
-  int hours, mins, secs;
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  int hours;
+  int mins;
+  int secs;
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char validity;
   route_head* pres_head = nullptr;
   route_head* gnss_head = nullptr;
-  int pres_alt, gnss_alt;
+  int pres_alt;
+  int gnss_alt;
   char pres_valid = 0;
   char gnss_valid = 0;
   Waypoint* pres_wpt = nullptr;

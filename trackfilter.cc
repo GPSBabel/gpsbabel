@@ -30,6 +30,7 @@ static constexpr bool TRACKF_DBG = false;
 #include <cstring>                         // for strlen, strchr, strcmp
 #include <ctime>                           // for gmtime, strftime, time_t, tm
 #include <iterator>                        // for next
+#include <utility>                         // for as_const
 
 #include <QByteArray>                      // for QByteArray
 #include <QChar>                           // for QChar
@@ -41,7 +42,7 @@ static constexpr bool TRACKF_DBG = false;
 #include <QRegularExpressionMatch>         // for QRegularExpressionMatch
 #include <QString>                         // for QString
 #include <Qt>                              // for UTC, CaseInsensitive
-#include <QtGlobal>                        // for qAsConst, foreach, qPrintable, QAddConst<>::Type, qint64
+#include <QtGlobal>                        // for foreach, qPrintable, QAddConst<>::Type, qint64
 
 #include "defs.h"
 #include "trackfilter.h"
@@ -62,7 +63,7 @@ int TrackFilter::trackfilter_opt_count()
 {
   int res = 0;
 
-  for (const auto& arg : qAsConst(args)) {
+  for (const auto& arg : std::as_const(args)) {
     if (*arg.argval != nullptr) {
       res++;
     }
@@ -296,7 +297,7 @@ void TrackFilter::trackfilter_title()
   if (strlen(opt_title) == 0) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
-  for (auto* track : qAsConst(track_list)) {
+  for (auto* track : std::as_const(track_list)) {
     trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, Qt::UTC));
   }
 }
@@ -308,7 +309,8 @@ void TrackFilter::trackfilter_title()
 void TrackFilter::trackfilter_pack()
 {
   if (!track_list.isEmpty()) {
-    int i, j;
+    int i;
+    int j;
 
     for (i = 1, j = 0; i < track_list.size(); i++, j++) {
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
@@ -358,8 +360,8 @@ void TrackFilter::trackfilter_merge()
 
     QList<Waypoint*> buff;
 
-    auto it = track_list.begin();
-    while (it != track_list.end()) { /* put all points into temp buffer */
+    auto it = track_list.cbegin();
+    while (it != track_list.cend()) { /* put all points into temp buffer */
       route_head* track = *it;
       // steal all the wpts
       WaypointList wpts;
@@ -376,9 +378,9 @@ void TrackFilter::trackfilter_merge()
           delete wpt;
         }
       }
-      if (it != track_list.begin()) {
+      if (it != track_list.cbegin()) {
         track_del_head(track);
-        it = track_list.erase(it);
+        it = static_cast<RouteList::const_iterator>(track_list.erase(it));
       } else {
         ++it;
       }
@@ -576,7 +578,7 @@ void TrackFilter::trackfilter_move()
 
   int timeless_points = 0;
 
-  for (auto* track : qAsConst(track_list)) {
+  for (auto* track : std::as_const(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
       if (wpt->creation_time.isValid()) {
         wpt->creation_time = wpt->creation_time.addMSecs(delta);
@@ -607,7 +609,7 @@ void TrackFilter::trackfilter_synth()
 
   fix_type fix = trackfilter_parse_fix(&nsats);
 
-  for (auto* track : qAsConst(track_list)) {
+  for (auto* track : std::as_const(track_list)) {
     bool first = true;
     foreach (Waypoint* wpt, track->waypoint_list) {
       if (opt_fix) {
@@ -701,7 +703,8 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 
 void TrackFilter::trackfilter_range()
 {
-  QDateTime start, stop; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime start; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime stop;  // constructed such that isValid() is false, unlike gpsbabel::DateTime!
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
@@ -713,8 +716,8 @@ void TrackFilter::trackfilter_range()
 
   int original_waypt_count = track_waypt_count();
 
-  auto it = track_list.begin();
-  while (it != track_list.end()) {
+  auto it = track_list.cbegin();
+  while (it != track_list.cend()) {
     route_head* track = *it;
 
     foreach (Waypoint* wpt, track->waypoint_list) {
@@ -738,7 +741,7 @@ void TrackFilter::trackfilter_range()
 
     if (track->rte_waypt_empty()) {
       track_del_head(track);
-      it = track_list.erase(it);
+      it = static_cast<RouteList::const_iterator>(track_list.erase(it));
     } else {
       ++it;
     }
@@ -757,7 +760,7 @@ void TrackFilter::trackfilter_seg2trk()
 {
   if (!track_list.isEmpty()) {
     QList<route_head*> new_track_list;
-    for (auto* src : qAsConst(track_list)) {
+    for (auto* src : std::as_const(track_list)) {
       new_track_list.append(src);
       route_head* dest = src;
       route_head* insert_point = src;
@@ -871,7 +874,7 @@ void TrackFilter::trackfilter_faketime()
   assert(opt_faketime != nullptr);
   faketime_t faketime = trackfilter_faketime_check(opt_faketime);
 
-  for (auto* track : qAsConst(track_list)) {
+  for (auto* track : std::as_const(track_list)) {
     foreach (Waypoint* wpt, track->waypoint_list) {
 
       if (!wpt->creation_time.isValid() || faketime.force) {

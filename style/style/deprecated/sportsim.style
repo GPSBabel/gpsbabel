@@ -1,0 +1,33 @@
+# gpsbabel XCSV style file
+#
+# Format: Sportsim track files
+# Author: Olaf Klein
+#   Date: 07/05/2006
+#
+DESCRIPTION	Sportsim track files (part of zipped .ssz files) 
+EXTENSION	txt
+DATATYPE	TRACK
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		SEMICOLON
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		TAB
+
+#
+# FILE HEADER
+#
+PROLOGUE	﻿SportsimVersion:01
+PROLOGUE	\#Sportsim TrackFile
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD	INDEX, "", "%05d"
+IFIELD	CONSTANT, "0", "%s"
+IFIELD	LAT_DECIMAL, "", "%f"
+IFIELD	LON_DECIMAL, "", "%f"
+IFIELD	ALT_FEET, "", "%.f"
+IFIELD	TIMET_TIME, "", "%ld"
+IFIELD	CONSTANT, ";", "%s"

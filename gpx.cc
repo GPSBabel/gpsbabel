@@ -24,7 +24,10 @@
 #include <cassert>                          // for assert
 #include <cmath>                            // for lround
 #include <cstdio>                           // for sscanf
+#include <cstdint>                          // for uint16_t
 #include <cstring>                          // for strchr, strncpy
+#include <optional>                         // for optional
+#include <utility>                          // for as_const
 
 #include <QByteArray>                       // for QByteArray
 #include <QDate>                            // for QDate
@@ -44,7 +47,6 @@
 #include <QXmlStreamNamespaceDeclarations>  // for QXmlStreamNamespaceDeclarations
 #include <QXmlStreamReader>                 // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
 #include <Qt>                               // for CaseInsensitive, UTC
-#include <QtGlobal>                         // for qAsConst, QAddConst<>::Type
 
 #include "defs.h"
 #include "garmin_fs.h"                      // for garmin_fs_t, garmin_ilink_t
@@ -503,7 +505,12 @@ xml_parse_time(const QString& dateTimeString)
     *pointstr = '\0';
   }
 
-  int year = 0, mon = 1, mday = 1, hour = 0, min = 0, sec = 0;
+  int year = 0;
+  int mon = 1;
+  int mday = 1;
+  int hour = 0;
+  int min = 0;
+  int sec = 0;
   gpsbabel::DateTime dt;
   int res = sscanf(timestr, "%d-%d-%dT%d:%d:%d", &year, &mon, &mday, &hour,
                    &min, &sec);
@@ -1049,7 +1056,7 @@ GpxFormat::wr_init(const QString& fname)
   } else {
     if (gpx_global) {
       // TODO: gpx 1.1 copyright goes here
-      for (const auto& l : qAsConst(gpx_global->link)) {
+      for (const auto& l : std::as_const(gpx_global->link)) {
         writer->writeStartElement(QStringLiteral("link"));
         writer->writeAttribute(QStringLiteral("href"), l.url_);
         writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);
@@ -1182,7 +1189,7 @@ GpxFormat::write_attributes(const QXmlStreamAttributes& attributes) const
 }
 
 void
-GpxFormat::fprint_xml_chain(XmlTag* tag) const
+GpxFormat::fprint_xml_chain(const XmlTag* tag) const
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);

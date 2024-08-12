@@ -24,12 +24,13 @@
 #include <cmath>                // for round
 #include <optional>             // for optional
 #include <tuple>                // for tuple, tuple_element<>::type
+#include <utility>              // for as_const
 
 #include <QDebug>               // for QDebug
 #include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString
 #include <QTextStream>          // for qSetRealNumberPrecision
-#include <QtGlobal>             // for qDebug, qAsConst, qint64
+#include <QtGlobal>             // for qDebug, qint64
 
 #include "defs.h"               // for Waypoint, route_head, fatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
 #include "src/core/datetime.h"  // for DateTime
@@ -88,7 +89,7 @@ void ResampleFilter::average_waypoint(Waypoint* wpt, bool zero_stuffed)
     }
     counter = 0;
     if (global_opts.debug_level >= 5) {
-      for (const auto& [pos, avc, alt] : qAsConst(history)) {
+      for (const auto& [pos, avc, alt] : std::as_const(history)) {
         qDebug() << "initial conditions" << pos << avc << alt;
       }
       qDebug() << "initial accumulator" << accumulated_position << accumulated_altitude_valid_count << accumulated_altitude;

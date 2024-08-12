@@ -88,11 +88,13 @@
 #include "lowranceusr.h"
 
 #include <cinttypes>            // for PRId64
-#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cmath>                // for round, atan, exp, log, tan
 #include <cstdio>               // for printf, sprintf, SEEK_CUR
 #include <cstdint>              // for int64_t
 #include <cstdlib>              // for abs
 #include <cstring>              // for strcmp, strlen
+#include <numbers>              // for pi
+#include <utility>              // for as_const
 
 #include <QByteArray>           // for QByteArray
 #include <QDate>                // for QDate
@@ -104,7 +106,7 @@
 #include <QTextEncoder>         // for QTextEncoder
 #include <QTime>                // for QTime
 #include <Qt>                   // for CaseInsensitive, UTC
-#include <QtGlobal>             // for qPrintable, uint, qAsConst, QAddConst<>::Type
+#include <QtGlobal>             // for qPrintable, uint, QAddConst<>::Type
 
 #include "defs.h"
 #include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
@@ -134,7 +136,7 @@ LowranceusrFormat::same_points(const Waypoint* A, const Waypoint* B)
 void
 LowranceusrFormat::register_waypt(const Waypoint* wpt) const
 {
-  for (const Waypoint* cmp : qAsConst(*waypt_table)) {
+  for (const Waypoint* cmp : std::as_const(*waypt_table)) {
     if (same_points(wpt, cmp)) {
       return;
     }
@@ -154,7 +156,7 @@ const Waypoint*
 LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high)
 {
   // Iterate with waypt_disp_all?
-  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* waypointp : std::as_const(*global_waypoint_list)) {
     const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->uid_unit == uid_unit &&
@@ -175,7 +177,7 @@ const Waypoint*
 LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
 {
   // Iterate with waypt_disp_all?
-  for (const Waypoint* waypointp : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* waypointp : std::as_const(*global_waypoint_list)) {
     const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(waypointp->fs.FsChainFind(kFsLowranceusr4));
 
     if (fs && fs->UUID1 == id1 &&
@@ -376,7 +378,7 @@ LowranceusrFormat::lon_mm_to_deg(double x)
 double
 LowranceusrFormat::lat_mm_to_deg(double x)
 {
-  return (2.0 * atan(exp(x / SEMIMINOR)) - M_PI / 2.0) / DEGREESTORADIANS;
+  return (2.0 * atan(exp(x / SEMIMINOR)) - std::numbers::pi / 2.0) / DEGREESTORADIANS;
 }
 
 long
@@ -388,7 +390,7 @@ LowranceusrFormat::lon_deg_to_mm(double x)
 long
 LowranceusrFormat::lat_deg_to_mm(double x)
 {
-  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + M_PI / 2.0) / 2.0)));
+  return round(SEMIMINOR * log(tan((x * DEGREESTORADIANS + std::numbers::pi / 2.0) / 2.0)));
 }
 
 void
@@ -988,16 +990,20 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
         wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
         wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
 
-        // It's not clear if this should be the continuous global or
-        // a local continuous_flag.
         char continuous_flag = gbfgetc(file_in);
-        if (!continuous_flag && opt_seg_break && j) {
-          /* option to break trails into segments was specified */
-          auto* trk_tmp = new route_head;
-          trk_tmp->rte_num = ++(*trail_num);
-          trk_tmp->rte_name = trk_head->rte_name;
-          track_add_head(trk_tmp);
-          trk_head = trk_tmp;
+        if (!continuous_flag) {
+          if (opt_seg_break) {
+            /* option to break trails into segments was specified */
+            if (!trk_head->rte_waypt_empty()) {
+              auto* trk_tmp = new route_head;
+              trk_tmp->rte_num = ++(*trail_num);
+              trk_tmp->rte_name = trk_head->rte_name;
+              track_add_head(trk_tmp);
+              trk_head = trk_tmp;
+            }
+          } else {
+            wpt_tmp->wpt_flags.new_trkseg = 1;
+          }
         }
 
         /* Track Point */
@@ -1259,7 +1265,8 @@ LowranceusrFormat::read()
 void
 LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
 {
-  int SymbolId, alt;
+  int SymbolId;
+  int alt;
 
   int Lat = lat_deg_to_mm(wpt->latitude);
   int Lon = lon_deg_to_mm(wpt->longitude);
@@ -1409,7 +1416,8 @@ LowranceusrFormat::lowranceusr4_waypt_disp(const Waypoint* wpt)
      it means */
   gbfputint32(2, file_out);
 
-  int SymbolId, ColorId;
+  int SymbolId;
+  int ColorId;
   if (!wpt->gc_data->get_icon().isEmpty() && wpt->icon_descr.compare(u"Geocache Found") == 0) {
     if (writing_version == 4) {
       SymbolId = lowranceusr4_find_icon_number_from_desc(wpt->icon_descr);
@@ -1586,7 +1594,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
   gbfputint16(num_trail_points, file_out);
   gbfputint16(max_trail_size, file_out);
   gbfputint16(num_section_points, file_out);
-  trail_point_count=1;
+  trail_point_count=0;
 }
 
 void
@@ -1677,7 +1685,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt) const
 }
 
 void
-LowranceusrFormat::lowranceusr4_route_trl(const route_head*) const
+LowranceusrFormat::lowranceusr4_route_trl(const route_head* /*unused*/) const
 {
   /* Mystery byte */
   gbfputc(0x01, file_out);	// end of Route info ??
@@ -1686,7 +1694,8 @@ LowranceusrFormat::lowranceusr4_route_trl(const route_head*) const
 void
 LowranceusrFormat::lowranceusr_trail_disp(const Waypoint* wpt)
 {
-  if (trail_point_count <= MAX_TRAIL_POINTS) {
+  if (trail_point_count < MAX_TRAIL_POINTS) {
+    trail_point_count++;
     int lat = lat_deg_to_mm(wpt->latitude);
     int lon = lon_deg_to_mm(wpt->longitude);
 
@@ -1696,11 +1705,15 @@ LowranceusrFormat::lowranceusr_trail_disp(const Waypoint* wpt)
 
     gbfputint32(lat, file_out);
     gbfputint32(lon, file_out);
-    gbfwrite(&continuous, 1, 1, file_out);
-    if (!continuous) {
-      continuous = 1;
-    }
-    trail_point_count++;
+    /* If this isn't the first point in the outgoing trail, and
+     *   i) the source wpt was the start of a new track segment or
+     *  ii) the source wpt is the first waypoint of a track that is being merged
+     * then set the continuous flag to 0 to indicate a discontinuity.
+     * Otherwise set the continous flag to 1.
+     */
+    char continuous_flag = !((trail_point_count > 1) && (wpt->wpt_flags.new_trkseg || merge_new_track));
+    merge_new_track = false;
+    gbfwrite(&continuous_flag, 1, 1, file_out);
   }
 }
 
@@ -1730,7 +1743,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
 }
 
 void
-LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
 {
   if (trail_count == (int)track_count()) {  /* last trail */
     short num_trail_points = trail_point_count;
@@ -1752,9 +1765,9 @@ LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head*)
   }
 }
 void
-LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head*)
+LowranceusrFormat::lowranceusr_merge_trail_hdr_2(const route_head* /*unused*/)
 {
-  continuous = 0;
+  merge_new_track = true;
 }
 
 void
@@ -2035,6 +2048,7 @@ LowranceusrFormat::write()
       gbfputint16(NumTrails, file_out);
       if (NumTrails) {
         trail_count=0;
+        merge_new_track = false;
         auto lowranceusr_trail_disp_lambda = [this](const Waypoint* waypointp)->void {
           lowranceusr_trail_disp(waypointp);
         };

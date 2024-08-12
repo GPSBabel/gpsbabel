@@ -71,77 +71,25 @@ for a little more info, see structures:
 	one_line_advanced_mode, one_line_basic_mode, one_line_common_start.
 ******************************************************************************/
 
+#include "v900.h"
+
+#include <cassert>     // for assert
+#include <cstdarg>     // for va_end, va_start
+#include <cstdio>      // for fclose, fgets, fread, vfprintf, stderr, va_list
+#include <cstdlib>     // for strtod
+#include <cstring>     // for strncmp, strcat, strcpy, strstr
+
+#include <QByteArray>  // for QByteArray
+#include <QDate>       // for QDate
+#include <QTime>       // for QTime
+#include <QtCore>      // for qPrintable, UTC
+
 #include "defs.h"
-#include <cassert>
-#include <cstdio>
-#include <cstdlib> // strtod
 
-/* the start of each record (line) is common to both advanced and basic mode.
-   it will be parsed by a single common code. hence, it will be easier and clearer
-   to have a common structure for it.
- */
-struct one_line_common_start {
-  char index[6];          /* record number */
-  char comma1;            /* ',' */
-  char tag;               /* tag type. T=trackpoint. TODO: more options??? */
-  char comma2;            /* ',' */
-  char date[6];           /* YYMMDD. YY=09 is 2009. */
-  char comma3;            /* ',' */
-  char time[6];           /* HHMMSS */
-  char comma4;            /* ',' */
-  char latitude_num[9];   /* example: "31.768380" */
-  char latitude_NS;       /* 'N' or 'S' */
-  char comma5;            /* ',' */
-  char longitude_num[10]; /* example: "035.209656" */
-  char longitude_EW;      /* 'E' or 'W' */
-  char comma6;            /* ',' */
-  char height[5];         /* Altitude in meters.
-                                 * (not corrected to WGS84 ??) */
-  char comma7;            /* ',' */
-  char speed[4];          /* speed in km/h. no decimal point. */
-  char comma8;            /* ',' */
-  char heading[3];        /* heading in degrees */
-  char comma9;            /* ',' */
-};
-
-/* this structure holds one record (line) in advanced logging mode.
-   advanced mode lines looks like this ('*' means NULL):
-1717**,T,090204,062634,31.765528N,035.207730E,772**,0***,0**,2D,SPS ,2.1**,1.9**,1.0**,*********
-*/
-struct one_line_advanced_mode {
-  one_line_common_start common;
-  char fixmode[2]; /* "2D" or "3D" */
-  char comma10;    /* ',' */
-  char valid[4];   /* "SPS " or "DGPS" */
-  char comma11;    /* ',' */
-  char pdop[5];
-  char comma12;    /* ',' */
-  char hdop[5];
-  char comma13;    /* ',' */
-  char vdop[5];
-  char comma14;    /* ',' */
-  char vox[9];     /* voicetag recorded */
-  char cr;         /* '\r' */
-  char lf;         /* '\n' */
-};
-
-/* this structure holds one record (line) in basic logging mode.
-   basic mode lines looks like this ('*' means NULL):
-1*****,T,090404,063401,31.765931N,035.206969E,821**,0***,0**,*********
-*/
-struct one_line_basic_mode {
-  one_line_common_start common;
-  char vox[9];    /* voicetag recorded */
-  char cr;        /* '\r' */
-  char lf;        /* '\n' */
-};
-
-
-static FILE* fin = nullptr;
 
 /* copied from dg-100.cpp */
-[[gnu::format(printf, 1, 2)]] static void
-v900_log(const char* fmt, ...)
+void
+V900Format::v900_log(const char* fmt, ...)
 {
   va_list ap;
 
@@ -154,8 +102,8 @@ v900_log(const char* fmt, ...)
   va_end(ap);
 }
 
-static void
-v900_rd_init(const QString& fname)
+void
+V900Format::rd_init(const QString& fname)
 {
   v900_log("%s(%s)\n",__func__,qPrintable(fname));
   /* note: file is opened in binary mode, since lines end with \r\n, and in windows text mode
@@ -168,8 +116,8 @@ v900_rd_init(const QString& fname)
   }
 }
 
-static void
-v900_rd_deinit()
+void
+V900Format::rd_deinit()
 {
   v900_log("%s\n",__func__);
   if (fin) {
@@ -178,8 +126,8 @@ v900_rd_deinit()
 }
 
 /* copied from dg-100.c - slight (incompatible) modification to how the date parameter is used */
-static QDateTime
-bintime2utc(int date, int time) {
+QDateTime
+V900Format::bintime2utc(int date, int time) {
   int secs = time % 100;
   time /= 100;
   int mins = time % 100;
@@ -198,8 +146,8 @@ bintime2utc(int date, int time) {
   return QDateTime(dt, tm, Qt::UTC);
 }
 
-static void
-v900_read()
+void
+V900Format::read()
 {
   /* use line buffer large enough to hold either basic or advanced mode lines. */
   union {
@@ -361,19 +309,3 @@ v900_read()
     }
   }
 }
-
-/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
-
-ff_vecs_t v900_vecs = {
-  ff_type_file,
-  {ff_cap_read, ff_cap_read, ff_cap_none}, /* Read only format. May only read trackpoints and waypoints. */
-  v900_rd_init,
-  nullptr,          /* wr_init */
-  v900_rd_deinit,
-  nullptr,          /* wr_deinit */
-  v900_read,
-  nullptr,          /* write */
-  nullptr,
-  nullptr,          /* args */
-  {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr}
-};

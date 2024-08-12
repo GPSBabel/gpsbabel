@@ -106,7 +106,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   arcpt1 = arcpt2;
 }
 
-void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
+void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head* /*unused*/)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(nullptr);

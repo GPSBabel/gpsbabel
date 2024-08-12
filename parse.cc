@@ -160,16 +160,23 @@ int
 parse_coordinates(const char* str, int datum, const grid_type grid,
                   double* latitude, double* longitude, const char* module)
 {
-  double lat, lon;
-  unsigned char lathemi=0, lonhemi=0;
-  int deg_lat, deg_lon, min_lat, min_lon;
+  double lat;
+  double lon;
+  unsigned char lathemi=0;
+  unsigned char lonhemi=0;
+  int deg_lat;
+  int deg_lon;
+  int min_lat;
+  int min_lon;
   char map[3];
   int utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmc;
   int result;
   int ct;
-  double lx, ly;
+  double lx;
+  double ly;
   const char* format;
 
   int valid = 1;
@@ -207,14 +214,14 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     break;
 
   case grid_bng:
-    datum = kDautmWGS84;	/* fix */
+    datum = kDatumWGS84;	/* fix */
     format = "%2s %lf %lf%n";
     ct = sscanf(str, format,
                 map, &lx, &ly,
                 &result);
     valid = (ct == 3);
     if (valid) {
-      if (! GPS_Math_UKOSMap_To_WGS84_M(map, lx, ly, &lat, &lon))
+      if (! GPS_Math_UKOSMap_To_WGS84_H(map, lx, ly, &lat, &lon))
         fatal("%s: Unable to convert BNG coordinates (%s)!\n",
               module, str);
     }
@@ -236,9 +243,10 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     break;
 
   case grid_swiss: {
-    double east, north;
+    double east;
+    double north;
 
-    datum = kDautmWGS84;	/* fix */
+    datum = kDatumWGS84;	/* fix */
     format = "%lf %lf%n";
     ct = sscanf(str, format,
                 &east, &north, &result);
@@ -265,7 +273,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     lon = -lon;
   }
 
-  if (datum != kDautmWGS84) {
+  if (datum != kDatumWGS84) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(lat, lon, 0.0,
                                     &lat, &lon, &alt, datum);

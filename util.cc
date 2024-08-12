@@ -27,6 +27,7 @@
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <utility>                      // for as_const
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -41,7 +42,7 @@
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -1037,7 +1038,7 @@ void list_timezones()
   };
   std::sort(zoneids.begin(), zoneids.end(), alpha);
   Warning() << "Available timezones are:";
-  for (const auto& id : qAsConst(zoneids)) {
+  for (const auto& id : std::as_const(zoneids)) {
     Warning() << id;
   }
 }

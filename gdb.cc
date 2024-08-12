@@ -992,7 +992,8 @@ GdbFormat::read()
     char typ;
     gt_waypt_classes_e wpt_class;
     Waypoint* wpt;
-    route_head* trk, *rte;
+    route_head* trk;
+    route_head* rte;
 
     int len = FREAD_i32;
     if (FREAD(&typ, 1) < 1) {
@@ -1182,7 +1183,8 @@ GdbFormat::write_waypoint(
   const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd,
   const int icon, const int display)
 {
-  char zbuf[32], ffbuf[32];
+  char zbuf[32];
+  char ffbuf[32];
 
   waypt_ct++;	/* increase informational number of written waypoints */
 
@@ -1335,7 +1337,8 @@ void
 GdbFormat::write_route(const route_head* rte, const QString& rte_name)
 {
   bounds bounds;
-  char zbuf[32], ffbuf[32];
+  char zbuf[32];
+  char ffbuf[32];
 
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xFF, sizeof(ffbuf));

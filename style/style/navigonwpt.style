@@ -1,0 +1,40 @@
+# gpsbabel XCSV style file
+# Author: Tom Glaab
+#
+DESCRIPTION     Navigon Waypoints
+SHORTLEN        8
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER         |
+RECORD_DELIMITER        NEWLINE
+BADCHARS                |
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+
+OFIELD  SHORTNAME, "","[%-.14s "
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "","]"
+OFIELD  CONSTANT, "%s","[0][17]"
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  LON_DECIMAL, "", "%08.5f"
+OFIELD  LAT_DECIMAL, "", "%08.5f"
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s",""
+OFIELD  CONSTANT, "%s","49"

@@ -1,0 +1,1301 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "gui/GPSBabelFE.app/Contents/MacOS/GPSBabelFE"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"find_package",
+			"find_dependency",
+			"_qt_internal_find_qt_dependencies",
+			"_qt_internal_find_third_party_dependencies",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"gui/CMakeLists.txt",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineWidgets/Qt6WebEngineWidgetsTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineWidgets/Qt6WebEngineWidgetsConfig.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6/Qt6Config.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineCore/Qt6WebEngineCoreTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineCore/Qt6WebEngineCoreConfig.cmake",
+			"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+			"/opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineWidgets/Qt6WebEngineWidgetsDependencies.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickConfig.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebEngineCore/Qt6WebEngineCoreDependencies.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebChannel/Qt6WebChannelTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6WebChannel/Qt6WebChannelConfig.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Qml/Qt6QmlTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Qml/Qt6QmlConfig.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Quick/Qt6QuickDependencies.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Core/Qt6CoreTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Core/Qt6CoreConfig.cmake",
+			"/opt/homebrew/Cellar/qt/6.7.0_1/lib/cmake/Qt6/FindWrapOpenGL.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6Gui/Qt6GuiTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfig.cmake",
+			"/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.28/Modules/FindCups.cmake",
+			"/opt/homebrew/opt/qt/lib/cmake/Qt6PrintSupport/Qt6PrintSupportDependencies.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 164,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 35,
+				"parent" : 0
+			},
+			{
+				"file" : 3,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 167,
+				"parent" : 4
+			},
+			{
+				"file" : 2,
+				"parent" : 5
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 55,
+				"parent" : 6
+			},
+			{
+				"file" : 1,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 62,
+				"parent" : 8
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 43,
+				"parent" : 6
+			},
+			{
+				"file" : 8,
+				"parent" : 10
+			},
+			{
+				"command" : 6,
+				"file" : 8,
+				"line" : 42,
+				"parent" : 11
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 111,
+				"parent" : 12
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 13
+			},
+			{
+				"file" : 5,
+				"parent" : 14
+			},
+			{
+				"command" : 3,
+				"file" : 5,
+				"line" : 55,
+				"parent" : 15
+			},
+			{
+				"file" : 4,
+				"parent" : 16
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 62,
+				"parent" : 17
+			},
+			{
+				"command" : 3,
+				"file" : 5,
+				"line" : 43,
+				"parent" : 15
+			},
+			{
+				"file" : 11,
+				"parent" : 19
+			},
+			{
+				"command" : 6,
+				"file" : 11,
+				"line" : 42,
+				"parent" : 20
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 111,
+				"parent" : 21
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 22
+			},
+			{
+				"file" : 10,
+				"parent" : 23
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 55,
+				"parent" : 24
+			},
+			{
+				"file" : 9,
+				"parent" : 25
+			},
+			{
+				"command" : 2,
+				"file" : 9,
+				"line" : 62,
+				"parent" : 26
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 111,
+				"parent" : 21
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 28
+			},
+			{
+				"file" : 13,
+				"parent" : 29
+			},
+			{
+				"command" : 3,
+				"file" : 13,
+				"line" : 55,
+				"parent" : 30
+			},
+			{
+				"file" : 12,
+				"parent" : 31
+			},
+			{
+				"command" : 2,
+				"file" : 12,
+				"line" : 62,
+				"parent" : 32
+			},
+			{
+				"command" : 3,
+				"file" : 10,
+				"line" : 43,
+				"parent" : 24
+			},
+			{
+				"file" : 16,
+				"parent" : 34
+			},
+			{
+				"command" : 6,
+				"file" : 16,
+				"line" : 42,
+				"parent" : 35
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 111,
+				"parent" : 36
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 37
+			},
+			{
+				"file" : 15,
+				"parent" : 38
+			},
+			{
+				"command" : 3,
+				"file" : 15,
+				"line" : 56,
+				"parent" : 39
+			},
+			{
+				"file" : 14,
+				"parent" : 40
+			},
+			{
+				"command" : 2,
+				"file" : 14,
+				"line" : 62,
+				"parent" : 41
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"file" : 3,
+				"parent" : 43
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 167,
+				"parent" : 44
+			},
+			{
+				"file" : 18,
+				"parent" : 45
+			},
+			{
+				"command" : 3,
+				"file" : 18,
+				"line" : 57,
+				"parent" : 46
+			},
+			{
+				"file" : 17,
+				"parent" : 47
+			},
+			{
+				"command" : 2,
+				"file" : 17,
+				"line" : 62,
+				"parent" : 48
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 167,
+				"parent" : 44
+			},
+			{
+				"file" : 21,
+				"parent" : 50
+			},
+			{
+				"command" : 3,
+				"file" : 21,
+				"line" : 43,
+				"parent" : 51
+			},
+			{
+				"file" : 20,
+				"parent" : 52
+			},
+			{
+				"command" : 7,
+				"file" : 20,
+				"line" : 33,
+				"parent" : 53
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 36,
+				"parent" : 54
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 55
+			},
+			{
+				"file" : 19,
+				"parent" : 56
+			},
+			{
+				"command" : 1,
+				"file" : 19,
+				"line" : 48,
+				"parent" : 57
+			},
+			{
+				"command" : 3,
+				"file" : 21,
+				"line" : 55,
+				"parent" : 51
+			},
+			{
+				"file" : 22,
+				"parent" : 59
+			},
+			{
+				"command" : 2,
+				"file" : 22,
+				"line" : 62,
+				"parent" : 60
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 111,
+				"parent" : 12
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 62
+			},
+			{
+				"file" : 24,
+				"parent" : 63
+			},
+			{
+				"command" : 3,
+				"file" : 24,
+				"line" : 55,
+				"parent" : 64
+			},
+			{
+				"file" : 23,
+				"parent" : 65
+			},
+			{
+				"command" : 2,
+				"file" : 23,
+				"line" : 62,
+				"parent" : 66
+			},
+			{
+				"command" : 3,
+				"file" : 24,
+				"line" : 43,
+				"parent" : 64
+			},
+			{
+				"file" : 26,
+				"parent" : 68
+			},
+			{
+				"command" : 7,
+				"file" : 26,
+				"line" : 33,
+				"parent" : 69
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 36,
+				"parent" : 70
+			},
+			{
+				"command" : 4,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 71
+			},
+			{
+				"file" : 25,
+				"parent" : 72
+			},
+			{
+				"command" : 2,
+				"file" : 25,
+				"line" : 96,
+				"parent" : 73
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 149,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -fcolor-diagnostics"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "QT_CORE_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_GUI_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_NETWORK_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_OPENGL_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_POSITIONING_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_PRINTSUPPORT_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_QMLBUILTINS_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_QMLINTEGRATION_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_QMLMODELS_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_QML_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_QUICK_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_SERIALPORT_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WEBCHANNEL_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WEBENGINECORE_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WEBENGINEWIDGETS_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_WIDGETS_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "QT_XML_LIB"
+				}
+			],
+			"frameworks" : 
+			[
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtCore.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtGui.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtNetwork.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtSerialPort.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWidgets.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtXml.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebEngineWidgets.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebEngineCore.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQuick.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQml.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQmlModels.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtOpenGL.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebChannel.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtPositioning.framework"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtPrintSupport.framework"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/Users/robertlipe/src/gpsbabel/gui"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/Users/robertlipe/src/gpsbabel/gui/gpsbabelfe_autogen/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtCore.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/share/qt/mkspecs/macx-clang"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtGui.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtNetwork.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtSerialPort.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWidgets.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtXml.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebEngineWidgets.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebEngineCore.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQuick.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQml.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/include/QtQmlIntegration"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/include/QtQmlBuiltins"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtQmlModels.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtOpenGL.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtWebChannel.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtPositioning.framework/Headers"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/opt/qt/lib/QtPrintSupport.framework/Headers"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2,
+					2
+				],
+				"standard" : "20"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				49
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"id" : "gpsbabelfe_autogen_timestamp_deps::@35f413a6cfe5475b20aa"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "gpsbabelfe_autogen::@35f413a6cfe5475b20aa"
+		}
+	],
+	"id" : "gpsbabelfe::@35f413a6cfe5475b20aa",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-F/opt/homebrew/opt/qt/lib",
+				"role" : "frameworkPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/opt/homebrew/opt/qt/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtSerialPort.framework/Versions/A/QtSerialPort",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtXml.framework/Versions/A/QtXml",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtWebEngineWidgets.framework/Versions/A/QtWebEngineWidgets",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtWebEngineCore.framework/Versions/A/QtWebEngineCore",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtWebChannel.framework/Versions/A/QtWebChannel",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtQuick.framework/Versions/A/QtQuick",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 27,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtQmlModels.framework/Versions/A/QtQmlModels",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 33,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtQml.framework/Versions/A/QtQml",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtNetwork.framework/Versions/A/QtNetwork",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 42,
+				"fragment" : "/opt/homebrew/opt/qt/lib/libQt6QmlBuiltins.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 27,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtOpenGL.framework/Versions/A/QtOpenGL",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtPositioning.framework/Versions/A/QtPositioning",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtPrintSupport.framework/Versions/A/QtPrintSupport",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtWidgets.framework/Versions/A/QtWidgets",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtGui.framework/Versions/A/QtGui",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/qt/lib/QtCore.framework/Versions/A/QtCore",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 49,
+				"fragment" : "-framework IOKit",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 49,
+				"fragment" : "-framework DiskArbitration",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 58,
+				"fragment" : "-framework OpenGL",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-framework AGL",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 61,
+				"fragment" : "-framework AppKit",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 61,
+				"fragment" : "-framework ImageIO",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 61,
+				"fragment" : "-framework Metal",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 67,
+				"fragment" : "-framework ApplicationServices",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 74,
+				"fragment" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/libcups.tbd",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "gpsbabelfe",
+	"nameOnDisk" : "GPSBabelFE",
+	"paths" : 
+	{
+		"build" : "gui",
+		"source" : "gui"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				49
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				46,
+				47,
+				48
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				50,
+				51
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "gui/gpsbabelfe_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/aboutdlg.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/advdlg.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/donate.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/dpencode.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/filterdata.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/filterdlg.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/filterwidgets.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/format.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/formatload.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/gmapdlg.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/gpx.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/help.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/latlng.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/main.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/mainwindow.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/map.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/optionsdlg.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/preferences.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/processwait.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/runmachine.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/upgrade.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/version_mismatch.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"compileGroupIndex" : 0,
+			"path" : "gui/serial_unix.cc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/aboutdlg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/advdlg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/appname.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/babeldata.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/donate.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/filterdata.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/filterdlg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/filterwidgets.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/format.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/formatload.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/gmapdlg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/gpx.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/help.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/mainwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/map.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/optionsdlg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/preferences.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/processwait.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/runmachine.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/setting.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/upgrade.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/version_mismatch.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/images/appicon.icns",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 75,
+			"path" : "gui/app.qrc",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "gui/gpsbabelfe_autogen/timestamp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "gui/gpsbabelfe_autogen/EWIEGA46WW/qrc_app.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "gui/gpsbabelfe_autogen/timestamp.rule",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "gui/gpsbabelfe_autogen/EWIEGA46WW/qrc_app.cpp.rule",
+			"sourceGroupIndex" : 3
+		}
+	],
+	"type" : "EXECUTABLE"
+}
