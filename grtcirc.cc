@@ -111,7 +111,7 @@ double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
 {
   double h = 360.0 + DEG(heading(lat1, lon1, lat2, lon2));
   if (h >= 360.0) {
-     h -= 360.0;
+    h -= 360.0;
   }
 
   return h;
