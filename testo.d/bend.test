@@ -3,3 +3,6 @@ rm -f ${TMPDIR}/bend.*
 
 gpsbabel -i gpx -f ${REFERENCE}/route/bend-input.gpx -x bend,distance=25,minangle=5 -o gpx -F ${TMPDIR}/bend.gpx
 compare ${REFERENCE}/route/bend-expected.gpx ${TMPDIR}/bend.gpx
+
+# Although not a real useful use case, test with extremly long segments to check great circle usage.
+gpsbabel -i kml -f lr.kml -x transform,rte=trk,del -x bend,distance=1000000,minangle=5 -o kml,line_color=9900ff00 -F lrdut.kml
