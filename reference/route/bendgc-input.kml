@@ -116,18 +116,18 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: 202.123988</td></tr>
+<tr><td>Longitude: -157.876012</td></tr>
 <tr><td>Latitude: 46.203079</td></tr>
 </table>
 ]]></description>
             <LookAt>
-              <longitude>202.123988</longitude>
+              <longitude>-157.876012</longitude>
               <latitude>46.203079</latitude>
               <tilt>66</tilt>
             </LookAt>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>202.123988,46.203079</coordinates>
+              <coordinates>-157.876012,46.203079</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -135,18 +135,18 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: 232.377086</td></tr>
+<tr><td>Longitude: -127.622914</td></tr>
 <tr><td>Latitude: 42.925678</td></tr>
 </table>
 ]]></description>
             <LookAt>
-              <longitude>232.377086</longitude>
+              <longitude>-127.622914</longitude>
               <latitude>42.925678</latitude>
               <tilt>66</tilt>
             </LookAt>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>232.377086,42.925678</coordinates>
+              <coordinates>-127.622914,42.925678</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -158,8 +158,8 @@
             <coordinates>
 140.615728,35.752604
 166.492918,42.992831
-202.123988,46.203079
-232.377086,42.925678
+-157.876012,46.203079
+-127.622914,42.925678
 </coordinates>
           </LineString>
         </Placemark>

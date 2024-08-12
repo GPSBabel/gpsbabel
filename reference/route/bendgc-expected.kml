@@ -5,7 +5,7 @@
     <LookAt>
       <longitude>0.000000</longitude>
       <latitude>41.058970</latitude>
-      <range>10669035.163373</range>
+      <range>1566562.115783</range>
     </LookAt>
     <!-- Normal route style -->
     <Style id="route_n">
@@ -94,7 +94,7 @@
       <Placemark>
         <name>RPT003</name>
         <description>&lt;table&gt;
-&lt;tr&gt;&lt;td&gt;Longitude: 202.123988&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -157.876012&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Latitude: 46.203079&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;</description>
         <styleUrl>#waypoint</styleUrl>
@@ -105,7 +105,7 @@
       <Placemark>
         <name>RPT004</name>
         <description>&lt;table&gt;
-&lt;tr&gt;&lt;td&gt;Longitude: 232.377086&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -127.622914&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Latitude: 42.925678&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;</description>
         <styleUrl>#waypoint</styleUrl>
@@ -220,18 +220,18 @@
             <snippet/>
             <description><![CDATA[
 <table>
-<tr><td>Longitude: 232.377086</td></tr>
+<tr><td>Longitude: -127.622914</td></tr>
 <tr><td>Latitude: 42.925678</td></tr>
 </table>
 ]]></description>
             <LookAt>
-              <longitude>232.377086</longitude>
+              <longitude>-127.622914</longitude>
               <latitude>42.925678</latitude>
               <tilt>66</tilt>
             </LookAt>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>232.377086,42.925678</coordinates>
+              <coordinates>-127.622914,42.925678</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -246,7 +246,7 @@
 178.578290,45.401172
 -170.887231,46.365336
 -144.937135,45.830297
-232.377086,42.925678
+-127.622914,42.925678
 </coordinates>
           </LineString>
         </Placemark>
