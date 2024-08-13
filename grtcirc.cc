@@ -141,7 +141,7 @@ std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
 
   double dot;
 
-  /* projpos must be of type PositionRad as we assign
+  /* prjpos must be of type PositionRad as we assign
    * prjpos.lat, prjpos.lon below in radians.
    */
   PositionRad prjpos = pos1;
