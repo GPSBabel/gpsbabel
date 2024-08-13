@@ -7,17 +7,18 @@ function convert_qt_translations()
 {
 # Combine the Qt translation files we use into local qt_??.qm files.
 #
-# It is recommended to combine Qts .qm files, this script does that for
+# It is recommended to combine Qt's .qm files, this script does that for
 # linux and macos, windeployqt does this for windows.
-# https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
+# https://doc.qt.io/qt-6/localization.html#deploy-translations
 #
-# This script is created from the log of the windows build from windeployqt
-# with Qt 5.12.1.
+# This script is created from the log of the windows build
+# with Qt 6.5.3 using windeployqt with the --verbose 2 option.
 # From the log you can see which translation files are used which depends on
 # which Qt modules we use.
-# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm.
+# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm,
+# and qtwebengine_*.qm.
 #
-# Note with Qt5 the Qt distributed qt_xx.qm files are metacatalogs, and just
+# Note with Qt6 the Qt distributed qt_xx.qm files are metacatalogs, and just
 # copying or converting them won't copy the dependencies.
 
   if [ "${machine}" = "Mac" ]; then
@@ -50,6 +51,7 @@ function convert_qt_translations()
     inputs+=("qtbase_${language}.qm")
     if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi
     if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
+    if [ -e "qtwebengine_${language}.qm" ]; then inputs+=("qtwebengine_${language}.qm"); fi
     "${LCONVERT}" -o "${LANGDIR}/qt_${language}.qm" "${inputs[@]}"
 
     if [ "${machine}" = "Mac" ]; then

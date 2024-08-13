@@ -520,8 +520,8 @@ GlobalsatSportFormat::track_read()
           }
 
           /*
-           * GPS year: 2000+; struct tm year: 1900+
-           * GPS month: 1-12, struct tm month: 0-11
+           * GPS year: 2000+; std::tm year: 1900+
+           * GPS month: 1-12, std::tm month: 0-11
            */
 
           QDate gpsDate = QDate(header.dateStart.Year+2000, header.dateStart.Month, header.dateStart.Day);

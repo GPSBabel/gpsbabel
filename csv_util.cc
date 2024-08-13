@@ -20,7 +20,6 @@
 
  */
 
-#include <cassert>             // for assert
 #include <cmath>               // for fabs
 #include <cstdlib>             // for strtod
 #include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
@@ -28,7 +27,7 @@
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
 #include <QDebug>              // for QDebug
-#include <QRegularExpression>  // for QRegularExpression
+#include <QList>               // for QList
 #include <QString>             // for QString, operator+
 
 #include "defs.h"
@@ -37,9 +36,6 @@
 
 
 #define MYNAME "CSV_UTIL"
-
-#define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
-
 
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
@@ -52,12 +48,10 @@ csv_stringclean(const QString& source, const QString& to_nuke)
 {
   QString r = source;
   if (!to_nuke.isEmpty()) {
-    // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
-    // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
-    // or one can imagine [^a] when we meant the characters '^' and 'a'.
-    QRegularExpression regex = QRegularExpression(QStringLiteral("[%1]").arg(QRegularExpression::escape(to_nuke)));
-    assert(regex.isValid());
-    r.remove(regex);
+    auto isNukeable = [&to_nuke](const QChar &ch)->bool {
+        return to_nuke.contains(ch);
+    };
+    r.removeIf(isNukeable);
   }
   return r;
 }
@@ -154,7 +148,8 @@ csv_dequote(const QString& string, const QString& enclosure)
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method,
+              bool* delimiter_detected)
 {
   QStringList retval;
 
@@ -168,6 +163,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
    * whitespace eater consume the space.
    */
   QString delimiter = delimited_by;
+  bool delimiter_seen = false;
   if (delimited_by == ", ") {
     delimiter = ",";
   }
@@ -200,8 +196,10 @@ csv_linesplit(const QString& string, const QString& delimited_by,
       if (!enclosed) {
         if ((dlen > 0) && string.mid(p).startsWith(delimiter)) {
           dfound = true;
+          delimiter_seen = true;
         } else if (hyper_whitespace_delimiter && string.at(p).isSpace()) {
           dfound = true;
+          delimiter_seen = true;
           while ((p < string.size()) && string.at(p).isSpace()) {
             p++;
           }
@@ -240,6 +238,9 @@ csv_linesplit(const QString& string, const QString& delimited_by,
 
     retval.append(value);
 
+  }
+  if (delimiter_detected != nullptr) {
+    *delimiter_detected = delimiter_seen;
   }
   return retval;
 }

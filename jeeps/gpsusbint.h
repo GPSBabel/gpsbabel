@@ -21,7 +21,11 @@
 
  */
 
-int32 GPS_Packet_Read_usb(gpsdevh* fd, GPS_PPacket* packet, int eatbulk);
-void  GPS_Make_Packet_usb(GPS_PPacket* packet, UC type, UC* data, int16 n);
-int32 GPS_Write_Packet_usb(gpsdevh* fd, GPS_PPacket& packet);
+#ifndef JEEPS_GPSUSBINT_H_INCLUDED_
+#define JEEPS_GPSUSBINT_H_INCLUDED_
+
+int32_t GPS_Packet_Read_usb(gpsdevh* fd, GPS_Packet* packet, int eatbulk);
+int32_t GPS_Write_Packet_usb(gpsdevh* fd, const GPS_Packet& packet);
+
+#endif // JEEPS_GPSUSBINT_H_INCLUDED_
 

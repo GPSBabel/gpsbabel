@@ -19,13 +19,16 @@
 
  */
 
+#ifndef JEEPS_GPSUSBCOMMON_H_INCLUDED_
+#define JEEPS_GPSUSBCOMMON_H_INCLUDED_
+
 /*
  * The 'low level ops' are registered by the OS layer (win32, libusb, etc.)
  * to provide gruntwork features for the common USB layer.
  */
-typedef int (*gusb_llop_get)(garmin_usb_packet* ibuf, size_t sz);
-typedef int (*gusb_llop_send)(const garmin_usb_packet* opkt, size_t sz);
-typedef int (*gusb_llop_close)(gpsdevh* dh, bool exit_lib);
+using gusb_llop_get = int (*)(garmin_usb_packet* ibuf, size_t sz);
+using gusb_llop_send = int (*)(const garmin_usb_packet* opkt, size_t sz);
+using gusb_llop_close = int (*)(gpsdevh* dh, bool exit_lib);
 
 typedef struct gusb_llops {
   gusb_llop_get  llop_get_intr;
@@ -37,9 +40,10 @@ typedef struct gusb_llops {
 
 /* Provided by the common code. */
 void gusb_syncup();
-void gusb_register_ll(struct gusb_llops*);
+void gusb_register_ll(gusb_llops* p);
 void gusb_list_units();
 
 /* Provided by the OS layers */
 // int gusb_init(const char *portname, gpsdev **dh);
 
+#endif // JEEPS_GPSUSBCOMMON_H_INCLUDED_

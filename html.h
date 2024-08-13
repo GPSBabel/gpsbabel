@@ -26,6 +26,7 @@
 
 #include "defs.h"
 #include "format.h"               // for Format
+#include "mkshort.h"              // for MakeShort
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -62,7 +63,7 @@ private:
   /* Data Members */
 
   gpsbabel::TextStream* file_out{nullptr};
-  short_handle mkshort_handle{};
+  MakeShort* mkshort_handle{};
 
   int waypoint_number{};
 

@@ -219,31 +219,31 @@ static int HexByte(const char* hex)
  */
 
 int
-color_to_bbggrr(const char* opt_color)
+color_to_bbggrr(const char* cname)
 {
   char* ep;
 
-  int color_num = strtol(opt_color, &ep, 10);
+  int color_num = strtol(cname, &ep, 10);
 
-  if (ep != opt_color) {
+  if (ep != cname) {
     return color_num;
   }
 
-  if (opt_color[0] == '#') {
-    color_num = (HexByte(opt_color+1)) +      // red
-                (HexByte(opt_color+3)<<8) +   // green
-                (HexByte(opt_color+5)<<16);   // blue
+  if (cname[0] == '#') {
+    color_num = (HexByte(cname+1)) +      // red
+                (HexByte(cname+3)<<8) +   // green
+                (HexByte(cname+5)<<16);   // blue
     return color_num;
   }
 
   for (auto i : color_table) {
-    if (0 == case_ignore_strcmp(opt_color, i.cn)) {
+    if (0 == case_ignore_strcmp(cname, i.cn)) {
       return (i.b << 16) +
              (i.g << 8) +
               i.r;
     }
   }
 
-  fatal("unrecognized color name %s\n", opt_color);
+  fatal("unrecognized color name %s\n", cname);
   return -1;
 }

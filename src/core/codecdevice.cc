@@ -154,4 +154,4 @@ bool CodecDevice::isSequential() const
   return true;
 }
 
-} // namespace
+} // namespace gpsbabel

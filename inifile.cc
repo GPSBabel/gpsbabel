@@ -29,10 +29,15 @@
 #include <QHash>               // for QHash
 #include <QIODevice>           // for QIODevice::ReadOnly, QIODevice
 #include <QTextStream>         // for QTextStream
-#include <QtGlobal>            // for qEnvironmentVariable, qPrintable, QT_VERSION, QT_VERSION_CHECK
+#include <QtGlobal>            // for qEnvironmentVariable, qPrintable
 #include <utility>
 
 #define MYNAME "inifile"
+
+struct inifile_t {
+  QHash<QString, InifileSection> sections;
+  QString source;
+};
 
 class InifileSection
 {
@@ -46,8 +51,10 @@ public:
 
 /* internal procedures */
 
-#define GPSBABEL_INIFILE "gpsbabel.ini"
-#define GPSBABEL_SUBDIR ".gpsbabel"
+static constexpr char GPSBABEL_INIFILE[] = "gpsbabel.ini";
+#ifndef __WIN32__
+static constexpr char GPSBABEL_SUBDIR[] = ".gpsbabel";
+#endif
 
 
 static QString
@@ -184,11 +191,7 @@ inifile_init(const QString& filename, const char* myname)
   gpsbabel::File file(name);
   file.open(QFile::ReadOnly);
   QTextStream stream(&file);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  // default for QTextStream::setCodec in Qt5 is QTextCodec::codecForLocale()
   // default for QTextStream::setEncoding in Qt6 is QStringConverter::Utf8
-  stream.setCodec("UTF-8");
-#endif
   stream.setAutoDetectUnicode(true);
 
   auto* result = new inifile_t;

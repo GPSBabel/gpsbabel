@@ -22,6 +22,7 @@ qtdatavis3d \
 qtlottie \
 qtnetworkauth \
 qtquick3d \
+qtquick3dphysics \
 qtquicktimeline \
 qtwebglplugin \
 qtshadertools \
