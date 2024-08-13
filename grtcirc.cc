@@ -62,10 +62,10 @@ double gcdist(PositionRad pos1, PositionRad pos2)
 {
   errno = 0;
 
-  const double lat1 = pos1.lat;
-  const double lon1 = pos1.lon;
-  const double lat2 = pos2.lat;
-  const double lon2 = pos2.lon;
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
 
   double sdlat = sin((lat1 - lat2) / 2.0);
   double sdlon = sin((lon1 - lon2) / 2.0);
@@ -89,10 +89,10 @@ double gcdist(PositionRad pos1, PositionRad pos2)
  */
 static double heading(PositionRad pos1, PositionRad pos2)
 {
-  double lat1 = pos1.lat;
-  double lon1 = pos1.lon;
-  double lat2 = pos2.lat;
-  double lon2 = pos2.lon;
+  double lat1 = pos1.latR;
+  double lon1 = pos1.lonR;
+  double lat2 = pos2.latR;
+  double lon2 = pos2.lonR;
 
   double v1 = sin(lon2 - lon1) * cos(lat2);
   double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon2 - lon1);
@@ -151,12 +151,12 @@ std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
   /* we use these values below assuming they are in radians,
    * => posn must be of type PositionRad.
    */
-  const double lat1 = pos1.lat;
-  const double lon1 = pos1.lon;
-  const double lat2 = pos2.lat;
-  const double lon2 = pos2.lon;
-  const double lat3 = pos3.lat;
-  const double lon3 = pos3.lon;
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
+  const double lat3 = pos3.latR;
+  const double lon3 = pos3.lonR;
 
   bool newpoints = true;
   if (lat1 == _lat1 && lat2 == _lat2 && lon1 == _lon1 && lon2 == _lon2) {
@@ -229,11 +229,11 @@ std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
          * atan2 would be overkill because lp and fabs(dot) are both
          * known to be positive. */
 
-        prjpos.lat = asin(yp);
+        prjpos.latR = asin(yp);
         if (xp == 0 && zp == 0) {
-          prjpos.lon = 0;
+          prjpos.lonR = 0;
         } else {
-          prjpos.lon = atan2(zp, xp);
+          prjpos.lonR = atan2(zp, xp);
         }
         frac = d1 / (d1 + d2);
 
@@ -308,10 +308,10 @@ PositionDeg linepart(PositionRad pos1, PositionRad pos2, double frac)
   /* we use these values below assuming they are in radians,
    * => posn must be of type PositionRad.
    */
-  const double lat1 = pos1.lat;
-  const double lon1 = pos1.lon;
-  const double lat2 = pos2.lat;
-  const double lon2 = pos2.lon;
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
 
   /* polar to ECEF rectangular */
   double x1 = cos(lon1) * cos(lat1);
@@ -354,11 +354,11 @@ PositionDeg linepart(PositionRad pos1, PositionRad pos2, double frac)
     yr = std::clamp(yr, -1.0, 1.0);
     zr = std::clamp(zr, -1.0, 1.0);
 
-    respos.lat = asin(yr);
+    respos.latR = asin(yr);
     if (xr == 0 && zr == 0) {
-      respos.lon = 0;
+      respos.lonR = 0;
     } else {
-      respos.lon = atan2(zr, xr);
+      respos.lonR = atan2(zr, xr);
     }
   }
   return respos;

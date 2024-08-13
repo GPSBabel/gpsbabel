@@ -260,29 +260,29 @@ struct PositionDeg
 {
   PositionDeg() = default;
   explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
-  PositionDeg(double latd, double lond) : lat(latd), lon(lond) {}
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
 
-  double lat;
-  double lon;
+  double latD;
+  double lonD;
 };
 
 struct PositionRad
 {
   PositionRad() = default;
   explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
-  PositionRad(double latr, double lonr) : lat(latr), lon(lonr) {}
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
 
-  double lat;
-  double lon;
+  double latR;
+  double lonR;
 };
 
 inline PositionDeg::PositionDeg(const PositionRad& posr) :
-  lat(posr.lat * kDegreesPerRadian),
-  lon(posr.lon * kDegreesPerRadian) {}
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
 
 inline PositionRad::PositionRad(const PositionDeg& posd) :
-  lat(posd.lat * kRadiansPerDegree),
-  lon(posd.lon * kRadiansPerDegree) {}
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -359,8 +359,8 @@ public:
   PositionDeg position() const {return PositionDeg(latitude, longitude);}
   void SetPosition(const PositionDeg& pos)
   {
-    latitude = pos.lat;
-    longitude = pos.lon;
+    latitude = pos.latD;
+    longitude = pos.lonD;
   }
 
 // mimic std::optional interface, but use our more space

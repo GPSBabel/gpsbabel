@@ -997,8 +997,8 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
                                    wpt->position()));
   }
   old_position = wpt->position();
-  latitude = wpt->position().lat;
-  longitude = wpt->position().lon;
+  latitude = wpt->position().latD;
+  longitude = wpt->position().lonD;
 
   QString write_delimiter;
   if (xcsv_style->field_delimiter == u"\\w") {
