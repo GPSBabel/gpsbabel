@@ -9,6 +9,7 @@
 /*.gcda
 /*.gcno
 /*.gcov
+/.cmake/
 /.vs/
 /.vscode/
 /GPSBabel
@@ -31,6 +32,17 @@
 /config.status
 /cscope.out
 /debug/
+/gpsbabel
+/gpsbabel-debug
+/gpsbabel_coverage.xml
+/gpsbabel.exe
+/gpsbabel.fo
+/gpsbabel.html
+/gpsbabel.pdf
+/Makefile
+.cmake/
+.qmake.cache
+.qmake.stash
 /empty
 /gbversion.h
 /gpsbabel
