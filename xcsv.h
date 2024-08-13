@@ -366,8 +366,7 @@ private:
   XcsvFile* xcsv_file{nullptr};
   const XcsvStyle* xcsv_style{nullptr};
   double pathdist = 0;
-  double oldlon = 999;
-  double oldlat = 999;
+  std::optional<PositionDeg> old_position;
 
   int waypt_out_count = 0;
   const route_head* csv_track = nullptr;

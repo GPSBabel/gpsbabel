@@ -19,10 +19,12 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
+#include <cmath>                     // for nan
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
@@ -106,6 +108,14 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
+
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
+
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
 
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
 constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
@@ -246,6 +256,35 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
+
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
+
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
+};
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -318,6 +357,12 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.latD;
+    longitude = pos.lonD;
+  }
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.

@@ -258,9 +258,7 @@ GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_cla
     /* At this point we have found a waypoint with same name,
        but probably from another data stream. Check coordinates!
     */
-    double dist = radtometers(gcdist(
-                                RAD(ref->latitude), RAD(ref->longitude),
-                                RAD(tmp->latitude), RAD(tmp->longitude)));
+    double dist = radtometers(gcdist(ref->position(), tmp->position()));
 
     if (fabs(dist) > 100) {
       fatal(MYNAME ": Route point mismatch!\n" \

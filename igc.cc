@@ -869,8 +869,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
     // Get a crude indication of groundspeed from the change in lat/lon
     int deltat_msec = (*wpt_rit)->GetCreationTime().msecsTo(wpt->GetCreationTime());
     speed = (deltat_msec == 0) ? 0:
-            radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
-                               RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
+            radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%.2fm/s\n", speed);

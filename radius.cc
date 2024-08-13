@@ -35,8 +35,8 @@
 void RadiusFilter::process()
 {
   foreach (Waypoint* waypointp, *global_waypoint_list) {
-    double dist = gc_distance(waypointp->latitude, waypointp->longitude,
-                              home_pos->latitude, home_pos->longitude);
+    double dist = radtomiles(gcdist(waypointp->position(),
+                                    home_pos->position()));
 
     if ((dist >= pos_dist) == (exclopt == nullptr)) {
       waypointp->wpt_flags.marked_for_deletion = 1;

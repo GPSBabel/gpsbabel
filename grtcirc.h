@@ -22,35 +22,24 @@
 #ifndef GRTCIRC_H
 #define GRTCIRC_H
 
-#include <numbers>  // for inv_pi
+#include <tuple>   // for tuple
+#include "defs.h"  // for PositionRad, PositionDeg
 
-double gcdist(double lat1, double lon1, double lat2, double lon2);
-double heading_true_degrees(double lat1, double lon1, double lat2, double lon2);
+/* Note PositionDeg and PositionRad can be implicity converted to
+ * each other, so you may use either to interface to these functions.
+ */
 
-double linedistprj(double lat1, double lon1,
-                   double lat2, double lon2,
-                   double lat3, double lon3,
-                   double* prjlat, double* prjlon,
-                   double* frac);
+double gcdist(PositionRad pos1, PositionRad pos2);
+double heading_true_degrees(PositionRad pos1, PositionRad pos2);
 
-double linedist(double lat1, double lon1,
-                double lat2, double lon2,
-                double lat3, double lon3);
+std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
+                                                    PositionRad pos2,
+                                                    PositionRad pos3);
+
+double linedist(PositionRad pos1, PositionRad pos2, PositionRad pos3);
 
 double radtometers(double rads);
 double radtomiles(double rads);
 
-void linepart(double lat1, double lon1,
-              double lat2, double lon2,
-              double frac,
-              double* reslat, double* reslon);
-
-/* Degrees to radians */
-constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
-constexpr double DEG(double x) { return x * kDegreesPerRadian; }
-
-/* Radians to degrees */
-constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
-constexpr double RAD(double x) { return x * kRadiansPerDegree; }
-
+PositionDeg linepart(PositionRad pos1, PositionRad pos2, double frac);
 #endif

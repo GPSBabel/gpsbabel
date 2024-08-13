@@ -49,10 +49,8 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
 
         for (int j = i + 1 ; j < nelems ; ++j) {
           if (!qlist.at(j).deleted) {
-            double dist = gc_distance(qlist.at(j).wpt->latitude,
-                                      qlist.at(j).wpt->longitude,
-                                      qlist.at(i).wpt->latitude,
-                                      qlist.at(i).wpt->longitude);
+            double dist = radtometers(gcdist(qlist.at(j).wpt->position(),
+                                             qlist.at(i).wpt->position()));
 
             if (dist <= pos_dist) {
               if (check_time) {

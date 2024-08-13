@@ -278,16 +278,12 @@ computed_trkdata track_recompute(const route_head* trk)
       /*
        * gcdist and heading want radians, not degrees.
        */
-      double tlat = RAD(thisw->latitude);
-      double tlon = RAD(thisw->longitude);
-      double plat = RAD(prev->latitude);
-      double plon = RAD(prev->longitude);
       if (!thisw->course_has_value()) {
         // Only recompute course if the waypoint
         // didn't already have a course.
-        thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
+        thisw->set_course(heading_true_degrees(prev->position(), thisw->position()));
       }
-      double dist = radtometers(gcdist(plat, plon, tlat, tlon));
+      double dist = radtometers(gcdist(prev->position(), thisw->position()));
       tdata.distance_meters += dist;
 
       /*
