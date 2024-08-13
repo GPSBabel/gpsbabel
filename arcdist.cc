@@ -161,8 +161,7 @@ void ArcDistanceFilter::process()
         wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
-        wp->longitude = ed->prjpos.lon;
-        wp->latitude = ed->prjpos.lat;
+        wp->SetPosition(ed->prjpos);
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
