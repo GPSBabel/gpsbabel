@@ -29,7 +29,6 @@
  * each other, so you may use either to interface to these functions.
  */
 
-double gcdist(double lat1, double lon1, double lat2, double lon2);
 double gcdist(PositionRad pos1, PositionRad pos2);
 double heading_true_degrees(PositionRad pos1, PositionRad pos2);
 
