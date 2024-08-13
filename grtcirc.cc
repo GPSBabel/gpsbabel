@@ -89,10 +89,10 @@ double gcdist(PositionRad pos1, PositionRad pos2)
  */
 static double heading(PositionRad pos1, PositionRad pos2)
 {
-  double lat1 = pos1.latR;
-  double lon1 = pos1.lonR;
-  double lat2 = pos2.latR;
-  double lon2 = pos2.lonR;
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
 
   double v1 = sin(lon2 - lon1) * cos(lat2);
   double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon2 - lon1);
