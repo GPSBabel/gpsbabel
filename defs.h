@@ -19,6 +19,7 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
+#include <cmath>                     // for nan
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
@@ -262,8 +263,8 @@ struct PositionDeg
   explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
   PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
 
-  double latD;
-  double lonD;
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
 };
 
 struct PositionRad
@@ -272,8 +273,8 @@ struct PositionRad
   explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
   PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
 
-  double latR;
-  double lonR;
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
 };
 
 inline PositionDeg::PositionDeg(const PositionRad& posr) :
