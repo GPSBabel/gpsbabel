@@ -233,15 +233,20 @@ static QString
 QStringFromRaw(int n, char* p)
 {
   QString r;
-  r.resize(n);
   int i;
+
   for (i = 0; i < n; i++) {
+    // Do not null terminate the output string. Just Bail.
     if (0 == p[i]) {
-       break;
+      assert(i < n);
+      return r;
     }
-    r[i] = p[i];
+    r.append(p[i]);
   }
-  r.truncate(i);
+  // The dev asked for N bytees. We return exactly that
+  // as we've run off the end of the input buffer.
+  assert (i == n);
+  assert (r.size() == n);
   return r;
 }
 
