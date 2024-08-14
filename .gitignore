@@ -9,6 +9,7 @@
 /*.gcda
 /*.gcno
 /*.gcov
+/.cmake/
 /.vs/
 /.vscode/
 /GPSBabel
