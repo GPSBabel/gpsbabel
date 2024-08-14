@@ -235,6 +235,17 @@ QStringFromRaw(int n, char* p)
   QString r;
   int i;
 
+#if 1
+  char* s = xstrndup(p, n);
+  QString qstr(s);
+  xfree(s);
+qDebug() << qstr;
+  return qstr;
+#endif
+
+
+
+
   for (i = 0; i < n; i++) {
     // Do not null terminate the output string. Just Bail.
     if (0 == p[i]) {
