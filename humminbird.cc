@@ -248,7 +248,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
   auto* wpt = new Waypoint;
 
   // Structure in record isn't guaranteed to be null terminated.
-  wpt->shortname = QString(w.name).left(sizeof(w.name));
+  wpt->shortname = QString(w.name).mid(0, sizeof(w.name));
 
   wpt->SetCreationTime(w.time);
 
@@ -319,7 +319,7 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
           rte = new route_head;
           route_add_head(rte);
           // Structure in record isn't guaranteed to be null terminated.
-          rte->rte_name = QString(hrte.name).left(sizeof(hrte.name));
+          rte->rte_name = QString(hrte.name).mid(0,sizeof(hrte.name));
           /* rte->rte_num = hrte.num + 1; only internal number */
         }
         route_add_wpt(rte, new Waypoint(*wpt));
@@ -377,7 +377,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   track_add_head(trk);
 
   // Structure in record isn't guaranteed to be null terminated.
-  trk->rte_name = QString(th.name).left(sizeof(th.name));
+  trk->rte_name = QString(th.name).mid(0, sizeof(th.name));
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
@@ -488,7 +488,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   gbfread(&namebuf, 1, TRK_NAME_LEN, fin);
 
   // Structure in record isn't guaranteed to be null terminated.
-  trk->rte_name = QString(namebuf).left(sizeof(namebuf));
+  trk->rte_name = QString(namebuf).mid(0, sizeof(namebuf));
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
