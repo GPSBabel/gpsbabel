@@ -239,6 +239,7 @@ QStringFromRaw(int n, char* p)
     // Do not null terminate the output string. Just Bail.
     if (0 == p[i]) {
       assert(i < n);
+      r.append("\0");
       return r;
     }
     r.append(p[i]);
@@ -247,6 +248,7 @@ QStringFromRaw(int n, char* p)
   // as we've run off the end of the input buffer.
   assert (i == n);
   assert (r.size() == n);
+  r.append("\0");
   return r;
 }
 
