@@ -226,20 +226,22 @@ HumminbirdBase::humminbird_rd_deinit() const
   gbfclose(fin_);
 }
 
-// Ensure a QString is long enough to hold N byte and
-// copy characters up to a null or a terminator into that
-// string. Remember that we don't have to hold the final \0.
+// Ensure a QString is long enough to hold N bytes and
+// copy characters up to a null or the end of the buffer.
+// Then ensure QString's internal data matches.
 static QString
 QStringFromRaw(int n, char* p)
 {
   QString r;
   r.resize(n);
-  for (int i = 0; i < n; i++) {
+  int i;
+  for (i = 0; i < n; i++) {
     if (0 == p[i]) {
        break;
     }
-   r[i] = p[i];
+    r[i] = p[i];
   }
+  r.truncate(i);
   return r;
 }
 
