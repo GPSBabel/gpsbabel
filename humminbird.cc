@@ -226,6 +226,23 @@ HumminbirdBase::humminbird_rd_deinit() const
   gbfclose(fin_);
 }
 
+// Ensure a QString is long enough to hold N byte and
+// copy characters up to a null or a terminator into that
+// string. Remember that we don't have to hold the final \0.
+static QString
+QStringFromRaw(int n, char* p)
+{
+  QString r;
+  r.resize(n);
+  for (int i = 0; i < n; i++) {
+    if (0 == p[i]) {
+       break;
+    }
+   r[i] = p[i];
+  }
+  return r;
+}
+
 void
 HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 {
@@ -247,9 +264,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 
   auto* wpt = new Waypoint;
 
-  // Structure in record isn't guaranteed to be null terminated.
-  wpt->shortname = QString(w.name).mid(0, sizeof(w.name));
-
+  wpt->shortname = QStringFromRaw(sizeof(w.name), w.name);
   wpt->SetCreationTime(w.time);
 
   double guder = gudermannian_i1924(w.north);
@@ -318,9 +333,7 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
         if (rte == nullptr) {
           rte = new route_head;
           route_add_head(rte);
-          // Structure in record isn't guaranteed to be null terminated.
-          rte->rte_name = QString(hrte.name).mid(0,sizeof(hrte.name));
-          /* rte->rte_num = hrte.num + 1; only internal number */
+          rte->rte_name = QStringFromRaw(sizeof(hrte.name), hrte.name);
         }
         route_add_wpt(rte, new Waypoint(*wpt));
       }
@@ -376,8 +389,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   auto* trk = new route_head;
   track_add_head(trk);
 
-  // Structure in record isn't guaranteed to be null terminated.
-  trk->rte_name = QString(th.name).mid(0, sizeof(th.name));
+  trk->rte_name = QStringFromRaw(sizeof(th.name), th.name);
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
@@ -487,8 +499,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   gbfseek(fin, file_len-TRK_NAME_LEN, SEEK_SET);
   gbfread(&namebuf, 1, TRK_NAME_LEN, fin);
 
-  // Structure in record isn't guaranteed to be null terminated.
-  trk->rte_name = QString(namebuf).mid(0, sizeof(namebuf));
+  trk->rte_name = QStringFromRaw(sizeof(namebuf), namebuf);
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
