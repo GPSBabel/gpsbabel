@@ -54,7 +54,7 @@ DBFHandle DBFCreate( const char * pszDBFFile );
 <h2>DBFGetFieldCount()</h2>
 
 <pre>
-int DBFGetFieldCount( DBFHandle hDBF );
+int DBFGetFieldCount( const DBFHandle hDBF );
 
   hDBF:		The access handle for the file to be queried, as returned
                 by DBFOpen(), or DBFCreate().
@@ -68,7 +68,7 @@ int DBFGetFieldCount( DBFHandle hDBF );
 <h2>DBFGetRecordCount()</h2>
 
 <pre>
-int DBFGetRecordCount( DBFHandle hDBF );
+int DBFGetRecordCount( const DBFHandle hDBF );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
@@ -83,7 +83,7 @@ int DBFGetRecordCount( DBFHandle hDBF );
 <h2>DBFGetFieldIndex()</h2>
 
 <pre>
-int DBFGetFieldIndex( DBFHandle hDBF, const char *pszFieldName );
+int DBFGetFieldIndex( const DBFHandle hDBF, const char *pszFieldName );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
@@ -99,7 +99,8 @@ int DBFGetFieldIndex( DBFHandle hDBF, const char *pszFieldName );
 <h2>DBFGetFieldInfo()</h2>
 
 <pre>
-DBFFieldType DBFGetFieldInfo( DBFHandle hDBF, int iField, char * pszFieldName,
+DBFFieldType DBFGetFieldInfo( const  DBFHandle hDBF, int iField,
+                              char * pszFieldName,
                               int * pnWidth, int * pnDecimals );
 
   hDBF:		The access handle for the file to be queried, as returned by
@@ -127,16 +128,16 @@ DBFFieldType DBFGetFieldInfo( DBFHandle hDBF, int iField, char * pszFieldName,
   The DBFGetFieldInfo() returns the type of the requested field, which is
   one of the DBFFieldType enumerated values.  As well, the field name, and
   field width information can optionally be returned.  The field type returned
-  does not correspond one to one with the xBase field types.  For instance
-  the xBase field type for Date will just be returned as being FTInteger.  <p>
+  does not correspond one to one with the xBase field types.  <p>
 
 <pre>
     typedef enum {
-      FTString,			/* fixed length string field 		*/
-      FTInteger,		/* numeric field with no decimals 	*/
-      FTDouble,			/* numeric field with decimals 		*/
-      FTLogical,		/* logical field.                       */
-      FTInvalid                 /* not a recognised field type 		*/
+      FTString,			/* fixed length string field        */
+      FTInteger,		/* numeric field with no decimals   */
+      FTDouble,			/* numeric field with decimals      */
+      FTLogical,		/* logical field                    */
+      FTDate,			/* date field                       */
+      FTInvalid			/* not a recognised field type      */
     } DBFFieldType;
 </pre>
 
@@ -251,7 +252,7 @@ const char *DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
 <h2>DBFIsAttributeNULL()</h2>
 
 <pre>
-int DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
+int DBFIsAttributeNULL( const DBFHandle hDBF, int iShape, int iField );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
@@ -382,7 +383,7 @@ void DBFClose( DBFHandle hDBF );
 <h2>DBFIsRecordDeleted()</h2>
 
 <pre>
-int DBFIsRecordDeleted( DBFHandle hDBF, int iShape );
+int DBFIsRecordDeleted( const DBFHandle hDBF, int iShape );
 
   hDBF:		The access handle for the file to be checked.
   iShape:       The record index to check.
@@ -410,7 +411,7 @@ int DBFMarkRecordDeleted( DBFHandle hDBF, int iShape, int bIsDeleted );
 <h2>DBFGetNativeFieldType()</h2>
 
 <pre>
-char DBFGetNativeFieldType( DBFHandle hDBF, int iField );
+char DBFGetNativeFieldType( const DBFHandle hDBF, int iField );
 
   hDBF:		The access handle for the file.
   iField:       The field index to query.
