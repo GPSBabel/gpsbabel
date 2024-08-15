@@ -226,43 +226,6 @@ HumminbirdBase::humminbird_rd_deinit() const
   gbfclose(fin_);
 }
 
-// Ensure a QString is long enough to hold N bytes and
-// copy characters up to a null or the end of the buffer.
-// Then ensure QString's internal data matches.
-static QString
-QStringFromRaw(int n, char* p)
-{
-  return QByteArray(p, qstrnlen(p, n));
-  QString r;
-  int i;
-
-#if 1
-  char* s = xstrndup(p, n);
-  QString qstr(s);
-  xfree(s);
-//qDebug() << qstr;
-  return qstr;
-#endif
-
-
-
-
-  for (i = 0; i < n; i++) {
-    // Do not null terminate the output string. Just Bail.
-    if (0 == p[i]) {
-      assert(i < n);
-      return r;
-    }
-    r.append(p[i]);
-  }
-  // The dev asked for N bytees. We return exactly that
-  // as we've run off the end of the input buffer.
-  assert (i == n);
-  assert (r.size() == n);
-qDebug() << qstr << "Again" << r;
-  return r;
-}
-
 void
 HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 {
@@ -284,7 +247,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 
   auto* wpt = new Waypoint;
 
-  wpt->shortname = QStringFromRaw(sizeof(w.name), w.name);
+  wpt->shortname = QByteArray(w.name, static_cast<int>(qstrnlen(w.name, sizeof(w.name))));
   wpt->SetCreationTime(w.time);
 
   double guder = gudermannian_i1924(w.north);
@@ -353,7 +316,7 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
         if (rte == nullptr) {
           rte = new route_head;
           route_add_head(rte);
-          rte->rte_name = QStringFromRaw(sizeof(hrte.name), hrte.name);
+          rte->rte_name = QByteArray(hrte.name, static_cast<int>(qstrnlen(hrte.name, sizeof(hrte.name))));
         }
         route_add_wpt(rte, new Waypoint(*wpt));
       }
@@ -409,7 +372,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   auto* trk = new route_head;
   track_add_head(trk);
 
-  trk->rte_name = QStringFromRaw(sizeof(th.name), th.name);
+  trk->rte_name = QByteArray(th.name, static_cast<int>(qstrnlen(th.name, sizeof(th.name))));
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
@@ -519,7 +482,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   gbfseek(fin, file_len-TRK_NAME_LEN, SEEK_SET);
   gbfread(&namebuf, 1, TRK_NAME_LEN, fin);
 
-  trk->rte_name = QStringFromRaw(sizeof(namebuf), namebuf);
+  trk->rte_name = QByteArray(namebuf, static_cast<int>(qstrnlen(namebuf, sizeof(namebuf))));
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */
