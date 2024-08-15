@@ -398,7 +398,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   /* num_points is actually one too big, because it includes the value in
      the header. But we want the extra point at the end because the
      freak-value filter below looks at points[i+1] */
-  auto* points = new humminbird_trk_point_t[th.num_points];
+  auto* points = new humminbird_trk_point_t[th.num_points]();
   if (! gbfread(points, sizeof(humminbird_trk_point_t), th.num_points-1, fin)) {
     fatal(MYNAME ": Unexpected end of file reading points!\n");
   }
@@ -502,7 +502,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   /* num_points is actually one too big, because it includes the value in
      the header. But we want the extra point at the end because the
      freak-value filter below looks at points[i+1] */
-  auto* points = new humminbird_trk_point_old_t[th.num_points];
+  auto* points = new humminbird_trk_point_old_t[th.num_points]();
   if (! gbfread(points, sizeof(humminbird_trk_point_old_t), th.num_points-1, fin)) {
     fatal(MYNAME ": Unexpected end of file reading points!\n");
   }
@@ -712,8 +712,8 @@ HumminbirdHTFormat::humminbird_track_head(const route_head* trk)
   trk_head = nullptr;
   last_time = 0;
   if (!trk->rte_waypt_empty()) {
-    trk_head = new humminbird_trk_header_t;
-    trk_points = new humminbird_trk_point_t[max_points];
+    trk_head = new humminbird_trk_header_t();
+    trk_points = new humminbird_trk_point_t[max_points]();
     QString name = trkname_sh->mkshort(trk->rte_name);
     strncpy(trk_head->name, CSTR(name), sizeof(trk_head->name)-1);
     be_write16(&trk_head->trk_num, trk->rte_num);
