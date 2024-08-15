@@ -232,6 +232,7 @@ HumminbirdBase::humminbird_rd_deinit() const
 static QString
 QStringFromRaw(int n, char* p)
 {
+  return QByteArray(p, qstrnlen(p, n));
   QString r;
   int i;
 
@@ -239,7 +240,7 @@ QStringFromRaw(int n, char* p)
   char* s = xstrndup(p, n);
   QString qstr(s);
   xfree(s);
-qDebug() << qstr;
+//qDebug() << qstr;
   return qstr;
 #endif
 
@@ -250,7 +251,6 @@ qDebug() << qstr;
     // Do not null terminate the output string. Just Bail.
     if (0 == p[i]) {
       assert(i < n);
-      r.append("\0");
       return r;
     }
     r.append(p[i]);
@@ -259,7 +259,7 @@ qDebug() << qstr;
   // as we've run off the end of the input buffer.
   assert (i == n);
   assert (r.size() == n);
-  r.append("\0");
+qDebug() << qstr << "Again" << r;
   return r;
 }
 
