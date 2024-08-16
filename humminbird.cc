@@ -167,28 +167,40 @@ struct HumminbirdBase::group_body_t {
 };
 
 
-/* Takes a latitude in degrees,
- * returns a latitude in degrees. */
+/* Takes a geodetic latitude in degrees,
+ * returns a geocentric latitude in degrees. */
 double
 HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 {
-  constexpr double cos_ae = 0.9966349016452;
-  constexpr double cos2_ae = cos_ae * cos_ae;
+  /* For
+   * angular eccentricity α,
+   * flattening f, and
+   * eccentricity e
+   * the flattening is related to the angular eccentricity:
+   * f = 1 - cos(α)
+   * 1 - f = cos(α)
+   * the flattening is related to the eccentricity:
+   * f = 1 - sqrt(1-e^2)
+   * (1 - f)^2 = 1 - e^2
+   * Equation 3-28 of
+   * Snyder, J. P. Map projections — A working manual. Professional Paper 1395,
+   * U.S. Geological Survey, 1987
+   * relates the geocentric latitude to geodetic latitude in terms of
+   * 1 - e^2 which is equal to cos^2(α) as shown above.
+   */
   const double gdr = gd_lat * std::numbers::pi / 180.0;
 
-  return atan(cos2_ae * tan(gdr)) * 180.0 * std::numbers::inv_pi;
+  return atan(cos2_α * tan(gdr)) * 180.0 * std::numbers::inv_pi;
 }
 
-/* Takes a latitude in degrees,
- * returns a latitude in degrees. */
+/* Takes a geocentric latitude in degrees,
+ * returns a geodetic latitude in degrees. */
 double
 HumminbirdBase::geocentric_to_geodetic_hwr(const double gc_lat)
 {
-  constexpr double cos_ae = 0.9966349016452;
-  constexpr double cos2_ae = cos_ae * cos_ae;
   const double gcr = gc_lat * std::numbers::pi / 180.0;
 
-  return atan(tan(gcr)/cos2_ae) * 180.0 * std::numbers::inv_pi;
+  return atan(tan(gcr)/cos2_α) * 180.0 * std::numbers::inv_pi;
 }
 
 /* Takes a projected "north" value, returns latitude in degrees. */

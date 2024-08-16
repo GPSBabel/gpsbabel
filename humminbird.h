@@ -49,6 +49,12 @@ protected:
 
   /* Constants */
 
+  /* We use an empirically derived ellipse to convert between geocentric and geodetic latitudes.
+   * It is described by the cosine of it's angular eccentricty α.
+   */
+  static constexpr double cos_α = 0.9966349016452;
+  static constexpr double cos2_α = cos_α * cos_α;
+
   static constexpr const char* humminbird_icons[] = {
     "Normal",       /*  0 */
     "House",        /*  1 */
