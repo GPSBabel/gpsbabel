@@ -805,7 +805,7 @@ HumminbirdFormat::humminbird_rte_head(const route_head* rte)
 {
   humrte = nullptr;
   if (!rte->rte_waypt_empty()) {
-    humrte = new humminbird_rte_t;
+    humrte = new humminbird_rte_t();
   }
 }
 
