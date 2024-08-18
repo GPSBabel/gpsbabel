@@ -44,8 +44,7 @@ private:
 
   struct extra_data {
     double distance;
-    double prjlatitude;
-    double prjlongitude;
+    PositionDeg prjpos;
     double frac;
     const Waypoint* arcpt1;
     const Waypoint* arcpt2;

@@ -148,7 +148,8 @@ csv_dequote(const QString& string, const QString& enclosure)
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method,
+              bool* delimiter_detected)
 {
   QStringList retval;
 
@@ -162,6 +163,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
    * whitespace eater consume the space.
    */
   QString delimiter = delimited_by;
+  bool delimiter_seen = false;
   if (delimited_by == ", ") {
     delimiter = ",";
   }
@@ -194,8 +196,10 @@ csv_linesplit(const QString& string, const QString& delimited_by,
       if (!enclosed) {
         if ((dlen > 0) && string.mid(p).startsWith(delimiter)) {
           dfound = true;
+          delimiter_seen = true;
         } else if (hyper_whitespace_delimiter && string.at(p).isSpace()) {
           dfound = true;
+          delimiter_seen = true;
           while ((p < string.size()) && string.at(p).isSpace()) {
             p++;
           }
@@ -234,6 +238,9 @@ csv_linesplit(const QString& string, const QString& delimited_by,
 
     retval.append(value);
 
+  }
+  if (delimiter_detected != nullptr) {
+    *delimiter_detected = delimiter_seen;
   }
   return retval;
 }

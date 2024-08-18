@@ -148,7 +148,7 @@ private:
 
   /* Constants */
 
-  /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
+  /* "kUnicsvFieldSep" and "kUnicsvLineSep" are only used by the writer */
 
   static constexpr const char* kUnicsvFieldSep = ",";
   static constexpr const char* kUnicsvLineSep = "\r\n";
@@ -189,6 +189,7 @@ private:
   double unicsv_depthscale{};
   double unicsv_proximityscale{};
   const char* unicsv_fieldsep{nullptr};
+  int unicsv_lineno{0};
   gpsbabel::TextStream* fin{nullptr};
   gpsbabel::TextStream* fout{nullptr};
   gpsdata_type unicsv_data_type{unknown_gpsdata};

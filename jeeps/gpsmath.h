@@ -3,11 +3,12 @@
 
 #include <cstdint>   // for int32_t
 #include <ctime>     // for time_t
+#include <numbers>   // for pi
 
 #include <QString>   // for QString
 
 
-constexpr double GPS_PI = 3.141592653589;
+constexpr double GPS_PI = std::numbers::pi;
 
 
 double GPS_Math_Deg_To_Rad(double v);
@@ -72,6 +73,16 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
                          double Sif, double* Dphi, double* Dlam,
                          double* DH, double Da, double Dif, double dx,
                          double dy, double dz);
+void GPS_Math_Helmert(double Sx, double Sy, double Sz,
+                      double* Dx, double* Dy, double* Dz,
+                      double tX, double tY, double tZ,
+                      double sppm,
+                      double rXs, double rYs, double rZs);
+void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
+                              double* Dx, double* Dy, double* Dz,
+                              double tX, double tY, double tZ,
+                              double sppm,
+                              double rXs, double rYs, double rZs);
 void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
                                      double* Dphi, double* Dlam, double* DH,
                                      int32_t n);
@@ -95,6 +106,10 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 int32_t GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
                                     double* mN, char* map);
 int32_t GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
+                                    double* lat, double* lon);
+int32_t GPS_Math_WGS84_To_UKOSMap_H(double lat, double lon, double* mE,
+                                    double* mN, char* map);
+int32_t GPS_Math_UKOSMap_To_WGS84_H(const char* map, double mE, double mN,
                                     double* lat, double* lon);
 int32_t GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double* mE,
                                     double* mN, char* map);
@@ -135,7 +150,7 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
                                  double* N);
 void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon);
 
-int32_t GPS_Math_WGS84_To_Swiss_EN(double phi, double lambda, double* E, double* N);
+int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E, double* N);
 void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon);
 
 void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,

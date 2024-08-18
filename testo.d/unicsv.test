@@ -54,3 +54,13 @@ gpsbabel -i unicsv -f ${REFERENCE}/pretty_degree.csv -o unicsv,grid=1 -F ${TMPDI
 compare ${REFERENCE}/pretty_degree1.csv ${TMPDIR}/pretty_degree1.csv
 gpsbabel -i unicsv -f ${REFERENCE}/pretty_degree.csv -o unicsv,grid=2 -F ${TMPDIR}/pretty_degree2.csv
 compare ${REFERENCE}/pretty_degree2.csv ${TMPDIR}/pretty_degree2.csv
+
+# delimiter detection
+gpsbabel -i unicsv -f ${REFERENCE}/unidelim.csv -o gpx -F ${TMPDIR}/unidelim.gpx
+compare ${REFERENCE}/unidelim.gpx ${TMPDIR}/unidelim.gpx
+
+gpsbabel -i unicsv,utc -f ${REFERENCE}/bngtest.csv -o gpx -F ${TMPDIR}/bngtest~csv.gpx
+compare ${REFERENCE}/bngtest.gpx ${TMPDIR}/bngtest~csv.gpx
+gpsbabel -i gpx -f ${REFERENCE}/bngtest.gpx -o unicsv,grid=bng,utc -F ${TMPDIR}/bngtest~gpx.csv
+compare ${REFERENCE}/bngtest.csv ${TMPDIR}/bngtest~gpx.csv
+

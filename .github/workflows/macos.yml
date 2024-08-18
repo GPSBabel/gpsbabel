@@ -25,18 +25,18 @@ jobs:
             os: macos-12
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '14.3.1'
-            GENERATOR: 'Xcode'
-            RELEASE: false
-            os: macos-13
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '14.3.1'
             GENERATOR: 'Ninja'
-            RELEASE: true
+            RELEASE: false
             os: macos-13
           - QT_VERSION: '6.5.3'
-            XCODE_VERSION: '15.3'
-            GENERATOR: 'Ninja'
+            XCODE_VERSION: '15.4'
+            GENERATOR: 'Xcode'
             RELEASE: false
+            os: macos-14
+          - QT_VERSION: '6.5.3'
+            XCODE_VERSION: '15.4'
+            GENERATOR: 'Ninja'
+            RELEASE: true
             os: macos-14
 
     steps:
@@ -59,9 +59,9 @@ jobs:
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
       env:
-        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+        CI_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
+        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
 
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'

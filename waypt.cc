@@ -73,7 +73,7 @@ del_marked_wpts()
   global_waypoint_list->del_marked_wpts();
 }
 
-unsigned int
+int
 waypt_count()
 {
   return global_waypoint_list->count();
@@ -200,11 +200,12 @@ waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text, 
   wpt->AddUrlLink(UrlLink(link, url_link_text, url_link_type));
 }
 
+// TODO: change inputs to PositionDeg?
 double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
- return radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+ return radtometers(gcdist(PositionDeg(lat1, lon1), PositionDeg(lat2, lon2)));
 }
 
 /*
@@ -355,7 +356,7 @@ double
 waypt_course(const Waypoint* A, const Waypoint* B)
 {
   if (A && B) {
-    return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
+    return heading_true_degrees(A->position(), B->position());
   } else {
     return 0;
   }

@@ -24,11 +24,12 @@
  */
 
 #include <cctype>          // for isprint
-#include <cmath>           // for cos, sin, atan2, pow, sqrt, M_PI
+#include <cmath>           // for cos, sin, atan2, pow, sqrt
 #include <cstdarg>         // for va_end, va_list, va_start
 #include <cstdio>          // for sscanf, snprintf, vprintf, SEEK_SET
 #include <cstdlib>         // for free
 #include <cstring>         // for memset
+#include <numbers>         // for inv_pi, pi
 
 #include <QByteArray>      // for QByteArray
 #include <QChar>           // for QChar
@@ -581,8 +582,8 @@ SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, d
   /* height above ellipsoid (in meters): */
   *alt = AP/cos(*lat) - CA/sqrt(1 - CE2 * pow(sin(*lat), 2));
 
-  *lat = *lat /M_PI*180;
-  *lon = *lon /M_PI*180;
+  *lat = *lat * std::numbers::inv_pi * 180;
+  *lon = *lon * std::numbers::inv_pi * 180;
 }
 
 void
@@ -1322,8 +1323,8 @@ void MinihomerFormat::lla2ecef(double lat, double lng, double alt, double* ecef_
   long double a = 6378137.0;
   long double esqr = 6.69437999014e-3;
 
-  long double llat = lat*M_PI/180;
-  long double llng = lng*M_PI/180;
+  long double llat = lat * std::numbers::pi / 180;
+  long double llng = lng * std::numbers::pi / 180;
   long double lalt = alt;
 
   long double s = sin(llat);
