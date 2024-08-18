@@ -37,7 +37,6 @@
 #include "jeeps/garminusb.h"
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpsusbcommon.h"
-#include "garmin_device_xml.h"
 
 #define GARMIN_VID 0x91e
 
@@ -67,8 +66,7 @@ static unsigned char gusb_bulk_in_ep;
 
 static bool libusb_successfully_initialized{false};
 static libusb_device_handle* udev{nullptr};
-static int garmin_usb_scan(libusb_unit_data*, int);
-static const gdx_info* gdx;
+static int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number);
 
 static int gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz);
 static int gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz);
@@ -82,33 +80,6 @@ static gusb_llops_t libusb_llops = {
   gusb_teardown,
   0
 };
-
-#if __linux__
-static
-char** os_get_garmin_mountpoints()
-{
-  // Hacked for testing.
-  return nullptr;
-}
-#elif __APPLE__
-// In fantasy land, we'd query iokit for enumerated devices of the Garmin
-// vendor ID and match that against the mounted device table.  In practical
-// matters, that's crazy complex and this is where the devices seems to always
-// get mounted...
-char** os_get_garmin_mountpoints()
-{
-  char** dlist = (char**) xcalloc(2, sizeof *dlist);
-  dlist[0] = xstrdup("/Volumes/GARMIN");
-  dlist[1] = nullptr;
-  return dlist;
-}
-#else
-char** os_get_garmin_mountpoints()
-{
-  return nullptr;
-}
-#endif
-
 
 static int
 gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
@@ -504,18 +475,6 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
   }
 
   if (0 == found_devices) {
-    /* It's time for Plan B.  The user told us to use
-     * Garmin Protocol in device "usb:" but it's possible
-     * that they're talking to one of the dozens of models
-     * that is wants to read and write GPX files on a
-     * mounted drive.  Try that now.
-     */
-    char** dlist = os_get_garmin_mountpoints();
-    gdx = gdx_find_file(dlist);
-    if (gdx != nullptr) {
-      return 1;
-    }
-    /* Plan C. */
     fatal("Found no Garmin USB devices.\n");
   } else if (req_unit_number >= found_devices) {
     fatal("usb unit number(%d) too high.\n"

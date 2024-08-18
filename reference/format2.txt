@@ -25,6 +25,7 @@ internal	r-r---	dg-200-bin		GlobalSat DG-200 Binary File
 serial	r-r---	dg-200		GlobalSat DG-200 Download
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language
+file	r-r---	googletakeout	json	Google Takeout Location History
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text
 file	rwrwrw	gtm	gtm	GPS TrackMaker
 file	rw----	arc	txt	GPSBabel arc filter file
@@ -45,9 +46,6 @@ serial	r-r---	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 file	rw----	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download
-file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
-file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 file	rwrw--	nmea		NMEA 0183 sentences
 file	rw-wrw	osm	osm	OpenStreetMap data files
 file	rwrwrw	ozi		OziExplorer
@@ -59,6 +57,3 @@ file	rw----	openoffice		Tab delimited fields useful for OpenOffice
 file	-w----	text	txt	Textual Output
 file	rwrwrw	unicsv		Universal csv with field structure in first line
 file	-w----	vcard	vcf	Vcard Output (for iPod)
-file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
-serial	r-r---	wbt		Wintec WBT-100/200 GPS Download
-file	--r---	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format

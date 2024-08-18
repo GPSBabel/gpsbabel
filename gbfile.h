@@ -104,8 +104,8 @@ QByteArray gbfreadbuf(gbsize_t size, gbfile* file);
 int gbfgetc(gbfile* file);
 QString gbfgets(char* buf, int len, gbfile* file);
 
-int gbvfprintf(gbfile* file, const char* format, va_list ap);
-int gbfprintf(gbfile* file, const char* format, ...);
+[[gnu::format(printf, 2, 0)]] int gbvfprintf(gbfile* file, const char* format, va_list ap);
+[[gnu::format(printf, 2, 3)]] int gbfprintf(gbfile* file, const char* format, ...);
 int gbfputc(int c, gbfile* file);
 int gbfputs(const QString& s, gbfile* file);
 int gbfwrite(const void* buf, gbsize_t size, gbsize_t members, gbfile* file);

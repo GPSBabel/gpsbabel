@@ -30,6 +30,7 @@
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
                    const QString& ver2, const QString& ver3,
+                   const QString& date,
                    const QString& installationId): QDialog(parent)
 {
   ui_.setupUi(this);
@@ -43,6 +44,11 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
     tt.replace("$hash$", "");
   } else {
     tt.replace("$hash$", "Hash: " + ver3);
+  }
+  if (date.isEmpty()) {
+    tt.replace("$date$", "");
+  } else {
+    tt.replace("$date$", "Date: " + date);
   }
   tt.replace("$installationId$", installationId);
 

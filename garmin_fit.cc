@@ -865,7 +865,7 @@ GarminFitFormat::read()
   } catch (ReaderException& e) {
     if (opt_recoverymode) {
       warning(MYNAME ": %s\n",e.what());
-      warning(MYNAME ": Aborting read and continuning processing.\n");
+      warning(MYNAME ": Aborting read and continuing processing.\n");
     } else {
       fatal(MYNAME ": %s  Use recoverymode option at your risk.\n",e.what());
     }
@@ -1151,7 +1151,8 @@ GarminFitFormat::fit_collect_track_tlr(const route_head* rte)
   // Recalculate odometer_distance for the whole track unless already
   // (properly, i.e. monotonically increasing) set
   double dist_sum = 0;
-  double prev_lat = 999, prev_lon = 999;
+  double prev_lat = 999;
+  double prev_lon = 999;
   double max_speed = 0;
   gpsbabel::DateTime prev_time;
   for (auto& crpt: course) {
@@ -1216,8 +1217,13 @@ GarminFitFormat::fit_collect_track_tlr(const route_head* rte)
   }
 
   // Use current time as creation time if we have nothing better
-  gpsbabel::DateTime track_date_time, track_end_date_time, creation_time;
-  double first_lat = 999, first_lon = 999, last_lat = 999, last_lon = 999;
+  gpsbabel::DateTime track_date_time;
+  gpsbabel::DateTime track_end_date_time;
+  gpsbabel::DateTime creation_time;
+  double first_lat = 999;
+  double first_lon = 999;
+  double last_lat = 999;
+  double last_lon = 999;
   if (!course.empty()) {
     track_date_time = creation_time = course.front().creation_time;
     track_end_date_time = course.back().creation_time;

@@ -26,7 +26,7 @@
 
 #include <cstdlib>             // for strtod
 
-#include "defs.h"              // for Waypoint, fatal, route_del_wpt, route_disp_all, track_del_wpt, track_disp_all, waypt_del, waypt_disp_all, route_head, rtedata, trkdata, wptdata, fix_none, fix_unknown
+#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), xstrtoi, del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
 
 
@@ -41,12 +41,10 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
   bool delh = false;
   bool delv = false;
 
-  auto* waypointp = const_cast<Waypoint*>(wpt);
-
-  if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
+  if ((hdopf >= 0.0) && (wpt->hdop > hdopf)) {
     delh = true;
   }
-  if ((vdopf >= 0.0) && (waypointp->vdop > vdopf)) {
+  if ((vdopf >= 0.0) && (wpt->vdop > vdopf)) {
     delv = true;
   }
 
@@ -56,81 +54,65 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
     del = delh || delv;
   }
 
-  if ((satpf >= 0) && (waypointp->sat < satpf)) {
+  if ((satpf >= 0) && (wpt->sat < satpf)) {
     del = true;
   }
 
-  if ((fixnoneopt) && (waypointp->fix == fix_none)) {
+  if ((fixnoneopt) && (wpt->fix == fix_none)) {
     del = true;
   }
 
-  if ((fixunknownopt) && (waypointp->fix == fix_unknown)) {
+  if ((fixunknownopt) && (wpt->fix == fix_unknown)) {
     del = true;
   }
 
-  if ((eleminopt) && (waypointp->altitude < eleminpf)) {
+  if ((eleminopt) && (wpt->altitude < eleminpf)) {
     del = true;
   }
 
-  if ((elemaxopt) && (waypointp->altitude > elemaxpf)) {
+  if ((elemaxopt) && (wpt->altitude > elemaxpf)) {
     del = true;
   }
 
-  if (nameopt && name_regex.match(waypointp->shortname).hasMatch()) {
+  if (nameopt && name_regex.match(wpt->shortname).hasMatch()) {
     del = true;
   }
-  if (descopt && desc_regex.match(waypointp->description).hasMatch()) {
+  if (descopt && desc_regex.match(wpt->description).hasMatch()) {
     del = true;
   }
-  if (cmtopt && cmt_regex.match(waypointp->notes).hasMatch()) {
+  if (cmtopt && cmt_regex.match(wpt->notes).hasMatch()) {
     del = true;
   }
-  if (iconopt && icon_regex.match(waypointp->icon_descr).hasMatch()) {
+  if (iconopt && icon_regex.match(wpt->icon_descr).hasMatch()) {
     del = true;
   }
 
   if (del) {
-    switch (what) {
-    case wptdata:
-      waypt_del(waypointp);
-      delete waypointp;
-      break;
-    case trkdata:
-      track_del_wpt(head, waypointp);
-      delete waypointp;
-      break;
-    case rtedata:
-      route_del_wpt(head, waypointp);
-      delete waypointp;
-      break;
-    default:
-      return;
-    }
+    const_cast<Waypoint*>(wpt)->wpt_flags.marked_for_deletion = 1;
   }
-}
-
-void DiscardFilter::fix_process_head(const route_head* trk)
-{
-  head = const_cast<route_head*>(trk);
 }
 
 void DiscardFilter::process()
 {
-  WayptFunctor<DiscardFilter> fix_process_wpt_f(this, &DiscardFilter::fix_process_wpt);
-  RteHdFunctor<DiscardFilter> fix_process_head_f(this, &DiscardFilter::fix_process_head);
+  auto waypoint_cb_lambda = [this](const Waypoint* wpt) -> void {
+    fix_process_wpt(wpt);
+  };
 
   // Filter waypoints.
-  what = wptdata;
-  waypt_disp_all(fix_process_wpt_f);
+  waypt_disp_all(waypoint_cb_lambda);
+  del_marked_wpts();
 
   // Filter tracks
-  what = trkdata;
-  track_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
+  auto track_tlr_lambda = [](const route_head* rte)->void {
+    track_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  track_disp_all(nullptr, track_tlr_lambda, waypoint_cb_lambda);
 
   // And routes
-  what = rtedata;
-  route_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
-
+  auto route_tlr_lambda = [](const route_head* rte)->void {
+    route_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  route_disp_all(nullptr, route_tlr_lambda, waypoint_cb_lambda);
 }
 
 QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)

@@ -19,6 +19,8 @@
 
  */
 
+#include "arcdist.h"
+
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
 #include <cstdlib>                // for strtod
@@ -28,7 +30,6 @@
 #include <QtGlobal>               // for foreach, qPrintable, qint64
 
 #include "defs.h"
-#include "arcdist.h"
 #include "grtcirc.h"              // for RAD, gcdist, linedistprj, radtomi
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/logging.h"     // for Fatal
@@ -43,8 +44,7 @@
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   static const Waypoint* arcpt1 = nullptr;
-  double prjlat;
-  double prjlon;
+  PositionDeg prjpos;
   double frac;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
@@ -61,12 +61,8 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
       if (ed->distance == BADVAL || projectopt || ed->distance >= pos_dist) {
         double dist;
         if (ptsopt) {
-          dist = gcdist(RAD(arcpt2->latitude),
-                        RAD(arcpt2->longitude),
-                        RAD(waypointp->latitude),
-                        RAD(waypointp->longitude));
-          prjlat = arcpt2->latitude;
-          prjlon = arcpt2->longitude;
+          dist = gcdist(arcpt2->position(), waypointp->position());
+          prjpos = arcpt2->position();
           frac = 1.0;
         } else {
           if (waypointp == nullptr) {
@@ -76,13 +72,9 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
             fatal(FatalMsg() << "Internal error: Attempt to project waypoint without predecessor");
           }
 
-          dist = linedistprj(arcpt1->latitude,
-                             arcpt1->longitude,
-                             arcpt2->latitude,
-                             arcpt2->longitude,
-                             waypointp->latitude,
-                             waypointp->longitude,
-                             &prjlat, &prjlon, &frac);
+          std::tie(dist, prjpos, frac) = linedistprj(arcpt1->position(),
+                                                     arcpt2->position(),
+                                                     waypointp->position());
         }
 
         /* convert radians to float point statute miles */
@@ -91,8 +83,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
         if (ed->distance > dist) {
           ed->distance = dist;
           if (projectopt) {
-            ed->prjlatitude = prjlat;
-            ed->prjlongitude = prjlon;
+            ed->prjpos = prjpos;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
             ed->arcpt2 = arcpt2;
@@ -105,7 +96,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   arcpt1 = arcpt2;
 }
 
-void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
+void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head* /*unused*/)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(nullptr);
@@ -163,17 +154,14 @@ void ArcDistanceFilter::process()
 
   unsigned removed = 0;
   foreach (Waypoint* wp, *global_waypoint_list) {
-    auto* ed = (extra_data*) wp->extra_data;
-    wp->extra_data = nullptr;
-    if (ed) {
+    if (wp->extra_data) {
+      auto* ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
-        waypt_del(wp);
-        delete wp;
+        wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
-        wp->longitude = ed->prjlongitude;
-        wp->latitude = ed->prjlatitude;
-        wp->route_priority = 1;
+        wp->SetPosition(ed->prjpos);
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
@@ -209,6 +197,7 @@ void ArcDistanceFilter::process()
       delete ed;
     }
   }
+  del_marked_wpts();
   if (global_opts.verbose_status > 0) {
     printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
   }

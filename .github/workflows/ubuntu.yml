@@ -18,11 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - IMAGE: 'focal'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-          - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+          # focal has Qt 5.12, end of standard support 4/2025, end of life 4/2030.
+          #- IMAGE: 'focal'
+          #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
@@ -30,8 +28,15 @@ jobs:
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
           - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt5'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
@@ -43,7 +48,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: build_and_test
       run: |
@@ -63,18 +68,57 @@ jobs:
 
   coverage:
     name: coverage Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: install
       run: |
         sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default  qtwebengine5-dev libqt5serialport5-dev ninja-build
+        sudo apt-get install gcovr lcov libusb-1.0-0-dev libgl-dev qt6-base-dev libqt6core5compat6-dev libqt6serialport6-dev qt6-webengine-dev qt6-webengine-dev-tools ninja-build
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: script
       env:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
       run: |
         ./tools/travis_script_linux_coverage
+
+  snap:
+    name: snap Build
+    runs-on: ubuntu-latest
+    outputs:
+      snap-file: ${{ steps.build-snap.outputs.snap }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build
+      uses: snapcore/action-build@v1
+      id: build-snap
+
+    # Make sure the snap is installable
+    - name: Test
+      run: |
+        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
+        export GBTEMP=$(pwd)/gbtemp
+        mkdir -p "$GBTEMP"
+        /snap/bin/gpsbabel -D3 || true
+        ./testo -p /snap/bin/gpsbabel 
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-Linux
+      run: |
+        ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.build-snap.outputs.snap }}
+        path: ${{ steps.build-snap.outputs.snap }}
+        retention-days: 7

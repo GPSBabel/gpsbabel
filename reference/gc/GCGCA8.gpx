@@ -1,98 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gpx xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+<gpx xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
   <name>Cache Listing Generated from Geocaching.com</name>
   <desc>This is an individual cache generated from Geocaching.com</desc>
   <author>Account "robertlipe" From Geocaching.com</author>
   <email>contact@geocaching.com</email>
-  <url>http://www.geocaching.com</url>
+  <url>https://www.geocaching.com</url>
   <urlname>Geocaching - High Tech Treasure Hunting</urlname>
-  <time>2005-07-16T18:18:41.5712989-07:00</time>
+  <time>2023-10-25T00:44:53.7176739Z</time>
   <keywords>cache, geocache</keywords>
-  <bounds minlat="35.9216666666667" minlon="-86.8616666666667" maxlat="35.9216666666667" maxlon="-86.8616666666667"/>
-  <wpt lat="35.9216666666667" lon="-86.8616666666667">
-    <time>2003-06-29T00:00:00.0000000-07:00</time>
+  <bounds minlat="35.921667" minlon="-86.861667" maxlat="35.921667" maxlon="-86.861667" />
+  <wpt lat="35.921667" lon="-86.861667">
+    <time>2003-06-29T00:00:00</time>
     <name>GCGCA8</name>
     <desc>Oozy rat in a sanitary zoo by robertlipe, Unknown Cache (3/2)</desc>
-    <url>http://www.geocaching.com/seek/cache_details.aspx?guid=cda94cd6-d657-49bd-8e7e-0031ef1b2613</url>
+    <url>https://www.geocaching.com/geocache/GCGCA8</url>
     <urlname>Oozy rat in a sanitary zoo</urlname>
     <sym>Geocache</sym>
     <type>Geocache|Unknown Cache</type>
-    <groundspeak:cache id="77386" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0">
+    <groundspeak:cache id="77386" available="False" archived="True" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
       <groundspeak:name>Oozy rat in a sanitary zoo</groundspeak:name>
       <groundspeak:placed_by>robertlipe</groundspeak:placed_by>
       <groundspeak:owner id="32733">robertlipe</groundspeak:owner>
       <groundspeak:type>Unknown Cache</groundspeak:type>
       <groundspeak:container>Not chosen</groundspeak:container>
+      <groundspeak:attributes>
+        <groundspeak:attribute id="24" inc="0">Wheelchair accessible</groundspeak:attribute>
+        <groundspeak:attribute id="19" inc="1">Ticks</groundspeak:attribute>
+        <groundspeak:attribute id="18" inc="1">Dangerous animals</groundspeak:attribute>
+        <groundspeak:attribute id="17" inc="1">Poisonous plants</groundspeak:attribute>
+        <groundspeak:attribute id="39" inc="1">Thorns</groundspeak:attribute>
+        <groundspeak:attribute id="30" inc="1">Picnic tables nearby</groundspeak:attribute>
+        <groundspeak:attribute id="28" inc="1">Public restrooms nearby</groundspeak:attribute>
+        <groundspeak:attribute id="1" inc="1">Dogs</groundspeak:attribute>
+      </groundspeak:attributes>
       <groundspeak:difficulty>3</groundspeak:difficulty>
       <groundspeak:terrain>2</groundspeak:terrain>
       <groundspeak:country>United States</groundspeak:country>
       <groundspeak:state>Tennessee</groundspeak:state>
-      <groundspeak:short_description html="True">The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.</groundspeak:short_description>
-      <groundspeak:long_description html="True">So if the cache isn't at the above coordinates, where is it?  
-
+      <groundspeak:short_description html="True">The cache is not at the coordinates above. These coords will get
+you to the correct park and within 1/2 mile of the cache. The cache
+is within 35 feet of the trail. It is not handicapped accessible.
+It is a nice walk in the woods that is practical for all ages.
+There is no space in the container for trading items. You should
+bring a writing stick and bug spray is recommended.
+</groundspeak:short_description>
+      <groundspeak:long_description html="True">So if the cache isn't at the above coordinates, where is it? 
 &lt;ul&gt;
-
-&lt;li&gt;Too bad I hid a boot
-&lt;li&gt;Too hot to hoot
-&lt;li&gt;Never odd or even
-&lt;li&gt;Do geese see God?
-&lt;li&gt;"Do nine men interpret?" "Nine men," I nod
-&lt;li&gt;Rats live on no evil star
-&lt;li&gt;Go hang a salami, I'm a lasagna hog
-&lt;/ul&gt;
-
-Now that it's intuitively obvious to even the most casual observer where the cache is, turn on your geo-mojo and go find it.
+&lt;li&gt;Too bad I hid a boot&lt;/li&gt;
+&lt;li&gt;Too hot to hoot&lt;/li&gt;
+&lt;li&gt;Never odd or even&lt;/li&gt;
+&lt;li&gt;Do geese see God?&lt;/li&gt;
+&lt;li&gt;"Do nine men interpret?" "Nine men," I nod&lt;/li&gt;
+&lt;li&gt;Rats live on no evil star&lt;/li&gt;
+&lt;li&gt;Go hang a salami, I'm a lasagna hog&lt;/li&gt;&lt;/ul&gt;
+Now that it's intuitively obvious to even the most casual observer
+where the cache is, turn on your geo-mojo and go find it. &lt;br&gt;
+&lt;img src="http://www.mtgc.org/mtgc_member-banner.gif" width="500"
+height="40" alt=
+"Member of Middle Tennessee GeoCachers Club [www.mtgc.org]"
+     border="0"&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"&gt;&lt;/a&gt;&lt;/p&gt;</groundspeak:long_description>
+</groundspeak:long_description>
       <groundspeak:encoded_hints>
-      There Is No Hint
       </groundspeak:encoded_hints>
       <groundspeak:logs>
-        <groundspeak:log id="8859126">
-          <groundspeak:date>2005-07-03T07:00:00</groundspeak:date>
+        <groundspeak:log id="732879189">
+          <groundspeak:date>2017-11-11T01:44:14Z</groundspeak:date>
+          <groundspeak:type>Archive</groundspeak:type>
+          <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
+          <groundspeak:text encoded="False">Removed the container from the final location. Enough construction has occurred since this was placed to make it much less of an adventure than is used to be, so I'm archiving.
+
+Thanx to all that hunted it.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="732728269">
+          <groundspeak:date>2017-11-09T20:09:12Z</groundspeak:date>
+          <groundspeak:type>Temporarily Disable Listing</groundspeak:type>
+          <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
+          <groundspeak:text encoded="False">Bye.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="732728218">
+          <groundspeak:date>2017-11-09T20:08:52Z</groundspeak:date>
+          <groundspeak:type>Owner Maintenance</groundspeak:type>
+          <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
+          <groundspeak:text encoded="False">Upon a tip from the CDC, confirmed that the ooze has exceeded code. Will archive when I'm near a real computer</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="730742845">
+          <groundspeak:date>2017-10-08T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Didn't find it</groundspeak:type>
+          <groundspeak:finder id="782769">Abiectio</groundspeak:finder>
+          <groundspeak:text encoded="False">Spent some time hunting this one today but came up empty. Loved the puzzle though!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="719105788">
+          <groundspeak:date>2017-09-09T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Didn't find it</groundspeak:type>
+          <groundspeak:finder id="537286">Siamese Retriever</groundspeak:finder>
+          <groundspeak:text encoded="False">Most of my mom's side of the family still lives in the McEwen and Dickson areas, so I am down this way quite a bit.  Yesterday (and the day before), my sister and I spent some time (again) in Clarksville, experiencing more government incompetence.  Today, I started the trip home with a stop at a cache I had tried nine years ago (!).  We found that one, and one other that I had also previously DNFed, and then I dropped her off and started the drive from Dickson to Nashville...  Funny story - Nashville is a little bit out of the way on that drive.  I am (still) trying to complete a Charter Member challenge, and Mr. Lipe is on that rarefied list.  Since he only has a few caches currently active, I targeted a puzzle that I was able to solve.  I DNFed that one last time I was in the area (yes, this one), and I DNFed it again today (yes, still this one).  I do that a lot.  In my defense, I was able to solve the puzzle, and I think I found the original hiding spot and the hiding spot other finders mentioned.  I really hope this one is not gone, as I think I have an idea on the container, and I enjoyed both of my visits here.  This one more than the last one, as last time it was pouring down rain.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="680980715">
+          <groundspeak:date>2017-04-23T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Didn't find it</groundspeak:type>
+          <groundspeak:finder id="537286">Siamese Retriever</groundspeak:finder>
+          <groundspeak:text encoded="False">I was down for another fun filled weekend of dealing with family issues, so I needed a break from the crazy before I went back home to deal with my own family issues.  I left Dickson this morning, and was hoping the rain wouldn't be too bad as I was trying to grab some very specific caches on the way home.  This was specific cache number 1.  I am currently 98.89% sure I solved this one correctly...  That said, my Oregon was pointing in a direction that was clearly marked as not the right spot.  I read a few old logs, and decided to try moving the search 65' NE/NNE.  I came up with a great new location, but the rain was starting in earnest, and I still had a lot of windshield time ahead of me.  I got wetter than I wanted to, and could not make the find.  On the plus side, I will be down this way a lot over the next several months to next several years, so I will have to try again.  I have a few other ideas that I was pondering as I drove, so I am going to poke at them next.  The find rate on this one for me was 00.00%.  HA!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="680347300">
+          <groundspeak:date>2017-04-23T19:00:00Z</groundspeak:date>
           <groundspeak:type>Found it</groundspeak:type>
-          <groundspeak:finder id="251373">littlepod</groundspeak:finder>
-          <groundspeak:text encoded="False">Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</groundspeak:text>
+          <groundspeak:finder id="779916">surena</groundspeak:finder>
+          <groundspeak:text encoded="False">Found it with a help of a friend. Couldn't sign the log as it was soaked. I'll s no picture as proof. TFTC.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="672054272">
+          <groundspeak:date>2017-03-23T22:16:12Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="19650942">maxlahoda</groundspeak:finder>
+          <groundspeak:text encoded="False">thanks </groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="660608027">
+          <groundspeak:date>2017-01-16T07:22:12Z</groundspeak:date>
+          <groundspeak:type>Write note</groundspeak:type>
+          <groundspeak:finder id="19043821">Beanercacher</groundspeak:finder>
+          <groundspeak:text encoded="False">It got dark on me. I'll try again later.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="658847511">
+          <groundspeak:date>2017-01-02T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="465278">TheLizards</groundspeak:finder>
+          <groundspeak:text encoded="False">Holy crap we actually found it. We aren't very good at this puzzle type of cache, but managed to solve and find it!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="647519707">
+          <groundspeak:date>2016-10-23T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="1639892">Uncle Fuzzy</groundspeak:finder>
+          <groundspeak:text encoded="False">After taking a nice walk with Gal to this one, we didn't have any luck right away. We searched all over the place, until she read a hint that sure helped out a lot. [:D] TFTF</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="647439494">
+          <groundspeak:date>2016-10-23T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="96095">GuentherGal</groundspeak:finder>
+          <groundspeak:text encoded="False">
+Fuzzy and I were off for a quick getaway to see some of the highlights of the area and score a few caches in Tennessee and Alabama. This was one of a handful of Mystery caches I solved back home. 
+
+Chuck and I were halfway to this one after completing a nearby Challenge, so we continued on to check out, “Oozy rat in a sanitary zoo.” Along the way we spied two deer and a lion, making this a real animal adventure.
+
+After poking around Ground Zero for a couple of minutes we read the logs. After going the 65’ NE as others have stated, we found the container in the first place we checked. We signed in and replaced as found. 
+
+We really enjoyed the hike to this one. The views from the boardwalk were just lovely. As we stood there, we saw several hot air balloons take off in the distance. Thanks for the fantastic Fall faraway fun!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="623723752">
+          <groundspeak:date>2016-07-31T19:57:37Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="17668336">kateandwill</groundspeak:finder>
+          <groundspeak:text encoded="False">Found after like an hour</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="615735001">
+          <groundspeak:date>2016-07-07T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="3747441">seit4</groundspeak:finder>
+          <groundspeak:text encoded="False">I've had this one solved for a long time - or so I thought. Went hunting for it and found nada. Used a PAF and found out I had clearly solved the puzzle wrong - although I sort of had the right idea. LOL. Found the right spot and signed the log this time. Thanks for the puzzle fun.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="590818610">
+          <groundspeak:date>2016-04-09T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9295495">ricky741</groundspeak:finder>
+          <groundspeak:text encoded="False">catching up on logs thanks for the fun</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="590277004">
+          <groundspeak:date>2016-04-09T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9264939">Walker Stalker 76</groundspeak:finder>
+          <groundspeak:text encoded="False">Found on our 2nd attempt while in town for the little ones birthday dinner at Chuck E Cheese!!Cool puzzle,thanks for the fun!!!Found with ricky741,Zombie Slayer &amp; DD#2.TFTH!!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="578677746">
+          <groundspeak:date>2016-03-05T21:03:57Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9967782">carterkylefamily</groundspeak:finder>
+          <groundspeak:text encoded="False">Whew...3 tries over a year and finally found it.  Great one and we are going for celebratory BBQ.  Log was missing so we put a long piece of paper in there for the time being.  Good luck!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="571624852">
+          <groundspeak:date>2016-01-31T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="8439277">jrtoken</groundspeak:finder>
+          <groundspeak:text encoded="False">TFTC!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="541904264">
+          <groundspeak:date>2015-09-19T01:14:41Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="12669642">momndad2boys</groundspeak:finder>
+          <groundspeak:text encoded="False">Finally! We worked on this for a while! Everything is in great shape! TFTC ACT</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="541022137">
+          <groundspeak:date>2015-09-14T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="268457">Brotherseldom</groundspeak:finder>
+          <groundspeak:text encoded="False">Fixed my DNF from a couple years back. Was a little creeper out by cache container when I finally found it though.</groundspeak:text>
         </groundspeak:log>
         <groundspeak:log id="7702861">
-          <groundspeak:date>2005-04-29T07:00:00</groundspeak:date>
+          <groundspeak:date>2005-04-29T07:00:00Z</groundspeak:date>
           <groundspeak:type>Write note</groundspeak:type>
           <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
           <groundspeak:text encoded="False">TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</groundspeak:text>
         </groundspeak:log>
-        <groundspeak:log id="7533203">
-          <groundspeak:date>2005-04-18T07:00:00</groundspeak:date>
-          <groundspeak:type>Found it</groundspeak:type>
-          <groundspeak:finder id="371671">Big Bumblebee</groundspeak:finder>
-          <groundspeak:text encoded="False">Found it a while ago.  Thanks.</groundspeak:text>
-        </groundspeak:log>
         <groundspeak:log id="7167128">
-          <groundspeak:date>2005-03-27T08:00:00</groundspeak:date>
+          <groundspeak:date>2005-03-27T08:00:00Z</groundspeak:date>
           <groundspeak:type>Write note</groundspeak:type>
           <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
           <groundspeak:text encoded="False">I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</groundspeak:text>
         </groundspeak:log>
-        <groundspeak:log id="6069172">
-          <groundspeak:date>2004-12-27T08:00:00</groundspeak:date>
-          <groundspeak:type>Found it</groundspeak:type>
-          <groundspeak:finder id="264545">Virtual Babe</groundspeak:finder>
-          <groundspeak:text encoded="False">This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!
-</groundspeak:text>
-        </groundspeak:log>
         <groundspeak:log id="2741866">
-          <groundspeak:date>2004-01-12T08:00:00</groundspeak:date>
+          <groundspeak:date>2004-01-12T08:00:00Z</groundspeak:date>
           <groundspeak:type>Write note</groundspeak:type>
           <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
           <groundspeak:text encoded="False">I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</groundspeak:text>
         </groundspeak:log>
         <groundspeak:log id="2165950">
-          <groundspeak:date>2003-10-04T07:00:00</groundspeak:date>
+          <groundspeak:date>2003-10-04T07:00:00Z</groundspeak:date>
           <groundspeak:type>Write note</groundspeak:type>
           <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
           <groundspeak:text encoded="False">In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</groundspeak:text>
         </groundspeak:log>
         <groundspeak:log id="1639036">
-          <groundspeak:date>2003-07-03T07:00:00</groundspeak:date>
+          <groundspeak:date>2003-07-03T07:00:00Z</groundspeak:date>
           <groundspeak:type>Write note</groundspeak:type>
           <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
           <groundspeak:text encoded="False">It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</groundspeak:text>

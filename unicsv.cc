@@ -23,8 +23,8 @@
 
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
-#include <cstring>                 // for strchr, strncpy
-#include <ctime>                   // for gmtime
+#include <ctime>                   // for tm
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -43,10 +43,10 @@
 #include "defs.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
-#include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
+#include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
 #include "session.h"               // for session_t
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning, Fatal
@@ -157,7 +157,6 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "diff",	fld_gc_diff, kStrAny },
   { "arch",	fld_gc_is_archived, kStrAny },
   { "avail",	fld_gc_is_available, kStrAny },
-  { "exported",	fld_gc_exported, kStrAny },
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
@@ -209,7 +208,7 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   }
 
   long long res = 0;
-  for (auto c : qAsConst(s)) {
+  for (auto c : std::as_const(s)) {
     int val = kBase31.indexOf(c);
     if (val < 0 || (base == 16 && val > 15)) {
       return 0;
@@ -225,10 +224,12 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   return res;
 }
 
-time_t
+QDate
 UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
-  int p1, p2, p3;
+  int p1;
+  int p2;
+  int p3;
   char sep[2];
   std::tm tm{};
   int lconsumed = 0;
@@ -240,9 +241,9 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   if (ct != 5) {
     if (consumed) {		/* don't stop here; it's only sniffing */
       *consumed = 0;	/* for a possible date */
-      return 0;
+      return {};
     }
-    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -269,56 +270,59 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   if ((tm.tm_mon > 12) || (tm.tm_mon < 1) || (tm.tm_mday > 31) || (tm.tm_mday < 1)) {
     if (consumed) {
       *consumed = 0;
-      return 0;	/* don't stop here */
+      return {};	/* don't stop here */
     }
-    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").\n");
+    fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
-  tm.tm_year -= 1900;
-  tm.tm_mon -= 1;
-
-  return mkgmtime(&tm);
+  QDate result{tm.tm_year, tm.tm_mon, tm.tm_mday};
+  if (!result.isValid()) {
+    fatal(FatalMsg() << MYNAME << ": Invalid date parsed from string (" << str << ").");
+  }
+  return result;
 }
 
-time_t
-UnicsvFormat::unicsv_parse_time(const char* str, int* usec, time_t* date)
+QTime
+UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
 {
-  int hour, min, sec;
+  int hour;
+  int min;
+  int sec;
+  int msec;
   int consumed = 0;
-  double us;
-  char sep[2];
+  double frac_sec;
 
   /* If we have something we're pretty sure is a date, parse that
    * first, skip over it, and pass that back to the caller)
    */
-  time_t ldate = unicsv_parse_date(str, &consumed);
-  if (consumed && ldate) {
+  QDate ldate = unicsv_parse_date(str, &consumed);
+  if (consumed && ldate.isValid()) {
     str += consumed;
-    if (date) {
-      *date = ldate;
-    }
+    date = ldate;
   }
-  int ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
-  if (ct < 5) {
-    fatal(MYNAME ": Could not parse time string (%s).\n", str);
+  int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d%lf", &hour, &min, &sec, &frac_sec);
+  if (ct < 3) {
+    fatal(FatalMsg() << MYNAME << ": Could not parse time string (" << str << ").");
   }
-  if (ct == 6) {
-    *usec = lround((us * 1000000));
-    if (*usec > 999999) {
-      *usec = 0;
-      sec++;
-    }
+  if (ct >= 4) {
+    // Don't round up and ripple through seconds, minutes, hours.
+    // 23:59:59.9999999 -> 24:00:00.000 which is an invalid QTime.
+    msec = frac_sec * 1000.0;
   } else {
-    *usec = 0;
+    msec = 0;
   }
 
-  return ((hour * SECONDS_PER_HOUR) + (min * 60) + sec);
+  QTime result{hour, min, sec, msec};
+  if (!result.isValid()) {
+    fatal(FatalMsg() << MYNAME << ": Invalid time parsed from string (" << str << ").");
+  }
+  return result;
 }
 
-time_t
-UnicsvFormat::unicsv_parse_time(const QString& str, int* msec, time_t* date)
+QTime
+UnicsvFormat::unicsv_parse_time(const QString& str, QDate& date)
 {
-  return unicsv_parse_time(CSTR(str), msec, date);
+  return unicsv_parse_time(CSTR(str), date);
 }
 
 Geocache::status_t
@@ -338,19 +342,9 @@ UnicsvFormat::unicsv_parse_status(const QString& str)
 }
 
 QDateTime
-UnicsvFormat::unicsv_adjust_time(const time_t time, const time_t* date) const
+UnicsvFormat::unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
 {
-  time_t res = time;
-  if (date) {
-    res += *date;
-  }
-  if (opt_utc) {
-    res += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
-  } else {
-    std::tm tm = *gmtime(&res);
-    res = mklocaltime(&tm);
-  }
-  return QDateTime::fromSecsSinceEpoch(res, Qt::UTC);
+  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
 }
 
 bool
@@ -391,19 +385,27 @@ void
 UnicsvFormat::unicsv_fondle_header(QString header)
 {
   /* Convert the entire header to lower case for convenience.
-   * If we see a tab in that header, we decree it to be tabsep.
    */
-  unicsv_fieldsep = ",";
-  if (header.contains('\t')) {
-    unicsv_fieldsep = "\t";
-  } else if (header.contains(';')) {
-    unicsv_fieldsep = ";";
-  } else if (header.contains('|')) {
-    unicsv_fieldsep = "|";
-  }
   header = header.toLower();
 
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  /* Find the separator and split the line into fields.
+   * If we see an unenclosd tab that is the separator.
+   * Otherwise, if we see an unenclosed semicolon that is the separator.
+   * Otherwise, if we see an unenclosed vertical bar that is the separator.
+   * Otherwise the separator is a comma.
+   */
+  const QList<const char*> delimiters = {"\t", ";", "|", ","};
+  unicsv_fieldsep = delimiters.last();
+  QStringList values;
+  bool delimiter_detected;
+  for (const auto* delimiter : delimiters) {
+    values = csv_linesplit(header, delimiter, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180, &delimiter_detected);
+    if (delimiter_detected) {
+      unicsv_fieldsep = delimiter;
+      break;
+    }
+  }
+
   for (auto value : values) {
     value = value.trimmed();
 
@@ -417,8 +419,12 @@ UnicsvFormat::unicsv_fondle_header(QString header)
       }
       f++;
     }
-    if ((f->name.isEmpty()) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+    if (global_opts.debug_level) {
+      if ((f->name.isEmpty()) && global_opts.debug_level) {
+        warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+      } else {
+        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
+      }
     }
 
     /* handle some special items */
@@ -462,14 +468,18 @@ UnicsvFormat::rd_init(const QString& fname)
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
+  unicsv_lineno = 0;
   if (opt_fields) {
     QString fields = QString(opt_fields).replace("+", ",");
     unicsv_fondle_header(fields);
-  } else if (buff = fin->readLine(), !buff.isNull()) {
+  } else if (buff = fin->readLine(); !buff.isNull()) {
+    ++unicsv_lineno;
     unicsv_fondle_header(buff);
   } else {
     unicsv_fieldsep = nullptr;
   }
+
+  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 
 void
@@ -495,10 +505,11 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   double swiss_easting = kUnicsvUnknown;
   double swiss_northing = kUnicsvUnknown;
   int checked = 0;
-  time_t date = -1;
-  time_t time = -1;
-  int usec = -1;
-  char is_localtime = 0;
+  QDate local_date;
+  QTime local_time;
+  QDate utc_date;
+  QTime utc_time;
+  bool need_datetime = true;
   garmin_fs_t* gmsd;
   double d;
   std::tm ymd{};
@@ -511,7 +522,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   wpt->longitude = kUnicsvUnknown;
 
   int column = -1;
-  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
@@ -595,7 +606,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_bng:
@@ -603,7 +614,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_bng_zone:
@@ -619,11 +630,11 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_swiss:
-      parse_coordinates(value, kDautmWGS84, grid_swiss,
+      parse_coordinates(value, kDatumWGS84, grid_swiss,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_swiss_easting:
@@ -682,16 +693,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_utc_date:
-      if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(value), nullptr);
-        is_localtime = 0;
+      if (need_datetime && !utc_date.isValid()) {
+        utc_date = unicsv_parse_date(CSTR(value), nullptr);
       }
       break;
 
     case fld_utc_time:
-      if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 0;
+      if (need_datetime && !utc_time.isValid()) {
+        utc_time = unicsv_parse_time(value, utc_date);
       }
       break;
 
@@ -763,21 +772,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_iso_time:
-      is_localtime = 2;	/* fix result */
-      wpt->SetCreationTime(xml_parse_time(value));
+      need_datetime = false;	/* fix result */
+      wpt->SetCreationTime(QDateTime::fromString(value, Qt::ISODateWithMs));
       break;
 
     case fld_time:
-      if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 1;
+      if (need_datetime && !local_time.isValid()) {
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
     case fld_date:
-      if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(value), nullptr);
-        is_localtime = 1;
+      if (need_datetime && !local_date.isValid()) {
+        local_date = unicsv_parse_date(CSTR(value), nullptr);
       }
       break;
 
@@ -806,9 +813,8 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_datetime:
-      if ((is_localtime < 2) && (date < 0) && (time < 0)) {
-        time = unicsv_parse_time(value, &usec, &date);
-        is_localtime = 1;
+      if (need_datetime && !local_date.isValid() && !local_time.isValid()) {
+        local_time = unicsv_parse_time(value, local_date);
       }
       break;
 
@@ -834,7 +840,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_facility:
       gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
@@ -879,7 +885,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_gc_diff:
     case fld_gc_is_archived:
     case fld_gc_is_available:
-    case fld_gc_exported:
     case fld_gc_last_found:
     case fld_gc_placer:
     case fld_gc_placer_id:
@@ -917,21 +922,13 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      case fld_gc_exported: {
-        time_t etime, edate;
-        int eusec;
-        etime = unicsv_parse_time(value, &eusec, &edate);
-        if (edate || etime) {
-          gc_data->exported = unicsv_adjust_time(etime, &edate);
-        }
-      }
       break;
       case fld_gc_last_found: {
-        time_t ftime, fdate;
-        int fusec;
-        ftime = unicsv_parse_time(value, &fusec, &fdate);
-        if (fdate || ftime) {
-          gc_data->last_found = unicsv_adjust_time(ftime, &fdate);
+        QTime ftime;
+        QDate fdate;
+        ftime = unicsv_parse_time(value, fdate);
+        if (fdate.isValid() || ftime.isValid()) {
+          gc_data->last_found = unicsv_adjust_time(fdate, ftime, true);
         }
       }
       break;
@@ -960,24 +957,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     return;
   }
 
-  if (is_localtime < 2) {	/* not fixed */
-    if ((time >= 0) && (date >= 0)) {
-      time_t t = date + time;
-
-      if (is_localtime) {
-        std::tm tm = *gmtime(&t);
-        if (opt_utc) {
-          wpt->SetCreationTime(mkgmtime(&tm));
-        } else {
-          wpt->SetCreationTime(mklocaltime(&tm));
-        }
-      } else {
-        wpt->SetCreationTime(t);
-      }
-    } else if (time >= 0) {
-      wpt->SetCreationTime(time);
-    } else if (date >= 0) {
-      wpt->SetCreationTime(date);
+  if (need_datetime) {	/* not fixed */
+    if (utc_date.isValid() && utc_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_date.isValid() && local_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
+    } else if (utc_date.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_date.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
+    } else if (utc_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(utc_date, utc_time, false));
+    } else if (local_time.isValid()) {
+      wpt->SetCreationTime(unicsv_adjust_time(local_date, local_time, true));
     } else if (ymd.tm_year || ymd.tm_mon || ymd.tm_mday) {
       if (ymd.tm_year < 100) {
         if (ymd.tm_year <= 70) {
@@ -986,7 +978,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           ymd.tm_year += 1900;
         }
       }
-      ymd.tm_year -= 1900;
 
       if (ymd.tm_mon == 0) {
         ymd.tm_mon = 1;
@@ -995,27 +986,17 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         ymd.tm_mday = 1;
       }
 
-      ymd.tm_mon--;
-      if (opt_utc) {
-        wpt->SetCreationTime(mkgmtime(&ymd));
-      } else {
-        wpt->SetCreationTime(mklocaltime(&ymd));
-      }
+      wpt->SetCreationTime(unicsv_adjust_time(
+                           QDate(ymd.tm_year, ymd.tm_mon, ymd.tm_mday),
+                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                           true));
     } else if (ymd.tm_hour || ymd.tm_min || ymd.tm_sec) {
-      if (opt_utc) {
-        wpt->SetCreationTime(mkgmtime(&ymd));
-      } else {
-        wpt->SetCreationTime(mklocaltime(&ymd));
-      }
+      wpt->SetCreationTime(unicsv_adjust_time(
+                           QDate(),
+                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                           true));
     }
 
-    if (usec >= 0) {
-      wpt->creation_time = wpt->creation_time.addMSecs(MICRO_TO_MILLI(usec));
-    }
-
-    if (opt_utc) {
-      wpt->creation_time = wpt->creation_time.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
-    }
   }
 
   /* utm/bng/swiss can be optional */
@@ -1036,27 +1017,27 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           fatal(MYNAME ": Unable to convert BNG coordinates (%.f %.f)!\n",
                 bng_easting, bng_northing);
         }
-        if (! GPS_Math_UKOSMap_To_WGS84_M(
+        if (! GPS_Math_UKOSMap_To_WGS84_H(
               bngz, bnge, bngn,
               &wpt->latitude, &wpt->longitude))
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 bngz, bnge, bngn);
       } else { // traditional zone easting northing
-        if (! GPS_Math_UKOSMap_To_WGS84_M(
+        if (! GPS_Math_UKOSMap_To_WGS84_H(
               CSTR(bng_zone), bng_easting, bng_northing,
               &wpt->latitude, &wpt->longitude))
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 CSTR(bng_zone), bng_easting, bng_northing);
       }
-      src_datum = kDautmWGS84;	/* don't convert afterwards */
+      src_datum = kDatumWGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
                                  &wpt->latitude, &wpt->longitude);
-      src_datum = kDautmWGS84;	/* don't convert afterwards */
+      src_datum = kDatumWGS84;	/* don't convert afterwards */
     }
   }
 
-  if ((src_datum != kDautmWGS84) &&
+  if ((src_datum != kDatumWGS84) &&
       (wpt->latitude != kUnicsvUnknown) && (wpt->longitude != kUnicsvUnknown)) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
@@ -1093,6 +1074,7 @@ UnicsvFormat::read()
   }
 
   while ((buff = fin->readLine(), !buff.isNull())) {
+    ++unicsv_lineno;
     buff = buff.trimmed();
     if (buff.isEmpty() || buff.startsWith('#')) {
       continue;
@@ -1103,8 +1085,7 @@ UnicsvFormat::read()
 
 /* =========================================================================== */
 
-void
-UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
+[[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
@@ -1131,16 +1112,16 @@ UnicsvFormat::unicsv_print_str(const QString& s) const
 }
 
 void
-UnicsvFormat::unicsv_print_data_time(const QDateTime& idt) const
+UnicsvFormat::unicsv_print_date_time(const QDateTime& idt) const
 {
   if (!idt.isValid()) {
     return;
   }
-  QDateTime dt = idt;
-  if (opt_utc) {
-    //time += xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
-    dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
-    dt = dt.toUTC();
+  QDateTime dt;
+  if (opt_utc != nullptr) {
+    dt = idt.toOffsetFromUtc(utc_offset);
+  } else {
+    dt = idt.toLocalTime();
   }
 
   unicsv_print_str(dt.toString(u"yyyy/MM/dd hh:mm:ss"));
@@ -1150,7 +1131,7 @@ void
 UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     unicsv_outp_flags[fld_shortname] = true;
@@ -1174,7 +1155,7 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
   }
   if (wpt->creation_time.isValid()) {
     unicsv_outp_flags[fld_time] = true;
-    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
+    if (wpt->creation_time.toTime_t() >= 2 * SECONDS_PER_DAY) {
       unicsv_outp_flags[fld_date] = true;
     }
   }
@@ -1278,9 +1259,6 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     if (gc_data->is_available != Geocache::status_t::gs_unknown) {
       unicsv_outp_flags[fld_gc_is_available] = true;
     }
-    if (gc_data->exported.isValid()) {
-      unicsv_outp_flags[fld_gc_exported] = true;
-    }
     if (gc_data->last_found.isValid()) {
       unicsv_outp_flags[fld_gc_last_found] = true;
     }
@@ -1299,14 +1277,16 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 void
 UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   const Geocache* gc_data = nullptr;
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
-  if (unicsv_datum_idx == kDautmWGS84) {
+  if (unicsv_datum_idx == kDatumWGS84) {
     lat = wpt->latitude;
     lon = wpt->longitude;
     alt = wpt->altitude;
@@ -1339,9 +1319,10 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 
   case grid_bng: {
     char map[3];
-    double north, east;
+    double north;
+    double east;
 
-    if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map)) {
+    if (! GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map)) {
       unicsv_fatal_outside(wpt);
     }
     auto fieldWidth = fout->fieldWidth();
@@ -1354,7 +1335,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   case grid_utm: {
     int zone;
     char zonec;
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
                                          &east, &north, &zone, &zonec, unicsv_datum_idx)) {
@@ -1367,7 +1349,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     break;
   }
   case grid_swiss: {
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north)) {
       unicsv_fatal_outside(wpt);
@@ -1524,12 +1507,10 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     }
   }
   if (unicsv_outp_flags[fld_date]) {
-    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
+    if (wpt->creation_time.toTime_t() >= 2 * SECONDS_PER_DAY) {
       QDateTime dt;
-      if (opt_utc) {
-        dt = wpt->GetCreationTime().toUTC();
-        // We might wrap to a different day by overriding the TZ offset.
-        dt = dt.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
+      if (opt_utc != nullptr) {
+        dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
       }
@@ -1541,18 +1522,17 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
   if (unicsv_outp_flags[fld_time]) {
     if (wpt->creation_time.isValid()) {
-      QTime t;
-      if (opt_utc) {
-        t = wpt->GetCreationTime().toUTC().time();
-        t = t.addSecs(xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR);
+      QDateTime dt;
+      if (opt_utc != nullptr) {
+        dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
-        t = wpt->GetCreationTime().toLocalTime().time();
+        dt = wpt->GetCreationTime().toLocalTime();
       }
       QString out;
-      if (t.msec() > 0) {
-        out = t.toString(u"hh:mm:ss.zzz");
+      if (dt.time().msec() > 0) {
+        out = dt.toString(u"hh:mm:ss.zzz");
       } else {
-        out = t.toString(u"hh:mm:ss");
+        out = dt.toString(u"hh:mm:ss");
       }
       *fout << unicsv_fieldsep << out;
     } else {
@@ -1651,16 +1631,9 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    if (gc_data) {
-      unicsv_print_data_time(gc_data->exported);
-    } else {
-      *fout << unicsv_fieldsep;
-    }
-  }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->last_found);
+      unicsv_print_date_time(gc_data->last_found);
     } else {
       *fout << unicsv_fieldsep;
     }
@@ -1711,7 +1684,7 @@ UnicsvFormat::wr_init(const QString& fname)
 
   unicsv_outp_flags.reset();
   unicsv_grid_idx = grid_unknown;
-  unicsv_datum_idx = kDautmWGS84;
+  unicsv_datum_idx = kDatumWGS84;
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
@@ -1736,12 +1709,13 @@ UnicsvFormat::wr_init(const QString& fname)
   } else if (unicsv_grid_idx == grid_swiss)
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = kDautmWGS84;  /* internal, becomes CH1903 */
+    unicsv_datum_idx = kDatumWGS84;  /* internal, becomes CH1903 */
   } else {
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
   llprec = xstrtoi(opt_prec, nullptr, 10);
+  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 
 void
@@ -1928,9 +1902,6 @@ UnicsvFormat::write()
   }
   if (unicsv_outp_flags[fld_gc_is_available]) {
     *fout << unicsv_fieldsep << "Available";
-  }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    *fout << unicsv_fieldsep << "Exported";
   }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     *fout << unicsv_fieldsep << "Last Found";

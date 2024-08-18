@@ -21,12 +21,12 @@
 
 #if defined __cplusplus
 #include <algorithm>              // for sort, stable_sort
-#include <cmath>                  // for M_PI
 #include <cstdarg>                // for va_list
 #include <cstddef>                // for NULL, nullptr_t, size_t
 #include <cstdint>                // for int32_t, uint32_t
 #include <cstdio>                 // for NULL, fprintf, FILE, stdout
 #include <ctime>                  // for time_t
+#include <numbers>                // for inv_pi, pi
 #include <optional>               // for optional
 #include <utility>                // for move
 

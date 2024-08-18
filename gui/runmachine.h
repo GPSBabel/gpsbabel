@@ -20,15 +20,16 @@
 #ifndef RUNMACHINE_H
 #define RUNMACHINE_H
 
-#include <QObject>             // for QObject
-#include <QProcess>            // for QProcess, QProcess::ExitStatus, QProcess::ProcessError, qt_getEnumName
-#include <QString>             // for QString
-#include <QStringList>         // for QStringList
-#include <QWidget>             // for QWidget
+#include <QList>          // for QList
+#include <QObject>        // for Q_ENUM, Q_OBJECT, Q_SIGNALS
+#include <QProcess>       // for QProcess, QProcess::ProcessError, QProcess::ExitStatus
+#include <QString>        // for QString
+#include <QStringList>    // for QStringList
+#include <QWidget>        // for QWidget
 
-#include <optional>            // for optional, nullopt
+#include <optional>       // for optional
 
-#include "processwait.h"       // for ProcessWaitDialog
+#include "processwait.h"  // for ProcessWaitDialog
 
 
 class RunMachine : public QWidget

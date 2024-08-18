@@ -29,7 +29,7 @@ PROLOGUE Lcl Date, Lcl Time, UTCOfst, AtvWpt,     Latitude,    Longitude,    Alt
 # INDIVIDUAL DATA FIELDS:
 #
 IFIELD GMT_TIME,"","%Y-%m-%d" 		#Lcl Date,
-IFIELD HMSG_TIME,"","%d:%d:%d %s"  	#Lcl Time,
+IFIELD GMT_TIME,"","%H:%M:%S"  	#Lcl Time,
 IFIELD IGNORE,"","%s"  				#UTCOfst,
 IFIELD IGNORE,"","%s"  				#AtvWpt,
 IFIELD LAT_DECIMAL, "", "%f"  		#Latitude,

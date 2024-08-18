@@ -25,8 +25,8 @@
 #include <cerrno>
 #include <cstdio>
 
-int32
-GPS_Write_Packet_usb(gpsdevh*, GPS_PPacket& packet)
+int32_t
+GPS_Write_Packet_usb(gpsdevh* /*unused*/, const GPS_Packet& packet)
 {
   garmin_usb_packet gp;
   memset(&gp, 0, sizeof(gp));

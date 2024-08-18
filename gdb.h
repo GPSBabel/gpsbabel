@@ -26,16 +26,17 @@
 #ifndef GDB_H_INCLUDED_
 #define GDB_H_INCLUDED_
 
-#include <QList>            // for QList
+#include <QHash>            // for QHash<>::const_iterator, QHash<>::key_iterator, qHash, qHashMulti, QHash
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
 #include <QVector>          // for QVector
 
-#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
+#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"         // for Format
 #include "garmin_fs.h"      // for garmin_fs_t
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
+#include "mkshort.h"        // for MakeShort
 
 
 class GdbFormat : public Format
@@ -63,6 +64,39 @@ public:
   void write() override;
   void wr_deinit() override;
 
+  /* Types */
+
+  // see  https://www.kdab.com/how-to-declare-a-qhash-overload/
+  class WptNamePosnKey;
+  using WptNamePosnHash = QHash<WptNamePosnKey, Waypoint*>;
+  class WptNamePosnKey {
+  public:
+    WptNamePosnKey(const QString& name, double lt, double ln) : shortname(name), lat(lt), lon(ln) {}
+
+    friend size_t qHash(const WptNamePosnKey &c, size_t seed = 0) noexcept
+    {
+      return qHashMulti(seed, c.shortname.toUpper(), c.lat, c.lon);
+    }
+
+    QString shortname;
+    double lat{};
+    double lon{};
+  };
+
+  class WptNameKey;
+  using WptNameHash = QHash<WptNameKey, Waypoint*>;
+  class WptNameKey {
+  public:
+    WptNameKey(const QString& name) : shortname(name) {} /* converting constructor */
+
+    friend size_t qHash(const WptNameKey &c, size_t seed = 0) noexcept
+    {
+      return qHash(c.shortname.toUpper(), seed);
+    }
+
+    QString shortname;
+  };
+
 private:
   /* Constants */
 
@@ -78,18 +112,16 @@ private:
 
   static constexpr int kGDBNameBufferLen = 1024;
 
-  /* static constexpr char gdb_release[] = "$Revision: 1.74 $"; */
-  static constexpr char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
-
   /* Member Functions */
 
-  static void gdb_flush_waypt_queue(QList<Waypoint*>* Q);
+  static void gdb_flush_waypt_queue(WptNamePosnHash& Q);
   void disp_summary(const gbfile* f) const;
   QString fread_cstr() const;
   static char* gdb_fread_cstr(gbfile* file_in);
   QString gdb_fread_strlist() const;
-  static Waypoint* gdb_find_wayptq(const QList<Waypoint*>* Q, const Waypoint* wpt, char exact);
-  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, char exact) const;
+  static Waypoint* gdb_find_wayptq(const WptNameHash& Q, const Waypoint* wpt);
+  static Waypoint* gdb_find_wayptq(const WptNamePosnHash& Q, const Waypoint* wpt);
+  Waypoint* gdb_reader_find_waypt(const Waypoint* wpt, bool exact) const;
   Waypoint* gdb_add_route_waypt(route_head* rte, Waypoint* ref, int wpt_class) const;
   static QString gdb_to_ISO8601_duration(unsigned int seconds);
   void gdb_write_cstr(QStringView a = QStringView()) const;
@@ -101,9 +133,9 @@ private:
   route_head* read_route();
   route_head* read_track();
   void reset_short_handle(const char* defname);
-  void write_header() const;
+  void write_header();
   static void gdb_check_waypt(Waypoint* wpt);
-  void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
+  void write_waypoint(const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);
   void route_write_bounds(bounds* bounds) const;
   void write_route(const route_head* rte, const QString& rte_name);
@@ -121,8 +153,12 @@ private:
   bool gdb_hide_wpt{};
   bool gdb_hide_rpt{};
 
-  QList<Waypoint*> wayptq_in, wayptq_out, wayptq_in_hidden;
-  short_handle short_h{};
+  WptNamePosnHash waypt_nameposn_in_hash;
+  WptNameHash waypt_name_in_hash;
+  WptNamePosnHash waypt_nameposn_in_hidden_hash;
+  WptNameHash waypt_name_in_hidden_hash;
+  WptNamePosnHash waypt_nameposn_out_hash;
+  MakeShort* short_h{};
 
   char* gdb_opt_category{};
   char* gdb_opt_ver{};

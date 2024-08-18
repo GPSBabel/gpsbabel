@@ -65,47 +65,39 @@ Filter* fltfactory()
 }
 
 struct FilterVecs::Impl {
-  ArcDistanceFilter arcdist;
-  BendFilter bend;
-  DiscardFilter discard;
-  DuplicateFilter duplicate;
-  HeightFilter height;
-  InterpolateFilter interpolate;
-  PolygonFilter polygon;
-  PositionFilter position;
-  RadiusFilter radius;
-  ReverseRouteFilter reverse_route;
-  SimplifyRouteFilter routesimple;
   StackFilter stackfilt;
-  SwapDataFilter swapdata;
-  TrackFilter trackfilter;
 
   const QVector<fl_vecs_t> filter_vec_list = {
 #if FILTERS_ENABLED
     {
-      &arcdist,
+      nullptr,
       "arc",
       "Include Only Points Within Distance of Arc",
+      &fltfactory<ArcDistanceFilter>
     },
     {
-      &bend,
+      nullptr,
       "bend",
-      "Add points before and after bends in routes"
+      "Add points before and after bends in routes",
+      &fltfactory<BendFilter>
     },
     {
-      &discard,
+      nullptr,
       "discard",
-      "Remove unreliable points with high hdop or vdop"
+      "Remove unreliable points with high hdop or vdop",
+      &fltfactory<DiscardFilter>
     },
     {
-      &duplicate,
+      nullptr,
       "duplicate",
       "Remove Duplicates",
+      &fltfactory<DuplicateFilter>
     },
     {
-      &interpolate,
+      nullptr,
       "interpolate",
-      "Interpolate between trackpoints"
+      "Interpolate between trackpoints",
+      &fltfactory<InterpolateFilter>
     },
     {
       nullptr,
@@ -114,19 +106,22 @@ struct FilterVecs::Impl {
       &fltfactory<NukeDataFilter>
     },
     {
-      &polygon,
+      nullptr,
       "polygon",
       "Include Only Points Inside Polygon",
+      &fltfactory<PolygonFilter>
     },
     {
-      &position,
+      nullptr,
       "position",
       "Remove Points Within Distance",
+      &fltfactory<PositionFilter>
     },
     {
-      &radius,
+      nullptr,
       "radius",
       "Include Only Points Within Radius",
+      &fltfactory<RadiusFilter>
     },
     {
       nullptr,
@@ -135,9 +130,10 @@ struct FilterVecs::Impl {
       &fltfactory<ResampleFilter>
     },
     {
-      &routesimple,
+      nullptr,
       "simplify",
       "Simplify routes",
+      &fltfactory<SimplifyRouteFilter>
     },
     {
       nullptr,
@@ -148,17 +144,20 @@ struct FilterVecs::Impl {
     {
       &stackfilt,
       "stack",
-      "Save and restore waypoint lists"
+      "Save and restore waypoint lists",
+      nullptr
     },
     {
-      &reverse_route,
+      nullptr,
       "reverse",
       "Reverse stops within routes",
+      &fltfactory<ReverseRouteFilter>
     },
     {
-      &trackfilter,
+      nullptr,
       "track",
-      "Manipulate track lists"
+      "Manipulate track lists",
+      &fltfactory<TrackFilter>
     },
     {
       nullptr,
@@ -167,14 +166,16 @@ struct FilterVecs::Impl {
       &fltfactory<TransformFilter>
     },
     {
-      &height,
+      nullptr,
       "height",
-      "Manipulate altitudes"
+      "Manipulate altitudes",
+      &fltfactory<HeightFilter>
     },
     {
-      &swapdata,
+      nullptr,
       "swap",
-      "Swap latitude and longitude of all loaded points"
+      "Swap latitude and longitude of all loaded points",
+      &fltfactory<SwapDataFilter>
     },
     {
       nullptr,
@@ -184,9 +185,10 @@ struct FilterVecs::Impl {
     }
 #elif defined (MINIMAL_FILTERS)
     {
-      &trackfilter,
+      nullptr,
       "track",
-      "Manipulate track lists"
+      "Manipulate track lists",
+      &fltfactory<TrackFilter>
     }
 #endif
   };

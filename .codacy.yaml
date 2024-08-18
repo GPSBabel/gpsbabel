@@ -1,12 +1,13 @@
 exclude_paths:
-  - 'deprecated/**'
-  - 'mac/libusb/**'
-  - 'reference/**'
-  - 'shapelib/**'
-  - 'zlib/**'
-  - coverity_model.cc
-  - strptime.[ch]
-  - jeeps/gpsproj.cc
-  - jeeps/gpsproj.h
-  - tools/qtci/README.md
-  - tools/uploadtool/README.md
+  - "coverity_model.cc"
+  - "deprecated/**"
+  - "gui/coretool/gpsbabel_*.ts"
+  - "gui/gpsbabelfe_*.ts"
+  - "jeeps/gpsproj.cc"
+  - "jeeps/gpsproj.h"
+  - "mac/libusb/**"
+  - "reference/**"
+  - "shapelib/**"
+  - "strptime/**"
+  - "tools/uploadtool/README.md"
+  - "zlib/**"

@@ -115,7 +115,7 @@ private:
     // Return data value interpreted as EXIF_TYPE_LONG.
     // This is most useful when the type is EXIF_TYPE_LONG and the count is one,
     // which occurs for multiple specific tags where we need the value.
-    inline uint32_t toLong() const
+    uint32_t toLong() const
     {
       return data.at(0).value<uint32_t>();
     }
