@@ -73,7 +73,7 @@ GeoJsonFormat::geojson_waypt_pr(const Waypoint* waypoint) const
     properties[DESCRIPTION] = waypoint->description;
   }
   if (waypoint->HasUrlLink()) {
-    UrlLink link = waypoint->GetUrlLink();
+    const UrlLink& link = waypoint->GetUrlLink();
     if (!link.url_.isEmpty()) {
       properties[URL] = link.url_;
     }
