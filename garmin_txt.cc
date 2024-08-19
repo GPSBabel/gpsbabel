@@ -494,7 +494,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
-    UrlLink l = wpt->GetUrlLink();
+    const UrlLink& l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
   } else {
     print_string("%s\t", "");
