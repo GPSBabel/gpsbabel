@@ -223,7 +223,7 @@ HumminbirdBase::humminbird_rd_deinit() const
 void
 HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 {
-  humminbird_waypt_t w{0};
+  humminbird_waypt_t w{};
 
   if (! gbfread(&w, 1, sizeof(w), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -285,7 +285,7 @@ void
 HumminbirdBase::humminbird_read_route(gbfile* fin) const
 {
 
-  humminbird_rte_t hrte{0};
+  humminbird_rte_t hrte{};
 
   if (! gbfread(&hrte, 1, sizeof(hrte), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -317,7 +317,7 @@ void
 HumminbirdBase::humminbird_read_track(gbfile* fin)
 {
 
-  humminbird_trk_header_t th{0};
+  humminbird_trk_header_t th{};
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
     fatal(MYNAME ": Unexpected end of file reading header!\n");
@@ -425,7 +425,7 @@ void
 HumminbirdBase::humminbird_read_track_old(gbfile* fin)
 {
 
-  humminbird_trk_header_old_t th{0};
+  humminbird_trk_header_old_t th{};
   constexpr int file_len = 8048;
   char namebuf[TRK_NAME_LEN];
 
@@ -609,7 +609,7 @@ HumminbirdBase::humminbird_wr_deinit()
 void
 HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
 {
-  humminbird_waypt_t hum{0};
+  humminbird_waypt_t hum{};
   int num_icons = std::size(humminbird_icons);
 
   be_write16(&hum.num, waypoint_num++);
