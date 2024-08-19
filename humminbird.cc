@@ -21,13 +21,13 @@
 
 #include "humminbird.h"
 
-#include <QMap>                 // for QMap
+#include <QHash>                // for QHash
 #include <Qt>                   // for CaseInsensitive
 #include <QtGlobal>             // for qRound
 
 #include <cmath>                // for atan, tan, log, sinh
-#include <cstdio>               // for snprintf, SEEK_SET
-#include <cstring>              // for strncpy, memcpy, memset
+#include <cstdio>               // for SEEK_SET
+#include <cstring>              // for strncpy
 #include <numbers>              // for inv_pi, pi
 
 #include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, be_write16, route_head, track_add_wpt
@@ -61,10 +61,6 @@ Still, they're useful in the code as a plain signature.
 #define WPT_MAGIC		0x02020024L
 #define WPT_MAGIC2		0x02030024L // New for 2013.  No visible diff?!
 #define RTE_MAGIC		0x03030088L
-
-#define EAST_SCALE		20038297.0 /* this is i1924_equ_axis*pi */
-#define i1924_equ_axis		6378388.0
-#define i1924_polar_axis	6356911.946
 
 #define BAD_CHARS		"\r\n\t"
 
@@ -172,8 +168,6 @@ struct HumminbirdBase::group_body_t {
 double
 HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 {
-  constexpr double cos_ae = 0.9966349016452;
-  constexpr double cos2_ae = cos_ae * cos_ae;
   const double gdr = gd_lat * std::numbers::pi / 180.0;
 
   return atan(cos2_ae * tan(gdr)) * 180.0 * std::numbers::inv_pi;
@@ -184,8 +178,6 @@ HumminbirdBase::geodetic_to_geocentric_hwr(const double gd_lat)
 double
 HumminbirdBase::geocentric_to_geodetic_hwr(const double gc_lat)
 {
-  constexpr double cos_ae = 0.9966349016452;
-  constexpr double cos2_ae = cos_ae * cos_ae;
   const double gcr = gc_lat * std::numbers::pi / 180.0;
 
   return atan(tan(gcr)/cos2_ae) * 180.0 * std::numbers::inv_pi;
@@ -218,6 +210,8 @@ void
 HumminbirdBase::humminbird_rd_init(const QString& fname)
 {
   fin_ = gbfopen_be(fname, "rb", MYNAME);
+
+  wpt_num_to_wpt_hash.clear();
 }
 
 void
@@ -275,6 +269,8 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
   case 2: // Waypoint temporary.
   case 3: // Waypoint man-overboard.
     waypt_add(wpt);
+    /* register the point over his internal Humminbird "Number" */
+    wpt_num_to_wpt_hash[w.num] = wpt;
     break;
   case 16: // Waypoint group header.
   case 17: // Waypoint group body.
@@ -283,10 +279,6 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
     delete wpt;
     break;
   }
-
-  /* register the point over his internal Humminbird "Number" */
-  QString buff = QString::number(w.num);
-  map[buff] = wpt;
 }
 
 void
@@ -306,13 +298,10 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
     route_head* rte = nullptr;
 
     for (int i = 0; i < hrte.count; i++) {
-      char buff[10];
       hrte.points[i] = be_read16(&hrte.points[i]);
 
       /* locate the point over his internal Humminbird "Number" */
-      snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
-      if ((map.value(buff))) {
-        const Waypoint* wpt = map.value(buff);
+      if (const Waypoint* wpt = wpt_num_to_wpt_hash.value(hrte.points[i], nullptr); wpt != nullptr) {
         if (rte == nullptr) {
           rte = new route_head;
           route_add_head(rte);
@@ -601,6 +590,8 @@ HumminbirdBase::humminbird_wr_init(const QString& fname)
 
   waypoint_num = 0;
   rte_num_ = 0;
+
+  wpt_id_to_wpt_num_hash.clear();
 }
 
 void
@@ -660,8 +651,7 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   QString name = (global_opts.synthesize_shortnames)
                  ? wptname_sh->mkshort_from_wpt(wpt)
                  : wptname_sh->mkshort(wpt->shortname);
-  memset(&hum.name, 0, sizeof(hum.name));
-  memcpy(&hum.name, CSTR(name), name.length());
+  strncpy(hum.name, CSTR(name), sizeof(hum.name)-1);
 
   gbfputuint32(WPT_MAGIC, fout_);
   gbfwrite(&hum, sizeof(hum), 1, fout_);
@@ -837,19 +827,29 @@ HumminbirdFormat::humminbird_rte_tail(const route_head* rte)
   humrte = nullptr;
 }
 
+QString HumminbirdFormat::wpt_to_id(const Waypoint* wpt)
+{
+  QString id = QStringLiteral("%1\01%2\01%3").arg(wpt->shortname)
+                .arg(wpt->latitude, 0, 'f', 9).arg(wpt->longitude, 0, 'f', 9);
+  return id;
+}
+
 void
 HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
 {
   if (humrte == nullptr) {
     return;
   }
-  int i = gb_ptr2int(wpt->extra_data);
-  if (i <= 0) {
+  QString id = wpt_to_id(wpt);
+
+  if (!wpt_id_to_wpt_num_hash.contains(id)) {
+    // This should not occur, we just scanned all waypoints and routes.
+    warning("Missing waypoint reference in route, point dropped from route.");
     return;
   }
 
   if (humrte->count < MAX_RTE_POINTS) {
-    humrte->points[humrte->count] = i - 1;
+    humrte->points[humrte->count] = wpt_id_to_wpt_num_hash.value(id);
     humrte->count++;
   } else {
     warning(MYNAME ": Sorry, routes are limited to %d points!\n", MAX_RTE_POINTS);
@@ -860,19 +860,10 @@ HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
 void
 HumminbirdFormat::humminbird_write_waypoint_wrapper(const Waypoint* wpt)
 {
-  Waypoint* tmpwpt;
-
-  QString key = QStringLiteral("%1\01%2\01%3").arg(wpt->shortname)
-                .arg(wpt->latitude, 0, 'f', 9).arg(wpt->longitude, 0, 'f', 9);
-  if (!(tmpwpt = map[key])) {
-    tmpwpt = const_cast<Waypoint*>(wpt);
-    map[key] = const_cast<Waypoint*>(wpt);
-    tmpwpt->extra_data = gb_int2ptr(waypoint_num + 1);	/* NOT NULL */
+  QString id = wpt_to_id(wpt);
+  if (!wpt_id_to_wpt_num_hash.contains(id)) {
+    wpt_id_to_wpt_num_hash[id] = waypoint_num;
     humminbird_write_waypoint(wpt);
-  } else {
-    void* p = tmpwpt->extra_data;
-    tmpwpt = const_cast<Waypoint*>(wpt);
-    tmpwpt->extra_data = p;
   }
 }
 

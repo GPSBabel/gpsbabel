@@ -1013,9 +1013,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
-
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
