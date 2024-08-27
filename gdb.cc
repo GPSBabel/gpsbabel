@@ -1235,7 +1235,7 @@ GdbFormat::write_waypoint(
     FWRITE(zbuf, 4);
     QString ld;
     if (wpt->HasUrlLink()) {
-      UrlLink l = wpt->GetUrlLink();
+      const UrlLink& l = wpt->GetUrlLink();
       ld = l.url_;
     }
     QString descr = (wpt_class < gt_waypt_class_map_point) ?
@@ -1526,7 +1526,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
   Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, refpt);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
-    UrlLink orig_link = refpt->GetUrlLink();
+    const UrlLink& orig_link = refpt->GetUrlLink();
     UrlLink test_link = test->GetUrlLink();
     if (orig_link.url_ != test_link.url_) {
       test = nullptr;

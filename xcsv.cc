@@ -1118,7 +1118,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
         buff = xcsv_urlbase;
       }
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff += QString::asprintf(fmp.printfc.constData(), CSTR(l.url_));
       } else {
         buff += QString::asprintf(fmp.printfc.constData(), fmp.val.constData() && *fmp.val.constData() ? fmp.val.constData() : "\"\"");
@@ -1127,7 +1127,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     break;
     case XcsvStyle::XT_URL_LINK_TEXT:
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff = QString::asprintf(fmp.printfc.constData(),
                                  !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp.val.constData());
       }
