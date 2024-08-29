@@ -943,7 +943,9 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
      for that field.  Rather than change all the parse routines, we first
      substitute a default value of zero for any missing field.
   */
-  tbuf.replace(",,", ",0,");
+  while (tbuf.contains(",,")) {
+    tbuf.replace(",,", ",0,");
+  }
 
   if (notalkerid_strmatch(tbuf, "WPL")) {
     gpwpl_parse(tbuf);
