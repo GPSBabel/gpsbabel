@@ -1152,26 +1152,7 @@ GdbFormat::write_header()
 void
 GdbFormat::gdb_check_waypt(Waypoint* wpt)
 {
-  double lat_orig = wpt->latitude;
-  double lon_orig = wpt->longitude;
-
-  if (wpt->latitude < -90) {
-    wpt->latitude += 180;
-  } else if (wpt->latitude > +90) {
-    wpt->latitude -= 180;
-  }
-  if (wpt->longitude < -180) {
-    wpt->longitude += 360;
-  } else if (wpt->longitude > +180) {
-    wpt->longitude -= 360;
-  }
-
-  if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
+  wpt->NormalizePosition();
 }
 
 /*-----------------------------------------------------------------------------*/
