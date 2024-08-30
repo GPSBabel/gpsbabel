@@ -357,6 +357,7 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
   PositionDeg position() const {return PositionDeg(latitude, longitude);}
   void SetPosition(const PositionDeg& pos)
   {
