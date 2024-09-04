@@ -87,8 +87,9 @@
 #ifndef LOWRANCEUSR_H_INCLUDED_
 #define LOWRANCEUSR_H_INCLUDED_
 
-#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cmath>                // for round, atan, exp, log, tan
 #include <cstdint>              // for int64_t
+#include <numbers>              // for pi
 
 #include <QList>                // for QList
 #include <QString>              // for QString
@@ -378,7 +379,7 @@ private:
 
   static constexpr int MAXUSRSTRINGSIZE = 256;
   static constexpr double SEMIMINOR = 6356752.3142;
-  static constexpr double DEGREESTORADIANS = M_PI/180.0;
+  static constexpr double DEGREESTORADIANS = std::numbers::pi/180.0;
   static constexpr int MAX_TRAIL_POINTS = 9999;
   static constexpr double UNKNOWN_USR_ALTITUDE = METERS_TO_FEET(-10000); /* -10000ft is how the unit stores unknown */
   static constexpr int64_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
@@ -457,7 +458,7 @@ private:
   unsigned short waypt_out_count{};
   int            trail_count{}, lowrance_route_count{};
   int            trail_point_count{};
-  char           continuous = 1;
+  bool           merge_new_track{false};
   short          num_section_points{};
   char*          merge{};
   int            reading_version{};

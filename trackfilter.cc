@@ -531,8 +531,7 @@ void TrackFilter::trackfilter_split()
 
         if (distance > 0) {
           double curdist = radtometers(
-                             gcdist(RAD(prev_wpt->latitude), RAD(prev_wpt->longitude),
-                                    RAD(wpt->latitude), RAD(wpt->longitude)));
+                             gcdist(prev_wpt->position(), wpt->position()));
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
@@ -600,10 +599,8 @@ void TrackFilter::trackfilter_move()
 
 void TrackFilter::trackfilter_synth()
 {
-  double last_course_lat;
-  double last_course_lon;
-  double last_speed_lat = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
-  double last_speed_lon = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
+  PositionDeg last_course_pos;
+  PositionDeg last_speed_pos;
   gpsbabel::DateTime last_speed_time;
   int nsats = 0;
 
@@ -626,18 +623,14 @@ void TrackFilter::trackfilter_synth()
           wpt->reset_speed();
         }
         first = false;
-        last_course_lat = wpt->latitude;
-        last_course_lon = wpt->longitude;
-        last_speed_lat = wpt->latitude;
-        last_speed_lon = wpt->longitude;
+        last_course_pos = wpt->position();
+        last_speed_pos = wpt->position();
         last_speed_time = wpt->GetCreationTime();
       } else {
         if (opt_course) {
-          wpt->set_course(heading_true_degrees(RAD(last_course_lat),
-                                               RAD(last_course_lon),RAD(wpt->latitude),
-                                               RAD(wpt->longitude)));
-          last_course_lat = wpt->latitude;
-          last_course_lon = wpt->longitude;
+          wpt->set_course(heading_true_degrees(last_course_pos,
+                                               wpt->position()));
+          last_course_pos = wpt->position();
         }
         if (opt_speed) {
           if (last_speed_time.msecsTo(wpt->GetCreationTime()) != 0) {
@@ -649,14 +642,11 @@ void TrackFilter::trackfilter_synth()
             // Note that points with the same time can occur because the input
             // has truncated times, or because we are truncating times with
             // toTime_t().
-            wpt->set_speed(radtometers(gcdist(
-                                         RAD(last_speed_lat), RAD(last_speed_lon),
-                                         RAD(wpt->latitude),
-                                         RAD(wpt->longitude))) /
+            wpt->set_speed(radtometers(gcdist(last_speed_pos, wpt->position()))
+                                          /
                            (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
                           );
-            last_speed_lat = wpt->latitude;
-            last_speed_lon = wpt->longitude;
+            last_speed_pos = wpt->position();
             last_speed_time = wpt->GetCreationTime();
           } else {
             wpt->reset_speed();
@@ -888,10 +878,7 @@ void TrackFilter::trackfilter_faketime()
 bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
 {
   return
-    radtometers(gcdist(RAD(wpta->latitude),
-                       RAD(wpta->longitude),
-                       RAD(wptb->latitude),
-                       RAD(wptb->longitude))) < kDistanceLimit &&
+    radtometers(gcdist(wpta->position(), wptb->position())) < kDistanceLimit &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
     wpta->courses_equal(*wptb) &&
     wpta->speeds_equal(*wptb) &&
@@ -909,10 +896,8 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   for (auto it = wptlist.cbegin(); it != wptlist.cend(); ++it) {
     auto* wpt = *it;
     if (it != wptlist.cbegin()) {
-      double cur_dist = radtometers(gcdist(RAD(prev_wpt->latitude),
-                                           RAD(prev_wpt->longitude),
-                                           RAD(wpt->latitude),
-                                           RAD(wpt->longitude)));
+      double cur_dist = radtometers(gcdist(prev_wpt->position(),
+                                           wpt->position()));
 
       // Denoise points that are on top of each other,
       // keeping the first and last of the group.

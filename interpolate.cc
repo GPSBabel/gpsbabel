@@ -65,8 +65,7 @@ void InterpolateFilter::process_rte(route_head* rte)
   }
 
   // And add them back, with interpolated points interspersed.
-  double lat1 = 0;
-  double lon1 = 0;
+  PositionDeg pos1;
   double altitude1 = unknown_alt;
   gpsbabel::DateTime time1;
   bool first = true;
@@ -92,10 +91,7 @@ void InterpolateFilter::process_rte(route_head* rte)
         // interpolate even if time is running backwards.
         npts = std::abs(*timespan) / max_time_step;
       } else if (opt_dist != nullptr) {
-        double distspan = radtomiles(gcdist(RAD(lat1),
-                                            RAD(lon1),
-                                            RAD(wpt->latitude),
-                                            RAD(wpt->longitude)));
+        double distspan = radtomiles(gcdist(pos1, wpt->position()));
         npts = distspan / max_dist_step;
       }
       if (!std::isfinite(npts) || (npts >= INT_MAX)) {
@@ -119,11 +115,7 @@ void InterpolateFilter::process_rte(route_head* rte)
         } else {
           wpt_new->creation_time = gpsbabel::DateTime();
         }
-        linepart(lat1, lon1,
-                 wpt->latitude, wpt->longitude,
-                 frac,
-                 &wpt_new->latitude,
-                 &wpt_new->longitude);
+        wpt_new->SetPosition(linepart(pos1, wpt->position(), frac));
         if (altspan.has_value()) {
           wpt_new->altitude = altitude1 + (frac * *altspan);
         } else {
@@ -142,8 +134,7 @@ void InterpolateFilter::process_rte(route_head* rte)
       track_add_wpt(rte, wpt);
     }
 
-    lat1 = wpt->latitude;
-    lon1 = wpt->longitude;
+    pos1 = wpt->position();
     altitude1 = wpt->altitude;
     time1 = wpt->creation_time.toUTC();  // use utc to avoid tz conversions.
   }

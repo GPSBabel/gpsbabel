@@ -958,33 +958,6 @@ QString get_filename(const QString& fname)
   return QFileInfo(fname).fileName();
 }
 
-/*
- * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-void* gb_int2ptr(const int i)
-{
-  union {
-    void* p;
-    int i;
-  } x = { nullptr };
-
-  x.i = i;
-  return x.p;
-}
-
-/*
- * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-int gb_ptr2int(const void* p)
-{
-  union {
-    const void* p;
-    int i;
-  } x = { p };
-
-  return x.i;
-}
-
 QTextCodec* get_codec(const QByteArray& cs_name)
 {
   QTextCodec* codec = QTextCodec::codecForName(cs_name);

@@ -19,11 +19,12 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cmath>                     // for M_PI
+#include <cmath>                     // for nan
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
@@ -36,7 +37,6 @@
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
-#include <QVector>                   // for QVector
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
@@ -50,12 +50,6 @@
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
@@ -115,8 +109,16 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
+
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
+
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
-constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 
 /*
@@ -235,17 +237,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
@@ -259,6 +255,35 @@ struct bounds {
   double min_lon;
   double min_alt;	/* -unknown_alt => invalid */
 };
+
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
+
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
+
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
+};
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -275,21 +300,14 @@ private:
   class op_flags
   {
   public:
-    op_flags() :
-      temperature(false),
-      proximity(false),
-      course(false),
-      speed(false),
-      geoidheight(false),
-      depth(false) {}
-    bool temperature:1;		/* temperature field is set */
-    bool proximity:1;		/* proximity field is set */
-    bool course:1;			/* course field is set */
-    bool speed:1;			/* speed field is set */
-    bool geoidheight:1;	/* geoidheight field is set */
-    bool depth:1;			/* depth field is set */
+    bool temperature:1{false}; /* temperature field is set */
+    bool proximity:1{false};   /* proximity field is set */
+    bool course:1{false};      /* course field is set */
+    bool speed:1{false};       /* speed field is set */
+    bool geoidheight:1{false}; /* geoidheight field is set */
+    bool depth:1{false};       /* depth field is set */
     /* !ToDo!
-    unsigned int altitude:1;		/+ altitude field is set +/
+    unsigned int altitude:1{false}; /+ altitude field is set +/
     ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
     odometer_distance
     */
@@ -339,6 +357,13 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.latD;
+    longitude = pos.lonD;
+  }
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
@@ -490,7 +515,7 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 void del_marked_wpts();
-unsigned int waypt_count();
+int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
@@ -674,10 +699,10 @@ private:
 };
 
 void route_init();
-unsigned int route_waypt_count();
-unsigned int route_count();
-unsigned int track_waypt_count();
-unsigned int track_count();
+int route_waypt_count();
+int route_count();
+int track_waypt_count();
+int track_count();
 route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
@@ -988,9 +1013,6 @@ enum grid_type {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
-
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
 
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();

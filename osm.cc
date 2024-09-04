@@ -835,9 +835,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
   osm_write_tag("name", route->rte_name);
   osm_write_tag("note", route->rte_desc);
 
-  if (opt_tag && (case_ignore_strncmp(opt_tag, "tagnd", 5) != 0)) {
-    osm_write_opt_tag(opt_tag);
-  }
+  osm_write_opt_tag(opt_tag);
 
   fout->writeEndElement(); // way
 }

@@ -24,7 +24,6 @@
 #include <cstdio>              // for size_t
 
 #include <QByteArray>          // for QByteArray
-#include <QRegularExpression>  // for QRegularExpression
 #include <QString>             // for QString
 #include <QTextCodec>          // for QTextCodec
 #include <QVector>             // for QVector
@@ -135,7 +134,7 @@ private:
   bool receiver_must_upper = true;
   QTextCodec* codec{nullptr};
 
-  QRegularExpression invalid_char_re;
+  QString valid_chars;
 
   QVector<arglist_t> garmin_args = {
     {
