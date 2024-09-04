@@ -519,12 +519,11 @@ Waypoint::CreationTimeXML() const
 
   QDateTime dt = GetCreationTime().toUTC();
 
-  const char* format = "yyyy-MM-ddTHH:mm:ssZ";
   if (dt.time().msec()) {
-    format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ss.zzzZ");
+  } else {
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ssZ");
   }
-
-  return dt.toString(format);
 }
 
 gpsbabel::DateTime

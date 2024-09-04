@@ -675,7 +675,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
   QRegularExpressionMatch match = re.match(fmtstart);
   if (match.hasMatch()) {
     // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
-    result = QDateTime::fromString(match.captured(0), "yyyyMMddHHmmss.zzz");
+    result = QDateTime::fromString(match.captured(0), u"yyyyMMddHHmmss.zzz");
     result.setTimeSpec(Qt::UTC);
     if (!result.isValid()) {
       fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
@@ -833,7 +833,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     QString start = match.captured(2);
     QString fmtstart("00000101000000");
     fmtstart.replace(0, start.size(), start);
-    result.start = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    result.start = QDateTime::fromString(fmtstart, u"yyyyMMddHHmmss");
     result.start.setTimeSpec(Qt::UTC);
     if (!result.start.isValid()) {
       fatal(MYNAME "-faketime-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
