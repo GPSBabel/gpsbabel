@@ -105,7 +105,7 @@ VcfFormat::vcf_disp(const Waypoint* wpt)
   vcf_print_utf(&wpt->gc_data->desc_short);
   gbfprintf(file_out, "\\n");
   vcf_print_utf(&wpt->gc_data->desc_long);
-  gbfprintf(file_out, "\\n\\nHINT:\\n");
+  gbfprintf(file_out, R"(\n\nHINT:\n)");
   if (vcf_encrypt) {
     QString s = rot13(wpt->gc_data->hint);
     vcf_print(s);
