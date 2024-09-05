@@ -27,6 +27,7 @@
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <memory>                       // for make_unique, unique_ptr
 #include <utility>                      // for as_const
 
 #include <QByteArray>                   // for QByteArray
@@ -572,8 +573,8 @@ rot13(const QString& s)
 QString
 convert_human_date_format(const char* human_datef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
+  auto result = std::make_unique<char[]>((2*strlen(human_datef)) + 1);
+  char* cout = result.get();
   char prev = '\0';
   int ylen = 0;
 
@@ -627,9 +628,7 @@ convert_human_date_format(const char* human_datef)
       fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return {result.get()};
 }
 
 /*
@@ -640,8 +639,8 @@ convert_human_date_format(const char* human_datef)
 QString
 convert_human_time_format(const char* human_timef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
+  auto result = std::make_unique<char[]>((2*strlen(human_timef)) + 1);
+  char* cout = result.get();
   char prev = '\0';
 
   for (const char* cin = human_timef; *cin; cin++) {
@@ -721,9 +720,7 @@ convert_human_time_format(const char* human_timef)
       fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return {result.get()};
 }
 
 
