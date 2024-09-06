@@ -28,7 +28,6 @@
 #include <tuple>      // for tie, tuple, make_tuple, ignore
 
 #include "defs.h"     // for PositionRad, DEG, METERS_TO_MILES, PositionDeg
-#include "grtcirc.h"
 
 static constexpr double EARTH_RAD = 6378137.0;
 

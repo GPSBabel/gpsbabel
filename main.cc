@@ -747,7 +747,7 @@ main(int argc, char* argv[])
 #endif
 
   if constexpr (DEBUG_LOCALE) {
-    printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+    printf("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -764,7 +764,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -776,7 +776,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
@@ -786,7 +786,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   qInstallMessageHandler(MessageHandler);
