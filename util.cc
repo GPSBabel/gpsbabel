@@ -27,7 +27,6 @@
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <memory>                       // for make_unique, unique_ptr
 #include <utility>                      // for as_const
 
 #include <QByteArray>                   // for QByteArray
@@ -573,8 +572,7 @@ rot13(const QString& s)
 QString
 convert_human_date_format(const char* human_datef)
 {
-  auto result = std::make_unique<char[]>((2*strlen(human_datef)) + 1);
-  char* cout = result.get();
+  QString result;
   char prev = '\0';
   int ylen = 0;
 
@@ -589,28 +587,25 @@ convert_human_date_format(const char* human_datef)
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          result.append("%y");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          *result.rbegin() = 'Y';
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          result.append("%m");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          result.append("%d");
           prev = 'D';
         }
         break;
@@ -618,7 +613,7 @@ convert_human_date_format(const char* human_datef)
         okay = 0;
       }
     } else if (ispunct(*cin)) {
-      *cout++ = *cin;
+      result.append(*cin);
       prev = '\0';
     } else {
       okay = 0;
@@ -628,7 +623,7 @@ convert_human_date_format(const char* human_datef)
       fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
     }
   }
-  return {result.get()};
+  return result;
 }
 
 /*
@@ -639,8 +634,7 @@ convert_human_date_format(const char* human_datef)
 QString
 convert_human_time_format(const char* human_timef)
 {
-  auto result = std::make_unique<char[]>((2*strlen(human_timef)) + 1);
-  char* cout = result.get();
+  QString result;
   char prev = '\0';
 
   for (const char* cin = human_timef; *cin; cin++) {
@@ -651,8 +645,7 @@ convert_human_time_format(const char* human_timef)
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          result.append("%S");
           prev = 'S';
         }
         break;
@@ -660,49 +653,44 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          result.append("%M");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          *result.rbegin() = 'I';  /* 01 .. 12 */
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          result.append("%k");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          *result.rbegin() = 'H';
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          result.append("%P");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          *result.rbegin() = 'P';
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          result.append("%p");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          *result.rbegin() = 'p';
         }
         break;
 
@@ -710,7 +698,7 @@ convert_human_time_format(const char* human_timef)
         okay = 0;
       }
     } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
+      result.append(*cin);
       prev = '\0';
     } else {
       okay = 0;
@@ -720,7 +708,7 @@ convert_human_time_format(const char* human_timef)
       fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
     }
   }
-  return {result.get()};
+  return result;
 }
 
 
