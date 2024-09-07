@@ -20,7 +20,7 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
