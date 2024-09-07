@@ -107,27 +107,6 @@ char* xstrdup(const QString& s)
   return xstrdup(CSTR(s));
 }
 
-/*
- * Duplicate at most sz bytes in str.
- */
-char*
-xstrndup(const char* str, size_t sz)
-{
-  size_t newlen = 0;
-  const char* cin = str;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  char* newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-
-  return newstr;
-}
-
 void*
 xrealloc(void* p, size_t s)
 {

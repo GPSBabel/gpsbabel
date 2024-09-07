@@ -29,7 +29,7 @@
 #include <cstdio>               // for snprintf, SEEK_SET
 #include <cstring>              // for strncpy, memcpy, memset
 
-#include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, xcalloc, track_add_wpt, xstrndup, mkshort, mkshort_del_handle, mkshort_new_handle, setshort_badchars, setshort_defname, setshort_length, setshort_mustuniq, setshort_...
+#include "defs.h"               // for Waypoint, be_read32, be_read16, be_write32, fatal, xfree, be_write16, route_head, xcalloc, track_add_wpt, mkshort, mkshort_del_handle, mkshort_new_handle, setshort_badchars, setshort_defname, setshort_length, setshort_mustuniq, setshort_...
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -481,7 +481,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
 
   gbfseek(fin, file_len-TRK_NAME_LEN, SEEK_SET);
   gbfread(&namebuf, 1, TRK_NAME_LEN, fin);
-  trk->rte_name = xstrndup(namebuf, sizeof(namebuf));
+  trk->rte_name = QByteArray(namebuf, qstrnlen(namebuf, sizeof(namebuf)));
 
   trk->rte_num  = th.trk_num;
 
