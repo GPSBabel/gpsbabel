@@ -592,7 +592,7 @@ convert_human_date_format(const QString& human_datef)
         }
         ylen++;
         if (ylen > 2) {
-          *result.rbegin() = 'Y';
+          result.back() = 'Y';
         }
         break;
       case 'm':
@@ -663,7 +663,7 @@ convert_human_time_format(const QString& human_timef)
           result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *result.rbegin() = 'I';  /* 01 .. 12 */
+          result.back() = 'I';  /* 01 .. 12 */
         }
         break;
 
@@ -672,7 +672,7 @@ convert_human_time_format(const QString& human_timef)
           result.append("%k");
           prev = 'H';
         } else {
-          *result.rbegin() = 'H';
+          result.back() = 'H';
         }
         break;
 
@@ -681,7 +681,7 @@ convert_human_time_format(const QString& human_timef)
           result.append("%P");
           prev = 'X';
         } else {
-          *result.rbegin() = 'P';
+          result.back() = 'P';
         }
         break;
 
@@ -690,7 +690,7 @@ convert_human_time_format(const QString& human_timef)
           result.append("%p");
           prev = 'X';
         } else {
-          *result.rbegin() = 'p';
+          result.back() = 'p';
         }
         break;
 
