@@ -570,20 +570,20 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const QString& human_datef)
 {
   QString result;
-  char prev = '\0';
+  QChar prev = '\0';
   int ylen = 0;
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  for (const QChar cin : human_datef) {
+    bool okay = true;
 
-    if (toupper(*cin) != 'Y') {
+    if (cin.toUpper() != 'Y') {
       ylen = 0;
     }
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'y':
       case 'Y':
         if (prev != 'Y') {
@@ -610,17 +610,17 @@ convert_human_date_format(const char* human_datef)
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      result.append(*cin);
+    } else if (cin.isPunct()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in date format " << human_datef << "!");
     }
   }
   return result;
@@ -632,16 +632,16 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const QString& human_timef)
 {
   QString result;
-  char prev = '\0';
+  QChar prev = '\0';
 
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+  for (const QChar cin : human_timef) {
+    bool okay = true;
 
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'S':
       case 's':
         if (prev != 'S') {
@@ -695,17 +695,17 @@ convert_human_time_format(const char* human_timef)
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      result.append(*cin);
+    } else if (cin.isPunct() || cin.isSpace()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in time format " << human_timef << "!");
     }
   }
   return result;
