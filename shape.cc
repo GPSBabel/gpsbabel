@@ -144,7 +144,7 @@ ShapeFormat::DBFCreateGpsbabel(const QString& pszFilename)
 }
 #endif
 
-void ShapeFormat::dump_fields() const
+[[noreturn]] void ShapeFormat::dump_fields() const
 {
   char name[12];
   warning(MYNAME ": Database fields:\n");
@@ -218,21 +218,17 @@ ShapeFormat::read()
     if (qopt_name.contains('+')) {
       // form a compound name from one or more fields.
       nameidx = -2;
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-      const QStringList opt_name_fields = qopt_name.split('+', QString::SkipEmptyParts);
-#else
       const QStringList opt_name_fields = qopt_name.split('+', Qt::SkipEmptyParts);
-#endif
       nameindices.reserve(opt_name_fields.size());
-      for (int oidx=0; oidx<opt_name_fields.size(); oidx++) {
+      for (const auto & opt_name_field : opt_name_fields) {
         bool ok;
-        int fieldIdx = opt_name_fields.at(oidx).toInt(&ok);
+        int fieldIdx = opt_name_field.toInt(&ok);
         if (ok) {
           // retrieve name component from given field number
           check_field_index(fieldIdx);
         } else {
           // retrieve name component from given field name.
-          fieldIdx = get_field_index(opt_name_fields.at(oidx));
+          fieldIdx = get_field_index(opt_name_field);
         }
         nameindices.append(fieldIdx);
       }

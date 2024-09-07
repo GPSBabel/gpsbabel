@@ -24,6 +24,7 @@
 #include <cstring>                    // for strcmp
 
 #include <QCoreApplication>           // for QCoreApplication
+#include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
 #include <QLocale>                    // for QLocale
@@ -49,6 +50,7 @@
 #include "gbversion.h"                // for VERSION_SHA
 #include "inifile.h"                  // for inifile_done, inifile_init
 #include "jeeps/gpsmath.h"            // for GPS_Lookup_Datum_Index
+#include "mkshort.h"                  // for MakeShort
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
@@ -60,6 +62,8 @@ static constexpr bool DEBUG_LOCALE = false;
 #define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
+
+static QElapsedTimer timer;
 
 class QargStackElement
 {
@@ -210,14 +214,6 @@ signal_handler(int sig)
 class FallbackOutput
 {
 public:
-  FallbackOutput() : mkshort_handle(mkshort_new_handle()) {}
-  // delete copy and move constructors and assignment operators.
-  // The defaults are not appropriate, and we haven't implemented proper ones.
-  FallbackOutput(const FallbackOutput&) = delete;
-  FallbackOutput& operator=(const FallbackOutput&) = delete;
-  FallbackOutput(FallbackOutput&&) = delete;
-  FallbackOutput& operator=(FallbackOutput&&) = delete;
-  ~FallbackOutput() {mkshort_del_handle(&mkshort_handle);}
 
   void waypt_disp(const Waypoint* wpt)
   {
@@ -229,7 +225,7 @@ public:
     if (!wpt->description.isEmpty()) {
       printf("%s/%s",
              global_opts.synthesize_shortnames ?
-             qPrintable(mkshort(mkshort_handle, wpt->description)) :
+             qPrintable(mkshort_handle.mkshort(wpt->description)) :
              qPrintable(wpt->shortname),
              qPrintable(wpt->description));
     }
@@ -241,12 +237,15 @@ public:
   }
 
 private:
-  short_handle mkshort_handle;
+  MakeShort mkshort_handle;
 };
 
 static void
 run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   start_session(ivecs.fmtname, fname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
@@ -268,11 +267,18 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
+                        .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+  }
 }
 
 static void
 run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
 {
+  if (global_opts.debug_level > 0)  {
+    timer.start();
+  }
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt);
@@ -292,6 +298,10 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->wr_init(ofname);
     ovecs->write();
     ovecs->wr_deinit();
+  }
+  if (global_opts.debug_level > 0)  {
+    Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
+                        .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -451,6 +461,9 @@ run(const char* prog_name)
       filter = FilterVecs::Instance().find_filter_vec(argument);
 
       if (filter) {
+        if (global_opts.debug_level > 0)  {
+          timer.start();
+        }
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
           FilterVecs::init_filter_vec(filter.flt);
@@ -470,6 +483,10 @@ run(const char* prog_name)
           filter->process();
           filter->deinit();
           FilterVecs::free_filter_vec(filter.flt);
+        }
+        if (global_opts.debug_level > 0)  {
+          Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
+                              .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
@@ -721,12 +738,12 @@ main(int argc, char* argv[])
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
 #error This version of Qt is not supported.
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1910) /* MSVC 2015 or earlier */
-#error MSVC 2015 and earlier are not supported. Please use MSVC 2017 or MSVC 2019.
+#if defined(_MSC_VER) && (_MSC_VER < 1920) /* Visual Studio 2017 or earlier */
+#error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
   if constexpr (DEBUG_LOCALE) {
@@ -787,7 +804,7 @@ main(int argc, char* argv[])
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDatumWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

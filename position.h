@@ -22,12 +22,14 @@
 #ifndef POSITION_H_INCLUDED_
 #define POSITION_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
-#include <QtGlobal>  // for qint64
+#include <QString>    // for QString
+#include <QVector>    // for QVector
+#include <QtGlobal>   // for qint64
 
-#include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT
-#include "filter.h"  // for Filter
+#include "defs.h"     // for arglist_t, route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, Waypoint, WaypointList (ptr only)
+#include "filter.h"   // for Filter
+#include "grtcirc.h"  // for RAD, gcdist, radtometers
+
 
 #if FILTERS_ENABLED
 
@@ -42,7 +44,22 @@ public:
   void process() override;
 
 private:
-  route_head* cur_rte = nullptr;
+  /* Types */
+
+  class WptRecord
+  {
+  public:
+    explicit WptRecord(Waypoint* w) : wpt(w) {}
+
+    Waypoint* wpt{nullptr};
+    bool deleted{false};
+  };
+
+  /* Member Functions */
+
+  void position_runqueue(const WaypointList& waypt_list, int qtype);
+
+  /* Data Members */
 
   double pos_dist{};
   qint64 max_diff_time{};
@@ -66,21 +83,6 @@ private:
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
   };
-
-  class WptRecord
-  {
-  public:
-    Waypoint* wpt{nullptr};
-    bool deleted{false};
-
-    explicit WptRecord(Waypoint* w) : wpt(w) {}
-  };
-
-  static double gc_distance(double lat1, double lon1, double lat2, double lon2);
-  void position_runqueue(WaypointList* waypt_list, int qtype);
-  void position_process_any_route(const route_head* rh, int type);
-  void position_process_rte(const route_head* rh);
-  void position_process_trk(const route_head* rh);
 
 };
 #endif // FILTERS_ENABLED

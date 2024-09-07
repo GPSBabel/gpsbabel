@@ -16,6 +16,7 @@ do
   case "$1" in
   -p) PNAME=$2; shift 2;;
   -v) VALGRIND=$2; shift 2;;
+  -d) DEBUG=1; shift 1;;
   *) break;;
   esac
 done
@@ -34,7 +35,11 @@ XMLWF=xmlwf
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
-trap "rm -fr $TMPDIR" 0 1 2 3 15
+if test -z  "$DEBUG"; then
+  trap "rm -fr $TMPDIR" 0 1 2 3 15
+else
+	echo "Preserving tempdir TMPDIR because DEBUG is set"
+fi
 
 bincompare()
 {

@@ -24,11 +24,12 @@
  */
 
 #include <cctype>          // for isprint
-#include <cmath>           // for cos, sin, atan2, pow, sqrt, M_PI
+#include <cmath>           // for cos, sin, atan2, pow, sqrt
 #include <cstdarg>         // for va_end, va_list, va_start
 #include <cstdio>          // for sscanf, snprintf, vprintf, SEEK_SET
 #include <cstdlib>         // for free
 #include <cstring>         // for memset
+#include <numbers>         // for inv_pi, pi
 
 #include <QByteArray>      // for QByteArray
 #include <QChar>           // for QChar
@@ -209,7 +210,9 @@ int
 SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len) const
 {
   int errors = 5;		// Allow this many receiver errors silently.
-  unsigned int c, i, state;
+  unsigned int c;
+  unsigned int i;
+  unsigned int state;
   signed int rcv_len;		// Negative length is read error.
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
@@ -417,7 +420,10 @@ SkytraqBase::skytraq_configure_logging() const
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
-  unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000;
+  unsigned int tmin=6;
+  unsigned int tmax=3600;
+  unsigned int dmin=0;
+  unsigned int dmax=10000;
   static uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
     0x18,			// message_id
     0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
@@ -479,7 +485,6 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
 
   // unsigned char log_bool, fifo_mode;
-  char* mystatus;
   unsigned int tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
   unsigned int tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
   unsigned int dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
@@ -488,9 +493,7 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
-  xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
-  db(1, mystatus);
-  xfree(mystatus);
+  db(1, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
 
   return res_OK;
 }
@@ -579,12 +582,12 @@ SkytraqBase::ECEF_to_LLA(double x, double y, long z, double* lat, double* lon, d
   /* height above ellipsoid (in meters): */
   *alt = AP/cos(*lat) - CA/sqrt(1 - CE2 * pow(sin(*lat), 2));
 
-  *lat = *lat /M_PI*180;
-  *lon = *lon /M_PI*180;
+  *lat = *lat * std::numbers::inv_pi * 180;
+  *lon = *lon * std::numbers::inv_pi * 180;
 }
 
 void
-SkytraqBase::state_init(struct read_state* pst)
+SkytraqBase::state_init(read_state* pst)
 {
   auto* track = new route_head;
   track->rte_name = "SkyTraq tracklog";
@@ -603,7 +606,7 @@ SkytraqBase::state_init(struct read_state* pst)
 }
 
 Waypoint*
-SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, double alt) const
+SkytraqBase::make_trackpoint(read_state* st, double lat, double lon, double alt) const
 {
   auto* wpt = new Waypoint;
 
@@ -626,7 +629,7 @@ SkytraqBase::make_trackpoint(struct read_state* st, double lat, double lon, doub
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
 
 int
-SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, int len) const
+SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len) const
 {
   int res = 0;
   double lat;
@@ -769,9 +772,10 @@ SkytraqBase::process_data_item(struct read_state* pst, const item_frame* pitem, 
 }
 
 int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-SkytraqBase::process_data_sector(struct read_state* pst, const uint8_t* buf, int len) const
+SkytraqBase::process_data_sector(read_state* pst, const uint8_t* buf, int len) const
 {
-  int plen, ilen;
+  int plen;
+  int ilen;
 
   for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
     ilen = process_data_item(pst, reinterpret_cast<const item_frame*>(&buf[plen]), len-plen);
@@ -790,7 +794,10 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
 {
   uint8_t MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (uint8_t)(sector) };
   int errors = 5;		/* allow this many errors */
-  unsigned int c, i, j, cs;
+  unsigned int c;
+  unsigned int i;
+  unsigned int j;
+  unsigned int cs;
   uint8_t buffer[16];
 
   if (sector > 0xFF) {
@@ -927,10 +934,17 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
 void
 SkytraqBase::skytraq_read_tracks() const
 {
-  struct read_state st;
+  read_state st;
   uint32_t log_wr_ptr;
-  uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
-  int t, rc, got_sectors, total_sectors_read = 0;
+  uint16_t sectors_free;
+  uint16_t sectors_total;
+  /* uint16_t sectors_used_a; */
+  /* uint16_t sectors_used_b; */
+  uint16_t sectors_used;
+  int t;
+  int rc;
+  int got_sectors;
+  int total_sectors_read = 0;
   int read_at_once = MAX(xstrtoi(opt_read_at_once, nullptr, 10), 1);
   int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
   int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
@@ -1145,7 +1159,8 @@ SkytraqBase::skytraq_erase() const
 void
 SkytraqBase::skytraq_set_location() const
 {
-  double lat, lng;
+  double lat;
+  double lng;
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
@@ -1243,7 +1258,7 @@ SkytraqfileFormat::rd_deinit()
 void
 SkytraqfileFormat::read()
 {
-  struct read_state st;
+  read_state st;
   int got_bytes;
   int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
   int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
@@ -1308,8 +1323,8 @@ void MinihomerFormat::lla2ecef(double lat, double lng, double alt, double* ecef_
   long double a = 6378137.0;
   long double esqr = 6.69437999014e-3;
 
-  long double llat = lat*M_PI/180;
-  long double llng = lng*M_PI/180;
+  long double llat = lat * std::numbers::pi / 180;
+  long double llng = lng * std::numbers::pi / 180;
   long double lalt = alt;
 
   long double s = sin(llat);
@@ -1323,7 +1338,9 @@ void MinihomerFormat::miniHomer_get_poi() const
 {
   uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
   uint8_t buf[32];
-  double lat, lng, alt;
+  double lat;
+  double lng;
+  double alt;
 
   for (unsigned int poi = 0; poi<NUMPOI; poi++) {
     MSG_GET_POI[1]=(poi>>8)&0xff;
@@ -1371,8 +1388,12 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) con
     0, 0, 0, 0, 0, 0, 0, 0,	//alt (double ecef)
     0 			// attr (u8, 1-> to flash, 0->ro sram)
   };
-  double lat, lng, alt;
-  double ecef_x, ecef_y, ecef_z;
+  double lat;
+  double lng;
+  double alt;
+  double ecef_x;
+  double ecef_y;
+  double ecef_z;
 
 
   int result = 0;		// result will be 0 if opt_poi isn't set

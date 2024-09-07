@@ -24,29 +24,19 @@
  * https://www.trackmaker.com/download/GTM211_format.pdf
  */
 
+#include "gtm.h"
+
 #include <cstdio>               // for SEEK_CUR
 #include <cstring>              // for strlen, memset
 
 #include <QList>                // for QList
 #include <QString>              // for QString
-#include <QVector>              // for QVector
 
-#include "defs.h" 
-#include "gbfile.h"             // for gbfseek, gbfputc, gbfputint32, gbfputflt
+#include "defs.h"
+#include "gbfile.h"             // for gbfseek, gbfputc, gbfputint32, gbfputflt, gbfputint16, gbfputuint16, gbfgetint32, gbfgetdbl, gbfputdbl, gbfgetint16, gbfwrite, gbfgetflt, gbfile, gbfclose, gbfgetc, gbfopen_le, gbfreadbuf
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
 #include "src/core/datetime.h"  // for DateTime
 
-
-static gbfile* file_in, *file_out;
-static int indatum;
-static int wp_count;
-static int ws_count;
-static int tr_count;
-static int ts_count;
-static int rt_count;
-static int im_count;
-static const route_head* rte_active;
-static int start_new;
 
 #define MYNAME "GTM"
 #define EPOCH89DIFF 631065600
@@ -70,8 +60,8 @@ static int start_new;
 
 #if 0
 /* not used */
-static short int
-fread_bool(gbfile* fd)
+short int
+GtmFormat::fread_bool(gbfile* fd)
 {
   char buf[2];
   gbfread(buf, 2, 1, fd);
@@ -84,29 +74,29 @@ fread_bool(gbfile* fd)
 #define fread_single(a) gbfgetflt(a)
 #define fread_double(a) gbfgetdbl(a)
 
-static QString
-fread_string(gbfile* fd)
+QString
+GtmFormat::fread_string(gbfile* fd)
 {
   int len = fread_integer(fd);
   return gbfreadbuf(len, fd);
 }
 
-static void
-fread_string_discard(gbfile* fd)
+void
+GtmFormat::fread_string_discard(gbfile* fd)
 {
   fread_string(fd);
 }
 
-static QString
-fread_fixedstring(gbfile* fd, int len)
+QString
+GtmFormat::fread_fixedstring(gbfile* fd, int len)
 {
   return gbfreadbuf(len, fd);
 }
 
 /* Write functions, according to specification. */
 
-static void
-fwrite_null(gbfile* fd, int len)
+void
+GtmFormat::fwrite_null(gbfile* fd, int len)
 {
   char buf[1024];
 
@@ -121,8 +111,8 @@ fwrite_null(gbfile* fd, int len)
 #define fwrite_single(a,b) gbfputflt((b), a)
 #define fwrite_double(a,b) gbfputdbl((b), a)
 
-static void
-fwrite_string(gbfile* fd, const char* str)
+void
+GtmFormat::fwrite_string(gbfile* fd, const char* str)
 {
   if (str && str[0]) {
     int len = strlen(str);
@@ -132,8 +122,9 @@ fwrite_string(gbfile* fd, const char* str)
     fwrite_integer(fd, 0);
   }
 }
-static void
-fwrite_string(gbfile* fd, const QString& str)
+
+void
+GtmFormat::fwrite_string(gbfile* fd, const QString& str)
 {
   if (str.isEmpty()) {
     fwrite_integer(fd, 0);
@@ -143,8 +134,8 @@ fwrite_string(gbfile* fd, const QString& str)
   }
 }
 
-static void
-fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
+void
+GtmFormat::fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
 {
   int len = str ? strlen(str) : 0;
 
@@ -159,159 +150,15 @@ fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
   }
 }
 
-static void
-fwrite_fixedstring(gbfile* fd, const QString& str, int fieldlen)
+void
+GtmFormat::fwrite_fixedstring(gbfile* fd, const QString& str, int fieldlen)
 {
   fwrite_fixedstring(fd, CSTR(str), fieldlen);
 }
 
 /* Auxiliary functions */
 
-#define MAX_INDATUM_INDEX 263
-
-static const int indatum_array[MAX_INDATUM_INDEX] = {
-  -1, // < 1
-  0, 0, 0, 0, 0, 0, 0, // < 8 : Adindan
-  1, // < 9 : Afgooye
-  2, // < 10 : Ain el Abd
-  -1, -1, -1, -1, // < 14
-  6, 6, 6, 6, 6, 6, 6, 6, 6, // < 23 : ARC 1950
-  7, 7, 7, // < 26 : ARC 1960
-  8, // < 27 : Ascension Island 58
-  -1, -1, -1, -1, -1, // < 32
-  13, // < 33 : Australian Geo 84
-  -1, // < 34
-  15, // < 35 : Bellevue IGN
-  16, // < 36 : Bermuda 1957
-  -1, -1, // < 38
-  17, // < 39 : Bukit Rimpah
-  18, // < 40 : Camp Area Astro
-  19, // < 41 : Campo Inchauspe
-  22, // < 42 : Canton Islan 1966
-  23, // < 43 : Cape
-  24, // < 44 : Cape Canaveral
-  26, // < 45 : Carthe
-  28, // < 46 : Chatham
-  29, // < 47 : Chua Astro
-  30, // < 48 : Corrego Alegre
-  -1, -1, // < 50
-  33, // < 51 : Djakarta (Batavia)
-  34, // < 52 : DOS 1968
-  35, // < 53 : Easter Island 1967
-  -1, // < 54
-  38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, // < 69 : European 1950 Mean
-  39, // < 70 : European 1979 Mean
-  -1, // < 71
-  41, // < 72 : Gandajika
-  42, // < 73 : Geodetic Datum 49
-  -1, // < 74
-  45, // < 75 : Guam 1963
-  46, // < 76 : Gunung Segara
-  -1, // < 77
-  49, // < 78 : Hearth North
-  -1, // < 79
-  50, // < 80 : Hjorsey 1955
-  51, // < 81 : Hong Kong 1963
-  52, // < 82 : Hu-Tzu-Shan
-  53, 53, 53, 53, 53, 53, 53, // < 89 : Indian
-  -1, // < 90
-  55, // < 91 : Ireland 1965
-  -1, // < 92
-  56, // < 93 : ISTS 073 69
-  57, // < 94 : Johnston Island 61
-  58, // < 95 : Kandawala
-  59, // < 96 : Kerguelen Island
-  60, // < 97 : Kertau 48
-  -1, -1, // < 99
-  61, // < 100 : L.C. 5 Astro
-  -1, // < 101
-  63, // < 102 : Liberia 1964
-  64, 64, // < 104 : Luzon
-  -1, // < 105
-  65, // < 106 : Mahe 1971
-  -1, // < 107
-  69, // < 108 : Merchich
-  71, // < 109 : Midway Astro 61
-  73, 73, // < 111 : Minna
-  -1, // < 112
-  75, 75, 75, // < 115 : Nahrwan
-  76, // < 116 : Naparima BWI
-  3, 3, 3, // < 119 : Alaska NAD27
-  14, 14, // < 121 : Bahamas NAD27
-  20, 20, 20, 20, 20, // < 126 : Canada Mean NAD27
-  21, // < 127 : Canal Zone NAD27
-  31, // < 128 : Cuba NAD27
-  44, // < 129 : Greenland NAD27
-  -1, -1, // < 131
-  20, // < 132 : Canada Mean NAD27
-  -1, -1, -1, // < 135
-  70, // < 136 : Mexico NAD27
-  -1, -1, -1, -1, -1, -1, -1, -1, // < 144
-  80, // < 145 : Old Egyptian
-  81, // < 146 : Old Hawaiian
-  82, // < 147 : Old Hawaiian Kauai
-  83, // < 148 : Old Hawaiian Maui
-  81, // < 149 : Old Hawaiian Mean
-  84, // < 150 : Old Hawaiian Oahu
-  85, // < 151 : Oman
-  86, 86, 86, 86, 86, // < 156 : OSG Britain
-  87, // < 157 : Pico de Las Nieves
-  88, // < 158 : Pitcairn Astro 67
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // < 171
-  91, // < 172 : Puerto Rico
-  92, // < 173 : Pulkovo 1942
-  94, // < 174 : Quatar National
-  -1, -1, // < 176
-  95, // < 177 : Rome 1940
-  96, 96, 96, 96, 96, 96, 96, // < 184 : S-42 (Pulkovo 1942)
-  -1, // < 185
-  100, // < 186 : Santo DOS
-  99, // < 187 : Sao Braz
-  -1, -1, -1, -1, // < 191
-  105, 105, // < 193 : SAD-69/Mean
-  98, // < 194 : SAD-69/Brazil
-  105, 105, 105, 105, 105, 105, 105, 105, 105, 105, // < 204 : SAD-69/Mean
-  106, // < 205 : South Asia
-  109, // < 206 : Tananarive 1926
-  111, // < 207 : Timbalai 1948
-  112, 112, 112, 112, // < 211 : Tokyo mean
-  113, // < 212 : Tristan Astro 1968
-  115, // < 213 : Viti Levu 1916
-  -1, -1, // < 215
-  116, // < 216 : Wake Eniwetok 1960
-  117, // < 217 : WGS 72
-  118, // < 218 : WGS 84
-  119, // < 219 : Yacare
-  120, // < 220 : Zanderij
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // < 231
-  98, // < 232 : SAD-69/Brazil
-  -1, -1, // < 234
-  117, // < 235 : WGS 72
-  0, // < 236 : Adindan
-  2, // < 237 : Ain el Abd
-  7, // < 238 : ARC 1960
-  8, // < 239 : Ascension Island 58
-  -1, -1, // < 241
-  52, // < 242 : Hu-Tzu-Shan
-  53, 53, 53, // < 245 : Indian
-  -1, // < 246
-  57, // < 247 : Johnston Island 61
-  64, // < 248 : Luzon
-  -1, // < 249
-  75, // < 250 : Nahrwan
-  76, // < 251 : Naparima BWI
-  -1, -1, -1, // < 254
-  82, // < 255 : Old Hawaiian Kauai
-  83, // < 256 : Old Hawaiian Maui
-  84, // < 257 : Old Hawaiian Oahu
-  -1, -1, // < 259
-  101, // < 260 : Sapper Hill 43
-  111, // < 261 : Timbalai 1948
-  112, // < 262 : Tokyo mean
-  116 // < 263 : Wake Eniwetok 1960
-};
-
-static void set_datum(int n)
+void GtmFormat::set_datum(int n)
 {
   indatum = -1;
   if (n > 0 && n < MAX_INDATUM_INDEX) {
@@ -323,52 +170,7 @@ static void set_datum(int n)
   }
 }
 
-static const char* icon_descr[] = {
-  "", "Airport", "Ball Park", "Bank", "Bar", "Boat Ramp", "Campground", "Car",
-  "City (Large)", "City (Medium)", "City (Small)", "Dam", "Danger Area",
-  "Drinking Water", "Fishing Area", "Gas Station", "Glider Area", "Golf Course",
-  "Heliport", "Hotel", "Animals", "Information", "Man Overboard", "Marina",
-  "Mine", "Medical Facility", "Parachute Area", "Park", "Parking Area",
-  "Picnic Area", "Private Field", "Residence", "Restaurant", "Restroom",
-  "Scenic Area", "School", "Seaplane Base", "Shipwreck", "Shopping Center",
-  "Short Tower", "Policy Station", "Ski Resort", "Soft Field", "Swimming Area",
-  "Tall Tower", "Telephone", "Tracback Point", "Ultralight Area", "Waypoint",
-  "Boat", "Exit", "Flag", "Duck", "Buoy", "Back Track", "Beach", "Bridge",
-  "Building", "Car Repair", "Cemetery", "Church", "Civil", "Convenience Store",
-  "Crossing", "Fast Food", "Forest", "Ghost Town", "Levee", "Military",
-  "Oil Field", "Post Office", "Rv Park", "Scales", "Summit", "Toll Booth",
-  "Trail Head", "Truck Stop", "Tunnel", "Highway", "Gate", "Fall", "Fence",
-  "Mata-Burro", "Fitness Center", "Movie Theater", "Live Theater", "Zoo", "Horn",
-  "Bowling", "Car Rental", "City (Capitol)", "Controlled Area", "Stadium",
-  "Museum", "Amusement Park", "Skull", "Department Store", "Pharmacy", "Pizza",
-  "Diver Down Flag 1", "Light", "Pin", "", "Pigsty", "Tree", "Bamboo",
-  "Banana Plant", "Arrow-Down", "Bifurcation", "Cavern", "River", "Rock",
-  "Arrow-Up", "Trunk", "Soccer Field", "Sporting Court", "Flag, Green", "Trench",
-  "Ship-Yellow", "Green Sign", "Swamp", "Lake", "Stop!",
-  "Fishing Hot Spot Facility", "Speed Reducer", "Stairway", "Cactus", "Ship-Red",
-  "Letter - S", "Letter - D", "Letter - N",
-  "Crossing", "Cross", "Flag, Red", "Curve1", "Curve2", "Curve3", "Curve4",
-  "Letter - W", "Letter - L", "Letter - R", "Radio Beacon", "Road Sign",
-  "Geocache", "Geocache Found", "Traffic Light", "Bus Station", "Train Station",
-  "School", "Mile Marker", "Conservation Area", "Waypoint", "Box", "Aerial",
-  "Auto Repair", "Boat", "Exit Ramp", "Fixed Nav Aid", "Floating Buoy", "Garden",
-  "Fish Farm", "Lighthouse", "Truck Service", "Resort", "Scuba", "Shooting",
-  "Sight Seeing", "Sounding", "Winery", "Navaid, Amber", "Navaid, Black",
-  "Navaid, Blue", "Navaid, Green", "Navaid, Green/Red", "Navaid, Green/White",
-  "Navaid, Orange", "Navaid, Red", "Navaid, Red/Green", "Navaid, Red/White",
-  "Navaid, Violet", "Navaid, White", "Navaid, White/Green", "Navaid, White/Red",
-  "Buoy, White", "Dot, White", "Red Square", "Red Diamond", "Green Square",
-  "Green Diamond", "Restricted Area", "Navaid (unlit)", "Dot (Small)", "Libraries", "Waypoint", "Waypoint1",
-  "Waypoint2", "Mark (1)", "Mark (2)", "Mark (3)", "Cross (Red)", "Store",
-  "Exclamation", "Flag (EUA)", "Flag (CAN)", "Flag (BRA)", "Man", "Animals",
-  "Deer Tracks", "Tree Stand", "Bridge", "Fence", "Intersection",
-  "Non Direct Beacon", "VHF Omni Range", "Vor/Tacan", "Vor-Dme",
-  "1st Approach Fix", "Localizer Outer", "Missed Appr. Pt", "Tacan",
-  "CheckPoint", nullptr
-};
-
-
-static void convert_datum(double* lat, double* lon)
+void GtmFormat::convert_datum(double* lat, double* lon) const
 {
   double amt;
   if (indatum != -1 && indatum != 118) {
@@ -379,8 +181,8 @@ static void convert_datum(double* lat, double* lon)
 
 /* Callbacks */
 
-static void
-gtm_rd_init(const QString& fname)
+void
+GtmFormat::rd_init(const QString& fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
   int version = fread_integer(file_in);
@@ -417,21 +219,21 @@ gtm_rd_init(const QString& fname)
   fread_discard(file_in, 22);
 }
 
-static void
-gtm_rd_deinit()
+void
+GtmFormat::rd_deinit()
 {
   gbfclose(file_in);
 }
 
-static void count_track_styles(const route_head* rte)
+void GtmFormat::count_track_styles(const route_head* rte)
 {
   if (!rte->rte_waypt_empty()) {
     ts_count++;
   }
 }
 
-static void
-gtm_wr_init(const QString& fname)
+void
+GtmFormat::wr_init(const QString& fname)
 {
   // Count the number of track style entires.
   // We don't output a track style for any track that doesn't have any
@@ -440,7 +242,10 @@ gtm_wr_init(const QString& fname)
   // in this format as every tracklog entry represents a waypoint,
   // and a new track is defined by a tracklog entry with the tracklog flag set.
   ts_count = 0;
-  track_disp_all(count_track_styles, nullptr, nullptr);
+  auto count_track_styles_lambda = [this](const route_head* rte)->void {
+    count_track_styles(rte);
+  };
+  track_disp_all(count_track_styles_lambda, nullptr, nullptr);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);	/* little endian */
 
@@ -490,14 +295,14 @@ gtm_wr_init(const QString& fname)
   fwrite_null(file_out, 22);
 }
 
-static void
-gtm_wr_deinit()
+void
+GtmFormat::wr_deinit()
 {
   gbfclose(file_out);
 }
 
-static void
-gtm_read()
+void
+GtmFormat::read()
 {
   route_head* trk_head = nullptr;
   route_head* rte_head = nullptr;
@@ -625,7 +430,7 @@ gtm_read()
   }
 }
 
-static int icon_from_descr(const QString& descr)
+int GtmFormat::icon_from_descr(const QString& descr)
 {
   for (int i = 0; icon_descr[i]; i++) {
     if (descr.compare(icon_descr[i]) == 0) {
@@ -635,7 +440,7 @@ static int icon_from_descr(const QString& descr)
   return 48;
 }
 
-static void write_waypt(const Waypoint* wpt)
+void GtmFormat::write_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -657,13 +462,13 @@ static void write_waypt(const Waypoint* wpt)
   fwrite_integer(file_out, 0);
 }
 
-static void start_rte(const route_head* rte)
+void GtmFormat::start_rte(const route_head* rte)
 {
   rte_active = rte;
   start_new = 1;
 }
 
-static void write_trk_waypt(const Waypoint* wpt)
+void GtmFormat::write_trk_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -677,7 +482,7 @@ static void write_trk_waypt(const Waypoint* wpt)
   start_new = 0;
 }
 
-static void write_trk_style(const route_head* trk)
+void GtmFormat::write_trk_style(const route_head* trk)
 {
   if (!trk->rte_waypt_empty()) {
     fwrite_string(file_out, trk->rte_name);
@@ -689,7 +494,7 @@ static void write_trk_style(const route_head* trk)
   }
 }
 
-static void write_rte_waypt(const Waypoint* wpt)
+void GtmFormat::write_rte_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -710,32 +515,31 @@ static void write_rte_waypt(const Waypoint* wpt)
   start_new = 0;
 }
 
-static void
-gtm_write()
+void
+GtmFormat::write()
 {
-  waypt_disp_all(write_waypt);
+  auto write_waypt_lambda = [this](const Waypoint* waypointp)->void {
+    write_waypt(waypointp);
+  };
+  waypt_disp_all(write_waypt_lambda);
+
   if (waypt_count()) {
     gbfwrite(WAYPOINTSTYLES, 1, sizeof(WAYPOINTSTYLES)-1, file_out);
   }
-  track_disp_all(start_rte, nullptr, write_trk_waypt);
-  track_disp_all(write_trk_style, nullptr, nullptr);
-  route_disp_all(start_rte, nullptr, write_rte_waypt);
+
+  auto start_rte_lambda = [this](const route_head* rte)->void {
+    start_rte(rte);
+  };
+  auto write_trk_style_lambda = [this](const route_head* rte)->void {
+    write_trk_style(rte);
+  };
+  auto write_trk_waypt_lambda = [this](const Waypoint* waypointp)->void {
+    write_trk_waypt(waypointp);
+  };
+  auto write_rte_waypt_lambda = [this](const Waypoint* waypointp)->void {
+    write_rte_waypt(waypointp);
+  };
+  track_disp_all(start_rte_lambda, nullptr, write_trk_waypt_lambda);
+  track_disp_all(write_trk_style_lambda, nullptr, nullptr);
+  route_disp_all(start_rte_lambda, nullptr, write_rte_waypt_lambda);
 }
-
-static
-QVector<arglist_t> gtm_args = {
-};
-
-ff_vecs_t gtm_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  gtm_rd_init,
-  gtm_wr_init,
-  gtm_rd_deinit,
-  gtm_wr_deinit,
-  gtm_read,
-  gtm_write,
-  nullptr,
-  &gtm_args,
-  NULL_POS_OPS
-};

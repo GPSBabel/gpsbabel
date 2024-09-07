@@ -60,9 +60,9 @@ private:
 
   /* Member Functions */
 
-  void GeoReadLoc(QXmlStreamReader& reader) const;
-  void geo_waypt_pr(const Waypoint*, QXmlStreamWriter& writer);
-  static Geocache::container_t wpt_container(const QString&);
+  static void GeoReadLoc(QXmlStreamReader& reader);
+  void geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer);
+  static Geocache::container_t wpt_container(const QString& args);
 
   /* Data Members */
 
