@@ -1,0 +1,81 @@
+diff --git a/Makefile.in b/Makefile.in
+index 83af6048..898a30b4 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -102,9 +102,6 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
+ 
+ SHAPE=shapelib/shpopen.o shapelib/dbfopen.o shapelib/safileio.o
+ 
+-MINIZIP=zlib/contrib/minizip/zip.o \
+-	zlib/contrib/minizip/ioapi.o
+-
+ ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
+ 	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
+ 	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
+@@ -118,7 +115,6 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
+ 	  gbfile.o parse.o session.o \
+ 	  src/core/xmlstreamwriter.o \
+ 	  src/core/usasciicodec.o\
+-	  src/core/ziparchive.o \
+ 	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+ OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
+ 
+diff --git a/tef_xml.cc b/tef_xml.cc
+index b32d69b3..38142961 100644
+--- a/tef_xml.cc
++++ b/tef_xml.cc
+@@ -72,11 +72,11 @@ tef_start(xg_string args, const QXmlStreamAttributes* attrv)
+   bool valid = false;
+ 
+   foreach(QXmlStreamAttribute attr, *attrv) {
+-    if (attr.name().compare("Comment", Qt::CaseInsensitive) == 0) {
+-      if (attr.value().compare("TourExchangeFormat", Qt::CaseInsensitive) == 0) {
++    if (attr.name().compare(QLatin1String("Comment"), Qt::CaseInsensitive) == 0) {
++      if (attr.value().compare(QLatin1String("TourExchangeFormat"), Qt::CaseInsensitive) == 0) {
+         valid = true;
+       }
+-    } else if (attr.name().compare("Version", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("Version"), Qt::CaseInsensitive) == 0) {
+       version = attr.value().toString().toDouble();
+     }
+   }
+@@ -95,9 +95,9 @@ tef_header(xg_string args, const QXmlStreamAttributes* attrv)
+ {
+   route = route_head_alloc();
+   foreach(QXmlStreamAttribute attr, *attrv) {
+-    if (attr.name().compare("Name", Qt::CaseInsensitive) == 0) {
++    if (attr.name().compare(QLatin1String("Name"), Qt::CaseInsensitive) == 0) {
+       route->rte_name = attr.value().toString().trimmed();
+-    } else if (attr.name().compare("Software", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("Software"), Qt::CaseInsensitive) == 0) {
+       route->rte_desc = attr.value().toString().trimmed();
+     }
+   }
+@@ -248,20 +248,20 @@ tef_item_start(xg_string args, const QXmlStreamAttributes* attrv)
+     QString attrstr = attr.value().toString();
+     QByteArray attrtext = attrstr.toUtf8();
+ 
+-    if (attr.name().compare("SegDescription", Qt::CaseInsensitive) == 0) {
++    if (attr.name().compare(QLatin1String("SegDescription"), Qt::CaseInsensitive) == 0) {
+       wpt_tmp->shortname = attrstr.trimmed();
+-    } else if (attr.name().compare("PointDescription", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("PointDescription"), Qt::CaseInsensitive) == 0) {
+       wpt_tmp->description = attrstr.trimmed();
+-    } else if (attr.name().compare("ViaStation", Qt::CaseInsensitive) == 0 &&
+-               attr.value().compare("true", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("ViaStation"), Qt::CaseInsensitive) == 0 &&
++               attr.value().compare(QLatin1String("true"), Qt::CaseInsensitive) == 0) {
+       wpt_tmp->wpt_flags.fmt_use = 1;  /* only a flag */
+ 
+       /* new in TEF V2 */
+-    } else if (attr.name().compare("Instruction", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("Instruction"), Qt::CaseInsensitive) == 0) {
+       wpt_tmp->description = attrstr.trimmed();
+-    } else if (attr.name().compare("Altitude", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("Altitude"), Qt::CaseInsensitive) == 0) {
+       wpt_tmp->altitude = attrstr.toDouble();
+-    } else if (attr.name().compare("TimeStamp", Qt::CaseInsensitive) == 0) {
++    } else if (attr.name().compare(QLatin1String("TimeStamp"), Qt::CaseInsensitive) == 0) {
+       /* nothing for the moment */
+     }
+   }
