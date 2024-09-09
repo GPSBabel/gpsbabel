@@ -6,7 +6,7 @@ while getopts "v:" opt; do
     *) exit 1;;
   esac
 done
-shift $(($OPTIND -1))
+shift $((OPTIND -1))
 
 container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:${VERSION}")
 trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
