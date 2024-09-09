@@ -357,6 +357,7 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
   PositionDeg position() const {return PositionDeg(latitude, longitude);}
   void SetPosition(const PositionDeg& pos)
   {
@@ -1011,9 +1012,6 @@ enum grid_type {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
-
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
 
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();

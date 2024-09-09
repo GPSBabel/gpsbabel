@@ -249,7 +249,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
 QDate
 XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
-  return QDate::fromString(s, "yyyyMMdd");
+  return QDate::fromString(s, u"yyyyMMdd");
 }
 
 QDateTime
@@ -1118,7 +1118,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
         buff = xcsv_urlbase;
       }
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff += QString::asprintf(fmp.printfc.constData(), CSTR(l.url_));
       } else {
         buff += QString::asprintf(fmp.printfc.constData(), fmp.val.constData() && *fmp.val.constData() ? fmp.val.constData() : "\"\"");
@@ -1127,7 +1127,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     break;
     case XcsvStyle::XT_URL_LINK_TEXT:
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff = QString::asprintf(fmp.printfc.constData(),
                                  !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp.val.constData());
       }
