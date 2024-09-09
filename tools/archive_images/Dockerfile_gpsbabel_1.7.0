@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 LABEL maintainer="https://github.com/tsteven4"
 
@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qt5-default \
+    qtbase5-dev \
     qttools5-dev \
     qttools5-dev-tools \
     qttranslations5-l10n \
