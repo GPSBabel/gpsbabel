@@ -1,5 +1,5 @@
 diff --git a/Makefile.in b/Makefile.in
-index 83af6048..ae94a7bd 100644
+index 3752efc1..0ce58112 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -102,9 +102,6 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
@@ -20,7 +20,7 @@ index 83af6048..ae94a7bd 100644
  	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
  OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
  
-@@ -435,90 +431,90 @@ toolinfo:
+@@ -432,93 +428,93 @@ toolinfo:
  	-$(QMAKE) -v
  
  # Machine generated from here down. 
@@ -75,6 +75,10 @@ index 83af6048..ae94a7bd 100644
    jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
    jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
    grtcirc.h src/core/logging.h strptime.h xcsv_tokens.gperf
+-delbin.o: delbin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
++delbin.o: delbin.cc defs.h config.h queue.h   \
+   gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+   src/core/xmltag.h
 -delgpl.o: delgpl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
 +delgpl.o: delgpl.cc defs.h config.h queue.h   \
    gbfile.h cet.h inifile.h session.h src/core/datetime.h
@@ -149,7 +153,7 @@ index 83af6048..ae94a7bd 100644
    gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
    grtcirc.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
    jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
-@@ -526,85 +522,85 @@ garmin.o: garmin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+@@ -526,82 +522,82 @@ garmin.o: garmin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
    jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
    jeeps/gpsserial.h garmin_tables.h garmin_fs.h garmin_device_xml.h
  garmin_device_xml.o: garmin_device_xml.cc defs.h config.h queue.h \
@@ -220,9 +224,6 @@ index 83af6048..ae94a7bd 100644
 -geo.o: geo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
 +geo.o: geo.cc defs.h config.h queue.h   gbfile.h \
    cet.h inifile.h session.h src/core/datetime.h src/core/file.h
--ggv_bin.o: ggv_bin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-+ggv_bin.o: ggv_bin.cc defs.h config.h queue.h   \
-   gbfile.h cet.h inifile.h session.h src/core/datetime.h
 -ggv_log.o: ggv_log.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
 +ggv_log.o: ggv_log.cc defs.h config.h queue.h   \
    gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h \
@@ -234,11 +235,6 @@ index 83af6048..ae94a7bd 100644
 -globals.o: globals.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
 +globals.o: globals.cc defs.h config.h queue.h   \
    gbfile.h cet.h inifile.h session.h src/core/datetime.h gbversion.h
--globalsat_sport.o: globalsat_sport.cc defs.h config.h queue.h zlib/zlib.h \
-- zlib/zconf.h config.h gbfile.h cet.h inifile.h session.h \
-+globalsat_sport.o: globalsat_sport.cc defs.h config.h queue.h  \
-+  config.h gbfile.h cet.h inifile.h session.h \
-  src/core/datetime.h gbser.h
 -glogbook.o: glogbook.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
 +glogbook.o: glogbook.cc defs.h config.h queue.h   \
    gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
@@ -246,6 +242,9 @@ index 83af6048..ae94a7bd 100644
 -gnav_trl.o: gnav_trl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
 +gnav_trl.o: gnav_trl.cc defs.h config.h queue.h   \
    gbfile.h cet.h inifile.h session.h src/core/datetime.h
+-google.o: google.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
++google.o: google.cc defs.h config.h queue.h   \
+   gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
 -googledir.o: googledir.cc defs.h config.h queue.h zlib/zlib.h \
 -  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
 +googledir.o: googledir.cc defs.h config.h queue.h  \
@@ -267,7 +266,7 @@ index 83af6048..ae94a7bd 100644
    cet.h inifile.h session.h src/core/datetime.h cet_util.h garmin_fs.h \
    jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
    jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
-@@ -612,79 +608,79 @@ gpx.o: gpx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+@@ -609,79 +605,79 @@ gpx.o: gpx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
    jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h \
    src/core/logging.h src/core/file.h src/core/xmlstreamwriter.h \
    src/core/xmltag.h
@@ -372,7 +371,7 @@ index 83af6048..ae94a7bd 100644
    cet.h inifile.h session.h src/core/datetime.h jeeps/gpsport.h \
    jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
    jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-@@ -692,89 +688,89 @@ jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/usb.h \
+@@ -689,89 +685,89 @@ jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/usb.h \
    jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h \
    jeeps/../garmin_device_xml.h
  jeeps/gpsmath.o: jeeps/gpsmath.cc jeeps/gps.h jeeps/../defs.h config.h \
@@ -481,7 +480,7 @@ index 83af6048..ae94a7bd 100644
  mac/libusb/darwin.o: mac/libusb/darwin.c config.h mac/libusb/usbi.h \
    mac/libusb/usb.h mac/libusb/error.h
  mac/libusb/descriptors.o: mac/libusb/descriptors.c mac/libusb/usbi.h \
-@@ -783,261 +779,233 @@ mac/libusb/error.o: mac/libusb/error.c mac/libusb/usb.h \
+@@ -780,261 +776,233 @@ mac/libusb/error.o: mac/libusb/error.c mac/libusb/usb.h \
    mac/libusb/error.h
  mac/libusb/usb.o: mac/libusb/usb.c mac/libusb/usbi.h mac/libusb/usb.h \
    mac/libusb/error.h
@@ -844,10 +843,10 @@ index 83af6048..ae94a7bd 100644
  internal_styles.cc: mkstyle.sh $(srcdir)/style/*.style
  	$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)
 diff --git a/configure.in b/configure.in
-index ffa67430..b0e84c42 100644
+index d8fd5d4e..a6afd36a 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -402,7 +402,7 @@ AC_SUBST(QT_INC_OPT)
+@@ -397,7 +397,7 @@ AC_SUBST(QT_INC_OPT)
  AC_SUBST(QT_SYSINC_OPT)
  AC_SUBST(QT_LIBS)
  
@@ -856,8 +855,20 @@ index ffa67430..b0e84c42 100644
  AC_CONFIG_FILES([gui/makelinuxdist.sh], [chmod +x gui/makelinuxdist.sh])
  AC_OUTPUT
  
+diff --git a/gpx.cc b/gpx.cc
+index e5fa054c..a6fc26be 100644
+--- a/gpx.cc
++++ b/gpx.cc
+@@ -28,7 +28,6 @@
+ #include "src/core/file.h"
+ #include "src/core/xmlstreamwriter.h"
+ #include "src/core/xmltag.h"
+-#include "src/core/ziparchive.h"
+ 
+ #include <QtCore/QXmlStreamReader>
+ #include <QtCore/QRegExp>
 diff --git a/tef_xml.cc b/tef_xml.cc
-index b32d69b3..38142961 100644
+index c8a64f8d..134eaa17 100644
 --- a/tef_xml.cc
 +++ b/tef_xml.cc
 @@ -72,11 +72,11 @@ tef_start(xg_string args, const QXmlStreamAttributes* attrv)

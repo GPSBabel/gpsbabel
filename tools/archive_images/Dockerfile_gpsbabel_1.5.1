@@ -66,6 +66,7 @@ RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
  && git checkout gpsbabel_1_5_1 \
  && cd gpsbabel \
  && patch < /home/gpsbabel/gpsbabel_1_5_1.patch \
+ && rm -fr zlib \
  && autoconf -f && ./configure --with-zlib=system && make -j 10 linux-gui \
  && rm $(pwd)/gui/GPSBabel1.5.1.tar.bz2 \
  && ln -s $(pwd)/gui/GPSBabel1.5.1/gpsbabel /usr/local/bin \

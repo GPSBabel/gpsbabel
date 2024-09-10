@@ -61,6 +61,7 @@ WORKDIR /home/gpsbabel
 RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
  && cd gpsbabel-build \
  && git checkout gpsbabel_1_8_0 \
+ && rm -fr zlib \
  && sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake \
  && qmake WITH_ZLIB=pkgconfig && make -j 10 unix-gui && make check \
  && ln -s $(pwd)/gui/GPSBabelFE/gpsbabel /usr/local/bin \
