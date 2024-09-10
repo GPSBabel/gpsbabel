@@ -8,7 +8,7 @@ while getopts "v:" opt; do
 done
 shift $((OPTIND -1))
 
-container=$(docker create -q -i -t -w /app -v "$(pwd):/app" --net=host -v $HOME/.Xauthority:/root/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix --env DISPLAY=$DISPLAY "tsteven4/gpsbabel:${VERSION}")
+container=$(docker create -q -i -t -w /app -v "$(pwd):/app" --net=host -v "$HOME/.Xauthority:/root/.Xauthority" -v /tmp/.X11-unix:/tmp/.X11-unix --env "DISPLAY=$DISPLAY" "tsteven4/gpsbabel:${VERSION}")
 trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
 docker start "${container}" >/dev/null
 docker exec -i -t "${container}" setup_user.sh "$(id -u)" "$(id -g)"
