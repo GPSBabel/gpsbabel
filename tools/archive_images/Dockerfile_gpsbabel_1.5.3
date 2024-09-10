@@ -28,7 +28,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ninja-build \
     curl \
     ca-certificates \
-    patch \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with libraries needed by gpsbabel
@@ -64,10 +63,9 @@ COPY gpsbabel_1_5_3.patch /home/gpsbabel
 RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
  && cd gpsbabel-build \
  && git checkout gpsbabel_1_5_3 \
- && patch < /home/gpsbabel/gpsbabel_1_5_3.patch \
+ && git apply /home/gpsbabel/gpsbabel_1_5_3.patch \
  && rm -fr zlib \
  && autoconf -f && ./configure --with-zlib=system && make -j 10 linux-gui \
- && rm $(pwd)/gui/GPSBabel1.5.3.tar.bz2 \
  && ln -s $(pwd)/gui/GPSBabel1.5.3/gpsbabel /usr/local/bin \
  && ln -s $(pwd)/gui/GPSBabel1.5.3/gpsbabelfe /usr/local/bin 
 
