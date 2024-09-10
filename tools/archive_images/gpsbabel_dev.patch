@@ -1,0 +1,13 @@
+diff --git a/gui/babeldata.h b/gui/babeldata.h
+index 9adb4dcd..00392f64 100644
+--- a/gui/babeldata.h
++++ b/gui/babeldata.h
+@@ -63,7 +63,7 @@ public:
+     upgradeErrors_(0),
+     upgradeOffers_(0),
+     runCount_(0),
+-    startupVersionCheck_(true),
++    startupVersionCheck_(false),
+     reportStatistics_(true),
+     allowBetaUpgrades_(false),
+     ignoreVersionMismatch_(false),

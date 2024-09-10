@@ -9,3 +9,4 @@ docker push tsteven4/gpsbabel:1.7.0
 docker push tsteven4/gpsbabel:1.8.0
 docker push tsteven4/gpsbabel:1.9.0
 docker push tsteven4/gpsbabel:latest
+docker push tsteven4/gpsbabel:dev
