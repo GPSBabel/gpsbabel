@@ -1,0 +1,10 @@
+#!/bin/bash -ex
+./make_docker_image_gpsbabel.sh 1.5.0
+./make_docker_image_gpsbabel.sh 1.5.1
+./make_docker_image_gpsbabel.sh 1.5.2
+./make_docker_image_gpsbabel.sh 1.5.3
+./make_docker_image_gpsbabel.sh 1.5.4
+./make_docker_image_gpsbabel.sh 1.6.0
+./make_docker_image_gpsbabel.sh 1.7.0
+./make_docker_image_gpsbabel.sh 1.8.0
+./make_docker_image_gpsbabel.sh 1.9.0
