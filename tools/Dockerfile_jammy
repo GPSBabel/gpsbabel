@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     make \
-    autoconf \
     git \
     valgrind \
     expat \
@@ -32,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     clang-tidy \
     jq \
     curl \
+    ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
