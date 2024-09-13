@@ -135,7 +135,6 @@ char* gbfgetstr(gbfile* file);			// read until any type of line-breaks or EOF
 QString gbfgetpstr(gbfile* file);		// read a pascal string
 QString gbfgetcstr(gbfile* file);		// read a null terminated string
 QByteArray gbfgetnativecstr(gbfile* file);  // read a null terminated string
-char* gbfgetcstr_old(gbfile* file);		// read a null terminated string
 
 int gbfputint16(int16_t i, gbfile* file);
 inline int gbfputuint16(uint16_t i, gbfile* file)

@@ -74,7 +74,7 @@
 #include <cstdint>              // for uint8_t
 #include <cstdio>               // for printf, SEEK_CUR, SEEK_SET
 #include <cmath>                // for abs
-#include <cstring>              // for strlen, strncmp
+#include <cstring>              // for strlen
 #include <vector>               // for vector
 
 #include <QByteArray>           // for QByteArray
@@ -110,7 +110,7 @@ TpoFormatBase::tpo_check_version_string()
 
   /* check for the presence of a 3.0-style id string */
   /* Note this check also finds version 4 id strings, e.g. "TOPO! Ver. 4.5.0" */
-  if (strncmp(v3_id_string, string_buffer, strlen(v3_id_string)) == 0) {
+  if (string_buffer.startsWith(v3_id_string)) {
     /*		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
 //fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
 

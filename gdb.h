@@ -117,7 +117,6 @@ private:
   static void gdb_flush_waypt_queue(WptNamePosnHash& Q);
   void disp_summary(const gbfile* f) const;
   QString fread_cstr() const;
-  static char* gdb_fread_cstr(gbfile* file_in);
   QString gdb_fread_strlist() const;
   static Waypoint* gdb_find_wayptq(const WptNameHash& Q, const Waypoint* wpt);
   static Waypoint* gdb_find_wayptq(const WptNamePosnHash& Q, const Waypoint* wpt);

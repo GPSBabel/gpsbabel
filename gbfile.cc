@@ -985,14 +985,12 @@ gbfgetflt(gbfile* file)
 
 /*
  * gbfgetcstr: Reads a string from file until either a '\0' or eof.
- *             The result is a temporary allocated entity: use it or free it!
  */
 
-char*
-gbfgetcstr_old(gbfile* file)
+QByteArray
+gbfgetnativecstr(gbfile* file)
 {
-  int len = 0;
-  char* str = file->buff;
+  QByteArray result;
 
   for (;;) {
     int c = gbfgetc(file);
@@ -1005,19 +1003,8 @@ gbfgetcstr_old(gbfile* file)
       fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
     }
 
-    if (len == file->buffsz) {
-      file->buffsz += 64;
-      str = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
-    }
-    str[len] = c;
-    len++;
+    result.append(c);
   }
-
-  char* result = (char*) xmalloc(len + 1);
-  if (len > 0) {
-    memcpy(result, str, len);
-  }
-  result[len] = '\0';
 
   return result;
 }
@@ -1025,19 +1012,7 @@ gbfgetcstr_old(gbfile* file)
 QString
 gbfgetcstr(gbfile* file)
 {
-  char* result = gbfgetcstr_old(file);
-  QString rv(result);
-  xfree(result);
-  return rv;
-}
-
-QByteArray
-gbfgetnativecstr(gbfile* file)
-{
-  char* result = gbfgetcstr_old(file);
-  QByteArray rv(result);
-  xfree(result);
-  return rv;
+  return {gbfgetnativecstr(file)};
 }
 
 /*
