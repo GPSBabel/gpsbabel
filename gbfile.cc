@@ -990,7 +990,11 @@ gbfgetflt(gbfile* file)
 QByteArray
 gbfgetnativecstr(gbfile* file)
 {
-  QByteArray result;
+  /* We emulate the historical return of a char* to an empty char string
+   * as opposed to a nullptr, thus we may return a QByteArray that is empty
+   * but not null, but never a null QByteArray.
+   */
+  QByteArray result("");
 
   for (;;) {
     int c = gbfgetc(file);
