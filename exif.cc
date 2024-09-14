@@ -63,7 +63,7 @@
 #include <cstring>              // for memcmp, strlen
 #include <utility>              // for as_const
 
-#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, xstrndup, fix_2d
+#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, fix_2d
 #include "garmin_tables.h"      // for gt_lookup_datum_index
 #include "gbfile.h"             // for gbfputuint32, gbfputuint16, gbfgetuint16, gbfgetuint32, gbfseek, gbftell, gbfile, gbfclose, gbfcopyfrom, gbfwrite, gbfopen_be, gbfread, gbfrewind, gbfgetflt, gbfgetint16, gbfopen, gbfputc, gbfputflt, gbsize_t, gbfeof, gbfgetdbl, gbfputdbl, gbfile::(anonymous)
 #include "jeeps/gpsmath.h"      // for GPS_Math_WGS84_To_Known_Datum_M

@@ -23,6 +23,7 @@
 
 #include <QHash>     // for QHash
 #include <QString>   // for QString
+#include <QStringList>   // for QString
 #include <QVector>   // for QVector
 
 #include <cstdint>   // for int32_t, uint32_t
@@ -52,13 +53,16 @@ protected:
   // constants related to position conversions.
   static constexpr double i1924_equ_axis = 6378388.0;
   static constexpr double EAST_SCALE = 20038297.0; /* this is i1924_equ_axis*pi */
+
   // static constexpr double i1924_polar_axis = 6356911.946;
   // We use a modified international 1924 ellipse with a different flattening,
   // defined by cos_ae = cos(angular eccentricity).
   static constexpr double cos_ae = 0.9966349016452;
   static constexpr double cos2_ae = cos_ae * cos_ae;
 
-  static constexpr const char* humminbird_icons[] = {
+  static constexpr auto kBadChars = "\r\n\t";
+
+  const QStringList humminbird_icons = {
     "Normal",       /*  0 */
     "House",        /*  1 */
     "Red cross",    /*  2 */

@@ -1,6 +1,7 @@
 *.a
+*.cbp
 *.o
-*.swp
+*.swo
 .ninja_deps
 .ninja_log
 .qmake.cache
@@ -10,6 +11,7 @@
 /*.gcno
 /*.gcov
 /.cmake/
+/.idea/
 /.vs/
 /.vscode/
 /GPSBabel
@@ -27,6 +29,7 @@
 /build/
 /codacy-clang-tidy
 /compile_commands.json
+/config.tests/
 /config.h
 /config.log
 /config.status
