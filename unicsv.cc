@@ -1,7 +1,7 @@
 /*
     Universal CSV - support for csv files, divining field order from the header.
 
-    Copyright (C) 2006-2013 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2006-2024 Robert Lipe, robertlipe+source@gpsbabel.org
     copyright (C) 2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -124,6 +124,7 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "power",	fld_power, kStrAny },
   { "prox",	fld_proximity, kStrAny },
   { "depth",	fld_depth, kStrAny },
+  { "datetime",	fld_datetime, kStrAny },
   { "date",	fld_date, kStrAny },
   { "time",	fld_time, kStrAny },
   { "zeit",	fld_time, kStrAny },
@@ -193,15 +194,16 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   //
   int base;
   const QString kBase31 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
-  if (s.size() >= 1 && s.size() <= 3) {
+  int len = s.size();
+  if (len >= 1 && len <= 3) {
     base = 16;
-  } else if (s.size() == 4) {
+  } else if (len == 4) {
     if (kBase31.indexOf(s[0]) < 16) {
       base = 16;
     } else {
       base = 31;
     }
-  } else if (s.size() >= 5 && s.size() <= 12) {
+  } else if (len >= 5 && len <= 12) {
     base = 31;
   } else {
     return 0;
@@ -231,7 +233,6 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   int p2;
   int p3;
   char sep[2];
-  std::tm tm{};
   int lconsumed = 0;
 
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
@@ -246,6 +247,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
     fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
+  struct std::tm tm{0};
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
     tm.tm_year = p1;
     tm.tm_mon = p2;
@@ -388,6 +390,8 @@ UnicsvFormat::unicsv_fondle_header(QString header)
    */
   header = header.toLower();
 
+  int column_count = 0;
+
   /* Find the separator and split the line into fields.
    * If we see an unenclosd tab that is the separator.
    * Otherwise, if we see an unenclosed semicolon that is the separator.
@@ -415,13 +419,18 @@ UnicsvFormat::unicsv_fondle_header(QString header)
     while (!f->name.isEmpty()) {
       if (unicsv_compare_fields(value, f)) {
         unicsv_fields_tab.last() = f->type;
+	if (global_opts.debug_level > 2) {
+          Debug() << MYNAME ": found column " << column_count
+                  << ": '" << value << "'";
+	}
         break;
       }
       f++;
     }
+
     if (global_opts.debug_level) {
       if ((f->name.isEmpty()) && global_opts.debug_level) {
-        warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+        warning(MYNAME ": Unhandled column %d \"%s\".\n", column_count, qPrintable(value));
       } else {
         warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
       }
@@ -448,6 +457,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
         unicsv_fields_tab.last() = fld_iso_time;
       }
     }
+    column_count++;
   }
 }
 
@@ -485,6 +495,11 @@ UnicsvFormat::rd_init(const QString& fname)
 void
 UnicsvFormat::rd_deinit()
 {
+  if (n_points_discarded) {
+    Warning() << MYNAME":" << n_points_discarded <<
+      "points were found during read without location and were ignored.";
+  }
+
   fin->close();
   delete fin;
   fin = nullptr;
@@ -550,15 +565,23 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
 
     switch (unicsv_fields_tab[column]) {
 
-    case fld_latitude:
-      human_to_dec(CSTR(value), &wpt->latitude, nullptr, 1);
-      wpt->latitude = wpt->latitude * ns;
-      break;
+    case fld_latitude: {
+      auto ll = human_to_dec(value, HumanToDec::FindLatitude);
+      if (ll.first.has_value()) {
+        wpt->latitude = ll.first.value();
+        wpt->latitude = wpt->latitude * ns;
+      }
+    }
+    break;
 
-    case fld_longitude:
-      human_to_dec(CSTR(value), nullptr, &wpt->longitude, 2);
-      wpt->longitude = wpt->longitude * ew;
-      break;
+    case fld_longitude: {
+      auto ll = human_to_dec(value, HumanToDec::FindLongitude);
+      if (ll.second.has_value()) {
+        wpt->longitude = ll.second.value();
+        wpt->longitude = wpt->longitude * ew;
+      }
+    }
+    break;
 
     case fld_shortname:
       wpt->shortname = value;
@@ -1042,6 +1065,12 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &wpt->latitude, &wpt->longitude, &alt, src_datum);
+  }
+
+  // For these reasons, we don't use the data we've harvested from this line.
+  if ((wpt->latitude == 0) && (wpt->longitude == 0)) {
+    n_points_discarded++;
+    return;
   }
 
   switch (unicsv_data_type) {
@@ -1715,6 +1744,7 @@ UnicsvFormat::wr_init(const QString& fname)
   }
 
   llprec = xstrtoi(opt_prec, nullptr, 10);
+  n_points_discarded = 0;
   utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
 }
 

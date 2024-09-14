@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2002 Alex Mottram (geo_alexm at cox-internet.com)
-    Copyright (C) 2002-2014 Robert Lipe
+    Copyright (C) 2002-2024 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,8 +58,14 @@ decdir_to_dec(const char* decdir);
 double
 ddmmdir_to_degrees(const char* ddmmdir);
 
-void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which);
+enum class HumanToDec {
+  FindLatitudeAndLongitude,
+  FindLatitude,
+  FindLongitude,
+};
+
+std::pair<std::optional<double>, std::optional<double>>
+human_to_dec(const QString& instr, HumanToDec which);
 
 QString
 dec_to_human(const char* format, const char* dirs, double val);

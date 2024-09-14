@@ -209,6 +209,7 @@ private:
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};
+  int n_points_discarded;
   int utc_offset{};
 
   QVector<arglist_t> unicsv_args = {

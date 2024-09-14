@@ -442,8 +442,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* latitude as a 32 bit integer offset */
     wpt->latitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
-  case XcsvStyle::XT_LAT_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1);
+  case XcsvStyle::XT_LAT_HUMAN_READABLE: {
+    auto ll = human_to_dec(value, HumanToDec::FindLatitude);
+    if (ll.first.has_value()) {
+      wpt->latitude = ll.first.value();
+    }
+    if (ll.second.has_value()) {
+      wpt->longitude = ll.second.value();
+    }
+    }
     break;
   case XcsvStyle::XT_LAT_DDMMDIR:
     wpt->latitude = ddmmdir_to_degrees(s);
@@ -466,8 +473,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     /* longitude as a 32 bit integer offset  */
     wpt->longitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
-  case XcsvStyle::XT_LON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2);
+  case XcsvStyle::XT_LON_HUMAN_READABLE: {
+    auto ll = human_to_dec(value, HumanToDec::FindLatitude);
+    if (ll.first.has_value()) {
+      wpt->latitude = ll.first.value();
+    }
+    if (ll.second.has_value()) {
+      wpt->longitude = ll.second.value();
+    }
+    }
     break;
   case XcsvStyle::XT_LON_DDMMDIR:
     wpt->longitude = ddmmdir_to_degrees(s);
@@ -477,8 +491,15 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     break;
   // case XcsvStyle::XT_LON_10E is handled outside the switch.
   /* LAT AND LON CONVERSIONS ********************************************/
-  case XcsvStyle::XT_LATLON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0);
+  case XcsvStyle::XT_LATLON_HUMAN_READABLE: {
+    auto ll = human_to_dec(value, HumanToDec::FindLatitude);
+    if (ll.first.has_value()) {
+      wpt->latitude = ll.first.value();
+    }
+    if (ll.second.has_value()) {
+      wpt->longitude = ll.second.value();
+    }
+    }
     break;
   /* DIRECTIONS **********************************************************/
   case XcsvStyle::XT_LAT_DIR:
