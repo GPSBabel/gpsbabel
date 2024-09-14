@@ -23,6 +23,8 @@
 #include <QXmlStreamWriter>         // for QXmlStreamWriter
 #include <QtGlobal>                 // for QT_VERSION, QT_VERSION_CHECK
 
+#include "defs.h"
+
 // As this code began in C, we have several hundred places that write
 // c strings.  Add a test that the string contains anything useful
 // before serializing an empty tag.
@@ -41,7 +43,96 @@
 
 namespace gpsbabel
 {
-// Dont emit the element if there's nothing interesting in it.
+XmlStreamWriter::xml_stack_list_entry_t& XmlStreamWriter::activeStack()
+{
+  if (stack_list.isEmpty()) {
+    fatal("xmlstreamwriter: programming error: the stack* functions are used incorrectly.");
+  }
+  return stack_list.last();
+}
+
+void XmlStreamWriter::stackAttribute(const QString& name, const QString& value)
+{
+  activeStack().append(xml_command(xml_wrt_cmd_t::attribute, name, value));
+}
+
+void XmlStreamWriter::stackEndElement()
+{
+  xml_stack_list_entry_t& active_stack = activeStack();
+  active_stack.append(xml_command(xml_wrt_cmd_t::end_element));
+
+  // Has the active_stack OptionalStartElement been paired with an EndElement?
+  if (active_stack.element_depth == 0) { // yes
+    const xml_stack_list_entry_t completed_stack = stack_list.takeLast();
+    // Does the completed_stack OptionalStartElement have any content?
+    if (completed_stack.element_count > 1) { // yes
+      // Is this the initial OptionalStartElement?
+      if (!stack_list.isEmpty()) { // no.  append stack contents to parent.
+        stack_list.last().append(completed_stack);
+      } else { // yes.  write the stack contents.
+        for (const auto& command: completed_stack.stack) {
+          switch (command.type) {
+          case xml_wrt_cmd_t::start_element:
+            QXmlStreamWriter::writeStartElement(command.name);
+            break;
+          case xml_wrt_cmd_t::attribute:
+            QXmlStreamWriter::writeAttribute(command.name, command.value);
+            break;
+          case xml_wrt_cmd_t::name_space:
+            QXmlStreamWriter::writeNamespace(command.name, command.value);
+            break;
+          case xml_wrt_cmd_t::text_element:
+            QXmlStreamWriter::writeTextElement(command.name, command.value);
+            break;
+          case xml_wrt_cmd_t::end_element:
+            QXmlStreamWriter::writeEndElement();
+            break;
+          }
+        }
+      }
+    } // else {no.  empty OptionalStartElement is discarded.}
+  }
+}
+
+void XmlStreamWriter::stackNamespace(const QString& namespaceUri, const QString& prefix)
+{
+  activeStack().append(xml_command(xml_wrt_cmd_t::name_space, namespaceUri, prefix));
+}
+
+/*
+ * Start an element that will be written if and only if it has children.
+ *
+ * Usage:
+ * 1. stackOptionalStartElement must be the first stack*() method called.
+ * 2. stackOptionalStartElement must be paired with a subsequent
+ *    stackEndElement.
+ * 3. write*() methods should not be called until the initial optional start
+ *    element has paired with a subsequent stackEndElement.
+ */
+void XmlStreamWriter::stackOptionalStartElement(const QString& name)
+{
+  stack_list.append(xml_stack_list_entry_t());
+  stackStartElement(name);
+}
+
+void XmlStreamWriter::stackOptionalTextElement(const QString& name, const QString& text)
+{
+  if (!text.isEmpty()) {
+    stackTextElement(name, text);
+  }
+}
+
+void XmlStreamWriter::stackStartElement(const QString& name)
+{
+  activeStack().append(xml_command(xml_wrt_cmd_t::start_element, name));
+}
+
+void XmlStreamWriter::stackTextElement(const QString& name, const QString& text)
+{
+  activeStack().append(xml_command(xml_wrt_cmd_t::text_element, name, text));
+}
+
+// Don't emit the element if there's nothing interesting in it.
 void XmlStreamWriter::writeOptionalTextElement(const QString& qualifiedName, const QString& text)
 {
   if (!text.isEmpty()) {

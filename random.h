@@ -73,12 +73,12 @@ private:
 
   /* Member Functions */
 
-  double rand_dbl(double);
-  float rand_flt(float);
-  int rand_int(int);
-  QString rand_str(int, const char*);
+  double rand_dbl(double max);
+  float rand_flt(float max);
+  int rand_int(int max);
+  QString rand_str(int maxlen, const char* fmt);
   void random_set_generator();
-  Waypoint* random_generate_wpt(int, const QDateTime&, const Waypoint*);
+  Waypoint* random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev);
 
   /* Data Members */
 

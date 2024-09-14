@@ -69,9 +69,11 @@
     3.x     "recreation"
 */
 
-#include <cmath>                // for abs
+#include "tpo.h"
+
 #include <cstdint>              // for uint8_t
 #include <cstdio>               // for printf, SEEK_CUR, SEEK_SET
+#include <cmath>                // for abs
 #include <cstring>              // for strlen, strncmp
 #include <vector>               // for vector
 
@@ -79,41 +81,24 @@
 #include <QScopedArrayPointer>  // for QScopedArrayPointer
 #include <QString>              // for QString
 #include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
-#include <QVector>              // for QVector
 #include <QtGlobal>             // for qPrintable, Q_UNUSED
 
-#include "defs.h"
-#include "gbfile.h"             // for gbfread, gbfgetc, gbfgetint32, gbfreadbuf, gbfseek, gbfgetdbl, gbfgetint16, gbfclose, gbfgetnativecstr, gbfgetuint16, gbfopen_le, gbfile
+#include "defs.h"               // for Waypoint, fatal, route_head, le_read32, waypt_add, track_add_wpt, track_add_head, doing_rtes, doing_wpts, gb_color, route_add_head, route_add_wpt, unknown_alt, doing_trks
+#include "gbfile.h"             // for gbfread, gbfgetc, gbfgetint32, gbfreadbuf, gbfseek, gbfgetdbl, gbfgetint16, gbfclose, gbfgetnativecstr, gbfgetuint16, gbfopen_le
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
 
 
 #define MYNAME	"TPO"
 
-static char* dumpheader = nullptr;
-
-static
-QVector<arglist_t> tpo2_args = {
-};
-
-static
-QVector<arglist_t> tpo3_args = {
-};
-
-
-static gbfile* tpo_file_in;
-static double track_length;
 
 /*******************************************************************************/
 /*                                      READ                                   */
 /*******************************************************************************/
 
-/* Define a global here that we can query from multiple places */
-static float tpo_version = 0.0;
-
 /* tpo_check_version_string()
    Check the first bytes of the file for a version 3.0 header. */
-static void
-tpo_check_version_string()
+void
+TpoFormatBase::tpo_check_version_string()
 {
 
   unsigned char string_size;
@@ -142,11 +127,11 @@ tpo_check_version_string()
   }
 }
 
-static void
 /* tpo_dump_header_bytes(int header_size)
    Write the first header_size bytes of the file to standard output
    as a C array definition. */
-tpo_dump_header_bytes(int header_size)
+void
+TpoFormatBase::tpo_dump_header_bytes(int header_size)
 {
   QByteArray buffer = gbfreadbuf(header_size, tpo_file_in);
 
@@ -172,8 +157,8 @@ tpo_dump_header_bytes(int header_size)
    Keep reading bytes from the file until the section name is encountered,
    then go seek_bytes forwards (+) or backwards (-) to the start of
    the section data. */
-static void
-tpo_read_until_section(const char* section_name, int seek_bytes)
+void
+TpoFormatBase::tpo_read_until_section(const char* section_name, int seek_bytes)
 {
   char byte;
   unsigned int match_index = 0;
@@ -220,7 +205,7 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 // that is the only type of data available in the version 2.x TPO
 // files.
 //
-static void tpo_read_2_x()
+void TpoFormatBase::tpo_read_2_x()
 {
   char buff[16];
 
@@ -335,7 +320,7 @@ static void tpo_read_2_x()
 //
 // For version 3.x files.
 //
-static int tpo_read_int()
+int TpoFormatBase::tpo_read_int()
 {
   constexpr int debug = 0;
 
@@ -381,7 +366,7 @@ static int tpo_read_int()
 //
 // For version 3.x/4.x files.
 //
-static int tpo_find_block(unsigned int block_desired)
+int TpoFormatBase::tpo_find_block(unsigned int block_desired)
 {
   unsigned int block_type;
   constexpr int debug = 0;
@@ -419,7 +404,7 @@ static int tpo_find_block(unsigned int block_desired)
 //
 // For version 3.x files.
 //
-static Waypoint* tpo_convert_ll(int lat, int lon)
+Waypoint* TpoFormatBase::tpo_convert_ll(int lat, int lon)
 {
   auto* waypoint_temp = new Waypoint;
 
@@ -453,19 +438,9 @@ static Waypoint* tpo_convert_ll(int lat, int lon)
   return (waypoint_temp);
 }
 
-#define TRACKNAMELENGTH 255
-class StyleInfo
-{
-public:
-  QString name;
-  uint8_t color[3] {0, 0, 0}; // keep R/G/B values separate because line_color needs BGR
-  uint8_t wide{0};
-  uint8_t dash{0};
-};
-
 // Track decoder for version 3.x/4.x files.
 // This block contains tracks (called "freehand routes" in Topo).
-static void tpo_process_tracks()
+void TpoFormatBase::tpo_process_tracks()
 {
   constexpr int debug = 0; // 0-4 for increasingly verbose output in this subroutine)
 
@@ -611,7 +586,7 @@ static void tpo_process_tracks()
     track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
 
     // Can be 8/16/32-bit value - never used? length in meters?
-    track_length = tpo_read_int();
+    double track_length = tpo_read_int();
 
 //UNKNOWN DATA LENGTH
     unsigned int name_length = tpo_read_int();
@@ -721,8 +696,8 @@ static void tpo_process_tracks()
     */
 
     // Read the track bytes into a buffer
-    auto* buf = (unsigned char*) xmalloc(track_byte_count);
-    gbfread(buf, 1, track_byte_count, tpo_file_in);
+    QScopedArrayPointer<unsigned char> buf(new unsigned char[track_byte_count]);
+    gbfread(buf.get(), 1, track_byte_count, tpo_file_in);
 
     // these can be set repeatedly, and retain their value between settings
     //  (even if not used for every trackpoint)
@@ -759,13 +734,13 @@ static void tpo_process_tracks()
       // Time to read a new latlong?
       if (!llvalid) {
 
-        lon = le_read32(buf+jj);
+        lon = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           printf("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
         }
         jj+=4;
 
-        lat = le_read32(buf+jj);
+        lat = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           printf("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
         }
@@ -781,7 +756,7 @@ static void tpo_process_tracks()
             && !buf[jj+3]
             && !buf[jj+2]) {
 
-          lonscale = le_read32(buf+jj);
+          lonscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
             printf("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
           }
@@ -797,7 +772,7 @@ static void tpo_process_tracks()
             && !buf[jj+3]
             && !buf[jj+2]) {
 
-          latscale = le_read32(buf+jj);
+          latscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
             printf("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
           }
@@ -822,13 +797,13 @@ static void tpo_process_tracks()
 
       // read 8-byte lon+lat, required at start of track or after 0x88 tag
       if (tpmode == GetFullPoint) {
-        lon = le_read32(buf+jj);
+        lon = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           printf("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
         }
         jj+=4;
 
-        lat = le_read32(buf+jj);
+        lat = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           printf("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
         }
@@ -861,7 +836,7 @@ static void tpo_process_tracks()
       // Note that lonscale can begin with 0x88, which should not be confused with GetFullPoint tags.
       if (tpmode == CheckLonScale) {
         if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
-          lonscale = le_read32(buf+jj);
+          lonscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
             printf("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
           }
@@ -880,7 +855,7 @@ static void tpo_process_tracks()
       // Note that latscale can begin with 0x88, which should not be confused with GetFullPoint tags.
       if (tpmode == CheckLatScale) {
         if ((jj+3<track_byte_count) && !(buf[jj+3]) && !(buf[jj+2])) {
-          latscale = le_read32(buf+jj);
+          latscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
             printf("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
           }
@@ -1034,22 +1009,13 @@ static void tpo_process_tracks()
 #endif
 
     } // end for jj track_byte_count
-    xfree(buf);
   } // end for ii track_count
 } // end of tpo_process_tracks
 
 
-// Global index to waypoints, needed for routes, filled in by
-// tpo_process_waypoints.
-//
-// For version 3.x files.
-//
-static Waypoint** tpo_wp_index;
-static unsigned int tpo_index_ptr;
-
 // Waypoint decoder for version 3.x files.
 //
-static void tpo_process_waypoints()
+void TpoFormatBase::tpo_process_waypoints(QList<Waypoint>& tpo_wp_index)
 {
   //printf("Processing Waypoints...\n");
 
@@ -1065,8 +1031,8 @@ static void tpo_process_waypoints()
 
   // Fetch storage for the waypoint index (needed later for
   // routes)
-  tpo_wp_index = (Waypoint**) xmalloc(sizeof(Waypoint*) * waypoint_count);
-  tpo_index_ptr = 0;
+  tpo_wp_index.clear();
+  tpo_wp_index.reserve(waypoint_count);
 
   if (waypoint_count == 0) {
     return;
@@ -1125,10 +1091,8 @@ static void tpo_process_waypoints()
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
-    auto* waypoint_temp2 = new Waypoint(*waypoint_temp);
-
-    // Attach the copy to our index
-    tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
+    // Attach a copy to our index.
+    tpo_wp_index.append(*waypoint_temp);
 
     // Add the original waypoint to the chain of waypoints
     waypt_add(waypoint_temp);
@@ -1157,7 +1121,7 @@ static void tpo_process_waypoints()
 
 // Map Notes decoder for version 3.x files.
 //
-static void tpo_process_map_notes()
+void TpoFormatBase::tpo_process_map_notes()
 {
   //printf("Processing Map Notes...\n");
 
@@ -1255,7 +1219,7 @@ static void tpo_process_map_notes()
 
 // Symbols decoder for version 3.x files.
 //
-static void tpo_process_symbols()
+void TpoFormatBase::tpo_process_symbols()
 {
   //printf("Processing Symbols...\n");
 
@@ -1298,7 +1262,7 @@ static void tpo_process_symbols()
 
 // Text Labels decoder for version 3.x files.
 //
-static void tpo_process_text_labels()
+void TpoFormatBase::tpo_process_text_labels()
 {
   //printf("Processing Text Labels...\n");
 
@@ -1358,11 +1322,11 @@ static void tpo_process_text_labels()
 
 // Route decoder for version 3.x files.
 //
-// We depend on tpo_wp_index[] having been malloc'ed and filled-in
-// with pointers to waypoint objects by tpo_process_waypoints()
+// We depend on tpo_wp_index having been filled-in
+// with waypoint objects by the tpo_process_waypoints()
 // function above.
 //
-static void tpo_process_routes()
+void TpoFormatBase::tpo_process_routes(const QList<Waypoint>& tpo_wp_index)
 {
   //printf("Processing Routes...\n");
 
@@ -1430,7 +1394,7 @@ static void tpo_process_routes()
 //printf("val: %x\t\t", val);
 
       // Duplicate a waypoint from our index of waypoints.
-      auto* waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
+      auto* waypoint_temp = new Waypoint(tpo_wp_index[val-1]);
 
       // Add the waypoint to the route
       route_add_wpt(route_temp, waypoint_temp);
@@ -1446,7 +1410,7 @@ static void tpo_process_routes()
 #ifdef DEAD_CODE_IS_REBORN
 // Compass decoder for version 3.x files.
 //
-static void tpo_process_compass()
+void TpoFormatBase::tpo_process_compass()
 {
 
   // Not implemented yet
@@ -1461,8 +1425,13 @@ static void tpo_process_compass()
 // (called "freehand routes" or just "routes" in Topo), "waypoints",
 // and "gps-routes".  We intend to read all three types.
 //
-static void tpo_read_3_x()
+void TpoFormatBase::tpo_read_3_x()
 {
+  // Global index to waypoints, needed for routes, filled in by
+  // tpo_process_waypoints.
+  //
+  // For version 3.x files.
+  QList<Waypoint> tpo_wp_index;
 
   if (doing_trks) {
 //printf("Processing Tracks\n");
@@ -1471,7 +1440,7 @@ static void tpo_read_3_x()
 
   if (doing_wpts || doing_rtes) {
 //printf("Processing Waypoints\n");
-    tpo_process_waypoints();
+    tpo_process_waypoints(tpo_wp_index);
   }
 
   if (doing_rtes) {
@@ -1481,7 +1450,7 @@ static void tpo_read_3_x()
     // for routes.
     //
 //printf("Processing Routes\n");
-    tpo_process_routes();
+    tpo_process_routes(tpo_wp_index);
   }
 
   if (doing_wpts) {
@@ -1517,15 +1486,9 @@ static void tpo_read_3_x()
 
 
 
-static void
-tpo_rd_init(const QString& fname)
+void
+TpoFormatBase::tpo_rd_init(const QString& fname)
 {
-
-  // prepare for an attempt to deallocate memory that may or may not get allocated
-  // depending on the options used.
-  tpo_index_ptr = 0;
-  tpo_wp_index = nullptr;
-
   tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
   tpo_check_version_string();
 
@@ -1547,26 +1510,14 @@ tpo_rd_init(const QString& fname)
   }
 }
 
-static void
-tpo_rd_deinit()
+void
+TpoFormatBase::tpo_rd_deinit()
 {
-  // Free the waypoint index, we don't need it anymore.
-  for (unsigned int i = 0; i < tpo_index_ptr; i++) {
-    delete tpo_wp_index[i];
-  }
-  tpo_index_ptr = 0;
-
-  // Free the index array itself
-  if (tpo_wp_index) {
-    xfree(tpo_wp_index);
-    tpo_wp_index = nullptr;
-  }
-
   gbfclose(tpo_file_in);
 }
 
-static void
-tpo_read()
+void
+TpoFormatBase::tpo_read()
 {
 
   if (tpo_version == 2.0) {
@@ -1579,33 +1530,3 @@ tpo_read()
     fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
   }
 }
-
-/* TPO 2.x format can read tracks only */
-ff_vecs_t tpo2_vecs = {
-  ff_type_file,   /* ff_type_internal */
-  { ff_cap_none, ff_cap_read,  ff_cap_none },
-  tpo_rd_init,
-  nullptr,
-  tpo_rd_deinit,
-  nullptr,
-  tpo_read,
-  nullptr,
-  nullptr,
-  &tpo2_args,
-  NULL_POS_OPS
-};
-
-/* TPO 3.x format can read waypoints/tracks/routes */
-ff_vecs_t tpo3_vecs = {
-  ff_type_file,   /* ff_type_internal */
-  { ff_cap_read, ff_cap_read, ff_cap_read },
-  tpo_rd_init,
-  nullptr,
-  tpo_rd_deinit,
-  nullptr,
-  tpo_read,
-  nullptr,
-  nullptr,
-  &tpo3_args,
-  NULL_POS_OPS
-};

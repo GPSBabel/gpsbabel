@@ -18,33 +18,33 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '5.15.2'
-            XCODE_VERSION: '12.5.1'
-            GENERATOR: 'Ninja'
-            RELEASE: false
-            os: macos-11
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '13.4.1'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-12
+          - QT_VERSION: '6.2.4'
+            XCODE_VERSION: '14.3.1'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-13
+          - QT_VERSION: '6.5.3'
+            XCODE_VERSION: '15.4'
             GENERATOR: 'Xcode'
             RELEASE: false
-            os: macos-12
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            os: macos-14
+          - QT_VERSION: '6.5.3'
+            XCODE_VERSION: '15.4'
             GENERATOR: 'Ninja'
             RELEASE: true
-            os: macos-12
-          - QT_VERSION: '6.5.3'
-            XCODE_VERSION: '14.2'
-            GENERATOR: 'Ninja'
-            RELEASE: false
-            os: macos-12
+            os: macos-14
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Cache Qt
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: ~/Cache
@@ -52,16 +52,16 @@ jobs:
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Qt install
       if: steps.cache.outputs.cache-hit != 'true'
       env:
-        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+        CI_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
+        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
 
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
@@ -73,13 +73,22 @@ jobs:
         # https://github.com/actions/runner-images/issues/6507
         # https://github.com/actions/runner-images/issues/2322
         # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
+        # workaround for https://github.com/actions/setup-python/issues/577
+        brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
-        brew install jing-trang
+        # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
+        if [ "${{ matrix.os }}" != "macos-11" ]; then
+          brew install jing-trang
+        fi
 
     - name: Script
       env:
-        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+        XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
@@ -97,7 +106,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MacOS_Installer ${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg

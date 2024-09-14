@@ -1,6 +1,7 @@
 *.a
+*.cbp
 *.o
-*.swp
+*.swo
 .ninja_deps
 .ninja_log
 .qmake.cache
@@ -9,6 +10,8 @@
 /*.gcda
 /*.gcno
 /*.gcov
+/.cmake/
+/.idea/
 /.vs/
 /.vscode/
 /GPSBabel
@@ -19,8 +22,14 @@
 /autom4te.cache/
 /babelweb/
 /bld/
+/bld-clazy/
+/bld-sanitizeaddress/
+/bld-sanitizeundefined/
+/bld-tidy/
 /build/
+/codacy-clang-tidy
 /compile_commands.json
+/config.tests/
 /config.h
 /config.log
 /config.status
@@ -45,6 +54,7 @@
 /out/
 /qrc_gpsbabel.cpp
 /release/
+/run-clang-tidy-nocolor
 /tmp/
 CMakeCache.txt
 CMakeFiles/

@@ -168,7 +168,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toUTC();
           *file_out << "<span class=\"gpsbabellogdate\">"
                     << logtime.toString(u"yyyy-MM-dd") << "</span><br>\n";
         }
@@ -228,12 +228,12 @@ HtmlFormat::write()
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
   if (!gpsbabel_testmode()) {
-    *file_out << "  <meta name=\"Generator\" content=\"GPSBabel "
+    *file_out << R"(  <meta name="Generator" content="GPSBabel )"
               << gpsbabel_version << "\">\n";
   }
   *file_out << "  <title>GPSBabel HTML Output</title>\n";
   if (stylesheet) {
-    *file_out << "  <link rel=\"stylesheet\" type=\"text/css\" href=\""
+    *file_out << R"(  <link rel="stylesheet" type="text/css" href=")"
               << stylesheet << "\">\n";
   } else {
     *file_out << "  <style>\n";

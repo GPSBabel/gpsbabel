@@ -37,7 +37,8 @@
 #include <QHash>                 // for QHash
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"              // for Format
+#include "formspec.h"            // for FormatSpecificData, kFsIGC
 #include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "src/core/datetime.h"   // for DateTime
 #include "kml.h"                 // for wp_field
@@ -78,8 +79,14 @@ public:
     ext_rec_gfo = 8,  // G Force?
     ext_rec_siu = 9,  // Satellites In Use
     ext_rec_acz = 10,  // Z Acceleration
-
   };
+
+  // Qt5 doesn't have a qHash function for scoped enumerations.
+  // Qt6 falls back to std::hash, but it may not use the seed.
+  friend size_t qHash(const igc_ext_type_t& key, size_t seed = 0) noexcept
+  {
+    return qHash(static_cast<std::underlying_type<igc_ext_type_t>::type>(key), seed);
+  }
 
   QVector<arglist_t>* get_args() override
   {
@@ -129,6 +136,30 @@ private:
 
     rec_none = 0,		// No record
     rec_bad = 1,		// Bad record
+  };
+
+  char* opt_enl{nullptr};
+  char* opt_tas{nullptr};
+  char* opt_vat{nullptr};
+  char* opt_oat{nullptr};
+  char* opt_trt{nullptr};
+  char* opt_gsp{nullptr};
+  char* opt_fxa{nullptr};
+  char* opt_siu{nullptr};
+  char* opt_acz{nullptr};
+  char* opt_gfo{nullptr};
+
+  const QHash<igc_ext_type_t, char**> ext_option_map = {
+    {igc_ext_type_t::ext_rec_enl, &opt_enl},
+    {igc_ext_type_t::ext_rec_tas, &opt_tas},
+    {igc_ext_type_t::ext_rec_vat, &opt_vat},
+    {igc_ext_type_t::ext_rec_oat, &opt_oat},
+    {igc_ext_type_t::ext_rec_trt, &opt_trt},
+    {igc_ext_type_t::ext_rec_gsp, &opt_gsp},
+    {igc_ext_type_t::ext_rec_fxa, &opt_fxa},
+    {igc_ext_type_t::ext_rec_gfo, &opt_gfo},
+    {igc_ext_type_t::ext_rec_siu, &opt_siu},
+    {igc_ext_type_t::ext_rec_acz, &opt_acz},
   };
 
   const QHash<QString, igc_ext_type_t> igc_extension_map{
@@ -205,7 +236,7 @@ private:
   class TaskRecordReader
   {
   public:
-    void igc_task_rec(const char*);
+    void igc_task_rec(const char* rec);
 
   private:
     enum class state_t { id, takeoff, start, turnpoint, finish, landing };
@@ -220,7 +251,7 @@ private:
   class Interpolater
   {
   public:
-    double interpolate_alt(const route_head*, const gpsbabel::DateTime&);
+    double interpolate_alt(const route_head* track, const gpsbabel::DateTime& time);
 
   private:
     std::optional<WaypointList::const_iterator> prev_wpt;
@@ -236,23 +267,23 @@ private:
 
   /* Member Functions */
 
-  static bool coords_match(double, double, double, double);
-  igc_rec_type_t get_record(char**) const;
-  void detect_pres_track(const route_head*);
-  void detect_gnss_track(const route_head*);
-  void detect_other_track(const route_head*, int& max_waypt_ct);
-  void get_tracks(const route_head**, const route_head**);
-  static QByteArray latlon2str(const Waypoint*);
-  static QByteArray date2str(const gpsbabel::DateTime&);
-  static QByteArray tod2str(const gpsbabel::DateTime&);
+  static bool coords_match(double lat1, double lon1, double lat2, double lon2);
+  igc_rec_type_t get_record(char** rec) const;
+  void detect_pres_track(const route_head* rh);
+  void detect_gnss_track(const route_head* rh);
+  void detect_other_track(const route_head* rh, int& max_waypt_ct);
+  void get_tracks(const route_head** pres_track, const route_head** gnss_track);
+  static QByteArray latlon2str(const Waypoint* wpt);
+  static QByteArray date2str(const gpsbabel::DateTime& dt);
+  static QByteArray tod2str(const gpsbabel::DateTime& tod);
   void wr_header();
-  void wr_task_wpt_name(const Waypoint*, const char*);
-  void wr_task_hdr(const route_head*, unsigned int task_num);
-  void wr_task_wpt(const Waypoint*);
-  void wr_task_tlr(const route_head*);
+  void wr_task_wpt_name(const Waypoint* wpt, const char* alt_name);
+  void wr_task_hdr(const route_head* rte, unsigned int task_num);
+  void wr_task_wpt(const Waypoint* wpt);
+  void wr_task_tlr(const route_head* rte);
   void wr_tasks();
-  void wr_fix_record(const Waypoint*, int, int);
-  static int correlate_tracks(const route_head*, const route_head*);
+  void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt);
+  static int correlate_tracks(const route_head* pres_track, const route_head* gnss_track);
   void wr_track();
 
   /* Data Members */
@@ -268,7 +299,47 @@ private:
       "timeadj", &timeadj,
       "(integer sec or 'auto') Barograph to GPS time diff",
       nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-    }
+    },
+    {
+      "ENL", &opt_enl, "Engine Noise (ENL; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TAS", &opt_tas, "True Airspeed (TAS; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "VAT", &opt_vat, "Total Energy Vario (VAT; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "OAT", &opt_oat, "Outside Air Temperature (OAT; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "TRT", &opt_trt, "True Track (TRT; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GSP", &opt_gsp, "Ground Speed (GSP; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "FXA", &opt_fxa, "Fix Accuracy (FXA; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "SIU", &opt_siu, "# Of Sats (SIU; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "ACZ", &opt_acz, "Z Acceleration (ACZ; default=1)",
+      "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "GFO", &opt_gfo, "G Force? (GFO; default=0)",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
   };
 };
 /*

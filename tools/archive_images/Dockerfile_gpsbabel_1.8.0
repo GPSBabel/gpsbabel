@@ -1,0 +1,72 @@
+# this file is used to build the image gpsbabel_build_environment used by travis.
+
+FROM ubuntu:jammy
+
+LABEL maintainer="https://github.com/tsteven4"
+
+WORKDIR /app
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# install packages needed for gpsbabel build
+# split into multiple commands to limit layer size
+
+# basic build and test tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    make \
+    autoconf \
+    git \
+    expat \
+    libxml2-utils \
+    cmake \
+    ninja-build \
+    curl \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with libraries needed by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-1.0-0-dev \
+    pkg-config \
+    libudev-dev \
+    libshp-dev \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with qt used by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    qtbase5-dev \
+    qttools5-dev \
+    qttools5-dev-tools \
+    qttranslations5-l10n \
+    qtwebengine5-dev \
+    libqt5serialport5-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# install environment for locale test
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && locale -a
+
+WORKDIR /home/gpsbabel
+
+RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
+ && cd gpsbabel-build \
+ && git checkout gpsbabel_1_8_0 \
+ && rm -fr zlib \
+ && rm -fr shapelib \
+ && sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake \
+ && qmake WITH_ZLIB=pkgconfig WITH_SHAPELIB=pkgconfig && make -j 10 unix-gui && make check \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabelfe /usr/local/bin 
+
+COPY setup_user.sh /usr/local/bin

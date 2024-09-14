@@ -20,13 +20,14 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
+#include <utility>                      // for as_const
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -41,7 +42,7 @@
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -101,27 +102,6 @@ xstrdup(const char* s)
 char* xstrdup(const QString& s)
 {
   return xstrdup(CSTR(s));
-}
-
-/*
- * Duplicate at most sz bytes in str.
- */
-char*
-xstrndup(const char* str, size_t sz)
-{
-  size_t newlen = 0;
-  const char* cin = str;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  char* newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-
-  return newstr;
 }
 
 void*
@@ -345,11 +325,7 @@ make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc
     result = QDateTime(QDate(1970, 1, 1), time, timespec, offset);
   } else if (date.isValid()) {
     //  no time, use start of day in the given Qt::TimeSpec.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    result = QDateTime(date, QTime(0,0), timespec, offset);
-#else
     result = date.startOfDay(timespec, offset);
-#endif
   }
 
   return result;
@@ -573,66 +549,60 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const QString& human_datef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
   int ylen = 0;
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  for (const QChar cin : human_datef) {
+    bool okay = true;
 
-    if (toupper(*cin) != 'Y') {
+    if (cin.toUpper() != 'Y') {
       ylen = 0;
     }
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          result.append("%y");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          result.back() = 'Y';
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          result.append("%m");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          result.append("%d");
           prev = 'D';
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format!", *cin);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in date format " << human_datef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 /*
@@ -641,22 +611,20 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const QString& human_timef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
 
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+  for (const QChar cin : human_timef) {
+    bool okay = true;
 
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          result.append("%S");
           prev = 'S';
         }
         break;
@@ -664,69 +632,62 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          result.append("%M");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          result.back() = 'I';  /* 01 .. 12 */
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          result.append("%k");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          result.back() = 'H';
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          result.append("%P");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          result.back() = 'P';
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          result.append("%p");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          result.back() = 'p';
         }
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct() || cin.isSpace()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format!", *cin);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in time format " << human_timef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 
@@ -981,6 +942,10 @@ int gb_ptr2int(const void* p)
   } x = { p };
 
   return x.i;
+
+QString get_filename(const QString& fname)
+{
+  return QFileInfo(fname).fileName();
 }
 
 QTextCodec* get_codec(const QByteArray& cs_name)
@@ -1032,7 +997,7 @@ void list_timezones()
   };
   std::sort(zoneids.begin(), zoneids.end(), alpha);
   Warning() << "Available timezones are:";
-  for (const auto& id : qAsConst(zoneids)) {
+  for (const auto& id : std::as_const(zoneids)) {
     Warning() << id;
   }
 }

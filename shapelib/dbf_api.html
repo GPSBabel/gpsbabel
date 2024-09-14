@@ -22,13 +22,13 @@ DBFHandle DBFOpen( const char * pszDBFFile, const char * pszAccess );
   pszDBFFile:		The name of the xBase (.dbf) file to access.
 
   pszAccess:		The fopen() style access string.  At this time only
-			"rb" (read-only binary) and "rb+" (read/write binary) 
+			"rb" (read-only binary) and "rb+" (read/write binary)
 		        should be used.
 </pre>
 
   The DBFOpen() function should be used to establish access to an existing
-  xBase format table file.  The returned DBFHandle is passed to other 
-  access functions, and DBFClose() should be invoked to recover resources, and 
+  xBase format table file.  The returned DBFHandle is passed to other
+  access functions, and DBFClose() should be invoked to recover resources, and
   flush changes to disk when complete.  The DBFCreate() function should
   called to create new xBase files.  As a convenience, DBFOpen() can be
   called with the name of a .shp or .shx file, and it will figure out the
@@ -43,8 +43,8 @@ DBFHandle DBFCreate( const char * pszDBFFile );
 
   pszDBFFile:		The name of the xBase (.dbf) file to create.
 </pre>
-  
-  The DBFCreate() function creates a new xBase format file with the given 
+
+  The DBFCreate() function creates a new xBase format file with the given
   name, and returns an access handle that can be used with other DBF functions.
   The newly created file will have no fields, and no records.  Fields should
   be added with DBFAddField() before any records add written.
@@ -54,7 +54,7 @@ DBFHandle DBFCreate( const char * pszDBFFile );
 <h2>DBFGetFieldCount()</h2>
 
 <pre>
-int DBFGetFieldCount( DBFHandle hDBF );
+int DBFGetFieldCount( const DBFHandle hDBF );
 
   hDBF:		The access handle for the file to be queried, as returned
                 by DBFOpen(), or DBFCreate().
@@ -68,7 +68,7 @@ int DBFGetFieldCount( DBFHandle hDBF );
 <h2>DBFGetRecordCount()</h2>
 
 <pre>
-int DBFGetRecordCount( DBFHandle hDBF );
+int DBFGetRecordCount( const DBFHandle hDBF );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
@@ -83,7 +83,7 @@ int DBFGetRecordCount( DBFHandle hDBF );
 <h2>DBFGetFieldIndex()</h2>
 
 <pre>
-int DBFGetFieldIndex( DBFHandle hDBF, const char *pszFieldName );
+int DBFGetFieldIndex( const DBFHandle hDBF, const char *pszFieldName );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
@@ -99,25 +99,26 @@ int DBFGetFieldIndex( DBFHandle hDBF, const char *pszFieldName );
 <h2>DBFGetFieldInfo()</h2>
 
 <pre>
-DBFFieldType DBFGetFieldInfo( DBFHandle hDBF, int iField, char * pszFieldName,
+DBFFieldType DBFGetFieldInfo( const  DBFHandle hDBF, int iField,
+                              char * pszFieldName,
                               int * pnWidth, int * pnDecimals );
 
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
 
-  iField:	The field to be queried.  This should be a number between 
+  iField:	The field to be queried.  This should be a number between
                 0 and n-1, where n is the number fields on the file, as
                 returned by DBFGetFieldCount().
 
   pszFieldName:	If this pointer is not NULL the name of the requested field
-		will be written to this location.  The pszFieldName buffer 
+		will be written to this location.  The pszFieldName buffer
                 should be at least 12 character is size in order to hold
-		the longest possible field name of 11 characters plus a 
+		the longest possible field name of 11 characters plus a
                 terminating zero character.
 
   pnWidth:	If this pointer is not NULL, the width of the requested field
 		will be returned in the int pointed to by pnWidth.  This is
-                the width in characters.  
+                the width in characters.
 
   pnDecimals:	If this pointer is not NULL, the number of decimal places
                 precision defined for the field will be returned.  This is
@@ -127,16 +128,16 @@ DBFFieldType DBFGetFieldInfo( DBFHandle hDBF, int iField, char * pszFieldName,
   The DBFGetFieldInfo() returns the type of the requested field, which is
   one of the DBFFieldType enumerated values.  As well, the field name, and
   field width information can optionally be returned.  The field type returned
-  does not correspond one to one with the xBase field types.  For instance
-  the xBase field type for Date will just be returned as being FTInteger.  <p>
+  does not correspond one to one with the xBase field types.  <p>
 
 <pre>
     typedef enum {
-      FTString,			/* fixed length string field 		*/
-      FTInteger,		/* numeric field with no decimals 	*/
-      FTDouble,			/* numeric field with decimals 		*/
-      FTLogical,		/* logical field.                       */
-      FTInvalid                 /* not a recognised field type 		*/
+      FTString,			/* fixed length string field        */
+      FTInteger,		/* numeric field with no decimals   */
+      FTDouble,			/* numeric field with decimals      */
+      FTLogical,		/* logical field                    */
+      FTDate,			/* date field                       */
+      FTInvalid			/* not a recognised field type      */
     } DBFFieldType;
 </pre>
 
@@ -145,7 +146,7 @@ DBFFieldType DBFGetFieldInfo( DBFHandle hDBF, int iField, char * pszFieldName,
 <h2>DBFAddField()</h2>
 
 <pre>
-int DBFAddField( DBFHandle hDBF, const char * pszFieldName, 
+int DBFAddField( DBFHandle hDBF, const char * pszFieldName,
                  DBFFieldType eType, int nWidth, int nDecimals );
 
   hDBF:		The access handle for the file to be updated, as returned by
@@ -186,7 +187,7 @@ int DBFAddField( DBFHandle hDBF, const char * pszFieldName,
 
 <pre>
 int DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
-  
+
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
 
@@ -206,7 +207,7 @@ int DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
 
 <pre>
 double DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
-  
+
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
 
@@ -226,7 +227,7 @@ double DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
 
 <pre>
 const char *DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
-  
+
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
 
@@ -237,10 +238,10 @@ const char *DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
 </pre>
 
   The DBFReadStringAttribute() will read the value of one field and return
-  it as a string.  This function may be used on any field type (including 
+  it as a string.  This function may be used on any field type (including
   FTInteger and FTDouble) and will return the string representation stored
   in the .dbf file.  The returned pointer is to an internal buffer
-  which is only valid untill the next DBF function call.  It's contents may
+  which is only valid until the next DBF function call.  It's contents may
   be copied with normal string functions such as strcpy(), or strdup().  If
   the TRIM_DBF_WHITESPACE macro is defined in shapefil.h (it is by default)
   then all leading and trailing space (ASCII 32) characters will be stripped
@@ -251,8 +252,8 @@ const char *DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
 <h2>DBFIsAttributeNULL()</h2>
 
 <pre>
-int DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
-  
+int DBFIsAttributeNULL( const DBFHandle hDBF, int iShape, int iField );
+
   hDBF:		The access handle for the file to be queried, as returned by
 		DBFOpen(), or DBFCreate().
 
@@ -265,7 +266,7 @@ int DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
   This function will return TRUE if the indicated field is NULL valued
   otherwise FALSE.  Note that NULL fields are represented in the .dbf file
   as having all spaces in the field.  Reading NULL fields will result in
-  a value of 0.0 or an empty string with the other DBFRead*Attribute() 
+  a value of 0.0 or an empty string with the other DBFRead*Attribute()
   functions.<p>
 
 <!-------------------------------------------------------------------------->
@@ -289,7 +290,7 @@ int DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField,
 
 The DBFWriteIntegerAttribute() function is used to write a value to a numeric
 field (FTInteger, or FTDouble).  If the write succeeds the value TRUE will
-be returned, otherwise FALSE will be returned.  If the value is too large to 
+be returned, otherwise FALSE will be returned.  If the value is too large to
 fit in the field, it will be truncated and FALSE returned.<p>
 
 <!-------------------------------------------------------------------------->
@@ -313,7 +314,7 @@ int DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField,
 
 The DBFWriteDoubleAttribute() function is used to write a value to a numeric
 field (FTInteger, or FTDouble).  If the write succeeds the value TRUE will
-be returned, otherwise FALSE will be returned.  If the value is too large to 
+be returned, otherwise FALSE will be returned.  If the value is too large to
 fit in the field, it will be truncated and FALSE returned.<p>
 
 <!-------------------------------------------------------------------------->
@@ -336,8 +337,8 @@ int DBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField,
 </pre>
 
 The DBFWriteStringAttribute() function is used to write a value to a string
-field (FString).  If the write succeeds the value TRUE willbe returned, 
-otherwise FALSE will be returned.  If the value is too large to 
+field (FString).  If the write succeeds the value TRUE willbe returned,
+otherwise FALSE will be returned.  If the value is too large to
 fit in the field, it will be truncated and FALSE returned.<p>
 
 <!-------------------------------------------------------------------------->
@@ -358,7 +359,7 @@ int DBFWriteNULLAttribute( DBFHandle hDBF, int iShape, int iField );
 
 The DBFWriteNULLAttribute() function is used to clear the indicated field
 to a NULL value.  In the .dbf file this is represented by setting the entire
-field to spaces.  If the write succeeds the value TRUE willbe returned, 
+field to spaces.  If the write succeeds the value TRUE willbe returned,
 otherwise FALSE will be returned.<p>
 
 <!-------------------------------------------------------------------------->
@@ -382,7 +383,7 @@ void DBFClose( DBFHandle hDBF );
 <h2>DBFIsRecordDeleted()</h2>
 
 <pre>
-int DBFIsRecordDeleted( DBFHandle hDBF, int iShape );
+int DBFIsRecordDeleted( const DBFHandle hDBF, int iShape );
 
   hDBF:		The access handle for the file to be checked.
   iShape:       The record index to check.
@@ -410,11 +411,11 @@ int DBFMarkRecordDeleted( DBFHandle hDBF, int iShape, int bIsDeleted );
 <h2>DBFGetNativeFieldType()</h2>
 
 <pre>
-char DBFGetNativeFieldType( DBFHandle hDBF, int iField );
+char DBFGetNativeFieldType( const DBFHandle hDBF, int iField );
 
   hDBF:		The access handle for the file.
   iField:       The field index to query.
-  
+
 </pre>
 
   This function returns the DBF type code of the indicated field. It will

@@ -18,40 +18,30 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include "vcf.h"
+
 #include <cmath>       // for fabs
 #include <cstdlib>     // for abs
 
 #include <QString>     // for QString
-#include <QVector>     // for QVector
 #include <Qt>          // for CaseInsensitive
 
 #include "defs.h"
-#include "gbfile.h"    // for gbfprintf, gbfputs, gbfclose, gbfopen, gbfile
+#include "gbfile.h"    // for gbfprintf, gbfputs, gbfclose, gbfopen
 #include "geocache.h"  // for Geocache, Geocache::UtfString
 
 
-static gbfile* file_out;
-
-static char* vcf_encrypt = nullptr;
-
 #define MYNAME "VCF"
 
-static
-QVector<arglist_t> vcf_args = {
-  {
-    "encrypt", &vcf_encrypt,
-    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-};
 
-static void
-wr_init(const QString& fname)
+void
+VcfFormat::wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
 }
 
-static void
-wr_deinit()
+void
+VcfFormat::wr_deinit()
 {
   gbfclose(file_out);
 }
@@ -60,8 +50,8 @@ wr_deinit()
  * Print a possibly empty input string, replacing newlines with escaped
  * newlines as we go.
  */
-static void
-vcf_print_utf(const Geocache::UtfString* s)
+void
+VcfFormat::vcf_print_utf(const Geocache::UtfString* s)
 {
   if (nullptr == s) {
     return;
@@ -77,8 +67,8 @@ vcf_print_utf(const Geocache::UtfString* s)
   gbfputs(stripped_html, file_out);
 }
 
-static void
-vcf_print(const char* s)
+void
+VcfFormat::vcf_print(const char* s)
 {
   if (!s) {
     return;
@@ -90,14 +80,14 @@ vcf_print(const char* s)
   gbfputs(cleaned, file_out);
 }
 
-static void
-vcf_print(const QString& s)
+void
+VcfFormat::vcf_print(const QString& s)
 {
   vcf_print(CSTR(s));
 }
 
-static void
-vcf_disp(const Waypoint* wpt)
+void
+VcfFormat::vcf_disp(const Waypoint* wpt)
 {
   int lonint = abs((int) wpt->longitude);
   int latint = abs((int) wpt->latitude);
@@ -107,7 +97,7 @@ vcf_disp(const Waypoint* wpt)
   gbfprintf(file_out, "ADR:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
 
   if (wpt->HasUrlLink()) {
-    UrlLink link = wpt->GetUrlLink();
+    const UrlLink& link = wpt->GetUrlLink();
     gbfprintf(file_out, "URL:%s\n", CSTR(link.url_));
   }
 
@@ -115,7 +105,7 @@ vcf_disp(const Waypoint* wpt)
   vcf_print_utf(&wpt->gc_data->desc_short);
   gbfprintf(file_out, "\\n");
   vcf_print_utf(&wpt->gc_data->desc_long);
-  gbfprintf(file_out, "\\n\\nHINT:\\n");
+  gbfprintf(file_out, R"(\n\nHINT:\n)");
   if (vcf_encrypt) {
     QString s = rot13(wpt->gc_data->hint);
     vcf_print(s);
@@ -126,23 +116,10 @@ vcf_disp(const Waypoint* wpt)
   gbfprintf(file_out, "\nEND:VCARD\n");
 }
 
-static void
-data_write()
+void VcfFormat::write()
 {
-  waypt_disp_all(vcf_disp);
+  auto vcf_disp_lambda = [this](const Waypoint* waypointp)->void {
+    vcf_disp(waypointp);
+  };
+  waypt_disp_all(vcf_disp_lambda);
 }
-
-
-ff_vecs_t vcf_vecs = {
-  ff_type_file,
-  { ff_cap_write, ff_cap_none, ff_cap_none},
-  nullptr,
-  wr_init,
-  nullptr,
-  wr_deinit,
-  nullptr,
-  data_write,
-  nullptr,
-  &vcf_args,
-  NULL_POS_OPS
-};

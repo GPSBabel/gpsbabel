@@ -350,7 +350,7 @@ private:
   /* Member Functions */
 
   static QDate yyyymmdd_to_time(const QString& s);
-  QDateTime xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
+  QDateTime xcsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
   static void sscanftime(const char* s, const char* format, QDate& date, QTime& time);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
@@ -366,8 +366,7 @@ private:
   XcsvFile* xcsv_file{nullptr};
   const XcsvStyle* xcsv_style{nullptr};
   double pathdist = 0;
-  double oldlon = 999;
-  double oldlat = 999;
+  std::optional<PositionDeg> old_position;
 
   int waypt_out_count = 0;
   const route_head* csv_track = nullptr;

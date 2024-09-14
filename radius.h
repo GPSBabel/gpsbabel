@@ -51,11 +51,6 @@ private:
 
   /* Member Functions */
 
-  static double gc_distance(double lat1, double lon1, double lat2, double lon2)
-  {
-    return radtomiles(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-  }
-
   /* Data Members */
 
   double pos_dist{};

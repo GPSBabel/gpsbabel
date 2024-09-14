@@ -20,10 +20,5 @@
       <text>three dots</text>
     </link>
     <sym>Waypoint</sym>
-    <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
-        <gpxx:DisplayMode>SymbolAndDescription</gpxx:DisplayMode>
-      </gpxx:WaypointExtension>
-    </extensions>
   </wpt>
 </gpx>

@@ -60,7 +60,7 @@ private:
   public:
     ShortNameKey(const QByteArray& name) : shortname(name) {} /* converting constructor */
 
-    friend qhash_result_t qHash(const ShortNameKey& key, qhash_result_t seed = 0) noexcept
+    friend size_t qHash(const ShortNameKey& key, size_t seed = 0) noexcept
     {
       // We hash all strings as upper case.
       return qHash(key.shortname.toUpper(), seed);

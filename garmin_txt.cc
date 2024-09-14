@@ -20,91 +20,59 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-
-#include "defs.h"
-
 #if CSVFMTS_ENABLED
+
+#include "garmin_txt.h"
+
 #include <algorithm>               // for for_each, sort
-#include <array>                   // for array
+#include <array>                   // for array, array<>::iterator
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
 #include <cstdint>                 // for uint16_t
 #include <cstdio>                  // for sscanf, fprintf, snprintf, stderr
 #include <cstdlib>                 // for abs
 #include <cstring>                 // for strstr, strlen
-#include <ctime>                   // for time_t, gmtime, localtime, strftime
-#include <utility>                 // for pair, make_pair
+#include <ctime>                   // for gmtime, time_t, localtime, strftime, tm
 
+#include <optional>                // for optional
+#include <type_traits>             // for add_const_t
+#include <utility>                 // for pair, as_const, make_pair
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
 #include <QDateTime>               // for QDateTime
-#include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
+#include <QDebug>                  // for QDebug
+#include <QIODevice>               // for QIODevice, QIODeviceBase::ReadOnly, QIODeviceBase::WriteOnly
 #include <QList>                   // for QList, QList<>::const_iterator
 #include <QString>                 // for QString, operator!=
 #include <QStringList>             // for QStringList
+#include <QStringLiteral>          // for qMakeStringPrivate, QStringLiteral
 #include <QTextStream>             // for QTextStream
 #include <QVector>                 // for QVector
 #include <Qt>                      // for CaseInsensitive
 #include <QtGlobal>                // for qRound, qPrintable
 
+#include "defs.h"
 #include "csv_util.h"              // for csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc, garmin_fs_convert_category, GMSD_SECTION_CATEGORIES
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
-#include "inifile.h"               // for inifile_readstr
-#include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
+#include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_H
 #include "src/core/datetime.h"     // for DateTime
-#include "src/core/logging.h"      // for Fatal
+#include "src/core/logging.h"      // for FatalMsg
 #include "src/core/textstream.h"   // for TextStream
 
 
 #define MYNAME "garmin_txt"
 
-struct gtxt_flags_t {
-  unsigned int metric:1;
-  unsigned int celsius:1;
-  unsigned int utc:1;
-  unsigned int enum_waypoints:1;
-  unsigned int route_header_written:1;
-  unsigned int track_header_written:1;
+const QVector<QString> GarminTxtFormat::headers = {
+  "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
+  "Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
+  "Date Modified\tLink\tCategories",
+  "Waypoint Name\tDistance\tLeg Length\tCourse",
+  "Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
+  "Name\tLength\tCourse\tWaypoints\tLink",
+  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink"
 };
-
-static gpsbabel::TextStream* fin = nullptr;
-static gpsbabel::TextStream* fout = nullptr;
-static route_head* current_trk;
-static route_head* current_rte;
-static int waypoints;
-static int routepoints;
-static const Waypoint** wpt_a;
-static int wpt_a_ct;
-static grid_type grid_index;
-static int datum_index;
-static const char* datum_str;
-static int current_line;
-static QString date_time_format;
-static int precision = 3;
-static time_t utc_offs = 0;
-static gtxt_flags_t gtxt_flags;
-
-enum header_type {
-  waypt_header = 0,
-  rtept_header,
-  trkpt_header,
-  route_header,
-  track_header,
-  unknown_header
-};
-
-inline header_type& operator++(header_type& s) // prefix
-{
-  return s = static_cast<header_type>(s + 1);
-}
-inline header_type operator++(header_type& s, int) // postfix
-{
-  header_type ret(s);
-  ++s;
-  return ret;
-}
 
 inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
 {
@@ -117,78 +85,22 @@ inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
   return ret;
 }
 
-static std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
-static QStringList header_column_names;
-
-static constexpr double kGarminUnknownAlt = 1.0e25;
-static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
-static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
-
-static bool is_valid_alt(double alt)
+bool GarminTxtFormat::is_valid_alt(double alt)
 {
   return (alt != unknown_alt) && (alt < kGarminUnknownAlt);
 }
 
-static char* opt_datum = nullptr;
-static char* opt_dist = nullptr;
-static char* opt_temp = nullptr;
-static char* opt_date_format = nullptr;
-static char* opt_time_format = nullptr;
-static char* opt_precision = nullptr;
-static char* opt_utc = nullptr;
-static char* opt_grid = nullptr;
-
-static
-QVector<arglist_t> garmin_txt_args = {
-  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"grid",  &opt_grid,        "Write position using this grid.", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
-  {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
-};
-
-class PathInfo
-{
-public:
-  double length {0};
-  time_t start {0};
-  time_t time {0};
-  double speed {0};
-  double total {0};
-  int count {0};
-  const Waypoint* prev_wpt {nullptr};
-  const Waypoint* first_wpt {nullptr};
-  const Waypoint* last_wpt {nullptr};
-};
-
-static PathInfo* route_info;
-static int route_idx;
-static PathInfo* cur_info;
-
-static const QVector<QString> headers = {
-  "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
-  "Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
-  "Date Modified\tLink\tCategories",
-  "Waypoint Name\tDistance\tLeg Length\tCourse",
-  "Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
-  "Name\tLength\tCourse\tWaypoints\tLink",
-  "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink"
-};
-
 /* helpers */
 
-static const char*
-get_option_val(const char* option, const char* def)
+const char*
+GarminTxtFormat::get_option_val(const char* option, const char* def)
 {
   const char* c = (option != nullptr) ? option : def;
   return c;
 }
 
-static void
-init_date_and_time_format()
+void
+GarminTxtFormat::init_date_and_time_format()
 {
   // This is old, and weird, code.. date_time_format is a global that's
   // explicitly malloced and freed elsewhere. This isn't very C++ at all,
@@ -202,12 +114,12 @@ init_date_and_time_format()
   date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
 }
 
-static void
-convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
+void
+GarminTxtFormat::convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon) const
 {
   double alt;
 
-  if (datum_index == kDautmWGS84) {
+  if (datum_index == kDatumWGS84) {
     *dest_lat = wpt->latitude;
     *dest_lon = wpt->longitude;
   } else GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
@@ -218,10 +130,10 @@ convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 
 /* Waypoint preparation */
 
-static void
-enum_waypt_cb(const Waypoint* wpt)
+void
+GarminTxtFormat::enum_waypt_cb(const Waypoint* wpt)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if (wpt_class < 0x80) {
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
@@ -244,21 +156,21 @@ enum_waypt_cb(const Waypoint* wpt)
 
 /* common route and track pre-work */
 
-static void
-prework_hdr_cb(const route_head*)
+void
+GarminTxtFormat::prework_hdr_cb(const route_head* /*unused*/)
 {
   cur_info = &route_info[route_idx];
 }
 
-static void
-prework_tlr_cb(const route_head*)
+void
+GarminTxtFormat::prework_tlr_cb(const route_head* /*unused*/)
 {
   cur_info->last_wpt = cur_info->prev_wpt;
   route_idx++;
 }
 
-static void
-prework_wpt_cb(const Waypoint* wpt)
+void
+GarminTxtFormat::prework_wpt_cb(const Waypoint* wpt)
 {
   const Waypoint* prev = cur_info->prev_wpt;
 
@@ -277,13 +189,17 @@ prework_wpt_cb(const Waypoint* wpt)
 
 /* output helpers */
 
-static void
-print_position(const Waypoint* wpt)
+void
+GarminTxtFormat::print_position(const Waypoint* wpt)
 {
   int valid = 1;
-  double lat, lon, north, east;
+  double lat;
+  double lon;
+  double north;
+  double east;
   int zone;
-  char map[3], zonec;
+  char map[3];
+  char zonec;
 
   convert_datum(wpt, &lat, &lon);
 
@@ -327,7 +243,7 @@ print_position(const Waypoint* wpt)
 
   case grid_bng:
 
-    valid = GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map);
+    valid = GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map);
     if (valid) {
       *fout << QString::asprintf("%s %5.0f %5.0f\t", map, east, north);
     }
@@ -363,8 +279,8 @@ print_position(const Waypoint* wpt)
   }
 }
 
-static void
-print_date_and_time(const time_t time, const bool time_only)
+void
+GarminTxtFormat::print_date_and_time(const time_t time, const bool time_only)
 {
   std::tm tm{};
   char tbuf[32];
@@ -390,38 +306,17 @@ print_date_and_time(const time_t time, const bool time_only)
   *fout << "\t";
 }
 
-static void
-print_categories(uint16_t categories)
+void
+GarminTxtFormat::print_categories(uint16_t categories)
 {
-  if (categories == 0) {
-    return;
-  }
-
-  int count = 0;
-  for (int i = 0; i < 16; i++) {
-    if ((categories & 1) != 0) {
-      QString c;
-      if (global_opts.inifile != nullptr) {
-        QString key = QString::number(i + 1);
-        c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      }
-
-      *fout << QString::asprintf("%s", (count++ > 0) ? "," : "");
-      if (c.isNull()) {
-        *fout << QString::asprintf("Category %d", i+1);
-      }
-//				*fout << QString::asprintf("%s", gps_categories[i]);
-      else {
-        *fout << c;
-      }
-
-    }
-    categories = categories >> 1;
+  const QStringList categoryList = garmin_fs_t::print_categories(categories);
+  if (!categoryList.isEmpty()) {
+    *fout << categoryList.join(',');
   }
 }
 
-static void
-print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
+void
+GarminTxtFormat::print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 {
   if ((A != nullptr) && (B != nullptr) && (A != B)) {
     int course = qRound(waypt_course(A, B));
@@ -429,8 +324,8 @@ print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
   }
 }
 
-static void
-print_distance(const double distance, const bool no_scale, const bool with_tab, const int decis)
+void
+GarminTxtFormat::print_distance(const double distance, const bool no_scale, const bool with_tab, const int decis)
 {
   double dist = distance;
 
@@ -464,8 +359,8 @@ print_distance(const double distance, const bool no_scale, const bool with_tab, 
   }
 }
 
-static void
-print_speed(const double distance, const time_t time)
+void
+GarminTxtFormat::print_speed(const double distance, const time_t time)
 {
   double dist = distance;
   const char* unit;
@@ -495,8 +390,8 @@ print_speed(const double distance, const time_t time)
   *fout << "\t";
 }
 
-static void
-print_temperature(const float temperature)
+void
+GarminTxtFormat::print_temperature(const float temperature)
 {
   if (gtxt_flags.celsius) {
     *fout << QString::asprintf("%.f C", temperature);
@@ -505,8 +400,8 @@ print_temperature(const float temperature)
   }
 }
 
-static void
-print_string(const char* fmt, const QString& string)
+void
+GarminTxtFormat::print_string(const char* fmt, const QString& string)
 {
   /* remove unwanted characters from source string */
   QString cleanstring;
@@ -523,12 +418,12 @@ print_string(const char* fmt, const QString& string)
 
 /* main cb's */
 
-static void
-write_waypt(const Waypoint* wpt)
+void
+GarminTxtFormat::write_waypt(const Waypoint* wpt)
 {
   const char* wpt_type;
 
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   int i = garmin_fs_t::get_display(gmsd, 0);
   if (i > GT_DISPLAY_MODE_MAX) {
@@ -599,7 +494,7 @@ write_waypt(const Waypoint* wpt)
   print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
-    UrlLink l = wpt->GetUrlLink();
+    const UrlLink& l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
   } else {
     print_string("%s\t", "");
@@ -609,8 +504,8 @@ write_waypt(const Waypoint* wpt)
   *fout << "\r\n";
 }
 
-static void
-route_disp_hdr_cb(const route_head* rte)
+void
+GarminTxtFormat::route_disp_hdr_cb(const route_head* rte)
 {
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
@@ -635,14 +530,14 @@ route_disp_hdr_cb(const route_head* rte)
   *fout << QStringLiteral("\r\nHeader\t%1\r\n\r\n").arg(headers[rtept_header]);
 }
 
-static void
-route_disp_tlr_cb(const route_head*)
+void
+GarminTxtFormat::route_disp_tlr_cb(const route_head* /*unused*/)
 {
   route_idx++;
 }
 
-static void
-route_disp_wpt_cb(const Waypoint* wpt)
+void
+GarminTxtFormat::route_disp_wpt_cb(const Waypoint* wpt)
 {
   const Waypoint* prev = cur_info->prev_wpt;
 
@@ -663,8 +558,8 @@ route_disp_wpt_cb(const Waypoint* wpt)
   cur_info->prev_wpt = wpt;
 }
 
-static void
-track_disp_hdr_cb(const route_head* track)
+void
+GarminTxtFormat::track_disp_hdr_cb(const route_head* track)
 {
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
@@ -690,14 +585,14 @@ track_disp_hdr_cb(const route_head* track)
   *fout << QStringLiteral("\r\n\r\nHeader\t%1\r\n\r\n").arg(headers[trkpt_header]);
 }
 
-static void
-track_disp_tlr_cb(const route_head*)
+void
+GarminTxtFormat::track_disp_tlr_cb(const route_head* /*unused*/)
 {
   route_idx++;
 }
 
-static void
-track_disp_wpt_cb(const Waypoint* wpt)
+void
+GarminTxtFormat::track_disp_wpt_cb(const Waypoint* wpt)
 {
   const Waypoint* prev = cur_info->prev_wpt;
   time_t delta;
@@ -740,8 +635,30 @@ track_disp_wpt_cb(const Waypoint* wpt)
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-garmin_txt_wr_init(const QString& fname)
+void
+GarminTxtFormat::garmin_txt_utc_option()
+{
+  if (opt_utc != nullptr) {
+    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
+      utc_offs = 0;
+    } else {
+      utc_offs = xstrtoi(opt_utc, nullptr, 10);
+    }
+    utc_offs *= (60 * 60);
+    gtxt_flags.utc = 1;
+  }
+}
+
+void
+GarminTxtFormat::garmin_txt_adjust_time(QDateTime& dt) const
+{
+  if (gtxt_flags.utc) {
+    dt = dt.toUTC().addSecs(dt.offsetFromUtc() - utc_offs);
+  }
+}
+
+void
+GarminTxtFormat::wr_init(const QString& fname)
 {
   gtxt_flags = {};
 
@@ -780,25 +697,17 @@ garmin_txt_wr_init(const QString& fname)
     datum_index = kDatumOSGB36;
     break;
   case grid_swiss: /* force datum to WGS84 */
-    datum_index = kDautmWGS84;
+    datum_index = kDatumWGS84;
     break;
   default:
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);
   }
 
-  if (opt_utc != nullptr) {
-    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
-      utc_offs = 0;
-    } else {
-      utc_offs = xstrtoi(opt_utc, nullptr, 10);
-    }
-    utc_offs *= (60 * 60);
-    gtxt_flags.utc = 1;
-  }
+  garmin_txt_utc_option();
 }
 
-static void
-garmin_txt_wr_deinit()
+void
+GarminTxtFormat::wr_deinit()
 {
   fout->close();
   delete fout;
@@ -807,11 +716,42 @@ garmin_txt_wr_deinit()
   date_time_format.squeeze();
 }
 
-static void
-garmin_txt_write()
+void
+GarminTxtFormat::write()
 {
+  auto enum_waypt_cb_lambda = [this](const Waypoint* waypointp)->void {
+    enum_waypt_cb(waypointp);
+  };
+  auto prework_hdr_cb_lambda = [this](const route_head* rte)->void {
+    prework_hdr_cb(rte);
+  };
+  auto prework_tlr_cb_lambda = [this](const route_head* rte)->void {
+    prework_tlr_cb(rte);
+  };
+  auto prework_wpt_cb_lambda = [this](const Waypoint* waypointp)->void {
+    prework_wpt_cb(waypointp);
+  };
+  auto route_disp_hdr_cb_lambda = [this](const route_head* rte)->void {
+    route_disp_hdr_cb(rte);
+  };
+  auto route_disp_tlr_cb_lambda = [this](const route_head* rte)->void {
+    route_disp_tlr_cb(rte);
+  };
+  auto route_disp_wpt_cb_lambda = [this](const Waypoint* waypointp)->void {
+    route_disp_wpt_cb(waypointp);
+  };
+  auto track_disp_hdr_cb_lambda = [this](const route_head* rte)->void {
+    track_disp_hdr_cb(rte);
+  };
+  auto track_disp_tlr_cb_lambda = [this](const route_head* rte)->void {
+    track_disp_tlr_cb(rte);
+  };
+  auto track_disp_wpt_cb_lambda = [this](const Waypoint* waypointp)->void {
+    track_disp_wpt_cb(waypointp);
+  };
+
   QString grid_str = gt_get_mps_grid_longname(grid_index, MYNAME);
-  grid_str = grid_str.replace('*', "°");
+  grid_str = grid_str.replace('*', u'°');
   *fout << "Grid\t" << grid_str << "\r\n";
 
   datum_str = gt_get_mps_datum_name(datum_index);
@@ -819,15 +759,15 @@ garmin_txt_write()
 
   waypoints = 0;
   gtxt_flags.enum_waypoints = 1;			/* enum all waypoints */
-  waypt_disp_all(enum_waypt_cb);
-  route_disp_all(nullptr, nullptr, enum_waypt_cb);
+  waypt_disp_all(enum_waypt_cb_lambda);
+  route_disp_all(nullptr, nullptr, enum_waypt_cb_lambda);
   gtxt_flags.enum_waypoints = 0;
 
   if (waypoints > 0) {
     wpt_a_ct = 0;
     wpt_a = new const Waypoint*[waypoints] {};
-    waypt_disp_all(enum_waypt_cb);
-    route_disp_all(nullptr, nullptr, enum_waypt_cb);
+    waypt_disp_all(enum_waypt_cb_lambda);
+    route_disp_all(nullptr, nullptr, enum_waypt_cb_lambda);
     auto sort_waypt_lambda = [](const Waypoint* wa, const Waypoint* wb)->bool {
       return wa->shortname.compare(wb->shortname, Qt::CaseInsensitive) < 0;
     };
@@ -842,10 +782,11 @@ garmin_txt_write()
     route_idx = 0;
     route_info = new PathInfo[route_count()];
     routepoints = 0;
-    route_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
+    route_disp_all(prework_hdr_cb_lambda, prework_tlr_cb_lambda, prework_wpt_cb_lambda);
+
     if (routepoints > 0) {
       route_idx = 0;
-      route_disp_all(route_disp_hdr_cb, route_disp_tlr_cb, route_disp_wpt_cb);
+      route_disp_all(route_disp_hdr_cb_lambda, route_disp_tlr_cb_lambda, route_disp_wpt_cb_lambda);
     }
     delete[] route_info;
     route_info = nullptr;
@@ -854,11 +795,11 @@ garmin_txt_write()
   route_idx = 0;
   route_info = new PathInfo[track_count()];
   routepoints = 0;
-  track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
+  track_disp_all(prework_hdr_cb_lambda, prework_tlr_cb_lambda, prework_wpt_cb_lambda);
 
   if (routepoints > 0) {
     route_idx = 0;
-    track_disp_all(track_disp_hdr_cb, track_disp_tlr_cb, track_disp_wpt_cb);
+    track_disp_all(track_disp_hdr_cb_lambda, track_disp_tlr_cb_lambda, track_disp_wpt_cb_lambda);
   }
   delete[] route_info;
 }
@@ -867,8 +808,8 @@ garmin_txt_write()
 
 /* helpers */
 
-static void
-free_headers()
+void
+GarminTxtFormat::free_headers()
 {
   std::for_each(header_mapping_info.begin(), header_mapping_info.end(),
                 [](auto& list)->void { list.clear(); });
@@ -877,8 +818,8 @@ free_headers()
 // Super simple attempt to convert strftime/strptime spec to Qt spec.
 // This misses a LOT of cases and vagaries, but the reality is that we
 // see very few date formats here.
-static QString
-strftime_to_timespec(const char* s)
+QString
+GarminTxtFormat::strftime_to_timespec(const char* s)
 {
   QString q;
   int l = strlen(s);
@@ -902,7 +843,7 @@ strftime_to_timespec(const char* s)
           q += "yyyy";
           continue;
         case 'H':
-          q += "hh";
+          q += "HH";
           continue;
         case 'M':
           q += "mm";
@@ -931,8 +872,11 @@ strftime_to_timespec(const char* s)
         case 'F':
           q += "yyyy-MM-dd";
           continue;
+        case 'p':
+          q += "AP";
+          continue;
         default:
-          q += s[i+1];
+          warning(MYNAME ": omitting unknown strptime conversion \"%%%c\" in \"%s\"\n", s[i], s);
           break;
         }
       }
@@ -948,15 +892,15 @@ strftime_to_timespec(const char* s)
 
 /* data parsers */
 
-static QDateTime
-parse_date_and_time(const QString& str)
+QDateTime
+GarminTxtFormat::parse_date_and_time(const QString& str)
 {
   QString timespec = strftime_to_timespec(CSTR(date_time_format));
   return QDateTime::fromString(QString(str).trimmed(), timespec);
 }
 
-static uint16_t
-parse_categories(const QString& str)
+uint16_t
+GarminTxtFormat::parse_categories(const QString& str) const
 {
   uint16_t res = 0;
 
@@ -964,19 +908,18 @@ parse_categories(const QString& str)
   for (const auto& catstring : catstrings) {
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
-      uint16_t val;
-      if (!garmin_fs_convert_category(CSTR(cin), &val)) {
+      if (std::optional<uint16_t> cat = garmin_fs_t::convert_category(cin); !cat.has_value()) {
         warning(MYNAME ": Unable to convert category \"%s\" at line %d!\n", qPrintable(cin), current_line);
       } else {
-        res = res | val;
+        res = res | *cat;
       }
     }
   }
   return res;
 }
 
-static bool
-parse_temperature(const QString& str, double* temperature)
+bool
+GarminTxtFormat::parse_temperature(const QString& str, double* temperature) const
 {
   double value;
   unsigned char unit;
@@ -1004,8 +947,8 @@ parse_temperature(const QString& str, double* temperature)
   return false;
 }
 
-static void
-parse_header(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_header(const QStringList& lineparts)
 {
   header_column_names.clear();
   for (const auto& name : lineparts) {
@@ -1013,8 +956,8 @@ parse_header(const QStringList& lineparts)
   }
 }
 
-static bool
-parse_display(const QString& str, int* val)
+bool
+GarminTxtFormat::parse_display(const QString& str, int* val) const
 {
   if (str.isEmpty()) {
     return false;
@@ -1030,8 +973,8 @@ parse_display(const QString& str, int* val)
   return false;
 }
 
-static void
-bind_fields(const header_type ht)
+void
+GarminTxtFormat::bind_fields(const header_type ht)
 {
   if ((grid_index < 0) || (datum_index < 0)) {
     fatal(MYNAME ": Incomplete or invalid file header!");
@@ -1046,7 +989,7 @@ bind_fields(const header_type ht)
   const QStringList altheader = headers.at(ht).toUpper().split('\t');
 
   int i = -1;
-  for (const auto& name : qAsConst(header_column_names)) {
+  for (const auto& name : std::as_const(header_column_names)) {
     i++;
 
     int field_idx = altheader.indexOf(name);
@@ -1063,8 +1006,8 @@ bind_fields(const header_type ht)
   header_column_names.clear();
 }
 
-static void
-parse_grid(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_grid(const QStringList& lineparts)
 {
   if (lineparts.empty()) {
     fatal(MYNAME ": Missing grid headline!\n");
@@ -1083,8 +1026,8 @@ parse_grid(const QStringList& lineparts)
   }
 }
 
-static void
-parse_datum(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_datum(const QStringList& lineparts)
 {
   if (lineparts.empty()) {
     fatal(MYNAME ": Missing GPS datum headline!\n");
@@ -1094,15 +1037,15 @@ parse_datum(const QStringList& lineparts)
   datum_index = gt_lookup_datum_index(CSTR(str), MYNAME);
 }
 
-static void
-parse_waypoint(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_waypoint(const QStringList& lineparts)
 {
   int column = -1;
 
   bind_fields(waypt_header);
 
   auto* wpt = new Waypoint;
-  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  auto* gmsd = new garmin_fs_t(-1);
   wpt->fs.FsChainAdd(gmsd);
 
   for (const auto& str : lineparts) {
@@ -1184,6 +1127,7 @@ parse_waypoint(const QStringList& lineparts)
       break;
     case 16:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1201,8 +1145,8 @@ parse_waypoint(const QStringList& lineparts)
   waypt_add(wpt);
 }
 
-static void
-parse_route_header(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_route_header(const QStringList& lineparts)
 {
   int column = -1;
 
@@ -1230,8 +1174,8 @@ parse_route_header(const QStringList& lineparts)
   current_rte = rte;
 }
 
-static void
-parse_track_header(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_track_header(const QStringList& lineparts)
 {
   int column = -1;
 
@@ -1259,8 +1203,8 @@ parse_track_header(const QStringList& lineparts)
 }
 
 
-static void
-parse_route_waypoint(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_route_waypoint(const QStringList& lineparts)
 {
   int column = -1;
   Waypoint* wpt = nullptr;
@@ -1291,8 +1235,8 @@ parse_route_waypoint(const QStringList& lineparts)
   }
 }
 
-static void
-parse_track_waypoint(const QStringList& lineparts)
+void
+GarminTxtFormat::parse_track_waypoint(const QStringList& lineparts)
 {
   int column = -1;
 
@@ -1319,6 +1263,7 @@ parse_track_waypoint(const QStringList& lineparts)
       break;
     case 2:
       if (QDateTime dt = parse_date_and_time(str); dt.isValid()) {
+        garmin_txt_adjust_time(dt);
         wpt->SetCreationTime(dt);
       }
     break;
@@ -1352,8 +1297,8 @@ parse_track_waypoint(const QStringList& lineparts)
 
 /***************************************************************/
 
-static void
-garmin_txt_rd_init(const QString& fname)
+void
+GarminTxtFormat::rd_init(const QString& fname)
 {
   gtxt_flags = {};
 
@@ -1367,10 +1312,11 @@ garmin_txt_rd_init(const QString& fname)
   grid_index = (grid_type) -1;
 
   init_date_and_time_format();
+  garmin_txt_utc_option();
 }
 
-static void
-garmin_txt_rd_deinit()
+void
+GarminTxtFormat::rd_deinit()
 {
   free_headers();
   header_column_names.clear();
@@ -1381,8 +1327,8 @@ garmin_txt_rd_deinit()
   date_time_format.squeeze();
 }
 
-static void
-garmin_txt_read()
+void
+GarminTxtFormat::read()
 {
   QString buff;
 
@@ -1426,27 +1372,4 @@ garmin_txt_read()
 
   }
 }
-
-/*
- * The file encoding is windows-1252.
- * Conversion between windows-1252 and utf-16 is handled by the stream.
- * Conversion between utf-16 and utf-8 is handled by this format.
- * Let main know char strings have already been converted to utf-8
- * so it doesn't attempt to re-convert any char strings including gmsd data.
- */
-
-ff_vecs_t garmin_txt_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  garmin_txt_rd_init,
-  garmin_txt_wr_init,
-  garmin_txt_rd_deinit,
-  garmin_txt_wr_deinit,
-  garmin_txt_read,
-  garmin_txt_write,
-  nullptr,
-  &garmin_txt_args,
-  NULL_POS_OPS
-};
-
 #endif // CSVFMTS_ENABLED

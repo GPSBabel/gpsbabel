@@ -66,6 +66,26 @@ compare ${REFERENCE}/track/garminconnect.csv ${TMPDIR}/garminconnect.csv
 gpsbabel -i gpx -f ${REFERENCE}/wptsequence.gpx -o gpx -F ${TMPDIR}/wptsequence.gpx
 compare ${REFERENCE}/wptsequence.gpx ${TMPDIR}/wptsequence.gpx
 
+# passthrough
+# gpx 1.0
+# we lose any extensions at the end of file - we don't have a place to store them.
+gpsbabel -i gpx -f ${REFERENCE}/gpxpassthrough10.gpx -o gpx -F ${TMPDIR}/gpxpassthrough10~gpx.gpx
+compare ${REFERENCE}/gpxpassthrough10~gpx.gpx ${TMPDIR}/gpxpassthrough10~gpx.gpx
+
+# gpx 1.1
+# we lose the any extensions in metadata, but we are constructing metadata anyway
+# we lose any extensions at the end of each trkseg  - we don't have a place to store them.
+# we lose any extensions at the end of file - we don't have a place to store them.
+gpsbabel -i gpx -f ${REFERENCE}/gpxpassthrough11.gpx -o gpx -F ${TMPDIR}/gpxpassthrough11~gpx.gpx
+compare ${REFERENCE}/gpxpassthrough11~gpx.gpx ${TMPDIR}/gpxpassthrough11~gpx.gpx
+
+# garmin specific categories
+gpsbabel -p gpsbabel-sample.ini -i gpx -f ${REFERENCE}/garmincategories.gpx  -o garmin_txt,utc=-7 -F ${TMPDIR}/garmincategories~gpx.txt
+compare ${REFERENCE}/garmincategories.txt ${TMPDIR}/garmincategories~gpx.txt
+
+gpsbabel -p gpsbabel-sample.ini -i garmin_txt,utc=-7 -f ${REFERENCE}/garmincategories.txt -o gpx,garminextensions -F ${TMPDIR}/garmincategories~txt.gpx
+compare ${REFERENCE}/garmincategories.gpx ${TMPDIR}/garmincategories~txt.gpx
+
 if [ -z "${VALGRIND}" ]; then
   set -e
   if command -v xmllint > /dev/null;

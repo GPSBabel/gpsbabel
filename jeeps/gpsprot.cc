@@ -29,9 +29,9 @@
 #define GPS_TAGUNK  20
 
 /* Storage for any unknown tags */
-static int32 gps_tag_unknown[GPS_TAGUNK];
-static int32 gps_tag_data_unknown[GPS_TAGUNK];
-static int32 gps_n_tag_unknown = 0;
+static int32_t gps_tag_unknown[GPS_TAGUNK];
+static int32_t gps_tag_data_unknown[GPS_TAGUNK];
+static int32_t gps_n_tag_unknown = 0;
 
 
 COMMANDDATA COMMAND_ID[2]= {
@@ -343,9 +343,9 @@ US GPS_Protocol_Version_Change(US id, US version)
 ** @return [int32] Success
 ************************************************************************/
 
-int32 GPS_Protocol_Table_Set(US id)
+int32_t GPS_Protocol_Table_Set(US id)
 {
-  int32 i;
+	int32_t i;
   US  v;
 
   i=0;
@@ -411,7 +411,7 @@ void GPS_Protocol_Error(US tag, US data)
 
 void GPS_Unknown_Protocol_Print()
 {
-  int32 i;
+	int32_t i;
 
   (void) fprintf(stdout,"\nUnknown protocols: ");
   if (!gps_n_tag_unknown) {

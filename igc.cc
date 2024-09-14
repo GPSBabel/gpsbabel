@@ -45,7 +45,6 @@
 #include <QTime>                // for operator<, operator==, QTime
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
-#include <QDebug>               // DELETEME for debugging
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
@@ -129,9 +128,14 @@ void IgcFormat::rd_deinit()
  */
 void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 {
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char tmp_str[kMaxRecLen];
 
   // First task record identifies the task to follow
@@ -235,14 +239,22 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 void IgcFormat::read()
 {
   char* ibuf;
-  int hours, mins, secs;
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  int hours;
+  int mins;
+  int secs;
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char validity;
   route_head* pres_head = nullptr;
   route_head* gnss_head = nullptr;
-  int pres_alt, gnss_alt;
+  int pres_alt;
+  int gnss_alt;
   char pres_valid = 0;
   char gnss_valid = 0;
   Waypoint* pres_wpt = nullptr;
@@ -425,7 +437,7 @@ void IgcFormat::read()
         // Create a route for each post-flight declaration
         task_record_reader.igc_task_rec(ibuf + 4);
         break;
-      } else if (global_opts.debug_level >= 4) {
+      } else if (global_opts.debug_level >= 5) {
         if (strcmp(tmp_str, "OOI") == 0) {
           printf(MYNAME ": Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {
@@ -452,15 +464,12 @@ void IgcFormat::read()
 
       QList<QString> unsupported_extensions;  // For determining how often unspported extensions exist
       QList<QString> supported_extensions;    // For debug output, determining how often supported extensions exist
-      if (global_opts.debug_level >= 1) {
-        printf(MYNAME ": I record: %s\n" MYNAME ": ", qPrintable(ibuf_q));
-      }
+      QList<QString> present_extensions;      // List of all extensions present in IGC file
+
       for (int i=3; i < ibuf_q.length(); i+=7) {
         QString ext_type = ibuf_q.mid(i+4, 3);
         QString extension_definition = ibuf_q.mid(i,7);
-        if (global_opts.debug_level >= 1) {
-          printf(" %s;",qPrintable(ext_type));
-        }
+        present_extensions.append(ext_type);
         // -1 because IGC records are one-initialized and QStrings are zero-initialized
         int begin = extension_definition.mid(0,2).toInt() - 1;
         int end = extension_definition.mid(2,2).toInt() - 1;
@@ -468,32 +477,31 @@ void IgcFormat::read()
         QString name = extension_definition.mid(4,3);
         igc_ext_type_t ext = get_ext_type(ext_type);
         if (ext != igc_ext_type_t::ext_rec_unknown) {
-          int factor = get_ext_factor(ext);
-          ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
           supported_extensions.append(name);
+          bool enabled = **ext_option_map.value(ext) == '1';
+          if (enabled) {
+            int factor = get_ext_factor(ext);
+            ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
+          }
         } else {
           unsupported_extensions.append(name);
         }
       }
       if (global_opts.debug_level >= 1) {
-        printf("\n");
+        printf(MYNAME ": I record: %s\n" MYNAME ": Extensions present: %s\n", qPrintable(ibuf_q),
+               qPrintable(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
-        printf(MYNAME ": Extensions defined in I record:\n");
+        printf(MYNAME ": Non-excluded extensions defined in I record:\n");
         printf(MYNAME ": (Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
           printf(MYNAME ":    Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
-          printf("\n" MYNAME "Supported extensions:");
-          foreach (QString ext, supported_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\nUnsupported extensions:");
-          foreach (QString ext, unsupported_extensions) {
-            printf(" %s", qPrintable(ext));
-          }
-          printf("\n");
+          printf(MYNAME ": Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
+                 qPrintable(unsupported_extensions.join(' ')));
+          printf(MYNAME ": Supported extensions (These are present in the I record and supported):\t%s\n",
+                 qPrintable(supported_extensions.join(' ')));
         }
       }
     }
@@ -638,7 +646,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
 
 QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
-  QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
+  QByteArray str = dt.toUTC().toString(u"ddMMyy").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad date format '%s'\n", str.constData());
   }
@@ -647,7 +655,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 
 QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
-  QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
+  QByteArray str = tod.toUTC().toString(u"hhmmss").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad time of day format '%s'\n", str.constData());
   }
@@ -688,11 +696,7 @@ void IgcFormat::wr_header()
   // Other header data may have been stored in track description
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
     QString desc = track->rte_desc.mid(QString(HDRMAGIC).size());
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-    const QStringList fields = desc.split(HDRDELIM, QString::SkipEmptyParts);
-#else
     const QStringList fields = desc.split(HDRDELIM, Qt::SkipEmptyParts);
-#endif
     for (const auto& field : fields) {
       gbfprintf(file_out, "%s\r\n", CSTR(field));
     }
@@ -865,8 +869,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
     // Get a crude indication of groundspeed from the change in lat/lon
     int deltat_msec = (*wpt_rit)->GetCreationTime().msecsTo(wpt->GetCreationTime());
     speed = (deltat_msec == 0) ? 0:
-            radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
-                               RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
+            radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%.2fm/s\n", speed);

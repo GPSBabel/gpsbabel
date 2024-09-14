@@ -41,7 +41,7 @@
 
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_t, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 
@@ -76,7 +76,7 @@ GarminGPIFormat::gpi_gmsd_init(Waypoint* wpt)
   }
   garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
   if (gmsd == nullptr) {
-    gmsd = garmin_fs_alloc(-1);
+    gmsd = new garmin_fs_t(-1);
     wpt->fs.FsChainAdd(gmsd);
   }
   return gmsd;
@@ -159,7 +159,8 @@ GarminGPIFormat::gpi_read_string(const char* field) const
 void
 GarminGPIFormat::read_header()
 {
-  int len, i;
+  int len;
+  int i;
 
   i = gbfgetint32(fin);
   if (i != 0) {
@@ -452,7 +453,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   case 0x8000b:  /* address (street/city...) */
     (void) gbfgetint32(fin);
-  // FALLTHROUGH
+    [[fallthrough]];
   case 0xb:  /* as seen in German POI files. */
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
@@ -700,7 +701,7 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
   res = 23;  /* bounds, ... of tag 0x80008 */
 
   foreach (Waypoint* wpt, data->waypt_list) {
-    garmin_fs_t* gmsd;
+    const garmin_fs_t* gmsd;
 
     res += 12;    /* tag/sz/sub-sz */
     res += 19;    /* poi fixed size */
@@ -1053,9 +1054,11 @@ GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 void
 GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz)
 {
-  int i, sz;
+  int i;
+  int sz;
   int dest_bpp;
-  int src_line_sz, dest_line_sz;
+  int src_line_sz;
+  int dest_line_sz;
   bmp_header_t src_h;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
@@ -1145,7 +1148,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   }
 
   ptr = (unsigned char*) xmalloc(sz);
-  const unsigned char* const startptr = ptr;
   dest_h = (gpi_bitmap_header_t*)ptr;
   *data = ptr;
   *data_sz = sz;
@@ -1176,8 +1178,8 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
       unsigned char* p = ptr;
 
       for (j = 0; j < src_h.width; j++) {
-        int color = (int32_t)gbfgetint16(f) | (gbfgetc(f) << 16);
-        le_write32(p, color);
+        gbfread(p, 1, 3, f);
+        p[3] = 0x00;
         p += 4;
       }
       for (j = (src_h.width * src_h.bpp) / 8; j < src_line_sz; j++) {
@@ -1202,10 +1204,6 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
     }
   }
 
-  auto bytesout = ptr - startptr;
-  if (bytesout != *data_sz) {
-    warning(MYNAME ": Code error in load_bitmap_from_file, expected output size %d, actual output %td.", *data_sz, bytesout);
-  }
   gbfclose(f);
 }
 

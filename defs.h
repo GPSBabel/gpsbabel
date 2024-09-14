@@ -19,11 +19,12 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cmath>                     // for M_PI
+#include <cmath>                     // for nan
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
@@ -36,7 +37,6 @@
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
-#include <QVector>                   // for QVector
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
@@ -112,8 +112,16 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
+
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
+
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
-constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 
 /*
@@ -234,17 +242,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
@@ -258,6 +260,35 @@ struct bounds {
   double min_lon;
   double min_alt;  // -unknown_alt => invalid.
 };
+
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
+
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
+
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
+};
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -326,7 +357,7 @@ public:
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
-  Waypoint& operator=(const Waypoint& other);
+  Waypoint& operator=(const Waypoint& rhs);
 
   /* Member Functions */
 
@@ -339,6 +370,13 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.latD;
+    longitude = pos.lonD;
+  }
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
@@ -490,7 +528,7 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 void del_marked_wpts();
-unsigned int waypt_count();
+int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
@@ -675,10 +713,10 @@ private:
 };
 
 void route_init();
-unsigned int route_waypt_count();
-unsigned int route_count();
-unsigned int track_waypt_count();
-unsigned int track_count();
+int route_waypt_count();
+int route_count();
+int track_waypt_count();
+int track_count();
 route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
@@ -702,8 +740,8 @@ void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_c
 void route_flush_all_routes();
 void route_flush_all_tracks();
 void route_deinit();
-void route_append(RouteList* src);
-void track_append(RouteList* src);
+void route_append(const RouteList* src);
+void track_append(const RouteList* src);
 void route_backup(RouteList** head_bak);
 void route_restore(RouteList* head_bak);
 void route_swap(RouteList& other);
@@ -808,14 +846,6 @@ struct posn_status {
 
 extern posn_status tracking_status;
 
-using ff_init = void (*)(const QString&);
-using ff_deinit = void (*)();
-using ff_read = void (*)();
-using ff_write = void (*)();
-using ff_exit = void (*)();
-using ff_writeposn = void (*)(Waypoint*);
-using ff_readposn = Waypoint* (*)(posn_status*);
-
 #define ARGTYPE_UNKNOWN    0x00000000U
 #define ARGTYPE_INT        0x00000001U
 #define ARGTYPE_FLOAT      0x00000002U
@@ -890,38 +920,6 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 { (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none }
 
-/*
- * Format capabilities for realtime positioning.
- */
-struct position_ops_t {
-  ff_init rd_init;
-  ff_readposn rd_position;
-  ff_deinit rd_deinit;
-
-  ff_init wr_init;
-  ff_writeposn wr_position;
-  ff_deinit wr_deinit;
-};
-
-#define NULL_POS_OPS { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, }
-
-/*
- *  Describe the file format to the caller.
- */
-struct ff_vecs_t {
-  ff_type type;
-  QVector<ff_cap> cap;
-  ff_init rd_init;
-  ff_init wr_init;
-  ff_deinit rd_deinit;
-  ff_deinit wr_deinit;
-  ff_read read;
-  ff_write write;
-  ff_exit exit;
-  QVector<arglist_t>* args;
-  position_ops_t position_ops;
-};
-
 [[noreturn]] void fatal(QDebug& msginstance);
 // cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
 // the noreturn attribute is listed before the gnu::format attribute.
@@ -931,8 +929,8 @@ struct ff_vecs_t {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char*, ...);
-[[gnu::format(printf, 1, 2)]] void warning(const char*, ...);
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
 
 void printposn(double c, bool is_lat);
 
@@ -941,7 +939,6 @@ void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const QString& s);
-char* xstrndup(const char* str, size_t sz);
 char* xstrdup(const char* s);
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
@@ -970,8 +967,10 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
+
 QString convert_human_date_format(const char* human_datef);  // "MM,YYYY,DD" -> "%m,%Y,%d"
 QString convert_human_time_format(const char* human_timef);  // "HH+mm+ss"   -> "%H+%M+%S
+
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 /* This lives in gpx.c */
@@ -1031,9 +1030,6 @@ enum grid_type {
 #define GRID_INDEX_MIN grid_lat_lon_ddd
 #define GRID_INDEX_MAX grid_swiss
 
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
-
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
@@ -1063,11 +1059,5 @@ int color_to_bbggrr(const char* cname);
  */
 constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-using qhash_result_t = uint;
-#else
-using qhash_result_t = size_t;
-#endif
 
 #endif // DEFS_H_INCLUDED_

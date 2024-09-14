@@ -148,7 +148,7 @@ private:
 
   /* Constants */
 
-  /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
+  /* "kUnicsvFieldSep" and "kUnicsvLineSep" are only used by the writer */
 
   static constexpr const char* kUnicsvFieldSep = ",";
   static constexpr const char* kUnicsvLineSep = "\r\n";
@@ -169,7 +169,7 @@ private:
   static QTime unicsv_parse_time(const char* str, QDate& date);
   static QTime unicsv_parse_time(const QString& str, QDate& date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
-  QDateTime unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
+  QDateTime unicsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
   static bool unicsv_compare_fields(const QString& s, const field_t* f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
@@ -189,6 +189,7 @@ private:
   double unicsv_depthscale{};
   double unicsv_proximityscale{};
   const char* unicsv_fieldsep{nullptr};
+  int unicsv_lineno{0};
   gpsbabel::TextStream* fin{nullptr};
   gpsbabel::TextStream* fout{nullptr};
   gpsdata_type unicsv_data_type{unknown_gpsdata};

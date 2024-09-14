@@ -44,9 +44,11 @@ private:
   bool debug{};
   char* opt_checkempty{};
   bool checkempty{};
-  unsigned int point_ct{};
-  unsigned int head_ct{};
-  unsigned int segment_ct_start{};
+  int point_ct{};
+  int total_point_ct{};
+  int segment_ct{};
+  int total_segment_ct{};
+  int head_ct{};
   const char* segment_type{};
   QVector<arglist_t> args = {
     {
@@ -59,9 +61,9 @@ private:
     },
   };
 
-  void validate_head(const route_head*);
+  void validate_head(const route_head* /*unused*/);
   void validate_head_trl(const route_head* header);
-  void validate_point(const Waypoint*);
+  void validate_point(const Waypoint* /*unused*/);
 
 };
 
