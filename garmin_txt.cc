@@ -20,8 +20,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#if CSVFMTS_ENABLED
-
 #include "garmin_txt.h"
 
 #include <algorithm>               // for for_each, sort
@@ -1372,4 +1370,3 @@ GarminTxtFormat::read()
 
   }
 }
-#endif // CSVFMTS_ENABLED

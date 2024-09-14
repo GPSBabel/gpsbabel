@@ -105,7 +105,6 @@ struct Vecs::Impl {
   NmeaFormat nmea_fmt;
   OziFormat ozi_fmt;
   KmlFormat kml_fmt;
-#if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
   Tpo2Format tpo2_fmt;
   Tpo3Format tpo3_fmt;
@@ -119,13 +118,9 @@ struct Vecs::Impl {
   MtkFileFormat mtk_ffmt;
   MtkM241Format mtk_m241_fmt;
   MtkM241FileFormat mtk_m241_ffmt;
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
   UnicsvFormat unicsv_fmt;
   GtmFormat gtm_fmt;
-#if CSVFMTS_ENABLED
   GarminTxtFormat garmin_txt_fmt;
-#endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
   GarminGPIFormat garmin_gpi_fmt;
   RandomFormat random_fmt;
@@ -145,10 +140,8 @@ struct Vecs::Impl {
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
-#endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
-#if CSVFMTS_ENABLED
     /* XCSV must be the first entry in this table. */
     {
       nullptr,
@@ -158,7 +151,6 @@ struct Vecs::Impl {
       nullptr,
       &fmtfactory<XcsvFormat>
     },
-#endif
     {
       nullptr,
       "geo",
@@ -209,7 +201,6 @@ struct Vecs::Impl {
       "kml",
       nullptr,
     },
-#if MAXIMAL_ENABLED
     {
       &lowranceusr_fmt,
       "lowranceusr",
@@ -297,8 +288,6 @@ struct Vecs::Impl {
       "bin",
       nullptr,
     },
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
     {
       nullptr,
       "vcard",
@@ -321,7 +310,6 @@ struct Vecs::Impl {
       "gtm",
       nullptr,
     },
-#if CSVFMTS_ENABLED
     {
       &garmin_txt_fmt,
       "garmin_txt",
@@ -329,7 +317,6 @@ struct Vecs::Impl {
       "txt",
       nullptr,
     },
-#endif // CSVFMTS_ENABLED
     {
       &gtc_fmt,
       "gtrnctr",
@@ -487,7 +474,6 @@ struct Vecs::Impl {
       nullptr,
       &fmtfactory<GoogleTakeoutFormat>
     }
-#endif // MAXIMAL_ENABLED
   };
 };
 
@@ -769,7 +755,6 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
     disp_vec_options(fmtdata.fmtname, args);
   }
 
-#if CSVFMTS_ENABLED
   /*
    * For style based formats let xcsv know the style file.  Otherwise
    * make sure xcsv knows no style file is in use. This covers the case
@@ -780,7 +765,6 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
   if (xcsvfmt != nullptr) {
     xcsvfmt->xcsv_setup_internal_style(fmtdata.style_filename);
   }
-#endif // CSVFMTS_ENABLED
 }
 
 Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
@@ -909,7 +893,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
     }
   }
 
-#if CSVFMTS_ENABLED
   /* The style formats are based on the xcsv format,
    * Make sure we know which entry in the vector list that is.
    */
@@ -967,7 +950,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   if (d_ptr_->vec_list.at(0).factory != nullptr) {
     delete xcsvfmt;
   }
-#endif // CSVFMTS_ENABLED
 
   /*
    *  Display the available formats in a format that's easy for humans to
