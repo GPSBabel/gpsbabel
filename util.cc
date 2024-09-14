@@ -838,82 +838,63 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  char* out;
-  char* instr;
-  char tag[8];
-  unsigned short int taglen = 0;
+  QString tag;
+  bool processing_tag = false;
+  QString out;
 
-  char* incopy = instr = xstrdup(utfstring);
-  /*
-   * We only shorten, so just dupe the input buf for space.
-   */
-  char* outstring = out = xstrdup(utfstring);
-
-  tag[0] = 0;
-  while (*instr) {
+  for (auto instr = utfstring.cbegin(), end = utfstring.cend(); instr != end;) {
     if ((*instr == '<') || (*instr == '&')) {
-      tag[0] = *instr;
-      taglen = 0;
+      processing_tag = true;
     }
 
-    if (! tag[0]) {
+    if (!processing_tag) {
       if (*instr == '\n') {
-        *out++ = ' ';
+        out.append(' ');
         do {
           instr++;
-        } while (isspace(*instr));
+        } while ((instr != end) && instr->isSpace());
         continue;
       } else {
-        *out++ = *instr;
+        out.append(*instr);
       }
     } else {
-      if (taglen < (sizeof(tag)-1)) {
-        tag[taglen++] = tolower(*instr);
-        tag[taglen] = 0;
+      if (tag.size() < 7) {
+        tag.append(instr->toLower());
       }
     }
 
-    if (((tag[0] == '<') && (*instr == '>')) ||
-        ((tag[0] == '&') && (*instr == ';'))) {
-      if (! strcmp(tag, "&amp;")) {
-        *out++ = '&';
-      } else if (! strcmp(tag, "&lt;")) {
-        *out++ = '<';
-      } else if (! strcmp(tag, "&gt;")) {
-        *out++ = '>';
-      } else if (! strcmp(tag, "&quot;")) {
-        *out++ = '"';
-      } else if (! strcmp(tag, "&nbsp;")) {
-        *out++ = ' ';
-      } else if (! strcmp(tag, "&deg;")) {
-        *out++ = 'd';
-        *out++ = 'e';
-        *out++ = 'g';
-      } else if ((tag[0]=='<') && (tag[1]=='p')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='b') && (tag[2]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='d')) {
-        *out++ = ' ';
-      } else if ((tag[0]=='<') && (tag[1]=='i') && (tag[2]=='m') && (tag[3]=='g')) {
-        *out++ = '[';
-        *out++ = 'I';
-        *out++ = 'M';
-        *out++ = 'G';
-        *out++ = ']';
+    if ((tag.startsWith('<') && (*instr == '>')) ||
+        (tag.startsWith('&') && (*instr == ';'))) {
+      if (tag == "&amp;") {
+        out.append('&');
+      } else if (tag == "&lt;") {
+        out.append('<');
+      } else if (tag == "&gt;") {
+        out.append('>');
+      } else if (tag == "&quot;") {
+        out.append('"');
+      } else if (tag == "&nbsp;") {
+        out.append(' ');
+      } else if (tag == "&deg;") {
+        out.append("deg");
+      } else if (tag.startsWith("<p")) {
+        out.append('\n');
+      } else if (tag.startsWith("<br")) {
+        out.append('\n');
+      } else if (tag.startsWith("</tr")) {
+        out.append('\n');
+      } else if (tag.startsWith("</td")) {
+        out.append(' ');
+      } else if (tag.startsWith("<img")) {
+        out.append("[IMG]");
       }
 
-      tag[0] = 0;
+      tag.clear();
+      processing_tag = false;
     }
     instr++;
   }
-  *out++ = 0;
-  xfree(incopy);
-  QString rv(outstring);
-  xfree(outstring);
-  return rv;
+  return out;
 #endif
 }
 
