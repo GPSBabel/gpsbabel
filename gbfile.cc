@@ -1016,7 +1016,7 @@ gbfgetnativecstr(gbfile* file)
 QString
 gbfgetcstr(gbfile* file)
 {
-  return {gbfgetnativecstr(file)};
+  return QString(gbfgetnativecstr(file));
 }
 
 /*
