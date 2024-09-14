@@ -950,8 +950,8 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
-QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
-QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+QString convert_human_date_format(const QString& human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
+QString convert_human_time_format(const QString& human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */

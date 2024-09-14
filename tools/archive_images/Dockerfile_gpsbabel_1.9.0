@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:noble
+FROM ubuntu:jammy
 
 LABEL maintainer="https://github.com/tsteven4"
 
@@ -19,36 +19,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # basic build and test tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
-    make \
     git \
-    valgrind \
     expat \
     libxml2-utils \
-    bear \
     cmake \
     ninja-build \
-    clazy \
-    clang-tidy \
-    jq \
     curl \
     ca-certificates \
- && rm -rf /var/lib/apt/lists/*
-
-# alternative compiler
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    clang \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs needed to build document
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    fop \
-    xsltproc \
-    docbook-xml \
-    docbook5-xml \
-    docbook-xsl \
-    docbook-xsl-ns \
-    libavalon-framework-java \
-    jing \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with libraries needed by gpsbabel
@@ -56,30 +33,54 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-1.0-0-dev \
     pkg-config \
     libudev-dev \
+    libshp-dev \
+    zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-base-dev \
-    qt6-5compat-dev \
-    qt6-serialport-dev \
+    libqt6core5compat6-dev \
+    libqt6opengl6-dev \
+    libqt6serialport6-dev \
+    libqt6webenginecore6-bin \
+    libgl-dev \
+    libopengl-dev \
+    libvulkan-dev \
     libx11-xcb-dev \
     libxkbcommon-dev \
+    qt6-l10n-tools \
     qt6-tools-dev \
+    qt6-tools-dev-tools \
     qt6-translations-l10n \
     qt6-webengine-dev \
+    qt6-webengine-dev-tools \
     qt6-wayland \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs needed to generate coverage report:
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcovr \
  && rm -rf /var/lib/apt/lists/*
 
 # install environment for locale test
 RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
+    tzdata \
  && rm -rf /var/lib/apt/lists/* \
  && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
  && locale-gen \
  && locale -a
+
+WORKDIR /home/gpsbabel
+
+RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
+ && cd gpsbabel-build \
+ && git checkout gpsbabel_1_9_0 \
+ && rm -fr zlib \
+ && rm -fr shapelib \
+ && sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake \
+ && mkdir bld \
+ && cd bld \
+ && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -DGPSBABEL_WITH_ZLIB=pkgconfig -DGPSBABEL_WITH_SHAPELIB=pkgconfig .. \
+ && cmake --build . --target package_app \
+ && cmake --build . --target check \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabelfe /usr/local/bin 
+
+COPY setup_user.sh /usr/local/bin
