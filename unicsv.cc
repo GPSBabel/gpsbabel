@@ -1,7 +1,7 @@
 /*
     Universal CSV - support for csv files, divining field order from the header.
 
-    Copyright (C) 2006-2023 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2006-2024 Robert Lipe, robertlipe+source@gpsbabel.org
     copyright (C) 2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -432,7 +432,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
 
     if (global_opts.debug_level) {
       if ((f->name.isEmpty()) && global_opts.debug_level) {
-        warning(MYNAME ": Unhandled column %d\"%s\".\n", column_countqPrintable(value));
+        warning(MYNAME ": Unhandled column %d \"%s\".\n", column_count, qPrintable(value));
       } else {
         warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
       }
