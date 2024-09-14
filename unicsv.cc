@@ -233,7 +233,6 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
   int p2;
   int p3;
   char sep[2];
-  std::tm tm{};
   int lconsumed = 0;
 
   int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
@@ -248,7 +247,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
     fatal(FatalMsg() << MYNAME << ": Could not parse date string (" << str << ").");
   }
 
-  struct tm tm{0};
+  struct std::tm tm{0};
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
     tm.tm_year = p1;
     tm.tm_mon = p2;
@@ -392,7 +391,6 @@ UnicsvFormat::unicsv_fondle_header(QString header)
   header = header.toLower();
 
   int column_count= 0;
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
 
   /* Find the separator and split the line into fields.
    * If we see an unenclosd tab that is the separator.

@@ -2,7 +2,7 @@
     Utilities for parsing Character Separated Value files (CSV)
 
     Copyright (C) 2002 Alex Mottram (geo_alexm at cox-internet.com)
-    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2024 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
